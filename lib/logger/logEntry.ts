@@ -124,7 +124,16 @@ export function safeStringify(obj: unknown, pretty = false): string {
     const seen = new WeakSet();
     const replacer = (key: string, value: unknown) => {
       // Redact sensitive keys
-      const sensitiveKeys = ['password', 'secret', 'key', 'token', 'apiKey', 'api_key', 'authToken', 'auth_token'];
+      const sensitiveKeys = [
+        'password',
+        'secret',
+        'key',
+        'token',
+        'apiKey',
+        'api_key',
+        'authToken',
+        'auth_token',
+      ];
       if (sensitiveKeys.some(sk => key.toLowerCase().includes(sk.toLowerCase()))) {
         return '[REDACTED]';
       }

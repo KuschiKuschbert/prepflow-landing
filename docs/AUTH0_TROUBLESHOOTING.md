@@ -16,35 +16,41 @@ If you've added the URLs but validation still shows them as missing, try these s
 **Common Mistakes:**
 
 ❌ **Wrong - Trailing slashes on web origins:**
+
 ```
 https://prepflow.org/
 https://www.prepflow.org/
 ```
 
 ✅ **Correct - No trailing slashes on web origins:**
+
 ```
 https://prepflow.org
 https://www.prepflow.org
 ```
 
 ❌ **Wrong - Missing protocol:**
+
 ```
 prepflow.org
 www.prepflow.org
 ```
 
 ✅ **Correct - Full URL with protocol:**
+
 ```
 https://prepflow.org
 https://www.prepflow.org
 ```
 
 ❌ **Wrong - Wrong path for callback:**
+
 ```
 https://prepflow.org/callback/auth0
 ```
 
 ✅ **Correct - Exact callback path:**
+
 ```
 https://prepflow.org/api/auth/callback/auth0
 ```
@@ -69,9 +75,11 @@ Auth0 changes can take **1-3 minutes** to propagate:
 The validation script shows what URLs are currently configured. Compare:
 
 **What You Added:**
+
 - Check the exact URLs you entered
 
 **What Script Expects:**
+
 - Web Origins (4 URLs):
   - `https://prepflow.org`
   - `https://www.prepflow.org`
@@ -95,6 +103,7 @@ The validation script shows what URLs are currently configured. Compare:
 ### Step 7: Check for Placeholder URLs
 
 If you see URLs like:
+
 - `https://yourdomain.com`
 - `https://example.com`
 - `https://{tenant}.auth0.com`

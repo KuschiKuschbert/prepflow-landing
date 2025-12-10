@@ -63,4 +63,3 @@ export async function fetchRecipeData(
     instructions: recipe.instructions || undefined,
   };
 }
-

@@ -94,12 +94,13 @@ function log(message, type = 'info') {
     reset: '\x1b[0m',
   };
 
-  const prefix = {
-    info: 'ℹ️',
-    success: '✅',
-    error: '❌',
-    warning: '⚠️',
-  }[type] || 'ℹ️';
+  const prefix =
+    {
+      info: 'ℹ️',
+      success: '✅',
+      error: '❌',
+      warning: '⚠️',
+    }[type] || 'ℹ️';
 
   console.log(`${colors[type]}${prefix} ${message}${colors.reset}`);
 
@@ -159,7 +160,10 @@ function httpsRequest(options, postData = null) {
  * Tries M2M credentials first, falls back to regular app credentials
  */
 async function getAccessToken() {
-  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(
+    /\/$/,
+    '',
+  );
   const m2mClientId = process.env.AUTH0_M2M_CLIENT_ID;
   const m2mClientSecret = process.env.AUTH0_M2M_CLIENT_SECRET;
   const appClientId = process.env.AUTH0_CLIENT_ID;
@@ -231,7 +235,10 @@ async function getAccessToken() {
  * Fetch Auth0 application settings
  */
 async function fetchApplicationSettings(accessToken) {
-  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(
+    /\/$/,
+    '',
+  );
   const clientId = process.env.AUTH0_CLIENT_ID;
 
   if (!auth0Domain || !clientId) {
@@ -345,7 +352,10 @@ function validateWebOrigins(webOrigins) {
 
   // Report results
   if (issues.length === 0) {
-    log(`All ${EXPECTED_WEB_ORIGINS.length} required web origins are configured correctly`, 'success');
+    log(
+      `All ${EXPECTED_WEB_ORIGINS.length} required web origins are configured correctly`,
+      'success',
+    );
   } else {
     issues.forEach(issue => {
       if (issue.type === 'placeholder' || issue.type === 'invalid') {
@@ -410,7 +420,10 @@ function validateCallbackUrls(callbackUrls) {
 
   // Report results
   if (issues.length === 0) {
-    log(`All ${EXPECTED_CALLBACK_URLS.length} required callback URLs are configured correctly`, 'success');
+    log(
+      `All ${EXPECTED_CALLBACK_URLS.length} required callback URLs are configured correctly`,
+      'success',
+    );
   } else {
     issues.forEach(issue => {
       if (issue.type === 'placeholder' || issue.type === 'invalid') {
@@ -473,7 +486,10 @@ function validateLogoutUrls(logoutUrls) {
 
   // Report results
   if (issues.length === 0) {
-    log(`All ${EXPECTED_LOGOUT_URLS.length} required logout URLs are configured correctly`, 'success');
+    log(
+      `All ${EXPECTED_LOGOUT_URLS.length} required logout URLs are configured correctly`,
+      'success',
+    );
   } else {
     issues.forEach(issue => {
       if (issue.type === 'placeholder' || issue.type === 'invalid') {
@@ -585,13 +601,19 @@ async function main() {
     let appSettings;
     try {
       appSettings = await fetchApplicationSettings(accessToken);
-      log(`✅ Retrieved settings for application: ${appSettings.name || appSettings.client_id}`, 'success');
+      log(
+        `✅ Retrieved settings for application: ${appSettings.name || appSettings.client_id}`,
+        'success',
+      );
     } catch (error) {
       if (error.message.includes('insufficient_scope') || error.message.includes('403')) {
         log('\n❌ Management API Access Denied', 'error');
         log('The credentials used do not have the required scopes.', 'error');
         log('\n💡 Solution Options:', 'info');
-        log('1. Use Machine-to-Machine (M2M) credentials with read:clients scope (recommended)', 'info');
+        log(
+          '1. Use Machine-to-Machine (M2M) credentials with read:clients scope (recommended)',
+          'info',
+        );
         log('   - Create M2M application in Auth0 Dashboard', 'info');
         log('   - Grant it "read:clients" scope', 'info');
         log('   - Set AUTH0_M2M_CLIENT_ID and AUTH0_M2M_CLIENT_SECRET', 'info');

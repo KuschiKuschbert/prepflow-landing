@@ -50,13 +50,14 @@ function log(message, type = 'info') {
     reset: '\x1b[0m',
   };
 
-  const prefix = {
-    info: 'ℹ️',
-    success: '✅',
-    error: '❌',
-    warning: '⚠️',
-    reset: '\x1b[0m',
-  }[type] || 'ℹ️';
+  const prefix =
+    {
+      info: 'ℹ️',
+      success: '✅',
+      error: '❌',
+      warning: '⚠️',
+      reset: '\x1b[0m',
+    }[type] || 'ℹ️';
 
   console.log(`${colors[type]}${prefix} ${message}${colors.reset}`);
 }
@@ -91,14 +92,25 @@ function checkHardcodedUrls() {
           // Check if it's a comment or documentation (acceptable)
           const lines = content.split('\n');
           lines.forEach((line, index) => {
-            if (pattern.test(line) && !line.trim().startsWith('//') && !line.trim().startsWith('*')) {
+            if (
+              pattern.test(line) &&
+              !line.trim().startsWith('//') &&
+              !line.trim().startsWith('*')
+            ) {
               // Check if it's a custom claim namespace (acceptable)
-              if (line.includes('https://prepflow.org/roles') || line.includes('https://prepflow.org/custom')) {
+              if (
+                line.includes('https://prepflow.org/roles') ||
+                line.includes('https://prepflow.org/custom')
+              ) {
                 // This is a custom claim namespace - acceptable
                 return;
               }
               // Check if it's in a URL() constructor or env var usage (acceptable)
-              if (line.includes('process.env') || line.includes('new URL') || line.includes('NEXTAUTH_URL')) {
+              if (
+                line.includes('process.env') ||
+                line.includes('new URL') ||
+                line.includes('NEXTAUTH_URL')
+              ) {
                 return;
               }
               log(`  ⚠️  ${file}:${index + 1} - ${description}`, 'warning');
@@ -121,10 +133,7 @@ function checkHardcodedUrls() {
 function checkCallbackUrlConstruction() {
   log('\n📋 Checking callback URL construction...', 'info');
 
-  const files = [
-    'app/api/auth/signin/page.tsx',
-    'middleware.ts',
-  ];
+  const files = ['app/api/auth/signin/page.tsx', 'middleware.ts'];
 
   let foundIssues = false;
 
@@ -136,7 +145,7 @@ function checkCallbackUrlConstruction() {
       // Check if callback URLs are constructed properly
       if (content.includes('callbackUrl') || content.includes('callback')) {
         // NextAuth's signIn() function handles callback URLs internally, so this is OK
-        if (content.includes('signIn(') || content.includes('from \'next-auth')) {
+        if (content.includes('signIn(') || content.includes("from 'next-auth")) {
           // This is using NextAuth's built-in callback handling - OK
           return;
         }
@@ -168,7 +177,11 @@ function checkLogoutUrlValidation() {
     // Check if returnTo URL is validated
     if (content.includes('returnTo')) {
       // Check if it validates the URL format
-      if (content.includes('startsWith') || content.includes('isValidUrl') || content.includes('new URL')) {
+      if (
+        content.includes('startsWith') ||
+        content.includes('isValidUrl') ||
+        content.includes('new URL')
+      ) {
         log('  ✅ Logout returnTo URL is validated', 'success');
       } else {
         log('  ⚠️  Logout returnTo URL may not be validated', 'warning');
@@ -210,12 +223,18 @@ function checkEnvVarUsage() {
   }
 
   // Check for placeholder values
-  if (process.env.NEXTAUTH_SECRET === 'dev-secret-change-me' || process.env.NEXTAUTH_SECRET === 'your-secret-here') {
+  if (
+    process.env.NEXTAUTH_SECRET === 'dev-secret-change-me' ||
+    process.env.NEXTAUTH_SECRET === 'your-secret-here'
+  ) {
     log('  ❌ NEXTAUTH_SECRET is using default/placeholder value', 'error');
     issues.errors.push('NEXTAUTH_SECRET is using default value');
   }
 
-  if (process.env.AUTH0_ISSUER_BASE_URL?.includes('yourdomain') || process.env.AUTH0_ISSUER_BASE_URL?.includes('example')) {
+  if (
+    process.env.AUTH0_ISSUER_BASE_URL?.includes('yourdomain') ||
+    process.env.AUTH0_ISSUER_BASE_URL?.includes('example')
+  ) {
     log('  ❌ AUTH0_ISSUER_BASE_URL contains placeholder value', 'error');
     issues.errors.push('AUTH0_ISSUER_BASE_URL contains placeholder');
   }
@@ -253,7 +272,11 @@ function checkErrorHandling() {
         // These pages display errors to users, which is appropriate
         return;
       }
-      if (content.includes('logger.error') || content.includes('logger.warn') || content.includes('logger.info')) {
+      if (
+        content.includes('logger.error') ||
+        content.includes('logger.warn') ||
+        content.includes('logger.info')
+      ) {
         // Good - has error logging
       } else if (content.includes('error') || content.includes('Error')) {
         // Only warn if it's a server-side file
@@ -281,7 +304,10 @@ function checkCommonIssues() {
   if (process.env.NEXTAUTH_URL) {
     const url = new URL(process.env.NEXTAUTH_URL);
     if (url.hostname.includes('prepflow.org') && !url.hostname.startsWith('www.')) {
-      log('  ⚠️  NEXTAUTH_URL uses non-www domain - ensure both www and non-www are in Auth0', 'warning');
+      log(
+        '  ⚠️  NEXTAUTH_URL uses non-www domain - ensure both www and non-www are in Auth0',
+        'warning',
+      );
       issues.warnings.push('NEXTAUTH_URL uses non-www - ensure both domains configured in Auth0');
     }
   }

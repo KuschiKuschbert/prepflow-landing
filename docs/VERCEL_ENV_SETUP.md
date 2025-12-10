@@ -11,6 +11,7 @@ npm run vercel:check-env
 ```
 
 This will show:
+
 - ✅ Which variables are set locally (for reference)
 - ❌ Which variables need to be set in Vercel
 - 📋 Copy-paste ready values (where safe)
@@ -36,6 +37,7 @@ NEXTAUTH_SESSION_MAX_AGE=14400
 ```
 
 **⚠️ CRITICAL:**
+
 - `NEXTAUTH_URL` **MUST** be `https://www.prepflow.org` (with www) in production
 - `NEXTAUTH_SECRET` should be different from development (generate new one: `openssl rand -base64 32`)
 - `NEXTAUTH_SESSION_MAX_AGE` is optional (defaults to 14400 = 4 hours)
@@ -107,6 +109,7 @@ For each critical variable above:
 5. Click **"Save"**
 
 **⚠️ IMPORTANT:**
+
 - Always select **Production** environment for production variables
 - Use **production secrets**, not development values
 - `NEXTAUTH_URL` must be `https://www.prepflow.org` (with www)
@@ -143,12 +146,14 @@ After setting environment variables:
 ### Issue: Still getting `error=auth0` after setting variables
 
 **Causes:**
+
 1. `NEXTAUTH_URL` not set to `https://www.prepflow.org` (with www)
 2. Environment variables not set for Production environment
 3. Application not redeployed after setting variables
 4. Browser cache/cookies
 
 **Fix:**
+
 1. Verify `NEXTAUTH_URL=https://www.prepflow.org` in Vercel Production environment
 2. Redeploy application
 3. Clear browser cookies for both domains
@@ -157,11 +162,13 @@ After setting environment variables:
 ### Issue: Environment variables not loading
 
 **Causes:**
+
 1. Variables set for wrong environment (Preview instead of Production)
 2. Application not redeployed after setting variables
 3. Typo in variable name
 
 **Fix:**
+
 1. Verify variables are set for **Production** environment
 2. Check variable names match exactly (case-sensitive)
 3. Redeploy application
@@ -170,10 +177,12 @@ After setting environment variables:
 ### Issue: Secrets are different between environments
 
 **This is correct!** You should use:
+
 - **Development:** Local `.env.local` with development secrets
 - **Production:** Vercel Production environment with production secrets
 
 **Best Practice:**
+
 - Generate new secrets for production: `openssl rand -base64 32`
 - Never use development secrets in production
 - Rotate secrets every 90 days

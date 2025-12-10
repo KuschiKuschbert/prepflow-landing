@@ -5,6 +5,7 @@
 ## Why Vercel API?
 
 The Vercel REST API allows you to:
+
 - ✅ **Set** environment variables programmatically (`set-vercel-env.js`)
 - ✅ **Update** environment variables without manual dashboard changes
 - ✅ **Sync** environment variables across environments
@@ -38,6 +39,7 @@ npm run vercel:set-env
 ```
 
 The script will:
+
 1. Fetch current Vercel environment variables
 2. Compare with required variables
 3. Prompt for production values (for secrets)
@@ -50,6 +52,7 @@ The script will:
 **Purpose:** Check which environment variables need to be set in Vercel
 
 **What it does:**
+
 - Reads `.env.local` for reference
 - Lists all required variables
 - Shows which ones are set locally
@@ -62,17 +65,20 @@ The script will:
 **Purpose:** Set environment variables in Vercel via REST API
 
 **What it does:**
+
 - Fetches current Vercel environment variables
 - Compares with required variables
 - Prompts for production values (for secrets)
 - Creates or updates variables in Vercel Production environment
 
 **Requires:**
+
 - `VERCEL_TOKEN` environment variable
 - `VERCEL_PROJECT_ID` (or will prompt)
 - `VERCEL_TEAM_ID` (optional, for team accounts)
 
 **Example output:**
+
 ```
 🚀 Setting Vercel Environment Variables via API...
 📋 Project ID: prj_abc123...
@@ -124,6 +130,7 @@ npm run vercel:set-env
 ```
 
 The script will:
+
 - Prompt for production values for secrets
 - Use predefined values for non-secrets (like `NEXTAUTH_URL=https://www.prepflow.org`)
 - Show validation warnings (e.g., if `NEXTAUTH_URL` doesn't have www)
@@ -167,6 +174,7 @@ NEXTAUTH_URL: {
 **Cause:** Invalid or expired VERCEL_TOKEN
 
 **Solution:**
+
 1. Go to: https://vercel.com/account/tokens
 2. Verify token exists and is not expired
 3. Create new token if needed
@@ -177,6 +185,7 @@ NEXTAUTH_URL: {
 **Cause:** Invalid VERCEL_PROJECT_ID
 
 **Solution:**
+
 1. Go to: Vercel Dashboard → Project → Settings → General
 2. Copy the correct Project ID (starts with `prj_...`)
 3. Set `VERCEL_PROJECT_ID` environment variable
@@ -187,6 +196,7 @@ NEXTAUTH_URL: {
 **Cause:** Token doesn't have required permissions
 
 **Solution:**
+
 1. Go to: https://vercel.com/account/tokens
 2. Create new token with **Full Account** scope
 3. Or grant token access to specific project
@@ -196,6 +206,7 @@ NEXTAUTH_URL: {
 **Cause:** Variable exists but script tried to create it
 
 **Solution:**
+
 - Script automatically handles this by updating existing variables
 - If error persists, check Vercel Dashboard manually
 
@@ -259,4 +270,3 @@ After setting environment variables:
 - **Vercel Checklist:** `docs/VERCEL_ENV_CHECKLIST.md`
 - **Auth0 Setup:** `docs/AUTH0_PRODUCTION_SETUP.md`
 - **Auth0 CLI:** `docs/AUTH0_CLI_SETUP.md`
-

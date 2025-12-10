@@ -35,12 +35,14 @@ The exposed database password must be rotated immediately in Supabase:
 ### 2. Audit Access Logs
 
 **Review Supabase logs for suspicious activity:**
+
 - Check database access logs for unauthorized connections
 - Review query logs for unusual patterns
 - Check for any data exfiltration attempts
 - **Time Window:** September 4, 2025 (22:44) to present
 
 **How to Check:**
+
 1. Supabase Dashboard → Logs → Database Logs
 2. Filter by date range (exposure window)
 3. Look for connections from unknown IPs
@@ -80,6 +82,7 @@ If this is a public repository or shared with many contributors:
 ### Option 2: Remove from History (Only if Private Repo)
 
 **⚠️ WARNING:** Only do this if:
+
 - Repository is private
 - Few collaborators (coordinate with team first)
 - You understand git history rewriting risks

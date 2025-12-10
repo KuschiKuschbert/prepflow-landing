@@ -40,4 +40,3 @@ export function buildCategoryHTML(category: string, cards: RecipeCardData[]): st
 
   return html;
 }
-

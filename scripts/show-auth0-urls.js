@@ -48,7 +48,10 @@ function httpsRequest(options, postData = null) {
 }
 
 async function getAccessToken() {
-  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(
+    /\/$/,
+    '',
+  );
   const appClientId = process.env.AUTH0_CLIENT_ID;
   const appClientSecret = process.env.AUTH0_CLIENT_SECRET;
   const m2mClientId = process.env.AUTH0_M2M_CLIENT_ID;
@@ -112,7 +115,10 @@ async function getAccessToken() {
 }
 
 async function fetchApplicationSettings(accessToken) {
-  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(
+    /\/$/,
+    '',
+  );
   const clientId = process.env.AUTH0_CLIENT_ID;
 
   if (!auth0Domain || !clientId) {
@@ -193,7 +199,6 @@ async function main() {
     console.log('  - http://localhost:3000/api/auth/callback/auth0');
     console.log('  - http://localhost:3001/api/auth/callback/auth0');
     console.log('');
-
   } catch (error) {
     console.error('❌ Error:', error.message);
     if (error.message.includes('insufficient_scope')) {

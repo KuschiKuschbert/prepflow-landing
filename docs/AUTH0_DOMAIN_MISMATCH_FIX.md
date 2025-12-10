@@ -33,6 +33,7 @@ NextAuth constructs callback URLs based on the **request origin**, not `NEXTAUTH
 ### Step 3: Test Direct Access
 
 **Always access via www:**
+
 - ✅ **Correct:** `https://www.prepflow.org/api/auth/signin`
 - ❌ **Wrong:** `https://prepflow.org/api/auth/signin` (will redirect, but might cause issues)
 
@@ -41,6 +42,7 @@ NextAuth constructs callback URLs based on the **request origin**, not `NEXTAUTH
 The middleware should redirect `prepflow.org` → `www.prepflow.org` **before** NextAuth processes the request.
 
 **Test:**
+
 1. Go to: `https://prepflow.org`
 2. Should automatically redirect to: `https://www.prepflow.org`
 3. If redirect doesn't work, middleware isn't deployed correctly
@@ -84,11 +86,13 @@ If sign-in still fails after verifying Vercel environment variables:
 ## Prevention
 
 **Always access via www:**
+
 - Bookmark: `https://www.prepflow.org`
 - Update all links to use `www.prepflow.org`
 - Set up DNS redirect at domain level (if possible)
 
 **Verify environment variables:**
+
 - Always check Vercel environment variables after deployment
 - Ensure `NEXTAUTH_URL` matches your primary domain
 - Redeploy after changing environment variables

@@ -22,7 +22,9 @@ interface AddIngredientParams<T> {
 /**
  * Add ingredient with optimistic update and error handling
  */
-export async function addIngredient<T extends { id: string; ingredient_name: string; cost_per_unit: number }>({
+export async function addIngredient<
+  T extends { id: string; ingredient_name: string; cost_per_unit: number },
+>({
   ingredientData,
   originalIngredients,
   setIngredients,
@@ -53,7 +55,13 @@ export async function addIngredient<T extends { id: string; ingredient_name: str
   const { data, error } = await handleIngredientInsert(normalized, ingredientData);
 
   if (error) {
-    handleIngredientInsertError(error, originalIngredients, setIngredients, setError, setShowAddForm);
+    handleIngredientInsertError(
+      error,
+      originalIngredients,
+      setIngredients,
+      setError,
+      setShowAddForm,
+    );
     throw new Error(formatIngredientInsertError(error));
   }
 
@@ -83,4 +91,3 @@ export function rollbackIngredientAdd<T>(
     setError(`Failed to add ingredient: ${formatIngredientErrorMessage(error)}`);
   }
 }
-

@@ -91,4 +91,3 @@ export function buildCardHTML(card: RecipeCardData): string {
 
   return html;
 }
-

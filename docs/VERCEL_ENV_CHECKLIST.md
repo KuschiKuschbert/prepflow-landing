@@ -58,12 +58,14 @@ DISABLE_ALLOWLIST=true
 ### Issue: Still getting `error=autho` after fixing
 
 **Causes:**
+
 1. Vercel environment variables not set correctly
 2. `NEXTAUTH_URL` doesn't match primary domain
 3. Domain redirect not working
 4. Browser cache/cookies
 
 **Fix:**
+
 1. Verify all environment variables in Vercel Dashboard
 2. Redeploy after changing environment variables
 3. Clear browser cookies for both domains
@@ -72,11 +74,13 @@ DISABLE_ALLOWLIST=true
 ### Issue: Redirect not working
 
 **Causes:**
+
 1. DNS not configured correctly
 2. Vercel domain settings not configured
 3. Redirect config not deployed
 
 **Fix:**
+
 1. Check Vercel Dashboard → Project → Settings → Domains
 2. Verify both `prepflow.org` and `www.prepflow.org` are configured
 3. Redeploy after adding redirect

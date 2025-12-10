@@ -46,7 +46,9 @@ async function saveWithCrossReferencing(
       return { success: false, error: updateError.message };
     }
 
-    logger.dev(`Updated sub-recipe card ${updatedCard?.id || existingCard.id} for ${subRecipeName}`);
+    logger.dev(
+      `Updated sub-recipe card ${updatedCard?.id || existingCard.id} for ${subRecipeName}`,
+    );
     return { success: true, cardId: updatedCard?.id || existingCard.id };
   }
 
@@ -127,4 +129,3 @@ export async function saveSubRecipeCard(
     return await saveWithOldMethod(supabase, cardData, subRecipeName);
   }
 }
-

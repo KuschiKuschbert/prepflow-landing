@@ -49,12 +49,13 @@ function log(message, type = 'info') {
     reset: '\x1b[0m',
   };
 
-  const prefix = {
-    info: 'ℹ️',
-    success: '✅',
-    error: '❌',
-    warning: '⚠️',
-  }[type] || 'ℹ️';
+  const prefix =
+    {
+      info: 'ℹ️',
+      success: '✅',
+      error: '❌',
+      warning: '⚠️',
+    }[type] || 'ℹ️';
 
   console.log(`${colors[type]}${prefix} ${message}${colors.reset}`);
 }
@@ -91,7 +92,13 @@ function validateAuth0Config() {
   };
 
   // Check required variables
-  const required = ['AUTH0_ISSUER_BASE_URL', 'AUTH0_CLIENT_ID', 'AUTH0_CLIENT_SECRET', 'NEXTAUTH_URL', 'NEXTAUTH_SECRET'];
+  const required = [
+    'AUTH0_ISSUER_BASE_URL',
+    'AUTH0_CLIENT_ID',
+    'AUTH0_CLIENT_SECRET',
+    'NEXTAUTH_URL',
+    'NEXTAUTH_SECRET',
+  ];
   const missing = required.filter(key => !config[key]);
 
   if (missing.length > 0) {
@@ -127,7 +134,10 @@ function validateAuth0Config() {
     }
 
     // Check for placeholder values
-    if (config.AUTH0_ISSUER_BASE_URL.includes('yourdomain') || config.AUTH0_ISSUER_BASE_URL.includes('example')) {
+    if (
+      config.AUTH0_ISSUER_BASE_URL.includes('yourdomain') ||
+      config.AUTH0_ISSUER_BASE_URL.includes('example')
+    ) {
       log('  ❌ Contains placeholder value', 'error');
       issues.errors.push('AUTH0_ISSUER_BASE_URL contains placeholder value');
     }
@@ -185,7 +195,10 @@ function validateAuth0Config() {
       log(`  ✅ Length OK (${config.NEXTAUTH_SECRET.length} chars)`, 'success');
     }
 
-    if (config.NEXTAUTH_SECRET === 'dev-secret-change-me' || config.NEXTAUTH_SECRET === 'your-secret-here') {
+    if (
+      config.NEXTAUTH_SECRET === 'dev-secret-change-me' ||
+      config.NEXTAUTH_SECRET === 'your-secret-here'
+    ) {
       log('  ❌ Using default/placeholder secret', 'error');
       issues.errors.push('NEXTAUTH_SECRET is using default/placeholder value');
     } else {
@@ -238,16 +251,25 @@ function validateAuth0Config() {
       const nextAuthUrl = new URL(config.NEXTAUTH_URL);
       const expectedCallback = `${nextAuthUrl.origin}/api/auth/callback/auth0`;
       log(`  ℹ️  Expected callback URL: ${expectedCallback}`, 'info');
-      log('  ℹ️  Verify this URL is in Auth0 Dashboard → Applications → Settings → Allowed Callback URLs', 'info');
+      log(
+        '  ℹ️  Verify this URL is in Auth0 Dashboard → Applications → Settings → Allowed Callback URLs',
+        'info',
+      );
 
       // Check if production and suggest both www and non-www
       if (nextAuthUrl.hostname.includes('prepflow.org')) {
         const hasWww = nextAuthUrl.hostname.startsWith('www.');
         if (hasWww) {
-          log('  ⚠️  Using www domain - ensure BOTH www and non-www are in Auth0 callback URLs', 'warning');
+          log(
+            '  ⚠️  Using www domain - ensure BOTH www and non-www are in Auth0 callback URLs',
+            'warning',
+          );
           issues.warnings.push('Ensure both www and non-www callback URLs are configured in Auth0');
         } else {
-          log('  ⚠️  Using non-www domain - ensure BOTH www and non-www are in Auth0 callback URLs', 'warning');
+          log(
+            '  ⚠️  Using non-www domain - ensure BOTH www and non-www are in Auth0 callback URLs',
+            'warning',
+          );
           issues.warnings.push('Ensure both www and non-www callback URLs are configured in Auth0');
         }
       }

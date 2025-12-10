@@ -56,15 +56,18 @@ npm run auth0:update-config
 **Purpose:** Validate current Auth0 configuration
 
 **What it does:**
+
 - Fetches current application settings via Management API
 - Validates web origins, callback URLs, logout URLs
 - Reports missing or incorrect URLs
 - Shows detailed validation report
 
 **Requirements:**
+
 - `read:clients` scope
 
 **Example output:**
+
 ```
 ✅ All 4 required web origins are configured correctly
 ✅ All 4 required callback URLs are configured correctly
@@ -77,6 +80,7 @@ npm run auth0:update-config
 **Purpose:** Update Auth0 configuration programmatically
 
 **What it does:**
+
 - Fetches current application settings
 - Compares with expected configuration
 - Updates web origins, callback URLs, logout URLs
@@ -85,10 +89,12 @@ npm run auth0:update-config
 - Shows before/after comparison
 
 **Requirements:**
+
 - `read:clients` scope
 - `update:clients` scope
 
 **Example output:**
+
 ```
 🔧 Updating Auth0 Application Configuration...
 ✅ Successfully authenticated
@@ -106,11 +112,13 @@ npm run auth0:update-config
 **Purpose:** Display current Auth0 configuration
 
 **What it does:**
+
 - Fetches and displays all configured URLs
 - Shows web origins, callback URLs, logout URLs
 - Useful for debugging configuration issues
 
 **Requirements:**
+
 - `read:clients` scope
 
 ### `npm run auth0:validate-env`
@@ -118,6 +126,7 @@ npm run auth0:update-config
 **Purpose:** Validate Auth0 environment variables
 
 **What it does:**
+
 - Checks for required environment variables
 - Validates format and length
 - Detects placeholder values
@@ -128,6 +137,7 @@ npm run auth0:update-config
 **Purpose:** Check for common Auth0 integration issues
 
 **What it does:**
+
 - Performs static code analysis
 - Checks for hardcoded URLs
 - Validates callback/logout URL construction
@@ -138,6 +148,7 @@ npm run auth0:update-config
 **Purpose:** Run all validation checks
 
 **What it does:**
+
 - Runs `auth0:validate-env`
 - Runs `auth0:check-config`
 - Runs `auth0:check-issues`
@@ -155,16 +166,19 @@ npm run auth0:update-config
 ### Updating Configuration
 
 1. **Check current state:**
+
    ```bash
    npm run auth0:check-config
    ```
 
 2. **Update configuration:**
+
    ```bash
    npm run auth0:update-config
    ```
 
 3. **Verify changes:**
+
    ```bash
    npm run auth0:check-config
    ```
@@ -184,6 +198,7 @@ npm run auth0:update-config
 ```
 
 This will:
+
 - ✅ Set all required web origins
 - ✅ Set all required callback URLs
 - ✅ Set all required logout URLs
@@ -228,6 +243,7 @@ The credentials used do not have the "update:clients" scope.
 ```
 
 **Solution:**
+
 1. Go to Auth0 Dashboard → APIs → Auth0 Management API
 2. Find your M2M application
 3. Grant `update:clients` scope
@@ -237,6 +253,7 @@ The credentials used do not have the "update:clients" scope.
 ### Error: "No valid credentials found"
 
 **Solution:**
+
 1. Check `.env.local` has M2M credentials:
    ```bash
    AUTH0_M2M_CLIENT_ID=...
@@ -248,6 +265,7 @@ The credentials used do not have the "update:clients" scope.
 ### Error: "HTTP 403: Forbidden"
 
 **Solution:**
+
 1. Verify M2M application is authorized for Management API
 2. Verify `read:clients` and `update:clients` scopes are granted
 3. Wait 1-2 minutes after granting scopes (propagation delay)
@@ -266,11 +284,13 @@ The credentials used do not have the "update:clients" scope.
 After setting up CLI access:
 
 1. **Update production configuration:**
+
    ```bash
    npm run auth0:update-config
    ```
 
 2. **Verify everything is correct:**
+
    ```bash
    npm run auth0:validate
    ```

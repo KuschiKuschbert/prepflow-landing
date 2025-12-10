@@ -61,6 +61,7 @@ If you prefer a dedicated M2M application (recommended for production):
    - Copy the **Client Secret**
 
 4. **Add to `.env.local`:**
+
    ```bash
    AUTH0_M2M_CLIENT_ID=your-new-m2m-client-id-here
    AUTH0_M2M_CLIENT_SECRET=your-new-m2m-client-secret-here
@@ -88,6 +89,7 @@ npm run auth0:check-config
 ```
 
 You should see:
+
 ```
 ✅ Successfully authenticated
 ✅ Retrieved settings for application: PrepFlow
@@ -99,11 +101,13 @@ You should see:
 ## Troubleshooting
 
 ### Still getting "Insufficient scope"?
+
 - Wait 2-3 minutes after granting scope (propagation delay)
 - Verify scope is checked: Dashboard → APIs → Auth0 Management API → Your App → Permissions
 - Check you're using the correct Client ID
 
 ### Getting "Invalid credentials"?
+
 - Verify `AUTH0_CLIENT_SECRET` is correct (for Option 1)
 - Or verify `AUTH0_M2M_CLIENT_SECRET` is correct (for Option 2)
 - Check for typos or extra spaces in `.env.local`

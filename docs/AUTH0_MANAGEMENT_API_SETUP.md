@@ -5,6 +5,7 @@
 ## Why Management API Access?
 
 The Auth0 Management API allows you to:
+
 - ✅ **Validate** application settings programmatically (`check-auth0-config.js`)
 - ✅ **Update** application settings programmatically (`update-auth0-config.js`)
 - ✅ **Fix** configuration issues without manual dashboard changes
@@ -14,9 +15,11 @@ The Auth0 Management API allows you to:
 ## Required Scopes
 
 **For Reading Configuration (check-auth0-config.js):**
+
 - `read:clients` - Read application settings
 
 **For Updating Configuration (update-auth0-config.js):**
+
 - `read:clients` - Read application settings
 - `update:clients` - Update application settings
 
@@ -52,6 +55,7 @@ The Auth0 Management API allows you to:
    - Copy the **Client Secret** (long string)
 
 4. **Set Environment Variables:**
+
    ```bash
    # Add to .env.local
    AUTH0_M2M_CLIENT_ID=your-m2m-client-id-here
@@ -59,6 +63,7 @@ The Auth0 Management API allows you to:
    ```
 
 5. **Test:**
+
    ```bash
    # Validate current configuration
    npm run auth0:check-config
@@ -96,6 +101,7 @@ The Auth0 Management API allows you to:
 ## Management API Endpoint
 
 The script uses the Management API endpoint:
+
 ```
 https://dev-7myakdl4itf644km.us.auth0.com/api/v2/
 ```
@@ -117,6 +123,7 @@ This is automatically constructed from your `AUTH0_ISSUER_BASE_URL` environment 
 **Cause:** Credentials don't have `read:clients` scope.
 
 **Solution:**
+
 - Verify the application is authorized for Auth0 Management API
 - Check that `read:clients` scope is granted
 - Wait 1-2 minutes after granting scope (propagation delay)
@@ -126,6 +133,7 @@ This is automatically constructed from your `AUTH0_ISSUER_BASE_URL` environment 
 **Cause:** Client ID or Secret is incorrect.
 
 **Solution:**
+
 - Verify environment variables are set correctly
 - Check for typos or extra spaces
 - Ensure you're using the correct credentials (M2M vs regular app)
@@ -135,6 +143,7 @@ This is automatically constructed from your `AUTH0_ISSUER_BASE_URL` environment 
 **Cause:** Application not authorized or wrong credentials.
 
 **Solution:**
+
 - Follow Option 1 or Option 2 above
 - Verify credentials match the authorized application
 - Check Auth0 Dashboard → APIs → Auth0 Management API → Authorized Applications

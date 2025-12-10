@@ -9,6 +9,7 @@ Production sign-in is failing with `error=autho` even though Auth0 dashboard con
 ## Root Cause
 
 The issue is likely a **domain mismatch** between:
+
 - The domain you're accessing: `prepflow.org` (non-www)
 - The callback URL domain: `www.prepflow.org` (www)
 - The `NEXTAUTH_URL` environment variable in Vercel
@@ -50,6 +51,7 @@ Even though we verified they're configured, double-check:
 ### Step 3: Handle Domain Redirects
 
 The issue is that users can access your site via both:
+
 - `prepflow.org` (non-www)
 - `www.prepflow.org` (www)
 
@@ -114,9 +116,11 @@ Run this to check what NextAuth is using:
 ```
 
 If `NEXTAUTH_URL=https://www.prepflow.org`, then callback is:
+
 - `https://www.prepflow.org/api/auth/callback/auth0` ✅
 
 If user accesses `prepflow.org`, but callback is `www.prepflow.org`, Auth0 might reject it if:
+
 - The origin (`prepflow.org`) doesn't match the callback domain (`www.prepflow.org`)
 - CORS policy blocks the redirect
 

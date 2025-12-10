@@ -255,10 +255,14 @@ function generateChecklist() {
   log('\n🚨 CRITICAL Variables (Must be set in Production):', 'error');
   log('─'.repeat(70), 'info');
   critical.forEach(({ key, config, localValue, validation }) => {
-    const displayValue = config.secret && localValue ? maskSecret(localValue) : localValue || 'NOT SET';
+    const displayValue =
+      config.secret && localValue ? maskSecret(localValue) : localValue || 'NOT SET';
     log(`\n${key}`, 'info');
     log(`   Description: ${config.description}`, 'info');
-    log(`   Status: ${localValue ? '✅ Set locally' : '❌ Not set locally'}`, localValue ? 'success' : 'error');
+    log(
+      `   Status: ${localValue ? '✅ Set locally' : '❌ Not set locally'}`,
+      localValue ? 'success' : 'error',
+    );
     if (validation) {
       log(`   Validation: ${validation}`, validation.includes('✅') ? 'success' : 'warn');
     }
@@ -275,10 +279,14 @@ function generateChecklist() {
     log('\n📋 Required Variables:', 'warn');
     log('─'.repeat(70), 'info');
     required.forEach(({ key, config, localValue }) => {
-      const displayValue = config.secret && localValue ? maskSecret(localValue) : localValue || 'NOT SET';
+      const displayValue =
+        config.secret && localValue ? maskSecret(localValue) : localValue || 'NOT SET';
       log(`\n${key}`, 'info');
       log(`   Description: ${config.description}`, 'info');
-      log(`   Status: ${localValue ? '✅ Set locally' : '❌ Not set locally'}`, localValue ? 'success' : 'warn');
+      log(
+        `   Status: ${localValue ? '✅ Set locally' : '❌ Not set locally'}`,
+        localValue ? 'success' : 'warn',
+      );
       if (localValue && !config.secret) {
         log(`   Current value: ${localValue}`, 'info');
       } else if (localValue && config.secret) {
@@ -298,7 +306,10 @@ function generateChecklist() {
       if (config.default) {
         log(`   Default: ${config.default}`, 'info');
       }
-      log(`   Status: ${localValue ? '✅ Set locally' : '⚪ Not set (optional)'}`, localValue ? 'success' : 'info');
+      log(
+        `   Status: ${localValue ? '✅ Set locally' : '⚪ Not set (optional)'}`,
+        localValue ? 'success' : 'info',
+      );
       if (localValue && !config.secret) {
         log(`   Current value: ${localValue}`, 'info');
       } else if (localValue && config.secret) {
@@ -333,8 +344,14 @@ function generateChecklist() {
   const optionalSet = optional.filter(({ localValue }) => localValue).length;
   const optionalTotal = optional.length;
 
-  log(`\n🚨 Critical: ${criticalSet}/${criticalTotal} set locally`, criticalSet === criticalTotal ? 'success' : 'error');
-  log(`📋 Required: ${requiredSet}/${requiredTotal} set locally`, requiredSet === requiredTotal ? 'success' : 'warn');
+  log(
+    `\n🚨 Critical: ${criticalSet}/${criticalTotal} set locally`,
+    criticalSet === criticalTotal ? 'success' : 'error',
+  );
+  log(
+    `📋 Required: ${requiredSet}/${requiredTotal} set locally`,
+    requiredSet === requiredTotal ? 'success' : 'warn',
+  );
   log(`📝 Optional: ${optionalSet}/${optionalTotal} set locally`, 'info');
 
   // Special Notes

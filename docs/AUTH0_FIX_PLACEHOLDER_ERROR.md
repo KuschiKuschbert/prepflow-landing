@@ -3,6 +3,7 @@
 ## Problem
 
 Auth0 dashboard shows error:
+
 ```
 Payload validation error: 'Object didn't pass validation for format url-with-placeholders: '
 on property web_origins[4].
@@ -13,6 +14,7 @@ This prevents saving the configuration, even though the API shows only 4 valid U
 ## Root Cause
 
 There's a **hidden 5th entry** (`web_origins[4]`) in the Auth0 dashboard that contains a placeholder URL like:
+
 - `https://yourdomain.com`
 - `https://example.com`
 - `https://{tenant}.auth0.com`
@@ -41,6 +43,7 @@ This entry might not be visible in the UI but is preventing the save operation.
 ### Step 3: Remove Placeholder URLs
 
 **Current valid URLs (keep these):**
+
 ```
 https://prepflow.org
 https://www.prepflow.org
@@ -49,6 +52,7 @@ http://localhost:3001
 ```
 
 **Remove any of these (placeholders):**
+
 - `https://yourdomain.com`
 - `https://example.com`
 - `https://{tenant}.auth0.com`
@@ -70,6 +74,7 @@ http://localhost:3001
 ### Step 5: Verify Other Fields
 
 **Allowed Callback URLs** (should have exactly 4):
+
 ```
 https://prepflow.org/api/auth/callback/auth0
 https://www.prepflow.org/api/auth/callback/auth0
@@ -78,6 +83,7 @@ http://localhost:3001/api/auth/callback/auth0
 ```
 
 **Allowed Logout URLs** (should have exactly 8):
+
 ```
 http://localhost:3000
 http://localhost:3000/
@@ -102,11 +108,13 @@ https://www.prepflow.org/
 ### Step 7: Verify Fix
 
 After saving, run:
+
 ```bash
 npm run auth0:check-config
 ```
 
 Should show:
+
 ```
 ✅ All 4 required web origins are configured correctly
 ✅ All 4 required callback URLs are configured correctly
@@ -128,6 +136,7 @@ If you have M2M credentials with `update:clients` scope:
 ## Why This Happens
 
 Auth0 dashboard sometimes:
+
 - Adds placeholder URLs during initial setup
 - Doesn't show all entries in the UI
 - Has UI bugs that hide invalid entries
@@ -136,6 +145,7 @@ Auth0 dashboard sometimes:
 ## Prevention
 
 After fixing:
+
 1. **Always verify** URLs before saving
 2. **Remove empty lines** from text areas
 3. **Don't copy-paste** placeholder examples

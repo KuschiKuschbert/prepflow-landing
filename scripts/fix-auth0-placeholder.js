@@ -60,11 +60,7 @@ function httpsRequest(options, postData = null) {
           if (res.statusCode >= 200 && res.statusCode < 300) {
             resolve({ data: parsed, statusCode: res.statusCode });
           } else {
-            reject(
-              new Error(
-                `HTTP ${res.statusCode}: ${JSON.stringify(parsed)}`,
-              ),
-            );
+            reject(new Error(`HTTP ${res.statusCode}: ${JSON.stringify(parsed)}`));
           }
         } catch (e) {
           if (res.statusCode >= 200 && res.statusCode < 300) {
@@ -87,7 +83,10 @@ function httpsRequest(options, postData = null) {
 }
 
 async function getAccessToken() {
-  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(
+    /\/$/,
+    '',
+  );
 
   if (!auth0Domain) {
     throw new Error('AUTH0_ISSUER_BASE_URL is required');
@@ -180,7 +179,10 @@ function isValidUrl(url) {
 }
 
 async function fetchApplicationSettings(accessToken) {
-  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(
+    /\/$/,
+    '',
+  );
   const clientId = process.env.AUTH0_CLIENT_ID;
 
   if (!auth0Domain || !clientId) {
@@ -202,7 +204,10 @@ async function fetchApplicationSettings(accessToken) {
 }
 
 async function updateApplicationSettings(accessToken, updates) {
-  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(
+    /\/$/,
+    '',
+  );
   const clientId = process.env.AUTH0_CLIENT_ID;
 
   if (!auth0Domain || !clientId) {
@@ -278,22 +283,25 @@ async function main() {
     ];
 
     // Merge valid existing URLs with expected URLs (remove duplicates)
-    const finalWebOrigins = [
-      ...new Set([...validWebOrigins, ...expectedWebOrigins]),
-    ].filter(url => isValidUrl(url) && !isPlaceholder(url));
+    const finalWebOrigins = [...new Set([...validWebOrigins, ...expectedWebOrigins])].filter(
+      url => isValidUrl(url) && !isPlaceholder(url),
+    );
 
-    const finalCallbacks = [
-      ...new Set([...validCallbacks, ...expectedCallbacks]),
-    ].filter(url => isValidUrl(url) && !isPlaceholder(url));
+    const finalCallbacks = [...new Set([...validCallbacks, ...expectedCallbacks])].filter(
+      url => isValidUrl(url) && !isPlaceholder(url),
+    );
 
-    const finalLogoutUrls = [
-      ...new Set([...validLogoutUrls, ...expectedLogoutUrls]),
-    ].filter(url => isValidUrl(url) && !isPlaceholder(url));
+    const finalLogoutUrls = [...new Set([...validLogoutUrls, ...expectedLogoutUrls])].filter(
+      url => isValidUrl(url) && !isPlaceholder(url),
+    );
 
     log('🌐 Web Origins:', 'info');
     log(`  Current: ${currentSettings.web_origins?.length || 0} entries`, 'info');
     log(`  Valid: ${validWebOrigins.length} entries`, 'info');
-    log(`  Placeholders removed: ${(currentSettings.web_origins?.length || 0) - validWebOrigins.length}`, 'warn');
+    log(
+      `  Placeholders removed: ${(currentSettings.web_origins?.length || 0) - validWebOrigins.length}`,
+      'warn',
+    );
     log(`  Final: ${finalWebOrigins.length} entries`, 'success');
     finalWebOrigins.forEach((url, i) => {
       log(`    [${i}] ${url}`, 'info');
@@ -303,7 +311,10 @@ async function main() {
     log('🔗 Callback URLs:', 'info');
     log(`  Current: ${currentSettings.callbacks?.length || 0} entries`, 'info');
     log(`  Valid: ${validCallbacks.length} entries`, 'info');
-    log(`  Placeholders removed: ${(currentSettings.callbacks?.length || 0) - validCallbacks.length}`, 'warn');
+    log(
+      `  Placeholders removed: ${(currentSettings.callbacks?.length || 0) - validCallbacks.length}`,
+      'warn',
+    );
     log(`  Final: ${finalCallbacks.length} entries`, 'success');
     finalCallbacks.forEach((url, i) => {
       log(`    [${i}] ${url}`, 'info');
@@ -313,7 +324,10 @@ async function main() {
     log('🚪 Logout URLs:', 'info');
     log(`  Current: ${currentSettings.allowed_logout_urls?.length || 0} entries`, 'info');
     log(`  Valid: ${validLogoutUrls.length} entries`, 'info');
-    log(`  Placeholders removed: ${(currentSettings.allowed_logout_urls?.length || 0) - validLogoutUrls.length}`, 'warn');
+    log(
+      `  Placeholders removed: ${(currentSettings.allowed_logout_urls?.length || 0) - validLogoutUrls.length}`,
+      'warn',
+    );
     log(`  Final: ${finalLogoutUrls.length} entries`, 'success');
     finalLogoutUrls.forEach((url, i) => {
       log(`    [${i}] ${url}`, 'info');

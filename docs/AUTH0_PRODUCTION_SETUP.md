@@ -54,6 +54,7 @@ http://localhost:3001
 **Purpose:** Used for password reset and email verification redirects. Not required for standard OAuth flow, but improves UX.
 
 **Set to:**
+
 ```
 https://www.prepflow.org/api/auth/signin
 ```
@@ -84,6 +85,7 @@ DISABLE_ALLOWLIST=true
 ```
 
 **⚠️ IMPORTANT:**
+
 - `NEXTAUTH_URL` should be `https://www.prepflow.org` (with www) to match your primary domain
 - Both www and non-www domains must be configured in Auth0 callback URLs
 - Use strong secrets (minimum 32 characters)
@@ -108,6 +110,7 @@ DISABLE_ALLOWLIST=true
 **Cause:** Callback URL not properly configured in Auth0
 
 **Solution:**
+
 1. Check Auth0 Dashboard → Applications → Settings → Allowed Callback URLs
 2. Ensure both `https://prepflow.org/api/auth/callback/auth0` and `https://www.prepflow.org/api/auth/callback/auth0` are included
 3. Save changes and wait 1-2 minutes for propagation
@@ -118,6 +121,7 @@ DISABLE_ALLOWLIST=true
 **Cause:** Callback URL doesn't match exactly what's configured in Auth0
 
 **Solution:**
+
 1. Verify callback URL in Auth0 matches exactly: `https://www.prepflow.org/api/auth/callback/auth0`
 2. Check for trailing slashes, protocol (https vs http), and www vs non-www
 3. Ensure `NEXTAUTH_URL` environment variable matches your primary domain
@@ -127,6 +131,7 @@ DISABLE_ALLOWLIST=true
 **Cause:** User not in allowlist (if allowlist enabled)
 
 **Solution:**
+
 1. Check `ALLOWED_EMAILS` environment variable includes user's email
 2. Or set `DISABLE_ALLOWLIST=true` to allow all authenticated users
 3. Verify email matches exactly (case-sensitive)
@@ -143,6 +148,7 @@ node scripts/validate-auth0-env.js
 ```
 
 **What it checks:**
+
 - ✅ All required environment variables are present
 - ✅ URL formats are correct (protocol, trailing slashes)
 - ✅ Secret lengths meet requirements
@@ -150,6 +156,7 @@ node scripts/validate-auth0-env.js
 - ✅ Callback URL consistency with NEXTAUTH_URL
 
 **Example output:**
+
 ```
 ✅ All required environment variables are present
 ✅ AUTH0_ISSUER_BASE_URL uses HTTPS
@@ -166,6 +173,7 @@ node scripts/check-auth0-config.js
 ```
 
 **What it checks:**
+
 - ✅ All required web origins are configured
 - ✅ All required callback URLs are configured
 - ✅ All required logout URLs are configured
@@ -174,17 +182,20 @@ node scripts/check-auth0-config.js
 - ✅ URLs match expected values exactly
 
 **Requirements:**
+
 - `AUTH0_ISSUER_BASE_URL` - Your Auth0 domain
 - `AUTH0_CLIENT_ID` - Your application's Client ID
 - `AUTH0_CLIENT_SECRET` - Your application's Client Secret
 
 **Optional (recommended for better security):**
+
 - `AUTH0_M2M_CLIENT_ID` - Machine-to-Machine application Client ID
 - `AUTH0_M2M_CLIENT_SECRET` - Machine-to-Machine application Client Secret
 
 **Note:** This script requires Management API access with `read:clients` scope. If you get a 403 error, see the script output for setup instructions.
 
 **Example output:**
+
 ```
 ✅ All 4 required web origins are configured correctly
 ✅ All 4 required callback URLs are configured correctly
@@ -200,6 +211,7 @@ node scripts/check-auth0-issues.js
 ```
 
 **What it checks:**
+
 - ✅ Environment variable usage and validation
 - ✅ Hardcoded URLs in code
 - ✅ Callback URL construction
@@ -208,6 +220,7 @@ node scripts/check-auth0-issues.js
 - ✅ Common configuration issues
 
 **Example output:**
+
 ```
 ✅ All required environment variables are set
 ✅ No problematic hardcoded URLs found
@@ -232,6 +245,7 @@ npm run auth0:validate
 To use `check-auth0-config.js`, you need Management API access. See `docs/AUTH0_MANAGEMENT_API_SETUP.md` for complete setup instructions.
 
 **Quick Setup:**
+
 1. Create M2M application in Auth0 Dashboard
 2. Grant it `read:clients` scope for Auth0 Management API
 3. Set `AUTH0_M2M_CLIENT_ID` and `AUTH0_M2M_CLIENT_SECRET` in `.env.local`

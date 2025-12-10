@@ -102,7 +102,8 @@ const REQUIRED_VARS = {
     description: 'Supabase anonymous key (public)',
     example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
     critical: true,
-    productionValue: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1bGtycWdqZm9oc3V4aHNtb2ZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5NzYwMDMsImV4cCI6MjA3MjU1MjAwM30.b_P98mAantymNfWy1Qz18SaR-LwrPjuaebO2Uj_5JK8',
+    productionValue:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1bGtycWdqZm9oc3V4aHNtb2ZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5NzYwMDMsImV4cCI6MjA3MjU1MjAwM30.b_P98mAantymNfWy1Qz18SaR-LwrPjuaebO2Uj_5JK8',
   },
   SUPABASE_SERVICE_ROLE_KEY: {
     required: true,
@@ -166,11 +167,7 @@ function httpsRequest(options, postData = null) {
           if (res.statusCode >= 200 && res.statusCode < 300) {
             resolve({ data: parsed, statusCode: res.statusCode });
           } else {
-            reject(
-              new Error(
-                `HTTP ${res.statusCode}: ${JSON.stringify(parsed)}`,
-              ),
-            );
+            reject(new Error(`HTTP ${res.statusCode}: ${JSON.stringify(parsed)}`));
           }
         } catch (e) {
           if (res.statusCode >= 200 && res.statusCode < 300) {
@@ -213,7 +210,10 @@ async function promptForValue(key, config, localValue) {
     if (localValue && !config.secret) {
       log(`   Current local value: ${localValue}`, 'info');
     } else if (localValue && config.secret) {
-      log(`   Current local value: ${localValue.substring(0, 4)}...${localValue.substring(localValue.length - 4)}`, 'info');
+      log(
+        `   Current local value: ${localValue.substring(0, 4)}...${localValue.substring(localValue.length - 4)}`,
+        'info',
+      );
     }
     if (config.productionValue && !config.prompt) {
       log(`   Using production value: ${config.productionValue}`, 'success');
@@ -239,6 +239,59 @@ async function promptForValue(key, config, localValue) {
   }
 }
 
+async function listVercelProjects(vercelToken, teamId) {
+  const teamParam = teamId ? `?teamId=${teamId}` : '';
+  const options = {
+    hostname: 'api.vercel.com',
+    path: `/v9/projects${teamParam}`,
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${vercelToken}`,
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const result = await httpsRequest(options);
+  return result.data.projects || [];
+}
+
+async function findVercelProject(vercelToken, teamId, projectName = 'prepflow') {
+  log(`\n🔍 Searching for Vercel project matching "${projectName}"...`, 'info');
+
+  try {
+    const projects = await listVercelProjects(vercelToken, teamId);
+
+    // Try exact match first
+    let project = projects.find(
+      p =>
+        p.name === projectName ||
+        p.name === `${projectName}-landing` ||
+        p.name === `prepflow-landing`,
+    );
+
+    // Try partial match
+    if (!project) {
+      project = projects.find(p => p.name.toLowerCase().includes(projectName.toLowerCase()));
+    }
+
+    if (project) {
+      log(`✅ Found project: ${project.name} (${project.id})`, 'success');
+      return { projectId: project.id, projectName: project.name };
+    }
+
+    // If not found, show available projects
+    log(`\n📋 Available projects:`, 'info');
+    projects.forEach(p => {
+      log(`   - ${p.name} (${p.id})`, 'info');
+    });
+
+    return null;
+  } catch (error) {
+    log(`⚠️ Could not list projects: ${error.message}`, 'warn');
+    return null;
+  }
+}
+
 async function getVercelProjectId(vercelToken, teamId) {
   // Try to get from environment or .vercel directory
   const vercelDir = path.join(process.cwd(), '.vercel');
@@ -248,6 +301,7 @@ async function getVercelProjectId(vercelToken, teamId) {
       try {
         const projectData = JSON.parse(fs.readFileSync(projectJson, 'utf-8'));
         if (projectData.projectId) {
+          log(`✅ Found project ID in .vercel directory: ${projectData.projectId}`, 'success');
           return projectData.projectId;
         }
       } catch (e) {
@@ -256,14 +310,19 @@ async function getVercelProjectId(vercelToken, teamId) {
     }
   }
 
-  // If not found, try to get from API using project name
-  // For now, we'll prompt for it
+  // Try to find project via API
+  const found = await findVercelProject(vercelToken, teamId);
+  if (found) {
+    return found.projectId;
+  }
+
+  // If not found, prompt for it
   const rl = createReadlineInterface();
   try {
     log('\n📋 Vercel Project Configuration', 'info');
     const projectId = await question(
       rl,
-      'Enter Vercel Project ID (or project name, found in Vercel Dashboard → Settings → General): ',
+      'Enter Vercel Project ID (found in Vercel Dashboard → Settings → General): ',
     );
     return projectId.trim();
   } finally {
@@ -287,7 +346,14 @@ async function listVercelEnvVars(vercelToken, projectId, teamId) {
   return result.data.envs || [];
 }
 
-async function createVercelEnvVar(vercelToken, projectId, teamId, key, value, environment = 'production') {
+async function createVercelEnvVar(
+  vercelToken,
+  projectId,
+  teamId,
+  key,
+  value,
+  environment = 'production',
+) {
   const teamParam = teamId ? `?teamId=${teamId}` : '';
   const postData = JSON.stringify({
     key,
@@ -311,7 +377,15 @@ async function createVercelEnvVar(vercelToken, projectId, teamId, key, value, en
   return result.data;
 }
 
-async function updateVercelEnvVar(vercelToken, projectId, teamId, envVarId, key, value, environment = 'production') {
+async function updateVercelEnvVar(
+  vercelToken,
+  projectId,
+  teamId,
+  envVarId,
+  key,
+  value,
+  environment = 'production',
+) {
   const teamParam = teamId ? `?teamId=${teamId}` : '';
   const postData = JSON.stringify({
     key,
@@ -365,7 +439,9 @@ async function main() {
     }
 
     // Get project ID
-    const projectId = process.env.VERCEL_PROJECT_ID || (await getVercelProjectId(vercelToken, process.env.VERCEL_TEAM_ID));
+    const projectId =
+      process.env.VERCEL_PROJECT_ID ||
+      (await getVercelProjectId(vercelToken, process.env.VERCEL_TEAM_ID));
     if (!projectId) {
       log('❌ Vercel Project ID is required', 'error');
       process.exit(1);
@@ -421,14 +497,25 @@ async function main() {
 
       let productionValue = config.productionValue;
 
-      // Prompt for secrets or values that need production input
+      // For secrets, use local value if available (user wants automation)
+      // Otherwise prompt for production input
       if (config.prompt || (config.secret && !productionValue)) {
         const localValue = localEnv[key];
-        productionValue = await promptForValue(key, config, localValue);
+        if (localValue && process.env.AUTO_MODE === 'true') {
+          // Auto mode: use local value for secrets
+          log(`   Using local value for ${key} (auto mode)`, 'info');
+          productionValue = localValue;
+        } else {
+          productionValue = await promptForValue(key, config, localValue);
+        }
       } else if (config.productionValue) {
         productionValue = config.productionValue;
       } else if (localEnv[key] && !config.secret) {
         // Use local value if not a secret and no production value specified
+        productionValue = localEnv[key];
+      } else if (localEnv[key] && config.secret) {
+        // For secrets, use local value if available (assume it's production-ready)
+        log(`   Using local value for ${key}`, 'info');
         productionValue = localEnv[key];
       }
 
@@ -500,7 +587,15 @@ async function main() {
     for (const { envVar, key, value, config } of varsToUpdate) {
       try {
         log(`\n🔄 Updating ${key}...`, 'info');
-        await updateVercelEnvVar(vercelToken, projectId, teamId, envVar.id, key, value, 'production');
+        await updateVercelEnvVar(
+          vercelToken,
+          projectId,
+          teamId,
+          envVar.id,
+          key,
+          value,
+          'production',
+        );
         log(`✅ Updated ${key}`, 'success');
       } catch (error) {
         log(`❌ Failed to update ${key}: ${error.message}`, 'error');
@@ -523,4 +618,3 @@ async function main() {
 }
 
 main();
-

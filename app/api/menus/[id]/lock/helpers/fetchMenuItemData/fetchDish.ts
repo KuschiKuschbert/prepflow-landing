@@ -106,4 +106,3 @@ export async function fetchDishData(
     instructions: undefined, // Dishes don't have instructions, sub-recipes do
   };
 }
-

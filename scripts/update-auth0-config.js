@@ -103,11 +103,7 @@ function httpsRequest(options, postData = null) {
           if (res.statusCode >= 200 && res.statusCode < 300) {
             resolve({ data: parsed, statusCode: res.statusCode });
           } else {
-            reject(
-              new Error(
-                `HTTP ${res.statusCode}: ${JSON.stringify(parsed)}`,
-              ),
-            );
+            reject(new Error(`HTTP ${res.statusCode}: ${JSON.stringify(parsed)}`));
           }
         } catch (e) {
           if (res.statusCode >= 200 && res.statusCode < 300) {
@@ -130,7 +126,10 @@ function httpsRequest(options, postData = null) {
 }
 
 async function getAccessToken() {
-  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(
+    /\/$/,
+    '',
+  );
 
   if (!auth0Domain) {
     throw new Error('AUTH0_ISSUER_BASE_URL is required');
@@ -196,7 +195,10 @@ async function getAccessToken() {
 }
 
 async function fetchApplicationSettings(accessToken) {
-  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(
+    /\/$/,
+    '',
+  );
   const clientId = process.env.AUTH0_CLIENT_ID;
 
   if (!auth0Domain || !clientId) {
@@ -218,7 +220,10 @@ async function fetchApplicationSettings(accessToken) {
 }
 
 async function updateApplicationSettings(accessToken, updates) {
-  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const auth0Domain = process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(
+    /\/$/,
+    '',
+  );
   const clientId = process.env.AUTH0_CLIENT_ID;
 
   if (!auth0Domain || !clientId) {
@@ -298,7 +303,10 @@ async function main() {
     let currentSettings;
     try {
       currentSettings = await fetchApplicationSettings(accessToken);
-      log(`✅ Retrieved settings for: ${currentSettings.name || currentSettings.client_id}`, 'success');
+      log(
+        `✅ Retrieved settings for: ${currentSettings.name || currentSettings.client_id}`,
+        'success',
+      );
     } catch (error) {
       if (error.message.includes('insufficient_scope') || error.message.includes('403')) {
         log('\n❌ Management API Access Denied', 'error');
@@ -327,17 +335,17 @@ async function main() {
     );
 
     // Merge with expected URLs (remove duplicates, keep order)
-    const finalWebOrigins = [
-      ...new Set([...EXPECTED_WEB_ORIGINS, ...validWebOrigins]),
-    ].filter(url => isValidUrl(url) && !isPlaceholder(url));
+    const finalWebOrigins = [...new Set([...EXPECTED_WEB_ORIGINS, ...validWebOrigins])].filter(
+      url => isValidUrl(url) && !isPlaceholder(url),
+    );
 
-    const finalCallbacks = [
-      ...new Set([...EXPECTED_CALLBACK_URLS, ...validCallbacks]),
-    ].filter(url => isValidUrl(url) && !isPlaceholder(url));
+    const finalCallbacks = [...new Set([...EXPECTED_CALLBACK_URLS, ...validCallbacks])].filter(
+      url => isValidUrl(url) && !isPlaceholder(url),
+    );
 
-    const finalLogoutUrls = [
-      ...new Set([...EXPECTED_LOGOUT_URLS, ...validLogoutUrls]),
-    ].filter(url => isValidUrl(url) && !isPlaceholder(url));
+    const finalLogoutUrls = [...new Set([...EXPECTED_LOGOUT_URLS, ...validLogoutUrls])].filter(
+      url => isValidUrl(url) && !isPlaceholder(url),
+    );
 
     // Show what will be updated
     log('\n📊 Configuration Summary:', 'info');
@@ -360,9 +368,11 @@ async function main() {
 
     // Check for changes
     const webOriginsChanged =
-      JSON.stringify(finalWebOrigins.sort()) !== JSON.stringify((currentSettings.web_origins || []).sort());
+      JSON.stringify(finalWebOrigins.sort()) !==
+      JSON.stringify((currentSettings.web_origins || []).sort());
     const callbacksChanged =
-      JSON.stringify(finalCallbacks.sort()) !== JSON.stringify((currentSettings.callbacks || []).sort());
+      JSON.stringify(finalCallbacks.sort()) !==
+      JSON.stringify((currentSettings.callbacks || []).sort());
     const logoutUrlsChanged =
       JSON.stringify(finalLogoutUrls.sort()) !==
       JSON.stringify((currentSettings.allowed_logout_urls || []).sort());
@@ -429,4 +439,3 @@ async function main() {
 }
 
 main();
-
