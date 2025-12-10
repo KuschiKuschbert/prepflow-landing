@@ -1,6 +1,6 @@
-import { isEmailAllowed } from '@/lib/allowlist';
 import { isAdmin } from '@/lib/admin-utils';
-import { getTokenFromCookie, type MiddlewareToken } from '@/lib/middleware-auth';
+import { isEmailAllowed } from '@/lib/allowlist';
+import { getTokenFromCookie } from '@/lib/middleware-auth';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
