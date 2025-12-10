@@ -27,7 +27,9 @@ export default async function middleware(req: NextRequest) {
   if (
     pathname.startsWith('/api/auth') ||
     pathname.startsWith('/api/leads') ||
-    pathname.startsWith('/api/debug')
+    pathname.startsWith('/api/debug') ||
+    pathname.startsWith('/api/test') ||
+    pathname.startsWith('/api/fix')
   ) {
     return NextResponse.next();
   }
