@@ -7,19 +7,21 @@ import { NextResponse } from 'next/server';
 export default async function middleware(req: NextRequest) {
   const { pathname, origin, search } = req.nextUrl;
   const isProduction = process.env.NODE_ENV === 'production';
+
+  // CRITICAL: Redirect non-www to www FIRST, before any auth processing
+  // This ensures NextAuth constructs callback URLs using www.prepflow.org
+  if (isProduction && origin.includes('prepflow.org') && !origin.includes('www.prepflow.org')) {
+    const wwwUrl = new URL(req.url);
+    wwwUrl.hostname = 'www.prepflow.org';
+    return NextResponse.redirect(wwwUrl, 301); // Permanent redirect
+  }
+
   const authConfigured = Boolean(
     process.env.NEXTAUTH_SECRET &&
     process.env.AUTH0_ISSUER_BASE_URL &&
     process.env.AUTH0_CLIENT_ID &&
     process.env.AUTH0_CLIENT_SECRET,
   );
-
-  // Redirect non-www to www in production (fixes Auth0 callback URL mismatch)
-  if (isProduction && origin.includes('prepflow.org') && !origin.includes('www.prepflow.org')) {
-    const wwwUrl = new URL(req.url);
-    wwwUrl.hostname = 'www.prepflow.org';
-    return NextResponse.redirect(wwwUrl, 301); // Permanent redirect
-  }
 
   // Always allow auth and selected public APIs
   if (pathname.startsWith('/api/auth') || pathname.startsWith('/api/leads')) {

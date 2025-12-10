@@ -23,6 +23,13 @@ if (
     const callbackUrl = process.env.NEXTAUTH_URL
       ? `${process.env.NEXTAUTH_URL}/api/auth/callback/auth0`
       : undefined;
+
+    // Development logging to verify callback URL construction
+    if (isDev && callbackUrl) {
+      logger.dev('[Auth0 Config] Forced callback URL:', callbackUrl);
+      logger.dev('[Auth0 Config] NEXTAUTH_URL:', process.env.NEXTAUTH_URL);
+    }
+
     providers.push(
       Auth0Provider({
         issuer: process.env.AUTH0_ISSUER_BASE_URL,

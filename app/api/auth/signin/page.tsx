@@ -1,10 +1,10 @@
 'use client';
 
-import { signIn, getProviders } from 'next-auth/react';
-import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { LANDING_FONT_WEIGHTS, LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
+import { getProviders, signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { LANDING_COLORS, LANDING_TYPOGRAPHY, LANDING_FONT_WEIGHTS } from '@/lib/landing-styles';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
 /**
  * Custom Auth0 Sign-In Page
@@ -23,6 +23,17 @@ function SignInContent() {
       setIsLoading(false);
     });
   }, []);
+
+  // Auto-redirect to www version if auth0 error detected and on non-www domain
+  useEffect(() => {
+    if (error === 'auth0' || error === 'Callback') {
+      const currentUrl = window.location.href;
+      if (currentUrl.includes('prepflow.org') && !currentUrl.includes('www.prepflow.org')) {
+        // Auto-redirect to www version
+        window.location.href = currentUrl.replace('prepflow.org', 'www.prepflow.org');
+      }
+    }
+  }, [error]);
 
   const handleSignIn = (providerId: string) => {
     signIn(providerId, {
