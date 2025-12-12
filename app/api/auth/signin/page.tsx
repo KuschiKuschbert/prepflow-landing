@@ -24,19 +24,14 @@ function SignInContent() {
   // Auto-redirect to Auth0 if error=auth0 is detected (cosmetic error - login actually works)
   // Use NextAuth's signIn() function directly instead of redirecting to /api/auth/signin/auth0
   // This bypasses NextAuth's buggy error handling and goes straight to Auth0
-  // Wait for providers to load before calling signIn() to ensure Auth0 provider is available
+  // signIn() works even if providers aren't loaded - it will fetch them internally if needed
   useEffect(() => {
-    if (
-      error === 'auth0' &&
-      providers?.auth0 &&
-      !isLoading &&
-      !isRedirecting &&
-      !redirectInitiated
-    ) {
+    if (error === 'auth0' && !isRedirecting && !redirectInitiated) {
       redirectInitiated = true;
       setIsRedirecting(true);
       // Use NextAuth's signIn() function directly - this bypasses the custom signin page
       // and calls the signin route handler directly, which generates the Auth0 authorization URL
+      // signIn() makes a POST request with CSRF token, bypassing NextAuth's GET request bug
       signIn('auth0', {
         callbackUrl,
         redirect: true, // Force immediate redirect to Auth0
@@ -49,7 +44,7 @@ function SignInContent() {
         console.error('[SignInPage] Auto-redirect failed:', err);
       });
     }
-  }, [error, providers, isLoading, callbackUrl, isRedirecting]);
+  }, [error, callbackUrl, isRedirecting]);
 
   useEffect(() => {
     getProviders().then(provs => {
