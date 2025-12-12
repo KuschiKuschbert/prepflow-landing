@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
           // Try to get authorization params
           authorizationParams: (auth0Provider as any).authorization?.params,
         };
-      } catch (e) {
+      } catch {
         // Provider internals may not be accessible
         providerConfig = { error: 'Cannot access provider internals' };
       }
