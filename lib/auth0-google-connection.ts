@@ -144,7 +144,7 @@ export async function enableGoogleConnectionForApp(): Promise<{
       return {
         success: false,
         message:
-          'Google connection exists but isn't configured with OAuth credentials. Please configure it in Auth0 Dashboard > Connections > Social > Google',
+          "Google connection exists but isn't configured with OAuth credentials. Please configure it in Auth0 Dashboard > Connections > Social > Google",
       };
     }
 
