@@ -96,8 +96,7 @@ export const authOptions: NextAuthOptions = {
   },
   providers,
   pages: {
-    // Temporarily removed custom signIn page to test if it fixes Auth0 redirect issue
-    // signIn: '/api/auth/signin', // Custom Cyber Carrot styled sign-in page
+    signIn: '/api/auth/signin', // Custom Cyber Carrot styled sign-in page (conditional - auto-redirects for provider signins)
     error: '/api/auth/error', // Custom error page (optional)
   },
   callbacks: {

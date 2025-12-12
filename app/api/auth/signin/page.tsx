@@ -21,17 +21,16 @@ function SignInContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
-  // Auto-redirect to Auth0 if error=auth0 is detected (cosmetic error - login actually works)
-  // Use NextAuth's signIn() function directly instead of redirecting to /api/auth/signin/auth0
-  // This bypasses NextAuth's buggy error handling and goes straight to Auth0
-  // signIn() works even if providers aren't loaded - it will fetch them internally if needed
+  // CONDITIONAL CUSTOM SIGNIN PAGE - Part 2 of 2
+  // If error=auth0 (provider-specific signin), immediately redirect to Auth0 without showing custom page
+  // This bypasses NextAuth's buggy redirect that sends provider signins to custom page
+  // Only show custom Cyber Carrot page for non-provider signins (initial visit, etc.)
   useEffect(() => {
     if (error === 'auth0' && !isRedirecting && !redirectInitiated) {
       redirectInitiated = true;
       setIsRedirecting(true);
-      // Use NextAuth's signIn() function directly - this bypasses the custom signin page
-      // and calls the signin route handler directly, which generates the Auth0 authorization URL
-      // signIn() makes a POST request with CSRF token, bypassing NextAuth's GET request bug
+      // Provider-specific signin detected - bypass custom page and go straight to Auth0
+      // Use NextAuth's signIn() function which makes POST request with CSRF token
       signIn('auth0', {
         callbackUrl,
         redirect: true, // Force immediate redirect to Auth0
@@ -65,41 +64,6 @@ function SignInContent() {
     }
   }, [error]);
 
-  // Auto-redirect to Auth0 if error=auth0 is detected (cosmetic error - login actually works)
-  // This improves UX by automatically starting the login flow instead of showing confusing error
-  // Redirect immediately without waiting for providers to load - we know Auth0 is configured
-  useEffect(() => {
-    // Check both the error from searchParams and directly from URL as fallback
-    const urlError =
-      typeof window !== 'undefined'
-        ? new URLSearchParams(window.location.search).get('error')
-        : null;
-    const shouldRedirect = (error === 'auth0' || urlError === 'auth0') && !isRedirecting;
-
-    if (shouldRedirect) {
-      setIsRedirecting(true);
-
-      // Get callbackUrl from searchParams or URL as fallback
-      const urlCallbackUrl =
-        typeof window !== 'undefined'
-          ? new URLSearchParams(window.location.search).get('callbackUrl')
-          : null;
-      const finalCallbackUrl = callbackUrl || urlCallbackUrl || '/webapp';
-
-      // Redirect immediately - don't wait for providers to load
-      // Construct the signin URL and redirect immediately
-      const signinUrl = `${window.location.origin}/api/auth/signin/auth0?callbackUrl=${encodeURIComponent(finalCallbackUrl)}`;
-
-      // Use both replace and href as fallback to ensure redirect happens
-      try {
-        window.location.replace(signinUrl);
-      } catch {
-        // Fallback if replace fails
-        window.location.href = signinUrl;
-      }
-    }
-  }, [error, callbackUrl, isRedirecting]);
-
   const handleSignIn = (providerId: string) => {
     signIn(providerId, {
       callbackUrl,
@@ -108,6 +72,26 @@ function SignInContent() {
       },
     });
   };
+
+  // CONDITIONAL RENDERING - Part 2 of 2
+  // If error=auth0 (provider-specific signin), show loading state while redirecting
+  // Don't show full custom page UI for provider signins - they should redirect immediately
+  if (error === 'auth0' && isRedirecting) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a] px-4 py-12">
+        <div className="w-full max-w-md text-center">
+          <div className="mb-6 rounded-2xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-6">
+            <div className="flex items-center justify-center gap-3">
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#29E7CD] border-t-transparent" />
+              <p className={`${LANDING_TYPOGRAPHY.base} text-[#29E7CD]`}>
+                Redirecting to sign in...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a] px-4 py-12">
