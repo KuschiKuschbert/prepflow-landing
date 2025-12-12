@@ -220,6 +220,3 @@ For even more customization, you can customize Auth0's Universal Login page:
 **Status:** ✅ **Production Ready**
 
 The Auth0 sign-in and error pages are fully styled with Cyber Carrot design system and ready for production use.
-
-
-

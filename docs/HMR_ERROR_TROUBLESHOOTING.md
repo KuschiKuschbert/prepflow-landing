@@ -122,6 +122,3 @@ If the error continues:
 1. Check Next.js release notes for HMR fixes
 2. Monitor Next.js GitHub issues for Turbopack updates
 3. Consider reporting to Next.js team if workarounds don't help
-
-
-

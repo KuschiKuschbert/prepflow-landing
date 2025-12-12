@@ -816,6 +816,3 @@ When reviewing code, check:
 ---
 
 **Remember:** The goal is to make PrepFlow feel like a helpful kitchen colleague, not a robot. Use kitchen metaphors naturally, keep it friendly but professional, and always prioritize clarity over cleverness.
-
-
-

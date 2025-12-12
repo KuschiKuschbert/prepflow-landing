@@ -9,16 +9,19 @@ import { logger } from '@/lib/logger';
 export async function POST(request: NextRequest) {
   try {
     const auth0Issuer = process.env.AUTH0_ISSUER_BASE_URL;
+    // Try M2M credentials first (more secure), fall back to regular app credentials
+    const m2mClientId = process.env.AUTH0_M2M_CLIENT_ID;
+    const m2mClientSecret = process.env.AUTH0_M2M_CLIENT_SECRET;
     const auth0ClientId = process.env.AUTH0_CLIENT_ID;
     const auth0ClientSecret = process.env.AUTH0_CLIENT_SECRET;
     const nextAuthUrl = process.env.NEXTAUTH_URL;
 
-    if (!auth0Issuer || !auth0ClientId || !auth0ClientSecret) {
+    if (!auth0Issuer) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Missing Auth0 credentials',
-          message: 'AUTH0_ISSUER_BASE_URL, AUTH0_CLIENT_ID, and AUTH0_CLIENT_SECRET must be set',
+          error: 'Missing Auth0 issuer',
+          message: 'AUTH0_ISSUER_BASE_URL must be set',
         },
         { status: 400 },
       );
@@ -35,15 +38,46 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Determine which credentials to use (M2M preferred, fall back to regular app)
+    const useM2M = m2mClientId && m2mClientSecret;
+    const managementClientId = useM2M ? m2mClientId : auth0ClientId;
+    const managementClientSecret = useM2M ? m2mClientSecret : auth0ClientSecret;
+
+    if (!managementClientId || !managementClientSecret) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Missing Auth0 credentials',
+          message:
+            'Either AUTH0_M2M_CLIENT_ID/AUTH0_M2M_CLIENT_SECRET (recommended) or AUTH0_CLIENT_ID/AUTH0_CLIENT_SECRET must be set',
+          hint: 'See docs/AUTH0_MANAGEMENT_API_SETUP.md for setup instructions',
+        },
+        { status: 400 },
+      );
+    }
+
+    // The application client ID to update (always use the main app, not M2M)
+    const applicationClientId = auth0ClientId;
+    if (!applicationClientId) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Missing application client ID',
+          message: 'AUTH0_CLIENT_ID must be set to identify which application to update',
+        },
+        { status: 400 },
+      );
+    }
+
     const domain = auth0Issuer.replace(/^https?:\/\//, '').replace(/\/$/, '');
     const managementClient = new ManagementClient({
       domain,
-      clientId: auth0ClientId,
-      clientSecret: auth0ClientSecret,
+      clientId: managementClientId,
+      clientSecret: managementClientSecret,
     });
 
     // Get current application configuration
-    const appResponse = await managementClient.clients.get({ client_id: auth0ClientId });
+    const appResponse = await managementClient.clients.get({ client_id: applicationClientId });
     const app = appResponse.data || (appResponse as any);
 
     // Build required URLs
@@ -74,30 +108,27 @@ export async function POST(request: NextRequest) {
 
     // Merge with existing URLs (avoid duplicates)
     const currentCallbacks = (app.callbacks || []) as string[];
-    const currentLogoutUrls = (app.logout_urls || []) as string[];
+    // Auth0 Management API uses 'allowed_logout_urls' (with underscores, not 'logout_urls')
+    const currentLogoutUrls = (app.allowed_logout_urls || app.logout_urls || []) as string[];
     const currentWebOrigins = (app.web_origins || []) as string[];
 
-    const updatedCallbacks = [
-      ...new Set([...currentCallbacks, ...requiredCallbacks]),
-    ];
-    const updatedLogoutUrls = [
-      ...new Set([...currentLogoutUrls, ...requiredLogoutUrls]),
-    ];
-    const updatedWebOrigins = [
-      ...new Set([...currentWebOrigins, ...requiredWebOrigins]),
-    ];
+    const updatedCallbacks = [...new Set([...currentCallbacks, ...requiredCallbacks])];
+    const updatedLogoutUrls = [...new Set([...currentLogoutUrls, ...requiredLogoutUrls])];
+    const updatedWebOrigins = [...new Set([...currentWebOrigins, ...requiredWebOrigins])];
 
     // Update application
+    // Auth0 Management API expects 'allowed_logout_urls' (not 'logout_urls')
     await managementClient.clients.update(
-      { client_id: auth0ClientId },
+      { client_id: applicationClientId },
       {
         callbacks: updatedCallbacks,
-        logout_urls: updatedLogoutUrls,
+        allowed_logout_urls: updatedLogoutUrls,
         web_origins: updatedWebOrigins,
       } as any, // Auth0 SDK types may be incomplete
     );
 
     logger.info('[Auth0 Fix] Updated Auth0 application configuration', {
+      usingM2M: useM2M,
       callbacks: updatedCallbacks,
       logoutUrls: updatedLogoutUrls,
       webOrigins: updatedWebOrigins,
@@ -110,17 +141,17 @@ export async function POST(request: NextRequest) {
         callbacks: {
           before: currentCallbacks,
           after: updatedCallbacks,
-          added: requiredCallbacks.filter((url) => !currentCallbacks.includes(url)),
+          added: requiredCallbacks.filter(url => !currentCallbacks.includes(url)),
         },
         logoutUrls: {
           before: currentLogoutUrls,
           after: updatedLogoutUrls,
-          added: requiredLogoutUrls.filter((url) => !currentLogoutUrls.includes(url)),
+          added: requiredLogoutUrls.filter(url => !currentLogoutUrls.includes(url)),
         },
         webOrigins: {
           before: currentWebOrigins,
           after: updatedWebOrigins,
-          added: requiredWebOrigins.filter((url) => !currentWebOrigins.includes(url)),
+          added: requiredWebOrigins.filter(url => !currentWebOrigins.includes(url)),
         },
       },
     });

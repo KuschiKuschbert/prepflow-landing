@@ -273,6 +273,3 @@ Retry processing failed webhook events:
 
 - [Stripe Integration Guide](./STRIPE_INTEGRATION.md)
 - [Stripe Testing Guide](./STRIPE_TESTING.md)
-
-
-

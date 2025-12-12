@@ -1,174 +1,151 @@
-# Auth0 Management API Setup Guide
+# Auth0 Management API Setup for Auto-Fix
 
-**Purpose:** Guide for setting up Auth0 Management API access to enable automated configuration management and validation.
+**Purpose:** Configure Auth0 Management API access to enable automatic configuration fixes via `/api/fix/auth0-callback-urls`
 
-## Why Management API Access?
+## Why This Is Needed
 
-The Auth0 Management API allows you to:
+The auto-fix endpoint (`/api/fix/auth0-callback-urls`) requires Management API permissions to update Auth0 application settings. Without this, you'll need to manually configure logout URLs in the Auth0 dashboard.
 
-- ✅ **Validate** application settings programmatically (`check-auth0-config.js`)
-- ✅ **Update** application settings programmatically (`update-auth0-config.js`)
-- ✅ **Fix** configuration issues without manual dashboard changes
-- ✅ **Sync** configuration across environments
-- ✅ **Automate** Auth0 configuration in CI/CD pipelines
+## Setup Steps
 
-## Required Scopes
+### Step 1: Create Machine-to-Machine (M2M) Application
 
-**For Reading Configuration (check-auth0-config.js):**
+1. **Go to Auth0 Dashboard:**
+   - Navigate to: https://manage.auth0.com
+   - Go to: **Applications** → **Applications**
 
-- `read:clients` - Read application settings
-
-**For Updating Configuration (update-auth0-config.js):**
-
-- `read:clients` - Read application settings
-- `update:clients` - Update application settings
-
-**⚠️ IMPORTANT:** Both scopes are required for full programmatic management.
-
-## Setup Options
-
-### Option 1: Machine-to-Machine (M2M) Application (Recommended)
-
-**Why:** More secure, dedicated credentials for API access, easier to manage.
-
-**Steps:**
-
-1. **Create M2M Application:**
-   - Go to https://manage.auth0.com
-   - Navigate to **Applications** → **Applications**
-   - Click **Create Application**
-   - Name: `PrepFlow Management API` (or similar)
+2. **Create New Application:**
+   - Click **"Create Application"**
+   - Name: `PrepFlow Management API` (or any name you prefer)
    - Type: **Machine to Machine Applications**
    - Click **Create**
 
-2. **Authorize Management API:**
-   - After creation, you'll see **APIs** section
-   - Select **Auth0 Management API**
-   - Toggle **Authorize**
-   - Under **Permissions**, select:
-     - ✅ `read:clients` (required for reading application settings)
-     - ✅ `update:clients` (required for updating application settings)
+3. **Authorize API:**
+   - Select: **Auth0 Management API**
    - Click **Authorize**
 
-3. **Get Credentials:**
-   - Copy the **Client ID** (starts with something like `abc123...`)
-   - Copy the **Client Secret** (long string)
+4. **Grant Permissions:**
+   - Find: **update:clients** scope
+   - Check the box to enable it
+   - Click **Authorize**
 
-4. **Set Environment Variables:**
+5. **Copy Credentials:**
+   - Copy the **Client ID** (starts with a long string)
+   - Copy the **Client Secret** (starts with a long string)
+   - **Save these securely** - you'll need them for Step 2
 
-   ```bash
-   # Add to .env.local
-   AUTH0_M2M_CLIENT_ID=your-m2m-client-id-here
-   AUTH0_M2M_CLIENT_SECRET=your-m2m-client-secret-here
-   ```
+### Step 2: Configure Environment Variables in Vercel
 
-5. **Test:**
+1. **Go to Vercel Dashboard:**
+   - Navigate to: Vercel Dashboard → Your Project → Settings → Environment Variables
 
-   ```bash
-   # Validate current configuration
-   npm run auth0:check-config
+2. **Add New Variables:**
+   - **Variable Name:** `AUTH0_M2M_CLIENT_ID`
+   - **Value:** The Client ID from Step 1
+   - **Environment:** Production (and Preview if desired)
+   - Click **Save**
 
-   # Update configuration programmatically
-   npm run auth0:update-config
-   ```
+   - **Variable Name:** `AUTH0_M2M_CLIENT_SECRET`
+   - **Value:** The Client Secret from Step 1
+   - **Environment:** Production (and Preview if desired)
+   - Click **Save**
 
-### Option 2: Grant Your Application Management API Access
+3. **Redeploy:**
+   - After adding variables, trigger a new deployment
+   - Or push a commit to trigger automatic deployment
 
-**Why:** Use existing application credentials (less secure, but simpler).
+### Step 3: Update Auto-Fix Endpoint (If Needed)
 
-**Steps:**
+The auto-fix endpoint (`app/api/fix/auth0-callback-urls/route.ts`) may need to be updated to use M2M credentials if they're different from the main Auth0 credentials.
 
-1. **Authorize Your Application:**
-   - Go to https://manage.auth0.com
-   - Navigate to **APIs** → **Auth0 Management API**
-   - Click **Machine to Machine Applications** tab
-   - Find your application (the one with `AUTH0_CLIENT_ID`)
-   - Toggle **Authorize** if not already authorized
+**Current Implementation:**
 
-2. **Grant Required Scopes:**
-   - Under **Permissions**, select:
-     - ✅ `read:clients` (required for reading application settings)
-     - ✅ `update:clients` (required for updating application settings)
-   - Click **Update**
+- Uses `AUTH0_CLIENT_ID` and `AUTH0_CLIENT_SECRET` (main application credentials)
+- These may not have `update:clients` scope
 
-3. **Test:**
-   ```bash
-   npm run auth0:check-config
-   ```
+**If M2M credentials are needed:**
 
-**Note:** Your existing `AUTH0_CLIENT_ID` and `AUTH0_CLIENT_SECRET` will be used automatically.
+- Update the endpoint to check for `AUTH0_M2M_CLIENT_ID` and `AUTH0_M2M_CLIENT_SECRET` first
+- Fall back to main credentials if M2M credentials aren't available
 
-## Management API Endpoint
+### Step 4: Test Auto-Fix Endpoint
 
-The script uses the Management API endpoint:
+After configuring Management API access:
 
-```
-https://dev-7myakdl4itf644km.us.auth0.com/api/v2/
+```bash
+curl -X POST https://www.prepflow.org/api/fix/auth0-callback-urls | jq '.'
 ```
 
-This is automatically constructed from your `AUTH0_ISSUER_BASE_URL` environment variable.
+**Expected Response:**
 
-## Security Best Practices
+```json
+{
+  "success": true,
+  "message": "Auth0 configuration updated successfully",
+  "changes": {
+    "callbacks": { ... },
+    "logoutUrls": { ... },
+    "webOrigins": { ... }
+  }
+}
+```
 
-1. **Never commit credentials to git** - Always use `.env.local` (gitignored)
-2. **Use M2M credentials** - More secure than regular application credentials
-3. **Minimal scopes** - Only grant `read:clients` (not write permissions)
-4. **Rotate secrets regularly** - Update credentials every 90 days
-5. **Use different credentials** - Separate M2M app for production vs development
+## Alternative: Manual Configuration
+
+If you prefer not to set up Management API access, you can manually configure logout URLs:
+
+1. Go to: https://manage.auth0.com → Applications → Prepflow → Settings
+2. Add to "Allowed Logout URLs":
+   ```
+   https://www.prepflow.org
+   https://www.prepflow.org/
+   https://prepflow.org
+   https://prepflow.org/
+   ```
+3. Save changes
+
+## Security Notes
+
+- **M2M credentials are sensitive** - Never commit them to git
+- **Store in Vercel environment variables** - Secure and encrypted
+- **Use minimal scopes** - Only grant `update:clients` scope (not `read:clients` or others unless needed)
+- **Rotate regularly** - Change M2M credentials every 90 days
 
 ## Troubleshooting
 
-### Error: "Insufficient scope"
+### "Insufficient scope" Error
 
-**Cause:** Credentials don't have `read:clients` scope.
+**Cause:** M2M application doesn't have `update:clients` scope
 
-**Solution:**
+**Fix:**
 
-- Verify the application is authorized for Auth0 Management API
-- Check that `read:clients` scope is granted
-- Wait 1-2 minutes after granting scope (propagation delay)
+1. Go to Auth0 Dashboard → Applications → Your M2M App
+2. Go to **APIs** tab
+3. Select **Auth0 Management API**
+4. Enable **update:clients** scope
+5. Save changes
 
-### Error: "Invalid credentials"
+### "Invalid credentials" Error
 
-**Cause:** Client ID or Secret is incorrect.
+**Cause:** M2M Client ID or Secret is incorrect
 
-**Solution:**
+**Fix:**
 
-- Verify environment variables are set correctly
-- Check for typos or extra spaces
-- Ensure you're using the correct credentials (M2M vs regular app)
+1. Verify credentials in Vercel environment variables
+2. Check for typos or extra spaces
+3. Regenerate credentials in Auth0 if needed
 
-### Error: "Management API Access Denied"
+### Auto-Fix Still Not Working
 
-**Cause:** Application not authorized or wrong credentials.
+**Check:**
 
-**Solution:**
+1. M2M application exists and is authorized
+2. `update:clients` scope is enabled
+3. Environment variables are set in Vercel
+4. Application was redeployed after adding variables
 
-- Follow Option 1 or Option 2 above
-- Verify credentials match the authorized application
-- Check Auth0 Dashboard → APIs → Auth0 Management API → Authorized Applications
+## Related Documentation
 
-## Verification
-
-After setup, run:
-
-```bash
-# Validate environment variables
-npm run auth0:validate-env
-
-# Check Auth0 dashboard configuration (requires Management API access)
-npm run auth0:check-config
-
-# Check for code issues
-npm run auth0:check-issues
-```
-
-All three scripts should pass without errors.
-
-## Next Steps
-
-Once Management API access is configured:
-
-1. Run `npm run auth0:check-config` regularly to validate configuration
-2. Add to CI/CD pipeline for automated validation
-3. Use before deployments to catch configuration issues early
+- `docs/AUTH0_STRIPE_REFERENCE.md` - Complete Auth0 reference
+- `docs/PRODUCTION_LOGIN_FIX_GUIDE.md` - Production login fix guide
+- `app/api/fix/auth0-callback-urls/route.ts` - Auto-fix endpoint implementation
