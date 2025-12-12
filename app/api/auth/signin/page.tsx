@@ -6,6 +6,9 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
+// Module-level flag to prevent multiple redirects
+let redirectInitiated = false;
+
 /**
  * Custom Auth0 Sign-In Page
  * Styled with Cyber Carrot Design System
@@ -17,6 +20,22 @@ function SignInContent() {
   const [providers, setProviders] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isRedirecting, setIsRedirecting] = useState(false);
+
+  // Immediate redirect check - runs in first useEffect before any other logic
+  // This ensures redirect happens as soon as component mounts
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !redirectInitiated) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlError = urlParams.get('error');
+      if (urlError === 'auth0' || error === 'auth0') {
+        redirectInitiated = true;
+        const urlCallbackUrl = urlParams.get('callbackUrl') || callbackUrl || '/webapp';
+        const signinUrl = `${window.location.origin}/api/auth/signin/auth0?callbackUrl=${encodeURIComponent(urlCallbackUrl)}`;
+        window.location.replace(signinUrl);
+        return;
+      }
+    }
+  }, [error, callbackUrl]);
 
   useEffect(() => {
     getProviders().then(provs => {
