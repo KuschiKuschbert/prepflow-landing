@@ -22,26 +22,19 @@ function SignInContent() {
   const [isRedirecting, setIsRedirecting] = useState(false);
 
   // CONDITIONAL CUSTOM SIGNIN PAGE - Part 2 of 2
-  // If error=auth0 (provider-specific signin), immediately redirect to Auth0 without showing custom page
+  // If error=auth0 (provider-specific signin), redirect directly to provider signin route
   // This bypasses NextAuth's buggy redirect that sends provider signins to custom page
+  // Direct redirect to /api/auth/signin/auth0 bypasses the custom signin page entirely
   // Only show custom Cyber Carrot page for non-provider signins (initial visit, etc.)
   useEffect(() => {
     if (error === 'auth0' && !isRedirecting && !redirectInitiated) {
       redirectInitiated = true;
       setIsRedirecting(true);
-      // Provider-specific signin detected - bypass custom page and go straight to Auth0
-      // Use NextAuth's signIn() function which makes POST request with CSRF token
-      signIn('auth0', {
-        callbackUrl,
-        redirect: true, // Force immediate redirect to Auth0
-      }).catch(err => {
-        // If signIn() fails, reset state so user can try again
-        redirectInitiated = false;
-        setIsRedirecting(false);
-        // Note: Can't use logger here as this is client-side code
-        // eslint-disable-next-line no-console
-        console.error('[SignInPage] Auto-redirect failed:', err);
-      });
+      // Provider-specific signin detected - redirect directly to provider signin route
+      // This bypasses the custom signin page and goes straight to NextAuth's provider handler
+      // Use window.location.replace to avoid adding to browser history
+      const providerSigninUrl = `/api/auth/signin/auth0?callbackUrl=${encodeURIComponent(callbackUrl)}`;
+      window.location.replace(providerSigninUrl);
     }
   }, [error, callbackUrl, isRedirecting]);
 
