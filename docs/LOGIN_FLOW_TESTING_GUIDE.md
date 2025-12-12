@@ -1,6 +1,6 @@
 # Login Flow Testing Guide
 
-**Date:** December 12, 2025  
+**Date:** December 12, 2025
 **Purpose:** Step-by-step guide for testing the complete login flow
 
 ## 🧪 Testing Checklist

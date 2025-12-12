@@ -1,6 +1,6 @@
 # Sign-In Flow Error Handling Implementation - Complete
 
-**Date:** December 12, 2025  
+**Date:** December 12, 2025
 **Status:** ✅ **All Implementation Steps Complete**
 
 ## Implementation Summary
@@ -12,6 +12,7 @@ All 8 steps from the plan have been successfully implemented:
 **File:** `lib/auth-options.ts`
 
 **Changes:**
+
 - Added validation for required fields (email, account, user) before proceeding
 - Added timeout handling for Management API calls (5 seconds via `fetchProfileWithRetry`)
 - Added retry logic for Management API failures (1 retry)
@@ -20,6 +21,7 @@ All 8 steps from the plan have been successfully implemented:
 - Return error token if critical data is missing (`MissingEmail`, `MissingAccountOrUser`)
 
 **Key Enhancements:**
+
 - Validates `account` and `user` exist at the start
 - Uses `fetchProfileWithRetry` for Management API calls with timeout/retry
 - Validates email exists after all fallbacks (profile, token, Management API)
@@ -31,6 +33,7 @@ All 8 steps from the plan have been successfully implemented:
 **File:** `lib/auth-options.ts`
 
 **Changes:**
+
 - Validates token exists and has required fields
 - Validates token.exp is a number before checking expiration
 - Ensures session always has email (critical for middleware/allowlist)
@@ -38,6 +41,7 @@ All 8 steps from the plan have been successfully implemented:
 - Returns null session only for expired tokens or critical errors (not missing data)
 
 **Key Enhancements:**
+
 - Validates token is not null/undefined
 - Checks for token errors (`RefreshAccessTokenError`, `MissingEmail`, `MissingAccountOrUser`)
 - Extracts email from token or token.sub if missing
@@ -49,6 +53,7 @@ All 8 steps from the plan have been successfully implemented:
 **File:** `lib/auth-options.ts`
 
 **Changes:**
+
 - Validates user has email before allowing sign-in
 - Validates account exists before allowing sign-in
 - Logs detailed sign-in attempt data for debugging
@@ -56,6 +61,7 @@ All 8 steps from the plan have been successfully implemented:
 - Adds Management API fallback before denying sign-in
 
 **Key Enhancements:**
+
 - Validates email exists in user or profile
 - Tries Management API as last resort before denying
 - Logs all sign-in attempts with structured data
@@ -68,6 +74,7 @@ All 8 steps from the plan have been successfully implemented:
 **New Function:** `fetchProfileWithRetry()`
 
 **Features:**
+
 - 5-second timeout for Management API calls
 - 1 retry on failure (with 500ms delay)
 - Returns email or fallback email
@@ -75,6 +82,7 @@ All 8 steps from the plan have been successfully implemented:
 - Returns `undefined` on timeout/failure (doesn't throw)
 
 **Usage:**
+
 ```typescript
 const email = await fetchProfileWithRetry(auth0UserId, fallbackEmail);
 ```
@@ -86,12 +94,14 @@ const email = await fetchProfileWithRetry(auth0UserId, fallbackEmail);
 **New Callback:** `redirect()`
 
 **Features:**
+
 - Validates callbackUrl is safe (same origin)
 - Ensures callbackUrl is relative or same-origin
 - Adds fallback to `/webapp` if callbackUrl is invalid
 - Logs redirect attempts for debugging
 
 **Validation Logic:**
+
 - Relative URLs (`/path`) → Safe, allow
 - Same-origin URLs (`https://prepflow.org/path`) → Safe, allow
 - External URLs → Invalid, use fallback `/webapp`
@@ -103,6 +113,7 @@ const email = await fetchProfileWithRetry(auth0UserId, fallbackEmail);
 **Endpoint:** `GET /api/test/auth0-signin-flow`
 
 **Features:**
+
 - Tests JWT callback scenarios (documented, not executable)
 - Tests session callback scenarios (documented, not executable)
 - Tests signIn callback scenarios (documented, not executable)
@@ -116,12 +127,14 @@ const email = await fetchProfileWithRetry(auth0UserId, fallbackEmail);
 **File:** `app/api/auth/error/page.tsx`
 
 **Changes:**
+
 - Added new error types: `MissingEmail`, `MissingAccountOrUser`, `MissingToken`, `InvalidCallbackUrl`
 - Added troubleshooting steps for each error type
 - Added links to diagnostic endpoints
 - Enhanced error messages with actionable steps
 
 **New Error Types:**
+
 - `MissingEmail` - Email missing after authentication
 - `MissingAccountOrUser` - Account or user data missing
 - `MissingToken` - Session token missing
@@ -132,16 +145,19 @@ const email = await fetchProfileWithRetry(auth0UserId, fallbackEmail);
 **File:** `lib/auth-options.ts`
 
 **New Types & Functions:**
+
 - `AuthErrorContext` interface for structured error data
 - `createErrorContext()` function for consistent error context creation
 
 **Features:**
+
 - Error context objects with all relevant data
 - Error codes for easier debugging
 - Timestamps for error tracking
 - User ID, provider, email in all error logs
 
 **Error Context Structure:**
+
 ```typescript
 interface AuthErrorContext {
   errorCode: string;
@@ -230,4 +246,3 @@ After implementation, test the following scenarios:
 - **Error Handling:** All errors are logged with structured context using `createErrorContext()`, making debugging easier and more consistent.
 
 - **Management API Integration:** The `fetchProfileWithRetry()` function provides timeout and retry logic, preventing authentication from hanging indefinitely if the Management API is slow or unavailable.
-

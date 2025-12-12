@@ -142,7 +142,7 @@ export async function POST() {
     // Verify social connections
     const socialConnections = await getSocialConnections();
     let googleConnectionVerified = await verifyGoogleConnection();
-    
+
     // Try to enable Google connection if it exists but isn't enabled
     if (!googleConnectionVerified) {
       const enableResult = await enableGoogleConnectionForApp();
@@ -151,7 +151,7 @@ export async function POST() {
         logger.info('[Auth0 Fix] Auto-enabled Google connection for application');
       }
     }
-    
+
     const callbackUrlStatus = await verifyCallbackUrls(updatedCallbacks);
 
     // Build response with social connection status
