@@ -42,17 +42,10 @@ function SignInContent() {
   useEffect(() => {
     if (error === 'auth0' && providers?.auth0 && !isLoading && !isRedirecting) {
       setIsRedirecting(true);
-      // Immediately redirect - no delay needed since providers are loaded
-      signIn('auth0', {
-        callbackUrl,
-        authorizationParams: {
-          prompt: 'login',
-        },
-      }).catch(err => {
-        // If redirect fails, reset state so user can try again
-        setIsRedirecting(false);
-        logger.error('[SignInPage] Auto-redirect failed:', err);
-      });
+      // Use direct window.location redirect for immediate redirect (signIn() can be slow/async)
+      // Construct the signin URL manually to ensure immediate redirect
+      const signinUrl = `/api/auth/signin/auth0?callbackUrl=${encodeURIComponent(callbackUrl)}`;
+      window.location.href = signinUrl;
     }
   }, [error, providers, isLoading, callbackUrl, isRedirecting]);
 
