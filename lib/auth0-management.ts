@@ -94,3 +94,169 @@ export function extractAuth0UserId(sub: string | undefined): string | null {
   // This is the format Auth0 uses for user IDs
   return sub;
 }
+
+/**
+ * Connection type from Auth0 Management API
+ */
+export interface Connection {
+  id: string;
+  name: string;
+  strategy: string;
+  enabled_clients?: string[];
+  is_domain_connection?: boolean;
+  options?: Record<string, any>;
+}
+
+/**
+ * Callback URL verification status
+ */
+export interface CallbackUrlStatus {
+  isValid: boolean;
+  configuredUrls: string[];
+  expectedUrls: string[];
+  missingUrls: string[];
+  extraUrls: string[];
+}
+
+/**
+ * Get all social connections from Auth0
+ *
+ * @returns {Promise<Connection[]>} Array of social connections
+ */
+export async function getSocialConnections(): Promise<Connection[]> {
+  const client = getManagementClient();
+
+  if (!client) {
+    return [];
+  }
+  try {
+    const connections = await client.connections.getAll({ strategy: 'oauth2' });
+    if (!connections || !Array.isArray(connections)) {
+      return [];
+    }
+    return connections.filter(
+      (conn: any) =>
+        ['google-oauth2', 'facebook', 'github', 'twitter', 'linkedin', 'apple'].includes(
+          conn.strategy,
+        ) ||
+        (conn.strategy === 'oauth2' && !conn.is_domain_connection),
+    ) as Connection[];
+  } catch (error) {
+    logger.error('[Auth0 Management] Failed to fetch social connections:', error);
+    return [];
+  }
+}
+
+/**
+ * Verify if Google connection is enabled and configured correctly
+ *
+ * @returns {Promise<boolean>} True if Google connection is enabled and configured
+ */
+export async function verifyGoogleConnection(): Promise<boolean> {
+  const client = getManagementClient();
+
+  if (!client) {
+    return false;
+  }
+  try {
+    const connections = await client.connections.getAll({ strategy: 'google-oauth2' });
+    if (!connections || !Array.isArray(connections) || connections.length === 0) {
+      return false;
+    }
+    const googleConnection = connections[0] as any;
+    const auth0ClientId = process.env.AUTH0_CLIENT_ID;
+    if (
+      auth0ClientId &&
+      googleConnection.enabled_clients &&
+      !googleConnection.enabled_clients.includes(auth0ClientId)
+    ) {
+      return false;
+    }
+    return !!googleConnection.options?.client_id;
+  } catch (error) {
+    logger.error('[Auth0 Management] Failed to verify Google connection:', error);
+    return false;
+  }
+}
+
+/**
+ * Verify callback URLs match Auth0 configuration
+ *
+ * @param {string[]} expectedUrls - Expected callback URLs
+ * @returns {Promise<CallbackUrlStatus>} Callback URL verification status
+ */
+export async function verifyCallbackUrls(expectedUrls: string[]): Promise<CallbackUrlStatus> {
+  const client = getManagementClient();
+
+  if (!client || !process.env.AUTH0_CLIENT_ID) {
+    return {
+      isValid: false,
+      configuredUrls: [],
+      expectedUrls,
+      missingUrls: expectedUrls,
+      extraUrls: [],
+    };
+  }
+  try {
+    const auth0ClientId = process.env.AUTH0_CLIENT_ID;
+
+    // Get application configuration
+    const appResponse = await client.clients.get({ client_id: auth0ClientId });
+    const app = appResponse.data || (appResponse as any);
+
+    const configuredUrls = (app.callbacks || []) as string[];
+
+    // Find missing and extra URLs
+    const missingUrls = expectedUrls.filter(url => !configuredUrls.includes(url));
+    const extraUrls = configuredUrls.filter(url => !expectedUrls.includes(url));
+    return {
+      isValid: missingUrls.length === 0,
+      configuredUrls,
+      expectedUrls,
+      missingUrls,
+      extraUrls,
+    };
+  } catch (error) {
+    logger.error('[Auth0 Management] Failed to verify callback URLs:', error);
+    return {
+      isValid: false,
+      configuredUrls: [],
+      expectedUrls,
+      missingUrls: expectedUrls,
+      extraUrls: [],
+    };
+  }
+}
+
+/**
+ * Get user profile from Auth0 Management API
+ *
+ * @param {string} auth0UserId - Auth0 user ID (e.g., "google-oauth2|102050647966509234700")
+ * @returns {Promise<any>} User profile object or null if not found
+ */
+export async function getUserProfileFromManagementAPI(auth0UserId: string): Promise<any | null> {
+  const client = getManagementClient();
+
+  if (!client) {
+    return null;
+  }
+  try {
+    const user = await client.users.get({ id: auth0UserId });
+    if (!user) {
+      return null;
+    }
+    return {
+      sub: user.user_id,
+      email: user.email,
+      email_verified: user.email_verified || false,
+      name: user.name,
+      nickname: user.nickname,
+      picture: user.picture,
+      given_name: user.given_name,
+      family_name: user.family_name,
+    };
+  } catch (error) {
+    logger.error(`[Auth0 Management] Failed to fetch user profile for ${auth0UserId}:`, error);
+    return null;
+  }
+}

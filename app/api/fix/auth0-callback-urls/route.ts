@@ -1,12 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { ManagementClient } from 'auth0';
 import { logger } from '@/lib/logger';
+import {
+  getSocialConnections,
+  verifyGoogleConnection,
+  verifyCallbackUrls,
+} from '@/lib/auth0-management';
 
 /**
  * Fix Auth0 Callback URLs via Management API
  * Automatically adds missing callback URLs, logout URLs, and web origins
  */
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     const auth0Issuer = process.env.AUTH0_ISSUER_BASE_URL;
     // Try M2M credentials first (more secure), fall back to regular app credentials
@@ -134,7 +139,13 @@ export async function POST(request: NextRequest) {
       webOrigins: updatedWebOrigins,
     });
 
-    return NextResponse.json({
+    // Verify social connections
+    const socialConnections = await getSocialConnections();
+    const googleConnectionVerified = await verifyGoogleConnection();
+    const callbackUrlStatus = await verifyCallbackUrls(updatedCallbacks);
+
+    // Build response with social connection status
+    const response = {
       success: true,
       message: 'Auth0 configuration updated successfully',
       changes: {
@@ -154,7 +165,31 @@ export async function POST(request: NextRequest) {
           added: requiredWebOrigins.filter(url => !currentWebOrigins.includes(url)),
         },
       },
-    });
+      socialConnections: {
+        total: socialConnections.length,
+        connections: socialConnections.map(conn => ({
+          id: conn.id,
+          name: conn.name,
+          strategy: conn.strategy,
+          enabled: conn.enabled_clients?.includes(applicationClientId) || false,
+        })),
+        google: {
+          verified: googleConnectionVerified,
+          status: googleConnectionVerified ? 'enabled' : 'disabled_or_misconfigured',
+          message: googleConnectionVerified
+            ? 'Google connection is enabled and configured correctly'
+            : 'Google connection is not enabled or misconfigured. Please enable it in Auth0 Dashboard > Connections > Social > Google',
+        },
+      },
+      callbackUrlVerification: {
+        verified: callbackUrlStatus.isValid,
+        configured: callbackUrlStatus.configuredUrls,
+        expected: callbackUrlStatus.expectedUrls,
+        missing: callbackUrlStatus.missingUrls,
+      },
+    };
+
+    return NextResponse.json(response);
   } catch (error) {
     logger.error('[Auth0 Fix] Error updating Auth0 configuration:', error);
     return NextResponse.json(
