@@ -2321,3 +2321,240 @@ video,
 canvas {
   transform: translateZ(0);
 }
+
+/* NextAuth Default Signin Page - Cyber Carrot Styling */
+/* Style NextAuth's default signin page to match Cyber Carrot Design System */
+.signin {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a0a;
+  padding: 1rem;
+  font-family:
+    var(--font-geist-sans),
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+.signin .card {
+  width: 100%;
+  max-width: 28rem;
+  background: #1f1f1f;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  border: 1px solid #2a2a2a;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.3),
+    0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Cyber Carrot gradient border effect */
+.signin .card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 1.5rem;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(41, 231, 205, 0.2) 0%,
+    rgba(255, 107, 0, 0.2) 50%,
+    rgba(217, 37, 199, 0.2) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.signin .logo {
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1.5rem;
+  display: block;
+  border-radius: 0.75rem;
+}
+
+.signin .error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  color: #fca5a5;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.signin .error p {
+  margin: 0;
+}
+
+.signin .provider {
+  margin-bottom: 1rem;
+}
+
+.signin .provider:last-child {
+  margin-bottom: 0;
+}
+
+.signin .button {
+  width: 100%;
+  background: linear-gradient(to right, #29e7cd, #ff6b00, #d925c7);
+  background-size: 200% 100%;
+  color: #ffffff;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.signin .button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, #29e7cd, #ff6b00, #d925c7);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.signin .button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 107, 0, 0.25);
+}
+
+.signin .button:hover::before {
+  opacity: 1;
+}
+
+.signin .button:active {
+  transform: translateY(0);
+}
+
+.signin .button span {
+  position: relative;
+  z-index: 1;
+}
+
+.signin .button img {
+  position: relative;
+  z-index: 1;
+  filter: brightness(0) invert(1);
+}
+
+.signin .button img#provider-logo-dark {
+  display: none;
+}
+
+/* Dark mode - show dark logo */
+@media (prefers-color-scheme: dark) {
+  .signin .button img#provider-logo {
+    display: none;
+  }
+  .signin .button img#provider-logo-dark {
+    display: block;
+  }
+}
+
+.signin .section-header {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #d1d5db;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.signin input[type='email'],
+.signin input[type='text'],
+.signin input[type='password'] {
+  width: 100%;
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #ffffff;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+.signin input[type='email']:focus,
+.signin input[type='text']:focus,
+.signin input[type='password']:focus {
+  outline: none;
+  border-color: #29e7cd;
+  box-shadow: 0 0 0 3px rgba(41, 231, 205, 0.1);
+}
+
+.signin input[type='email']::placeholder,
+.signin input[type='text']::placeholder,
+.signin input[type='password']::placeholder {
+  color: #6b7280;
+}
+
+.signin button[type='submit']:not(.button) {
+  width: 100%;
+  background: linear-gradient(to right, #29e7cd, #ff6b00, #d925c7);
+  color: #ffffff;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.signin button[type='submit']:not(.button):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 107, 0, 0.25);
+}
+
+.signin button[type='submit']:not(.button):active {
+  transform: translateY(0);
+}
+
+.signin hr {
+  border: none;
+  border-top: 1px solid #2a2a2a;
+  margin: 1.5rem 0;
+}
+
+.signin label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.signin form {
+  margin-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media (min-width: 481px) {
+  .signin .card {
+    padding: 2.5rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  .signin .card {
+    padding: 3rem;
+  }
+}
