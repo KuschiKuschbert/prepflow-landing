@@ -268,12 +268,31 @@ export const authOptions: NextAuthOptions = {
         return null as any;
       }
 
+      // CRITICAL: Ensure session is always returned (never null/undefined)
+      if (!session) {
+        logger.error('[Auth0 Session] Session is null/undefined');
+        return {
+          user: {
+            email: token.email || null,
+            name: token.name || null,
+            image: token.picture || null,
+          },
+          expires: new Date(Date.now() + SESSION_MAX_AGE * 1000).toISOString(),
+        } as any;
+      }
+
       // Add roles to session
       if (session?.user) {
         (session.user as any).roles = Array.isArray(token.roles) ? token.roles : [];
         (session.user as any).role =
           Array.isArray(token.roles) && token.roles.length > 0 ? token.roles[0] : null;
       }
+
+      // Ensure session always has required fields
+      if (!session.expires) {
+        session.expires = new Date(Date.now() + SESSION_MAX_AGE * 1000).toISOString();
+      }
+
       return session;
     },
   },
