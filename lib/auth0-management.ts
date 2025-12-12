@@ -130,7 +130,10 @@ export async function getSocialConnections(): Promise<Connection[]> {
     return [];
   }
   try {
-    const connections = await client.connections.getAll({ strategy: 'oauth2' });
+    const connectionsResponse = await client.connections.getAll();
+    const connections = Array.isArray(connectionsResponse)
+      ? connectionsResponse
+      : (connectionsResponse as any)?.data || [];
     if (!connections || !Array.isArray(connections)) {
       return [];
     }
@@ -159,11 +162,19 @@ export async function verifyGoogleConnection(): Promise<boolean> {
     return false;
   }
   try {
-    const connections = await client.connections.getAll({ strategy: 'google-oauth2' });
+    const connectionsResponse = await client.connections.getAll();
+    const connections = Array.isArray(connectionsResponse)
+      ? connectionsResponse
+      : (connectionsResponse as any)?.data || [];
     if (!connections || !Array.isArray(connections) || connections.length === 0) {
       return false;
     }
-    const googleConnection = connections[0] as any;
+    const googleConnection = connections.find(
+      (conn: any) => conn.strategy === 'google-oauth2',
+    ) as any;
+    if (!googleConnection) {
+      return false;
+    }
     const auth0ClientId = process.env.AUTH0_CLIENT_ID;
     if (
       auth0ClientId &&
@@ -241,12 +252,13 @@ export async function getUserProfileFromManagementAPI(auth0UserId: string): Prom
     return null;
   }
   try {
-    const user = await client.users.get({ id: auth0UserId });
+    const userResponse = await client.users.get({ id: auth0UserId });
+    const user = (userResponse as any)?.data || userResponse;
     if (!user) {
       return null;
     }
     return {
-      sub: user.user_id,
+      sub: user.user_id || auth0UserId,
       email: user.email,
       email_verified: user.email_verified || false,
       name: user.name,
