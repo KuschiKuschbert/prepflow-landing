@@ -42,10 +42,28 @@ function SignInContent() {
   useEffect(() => {
     if (error === 'auth0' && providers?.auth0 && !isLoading && !isRedirecting) {
       setIsRedirecting(true);
-      // Use direct window.location redirect for immediate redirect (signIn() can be slow/async)
-      // Construct the signin URL manually to ensure immediate redirect
-      const signinUrl = `/api/auth/signin/auth0?callbackUrl=${encodeURIComponent(callbackUrl)}`;
-      window.location.href = signinUrl;
+
+      // Try signIn() first (preferred method)
+      signIn('auth0', {
+        callbackUrl,
+        redirect: true, // Force immediate redirect
+      }).catch(() => {
+        // If signIn() fails, fallback to direct redirect
+        // Construct the signin URL and redirect immediately
+        const signinUrl = `${window.location.origin}/api/auth/signin/auth0?callbackUrl=${encodeURIComponent(callbackUrl)}`;
+        window.location.replace(signinUrl);
+      });
+
+      // Fallback: Force redirect after 500ms if signIn() hasn't redirected yet
+      const fallbackTimeout = setTimeout(() => {
+        if (window.location.pathname === '/api/auth/signin') {
+          // Still on signin page, force redirect
+          const signinUrl = `${window.location.origin}/api/auth/signin/auth0?callbackUrl=${encodeURIComponent(callbackUrl)}`;
+          window.location.replace(signinUrl);
+        }
+      }, 500);
+
+      return () => clearTimeout(fallbackTimeout);
     }
   }, [error, providers, isLoading, callbackUrl, isRedirecting]);
 
