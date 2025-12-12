@@ -4,7 +4,7 @@ import { Icon } from '@/components/ui/Icon';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronRight, X } from 'lucide-react';
-import { signIn, useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { memo, useEffect, useRef } from 'react';
@@ -25,7 +25,7 @@ export const MobileMenuDrawer = memo(function MobileMenuDrawer({
   onClose,
   trackEngagement,
 }: MobileMenuDrawerProps) {
-  const { data: session } = useSession();
+  const { user } = useUser();
   const pathname = usePathname();
   const router = useRouter();
   const isMobile = useMediaQuery('(max-width: 1024px)');
@@ -72,7 +72,7 @@ export const MobileMenuDrawer = memo(function MobileMenuDrawer({
   // Handle sign in
   const handleSignIn = () => {
     trackEngagement('mobile_drawer_sign_in_click');
-    signIn();
+    window.location.href = '/api/auth/login?returnTo=/webapp';
     onClose();
   };
 
@@ -176,7 +176,7 @@ export const MobileMenuDrawer = memo(function MobileMenuDrawer({
 
               {/* Authentication section */}
               <div className="border-t border-white/10 px-4 py-4">
-                {session ? (
+                {user ? (
                   <button
                     onClick={handleGoToDashboard}
                     className="w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 text-base font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#29E7CD]/20 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"

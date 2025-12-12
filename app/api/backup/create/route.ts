@@ -4,8 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
 import { exportUserData, convertToSQL } from '@/lib/backup/export';
@@ -20,12 +19,9 @@ import type { BackupFormat, EncryptionMode } from '@/lib/backup/types';
  */
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const user = await requireAuth(request);
 
-    const userId = session.user.email;
+    const userId = user.email;
     const body = await request.json();
     const format: BackupFormat = body.format || 'json';
     const encryptionMode: EncryptionMode | undefined = body.encryptionMode;

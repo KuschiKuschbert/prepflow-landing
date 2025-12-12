@@ -1,7 +1,6 @@
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { deleteByUser } from './helpers/deleteByUser';
 import { getUserTableIds } from './helpers/getUserTableIds';
@@ -15,10 +14,16 @@ type DeleteSummary = {
 };
 
 export async function POST(request: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
+  try {
+    const user = await requireAuth(request);
+  } catch (error) {
+    if (error instanceof NextResponse) {
+      return error;
+    }
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  const user = await requireAuth(request);
 
   const supabase = createSupabaseAdmin();
 
@@ -31,7 +36,7 @@ export async function POST(request: NextRequest) {
   const userId = (body?.userId as string) || '';
   const wipeAll = body?.all === true;
 
-  logger.info('Reset request:', { userId, wipeAll, dryRun, hasSession: !!session?.user });
+  logger.info('Reset request:', { userId, wipeAll, dryRun, hasUser: !!user });
 
   if (!wipeAll && !userId) {
     return NextResponse.json(

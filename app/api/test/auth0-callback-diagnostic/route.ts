@@ -5,8 +5,8 @@
  * @returns {Promise<NextResponse>} JSON response with callback flow diagnostic information
  */
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-options';
+import { NextRequest } from 'next/server';
+import { auth0 } from '@/lib/auth0';
 import { logger } from '@/lib/logger';
 
 /**
@@ -15,10 +15,10 @@ import { logger } from '@/lib/logger';
  *
  * @returns {Promise<NextResponse>} JSON response with callback flow diagnostic information
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     // Get current session to check if callback was successful
-    const session = await getServerSession(authOptions);
+    const session = await auth0.getSession(req);
 
     // Build diagnostic response
     const response = {
@@ -30,10 +30,12 @@ export async function GET() {
             user: {
               email: session.user?.email,
               name: session.user?.name,
-              image: session.user?.image,
+              image: session.user?.picture,
               roles: (session.user as any)?.roles || [],
             },
-            expires: session.expires,
+            expires: session.tokenSet?.expiresAt
+              ? new Date(session.tokenSet.expiresAt * 1000).toISOString()
+              : null,
           }
         : {
             exists: false,
@@ -42,14 +44,14 @@ export async function GET() {
       callbackFlow: {
         step1: {
           name: 'Auth0 Redirects to Callback',
-          url: '/api/auth/callback/auth0',
+          url: '/api/auth/callback',
           status: 'expected',
           description: 'Auth0 redirects user to this URL after successful authentication',
         },
         step2: {
-          name: 'NextAuth Processes Callback',
+          name: 'Auth0 SDK Processes Callback',
           status: session ? 'success' : 'unknown',
-          description: 'NextAuth processes the callback and creates session',
+          description: 'Auth0 SDK processes the callback and creates session',
           checks: {
             profileExtraction: session
               ? 'Profile extracted successfully'
@@ -77,18 +79,8 @@ export async function GET() {
       commonIssues: {
         missingProfile: {
           description:
-            'If profile is missing, NextAuth redirects to /signin. Management API fallback should handle this.',
+            'If profile is missing, Auth0 SDK may fail to create session. Check Auth0 user profile configuration.',
           status: session ? 'not_applicable' : 'possible_issue',
-        },
-        missingAccount: {
-          description:
-            'If account is missing, NextAuth redirects to /signin. Management API fallback should handle this.',
-          status: session ? 'not_applicable' : 'possible_issue',
-        },
-        signInCallbackBlocked: {
-          description:
-            'If signIn callback returns false, NextAuth redirects to error page. Our callback always returns true.',
-          status: 'not_applicable',
         },
         callbackUrlMismatch: {
           description:
@@ -108,13 +100,13 @@ export async function GET() {
             'Run /api/test/auth0-social-connections to verify Google connection',
             'Run /api/fix/auth0-callback-urls to fix callback URLs',
             'Check Vercel logs for callback processing errors',
-            'Verify NEXTAUTH_URL environment variable is set correctly',
+            'Verify AUTH0_BASE_URL environment variable is set correctly',
           ],
     };
 
     logger.info('[Auth0 Callback Diagnostic] Diagnostic check completed', {
       sessionExists: !!session,
-      userEmail: session?.user?.email,
+      userEmail: session?.user?.email || 'no session',
     });
 
     return NextResponse.json(response);

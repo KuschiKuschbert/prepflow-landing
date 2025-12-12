@@ -101,9 +101,8 @@ export async function evaluateGateAsync(
   let email = userEmail;
   if (!email && req) {
     try {
-      const { getServerSession } = await import('next-auth');
-      const { authOptions } = await import('./auth-options');
-      const session = await getServerSession(authOptions);
+      const { auth0 } = await import('@/lib/auth0');
+      const session = await auth0.getSession(req as any); // Convert Request to NextRequest if needed
       email = session?.user?.email || undefined;
     } catch {
       // Ignore errors getting session

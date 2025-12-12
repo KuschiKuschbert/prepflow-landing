@@ -4,9 +4,8 @@
  *
  * @returns {Promise<NextResponse>} JSON response with diagnostic information
  */
-import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-options';
+import { NextResponse, NextRequest } from 'next/server';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import {
   getUserProfileFromManagementAPI,
@@ -19,9 +18,10 @@ import {
  *
  * @returns {Promise<NextResponse>} JSON response with diagnostic information
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const { auth0 } = await import('@/lib/auth0');
+    const session = await auth0.getSession(req);
     const diagnostic: any = {
       timestamp: new Date().toISOString(),
       sessionStatus: session ? 'active' : 'inactive',
@@ -30,10 +30,10 @@ export async function GET() {
             user: {
               email: session.user?.email,
               name: session.user?.name,
-              image: session.user?.image,
+              image: session.user?.picture,
               roles: (session.user as any)?.roles || [],
             },
-            expires: session.expires,
+            expiresAt: session.expiresAt,
           }
         : null,
       jwtCallbackTests: {
@@ -121,9 +121,9 @@ export async function GET() {
 
     // If session exists, test Management API with actual user ID
     if (session?.user?.email) {
-      const tokenSub = (session as any)?.token?.sub;
-      if (tokenSub) {
-        const auth0UserId = extractAuth0UserId(tokenSub);
+      const userSub = session.user.sub;
+      if (userSub) {
+        const auth0UserId = extractAuth0UserId(userSub);
         if (auth0UserId) {
           diagnostic.managementApiTests.actualUser = {
             description: 'Test Management API with actual user ID',

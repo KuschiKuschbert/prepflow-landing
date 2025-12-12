@@ -4,7 +4,7 @@
 
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { getToken } from 'next-auth/jwt';
+import { getUserEmail } from '@/lib/auth0-api-helpers';
 import { NextRequest } from 'next/server';
 import { buildUpdateData } from './buildUpdateData';
 import { detectRecipeChanges } from './detectRecipeChanges';
@@ -30,8 +30,7 @@ export async function handleRecipeUpdate(
   // Get user email for change tracking
   let userEmail: string | null = null;
   try {
-    const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
-    userEmail = (token?.email as string) || null;
+    userEmail = await getUserEmail(request);
   } catch (tokenError) {
     logger.warn('[Recipes API] Could not get user email for change tracking:', tokenError);
   }
@@ -95,7 +94,3 @@ export async function handleRecipeUpdate(
 
   return updatedRecipe;
 }
-
-
-
-

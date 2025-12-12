@@ -1,8 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { isFeatureEnabled } from '@/lib/feature-flags';
 import { logger } from '@/lib/logger';
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -17,11 +16,11 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(req: NextRequest, context: { params: Promise<{ flagKey: string }> }) {
   try {
     const { flagKey } = await context.params;
-    const session = await getServerSession(authOptions);
+    const user = await requireAuth(req);
 
     // Get user info from session
-    const userId = (session?.user as any)?.id || (session as any)?.sub;
-    const userEmail = session?.user?.email || undefined;
+    const userId = user.sub;
+    const userEmail = user.email || undefined;
 
     // Check feature flag
     const enabled = await isFeatureEnabled(flagKey, userId, userEmail);

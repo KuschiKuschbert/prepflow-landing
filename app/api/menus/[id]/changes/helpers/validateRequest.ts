@@ -4,8 +4,11 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { getToken } from 'next-auth/jwt';
+import { getUserEmail as getEmailFromAuth0 } from '@/lib/auth0-api-helpers';
 import { supabaseAdmin } from '@/lib/supabase';
+
+const isDev = process.env.NODE_ENV === 'development';
+const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
 
 /**
  * Validates authentication for menu changes API
@@ -19,10 +22,9 @@ export async function validateAuth(
   requireEmail: boolean = false,
 ): Promise<{ userEmail: string | null; error: NextResponse | null }> {
   try {
-    const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
-    const userEmail = (token?.email as string) || null;
+    const userEmail = await getEmailFromAuth0(request);
 
-    if (!userEmail && process.env.NODE_ENV === 'production' && requireEmail) {
+    if (!userEmail && !(isDev && authBypassDev) && requireEmail) {
       return {
         userEmail: null,
         error: NextResponse.json(
@@ -34,7 +36,7 @@ export async function validateAuth(
 
     return { userEmail, error: null };
   } catch (tokenError) {
-    if (process.env.NODE_ENV === 'production') {
+    if (!(isDev && authBypassDev)) {
       return {
         userEmail: null,
         error: NextResponse.json(
@@ -83,7 +85,3 @@ export async function validateMenuExists(
 
   return { exists: true, error: null };
 }
-
-
-
-

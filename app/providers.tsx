@@ -5,7 +5,7 @@ import { deriveAutosaveId } from '@/lib/autosave-id';
 import { clearDraft, getAllDrafts, saveDraft } from '@/lib/autosave-storage';
 import { initializeClientErrorHandlers } from '@/lib/error-handlers/client-error-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { SessionProvider } from 'next-auth/react';
+import { Auth0Provider } from '@auth0/nextjs-auth0/client';
 import { ReactNode, useEffect, useState } from 'react';
 
 export function Providers({ children }: { children: ReactNode }) {
@@ -15,12 +15,12 @@ export function Providers({ children }: { children: ReactNode }) {
   // Initialize global error handlers
   useGlobalErrorHandlers();
   return (
-    <SessionProvider>
+    <Auth0Provider>
       <QueryClientProvider client={queryClient}>
         <SeasonalEvaluator />
         {children}
       </QueryClientProvider>
-    </SessionProvider>
+    </Auth0Provider>
   );
 }
 

@@ -5,8 +5,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { getToken } from 'next-auth/jwt';
+import { getUserEmail as getEmailFromAuth0 } from '@/lib/auth0-api-helpers';
 import { supabaseAdmin } from '@/lib/supabase';
+
+const isDev = process.env.NODE_ENV === 'development';
+const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
 
 /**
  * Validates authentication for menu lock operations
@@ -19,14 +22,38 @@ export async function validateAuth(
   request: NextRequest,
   menuId: string,
 ): Promise<{ userEmail: string | null; error: NextResponse | null }> {
-  let token;
   try {
-    token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+    const userEmail = await getEmailFromAuth0(request);
+
+    // Debug logging in development
+    if (process.env.NODE_ENV === 'development') {
+      logger.dev('[Menu Lock API] Auth check:', {
+        hasEmail: !!userEmail,
+        cookies: request.headers.get('cookie') ? 'present' : 'missing',
+        menuId,
+      });
+    }
+
+    if (!userEmail && !(isDev && authBypassDev)) {
+      logger.warn('[Menu Lock API] Unauthorized attempt:', {
+        menuId,
+        hasEmail: !!userEmail,
+        cookies: request.headers.get('cookie') ? 'present' : 'missing',
+        nodeEnv: process.env.NODE_ENV,
+      });
+      return {
+        userEmail: null,
+        error: NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'AUTH_ERROR', 401), {
+          status: 401,
+        }),
+      };
+    }
+
+    return { userEmail, error: null };
   } catch (tokenError) {
-    logger.error('[Menu Lock API] Error getting token:', {
+    logger.error('[Menu Lock API] Error getting user email:', {
       error: tokenError instanceof Error ? tokenError.message : String(tokenError),
       menuId,
-      hasSecret: !!process.env.NEXTAUTH_SECRET,
     });
     return {
       userEmail: null,
@@ -36,37 +63,6 @@ export async function validateAuth(
       ),
     };
   }
-
-  // Debug logging in development
-  if (process.env.NODE_ENV === 'development') {
-    logger.dev('[Menu Lock API] Token check:', {
-      hasToken: !!token,
-      tokenKeys: token ? Object.keys(token) : [],
-      hasEmail: !!token?.email,
-      cookies: request.headers.get('cookie') ? 'present' : 'missing',
-      cookieHeader: request.headers.get('cookie')?.substring(0, 100) || 'none',
-      hasSecret: !!process.env.NEXTAUTH_SECRET,
-    });
-  }
-
-  if (!token?.email) {
-    logger.warn('[Menu Lock API] Unauthorized attempt:', {
-      menuId,
-      hasToken: !!token,
-      hasEmail: !!token?.email,
-      cookies: request.headers.get('cookie') ? 'present' : 'missing',
-      nodeEnv: process.env.NODE_ENV,
-      hasSecret: !!process.env.NEXTAUTH_SECRET,
-    });
-    return {
-      userEmail: null,
-      error: NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'AUTH_ERROR', 401), {
-        status: 401,
-      }),
-    };
-  }
-
-  return { userEmail: token.email as string, error: null };
 }
 
 /**
@@ -104,7 +100,3 @@ export async function validateMenuExists(
 
   return { exists: true, error: null };
 }
-
-
-
-

@@ -1,9 +1,8 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
 import { getOrCreateCustomerId } from '@/lib/billing';
 import { logger } from '@/lib/logger';
 import { getStripe } from '@/lib/stripe';
-import { getServerSession } from 'next-auth';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -23,18 +22,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
-    }
+    const user = await requireAuth(req);
+    const email = user.email;
 
-    const customerId = await getOrCreateCustomerId(session.user.email as string);
+    const customerId = await getOrCreateCustomerId(email);
     if (!customerId) {
       logger.error('[Billing API] Unable to resolve customer', {
-        context: { endpoint: '/api/billing/create-portal-session', email: session.user.email },
+        context: { endpoint: '/api/billing/create-portal-session', email },
       });
       return NextResponse.json(
         ApiErrorHandler.createError('Unable to resolve customer', 'CUSTOMER_RESOLUTION_ERROR', 500),
@@ -42,7 +36,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const origin = req.headers.get('origin') || process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    const origin = req.headers.get('origin') || process.env.AUTH0_BASE_URL || 'http://localhost:3000';
     const portal = await stripe.billingPortal.sessions.create({
       customer: customerId,
       return_url: `${origin}/webapp/settings/billing`,

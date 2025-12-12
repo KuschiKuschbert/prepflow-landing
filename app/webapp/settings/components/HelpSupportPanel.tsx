@@ -1,6 +1,6 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { QuickActions } from './HelpSupportPanel/components/QuickActions';
 import { RecentErrorsList } from './HelpSupportPanel/components/RecentErrorsList';
 import { AutoReportToggle } from './HelpSupportPanel/components/AutoReportToggle';
@@ -18,8 +18,8 @@ import { useSupportForm } from './HelpSupportPanel/hooks/useSupportForm';
  * @returns {JSX.Element} Help and support panel
  */
 export function HelpSupportPanel() {
-  const { data: session } = useSession();
-  const userEmail = session?.user?.email || undefined;
+  const { user } = useUser();
+  const userEmail = user?.email || undefined;
 
   const { recentErrors, loadingErrors, refreshErrors } = useRecentErrors(userEmail);
   const { autoReport, loadingAutoReport, handleAutoReportToggle } = useAutoReport(userEmail);

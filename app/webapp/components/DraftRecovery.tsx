@@ -4,14 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { getAllDrafts, DraftMetadata, clearDraft } from '@/lib/autosave-storage';
 import { syncAllDrafts } from '@/lib/autosave-sync';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 import { logger } from '@/lib/logger';
 export function DraftRecovery() {
-  const session = useSession();
-  // Safely destructure session data, handling undefined during SSR
-  const sessionData = session?.data;
-  const userId = sessionData?.user?.email || null;
+  const { user } = useUser();
+  const userId = user?.email || null;
   const [drafts, setDrafts] = useState<DraftMetadata[]>([]);
   const [showDialog, setShowDialog] = useState(false);
   const [syncing, setSyncing] = useState(false);

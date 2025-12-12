@@ -1,10 +1,9 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
+import { getUserFromRequest } from '@/lib/auth0-api-helpers';
 import { detectCategory } from '@/lib/error-detection/category-detector';
 import { detectSeverity } from '@/lib/error-detection/severity-detector';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -61,13 +60,13 @@ export async function POST(request: NextRequest) {
     // Get user session to associate error with user
     let userId: string | null = null;
     try {
-      const session = await getServerSession(authOptions);
-      if (session?.user?.email) {
+      const user = await getUserFromRequest(request);
+      if (user?.email) {
         // Look up user_id from email
         const { data: userData } = await supabaseAdmin
           .from('users')
           .select('id')
-          .eq('email', session.user.email)
+          .eq('email', user.email)
           .single();
         if (userData) {
           userId = userData.id;

@@ -1,31 +1,32 @@
-import { isAdmin } from '@/lib/admin-utils';
+import { auth0 } from '@/lib/auth0';
 import { isEmailAllowed } from '@/lib/allowlist';
-import { getTokenFromCookie } from '@/lib/middleware-auth';
+import { isAdmin } from '@/lib/admin-utils';
+import { logger } from '@/lib/logger';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+const isProduction = process.env.NODE_ENV === 'production';
+const isDevelopment = process.env.NODE_ENV === 'development';
+const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
+
 export default async function middleware(req: NextRequest) {
   const { pathname, origin, search } = req.nextUrl;
-  const isProduction = process.env.NODE_ENV === 'production';
 
   // CRITICAL: Redirect non-www to www FIRST, before any auth processing
-  // This ensures NextAuth constructs callback URLs using www.prepflow.org
+  // This ensures Auth0 SDK constructs callback URLs using www.prepflow.org
   if (isProduction && origin.includes('prepflow.org') && !origin.includes('www.prepflow.org')) {
     const wwwUrl = new URL(req.url);
     wwwUrl.hostname = 'www.prepflow.org';
     return NextResponse.redirect(wwwUrl, 301); // Permanent redirect
   }
 
-  const authConfigured = Boolean(
-    process.env.NEXTAUTH_SECRET &&
-    process.env.AUTH0_ISSUER_BASE_URL &&
-    process.env.AUTH0_CLIENT_ID &&
-    process.env.AUTH0_CLIENT_SECRET,
-  );
+  // Always allow Auth0 SDK routes (handled by route handler)
+  if (pathname.startsWith('/api/auth/')) {
+    return NextResponse.next();
+  }
 
-  // Always allow auth and selected public APIs
+  // Always allow selected public APIs
   if (
-    pathname.startsWith('/api/auth') ||
     pathname.startsWith('/api/leads') ||
     pathname.startsWith('/api/debug') ||
     pathname.startsWith('/api/test') ||
@@ -34,94 +35,70 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Development bypass: Skip all auth checks if configured
+  if (isDevelopment && authBypassDev) {
+    logger.dev('[Middleware] Development bypass enabled - skipping authentication');
+    return NextResponse.next();
+  }
+
+  // Get session for protected routes
+  const session = await auth0.getSession(req);
+  const isApi = pathname.startsWith('/api/');
+
   // Admin routes require admin role
   if (pathname.startsWith('/admin') || pathname.startsWith('/api/admin')) {
-    // Development bypass: Allow admin access without role check if ADMIN_BYPASS=true
-    if (process.env.ADMIN_BYPASS === 'true') {
-      if (process.env.NODE_ENV === 'development') {
-        // Development-only logging - using console.log for middleware
-        // eslint-disable-next-line no-console
-        console.log('[Middleware] ADMIN_BYPASS enabled - allowing admin access without role check');
-      }
-      return NextResponse.next();
-    }
-
-    // Skip admin checks in development if auth not configured (for testing)
-    if (!isProduction || !authConfigured) {
-      return NextResponse.next();
-    }
-
-    // Get token using cookie parsing only (avoids openid-client bundling in edge runtime)
-    // Note: We never import next-auth/jwt in middleware to prevent openid-client bundling
-    const token = await getTokenFromCookie(req, process.env.NEXTAUTH_SECRET);
-
-    const isApi = pathname.startsWith('/api/');
-
-    if (!token) {
+    if (!session?.user) {
       if (isApi) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
       }
-      // Only redirect to Auth0 signin if Auth0 is configured
-      if (authConfigured) {
-        const callback = encodeURIComponent(pathname + (search || ''));
-        return NextResponse.redirect(`${origin}/api/auth/signin/auth0?callbackUrl=${callback}`);
-      }
-      // If Auth0 not configured, redirect to not-authorized page
-      return NextResponse.redirect(`${origin}/not-authorized`);
+      const callback = encodeURIComponent(pathname + (search || ''));
+      return NextResponse.redirect(new URL(`/api/auth/login?returnTo=${callback}`, origin));
     }
 
     // Check if user has admin role
-    if (!isAdmin(token)) {
+    if (!isAdmin(session.user)) {
       if (isApi) {
         return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 });
       }
-      return NextResponse.redirect(`${origin}/not-authorized`);
+      return NextResponse.redirect(new URL('/not-authorized', origin));
     }
 
     // Admin is authenticated and authorized
     return NextResponse.next();
   }
 
-  // Skip all auth checks in development or if auth is not configured
-  if (!isProduction || !authConfigured) {
-    return NextResponse.next();
-  }
-
-  // Production: Require authentication
-  // Get token using cookie parsing only (avoids openid-client bundling in edge runtime)
-  // Note: We never import next-auth/jwt in middleware to prevent openid-client bundling
-  const token = await getTokenFromCookie(req, process.env.NEXTAUTH_SECRET);
-
-  const isApi = pathname.startsWith('/api/');
-
-  if (!token) {
-    if (isApi) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-    // Only redirect to Auth0 signin if Auth0 is configured
-    if (authConfigured) {
+  // Protected routes (webapp, other APIs) require authentication
+  if (pathname.startsWith('/webapp') || (isApi && !pathname.startsWith('/api/auth'))) {
+    if (!session?.user) {
+      if (isApi) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
       const callback = encodeURIComponent(pathname + (search || ''));
-      return NextResponse.redirect(`${origin}/api/auth/signin/auth0?callbackUrl=${callback}`);
+      return NextResponse.redirect(new URL(`/api/auth/login?returnTo=${callback}`, origin));
     }
-    // If Auth0 not configured, redirect to not-authorized page
-    return NextResponse.redirect(`${origin}/not-authorized`);
+
+    // Check allowlist only in production/preview and if allowlist is enabled
+    const allowlistEnabled = process.env.DISABLE_ALLOWLIST !== 'true';
+    if (allowlistEnabled && !isEmailAllowed(session.user.email)) {
+      if (isApi) {
+        return NextResponse.json({ error: 'Forbidden - Email not in allowlist' }, { status: 403 });
+      }
+      return NextResponse.redirect(new URL('/not-authorized', origin));
+    }
   }
 
-  // Check allowlist only in production and if allowlist is enabled
-  // In development, all authenticated users are allowed (early return above handles this)
-  // Allowlist can be disabled by setting DISABLE_ALLOWLIST=true for testing/friend access
-  const allowlistEnabled = process.env.DISABLE_ALLOWLIST !== 'true';
-  const email = (token as any)?.email as string | undefined;
-  if (isProduction && allowlistEnabled && !isEmailAllowed(email)) {
-    if (isApi) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
-    return NextResponse.redirect(`${origin}/not-authorized`);
-  }
-
+  // Allow all other routes (landing page, etc.)
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/webapp/:path*', '/api/:path*', '/admin/:path*'],
+  matcher: [
+    /*
+     * Match all request paths except for:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
+     */
+    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+  ],
 };

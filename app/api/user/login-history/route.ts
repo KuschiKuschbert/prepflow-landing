@@ -1,8 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -14,15 +13,8 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
-    }
-
-    const userEmail = session.user.email;
+    const user = await requireAuth(req);
+    const userEmail = user.email;
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get('limit') || '50', 10);
     const offset = parseInt(searchParams.get('offset') || '0', 10);
@@ -105,7 +97,3 @@ export async function GET(req: NextRequest) {
     );
   }
 }
-
-
-
-

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { exportUserData } from '@/lib/backup/export';
+import { NextRequest } from 'next/server';
 
 /**
  * GET /api/account/export
@@ -9,14 +9,10 @@ import { exportUserData } from '@/lib/backup/export';
  *
  * @returns {Promise<NextResponse>} Export response with JSON file download
  */
-export async function GET() {
-  const session: any = await getServerSession(authOptions as any);
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
+export async function GET(req: NextRequest) {
   try {
-    const userId = session.user.email;
+    const user = await requireAuth(req);
+    const userId = user.email;
 
     // Export user data
     const backupData = await exportUserData(userId);

@@ -1,7 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getAvatar } from './helpers/getAvatar';
@@ -17,17 +16,10 @@ const avatarSchema = z.object({
  *
  * @returns {Promise<NextResponse>} User avatar preference
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
-    }
-
-    return await getAvatar(session.user.email);
+    const user = await requireAuth(req);
+    return await getAvatar(user.email);
   } catch (error) {
     logger.error('[Avatar API] Unexpected error:', {
       error: error instanceof Error ? error.message : String(error),
@@ -52,15 +44,15 @@ import { isValidAvatar } from '@/lib/avatars';
  */
 export async function PUT(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const user = await requireAuth(req);
+    if (!user?.email) {
       return NextResponse.json(
         ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
         { status: 401 },
       );
     }
 
-    const userEmail = session.user.email;
+    const userEmail = user.email;
     const body = await req.json().catch(() => ({}));
     const validationResult = avatarSchema.safeParse(body);
 

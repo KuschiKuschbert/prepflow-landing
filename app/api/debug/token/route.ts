@@ -3,10 +3,8 @@
  * Debug endpoint to inspect current session token (development only)
  */
 
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-options';
+import { auth0 } from '@/lib/auth0';
 import { NextRequest, NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
 import { extractAuth0UserId } from '@/lib/auth0-management';
 
 /**
@@ -36,23 +34,22 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const session = await getServerSession(authOptions);
-    const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+    const session = await auth0.getSession(request);
 
-    // Extract custom claims from token
+    // Extract custom claims from session user
     const customClaims: Record<string, unknown> = {};
-    if (token) {
-      const tokenAny = token as any;
+    if (session?.user) {
+      const userAny = session.user as any;
       // Check for common custom claim namespaces
-      Object.keys(tokenAny).forEach(key => {
+      Object.keys(userAny).forEach(key => {
         if (key.startsWith('https://') || key.includes('custom') || key.includes('roles')) {
-          customClaims[key] = tokenAny[key];
+          customClaims[key] = userAny[key];
         }
       });
     }
 
     // Extract Auth0 user ID
-    const auth0UserId = token?.sub ? extractAuth0UserId(token.sub) : null;
+    const auth0UserId = session?.user?.sub ? extractAuth0UserId(session.user.sub) : null;
 
     // Try to decode id_token if available in cookies (for initial sign-in)
     let idTokenPayload: Record<string, unknown> | null = null;
@@ -71,26 +68,23 @@ export async function GET(request: NextRequest) {
             user: {
               email: session.user?.email,
               name: session.user?.name,
-              roles: (session.user as any)?.roles || [],
-              role: (session.user as any)?.role || null,
+              sub: session.user?.sub,
+              roles: (session.user as any)['https://prepflow.org/roles'] || [],
+              picture: session.user?.picture,
             },
-            expires: session.expires,
+            expiresAt: session.expiresAt,
           }
         : null,
-      token: token
+      token: session?.user
         ? {
-            email: token.email,
-            name: token.name,
-            sub: token.sub,
+            email: session.user.email,
+            name: session.user.name,
+            sub: session.user.sub,
             auth0UserId: auth0UserId,
-            roles: (token as any).roles || [],
-            role: (token as any).role || null,
-            rolesSource: (token as any).rolesSource || 'unknown',
-            iat: token.iat,
-            exp: token.exp,
-            // Include all token properties for debugging
-            allProperties: Object.keys(token),
-            // Custom claims found in token
+            roles: (session.user as any)['https://prepflow.org/roles'] || [],
+            // Include all user properties for debugging
+            allProperties: Object.keys(session.user),
+            // Custom claims found in user object
             customClaims: Object.keys(customClaims).length > 0 ? customClaims : null,
           }
         : null,
@@ -124,13 +118,12 @@ export async function GET(request: NextRequest) {
         ADMIN_BYPASS: process.env.ADMIN_BYPASS === 'true',
       },
       troubleshooting: {
-        rolesFound: token ? ((token as any).roles || []).length > 0 : false,
-        rolesSource: token ? (token as any).rolesSource || 'unknown' : null,
+        rolesFound: session?.user ? (((session.user as any)['https://prepflow.org/roles'] || []).length > 0) : false,
         auth0UserId: auth0UserId,
         recommendation:
-          !token || ((token as any).roles || []).length === 0
-            ? 'Roles not found in token. Check: 1) Auth0 Actions configured to include roles, 2) Management API fallback is working, 3) User has roles assigned in Auth0'
-            : 'Roles found in token',
+          !session?.user || (((session.user as any)['https://prepflow.org/roles'] || []).length === 0)
+            ? 'Roles not found in session. Check: 1) Auth0 Actions configured to include roles, 2) Management API fallback is working, 3) User has roles assigned in Auth0'
+            : 'Roles found in session',
       },
     });
   } catch (error) {

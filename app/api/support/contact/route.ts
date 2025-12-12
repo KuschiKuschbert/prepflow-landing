@@ -1,7 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { checkRateLimit } from './helpers/checkRateLimit';
 import { createTicket } from './helpers/createTicket';
@@ -18,15 +17,15 @@ import { validateRequest } from './helpers/validateRequest';
  */
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const user = await requireAuth(req);
+    if (!user?.email) {
       return NextResponse.json(
         ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
         { status: 401 },
       );
     }
 
-    const userEmail = session.user.email;
+    const userEmail = user.email;
 
     // Check rate limit
     const rateLimit = checkRateLimit(userEmail);

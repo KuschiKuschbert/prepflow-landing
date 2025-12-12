@@ -7,7 +7,7 @@ import { useSessionTimeout } from '@/hooks/useSessionTimeout';
 import { useTranslation } from '@/lib/useTranslation';
 import { Inter } from 'next/font/google';
 import dynamic from 'next/dynamic';
-import { signOut } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import React, { useEffect, useState } from 'react';
 import { CountryProvider } from '../../contexts/CountryContext';
 import { GlobalWarningProvider, useGlobalWarning } from '../../contexts/GlobalWarningContext';
@@ -123,11 +123,9 @@ export default function WebAppLayout({
     timeoutMs,
     warningMs,
     onTimeout: async () => {
-      // Actually sign out the user (not just redirect)
-      // This clears the NextAuth session cookie
-      await signOut({ redirect: false });
-      // Then redirect to home page
-      window.location.href = '/';
+      // Logout via Auth0 SDK - redirects to Auth0 logout then back to home
+      const returnTo = `${window.location.origin}/`;
+      window.location.href = `/api/auth/logout?returnTo=${encodeURIComponent(returnTo)}`;
     },
     enabled: true,
   });

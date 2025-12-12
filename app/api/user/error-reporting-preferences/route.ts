@@ -1,7 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getPreferences } from './helpers/getPreferences';
 import { updatePreferences } from './helpers/updatePreferences';
@@ -11,17 +10,17 @@ import { updatePreferences } from './helpers/updatePreferences';
  * Get user's error reporting preferences
  * Requires authentication
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const user = await requireAuth(req);
+    if (!user?.email) {
       return NextResponse.json(
         ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
         { status: 401 },
       );
     }
 
-    return await getPreferences(session.user.email);
+    return await getPreferences(user.email);
   } catch (error) {
     logger.error('[Error Reporting Preferences API] Unexpected error:', {
       error: error instanceof Error ? error.message : String(error),
@@ -50,15 +49,15 @@ export async function GET() {
  */
 export async function PUT(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const user = await requireAuth(req);
+    if (!user?.email) {
       return NextResponse.json(
         ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
         { status: 401 },
       );
     }
 
-    const userEmail = session.user.email;
+    const userEmail = user.email;
     const body = await req.json();
 
     return await updatePreferences(userEmail, body);

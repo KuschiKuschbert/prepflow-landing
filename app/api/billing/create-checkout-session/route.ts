@@ -1,9 +1,8 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
 import { getOrCreateCustomerId, resolvePriceIdFromTier } from '@/lib/billing';
 import { logger } from '@/lib/logger';
 import { getStripe } from '@/lib/stripe';
-import { getServerSession } from 'next-auth';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -36,13 +35,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
-    }
+    const user = await requireAuth(req);
+    const email = user.email;
 
     const body = await req.json().catch(() => ({}));
     const validationResult = checkoutSessionSchema.safeParse(body);
@@ -67,10 +61,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const customerId = await getOrCreateCustomerId(session.user.email as string);
+    const customerId = await getOrCreateCustomerId(email);
     if (!customerId) {
       logger.error('[Billing API] Unable to resolve customer', {
-        context: { endpoint: '/api/billing/create-checkout-session', email: session.user.email },
+        context: { endpoint: '/api/billing/create-checkout-session', email },
       });
       return NextResponse.json(
         ApiErrorHandler.createError('Unable to resolve customer', 'CUSTOMER_RESOLUTION_ERROR', 500),
@@ -88,7 +82,7 @@ export async function POST(req: NextRequest) {
         return null;
       })();
 
-    const origin = req.headers.get('origin') || process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    const origin = req.headers.get('origin') || process.env.AUTH0_BASE_URL || 'http://localhost:3000';
 
     // Stripe best practice: Create checkout session with proper metadata
     // Metadata is used by webhook handler to identify user and tier
@@ -103,14 +97,14 @@ export async function POST(req: NextRequest) {
       // Stripe best practice: Include metadata for webhook processing
       metadata: {
         tier: determinedTier || 'starter',
-        user_email: session.user.email as string,
+        user_email: email,
         created_by: 'checkout_api',
       },
       subscription_data: {
         // Stripe best practice: Include metadata in subscription for webhook events
         metadata: {
           tier: determinedTier || 'starter',
-          user_email: session.user.email as string,
+          user_email: email,
         },
       },
       // Stripe best practice: Enable automatic tax if configured

@@ -1,6 +1,6 @@
 'use client';
 
-import { signIn, useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { MagneticButton } from '@/components/ui/MagneticButton';
@@ -12,8 +12,8 @@ interface HeroProps {
 }
 
 export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
-  const { status } = useSession();
-  const isAuthenticated = status === 'authenticated';
+  const { user, isLoading } = useUser();
+  const isAuthenticated = !!user;
 
   const handleSignIn = () => {
     if (trackEngagement) {
@@ -24,7 +24,7 @@ export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
         sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
       }
     } catch (_) {}
-    signIn('auth0', { callbackUrl: '/webapp' });
+    window.location.href = '/api/auth/login?returnTo=/webapp';
   };
 
   const handleRegister = () => {
@@ -36,7 +36,7 @@ export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
         sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
       }
     } catch (_) {}
-    signIn('auth0', { callbackUrl: '/webapp' });
+    window.location.href = '/api/auth/login?returnTo=/webapp';
   };
 
   const handleGoToDashboard = () => {

@@ -4,8 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { handleGoogleDriveCallback } from '@/lib/backup/google-drive';
 import { logger } from '@/lib/logger';
 
@@ -18,15 +17,15 @@ import { logger } from '@/lib/logger';
 export async function GET(request: NextRequest) {
   try {
     // Verify user is authenticated
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const user = await requireAuth(request);
+    if (!user?.email) {
       logger.warn('[Google Callback] Unauthenticated access attempt');
       return NextResponse.redirect(
         `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/webapp/settings/backup?error=unauthorized`,
       );
     }
 
-    const expectedUserId = session.user.email;
+    const expectedUserId = user.email;
     const { searchParams } = new URL(request.url);
     const code = searchParams.get('code');
     const stateToken = searchParams.get('state'); // Secure state token

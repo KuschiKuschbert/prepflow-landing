@@ -1,7 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
 import { logger } from '@/lib/logger';
-import { getServerSession } from 'next-auth';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { NextRequest, NextResponse } from 'next/server';
 import { getProfile } from './helpers/getProfile';
 import { updateProfile } from './helpers/updateProfile';
@@ -12,17 +11,10 @@ import { updateProfile } from './helpers/updateProfile';
  *
  * @returns {Promise<NextResponse>} User profile data
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
-    }
-
-    return await getProfile(session.user.email);
+    const user = await requireAuth(req);
+    return await getProfile(user.email);
   } catch (error) {
     logger.error('[Profile API] Unexpected error:', {
       error: error instanceof Error ? error.message : String(error),
@@ -53,15 +45,8 @@ export async function GET() {
  */
 export async function PUT(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
-    }
-
-    const userEmail = session.user.email;
+    const user = await requireAuth(req);
+    const userEmail = user.email;
     const body = await req.json();
 
     return await updateProfile(userEmail, body);

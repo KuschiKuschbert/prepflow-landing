@@ -1,34 +1,38 @@
-import { authOptions } from '@/lib/auth-options';
+import { auth0 } from '@/lib/auth0';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * Test endpoint to capture what NextAuth actually sends to Auth0
- * This helps diagnose the error=auth0 issue
+ * Test endpoint to check Auth0 SDK configuration
+ * This helps diagnose Auth0 SDK setup issues
  */
 export async function GET(request: NextRequest) {
   try {
-    const nextAuthUrl = process.env.NEXTAUTH_URL;
-    const callbackUrl = nextAuthUrl
-      ? `${nextAuthUrl}/api/auth/callback/auth0`
+    const auth0BaseUrl = process.env.AUTH0_BASE_URL;
+    const callbackUrl = auth0BaseUrl
+      ? `${auth0BaseUrl}/api/auth/callback`
       : 'NOT SET';
 
-    // Try to get the Auth0 provider and see its configuration
-    const auth0Provider = authOptions.providers.find((p) => p.id === 'auth0');
+    // Try to get the current session
+    const session = await auth0.getSession(request);
 
     const testResults = {
-      nextAuthUrl: nextAuthUrl || 'NOT SET',
+      auth0BaseUrl: auth0BaseUrl || 'NOT SET',
       expectedCallbackUrl: callbackUrl,
-      providerFound: Boolean(auth0Provider),
-      providerId: auth0Provider?.id || 'NOT FOUND',
-      // Try to access provider internals (may not work due to NextAuth internals)
-      providerType: auth0Provider?.type || 'NOT FOUND',
+      auth0Configured: Boolean(
+        process.env.AUTH0_ISSUER_BASE_URL &&
+        process.env.AUTH0_CLIENT_ID &&
+        process.env.AUTH0_CLIENT_SECRET,
+      ),
+      sessionActive: Boolean(session?.user),
+      userEmail: session?.user?.email || 'NOT FOUND',
     };
 
     // Log for debugging
-    logger.info('[Auth Test] Provider check:', {
-      providerFound: testResults.providerFound,
-      nextAuthUrl: testResults.nextAuthUrl,
+    logger.info('[Auth Test] Auth0 SDK check:', {
+      auth0Configured: testResults.auth0Configured,
+      auth0BaseUrl: testResults.auth0BaseUrl,
+      sessionActive: testResults.sessionActive,
     });
 
     return NextResponse.json(testResults, {

@@ -1,8 +1,8 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { getUserEmail } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
 import { backfillMissingIngredients } from './helpers/backfillMissingIngredients';
 import { handleRecipeIngredientsError } from './helpers/handleRecipeIngredientsError';
 import { mapRecipeIngredients } from './helpers/mapRecipeIngredients';
@@ -153,8 +153,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     // Get user email for change tracking
     let userEmail: string | null = null;
     try {
-      const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
-      userEmail = (token?.email as string) || null;
+      userEmail = await getUserEmail(request);
     } catch (tokenError) {
       // Continue without user email if auth fails (for development)
       logger.warn('[Recipes API] Could not get user email for change tracking:', tokenError);

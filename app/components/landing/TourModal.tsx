@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { signIn } from 'next-auth/react';
+// Auth0 SDK login handled via URL redirect
 import { trackEvent } from '@/lib/analytics';
 
 interface Step {
@@ -89,7 +89,7 @@ export default function TourModal({ isOpen, onClose, steps }: TourModalProps) {
                         sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
                       }
                     } catch (_) {}
-                    signIn('auth0', { callbackUrl: '/webapp' });
+                    window.location.href = '/api/auth/login?returnTo=/webapp';
                   } else {
                     trackEvent('tour_next', 'engagement', steps[index]?.key, index + 1);
                     setIndex(i => Math.min(i + 1, last));

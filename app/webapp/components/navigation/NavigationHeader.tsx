@@ -5,7 +5,7 @@ import { Icon } from '@/components/ui/Icon';
 import { useUserAvatar } from '@/hooks/useUserAvatar';
 import { getAvatarUrl, getDefaultAvatar } from '@/lib/user-avatar';
 import { Search } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { Breadcrumbs } from './NavigationHeader/components/Breadcrumbs';
 import { LogoSection } from './NavigationHeader/components/LogoSection';
 import { UserAvatarButton } from './NavigationHeader/components/UserAvatarButton';
@@ -65,9 +65,9 @@ export function NavigationHeader({
   userButtonRef,
   onAchievementsClick,
 }: NavigationHeaderProps) {
-  const { data: session } = useSession();
-  const userEmail = session?.user?.email;
-  const userName = session?.user?.name || userEmail?.split('@')[0];
+  const { user } = useUser();
+  const userEmail = user?.email;
+  const userName = user?.name || userEmail?.split('@')[0];
   const { avatar: userAvatar } = useUserAvatar();
 
   const { isVisible, isDesktop } = useHeaderVisibility();

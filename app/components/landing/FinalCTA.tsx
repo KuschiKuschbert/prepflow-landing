@@ -1,6 +1,6 @@
 'use client';
 
-import { signIn, useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { MagneticButton } from '@/components/ui/MagneticButton';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import {
@@ -15,8 +15,8 @@ interface FinalCTAProps {
 }
 
 export default function FinalCTA({ trackEngagement }: FinalCTAProps) {
-  const { status } = useSession();
-  const isAuthenticated = status === 'authenticated';
+  const { user } = useUser();
+  const isAuthenticated = !!user;
 
   const handleSignIn = () => {
     if (trackEngagement) {
@@ -27,7 +27,7 @@ export default function FinalCTA({ trackEngagement }: FinalCTAProps) {
         sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
       }
     } catch (_) {}
-    signIn('auth0', { callbackUrl: '/webapp' });
+    window.location.href = '/api/auth/login?returnTo=/webapp';
   };
 
   const handleRegister = () => {
@@ -39,7 +39,7 @@ export default function FinalCTA({ trackEngagement }: FinalCTAProps) {
         sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
       }
     } catch (_) {}
-    signIn('auth0', { callbackUrl: '/webapp' });
+    window.location.href = '/api/auth/login?returnTo=/webapp';
   };
 
   const handleGoToDashboard = () => {

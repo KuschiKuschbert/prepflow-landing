@@ -12,7 +12,7 @@ import { updateParLevel } from './helpers/updateParLevel';
 export async function GET(request: NextRequest) {
   try {
     // Authenticate and setup Supabase
-    const { supabaseAdmin, error: authError } = await authenticateAndSetup();
+    const { supabaseAdmin, error: authError } = await authenticateAndSetup(request);
     if (authError) {
       return authError;
     }
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { supabaseAdmin, error: authError } = await authenticateAndSetup();
+    const { supabaseAdmin, error: authError } = await authenticateAndSetup(request);
     if (authError) {
       return authError;
     }
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const { supabaseAdmin, error: authError } = await authenticateAndSetup();
+    const { supabaseAdmin, error: authError } = await authenticateAndSetup(request);
     if (authError) {
       return authError;
     }
@@ -107,7 +107,7 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const { supabaseAdmin, error: authError } = await authenticateAndSetup();
+    const { supabaseAdmin, error: authError } = await authenticateAndSetup(request);
     if (authError) {
       return authError;
     }

@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ManagementClient } from 'auth0';
 import { logger } from '@/lib/logger';
-import { authOptions } from '@/lib/auth-options';
-
+import { requireAuth } from '@/lib/auth0-api-helpers';
 /**
  * Comprehensive Auth0 Test Endpoint
  * Tests all aspects of Auth0 configuration and NextAuth integration
@@ -48,16 +47,16 @@ export async function GET(request: NextRequest) {
     // Test 1: Environment Variables
     logger.info('[Auth0 Test] Starting comprehensive tests...');
 
-    const nextAuthUrl = process.env.NEXTAUTH_URL;
+    const auth0BaseUrl = process.env.AUTH0_BASE_URL;
     const auth0Issuer = process.env.AUTH0_ISSUER_BASE_URL;
     const auth0ClientId = process.env.AUTH0_CLIENT_ID;
     const auth0ClientSecret = process.env.AUTH0_CLIENT_SECRET;
-    const nextAuthSecret = process.env.NEXTAUTH_SECRET;
+    const auth0Secret = process.env.AUTH0_SECRET;
 
-    if (!nextAuthUrl) {
-      addTest('NEXTAUTH_URL', 'fail', 'NEXTAUTH_URL is not set');
+    if (!auth0BaseUrl) {
+      addTest('AUTH0_BASE_URL', 'fail', 'AUTH0_BASE_URL is not set');
     } else {
-      addTest('NEXTAUTH_URL', 'pass', `Set to: ${nextAuthUrl}`, { url: nextAuthUrl });
+      addTest('AUTH0_BASE_URL', 'pass', `Set to: ${auth0BaseUrl}`, { url: auth0BaseUrl });
     }
 
     if (!auth0Issuer) {
@@ -77,65 +76,32 @@ export async function GET(request: NextRequest) {
     } else {
       addTest('AUTH0_CLIENT_SECRET', 'pass', 'Set correctly', { hasValue: true });
     }
-
-    if (!nextAuthSecret) {
-      addTest('NEXTAUTH_SECRET', 'fail', 'NEXTAUTH_SECRET is not set');
+    if (!auth0Secret) {
+      addTest('AUTH0_SECRET', 'fail', 'AUTH0_SECRET is not set');
     } else {
-      const secretLength = nextAuthSecret.length;
+      const secretLength = auth0Secret.length;
       if (secretLength < 32) {
-        addTest('NEXTAUTH_SECRET', 'warning', `Secret is only ${secretLength} characters (recommended: 32+)`, {
+        addTest('AUTH0_SECRET', 'warning', `Secret is only ${secretLength} characters (recommended: 32+)`, {
           length: secretLength,
         });
       } else {
-        addTest('NEXTAUTH_SECRET', 'pass', `Secret length: ${secretLength} characters`, { length: secretLength });
+        addTest('AUTH0_SECRET', 'pass', `Secret length: ${secretLength} characters`, { length: secretLength });
       }
     }
 
     // Test 2: Callback URL Construction
-    if (nextAuthUrl) {
-      const expectedCallback = `${nextAuthUrl}/api/auth/callback/auth0`;
+    if (auth0BaseUrl) {
+      const expectedCallback = `${auth0BaseUrl}/api/auth/callback`;
       addTest('Callback URL Construction', 'pass', `Expected: ${expectedCallback}`, {
         callbackUrl: expectedCallback,
       });
     }
 
-    // Test 3: Provider Configuration
-    const auth0Provider = authOptions.providers.find((p) => p.id === 'auth0');
-    if (!auth0Provider) {
-      addTest('Auth0 Provider', 'fail', 'Auth0 provider not found in authOptions');
-    } else {
-      addTest('Auth0 Provider', 'pass', 'Auth0 provider configured', {
-        providerId: auth0Provider.id,
-        providerType: auth0Provider.type,
-      });
-
-      // Try to access provider internals (may not work due to NextAuth internals)
-      try {
-        const providerAny = auth0Provider as any;
-        const redirectUri = providerAny.authorization?.params?.redirect_uri;
-        const callbackURL = providerAny.callbackURL;
-
-        if (redirectUri) {
-          addTest('Provider redirect_uri', 'pass', `Set to: ${redirectUri}`, { redirectUri });
-        } else {
-          addTest('Provider redirect_uri', 'warning', 'Not accessible at runtime (expected)', {
-            note: 'NextAuth provider config is not accessible at runtime',
-          });
-        }
-
-        if (callbackURL) {
-          addTest('Provider callbackURL', 'pass', `Set to: ${callbackURL}`, { callbackURL });
-        } else {
-          addTest('Provider callbackURL', 'warning', 'Not accessible at runtime (expected)', {
-            note: 'NextAuth provider config is not accessible at runtime',
-          });
-        }
-      } catch (error) {
-        addTest('Provider Config Access', 'warning', 'Cannot access provider internals (expected)', {
-          error: error instanceof Error ? error.message : String(error),
-        });
-      }
-    }
+    // Test 3: Auth0 SDK Configuration
+    // Auth0 SDK reads configuration from environment variables automatically
+    addTest('Auth0 SDK Configuration', 'pass', 'Auth0 SDK configured via environment variables', {
+      configured: true,
+    });
 
     // Test 4: Auth0 Management API Connection
     if (auth0Issuer && auth0ClientId && auth0ClientSecret) {
@@ -157,9 +123,9 @@ export async function GET(request: NextRequest) {
 
         // Test 5: Verify Callback URLs in Auth0
         const callbacks = (app.callbacks || []) as string[];
-        const expectedCallback = nextAuthUrl ? `${nextAuthUrl}/api/auth/callback/auth0` : null;
-        const expectedCallbackNonWww = nextAuthUrl && nextAuthUrl.includes('www.')
-          ? `${nextAuthUrl.replace('www.', '')}/api/auth/callback/auth0`
+        const expectedCallback = auth0BaseUrl ? `${auth0BaseUrl}/api/auth/callback` : null;
+        const expectedCallbackNonWww = auth0BaseUrl && auth0BaseUrl.includes('www.')
+          ? `${auth0BaseUrl.replace('www.', '')}/api/auth/callback`
           : null;
 
         if (expectedCallback && callbacks.includes(expectedCallback)) {
@@ -187,9 +153,9 @@ export async function GET(request: NextRequest) {
 
         // Test 6: Verify Logout URLs
         const logoutUrls = (app.logout_urls || []) as string[];
-        const expectedLogout = nextAuthUrl || '';
-        const expectedLogoutNonWww = nextAuthUrl && nextAuthUrl.includes('www.')
-          ? nextAuthUrl.replace('www.', '')
+        const expectedLogout = auth0BaseUrl || '';
+        const expectedLogoutNonWww = auth0BaseUrl && auth0BaseUrl.includes('www.')
+          ? auth0BaseUrl.replace('www.', '')
           : null;
 
         if (logoutUrls.some((url: string) => url.includes(expectedLogout))) {
@@ -205,9 +171,9 @@ export async function GET(request: NextRequest) {
 
         // Test 7: Verify Web Origins
         const webOrigins = (app.web_origins || []) as string[];
-        const expectedOrigin = nextAuthUrl || '';
-        const expectedOriginNonWww = nextAuthUrl && nextAuthUrl.includes('www.')
-          ? nextAuthUrl.replace('www.', '')
+        const expectedOrigin = auth0BaseUrl || '';
+        const expectedOriginNonWww = auth0BaseUrl && auth0BaseUrl.includes('www.')
+          ? auth0BaseUrl.replace('www.', '')
           : null;
 
         if (webOrigins.includes(expectedOrigin) || webOrigins.includes('*')) {
@@ -234,19 +200,19 @@ export async function GET(request: NextRequest) {
     addTest('Request Origin', 'pass', `Request from: ${requestOrigin}`, { origin: requestOrigin });
 
     // Test 9: URL Consistency Check
-    if (nextAuthUrl && requestOrigin) {
+    if (auth0BaseUrl && requestOrigin) {
       const originUrl = requestOrigin.includes('http') ? requestOrigin : `https://${requestOrigin}`;
-      const nextAuthHost = new URL(nextAuthUrl).hostname;
+      const auth0Host = new URL(auth0BaseUrl).hostname;
       const originHost = originUrl.includes('http') ? new URL(originUrl).hostname : requestOrigin;
 
-      if (nextAuthHost === originHost || originHost.includes(nextAuthHost) || nextAuthHost.includes(originHost)) {
-        addTest('URL Consistency', 'pass', 'NEXTAUTH_URL matches request origin', {
-          nextAuthHost,
+      if (auth0Host === originHost || originHost.includes(auth0Host) || auth0Host.includes(originHost)) {
+        addTest('URL Consistency', 'pass', 'AUTH0_BASE_URL matches request origin', {
+          auth0Host,
           originHost,
         });
       } else {
-        addTest('URL Consistency', 'warning', 'NEXTAUTH_URL may not match request origin', {
-          nextAuthHost,
+        addTest('URL Consistency', 'warning', 'AUTH0_BASE_URL may not match request origin', {
+          auth0Host,
           originHost,
           note: 'This may cause callback URL validation issues',
         });

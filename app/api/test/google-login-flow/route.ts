@@ -4,9 +4,8 @@
  *
  * @returns {Promise<NextResponse>} JSON response with session status
  */
-import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-options';
+import { NextResponse, NextRequest } from 'next/server';
+import { auth0 } from '@/lib/auth0';
 import { logger } from '@/lib/logger';
 
 /**
@@ -14,9 +13,9 @@ import { logger } from '@/lib/logger';
  *
  * @returns {Promise<NextResponse>} JSON response with session status
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await auth0.getSession(req);
 
     return NextResponse.json({
       success: true,
@@ -25,10 +24,10 @@ export async function GET() {
             user: {
               email: session.user?.email,
               name: session.user?.name,
-              image: session.user?.image,
+              image: session.user?.picture,
               roles: (session.user as any)?.roles || [],
             },
-            expires: session.expires,
+            expiresAt: session.expiresAt,
           }
         : null,
       message: session

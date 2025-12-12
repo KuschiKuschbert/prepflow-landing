@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
 import { useNotification } from '@/contexts/NotificationContext';
@@ -26,8 +26,8 @@ export function useProfileApiFetch({
   initialDataLoadedRef,
 }: UseProfileApiFetchProps) {
   const { showError } = useNotification();
-  const { data: session } = useSession();
-  const sessionEmail = session?.user?.email || null;
+  const { user } = useUser();
+  const sessionEmail = user?.email || null;
 
   const [loading, setLoading] = useState(!cachedProfile);
   const [profile, setProfile] = useState<ProfileData | null>(

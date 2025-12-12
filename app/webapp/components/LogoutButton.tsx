@@ -2,13 +2,11 @@
 
 import { clearSessionStats } from '@/lib/arcadeStats';
 import { clearAllDrafts } from '@/lib/autosave-storage';
-import { signOut, useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 export function LogoutButton() {
-  const session = useSession();
-  // Safely destructure session data, handling undefined during SSR
-  const sessionData = session?.data;
-  const userId = sessionData?.user?.email || null;
+  const { user } = useUser();
+  const userId = user?.email || null;
 
   const handleLogout = async () => {
     // Clear all autosave drafts
@@ -17,10 +15,7 @@ export function LogoutButton() {
     // Clear session stats (reset navbar scores on logout, but keep persistent stats in Settings)
     clearSessionStats();
 
-    // Clear NextAuth session
-    await signOut({ redirect: false });
-
-    // Redirect to logout API which handles Auth0 logout
+    // Logout via Auth0 SDK - redirects to Auth0 logout then back to home
     const returnTo = `${window.location.origin}/`;
     window.location.href = `/api/auth/logout?returnTo=${encodeURIComponent(returnTo)}`;
   };

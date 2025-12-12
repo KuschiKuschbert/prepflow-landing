@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
+import { NextRequest } from 'next/server';
 
 /**
  * DELETE /api/account/delete
@@ -8,9 +8,14 @@ import { authOptions } from '@/lib/auth-options';
  *
  * @returns {Promise<NextResponse>} Deletion request response
  */
-export async function POST() {
-  const session: any = await getServerSession(authOptions as any);
-  if (!session?.user?.email) {
+export async function POST(req: NextRequest) {
+  try {
+    await requireAuth(req);
+  } catch (error) {
+    // requireAuth throws NextResponse, so rethrow it
+    if (error instanceof NextResponse) {
+      throw error;
+    }
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   // Placeholder: Queue deletion process; require confirmation path in UI

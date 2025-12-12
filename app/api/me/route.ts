@@ -1,19 +1,18 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
 import { logger } from '@/lib/logger';
-import { getServerSession } from 'next-auth';
-import { NextResponse } from 'next/server';
+import { getUserFromRequest } from '@/lib/auth0-api-helpers';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
+    const user = await getUserFromRequest(req);
+    if (!user) {
       return NextResponse.json(
         ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
         { status: 401 },
       );
     }
-    return NextResponse.json({ user: session.user });
+    return NextResponse.json({ user });
   } catch (error) {
     logger.error('[API /me] Failed to get user session:', {
       error: error instanceof Error ? error.message : String(error),

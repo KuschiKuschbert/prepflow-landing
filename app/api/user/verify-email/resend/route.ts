@@ -1,8 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
-import { getServerSession } from 'next-auth';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * POST /api/user/verify-email/resend
@@ -11,17 +10,10 @@ import { NextResponse } from 'next/server';
  *
  * @returns {Promise<NextResponse>} Resend response
  */
-export async function POST() {
+export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
-    }
-
-    const userEmail = session.user.email;
+    const user = await requireAuth(req);
+    const userEmail = user.email;
 
     // Auth0 manages email verification
     // In a production system, you would:
@@ -61,7 +53,3 @@ export async function POST() {
     );
   }
 }
-
-
-
-

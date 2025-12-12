@@ -1,9 +1,8 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { SessionProvider } from 'next-auth/react';
 import { isAdmin } from '@/lib/admin-auth';
 import { NotificationProvider } from '@/contexts/NotificationContext';
 import AdminNavigation from './components/AdminNavigation';
@@ -14,25 +13,25 @@ function AdminLayoutContent({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { data: session, status } = useSession();
+  const { user, isLoading } = useUser();
   const router = useRouter();
 
   useEffect(() => {
-    if (status === 'loading') return;
+    if (isLoading) return;
 
-    if (!session?.user) {
-      router.push('/api/auth/signin/auth0?callbackUrl=/admin');
+    if (!user) {
+      router.push('/api/auth/login?returnTo=/admin');
       return;
     }
 
     // Check if user is admin
-    if (!isAdmin(session.user)) {
+    if (!isAdmin(user)) {
       router.push('/not-authorized');
       return;
     }
-  }, [session, status, router]);
+  }, [user, isLoading, router]);
 
-  if (status === 'loading') {
+  if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a] text-white">
         <div className="text-center">
@@ -43,7 +42,7 @@ function AdminLayoutContent({
     );
   }
 
-  if (!session?.user || !isAdmin(session.user)) {
+  if (!user || !isAdmin(user)) {
     return null;
   }
 
@@ -59,8 +58,9 @@ function AdminLayoutContent({
 
 /**
  * Admin layout component with authentication and authorization checks.
- * Wraps admin pages with session provider, notification provider, and admin navigation.
+ * Wraps admin pages with notification provider and admin navigation.
  * Redirects non-admin users to unauthorized page.
+ * Note: UserProvider is already provided at root level in app/providers.tsx
  *
  * @component
  * @param {Object} props - Component props
@@ -73,10 +73,8 @@ export default function AdminLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SessionProvider>
-      <NotificationProvider>
-        <AdminLayoutContent>{children}</AdminLayoutContent>
-      </NotificationProvider>
-    </SessionProvider>
+    <NotificationProvider>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </NotificationProvider>
   );
 }

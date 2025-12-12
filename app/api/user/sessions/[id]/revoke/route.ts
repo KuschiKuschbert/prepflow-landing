@@ -1,7 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -17,24 +16,17 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
-    }
-
+    await requireAuth(req);
     const { id } = await context.params;
 
-    // With NextAuth JWT strategy, we can't revoke individual sessions
+    // With Auth0 SDK JWT strategy, we can't revoke individual sessions
     // If the requested session is the current one, we can sign them out
     if (id === 'current') {
       // Return sign-out URL
       return NextResponse.json({
         success: true,
         message: 'Session revoked. Please sign out to complete.',
-        sign_out_url: '/api/auth/signout',
+        sign_out_url: '/api/auth/logout',
         note: 'With JWT sessions, you must sign out to revoke the current session.',
       });
     }
@@ -42,7 +34,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     return NextResponse.json({
       success: false,
       message: 'Session not found or cannot be revoked',
-      note: 'NextAuth JWT sessions are stateless. Only the current session can be revoked by signing out.',
+      note: 'Auth0 SDK JWT sessions are stateless. Only the current session can be revoked by signing out.',
     });
   } catch (error) {
     logger.error('[Sessions API] Unexpected error:', {
@@ -64,7 +56,3 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     );
   }
 }
-
-
-
-

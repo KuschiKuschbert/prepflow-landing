@@ -1,6 +1,6 @@
 # Google Connection API Usage Guide
 
-**Date:** December 12, 2025  
+**Date:** December 12, 2025
 **Purpose:** Complete guide for using the API to configure and enable Google OAuth connection
 
 ## API Endpoints

@@ -1,18 +1,25 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
-import { getServerSession } from 'next-auth';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Authenticate user and setup Supabase admin client.
  *
+ * @param {NextRequest} req - Request object
  * @returns {Promise<{supabaseAdmin: any, error: NextResponse | null}>} Supabase client and error if any
  */
-export async function authenticateAndSetup() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
+export async function authenticateAndSetup(req: NextRequest) {
+  try {
+    await requireAuth(req);
+  } catch (error) {
+    if (error instanceof NextResponse) {
+      return {
+        supabaseAdmin: null,
+        error,
+      };
+    }
     return {
       supabaseAdmin: null,
       error: NextResponse.json(

@@ -5,7 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
+import { getUserFromRequest } from '@/lib/auth0-api-helpers';
 import { supabaseAdmin } from '@/lib/supabase';
 import { detectSuitablePlatingMethods } from '@/lib/ai/plating-method-detection';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
@@ -17,11 +17,11 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     const recipeId = id;
 
     // Check authentication
-    let token;
+    let session;
     try {
-      token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+      session = await getUserFromRequest(req);
     } catch (tokenError) {
-      logger.error('[Plating Method Suggestion] Token check failed:', {
+      logger.error('[Plating Method Suggestion] Session check failed:', {
         error: tokenError instanceof Error ? tokenError.message : String(tokenError),
         recipeId,
       });
@@ -31,8 +31,8 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
       );
     }
 
-    if (!token) {
-      logger.warn('[Plating Method Suggestion] No token found', {
+    if (!session?.email) {
+      logger.warn('[Plating Method Suggestion] No session found', {
         recipeId,
         cookies: req.headers.get('cookie') ? 'present' : 'missing',
       });

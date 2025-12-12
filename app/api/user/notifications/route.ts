@@ -1,7 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getPreferences } from './helpers/getPreferences';
@@ -31,17 +30,17 @@ const notificationPreferencesSchema = z.object({
  *
  * @returns {Promise<NextResponse>} Notification preferences
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const user = await requireAuth(req);
+    if (!user?.email) {
       return NextResponse.json(
         ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
         { status: 401 },
       );
     }
 
-    return await getPreferences(session.user.email);
+    return await getPreferences(user.email);
   } catch (error) {
     logger.error('[Notifications API] Unexpected error:', {
       error: error instanceof Error ? error.message : String(error),
@@ -72,15 +71,15 @@ export async function GET() {
  */
 export async function PUT(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const user = await requireAuth(req);
+    if (!user?.email) {
       return NextResponse.json(
         ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
         { status: 401 },
       );
     }
 
-    const userEmail = session.user.email;
+    const userEmail = user.email;
     const body = await req.json();
 
     // Validate request body

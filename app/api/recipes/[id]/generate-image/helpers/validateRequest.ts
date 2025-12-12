@@ -2,7 +2,7 @@
  * Request validation and authentication for recipe image generation
  */
 
-import { getToken } from 'next-auth/jwt';
+import { getUserFromRequest } from '@/lib/auth0-api-helpers';
 import { type NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
@@ -53,17 +53,16 @@ export async function validateRequest(
   }
 
   // Check authentication
-  let token;
+  let session;
   try {
-    token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    session = await getUserFromRequest(req);
   } catch (tokenError) {
-    logger.error('[Recipe Image Generation] Error getting token:', {
+    logger.error('[Recipe Image Generation] Error getting session:', {
       error: tokenError instanceof Error ? tokenError.message : String(tokenError),
       recipeId,
-      hasSecret: !!process.env.NEXTAUTH_SECRET,
     });
     if (process.env.NODE_ENV === 'development') {
-      token = null;
+      session = null;
     } else {
       return NextResponse.json(
         ApiErrorHandler.createError('Authentication error', 'AUTH_ERROR', 401),
@@ -74,20 +73,20 @@ export async function validateRequest(
 
   if (process.env.NODE_ENV === 'development') {
     logger.dev('[Recipe Image Generation] Auth check:', {
-      hasToken: !!token,
-      tokenEmail: token?.email,
-      tokenSub: token?.sub,
+      hasSession: !!session,
+      userEmail: session?.email,
+      userSub: session?.sub,
       cookies: req.headers.get('cookie') ? 'present' : 'missing',
     });
   }
 
   const userId =
-    token?.email || token?.sub || (process.env.NODE_ENV === 'development' ? 'dev-user' : null);
+    session?.email || session?.sub || (process.env.NODE_ENV === 'development' ? 'dev-user' : null);
 
   if (!userId && process.env.NODE_ENV === 'production') {
     logger.warn('[Recipe Image Generation] Unauthorized attempt:', {
       recipeId,
-      hasToken: !!token,
+      hasSession: !!session,
       cookies: req.headers.get('cookie') ? 'present' : 'missing',
     });
     return NextResponse.json(

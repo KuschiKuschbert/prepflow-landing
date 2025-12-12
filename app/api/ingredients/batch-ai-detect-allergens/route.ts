@@ -12,9 +12,7 @@ import {
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-options';
-
+import { requireAuth } from '@/lib/auth0-api-helpers';
 // Simple rate limiting
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
@@ -34,13 +32,13 @@ function checkRateLimit(userId: string): boolean {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const user = await requireAuth(request);
+    if (!user?.email) {
       return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'AUTH_ERROR', 401), {
         status: 401,
       });
     }
-    const userId = session.user.email;
+    const userId = user.email;
     if (!checkRateLimit(userId)) {
       return NextResponse.json(
         ApiErrorHandler.createError(

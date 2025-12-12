@@ -1,99 +1,64 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authOptions } from '@/lib/auth-options';
 import { logger } from '@/lib/logger';
 
 /**
- * Debug endpoint to investigate NextAuth callback URL validation
- * This helps understand when and why NextAuth adds error=auth0
+ * Debug endpoint to investigate Auth0 SDK callback URL validation
+ * This helps understand Auth0 SDK callback flow
  */
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const callbackUrl = searchParams.get('callbackUrl') || '/webapp';
-    const providerId = searchParams.get('provider') || 'auth0';
 
     // Get environment variables
-    const nextAuthUrl = process.env.NEXTAUTH_URL;
+    const auth0BaseUrl = process.env.AUTH0_BASE_URL;
     const requestOrigin = request.headers.get('origin') || request.nextUrl.origin;
     const host = request.headers.get('host') || request.nextUrl.host;
 
     // Construct expected callback URL
-    const expectedCallbackUrl = nextAuthUrl
-      ? `${nextAuthUrl}/api/auth/callback/${providerId}`
-      : `${requestOrigin}/api/auth/callback/${providerId}`;
+    const expectedCallbackUrl = auth0BaseUrl
+      ? `${auth0BaseUrl}/api/auth/callback`
+      : `${requestOrigin}/api/auth/callback`;
 
-    // Get provider configuration
-    const providers = authOptions.providers || [];
-    const auth0Provider = providers.find((p: any) => p.id === providerId);
-
-    // Extract provider configuration details
-    let providerConfig: any = {};
-    if (auth0Provider) {
-      try {
-        // Try to access provider internals (may not be accessible)
-        providerConfig = {
-          id: auth0Provider.id,
-          name: auth0Provider.name,
-          type: (auth0Provider as any).type,
-          // Try to get callback URL from provider
-          callbackURL: (auth0Provider as any).callbackURL,
-          // Try to get authorization params
-          authorizationParams: (auth0Provider as any).authorization?.params,
-        };
-      } catch {
-        // Provider internals may not be accessible
-        providerConfig = { error: 'Cannot access provider internals' };
-      }
-    }
-
-    // Check what NextAuth would construct
-    const constructedCallbackUrl = nextAuthUrl
-      ? `${nextAuthUrl}/api/auth/callback/${providerId}`
-      : `${requestOrigin}/api/auth/callback/${providerId}`;
+    // Check what Auth0 SDK would construct
+    const constructedCallbackUrl = auth0BaseUrl
+      ? `${auth0BaseUrl}/api/auth/callback`
+      : `${requestOrigin}/api/auth/callback`;
 
     // Log for debugging
-    logger.info('[NextAuth Validation Debug]', {
-      nextAuthUrl,
+    logger.info('[Auth0 SDK Validation Debug]', {
+      auth0BaseUrl,
       requestOrigin,
       host,
       callbackUrl,
-      providerId,
       expectedCallbackUrl,
       constructedCallbackUrl,
-      providerFound: !!auth0Provider,
-      providerConfig,
     });
 
     return NextResponse.json({
       environment: process.env.NODE_ENV,
       validation: {
-        nextAuthUrl,
+        auth0BaseUrl,
         requestOrigin,
         host,
         callbackUrl,
-        providerId,
         expectedCallbackUrl,
         constructedCallbackUrl,
         match: expectedCallbackUrl === constructedCallbackUrl,
       },
-      provider: {
-        found: !!auth0Provider,
-        config: providerConfig,
-        totalProviders: providers.length,
-      },
       analysis: {
         issue:
-          nextAuthUrl && requestOrigin !== nextAuthUrl
-            ? 'Request origin does not match NEXTAUTH_URL - NextAuth may validate against request origin'
-            : 'Request origin matches NEXTAUTH_URL',
+          auth0BaseUrl && requestOrigin !== auth0BaseUrl
+            ? 'Request origin does not match AUTH0_BASE_URL - Auth0 SDK may validate against request origin'
+            : 'Request origin matches AUTH0_BASE_URL',
         recommendation:
-          nextAuthUrl && requestOrigin !== nextAuthUrl
-            ? 'Ensure middleware redirects non-www to www BEFORE NextAuth processes request'
-            : 'Configuration appears correct - error may be from NextAuth internal validation',
+          auth0BaseUrl && requestOrigin !== auth0BaseUrl
+            ? 'Ensure middleware redirects non-www to www BEFORE Auth0 SDK processes request'
+            : 'Configuration appears correct',
       },
     });
   } catch (error) {
-    logger.error('[NextAuth Validation Debug] Error:', error);
+    logger.error('[Auth0 SDK Validation Debug] Error:', error);
     return NextResponse.json(
       {
         error: error instanceof Error ? error.message : String(error),

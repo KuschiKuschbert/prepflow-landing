@@ -4,8 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { authenticateGoogleDrive, uploadBackupToDrive } from '@/lib/backup/google-drive';
 import { exportUserData } from '@/lib/backup/export';
 import { encryptBackup } from '@/lib/backup/encryption';
@@ -21,12 +20,12 @@ import type { EncryptionMode } from '@/lib/backup/types';
  */
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const user = await requireAuth(request);
+    if (!user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const userId = session.user.email;
+    const userId = user.email;
     const body = await request.json();
     const encryptionMode: EncryptionMode = body.encryptionMode || 'prepflow-only';
     const password: string | undefined = body.password;

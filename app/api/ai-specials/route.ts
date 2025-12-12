@@ -1,6 +1,5 @@
 import { checkFeatureAccess } from '@/lib/api-feature-gate';
-import { authOptions } from '@/lib/auth-options';
-import { getServerSession } from 'next-auth';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { NextRequest, NextResponse } from 'next/server';
 import { handleAISpecialsError } from './helpers/handleAISpecialsError';
 import { validateAISpecialsRequest } from './helpers/validateRequest';
@@ -22,14 +21,16 @@ import { saveAISpecials } from './helpers/saveAISpecials';
 export async function POST(request: NextRequest) {
   try {
     // Check feature access (requires Pro tier)
-    const session = await getServerSession(authOptions);
-    if (session?.user?.email) {
-      try {
-        await checkFeatureAccess('ai_specials', session.user.email, request);
-      } catch (error) {
-        // checkFeatureAccess throws NextResponse, so return it
-        return error as NextResponse;
+    try {
+      const user = await requireAuth(request);
+      await checkFeatureAccess('ai_specials', user.email, request);
+    } catch (error) {
+      // checkFeatureAccess throws NextResponse, so return it
+      if (error instanceof NextResponse) {
+        return error;
       }
+      // If requireAuth throws, it's already a NextResponse, so rethrow
+      throw error;
     }
 
     const body = await request.json();

@@ -1,28 +1,23 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
 import { logger } from '@/lib/logger';
-import { getServerSession } from 'next-auth';
-import { NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/auth0-api-helpers';
+import { auth0 } from '@/lib/auth0';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * GET /api/user/sessions
  * Get current user's active sessions
- * Note: NextAuth JWT sessions don't have a traditional session store,
+ * Note: Auth0 SDK sessions are stateless (JWT-based),
  * so we return the current session information
  *
  * @returns {Promise<NextResponse>} Active sessions list
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
-    }
+    const user = await requireAuth(req);
+    const session = await auth0.getSession(req);
 
-    // NextAuth with JWT strategy doesn't maintain a session store
+    // Auth0 SDK with JWT strategy doesn't maintain a session store
     // We return the current session as the only "active" session
     // In a production system with session storage, you would query the session store here
     return NextResponse.json({
@@ -32,14 +27,14 @@ export async function GET() {
           user_agent: 'Current Session',
           ip_address: null, // Not available in server-side context
           location: null,
-          created_at: session.expires
+          created_at: session?.expiresAt
             ? new Date(Date.now() - 3600000).toISOString()
             : new Date().toISOString(), // Approximate
-          expires_at: session.expires,
+          expires_at: session?.expiresAt || null,
           is_current: true,
         },
       ],
-      note: 'NextAuth JWT sessions are stateless. Only the current session is shown.',
+      note: 'Auth0 SDK JWT sessions are stateless. Only the current session is shown.',
     });
   } catch (error) {
     logger.error('[Sessions API] Unexpected error:', {
@@ -61,7 +56,3 @@ export async function GET() {
     );
   }
 }
-
-
-
-

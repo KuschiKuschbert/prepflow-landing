@@ -3,7 +3,7 @@
  * Landing page header component
  */
 
-import { signIn, useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import Link from 'next/link';
 import React from 'react';
 import { BrandMark } from '../../../components/BrandMark';
@@ -17,9 +17,8 @@ interface LandingHeaderProps {
 
 const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: LandingHeaderProps) {
   const { t } = useTranslation();
-  const { status } = useSession();
-  const isAuthenticated = status === 'authenticated';
-  const isLoading = status === 'loading';
+  const { user, isLoading } = useUser();
+  const isAuthenticated = !!user;
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-gray-700 bg-[#0a0a0a]/95 backdrop-blur-md">
@@ -92,7 +91,7 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
                           sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
                         }
                       } catch (_) {}
-                      signIn('auth0', { callbackUrl: '/webapp' });
+                      window.location.href = '/api/auth/login?returnTo=/webapp';
                     }}
                     strength={0.3}
                     maxDistance={10}
@@ -108,7 +107,7 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
                           sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
                         }
                       } catch (_) {}
-                      signIn('auth0', { callbackUrl: '/webapp' });
+                      window.location.href = '/api/auth/login?returnTo=/webapp';
                     }}
                     strength={0.3}
                     maxDistance={10}
@@ -135,7 +134,7 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
                         sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
                       }
                     } catch (_) {}
-                    signIn('auth0', { callbackUrl: '/webapp' });
+                    window.location.href = '/api/auth/login?returnTo=/webapp';
                   }
                 }}
                 strength={0.25}

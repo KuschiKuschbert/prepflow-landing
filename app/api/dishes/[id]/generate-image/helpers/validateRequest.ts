@@ -3,7 +3,7 @@
  */
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { getToken } from 'next-auth/jwt';
+import { getUserFromRequest } from '@/lib/auth0-api-helpers';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -31,14 +31,14 @@ export function validateDishId(dishId: string | undefined): NextResponse | null 
 export async function authenticateRequest(
   req: NextRequest,
 ): Promise<{ userId: string } | NextResponse> {
-  const token = await getToken({ req });
-  if (!token || !token.sub) {
+  const user = await getUserFromRequest(req);
+  if (!user || !user.sub) {
     return NextResponse.json(
       ApiErrorHandler.createError('Authentication required', 'AUTH_ERROR', 401),
       { status: 401 },
     );
   }
-  return { userId: token.sub };
+  return { userId: user.sub };
 }
 
 /**

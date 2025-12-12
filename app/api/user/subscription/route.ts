@@ -1,12 +1,11 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
 import { getEntitlementsForTierAsync } from '@/lib/entitlements';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import type { TierSlug } from '@/lib/tier-config';
 import { getUsage } from '@/lib/usage-tracker';
-import { getServerSession } from 'next-auth';
-import { NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/auth0-api-helpers';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * GET /api/user/subscription
@@ -14,17 +13,10 @@ import { NextResponse } from 'next/server';
  *
  * @returns {Promise<NextResponse>} Subscription details
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
-    }
-
-    const userEmail = session.user.email as string;
+    const user = await requireAuth(req);
+    const userEmail = user.email;
 
     if (!supabaseAdmin) {
       logger.warn('[Subscription API] Supabase not available');

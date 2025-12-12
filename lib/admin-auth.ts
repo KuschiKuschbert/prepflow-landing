@@ -3,9 +3,7 @@
  * Handles admin role checking and authorization for admin panel access.
  */
 
-import { authOptions } from './auth-options';
-import { getServerSession } from 'next-auth';
-import { getToken } from 'next-auth/jwt';
+import { auth0 } from './auth0';
 import { isAdmin } from './admin-utils';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
@@ -58,8 +56,13 @@ export function getAdminRole(user: any): AdminRole | null {
  *
  * @returns {Promise<AdminUser | null>} Admin user info or null if not admin
  */
-export async function getAdminUser(): Promise<AdminUser | null> {
-  const session = await getServerSession(authOptions);
+export async function getAdminUser(req?: NextRequest): Promise<AdminUser | null> {
+  if (!req) {
+    // If no request provided, return null (can't get session without request)
+    return null;
+  }
+  const { auth0 } = await import('@/lib/auth0');
+  const session = await auth0.getSession(req);
   if (!session?.user) return null;
 
   const role = getAdminRole(session.user);
@@ -81,21 +84,22 @@ export async function getAdminUser(): Promise<AdminUser | null> {
  * @throws {NextResponse} 401 or 403 response if not admin
  */
 export async function requireAdmin(request: NextRequest): Promise<AdminUser> {
-  const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+  const { auth0 } = await import('@/lib/auth0');
+  const session = await auth0.getSession(request);
 
-  if (!token) {
+  if (!session?.user) {
     throw NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  if (!isAdmin(token)) {
+  if (!isAdmin(session.user)) {
     throw NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 });
   }
 
-  const role = getAdminRole(token) || 'admin';
+  const role = getAdminRole(session.user) || 'admin';
 
   return {
-    id: token.email || token.sub || '',
-    email: token.email || '',
+    id: session.user.email || session.user.sub || '',
+    email: session.user.email || '',
     role,
   };
 }
@@ -104,10 +108,16 @@ export async function requireAdmin(request: NextRequest): Promise<AdminUser> {
  * Check if current session user is admin (for client-side checks).
  * Note: This should be used carefully - always verify on server side.
  *
+ * @param {NextRequest} req - Next.js request object (required for server-side checks)
  * @returns {Promise<boolean>} True if current user is admin
  */
-export async function checkIsAdmin(): Promise<boolean> {
-  const session = await getServerSession(authOptions);
+export async function checkIsAdmin(req?: NextRequest): Promise<boolean> {
+  if (!req) {
+    // Can't check admin status without request
+    return false;
+  }
+  const { auth0 } = await import('@/lib/auth0');
+  const session = await auth0.getSession(req);
   if (!session?.user) return false;
   return isAdmin(session.user);
 }

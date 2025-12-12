@@ -1,8 +1,8 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { getServerSession } from 'next-auth';
+import { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 /**
@@ -11,17 +11,17 @@ import { NextResponse } from 'next/server';
  *
  * @returns {Promise<NextResponse>} Navigation patterns data
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const user = await requireAuth(req);
+    if (!user?.email) {
       return NextResponse.json(
         ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
         { status: 401 },
       );
     }
 
-    const userId = session.user.email;
+    const userId = user.email;
 
     if (!supabaseAdmin) {
       logger.error('[Navigation Optimization API] Supabase not available');

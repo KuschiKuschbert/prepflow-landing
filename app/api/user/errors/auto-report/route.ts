@@ -1,9 +1,8 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { authOptions } from '@/lib/auth-options';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { detectSeverity } from '@/lib/error-detection/severity-detector';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -18,13 +17,8 @@ const autoReportSchema = z.object({
  */
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
-    }
+    const user = await requireAuth(req);
+    const userEmail = user.email;
 
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -32,8 +26,6 @@ export async function POST(req: NextRequest) {
         { status: 500 },
       );
     }
-
-    const userEmail = session.user.email;
     const body = await req.json();
 
     // Validate request body
@@ -174,7 +166,3 @@ ${errorData.context ? `Context:\n${JSON.stringify(errorData.context, null, 2)}` 
     );
   }
 }
-
-
-
-

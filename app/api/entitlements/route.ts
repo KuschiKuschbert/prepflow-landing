@@ -1,16 +1,13 @@
-import { authOptions } from '@/lib/auth-options';
 import { getEntitlementsForTierAsync } from '@/lib/entitlements';
 import { supabaseAdmin } from '@/lib/supabase';
 import type { TierSlug } from '@/lib/tier-config';
-import { getServerSession } from 'next-auth';
-import { NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/auth0-api-helpers';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-  const email = session.user.email as string;
+export async function GET(req: NextRequest) {
+  try {
+    const user = await requireAuth(req);
+    const email = user.email;
 
   // Get actual tier from database
   let tier: TierSlug = 'starter';
@@ -30,7 +27,14 @@ export async function GET() {
     }
   }
 
-  // Get entitlements using database config (with code fallback)
-  const ent = await getEntitlementsForTierAsync(email, tier);
-  return NextResponse.json({ entitlements: ent });
+    // Get entitlements using database config (with code fallback)
+    const ent = await getEntitlementsForTierAsync(email, tier);
+    return NextResponse.json({ entitlements: ent });
+  } catch (error) {
+    // requireAuth throws NextResponse, so rethrow it
+    if (error instanceof NextResponse) {
+      throw error;
+    }
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
 }
