@@ -46,6 +46,21 @@ export interface Connection {
 }
 
 /**
+ * Get Google connection from Auth0
+ * Helper function to reduce code duplication
+ */
+async function getGoogleConnection(client: ManagementClient): Promise<any> {
+  const connectionsResponse = await client.connections.getAll();
+  const connections = Array.isArray(connectionsResponse)
+    ? connectionsResponse
+    : (connectionsResponse as any)?.data || [];
+  if (!connections || !Array.isArray(connections)) {
+    return null;
+  }
+  return connections.find((conn: any) => conn.strategy === 'google-oauth2') as any;
+}
+
+/**
  * Verify if Google connection is enabled and configured correctly
  *
  * @returns {Promise<boolean>} True if Google connection is enabled and configured
