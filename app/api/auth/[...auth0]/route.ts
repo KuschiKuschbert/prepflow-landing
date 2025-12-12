@@ -13,16 +13,40 @@
  */
 
 import { auth0 } from '@/lib/auth0';
-import { NextRequest } from 'next/server';
+import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Auth0 SDK Route Handlers
  * auth0.middleware() handles all auth routes automatically based on lib/auth0.ts config
+ * It routes to the appropriate handler (login, logout, callback) based on the pathname
  */
 export async function GET(req: NextRequest) {
-  return auth0.middleware(req);
+  try {
+    return await auth0.middleware(req);
+  } catch (error) {
+    logger.error('[Auth0 Route Handler] Error in GET handler:', {
+      error: error instanceof Error ? error.message : String(error),
+      pathname: req.nextUrl.pathname,
+    });
+    return NextResponse.json(
+      { error: 'Authentication error', message: 'Failed to process authentication request' },
+      { status: 500 },
+    );
+  }
 }
 
 export async function POST(req: NextRequest) {
-  return auth0.middleware(req);
+  try {
+    return await auth0.middleware(req);
+  } catch (error) {
+    logger.error('[Auth0 Route Handler] Error in POST handler:', {
+      error: error instanceof Error ? error.message : String(error),
+      pathname: req.nextUrl.pathname,
+    });
+    return NextResponse.json(
+      { error: 'Authentication error', message: 'Failed to process authentication request' },
+      { status: 500 },
+    );
+  }
 }
