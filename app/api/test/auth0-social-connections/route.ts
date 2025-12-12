@@ -48,7 +48,7 @@ export async function GET() {
           id: conn.id,
           name: conn.name,
           strategy: conn.strategy,
-          enabled: conn.enabled_clients?.length > 0,
+          enabled: (conn.enabled_clients?.length ?? 0) > 0,
           enabledClients: conn.enabled_clients || [],
         })),
       },
