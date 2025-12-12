@@ -16,6 +16,7 @@ function SignInContent() {
   const error = searchParams.get('error');
   const [providers, setProviders] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   useEffect(() => {
     getProviders().then(provs => {
@@ -39,19 +40,21 @@ function SignInContent() {
   // Auto-redirect to Auth0 if error=auth0 is detected (cosmetic error - login actually works)
   // This improves UX by automatically starting the login flow instead of showing confusing error
   useEffect(() => {
-    if (error === 'auth0' && providers?.auth0 && !isLoading) {
-      // Small delay to ensure providers are fully loaded
-      const timer = setTimeout(() => {
-        signIn('auth0', {
-          callbackUrl,
-          authorizationParams: {
-            prompt: 'login',
-          },
-        });
-      }, 100);
-      return () => clearTimeout(timer);
+    if (error === 'auth0' && providers?.auth0 && !isLoading && !isRedirecting) {
+      setIsRedirecting(true);
+      // Immediately redirect - no delay needed since providers are loaded
+      signIn('auth0', {
+        callbackUrl,
+        authorizationParams: {
+          prompt: 'login',
+        },
+      }).catch(err => {
+        // If redirect fails, reset state so user can try again
+        setIsRedirecting(false);
+        logger.error('[SignInPage] Auto-redirect failed:', err);
+      });
     }
-  }, [error, providers, isLoading, callbackUrl]);
+  }, [error, providers, isLoading, callbackUrl, isRedirecting]);
 
   const handleSignIn = (providerId: string) => {
     signIn(providerId, {
@@ -111,11 +114,14 @@ function SignInContent() {
             )}
 
             {/* Loading message when auto-redirecting for auth0 error */}
-            {error === 'auth0' && isLoading && (
+            {error === 'auth0' && (isLoading || isRedirecting) && (
               <div className="mb-6 rounded-2xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-4">
-                <p className={`${LANDING_TYPOGRAPHY.sm} text-[#29E7CD]`}>
-                  Redirecting to sign in...
-                </p>
+                <div className="flex items-center gap-3">
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#29E7CD] border-t-transparent" />
+                  <p className={`${LANDING_TYPOGRAPHY.sm} text-[#29E7CD]`}>
+                    Redirecting to sign in...
+                  </p>
+                </div>
               </div>
             )}
 
