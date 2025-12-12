@@ -65,7 +65,7 @@ function SignInContent() {
       // Use both replace and href as fallback to ensure redirect happens
       try {
         window.location.replace(signinUrl);
-      } catch (err) {
+      } catch {
         // Fallback if replace fails
         window.location.href = signinUrl;
       }
