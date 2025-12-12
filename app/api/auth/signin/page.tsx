@@ -21,21 +21,35 @@ function SignInContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
-  // Immediate redirect check - runs in first useEffect before any other logic
-  // This ensures redirect happens as soon as component mounts
+  // Auto-redirect to Auth0 if error=auth0 is detected (cosmetic error - login actually works)
+  // Use NextAuth's signIn() function directly instead of redirecting to /api/auth/signin/auth0
+  // This bypasses NextAuth's buggy error handling and goes straight to Auth0
+  // Wait for providers to load before calling signIn() to ensure Auth0 provider is available
   useEffect(() => {
-    if (typeof window !== 'undefined' && !redirectInitiated) {
-      const urlParams = new URLSearchParams(window.location.search);
-      const urlError = urlParams.get('error');
-      if (urlError === 'auth0' || error === 'auth0') {
-        redirectInitiated = true;
-        const urlCallbackUrl = urlParams.get('callbackUrl') || callbackUrl || '/webapp';
-        const signinUrl = `${window.location.origin}/api/auth/signin/auth0?callbackUrl=${encodeURIComponent(urlCallbackUrl)}`;
-        window.location.replace(signinUrl);
-        return;
-      }
+    if (
+      error === 'auth0' &&
+      providers?.auth0 &&
+      !isLoading &&
+      !isRedirecting &&
+      !redirectInitiated
+    ) {
+      redirectInitiated = true;
+      setIsRedirecting(true);
+      // Use NextAuth's signIn() function directly - this bypasses the custom signin page
+      // and calls the signin route handler directly, which generates the Auth0 authorization URL
+      signIn('auth0', {
+        callbackUrl,
+        redirect: true, // Force immediate redirect to Auth0
+      }).catch(err => {
+        // If signIn() fails, reset state so user can try again
+        redirectInitiated = false;
+        setIsRedirecting(false);
+        // Note: Can't use logger here as this is client-side code
+        // eslint-disable-next-line no-console
+        console.error('[SignInPage] Auto-redirect failed:', err);
+      });
     }
-  }, [error, callbackUrl]);
+  }, [error, providers, isLoading, callbackUrl, isRedirecting]);
 
   useEffect(() => {
     getProviders().then(provs => {
