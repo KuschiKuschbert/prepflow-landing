@@ -188,7 +188,7 @@ function AuthErrorContent() {
             {/* Actions */}
             <div className="space-y-3">
               <Link
-                href="/api/auth/signin"
+                href="/api/auth/login"
                 className="block w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] p-[1px] transition-all duration-200 hover:shadow-xl hover:shadow-[#FF6B00]/25"
               >
                 <div className="flex items-center justify-center gap-2 rounded-2xl bg-[#1f1f1f] px-6 py-4 transition-all duration-200 hover:bg-[#1f1f1f]/90">

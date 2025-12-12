@@ -3,7 +3,7 @@
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { getStoredAvatar, isValidAvatar, storeAvatar } from '@/lib/user-avatar';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { useCallback, useEffect, useState } from 'react';
 
 const AVATAR_STORAGE_KEY = 'prepflow-user-avatar';
@@ -31,7 +31,7 @@ interface UseUserAvatarReturn {
  * ```
  */
 export function useUserAvatar(): UseUserAvatarReturn {
-  const { data: session } = useSession();
+  const { user } = useUser();
   const { showSuccess, showError } = useNotification();
   const [avatar, setAvatarState] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -56,7 +56,7 @@ export function useUserAvatar(): UseUserAvatarReturn {
 
   // Fetch avatar from API on mount (if authenticated)
   useEffect(() => {
-    if (!isHydrated || !session?.user?.email) return;
+    if (!isHydrated || !user?.email) return;
 
     const fetchAvatar = async () => {
       try {
@@ -77,7 +77,7 @@ export function useUserAvatar(): UseUserAvatarReturn {
     };
 
     fetchAvatar();
-  }, [isHydrated, session?.user?.email]);
+  }, [isHydrated, user?.email]);
 
   // Listen to storage events for cross-tab sync
   useEffect(() => {
@@ -129,7 +129,7 @@ export function useUserAvatar(): UseUserAvatarReturn {
       }
 
       // Sync with API if authenticated
-      if (session?.user?.email) {
+      if (user?.email) {
         try {
           const response = await fetch('/api/user/avatar', {
             method: 'PUT',
@@ -165,7 +165,7 @@ export function useUserAvatar(): UseUserAvatarReturn {
         setLoading(false);
       }
     },
-    [avatar, loading, session?.user?.email, showSuccess, showError],
+    [avatar, loading, user?.email, showSuccess, showError],
   );
 
   return {

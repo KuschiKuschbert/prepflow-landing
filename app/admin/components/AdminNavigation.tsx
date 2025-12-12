@@ -17,7 +17,7 @@ import {
   Wrench,
   X,
 } from 'lucide-react';
-import { signOut, useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -53,7 +53,7 @@ const navItems: NavItem[] = [
  * @returns {JSX.Element} Admin navigation sidebar with mobile menu support
  */
 export default function AdminNavigation() {
-  const { data: session } = useSession();
+  const { user } = useUser();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [unresolvedTicketsCount, setUnresolvedTicketsCount] = useState(0);
@@ -133,7 +133,9 @@ export default function AdminNavigation() {
   }, []);
 
   const handleSignOut = async () => {
-    await signOut({ callbackUrl: '/' });
+    // Logout via Auth0 SDK - redirects to Auth0 logout then back to home
+    const returnTo = `${window.location.origin}/`;
+    window.location.href = `/api/auth/logout?returnTo=${encodeURIComponent(returnTo)}`;
   };
 
   // Update nav items with badge count
@@ -168,8 +170,8 @@ export default function AdminNavigation() {
           {/* Header */}
           <div className="border-b border-[#2a2a2a] p-6">
             <h1 className="text-xl font-bold text-white">PrepFlow Admin</h1>
-            {session?.user?.email && (
-              <p className="mt-1 text-sm text-gray-400">{session.user.email}</p>
+            {user?.email && (
+              <p className="mt-1 text-sm text-gray-400">{user.email}</p>
             )}
           </div>
 

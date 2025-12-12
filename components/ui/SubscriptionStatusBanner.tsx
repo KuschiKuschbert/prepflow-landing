@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/navigation';
 import { Icon } from './Icon';
 import { AlertCircle, AlertTriangle, Info, X } from 'lucide-react';
@@ -21,14 +21,14 @@ interface SubscriptionStatusBannerProps {
  * @returns {JSX.Element | null} Rendered banner or null if not needed
  */
 export function SubscriptionStatusBanner({ className = '' }: SubscriptionStatusBannerProps) {
-  const { data: session } = useSession();
+  const { user } = useUser();
   const router = useRouter();
   const [subscriptionStatus, setSubscriptionStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    if (!session?.user?.email) {
+    if (!user?.email) {
       setLoading(false);
       return;
     }
@@ -54,7 +54,7 @@ export function SubscriptionStatusBanner({ className = '' }: SubscriptionStatusB
     };
 
     checkStatus();
-  }, [session?.user?.email]);
+  }, [user?.email]);
 
   const handleDismiss = () => {
     if (subscriptionStatus) {

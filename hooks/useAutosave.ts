@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { saveDraft, clearDraft, getDraft } from '@/lib/autosave-storage';
 import { EntityType } from '@/lib/autosave-sync';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { performAutosave, setupAutosaveLifecycle } from './utils/autosaveLifecycle';
 
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
@@ -35,9 +35,8 @@ export function useAutosave({
   onError,
   onConflict,
 }: UseAutosaveOptions): UseAutosaveReturn {
-  const session = useSession();
-  const sessionData = session?.data;
-  const userId = sessionData?.user?.email || null;
+  const { user } = useUser();
+  const userId = user?.email || null;
   const [status, setStatus] = useState<SaveStatus>('idle');
   const [error, setError] = useState<string | null>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);

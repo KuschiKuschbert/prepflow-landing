@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 
@@ -22,14 +22,14 @@ interface SubscriptionStatus {
  * @returns {Function} returns.refresh - Manual refresh function
  */
 export function useSubscriptionStatus() {
-  const { data: session } = useSession();
+  const { user } = useUser();
   const { showSuccess, showWarning, showError } = useNotification();
   const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [previousStatus, setPreviousStatus] = useState<string | null>(null);
 
   const fetchSubscription = useCallback(async () => {
-    if (!session?.user?.email) {
+    if (!user?.email) {
       setIsLoading(false);
       return;
     }
@@ -59,7 +59,7 @@ export function useSubscriptionStatus() {
     } finally {
       setIsLoading(false);
     }
-  }, [session?.user?.email, previousStatus, showSuccess, showWarning]);
+  }, [user?.email, previousStatus, showSuccess, showWarning]);
 
   useEffect(() => {
     fetchSubscription();

@@ -48,7 +48,7 @@ export async function handleLockToggle({
         const errorMsg = 'Your session has expired. Please sign in again to continue.';
         showError(errorMsg);
         setTimeout(() => {
-          window.location.href = '/api/auth/signin';
+          window.location.href = '/api/auth/login';
         }, 2000);
         return;
       }

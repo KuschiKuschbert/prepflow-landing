@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 /**
  * Hook to check if a feature flag is enabled.
@@ -11,7 +11,7 @@ import { useSession } from 'next-auth/react';
  * @returns {boolean} True if feature is enabled, false otherwise
  */
 export function useFeatureFlag(flagKey: string): boolean {
-  const { data: session } = useSession();
+  const { user } = useUser();
   const [enabled, setEnabled] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +35,7 @@ export function useFeatureFlag(flagKey: string): boolean {
     }
 
     checkFeatureFlag();
-  }, [flagKey, session]);
+  }, [flagKey, user]);
 
   // Return false while loading to prevent flash of content
   return loading ? false : enabled;

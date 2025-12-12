@@ -6,9 +6,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import Link from 'next/link';
-import { signIn } from 'next-auth/react';
 import { trackEvent } from '@/lib/analytics';
 import { GuideNavigation } from '../webapp/guide/components/GuideNavigation';
 import { GuideViewer } from '../webapp/guide/components/GuideViewer';
@@ -18,8 +17,8 @@ import { getAllGuides, getGuidesByCategory } from '../webapp/guide/data/guides';
 import type { Guide } from '../webapp/guide/data/guide-types';
 
 export default function PublicGuidePage() {
-  const { data: session } = useSession();
-  const isAuthenticated = !!session;
+  const { user } = useUser();
+  const isAuthenticated = !!user;
 
   const {
     currentGuide,
@@ -81,7 +80,7 @@ export default function PublicGuidePage() {
 
   const handleSignIn = () => {
     trackEvent('guide_sign_in_prompt', 'engagement');
-    signIn('auth0', { callbackUrl: '/webapp/guide' });
+    window.location.href = '/api/auth/login?returnTo=/webapp/guide';
   };
 
   return (

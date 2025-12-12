@@ -2,44 +2,22 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { signIn, signOut } from 'next-auth/react';
 
 export default function NotAuthorizedPage() {
   const handleLogout = async () => {
-    // Clear NextAuth session first
-    await signOut({ redirect: false });
-
-    // Then redirect to our custom logout API which handles Auth0 logout
-    // The API will redirect to Auth0 logout endpoint, which clears Auth0 session
-    // Auth0 will then redirect back to the landing page
-    window.location.href = `/api/auth/logout?returnTo=${encodeURIComponent(window.location.origin + '/')}`;
+    // Logout via Auth0 SDK - redirects to Auth0 logout then back to home
+    const returnTo = `${window.location.origin}/`;
+    window.location.href = `/api/auth/logout?returnTo=${encodeURIComponent(returnTo)}`;
   };
 
   const handleSignIn = async () => {
-    // Clear NextAuth session
-    await signOut({ redirect: false });
-
-    // Sign in with prompt to show login screen
-    signIn('auth0', {
-      callbackUrl: '/webapp',
-      authorizationParams: {
-        prompt: 'login',
-      },
-    });
+    // Redirect to Auth0 login
+    window.location.href = '/api/auth/login?returnTo=/webapp';
   };
 
   const handleCreateAccount = async () => {
-    // Clear NextAuth session
-    await signOut({ redirect: false });
-
-    // Sign in with signup hint
-    signIn('auth0', {
-      callbackUrl: '/webapp',
-      authorizationParams: {
-        prompt: 'login',
-        screen_hint: 'signup',
-      },
-    });
+    // Redirect to Auth0 login (Auth0 handles signup flow)
+    window.location.href = '/api/auth/login?returnTo=/webapp';
   };
 
   return (
@@ -70,10 +48,6 @@ export default function NotAuthorizedPage() {
         </button>
         <Link
           href="/"
-          onClick={async e => {
-            // Clear NextAuth session when going back to landing
-            await signOut({ redirect: false });
-          }}
           className="rounded-2xl border border-[#2a2a2a] px-5 py-3 text-center font-semibold hover:bg-[#2a2a2a]/40"
         >
           Back to landing

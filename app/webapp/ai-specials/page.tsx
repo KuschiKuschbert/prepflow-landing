@@ -1,5 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
+
+// Force dynamic rendering to prevent SSR issues with Auth0 SDK
+export const dynamic = 'force-dynamic';
 import { useTranslation } from '@/lib/useTranslation';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';

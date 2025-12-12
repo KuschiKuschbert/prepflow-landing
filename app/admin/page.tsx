@@ -11,7 +11,7 @@ import {
   Shield,
   Users,
 } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -42,7 +42,7 @@ interface DashboardStats {
  * @returns {JSX.Element} Admin dashboard page
  */
 export default function AdminDashboard() {
-  const { data: session } = useSession();
+  const { user } = useUser();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -155,7 +155,7 @@ export default function AdminDashboard() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
-        <p className="mt-2 text-gray-400">Welcome back, {session?.user?.email || 'Admin'}</p>
+        <p className="mt-2 text-gray-400">Welcome back, {user?.email || 'Admin'}</p>
       </div>
 
       {/* Stats Grid */}
