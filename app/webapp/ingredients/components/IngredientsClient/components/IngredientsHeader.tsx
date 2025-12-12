@@ -31,3 +31,4 @@ export function IngredientsHeader({ hideHeader }: IngredientsHeaderProps) {
 
 
 
+

@@ -1,6 +1,6 @@
 # NextAuth Auth0 Redirect Fix - Final Solution
 
-**Date:** December 12, 2025  
+**Date:** December 12, 2025
 **Status:** 🔍 Investigating Root Cause
 
 ## Problem Summary
@@ -15,7 +15,7 @@ When accessing `/api/auth/signin/auth0?callbackUrl=/webapp`:
 
 ### NextAuth Request Parsing Bug
 
-**File:** `node_modules/next-auth/src/core/index.ts`  
+**File:** `node_modules/next-auth/src/core/index.ts`
 **Line:** 72
 
 ```typescript
@@ -30,7 +30,7 @@ When NextAuth parses `/api/auth/signin/auth0`:
 
 ### NextAuth Signin Route Handler
 
-**File:** `node_modules/next-auth/src/core/index.ts`  
+**File:** `node_modules/next-auth/src/core/index.ts`
 **Line:** 187-194
 
 ```typescript

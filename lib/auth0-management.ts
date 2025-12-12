@@ -272,3 +272,52 @@ export async function getUserProfileFromManagementAPI(auth0UserId: string): Prom
     return null;
   }
 }
+
+/**
+ * Fetch user profile with timeout and retry logic
+ * Used in JWT callback to ensure email is always available
+ *
+ * @param {string} auth0UserId - Auth0 user ID (e.g., "google-oauth2|102050647966509234700")
+ * @param {string} [fallbackEmail] - Fallback email if Management API fails
+ * @returns {Promise<string | undefined>} User email or fallback email, undefined if both fail
+ */
+export async function fetchProfileWithRetry(
+  auth0UserId: string,
+  fallbackEmail?: string,
+): Promise<string | undefined> {
+  const timeout = 5000; // 5 seconds
+  const maxRetries = 1;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const profilePromise = getUserProfileFromManagementAPI(auth0UserId);
+      const timeoutPromise = new Promise<null>((_, reject) =>
+        setTimeout(() => reject(new Error('Management API timeout')), timeout),
+      );
+
+      const profile = await Promise.race([profilePromise, timeoutPromise]);
+      if (profile?.email) {
+        logger.dev(`[Auth0 Management] Profile fetched successfully (attempt ${attempt + 1})`);
+        return profile.email;
+      }
+      // Profile exists but no email - use fallback
+      if (profile && !profile.email) {
+        logger.warn(`[Auth0 Management] Profile found but email missing for ${auth0UserId}`);
+        return fallbackEmail;
+      }
+    } catch (error) {
+      if (attempt === maxRetries) {
+        logger.warn(
+          `[Auth0 Management] Failed after ${maxRetries + 1} attempts for ${auth0UserId}:`,
+          error instanceof Error ? error.message : String(error),
+        );
+        return fallbackEmail;
+      }
+      // Retry after short delay
+      logger.dev(`[Auth0 Management] Retry attempt ${attempt + 1}/${maxRetries} for ${auth0UserId}`);
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+  }
+
+  return fallbackEmail;
+}

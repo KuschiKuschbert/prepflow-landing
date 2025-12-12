@@ -257,3 +257,4 @@ COMMENT ON COLUMN shifts.published_at IS 'Timestamp when shift was published (mo
 
 
 
+

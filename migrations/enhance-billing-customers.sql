@@ -30,3 +30,4 @@ COMMENT ON COLUMN billing_customers.last_synced_at IS 'Last time subscription da
 
 
 
+

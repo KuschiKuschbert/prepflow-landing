@@ -4,6 +4,7 @@ import {
   extractAuth0UserId,
   getUserRoles,
   getUserProfileFromManagementAPI,
+  fetchProfileWithRetry,
 } from './auth0-management';
 import { logger } from './logger';
 
@@ -88,6 +89,49 @@ if (
 // Session duration configuration (4 hours default, matches client-side timeout)
 const SESSION_MAX_AGE = Number(process.env.NEXTAUTH_SESSION_MAX_AGE) || 4 * 60 * 60; // 4 hours in seconds
 
+/**
+ * Structured error context for authentication errors
+ */
+interface AuthErrorContext {
+  errorCode: string;
+  errorMessage: string;
+  userId?: string;
+  provider?: string;
+  email?: string;
+  hasAccount: boolean;
+  hasUser: boolean;
+  hasProfile: boolean;
+  timestamp: string;
+}
+
+/**
+ * Create structured error context for logging
+ */
+function createErrorContext(
+  errorCode: string,
+  errorMessage: string,
+  context: {
+    userId?: string;
+    provider?: string;
+    email?: string;
+    hasAccount?: boolean;
+    hasUser?: boolean;
+    hasProfile?: boolean;
+  } = {},
+): AuthErrorContext {
+  return {
+    errorCode,
+    errorMessage,
+    userId: context.userId,
+    provider: context.provider,
+    email: context.email,
+    hasAccount: context.hasAccount ?? false,
+    hasUser: context.hasUser ?? false,
+    hasProfile: context.hasProfile ?? false,
+    timestamp: new Date().toISOString(),
+  };
+}
+
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
@@ -99,43 +143,80 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user, account, profile }) {
-      if (account && user) {
-        // If profile missing (Google login issue), fetch from Management API
-        if (!profile && account.provider === 'auth0' && account.providerAccountId) {
-          try {
+      // CRITICAL: Validate account and user exist
+      if (!account || !user) {
+        const errorContext = createErrorContext('MissingAccountOrUser', 'Account or user data missing', {
+          userId: account?.providerAccountId,
+          provider: account?.provider,
+          hasAccount: !!account,
+          hasUser: !!user,
+        });
+        logger.error('[Auth0 JWT] Missing account or user', errorContext);
+        return { ...token, error: 'MissingAccountOrUser' };
+      }
+
+      // CRITICAL: Ensure email exists (required for authentication)
+      let userEmail = (user as any)?.email || token.email || profile?.email;
+
+      // If profile missing (Google login issue), try Management API with timeout and retry
+      if (!profile && account.provider === 'auth0' && account.providerAccountId) {
+        try {
+          const fetchedEmail = await fetchProfileWithRetry(account.providerAccountId, userEmail);
+          if (fetchedEmail) {
+            userEmail = fetchedEmail;
+            // Also try to get full profile for other fields
             const managementProfile = await getUserProfileFromManagementAPI(
               account.providerAccountId,
             );
             if (managementProfile) {
               Object.assign(user, {
-                email: managementProfile.email || (user as any)?.email,
+                email: managementProfile.email || userEmail,
                 email_verified: managementProfile.email_verified || false,
                 name: managementProfile.name || (user as any)?.name,
                 picture: managementProfile.picture || (user as any)?.picture,
               });
             }
-          } catch (error) {
-            if (isDev) {
-              logger.warn('[Auth0 JWT] Failed to fetch profile from Management API:', error);
-            }
           }
-        }
-        const userEmail = (user as any)?.email || token.email;
-        const emailVerified = (user as any)?.email_verified || false;
-
-        if (userEmail) {
-          // Sync user asynchronously (don't block authentication)
-          syncUserFromAuth0(userEmail, emailVerified).catch(err => {
-            logger.error('[Auth0 JWT] Failed to sync user:', {
-              error: err instanceof Error ? err.message : String(err),
-              email: userEmail,
-            });
+        } catch (error) {
+          logger.warn('[Auth0 JWT] Failed to fetch profile from Management API:', {
+            error: error instanceof Error ? error.message : String(error),
+            providerAccountId: account.providerAccountId,
+            fallbackEmail: userEmail,
           });
         }
+      }
 
-        let roles: string[] = [];
-        try {
-          if (account && typeof account === 'object') {
+      // CRITICAL: If email still missing after all fallbacks, fail authentication
+      if (!userEmail) {
+        const errorContext = createErrorContext(
+          'MissingEmail',
+          'Email missing after all fallbacks (profile, token, Management API)',
+          {
+            userId: account.providerAccountId,
+            provider: account.provider,
+            hasAccount: true,
+            hasUser: true,
+            hasProfile: !!profile,
+          },
+        );
+        logger.error('[Auth0 JWT] Email missing after all fallbacks', errorContext);
+        return { ...token, error: 'MissingEmail' };
+      }
+
+      const emailVerified = (user as any)?.email_verified || (profile as any)?.email_verified || false;
+
+      // Sync user asynchronously (don't block authentication)
+      // userEmail is guaranteed to exist at this point (validated above)
+      syncUserFromAuth0(userEmail, emailVerified).catch(err => {
+        logger.error('[Auth0 JWT] Failed to sync user:', {
+          error: err instanceof Error ? err.message : String(err),
+          email: userEmail,
+        });
+      });
+
+      let roles: string[] = [];
+      try {
+        if (account && typeof account === 'object') {
             const accountAny = account as any;
             let customRoles: string[] | undefined;
             if (
@@ -172,85 +253,187 @@ export const authOptions: NextAuthOptions = {
               userAny?.['https://prepflow.org/custom']?.roles ||
               [];
 
-            if (isDev && roles.length > 0) {
-              logger.dev('[Auth0 JWT] Roles found in token:', roles);
+          if (isDev && roles.length > 0) {
+            logger.dev('[Auth0 JWT] Roles found in token:', roles);
+          }
+        }
+      } catch (error) {
+        roles = [];
+        logger.warn('[Auth0 JWT] Error extracting roles from token:', {
+          error: error instanceof Error ? error.message : String(error),
+          providerAccountId: account?.providerAccountId,
+        });
+      }
+
+      let rolesSource = 'token';
+      if (roles.length === 0) {
+        try {
+          const auth0UserId = extractAuth0UserId(
+            token.sub || (user as any)?.id || account.providerAccountId,
+          );
+          if (auth0UserId) {
+            const managementRoles = await getUserRoles(auth0UserId);
+            if (managementRoles.length > 0) {
+              roles = managementRoles;
+              rolesSource = 'management-api';
             }
           }
         } catch (error) {
-          roles = [];
-          if (isDev) {
-            logger.warn('[Auth0 JWT] Error extracting roles from token:', error);
-          }
+          logger.warn('[Auth0 JWT] Failed to fetch roles from Management API:', {
+            error: error instanceof Error ? error.message : String(error),
+            providerAccountId: account.providerAccountId,
+          });
         }
-        let rolesSource = 'token';
-        if (roles.length === 0) {
-          try {
-            const auth0UserId = extractAuth0UserId(token.sub || user?.id);
-            if (auth0UserId) {
-              const managementRoles = await getUserRoles(auth0UserId);
-              if (managementRoles.length > 0) {
-                roles = managementRoles;
-                rolesSource = 'management-api';
-              }
-            }
-          } catch (error) {
-            if (isDev) {
-              logger.error('[Auth0 JWT] Failed to fetch roles from Management API:', error);
-            }
-          }
-        }
-        const now = Math.floor(Date.now() / 1000);
-        return {
-          ...token,
-          roles: Array.isArray(roles) ? roles : [],
-          accessToken: account?.access_token || null,
-          rolesSource,
-          exp: now + SESSION_MAX_AGE,
-        };
       }
-      const now = Math.floor(Date.now() / 1000);
+
+      const tokenNow = Math.floor(Date.now() / 1000);
+      return {
+        ...token,
+        email: userEmail, // Ensure email is always in token
+        name: (user as any)?.name || (profile as any)?.name || token.name,
+        picture: (user as any)?.picture || (profile as any)?.picture || token.picture,
+        sub: token.sub || account.providerAccountId || (user as any)?.id,
+        roles: Array.isArray(roles) ? roles : [],
+        accessToken: account?.access_token || null,
+        rolesSource,
+        exp: tokenNow + SESSION_MAX_AGE,
+      };
+      // Token refresh logic (when account/user not present)
+      const refreshNow = Math.floor(Date.now() / 1000);
       const tokenExp = (token.exp as number) || 0;
-      if (tokenExp > 0 && tokenExp < now) {
+      if (tokenExp > 0 && tokenExp < refreshNow) {
         return { ...token, error: 'RefreshAccessTokenError' };
       }
       return token;
     },
     async signIn({ user, account, profile }) {
-      if (isDev) {
-        logger.dev('[Auth0 SignIn] Signin attempt:', {
-          provider: account?.provider,
-          providerAccountId: account?.providerAccountId,
-          userEmail: (user as any)?.email,
-          hasProfile: !!profile,
-          hasAccount: !!account,
-        });
+      // CRITICAL: Validate user has email (required for authentication)
+      const userEmail = (user as any)?.email || profile?.email;
+
+      if (!userEmail) {
+        const errorContext = createErrorContext(
+          'MissingEmail',
+          'Email missing from user and profile in signIn callback',
+          {
+            userId: account?.providerAccountId,
+            provider: account?.provider,
+            hasAccount: !!account,
+            hasUser: !!user,
+            hasProfile: !!profile,
+          },
+        );
+        logger.error('[Auth0 SignIn] Email missing from user and profile', errorContext);
+
+        // Try Management API as last resort before denying
+        if (account?.providerAccountId && account.provider === 'auth0') {
+          try {
+            const managementProfile = await getUserProfileFromManagementAPI(
+              account.providerAccountId,
+            );
+            if (managementProfile?.email) {
+              logger.info('[Auth0 SignIn] Email found via Management API fallback', {
+                email: managementProfile.email,
+                providerAccountId: account.providerAccountId,
+              });
+              return true; // Allow sign-in
+            }
+          } catch (error) {
+            logger.error('[Auth0 SignIn] Management API fallback failed:', {
+              error: error instanceof Error ? error.message : String(error),
+              providerAccountId: account.providerAccountId,
+            });
+          }
+        }
+
+        // Deny sign-in - email is critical
+        return false;
       }
+
+      // Log successful sign-in attempt
+      logger.info('[Auth0 SignIn] Sign-in allowed', {
+        email: userEmail,
+        provider: account?.provider,
+        hasProfile: !!profile,
+        hasAccount: !!account,
+        providerAccountId: account?.providerAccountId,
+      });
+
       return true;
     },
     async session({ session, token }) {
-      // If token has error (expired), return null session to force re-authentication
+      // CRITICAL: Validate token exists
+      if (!token) {
+        const errorContext = createErrorContext(
+          'MissingToken',
+          'Token is null/undefined in session callback',
+          {
+            email: session?.user?.email || undefined,
+          },
+        );
+        logger.error('[Auth0 Session] Token is null/undefined', errorContext);
+        return null as any; // Force re-authentication
+      }
+
+      // Validate token.exp is a number before checking expiration
       if ((token as any).error === 'RefreshAccessTokenError') {
-        if (isDev) {
-          logger.warn('[Auth0 Session] Token expired, returning null session');
-        }
-        return null as any;
+        logger.warn('[Auth0 Session] Token expired, returning null session');
+        return null as any; // Expired token - force re-authentication
+      }
+
+      // Check for other token errors (MissingEmail, MissingAccountOrUser)
+      if ((token as any).error) {
+        logger.error('[Auth0 Session] Token has error:', {
+          error: (token as any).error,
+          email: token.email,
+          sub: token.sub,
+        });
+        return null as any; // Force re-authentication for critical errors
+      }
+
+      // CRITICAL: Ensure email exists (required for middleware/allowlist)
+      const email = token.email || (token.sub ? token.sub.split('|')[1] : undefined);
+      if (!email && !session?.user?.email) {
+        const errorContext = createErrorContext(
+          'MissingEmail',
+          'Email missing from token and session in session callback',
+          {
+            userId: token.sub,
+            email: token.email || undefined,
+          },
+        );
+        logger.error('[Auth0 Session] Email missing from token and session', errorContext);
+        return null as any; // Force re-authentication
       }
 
       // CRITICAL: Ensure session is always returned (never null/undefined)
       if (!session) {
-        logger.error('[Auth0 Session] Session is null/undefined');
+        logger.error('[Auth0 Session] Session is null/undefined, creating fallback session');
         return {
           user: {
-            email: token.email || null,
-            name: token.name || null,
-            image: token.picture || null,
+            email: email || token.email || undefined,
+            name: token.name || undefined,
+            image: token.picture || undefined,
           },
           expires: new Date(Date.now() + SESSION_MAX_AGE * 1000).toISOString(),
         } as any;
       }
 
+      // Ensure session.user exists
+      if (!session.user) {
+        session.user = {
+          email: email || token.email || undefined,
+          name: token.name || undefined,
+          image: token.picture || undefined,
+        };
+      } else {
+        // Ensure email is set in session.user
+        if (!session.user.email) {
+          session.user.email = email || token.email || undefined;
+        }
+      }
+
       // Add roles to session
-      if (session?.user) {
+      if (session.user) {
         (session.user as any).roles = Array.isArray(token.roles) ? token.roles : [];
         (session.user as any).role =
           Array.isArray(token.roles) && token.roles.length > 0 ? token.roles[0] : null;
@@ -260,7 +443,28 @@ export const authOptions: NextAuthOptions = {
       if (!session.expires) {
         session.expires = new Date(Date.now() + SESSION_MAX_AGE * 1000).toISOString();
       }
+
       return session;
+    },
+    async redirect({ url, baseUrl }) {
+      // Validate callbackUrl is safe (same origin)
+      if (url.startsWith('/')) {
+        // Relative URL - safe
+        logger.dev('[Auth0 Redirect] Redirecting to relative URL:', url);
+        return url;
+      }
+      if (url.startsWith(baseUrl)) {
+        // Same origin - safe
+        logger.dev('[Auth0 Redirect] Redirecting to same-origin URL:', url);
+        return url;
+      }
+      // External URL or invalid - use fallback
+      logger.warn('[Auth0 Redirect] Invalid callbackUrl, using fallback', {
+        url,
+        baseUrl,
+        fallback: `${baseUrl}/webapp`,
+      });
+      return `${baseUrl}/webapp`;
     },
   },
 };

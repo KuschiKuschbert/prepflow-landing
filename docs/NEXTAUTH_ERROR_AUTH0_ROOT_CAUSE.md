@@ -1,6 +1,6 @@
 # NextAuth `error=auth0` Root Cause Analysis
 
-**Date:** December 12, 2025  
+**Date:** December 12, 2025
 **Status:** ✅ **ROOT CAUSE IDENTIFIED**
 
 ## Root Cause Discovery
@@ -9,7 +9,7 @@ After investigating NextAuth source code, I found the exact reason why `error=au
 
 ### The Bug: NextAuth Request Parser Fallback
 
-**File:** `node_modules/next-auth/src/core/index.ts`  
+**File:** `node_modules/next-auth/src/core/index.ts`
 **Line:** 72
 
 ```typescript
