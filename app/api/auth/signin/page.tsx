@@ -216,6 +216,12 @@ function SignInContent() {
   );
 }
 
+/**
+ * Sign-in page component with auto-redirect for cosmetic auth0 errors.
+ *
+ * @component
+ * @returns {JSX.Element} Sign-in page with Auth0 provider
+ */
 export default function SignInPage() {
   return (
     <Suspense
