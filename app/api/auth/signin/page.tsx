@@ -41,13 +41,34 @@ function SignInContent() {
   // This improves UX by automatically starting the login flow instead of showing confusing error
   // Redirect immediately without waiting for providers to load - we know Auth0 is configured
   useEffect(() => {
-    if (error === 'auth0' && !isRedirecting) {
+    // Check both the error from searchParams and directly from URL as fallback
+    const urlError =
+      typeof window !== 'undefined'
+        ? new URLSearchParams(window.location.search).get('error')
+        : null;
+    const shouldRedirect = (error === 'auth0' || urlError === 'auth0') && !isRedirecting;
+
+    if (shouldRedirect) {
       setIsRedirecting(true);
+
+      // Get callbackUrl from searchParams or URL as fallback
+      const urlCallbackUrl =
+        typeof window !== 'undefined'
+          ? new URLSearchParams(window.location.search).get('callbackUrl')
+          : null;
+      const finalCallbackUrl = callbackUrl || urlCallbackUrl || '/webapp';
 
       // Redirect immediately - don't wait for providers to load
       // Construct the signin URL and redirect immediately
-      const signinUrl = `${window.location.origin}/api/auth/signin/auth0?callbackUrl=${encodeURIComponent(callbackUrl)}`;
-      window.location.replace(signinUrl);
+      const signinUrl = `${window.location.origin}/api/auth/signin/auth0?callbackUrl=${encodeURIComponent(finalCallbackUrl)}`;
+
+      // Use both replace and href as fallback to ensure redirect happens
+      try {
+        window.location.replace(signinUrl);
+      } catch (err) {
+        // Fallback if replace fails
+        window.location.href = signinUrl;
+      }
     }
   }, [error, callbackUrl, isRedirecting]);
 
