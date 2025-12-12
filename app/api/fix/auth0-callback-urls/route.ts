@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { ManagementClient } from 'auth0';
 import { logger } from '@/lib/logger';
+import { getSocialConnections, verifyCallbackUrls } from '@/lib/auth0-management';
 import {
-  getSocialConnections,
   verifyGoogleConnection,
-  verifyCallbackUrls,
-} from '@/lib/auth0-management';
+  enableGoogleConnectionForApp,
+} from '@/lib/auth0-google-connection';
 
 /**
  * Fix Auth0 Callback URLs via Management API
@@ -141,7 +141,17 @@ export async function POST() {
 
     // Verify social connections
     const socialConnections = await getSocialConnections();
-    const googleConnectionVerified = await verifyGoogleConnection();
+    let googleConnectionVerified = await verifyGoogleConnection();
+    
+    // Try to enable Google connection if it exists but isn't enabled
+    if (!googleConnectionVerified) {
+      const enableResult = await enableGoogleConnectionForApp();
+      if (enableResult.success && enableResult.enabled) {
+        googleConnectionVerified = true;
+        logger.info('[Auth0 Fix] Auto-enabled Google connection for application');
+      }
+    }
+    
     const callbackUrlStatus = await verifyCallbackUrls(updatedCallbacks);
 
     // Build response with social connection status
