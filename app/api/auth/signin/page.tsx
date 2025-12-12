@@ -31,9 +31,27 @@ function SignInContent() {
       if (currentUrl.includes('prepflow.org') && !currentUrl.includes('www.prepflow.org')) {
         // Auto-redirect to www version
         window.location.href = currentUrl.replace('prepflow.org', 'www.prepflow.org');
+        return;
       }
     }
   }, [error]);
+
+  // Auto-redirect to Auth0 if error=auth0 is detected (cosmetic error - login actually works)
+  // This improves UX by automatically starting the login flow instead of showing confusing error
+  useEffect(() => {
+    if (error === 'auth0' && providers?.auth0 && !isLoading) {
+      // Small delay to ensure providers are fully loaded
+      const timer = setTimeout(() => {
+        signIn('auth0', {
+          callbackUrl,
+          authorizationParams: {
+            prompt: 'login',
+          },
+        });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [error, providers, isLoading, callbackUrl]);
 
   const handleSignIn = (providerId: string) => {
     signIn(providerId, {
@@ -62,8 +80,8 @@ function SignInContent() {
               </p>
             </div>
 
-            {/* Error Message */}
-            {error && (
+            {/* Error Message - Suppress auth0 error since login actually works (cosmetic issue) */}
+            {error && error !== 'auth0' && (
               <div className="mb-6 rounded-2xl border border-red-500/30 bg-red-500/10 p-4">
                 <p className={`${LANDING_TYPOGRAPHY.sm} text-red-400`}>
                   {error === 'AccessDenied'
@@ -72,11 +90,11 @@ function SignInContent() {
                       ? 'There was a problem with the server configuration. Please contact support.'
                       : error === 'Verification'
                         ? 'The verification token has expired. Please try signing in again.'
-                        : error === 'Callback' || error === 'autho' || error === 'auth0'
+                        : error === 'Callback' || error === 'autho'
                           ? 'There was a problem with the authentication callback. This usually means the callback URL is not properly configured. Please ensure you are accessing the site via www.prepflow.org (not prepflow.org).'
                           : 'An error occurred during sign in. Please try again.'}
                 </p>
-                {(error === 'Callback' || error === 'autho' || error === 'auth0') && (
+                {(error === 'Callback' || error === 'autho') && (
                   <p className={`${LANDING_TYPOGRAPHY.xs} mt-2 text-gray-500`}>
                     Error code: {error}. This may indicate a callback URL configuration issue. Try
                     accessing{' '}
@@ -89,6 +107,15 @@ function SignInContent() {
                     instead.
                   </p>
                 )}
+              </div>
+            )}
+
+            {/* Loading message when auto-redirecting for auth0 error */}
+            {error === 'auth0' && isLoading && (
+              <div className="mb-6 rounded-2xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-4">
+                <p className={`${LANDING_TYPOGRAPHY.sm} text-[#29E7CD]`}>
+                  Redirecting to sign in...
+                </p>
               </div>
             )}
 
