@@ -1,6 +1,6 @@
 # Auth0 SDK Browser Testing Guide
 
-**Date:** December 13, 2025  
+**Date:** December 13, 2025
 **Status:** Ready for Testing
 
 ## Overview
@@ -435,4 +435,3 @@ If you encounter issues during testing:
 3. Check Network tab for failed requests
 4. Verify Auth0 Dashboard configuration
 5. Review this guide for common issues
-
