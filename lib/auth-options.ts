@@ -96,7 +96,8 @@ export const authOptions: NextAuthOptions = {
   },
   providers,
   pages: {
-    signIn: '/api/auth/signin', // Custom Cyber Carrot styled sign-in page (conditional - auto-redirects for provider signins)
+    // Removed custom signIn page to prevent redirect loops with provider signins
+    // NextAuth's default signin page is styled with Cyber Carrot CSS (app/globals.css)
     error: '/api/auth/error', // Custom error page (optional)
   },
   callbacks: {
@@ -292,7 +293,6 @@ export const authOptions: NextAuthOptions = {
       if (!session.expires) {
         session.expires = new Date(Date.now() + SESSION_MAX_AGE * 1000).toISOString();
       }
-
       return session;
     },
   },
