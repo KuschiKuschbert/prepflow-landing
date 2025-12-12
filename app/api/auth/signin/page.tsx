@@ -39,33 +39,17 @@ function SignInContent() {
 
   // Auto-redirect to Auth0 if error=auth0 is detected (cosmetic error - login actually works)
   // This improves UX by automatically starting the login flow instead of showing confusing error
+  // Redirect immediately without waiting for providers to load - we know Auth0 is configured
   useEffect(() => {
-    if (error === 'auth0' && providers?.auth0 && !isLoading && !isRedirecting) {
+    if (error === 'auth0' && !isRedirecting) {
       setIsRedirecting(true);
 
-      // Try signIn() first (preferred method)
-      signIn('auth0', {
-        callbackUrl,
-        redirect: true, // Force immediate redirect
-      }).catch(() => {
-        // If signIn() fails, fallback to direct redirect
-        // Construct the signin URL and redirect immediately
-        const signinUrl = `${window.location.origin}/api/auth/signin/auth0?callbackUrl=${encodeURIComponent(callbackUrl)}`;
-        window.location.replace(signinUrl);
-      });
-
-      // Fallback: Force redirect after 500ms if signIn() hasn't redirected yet
-      const fallbackTimeout = setTimeout(() => {
-        if (window.location.pathname === '/api/auth/signin') {
-          // Still on signin page, force redirect
-          const signinUrl = `${window.location.origin}/api/auth/signin/auth0?callbackUrl=${encodeURIComponent(callbackUrl)}`;
-          window.location.replace(signinUrl);
-        }
-      }, 500);
-
-      return () => clearTimeout(fallbackTimeout);
+      // Redirect immediately - don't wait for providers to load
+      // Construct the signin URL and redirect immediately
+      const signinUrl = `${window.location.origin}/api/auth/signin/auth0?callbackUrl=${encodeURIComponent(callbackUrl)}`;
+      window.location.replace(signinUrl);
     }
-  }, [error, providers, isLoading, callbackUrl, isRedirecting]);
+  }, [error, callbackUrl, isRedirecting]);
 
   const handleSignIn = (providerId: string) => {
     signIn(providerId, {
@@ -125,7 +109,7 @@ function SignInContent() {
             )}
 
             {/* Loading message when auto-redirecting for auth0 error */}
-            {error === 'auth0' && (isLoading || isRedirecting) && (
+            {error === 'auth0' && isRedirecting && (
               <div className="mb-6 rounded-2xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-4">
                 <div className="flex items-center gap-3">
                   <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#29E7CD] border-t-transparent" />
