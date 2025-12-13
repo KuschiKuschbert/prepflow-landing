@@ -38,10 +38,25 @@ function getBaseUrl(): string {
  * - AUTH0_CLIENT_ID
  * - AUTH0_CLIENT_SECRET
  */
+// Extract domain from AUTH0_ISSUER_BASE_URL or use AUTH0_DOMAIN
+function getAuth0Domain(): string | undefined {
+  // Prefer AUTH0_DOMAIN if set (Auth0 SDK standard)
+  if (process.env.AUTH0_DOMAIN) {
+    return process.env.AUTH0_DOMAIN.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  }
+  
+  // Fallback to extracting from AUTH0_ISSUER_BASE_URL
+  if (process.env.AUTH0_ISSUER_BASE_URL) {
+    return process.env.AUTH0_ISSUER_BASE_URL.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  }
+  
+  return undefined;
+}
+
 export const auth0 = new Auth0Client({
   appBaseUrl: getBaseUrl(),
   secret: process.env.AUTH0_SECRET,
-  domain: process.env.AUTH0_ISSUER_BASE_URL?.replace(/^https?:\/\//, '').replace(/\/$/, ''),
+  domain: getAuth0Domain(),
   clientId: process.env.AUTH0_CLIENT_ID,
   clientSecret: process.env.AUTH0_CLIENT_SECRET,
   authorizationParameters: {
@@ -55,6 +70,7 @@ export const auth0 = new Auth0Client({
     rolling: true, // Extend session on activity
   },
   routes: {
+    login: '/api/auth/login',
     callback: '/api/auth/callback',
     logout: '/api/auth/logout',
   },

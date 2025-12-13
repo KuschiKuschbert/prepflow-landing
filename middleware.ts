@@ -20,10 +20,63 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(wwwUrl, 301); // Permanent redirect
   }
 
-  // Always allow Auth0 SDK routes (handled by route handler)
-  if (pathname.startsWith('/api/auth/')) {
-    return NextResponse.next();
+  // CRITICAL: Call Auth0 SDK middleware FIRST for all routes
+  // This handles all /api/auth/* routes automatically (login, logout, callback, etc.)
+  // For auth routes, it returns a response (redirect, etc.)
+  // For non-auth routes, it returns NextResponse.next() to continue processing
+  try {
+    const auth0Response = await auth0.middleware(req);
+    
+    // If this is an auth route, Auth0 SDK handles it - return its response immediately
+    if (pathname.startsWith('/api/auth/')) {
+      // Log successful auth route handling for debugging
+      logger.dev('[Middleware] Auth0 handled auth route:', {
+        pathname,
+        status: auth0Response.status,
+        hasLocation: !!auth0Response.headers.get('location'),
+      });
+      return auth0Response;
+    }
+    
+    // For non-auth routes, auth0.middleware() returns NextResponse.next() to pass through
+    // Continue with custom logic below
+  } catch (error) {
+    // Log Auth0 middleware errors for debugging
+    logger.error('[Middleware] Auth0 middleware error:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      pathname,
+      url: req.url,
+    });
+    
+    // If it's an auth route and middleware failed, return detailed error response
+    if (pathname.startsWith('/api/auth/')) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorStack = error instanceof Error ? error.stack : undefined;
+      
+      logger.error('[Middleware] Auth0 auth route failed:', {
+        pathname,
+        error: errorMessage,
+        stack: errorStack,
+      });
+      
+      return NextResponse.json(
+        {
+          error: 'Authentication error',
+          message: 'Failed to process authentication request',
+          details: errorMessage,
+          pathname,
+        },
+        { status: 500 },
+      );
+    }
+    
+    // For non-auth routes, continue with custom logic (don't fail on Auth0 errors)
+    // This allows the app to work even if Auth0 middleware has issues
   }
+  
+  // For non-auth routes, auth0.middleware() returns NextResponse.next() to pass through
+  // Continue with our custom logic below
 
   // Always allow selected public APIs
   if (
