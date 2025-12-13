@@ -26,7 +26,7 @@ export default async function middleware(req: NextRequest) {
   // For non-auth routes, it returns NextResponse.next() to continue processing
   try {
     const auth0Response = await auth0.middleware(req);
-    
+
     // If this is an auth route, Auth0 SDK handles it - return its response immediately
     if (pathname.startsWith('/api/auth/')) {
       // Log successful auth route handling for debugging
@@ -37,7 +37,7 @@ export default async function middleware(req: NextRequest) {
       });
       return auth0Response;
     }
-    
+
     // For non-auth routes, auth0.middleware() returns NextResponse.next() to pass through
     // Continue with custom logic below
   } catch (error) {
@@ -48,18 +48,18 @@ export default async function middleware(req: NextRequest) {
       pathname,
       url: req.url,
     });
-    
+
     // If it's an auth route and middleware failed, return detailed error response
     if (pathname.startsWith('/api/auth/')) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       const errorStack = error instanceof Error ? error.stack : undefined;
-      
+
       logger.error('[Middleware] Auth0 auth route failed:', {
         pathname,
         error: errorMessage,
         stack: errorStack,
       });
-      
+
       return NextResponse.json(
         {
           error: 'Authentication error',
@@ -70,11 +70,11 @@ export default async function middleware(req: NextRequest) {
         { status: 500 },
       );
     }
-    
+
     // For non-auth routes, continue with custom logic (don't fail on Auth0 errors)
     // This allows the app to work even if Auth0 middleware has issues
   }
-  
+
   // For non-auth routes, auth0.middleware() returns NextResponse.next() to pass through
   // Continue with our custom logic below
 

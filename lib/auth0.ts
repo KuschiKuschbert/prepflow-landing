@@ -44,13 +44,47 @@ function getAuth0Domain(): string | undefined {
   if (process.env.AUTH0_DOMAIN) {
     return process.env.AUTH0_DOMAIN.replace(/^https?:\/\//, '').replace(/\/$/, '');
   }
-  
+
   // Fallback to extracting from AUTH0_ISSUER_BASE_URL
   if (process.env.AUTH0_ISSUER_BASE_URL) {
     return process.env.AUTH0_ISSUER_BASE_URL.replace(/^https?:\/\//, '').replace(/\/$/, '');
   }
-  
+
   return undefined;
+}
+
+// Validate required environment variables
+function validateAuth0Config() {
+  const required = {
+    AUTH0_SECRET: process.env.AUTH0_SECRET,
+    AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
+    AUTH0_CLIENT_SECRET: process.env.AUTH0_CLIENT_SECRET,
+  };
+
+  const domain = getAuth0Domain();
+  if (!domain) {
+    logger.error('[Auth0 SDK] Missing AUTH0_DOMAIN or AUTH0_ISSUER_BASE_URL');
+  }
+
+  const missing = Object.entries(required)
+    .filter(([key, value]) => !value)
+    .map(([key]) => key);
+
+  if (missing.length > 0) {
+    logger.error('[Auth0 SDK] Missing required environment variables:', { missing });
+  }
+
+  return {
+    isValid: missing.length === 0 && !!domain,
+    missing,
+    domain: domain || 'NOT_SET',
+  };
+}
+
+// Validate config on module load (only log errors, don't throw)
+const configValidation = validateAuth0Config();
+if (!configValidation.isValid) {
+  logger.error('[Auth0 SDK] Configuration validation failed:', configValidation);
 }
 
 export const auth0 = new Auth0Client({
