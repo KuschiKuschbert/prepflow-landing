@@ -1,8 +1,8 @@
 # Auth0 SDK Comprehensive Test Results
 
-**Date:** 2025-12-13  
-**Test Environment:** Production (www.prepflow.org)  
-**Status:** ✅ **Core Login Flow Working** | ⚠️ **Google Connection Needs Enabling**
+**Date:** 2025-12-13
+**Test Environment:** Production (www.prepflow.org)
+**Status:** ✅ **Core Login Flow Working** | ⚠️ **Social Connections Need Configuration**
 
 ## Test Summary
 
@@ -37,10 +37,11 @@
 
 ### ⚠️ Needs Attention
 
-1. **Google Social Login** ⚠️
-   - Google connection exists but not enabled for PrepFlow application
-   - Auto-enable failed: "Insufficient scope, expected any of: read:connections"
-   - **Action Required:** Enable manually in Auth0 Dashboard
+1. **Social Login Connections** ⚠️
+   - **Google:** Connection exists but not enabled for PrepFlow application
+   - **Apple:** Connection does not exist - needs to be created
+   - **Microsoft:** Connection does not exist - needs to be created
+   - **Action Required:** Configure and enable connections in Auth0 Dashboard
 
 2. **Logout Flow** ✅
    - Logout endpoint exists (`/api/auth/logout`)
@@ -189,7 +190,11 @@ https://dev-7myakdl4itf644km.us.auth0.com/oidc/logout/confirm?state=...
 
 **Allowed Web Origins:** ✅ All configured correctly
 
-**Google Connection:** ⚠️ Exists but not enabled for PrepFlow application
+**Social Connections:**
+
+- **Google:** ⚠️ Exists but not enabled for PrepFlow application
+- **Apple:** ⚠️ Does not exist - needs to be created
+- **Microsoft:** ⚠️ Does not exist - needs to be created
 
 ### Vercel Environment Variables ✅
 
@@ -270,9 +275,10 @@ https://dev-7myakdl4itf644km.us.auth0.com/oidc/logout/confirm?state=...
 
 1. ✅ **Login Flow:** Working correctly - no action needed
 2. ✅ **Logout Flow:** Working correctly - endpoint redirects to Auth0 confirmation page
-3. ⚠️ **Google Social Login:** Enable in Auth0 Dashboard
-   - Go to: https://manage.auth0.com → Connections → Social → Google
-   - Applications tab → Enable for PrepFlow application
+3. ⚠️ **Social Login Connections:** Configure in Auth0 Dashboard
+   - **Google:** Enable existing connection (Applications tab → Enable for PrepFlow)
+   - **Apple:** Create new connection (Connections → Social → Apple)
+   - **Microsoft:** Create new connection (Connections → Social → Microsoft)
 4. ⚠️ **Full Logout Test:** Test with authenticated session (optional)
    - Login with email/password
    - Click logout button
@@ -296,16 +302,18 @@ https://dev-7myakdl4itf644km.us.auth0.com/oidc/logout/confirm?state=...
 
 ## Test Coverage Summary
 
-| Component              | Status         | Notes                                         |
-| ---------------------- | -------------- | --------------------------------------------- |
-| Login Flow             | ✅ PASS        | Working correctly                             |
-| Protected Routes       | ✅ PASS        | Correctly redirect to login                   |
-| API Route Protection   | ✅ PASS        | Correctly reject unauthenticated              |
-| Callback URLs          | ✅ PASS        | Configured correctly                          |
-| Base URL Configuration | ✅ PASS        | Using production URL                          |
-| Logout Flow            | ✅ PASS        | Endpoint working, confirmation page displayed |
-| Google Social Login    | ⚠️ NOT ENABLED | Needs manual enablement                       |
-| Session Management     | ⚠️ PENDING     | Needs testing                                 |
+| Component              | Status            | Notes                                         |
+| ---------------------- | ----------------- | --------------------------------------------- |
+| Login Flow             | ✅ PASS           | Working correctly                             |
+| Protected Routes       | ✅ PASS           | Correctly redirect to login                   |
+| API Route Protection   | ✅ PASS           | Correctly reject unauthenticated              |
+| Callback URLs          | ✅ PASS           | Configured correctly                          |
+| Base URL Configuration | ✅ PASS           | Using production URL                          |
+| Logout Flow            | ✅ PASS           | Endpoint working, confirmation page displayed |
+| Google Social Login    | ⚠️ NOT ENABLED    | Connection exists, needs enablement           |
+| Apple Social Login     | ⚠️ NOT CONFIGURED | Connection does not exist - needs creation    |
+| Microsoft Social Login | ⚠️ NOT CONFIGURED | Connection does not exist - needs creation    |
+| Session Management     | ⚠️ PENDING        | Needs testing                                 |
 
 ## Conclusion
 
