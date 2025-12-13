@@ -12,17 +12,24 @@ const isDev = process.env.NODE_ENV === 'development';
 /**
  * Dynamic base URL detection for Auth0 SDK
  * Supports dev, preview (Vercel), and production environments
+ *
+ * Priority:
+ * 1. AUTH0_BASE_URL (explicit production URL - highest priority)
+ * 2. VERCEL_URL (preview deployments - only if AUTH0_BASE_URL not set)
+ * 3. localhost:3000 (development default)
  */
 function getBaseUrl(): string {
+  // Explicit base URL (production or custom) - CHECK FIRST
+  // This ensures production always uses the correct URL, even if VERCEL_URL is set
+  if (process.env.AUTH0_BASE_URL) {
+    return process.env.AUTH0_BASE_URL;
+  }
+
   // Preview deployments: Use VERCEL_URL (auto-detected by Vercel)
+  // Only used if AUTH0_BASE_URL is not set
   if (process.env.VERCEL_URL) {
     const protocol = process.env.VERCEL_URL.startsWith('localhost') ? 'http' : 'https';
     return `${protocol}://${process.env.VERCEL_URL}`;
-  }
-
-  // Explicit base URL (production or custom)
-  if (process.env.AUTH0_BASE_URL) {
-    return process.env.AUTH0_BASE_URL;
   }
 
   // Development default
@@ -62,15 +69,14 @@ function validateAndGetAuth0Secret(): string {
 
   if (!secret || typeof secret !== 'string' || secret.trim().length === 0) {
     throw new Error(
-      'AUTH0_SECRET is required but missing or empty. ' +
-      'Generate one with: openssl rand -hex 32'
+      'AUTH0_SECRET is required but missing or empty. ' + 'Generate one with: openssl rand -hex 32',
     );
   }
 
   if (secret.length < 32) {
     throw new Error(
       `AUTH0_SECRET must be at least 32 characters (got ${secret.length}). ` +
-      'Generate one with: openssl rand -hex 32'
+        'Generate one with: openssl rand -hex 32',
     );
   }
 
