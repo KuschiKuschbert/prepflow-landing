@@ -72,9 +72,17 @@ export async function GET() {
     }));
 
     // Filter for Apple and Microsoft specifically
-    const appleConnections = allConnections.filter((conn: any) => conn.strategy === 'apple');
+    // Check both strategy and name (connection parameter might use name, not strategy)
+    const appleConnections = allConnections.filter(
+      (conn: any) => conn.strategy === 'apple' || conn.name?.toLowerCase().includes('apple'),
+    );
     const microsoftConnections = allConnections.filter(
-      (conn: any) => conn.strategy === 'windowslive' || conn.strategy === 'waad',
+      (conn: any) =>
+        conn.strategy === 'windowslive' ||
+        conn.strategy === 'waad' ||
+        conn.strategy === 'microsoft-account' ||
+        conn.name?.toLowerCase().includes('microsoft') ||
+        conn.name?.toLowerCase().includes('windows'),
     );
 
     return NextResponse.json({
