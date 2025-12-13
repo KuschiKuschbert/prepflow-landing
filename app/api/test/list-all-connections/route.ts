@@ -17,7 +17,6 @@ function getManagementClient(): ManagementClient | null {
   }
 
   const domain = issuerBaseUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
-  const applicationClientId = clientId;
 
   try {
     return new ManagementClient({
