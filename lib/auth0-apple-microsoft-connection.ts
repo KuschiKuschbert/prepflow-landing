@@ -32,7 +32,10 @@ export async function verifyAppleConnection(): Promise<boolean> {
       ? connections
       : (connections as any)?.data || [];
 
-    const appleConnection = connectionsList.find((conn: any) => conn.strategy === 'apple');
+    // Check both strategy and name (connection parameter might use name, not strategy)
+    const appleConnection = connectionsList.find(
+      (conn: any) => conn.strategy === 'apple' || conn.name?.toLowerCase().includes('apple'),
+    );
 
     if (!appleConnection) {
       logger.dev('[Auth0 Apple] Apple connection not found');
@@ -73,9 +76,15 @@ export async function verifyMicrosoftConnection(): Promise<boolean> {
       ? connections
       : (connections as any)?.data || [];
 
-    // Microsoft can use 'windowslive' or 'waad' (Windows Azure AD) strategy
+    // Microsoft can use 'windowslive', 'waad' (Windows Azure AD), or 'microsoft-account' strategy
+    // Also check connection name (connection parameter might use name, not strategy)
     const microsoftConnection = connectionsList.find(
-      (conn: any) => conn.strategy === 'windowslive' || conn.strategy === 'waad',
+      (conn: any) =>
+        conn.strategy === 'windowslive' ||
+        conn.strategy === 'waad' ||
+        conn.strategy === 'microsoft-account' ||
+        conn.name?.toLowerCase().includes('microsoft') ||
+        conn.name?.toLowerCase().includes('windows'),
     );
 
     if (!microsoftConnection) {
@@ -204,9 +213,15 @@ export async function enableMicrosoftConnectionForApp(): Promise<{
       ? connections
       : (connections as any)?.data || [];
 
-    // Microsoft can use 'windowslive' or 'waad' (Windows Azure AD) strategy
+    // Microsoft can use 'windowslive', 'waad' (Windows Azure AD), or 'microsoft-account' strategy
+    // Also check connection name (connection parameter might use name, not strategy)
     const microsoftConnection = connectionsList.find(
-      (conn: any) => conn.strategy === 'windowslive' || conn.strategy === 'waad',
+      (conn: any) =>
+        conn.strategy === 'windowslive' ||
+        conn.strategy === 'waad' ||
+        conn.strategy === 'microsoft-account' ||
+        conn.name?.toLowerCase().includes('microsoft') ||
+        conn.name?.toLowerCase().includes('windows'),
     );
 
     if (!microsoftConnection) {
