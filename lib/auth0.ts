@@ -53,10 +53,33 @@ function getAuth0Domain(): string | undefined {
   return undefined;
 }
 
-// Validate required environment variables
+/**
+ * Validate and get AUTH0_SECRET
+ * Throws error if secret is missing or invalid (fail fast)
+ */
+function validateAndGetAuth0Secret(): string {
+  const secret = process.env.AUTH0_SECRET;
+
+  if (!secret || typeof secret !== 'string' || secret.trim().length === 0) {
+    throw new Error(
+      'AUTH0_SECRET is required but missing or empty. ' +
+      'Generate one with: openssl rand -hex 32'
+    );
+  }
+
+  if (secret.length < 32) {
+    throw new Error(
+      `AUTH0_SECRET must be at least 32 characters (got ${secret.length}). ` +
+      'Generate one with: openssl rand -hex 32'
+    );
+  }
+
+  return secret;
+}
+
+// Validate other required environment variables (non-blocking, just logging)
 function validateAuth0Config() {
   const required = {
-    AUTH0_SECRET: process.env.AUTH0_SECRET,
     AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
     AUTH0_CLIENT_SECRET: process.env.AUTH0_CLIENT_SECRET,
   };
@@ -81,7 +104,10 @@ function validateAuth0Config() {
   };
 }
 
-// Validate config on module load (only log errors, don't throw)
+// Validate and get AUTH0_SECRET (throws if invalid - fail fast)
+const validatedSecret = validateAndGetAuth0Secret();
+
+// Validate other config (non-blocking, just logging)
 const configValidation = validateAuth0Config();
 if (!configValidation.isValid) {
   logger.error('[Auth0 SDK] Configuration validation failed:', configValidation);
@@ -89,7 +115,7 @@ if (!configValidation.isValid) {
 
 export const auth0 = new Auth0Client({
   appBaseUrl: getBaseUrl(),
-  secret: process.env.AUTH0_SECRET,
+  secret: validatedSecret,
   domain: getAuth0Domain(),
   clientId: process.env.AUTH0_CLIENT_ID,
   clientSecret: process.env.AUTH0_CLIENT_SECRET,
