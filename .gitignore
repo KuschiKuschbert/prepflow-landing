@@ -124,3 +124,6 @@ pnpm-lock.yaml
 *.pyo
 *.pyd
 .Python
+
+# Note: public/images/_hidden/ is NOT ignored so background.png gets deployed
+# It's "hidden" by being in a _hidden subdirectory but still accessible via API
