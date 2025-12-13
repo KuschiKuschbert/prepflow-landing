@@ -139,9 +139,16 @@ export async function getSocialConnections(): Promise<Connection[]> {
     }
     return connections.filter(
       (conn: any) =>
-        ['google-oauth2', 'facebook', 'github', 'twitter', 'linkedin', 'apple'].includes(
-          conn.strategy,
-        ) ||
+        [
+          'google-oauth2',
+          'facebook',
+          'github',
+          'twitter',
+          'linkedin',
+          'apple',
+          'windowslive',
+          'waad', // Windows Azure AD
+        ].includes(conn.strategy) ||
         (conn.strategy === 'oauth2' && !conn.is_domain_connection),
     ) as Connection[];
   } catch (error) {
