@@ -192,9 +192,9 @@ https://dev-7myakdl4itf644km.us.auth0.com/oidc/logout/confirm?state=...
 
 **Social Connections:**
 
-- **Google:** ⚠️ Exists but not enabled for PrepFlow application
-- **Apple:** ⚠️ Does not exist - needs to be created
-- **Microsoft:** ⚠️ Does not exist - needs to be created
+- **Google:** ✅ Fully functional (`google-oauth2`)
+- **Apple:** ✅ Fully functional (`Apple`)
+- **Microsoft:** ⚠️ Connection exists but needs client ID configuration (`Microsoft`)
 
 ### Vercel Environment Variables ✅
 
