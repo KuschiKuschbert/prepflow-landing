@@ -19,7 +19,8 @@ export async function POST() {
     const m2mClientSecret = process.env.AUTH0_M2M_CLIENT_SECRET;
     const auth0ClientId = process.env.AUTH0_CLIENT_ID;
     const auth0ClientSecret = process.env.AUTH0_CLIENT_SECRET;
-    const nextAuthUrl = process.env.NEXTAUTH_URL;
+    // Use AUTH0_BASE_URL (Auth0 SDK) or fall back to NEXTAUTH_URL for backward compatibility
+    const baseUrl = process.env.AUTH0_BASE_URL || process.env.NEXTAUTH_URL;
 
     if (!auth0Issuer) {
       return NextResponse.json(
@@ -32,12 +33,12 @@ export async function POST() {
       );
     }
 
-    if (!nextAuthUrl) {
+    if (!baseUrl) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Missing NEXTAUTH_URL',
-          message: 'NEXTAUTH_URL must be set',
+          error: 'Missing base URL',
+          message: 'AUTH0_BASE_URL or NEXTAUTH_URL must be set',
         },
         { status: 400 },
       );
@@ -85,30 +86,41 @@ export async function POST() {
     const appResponse = await managementClient.clients.get({ client_id: applicationClientId });
     const app = appResponse.data || (appResponse as any);
 
-    // Build required URLs
+    // Build required URLs (Auth0 SDK uses /api/auth/callback, not /api/auth/callback/auth0)
     const requiredCallbacks = [
-      `${nextAuthUrl}/api/auth/callback/auth0`,
-      ...(nextAuthUrl.includes('www.')
-        ? [`${nextAuthUrl.replace('www.', '')}/api/auth/callback/auth0`]
-        : [`${nextAuthUrl.replace(/^https?:\/\//, 'https://www.')}/api/auth/callback/auth0`]),
+      `${baseUrl}/api/auth/callback`,
+      ...(baseUrl.includes('www.')
+        ? [`${baseUrl.replace('www.', '')}/api/auth/callback`]
+        : [`${baseUrl.replace(/^https?:\/\//, 'https://www.')}/api/auth/callback`]),
+      // Also include localhost for development
+      'http://localhost:3000/api/auth/callback',
+      'http://localhost:3001/api/auth/callback',
     ];
 
     const requiredLogoutUrls = [
-      nextAuthUrl,
-      `${nextAuthUrl}/`,
-      ...(nextAuthUrl.includes('www.')
-        ? [nextAuthUrl.replace('www.', ''), `${nextAuthUrl.replace('www.', '')}/`]
+      baseUrl,
+      `${baseUrl}/`,
+      ...(baseUrl.includes('www.')
+        ? [baseUrl.replace('www.', ''), `${baseUrl.replace('www.', '')}/`]
         : [
-            nextAuthUrl.replace(/^https?:\/\//, 'https://www.'),
-            `${nextAuthUrl.replace(/^https?:\/\//, 'https://www.')}/`,
+            baseUrl.replace(/^https?:\/\//, 'https://www.'),
+            `${baseUrl.replace(/^https?:\/\//, 'https://www.')}/`,
           ]),
+      // Also include localhost for development
+      'http://localhost:3000',
+      'http://localhost:3000/',
+      'http://localhost:3001',
+      'http://localhost:3001/',
     ];
 
     const requiredWebOrigins = [
-      nextAuthUrl,
-      ...(nextAuthUrl.includes('www.')
-        ? [nextAuthUrl.replace('www.', '')]
-        : [nextAuthUrl.replace(/^https?:\/\//, 'https://www.')]),
+      baseUrl,
+      ...(baseUrl.includes('www.')
+        ? [baseUrl.replace('www.', '')]
+        : [baseUrl.replace(/^https?:\/\//, 'https://www.')]),
+      // Also include localhost for development
+      'http://localhost:3000',
+      'http://localhost:3001',
     ];
 
     // Merge with existing URLs (avoid duplicates)
