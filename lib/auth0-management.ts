@@ -11,7 +11,7 @@ let managementClient: ManagementClient | null = null;
 /**
  * Get or create Auth0 Management API client
  */
-function getManagementClient(): ManagementClient | null {
+export function getManagementClient(): ManagementClient | null {
   const issuerBaseUrl = process.env.AUTH0_ISSUER_BASE_URL;
   const clientId = process.env.AUTH0_CLIENT_ID;
   const clientSecret = process.env.AUTH0_CLIENT_SECRET;

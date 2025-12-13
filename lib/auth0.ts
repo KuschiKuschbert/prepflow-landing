@@ -111,7 +111,22 @@ function validateAuth0Config() {
 }
 
 // Validate and get AUTH0_SECRET (throws if invalid - fail fast)
-const validatedSecret = validateAndGetAuth0Secret();
+// Skip validation during build time (Next.js build phase) - only validate at runtime
+const isBuildTime =
+  process.env.NEXT_PHASE === 'phase-production-build' ||
+  process.env.NEXT_PHASE === 'phase-development-build';
+let validatedSecret: string;
+try {
+  validatedSecret = validateAndGetAuth0Secret();
+} catch (error) {
+  if (isBuildTime) {
+    // During build, use a placeholder secret (will be validated at runtime)
+    validatedSecret = 'build-time-placeholder-secret-that-will-be-validated-at-runtime';
+    logger.dev('[Auth0 SDK] Skipping AUTH0_SECRET validation during build time');
+  } else {
+    throw error;
+  }
+}
 
 // Validate other config (non-blocking, just logging)
 const configValidation = validateAuth0Config();
@@ -141,7 +156,7 @@ export const auth0 = new Auth0Client({
     logout: '/api/auth/logout',
   },
   signInReturnToPath: '/webapp', // Redirect to webapp after successful login
-  beforeSessionSaved: async (session, idToken) => {
+  beforeSessionSaved: async session => {
     // Sync user to database on first login or update last_login
     const email = session.user?.email;
     const emailVerified = session.user?.email_verified || false;
