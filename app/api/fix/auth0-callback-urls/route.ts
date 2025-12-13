@@ -95,6 +95,14 @@ export async function POST() {
       // Also include localhost for development
       'http://localhost:3000/api/auth/callback',
       'http://localhost:3001/api/auth/callback',
+      // Temporary: Include Vercel preview URLs if VERCEL_URL is set (for preview deployments)
+      // This allows preview deployments to work while we investigate AUTH0_BASE_URL priority
+      ...(process.env.VERCEL_URL && !process.env.VERCEL_URL.includes('prepflow.org')
+        ? [
+            `https://${process.env.VERCEL_URL}/api/auth/callback`,
+            `http://${process.env.VERCEL_URL}/api/auth/callback`,
+          ]
+        : []),
     ];
 
     const requiredLogoutUrls = [
