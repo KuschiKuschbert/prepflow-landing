@@ -36,7 +36,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const origin = req.headers.get('origin') || process.env.AUTH0_BASE_URL || 'http://localhost:3000';
+    const origin =
+      req.headers.get('origin') || process.env.AUTH0_BASE_URL || 'http://localhost:3000';
     const portal = await stripe.billingPortal.sessions.create({
       customer: customerId,
       return_url: `${origin}/webapp/settings/billing`,

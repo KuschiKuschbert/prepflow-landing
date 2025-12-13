@@ -40,7 +40,3 @@ export function useFeatureFlag(flagKey: string): boolean {
   // Return false while loading to prevent flash of content
   return loading ? false : enabled;
 }
-
-
-
-

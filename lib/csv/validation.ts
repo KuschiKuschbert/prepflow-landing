@@ -333,7 +333,3 @@ export function getPerformanceValidationSchema(): ValidationSchema {
     },
   };
 }
-
-
-
-

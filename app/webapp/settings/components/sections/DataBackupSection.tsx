@@ -32,7 +32,3 @@ export function DataBackupSection() {
     </div>
   );
 }
-
-
-
-

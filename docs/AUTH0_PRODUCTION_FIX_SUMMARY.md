@@ -46,20 +46,26 @@
 ## Code Changes Made
 
 ### 1. Enhanced Production Logging
+
 **File:** `lib/auth-options.ts`
+
 - Added production-safe logging for callback URL configuration
 - Logs when `NEXTAUTH_URL` is missing
 - Helps diagnose configuration issues
 
 ### 2. Created Diagnostic Endpoint
+
 **File:** `app/api/debug/auth/route.ts`
+
 - Diagnostic endpoint to check production configuration
 - Shows what `NEXTAUTH_URL` is set to
 - Identifies configuration issues
 - Accessible at: `/api/debug/auth` (requires admin key or dev mode)
 
 ### 3. Updated Middleware
+
 **File:** `middleware.ts`
+
 - Added `/api/debug` to allowed public APIs
 
 ## Testing Steps
@@ -86,6 +92,7 @@ After setting `NEXTAUTH_URL` in Vercel and redeploying:
 ## Expected Result
 
 After fixing `NEXTAUTH_URL`:
+
 - ✅ Login works on `https://www.prepflow.org`
 - ✅ Login works after redirect from `https://prepflow.org`
 - ✅ No `error=auth0` in URL

@@ -49,7 +49,3 @@ export function isAdmin(user: any): boolean {
 
   return false;
 }
-
-
-
-

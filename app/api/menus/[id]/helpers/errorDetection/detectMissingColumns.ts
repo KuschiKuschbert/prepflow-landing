@@ -60,7 +60,3 @@ export function detectMissingColumns(error: any): ColumnErrorInfo {
     columnName,
   };
 }
-
-
-
-

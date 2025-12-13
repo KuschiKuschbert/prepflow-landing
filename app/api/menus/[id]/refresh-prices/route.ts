@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { getToken } from 'next-auth/jwt';
+import { getUserEmail } from '@/lib/auth0-api-helpers';
 import { refreshMenuRecommendedPrices } from '../items/[itemId]/helpers/cacheRecommendedPrice';
 
 /**
@@ -27,14 +27,14 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
 
     // Get user email for auth
     try {
-      const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
-      if (!token?.email && process.env.NODE_ENV === 'production') {
+      const userEmail = await getUserEmail(request);
+      if (!userEmail && process.env.NODE_ENV === 'production') {
         return NextResponse.json(
           ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
           { status: 401 },
         );
       }
-    } catch (tokenError) {
+    } catch (authError) {
       if (process.env.NODE_ENV === 'production') {
         return NextResponse.json(
           ApiErrorHandler.createError('Authentication error', 'AUTH_ERROR', 401),

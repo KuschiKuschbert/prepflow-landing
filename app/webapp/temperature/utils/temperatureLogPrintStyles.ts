@@ -100,7 +100,3 @@ export function getTemperatureLogPrintStyles(): string {
     }
   `;
 }
-
-
-
-

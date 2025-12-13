@@ -122,7 +122,3 @@ export function TaskItem({
     </div>
   );
 }
-
-
-
-

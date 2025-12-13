@@ -136,7 +136,3 @@ export function FilterBar({
     </div>
   );
 }
-
-
-
-

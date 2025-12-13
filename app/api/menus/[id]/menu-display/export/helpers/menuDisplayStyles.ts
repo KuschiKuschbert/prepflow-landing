@@ -119,7 +119,3 @@ export const menuDisplayStyles = `
     }
   }
 `;
-
-
-
-

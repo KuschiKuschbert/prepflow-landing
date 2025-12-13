@@ -90,7 +90,3 @@ export function getAchievement(id: AchievementId): Omit<Achievement, 'unlockedAt
 export function getAllAchievements(): Omit<Achievement, 'unlockedAt'>[] {
   return Object.values(ACHIEVEMENTS);
 }
-
-
-
-

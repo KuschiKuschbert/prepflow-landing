@@ -27,17 +27,20 @@ This guide provides comprehensive browser testing steps for the Auth0 SDK migrat
 **URL:** `https://www.prepflow.org`
 
 **Expected Behavior:**
+
 - ✅ Page loads successfully
 - ✅ No console errors
 - ✅ Sign in/Register buttons visible
 
 **What to Log:**
+
 - [ ] Page load time
 - [ ] Any console errors or warnings
 - [ ] Network requests (check for failed requests)
 - [ ] Cookies set (Application → Cookies)
 
 **Test:**
+
 ```bash
 # Open browser and navigate to:
 https://www.prepflow.org
@@ -50,11 +53,13 @@ https://www.prepflow.org
 **URL:** `https://www.prepflow.org/api/auth/login?returnTo=/webapp`
 
 **Expected Behavior:**
+
 - ✅ Redirects to Auth0 login page
 - ✅ Shows Google login option
 - ✅ No 400 errors
 
 **What to Log:**
+
 - [ ] HTTP status code (should be 302/307 redirect)
 - [ ] Redirect location (should include `auth0.com`)
 - [ ] Any console errors
@@ -62,12 +67,14 @@ https://www.prepflow.org
 - [ ] Cookies set after redirect
 
 **Test:**
+
 ```bash
 # Open browser and navigate to:
 https://www.prepflow.org/api/auth/login?returnTo=/webapp
 ```
 
 **If you see 400 error:**
+
 - Check Vercel logs for Auth0 SDK errors
 - Verify environment variables are set correctly
 - Check Auth0 Dashboard configuration
@@ -77,6 +84,7 @@ https://www.prepflow.org/api/auth/login?returnTo=/webapp
 ### 3. Google Login Flow
 
 **Steps:**
+
 1. Click "Sign in" button on landing page OR navigate to `/api/auth/login?returnTo=/webapp`
 2. Should redirect to Auth0 login page
 3. Click "Continue with Google"
@@ -84,6 +92,7 @@ https://www.prepflow.org/api/auth/login?returnTo=/webapp
 5. Should redirect back to `/webapp`
 
 **Expected Behavior:**
+
 - ✅ Redirects to Auth0 login page
 - ✅ Google login button works
 - ✅ After Google auth, redirects to `/webapp`
@@ -91,6 +100,7 @@ https://www.prepflow.org/api/auth/login?returnTo=/webapp
 - ✅ No console errors
 
 **What to Log:**
+
 - [ ] Each redirect URL
 - [ ] Time taken for each redirect
 - [ ] Any console errors during flow
@@ -99,6 +109,7 @@ https://www.prepflow.org/api/auth/login?returnTo=/webapp
 - [ ] Final URL after login
 
 **Test:**
+
 ```bash
 # 1. Navigate to landing page
 https://www.prepflow.org
@@ -118,17 +129,20 @@ https://www.prepflow.org/api/auth/login?returnTo=/webapp
 **URL:** `https://www.prepflow.org/webapp`
 
 **Expected Behavior:**
+
 - ✅ Redirects to `/api/auth/login?returnTo=/webapp`
 - ✅ No 401/403 errors
 - ✅ Smooth redirect flow
 
 **What to Log:**
+
 - [ ] HTTP status code (should be 302/307 redirect)
 - [ ] Redirect location (should be `/api/auth/login?returnTo=/webapp`)
 - [ ] Any console errors
 - [ ] Network requests (check for failed requests)
 
 **Test:**
+
 ```bash
 # Open browser in incognito/private mode (not logged in)
 # Navigate to:
@@ -142,12 +156,14 @@ https://www.prepflow.org/webapp
 **URL:** `https://www.prepflow.org/webapp`
 
 **Expected Behavior:**
+
 - ✅ Page loads successfully
 - ✅ User is authenticated
 - ✅ Can see webapp content
 - ✅ No redirect loops
 
 **What to Log:**
+
 - [ ] Page load time
 - [ ] Any console errors
 - [ ] Network requests (check for failed requests)
@@ -155,6 +171,7 @@ https://www.prepflow.org/webapp
 - [ ] Cookies present (should include Auth0 session cookies)
 
 **Test:**
+
 ```bash
 # After completing login flow, navigate to:
 https://www.prepflow.org/webapp
@@ -165,12 +182,14 @@ https://www.prepflow.org/webapp
 ### 6. Logout Flow
 
 **Steps:**
+
 1. While logged in, click "Logout" button
 2. Should redirect to Auth0 logout
 3. Should redirect back to landing page
 4. Should be logged out
 
 **Expected Behavior:**
+
 - ✅ Logout button works
 - ✅ Redirects to Auth0 logout endpoint
 - ✅ Redirects back to landing page
@@ -178,6 +197,7 @@ https://www.prepflow.org/webapp
 - ✅ Session cookies cleared
 
 **What to Log:**
+
 - [ ] Logout button click
 - [ ] Redirect URLs
 - [ ] Cookies cleared (check Application → Cookies)
@@ -185,6 +205,7 @@ https://www.prepflow.org/webapp
 - [ ] Any console errors
 
 **Test:**
+
 ```bash
 # 1. While logged in, click "Logout" button
 # OR navigate to:
@@ -202,17 +223,20 @@ https://www.prepflow.org/api/auth/logout?returnTo=https://www.prepflow.org
 **URL:** `https://www.prepflow.org/api/me`
 
 **Expected Behavior:**
+
 - ✅ Returns 401 Unauthorized
 - ✅ JSON error response
 - ✅ No redirect
 
 **What to Log:**
+
 - [ ] HTTP status code (should be 401)
 - [ ] Response body (should be JSON error)
 - [ ] Any console errors
 - [ ] Network request details
 
 **Test:**
+
 ```bash
 # Open browser console (F12)
 # Run:
@@ -229,17 +253,20 @@ fetch('https://www.prepflow.org/api/me')
 **URL:** `https://www.prepflow.org/api/me`
 
 **Expected Behavior:**
+
 - ✅ Returns 200 OK
 - ✅ JSON response with user data
 - ✅ User email in response
 
 **What to Log:**
+
 - [ ] HTTP status code (should be 200)
 - [ ] Response body (should include user email)
 - [ ] Any console errors
 - [ ] Network request details
 
 **Test:**
+
 ```bash
 # After logging in, open browser console (F12)
 # Run:
@@ -254,23 +281,27 @@ fetch('https://www.prepflow.org/api/me')
 ### 9. Session Refresh
 
 **Steps:**
+
 1. Log in
 2. Wait 5 minutes
 3. Navigate to a different page
 4. Session should still be valid
 
 **Expected Behavior:**
+
 - ✅ Session remains valid after inactivity
 - ✅ No unexpected logouts
 - ✅ Can still access protected routes
 
 **What to Log:**
+
 - [ ] Time waited
 - [ ] Session still valid (can access `/webapp`)
 - [ ] Any console errors
 - [ ] Cookies still present
 
 **Test:**
+
 ```bash
 # 1. Log in
 # 2. Wait 5 minutes
@@ -283,16 +314,19 @@ fetch('https://www.prepflow.org/api/me')
 ### 10. Error Handling
 
 **Test Invalid Login:**
+
 - Try logging in with invalid credentials
 - Should show error message
 - Should not crash
 
 **Test Network Error:**
+
 - Disable network during login
 - Should show error message
 - Should not crash
 
 **What to Log:**
+
 - [ ] Error messages displayed
 - [ ] Console errors
 - [ ] Network requests (check for failed requests)
@@ -305,11 +339,13 @@ fetch('https://www.prepflow.org/api/me')
 ### Issue: 400 Bad Request on `/api/auth/login`
 
 **Possible Causes:**
+
 - Missing `AUTH0_SECRET` environment variable
 - Missing `AUTH0_BASE_URL` environment variable
 - Auth0 SDK configuration incorrect
 
 **Solution:**
+
 1. Check Vercel environment variables
 2. Verify `AUTH0_SECRET` is set (should be 32+ characters)
 3. Verify `AUTH0_BASE_URL` is set to `https://www.prepflow.org`
@@ -320,11 +356,13 @@ fetch('https://www.prepflow.org/api/me')
 ### Issue: Redirect Loop
 
 **Possible Causes:**
+
 - Callback URL not configured in Auth0 Dashboard
 - Middleware redirecting incorrectly
 - Auth0 SDK route handler not working
 
 **Solution:**
+
 1. Check Auth0 Dashboard → Applications → Settings → Allowed Callback URLs
 2. Should include: `https://www.prepflow.org/api/auth/callback`
 3. Check middleware.ts for incorrect redirects
@@ -335,11 +373,13 @@ fetch('https://www.prepflow.org/api/me')
 ### Issue: Session Not Persisting
 
 **Possible Causes:**
+
 - Cookies not being set
 - Cookie domain/path incorrect
 - Session configuration incorrect
 
 **Solution:**
+
 1. Check Application → Cookies in browser DevTools
 2. Verify Auth0 session cookies are present
 3. Check cookie domain (should be `.prepflow.org` or `www.prepflow.org`)
@@ -350,11 +390,13 @@ fetch('https://www.prepflow.org/api/me')
 ### Issue: Google Login Not Working
 
 **Possible Causes:**
+
 - Google OAuth not configured in Auth0 Dashboard
 - Google connection not enabled
 - Callback URL not whitelisted
 
 **Solution:**
+
 1. Check Auth0 Dashboard → Authentication → Social → Google
 2. Verify Google connection is enabled
 3. Check callback URLs are configured correctly
@@ -368,11 +410,13 @@ Use this template to log your testing results:
 
 ```markdown
 ## Test: [Test Name]
+
 **Date:** [Date/Time]
 **Browser:** [Chrome/Firefox/Safari] [Version]
 **URL:** [URL tested]
 
 ### Results:
+
 - ✅/❌ Status: [Pass/Fail]
 - HTTP Status: [Status code]
 - Redirects: [List of redirects]
@@ -381,6 +425,7 @@ Use this template to log your testing results:
 - Network Errors: [List of failed requests]
 
 ### Notes:
+
 [Any additional observations]
 ```
 

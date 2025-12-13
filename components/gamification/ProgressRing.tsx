@@ -118,7 +118,3 @@ export function ProgressRing({
     </div>
   );
 }
-
-
-
-

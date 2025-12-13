@@ -50,7 +50,3 @@ export function CompletionBadge({
     </div>
   );
 }
-
-
-
-

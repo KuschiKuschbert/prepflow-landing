@@ -170,9 +170,7 @@ export default function AdminNavigation() {
           {/* Header */}
           <div className="border-b border-[#2a2a2a] p-6">
             <h1 className="text-xl font-bold text-white">PrepFlow Admin</h1>
-            {user?.email && (
-              <p className="mt-1 text-sm text-gray-400">{user.email}</p>
-            )}
+            {user?.email && <p className="mt-1 text-sm text-gray-400">{user.email}</p>}
           </div>
 
           {/* Navigation */}

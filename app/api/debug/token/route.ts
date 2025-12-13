@@ -118,10 +118,12 @@ export async function GET(request: NextRequest) {
         ADMIN_BYPASS: process.env.ADMIN_BYPASS === 'true',
       },
       troubleshooting: {
-        rolesFound: session?.user ? (((session.user as any)['https://prepflow.org/roles'] || []).length > 0) : false,
+        rolesFound: session?.user
+          ? ((session.user as any)['https://prepflow.org/roles'] || []).length > 0
+          : false,
         auth0UserId: auth0UserId,
         recommendation:
-          !session?.user || (((session.user as any)['https://prepflow.org/roles'] || []).length === 0)
+          !session?.user || ((session.user as any)['https://prepflow.org/roles'] || []).length === 0
             ? 'Roles not found in session. Check: 1) Auth0 Actions configured to include roles, 2) Management API fallback is working, 3) User has roles assigned in Auth0'
             : 'Roles found in session',
       },

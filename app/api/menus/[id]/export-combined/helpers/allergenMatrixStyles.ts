@@ -183,7 +183,3 @@ export const allergenMatrixStyles = `
     }
   }
 `;
-
-
-
-

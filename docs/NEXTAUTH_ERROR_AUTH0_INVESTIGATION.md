@@ -19,17 +19,18 @@ Why does NextAuth add `error=auth0` to the URL before redirecting to Auth0?
 ### 1. Sign-In Route Handler (`node_modules/next-auth/src/core/routes/signin.ts`)
 
 **Key Code:**
+
 ```typescript
-if (provider.type === "oauth") {
+if (provider.type === 'oauth') {
   try {
-    const response = await getAuthorizationUrl({ options, query })
-    return response
+    const response = await getAuthorizationUrl({ options, query });
+    return response;
   } catch (error) {
-    logger.error("SIGNIN_OAUTH_ERROR", {
+    logger.error('SIGNIN_OAUTH_ERROR', {
       error: error as Error,
       providerId: provider.id,
-    })
-    return { redirect: `${url}/error?error=OAuthSignin` }
+    });
+    return { redirect: `${url}/error?error=OAuthSignin` };
   }
 }
 ```
@@ -39,11 +40,12 @@ if (provider.type === "oauth") {
 ### 2. Authorization URL Generation (`node_modules/next-auth/src/core/lib/oauth/authorization-url.ts`)
 
 **Key Code:**
+
 ```typescript
-const client = await openidClient(options)
-const authorizationParams: AuthorizationParameters = params
-const url = client.authorizationUrl(authorizationParams)
-return { redirect: url, cookies }
+const client = await openidClient(options);
+const authorizationParams: AuthorizationParameters = params;
+const url = client.authorizationUrl(authorizationParams);
+return { redirect: url, cookies };
 ```
 
 **Observation:** This function constructs the authorization URL. If it fails, it would throw an error caught by the signin route handler.
@@ -51,13 +53,17 @@ return { redirect: url, cookies }
 ### 3. OpenID Client Creation (`node_modules/next-auth/src/core/lib/oauth/client.ts`)
 
 **Key Code:**
+
 ```typescript
-const client = new issuer.Client({
-  client_id: provider.clientId as string,
-  client_secret: provider.clientSecret as string,
-  redirect_uris: [provider.callbackUrl],  // <-- Uses provider.callbackUrl
-  ...provider.client,
-}, provider.jwks)
+const client = new issuer.Client(
+  {
+    client_id: provider.clientId as string,
+    client_secret: provider.clientSecret as string,
+    redirect_uris: [provider.callbackUrl], // <-- Uses provider.callbackUrl
+    ...provider.client,
+  },
+  provider.jwks,
+);
 ```
 
 **Observation:** The OpenID client uses `provider.callbackUrl` from the provider configuration. This is where our forced callback URL should be used.
@@ -65,14 +71,13 @@ const client = new issuer.Client({
 ### 4. Callback URL Validation (`node_modules/next-auth/src/core/lib/assert.ts`)
 
 **Key Code:**
+
 ```typescript
-const callbackUrlParam = req.query?.callbackUrl as string | undefined
-const url = parseUrl(req.origin)
+const callbackUrlParam = req.query?.callbackUrl as string | undefined;
+const url = parseUrl(req.origin);
 
 if (callbackUrlParam && !isValidHttpUrl(callbackUrlParam, url.base)) {
-  return new InvalidCallbackUrl(
-    `Invalid callback URL. Received: ${callbackUrlParam}`
-  )
+  return new InvalidCallbackUrl(`Invalid callback URL. Received: ${callbackUrlParam}`);
 }
 ```
 
@@ -102,6 +107,7 @@ curl "https://www.prepflow.org/api/auth/signin/auth0?callbackUrl=/webapp" -I
 ```
 
 **Result:**
+
 - HTTP 302 redirect
 - Location: `/api/auth/signin?callbackUrl=...&error=auth0`
 - **Error is set BEFORE redirecting to Auth0**

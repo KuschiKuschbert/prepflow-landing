@@ -84,7 +84,3 @@ export async function processIngredientAllergens(
     });
   });
 }
-
-
-
-

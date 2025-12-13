@@ -141,7 +141,3 @@ export function formatCleaningScheduleForPrint(
     </div>
   `;
 }
-
-
-
-

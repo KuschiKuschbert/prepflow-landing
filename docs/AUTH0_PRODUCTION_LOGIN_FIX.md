@@ -18,6 +18,7 @@ Based on browser testing and code review:
 ### Step 1: Check Production Environment Variables
 
 **Go to Vercel Dashboard:**
+
 1. Navigate to: https://vercel.com/dashboard
 2. Select your project: **prepflow-landing**
 3. Go to: **Settings** → **Environment Variables**
@@ -34,6 +35,7 @@ NEXTAUTH_SECRET=[your-production-secret-min-32-chars]
 ```
 
 **⚠️ CRITICAL CHECKLIST:**
+
 - [ ] `NEXTAUTH_URL` is set to `https://www.prepflow.org` (with www, no trailing slash)
 - [ ] `NEXTAUTH_URL` is set for **Production** environment (not just Preview)
 - [ ] All Auth0 variables are set for **Production** environment
@@ -50,6 +52,7 @@ curl https://www.prepflow.org/api/debug/auth \
 ```
 
 This will show:
+
 - What `NEXTAUTH_URL` is actually set to in production
 - Expected callback URL
 - Any configuration issues
@@ -112,12 +115,14 @@ node scripts/set-vercel-env.js
 ```
 
 This will:
+
 - Fetch current Vercel environment variables
 - Compare with required variables
 - Prompt for production values
 - Set/update variables in Vercel Production environment
 
 **Get Vercel Token:**
+
 1. Go to: https://vercel.com/account/tokens
 2. Click **Create Token**
 3. Copy the token
@@ -152,6 +157,7 @@ This ensures NextAuth uses `NEXTAUTH_URL` for all URL construction, not just the
 **File:** `lib/auth-options.ts`
 
 Added production-safe logging to track callback URL configuration:
+
 - Logs callback URL being used (no secrets exposed)
 - Logs if `NEXTAUTH_URL` is missing
 - Helps diagnose configuration issues
@@ -161,6 +167,7 @@ Added production-safe logging to track callback URL configuration:
 **File:** `app/api/debug/auth/route.ts`
 
 Diagnostic endpoint to check production configuration:
+
 - Shows what `NEXTAUTH_URL` is set to
 - Shows expected callback URL
 - Identifies configuration issues
@@ -183,6 +190,7 @@ curl https://www.prepflow.org/api/debug/auth \
 ```
 
 Should show:
+
 - `nextAuthUrl: "https://www.prepflow.org"`
 - `isCorrectProductionUrl: true`
 - `issues: []`
@@ -218,11 +226,13 @@ Should show:
 ### Issue: Still getting `error=auth0` after setting `NEXTAUTH_URL`
 
 **Possible Causes:**
+
 1. Environment variable not set for Production environment
 2. Application not redeployed after setting variable
 3. Browser cache/cookies still holding old values
 
 **Solution:**
+
 1. Verify variable is set for **Production** (not Preview)
 2. Redeploy application
 3. Clear browser data completely

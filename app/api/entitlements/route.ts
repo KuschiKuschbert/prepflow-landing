@@ -9,23 +9,23 @@ export async function GET(req: NextRequest) {
     const user = await requireAuth(req);
     const email = user.email;
 
-  // Get actual tier from database
-  let tier: TierSlug = 'starter';
-  if (supabaseAdmin) {
-    try {
-      const { data } = await supabaseAdmin
-        .from('users')
-        .select('subscription_tier')
-        .eq('email', email)
-        .maybeSingle();
+    // Get actual tier from database
+    let tier: TierSlug = 'starter';
+    if (supabaseAdmin) {
+      try {
+        const { data } = await supabaseAdmin
+          .from('users')
+          .select('subscription_tier')
+          .eq('email', email)
+          .maybeSingle();
 
-      if (data?.subscription_tier) {
-        tier = data.subscription_tier as TierSlug;
+        if (data?.subscription_tier) {
+          tier = data.subscription_tier as TierSlug;
+        }
+      } catch (error) {
+        // Fallback to starter on error
       }
-    } catch (error) {
-      // Fallback to starter on error
     }
-  }
 
     // Get entitlements using database config (with code fallback)
     const ent = await getEntitlementsForTierAsync(email, tier);

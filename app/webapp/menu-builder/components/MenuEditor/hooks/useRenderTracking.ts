@@ -36,7 +36,3 @@ export function useRenderTracking(menu: Menu) {
     prevMenuRef.current = menu;
   }, [menu, renderId]);
 }
-
-
-
-

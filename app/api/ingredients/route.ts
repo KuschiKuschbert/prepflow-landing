@@ -2,7 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
+import { getUserEmail } from '@/lib/auth0-api-helpers';
 import { createIngredient } from './helpers/createIngredient';
 import { deleteIngredient } from './helpers/deleteIngredient';
 import { handleIngredientError } from './helpers/handleIngredientError';
@@ -83,11 +83,10 @@ export async function PUT(request: NextRequest) {
     // Get user email for change tracking
     let userEmail: string | null = null;
     try {
-      const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
-      userEmail = (token?.email as string) || null;
-    } catch (tokenError) {
+      userEmail = await getUserEmail(request);
+    } catch (authError) {
       // Continue without user email if auth fails (for development)
-      logger.warn('[Ingredients API] Could not get user email for change tracking:', tokenError);
+      logger.warn('[Ingredients API] Could not get user email for change tracking:', authError);
     }
 
     const data = await updateIngredient(id, updates, userEmail);

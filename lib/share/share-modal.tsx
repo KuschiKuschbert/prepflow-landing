@@ -242,7 +242,3 @@ export function ShareModal({
     </div>
   );
 }
-
-
-
-

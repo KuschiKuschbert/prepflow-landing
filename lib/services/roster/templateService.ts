@@ -270,7 +270,3 @@ export function validateTemplateApplication(
     errors,
   };
 }
-
-
-
-

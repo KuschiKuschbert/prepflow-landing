@@ -35,7 +35,3 @@ export function usePagination<T>(items: T[], itemsPerPageDefault = 20) {
     paginatedItems,
   };
 }
-
-
-
-

@@ -110,7 +110,3 @@ export function useEntitlements() {
     refresh: fetchEntitlements,
   };
 }
-
-
-
-

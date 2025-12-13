@@ -64,7 +64,3 @@ export function LegalCompliancePanel() {
     </div>
   );
 }
-
-
-
-

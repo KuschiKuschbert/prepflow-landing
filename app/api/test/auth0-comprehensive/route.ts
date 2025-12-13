@@ -81,11 +81,18 @@ export async function GET(request: NextRequest) {
     } else {
       const secretLength = auth0Secret.length;
       if (secretLength < 32) {
-        addTest('AUTH0_SECRET', 'warning', `Secret is only ${secretLength} characters (recommended: 32+)`, {
+        addTest(
+          'AUTH0_SECRET',
+          'warning',
+          `Secret is only ${secretLength} characters (recommended: 32+)`,
+          {
+            length: secretLength,
+          },
+        );
+      } else {
+        addTest('AUTH0_SECRET', 'pass', `Secret length: ${secretLength} characters`, {
           length: secretLength,
         });
-      } else {
-        addTest('AUTH0_SECRET', 'pass', `Secret length: ${secretLength} characters`, { length: secretLength });
       }
     }
 
@@ -124,9 +131,10 @@ export async function GET(request: NextRequest) {
         // Test 5: Verify Callback URLs in Auth0
         const callbacks = (app.callbacks || []) as string[];
         const expectedCallback = auth0BaseUrl ? `${auth0BaseUrl}/api/auth/callback` : null;
-        const expectedCallbackNonWww = auth0BaseUrl && auth0BaseUrl.includes('www.')
-          ? `${auth0BaseUrl.replace('www.', '')}/api/auth/callback`
-          : null;
+        const expectedCallbackNonWww =
+          auth0BaseUrl && auth0BaseUrl.includes('www.')
+            ? `${auth0BaseUrl.replace('www.', '')}/api/auth/callback`
+            : null;
 
         if (expectedCallback && callbacks.includes(expectedCallback)) {
           addTest('Auth0 Callback URL (www)', 'pass', `Found in Auth0: ${expectedCallback}`, {
@@ -140,23 +148,32 @@ export async function GET(request: NextRequest) {
         }
 
         if (expectedCallbackNonWww && callbacks.includes(expectedCallbackNonWww)) {
-          addTest('Auth0 Callback URL (non-www)', 'pass', `Found in Auth0: ${expectedCallbackNonWww}`, {
-            callbackUrl: expectedCallbackNonWww,
-          });
+          addTest(
+            'Auth0 Callback URL (non-www)',
+            'pass',
+            `Found in Auth0: ${expectedCallbackNonWww}`,
+            {
+              callbackUrl: expectedCallbackNonWww,
+            },
+          );
         } else if (expectedCallbackNonWww) {
-          addTest('Auth0 Callback URL (non-www)', 'warning', `Not found in Auth0: ${expectedCallbackNonWww}`, {
-            expected: expectedCallbackNonWww,
-            configured: callbacks,
-            note: 'Non-www callback recommended but not required if middleware redirects',
-          });
+          addTest(
+            'Auth0 Callback URL (non-www)',
+            'warning',
+            `Not found in Auth0: ${expectedCallbackNonWww}`,
+            {
+              expected: expectedCallbackNonWww,
+              configured: callbacks,
+              note: 'Non-www callback recommended but not required if middleware redirects',
+            },
+          );
         }
 
         // Test 6: Verify Logout URLs
         const logoutUrls = (app.logout_urls || []) as string[];
         const expectedLogout = auth0BaseUrl || '';
-        const expectedLogoutNonWww = auth0BaseUrl && auth0BaseUrl.includes('www.')
-          ? auth0BaseUrl.replace('www.', '')
-          : null;
+        const expectedLogoutNonWww =
+          auth0BaseUrl && auth0BaseUrl.includes('www.') ? auth0BaseUrl.replace('www.', '') : null;
 
         if (logoutUrls.some((url: string) => url.includes(expectedLogout))) {
           addTest('Auth0 Logout URL', 'pass', `Found in Auth0: ${expectedLogout}`, {
@@ -172,9 +189,8 @@ export async function GET(request: NextRequest) {
         // Test 7: Verify Web Origins
         const webOrigins = (app.web_origins || []) as string[];
         const expectedOrigin = auth0BaseUrl || '';
-        const expectedOriginNonWww = auth0BaseUrl && auth0BaseUrl.includes('www.')
-          ? auth0BaseUrl.replace('www.', '')
-          : null;
+        const expectedOriginNonWww =
+          auth0BaseUrl && auth0BaseUrl.includes('www.') ? auth0BaseUrl.replace('www.', '') : null;
 
         if (webOrigins.includes(expectedOrigin) || webOrigins.includes('*')) {
           addTest('Auth0 Web Origins', 'pass', `Found in Auth0: ${expectedOrigin}`, {
@@ -205,7 +221,11 @@ export async function GET(request: NextRequest) {
       const auth0Host = new URL(auth0BaseUrl).hostname;
       const originHost = originUrl.includes('http') ? new URL(originUrl).hostname : requestOrigin;
 
-      if (auth0Host === originHost || originHost.includes(auth0Host) || auth0Host.includes(originHost)) {
+      if (
+        auth0Host === originHost ||
+        originHost.includes(auth0Host) ||
+        auth0Host.includes(originHost)
+      ) {
         addTest('URL Consistency', 'pass', 'AUTH0_BASE_URL matches request origin', {
           auth0Host,
           originHost,

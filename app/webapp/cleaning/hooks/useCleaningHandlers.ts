@@ -85,7 +85,3 @@ export function useCleaningHandlers({
     handleTaskUpdate,
   };
 }
-
-
-
-

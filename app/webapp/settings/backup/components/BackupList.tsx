@@ -157,7 +157,3 @@ export function BackupList({ backups, onRestore, onRefresh }: BackupListProps) {
     </div>
   );
 }
-
-
-
-

@@ -53,7 +53,3 @@ export function detectDishChanges(currentDish: any, updateData: any): ChangeDete
 
   return { changes, changeDetails };
 }
-
-
-
-

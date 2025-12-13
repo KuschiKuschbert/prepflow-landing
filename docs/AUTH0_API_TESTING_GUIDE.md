@@ -13,6 +13,7 @@ This guide documents the comprehensive API endpoints created to test and fix Aut
 **Purpose:** Tests all aspects of Auth0 configuration and NextAuth integration.
 
 **What It Tests:**
+
 - ✅ Environment variables (NEXTAUTH_URL, Auth0 credentials, secrets)
 - ✅ Callback URL construction
 - ✅ Provider configuration
@@ -24,11 +25,13 @@ This guide documents the comprehensive API endpoints created to test and fix Aut
 - ✅ URL consistency checks
 
 **Usage:**
+
 ```bash
 curl https://www.prepflow.org/api/test/auth0-comprehensive
 ```
 
 **Response Format:**
+
 ```json
 {
   "timestamp": "2025-12-10T14:38:14.000Z",
@@ -39,7 +42,7 @@ curl https://www.prepflow.org/api/test/auth0-comprehensive
       "status": "pass",
       "message": "Set to: https://www.prepflow.org",
       "details": { "url": "https://www.prepflow.org" }
-    },
+    }
     // ... more tests
   ],
   "summary": {
@@ -58,17 +61,20 @@ curl https://www.prepflow.org/api/test/auth0-comprehensive
 **Purpose:** Tests the actual NextAuth authorization flow to see if it redirects to Auth0 correctly.
 
 **What It Tests:**
+
 - ✅ Signin endpoint response
 - ✅ Redirect behavior
 - ✅ Error detection (`error=auth0`)
 - ✅ Auth0 redirect validation
 
 **Usage:**
+
 ```bash
 curl "https://www.prepflow.org/api/test/auth0-flow?callbackUrl=/webapp"
 ```
 
 **Response Format:**
+
 ```json
 {
   "success": true,
@@ -98,6 +104,7 @@ curl "https://www.prepflow.org/api/test/auth0-flow?callbackUrl=/webapp"
 **Purpose:** Automatically fixes Auth0 configuration by adding missing callback URLs, logout URLs, and web origins via Auth0 Management API.
 
 **What It Does:**
+
 - ✅ Connects to Auth0 Management API
 - ✅ Retrieves current application configuration
 - ✅ Adds missing callback URLs (www and non-www)
@@ -106,11 +113,13 @@ curl "https://www.prepflow.org/api/test/auth0-flow?callbackUrl=/webapp"
 - ✅ Updates Auth0 application configuration
 
 **Usage:**
+
 ```bash
 curl -X POST https://www.prepflow.org/api/fix/auth0-callback-urls
 ```
 
 **Response Format:**
+
 ```json
 {
   "success": true,
@@ -132,18 +141,11 @@ curl -X POST https://www.prepflow.org/api/fix/auth0-callback-urls
         "https://prepflow.org",
         "https://prepflow.org/"
       ],
-      "added": [
-        "https://www.prepflow.org/",
-        "https://prepflow.org",
-        "https://prepflow.org/"
-      ]
+      "added": ["https://www.prepflow.org/", "https://prepflow.org", "https://prepflow.org/"]
     },
     "webOrigins": {
       "before": ["https://www.prepflow.org"],
-      "after": [
-        "https://www.prepflow.org",
-        "https://prepflow.org"
-      ],
+      "after": ["https://www.prepflow.org", "https://prepflow.org"],
       "added": ["https://prepflow.org"]
     }
   }
@@ -173,6 +175,7 @@ export const authOptions: NextAuthOptions = {
 **File:** `app/api/test/auth0-comprehensive/route.ts`
 
 **Features:**
+
 - Tests all environment variables
 - Verifies Auth0 Management API connection
 - Checks Auth0 dashboard configuration
@@ -183,6 +186,7 @@ export const authOptions: NextAuthOptions = {
 **File:** `app/api/test/auth0-flow/route.ts`
 
 **Features:**
+
 - Tests actual NextAuth signin flow
 - Detects `error=auth0` issues
 - Validates redirect behavior
@@ -192,6 +196,7 @@ export const authOptions: NextAuthOptions = {
 **File:** `app/api/fix/auth0-callback-urls/route.ts`
 
 **Features:**
+
 - Uses Auth0 Management API to update configuration
 - Automatically adds missing URLs
 - Preserves existing configuration
@@ -205,6 +210,7 @@ curl https://www.prepflow.org/api/test/auth0-comprehensive | jq
 ```
 
 **Check:**
+
 - All tests should pass or have warnings (not failures)
 - Verify callback URLs are configured in Auth0
 - Check URL consistency
@@ -216,6 +222,7 @@ curl "https://www.prepflow.org/api/test/auth0-flow?callbackUrl=/webapp" | jq
 ```
 
 **Check:**
+
 - `success` should be `true`
 - `hasError` should be `false`
 - `redirectsToAuth0` should be `true`
@@ -229,6 +236,7 @@ curl -X POST https://www.prepflow.org/api/fix/auth0-callback-urls | jq
 ```
 
 **Check:**
+
 - `success` should be `true`
 - Review `changes` to see what was added
 
@@ -281,6 +289,7 @@ curl "https://www.prepflow.org/api/test/auth0-flow?callbackUrl=/webapp" | jq
 ### If Flow Test Shows `error=auth0`
 
 1. **Run Fix Endpoint:**
+
    ```bash
    curl -X POST https://www.prepflow.org/api/fix/auth0-callback-urls
    ```

@@ -75,7 +75,3 @@ export function ExportDropdown({ exportLoading, onExport }: ExportDropdownProps)
     </div>
   );
 }
-
-
-
-

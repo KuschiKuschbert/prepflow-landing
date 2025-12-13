@@ -33,7 +33,3 @@ export function DialogHeader({ summary, onClose }: DialogHeaderProps) {
     </div>
   );
 }
-
-
-
-

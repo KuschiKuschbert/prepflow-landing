@@ -72,10 +72,12 @@ Show a friendly loading message during auto-redirect:
 ## Testing
 
 ### Before Fix
+
 - User accesses `/webapp` → Sees error page with `error=auth0`
 - User clicks "Sign in with Auth0" → Works, but confusing UX
 
 ### After Fix
+
 - User accesses `/webapp` → Automatically redirects to Auth0 login
 - No confusing error message
 - Seamless login experience

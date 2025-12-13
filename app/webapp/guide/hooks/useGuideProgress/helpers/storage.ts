@@ -24,7 +24,3 @@ export function saveProgress(progress: Record<string, GuideProgress>): void {
     // Ignore storage errors
   }
 }
-
-
-
-

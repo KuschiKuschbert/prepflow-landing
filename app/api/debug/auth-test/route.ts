@@ -9,9 +9,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   try {
     const auth0BaseUrl = process.env.AUTH0_BASE_URL;
-    const callbackUrl = auth0BaseUrl
-      ? `${auth0BaseUrl}/api/auth/callback`
-      : 'NOT SET';
+    const callbackUrl = auth0BaseUrl ? `${auth0BaseUrl}/api/auth/callback` : 'NOT SET';
 
     // Try to get the current session
     const session = await auth0.getSession(request);

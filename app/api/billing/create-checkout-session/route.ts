@@ -82,7 +82,8 @@ export async function POST(req: NextRequest) {
         return null;
       })();
 
-    const origin = req.headers.get('origin') || process.env.AUTH0_BASE_URL || 'http://localhost:3000';
+    const origin =
+      req.headers.get('origin') || process.env.AUTH0_BASE_URL || 'http://localhost:3000';
 
     // Stripe best practice: Create checkout session with proper metadata
     // Metadata is used by webhook handler to identify user and tier

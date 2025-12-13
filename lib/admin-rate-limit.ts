@@ -57,7 +57,3 @@ export function getAdminRemainingRequests(identifier: string, isCritical = false
   const max = isCritical ? CRITICAL_RATE_LIMIT_MAX : ADMIN_RATE_LIMIT_MAX;
   return Math.max(0, max - entry.count);
 }
-
-
-
-

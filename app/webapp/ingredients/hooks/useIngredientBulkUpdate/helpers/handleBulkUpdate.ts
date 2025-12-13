@@ -42,7 +42,3 @@ export async function handleBulkUpdate(
     throw error;
   }
 }
-
-
-
-

@@ -8,6 +8,7 @@
 When using a custom signIn page (`pages.signIn: '/api/auth/signin'`), NextAuth redirects ALL signin requests (including provider-specific ones like `/api/auth/signin/auth0`) to the custom signin page, even when a provider ID is present in the URL.
 
 This causes a redirect loop:
+
 1. User navigates to `/webapp` → Redirects to `/api/auth/signin?error=auth0`
 2. Custom signin page tries to redirect to `/api/auth/signin/auth0`
 3. NextAuth processes GET `/api/auth/signin/auth0` → Redirects back to `/api/auth/signin?error=auth0`
@@ -48,6 +49,7 @@ pages: {
 ## Test Results
 
 ✅ **Redirect works correctly** when custom signIn page is removed:
+
 - User navigates to `/webapp` → Redirects to `/api/auth/signin?error=auth0`
 - NextAuth processes the request → Redirects to Auth0 login page
 - User can log in successfully
@@ -64,6 +66,7 @@ pages: {
 ### Option 2: Conditional Custom SignIn Page (Future Enhancement)
 
 We could modify the custom signIn page to:
+
 1. Check if there's a provider ID in the URL
 2. If provider ID exists, call `signIn(providerId)` directly (POST request)
 3. If no provider ID, show the custom signin page
@@ -73,6 +76,7 @@ But this requires NextAuth to NOT redirect provider-specific signins to the cust
 ### Option 3: Style NextAuth's Default Signin Page
 
 We could use CSS to style NextAuth's default signin page:
+
 - Override NextAuth's default styles with Cyber Carrot theme
 - Use CSS variables and Tailwind classes
 - Maintain custom branding while using NextAuth's native signin flow

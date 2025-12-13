@@ -83,7 +83,3 @@ export function useSubscriptionStatus() {
     refresh: fetchSubscription,
   };
 }
-
-
-
-

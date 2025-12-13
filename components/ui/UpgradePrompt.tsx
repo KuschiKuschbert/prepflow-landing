@@ -108,7 +108,3 @@ export function UpgradePrompt({
     </div>
   );
 }
-
-
-
-

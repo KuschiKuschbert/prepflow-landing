@@ -3,6 +3,7 @@
 ## Test Results (After Latest Deployment)
 
 ### Diagnostic Endpoint (`/api/debug/auth`)
+
 ```json
 {
   "environment": "production",
@@ -19,26 +20,31 @@
 ```
 
 **Status:** ✅ Configuration appears correct
+
 - `NEXTAUTH_URL` is set correctly
 - No configuration issues detected
 - Diagnostic endpoint can't read provider config at runtime (expected limitation)
 
 ### Sign-In Endpoint Test
+
 ```bash
 curl "https://www.prepflow.org/api/auth/signin/auth0?callbackUrl=https%3A%2F%2Fwww.prepflow.org%2Fwebapp"
 ```
 
 **Result:**
+
 - HTTP 302 redirect
 - Redirects to: `https://www.prepflow.org/api/auth/signin?callbackUrl=...&error=auth0`
 - **NextAuth returns `error=auth0` IMMEDIATELY** before redirecting to Auth0
 
 ### Middleware Redirect Test
+
 ```bash
 curl "https://prepflow.org" -I
 ```
 
 **Result:**
+
 - HTTP 307 redirect
 - ✅ Middleware redirects non-www to www correctly
 
@@ -48,6 +54,7 @@ curl "https://prepflow.org" -I
 NextAuth v4 validates callback URLs against the **request origin** BEFORE redirecting to Auth0. Even though we're forcing the callback URL in the provider configuration, NextAuth performs validation before using our forced value.
 
 **Why This Happens:**
+
 1. NextAuth v4 constructs callback URLs from request origin by default
 2. NextAuth validates the callback URL before redirecting to Auth0
 3. If the callback URL doesn't match what NextAuth expects (based on request origin), it returns `error=auth0` immediately
@@ -56,6 +63,7 @@ NextAuth v4 validates callback URLs against the **request origin** BEFORE redire
 ## Current Code Configuration
 
 **Callback URL Forcing (lib/auth-options.ts):**
+
 ```typescript
 // Force callback URL in both places
 providerConfig.authorization.params.redirect_uri = callbackUrl; // What Auth0 sees
@@ -69,6 +77,7 @@ providerConfig.callbackURL = callbackUrl; // What NextAuth uses internally
 ### Option 1: Check Vercel Function Logs (CRITICAL)
 
 **Action Required:**
+
 1. Go to **Vercel Dashboard** → **Your Project** → **Functions**
 2. Look for recent function invocations for `/api/auth/signin/auth0`
 3. Check logs for:
@@ -81,6 +90,7 @@ providerConfig.callbackURL = callbackUrl; // What NextAuth uses internally
 ### Option 2: Verify Auth0 Dashboard Configuration
 
 **Double-check these URLs are EXACTLY correct:**
+
 1. Go to: https://manage.auth0.com → Applications → Prepflow → Settings
 2. **Allowed Callback URLs** - Must include EXACTLY:
    ```
@@ -92,6 +102,7 @@ providerConfig.callbackURL = callbackUrl; // What NextAuth uses internally
 ### Option 3: Test with Browser Network Tab
 
 **Action Required:**
+
 1. Open browser DevTools → Network tab
 2. Navigate to: `https://www.prepflow.org/api/auth/signin`
 3. Click "Sign in with Auth0"
@@ -108,6 +119,7 @@ providerConfig.callbackURL = callbackUrl; // What NextAuth uses internally
 **The Issue:** NextAuth v4 might not be using `NEXTAUTH_URL` for URL construction even when it's set.
 
 **Possible Solutions:**
+
 1. Ensure `NEXTAUTH_URL` has no trailing slash
 2. Ensure `NEXTAUTH_URL` matches the exact domain (www.prepflow.org)
 3. Check if there are any other environment variables interfering
@@ -129,6 +141,7 @@ providerConfig.callbackURL = callbackUrl; // What NextAuth uses internally
 ## Expected Behavior
 
 When working correctly:
+
 1. User accesses `https://www.prepflow.org/api/auth/signin`
 2. Clicks "Sign in with Auth0"
 3. NextAuth constructs authorization URL with `redirect_uri=https://www.prepflow.org/api/auth/callback/auth0`

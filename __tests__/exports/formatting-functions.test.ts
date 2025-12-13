@@ -107,7 +107,3 @@ describe('Export Formatting Functions', () => {
     });
   });
 });
-
-
-
-

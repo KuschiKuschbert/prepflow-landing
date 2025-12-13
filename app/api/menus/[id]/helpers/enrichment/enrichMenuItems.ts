@@ -87,7 +87,3 @@ export async function enrichMenuItems(
     }),
   );
 }
-
-
-
-

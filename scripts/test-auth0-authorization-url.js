@@ -24,7 +24,9 @@ async function testAuthorizationUrl() {
     console.log(`      - Expected Callback: ${diagnostic.expectedCallbackUrl}`);
     console.log(`      - Actual Redirect URI: ${diagnostic.actualRedirectUri || 'NOT SET'}`);
     console.log(`      - Provider Callback URL: ${diagnostic.providerCallbackURL || 'NOT SET'}`);
-    console.log(`      - Issues: ${diagnostic.issues.length === 0 ? 'None' : diagnostic.issues.join(', ')}\n`);
+    console.log(
+      `      - Issues: ${diagnostic.issues.length === 0 ? 'None' : diagnostic.issues.join(', ')}\n`,
+    );
 
     // Test 2: Try to get the signin page and see what happens
     console.log('2️⃣ Testing signin endpoint...');
@@ -84,7 +86,6 @@ async function testAuthorizationUrl() {
     }
 
     console.log('\n✅ Tests completed\n');
-
   } catch (error) {
     console.error('❌ Error:', error.message);
     process.exit(1);

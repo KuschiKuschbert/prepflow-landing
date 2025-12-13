@@ -13,7 +13,10 @@ function AuthErrorContent() {
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
 
-  const errorMessages: Record<string, { title: string; message: string; troubleshooting?: string[] }> = {
+  const errorMessages: Record<
+    string,
+    { title: string; message: string; troubleshooting?: string[] }
+  > = {
     Configuration: {
       title: 'Configuration Error',
       message:
@@ -38,7 +41,11 @@ function AuthErrorContent() {
       title: 'Verification Error',
       message:
         'The verification token has expired or has already been used. Please try signing in again.',
-      troubleshooting: ['Try signing in again', 'Clear your browser cookies', 'Use a different browser'],
+      troubleshooting: [
+        'Try signing in again',
+        'Clear your browser cookies',
+        'Use a different browser',
+      ],
     },
     Callback: {
       title: 'Callback Error',
@@ -176,7 +183,10 @@ function AuthErrorContent() {
                 </h3>
                 <ul className="space-y-2">
                   {errorInfo.troubleshooting.map((step, index) => (
-                    <li key={index} className={`${LANDING_TYPOGRAPHY.sm} flex items-start gap-2 text-gray-400`}>
+                    <li
+                      key={index}
+                      className={`${LANDING_TYPOGRAPHY.sm} flex items-start gap-2 text-gray-400`}
+                    >
                       <span className="mt-1 text-[#29E7CD]">•</span>
                       <span>{step}</span>
                     </li>

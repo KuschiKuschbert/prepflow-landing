@@ -145,7 +145,3 @@ export async function handlePutRequest(
     dish: updatedDish,
   });
 }
-
-
-
-

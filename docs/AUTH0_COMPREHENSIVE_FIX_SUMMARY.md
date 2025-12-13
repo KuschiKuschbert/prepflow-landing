@@ -17,6 +17,7 @@ export const authOptions: NextAuthOptions = {
 ```
 
 **Why This Works:**
+
 - NextAuth v4 validates callback URLs against the base URL
 - By explicitly setting `url`, we ensure NextAuth uses `NEXTAUTH_URL` instead of request origin
 - This prevents `error=auth0` caused by domain mismatch
@@ -24,17 +25,20 @@ export const authOptions: NextAuthOptions = {
 ### 2. Comprehensive Test Endpoints Created
 
 #### `/api/test/auth0-comprehensive`
+
 - Tests all environment variables
 - Verifies Auth0 Management API connection
 - Checks Auth0 dashboard configuration (callbacks, logout URLs, web origins)
 - Validates URL consistency
 
 #### `/api/test/auth0-flow`
+
 - Tests actual NextAuth authorization flow
 - Detects `error=auth0` issues
 - Validates redirect behavior
 
 #### `/api/fix/auth0-callback-urls`
+
 - Automatically fixes Auth0 configuration via Management API
 - Adds missing callback URLs, logout URLs, and web origins
 - Preserves existing configuration
@@ -66,6 +70,7 @@ curl https://www.prepflow.org/api/test/auth0-comprehensive | jq
 ```
 
 **Check Results:**
+
 - All tests should pass (green) or have warnings (yellow)
 - No failures (red)
 - Verify callback URLs are configured in Auth0
@@ -77,6 +82,7 @@ curl "https://www.prepflow.org/api/test/auth0-flow?callbackUrl=/webapp" | jq
 ```
 
 **Expected Result:**
+
 ```json
 {
   "success": true,
@@ -97,6 +103,7 @@ curl -X POST https://www.prepflow.org/api/fix/auth0-callback-urls | jq
 ```
 
 **What It Does:**
+
 - Connects to Auth0 Management API
 - Adds missing callback URLs (www and non-www)
 - Adds missing logout URLs
@@ -115,6 +122,7 @@ curl "https://www.prepflow.org/api/test/auth0-flow?callbackUrl=/webapp" | jq
 ## Expected Results After Fix
 
 ### Comprehensive Test
+
 - ✅ All environment variables pass
 - ✅ Auth0 Management API connects successfully
 - ✅ Callback URLs found in Auth0
@@ -122,11 +130,13 @@ curl "https://www.prepflow.org/api/test/auth0-flow?callbackUrl=/webapp" | jq
 - ✅ Web Origins found in Auth0
 
 ### Flow Test
+
 - ✅ `success: true`
 - ✅ `hasError: false`
 - ✅ `redirectsToAuth0: true`
 
 ### Manual Browser Test
+
 1. Navigate to `https://www.prepflow.org/api/auth/signin`
 2. Click "Sign in with Auth0"
 3. Should redirect to Auth0 login page (not error page)
@@ -139,10 +149,12 @@ curl "https://www.prepflow.org/api/test/auth0-flow?callbackUrl=/webapp" | jq
 **Wait for deployment:** The middleware changes need to deploy (2-3 minutes)
 
 **Check deployment status:**
+
 - Go to Vercel Dashboard → Your Project → Deployments
 - Wait for latest deployment to complete
 
 **Re-test:**
+
 ```bash
 curl https://www.prepflow.org/api/test/auth0-comprehensive
 ```
@@ -150,11 +162,13 @@ curl https://www.prepflow.org/api/test/auth0-comprehensive
 ### If Comprehensive Test Shows Missing URLs
 
 **Run fix endpoint:**
+
 ```bash
 curl -X POST https://www.prepflow.org/api/fix/auth0-callback-urls
 ```
 
 **Verify in Auth0 Dashboard:**
+
 - Go to https://manage.auth0.com → Applications → Prepflow → Settings
 - Check "Allowed Callback URLs" includes both www and non-www
 - Check "Allowed Logout URLs" includes both www and non-www
@@ -163,11 +177,13 @@ curl -X POST https://www.prepflow.org/api/fix/auth0-callback-urls
 ### If Flow Test Still Shows `error=auth0`
 
 **Check Vercel Logs:**
+
 - Go to Vercel Dashboard → Your Project → Functions
 - Look for `[Auth0 Config]` log entries
 - Check if `url` option is being set correctly
 
 **Verify NEXTAUTH_URL:**
+
 - Go to Vercel Dashboard → Settings → Environment Variables
 - Verify `NEXTAUTH_URL=https://www.prepflow.org` (no trailing slash)
 - Redeploy if changed

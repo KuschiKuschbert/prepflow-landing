@@ -12,14 +12,11 @@ export async function GET(request: NextRequest) {
   // TODO: Add proper authentication/rate limiting for production use
 
   const auth0BaseUrl = process.env.AUTH0_BASE_URL;
-  const expectedCallbackUrl = auth0BaseUrl
-    ? `${auth0BaseUrl}/api/auth/callback`
-    : 'NOT SET';
+  const expectedCallbackUrl = auth0BaseUrl ? `${auth0BaseUrl}/api/auth/callback` : 'NOT SET';
 
   // Check if AUTH0_BASE_URL is set correctly for production
   const isProduction = process.env.NODE_ENV === 'production';
-  const isCorrectProductionUrl =
-    isProduction && auth0BaseUrl === 'https://www.prepflow.org';
+  const isCorrectProductionUrl = isProduction && auth0BaseUrl === 'https://www.prepflow.org';
 
   // Get request origin for comparison
   const requestOrigin = request.headers.get('origin') || request.nextUrl.origin;
@@ -44,8 +41,8 @@ export async function GET(request: NextRequest) {
     isCorrectProductionUrl,
     auth0Configured: Boolean(
       process.env.AUTH0_ISSUER_BASE_URL &&
-        process.env.AUTH0_CLIENT_ID &&
-        process.env.AUTH0_CLIENT_SECRET,
+      process.env.AUTH0_CLIENT_ID &&
+      process.env.AUTH0_CLIENT_SECRET,
     ),
     auth0SecretSet: Boolean(process.env.AUTH0_SECRET),
     issues: [],
@@ -64,13 +61,8 @@ export async function GET(request: NextRequest) {
     diagnostics.issues.push('AUTH0_BASE_URL has trailing slash (should not)');
   }
 
-  if (
-    requestOrigin.includes('prepflow.org') &&
-    !requestOrigin.includes('www.prepflow.org')
-  ) {
-    diagnostics.issues.push(
-      'Request is from non-www domain - middleware should redirect to www',
-    );
+  if (requestOrigin.includes('prepflow.org') && !requestOrigin.includes('www.prepflow.org')) {
+    diagnostics.issues.push('Request is from non-www domain - middleware should redirect to www');
   }
 
   // Log diagnostics (safe - no secrets)

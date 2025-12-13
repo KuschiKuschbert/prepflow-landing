@@ -7,6 +7,7 @@ Even though `NEXTAUTH_URL` is set correctly in Vercel (`https://www.prepflow.org
 ## Root Cause
 
 NextAuth's Auth0 provider may construct the authorization URL using the **request origin** instead of `NEXTAUTH_URL`, even when we force the callback URL. This causes a mismatch between:
+
 - The callback URL we're forcing: `https://www.prepflow.org/api/auth/callback/auth0`
 - The callback URL Auth0 receives: Might be constructed from request origin
 
@@ -24,6 +25,7 @@ NextAuth's Auth0 provider may construct the authorization URL using the **reques
 Visit: `https://www.prepflow.org/api/debug/auth`
 
 This will show:
+
 - Current `NEXTAUTH_URL` value
 - Expected callback URL
 - Actual redirect_uri being used by the provider
@@ -84,6 +86,7 @@ if (callbackUrl) {
 ### Enhanced Diagnostic Endpoint
 
 Updated `app/api/debug/auth/route.ts` to show:
+
 - Actual `redirect_uri` being used by the provider
 - Provider `callbackURL` value
 - Any provider configuration errors

@@ -50,7 +50,3 @@ export function useStatsDates(
     return dateArray;
   }, [gridFilter, startDate, endDate]);
 }
-
-
-
-

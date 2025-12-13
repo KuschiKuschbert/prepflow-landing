@@ -39,7 +39,3 @@ export async function findTargetMenuId(
 
   return targetMenuId;
 }
-
-
-
-
