@@ -44,15 +44,23 @@ export function useUserProfile(): UseUserProfileReturn {
   const cachedProfile =
     typeof window !== 'undefined' ? getCachedData<UserProfile>(CACHE_KEY) : null;
 
+  // Validate cached profile - must have email property to be valid
+  const validCachedProfile =
+    cachedProfile && typeof cachedProfile === 'object' && 'email' in cachedProfile
+      ? cachedProfile
+      : null;
+
   logger.dev('[useUserProfile] Hook initialized:', {
     hasUserEmail: !!userEmail,
     userEmail,
     hasCachedProfile: !!cachedProfile,
     cachedProfileData: cachedProfile,
+    isValidCachedProfile: !!validCachedProfile,
+    validCachedProfileData: validCachedProfile,
   });
 
   const [profile, setProfile] = useState<UserProfile | null>(
-    cachedProfile ||
+    validCachedProfile ||
       (userEmail
         ? {
             email: userEmail,
@@ -108,8 +116,8 @@ export function useUserProfile(): UseUserProfileReturn {
 
     const loadProfile = async () => {
       logger.dev('[useUserProfile] Starting loadProfile');
-      // Only show loading if we don't have cached data (better UX)
-      if (!cachedProfile) {
+      // Only show loading if we don't have valid cached data (better UX)
+      if (!validCachedProfile) {
         setLoading(true);
       }
 
