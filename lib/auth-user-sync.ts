@@ -44,17 +44,45 @@ export async function syncUserFromAuth0(
       .maybeSingle();
 
     if (existingUser) {
-      // Update last_login timestamp (Auth0 best practice: track login activity)
-      await supabaseAdmin
+      // Check if we need to update name fields
+      const { data: userWithName } = await supabaseAdmin
         .from('users')
-        .update({
-          last_login: new Date().toISOString(),
-          email_verified: emailVerified || existingUser.email_verified, // Don't downgrade verification
-          updated_at: new Date().toISOString(),
-        })
-        .eq('email', email);
+        .select('first_name, last_name')
+        .eq('email', email)
+        .maybeSingle();
 
-      logger.dev('[Auth0 Sync] Updated user last_login:', { email });
+      const updateData: {
+        last_login: string;
+        updated_at: string;
+        email_verified: boolean;
+        first_name?: string | null;
+        last_name?: string | null;
+      } = {
+        last_login: new Date().toISOString(),
+        email_verified: emailVerified || existingUser.email_verified, // Don't downgrade verification
+        updated_at: new Date().toISOString(),
+      };
+
+      // Update name if provided and user doesn't have one yet
+      if (name && userWithName) {
+        const { first_name, last_name } = splitName(name);
+        if (!userWithName.first_name && first_name) {
+          updateData.first_name = first_name;
+        }
+        if (!userWithName.last_name && last_name) {
+          updateData.last_name = last_name;
+        }
+      }
+
+      await supabaseAdmin.from('users').update(updateData).eq('email', email);
+      logger.dev('[Auth0 Sync] Updated user:', {
+        email,
+        updatedName: !!(
+          name &&
+          userWithName &&
+          (!userWithName.first_name || !userWithName.last_name)
+        ),
+      });
       return;
     }
 
