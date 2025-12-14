@@ -73,16 +73,11 @@ export function useUserProfile(): UseUserProfileReturn {
   }, [userEmail, profile?.email, user?.name]);
 
   // Fetch profile from /api/me on mount
+  // Always fetch fresh data to ensure UI updates when name becomes available
+  // Cached data is already used for initial state above (prevents loading flash)
   useEffect(() => {
     if (!userEmail) {
       setProfile(null);
-      setLoading(false);
-      return;
-    }
-
-    // Use cached data if available
-    if (cachedProfile) {
-      setProfile(cachedProfile);
       setLoading(false);
       return;
     }
@@ -91,7 +86,10 @@ export function useUserProfile(): UseUserProfileReturn {
     prefetchApi('/api/me');
 
     const loadProfile = async () => {
-      setLoading(true);
+      // Only show loading if we don't have cached data (better UX)
+      if (!cachedProfile) {
+        setLoading(true);
+      }
 
       try {
         const response = await fetch('/api/me');
@@ -142,8 +140,18 @@ export function useUserProfile(): UseUserProfileReturn {
           };
 
           setProfile(profileData);
-          // Cache for next render
+          // Cache fresh data for next render
+          // This ensures UI updates immediately and cache is fresh for next mount
           cacheData(CACHE_KEY, profileData, CACHE_EXPIRY_MS);
+
+          // Log when name becomes available (for debugging)
+          if (profileData.first_name || profileData.last_name) {
+            logger.dev('[useUserProfile] Name data loaded:', {
+              first_name: profileData.first_name,
+              last_name: profileData.last_name,
+              display_name: profileData.display_name,
+            });
+          }
         }
       } catch (error) {
         // Network error, use session data as fallback
