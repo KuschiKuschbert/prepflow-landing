@@ -3,7 +3,9 @@
 import { DashboardSection } from '@/components/ui/DashboardSection';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { getUserFirstName } from '@/lib/user-name';
 import { LayoutDashboard } from 'lucide-react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import { PageHeader } from './components/static/PageHeader';
