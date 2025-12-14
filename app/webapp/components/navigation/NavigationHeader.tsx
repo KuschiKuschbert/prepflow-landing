@@ -70,7 +70,9 @@ export function NavigationHeader({
   onAchievementsClick,
 }: NavigationHeaderProps) {
   const { user, error: userError, isLoading: userLoading } = useUser();
-  const userEmail = user?.email;
+  // Handle nested user structure: user.user.email (Auth0 SDK sometimes returns nested structure)
+  const userEmail = user?.email || (user as any)?.user?.email;
+  const userName = user?.name || (user as any)?.user?.name;
 
   // Log Auth0 useUser() result in NavigationHeader
   useEffect(() => {

@@ -38,7 +38,9 @@ interface UseUserProfileReturn {
  */
 export function useUserProfile(): UseUserProfileReturn {
   const { user, error: userError, isLoading: userLoading } = useUser();
-  const userEmail = user?.email;
+  // Handle nested user structure: user.user.email (Auth0 SDK sometimes returns nested structure)
+  const userEmail = user?.email || (user as any)?.user?.email;
+  const userName = user?.name || (user as any)?.user?.name;
 
   // Log Auth0 useUser() result to debug why userEmail is missing
   useEffect(() => {
@@ -115,22 +117,23 @@ export function useUserProfile(): UseUserProfileReturn {
     logger.dev('[useUserProfile] useEffect triggered:', {
       hasUserEmail: !!userEmail,
       userEmail,
+      userLoading,
+      userError: userError?.message,
       hasCachedProfile: !!cachedProfile,
       currentProfile: profile,
     });
 
-    if (!userEmail) {
-      logger.dev('[useUserProfile] No userEmail, setting profile to null');
-      setProfile(null);
-      setLoading(false);
+    // Wait for Auth0 useUser() to finish loading before making decisions
+    if (userLoading) {
+      logger.dev('[useUserProfile] Auth0 useUser() still loading, waiting...');
       return;
     }
 
     // Prefetch for faster loading
     prefetchApi('/api/me');
 
-    const loadProfileWithEmail = async (email: string) => {
-      logger.dev('[useUserProfile] Starting loadProfileWithEmail:', { email });
+    const loadProfile = async () => {
+      logger.dev('[useUserProfile] Starting loadProfile (will try /api/me even without userEmail)');
       // Only show loading if we don't have valid cached data (better UX)
       if (!validCachedProfile) {
         setLoading(true);
@@ -140,16 +143,9 @@ export function useUserProfile(): UseUserProfileReturn {
         const response = await fetch('/api/me');
 
         if (response.status === 401) {
-          // Not authenticated, use session data only
-          logger.dev('[useUserProfile] User not authenticated (401), using session data');
-          setProfile({
-            email: userEmail || '',
-            first_name: null,
-            last_name: null,
-            display_name: null,
-            first_name_display: null,
-            name: user?.name || null,
-          });
+          // Not authenticated, set profile to null
+          logger.dev('[useUserProfile] User not authenticated (401), setting profile to null');
+          setProfile(null);
           setLoading(false);
           return;
         }
@@ -275,9 +271,11 @@ export function useUserProfile(): UseUserProfileReturn {
       }
     };
 
+    // Always try to load profile, even if userEmail is missing
+    // /api/me will return 401 if not authenticated, which we handle above
     loadProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userEmail]);
+  }, [userEmail, userLoading]);
 
   return {
     profile,
