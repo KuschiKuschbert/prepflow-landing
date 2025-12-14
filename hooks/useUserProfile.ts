@@ -168,7 +168,7 @@ export function useUserProfile(): UseUserProfileReturn {
 
         if (userData) {
           const profileData: UserProfile = {
-            email: userData.email || userEmail,
+            email: userData.email || userEmail || '',
             first_name: userData.first_name || null,
             last_name: userData.last_name || null,
             display_name: userData.display_name || null,
@@ -176,11 +176,28 @@ export function useUserProfile(): UseUserProfileReturn {
             name: userData.name || user?.name || null,
           };
 
+          // Validate profileData has at least email
+          if (!profileData.email) {
+            logger.error('[useUserProfile] Invalid profileData - missing email:', profileData);
+            // Fallback to session data
+            setProfile({
+              email: userEmail || '',
+              first_name: null,
+              last_name: null,
+              display_name: null,
+              first_name_display: null,
+              name: user?.name || null,
+            });
+            setLoading(false);
+            return;
+          }
+
           logger.dev('[useUserProfile] Received API data:', {
             first_name: userData.first_name,
             last_name: userData.last_name,
             display_name: userData.display_name,
             first_name_display: userData.first_name_display,
+            email: profileData.email,
           });
 
           setProfile(profileData);
@@ -190,6 +207,7 @@ export function useUserProfile(): UseUserProfileReturn {
             last_name: profileData.last_name,
             display_name: profileData.display_name,
             first_name_display: profileData.first_name_display,
+            email: profileData.email,
           });
 
           // Cache fresh data for next render
@@ -197,6 +215,15 @@ export function useUserProfile(): UseUserProfileReturn {
           cacheData(CACHE_KEY, profileData, CACHE_EXPIRY_MS);
         } else {
           logger.dev('[useUserProfile] No userData in API response');
+          // Set fallback profile with email
+          setProfile({
+            email: userEmail || '',
+            first_name: null,
+            last_name: null,
+            display_name: null,
+            first_name_display: null,
+            name: user?.name || null,
+          });
         }
       } catch (error) {
         // Network error, use session data as fallback
