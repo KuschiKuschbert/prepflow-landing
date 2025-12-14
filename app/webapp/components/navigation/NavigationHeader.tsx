@@ -69,18 +69,44 @@ export function NavigationHeader({
   userButtonRef,
   onAchievementsClick,
 }: NavigationHeaderProps) {
-  const { user } = useUser();
+  const { user, error: userError, isLoading: userLoading } = useUser();
   const userEmail = user?.email;
+
+  // Log Auth0 useUser() result in NavigationHeader
+  useEffect(() => {
+    logger.dev('[NavigationHeader] Auth0 useUser() result:', {
+      hasUser: !!user,
+      user,
+      userEmail,
+      userError: userError?.message,
+      userLoading,
+      userKeys: user ? Object.keys(user) : [],
+      userEmailValue: user?.email,
+      userNameValue: user?.name,
+    });
+  }, [user, userEmail, userError, userLoading]);
+
   // Fetch user profile from database to get first_name and last_name
   const { profile } = useUserProfile();
 
-  // Log profile changes
+  // Log profile changes with detailed inspection
   useEffect(() => {
-    logger.dev('[NavigationHeader] Profile data:', {
+    logger.dev('[NavigationHeader] Profile data received:', {
       profile,
       profileType: typeof profile,
       profileIsNull: profile === null,
+      profileIsUndefined: profile === undefined,
+      profileStringified: JSON.stringify(profile),
       profileKeys: profile ? Object.keys(profile) : [],
+      profileValues: profile
+        ? Object.entries(profile).map(([key, value]) => ({
+            key,
+            value,
+            valueType: typeof value,
+            isNull: value === null,
+            isUndefined: value === undefined,
+          }))
+        : [],
       first_name: profile?.first_name,
       last_name: profile?.last_name,
       display_name: profile?.display_name,
@@ -91,12 +117,21 @@ export function NavigationHeader({
 
   // Use helper function to get display name with proper fallback chain
   // Priority: Database first_name/last_name → Auth0 session name → Email prefix
-  const userName = getUserDisplayName({
+  const userNameInput = {
     first_name: profile?.first_name,
     last_name: profile?.last_name,
     name: user?.name,
     email: userEmail,
+  };
+  logger.dev('[NavigationHeader] userName input object:', {
+    userNameInput,
+    profileFirst: profile?.first_name,
+    profileLast: profile?.last_name,
+    auth0Name: user?.name,
+    userEmail,
   });
+
+  const userName = getUserDisplayName(userNameInput);
   const { avatar: userAvatar } = useUserAvatar();
 
   const { isVisible, isDesktop } = useHeaderVisibility();
@@ -116,12 +151,21 @@ export function NavigationHeader({
 
   // Get avatar URL or default initials
   const avatarUrl = getAvatarUrl(userAvatar);
-  const defaultInitials = getDefaultAvatar({
+  const defaultInitialsInput = {
     first_name: profile?.first_name,
     last_name: profile?.last_name,
     name: user?.name,
     email: userEmail,
+  };
+  logger.dev('[NavigationHeader] defaultInitials input object:', {
+    defaultInitialsInput,
+    profileFirst: profile?.first_name,
+    profileLast: profile?.last_name,
+    auth0Name: user?.name,
+    userEmail,
   });
+
+  const defaultInitials = getDefaultAvatar(defaultInitialsInput);
 
   // Log computed values (only log when profile changes to avoid spam)
   useEffect(() => {
@@ -132,6 +176,8 @@ export function NavigationHeader({
       profileLast: profile?.last_name,
       auth0Name: user?.name,
       userEmail,
+      profileEmail: profile?.email,
+      profileDisplayName: profile?.display_name,
     });
   }, [profile, userName, defaultInitials, user?.name, userEmail]);
 

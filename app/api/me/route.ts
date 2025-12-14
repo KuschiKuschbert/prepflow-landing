@@ -74,9 +74,21 @@ export async function GET(req: NextRequest) {
       display_name: user.display_name,
       first_name_display: user.first_name_display,
       auth0Name: authUser.name,
+      dbUserFirst: dbUser?.first_name,
+      dbUserLast: dbUser?.last_name,
+      hasDbUser: !!dbUser,
     });
 
-    return NextResponse.json({ user });
+    const responseData = { user };
+    logger.dev('[API /me] Response JSON structure:', {
+      hasUser: !!responseData.user,
+      userKeys: Object.keys(responseData.user || {}),
+      userEmail: responseData.user?.email,
+      userFirstName: responseData.user?.first_name,
+      userLastName: responseData.user?.last_name,
+    });
+
+    return NextResponse.json(responseData);
   } catch (error) {
     logger.error('[API /me] Failed to get user session:', {
       error: error instanceof Error ? error.message : String(error),

@@ -37,8 +37,22 @@ interface UseUserProfileReturn {
  * ```
  */
 export function useUserProfile(): UseUserProfileReturn {
-  const { user } = useUser();
+  const { user, error: userError, isLoading: userLoading } = useUser();
   const userEmail = user?.email;
+
+  // Log Auth0 useUser() result to debug why userEmail is missing
+  useEffect(() => {
+    logger.dev('[useUserProfile] Auth0 useUser() result:', {
+      hasUser: !!user,
+      user,
+      userEmail,
+      userError: userError?.message,
+      userLoading,
+      userKeys: user ? Object.keys(user) : [],
+      userEmailValue: user?.email,
+      userNameValue: user?.name,
+    });
+  }, [user, userEmail, userError, userLoading]);
 
   // Initialize with cached data for instant display
   const cachedProfile =
@@ -158,13 +172,23 @@ export function useUserProfile(): UseUserProfileReturn {
         }
 
         const data = await response.json();
-        const userData = data.user;
+        logger.dev('[useUserProfile] Raw API response:', {
+          data,
+          dataKeys: Object.keys(data || {}),
+          hasUser: !!data.user,
+          userType: typeof data.user,
+        });
 
-        logger.dev('[useUserProfile] API response received:', {
+        const userData = data.user;
+        logger.dev('[useUserProfile] Extracted userData:', {
+          userData,
+          userDataKeys: userData ? Object.keys(userData) : [],
+          userDataType: typeof userData,
           hasUserData: !!userData,
           userDataFirst: userData?.first_name,
           userDataLast: userData?.last_name,
           userDataDisplay: userData?.display_name,
+          userDataEmail: userData?.email,
         });
 
         if (userData) {
@@ -201,14 +225,20 @@ export function useUserProfile(): UseUserProfileReturn {
             email: profileData.email,
           });
 
+          logger.dev('[useUserProfile] About to set profile state:', {
+            profileData,
+            profileDataKeys: Object.keys(profileData),
+            profileDataStringified: JSON.stringify(profileData),
+          });
+
           setProfile(profileData);
 
-          logger.dev('[useUserProfile] Profile state updated:', {
+          // Log after state update (will show in next render)
+          logger.dev('[useUserProfile] Profile state set (check next render):', {
+            profileData,
+            email: profileData.email,
             first_name: profileData.first_name,
             last_name: profileData.last_name,
-            display_name: profileData.display_name,
-            first_name_display: profileData.first_name_display,
-            email: profileData.email,
           });
 
           // Cache fresh data for next render
