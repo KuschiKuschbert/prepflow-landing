@@ -129,8 +129,8 @@ export function useUserProfile(): UseUserProfileReturn {
     // Prefetch for faster loading
     prefetchApi('/api/me');
 
-    const loadProfile = async () => {
-      logger.dev('[useUserProfile] Starting loadProfile');
+    const loadProfileWithEmail = async (email: string) => {
+      logger.dev('[useUserProfile] Starting loadProfileWithEmail:', { email });
       // Only show loading if we don't have valid cached data (better UX)
       if (!validCachedProfile) {
         setLoading(true);
