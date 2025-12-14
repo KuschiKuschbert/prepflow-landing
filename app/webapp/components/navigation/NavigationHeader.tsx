@@ -77,10 +77,15 @@ export function NavigationHeader({
   // Log profile changes
   useEffect(() => {
     logger.dev('[NavigationHeader] Profile data:', {
+      profile,
+      profileType: typeof profile,
+      profileIsNull: profile === null,
+      profileKeys: profile ? Object.keys(profile) : [],
       first_name: profile?.first_name,
       last_name: profile?.last_name,
       display_name: profile?.display_name,
       first_name_display: profile?.first_name_display,
+      email: profile?.email,
     });
   }, [profile]);
 

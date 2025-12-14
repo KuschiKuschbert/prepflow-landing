@@ -43,6 +43,14 @@ export function useUserProfile(): UseUserProfileReturn {
   // Initialize with cached data for instant display
   const cachedProfile =
     typeof window !== 'undefined' ? getCachedData<UserProfile>(CACHE_KEY) : null;
+
+  logger.dev('[useUserProfile] Hook initialized:', {
+    hasUserEmail: !!userEmail,
+    userEmail,
+    hasCachedProfile: !!cachedProfile,
+    cachedProfileData: cachedProfile,
+  });
+
   const [profile, setProfile] = useState<UserProfile | null>(
     cachedProfile ||
       (userEmail
@@ -57,6 +65,11 @@ export function useUserProfile(): UseUserProfileReturn {
         : null),
   );
   const [loading, setLoading] = useState(!cachedProfile);
+
+  logger.dev('[useUserProfile] Initial state set:', {
+    profile,
+    loading,
+  });
 
   // Update profile with session email if session becomes available
   useEffect(() => {
@@ -76,7 +89,15 @@ export function useUserProfile(): UseUserProfileReturn {
   // Always fetch fresh data to ensure UI updates when name becomes available
   // Cached data is already used for initial state above (prevents loading flash)
   useEffect(() => {
+    logger.dev('[useUserProfile] useEffect triggered:', {
+      hasUserEmail: !!userEmail,
+      userEmail,
+      hasCachedProfile: !!cachedProfile,
+      currentProfile: profile,
+    });
+
     if (!userEmail) {
+      logger.dev('[useUserProfile] No userEmail, setting profile to null');
       setProfile(null);
       setLoading(false);
       return;
@@ -86,6 +107,7 @@ export function useUserProfile(): UseUserProfileReturn {
     prefetchApi('/api/me');
 
     const loadProfile = async () => {
+      logger.dev('[useUserProfile] Starting loadProfile');
       // Only show loading if we don't have cached data (better UX)
       if (!cachedProfile) {
         setLoading(true);
