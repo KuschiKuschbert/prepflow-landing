@@ -30,6 +30,21 @@ export async function GET(req: NextRequest) {
 
       if (!error && data) {
         dbUser = data;
+        logger.dev('[API /me] Database user data:', {
+          email: authUser.email,
+          first_name: dbUser.first_name,
+          last_name: dbUser.last_name,
+          hasError: !!error,
+        });
+      } else if (error) {
+        logger.dev('[API /me] Database query error:', {
+          email: authUser.email,
+          error: error.message,
+        });
+      } else {
+        logger.dev('[API /me] No database user found:', {
+          email: authUser.email,
+        });
       }
     }
 
@@ -51,6 +66,15 @@ export async function GET(req: NextRequest) {
         email: authUser.email,
       }),
     };
+
+    logger.dev('[API /me] Returning user data:', {
+      email: user.email,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      display_name: user.display_name,
+      first_name_display: user.first_name_display,
+      auth0Name: authUser.name,
+    });
 
     return NextResponse.json({ user });
   } catch (error) {

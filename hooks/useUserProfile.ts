@@ -129,6 +129,13 @@ export function useUserProfile(): UseUserProfileReturn {
         const data = await response.json();
         const userData = data.user;
 
+        logger.dev('[useUserProfile] API response received:', {
+          hasUserData: !!userData,
+          userDataFirst: userData?.first_name,
+          userDataLast: userData?.last_name,
+          userDataDisplay: userData?.display_name,
+        });
+
         if (userData) {
           const profileData: UserProfile = {
             email: userData.email || userEmail,
@@ -139,19 +146,27 @@ export function useUserProfile(): UseUserProfileReturn {
             name: userData.name || user?.name || null,
           };
 
+          logger.dev('[useUserProfile] Received API data:', {
+            first_name: userData.first_name,
+            last_name: userData.last_name,
+            display_name: userData.display_name,
+            first_name_display: userData.first_name_display,
+          });
+
           setProfile(profileData);
+
+          logger.dev('[useUserProfile] Profile state updated:', {
+            first_name: profileData.first_name,
+            last_name: profileData.last_name,
+            display_name: profileData.display_name,
+            first_name_display: profileData.first_name_display,
+          });
+
           // Cache fresh data for next render
           // This ensures UI updates immediately and cache is fresh for next mount
           cacheData(CACHE_KEY, profileData, CACHE_EXPIRY_MS);
-
-          // Log when name becomes available (for debugging)
-          if (profileData.first_name || profileData.last_name) {
-            logger.dev('[useUserProfile] Name data loaded:', {
-              first_name: profileData.first_name,
-              last_name: profileData.last_name,
-              display_name: profileData.display_name,
-            });
-          }
+        } else {
+          logger.dev('[useUserProfile] No userData in API response');
         }
       } catch (error) {
         // Network error, use session data as fallback

@@ -4,6 +4,7 @@
  */
 
 import { getAvatarById, isValidAvatar } from './avatars';
+import { logger } from './logger';
 
 const AVATAR_STORAGE_KEY = 'prepflow-user-avatar';
 
@@ -42,44 +43,70 @@ export function getDefaultAvatar(
   if (userNameOrUser && typeof userNameOrUser === 'object') {
     const { first_name, last_name, name, email } = userNameOrUser;
 
+    logger.dev('[getDefaultAvatar] Input object:', {
+      first_name,
+      last_name,
+      name,
+      email,
+    });
+
     // First choice: first_name + last_name (best initials)
     if (first_name && last_name) {
-      return (first_name[0] + last_name[0]).toUpperCase();
+      const initials = (first_name[0] + last_name[0]).toUpperCase();
+      logger.dev('[getDefaultAvatar] Using first_name + last_name:', initials);
+      return initials;
     }
 
     // Second choice: first_name only
     if (first_name) {
-      return first_name[0].toUpperCase();
+      const initials = first_name[0].toUpperCase();
+      logger.dev('[getDefaultAvatar] Using first_name only:', initials);
+      return initials;
     }
 
     // Third choice: full name string
     if (name) {
       const parts = name.trim().split(/\s+/);
       if (parts.length >= 2) {
-        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        const initials = (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        logger.dev('[getDefaultAvatar] Using full name string (2+ parts):', initials);
+        return initials;
       }
-      return name[0].toUpperCase();
+      const initials = name[0].toUpperCase();
+      logger.dev('[getDefaultAvatar] Using full name string (1 part):', initials);
+      return initials;
     }
 
     // Fourth choice: email prefix
     if (email) {
       const emailPrefix = email.split('@')[0];
-      return emailPrefix[0].toUpperCase();
+      const initials = emailPrefix[0].toUpperCase();
+      logger.dev('[getDefaultAvatar] Using email prefix:', initials);
+      return initials;
     }
 
+    logger.dev('[getDefaultAvatar] No valid data, returning fallback: U');
     return 'U';
   }
 
   // Handle string format (backward compatibility)
   const userName = userNameOrUser;
-  if (!userName) return 'U';
+  logger.dev('[getDefaultAvatar] Input string:', userName);
+  if (!userName) {
+    logger.dev('[getDefaultAvatar] Empty string, returning fallback: U');
+    return 'U';
+  }
   const parts = userName.trim().split(/\s+/);
   if (parts.length >= 2) {
     // First letter of first name + first letter of last name
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    const initials = (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    logger.dev('[getDefaultAvatar] Using string format (2+ parts):', initials);
+    return initials;
   }
   // First letter of name or email
-  return userName[0].toUpperCase();
+  const initials = userName[0].toUpperCase();
+  logger.dev('[getDefaultAvatar] Using string format (1 part):', initials);
+  return initials;
 }
 
 /**
