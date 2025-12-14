@@ -1,10 +1,11 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { Icon } from '@/components/ui/Icon';
-import { CreditCard, Settings, Settings2, Shield, User } from 'lucide-react';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
-import { prefetchRoute } from '@/lib/cache/prefetch-config';
 import { LogoutButton } from '@/app/webapp/components/LogoutButton';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { Icon } from '@/components/ui/Icon';
+import { prefetchRoute } from '@/lib/cache/prefetch-config';
+import { getUserGreeting } from '@/lib/user-name';
+import { CreditCard, Settings, Settings2, Shield, User } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface UserMenuProps {
   isOpen: boolean;
@@ -50,7 +51,7 @@ export function UserMenu({
               {avatarUrl ? (
                 <Image
                   src={avatarUrl}
-                  alt={userName || 'User avatar'}
+                  alt={userName ? `${userName}'s avatar` : 'User avatar'}
                   fill
                   sizes="64px"
                   className="object-cover"
@@ -68,7 +69,15 @@ export function UserMenu({
             </div>
           </div>
           <div className="text-center">
-            <div className="text-lg font-medium text-white">Hi, {userName || 'User'}!</div>
+            <div className="text-lg font-medium text-white">
+              {getUserGreeting(
+                {
+                  name: userName,
+                  email: userEmail,
+                },
+                'Hi',
+              )}
+            </div>
             <div className="text-sm text-gray-400">{userEmail}</div>
           </div>
 

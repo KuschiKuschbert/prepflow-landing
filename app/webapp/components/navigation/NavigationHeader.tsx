@@ -4,8 +4,9 @@ import { NavbarStats } from '@/components/Arcade/NavbarStats';
 import { Icon } from '@/components/ui/Icon';
 import { useUserAvatar } from '@/hooks/useUserAvatar';
 import { getAvatarUrl, getDefaultAvatar } from '@/lib/user-avatar';
-import { Search } from 'lucide-react';
+import { getUserDisplayName } from '@/lib/user-name';
 import { useUser } from '@auth0/nextjs-auth0/client';
+import { Search } from 'lucide-react';
 import { Breadcrumbs } from './NavigationHeader/components/Breadcrumbs';
 import { LogoSection } from './NavigationHeader/components/LogoSection';
 import { UserAvatarButton } from './NavigationHeader/components/UserAvatarButton';
@@ -67,7 +68,13 @@ export function NavigationHeader({
 }: NavigationHeaderProps) {
   const { user } = useUser();
   const userEmail = user?.email;
-  const userName = user?.name || userEmail?.split('@')[0];
+  // Use helper function to get display name with proper fallback chain
+  // Note: For full database name, components can fetch from /api/me, but for navigation header
+  // we use Auth0 session data for performance (helper handles fallback)
+  const userName = getUserDisplayName({
+    name: user?.name,
+    email: userEmail,
+  });
   const { avatar: userAvatar } = useUserAvatar();
 
   const { isVisible, isDesktop } = useHeaderVisibility();

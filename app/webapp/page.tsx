@@ -1,12 +1,12 @@
 'use client';
 
+import { DashboardSection } from '@/components/ui/DashboardSection';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { LayoutDashboard } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import { PageHeader } from './components/static/PageHeader';
-import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
-import { DashboardSection } from '@/components/ui/DashboardSection';
-import { LayoutDashboard } from 'lucide-react';
-import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 
 // Static imports - needed immediately
 import QuickActions from './components/QuickActions';
@@ -49,13 +49,22 @@ const KitchenCharts = dynamic(() => import('./components/KitchenCharts'), {
 
 export default function WebAppDashboard() {
   // ErrorBoundary is already in app/webapp/layout.tsx wrapping all children
+  const { user } = useUser();
+  const displayName = getUserFirstName({
+    name: user?.name,
+    email: user?.email,
+  });
+  const subtitle = displayName
+    ? `Welcome back, ${displayName}! Here's your kitchen overview`
+    : "Welcome back! Here's your kitchen overview";
+
   return (
     <ResponsivePageContainer fullWidth={true}>
       <div className="tablet:px-6 tablet:py-6 desktop:px-8 large-desktop:px-12 min-h-screen overflow-x-hidden bg-transparent px-4 py-4 xl:px-16 2xl:px-20">
         {/* Static Header - Renders Instantly */}
         <PageHeader
           title="Kitchen Management Dashboard"
-          subtitle="Welcome back! Here's your kitchen overview"
+          subtitle={subtitle}
           icon={LayoutDashboard}
         />
 

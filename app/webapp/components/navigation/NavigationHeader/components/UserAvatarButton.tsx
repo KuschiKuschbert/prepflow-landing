@@ -1,6 +1,4 @@
 import Image from 'next/image';
-import { Icon } from '@/components/ui/Icon';
-import { User } from 'lucide-react';
 
 interface UserAvatarButtonProps {
   buttonRef: React.RefObject<HTMLButtonElement | null>;
@@ -43,7 +41,7 @@ export function UserAvatarButton({
         {avatarUrl ? (
           <Image
             src={avatarUrl}
-            alt={userName || 'User avatar'}
+            alt={userName ? `${userName}'s avatar` : 'User avatar'}
             fill
             sizes="40px"
             className="object-cover"

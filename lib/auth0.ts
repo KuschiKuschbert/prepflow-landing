@@ -160,11 +160,12 @@ export const auth0 = new Auth0Client({
     // Sync user to database on first login or update last_login
     const email = session.user?.email;
     const emailVerified = session.user?.email_verified || false;
+    const name = session.user?.name; // Extract name from Auth0
 
     if (email) {
       try {
-        await syncUserFromAuth0(email, emailVerified);
-        logger.dev('[Auth0 SDK] User synced after callback:', { email });
+        await syncUserFromAuth0(email, emailVerified, name);
+        logger.dev('[Auth0 SDK] User synced after callback:', { email, hasName: !!name });
       } catch (error) {
         // Log error but don't fail authentication
         logger.error('[Auth0 SDK] Failed to sync user after callback:', {
