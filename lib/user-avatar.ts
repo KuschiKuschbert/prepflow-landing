@@ -23,10 +23,55 @@ export function getAvatarUrl(avatarId: string | null | undefined): string | null
  * Get default avatar (initials) for user.
  * Generates initials from user name or email.
  *
- * @param {string} userName - User name or email
+ * @param {string | { first_name?: string | null; last_name?: string | null; name?: string | null; email?: string | null }} userNameOrUser - User name string or user object with name fields
  * @returns {string} First letter(s) of name/email, uppercase
  */
-export function getDefaultAvatar(userName: string | null | undefined): string {
+export function getDefaultAvatar(
+  userNameOrUser:
+    | string
+    | null
+    | undefined
+    | {
+        first_name?: string | null;
+        last_name?: string | null;
+        name?: string | null;
+        email?: string | null;
+      },
+): string {
+  // Handle user object format (preferred - uses database first_name/last_name)
+  if (userNameOrUser && typeof userNameOrUser === 'object') {
+    const { first_name, last_name, name, email } = userNameOrUser;
+
+    // First choice: first_name + last_name (best initials)
+    if (first_name && last_name) {
+      return (first_name[0] + last_name[0]).toUpperCase();
+    }
+
+    // Second choice: first_name only
+    if (first_name) {
+      return first_name[0].toUpperCase();
+    }
+
+    // Third choice: full name string
+    if (name) {
+      const parts = name.trim().split(/\s+/);
+      if (parts.length >= 2) {
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      }
+      return name[0].toUpperCase();
+    }
+
+    // Fourth choice: email prefix
+    if (email) {
+      const emailPrefix = email.split('@')[0];
+      return emailPrefix[0].toUpperCase();
+    }
+
+    return 'U';
+  }
+
+  // Handle string format (backward compatibility)
+  const userName = userNameOrUser;
   if (!userName) return 'U';
   const parts = userName.trim().split(/\s+/);
   if (parts.length >= 2) {

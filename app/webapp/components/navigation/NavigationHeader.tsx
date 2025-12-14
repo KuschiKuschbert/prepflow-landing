@@ -3,6 +3,7 @@
 import { NavbarStats } from '@/components/Arcade/NavbarStats';
 import { Icon } from '@/components/ui/Icon';
 import { useUserAvatar } from '@/hooks/useUserAvatar';
+import { useUserProfile } from '@/hooks/useUserProfile';
 import { getAvatarUrl, getDefaultAvatar } from '@/lib/user-avatar';
 import { getUserDisplayName } from '@/lib/user-name';
 import { useUser } from '@auth0/nextjs-auth0/client';
@@ -68,10 +69,13 @@ export function NavigationHeader({
 }: NavigationHeaderProps) {
   const { user } = useUser();
   const userEmail = user?.email;
+  // Fetch user profile from database to get first_name and last_name
+  const { profile } = useUserProfile();
   // Use helper function to get display name with proper fallback chain
-  // Note: For full database name, components can fetch from /api/me, but for navigation header
-  // we use Auth0 session data for performance (helper handles fallback)
+  // Priority: Database first_name/last_name → Auth0 session name → Email prefix
   const userName = getUserDisplayName({
+    first_name: profile?.first_name,
+    last_name: profile?.last_name,
     name: user?.name,
     email: userEmail,
   });
@@ -94,7 +98,12 @@ export function NavigationHeader({
 
   // Get avatar URL or default initials
   const avatarUrl = getAvatarUrl(userAvatar);
-  const defaultInitials = getDefaultAvatar(userName || userEmail || '');
+  const defaultInitials = getDefaultAvatar({
+    first_name: profile?.first_name,
+    last_name: profile?.last_name,
+    name: user?.name,
+    email: userEmail,
+  });
 
   return (
     <header
@@ -179,6 +188,8 @@ export function NavigationHeader({
               avatarUrl={avatarUrl || null}
               userName={userName || null}
               userEmail={userEmail || undefined}
+              firstName={profile?.first_name || null}
+              lastName={profile?.last_name || null}
               defaultInitials={defaultInitials}
               onClose={() => setIsDesktopUserMenuOpen(false)}
             />

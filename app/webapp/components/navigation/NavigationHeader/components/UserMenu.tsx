@@ -14,6 +14,8 @@ interface UserMenuProps {
   avatarUrl: string | null;
   userName: string | null;
   userEmail: string | undefined;
+  firstName: string | null;
+  lastName: string | null;
   defaultInitials: string;
   onClose: () => void;
 }
@@ -28,6 +30,8 @@ export function UserMenu({
   avatarUrl,
   userName,
   userEmail,
+  firstName,
+  lastName,
   defaultInitials,
   onClose,
 }: UserMenuProps) {
@@ -57,6 +61,8 @@ export function UserMenu({
                   className="object-cover"
                   unoptimized
                 />
+              ) : defaultInitials && defaultInitials !== 'U' ? (
+                defaultInitials
               ) : userName ? (
                 userName[0].toUpperCase()
               ) : (
@@ -72,6 +78,8 @@ export function UserMenu({
             <div className="text-lg font-medium text-white">
               {getUserGreeting(
                 {
+                  first_name: firstName,
+                  last_name: lastName,
                   name: userName,
                   email: userEmail,
                 },
