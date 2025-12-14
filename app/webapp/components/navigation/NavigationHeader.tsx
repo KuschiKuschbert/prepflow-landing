@@ -72,7 +72,7 @@ export function NavigationHeader({
   const { user, error: userError, isLoading: userLoading } = useUser();
   // Handle nested user structure: user.user.email (Auth0 SDK sometimes returns nested structure)
   const userEmail = user?.email || (user as any)?.user?.email;
-  const userName = user?.name || (user as any)?.user?.name;
+  const auth0UserName = user?.name || (user as any)?.user?.name;
 
   // Log Auth0 useUser() result in NavigationHeader
   useEffect(() => {
@@ -122,7 +122,7 @@ export function NavigationHeader({
   const userNameInput = {
     first_name: profile?.first_name,
     last_name: profile?.last_name,
-    name: user?.name,
+    name: userName,
     email: userEmail,
   };
   logger.dev('[NavigationHeader] userName input object:', {
@@ -156,7 +156,7 @@ export function NavigationHeader({
   const defaultInitialsInput = {
     first_name: profile?.first_name,
     last_name: profile?.last_name,
-    name: user?.name,
+    name: userName,
     email: userEmail,
   };
   logger.dev('[NavigationHeader] defaultInitials input object:', {

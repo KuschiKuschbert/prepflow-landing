@@ -84,7 +84,7 @@ export function useUserProfile(): UseUserProfileReturn {
             last_name: null,
             display_name: null,
             first_name_display: null,
-            name: user?.name || null,
+            name: userName || null,
           }
         : null),
   );
@@ -161,7 +161,7 @@ export function useUserProfile(): UseUserProfileReturn {
             last_name: null,
             display_name: null,
             first_name_display: null,
-            name: user?.name || null,
+            name: userName || null,
           });
           setLoading(false);
           return;
@@ -207,7 +207,7 @@ export function useUserProfile(): UseUserProfileReturn {
               last_name: null,
               display_name: null,
               first_name_display: null,
-              name: user?.name || null,
+              name: userName || null,
             });
             setLoading(false);
             return;
@@ -249,7 +249,7 @@ export function useUserProfile(): UseUserProfileReturn {
             last_name: null,
             display_name: null,
             first_name_display: null,
-            name: user?.name || null,
+            name: userName || null,
           });
         }
       } catch (error) {
