@@ -72,7 +72,8 @@ export function useUserProfile(): UseUserProfileReturn {
           }
         : null),
   );
-  const [loading, setLoading] = useState(!cachedProfile);
+  // Use same validation variable as fetch effect to prevent unnecessary state updates
+  const [loading, setLoading] = useState(!validCachedProfile);
 
   logger.dev('[useUserProfile] Initial state set:', {
     profile,
@@ -128,7 +129,7 @@ export function useUserProfile(): UseUserProfileReturn {
           // Not authenticated, use session data only
           logger.dev('[useUserProfile] User not authenticated (401), using session data');
           setProfile({
-            email: userEmail,
+            email: userEmail || '',
             first_name: null,
             last_name: null,
             display_name: null,
@@ -145,7 +146,7 @@ export function useUserProfile(): UseUserProfileReturn {
             status: response.status,
           });
           setProfile({
-            email: userEmail,
+            email: userEmail || '',
             first_name: null,
             last_name: null,
             display_name: null,
@@ -230,8 +231,9 @@ export function useUserProfile(): UseUserProfileReturn {
         logger.dev('[useUserProfile] Network error, using session data:', {
           error: error instanceof Error ? error.message : String(error),
         });
+        // Ensure email has fallback to prevent invalid profile objects
         setProfile({
-          email: userEmail,
+          email: userEmail || '',
           first_name: null,
           last_name: null,
           display_name: null,
