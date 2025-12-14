@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
         email_verified: authUser.email_verified || false,
       },
     });
-  } catch (error) {
+  } catch {
     // If there's an error, return 401 (not authenticated)
     return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
   }
