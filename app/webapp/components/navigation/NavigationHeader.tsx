@@ -84,7 +84,7 @@ export function NavigationHeader({
       userLoading,
       userKeys: user ? Object.keys(user) : [],
       userEmailValue: user?.email,
-      userNameValue: user?.name,
+      userNameValue: auth0UserName,
     });
   }, [user, userEmail, userError, userLoading]);
 
@@ -122,14 +122,14 @@ export function NavigationHeader({
   const userNameInput = {
     first_name: profile?.first_name,
     last_name: profile?.last_name,
-    name: userName,
+    name: auth0UserName,
     email: userEmail,
   };
   logger.dev('[NavigationHeader] userName input object:', {
     userNameInput,
     profileFirst: profile?.first_name,
     profileLast: profile?.last_name,
-    auth0Name: user?.name,
+    auth0Name: auth0UserName,
     userEmail,
   });
 
@@ -163,7 +163,7 @@ export function NavigationHeader({
     defaultInitialsInput,
     profileFirst: profile?.first_name,
     profileLast: profile?.last_name,
-    auth0Name: user?.name,
+    auth0Name: auth0UserName,
     userEmail,
   });
 
@@ -176,7 +176,7 @@ export function NavigationHeader({
       defaultInitials,
       profileFirst: profile?.first_name,
       profileLast: profile?.last_name,
-      auth0Name: user?.name,
+      auth0Name: auth0UserName,
       userEmail,
       profileEmail: profile?.email,
       profileDisplayName: profile?.display_name,
