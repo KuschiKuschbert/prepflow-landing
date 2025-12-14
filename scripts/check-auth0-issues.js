@@ -205,13 +205,16 @@ function checkLogoutUrlValidation() {
 function checkEnvVarUsage() {
   log('\n📋 Checking environment variable usage...', 'info');
 
+  // Prefer AUTH0_* variables, but check NEXTAUTH_* as fallback
   const requiredVars = [
     'AUTH0_ISSUER_BASE_URL',
     'AUTH0_CLIENT_ID',
     'AUTH0_CLIENT_SECRET',
-    'NEXTAUTH_URL',
-    'NEXTAUTH_SECRET',
-  ];
+    // At least one base URL must be set
+    process.env.AUTH0_BASE_URL ? 'AUTH0_BASE_URL' : 'NEXTAUTH_URL',
+    // At least one secret must be set
+    process.env.AUTH0_SECRET ? 'AUTH0_SECRET' : 'NEXTAUTH_SECRET',
+  ].filter(Boolean);
 
   const missing = requiredVars.filter(key => !process.env[key]);
 
@@ -222,13 +225,26 @@ function checkEnvVarUsage() {
     log('  ✅ All required environment variables are set', 'success');
   }
 
+  // Warn if using deprecated NEXTAUTH_* variables
+  if (process.env.NEXTAUTH_URL && !process.env.AUTH0_BASE_URL) {
+    log('  ⚠️  NEXTAUTH_URL is deprecated - use AUTH0_BASE_URL instead', 'warning');
+    issues.warnings.push('NEXTAUTH_URL is deprecated, use AUTH0_BASE_URL');
+  }
+
+  if (process.env.NEXTAUTH_SECRET && !process.env.AUTH0_SECRET) {
+    log('  ⚠️  NEXTAUTH_SECRET is deprecated - use AUTH0_SECRET instead', 'warning');
+    issues.warnings.push('NEXTAUTH_SECRET is deprecated, use AUTH0_SECRET');
+  }
+
   // Check for placeholder values
+  const secret = process.env.AUTH0_SECRET || process.env.NEXTAUTH_SECRET;
   if (
-    process.env.NEXTAUTH_SECRET === 'dev-secret-change-me' ||
-    process.env.NEXTAUTH_SECRET === 'your-secret-here'
+    secret === 'dev-secret-change-me' ||
+    secret === 'your-secret-here' ||
+    secret === 'build-time-placeholder-secret-that-will-be-validated-at-runtime'
   ) {
-    log('  ❌ NEXTAUTH_SECRET is using default/placeholder value', 'error');
-    issues.errors.push('NEXTAUTH_SECRET is using default value');
+    log('  ❌ Auth secret is using default/placeholder value', 'error');
+    issues.errors.push('Auth secret is using default value');
   }
 
   if (
@@ -247,9 +263,8 @@ function checkErrorHandling() {
   log('\n📋 Checking error handling...', 'info');
 
   const files = [
-    'lib/auth-options.ts',
+    'lib/auth0.ts',
     'app/api/auth/logout/route.ts',
-    'app/api/auth/signin/page.tsx',
     'app/api/auth/error/page.tsx',
   ];
 
@@ -300,15 +315,20 @@ function checkErrorHandling() {
 function checkCommonIssues() {
   log('\n📋 Checking for common Auth0 issues...', 'info');
 
-  // Check if NEXTAUTH_URL matches expected format
-  if (process.env.NEXTAUTH_URL) {
-    const url = new URL(process.env.NEXTAUTH_URL);
-    if (url.hostname.includes('prepflow.org') && !url.hostname.startsWith('www.')) {
-      log(
-        '  ⚠️  NEXTAUTH_URL uses non-www domain - ensure both www and non-www are in Auth0',
-        'warning',
-      );
-      issues.warnings.push('NEXTAUTH_URL uses non-www - ensure both domains configured in Auth0');
+  // Check if base URL matches expected format
+  const baseUrl = process.env.AUTH0_BASE_URL || process.env.NEXTAUTH_URL;
+  if (baseUrl) {
+    try {
+      const url = new URL(baseUrl);
+      if (url.hostname.includes('prepflow.org') && !url.hostname.startsWith('www.')) {
+        log(
+          '  ⚠️  Base URL uses non-www domain - ensure both www and non-www are in Auth0',
+          'warning',
+        );
+        issues.warnings.push('Base URL uses non-www - ensure both domains configured in Auth0');
+      }
+    } catch (error) {
+      log(`  ⚠️  Could not parse base URL: ${error.message}`, 'warning');
     }
   }
 

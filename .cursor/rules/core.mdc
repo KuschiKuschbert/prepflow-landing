@@ -5,38 +5,45 @@ alwaysApply: true
 
 **📚 Complete Reference:** See `docs/AUTH0_STRIPE_REFERENCE.md` for comprehensive Auth0 and Stripe configuration, setup, testing, and troubleshooting guide.
 
-### Auth (NextAuth + Auth0)
+### Auth (Auth0 SDK)
 
 **MANDATORY Environment Variables:**
+- `AUTH0_SECRET` - Generate with: `openssl rand -hex 32` (minimum 32 characters)
+- `AUTH0_BASE_URL` - Application URL (`http://localhost:3000` for dev, `https://www.prepflow.org` for prod)
 - `AUTH0_ISSUER_BASE_URL` - Auth0 tenant URL (e.g., `https://dev-xxx.us.auth0.com`)
 - `AUTH0_CLIENT_ID` - Auth0 application client ID
 - `AUTH0_CLIENT_SECRET` - Auth0 application client secret
-- `NEXTAUTH_SECRET` - Generate with: `openssl rand -base64 32` (minimum 32 characters)
-- `NEXTAUTH_URL` - Application URL (`http://localhost:3000` for dev, `https://yourdomain.com` for prod)
-- `NEXTAUTH_SESSION_MAX_AGE` - Session timeout in seconds (default: 14400 = 4 hours)
+- `AUTH0_DOMAIN` - Auth0 domain (optional, extracted from AUTH0_ISSUER_BASE_URL if not set)
+
+**Deprecated (Backward Compatibility):**
+- `NEXTAUTH_URL` - Use `AUTH0_BASE_URL` instead (kept as fallback during migration)
+- `NEXTAUTH_SECRET` - Use `AUTH0_SECRET` instead (no longer used)
 
 **MANDATORY Auth0 Dashboard Configuration:**
-- **Allowed Callback URLs:** Must include `/api/auth/callback/auth0` for all environments
+- **Allowed Callback URLs:** Must include `/api/auth/callback` for all environments (Auth0 SDK uses `/api/auth/callback`, not `/api/auth/callback/auth0`)
 - **Allowed Logout URLs:** Must include exact logout URLs (with and without trailing slash) - **CRITICAL** or logout will fail
 - **Allowed Web Origins:** Must include application origins for CORS
 
 **Implementation Files:**
-- `lib/auth-options.ts` - NextAuth configuration with Auth0 provider
+- `lib/auth0.ts` - Auth0 SDK client instance and configuration
 - `lib/auth-user-sync.ts` - User sync on first login (creates user record, updates last_login)
 - `lib/auth0-management.ts` - Management API client for role extraction
-- `app/api/auth/[...nextauth]/route.ts` - NextAuth route handler
-- `middleware.ts` - Allowlist enforcement
+- `lib/auth0-api-helpers.ts` - API route helpers for authentication
+- `lib/auth0-middleware.ts` - Middleware helpers for authentication
+- `middleware.ts` - Auth0 SDK middleware integration and allowlist enforcement
 
 **MANDATORY Best Practices:**
 - ✅ User creation on first login (implemented in `lib/auth-user-sync.ts`)
-- ✅ JWT session strategy (stateless, 4-hour timeout)
+- ✅ Session management via Auth0 SDK (4-hour inactivity timeout, 24-hour absolute timeout)
 - ✅ Minimal scopes: `openid profile email` only
 - ✅ Role extraction with fallbacks (token → Management API)
 - ✅ Email verification sync from Auth0
 - ✅ Never downgrade email verification status
 
 **Routes:**
-- `/api/auth/[...nextauth]` - NextAuth authentication handlers
+- `/api/auth/login` - Auth0 SDK login handler
+- `/api/auth/callback` - Auth0 SDK callback handler
+- `/api/auth/logout` - Auth0 SDK logout handler
 - `/api/me` - Current user information
 - Middleware enforces allowlist on `/webapp/**` and `/api/**` (except auth routes)
 

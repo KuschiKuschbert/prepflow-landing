@@ -41,10 +41,10 @@ async function verifyProductionAuth0() {
     console.log('1️⃣ Checking basic diagnostic endpoint...');
     const basic = await checkEndpoint(`${PRODUCTION_URL}/api/debug/auth`);
     console.log('   ✅ Basic Diagnostic Results:');
-    console.log(`      - NEXTAUTH_URL: ${basic.nextAuthUrl}`);
+    console.log(`      - Base URL: ${basic.baseUrl || basic.nextAuthUrl || 'NOT SET'}`);
     console.log(`      - Is Correct Production URL: ${basic.isCorrectProductionUrl}`);
     console.log(`      - Auth0 Configured: ${basic.auth0Configured}`);
-    console.log(`      - NextAuth Secret Set: ${basic.nextAuthSecretSet}`);
+    console.log(`      - Auth Secret Set: ${basic.authSecretSet || basic.nextAuthSecretSet || false}`);
     console.log(
       `      - Issues: ${basic.issues.length === 0 ? 'None' : basic.issues.join(', ')}\n`,
     );

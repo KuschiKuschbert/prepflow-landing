@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PrepFlow Background Generator</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        position: relative;
+        margin: 0 auto;
+      }
+
+      /* Base gradient */
+      .base-gradient {
+        position: fixed;
+        inset: 0;
+        z-index: -20;
+        background: linear-gradient(180deg, rgba(10, 10, 10, 1) 0%, rgba(8, 8, 10, 1) 100%);
+      }
+
+      /* Mouse spotlight (fixed position for static image) */
+      .spotlight {
+        position: fixed;
+        inset: 0;
+        z-index: -10;
+        pointer-events: none;
+        background: radial-gradient(
+          600px circle at 960px 540px,
+          rgba(41, 231, 205, 0.06),
+          transparent 40%
+        );
+      }
+
+      /* Logo watermarks */
+      .logo-watermark {
+        position: fixed;
+        pointer-events: none;
+        z-index: -10;
+        opacity: 0.02;
+        width: 300px;
+        height: 300px;
+      }
+
+      /* Tron-like neon grid */
+      .grid {
+        position: fixed;
+        inset: 0;
+        z-index: -10;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(41, 231, 205, 0.08) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(59, 130, 246, 0.06) 1px, transparent 1px);
+        background-size: 48px 48px;
+        background-position:
+          0px 0px,
+          0px 0px;
+        mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+      }
+
+      /* Corner glows */
+      .corner-glow-cyan {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 420px;
+        height: 420px;
+        z-index: -10;
+        pointer-events: none;
+        background: radial-gradient(closest-side, rgba(41, 231, 205, 0.18), transparent 70%);
+      }
+
+      .corner-glow-magenta {
+        position: fixed;
+        right: 0;
+        top: 120px;
+        width: 400px;
+        height: 400px;
+        z-index: -10;
+        pointer-events: none;
+        background: radial-gradient(closest-side, rgba(217, 37, 199, 0.16), transparent 70%);
+      }
+
+      /* Fine noise */
+      .noise {
+        position: fixed;
+        inset: 0;
+        z-index: -10;
+        pointer-events: none;
+        opacity: 0.02;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter><rect width="64" height="64" filter="url(%23n)" opacity="0.5"/></svg>');
+        background-size: 256px 256px;
+      }
+
+      /* Controls */
+      .controls {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+        background: rgba(31, 31, 31, 0.95);
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid rgba(42, 42, 42, 0.8);
+      }
+
+      .controls button {
+        background: linear-gradient(135deg, #29e7cd 0%, #d925c7 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      .controls button:hover {
+        transform: scale(1.05);
+      }
+
+      .controls p {
+        color: rgba(255, 255, 255, 0.7);
+        margin-top: 12px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Base gradient -->
+    <div class="base-gradient"></div>
+
+    <!-- Spotlight (fixed position) -->
+    <div class="spotlight"></div>
+
+    <!-- Logo watermarks -->
+    <img
+      src="/images/prepflow-logo.png"
+      alt=""
+      class="logo-watermark"
+      style="left: 10%; top: 15%; transform: rotate(0deg) scale(0.8)"
+      onerror="this.style.display = 'none'"
+    />
+    <img
+      src="/images/prepflow-logo.png"
+      alt=""
+      class="logo-watermark"
+      style="left: 40%; top: 40%; transform: rotate(15deg) scale(0.9)"
+      onerror="this.style.display = 'none'"
+    />
+    <img
+      src="/images/prepflow-logo.png"
+      alt=""
+      class="logo-watermark"
+      style="left: 70%; top: 65%; transform: rotate(30deg) scale(1)"
+      onerror="this.style.display = 'none'"
+    />
+
+    <!-- Grid -->
+    <div class="grid"></div>
+
+    <!-- Corner glows -->
+    <div class="corner-glow-cyan"></div>
+    <div class="corner-glow-magenta"></div>
+
+    <!-- Noise -->
+    <div class="noise"></div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button onclick="downloadBackground()">Download Background PNG</button>
+      <p>Click to download a 1920x1080px PNG of the background</p>
+    </div>
+
+    <script>
+      function downloadBackground() {
+        // Use html2canvas to capture the background
+        if (typeof html2canvas === 'undefined') {
+          // Load html2canvas library
+          const script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+          script.onload = () => captureAndDownload();
+          document.head.appendChild(script);
+        } else {
+          captureAndDownload();
+        }
+      }
+
+      function captureAndDownload() {
+        html2canvas(document.body, {
+          width: 1920,
+          height: 1080,
+          scale: 2, // Higher quality
+          useCORS: true,
+          backgroundColor: '#0a0a0a',
+        }).then(canvas => {
+          canvas.toBlob(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'prepflow-background.png';
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('✅ Background downloaded!');
+          }, 'image/png');
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,6 +1,6 @@
 # Auth0 Connection Name Guide
 
-**Date:** 2025-12-13  
+**Date:** 2025-12-13
 **Issue:** Apple and Microsoft login flows return "connection not found" error
 
 ## Problem

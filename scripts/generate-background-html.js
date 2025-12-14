@@ -34,21 +34,21 @@ function generateBackgroundHTML() {
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     html, body {
       width: 1920px;
       height: 1080px;
       overflow: hidden;
       position: relative;
     }
-    
+
     .base-gradient {
       position: absolute;
       inset: 0;
       z-index: 1;
       background: linear-gradient(180deg, rgba(10,10,10,1) 0%, rgba(8,8,10,1) 100%);
     }
-    
+
     .spotlight {
       position: absolute;
       inset: 0;
@@ -56,7 +56,7 @@ function generateBackgroundHTML() {
       pointer-events: none;
       background: radial-gradient(600px circle at ${mouseX}px ${mouseY}px, rgba(41, 231, 205, 0.06), transparent 40%);
     }
-    
+
     .logo-watermark {
       position: absolute;
       pointer-events: none;
@@ -65,13 +65,13 @@ function generateBackgroundHTML() {
       width: 300px;
       height: 300px;
     }
-    
+
     .grid {
       position: absolute;
       inset: 0;
       z-index: 4;
       pointer-events: none;
-      background-image: 
+      background-image:
         linear-gradient(rgba(41,231,205,${gridCyanOpacity}) 1px, transparent 1px),
         linear-gradient(90deg, rgba(59,130,246,${gridBlueOpacity}) 1px, transparent 1px);
       background-size: ${gridSizePx}px ${gridSizePx}px;
@@ -79,7 +79,7 @@ function generateBackgroundHTML() {
       mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
       -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
     }
-    
+
     .corner-glow-cyan {
       position: absolute;
       left: 0;
@@ -90,7 +90,7 @@ function generateBackgroundHTML() {
       pointer-events: none;
       background: radial-gradient(closest-side, rgba(41,231,205,${cornerCyanOpacity}), transparent 70%);
     }
-    
+
     .corner-glow-magenta {
       position: absolute;
       right: 0;
@@ -101,7 +101,7 @@ function generateBackgroundHTML() {
       pointer-events: none;
       background: radial-gradient(closest-side, rgba(217,37,199,${cornerMagentaOpacity}), transparent 70%);
     }
-    
+
     .noise {
       position: absolute;
       inset: 0;

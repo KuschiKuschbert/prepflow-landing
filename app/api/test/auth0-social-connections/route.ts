@@ -4,13 +4,13 @@
  *
  * @returns {Promise<NextResponse>} JSON response with social connection status
  */
-import { NextResponse } from 'next/server';
 import {
-  getSocialConnections,
-  verifyGoogleConnection,
-  verifyCallbackUrls,
+    getSocialConnections,
+    verifyCallbackUrls,
+    verifyGoogleConnection,
 } from '@/lib/auth0-management';
 import { logger } from '@/lib/logger';
+import { NextResponse } from 'next/server';
 
 /**
  * Test endpoint to check social connection status and configuration.
@@ -19,13 +19,15 @@ import { logger } from '@/lib/logger';
  */
 export async function GET() {
   try {
-    const nextAuthUrl = process.env.NEXTAUTH_URL;
-    const expectedCallbackUrls = nextAuthUrl
+    // Use AUTH0_BASE_URL (Auth0 SDK) - test scripts keep NEXTAUTH_URL fallback for diagnostics
+    const baseUrl = process.env.AUTH0_BASE_URL || process.env.NEXTAUTH_URL;
+    // Auth0 SDK uses /api/auth/callback (not /api/auth/callback/auth0)
+    const expectedCallbackUrls = baseUrl
       ? [
-          `${nextAuthUrl}/api/auth/callback/auth0`,
-          ...(nextAuthUrl.includes('www.')
-            ? [`${nextAuthUrl.replace('www.', '')}/api/auth/callback/auth0`]
-            : [`${nextAuthUrl.replace(/^https?:\/\//, 'https://www.')}/api/auth/callback/auth0`]),
+          `${baseUrl}/api/auth/callback`,
+          ...(baseUrl.includes('www.')
+            ? [`${baseUrl.replace('www.', '')}/api/auth/callback`]
+            : [`${baseUrl.replace(/^https?:\/\//, 'https://www.')}/api/auth/callback`]),
         ]
       : [];
 

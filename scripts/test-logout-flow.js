@@ -2,13 +2,14 @@
 
 /**
  * Logout Flow Verification Test
- * Tests that logout properly clears both NextAuth and Auth0 sessions
+ * Tests that logout properly clears Auth0 SDK sessions
  */
 
 const https = require('https');
 const http = require('http');
 
-const BASE_URL = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+// Prefer AUTH0_BASE_URL, fall back to NEXTAUTH_URL for backward compatibility
+const BASE_URL = process.env.AUTH0_BASE_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000';
 
 const testResults = {
   passed: [],
@@ -231,18 +232,19 @@ async function testAuth0Configuration() {
 
   const auth0Issuer = process.env.AUTH0_ISSUER_BASE_URL;
   const clientId = process.env.AUTH0_CLIENT_ID;
-  const nextAuthUrl = process.env.NEXTAUTH_URL || BASE_URL;
+  // Prefer AUTH0_BASE_URL, fall back to NEXTAUTH_URL for backward compatibility
+  const baseUrl = process.env.AUTH0_BASE_URL || process.env.NEXTAUTH_URL || BASE_URL;
 
   if (auth0Issuer && clientId) {
     log('Auth0 configuration: Present', 'success');
 
     // Construct expected logout URL
-    const expectedLogoutUrl = `${auth0Issuer}/v2/logout?client_id=${encodeURIComponent(clientId)}&returnTo=${encodeURIComponent(nextAuthUrl)}`;
+    const expectedLogoutUrl = `${auth0Issuer}/v2/logout?client_id=${encodeURIComponent(clientId)}&returnTo=${encodeURIComponent(baseUrl)}`;
     log(`Expected Auth0 logout URL: ${expectedLogoutUrl}`, 'info');
     log('Verify this URL pattern is whitelisted in Auth0 dashboard:', 'info');
     log('  - Go to: https://manage.auth0.com', 'info');
     log('  - Applications > Your App > Settings', 'info');
-    log(`  - "Allowed Logout URLs" should include: ${nextAuthUrl}`, 'info');
+    log(`  - "Allowed Logout URLs" should include: ${baseUrl}`, 'info');
   } else {
     log('Auth0 configuration: Missing (logout may not work)', 'error');
   }

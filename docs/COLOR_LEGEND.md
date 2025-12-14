@@ -1,7 +1,7 @@
 # PrepFlow Color Legend
 
-**Last Updated:** December 2024  
-**Design System:** Cyber Carrot  
+**Last Updated:** December 2024
+**Design System:** Cyber Carrot
 **Use Across:** Web, Mobile, Marketing Materials, Social Media, Documentation
 
 ---
@@ -475,5 +475,5 @@ export const COLORS = {
 
 ---
 
-**Last Updated:** December 2024  
+**Last Updated:** December 2024
 **Maintained By:** PrepFlow Design Team

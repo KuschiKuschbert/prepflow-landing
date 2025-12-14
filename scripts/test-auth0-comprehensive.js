@@ -8,7 +8,8 @@
 const https = require('https');
 const http = require('http');
 
-const BASE_URL = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+// Prefer AUTH0_BASE_URL, fall back to NEXTAUTH_URL for backward compatibility
+const BASE_URL = process.env.AUTH0_BASE_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000';
 
 const testResults = {
   passed: [],
@@ -105,6 +106,9 @@ async function testAuth0Configuration() {
     AUTH0_ISSUER_BASE_URL: process.env.AUTH0_ISSUER_BASE_URL,
     AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
     AUTH0_CLIENT_SECRET: process.env.AUTH0_CLIENT_SECRET,
+    AUTH0_SECRET: process.env.AUTH0_SECRET,
+    AUTH0_BASE_URL: process.env.AUTH0_BASE_URL,
+    // Deprecated - kept for backward compatibility
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   };
@@ -113,11 +117,24 @@ async function testAuth0Configuration() {
   for (const [key, value] of Object.entries(requiredVars)) {
     if (value) {
       const masked = key.includes('SECRET') ? `${value.substring(0, 8)}...` : value;
-      log(`${key}: ${masked}`, 'success', true);
+      const deprecated = key.startsWith('NEXTAUTH_') ? ' (deprecated)' : '';
+      log(`${key}: ${masked}${deprecated}`, deprecated ? 'warning' : 'success', true);
+    } else if (key.startsWith('NEXTAUTH_')) {
+      // NEXTAUTH_* vars are optional (deprecated)
+      log(`${key}: Not set (using AUTH0_* equivalent)`, 'info', true);
     } else {
       log(`${key}: MISSING`, 'error', true);
       allPresent = false;
     }
+  }
+
+  // Warn if using deprecated vars
+  if (requiredVars.NEXTAUTH_URL && !requiredVars.AUTH0_BASE_URL) {
+    log('⚠️  NEXTAUTH_URL is deprecated - use AUTH0_BASE_URL instead', 'warning');
+  }
+
+  if (requiredVars.NEXTAUTH_SECRET && !requiredVars.AUTH0_SECRET) {
+    log('⚠️  NEXTAUTH_SECRET is deprecated - use AUTH0_SECRET instead', 'warning');
   }
 
   // Validate format
@@ -128,12 +145,14 @@ async function testAuth0Configuration() {
     log('AUTH0_ISSUER_BASE_URL should start with https://', 'warning');
   }
 
-  if (requiredVars.NEXTAUTH_URL && !requiredVars.NEXTAUTH_URL.startsWith('http')) {
-    log('NEXTAUTH_URL should be a valid URL', 'warning');
+  const baseUrl = requiredVars.AUTH0_BASE_URL || requiredVars.NEXTAUTH_URL;
+  if (baseUrl && !baseUrl.startsWith('http')) {
+    log('Base URL should be a valid URL', 'warning');
   }
 
-  if (requiredVars.NEXTAUTH_SECRET && requiredVars.NEXTAUTH_SECRET.length < 32) {
-    log('NEXTAUTH_SECRET should be at least 32 characters', 'warning');
+  const secret = requiredVars.AUTH0_SECRET || requiredVars.NEXTAUTH_SECRET;
+  if (secret && secret.length < 32) {
+    log('Auth secret should be at least 32 characters', 'warning');
   }
 
   console.log('');
@@ -201,15 +220,18 @@ async function testAuth0Callback() {
   log('Testing Auth0 Callback Configuration...', 'info');
   console.log('');
 
-  const callbackUrl = `${process.env.NEXTAUTH_URL || BASE_URL}/api/auth/callback/auth0`;
+  // Auth0 SDK uses /api/auth/callback (not /api/auth/callback/auth0)
+  const baseUrl = process.env.AUTH0_BASE_URL || process.env.NEXTAUTH_URL || BASE_URL;
+  const callbackUrl = `${baseUrl}/api/auth/callback`;
 
   log(`Expected callback URL: ${callbackUrl}`, 'info');
   log('Verify this URL is configured in Auth0 Dashboard:', 'info');
   log('  - Go to: https://manage.auth0.com/dashboard', 'info');
   log('  - Applications > Your App > Settings', 'info');
   log(`  - Allowed Callback URLs should include: ${callbackUrl}`, 'info');
-  log('  - Allowed Logout URLs should include: ${process.env.NEXTAUTH_URL || BASE_URL}', 'info');
-  log('  - Allowed Web Origins should include: ${process.env.NEXTAUTH_URL || BASE_URL}', 'info');
+  const baseUrlForLogs = process.env.AUTH0_BASE_URL || process.env.NEXTAUTH_URL || BASE_URL;
+  log(`  - Allowed Logout URLs should include: ${baseUrlForLogs}`, 'info');
+  log(`  - Allowed Web Origins should include: ${baseUrlForLogs}`, 'info');
   console.log('');
 
   // Test callback endpoint exists
@@ -339,13 +361,17 @@ async function testSecurity() {
   log('Testing Security Configuration...', 'info');
   console.log('');
 
-  // Check NEXTAUTH_SECRET strength
-  const secret = process.env.NEXTAUTH_SECRET;
+  // Check Auth secret strength (prefer AUTH0_SECRET)
+  const secret = process.env.AUTH0_SECRET || process.env.NEXTAUTH_SECRET;
+  const secretVar = process.env.AUTH0_SECRET ? 'AUTH0_SECRET' : 'NEXTAUTH_SECRET';
   if (secret) {
     if (secret.length >= 32) {
-      log(`NEXTAUTH_SECRET: Strong (${secret.length} chars)`, 'success', true);
+      log(`${secretVar}: Strong (${secret.length} chars)`, 'success', true);
     } else {
-      log(`NEXTAUTH_SECRET: Weak (${secret.length} chars, should be >= 32)`, 'warning');
+      log(`${secretVar}: Weak (${secret.length} chars, should be >= 32)`, 'warning');
+    }
+    if (process.env.NEXTAUTH_SECRET && !process.env.AUTH0_SECRET) {
+      log('⚠️  NEXTAUTH_SECRET is deprecated - use AUTH0_SECRET instead', 'warning');
     }
   }
 
@@ -357,14 +383,18 @@ async function testSecurity() {
     log('AUTH0_CLIENT_SECRET: MISSING', 'error', true);
   }
 
-  // Verify HTTPS for production
-  const nextAuthUrl = process.env.NEXTAUTH_URL;
-  if (nextAuthUrl && nextAuthUrl.includes('localhost')) {
-    log('NEXTAUTH_URL: Using localhost (development)', 'info');
-  } else if (nextAuthUrl && nextAuthUrl.startsWith('https://')) {
-    log('NEXTAUTH_URL: Using HTTPS (production ready)', 'success', true);
-  } else if (nextAuthUrl && nextAuthUrl.startsWith('http://')) {
-    log('NEXTAUTH_URL: Using HTTP (not secure for production)', 'warning');
+  // Verify HTTPS for production (prefer AUTH0_BASE_URL)
+  const baseUrlForCheck = process.env.AUTH0_BASE_URL || process.env.NEXTAUTH_URL;
+  const baseUrlVar = process.env.AUTH0_BASE_URL ? 'AUTH0_BASE_URL' : 'NEXTAUTH_URL';
+  if (baseUrlForCheck && baseUrlForCheck.includes('localhost')) {
+    log(`${baseUrlVar}: Using localhost (development)`, 'info');
+  } else if (baseUrlForCheck && baseUrlForCheck.startsWith('https://')) {
+    log(`${baseUrlVar}: Using HTTPS (production ready)`, 'success', true);
+  } else if (baseUrlForCheck && baseUrlForCheck.startsWith('http://')) {
+    log(`${baseUrlVar}: Using HTTP (not secure for production)`, 'warning');
+  }
+  if (process.env.NEXTAUTH_URL && !process.env.AUTH0_BASE_URL) {
+    log('⚠️  NEXTAUTH_URL is deprecated - use AUTH0_BASE_URL instead', 'warning');
   }
 
   console.log('');

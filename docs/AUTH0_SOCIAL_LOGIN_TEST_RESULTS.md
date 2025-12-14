@@ -1,7 +1,7 @@
 # Auth0 Social Login Test Results
 
-**Date:** 2025-12-13  
-**Test Environment:** Production (www.prepflow.org)  
+**Date:** 2025-12-13
+**Test Environment:** Production (www.prepflow.org)
 **Status:** ✅ **Apple & Google Working** | ⚠️ **Microsoft Needs Configuration**
 
 ## Test Summary
@@ -101,8 +101,8 @@ window.location.href = '/api/auth/login?connection=Microsoft&returnTo=/webapp';
 
 ## Test Results
 
-**Date:** 2025-12-13  
-**Tester:** Browser automation  
+**Date:** 2025-12-13
+**Tester:** Browser automation
 **Environment:** Production (www.prepflow.org)
 
 ### Apple Login Flow

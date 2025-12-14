@@ -86,19 +86,32 @@ function validateAuth0Config() {
     AUTH0_ISSUER_BASE_URL: process.env.AUTH0_ISSUER_BASE_URL,
     AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
     AUTH0_CLIENT_SECRET: process.env.AUTH0_CLIENT_SECRET,
+    AUTH0_SECRET: process.env.AUTH0_SECRET,
+    AUTH0_BASE_URL: process.env.AUTH0_BASE_URL,
+    // Deprecated - kept for backward compatibility
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_SESSION_MAX_AGE: process.env.NEXTAUTH_SESSION_MAX_AGE,
   };
 
-  // Check required variables
+  // Check required variables (prefer AUTH0_* over NEXTAUTH_*)
   const required = [
     'AUTH0_ISSUER_BASE_URL',
     'AUTH0_CLIENT_ID',
     'AUTH0_CLIENT_SECRET',
-    'NEXTAUTH_URL',
-    'NEXTAUTH_SECRET',
+    // AUTH0_SECRET or NEXTAUTH_SECRET (at least one)
+    // AUTH0_BASE_URL or NEXTAUTH_URL (at least one)
   ];
+
+  // Check if at least one base URL is set
+  if (!config.AUTH0_BASE_URL && !config.NEXTAUTH_URL) {
+    required.push('AUTH0_BASE_URL or NEXTAUTH_URL');
+  }
+
+  // Check if at least one secret is set
+  if (!config.AUTH0_SECRET && !config.NEXTAUTH_SECRET) {
+    required.push('AUTH0_SECRET or NEXTAUTH_SECRET');
+  }
   const missing = required.filter(key => !config[key]);
 
   if (missing.length > 0) {
@@ -143,64 +156,81 @@ function validateAuth0Config() {
     }
   }
 
-  // Validate NEXTAUTH_URL
-  if (config.NEXTAUTH_URL) {
-    log('\n📋 Validating NEXTAUTH_URL...', 'info');
+  // Validate AUTH0_BASE_URL (preferred)
+  const baseUrl = config.AUTH0_BASE_URL || config.NEXTAUTH_URL;
+  const baseUrlVar = config.AUTH0_BASE_URL ? 'AUTH0_BASE_URL' : 'NEXTAUTH_URL';
 
-    if (!config.NEXTAUTH_URL.startsWith('http://') && !config.NEXTAUTH_URL.startsWith('https://')) {
+  if (config.NEXTAUTH_URL && !config.AUTH0_BASE_URL) {
+    log('\n⚠️  NEXTAUTH_URL is deprecated - use AUTH0_BASE_URL instead', 'warning');
+    issues.warnings.push('NEXTAUTH_URL is deprecated, use AUTH0_BASE_URL');
+  }
+
+  if (baseUrl) {
+    log(`\n📋 Validating ${baseUrlVar}...`, 'info');
+
+    if (!baseUrl.startsWith('http://') && !baseUrl.startsWith('https://')) {
       log('  ❌ Missing protocol (should start with http:// or https://)', 'error');
-      issues.errors.push('NEXTAUTH_URL missing protocol');
+      issues.errors.push(`${baseUrlVar} missing protocol`);
     } else {
       log('  ✅ Has protocol', 'success');
     }
 
-    if (config.NEXTAUTH_URL.endsWith('/')) {
+    if (baseUrl.endsWith('/')) {
       log('  ⚠️  Has trailing slash (should not)', 'warning');
-      issues.warnings.push('NEXTAUTH_URL should not have trailing slash');
+      issues.warnings.push(`${baseUrlVar} should not have trailing slash`);
     } else {
       log('  ✅ No trailing slash', 'success');
     }
 
-    if (!isValidUrl(config.NEXTAUTH_URL)) {
+    if (!isValidUrl(baseUrl)) {
       log('  ❌ Invalid URL format', 'error');
-      issues.errors.push('NEXTAUTH_URL is not a valid URL');
+      issues.errors.push(`${baseUrlVar} is not a valid URL`);
     } else {
       log('  ✅ Valid URL format', 'success');
     }
 
     // Check for placeholder values
-    if (config.NEXTAUTH_URL.includes('yourdomain') || config.NEXTAUTH_URL.includes('example')) {
+    if (baseUrl.includes('yourdomain') || baseUrl.includes('example')) {
       log('  ❌ Contains placeholder value', 'error');
-      issues.errors.push('NEXTAUTH_URL contains placeholder value');
+      issues.errors.push(`${baseUrlVar} contains placeholder value`);
     }
 
     // Check if production URL matches expected format
-    if (config.NEXTAUTH_URL.startsWith('https://')) {
-      const url = new URL(config.NEXTAUTH_URL);
+    if (baseUrl.startsWith('https://')) {
+      const url = new URL(baseUrl);
       if (!url.hostname.includes('prepflow.org') && !url.hostname.includes('localhost')) {
         log('  ⚠️  Production URL does not match expected domain (prepflow.org)', 'warning');
-        issues.warnings.push('NEXTAUTH_URL does not match expected production domain');
+        issues.warnings.push(`${baseUrlVar} does not match expected production domain`);
       }
     }
   }
 
-  // Validate NEXTAUTH_SECRET
-  if (config.NEXTAUTH_SECRET) {
-    log('\n📋 Validating NEXTAUTH_SECRET...', 'info');
+  // Validate AUTH0_SECRET (preferred) or NEXTAUTH_SECRET (deprecated)
+  const secret = config.AUTH0_SECRET || config.NEXTAUTH_SECRET;
+  const secretVar = config.AUTH0_SECRET ? 'AUTH0_SECRET' : 'NEXTAUTH_SECRET';
 
-    if (config.NEXTAUTH_SECRET.length < 32) {
-      log(`  ❌ Too short (${config.NEXTAUTH_SECRET.length} chars, minimum 32)`, 'error');
-      issues.errors.push('NEXTAUTH_SECRET is too short (minimum 32 characters)');
+  if (config.NEXTAUTH_SECRET && !config.AUTH0_SECRET) {
+    log('\n⚠️  NEXTAUTH_SECRET is deprecated - use AUTH0_SECRET instead', 'warning');
+    issues.warnings.push('NEXTAUTH_SECRET is deprecated, use AUTH0_SECRET');
+  }
+
+  if (secret) {
+    log(`\n📋 Validating ${secretVar}...`, 'info');
+
+    if (secret.length < 32) {
+      log(`  ❌ Too short (${secret.length} chars, minimum 32)`, 'error');
+      issues.errors.push(`${secretVar} is too short (minimum 32 characters)`);
     } else {
-      log(`  ✅ Length OK (${config.NEXTAUTH_SECRET.length} chars)`, 'success');
+      log(`  ✅ Length OK (${secret.length} chars)`, 'success');
     }
 
     if (
-      config.NEXTAUTH_SECRET === 'dev-secret-change-me' ||
-      config.NEXTAUTH_SECRET === 'your-secret-here'
+      secret === 'dev-secret-change-me' ||
+      secret === 'your-secret-here' ||
+      secret === 'build-time-placeholder-secret-that-will-be-validated-at-runtime'
     ) {
       log('  ❌ Using default/placeholder secret', 'error');
-      issues.errors.push('NEXTAUTH_SECRET is using default/placeholder value');
+      issues.errors.push(`${secretVar} is using default/placeholder value`);
     } else {
       log('  ✅ Not using default secret', 'success');
     }
@@ -218,38 +248,20 @@ function validateAuth0Config() {
     }
   }
 
-  // Validate NEXTAUTH_SESSION_MAX_AGE
+  // Validate NEXTAUTH_SESSION_MAX_AGE (deprecated - Auth0 SDK handles sessions internally)
   if (config.NEXTAUTH_SESSION_MAX_AGE) {
-    log('\n📋 Validating NEXTAUTH_SESSION_MAX_AGE...', 'info');
-
-    const maxAge = Number(config.NEXTAUTH_SESSION_MAX_AGE);
-    if (isNaN(maxAge)) {
-      log('  ❌ Not a valid number', 'error');
-      issues.errors.push('NEXTAUTH_SESSION_MAX_AGE is not a valid number');
-    } else {
-      const hours = maxAge / 3600;
-      log(`  ✅ Valid (${hours} hours)`, 'success');
-
-      if (maxAge < 3600) {
-        log('  ⚠️  Very short session (less than 1 hour)', 'warning');
-        issues.warnings.push('NEXTAUTH_SESSION_MAX_AGE is very short');
-      }
-      if (maxAge > 86400) {
-        log('  ⚠️  Very long session (more than 24 hours)', 'warning');
-        issues.warnings.push('NEXTAUTH_SESSION_MAX_AGE is very long');
-      }
-    }
-  } else {
-    log('\n📋 NEXTAUTH_SESSION_MAX_AGE not set (using default: 4 hours)', 'info');
+    log('\n⚠️  NEXTAUTH_SESSION_MAX_AGE is deprecated - Auth0 SDK manages sessions internally', 'warning');
+    issues.warnings.push('NEXTAUTH_SESSION_MAX_AGE is deprecated, Auth0 SDK manages sessions');
   }
 
   // Check callback URL consistency
-  if (config.NEXTAUTH_URL && config.AUTH0_ISSUER_BASE_URL) {
+  if (baseUrl && config.AUTH0_ISSUER_BASE_URL) {
     log('\n📋 Checking callback URL consistency...', 'info');
 
     try {
-      const nextAuthUrl = new URL(config.NEXTAUTH_URL);
-      const expectedCallback = `${nextAuthUrl.origin}/api/auth/callback/auth0`;
+      const baseUrlObj = new URL(baseUrl);
+      // Auth0 SDK uses /api/auth/callback (not /api/auth/callback/auth0)
+      const expectedCallback = `${baseUrlObj.origin}/api/auth/callback`;
       log(`  ℹ️  Expected callback URL: ${expectedCallback}`, 'info');
       log(
         '  ℹ️  Verify this URL is in Auth0 Dashboard → Applications → Settings → Allowed Callback URLs',
@@ -257,8 +269,8 @@ function validateAuth0Config() {
       );
 
       // Check if production and suggest both www and non-www
-      if (nextAuthUrl.hostname.includes('prepflow.org')) {
-        const hasWww = nextAuthUrl.hostname.startsWith('www.');
+      if (baseUrlObj.hostname.includes('prepflow.org')) {
+        const hasWww = baseUrlObj.hostname.startsWith('www.');
         if (hasWww) {
           log(
             '  ⚠️  Using www domain - ensure BOTH www and non-www are in Auth0 callback URLs',
@@ -274,7 +286,7 @@ function validateAuth0Config() {
         }
       }
     } catch (error) {
-      log(`  ⚠️  Could not parse NEXTAUTH_URL: ${error.message}`, 'warning');
+      log(`  ⚠️  Could not parse ${baseUrlVar}: ${error.message}`, 'warning');
     }
   }
 

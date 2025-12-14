@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Test script to check what authorization URL NextAuth generates
+ * Test script to check what authorization URL Auth0 SDK generates
  * This helps diagnose if the callback URL is being forced correctly
  */
 
@@ -20,7 +20,7 @@ async function testAuthorizationUrl() {
     const diagnostic = await diagnosticResponse.json();
 
     console.log('   ✅ Diagnostic Results:');
-    console.log(`      - NEXTAUTH_URL: ${diagnostic.nextAuthUrl}`);
+    console.log(`      - Base URL: ${diagnostic.baseUrl || diagnostic.nextAuthUrl || 'NOT SET'}`);
     console.log(`      - Expected Callback: ${diagnostic.expectedCallbackUrl}`);
     console.log(`      - Actual Redirect URI: ${diagnostic.actualRedirectUri || 'NOT SET'}`);
     console.log(`      - Provider Callback URL: ${diagnostic.providerCallbackURL || 'NOT SET'}`);
@@ -28,9 +28,9 @@ async function testAuthorizationUrl() {
       `      - Issues: ${diagnostic.issues.length === 0 ? 'None' : diagnostic.issues.join(', ')}\n`,
     );
 
-    // Test 2: Try to get the signin page and see what happens
-    console.log('2️⃣ Testing signin endpoint...');
-    const signinResponse = await fetch(`${BASE_URL}/api/auth/signin`, {
+    // Test 2: Try to get the login endpoint and see what happens
+    console.log('2️⃣ Testing login endpoint...');
+    const signinResponse = await fetch(`${BASE_URL}/api/auth/login`, {
       method: 'GET',
       redirect: 'manual', // Don't follow redirects
     });
@@ -53,7 +53,8 @@ async function testAuthorizationUrl() {
         console.log(`   - Redirect URI Parameter: ${redirectUri || 'NOT FOUND'}`);
 
         if (redirectUri) {
-          const expectedCallback = 'https://www.prepflow.org/api/auth/callback/auth0';
+          // Auth0 SDK uses /api/auth/callback (not /api/auth/callback/auth0)
+          const expectedCallback = 'https://www.prepflow.org/api/auth/callback';
           if (redirectUri === expectedCallback) {
             console.log(`   ✅ Redirect URI matches expected: ${expectedCallback}`);
           } else {
@@ -71,7 +72,8 @@ async function testAuthorizationUrl() {
 
     // Test 3: Check if we can access the callback endpoint
     console.log('\n4️⃣ Testing callback endpoint...');
-    const callbackResponse = await fetch(`${BASE_URL}/api/auth/callback/auth0?error=auth0`, {
+    // Auth0 SDK uses /api/auth/callback (not /api/auth/callback/auth0)
+    const callbackResponse = await fetch(`${BASE_URL}/api/auth/callback?error=auth0`, {
       method: 'GET',
       redirect: 'manual',
     });

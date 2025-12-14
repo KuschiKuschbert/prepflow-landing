@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server';
-import { ManagementClient } from 'auth0';
-import { logger } from '@/lib/logger';
-import { getSocialConnections, verifyCallbackUrls } from '@/lib/auth0-management';
 import {
-  verifyGoogleConnection,
-  enableGoogleConnectionForApp,
+    enableGoogleConnectionForApp,
+    verifyGoogleConnection,
 } from '@/lib/auth0-google-connection';
+import { getSocialConnections, verifyCallbackUrls } from '@/lib/auth0-management';
+import { logger } from '@/lib/logger';
+import { ManagementClient } from 'auth0';
+import { NextResponse } from 'next/server';
 
 /**
  * Fix Auth0 Callback URLs via Management API
@@ -19,8 +19,8 @@ export async function POST() {
     const m2mClientSecret = process.env.AUTH0_M2M_CLIENT_SECRET;
     const auth0ClientId = process.env.AUTH0_CLIENT_ID;
     const auth0ClientSecret = process.env.AUTH0_CLIENT_SECRET;
-    // Use AUTH0_BASE_URL (Auth0 SDK) or fall back to NEXTAUTH_URL for backward compatibility
-    const baseUrl = process.env.AUTH0_BASE_URL || process.env.NEXTAUTH_URL;
+    // Use AUTH0_BASE_URL (Auth0 SDK)
+    const baseUrl = process.env.AUTH0_BASE_URL;
 
     if (!auth0Issuer) {
       return NextResponse.json(
@@ -38,7 +38,7 @@ export async function POST() {
         {
           success: false,
           error: 'Missing base URL',
-          message: 'AUTH0_BASE_URL or NEXTAUTH_URL must be set',
+          message: 'AUTH0_BASE_URL must be set',
         },
         { status: 400 },
       );

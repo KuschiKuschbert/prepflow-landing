@@ -8,7 +8,8 @@
 const https = require('https');
 const http = require('http');
 
-const BASE_URL = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+// Prefer AUTH0_BASE_URL, fall back to NEXTAUTH_URL for backward compatibility
+const BASE_URL = process.env.AUTH0_BASE_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000';
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 const AUTH0_ISSUER_BASE_URL = process.env.AUTH0_ISSUER_BASE_URL;
 const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
@@ -84,6 +85,9 @@ async function testEnvironmentVariables() {
     AUTH0_ISSUER_BASE_URL: process.env.AUTH0_ISSUER_BASE_URL,
     AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
     AUTH0_CLIENT_SECRET: process.env.AUTH0_CLIENT_SECRET,
+    AUTH0_SECRET: process.env.AUTH0_SECRET,
+    AUTH0_BASE_URL: process.env.AUTH0_BASE_URL,
+    // Deprecated - kept for backward compatibility
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   };
@@ -93,11 +97,24 @@ async function testEnvironmentVariables() {
     if (value) {
       const masked =
         key.includes('SECRET') || key.includes('KEY') ? `${value.substring(0, 8)}...` : value;
-      log(`${key}: ${masked}`, 'success');
+      const deprecated = key.startsWith('NEXTAUTH_') ? ' (deprecated)' : '';
+      log(`${key}: ${masked}${deprecated}`, deprecated ? 'warning' : 'success');
+    } else if (key.startsWith('NEXTAUTH_')) {
+      // NEXTAUTH_* vars are optional (deprecated)
+      log(`${key}: Not set (using AUTH0_* equivalent)`, 'info');
     } else {
       log(`${key}: MISSING`, 'error');
       allPresent = false;
     }
+  }
+
+  // Warn if using deprecated vars
+  if (requiredVars.NEXTAUTH_URL && !requiredVars.AUTH0_BASE_URL) {
+    log('⚠️  NEXTAUTH_URL is deprecated - use AUTH0_BASE_URL instead', 'warning');
+  }
+
+  if (requiredVars.NEXTAUTH_SECRET && !requiredVars.AUTH0_SECRET) {
+    log('⚠️  NEXTAUTH_SECRET is deprecated - use AUTH0_SECRET instead', 'warning');
   }
 
   console.log('');

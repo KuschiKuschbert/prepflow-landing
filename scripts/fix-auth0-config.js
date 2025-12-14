@@ -104,11 +104,12 @@ async function main() {
 
   if (flowTest.status === 200 && !flowTest.data.success) {
     console.log('🔴 CRITICAL ISSUE: Authorization flow is failing\n');
-    console.log('NextAuth is returning error=auth0 before redirecting to Auth0.\n');
+    console.log('Auth0 SDK is returning error=auth0 before redirecting to Auth0.\n');
     console.log('To fix this:\n');
-    console.log('1. Verify NEXTAUTH_URL in Vercel:');
+    console.log('1. Verify AUTH0_BASE_URL in Vercel (or NEXTAUTH_URL for backward compatibility):');
     console.log('   - Go to: Vercel Dashboard → Project → Settings → Environment Variables');
-    console.log('   - Verify NEXTAUTH_URL is: https://www.prepflow.org (no trailing slash)');
+    console.log('   - Verify AUTH0_BASE_URL is: https://www.prepflow.org (no trailing slash)');
+    console.log('   - Or NEXTAUTH_URL (deprecated): https://www.prepflow.org (no trailing slash)');
     console.log("   - Ensure it's set for Production environment");
     console.log('   - Redeploy after verifying\n');
     console.log('2. Check Vercel deployment logs for [Auth0 Config] entries\n');

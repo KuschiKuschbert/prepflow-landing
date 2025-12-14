@@ -32,9 +32,9 @@ export async function auditDish(dish: any): Promise<PriceAuditResult> {
     result.menuBuilderPrice = menuBuilderPrice;
 
     // Get recipe/dish builder price (from /api/dishes/[id]/cost endpoint)
-    const costResponse = await fetch(
-      `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/dishes/${dish.id}/cost`,
-    );
+    // Use AUTH0_BASE_URL (Auth0 SDK) - fallback to localhost for development
+    const baseUrl = process.env.AUTH0_BASE_URL || 'http://localhost:3000';
+    const costResponse = await fetch(`${baseUrl}/api/dishes/${dish.id}/cost`);
     if (costResponse.ok) {
       const costData = await costResponse.json();
       if (costData.success && costData.cost?.recommendedPrice != null) {

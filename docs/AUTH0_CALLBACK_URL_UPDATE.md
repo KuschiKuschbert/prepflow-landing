@@ -1,6 +1,6 @@
 # Auth0 Callback URL Update - Manual Steps
 
-**Date:** 2025-12-13  
+**Date:** 2025-12-13
 **Issue:** Callback URL mismatch - Auth0 receiving preview URL instead of production URL
 
 ## Current Error

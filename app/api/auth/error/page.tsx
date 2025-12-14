@@ -1,9 +1,9 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { LANDING_FONT_WEIGHTS, LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
-import { LANDING_TYPOGRAPHY, LANDING_FONT_WEIGHTS } from '@/lib/landing-styles';
 
 /**
  * Custom Auth0 Error Page
@@ -23,7 +23,7 @@ function AuthErrorContent() {
         'There was a problem with the server configuration. Please contact support if this persists.',
       troubleshooting: [
         'Check that Auth0 environment variables are configured correctly',
-        'Verify NEXTAUTH_URL matches your domain',
+        'Verify AUTH0_BASE_URL matches your domain',
         'Check Vercel environment variables',
       ],
     },

@@ -6,8 +6,10 @@ import { google, type Auth } from 'googleapis';
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+// Use AUTH0_BASE_URL (Auth0 SDK) - fallback handled by getDetectedBaseUrl() if needed
 const GOOGLE_REDIRECT_URI =
-  process.env.GOOGLE_REDIRECT_URI || `${process.env.NEXTAUTH_URL}/api/backup/google-callback`;
+  process.env.GOOGLE_REDIRECT_URI ||
+  `${process.env.AUTH0_BASE_URL || 'http://localhost:3000'}/api/backup/google-callback`;
 
 /**
  * Get OAuth2 client for Google Drive.

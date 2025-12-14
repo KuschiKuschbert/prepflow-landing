@@ -2,26 +2,27 @@ import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * Test NextAuth Authorization Flow
+ * Test Auth0 SDK Authorization Flow
  * Simulates what happens when a user clicks "Sign in with Auth0"
  */
 export async function GET(request: NextRequest) {
   try {
-    const nextAuthUrl = process.env.NEXTAUTH_URL;
+    // Use AUTH0_BASE_URL (Auth0 SDK) - test scripts keep NEXTAUTH_URL fallback for diagnostics
+    const baseUrl = process.env.AUTH0_BASE_URL || process.env.NEXTAUTH_URL;
     const callbackUrl = request.nextUrl.searchParams.get('callbackUrl') || '/webapp';
 
-    if (!nextAuthUrl) {
+    if (!baseUrl) {
       return NextResponse.json(
         {
           success: false,
-          error: 'NEXTAUTH_URL not set',
+          error: 'AUTH0_BASE_URL (or NEXTAUTH_URL for backward compatibility) must be set',
         },
         { status: 400 },
       );
     }
 
-    // Construct the signin URL that NextAuth would generate
-    const signinUrl = `${nextAuthUrl}/api/auth/signin/auth0?callbackUrl=${encodeURIComponent(callbackUrl)}`;
+    // Construct the signin URL that Auth0 SDK would generate
+    const signinUrl = `${baseUrl}/api/auth/login?returnTo=${encodeURIComponent(callbackUrl)}`;
 
     // Test the actual signin endpoint
     const testResponse = await fetch(signinUrl, {
@@ -64,10 +65,10 @@ export async function GET(request: NextRequest) {
           hasError,
         },
         diagnosis: hasError
-          ? 'NextAuth is returning error=auth0 before redirecting to Auth0. This indicates callback URL validation failure.'
+          ? 'Auth0 SDK is returning error=auth0 before redirecting to Auth0. This indicates callback URL validation failure.'
           : redirectsToAuth0
-            ? 'NextAuth is correctly redirecting to Auth0'
-            : 'NextAuth is redirecting but not to Auth0',
+            ? 'Auth0 SDK is correctly redirecting to Auth0'
+            : 'Auth0 SDK is redirecting but not to Auth0',
       },
     });
   } catch (error) {

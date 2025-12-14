@@ -1,7 +1,7 @@
 # Auth0 Apple and Microsoft Login Test Results
 
-**Date:** 2025-12-13  
-**Test Environment:** Production (www.prepflow.org)  
+**Date:** 2025-12-13
+**Test Environment:** Production (www.prepflow.org)
 **Status:** ⚠️ **Connections Not Configured**
 
 ## Test Summary

@@ -42,8 +42,20 @@ const REQUIRED_VARS = {
     secret: true,
   },
 
-  // NextAuth Configuration (CRITICAL)
-  NEXTAUTH_URL: {
+  // Auth0 SDK Configuration (CRITICAL)
+  AUTH0_SECRET: {
+    required: true,
+    description: 'Auth0 SDK secret (minimum 32 characters)',
+    example: 'your-production-secret-min-32-chars',
+    critical: true,
+    secret: true,
+    validation: value => {
+      if (!value) return 'Missing';
+      if (value.length < 32) return '⚠️ Must be at least 32 characters';
+      return '✅ Valid';
+    },
+  },
+  AUTH0_BASE_URL: {
     required: true,
     description: 'Application URL (MUST be www.prepflow.org for production)',
     example: 'https://www.prepflow.org',
@@ -56,23 +68,39 @@ const REQUIRED_VARS = {
       return '✅ Correct';
     },
   },
-  NEXTAUTH_SECRET: {
-    required: true,
-    description: 'NextAuth secret (minimum 32 characters)',
-    example: 'your-production-secret-min-32-chars',
-    critical: true,
-    secret: true,
+  // Deprecated NextAuth Configuration (backward compatibility)
+  NEXTAUTH_URL: {
+    required: false,
+    description: 'DEPRECATED: Use AUTH0_BASE_URL instead',
+    example: 'https://www.prepflow.org',
+    critical: false,
+    deprecated: true,
     validation: value => {
-      if (!value) return 'Missing';
-      if (value.length < 32) return '⚠️ Must be at least 32 characters';
-      return '✅ Valid';
+      if (value) return '⚠️ Deprecated - use AUTH0_BASE_URL instead';
+      return '✅ Not set (using AUTH0_BASE_URL)';
+    },
+  },
+  NEXTAUTH_SECRET: {
+    required: false,
+    description: 'DEPRECATED: Use AUTH0_SECRET instead',
+    example: 'your-production-secret-min-32-chars',
+    critical: false,
+    secret: true,
+    deprecated: true,
+    validation: value => {
+      if (value) return '⚠️ Deprecated - use AUTH0_SECRET instead';
+      return '✅ Not set (using AUTH0_SECRET)';
     },
   },
   NEXTAUTH_SESSION_MAX_AGE: {
     required: false,
-    description: 'Session timeout in seconds (default: 14400 = 4 hours)',
+    description: 'DEPRECATED: Auth0 SDK manages sessions internally',
     example: '14400',
-    default: '14400',
+    deprecated: true,
+    validation: value => {
+      if (value) return '⚠️ Deprecated - Auth0 SDK manages sessions';
+      return '✅ Not set (Auth0 SDK default)';
+    },
   },
 
   // Supabase Configuration (CRITICAL)
@@ -357,7 +385,8 @@ function generateChecklist() {
   // Special Notes
   log('\n\n⚠️  Important Notes:', 'warn');
   log('─'.repeat(70), 'info');
-  log('1. NEXTAUTH_URL MUST be https://www.prepflow.org (with www) in production', 'error');
+  log('1. AUTH0_BASE_URL MUST be https://www.prepflow.org (with www) in production', 'error');
+  log('   (NEXTAUTH_URL is deprecated - use AUTH0_BASE_URL instead)', 'warn');
   log('2. All secrets should be different between development and production', 'warn');
   log('3. After setting variables in Vercel, redeploy your application', 'info');
   log('4. Wait 1-2 minutes after deployment for changes to take effect', 'info');
