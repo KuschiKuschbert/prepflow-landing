@@ -115,3 +115,4 @@ curl -X POST http://localhost:3000/api/ingredients/add-consumables
 - `operations.mdc` - Backup & Recovery procedures
 - `app/api/ingredients/add-consumables/route.ts` - Safe consumables endpoint
 - `lib/populate-helpers/index.ts` - Data population utilities
+

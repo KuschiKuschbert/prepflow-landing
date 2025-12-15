@@ -18,3 +18,4 @@ export function calculateSummary(changes: MenuChangeTracking[]): string {
 
   return summaryParts.join(', ');
 }
+

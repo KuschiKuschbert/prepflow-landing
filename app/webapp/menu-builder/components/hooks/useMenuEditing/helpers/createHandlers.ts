@@ -1,7 +1,7 @@
 /**
  * Create handler functions for menu editing.
  */
-import type { Menu } from '../../../types';
+import type { Menu } from '../../../../types';
 
 interface EditingRefs {
   titleEditingRef: React.MutableRefObject<any>;

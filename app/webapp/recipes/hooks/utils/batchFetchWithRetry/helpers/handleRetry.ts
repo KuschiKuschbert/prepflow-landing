@@ -2,7 +2,7 @@
  * Handle retry logic for batch fetch.
  */
 import { logger } from '@/lib/logger';
-import type { RecipeIngredientWithDetails } from '../../../types';
+import type { RecipeIngredientWithDetails } from '../../../../types';
 
 export async function handleRetryHelper(
   recipeIds: string[],

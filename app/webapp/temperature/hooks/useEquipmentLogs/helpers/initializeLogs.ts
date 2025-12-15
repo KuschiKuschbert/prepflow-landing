@@ -2,7 +2,7 @@
  * Initialize logs from cache or set empty state.
  */
 import { getCachedData } from '@/lib/cache/data-cache';
-import type { TemperatureLog } from '../../types';
+import type { TemperatureLog } from '../../../types';
 
 export function initializeLogsHelper(
   equipmentName: string | null,

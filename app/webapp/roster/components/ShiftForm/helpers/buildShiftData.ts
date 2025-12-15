@@ -1,7 +1,7 @@
 /**
  * Build shift data from form data.
  */
-import type { Shift } from '../../types';
+import type { Shift } from '../../../types';
 
 export function buildShiftDataFromForm(
   formData: {

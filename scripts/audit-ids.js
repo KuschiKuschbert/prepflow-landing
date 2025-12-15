@@ -264,3 +264,4 @@ generateReport();
 // Exit with error code if critical issues found
 const criticalIssues = issues.missingKeys.length + issues.duplicateKeys.length;
 process.exit(criticalIssues > 0 ? 1 : 0);
+

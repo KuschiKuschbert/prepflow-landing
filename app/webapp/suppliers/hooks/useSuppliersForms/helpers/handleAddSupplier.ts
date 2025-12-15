@@ -3,7 +3,7 @@
  */
 import { cacheData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
-import type { Supplier, SupplierFormData } from '../../types';
+import type { Supplier, SupplierFormData } from '../../../types';
 import { DEFAULT_SUPPLIER_FORM } from '../defaultValues';
 
 export async function handleAddSupplierHelper(

@@ -2,7 +2,7 @@
  * Perform bulk delete operation.
  */
 import { logger } from '@/lib/logger';
-import type { Recipe, Dish } from '../../types';
+import type { Recipe, Dish } from '../../../types';
 
 export async function performBulkDelete(
   selectedRecipeIds: string[],

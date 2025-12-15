@@ -3,7 +3,7 @@
  */
 import { logger } from '@/lib/logger';
 import type { PerformanceInsight } from '../usePerformanceInsights';
-import type { PerformanceItem } from '../../types';
+import type { PerformanceItem } from '../../../types';
 
 interface FetchAIInsightsParams {
   performanceItems: PerformanceItem[];

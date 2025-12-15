@@ -2,7 +2,7 @@
  * Equipment state management.
  */
 import { useState } from 'react';
-import type { TemperatureEquipment } from '../../types';
+import type { TemperatureEquipment } from '../../../types';
 
 export function useEquipmentState() {
   const [editingEquipment, setEditingEquipment] = useState<string | null>(null);

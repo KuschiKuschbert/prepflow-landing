@@ -3,7 +3,7 @@
  */
 import { cacheData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
-import type { SupplierPriceList, PriceListFormData } from '../../types';
+import type { SupplierPriceList, PriceListFormData } from '../../../types';
 import { DEFAULT_PRICE_LIST_FORM } from '../defaultValues';
 
 export async function handleAddPriceListHelper(

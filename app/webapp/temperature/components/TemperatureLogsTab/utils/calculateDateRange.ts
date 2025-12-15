@@ -4,6 +4,7 @@ import type { DateRange } from '../types';
 /**
  * Calculate date range from logs or selected date
  */
+export type { DateRange };
 export function calculateDateRange(
   logs: TemperatureLog[],
   selectedDate: string,

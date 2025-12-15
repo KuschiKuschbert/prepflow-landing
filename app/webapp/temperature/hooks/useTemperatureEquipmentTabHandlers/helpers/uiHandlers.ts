@@ -1,7 +1,7 @@
 /**
  * UI handlers for equipment interactions.
  */
-import type { TemperatureEquipment } from '../../types';
+import type { TemperatureEquipment } from '../../../types';
 
 export function createUIHandlers(
   setSelectedEquipment: (equipment: TemperatureEquipment | null) => void,

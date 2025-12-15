@@ -1,7 +1,7 @@
 /**
  * Equipment handlers.
  */
-import type { TemperatureEquipment } from '../../types';
+import type { TemperatureEquipment } from '../../../types';
 import { handleGenerateSampleData } from '../../utils/generateSampleDataHandler';
 
 export function createEquipmentHandlersHelper(

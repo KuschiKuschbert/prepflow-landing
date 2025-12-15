@@ -439,3 +439,4 @@ npm run test:integration
 - `docs/AUTH0_LOGOUT_SETUP.md` - Logout configuration
 - `AUTH0_LOCALHOST_SETUP.md` - Localhost setup guide
 - `docs/BROWSER_TESTING_GUIDE.md` - Browser testing steps
+

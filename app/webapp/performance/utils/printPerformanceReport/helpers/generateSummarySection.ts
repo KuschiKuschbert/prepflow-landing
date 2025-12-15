@@ -1,7 +1,7 @@
 /**
  * Generate summary section HTML for performance report print.
  */
-import type { PerformanceItem, PerformanceMetadata } from '../../types';
+import type { PerformanceItem, PerformanceMetadata } from '../../../types';
 
 interface GenerateSummarySectionParams {
   performanceItems: PerformanceItem[];

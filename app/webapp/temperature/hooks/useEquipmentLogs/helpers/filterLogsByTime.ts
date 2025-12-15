@@ -1,7 +1,7 @@
 /**
  * Filter logs by time range.
  */
-import type { TemperatureLog } from '../../types';
+import type { TemperatureLog } from '../../../types';
 
 export function createFilterLogsByTime(timeFilter: '24h' | '7d' | '30d' | 'all') {
   return (allLogs: TemperatureLog[]): TemperatureLog[] => {

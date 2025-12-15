@@ -2,7 +2,7 @@
  * Initial state for temperature page data.
  */
 import { getCachedData } from '@/lib/cache/data-cache';
-import type { TemperatureEquipment, TemperatureLog } from '../../types';
+import type { TemperatureEquipment, TemperatureLog } from '../../../types';
 
 export function createInitialState() {
   return {

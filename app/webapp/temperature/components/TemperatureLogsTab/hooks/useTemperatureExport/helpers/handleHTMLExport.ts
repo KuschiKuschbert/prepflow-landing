@@ -1,7 +1,7 @@
 /**
  * Handle HTML export for temperature logs.
  */
-import type { TemperatureEquipment, TemperatureLog } from '../../../../types';
+import type { TemperatureEquipment, TemperatureLog } from '../../../../../types';
 import type { DateRange } from '../../../utils/calculateDateRange';
 
 export async function handleHTMLExportHelper(

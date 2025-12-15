@@ -2,7 +2,7 @@
  * Update logs from query data.
  */
 import { logger } from '@/lib/logger';
-import type { TemperatureLog } from '../../types';
+import type { TemperatureLog } from '../../../types';
 
 export function updateLogsFromQueryHelper(
   logsData: any,

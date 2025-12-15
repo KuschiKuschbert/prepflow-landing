@@ -3,7 +3,7 @@
  */
 import { convertToCOGSCalculations } from '../../utils/recipeCalculationHelpers';
 import { storeRecipeForEditing } from '../../utils/recipeEditHelpers';
-import type { Recipe, RecipeIngredientWithDetails } from '../../types';
+import type { Recipe, RecipeIngredientWithDetails } from '../../../types';
 
 export function handleEditFromPreview(
   selectedRecipe: Recipe,

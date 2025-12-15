@@ -2,8 +2,8 @@
  * Process recipe ingredients into COGS calculations.
  */
 import { createCalculation } from '../../../../cogs/hooks/utils/createCalculation';
-import type { COGSCalculation, Ingredient } from '../../../../cogs/types';
-import type { Recipe } from '../../../types';
+import type { COGSCalculation, Ingredient } from '../../../../../cogs/types';
+import type { Recipe } from '../../../../types';
 
 export function processRecipeIngredients(
   recipeIngredients: any[],

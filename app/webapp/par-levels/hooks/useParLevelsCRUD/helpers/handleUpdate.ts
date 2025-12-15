@@ -2,7 +2,7 @@
  * Handle par level update operation.
  */
 import { createOptimisticUpdate } from '@/lib/optimistic-updates';
-import type { ParLevel } from '../../types';
+import type { ParLevel } from '../../../types';
 
 interface HandleUpdateParams {
   updates: Partial<ParLevel>;

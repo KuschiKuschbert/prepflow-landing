@@ -2,7 +2,7 @@
  * Handle duplicating a recipe.
  */
 import { supabase } from '@/lib/supabase';
-import type { Recipe, RecipeIngredientWithDetails } from '../../types';
+import type { Recipe, RecipeIngredientWithDetails } from '../../../types';
 
 export async function handleDuplicateRecipe(
   recipe: Recipe,

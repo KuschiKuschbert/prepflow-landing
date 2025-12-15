@@ -26,3 +26,4 @@ UPDATE users SET subscription_tier = 'starter' WHERE subscription_tier IS NULL;
 
 
 
+

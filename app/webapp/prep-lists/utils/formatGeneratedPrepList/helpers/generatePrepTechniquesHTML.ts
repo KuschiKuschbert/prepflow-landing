@@ -2,7 +2,7 @@
  * Generate prep techniques HTML for prep list.
  */
 import { escapeHtml } from '@/lib/exports/template-utils';
-import type { SectionData } from '../../types';
+import type { SectionData } from '../../../types';
 
 export function generatePrepTechniquesHTML(section: SectionData): string {
   if (!section.prepTechniques) return '';

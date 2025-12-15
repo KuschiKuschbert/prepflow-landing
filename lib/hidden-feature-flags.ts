@@ -13,3 +13,4 @@ export async function isHiddenFeatureEnabled(
   // and verify if the feature is unlocked and enabled for the user
   return false;
 }
+

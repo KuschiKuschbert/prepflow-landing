@@ -1,7 +1,7 @@
 /**
  * Handle recipe images generated callback.
  */
-import type { Recipe } from '../../types';
+import type { Recipe } from '../../../types';
 
 export function createRecipeImagesGeneratedHandler(
   setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>,

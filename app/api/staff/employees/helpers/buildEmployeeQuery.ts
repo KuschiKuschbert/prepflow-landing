@@ -40,3 +40,4 @@ export async function buildEmployeeQuery(supabase: any, params: any) {
 
   return { data, error, count };
 }
+

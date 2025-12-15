@@ -47,3 +47,4 @@ export async function buildShiftQuery(supabase: any, params: any) {
 
   return { data, error, count };
 }
+

@@ -75,3 +75,4 @@ export function generateAllergenMatrixHTML(matrixData: AllergenMatrixData[]): st
 
   return matrixContent;
 }
+

@@ -2,7 +2,7 @@
  * Fetch performance tips (AI or fallback).
  */
 import { generatePerformanceTips } from '../../../utils/generatePerformanceTips';
-import type { PerformanceItem } from '../../types';
+import type { PerformanceItem } from '../../../types';
 
 export async function fetchPerformanceTips(
   performanceScore: number,

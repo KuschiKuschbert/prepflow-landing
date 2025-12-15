@@ -150,3 +150,4 @@ export function formatTemperatureLogsForPrint(data: TemperatureLogExportData): s
 
   return html;
 }
+

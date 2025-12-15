@@ -140,3 +140,4 @@ function generateBackgroundHTML() {
 }
 
 module.exports = { generateBackgroundHTML };
+

@@ -156,3 +156,4 @@ export async function initializeTrial(userEmail: string): Promise<void> {
     throw error;
   }
 }
+

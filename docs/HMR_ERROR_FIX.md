@@ -160,3 +160,4 @@ The fix is defensive and doesn't change the API, so existing tests should contin
 ✅ **HMR-safe implementation**
 ✅ **No breaking changes**
 ✅ **Backward compatible**
+

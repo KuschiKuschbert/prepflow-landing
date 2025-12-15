@@ -1,7 +1,7 @@
 /**
  * Create pricing calculation callbacks.
  */
-import type { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../../../types';
+import type { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../../../../types';
 import { calculateAllPrices } from '../../calculateAllPrices';
 import { calculateVisiblePrices } from '../../calculateVisiblePrices';
 import { fetchBatchWithDeduplication } from '../../fetchBatchWithDeduplication';

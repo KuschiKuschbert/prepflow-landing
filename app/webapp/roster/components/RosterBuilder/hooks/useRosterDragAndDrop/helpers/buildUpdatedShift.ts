@@ -2,7 +2,7 @@
  * Build updated shift from drag and drop.
  */
 import { format, addDays } from 'date-fns';
-import type { Shift } from '../../../../types';
+import type { Shift } from '../../../../../types';
 
 export function buildUpdatedShift(
   draggedShift: Shift,

@@ -272,3 +272,4 @@ export async function getUserTablesWithData(userId: string): Promise<TableData[]
 
   return tables;
 }
+

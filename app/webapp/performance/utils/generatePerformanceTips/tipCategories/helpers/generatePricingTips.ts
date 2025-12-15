@@ -1,7 +1,7 @@
 /**
  * Generate tips for pricing optimization based on Bargain Buckets.
  */
-import type { PerformanceItem, PerformanceTip } from '../../../types';
+import type { PerformanceItem, PerformanceTip } from '../../../../types';
 
 export function generatePricingTips(
   bargainBuckets: PerformanceItem[],

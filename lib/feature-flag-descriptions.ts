@@ -19,3 +19,4 @@ export const FEATURE_FLAG_DESCRIPTIONS: Record<string, string> = {
 export function getFeatureFlagDescription(flagKey: string): string | null {
   return FEATURE_FLAG_DESCRIPTIONS[flagKey] || null;
 }
+

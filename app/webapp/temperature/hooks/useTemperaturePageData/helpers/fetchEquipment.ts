@@ -3,7 +3,7 @@
  */
 import { cacheData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
-import type { TemperatureEquipment } from '../../types';
+import type { TemperatureEquipment } from '../../../types';
 
 export async function fetchEquipmentHelper(
   setEquipment: (equipment: TemperatureEquipment[]) => void,

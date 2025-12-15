@@ -51,3 +51,4 @@ export async function handleSubmit({
     setError('Failed to save kitchen section');
   }
 }
+

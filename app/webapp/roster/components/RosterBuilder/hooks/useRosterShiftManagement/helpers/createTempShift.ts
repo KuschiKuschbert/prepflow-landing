@@ -1,7 +1,7 @@
 /**
  * Create temporary shift for optimistic update.
  */
-import type { Shift } from '../../../../types';
+import type { Shift } from '../../../../../types';
 
 export function createTempShift(shiftData: Partial<Shift>): Shift {
   const tempId = `temp-${Date.now()}`;

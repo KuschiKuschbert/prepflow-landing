@@ -116,3 +116,4 @@ export function subscribeMilestones(listener: MilestoneListener): () => void {
   window.addEventListener('gamification:milestone', handler);
   return () => window.removeEventListener('gamification:milestone', handler);
 }
+

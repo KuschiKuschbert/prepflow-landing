@@ -1,8 +1,8 @@
 /**
  * Generate burger instruction template.
  */
-import type { Recipe, RecipeIngredientWithDetails } from '../../../types';
-import type { IngredientAnalysis } from '../analyzeIngredients';
+import type { Recipe, RecipeIngredientWithDetails } from '../../../../types';
+import type { IngredientAnalysis } from '../../analyzeIngredients';
 
 export function generateBurgerInstructions(
   recipe: Recipe,

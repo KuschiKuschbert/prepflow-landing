@@ -7,7 +7,7 @@ import {
   exportTemperatureLogsToCSV,
   printTemperatureLogs,
 } from '../../../../../utils/temperatureLogExportUtils';
-import type { TemperatureEquipment, TemperatureLog } from '../../../../types';
+import type { TemperatureEquipment, TemperatureLog } from '../../../../../types';
 import type { DateRange } from '../../../utils/calculateDateRange';
 import { handleHTMLExportHelper } from './handleHTMLExport';
 

@@ -3,7 +3,7 @@
  */
 import { logger } from '@/lib/logger';
 import { printTemperatureLogs } from '../../../../../utils/temperatureLogExportUtils';
-import type { TemperatureEquipment, TemperatureLog } from '../../../../types';
+import type { TemperatureEquipment, TemperatureLog } from '../../../../../types';
 import type { DateRange } from '../../../utils/calculateDateRange';
 
 export function handlePrintHelper(

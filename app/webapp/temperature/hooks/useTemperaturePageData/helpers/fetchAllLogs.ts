@@ -3,7 +3,7 @@
  */
 import { cacheData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
-import type { TemperatureLog } from '../../types';
+import type { TemperatureLog } from '../../../types';
 
 export async function fetchAllLogsHelper(
   limit: number | undefined,

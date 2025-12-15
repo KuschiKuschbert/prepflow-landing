@@ -2,7 +2,7 @@
  * Handle adding a new recipe.
  */
 import { supabase } from '@/lib/supabase';
-import type { Recipe } from '../../types';
+import type { Recipe } from '../../../types';
 
 export async function handleAddRecipe(
   newRecipe: Partial<Recipe>,

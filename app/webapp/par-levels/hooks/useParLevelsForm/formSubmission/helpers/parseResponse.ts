@@ -13,3 +13,4 @@ export async function parseResponse(response: Response) {
     throw new Error(`Server error (${response.status}). Please check the server logs.`);
   }
 }
+

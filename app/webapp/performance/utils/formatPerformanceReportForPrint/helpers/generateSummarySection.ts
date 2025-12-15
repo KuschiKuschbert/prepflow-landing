@@ -1,7 +1,7 @@
 /**
  * Generate summary section HTML for performance report.
  */
-import type { PerformanceItem, PerformanceMetadata, DateRange } from '../../types';
+import type { PerformanceItem, PerformanceMetadata, DateRange } from '../../../types';
 
 interface GenerateSummarySectionParams {
   items: PerformanceItem[];

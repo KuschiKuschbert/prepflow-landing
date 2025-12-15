@@ -12,3 +12,4 @@ export function formatFrequencyType(frequency: string): string {
   };
   return map[frequency] || frequency;
 }
+

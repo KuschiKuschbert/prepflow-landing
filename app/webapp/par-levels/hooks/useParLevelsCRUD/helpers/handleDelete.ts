@@ -2,7 +2,7 @@
  * Handle par level delete operation.
  */
 import { createOptimisticDelete } from '@/lib/optimistic-updates';
-import type { ParLevel } from '../../types';
+import type { ParLevel } from '../../../types';
 
 interface HandleDeleteParams {
   id: string;

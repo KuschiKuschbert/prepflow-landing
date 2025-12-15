@@ -1,7 +1,7 @@
 /**
  * Generate tips for menu cleanup based on Burnt Toast items.
  */
-import type { PerformanceItem, PerformanceTip } from '../../../types';
+import type { PerformanceItem, PerformanceTip } from '../../../../types';
 
 export function generateCleanupTips(
   burntToast: PerformanceItem[],
