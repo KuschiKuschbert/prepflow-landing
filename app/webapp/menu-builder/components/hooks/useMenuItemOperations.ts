@@ -2,8 +2,14 @@
  * Hook for managing menu item operations (add, remove, move, reorder, update price)
  * Orchestrates specialized hooks for different operations.
  */
-import { createOperations } from './useMenuItemOperations/helpers/createOperations';
 import type { Dish, MenuItem, Recipe } from '../../types';
+import { useMenuItemAddition } from './helpers/useMenuItemAddition';
+import { useMenuItemCategory } from './helpers/useMenuItemCategory';
+import { useMenuItemPrice } from './helpers/useMenuItemPrice';
+import { useMenuItemRemoval } from './helpers/useMenuItemRemoval';
+import { useMenuItemReorder } from './helpers/useMenuItemReorder';
+import { createOperations } from './useMenuItemOperations/helpers/createOperations';
+
 interface UseMenuItemOperationsProps {
   menuId: string;
   menuItems: MenuItem[];
@@ -36,5 +42,17 @@ interface UseMenuItemOperationsReturn {
 export function useMenuItemOperations(
   props: UseMenuItemOperationsProps,
 ): UseMenuItemOperationsReturn {
-  return createOperations(props);
+  const additionResult = useMenuItemAddition(props);
+  const removalResult = useMenuItemRemoval(props);
+  const reorderResult = useMenuItemReorder(props);
+  const categoryResult = useMenuItemCategory(props);
+  const priceResult = useMenuItemPrice(props);
+
+  return createOperations({
+    additionResult,
+    removalResult,
+    reorderResult,
+    categoryResult,
+    priceResult,
+  });
 }

@@ -4,10 +4,10 @@
  */
 import { useMemo, useRef } from 'react';
 import type { Menu } from '../../types';
+import { useMenuDescriptionEditing } from './helpers/useMenuDescriptionEditing';
+import { useMenuTitleEditing } from './helpers/useMenuTitleEditing';
 import { createEditingState } from './useMenuEditing/helpers/createEditingState';
 import { createHandlers } from './useMenuEditing/helpers/createHandlers';
-import { useMenuTitleEditing } from '../helpers/useMenuTitleEditing';
-import { useMenuDescriptionEditing } from '../helpers/useMenuDescriptionEditing';
 
 interface UseMenuEditingProps {
   menus: Menu[];

@@ -2,7 +2,7 @@
 
 import { useCountry } from '@/contexts/CountryContext';
 import { useEffect, useMemo, useState } from 'react';
-import { fetchAIInsights } from './usePerformanceInsights/helpers/fetchAIInsights';
+import type { PerformanceItem } from '../types';
 import {
   generateBargainBucketInsight,
   generateBurntToastInsight,
@@ -10,7 +10,7 @@ import {
   generateHiddenGemInsight,
   sortInsightsByPriority,
 } from '../utils/insightGenerators';
-import type { PerformanceItem } from '../types';
+import { fetchAIInsights } from './usePerformanceInsights/helpers/fetchAIInsights';
 
 export interface PerformanceInsight {
   id: string;

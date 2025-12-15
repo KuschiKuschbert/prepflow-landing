@@ -2,15 +2,11 @@
  * Data loading utilities for menu data.
  */
 import { logger } from '@/lib/logger';
-import {
-  clearLoadingIfNeeded,
-  setLoadingIfNeeded,
-  shouldShowLoading,
-} from './dataLoading/helpers/handleLoadingState';
+import type { Dish, MenuItem, MenuStatistics, Recipe } from '../../../types';
+import { clearLoadingIfNeeded, setLoadingIfNeeded } from './dataLoading/helpers/handleLoadingState';
 import { handleStatistics } from './dataLoading/helpers/handleStatistics';
 import { processDishesAndRecipes } from './dataLoading/helpers/processDishesAndRecipes';
 import { processMenuResponse } from './dataLoading/helpers/processMenuResponse';
-import type { Dish, MenuItem, MenuStatistics, Recipe } from '../../../types';
 
 interface LoadMenuDataProps {
   menuId: string;

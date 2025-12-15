@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import type { MenuItem } from '../../types';
 import { createInitialDialogState } from './useMenuEditorUI/helpers/createInitialDialogState';
 import { createRemoveHandlers } from './useMenuEditorUI/helpers/createRemoveHandlers';
-import type { MenuItem } from '../../types';
 
 interface UseMenuEditorUIProps {
   handleAddCategoryBase: (category: string, setNewCategory: (cat: string) => void) => void;

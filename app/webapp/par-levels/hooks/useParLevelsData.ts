@@ -1,12 +1,12 @@
 /**
  * Hook for fetching par levels and ingredients data.
  */
-import { useState, useEffect, useCallback } from 'react';
 import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
+import { useCallback, useEffect, useState } from 'react';
+import type { Ingredient, ParLevel } from '../types';
 import { handleParLevelsError } from './useParLevelsData/helpers/handleParLevelsError';
 import { parseParLevelsResponse } from './useParLevelsData/helpers/parseParLevelsResponse';
-import type { ParLevel, Ingredient } from '../types';
 
 interface UseParLevelsDataReturn {
   parLevels: ParLevel[];

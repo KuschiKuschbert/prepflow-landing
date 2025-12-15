@@ -1,10 +1,10 @@
 /**
  * Hook for managing par level CRUD operations.
  */
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
+import type { ParLevel } from '../types';
 import { handleDelete } from './useParLevelsCRUD/helpers/handleDelete';
 import { handleUpdate } from './useParLevelsCRUD/helpers/handleUpdate';
-import type { ParLevel } from '../types';
 
 interface UseParLevelsCRUDProps {
   parLevels: ParLevel[];
