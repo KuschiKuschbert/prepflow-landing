@@ -14,7 +14,7 @@ interface CompactModeProps {
   setShowPlatingPopup: (show: boolean) => void;
   handleGenerateClick: () => void;
   handleGenerate: (methods: PlatingMethodOption[]) => Promise<void>;
-  generateButtonRef: React.RefObject<HTMLButtonElement>;
+  generateButtonRef: React.RefObject<HTMLButtonElement | null>;
   entityName: string;
 }
 

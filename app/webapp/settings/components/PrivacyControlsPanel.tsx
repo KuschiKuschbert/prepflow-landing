@@ -56,9 +56,10 @@ export function PrivacyControlsPanel() {
   }, [isVisible]);
 
   const handleExport = () => handleExportHelper(showSuccess, showError, setExporting);
-  const handleDelete = () => handleDeleteHelper(showConfirm, setDeletionRequested, showSuccess, showError, setDeleting);
-  const handleCancelDeletion = () => handleCancelDeletionHelper(showConfirm, setDeletionRequested, showSuccess, showError);
-
+  const handleDelete = () =>
+    handleDeleteHelper(showConfirm, setDeletionRequested, showSuccess, showError, setDeleting);
+  const handleCancelDeletion = () =>
+    handleCancelDeletionHelper(showConfirm, setDeletionRequested, showSuccess, showError);
 
   if (loading) {
     return (
@@ -128,8 +129,8 @@ export function PrivacyControlsPanel() {
           ) : (
             <>
               <p className="text-sm text-gray-400">
-                Permanently delete your account and all associated data. This action can't be
-                undone. You'll have a 7-day grace period to cancel the deletion request.
+                Permanently delete your account and all associated data. This action can&apos;t be
+                undone. You&apos;ll have a 7-day grace period to cancel the deletion request.
               </p>
               <button
                 onClick={handleDelete}
