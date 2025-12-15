@@ -80,7 +80,7 @@ export default function BillingPage() {
     const confirmed = await showConfirm({
       title: 'Sync Subscriptions',
       message:
-        'Sync all subscriptions from Stripe? This'll update subscription statuses and reconcile any mismatches. This may take a few moments.',
+        'Sync all subscriptions from Stripe? This&apos;ll update subscription statuses and reconcile any mismatches. This may take a few moments.',
       variant: 'info',
       confirmLabel: 'Sync',
       cancelLabel: 'Cancel',

@@ -1,3 +1,5 @@
+import { useNotification } from '@/contexts/NotificationContext';
+import { useConfirm } from '@/hooks/useConfirm';
 import { TemperatureEquipment } from '../types';
 import { useEquipmentState } from './useTemperatureEquipmentTabHandlers/helpers/equipmentState';
 import { createEquipmentHandlersHelper } from './useTemperatureEquipmentTabHandlers/helpers/equipmentHandlers';
@@ -25,13 +27,79 @@ export function useTemperatureEquipmentTabHandlers({
   onDeleteEquipment,
   onRefreshLogs,
 }: UseTemperatureEquipmentTabHandlersProps) {
+  const { showSuccess, showError } = useNotification();
+  const { showConfirm, ConfirmDialog } = useConfirm();
   const state = useEquipmentState();
-  const { editingEquipment, setEditingEquipment, selectedEquipment, setSelectedEquipment, isDrawerOpen, setIsDrawerOpen, qrCodeEquipment, setQrCodeEquipment, isQRCodeModalOpen, setIsQRCodeModalOpen, currentPage, setCurrentPage, viewMode, setViewMode, isGenerating, setIsGenerating, newEquipment, setNewEquipment, showCreateForm, setShowCreateForm } = state;
-  const handlers = createEquipmentHandlersHelper(equipment, itemsPerPage, currentPage, setCurrentPage, newEquipment, setNewEquipment, setShowCreateForm, setEditingEquipment, onUpdateEquipment, onCreateEquipment, onDeleteEquipment, onRefreshLogs, setIsGenerating);
-  const { handleCreateEquipment, handleUpdateEquipment, handleDeleteEquipment, toggleEquipmentStatus, handleGenerateSampleData, ConfirmDialog } = handlers;
-  const uiHandlers = createUIHandlers(setSelectedEquipment, setIsDrawerOpen, setQrCodeEquipment, setIsQRCodeModalOpen);
-  const { handleEquipmentClick, handleCloseDrawer, handleShowQRCode, handleCloseQRCodeModal } = uiHandlers;
+  const {
+    editingEquipment,
+    setEditingEquipment,
+    selectedEquipment,
+    setSelectedEquipment,
+    isDrawerOpen,
+    setIsDrawerOpen,
+    qrCodeEquipment,
+    setQrCodeEquipment,
+    isQRCodeModalOpen,
+    setIsQRCodeModalOpen,
+    currentPage,
+    setCurrentPage,
+    viewMode,
+    setViewMode,
+    isGenerating,
+    setIsGenerating,
+    newEquipment,
+    setNewEquipment,
+    showCreateForm,
+    setShowCreateForm,
+  } = state;
+  const handlers = createEquipmentHandlersHelper(
+    equipment,
+    itemsPerPage,
+    currentPage,
+    setCurrentPage,
+    newEquipment,
+    setNewEquipment,
+    setShowCreateForm,
+    setEditingEquipment,
+    onUpdateEquipment,
+    onCreateEquipment,
+    onDeleteEquipment,
+    onRefreshLogs,
+    setIsGenerating,
+    showSuccess,
+    showError,
+    showConfirm,
+  );
+  const {
+    handleCreateEquipment,
+    handleUpdateEquipment,
+    handleDeleteEquipment,
+    toggleEquipmentStatus,
+    handleGenerateSampleData,
+  } = handlers;
+  const uiHandlers = createUIHandlers(
+    setSelectedEquipment,
+    setIsDrawerOpen,
+    setQrCodeEquipment,
+    setIsQRCodeModalOpen,
+  );
+  const { handleEquipmentClick, handleCloseDrawer, handleShowQRCode, handleCloseQRCodeModal } =
+    uiHandlers;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, equipment.length);
-  return { ...state, startIndex, endIndex, handleEquipmentClick, handleCloseDrawer, handleShowQRCode, handleCloseQRCodeModal, handleCreateEquipment, handleUpdateEquipment, handleDeleteEquipment, toggleEquipmentStatus, handleGenerateSampleData, ConfirmDialog };
+  return {
+    ...state,
+    startIndex,
+    endIndex,
+    handleEquipmentClick,
+    handleCloseDrawer,
+    handleShowQRCode,
+    handleCloseQRCodeModal,
+    handleCreateEquipment,
+    handleUpdateEquipment,
+    handleDeleteEquipment,
+    toggleEquipmentStatus,
+    handleGenerateSampleData,
+    ConfirmDialog,
+  };
 }

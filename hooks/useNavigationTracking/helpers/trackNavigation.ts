@@ -3,9 +3,9 @@
  */
 import { saveUsageLog } from '@/lib/navigation-optimization/localStorage';
 import { getAdaptiveNavSettings } from '@/lib/navigation-optimization/store';
-import { savePendingLogs, saveVisitCounts } from '../useNavigationTracking';
-import type { PendingLog } from '../useNavigationTracking/logStorage';
-import { calculateReturnFrequency } from '../useNavigationTracking/visitCounts';
+import type { PendingLog } from '../logStorage';
+import { savePendingLogs } from '../logStorage';
+import { calculateReturnFrequency, saveVisitCounts } from '../visitCounts';
 
 const MAX_LOCAL_LOGS = 1000;
 
@@ -26,7 +26,14 @@ export function createTrackNavigationHandler(
     visitCountsRef.current.set(href, currentCount + 1);
     saveVisitCounts(visitCountsRef.current);
     const returnFrequency = calculateReturnFrequency(href, visitCountsRef.current);
-    const logEntry: PendingLog = { href, timestamp: now.getTime(), dayOfWeek, hourOfDay, returnFrequency, synced: false };
+    const logEntry: PendingLog = {
+      href,
+      timestamp: now.getTime(),
+      dayOfWeek,
+      hourOfDay,
+      returnFrequency,
+      synced: false,
+    };
     pendingLogsRef.current.push(logEntry);
     if (pendingLogsRef.current.length > MAX_LOCAL_LOGS) {
       pendingLogsRef.current = pendingLogsRef.current.slice(-MAX_LOCAL_LOGS);

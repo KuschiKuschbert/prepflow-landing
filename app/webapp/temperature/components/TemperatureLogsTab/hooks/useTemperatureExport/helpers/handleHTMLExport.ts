@@ -11,8 +11,10 @@ export async function handleHTMLExportHelper(
   showSuccess: (message: string) => void,
 ): Promise<void> {
   const { generatePrintTemplate } = await import('@/lib/exports/print-template');
-  const { formatTemperatureLogsForPrint } = await import('../../../../utils/formatTemperatureLogsForPrint');
-  const { getTemperatureLogPrintStyles } = await import('../../../../utils/temperatureLogPrintStyles');
+  const { formatTemperatureLogsForPrint } =
+    await import('../../../../../utils/formatTemperatureLogsForPrint');
+  const { getTemperatureLogPrintStyles } =
+    await import('../../../../../utils/temperatureLogPrintStyles');
   const contentHtml = formatTemperatureLogsForPrint({ logs: logsToExport, equipment, dateRange });
   const temperatureLogStyles = getTemperatureLogPrintStyles();
   let subtitle = 'Temperature Logs';
@@ -30,7 +32,9 @@ export async function handleHTMLExportHelper(
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  const dateStr = dateRange ? `${dateRange.start}_to_${dateRange.end}` : new Date().toISOString().split('T')[0];
+  const dateStr = dateRange
+    ? `${dateRange.start}_to_${dateRange.end}`
+    : new Date().toISOString().split('T')[0];
   a.download = `temperature_logs_${dateStr}.html`;
   document.body.appendChild(a);
   a.click();

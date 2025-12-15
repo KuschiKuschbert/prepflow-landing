@@ -2,8 +2,10 @@
  * Load ingredients for a recipe or dish item.
  */
 import type { RecipeDishItem } from '../useRecipeDishEditorData';
-import { loadDishIngredients } from '../useRecipeDishIngredientLoading.helpers';
-import { loadRecipeIngredients } from '../useRecipeDishIngredientLoading.helpers';
+import {
+  loadDishIngredients,
+  loadRecipeIngredients,
+} from '../../useRecipeDishIngredientLoading.helpers';
 import type { COGSCalculation, Ingredient } from '../../../../cogs/types';
 import type { Recipe } from '../../../types';
 

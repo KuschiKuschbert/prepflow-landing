@@ -136,7 +136,7 @@ const faqItems: FAQItem[] = [
     id: 'reset-data',
     question: 'How do I reset my data?',
     answer:
-      'Go to the Setup page and scroll to the "Danger Zone" section. Click "Reset Your Data" to delete all your ingredients, recipes, menu dishes, and other data. This action can't be undone. You can optionally reseed with clean test data after resetting.',
+      'Go to the Setup page and scroll to the "Danger Zone" section. Click "Reset Your Data" to delete all your ingredients, recipes, menu dishes, and other data. This action can&apos;t be undone. You can optionally reseed with clean test data after resetting.',
     category: 'webapp',
   },
   // General Questions

@@ -3,8 +3,8 @@
  */
 import { Icon } from '@/components/ui/Icon';
 import { AlertCircle, Loader2, Sparkles } from 'lucide-react';
-import { PlatingMethodSelectorPopup } from '../PlatingMethodSelectorPopup';
-import type { PlatingMethodOption } from '../PlatingMethodSelectorPopup';
+import type { PlatingMethodOption } from '../../PlatingMethodSelectorPopup';
+import { PlatingMethodSelectorPopup } from '../../PlatingMethodSelectorPopup';
 
 interface CompactModeProps {
   hasImages: boolean;

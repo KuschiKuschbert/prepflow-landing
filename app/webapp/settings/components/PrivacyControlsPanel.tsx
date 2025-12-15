@@ -4,14 +4,14 @@ import { Icon } from '@/components/ui/Icon';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useConfirm } from '@/hooks/useConfirm';
 import { useIsVisible } from '@/hooks/useIsVisible';
-import { Activity, AlertTriangle, Database, Download, Trash2 } from 'lucide-react';
+import { AlertTriangle, Download, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { handleExportHelper } from './PrivacyControlsPanel/helpers/handleExport';
-import { handleDeleteHelper } from './PrivacyControlsPanel/helpers/handleDelete';
-import { handleCancelDeletionHelper } from './PrivacyControlsPanel/helpers/handleCancelDeletion';
-import { loadPrivacyDataHelper } from './PrivacyControlsPanel/helpers/loadPrivacyData';
-import { DataUsageSection } from './PrivacyControlsPanel/components/DataUsageSection';
 import { AccountActivitySection } from './PrivacyControlsPanel/components/AccountActivitySection';
+import { DataUsageSection } from './PrivacyControlsPanel/components/DataUsageSection';
+import { handleCancelDeletionHelper } from './PrivacyControlsPanel/helpers/handleCancelDeletion';
+import { handleDeleteHelper } from './PrivacyControlsPanel/helpers/handleDelete';
+import { handleExportHelper } from './PrivacyControlsPanel/helpers/handleExport';
+import { loadPrivacyDataHelper } from './PrivacyControlsPanel/helpers/loadPrivacyData';
 
 interface DataUsage {
   usage: {

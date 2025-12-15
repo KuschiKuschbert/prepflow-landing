@@ -1,34 +1,63 @@
 /**
  * Equipment handlers.
  */
-import { useConfirm } from '@/hooks/useConfirm';
-import { useNotification } from '@/contexts/NotificationContext';
 import type { TemperatureEquipment } from '../../types';
-import { handleGenerateSampleData } from '../utils/generateSampleDataHandler';
+import { handleGenerateSampleData } from '../../utils/generateSampleDataHandler';
 
 export function createEquipmentHandlersHelper(
   equipment: TemperatureEquipment[],
   itemsPerPage: number,
   currentPage: number,
   setCurrentPage: (page: number) => void,
-  newEquipment: { name: string; equipmentType: string; location: string; minTemp: number | null; maxTemp: number | null },
+  newEquipment: {
+    name: string;
+    equipmentType: string;
+    location: string;
+    minTemp: number | null;
+    maxTemp: number | null;
+  },
   setNewEquipment: (equipment: any) => void,
   setShowCreateForm: (show: boolean) => void,
   setEditingEquipment: (id: string | null) => void,
   onUpdateEquipment: (equipmentId: string, updates: Partial<TemperatureEquipment>) => Promise<void>,
-  onCreateEquipment: (name: string, equipmentType: string, location: string | null, minTemp: number | null, maxTemp: number | null) => Promise<void>,
+  onCreateEquipment: (
+    name: string,
+    equipmentType: string,
+    location: string | null,
+    minTemp: number | null,
+    maxTemp: number | null,
+  ) => Promise<void>,
   onDeleteEquipment: (equipmentId: string) => Promise<void>,
   onRefreshLogs: (() => Promise<void>) | undefined,
   setIsGenerating: (generating: boolean) => void,
+  showSuccess: (message: string) => void,
+  showError: (message: string) => void,
+  showConfirm: (options: {
+    title: string;
+    message: string;
+    variant?: 'danger' | 'warning' | 'info';
+    confirmLabel?: string;
+    cancelLabel?: string;
+  }) => Promise<boolean>,
 ) {
-  const { showSuccess, showError } = useNotification();
-  const { showConfirm, ConfirmDialog } = useConfirm();
   return {
     handleCreateEquipment: async (e: React.FormEvent) => {
       e.preventDefault();
       try {
-        await onCreateEquipment(newEquipment.name, newEquipment.equipmentType, newEquipment.location || null, newEquipment.minTemp, newEquipment.maxTemp);
-        setNewEquipment({ name: '', equipmentType: '', location: '', minTemp: null, maxTemp: null });
+        await onCreateEquipment(
+          newEquipment.name,
+          newEquipment.equipmentType,
+          newEquipment.location || null,
+          newEquipment.minTemp,
+          newEquipment.maxTemp,
+        );
+        setNewEquipment({
+          name: '',
+          equipmentType: '',
+          location: '',
+          minTemp: null,
+          maxTemp: null,
+        });
         setShowCreateForm(false);
         setCurrentPage(Math.ceil((equipment.length + 1) / itemsPerPage));
       } catch (error) {}
@@ -59,7 +88,7 @@ export function createEquipmentHandlersHelper(
         await onUpdateEquipment(equipmentId, { is_active: !currentStatus });
       } catch (error) {}
     },
-    generateSampleData: () => handleGenerateSampleData(equipment, showError, showSuccess, setIsGenerating, onRefreshLogs),
-    ConfirmDialog,
+    generateSampleData: () =>
+      handleGenerateSampleData(equipment, showError, showSuccess, setIsGenerating, onRefreshLogs),
   };
 }

@@ -4,7 +4,10 @@
 import type { ExportFormat } from '@/components/ui/ExportButton';
 import { logger } from '@/lib/logger';
 import type { TemperatureEquipment, TemperatureLog } from '../../../../types';
-import { exportTemperatureLogsToCSV, printTemperatureLogs } from '../../../../utils/temperatureLogExportUtils';
+import {
+  exportTemperatureLogsToCSV,
+  printTemperatureLogs,
+} from '../../../../../utils/temperatureLogExportUtils';
 import type { DateRange } from '../../../utils/calculateDateRange';
 import { handleHTMLExportHelper } from './handleHTMLExport';
 
@@ -24,13 +27,15 @@ export async function handleExportHelper(
       showSuccess('Temperature logs exported as CSV');
     } else if (format === 'pdf') {
       printTemperatureLogs({ logs: logsToExport, equipment, dateRange });
-      showSuccess("Temperature logs opened for printing. Use your browser's print dialog to save as PDF.");
+      showSuccess(
+        "Temperature logs opened for printing. Use your browser's print dialog to save as PDF.",
+      );
     } else if (format === 'html') {
       await handleHTMLExportHelper(logsToExport, equipment, dateRange, showSuccess);
     }
   } catch (err) {
     logger.error('[Temperature Logs] Export error:', err);
-    showError("Failed to export temperature logs. Give it another go, chef.");
+    showError('Failed to export temperature logs. Give it another go, chef.');
   } finally {
     setExportLoading(null);
   }

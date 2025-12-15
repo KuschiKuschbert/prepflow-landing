@@ -3,6 +3,7 @@
  */
 import { logger } from '@/lib/logger';
 import { useEffect, useRef } from 'react';
+import { createCleanup } from './useRecipeCards/helpers/createCleanup';
 import { fetchCards } from './useRecipeCards/helpers/fetchCards';
 import { handleFetchError } from './useRecipeCards/helpers/handleFetchError';
 import { updateCards } from './useRecipeCards/helpers/updateCards';
@@ -30,7 +31,6 @@ export function useRecipeCards({ menuId, onError }: UseRecipeCardsOptions) {
 
   useEffect(() => {
     logger.dev('[useRecipeCards] Hook mounted', { menuId });
-    async function performFetch(isPollingCheck = false) {
     async function performFetch(isPollingCheck = false) {
       try {
         // Only show loading spinner on initial load, not during polling
