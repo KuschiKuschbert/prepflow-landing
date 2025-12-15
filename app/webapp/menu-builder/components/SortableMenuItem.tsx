@@ -109,7 +109,7 @@ export function SortableMenuItem({
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
-        onMouseLeave={e => handleMouseLeave(e, tooltipRef)}
+        onMouseLeave={handleMouseLeave}
         className="group relative flex cursor-pointer items-center justify-between rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 transition-all hover:border-[#29E7CD]/50"
       >
         <MenuItemContent item={item} menuId={menuId} />
