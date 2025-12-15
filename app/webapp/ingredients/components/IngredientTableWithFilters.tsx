@@ -11,7 +11,6 @@ import { IngredientTableDialogs } from './IngredientTableDialogs';
 import { IngredientTableEmptyState } from './IngredientTableEmptyState';
 import { IngredientTableFilterBar } from './IngredientTableFilterBar';
 import { IngredientTableHeader } from './IngredientTableHeader';
-
 interface Ingredient {
   id: string;
   ingredient_name: string;

@@ -1,7 +1,7 @@
-import { auth0 } from './auth0';
 import { NextRequest, NextResponse } from 'next/server';
-import { isEmailAllowed } from './allowlist';
 import { isAdmin } from './admin-utils';
+import { isEmailAllowed } from './allowlist';
+import { auth0 } from './auth0';
 import { logger } from './logger';
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -17,6 +17,7 @@ export async function getUserFromRequest(req: NextRequest): Promise<{
   picture?: string;
   sub: string;
   roles?: string[];
+  email_verified?: boolean;
 } | null> {
   // Development bypass: Return mock user if configured
   if (isDev && authBypassDev) {
@@ -25,6 +26,7 @@ export async function getUserFromRequest(req: NextRequest): Promise<{
       name: 'Dev User',
       sub: 'dev|123',
       roles: ['admin'],
+      email_verified: true,
     };
   }
 
@@ -40,6 +42,7 @@ export async function getUserFromRequest(req: NextRequest): Promise<{
       picture: session.user.picture,
       sub: session.user.sub || '',
       roles: (session.user as any)['https://prepflow.org/roles'] || [],
+      email_verified: (session.user as any).email_verified || false,
     };
   } catch (error) {
     logger.error('[Auth0 API Helpers] Failed to get user from request:', {
@@ -59,6 +62,7 @@ export async function requireAuth(req: NextRequest): Promise<{
   picture?: string;
   sub: string;
   roles?: string[];
+  email_verified?: boolean;
 }> {
   // Development bypass: Return mock user
   if (isDev && authBypassDev) {
@@ -100,6 +104,7 @@ export async function requireAdmin(req: NextRequest): Promise<{
   picture?: string;
   sub: string;
   roles?: string[];
+  email_verified?: boolean;
 }> {
   const user = await requireAuth(req);
 

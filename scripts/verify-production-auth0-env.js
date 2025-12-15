@@ -44,7 +44,9 @@ async function verifyProductionAuth0() {
     console.log(`      - Base URL: ${basic.baseUrl || basic.nextAuthUrl || 'NOT SET'}`);
     console.log(`      - Is Correct Production URL: ${basic.isCorrectProductionUrl}`);
     console.log(`      - Auth0 Configured: ${basic.auth0Configured}`);
-    console.log(`      - Auth Secret Set: ${basic.authSecretSet || basic.nextAuthSecretSet || false}`);
+    console.log(
+      `      - Auth Secret Set: ${basic.authSecretSet || basic.nextAuthSecretSet || false}`,
+    );
     console.log(
       `      - Issues: ${basic.issues.length === 0 ? 'None' : basic.issues.join(', ')}\n`,
     );

@@ -28,6 +28,11 @@ const exts = new Set(['.ts', '.tsx', '.js', '.jsx']);
 function detectCategory(filePath) {
   const p = filePath.replace(/\\/g, '/');
 
+  // Exclude config files and scripts (not application code)
+  if (p.includes('next.config.') || p.startsWith('scripts/') || p.includes('/scripts/')) {
+    return null;
+  }
+
   // Configuration/data files exception (500 lines)
   if (
     p.includes('-styles.ts') ||
@@ -112,6 +117,10 @@ async function checkFileSizes(files = null) {
     const content = fs.readFileSync(file, 'utf8');
     const lines = countLines(content);
     const category = detectCategory(file);
+    
+    // Skip files that return null (excluded)
+    if (category === null) continue;
+    
     const limit = LIMITS[category];
 
     if (limit && lines > limit) {

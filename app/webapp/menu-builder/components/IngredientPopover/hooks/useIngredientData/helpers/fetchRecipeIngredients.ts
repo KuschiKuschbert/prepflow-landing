@@ -1,42 +1,47 @@
+/**
+ * Fetch Recipe Ingredients Helper
+ * Fetches ingredients from a recipe and adds them to the ingredients list
+ */
+
 import { logger } from '@/lib/logger';
 import { IngredientData } from '../../useIngredientData';
 
-export async function fetchRecipeIngredients(recipeId: string): Promise<IngredientData[]> {
-  const response = await fetch(`/api/recipes/${recipeId}/ingredients`);
-  const data = await response.json();
+export async function fetchRecipeIngredients(
+  recipeId: string,
+  allIngredients: IngredientData[],
+): Promise<void> {
+  try {
+    const recipeResponse = await fetch(`/api/recipes/${recipeId}/ingredients`);
+    const recipeData = await recipeResponse.json();
+    if (recipeData.items && Array.isArray(recipeData.items)) {
+      recipeData.items.forEach((ri: any) => {
+        const ingredient = ri.ingredients;
+        if (ingredient) {
+          const existingIndex = allIngredients.findIndex(ing => ing.id === ingredient.id);
+          if (existingIndex === -1) {
+            const ingredientData: IngredientData = {
+              id: ingredient.id,
+              ingredient_name: ingredient.ingredient_name || 'Unknown',
+              brand: ingredient.brand || undefined,
+              quantity: ri.quantity,
+              unit: ri.unit,
+              allergens: Array.isArray(ingredient.allergens) ? ingredient.allergens : [],
+              allergen_source: ingredient.allergen_source || undefined,
+            };
 
-  if (!response.ok) {
-    throw new Error(data.error || 'Failed to fetch recipe ingredients');
-  }
+            if (!ingredient.ingredient_name) {
+              logger.warn('[IngredientPopover] Recipe ingredient missing ingredient_name', {
+                recipeId,
+                ingredientId: ingredient.id,
+              });
+            }
 
-  if (!data.items || !Array.isArray(data.items)) {
-    logger.warn('[IngredientPopover] Recipe ingredients API returned no items', {
-      recipeId,
-      responseData: data,
-    });
-    return [];
-  }
-
-  return data.items.map((item: any) => {
-    const ingredient = item.ingredients;
-
-    const ingredientData: IngredientData = {
-      id: item.ingredient_id || ingredient?.id,
-      ingredient_name: ingredient?.ingredient_name || 'Unknown',
-      brand: ingredient?.brand || undefined,
-      quantity: item.quantity,
-      unit: item.unit,
-      allergens: Array.isArray(ingredient?.allergens) ? ingredient.allergens : [],
-      allergen_source: ingredient?.allergen_source || undefined,
-    };
-
-    if (!ingredient?.ingredient_name) {
-      logger.warn('[IngredientPopover] Recipe ingredient missing ingredient_name', {
-        recipeId,
-        ingredientId: ingredient?.id || item.ingredient_id,
+            allIngredients.push(ingredientData);
+          }
+        }
       });
     }
-
-    return ingredientData;
-  });
+  } catch (err) {
+    logger.error(`[IngredientPopover] Error fetching recipe ingredients:`, err);
+  }
 }

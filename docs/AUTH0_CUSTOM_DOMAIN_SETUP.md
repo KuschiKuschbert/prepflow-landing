@@ -96,6 +96,7 @@ After verification, you must configure Auth0 features to use the custom domain:
 Update your Vercel environment variables to use the custom domain:
 
 **Current Production Configuration:**
+
 ```bash
 AUTH0_ISSUER_BASE_URL=https://dev-7myakdl4itf644km.us.auth0.com
 AUTH0_BASE_URL=https://www.prepflow.org
@@ -103,6 +104,7 @@ AUTH0_BASE_URL=https://www.prepflow.org
 ```
 
 **New Production Configuration (with Custom Domain):**
+
 ```bash
 # Option 1: Set AUTH0_DOMAIN explicitly (Recommended - Auth0 SDK standard)
 AUTH0_DOMAIN=auth.prepflow.org
@@ -115,6 +117,7 @@ AUTH0_BASE_URL=https://www.prepflow.org  # Stays the same
 ```
 
 **Important Notes:**
+
 - `AUTH0_BASE_URL` stays `https://www.prepflow.org` - this is your application URL for callback URLs, NOT the Auth0 domain
 - `AUTH0_DOMAIN` or `AUTH0_ISSUER_BASE_URL` changes to use the custom domain `auth.prepflow.org`
 - `AUTH0_DOMAIN` is preferred (Auth0 SDK standard) but optional if `AUTH0_ISSUER_BASE_URL` is set correctly
@@ -135,6 +138,7 @@ After switching to custom domain, update your callback URLs:
 1. **Go to:** Auth0 Dashboard → **Applications** → **PrepFlow** → **Settings**
 
 2. **Update Allowed Callback URLs:**
+
    ```
    https://www.prepflow.org/api/auth/callback
    https://prepflow.org/api/auth/callback
@@ -142,6 +146,7 @@ After switching to custom domain, update your callback URLs:
    ```
 
 3. **Update Allowed Logout URLs:**
+
    ```
    https://www.prepflow.org
    https://www.prepflow.org/
@@ -163,6 +168,7 @@ After switching to custom domain, update your callback URLs:
 The code already supports custom domains via `AUTH0_DOMAIN` environment variable. No code changes needed!
 
 **Current Implementation:**
+
 - `lib/auth0.ts` already reads `AUTH0_DOMAIN` or extracts from `AUTH0_ISSUER_BASE_URL`
 - Auth0 SDK automatically uses the custom domain for all authentication flows
 
@@ -185,6 +191,7 @@ The code already supports custom domains via `AUTH0_DOMAIN` environment variable
 ### Backward Compatibility
 
 ✅ **Existing integrations continue to work:**
+
 - Old domain (`dev-7myakdl4itf644km.us.auth0.com`) still works
 - Both domains can coexist during migration
 - Users must log in again (existing sessions invalidated)
@@ -197,6 +204,7 @@ The code already supports custom domains via `AUTH0_DOMAIN` environment variable
 - **After:** `iss: "https://auth.prepflow.org"`
 
 **Impact:**
+
 - Management API tokens must use custom domain if obtained via custom domain
 - Token validation must account for custom domain issuer
 
@@ -205,6 +213,7 @@ The code already supports custom domains via `AUTH0_DOMAIN` environment variable
 For local development, you can:
 
 **Option 1: Keep using default domain**
+
 ```bash
 # .env.local (development)
 AUTH0_ISSUER_BASE_URL=https://dev-7myakdl4itf644km.us.auth0.com
@@ -212,6 +221,7 @@ AUTH0_ISSUER_BASE_URL=https://dev-7myakdl4itf644km.us.auth0.com
 ```
 
 **Option 2: Use custom domain in dev too**
+
 ```bash
 # .env.local (development)
 AUTH0_DOMAIN=auth.prepflow.org
@@ -221,12 +231,14 @@ AUTH0_ISSUER_BASE_URL=https://auth.prepflow.org
 ### Certificate Management
 
 **Auth0-Managed (Recommended):**
+
 - ✅ Free
 - ✅ Automatic renewal every 3 months
 - ✅ No maintenance required
 - ✅ Requires credit card on file (for verification, not charged)
 
 **Self-Managed (Enterprise Only):**
+
 - Requires reverse proxy (Cloudflare, AWS CloudFront, Azure CDN, Google Cloud)
 - You manage SSL certificates
 - More complex setup
@@ -239,6 +251,7 @@ AUTH0_ISSUER_BASE_URL=https://auth.prepflow.org
 **Symptoms:** Auth0 shows "Verification Failed" or "Pending"
 
 **Solutions:**
+
 1. Verify CNAME record is correct: `dig auth.prepflow.org`
 2. Wait for DNS propagation (can take up to 24 hours)
 3. Check TTL - lower TTL (300-600) speeds up propagation
@@ -249,6 +262,7 @@ AUTH0_ISSUER_BASE_URL=https://auth.prepflow.org
 **Symptoms:** Custom domain shows "Pending" or "Certificate Error"
 
 **Solutions:**
+
 1. Wait 5-15 minutes after DNS verification
 2. Check DNS propagation is complete
 3. Verify CNAME points to correct Auth0 verification endpoint
@@ -259,6 +273,7 @@ AUTH0_ISSUER_BASE_URL=https://auth.prepflow.org
 **Symptoms:** Login redirects to `dev-7myakdl4itf644km.us.auth0.com` instead of `auth.prepflow.org`
 
 **Solutions:**
+
 1. Verify `AUTH0_DOMAIN` environment variable is set correctly
 2. Redeploy after updating environment variables
 3. Clear browser cache and cookies
@@ -269,6 +284,7 @@ AUTH0_ISSUER_BASE_URL=https://auth.prepflow.org
 **Symptoms:** `redirect_uri_mismatch` error after switching to custom domain
 
 **Solutions:**
+
 1. Update Allowed Callback URLs in Auth0 Dashboard
 2. Ensure callback URLs use `https://` (not `http://`)
 3. Verify no trailing slashes in callback URLs

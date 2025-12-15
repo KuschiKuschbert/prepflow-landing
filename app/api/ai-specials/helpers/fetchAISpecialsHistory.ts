@@ -1,5 +1,5 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
 /**
@@ -35,7 +35,7 @@ export async function fetchAISpecialsHistory(
     return NextResponse.json(
       {
         error: 'Failed to fetch AI specials',
-        message: 'Could not retrieve AI analysis data',
+        message: "couldn't retrieve AI analysis data",
       },
       { status: 500 },
     );

@@ -1,5 +1,5 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
 /**
@@ -49,7 +49,7 @@ export async function saveAISpecials(
     return NextResponse.json(
       {
         error: 'Failed to save AI analysis',
-        message: 'Could not save AI processing results',
+        message: "couldn't save AI processing results",
       },
       { status: 500 },
     );

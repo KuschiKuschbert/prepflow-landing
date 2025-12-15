@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
-import type { Menu } from '../../../types';
 import { useCallback, useRef } from 'react';
+import type { Menu } from '../../../types';
 
 interface UseMenuHandlersProps {
   menus: Menu[];
@@ -48,15 +48,13 @@ export function useMenuHandlers({
         const existingIndex = prevMenus.findIndex(m => m.id === savedMenu.id);
         if (existingIndex >= 0) {
           const updated = prevMenus.map(m => (m.id === savedMenu.id ? savedMenu : m));
-          if (selectedMenuRef.current?.id === savedMenu.id) {
-            const currentMenu = selectedMenuRef.current;
-            if (
-              currentMenu.menu_name !== savedMenu.menu_name ||
-              currentMenu.description !== savedMenu.description ||
-              currentMenu.updated_at !== savedMenu.updated_at
-            ) {
-              setSelectedMenuRef.current(savedMenu);
-            }
+          if (
+            selectedMenuRef.current?.id === savedMenu.id &&
+            (selectedMenuRef.current.menu_name !== savedMenu.menu_name ||
+              selectedMenuRef.current.description !== savedMenu.description ||
+              selectedMenuRef.current.updated_at !== savedMenu.updated_at)
+          ) {
+            setSelectedMenuRef.current(savedMenu);
           }
           return updated;
         }
@@ -68,10 +66,7 @@ export function useMenuHandlers({
   );
 
   const handleMenuUpdated = useCallback(() => {
-    logger.dev(
-      '[MenuBuilderClient] handleMenuUpdated CALLED - Calling fetchMenus with updateSelected=true',
-    );
-    // Update both menus list and selected menu if one is selected
+    logger.dev('[MenuBuilderClient] handleMenuUpdated CALLED - Calling fetchMenus with updateSelected=true');
     fetchMenus(true);
   }, [fetchMenus]);
 
@@ -86,7 +81,6 @@ export function useMenuHandlers({
 
   const handleBack = useCallback(() => {
     logger.dev('[MenuBuilderClient] handleBack CALLED - Refreshing menus list');
-    // Refresh menus list to show updated lock status and print buttons
     fetchMenus(false);
   }, [fetchMenus]);
 

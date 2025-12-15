@@ -5,9 +5,9 @@
  * @returns {Promise<NextResponse>} JSON response with social connection status
  */
 import {
-    getSocialConnections,
-    verifyCallbackUrls,
-    verifyGoogleConnection,
+  getSocialConnections,
+  verifyCallbackUrls,
+  verifyGoogleConnection,
 } from '@/lib/auth0-management';
 import { logger } from '@/lib/logger';
 import { NextResponse } from 'next/server';

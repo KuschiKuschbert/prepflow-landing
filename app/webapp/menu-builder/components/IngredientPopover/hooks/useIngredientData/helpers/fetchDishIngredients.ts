@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { IngredientData, RecipeSource } from '../../useIngredientData';
+import { fetchRecipeIngredients } from './fetchRecipeIngredients';
 
 export async function fetchDishIngredients(
   dishId: string,
@@ -65,40 +66,7 @@ export async function fetchDishIngredients(
   }
 
   for (const recipe of recipes) {
-    try {
-      const recipeResponse = await fetch(`/api/recipes/${recipe.source_id}/ingredients`);
-      const recipeData = await recipeResponse.json();
-      if (recipeData.items && Array.isArray(recipeData.items)) {
-        recipeData.items.forEach((ri: any) => {
-          const ingredient = ri.ingredients;
-          if (ingredient) {
-            const existingIndex = allIngredients.findIndex(ing => ing.id === ingredient.id);
-            if (existingIndex === -1) {
-              const ingredientData: IngredientData = {
-                id: ingredient.id,
-                ingredient_name: ingredient.ingredient_name || 'Unknown',
-                brand: ingredient.brand || undefined,
-                quantity: ri.quantity,
-                unit: ri.unit,
-                allergens: Array.isArray(ingredient.allergens) ? ingredient.allergens : [],
-                allergen_source: ingredient.allergen_source || undefined,
-              };
-
-              if (!ingredient.ingredient_name) {
-                logger.warn('[IngredientPopover] Recipe ingredient missing ingredient_name', {
-                  recipeId: recipe.source_id,
-                  ingredientId: ingredient.id,
-                });
-              }
-
-              allIngredients.push(ingredientData);
-            }
-          }
-        });
-      }
-    } catch (err) {
-      logger.error(`[IngredientPopover] Error fetching recipe ingredients:`, err);
-    }
+    await fetchRecipeIngredients(recipe.source_id, allIngredients);
   }
 
   return { ingredients: allIngredients, recipeSources: recipes };

@@ -262,11 +262,7 @@ function checkEnvVarUsage() {
 function checkErrorHandling() {
   log('\n📋 Checking error handling...', 'info');
 
-  const files = [
-    'lib/auth0.ts',
-    'app/api/auth/logout/route.ts',
-    'app/api/auth/error/page.tsx',
-  ];
+  const files = ['lib/auth0.ts', 'app/api/auth/logout/route.ts', 'app/api/auth/error/page.tsx'];
 
   let foundIssues = false;
 

@@ -1,5 +1,5 @@
-import { supabaseAdmin } from './supabase';
 import { logger } from './logger';
+import { supabaseAdmin } from './supabase';
 
 export type NotificationType = 'subscription' | 'system' | 'billing';
 
@@ -111,7 +111,7 @@ export const subscriptionNotifications = {
       type: 'billing',
       title: 'Payment Failed',
       message:
-        'Your payment could not be processed. Please update your payment method to continue using PrepFlow.',
+        "Your payment couldn't be processed. Please update your payment method to continue using PrepFlow.",
       actionUrl: '/webapp/settings/billing',
       actionLabel: 'Update Payment',
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Expires in 7 days

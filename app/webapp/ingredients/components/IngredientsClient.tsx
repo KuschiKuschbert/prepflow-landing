@@ -2,7 +2,6 @@
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
 import { logger } from '@/lib/logger';
-import { useTranslation } from '@/lib/useTranslation';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useIngredientActions } from '../hooks/useIngredientActions';
@@ -100,10 +99,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     isLoading,
     refetch: refetchIngredients,
   } = useIngredientsQuery(1, 10000);
-  useEffect(
-    () => setPage(1),
-    [itemsPerPage, searchTerm, supplierFilter, storageFilter, categoryFilter],
-  );
+  useEffect(() => setPage(1), [itemsPerPage, searchTerm, supplierFilter, storageFilter, categoryFilter]);
   useIngredientMigration(loading, isLoading, ingredientsData);
   useEffect(() => {
     const active = loading || isLoading;

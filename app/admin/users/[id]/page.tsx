@@ -1,22 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { Icon } from '@/components/ui/Icon';
-import {
-  ArrowLeft,
-  User,
-  Mail,
-  Calendar,
-  CreditCard,
-  Trash2,
-  Save,
-  AlertTriangle,
-} from 'lucide-react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useConfirm } from '@/hooks/useConfirm';
 import { logger } from '@/lib/logger';
+import { ArrowLeft, Calendar, Mail, Save, Trash2, User } from 'lucide-react';
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 interface UserData {
   id: string;
@@ -114,7 +105,7 @@ export default function UserDetailPage() {
   const handleDelete = async () => {
     const confirmed = await showConfirm({
       title: 'Delete User',
-      message: `Are you sure you want to delete ${user?.email}? This action cannot be undone and will delete all associated data.`,
+      message: `Are you sure you want to delete ${user?.email}? This action can't be undone and will delete all associated data.`,
       variant: 'danger',
       confirmLabel: 'Delete',
       cancelLabel: 'Cancel',

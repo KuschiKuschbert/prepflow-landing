@@ -86,7 +86,7 @@ export function NavigationHeader({
       userEmailValue: user?.email,
       userNameValue: auth0UserName,
     });
-  }, [user, userEmail, userError, userLoading]);
+  }, [user, userEmail, userError, userLoading, auth0UserName]);
 
   // Fetch user profile from database to get first_name and last_name
   const { profile } = useUserProfile();
@@ -181,7 +181,7 @@ export function NavigationHeader({
       profileEmail: profile?.email,
       profileDisplayName: profile?.display_name,
     });
-  }, [profile, userName, defaultInitials, user?.name, userEmail]);
+  }, [profile, userName, defaultInitials, user?.name, userEmail, auth0UserName]);
 
   return (
     <header

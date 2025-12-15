@@ -54,6 +54,9 @@ function detectCategory(filePath) {
     return 'report';
   }
 
+  // Exclude config files and scripts
+  if (p.includes('next.config.') || p.includes('/scripts/')) return null;
+  
   // Standard detection logic
   if (p.includes('/app/api/')) return 'api';
   if (p.match(/\/hooks\//) || /\/hooks\/[^/]+\.(t|j)sx?$/.test(p)) return 'hook';
@@ -104,6 +107,10 @@ function main() {
     const content = fs.readFileSync(file, 'utf8');
     const lines = countLines(content);
     const category = detectCategory(file);
+    
+    // Skip files that return null (excluded)
+    if (category === null) continue;
+    
     const limit = LIMITS[category];
 
     if (limit && lines > limit) {

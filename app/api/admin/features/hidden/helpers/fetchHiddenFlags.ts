@@ -1,5 +1,5 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
 /**
@@ -45,7 +45,7 @@ export async function fetchHiddenFlags(): Promise<{ flags: any[] } | NextRespons
           success: false,
           error: 'TABLE_NOT_FOUND',
           message:
-            'The hidden_feature_flags table does not exist. Please run the migration: migrations/create_hidden_feature_flags_table.sql',
+            "The hidden_feature_flags table doesn't exist. Please run the migration: migrations/create_hidden_feature_flags_table.sql",
           details: {
             migrationFile: 'migrations/create_hidden_feature_flags_table.sql',
             errorCode: error.code,

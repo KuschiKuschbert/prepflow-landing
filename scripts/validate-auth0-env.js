@@ -250,7 +250,10 @@ function validateAuth0Config() {
 
   // Validate NEXTAUTH_SESSION_MAX_AGE (deprecated - Auth0 SDK handles sessions internally)
   if (config.NEXTAUTH_SESSION_MAX_AGE) {
-    log('\n⚠️  NEXTAUTH_SESSION_MAX_AGE is deprecated - Auth0 SDK manages sessions internally', 'warning');
+    log(
+      '\n⚠️  NEXTAUTH_SESSION_MAX_AGE is deprecated - Auth0 SDK manages sessions internally',
+      'warning',
+    );
     issues.warnings.push('NEXTAUTH_SESSION_MAX_AGE is deprecated, Auth0 SDK manages sessions');
   }
 

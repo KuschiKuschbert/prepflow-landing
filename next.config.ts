@@ -1,9 +1,15 @@
 import type { NextConfig } from 'next';
 
-// Bundle analyzer
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
+// Bundle analyzer (optional - only if package is installed)
+let withBundleAnalyzer = (config: NextConfig) => config;
+try {
+  const bundleAnalyzer = require('@next/bundle-analyzer')({
+    enabled: process.env.ANALYZE === 'true',
+  });
+  withBundleAnalyzer = bundleAnalyzer;
+} catch {
+  // Bundle analyzer not installed - skip
+}
 
 const nextConfig: NextConfig = {
   // Let Vercel handle compression automatically

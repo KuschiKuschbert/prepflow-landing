@@ -1,6 +1,6 @@
 import {
-    enableGoogleConnectionForApp,
-    verifyGoogleConnection,
+  enableGoogleConnectionForApp,
+  verifyGoogleConnection,
 } from '@/lib/auth0-google-connection';
 import { getSocialConnections, verifyCallbackUrls } from '@/lib/auth0-management';
 import { logger } from '@/lib/logger';
