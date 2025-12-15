@@ -2,7 +2,7 @@
  * Hook for reordering menu items (move up/down, drag and drop).
  */
 import { useCallback } from 'react';
-import { performReorder as performReorderOperation } from './helpers/performReorder';
+import { performReorder as performReorderOperation } from './useMenuItemReorder/helpers/performReorder';
 
 interface UseMenuItemReorderProps {
   menuId: string;
