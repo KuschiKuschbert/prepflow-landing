@@ -3,8 +3,8 @@
  * Provides a consistent pattern for optimistic updates across the application.
  */
 
-import { useState, useCallback } from 'react';
-import { logger } from '@/lib/logger';
+import { useCallback, useState } from 'react';
+import { createMutateHandler } from './useOptimisticMutation/helpers/mutate';
 
 interface UseOptimisticMutationOptions<T> {
   onSuccess?: (data: T) => void;
@@ -51,51 +51,7 @@ export function useOptimisticMutation<T = unknown>(
   const { onSuccess, onError, showSuccessNotification, showErrorNotification } = options;
   const [isMutating, setIsMutating] = useState(false);
 
-  const mutate = useCallback(
-    async (
-      optimisticUpdate: () => void,
-      mutationFn: () => Promise<Response>,
-      rollbackFn: () => void,
-      successMessage?: string,
-    ) => {
-      setIsMutating(true);
-
-      // Apply optimistic update immediately
-      optimisticUpdate();
-
-      try {
-        const response = await mutationFn();
-        const result = await response.json();
-
-        if (response.ok) {
-          if (successMessage && showSuccessNotification) {
-            showSuccessNotification(successMessage);
-          }
-          onSuccess?.(result.data || result);
-        } else {
-          // Revert optimistic update on error
-          rollbackFn();
-          const errorMsg = result.error || result.message || 'Operation failed';
-          if (showErrorNotification) {
-            showErrorNotification(errorMsg);
-          }
-          onError?.(errorMsg);
-        }
-      } catch (err) {
-        // Revert optimistic update on error
-        rollbackFn();
-        const errorMsg = err instanceof Error ? err.message : 'Operation failed';
-        logger.error('Optimistic mutation failed:', err);
-        if (showErrorNotification) {
-          showErrorNotification(errorMsg);
-        }
-        onError?.(errorMsg);
-      } finally {
-        setIsMutating(false);
-      }
-    },
-    [onSuccess, onError, showSuccessNotification, showErrorNotification],
-  );
+  const mutate = useCallback(createMutateHandler(setIsMutating, onSuccess, onError, showSuccessNotification, showErrorNotification), [onSuccess, onError, showSuccessNotification, showErrorNotification]);
 
   return { mutate, isMutating };
 }

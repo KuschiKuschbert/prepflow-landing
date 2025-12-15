@@ -31,6 +31,8 @@ import {
   getShiftsForEmployeeAndDay,
   getCurrentWeekShifts,
 } from './RosterBuilder/utils/rosterHelpers';
+import { createInlineEntrySaveHandler } from './RosterBuilder/helpers/handleInlineEntrySave';
+import { createPublishHandler } from './RosterBuilder/helpers/handlePublish';
 
 interface RosterBuilderProps {
   weekStartDate?: Date;
@@ -183,43 +185,8 @@ export function RosterBuilder({
     [shifts],
   );
 
-  // Handle inline entry save
-  const handleInlineEntrySave = async (shiftData: Partial<Shift>) => {
-    // Check shift limit before creating
-    const dateStr = shiftData.shift_date!;
-    const existingShifts = shifts.filter(
-      s => s.employee_id === shiftData.employee_id && s.shift_date === dateStr,
-    );
-    if (existingShifts.length >= 2) {
-      showError('Maximum 2 shifts per day allowed');
-      return;
-    }
-
-    await handleCreateShift(shiftData);
-    // Close inline entry after save
-    setActiveInlineEntry(null);
-  };
-
-  // Publish draft shifts
-  const handlePublish = async () => {
-    const draftShifts = shifts.filter(s => s.status === 'draft');
-    if (draftShifts.length === 0) {
-      showError('No draft shifts to publish');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      // TODO: Call API to publish shifts
-      const shiftIds = draftShifts.map(s => s.id);
-      publishShifts(shiftIds);
-      showSuccess(`${draftShifts.length} shift(s) published successfully`);
-    } catch (error) {
-      showError('Failed to publish shifts');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const handleInlineEntrySave = createInlineEntrySaveHandler(shifts, handleCreateShift, setActiveInlineEntry, showError);
+  const handlePublish = createPublishHandler(shifts, publishShifts, setLoading, showError, showSuccess);
 
   const currentWeekShifts = getCurrentWeekShifts(shifts, currentWeekStart);
 

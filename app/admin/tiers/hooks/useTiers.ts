@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
+import { useCallback, useState } from 'react';
 import type { TierConfiguration } from '../types';
 
 /**
@@ -50,16 +50,14 @@ export function useTiers() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(tier),
         });
-
         if (response.ok) {
           showSuccess(`Tier ${tier.tier_slug} updated successfully`);
           fetchTiers();
           return true;
-        } else {
-          const errorData = await response.json();
-          showError(errorData.error || 'Failed to update tier');
-          return false;
         }
+        const errorData = await response.json();
+        showError(errorData.error || 'Failed to update tier');
+        return false;
       } catch (error) {
         showError('Failed to update tier');
         return false;
@@ -74,16 +72,14 @@ export function useTiers() {
         const response = await fetch(`/api/admin/tiers?tier_slug=${tierSlug}`, {
           method: 'DELETE',
         });
-
         if (response.ok) {
           showSuccess(`Tier ${tierSlug} disabled successfully`);
           fetchTiers();
           return true;
-        } else {
-          const errorData = await response.json();
-          showError(errorData.error || 'Failed to disable tier');
-          return false;
         }
+        const errorData = await response.json();
+        showError(errorData.error || 'Failed to disable tier');
+        return false;
       } catch (error) {
         showError('Failed to disable tier');
         return false;
@@ -91,6 +87,7 @@ export function useTiers() {
     },
     [fetchTiers, showSuccess, showError],
   );
+
   return {
     tiers,
     loading,

@@ -12,6 +12,7 @@ import { X, Download, FileText, FileSpreadsheet, FileCode, Check } from 'lucide-
 import type { TemplateVariant } from '@/lib/exports/template-utils';
 import { getVariantDisplayName, getVariantDescription } from '@/lib/exports/template-utils';
 import type { ExportFormat } from './ExportButton';
+import { setupFocusTrap } from './ExportOptionsModal/helpers/focusTrap';
 
 export interface ExportFilter {
   id: string;
@@ -83,34 +84,7 @@ export function ExportOptionsModal({
   // Focus trap
   useEffect(() => {
     if (isOpen && modalRef.current) {
-      const focusableElements = modalRef.current.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      );
-      const firstElement = focusableElements[0] as HTMLElement;
-      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-
-      const handleTab = (e: KeyboardEvent) => {
-        if (e.key !== 'Tab') return;
-
-        if (e.shiftKey) {
-          if (document.activeElement === firstElement) {
-            e.preventDefault();
-            lastElement?.focus();
-          }
-        } else {
-          if (document.activeElement === lastElement) {
-            e.preventDefault();
-            firstElement?.focus();
-          }
-        }
-      };
-
-      document.addEventListener('keydown', handleTab);
-      firstElement?.focus();
-
-      return () => {
-        document.removeEventListener('keydown', handleTab);
-      };
+      return setupFocusTrap(modalRef);
     }
   }, [isOpen]);
 

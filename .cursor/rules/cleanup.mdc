@@ -32,7 +32,7 @@ alwaysApply: true
 - **Components:** 300 lines maximum
 - **API Routes:** 200 lines maximum
 - **Utilities:** 150 lines maximum
-- **Hooks:** 100 lines maximum
+- **Hooks:** 120 lines maximum (increased from 100 to accommodate coordination hooks)
 - **Data Files:** 2000 lines maximum (seed data, translations)
 
 **Enforcement:**

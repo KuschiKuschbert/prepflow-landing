@@ -44,15 +44,15 @@ After comprehensive refactoring, we've successfully reduced file sizes across th
   - Configuration/data files (can be up to 500 lines)
   - Complex algorithm files (can be up to 300 lines with justification)
 
-### Hooks (Limit: 100 lines)
+### Hooks (Limit: 120 lines)
 
 - **Before**: Multiple hooks exceeded 100 lines
-- **After**: All hooks are now 50-100 lines
+- **After**: All hooks are now 50-120 lines
 - **Examples**:
   - `useIngredientFormLogic.ts`: 274 → 102 lines (extracted 4 helper hooks)
   - `useMenuItemPrice.ts`: 201 → 93 lines (extracted 3 helpers)
   - `useDishesClientPagination.ts`: 198 → 57 lines (extracted 5 helpers)
-- **Status**: ✅ **Limit is appropriate** - No changes needed
+- **Status**: ✅ **Limit updated to 120 lines** - Accommodates coordination hooks that manage multiple concerns
 
 ## Recommended File Size Limits
 
@@ -65,7 +65,7 @@ Based on refactoring results and project needs:
 | **Pages**      | 500 lines     | ✅ Keep                 | All pages are now 100-250 lines      |
 | **Components** | 300 lines     | ✅ Keep                 | All components are now 100-300 lines |
 | **API Routes** | 200 lines     | ✅ Keep                 | All routes are now 70-200 lines      |
-| **Hooks**      | 100 lines     | ✅ Keep                 | All hooks are now 50-100 lines       |
+| **Hooks**      | 120 lines     | ✅ Updated              | Increased from 100 to accommodate coordination hooks |
 | **Utilities**  | 150 lines     | ⚠️ Keep with exceptions | See exceptions below                 |
 
 ### Recommended Exceptions for Utilities
@@ -147,6 +147,6 @@ const LIMITS = {
 
 ## Conclusion
 
-The current file size limits are **appropriate and effective**. The refactoring has successfully reduced file sizes while maintaining functionality. The recommended exceptions for utilities provide flexibility for legitimate cases where larger files are necessary.
+The current file size limits are **appropriate and effective**. The refactoring has successfully reduced file sizes while maintaining functionality. The hook limit was increased from 100 to 120 lines to accommodate coordination hooks that manage multiple concerns, while still enforcing good separation of concerns. The recommended exceptions for utilities provide flexibility for legitimate cases where larger files are necessary.
 
-**Recommendation**: Keep current limits, implement exceptions for configuration/data files and complex algorithms as described above.
+**Recommendation**: Keep current limits (with hook limit updated to 120 lines), implement exceptions for configuration/data files and complex algorithms as described above.

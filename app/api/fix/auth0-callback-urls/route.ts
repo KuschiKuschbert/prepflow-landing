@@ -1,11 +1,12 @@
 import {
-  enableGoogleConnectionForApp,
-  verifyGoogleConnection,
+    enableGoogleConnectionForApp,
+    verifyGoogleConnection,
 } from '@/lib/auth0-google-connection';
 import { getSocialConnections, verifyCallbackUrls } from '@/lib/auth0-management';
 import { logger } from '@/lib/logger';
 import { ManagementClient } from 'auth0';
 import { NextResponse } from 'next/server';
+import { buildRequiredUrls } from './helpers/buildRequiredUrls';
 
 /**
  * Fix Auth0 Callback URLs via Management API
@@ -87,49 +88,7 @@ export async function POST() {
     const app = appResponse.data || (appResponse as any);
 
     // Build required URLs (Auth0 SDK uses /api/auth/callback, not /api/auth/callback/auth0)
-    const requiredCallbacks = [
-      `${baseUrl}/api/auth/callback`,
-      ...(baseUrl.includes('www.')
-        ? [`${baseUrl.replace('www.', '')}/api/auth/callback`]
-        : [`${baseUrl.replace(/^https?:\/\//, 'https://www.')}/api/auth/callback`]),
-      // Also include localhost for development
-      'http://localhost:3000/api/auth/callback',
-      'http://localhost:3001/api/auth/callback',
-      // Temporary: Include Vercel preview URLs if VERCEL_URL is set (for preview deployments)
-      // This allows preview deployments to work while we investigate AUTH0_BASE_URL priority
-      ...(process.env.VERCEL_URL && !process.env.VERCEL_URL.includes('prepflow.org')
-        ? [
-            `https://${process.env.VERCEL_URL}/api/auth/callback`,
-            `http://${process.env.VERCEL_URL}/api/auth/callback`,
-          ]
-        : []),
-    ];
-
-    const requiredLogoutUrls = [
-      baseUrl,
-      `${baseUrl}/`,
-      ...(baseUrl.includes('www.')
-        ? [baseUrl.replace('www.', ''), `${baseUrl.replace('www.', '')}/`]
-        : [
-            baseUrl.replace(/^https?:\/\//, 'https://www.'),
-            `${baseUrl.replace(/^https?:\/\//, 'https://www.')}/`,
-          ]),
-      // Also include localhost for development
-      'http://localhost:3000',
-      'http://localhost:3000/',
-      'http://localhost:3001',
-      'http://localhost:3001/',
-    ];
-
-    const requiredWebOrigins = [
-      baseUrl,
-      ...(baseUrl.includes('www.')
-        ? [baseUrl.replace('www.', '')]
-        : [baseUrl.replace(/^https?:\/\//, 'https://www.')]),
-      // Also include localhost for development
-      'http://localhost:3000',
-      'http://localhost:3001',
-    ];
+    const { requiredCallbacks, requiredLogoutUrls, requiredWebOrigins } = buildRequiredUrls(baseUrl);
 
     // Merge with existing URLs (avoid duplicates)
     const currentCallbacks = (app.callbacks || []) as string[];

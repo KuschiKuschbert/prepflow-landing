@@ -18,7 +18,7 @@ export function handleAISpecialsError(error: Error | any, operation: string): Ne
   return NextResponse.json(
     {
       error: 'Internal server error',
-      message: 'An unexpected error occurred',
+      message: "Something went wrong while processing your request. Give it another go, chef.",
     },
     { status: 500 },
   );

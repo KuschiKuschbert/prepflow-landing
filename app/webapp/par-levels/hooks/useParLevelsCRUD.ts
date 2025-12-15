@@ -2,7 +2,8 @@
  * Hook for managing par level CRUD operations.
  */
 import { useState, useCallback } from 'react';
-import { createOptimisticDelete, createOptimisticUpdate } from '@/lib/optimistic-updates';
+import { handleDelete } from './helpers/handleDelete';
+import { handleUpdate } from './helpers/handleUpdate';
 import type { ParLevel } from '../types';
 
 interface UseParLevelsCRUDProps {
@@ -26,53 +27,30 @@ export function useParLevelsCRUD({
   const [editingParLevel, setEditingParLevel] = useState<ParLevel | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
-  const handleUpdate = useCallback(
+  const handleUpdateCallback = useCallback(
     async (updates: Partial<ParLevel>) => {
-      if (!updates.id) return;
-      await createOptimisticUpdate(
-        parLevels,
-        updates.id,
+      await handleUpdate({
         updates,
-        () =>
-          fetch('/api/par-levels', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              id: updates.id,
-              parLevel: updates.par_level,
-              reorderPoint: updates.reorder_point,
-              unit: updates.unit,
-            }),
-          }),
+        parLevels,
         setParLevels,
-        () => {
-          showSuccess('Par level updated successfully');
-          fetchParLevels();
-        },
+        fetchParLevels,
         showError,
-      );
+        showSuccess,
+      });
     },
     [parLevels, setParLevels, fetchParLevels, showError, showSuccess],
   );
-  const handleEdit = useCallback((parLevel: ParLevel) => {
-    setEditingParLevel(parLevel);
-  }, []);
-  const handleDelete = useCallback(
+  const handleEdit = useCallback((parLevel: ParLevel) => setEditingParLevel(parLevel), []);
+  const handleDeleteCallback = useCallback(
     async (id: string): Promise<void> => {
-      const parLevelToDelete = parLevels.find(pl => pl.id === id);
-      if (!parLevelToDelete) return;
-
-      await createOptimisticDelete(
-        parLevels,
+      await handleDelete({
         id,
-        () => fetch(`/api/par-levels?id=${id}`, { method: 'DELETE' }),
+        parLevels,
         setParLevels,
-        () => {
-          showSuccess('Par level deleted successfully');
-          fetchParLevels();
-        },
+        fetchParLevels,
         showError,
-      );
+        showSuccess,
+      });
     },
     [parLevels, setParLevels, fetchParLevels, showSuccess, showError],
   );
@@ -82,10 +60,10 @@ export function useParLevelsCRUD({
   }, []);
   const confirmDelete = useCallback(async () => {
     if (!deleteConfirmId) return;
-    await handleDelete(deleteConfirmId);
+    await handleDeleteCallback(deleteConfirmId);
     setShowDeleteConfirm(false);
     setDeleteConfirmId(null);
-  }, [deleteConfirmId, handleDelete]);
+  }, [deleteConfirmId, handleDeleteCallback]);
   const cancelDelete = useCallback(() => {
     setShowDeleteConfirm(false);
     setDeleteConfirmId(null);
@@ -97,9 +75,9 @@ export function useParLevelsCRUD({
     editingParLevel,
     showDeleteConfirm,
     deleteConfirmId,
-    handleUpdate,
+    handleUpdate: handleUpdateCallback,
     handleEdit,
-    handleDelete,
+    handleDelete: handleDeleteCallback,
     handleDeleteClick,
     confirmDelete,
     cancelDelete,

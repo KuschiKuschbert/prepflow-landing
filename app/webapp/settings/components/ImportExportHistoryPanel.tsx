@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
-import { Download, Upload, Database, RotateCcw } from 'lucide-react';
+import { Database, Download, RotateCcw, Upload } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface ImportExportLog {
@@ -115,7 +115,7 @@ export function ImportExportHistoryPanel() {
 
       {history.length === 0 ? (
         <p className="text-sm text-gray-400">
-          No import/export history found. History will be tracked after database migration is
+          No import/export history found. History will be tracked after data structure updates are
           applied.
         </p>
       ) : (

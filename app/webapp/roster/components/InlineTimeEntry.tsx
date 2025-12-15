@@ -8,11 +8,12 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { format } from 'date-fns';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Clock, X, Save } from 'lucide-react';
 import type { Shift } from '../types';
+import { calculatePopoverPosition } from './InlineTimeEntry/helpers/calculatePopoverPosition';
+import { buildShiftData } from './InlineTimeEntry/helpers/buildShiftData';
 
 interface InlineTimeEntryProps {
   employeeId: string;
@@ -49,53 +50,8 @@ export function InlineTimeEntry({
     null,
   );
 
-  // Calculate popover position
   useEffect(() => {
-    if (!cellPosition) {
-      // Fallback: center on screen
-      setPopoverPosition({
-        top: window.innerHeight / 2 - 100,
-        left: window.innerWidth / 2 - 150,
-      });
-      return;
-    }
-
-    const popoverWidth = 320; // Approximate popover width
-    const popoverHeight = 180; // Approximate popover height
-    const spacing = 8; // Space between cell and popover
-    const viewportPadding = 16; // Padding from viewport edges
-
-    // Calculate available space above and below cell
-    const spaceAbove = cellPosition.top;
-    const spaceBelow = window.innerHeight - cellPosition.top - cellPosition.height;
-
-    // Determine if popover should appear above or below
-    const shouldPlaceAbove = spaceBelow < popoverHeight + spacing && spaceAbove > spaceBelow;
-
-    // Calculate vertical position
-    let top: number;
-    if (shouldPlaceAbove) {
-      top = cellPosition.top - popoverHeight - spacing;
-    } else {
-      top = cellPosition.top + cellPosition.height + spacing;
-    }
-
-    // Ensure popover doesn't go above viewport
-    top = Math.max(viewportPadding, top);
-
-    // Ensure popover doesn't go below viewport
-    top = Math.min(window.innerHeight - popoverHeight - viewportPadding, top);
-
-    // Calculate horizontal position (center on cell)
-    let left = cellPosition.left + cellPosition.width / 2 - popoverWidth / 2;
-
-    // Ensure popover doesn't go off left edge
-    left = Math.max(viewportPadding, left);
-
-    // Ensure popover doesn't go off right edge
-    left = Math.min(window.innerWidth - popoverWidth - viewportPadding, left);
-
-    setPopoverPosition({ top, left });
+    setPopoverPosition(calculatePopoverPosition(cellPosition));
   }, [cellPosition]);
 
   // Auto-focus on start time input when component mounts
@@ -145,34 +101,8 @@ export function InlineTimeEntry({
     }
 
     setSaving(true);
-
-    // Convert times to ISO timestamps
-    const shiftDate = format(date, 'yyyy-MM-dd');
-    const [startHour, startMin] = startTime.split(':').map(Number);
-    const [endHour, endMin] = endTime.split(':').map(Number);
-
-    const startDateTime = new Date(date);
-    startDateTime.setHours(startHour, startMin, 0, 0);
-
-    let endDateTime = new Date(date);
-    endDateTime.setHours(endHour, endMin, 0, 0);
-
-    // Handle shifts spanning midnight
-    if (endDateTime < startDateTime) {
-      endDateTime = new Date(endDateTime);
-      endDateTime.setDate(endDateTime.getDate() + 1);
-    }
-
-    const shiftData: Partial<Shift> = {
-      employee_id: employeeId,
-      shift_date: shiftDate,
-      start_time: startDateTime.toISOString(),
-      end_time: endDateTime.toISOString(),
-      status: 'draft',
-    };
-
     try {
-      await onSave(shiftData);
+      await onSave(buildShiftData(employeeId, date, startTime, endTime));
     } catch (err) {
       setError('Failed to save shift');
       setSaving(false);

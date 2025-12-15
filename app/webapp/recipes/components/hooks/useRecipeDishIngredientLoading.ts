@@ -3,10 +3,7 @@ import { RecipeDishItem } from './useRecipeDishEditorData';
 import { Recipe } from '../../types';
 import { COGSCalculation, Ingredient } from '../../../cogs/types';
 import { logger } from '@/lib/logger';
-import {
-  loadRecipeIngredients,
-  loadDishIngredients,
-} from './useRecipeDishIngredientLoading.helpers';
+import { loadIngredientsForItem } from './useRecipeDishIngredientLoading/helpers/loadIngredientsForItem';
 
 interface UseRecipeDishIngredientLoadingProps {
   selectedItem: RecipeDishItem | null;
@@ -42,11 +39,8 @@ export function useRecipeDishIngredientLoading({
     showErrorRef.current = showError;
   }, [convertIngredientQuantity, showError]);
 
-  // Load ingredients when selectedItem or data changes
   useEffect(() => {
     const selectedItemId = selectedItem?.id || null;
-
-    // Handle deselection
     if (!selectedItemId) {
       if (previousSelectedItemIdRef.current !== null) {
         setCalculations([]);
@@ -56,45 +50,20 @@ export function useRecipeDishIngredientLoading({
       }
       return;
     }
-
-    // Skip if same item selected AND we've already loaded it successfully
-    // This prevents reloading when clicking the same dish multiple times
-    if (selectedItemId === loadedItemIdRef.current && ingredients.length > 0) {
-      return;
-    }
-
-    // Don't try to load if ingredients not ready yet (but item is selected)
-    if (ingredients.length === 0) {
-      // Keep waiting for ingredients to load
-      return;
-    }
+    if (selectedItemId === loadedItemIdRef.current && ingredients.length > 0) return;
+    if (ingredients.length === 0) return;
 
     const loadIngredients = async () => {
+      if (!selectedItem) return;
       setLoadingIngredients(true);
       try {
-        let loadedCalculations: COGSCalculation[] = [];
-
-        if (!selectedItem) {
-          return;
-        }
-
-        if (selectedItem.type === 'recipe') {
-          loadedCalculations = await loadRecipeIngredients({
-            recipeId: selectedItem.id,
-            allRecipes,
-            ingredients,
-            convertIngredientQuantity: convertIngredientQuantityRef.current,
-          });
-        } else {
-          loadedCalculations = await loadDishIngredients({
-            dishId: selectedItem.id,
-            recipes,
-            ingredients,
-            convertIngredientQuantity: convertIngredientQuantityRef.current,
-          });
-        }
-
-        // Only update refs after successful load to prevent unnecessary reloads
+        const loadedCalculations = await loadIngredientsForItem({
+          selectedItem,
+          allRecipes,
+          recipes,
+          ingredients,
+          convertIngredientQuantity: convertIngredientQuantityRef.current,
+        });
         previousSelectedItemIdRef.current = selectedItemId;
         loadedItemIdRef.current = selectedItemId;
         setCalculations(loadedCalculations);
@@ -102,14 +71,11 @@ export function useRecipeDishIngredientLoading({
         logger.error('Failed to load ingredients:', err);
         showErrorRef.current('Failed to load ingredients');
         setCalculations([]);
-        // Don't update ref on error, so it will retry next time
       } finally {
         setLoadingIngredients(false);
       }
     };
-
     loadIngredients();
-    // Depend on selectedItem ID and arrays - arrays are stable from useCOGSDataFetching
   }, [selectedItem, selectedItem?.id, selectedItem?.type, ingredients, recipes, allRecipes]);
   return { calculations, setCalculations, loadingIngredients };
 }

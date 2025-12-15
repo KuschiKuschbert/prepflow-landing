@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Icon } from '@/components/ui/Icon';
 import { useNotification } from '@/contexts/NotificationContext';
 import { BarChart3 } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
+import { useState } from 'react';
 
 export default function TestDataGenerator() {
   const [isGeneratingTestData, setIsGeneratingTestData] = useState(false);
@@ -33,7 +33,7 @@ export default function TestDataGenerator() {
         showError(`Error: ${data.error || 'Failed to generate test data'}`);
       }
     } catch (error) {
-      showError('Network error occurred while generating test data');
+      showError("Connection issue while generating test data. Give it another go, chef.");
     } finally {
       setIsGeneratingTestData(false);
     }

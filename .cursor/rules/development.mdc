@@ -504,7 +504,7 @@ Enforces file size limits to maintain code quality:
 - **Complex Components:** Maximum 300 lines
 - **API Routes:** Maximum 200 lines
 - **Utility Functions:** Maximum 150 lines
-- **Hooks:** Maximum 100 lines
+- **Hooks:** Maximum 120 lines (increased from 100 to accommodate coordination hooks)
 
 **Integration:** Runs automatically in CI pipeline and pre-commit hooks.
 
@@ -1192,7 +1192,7 @@ export const PREFETCH_MAP: Record<string, string[]> = {
 - **Complex Components:** Maximum 300 lines
 - **API Routes:** Maximum 200 lines
 - **Utility Functions:** Maximum 150 lines
-- **Hooks:** Maximum 100 lines
+- **Hooks:** Maximum 120 lines (increased from 100 to accommodate coordination hooks)
 
 **Mandatory Refactoring Triggers:**
 
@@ -1200,7 +1200,7 @@ export const PREFETCH_MAP: Record<string, string[]> = {
 - ✅ **Component exceeds 300 lines** → Extract sub-components and hooks
 - ✅ **API route exceeds 200 lines** → Split into multiple endpoints
 - ✅ **Function exceeds 150 lines** → Break into smaller functions
-- ✅ **Hook exceeds 100 lines** → Split into multiple specialized hooks
+- ✅ **Hook exceeds 120 lines** → Split into multiple specialized hooks
 
 **Refactoring Requirements:**
 

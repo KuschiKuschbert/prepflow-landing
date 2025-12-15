@@ -4,6 +4,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
+import { handleParLevelsError } from './helpers/handleParLevelsError';
+import { parseParLevelsResponse } from './helpers/parseParLevelsResponse';
 import type { ParLevel, Ingredient } from '../types';
 
 interface UseParLevelsDataReturn {
@@ -36,35 +38,13 @@ export function useParLevelsData({ showError }: UseParLevelsDataProps): UseParLe
       const response = await fetch('/api/par-levels');
       logger.dev(`[Par Levels] Response status: ${response.status} ${response.statusText}`);
 
-      let result;
-      try {
-        const responseText = await response.text();
-        logger.dev('[Par Levels] Response text:', responseText);
-        result = JSON.parse(responseText);
-        logger.dev('[Par Levels] Parsed result:', result);
-      } catch (parseError) {
-        logger.error('[Par Levels] Parse error:', parseError);
-        showError(`Server error (${response.status}). Please check the server logs.`);
-        return;
-      }
+      const result = await parseParLevelsResponse({ response, showError });
+      if (!result) return;
       if (response.ok && result.success) {
         setParLevels(result.data || []);
         cacheData('par_levels', result.data || []);
       } else {
-        const errorMessage =
-          result.message || result.error || `Failed to fetch par levels (${response.status})`;
-        const instructions = result.details?.instructions || [];
-        logger.error('[Par Levels] API Error:', {
-          status: response.status,
-          error: errorMessage,
-          details: result.details,
-          code: result.code,
-          fullResponse: result,
-        });
-        showError(
-          instructions.length > 0 ? `${errorMessage}\n\n${instructions.join('\n')}` : errorMessage,
-        );
-        if (instructions.length > 0) logger.dev('[Par Levels] Error Instructions:', instructions);
+        handleParLevelsError({ response, result, showError });
       }
     } catch (err) {
       logger.error('Failed to fetch par levels:', err);

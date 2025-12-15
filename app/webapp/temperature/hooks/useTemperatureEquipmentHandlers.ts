@@ -1,14 +1,9 @@
 import { useState } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
-import type { TemperatureEquipment } from '../types';
-import {
-  updateEquipment,
-  createEquipment,
-  deleteEquipment,
-} from './useTemperatureEquipmentHandlers/equipmentCRUD';
 import { handleQuickTempLog as handleQuickTempLogHelper } from './useTemperatureEquipmentHandlers/quickTempLog';
 import { handleRefreshLogs as handleRefreshLogsHelper } from './useTemperatureEquipmentHandlers/refreshLogs';
 import { useOnTemperatureLogged } from '@/lib/personality/hooks';
+import { createEquipmentHandlers } from './useTemperatureEquipmentHandlers/helpers/createHandlers';
 interface UseTemperatureEquipmentHandlersProps {
   activeTab: 'logs' | 'equipment' | 'analytics';
   fetchAllLogs: (limit?: number, forceRefresh?: boolean) => Promise<void>;
@@ -50,42 +45,7 @@ export function useTemperatureEquipmentHandlers({
       onTemperatureLogged();
     }
   };
-  const handleUpdateEquipment = async (
-    equipmentId: string,
-    updates: Partial<TemperatureEquipment>,
-  ) => {
-    await updateEquipment(equipmentId, updates, {
-      equipment,
-      setEquipment,
-      fetchEquipment,
-      showError,
-      showSuccess,
-    });
-  };
-  const handleCreateEquipment = async (
-    name: string,
-    equipmentType: string,
-    location: string | null,
-    minTemp: number | null,
-    maxTemp: number | null,
-  ) => {
-    await createEquipment(name, equipmentType, location, minTemp, maxTemp, {
-      equipment,
-      setEquipment,
-      fetchEquipment,
-      showError,
-      showSuccess,
-    });
-  };
-  const handleDeleteEquipment = async (equipmentId: string) => {
-    await deleteEquipment(equipmentId, {
-      equipment,
-      setEquipment,
-      fetchEquipment,
-      showError,
-      showSuccess,
-    });
-  };
+  const { handleUpdateEquipment, handleCreateEquipment, handleDeleteEquipment } = createEquipmentHandlers(equipment, setEquipment, fetchEquipment, showError, showSuccess);
   const handleRefreshLogs = async () => {
     await handleRefreshLogsHelper({
       fetchAllLogs,
@@ -94,12 +54,5 @@ export function useTemperatureEquipmentHandlers({
       equipment,
     });
   };
-  return {
-    quickTempLoading,
-    handleQuickTempLog,
-    handleUpdateEquipment,
-    handleCreateEquipment,
-    handleDeleteEquipment,
-    handleRefreshLogs,
-  };
+  return { quickTempLoading, handleQuickTempLog, handleUpdateEquipment, handleCreateEquipment, handleDeleteEquipment, handleRefreshLogs };
 }

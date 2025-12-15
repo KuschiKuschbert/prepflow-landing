@@ -2,12 +2,13 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { useNotification } from '@/contexts/NotificationContext';
-import { logger } from '@/lib/logger';
 import { AlertCircle, Loader2, Sparkles } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { FoodImageDisplay } from './FoodImageDisplay';
 import { LoadingSkeleton } from './LoadingSkeleton';
 import { PlatingMethodSelectorPopup, type PlatingMethodOption } from './PlatingMethodSelectorPopup';
+import { handleGenerateHelper } from './FoodImageGenerator/helpers/handleGenerate';
+import { CompactMode } from './FoodImageGenerator/components/CompactMode';
 
 interface FoodImageGeneratorProps {
   entityType: 'recipe' | 'dish';
@@ -81,170 +82,23 @@ export function FoodImageGenerator({
   };
 
   const handleGenerate = async (selectedMethods: PlatingMethodOption[]) => {
-    setIsGenerating(true);
-    setError(null);
-
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          platingMethods: selectedMethods,
-        }),
-        credentials: 'include', // Include cookies for authentication
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        const errorMessage =
-          data.error || data.message || `Failed to generate images: ${response.statusText}`;
-        setError(errorMessage);
-        showError(errorMessage);
-        return;
-      }
-
-      if (data.success) {
-        // Handle new format with multiple plating methods
-        // Only update methods that were actually regenerated (preserve existing ones)
-
-        // Calculate new values for regenerated methods
-        const updatedClassic = selectedMethods.includes('classic')
-          ? data.classic || data.imageUrl || null
-          : generatedClassic;
-        const updatedModern = selectedMethods.includes('landscape')
-          ? data.modern || null
-          : generatedModern;
-        const updatedRustic = selectedMethods.includes('stacking')
-          ? data.rustic || data.imageUrlAlternative || null
-          : generatedRustic;
-        const updatedMinimalist = selectedMethods.includes('deconstructed')
-          ? data.minimalist || null
-          : generatedMinimalist;
-
-        // Update state only for regenerated methods
-        if (selectedMethods.includes('classic')) {
-          setGeneratedClassic(updatedClassic);
-        }
-        if (selectedMethods.includes('landscape')) {
-          setGeneratedModern(updatedModern);
-        }
-        if (selectedMethods.includes('stacking')) {
-          setGeneratedRustic(updatedRustic);
-        }
-        if (selectedMethods.includes('deconstructed')) {
-          setGeneratedMinimalist(updatedMinimalist);
-        }
-
-        // Merge new plating methods with existing ones (preserve existing, replace only regenerated)
-        setGeneratedPlatingMethods(prev => {
-          const updated = { ...prev };
-          // Extract new plating methods (landscape, stacking, deconstructed) from response
-          const newMethods = ['landscape', 'stacking', 'deconstructed'] as const;
-          for (const method of newMethods) {
-            if (selectedMethods.includes(method)) {
-              // Only update if this method was selected for regeneration
-              updated[method] = data[method] || null;
-            }
-            // Otherwise, preserve existing value (don't touch it)
-          }
-          return updated;
-        });
-
-        // Call callback with all current values (new for regenerated, existing for others)
-        onImagesGenerated?.({
-          classic: updatedClassic,
-          modern: updatedModern,
-          rustic: updatedRustic,
-          minimalist: updatedMinimalist,
-        });
-
-        onImagesGenerated?.({
-          classic: updatedClassic,
-          modern: updatedModern,
-          rustic: updatedRustic,
-          minimalist: updatedMinimalist,
-        });
-
-        if (data.cached) {
-          showSuccess('Images loaded from cache');
-        } else {
-          showSuccess('Food images generated successfully!');
-        }
-      } else {
-        const errorMessage = data.error || data.message || 'Failed to generate images';
-        setError(errorMessage);
-        showError(errorMessage);
-      }
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unexpected error occurred while generating images';
-      setError(errorMessage);
-      showError(errorMessage);
-      logger.error('[FoodImageGenerator] Generation error:', err);
-    } finally {
-      setIsGenerating(false);
-    }
+    await handleGenerateHelper(endpoint, selectedMethods, setIsGenerating, setError, showError, showSuccess, setGeneratedClassic, setGeneratedModern, setGeneratedRustic, setGeneratedMinimalist, setGeneratedPlatingMethods, onImagesGenerated, generatedClassic, generatedModern, generatedRustic, generatedMinimalist);
   };
 
   if (compact) {
-    // Compact mode: Just a button, no display
     return (
       <div className={className}>
-        {!hasImages && !isGenerating && (
-          <>
-            <button
-              ref={generateButtonRef}
-              onClick={handleGenerateClick}
-              disabled={isGenerating}
-              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] px-4 py-2 text-sm font-medium text-black transition-all duration-200 hover:shadow-lg hover:shadow-[#FF6B00]/25 disabled:cursor-not-allowed disabled:opacity-50"
-              aria-label={`Generate images for ${entityName}`}
-            >
-              <Icon icon={Sparkles} size="sm" aria-hidden={true} />
-              <span>Generate Image</span>
-            </button>
-            <PlatingMethodSelectorPopup
-              isOpen={showPlatingPopup}
-              onClose={() => setShowPlatingPopup(false)}
-              onGenerate={handleGenerate}
-              triggerRef={generateButtonRef as unknown as React.RefObject<HTMLElement>}
-            />
-          </>
-        )}
-        {hasImages && !isGenerating && (
-          <>
-            <button
-              ref={generateButtonRef}
-              onClick={handleGenerateClick}
-              disabled={isGenerating}
-              className="flex items-center gap-2 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/40 px-3 py-1.5 text-xs font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#2a2a2a]/60 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-              aria-label={`Regenerate images for ${entityName}`}
-            >
-              <Icon icon={Sparkles} size="xs" aria-hidden={true} />
-              <span>Regenerate</span>
-            </button>
-            <PlatingMethodSelectorPopup
-              isOpen={showPlatingPopup}
-              onClose={() => setShowPlatingPopup(false)}
-              onGenerate={handleGenerate}
-              triggerRef={generateButtonRef as unknown as React.RefObject<HTMLElement>}
-            />
-          </>
-        )}
-        {isGenerating && (
-          <div className="flex items-center gap-2 rounded-xl bg-[#2a2a2a]/40 px-4 py-2 text-sm font-medium text-gray-300">
-            <Icon icon={Loader2} size="sm" className="animate-spin" aria-hidden={true} />
-            <span>Generating...</span>
-          </div>
-        )}
-        {error && (
-          <div className="mt-2 flex items-center gap-2 rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-400">
-            <Icon icon={AlertCircle} size="sm" aria-hidden={true} />
-            <span>{error}</span>
-          </div>
-        )}
+        <CompactMode
+          hasImages={hasImages}
+          isGenerating={isGenerating}
+          error={error}
+          showPlatingPopup={showPlatingPopup}
+          setShowPlatingPopup={setShowPlatingPopup}
+          handleGenerateClick={handleGenerateClick}
+          handleGenerate={handleGenerate}
+          generateButtonRef={generateButtonRef}
+          entityName={entityName}
+        />
       </div>
     );
   }

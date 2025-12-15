@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Recipe } from '../../types';
 import { COGSCalculation, Ingredient } from '../../../cogs/types';
-import { createCalculation } from '../../../cogs/hooks/utils/createCalculation';
 import { logger } from '@/lib/logger';
+import { processRecipeIngredients } from './useRecipeEditIngredientLoading/helpers/processRecipeIngredients';
 
 interface UseRecipeEditIngredientLoadingProps {
   recipe: Recipe | null;
@@ -51,33 +51,8 @@ export function useRecipeEditIngredientLoading({
 
         const data = await response.json();
         const recipeIngredients = data.items || [];
-
         if (recipeIngredients.length > 0) {
-          const recipeYield = recipe.yield || 1;
-          const loadedCalculations = recipeIngredients
-            .map((ri: any) => {
-              const ingredientData = ingredients.find(ing => ing.id === ri.ingredient_id);
-              if (!ingredientData) return null;
-
-              const { convertedQuantity, convertedUnit, conversionNote } =
-                convertIngredientQuantityRef.current(
-                  ri.quantity / recipeYield,
-                  ri.unit,
-                  ingredientData.unit || 'kg',
-                );
-
-              return createCalculation(
-                ri.ingredient_id,
-                ingredientData,
-                convertedQuantity,
-                convertedUnit,
-                conversionNote || '',
-                recipe.id,
-              );
-            })
-            .filter(Boolean) as COGSCalculation[];
-
-          setCalculations(loadedCalculations);
+          setCalculations(processRecipeIngredients(recipeIngredients, recipe, ingredients, convertIngredientQuantityRef.current));
         } else {
           setCalculations([]);
         }

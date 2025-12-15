@@ -23,7 +23,7 @@ export async function validateCleaningTables(): Promise<ValidationResult> {
   if (!supabaseAdmin) {
     return {
       success: false,
-      message: 'Database connection not available',
+      message: "Data connection not available",
       tablesExist: false,
       instructions: [
         'Supabase is not configured. Please check:',

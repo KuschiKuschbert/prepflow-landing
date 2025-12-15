@@ -1,7 +1,6 @@
 /**
  * CSV utility functions for performance data
  */
-
 import { exportToCSV, parseCSV } from '@/lib/csv/csv-utils';
 import {
   validateCSVData,
@@ -9,6 +8,8 @@ import {
   getPerformanceValidationSchema,
 } from '@/lib/csv/validation';
 import { logger } from '@/lib/logger';
+import { mapCSVRowToSalesData } from './csv-utils/helpers/mapCSVRowToSalesData';
+import { mapPerformanceItemToCSVRow } from './csv-utils/helpers/mapPerformanceItemToCSVRow';
 
 const CSV_HEADERS = [
   'Dish',
@@ -22,27 +23,6 @@ const CSV_HEADERS = [
   'Popularity Cat',
   'Menu Item Class',
 ];
-
-/**
- * Map performance item to CSV row format.
- *
- * @param {any} item - Performance item to map
- * @returns {Record<string, any>} CSV row object
- */
-function mapPerformanceItemToCSVRow(item: any): Record<string, any> {
-  return {
-    Dish: item.name || '',
-    'Number Sold': item.number_sold || 0,
-    'Popularity %': item.popularity_percentage?.toFixed(2) || '0.00',
-    'Total Revenue ex GST': ((item.selling_price * item.number_sold) / 1.1).toFixed(2),
-    'Total Cost': (item.food_cost * item.number_sold).toFixed(2),
-    'Total Profit ex GST': (item.gross_profit * item.number_sold).toFixed(2),
-    'Gross Profit %': item.gross_profit_percentage?.toFixed(2) || '0.00',
-    'Profit Cat': item.profit_category || '',
-    'Popularity Cat': item.popularity_category || '',
-    'Menu Item Class': item.menu_item_class || '',
-  };
-}
 
 /**
  * Export performance data to CSV file using unified CSV utilities.
@@ -60,41 +40,6 @@ export function exportPerformanceDataToCSV(performanceItems: any[]): void {
   exportToCSV(csvData, CSV_HEADERS, filename);
 }
 
-/**
- * Map CSV row to sales data object.
- *
- * @param {Record<string, any>} row - CSV row data
- * @returns {any} Sales data object
- */
-function mapCSVRowToSalesData(row: Record<string, any>): any {
-  // Normalize keys to lowercase for matching
-  const normalizedRow: Record<string, any> = {};
-  Object.keys(row).forEach(key => {
-    normalizedRow[key.toLowerCase().trim()] = row[key];
-  });
-
-  // Flexible column matching
-  let dishName = '';
-  let numberSold = 0;
-  let popularityPercentage = 0;
-
-  Object.keys(normalizedRow).forEach(key => {
-    const value = normalizedRow[key];
-    if (key.includes('dish') || key.includes('name')) {
-      dishName = String(value || '').trim();
-    } else if (key.includes('sold') || key.includes('number')) {
-      numberSold = parseInt(String(value), 10) || 0;
-    } else if (key.includes('popularity')) {
-      popularityPercentage = parseFloat(String(value)) || 0;
-    }
-  });
-
-  return {
-    dish_name: dishName,
-    number_sold: numberSold,
-    popularity_percentage: popularityPercentage,
-  };
-}
 
 /**
  * Parse CSV sales data using PapaParse.

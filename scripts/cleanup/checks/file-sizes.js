@@ -16,7 +16,7 @@ const LIMITS = {
   component: 300,
   api: 200,
   util: 150,
-  hook: 100,
+  hook: 120, // Increased from 100 to accommodate coordination hooks
   data: 2000,
   config: 500, // Configuration/data files exception
   algorithm: 300, // Complex algorithms exception

@@ -1,9 +1,8 @@
 'use client';
 
 import { useCountry } from '@/contexts/CountryContext';
-import { logger } from '@/lib/logger';
 import { useEffect, useMemo, useState } from 'react';
-import { PerformanceItem } from '../types';
+import { fetchAIInsights } from './helpers/fetchAIInsights';
 import {
   generateBargainBucketInsight,
   generateBurntToastInsight,
@@ -11,6 +10,7 @@ import {
   generateHiddenGemInsight,
   sortInsightsByPriority,
 } from '../utils/insightGenerators';
+import type { PerformanceItem } from '../types';
 
 export interface PerformanceInsight {
   id: string;
@@ -38,35 +38,17 @@ export function usePerformanceInsights(
       setAiInsights([]);
       return;
     }
-    const fetchAIInsights = async () => {
+    const loadAIInsights = async () => {
       setIsLoadingAI(true);
-      try {
-        const response = await fetch('/api/ai/performance-insights', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            performanceItems,
-            performanceScore: performanceScore || 0,
-            countryCode: selectedCountry,
-          }),
-        });
-        if (response.ok) {
-          const data = await response.json();
-          if (data.insights && data.source === 'ai' && data.insights.length > 0) {
-            setAiInsights(data.insights);
-            setIsLoadingAI(false);
-            return;
-          }
-        }
-      } catch (error) {
-        logger.warn('AI insights failed, using fallback:', {
-          error: error instanceof Error ? error.message : String(error),
-        });
-      }
+      const insights = await fetchAIInsights({
+        performanceItems,
+        performanceScore: performanceScore || 0,
+        countryCode: selectedCountry,
+      });
+      setAiInsights(insights);
       setIsLoadingAI(false);
-      setAiInsights([]);
     };
-    fetchAIInsights();
+    loadAIInsights();
   }, [performanceItems, performanceScore, selectedCountry]);
 
   const fallbackInsights = useMemo(() => {
@@ -87,10 +69,7 @@ export function usePerformanceInsights(
     return sortInsightsByPriority(result);
   }, [performanceItems]);
 
-  // Always show fallback insights immediately, only replace with AI if successful
-  // This prevents flickering when AI loads or fails
   const insights = aiInsights.length > 0 ? aiInsights : fallbackInsights;
-
   return {
     insights,
     hasInsights: insights.length > 0,

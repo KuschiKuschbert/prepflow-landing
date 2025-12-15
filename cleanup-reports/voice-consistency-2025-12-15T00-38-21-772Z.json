@@ -1,0 +1,503 @@
+{
+  "total": 23,
+  "byType": {
+    "missing-contraction": 10,
+    "generic-message": 6,
+    "technical-jargon": 7
+  },
+  "bySeverity": {
+    "warning": 12,
+    "info": 11
+  },
+  "files": {
+    "app/privacy-policy/page.tsx": [
+      {
+        "file": "app/privacy-policy/page.tsx",
+        "line": 50,
+        "message": "missing-contraction: \"By using PrepFlow, you agree to the collection and use of information in accordance\n                with this policy. If you do not agree with our policies and practices, please do not\n                use our service.\" - Consider using \"don't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "By using PrepFlow, you agree to the collection and use of information in accordance\n                with this policy. If you do not agree with our policies and practices, please do not\n                use our service.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "By using PrepFlow, you agree to the collection and use of information in accordance\n                with this policy. If you do not agree with our policies and practices, please do not\n                use our service.",
+          "rule": {
+            "pattern": {},
+            "fix": "don't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"don't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      },
+      {
+        "file": "app/privacy-policy/page.tsx",
+        "line": 110,
+        "message": "missing-contraction: \"We do not sell, trade, or rent your personal information to third parties. We may\n                share your information only in the following circumstances:\" - Consider using \"don't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "We do not sell, trade, or rent your personal information to third parties. We may\n                share your information only in the following circumstances:",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "We do not sell, trade, or rent your personal information to third parties. We may\n                share your information only in the following circumstances:",
+          "rule": {
+            "pattern": {},
+            "fix": "don't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"don't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      },
+      {
+        "file": "app/privacy-policy/page.tsx",
+        "line": 241,
+        "message": "missing-contraction: \"PrepFlow is not intended for use by individuals under the age of 18. We do not\n                knowingly collect personal information from children. If you believe we have\n                collected information from a child, please contact us immediately.\" - Consider using \"don't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "PrepFlow is not intended for use by individuals under the age of 18. We do not\n                knowingly collect personal information from children. If you believe we have\n                collected information from a child, please contact us immediately.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "PrepFlow is not intended for use by individuals under the age of 18. We do not\n                knowingly collect personal information from children. If you believe we have\n                collected information from a child, please contact us immediately.",
+          "rule": {
+            "pattern": {},
+            "fix": "don't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"don't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/terms-of-service/page.tsx": [
+      {
+        "file": "app/terms-of-service/page.tsx",
+        "line": 51,
+        "message": "missing-contraction: \"By accessing and using PrepFlow (&quot;the Service&quot;), you accept and agree to\n                be bound by the terms and provision of this agreement. If you do not agree to abide\n                by the above, please do not use this service.\" - Consider using \"don't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "By accessing and using PrepFlow (&quot;the Service&quot;), you accept and agree to\n                be bound by the terms and provision of this agreement. If you do not agree to abide\n                by the above, please do not use this service.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "By accessing and using PrepFlow (&quot;the Service&quot;), you accept and agree to\n                be bound by the terms and provision of this agreement. If you do not agree to abide\n                by the above, please do not use this service.",
+          "rule": {
+            "pattern": {},
+            "fix": "don't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"don't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      },
+      {
+        "file": "app/terms-of-service/page.tsx",
+        "line": 76,
+        "message": "missing-contraction: \"The Service is designed to assist restaurant owners, managers, and chefs in making\n                informed business decisions. However, we do not guarantee specific financial\n                outcomes.\" - Consider using \"don't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "The Service is designed to assist restaurant owners, managers, and chefs in making\n                informed business decisions. However, we do not guarantee specific financial\n                outcomes.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "The Service is designed to assist restaurant owners, managers, and chefs in making\n                informed business decisions. However, we do not guarantee specific financial\n                outcomes.",
+          "rule": {
+            "pattern": {},
+            "fix": "don't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"don't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      },
+      {
+        "file": "app/terms-of-service/page.tsx",
+        "line": 199,
+        "message": "missing-contraction: \"We strive to provide reliable service but\n                cannot guarantee uninterrupted access. The Service may be temporarily unavailable\n                due to maintenance, updates, or technical issues.\" - Consider using \"can't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "We strive to provide reliable service but\n                cannot guarantee uninterrupted access. The Service may be temporarily unavailable\n                due to maintenance, updates, or technical issues.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "We strive to provide reliable service but\n                cannot guarantee uninterrupted access. The Service may be temporarily unavailable\n                due to maintenance, updates, or technical issues.",
+          "rule": {
+            "pattern": {},
+            "fix": "can't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"can't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      },
+      {
+        "file": "app/terms-of-service/page.tsx",
+        "line": 209,
+        "message": "missing-contraction: \"PrepFlow is a tool to assist decision-making,\n                but we do not guarantee specific financial results, increased profits, or business\n                success.\" - Consider using \"don't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "PrepFlow is a tool to assist decision-making,\n                but we do not guarantee specific financial results, increased profits, or business\n                success.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "PrepFlow is a tool to assist decision-making,\n                but we do not guarantee specific financial results, increased profits, or business\n                success.",
+          "rule": {
+            "pattern": {},
+            "fix": "don't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"don't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      },
+      {
+        "file": "app/terms-of-service/page.tsx",
+        "line": 282,
+        "message": "missing-contraction: \"If a dispute cannot be resolved amicably, it shall be subject to the exclusive\n                jurisdiction of the courts of Australia.\" - Consider using \"can't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "If a dispute cannot be resolved amicably, it shall be subject to the exclusive\n                jurisdiction of the courts of Australia.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "If a dispute cannot be resolved amicably, it shall be subject to the exclusive\n                jurisdiction of the courts of Australia.",
+          "rule": {
+            "pattern": {},
+            "fix": "can't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"can't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/webapp/roster/components/RosterBuilder/hooks/useRosterShiftManagement.ts": [
+      {
+        "file": "app/webapp/roster/components/RosterBuilder/hooks/useRosterShiftManagement.ts",
+        "line": 196,
+        "message": "generic-message: \"Failed to delete shift. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to delete shift. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to delete shift. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "app/webapp/settings/components/AdaptiveNavSettingsPanel.tsx": [
+      {
+        "file": "app/webapp/settings/components/AdaptiveNavSettingsPanel.tsx",
+        "line": 224,
+        "message": "technical-jargon: \"Sync to Server - Syncs your local preferences to the server database so they persist across devices and browser sessions\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "Sync to Server - Syncs your local preferences to the server database so they persist across devices and browser sessions",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "Sync to Server - Syncs your local preferences to the server database so they persist across devices and browser sessions",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "accessibility"
+      }
+    ],
+    "app/webapp/settings/components/HelpSupportPanel/components/PrivacyNotice.tsx": [
+      {
+        "file": "app/webapp/settings/components/HelpSupportPanel/components/PrivacyNotice.tsx",
+        "line": 35,
+        "message": "generic-message: \"Page address where error occurred\" - Describe the error in PrepFlow voice",
+        "severity": "warning",
+        "fixable": false,
+        "text": "Page address where error occurred",
+        "violation": {
+          "type": "generic-message",
+          "text": "Page address where error occurred",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Describe the error in PrepFlow voice",
+            "severity": "warning"
+          },
+          "suggestion": "Describe the error in PrepFlow voice",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/webapp/settings/components/PrivacyControlsPanel.tsx": [
+      {
+        "file": "app/webapp/settings/components/PrivacyControlsPanel.tsx",
+        "line": 346,
+        "message": "missing-contraction: \"Permanently delete your account and all associated data. This action cannot be\n                undone. You will have a 7-day grace period to cancel the deletion request.\" - Consider using \"can't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "Permanently delete your account and all associated data. This action cannot be\n                undone. You will have a 7-day grace period to cancel the deletion request.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "Permanently delete your account and all associated data. This action cannot be\n                undone. You will have a 7-day grace period to cancel the deletion request.",
+          "rule": {
+            "pattern": {},
+            "fix": "can't",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"can't\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      },
+      {
+        "file": "app/webapp/settings/components/PrivacyControlsPanel.tsx",
+        "line": 346,
+        "message": "missing-contraction: \"Permanently delete your account and all associated data. This action cannot be\n                undone. You will have a 7-day grace period to cancel the deletion request.\" - Consider using \"you'll\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "text": "Permanently delete your account and all associated data. This action cannot be\n                undone. You will have a 7-day grace period to cancel the deletion request.",
+        "violation": {
+          "type": "missing-contraction",
+          "text": "Permanently delete your account and all associated data. This action cannot be\n                undone. You will have a 7-day grace period to cancel the deletion request.",
+          "rule": {
+            "pattern": {},
+            "fix": "you'll",
+            "severity": "warning"
+          },
+          "suggestion": "Consider using \"you'll\" instead",
+          "severity": "warning"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/webapp/settings/components/sections/QRCodesSection/utils/generatePrintHTML.ts": [
+      {
+        "file": "app/webapp/settings/components/sections/QRCodesSection/utils/generatePrintHTML.ts",
+        "line": 89,
+        "message": "technical-jargon: \"${entity.name}\" - Use 'item', 'ingredient', 'recipe', etc.",
+        "severity": "warning",
+        "fixable": false,
+        "text": "${entity.name}",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "${entity.name}",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Use 'item', 'ingredient', 'recipe', etc.",
+            "severity": "warning"
+          },
+          "suggestion": "Use 'item', 'ingredient', 'recipe', etc.",
+          "severity": "warning"
+        },
+        "stringType": "accessibility"
+      }
+    ],
+    "app/webapp/setup/components/IngredientsSetup.tsx": [
+      {
+        "file": "app/webapp/setup/components/IngredientsSetup.tsx",
+        "line": 73,
+        "message": "technical-jargon: \"Ingredients Database\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "Ingredients Database",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "Ingredients Database",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "jsx"
+      }
+    ],
+    "app/webapp/temperature/components/TemperatureLogsTab/hooks/useTemperatureExport.ts": [
+      {
+        "file": "app/webapp/temperature/components/TemperatureLogsTab/hooks/useTemperatureExport.ts",
+        "line": 118,
+        "message": "generic-message: \"Failed to export temperature logs. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to export temperature logs. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to export temperature logs. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "components/ui/CopyButton.tsx": [
+      {
+        "file": "components/ui/CopyButton.tsx",
+        "line": 48,
+        "message": "generic-message: \"Failed to copy. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to copy. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to copy. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "components/ui/ShareButton.tsx": [
+      {
+        "file": "components/ui/ShareButton.tsx",
+        "line": 80,
+        "message": "generic-message: \"Failed to copy link. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to copy link. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to copy link. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "lib/auth0-apple-microsoft-connection.ts": [
+      {
+        "file": "lib/auth0-apple-microsoft-connection.ts",
+        "line": 128,
+        "message": "technical-jargon: \"Management API client or application client ID not available\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "Management API client or application client ID not available",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "Management API client or application client ID not available",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "dialog"
+      },
+      {
+        "file": "lib/auth0-apple-microsoft-connection.ts",
+        "line": 206,
+        "message": "technical-jargon: \"Management API client or application client ID not available\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "Management API client or application client ID not available",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "Management API client or application client ID not available",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "dialog"
+      }
+    ],
+    "lib/auth0-google-connection.ts": [
+      {
+        "file": "lib/auth0-google-connection.ts",
+        "line": 110,
+        "message": "technical-jargon: \"Management API client not available. Check AUTH0_ISSUER_BASE_URL, AUTH0_CLIENT_ID, and AUTH0_CLIENT_SECRET.\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "Management API client not available. Check AUTH0_ISSUER_BASE_URL, AUTH0_CLIENT_ID, and AUTH0_CLIENT_SECRET.",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "Management API client not available. Check AUTH0_ISSUER_BASE_URL, AUTH0_CLIENT_ID, and AUTH0_CLIENT_SECRET.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "dialog"
+      },
+      {
+        "file": "lib/auth0-google-connection.ts",
+        "line": 238,
+        "message": "technical-jargon: \"Management API client not available. Check AUTH0_ISSUER_BASE_URL, AUTH0_CLIENT_ID, and AUTH0_CLIENT_SECRET.\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "Management API client not available. Check AUTH0_ISSUER_BASE_URL, AUTH0_CLIENT_ID, and AUTH0_CLIENT_SECRET.",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "Management API client not available. Check AUTH0_ISSUER_BASE_URL, AUTH0_CLIENT_ID, and AUTH0_CLIENT_SECRET.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "dialog"
+      }
+    ],
+    "lib/share/share-modal.tsx": [
+      {
+        "file": "lib/share/share-modal.tsx",
+        "line": 63,
+        "message": "generic-message: \"Failed to copy link. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to copy link. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to copy link. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ]
+  },
+  "timestamp": "2025-12-15T00:38:21.762Z"
+}

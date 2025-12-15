@@ -1,7 +1,6 @@
 /**
  * Generate HTML export for recipe cards
  */
-
 import { NextResponse } from 'next/server';
 import { generateExportTemplate, escapeHtml } from '@/lib/exports/pdf-template';
 import { buildCategoryHTML } from './generateHTML/buildCategoryHTML';
@@ -166,19 +165,11 @@ export function generateHTML(
   // Sort categories alphabetically
   const sortedCategories = Array.from(cardsByCategory.keys()).sort();
 
-  // Generate recipe cards content HTML
-  let cardsContent = `
-    <style>
-      ${recipeCardStyles}
-    </style>
-    <div class="recipe-cards">
-  `;
-
+  let cardsContent = `<style>${recipeCardStyles}</style><div class="recipe-cards">`;
   sortedCategories.forEach(category => {
     const categoryCards = cardsByCategory.get(category)!;
     cardsContent += buildCategoryHTML(category, categoryCards);
   });
-
   cardsContent += `</div>`;
 
   // Use shared template

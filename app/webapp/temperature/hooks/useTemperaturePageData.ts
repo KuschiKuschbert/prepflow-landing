@@ -1,79 +1,40 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
+import { prefetchApis } from '@/lib/cache/data-cache';
 import { TemperatureEquipment, TemperatureLog } from '../types';
 import { useTemperatureLogsQuery } from './useTemperatureLogsQuery';
 import { logger } from '@/lib/logger';
+import { fetchAllLogsHelper } from './useTemperaturePageData/helpers/fetchAllLogs';
+import { fetchEquipmentHelper } from './useTemperaturePageData/helpers/fetchEquipment';
+import { updateLogsFromQueryHelper } from './useTemperaturePageData/helpers/updateLogsFromQuery';
+import { createInitialState } from './useTemperaturePageData/helpers/initialState';
 export function useTemperaturePageData(activeTab: 'logs' | 'equipment' | 'analytics') {
   const queryClient = useQueryClient();
-  const [logs, setLogs] = useState<TemperatureLog[]>([]);
-  const [allLogs, setAllLogs] = useState<TemperatureLog[]>(
-    () => getCachedData<TemperatureLog[]>('temperature_all_logs') || [],
-  );
-  const [equipment, setEquipment] = useState<TemperatureEquipment[]>(
-    () => getCachedData<TemperatureEquipment[]>('temperature_equipment') || [],
-  );
-  const [loading, setLoading] = useState(false);
-  const [analyticsLoading, setAnalyticsLoading] = useState(false);
-  const [lastAnalyticsFetch, setLastAnalyticsFetch] = useState<number>(0);
-  const [selectedDate, setSelectedDate] = useState('');
-  const [selectedType, setSelectedType] = useState('all');
-  const [page, setPage] = useState(1);
-  const pageSize = 20;
+  const initialState = createInitialState();
+  const [logs, setLogs] = useState<TemperatureLog[]>(initialState.logs);
+  const [allLogs, setAllLogs] = useState<TemperatureLog[]>(initialState.allLogs);
+  const [equipment, setEquipment] = useState<TemperatureEquipment[]>(initialState.equipment);
+  const [loading, setLoading] = useState(initialState.loading);
+  const [analyticsLoading, setAnalyticsLoading] = useState(initialState.analyticsLoading);
+  const [lastAnalyticsFetch, setLastAnalyticsFetch] = useState(initialState.lastAnalyticsFetch);
+  const [selectedDate, setSelectedDate] = useState(initialState.selectedDate);
+  const [selectedType, setSelectedType] = useState(initialState.selectedType);
+  const [page, setPage] = useState(initialState.page);
+  const pageSize = initialState.pageSize;
   const { data: logsData, isLoading: logsLoading } = useTemperatureLogsQuery(
     selectedDate,
     selectedType,
     page,
     pageSize,
   );
-  const fetchAllLogs = useCallback(
-    async (limit?: number, forceRefresh = false) => {
-      const isStale = Date.now() - lastAnalyticsFetch > 30000;
-      if (!forceRefresh && !isStale && allLogs.length > 0) return;
-      setAnalyticsLoading(true);
-      try {
-        const response = await fetch(`/api/temperature-logs?limit=${limit || 1000}`);
-        const json = await response.json();
-        if (json.success && json.data?.items) {
-          setAllLogs(json.data.items);
-          cacheData('temperature_all_logs', json.data.items);
-          setLastAnalyticsFetch(Date.now());
-        }
-      } catch (error) {
-        logger.error('Error fetching all logs:', error);
-      } finally {
-        setAnalyticsLoading(false);
-      }
-    },
-    [allLogs.length, lastAnalyticsFetch],
-  );
+  const fetchAllLogs = useCallback(async (limit?: number, forceRefresh = false) => {
+    await fetchAllLogsHelper(limit, forceRefresh, lastAnalyticsFetch, allLogs, setAllLogs, setAnalyticsLoading, setLastAnalyticsFetch);
+  }, [allLogs.length, lastAnalyticsFetch]);
   const fetchEquipment = useCallback(async () => {
-    try {
-      const response = await fetch('/api/temperature-equipment');
-      const data = await response.json();
-      if (data.success && data.data) {
-        setEquipment(data.data);
-        cacheData('temperature_equipment', data.data);
-      }
-    } catch (error) {
-      logger.error('Error fetching equipment:', error);
-    }
+    await fetchEquipmentHelper(setEquipment);
   }, []);
   useEffect(() => {
-    if (logsData) {
-      // Handle both direct items array and wrapped response
-      const items = Array.isArray(logsData) ? logsData : (logsData as any)?.items || [];
-      setLogs(items);
-      logger.dev('[TemperaturePageData] Updated logs:', {
-        count: items.length,
-        hasData: !!logsData,
-        logsDataType: typeof logsData,
-        logsDataKeys: logsData ? Object.keys(logsData as any) : [],
-      });
-    } else {
-      logger.dev('[TemperaturePageData] logsData is undefined');
-      setLogs([]);
-    }
+    updateLogsFromQueryHelper(logsData, setLogs);
   }, [logsData]);
   useEffect(() => {
     prefetchApis(['/api/temperature-equipment']);

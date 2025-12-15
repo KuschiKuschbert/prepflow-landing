@@ -2,12 +2,12 @@
 
 'use client';
 
-import { useAdaptiveNavSettings } from '@/lib/navigation-optimization/store';
-import { useNotification } from '@/contexts/NotificationContext';
 import { useNavigationItems } from '@/app/webapp/components/navigation/nav-items';
-import { useMemo, useState, useEffect } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { Beaker, Info, Download } from 'lucide-react';
+import { useNotification } from '@/contexts/NotificationContext';
+import { useAdaptiveNavSettings } from '@/lib/navigation-optimization/store';
+import { Beaker, Download, Info } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 
 /**
  * Get display name for a category.
@@ -221,15 +221,15 @@ export function AdaptiveNavSettingsPanel() {
               <button
                 onClick={handleSyncToServer}
                 className="flex items-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/50"
-                aria-label="Sync to Server - Syncs your local preferences to the server database so they persist across devices and browser sessions"
+                aria-label="Sync to Server - Syncs your local preferences to your account so they persist across devices and browser sessions"
               >
                 Sync to Server
                 <Icon icon={Info} size="xs" className="text-gray-400" aria-hidden={true} />
               </button>
               <div className="pointer-events-none absolute bottom-full left-0 z-10 mb-2 hidden w-64 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 text-xs text-gray-300 shadow-lg group-hover:block">
-                Syncs your local preferences (enabled state and selected sections) to the server
-                database so they persist across devices and browser sessions. Currently uses
-                localStorage by default; syncing saves preferences to your account.
+                Syncs your local preferences (enabled state and selected sections) to your account
+                so they persist across devices and browser sessions. Currently uses localStorage by
+                default; syncing saves preferences to your account.
               </div>
             </div>
             <button

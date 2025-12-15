@@ -34,13 +34,8 @@ export function useDishesClientBulkActions({
     rollbackRecipes,
   } = useDishesOptimisticUpdates({ dishes, recipes, selectedItems, setDishes, setRecipes });
 
-  const selectedRecipeIds = useMemo(() => {
-    return Array.from(selectedItems).filter(id => selectedItemTypes.get(id) === 'recipe');
-  }, [selectedItems, selectedItemTypes]);
-
-  const selectedDishIds = useMemo(() => {
-    return Array.from(selectedItems).filter(id => selectedItemTypes.get(id) === 'dish');
-  }, [selectedItems, selectedItemTypes]);
+  const selectedRecipeIds = useMemo(() => Array.from(selectedItems).filter(id => selectedItemTypes.get(id) === 'recipe'), [selectedItems, selectedItemTypes]);
+  const selectedDishIds = useMemo(() => Array.from(selectedItems).filter(id => selectedItemTypes.get(id) === 'dish'), [selectedItems, selectedItemTypes]);
 
   const {
     bulkActionLoading,
@@ -83,26 +78,5 @@ export function useDishesClientBulkActions({
 
   const [showBulkMenu, setShowBulkMenu] = useState(false);
 
-  return {
-    bulkActionLoading,
-    bulkShareLoading,
-    addToMenuLoading,
-    showBulkMenu,
-    setShowBulkMenu,
-    showBulkDeleteConfirm,
-    setShowBulkDeleteConfirm,
-    handleBulkDelete,
-    confirmBulkDelete,
-    cancelBulkDelete,
-    handleBulkShare,
-    handleBulkAddToMenu,
-    handleSelectMenu,
-    handleCreateNewMenu,
-    menus,
-    loadingMenus,
-    showMenuDialog,
-    setShowMenuDialog,
-    selectedRecipeIds,
-    selectedDishIds,
-  };
+  return { bulkActionLoading, bulkShareLoading, addToMenuLoading, showBulkMenu, setShowBulkMenu, showBulkDeleteConfirm, setShowBulkDeleteConfirm, handleBulkDelete, confirmBulkDelete, cancelBulkDelete, handleBulkShare, handleBulkAddToMenu, handleSelectMenu, handleCreateNewMenu, menus, loadingMenus, showMenuDialog, setShowMenuDialog, selectedRecipeIds, selectedDishIds };
 }

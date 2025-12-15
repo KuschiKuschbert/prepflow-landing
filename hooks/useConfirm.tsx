@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { createConfirmHandlers } from './useConfirm/helpers/handlers';
 
 interface ConfirmOptions {
   title: string;
@@ -60,40 +61,11 @@ export function useConfirm() {
     });
   }, []);
 
-  const handleConfirm = useCallback(() => {
-    setIsOpen(false);
-    if (resolvePromise) {
-      resolvePromise(true);
-      setResolvePromise(null);
-    }
-    // Clear options after a short delay to allow dialog to close
-    setTimeout(() => setOptions(null), 200);
-  }, [resolvePromise]);
-
-  const handleCancel = useCallback(() => {
-    setIsOpen(false);
-    if (resolvePromise) {
-      resolvePromise(false);
-      setResolvePromise(null);
-    }
-    // Clear options after a short delay to allow dialog to close
-    setTimeout(() => setOptions(null), 200);
-  }, [resolvePromise]);
+  const { handleConfirm, handleCancel } = createConfirmHandlers(setIsOpen, setResolvePromise, setOptions, resolvePromise);
 
   const ConfirmDialogComponent = () => {
     if (!options) return null;
-    return (
-      <ConfirmDialog
-        isOpen={isOpen}
-        title={options.title}
-        message={options.message}
-        variant={options.variant || 'warning'}
-        confirmLabel={options.confirmLabel || 'Confirm'}
-        cancelLabel={options.cancelLabel || 'Cancel'}
-        onConfirm={handleConfirm}
-        onCancel={handleCancel}
-      />
-    );
+    return <ConfirmDialog isOpen={isOpen} title={options.title} message={options.message} variant={options.variant || 'warning'} confirmLabel={options.confirmLabel || 'Confirm'} cancelLabel={options.cancelLabel || 'Cancel'} onConfirm={handleConfirm} onCancel={handleCancel} />;
   };
 
   return {

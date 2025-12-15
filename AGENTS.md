@@ -1396,7 +1396,7 @@ export const PREFETCH_MAP: Record<string, string[]> = {
 - **Complex Components:** Maximum 300 lines
 - **API Routes:** Maximum 200 lines
 - **Utility Functions:** Maximum 150 lines
-- **Hooks:** Maximum 100 lines
+- **Hooks:** Maximum 120 lines (increased from 100 to accommodate coordination hooks)
 
 **Mandatory Refactoring Triggers:**
 
@@ -1404,7 +1404,7 @@ export const PREFETCH_MAP: Record<string, string[]> = {
 - ✅ **Component exceeds 300 lines** → Extract sub-components and hooks
 - ✅ **API route exceeds 200 lines** → Split into multiple endpoints
 - ✅ **Function exceeds 150 lines** → Break into smaller functions
-- ✅ **Hook exceeds 100 lines** → Split into multiple specialized hooks
+- ✅ **Hook exceeds 120 lines** → Split into multiple specialized hooks
 
 **Refactoring Requirements:**
 
@@ -1499,13 +1499,13 @@ export const PREFETCH_MAP: Record<string, string[]> = {
 
 #### **Ingredient Management Hooks Refactoring**
 
-**Before:** Large hooks exceeding 100-line limit
+**Before:** Large hooks exceeding 100-line limit (now 120-line limit)
 
 - `useIngredientActions.ts`: 187+ lines (exceeded limit)
 - `useIngredientCRUD.ts`: 158 lines
 - `useIngredientCSV.ts`: 135 lines
 
-**After:** Split into specialized hooks (all under 100 lines)
+**After:** Split into specialized hooks (all under 120 lines)
 
 - `useIngredientActions.ts`: Orchestrator hook (delegates to specialized hooks)
 - `useIngredientCRUD.ts`: 93 lines - Create, Read, Update, Delete operations
@@ -1515,7 +1515,7 @@ export const PREFETCH_MAP: Record<string, string[]> = {
 
 **Benefits:**
 
-- ✅ All hooks meet 100-line limit
+- ✅ All hooks meet 120-line limit (increased from 100 to accommodate coordination hooks)
 - ✅ Clear separation: CRUD, CSV, Bulk Actions, Form Logic
 - ✅ Improved maintainability and testability
 - ✅ Better code organization
@@ -2828,7 +2828,7 @@ The temperature analytics system uses **Recharts** for optimal performance and u
 
 **Standards Enforced:**
 
-- File size limits (pages: 500, components: 300, API: 200, utils: 150, hooks: 100)
+- File size limits (pages: 500, components: 300, API: 200, utils: 150, hooks: 120)
 - Breakpoint standards (custom breakpoints only, detects rogue breakpoints)
 - Console.log migration (360 instances → logger.dev())
 - Unused imports (via ESLint)

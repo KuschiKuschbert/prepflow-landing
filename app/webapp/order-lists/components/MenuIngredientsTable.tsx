@@ -102,7 +102,7 @@ export function MenuIngredientsTable({
       }
     } catch (err) {
       logger.error('[Order List] Export error:', err);
-      showError('Failed to export order list. Please try again.');
+      showError("Failed to export order list. Give it another go, chef.");
     } finally {
       setExportLoading(null);
     }

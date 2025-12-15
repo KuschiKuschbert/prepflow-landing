@@ -2,6 +2,7 @@
  * Utilities for handling drag end events.
  */
 import { DragEndEvent } from '@dnd-kit/core';
+import { moveItemToCategory } from './helpers/moveItemToCategory';
 import type { MenuItem } from '../../types';
 import { reorderMenuItems } from '../../utils/menuDragDropHelpers';
 
@@ -18,39 +19,6 @@ interface HandleDragEndProps {
   onStatisticsUpdate: () => void;
   onMenuDataReload: () => Promise<void>;
   notifications?: NotificationFunctions;
-}
-
-/**
- * Move menu item to new category.
- */
-async function moveItemToCategory(
-  menuId: string,
-  itemId: string,
-  targetCategory: string,
-  targetPosition: number,
-  onMenuDataReload: () => Promise<void>,
-  onStatisticsUpdate: () => void,
-  notifications?: NotificationFunctions,
-): Promise<void> {
-  try {
-    const response = await fetch(`/api/menus/${menuId}/items/${itemId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ category: targetCategory, position: targetPosition }),
-    });
-
-    if (response.ok) {
-      await onMenuDataReload();
-      await onStatisticsUpdate();
-    } else {
-      const result = await response.json();
-      notifications?.showError(
-        `Failed to move item: ${result.error || result.message || 'Unknown error'}`,
-      );
-    }
-  } catch (err) {
-    notifications?.showError('Failed to move item. Please check your connection and try again.');
-  }
 }
 
 /**

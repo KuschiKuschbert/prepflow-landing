@@ -39,36 +39,22 @@ export function useDishCostCalculation(
   >({});
   const [loading, setLoading] = useState(false);
 
-  // Fetch recipe ingredients for cost calculation
   useEffect(() => {
     const fetchRecipeIngredients = async () => {
       const recipeIds = selectedRecipes.map(sr => sr.recipe_id);
-      if (recipeIds.length === 0) {
-        setRecipeIngredients({});
-        return;
-      }
-
+      if (recipeIds.length === 0) { setRecipeIngredients({}); return; }
       setLoading(true);
       try {
-        const response = await fetch('/api/recipes/ingredients/batch', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ recipeIds }),
-        });
-
+        const response = await fetch('/api/recipes/ingredients/batch', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ recipeIds }) });
         const data = await response.json();
-        if (data.items) {
-          setRecipeIngredients(data.items);
-        }
+        if (data.items) setRecipeIngredients(data.items);
       } catch (err) {
         logger.error('Failed to fetch recipe ingredients:', err);
       } finally {
         setLoading(false);
       }
     };
-
     fetchRecipeIngredients();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRecipes.map(sr => sr.recipe_id).join(',')]);
 
   // Calculate total cost

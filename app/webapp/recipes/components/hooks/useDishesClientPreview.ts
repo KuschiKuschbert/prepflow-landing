@@ -27,50 +27,30 @@ export function useDishesClientPreview({
   const [editingDish, setEditingDish] = useState<Dish | null>(null);
   const [showDishEditDrawer, setShowDishEditDrawer] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
-  const [editingItem, setEditingItem] = useState<{
-    item: Recipe | Dish;
-    type: 'recipe' | 'dish';
-  } | null>(null);
+  const [editingItem, setEditingItem] = useState<{ item: Recipe | Dish; type: 'recipe' | 'dish' } | null>(null);
   const [highlightingRowId, setHighlightingRowId] = useState<string | null>(null);
   const [highlightingRowType, setHighlightingRowType] = useState<'recipe' | 'dish' | null>(null);
 
-  const handlePreviewDish = useCallback(
-    (dish: Dish) => {
-      // Close recipe panel if open to prevent cache overload
-      if (showRecipePanel) {
-        setShowRecipePanel(false);
-        setSelectedRecipeForPreview(null);
-        setRecipeIngredients([]);
-      }
-      setSelectedDishForPreview(dish);
-      setShowDishPanel(true);
-    },
-    [showRecipePanel],
-  );
+  const handlePreviewDish = useCallback((dish: Dish) => {
+    if (showRecipePanel) { setShowRecipePanel(false); setSelectedRecipeForPreview(null); setRecipeIngredients([]); }
+    setSelectedDishForPreview(dish);
+    setShowDishPanel(true);
+  }, [showRecipePanel]);
 
-  const handlePreviewRecipe = useCallback(
-    async (recipe: Recipe) => {
-      // Close dish panel if open to prevent cache overload
-      if (showDishPanel) {
-        setShowDishPanel(false);
-        setSelectedDishForPreview(null);
-      }
-      try {
-        const ingredients = await fetchRecipeIngredients(recipe.id);
-        setSelectedRecipeForPreview(recipe);
-        setRecipeIngredients(ingredients);
-        setPreviewYield(recipe.yield || 1);
-        setShowRecipePanel(true);
-        generateAIInstructions(recipe, ingredients).catch(err => {
-          logger.error('Failed to generate AI instructions:', err);
-        });
-      } catch (err) {
-        logger.error('Failed to load recipe:', err);
-        setError('Failed to load recipe details');
-      }
-    },
-    [showDishPanel, fetchRecipeIngredients, generateAIInstructions, setError],
-  );
+  const handlePreviewRecipe = useCallback(async (recipe: Recipe) => {
+    if (showDishPanel) { setShowDishPanel(false); setSelectedDishForPreview(null); }
+    try {
+      const ingredients = await fetchRecipeIngredients(recipe.id);
+      setSelectedRecipeForPreview(recipe);
+      setRecipeIngredients(ingredients);
+      setPreviewYield(recipe.yield || 1);
+      setShowRecipePanel(true);
+      generateAIInstructions(recipe, ingredients).catch(err => logger.error('Failed to generate AI instructions:', err));
+    } catch (err) {
+      logger.error('Failed to load recipe:', err);
+      setError('Failed to load recipe details');
+    }
+  }, [showDishPanel, fetchRecipeIngredients, generateAIInstructions, setError]);
 
   return {
     selectedRecipeForPreview,

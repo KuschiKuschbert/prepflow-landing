@@ -13,6 +13,10 @@ import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Clock, User, Briefcase, Coffee, FileText, X } from 'lucide-react';
 import type { Shift, Employee } from '../types';
+import { buildShiftDataFromForm } from './ShiftForm/helpers/buildShiftData';
+import { validateShiftForm } from './ShiftForm/helpers/validateForm';
+import { FormField } from './ShiftForm/components/FormField';
+import { TimeInput } from './ShiftForm/components/TimeInput';
 
 interface ShiftFormProps {
   isOpen: boolean;
@@ -69,76 +73,15 @@ export function ShiftForm({
   }, [preselectedDate, editingShift]);
 
   const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.employee_id) {
-      newErrors.employee_id = 'Employee is required';
-    }
-
-    if (!formData.shift_date) {
-      newErrors.shift_date = 'Date is required';
-    }
-
-    if (!formData.start_time) {
-      newErrors.start_time = 'Start time is required';
-    }
-
-    if (!formData.end_time) {
-      newErrors.end_time = 'End time is required';
-    }
-
-    // Validate time logic
-    if (formData.start_time && formData.end_time) {
-      const [startHour, startMin] = formData.start_time.split(':').map(Number);
-      const [endHour, endMin] = formData.end_time.split(':').map(Number);
-      const startMinutes = startHour * 60 + startMin;
-      const endMinutes = endHour * 60 + endMin;
-
-      if (endMinutes <= startMinutes) {
-        newErrors.end_time = 'End time must be after start time';
-      }
-    }
-
+    const newErrors = validateShiftForm(formData);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    // Convert form data to shift format
-    const shiftDate = new Date(formData.shift_date);
-    const [startHour, startMin] = formData.start_time.split(':').map(Number);
-    const [endHour, endMin] = formData.end_time.split(':').map(Number);
-
-    const startTime = new Date(shiftDate);
-    startTime.setHours(startHour, startMin, 0, 0);
-
-    let endTime = new Date(shiftDate);
-    endTime.setHours(endHour, endMin, 0, 0);
-
-    // Handle shifts spanning midnight
-    if (endTime < startTime) {
-      endTime = new Date(endTime);
-      endTime.setDate(endTime.getDate() + 1);
-    }
-
-    const shiftData: Partial<Shift> = {
-      employee_id: formData.employee_id,
-      shift_date: formData.shift_date,
-      start_time: startTime.toISOString(),
-      end_time: endTime.toISOString(),
-      status: editingShift?.status || 'draft',
-      role: formData.role || null,
-      break_duration_minutes: formData.break_duration_minutes || 0,
-      notes: formData.notes || null,
-    };
-
-    await onSave(shiftData);
+    if (!validateForm()) return;
+    await onSave(buildShiftDataFromForm(formData, editingShift));
   };
 
   if (!isOpen) return null;
@@ -163,11 +106,7 @@ export function ShiftForm({
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Employee Selection */}
-          <div>
-            <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
-              <Icon icon={User} size="sm" aria-hidden={true} />
-              Employee *
-            </label>
+          <FormField label="Employee *" icon={User} error={errors.employee_id}>
             <select
               value={formData.employee_id}
               onChange={e => {
@@ -188,17 +127,10 @@ export function ShiftForm({
                 </option>
               ))}
             </select>
-            {errors.employee_id && (
-              <p className="mt-1 text-xs text-red-400">{errors.employee_id}</p>
-            )}
-          </div>
+          </FormField>
 
           {/* Date */}
-          <div>
-            <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
-              <Icon icon={Clock} size="sm" aria-hidden={true} />
-              Date *
-            </label>
+          <FormField label="Date *" icon={Clock} error={errors.shift_date}>
             <input
               type="date"
               value={formData.shift_date}
@@ -213,64 +145,34 @@ export function ShiftForm({
               }`}
               disabled={loading}
             />
-            {errors.shift_date && <p className="mt-1 text-xs text-red-400">{errors.shift_date}</p>}
-          </div>
+          </FormField>
 
           {/* Time Range */}
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
-                <Icon icon={Clock} size="sm" aria-hidden={true} />
-                Start Time *
-              </label>
-              <input
-                type="time"
-                value={formData.start_time}
-                onChange={e => {
-                  setFormData(prev => ({ ...prev, start_time: e.target.value }));
-                  setErrors(prev => ({ ...prev, start_time: '', end_time: '' }));
-                }}
-                className={`w-full rounded-xl border bg-[#0a0a0a] px-4 py-3 text-white transition-colors ${
-                  errors.start_time
-                    ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-                    : 'border-[#2a2a2a] focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20'
-                }`}
-                disabled={loading}
-              />
-              {errors.start_time && (
-                <p className="mt-1 text-xs text-red-400">{errors.start_time}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
-                <Icon icon={Clock} size="sm" aria-hidden={true} />
-                End Time *
-              </label>
-              <input
-                type="time"
-                value={formData.end_time}
-                onChange={e => {
-                  setFormData(prev => ({ ...prev, end_time: e.target.value }));
-                  setErrors(prev => ({ ...prev, end_time: '' }));
-                }}
-                className={`w-full rounded-xl border bg-[#0a0a0a] px-4 py-3 text-white transition-colors ${
-                  errors.end_time
-                    ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-                    : 'border-[#2a2a2a] focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20'
-                }`}
-                disabled={loading}
-              />
-              {errors.end_time && <p className="mt-1 text-xs text-red-400">{errors.end_time}</p>}
-            </div>
+            <TimeInput
+              label="Start Time *"
+              value={formData.start_time}
+              onChange={value => {
+                setFormData(prev => ({ ...prev, start_time: value }));
+                setErrors(prev => ({ ...prev, start_time: '', end_time: '' }));
+              }}
+              error={errors.start_time}
+              disabled={loading}
+            />
+            <TimeInput
+              label="End Time *"
+              value={formData.end_time}
+              onChange={value => {
+                setFormData(prev => ({ ...prev, end_time: value }));
+                setErrors(prev => ({ ...prev, end_time: '' }));
+              }}
+              error={errors.end_time}
+              disabled={loading}
+            />
           </div>
 
           {/* Role */}
-          <div>
-            <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
-              <Icon icon={Briefcase} size="sm" aria-hidden={true} />
-              Role (Optional)
-            </label>
+          <FormField label="Role (Optional)" icon={Briefcase}>
             <select
               value={formData.role}
               onChange={e => setFormData(prev => ({ ...prev, role: e.target.value }))}
@@ -285,14 +187,10 @@ export function ShiftForm({
               <option value="server">Server</option>
               <option value="manager">Manager</option>
             </select>
-          </div>
+          </FormField>
 
           {/* Break Duration */}
-          <div>
-            <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
-              <Icon icon={Coffee} size="sm" aria-hidden={true} />
-              Break Duration (minutes)
-            </label>
+          <FormField label="Break Duration (minutes)" icon={Coffee}>
             <input
               type="number"
               min="0"
@@ -307,14 +205,10 @@ export function ShiftForm({
               className="w-full rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-colors focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20"
               disabled={loading}
             />
-          </div>
+          </FormField>
 
           {/* Notes */}
-          <div>
-            <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
-              <Icon icon={FileText} size="sm" aria-hidden={true} />
-              Notes (Optional)
-            </label>
+          <FormField label="Notes (Optional)" icon={FileText}>
             <textarea
               value={formData.notes}
               onChange={e => setFormData(prev => ({ ...prev, notes: e.target.value }))}
@@ -322,7 +216,7 @@ export function ShiftForm({
               className="w-full rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-colors focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20"
               disabled={loading}
             />
-          </div>
+          </FormField>
 
           {/* Actions */}
           <div className="flex items-center justify-end gap-4 pt-4">

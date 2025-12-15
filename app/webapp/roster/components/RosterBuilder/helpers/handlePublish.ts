@@ -1,0 +1,30 @@
+/**
+ * Handle publish draft shifts.
+ */
+import type { Shift } from '../../../types';
+
+export function createPublishHandler(
+  shifts: Shift[],
+  publishShifts: (shiftIds: string[]) => void,
+  setLoading: (loading: boolean) => void,
+  showError: (message: string) => void,
+  showSuccess: (message: string) => void,
+) {
+  return async () => {
+    const draftShifts = shifts.filter(s => s.status === 'draft');
+    if (draftShifts.length === 0) {
+      showError('No draft shifts to publish');
+      return;
+    }
+    setLoading(true);
+    try {
+      const shiftIds = draftShifts.map(s => s.id);
+      publishShifts(shiftIds);
+      showSuccess(`${draftShifts.length} shift(s) published successfully`);
+    } catch (error) {
+      showError('Failed to publish shifts');
+    } finally {
+      setLoading(false);
+    }
+  };
+}

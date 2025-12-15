@@ -1,9 +1,10 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { saveDraft, clearDraft, getDraft } from '@/lib/autosave-storage';
 import { EntityType } from '@/lib/autosave-sync';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { performAutosave, setupAutosaveLifecycle } from './utils/autosaveLifecycle';
+import { initializeDraftHelper } from './useAutosave/helpers/initializeDraft';
+import { handleDataChangeHelper } from './useAutosave/helpers/handleDataChange';
 
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
@@ -70,24 +71,11 @@ export function useAutosave({
   }, [entityType, entityId, data, userId, enabled, onConflict, onSave, onError]);
 
   useEffect(() => {
-    if (entityId && enabled) {
-      const existingDraft = getDraft(entityType, entityId, userId);
-      if (existingDraft && onSave) {
-        // Optionally restore draft on mount
-        // onSave(existingDraft.data);
-      }
-    }
+    initializeDraftHelper(entityId, enabled, entityType, userId, onSave);
     isInitialLoadRef.current = false;
   }, [entityType, entityId, userId, enabled, onSave]);
   useEffect(() => {
-    if (!enabled || !entityId || isInitialLoadRef.current) return;
-    const hasChanged = dataString !== previousDataRef.current;
-    if (!hasChanged) return;
-    setHasUnsavedChanges(true);
-    previousDataRef.current = dataString;
-    saveDraft(entityType, entityId, data, userId);
-    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-    debounceTimerRef.current = setTimeout(async () => await performSave(), debounceMs);
+    handleDataChangeHelper(dataString, previousDataRef, enabled, entityId, isInitialLoadRef, entityType, data, userId, debounceMs, debounceTimerRef, performSave, setHasUnsavedChanges);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataString, entityType, entityId, userId, debounceMs, enabled, performSave]);
 

@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { MenuItem } from '../../types';
+import { createInitialDialogState } from './helpers/createInitialDialogState';
+import { createRemoveHandlers } from './helpers/createRemoveHandlers';
+import type { MenuItem } from '../../types';
 
 interface UseMenuEditorUIProps {
   handleAddCategoryBase: (category: string, setNewCategory: (cat: string) => void) => void;
@@ -38,56 +40,16 @@ export function useMenuEditorUI({
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
   const [selectedItemForStats, setSelectedItemForStats] = useState<MenuItem | null>(null);
-
-  const [confirmDialog, setConfirmDialog] = useState<{
-    isOpen: boolean;
-    title: string;
-    message: string;
-    onConfirm: () => void;
-    variant?: 'danger' | 'warning' | 'info';
-  }>({
-    isOpen: false,
-    title: '',
-    message: '',
-    onConfirm: () => {},
-    variant: 'warning',
+  const [confirmDialog, setConfirmDialog] = useState(createInitialDialogState());
+  const handleAddCategory = () => handleAddCategoryBase(newCategory, setNewCategory);
+  const { handleRemoveCategory, handleRemoveItem } = createRemoveHandlers({
+    handleRemoveCategoryBase,
+    performRemoveCategory,
+    handleRemoveItemBase,
+    performRemoveItem,
+    menuItems,
+    setConfirmDialog,
   });
-
-  const handleAddCategory = () => {
-    handleAddCategoryBase(newCategory, setNewCategory);
-  };
-
-  const handleRemoveCategory = async (category: string) => {
-    handleRemoveCategoryBase(category, () => {
-      setConfirmDialog({
-        isOpen: true,
-        title: 'Remove Category',
-        message: `Remove category "${category}"? Items in this category will be moved to "Uncategorized".`,
-        variant: 'warning',
-        onConfirm: async () => {
-          setConfirmDialog(prev => ({ ...prev, isOpen: false }));
-          await performRemoveCategory(category);
-        },
-      });
-    });
-  };
-
-  const handleRemoveItem = async (itemId: string) => {
-    handleRemoveItemBase(itemId, () => {
-      const item = menuItems.find(i => i.id === itemId);
-      const itemName = item?.dishes?.dish_name || item?.recipes?.recipe_name || 'this item';
-      setConfirmDialog({
-        isOpen: true,
-        title: 'Remove Item',
-        message: `Remove "${itemName}" from this menu?`,
-        variant: 'warning',
-        onConfirm: async () => {
-          setConfirmDialog(prev => ({ ...prev, isOpen: false }));
-          await performRemoveItem(itemId, itemName);
-        },
-      });
-    });
-  };
 
   const handleItemTap = (
     item: { type: 'dish' | 'recipe'; id: string; name: string },

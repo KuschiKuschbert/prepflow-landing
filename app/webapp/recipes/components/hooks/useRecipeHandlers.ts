@@ -33,31 +33,9 @@ export function useRecipeHandlers({
     () => buildFormatQuantity(previewYield, selectedRecipe),
     [previewYield, selectedRecipe],
   );
-  const handlePreviewRecipe = useCallback(
-    async (recipe: Recipe) => {
-      await handlePreviewRecipeUtil({
-        recipe,
-        fetchRecipeIngredients,
-        setSelectedRecipe,
-        setRecipeIngredients,
-        setPreviewYield,
-        setShowUnifiedModal,
-        clearChangedFlag,
-        generateAIInstructions,
-        setError,
-      });
-    },
-    [
-      fetchRecipeIngredients,
-      setError,
-      generateAIInstructions,
-      clearChangedFlag,
-      setSelectedRecipe,
-      setRecipeIngredients,
-      setPreviewYield,
-      setShowUnifiedModal,
-    ],
-  );
+  const handlePreviewRecipe = useCallback(async (recipe: Recipe) => {
+    await handlePreviewRecipeUtil({ recipe, fetchRecipeIngredients, setSelectedRecipe, setRecipeIngredients, setPreviewYield, setShowUnifiedModal, clearChangedFlag, generateAIInstructions, setError });
+  }, [fetchRecipeIngredients, setError, generateAIInstructions, clearChangedFlag, setSelectedRecipe, setRecipeIngredients, setPreviewYield, setShowUnifiedModal]);
   const {
     handleEditRecipeWrapper,
     handleEditRecipeFromCard,
@@ -85,25 +63,8 @@ export function useRecipeHandlers({
     ],
   );
   const handleDuplicateRecipeWrapper = useCallback(async () => {
-    await handleDuplicateRecipeWrapperUtil({
-      selectedRecipe,
-      handleDuplicateRecipe,
-      handlePreviewRecipe,
-      setShowUnifiedModal,
-    });
+    await handleDuplicateRecipeWrapperUtil({ selectedRecipe, handleDuplicateRecipe, handlePreviewRecipe, setShowUnifiedModal });
   }, [selectedRecipe, handleDuplicateRecipe, handlePreviewRecipe, setShowUnifiedModal]);
-  const handleRefreshIngredients = useMemo(
-    () => buildRefreshIngredients({ selectedRecipe, fetchRecipeIngredients, setRecipeIngredients }),
-    [selectedRecipe, fetchRecipeIngredients, setRecipeIngredients],
-  );
-  return buildRecipeHandlersReturn({
-    formatQuantity,
-    handlePreviewRecipe,
-    handleEditRecipeWrapper,
-    handleEditRecipeFromCard,
-    handleDuplicateRecipeWrapper,
-    handleShareRecipeWrapper,
-    handlePrint,
-    handleRefreshIngredients,
-  });
+  const handleRefreshIngredients = useMemo(() => buildRefreshIngredients({ selectedRecipe, fetchRecipeIngredients, setRecipeIngredients }), [selectedRecipe, fetchRecipeIngredients, setRecipeIngredients]);
+  return buildRecipeHandlersReturn({ formatQuantity, handlePreviewRecipe, handleEditRecipeWrapper, handleEditRecipeFromCard, handleDuplicateRecipeWrapper, handleShareRecipeWrapper, handlePrint, handleRefreshIngredients });
 }

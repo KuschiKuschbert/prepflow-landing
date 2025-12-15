@@ -4,9 +4,10 @@
 // HMR fix: Using direct lucide-react imports instead of Icon wrapper to avoid Turbopack module resolution issues
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ImageIcon, ChevronDown } from 'lucide-react';
-import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
 import { ImageLightbox } from './ImageLightbox';
+import { renderImageComponent } from './FoodImageDisplay/helpers/renderImage';
+import { buildImageMap } from './FoodImageDisplay/helpers/buildImageMap';
 
 // All supported plating methods
 export type PlatingMethod =
@@ -69,88 +70,8 @@ export function FoodImageDisplay({
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  /**
-   * Validate base64 string format
-   * @param str - String to validate
-   * @returns true if valid base64, false otherwise
-   */
-  const isValidBase64 = (str: string): boolean => {
-    if (!str || str.length === 0) return false;
-    // Base64 regex: allows A-Z, a-z, 0-9, +, /, = (padding)
-    const base64Regex = /^[A-Za-z0-9+/]*={0,2}$/;
-    return base64Regex.test(str);
-  };
 
-  /**
-   * Normalize image URL - handles both old JSON format and new string format
-   * @param url - Image URL (may be a JSON string or a regular string)
-   * @returns Normalized image URL string or null
-   */
-  const normalizeImageUrl = (url: string | null | undefined): string | null => {
-    if (!url || typeof url !== 'string') return null;
-
-    // If it's already a valid URL string (starts with http://, https://, or data:), return as-is
-    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
-      // For data URLs, validate the base64 portion
-      if (url.startsWith('data:')) {
-        const match = url.match(/^data:([^;]+);base64,(.+)$/);
-        if (match && isValidBase64(match[2])) {
-          return url;
-        }
-        // Invalid base64 in data URL - return null to prevent ERR_INVALID_URL
-        return null;
-      }
-      return url;
-    }
-
-    // Try to parse as JSON (handles old format where entire object was stored)
-    try {
-      const parsed = JSON.parse(url);
-      if (typeof parsed === 'object' && parsed !== null) {
-        // If it's an object with imageUrl property, use that
-        if (parsed.imageUrl && typeof parsed.imageUrl === 'string') {
-          return parsed.imageUrl;
-        }
-        // If it's an object with imageData, construct data URL (with validation)
-        if (parsed.imageData && typeof parsed.imageData === 'string') {
-          // Validate base64 before constructing data URL
-          if (!isValidBase64(parsed.imageData)) {
-            return null; // Invalid base64 - return null to prevent ERR_INVALID_URL
-          }
-          const mimeType = parsed.mimeType || 'image/jpeg';
-          return `data:${mimeType};base64,${parsed.imageData}`;
-        }
-      }
-    } catch {
-      // Not JSON, treat as regular string
-    }
-
-    // If it doesn't match any pattern, return null
-    return null;
-  };
-
-  // Normalize all image URLs
-  const normalizedImageUrl = normalizeImageUrl(imageUrl); // Classic
-  const normalizedImageUrlModern = normalizeImageUrl(imageUrlModern); // Modern
-  const normalizedImageUrlAlternative = normalizeImageUrl(imageUrlAlternative); // Rustic
-  const normalizedImageUrlMinimalist = normalizeImageUrl(imageUrlMinimalist); // Minimalist
-
-  // Normalize additional plating methods from JSON column
-  const normalizedPlatingMethodsImages: Record<string, string | null> = {};
-  if (platingMethodsImages) {
-    for (const [method, url] of Object.entries(platingMethodsImages)) {
-      normalizedPlatingMethodsImages[method] = normalizeImageUrl(url);
-    }
-  }
-
-  // Map all plating methods to their URLs
-  const imageMap: Record<string, string | null> = {
-    classic: normalizedImageUrl,
-    modern: normalizedImageUrlModern,
-    rustic: normalizedImageUrlAlternative,
-    minimalist: normalizedImageUrlMinimalist,
-    ...normalizedPlatingMethodsImages,
-  };
+  const imageMap = buildImageMap(imageUrl, imageUrlModern, imageUrlAlternative, imageUrlMinimalist, platingMethodsImages);
 
   // Get available plating methods (those with images)
   const availablePlatingMethods = (Object.keys(imageMap) as PlatingMethod[]).filter(
@@ -278,29 +199,7 @@ export function FoodImageDisplay({
             </div>
           )}
 
-          {currentImageUrl &&
-            typeof currentImageUrl === 'string' &&
-            // Use regular img tag for data URLs (base64), Next.js Image for external URLs
-            (currentImageUrl.startsWith('data:') ? (
-              <img
-                src={currentImageUrl}
-                alt={alt}
-                className={`h-full w-full object-cover transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
-                onLoad={handleLoad}
-                onError={handleError}
-              />
-            ) : (
-              <Image
-                src={currentImageUrl}
-                alt={alt}
-                fill
-                className={`object-cover transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
-                priority={priority}
-                onLoad={handleLoad}
-                onError={handleError}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              />
-            ))}
+          {currentImageUrl && renderImageComponent(currentImageUrl, alt, isLoading, priority, handleLoad, handleError)}
 
           {/* Plating Method Selector - Only show if multiple images exist */}
           {availablePlatingMethods.length > 1 && showSelector && (

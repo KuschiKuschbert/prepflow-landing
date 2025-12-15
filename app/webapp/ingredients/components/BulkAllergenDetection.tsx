@@ -1,11 +1,11 @@
 'use client';
 
-import { useConfirm } from '@/hooks/useConfirm';
-import { useNotification } from '@/contexts/NotificationContext';
-import { logger } from '@/lib/logger';
-import { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
+import { useNotification } from '@/contexts/NotificationContext';
+import { useConfirm } from '@/hooks/useConfirm';
+import { logger } from '@/lib/logger';
 import { Sparkles } from 'lucide-react';
+import { useState } from 'react';
 
 interface BulkAllergenDetectionProps {
   onComplete?: () => void;
@@ -80,7 +80,7 @@ export function BulkAllergenDetection({ onComplete }: BulkAllergenDetectionProps
       }
     } catch (err) {
       logger.error('[BulkAllergenDetection] Error:', err);
-      showError('Network error occurred while detecting allergens');
+      showError("Connection issue while detecting allergens. Give it another go, chef.");
     } finally {
       setLoading(false);
     }

@@ -2,10 +2,10 @@
  * Hook for managing menu data loading and caching
  */
 import { useState, useEffect, useCallback } from 'react';
-import { getCachedData } from '@/lib/cache/data-cache';
-import { logger } from '@/lib/logger';
 import type { MenuItem, MenuStatistics, Dish, Recipe } from '../../types';
 import { loadMenuData as loadMenuDataHelper } from './useMenuData/dataLoading';
+import { initializeState } from './useMenuData/helpers/initializeState';
+import { refreshStatistics as refreshStatisticsHelper } from './useMenuData/helpers/refreshStatistics';
 
 interface UseMenuDataProps {
   menuId: string;
@@ -31,56 +31,19 @@ export function useMenuData({ menuId, onError }: UseMenuDataProps): UseMenuDataR
   const dishesCacheKey = 'menu_builder_dishes';
   const recipesCacheKey = 'menu_builder_recipes';
 
-  const cachedMenuData = getCachedData<{
-    menuItems: MenuItem[];
-    categories: string[];
-    statistics: MenuStatistics | null;
-  }>(menuCacheKey);
-  const cachedDishes = getCachedData<Dish[]>(dishesCacheKey);
-  const cachedRecipes = getCachedData<Recipe[]>(recipesCacheKey);
-
-  const [menuItems, setMenuItems] = useState<MenuItem[]>(cachedMenuData?.menuItems || []);
-  const [dishes, setDishes] = useState<Dish[]>(cachedDishes || []);
-  const [recipes, setRecipes] = useState<Recipe[]>(cachedRecipes || []);
-  const [categories, setCategories] = useState<string[]>(
-    cachedMenuData?.categories || ['Uncategorized'],
+  const initialState = initializeState({ menuCacheKey, dishesCacheKey, recipesCacheKey });
+  const [menuItems, setMenuItems] = useState<MenuItem[]>(initialState.menuItems);
+  const [dishes, setDishes] = useState<Dish[]>(initialState.dishes);
+  const [recipes, setRecipes] = useState<Recipe[]>(initialState.recipes);
+  const [categories, setCategories] = useState<string[]>(initialState.categories);
+  const [statistics, setStatistics] = useState<MenuStatistics | null>(initialState.statistics);
+  const [loading, setLoading] = useState(initialState.loading);
+  const refreshStatistics = useCallback(
+    async () => refreshStatisticsHelper(menuId, setStatistics),
+    [menuId, setStatistics],
   );
-  const [statistics, setStatistics] = useState<MenuStatistics | null>(
-    cachedMenuData?.statistics || null,
-  );
-  const [loading, setLoading] = useState(!cachedMenuData && !cachedDishes && !cachedRecipes);
-  const refreshStatistics = useCallback(async () => {
-    try {
-      const statsResponse = await fetch(`/api/menus/${menuId}/statistics`);
-      if (statsResponse.ok) {
-        const statsData = await statsResponse.json();
-        if (statsData.success) {
-          logger.dev('[useMenuData] Statistics refreshed', {
-            menuId,
-            statistics: statsData.statistics,
-            totalItems: statsData.statistics?.total_items,
-          });
-          setStatistics(statsData.statistics);
-        } else {
-          logger.warn('[useMenuData] Statistics API returned error', {
-            menuId,
-            error: statsData.error || statsData.message,
-          });
-        }
-      } else {
-        logger.error('[useMenuData] Statistics API request failed', {
-          menuId,
-          status: statsResponse.status,
-          statusText: statsResponse.statusText,
-        });
-      }
-    } catch (err) {
-      logger.error('[useMenuData] Failed to refresh statistics', { menuId, error: err });
-    }
-  }, [menuId]);
   const loadMenuData = useCallback(async () => {
-    // Only show loading if we don't have cached data (background refresh pattern)
-    const hasCachedData = cachedMenuData || cachedDishes || cachedRecipes;
+    const hasCachedData = initialState.menuItems.length > 0 || initialState.dishes.length > 0 || initialState.recipes.length > 0;
     await loadMenuDataHelper({
       menuId,
       menuCacheKey,
@@ -93,7 +56,7 @@ export function useMenuData({ menuId, onError }: UseMenuDataProps): UseMenuDataR
       setCategories,
       setStatistics,
       setLoading,
-      showLoading: !hasCachedData, // Don't show loading if we have cached data
+      showLoading: !hasCachedData,
     });
   }, [
     menuId,
@@ -101,9 +64,7 @@ export function useMenuData({ menuId, onError }: UseMenuDataProps): UseMenuDataR
     dishesCacheKey,
     recipesCacheKey,
     onError,
-    cachedMenuData,
-    cachedDishes,
-    cachedRecipes,
+    initialState,
     setMenuItems,
     setDishes,
     setRecipes,

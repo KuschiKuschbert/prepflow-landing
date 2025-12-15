@@ -3,6 +3,8 @@
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Icon } from './Icon';
+import { setupInputDialogFocusTrap } from './InputDialog/helpers/focusTrap';
+import { validateInput } from './InputDialog/helpers/validation';
 
 /**
  * Input dialog component with Cyber Carrot Design System styling.
@@ -82,75 +84,7 @@ export function InputDialog({
   // Focus trap and keyboard handling
   useEffect(() => {
     if (isOpen && dialogRef.current) {
-      // Store trigger element (the element that opened the dialog)
-      triggerRef.current = document.activeElement as HTMLElement;
-
-      // Get all focusable elements within the dialog
-      const getFocusableElements = (): HTMLElement[] => {
-        if (!dialogRef.current) return [];
-        return Array.from(
-          dialogRef.current.querySelectorAll(
-            'button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])',
-          ),
-        ) as HTMLElement[];
-      };
-
-      const focusableElements = getFocusableElements();
-      const firstElement = focusableElements[0];
-      const lastElement = focusableElements[focusableElements.length - 1];
-
-      // Focus input when dialog opens
-      setTimeout(() => {
-        if (inputRef.current) {
-          inputRef.current.focus();
-          inputRef.current.select();
-        } else if (firstElement) {
-          firstElement.focus();
-        }
-      }, 100);
-
-      // Handle Tab key to trap focus
-      const handleTab = (e: KeyboardEvent) => {
-        if (e.key !== 'Tab') return;
-
-        if (focusableElements.length === 0) {
-          e.preventDefault();
-          return;
-        }
-
-        if (e.shiftKey) {
-          // Shift + Tab (backwards)
-          if (document.activeElement === firstElement) {
-            e.preventDefault();
-            lastElement?.focus();
-          }
-        } else {
-          // Tab (forwards)
-          if (document.activeElement === lastElement) {
-            e.preventDefault();
-            firstElement?.focus();
-          }
-        }
-      };
-
-      // Handle Escape key
-      const handleEscape = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
-          onCancel();
-        }
-      };
-
-      document.addEventListener('keydown', handleTab);
-      document.addEventListener('keydown', handleEscape);
-
-      return () => {
-        document.removeEventListener('keydown', handleTab);
-        document.removeEventListener('keydown', handleEscape);
-        // Return focus to trigger element when dialog closes
-        if (triggerRef.current && typeof triggerRef.current.focus === 'function') {
-          triggerRef.current.focus();
-        }
-      };
+      return setupInputDialogFocusTrap(dialogRef, inputRef, onCancel);
     }
   }, [isOpen, onCancel]);
 
@@ -162,36 +96,11 @@ export function InputDialog({
   }, [isOpen, defaultValue]);
 
   const handleConfirm = () => {
-    if (validation) {
-      const validationError = validation(value);
-      if (validationError) {
-        setError(validationError);
-        return;
-      }
-    }
-
-    // Additional type-specific validation
-    if (type === 'number') {
-      const numValue = parseFloat(value);
-      if (isNaN(numValue)) {
-        setError('Please enter a valid number');
-        return;
-      }
-      if (min !== undefined && numValue < min) {
-        setError(`Value must be at least ${min}`);
-        return;
-      }
-      if (max !== undefined && numValue > max) {
-        setError(`Value must be at most ${max}`);
-        return;
-      }
-    }
-
-    if (!value.trim()) {
-      setError('This field is required');
+    const validationError = validateInput(value, type, min, max, validation);
+    if (validationError) {
+      setError(validationError);
       return;
     }
-
     onConfirm(value.trim());
   };
 

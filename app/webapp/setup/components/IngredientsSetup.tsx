@@ -60,7 +60,7 @@ export default function IngredientsSetup({
         setError(data.error || 'Failed to populate ingredients');
       }
     } catch (err) {
-      setError('Network error occurred');
+      setError("Connection issue occurred. Give it another go, chef.");
     } finally {
       setLoading(false);
     }
@@ -70,10 +70,10 @@ export default function IngredientsSetup({
     <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 shadow-lg">
       <div className="mb-8 text-center">
         <div className="mb-4 text-6xl">🥕</div>
-        <h3 className="mb-2 text-2xl font-bold text-white">Ingredients Database</h3>
+        <h3 className="mb-2 text-2xl font-bold text-white">Ingredients</h3>
         <p className="text-lg text-gray-400">
-          Populate your database with ~95 common kitchen ingredients (including consumables) with
-          costs, units, and yield percentages
+          Populate your ingredients list with ~95 common kitchen ingredients (including consumables)
+          with costs, units, and yield percentages
         </p>
       </div>
 

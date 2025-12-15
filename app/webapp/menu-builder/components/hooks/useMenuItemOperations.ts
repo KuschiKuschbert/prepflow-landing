@@ -2,12 +2,8 @@
  * Hook for managing menu item operations (add, remove, move, reorder, update price)
  * Orchestrates specialized hooks for different operations.
  */
+import { createOperations } from './helpers/createOperations';
 import type { Dish, MenuItem, Recipe } from '../../types';
-import { useMenuItemAddition } from './helpers/useMenuItemAddition';
-import { useMenuItemCategory } from './helpers/useMenuItemCategory';
-import { useMenuItemPrice } from './helpers/useMenuItemPrice';
-import { useMenuItemRemoval } from './helpers/useMenuItemRemoval';
-import { useMenuItemReorder } from './helpers/useMenuItemReorder';
 interface UseMenuItemOperationsProps {
   menuId: string;
   menuItems: MenuItem[];
@@ -37,71 +33,6 @@ interface UseMenuItemOperationsReturn {
   performMoveToCategory: (itemId: string, targetCategory: string, item: MenuItem) => Promise<void>;
 }
 
-export function useMenuItemOperations({
-  menuId,
-  menuItems,
-  dishes,
-  recipes,
-  categories,
-  setMenuItems,
-  setCategories,
-  refreshStatistics,
-  loadMenuData,
-  showError,
-  showSuccess,
-}: UseMenuItemOperationsProps): UseMenuItemOperationsReturn {
-  const { handleCategorySelect } = useMenuItemAddition({
-    menuId,
-    menuItems,
-    dishes,
-    recipes,
-    categories,
-    setMenuItems,
-    setCategories,
-    refreshStatistics,
-    showError,
-  });
-  const { handleRemoveItem, performRemoveItem } = useMenuItemRemoval({
-    menuId,
-    menuItems,
-    setMenuItems,
-    refreshStatistics,
-    showError,
-    showSuccess,
-  });
-  const { handleMoveUp, handleMoveDown, performReorder } = useMenuItemReorder({
-    menuId,
-    menuItems,
-    setMenuItems,
-    refreshStatistics,
-    showError,
-  });
-  const { handleMoveToCategory, performMoveToCategory } = useMenuItemCategory({
-    menuId,
-    menuItems,
-    setMenuItems,
-    refreshStatistics,
-    loadMenuData,
-    showError,
-  });
-  const { handleUpdateActualPrice } = useMenuItemPrice({
-    menuId,
-    menuItems,
-    setMenuItems,
-    loadMenuData,
-    refreshStatistics,
-    showError,
-    showSuccess,
-  });
-  return {
-    handleCategorySelect,
-    handleRemoveItem,
-    performRemoveItem,
-    handleMoveUp,
-    handleMoveDown,
-    performReorder,
-    handleMoveToCategory,
-    handleUpdateActualPrice,
-    performMoveToCategory,
-  };
+export function useMenuItemOperations(props: UseMenuItemOperationsProps): UseMenuItemOperationsReturn {
+  return createOperations(props);
 }

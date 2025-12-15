@@ -22,6 +22,7 @@ import { useDishesClientRecipePricing } from './hooks/useDishesClientRecipePrici
 import { useDishesSidePanelsHandlers } from './hooks/useDishesSidePanelsHandlers';
 import { useDishesClientBulkActions } from './DishesClient/hooks/useDishesClientBulkActions';
 import { useSelectionMode } from '@/app/webapp/ingredients/hooks/useSelectionMode';
+import { createRecipeImagesGeneratedHandler } from './DishesClient/helpers/handleRecipeImagesGenerated';
 export default function DishesClient() {
   const { viewMode, setViewMode } = useDishesClientViewMode();
   const { recipePrices, updateVisibleRecipePrices } = useRecipePricing();
@@ -137,12 +138,8 @@ export default function DishesClient() {
   });
   const selectedItemTypes = useMemo(() => {
     const types = new Map<string, 'recipe' | 'dish'>();
-    dishes.forEach(d => {
-      if (selectedItems.has(d.id)) types.set(d.id, 'dish');
-    });
-    recipes.forEach(r => {
-      if (selectedItems.has(r.id)) types.set(r.id, 'recipe');
-    });
+    dishes.forEach(d => { if (selectedItems.has(d.id)) types.set(d.id, 'dish'); });
+    recipes.forEach(r => { if (selectedItems.has(r.id)) types.set(r.id, 'recipe'); });
     return types;
   }, [dishes, recipes, selectedItems]);
 
@@ -178,44 +175,7 @@ export default function DishesClient() {
   });
 
   const selectedRecipeCount = selectedRecipeIds.length;
-
-  // Callback to update recipe with generated images (all 4 plating methods)
-  const handleRecipeImagesGenerated = useCallback(
-    (
-      recipeId: string,
-      images: {
-        classic: string | null;
-        modern: string | null;
-        rustic: string | null;
-        minimalist: string | null;
-      },
-    ) => {
-      setRecipes(prevRecipes =>
-        prevRecipes.map(recipe =>
-          recipe.id === recipeId
-            ? {
-                ...recipe,
-                image_url: images.classic,
-                image_url_alternative: images.rustic,
-                image_url_modern: images.modern,
-                image_url_minimalist: images.minimalist,
-              }
-            : recipe,
-        ),
-      );
-      // Also update selectedRecipeForPreview if it's the same recipe
-      if (selectedRecipeForPreview?.id === recipeId) {
-        setSelectedRecipeForPreview({
-          ...selectedRecipeForPreview,
-          image_url: images.classic,
-          image_url_alternative: images.rustic,
-          image_url_modern: images.modern,
-          image_url_minimalist: images.minimalist,
-        });
-      }
-    },
-    [setRecipes, selectedRecipeForPreview, setSelectedRecipeForPreview],
-  );
+  const handleRecipeImagesGenerated = useCallback(createRecipeImagesGeneratedHandler(setRecipes, selectedRecipeForPreview, setSelectedRecipeForPreview), [setRecipes, selectedRecipeForPreview, setSelectedRecipeForPreview]);
 
   const sidePanelsHandlers = useDishesSidePanelsHandlers({
     setShowDishPanel,

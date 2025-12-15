@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import { Icon } from '@/components/ui/Icon';
 import { ChevronDown, ChevronUp, Shield } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 
 /**
@@ -32,7 +32,7 @@ export function PrivacyNotice() {
           <ul className="mb-3 ml-4 list-disc space-y-1">
             <li>Error messages and stack traces</li>
             <li>Browser and device information</li>
-            <li>Page URL where error occurred</li>
+            <li>Page where error occurred</li>
             <li>Timestamp of the error</li>
           </ul>
           <p className="mb-2 font-medium text-gray-300">Why is it collected?</p>
