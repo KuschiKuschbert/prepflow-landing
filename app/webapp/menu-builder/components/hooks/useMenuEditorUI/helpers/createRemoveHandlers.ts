@@ -1,12 +1,17 @@
 /**
  * Create remove handlers for categories and items.
  */
-import {
-  createCategoryRemoveDialog,
-  createItemRemoveDialog,
-} from './createConfirmDialog';
+import { createCategoryRemoveDialog, createItemRemoveDialog } from './createConfirmDialog';
 import { getItemName } from './getItemName';
 import type { MenuItem } from '../../../../types';
+
+interface ConfirmDialogState {
+  isOpen: boolean;
+  title: string;
+  message: string;
+  variant?: 'danger' | 'warning' | 'info';
+  onConfirm: () => void;
+}
 
 interface CreateRemoveHandlersParams {
   handleRemoveCategoryBase: (category: string, onConfirm: () => void) => void;
@@ -14,7 +19,7 @@ interface CreateRemoveHandlersParams {
   handleRemoveItemBase: (itemId: string, onConfirm: () => void) => void;
   performRemoveItem: (itemId: string, itemName: string) => Promise<void>;
   menuItems: MenuItem[];
-  setConfirmDialog: React.Dispatch<React.SetStateAction<any>>;
+  setConfirmDialog: React.Dispatch<React.SetStateAction<ConfirmDialogState>>;
 }
 
 export function createRemoveHandlers({
@@ -42,7 +47,7 @@ export function createRemoveHandlers({
       const itemName = getItemName(item);
       setConfirmDialog(
         createItemRemoveDialog(itemName, async () => {
-          setConfirmDialog(prev => ({ ...prev, isOpen: false }));
+          setConfirmDialog((prev: ConfirmDialogState) => ({ ...prev, isOpen: false }));
           await performRemoveItem(itemId, itemName);
         }),
       );

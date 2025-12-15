@@ -40,7 +40,13 @@ export function useMenuEditorUI({
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
   const [selectedItemForStats, setSelectedItemForStats] = useState<MenuItem | null>(null);
-  const [confirmDialog, setConfirmDialog] = useState(createInitialDialogState());
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    variant?: 'danger' | 'warning' | 'info';
+    onConfirm: () => void;
+  }>(createInitialDialogState());
   const handleAddCategory = () => handleAddCategoryBase(newCategory, setNewCategory);
   const { handleRemoveCategory, handleRemoveItem } = createRemoveHandlers({
     handleRemoveCategoryBase,
