@@ -4,8 +4,8 @@
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { useRef, useState } from 'react';
-import { handleFetch } from './helpers/handleFetch';
-import { parseResponse } from './helpers/parseResponse';
+import { handleFetch } from './useCardGeneration/helpers/handleFetch';
+import { parseResponse } from './useCardGeneration/helpers/parseResponse';
 
 interface UseCardGenerationOptions {
   menuId: string;

@@ -1,8 +1,8 @@
 import { useNotification } from '@/contexts/NotificationContext';
 import { useConfirm } from '@/hooks/useConfirm';
 import { TemperatureEquipment } from '../types';
-import { useEquipmentState } from './useTemperatureEquipmentTabHandlers/helpers/equipmentState';
 import { createEquipmentHandlersHelper } from './useTemperatureEquipmentTabHandlers/helpers/equipmentHandlers';
+import { useEquipmentState } from './useTemperatureEquipmentTabHandlers/helpers/equipmentState';
 import { createUIHandlers } from './useTemperatureEquipmentTabHandlers/helpers/uiHandlers';
 interface UseTemperatureEquipmentTabHandlersProps {
   equipment: TemperatureEquipment[];

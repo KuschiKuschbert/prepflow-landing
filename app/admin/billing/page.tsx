@@ -1,20 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import {
-  CreditCard,
-  DollarSign,
-  TrendingUp,
-  AlertCircle,
-  CheckCircle,
-  RefreshCw,
-  Heart,
-  Loader2,
-} from 'lucide-react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useConfirm } from '@/hooks/useConfirm';
 import { logger } from '@/lib/logger';
+import {
+  AlertCircle,
+  CheckCircle,
+  DollarSign,
+  Heart,
+  Loader2,
+  RefreshCw,
+  TrendingUp,
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface BillingData {
   totalRevenue: number;

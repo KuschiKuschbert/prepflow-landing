@@ -2,8 +2,8 @@
  * Handle print for temperature logs.
  */
 import { logger } from '@/lib/logger';
-import type { TemperatureEquipment, TemperatureLog } from '../../../../types';
 import { printTemperatureLogs } from '../../../../../utils/temperatureLogExportUtils';
+import type { TemperatureEquipment, TemperatureLog } from '../../../../types';
 import type { DateRange } from '../../../utils/calculateDateRange';
 
 export function handlePrintHelper(

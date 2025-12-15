@@ -3,10 +3,10 @@ import { logger } from '@/lib/logger';
 import { useEffect, useState } from 'react';
 import type { MenuItem } from '../../../types';
 import {
-    getCachedStatistics,
-    invalidateCacheIfPriceChanged,
-    setCachedStatistics,
-} from './helpers/statisticsCache';
+  getCachedStatistics,
+  invalidateCacheIfPriceChanged,
+  setCachedStatistics,
+} from './useMenuItemStatistics/helpers/statisticsCache';
 
 interface ItemStatistics {
   cogs: number;

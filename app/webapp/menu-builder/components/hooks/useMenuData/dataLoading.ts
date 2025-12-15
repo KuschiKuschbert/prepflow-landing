@@ -2,10 +2,14 @@
  * Data loading utilities for menu data.
  */
 import { logger } from '@/lib/logger';
-import { clearLoadingIfNeeded, setLoadingIfNeeded, shouldShowLoading } from './helpers/handleLoadingState';
-import { handleStatistics } from './helpers/handleStatistics';
-import { processDishesAndRecipes } from './helpers/processDishesAndRecipes';
-import { processMenuResponse } from './helpers/processMenuResponse';
+import {
+  clearLoadingIfNeeded,
+  setLoadingIfNeeded,
+  shouldShowLoading,
+} from './dataLoading/helpers/handleLoadingState';
+import { handleStatistics } from './dataLoading/helpers/handleStatistics';
+import { processDishesAndRecipes } from './dataLoading/helpers/processDishesAndRecipes';
+import { processMenuResponse } from './dataLoading/helpers/processMenuResponse';
 import type { Dish, MenuItem, MenuStatistics, Recipe } from '../../../types';
 
 interface LoadMenuDataProps {
@@ -64,7 +68,13 @@ export async function loadMenuData({
       onError,
     });
     if (!menuProcessed) {
-      clearLoadingIfNeeded({ menuCacheKey, dishesCacheKey, recipesCacheKey, showLoading, setLoading });
+      clearLoadingIfNeeded({
+        menuCacheKey,
+        dishesCacheKey,
+        recipesCacheKey,
+        showLoading,
+        setLoading,
+      });
       return;
     }
 
@@ -86,8 +96,20 @@ export async function loadMenuData({
     });
   } catch (err) {
     logger.error('Failed to load menu data:', err);
-    clearLoadingIfNeeded({ menuCacheKey, dishesCacheKey, recipesCacheKey, showLoading, setLoading });
+    clearLoadingIfNeeded({
+      menuCacheKey,
+      dishesCacheKey,
+      recipesCacheKey,
+      showLoading,
+      setLoading,
+    });
   } finally {
-    clearLoadingIfNeeded({ menuCacheKey, dishesCacheKey, recipesCacheKey, showLoading, setLoading });
+    clearLoadingIfNeeded({
+      menuCacheKey,
+      dishesCacheKey,
+      recipesCacheKey,
+      showLoading,
+      setLoading,
+    });
   }
 }

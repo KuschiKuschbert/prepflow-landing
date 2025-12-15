@@ -2,7 +2,7 @@
 
 import { useCountry } from '@/contexts/CountryContext';
 import { useEffect, useMemo, useState } from 'react';
-import { fetchAIInsights } from './helpers/fetchAIInsights';
+import { fetchAIInsights } from './usePerformanceInsights/helpers/fetchAIInsights';
 import {
   generateBargainBucketInsight,
   generateBurntToastInsight,

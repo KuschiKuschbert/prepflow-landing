@@ -2,8 +2,8 @@
  * Hook for managing par level CRUD operations.
  */
 import { useState, useCallback } from 'react';
-import { handleDelete } from './helpers/handleDelete';
-import { handleUpdate } from './helpers/handleUpdate';
+import { handleDelete } from './useParLevelsCRUD/helpers/handleDelete';
+import { handleUpdate } from './useParLevelsCRUD/helpers/handleUpdate';
 import type { ParLevel } from '../types';
 
 interface UseParLevelsCRUDProps {

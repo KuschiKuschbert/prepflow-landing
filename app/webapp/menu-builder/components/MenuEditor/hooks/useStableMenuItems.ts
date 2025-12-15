@@ -3,7 +3,7 @@
 import { logger } from '@/lib/logger';
 import { useEffect, useMemo, useRef } from 'react';
 import type { MenuItem } from '../../../types';
-import { detectItemChanges } from './helpers/detectItemChanges';
+import { detectItemChanges } from './useStableMenuItems/helpers/detectItemChanges';
 
 export function useStableMenuItems(rawMenuItems: MenuItem[], menuId: string): MenuItem[] {
   const prevRawMenuItemsRef = useRef<MenuItem[]>(rawMenuItems);

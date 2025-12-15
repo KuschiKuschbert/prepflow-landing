@@ -3,11 +3,11 @@
  */
 import type { ExportFormat } from '@/components/ui/ExportButton';
 import { logger } from '@/lib/logger';
-import type { TemperatureEquipment, TemperatureLog } from '../../../../types';
 import {
   exportTemperatureLogsToCSV,
   printTemperatureLogs,
 } from '../../../../../utils/temperatureLogExportUtils';
+import type { TemperatureEquipment, TemperatureLog } from '../../../../types';
 import type { DateRange } from '../../../utils/calculateDateRange';
 import { handleHTMLExportHelper } from './handleHTMLExport';
 

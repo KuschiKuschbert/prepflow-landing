@@ -4,8 +4,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
-import { handleParLevelsError } from './helpers/handleParLevelsError';
-import { parseParLevelsResponse } from './helpers/parseParLevelsResponse';
+import { handleParLevelsError } from './useParLevelsData/helpers/handleParLevelsError';
+import { parseParLevelsResponse } from './useParLevelsData/helpers/parseParLevelsResponse';
 import type { ParLevel, Ingredient } from '../types';
 
 interface UseParLevelsDataReturn {

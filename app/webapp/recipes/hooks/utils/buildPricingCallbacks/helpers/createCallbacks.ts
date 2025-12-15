@@ -4,8 +4,8 @@
 import type { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../../../types';
 import { calculateAllPrices } from '../../calculateAllPrices';
 import { calculateVisiblePrices } from '../../calculateVisiblePrices';
-import { updateVisiblePricesWithDebounce } from '../../updateVisiblePricesWithDebounce';
 import { fetchBatchWithDeduplication } from '../../fetchBatchWithDeduplication';
+import { updateVisiblePricesWithDebounce } from '../../updateVisiblePricesWithDebounce';
 
 export function createPricingCallbacksHelper(
   calculateRecommendedPrice: (

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { createInitialDialogState } from './helpers/createInitialDialogState';
-import { createRemoveHandlers } from './helpers/createRemoveHandlers';
+import { createInitialDialogState } from './useMenuEditorUI/helpers/createInitialDialogState';
+import { createRemoveHandlers } from './useMenuEditorUI/helpers/createRemoveHandlers';
 import type { MenuItem } from '../../types';
 
 interface UseMenuEditorUIProps {

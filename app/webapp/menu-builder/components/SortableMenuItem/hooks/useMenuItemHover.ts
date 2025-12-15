@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { MenuItem } from '../../../types';
-import { isWithinReorderExclusionZone } from './helpers/isWithinReorderExclusionZone';
+import { isWithinReorderExclusionZone } from './useMenuItemHover/helpers/isWithinReorderExclusionZone';
 
 interface UseMenuItemHoverProps {
   item: MenuItem;

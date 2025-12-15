@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { calculateTooltipPosition } from './helpers/calculateTooltipPosition';
-import { resolvePosition } from './helpers/resolvePosition';
+import { calculateTooltipPosition } from './useTooltipPosition/helpers/calculateTooltipPosition';
+import { resolvePosition } from './useTooltipPosition/helpers/resolvePosition';
 
 interface UseTooltipPositionProps {
   isVisible: boolean;
