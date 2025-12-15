@@ -72,4 +72,3 @@ export function validateEmployeeRequest(body: any): {
     },
   };
 }
-

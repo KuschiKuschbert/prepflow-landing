@@ -50,7 +50,7 @@ export function MenuIngredientsTable({
       showSuccess('Order list opened for printing');
     } catch (err) {
       logger.error('[Order List] Print error:', err);
-      showError("Failed to print order list. Give it another go, chef.");
+      showError('Failed to print order list. Give it another go, chef.');
     }
   };
 
@@ -102,7 +102,7 @@ export function MenuIngredientsTable({
       }
     } catch (err) {
       logger.error('[Order List] Export error:', err);
-      showError("Failed to export order list. Give it another go, chef.");
+      showError('Failed to export order list. Give it another go, chef.');
     } finally {
       setExportLoading(null);
     }

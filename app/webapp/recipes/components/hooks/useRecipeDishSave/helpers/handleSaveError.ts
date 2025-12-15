@@ -17,5 +17,7 @@ export async function handleSaveError(
     [`${itemType}Id`]: itemId,
     ingredientsCount: count,
   });
-  showError(result.error || result.message || `Failed to save ${itemType} ingredients (${response.status})`);
+  showError(
+    result.error || result.message || `Failed to save ${itemType} ingredients (${response.status})`,
+  );
 }

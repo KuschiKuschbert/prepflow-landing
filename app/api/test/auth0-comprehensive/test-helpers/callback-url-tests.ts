@@ -25,10 +25,16 @@ export function testCallbackURLs(
       callbackUrl: expectedCallback,
     });
   } else if (expectedCallback) {
-    addTest(results, 'Auth0 Callback URL (www)', 'fail', `NOT found in Auth0: ${expectedCallback}`, {
-      expected: expectedCallback,
-      configured: callbacks,
-    });
+    addTest(
+      results,
+      'Auth0 Callback URL (www)',
+      'fail',
+      `NOT found in Auth0: ${expectedCallback}`,
+      {
+        expected: expectedCallback,
+        configured: callbacks,
+      },
+    );
   }
 
   if (expectedCallbackNonWww && callbacks.includes(expectedCallbackNonWww)) {

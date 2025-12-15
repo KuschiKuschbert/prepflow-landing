@@ -147,4 +147,3 @@ export function exportTemperatureLogsToCSV(data: TemperatureLogExportData): void
     throw err;
   }
 }
-

@@ -27,6 +27,8 @@ export function useBillingCancel({ subscriptionData, refreshSubscription }: UseB
         ? formatDate(subscriptionData!.subscription.expires_at)
         : 'the end of your billing period';
 
+      // Check if user is EU customer (will be updated after API response)
+      // For now, show standard message - API will return isEU status
       const confirmed = await showConfirm({
         title: immediate ? 'Cancel Subscription Immediately' : 'Cancel Subscription',
         message: immediate

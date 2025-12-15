@@ -70,8 +70,13 @@ export function FoodImageDisplay({
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-
-  const imageMap = buildImageMap(imageUrl, imageUrlModern, imageUrlAlternative, imageUrlMinimalist, platingMethodsImages);
+  const imageMap = buildImageMap(
+    imageUrl,
+    imageUrlModern,
+    imageUrlAlternative,
+    imageUrlMinimalist,
+    platingMethodsImages,
+  );
 
   // Get available plating methods (those with images)
   const availablePlatingMethods = (Object.keys(imageMap) as PlatingMethod[]).filter(
@@ -199,7 +204,15 @@ export function FoodImageDisplay({
             </div>
           )}
 
-          {currentImageUrl && renderImageComponent(currentImageUrl, alt, isLoading, priority, handleLoad, handleError)}
+          {currentImageUrl &&
+            renderImageComponent(
+              currentImageUrl,
+              alt,
+              isLoading,
+              priority,
+              handleLoad,
+              handleError,
+            )}
 
           {/* Plating Method Selector - Only show if multiple images exist */}
           {availablePlatingMethods.length > 1 && showSelector && (

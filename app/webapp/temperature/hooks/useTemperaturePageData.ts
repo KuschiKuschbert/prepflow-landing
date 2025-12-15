@@ -27,9 +27,20 @@ export function useTemperaturePageData(activeTab: 'logs' | 'equipment' | 'analyt
     page,
     pageSize,
   );
-  const fetchAllLogs = useCallback(async (limit?: number, forceRefresh = false) => {
-    await fetchAllLogsHelper(limit, forceRefresh, lastAnalyticsFetch, allLogs, setAllLogs, setAnalyticsLoading, setLastAnalyticsFetch);
-  }, [allLogs.length, lastAnalyticsFetch]);
+  const fetchAllLogs = useCallback(
+    async (limit?: number, forceRefresh = false) => {
+      await fetchAllLogsHelper(
+        limit,
+        forceRefresh,
+        lastAnalyticsFetch,
+        allLogs,
+        setAllLogs,
+        setAnalyticsLoading,
+        setLastAnalyticsFetch,
+      );
+    },
+    [allLogs.length, lastAnalyticsFetch],
+  );
   const fetchEquipment = useCallback(async () => {
     await fetchEquipmentHelper(setEquipment);
   }, []);

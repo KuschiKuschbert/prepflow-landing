@@ -42,7 +42,10 @@ export async function handleFetch({
   } catch (fetchError) {
     clearTimeout(timeoutId);
     const fetchDuration = Date.now() - fetchStartTime;
-    logger.error(`[useCardGeneration] [${requestId}] Fetch failed after ${fetchDuration}ms:`, fetchError);
+    logger.error(
+      `[useCardGeneration] [${requestId}] Fetch failed after ${fetchDuration}ms:`,
+      fetchError,
+    );
 
     if (fetchError instanceof Error && fetchError.name === 'AbortError') {
       throw new Error(

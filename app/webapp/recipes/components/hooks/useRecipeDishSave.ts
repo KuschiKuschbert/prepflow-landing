@@ -33,7 +33,9 @@ export function useRecipeDishSave({
       return;
     }
     if (calculations.length === 0) {
-      showError(`${selectedItem.type === 'recipe' ? 'Recipe' : 'Dish'} must contain at least one ingredient`);
+      showError(
+        `${selectedItem.type === 'recipe' ? 'Recipe' : 'Dish'} must contain at least one ingredient`,
+      );
       return;
     }
     setSaving(true);
@@ -48,7 +50,13 @@ export function useRecipeDishSave({
       onSave();
     } catch (err) {
       if (err instanceof Response) {
-        await handleSaveError(err, selectedItem.type, selectedItem.id, calculations.length, showError);
+        await handleSaveError(
+          err,
+          selectedItem.type,
+          selectedItem.id,
+          calculations.length,
+          showError,
+        );
       } else {
         logger.error('Failed to save:', err);
         showError('Failed to save ingredients');

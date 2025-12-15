@@ -1,7 +1,8 @@
 /**
  * Generate tips for marketing opportunities based on Hidden Gems.
  */
-import type { PerformanceItem, PerformanceTip } from '../../../../types';
+import type { PerformanceItem } from '../../../../types';
+import type { PerformanceTip } from '../../tipCategories';
 
 export function generateMarketingTips(
   hiddenGems: PerformanceItem[],

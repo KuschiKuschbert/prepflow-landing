@@ -5,9 +5,9 @@
  * @returns {Promise<NextResponse>} JSON response with diagnostic information
  */
 import {
-    extractAuth0UserId,
-    fetchProfileWithRetry,
-    getUserProfileFromManagementAPI,
+  extractAuth0UserId,
+  fetchProfileWithRetry,
+  getUserProfileFromManagementAPI,
 } from '@/lib/auth0-management';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';

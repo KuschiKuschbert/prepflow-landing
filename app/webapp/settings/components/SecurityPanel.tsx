@@ -50,8 +50,8 @@ export function SecurityPanel() {
     loadSecurityDataHelper(setSessions, setLoginHistory, setLoading);
   }, [isVisible]);
 
-  const handleRevokeSession = (sessionId: string) => handleRevokeSessionHelper(sessionId, setRevokingSession, setSessions, showSuccess, showError);
-
+  const handleRevokeSession = (sessionId: string) =>
+    handleRevokeSessionHelper(sessionId, setRevokingSession, setSessions, showSuccess, showError);
 
   if (loading) {
     return (
@@ -106,7 +106,11 @@ export function SecurityPanel() {
         </div>
       </div>
 
-      <ActiveSessionsSection sessions={sessions} revokingSession={revokingSession} onRevokeSession={handleRevokeSession} />
+      <ActiveSessionsSection
+        sessions={sessions}
+        revokingSession={revokingSession}
+        onRevokeSession={handleRevokeSession}
+      />
       <LoginHistorySection loginHistory={loginHistory} />
     </div>
   );

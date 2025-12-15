@@ -12,14 +12,22 @@ export function createHandleFieldChange(
   setFormData: React.Dispatch<React.SetStateAction<ProfileFormData>>,
 ) {
   return (field: keyof ProfileFormData, value: string) => {
-    logger.dev(`[ProfileInformationPanel] ${field} onChange`, { mountId: mountIdRef.current, newValue: value, previousValue: formData[field] });
+    logger.dev(`[ProfileInformationPanel] ${field} onChange`, {
+      mountId: mountIdRef.current,
+      newValue: value,
+      previousValue: formData[field],
+    });
     userHasModifiedRef.current = true;
     if (typeof window !== 'undefined') {
       sessionStorage.setItem(USER_MODIFIED_KEY, 'true');
     }
     setFormData(prev => {
       const updated = { ...prev, [field]: value };
-      logger.dev(`[ProfileInformationPanel] setFormData called for ${field}`, { mountId: mountIdRef.current, previous: prev[field], updated: updated[field] });
+      logger.dev(`[ProfileInformationPanel] setFormData called for ${field}`, {
+        mountId: mountIdRef.current,
+        previous: prev[field],
+        updated: updated[field],
+      });
       return updated;
     });
   };

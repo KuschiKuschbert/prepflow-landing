@@ -384,4 +384,3 @@ stripe trigger customer.subscription.created
 - [Subscription Management Guide](./SUBSCRIPTION_MANAGEMENT.md)
 - [Stripe Testing Guide](./STRIPE_TESTING.md)
 - [Billing API Reference](../app/api/billing/README.md)
-

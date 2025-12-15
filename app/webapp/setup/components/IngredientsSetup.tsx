@@ -60,7 +60,7 @@ export default function IngredientsSetup({
         setError(data.error || 'Failed to populate ingredients');
       }
     } catch (err) {
-      setError("Connection issue occurred. Give it another go, chef.");
+      setError('Connection issue occurred. Give it another go, chef.');
     } finally {
       setLoading(false);
     }

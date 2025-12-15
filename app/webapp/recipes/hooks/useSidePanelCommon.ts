@@ -30,7 +30,12 @@ export function useSidePanelCommon({
   const panelRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [panelStyle, setPanelStyle] = useState<React.CSSProperties>({ position: 'fixed', top: 'calc(var(--header-height-mobile) + var(--safe-area-inset-top))', height: 'calc(100vh - var(--header-height-mobile) - var(--safe-area-inset-top))', right: 0 });
+  const [panelStyle, setPanelStyle] = useState<React.CSSProperties>({
+    position: 'fixed',
+    top: 'calc(var(--header-height-mobile) + var(--safe-area-inset-top))',
+    height: 'calc(100vh - var(--header-height-mobile) - var(--safe-area-inset-top))',
+    right: 0,
+  });
 
   useEffect(() => {
     const handleResize = () => setPanelStyle(updatePanelStyle());

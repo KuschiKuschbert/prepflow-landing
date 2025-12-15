@@ -12,10 +12,7 @@ interface CSVImportErrorsProps {
   validationErrors: Map<number, string>;
 }
 
-export function CSVImportErrors({
-  parseErrors,
-  validationErrors,
-}: CSVImportErrorsProps) {
+export function CSVImportErrors({ parseErrors, validationErrors }: CSVImportErrorsProps) {
   return (
     <>
       {/* Parse Errors Display */}
@@ -31,9 +28,7 @@ export function CSVImportErrors({
                 Row {error.row}: {error.error}
               </div>
             ))}
-            {parseErrors.length > 10 && (
-              <div>... and {parseErrors.length - 10} more errors</div>
-            )}
+            {parseErrors.length > 10 && <div>... and {parseErrors.length - 10} more errors</div>}
           </div>
         </div>
       )}

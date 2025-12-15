@@ -39,7 +39,7 @@ export function useDatabaseCheck() {
       setCheckingDb(false);
       return true;
     } catch {
-      setDbError("Failed to check data tables. Give it another go, chef.");
+      setDbError('Failed to check data tables. Give it another go, chef.');
       setCheckingDb(false);
       return false;
     }
@@ -53,4 +53,3 @@ export function useDatabaseCheck() {
     cachedDbCheck,
   };
 }
-

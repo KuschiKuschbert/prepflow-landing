@@ -4,7 +4,7 @@ import { logger } from '@/lib/logger';
 import { useOnRecipeCreated } from '@/lib/personality/hooks';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
-import { Recipe } from '../types';
+import { Recipe, RecipeIngredientWithDetails } from '../types';
 import { useRecipeBulkOperations } from './useRecipeBulkOperations';
 import { useRecipeDeleteOperations } from './useRecipeDeleteOperations';
 import { useRecipeShareOperations } from './useRecipeShareOperations';
@@ -46,31 +46,56 @@ export function useRecipeActions({
     rollbackRecipes,
   );
   const shareOps = useRecipeShareOperations();
-  const handleAddRecipe = useCallback(async (newRecipe: Partial<Recipe>) => {
-    try {
-      return await handleAddRecipeHelper(newRecipe, fetchRecipes, onRecipeCreated, showErrorNotification);
-    } catch {
-      showErrorNotification('Failed to add recipe');
-      return false;
-    }
-  }, [fetchRecipes, showErrorNotification, onRecipeCreated]);
-  const handleEditFromPreview = useCallback(async (selectedRecipe: Recipe, recipeIngredients: any[]) => {
-    try {
-      handleEditFromPreviewHelper(selectedRecipe, recipeIngredients, router, showErrorNotification);
-    } catch (err) {
-      logger.error('❌ Error in handleEditFromPreview:', err);
-      showErrorNotification('Failed to load recipe for editing');
-    }
-  }, [router, showErrorNotification]);
-  const handleDuplicateRecipe = useCallback(async (recipe: Recipe) => {
-    try {
-      return await handleDuplicateRecipeHelper(recipe, fetchRecipeIngredients, fetchRecipes, showErrorNotification, showSuccess);
-    } catch (err) {
-      logger.error('Error duplicating recipe:', err);
-      showErrorNotification('Failed to duplicate recipe');
-      return null;
-    }
-  }, [fetchRecipes, fetchRecipeIngredients, showErrorNotification, showSuccess]);
+  const handleAddRecipe = useCallback(
+    async (newRecipe: Partial<Recipe>) => {
+      try {
+        return await handleAddRecipeHelper(
+          newRecipe,
+          fetchRecipes,
+          onRecipeCreated,
+          showErrorNotification,
+        );
+      } catch {
+        showErrorNotification('Failed to add recipe');
+        return false;
+      }
+    },
+    [fetchRecipes, showErrorNotification, onRecipeCreated],
+  );
+  const handleEditFromPreview = useCallback(
+    async (selectedRecipe: Recipe, recipeIngredients: any[]) => {
+      try {
+        handleEditFromPreviewHelper(
+          selectedRecipe,
+          recipeIngredients,
+          router,
+          showErrorNotification,
+        );
+      } catch (err) {
+        logger.error('❌ Error in handleEditFromPreview:', err);
+        showErrorNotification('Failed to load recipe for editing');
+      }
+    },
+    [router, showErrorNotification],
+  );
+  const handleDuplicateRecipe = useCallback(
+    async (recipe: Recipe) => {
+      try {
+        return await handleDuplicateRecipeHelper(
+          recipe,
+          fetchRecipeIngredients,
+          fetchRecipes,
+          showErrorNotification,
+          showSuccess,
+        );
+      } catch (err) {
+        logger.error('Error duplicating recipe:', err);
+        showErrorNotification('Failed to duplicate recipe');
+        return null;
+      }
+    },
+    [fetchRecipes, fetchRecipeIngredients, showErrorNotification, showSuccess],
+  );
   return {
     ...deleteOps,
     ...bulkOps,

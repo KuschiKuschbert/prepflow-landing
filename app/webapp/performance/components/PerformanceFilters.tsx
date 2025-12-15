@@ -41,8 +41,27 @@ export default function PerformanceFilters({
   const [exportLoading, setExportLoading] = useState<ExportFormat | null>(null);
   const [printLoading, setPrintLoading] = useState(false);
 
-  const handlePrint = () => handlePrintHelper(performanceItems, dateRange, metadata, performanceScore, showError, showSuccess, setPrintLoading);
-  const handleExport = async (format: ExportFormat) => handleExportHelper(format, performanceItems, dateRange, metadata, performanceScore, showError, showSuccess, setExportLoading);
+  const handlePrint = () =>
+    handlePrintHelper(
+      performanceItems,
+      dateRange,
+      metadata,
+      performanceScore,
+      showError,
+      showSuccess,
+      setPrintLoading,
+    );
+  const handleExport = async (format: ExportFormat) =>
+    handleExportHelper(
+      format,
+      performanceItems,
+      dateRange,
+      metadata,
+      performanceScore,
+      showError,
+      showSuccess,
+      setExportLoading,
+    );
 
   const handleFilterChange = (key: keyof PerformanceFiltersType, value: any) => {
     onFiltersChange({ ...filters, [key]: value });
@@ -54,8 +73,21 @@ export default function PerformanceFilters({
       <div className="tablet:flex-row flex flex-col items-center gap-2">
         <div className="flex items-center gap-1">
           <ImportButton onImportClick={onImportClick} />
-          <PrintButton onClick={handlePrint} loading={printLoading} disabled={performanceItems.length === 0} size="sm" variant="secondary" />
-          <ExportButton onExport={handleExport} loading={exportLoading} disabled={performanceItems.length === 0} availableFormats={['csv', 'pdf', 'html']} size="sm" variant="secondary" />
+          <PrintButton
+            onClick={handlePrint}
+            loading={printLoading}
+            disabled={performanceItems.length === 0}
+            size="sm"
+            variant="secondary"
+          />
+          <ExportButton
+            onExport={handleExport}
+            loading={exportLoading}
+            disabled={performanceItems.length === 0}
+            availableFormats={['csv', 'pdf', 'html']}
+            size="sm"
+            variant="secondary"
+          />
         </div>
 
         {/* Result count */}
@@ -64,7 +96,11 @@ export default function PerformanceFilters({
           <span className="font-semibold text-white">{performanceItems.length}</span>
         </div>
 
-        <MenuItemClassFilters filters={filters} performanceItems={performanceItems} onFilterChange={handleFilterChange} />
+        <MenuItemClassFilters
+          filters={filters}
+          performanceItems={performanceItems}
+          onFilterChange={handleFilterChange}
+        />
 
         {/* Search and Sort Controls - Compact inline (right side, most frequently used) */}
         <div className="flex flex-1 items-center gap-1.5">

@@ -25,9 +25,9 @@ import { useParLevelsPagination } from './hooks/useParLevelsPagination';
 import { useParLevelsSelection } from './hooks/useParLevelsSelection';
 import { useSelectionMode } from './hooks/useSelectionMode';
 import {
-    exportParLevelsToCSV,
-    exportParLevelsToHTML,
-    exportParLevelsToPDF,
+  exportParLevelsToCSV,
+  exportParLevelsToHTML,
+  exportParLevelsToPDF,
 } from './utils/exportParLevels';
 import { printParLevels } from './utils/printParLevels';
 

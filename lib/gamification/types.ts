@@ -100,4 +100,3 @@ export interface GamificationStats {
   achievements: AchievementProgress;
   streak: number;
 }
-

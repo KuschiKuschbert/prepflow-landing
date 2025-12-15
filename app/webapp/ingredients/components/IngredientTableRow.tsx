@@ -10,12 +10,12 @@ import { Edit, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useLongPress } from '../hooks/useLongPress';
 import {
-    IngredientBrandCell,
-    IngredientCostCell,
-    IngredientNameCell,
-    IngredientPackSizeCell,
-    IngredientStockCell,
-    IngredientSupplierCell,
+  IngredientBrandCell,
+  IngredientCostCell,
+  IngredientNameCell,
+  IngredientPackSizeCell,
+  IngredientStockCell,
+  IngredientSupplierCell,
 } from './IngredientTableCell';
 
 interface Ingredient {

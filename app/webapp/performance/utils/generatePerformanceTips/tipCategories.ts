@@ -13,4 +13,11 @@ export interface PerformanceTip {
   action?: string;
 }
 
-export { generateStrategyTips, generateCleanupTips, generateMarketingTips, generatePricingTips, generateGrowthTips, generateDataQualityTips };
+export {
+  generateStrategyTips,
+  generateCleanupTips,
+  generateMarketingTips,
+  generatePricingTips,
+  generateGrowthTips,
+  generateDataQualityTips,
+};

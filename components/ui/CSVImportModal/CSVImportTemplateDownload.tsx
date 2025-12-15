@@ -10,9 +10,7 @@ interface CSVImportTemplateDownloadProps {
   onDownload: () => void;
 }
 
-export function CSVImportTemplateDownload({
-  onDownload,
-}: CSVImportTemplateDownloadProps) {
+export function CSVImportTemplateDownload({ onDownload }: CSVImportTemplateDownloadProps) {
   return (
     <div className="rounded-xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/30 p-4">
       <div className="flex items-center justify-between">

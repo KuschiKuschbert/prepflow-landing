@@ -77,9 +77,10 @@ export function CSVImportModal<T = any>({
   const [errors, setErrors] = useState<Array<{ row: number; error: string }>>([]);
   const [validationErrors, setValidationErrors] = useState<Map<number, string>>(new Map());
 
-  const parseCSVData = useCallback((csvText: string) => {
-    try {
-      if (!csvText || csvText.trim().length === 0) {
+  const parseCSVData = useCallback(
+    (csvText: string) => {
+      try {
+        if (!csvText || csvText.trim().length === 0) {
           setErrors([{ row: 0, error: 'CSV file is empty' }]);
           setParsedEntities([]);
           setSelectedIndices(new Set());
@@ -88,13 +89,17 @@ export function CSVImportModal<T = any>({
         }
 
         const result = config.parseCSV(csvText);
-        const parseErrors = result.errors.map(err => ({ row: err.row || 0, error: err.message || 'Parse error' }));
+        const parseErrors = result.errors.map(err => ({
+          row: err.row || 0,
+          error: err.message || 'Parse error',
+        }));
         setErrors(parseErrors);
         const newValidationErrors = new Map<number, string>();
         if (config.validateEntity && result.data.length > 0) {
           result.data.forEach((entity, index) => {
             const validation = config.validateEntity!(entity, index);
-            if (!validation.valid && validation.error) newValidationErrors.set(index, validation.error);
+            if (!validation.valid && validation.error)
+              newValidationErrors.set(index, validation.error);
           });
         }
         setValidationErrors(newValidationErrors);
@@ -104,14 +109,18 @@ export function CSVImportModal<T = any>({
           if (!newValidationErrors.has(index)) validIndices.add(index);
         });
         setSelectedIndices(validIndices);
-    } catch (err) {
-      logger.error('[CSV Import Modal] Failed to parse CSV:', err);
-      setErrors([{ row: 0, error: err instanceof Error ? err.message : 'Failed to parse CSV file' }]);
-      setParsedEntities([]);
-      setSelectedIndices(new Set());
-      setValidationErrors(new Map());
-    }
-  }, [config]);
+      } catch (err) {
+        logger.error('[CSV Import Modal] Failed to parse CSV:', err);
+        setErrors([
+          { row: 0, error: err instanceof Error ? err.message : 'Failed to parse CSV file' },
+        ]);
+        setParsedEntities([]);
+        setSelectedIndices(new Set());
+        setValidationErrors(new Map());
+      }
+    },
+    [config],
+  );
 
   const handleFileUpload = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -3,7 +3,11 @@
 import { useEffect, useState } from 'react';
 import type { TierSlug } from '@/lib/tier-config';
 import { fetchEntitlementsHelper } from './useEntitlements/helpers/fetchEntitlements';
-import { hasFeatureHelper, getUpgradeTierHelper, checkLimitHelper } from './useEntitlements/helpers/entitlementHelpers';
+import {
+  hasFeatureHelper,
+  getUpgradeTierHelper,
+  checkLimitHelper,
+} from './useEntitlements/helpers/entitlementHelpers';
 import type { UserEntitlements, SubscriptionData } from './useEntitlements/types';
 
 export type { UserEntitlements, SubscriptionData };
@@ -19,7 +23,8 @@ export function useEntitlements() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchEntitlements = () => fetchEntitlementsHelper(setEntitlements, setSubscription, setUsage, setLoading, setError);
+  const fetchEntitlements = () =>
+    fetchEntitlementsHelper(setEntitlements, setSubscription, setUsage, setLoading, setError);
   useEffect(() => {
     fetchEntitlements();
   }, []);
@@ -27,7 +32,8 @@ export function useEntitlements() {
   const hasFeature = (featureKey: string) => hasFeatureHelper(entitlements, featureKey);
   const canUpgrade = tier !== 'business';
   const getUpgradeTier = () => getUpgradeTierHelper(tier);
-  const checkLimit = (resourceType: 'recipes' | 'ingredients') => checkLimitHelper(usage, entitlements, resourceType);
+  const checkLimit = (resourceType: 'recipes' | 'ingredients') =>
+    checkLimitHelper(usage, entitlements, resourceType);
 
   return {
     entitlements,

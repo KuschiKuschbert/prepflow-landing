@@ -59,4 +59,3 @@ console.log('      - Background watermarks');
 console.log('\n💡 Optional: Generate optimized variants');
 console.log('   Run: node scripts/optimize-images.js');
 console.log('   This creates WebP and AVIF versions for better performance\n');
-

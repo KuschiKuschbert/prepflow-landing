@@ -15,7 +15,10 @@ export async function fetchEquipmentLogsHelper(
   cachedLogs: TemperatureLog[] | null,
 ): Promise<void> {
   try {
-    const locationsToQuery = [...(equipmentLocation ? [equipmentLocation] : []), ...(equipmentName ? [equipmentName] : [])].filter(Boolean);
+    const locationsToQuery = [
+      ...(equipmentLocation ? [equipmentLocation] : []),
+      ...(equipmentName ? [equipmentName] : []),
+    ].filter(Boolean);
     const uniqueLocations = [...new Set(locationsToQuery)];
     const fetchPromises = uniqueLocations.map(loc => {
       const params = new URLSearchParams();
@@ -28,7 +31,7 @@ export async function fetchEquipmentLogsHelper(
     });
     const responses = await Promise.all(fetchPromises);
     const allLogs: TemperatureLog[] = [];
-    responses.forEach((data) => {
+    responses.forEach(data => {
       if (data.success && data.data?.items) allLogs.push(...data.data.items);
     });
     const uniqueLogs = Array.from(new Map(allLogs.map(log => [log.id, log])).values());
@@ -41,7 +44,9 @@ export async function fetchEquipmentLogsHelper(
         matchingLogs: uniqueLogs.slice(0, 3).map(l => ({ location: l.location, date: l.log_date })),
       });
     } else {
-      logger.warn(`⚠️ No logs found for equipment "${equipmentName}"`, { queriedLocations: uniqueLocations });
+      logger.warn(`⚠️ No logs found for equipment "${equipmentName}"`, {
+        queriedLocations: uniqueLocations,
+      });
       if (!cachedLogs) setLogs([]);
     }
   } catch (err) {

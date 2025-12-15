@@ -31,8 +31,12 @@ export function useUnifiedBulkActions({
   const { showSuccess, showError } = useNotification();
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
   const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = useState(false);
-  const selectedRecipeIds = Array.from(selectedItems).filter(id => selectedItemTypes.get(id) === 'recipe');
-  const selectedDishIds = Array.from(selectedItems).filter(id => selectedItemTypes.get(id) === 'dish');
+  const selectedRecipeIds = Array.from(selectedItems).filter(
+    id => selectedItemTypes.get(id) === 'recipe',
+  );
+  const selectedDishIds = Array.from(selectedItems).filter(
+    id => selectedItemTypes.get(id) === 'dish',
+  );
 
   const handleBulkDelete = useCallback(() => {
     if (selectedItems.size === 0) return;

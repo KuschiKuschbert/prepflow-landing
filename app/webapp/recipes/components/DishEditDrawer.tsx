@@ -137,7 +137,7 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
         })
         .catch(err => {
           logger.error('Failed to fetch dish details:', err);
-          showError("Failed to load dish details. Give it another go, chef.");
+          showError('Failed to load dish details. Give it another go, chef.');
           setLoading(false);
         });
     } else {

@@ -36,7 +36,10 @@ export function exportOrderListsToHTML(orderLists: OrderList[]): void {
     content,
     totalItems: orderLists.reduce((sum, list) => sum + list.order_list_items.length, 0),
   });
-  downloadFile(new Blob([html], { type: 'text/html' }), `order-lists-${new Date().toISOString().split('T')[0]}.html`);
+  downloadFile(
+    new Blob([html], { type: 'text/html' }),
+    `order-lists-${new Date().toISOString().split('T')[0]}.html`,
+  );
 }
 
 export async function exportOrderListsToPDF(orderLists: OrderList[]): Promise<void> {

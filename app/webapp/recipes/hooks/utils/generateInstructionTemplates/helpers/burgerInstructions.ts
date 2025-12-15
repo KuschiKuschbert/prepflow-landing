@@ -11,9 +11,17 @@ export function generateBurgerInstructions(
   cookingMethod: string,
 ): string {
   const { hasProtein, hasVegetables, hasDairy } = analysis;
-  const proteinName = ingredients.find(ri => ri.ingredients.ingredient_name.toLowerCase().includes('beef') || ri.ingredients.ingredient_name.toLowerCase().includes('mince'))?.ingredients.ingredient_name || 'main protein';
-  const cheeseName = ingredients.find(ri => ri.ingredients.ingredient_name.toLowerCase().includes('cheese'))?.ingredients.ingredient_name || 'cheese';
-  const cookingSurface = cookingMethod === 'grill/pan' ? 'grill or large skillet' : 'cooking surface';
+  const proteinName =
+    ingredients.find(
+      ri =>
+        ri.ingredients.ingredient_name.toLowerCase().includes('beef') ||
+        ri.ingredients.ingredient_name.toLowerCase().includes('mince'),
+    )?.ingredients.ingredient_name || 'main protein';
+  const cheeseName =
+    ingredients.find(ri => ri.ingredients.ingredient_name.toLowerCase().includes('cheese'))
+      ?.ingredients.ingredient_name || 'cheese';
+  const cookingSurface =
+    cookingMethod === 'grill/pan' ? 'grill or large skillet' : 'cooking surface';
   return `**Burger Preparation:**
 **Mise en Place:**
 1. Gather all ingredients and equipment

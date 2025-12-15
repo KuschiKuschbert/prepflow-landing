@@ -14,13 +14,7 @@ export function RecipeCardQR({ recipeUrl }: RecipeCardQRProps) {
     <div className="mt-4 flex items-center justify-between rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] p-3">
       <div className="flex items-center gap-3">
         <div className="rounded-lg bg-white p-2">
-          <QRCodeSVG
-            value={recipeUrl}
-            size={64}
-            level="M"
-            bgColor="#FFFFFF"
-            fgColor="#000000"
-          />
+          <QRCodeSVG value={recipeUrl} size={64} level="M" bgColor="#FFFFFF" fgColor="#000000" />
         </div>
         <div>
           <p className="text-xs font-medium text-white">📱 Scan for Instructions</p>

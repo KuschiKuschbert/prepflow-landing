@@ -134,4 +134,3 @@ function formatDate(dateString: string | null | undefined): string {
     day: 'numeric',
   });
 }
-

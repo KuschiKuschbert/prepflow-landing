@@ -18,7 +18,10 @@ export async function deleteEquipment(
 ): Promise<void> {
   const originalEquipment = [...equipment];
   const equipmentToDelete = equipment.find(eq => eq.id === equipmentId);
-  if (!equipmentToDelete) { showError('Equipment not found'); return; }
+  if (!equipmentToDelete) {
+    showError('Equipment not found');
+    return;
+  }
   setEquipment(prevEquipment => prevEquipment.filter(eq => eq.id !== equipmentId));
   try {
     const response = await fetch(`/api/temperature-equipment/${equipmentId}`, { method: 'DELETE' });

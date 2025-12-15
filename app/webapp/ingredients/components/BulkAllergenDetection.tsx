@@ -80,7 +80,7 @@ export function BulkAllergenDetection({ onComplete }: BulkAllergenDetectionProps
       }
     } catch (err) {
       logger.error('[BulkAllergenDetection] Error:', err);
-      showError("Connection issue while detecting allergens. Give it another go, chef.");
+      showError('Connection issue while detecting allergens. Give it another go, chef.');
     } finally {
       setLoading(false);
     }

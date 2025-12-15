@@ -19,10 +19,19 @@ export async function updateEquipment(
 ): Promise<void> {
   const originalEquipment = [...equipment];
   const equipmentToUpdate = equipment.find(eq => eq.id === equipmentId);
-  if (!equipmentToUpdate) { showError('Equipment not found'); return; }
-  setEquipment(prevEquipment => prevEquipment.map(eq => (eq.id === equipmentId ? { ...eq, ...updates } : eq)));
+  if (!equipmentToUpdate) {
+    showError('Equipment not found');
+    return;
+  }
+  setEquipment(prevEquipment =>
+    prevEquipment.map(eq => (eq.id === equipmentId ? { ...eq, ...updates } : eq)),
+  );
   try {
-    const response = await fetch(`/api/temperature-equipment/${equipmentId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updates) });
+    const response = await fetch(`/api/temperature-equipment/${equipmentId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates),
+    });
     const data = await response.json();
     if (data.success) {
       fetchEquipment().catch(err => logger.error('Failed to refresh equipment:', err));

@@ -1,7 +1,8 @@
 /**
  * Generate tips for growth strategy based on Chef's Kiss items.
  */
-import type { PerformanceItem, PerformanceTip } from '../../../../types';
+import type { PerformanceItem } from '../../../../types';
+import type { PerformanceTip } from '../../tipCategories';
 
 export function generateGrowthTips(
   chefsKiss: PerformanceItem[],

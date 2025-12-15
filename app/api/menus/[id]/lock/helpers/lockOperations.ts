@@ -17,7 +17,7 @@ export async function checkLockStatus(
   menuId: string,
 ): Promise<{ isLocked: boolean; error: NextResponse | null }> {
   if (!supabaseAdmin) {
-    throw new Error("Data connection not available");
+    throw new Error('Data connection not available');
   }
 
   const migrationError = ApiErrorHandler.createError(
@@ -52,7 +52,7 @@ export async function lockMenu(
   userEmail: string,
 ): Promise<{ menu: any | null; error: NextResponse | null }> {
   if (!supabaseAdmin) {
-    throw new Error("Data connection not available");
+    throw new Error('Data connection not available');
   }
 
   const migrationError = ApiErrorHandler.createError(
@@ -94,7 +94,7 @@ export async function lockMenu(
         menu: null,
         error: NextResponse.json(
           ApiErrorHandler.createError(
-            "Data structure mismatch: locked_by column needs to be VARCHAR. Please run migrations/add-menu-lock.sql",
+            'Data structure mismatch: locked_by column needs to be VARCHAR. Please run migrations/add-menu-lock.sql',
             'MIGRATION_REQUIRED',
             503,
           ),
@@ -136,7 +136,7 @@ export async function unlockMenu(
   menuId: string,
 ): Promise<{ menu: any | null; error: NextResponse | null }> {
   if (!supabaseAdmin) {
-    throw new Error("Data connection not available");
+    throw new Error('Data connection not available');
   }
 
   const { data: updatedMenu, error: updateError } = await supabaseAdmin
@@ -166,4 +166,3 @@ export async function unlockMenu(
 
   return { menu: updatedMenu, error: null };
 }
-

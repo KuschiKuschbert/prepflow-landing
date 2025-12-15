@@ -33,24 +33,45 @@ export function useProfileApiFetch({
   const sessionEmail = user?.email || null;
 
   const [loading, setLoading] = useState(!cachedProfile);
-  const [profile, setProfile] = useState<ProfileData | null>(cachedProfile || (sessionEmail ? createDefaultProfile(sessionEmail) : null));
+  const [profile, setProfile] = useState<ProfileData | null>(
+    cachedProfile || (sessionEmail ? createDefaultProfile(sessionEmail) : null),
+  );
 
   useEffect(() => {
     if (sessionEmail && !profile?.email) {
-      logger.dev('[ProfileInformationPanel] Setting profile from session email', { mountId: mountIdRef.current, sessionEmail });
+      logger.dev('[ProfileInformationPanel] Setting profile from session email', {
+        mountId: mountIdRef.current,
+        sessionEmail,
+      });
       setProfile(createDefaultProfile(sessionEmail));
     }
   }, [sessionEmail, profile?.email, mountIdRef]);
 
   useEffect(() => {
     const currentMountId = mountIdRef.current;
-    const skipResult = shouldSkipApiCall(userHasModifiedRef, USER_MODIFIED_KEY, isLoadingRef, cachedProfile, initialDataLoadedRef, setLoading);
+    const skipResult = shouldSkipApiCall(
+      userHasModifiedRef,
+      USER_MODIFIED_KEY,
+      isLoadingRef,
+      cachedProfile,
+      initialDataLoadedRef,
+      setLoading,
+    );
     if (skipResult.skip) {
-      logger.dev(`[ProfileInformationPanel] Skipping API call - ${skipResult.reason}`, { mountId: currentMountId });
+      logger.dev(`[ProfileInformationPanel] Skipping API call - ${skipResult.reason}`, {
+        mountId: currentMountId,
+      });
       return;
     }
     prefetchApi('/api/user/profile');
-    loadProfileHelper(sessionEmail, setProfile, setLoading, isLoadingRef, showError, currentMountId);
+    loadProfileHelper(
+      sessionEmail,
+      setProfile,
+      setLoading,
+      isLoadingRef,
+      showError,
+      currentMountId,
+    );
   }, []);
 
   return {

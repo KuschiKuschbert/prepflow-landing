@@ -4,11 +4,7 @@
 import { format, addDays } from 'date-fns';
 import type { Shift } from '../../../../../types';
 
-export function buildUpdatedShift(
-  draggedShift: Shift,
-  employeeId: string,
-  date: Date,
-): Shift {
+export function buildUpdatedShift(draggedShift: Shift, employeeId: string, date: Date): Shift {
   const newShiftDate = format(date, 'yyyy-MM-dd');
   const shiftDate = new Date(newShiftDate);
   const [startHour, startMin] = draggedShift.start_time.split('T')[1].split(':').map(Number);

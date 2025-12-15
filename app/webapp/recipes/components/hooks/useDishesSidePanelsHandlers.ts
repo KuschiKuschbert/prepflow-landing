@@ -49,16 +49,40 @@ export function useDishesSidePanelsHandlers({
     setSelectedDishForPreview(null);
   }, [setShowDishPanel, setSelectedDishForPreview]);
   const onDishPanelClose = closeDishPanel;
-  const onDishEdit = useCallback((dish: Dish) => { closeDishPanel(); handleEditDish(dish); }, [closeDishPanel, handleEditDish]);
-  const onDishDelete = useCallback((dish: Dish) => { closeDishPanel(); handleDeleteDish(dish); }, [closeDishPanel, handleDeleteDish]);
+  const onDishEdit = useCallback(
+    (dish: Dish) => {
+      closeDishPanel();
+      handleEditDish(dish);
+    },
+    [closeDishPanel, handleEditDish],
+  );
+  const onDishDelete = useCallback(
+    (dish: Dish) => {
+      closeDishPanel();
+      handleDeleteDish(dish);
+    },
+    [closeDishPanel, handleDeleteDish],
+  );
   const closeRecipePanel = useCallback(() => {
     setShowRecipePanel(false);
     setSelectedRecipeForPreview(null);
     setRecipeIngredients([]);
   }, [setShowRecipePanel, setSelectedRecipeForPreview, setRecipeIngredients]);
   const onRecipePanelClose = closeRecipePanel;
-  const onRecipeEdit = useCallback((recipe: Recipe) => { closeRecipePanel(); handleEditRecipe(recipe); }, [closeRecipePanel, handleEditRecipe]);
-  const onRecipeDelete = useCallback((recipe: Recipe) => { closeRecipePanel(); handleDeleteRecipe(recipe); }, [closeRecipePanel, handleDeleteRecipe]);
+  const onRecipeEdit = useCallback(
+    (recipe: Recipe) => {
+      closeRecipePanel();
+      handleEditRecipe(recipe);
+    },
+    [closeRecipePanel, handleEditRecipe],
+  );
+  const onRecipeDelete = useCallback(
+    (recipe: Recipe) => {
+      closeRecipePanel();
+      handleDeleteRecipe(recipe);
+    },
+    [closeRecipePanel, handleDeleteRecipe],
+  );
   const onDishEditDrawerClose = useCallback(() => {
     setShowDishEditDrawer(false);
     setEditingDish(null);

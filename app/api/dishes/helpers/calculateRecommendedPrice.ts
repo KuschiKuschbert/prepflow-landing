@@ -21,4 +21,3 @@ export function calculateRecommendedPrice(totalCost: number): number {
 
   return finalPriceInclGST;
 }
-

@@ -38,42 +38,92 @@ export function useRosterShiftManagement({
   const { showError, showSuccess } = useNotification();
   const [loading, setLoading] = useState(false);
 
-  const handleCreateShift = useCallback(async (shiftData: Partial<Shift>) => {
-    const isEdit = !!editingShiftId;
-    if (!isEdit) {
-      const dateStr = shiftData.shift_date!;
-      const existingShifts = shifts.filter(s => s.employee_id === shiftData.employee_id && s.shift_date === dateStr && s.id !== editingShiftId);
-      if (existingShifts.length >= 2) { showError('Maximum 2 shifts per day allowed'); return; }
-    }
-    if (isEdit) {
-      const originalShift = shifts.find(s => s.id === editingShiftId);
-      if (!originalShift) { showError('Shift not found'); return; }
-      await handleUpdateShiftHelper(editingShiftId, shiftData, originalShift, updateShift, setShowShiftForm, setFormEmployeeId, setFormDate, setEditingShiftId, showSuccess, showError);
-    } else {
-      await handleCreateShiftHelper(shiftData, addShift, updateShift, removeShift, setShowShiftForm, setFormEmployeeId, setFormDate, showSuccess, showError);
-    }
-  }, [addShift, updateShift, removeShift, showSuccess, showError, setShowShiftForm, setFormEmployeeId, setFormDate, shifts, editingShiftId, setEditingShiftId]);
-
-  const handleDeleteShift = useCallback(async (shiftId: string) => {
-    const shiftToDelete = shifts.find(s => s.id === shiftId);
-    if (!shiftToDelete) return;
-    removeShift(shiftId);
-    try {
-      const response = await fetch(`/api/roster/shifts/${shiftId}`, { method: 'DELETE' });
-      const result = await response.json();
-      if (response.ok) {
-        showSuccess('Shift deleted successfully');
-        removeValidationWarning(shiftId);
-      } else {
-        addShift(shiftToDelete);
-        showError(result.error || result.message || 'Failed to delete shift');
+  const handleCreateShift = useCallback(
+    async (shiftData: Partial<Shift>) => {
+      const isEdit = !!editingShiftId;
+      if (!isEdit) {
+        const dateStr = shiftData.shift_date!;
+        const existingShifts = shifts.filter(
+          s =>
+            s.employee_id === shiftData.employee_id &&
+            s.shift_date === dateStr &&
+            s.id !== editingShiftId,
+        );
+        if (existingShifts.length >= 2) {
+          showError('Maximum 2 shifts per day allowed');
+          return;
+        }
       }
-    } catch (err) {
-      addShift(shiftToDelete);
-      logger.error('Failed to delete shift', err);
-      showError("Failed to delete shift. Give it another go, chef.");
-    }
-  }, [shifts, removeShift, addShift, showSuccess, showError, removeValidationWarning]);
+      if (isEdit) {
+        const originalShift = shifts.find(s => s.id === editingShiftId);
+        if (!originalShift) {
+          showError('Shift not found');
+          return;
+        }
+        await handleUpdateShiftHelper(
+          editingShiftId,
+          shiftData,
+          originalShift,
+          updateShift,
+          setShowShiftForm,
+          setFormEmployeeId,
+          setFormDate,
+          setEditingShiftId,
+          showSuccess,
+          showError,
+        );
+      } else {
+        await handleCreateShiftHelper(
+          shiftData,
+          addShift,
+          updateShift,
+          removeShift,
+          setShowShiftForm,
+          setFormEmployeeId,
+          setFormDate,
+          showSuccess,
+          showError,
+        );
+      }
+    },
+    [
+      addShift,
+      updateShift,
+      removeShift,
+      showSuccess,
+      showError,
+      setShowShiftForm,
+      setFormEmployeeId,
+      setFormDate,
+      shifts,
+      editingShiftId,
+      setEditingShiftId,
+    ],
+  );
+
+  const handleDeleteShift = useCallback(
+    async (shiftId: string) => {
+      const shiftToDelete = shifts.find(s => s.id === shiftId);
+      if (!shiftToDelete) return;
+      removeShift(shiftId);
+      try {
+        const response = await fetch(`/api/roster/shifts/${shiftId}`, { method: 'DELETE' });
+        const result = await response.json();
+        if (response.ok) {
+          showSuccess('Shift deleted successfully');
+          removeValidationWarning(shiftId);
+        } else {
+          addShift(shiftToDelete);
+          showError(result.error || result.message || 'Failed to delete shift');
+        }
+      } catch (err) {
+        addShift(shiftToDelete);
+        logger.error('Failed to delete shift', err);
+        showError('Failed to delete shift. Give it another go, chef.');
+      }
+    },
+    [shifts, removeShift, addShift, showSuccess, showError, removeValidationWarning],
+  );
 
   return {
     handleCreateShift,

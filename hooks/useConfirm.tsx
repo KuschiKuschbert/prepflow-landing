@@ -61,11 +61,27 @@ export function useConfirm() {
     });
   }, []);
 
-  const { handleConfirm, handleCancel } = createConfirmHandlers(setIsOpen, setResolvePromise, setOptions, resolvePromise);
+  const { handleConfirm, handleCancel } = createConfirmHandlers(
+    setIsOpen,
+    setResolvePromise,
+    setOptions,
+    resolvePromise,
+  );
 
   const ConfirmDialogComponent = () => {
     if (!options) return null;
-    return <ConfirmDialog isOpen={isOpen} title={options.title} message={options.message} variant={options.variant || 'warning'} confirmLabel={options.confirmLabel || 'Confirm'} cancelLabel={options.cancelLabel || 'Cancel'} onConfirm={handleConfirm} onCancel={handleCancel} />;
+    return (
+      <ConfirmDialog
+        isOpen={isOpen}
+        title={options.title}
+        message={options.message}
+        variant={options.variant || 'warning'}
+        confirmLabel={options.confirmLabel || 'Confirm'}
+        cancelLabel={options.cancelLabel || 'Cancel'}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+      />
+    );
   };
 
   return {

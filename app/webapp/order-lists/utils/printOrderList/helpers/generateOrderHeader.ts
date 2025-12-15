@@ -1,7 +1,7 @@
 /**
  * Generate order list header HTML.
  */
-import type { OrderList } from '../printOrderList';
+import type { OrderList } from '../../printOrderList';
 
 export function getStatusColor(status: string): string {
   switch (status) {

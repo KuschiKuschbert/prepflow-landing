@@ -15,8 +15,6 @@ export function getEmployeeWeekShifts(
 
   return shifts.filter(shift => {
     const shiftDate = shift.shift_date;
-    return (
-      shift.employee_id === employeeId && shiftDate >= weekStartStr && shiftDate <= weekEndStr
-    );
+    return shift.employee_id === employeeId && shiftDate >= weekStartStr && shiftDate <= weekEndStr;
   });
 }

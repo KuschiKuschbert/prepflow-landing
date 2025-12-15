@@ -100,10 +100,16 @@ export async function testManagementAPI(results: TestResults): Promise<void> {
 
     const appResponse = await managementClient.clients.get({ client_id: auth0ClientId });
     const app = appResponse.data || (appResponse as any);
-    addTest(results, 'Auth0 Management API', 'pass', 'Successfully connected to Auth0 Management API', {
-      applicationName: app.name || 'Unknown',
-      applicationId: app.client_id || auth0ClientId,
-    });
+    addTest(
+      results,
+      'Auth0 Management API',
+      'pass',
+      'Successfully connected to Auth0 Management API',
+      {
+        applicationName: app.name || 'Unknown',
+        applicationId: app.client_id || auth0ClientId,
+      },
+    );
 
     // Test callback URLs
     testCallbackURLs(results, app, auth0BaseUrl);

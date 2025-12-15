@@ -56,7 +56,12 @@ export function LoginHistorySection({ loginHistory }: LoginHistorySectionProps) 
               >
                 <div className="flex items-center gap-3">
                   {log.successful ? (
-                    <Icon icon={CheckCircle} size="sm" className="text-green-400" aria-hidden={true} />
+                    <Icon
+                      icon={CheckCircle}
+                      size="sm"
+                      className="text-green-400"
+                      aria-hidden={true}
+                    />
                   ) : (
                     <Icon icon={XCircle} size="sm" className="text-red-400" aria-hidden={true} />
                   )}

@@ -156,3 +156,28 @@ export async function syncUserFromAuth0(
     });
   }
 }
+
+/**
+ * Detect and store user country for data transfer restrictions
+ * Should be called when request headers are available (e.g., in middleware or API routes)
+ *
+ * @param {string} email - User email
+ * @param {Headers} headers - Request headers
+ * @returns {Promise<void>}
+ */
+export async function detectAndStoreUserCountry(email: string, headers: Headers): Promise<void> {
+  try {
+    const { detectCountryFromHeaders, storeUserCountry } =
+      await import('./data-transfer/country-detection');
+    const countryCode = detectCountryFromHeaders(headers);
+    if (countryCode) {
+      await storeUserCountry(email, countryCode);
+    }
+  } catch (error) {
+    // Don't fail if country detection fails
+    logger.warn('[Auth User Sync] Failed to detect/store country:', {
+      error: error instanceof Error ? error.message : String(error),
+      email,
+    });
+  }
+}

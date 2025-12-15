@@ -34,4 +34,3 @@ export function EmptyTasksState({ onCreateTask }: EmptyTasksStateProps) {
     </div>
   );
 }
-

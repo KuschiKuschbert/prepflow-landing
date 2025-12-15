@@ -2,7 +2,7 @@
  * Fetch entitlements helper.
  */
 import { logger } from '@/lib/logger';
-import type { SubscriptionData, UserEntitlements } from '../useEntitlements';
+import type { SubscriptionData, UserEntitlements } from '../types';
 
 export async function fetchEntitlementsHelper(
   setEntitlements: (entitlements: UserEntitlements | null) => void,

@@ -68,6 +68,6 @@ export async function performDeleteAllShifts({
     // Revert on error - restore all shifts
     originalShifts.forEach(shift => addShift(shift));
     logger.error('Failed to delete all shifts', err);
-    showError("Failed to delete shifts. Give it another go, chef.");
+    showError('Failed to delete shifts. Give it another go, chef.');
   }
 }

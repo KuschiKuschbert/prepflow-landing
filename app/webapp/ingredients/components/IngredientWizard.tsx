@@ -1,19 +1,19 @@
 'use client';
 import { logger } from '@/lib/logger';
 import {
-    formatBrandName,
-    formatIngredientName,
-    formatStorageLocation,
-    formatSupplierName,
-    formatTextInput,
+  formatBrandName,
+  formatIngredientName,
+  formatStorageLocation,
+  formatSupplierName,
+  formatTextInput,
 } from '@/lib/text-utils';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-    calculateCostPerUnit,
-    calculateWastagePercentage,
-    checkValidation as checkValidationHelper,
-    formatCost,
-    getValidationErrors,
+  calculateCostPerUnit,
+  calculateWastagePercentage,
+  checkValidation as checkValidationHelper,
+  formatCost,
+  getValidationErrors,
 } from '../utils/wizard-helpers';
 import IngredientWizardNavigation from './IngredientWizardNavigation';
 import IngredientWizardStep1 from './IngredientWizardStep1';
@@ -171,7 +171,10 @@ export default function IngredientWizard({
       resetWizard();
     } catch (error: any) {
       setErrors({
-        submit: error?.message || error?.details || "Failed to save ingredient. Give it another go, chef.",
+        submit:
+          error?.message ||
+          error?.details ||
+          'Failed to save ingredient. Give it another go, chef.',
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }

@@ -1,8 +1,8 @@
 import { parseCSV } from '@/lib/csv/csv-utils';
 import {
-    getIngredientsValidationSchema,
-    transformCSVData,
-    validateCSVData,
+  getIngredientsValidationSchema,
+  transformCSVData,
+  validateCSVData,
 } from '@/lib/csv/validation';
 import { logger } from '@/lib/logger';
 import { supabase } from '@/lib/supabase';
@@ -54,7 +54,9 @@ export function parseIngredientsCSV(csvText: string): {
     errors.push('CSV file appears to be empty or has no valid data rows');
     return { ingredients: [], errors };
   }
-  const ingredients = result.data.map(row => mapCSVRowToIngredient(row)).filter(ing => ing.ingredient_name);
+  const ingredients = result.data
+    .map(row => mapCSVRowToIngredient(row))
+    .filter(ing => ing.ingredient_name);
 
   // Validate ingredients
   const schema = getIngredientsValidationSchema();

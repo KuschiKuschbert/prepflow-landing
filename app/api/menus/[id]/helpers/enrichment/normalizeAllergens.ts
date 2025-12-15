@@ -45,4 +45,3 @@ export function normalizeAllergens(allergenData: any, itemName?: string): string
   });
   return [];
 }
-

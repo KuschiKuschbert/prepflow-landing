@@ -24,7 +24,10 @@ export function handlePrintHelper(
       performanceItems,
       metadata,
       performanceScore,
-      dateRange: dateRange.startDate && dateRange.endDate ? { start: dateRange.startDate, end: dateRange.endDate } : undefined,
+      dateRange:
+        dateRange.startDate && dateRange.endDate
+          ? { start: dateRange.startDate, end: dateRange.endDate }
+          : undefined,
     });
     showSuccess('Performance report opened for printing');
   } catch (error) {

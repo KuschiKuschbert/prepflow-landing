@@ -99,7 +99,10 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     isLoading,
     refetch: refetchIngredients,
   } = useIngredientsQuery(1, 10000);
-  useEffect(() => setPage(1), [itemsPerPage, searchTerm, supplierFilter, storageFilter, categoryFilter]);
+  useEffect(
+    () => setPage(1),
+    [itemsPerPage, searchTerm, supplierFilter, storageFilter, categoryFilter],
+  );
   useIngredientMigration(loading, isLoading, ingredientsData);
   useEffect(() => {
     const active = loading || isLoading;

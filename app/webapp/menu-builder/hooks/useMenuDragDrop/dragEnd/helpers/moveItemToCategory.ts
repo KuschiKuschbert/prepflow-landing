@@ -32,6 +32,6 @@ export async function moveItemToCategory(
       );
     }
   } catch (err) {
-    notifications?.showError("Failed to move item. Give it another go, chef.");
+    notifications?.showError('Failed to move item. Give it another go, chef.');
   }
 }

@@ -41,7 +41,7 @@ export function useMenuItemAddition({
       const dish = dishes.find(d => d.id === selectedItem.id);
       const recipe = recipes.find(r => r.id === selectedItem.id);
       if (!dish && !recipe) {
-        showError("Item not found. Give it another go, chef.");
+        showError('Item not found. Give it another go, chef.');
         return;
       }
       const categoryItems = menuItems.filter(item => item.category === category);

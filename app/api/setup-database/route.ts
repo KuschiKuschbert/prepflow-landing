@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error: "Data tables don't exist",
-          message: "Please create the data tables first using the create-tables API endpoint",
+          message: 'Please create the data tables first using the create-tables API endpoint',
           instructions:
             'Visit /api/create-tables to get the SQL script, then run it in your Supabase dashboard',
           errorDetails: testError,

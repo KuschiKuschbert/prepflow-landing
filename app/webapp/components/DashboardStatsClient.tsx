@@ -11,9 +11,9 @@ import { DashboardErrorAlert } from './DashboardErrorAlert';
 import DashboardStats from './DashboardStats';
 import RecentActivity from './RecentActivity';
 import type {
-    DashboardStatsData,
-    TemperatureEquipment,
-    TemperatureLog,
+  DashboardStatsData,
+  TemperatureEquipment,
+  TemperatureLog,
 } from './types/dashboard-stats';
 
 export default function DashboardStatsClient() {
@@ -106,7 +106,7 @@ export default function DashboardStatsClient() {
         }
       } catch (err) {
         logger.error('Error parsing stats response:', err);
-        setStatsError("Failed to parse dashboard statistics. Give it another go, chef.");
+        setStatsError('Failed to parse dashboard statistics. Give it another go, chef.');
       }
 
       // Process temperature logs data

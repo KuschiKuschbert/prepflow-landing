@@ -47,6 +47,19 @@ export async function setupFetch({
     setError,
     startPolling,
     stopPolling,
-    performFetch: () => setupFetch({ menuId, isPollingCheck: true, setLoading, setError, abortControllerRef, fetchCards, updateCards, handleFetchError, startPolling, stopPolling, onError }),
+    performFetch: () =>
+      setupFetch({
+        menuId,
+        isPollingCheck: true,
+        setLoading,
+        setError,
+        abortControllerRef,
+        fetchCards,
+        updateCards,
+        handleFetchError,
+        startPolling,
+        stopPolling,
+        onError,
+      }),
   });
 }

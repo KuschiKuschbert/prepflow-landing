@@ -150,4 +150,3 @@ export function isWebShareAPIAvailable(): boolean {
 export function isClipboardAPIAvailable(): boolean {
   return typeof navigator !== 'undefined' && !!navigator.clipboard;
 }
-

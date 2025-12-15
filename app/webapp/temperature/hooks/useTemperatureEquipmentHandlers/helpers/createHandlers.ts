@@ -13,13 +13,37 @@ export function createEquipmentHandlers(
 ) {
   return {
     handleUpdateEquipment: async (equipmentId: string, updates: Partial<TemperatureEquipment>) => {
-      await updateEquipment(equipmentId, updates, { equipment, setEquipment, fetchEquipment, showError, showSuccess });
+      await updateEquipment(equipmentId, updates, {
+        equipment,
+        setEquipment,
+        fetchEquipment,
+        showError,
+        showSuccess,
+      });
     },
-    handleCreateEquipment: async (name: string, equipmentType: string, location: string | null, minTemp: number | null, maxTemp: number | null) => {
-      await createEquipment(name, equipmentType, location, minTemp, maxTemp, { equipment, setEquipment, fetchEquipment, showError, showSuccess });
+    handleCreateEquipment: async (
+      name: string,
+      equipmentType: string,
+      location: string | null,
+      minTemp: number | null,
+      maxTemp: number | null,
+    ) => {
+      await createEquipment(name, equipmentType, location, minTemp, maxTemp, {
+        equipment,
+        setEquipment,
+        fetchEquipment,
+        showError,
+        showSuccess,
+      });
     },
     handleDeleteEquipment: async (equipmentId: string) => {
-      await deleteEquipment(equipmentId, { equipment, setEquipment, fetchEquipment, showError, showSuccess });
+      await deleteEquipment(equipmentId, {
+        equipment,
+        setEquipment,
+        fetchEquipment,
+        showError,
+        showSuccess,
+      });
     },
   };
 }

@@ -60,13 +60,13 @@ Based on refactoring results and project needs:
 
 ### Standard Limits (No Changes)
 
-| File Type      | Current Limit | Status                  | Notes                                |
-| -------------- | ------------- | ----------------------- | ------------------------------------ |
-| **Pages**      | 500 lines     | ✅ Keep                 | All pages are now 100-250 lines      |
-| **Components** | 300 lines     | ✅ Keep                 | All components are now 100-300 lines |
-| **API Routes** | 200 lines     | ✅ Keep                 | All routes are now 70-200 lines      |
+| File Type      | Current Limit | Status                  | Notes                                                |
+| -------------- | ------------- | ----------------------- | ---------------------------------------------------- |
+| **Pages**      | 500 lines     | ✅ Keep                 | All pages are now 100-250 lines                      |
+| **Components** | 300 lines     | ✅ Keep                 | All components are now 100-300 lines                 |
+| **API Routes** | 200 lines     | ✅ Keep                 | All routes are now 70-200 lines                      |
 | **Hooks**      | 120 lines     | ✅ Updated              | Increased from 100 to accommodate coordination hooks |
-| **Utilities**  | 150 lines     | ⚠️ Keep with exceptions | See exceptions below                 |
+| **Utilities**  | 150 lines     | ⚠️ Keep with exceptions | See exceptions below                                 |
 
 ### Recommended Exceptions for Utilities
 

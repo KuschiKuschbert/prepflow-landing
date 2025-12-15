@@ -19,7 +19,11 @@ export async function handleCreateShiftHelper(
   const tempShift = createTempShift(shiftData);
   addShift(tempShift);
   try {
-    const response = await fetch('/api/roster/shifts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(shiftData) });
+    const response = await fetch('/api/roster/shifts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(shiftData),
+    });
     const result = await response.json();
     if (response.ok && result.shift) {
       updateShift(tempShift.id, result.shift);
@@ -34,6 +38,6 @@ export async function handleCreateShiftHelper(
   } catch (err) {
     removeShift(tempShift.id);
     logger.error('Failed to create shift', err);
-    showError("Failed to create shift. Give it another go, chef.");
+    showError('Failed to create shift. Give it another go, chef.');
   }
 }

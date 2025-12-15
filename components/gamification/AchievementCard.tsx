@@ -159,4 +159,3 @@ export function AchievementCard({
 }
 
 export default AchievementCard;
-

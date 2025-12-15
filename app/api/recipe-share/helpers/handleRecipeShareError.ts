@@ -18,7 +18,7 @@ export function handleRecipeShareError(error: Error | any, operation: string): N
   return NextResponse.json(
     {
       error: 'Internal server error',
-      message: "Something went wrong while sharing the recipe. Give it another go, chef.",
+      message: 'Something went wrong while sharing the recipe. Give it another go, chef.',
     },
     { status: 500 },
   );

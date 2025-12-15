@@ -8,7 +8,8 @@ export function createInitialState() {
   return {
     logs: [] as TemperatureLog[],
     allLogs: (getCachedData<TemperatureLog[]>('temperature_all_logs') || []) as TemperatureLog[],
-    equipment: (getCachedData<TemperatureEquipment[]>('temperature_equipment') || []) as TemperatureEquipment[],
+    equipment: (getCachedData<TemperatureEquipment[]>('temperature_equipment') ||
+      []) as TemperatureEquipment[],
     loading: false,
     analyticsLoading: false,
     lastAnalyticsFetch: 0,

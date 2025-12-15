@@ -33,7 +33,7 @@ export default function TestDataGenerator() {
         showError(`Error: ${data.error || 'Failed to generate test data'}`);
       }
     } catch (error) {
-      showError("Connection issue while generating test data. Give it another go, chef.");
+      showError('Connection issue while generating test data. Give it another go, chef.');
     } finally {
       setIsGeneratingTestData(false);
     }

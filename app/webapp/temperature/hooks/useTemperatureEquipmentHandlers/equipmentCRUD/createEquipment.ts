@@ -38,7 +38,14 @@ export async function createEquipment(
     const response = await fetch('/api/temperature-equipment', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, equipment_type: equipmentType, location, min_temp_celsius: minTemp, max_temp_celsius: maxTemp, is_active: true }),
+      body: JSON.stringify({
+        name,
+        equipment_type: equipmentType,
+        location,
+        min_temp_celsius: minTemp,
+        max_temp_celsius: maxTemp,
+        is_active: true,
+      }),
     });
     const data = await response.json();
     if (data.success && data.item) {

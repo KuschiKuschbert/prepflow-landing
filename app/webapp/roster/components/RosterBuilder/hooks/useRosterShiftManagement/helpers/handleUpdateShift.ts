@@ -18,7 +18,11 @@ export async function handleUpdateShiftHelper(
 ): Promise<void> {
   updateShift(editingShiftId, shiftData);
   try {
-    const response = await fetch(`/api/roster/shifts/${editingShiftId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(shiftData) });
+    const response = await fetch(`/api/roster/shifts/${editingShiftId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(shiftData),
+    });
     const result = await response.json();
     if (response.ok && result.shift) {
       updateShift(editingShiftId, result.shift);
@@ -34,6 +38,6 @@ export async function handleUpdateShiftHelper(
   } catch (err) {
     updateShift(editingShiftId, originalShift);
     logger.error('Failed to update shift', err);
-    showError("Failed to update shift. Give it another go, chef.");
+    showError('Failed to update shift. Give it another go, chef.');
   }
 }

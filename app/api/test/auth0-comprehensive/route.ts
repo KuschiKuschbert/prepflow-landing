@@ -1,10 +1,10 @@
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import {
-    testCallbackUrlConstruction,
-    testEnvironmentVariables,
-    testManagementAPI,
-    testURLConsistency,
+  testCallbackUrlConstruction,
+  testEnvironmentVariables,
+  testManagementAPI,
+  testURLConsistency,
 } from './test-helpers';
 import { addTest, createTestResults } from './test-utils';
 
@@ -25,9 +25,15 @@ export async function GET(request: NextRequest) {
     testCallbackUrlConstruction(results);
 
     // Test 3: Auth0 SDK Configuration
-    addTest(results, 'Auth0 SDK Configuration', 'pass', 'Auth0 SDK configured via environment variables', {
-      configured: true,
-    });
+    addTest(
+      results,
+      'Auth0 SDK Configuration',
+      'pass',
+      'Auth0 SDK configured via environment variables',
+      {
+        configured: true,
+      },
+    );
 
     // Test 4: Auth0 Management API Connection
     await testManagementAPI(results);

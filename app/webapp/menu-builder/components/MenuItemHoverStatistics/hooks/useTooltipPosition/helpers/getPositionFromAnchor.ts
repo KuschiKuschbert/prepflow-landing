@@ -1,7 +1,9 @@
 /**
  * Get position from anchor element.
  */
-export function getPositionFromAnchor(anchorElement: HTMLElement | null): { x: number; y: number } | null {
+export function getPositionFromAnchor(
+  anchorElement: HTMLElement | null,
+): { x: number; y: number } | null {
   if (!anchorElement) return null;
   const rect = anchorElement.getBoundingClientRect();
   return {

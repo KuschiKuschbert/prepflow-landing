@@ -36,10 +36,7 @@ export function setCachedStatistics(cacheKey: string, statistics: ItemStatistics
   });
 }
 
-export function invalidateCacheIfPriceChanged(
-  cacheKey: string,
-  newPrice: number | null,
-): boolean {
+export function invalidateCacheIfPriceChanged(cacheKey: string, newPrice: number | null): boolean {
   const cached = statisticsCache.get(cacheKey);
   if (!cached) return false;
   const priceChanged =

@@ -136,4 +136,3 @@ if (require.main === module) {
 }
 
 module.exports = { testWebhookEvent, validateEndpoint };
-

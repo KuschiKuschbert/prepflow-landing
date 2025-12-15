@@ -70,7 +70,7 @@ export async function performReorder({
   } catch (err) {
     setMenuItems(originalMenuItems);
     logger.error('Failed to reorder items:', err);
-    showError("Failed to reorder items. Give it another go, chef.");
+    showError('Failed to reorder items. Give it another go, chef.');
     refreshStatistics().catch(err => logger.error('Failed to refresh statistics:', err));
   }
 }

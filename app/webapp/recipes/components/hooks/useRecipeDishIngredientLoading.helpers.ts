@@ -55,7 +55,15 @@ export async function loadDishIngredients({
   const dishRecipes = data.dish.recipes || [];
   const dishIngredients = data.dish.ingredients || [];
 
-  logger.dev('[loadDishIngredients] Fetched dish data', { dishId, dishRecipesCount: dishRecipes.length, dishIngredientsCount: dishIngredients.length, dishRecipes, dishIngredients, availableIngredientsCount: ingredients.length, availableRecipesCount: recipes.length });
+  logger.dev('[loadDishIngredients] Fetched dish data', {
+    dishId,
+    dishRecipesCount: dishRecipes.length,
+    dishIngredientsCount: dishIngredients.length,
+    dishRecipes,
+    dishIngredients,
+    availableIngredientsCount: ingredients.length,
+    availableRecipesCount: recipes.length,
+  });
 
   const allCalculations: COGSCalculation[] = [];
   const processIngredient = (ingId: string, qty: number, unit: string) => {

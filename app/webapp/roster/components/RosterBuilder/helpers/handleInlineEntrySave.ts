@@ -11,7 +11,9 @@ export function createInlineEntrySaveHandler(
 ) {
   return async (shiftData: Partial<Shift>) => {
     const dateStr = shiftData.shift_date!;
-    const existingShifts = shifts.filter(s => s.employee_id === shiftData.employee_id && s.shift_date === dateStr);
+    const existingShifts = shifts.filter(
+      s => s.employee_id === shiftData.employee_id && s.shift_date === dateStr,
+    );
     if (existingShifts.length >= 2) {
       showError('Maximum 2 shifts per day allowed');
       return;

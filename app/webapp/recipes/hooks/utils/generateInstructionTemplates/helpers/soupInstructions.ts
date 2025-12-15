@@ -10,8 +10,18 @@ export function generateSoupInstructions(
   analysis: IngredientAnalysis,
 ): string {
   const { hasProtein, hasVegetables, hasGrains } = analysis;
-  const proteinName = ingredients.find(ri => ri.ingredients.ingredient_name.toLowerCase().includes('beef') || ri.ingredients.ingredient_name.toLowerCase().includes('chicken'))?.ingredients.ingredient_name || 'protein';
-  const grainName = ingredients.find(ri => ri.ingredients.ingredient_name.toLowerCase().includes('rice') || ri.ingredients.ingredient_name.toLowerCase().includes('pasta'))?.ingredients.ingredient_name || 'grains';
+  const proteinName =
+    ingredients.find(
+      ri =>
+        ri.ingredients.ingredient_name.toLowerCase().includes('beef') ||
+        ri.ingredients.ingredient_name.toLowerCase().includes('chicken'),
+    )?.ingredients.ingredient_name || 'protein';
+  const grainName =
+    ingredients.find(
+      ri =>
+        ri.ingredients.ingredient_name.toLowerCase().includes('rice') ||
+        ri.ingredients.ingredient_name.toLowerCase().includes('pasta'),
+    )?.ingredients.ingredient_name || 'grains';
   return `**Soup Preparation:**
 **Mise en Place:**
 1. Gather all ingredients and large pot

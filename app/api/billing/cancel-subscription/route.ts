@@ -146,19 +146,67 @@ export async function POST(req: NextRequest) {
 
     clearTierCache(userEmail);
 
+    // Check if user is EU customer for enhanced cancellation rights
+    let isEU = false;
+    try {
+      const { getUserEUStatus } = await import('@/lib/geo/eu-detection');
+      isEU = await getUserEUStatus(userEmail, req);
+    } catch (err) {
+      // Don't fail cancellation if EU detection fails
+      logger.warn('[Billing API] Failed to detect EU status:', {
+        error: err instanceof Error ? err.message : String(err),
+        userEmail,
+      });
+    }
+
+    // Schedule account deletion 30 days after cancellation (if immediate cancellation)
+    // For scheduled cancellations, deletion will be scheduled when subscription actually ends
+    if (immediate) {
+      try {
+        const { scheduleAccountDeletion } = await import('@/lib/data-retention/schedule-deletion');
+        await scheduleAccountDeletion({
+          userEmail,
+          metadata: {
+            reason: 'subscription_cancelled_immediate',
+            subscriptionId: subscriptionId,
+            isEU,
+          },
+        });
+        logger.dev('[Billing API] Account deletion scheduled for cancelled subscription:', {
+          userEmail,
+          isEU,
+        });
+      } catch (err) {
+        // Don't fail the cancellation if deletion scheduling fails
+        logger.error('[Billing API] Failed to schedule account deletion:', {
+          error: err instanceof Error ? err.message : String(err),
+          userEmail,
+        });
+      }
+    }
+
     logger.dev('[Billing API] Subscription cancelled:', {
       userEmail,
       subscriptionId,
       immediate,
       cancelAtPeriodEnd,
       expiresAt: expiresAt?.toISOString(),
+      isEU,
     });
+
+    // EU customers have enhanced cancellation rights (can cancel at any time without penalty)
+    const cancellationMessage = isEU
+      ? immediate
+        ? 'Subscription cancelled immediately. As an EU customer, you can cancel at any time without penalty.'
+        : 'Subscription will be cancelled at the end of the billing period. As an EU customer, you can cancel at any time without penalty.'
+      : immediate
+        ? 'Subscription cancelled immediately'
+        : 'Subscription will be cancelled at the end of the billing period';
 
     return NextResponse.json({
       success: true,
-      message: immediate
-        ? 'Subscription cancelled immediately'
-        : 'Subscription will be cancelled at the end of the billing period',
+      message: cancellationMessage,
+      isEU,
       subscription: {
         id: updatedSubscription.id,
         status: updatedSubscription.status,

@@ -139,4 +139,3 @@ export function getComplianceReportPrintStyles(): string {
 
   return `${baseStyles}\n${complianceReportStyles}`;
 }
-

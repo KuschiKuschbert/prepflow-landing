@@ -57,8 +57,7 @@ export function RecipeCardCompact({
             <h3 className="truncate text-base font-semibold text-white">{title}</h3>
             {isSubRecipe && usedByMenuItems && usedByMenuItems.length > 0 && (
               <p className="mt-0.5 truncate text-xs text-gray-500">
-                Used by {usedByMenuItems.length}{' '}
-                {usedByMenuItems.length === 1 ? 'dish' : 'dishes'}
+                Used by {usedByMenuItems.length} {usedByMenuItems.length === 1 ? 'dish' : 'dishes'}
               </p>
             )}
           </div>
@@ -91,13 +90,7 @@ export function RecipeCardCompact({
             onClick={e => e.stopPropagation()}
             data-prep-input
           >
-            <QRCodeSVG
-              value={recipeUrl}
-              size={80}
-              level="M"
-              bgColor="#FFFFFF"
-              fgColor="#000000"
-            />
+            <QRCodeSVG value={recipeUrl} size={80} level="M" bgColor="#FFFFFF" fgColor="#000000" />
             <p className="mt-1 text-[8px] text-gray-500">Scan to view recipe</p>
           </div>
         )}

@@ -61,7 +61,7 @@ export function HealthInspectorReport() {
       }
     } catch (err) {
       logger.error('Error generating report:', err);
-      setError("Failed to generate report. Give it another go, chef.");
+      setError('Failed to generate report. Give it another go, chef.');
     } finally {
       setLoading(false);
     }

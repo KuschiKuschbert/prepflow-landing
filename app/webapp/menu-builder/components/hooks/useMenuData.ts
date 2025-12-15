@@ -43,7 +43,10 @@ export function useMenuData({ menuId, onError }: UseMenuDataProps): UseMenuDataR
     [menuId, setStatistics],
   );
   const loadMenuData = useCallback(async () => {
-    const hasCachedData = initialState.menuItems.length > 0 || initialState.dishes.length > 0 || initialState.recipes.length > 0;
+    const hasCachedData =
+      initialState.menuItems.length > 0 ||
+      initialState.dishes.length > 0 ||
+      initialState.recipes.length > 0;
     await loadMenuDataHelper({
       menuId,
       menuCacheKey,

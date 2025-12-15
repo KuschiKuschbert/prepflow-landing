@@ -3,7 +3,7 @@
  */
 
 import { useState, useCallback } from 'react';
-import type { SupplierFormData, PriceListFormData } from '../types';
+import type { SupplierFormData, PriceListFormData, Supplier, SupplierPriceList } from '../types';
 import { handleAddSupplierHelper } from './useSuppliersForms/helpers/handleAddSupplier';
 import { handleAddPriceListHelper } from './useSuppliersForms/helpers/handleAddPriceList';
 import { DEFAULT_SUPPLIER_FORM, DEFAULT_PRICE_LIST_FORM } from './useSuppliersForms/defaultValues';
@@ -30,15 +30,34 @@ export function useSuppliersForms({
   const [newSupplier, setNewSupplier] = useState<SupplierFormData>(DEFAULT_SUPPLIER_FORM);
   const [newPriceList, setNewPriceList] = useState<PriceListFormData>(DEFAULT_PRICE_LIST_FORM);
 
-  const handleAddSupplier = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    await handleAddSupplierHelper(newSupplier, suppliers, setSuppliers, setNewSupplier, setShowAddSupplier);
-  }, [newSupplier, suppliers, setSuppliers, setShowAddSupplier]);
+  const handleAddSupplier = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      await handleAddSupplierHelper(
+        newSupplier,
+        suppliers,
+        setSuppliers,
+        setNewSupplier,
+        setShowAddSupplier,
+      );
+    },
+    [newSupplier, suppliers, setSuppliers, setShowAddSupplier],
+  );
 
-  const handleAddPriceList = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    await handleAddPriceListHelper(newPriceList, priceLists, selectedSupplier, setPriceLists, setNewPriceList, setShowAddPriceList);
-  }, [newPriceList, priceLists, selectedSupplier, setPriceLists, setShowAddPriceList]);
+  const handleAddPriceList = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      await handleAddPriceListHelper(
+        newPriceList,
+        priceLists,
+        selectedSupplier,
+        setPriceLists,
+        setNewPriceList,
+        setShowAddPriceList,
+      );
+    },
+    [newPriceList, priceLists, selectedSupplier, setPriceLists, setShowAddPriceList],
+  );
 
   return {
     newSupplier,

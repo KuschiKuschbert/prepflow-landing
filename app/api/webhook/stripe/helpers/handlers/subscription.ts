@@ -168,6 +168,28 @@ export async function handleSubscriptionDeleted(
   await updateUserSubscription(userEmail, 'starter', 'cancelled', null, sub.id, false, undefined);
   clearTierCache(userEmail);
 
+  // Schedule account deletion 30 days after subscription ends
+  try {
+    const { scheduleAccountDeletion } = await import('@/lib/data-retention/schedule-deletion');
+    await scheduleAccountDeletion({
+      userEmail,
+      metadata: {
+        reason: 'subscription_ended',
+        subscriptionId: sub.id,
+        endedAt: new Date().toISOString(),
+      },
+    });
+    logger.dev('[Stripe Webhook] Account deletion scheduled for ended subscription:', {
+      userEmail,
+    });
+  } catch (err) {
+    // Don't fail the webhook if deletion scheduling fails
+    logger.error('[Stripe Webhook] Failed to schedule account deletion:', {
+      error: err instanceof Error ? err.message : String(err),
+      userEmail,
+    });
+  }
+
   // Send notification
   await subscriptionNotifications.subscriptionCancelled(userEmail, false);
 

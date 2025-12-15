@@ -74,13 +74,44 @@ export function useRosterBulkActions({
     showError,
   ]);
 
-  const handleDeleteEmployeeFromRoster = useCallback(async (employeeId: string) => {
-    const employeeShifts = getEmployeeWeekShifts(shifts, employeeId, currentWeekStart);
-    const employeeName = getEmployeeName(employees, employeeId);
-    const confirmed = await confirmDeleteEmployee({ employeeName, employeeShiftsCount: employeeShifts.length, showConfirm });
-    if (!confirmed) return;
-    await performDeleteEmployeeFromRoster({ employeeId, shifts, employees, currentWeekStart, addedEmployeeIds, setAddedEmployeeIds, removeShift, addShift, removeValidationWarning, showError, showSuccess });
-  }, [currentWeekStart, shifts, employees, addedEmployeeIds, removeShift, addShift, removeValidationWarning, showConfirm, showSuccess, showError, setAddedEmployeeIds]);
+  const handleDeleteEmployeeFromRoster = useCallback(
+    async (employeeId: string) => {
+      const employeeShifts = getEmployeeWeekShifts(shifts, employeeId, currentWeekStart);
+      const employeeName = getEmployeeName(employees, employeeId);
+      const confirmed = await confirmDeleteEmployee({
+        employeeName,
+        employeeShiftsCount: employeeShifts.length,
+        showConfirm,
+      });
+      if (!confirmed) return;
+      await performDeleteEmployeeFromRoster({
+        employeeId,
+        shifts,
+        employees,
+        currentWeekStart,
+        addedEmployeeIds,
+        setAddedEmployeeIds,
+        removeShift,
+        addShift,
+        removeValidationWarning,
+        showError,
+        showSuccess,
+      });
+    },
+    [
+      currentWeekStart,
+      shifts,
+      employees,
+      addedEmployeeIds,
+      removeShift,
+      addShift,
+      removeValidationWarning,
+      showConfirm,
+      showSuccess,
+      showError,
+      setAddedEmployeeIds,
+    ],
+  );
 
   return {
     handleDeleteAllShifts,

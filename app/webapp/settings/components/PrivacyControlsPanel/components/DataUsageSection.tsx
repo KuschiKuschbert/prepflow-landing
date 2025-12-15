@@ -46,7 +46,9 @@ export function DataUsageSection({ dataUsage }: DataUsageSectionProps) {
       </div>
       <div className="rounded-xl border border-[#29E7CD]/20 bg-[#29E7CD]/5 p-3">
         <p className="text-xs text-gray-500">Total Storage</p>
-        <p className="text-lg font-semibold text-[#29E7CD]">{formatFileSize(dataUsage.total_size_bytes)}</p>
+        <p className="text-lg font-semibold text-[#29E7CD]">
+          {formatFileSize(dataUsage.total_size_bytes)}
+        </p>
       </div>
     </div>
   );

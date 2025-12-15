@@ -38,7 +38,9 @@ export async function handleDuplicateRecipe(
       quantity: ing.quantity,
       unit: ing.unit,
     }));
-    const { error: ingredientsError } = await supabase.from('recipe_ingredients').insert(ingredientInserts);
+    const { error: ingredientsError } = await supabase
+      .from('recipe_ingredients')
+      .insert(ingredientInserts);
     if (ingredientsError) {
       showErrorNotification(`Failed to duplicate ingredients: ${ingredientsError.message}`);
       await fetchRecipes();

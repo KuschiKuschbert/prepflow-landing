@@ -185,8 +185,19 @@ export function RosterBuilder({
     [shifts],
   );
 
-  const handleInlineEntrySave = createInlineEntrySaveHandler(shifts, handleCreateShift, setActiveInlineEntry, showError);
-  const handlePublish = createPublishHandler(shifts, publishShifts, setLoading, showError, showSuccess);
+  const handleInlineEntrySave = createInlineEntrySaveHandler(
+    shifts,
+    handleCreateShift,
+    setActiveInlineEntry,
+    showError,
+  );
+  const handlePublish = createPublishHandler(
+    shifts,
+    publishShifts,
+    setLoading,
+    showError,
+    showSuccess,
+  );
 
   const currentWeekShifts = getCurrentWeekShifts(shifts, currentWeekStart);
 

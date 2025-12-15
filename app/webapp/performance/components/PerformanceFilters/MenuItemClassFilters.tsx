@@ -14,26 +14,43 @@ interface MenuItemClassFiltersProps {
   onFilterChange: (key: keyof PerformanceFiltersType, value: any) => void;
 }
 
-export function MenuItemClassFilters({ filters, performanceItems, onFilterChange }: MenuItemClassFiltersProps) {
+export function MenuItemClassFilters({
+  filters,
+  performanceItems,
+  onFilterChange,
+}: MenuItemClassFiltersProps) {
   const handleMenuItemClassToggle = (className: string) => {
     const currentClasses = filters.menuItemClass || [];
-    const newClasses = currentClasses.includes(className) ? currentClasses.filter(c => c !== className) : [...currentClasses, className];
+    const newClasses = currentClasses.includes(className)
+      ? currentClasses.filter(c => c !== className)
+      : [...currentClasses, className];
     onFilterChange('menuItemClass', newClasses);
   };
 
-  const classCounts = MENU_ITEM_CLASSES.reduce((acc, className) => {
-    acc[className] = performanceItems.filter(item => item.menu_item_class === className).length;
-    return acc;
-  }, {} as Record<string, number>);
+  const classCounts = MENU_ITEM_CLASSES.reduce(
+    (acc, className) => {
+      acc[className] = performanceItems.filter(item => item.menu_item_class === className).length;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 
-  const hasActiveFilters = (filters.menuItemClass?.length || 0) > 0 || filters.searchTerm.length > 0;
+  const hasActiveFilters =
+    (filters.menuItemClass?.length || 0) > 0 || filters.searchTerm.length > 0;
 
   return (
     <div className="flex flex-wrap items-center gap-1">
       {MENU_ITEM_CLASSES.map(className => {
         const isActive = filters.menuItemClass?.includes(className) || false;
         const count = classCounts[className];
-        const shortLabel = className === "Chef's Kiss" ? 'Kiss' : className === 'Hidden Gem' ? 'Gem' : className === 'Bargain Bucket' ? 'Bargain' : 'Toast';
+        const shortLabel =
+          className === "Chef's Kiss"
+            ? 'Kiss'
+            : className === 'Hidden Gem'
+              ? 'Gem'
+              : className === 'Bargain Bucket'
+                ? 'Bargain'
+                : 'Toast';
         return (
           <button
             key={className}

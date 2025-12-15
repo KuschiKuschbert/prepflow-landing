@@ -365,4 +365,3 @@ This document outlines the best practices implemented for Stripe and Auth0 integ
 - [Stripe API Reference](https://stripe.com/docs/api)
 - [Auth0 Best Practices](https://auth0.com/docs/best-practices)
 - [NextAuth.js Documentation](https://next-auth.js.org/)
-

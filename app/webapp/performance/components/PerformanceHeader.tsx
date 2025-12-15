@@ -11,6 +11,7 @@ import { PerformanceScoreTooltip } from './PerformanceHeader/PerformanceScoreToo
 import { MethodologyTooltip } from './PerformanceHeader/MethodologyTooltip';
 import { calculatePopoverPosition } from './PerformanceHeader/helpers/calculatePopoverPosition';
 import { fetchPerformanceTips } from './PerformanceHeader/helpers/fetchPerformanceTips';
+import { generatePerformanceTips } from '../utils/generatePerformanceTips';
 
 interface PerformanceHeaderProps {
   performanceScore: number;
@@ -43,12 +44,16 @@ export default function PerformanceHeader({
   }, []);
 
   useEffect(() => {
-    fetchPerformanceTips(performanceScore, performanceItems, selectedCountry, generateTips).then(setTips);
+    fetchPerformanceTips(performanceScore, performanceItems, selectedCountry, generateTips).then(
+      setTips,
+    );
   }, [performanceScore, performanceItems, selectedCountry, generateTips]);
 
   useEffect(() => {
     if (showMethodologyTooltip && methodologyButtonRef.current) {
-      setMethodologyTooltipPos(calculatePopoverPosition(methodologyButtonRef.current.getBoundingClientRect()));
+      setMethodologyTooltipPos(
+        calculatePopoverPosition(methodologyButtonRef.current.getBoundingClientRect()),
+      );
     }
   }, [showMethodologyTooltip]);
 
@@ -92,11 +97,30 @@ export default function PerformanceHeader({
     <div className="tablet:flex-row tablet:items-center tablet:gap-4 flex flex-col items-start gap-2">
       <div className="relative text-right" ref={scoreRef}>
         <div className="text-sm text-gray-400">Performance Score</div>
-        <div className={`relative inline-flex cursor-help items-center gap-2 ${performanceScoreColor}`} onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)} role="button" tabIndex={0} aria-label="Performance score with improvement tips" onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setShowTooltip(!showTooltip); } }}>
+        <div
+          className={`relative inline-flex cursor-help items-center gap-2 ${performanceScoreColor}`}
+          onMouseEnter={() => setShowTooltip(true)}
+          onMouseLeave={() => setShowTooltip(false)}
+          role="button"
+          tabIndex={0}
+          aria-label="Performance score with improvement tips"
+          onKeyDown={e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setShowTooltip(!showTooltip);
+            }
+          }}
+        >
           <div className={`text-2xl font-bold`}>{mounted ? performanceScore : 0}/100</div>
           <Sparkles className="h-4 w-4 text-[#29E7CD] transition-opacity hover:opacity-80" />
         </div>
-        <PerformanceScoreTooltip showTooltip={showTooltip} tips={tips} tipsLoading={tipsLoading} onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)} />
+        <PerformanceScoreTooltip
+          showTooltip={showTooltip}
+          tips={tips}
+          tipsLoading={tipsLoading}
+          onMouseEnter={() => setShowTooltip(true)}
+          onMouseLeave={() => setShowTooltip(false)}
+        />
       </div>
     </div>
   );
@@ -109,10 +133,23 @@ export default function PerformanceHeader({
             <span>Performance Analysis</span>
             {metadata && (
               <div className="relative">
-                <button ref={methodologyButtonRef} onClick={() => setShowMethodologyTooltip(!showMethodologyTooltip)} className="flex items-center justify-center rounded-lg p-1 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD]" aria-label="Show methodology information" onMouseEnter={() => setShowMethodologyTooltip(true)} onMouseLeave={() => setShowMethodologyTooltip(false)}>
+                <button
+                  ref={methodologyButtonRef}
+                  onClick={() => setShowMethodologyTooltip(!showMethodologyTooltip)}
+                  className="flex items-center justify-center rounded-lg p-1 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+                  aria-label="Show methodology information"
+                  onMouseEnter={() => setShowMethodologyTooltip(true)}
+                  onMouseLeave={() => setShowMethodologyTooltip(false)}
+                >
                   <Icon icon={Info} size="xs" className="text-[#29E7CD]" />
                 </button>
-                <MethodologyTooltip showMethodologyTooltip={showMethodologyTooltip} methodologyTooltipPos={methodologyTooltipPos} metadata={metadata} onMouseEnter={() => setShowMethodologyTooltip(true)} onMouseLeave={() => setShowMethodologyTooltip(false)} />
+                <MethodologyTooltip
+                  showMethodologyTooltip={showMethodologyTooltip}
+                  methodologyTooltipPos={methodologyTooltipPos}
+                  metadata={metadata}
+                  onMouseEnter={() => setShowMethodologyTooltip(true)}
+                  onMouseLeave={() => setShowMethodologyTooltip(false)}
+                />
               </div>
             )}
           </div>

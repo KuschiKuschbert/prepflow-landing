@@ -40,7 +40,11 @@ function getLocationDisplay(location: string | null, ip: string | null) {
   return 'Unknown';
 }
 
-export function ActiveSessionsSection({ sessions, revokingSession, onRevokeSession }: ActiveSessionsSectionProps) {
+export function ActiveSessionsSection({
+  sessions,
+  revokingSession,
+  onRevokeSession,
+}: ActiveSessionsSectionProps) {
   return (
     <div className="space-y-3 border-t border-[#2a2a2a] pt-4">
       <h3 className="text-lg font-medium">Active Sessions</h3>

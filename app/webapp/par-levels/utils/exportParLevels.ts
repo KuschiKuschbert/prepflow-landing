@@ -18,7 +18,6 @@ export function exportParLevelsToCSV(parLevels: ParLevel[]): void {
   exportToCSV(csvData, CSV_HEADERS, filename);
 }
 
-
 export function exportParLevelsToHTML(parLevels: ParLevel[]): void {
   if (!parLevels || parLevels.length === 0) return;
   const content = formatParLevelsForExport(parLevels);
@@ -28,7 +27,10 @@ export function exportParLevelsToHTML(parLevels: ParLevel[]): void {
     content,
     totalItems: parLevels.length,
   });
-  downloadFile(new Blob([html], { type: 'text/html' }), `par-levels-${new Date().toISOString().split('T')[0]}.html`);
+  downloadFile(
+    new Blob([html], { type: 'text/html' }),
+    `par-levels-${new Date().toISOString().split('T')[0]}.html`,
+  );
 }
 
 export async function exportParLevelsToPDF(parLevels: ParLevel[]): Promise<void> {

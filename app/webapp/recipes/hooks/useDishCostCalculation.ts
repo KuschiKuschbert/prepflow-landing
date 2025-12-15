@@ -42,10 +42,17 @@ export function useDishCostCalculation(
   useEffect(() => {
     const fetchRecipeIngredients = async () => {
       const recipeIds = selectedRecipes.map(sr => sr.recipe_id);
-      if (recipeIds.length === 0) { setRecipeIngredients({}); return; }
+      if (recipeIds.length === 0) {
+        setRecipeIngredients({});
+        return;
+      }
       setLoading(true);
       try {
-        const response = await fetch('/api/recipes/ingredients/batch', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ recipeIds }) });
+        const response = await fetch('/api/recipes/ingredients/batch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ recipeIds }),
+        });
         const data = await response.json();
         if (data.items) setRecipeIngredients(data.items);
       } catch (err) {

@@ -1,11 +1,16 @@
 import { NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { exportUserData } from '@/lib/backup/export';
+import { markDataExported } from '@/lib/data-retention/schedule-deletion';
+import { checkTransferRestriction } from '@/lib/data-transfer/restrictions';
+import { logger } from '@/lib/logger';
 import { NextRequest } from 'next/server';
 
 /**
  * GET /api/account/export
  * Export user data as JSON download (GDPR compliance).
+ * Also marks data as exported in account_deletions table.
+ * Enforces cross-border data transfer restrictions.
  *
  * @returns {Promise<NextResponse>} Export response with JSON file download
  */
@@ -14,8 +19,32 @@ export async function GET(req: NextRequest) {
     const user = await requireAuth(req);
     const userId = user.email;
 
+    // Check transfer restrictions before exporting
+    const restrictionCheck = await checkTransferRestriction(userId, req);
+
+    if (!restrictionCheck.allowed) {
+      logger.warn('[Account Export API] Data export blocked due to transfer restrictions:', {
+        userEmail: userId,
+        countryCode: restrictionCheck.countryCode,
+        reason: restrictionCheck.reason,
+      });
+
+      return NextResponse.json(
+        {
+          error: 'Data export restricted',
+          message: restrictionCheck.reason || 'Data exports to your country are restricted.',
+          requiresConsent: restrictionCheck.requiresConsent,
+          countryCode: restrictionCheck.countryCode,
+        },
+        { status: 403 },
+      );
+    }
+
     // Export user data
     const backupData = await exportUserData(userId);
+
+    // Mark data as exported (for 30-day retention tracking)
+    await markDataExported(userId);
 
     // Convert to JSON string
     const jsonData = JSON.stringify(backupData, null, 2);
@@ -29,6 +58,11 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (error: any) {
+    logger.error('[Account Export API] Failed to export data:', {
+      error: error.message,
+      stack: error.stack,
+    });
+
     return NextResponse.json(
       { error: 'Failed to export data', message: error.message },
       { status: 500 },

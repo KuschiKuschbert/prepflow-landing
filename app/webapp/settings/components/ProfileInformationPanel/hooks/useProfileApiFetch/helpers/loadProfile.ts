@@ -18,7 +18,10 @@ export async function loadProfileHelper(
   try {
     const response = await fetch('/api/user/profile');
     if (response.status === 401) {
-      logger.dev('[ProfileInformationPanel] User not authenticated (401), using session email', { mountId, sessionEmail });
+      logger.dev('[ProfileInformationPanel] User not authenticated (401), using session email', {
+        mountId,
+        sessionEmail,
+      });
       if (sessionEmail) {
         setProfile({
           email: sessionEmail,
@@ -37,7 +40,11 @@ export async function loadProfileHelper(
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       const errorMessage = errorData.error || errorData.message || 'Failed to load profile';
-      logger.error('[ProfileInformationPanel] API error:', { status: response.status, error: errorMessage, mountId });
+      logger.error('[ProfileInformationPanel] API error:', {
+        status: response.status,
+        error: errorMessage,
+        mountId,
+      });
       showError(`Failed to load profile: ${errorMessage}`);
       setLoading(false);
       isLoadingRef.current = false;
@@ -50,7 +57,10 @@ export async function loadProfileHelper(
       cacheData('user_profile', profileData, 5 * 60 * 1000);
     }
   } catch (error) {
-    logger.error('[ProfileInformationPanel] Network or unexpected error:', { error: error instanceof Error ? error.message : String(error), mountId });
+    logger.error('[ProfileInformationPanel] Network or unexpected error:', {
+      error: error instanceof Error ? error.message : String(error),
+      mountId,
+    });
     showError('Failed to load profile information. Please check your connection.');
   } finally {
     setLoading(false);

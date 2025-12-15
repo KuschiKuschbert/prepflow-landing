@@ -40,7 +40,6 @@ export function exportPerformanceDataToCSV(performanceItems: any[]): void {
   exportToCSV(csvData, CSV_HEADERS, filename);
 }
 
-
 /**
  * Parse CSV sales data using PapaParse.
  *

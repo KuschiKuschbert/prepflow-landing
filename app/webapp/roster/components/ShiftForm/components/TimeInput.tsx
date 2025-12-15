@@ -13,7 +13,14 @@ interface TimeInputProps {
   onClearErrors?: () => void;
 }
 
-export function TimeInput({ label, value, onChange, error, disabled, onClearErrors }: TimeInputProps) {
+export function TimeInput({
+  label,
+  value,
+  onChange,
+  error,
+  disabled,
+  onClearErrors,
+}: TimeInputProps) {
   return (
     <FormField label={label} icon={Clock} error={error}>
       <input

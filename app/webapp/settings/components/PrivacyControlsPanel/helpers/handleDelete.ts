@@ -12,7 +12,8 @@ export async function handleDeleteHelper(
 ): Promise<void> {
   const confirmed = await showConfirm({
     title: 'Delete Your Account?',
-    message: 'Are you sure you want to delete your account? This action can&apos;t be undone. All your data will be permanently deleted after a 7-day grace period. You can cancel this request anytime before then.',
+    message:
+      'Are you sure you want to delete your account? This action can&apos;t be undone. All your data will be permanently deleted after a 7-day grace period. You can cancel this request anytime before then.',
     variant: 'danger',
     confirmLabel: 'Yes, Delete My Account',
     cancelLabel: 'Cancel',

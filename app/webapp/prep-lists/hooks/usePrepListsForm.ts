@@ -55,11 +55,41 @@ export function usePrepListsForm({
         setError,
       });
     },
-    [formData, editingPrepList, userId, prepLists, setPrepLists, showError, showSuccess, resetForm, refetchPrepLists, setError],
+    [
+      formData,
+      editingPrepList,
+      userId,
+      prepLists,
+      setPrepLists,
+      showError,
+      showSuccess,
+      resetForm,
+      refetchPrepLists,
+      setError,
+    ],
   );
-  const addItem = useCallback(() => setFormData(prev => ({ ...prev, items: [...prev.items, { ingredientId: '', quantity: '', unit: '', notes: '' }] })), []);
-  const removeItem = useCallback((index: number) => setFormData(prev => ({ ...prev, items: prev.items.filter((_, i) => i !== index) })), []);
-  const updateItem = useCallback((index: number, field: string, value: string) => setFormData(prev => { const newItems = [...prev.items]; newItems[index] = { ...newItems[index], [field]: value }; return { ...prev, items: newItems }; }), []);
+  const addItem = useCallback(
+    () =>
+      setFormData(prev => ({
+        ...prev,
+        items: [...prev.items, { ingredientId: '', quantity: '', unit: '', notes: '' }],
+      })),
+    [],
+  );
+  const removeItem = useCallback(
+    (index: number) =>
+      setFormData(prev => ({ ...prev, items: prev.items.filter((_, i) => i !== index) })),
+    [],
+  );
+  const updateItem = useCallback(
+    (index: number, field: string, value: string) =>
+      setFormData(prev => {
+        const newItems = [...prev.items];
+        newItems[index] = { ...newItems[index], [field]: value };
+        return { ...prev, items: newItems };
+      }),
+    [],
+  );
   const handleEdit = useCallback((prepList: PrepList) => {
     setEditingPrepList(prepList);
     setFormData({

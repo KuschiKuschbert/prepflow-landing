@@ -30,4 +30,3 @@ export function RecipeSourcesList({ recipeSources }: RecipeSourcesListProps) {
     </div>
   );
 }
-

@@ -51,7 +51,9 @@ export function formatGeneratedPrepListForPrint(
         section.prepTechniques.specialTechniques.length > 0);
     if (
       section.aggregatedIngredients.length === 0 &&
-      (!includeInstructions || !section.prepInstructions || section.prepInstructions.length === 0) &&
+      (!includeInstructions ||
+        !section.prepInstructions ||
+        section.prepInstructions.length === 0) &&
       !hasPrepTechniques
     ) {
       return;

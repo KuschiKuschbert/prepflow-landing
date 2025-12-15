@@ -107,9 +107,7 @@ export function CSVImportPreview<T>({
                 <div className="flex-1">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">{formatEntityForPreview(entity, index)}</div>
-                    {hasError && (
-                      <div className="ml-2 text-xs text-red-400">{errorMessage}</div>
-                    )}
+                    {hasError && <div className="ml-2 text-xs text-red-400">{errorMessage}</div>}
                   </div>
                 </div>
               </div>

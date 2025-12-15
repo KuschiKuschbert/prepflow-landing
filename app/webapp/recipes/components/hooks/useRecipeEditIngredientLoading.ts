@@ -52,7 +52,14 @@ export function useRecipeEditIngredientLoading({
         const data = await response.json();
         const recipeIngredients = data.items || [];
         if (recipeIngredients.length > 0) {
-          setCalculations(processRecipeIngredients(recipeIngredients, recipe, ingredients, convertIngredientQuantityRef.current));
+          setCalculations(
+            processRecipeIngredients(
+              recipeIngredients,
+              recipe,
+              ingredients,
+              convertIngredientQuantityRef.current,
+            ),
+          );
         } else {
           setCalculations([]);
         }

@@ -57,4 +57,3 @@ export function useButtonAnimations({
     setContainerWidths,
   );
 }
-

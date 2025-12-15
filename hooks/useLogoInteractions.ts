@@ -11,29 +11,48 @@ export const useLogoInteractions = () => {
   const logoHoldTimerRef = useRef<NodeJS.Timeout | null>(null);
   const logoHoldStartRef = useRef<number | null>(null);
   const preventNavigationRef = useRef<boolean>(false);
-  const { handleLogoInteraction } = createLogoHandlers(logoClicks, setLogoClicks, setShowTomatoToss, preventNavigationRef, clickTimerRef);
-  const { handleLogoMouseDown, handleLogoMouseUp, handleLogoMouseLeave } = createMouseHandlers(logoHoldTimerRef, logoHoldStartRef, setShowAchievements);
-  const handleLogoClick = useCallback((e: React.MouseEvent) => {
-    const shouldPrevent = handleLogoInteraction(true);
-    if (shouldPrevent) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  }, [handleLogoInteraction]);
-  const handleLogoTouchStart = useCallback((e: React.TouchEvent) => {
-    if (logoClicks >= 8) {
-      preventNavigationRef.current = true;
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  }, [logoClicks]);
-  const handleLogoTouchEnd = useCallback((e: React.TouchEvent) => {
-    const shouldPrevent = handleLogoInteraction(true);
-    if (shouldPrevent) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  }, [handleLogoInteraction]);
+  const { handleLogoInteraction } = createLogoHandlers(
+    logoClicks,
+    setLogoClicks,
+    setShowTomatoToss,
+    preventNavigationRef,
+    clickTimerRef,
+  );
+  const { handleLogoMouseDown, handleLogoMouseUp, handleLogoMouseLeave } = createMouseHandlers(
+    logoHoldTimerRef,
+    logoHoldStartRef,
+    setShowAchievements,
+  );
+  const handleLogoClick = useCallback(
+    (e: React.MouseEvent) => {
+      const shouldPrevent = handleLogoInteraction(true);
+      if (shouldPrevent) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    },
+    [handleLogoInteraction],
+  );
+  const handleLogoTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      if (logoClicks >= 8) {
+        preventNavigationRef.current = true;
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    },
+    [logoClicks],
+  );
+  const handleLogoTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      const shouldPrevent = handleLogoInteraction(true);
+      if (shouldPrevent) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    },
+    [handleLogoInteraction],
+  );
   useEffect(() => setupKeyboardHandler(setShowAchievements), []);
   useEffect(() => createCleanupHandler(clickTimerRef, logoHoldTimerRef), []);
   return {

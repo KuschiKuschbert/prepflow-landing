@@ -138,6 +138,36 @@ export default async function middleware(req: NextRequest) {
       }
       return NextResponse.redirect(new URL('/not-authorized', origin));
     }
+
+    // Detect and store user country and EU status (non-blocking)
+    if (session.user.email) {
+      try {
+        const { detectAndStoreUserCountry } = await import('@/lib/auth-user-sync');
+        const { detectAndStoreEUStatus } = await import('@/lib/geo/eu-detection');
+        // Run asynchronously to avoid blocking the request
+        Promise.all([
+          detectAndStoreUserCountry(session.user.email, req.headers).catch(err => {
+            logger.warn('[Middleware] Failed to detect/store country:', {
+              error: err instanceof Error ? err.message : String(err),
+              email: session.user.email,
+            });
+          }),
+          detectAndStoreEUStatus(session.user.email, req.headers).catch(err => {
+            logger.warn('[Middleware] Failed to detect/store EU status:', {
+              error: err instanceof Error ? err.message : String(err),
+              email: session.user.email,
+            });
+          }),
+        ]).catch(() => {
+          // Ignore errors - don't block request
+        });
+      } catch (error) {
+        // Don't fail request if detection fails
+        logger.warn('[Middleware] Error importing detection utilities:', {
+          error: error instanceof Error ? error.message : String(error),
+        });
+      }
+    }
   }
 
   // Allow all other routes (landing page, etc.)

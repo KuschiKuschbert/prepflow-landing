@@ -7,7 +7,7 @@ import {
   loadDishIngredients,
   loadRecipeIngredients,
 } from '../../useRecipeDishIngredientLoading.helpers';
-import type { RecipeDishItem } from '../useRecipeDishEditorData';
+import type { RecipeDishItem } from '../../useRecipeDishEditorData';
 
 interface LoadIngredientsForItemParams {
   selectedItem: RecipeDishItem;

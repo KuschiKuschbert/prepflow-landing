@@ -82,7 +82,24 @@ export function FoodImageGenerator({
   };
 
   const handleGenerate = async (selectedMethods: PlatingMethodOption[]) => {
-    await handleGenerateHelper(endpoint, selectedMethods, setIsGenerating, setError, showError, showSuccess, setGeneratedClassic, setGeneratedModern, setGeneratedRustic, setGeneratedMinimalist, setGeneratedPlatingMethods, onImagesGenerated, generatedClassic, generatedModern, generatedRustic, generatedMinimalist);
+    await handleGenerateHelper(
+      endpoint,
+      selectedMethods,
+      setIsGenerating,
+      setError,
+      showError,
+      showSuccess,
+      setGeneratedClassic,
+      setGeneratedModern,
+      setGeneratedRustic,
+      setGeneratedMinimalist,
+      setGeneratedPlatingMethods,
+      generatedClassic,
+      generatedModern,
+      generatedRustic,
+      generatedMinimalist,
+      onImagesGenerated,
+    );
   };
 
   if (compact) {

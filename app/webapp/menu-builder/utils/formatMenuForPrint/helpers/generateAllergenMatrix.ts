@@ -51,7 +51,9 @@ export function generateAllergenMatrix(menuItems: MenuItem[]): string {
       } else if (isRecipe && item.recipes?.allergens) {
         allergens = Array.isArray(item.recipes.allergens) ? item.recipes.allergens : [];
       }
-      allergens = consolidateAllergens(allergens).filter(code => VALID_ALLERGEN_CODES.includes(code));
+      allergens = consolidateAllergens(allergens).filter(code =>
+        VALID_ALLERGEN_CODES.includes(code),
+      );
       const isVegetarian =
         item.is_vegetarian ?? (isDish ? item.dishes?.is_vegetarian : item.recipes?.is_vegetarian);
       const isVegan = item.is_vegan ?? (isDish ? item.dishes?.is_vegan : item.recipes?.is_vegan);

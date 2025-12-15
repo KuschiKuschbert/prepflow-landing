@@ -34,7 +34,11 @@ export const errorMessages: Record<string, ErrorMessage> = {
     title: 'Verification Error',
     message:
       'The verification token has expired or has already been used. Please try signing in again.',
-    troubleshooting: ['Try signing in again', 'Clear your browser cookies', 'Use a different browser'],
+    troubleshooting: [
+      'Try signing in again',
+      'Clear your browser cookies',
+      'Use a different browser',
+    ],
   },
   Callback: {
     title: 'Callback Error',
@@ -112,7 +116,7 @@ export const errorMessages: Record<string, ErrorMessage> = {
   Default: {
     title: 'Authentication Error',
     message:
-      "Something went wrong during sign-in. Give it another go, or reach out if it keeps happening.",
+      'Something went wrong during sign-in. Give it another go, or reach out if it keeps happening.',
     troubleshooting: [
       'Try signing in again',
       'Clear your browser cookies',

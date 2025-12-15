@@ -13,7 +13,7 @@ export async function fetchHiddenFlags(): Promise<{ flags: any[] } | NextRespons
       {
         success: false,
         error: 'DATABASE_ERROR',
-        message: "Data connection not available",
+        message: 'Data connection not available',
         flags: [],
       },
       { status: 500 },

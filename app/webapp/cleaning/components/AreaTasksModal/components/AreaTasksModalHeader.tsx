@@ -53,4 +53,3 @@ export function AreaTasksModalHeader({ area, onClose, onCreateTask }: AreaTasksM
     </div>
   );
 }
-

@@ -38,4 +38,3 @@ export function GridFilterBar({ gridFilter, onFilterChange }: GridFilterBarProps
     </div>
   );
 }
-

@@ -10,8 +10,19 @@ export function generateGeneralInstructions(
   analysis: IngredientAnalysis,
 ): string {
   const { hasProtein, hasVegetables, hasDairy } = analysis;
-  const proteinName = ingredients.find(ri => ri.ingredients.ingredient_name.toLowerCase().includes('beef') || ri.ingredients.ingredient_name.toLowerCase().includes('chicken') || ri.ingredients.ingredient_name.toLowerCase().includes('mince'))?.ingredients.ingredient_name || 'main protein';
-  const dairyName = ingredients.find(ri => ri.ingredients.ingredient_name.toLowerCase().includes('cheese') || ri.ingredients.ingredient_name.toLowerCase().includes('milk'))?.ingredients.ingredient_name || 'dairy products';
+  const proteinName =
+    ingredients.find(
+      ri =>
+        ri.ingredients.ingredient_name.toLowerCase().includes('beef') ||
+        ri.ingredients.ingredient_name.toLowerCase().includes('chicken') ||
+        ri.ingredients.ingredient_name.toLowerCase().includes('mince'),
+    )?.ingredients.ingredient_name || 'main protein';
+  const dairyName =
+    ingredients.find(
+      ri =>
+        ri.ingredients.ingredient_name.toLowerCase().includes('cheese') ||
+        ri.ingredients.ingredient_name.toLowerCase().includes('milk'),
+    )?.ingredients.ingredient_name || 'dairy products';
   return `**${recipe.recipe_name} Preparation:**
 **Mise en Place:**
 1. Gather all ingredients and equipment

@@ -13,11 +13,26 @@ export function buildPricingCallbacks({
   setRecipePrices,
   debounceTimerRef,
 }: {
-  calculateRecommendedPrice: (recipe: Recipe, ingredients: RecipeIngredientWithDetails[]) => RecipePriceData | null;
+  calculateRecommendedPrice: (
+    recipe: Recipe,
+    ingredients: RecipeIngredientWithDetails[],
+  ) => RecipePriceData | null;
   inFlightRequestsRef: React.MutableRefObject<Map<string, AbortController>>;
-  batchRequestCacheRef: React.MutableRefObject<Map<string, Promise<Record<string, RecipeIngredientWithDetails[]>>>>;
-  setRecipePrices: (prices: Record<string, RecipePriceData> | ((prev: Record<string, RecipePriceData>) => Record<string, RecipePriceData>)) => void;
+  batchRequestCacheRef: React.MutableRefObject<
+    Map<string, Promise<Record<string, RecipeIngredientWithDetails[]>>>
+  >;
+  setRecipePrices: (
+    prices:
+      | Record<string, RecipePriceData>
+      | ((prev: Record<string, RecipePriceData>) => Record<string, RecipePriceData>),
+  ) => void;
   debounceTimerRef: React.MutableRefObject<NodeJS.Timeout | null>;
 }) {
-  return createPricingCallbacksHelper(calculateRecommendedPrice, inFlightRequestsRef, batchRequestCacheRef, setRecipePrices, debounceTimerRef);
+  return createPricingCallbacksHelper(
+    calculateRecommendedPrice,
+    inFlightRequestsRef,
+    batchRequestCacheRef,
+    setRecipePrices,
+    debounceTimerRef,
+  );
 }

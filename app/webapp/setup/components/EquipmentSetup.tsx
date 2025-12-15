@@ -170,7 +170,7 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
         setEquipment([]);
         setEquipmentResult(`Successfully deleted all ${equipment.length} pieces of equipment!`);
       } else {
-        setEquipmentError("Some equipment failed to delete. Give it another go, chef.");
+        setEquipmentError('Some equipment failed to delete. Give it another go, chef.');
       }
     } catch (error) {
       setEquipmentError('Network error occurred');

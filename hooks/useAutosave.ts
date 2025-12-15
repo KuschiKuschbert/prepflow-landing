@@ -75,7 +75,20 @@ export function useAutosave({
     isInitialLoadRef.current = false;
   }, [entityType, entityId, userId, enabled, onSave]);
   useEffect(() => {
-    handleDataChangeHelper(dataString, previousDataRef, enabled, entityId, isInitialLoadRef, entityType, data, userId, debounceMs, debounceTimerRef, performSave, setHasUnsavedChanges);
+    handleDataChangeHelper(
+      dataString,
+      previousDataRef,
+      enabled,
+      entityId,
+      isInitialLoadRef,
+      entityType,
+      data,
+      userId,
+      debounceMs,
+      debounceTimerRef,
+      performSave,
+      setHasUnsavedChanges,
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataString, entityType, entityId, userId, debounceMs, enabled, performSave]);
 

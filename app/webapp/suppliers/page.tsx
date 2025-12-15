@@ -18,9 +18,9 @@ import { SuppliersTabs } from './components/SuppliersTabs';
 import { useSuppliersData } from './hooks/useSuppliersData';
 import { useSuppliersForms } from './hooks/useSuppliersForms';
 import {
-    exportSuppliersToCSV,
-    exportSuppliersToHTML,
-    exportSuppliersToPDF,
+  exportSuppliersToCSV,
+  exportSuppliersToHTML,
+  exportSuppliersToPDF,
 } from './utils/exportSuppliers';
 import { printSuppliers } from './utils/printSuppliers';
 
@@ -219,7 +219,7 @@ export default function SuppliersPage() {
         }, 2000);
       } catch (err) {
         logger.error('[Suppliers Import] Import error:', err);
-        showError("Failed to import suppliers. Give it another go, chef.");
+        showError('Failed to import suppliers. Give it another go, chef.');
         setImportProgress(undefined);
       } finally {
         setImportLoading(false);

@@ -4,9 +4,7 @@
  * Admin-only endpoint for batch processing ingredients without allergens
  */
 
-import {
-    enrichIngredientWithAllergens
-} from '@/lib/allergens/ai-allergen-detection';
+import { enrichIngredientWithAllergens } from '@/lib/allergens/ai-allergen-detection';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
@@ -41,7 +39,7 @@ export async function POST(request: NextRequest) {
     if (!checkRateLimit(userId)) {
       return NextResponse.json(
         ApiErrorHandler.createError(
-          "Rate limit exceeded. Give it another go in a moment, chef.",
+          'Rate limit exceeded. Give it another go in a moment, chef.',
           'RATE_LIMIT_ERROR',
           429,
         ),

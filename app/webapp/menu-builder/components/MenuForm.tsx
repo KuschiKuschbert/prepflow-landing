@@ -51,7 +51,9 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
       const result = await response.json();
 
       if (!response.ok) {
-        setError(result.error || result.message || "Failed to save menu. Give it another go, chef.");
+        setError(
+          result.error || result.message || 'Failed to save menu. Give it another go, chef.',
+        );
         setLoading(false);
         return;
       }
@@ -59,7 +61,7 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
       if (result.success && result.menu) {
         onSave(result.menu);
       } else {
-        setError("Failed to save menu. Give it another go, chef.");
+        setError('Failed to save menu. Give it another go, chef.');
         setLoading(false);
       }
     } catch (err) {

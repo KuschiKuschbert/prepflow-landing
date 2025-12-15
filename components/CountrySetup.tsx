@@ -64,8 +64,14 @@ export default function CountrySetup() {
         break;
     }
   };
-  const formatPrice = (amount: number, includeTax: boolean = true) => formatCurrencyWithTax(amount, selectedCountry, includeTax);
-  const formatDate = (date: Date) => new Intl.DateTimeFormat(countryConfig.locale, { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
+  const formatPrice = (amount: number, includeTax: boolean = true) =>
+    formatCurrencyWithTax(amount, selectedCountry, includeTax);
+  const formatDate = (date: Date) =>
+    new Intl.DateTimeFormat(countryConfig.locale, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(date);
   const formatNumber = (num: number) => new Intl.NumberFormat(countryConfig.locale).format(num);
 
   return (

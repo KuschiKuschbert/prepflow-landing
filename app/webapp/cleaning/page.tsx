@@ -24,9 +24,9 @@ import { useCleaningModals } from './hooks/useCleaningModals';
 import { useCleaningPageData } from './hooks/useCleaningPageData';
 import { useStatsDates } from './hooks/useStatsDates';
 import {
-    exportCleaningScheduleToCSV,
-    exportCleaningScheduleToHTML,
-    exportCleaningScheduleToPDF,
+  exportCleaningScheduleToCSV,
+  exportCleaningScheduleToHTML,
+  exportCleaningScheduleToPDF,
 } from './utils/exportCleaningSchedules';
 import { printCleaningSchedule } from './utils/printCleaningSchedule';
 
@@ -164,7 +164,7 @@ export default function CleaningRosterPage() {
       showSuccess('Cleaning schedule opened for printing');
     } catch (err) {
       logger.error('[Cleaning Schedule] Print error:', err);
-      showError("Failed to print cleaning schedule. Give it another go, chef.");
+      showError('Failed to print cleaning schedule. Give it another go, chef.');
     }
   };
 
@@ -192,7 +192,9 @@ export default function CleaningRosterPage() {
       }
     } catch (err) {
       logger.error(`[Cleaning Schedule] Export error (${format}):`, err);
-      showError(`Failed to export cleaning schedule to ${format.toUpperCase()}. Give it another go, chef.`);
+      showError(
+        `Failed to export cleaning schedule to ${format.toUpperCase()}. Give it another go, chef.`,
+      );
     } finally {
       setExportLoading(null);
     }

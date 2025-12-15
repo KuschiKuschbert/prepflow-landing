@@ -1,6 +1,6 @@
 import {
-    enableGoogleConnectionForApp,
-    verifyGoogleConnection,
+  enableGoogleConnectionForApp,
+  verifyGoogleConnection,
 } from '@/lib/auth0-google-connection';
 import { getSocialConnections, verifyCallbackUrls } from '@/lib/auth0-management';
 import { logger } from '@/lib/logger';
@@ -88,7 +88,8 @@ export async function POST() {
     const app = appResponse.data || (appResponse as any);
 
     // Build required URLs (Auth0 SDK uses /api/auth/callback, not /api/auth/callback/auth0)
-    const { requiredCallbacks, requiredLogoutUrls, requiredWebOrigins } = buildRequiredUrls(baseUrl);
+    const { requiredCallbacks, requiredLogoutUrls, requiredWebOrigins } =
+      buildRequiredUrls(baseUrl);
 
     // Merge with existing URLs (avoid duplicates)
     const currentCallbacks = (app.callbacks || []) as string[];

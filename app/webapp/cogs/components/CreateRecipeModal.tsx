@@ -57,7 +57,7 @@ export function CreateRecipeModal({
         onSuccess(result.id, result.recipe_name);
         onClose();
       } else {
-        setError("Failed to create recipe. Give it another go, chef.");
+        setError('Failed to create recipe. Give it another go, chef.');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create recipe');

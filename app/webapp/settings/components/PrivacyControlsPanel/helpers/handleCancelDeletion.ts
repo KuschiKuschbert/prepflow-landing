@@ -11,7 +11,8 @@ export async function handleCancelDeletionHelper(
 ): Promise<void> {
   const confirmed = await showConfirm({
     title: 'Cancel Account Deletion?',
-    message: 'Are you sure you want to cancel the account deletion request? Your account will remain active.',
+    message:
+      'Are you sure you want to cancel the account deletion request? Your account will remain active.',
     variant: 'info',
     confirmLabel: 'Yes, Cancel Deletion',
     cancelLabel: 'Keep Deletion Request',

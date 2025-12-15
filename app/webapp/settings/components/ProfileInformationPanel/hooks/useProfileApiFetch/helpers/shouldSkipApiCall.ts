@@ -9,7 +9,9 @@ export function shouldSkipApiCall(
   initialDataLoadedRef: React.MutableRefObject<boolean>,
   setLoading: (loading: boolean) => void,
 ): { skip: boolean; reason?: string } {
-  const userHasModified = userHasModifiedRef.current || (typeof window !== 'undefined' && sessionStorage.getItem(USER_MODIFIED_KEY) === 'true');
+  const userHasModified =
+    userHasModifiedRef.current ||
+    (typeof window !== 'undefined' && sessionStorage.getItem(USER_MODIFIED_KEY) === 'true');
   if (userHasModified) return { skip: true, reason: 'user has modified form' };
   if (isLoadingRef.current) return { skip: true, reason: 'already loading' };
   if (cachedProfile) {

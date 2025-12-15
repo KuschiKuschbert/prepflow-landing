@@ -66,7 +66,9 @@ export function useMenuHandlers({
   );
 
   const handleMenuUpdated = useCallback(() => {
-    logger.dev('[MenuBuilderClient] handleMenuUpdated CALLED - Calling fetchMenus with updateSelected=true');
+    logger.dev(
+      '[MenuBuilderClient] handleMenuUpdated CALLED - Calling fetchMenus with updateSelected=true',
+    );
     fetchMenus(true);
   }, [fetchMenus]);
 

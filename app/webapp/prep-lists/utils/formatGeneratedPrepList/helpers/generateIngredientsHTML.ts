@@ -4,7 +4,10 @@
 import { escapeHtml } from '@/lib/exports/template-utils';
 import type { SectionData } from '../../../types';
 
-export function generateIngredientsHTML(section: SectionData, variant: 'default' | 'kitchen'): string {
+export function generateIngredientsHTML(
+  section: SectionData,
+  variant: 'default' | 'kitchen',
+): string {
   if (section.aggregatedIngredients.length === 0) return '';
 
   if (variant === 'kitchen') {

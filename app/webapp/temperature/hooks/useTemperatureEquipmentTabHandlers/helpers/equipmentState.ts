@@ -13,7 +13,13 @@ export function useEquipmentState() {
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [newEquipment, setNewEquipment] = useState({ name: '', equipmentType: '', location: '', minTemp: null as number | null, maxTemp: null as number | null });
+  const [newEquipment, setNewEquipment] = useState({
+    name: '',
+    equipmentType: '',
+    location: '',
+    minTemp: null as number | null,
+    maxTemp: null as number | null,
+  });
   const [showCreateForm, setShowCreateForm] = useState(false);
   return {
     editingEquipment,

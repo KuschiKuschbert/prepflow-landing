@@ -53,21 +53,33 @@ export function useRosterDragAndDrop({
     [shifts, setDraggedShift, setActiveShiftId],
   );
 
-  const handleDragEnd = useCallback(async (event: DragEndEvent) => {
-    const { active, over } = event;
-    setActiveShiftId(null);
-    setDraggedShift(null);
-    setDropTarget(null);
-    if (!over || !draggedShift) return;
-    const dropData = over.data.current;
-    if (!dropData || dropData.type !== 'roster-cell') return;
-    const { employeeId, date } = dropData;
-    const updatedShift = buildUpdatedShift(draggedShift, employeeId, date);
-    const employee = employees.find(e => e.id === employeeId);
-    if (employee) validateAndWarn(updatedShift, employee);
-    updateShift(draggedShift.id, updatedShift);
-    showSuccess('Shift moved successfully');
-  }, [draggedShift, employees, updateShift, validateAndWarn, showSuccess, setDraggedShift, setDropTarget, setActiveShiftId]);
+  const handleDragEnd = useCallback(
+    async (event: DragEndEvent) => {
+      const { active, over } = event;
+      setActiveShiftId(null);
+      setDraggedShift(null);
+      setDropTarget(null);
+      if (!over || !draggedShift) return;
+      const dropData = over.data.current;
+      if (!dropData || dropData.type !== 'roster-cell') return;
+      const { employeeId, date } = dropData;
+      const updatedShift = buildUpdatedShift(draggedShift, employeeId, date);
+      const employee = employees.find(e => e.id === employeeId);
+      if (employee) validateAndWarn(updatedShift, employee);
+      updateShift(draggedShift.id, updatedShift);
+      showSuccess('Shift moved successfully');
+    },
+    [
+      draggedShift,
+      employees,
+      updateShift,
+      validateAndWarn,
+      showSuccess,
+      setDraggedShift,
+      setDropTarget,
+      setActiveShiftId,
+    ],
+  );
 
   const handleDragOver = useCallback(
     (event: any) => {

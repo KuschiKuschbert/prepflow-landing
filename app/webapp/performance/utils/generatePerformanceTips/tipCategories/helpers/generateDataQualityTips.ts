@@ -1,7 +1,8 @@
 /**
  * Generate tips for data quality based on sales data coverage.
  */
-import type { PerformanceItem, PerformanceTip } from '../../../../types';
+import type { PerformanceItem } from '../../../../types';
+import type { PerformanceTip } from '../../tipCategories';
 
 export function generateDataQualityTips(performanceItems: PerformanceItem[]): PerformanceTip[] {
   const tips: PerformanceTip[] = [];
