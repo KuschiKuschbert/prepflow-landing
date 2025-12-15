@@ -2,7 +2,7 @@
  * Handle click outside panel to close.
  */
 export function createClickOutsideHandler(
-  panelRef: React.RefObject<HTMLDivElement>,
+  panelRef: React.RefObject<HTMLDivElement | null>,
   onClose: () => void,
 ): (event: MouseEvent | TouchEvent) => void {
   return (event: MouseEvent | TouchEvent) => {
