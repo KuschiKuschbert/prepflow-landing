@@ -88,7 +88,7 @@ export function createEquipmentHandlersHelper(
         await onUpdateEquipment(equipmentId, { is_active: !currentStatus });
       } catch (error) {}
     },
-    generateSampleData: () =>
+    handleGenerateSampleData: () =>
       handleGenerateSampleData(equipment, showError, showSuccess, setIsGenerating, onRefreshLogs),
   };
 }

@@ -23,10 +23,14 @@ export async function handleExportHelper(
   try {
     setExportLoading(format);
     if (format === 'csv') {
-      exportTemperatureLogsToCSV({ logs: logsToExport, equipment, dateRange });
+      exportTemperatureLogsToCSV({
+        logs: logsToExport,
+        equipment,
+        dateRange: dateRange ?? undefined,
+      });
       showSuccess('Temperature logs exported as CSV');
     } else if (format === 'pdf') {
-      printTemperatureLogs({ logs: logsToExport, equipment, dateRange });
+      printTemperatureLogs({ logs: logsToExport, equipment, dateRange: dateRange ?? undefined });
       showSuccess(
         "Temperature logs opened for printing. Use your browser's print dialog to save as PDF.",
       );

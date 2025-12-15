@@ -2,7 +2,7 @@
  * Build image map from all image sources.
  */
 import { normalizeImageUrl } from './normalizeImageUrl';
-import type { PlatingMethod } from '../FoodImageDisplay';
+import type { PlatingMethod } from '../../FoodImageDisplay';
 
 export function buildImageMap(
   imageUrl: string | null | undefined,

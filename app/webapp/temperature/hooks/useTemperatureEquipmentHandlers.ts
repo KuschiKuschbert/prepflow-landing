@@ -4,6 +4,7 @@ import { handleQuickTempLog as handleQuickTempLogHelper } from './useTemperature
 import { handleRefreshLogs as handleRefreshLogsHelper } from './useTemperatureEquipmentHandlers/refreshLogs';
 import { useOnTemperatureLogged } from '@/lib/personality/hooks';
 import { createEquipmentHandlers } from './useTemperatureEquipmentHandlers/helpers/createHandlers';
+import type { TemperatureEquipment } from '../types';
 interface UseTemperatureEquipmentHandlersProps {
   activeTab: 'logs' | 'equipment' | 'analytics';
   fetchAllLogs: (limit?: number, forceRefresh?: boolean) => Promise<void>;
@@ -45,7 +46,8 @@ export function useTemperatureEquipmentHandlers({
       onTemperatureLogged();
     }
   };
-  const { handleUpdateEquipment, handleCreateEquipment, handleDeleteEquipment } = createEquipmentHandlers(equipment, setEquipment, fetchEquipment, showError, showSuccess);
+  const { handleUpdateEquipment, handleCreateEquipment, handleDeleteEquipment } =
+    createEquipmentHandlers(equipment, setEquipment, fetchEquipment, showError, showSuccess);
   const handleRefreshLogs = async () => {
     await handleRefreshLogsHelper({
       fetchAllLogs,
@@ -54,5 +56,12 @@ export function useTemperatureEquipmentHandlers({
       equipment,
     });
   };
-  return { quickTempLoading, handleQuickTempLog, handleUpdateEquipment, handleCreateEquipment, handleDeleteEquipment, handleRefreshLogs };
+  return {
+    quickTempLoading,
+    handleQuickTempLog,
+    handleUpdateEquipment,
+    handleCreateEquipment,
+    handleDeleteEquipment,
+    handleRefreshLogs,
+  };
 }

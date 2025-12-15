@@ -2,7 +2,7 @@
  * Utilities for handling drag end events.
  */
 import { DragEndEvent } from '@dnd-kit/core';
-import { moveItemToCategory } from './helpers/moveItemToCategory';
+import { moveItemToCategory } from './dragEnd/helpers/moveItemToCategory';
 import type { MenuItem } from '../../types';
 import { reorderMenuItems } from '../../utils/menuDragDropHelpers';
 

@@ -28,13 +28,21 @@ export function useTemperatureExport({
   const handlePrint = () => {
     const logsToExport = logs.length > 0 ? logs : allLogs;
     const dateRange = calculateDateRange(logsToExport, selectedDate);
-    handlePrintHelper(logsToExport, equipment, dateRange, showSuccess, showError);
+    handlePrintHelper(logsToExport, equipment, dateRange ?? null, showSuccess, showError);
   };
 
   const handleExport = async (format: ExportFormat) => {
     const logsToExport = logs.length > 0 ? logs : allLogs;
     const dateRange = calculateDateRange(logsToExport, selectedDate);
-    await handleExportHelper(format, logsToExport, equipment, dateRange, setExportLoading, showSuccess, showError);
+    await handleExportHelper(
+      format,
+      logsToExport,
+      equipment,
+      dateRange ?? null,
+      setExportLoading,
+      showSuccess,
+      showError,
+    );
   };
 
   return {

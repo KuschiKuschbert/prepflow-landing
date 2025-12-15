@@ -2,15 +2,19 @@
  * Focus trap helper for input dialog.
  */
 export function setupInputDialogFocusTrap(
-  dialogRef: React.RefObject<HTMLDivElement>,
-  inputRef: React.RefObject<HTMLInputElement>,
+  dialogRef: React.RefObject<HTMLDivElement | null>,
+  inputRef: React.RefObject<HTMLInputElement | null>,
   onCancel: () => void,
 ): () => void {
   if (!dialogRef.current) return () => {};
   const triggerRef = document.activeElement as HTMLElement;
   const getFocusableElements = (): HTMLElement[] => {
     if (!dialogRef.current) return [];
-    return Array.from(dialogRef.current.querySelectorAll('button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])')) as HTMLElement[];
+    return Array.from(
+      dialogRef.current.querySelectorAll(
+        'button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      ),
+    ) as HTMLElement[];
   };
   const focusableElements = getFocusableElements();
   const firstElement = focusableElements[0];

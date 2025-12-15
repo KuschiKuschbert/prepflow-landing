@@ -14,7 +14,7 @@ export function handlePrintHelper(
   showError: (message: string) => void,
 ): void {
   try {
-    printTemperatureLogs({ logs: logsToExport, equipment, dateRange });
+    printTemperatureLogs({ logs: logsToExport, equipment, dateRange: dateRange ?? undefined });
     showSuccess('Temperature logs opened for printing');
   } catch (err) {
     logger.error('[Temperature Logs] Print error:', err);

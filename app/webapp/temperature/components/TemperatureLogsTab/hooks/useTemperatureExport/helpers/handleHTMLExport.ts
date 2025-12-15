@@ -15,7 +15,11 @@ export async function handleHTMLExportHelper(
     await import('../../../../../utils/formatTemperatureLogsForPrint');
   const { getTemperatureLogPrintStyles } =
     await import('../../../../../utils/temperatureLogPrintStyles');
-  const contentHtml = formatTemperatureLogsForPrint({ logs: logsToExport, equipment, dateRange });
+  const contentHtml = formatTemperatureLogsForPrint({
+    logs: logsToExport,
+    equipment,
+    dateRange: dateRange ?? undefined,
+  });
   const temperatureLogStyles = getTemperatureLogPrintStyles();
   let subtitle = 'Temperature Logs';
   if (dateRange) {
