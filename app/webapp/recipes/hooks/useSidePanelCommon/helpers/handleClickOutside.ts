@@ -1,3 +1,5 @@
+import React from 'react';
+
 /**
  * Handle click outside panel to close.
  */
