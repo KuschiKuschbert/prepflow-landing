@@ -33,7 +33,7 @@ export function useMenuItemStatistics(menuId: string, item: MenuItem) {
 
   useEffect(() => {
     const cacheKey = `${menuId}-${item.id}`;
-    if (invalidateCacheIfPriceChanged(cacheKey, item.actual_selling_price)) {
+    if (invalidateCacheIfPriceChanged(cacheKey, item.actual_selling_price ?? null)) {
       logger.dev('[useMenuItemStatistics] Cache invalidated - price changed', {
         itemId: item.id,
         newPrice: item.actual_selling_price,
