@@ -56,7 +56,7 @@ export function DeleteConfirmationModal({
                 <h3 className="text-xl font-bold text-white">
                   Delete {itemTypeLabel.charAt(0).toUpperCase() + itemTypeLabel.slice(1)}
                 </h3>
-                <p className="text-sm text-gray-400">This action can't be undone</p>
+                <p className="text-sm text-gray-400">This action can&apos;t be undone</p>
               </div>
             </div>
           </div>

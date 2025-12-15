@@ -1,13 +1,15 @@
 /**
  * Update cards state based on fetch result.
  */
+import { SubRecipeCards } from '../../../types';
+
 interface UpdateCardsParams {
-  result: { success: boolean; cards?: any[]; subRecipeCards?: any[]; error?: string };
+  result: { success: boolean; cards?: any[]; subRecipeCards?: SubRecipeCards; error?: string };
   setCards: React.Dispatch<React.SetStateAction<any[]>>;
-  setSubRecipeCards: React.Dispatch<React.SetStateAction<any[]>>;
+  setSubRecipeCards: React.Dispatch<React.SetStateAction<SubRecipeCards>>;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
-  startPolling: (callback: () => void) => void;
+  startPolling: (callback: () => Promise<void>) => void;
   stopPolling: () => void;
   performFetch: (isPollingCheck: boolean) => Promise<void>;
 }

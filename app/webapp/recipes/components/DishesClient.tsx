@@ -138,8 +138,12 @@ export default function DishesClient() {
   });
   const selectedItemTypes = useMemo(() => {
     const types = new Map<string, 'recipe' | 'dish'>();
-    dishes.forEach(d => { if (selectedItems.has(d.id)) types.set(d.id, 'dish'); });
-    recipes.forEach(r => { if (selectedItems.has(r.id)) types.set(r.id, 'recipe'); });
+    dishes.forEach(d => {
+      if (selectedItems.has(d.id)) types.set(d.id, 'dish');
+    });
+    recipes.forEach(r => {
+      if (selectedItems.has(r.id)) types.set(r.id, 'recipe');
+    });
     return types;
   }, [dishes, recipes, selectedItems]);
 
@@ -175,7 +179,25 @@ export default function DishesClient() {
   });
 
   const selectedRecipeCount = selectedRecipeIds.length;
-  const handleRecipeImagesGenerated = useCallback(createRecipeImagesGeneratedHandler(setRecipes, selectedRecipeForPreview, setSelectedRecipeForPreview), [setRecipes, selectedRecipeForPreview, setSelectedRecipeForPreview]);
+  const handleRecipeImagesGenerated = useCallback(
+    (
+      recipeId: string,
+      images: {
+        classic: string | null;
+        modern: string | null;
+        rustic: string | null;
+        minimalist: string | null;
+      },
+    ) => {
+      const handler = createRecipeImagesGeneratedHandler(
+        setRecipes,
+        selectedRecipeForPreview,
+        setSelectedRecipeForPreview,
+      );
+      return handler(recipeId, images);
+    },
+    [setRecipes, selectedRecipeForPreview, setSelectedRecipeForPreview],
+  );
 
   const sidePanelsHandlers = useDishesSidePanelsHandlers({
     setShowDishPanel,

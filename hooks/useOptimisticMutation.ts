@@ -51,7 +51,24 @@ export function useOptimisticMutation<T = unknown>(
   const { onSuccess, onError, showSuccessNotification, showErrorNotification } = options;
   const [isMutating, setIsMutating] = useState(false);
 
-  const mutate = useCallback(createMutateHandler(setIsMutating, onSuccess, onError, showSuccessNotification, showErrorNotification), [onSuccess, onError, showSuccessNotification, showErrorNotification]);
+  const mutate = useCallback(
+    (
+      optimisticUpdate: () => void,
+      mutationFn: () => Promise<Response>,
+      rollbackFn: () => void,
+      successMessage?: string,
+    ) => {
+      const handler = createMutateHandler(
+        setIsMutating,
+        onSuccess,
+        onError,
+        showSuccessNotification,
+        showErrorNotification,
+      );
+      return handler(optimisticUpdate, mutationFn, rollbackFn, successMessage);
+    },
+    [onSuccess, onError, showSuccessNotification, showErrorNotification],
+  );
 
   return { mutate, isMutating };
 }

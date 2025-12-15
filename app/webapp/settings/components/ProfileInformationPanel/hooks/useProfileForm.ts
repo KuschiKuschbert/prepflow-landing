@@ -37,16 +37,49 @@ export function useProfileForm({
   USER_MODIFIED_KEY,
   onProfileUpdate,
 }: UseProfileFormProps) {
-  const initialFormData = useMemo(() => createInitialFormData(cachedProfile), [cachedProfile?.first_name, cachedProfile?.last_name, cachedProfile?.business_name]);
+  const initialFormData = useMemo(
+    () => createInitialFormData(cachedProfile),
+    [cachedProfile?.first_name, cachedProfile?.last_name, cachedProfile?.business_name],
+  );
   const initialFormValuesRef = useRef<ProfileFormData | null>(null);
   if (initialFormValuesRef.current === null) initialFormValuesRef.current = initialFormData;
   const [formData, setFormData] = useState(initialFormData);
   useTrackFormDataChanges(formData, mountIdRef, userHasModifiedRef);
-  useUpdateFormFromProfile(profile, initialDataLoadedRef, userHasModifiedRef, USER_MODIFIED_KEY, mountIdRef, setFormData, onProfileUpdate);
+  useUpdateFormFromProfile(
+    profile,
+    initialDataLoadedRef,
+    userHasModifiedRef,
+    USER_MODIFIED_KEY,
+    mountIdRef,
+    setFormData,
+    onProfileUpdate,
+  );
 
-  const handleFieldChange = useCallback(createHandleFieldChange(formData, mountIdRef, userHasModifiedRef, USER_MODIFIED_KEY, setFormData), [formData, mountIdRef, userHasModifiedRef, USER_MODIFIED_KEY]);
+  const handleFieldChange = useCallback(
+    (field: keyof ProfileFormData, value: string) => {
+      const handler = createHandleFieldChange(
+        formData,
+        mountIdRef,
+        userHasModifiedRef,
+        USER_MODIFIED_KEY,
+        setFormData,
+      );
+      return handler(field, value);
+    },
+    [formData, mountIdRef, userHasModifiedRef, USER_MODIFIED_KEY, setFormData],
+  );
 
-  const resetForm = useCallback(createResetForm(mountIdRef, profile, formData, userHasModifiedRef, USER_MODIFIED_KEY, setFormData), [formData, profile, mountIdRef, userHasModifiedRef, USER_MODIFIED_KEY]);
+  const resetForm = useCallback(() => {
+    const handler = createResetForm(
+      mountIdRef,
+      profile,
+      formData,
+      userHasModifiedRef,
+      USER_MODIFIED_KEY,
+      setFormData,
+    );
+    return handler();
+  }, [formData, profile, mountIdRef, userHasModifiedRef, USER_MODIFIED_KEY, setFormData]);
   const hasChanges = useMemo(() => checkHasChanges(formData, profile), [formData, profile]);
 
   return {

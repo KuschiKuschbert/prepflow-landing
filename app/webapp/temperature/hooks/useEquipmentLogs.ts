@@ -17,12 +17,27 @@ export function useEquipmentLogs({
   const [logs, setLogs] = useState<TemperatureLog[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const filterLogsByTime = useCallback(createFilterLogsByTime(timeFilter), [timeFilter]);
+  const filterLogsByTime = useCallback(
+    (allLogs: TemperatureLog[]) => {
+      const handler = createFilterLogsByTime(timeFilter);
+      return handler(allLogs);
+    },
+    [timeFilter],
+  );
   useEffect(() => {
+    if (!equipmentName) return;
     const initResult = initializeLogsHelper(equipmentName, filterLogsByTime, setLogs, setIsLoading);
     if (!initResult) return;
     setError(null);
-    fetchEquipmentLogsHelper(equipmentName, equipmentLocation, filterLogsByTime, setLogs, setIsLoading, setError, initResult.cachedLogs);
+    fetchEquipmentLogsHelper(
+      equipmentName,
+      equipmentLocation,
+      filterLogsByTime,
+      setLogs,
+      setIsLoading,
+      setError,
+      initResult.cachedLogs,
+    );
   }, [equipmentName, equipmentLocation, filterLogsByTime]);
   useEffect(() => {
     if (!equipmentName) return;

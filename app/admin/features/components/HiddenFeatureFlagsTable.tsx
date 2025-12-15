@@ -59,7 +59,7 @@ export function HiddenFeatureFlagsTable({
           error.includes('relation') ? (
             <div className="mt-4 rounded-lg border border-yellow-500/20 bg-yellow-500/10 p-4">
               <p className="mb-2 text-sm font-medium text-yellow-400">
-                Table doesn't exist. Run migration:
+                Table doesn&apos;t exist. Run migration:
               </p>
               <code className="mt-2 block rounded bg-[#0a0a0a] px-3 py-2 text-xs text-yellow-300">
                 migrations/create_hidden_feature_flags_table.sql

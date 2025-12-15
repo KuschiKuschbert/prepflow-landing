@@ -4,15 +4,11 @@
 
 import { useCallback, useEffect, useRef } from 'react';
 import { createTrackNavigationHandler } from './useNavigationTracking/helpers/trackNavigation';
-import {
-    loadPendingLogs,
-    type PendingLog
-} from './useNavigationTracking/logStorage';
+import { loadPendingLogs, type PendingLog } from './useNavigationTracking/logStorage';
+import { syncPendingLogs } from './useNavigationTracking/logSync';
 import { useLogSync } from './useNavigationTracking/useLogSync';
 import { useTimeTracking } from './useNavigationTracking/useTimeTracking';
-import {
-    loadVisitCounts
-} from './useNavigationTracking/visitCounts';
+import { loadVisitCounts } from './useNavigationTracking/visitCounts';
 
 /**
  * Hook to track navigation usage for adaptive optimization.
@@ -49,7 +45,19 @@ export function useNavigationTracking() {
   // Set up time tracking
   useTimeTracking(pendingLogsRef, pageStartTimeRef, previousPathRef, syncPendingLogsWrapper);
 
-  const trackNavigation = useCallback(createTrackNavigationHandler(pendingLogsRef, visitCountsRef, previousPathRef, pageStartTimeRef, syncPendingLogsWrapper), [syncPendingLogsWrapper]);
+  const trackNavigation = useCallback(
+    (href: string) => {
+      const handler = createTrackNavigationHandler(
+        pendingLogsRef,
+        visitCountsRef,
+        previousPathRef,
+        pageStartTimeRef,
+        syncPendingLogsWrapper,
+      );
+      return handler(href);
+    },
+    [syncPendingLogsWrapper],
+  );
 
   return {
     trackNavigation,
