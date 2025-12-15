@@ -1,9 +1,9 @@
 /**
  * Create remove handlers for categories and items.
  */
+import type { MenuItem } from '../../../../types';
 import { createCategoryRemoveDialog, createItemRemoveDialog } from './createConfirmDialog';
 import { getItemName } from './getItemName';
-import type { MenuItem } from '../../../../types';
 
 interface ConfirmDialogState {
   isOpen: boolean;
