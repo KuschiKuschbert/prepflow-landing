@@ -1,11 +1,11 @@
 'use client';
 
+import { useLongPress } from '@/app/webapp/ingredients/hooks/useLongPress';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Icon } from '@/components/ui/Icon';
 import { Edit2, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useLongPress } from '@/app/webapp/ingredients/hooks/useLongPress';
 import type { ParLevel } from '../types';
 
 interface ParLevelTableRowProps {
@@ -189,7 +189,7 @@ export function ParLevelTableRow({
           <ConfirmDialog
             isOpen={showDeleteConfirm}
             title="Delete Par Level"
-            message={`Are you sure you want to delete the par level for "${parLevel.ingredients?.ingredient_name || 'this ingredient'}"? This action cannot be undone.`}
+            message={`Are you sure you want to delete the par level for "${parLevel.ingredients?.ingredient_name || 'this ingredient'}"? This action can't be undone.`}
             confirmLabel="Delete"
             cancelLabel="Cancel"
             onConfirm={confirmDelete}

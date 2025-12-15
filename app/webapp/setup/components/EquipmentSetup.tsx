@@ -1,14 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { TemperatureEquipment, NewEquipment } from '../types';
-import { equipmentTypes } from './equipment-config';
-import { getDefaultTemps } from './equipment-utils';
-import { EquipmentTypeModal } from './EquipmentTypeModal';
-import { EquipmentForm } from './EquipmentForm';
-import { EquipmentList } from './EquipmentList';
 import { useConfirm } from '@/hooks/useConfirm';
 import { logger } from '@/lib/logger';
+import { useEffect, useState } from 'react';
+import { NewEquipment, TemperatureEquipment } from '../types';
+import { getDefaultTemps } from './equipment-utils';
+import { EquipmentForm } from './EquipmentForm';
+import { EquipmentList } from './EquipmentList';
+import { EquipmentTypeModal } from './EquipmentTypeModal';
 interface EquipmentSetupProps {
   setupProgress: {
     ingredients: boolean;
@@ -171,7 +170,7 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
         setEquipment([]);
         setEquipmentResult(`Successfully deleted all ${equipment.length} pieces of equipment!`);
       } else {
-        setEquipmentError('Some equipment failed to delete. Please try again.');
+        setEquipmentError("Some equipment failed to delete. Give it another go, chef.");
       }
     } catch (error) {
       setEquipmentError('Network error occurred');

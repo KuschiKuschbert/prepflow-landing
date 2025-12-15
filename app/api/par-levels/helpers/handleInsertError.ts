@@ -72,7 +72,7 @@ export function handleInsertError(insertError: any, dataToInsert: any) {
               `The par_levels table requires the column "${columnName || 'unknown'}" to have a value, but it was null.`,
               'Please check:',
               `1. Ensure ${columnName || 'the required field'} is provided in the request`,
-              '2. Verify the database schema matches the migration script',
+              "2. Verify the data structure matches the migration script",
               '3. Run migrations/add-par-levels-columns.sql in Supabase SQL Editor if needed',
             ],
       },

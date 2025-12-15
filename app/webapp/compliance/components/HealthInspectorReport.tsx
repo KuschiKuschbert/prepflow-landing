@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { logger } from '@/lib/logger';
-import { generateHTMLReport, ReportData } from '@/lib/compliance/report-generator';
-import { FileText, Download, Printer, Calendar } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { generateHTMLReport, ReportData } from '@/lib/compliance/report-generator';
+import { logger } from '@/lib/logger';
+import { Calendar, Download, FileText, Printer } from 'lucide-react';
+import { useState } from 'react';
 
 export function HealthInspectorReport() {
   const [reportData, setReportData] = useState<ReportData | null>(null);
@@ -61,7 +61,7 @@ export function HealthInspectorReport() {
       }
     } catch (err) {
       logger.error('Error generating report:', err);
-      setError('Failed to generate report. Please try again.');
+      setError("Failed to generate report. Give it another go, chef.");
     } finally {
       setLoading(false);
     }

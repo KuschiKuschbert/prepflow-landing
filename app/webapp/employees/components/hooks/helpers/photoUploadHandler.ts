@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { uploadPhoto, deletePhoto } from './photoUpload';
+import { deletePhoto, uploadPhoto } from './photoUpload';
 
 interface PhotoUploadHandlerProps {
   file: File;
@@ -40,7 +40,7 @@ export async function handlePhotoUpload({
     showSuccess('Photo uploaded successfully');
   } catch (error: any) {
     logger.error('Error uploading photo:', error);
-    const errorMessage = error.message || 'Failed to upload photo. Please try again.';
+    const errorMessage = error.message || "Failed to upload photo. Give it another go, chef.";
     setPhotoError(errorMessage);
     setPhotoPreview(null);
     showError(errorMessage);

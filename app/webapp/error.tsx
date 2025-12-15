@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { usePathname } from 'next/navigation';
 
@@ -28,7 +27,7 @@ export default function WebAppError({ error, reset }: ErrorProps) {
         <div className="max-w-md rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 text-center">
           <h1 className="mb-4 text-2xl font-bold text-white">Something went wrong</h1>
           <p className="mb-6 text-gray-400">
-            {error.message || 'An unexpected error occurred. Please try again.'}
+            {error.message || "Something went wrong. Give it another go, chef."}
           </p>
           <button
             onClick={reset}

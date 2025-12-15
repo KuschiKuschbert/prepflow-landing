@@ -1,14 +1,14 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
-import { PageHeader } from '../components/static/PageHeader';
-import { ClipboardCheck } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { LoadingSkeleton, PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
+import { ClipboardCheck } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
-import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { PageHeader } from '../components/static/PageHeader';
 
 // Lazy load order list components to reduce initial bundle size
 const MenuIngredientsTable = dynamic(
@@ -21,7 +21,6 @@ const MenuIngredientsTable = dynamic(
     loading: () => <PageSkeleton />,
   },
 );
-import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
 
 interface Menu {
   id: string;
@@ -191,7 +190,7 @@ export default function OrderListsPage() {
             <p className="font-semibold text-red-400">{error}</p>
             {error.includes('column') && (
               <p className="mt-2 text-sm text-red-300">
-                This usually means your database schema needs to be updated. Check the server logs
+                This usually means your data structure needs to be updated. Check the server logs
                 for more details.
               </p>
             )}

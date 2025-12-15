@@ -108,6 +108,7 @@ function shouldExcludeFile(filePath) {
     /migrations\//,
     /\.config\./,
     /jest\./,
+    /\/api\/test\//, // Exclude test API endpoints (diagnostic/internal)
   ];
 
   return excludePatterns.some(pattern => pattern.test(filePath));

@@ -216,7 +216,7 @@ export function IngredientCard({
       <ConfirmDialog
         isOpen={showDeleteConfirm}
         title="Delete Ingredient"
-        message={`Are you sure you want to delete "${ingredient.ingredient_name}"? This action cannot be undone.`}
+        message={`Are you sure you want to delete "${ingredient.ingredient_name}"? This action can't be undone.`}
         confirmLabel="Delete"
         cancelLabel="Cancel"
         onConfirm={confirmDelete}

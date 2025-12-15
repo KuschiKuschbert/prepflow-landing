@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { Recipe, Dish } from '../types';
+import { Dish, Recipe } from '../types';
 
 interface UnifiedBulkDeleteConfirmationModalProps {
   show: boolean;
@@ -38,7 +37,7 @@ export function UnifiedBulkDeleteConfirmationModal({
   const totalCount = selectedItems.size;
 
   let title = 'Delete Multiple Items';
-  let description = 'This action cannot be undone';
+  let description = "This action can't be undone";
 
   if (recipeCount > 0 && dishCount > 0) {
     title = `Delete ${recipeCount} Recipe${recipeCount > 1 ? 's' : ''} and ${dishCount} Dish${dishCount > 1 ? 'es' : ''}`;

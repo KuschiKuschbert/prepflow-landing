@@ -1,9 +1,9 @@
-import { useCallback } from 'react';
-import { format, addDays } from 'date-fns';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useConfirm } from '@/hooks/useConfirm';
 import { logger } from '@/lib/logger';
-import type { Shift, Employee } from '../../../types';
+import { addDays, format } from 'date-fns';
+import { useCallback } from 'react';
+import type { Employee, Shift } from '../../../types';
 
 interface UseRosterBulkActionsProps {
   shifts: Shift[];
@@ -53,7 +53,7 @@ export function useRosterBulkActions({
 
     const confirmed = await showConfirm({
       title: 'Delete All Shifts',
-      message: `Are you sure you want to delete all ${shiftsToDelete.length} shift${shiftsToDelete.length > 1 ? 's' : ''}${weekShifts.length > 0 ? ' for this week' : ''}? This action cannot be undone.`,
+      message: `Are you sure you want to delete all ${shiftsToDelete.length} shift${shiftsToDelete.length > 1 ? 's' : ''}${weekShifts.length > 0 ? ' for this week' : ''}? This action can't be undone.`,
       variant: 'danger',
       confirmLabel: 'Delete All',
       cancelLabel: 'Cancel',
@@ -134,7 +134,7 @@ export function useRosterBulkActions({
       logger.dev('Showing confirmation dialog for:', employeeName);
       const confirmed = await showConfirm({
         title: 'Remove Employee from Roster',
-        message: `Are you sure you want to 86 ${employeeName} from this week's roster?${employeeShifts.length > 0 ? ` This will delete all ${employeeShifts.length} shift${employeeShifts.length > 1 ? 's' : ''} for this week's roster.` : ''} This action cannot be undone.`,
+        message: `Are you sure you want to 86 ${employeeName} from this week's roster?${employeeShifts.length > 0 ? ` This will delete all ${employeeShifts.length} shift${employeeShifts.length > 1 ? 's' : ''} for this week's roster.` : ''} This action can't be undone.`,
         variant: 'danger',
         confirmLabel: '86 Them',
         cancelLabel: 'Cancel',

@@ -112,7 +112,7 @@ export const errorMessages: Record<string, ErrorMessage> = {
   Default: {
     title: 'Authentication Error',
     message:
-      'An error occurred during authentication. Please try again or contact support if the problem persists.',
+      "Something went wrong during sign-in. Give it another go, or reach out if it keeps happening.",
     troubleshooting: [
       'Try signing in again',
       'Clear your browser cookies',

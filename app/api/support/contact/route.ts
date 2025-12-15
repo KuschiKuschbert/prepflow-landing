@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json(
         ApiErrorHandler.createError(
-          'Too many requests. Please try again later.',
+          "Too many requests. Give it another go in a moment, chef.",
           'RATE_LIMIT_EXCEEDED',
           429,
         ),

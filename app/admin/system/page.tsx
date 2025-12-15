@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { Activity, Database, Clock, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import { logger } from '@/lib/logger';
+import { Activity, AlertTriangle, CheckCircle, Clock, Database, XCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface SystemHealth {
   status: 'healthy' | 'degraded' | 'down';
@@ -142,7 +142,7 @@ export default function SystemHealthPage() {
         {/* API Performance */}
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-white">API Performance</h3>
+            <h3 className="text-lg font-semibold text-white">System Performance</h3>
             <Icon icon={Activity} size="md" className="text-[#29E7CD]" />
           </div>
           <div className="space-y-2">

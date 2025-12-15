@@ -49,8 +49,8 @@ export function IngredientTableDialogs({
         }
         message={
           deleteConfirmId
-            ? 'Are you sure you want to delete this ingredient? This action cannot be undone.'
-            : `Are you sure you want to delete ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}? This action cannot be undone.`
+            ? 'Are you sure you want to delete this ingredient? This action can't be undone.'
+            : `Are you sure you want to delete ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}? This action can't be undone.`
         }
         confirmLabel="Delete"
         cancelLabel="Cancel"

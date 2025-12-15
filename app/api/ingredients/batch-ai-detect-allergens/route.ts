@@ -4,15 +4,14 @@
  * Admin-only endpoint for batch processing ingredients without allergens
  */
 
-import { NextRequest, NextResponse } from 'next/server';
 import {
-  detectAllergensFromIngredient,
-  enrichIngredientWithAllergens,
+    enrichIngredientWithAllergens
 } from '@/lib/allergens/ai-allergen-detection';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { requireAuth } from '@/lib/auth0-api-helpers';
+import { NextRequest, NextResponse } from 'next/server';
 // Simple rate limiting
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
@@ -42,7 +41,7 @@ export async function POST(request: NextRequest) {
     if (!checkRateLimit(userId)) {
       return NextResponse.json(
         ApiErrorHandler.createError(
-          'Rate limit exceeded. Please try again later.',
+          "Rate limit exceeded. Give it another go in a moment, chef.",
           'RATE_LIMIT_ERROR',
           429,
         ),

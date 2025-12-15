@@ -2,16 +2,16 @@
 
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 import { EditDrawer } from '@/components/ui/EditDrawer';
+import { useNotification } from '@/contexts/NotificationContext';
 import { useAutosave } from '@/hooks/useAutosave';
 import { deriveAutosaveId } from '@/lib/autosave-id';
-import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
 import { useEffect, useState } from 'react';
 import { useDishCostCalculation } from '../hooks/useDishCostCalculation';
 import { Dish, Recipe } from '../types';
 import DishFormPricing from './DishFormPricing';
 import DishIngredientSelector from './DishIngredientSelector';
 import DishRecipeSelector from './DishRecipeSelector';
-import { logger } from '@/lib/logger';
 interface DishEditDrawerProps {
   isOpen: boolean;
   dish: Dish | null;
@@ -137,7 +137,7 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
         })
         .catch(err => {
           logger.error('Failed to fetch dish details:', err);
-          showError('Failed to load dish details. Please try again.');
+          showError("Failed to load dish details. Give it another go, chef.");
           setLoading(false);
         });
     } else {

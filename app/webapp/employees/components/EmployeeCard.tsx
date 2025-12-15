@@ -142,7 +142,7 @@ export function EmployeeCard({
       <ConfirmDialog
         isOpen={showDeleteQualConfirm}
         title="Remove Qualification"
-        message="Are you sure you want to remove this qualification? This action cannot be undone."
+        message="Are you sure you want to remove this qualification? This action can't be undone."
         confirmLabel="Remove"
         cancelLabel="Cancel"
         onConfirm={confirmDeleteQualification}

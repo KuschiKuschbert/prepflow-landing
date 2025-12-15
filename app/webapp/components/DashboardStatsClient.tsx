@@ -4,16 +4,16 @@ import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
 import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
+import { logger } from '@/lib/logger';
 import { supabase } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 import { DashboardErrorAlert } from './DashboardErrorAlert';
 import DashboardStats from './DashboardStats';
 import RecentActivity from './RecentActivity';
-import { logger } from '@/lib/logger';
 import type {
-  DashboardStatsData,
-  TemperatureEquipment,
-  TemperatureLog,
+    DashboardStatsData,
+    TemperatureEquipment,
+    TemperatureLog,
 } from './types/dashboard-stats';
 
 export default function DashboardStatsClient() {
@@ -106,7 +106,7 @@ export default function DashboardStatsClient() {
         }
       } catch (err) {
         logger.error('Error parsing stats response:', err);
-        setStatsError('Failed to parse dashboard statistics. Please try again.');
+        setStatsError("Failed to parse dashboard statistics. Give it another go, chef.");
       }
 
       // Process temperature logs data

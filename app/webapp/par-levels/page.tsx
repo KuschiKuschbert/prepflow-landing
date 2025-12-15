@@ -25,9 +25,9 @@ import { useParLevelsPagination } from './hooks/useParLevelsPagination';
 import { useParLevelsSelection } from './hooks/useParLevelsSelection';
 import { useSelectionMode } from './hooks/useSelectionMode';
 import {
-  exportParLevelsToCSV,
-  exportParLevelsToHTML,
-  exportParLevelsToPDF,
+    exportParLevelsToCSV,
+    exportParLevelsToHTML,
+    exportParLevelsToPDF,
 } from './utils/exportParLevels';
 import { printParLevels } from './utils/printParLevels';
 
@@ -314,7 +314,7 @@ export default function ParLevelsPage() {
         <ConfirmDialog
           isOpen={showDeleteConfirm}
           title="Delete Par Level"
-          message="Are you sure you want to delete this par level? This action cannot be undone."
+          message="Are you sure you want to delete this par level? This action can't be undone."
           confirmLabel="Delete"
           cancelLabel="Cancel"
           onConfirm={confirmDelete}

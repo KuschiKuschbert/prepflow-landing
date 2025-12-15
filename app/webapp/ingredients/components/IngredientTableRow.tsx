@@ -3,20 +3,20 @@
 
 'use client';
 
+import { formatRecipeDate } from '@/app/webapp/recipes/utils/formatDate';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Icon } from '@/components/ui/Icon';
 import { Edit, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import {
-  IngredientBrandCell,
-  IngredientCostCell,
-  IngredientNameCell,
-  IngredientPackSizeCell,
-  IngredientStockCell,
-  IngredientSupplierCell,
-} from './IngredientTableCell';
-import { formatRecipeDate } from '@/app/webapp/recipes/utils/formatDate';
 import { useLongPress } from '../hooks/useLongPress';
+import {
+    IngredientBrandCell,
+    IngredientCostCell,
+    IngredientNameCell,
+    IngredientPackSizeCell,
+    IngredientStockCell,
+    IngredientSupplierCell,
+} from './IngredientTableCell';
 
 interface Ingredient {
   id: string;
@@ -221,7 +221,7 @@ export function IngredientTableRow({
       <ConfirmDialog
         isOpen={showDeleteConfirm}
         title="Delete Ingredient"
-        message={`Are you sure you want to delete "${ingredient.ingredient_name}"? This action cannot be undone.`}
+        message={`Are you sure you want to delete "${ingredient.ingredient_name}"? This action can't be undone.`}
         confirmLabel="Delete"
         cancelLabel="Cancel"
         onConfirm={confirmDelete}

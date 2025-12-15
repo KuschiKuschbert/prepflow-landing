@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
 import { ExportButton, type ExportFormat } from '@/components/ui/ExportButton';
 import { PrintButton } from '@/components/ui/PrintButton';
-import { printOrderList, exportOrderListToCSV } from '../utils/orderListExportUtils';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
+import { useState } from 'react';
 import type { OrderListData } from '../utils/formatOrderListForPrint';
+import { exportOrderListToCSV, printOrderList } from '../utils/orderListExportUtils';
 
 interface Ingredient {
   id: string;
@@ -50,7 +50,7 @@ export function MenuIngredientsTable({
       showSuccess('Order list opened for printing');
     } catch (err) {
       logger.error('[Order List] Print error:', err);
-      showError('Failed to print order list. Please try again.');
+      showError("Failed to print order list. Give it another go, chef.");
     }
   };
 

@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
 import { logger } from '@/lib/logger';
+import { useEffect, useRef, useState } from 'react';
 import { fetchDishIngredients } from './useIngredientData/helpers/fetchDishIngredients';
 import { fetchRecipeIngredients } from './useIngredientData/helpers/fetchRecipeIngredients';
 
@@ -59,8 +59,9 @@ export function useIngredientData(
           setIngredients(dishIngredients);
           setRecipeSources(dishRecipes);
         } else {
-          const recipeIngredients = await fetchRecipeIngredients(menuItemId);
-          setIngredients(recipeIngredients);
+          const allIngredients: IngredientData[] = [];
+          await fetchRecipeIngredients(menuItemId, allIngredients);
+          setIngredients(allIngredients);
         }
       } catch (err) {
         logger.error('[IngredientPopover] Error fetching ingredients:', err);

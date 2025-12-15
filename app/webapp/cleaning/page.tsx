@@ -1,8 +1,12 @@
 'use client';
 
+import { ExportButton, type ExportFormat } from '@/components/ui/ExportButton';
 import { Icon } from '@/components/ui/Icon';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { PrintButton } from '@/components/ui/PrintButton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
 import { ClipboardCheck, MapPin, Plus } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
@@ -19,20 +23,12 @@ import { useCleaningKeyboardShortcuts } from './hooks/useCleaningKeyboardShortcu
 import { useCleaningModals } from './hooks/useCleaningModals';
 import { useCleaningPageData } from './hooks/useCleaningPageData';
 import { useStatsDates } from './hooks/useStatsDates';
-import { ExportButton, type ExportFormat } from '@/components/ui/ExportButton';
-import { PrintButton } from '@/components/ui/PrintButton';
 import {
-  printCleaningRecords,
-  exportCleaningRecordsToCSV,
-} from './utils/cleaningRecordExportUtils';
-import {
-  exportCleaningScheduleToCSV,
-  exportCleaningScheduleToHTML,
-  exportCleaningScheduleToPDF,
+    exportCleaningScheduleToCSV,
+    exportCleaningScheduleToHTML,
+    exportCleaningScheduleToPDF,
 } from './utils/exportCleaningSchedules';
 import { printCleaningSchedule } from './utils/printCleaningSchedule';
-import { useNotification } from '@/contexts/NotificationContext';
-import { logger } from '@/lib/logger';
 
 // Lazy load modals - only load when needed
 const CreateTaskForm = dynamic(
@@ -168,7 +164,7 @@ export default function CleaningRosterPage() {
       showSuccess('Cleaning schedule opened for printing');
     } catch (err) {
       logger.error('[Cleaning Schedule] Print error:', err);
-      showError('Failed to print cleaning schedule. Please try again.');
+      showError("Failed to print cleaning schedule. Give it another go, chef.");
     }
   };
 
@@ -196,7 +192,7 @@ export default function CleaningRosterPage() {
       }
     } catch (err) {
       logger.error(`[Cleaning Schedule] Export error (${format}):`, err);
-      showError(`Failed to export cleaning schedule to ${format.toUpperCase()}. Please try again.`);
+      showError(`Failed to export cleaning schedule to ${format.toUpperCase()}. Give it another go, chef.`);
     } finally {
       setExportLoading(null);
     }

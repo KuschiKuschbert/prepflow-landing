@@ -1,28 +1,28 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
-import { useTranslation } from '@/lib/useTranslation';
-import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
-import { useSuppliersData } from './hooks/useSuppliersData';
-import { useSuppliersForms } from './hooks/useSuppliersForms';
-import { SuppliersTabs } from './components/SuppliersTabs';
-import { SuppliersContent } from './components/SuppliersContent';
-import { PrintButton } from '@/components/ui/PrintButton';
+import { CSVImportModal } from '@/components/ui/CSVImportModal';
 import { ExportButton, type ExportFormat } from '@/components/ui/ExportButton';
 import { ImportButton } from '@/components/ui/ImportButton';
-import { CSVImportModal } from '@/components/ui/CSVImportModal';
-import { printSuppliers } from './utils/printSuppliers';
-import {
-  exportSuppliersToCSV,
-  exportSuppliersToHTML,
-  exportSuppliersToPDF,
-} from './utils/exportSuppliers';
-import { supplierImportConfig, type SupplierImportRow } from '@/lib/imports/supplier-import';
-import { useNotification } from '@/contexts/NotificationContext';
-import { logger } from '@/lib/logger';
-import { cacheData } from '@/lib/cache/data-cache';
 import type { ImportProgressState } from '@/components/ui/ImportProgress';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { PrintButton } from '@/components/ui/PrintButton';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { useNotification } from '@/contexts/NotificationContext';
+import { cacheData } from '@/lib/cache/data-cache';
+import { supplierImportConfig, type SupplierImportRow } from '@/lib/imports/supplier-import';
+import { logger } from '@/lib/logger';
+import { useTranslation } from '@/lib/useTranslation';
+import { useCallback, useState } from 'react';
+import { SuppliersContent } from './components/SuppliersContent';
+import { SuppliersTabs } from './components/SuppliersTabs';
+import { useSuppliersData } from './hooks/useSuppliersData';
+import { useSuppliersForms } from './hooks/useSuppliersForms';
+import {
+    exportSuppliersToCSV,
+    exportSuppliersToHTML,
+    exportSuppliersToPDF,
+} from './utils/exportSuppliers';
+import { printSuppliers } from './utils/printSuppliers';
 
 export default function SuppliersPage() {
   const { t } = useTranslation();
@@ -219,7 +219,7 @@ export default function SuppliersPage() {
         }, 2000);
       } catch (err) {
         logger.error('[Suppliers Import] Import error:', err);
-        showError('Failed to import suppliers. Please try again.');
+        showError("Failed to import suppliers. Give it another go, chef.");
         setImportProgress(undefined);
       } finally {
         setImportLoading(false);

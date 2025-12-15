@@ -49,7 +49,7 @@ export default function StaffPage() {
   }, []);
 
   const handleDelete = async (employeeId: string) => {
-    if (!confirm('Are you sure you want to delete this employee? This action cannot be undone.')) {
+    if (!confirm('Are you sure you want to delete this employee? This action can't be undone.')) {
       return;
     }
 

@@ -2,9 +2,9 @@
  * Fetch ingredients with par levels
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 interface IngredientWithParLevel {
   id: string;
@@ -27,7 +27,7 @@ export async function fetchIngredientsWithParLevels(
   menuId: string,
 ): Promise<IngredientWithParLevel[]> {
   if (!supabaseAdmin) {
-    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+    throw ApiErrorHandler.createError("Data connection not available", 'DATABASE_ERROR', 500);
   }
 
   // Fetch ingredient details
@@ -48,7 +48,7 @@ export async function fetchIngredientsWithParLevels(
     if (errorMessage.includes('column') || errorMessage.includes('does not exist')) {
       throw ApiErrorHandler.createError('Database column not found', 'DATABASE_ERROR', 500, {
         message:
-          'One or more database columns are missing. Please ensure your database schema is up to date.',
+          "One or more data columns are missing. Please ensure your data structure is up to date.",
         details: errorMessage,
       });
     }

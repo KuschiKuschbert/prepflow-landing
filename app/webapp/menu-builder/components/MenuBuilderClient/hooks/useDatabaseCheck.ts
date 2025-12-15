@@ -39,7 +39,7 @@ export function useDatabaseCheck() {
       setCheckingDb(false);
       return true;
     } catch {
-      setDbError('Failed to check database tables. Please try again.');
+      setDbError("Failed to check data tables. Give it another go, chef.");
       setCheckingDb(false);
       return false;
     }

@@ -29,7 +29,7 @@ export function useDialogActions({
       onClose();
     } catch (err) {
       logger.error('[MenuUnlockChangesDialog] Error recalculating prices:', err);
-      showError('Failed to recalculate prices. Please try again.');
+      showError("Failed to recalculate prices. Give it another go, chef.");
     } finally {
       setRecalculating(false);
     }
@@ -51,7 +51,7 @@ export function useDialogActions({
       onClose();
     } catch (err) {
       logger.error('[MenuUnlockChangesDialog] Error dismissing changes:', err);
-      showError('Failed to dismiss changes. Please try again.');
+      showError("Failed to dismiss changes. Give it another go, chef.");
     }
   };
 

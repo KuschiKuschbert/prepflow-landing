@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
-import { UtensilsCrossed, BookOpen, AlertTriangle, Thermometer, Sparkles } from 'lucide-react';
+import { AlertTriangle, BookOpen, Sparkles, Thermometer, UtensilsCrossed } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -48,7 +48,7 @@ export default function KitchenOperations() {
           let errorMessage = 'Failed to fetch kitchen operations stats';
 
           if (response.status === 0 || response.status >= 500) {
-            errorMessage = 'Server error: Unable to fetch stats. Please try again later.';
+            errorMessage = "Server error: Unable to fetch stats. Give it another go later, chef.";
           } else if (response.status === 404) {
             errorMessage = 'Stats endpoint not found. Please check your connection.';
           } else if (response.status >= 400 && response.status < 500) {

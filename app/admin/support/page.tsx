@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { Wrench, User, Key, Database, AlertTriangle } from 'lucide-react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useConfirm } from '@/hooks/useConfirm';
 import { usePrompt } from '@/hooks/usePrompt';
 import { logger } from '@/lib/logger';
+import { AlertTriangle, Database, Key, User } from 'lucide-react';
+import { useState } from 'react';
 
 /**
  * Support tools page component for admin dashboard.
@@ -125,10 +125,10 @@ export default function SupportToolsPage() {
       bgColor: 'bg-[#D925C7]/10',
     },
     {
-      title: 'Database Query',
-      description: 'Run custom database queries (coming soon)',
+      title: 'Data Search',
+      description: 'Search and find data across your system (coming soon)',
       icon: Database,
-      action: () => showError('Database query tool coming soon'),
+      action: () => showError('Data search tool coming soon'),
       loading: false,
       color: 'text-[#FF6B00]',
       bgColor: 'bg-[#FF6B00]/10',

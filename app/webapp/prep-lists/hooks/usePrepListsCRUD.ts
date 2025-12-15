@@ -1,8 +1,8 @@
 /**
  * Hook for managing prep list CRUD operations.
  */
-import { useState, useCallback } from 'react';
 import { logger } from '@/lib/logger';
+import { useCallback, useState } from 'react';
 import type { PrepList } from '../types';
 
 interface UsePrepListsCRUDProps {
@@ -73,7 +73,7 @@ export function usePrepListsCRUD({
       setConfirmDialog({
         isOpen: true,
         title: 'Delete Prep List',
-        message: `Are you sure you want to delete "${prepList?.name || 'this prep list'}"? This action cannot be undone.`,
+        message: `Are you sure you want to delete "${prepList?.name || 'this prep list'}"? This action can't be undone.`,
         onConfirm: async () => {
           setConfirmDialog(prev => ({ ...prev, isOpen: false }));
           await performDelete(id);

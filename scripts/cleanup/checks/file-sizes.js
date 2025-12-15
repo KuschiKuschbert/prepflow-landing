@@ -117,10 +117,10 @@ async function checkFileSizes(files = null) {
     const content = fs.readFileSync(file, 'utf8');
     const lines = countLines(content);
     const category = detectCategory(file);
-    
+
     // Skip files that return null (excluded)
     if (category === null) continue;
-    
+
     const limit = LIMITS[category];
 
     if (limit && lines > limit) {

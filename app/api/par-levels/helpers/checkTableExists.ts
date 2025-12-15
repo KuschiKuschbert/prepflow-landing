@@ -32,7 +32,7 @@ export async function checkTableExists(supabaseAdmin: any) {
         exists: false,
         error: NextResponse.json(
           ApiErrorHandler.createError(
-            'Par levels table does not exist. Please run the migration script.',
+            "Par levels table doesn't exist. Please run the migration script.",
             'TABLE_NOT_FOUND',
             400,
             {

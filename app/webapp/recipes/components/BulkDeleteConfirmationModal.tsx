@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { Recipe } from '../types';
 
 interface BulkDeleteConfirmationModalProps {
@@ -45,7 +44,7 @@ export function BulkDeleteConfirmationModal({
               </div>
               <div>
                 <h3 className="text-xl font-bold text-white">Delete Multiple Recipes</h3>
-                <p className="text-sm text-gray-400">This action cannot be undone</p>
+                <p className="text-sm text-gray-400">This action can't be undone</p>
               </div>
             </div>
           </div>

@@ -1,10 +1,10 @@
 'use client';
 
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useTranslation } from '@/lib/useTranslation';
 import { useState } from 'react';
 import { IngredientTableRow } from './IngredientTableRow';
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
 interface Ingredient {
   id: string;
@@ -220,7 +220,7 @@ export default function IngredientTable({
       <ConfirmDialog
         isOpen={showDeleteConfirm}
         title="Delete Ingredient"
-        message="Are you sure you want to delete this ingredient? This action cannot be undone."
+        message="Are you sure you want to delete this ingredient? This action can't be undone."
         confirmLabel="Delete"
         cancelLabel="Cancel"
         onConfirm={confirmDelete}

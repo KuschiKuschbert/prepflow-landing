@@ -1,21 +1,19 @@
 'use client';
-import {
-  formatBrandName,
-  formatIngredientName,
-  formatStorageLocation,
-  formatSupplierName,
-  formatTextInput,
-} from '@/lib/text-utils';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { WizardProgressBar } from './WizardProgressBar';
-import { WizardErrorDisplay } from './WizardErrorDisplay';
 import { logger } from '@/lib/logger';
 import {
-  calculateCostPerUnit,
-  calculateWastagePercentage,
-  checkValidation as checkValidationHelper,
-  formatCost,
-  getValidationErrors,
+    formatBrandName,
+    formatIngredientName,
+    formatStorageLocation,
+    formatSupplierName,
+    formatTextInput,
+} from '@/lib/text-utils';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+    calculateCostPerUnit,
+    calculateWastagePercentage,
+    checkValidation as checkValidationHelper,
+    formatCost,
+    getValidationErrors,
 } from '../utils/wizard-helpers';
 import IngredientWizardNavigation from './IngredientWizardNavigation';
 import IngredientWizardStep1 from './IngredientWizardStep1';
@@ -23,6 +21,8 @@ import IngredientWizardStep2 from './IngredientWizardStep2';
 import IngredientWizardStep3 from './IngredientWizardStep3';
 import IngredientWizardStep4 from './IngredientWizardStep4';
 import { Ingredient, IngredientWizardProps } from './types';
+import { WizardErrorDisplay } from './WizardErrorDisplay';
+import { WizardProgressBar } from './WizardProgressBar';
 export default function IngredientWizard({
   suppliers = [],
   availableUnits = [],
@@ -171,7 +171,7 @@ export default function IngredientWizard({
       resetWizard();
     } catch (error: any) {
       setErrors({
-        submit: error?.message || error?.details || 'Failed to save ingredient. Please try again.',
+        submit: error?.message || error?.details || "Failed to save ingredient. Give it another go, chef.",
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
