@@ -41,3 +41,4 @@ COMMENT ON COLUMN data_transfer_restrictions.consent_given_at IS 'Timestamp when
 
 
 
+

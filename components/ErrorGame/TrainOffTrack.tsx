@@ -77,9 +77,10 @@ const TrainOffTrack: React.FC = () => {
             <motion.div
               animate={
                 reducedMotion
-                  ? { x: 0 }
+                  ? { x: 0, scaleX: -1 }
                   : {
                       x: ['-300px', 'calc(100vw + 300px)'],
+                      scaleX: -1,
                     }
               }
               transition={
@@ -92,11 +93,9 @@ const TrainOffTrack: React.FC = () => {
                     }
               }
             >
-              <div className="inline-block" style={{ transform: 'scaleX(-1)' }}>
-                <span className="desktop:text-8xl inline-block text-6xl whitespace-nowrap">
-                  🚂🚃🚃🚃
-                </span>
-              </div>
+              <span className="desktop:text-8xl inline-block text-6xl whitespace-nowrap">
+                🚂🚃🚃🚃
+              </span>
             </motion.div>
           </motion.div>
         </div>
@@ -113,9 +112,10 @@ const TrainOffTrack: React.FC = () => {
             <motion.div
               animate={
                 reducedMotion
-                  ? { x: 0 }
+                  ? { x: 0, scaleX: -1 }
                   : {
                       x: ['-300px', 'calc(100vw + 300px)'],
+                      scaleX: -1,
                     }
               }
               transition={
@@ -128,11 +128,9 @@ const TrainOffTrack: React.FC = () => {
                     }
               }
             >
-              <div className="inline-block" style={{ transform: 'scaleX(-1)' }}>
-                <span className="desktop:text-8xl inline-block text-6xl whitespace-nowrap">
-                  🚂🚃🚃🚃
-                </span>
-              </div>
+              <span className="desktop:text-8xl inline-block text-6xl whitespace-nowrap">
+                🚂🚃🚃🚃
+              </span>
             </motion.div>
           </motion.div>
         </div>

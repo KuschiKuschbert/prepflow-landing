@@ -11,3 +11,4 @@ COMMENT ON COLUMN users.is_eu_customer IS 'Whether user is an EU customer (for E
 
 
 
+

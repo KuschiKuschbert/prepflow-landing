@@ -55,3 +55,4 @@ CREATE POLICY "Service role can access support_tickets" ON support_tickets
 
 
 
+
