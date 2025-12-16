@@ -14,7 +14,7 @@ export function RecipeUnitSelect({ value, onChange }: RecipeUnitSelectProps) {
       <select
         value={value || 'kg'}
         onChange={e => onChange(e.target.value)}
-        className="w-full cursor-pointer appearance-none rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white shadow-sm transition-all duration-200 hover:shadow-md focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+        className="w-full cursor-pointer appearance-none rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--foreground)] shadow-sm transition-all duration-200 hover:shadow-md focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
       >
         <optgroup label="Weight">
           <option value="g">Grams (g)</option>
@@ -42,7 +42,7 @@ export function RecipeUnitSelect({ value, onChange }: RecipeUnitSelectProps) {
       </select>
       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
         <svg
-          className="h-5 w-5 text-gray-400"
+          className="h-5 w-5 text-[var(--foreground-muted)]"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

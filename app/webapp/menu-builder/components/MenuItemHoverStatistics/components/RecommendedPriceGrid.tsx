@@ -15,28 +15,31 @@ export function RecommendedPriceGrid({ statistics }: { statistics: ItemStatistic
     statistics.recommended_selling_price! > 0
       ? (profit / statistics.recommended_selling_price!) * 100
       : 0;
-  const profitColor = profit >= 0 ? 'text-[#29E7CD]' : 'text-red-400';
-  const marginColor = margin >= 0 ? 'text-[#29E7CD]' : 'text-red-400';
+  const profitColor = profit >= 0 ? 'text-[var(--primary)]' : 'text-[var(--color-error)]';
+  const marginColor = margin >= 0 ? 'text-[var(--primary)]' : 'text-[var(--color-error)]';
   return (
     <div className="grid grid-cols-2 gap-2 text-xs">
       <div>
-        <div className="text-gray-400">COGS</div>
-        <div className="font-medium text-white">${statistics.cogs.toFixed(2)}</div>
+        <div className="text-[var(--foreground-muted)]">COGS</div>
+        <div className="font-medium text-[var(--foreground)]">${statistics.cogs.toFixed(2)}</div>
       </div>
       <div>
-        <div className="text-gray-400">Revenue</div>
-        <div className="font-medium text-white">
+        <div className="text-[var(--foreground-muted)]">Revenue</div>
+        <div className="font-medium text-[var(--foreground)]">
           ${statistics.recommended_selling_price!.toFixed(2)}
         </div>
       </div>
       <div>
-        <div className="text-gray-400">Gross Profit</div>
+        <div className="text-[var(--foreground-muted)]">Gross Profit</div>
         <div className={`font-medium ${profitColor}`}>${profit.toFixed(2)}</div>
       </div>
       <div>
-        <div className="text-gray-400">Profit Margin</div>
+        <div className="text-[var(--foreground-muted)]">Profit Margin</div>
         <div className={`font-medium ${marginColor}`}>{margin.toFixed(1)}%</div>
       </div>
     </div>
   );
 }
+
+
+

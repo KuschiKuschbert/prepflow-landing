@@ -35,8 +35,8 @@ export function FrequencyPreview({ frequencyType, startDate }: FrequencyPreviewP
   }
 
   return (
-    <div className="mt-3 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
-      <div className="mb-2 text-xs font-medium text-gray-400">Next Occurrences</div>
+    <div className="mt-3 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
+      <div className="mb-2 text-xs font-medium text-[var(--foreground-muted)]">Next Occurrences</div>
       <div className="flex flex-wrap gap-2">
         {previewDates.map((dateStr, index) => {
           const date = new Date(dateStr);
@@ -46,8 +46,8 @@ export function FrequencyPreview({ frequencyType, startDate }: FrequencyPreviewP
               key={dateStr}
               className={`rounded-lg px-2 py-1 text-xs ${
                 isToday
-                  ? 'border border-[#29E7CD]/30 bg-[#29E7CD]/20 text-[#29E7CD]'
-                  : 'border border-[#2a2a2a] bg-[#1f1f1f] text-gray-300'
+                  ? 'border border-[var(--primary)]/30 bg-[var(--primary)]/20 text-[var(--primary)]'
+                  : 'border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground-secondary)]'
               }`}
             >
               {isToday

@@ -19,12 +19,12 @@ export function ScheduledCancellationBanner({
   if (!cancelAtPeriodEnd || !isActive) return null;
 
   return (
-    <div className="mb-6 rounded-2xl border border-yellow-500/30 bg-yellow-500/10 p-4">
+    <div className="mb-6 rounded-2xl border border-[var(--color-warning)]/30 bg-[var(--color-warning)]/10 p-4">
       <div className="flex items-center gap-3">
-        <Icon icon={Calendar} size="md" className="text-yellow-400" aria-hidden={true} />
+        <Icon icon={Calendar} size="md" className="text-[var(--color-warning)]" aria-hidden={true} />
         <div className="flex-1">
-          <p className="font-semibold text-white">Cancellation Scheduled</p>
-          <p className="text-sm text-gray-300">
+          <p className="font-semibold text-[var(--foreground)]">Cancellation Scheduled</p>
+          <p className="text-sm text-[var(--foreground-secondary)]">
             Your subscription will be cancelled on{' '}
             {expiresAt ? formatDate(expiresAt) : 'the end of your billing period'}. You can
             reactivate it anytime before then.

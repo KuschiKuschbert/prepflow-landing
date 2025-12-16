@@ -15,13 +15,13 @@ export function AnimatedProgressBar({ progress, label, className = '' }: Animate
     <div className={`space-y-2 ${className}`}>
       {label && (
         <div className="text-fluid-sm flex justify-between">
-          <span className="text-gray-300">{label}</span>
-          <span className="font-medium text-[#29E7CD]">{progress}%</span>
+          <span className="text-[var(--foreground-secondary)]">{label}</span>
+          <span className="font-medium text-[var(--primary)]">{progress}%</span>
         </div>
       )}
-      <div className="h-2 w-full overflow-hidden rounded-full bg-[#2a2a2a]">
+      <div className="h-2 w-full overflow-hidden rounded-full bg-[var(--muted)]">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] transition-all duration-1000 ease-out"
+          className="h-full rounded-full bg-gradient-to-r from-[var(--primary)] via-[#FF6B00] to-[var(--accent)] transition-all duration-1000 ease-out"
           style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
         />
       </div>

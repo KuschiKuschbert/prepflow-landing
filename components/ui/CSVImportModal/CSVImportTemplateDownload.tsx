@@ -12,20 +12,20 @@ interface CSVImportTemplateDownloadProps {
 
 export function CSVImportTemplateDownload({ onDownload }: CSVImportTemplateDownloadProps) {
   return (
-    <div className="rounded-xl border border-[#2a2a2a]/50 bg-[#2a2a2a]/30 p-4">
+    <div className="rounded-xl border border-[var(--border)]/50 bg-[var(--muted)]/30 p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Icon icon={FileText} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+          <Icon icon={FileText} size="md" className="text-[var(--primary)]" aria-hidden={true} />
           <div>
-            <h3 className="text-sm font-semibold text-white">Need a template?</h3>
-            <p className="text-xs text-gray-400">
+            <h3 className="text-sm font-semibold text-[var(--foreground)]">Need a template?</h3>
+            <p className="text-xs text-[var(--foreground-muted)]">
               Download our CSV template with all required columns
             </p>
           </div>
         </div>
         <button
           onClick={onDownload}
-          className="flex items-center gap-2 rounded-lg bg-[#29E7CD]/10 px-4 py-2 text-sm font-medium text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/20"
+          className="flex items-center gap-2 rounded-lg bg-[var(--primary)]/10 px-4 py-2 text-sm font-medium text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/20"
         >
           <Icon icon={Download} size="sm" aria-hidden={true} />
           Download Template

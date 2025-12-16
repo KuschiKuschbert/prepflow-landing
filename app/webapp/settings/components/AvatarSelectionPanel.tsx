@@ -118,10 +118,10 @@ export function AvatarSelectionPanel() {
   };
 
   return (
-    <div className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+    <div className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
       <div>
         <h2 className="text-xl font-semibold">Avatar</h2>
-        <p className="mt-1 text-sm text-gray-300">
+        <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
           Choose your avatar to personalize your PrepFlow experience.
         </p>
       </div>
@@ -182,8 +182,8 @@ export function AvatarSelectionPanel() {
                 <div
                   className={`relative overflow-hidden rounded-2xl border-2 transition-all ${
                     isSelected
-                      ? 'border-[#29E7CD] bg-[#29E7CD]/10 shadow-lg shadow-[#29E7CD]/20'
-                      : 'border-[#2a2a2a] bg-[#2a2a2a]/20 hover:border-[#29E7CD]/50'
+                      ? 'border-[var(--primary)] bg-[var(--primary)]/10 shadow-lg shadow-[var(--primary)]/20'
+                      : 'border-[var(--border)] bg-[var(--muted)]/20 hover:border-[var(--primary)]/50'
                   }`}
                 >
                   {/* Avatar Image */}
@@ -201,16 +201,16 @@ export function AvatarSelectionPanel() {
 
                   {/* Selection Indicator */}
                   {isSelected && (
-                    <div className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#29E7CD] shadow-lg">
-                      <Icon icon={Check} size="xs" className="text-black" aria-hidden={true} />
+                    <div className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--primary)] shadow-lg">
+                      <Icon icon={Check} size="xs" className="text-[var(--button-active-text)]" aria-hidden={true} />
                     </div>
                   )}
 
                   {/* Avatar Name */}
-                  <div className="border-t border-[#2a2a2a] bg-[#1f1f1f]/80 p-2">
+                  <div className="border-t border-[var(--border)] bg-[var(--surface)]/80 p-2">
                     <p
                       className={`truncate text-center text-xs font-medium transition-colors ${
-                        isSelected ? 'text-[#29E7CD]' : 'text-gray-300'
+                        isSelected ? 'text-[var(--primary)]' : 'text-[var(--foreground-secondary)]'
                       }`}
                     >
                       {avatarOption.name}
@@ -232,7 +232,7 @@ export function AvatarSelectionPanel() {
           <button
             onClick={scrollLeft}
             disabled={!canScrollLeft}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#2a2a2a] bg-[#2a2a2a]/30 text-gray-400 transition-all hover:bg-[#2a2a2a]/50 hover:text-[#29E7CD] disabled:cursor-not-allowed disabled:opacity-30"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--muted)]/30 text-[var(--foreground-muted)] transition-all hover:bg-[var(--muted)]/50 hover:text-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-30"
             aria-label="Scroll left"
           >
             <Icon icon={ChevronLeft} size="sm" aria-hidden={true} />
@@ -245,7 +245,7 @@ export function AvatarSelectionPanel() {
                 <div
                   key={index}
                   className={`h-1.5 rounded-full transition-all ${
-                    isSelected ? 'w-6 bg-[#29E7CD]' : 'w-1.5 bg-[#2a2a2a]'
+                    isSelected ? 'w-6 bg-[var(--primary)]' : 'w-1.5 bg-[var(--muted)]'
                   }`}
                   aria-hidden={true}
                 />
@@ -256,7 +256,7 @@ export function AvatarSelectionPanel() {
           <button
             onClick={scrollRight}
             disabled={!canScrollRight}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#2a2a2a] bg-[#2a2a2a]/30 text-gray-400 transition-all hover:bg-[#2a2a2a]/50 hover:text-[#29E7CD] disabled:cursor-not-allowed disabled:opacity-30"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--muted)]/30 text-[var(--foreground-muted)] transition-all hover:bg-[var(--muted)]/50 hover:text-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-30"
             aria-label="Scroll right"
           >
             <Icon icon={ChevronRight} size="sm" aria-hidden={true} />
@@ -266,11 +266,11 @@ export function AvatarSelectionPanel() {
 
       {/* Clear Selection Button */}
       {avatar && (
-        <div className="flex justify-end border-t border-[#2a2a2a] pt-4">
+        <div className="flex justify-end border-t border-[var(--border)] pt-4">
           <button
             onClick={() => !loading && setAvatar(null)}
             disabled={loading}
-            className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/50 disabled:opacity-50"
+            className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 px-4 py-2 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/50 disabled:opacity-50"
           >
             Use Initials Instead
           </button>
@@ -280,7 +280,7 @@ export function AvatarSelectionPanel() {
       {/* Loading Indicator */}
       {loading && (
         <div className="flex items-center justify-center py-2">
-          <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#29E7CD] border-t-transparent" />
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--primary)] border-t-transparent" />
         </div>
       )}
     </div>

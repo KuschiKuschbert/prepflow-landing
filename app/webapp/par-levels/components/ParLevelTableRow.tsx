@@ -94,9 +94,9 @@ export function ParLevelTableRow({
   return (
     <>
       <tr
-        className={`border-l-2 border-[#29E7CD]/30 bg-[#29E7CD]/2 transition-colors duration-200 ${
-          isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[#29E7CD]/5'
-        } ${isSelected && isSelectionMode ? 'bg-[#29E7CD]/10' : ''}`}
+        className={`border-l-2 border-[var(--primary)]/30 bg-[var(--primary)]/2 transition-colors duration-200 ${
+          isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[var(--primary)]/5'
+        } ${isSelected && isSelectionMode ? 'bg-[var(--primary)]/10' : ''}`}
         onClick={handleRowClick}
         title={isSelectionMode ? 'Tap to select' : 'Click to edit par level'}
         onTouchStart={isSelectionMode ? undefined : longPressHandlers.onTouchStart}
@@ -117,12 +117,12 @@ export function ParLevelTableRow({
 
               onSelectParLevel(parLevel.id, willBeSelected);
             }}
-            className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+            className="flex items-center justify-center transition-colors hover:text-[var(--primary)]"
             aria-label={`${isSelected ? 'Deselect' : 'Select'} par level for ${parLevel.ingredients?.ingredient_name || 'ingredient'}`}
           >
             {isSelected ? (
               <svg
-                className="h-4 w-4 text-[#29E7CD]"
+                className="h-4 w-4 text-[var(--primary)]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -135,33 +135,33 @@ export function ParLevelTableRow({
                 />
               </svg>
             ) : (
-              <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+              <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
             )}
           </button>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div>
-            <div className="text-sm font-medium text-white">
+            <div className="text-sm font-medium text-[var(--foreground)]">
               {parLevel.ingredients?.ingredient_name || 'Unknown Ingredient'}
             </div>
             {parLevel.ingredients?.category && (
-              <div className="text-xs text-gray-400">{parLevel.ingredients.category}</div>
+              <div className="text-xs text-[var(--foreground-muted)]">{parLevel.ingredients.category}</div>
             )}
           </div>
         </td>
-        <td className="px-6 py-4 text-sm whitespace-nowrap text-white">
+        <td className="px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground)]">
           {parLevel.par_level} {parLevel.unit}
         </td>
-        <td className="px-6 py-4 text-sm whitespace-nowrap text-white">
+        <td className="px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground)]">
           {parLevel.reorder_point} {parLevel.unit}
         </td>
-        <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">{parLevel.unit}</td>
+        <td className="px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)]">{parLevel.unit}</td>
         <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
           <div className="flex items-center justify-end gap-2">
             <button
               onClick={handleEditClick}
               disabled={isSelectionMode}
-              className="rounded-lg p-2 text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/10 disabled:opacity-50"
+              className="rounded-lg p-2 text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/10 disabled:opacity-50"
               aria-label={`Edit par level for ${parLevel.ingredients?.ingredient_name || 'ingredient'}`}
             >
               <Icon icon={Edit2} size="sm" aria-hidden={true} />
@@ -169,11 +169,11 @@ export function ParLevelTableRow({
             <button
               onClick={handleDeleteClick}
               disabled={deletingId === parLevel.id || isSelectionMode}
-              className="rounded-lg p-2 text-red-400 transition-colors hover:bg-red-400/10 disabled:opacity-50"
+              className="rounded-lg p-2 text-[var(--color-error)] transition-colors hover:bg-[var(--color-error)]/10 disabled:opacity-50"
               aria-label={`Delete par level for ${parLevel.ingredients?.ingredient_name || 'ingredient'}`}
             >
               {deletingId === parLevel.id ? (
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-red-400 border-t-transparent"></div>
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--color-error)] border-t-transparent"></div>
               ) : (
                 <Icon icon={Trash2} size="sm" aria-hidden={true} />
               )}

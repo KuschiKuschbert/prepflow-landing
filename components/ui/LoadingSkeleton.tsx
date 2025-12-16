@@ -15,7 +15,7 @@ export function LoadingSkeleton({
   height,
   width,
 }: LoadingSkeletonProps) {
-  const baseClasses = 'animate-pulse bg-[#2a2a2a] rounded-xl';
+  const baseClasses = 'animate-pulse bg-[var(--muted)] rounded-xl';
 
   const variants = {
     card: 'h-32',
@@ -50,28 +50,28 @@ export function LoadingSkeleton({
 // Specialized skeleton components for common patterns
 export function PageSkeleton() {
   return (
-    <div className="desktop:p-6 min-h-screen bg-[#0a0a0a] p-4">
+    <div className="desktop:p-6 min-h-screen bg-[var(--background)] p-4">
       <div className="mx-auto max-w-7xl">
         {/* Header skeleton */}
         <div className="mb-8 animate-pulse">
-          <div className="mb-4 h-8 w-1/3 rounded-3xl bg-[#2a2a2a]"></div>
-          <div className="h-4 w-1/2 rounded-xl bg-[#2a2a2a]"></div>
+          <div className="mb-4 h-8 w-1/3 rounded-3xl bg-[var(--muted)]"></div>
+          <div className="h-4 w-1/2 rounded-xl bg-[var(--muted)]"></div>
         </div>
 
         {/* Action buttons skeleton */}
         <div className="mb-8 flex gap-3">
-          <div className="h-12 w-32 animate-pulse rounded-2xl bg-[#2a2a2a]"></div>
-          <div className="h-12 w-40 animate-pulse rounded-2xl bg-[#2a2a2a]"></div>
-          <div className="h-12 w-28 animate-pulse rounded-2xl bg-[#2a2a2a]"></div>
+          <div className="h-12 w-32 animate-pulse rounded-2xl bg-[var(--muted)]"></div>
+          <div className="h-12 w-40 animate-pulse rounded-2xl bg-[var(--muted)]"></div>
+          <div className="h-12 w-28 animate-pulse rounded-2xl bg-[var(--muted)]"></div>
         </div>
 
         {/* Main content skeleton */}
-        <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
+        <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
           <div className="animate-pulse">
-            <div className="mb-6 h-6 w-1/4 rounded-xl bg-[#2a2a2a]"></div>
+            <div className="mb-6 h-6 w-1/4 rounded-xl bg-[var(--muted)]"></div>
             <div className="space-y-4">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-16 rounded-xl bg-[#2a2a2a]"></div>
+                <div key={i} className="h-16 rounded-xl bg-[var(--muted)]"></div>
               ))}
             </div>
           </div>
@@ -83,26 +83,26 @@ export function PageSkeleton() {
 
 export function TableSkeleton({ rows = 5, columns = 4 }: { rows?: number; columns?: number }) {
   return (
-    <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
+    <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-lg">
       {/* Header */}
-      <div className="border-b border-[#2a2a2a] bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-6 py-4">
+      <div className="border-b border-[var(--border)] bg-gradient-to-r from-[var(--muted)]/50 to-[var(--muted)]/20 px-6 py-4">
         <div className="animate-pulse">
           <div className="flex gap-4">
             {Array.from({ length: columns }).map((_, i) => (
-              <div key={i} className="h-4 w-24 rounded bg-[#2a2a2a]"></div>
+              <div key={i} className="h-4 w-24 rounded bg-[var(--muted)]"></div>
             ))}
           </div>
         </div>
       </div>
 
       {/* Rows */}
-      <div className="divide-y divide-[#2a2a2a]">
+      <div className="divide-y divide-[var(--muted)]">
         {Array.from({ length: rows }).map((_, i) => (
           <div key={i} className="px-6 py-4">
             <div className="animate-pulse">
               <div className="flex gap-4">
                 {Array.from({ length: columns }).map((_, j) => (
-                  <div key={j} className="h-4 w-20 rounded bg-[#2a2a2a]"></div>
+                  <div key={j} className="h-4 w-20 rounded bg-[var(--muted)]"></div>
                 ))}
               </div>
             </div>
@@ -115,10 +115,10 @@ export function TableSkeleton({ rows = 5, columns = 4 }: { rows?: number; column
 
 export function ChartSkeleton() {
   return (
-    <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
+    <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
       <div className="animate-pulse">
-        <div className="mb-4 h-6 w-1/3 rounded-xl bg-[#2a2a2a]"></div>
-        <div className="h-80 rounded-xl bg-[#2a2a2a]"></div>
+        <div className="mb-4 h-6 w-1/3 rounded-xl bg-[var(--muted)]"></div>
+        <div className="h-80 rounded-xl bg-[var(--muted)]"></div>
       </div>
     </div>
   );
@@ -130,11 +130,11 @@ export function CardGridSkeleton({ count = 6 }: { count?: number }) {
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="animate-pulse rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg"
+          className="animate-pulse rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg"
         >
-          <div className="mb-3 h-4 w-3/4 rounded bg-[#2a2a2a]"></div>
-          <div className="mb-2 h-3 w-1/2 rounded bg-[#2a2a2a]"></div>
-          <div className="h-3 w-2/3 rounded bg-[#2a2a2a]"></div>
+          <div className="mb-3 h-4 w-3/4 rounded bg-[var(--muted)]"></div>
+          <div className="mb-2 h-3 w-1/2 rounded bg-[var(--muted)]"></div>
+          <div className="h-3 w-2/3 rounded bg-[var(--muted)]"></div>
         </div>
       ))}
     </div>
@@ -147,11 +147,11 @@ export function StatsGridSkeleton() {
       {Array.from({ length: 4 }).map((_, i) => (
         <div
           key={i}
-          className="animate-pulse rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg"
+          className="animate-pulse rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg"
         >
-          <div className="mb-3 h-4 w-1/2 rounded bg-[#2a2a2a]"></div>
-          <div className="mb-2 h-8 w-1/3 rounded bg-[#2a2a2a]"></div>
-          <div className="h-3 w-2/3 rounded bg-[#2a2a2a]"></div>
+          <div className="mb-3 h-4 w-1/2 rounded bg-[var(--muted)]"></div>
+          <div className="mb-2 h-8 w-1/3 rounded bg-[var(--muted)]"></div>
+          <div className="h-3 w-2/3 rounded bg-[var(--muted)]"></div>
         </div>
       ))}
     </div>
@@ -160,17 +160,17 @@ export function StatsGridSkeleton() {
 
 export function FormSkeleton() {
   return (
-    <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
+    <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
       <div className="animate-pulse">
-        <div className="mb-6 h-6 w-1/4 rounded-xl bg-[#2a2a2a]"></div>
+        <div className="mb-6 h-6 w-1/4 rounded-xl bg-[var(--muted)]"></div>
         <div className="space-y-4">
           {[...Array(4)].map((_, i) => (
             <div key={i}>
-              <div className="mb-2 h-4 w-1/3 rounded bg-[#2a2a2a]"></div>
-              <div className="h-10 rounded-xl bg-[#2a2a2a]"></div>
+              <div className="mb-2 h-4 w-1/3 rounded bg-[var(--muted)]"></div>
+              <div className="h-10 rounded-xl bg-[var(--muted)]"></div>
             </div>
           ))}
-          <div className="h-10 w-24 rounded-xl bg-[#2a2a2a]"></div>
+          <div className="h-10 w-24 rounded-xl bg-[var(--muted)]"></div>
         </div>
       </div>
     </div>
@@ -180,16 +180,16 @@ export function FormSkeleton() {
 // Landing page specific skeletons
 export function HeroSkeleton() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">
+    <div className="flex min-h-screen items-center justify-center bg-[var(--background)]">
       <div className="tablet:px-6 desktop:px-8 mx-auto max-w-7xl px-4">
         <div className="animate-pulse">
-          <div className="mx-auto mb-8 h-16 w-2/3 rounded-3xl bg-[#2a2a2a]"></div>
-          <div className="mx-auto mb-12 h-6 w-1/2 rounded-xl bg-[#2a2a2a]"></div>
+          <div className="mx-auto mb-8 h-16 w-2/3 rounded-3xl bg-[var(--muted)]"></div>
+          <div className="mx-auto mb-12 h-6 w-1/2 rounded-xl bg-[var(--muted)]"></div>
           <div className="mb-16 flex justify-center gap-4">
-            <div className="h-14 w-48 rounded-2xl bg-[#2a2a2a]"></div>
-            <div className="h-14 w-40 rounded-2xl bg-[#2a2a2a]"></div>
+            <div className="h-14 w-48 rounded-2xl bg-[var(--muted)]"></div>
+            <div className="h-14 w-40 rounded-2xl bg-[var(--muted)]"></div>
           </div>
-          <div className="h-96 rounded-3xl bg-[#2a2a2a]"></div>
+          <div className="h-96 rounded-3xl bg-[var(--muted)]"></div>
         </div>
       </div>
     </div>
@@ -198,17 +198,17 @@ export function HeroSkeleton() {
 
 export function PricingSkeleton() {
   return (
-    <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 shadow-lg">
+    <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 shadow-lg">
       <div className="animate-pulse">
-        <div className="mb-6 h-8 w-1/3 rounded-xl bg-[#2a2a2a]"></div>
-        <div className="mb-4 h-12 w-1/4 rounded-xl bg-[#2a2a2a]"></div>
-        <div className="mb-8 h-4 w-1/2 rounded bg-[#2a2a2a]"></div>
+        <div className="mb-6 h-8 w-1/3 rounded-xl bg-[var(--muted)]"></div>
+        <div className="mb-4 h-12 w-1/4 rounded-xl bg-[var(--muted)]"></div>
+        <div className="mb-8 h-4 w-1/2 rounded bg-[var(--muted)]"></div>
         <div className="mb-8 space-y-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-4 w-full rounded bg-[#2a2a2a]"></div>
+            <div key={i} className="h-4 w-full rounded bg-[var(--muted)]"></div>
           ))}
         </div>
-        <div className="h-14 w-full rounded-2xl bg-[#2a2a2a]"></div>
+        <div className="h-14 w-full rounded-2xl bg-[var(--muted)]"></div>
       </div>
     </div>
   );

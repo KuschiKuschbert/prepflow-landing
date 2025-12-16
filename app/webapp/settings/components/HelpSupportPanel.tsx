@@ -35,10 +35,10 @@ export function HelpSupportPanel() {
   } = useSupportForm(userEmail, refreshErrors);
 
   return (
-    <div className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+    <div className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
       <div>
         <h2 className="text-xl font-semibold">Help & Support</h2>
-        <p className="mt-1 text-sm text-gray-300">
+        <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
           Get help, report issues, or request new features.
         </p>
       </div>
@@ -47,11 +47,11 @@ export function HelpSupportPanel() {
 
       {/* Recent Errors Section */}
       {userEmail && (
-        <div className="border-t border-[#2a2a2a] pt-4">
+        <div className="border-t border-[var(--border)] pt-4">
           <div className="mb-3 flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-white">Recent Errors</h3>
+            <h3 className="text-lg font-semibold text-[var(--foreground)]">Recent Errors</h3>
             {recentErrors.length > 0 && (
-              <span className="text-xs text-gray-400">
+              <span className="text-xs text-[var(--foreground-muted)]">
                 {recentErrors.length} error{recentErrors.length !== 1 ? 's' : ''} in last 7 days
               </span>
             )}
@@ -66,7 +66,7 @@ export function HelpSupportPanel() {
 
       {/* Auto-Report Toggle */}
       {userEmail && (
-        <div className="border-t border-[#2a2a2a] pt-4">
+        <div className="border-t border-[var(--border)] pt-4">
           <AutoReportToggle
             enabled={autoReport}
             loading={loadingAutoReport}

@@ -65,10 +65,10 @@ export function PrivacyControlsPanel() {
     return (
       <div
         ref={ref}
-        className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6"
+        className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6"
       >
-        <div className="h-6 w-48 animate-pulse rounded bg-[#2a2a2a]" />
-        <div className="h-4 w-64 animate-pulse rounded bg-[#2a2a2a]" />
+        <div className="h-6 w-48 animate-pulse rounded bg-[var(--muted)]" />
+        <div className="h-4 w-64 animate-pulse rounded bg-[var(--muted)]" />
       </div>
     );
   }
@@ -78,11 +78,11 @@ export function PrivacyControlsPanel() {
       <ConfirmDialog />
       <div
         ref={ref}
-        className="mb-6 space-y-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6"
+        className="mb-6 space-y-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6"
       >
         <div>
           <h2 className="text-xl font-semibold">Privacy & Data</h2>
-          <p className="mt-1 text-sm text-gray-300">
+          <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
             Manage your data, view activity, and control your privacy settings.
           </p>
         </div>
@@ -91,16 +91,16 @@ export function PrivacyControlsPanel() {
         {dataUsage && <DataUsageSection dataUsage={dataUsage} />}
 
         {/* Data Export */}
-        <div className="space-y-3 border-t border-[#2a2a2a] pt-4">
+        <div className="space-y-3 border-t border-[var(--border)] pt-4">
           <h3 className="text-lg font-medium">Export Your Data</h3>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-[var(--foreground-muted)]">
             Download a copy of all your data in JSON format. This includes ingredients, recipes,
             dishes, and all other data associated with your account.
           </p>
           <button
             onClick={handleExport}
             disabled={exporting}
-            className="flex items-center gap-2 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/60 disabled:opacity-50"
+            className="flex items-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/40 px-4 py-2 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/60 disabled:opacity-50"
           >
             <Icon icon={Download} size="sm" aria-hidden={true} />
             {exporting ? 'Exporting...' : 'Export My Data'}
@@ -108,34 +108,34 @@ export function PrivacyControlsPanel() {
         </div>
 
         {/* Account Deletion */}
-        <div className="space-y-3 border-t border-[#2a2a2a] pt-4">
+        <div className="space-y-3 border-t border-[var(--border)] pt-4">
           <div className="flex items-center gap-2">
-            <Icon icon={AlertTriangle} size="md" className="text-red-400" aria-hidden={true} />
-            <h3 className="text-lg font-medium text-red-400">Delete Your Account</h3>
+            <Icon icon={AlertTriangle} size="md" className="text-[var(--color-error)]" aria-hidden={true} />
+            <h3 className="text-lg font-medium text-[var(--color-error)]">Delete Your Account</h3>
           </div>
           {deletionRequested ? (
-            <div className="space-y-3 rounded-xl border border-yellow-500/30 bg-yellow-500/5 p-4">
-              <p className="text-sm text-yellow-400">
+            <div className="space-y-3 rounded-xl border border-[var(--color-warning)]/30 bg-[var(--color-warning)]/5 p-4">
+              <p className="text-sm text-[var(--color-warning)]">
                 Account deletion requested. Your account will be permanently deleted after a 7-day
                 grace period. You can cancel this request anytime before then.
               </p>
               <button
                 onClick={handleCancelDeletion}
-                className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-400 transition-colors hover:bg-yellow-500/20"
+                className="rounded-xl border border-[var(--color-warning)]/30 bg-[var(--color-warning)]/10 px-4 py-2 text-sm text-[var(--color-warning)] transition-colors hover:bg-[var(--color-warning)]/20"
               >
                 Cancel Deletion Request
               </button>
             </div>
           ) : (
             <>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-[var(--foreground-muted)]">
                 Permanently delete your account and all associated data. This action can&apos;t be
                 undone. You&apos;ll have a 7-day grace period to cancel the deletion request.
               </p>
               <button
                 onClick={handleDelete}
                 disabled={deleting}
-                className="flex items-center gap-2 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm text-red-400 transition-colors hover:bg-red-500/20 disabled:opacity-50"
+                className="flex items-center gap-2 rounded-2xl border border-[var(--color-error)]/30 bg-[var(--color-error)]/10 px-4 py-2 text-sm text-[var(--color-error)] transition-colors hover:bg-[var(--color-error)]/20 disabled:opacity-50"
               >
                 <Icon icon={Trash2} size="sm" aria-hidden={true} />
                 {deleting ? 'Requesting...' : 'Request Account Deletion'}

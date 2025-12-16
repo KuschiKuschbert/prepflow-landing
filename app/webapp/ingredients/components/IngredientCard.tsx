@@ -119,9 +119,9 @@ export function IngredientCard({
   return (
     <>
       <div
-        className={`rounded-xl border-l-2 border-[#D925C7]/30 bg-[#D925C7]/2 p-3 transition-all duration-200 ${
-          isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[#D925C7]/5'
-        } ${isSelected && isSelectionMode ? 'border-[#D925C7]/50 bg-[#D925C7]/10' : ''}`}
+        className={`rounded-xl border-l-2 border-[var(--accent)]/30 bg-[var(--accent)]/2 p-3 transition-all duration-200 ${
+          isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[var(--accent)]/5'
+        } ${isSelected && isSelectionMode ? 'border-[var(--accent)]/50 bg-[var(--accent)]/10' : ''}`}
         onClick={handleCardClick}
         title={isSelectionMode ? 'Tap to select' : 'Click to edit ingredient'}
         onTouchStart={handleTouchStart}
@@ -131,39 +131,39 @@ export function IngredientCard({
         {/* Header: Name and Cost */}
         <div className="mb-2 flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
-            <h3 className="truncate text-base font-semibold text-white">
+            <h3 className="truncate text-base font-semibold text-[var(--foreground)]">
               {ingredient.ingredient_name}
             </h3>
             {ingredient.product_code && (
-              <p className="truncate text-xs text-gray-500">{ingredient.product_code}</p>
+              <p className="truncate text-xs text-[var(--foreground-subtle)]">{ingredient.product_code}</p>
             )}
           </div>
           <div className="flex-shrink-0 text-right">
-            <div className="text-base font-bold text-[#29E7CD]">
+            <div className="text-base font-bold text-[var(--primary)]">
               {formatCurrency(convertedCost)}
             </div>
-            <div className="text-xs text-gray-400">/{displayUnit}</div>
+            <div className="text-xs text-[var(--foreground-muted)]">/{displayUnit}</div>
           </div>
         </div>
 
         {/* Secondary Info: Compact inline layout */}
-        <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-400">
+        <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--foreground-muted)]">
           {ingredient.brand && (
             <span>
-              <span className="text-gray-500">Brand:</span> {ingredient.brand}
+              <span className="text-[var(--foreground-subtle)]">Brand:</span> {ingredient.brand}
             </span>
           )}
           {ingredient.supplier && (
             <span className="flex items-center gap-1">
-              <Icon icon={Store} size="xs" className="text-gray-500" aria-hidden={true} />
+              <Icon icon={Store} size="xs" className="text-[var(--foreground-subtle)]" aria-hidden={true} />
               {ingredient.supplier}
             </span>
           )}
           {ingredient.pack_size != null && (
             <span className="flex items-center gap-1">
-              <Icon icon={MapPin} size="xs" className="text-gray-500" aria-hidden={true} />
+              <Icon icon={MapPin} size="xs" className="text-[var(--foreground-subtle)]" aria-hidden={true} />
               {String(ingredient.pack_size)} {packSizeUnit}
-              {showUnitTooltip && <span className="text-gray-500">({standardUnit})</span>}
+              {showUnitTooltip && <span className="text-[var(--foreground-subtle)]">({standardUnit})</span>}
             </span>
           )}
         </div>
@@ -172,13 +172,13 @@ export function IngredientCard({
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-1.5">
             <span
-              className={`truncate text-xs font-medium ${isLowStock ? 'text-red-400' : 'text-gray-300'}`}
+              className={`truncate text-xs font-medium ${isLowStock ? 'text-[var(--color-error)]' : 'text-[var(--foreground-secondary)]'}`}
             >
               Stock: {ingredient.current_stock != null ? String(ingredient.current_stock) : '0'}{' '}
               {ingredient.unit || ''}
             </span>
             {isLowStock && (
-              <span className="inline-flex flex-shrink-0 items-center rounded-full bg-red-900/20 px-1.5 py-0.5 text-xs font-medium text-red-400">
+              <span className="inline-flex flex-shrink-0 items-center rounded-full bg-red-900/20 px-1.5 py-0.5 text-xs font-medium text-[var(--color-error)]">
                 Low
               </span>
             )}
@@ -187,17 +187,17 @@ export function IngredientCard({
             <button
               onClick={handleEditClick}
               disabled={isSelectionMode}
-              className={`flex items-center justify-center gap-1 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-3 py-1.5 text-xs font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 hover:drop-shadow-[0_0_8px_rgba(41,231,205,0.6)] disabled:opacity-50 ${
+              className={`flex items-center justify-center gap-1 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] px-3 py-1.5 text-xs font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--color-info)]/80 hover:drop-shadow-[0_0_8px_rgba(41,231,205,0.6)] disabled:opacity-50 ${
                 isSelectionMode ? 'cursor-not-allowed' : ''
               }`}
               aria-label={`Edit ${ingredient.ingredient_name}`}
             >
-              <Icon icon={Edit} size="xs" className="text-white" aria-hidden={true} />
+              <Icon icon={Edit} size="xs" className="text-[var(--foreground)]" aria-hidden={true} />
             </button>
             <button
               onClick={handleDeleteClick}
               disabled={deletingId === ingredient.id || isSelectionMode}
-              className={`flex items-center justify-center gap-1 rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-3 py-1.5 text-xs font-medium text-white transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.6)] disabled:opacity-50 ${
+              className={`flex items-center justify-center gap-1 rounded-lg bg-gradient-to-r from-[var(--color-error)] to-[#dc2626] px-3 py-1.5 text-xs font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[var(--color-error)]/80 hover:to-[#dc2626]/80 hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.6)] disabled:opacity-50 ${
                 isSelectionMode ? 'cursor-not-allowed' : ''
               }`}
               aria-label={`Delete ${ingredient.ingredient_name}`}
@@ -205,7 +205,7 @@ export function IngredientCard({
               {deletingId === ingredient.id ? (
                 <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
               ) : (
-                <Icon icon={Trash2} size="xs" className="text-white" aria-hidden={true} />
+                <Icon icon={Trash2} size="xs" className="text-[var(--foreground)]" aria-hidden={true} />
               )}
             </button>
           </div>

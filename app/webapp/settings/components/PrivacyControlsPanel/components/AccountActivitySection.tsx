@@ -28,25 +28,25 @@ function formatDate(dateString: string) {
 
 export function AccountActivitySection({ recentActivity }: AccountActivitySectionProps) {
   return (
-    <div className="space-y-3 border-t border-[#2a2a2a] pt-4">
+    <div className="space-y-3 border-t border-[var(--border)] pt-4">
       <div className="flex items-center gap-2">
-        <Icon icon={Activity} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+        <Icon icon={Activity} size="md" className="text-[var(--primary)]" aria-hidden={true} />
         <h3 className="text-lg font-medium">Recent Activity</h3>
       </div>
       {recentActivity.length === 0 ? (
-        <p className="text-sm text-gray-400">No recent activity to display.</p>
+        <p className="text-sm text-[var(--foreground-muted)]">No recent activity to display.</p>
       ) : (
         <div className="space-y-2">
           {recentActivity.slice(0, 10).map(activity => (
             <div
               key={activity.id}
-              className="flex items-center justify-between rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-3"
+              className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 p-3"
             >
               <div>
-                <p className="text-sm font-medium text-white capitalize">
+                <p className="text-sm font-medium text-[var(--foreground)] capitalize">
                   {activity.action_type} {activity.entity_type}
                 </p>
-                <p className="text-xs text-gray-400">{formatDate(activity.created_at)}</p>
+                <p className="text-xs text-[var(--foreground-muted)]">{formatDate(activity.created_at)}</p>
               </div>
             </div>
           ))}

@@ -136,23 +136,23 @@ export function CleaningGrid({
 
   if (tasks.length === 0) {
     return (
-      <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-12 text-center">
-        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-          <Icon icon={ClipboardCheck} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
+      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-12 text-center">
+        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20">
+          <Icon icon={ClipboardCheck} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
         </div>
-        <h3 className="mb-2 text-xl font-semibold text-white">No cleaning tasks yet</h3>
-        <p className="mb-6 text-gray-400">
+        <h3 className="mb-2 text-xl font-semibold text-[var(--button-active-text)]">No cleaning tasks yet</h3>
+        <p className="mb-6 text-[var(--foreground-muted)]">
           Create your first cleaning task to start tracking your cleaning schedule.
         </p>
         <div className="tablet:flex-row tablet:justify-center flex flex-col gap-3">
           <button
             onClick={() => onCreateTask?.()}
-            className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
+            className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
           >
             Create Your First Task
           </button>
-          <p className="flex items-center justify-center text-sm text-gray-500">
-            Press <kbd className="mx-1 rounded bg-[#2a2a2a] px-2 py-1 text-xs">N</kbd> for quick
+          <p className="flex items-center justify-center text-sm text-[var(--foreground-subtle)]">
+            Press <kbd className="mx-1 rounded bg-[var(--muted)] px-2 py-1 text-xs">N</kbd> for quick
             create
           </p>
         </div>
@@ -161,14 +161,14 @@ export function CleaningGrid({
   }
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
+    <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
       {/* Sticky header with day headers */}
-      <div className="sticky top-0 z-20 flex border-b border-[#2a2a2a] bg-[#1f1f1f]">
+      <div className="sticky top-0 z-20 flex border-b border-[var(--border)] bg-[var(--surface)]">
         {/* Empty cell for task name column */}
-        <div className="desktop:min-w-[280px] desktop:max-w-[280px] sticky left-0 z-30 max-w-[220px] min-w-[220px] border-r border-[#2a2a2a] bg-[#1f1f1f] px-4 py-3">
-          <div className="text-sm font-medium text-gray-400">Task</div>
+        <div className="desktop:min-w-[280px] desktop:max-w-[280px] sticky left-0 z-30 max-w-[220px] min-w-[220px] border-r border-[var(--border)] bg-[var(--surface)] px-4 py-3">
+          <div className="text-sm font-medium text-[var(--foreground-muted)]">Task</div>
           {dates.length > 0 && (
-            <div className="mt-1 text-xs text-gray-500">
+            <div className="mt-1 text-xs text-[var(--foreground-subtle)]">
               {dates.length} {dates.length === 1 ? 'day' : 'days'}
             </div>
           )}

@@ -6,6 +6,8 @@ import {
   getTaxBreakdown,
   formatCurrencyWithTax,
 } from '@/lib/country-config';
+import { Icon } from '@/components/ui/Icon';
+import { Globe, MapPin, Settings, Calculator, BarChart3, Zap, Search, ChevronDown } from 'lucide-react';
 
 export default function CountrySetup() {
   const { selectedCountry, countryConfig, setCountry } = useCountry();
@@ -75,15 +77,21 @@ export default function CountrySetup() {
   const formatNumber = (num: number) => new Intl.NumberFormat(countryConfig.locale).format(num);
 
   return (
-    <div className="mx-auto max-w-3xl rounded-2xl border border-[#29E7CD]/30 bg-[#1f1f1f] p-6">
+    <div className="mx-auto max-w-3xl rounded-2xl border border-[var(--primary)]/30 bg-[var(--surface)] p-6">
       <div className="mb-6 text-center">
-        <h2 className="text-fluid-2xl mb-2 font-bold text-[#29E7CD]">🌍 Country & Tax Setup</h2>
-        <p className="text-fluid-sm text-gray-400">
+        <h2 className="text-fluid-2xl mb-2 flex items-center justify-center gap-2 font-bold text-[var(--primary)]">
+          <Icon icon={Globe} size="lg" className="text-[var(--primary)]" aria-hidden={true} />
+          Country & Tax Setup
+        </h2>
+        <p className="text-fluid-sm text-[var(--foreground-muted)]">
           Configure your country for automatic tax rates and currency formatting
         </p>
       </div>
-      <div className="mb-6 rounded-xl bg-[#2a2a2a]/50 p-4">
-        <h3 className="text-fluid-lg mb-3 font-semibold text-white">📍 Select Your Country</h3>
+      <div className="mb-6 rounded-xl bg-[var(--muted)]/50 p-4">
+        <h3 className="text-fluid-lg mb-3 flex items-center gap-2 font-semibold text-[var(--foreground)]">
+          <Icon icon={MapPin} size="md" className="text-[var(--primary)]" aria-hidden={true} />
+          Select Your Country
+        </h3>
         <div className="relative" ref={dropdownRef}>
           <div className="relative">
             <input
@@ -97,39 +105,21 @@ export default function CountrySetup() {
               }}
               onFocus={() => setShowDropdown(true)}
               onKeyDown={handleKeyDown}
-              className="w-full rounded-lg border border-[#29E7CD]/30 bg-[#1f1f1f] p-3 pr-10 pl-10 text-white placeholder-gray-400 transition-all duration-200 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-lg border border-[var(--primary)]/30 bg-[var(--surface)] p-3 pr-10 pl-10 text-[var(--foreground)] placeholder-gray-400 transition-all duration-200 focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             />
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <svg
-                className="h-5 w-5 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
+              <Icon icon={Search} size="md" className="text-[var(--foreground-muted)]" aria-hidden={true} />
             </div>
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80"
+              className="absolute inset-y-0 right-0 flex items-center pr-3 text-[var(--primary)] transition-colors hover:text-[var(--primary)]/80"
+              aria-label="Toggle country dropdown"
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
+              <Icon icon={ChevronDown} size="md" className="text-[var(--primary)]" aria-hidden={true} />
             </button>
           </div>
           {showDropdown && (
-            <div className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-[#29E7CD]/30 bg-[#1f1f1f] shadow-lg">
+            <div className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-[var(--primary)]/30 bg-[var(--surface)] shadow-lg">
               {filteredCountries.length > 0 ? (
                 filteredCountries.map((country, index) => (
                   <button
@@ -142,102 +132,108 @@ export default function CountrySetup() {
                     }}
                     className={`w-full p-3 text-left transition-colors ${
                       selectedCountry === country.code
-                        ? 'bg-[#29E7CD]/10 text-[#29E7CD]'
+                        ? 'bg-[var(--primary)]/10 text-[var(--primary)]'
                         : highlightedIndex === index
-                          ? 'bg-[#2a2a2a]/70 text-white'
-                          : 'text-white hover:bg-[#2a2a2a]/50'
+                          ? 'bg-[var(--muted)]/70 text-[var(--foreground)]'
+                          : 'text-[var(--foreground)] hover:bg-[var(--muted)]/50'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="font-medium">{country.name}</div>
-                        <div className="text-fluid-sm text-gray-400">
+                        <div className="text-fluid-sm text-[var(--foreground-muted)]">
                           {country.currency} • {country.taxName}{' '}
                           {(country.taxRate * 100).toFixed(0)}%
                         </div>
                       </div>
-                      <div className="text-fluid-xs text-gray-500">{country.code}</div>
+                      <div className="text-fluid-xs text-[var(--foreground-subtle)]">{country.code}</div>
                     </div>
                   </button>
                 ))
               ) : (
-                <div className="p-3 text-center text-gray-400">No countries found</div>
+                <div className="p-3 text-center text-[var(--foreground-muted)]">No countries found</div>
               )}
             </div>
           )}
         </div>
 
-        <div className="text-fluid-sm mt-3 text-gray-400">
-          Selected: <span className="font-medium text-[#29E7CD]">{countryConfig.name}</span> •
-          Currency: <span className="text-white">{countryConfig.currency}</span> • Tax:{' '}
-          <span className="text-white">
+        <div className="text-fluid-sm mt-3 text-[var(--foreground-muted)]">
+          Selected: <span className="font-medium text-[var(--primary)]">{countryConfig.name}</span> •
+          Currency: <span className="text-[var(--foreground)]">{countryConfig.currency}</span> • Tax:{' '}
+          <span className="text-[var(--foreground)]">
             {countryConfig.taxName} {(countryConfig.taxRate * 100).toFixed(0)}%
           </span>
         </div>
       </div>
-      <div className="mb-6 rounded-xl bg-[#2a2a2a]/50 p-3">
-        <h3 className="text-fluid-base mb-2 font-semibold text-white">⚙️ Configuration Details</h3>
+      <div className="mb-6 rounded-xl bg-[var(--muted)]/50 p-3">
+        <h3 className="text-fluid-base mb-2 flex items-center gap-2 font-semibold text-[var(--foreground)]">
+          <Icon icon={Settings} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+          Configuration Details
+        </h3>
         <div className="text-fluid-xs flex flex-wrap gap-3">
-          <div className="flex items-center space-x-2 rounded-lg bg-[#1f1f1f] px-3 py-2">
-            <span className="font-medium text-[#29E7CD]">Date:</span>
-            <span className="text-white">{countryConfig.dateFormat}</span>
-            <span className="text-gray-400">({formatDate(new Date())})</span>
+          <div className="flex items-center space-x-2 rounded-lg bg-[var(--surface)] px-3 py-2">
+            <span className="font-medium text-[var(--primary)]">Date:</span>
+            <span className="text-[var(--foreground)]">{countryConfig.dateFormat}</span>
+            <span className="text-[var(--foreground-muted)]">({formatDate(new Date())})</span>
           </div>
 
-          <div className="flex items-center space-x-2 rounded-lg bg-[#1f1f1f] px-3 py-2">
-            <span className="font-medium text-[#29E7CD]">Locale:</span>
-            <span className="text-white">{countryConfig.locale}</span>
+          <div className="flex items-center space-x-2 rounded-lg bg-[var(--surface)] px-3 py-2">
+            <span className="font-medium text-[var(--primary)]">Locale:</span>
+            <span className="text-[var(--foreground)]">{countryConfig.locale}</span>
           </div>
 
-          <div className="flex items-center space-x-2 rounded-lg bg-[#1f1f1f] px-3 py-2">
-            <span className="font-medium text-[#29E7CD]">Time:</span>
-            <span className="text-white">{countryConfig.dateFormat}</span>
+          <div className="flex items-center space-x-2 rounded-lg bg-[var(--surface)] px-3 py-2">
+            <span className="font-medium text-[var(--primary)]">Time:</span>
+            <span className="text-[var(--foreground)]">{countryConfig.dateFormat}</span>
           </div>
         </div>
       </div>
-      <div className="mb-6 rounded-xl bg-[#2a2a2a]/50 p-3">
+      <div className="mb-6 rounded-xl bg-[var(--muted)]/50 p-3">
         <div className="mb-2 flex items-center justify-between">
-          <h3 className="text-fluid-base font-semibold text-white">🧮 Tax Calculator</h3>
+          <h3 className="text-fluid-base flex items-center gap-2 font-semibold text-[var(--foreground)]">
+            <Icon icon={Calculator} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+            Tax Calculator
+          </h3>
           <button
             onClick={() => setShowTaxBreakdown(!showTaxBreakdown)}
-            className="text-fluid-xs rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1 text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80"
+            className="text-fluid-xs rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-3 py-1 text-[var(--button-active-text)] transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80"
           >
             {showTaxBreakdown ? 'Hide' : 'Show'} Breakdown
           </button>
         </div>
 
         <div className="mb-2 flex items-center space-x-3">
-          <label className="text-fluid-xs font-medium text-white">Test Amount:</label>
+          <label className="text-fluid-xs font-medium text-[var(--foreground)]">Test Amount:</label>
           <input
             type="number"
             value={testAmount}
             onChange={e => setTestAmount(Number(e.target.value))}
-            className="text-fluid-xs w-20 rounded-lg border border-[#29E7CD]/30 bg-[#1f1f1f] p-2 text-white"
+            className="text-fluid-xs w-20 rounded-lg border border-[var(--primary)]/30 bg-[var(--surface)] p-2 text-[var(--foreground)]"
             placeholder="100"
           />
-          <div className="text-fluid-xs font-mono text-white">
+          <div className="text-fluid-xs font-mono text-[var(--foreground)]">
             Total: {formatPrice(testAmount, true)}
           </div>
         </div>
 
         {showTaxBreakdown && (
-          <div className="rounded-lg bg-[#1f1f1f] p-2">
+          <div className="rounded-lg bg-[var(--surface)] p-2">
             <div className="text-fluid-xs flex justify-between">
               <div className="text-center">
-                <div className="mb-1 text-gray-400">Subtotal</div>
-                <div className="font-mono text-white">
+                <div className="mb-1 text-[var(--foreground-muted)]">Subtotal</div>
+                <div className="font-mono text-[var(--foreground)]">
                   {formatPrice(taxBreakdown.subtotal, false)}
                 </div>
               </div>
               <div className="text-center">
-                <div className="mb-1 text-gray-400">{taxBreakdown.taxName}</div>
-                <div className="font-mono text-[#29E7CD]">
+                <div className="mb-1 text-[var(--foreground-muted)]">{taxBreakdown.taxName}</div>
+                <div className="font-mono text-[var(--primary)]">
                   {formatPrice(taxBreakdown.taxAmount, false)}
                 </div>
               </div>
               <div className="text-center">
-                <div className="mb-1 text-gray-400">Total</div>
-                <div className="font-mono font-semibold text-[#29E7CD]">
+                <div className="mb-1 text-[var(--foreground-muted)]">Total</div>
+                <div className="font-mono font-semibold text-[var(--primary)]">
                   {formatPrice(taxBreakdown.total, false)}
                 </div>
               </div>
@@ -245,45 +241,48 @@ export default function CountrySetup() {
           </div>
         )}
       </div>
-      <div className="mb-6 rounded-xl bg-[#2a2a2a]/50 p-3">
-        <h3 className="text-fluid-base mb-2 font-semibold text-white">📊 Formatting Examples</h3>
+      <div className="mb-6 rounded-xl bg-[var(--muted)]/50 p-3">
+        <h3 className="text-fluid-base mb-2 flex items-center gap-2 font-semibold text-[var(--foreground)]">
+          <Icon icon={BarChart3} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+          Formatting Examples
+        </h3>
         <div className="text-fluid-xs flex flex-wrap gap-3">
-          <div className="flex items-center space-x-2 rounded-lg bg-[#1f1f1f] px-3 py-2">
-            <span className="font-medium text-[#29E7CD]">Currency:</span>
-            <span className="text-white">{formatPrice(testAmount, false)}</span>
-            <span className="text-gray-400">→</span>
-            <span className="text-[#29E7CD]">{formatPrice(testAmount, true)}</span>
+          <div className="flex items-center space-x-2 rounded-lg bg-[var(--surface)] px-3 py-2">
+            <span className="font-medium text-[var(--primary)]">Currency:</span>
+            <span className="text-[var(--foreground)]">{formatPrice(testAmount, false)}</span>
+            <span className="text-[var(--foreground-muted)]">→</span>
+            <span className="text-[var(--primary)]">{formatPrice(testAmount, true)}</span>
           </div>
 
-          <div className="flex items-center space-x-2 rounded-lg bg-[#1f1f1f] px-3 py-2">
-            <span className="font-medium text-[#29E7CD]">Number:</span>
-            <span className="text-white">{formatNumber(1234567.89)}</span>
+          <div className="flex items-center space-x-2 rounded-lg bg-[var(--surface)] px-3 py-2">
+            <span className="font-medium text-[var(--primary)]">Number:</span>
+            <span className="text-[var(--foreground)]">{formatNumber(1234567.89)}</span>
           </div>
 
-          <div className="flex items-center space-x-2 rounded-lg bg-[#1f1f1f] px-3 py-2">
-            <span className="font-medium text-[#29E7CD]">Date:</span>
-            <span className="text-white">{formatDate(new Date())}</span>
+          <div className="flex items-center space-x-2 rounded-lg bg-[var(--surface)] px-3 py-2">
+            <span className="font-medium text-[var(--primary)]">Date:</span>
+            <span className="text-[var(--foreground)]">{formatDate(new Date())}</span>
           </div>
 
-          <div className="flex items-center space-x-2 rounded-lg bg-[#1f1f1f] px-3 py-2">
-            <span className="font-medium text-[#29E7CD]">Percent:</span>
-            <span className="text-white">
+          <div className="flex items-center space-x-2 rounded-lg bg-[var(--surface)] px-3 py-2">
+            <span className="font-medium text-[var(--primary)]">Percent:</span>
+            <span className="text-[var(--foreground)]">
               {new Intl.NumberFormat(countryConfig.locale, { style: 'percent' }).format(0.15)}
             </span>
           </div>
         </div>
       </div>
-      <div className="rounded-xl border border-[#29E7CD]/30 bg-gradient-to-r from-[#29E7CD]/10 to-[#D925C7]/10 p-3">
+      <div className="rounded-xl border border-[var(--primary)]/30 bg-gradient-to-r from-[var(--primary)]/10 to-[var(--accent)]/10 p-3">
         <div className="flex items-start space-x-2">
-          <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-            <span className="text-fluid-sm">⚡</span>
+          <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20">
+            <Icon icon={Zap} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
           </div>
           <div>
-            <h4 className="text-fluid-base mb-1 font-semibold text-white">Global Impact</h4>
-            <p className="text-fluid-xs mb-2 text-gray-300">
+            <h4 className="text-fluid-base mb-1 font-semibold text-[var(--foreground)]">Global Impact</h4>
+            <p className="text-fluid-xs mb-2 text-[var(--foreground-secondary)]">
               This setting automatically applies across your entire PrepFlow system:
             </p>
-            <div className="text-fluid-xs flex flex-wrap gap-2 text-gray-300">
+            <div className="text-fluid-xs flex flex-wrap gap-2 text-[var(--foreground-secondary)]">
               <span>
                 • Pricing uses {countryConfig.taxName} at {(countryConfig.taxRate * 100).toFixed(0)}
                 %

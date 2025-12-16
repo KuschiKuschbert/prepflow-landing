@@ -62,15 +62,15 @@ export function PrepListExport({
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-2xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px]">
-        <div className="rounded-3xl bg-[#1f1f1f]/95 p-6">
+      <div className="w-full max-w-2xl rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px]">
+        <div className="rounded-3xl bg-[var(--surface)]/95 p-6">
           {/* Header */}
           <div className="mb-6 flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-semibold text-white">
+              <h2 className="text-2xl font-semibold text-[var(--foreground)]">
                 {t('prepLists.export', 'Export Prep List')}
               </h2>
-              <p className="mt-1 text-sm text-gray-400">
+              <p className="mt-1 text-sm text-[var(--foreground-muted)]">
                 {prepList
                   ? t('prepLists.exportDesc', 'Print or export this prep list')
                   : t('prepLists.exportGeneratedDesc', 'Choose sections to export')}
@@ -78,7 +78,7 @@ export function PrepListExport({
             </div>
             <button
               onClick={onClose}
-              className="p-2 text-gray-400 transition-colors hover:text-white"
+              className="p-2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
               aria-label="Close"
             >
               <Icon icon={X} size="md" aria-hidden={true} />
@@ -91,25 +91,25 @@ export function PrepListExport({
               {/* Section Selection */}
               <div>
                 <div className="mb-3 flex items-center justify-between">
-                  <label className="text-sm font-medium text-white">
+                  <label className="text-sm font-medium text-[var(--foreground)]">
                     {t('prepLists.selectSections', 'Select Sections')}
                   </label>
                   <div className="flex gap-2">
                     <button
                       onClick={selectAllSections}
-                      className="text-xs text-[#29E7CD] hover:text-[#29E7CD]/80"
+                      className="text-xs text-[var(--primary)] hover:text-[var(--primary)]/80"
                     >
                       {t('prepLists.selectAll', 'Select All')}
                     </button>
                     <button
                       onClick={clearSelection}
-                      className="text-xs text-gray-400 hover:text-white"
+                      className="text-xs text-[var(--foreground-muted)] hover:text-[var(--foreground)]"
                     >
                       {t('prepLists.clear', 'Clear')}
                     </button>
                   </div>
                 </div>
-                <div className="max-h-48 space-y-2 overflow-y-auto rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
+                <div className="max-h-48 space-y-2 overflow-y-auto rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
                   {generatedData.sections.map((section, index) => {
                     const sectionId = section.sectionId || `uncategorized-${index}`;
                     const isSelected = section.sectionId
@@ -124,16 +124,16 @@ export function PrepListExport({
                     return (
                       <label
                         key={sectionId}
-                        className="flex cursor-pointer items-center gap-3 rounded-lg p-2 transition-colors hover:bg-[#2a2a2a]"
+                        className="flex cursor-pointer items-center gap-3 rounded-lg p-2 transition-colors hover:bg-[var(--muted)]"
                       >
                         <input
                           type="checkbox"
                           checked={isSelected}
                           onChange={() => toggleSection(section.sectionId || '')}
-                          className="h-4 w-4 rounded border-[#2a2a2a] bg-[#0a0a0a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
+                          className="h-4 w-4 rounded border-[var(--border)] bg-[var(--background)] text-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
                         />
-                        <span className="flex-1 text-sm text-white">{section.sectionName}</span>
-                        <span className="text-xs text-gray-400">
+                        <span className="flex-1 text-sm text-[var(--foreground)]">{section.sectionName}</span>
+                        <span className="text-xs text-[var(--foreground-muted)]">
                           {section.aggregatedIngredients.length} ingredients
                           {section.prepInstructions && section.prepInstructions.length > 0
                             ? `, ${section.prepInstructions.length} instructions`
@@ -151,9 +151,9 @@ export function PrepListExport({
                   type="checkbox"
                   checked={includeInstructions}
                   onChange={e => setIncludeInstructions(e.target.checked)}
-                  className="h-4 w-4 rounded border-[#2a2a2a] bg-[#0a0a0a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
+                  className="h-4 w-4 rounded border-[var(--border)] bg-[var(--background)] text-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
                 />
-                <span className="text-sm text-white">
+                <span className="text-sm text-[var(--foreground)]">
                   {t('prepLists.includeInstructions', 'Include Prep Instructions')}
                 </span>
               </label>
@@ -164,13 +164,13 @@ export function PrepListExport({
           <div className="flex items-center justify-end gap-3">
             <button
               onClick={onClose}
-              className="rounded-xl bg-[#2a2a2a] px-6 py-3 text-gray-300 transition-colors hover:bg-[#2a2a2a]/80"
+              className="rounded-xl bg-[var(--muted)] px-6 py-3 text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/80"
             >
               {t('prepLists.cancel', 'Cancel')}
             </button>
             <button
               onClick={handlePrint}
-              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
+              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
             >
               <Icon icon={Printer} size="sm" aria-hidden={true} />
               {t('prepLists.print', 'Print')}

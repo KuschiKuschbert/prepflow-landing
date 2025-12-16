@@ -44,7 +44,7 @@ interface NavItemProps {
  *   href="/webapp/recipes"
  *   label="Recipes"
  *   icon={<Icon icon={UtensilsCrossed} />}
- *   color="text-[#29E7CD]"
+ *   color="text-[var(--primary)]"
  *   isActive={pathname.startsWith('/webapp/recipes')}
  *   compact={false}
  * />
@@ -85,12 +85,12 @@ export function NavItem({
         href={href}
         onClick={handleClick}
         onMouseEnter={() => prefetchRoute(href)}
-        className={`group flex min-h-[44px] items-center py-3 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none ${
+        className={`group flex min-h-[44px] items-center py-3 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none ${
           showLabel
             ? `space-x-3 rounded-lg px-4 transition-all duration-200 ${
                 isActive
-                  ? 'border border-[#29E7CD]/30 bg-[#29E7CD]/10'
-                  : 'hover:scale-[1.02] hover:bg-[#2a2a2a]/30'
+                  ? 'border border-[var(--primary)]/30 bg-[var(--primary)]/10'
+                  : 'hover:scale-[1.02] hover:bg-[var(--muted)]/30'
               }`
             : 'justify-center rounded-none !border-0 !bg-transparent px-3 !shadow-none !outline-none hover:!bg-transparent'
         } ${showLabel ? className : ''}`}
@@ -113,12 +113,12 @@ export function NavItem({
         <span
           className={`flex flex-shrink-0 items-center justify-center ${
             showLabel
-              ? `${isActive ? color : 'text-gray-400 group-hover:text-gray-300'} ${iconSizeClasses.sm}`
+              ? `${isActive ? color : 'text-[var(--foreground-muted)] group-hover:text-[var(--foreground-secondary)]'} ${iconSizeClasses.sm}`
               : `flex aspect-square h-10 w-10 items-center justify-center rounded-full border-2 ${
                   isActive
-                    ? 'border-[#29E7CD]/50'
-                    : 'border-transparent group-hover:border-[#2a2a2a]/50'
-                } ${isActive ? color : 'text-gray-400 group-hover:text-gray-300'}`
+                    ? 'border-[var(--primary)]/50'
+                    : 'border-transparent group-hover:border-[var(--border)]/50'
+                } ${isActive ? color : 'text-[var(--foreground-muted)] group-hover:text-[var(--foreground-secondary)]'}`
           }`}
         >
           {showLabel ? (
@@ -130,7 +130,7 @@ export function NavItem({
         {showLabel && (
           <span
             className={`text-sm font-medium ${
-              isActive ? 'text-white/90' : 'text-gray-300/90 group-hover:text-white'
+              isActive ? 'text-[var(--foreground-secondary)]' : 'text-[var(--foreground-secondary)] group-hover:text-[var(--foreground)]'
             }`}
           >
             {label}
@@ -147,10 +147,10 @@ export function NavItem({
       onMouseEnter={() => prefetchRoute(href)}
       className={`${showLabel ? 'group' : ''} flex ${showLabel ? 'min-h-[44px]' : ''} items-center ${showLabel ? 'py-3' : 'py-0'} ${
         showLabel
-          ? `space-x-4 rounded-lg px-4 transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none ${
+          ? `space-x-4 rounded-lg px-4 transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none ${
               isActive
-                ? 'border border-[#29E7CD]/30 bg-[#29E7CD]/10'
-                : 'hover:scale-[1.02] hover:bg-[#2a2a2a]/50'
+                ? 'border border-[var(--primary)]/30 bg-[var(--primary)]/10'
+                : 'hover:scale-[1.02] hover:bg-[var(--muted)]/50'
             }`
           : 'justify-center rounded-none !border-0 !bg-transparent px-0 py-0 !shadow-none !ring-0 !outline-none hover:!bg-transparent focus:!ring-0'
       } ${showLabel ? className : ''}`}
@@ -173,12 +173,12 @@ export function NavItem({
       <span
         className={`flex flex-shrink-0 items-center justify-center ${
           showLabel
-            ? `${isActive ? color : 'text-gray-400 group-hover:text-gray-300'} ${iconSizeClasses[iconSize]}`
+            ? `${isActive ? color : 'text-[var(--foreground-muted)] group-hover:text-[var(--foreground-secondary)]'} ${iconSizeClasses[iconSize]}`
             : `flex aspect-square h-10 w-10 items-center justify-center rounded-full border-2 ${
                 isActive
-                  ? 'border-[#29E7CD]/50'
-                  : 'border-transparent group-hover:border-[#2a2a2a]/50'
-              } ${isActive ? color : 'text-gray-400 group-hover:text-gray-300'}`
+                  ? 'border-[var(--primary)]/50'
+                  : 'border-transparent group-hover:border-[var(--border)]/50'
+              } ${isActive ? color : 'text-[var(--foreground-muted)] group-hover:text-[var(--foreground-secondary)]'}`
         }`}
       >
         {showLabel ? (
@@ -192,7 +192,7 @@ export function NavItem({
       {showLabel && (
         <span
           className={`text-sm font-medium ${
-            isActive ? 'text-white' : 'text-gray-300 group-hover:text-white'
+            isActive ? 'text-[var(--foreground)]' : 'text-[var(--foreground-secondary)] group-hover:text-[var(--foreground)]'
           }`}
         >
           {label}

@@ -117,20 +117,20 @@ export function AdaptiveNavSettingsPanel() {
   };
 
   return (
-    <div className="mt-8 space-y-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+    <div className="mt-8 space-y-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-xl font-semibold">Adaptive Navigation</h2>
             <span
-              className="inline-flex items-center gap-1 rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2 py-0.5 text-xs font-medium text-yellow-400"
+              className="inline-flex items-center gap-1 rounded-full border border-[var(--color-warning)]/30 bg-[var(--color-warning)]/10 px-2 py-0.5 text-xs font-medium text-[var(--color-warning)]"
               title="This feature is experimental and may change"
             >
-              <Icon icon={Beaker} size="xs" className="text-yellow-400" aria-hidden={true} />
+              <Icon icon={Beaker} size="xs" className="text-[var(--color-warning)]" aria-hidden={true} />
               Experimental
             </span>
           </div>
-          <p className="mt-1 text-sm text-gray-400">
+          <p className="mt-1 text-sm text-[var(--foreground)]/60">
             Automatically reorder navigation items based on your usage patterns
           </p>
         </div>
@@ -139,9 +139,9 @@ export function AdaptiveNavSettingsPanel() {
             type="checkbox"
             checked={settings.enabled}
             onChange={e => updateSettings({ enabled: e.target.checked })}
-            className="h-5 w-5 rounded border-[#2a2a2a] bg-[#1f1f1f] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
+            className="h-5 w-5 rounded border-[var(--border)] bg-[var(--surface)] text-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
           />
-          <span className="text-sm text-gray-300">Enable</span>
+          <span className="text-sm text-[var(--foreground)]/80">Enable</span>
         </label>
       </div>
 
@@ -149,8 +149,8 @@ export function AdaptiveNavSettingsPanel() {
         <>
           {/* Section Selection */}
           <div>
-            <h3 className="mb-3 text-sm font-medium text-gray-300">Sections to Optimize</h3>
-            <p className="mb-4 text-xs text-gray-400">
+            <h3 className="mb-3 text-sm font-medium text-[var(--foreground)]/80">Sections to Optimize</h3>
+            <p className="mb-4 text-xs text-[var(--foreground)]/60">
               Select which navigation sections should be reordered based on your usage patterns.
               Items within selected sections will be reordered by time of day.
             </p>
@@ -163,20 +163,20 @@ export function AdaptiveNavSettingsPanel() {
                     onClick={() => handleToggleSection(category)}
                     className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm transition-colors ${
                       isSelected
-                        ? 'border-[#29E7CD] bg-[#29E7CD]/10 text-[#29E7CD]'
-                        : 'border-[#2a2a2a] bg-[#2a2a2a]/30 text-gray-300 hover:border-[#2a2a2a]/50'
+                        ? 'border-[var(--primary)] bg-[var(--primary)]/10 text-[var(--primary)]'
+                        : 'border-[var(--border)] bg-[var(--muted)]/30 text-[var(--foreground)]/80 hover:border-[var(--border)]/50'
                     }`}
                   >
                     <div
                       className={`flex h-4 w-4 items-center justify-center rounded border ${
                         isSelected
-                          ? 'border-[#29E7CD] bg-[#29E7CD]/20'
-                          : 'border-[#2a2a2a] bg-[#1f1f1f]'
+                          ? 'border-[var(--primary)] bg-[var(--primary)]/20'
+                          : 'border-[var(--border)] bg-[var(--surface)]'
                       }`}
                     >
                       {isSelected && (
                         <svg
-                          className="h-3 w-3 text-[#29E7CD]"
+                          className="h-3 w-3 text-[var(--primary)]"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -198,35 +198,35 @@ export function AdaptiveNavSettingsPanel() {
           </div>
 
           {/* Status Info */}
-          <div className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
+          <div className="rounded-lg border border-[var(--border)] bg-[var(--muted)]/20 p-4">
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-400">Status:</span>
-                <span className="text-[#29E7CD]">Active</span>
+                <span className="text-[var(--foreground)]/60">Status:</span>
+                <span className="text-[var(--primary)]">Active</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-400">Sections optimized:</span>
-                <span className="text-gray-300">{settings.selectedSections?.length || 0}</span>
+                <span className="text-[var(--foreground)]/60">Sections optimized:</span>
+                <span className="text-[var(--foreground)]/80">{settings.selectedSections?.length || 0}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-400">Last updated:</span>
-                <span className="text-gray-300">{formatLastUpdated(settings.lastUpdated)}</span>
+                <span className="text-[var(--foreground)]/60">Last updated:</span>
+                <span className="text-[var(--foreground)]/80">{formatLastUpdated(settings.lastUpdated)}</span>
               </div>
             </div>
           </div>
 
           {/* Actions */}
-          <div className="flex flex-wrap gap-3 border-t border-[#2a2a2a] pt-4">
+          <div className="flex flex-wrap gap-3 border-t border-[var(--border)] pt-4">
             <div className="group relative">
               <button
                 onClick={handleSyncToServer}
-                className="flex items-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/50"
+                className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)]/30 px-4 py-2 text-sm text-[var(--foreground)]/80 transition-colors hover:bg-[var(--surface)]/50"
                 aria-label="Sync to Server - Syncs your local preferences to your account so they persist across devices and browser sessions"
               >
                 Sync to Server
-                <Icon icon={Info} size="xs" className="text-gray-400" aria-hidden={true} />
+                <Icon icon={Info} size="xs" className="text-[var(--foreground)]/60" aria-hidden={true} />
               </button>
-              <div className="pointer-events-none absolute bottom-full left-0 z-10 mb-2 hidden w-64 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 text-xs text-gray-300 shadow-lg group-hover:block">
+              <div className="pointer-events-none absolute bottom-full left-0 z-10 mb-2 hidden w-64 rounded-lg border border-[var(--border)] bg-[var(--surface)] p-3 text-xs text-[var(--foreground)]/80 shadow-lg group-hover:block">
                 Syncs your local preferences (enabled state and selected sections) to your account
                 so they persist across devices and browser sessions. Currently uses localStorage by
                 default; syncing saves preferences to your account.
@@ -235,16 +235,16 @@ export function AdaptiveNavSettingsPanel() {
             <button
               onClick={handleLoadFromServer}
               disabled={isLoadingFromServer}
-              className="flex items-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/50 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 px-4 py-2 text-sm text-[var(--foreground)]/80 transition-colors hover:bg-[var(--muted)]/50 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isLoadingFromServer ? (
                 <>
-                  <div className="h-3 w-3 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
+                  <div className="h-3 w-3 animate-spin rounded-full border-2 border-[var(--foreground)]/60 border-t-transparent" />
                   Loading...
                 </>
               ) : (
                 <>
-                  <Icon icon={Download} size="xs" className="text-gray-300" aria-hidden={true} />
+                  <Icon icon={Download} size="xs" className="text-[var(--foreground)]/80" aria-hidden={true} />
                   Load from Server
                 </>
               )}
@@ -254,7 +254,7 @@ export function AdaptiveNavSettingsPanel() {
                 updateSettings({ selectedSections: [] });
                 showInfo('All sections deselected');
               }}
-              className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/50"
+              className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 px-4 py-2 text-sm text-[var(--foreground)]/80 transition-colors hover:bg-[var(--muted)]/50"
             >
               Clear Selection
             </button>
@@ -263,8 +263,8 @@ export function AdaptiveNavSettingsPanel() {
       )}
 
       {mounted && !settings.enabled && (
-        <div className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
-          <p className="text-sm text-gray-400">
+        <div className="rounded-lg border border-[var(--border)] bg-[var(--muted)]/20 p-4">
+          <p className="text-sm text-[var(--foreground)]/60">
             Enable adaptive navigation to automatically optimize your navigation bar based on when
             and how you use different features. The system learns your patterns and reorders items
             to match your workflow.

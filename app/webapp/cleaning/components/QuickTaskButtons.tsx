@@ -35,14 +35,14 @@ export function QuickTaskButtons({ onSelect, selectedAreaId }: QuickTaskButtonsP
 
   return (
     <div className="mb-4">
-      <div className="mb-2 text-xs font-medium text-gray-400">Quick Add Common Tasks</div>
+      <div className="mb-2 text-xs font-medium text-[var(--foreground-muted)]">Quick Add Common Tasks</div>
       <div className="flex flex-wrap gap-2">
         {quickTasks.map((task, index) => (
           <button
             key={index}
             type="button"
             onClick={() => onSelect(task)}
-            className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-3 py-2 text-xs text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/10 hover:text-[#29E7CD]"
+            className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/50 px-3 py-2 text-xs text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--primary)]/50 hover:bg-[var(--primary)]/10 hover:text-[var(--primary)]"
             title={task.description}
           >
             {task.name}

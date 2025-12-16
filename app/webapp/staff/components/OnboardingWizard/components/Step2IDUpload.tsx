@@ -13,10 +13,10 @@ interface Step2IDUploadProps {
 export function Step2IDUpload({ idFile, onFileUpload }: Step2IDUploadProps) {
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-white">Step 2: ID Upload</h3>
-      <p className="text-sm text-gray-400">Please upload a photo of your government-issued ID</p>
-      <div className="rounded-xl border-2 border-dashed border-[#2a2a2a] p-8 text-center">
-        <Icon icon={Upload} size="xl" className="mx-auto mb-4 text-gray-400" aria-hidden={true} />
+      <h3 className="text-lg font-semibold text-[var(--foreground)]">Step 2: ID Upload</h3>
+      <p className="text-sm text-[var(--foreground-muted)]">Please upload a photo of your government-issued ID</p>
+      <div className="rounded-xl border-2 border-dashed border-[var(--border)] p-8 text-center">
+        <Icon icon={Upload} size="xl" className="mx-auto mb-4 text-[var(--foreground-muted)]" aria-hidden={true} />
         <input
           type="file"
           accept="image/*,.pdf"
@@ -26,11 +26,11 @@ export function Step2IDUpload({ idFile, onFileUpload }: Step2IDUploadProps) {
         />
         <label
           htmlFor="id-upload"
-          className="cursor-pointer rounded-xl bg-[#29E7CD]/10 px-6 py-3 text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/20"
+          className="cursor-pointer rounded-xl bg-[var(--primary)]/10 px-6 py-3 text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/20"
         >
           Choose File
         </label>
-        {idFile && <p className="mt-4 text-sm text-gray-300">Selected: {idFile.name}</p>}
+        {idFile && <p className="mt-4 text-sm text-[var(--foreground-secondary)]">Selected: {idFile.name}</p>}
       </div>
     </div>
   );

@@ -37,16 +37,16 @@ export function EmployeePhotoUpload({
 
   return (
     <div>
-      <label className="mb-2 block text-sm font-medium text-gray-300">
+      <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
         Photo
-        <span className="ml-2 text-xs text-gray-500">
+        <span className="ml-2 text-xs text-[var(--foreground-subtle)]">
           (Max {formatFileSize(MAX_PHOTO_SIZE)}, JPG/PNG/WebP)
         </span>
       </label>
       <div className="flex items-center gap-4">
         {photoPreview ? (
           <div className="relative">
-            <div className="relative h-20 w-20 overflow-hidden rounded-2xl border border-[#2a2a2a]">
+            <div className="relative h-20 w-20 overflow-hidden rounded-2xl border border-[var(--border)]">
               {photoPreview.startsWith('data:') ? (
                 <Image
                   src={photoPreview}
@@ -69,7 +69,7 @@ export function EmployeePhotoUpload({
                   <Icon
                     icon={Loader2}
                     size="md"
-                    className="animate-spin text-white"
+                    className="animate-spin text-[var(--foreground)]"
                     aria-hidden={true}
                   />
                 </div>
@@ -79,7 +79,7 @@ export function EmployeePhotoUpload({
               <button
                 type="button"
                 onClick={onRemovePhoto}
-                className="absolute -top-2 -right-2 rounded-full bg-red-500 p-1 text-white transition-colors hover:bg-red-600"
+                className="absolute -top-2 -right-2 rounded-full bg-[var(--color-error)] p-1 text-[var(--button-active-text)] transition-colors hover:bg-red-600"
                 aria-label="Remove photo"
               >
                 <Icon icon={X} size="xs" aria-hidden={true} />
@@ -87,16 +87,16 @@ export function EmployeePhotoUpload({
             )}
           </div>
         ) : (
-          <div className="flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-dashed border-[#2a2a2a] bg-[#2a2a2a]/50">
+          <div className="flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-dashed border-[var(--border)] bg-[var(--muted)]/50">
             {photoUploading ? (
               <Icon
                 icon={Loader2}
                 size="md"
-                className="animate-spin text-gray-400"
+                className="animate-spin text-[var(--foreground-muted)]"
                 aria-hidden={true}
               />
             ) : (
-              <Icon icon={Upload} size="md" className="text-gray-400" aria-hidden={true} />
+              <Icon icon={Upload} size="md" className="text-[var(--foreground-muted)]" aria-hidden={true} />
             )}
           </div>
         )}
@@ -112,8 +112,8 @@ export function EmployeePhotoUpload({
           />
           <label
             htmlFor="photo-upload"
-            className={`flex cursor-pointer items-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 text-sm font-medium text-white transition-colors ${
-              photoUploading ? 'cursor-not-allowed opacity-50' : 'hover:bg-[#2a2a2a]/80'
+            className={`flex cursor-pointer items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 text-sm font-medium text-[var(--foreground)] transition-colors ${
+              photoUploading ? 'cursor-not-allowed opacity-50' : 'hover:bg-[var(--muted)]/80'
             }`}
           >
             {photoUploading ? (
@@ -128,7 +128,7 @@ export function EmployeePhotoUpload({
               </>
             )}
           </label>
-          {photoError && <p className="mt-1 text-xs text-red-400">{photoError}</p>}
+          {photoError && <p className="mt-1 text-xs text-[var(--color-error)]">{photoError}</p>}
         </div>
       </div>
     </div>

@@ -87,18 +87,18 @@ export function UnifiedTableRow({
     >
       {/* Checkbox */}
       <td
-        className="px-6 py-4 text-sm font-medium whitespace-nowrap text-white"
+        className="px-6 py-4 text-sm font-medium whitespace-nowrap text-[var(--foreground)]"
         onClick={e => e.stopPropagation()}
       >
         <button
           onClick={() => onSelectItem(item.id)}
-          className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+          className="flex items-center justify-center transition-colors hover:text-[var(--primary)]"
           aria-label={`${isSelected ? 'Deselect' : 'Select'} ${isDish ? 'dish' : 'recipe'} ${itemName}`}
         >
           {isSelected ? (
-            <Icon icon={Check} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+            <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
           ) : (
-            <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+            <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
           )}
         </button>
       </td>
@@ -108,8 +108,8 @@ export function UnifiedTableRow({
         <span
           className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
             isDish
-              ? 'border border-[#29E7CD]/20 bg-[#29E7CD]/10 text-[#29E7CD]'
-              : 'border border-[#3B82F6]/20 bg-[#3B82F6]/10 text-[#3B82F6]'
+              ? 'border border-[var(--primary)]/20 bg-[var(--primary)]/10 text-[var(--primary)]'
+              : 'border border-[var(--color-info)]/20 bg-[var(--color-info)]/10 text-[var(--color-info)]'
           }`}
         >
           {isDish ? 'Dish' : 'Recipe'}
@@ -118,11 +118,11 @@ export function UnifiedTableRow({
 
       {/* Name */}
       <td
-        className={`px-6 py-4 text-sm font-medium text-white transition-all duration-300 ${
+        className={`px-6 py-4 text-sm font-medium text-[var(--foreground)] transition-all duration-300 ${
           !isSelectionMode ? 'cursor-pointer' : ''
         } ${
           isHighlighting
-            ? 'animate-[highlightPulse_0.5s_ease-in-out] border-l-4 border-[#29E7CD] bg-[#29E7CD]/10'
+            ? 'animate-[highlightPulse_0.5s_ease-in-out] border-l-4 border-[var(--primary)] bg-[var(--primary)]/10'
             : ''
         }`}
         onClick={
@@ -137,7 +137,7 @@ export function UnifiedTableRow({
 
       {/* Price (Recommended Price for both dishes and recipes) */}
       <td
-        className={`px-6 py-4 text-sm whitespace-nowrap text-gray-300 ${!isSelectionMode ? 'cursor-pointer' : ''}`}
+        className={`px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${!isSelectionMode ? 'cursor-pointer' : ''}`}
         onClick={
           !isSelectionMode
             ? () =>
@@ -162,7 +162,7 @@ export function UnifiedTableRow({
 
       {/* Contributing Margin */}
       <td
-        className={`desktop:table-cell hidden px-6 py-4 text-sm whitespace-nowrap text-gray-300 ${!isSelectionMode ? 'cursor-pointer' : ''}`}
+        className={`desktop:table-cell hidden px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${!isSelectionMode ? 'cursor-pointer' : ''}`}
         onClick={
           !isSelectionMode
             ? () =>
@@ -179,7 +179,7 @@ export function UnifiedTableRow({
               const recommendedContributingMargin = recommendedPriceExclGST - dishCost.total_cost;
 
               return (
-                <span className="font-semibold text-[#D925C7]">
+                <span className="font-semibold text-[var(--accent)]">
                   ${recommendedContributingMargin.toFixed(2)}
                 </span>
               );
@@ -189,10 +189,10 @@ export function UnifiedTableRow({
           )
         ) : recipe && recipePrice ? (
           <div className="flex flex-col">
-            <span className="font-semibold text-[#D925C7]">
+            <span className="font-semibold text-[var(--accent)]">
               ${recipePrice.contributingMargin.toFixed(2)}
             </span>
-            <span className="text-xs text-gray-400">/portion</span>
+            <span className="text-xs text-[var(--foreground-muted)]">/portion</span>
           </div>
         ) : (
           '—'
@@ -216,7 +216,7 @@ export function UnifiedTableRow({
               return (
                 <span
                   className={`font-semibold ${
-                    recommendedGrossProfitMargin >= 30 ? 'text-green-400' : 'text-yellow-400'
+                    recommendedGrossProfitMargin >= 30 ? 'text-[var(--color-success)]' : 'text-[var(--color-warning)]'
                   }`}
                 >
                   {recommendedGrossProfitMargin.toFixed(1)}%
@@ -224,24 +224,24 @@ export function UnifiedTableRow({
               );
             })()
           ) : (
-            <span className="text-gray-500">—</span>
+            <span className="text-[var(--foreground-subtle)]">—</span>
           )
         ) : recipe && recipePrice ? (
           <div className="flex flex-col">
-            <span className="font-semibold text-white">
+            <span className="font-semibold text-[var(--foreground)]">
               {recipePrice.gross_profit_margin.toFixed(1)}%
             </span>
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-[var(--foreground-muted)]">
               ${recipePrice.gross_profit.toFixed(2)}/portion
             </span>
           </div>
         ) : (
-          <span className="text-gray-500">—</span>
+          <span className="text-[var(--foreground-subtle)]">—</span>
         )}
       </td>
 
       {/* Created */}
-      <td className="desktop:table-cell hidden px-6 py-4 text-sm text-gray-400">
+      <td className="desktop:table-cell hidden px-6 py-4 text-sm text-[var(--foreground-muted)]">
         {formatRecipeDate(item.created_at)}
       </td>
 
@@ -252,7 +252,7 @@ export function UnifiedTableRow({
             onClick={() =>
               isDish && dish ? onPreviewDish(dish) : recipe ? onPreviewRecipe(recipe) : undefined
             }
-            className="text-gray-400 transition-colors hover:text-[#29E7CD]"
+            className="text-[var(--foreground-muted)] transition-colors hover:text-[var(--primary)]"
             aria-label={`Preview ${isDish ? 'dish' : 'recipe'} ${itemName}`}
             title="Preview full details"
           >
@@ -262,7 +262,7 @@ export function UnifiedTableRow({
             onClick={() =>
               isDish && dish ? onEditDish(dish) : recipe ? onEditRecipe(recipe) : undefined
             }
-            className="text-gray-400 transition-colors hover:text-[#29E7CD]"
+            className="text-[var(--foreground-muted)] transition-colors hover:text-[var(--primary)]"
             aria-label={`Edit ${isDish ? 'dish' : 'recipe'} ${itemName}`}
             title={`Edit ${isDish ? 'dish' : 'recipe'}`}
           >
@@ -272,7 +272,7 @@ export function UnifiedTableRow({
             onClick={() =>
               isDish && dish ? onDeleteDish(dish) : recipe ? onDeleteRecipe(recipe) : undefined
             }
-            className="text-gray-400 transition-colors hover:text-red-400"
+            className="text-[var(--foreground-muted)] transition-colors hover:text-[var(--color-error)]"
             aria-label={`Delete ${isDish ? 'dish' : 'recipe'} ${itemName}`}
             title={`Delete ${isDish ? 'dish' : 'recipe'}`}
           >

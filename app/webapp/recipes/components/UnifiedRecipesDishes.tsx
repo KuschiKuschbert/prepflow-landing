@@ -20,7 +20,7 @@ export default function UnifiedRecipesDishes() {
 
   if (error) {
     return (
-      <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-4 text-red-400">
+      <div className="rounded-lg border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-4 text-[var(--color-error)]">
         {error}
       </div>
     );
@@ -54,7 +54,7 @@ export default function UnifiedRecipesDishes() {
         <select
           value={selectedCategory}
           onChange={e => setSelectedCategory(e.target.value)}
-          className="rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] px-4 py-2 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+          className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
         >
           <option value="All">All Categories</option>
           {categories.map(category => (
@@ -68,18 +68,18 @@ export default function UnifiedRecipesDishes() {
       {/* Grouped Items by Category */}
       {Object.keys(groupedItems).length === 0 ? (
         <div className="py-12 text-center">
-          <div className="mb-4 text-6xl text-gray-400">🍽️</div>
-          <h3 className="mb-2 text-lg font-medium text-white">No items yet</h3>
-          <p className="text-gray-500">Create your first recipe or dish to get started.</p>
+          <div className="mb-4 text-6xl text-[var(--foreground-muted)]">🍽️</div>
+          <h3 className="mb-2 text-lg font-medium text-[var(--foreground)]">No items yet</h3>
+          <p className="text-[var(--foreground-subtle)]">Create your first recipe or dish to get started.</p>
         </div>
       ) : (
         <div className="space-y-8">
           {Object.entries(groupedItems).map(([category, categoryItems]) => (
             <div key={category} className="space-y-4">
               {/* Category Header */}
-              <div className="flex items-center justify-between border-b border-[#2a2a2a] pb-2">
-                <h2 className="text-xl font-semibold text-white">{category}</h2>
-                <span className="text-sm text-gray-400">{categoryItems.length} items</span>
+              <div className="flex items-center justify-between border-b border-[var(--border)] pb-2">
+                <h2 className="text-xl font-semibold text-[var(--foreground)]">{category}</h2>
+                <span className="text-sm text-[var(--foreground-muted)]">{categoryItems.length} items</span>
               </div>
 
               {/* Items Grid */}
@@ -87,29 +87,29 @@ export default function UnifiedRecipesDishes() {
                 {categoryItems.map(item => (
                   <div
                     key={`${item.type}-${item.id}`}
-                    className="group rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-lg"
+                    className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 transition-all duration-200 hover:border-[var(--primary)]/50 hover:shadow-lg"
                   >
                     <div className="mb-3 flex items-start justify-between">
                       <div className="flex items-center gap-2">
                         <Icon
                           icon={item.type === 'recipe' ? ChefHat : UtensilsCrossed}
                           size="sm"
-                          className={item.type === 'recipe' ? 'text-[#29E7CD]' : 'text-[#3B82F6]'}
+                          className={item.type === 'recipe' ? 'text-[var(--primary)]' : 'text-[var(--color-info)]'}
                           aria-hidden={true}
                         />
-                        <h3 className="font-semibold text-white">{item.name}</h3>
+                        <h3 className="font-semibold text-[var(--foreground)]">{item.name}</h3>
                       </div>
-                      <span className="rounded-full bg-[#2a2a2a] px-2 py-1 text-xs text-gray-400">
+                      <span className="rounded-full bg-[var(--muted)] px-2 py-1 text-xs text-[var(--foreground-muted)]">
                         {item.type === 'recipe' ? 'Recipe' : 'Dish'}
                       </span>
                     </div>
 
                     {item.description && (
-                      <p className="mb-3 line-clamp-2 text-sm text-gray-400">{item.description}</p>
+                      <p className="mb-3 line-clamp-2 text-sm text-[var(--foreground-muted)]">{item.description}</p>
                     )}
 
                     <div className="flex items-center justify-between">
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-[var(--foreground-subtle)]">
                         {item.type === 'recipe' ? (
                           <>
                             Yield: {item.yield} {item.yield_unit}
@@ -120,7 +120,7 @@ export default function UnifiedRecipesDishes() {
                       </div>
                       <button
                         onClick={() => handleCalculateCOGS(item)}
-                        className="flex items-center gap-1 rounded-lg bg-[#29E7CD]/10 px-3 py-1.5 text-xs font-medium text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/20"
+                        className="flex items-center gap-1 rounded-lg bg-[var(--primary)]/10 px-3 py-1.5 text-xs font-medium text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/20"
                       >
                         <Icon icon={Calculator} size="xs" aria-hidden={true} />
                         Calculate COGS

@@ -33,28 +33,28 @@ export function EquipmentStatusCard({
     <button
       onClick={onSelect}
       onMouseEnter={onHover ? () => onHover() : undefined}
-      className={`group relative w-full overflow-hidden rounded-3xl border bg-[#1f1f1f] text-left shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] ${
+      className={`group relative w-full overflow-hidden rounded-3xl border bg-[var(--surface)] text-left shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl active:scale-[0.98] ${
         isCompact ? 'p-3' : 'p-5'
       } ${
         isSelected
-          ? 'scale-[1.02] border-[#29E7CD] bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/5 ring-2 ring-[#29E7CD]/30'
+          ? 'scale-[1.02] border-[var(--primary)] bg-gradient-to-br from-[var(--primary)]/10 to-[var(--accent)]/5 ring-2 ring-[#29E7CD]/30'
           : isOutOfRange
-            ? 'scale-100 border-red-500/50 ring-0 hover:border-red-500/70 hover:bg-red-500/5'
+            ? 'scale-100 border-[var(--color-error)]/50 ring-0 hover:border-[var(--color-error)]/70 hover:bg-[var(--color-error)]/5'
             : needsSetup
-              ? 'scale-100 border-yellow-500/50 ring-0 hover:border-yellow-500/70 hover:bg-yellow-500/5'
-              : 'scale-100 border-[#2a2a2a] ring-0 hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/5'
+              ? 'scale-100 border-[var(--color-warning)]/50 ring-0 hover:border-[var(--color-warning)]/70 hover:bg-[var(--color-warning)]/5'
+              : 'scale-100 border-[var(--border)] ring-0 hover:border-[var(--primary)]/50 hover:bg-[var(--primary)]/5'
       }`}
     >
       {/* Gradient accent on hover */}
       {!isSelected && (
-        <div className="absolute inset-0 bg-gradient-to-br from-[#29E7CD]/5 to-[#D925C7]/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 to-[var(--accent)]/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       )}
       <div className="relative">
         {/* Header with status indicator */}
         <div className={`flex items-center justify-between ${isCompact ? 'mb-3' : 'mb-4'}`}>
           <div className="min-w-0 flex-1">
             <h3
-              className={`truncate font-bold text-white transition-colors group-hover:text-[#29E7CD] ${
+              className={`truncate font-bold text-[var(--foreground)] transition-colors group-hover:text-[var(--primary)] ${
                 isCompact ? 'text-sm' : 'text-base'
               }`}
             >
@@ -64,23 +64,23 @@ export function EquipmentStatusCard({
               <div
                 className={`h-2 w-2 rounded-full shadow-lg ${
                   isOutOfRange
-                    ? 'animate-pulse bg-red-500'
+                    ? 'animate-pulse bg-[var(--color-error)]'
                     : needsSetup
-                      ? 'bg-yellow-500'
+                      ? 'bg-[var(--color-warning)]'
                       : status.status === 'no-data'
                         ? 'bg-gray-500'
-                        : 'bg-green-500'
+                        : 'bg-[var(--color-success)]'
                 }`}
               />
               <span
                 className={`text-xs font-semibold ${
                   isOutOfRange
-                    ? 'text-red-400'
+                    ? 'text-[var(--color-error)]'
                     : needsSetup
-                      ? 'text-yellow-400'
+                      ? 'text-[var(--color-warning)]'
                       : status.status === 'no-data'
-                        ? 'text-gray-400'
-                        : 'text-green-400'
+                        ? 'text-[var(--foreground-muted)]'
+                        : 'text-[var(--color-success)]'
                 }`}
               >
                 {status.status === 'no-data'
@@ -98,19 +98,19 @@ export function EquipmentStatusCard({
         {/* Temperature display */}
         <div className={isCompact ? 'mb-3' : 'mb-4'}>
           <div
-            className={`font-bold text-white transition-colors group-hover:text-[#29E7CD] ${
+            className={`font-bold text-[var(--foreground)] transition-colors group-hover:text-[var(--primary)] ${
               isCompact ? 'mb-1 text-xl' : 'mb-2 text-3xl'
             }`}
           >
             {status.temperature ? `${status.temperature.toFixed(1)}°C` : '--'}
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-400">
+          <div className="flex items-center gap-2 text-xs text-[var(--foreground-muted)]">
             <span>
               {logs.length} reading{logs.length !== 1 ? 's' : ''}
             </span>
             {!isCompact && (
               <>
-                <span className="text-gray-600">•</span>
+                <span className="text-[var(--foreground-subtle)]">•</span>
                 <span className="uppercase">{timeFilter}</span>
               </>
             )}
@@ -119,16 +119,16 @@ export function EquipmentStatusCard({
 
         {/* Action indicators - only show in non-compact mode or if critical */}
         {!isCompact && (isOutOfRange || needsSetup) && (
-          <div className="border-t border-[#2a2a2a] pt-3">
+          <div className="border-t border-[var(--border)] pt-3">
             {isOutOfRange && (
-              <div className="flex items-center gap-2 text-xs text-red-400">
-                <Icon icon={AlertTriangle} size="xs" className="text-red-400" aria-hidden={true} />
+              <div className="flex items-center gap-2 text-xs text-[var(--color-error)]">
+                <Icon icon={AlertTriangle} size="xs" className="text-[var(--color-error)]" aria-hidden={true} />
                 <span>Attention required</span>
               </div>
             )}
             {needsSetup && (
-              <div className="flex items-center gap-2 text-xs text-yellow-400">
-                <Icon icon={Settings} size="xs" className="text-yellow-400" aria-hidden={true} />
+              <div className="flex items-center gap-2 text-xs text-[var(--color-warning)]">
+                <Icon icon={Settings} size="xs" className="text-[var(--color-warning)]" aria-hidden={true} />
                 <span>Configure thresholds</span>
               </div>
             )}
@@ -137,8 +137,8 @@ export function EquipmentStatusCard({
 
         {/* Compact mode critical indicators */}
         {isCompact && isOutOfRange && (
-          <div className="flex items-center justify-center text-xs text-red-400">
-            <Icon icon={AlertCircle} size="xs" className="text-red-400" aria-hidden={true} />
+          <div className="flex items-center justify-center text-xs text-[var(--color-error)]">
+            <Icon icon={AlertCircle} size="xs" className="text-[var(--color-error)]" aria-hidden={true} />
           </div>
         )}
       </div>

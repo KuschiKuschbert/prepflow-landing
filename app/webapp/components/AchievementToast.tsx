@@ -3,6 +3,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { X } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { type Achievement } from '@/lib/personality/achievements';
 import { usePersonality } from '@/lib/personality/store';
 import confetti from 'canvas-confetti';
@@ -80,28 +82,38 @@ export function AchievementToast() {
     };
   }, [settings.enabled]);
 
+  const handleDismiss = () => {
+    setIsVisible(false);
+    setTimeout(() => {
+      setCurrentAchievement(null);
+    }, 300);
+  };
+
   if (!currentAchievement || !isVisible) return null;
 
   return (
-    <div
-      className="fixed top-20 left-1/2 z-[90] -translate-x-1/2 transform transition-all duration-300"
-      style={{
-        opacity: isVisible ? 1 : 0,
-        transform: `translateX(-50%) translateY(${isVisible ? '0' : '-20px'})`,
-      }}
-    >
-      <div className="mx-auto max-w-md rounded-3xl border-2 border-[#29E7CD]/50 bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-6 shadow-2xl backdrop-blur-md">
-        <div className="flex items-center gap-4">
-          <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] text-4xl">
-            {currentAchievement.icon}
-          </div>
+    <div className="animate-in fade-in slide-in-from-top-4 fixed top-20 left-1/2 z-[60] -translate-x-1/2 duration-300">
+      <div className="rounded-2xl border border-[var(--tertiary)]/30 bg-gradient-to-r from-[var(--tertiary)]/20 via-[var(--accent)]/20 to-[var(--primary)]/20 p-[1px] shadow-xl">
+        <div className="flex items-center gap-3 rounded-2xl bg-[var(--surface-variant)] px-4 py-3">
+          {currentAchievement.icon && (
+            <span className="text-2xl" aria-hidden="true">
+              {currentAchievement.icon}
+            </span>
+          )}
           <div className="flex-1">
-            <div className="mb-1 text-xs font-semibold tracking-wider text-[#29E7CD] uppercase">
+            <div className="mb-0.5 text-xs font-semibold tracking-wider text-[var(--primary)] uppercase">
               Achievement Unlocked!
             </div>
-            <div className="text-xl font-bold text-white">{currentAchievement.name}</div>
-            <div className="mt-1 text-sm text-gray-300">{currentAchievement.description}</div>
+            <div className="font-semibold text-[var(--foreground)]">{currentAchievement.name}</div>
+            <div className="text-sm text-[var(--foreground)]/60">{currentAchievement.description}</div>
           </div>
+          <button
+            onClick={handleDismiss}
+            className="rounded-lg p-1 text-[var(--foreground)]/60 transition-colors hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
+            aria-label="Dismiss achievement notification"
+          >
+            <Icon icon={X} size="sm" />
+          </button>
         </div>
       </div>
     </div>

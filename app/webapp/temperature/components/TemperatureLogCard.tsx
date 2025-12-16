@@ -54,41 +54,41 @@ export function TemperatureLogCard({
   return (
     <div
       onClick={() => isClickable && onLogClick(log)}
-      className={`group relative overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg transition-all duration-300 ${
+      className={`group relative overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg transition-all duration-300 ${
         isClickable
-          ? 'cursor-pointer hover:border-[#29E7CD]/30 hover:shadow-2xl'
-          : 'hover:border-[#29E7CD]/30 hover:shadow-2xl'
+          ? 'cursor-pointer hover:border-[var(--primary)]/30 hover:shadow-2xl'
+          : 'hover:border-[var(--primary)]/30 hover:shadow-2xl'
       }`}
     >
       {/* Gradient accent */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#29E7CD]/5 to-[#D925C7]/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 to-[var(--accent)]/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
       <div className="relative">
         <div className="mb-4 flex items-start justify-between gap-4">
           <div className="flex min-w-0 flex-1 items-start gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10 shadow-lg">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10 shadow-lg">
               <Icon
                 icon={getTypeIcon(log.temperature_type)}
                 size="lg"
-                className="text-[#29E7CD]"
+                className="text-[var(--primary)]"
                 aria-hidden={true}
               />
             </div>
             <div className="min-w-0 flex-1">
-              <h4 className="mb-1 truncate text-lg font-semibold text-white">
+              <h4 className="mb-1 truncate text-lg font-semibold text-[var(--foreground)]">
                 {log.location || getTypeLabel(log.temperature_type)}
               </h4>
-              <div className="flex flex-wrap items-center gap-2 text-sm text-gray-400">
+              <div className="flex flex-wrap items-center gap-2 text-sm text-[var(--foreground-muted)]">
                 <span>{formatDateString(log.log_date)}</span>
-                <span className="text-gray-600">•</span>
+                <span className="text-[var(--foreground-subtle)]">•</span>
                 <span>{log.log_time}</span>
-                <span className="text-gray-600">•</span>
+                <span className="text-[var(--foreground-subtle)]">•</span>
                 <span className="text-xs">{getTypeLabel(log.temperature_type)}</span>
               </div>
             </div>
           </div>
           <div className="flex shrink-0 flex-col items-end gap-2">
-            <span className="text-3xl font-bold text-[#29E7CD]">{log.temperature_celsius}°C</span>
+            <span className="text-3xl font-bold text-[var(--primary)]">{log.temperature_celsius}°C</span>
             <span
               className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${getStatusColor(status)}`}
             >
@@ -97,7 +97,7 @@ export function TemperatureLogCard({
                   <Icon
                     icon={AlertTriangle}
                     size="xs"
-                    className="text-red-400"
+                    className="text-[var(--color-error)]"
                     aria-hidden={true}
                   />
                   High
@@ -107,7 +107,7 @@ export function TemperatureLogCard({
                   <Icon
                     icon={AlertTriangle}
                     size="xs"
-                    className="text-blue-400"
+                    className="text-[var(--color-info)]"
                     aria-hidden={true}
                   />
                   Low
@@ -117,7 +117,7 @@ export function TemperatureLogCard({
                   <Icon
                     icon={CheckCircle2}
                     size="xs"
-                    className="text-green-400"
+                    className="text-[var(--color-success)]"
                     aria-hidden={true}
                   />
                   Normal
@@ -129,22 +129,22 @@ export function TemperatureLogCard({
 
         {/* Additional Info */}
         {(log.location || log.logged_by || log.notes) && (
-          <div className="mb-4 space-y-2 rounded-2xl bg-[#2a2a2a]/30 p-3">
+          <div className="mb-4 space-y-2 rounded-2xl bg-[var(--muted)]/30 p-3">
             {log.location && log.location !== getTypeLabel(log.temperature_type) && (
-              <div className="flex items-center gap-2 text-sm text-gray-300">
-                <Icon icon={MapPin} size="sm" className="text-gray-300" aria-hidden={true} />
+              <div className="flex items-center gap-2 text-sm text-[var(--foreground-secondary)]">
+                <Icon icon={MapPin} size="sm" className="text-[var(--foreground-secondary)]" aria-hidden={true} />
                 <span>{log.location}</span>
               </div>
             )}
             {log.logged_by && (
-              <div className="flex items-center gap-2 text-xs text-gray-400">
-                <Icon icon={User} size="sm" className="text-gray-400" aria-hidden={true} />
+              <div className="flex items-center gap-2 text-xs text-[var(--foreground-muted)]">
+                <Icon icon={User} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
                 <span>
                   {t('temperature.loggedBy', 'Logged by')}: {log.logged_by}
                 </span>
               </div>
             )}
-            {log.notes && <p className="text-sm leading-relaxed text-gray-300">{log.notes}</p>}
+            {log.notes && <p className="text-sm leading-relaxed text-[var(--foreground-secondary)]">{log.notes}</p>}
           </div>
         )}
 
@@ -153,10 +153,10 @@ export function TemperatureLogCard({
           <div
             className={`mb-4 rounded-2xl border p-4 ${
               foodSafety.status === 'safe'
-                ? 'border-green-400/20 bg-green-400/10'
+                ? 'border-[var(--color-success)]/20 bg-[var(--color-success)]/10'
                 : foodSafety.status === 'warning'
-                  ? 'border-yellow-400/20 bg-yellow-400/10'
-                  : 'border-red-400/20 bg-red-400/10'
+                  ? 'border-[var(--color-warning)]/20 bg-[var(--color-warning)]/10'
+                  : 'border-[var(--color-error)]/20 bg-[var(--color-error)]/10'
             }`}
           >
             <div className="flex items-start gap-3">
@@ -185,7 +185,7 @@ export function TemperatureLogCard({
               alt="Temperature reading"
               width={200}
               height={200}
-              className="h-32 w-full rounded-2xl border border-[#2a2a2a] object-cover transition-transform duration-300 group-hover:scale-105"
+              className="h-32 w-full rounded-2xl border border-[var(--border)] object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </div>
         )}
@@ -194,16 +194,16 @@ export function TemperatureLogCard({
         <div className="flex gap-2">
           <button
             onClick={e => e.stopPropagation()}
-            className="flex items-center justify-center gap-2 rounded-xl bg-[#2a2a2a] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-[#3a3a3a] hover:shadow-lg"
+            className="flex items-center justify-center gap-2 rounded-xl bg-[var(--muted)] px-4 py-2 text-sm font-medium text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)] hover:shadow-lg"
           >
-            <Icon icon={Camera} size="sm" className="text-white" aria-hidden={true} />
+            <Icon icon={Camera} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
             {t('temperature.addPhoto', 'Add Photo')}
           </button>
           <button
             onClick={e => e.stopPropagation()}
-            className="flex items-center justify-center gap-2 rounded-xl bg-[#2a2a2a] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-[#3a3a3a] hover:shadow-lg"
+            className="flex items-center justify-center gap-2 rounded-xl bg-[var(--muted)] px-4 py-2 text-sm font-medium text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)] hover:shadow-lg"
           >
-            <Icon icon={Pencil} size="sm" className="text-white" aria-hidden={true} />
+            <Icon icon={Pencil} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
             {t('temperature.edit', 'Edit')}
           </button>
         </div>

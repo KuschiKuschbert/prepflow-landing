@@ -23,7 +23,7 @@ export function LogoutButton() {
   return (
     <button
       onClick={handleLogout}
-      className="desktop:min-h-0 desktop:py-1.5 min-h-[44px] rounded-lg border border-red-500/50 bg-red-500/10 px-3 py-2 text-sm font-medium text-red-400 transition-all duration-200 hover:bg-red-500/20 active:scale-[0.98]"
+      className="desktop:min-h-0 desktop:py-1.5 min-h-[44px] rounded-lg border border-[var(--color-error)]/50 bg-[var(--color-error)]/10 px-3 py-2 text-sm font-medium text-[var(--color-error)] transition-all duration-200 hover:bg-[var(--color-error)]/20 active:scale-[0.98]"
       aria-label="Logout"
       title="Logout"
     >

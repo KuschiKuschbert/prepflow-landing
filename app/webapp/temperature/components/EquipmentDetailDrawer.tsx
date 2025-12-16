@@ -87,7 +87,7 @@ export function EquipmentDetailDrawer({ equipment, isOpen, onClose }: EquipmentD
       {/* Drawer with gradient border */}
       <div
         ref={drawerRef}
-        className={`fixed right-0 z-[75] w-full transform rounded-l-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl transition-transform duration-200 ease-out ${
+        className={`fixed right-0 z-[75] w-full transform rounded-l-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl transition-transform duration-200 ease-out ${
           !isMobile ? 'desktop:w-[600px] large-desktop:w-[700px] xl:w-[800px]' : ''
         } ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
         style={{
@@ -104,7 +104,7 @@ export function EquipmentDetailDrawer({ equipment, isOpen, onClose }: EquipmentD
         aria-modal="true"
         aria-labelledby="equipment-detail-title"
       >
-        <div className="flex h-full flex-col overflow-hidden rounded-l-3xl bg-[#0a0a0a]">
+        <div className="flex h-full flex-col overflow-hidden rounded-l-3xl bg-[var(--background)]">
           <EquipmentDrawerHeader
             equipment={equipment}
             isMobile={isMobile}
@@ -124,7 +124,7 @@ export function EquipmentDetailDrawer({ equipment, isOpen, onClose }: EquipmentD
             <div className="flex flex-1 flex-col p-4">
               {/* Time Filter - One Line */}
               <div className="mb-3 flex-shrink-0">
-                <label className="mb-2 block text-xs font-semibold text-gray-300">
+                <label className="mb-2 block text-xs font-semibold text-[var(--foreground-secondary)]">
                   {t('temperature.timeFilter', 'Time Period')}
                 </label>
                 <EquipmentDrawerTimeFilter
@@ -135,7 +135,7 @@ export function EquipmentDetailDrawer({ equipment, isOpen, onClose }: EquipmentD
 
               {/* Statistics Section - 2 Columns Below Time Filter */}
               <div className="mb-3 flex-shrink-0">
-                <label className="mb-2 block text-xs font-semibold text-gray-300">
+                <label className="mb-2 block text-xs font-semibold text-[var(--foreground-secondary)]">
                   {t('temperature.statistics', 'Statistics')}
                 </label>
                 <EquipmentDrawerStatisticsSection
@@ -148,18 +148,18 @@ export function EquipmentDetailDrawer({ equipment, isOpen, onClose }: EquipmentD
               {/* Chart Section - Full Width Below */}
               <div className="mb-4 flex-shrink-0">
                 <div className="mb-2 flex items-center justify-between">
-                  <label className="text-xs font-semibold text-gray-300">
+                  <label className="text-xs font-semibold text-[var(--foreground-secondary)]">
                     {t('temperature.temperatureChart', 'Temperature Chart')}
                   </label>
                   {(equipment.min_temp_celsius === null || equipment.max_temp_celsius === null) && (
-                    <div className="flex items-center gap-2 rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-3 py-2">
+                    <div className="flex items-center gap-2 rounded-xl border border-[var(--color-warning)]/30 bg-[var(--color-warning)]/10 px-3 py-2">
                       <Icon
                         icon={AlertTriangle}
                         size="sm"
-                        className="text-yellow-400"
+                        className="text-[var(--color-warning)]"
                         aria-hidden={true}
                       />
-                      <span className="text-xs font-medium text-yellow-400">
+                      <span className="text-xs font-medium text-[var(--color-warning)]">
                         Temperature thresholds not configured
                       </span>
                     </div>

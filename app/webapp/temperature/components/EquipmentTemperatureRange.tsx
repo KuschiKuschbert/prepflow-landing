@@ -45,19 +45,19 @@ export function EquipmentTemperatureRange({
   return (
     <div className="tablet:items-start flex shrink-0 flex-col items-end gap-2">
       <div className="tablet:text-left text-right">
-        <div className="mb-1 text-xs font-medium tracking-wide text-gray-400 uppercase">
+        <div className="mb-1 text-xs font-medium tracking-wide text-[var(--foreground-muted)] uppercase">
           {t('temperature.range', 'Temperature Range')}
         </div>
         <div className="flex flex-col gap-1">
-          <div className="text-xl font-bold text-[#29E7CD]">{displayText}</div>
-          {isRecommended && <span className="text-xs text-gray-500 italic">(Recommended)</span>}
+          <div className="text-xl font-bold text-[var(--primary)]">{displayText}</div>
+          {isRecommended && <span className="text-xs text-[var(--foreground-subtle)] italic">(Recommended)</span>}
         </div>
       </div>
-      <div className="flex items-center gap-2 rounded-full border border-[#2a2a2a] bg-[#2a2a2a]/50 px-3 py-1.5">
+      <div className="flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--muted)]/50 px-3 py-1.5">
         <div
-          className={`h-2 w-2 rounded-full shadow-lg ${isActive ? 'bg-blue-400' : 'bg-gray-500'}`}
+          className={`h-2 w-2 rounded-full shadow-lg ${isActive ? 'bg-[var(--color-info)]' : 'bg-gray-500'}`}
         />
-        <span className="text-xs font-semibold text-gray-300">
+        <span className="text-xs font-semibold text-[var(--foreground-secondary)]">
           {isActive ? t('common.active', 'Active') : t('common.inactive', 'Inactive')}
         </span>
       </div>

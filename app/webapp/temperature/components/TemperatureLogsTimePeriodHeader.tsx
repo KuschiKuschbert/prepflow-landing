@@ -17,13 +17,13 @@ export function TemperatureLogsTimePeriodHeader({
   logCount,
 }: TemperatureLogsTimePeriodHeaderProps) {
   return (
-    <div className="mb-6 flex items-center gap-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
-      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 shadow-lg">
-        <Icon icon={icon} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
+    <div className="mb-6 flex items-center gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
+      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20 shadow-lg">
+        <Icon icon={icon} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
       </div>
       <div className="flex-1">
-        <h3 className="text-xl font-bold text-white">{label}</h3>
-        <p className="text-sm text-gray-400">
+        <h3 className="text-xl font-bold text-[var(--foreground)]">{label}</h3>
+        <p className="text-sm text-[var(--foreground-muted)]">
           {logCount} temperature reading{logCount !== 1 ? 's' : ''}
         </p>
       </div>

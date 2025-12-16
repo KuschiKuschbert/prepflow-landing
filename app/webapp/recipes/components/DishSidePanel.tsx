@@ -86,7 +86,7 @@ export function DishSidePanel({ isOpen, dish, onClose, onEdit, onDelete }: DishS
       {/* Side Panel with gradient border */}
       <div
         ref={panelRef}
-        className={`desktop:max-w-lg fixed right-0 z-[65] w-full max-w-md overflow-hidden rounded-l-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl transition-transform duration-200 ease-out ${
+        className={`desktop:max-w-lg fixed right-0 z-[65] w-full max-w-md overflow-hidden rounded-l-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl transition-transform duration-200 ease-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         style={panelStyle}
@@ -95,7 +95,7 @@ export function DishSidePanel({ isOpen, dish, onClose, onEdit, onDelete }: DishS
         aria-modal="true"
         aria-labelledby="dish-panel-title"
       >
-        <div className="flex h-full flex-col overflow-hidden rounded-l-3xl bg-[#1f1f1f]">
+        <div className="flex h-full flex-col overflow-hidden rounded-l-3xl bg-[var(--surface)]">
           <DishSidePanelHeader
             dish={currentDish}
             capitalizeDishName={capitalizeDishName}

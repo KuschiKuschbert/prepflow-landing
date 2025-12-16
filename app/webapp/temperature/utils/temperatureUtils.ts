@@ -62,7 +62,7 @@ export function getFoodSafetyStatus(temp: number, logTime: string, logDate: stri
     return {
       status: 'safe',
       message: 'Outside danger zone',
-      color: 'text-green-400',
+      color: 'text-[var(--color-success)]',
       icon: CheckCircle2,
     };
   }
@@ -75,21 +75,21 @@ export function getFoodSafetyStatus(temp: number, logTime: string, logDate: stri
     return {
       status: 'safe',
       message: `${(2 - hoursInDangerZone).toFixed(1)}h remaining - can refrigerate`,
-      color: 'text-green-400',
+      color: 'text-[var(--color-success)]',
       icon: CheckCircle2,
     };
   } else if (hoursInDangerZone < 4) {
     return {
       status: 'warning',
       message: `${(4 - hoursInDangerZone).toFixed(1)}h remaining - use immediately`,
-      color: 'text-yellow-400',
+      color: 'text-[var(--color-warning)]',
       icon: AlertTriangle,
     };
   } else {
     return {
       status: 'danger',
       message: `${hoursInDangerZone.toFixed(1)}h in danger zone - DISCARD`,
-      color: 'text-red-400',
+      color: 'text-[var(--color-error)]',
       icon: AlertCircle,
     };
   }

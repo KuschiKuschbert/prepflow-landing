@@ -50,3 +50,6 @@ export function printQRCode({
     content: qrContent,
   });
 }
+
+
+

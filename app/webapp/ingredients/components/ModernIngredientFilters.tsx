@@ -109,9 +109,9 @@ export default function ModernIngredientFilters({
 
   return (
     <div className="mb-6 space-y-4">
-      <div className="tablet:p-4 flex flex-wrap items-center gap-3 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-3 backdrop-blur-sm">
+      <div className="tablet:p-4 flex flex-wrap items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-3 backdrop-blur-sm">
         <div className="tablet:w-auto relative w-full min-w-[200px] flex-1">
-          <div className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400">
+          <div className="absolute top-1/2 left-3 -translate-y-1/2 text-[var(--foreground-muted)]">
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -126,12 +126,12 @@ export default function ModernIngredientFilters({
             placeholder="Search ingredients..."
             value={localSearchTerm}
             onChange={e => setLocalSearchTerm(e.target.value)}
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#0a0a0a]/80 px-10 py-2.5 text-sm text-white placeholder-gray-500 transition-all duration-200 focus:border-[#29E7CD]/50 focus:bg-[#0a0a0a] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+            className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)]/80 px-10 py-2.5 text-sm text-[var(--foreground)] placeholder-gray-500 transition-all duration-200 focus:border-[var(--primary)]/50 focus:bg-[var(--background)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
           />
           {localSearchTerm && (
             <button
               onClick={() => setLocalSearchTerm('')}
-              className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 transition-colors hover:text-white"
+              className="absolute top-1/2 right-3 -translate-y-1/2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
               aria-label="Clear search"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -158,8 +158,8 @@ export default function ModernIngredientFilters({
             setShowSortMenu(false);
           }}
           onChange={onSupplierFilterChange}
-          activeColor="border-[#3B82F6]/50 bg-[#3B82F6]/10 text-[#3B82F6]"
-          activeBg="bg-[#3B82F6]/20"
+          activeColor="border-[var(--color-info)]/50 bg-[var(--color-info)]/10 text-[var(--color-info)]"
+          activeBg="bg-[var(--color-info)]/20"
         />
 
         <FilterDropdown
@@ -174,8 +174,8 @@ export default function ModernIngredientFilters({
             setShowSortMenu(false);
           }}
           onChange={onStorageFilterChange}
-          activeColor="border-[#D925C7]/50 bg-[#D925C7]/10 text-[#D925C7]"
-          activeBg="bg-[#D925C7]/20"
+          activeColor="border-[var(--accent)]/50 bg-[var(--accent)]/10 text-[var(--accent)]"
+          activeBg="bg-[var(--accent)]/20"
         />
 
         <div className="tablet:w-auto relative w-full">
@@ -185,7 +185,7 @@ export default function ModernIngredientFilters({
               setShowSupplierMenu(false);
               setShowStorageMenu(false);
             }}
-            className="tablet:w-auto flex w-full items-center justify-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#0a0a0a]/80 px-4 py-2.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] hover:text-[#29E7CD]"
+            className="tablet:w-auto flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--background)]/80 px-4 py-2.5 text-sm font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--primary)]/50 hover:bg-[var(--surface)] hover:text-[var(--primary)]"
           >
             <Icon
               icon={currentSortOption.icon}
@@ -208,7 +208,7 @@ export default function ModernIngredientFilters({
                 onClick={() => setShowSortMenu(false)}
                 aria-hidden={true}
               />
-              <div className="absolute top-full left-0 z-50 mt-2 w-48 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
+              <div className="absolute top-full left-0 z-50 mt-2 w-48 rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-xl">
                 <div className="p-2">
                   {sortOptions.map(option => (
                     <button
@@ -219,8 +219,8 @@ export default function ModernIngredientFilters({
                       }}
                       className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                         sortBy === option.value
-                          ? 'bg-[#29E7CD]/20 text-[#29E7CD]'
-                          : 'text-gray-300 hover:bg-[#2a2a2a]'
+                          ? 'bg-[var(--primary)]/20 text-[var(--primary)]'
+                          : 'text-[var(--foreground-secondary)] hover:bg-[var(--muted)]'
                       }`}
                     >
                       <Icon
@@ -230,7 +230,7 @@ export default function ModernIngredientFilters({
                         aria-hidden={true}
                       />
                       <span>{option.label}</span>
-                      {sortBy === option.value && <span className="ml-auto text-[#29E7CD]">✓</span>}
+                      {sortBy === option.value && <span className="ml-auto text-[var(--primary)]">✓</span>}
                     </button>
                   ))}
                 </div>
@@ -243,7 +243,7 @@ export default function ModernIngredientFilters({
           <select
             value={displayUnit}
             onChange={e => onDisplayUnitChange(e.target.value)}
-            className="tablet:w-auto w-full rounded-xl border border-[#2a2a2a] bg-[#0a0a0a]/80 px-4 py-2.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#2a2a2a] hover:bg-[#1f1f1f] focus:border-[#29E7CD]/50 focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+            className="tablet:w-auto w-full rounded-xl border border-[var(--border)] bg-[var(--background)]/80 px-4 py-2.5 text-sm font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--border)] hover:bg-[var(--surface)] focus:border-[var(--primary)]/50 focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
             title="Display unit"
           >
             <optgroup label="Weight">
@@ -262,7 +262,7 @@ export default function ModernIngredientFilters({
         {activeFilterCount > 0 && (
           <button
             onClick={handleClearAll}
-            className="tablet:w-auto flex w-full items-center justify-center gap-2 rounded-xl border border-gray-600/30 bg-gray-600/10 px-4 py-2.5 text-sm font-medium text-gray-400 transition-all duration-200 hover:border-gray-500/50 hover:bg-gray-500/20 hover:text-white"
+            className="tablet:w-auto flex w-full items-center justify-center gap-2 rounded-xl border border-gray-600/30 bg-gray-600/10 px-4 py-2.5 text-sm font-medium text-[var(--foreground-muted)] transition-all duration-200 hover:border-gray-500/50 hover:bg-gray-500/20 hover:text-[var(--foreground)]"
           >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path

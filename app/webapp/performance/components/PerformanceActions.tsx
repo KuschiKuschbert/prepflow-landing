@@ -21,7 +21,7 @@ export default function PerformanceActions({
     <div className="tablet:gap-4 desktop:mb-6 mb-4 flex flex-wrap gap-3">
       <button
         onClick={onImportClick}
-        className="tablet:w-auto tablet:px-6 tablet:text-base flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-black transition-colors"
+        className="tablet:w-auto tablet:px-6 tablet:text-base flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-[var(--primary-text)] transition-colors"
         style={{
           backgroundColor: LANDING_COLORS.primary,
         }}
@@ -44,7 +44,7 @@ export default function PerformanceActions({
       </button>
       <button
         onClick={onExportCSV}
-        className="tablet:w-auto tablet:px-6 tablet:text-base flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white transition-colors"
+        className="tablet:w-auto tablet:px-6 tablet:text-base flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-[var(--foreground)] transition-colors"
         style={{
           backgroundColor: LANDING_COLORS.secondary,
         }}
@@ -67,7 +67,7 @@ export default function PerformanceActions({
       </button>
       <button
         onClick={onToggleCharts}
-        className="tablet:w-auto tablet:px-6 tablet:text-base flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-gray-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-700"
+        className="tablet:w-auto tablet:px-6 tablet:text-base flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-gray-600 px-4 py-3 text-sm font-medium text-[var(--foreground)] transition-colors hover:bg-gray-700"
       >
         <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
           <path

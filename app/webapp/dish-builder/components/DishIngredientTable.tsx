@@ -43,20 +43,20 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
             {calculations.map((calc, index) => (
               <div
                 key={calc.ingredientId || `calc-${index}`}
-                className="rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] p-3"
+                className="rounded-lg border border-[var(--border)] bg-[var(--muted)] p-3"
               >
                 <div className="mb-2 flex items-start justify-between">
-                  <h4 className="text-sm font-medium text-white">{calc.ingredientName}</h4>
+                  <h4 className="text-sm font-medium text-[var(--foreground)]">{calc.ingredientName}</h4>
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm font-bold text-[#29E7CD]">
+                    <span className="text-sm font-bold text-[var(--primary)]">
                       ${calc.yieldAdjustedCost.toFixed(2)}
                     </span>
                     <button
                       onClick={() => onEditIngredient(calc.ingredientId, calc.quantity)}
-                      className="p-1 text-gray-400 transition-colors duration-200 hover:text-[#29E7CD]"
+                      className="p-1 text-[var(--foreground-muted)] transition-colors duration-200 hover:text-[var(--primary)]"
                       title="Edit quantity"
                     >
-                      <Icon icon={Edit} size="sm" className="text-gray-400" aria-hidden={true} />
+                      <Icon icon={Edit} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
                     </button>
                     <button
                       type="button"
@@ -65,10 +65,10 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
                         e.stopPropagation();
                         void onRemoveIngredient(calc.ingredientId);
                       }}
-                      className="p-1 text-gray-400 transition-colors duration-200 hover:text-red-400"
+                      className="p-1 text-[var(--foreground-muted)] transition-colors duration-200 hover:text-[var(--color-error)]"
                       title="Remove ingredient"
                     >
-                      <Icon icon={Trash2} size="sm" className="text-gray-400" aria-hidden={true} />
+                      <Icon icon={Trash2} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
                     </button>
                   </div>
                 </div>
@@ -80,29 +80,29 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
                         type="number"
                         value={editQuantity}
                         onChange={e => onEditQuantityChange(parseFloat(e.target.value) || 0)}
-                        className="w-20 rounded border border-[#3a3a3a] bg-[#0a0a0a] px-2 py-1 text-sm text-white focus:ring-1 focus:ring-[#29E7CD] focus:outline-none"
+                        className="w-20 rounded border border-[var(--border)] bg-[var(--background)] px-2 py-1 text-sm text-[var(--foreground)] focus:ring-1 focus:ring-[var(--primary)] focus:outline-none"
                         step="0.1"
                         min="0"
                       />
-                      <span className="text-xs text-gray-400">{calc.unit}</span>
+                      <span className="text-xs text-[var(--foreground-muted)]">{calc.unit}</span>
                     </div>
                     <div className="flex space-x-2">
                       <button
                         onClick={onSaveEdit}
-                        className="rounded bg-[#29E7CD] px-3 py-1 text-xs text-white transition-colors duration-200 hover:bg-[#29E7CD]/80"
+                        className="rounded bg-[var(--primary)] px-3 py-1 text-xs text-[var(--button-active-text)] transition-colors duration-200 hover:bg-[var(--primary)]/80"
                       >
                         Save
                       </button>
                       <button
                         onClick={onCancelEdit}
-                        className="rounded bg-gray-600 px-3 py-1 text-xs text-white transition-colors duration-200 hover:bg-gray-500"
+                        className="rounded bg-gray-600 px-3 py-1 text-xs text-[var(--foreground)] transition-colors duration-200 hover:bg-gray-500"
                       >
                         Cancel
                       </button>
                     </div>
                   </div>
                 ) : (
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-[var(--foreground-muted)]">
                     {calc.quantity} {calc.unit}
                   </p>
                 )}
@@ -113,43 +113,43 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
 
         {/* Desktop Table Layout */}
         <div className="large-desktop:block hidden overflow-x-auto">
-          <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
-            <table className="min-w-full divide-y divide-[#2a2a2a]">
-              <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
+          <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
+            <table className="min-w-full divide-y divide-[var(--muted)]">
+              <thead className="sticky top-0 z-10 bg-gradient-to-r from-[var(--muted)]/50 to-[var(--muted)]/20">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                     Ingredient
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                     Qty
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                     Cost
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+                  <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
+              <tbody className="divide-y divide-[var(--muted)] bg-[var(--surface)]">
                 {calculations.map((calc, index) => (
                   <tr
                     key={calc.ingredientId || `calc-${index}`}
-                    className="transition-colors hover:bg-[#2a2a2a]/20"
+                    className="transition-colors hover:bg-[var(--muted)]/20"
                   >
-                    <td className="px-6 py-4 text-sm text-white">{calc.ingredientName}</td>
-                    <td className="px-6 py-4 text-sm text-gray-300">
+                    <td className="px-6 py-4 text-sm text-[var(--foreground)]">{calc.ingredientName}</td>
+                    <td className="px-6 py-4 text-sm text-[var(--foreground-secondary)]">
                       {editingIngredient === calc.ingredientId ? (
                         <div className="flex items-center space-x-2">
                           <input
                             type="number"
                             value={editQuantity}
                             onChange={e => onEditQuantityChange(parseFloat(e.target.value) || 0)}
-                            className="w-20 rounded border border-[#3a3a3a] bg-[#0a0a0a] px-2 py-1 text-sm text-white focus:ring-1 focus:ring-[#29E7CD] focus:outline-none"
+                            className="w-20 rounded border border-[var(--border)] bg-[var(--background)] px-2 py-1 text-sm text-[var(--foreground)] focus:ring-1 focus:ring-[var(--primary)] focus:outline-none"
                             step="0.1"
                             min="0"
                           />
-                          <span className="text-xs text-gray-400">{calc.unit}</span>
+                          <span className="text-xs text-[var(--foreground-muted)]">{calc.unit}</span>
                         </div>
                       ) : (
                         <span>
@@ -157,7 +157,7 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
                         </span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-300">
+                    <td className="px-6 py-4 text-sm text-[var(--foreground-secondary)]">
                       ${calc.yieldAdjustedCost.toFixed(2)}
                     </td>
                     <td className="px-6 py-4 text-sm">
@@ -166,13 +166,13 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
                           <>
                             <button
                               onClick={onSaveEdit}
-                              className="rounded bg-[#29E7CD] px-2 py-1 text-xs text-white transition-colors duration-200 hover:bg-[#29E7CD]/80"
+                              className="rounded bg-[var(--primary)] px-2 py-1 text-xs text-[var(--button-active-text)] transition-colors duration-200 hover:bg-[var(--primary)]/80"
                             >
                               Save
                             </button>
                             <button
                               onClick={onCancelEdit}
-                              className="rounded bg-gray-600 px-2 py-1 text-xs text-white transition-colors duration-200 hover:bg-gray-500"
+                              className="rounded bg-gray-600 px-2 py-1 text-xs text-[var(--foreground)] transition-colors duration-200 hover:bg-gray-500"
                             >
                               Cancel
                             </button>
@@ -181,13 +181,13 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
                           <>
                             <button
                               onClick={() => onEditIngredient(calc.ingredientId, calc.quantity)}
-                              className="p-1 text-gray-400 transition-colors duration-200 hover:text-[#29E7CD]"
+                              className="p-1 text-[var(--foreground-muted)] transition-colors duration-200 hover:text-[var(--primary)]"
                               title="Edit quantity"
                             >
                               <Icon
                                 icon={Edit}
                                 size="sm"
-                                className="text-gray-400"
+                                className="text-[var(--foreground-muted)]"
                                 aria-hidden={true}
                               />
                             </button>
@@ -198,13 +198,13 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
                                 e.stopPropagation();
                                 void onRemoveIngredient(calc.ingredientId);
                               }}
-                              className="p-1 text-gray-400 transition-colors duration-200 hover:text-red-400"
+                              className="p-1 text-[var(--foreground-muted)] transition-colors duration-200 hover:text-[var(--color-error)]"
                               title="Remove ingredient"
                             >
                               <Icon
                                 icon={Trash2}
                                 size="sm"
-                                className="text-gray-400"
+                                className="text-[var(--foreground-muted)]"
                                 aria-hidden={true}
                               />
                             </button>
@@ -220,15 +220,15 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
         </div>
 
         {/* Total COGS Summary */}
-        <div className="border-t border-[#2a2a2a] pt-4">
+        <div className="border-t border-[var(--border)] pt-4">
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-lg font-medium text-white">Total COGS:</span>
-            <span className="text-lg font-bold text-[#29E7CD]">${totalCOGS.toFixed(2)}</span>
+            <span className="text-lg font-medium text-[var(--foreground)]">Total COGS:</span>
+            <span className="text-lg font-bold text-[var(--primary)]">${totalCOGS.toFixed(2)}</span>
           </div>
           {costPerPortion > 0 && (
             <div className="mb-4 flex items-center justify-between">
-              <span className="text-sm text-gray-400">Cost per portion:</span>
-              <span className="text-sm font-medium text-white">${costPerPortion.toFixed(2)}</span>
+              <span className="text-sm text-[var(--foreground-muted)]">Cost per portion:</span>
+              <span className="text-sm font-medium text-[var(--foreground)]">${costPerPortion.toFixed(2)}</span>
             </div>
           )}
         </div>

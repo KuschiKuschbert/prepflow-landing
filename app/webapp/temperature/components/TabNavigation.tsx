@@ -35,17 +35,17 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
 
   return (
     <div className="mb-8">
-      <div className="flex gap-2 rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-1.5 shadow-lg">
+      <div className="flex gap-2 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-1.5 shadow-lg">
         {tabs.map(tab => {
           const isActive = activeTab === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`group tablet:px-6 relative flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-2xl px-4 py-3 font-medium transition-all duration-300 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+              className={`group tablet:px-6 relative flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-2xl px-4 py-3 font-semibold transition-all duration-300 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none ${
                 isActive
-                  ? 'scale-[1.02] bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-black shadow-xl'
-                  : 'text-gray-400 hover:bg-[#2a2a2a] hover:text-white'
+                  ? 'scale-[1.02] bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl border border-[var(--primary)]/30'
+                  : 'text-[var(--foreground-secondary)] hover:bg-[var(--muted)] hover:text-[var(--button-active-text)]'
               }`}
               aria-pressed={isActive}
               aria-label={tab.ariaLabel}
@@ -58,7 +58,7 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
               />
               <span className="tablet:inline hidden">{tab.label}</span>
               {isActive && (
-                <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 blur-xl" />
+                <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20 blur-xl" />
               )}
             </button>
           );

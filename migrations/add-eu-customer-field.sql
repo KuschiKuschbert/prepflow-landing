@@ -8,3 +8,6 @@ CREATE INDEX IF NOT EXISTS idx_users_is_eu_customer ON users(is_eu_customer) WHE
 
 -- Comment
 COMMENT ON COLUMN users.is_eu_customer IS 'Whether user is an EU customer (for EU Data Act compliance - enhanced cancellation rights)';
+
+
+

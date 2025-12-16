@@ -54,10 +54,10 @@ export function CreateEquipmentForm({
   if (!show) return null;
 
   return (
-    <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
+    <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="flex items-center gap-2 text-lg font-semibold text-white">
-          <Icon icon={Plus} size="md" className="text-white" aria-hidden={true} />
+        <h3 className="flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
+          <Icon icon={Plus} size="md" className="text-[var(--foreground)]" aria-hidden={true} />
           Add New Equipment
         </h3>
         <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
@@ -65,18 +65,18 @@ export function CreateEquipmentForm({
       <form onSubmit={onSubmit} className="space-y-4">
         <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Equipment Name</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Equipment Name</label>
             <input
               type="text"
               value={newEquipment.name}
               onChange={e => setNewEquipment({ ...newEquipment, name: e.target.value })}
-              className="w-full rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
               placeholder="e.g., Main Fridge, Freezer 1"
               required
             />
           </div>
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">Equipment Type</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Equipment Type</label>
             <select
               value={newEquipment.equipmentType}
               onChange={e => {
@@ -90,7 +90,7 @@ export function CreateEquipmentForm({
                   maxTemp: defaultRange.maxTemp,
                 });
               }}
-              className="w-full rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
               required
             >
               <option value="">Select type...</option>
@@ -101,7 +101,7 @@ export function CreateEquipmentForm({
               ))}
             </select>
             {newEquipment.equipmentType && (
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-1 text-xs text-[var(--foreground-muted)]">
                 Temperature range set automatically based on Queensland Food Safety Standards
               </p>
             )}
@@ -109,19 +109,19 @@ export function CreateEquipmentForm({
         </div>
         <div className="desktop:grid-cols-3 grid grid-cols-1 gap-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
               Location (Optional)
             </label>
             <input
               type="text"
               value={newEquipment.location}
               onChange={e => setNewEquipment({ ...newEquipment, location: e.target.value })}
-              className="w-full rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
               placeholder="e.g., Kitchen, Storage Room"
             />
           </div>
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
               Min Temperature (°C)
             </label>
             <input
@@ -134,12 +134,12 @@ export function CreateEquipmentForm({
                   minTemp: e.target.value ? parseFloat(e.target.value) : null,
                 })
               }
-              className="w-full rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
               placeholder="Optional"
             />
           </div>
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
               Max Temperature (°C)
             </label>
             <input
@@ -152,7 +152,7 @@ export function CreateEquipmentForm({
                   maxTemp: e.target.value ? parseFloat(e.target.value) : null,
                 })
               }
-              className="w-full rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
               placeholder="Optional"
             />
           </div>
@@ -160,14 +160,14 @@ export function CreateEquipmentForm({
         <div className="flex space-x-3">
           <button
             type="submit"
-            className="rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
+            className="rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
           >
             {t('temperature.addEquipment', 'Add Equipment')}
           </button>
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-xl bg-[#2a2a2a] px-6 py-3 font-semibold text-gray-300 transition-all duration-200 hover:bg-[#3a3a3a]"
+            className="rounded-xl bg-[var(--muted)] px-6 py-3 font-semibold text-[var(--foreground-secondary)] transition-all duration-200 hover:bg-[var(--surface-variant)]"
           >
             {t('common.cancel', 'Cancel')}
           </button>

@@ -21,15 +21,15 @@ export function SupportForm({
   onCancel,
 }: SupportFormProps) {
   return (
-    <form onSubmit={onSubmit} className="space-y-4 border-t border-[#2a2a2a] pt-4">
+    <form onSubmit={onSubmit} className="space-y-4 border-t border-[var(--border)] pt-4">
       {formData.related_error_id && (
-        <div className="rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-3 text-sm text-[#29E7CD]">
+        <div className="rounded-lg border border-[var(--primary)]/30 bg-[var(--primary)]/10 p-3 text-sm text-[var(--primary)]">
           <Icon icon={AlertTriangle} size="sm" className="mb-1 inline-block" aria-hidden={true} />{' '}
           Reporting a specific error. Error details will be automatically included.
         </div>
       )}
       <div>
-        <label htmlFor="support-type" className="mb-2 block text-sm font-medium text-gray-300">
+        <label htmlFor="support-type" className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
           Request Type
         </label>
         <select
@@ -38,7 +38,7 @@ export function SupportForm({
           onChange={e =>
             onFormDataChange({ ...formData, type: e.target.value as SupportFormData['type'] })
           }
-          className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+          className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
         >
           <option value="question">Question</option>
           <option value="bug">Report a Bug</option>
@@ -52,7 +52,7 @@ export function SupportForm({
       )}
 
       <div>
-        <label htmlFor="support-subject" className="mb-2 block text-sm font-medium text-gray-300">
+        <label htmlFor="support-subject" className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
           Subject
         </label>
         <input
@@ -62,13 +62,13 @@ export function SupportForm({
           onChange={e => onFormDataChange({ ...formData, subject: e.target.value })}
           required
           maxLength={200}
-          className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+          className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
           placeholder="Brief description of your request"
         />
       </div>
 
       <div>
-        <label htmlFor="support-message" className="mb-2 block text-sm font-medium text-gray-300">
+        <label htmlFor="support-message" className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
           Message
         </label>
         <textarea
@@ -79,7 +79,7 @@ export function SupportForm({
           minLength={10}
           maxLength={5000}
           rows={5}
-          className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+          className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
           placeholder="Please provide as much detail as possible..."
         />
       </div>
@@ -88,14 +88,14 @@ export function SupportForm({
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-2xl border border-[#2a2a2a] px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/40"
+          className="rounded-2xl border border-[var(--border)] px-4 py-2 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/40"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-sm font-medium text-white transition-all hover:shadow-lg disabled:opacity-50"
+          className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all hover:shadow-lg disabled:opacity-50"
         >
           {submitting ? 'Submitting...' : 'Submit Request'}
         </button>

@@ -89,11 +89,11 @@ export default function PerformanceSummaryCards({
 
   const getTrendIcon = (value: number, threshold: number = 0) => {
     if (value > threshold) {
-      return <Icon icon={TrendingUp} size="sm" className="text-green-400" />;
+      return <Icon icon={TrendingUp} size="sm" className="text-[var(--color-success)]" />;
     } else if (value < threshold) {
-      return <Icon icon={TrendingDown} size="sm" className="text-red-400" />;
+      return <Icon icon={TrendingDown} size="sm" className="text-[var(--color-error)]" />;
     }
-    return <Icon icon={Minus} size="sm" className="text-gray-400" />;
+    return <Icon icon={Minus} size="sm" className="text-[var(--foreground-muted)]" />;
   };
 
   if (performanceItems.length === 0) {
@@ -103,61 +103,61 @@ export default function PerformanceSummaryCards({
   return (
     <SummaryCardGrid className="tablet:mb-3 desktop:mb-4 mb-2" gap="sm">
       {/* Total Profit Card */}
-      <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5">
+      <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2.5">
         <div className="mb-1.5 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <Icon icon={DollarSign} size="sm" className="text-[#29E7CD]" />
-            <span className="text-fluid-xs text-gray-400">Total Profit</span>
+            <Icon icon={DollarSign} size="sm" className="text-[var(--primary)]" />
+            <span className="text-fluid-xs text-[var(--foreground-muted)]">Total Profit</span>
           </div>
           {getTrendIcon(summary.totalProfit, 0)}
         </div>
-        <div className="text-fluid-lg font-bold text-white">
+        <div className="text-fluid-lg font-bold text-[var(--foreground)]">
           {formatCurrency(summary.totalProfit)}
         </div>
-        <div className="text-fluid-xs mt-0.5 text-gray-500">ex GST</div>
+        <div className="text-fluid-xs mt-0.5 text-[var(--foreground-muted)]">ex GST</div>
       </div>
 
       {/* Average Profit Margin Card */}
-      <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5">
+      <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2.5">
         <div className="mb-1.5 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <Icon icon={BarChart3} size="sm" className="text-[#3B82F6]" />
-            <span className="text-fluid-xs text-gray-400">Avg Margin</span>
+            <Icon icon={BarChart3} size="sm" className="text-[var(--color-info)]" />
+            <span className="text-fluid-xs text-[var(--foreground-muted)]">Avg Margin</span>
           </div>
           {getTrendIcon(summary.averageProfitMargin, 70)}
         </div>
-        <div className="text-fluid-lg font-bold text-white">
+        <div className="text-fluid-lg font-bold text-[var(--foreground)]">
           {formatPercentage(summary.averageProfitMargin)}
         </div>
-        <div className="text-fluid-xs mt-0.5 text-gray-500">across all items</div>
+        <div className="text-fluid-xs mt-0.5 text-[var(--foreground-muted)]">across all items</div>
       </div>
 
       {/* Category Breakdown Card */}
-      <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5">
+      <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2.5">
         <div className="mb-1.5 flex items-center gap-1.5">
-          <Icon icon={Package} size="sm" className="text-[#D925C7]" />
-          <span className="text-fluid-xs text-gray-400">Categories</span>
+          <Icon icon={Package} size="sm" className="text-[var(--accent)]" />
+          <span className="text-fluid-xs text-[var(--foreground-muted)]">Categories</span>
         </div>
         <div className="space-y-0.5">
           <div className="text-fluid-xs flex items-center justify-between">
-            <span className="text-green-400">Chef&apos;s Kiss</span>
-            <span className="font-semibold text-white">
+            <span className="text-[var(--color-success)]">Chef&apos;s Kiss</span>
+            <span className="font-semibold text-[var(--foreground)]">
               {summary.categoryCounts["Chef's Kiss"]}
             </span>
           </div>
           <div className="text-fluid-xs flex items-center justify-between">
-            <span className="text-blue-400">Hidden Gem</span>
-            <span className="font-semibold text-white">{summary.categoryCounts['Hidden Gem']}</span>
+            <span className="text-[var(--color-info)]">Hidden Gem</span>
+            <span className="font-semibold text-[var(--foreground)]">{summary.categoryCounts['Hidden Gem']}</span>
           </div>
           <div className="text-fluid-xs flex items-center justify-between">
-            <span className="text-yellow-400">Bargain</span>
-            <span className="font-semibold text-white">
+            <span className="text-[var(--color-warning)]">Bargain</span>
+            <span className="font-semibold text-[var(--foreground)]">
               {summary.categoryCounts['Bargain Bucket']}
             </span>
           </div>
           <div className="text-fluid-xs flex items-center justify-between">
-            <span className="text-red-400">Burnt Toast</span>
-            <span className="font-semibold text-white">
+            <span className="text-[var(--color-error)]">Burnt Toast</span>
+            <span className="font-semibold text-[var(--foreground)]">
               {summary.categoryCounts['Burnt Toast']}
             </span>
           </div>
@@ -165,23 +165,23 @@ export default function PerformanceSummaryCards({
       </div>
 
       {/* Top Performer Card */}
-      <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[#2a2a2a] bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a]/50 p-2.5">
+      <div className="tablet:p-3 desktop:p-4 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2.5">
         <div className="mb-1.5 flex items-center gap-1.5">
-          <Icon icon={Award} size="sm" className="text-yellow-400" />
-          <span className="text-fluid-xs text-gray-400">Top Performer</span>
+          <Icon icon={Award} size="sm" className="text-[var(--color-warning)]" />
+          <span className="text-fluid-xs text-[var(--foreground-muted)]">Top Performer</span>
         </div>
         {summary.topPerformer ? (
           <>
-            <div className="text-fluid-sm truncate font-semibold text-white">
+            <div className="text-fluid-sm truncate font-semibold text-[var(--foreground)]">
               {summary.topPerformer.name}
             </div>
-            <div className="text-fluid-xs mt-0.5 text-gray-500">
+            <div className="text-fluid-xs mt-0.5 text-[var(--foreground-muted)]">
               {formatCurrency(summary.topPerformer.gross_profit * summary.topPerformer.number_sold)}{' '}
               profit
             </div>
           </>
         ) : (
-          <div className="text-fluid-xs text-gray-500">No data</div>
+          <div className="text-fluid-xs text-[var(--foreground-muted)]">No data</div>
         )}
       </div>
     </SummaryCardGrid>

@@ -31,24 +31,24 @@ export function TaskItem({
 }: TaskItemProps) {
   if (isEditing) {
     return (
-      <div className="tablet:p-4 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3 transition-all duration-200 hover:border-[#29E7CD]/30">
+      <div className="tablet:p-4 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-3 transition-all duration-200 hover:border-[var(--primary)]/30">
         <div className="space-y-3">
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-300">Task Name</label>
+            <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Task Name</label>
             <input
               type="text"
               value={editFormData.task_name}
               onChange={e => onEditFormChange({ ...editFormData, task_name: e.target.value })}
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] px-3 py-2 text-white placeholder-gray-500 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-[var(--foreground)] placeholder-gray-500 focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
               placeholder="Task name"
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-300">Frequency</label>
+            <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Frequency</label>
             <select
               value={editFormData.frequency_type}
               onChange={e => onEditFormChange({ ...editFormData, frequency_type: e.target.value })}
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] px-3 py-2 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             >
               <option value="daily">Daily</option>
               <option value="bi-daily">Bi-Daily</option>
@@ -60,13 +60,13 @@ export function TaskItem({
           <div className="flex gap-2">
             <button
               onClick={onSave}
-              className="flex-1 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-sm font-semibold text-black transition-all duration-200 hover:shadow-lg"
+              className="flex-1 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-sm font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg"
             >
               Save
             </button>
             <button
               onClick={onCancel}
-              className="rounded-xl bg-[#2a2a2a] px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]"
+              className="rounded-xl bg-[var(--muted)] px-4 py-2 text-sm font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]"
             >
               Cancel
             </button>
@@ -77,42 +77,42 @@ export function TaskItem({
   }
 
   return (
-    <div className="tablet:p-4 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3 transition-all duration-200 hover:border-[#29E7CD]/30">
+    <div className="tablet:p-4 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-3 transition-all duration-200 hover:border-[var(--primary)]/30">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <div className="mb-1 flex items-center gap-2">
-            <h3 className="font-semibold text-white">{task.task_name}</h3>
+            <h3 className="font-semibold text-[var(--foreground)]">{task.task_name}</h3>
             {task.frequency_type && (
-              <span className="rounded-full bg-[#29E7CD]/10 px-2 py-0.5 text-xs text-[#29E7CD]">
+              <span className="rounded-full bg-[var(--primary)]/10 px-2 py-0.5 text-xs text-[var(--primary)]">
                 {formatFrequencyType(task.frequency_type)}
               </span>
             )}
           </div>
-          {task.description && <p className="text-sm text-gray-400">{task.description}</p>}
+          {task.description && <p className="text-sm text-[var(--foreground-muted)]">{task.description}</p>}
           {task.equipment_id && task.temperature_equipment && (
-            <div className="mt-2 flex items-center gap-2 text-xs text-gray-500">
+            <div className="mt-2 flex items-center gap-2 text-xs text-[var(--foreground-subtle)]">
               <span>Equipment:</span>
-              <span className="text-blue-400">{(task.temperature_equipment as any)?.name}</span>
+              <span className="text-[var(--color-info)]">{(task.temperature_equipment as any)?.name}</span>
             </div>
           )}
           {task.section_id && task.kitchen_sections && (
-            <div className="mt-1 flex items-center gap-2 text-xs text-gray-500">
+            <div className="mt-1 flex items-center gap-2 text-xs text-[var(--foreground-subtle)]">
               <span>Section:</span>
-              <span className="text-[#D925C7]">{(task.kitchen_sections as any)?.section_name}</span>
+              <span className="text-[var(--accent)]">{(task.kitchen_sections as any)?.section_name}</span>
             </div>
           )}
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={onEdit}
-            className="rounded-lg bg-[#2a2a2a] p-2 text-gray-400 transition-colors hover:bg-[#3a3a3a] hover:text-[#29E7CD]"
+            className="rounded-lg bg-[var(--muted)] p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--surface-variant)] hover:text-[var(--primary)]"
             title="Edit task"
           >
             <Icon icon={Edit2} size="sm" aria-hidden={true} />
           </button>
           <button
             onClick={onDelete}
-            className="rounded-lg bg-[#2a2a2a] p-2 text-gray-400 transition-colors hover:bg-[#3a3a3a] hover:text-red-400"
+            className="rounded-lg bg-[var(--muted)] p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--surface-variant)] hover:text-[var(--color-error)]"
             title="Delete task"
           >
             <Icon icon={Trash2} size="sm" aria-hidden={true} />
@@ -122,3 +122,6 @@ export function TaskItem({
     </div>
   );
 }
+
+
+

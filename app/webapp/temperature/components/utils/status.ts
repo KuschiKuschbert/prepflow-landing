@@ -63,7 +63,7 @@ export function getFoodSafetyStatus(
     return {
       status: 'safe',
       message: 'Outside danger zone',
-      color: 'text-green-400',
+      color: 'text-[var(--color-success)]',
       icon: CheckCircle2,
     };
   const logDateTime = new Date(`${logDate}T${logTime}`);
@@ -73,21 +73,21 @@ export function getFoodSafetyStatus(
     return {
       status: 'safe',
       message: `${(2 - hoursInDangerZone).toFixed(1)}h remaining - can refrigerate`,
-      color: 'text-green-400',
+      color: 'text-[var(--color-success)]',
       icon: CheckCircle2,
     };
   } else if (hoursInDangerZone < 4) {
     return {
       status: 'warning',
       message: `${(4 - hoursInDangerZone).toFixed(1)}h remaining - use immediately`,
-      color: 'text-yellow-400',
+      color: 'text-[var(--color-warning)]',
       icon: AlertTriangle,
     };
   } else {
     return {
       status: 'danger',
       message: `${hoursInDangerZone.toFixed(1)}h in danger zone - DISCARD`,
-      color: 'text-red-400',
+      color: 'text-[var(--color-error)]',
       icon: AlertCircle,
     };
   }
@@ -102,10 +102,10 @@ export function getFoodSafetyStatus(
 export function getStatusColor(status: string): string {
   switch (status) {
     case 'high':
-      return 'text-red-400 bg-red-400/10 border-red-400/20';
+      return 'text-[var(--color-error)] bg-[var(--color-error-bg)] border border-[var(--color-error-border)]';
     case 'low':
-      return 'text-blue-400 bg-blue-400/10 border-blue-400/20';
+      return 'text-[var(--color-info)] bg-[var(--color-info-bg)] border border-[var(--color-info-border)]';
     default:
-      return 'text-green-400 bg-green-400/10 border-green-400/20';
+      return 'text-[var(--color-success)] bg-[var(--color-success-bg)] border border-[var(--color-success-border)]';
   }
 }

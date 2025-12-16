@@ -126,18 +126,18 @@ export function FoodImageGenerator({
       {showDisplay && (
         <div>
           {isGenerating ? (
-            <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]">
+            <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)]">
               <LoadingSkeleton variant="card" className="h-full w-full" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="flex flex-col items-center gap-3 rounded-2xl bg-black/60 px-6 py-4 backdrop-blur-sm">
                   <Icon
                     icon={Loader2}
                     size="xl"
-                    className="animate-spin text-[#29E7CD]"
+                    className="animate-spin text-[var(--primary)]"
                     aria-hidden={true}
                   />
-                  <p className="text-sm font-medium text-white">Generating images...</p>
-                  <p className="text-xs text-gray-400">This may take up to 10 seconds</p>
+                  <p className="text-sm font-medium text-[var(--foreground)]">Generating images...</p>
+                  <p className="text-xs text-[var(--foreground-muted)]">This may take up to 10 seconds</p>
                 </div>
               </div>
             </div>
@@ -163,7 +163,7 @@ export function FoodImageGenerator({
             ref={generateButtonRef}
             onClick={handleGenerateClick}
             disabled={isGenerating}
-            className="w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl hover:shadow-[#FF6B00]/25 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-2xl bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl hover:shadow-[var(--tertiary)]/25 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label={`Generate images for ${entityName}`}
           >
             <div className="flex items-center justify-center gap-2">
@@ -187,7 +187,7 @@ export function FoodImageGenerator({
             ref={generateButtonRef}
             onClick={handleGenerateClick}
             disabled={isGenerating}
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-4 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#2a2a2a]/60 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)]/40 px-4 py-2 text-sm font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--primary)]/50 hover:bg-[var(--muted)]/60 hover:text-[var(--foreground)] disabled:cursor-not-allowed disabled:opacity-50"
             aria-label={`Regenerate images for ${entityName}`}
           >
             <div className="flex items-center justify-center gap-2">
@@ -206,16 +206,16 @@ export function FoodImageGenerator({
 
       {/* Error Display */}
       {error && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4">
+        <div className="rounded-xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-4">
           <div className="flex items-start gap-3">
             <Icon
               icon={AlertCircle}
               size="md"
-              className="mt-0.5 flex-shrink-0 text-red-400"
+              className="mt-0.5 flex-shrink-0 text-[var(--color-error)]"
               aria-hidden={true}
             />
             <div className="flex-1">
-              <p className="text-sm font-medium text-red-400">Generation Failed</p>
+              <p className="text-sm font-medium text-[var(--color-error)]">Generation Failed</p>
               <p className="mt-1 text-xs text-red-300">{error}</p>
               {error.includes('Rate limit') && (
                 <p className="mt-2 text-xs text-red-300/80">

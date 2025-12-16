@@ -75,14 +75,14 @@ export default function IngredientWizardStep4({
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="mb-2 text-sm font-semibold text-white">Allergen Information</h3>
-        <div className="mb-2 rounded-lg border border-yellow-500/30 bg-yellow-500/5 px-3 py-2">
-          <p className="text-xs font-medium text-yellow-400">
+        <h3 className="mb-2 text-sm font-semibold text-[var(--foreground)]">Allergen Information</h3>
+        <div className="mb-2 rounded-lg border border-[var(--color-warning)]/30 bg-[var(--color-warning)]/5 px-3 py-2">
+          <p className="text-xs font-medium text-[var(--color-warning)]">
             ⚠️ Experimental: Allergen detection is currently experimental and may not be 100%
             accurate.
           </p>
         </div>
-        <p className="mb-4 text-xs text-gray-400">
+        <p className="mb-4 text-xs text-[var(--foreground-muted)]">
           Allergens are automatically detected when you enter this step using hybrid detection
           (keyword matching + AI). You can optionally edit them manually below.
         </p>
@@ -90,28 +90,28 @@ export default function IngredientWizardStep4({
 
       {/* Auto-detection Info */}
       {detectingAllergens ? (
-        <div className="mb-4 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/5 p-3">
+        <div className="mb-4 rounded-lg border border-[var(--primary)]/30 bg-[var(--primary)]/5 p-3">
           <div className="flex items-start gap-2">
-            <div className="mt-0.5 h-4 w-4 animate-spin rounded-full border-2 border-[#29E7CD] border-t-transparent" />
-            <div className="flex-1 text-xs text-gray-300">
-              <div className="font-semibold text-[#29E7CD]">Detecting Allergens...</div>
-              <div className="mt-1 text-gray-400">
+            <div className="mt-0.5 h-4 w-4 animate-spin rounded-full border-2 border-[var(--primary)] border-t-transparent" />
+            <div className="flex-1 text-xs text-[var(--foreground-secondary)]">
+              <div className="font-semibold text-[var(--primary)]">Detecting Allergens...</div>
+              <div className="mt-1 text-[var(--foreground-muted)]">
                 Analyzing ingredient name and brand for allergens using hybrid detection.
               </div>
             </div>
           </div>
         </div>
       ) : (
-        <div className="mb-4 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/5 p-3">
+        <div className="mb-4 rounded-lg border border-[var(--primary)]/30 bg-[var(--primary)]/5 p-3">
           <div className="flex items-start gap-2">
-            <Icon icon={Check} size="sm" className="mt-0.5 text-[#29E7CD]" aria-hidden={true} />
-            <div className="flex-1 text-xs text-gray-300">
-              <div className="font-semibold text-[#29E7CD]">
+            <Icon icon={Check} size="sm" className="mt-0.5 text-[var(--primary)]" aria-hidden={true} />
+            <div className="flex-1 text-xs text-[var(--foreground-secondary)]">
+              <div className="font-semibold text-[var(--primary)]">
                 {selectedAllergens.length > 0
                   ? `Detected ${selectedAllergens.length} Allergen${selectedAllergens.length !== 1 ? 's' : ''}`
                   : 'Automatic Detection Enabled'}
               </div>
-              <div className="mt-1 text-gray-400">
+              <div className="mt-1 text-[var(--foreground-muted)]">
                 {selectedAllergens.length > 0
                   ? 'Allergens were automatically detected. You can edit them below if needed.'
                   : 'Allergens will be detected automatically on save using hybrid detection (keyword matching first, then AI if needed).'}
@@ -126,7 +126,7 @@ export default function IngredientWizardStep4({
         <button
           type="button"
           onClick={() => setShowManualEdit(!showManualEdit)}
-          className="flex items-center gap-2 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-sm text-white transition-all hover:bg-[#1a1a1a]"
+          className="flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-sm text-[var(--foreground)] transition-all hover:bg-[var(--surface)]"
         >
           <Icon icon={Edit2} size="sm" aria-hidden={true} />
           <span>{showManualEdit ? 'Hide Manual Selection' : 'Edit Allergens Manually'}</span>
@@ -135,7 +135,7 @@ export default function IngredientWizardStep4({
           <div className="mt-3 space-y-2">
             {hasManualAllergens ? (
               <>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-[var(--foreground-muted)]">
                   You have manually selected {selectedAllergens.length} allergen
                   {selectedAllergens.length !== 1 ? 's' : ''}. These will override automatic
                   detection.
@@ -148,7 +148,7 @@ export default function IngredientWizardStep4({
               </>
             ) : (
               <>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-[var(--foreground-muted)]">
                   {selectedAllergens.length} allergen{selectedAllergens.length !== 1 ? 's' : ''}{' '}
                   detected automatically. You can edit them below if needed.
                 </p>
@@ -175,15 +175,15 @@ export default function IngredientWizardStep4({
                   key={allergen.code}
                   className={`flex cursor-pointer items-center gap-2 rounded-lg border p-3 transition-all ${
                     isSelected
-                      ? 'border-[#29E7CD] bg-[#29E7CD]/10'
-                      : 'border-[#2a2a2a] bg-[#0a0a0a] hover:border-[#29E7CD]/50'
+                      ? 'border-[var(--primary)] bg-[var(--primary)]/10'
+                      : 'border-[var(--border)] bg-[var(--background)] hover:border-[var(--primary)]/50'
                   }`}
                 >
                   <input
                     type="checkbox"
                     checked={isSelected}
                     onChange={() => handleAllergenToggle(allergen.code)}
-                    className="h-4 w-4 rounded border-[#2a2a2a] bg-[#0a0a0a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
+                    className="h-4 w-4 rounded border-[var(--border)] bg-[var(--background)] text-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
                   />
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
@@ -191,14 +191,14 @@ export default function IngredientWizardStep4({
                         <Icon
                           icon={ALLERGEN_ICONS[allergen.icon]}
                           size="sm"
-                          className="text-[#29E7CD]"
+                          className="text-[var(--primary)]"
                           aria-hidden={true}
                         />
                       )}
-                      <span className="text-sm font-medium text-white">{allergen.displayName}</span>
+                      <span className="text-sm font-medium text-[var(--foreground)]">{allergen.displayName}</span>
                     </div>
                     {allergen.description && (
-                      <p className="mt-0.5 text-xs text-gray-400">{allergen.description}</p>
+                      <p className="mt-0.5 text-xs text-[var(--foreground-muted)]">{allergen.description}</p>
                     )}
                   </div>
                 </label>
@@ -208,7 +208,7 @@ export default function IngredientWizardStep4({
         </div>
       )}
 
-      {errors.allergens && <p className="mt-1 text-xs text-red-400">{errors.allergens}</p>}
+      {errors.allergens && <p className="mt-1 text-xs text-[var(--color-error)]">{errors.allergens}</p>}
     </div>
   );
 }

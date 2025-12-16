@@ -126,9 +126,9 @@ function NewButton({ isCollapsed = false }: NewButtonProps) {
           isCollapsed ? 'px-2 py-2.5' : 'px-4 py-2.5',
           'min-h-[44px]',
           'bg-gradient-to-r',
-          'from-[#29E7CD]',
-          'to-[#D925C7]',
-          'text-white',
+          'from-[var(--primary)]',
+          'to-[var(--accent)]',
+          'text-[var(--button-active-text)]',
           'font-medium',
           'text-sm',
           'transition-all',
@@ -138,15 +138,15 @@ function NewButton({ isCollapsed = false }: NewButtonProps) {
           'active:scale-[0.98]',
           'focus:outline-none',
           'focus:ring-2',
-          'focus:ring-[#29E7CD]',
+          'focus:ring-[var(--primary)]',
           'focus:ring-offset-2',
-          'focus:ring-offset-[#1f1f1f]',
+          'focus:ring-offset-[var(--surface)]',
         )}
         aria-label="Create new item"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <Icon icon={Plus} size="md" className="text-white" aria-hidden={true} />
+        <Icon icon={Plus} size="md" className="text-[var(--button-active-text)]" aria-hidden={true} />
         <span>New</span>
       </button>
 
@@ -161,10 +161,10 @@ function NewButton({ isCollapsed = false }: NewButtonProps) {
             'w-full',
             'rounded-2xl',
             'bg-gradient-to-r',
-            'from-[#29E7CD]/20',
-            'via-[#FF6B00]/20',
-            'via-[#D925C7]/20',
-            'to-[#29E7CD]/20',
+            'from-[var(--primary)]/20',
+            'via-[var(--tertiary)]/20',
+            'via-[var(--accent)]/20',
+            'to-[var(--primary)]/20',
             'p-[1px]',
             'shadow-xl',
             'z-[60]',
@@ -175,8 +175,8 @@ function NewButton({ isCollapsed = false }: NewButtonProps) {
           role="menu"
           aria-orientation="vertical"
         >
-          <div className="desktop:p-2 rounded-xl bg-[#1f1f1f]/95 p-2">
-            <div className="mb-2 px-3 py-1.5 text-xs font-semibold tracking-wider text-gray-400 uppercase">
+          <div className="desktop:p-2 rounded-xl bg-[var(--surface)]/95 p-2">
+            <div className="mb-2 px-3 py-1.5 text-xs font-semibold tracking-wider text-[var(--foreground)]/60 uppercase">
               Create New
             </div>
             <div className="desktop:space-y-1 space-y-2">
@@ -196,11 +196,11 @@ function NewButton({ isCollapsed = false }: NewButtonProps) {
                     'desktop:py-2.5',
                     'text-left',
                     'text-sm',
-                    'text-gray-300',
+                    'text-[var(--foreground)]/80',
                     // Mobile: Individual card styling
                     'border',
-                    'border-[#2a2a2a]',
-                    'bg-[#1f1f1f]',
+                    'border-[var(--border)]',
+                    'bg-[var(--surface)]',
                     'shadow-md',
                     // Desktop: Remove card styling
                     'desktop:border-0',
@@ -208,11 +208,11 @@ function NewButton({ isCollapsed = false }: NewButtonProps) {
                     'desktop:shadow-none',
                     'transition-all',
                     'duration-200',
-                    'hover:bg-[#2a2a2a]',
-                    index % 2 === 0 ? 'hover:text-[#29E7CD]' : 'hover:text-[#FF6B00]',
+                    'hover:bg-[var(--muted)]/50',
+                    index % 2 === 0 ? 'hover:text-[var(--primary)]' : 'hover:text-[var(--tertiary)]',
                     'focus:outline-none',
-                    'focus:bg-[#2a2a2a]',
-                    index % 2 === 0 ? 'focus:text-[#29E7CD]' : 'focus:text-[#FF6B00]',
+                    'focus:bg-[var(--muted)]/50',
+                    index % 2 === 0 ? 'focus:text-[var(--primary)]' : 'focus:text-[var(--tertiary)]',
                     'active:scale-95',
                   )}
                   role="menuitem"

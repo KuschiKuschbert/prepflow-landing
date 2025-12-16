@@ -31,7 +31,7 @@ export function NetworkStatusBanner() {
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -100, opacity: 0 }}
-          className="fixed top-0 right-0 left-0 z-[100] bg-red-500/90 px-4 py-3 text-center text-sm font-medium text-white shadow-lg backdrop-blur-sm"
+          className="fixed top-0 right-0 left-0 z-[100] bg-[var(--color-error)]/90 px-4 py-3 text-center text-sm font-medium text-[var(--button-active-text)] shadow-lg backdrop-blur-sm"
         >
           <div className="mx-auto flex max-w-7xl items-center justify-center gap-2">
             <Icon icon={WifiOff} size="sm" aria-hidden={true} />
@@ -45,7 +45,7 @@ export function NetworkStatusBanner() {
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -100, opacity: 0 }}
-          className="fixed top-0 right-0 left-0 z-[100] bg-green-500/90 px-4 py-3 text-center text-sm font-medium text-white shadow-lg backdrop-blur-sm"
+          className="fixed top-0 right-0 left-0 z-[100] bg-[var(--color-success)]/90 px-4 py-3 text-center text-sm font-medium text-[var(--button-active-text)] shadow-lg backdrop-blur-sm"
         >
           <div className="mx-auto flex max-w-7xl items-center justify-center gap-2">
             <Icon icon={Wifi} size="sm" aria-hidden={true} />

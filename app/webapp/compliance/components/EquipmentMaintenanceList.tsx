@@ -29,10 +29,10 @@ interface EquipmentMaintenanceListProps {
 export function EquipmentMaintenanceList({ records }: EquipmentMaintenanceListProps) {
   if (records.length === 0) {
     return (
-      <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-12 text-center">
-        <Icon icon={Wrench} size="xl" className="mx-auto mb-4 text-gray-500" aria-hidden={true} />
-        <h3 className="mb-2 text-xl font-semibold text-white">No Maintenance Records</h3>
-        <p className="text-gray-400">
+      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-12 text-center">
+        <Icon icon={Wrench} size="xl" className="mx-auto mb-4 text-[var(--foreground-subtle)]" aria-hidden={true} />
+        <h3 className="mb-2 text-xl font-semibold text-[var(--foreground)]">No Maintenance Records</h3>
+        <p className="text-[var(--foreground-muted)]">
           Get started by adding your first equipment maintenance record.
         </p>
       </div>
@@ -44,20 +44,20 @@ export function EquipmentMaintenanceList({ records }: EquipmentMaintenanceListPr
       {records.map(record => (
         <div
           key={record.id}
-          className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 transition-colors hover:border-[#29E7CD]/30"
+          className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 transition-colors hover:border-[var(--primary)]/30"
         >
           <div className="mb-4 flex items-start justify-between">
             <div className="flex-1">
               <div className="mb-2 flex items-center gap-2">
-                <h3 className="text-xl font-semibold text-white">{record.equipment_name}</h3>
+                <h3 className="text-xl font-semibold text-[var(--foreground)]">{record.equipment_name}</h3>
                 {record.is_critical && (
-                  <span className="flex items-center gap-1 rounded-full bg-red-500/20 px-2 py-1 text-xs text-red-400">
+                  <span className="flex items-center gap-1 rounded-full bg-[var(--color-error)]/20 px-2 py-1 text-xs text-[var(--color-error)]">
                     <Icon icon={AlertTriangle} size="xs" aria-hidden={true} />
                     Critical
                   </span>
                 )}
               </div>
-              <div className="flex flex-wrap gap-4 text-sm text-gray-400">
+              <div className="flex flex-wrap gap-4 text-sm text-[var(--foreground-muted)]">
                 {record.equipment_type && (
                   <span className="capitalize">Type: {record.equipment_type}</span>
                 )}
@@ -66,24 +66,24 @@ export function EquipmentMaintenanceList({ records }: EquipmentMaintenanceListPr
               </div>
             </div>
             <div className="text-right">
-              <div className="mb-1 flex items-center gap-1 text-sm text-gray-400">
+              <div className="mb-1 flex items-center gap-1 text-sm text-[var(--foreground-muted)]">
                 <Icon icon={Calendar} size="sm" aria-hidden={true} />
                 <span>{new Date(record.maintenance_date).toLocaleDateString()}</span>
               </div>
               {record.cost && (
-                <div className="flex items-center gap-1 text-sm font-semibold text-[#29E7CD]">
+                <div className="flex items-center gap-1 text-sm font-semibold text-[var(--primary)]">
                   <Icon icon={DollarSign} size="sm" aria-hidden={true} />
                   <span>${record.cost.toFixed(2)}</span>
                 </div>
               )}
             </div>
           </div>
-          <p className="mb-2 text-sm text-gray-300">{record.description}</p>
+          <p className="mb-2 text-sm text-[var(--foreground-secondary)]">{record.description}</p>
           {record.performed_by && (
-            <p className="text-xs text-gray-500">Performed by: {record.performed_by}</p>
+            <p className="text-xs text-[var(--foreground-subtle)]">Performed by: {record.performed_by}</p>
           )}
           {record.next_maintenance_date && (
-            <p className="mt-2 text-xs text-gray-500">
+            <p className="mt-2 text-xs text-[var(--foreground-subtle)]">
               Next maintenance: {new Date(record.next_maintenance_date).toLocaleDateString()}
             </p>
           )}
@@ -92,3 +92,6 @@ export function EquipmentMaintenanceList({ records }: EquipmentMaintenanceListPr
     </div>
   );
 }
+
+
+

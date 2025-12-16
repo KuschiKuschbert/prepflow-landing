@@ -52,11 +52,11 @@ export default function DishRecipeSelector({
   return (
     <div className="mb-6">
       <div className="mb-3 flex items-center justify-between">
-        <label className="text-sm font-medium text-gray-300">Recipes</label>
+        <label className="text-sm font-medium text-[var(--foreground-secondary)]">Recipes</label>
         <button
           type="button"
           onClick={handleAddRecipe}
-          className="flex items-center gap-2 rounded-lg bg-[#2a2a2a] px-3 py-1.5 text-sm text-white transition-colors hover:bg-[#3a3a3a]"
+          className="flex items-center gap-2 rounded-lg bg-[var(--muted)] px-3 py-1.5 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--surface-variant)]"
         >
           <Icon icon={Plus} size="sm" />
           Add Recipe
@@ -64,7 +64,7 @@ export default function DishRecipeSelector({
       </div>
       <div className="space-y-3">
         {selectedRecipes.map((sr, index) => (
-          <div key={index} className="flex gap-3 rounded-lg bg-[#2a2a2a]/30 p-3">
+          <div key={index} className="flex gap-3 rounded-lg bg-[var(--muted)]/30 p-3">
             <DishRecipeCombobox
               recipes={recipes}
               selectedRecipe={sr}
@@ -82,13 +82,13 @@ export default function DishRecipeSelector({
                   ),
                 )
               }
-              className="w-24 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-3 py-2 text-white"
+              className="w-24 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-[var(--foreground)]"
               placeholder="Qty"
             />
             <button
               type="button"
               onClick={() => handleRemoveRecipe(index)}
-              className="rounded-lg p-2 text-red-400 transition-colors hover:bg-red-500/20"
+              className="rounded-lg p-2 text-[var(--color-error)] transition-colors hover:bg-[var(--color-error)]/20"
             >
               <Icon icon={Trash2} size="sm" />
             </button>

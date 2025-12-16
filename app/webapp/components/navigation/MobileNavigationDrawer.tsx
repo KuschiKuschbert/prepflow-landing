@@ -136,7 +136,7 @@ export const MobileNavigationDrawer = memo(function MobileNavigationDrawer({
       {/* Drawer */}
       <div
         ref={menuRef}
-        className="fixed top-0 right-0 bottom-0 z-[70] flex w-[85%] max-w-[320px] flex-col bg-[#1f1f1f] shadow-2xl"
+        className="fixed top-0 right-0 bottom-0 z-[70] flex w-[85%] max-w-[320px] flex-col bg-[var(--surface)] shadow-2xl"
         style={{
           animation: 'slideInRight 0.3s var(--easing-standard) forwards',
         }}
@@ -146,17 +146,17 @@ export const MobileNavigationDrawer = memo(function MobileNavigationDrawer({
       >
         {/* Header */}
         <div
-          className="flex flex-shrink-0 items-center justify-between border-b border-[#2a2a2a] px-4 py-4"
+          className="flex flex-shrink-0 items-center justify-between border-b border-[var(--border)] px-4 py-4"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          <span className="text-lg font-semibold text-white">Menu</span>
+          <span className="text-lg font-semibold text-[var(--foreground)]">Menu</span>
           <button
             onClick={onClose}
-            className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-[#2a2a2a]/50 active:scale-95"
+            className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-[var(--muted)]/50 active:scale-95"
             aria-label="Close menu"
           >
-            <Icon icon={X} size="sm" className="text-gray-400" aria-hidden={true} />
+            <Icon icon={X} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
           </button>
         </div>
 
@@ -173,10 +173,10 @@ export const MobileNavigationDrawer = memo(function MobileNavigationDrawer({
             if (!items || items.length === 0) return null;
 
             return (
-              <div key={category} className="border-b border-[#2a2a2a]/50">
+              <div key={category} className="border-b border-[var(--border)]/50">
                 {/* Category Header */}
                 <div className="px-4 pt-4 pb-2">
-                  <span className="text-xs font-semibold tracking-wider text-gray-500 uppercase">
+                  <span className="text-xs font-semibold tracking-wider text-[var(--foreground-subtle)] uppercase">
                     {getCategoryLabel(category)}
                   </span>
                 </div>

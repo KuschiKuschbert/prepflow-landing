@@ -67,7 +67,7 @@ export function ExportButton({
   };
 
   const baseClasses =
-    'flex items-center gap-2 rounded-lg font-medium text-white transition-all duration-200';
+    'flex items-center gap-2 rounded-lg font-medium text-[var(--foreground)] transition-all duration-200';
   const sizeClasses = {
     sm: 'px-3 py-1.5 text-xs',
     md: 'px-4 py-2 text-sm',
@@ -75,8 +75,8 @@ export function ExportButton({
   };
   const variantClasses = {
     primary:
-      'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-lg hover:shadow-[#29E7CD]/30',
-    secondary: 'bg-[#2a2a2a] border border-[#2a2a2a] hover:border-[#29E7CD]/30 hover:bg-[#3a3a3a]',
+      'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 hover:shadow-lg hover:shadow-[var(--primary)]/30 text-[var(--button-active-text)]',
+    secondary: 'bg-[var(--muted)] border border-[var(--border)] hover:border-[var(--primary)]/30 hover:bg-[var(--surface-variant)]',
   };
 
   return (
@@ -102,7 +102,7 @@ export function ExportButton({
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 z-50 mt-2 w-48 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
+        <div className="absolute right-0 z-50 mt-2 w-48 rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-lg">
           <div className="py-1">
             {availableFormats.map(format => {
               const IconComponent = formatIcons[format];
@@ -112,21 +112,21 @@ export function ExportButton({
                   key={format}
                   onClick={() => handleExport(format)}
                   disabled={isLoading || disabled}
-                  className="flex w-full items-center gap-3 px-4 py-2 text-sm text-white transition-colors hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex w-full items-center gap-3 px-4 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)] disabled:cursor-not-allowed disabled:opacity-50"
                   aria-label={`Export as ${formatLabels[format]}`}
                 >
                   {isLoading ? (
                     <Icon
                       icon={Loader2}
                       size="sm"
-                      className="animate-spin text-[#29E7CD]"
+                      className="animate-spin text-[var(--primary)]"
                       aria-hidden={true}
                     />
                   ) : (
                     <Icon
                       icon={IconComponent}
                       size="sm"
-                      className="text-gray-400"
+                      className="text-[var(--foreground-muted)]"
                       aria-hidden={true}
                     />
                   )}

@@ -19,7 +19,7 @@ export function ExportDropdown({ exportLoading, onExport }: ExportDropdownProps)
       <button
         onClick={() => setIsOpen(!isOpen)}
         disabled={exportLoading !== null}
-        className="flex items-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] px-4 py-2 text-sm text-white transition-colors hover:bg-[#2a2a2a] disabled:opacity-50"
+        className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)] disabled:opacity-50"
       >
         <Icon icon={Download} size="sm" aria-hidden={true} />
         <span>{exportLoading ? `Exporting ${exportLoading.toUpperCase()}...` : 'Export'}</span>
@@ -33,7 +33,7 @@ export function ExportDropdown({ exportLoading, onExport }: ExportDropdownProps)
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} aria-hidden={true} />
-          <div className="absolute top-full left-0 z-50 mt-1.5 w-44 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
+          <div className="absolute top-full left-0 z-50 mt-1.5 w-44 rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-xl">
             <div className="p-1.5">
               <button
                 onClick={() => {
@@ -41,7 +41,7 @@ export function ExportDropdown({ exportLoading, onExport }: ExportDropdownProps)
                   setIsOpen(false);
                 }}
                 disabled={exportLoading !== null}
-                className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD] disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Icon icon={FileText} size="sm" aria-hidden={true} />
                 <span>Export CSV</span>
@@ -52,7 +52,7 @@ export function ExportDropdown({ exportLoading, onExport }: ExportDropdownProps)
                   setIsOpen(false);
                 }}
                 disabled={exportLoading !== null}
-                className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD] disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Icon icon={FileText} size="sm" aria-hidden={true} />
                 <span>Export HTML</span>
@@ -63,7 +63,7 @@ export function ExportDropdown({ exportLoading, onExport }: ExportDropdownProps)
                   setIsOpen(false);
                 }}
                 disabled={exportLoading !== null}
-                className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD] disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Icon icon={FileText} size="sm" aria-hidden={true} />
                 <span>Export PDF</span>
@@ -75,3 +75,6 @@ export function ExportDropdown({ exportLoading, onExport }: ExportDropdownProps)
     </div>
   );
 }
+
+
+

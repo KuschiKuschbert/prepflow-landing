@@ -76,11 +76,11 @@ export function QRCodesSection() {
 
   if (error) {
     return (
-      <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-6 text-center">
-        <p className="text-red-400">{error}</p>
+      <div className="rounded-2xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-6 text-center">
+        <p className="text-[var(--color-error)]">{error}</p>
         <button
           onClick={refetch}
-          className="mt-4 rounded-lg bg-red-500/20 px-4 py-2 text-red-400 hover:bg-red-500/30"
+          className="mt-4 rounded-lg bg-[var(--color-error)]/20 px-4 py-2 text-[var(--color-error)] hover:bg-[var(--color-error)]/30"
         >
           Try Again
         </button>
@@ -93,8 +93,8 @@ export function QRCodesSection() {
       {/* Header */}
       <div className="tablet:flex-row tablet:items-center tablet:justify-between flex flex-col gap-4">
         <div>
-          <h2 className="text-xl font-semibold text-white">QR Code Library</h2>
-          <p className="text-sm text-gray-400">
+          <h2 className="text-xl font-semibold text-[var(--foreground)]">QR Code Library</h2>
+          <p className="text-sm text-[var(--foreground-muted)]">
             {entities.length} QR codes in {sortedTypes.length} categories
           </p>
         </div>
@@ -104,7 +104,7 @@ export function QRCodesSection() {
           {selectedItems.size > 0 && (
             <button
               onClick={handlePrintSelected}
-              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2.5 font-medium text-black"
+              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] px-4 py-2.5 font-medium text-[var(--button-active-text)]"
             >
               <Icon icon={Printer} size="sm" />
               Print {selectedItems.size} Selected
@@ -113,7 +113,7 @@ export function QRCodesSection() {
           {entities.length > 0 && (
             <button
               onClick={handlePrintAll}
-              className="flex items-center gap-2 rounded-xl border border-[#29E7CD] bg-[#29E7CD]/10 px-4 py-2.5 font-medium text-[#29E7CD] hover:bg-[#29E7CD]/20"
+              className="flex items-center gap-2 rounded-xl border border-[var(--primary)] bg-[var(--primary)]/10 px-4 py-2.5 font-medium text-[var(--primary)] hover:bg-[var(--primary)]/20"
             >
               <Icon icon={Printer} size="sm" />
               Print All ({entities.length})
@@ -124,11 +124,11 @@ export function QRCodesSection() {
 
       {/* Clear Selection */}
       {selectedItems.size > 0 && (
-        <div className="flex items-center justify-between rounded-xl bg-[#29E7CD]/10 px-4 py-2">
-          <span className="text-sm text-[#29E7CD]">{selectedItems.size} items selected</span>
+        <div className="flex items-center justify-between rounded-xl bg-[var(--primary)]/10 px-4 py-2">
+          <span className="text-sm text-[var(--primary)]">{selectedItems.size} items selected</span>
           <button
             onClick={clearSelection}
-            className="flex items-center gap-1 text-sm text-gray-400 hover:text-white"
+            className="flex items-center gap-1 text-sm text-[var(--foreground-muted)] hover:text-[var(--foreground)]"
           >
             <Icon icon={X} size="xs" />
             Clear
@@ -156,11 +156,11 @@ export function QRCodesSection() {
       {/* Empty State */}
       {entities.length === 0 && (
         <div className="py-12 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#2a2a2a]">
-            <Icon icon={QrCode} size="lg" className="text-gray-500" />
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--muted)]">
+            <Icon icon={QrCode} size="lg" className="text-[var(--foreground-subtle)]" />
           </div>
-          <h3 className="mb-2 text-lg font-medium text-white">No QR Codes Found</h3>
-          <p className="text-sm text-gray-400">
+          <h3 className="mb-2 text-lg font-medium text-[var(--foreground)]">No QR Codes Found</h3>
+          <p className="text-sm text-[var(--foreground-muted)]">
             Create recipes, cleaning areas, equipment, or employees to generate QR codes.
           </p>
         </div>
@@ -168,12 +168,12 @@ export function QRCodesSection() {
 
       {/* Print Tips */}
       {entities.length > 0 && (
-        <div className="rounded-xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-4">
-          <h3 className="mb-2 flex items-center gap-2 text-sm font-medium text-white">
-            <Icon icon={Printer} size="sm" className="text-[#29E7CD]" />
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/50 p-4">
+          <h3 className="mb-2 flex items-center gap-2 text-sm font-medium text-[var(--foreground)]">
+            <Icon icon={Printer} size="sm" className="text-[var(--primary)]" />
             Printing Tips
           </h3>
-          <ul className="space-y-1 text-xs text-gray-400">
+          <ul className="space-y-1 text-xs text-[var(--foreground-muted)]">
             <li>• Click section headers to expand/collapse categories</li>
             <li>• Use &quot;Print&quot; button next to each section to print that category only</li>
             <li>• Layout fits ~20 QR codes per A4 page (4 columns)</li>

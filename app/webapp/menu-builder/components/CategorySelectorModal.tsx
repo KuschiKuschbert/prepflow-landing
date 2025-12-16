@@ -81,20 +81,20 @@ export default function CategorySelectorModal({
       <div className="fixed inset-0 z-[75] bg-black/20" onClick={onClose} aria-hidden={true} />
       {/* Popover positioned near the item */}
       <div
-        className="fixed z-[80] w-[280px] rounded-xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl"
+        className="fixed z-[80] w-[280px] rounded-xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl"
         style={{
           left: `${popoverPosition.left}px`,
           top: `${popoverPosition.top}px`,
           maxHeight: `320px`,
         }}
       >
-        <div className="rounded-xl bg-[#1f1f1f]/95" style={{ maxHeight: `320px` }}>
+        <div className="rounded-xl bg-[var(--surface)]/95" style={{ maxHeight: `320px` }}>
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-[#2a2a2a] px-4 py-3">
-            <p className="text-sm font-medium text-gray-300">Add to category</p>
+          <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">
+            <p className="text-sm font-medium text-[var(--foreground-secondary)]">Add to category</p>
             <button
               onClick={onClose}
-              className="rounded-lg p-1 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+              className="rounded-lg p-1 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
               aria-label="Close"
             >
               <Icon icon={X} size="sm" />
@@ -109,9 +109,9 @@ export default function CategorySelectorModal({
                   onSelectCategory(category);
                   onClose();
                 }}
-                className="w-full border-b border-[#2a2a2a]/50 px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-[#2a2a2a]/50 hover:text-[#29E7CD]"
+                className="w-full border-b border-[var(--border)]/50 px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-[var(--muted)]/50 hover:text-[var(--primary)]"
               >
-                <span className="text-sm font-medium text-white">{category}</span>
+                <span className="text-sm font-medium text-[var(--foreground)]">{category}</span>
               </button>
             ))}
           </div>

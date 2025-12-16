@@ -31,14 +31,14 @@ export function useIngredientTableSort(
         return React.createElement(Icon, {
           icon: ChevronUp,
           size: 'xs',
-          className: 'ml-1 text-[#29E7CD]',
+          className: 'ml-1 text-[var(--primary)]',
         });
       }
       if (sortBy === currentDesc) {
         return React.createElement(Icon, {
           icon: ChevronDown,
           size: 'xs',
-          className: 'ml-1 text-[#29E7CD]',
+          className: 'ml-1 text-[var(--primary)]',
         });
       }
       return null;

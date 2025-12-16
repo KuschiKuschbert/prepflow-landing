@@ -47,10 +47,10 @@ export function UnifiedRecipeModalPreviewTab({
 
       {/* Ingredients Summary */}
       <div>
-        <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-          <Icon icon={ChefHat} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+        <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
+          <Icon icon={ChefHat} size="md" className="text-[var(--primary)]" aria-hidden={true} />
           Ingredients
-          <span className="ml-2 text-sm font-normal text-gray-400">
+          <span className="ml-2 text-sm font-normal text-[var(--foreground-muted)]">
             ({recipeIngredients.length} item{recipeIngredients.length !== 1 ? 's' : ''})
           </span>
         </h3>
@@ -64,23 +64,23 @@ export function UnifiedRecipeModalPreviewTab({
 
       {/* AI Instructions */}
       <div>
-        <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-          <Icon icon={FileText} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+        <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
+          <Icon icon={FileText} size="md" className="text-[var(--primary)]" aria-hidden={true} />
           AI-Generated Cooking Method
         </h3>
-        <div className="rounded-lg bg-[#0a0a0a] p-4">
+        <div className="rounded-lg bg-[var(--background)] p-4">
           {generatingInstructions ? (
             <div className="flex items-center justify-center py-8">
               <Icon
                 icon={Loader2}
                 size="lg"
-                className="animate-spin text-[#29E7CD]"
+                className="animate-spin text-[var(--primary)]"
                 aria-hidden={true}
               />
-              <span className="ml-3 text-gray-400">Generating cooking instructions...</span>
+              <span className="ml-3 text-[var(--foreground-muted)]">Generating cooking instructions...</span>
             </div>
           ) : (
-            <div className="whitespace-pre-wrap text-gray-300">{aiInstructions}</div>
+            <div className="whitespace-pre-wrap text-[var(--foreground-secondary)]">{aiInstructions}</div>
           )}
         </div>
       </div>
@@ -88,21 +88,21 @@ export function UnifiedRecipeModalPreviewTab({
       {/* Manual Instructions */}
       {recipe.instructions ? (
         <div>
-          <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-            <Icon icon={FileText} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+          <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
+            <Icon icon={FileText} size="md" className="text-[var(--primary)]" aria-hidden={true} />
             Manual Instructions
           </h3>
-          <div className="rounded-lg bg-[#0a0a0a] p-4">
-            <p className="whitespace-pre-wrap text-gray-300">{recipe.instructions}</p>
+          <div className="rounded-lg bg-[var(--background)] p-4">
+            <p className="whitespace-pre-wrap text-[var(--foreground-secondary)]">{recipe.instructions}</p>
           </div>
         </div>
       ) : (
         <div>
-          <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-            <Icon icon={FileText} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+          <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
+            <Icon icon={FileText} size="md" className="text-[var(--primary)]" aria-hidden={true} />
             Manual Instructions
           </h3>
-          <div className="rounded-lg bg-[#0a0a0a] p-8 text-center text-gray-500">
+          <div className="rounded-lg bg-[var(--background)] p-8 text-center text-[var(--foreground-subtle)]">
             No instructions added yet. Use the Edit button to add instructions.
           </div>
         </div>

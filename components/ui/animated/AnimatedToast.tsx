@@ -28,10 +28,10 @@ export function AnimatedToast({
   onClose,
 }: AnimatedToastProps) {
   const typeClasses = {
-    success: 'bg-green-900/20 border-green-500 text-green-400',
-    error: 'bg-red-900/20 border-red-500 text-red-400',
-    warning: 'bg-yellow-900/20 border-yellow-500 text-yellow-400',
-    info: 'bg-blue-900/20 border-blue-500 text-blue-400',
+    success: 'bg-green-900/20 border-[var(--color-success)] text-[var(--color-success)]',
+    error: 'bg-red-900/20 border-[var(--color-error)] text-[var(--color-error)]',
+    warning: 'bg-yellow-900/20 border-[var(--color-warning)] text-[var(--color-warning)]',
+    info: 'bg-blue-900/20 border-[var(--color-info)] text-[var(--color-info)]',
   };
 
   const icons = {
@@ -57,7 +57,7 @@ export function AnimatedToast({
         </div>
         <button
           onClick={onClose}
-          className="flex-shrink-0 text-gray-400 transition-colors hover:text-white"
+          className="flex-shrink-0 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
         >
           <span className="sr-only">Close</span>
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -15,11 +15,11 @@ export function SuccessMessage({ message, onClose }: SuccessMessageProps) {
   // Smaller notification for recipe loaded
   if (isRecipeLoaded) {
     return (
-      <div className="animate-in slide-in-from-top-2 mb-4 rounded-lg border border-green-400/50 bg-green-500/20 px-4 py-2.5 text-sm text-green-200 shadow-md transition-all duration-200">
+      <div className="animate-in slide-in-from-top-2 mb-4 rounded-lg border border-[var(--color-success)]/50 bg-[var(--color-success)]/20 px-4 py-2.5 text-sm text-green-200 shadow-md transition-all duration-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <svg
-              className="h-4 w-4 text-green-400"
+              className="h-4 w-4 text-[var(--color-success)]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -35,7 +35,7 @@ export function SuccessMessage({ message, onClose }: SuccessMessageProps) {
           </div>
           <button
             onClick={onClose}
-            className="ml-2 rounded-full p-1 text-green-300 transition-colors hover:bg-green-500/30 hover:text-green-200"
+            className="ml-2 rounded-full p-1 text-green-300 transition-colors hover:bg-[var(--color-success)]/30 hover:text-green-200"
           >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -53,12 +53,12 @@ export function SuccessMessage({ message, onClose }: SuccessMessageProps) {
 
   // Larger notification for recipe saved
   return (
-    <div className="animate-in slide-in-from-top-2 mb-6 scale-105 transform rounded-2xl border-2 border-green-400 bg-gradient-to-r from-green-500 to-emerald-500 px-6 py-5 text-white shadow-2xl transition-all duration-300 duration-500 hover:scale-110">
+    <div className="animate-in slide-in-from-top-2 mb-6 scale-105 transform rounded-2xl border-2 border-[var(--color-success)] bg-gradient-to-r from-green-500 to-emerald-500 px-6 py-5 text-[var(--button-active-text)] shadow-2xl transition-all duration-300 duration-500 hover:scale-110">
       <div className="flex items-center space-x-4">
         <div className="flex-shrink-0">
           <div className="flex h-10 w-10 animate-pulse items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
             <svg
-              className="h-6 w-6 text-white"
+              className="h-6 w-6 text-[var(--foreground)]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -73,7 +73,7 @@ export function SuccessMessage({ message, onClose }: SuccessMessageProps) {
           </div>
         </div>
         <div className="flex-1">
-          <p className="text-lg font-bold text-white">{message}</p>
+          <p className="text-lg font-bold text-[var(--foreground)]">{message}</p>
           {isRecipeSaved && (
             <p className="mt-1 text-sm font-medium text-green-100">
               Your recipe has been added to the Recipe Book and is ready to use!
@@ -82,7 +82,7 @@ export function SuccessMessage({ message, onClose }: SuccessMessageProps) {
         </div>
         <button
           onClick={onClose}
-          className="flex-shrink-0 rounded-full p-2 text-white/80 transition-all duration-200 hover:bg-white/20 hover:text-white"
+          className="flex-shrink-0 rounded-full p-2 text-[var(--foreground)]/80 transition-all duration-200 hover:bg-white/20 hover:text-[var(--foreground)]"
         >
           <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path

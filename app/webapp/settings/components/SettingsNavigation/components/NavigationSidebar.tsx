@@ -33,32 +33,30 @@ export function NavigationSidebar({
 }: NavigationSidebarProps) {
   return (
     <aside
-      className="desktop:translate-x-0 desktop:translate-x-0 sticky top-[calc(var(--header-height-mobile)+var(--safe-area-inset-top)+1rem)] left-4 z-40 h-[calc(100vh-var(--header-height-mobile)-var(--safe-area-inset-top)-2rem)] w-64 -translate-x-full transform rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl shadow-[#29E7CD]/20 transition-transform duration-200"
+      className="desktop:translate-x-0 desktop:translate-x-0 sticky top-[calc(var(--header-height-mobile)+var(--safe-area-inset-top)+1rem)] left-4 z-40 h-[calc(100vh-var(--header-height-mobile)-var(--safe-area-inset-top)-2rem)] w-64 -translate-x-full transform rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 to-[var(--primary)]/20 p-[1px] transition-transform duration-200"
       role="navigation"
       aria-label="Settings navigation"
     >
-      <div className="flex h-full flex-col rounded-3xl bg-[#1f1f1f] backdrop-blur-xl">
+      <div className="flex h-full flex-col rounded-3xl bg-[var(--surface)]">
         {/* Header */}
-        <div className="rounded-t-3xl border-b border-[#2a2a2a] bg-gradient-to-r from-[#29E7CD]/10 via-[#FF6B00]/5 to-[#D925C7]/10 p-6">
-          <h1 className="bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] bg-clip-text text-xl font-bold text-transparent">
-            Settings
-          </h1>
-          <p className="mt-1 text-sm text-[#29E7CD]/70">Manage your account and preferences</p>
+        <div className="rounded-t-3xl border-b border-[var(--border)] p-4">
+          <h1 className="text-lg font-semibold text-[var(--foreground)]">Settings</h1>
+          <p className="mt-0.5 text-xs text-[var(--foreground)]/60">Manage your account and preferences</p>
         </div>
 
         {/* Navigation */}
-        <nav className="desktop:p-6 flex-1 overflow-y-auto p-4" aria-label="Settings categories">
-          <div className="space-y-6">
+        <nav className="desktop:p-4 flex-1 overflow-y-auto p-3" aria-label="Settings categories">
+          <div className="space-y-4">
             {categories.map(category => {
               const isExpanded = expandedCategories.has(category.id);
               const hasItems = category.items.length > 0;
 
               return (
-                <div key={category.id} className="space-y-2">
+                <div key={category.id} className="space-y-1">
                   {/* Category Header */}
                   <button
                     onClick={() => onToggleCategory(category.id)}
-                    className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold tracking-wider text-[#29E7CD]/60 uppercase transition-all duration-200 hover:bg-gradient-to-r hover:from-[#29E7CD]/10 hover:via-[#FF6B00]/5 hover:to-[#D925C7]/10 hover:text-[#29E7CD] hover:shadow-md hover:shadow-[#29E7CD]/10 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+                    className="flex w-full items-center justify-between rounded-lg px-3 py-1.5 text-xs font-semibold tracking-wider text-[var(--foreground)]/60 uppercase transition-colors duration-200 hover:bg-[var(--surface)]/50 hover:text-[var(--foreground)]/80 focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
                     aria-expanded={isExpanded}
                     aria-controls={`category-${category.id}`}
                   >
@@ -66,15 +64,15 @@ export function NavigationSidebar({
                       <Icon
                         icon={category.icon}
                         size="xs"
-                        className={isExpanded ? 'text-[#29E7CD]' : 'text-[#29E7CD]/60'}
+                        className="text-[var(--foreground)]/60"
                       />
-                      <span className={isExpanded ? 'text-[#29E7CD]' : ''}>{category.label}</span>
+                      <span>{category.label}</span>
                     </div>
                     {hasItems && (
                       <Icon
                         icon={isExpanded ? ChevronUp : ChevronDown}
                         size="xs"
-                        className="text-[#29E7CD]/60 transition-transform duration-200"
+                        className="text-[var(--foreground)]/60 transition-transform duration-200"
                       />
                     )}
                   </button>
@@ -83,7 +81,7 @@ export function NavigationSidebar({
                   {isExpanded && hasItems && (
                     <ul
                       id={`category-${category.id}`}
-                      className="space-y-2 pl-1"
+                      className="space-y-1"
                       role="group"
                       aria-label={`${category.label} settings`}
                     >
@@ -106,10 +104,10 @@ export function NavigationSidebar({
                               }}
                               onClick={() => onNavClick(item.hash)}
                               onKeyDown={e => onKeyDown(e, category.id, itemIndex, item.hash)}
-                              className={`group relative flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-transparent focus:outline-none ${
+                              className={`group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:outline-none ${
                                 isActive
-                                  ? 'border-l-2 border-[#29E7CD] bg-gradient-to-r from-[#29E7CD]/20 via-[#FF6B00]/10 to-[#D925C7]/20 text-[#29E7CD] shadow-lg shadow-[#29E7CD]/20'
-                                  : 'text-[#29E7CD]/60 hover:scale-[1.02] hover:bg-gradient-to-r hover:from-[#29E7CD]/10 hover:via-[#FF6B00]/5 hover:to-[#D925C7]/10 hover:text-[#29E7CD] hover:shadow-md hover:shadow-[#29E7CD]/10'
+                                  ? 'border border-[var(--primary)]/30 bg-[var(--primary)]/10'
+                                  : 'hover:scale-[1.02] hover:bg-[var(--surface)]/50'
                               }`}
                               aria-label={`${item.ariaLabel} - ${category.label} settings`}
                               aria-current={isActive ? 'page' : undefined}
@@ -118,21 +116,18 @@ export function NavigationSidebar({
                                 icon={item.icon}
                                 size="sm"
                                 className={`transition-colors duration-200 ${
-                                  isActive
-                                    ? 'text-[#29E7CD]'
-                                    : 'text-[#29E7CD]/60 group-hover:text-[#29E7CD]'
+                                  isActive ? 'text-[var(--primary)]' : 'text-[var(--foreground)]/60'
                                 }`}
                               />
                               <span
                                 className={`font-medium transition-colors duration-200 ${
-                                  isActive ? 'text-[#29E7CD]' : 'group-hover:text-[#29E7CD]'
+                                  isActive
+                                    ? 'text-[var(--foreground)]'
+                                    : 'text-[var(--foreground)]/70 group-hover:text-[var(--foreground)]'
                                 }`}
                               >
                                 {item.label}
                               </span>
-                              {isActive && (
-                                <div className="absolute right-2 h-2 w-2 animate-pulse rounded-full bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7]" />
-                              )}
                             </button>
                           </li>
                         );

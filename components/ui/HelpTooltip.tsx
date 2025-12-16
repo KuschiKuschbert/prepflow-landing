@@ -60,12 +60,12 @@ export function HelpTooltip({
   };
 
   const arrowClasses = {
-    top: 'top-full left-1/2 -translate-x-1/2 border-t-[#1f1f1f] border-l-transparent border-r-transparent border-b-transparent',
+    top: 'top-full left-1/2 -translate-x-1/2 border-t-[var(--surface)] border-l-transparent border-r-transparent border-b-transparent',
     bottom:
-      'bottom-full left-1/2 -translate-x-1/2 border-b-[#1f1f1f] border-l-transparent border-r-transparent border-t-transparent',
-    left: 'left-full top-1/2 -translate-y-1/2 border-l-[#1f1f1f] border-t-transparent border-r-transparent border-b-transparent',
+      'bottom-full left-1/2 -translate-x-1/2 border-b-[var(--surface)] border-l-transparent border-r-transparent border-t-transparent',
+    left: 'left-full top-1/2 -translate-y-1/2 border-l-[var(--surface)] border-t-transparent border-r-transparent border-b-transparent',
     right:
-      'right-full top-1/2 -translate-y-1/2 border-r-[#1f1f1f] border-t-transparent border-l-transparent border-b-transparent',
+      'right-full top-1/2 -translate-y-1/2 border-r-[var(--surface)] border-t-transparent border-l-transparent border-b-transparent',
   };
 
   return (
@@ -88,7 +88,7 @@ export function HelpTooltip({
       >
         {children || (
           <svg
-            className="h-4 w-4 text-gray-400 transition-colors hover:text-[#29E7CD]"
+            className="h-4 w-4 text-[var(--foreground-muted)] transition-colors hover:text-[var(--primary)]"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -107,11 +107,11 @@ export function HelpTooltip({
       {isOpen && (
         <div
           ref={tooltipRef}
-          className={`absolute z-50 w-64 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-xl ${positionClasses[position]}`}
+          className={`absolute z-50 w-64 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-xl ${positionClasses[position]}`}
           role="tooltip"
         >
-          {title && <h4 className="text-fluid-sm mb-2 font-semibold text-white">{title}</h4>}
-          <p className="text-fluid-sm leading-relaxed text-gray-300">{content}</p>
+          {title && <h4 className="text-fluid-sm mb-2 font-semibold text-[var(--foreground)]">{title}</h4>}
+          <p className="text-fluid-sm leading-relaxed text-[var(--foreground-secondary)]">{content}</p>
           <div className={`absolute h-0 w-0 border-4 ${arrowClasses[position]}`} />
         </div>
       )}

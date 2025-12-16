@@ -50,7 +50,7 @@ export function CopyButton({
   };
 
   const baseClasses =
-    'flex items-center gap-2 rounded-lg font-medium text-white transition-all duration-200';
+    'flex items-center gap-2 rounded-lg font-medium text-[var(--foreground)] transition-all duration-200';
   const sizeClasses = {
     sm: 'px-3 py-1.5 text-xs',
     md: 'px-4 py-2 text-sm',
@@ -58,9 +58,9 @@ export function CopyButton({
   };
   const variantClasses = {
     primary:
-      'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-lg hover:shadow-[#29E7CD]/30',
-    secondary: 'bg-[#2a2a2a] border border-[#2a2a2a] hover:border-[#29E7CD]/30 hover:bg-[#3a3a3a]',
-    icon: 'p-2 rounded-lg bg-[#2a2a2a] border border-[#2a2a2a] hover:border-[#29E7CD]/30 hover:bg-[#3a3a3a]',
+      'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 hover:shadow-lg hover:shadow-[var(--primary)]/30 text-[var(--button-active-text)]',
+    secondary: 'bg-[var(--muted)] border border-[var(--border)] hover:border-[var(--primary)]/30 hover:bg-[var(--surface-variant)]',
+    icon: 'p-2 rounded-lg bg-[var(--muted)] border border-[var(--border)] hover:border-[var(--primary)]/30 hover:bg-[var(--surface-variant)]',
   };
 
   const iconSize = variant === 'icon' ? 'md' : 'sm';
@@ -79,7 +79,7 @@ export function CopyButton({
         <Icon icon={Loader2} size={iconSize} className="animate-spin" aria-hidden={true} />
       ) : copied ? (
         <>
-          <Icon icon={Check} size={iconSize} className="text-[#29E7CD]" aria-hidden={true} />
+          <Icon icon={Check} size={iconSize} className="text-[var(--primary)]" aria-hidden={true} />
           {variant !== 'icon' && <span className="tablet:inline hidden">Copied!</span>}
         </>
       ) : (

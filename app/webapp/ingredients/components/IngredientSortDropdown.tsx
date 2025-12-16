@@ -78,7 +78,7 @@ export function IngredientSortDropdown({
     <div className="relative">
       <button
         onClick={onToggle}
-        className="flex items-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] hover:text-[#29E7CD]"
+        className="flex items-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)]/80 px-3 py-2 text-sm font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--primary)]/50 hover:bg-[var(--surface)] hover:text-[var(--primary)]"
       >
         {currentSortOption.icon}
         <span className="truncate">{currentSortOption.label}</span>
@@ -92,7 +92,7 @@ export function IngredientSortDropdown({
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={onClose} aria-hidden={true} />
-          <div className="absolute top-full left-0 z-50 mt-1.5 w-44 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
+          <div className="absolute top-full left-0 z-50 mt-1.5 w-44 rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-xl">
             <div className="p-1.5">
               {sortOptions.map(option => (
                 <button
@@ -103,13 +103,13 @@ export function IngredientSortDropdown({
                   }}
                   className={`flex w-full items-center gap-1.5 rounded-md px-2.5 py-1.5 text-left text-sm transition-colors ${
                     sortBy === option.value
-                      ? 'bg-[#29E7CD]/20 text-[#29E7CD]'
-                      : 'text-gray-300 hover:bg-[#2a2a2a]'
+                      ? 'bg-[var(--primary)]/20 text-[var(--primary)]'
+                      : 'text-[var(--foreground-secondary)] hover:bg-[var(--muted)]'
                   }`}
                 >
                   {option.icon}
                   <span>{option.label}</span>
-                  {sortBy === option.value && <span className="ml-auto text-[#29E7CD]">✓</span>}
+                  {sortBy === option.value && <span className="ml-auto text-[var(--primary)]">✓</span>}
                 </button>
               ))}
             </div>

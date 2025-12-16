@@ -143,7 +143,7 @@ export function ParLevelEditDrawer({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-2xl bg-[#2a2a2a] px-4 py-2.5 font-semibold text-white transition-all duration-300 hover:bg-[#3a3a3a]"
+              className="flex-1 rounded-2xl bg-[var(--muted)] px-4 py-2.5 font-semibold text-[var(--foreground)] transition-all duration-300 hover:bg-[var(--surface-variant)]"
             >
               Cancel
             </button>
@@ -151,7 +151,7 @@ export function ParLevelEditDrawer({
               type="button"
               onClick={handleSave}
               disabled={loading || status === 'saving' || !isValidParLevel}
-              className="flex-1 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2.5 font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#29E7CD]/25 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex-1 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] px-4 py-2.5 font-semibold text-[var(--button-active-text)] transition-all duration-300 hover:shadow-lg hover:shadow-[var(--primary)]/25 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading || status === 'saving' ? 'Saving...' : 'Save'}
             </button>
@@ -162,16 +162,16 @@ export function ParLevelEditDrawer({
       <form onSubmit={e => e.preventDefault()} className="space-y-4">
         {/* Read-only ingredient display */}
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
             {t('parLevels.ingredient', 'Ingredient')}
           </label>
-          <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3 text-gray-400">
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/50 px-4 py-3 text-[var(--foreground-muted)]">
             {ingredient?.ingredient_name || 'Unknown ingredient'}
           </div>
         </div>
 
         <div>
-          <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
+          <label className="mb-2 flex items-center gap-2 text-sm font-medium text-[var(--foreground-secondary)]">
             {t('parLevels.parLevel', 'Par Level')}
             <HelpTooltip content={getHelpText('parLevel', true)} title="Par Level" />
           </label>
@@ -179,14 +179,14 @@ export function ParLevelEditDrawer({
             type="text"
             value={formData.parLevel}
             onChange={e => handleNumericChange('parLevel', e.target.value)}
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+            className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             placeholder="e.g., 50"
             required
           />
         </div>
 
         <div>
-          <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
+          <label className="mb-2 flex items-center gap-2 text-sm font-medium text-[var(--foreground-secondary)]">
             {t('parLevels.reorderPoint', 'Reorder Point')}
             <HelpTooltip content={getHelpText('reorderPoint', true)} title="Reorder Point" />
           </label>
@@ -197,25 +197,25 @@ export function ParLevelEditDrawer({
               max="100"
               value={formData.reorderPointPercentage || '50'}
               onChange={e => handleInputChange('reorderPointPercentage', e.target.value)}
-              className="slider h-3 w-48 flex-shrink-0 cursor-pointer appearance-none rounded-lg bg-[#2a2a2a]"
+              className="slider h-3 w-48 flex-shrink-0 cursor-pointer appearance-none rounded-lg bg-[var(--muted)]"
               style={{
-                background: `linear-gradient(to right, #29e7cd 0%, #29e7cd ${reorderPointPercentage}%, #2a2a2a ${reorderPointPercentage}%, #2a2a2a 100%)`,
+                background: `linear-gradient(to right, #29e7cd 0%, #29e7cd ${reorderPointPercentage}%, var(--muted) ${reorderPointPercentage}%, var(--muted) 100%)`,
               }}
               required
             />
             <div className="w-16 text-center">
-              <div className="text-lg font-bold text-[#29E7CD]">
+              <div className="text-lg font-bold text-[var(--primary)]">
                 {String(Math.round(reorderPointPercentage))}%
               </div>
             </div>
           </div>
           {parLevelValue > 0 && (
-            <p className="mt-1 text-xs text-gray-400">
+            <p className="mt-1 text-xs text-[var(--foreground-muted)]">
               {calculatedReorderPoint.toFixed(1)} {formData.unit}
             </p>
           )}
           {!isValidParLevel && formData.parLevel && formData.reorderPointPercentage && (
-            <p className="mt-1 text-xs text-red-400">
+            <p className="mt-1 text-xs text-[var(--color-error)]">
               {reorderPointPercentage > 100
                 ? 'Reorder point percentage cannot exceed 100%'
                 : calculatedReorderPoint >= parLevelValue
@@ -226,14 +226,14 @@ export function ParLevelEditDrawer({
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
             {t('parLevels.unit', 'Unit')}
           </label>
           <input
             type="text"
             value={formData.unit}
             onChange={e => handleInputChange('unit', e.target.value)}
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+            className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             placeholder="e.g., kg, pieces, liters"
             required
           />

@@ -160,31 +160,31 @@ export function MenuItemPriceEditPopup({
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/30 p-4">
-      <div className="relative w-full max-w-sm rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-xl">
+      <div className="relative w-full max-w-sm rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-xl">
         <div
           ref={popupRef}
-          className="rounded-2xl bg-[#1f1f1f]/95 p-6"
+          className="rounded-2xl bg-[var(--surface)]/95 p-6"
           onClick={e => e.stopPropagation()}
         >
           <button
             onClick={handleCancel}
-            className="absolute top-4 right-4 rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+            className="absolute top-4 right-4 rounded-lg p-1.5 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
             aria-label="Close"
           >
             <Icon icon={X} size="sm" />
           </button>
 
-          <h3 className="mb-4 text-lg font-semibold text-white">Edit Price: {itemName}</h3>
+          <h3 className="mb-4 text-lg font-semibold text-[var(--foreground)]">Edit Price: {itemName}</h3>
 
           {item.recommended_selling_price != null && (
-            <div className="mb-3 text-xs text-gray-400">
+            <div className="mb-3 text-xs text-[var(--foreground-muted)]">
               Recommended: ${item.recommended_selling_price.toFixed(2)}
               {isRecipe && ' per serve'}
             </div>
           )}
 
           <div className="mb-4">
-            <label className="mb-2 block text-sm text-gray-400">
+            <label className="mb-2 block text-sm text-[var(--foreground-muted)]">
               Actual Selling Price{isRecipe && ' (per serve)'}
             </label>
             <input
@@ -194,22 +194,22 @@ export function MenuItemPriceEditPopup({
               value={priceValue}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
-              className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
               placeholder="0.00"
             />
-            {error && <div className="mt-1 text-xs text-red-400">{error}</div>}
+            {error && <div className="mt-1 text-xs text-[var(--color-error)]">{error}</div>}
           </div>
 
           <div className="flex gap-2">
             <button
               onClick={handleSave}
-              className="flex-1 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 font-medium text-black transition-all hover:shadow-lg"
+              className="flex-1 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 font-medium text-[var(--button-active-text)] transition-all hover:shadow-lg"
             >
               Save
             </button>
             <button
               onClick={handleCancel}
-              className="flex-1 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 font-medium text-gray-300 transition-colors hover:bg-[#3a3a3a]"
+              className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--muted)] px-4 py-2 font-medium text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--surface-variant)]"
             >
               Cancel
             </button>

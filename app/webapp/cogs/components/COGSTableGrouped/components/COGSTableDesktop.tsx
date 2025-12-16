@@ -50,21 +50,21 @@ export function COGSTableDesktop({
 }: COGSTableDesktopProps) {
   return (
     <div className="large-desktop:block hidden overflow-x-auto">
-      <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
-        <table className="min-w-full divide-y divide-[#2a2a2a]">
+      <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
+        <table className="min-w-full divide-y divide-[var(--muted)]">
           <COGSTableHeader
             onSortChange={onSortChange}
             handleColumnSort={handleColumnSort}
             getSortIcon={getSortIcon}
           />
-          <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
+          <tbody className="divide-y divide-[var(--muted)] bg-[var(--surface)]">
             {/* Recipe Groups */}
             {recipeGroups.map(group => {
               const isExpanded = expandedRecipes.has(group.recipeId);
               return (
                 <React.Fragment key={group.recipeId}>
                   {/* Recipe Header Row */}
-                  <tr className="bg-[#29E7CD]/5 transition-colors hover:bg-[#29E7CD]/10">
+                  <tr className="bg-[var(--primary)]/5 transition-colors hover:bg-[var(--primary)]/10">
                     <td colSpan={4} className="px-6 py-3">
                       <button
                         onClick={() => onToggleRecipe(group.recipeId)}
@@ -75,17 +75,17 @@ export function COGSTableDesktop({
                             <Icon
                               icon={ChefHat}
                               size="sm"
-                              className="text-[#29E7CD]"
+                              className="text-[var(--primary)]"
                               aria-hidden={true}
                             />
-                            <span className="font-semibold text-white">
+                            <span className="font-semibold text-[var(--foreground)]">
                               {group.recipeName} ({group.quantity}x)
                             </span>
-                            <span className="text-sm text-gray-400">
+                            <span className="text-sm text-[var(--foreground-muted)]">
                               Total: ${(group.totalCost / dishPortions).toFixed(2)}
                             </span>
                           </div>
-                          <div className="ml-6 text-xs text-gray-500">
+                          <div className="ml-6 text-xs text-[var(--foreground-subtle)]">
                             Recipe yield: {group.yield} {group.yieldUnit} (ingredients shown per
                             portion)
                           </div>
@@ -93,7 +93,7 @@ export function COGSTableDesktop({
                         <Icon
                           icon={isExpanded ? ChevronUp : ChevronDown}
                           size="sm"
-                          className="text-[#29E7CD]"
+                          className="text-[var(--primary)]"
                           aria-hidden={true}
                         />
                       </button>
@@ -122,9 +122,9 @@ export function COGSTableDesktop({
 
             {/* Standalone Ingredients Header */}
             {standaloneCalculations.length > 0 && (
-              <tr className="bg-[#2a2a2a]/30">
+              <tr className="bg-[var(--muted)]/30">
                 <td colSpan={4} className="px-6 py-3">
-                  <span className="text-sm font-semibold text-white">Standalone Ingredients</span>
+                  <span className="text-sm font-semibold text-[var(--foreground)]">Standalone Ingredients</span>
                 </td>
               </tr>
             )}

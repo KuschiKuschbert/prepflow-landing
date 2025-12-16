@@ -56,8 +56,8 @@ export function ReferenceAreas({
           x2={xAxisDomain[1]}
           y1={yMin}
           y2={equipment.min_temp_celsius}
-          fill="#dc2626"
-          fillOpacity={0.9}
+          fill="var(--color-error)"
+          fillOpacity={0.25}
           stroke="none"
           ifOverflow="extendDomain"
         />
@@ -66,8 +66,8 @@ export function ReferenceAreas({
           x2={xAxisDomain[1]}
           y1={equipment.max_temp_celsius}
           y2={yMax}
-          fill="#dc2626"
-          fillOpacity={0.9}
+          fill="var(--color-error)"
+          fillOpacity={0.25}
           stroke="none"
           ifOverflow="extendDomain"
         />
@@ -87,8 +87,8 @@ export function ReferenceAreas({
         x2={xAxisDomain[1]}
         y1={yMin}
         y2={equipment.min_temp_celsius}
-        fill="#dc2626"
-        fillOpacity={0.9}
+        fill="var(--color-error)"
+        fillOpacity={0.25}
         stroke="none"
         ifOverflow="extendDomain"
       />
@@ -107,8 +107,8 @@ export function ReferenceAreas({
         x2={xAxisDomain[1]}
         y1={equipment.max_temp_celsius}
         y2={yMax}
-        fill="#dc2626"
-        fillOpacity={0.9}
+        fill="var(--color-error)"
+        fillOpacity={0.25}
         stroke="none"
         ifOverflow="extendDomain"
       />

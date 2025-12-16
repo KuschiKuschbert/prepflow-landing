@@ -71,7 +71,7 @@ export const DishForm: React.FC<DishFormProps> = ({
   const hasIngredients = calculations.length > 0;
 
   return (
-    <div className="tablet:p-6 rounded-lg bg-[#1f1f1f] p-4 shadow">
+    <div className="tablet:p-6 rounded-lg bg-[var(--surface)] p-4 shadow">
       <h2 className="tablet:text-xl mb-6 text-lg font-semibold">Recipe & Ingredients</h2>
 
       {/* Recipe Combobox */}
@@ -83,7 +83,7 @@ export const DishForm: React.FC<DishFormProps> = ({
           onCreateNew={onCreateNewRecipe}
         />
         {!hasRecipe && (
-          <p className="mt-2 text-sm text-gray-500">
+          <p className="mt-2 text-sm text-[var(--foreground-subtle)]">
             Please select or create a recipe to calculate COGS
           </p>
         )}
@@ -94,20 +94,20 @@ export const DishForm: React.FC<DishFormProps> = ({
         <div className="mb-4 flex items-center gap-2 text-sm">
           {autosaveStatus === 'saving' && (
             <>
-              <div className="h-3 w-3 animate-spin rounded-full border-2 border-[#29E7CD] border-t-transparent" />
-              <span className="text-gray-400">Saving...</span>
+              <div className="h-3 w-3 animate-spin rounded-full border-2 border-[var(--primary)] border-t-transparent" />
+              <span className="text-[var(--foreground-muted)]">Saving...</span>
             </>
           )}
           {autosaveStatus === 'saved' && (
             <>
-              <div className="h-3 w-3 rounded-full bg-[#29E7CD]" />
-              <span className="text-[#29E7CD]">Saved</span>
+              <div className="h-3 w-3 rounded-full bg-[var(--primary)]" />
+              <span className="text-[var(--primary)]">Saved</span>
             </>
           )}
           {autosaveStatus === 'error' && (
             <>
-              <div className="h-3 w-3 rounded-full bg-red-500" />
-              <span className="text-red-400">Save failed</span>
+              <div className="h-3 w-3 rounded-full bg-[var(--color-error)]" />
+              <span className="text-[var(--color-error)]">Save failed</span>
             </>
           )}
         </div>
@@ -115,8 +115,8 @@ export const DishForm: React.FC<DishFormProps> = ({
 
       {/* Number of Portions */}
       {hasRecipe && (
-        <div className="mb-6 border-t border-[#2a2a2a]/50 pt-4">
-          <label className="mb-2 block text-sm font-medium text-gray-300">
+        <div className="mb-6 border-t border-[var(--border)]/50 pt-4">
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
             🍽️ Number of Portions
           </label>
           <div className="flex items-center gap-3">
@@ -133,24 +133,24 @@ export const DishForm: React.FC<DishFormProps> = ({
                   onDishPortionsChange(numValue);
                 }
               }}
-              className="w-24 rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-center font-semibold text-white shadow-sm transition-all duration-200 hover:shadow-md focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+              className="w-24 rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-center font-semibold text-[var(--foreground)] shadow-sm transition-all duration-200 hover:shadow-md focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
             />
-            <span className="text-sm text-gray-400">portions</span>
+            <span className="text-sm text-[var(--foreground-muted)]">portions</span>
             <button
               onClick={onToggleAddIngredient}
               disabled={!hasRecipe}
-              className="ml-auto flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1.5 text-xs font-medium text-white shadow-md transition-all duration-200 hover:from-[#29E7CD]/90 hover:to-[#D925C7]/90 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
+              className="ml-auto flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-3 py-1.5 text-xs font-medium text-[var(--button-active-text)] shadow-md transition-all duration-200 hover:from-[var(--primary)]/90 hover:to-[var(--accent)]/90 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Icon
                 icon={showAddIngredient ? X : Edit}
                 size="xs"
-                className="text-white"
+                className="text-[var(--foreground)]"
                 aria-hidden={true}
               />
               <span>{showAddIngredient ? 'Cancel' : 'Add Ingredient'}</span>
             </button>
           </div>
-          <p className="mt-2 text-xs text-gray-500">
+          <p className="mt-2 text-xs text-[var(--foreground-subtle)]">
             This determines the cost per portion for your pricing calculations
           </p>
 

@@ -73,9 +73,9 @@ export function QuantityInputModal({
       />
 
       {/* Dialog */}
-      <div className="relative z-[65] w-full max-w-md rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
+      <div className="relative z-[65] w-full max-w-md rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl">
         <div
-          className="desktop:p-6 rounded-3xl bg-[#1f1f1f]/95 p-4"
+          className="desktop:p-6 rounded-3xl bg-[var(--surface)]/95 p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="dialog-title"
@@ -84,25 +84,25 @@ export function QuantityInputModal({
         >
           {/* Icon */}
           <div className="mb-4 flex justify-center">
-            <Icon icon={Package} size="lg" className="text-[#29E7CD]" aria-hidden={true} />
+            <Icon icon={Package} size="lg" className="text-[var(--primary)]" aria-hidden={true} />
           </div>
 
           {/* Title */}
           <h2
             id="dialog-title"
-            className="desktop:text-xl mb-2 text-center text-lg font-bold text-white"
+            className="desktop:text-xl mb-2 text-center text-lg font-bold text-[var(--foreground)]"
           >
             Add Ingredient
           </h2>
 
           {/* Ingredient Name */}
-          <p id="dialog-description" className="mb-4 text-center text-sm text-gray-300">
+          <p id="dialog-description" className="mb-4 text-center text-sm text-[var(--foreground-secondary)]">
             {ingredientName}
           </p>
 
           {/* Quantity Input */}
           <div className="mb-4">
-            <label className="mb-2 block text-sm font-medium text-gray-300">Quantity</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Quantity</label>
             <div className="flex items-center gap-3">
               <input
                 ref={inputRef}
@@ -116,17 +116,17 @@ export function QuantityInputModal({
                 }}
                 placeholder="0.00"
                 className={`flex-1 rounded-2xl border ${
-                  error ? 'border-red-500' : 'border-[#2a2a2a]'
-                } bg-[#0a0a0a] px-4 py-3 text-white placeholder-gray-500 transition-all duration-200 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none`}
+                  error ? 'border-[var(--color-error)]' : 'border-[var(--border)]'
+                } bg-[var(--background)] px-4 py-3 text-[var(--foreground)] placeholder-gray-500 transition-all duration-200 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none`}
                 aria-invalid={error ? 'true' : 'false'}
                 aria-describedby={error ? 'error-message' : undefined}
               />
-              <div className="rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-4 py-3 text-sm font-medium text-gray-300">
+              <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)]/40 px-4 py-3 text-sm font-medium text-[var(--foreground-secondary)]">
                 {unit}
               </div>
             </div>
             {error && (
-              <p id="error-message" className="mt-2 text-sm text-red-400" role="alert">
+              <p id="error-message" className="mt-2 text-sm text-[var(--color-error)]" role="alert">
                 {error}
               </p>
             )}
@@ -136,13 +136,13 @@ export function QuantityInputModal({
           <div className="flex gap-3">
             <button
               onClick={onCancel}
-              className="flex-1 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-4 py-3 font-semibold text-gray-300 transition-all duration-200 hover:bg-[#2a2a2a]/60"
+              className="flex-1 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/40 px-4 py-3 font-semibold text-[var(--foreground-secondary)] transition-all duration-200 hover:bg-[var(--muted)]/60"
             >
               Cancel
             </button>
             <button
               onClick={handleConfirm}
-              className="flex-1 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-3 font-semibold text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80"
+              className="flex-1 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80"
             >
               Add
             </button>

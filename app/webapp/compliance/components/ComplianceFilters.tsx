@@ -16,6 +16,8 @@ import {
 } from '../utils/exportComplianceRecords';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
+import { Icon } from '@/components/ui/Icon';
+import { Plus, CheckCircle2, AlertTriangle, XCircle } from 'lucide-react';
 
 interface ComplianceFiltersProps {
   types: ComplianceType[];
@@ -103,13 +105,13 @@ export function ComplianceFilters({
       <div className="tablet:flex-row tablet:items-center flex flex-col items-start justify-between gap-4">
         <div className="tablet:flex-row flex flex-col gap-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
               {t('compliance.filterType', 'Filter by Type')}
             </label>
             <select
               value={selectedType}
               onChange={e => onTypeChange(e.target.value)}
-              className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             >
               <option value="all">{t('compliance.allTypes', 'All Types')}</option>
               {types.map(type => (
@@ -120,29 +122,30 @@ export function ComplianceFilters({
             </select>
           </div>
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
               {t('compliance.filterStatus', 'Filter by Status')}
             </label>
             <select
               value={selectedStatus}
               onChange={e => onStatusChange(e.target.value)}
-              className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             >
               <option value="all">{t('compliance.allStatuses', 'All Statuses')}</option>
-              <option value="active">✅ {t('compliance.active', 'Active')}</option>
+              <option value="active">{t('compliance.active', 'Active')}</option>
               <option value="pending_renewal">
-                ⚠️ {t('compliance.pendingRenewal', 'Pending Renewal')}
+                {t('compliance.pendingRenewal', 'Pending Renewal')}
               </option>
-              <option value="expired">❌ {t('compliance.expired', 'Expired')}</option>
+              <option value="expired">{t('compliance.expired', 'Expired')}</option>
             </select>
           </div>
         </div>
         <div className="flex flex-wrap gap-3">
           <button
             onClick={onAddRecord}
-            className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
+            className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 flex items-center gap-2 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
           >
-            ➕ {t('compliance.addRecord', 'Add Compliance Record')}
+            <Icon icon={Plus} size="sm" className="text-[var(--button-active-text)]" aria-hidden={true} />
+            {t('compliance.addRecord', 'Add Compliance Record')}
           </button>
           <PrintButton
             onClick={handlePrint}

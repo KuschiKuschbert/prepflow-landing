@@ -109,7 +109,7 @@ export const MoreDrawer = memo(function MoreDrawer({ isOpen, onClose }: MoreDraw
       />
 
       {/* Fixed Menu Card */}
-      <div className="fixed right-4 bottom-[calc(var(--bottom-navbar-height)+1rem)] z-[70] max-h-[70vh] w-[280px] rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl">
+      <div className="fixed right-4 bottom-[calc(var(--bottom-navbar-height)+1rem)] z-[70] max-h-[70vh] w-[280px] rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-2xl">
         <div
           ref={menuRef}
           className="flex max-h-[calc(70vh-2px)] flex-col rounded-2xl"
@@ -124,10 +124,10 @@ export const MoreDrawer = memo(function MoreDrawer({ isOpen, onClose }: MoreDraw
           {/* Scrollable Navigation List */}
           <div className="overflow-y-auto overscroll-contain">
             {groupedItems.map(({ category, items }, catIndex) => (
-              <div key={category} className={catIndex > 0 ? 'border-t border-[#2a2a2a]/50' : ''}>
+              <div key={category} className={catIndex > 0 ? 'border-t border-[var(--border)]/50' : ''}>
                 {/* Category Header */}
-                <div className="sticky top-0 bg-[#1f1f1f] px-4 pt-3 pb-1">
-                  <span className="text-[10px] font-semibold tracking-wider text-gray-500 uppercase">
+                <div className="sticky top-0 bg-[var(--surface)] px-4 pt-3 pb-1">
+                  <span className="text-[10px] font-semibold tracking-wider text-[var(--foreground-subtle)] uppercase">
                     {getCategoryLabel(category)}
                   </span>
                 </div>

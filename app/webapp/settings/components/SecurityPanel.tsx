@@ -57,10 +57,10 @@ export function SecurityPanel() {
     return (
       <div
         ref={ref}
-        className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6"
+        className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6"
       >
-        <div className="h-6 w-48 animate-pulse rounded bg-[#2a2a2a]" />
-        <div className="h-4 w-64 animate-pulse rounded bg-[#2a2a2a]" />
+        <div className="h-6 w-48 animate-pulse rounded bg-[var(--muted)]" />
+        <div className="h-4 w-64 animate-pulse rounded bg-[var(--muted)]" />
       </div>
     );
   }
@@ -68,26 +68,26 @@ export function SecurityPanel() {
   return (
     <div
       ref={ref}
-      className="mb-6 space-y-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6"
+      className="mb-6 space-y-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6"
     >
       <div>
         <h2 className="text-xl font-semibold">Account Security</h2>
-        <p className="mt-1 text-sm text-gray-300">
+        <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
           Manage your account security settings and monitor login activity.
         </p>
       </div>
 
       {/* Password Management */}
-      <div className="space-y-3 border-t border-[#2a2a2a] pt-4">
+      <div className="space-y-3 border-t border-[var(--border)] pt-4">
         <h3 className="text-lg font-medium">Password</h3>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-[var(--foreground-muted)]">
           Your password is managed by Auth0. To change your password, please visit your Auth0
           dashboard or use the password reset feature.
         </p>
         <div className="flex gap-3">
           <Link
             href="/api/auth/signout"
-            className="rounded-2xl border border-[#2a2a2a] px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/40"
+            className="rounded-2xl border border-[var(--border)] px-4 py-2 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/40"
           >
             Sign Out
           </Link>
@@ -95,12 +95,12 @@ export function SecurityPanel() {
       </div>
 
       {/* Two-Factor Authentication */}
-      <div className="space-y-3 border-t border-[#2a2a2a] pt-4">
+      <div className="space-y-3 border-t border-[var(--border)] pt-4">
         <h3 className="text-lg font-medium">Two-Factor Authentication</h3>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-[var(--foreground-muted)]">
           2FA is managed through Auth0. Enable it in your Auth0 dashboard for enhanced security.
         </p>
-        <div className="flex items-center gap-2 text-sm text-gray-500">
+        <div className="flex items-center gap-2 text-sm text-[var(--foreground-subtle)]">
           <Icon icon={Shield} size="sm" aria-hidden={true} />
           <span>Configure in Auth0 dashboard</span>
         </div>

@@ -16,9 +16,9 @@ export function TemperatureChartEmptyState({
   statusColor,
 }: TemperatureChartEmptyStateProps) {
   return (
-    <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
+    <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-white">{equipment.name}</h3>
+        <h3 className="text-lg font-semibold text-[var(--foreground)]">{equipment.name}</h3>
         <div className="flex items-center space-x-2">
           <div className={`h-2 w-2 rounded-full ${statusColor.replace('text-', 'bg-')}`}></div>
           <span className={`text-sm ${statusColor}`}>{latestStatus}</span>

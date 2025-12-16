@@ -22,7 +22,7 @@ export function SectionsList({ sections, onEdit, onDelete, onUnassignDish }: Sec
       {sections.map(section => (
         <div
           key={section.id}
-          className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-xl"
+          className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 transition-all duration-200 hover:border-[var(--primary)]/50 hover:shadow-xl"
         >
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -38,9 +38,9 @@ export function SectionsList({ sections, onEdit, onDelete, onUnassignDish }: Sec
                 />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">{section.name}</h3>
+                <h3 className="text-lg font-semibold text-[var(--foreground)]">{section.name}</h3>
                 {section.description && (
-                  <p className="text-sm text-gray-400">{section.description}</p>
+                  <p className="text-sm text-[var(--foreground-muted)]">{section.description}</p>
                 )}
               </div>
             </div>
@@ -48,27 +48,27 @@ export function SectionsList({ sections, onEdit, onDelete, onUnassignDish }: Sec
             <div className="flex space-x-2">
               <button
                 onClick={() => onEdit(section)}
-                className="rounded-xl p-2 text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/10"
+                className="rounded-xl p-2 text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/10"
                 title="Edit"
               >
                 <Icon icon={Edit} size="md" aria-hidden={true} />
               </button>
               <button
                 onClick={() => onDelete(section.id)}
-                className="rounded-xl p-2 text-red-400 transition-colors hover:bg-red-400/10"
+                className="rounded-xl p-2 text-[var(--color-error)] transition-colors hover:bg-[var(--color-error)]/10"
                 title="Delete"
               >
                 <Icon icon={Trash2} size="md" aria-hidden={true} />
               </button>
             </div>
           </div>
-          <div className="rounded-xl bg-[#2a2a2a]/30 p-4">
-            <h4 className="mb-3 text-sm font-semibold text-white">
+          <div className="rounded-xl bg-[var(--muted)]/30 p-4">
+            <h4 className="mb-3 text-sm font-semibold text-[var(--foreground)]">
               {t('dishSections.dishesInSection', 'Dishes in this section')} (
               {section.menu_dishes.length})
             </h4>
             {section.menu_dishes.length === 0 ? (
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-[var(--foreground-muted)]">
                 {t('dishSections.noDishesInSection', 'No dishes assigned to this section')}
               </p>
             ) : (
@@ -76,15 +76,15 @@ export function SectionsList({ sections, onEdit, onDelete, onUnassignDish }: Sec
                 {section.menu_dishes.map(dish => (
                   <div
                     key={dish.id}
-                    className="flex items-center justify-between rounded-lg bg-[#1f1f1f] p-3"
+                    className="flex items-center justify-between rounded-lg bg-[var(--surface)] p-3"
                   >
                     <div>
-                      <p className="text-sm font-semibold text-white">{dish.name}</p>
-                      <p className="text-xs text-gray-400">{dish.category}</p>
+                      <p className="text-sm font-semibold text-[var(--foreground)]">{dish.name}</p>
+                      <p className="text-xs text-[var(--foreground-muted)]">{dish.category}</p>
                     </div>
                     <button
                       onClick={() => onUnassignDish(dish.id)}
-                      className="rounded p-1 text-red-400 transition-colors hover:bg-red-400/10"
+                      className="rounded p-1 text-[var(--color-error)] transition-colors hover:bg-[var(--color-error)]/10"
                       title="Unassign"
                     >
                       <Icon icon={X} size="sm" aria-hidden={true} />

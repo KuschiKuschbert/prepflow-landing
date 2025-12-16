@@ -39,7 +39,7 @@ export function EquipmentActionButtons({
           onQuickTempLog(item.id, item.name, item.equipment_type);
         }}
         disabled={quickTempLoading[item.id] || !item.is_active}
-        className="flex-1 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2.5 text-sm font-semibold text-black shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
+        className="flex-1 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
         style={{
           background: `linear-gradient(to right, ${LANDING_COLORS.primary}, ${LANDING_COLORS.accent})`,
         }}
@@ -54,10 +54,10 @@ export function EquipmentActionButtons({
             handleButtonClick(e);
             onShowQRCode(item);
           }}
-          className="group relative rounded-xl border-2 border-[#29E7CD]/60 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 p-2.5 text-gray-300 transition-all duration-200 hover:border-[#29E7CD] hover:from-[#29E7CD]/20 hover:to-[#D925C7]/20 hover:text-white hover:shadow-lg hover:shadow-[#29E7CD]/20"
+          className="group relative rounded-xl border-2 border-[var(--primary)]/60 bg-gradient-to-br from-[var(--primary)]/10 to-[var(--accent)]/10 p-2.5 text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--primary)] hover:from-[var(--primary)]/20 hover:to-[var(--accent)]/20 hover:text-[var(--button-active-text)] hover:shadow-lg hover:shadow-[var(--primary)]/20"
           title="Show QR Code"
         >
-          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
           <Icon icon={QrCode} size="sm" className="relative z-10" aria-hidden={true} />
         </button>
       )}
@@ -68,8 +68,8 @@ export function EquipmentActionButtons({
         }}
         className={`rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
           item.is_active
-            ? 'bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 hover:shadow-lg'
-            : 'bg-green-500/20 text-green-400 hover:bg-green-500/30 hover:shadow-lg'
+            ? 'bg-[var(--color-warning)]/20 text-[var(--color-warning)] hover:bg-[var(--color-warning)]/30 hover:shadow-lg'
+            : 'bg-[var(--color-success)]/20 text-[var(--color-success)] hover:bg-[var(--color-success)]/30 hover:shadow-lg'
         }`}
       >
         {item.is_active ? t('common.deactivate', 'Deactivate') : t('common.activate', 'Activate')}
@@ -79,7 +79,7 @@ export function EquipmentActionButtons({
           handleButtonClick(e);
           setEditingId(editingId === item.id ? null : item.id);
         }}
-        className="rounded-xl bg-[#2a2a2a] px-4 py-2.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:bg-[#3a3a3a] hover:text-white hover:shadow-lg"
+        className="rounded-xl bg-[var(--muted)] px-4 py-2.5 text-sm font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:bg-[var(--surface-variant)] hover:text-[var(--foreground)] hover:shadow-lg"
       >
         {editingId === item.id ? t('common.cancel', 'Cancel') : t('common.edit', 'Edit')}
       </button>
@@ -88,7 +88,7 @@ export function EquipmentActionButtons({
           handleButtonClick(e);
           onDelete(item.id);
         }}
-        className="rounded-xl bg-red-500/20 px-4 py-2.5 text-sm font-medium text-red-400 transition-all duration-200 hover:bg-red-500/30 hover:shadow-lg"
+        className="rounded-xl bg-[var(--color-error)]/20 px-4 py-2.5 text-sm font-medium text-[var(--color-error)] transition-all duration-200 hover:bg-[var(--color-error)]/30 hover:shadow-lg"
       >
         {t('common.delete', 'Delete')}
       </button>

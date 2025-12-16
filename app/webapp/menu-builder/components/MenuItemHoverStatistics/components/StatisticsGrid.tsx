@@ -15,11 +15,11 @@ interface ItemStatistics {
  */
 function getProfitMarginColor(margin: number): string {
   if (margin >= 65) {
-    return 'text-[#29E7CD]'; // Good - cyan
+    return 'text-[var(--primary)]'; // Good - cyan
   } else if (margin >= 50) {
-    return 'text-yellow-400'; // Warning - yellow
+    return 'text-[var(--color-warning)]'; // Warning - yellow
   } else {
-    return 'text-red-400'; // Critical - red
+    return 'text-[var(--color-error)]'; // Critical - red
   }
 }
 
@@ -29,42 +29,42 @@ function getProfitMarginColor(margin: number): string {
  */
 function getFoodCostColor(foodCostPercent: number): string {
   if (foodCostPercent <= 30) {
-    return 'text-green-400'; // Good - green
+    return 'text-[var(--color-success)]'; // Good - green
   } else if (foodCostPercent <= 35) {
-    return 'text-yellow-400'; // Warning - yellow
+    return 'text-[var(--color-warning)]'; // Warning - yellow
   } else {
-    return 'text-red-400'; // Critical - red
+    return 'text-[var(--color-error)]'; // Critical - red
   }
 }
 
 export function StatisticsGrid({ statistics }: { statistics: ItemStatistics }) {
   // Gross Profit (dollar amount) uses positive/negative logic
-  const profitColor = (value: number) => (value >= 0 ? 'text-[#29E7CD]' : 'text-red-400');
+  const profitColor = (value: number) => (value >= 0 ? 'text-[var(--primary)]' : 'text-[var(--color-error)]');
 
   return (
     <div className="grid grid-cols-2 gap-2 text-xs">
       <div>
-        <div className="text-gray-400">COGS</div>
-        <div className="font-medium text-white">${statistics.cogs.toFixed(2)}</div>
+        <div className="text-[var(--foreground-muted)]">COGS</div>
+        <div className="font-medium text-[var(--foreground)]">${statistics.cogs.toFixed(2)}</div>
       </div>
       <div>
-        <div className="text-gray-400">Revenue</div>
-        <div className="font-medium text-white">${statistics.selling_price.toFixed(2)}</div>
+        <div className="text-[var(--foreground-muted)]">Revenue</div>
+        <div className="font-medium text-[var(--foreground)]">${statistics.selling_price.toFixed(2)}</div>
       </div>
       <div>
-        <div className="text-gray-400">Gross Profit</div>
+        <div className="text-[var(--foreground-muted)]">Gross Profit</div>
         <div className={`font-medium ${profitColor(statistics.gross_profit)}`}>
           ${statistics.gross_profit.toFixed(2)}
         </div>
       </div>
       <div>
-        <div className="text-gray-400">Profit Margin</div>
+        <div className="text-[var(--foreground-muted)]">Profit Margin</div>
         <div className={`font-medium ${getProfitMarginColor(statistics.gross_profit_margin)}`}>
           {statistics.gross_profit_margin.toFixed(1)}%
         </div>
       </div>
       <div className="col-span-2">
-        <div className="text-gray-400">Food Cost %</div>
+        <div className="text-[var(--foreground-muted)]">Food Cost %</div>
         <div className={`font-medium ${getFoodCostColor(statistics.food_cost_percent)}`}>
           {statistics.food_cost_percent.toFixed(1)}%
         </div>

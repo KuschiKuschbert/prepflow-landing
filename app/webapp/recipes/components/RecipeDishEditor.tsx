@@ -173,7 +173,7 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
             capitalizeName={capitalizeName}
           />
         )}
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
           {!selectedItem ? (
             <EmptyState />
           ) : loadingIngredients && calculations.length === 0 ? (
@@ -185,10 +185,10 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
             <>
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold text-white">
+                  <h3 className="text-lg font-semibold text-[var(--foreground)]">
                     {capitalizeName(selectedItem.name)}
                   </h3>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-[var(--foreground-muted)]">
                     {selectedItem.type === 'recipe' ? 'Recipe' : 'Dish'} Ingredients & Consumables
                   </p>
                 </div>
@@ -254,7 +254,7 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
       </div>
 
       {dataError && (
-        <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-4 text-red-400">
+        <div className="rounded-lg border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-4 text-[var(--color-error)]">
           {dataError}
         </div>
       )}

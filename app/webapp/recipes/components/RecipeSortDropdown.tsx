@@ -41,7 +41,7 @@ export function RecipeSortDropdown({
     <div className="tablet:w-auto relative w-full">
       <button
         onClick={onToggle}
-        className="tablet:w-auto flex w-full items-center justify-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#2a2a2a] hover:bg-[#1f1f1f]"
+        className="tablet:w-auto flex w-full items-center justify-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)]/80 px-3 py-2 text-sm font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--border)] hover:bg-[var(--surface)]"
       >
         <Icon icon={ArrowUpDown} size="sm" className="text-current" aria-hidden={true} />
         <span className="truncate">{currentSortLabel}</span>
@@ -55,7 +55,7 @@ export function RecipeSortDropdown({
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={onClose} aria-hidden={true} />
-          <div className="absolute top-full left-0 z-50 mt-1.5 w-56 overflow-y-auto rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
+          <div className="absolute top-full left-0 z-50 mt-1.5 w-56 overflow-y-auto rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-xl">
             <div className="p-1.5">
               {SORT_OPTIONS.map(option => (
                 <button
@@ -63,8 +63,8 @@ export function RecipeSortDropdown({
                   onClick={() => handleSort(option.value)}
                   className={`w-full rounded-md px-2.5 py-1.5 text-left text-sm transition-colors ${
                     sortField === option.value
-                      ? 'border border-[#29E7CD]/50 bg-[#29E7CD]/20 text-[#29E7CD]'
-                      : 'text-gray-300 hover:bg-[#2a2a2a]'
+                      ? 'border border-[var(--primary)]/50 bg-[var(--primary)]/20 text-[var(--primary)]'
+                      : 'text-[var(--foreground-secondary)] hover:bg-[var(--muted)]'
                   }`}
                 >
                   <div className="flex items-center justify-between">

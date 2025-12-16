@@ -119,7 +119,7 @@ export default function DishBuilderClient({
 
       <div className="space-y-6">
         {error && (
-          <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-4 text-red-400">
+          <div className="rounded-lg border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-4 text-[var(--color-error)]">
             {error}
           </div>
         )}

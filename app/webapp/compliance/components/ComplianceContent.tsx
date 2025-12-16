@@ -163,8 +163,8 @@ export function ComplianceContent({
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="mb-2 text-2xl font-semibold text-white">Allergen Overview</h2>
-          <p className="text-gray-400">
+          <h2 className="mb-2 text-2xl font-semibold text-[var(--foreground)]">Allergen Overview</h2>
+          <p className="text-[var(--foreground-muted)]">
             View all dishes and recipes with their allergen information for compliance tracking
           </p>
         </div>

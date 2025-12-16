@@ -97,8 +97,8 @@ export function BillingSection() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="h-8 w-48 animate-pulse rounded bg-[#2a2a2a]" />
-        <div className="h-4 w-64 animate-pulse rounded bg-[#2a2a2a]" />
+        <div className="h-8 w-48 animate-pulse rounded bg-[var(--surface)]" />
+        <div className="h-4 w-64 animate-pulse rounded bg-[var(--surface)]" />
       </div>
     );
   }
@@ -108,48 +108,48 @@ export function BillingSection() {
       {subscriptionData && (
         <>
           {/* Current Plan */}
-          <div className="space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+          <div className="space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
             <div>
-              <h2 className="text-xl font-semibold">Current Plan</h2>
-              <p className="mt-1 text-sm text-gray-300">Your active subscription details</p>
+              <h2 className="text-xl font-semibold text-[var(--foreground)]">Current Plan</h2>
+              <p className="mt-1 text-sm text-[var(--foreground)]/80">Your active subscription details</p>
             </div>
 
             <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
-              <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
-                <p className="text-xs text-gray-500">Plan</p>
-                <p className="text-lg font-semibold text-white capitalize">
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
+                <p className="text-xs text-[var(--foreground)]/60">Plan</p>
+                <p className="text-lg font-semibold text-[var(--foreground)] capitalize">
                   {subscriptionData.subscription.tier}
                 </p>
               </div>
-              <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
-                <p className="text-xs text-gray-500">Status</p>
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
+                <p className="text-xs text-[var(--foreground)]/60">Status</p>
                 <div className="flex items-center gap-2">
                   <Icon
                     icon={CheckCircle}
                     size="sm"
                     className={
                       subscriptionData.subscription.status === 'active'
-                        ? 'text-green-400'
-                        : 'text-yellow-400'
+                        ? 'text-[var(--color-success)]'
+                        : 'text-[var(--color-warning)]'
                     }
                     aria-hidden={true}
                   />
-                  <p className="text-lg font-semibold text-white capitalize">
+                  <p className="text-lg font-semibold text-[var(--foreground)] capitalize">
                     {subscriptionData.subscription.status}
                   </p>
                 </div>
               </div>
               {subscriptionData.subscription.expires_at && (
-                <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
-                  <p className="text-xs text-gray-500">Renewal Date</p>
-                  <p className="text-lg font-semibold text-white">
+                <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
+                  <p className="text-xs text-[var(--foreground)]/60">Renewal Date</p>
+                  <p className="text-lg font-semibold text-[var(--foreground)]">
                     {formatDate(subscriptionData.subscription.expires_at)}
                   </p>
                 </div>
               )}
-              <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
-                <p className="text-xs text-gray-500">Member Since</p>
-                <p className="text-lg font-semibold text-white">
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
+                <p className="text-xs text-[var(--foreground)]/60">Member Since</p>
+                <p className="text-lg font-semibold text-[var(--foreground)]">
                   {formatDate(subscriptionData.subscription.created_at)}
                 </p>
               </div>
@@ -157,41 +157,41 @@ export function BillingSection() {
           </div>
 
           {/* Usage Metrics */}
-          <div className="space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+          <div className="space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
             <div>
-              <h2 className="text-xl font-semibold">Usage</h2>
-              <p className="mt-1 text-sm text-gray-300">Your current data usage</p>
+              <h2 className="text-xl font-semibold text-[var(--foreground)]">Usage</h2>
+              <p className="mt-1 text-sm text-[var(--foreground)]/80">Your current data usage</p>
             </div>
 
             <div className="desktop:grid-cols-3 grid grid-cols-1 gap-4">
-              <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
                 <div className="flex items-center gap-2">
-                  <Icon icon={Package} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+                  <Icon icon={Package} size="md" className="text-[var(--primary)]" aria-hidden={true} />
                   <div>
-                    <p className="text-xs text-gray-500">Ingredients</p>
-                    <p className="text-2xl font-bold text-white">
+                    <p className="text-xs text-[var(--foreground)]/60">Ingredients</p>
+                    <p className="text-2xl font-bold text-[var(--foreground)]">
                       {subscriptionData.usage.ingredients}
                     </p>
                   </div>
                 </div>
               </div>
-              <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
                 <div className="flex items-center gap-2">
-                  <Icon icon={TrendingUp} size="md" className="text-[#3B82F6]" aria-hidden={true} />
+                  <Icon icon={TrendingUp} size="md" className="text-[var(--color-info)]" aria-hidden={true} />
                   <div>
-                    <p className="text-xs text-gray-500">Recipes</p>
-                    <p className="text-2xl font-bold text-white">
+                    <p className="text-xs text-[var(--foreground)]/60">Recipes</p>
+                    <p className="text-2xl font-bold text-[var(--foreground)]">
                       {subscriptionData.usage.recipes}
                     </p>
                   </div>
                 </div>
               </div>
-              <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
                 <div className="flex items-center gap-2">
-                  <Icon icon={CreditCard} size="md" className="text-[#D925C7]" aria-hidden={true} />
+                  <Icon icon={CreditCard} size="md" className="text-[var(--accent)]" aria-hidden={true} />
                   <div>
-                    <p className="text-xs text-gray-500">Menu Dishes</p>
-                    <p className="text-2xl font-bold text-white">{subscriptionData.usage.dishes}</p>
+                    <p className="text-xs text-[var(--foreground)]/60">Menu Dishes</p>
+                    <p className="text-2xl font-bold text-[var(--foreground)]">{subscriptionData.usage.dishes}</p>
                   </div>
                 </div>
               </div>
@@ -199,10 +199,10 @@ export function BillingSection() {
           </div>
 
           {/* Billing Actions */}
-          <div className="space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+          <div className="space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
             <div>
-              <h2 className="text-xl font-semibold">Billing Management</h2>
-              <p className="mt-1 text-sm text-gray-300">
+              <h2 className="text-xl font-semibold text-[var(--foreground)]">Billing Management</h2>
+              <p className="mt-1 text-sm text-[var(--foreground)]/80">
                 Manage your payment method, view invoices, and update your subscription.
               </p>
             </div>
@@ -212,7 +212,7 @@ export function BillingSection() {
                 <input type="hidden" name="tier" value="starter" />
                 <button
                   type="submit"
-                  className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 font-medium text-white transition-all hover:shadow-lg"
+                  className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 font-medium text-[var(--button-active-text)] transition-all hover:shadow-lg"
                 >
                   Subscribe / Change Plan
                 </button>
@@ -220,13 +220,13 @@ export function BillingSection() {
               <button
                 onClick={handleOpenPortal}
                 disabled={openingPortal}
-                className="rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-4 py-2 transition-colors hover:bg-[#2a2a2a]/60 disabled:opacity-50"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/40 px-4 py-2 text-[var(--foreground)] transition-colors hover:bg-[var(--surface)]/60 disabled:opacity-50"
               >
                 {openingPortal ? 'Opening...' : 'Manage Billing'}
               </button>
             </div>
 
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-[var(--foreground)]/60">
               The billing portal allows you to update your payment method, view billing history, and
               manage your subscription.
             </p>

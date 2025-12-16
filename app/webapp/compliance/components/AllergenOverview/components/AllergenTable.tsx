@@ -22,18 +22,18 @@ export function AllergenTable({
 }: AllergenTableProps) {
   if (items.length === 0) {
     return (
-      <div className="overflow-hidden rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]">
+      <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)]">
         <div className="px-6 py-12">
           <div className="text-center">
             <div className="mb-4 flex justify-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20">
-                <Icon icon={Search} size="lg" className="text-[#29E7CD]" aria-hidden={true} />
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20">
+                <Icon icon={Search} size="lg" className="text-[var(--primary)]" aria-hidden={true} />
               </div>
             </div>
-            <h3 className="mb-2 text-lg font-semibold text-white">
+            <h3 className="mb-2 text-lg font-semibold text-[var(--foreground)]">
               {hasActiveFilters ? 'No Items Match Your Filters' : 'No Items Found'}
             </h3>
-            <p className="mb-4 text-sm text-gray-400">
+            <p className="mb-4 text-sm text-[var(--foreground-muted)]">
               {hasActiveFilters
                 ? 'Try adjusting your filters or clearing them to see all items.'
                 : totalItems === 0
@@ -43,7 +43,7 @@ export function AllergenTable({
             {hasActiveFilters && (
               <button
                 onClick={onClearFilters}
-                className="rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] hover:text-[#29E7CD]"
+                className="rounded-lg border border-[var(--border)] bg-[var(--background)]/80 px-4 py-2 text-sm font-medium text-[var(--foreground-secondary)] transition-colors hover:border-[var(--primary)]/50 hover:bg-[var(--surface)] hover:text-[var(--primary)]"
               >
                 Clear All Filters
               </button>
@@ -55,23 +55,23 @@ export function AllergenTable({
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]">
+    <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)]">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-[#2a2a2a]">
-          <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
+        <table className="min-w-full divide-y divide-[var(--muted)]">
+          <thead className="sticky top-0 z-10 bg-gradient-to-r from-[var(--muted)]/50 to-[var(--muted)]/20">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 Allergens
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 From Ingredients
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
+          <tbody className="divide-y divide-[var(--muted)] bg-[var(--surface)]">
             {items.map(item => {
               // Build map of ingredient name -> allergens it contributes to
               const ingredientAllergenMap: Record<string, string[]> = {};
@@ -93,23 +93,23 @@ export function AllergenTable({
               return (
                 <tr
                   key={`${item.type}-${item.id}`}
-                  className="transition-colors hover:bg-[#2a2a2a]/20"
+                  className="transition-colors hover:bg-[var(--muted)]/20"
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       <span
                         className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
                           item.type === 'recipe'
-                            ? 'border border-[#29E7CD]/20 bg-[#29E7CD]/10 text-[#29E7CD]'
-                            : 'border border-[#D925C7]/20 bg-[#D925C7]/10 text-[#D925C7]'
+                            ? 'border border-[var(--primary)]/20 bg-[var(--primary)]/10 text-[var(--primary)]'
+                            : 'border border-[var(--accent)]/20 bg-[var(--accent)]/10 text-[var(--accent)]'
                         }`}
                       >
                         {item.type === 'recipe' ? 'Recipe' : 'Dish'}
                       </span>
-                      <div className="text-sm font-medium text-white">{item.name}</div>
+                      <div className="text-sm font-medium text-[var(--foreground)]">{item.name}</div>
                     </div>
                     {item.description && (
-                      <div className="mt-1 text-xs text-gray-400">{item.description}</div>
+                      <div className="mt-1 text-xs text-[var(--foreground-muted)]">{item.description}</div>
                     )}
                   </td>
                   <td className="px-6 py-4">
@@ -133,7 +133,7 @@ export function AllergenTable({
                             <span
                               key={ingredientName}
                               title={tooltipText}
-                              className="inline-flex cursor-help rounded-full bg-[#2a2a2a] px-2.5 py-0.5 text-xs font-medium text-gray-300 transition-colors hover:bg-[#29E7CD]/10 hover:text-[#29E7CD]"
+                              className="inline-flex cursor-help rounded-full bg-[var(--muted)] px-2.5 py-0.5 text-xs font-medium text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--primary)]/10 hover:text-[var(--primary)]"
                             >
                               {ingredientName}
                             </span>
@@ -141,7 +141,7 @@ export function AllergenTable({
                         })}
                       </div>
                     ) : (
-                      <span className="text-xs text-gray-500">—</span>
+                      <span className="text-xs text-[var(--foreground-subtle)]">—</span>
                     )}
                   </td>
                 </tr>

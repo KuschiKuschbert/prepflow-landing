@@ -80,25 +80,25 @@ export const ApiErrorDisplay: React.FC<ApiErrorDisplayProps> = ({
 
   return (
     <div
-      className={`mx-auto max-w-md rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg ${className}`}
+      className={`mx-auto max-w-md rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg ${className}`}
     >
       <div className="mb-4 flex items-center justify-center">
         <div
           className={`h-12 w-12 rounded-full bg-gradient-to-r ${getErrorColor(error.code)} flex items-center justify-center`}
         >
-          <div className="text-white">{getErrorIcon(error.code)}</div>
+          <div className="text-[var(--button-active-text)]">{getErrorIcon(error.code)}</div>
         </div>
       </div>
 
-      <h2 className="text-fluid-xl mb-2 text-center font-semibold text-white">
+      <h2 className="text-fluid-xl mb-2 text-center font-semibold text-[var(--foreground)]">
         {context ? `${context} Error` : 'API Error'}
       </h2>
 
-      <p className="mb-4 text-center text-gray-400">{error.message}</p>
+      <p className="mb-4 text-center text-[var(--foreground-muted)]">{error.message}</p>
 
       {error.code && (
         <div className="mb-4 text-center">
-          <span className="text-fluid-sm inline-block rounded-full bg-[#2a2a2a] px-3 py-1 text-gray-400">
+          <span className="text-fluid-sm inline-block rounded-full bg-[var(--muted)] px-3 py-1 text-[var(--foreground-muted)]">
             Error Code: {error.code}
           </span>
         </div>
@@ -108,7 +108,7 @@ export const ApiErrorDisplay: React.FC<ApiErrorDisplayProps> = ({
         <div className="flex justify-center">
           <button
             onClick={onRetry}
-            className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-2 font-medium text-white transition-all duration-200 hover:shadow-xl"
+            className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-2 font-medium text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
           >
             Try Again
           </button>
@@ -116,9 +116,9 @@ export const ApiErrorDisplay: React.FC<ApiErrorDisplayProps> = ({
       )}
 
       {process.env.NODE_ENV === 'development' && error.details && (
-        <details className="mt-4 rounded-xl bg-[#2a2a2a] p-3">
-          <summary className="cursor-pointer text-gray-400">Error Details</summary>
-          <pre className="text-fluid-xs mt-2 overflow-auto text-red-400">
+        <details className="mt-4 rounded-xl bg-[var(--muted)] p-3">
+          <summary className="cursor-pointer text-[var(--foreground-muted)]">Error Details</summary>
+          <pre className="text-fluid-xs mt-2 overflow-auto text-[var(--color-error)]">
             {JSON.stringify(error.details, null, 2)}
           </pre>
         </details>

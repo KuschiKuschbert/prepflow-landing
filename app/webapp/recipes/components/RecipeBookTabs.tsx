@@ -1,7 +1,7 @@
 'use client';
 
-import { ChefHat, UtensilsCrossed } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { ChefHat, UtensilsCrossed } from 'lucide-react';
 
 interface RecipeBookTabsProps {
   activeTab: 'recipes' | 'dishes';
@@ -11,13 +11,13 @@ interface RecipeBookTabsProps {
 export function RecipeBookTabs({ activeTab, onTabChange }: RecipeBookTabsProps) {
   return (
     <div className="mb-6">
-      <div className="flex space-x-1 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-1">
+      <div className="flex space-x-1 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-1">
         <button
           onClick={() => onTabChange('recipes')}
-          className={`flex items-center gap-2 rounded-xl px-6 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+          className={`flex items-center gap-2 rounded-xl px-6 py-3 font-semibold transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none ${
             activeTab === 'recipes'
-              ? 'bg-[#29E7CD] text-black shadow-lg'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl border border-[var(--primary)]/30'
+              : 'text-[var(--foreground-secondary)] hover:text-[var(--button-active-text)]'
           }`}
           aria-pressed={activeTab === 'recipes'}
           aria-label="View recipes"
@@ -27,10 +27,10 @@ export function RecipeBookTabs({ activeTab, onTabChange }: RecipeBookTabsProps) 
         </button>
         <button
           onClick={() => onTabChange('dishes')}
-          className={`flex items-center gap-2 rounded-xl px-6 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+          className={`flex items-center gap-2 rounded-xl px-6 py-3 font-semibold transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none ${
             activeTab === 'dishes'
-              ? 'bg-[#29E7CD] text-black shadow-lg'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl border border-[var(--primary)]/30'
+              : 'text-[var(--foreground-secondary)] hover:text-[var(--button-active-text)]'
           }`}
           aria-pressed={activeTab === 'dishes'}
           aria-label="View dishes"

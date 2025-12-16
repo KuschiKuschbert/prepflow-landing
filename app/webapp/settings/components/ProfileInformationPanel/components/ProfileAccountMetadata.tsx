@@ -29,23 +29,23 @@ export function ProfileAccountMetadata({
   email_verified,
 }: ProfileAccountMetadataProps) {
   return (
-    <div className="border-t border-[#2a2a2a] pt-4">
+    <div className="border-t border-[var(--border)] pt-4">
       <div className="desktop:grid-cols-2 grid grid-cols-1 gap-3">
         <div>
-          <p className="text-xs text-gray-500">Account Created</p>
-          <p className="text-sm font-medium text-gray-300">{formatDate(created_at)}</p>
+          <p className="text-xs text-[var(--foreground-subtle)]">Account Created</p>
+          <p className="text-sm font-medium text-[var(--foreground-secondary)]">{formatDate(created_at)}</p>
         </div>
         <div>
-          <p className="text-xs text-gray-500">Last Login</p>
-          <p className="text-sm font-medium text-gray-300">{formatDate(last_login)}</p>
+          <p className="text-xs text-[var(--foreground-subtle)]">Last Login</p>
+          <p className="text-sm font-medium text-[var(--foreground-secondary)]">{formatDate(last_login)}</p>
         </div>
         <div>
-          <p className="text-xs text-gray-500">Email Verification</p>
-          <p className="text-sm font-medium text-gray-300">
+          <p className="text-xs text-[var(--foreground-subtle)]">Email Verification</p>
+          <p className="text-sm font-medium text-[var(--foreground-secondary)]">
             {email_verified ? (
-              <span className="text-green-400">Verified</span>
+              <span className="text-[var(--color-success)]">Verified</span>
             ) : (
-              <span className="text-yellow-400">Unverified</span>
+              <span className="text-[var(--color-warning)]">Unverified</span>
             )}
           </p>
         </div>

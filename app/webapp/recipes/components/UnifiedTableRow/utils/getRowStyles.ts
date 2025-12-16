@@ -4,9 +4,9 @@
 
 export function getRowStyles(isDish: boolean) {
   return {
-    borderColor: isDish ? 'border-[#29E7CD]/30' : 'border-[#3B82F6]/30',
-    bgColor: isDish ? 'bg-[#29E7CD]/2' : 'bg-[#3B82F6]/2',
-    hoverColor: isDish ? 'hover:bg-[#29E7CD]/5' : 'hover:bg-[#3B82F6]/5',
-    selectedColor: isDish ? 'bg-[#29E7CD]/10' : 'bg-[#3B82F6]/10',
+    borderColor: isDish ? 'border-[var(--primary)]/30' : 'border-[var(--color-info)]/30',
+    bgColor: isDish ? 'bg-[var(--primary)]/2' : 'bg-[var(--color-info)]/2',
+    hoverColor: isDish ? 'hover:bg-[var(--primary)]/5' : 'hover:bg-[var(--color-info)]/5',
+    selectedColor: isDish ? 'bg-[var(--primary)]/10' : 'bg-[var(--color-info)]/10',
   };
 }

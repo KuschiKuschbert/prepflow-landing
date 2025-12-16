@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
+import Link from 'next/link';
 
 interface BreadcrumbsProps {
   pathname: string;
@@ -15,14 +15,14 @@ export function Breadcrumbs({ pathname, navigationItems, isActive }: Breadcrumbs
     <div className="desktop:flex hidden items-center space-x-2">
       <Link
         href="/webapp"
-        className={`${LANDING_TYPOGRAPHY.sm} text-gray-400 transition-colors duration-200 hover:text-[#29E7CD]`}
+        className={`${LANDING_TYPOGRAPHY.sm} text-[var(--foreground-muted)] transition-colors duration-200 hover:text-[var(--primary)]`}
       >
         Dashboard
       </Link>
       {pathname !== '/webapp' && (
         <>
-          <span className={`${LANDING_TYPOGRAPHY.sm} text-gray-500`}>/</span>
-          <span className={`${LANDING_TYPOGRAPHY.sm} font-medium text-[#29E7CD]`}>
+          <span className={`${LANDING_TYPOGRAPHY.sm} text-[var(--foreground-subtle)]`}>/</span>
+          <span className={`${LANDING_TYPOGRAPHY.sm} font-medium text-[var(--primary)]`}>
             {navigationItems.find(item => isActive(item.href))?.label || 'Page'}
           </span>
         </>

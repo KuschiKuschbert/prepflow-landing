@@ -7,7 +7,7 @@ import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { isArcadeDisabled, isTouchDevice, prefersReducedMotion } from '@/lib/arcadeGuards';
 import { useTranslation } from '@/lib/useTranslation';
 import { usePathname } from 'next/navigation';
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import TomatoToss from '../../../components/EasterEggs/TomatoToss';
 import { BottomNavBar } from './navigation/BottomNavBar';
 import { MobileFAB } from './navigation/MobileFAB';
@@ -95,21 +95,28 @@ const ModernNavigation = memo(function ModernNavigation({ className = '' }: Mode
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isDesktop]);
 
-  const isActive = (href: string) => {
-    if (href === '/webapp') return pathname === '/webapp';
-    // Handle hash URLs (e.g., /webapp/recipes#ingredients)
-    if (href.includes('#')) {
-      const [path, hash] = href.split('#');
-      if (pathname === path) {
-        if (typeof window !== 'undefined') {
-          return window.location.hash === `#${hash}`;
+  // Memoize isActive to prevent hydration mismatches
+  // During SSR, always return false for hash-based checks to ensure consistency
+  const isActive = useCallback(
+    (href: string) => {
+      if (href === '/webapp') return pathname === '/webapp';
+      // Handle hash URLs (e.g., /webapp/recipes#ingredients)
+      if (href.includes('#')) {
+        const [path, hash] = href.split('#');
+        if (pathname === path) {
+          // Only check hash on client side after mount to prevent hydration mismatch
+          if (typeof window !== 'undefined' && window.location) {
+            return window.location.hash === `#${hash}`;
+          }
+          // During SSR or before mount, return false for hash checks
+          return false;
         }
-        return false;
+        return pathname.startsWith(path);
       }
-      return pathname.startsWith(path);
-    }
-    return pathname.startsWith(href);
-  };
+      return pathname.startsWith(href);
+    },
+    [pathname],
+  );
 
   return (
     <>

@@ -16,16 +16,16 @@ export function RecipeSidePanelHeader({
   onClose,
 }: RecipeSidePanelHeaderProps) {
   return (
-    <div className="flex-shrink-0 border-b border-[#2a2a2a] p-6">
+    <div className="flex-shrink-0 border-b border-[var(--border)] p-6">
       <div className="mb-4 flex items-start justify-between">
         <div className="flex-1 pr-4">
-          <h2 id="recipe-panel-title" className="text-xl font-bold text-white">
+          <h2 id="recipe-panel-title" className="text-xl font-bold text-[var(--foreground)]">
             {capitalizeRecipeName(recipe.recipe_name)}
           </h2>
         </div>
         <button
           onClick={onClose}
-          className="flex-shrink-0 rounded-lg p-2 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+          className="flex-shrink-0 rounded-lg p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
           aria-label="Close recipe panel"
         >
           <Icon icon={X} size="md" aria-hidden={true} />

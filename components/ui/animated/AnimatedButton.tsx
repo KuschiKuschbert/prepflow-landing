@@ -36,19 +36,19 @@ export function AnimatedButton({
 
   const variantClasses = {
     primary: `
-      bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] text-white
-      hover:from-[#29E7CD]/80 hover:via-[#FF6B00]/80 hover:to-[#D925C7]/80
-      focus:ring-[#29E7CD] shadow-lg hover:shadow-xl hover:shadow-[#FF6B00]/25
+      bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] text-[var(--button-active-text)]
+      hover:from-[var(--primary)]/80 hover:via-[var(--tertiary)]/80 hover:to-[var(--accent)]/80
+      focus:ring-[var(--primary)] shadow-lg hover:shadow-xl hover:shadow-[var(--tertiary)]/25
     `,
     secondary: `
-      bg-[#2a2a2a] text-white border border-[#3a3a3a]
-      hover:bg-[#3a3a3a] hover:border-[#FF6B00]/50
-      focus:ring-[#29E7CD]
+      bg-[var(--muted)] text-[var(--foreground)] border border-[var(--border)]
+      hover:bg-[var(--surface-variant)] hover:border-[var(--tertiary)]/50
+      focus:ring-[var(--primary)]
     `,
     outline: `
-      bg-transparent text-[#29E7CD] border border-[#29E7CD]
-      hover:bg-[#29E7CD] hover:text-white
-      focus:ring-[#29E7CD]
+      bg-transparent text-[var(--primary)] border border-[var(--primary)]
+      hover:bg-[var(--primary)] hover:text-[var(--button-active-text)]
+      focus:ring-[var(--primary)]
     `,
   };
 

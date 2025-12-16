@@ -70,23 +70,23 @@ export default function BackupSettingsPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-4xl p-6 text-white">
+      <div className="mx-auto max-w-4xl p-6 text-[var(--foreground)]">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 w-64 rounded bg-[#2a2a2a]"></div>
-          <div className="h-32 rounded bg-[#2a2a2a]"></div>
-          <div className="h-32 rounded bg-[#2a2a2a]"></div>
+          <div className="h-8 w-64 rounded bg-[var(--muted)]"></div>
+          <div className="h-32 rounded bg-[var(--muted)]"></div>
+          <div className="h-32 rounded bg-[var(--muted)]"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-4xl p-6 text-white">
+    <div className="mx-auto max-w-4xl p-6 text-[var(--foreground)]">
       {/* Header */}
       <div className="mb-6 flex items-center gap-4">
         <Link
           href="/webapp/settings"
-          className="flex items-center gap-2 text-gray-400 transition-colors hover:text-[#29E7CD]"
+          className="flex items-center gap-2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--primary)]"
         >
           <Icon icon={ArrowLeft} size="sm" />
           <span>Back to Settings</span>
@@ -94,7 +94,7 @@ export default function BackupSettingsPage() {
       </div>
 
       <h1 className="mb-2 text-3xl font-bold">Backup & Restore</h1>
-      <p className="mb-8 text-gray-400">
+      <p className="mb-8 text-[var(--foreground-muted)]">
         Backup your data to Google Drive or download encrypted backup files. Restore from backups
         with full, selective, or merge options.
       </p>

@@ -57,7 +57,7 @@ const CatchTheDocket: React.FC<CatchTheDocketProps> = ({ isLoading, onLoadComple
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-40 flex min-h-screen flex-col items-center justify-center p-6 text-white"
+        className="fixed inset-0 z-40 flex min-h-screen flex-col items-center justify-center p-6 text-[var(--foreground)]"
         onPointerDown={e => {
           initSounds();
         }}
@@ -73,7 +73,7 @@ const CatchTheDocket: React.FC<CatchTheDocketProps> = ({ isLoading, onLoadComple
           <motion.div
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-fluid-sm pointer-events-none absolute top-6 right-6 z-50 rounded-full border border-[#2a2a2a] bg-[#1f1f1f]/70 px-3 py-1 text-white backdrop-blur-sm"
+            className="text-fluid-sm pointer-events-none absolute top-6 right-6 z-50 rounded-full border border-[var(--border)] bg-[var(--surface)]/70 px-3 py-1 text-[var(--foreground)] backdrop-blur-sm"
             title="Dockets caught"
           >
             🧾 {caught}

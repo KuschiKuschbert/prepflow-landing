@@ -114,56 +114,56 @@ export function COGSHeader({
         }
       />
 
-      <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-r from-[#29E7CD]/10 to-[#3B82F6]/10 p-6">
+      <div className="rounded-3xl border border-[var(--primary)]/30 bg-gradient-to-r from-[var(--primary)]/10 to-[#3B82F6]/10 p-6">
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
-            <Icon icon={Lightbulb} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+          <h2 className="flex items-center gap-2 text-lg font-semibold text-[var(--button-active-text)]">
+            <Icon icon={Lightbulb} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
             Why COGS Matters
           </h2>
           <button
             onClick={() => setShowGuide(!showGuide)}
-            className="text-sm text-[#29E7CD] hover:underline"
+            className="text-sm text-[var(--primary)] hover:underline"
           >
             {showGuide ? 'Hide' : 'Show'} Workflow Guide
           </button>
         </div>
-        <p className="text-gray-300">
+        <p className="text-[var(--foreground-secondary)]">
           COGS (Cost of Goods Sold) is the actual cost of ingredients for one serving. Knowing your
           COGS helps you set menu prices that cover costs and make profit. Without accurate COGS,
           you might be losing money on every dish you sell.
         </p>
 
         {showGuide && (
-          <div className="mt-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4">
-            <h3 className="mb-3 text-sm font-semibold text-white">Step-by-Step Workflow:</h3>
-            <ol className="space-y-2 text-sm text-gray-300">
+          <div className="mt-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+            <h3 className="mb-3 text-sm font-semibold text-[var(--foreground)]">Step-by-Step Workflow:</h3>
+            <ol className="space-y-2 text-sm text-[var(--foreground-secondary)]">
               <li className="flex items-start gap-2">
-                <span className="font-bold text-[#29E7CD]">1.</span>
+                <span className="font-bold text-[var(--primary)]">1.</span>
                 <span>
                   <strong>Dish Name:</strong> Enter the name of your dish (or select an existing
                   recipe)
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="font-bold text-[#29E7CD]">2.</span>
+                <span className="font-bold text-[var(--primary)]">2.</span>
                 <span>
                   <strong>Portions:</strong> Set how many servings this recipe makes
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="font-bold text-[#29E7CD]">3.</span>
+                <span className="font-bold text-[var(--primary)]">3.</span>
                 <span>
                   <strong>Add Ingredients:</strong> Add all ingredients with their quantities
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="font-bold text-[#29E7CD]">4.</span>
+                <span className="font-bold text-[var(--primary)]">4.</span>
                 <span>
                   <strong>Calculate:</strong> See your total COGS and cost per portion
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="font-bold text-[#29E7CD]">5.</span>
+                <span className="font-bold text-[var(--primary)]">5.</span>
                 <span>
                   <strong>Set Price:</strong> Use the pricing tool to set your menu price based on
                   target profit margin

@@ -123,7 +123,7 @@ export default function RecipeSharingPage() {
   if (loading) {
     return (
       <ResponsivePageContainer>
-        <div className="min-h-screen bg-transparent py-8 text-white">
+        <div className="min-h-screen bg-transparent py-8 text-[var(--foreground)]">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="mt-6 space-y-4">
             <LoadingSkeleton variant="card" count={5} height="80px" />
@@ -134,26 +134,26 @@ export default function RecipeSharingPage() {
   }
   return (
     <ResponsivePageContainer>
-      <div className="min-h-screen bg-transparent py-8 text-white">
+      <div className="min-h-screen bg-transparent py-8 text-[var(--foreground)]">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="mb-2 text-3xl font-bold text-white">
+            <h1 className="mb-2 text-3xl font-bold text-[var(--foreground)]">
               📤 {t('recipeSharing.title', 'Recipe Sharing')}
             </h1>
-            <p className="text-gray-400">
+            <p className="text-[var(--foreground-muted)]">
               {t('recipeSharing.subtitle', 'Share your recipes as PDFs or links')}
             </p>
           </div>
           <button
             onClick={() => setShowForm(true)}
-            className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
+            className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
           >
             + {t('recipeSharing.shareRecipe', 'Share Recipe')}
           </button>
         </div>
         {error && (
-          <div className="mb-6 rounded-2xl border border-red-400/20 bg-red-400/10 p-4">
-            <p className="text-red-400">{error}</p>
+          <div className="mb-6 rounded-2xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-4">
+            <p className="text-[var(--color-error)]">{error}</p>
           </div>
         )}
         <div className="space-y-4">

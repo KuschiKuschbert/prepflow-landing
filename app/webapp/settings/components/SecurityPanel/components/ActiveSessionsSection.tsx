@@ -46,27 +46,27 @@ export function ActiveSessionsSection({
   onRevokeSession,
 }: ActiveSessionsSectionProps) {
   return (
-    <div className="space-y-3 border-t border-[#2a2a2a] pt-4">
+    <div className="space-y-3 border-t border-[var(--border)] pt-4">
       <h3 className="text-lg font-medium">Active Sessions</h3>
       {sessions.length === 0 ? (
-        <p className="text-sm text-gray-400">No active sessions found.</p>
+        <p className="text-sm text-[var(--foreground-muted)]">No active sessions found.</p>
       ) : (
         <div className="space-y-3">
           {sessions.map(session => (
             <div
               key={session.id}
-              className="flex items-center justify-between rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4"
+              className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 p-4"
             >
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <p className="font-medium text-white">{session.user_agent}</p>
+                  <p className="font-medium text-[var(--foreground)]">{session.user_agent}</p>
                   {session.is_current && (
-                    <span className="rounded-full bg-[#29E7CD]/10 px-2 py-0.5 text-xs text-[#29E7CD]">
+                    <span className="rounded-full bg-[var(--primary)]/10 px-2 py-0.5 text-xs text-[var(--primary)]">
                       Current
                     </span>
                   )}
                 </div>
-                <div className="mt-1 flex items-center gap-4 text-xs text-gray-400">
+                <div className="mt-1 flex items-center gap-4 text-xs text-[var(--foreground-muted)]">
                   <span>{getLocationDisplay(session.location, session.ip_address)}</span>
                   <span className="flex items-center gap-1">
                     <Icon icon={Clock} size="xs" aria-hidden={true} />
@@ -78,7 +78,7 @@ export function ActiveSessionsSection({
                 <button
                   onClick={() => onRevokeSession(session.id)}
                   disabled={revokingSession === session.id}
-                  className="rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs text-red-400 transition-colors hover:bg-red-500/20 disabled:opacity-50"
+                  className="rounded-xl border border-[var(--color-error)]/30 bg-[var(--color-error)]/10 px-3 py-1.5 text-xs text-[var(--color-error)] transition-colors hover:bg-[var(--color-error)]/20 disabled:opacity-50"
                 >
                   {revokingSession === session.id ? 'Revoking...' : 'Revoke'}
                 </button>

@@ -126,28 +126,28 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
   return (
     <>
       <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/50 p-4">
-        <div className="w-full max-w-2xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px]">
-          <div className="rounded-3xl bg-[#1f1f1f]/95 p-6 text-white">
+        <div className="w-full max-w-2xl rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px]">
+          <div className="rounded-3xl bg-[var(--surface)]/95 p-6 text-[var(--button-active-text)]">
             {/* Header */}
             <div className="mb-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Icon icon={RotateCcw} size="lg" className="text-[#29E7CD]" />
+                <Icon icon={RotateCcw} size="lg" className="text-[var(--primary)]" />
                 <div>
                   <h2 className="text-2xl font-bold">Restore from Backup</h2>
-                  <p className="text-sm text-gray-400">{backup.filename}</p>
+                  <p className="text-sm text-[var(--foreground-muted)]">{backup.filename}</p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="rounded-full p-2 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+                className="rounded-full p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
               >
                 <Icon icon={X} size="sm" />
               </button>
             </div>
 
             {/* Warning */}
-            <div className="mb-6 flex items-start gap-3 rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-4">
-              <Icon icon={AlertTriangle} size="sm" className="mt-0.5 text-yellow-400" />
+            <div className="mb-6 flex items-start gap-3 rounded-xl border border-[var(--color-warning)]/30 bg-[var(--color-warning)]/10 p-4">
+              <Icon icon={AlertTriangle} size="sm" className="mt-0.5 text-[var(--color-warning)]" />
               <div className="flex-1 text-sm text-yellow-200">
                 <p className="font-medium">Warning: Restore will modify your data</p>
                 <p className="mt-1 text-yellow-300/80">
@@ -163,7 +163,7 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
 
             {/* Restore Mode Selection */}
             <div className="mb-6">
-              <label className="mb-3 block text-sm font-medium text-gray-300">Restore Mode</label>
+              <label className="mb-3 block text-sm font-medium text-[var(--foreground-secondary)]">Restore Mode</label>
               <div className="grid grid-cols-3 gap-3">
                 {(['full', 'selective', 'merge'] as RestoreMode[]).map(m => (
                   <button
@@ -176,12 +176,12 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
                     }}
                     className={`rounded-2xl border p-3 text-sm transition-colors ${
                       mode === m
-                        ? 'border-[#29E7CD]/50 bg-[#29E7CD]/10 text-[#29E7CD]'
-                        : 'border-[#2a2a2a] bg-[#2a2a2a]/20 text-gray-300 hover:border-[#2a2a2a]/50'
+                        ? 'border-[var(--primary)]/50 bg-[var(--primary)]/10 text-[var(--primary)]'
+                        : 'border-[var(--border)] bg-[var(--muted)]/20 text-[var(--foreground-secondary)] hover:border-[var(--border)]/50'
                     }`}
                   >
                     <div className="font-medium capitalize">{m}</div>
-                    <div className="mt-1 text-xs text-gray-400">
+                    <div className="mt-1 text-xs text-[var(--foreground-muted)]">
                       {m === 'full' && 'Replace all data'}
                       {m === 'selective' && 'Restore selected tables'}
                       {m === 'merge' && 'Add to existing data'}
@@ -194,14 +194,14 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
             {/* Table Selection (for selective mode) */}
             {mode === 'selective' && (
               <div className="mb-6">
-                <label className="mb-3 block text-sm font-medium text-gray-300">
+                <label className="mb-3 block text-sm font-medium text-[var(--foreground-secondary)]">
                   Select Tables
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {availableTables.map(table => (
                     <label
                       key={table}
-                      className="flex cursor-pointer items-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-3 transition-colors hover:bg-[#2a2a2a]/30"
+                      className="flex cursor-pointer items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 p-3 transition-colors hover:bg-[var(--muted)]/30"
                     >
                       <input
                         type="checkbox"
@@ -213,9 +213,9 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
                             setSelectedTables(selectedTables.filter(t => t !== table));
                           }
                         }}
-                        className="h-4 w-4 rounded border-[#2a2a2a] bg-[#1f1f1f] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
+                        className="h-4 w-4 rounded border-[var(--border)] bg-[var(--surface)] text-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
                       />
-                      <span className="text-sm text-gray-300">{table}</span>
+                      <span className="text-sm text-[var(--foreground-secondary)]">{table}</span>
                     </label>
                   ))}
                 </div>
@@ -225,7 +225,7 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
             {/* Password Input (for password-protected backups) */}
             {backup.encryptionMode === 'user-password' && (
               <div className="mb-6">
-                <label className="mb-2 block text-sm font-medium text-gray-300">
+                <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
                   Backup Password
                 </label>
                 <input
@@ -233,7 +233,7 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   placeholder="Enter backup password"
-                  className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-500 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                  className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] placeholder-gray-500 focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                 />
               </div>
             )}
@@ -243,7 +243,7 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
               <button
                 onClick={onClose}
                 disabled={loading}
-                className="rounded-2xl border border-[#2a2a2a] px-4 py-2 text-gray-300 transition-colors hover:bg-[#2a2a2a]/40 disabled:opacity-50"
+                className="rounded-2xl border border-[var(--border)] px-4 py-2 text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/40 disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -252,7 +252,7 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
                 disabled={
                   loading || !backupFile || (mode === 'selective' && selectedTables.length === 0)
                 }
-                className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 font-medium text-white transition-all hover:shadow-lg disabled:opacity-50"
+                className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 font-medium text-[var(--button-active-text)] transition-all hover:shadow-lg disabled:opacity-50"
               >
                 <Icon icon={RotateCcw} size="sm" />
                 {loading ? 'Restoring...' : 'Restore Backup'}

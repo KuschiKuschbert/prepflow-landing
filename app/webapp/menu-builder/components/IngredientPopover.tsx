@@ -48,7 +48,7 @@ export function IngredientPopover({
     <div
       ref={popoverRef}
       data-ingredient-popover
-      className="fixed z-[75] flex max-h-[500px] w-[400px] flex-col rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl"
+      className="fixed z-[75] flex max-h-[500px] w-[400px] flex-col rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl"
       style={{
         left: `${popoverPosition.left}px`,
         top: `${popoverPosition.top}px`,
@@ -57,19 +57,19 @@ export function IngredientPopover({
       aria-modal="true"
       aria-labelledby="popover-title"
     >
-      <div className="flex max-h-[500px] w-full flex-col overflow-hidden rounded-2xl bg-[#1f1f1f]/95">
-        <div className="flex items-center justify-between border-b border-[#2a2a2a] p-4">
+      <div className="flex max-h-[500px] w-full flex-col overflow-hidden rounded-2xl bg-[var(--surface)]/95">
+        <div className="flex items-center justify-between border-b border-[var(--border)] p-4">
           <div className="min-w-0 flex-1">
-            <h3 id="popover-title" className="truncate text-sm font-semibold text-white">
+            <h3 id="popover-title" className="truncate text-sm font-semibold text-[var(--foreground)]">
               {menuItemName}
             </h3>
-            <p className="mt-0.5 text-xs text-gray-400">
+            <p className="mt-0.5 text-xs text-[var(--foreground-muted)]">
               {menuItemType === 'dish' ? 'Dish' : 'Recipe'} ingredients
             </p>
           </div>
           <button
             onClick={onClose}
-            className="ml-2 flex-shrink-0 rounded-full p-1 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+            className="ml-2 flex-shrink-0 rounded-full p-1 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
             aria-label="Close"
           >
             <Icon icon={X} size="sm" aria-hidden={true} />
@@ -83,11 +83,11 @@ export function IngredientPopover({
             </div>
           ) : error ? (
             <div className="py-4 text-center">
-              <p className="text-sm text-red-400">{error}</p>
+              <p className="text-sm text-[var(--color-error)]">{error}</p>
             </div>
           ) : ingredients.length === 0 && recipeSources.length === 0 ? (
             <div className="py-4 text-center">
-              <p className="text-sm text-gray-400">No ingredients found</p>
+              <p className="text-sm text-[var(--foreground-muted)]">No ingredients found</p>
             </div>
           ) : (
             <div className="space-y-4">

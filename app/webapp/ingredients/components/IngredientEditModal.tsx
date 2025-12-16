@@ -155,26 +155,26 @@ export default function IngredientEditModal({
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300" />
 
       {/* Modal Card - Responsive */}
-      <div className="animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 relative z-10 max-h-[calc(90vh-10vh)] w-full max-w-4xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl transition-all duration-300">
+      <div className="animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 relative z-10 max-h-[calc(90vh-10vh)] w-full max-w-4xl rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl transition-all duration-300">
         <div
           ref={modalRef}
-          className="max-h-[calc(90vh-10vh)] w-full overflow-hidden rounded-3xl bg-[#1f1f1f]/95"
+          className="max-h-[calc(90vh-10vh)] w-full overflow-hidden rounded-3xl bg-[var(--surface)]/95"
           onClick={e => e.stopPropagation()}
           role="dialog"
           aria-modal="true"
           aria-labelledby="ingredient-edit-modal-title"
         >
           {/* Header with close button - Responsive */}
-          <div className="desktop:px-4 desktop:py-2.5 sticky top-0 z-20 flex items-center justify-between border-b border-[#2a2a2a] bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a]/50 px-3 py-2 backdrop-blur-sm">
+          <div className="desktop:px-4 desktop:py-2.5 sticky top-0 z-20 flex items-center justify-between border-b border-[var(--border)] bg-gradient-to-r from-[var(--surface)] to-[var(--muted)]/50 px-3 py-2 backdrop-blur-sm">
             <h2
               id="ingredient-edit-modal-title"
-              className="desktop:text-xl text-lg font-bold text-white"
+              className="desktop:text-xl text-lg font-bold text-[var(--button-active-text)]"
             >
               Edit Ingredient
             </h2>
             <button
               onClick={onClose}
-              className="rounded-full p-2 text-gray-400 transition-all duration-200 hover:bg-[#2a2a2a] hover:text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+              className="rounded-full p-2 text-[var(--foreground-muted)] transition-all duration-200 hover:bg-[var(--muted)] hover:text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
               aria-label="Close modal"
             >
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

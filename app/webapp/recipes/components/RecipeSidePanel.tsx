@@ -129,7 +129,7 @@ export function RecipeSidePanel({
       {/* Side Panel with gradient border */}
       <div
         ref={panelRef}
-        className={`desktop:max-w-lg fixed right-0 z-[65] w-full max-w-md overflow-hidden rounded-l-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl transition-transform duration-200 ease-out ${
+        className={`desktop:max-w-lg fixed right-0 z-[65] w-full max-w-md overflow-hidden rounded-l-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl transition-transform duration-200 ease-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         style={panelStyle}
@@ -138,7 +138,7 @@ export function RecipeSidePanel({
         aria-modal="true"
         aria-labelledby="recipe-panel-title"
       >
-        <div className="flex h-full flex-col overflow-hidden rounded-l-3xl bg-[#1f1f1f]">
+        <div className="flex h-full flex-col overflow-hidden rounded-l-3xl bg-[var(--surface)]">
           <RecipeSidePanelHeader
             recipe={recipe}
             capitalizeRecipeName={capitalizeRecipeName}
@@ -177,10 +177,10 @@ export function RecipeSidePanel({
             {/* COGS Breakdown (per portion) */}
             {perPortionCalculations.length > 0 && (
               <div>
-                <h3 className="mb-3 text-sm font-semibold text-white">
+                <h3 className="mb-3 text-sm font-semibold text-[var(--foreground)]">
                   COGS Breakdown (per portion)
                 </h3>
-                <div className="rounded-lg bg-[#1f1f1f] p-4">
+                <div className="rounded-lg bg-[var(--surface)] p-4">
                   <COGSTable
                     calculations={perPortionCalculations}
                     editingIngredient={null}
@@ -201,11 +201,11 @@ export function RecipeSidePanel({
             {/* Ingredients Summary */}
             <div>
               <div className="mb-3 flex items-center gap-2">
-                <Icon icon={ChefHat} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
-                <h3 className="text-sm font-semibold text-white">
+                <Icon icon={ChefHat} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+                <h3 className="text-sm font-semibold text-[var(--foreground)]">
                   Ingredients ({recipeIngredients.length})
                 </h3>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-[var(--foreground-subtle)]">
                   - Yield: {recipe.yield} {recipe.yield_unit || 'servings'}
                 </span>
               </div>
@@ -220,9 +220,9 @@ export function RecipeSidePanel({
             {/* Instructions Preview */}
             {recipe.instructions && (
               <div>
-                <h3 className="mb-3 text-sm font-semibold text-white">Instructions</h3>
-                <div className="rounded-lg bg-[#0a0a0a] p-4">
-                  <p className="line-clamp-4 text-sm whitespace-pre-wrap text-gray-300">
+                <h3 className="mb-3 text-sm font-semibold text-[var(--foreground)]">Instructions</h3>
+                <div className="rounded-lg bg-[var(--background)] p-4">
+                  <p className="line-clamp-4 text-sm whitespace-pre-wrap text-[var(--foreground-secondary)]">
                     {recipe.instructions}
                   </p>
                 </div>

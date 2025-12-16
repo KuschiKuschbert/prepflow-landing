@@ -143,3 +143,6 @@ export function trackSessionDuration(durationMs: number): void {
 export function getBehaviorProfile(): BehaviorProfile {
   return loadProfile();
 }
+
+
+

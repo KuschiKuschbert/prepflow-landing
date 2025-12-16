@@ -68,8 +68,8 @@ export default function TimeAttendancePage() {
     return (
       <div className="space-y-6">
         <PageHeader title="Time & Attendance" icon={Clock} />
-        <div className="rounded-3xl border border-red-500/50 bg-red-500/10 p-6">
-          <p className="text-red-400">Error: {error}</p>
+        <div className="rounded-3xl border border-[var(--color-error)]/50 bg-[var(--color-error)]/10 p-6">
+          <p className="text-[var(--color-error)]">Error: {error}</p>
         </div>
       </div>
     );
@@ -79,8 +79,8 @@ export default function TimeAttendancePage() {
     return (
       <div className="space-y-6">
         <PageHeader title="Time & Attendance" icon={Clock} />
-        <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-          <p className="text-gray-400">No employee found. Please contact your administrator.</p>
+        <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
+          <p className="text-[var(--foreground-muted)]">No employee found. Please contact your administrator.</p>
         </div>
       </div>
     );

@@ -67,9 +67,9 @@ export function RecipeTableRow({
 
   return (
     <tr
-      className={`border-l-2 border-[#3B82F6]/30 bg-[#3B82F6]/2 transition-colors ${
-        isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[#3B82F6]/5'
-      } ${isSelected && isSelectionMode ? 'bg-[#3B82F6]/10' : ''}`}
+      className={`border-l-2 border-[var(--color-info)]/30 bg-[var(--color-info)]/2 transition-colors ${
+        isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[var(--color-info)]/5'
+      } ${isSelected && isSelectionMode ? 'bg-[var(--color-info)]/10' : ''}`}
       onClick={handleRowClick}
       title={isSelectionMode ? 'Tap to select' : 'Click to preview recipe'}
       onTouchStart={isSelectionMode ? undefined : longPressHandlers.onTouchStart}
@@ -77,27 +77,27 @@ export function RecipeTableRow({
       onTouchEnd={isSelectionMode ? undefined : longPressHandlers.onTouchEnd}
     >
       <td
-        className="px-6 py-4 text-sm font-medium whitespace-nowrap text-white"
+        className="px-6 py-4 text-sm font-medium whitespace-nowrap text-[var(--foreground)]"
         onClick={e => e.stopPropagation()}
       >
         <button
           onClick={() => onSelectRecipe(recipe.id)}
-          className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+          className="flex items-center justify-center transition-colors hover:text-[var(--primary)]"
           aria-label={`${isSelected ? 'Deselect' : 'Select'} recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
         >
           {isSelected ? (
-            <Icon icon={Check} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+            <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
           ) : (
-            <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+            <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
           )}
         </button>
       </td>
       <td
-        className={`px-6 py-4 text-sm font-medium whitespace-nowrap text-white transition-all duration-300 ${
+        className={`px-6 py-4 text-sm font-medium whitespace-nowrap text-[var(--foreground)] transition-all duration-300 ${
           !isSelectionMode ? 'cursor-pointer' : ''
         } ${
           isHighlighting
-            ? 'animate-[highlightPulse_0.5s_ease-in-out] border-l-4 border-[#29E7CD] bg-[#29E7CD]/10'
+            ? 'animate-[highlightPulse_0.5s_ease-in-out] border-l-4 border-[var(--primary)] bg-[var(--primary)]/10'
             : ''
         }`}
         onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
@@ -105,7 +105,7 @@ export function RecipeTableRow({
         {capitalizeRecipeName(recipe.recipe_name)}
       </td>
       <td
-        className={`px-6 py-4 text-sm whitespace-nowrap text-gray-300 ${!isSelectionMode ? 'cursor-pointer' : ''}`}
+        className={`px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${!isSelectionMode ? 'cursor-pointer' : ''}`}
         onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
       >
         {recipePrice ? (
@@ -115,50 +115,50 @@ export function RecipeTableRow({
         )}
       </td>
       <td
-        className={`desktop:table-cell hidden px-6 py-4 text-sm whitespace-nowrap text-gray-300 ${!isSelectionMode ? 'cursor-pointer' : ''}`}
+        className={`desktop:table-cell hidden px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${!isSelectionMode ? 'cursor-pointer' : ''}`}
         onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
       >
         {recipePrice ? (
           <div className="flex flex-col">
-            <span className="font-semibold text-white">
+            <span className="font-semibold text-[var(--foreground)]">
               {recipePrice.gross_profit_margin.toFixed(1)}%
             </span>
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-[var(--foreground-muted)]">
               ${recipePrice.gross_profit.toFixed(2)}/portion
             </span>
           </div>
         ) : (
-          <span className="text-gray-500">-</span>
+          <span className="text-[var(--foreground-subtle)]">-</span>
         )}
       </td>
       <td
-        className={`desktop:table-cell hidden px-6 py-4 text-sm whitespace-nowrap text-gray-300 ${!isSelectionMode ? 'cursor-pointer' : ''}`}
+        className={`desktop:table-cell hidden px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${!isSelectionMode ? 'cursor-pointer' : ''}`}
         onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
       >
         {recipePrice ? (
           <div className="flex flex-col">
-            <span className="font-semibold text-[#D925C7]">
+            <span className="font-semibold text-[var(--accent)]">
               ${recipePrice.contributingMargin.toFixed(2)}
             </span>
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-[var(--foreground-muted)]">
               {recipePrice.contributingMarginPercent.toFixed(1)}%/portion
             </span>
           </div>
         ) : (
-          <span className="text-gray-500">-</span>
+          <span className="text-[var(--foreground-subtle)]">-</span>
         )}
       </td>
       <td
-        className={`desktop:table-cell hidden px-6 py-4 text-sm whitespace-nowrap text-gray-300 ${!isSelectionMode ? 'cursor-pointer' : ''}`}
+        className={`desktop:table-cell hidden px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${!isSelectionMode ? 'cursor-pointer' : ''}`}
         onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
       >
         {formatRecipeDate(recipe.created_at)}
       </td>
-      <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-300">
+      <td className="px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)]">
         <div className="flex gap-2" onClick={e => e.stopPropagation()}>
           <button
             onClick={() => onPreviewRecipe(recipe)}
-            className="text-gray-400 transition-colors hover:text-[#29E7CD]"
+            className="text-[var(--foreground-muted)] transition-colors hover:text-[var(--primary)]"
             aria-label={`Preview recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
             title="Preview full details"
           >
@@ -166,7 +166,7 @@ export function RecipeTableRow({
           </button>
           <button
             onClick={() => onEditRecipe(recipe)}
-            className="text-gray-400 transition-colors hover:text-[#29E7CD]"
+            className="text-[var(--foreground-muted)] transition-colors hover:text-[var(--primary)]"
             aria-label={`Edit recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
             title="Edit recipe"
           >
@@ -174,7 +174,7 @@ export function RecipeTableRow({
           </button>
           <button
             onClick={() => onDeleteRecipe(recipe)}
-            className="text-gray-400 transition-colors hover:text-red-400"
+            className="text-[var(--foreground-muted)] transition-colors hover:text-[var(--color-error)]"
             aria-label={`Delete recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
             title="Delete recipe"
           >

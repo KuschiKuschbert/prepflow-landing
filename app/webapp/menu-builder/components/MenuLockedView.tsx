@@ -50,17 +50,17 @@ function MenuLockedViewComponent({ menu, menuItems, onUnlock }: MenuLockedViewPr
   return (
     <div className="space-y-6">
       <LockedStatusBanner menu={menu} onUnlock={onUnlock} />
-      <div className="mb-6 flex items-center justify-between border-b border-[#2a2a2a]">
+      <div className="mb-6 flex items-center justify-between border-b border-[var(--border)]">
         <div className="flex space-x-4">
           <button
             onClick={() => setActiveTab('display')}
-            className={`px-1 pb-2 ${activeTab === 'display' ? 'border-primary border-b-2 text-white' : 'text-gray-400'}`}
+            className={`px-1 pb-2 ${activeTab === 'display' ? 'border-primary border-b-2 text-[var(--foreground)]' : 'text-[var(--foreground-muted)]'}`}
           >
             Menu Display
           </button>
           <button
             onClick={() => setActiveTab('allergens')}
-            className={`px-1 pb-2 ${activeTab === 'allergens' ? 'border-primary border-b-2 text-white' : 'text-gray-400'}`}
+            className={`px-1 pb-2 ${activeTab === 'allergens' ? 'border-primary border-b-2 text-[var(--foreground)]' : 'text-[var(--foreground-muted)]'}`}
           >
             Allergen Matrix
           </button>
@@ -73,7 +73,7 @@ function MenuLockedViewComponent({ menu, menuItems, onUnlock }: MenuLockedViewPr
                 // Silently fail - this is just a prefetch
               });
             }}
-            className={`px-1 pb-2 ${activeTab === 'recipes' ? 'border-primary border-b-2 text-white' : 'text-gray-400'}`}
+            className={`px-1 pb-2 ${activeTab === 'recipes' ? 'border-primary border-b-2 text-[var(--foreground)]' : 'text-[var(--foreground-muted)]'}`}
           >
             Recipe Cards
           </button>
@@ -86,8 +86,8 @@ function MenuLockedViewComponent({ menu, menuItems, onUnlock }: MenuLockedViewPr
       </div>
 
       {activeTab === 'display' && (
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-          <h3 className="mb-6 text-xl font-semibold text-white">Menu Display</h3>
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
+          <h3 className="mb-6 text-xl font-semibold text-[var(--foreground)]">Menu Display</h3>
           <MenuDisplayView menu={menu} menuItems={menuItems} />
         </div>
       )}

@@ -53,15 +53,15 @@ export function EquipmentListTableDesktop({
   getSortIcon,
 }: EquipmentListTableDesktopProps) {
   return (
-    <div className="large-desktop:block hidden overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
+    <div className="large-desktop:block hidden overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-lg">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-[#2a2a2a] bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
+            <tr className="border-b border-[var(--border)] bg-gradient-to-r from-[var(--muted)]/50 to-[var(--muted)]/20">
               <th className="px-6 py-4">
                 <button
                   onClick={() => handleSort('name')}
-                  className="flex items-center gap-2 text-left text-xs font-semibold tracking-wider text-gray-400 uppercase transition-colors hover:text-white"
+                  className="flex items-center gap-2 text-left text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase transition-colors hover:text-[var(--foreground)]"
                 >
                   Equipment
                   {getSortIcon('name')}
@@ -70,7 +70,7 @@ export function EquipmentListTableDesktop({
               <th className="px-6 py-4">
                 <button
                   onClick={() => handleSort('type')}
-                  className="flex items-center gap-2 text-left text-xs font-semibold tracking-wider text-gray-400 uppercase transition-colors hover:text-white"
+                  className="flex items-center gap-2 text-left text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase transition-colors hover:text-[var(--foreground)]"
                 >
                   Type
                   {getSortIcon('type')}
@@ -79,42 +79,42 @@ export function EquipmentListTableDesktop({
               <th className="px-6 py-4">
                 <button
                   onClick={() => handleSort('location')}
-                  className="flex items-center gap-2 text-left text-xs font-semibold tracking-wider text-gray-400 uppercase transition-colors hover:text-white"
+                  className="flex items-center gap-2 text-left text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase transition-colors hover:text-[var(--foreground)]"
                 >
                   Location
                   {getSortIcon('location')}
                 </button>
               </th>
-              <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-gray-400 uppercase">
+              <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
                 Temperature Range
               </th>
               <th className="px-6 py-4">
                 <button
                   onClick={() => handleSort('lastLogDate')}
-                  className="flex items-center gap-2 text-left text-xs font-semibold tracking-wider text-gray-400 uppercase transition-colors hover:text-white"
+                  className="flex items-center gap-2 text-left text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase transition-colors hover:text-[var(--foreground)]"
                 >
                   Last Log Date
                   {getSortIcon('lastLogDate')}
                 </button>
               </th>
-              <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-gray-400 uppercase">
+              <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
                 Last Temperature
               </th>
               <th className="px-6 py-4">
                 <button
                   onClick={() => handleSort('status')}
-                  className="flex items-center gap-2 text-left text-xs font-semibold tracking-wider text-gray-400 uppercase transition-colors hover:text-white"
+                  className="flex items-center gap-2 text-left text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase transition-colors hover:text-[var(--foreground)]"
                 >
                   Status
                   {getSortIcon('status')}
                 </button>
               </th>
-              <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-gray-400 uppercase">
+              <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#2a2a2a]">
+          <tbody className="divide-y divide-[var(--muted)]">
             {paginatedEquipment.map(item => (
               <EquipmentListTableRow
                 key={item.id}

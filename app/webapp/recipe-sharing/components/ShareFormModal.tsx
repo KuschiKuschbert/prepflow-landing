@@ -36,28 +36,28 @@ export function ShareFormModal({
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-md rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px]">
-        <div className="rounded-3xl bg-[#1f1f1f]/95 p-6">
+      <div className="w-full max-w-md rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px]">
+        <div className="rounded-3xl bg-[var(--surface)]/95 p-6">
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-white">
+            <h2 className="text-xl font-semibold text-[var(--button-active-text)]">
               {t('recipeSharing.shareRecipe', 'Share Recipe')}
             </h2>
             <button
               onClick={onClose}
-              className="p-2 text-gray-400 transition-colors hover:text-white"
+              className="p-2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
             >
               <Icon icon={X} size="lg" aria-hidden={true} />
             </button>
           </div>
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
                 {t('recipeSharing.selectRecipe', 'Select Recipe')}
               </label>
               <select
                 value={formData.recipeId}
                 onChange={e => onFormDataChange({ ...formData, recipeId: e.target.value })}
-                className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                 required
               >
                 <option value="">
@@ -71,7 +71,7 @@ export function ShareFormModal({
               </select>
             </div>
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
                 {t('recipeSharing.shareType', 'Share Type')}
               </label>
               <select
@@ -82,7 +82,7 @@ export function ShareFormModal({
                     shareType: e.target.value as 'pdf' | 'link' | 'email',
                   })
                 }
-                className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                 required
               >
                 <option value="pdf">📄 PDF Download</option>
@@ -92,27 +92,27 @@ export function ShareFormModal({
             </div>
             {formData.shareType === 'email' && (
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-300">
+                <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
                   {t('recipeSharing.recipientEmail', 'Recipient Email')}
                 </label>
                 <input
                   type="email"
                   value={formData.recipientEmail}
                   onChange={e => onFormDataChange({ ...formData, recipientEmail: e.target.value })}
-                  className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                   placeholder="recipient@example.com"
                   required={formData.shareType === 'email'}
                 />
               </div>
             )}
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
                 {t('recipeSharing.notes', 'Notes')}
               </label>
               <textarea
                 value={formData.notes}
                 onChange={e => onFormDataChange({ ...formData, notes: e.target.value })}
-                className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                 rows={3}
                 placeholder={String(
                   t(
@@ -126,13 +126,13 @@ export function ShareFormModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 rounded-xl bg-[#2a2a2a] px-4 py-3 text-gray-300 transition-colors hover:bg-[#2a2a2a]/80"
+                className="flex-1 rounded-xl bg-[var(--muted)] px-4 py-3 text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/80"
               >
                 {t('recipeSharing.cancel', 'Cancel')}
               </button>
               <button
                 type="submit"
-                className="flex-1 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
+                className="flex-1 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
               >
                 {t('recipeSharing.share', 'Share')}
               </button>

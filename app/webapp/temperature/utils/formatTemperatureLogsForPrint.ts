@@ -41,7 +41,7 @@ function getComplianceStatus(
   const maxTemp = matched.max_temp_celsius;
 
   if (temp < minTemp || temp > maxTemp) {
-    return { status: 'Out of Range', color: '#ef4444' };
+    return { status: 'Out of Range', color: 'var(--color-error)' };
   }
 
   return { status: 'Compliant', color: '#10b981' };
@@ -150,3 +150,6 @@ export function formatTemperatureLogsForPrint(data: TemperatureLogExportData): s
 
   return html;
 }
+
+
+

@@ -134,7 +134,7 @@ export function InlineTimeEntry({
       {/* Popover */}
       <div
         ref={popoverRef}
-        className="fixed z-[80] w-80 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-xl"
+        className="fixed z-[80] w-80 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-xl"
         style={{
           top: `${popoverPosition.top}px`,
           left: `${popoverPosition.left}px`,
@@ -150,7 +150,7 @@ export function InlineTimeEntry({
                 <Icon
                   icon={Clock}
                   size="xs"
-                  className="absolute top-1/2 left-2 -translate-y-1/2 text-gray-400"
+                  className="absolute top-1/2 left-2 -translate-y-1/2 text-[var(--foreground-muted)]"
                   aria-hidden={true}
                 />
                 <input
@@ -161,23 +161,23 @@ export function InlineTimeEntry({
                     setStartTime(e.target.value);
                     setError(null);
                   }}
-                  className={`w-full rounded-lg border bg-[#0a0a0a] py-1.5 pr-2 pl-8 text-sm text-white ${
+                  className={`w-full rounded-lg border bg-[var(--background)] py-1.5 pr-2 pl-8 text-sm text-[var(--foreground)] ${
                     error
-                      ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-                      : 'border-[#2a2a2a] focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20'
+                      ? 'border-[var(--color-error)]/50 focus:border-[var(--color-error)] focus:ring-2 focus:ring-red-500/20'
+                      : 'border-[var(--border)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20'
                   }`}
                   disabled={saving}
                 />
               </div>
             </div>
-            <span className="text-gray-400">-</span>
+            <span className="text-[var(--foreground-muted)]">-</span>
             <div className="flex-1">
               <label className="sr-only">End time</label>
               <div className="relative">
                 <Icon
                   icon={Clock}
                   size="xs"
-                  className="absolute top-1/2 left-2 -translate-y-1/2 text-gray-400"
+                  className="absolute top-1/2 left-2 -translate-y-1/2 text-[var(--foreground-muted)]"
                   aria-hidden={true}
                 />
                 <input
@@ -187,10 +187,10 @@ export function InlineTimeEntry({
                     setEndTime(e.target.value);
                     setError(null);
                   }}
-                  className={`w-full rounded-lg border bg-[#0a0a0a] py-1.5 pr-2 pl-8 text-sm text-white ${
+                  className={`w-full rounded-lg border bg-[var(--background)] py-1.5 pr-2 pl-8 text-sm text-[var(--foreground)] ${
                     error
-                      ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-                      : 'border-[#2a2a2a] focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20'
+                      ? 'border-[var(--color-error)]/50 focus:border-[var(--color-error)] focus:ring-2 focus:ring-red-500/20'
+                      : 'border-[var(--border)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20'
                   }`}
                   disabled={saving}
                 />
@@ -199,7 +199,7 @@ export function InlineTimeEntry({
           </div>
 
           {/* Error Message */}
-          {error && <p className="text-xs text-red-400">{error}</p>}
+          {error && <p className="text-xs text-[var(--color-error)]">{error}</p>}
 
           {/* Actions */}
           <div className="flex items-center justify-end gap-2">
@@ -209,7 +209,7 @@ export function InlineTimeEntry({
                 e.stopPropagation();
                 onCancel();
               }}
-              className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+              className="rounded-lg p-1.5 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
               aria-label="Cancel"
               disabled={saving}
             >
@@ -217,7 +217,7 @@ export function InlineTimeEntry({
             </button>
             <button
               type="submit"
-              className="flex items-center gap-1 rounded-lg bg-[#29E7CD]/20 px-3 py-1.5 text-xs font-medium text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/30 disabled:opacity-50"
+              className="flex items-center gap-1 rounded-lg bg-[var(--primary)]/20 px-3 py-1.5 text-xs font-medium text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/30 disabled:opacity-50"
               disabled={saving}
             >
               <Icon icon={Save} size="xs" aria-hidden={true} />

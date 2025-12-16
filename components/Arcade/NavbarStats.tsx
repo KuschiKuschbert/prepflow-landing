@@ -67,7 +67,7 @@ export const NavbarStats: React.FC<NavbarStatsProps> = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="tablet:gap-1.5 desktop:gap-2 flex items-center gap-1 rounded-lg px-2 py-1 text-white/80 transition-colors hover:bg-[#2a2a2a]/50 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+      className="tablet:gap-1.5 desktop:gap-2 flex items-center gap-1 rounded-lg px-2 py-1 text-[var(--foreground)]/80 transition-colors hover:bg-[var(--surface)]/50 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none"
       aria-label="Open achievements and stats"
       title="Click to view achievements and stats"
     >
@@ -113,12 +113,12 @@ export const NavbarStats: React.FC<NavbarStatsProps> = ({ onClick }) => {
       {gamificationEnabled && achievementCount > 0 && (
         <div
           title={`${achievementCount} achievements unlocked`}
-          className="tablet:gap-1 flex items-center gap-0.5 rounded-full bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 px-2 py-0.5"
+          className="tablet:gap-1 flex items-center gap-0.5 rounded-full bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20 px-2 py-0.5"
         >
           <span className="text-fluid-sm tablet:text-fluid-base desktop:text-fluid-lg leading-none">
             🏆
           </span>
-          <span className="tablet:text-[11px] desktop:text-fluid-xs text-[10px] leading-none font-semibold text-[#29E7CD]">
+          <span className="tablet:text-[11px] desktop:text-fluid-xs text-[10px] leading-none font-semibold text-[var(--primary)]">
             {achievementCount}
           </span>
         </div>
@@ -130,7 +130,7 @@ export const NavbarStats: React.FC<NavbarStatsProps> = ({ onClick }) => {
           <span className="text-fluid-sm tablet:text-fluid-base desktop:text-fluid-lg leading-none">
             🔥
           </span>
-          <span className="tablet:text-[11px] desktop:text-fluid-xs text-[10px] leading-none font-semibold text-[#FF6B00]">
+          <span className="tablet:text-[11px] desktop:text-fluid-xs text-[10px] leading-none font-semibold text-[var(--tertiary)]">
             {streakDays}
           </span>
         </div>

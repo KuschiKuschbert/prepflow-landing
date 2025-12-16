@@ -14,12 +14,12 @@ interface FormFieldProps {
 export function FormField({ label, icon, error, children }: FormFieldProps) {
   return (
     <div>
-      <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
+      <label className="mb-2 flex items-center gap-2 text-sm font-medium text-[var(--foreground-secondary)]">
         <Icon icon={icon} size="sm" aria-hidden={true} />
         {label}
       </label>
       {children}
-      {error && <p className="mt-1 text-xs text-red-400">{error}</p>}
+      {error && <p className="mt-1 text-xs text-[var(--color-error)]">{error}</p>}
     </div>
   );
 }

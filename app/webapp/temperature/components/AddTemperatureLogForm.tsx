@@ -90,33 +90,33 @@ export function AddTemperatureLogForm({
   if (!show) return null;
 
   return (
-    <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
+    <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
       <div className="mb-2 flex items-center justify-between">
-        <h3 className="text-xl font-semibold text-white">
+        <h3 className="text-xl font-semibold text-[var(--foreground)]">
           {t('temperature.addNewLog', 'Add New Temperature Log')}
         </h3>
         <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
       </div>
-      <p className="mb-4 text-sm text-gray-400">
+      <p className="mb-4 text-sm text-[var(--foreground-muted)]">
         <Icon
           icon={Lightbulb}
           size="sm"
-          className="mr-1 inline text-[#29E7CD]"
+          className="mr-1 inline text-[var(--primary)]"
           aria-hidden={true}
         />{' '}
         You can log multiple temperatures per day for the same equipment.
       </p>
       <form onSubmit={onAddLog} className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
         <div className="desktop:col-span-2">
-          <div className="rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/50 px-4 py-3">
-            <p className="text-sm text-gray-400">
-              <span className="font-medium text-gray-300">Date & Time:</span>{' '}
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)]/50 px-4 py-3">
+            <p className="text-sm text-[var(--foreground-muted)]">
+              <span className="font-medium text-[var(--foreground-secondary)]">Date & Time:</span>{' '}
               {formatDate(newLog.log_date)} at {formatTime(newLog.log_time)}
             </p>
           </div>
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
             {t('temperature.equipment', 'Equipment')}
           </label>
           <select
@@ -129,7 +129,7 @@ export function AddTemperatureLogForm({
                 location: selectedEquipment?.name || '',
               });
             }}
-            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             required
           >
             <option value="">{t('temperature.selectEquipment', 'Select Equipment')}</option>
@@ -159,7 +159,7 @@ export function AddTemperatureLogForm({
           </select>
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
             {t('temperature.temperature', 'Temperature (°C)')}
           </label>
           <input
@@ -167,13 +167,13 @@ export function AddTemperatureLogForm({
             step="0.1"
             value={newLog.temperature_celsius}
             onChange={e => setNewLog({ ...newLog, temperature_celsius: e.target.value })}
-            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             placeholder="e.g., 3.5"
             required
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
             {['food_cooking', 'food_hot_holding', 'food_cold_holding'].includes(
               newLog.temperature_type,
             )
@@ -184,7 +184,7 @@ export function AddTemperatureLogForm({
             type="text"
             value={newLog.location}
             onChange={e => setNewLog({ ...newLog, location: e.target.value })}
-            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             placeholder={
               ['food_cooking', 'food_hot_holding', 'food_cold_holding'].includes(
                 newLog.temperature_type,
@@ -198,7 +198,7 @@ export function AddTemperatureLogForm({
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
             {t('temperature.loggedBy', 'Logged By')}
           </label>
           <select
@@ -210,7 +210,7 @@ export function AddTemperatureLogForm({
                 logged_by: selectedStaff ? selectedStaff.full_name : '',
               });
             }}
-            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             disabled={staffLoading}
           >
             <option value="">{staffLoading ? 'Loading staff...' : 'Select staff member'}</option>
@@ -228,9 +228,9 @@ export function AddTemperatureLogForm({
               type="checkbox"
               checked={showNotes}
               onChange={e => setShowNotes(e.target.checked)}
-              className="h-4 w-4 rounded border-[#2a2a2a] bg-[#2a2a2a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
+              className="h-4 w-4 rounded border-[var(--border)] bg-[var(--muted)] text-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
             />
-            <span className="text-sm font-medium text-gray-300">
+            <span className="text-sm font-medium text-[var(--foreground-secondary)]">
               {t('temperature.addNotes', 'Add Notes')}
             </span>
           </label>
@@ -238,7 +238,7 @@ export function AddTemperatureLogForm({
             <textarea
               value={newLog.notes}
               onChange={e => setNewLog({ ...newLog, notes: e.target.value })}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
               placeholder="Additional notes or observations"
               rows={3}
             />
@@ -247,14 +247,14 @@ export function AddTemperatureLogForm({
         <div className="desktop:col-span-2 flex space-x-4">
           <button
             type="submit"
-            className="rounded-2xl bg-[#29E7CD] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
+            className="rounded-2xl bg-[var(--primary)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
           >
             {t('temperature.save', 'Save Log')}
           </button>
           <button
             type="button"
             onClick={() => setShow(false)}
-            className="rounded-2xl bg-[#2a2a2a] px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]"
+            className="rounded-2xl bg-[var(--muted)] px-6 py-3 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]"
           >
             {t('temperature.cancel', 'Cancel')}
           </button>

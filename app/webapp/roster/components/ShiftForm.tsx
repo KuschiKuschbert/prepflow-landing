@@ -88,18 +88,18 @@ export function ShiftForm({
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm">
-      <div className="relative z-50 my-auto w-full max-w-2xl rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-xl">
+      <div className="relative z-50 my-auto w-full max-w-2xl rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-xl">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-fluid-xl font-bold text-white">
+          <h2 className="text-fluid-xl font-bold text-[var(--foreground)]">
             {editingShift ? 'Edit Shift' : 'Add Shift'}
           </h2>
           <button
             onClick={onClose}
-            className="rounded-full p-2 transition-colors hover:bg-[#2a2a2a]"
+            className="rounded-full p-2 transition-colors hover:bg-[var(--muted)]"
             aria-label="Close"
           >
-            <Icon icon={X} size="md" className="text-gray-400" aria-hidden={true} />
+            <Icon icon={X} size="md" className="text-[var(--foreground-muted)]" aria-hidden={true} />
           </button>
         </div>
 
@@ -113,10 +113,10 @@ export function ShiftForm({
                 setFormData(prev => ({ ...prev, employee_id: e.target.value }));
                 setErrors(prev => ({ ...prev, employee_id: '' }));
               }}
-              className={`w-full rounded-xl border bg-[#0a0a0a] px-4 py-3 text-white transition-colors ${
+              className={`w-full rounded-xl border bg-[var(--background)] px-4 py-3 text-[var(--foreground)] transition-colors ${
                 errors.employee_id
-                  ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-                  : 'border-[#2a2a2a] focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20'
+                  ? 'border-[var(--color-error)]/50 focus:border-[var(--color-error)] focus:ring-2 focus:ring-red-500/20'
+                  : 'border-[var(--border)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20'
               }`}
               disabled={loading}
             >
@@ -138,10 +138,10 @@ export function ShiftForm({
                 setFormData(prev => ({ ...prev, shift_date: e.target.value }));
                 setErrors(prev => ({ ...prev, shift_date: '' }));
               }}
-              className={`w-full rounded-xl border bg-[#0a0a0a] px-4 py-3 text-white transition-colors ${
+              className={`w-full rounded-xl border bg-[var(--background)] px-4 py-3 text-[var(--foreground)] transition-colors ${
                 errors.shift_date
-                  ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-                  : 'border-[#2a2a2a] focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20'
+                  ? 'border-[var(--color-error)]/50 focus:border-[var(--color-error)] focus:ring-2 focus:ring-red-500/20'
+                  : 'border-[var(--border)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20'
               }`}
               disabled={loading}
             />
@@ -176,7 +176,7 @@ export function ShiftForm({
             <select
               value={formData.role}
               onChange={e => setFormData(prev => ({ ...prev, role: e.target.value }))}
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-colors focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20"
               disabled={loading}
             >
               <option value="">No specific role</option>
@@ -202,7 +202,7 @@ export function ShiftForm({
                   break_duration_minutes: parseInt(e.target.value) || 0,
                 }))
               }
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-colors focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20"
               disabled={loading}
             />
           </FormField>
@@ -213,7 +213,7 @@ export function ShiftForm({
               value={formData.notes}
               onChange={e => setFormData(prev => ({ ...prev, notes: e.target.value }))}
               rows={3}
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-colors focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--foreground)] transition-colors focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20"
               disabled={loading}
             />
           </FormField>
@@ -226,7 +226,7 @@ export function ShiftForm({
             <button
               type="submit"
               disabled={loading}
-              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? 'Saving...' : editingShift ? 'Update Shift' : 'Create Shift'}
             </button>

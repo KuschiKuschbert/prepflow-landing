@@ -184,14 +184,14 @@ export default function GuidePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
+    <div className="min-h-screen bg-[var(--background)]">
       <div className="desktop:px-8 mx-auto max-w-7xl px-4 py-8">
         {!currentGuide ? (
           // Guide selection view
           <div className="space-y-8">
             <div className="space-y-2">
-              <h1 className="text-fluid-3xl font-bold text-white">PrepFlow Guides</h1>
-              <p className="text-fluid-base text-gray-400">
+              <h1 className="text-fluid-3xl font-bold text-[var(--foreground)]">PrepFlow Guides</h1>
+              <p className="text-fluid-base text-[var(--foreground-muted)]">
                 Learn how to use PrepFlow with step-by-step guides, interactive demos, and visual
                 walkthroughs.
               </p>
@@ -206,15 +206,15 @@ export default function GuidePage() {
               <div>
                 <button
                   onClick={handleBackToList}
-                  className="mb-2 text-sm text-gray-400 transition-colors hover:text-[#29E7CD]"
+                  className="mb-2 text-sm text-[var(--foreground-muted)] transition-colors hover:text-[var(--primary)]"
                   aria-label="Back to guide list"
                 >
                   ← Back to Guides
                 </button>
-                <h1 className="text-fluid-2xl font-bold text-white">{currentGuide.title}</h1>
-                <p className="mt-1 text-sm text-gray-400">{currentGuide.description}</p>
+                <h1 className="text-fluid-2xl font-bold text-[var(--foreground)]">{currentGuide.title}</h1>
+                <p className="mt-1 text-sm text-[var(--foreground-muted)]">{currentGuide.description}</p>
               </div>
-              <div className="text-right text-sm text-gray-500">
+              <div className="text-right text-sm text-[var(--foreground-subtle)]">
                 Step {currentStepIndex + 1} of {currentGuide.steps.length}
               </div>
             </div>
@@ -226,10 +226,10 @@ export default function GuidePage() {
                   key={step.id}
                   className={`h-2 flex-1 rounded-full transition-colors ${
                     index === currentStepIndex
-                      ? 'bg-[#29E7CD]'
+                      ? 'bg-[var(--primary)]'
                       : index < currentStepIndex
-                        ? 'bg-[#29E7CD]/50'
-                        : 'bg-[#2a2a2a]'
+                        ? 'bg-[var(--primary)]/50'
+                        : 'bg-[var(--muted)]'
                   }`}
                   aria-label={`Step ${index + 1}: ${step.title}`}
                 />

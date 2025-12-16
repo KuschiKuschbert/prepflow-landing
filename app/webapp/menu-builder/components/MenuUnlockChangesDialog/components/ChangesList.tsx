@@ -17,17 +17,17 @@ export function ChangesList({ changes }: ChangesListProps) {
       {/* Dishes */}
       {groupedChanges.dish.length > 0 && (
         <div>
-          <h3 className="mb-2 text-sm font-semibold tracking-wider text-gray-400 uppercase">
+          <h3 className="mb-2 text-sm font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
             Dishes ({groupedChanges.dish.length})
           </h3>
           <div className="space-y-2">
             {groupedChanges.dish.map(change => (
               <div
                 key={`dish-change-${change.id}`}
-                className="rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/50 p-3"
+                className="rounded-lg border border-[var(--border)] bg-[var(--background)]/50 p-3"
               >
-                <div className="font-medium text-white">{change.entity_name}</div>
-                <div className="mt-1 text-sm text-gray-400">{formatChangeDetails(change)}</div>
+                <div className="font-medium text-[var(--foreground)]">{change.entity_name}</div>
+                <div className="mt-1 text-sm text-[var(--foreground-muted)]">{formatChangeDetails(change)}</div>
               </div>
             ))}
           </div>
@@ -37,17 +37,17 @@ export function ChangesList({ changes }: ChangesListProps) {
       {/* Recipes */}
       {groupedChanges.recipe.length > 0 && (
         <div>
-          <h3 className="mb-2 text-sm font-semibold tracking-wider text-gray-400 uppercase">
+          <h3 className="mb-2 text-sm font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
             Recipes ({groupedChanges.recipe.length})
           </h3>
           <div className="space-y-2">
             {groupedChanges.recipe.map(change => (
               <div
                 key={`recipe-change-${change.id}`}
-                className="rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/50 p-3"
+                className="rounded-lg border border-[var(--border)] bg-[var(--background)]/50 p-3"
               >
-                <div className="font-medium text-white">{change.entity_name}</div>
-                <div className="mt-1 text-sm text-gray-400">{formatChangeDetails(change)}</div>
+                <div className="font-medium text-[var(--foreground)]">{change.entity_name}</div>
+                <div className="mt-1 text-sm text-[var(--foreground-muted)]">{formatChangeDetails(change)}</div>
               </div>
             ))}
           </div>
@@ -57,17 +57,17 @@ export function ChangesList({ changes }: ChangesListProps) {
       {/* Ingredients */}
       {groupedChanges.ingredient.length > 0 && (
         <div>
-          <h3 className="mb-2 text-sm font-semibold tracking-wider text-gray-400 uppercase">
+          <h3 className="mb-2 text-sm font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
             Ingredients ({groupedChanges.ingredient.length})
           </h3>
           <div className="space-y-2">
             {groupedChanges.ingredient.map(change => (
               <div
                 key={`ingredient-change-${change.id}`}
-                className="rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/50 p-3"
+                className="rounded-lg border border-[var(--border)] bg-[var(--background)]/50 p-3"
               >
-                <div className="font-medium text-white">{change.entity_name}</div>
-                <div className="mt-1 text-sm text-gray-400">{formatChangeDetails(change)}</div>
+                <div className="font-medium text-[var(--foreground)]">{change.entity_name}</div>
+                <div className="mt-1 text-sm text-[var(--foreground-muted)]">{formatChangeDetails(change)}</div>
               </div>
             ))}
           </div>

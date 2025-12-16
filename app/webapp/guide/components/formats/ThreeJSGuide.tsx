@@ -21,11 +21,11 @@ export function ThreeJSGuide({ content, className = '' }: ThreeJSGuideProps) {
     <div className={`relative ${className}`}>
       <Suspense
         fallback={
-          <div className="flex h-96 items-center justify-center rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
+          <div className="flex h-96 items-center justify-center rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
             <div className="text-center">
               <div className="mb-4 animate-spin text-4xl">🎨</div>
-              <p className="text-gray-400">Loading 3D simulation...</p>
-              <p className="mt-2 text-xs text-gray-500">
+              <p className="text-[var(--foreground-muted)]">Loading 3D simulation...</p>
+              <p className="mt-2 text-xs text-[var(--foreground-subtle)]">
                 This may take a moment on slower connections
               </p>
             </div>

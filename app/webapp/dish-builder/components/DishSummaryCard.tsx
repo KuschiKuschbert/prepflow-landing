@@ -18,65 +18,65 @@ export default function DishSummaryCard({
   pricingCalculation,
 }: DishSummaryCardProps) {
   return (
-    <div className="rounded-3xl border border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 via-[#D925C7]/10 to-[#29E7CD]/10 p-6 shadow-lg">
+    <div className="rounded-3xl border border-[var(--primary)]/30 bg-gradient-to-br from-[var(--primary)]/10 via-[var(--accent)]/10 to-[var(--primary)]/10 p-6 shadow-lg">
       <div className="tablet:grid-cols-4 grid grid-cols-2 gap-4">
         {/* Ingredient Count */}
-        <div className="rounded-xl border border-[#2a2a2a]/50 bg-[#1f1f1f]/50 p-4">
+        <div className="rounded-xl border border-[var(--border)]/50 bg-[var(--surface)]/50 p-4">
           <div className="mb-2 flex items-center gap-2">
-            <Icon icon={Package} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
-            <span className="text-xs font-medium tracking-wide text-gray-400 uppercase">
+            <Icon icon={Package} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+            <span className="text-xs font-medium tracking-wide text-[var(--foreground-muted)] uppercase">
               Ingredients
             </span>
           </div>
-          <div className="text-2xl font-bold text-white">{ingredientCount}</div>
-          <div className="text-xs text-gray-400">items added</div>
+          <div className="text-2xl font-bold text-[var(--foreground)]">{ingredientCount}</div>
+          <div className="text-xs text-[var(--foreground-muted)]">items added</div>
         </div>
 
         {/* Total COGS */}
-        <div className="rounded-xl border border-[#2a2a2a]/50 bg-[#1f1f1f]/50 p-4">
+        <div className="rounded-xl border border-[var(--border)]/50 bg-[var(--surface)]/50 p-4">
           <div className="mb-2 flex items-center gap-2">
-            <Icon icon={Calculator} size="sm" className="text-[#3B82F6]" aria-hidden={true} />
-            <span className="text-xs font-medium tracking-wide text-gray-400 uppercase">
+            <Icon icon={Calculator} size="sm" className="text-[var(--color-info)]" aria-hidden={true} />
+            <span className="text-xs font-medium tracking-wide text-[var(--foreground-muted)] uppercase">
               Total COGS
             </span>
           </div>
-          <div className="text-2xl font-bold text-white">${totalCOGS.toFixed(2)}</div>
-          <div className="text-xs text-gray-400">total cost</div>
+          <div className="text-2xl font-bold text-[var(--foreground)]">${totalCOGS.toFixed(2)}</div>
+          <div className="text-xs text-[var(--foreground-muted)]">total cost</div>
         </div>
 
         {/* Cost Per Portion */}
-        <div className="rounded-xl border border-[#2a2a2a]/50 bg-[#1f1f1f]/50 p-4">
+        <div className="rounded-xl border border-[var(--border)]/50 bg-[var(--surface)]/50 p-4">
           <div className="mb-2 flex items-center gap-2">
-            <Icon icon={DollarSign} size="sm" className="text-[#D925C7]" aria-hidden={true} />
-            <span className="text-xs font-medium tracking-wide text-gray-400 uppercase">
+            <Icon icon={DollarSign} size="sm" className="text-[var(--accent)]" aria-hidden={true} />
+            <span className="text-xs font-medium tracking-wide text-[var(--foreground-muted)] uppercase">
               Per Portion
             </span>
           </div>
-          <div className="text-2xl font-bold text-white">${costPerPortion.toFixed(2)}</div>
-          <div className="text-xs text-gray-400">cost per serving</div>
+          <div className="text-2xl font-bold text-[var(--foreground)]">${costPerPortion.toFixed(2)}</div>
+          <div className="text-xs text-[var(--foreground-muted)]">cost per serving</div>
         </div>
 
         {/* Recommended Price */}
-        <div className="rounded-xl border border-[#29E7CD]/50 bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 p-4">
+        <div className="rounded-xl border border-[var(--primary)]/50 bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20 p-4">
           <div className="mb-2 flex items-center gap-2">
-            <Icon icon={TrendingUp} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
-            <span className="text-xs font-medium tracking-wide text-[#29E7CD] uppercase">
+            <Icon icon={TrendingUp} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+            <span className="text-xs font-medium tracking-wide text-[var(--primary)] uppercase">
               Recommended
             </span>
           </div>
           {pricingCalculation ? (
             <>
-              <div className="text-2xl font-bold text-white">
+              <div className="text-2xl font-bold text-[var(--foreground)]">
                 ${pricingCalculation.sellPriceInclGST.toFixed(2)}
               </div>
-              <div className="text-xs text-gray-300">
+              <div className="text-xs text-[var(--foreground-secondary)]">
                 {pricingCalculation.actualGrossProfit.toFixed(1)}% GP
               </div>
             </>
           ) : (
             <>
-              <div className="text-2xl font-bold text-gray-400">$0.00</div>
-              <div className="text-xs text-gray-500">add ingredients</div>
+              <div className="text-2xl font-bold text-[var(--foreground-muted)]">$0.00</div>
+              <div className="text-xs text-[var(--foreground-subtle)]">add ingredients</div>
             </>
           )}
         </div>

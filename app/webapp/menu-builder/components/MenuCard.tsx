@@ -75,8 +75,8 @@ export function MenuCard({
       key={menu.id}
       className={`group relative cursor-pointer overflow-visible rounded-2xl border p-6 transition-all hover:shadow-lg ${
         isLocked
-          ? 'border-yellow-500/50 bg-yellow-500/10 hover:border-yellow-500/70'
-          : 'border-[#2a2a2a] bg-[#1f1f1f] hover:border-[#29E7CD]/50'
+          ? 'border-[var(--color-warning)]/50 bg-[var(--color-warning)]/10 hover:border-[var(--color-warning)]/70'
+          : 'border-[var(--border)] bg-[var(--surface)] hover:border-[var(--primary)]/50'
       }`}
       onClick={() => {
         if (!isEditingThisMenu) {
@@ -96,7 +96,7 @@ export function MenuCard({
               onKeyDown={e => onTitleKeyDown(e, menu)}
               disabled={isSaving}
               onClick={e => e.stopPropagation()}
-              className="min-w-0 flex-1 rounded-lg border border-[#29E7CD] bg-[#0a0a0a] px-3 py-1.5 text-base font-semibold text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none disabled:opacity-50"
+              className="min-w-0 flex-1 rounded-lg border border-[var(--primary)] bg-[var(--background)] px-3 py-1.5 text-base font-semibold text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none disabled:opacity-50"
               style={{ maxWidth: 'calc(100% - 80px)' }}
             />
             <div className="ml-auto flex shrink-0 gap-1.5">
@@ -106,7 +106,7 @@ export function MenuCard({
                   onSaveTitle(menu);
                 }}
                 disabled={isSaving}
-                className="shrink-0 rounded-lg bg-[#29E7CD] p-1.5 text-black transition-colors hover:bg-[#29E7CD]/80 disabled:opacity-50"
+                className="shrink-0 rounded-lg bg-[var(--primary)] p-1.5 text-[var(--primary-text)] transition-colors hover:bg-[var(--primary)]/80 disabled:opacity-50"
                 aria-label="Save menu name"
               >
                 <Icon icon={Check} size="sm" />
@@ -117,7 +117,7 @@ export function MenuCard({
                   onCancelEdit();
                 }}
                 disabled={isSaving}
-                className="shrink-0 rounded-lg bg-[#2a2a2a] p-1.5 text-gray-400 transition-colors hover:bg-[#3a3a3a] hover:text-white disabled:opacity-50"
+                className="shrink-0 rounded-lg bg-[var(--muted)] p-1.5 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--surface-variant)] hover:text-[var(--foreground)] disabled:opacity-50"
                 aria-label="Cancel editing"
               >
                 <Icon icon={X} size="sm" />
@@ -128,7 +128,7 @@ export function MenuCard({
           <>
             <div className="flex flex-1 items-center gap-2">
               <h3
-                className="text-fluid-lg flex-1 font-semibold text-white"
+                className="text-fluid-lg flex-1 font-semibold text-[var(--foreground)]"
                 onDoubleClick={isLocked ? undefined : e => onStartEditTitle(menu, e)}
               >
                 {menu.menu_name}
@@ -137,7 +137,7 @@ export function MenuCard({
                 <Icon
                   icon={Lock}
                   size="sm"
-                  className="text-yellow-400"
+                  className="text-[var(--color-warning)]"
                   aria-label="Menu is locked"
                   title="This menu is locked and cannot be edited or deleted"
                 />
@@ -147,7 +147,7 @@ export function MenuCard({
               <div className="flex gap-2" onClick={e => e.stopPropagation()}>
                 <button
                   onClick={e => onStartEditTitle(menu, e)}
-                  className="rounded-lg p-2 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+                  className="rounded-lg p-2 text-[var(--foreground-muted)] opacity-0 transition-all group-hover:opacity-100 hover:bg-[var(--muted)] hover:text-[var(--primary)]"
                   aria-label={`Edit menu name "${menu.menu_name}"`}
                   title="Double-click or click edit to rename"
                 >
@@ -155,7 +155,7 @@ export function MenuCard({
                 </button>
                 <button
                   onClick={() => onDeleteClick(menu)}
-                  className="rounded-lg p-2 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-[#2a2a2a] hover:text-red-400"
+                  className="rounded-lg p-2 text-[var(--foreground-muted)] opacity-0 transition-all group-hover:opacity-100 hover:bg-[var(--muted)] hover:text-[var(--color-error)]"
                   aria-label={`Delete menu "${menu.menu_name}"`}
                 >
                   <Icon icon={Trash2} size="sm" />
@@ -179,7 +179,7 @@ export function MenuCard({
               onClick={e => e.stopPropagation()}
               rows={2}
               placeholder="Add a description for this menu..."
-              className="min-w-0 flex-1 rounded-lg border border-[#29E7CD] bg-[#0a0a0a] px-3 py-2 text-sm text-gray-300 placeholder-gray-500 focus:ring-2 focus:ring-[#29E7CD] focus:outline-none disabled:opacity-50"
+              className="min-w-0 flex-1 rounded-lg border border-[var(--primary)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--foreground-secondary)] placeholder-gray-500 focus:ring-2 focus:ring-[var(--primary)] focus:outline-none disabled:opacity-50"
             />
             <div className="flex shrink-0 flex-col gap-2">
               <button
@@ -188,7 +188,7 @@ export function MenuCard({
                   onSaveDescription(menu);
                 }}
                 disabled={isSaving}
-                className="shrink-0 rounded-lg bg-[#29E7CD] p-1.5 text-black transition-colors hover:bg-[#29E7CD]/80 disabled:opacity-50"
+                className="shrink-0 rounded-lg bg-[var(--primary)] p-1.5 text-[var(--primary-text)] transition-colors hover:bg-[var(--primary)]/80 disabled:opacity-50"
                 aria-label="Save description"
               >
                 <Icon icon={Check} size="sm" />
@@ -199,7 +199,7 @@ export function MenuCard({
                   onCancelEdit();
                 }}
                 disabled={isSaving}
-                className="shrink-0 rounded-lg bg-[#2a2a2a] p-1.5 text-gray-400 transition-colors hover:bg-[#3a3a3a] hover:text-white disabled:opacity-50"
+                className="shrink-0 rounded-lg bg-[var(--muted)] p-1.5 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--surface-variant)] hover:text-[var(--foreground)] disabled:opacity-50"
                 aria-label="Cancel editing"
               >
                 <Icon icon={X} size="sm" />
@@ -212,10 +212,10 @@ export function MenuCard({
             onDoubleClick={isLocked ? undefined : e => onStartEditDescription(menu, e)}
           >
             {menu.description ? (
-              <p className="flex-1 text-sm text-gray-400">{menu.description}</p>
+              <p className="flex-1 text-sm text-[var(--foreground-muted)]">{menu.description}</p>
             ) : (
               <p
-                className={`flex-1 text-sm ${isLocked ? 'text-gray-500' : 'text-gray-500 italic'}`}
+                className={`flex-1 text-sm ${isLocked ? 'text-[var(--foreground-subtle)]' : 'text-[var(--foreground-subtle)] italic'}`}
               >
                 {isLocked ? 'No description.' : 'No description. Double-click to add one.'}
               </p>
@@ -223,7 +223,7 @@ export function MenuCard({
             {!isLocked && (
               <button
                 onClick={e => onStartEditDescription(menu, e)}
-                className="rounded-lg p-1.5 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+                className="rounded-lg p-1.5 text-[var(--foreground-muted)] opacity-0 transition-all group-hover:opacity-100 hover:bg-[var(--muted)] hover:text-[var(--primary)]"
                 aria-label="Edit menu description"
                 title="Double-click or click edit to add/edit description"
               >
@@ -235,7 +235,7 @@ export function MenuCard({
       </div>
 
       {/* Menu Stats */}
-      <div className="flex items-center justify-between text-sm text-gray-500">
+      <div className="flex items-center justify-between text-sm text-[var(--foreground-subtle)]">
         <span>{menu.items_count || 0} dishes</span>
         <div className="flex items-center gap-3">
           {isLocked && (
@@ -254,7 +254,7 @@ export function MenuCard({
                   );
                 }
               }}
-              className="flex items-center gap-1.5 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1.5 text-xs font-medium text-[#29E7CD] transition-all hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/20"
+              className="flex items-center gap-1.5 rounded-lg border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-3 py-1.5 text-xs font-medium text-[var(--primary)] transition-all hover:border-[var(--primary)]/50 hover:bg-[var(--primary)]/20"
               aria-label={`Print menu "${menu.menu_name}"`}
               title="Print menu"
             >

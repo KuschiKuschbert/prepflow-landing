@@ -104,7 +104,7 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-40 flex min-h-screen flex-col items-center justify-center p-6 text-white"
+          className="fixed inset-0 z-40 flex min-h-screen flex-col items-center justify-center p-6 text-[var(--foreground)]"
         >
           {/* Header */}
           <motion.div
@@ -115,7 +115,7 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
             <h1 className="text-fluid-4xl desktop:text-fluid-4xl mb-2 font-extrabold">
               🍅 Tomato Toss!
             </h1>
-            <p className="text-fluid-lg text-gray-300">Let it all out, Chef — aim for the wall.</p>
+            <p className="text-fluid-lg text-[var(--foreground-secondary)]">Let it all out, Chef — aim for the wall.</p>
           </motion.div>
 
           {/* Wall Area */}
@@ -126,7 +126,7 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
             transition={{ delay: 0.3 }}
             onClick={handleWallClick}
             onTouchEnd={handleWallTouch}
-            className="desktop:h-[500px] relative h-[400px] w-full max-w-4xl cursor-crosshair rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/40 shadow-2xl backdrop-blur-sm"
+            className="desktop:h-[500px] relative h-[400px] w-full max-w-4xl cursor-crosshair rounded-2xl border border-[var(--border)] bg-[var(--surface)]/40 shadow-2xl backdrop-blur-sm"
           >
             {/* Splatters */}
             {splatters.map(splatter => (
@@ -196,7 +196,7 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
                 animate={{ opacity: 1 }}
                 className="absolute inset-0 flex items-center justify-center"
               >
-                <p className="text-fluid-lg rounded-xl bg-[#2a2a2a]/80 px-6 py-3 font-semibold text-white backdrop-blur-sm">
+                <p className="text-fluid-lg rounded-xl bg-[var(--muted)]/80 px-6 py-3 font-semibold text-[var(--foreground)] backdrop-blur-sm">
                   Click or tap anywhere to throw!
                 </p>
               </motion.div>
@@ -210,8 +210,8 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
               animate={{ opacity: 1, y: 0 }}
               className="mt-6 space-y-4"
             >
-              <div className="rounded-xl border border-[#29E7CD] bg-[#29E7CD]/10 px-6 py-4">
-                <p className="text-fluid-lg font-semibold text-[#29E7CD]">
+              <div className="rounded-xl border border-[var(--primary)] bg-[var(--primary)]/10 px-6 py-4">
+                <p className="text-fluid-lg font-semibold text-[var(--primary)]">
                   Time&apos;s up! You threw {throws} tomatoes! 🍅
                 </p>
               </div>
@@ -225,8 +225,8 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
               animate={{ opacity: 1, y: 0 }}
               className="mt-6 space-y-4"
             >
-              <div className="rounded-xl border border-[#D925C7] bg-[#D925C7]/10 px-6 py-4">
-                <p className="text-fluid-lg font-semibold text-[#D925C7]">
+              <div className="rounded-xl border border-[var(--accent)] bg-[var(--accent)]/10 px-6 py-4">
+                <p className="text-fluid-lg font-semibold text-[var(--accent)]">
                   Chef! Get back to work! 🔪
                 </p>
               </div>
@@ -241,7 +241,7 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
             whileHover={reducedMotion ? {} : { scale: 1.05 }}
             whileTap={reducedMotion ? {} : { scale: 0.95 }}
             onClick={onClose}
-            className="mt-6 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-[#2a2a2a]/60 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
+            className="mt-6 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/40 px-8 py-3 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--muted)]/60 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none"
           >
             Back to PrepFlow 🧽
           </motion.button>

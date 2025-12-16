@@ -98,7 +98,7 @@ export function ProgressRing({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#2a2a2a"
+          stroke="var(--muted)"
           strokeWidth={strokeWidth}
         />
         {/* Progress circle */}
@@ -118,3 +118,6 @@ export function ProgressRing({
     </div>
   );
 }
+
+
+

@@ -182,12 +182,12 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
   return (
     <>
       <ConfirmDialog />
-      <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 shadow-lg">
+      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 shadow-lg">
         {/* Add Equipment Button */}
         <div className="mb-6 flex justify-center">
           <button
             onClick={() => setShowEquipmentModal(true)}
-            className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-8 py-4 text-lg font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 hover:shadow-xl"
+            className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[#3B82F6] px-8 py-4 text-lg font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[#3B82F6]/80 hover:shadow-xl"
           >
             ➕ Add Equipment
           </button>

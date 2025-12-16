@@ -153,12 +153,12 @@ export function FoodImageDisplay({
   if (!hasAnyImage) {
     return (
       <div
-        className={`flex items-center justify-center rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] ${className}`}
+        className={`flex items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface)] ${className}`}
         style={{ minHeight: '200px' }}
       >
         <div className="flex flex-col items-center gap-3 text-center">
-          <ImageIcon className="h-8 w-8 text-gray-500" aria-hidden={true} />
-          <p className="text-sm text-gray-400">No image available</p>
+          <ImageIcon className="h-8 w-8 text-[var(--foreground-subtle)]" aria-hidden={true} />
+          <p className="text-sm text-[var(--foreground-muted)]">No image available</p>
         </div>
       </div>
     );
@@ -168,12 +168,12 @@ export function FoodImageDisplay({
   if (hasError && currentImageUrl) {
     return (
       <div
-        className={`flex items-center justify-center rounded-2xl border border-red-500/20 bg-red-500/10 ${className}`}
+        className={`flex items-center justify-center rounded-2xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 ${className}`}
         style={{ minHeight: '200px' }}
       >
         <div className="flex flex-col items-center gap-3 text-center">
-          <ImageIcon className="h-8 w-8 text-red-400" aria-hidden={true} />
-          <p className="text-sm text-red-400">Failed to load image</p>
+          <ImageIcon className="h-8 w-8 text-[var(--color-error)]" aria-hidden={true} />
+          <p className="text-sm text-[var(--color-error)]">Failed to load image</p>
         </div>
       </div>
     );
@@ -182,11 +182,11 @@ export function FoodImageDisplay({
   return (
     <>
       <div
-        className={`relative overflow-hidden rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] ${className}`}
+        className={`relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] ${className}`}
       >
         {/* Image Container - Clickable */}
         <div
-          className="relative aspect-video w-full cursor-pointer bg-[#0a0a0a] transition-all duration-200 hover:opacity-90"
+          className="relative aspect-video w-full cursor-pointer bg-[var(--background)] transition-all duration-200 hover:opacity-90"
           onClick={handleImageClick}
           role="button"
           tabIndex={0}
@@ -222,7 +222,7 @@ export function FoodImageDisplay({
                   e.stopPropagation();
                   setIsDropdownOpen(!isDropdownOpen);
                 }}
-                className="flex items-center gap-2 rounded-xl bg-black/60 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all duration-200 hover:bg-black/80 hover:shadow-lg"
+                className="flex items-center gap-2 rounded-xl bg-black/60 px-4 py-2 text-sm font-medium text-[var(--foreground)] backdrop-blur-sm transition-all duration-200 hover:bg-black/80 hover:shadow-lg"
                 aria-label="Select plating method"
                 aria-expanded={isDropdownOpen}
                 aria-haspopup="true"
@@ -236,7 +236,7 @@ export function FoodImageDisplay({
 
               {/* Dropdown Menu */}
               {isDropdownOpen && (
-                <div className="absolute right-0 bottom-full mb-2 max-h-[300px] min-w-[160px] overflow-y-auto rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
+                <div className="absolute right-0 bottom-full mb-2 max-h-[300px] min-w-[160px] overflow-y-auto rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-lg">
                   {availablePlatingMethods.map(method => (
                     <button
                       key={method}
@@ -247,8 +247,8 @@ export function FoodImageDisplay({
                       }}
                       className={`w-full px-4 py-2.5 text-left text-sm transition-colors first:rounded-t-xl last:rounded-b-xl ${
                         selectedPlating === method
-                          ? 'bg-[#29E7CD]/10 text-[#29E7CD]'
-                          : 'text-white hover:bg-[#2a2a2a]'
+                          ? 'bg-[var(--primary)]/10 text-[var(--primary)]'
+                          : 'text-[var(--foreground)] hover:bg-[var(--muted)]'
                       }`}
                     >
                       {platingMethodLabels[method] || method}
@@ -261,7 +261,7 @@ export function FoodImageDisplay({
 
           {/* Plating Method Badge */}
           {hasAnyImage && (
-            <div className="absolute top-4 left-4 z-20 rounded-lg bg-black/60 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm">
+            <div className="absolute top-4 left-4 z-20 rounded-lg bg-black/60 px-3 py-1.5 text-xs font-medium text-[var(--foreground)] backdrop-blur-sm">
               {platingMethodLabels[selectedPlating] || selectedPlating} Plating
             </div>
           )}

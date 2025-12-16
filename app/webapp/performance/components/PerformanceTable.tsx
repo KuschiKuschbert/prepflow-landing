@@ -39,9 +39,9 @@ export default function PerformanceTable({
       </div>
 
       <div className="desktop:block hidden overflow-x-auto">
-        <table className="min-w-full divide-y divide-[#2a2a2a]">
+        <table className="min-w-full divide-y divide-[var(--border)]">
           <PerformanceTableHeader handleColumnSort={handleColumnSort} getSortIcon={getSortIcon} />
-          <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
+          <tbody className="divide-y divide-[var(--border)] bg-[var(--surface)]">
             {performanceItems.map(item => (
               <PerformanceTableRow key={item.id} item={item} />
             ))}

@@ -73,11 +73,11 @@ export function RosterGrid({
         <div className="min-w-full">
           {/* Header Row */}
           <div className="mb-2 grid grid-cols-8 gap-2">
-            <div className="font-semibold text-gray-400">Employee</div>
+            <div className="font-semibold text-[var(--foreground-muted)]">Employee</div>
             {weekDays.map(day => (
               <div key={day.toISOString()} className="text-center">
-                <div className="font-semibold text-white">{format(day, 'EEE')}</div>
-                <div className="text-sm text-gray-400">{format(day, 'MMM d')}</div>
+                <div className="font-semibold text-[var(--foreground)]">{format(day, 'EEE')}</div>
+                <div className="text-sm text-[var(--foreground-muted)]">{format(day, 'MMM d')}</div>
               </div>
             ))}
           </div>

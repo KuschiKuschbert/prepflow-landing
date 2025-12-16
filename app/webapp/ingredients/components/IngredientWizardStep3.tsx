@@ -34,38 +34,38 @@ export default function IngredientWizardStep3({ formData, formatCost }: WizardSt
     <div className="tablet:grid-cols-2 large-desktop:grid-cols-4 grid grid-cols-1 gap-3">
       {/* Ingredient Name */}
       <div>
-        <div className="mb-1 text-xs text-gray-400">Name</div>
-        <div className="text-sm font-medium text-white">
+        <div className="mb-1 text-xs text-[var(--foreground-muted)]">Name</div>
+        <div className="text-sm font-medium text-[var(--foreground)]">
           {formData.ingredient_name || 'Not set'}
         </div>
       </div>
 
       {/* Cost per Unit */}
       <div>
-        <div className="mb-1 text-xs text-gray-400">Cost per Unit</div>
-        <div className="text-lg font-bold text-[#29E7CD]">
+        <div className="mb-1 text-xs text-[var(--foreground-muted)]">Cost per Unit</div>
+        <div className="text-lg font-bold text-[var(--primary)]">
           ${costPerWorkingUnit > 0 ? formatCost(costPerWorkingUnit) : '0.000'}/{workingUnit}
         </div>
       </div>
 
       {/* Yield */}
       <div>
-        <div className="mb-1 text-xs text-gray-400">Yield</div>
-        <div className="text-lg font-bold text-[#29E7CD]">
+        <div className="mb-1 text-xs text-[var(--foreground-muted)]">Yield</div>
+        <div className="text-lg font-bold text-[var(--primary)]">
           {String(formData.yield_percentage ?? 100)}%
         </div>
-        <div className="mt-0.5 text-xs text-gray-500">
+        <div className="mt-0.5 text-xs text-[var(--foreground-subtle)]">
           Waste: {100 - (formData.yield_percentage || 100)}%
         </div>
       </div>
 
       {/* Adjusted Cost */}
       <div>
-        <div className="mb-1 text-xs text-gray-400">Adjusted Cost</div>
-        <div className="text-lg font-bold text-[#3B82F6]">
+        <div className="mb-1 text-xs text-[var(--foreground-muted)]">Adjusted Cost</div>
+        <div className="text-lg font-bold text-[var(--color-info)]">
           ${adjustedCost > 0 ? formatCost(adjustedCost) : '0.000'}/{workingUnit}
         </div>
-        <div className="mt-0.5 text-xs text-gray-500">For COGS</div>
+        <div className="mt-0.5 text-xs text-[var(--foreground-subtle)]">For COGS</div>
       </div>
     </div>
   );

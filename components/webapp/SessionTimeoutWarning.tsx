@@ -50,14 +50,14 @@ export const SessionTimeoutWarning: React.FC<SessionTimeoutWarningProps> = ({
             transition={{ duration: 0.3, type: 'spring', stiffness: 300, damping: 30 }}
             className="fixed top-1/2 left-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 p-6"
           >
-            <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-2xl">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-2xl">
               {/* Header */}
               <div className="mb-4 text-center">
                 <div className="text-fluid-4xl mb-2">⏰</div>
-                <h2 className="text-fluid-2xl mb-2 font-bold text-white">
+                <h2 className="text-fluid-2xl mb-2 font-bold text-[var(--foreground)]">
                   Session Timeout Warning
                 </h2>
-                <p className="text-gray-400">
+                <p className="text-[var(--foreground)]/60">
                   You&apos;ve been inactive for a while. You&apos;ll be logged out soon for
                   security.
                 </p>
@@ -65,10 +65,10 @@ export const SessionTimeoutWarning: React.FC<SessionTimeoutWarningProps> = ({
 
               {/* Countdown Timer */}
               <div className="mb-6 flex items-center justify-center">
-                <div className="rounded-xl border border-[#D925C7]/50 bg-[#D925C7]/10 px-8 py-4">
+                <div className="rounded-xl border border-[var(--accent)]/50 bg-[var(--accent)]/10 px-8 py-4">
                   <div className="text-center">
-                    <div className="text-fluid-xs mb-1 text-gray-400">Time remaining</div>
-                    <div className="text-fluid-4xl font-bold text-[#D925C7]">
+                    <div className="text-fluid-xs mb-1 text-[var(--foreground)]/60">Time remaining</div>
+                    <div className="text-fluid-4xl font-bold text-[var(--accent)]">
                       {formatTime(remainingMs)}
                     </div>
                   </div>
@@ -79,11 +79,11 @@ export const SessionTimeoutWarning: React.FC<SessionTimeoutWarningProps> = ({
               <div className="flex flex-col gap-3">
                 <button
                   onClick={onStayActive}
-                  className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-lg hover:shadow-[#29E7CD]/20 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+                  className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg hover:shadow-[var(--primary)]/20 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none"
                 >
                   Stay Active
                 </button>
-                <p className="text-fluid-xs text-center text-gray-500">
+                <p className="text-fluid-xs text-center text-[var(--foreground)]/60">
                   Click the button or interact with the page to continue your session
                 </p>
               </div>

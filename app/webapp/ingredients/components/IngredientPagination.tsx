@@ -25,19 +25,19 @@ export default function IngredientPagination({
 
   return (
     <div className={`flex items-center justify-between ${className}`}>
-      <span className="text-sm text-gray-400">{paginationText}</span>
+      <span className="text-sm text-[var(--foreground-muted)]">{paginationText}</span>
       <div className="space-x-2">
         <button
           onClick={() => onPageChange(Math.max(1, page - 1))}
           disabled={page <= 1}
-          className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white disabled:opacity-50"
+          className="rounded-lg bg-[var(--muted)] px-3 py-2 text-sm text-[var(--foreground)] disabled:opacity-50"
         >
           Prev
         </button>
         <button
           onClick={() => onPageChange(Math.min(totalPages, page + 1))}
           disabled={page >= totalPages}
-          className="rounded-lg bg-[#2a2a2a] px-3 py-2 text-sm text-white disabled:opacity-50"
+          className="rounded-lg bg-[var(--muted)] px-3 py-2 text-sm text-[var(--foreground)] disabled:opacity-50"
         >
           Next
         </button>

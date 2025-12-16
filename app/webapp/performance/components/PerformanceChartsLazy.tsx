@@ -42,7 +42,7 @@ export default function PerformanceChartsLazy({
             1,
             performanceItems.filter(item => item.menu_item_class === "Chef's Kiss").length,
           ),
-        color: '#22c55e',
+        color: 'var(--color-success)',
       },
       {
         name: 'Hidden Gem',
@@ -54,7 +54,7 @@ export default function PerformanceChartsLazy({
             1,
             performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').length,
           ),
-        color: '#3b82f6',
+        color: 'var(--color-info)',
       },
       {
         name: 'Bargain Bucket',
@@ -66,7 +66,7 @@ export default function PerformanceChartsLazy({
             1,
             performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket').length,
           ),
-        color: '#f97316',
+        color: 'var(--color-warning)',
       },
       {
         name: 'Burnt Toast',
@@ -78,7 +78,7 @@ export default function PerformanceChartsLazy({
             1,
             performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').length,
           ),
-        color: '#ef4444',
+        color: 'var(--color-error)',
       },
     ],
     [performanceItems],
@@ -89,22 +89,22 @@ export default function PerformanceChartsLazy({
       {
         name: "Chef's Kiss",
         value: performanceItems.filter(item => item.menu_item_class === "Chef's Kiss").length,
-        color: '#22c55e',
+        color: 'var(--color-success)',
       },
       {
         name: 'Hidden Gem',
         value: performanceItems.filter(item => item.menu_item_class === 'Hidden Gem').length,
-        color: '#3b82f6',
+        color: 'var(--color-info)',
       },
       {
         name: 'Bargain Bucket',
         value: performanceItems.filter(item => item.menu_item_class === 'Bargain Bucket').length,
-        color: '#f97316',
+        color: 'var(--color-warning)',
       },
       {
         name: 'Burnt Toast',
         value: performanceItems.filter(item => item.menu_item_class === 'Burnt Toast').length,
-        color: '#ef4444',
+        color: 'var(--color-error)',
       },
     ],
     [performanceItems],
@@ -143,11 +143,11 @@ export default function PerformanceChartsLazy({
     <div className="mb-8 space-y-6">
       {/* Chart Insights */}
       {topProfitItems.length > 0 && (
-        <div className="rounded-2xl border border-[#2a2a2a] bg-gradient-to-r from-[#29E7CD]/10 to-[#D925C7]/10 p-4">
-          <p className="text-sm text-gray-300">
-            <span className="font-semibold text-white">Insight:</span> Your top 3 items (
+        <div className="rounded-2xl border border-[var(--border)] bg-gradient-to-r from-[var(--primary)]/10 to-[var(--accent)]/10 p-4">
+          <p className="text-sm text-[var(--foreground-secondary)]">
+            <span className="font-semibold text-[var(--button-active-text)]">Insight:</span> Your top 3 items (
             {topProfitItems.map(item => item.name).join(', ')}) generate{' '}
-            <span className="font-semibold text-[#29E7CD]">{top3ProfitPercentage.toFixed(1)}%</span>{' '}
+            <span className="font-semibold text-[var(--primary)]">{top3ProfitPercentage.toFixed(1)}%</span>{' '}
             of total profit (
             {formatCurrency(
               topProfitItems.reduce((sum, item) => sum + item.gross_profit * item.number_sold, 0),
@@ -160,26 +160,26 @@ export default function PerformanceChartsLazy({
       {/* Charts Grid */}
       <div className="large-desktop:grid-cols-2 grid grid-cols-1 gap-6">
         {/* Bar Chart - Profit by Category */}
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-          <h3 className="desktop:text-xl mb-4 text-lg font-semibold text-white">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
+          <h3 className="desktop:text-xl mb-4 text-lg font-semibold text-[var(--foreground)]">
             Average Profit Margin by Category
           </h3>
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <ReBarChart data={chartData} margin={{ top: 10, right: 20, bottom: 0, left: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
-                <XAxis dataKey="name" stroke="#9ca3af" />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
+                <XAxis dataKey="name" stroke="var(--foreground-muted)" />
                 <YAxis
-                  stroke="#9ca3af"
+                  stroke="var(--foreground-muted)"
                   tickFormatter={(v: number | string) =>
                     `${typeof v === 'number' ? v.toFixed(0) : v}%`
                   }
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#1f1f1f',
-                    border: '1px solid #2a2a2a',
-                    color: '#fff',
+                    backgroundColor: 'var(--surface)',
+                    border: '1px solid var(--border)',
+                    color: 'var(--foreground)',
                   }}
                   formatter={(value: number | string) => [
                     `${(value as number).toFixed(1)}%`,
@@ -197,8 +197,8 @@ export default function PerformanceChartsLazy({
         </div>
 
         {/* Pie Chart - Category Distribution */}
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-          <h3 className="desktop:text-xl mb-4 text-lg font-semibold text-white">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
+          <h3 className="desktop:text-xl mb-4 text-lg font-semibold text-[var(--foreground)]">
             Category Distribution
           </h3>
           <div className="h-72 w-full">
@@ -206,9 +206,9 @@ export default function PerformanceChartsLazy({
               <RePieChart>
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#1f1f1f',
-                    border: '1px solid #2a2a2a',
-                    color: '#fff',
+                    backgroundColor: 'var(--surface)',
+                    border: '1px solid var(--border)',
+                    color: 'var(--foreground)',
                   }}
                   formatter={(value: number | string, name: string) => [String(value), name]}
                 />
@@ -225,16 +225,16 @@ export default function PerformanceChartsLazy({
 
       {/* Time Series Chart - Show if date range is selected */}
       {dateRange?.startDate && dateRange?.endDate && (
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-          <h3 className="desktop:text-xl mb-4 text-lg font-semibold text-white">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
+          <h3 className="desktop:text-xl mb-4 text-lg font-semibold text-[var(--foreground)]">
             Performance Over Time
           </h3>
-          <p className="mb-4 text-sm text-gray-400">
+          <p className="mb-4 text-sm text-[var(--foreground-muted)]">
             Note: Time-series visualization requires daily sales data. Currently showing aggregated
             data for the selected period.
           </p>
-          <div className="flex h-64 w-full items-center justify-center rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
-            <p className="text-sm text-gray-500">
+          <div className="flex h-64 w-full items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 p-4">
+            <p className="text-sm text-[var(--foreground-subtle)]">
               Time-series chart coming soon. Select a date range to see trends over time.
             </p>
           </div>

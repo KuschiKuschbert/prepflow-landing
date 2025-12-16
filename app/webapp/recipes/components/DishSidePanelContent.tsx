@@ -75,18 +75,18 @@ export function DishSidePanelContent({
 
       {dishDetails?.recipes && dishDetails.recipes.length > 0 && (
         <div>
-          <h3 className="mb-3 text-sm font-semibold text-white">Recipes</h3>
+          <h3 className="mb-3 text-sm font-semibold text-[var(--foreground)]">Recipes</h3>
           <div className="space-y-2">
             {dishDetails.recipes.map((dr, index) => {
               const recipeYield = dr.recipes?.yield || 1;
               const recipeYieldUnit = dr.recipes?.yield_unit || 'servings';
               return (
-                <div key={index} className="rounded-lg bg-[#2a2a2a]/30 p-3 text-sm text-gray-300">
-                  <span className="font-medium text-white">
+                <div key={index} className="rounded-lg bg-[var(--muted)]/30 p-3 text-sm text-[var(--foreground-secondary)]">
+                  <span className="font-medium text-[var(--foreground)]">
                     {dr.recipes?.recipe_name || (dr.recipes as any)?.name || 'Unknown Recipe'}
                   </span>
-                  <span className="ml-2 text-gray-400">× {dr.quantity}</span>
-                  <span className="ml-2 text-xs text-gray-500">
+                  <span className="ml-2 text-[var(--foreground-muted)]">× {dr.quantity}</span>
+                  <span className="ml-2 text-xs text-[var(--foreground-subtle)]">
                     (yield: {recipeYield} {recipeYieldUnit})
                   </span>
                 </div>
@@ -98,17 +98,17 @@ export function DishSidePanelContent({
 
       {dishDetails?.ingredients && dishDetails.ingredients.length > 0 && (
         <div>
-          <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
-            <Icon icon={UtensilsCrossed} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+          <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-[var(--foreground)]">
+            <Icon icon={UtensilsCrossed} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
             Standalone Ingredients
           </h3>
           <div className="space-y-2">
             {dishDetails.ingredients.map((di, index) => (
-              <div key={index} className="rounded-lg bg-[#2a2a2a]/30 p-3 text-sm text-gray-300">
-                <span className="font-medium text-white">
+              <div key={index} className="rounded-lg bg-[var(--muted)]/30 p-3 text-sm text-[var(--foreground-secondary)]">
+                <span className="font-medium text-[var(--foreground)]">
                   {di.ingredients?.ingredient_name || 'Unknown Ingredient'}
                 </span>
-                <span className="ml-2 text-gray-400">
+                <span className="ml-2 text-[var(--foreground-muted)]">
                   {di.quantity} {di.unit}
                 </span>
               </div>
@@ -119,8 +119,8 @@ export function DishSidePanelContent({
 
       {calculations.length > 0 && (
         <div>
-          <h3 className="mb-3 text-sm font-semibold text-white">COGS Breakdown</h3>
-          <div className="rounded-lg bg-[#1f1f1f] p-4">
+          <h3 className="mb-3 text-sm font-semibold text-[var(--foreground)]">COGS Breakdown</h3>
+          <div className="rounded-lg bg-[var(--surface)] p-4">
             {dishDetails ? (
               <COGSTableGrouped
                 calculations={calculations}

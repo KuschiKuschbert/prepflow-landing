@@ -40,7 +40,16 @@ export async function runScheduledBackups(): Promise<void> {
 
   for (const schedule of schedules) {
     try {
-      await runUserScheduledBackup(schedule);
+      // Map database fields (snake_case) to interface (camelCase)
+      const mappedSchedule: BackupSchedule = {
+        userId: schedule.user_id,
+        intervalHours: schedule.interval_hours,
+        lastBackupAt: schedule.last_backup_at || undefined,
+        nextBackupAt: schedule.next_backup_at || undefined,
+        enabled: schedule.enabled,
+        autoUploadToDrive: schedule.auto_upload_to_drive,
+      };
+      await runUserScheduledBackup(mappedSchedule);
     } catch (error: any) {
       logger.error(`[Backup Scheduler] Failed to run backup for user ${schedule.user_id}:`, error);
     }

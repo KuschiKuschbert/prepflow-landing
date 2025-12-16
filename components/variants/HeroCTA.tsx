@@ -18,29 +18,29 @@ export function HeroCTA({ t, handleEngagement, variant }: HeroCTAProps) {
         return {
           text: t('hero.variantA.ctaPrimary', 'Get Sample Dashboard'),
           href: '#lead-magnet',
-          gradient: 'from-[#D925C7] to-[#29E7CD]',
+          gradient: 'from-[var(--accent)] to-[var(--primary)]',
           shadow: 'hover:shadow-[#D925C7]/25',
         };
       case 'variantB':
         return {
           text: t('hero.variantB.ctaPrimary', 'Get Sample Dashboard'),
           href: '#lead-magnet',
-          gradient: 'from-[#3B82F6] to-[#29E7CD]',
-          shadow: 'hover:shadow-[#3B82F6]/25',
+          gradient: 'from-[var(--color-info)] to-[var(--primary)]',
+          shadow: 'hover:shadow-[var(--color-info)]/25',
         };
       case 'variantC':
         return {
           text: t('hero.variantC.ctaPrimary', 'Get Sample Dashboard'),
           href: '#lead-magnet',
-          gradient: 'from-[#29E7CD] to-[#D925C7]',
-          shadow: 'hover:shadow-[#29E7CD]/25',
+          gradient: 'from-[var(--primary)] to-[var(--accent)]',
+          shadow: 'hover:shadow-[var(--primary)]/25',
         };
       default:
         return {
           text: t('hero.ctaPrimary', 'Get PrepFlow Now - $29 AUD'),
           href: 'https://7495573591101.gumroad.com/l/prepflow',
-          gradient: 'from-[#29E7CD] to-[#3B82F6]',
-          shadow: 'hover:shadow-[#29E7CD]/25',
+          gradient: 'from-[var(--primary)] to-[var(--color-info)]',
+          shadow: 'hover:shadow-[var(--primary)]/25',
         };
     }
   };
@@ -51,25 +51,25 @@ export function HeroCTA({ t, handleEngagement, variant }: HeroCTAProps) {
         return {
           text: t('hero.variantA.ctaSecondary', 'Get Free Sample'),
           href: '#lead-magnet',
-          borderHover: 'hover:border-[#D925C7] hover:text-[#D925C7]',
+          borderHover: 'hover:border-[var(--accent)] hover:text-[var(--accent)]',
         };
       case 'variantB':
         return {
           text: t('hero.variantB.ctaSecondary', 'Try Sample Sheet'),
           href: '#lead-magnet',
-          borderHover: 'hover:border-[#3B82F6] hover:text-[#3B82F6]',
+          borderHover: 'hover:border-[var(--color-info)] hover:text-[var(--color-info)]',
         };
       case 'variantC':
         return {
           text: t('hero.variantC.ctaSecondary', 'Free Sample'),
           href: '#lead-magnet',
-          borderHover: 'hover:border-[#29E7CD] hover:text-[#29E7CD]',
+          borderHover: 'hover:border-[var(--primary)] hover:text-[var(--primary)]',
         };
       default:
         return {
           text: t('hero.ctaSecondary', 'Get Free Sample'),
           href: '#lead-magnet',
-          borderHover: 'hover:border-[#29E7CD] hover:text-[#29E7CD]',
+          borderHover: 'hover:border-[var(--primary)] hover:text-[var(--primary)]',
         };
     }
   };
@@ -108,19 +108,19 @@ export function HeroCTA({ t, handleEngagement, variant }: HeroCTAProps) {
         href={primary.href}
         target={variant === 'control' ? '_blank' : undefined}
         rel={variant === 'control' ? 'noopener noreferrer' : undefined}
-        className={`rounded-2xl bg-gradient-to-r ${primary.gradient} text-fluid-base px-8 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl ${primary.shadow}`}
+        className={`rounded-2xl bg-gradient-to-r ${primary.gradient} text-fluid-base px-8 py-4 font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-300 hover:shadow-xl ${primary.shadow}`}
         onClick={() => handleEngagement?.('hero_cta_click')}
       >
         {primary.text}
       </a>
       <a
         href={secondary.href}
-        className={`text-fluid-base rounded-2xl border border-gray-600 px-8 py-4 font-semibold text-gray-300 transition-all duration-300 ${secondary.borderHover}`}
+        className={`text-fluid-base rounded-2xl border border-[var(--border)] px-8 py-4 font-semibold text-[var(--foreground-secondary)] transition-all duration-300 ${secondary.borderHover}`}
         onClick={() => handleEngagement?.('hero_demo_click')}
       >
         {secondary.text}
       </a>
-      <p className="text-fluid-sm w-full text-gray-500">{getDisclaimer()}</p>
+      <p className="text-fluid-sm w-full text-[var(--foreground-subtle)]">{getDisclaimer()}</p>
     </div>
   );
 }

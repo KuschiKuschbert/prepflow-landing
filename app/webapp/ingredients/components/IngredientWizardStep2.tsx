@@ -25,7 +25,7 @@ export default function IngredientWizardStep2({
     <div className="tablet:grid-cols-2 large-desktop:grid-cols-4 grid grid-cols-1 gap-3">
       {/* Supplier */}
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-gray-300">Supplier</label>
+        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Supplier</label>
         <SupplierCombobox
           value={formData.supplier || ''}
           onChange={value => onInputChange('supplier', value)}
@@ -36,7 +36,7 @@ export default function IngredientWizardStep2({
 
       {/* Product Code */}
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-gray-300">
+        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
           Product Code (Optional)
         </label>
         <input
@@ -44,14 +44,14 @@ export default function IngredientWizardStep2({
           value={formData.product_code || ''}
           onChange={e => onInputChange('product_code', e.target.value)}
           onBlur={e => onInputBlur?.('product_code', e.target.value)}
-          className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-sm text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+          className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--foreground)] transition-all focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
           placeholder="e.g., SKU123456"
         />
       </div>
 
       {/* Storage Location */}
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-gray-300">Storage Location</label>
+        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Storage Location</label>
         <StorageCombobox
           value={formData.storage_location || ''}
           onChange={value => onInputChange('storage_location', value)}
@@ -61,7 +61,7 @@ export default function IngredientWizardStep2({
 
       {/* Yield Percentage */}
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-gray-300">Yield %</label>
+        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Yield %</label>
         <div className="flex items-center space-x-2">
           <input
             type="range"
@@ -69,15 +69,15 @@ export default function IngredientWizardStep2({
             max="100"
             value={formData.yield_percentage || 100}
             onChange={e => onYieldPercentageChange?.(parseInt(e.target.value))}
-            className="slider h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-[#2a2a2a]"
+            className="slider h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-[var(--muted)]"
           />
           <div className="w-16 text-center">
-            <div className="text-lg font-bold text-[#29E7CD]">
+            <div className="text-lg font-bold text-[var(--primary)]">
               {String(formData.yield_percentage ?? 100)}%
             </div>
           </div>
         </div>
-        <p className="mt-1 text-xs text-gray-400">
+        <p className="mt-1 text-xs text-[var(--foreground-muted)]">
           Waste: {100 - (formData.yield_percentage || 100)}%
         </p>
       </div>

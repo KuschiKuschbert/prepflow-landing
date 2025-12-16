@@ -68,7 +68,7 @@ export default function PerformanceFilters({
   };
 
   return (
-    <div className="sticky top-0 z-30 border-b border-[#2a2a2a] bg-[#1f1f1f]/95 p-3 backdrop-blur-sm">
+    <div className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--surface)]/95 p-3 backdrop-blur-sm">
       {/* Single Row: Actions, Result count, Filters, Search/Sort */}
       <div className="tablet:flex-row flex flex-col items-center gap-2">
         <div className="flex items-center gap-1">
@@ -91,9 +91,9 @@ export default function PerformanceFilters({
         </div>
 
         {/* Result count */}
-        <div className="text-xs whitespace-nowrap text-gray-400">
-          <span className="font-semibold text-white">{filteredAndSortedItems.length}</span>/
-          <span className="font-semibold text-white">{performanceItems.length}</span>
+        <div className="text-xs whitespace-nowrap text-[var(--foreground-muted)]">
+          <span className="font-semibold text-[var(--foreground)]">{filteredAndSortedItems.length}</span>/
+          <span className="font-semibold text-[var(--foreground)]">{performanceItems.length}</span>
         </div>
 
         <MenuItemClassFilters
@@ -109,12 +109,12 @@ export default function PerformanceFilters({
             placeholder="Search..."
             value={filters.searchTerm}
             onChange={e => handleFilterChange('searchTerm', e.target.value)}
-            className="min-w-0 flex-1 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-2 py-1 text-xs text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+            className="min-w-0 flex-1 rounded-lg border border-[var(--border)] bg-[var(--muted)] px-2 py-1 text-xs text-[var(--foreground)] placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
           />
           <select
             value={filters.sortBy}
             onChange={e => handleFilterChange('sortBy', e.target.value)}
-            className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-1.5 py-1 text-xs text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+            className="rounded-lg border border-[var(--border)] bg-[var(--muted)] px-1.5 py-1 text-xs text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
           >
             <option value="name">Name</option>
             <option value="number_sold">Sold</option>
@@ -130,7 +130,7 @@ export default function PerformanceFilters({
           <select
             value={filters.sortOrder}
             onChange={e => handleFilterChange('sortOrder', e.target.value as 'asc' | 'desc')}
-            className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-1.5 py-1 text-xs text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+            className="rounded-lg border border-[var(--border)] bg-[var(--muted)] px-1.5 py-1 text-xs text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
           >
             <option value="desc">↓</option>
             <option value="asc">↑</option>

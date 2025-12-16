@@ -14,13 +14,13 @@ export function SuppliersTabs({ activeTab, onTabChange }: SuppliersTabsProps) {
 
   return (
     <div className="mb-8">
-      <div className="flex space-x-1 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-1">
+      <div className="flex space-x-1 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-1">
         <button
           onClick={() => onTabChange('suppliers')}
           className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
             activeTab === 'suppliers'
-              ? 'bg-[#29E7CD] text-black shadow-lg'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-[var(--primary)] text-[var(--button-active-text)] shadow-lg'
+              : 'text-[var(--foreground-muted)] hover:text-[var(--button-active-text)]'
           }`}
         >
           👥 {t('suppliers.suppliers', 'Suppliers')}
@@ -29,8 +29,8 @@ export function SuppliersTabs({ activeTab, onTabChange }: SuppliersTabsProps) {
           onClick={() => onTabChange('priceLists')}
           className={`rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
             activeTab === 'priceLists'
-              ? 'bg-[#29E7CD] text-black shadow-lg'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-[var(--primary)] text-[var(--button-active-text)] shadow-lg'
+              : 'text-[var(--foreground-muted)] hover:text-[var(--button-active-text)]'
           }`}
         >
           📄 {t('suppliers.priceLists', 'Price Lists')}

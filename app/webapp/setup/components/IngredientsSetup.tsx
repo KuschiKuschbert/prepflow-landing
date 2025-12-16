@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Icon } from '@/components/ui/Icon';
+import { Carrot, Info, AlertTriangle, CheckCircle2, Check } from 'lucide-react';
 
 interface IngredientsSetupProps {
   setupProgress: {
@@ -67,50 +69,52 @@ export default function IngredientsSetup({
   };
 
   return (
-    <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 shadow-lg">
+    <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 shadow-lg">
       <div className="mb-8 text-center">
-        <div className="mb-4 text-6xl">🥕</div>
-        <h3 className="mb-2 text-2xl font-bold text-white">Ingredients</h3>
-        <p className="text-lg text-gray-400">
+        <div className="mb-4 flex justify-center">
+          <Icon icon={Carrot} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
+        </div>
+        <h3 className="mb-2 text-2xl font-bold text-[var(--foreground)]">Ingredients</h3>
+        <p className="text-lg text-[var(--foreground-muted)]">
           Populate your ingredients list with ~95 common kitchen ingredients (including consumables)
           with costs, units, and yield percentages
         </p>
       </div>
 
       <div className="mx-auto max-w-2xl">
-        <div className="mb-6 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/50 p-6">
-          <h4 className="mb-4 text-lg font-semibold text-white">What you&apos;ll get:</h4>
-          <ul className="space-y-2 text-gray-300">
+        <div className="mb-6 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/50 p-6">
+          <h4 className="mb-4 text-lg font-semibold text-[var(--foreground)]">What you&apos;ll get:</h4>
+          <ul className="space-y-2 text-[var(--foreground-secondary)]">
             <li className="flex items-center space-x-2">
-              <span className="text-[#29E7CD]">✓</span>
+              <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
               <span>~95 common ingredients (vegetables, meats, dairy, spices, consumables)</span>
             </li>
             <li className="flex items-center space-x-2">
-              <span className="text-[#29E7CD]">✓</span>
+              <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
               <span>Realistic cost data for Australian suppliers</span>
             </li>
             <li className="flex items-center space-x-2">
-              <span className="text-[#29E7CD]">✓</span>
+              <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
               <span>Proper units (kg, g, L, mL, each, etc.)</span>
             </li>
             <li className="flex items-center space-x-2">
-              <span className="text-[#29E7CD]">✓</span>
+              <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
               <span>Yield percentages and waste factors</span>
             </li>
             <li className="flex items-center space-x-2">
-              <span className="text-[#29E7CD]">✓</span>
+              <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
               <span>Trim and peel waste calculations</span>
             </li>
           </ul>
         </div>
 
         {isProduction && (
-          <div className="mb-6 rounded-2xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-4 text-[#29E7CD]">
+          <div className="mb-6 rounded-2xl border border-[var(--primary)]/30 bg-[var(--primary)]/10 p-4 text-[var(--primary)]">
             <div className="flex items-start space-x-2">
-              <span className="text-[#29E7CD]">ℹ️</span>
+              <Icon icon={Info} size="sm" className="text-[var(--primary)] flex-shrink-0 mt-0.5" aria-hidden={true} />
               <div className="flex-1">
                 <p className="font-semibold">Development Feature</p>
-                <p className="mt-1 text-sm text-gray-300">
+                <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
                   Test data seeding is only available in development mode. In production, you should
                   add ingredients manually through the Ingredients page.
                 </p>
@@ -120,18 +124,18 @@ export default function IngredientsSetup({
         )}
 
         {error && !isProduction && (
-          <div className="mb-6 rounded-2xl border border-red-500/30 bg-red-900/20 p-4 text-red-300">
+          <div className="mb-6 rounded-2xl border border-[var(--color-error)]/30 bg-red-900/20 p-4 text-red-300">
             <div className="flex items-center space-x-2">
-              <span className="text-red-400">⚠️</span>
+              <Icon icon={AlertTriangle} size="sm" className="text-[var(--color-error)]" aria-hidden={true} />
               <span>{error}</span>
             </div>
           </div>
         )}
 
         {result && (
-          <div className="mb-6 rounded-2xl border border-green-500/30 bg-green-900/20 p-4 text-green-300">
+          <div className="mb-6 rounded-2xl border border-[var(--color-success)]/30 bg-green-900/20 p-4 text-green-300">
             <div className="flex items-center space-x-2">
-              <span className="text-green-400">✅</span>
+              <Icon icon={CheckCircle2} size="sm" className="text-[var(--color-success)]" aria-hidden={true} />
               <span>{result}</span>
             </div>
           </div>
@@ -143,15 +147,15 @@ export default function IngredientsSetup({
             disabled={loading || setupProgress.ingredients || isProduction}
             className={`rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-200 ${
               setupProgress.ingredients
-                ? 'cursor-not-allowed bg-green-600 text-white'
+                ? 'cursor-not-allowed bg-green-600 text-[var(--button-active-text)]'
                 : loading
-                  ? 'cursor-not-allowed bg-[#2a2a2a] text-gray-400'
-                  : 'bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white shadow-lg hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 hover:shadow-xl'
+                  ? 'cursor-not-allowed bg-[var(--muted)] text-[var(--foreground-muted)]'
+                  : 'bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] text-[var(--button-active-text)] shadow-lg hover:from-[var(--primary)]/80 hover:to-[var(--color-info)]/80 hover:shadow-xl'
             }`}
           >
             {setupProgress.ingredients ? (
               <span className="flex items-center justify-center space-x-2">
-                <span>✅</span>
+                <Icon icon={CheckCircle2} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
                 <span>Ingredients Added Successfully!</span>
               </span>
             ) : loading ? (
@@ -161,14 +165,14 @@ export default function IngredientsSetup({
               </span>
             ) : (
               <span className="flex items-center justify-center space-x-2">
-                <span>🥕</span>
+                <Icon icon={Carrot} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
                 <span>Add ~95 Ingredients (including consumables)</span>
               </span>
             )}
           </button>
 
           {!setupProgress.ingredients && (
-            <p className="mt-4 text-sm text-gray-400">
+            <p className="mt-4 text-sm text-[var(--foreground-muted)]">
               This will take about 10-15 seconds to complete
             </p>
           )}

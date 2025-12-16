@@ -79,8 +79,8 @@ export function RegionSelector() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 px-3 py-1.5">
-        <div className="h-4 w-8 animate-pulse rounded bg-[#2a2a2a]" />
+      <div className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 px-3 py-1.5">
+        <div className="h-4 w-8 animate-pulse rounded bg-[var(--muted)]" />
       </div>
     );
   }
@@ -90,12 +90,12 @@ export function RegionSelector() {
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 px-3 py-1.5 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/40 hover:text-white focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+        className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 px-3 py-1.5 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/40 hover:text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
         aria-label="Change region"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <Icon icon={Globe} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+        <Icon icon={Globe} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
         <span className="font-medium">
           {selectedCountry} • {getUnitSystemLabel(countryConfig.unitSystem)}
         </span>
@@ -110,7 +110,7 @@ export function RegionSelector() {
       {isOpen && (
         <div
           ref={dropdownRef}
-          className="absolute top-full right-0 z-50 mt-2 max-h-[400px] w-64 overflow-y-auto rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl"
+          className="absolute top-full right-0 z-50 mt-2 max-h-[400px] w-64 overflow-y-auto rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-2xl"
           role="menu"
         >
           <div className="p-2">
@@ -122,20 +122,20 @@ export function RegionSelector() {
                   onClick={() => handleCountrySelect(country.code)}
                   className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm transition-colors ${
                     isSelected
-                      ? 'bg-[#29E7CD]/10 text-[#29E7CD]'
-                      : 'text-gray-300 hover:bg-[#2a2a2a]/40 hover:text-white'
+                      ? 'bg-[var(--primary)]/10 text-[var(--primary)]'
+                      : 'text-[var(--foreground-secondary)] hover:bg-[var(--muted)]/40 hover:text-[var(--foreground)]'
                   }`}
                   role="menuitem"
                 >
                   <div className="flex-1">
                     <div className="font-medium">{country.name}</div>
-                    <div className="text-xs text-gray-400">
+                    <div className="text-xs text-[var(--foreground-muted)]">
                       {getUnitSystemLabel(country.unitSystem)} • {country.currency} •{' '}
                       {country.taxName}
                     </div>
                   </div>
                   {isSelected && (
-                    <Icon icon={Check} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+                    <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
                   )}
                 </button>
               );

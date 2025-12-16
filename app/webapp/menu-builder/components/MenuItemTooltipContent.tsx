@@ -25,13 +25,13 @@ export function MenuItemTooltipContent({
 }: MenuItemTooltipContentProps) {
   if (loading) {
     return (
-      <div className="animate-pulse text-xs text-gray-400 transition-opacity duration-200">
+      <div className="animate-pulse text-xs text-[var(--foreground-muted)] transition-opacity duration-200">
         Loading statistics...
       </div>
     );
   }
   if (error) {
-    return <div className="text-xs text-red-400 transition-opacity duration-200">{error}</div>;
+    return <div className="text-xs text-[var(--color-error)] transition-opacity duration-200">{error}</div>;
   }
   if (!statistics) return null;
 
@@ -50,23 +50,23 @@ export function MenuItemTooltipContent({
   return (
     <div className="space-y-3 transition-opacity duration-200">
       {hasCogsError && (
-        <div className="mb-2 rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-2">
-          <div className="text-xs font-medium text-yellow-400">⚠️ Calculation Warning</div>
+        <div className="mb-2 rounded-lg border border-[var(--color-warning)]/30 bg-[var(--color-warning)]/10 p-2">
+          <div className="text-xs font-medium text-[var(--color-warning)]">⚠️ Calculation Warning</div>
           <div className="mt-1 text-xs text-yellow-300/80">{statistics.cogs_error}</div>
         </div>
       )}
       {hasMenuPrice ? (
         <>
-          <div className="mb-2 border-b border-[#2a2a2a] pb-2">
-            <div className="text-xs text-gray-400">Selling Price</div>
+          <div className="mb-2 border-b border-[var(--border)] pb-2">
+            <div className="text-xs text-[var(--foreground-muted)]">Selling Price</div>
             <div className="flex items-baseline gap-2">
-              <div className="text-sm font-semibold text-white">
+              <div className="text-sm font-semibold text-[var(--foreground)]">
                 ${statistics.selling_price.toFixed(2)}
               </div>
               {hasRecommendedPrice && (
                 <div
                   className={`text-xs ${
-                    recommendedHigher ? 'font-medium text-yellow-400' : 'text-gray-500'
+                    recommendedHigher ? 'font-medium text-[var(--color-warning)]' : 'text-[var(--foreground-subtle)]'
                   }`}
                 >
                   (${statistics.recommended_selling_price!.toFixed(2)})
@@ -77,7 +77,7 @@ export function MenuItemTooltipContent({
           {hasValidCogs ? (
             <StatisticsGrid statistics={statistics} />
           ) : (
-            <div className="text-xs text-gray-400">
+            <div className="text-xs text-[var(--foreground-muted)]">
               Unable to calculate profit metrics - missing cost data
             </div>
           )}
@@ -87,7 +87,7 @@ export function MenuItemTooltipContent({
           {hasValidCogs ? (
             <StatisticsGrid statistics={statistics} />
           ) : (
-            <div className="text-xs text-gray-400">
+            <div className="text-xs text-[var(--foreground-muted)]">
               Unable to calculate statistics - missing cost or price data
             </div>
           )}

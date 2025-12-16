@@ -76,9 +76,9 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
         'transform',
         'rounded-r-3xl',
         'bg-gradient-to-r',
-        'from-[#29E7CD]/20',
-        'via-[#D925C7]/20',
-        'to-[#29E7CD]/20',
+        'from-[var(--primary)]/20',
+        'via-[var(--accent)]/20',
+        'to-[var(--primary)]/20',
         'p-[1px]',
         'transition-transform',
         'duration-300',
@@ -91,19 +91,19 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
         transitionTimingFunction: 'var(--easing-emphasized)',
       }}
     >
-      <div className="flex h-full flex-col overflow-y-auto rounded-r-3xl bg-[#1f1f1f]">
+      <div className="flex h-full flex-col overflow-y-auto rounded-r-3xl bg-[var(--surface)]">
         <div
           className={cn(
             'flex',
             'items-center',
             'justify-between',
             'border-b',
-            'border-[#2a2a2a]',
+            'border-[var(--border)]',
             'p-3',
             'desktop:p-4',
           )}
         >
-          <h2 id="sidebar-title" className="text-lg font-semibold text-white">
+          <h2 id="sidebar-title" className="text-lg font-semibold text-[var(--foreground)]">
             Navigation
           </h2>
           <button
@@ -115,11 +115,11 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
               'min-h-[44px]',
               'min-w-[44px]',
               'transition-colors',
-              'hover:bg-[#2a2a2a]/50',
+              'hover:bg-[var(--muted)]/50',
             )}
           >
             <svg
-              className="h-5 w-5 text-gray-400"
+              className="h-5 w-5 text-[var(--foreground-muted)]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -134,9 +134,9 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
           </button>
         </div>
 
-        <div className={cn('hidden', 'desktop:block', 'border-b', 'border-[#2a2a2a]', 'p-4')}>
-          <div className="text-xs text-gray-500">
-            Press <kbd className="rounded bg-[#2a2a2a] px-1">⌘B</kbd> to toggle
+        <div className={cn('hidden', 'desktop:block', 'border-b', 'border-[var(--border)]', 'p-4')}>
+          <div className="text-xs text-[var(--foreground-subtle)]">
+            Press <kbd className="rounded bg-[var(--muted)] px-1">⌘B</kbd> to toggle
           </div>
         </div>
 
@@ -150,7 +150,7 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
                   'text-xs',
                   'font-semibold',
                   'tracking-wider',
-                  'text-gray-400',
+                  'text-[var(--foreground-muted)]',
                   'uppercase',
                 )}
               >
@@ -186,8 +186,8 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
                         'transition-all',
                         'duration-200',
                         isActive(item.href)
-                          ? 'border border-[#29E7CD]/30 bg-[#29E7CD]/10'
-                          : 'hover:scale-[1.02] hover:bg-[#2a2a2a]/50',
+                          ? 'border border-[var(--primary)]/30 bg-[var(--primary)]/10'
+                          : 'hover:scale-[1.02] hover:bg-[var(--muted)]/50',
                       )}
                       style={{
                         transitionTimingFunction: 'var(--easing-standard)',
@@ -198,7 +198,7 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
                         opacity: reducedMotion ? 1 : 0,
                       }}
                     >
-                      <span className={cn(isActive(item.href) ? item.color : `text-gray-400`)}>
+                      <span className={cn(isActive(item.href) ? item.color : `text-[var(--foreground-muted)]`)}>
                         {item.icon}
                       </span>
                       <span
@@ -206,8 +206,8 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
                           'text-sm',
                           'font-medium',
                           isActive(item.href)
-                            ? 'text-white'
-                            : 'text-gray-300 group-hover:text-white',
+                            ? 'text-[var(--foreground)]'
+                            : 'text-[var(--foreground)]/80 group-hover:text-[var(--foreground)]',
                         )}
                       >
                         {item.label}
@@ -221,16 +221,16 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
         </div>
 
         {/* Mobile-only: Language and Logout */}
-        <div className="desktop:hidden space-y-3 border-t border-[#2a2a2a] p-4">
+        <div className="desktop:hidden space-y-3 border-t border-[var(--border)] p-4">
           <div>
-            <div className="mb-2 text-xs tracking-wider text-gray-400 uppercase">Settings</div>
+            <div className="mb-2 text-xs tracking-wider text-[var(--foreground-muted)] uppercase">Settings</div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-300">Language</span>
+                <span className="text-sm text-[var(--foreground)]/80">Language</span>
                 <LanguageSwitcher />
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-300">Account</span>
+                <span className="text-sm text-[var(--foreground)]/80">Account</span>
                 <LogoutButton />
               </div>
             </div>

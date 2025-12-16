@@ -50,18 +50,18 @@ export const PricingTool: React.FC<PricingToolProps> = ({
   };
 
   return (
-    <div className="mt-6 border-t border-[#2a2a2a] pt-4">
+    <div className="mt-6 border-t border-[var(--border)] pt-4">
       <div className="mb-4">
         {/* Header with Title and Target Gross Profit */}
         <div className="tablet:flex-row tablet:items-center tablet:justify-between mb-4 flex flex-col gap-3">
-          <h3 className="flex items-center text-lg font-semibold text-white">
-            <Icon icon={DollarSign} size="md" className="mr-2 text-[#29E7CD]" aria-hidden={true} />
+          <h3 className="flex items-center text-lg font-semibold text-[var(--foreground)]">
+            <Icon icon={DollarSign} size="md" className="mr-2 text-[var(--primary)]" aria-hidden={true} />
             Costing Tool
-            <div className="ml-2 h-2 w-2 animate-pulse rounded-full bg-[#29E7CD]"></div>
+            <div className="ml-2 h-2 w-2 animate-pulse rounded-full bg-[var(--primary)]"></div>
           </h3>
           <div className="flex items-center gap-3">
-            <label className="flex items-center gap-1 text-sm font-medium text-gray-300">
-              <Icon icon={Target} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+            <label className="flex items-center gap-1 text-sm font-medium text-[var(--foreground-secondary)]">
+              <Icon icon={Target} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
               Target Gross Profit %
             </label>
             <div className="flex space-x-2">
@@ -71,8 +71,8 @@ export const PricingTool: React.FC<PricingToolProps> = ({
                   onClick={() => onTargetGrossProfitChange(gp)}
                   className={`rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 ${
                     targetGrossProfit === gp
-                      ? 'bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] text-white shadow-lg'
-                      : 'bg-[#2a2a2a] text-gray-300 hover:bg-[#2a2a2a]/80'
+                      ? 'bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-lg'
+                      : 'bg-[var(--muted)] text-[var(--foreground-secondary)] hover:bg-[var(--muted)]/80'
                   }`}
                 >
                   {gp}%
@@ -84,8 +84,8 @@ export const PricingTool: React.FC<PricingToolProps> = ({
 
         {/* Pricing Strategy Selector with Dynamic Prices */}
         <div className="mb-4">
-          <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300">
-            <Icon icon={BarChart3} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+          <label className="mb-2 flex items-center gap-2 text-sm font-medium text-[var(--foreground-secondary)]">
+            <Icon icon={BarChart3} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
             Pricing Strategy
             <HelpTooltip
               content="Charm: Prices ending in .95 or .99 - psychologically appealing. Whole: Round to nearest dollar - clean pricing. Real: Exact calculated price - may have cents."
@@ -97,8 +97,8 @@ export const PricingTool: React.FC<PricingToolProps> = ({
               onClick={() => onPricingStrategyChange('charm')}
               className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
                 pricingStrategy === 'charm'
-                  ? 'bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] text-white shadow-lg'
-                  : 'bg-[#2a2a2a] text-gray-300 hover:bg-[#2a2a2a]/80'
+                  ? 'bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-lg'
+                  : 'bg-[var(--muted)] text-[var(--foreground-secondary)] hover:bg-[var(--muted)]/80'
               }`}
             >
               <div className="font-semibold">Charm</div>
@@ -108,8 +108,8 @@ export const PricingTool: React.FC<PricingToolProps> = ({
               onClick={() => onPricingStrategyChange('whole')}
               className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
                 pricingStrategy === 'whole'
-                  ? 'bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] text-white shadow-lg'
-                  : 'bg-[#2a2a2a] text-gray-300 hover:bg-[#2a2a2a]/80'
+                  ? 'bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-lg'
+                  : 'bg-[var(--muted)] text-[var(--foreground-secondary)] hover:bg-[var(--muted)]/80'
               }`}
             >
               <div className="font-semibold">Whole</div>
@@ -119,8 +119,8 @@ export const PricingTool: React.FC<PricingToolProps> = ({
               onClick={() => onPricingStrategyChange('real')}
               className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
                 pricingStrategy === 'real'
-                  ? 'bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] text-white shadow-lg'
-                  : 'bg-[#2a2a2a] text-gray-300 hover:bg-[#2a2a2a]/80'
+                  ? 'bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-lg'
+                  : 'bg-[var(--muted)] text-[var(--foreground-secondary)] hover:bg-[var(--muted)]/80'
               }`}
             >
               <div className="font-semibold">Real</div>
@@ -130,66 +130,66 @@ export const PricingTool: React.FC<PricingToolProps> = ({
         </div>
 
         {/* Hero Selling Price Card */}
-        <div className="mb-4 rounded-2xl border-2 border-[#29E7CD]/50 bg-gradient-to-br from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-6 shadow-lg">
-          <div className="mb-2 text-xs font-medium tracking-wide text-gray-400 uppercase">
+        <div className="mb-4 rounded-2xl border-2 border-[var(--primary)]/50 bg-gradient-to-br from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-6 shadow-lg">
+          <div className="mb-2 text-xs font-medium tracking-wide text-[var(--foreground-muted)] uppercase">
             Recommended Selling Price
           </div>
           <div className="mb-1 flex items-baseline gap-2">
-            <span className="text-4xl font-bold text-white">
+            <span className="text-4xl font-bold text-[var(--foreground)]">
               ${pricingCalculation.sellPriceInclGST.toFixed(2)}
             </span>
-            <span className="text-sm font-medium text-gray-400">incl. GST</span>
+            <span className="text-sm font-medium text-[var(--foreground-muted)]">incl. GST</span>
           </div>
           <div className="mt-2 flex items-center gap-2">
-            <span className="rounded-full bg-[#29E7CD]/20 px-2 py-1 text-xs font-medium text-[#29E7CD]">
+            <span className="rounded-full bg-[var(--primary)]/20 px-2 py-1 text-xs font-medium text-[var(--primary)]">
               {getStrategyLabel(pricingStrategy)} Pricing
             </span>
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-[var(--foreground-muted)]">
               {pricingCalculation.actualGrossProfit.toFixed(1)}% GP
             </span>
           </div>
         </div>
 
         {/* Compact Metrics Grid */}
-        <div className="rounded-xl border border-[#2a2a2a]/50 bg-[#1f1f1f]/50 p-3">
+        <div className="rounded-xl border border-[var(--border)]/50 bg-[var(--surface)]/50 p-3">
           <div className="grid grid-cols-2 gap-3">
             {/* Food Cost */}
-            <div className="rounded-lg border border-[#2a2a2a]/50 bg-[#2a2a2a]/30 p-2.5">
-              <div className="mb-1 text-xs tracking-wide text-gray-500 uppercase">Food Cost</div>
-              <div className="text-lg font-bold text-white">${costPerPortion.toFixed(2)}</div>
-              <div className="text-xs text-gray-400">per portion</div>
+            <div className="rounded-lg border border-[var(--border)]/50 bg-[var(--muted)]/30 p-2.5">
+              <div className="mb-1 text-xs tracking-wide text-[var(--foreground-subtle)] uppercase">Food Cost</div>
+              <div className="text-lg font-bold text-[var(--foreground)]">${costPerPortion.toFixed(2)}</div>
+              <div className="text-xs text-[var(--foreground-muted)]">per portion</div>
             </div>
 
             {/* Gross Profit */}
-            <div className="rounded-lg border border-[#2a2a2a]/50 bg-[#2a2a2a]/30 p-2.5">
-              <div className="mb-1 text-xs tracking-wide text-gray-500 uppercase">Gross Profit</div>
-              <div className="text-lg font-bold text-green-400">
+            <div className="rounded-lg border border-[var(--border)]/50 bg-[var(--muted)]/30 p-2.5">
+              <div className="mb-1 text-xs tracking-wide text-[var(--foreground-subtle)] uppercase">Gross Profit</div>
+              <div className="text-lg font-bold text-[var(--color-success)]">
                 ${pricingCalculation.grossProfitDollar.toFixed(2)}
               </div>
-              <div className="text-xs text-gray-400">
+              <div className="text-xs text-[var(--foreground-muted)]">
                 {pricingCalculation.actualGrossProfit.toFixed(1)}% margin
               </div>
             </div>
           </div>
 
           {/* Secondary Info - Less Prominent */}
-          <div className="mt-3 border-t border-[#2a2a2a]/30 pt-3">
-            <div className="flex items-center justify-between text-xs text-gray-400">
+          <div className="mt-3 border-t border-[var(--border)]/30 pt-3">
+            <div className="flex items-center justify-between text-xs text-[var(--foreground-muted)]">
               <span>Contributing Margin:</span>
-              <span className="font-medium text-gray-300">
+              <span className="font-medium text-[var(--foreground-secondary)]">
                 ${pricingCalculation.contributingMargin.toFixed(2)} (
                 {pricingCalculation.contributingMarginPercent.toFixed(1)}%)
               </span>
             </div>
-            <div className="mt-1 flex items-center justify-between text-xs text-gray-400">
+            <div className="mt-1 flex items-center justify-between text-xs text-[var(--foreground-muted)]">
               <span>GST (10%):</span>
-              <span className="font-medium text-gray-300">
+              <span className="font-medium text-[var(--foreground-secondary)]">
                 ${pricingCalculation.gstAmount.toFixed(2)}
               </span>
             </div>
-            <div className="mt-1 flex items-center justify-between text-xs text-gray-400">
+            <div className="mt-1 flex items-center justify-between text-xs text-[var(--foreground-muted)]">
               <span>Sell Price (Excl GST):</span>
-              <span className="font-medium text-gray-300">
+              <span className="font-medium text-[var(--foreground-secondary)]">
                 ${pricingCalculation.sellPriceExclGST.toFixed(2)}
               </span>
             </div>

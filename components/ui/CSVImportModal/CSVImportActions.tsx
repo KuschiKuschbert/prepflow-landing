@@ -22,20 +22,20 @@ export function CSVImportActions({
 }: CSVImportActionsProps) {
   return (
     <div className="flex items-center justify-between">
-      <div className="text-sm text-gray-400">
+      <div className="text-sm text-[var(--foreground-muted)]">
         {selectedValidCount} of {validCount} valid {entityNamePlural} selected
       </div>
       <div className="flex gap-3">
         <button
           onClick={onClose}
-          className="rounded-lg px-4 py-2 text-sm font-medium text-gray-400 transition-colors hover:text-white"
+          className="rounded-lg px-4 py-2 text-sm font-medium text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
         >
           Cancel
         </button>
         <button
           onClick={onImport}
           disabled={loading || selectedValidCount === 0}
-          className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
         >
           Import Selected ({selectedValidCount})
         </button>

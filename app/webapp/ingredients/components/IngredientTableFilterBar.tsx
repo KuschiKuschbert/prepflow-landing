@@ -106,7 +106,7 @@ export function IngredientTableFilterBar({
   }, [onSearchChange, onSupplierFilterChange, onStorageFilterChange, onCategoryFilterChange]);
 
   return (
-    <div className="sticky top-0 z-30 border-b border-[#2a2a2a] bg-[#1f1f1f]/95 p-3 backdrop-blur-sm">
+    <div className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--surface)]/95 p-3 backdrop-blur-sm">
       {/* Search and Filters - Optimized Layout */}
       <div className="tablet:flex-row tablet:items-center tablet:gap-2 flex flex-col gap-2">
         <IngredientSearchBar
@@ -133,8 +133,8 @@ export function IngredientTableFilterBar({
               setShowSortMenu(false);
             }}
             onChange={onSupplierFilterChange}
-            activeColor="border-[#3B82F6]/50 bg-[#3B82F6]/10 text-[#3B82F6]"
-            activeBg="bg-[#3B82F6]/20"
+            activeColor="border-[var(--color-info)]/50 bg-[var(--color-info)]/10 text-[var(--color-info)]"
+            activeBg="bg-[var(--color-info)]/20"
           />
 
           <FilterDropdown
@@ -150,8 +150,8 @@ export function IngredientTableFilterBar({
               setShowSortMenu(false);
             }}
             onChange={onStorageFilterChange}
-            activeColor="border-[#D925C7]/50 bg-[#D925C7]/10 text-[#D925C7]"
-            activeBg="bg-[#D925C7]/20"
+            activeColor="border-[var(--accent)]/50 bg-[var(--accent)]/10 text-[var(--accent)]"
+            activeBg="bg-[var(--accent)]/20"
           />
 
           <FilterDropdown
@@ -167,8 +167,8 @@ export function IngredientTableFilterBar({
               setShowSortMenu(false);
             }}
             onChange={onCategoryFilterChange}
-            activeColor="border-[#29E7CD]/50 bg-[#29E7CD]/10 text-[#29E7CD]"
-            activeBg="bg-[#29E7CD]/20"
+            activeColor="border-[var(--primary)]/50 bg-[var(--primary)]/10 text-[var(--primary)]"
+            activeBg="bg-[var(--primary)]/20"
           />
 
           <IngredientSortDropdown

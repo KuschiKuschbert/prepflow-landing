@@ -147,7 +147,7 @@ export default function TemperatureAnalyticsTab({
     return (
       <div className="space-y-6">
         {/* Time Period Filter Skeleton */}
-        <div className="flex flex-wrap gap-2 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
+        <div className="flex flex-wrap gap-2 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
           {['24h', '7d', '30d', 'all'].map(filter => (
             <div key={filter} className="h-8 w-20 rounded-xl bg-gray-700 px-4 py-2"></div>
           ))}

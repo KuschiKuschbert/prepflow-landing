@@ -41,19 +41,19 @@ export function COGSCalculatorModal({ isOpen, item, onClose }: COGSCalculatorMod
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4">
-      <div className="relative max-h-[90vh] w-full max-w-7xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
-        <div className="max-h-[90vh] w-full overflow-hidden rounded-3xl bg-[#1f1f1f]/95">
+      <div className="relative max-h-[90vh] w-full max-w-7xl rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl">
+        <div className="max-h-[90vh] w-full overflow-hidden rounded-3xl bg-[var(--surface)]/95">
           {/* Modal Header */}
-          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#2a2a2a] bg-[#1f1f1f] p-6">
+          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[var(--border)] bg-[var(--surface)] p-6">
             <div>
-              <h2 className="text-2xl font-bold text-white">COGS Calculator</h2>
-              <p className="mt-1 text-sm text-gray-400">
+              <h2 className="text-2xl font-bold text-[var(--foreground)]">COGS Calculator</h2>
+              <p className="mt-1 text-sm text-[var(--foreground-muted)]">
                 {item.name} ({item.type === 'recipe' ? 'Recipe' : 'Dish'})
               </p>
             </div>
             <button
               onClick={onClose}
-              className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+              className="rounded-lg p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
               aria-label="Close modal"
             >
               <Icon icon={X} size="lg" aria-hidden={true} />

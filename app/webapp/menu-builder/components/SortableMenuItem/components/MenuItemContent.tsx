@@ -102,26 +102,26 @@ export function MenuItemContent({ item, menuId }: MenuItemContentProps) {
     <div className="flex flex-1 items-center gap-2">
       {/* Type Icon */}
       {isDish ? (
-        <Icon icon={Utensils} size="sm" className="text-[#29E7CD]" />
+        <Icon icon={Utensils} size="sm" className="text-[var(--primary)]" />
       ) : isRecipe ? (
-        <Icon icon={ChefHat} size="sm" className="text-[#D925C7]" />
+        <Icon icon={ChefHat} size="sm" className="text-[var(--accent)]" />
       ) : null}
 
       <div className="flex-1">
         {isDish ? (
           <>
-            <div className="font-medium text-white">{item.dishes?.dish_name || 'Unknown Dish'}</div>
+            <div className="font-medium text-[var(--foreground)]">{item.dishes?.dish_name || 'Unknown Dish'}</div>
             <div className="flex items-baseline gap-2">
               {/* Show "Recommended:" label only if actual price exists and differs from recommended */}
               {item.actual_selling_price != null &&
                 item.recommended_selling_price != null &&
                 Math.abs(item.actual_selling_price - item.recommended_selling_price) > 0.01 && (
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-[var(--foreground-subtle)]">
                     Recommended: ${item.recommended_selling_price.toFixed(2)}
                   </div>
                 )}
               <div className="flex items-center gap-1.5">
-                <div className="cursor-pointer text-sm font-semibold text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80">
+                <div className="cursor-pointer text-sm font-semibold text-[var(--primary)] transition-colors hover:text-[var(--primary)]/80">
                   {item.actual_selling_price != null ? (
                     <>${item.actual_selling_price.toFixed(2)}</>
                   ) : item.dishes?.selling_price != null ? (
@@ -134,7 +134,7 @@ export function MenuItemContent({ item, menuId }: MenuItemContentProps) {
                   <Icon
                     icon={AlertCircle}
                     size="xs"
-                    className="text-red-400"
+                    className="text-[var(--color-error)]"
                     aria-label="Critical: Profit margin or food cost needs immediate attention"
                   />
                 )}
@@ -142,7 +142,7 @@ export function MenuItemContent({ item, menuId }: MenuItemContentProps) {
                   <Icon
                     icon={AlertTriangle}
                     size="xs"
-                    className="text-yellow-400"
+                    className="text-[var(--color-warning)]"
                     aria-label="Warning: Profit margin or food cost may need adjustment"
                   />
                 )}
@@ -172,7 +172,7 @@ export function MenuItemContent({ item, menuId }: MenuItemContentProps) {
           </>
         ) : isRecipe ? (
           <>
-            <div className="font-medium text-white">
+            <div className="font-medium text-[var(--foreground)]">
               {item.recipes?.recipe_name || 'Unknown Recipe'}
             </div>
             <div className="flex items-baseline gap-2">
@@ -180,12 +180,12 @@ export function MenuItemContent({ item, menuId }: MenuItemContentProps) {
               {item.actual_selling_price != null &&
                 item.recommended_selling_price != null &&
                 Math.abs(item.actual_selling_price - item.recommended_selling_price) > 0.01 && (
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-[var(--foreground-subtle)]">
                     Recommended: ${item.recommended_selling_price.toFixed(2)}
                   </div>
                 )}
               <div className="flex items-center gap-1.5">
-                <div className="cursor-pointer text-sm font-semibold text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80">
+                <div className="cursor-pointer text-sm font-semibold text-[var(--primary)] transition-colors hover:text-[var(--primary)]/80">
                   {item.actual_selling_price != null ? (
                     <>${item.actual_selling_price.toFixed(2)}</>
                   ) : item.recommended_selling_price != null ? (
@@ -196,7 +196,7 @@ export function MenuItemContent({ item, menuId }: MenuItemContentProps) {
                   <Icon
                     icon={AlertCircle}
                     size="xs"
-                    className="text-red-400"
+                    className="text-[var(--color-error)]"
                     aria-label="Critical: Profit margin or food cost needs immediate attention"
                   />
                 )}
@@ -204,14 +204,14 @@ export function MenuItemContent({ item, menuId }: MenuItemContentProps) {
                   <Icon
                     icon={AlertTriangle}
                     size="xs"
-                    className="text-yellow-400"
+                    className="text-[var(--color-warning)]"
                     aria-label="Warning: Profit margin or food cost may need adjustment"
                   />
                 )}
               </div>
               {/* Show "per serve" only when using recommended price (no actual price set) */}
               {item.actual_selling_price == null && item.recommended_selling_price != null && (
-                <div className="text-xs text-gray-400">per serve</div>
+                <div className="text-xs text-[var(--foreground-muted)]">per serve</div>
               )}
             </div>
             {/* Allergens and Dietary Info for Recipe */}
@@ -237,7 +237,7 @@ export function MenuItemContent({ item, menuId }: MenuItemContentProps) {
             )}
           </>
         ) : (
-          <div className="font-medium text-white">Unknown Item</div>
+          <div className="font-medium text-[var(--foreground)]">Unknown Item</div>
         )}
       </div>
     </div>

@@ -36,9 +36,9 @@ export function Step3ContractSignature({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-white">Step 3: Contract Signature</h3>
-      <p className="text-sm text-gray-400">Please sign the employment contract</p>
-      <div className="rounded-xl border border-[#2a2a2a] bg-white p-4">
+      <h3 className="text-lg font-semibold text-[var(--foreground)]">Step 3: Contract Signature</h3>
+      <p className="text-sm text-[var(--foreground-muted)]">Please sign the employment contract</p>
+      <div className="rounded-xl border border-[var(--border)] bg-[var(--qr-background)] p-4">
         <SignatureCanvas
           ref={signatureRef}
           canvasProps={{
@@ -57,7 +57,7 @@ export function Step3ContractSignature({
         </Button>
       </div>
       {signatureData && (
-        <div className="flex items-center gap-2 text-sm text-green-400">
+        <div className="flex items-center gap-2 text-sm text-[var(--color-success)]">
           <Icon icon={CheckCircle} size="sm" aria-hidden={true} />
           Signature saved
         </div>

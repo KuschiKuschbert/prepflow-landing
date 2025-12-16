@@ -95,14 +95,14 @@ export function BulkAllergenDetection({ onComplete }: BulkAllergenDetectionProps
           disabled={loading}
           className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 ${
             loading
-              ? 'cursor-not-allowed bg-[#2a2a2a] text-gray-400'
-              : 'border border-[#29E7CD]/30 bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 text-[#29E7CD] hover:border-[#29E7CD]/50 hover:from-[#29E7CD]/30 hover:to-[#D925C7]/30'
+              ? 'cursor-not-allowed bg-[var(--muted)] text-[var(--foreground-muted)]'
+              : 'border border-[var(--primary)]/30 bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20 text-[var(--primary)] hover:border-[var(--primary)]/50 hover:from-[var(--primary)]/30 hover:to-[var(--accent)]/30'
           }`}
           title="Detect allergens for ingredients missing them"
         >
           {loading ? (
             <>
-              <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-[#29E7CD]" />
+              <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-[var(--primary)]" />
               <span>Detecting...</span>
             </>
           ) : (
@@ -114,14 +114,14 @@ export function BulkAllergenDetection({ onComplete }: BulkAllergenDetectionProps
         </button>
 
         {progress && (
-          <div className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 text-xs text-gray-400">
+          <div className="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-3 text-xs text-[var(--foreground-muted)]">
             <div className="space-y-1">
               <div>Processed: {progress.processed}</div>
-              <div className="text-green-400">Successful: {progress.successful}</div>
+              <div className="text-[var(--color-success)]">Successful: {progress.successful}</div>
               {progress.skipped > 0 && (
-                <div className="text-yellow-400">Skipped: {progress.skipped}</div>
+                <div className="text-[var(--color-warning)]">Skipped: {progress.skipped}</div>
               )}
-              {progress.failed > 0 && <div className="text-red-400">Failed: {progress.failed}</div>}
+              {progress.failed > 0 && <div className="text-[var(--color-error)]">Failed: {progress.failed}</div>}
             </div>
           </div>
         )}

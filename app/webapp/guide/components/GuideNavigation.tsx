@@ -66,7 +66,7 @@ export function GuideNavigation({
         <Icon
           icon={Search}
           size="sm"
-          className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"
+          className="absolute top-1/2 left-4 -translate-y-1/2 text-[var(--foreground-muted)]"
           aria-hidden={true}
         />
         <input
@@ -74,7 +74,7 @@ export function GuideNavigation({
           placeholder="Search guides..."
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          className="w-full rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] py-3 pr-4 pl-12 text-white placeholder:text-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+          className="w-full rounded-2xl border border-[var(--border)] bg-[var(--surface)] py-3 pr-4 pl-12 text-[var(--foreground)] placeholder:text-[var(--foreground-subtle)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
           aria-label="Search guides"
         />
       </div>
@@ -88,8 +88,8 @@ export function GuideNavigation({
             onClick={() => setSelectedCategory(category.id)}
             className={`flex items-center gap-2 rounded-2xl border px-4 py-2 text-sm transition-colors ${
               selectedCategory === category.id
-                ? 'border-[#29E7CD] bg-[#29E7CD]/10 text-[#29E7CD]'
-                : 'border-[#2a2a2a] bg-[#1f1f1f] text-gray-300 hover:border-[#2a2a2a] hover:bg-[#2a2a2a]/50'
+                ? 'border-[var(--primary)] bg-[var(--primary)]/10 text-[var(--primary)]'
+                : 'border-[var(--border)] bg-[var(--surface)] text-[var(--foreground-secondary)] hover:border-[var(--border)] hover:bg-[var(--muted)]/50'
             }`}
             aria-label={`Filter by ${category.label}`}
             aria-pressed={selectedCategory === category.id}
@@ -103,7 +103,7 @@ export function GuideNavigation({
       {/* Guide list */}
       <div className="space-y-3">
         {filteredGuides.length === 0 ? (
-          <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center text-gray-400">
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center text-[var(--foreground-muted)]">
             No guides found. Try a different search or category.
           </div>
         ) : (
@@ -114,8 +114,8 @@ export function GuideNavigation({
               onClick={() => onSelectGuide(guide)}
               className={`w-full rounded-2xl border p-4 text-left transition-all ${
                 selectedGuideId === guide.id
-                  ? 'border-[#29E7CD] bg-[#29E7CD]/10 shadow-lg'
-                  : 'border-[#2a2a2a] bg-[#1f1f1f] hover:border-[#2a2a2a] hover:bg-[#2a2a2a]/50'
+                  ? 'border-[var(--primary)] bg-[var(--primary)]/10 shadow-lg'
+                  : 'border-[var(--border)] bg-[var(--surface)] hover:border-[var(--border)] hover:bg-[var(--muted)]/50'
               }`}
             >
               <div className="flex items-start gap-4">
@@ -125,9 +125,9 @@ export function GuideNavigation({
                   </span>
                 )}
                 <div className="flex-1">
-                  <h3 className="font-semibold text-white">{guide.title}</h3>
-                  <p className="mt-1 text-sm text-gray-400">{guide.description}</p>
-                  <div className="mt-2 flex items-center gap-4 text-xs text-gray-500">
+                  <h3 className="font-semibold text-[var(--foreground)]">{guide.title}</h3>
+                  <p className="mt-1 text-sm text-[var(--foreground-muted)]">{guide.description}</p>
+                  <div className="mt-2 flex items-center gap-4 text-xs text-[var(--foreground-subtle)]">
                     {guide.difficulty && <span className="capitalize">{guide.difficulty}</span>}
                     {guide.estimatedTime && <span>{Math.round(guide.estimatedTime / 60)} min</span>}
                     <span>{guide.steps.length} steps</span>

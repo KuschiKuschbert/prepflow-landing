@@ -58,33 +58,33 @@ export function EquipmentListTableMobileCards({
               onEquipmentClick(item);
             }
           }}
-          className={`group relative overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg transition-all duration-300 ${
+          className={`group relative overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg transition-all duration-300 ${
             editingId === item.id
-              ? 'border-[#29E7CD] bg-[#29E7CD]/10'
+              ? 'border-[var(--primary)] bg-[var(--primary)]/10'
               : onEquipmentClick
-                ? 'cursor-pointer hover:border-[#29E7CD]/30 hover:shadow-2xl'
-                : 'hover:border-[#29E7CD]/30 hover:shadow-2xl'
+                ? 'cursor-pointer hover:border-[var(--primary)]/30 hover:shadow-2xl'
+                : 'hover:border-[var(--primary)]/30 hover:shadow-2xl'
           }`}
         >
           <div className="flex items-start gap-3">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
               <Icon
                 icon={getTypeIcon(item.equipment_type)}
                 size="lg"
-                className="text-[#29E7CD]"
+                className="text-[var(--primary)]"
                 aria-hidden={true}
               />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="mb-2 text-base font-semibold text-white">{item.name}</div>
-              <div className="mb-2 text-sm text-gray-400">{getTypeLabel(item.equipment_type)}</div>
+              <div className="mb-2 text-base font-semibold text-[var(--foreground)]">{item.name}</div>
+              <div className="mb-2 text-sm text-[var(--foreground-muted)]">{getTypeLabel(item.equipment_type)}</div>
               {item.location && (
-                <div className="mb-2 flex items-center gap-1 text-xs text-gray-500">
-                  <Icon icon={MapPin} size="xs" className="text-gray-500" aria-hidden={true} />
+                <div className="mb-2 flex items-center gap-1 text-xs text-[var(--foreground-subtle)]">
+                  <Icon icon={MapPin} size="xs" className="text-[var(--foreground-subtle)]" aria-hidden={true} />
                   <span>{item.location}</span>
                 </div>
               )}
-              <div className="mb-2 text-sm font-medium text-[#29E7CD]">
+              <div className="mb-2 text-sm font-medium text-[var(--primary)]">
                 {item.min_temp_celsius !== null && item.max_temp_celsius !== null
                   ? `${item.min_temp_celsius}°C - ${item.max_temp_celsius}°C`
                   : item.min_temp_celsius !== null
@@ -98,21 +98,21 @@ export function EquipmentListTableMobileCards({
                   const formattedDate = formatDate ? formatDate(date) : lastLogInfo.date;
                   return (
                     <div className="mb-2 space-y-1">
-                      <div className="text-xs text-gray-400">Last log: {formattedDate}</div>
+                      <div className="text-xs text-[var(--foreground-muted)]">Last log: {formattedDate}</div>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-gray-300">
+                        <span className="text-sm font-semibold text-[var(--foreground-secondary)]">
                           {lastLogInfo.temperature.toFixed(1)}°C
                         </span>
                         {lastLogInfo.isInRange !== null && (
                           <div className="flex items-center gap-1">
                             <div
                               className={`h-1.5 w-1.5 rounded-full ${
-                                lastLogInfo.isInRange ? 'bg-green-500' : 'bg-red-500'
+                                lastLogInfo.isInRange ? 'bg-[var(--color-success)]' : 'bg-[var(--color-error)]'
                               }`}
                             />
                             <span
                               className={`text-xs font-semibold ${
-                                lastLogInfo.isInRange ? 'text-green-400' : 'text-red-400'
+                                lastLogInfo.isInRange ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'
                               }`}
                             >
                               {lastLogInfo.isInRange ? 'In Range' : 'Out of Range'}
@@ -123,21 +123,21 @@ export function EquipmentListTableMobileCards({
                     </div>
                   );
                 }
-                return <div className="mb-2 text-xs text-gray-500">Last log: Never</div>;
+                return <div className="mb-2 text-xs text-[var(--foreground-subtle)]">Last log: Never</div>;
               })()}
               <div className="flex items-center gap-2">
                 <div
-                  className={`h-2 w-2 rounded-full ${item.is_active ? 'animate-pulse bg-green-500' : 'bg-gray-500'}`}
+                  className={`h-2 w-2 rounded-full ${item.is_active ? 'animate-pulse bg-[var(--color-success)]' : 'bg-gray-500'}`}
                 />
                 <span
-                  className={`text-xs font-semibold ${item.is_active ? 'text-green-400' : 'text-gray-400'}`}
+                  className={`text-xs font-semibold ${item.is_active ? 'text-[var(--color-success)]' : 'text-[var(--foreground-muted)]'}`}
                 >
                   {item.is_active ? 'Active' : 'Inactive'}
                 </span>
               </div>
             </div>
             {editingId === item.id && (
-              <div className="mt-4 rounded-2xl border-t border-[#2a2a2a] bg-[#2a2a2a]/30 pt-4">
+              <div className="mt-4 rounded-2xl border-t border-[var(--border)] bg-[var(--muted)]/30 pt-4">
                 <form
                   onSubmit={e => {
                     e.preventDefault();
@@ -160,23 +160,23 @@ export function EquipmentListTableMobileCards({
                 >
                   <div className="space-y-3">
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-gray-300">
+                      <label className="mb-1 block text-xs font-medium text-[var(--foreground-secondary)]">
                         Equipment Name
                       </label>
                       <input
                         type="text"
                         name="name"
                         defaultValue={item.name}
-                        className="w-full rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] px-3 py-2 text-sm text-white transition-all focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+                        className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] transition-all focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
                         required
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-gray-300">Type</label>
+                      <label className="mb-1 block text-xs font-medium text-[var(--foreground-secondary)]">Type</label>
                       <select
                         name="equipmentType"
                         defaultValue={item.equipment_type}
-                        className="w-full rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] px-3 py-2 text-sm text-white transition-all focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+                        className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] transition-all focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
                         required
                       >
                         {temperatureTypes.map(type => (
@@ -188,7 +188,7 @@ export function EquipmentListTableMobileCards({
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="mb-1 block text-xs font-medium text-gray-300">
+                        <label className="mb-1 block text-xs font-medium text-[var(--foreground-secondary)]">
                           Min Temp
                         </label>
                         <input
@@ -196,12 +196,12 @@ export function EquipmentListTableMobileCards({
                           step="0.1"
                           name="minTemp"
                           defaultValue={item.min_temp_celsius || ''}
-                          className="w-full rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] px-3 py-2 text-sm text-white transition-all focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+                          className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] transition-all focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
                           placeholder="Optional"
                         />
                       </div>
                       <div>
-                        <label className="mb-1 block text-xs font-medium text-gray-300">
+                        <label className="mb-1 block text-xs font-medium text-[var(--foreground-secondary)]">
                           Max Temp
                         </label>
                         <input
@@ -209,7 +209,7 @@ export function EquipmentListTableMobileCards({
                           step="0.1"
                           name="maxTemp"
                           defaultValue={item.max_temp_celsius || ''}
-                          className="w-full rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] px-3 py-2 text-sm text-white transition-all focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+                          className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] transition-all focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
                           placeholder="Optional"
                         />
                       </div>
@@ -218,14 +218,14 @@ export function EquipmentListTableMobileCards({
                   <div className="flex gap-2">
                     <button
                       type="submit"
-                      className="rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-sm font-semibold text-black shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                      className="rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-sm font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
                     >
                       Update Equipment
                     </button>
                     <button
                       type="button"
                       onClick={() => setEditingId(null)}
-                      className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:bg-[#3a3a3a] hover:text-white"
+                      className="rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 text-sm font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:bg-[var(--surface-variant)] hover:text-[var(--foreground)]"
                     >
                       Cancel
                     </button>
@@ -237,7 +237,7 @@ export function EquipmentListTableMobileCards({
               <button
                 onClick={() => onQuickTempLog(item.id, item.name, item.equipment_type)}
                 disabled={quickTempLoading[item.id] || !item.is_active}
-                className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1.5 text-xs font-semibold text-black transition-all duration-200 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-3 py-1.5 text-xs font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Quick Log
               </button>
@@ -245,30 +245,30 @@ export function EquipmentListTableMobileCards({
                 {onShowQRCode && (
                   <button
                     onClick={() => onShowQRCode(item)}
-                    className="group relative rounded-lg border-2 border-[#29E7CD]/60 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 p-1.5 text-gray-300 transition-all duration-200 hover:border-[#29E7CD] hover:from-[#29E7CD]/20 hover:to-[#D925C7]/20 hover:text-white hover:shadow-lg hover:shadow-[#29E7CD]/20"
+                    className="group relative rounded-lg border-2 border-[var(--primary)]/60 bg-gradient-to-br from-[var(--primary)]/10 to-[var(--accent)]/10 p-1.5 text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--primary)] hover:from-[var(--primary)]/20 hover:to-[var(--accent)]/20 hover:text-[var(--button-active-text)] hover:shadow-lg hover:shadow-[var(--primary)]/20"
                     title="Show QR Code"
                   >
-                    <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+                    <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
                     <Icon icon={QrCode} size="sm" className="relative z-10" aria-hidden={true} />
                   </button>
                 )}
                 <button
                   onClick={() => onToggleStatus(item.id, item.is_active)}
-                  className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] p-1.5 text-gray-400 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/10 hover:text-white"
+                  className="rounded-lg border border-[var(--border)] bg-[var(--muted)] p-1.5 text-[var(--foreground-muted)] transition-all duration-200 hover:border-[var(--primary)]/50 hover:bg-[var(--primary)]/10 hover:text-[var(--foreground)]"
                   title={item.is_active ? 'Deactivate' : 'Activate'}
                 >
                   <Icon icon={item.is_active ? PowerOff : Power} size="sm" aria-hidden={true} />
                 </button>
                 <button
                   onClick={() => setEditingId(editingId === item.id ? null : item.id)}
-                  className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] p-1.5 text-gray-400 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/10 hover:text-white"
+                  className="rounded-lg border border-[var(--border)] bg-[var(--muted)] p-1.5 text-[var(--foreground-muted)] transition-all duration-200 hover:border-[var(--primary)]/50 hover:bg-[var(--primary)]/10 hover:text-[var(--foreground)]"
                   title="Edit"
                 >
                   <Icon icon={Edit} size="sm" aria-hidden={true} />
                 </button>
                 <button
                   onClick={() => onDelete(item.id)}
-                  className="rounded-lg border border-red-500/30 bg-red-500/10 p-1.5 text-red-400 transition-all duration-200 hover:border-red-500/50 hover:bg-red-500/20"
+                  className="rounded-lg border border-[var(--color-error)]/30 bg-[var(--color-error)]/10 p-1.5 text-[var(--color-error)] transition-all duration-200 hover:border-[var(--color-error)]/50 hover:bg-[var(--color-error)]/20"
                   title="Delete"
                 >
                   <Icon icon={Trash2} size="sm" aria-hidden={true} />

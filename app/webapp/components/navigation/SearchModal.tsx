@@ -127,9 +127,9 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
         onTouchStart={e => e.stopPropagation()}
       >
         <div className="mx-4 w-full max-w-2xl">
-          <div className="rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-xl">
-            <div className="rounded-2xl bg-[#1f1f1f]/95">
-              <div className="desktop:p-4 border-b border-[#2a2a2a] p-3">
+          <div className="rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-xl">
+            <div className="rounded-2xl bg-[var(--surface)]/95">
+              <div className="desktop:p-4 border-b border-[var(--border)] p-3">
                 <div className="relative">
                   <h2 id="search-modal-title" className="sr-only">
                     Search navigation
@@ -140,12 +140,12 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
                     placeholder="Search navigation&hellip;"
                     value={query}
                     onChange={e => onChange(e.target.value)}
-                    className="w-full rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-3 pl-12 text-lg text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+                    className="w-full rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 px-4 py-3 pl-12 text-lg text-[var(--foreground)] placeholder-[var(--foreground)]/50 focus:border-transparent focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
                     autoFocus
                     aria-label="Search navigation"
                   />
                   <svg
-                    className="absolute top-3.5 left-4 h-5 w-5 text-gray-400"
+                    className="absolute top-3.5 left-4 h-5 w-5 text-[var(--foreground)]/50"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -180,16 +180,16 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
                           onClose();
                         }}
                         onMouseEnter={() => prefetchRoute(item.href)}
-                        className="flex items-center space-x-3 rounded-lg px-3 py-2 transition-colors hover:bg-[#2a2a2a]/50 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+                        className="flex items-center space-x-3 rounded-lg px-3 py-2 transition-colors hover:bg-[var(--muted)]/50 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none"
                       >
-                        <span className="text-gray-400">{item.icon}</span>
-                        <span className="text-gray-300">{item.label}</span>
-                        <span className="ml-auto text-xs text-gray-500">{item.category}</span>
+                        <span className="text-[var(--foreground)]/60">{item.icon}</span>
+                        <span className="text-[var(--foreground)]/80">{item.label}</span>
+                        <span className="ml-auto text-xs text-[var(--foreground)]/50">{item.category}</span>
                       </Link>
                     ))}
                   </div>
                 ) : (
-                  <div className="py-8 text-center text-gray-400" role="status" aria-live="polite">
+                  <div className="py-8 text-center text-[var(--foreground)]/50" role="status" aria-live="polite">
                     No results found for &quot;{query}&quot;
                   </div>
                 )}

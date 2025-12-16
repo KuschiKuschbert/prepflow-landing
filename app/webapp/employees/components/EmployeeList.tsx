@@ -19,10 +19,10 @@ export function EmployeeList({
 }: EmployeeListProps) {
   if (employees.length === 0) {
     return (
-      <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center shadow-lg">
-        <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
+      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center shadow-lg">
+        <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
           <svg
-            className="h-10 w-10 text-[#29E7CD]"
+            className="h-10 w-10 text-[var(--primary)]"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -36,8 +36,8 @@ export function EmployeeList({
             />
           </svg>
         </div>
-        <h3 className="mb-2 text-xl font-semibold text-white">No Employees</h3>
-        <p className="text-gray-400">Start by adding your kitchen staff and food handlers</p>
+        <h3 className="mb-2 text-xl font-semibold text-[var(--foreground)]">No Employees</h3>
+        <p className="text-[var(--foreground-muted)]">Start by adding your kitchen staff and food handlers</p>
       </div>
     );
   }

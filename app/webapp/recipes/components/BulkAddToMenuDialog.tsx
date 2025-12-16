@@ -25,17 +25,17 @@ export function BulkAddToMenuDialog({
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-md rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
-        <div className="rounded-2xl bg-[#1f1f1f]/95">
-          <div className="border-b border-[#2a2a2a] p-6">
+      <div className="w-full max-w-md rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl">
+        <div className="rounded-2xl bg-[var(--surface)]/95">
+          <div className="border-b border-[var(--border)] p-6">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-bold text-white">Add to Menu</h3>
-                <p className="text-sm text-gray-400">Select a menu to add selected items</p>
+                <h3 className="text-xl font-bold text-[var(--foreground)]">Add to Menu</h3>
+                <p className="text-sm text-[var(--foreground-muted)]">Select a menu to add selected items</p>
               </div>
               <button
                 onClick={onClose}
-                className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+                className="rounded-lg p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
                 aria-label="Close dialog"
               >
                 <Icon icon={X} size="sm" aria-hidden={true} />
@@ -49,17 +49,17 @@ export function BulkAddToMenuDialog({
                 <Icon
                   icon={Loader2}
                   size="lg"
-                  className="animate-spin text-[#29E7CD]"
+                  className="animate-spin text-[var(--primary)]"
                   aria-hidden={true}
                 />
-                <span className="ml-3 text-gray-400">Loading menus...</span>
+                <span className="ml-3 text-[var(--foreground-muted)]">Loading menus...</span>
               </div>
             ) : menus.length === 0 ? (
               <div className="py-8 text-center">
-                <p className="text-gray-400">No menus available</p>
+                <p className="text-[var(--foreground-muted)]">No menus available</p>
                 <button
                   onClick={onCreateNew}
-                  className="mt-4 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 font-medium text-white transition-all duration-200 hover:shadow-lg"
+                  className="mt-4 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 font-medium text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg"
                 >
                   Create New Menu
                 </button>
@@ -68,37 +68,37 @@ export function BulkAddToMenuDialog({
               <div className="space-y-2">
                 <button
                   onClick={onCreateNew}
-                  className="flex w-full items-center gap-3 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] p-4 text-left transition-colors hover:border-[#29E7CD]/50 hover:bg-[#2a2a2a]"
+                  className="flex w-full items-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--background)] p-4 text-left transition-colors hover:border-[var(--primary)]/50 hover:bg-[var(--muted)]"
                 >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7]">
-                    <Icon icon={Plus} size="sm" className="text-white" aria-hidden={true} />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]">
+                    <Icon icon={Plus} size="sm" className="text-[var(--button-active-text)]" aria-hidden={true} />
                   </div>
                   <div>
-                    <div className="font-medium text-white">Create New Menu</div>
-                    <div className="text-sm text-gray-400">Start a new menu from scratch</div>
+                    <div className="font-medium text-[var(--foreground)]">Create New Menu</div>
+                    <div className="text-sm text-[var(--foreground-muted)]">Start a new menu from scratch</div>
                   </div>
                 </button>
 
-                <div className="border-t border-[#2a2a2a] pt-2">
-                  <div className="mb-2 px-2 text-xs font-medium tracking-wider text-gray-400 uppercase">
+                <div className="border-t border-[var(--border)] pt-2">
+                  <div className="mb-2 px-2 text-xs font-medium tracking-wider text-[var(--foreground-muted)] uppercase">
                     Existing Menus
                   </div>
                   {menus.map(menu => (
                     <button
                       key={menu.id}
                       onClick={() => onSelectMenu(menu.id)}
-                      className="flex w-full items-center justify-between rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] p-4 text-left transition-colors hover:border-[#29E7CD]/50 hover:bg-[#2a2a2a]"
+                      className="flex w-full items-center justify-between rounded-lg border border-[var(--border)] bg-[var(--background)] p-4 text-left transition-colors hover:border-[var(--primary)]/50 hover:bg-[var(--muted)]"
                     >
                       <div className="flex-1">
-                        <div className="font-medium text-white">{menu.menu_name}</div>
+                        <div className="font-medium text-[var(--foreground)]">{menu.menu_name}</div>
                         {menu.description && (
-                          <div className="mt-1 text-sm text-gray-400">{menu.description}</div>
+                          <div className="mt-1 text-sm text-[var(--foreground-muted)]">{menu.description}</div>
                         )}
-                        <div className="mt-1 text-xs text-gray-500">
+                        <div className="mt-1 text-xs text-[var(--foreground-subtle)]">
                           {menu.items_count || 0} item{(menu.items_count || 0) !== 1 ? 's' : ''}
                         </div>
                       </div>
-                      <div className="ml-4 text-[#29E7CD]">
+                      <div className="ml-4 text-[var(--primary)]">
                         <svg
                           className="h-5 w-5"
                           fill="none"

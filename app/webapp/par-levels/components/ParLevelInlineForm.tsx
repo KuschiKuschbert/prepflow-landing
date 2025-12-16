@@ -66,13 +66,13 @@ export function ParLevelInlineForm({
     calculatedReorderPoint < parLevelValue;
 
   return (
-    <div className="mb-4 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-4">
+    <div className="mb-4 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4">
       <form onSubmit={onSubmit}>
         {/* Single Row Layout - Always Horizontal */}
         <div className="flex items-end gap-3">
           {/* Ingredient Dropdown */}
           <div className="min-w-[200px] flex-1">
-            <label className="mb-1 block text-xs font-medium text-gray-400">
+            <label className="mb-1 block text-xs font-medium text-[var(--foreground-muted)]">
               {t('parLevels.ingredient', 'Ingredient')}
             </label>
             <select
@@ -84,7 +84,7 @@ export function ParLevelInlineForm({
                   onFormDataChange('unit', '');
                 }
               }}
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-3 py-2 text-sm text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
               required
             >
               <option value="">{t('parLevels.selectIngredient', 'Select...')}</option>
@@ -98,7 +98,7 @@ export function ParLevelInlineForm({
 
           {/* Par Level Input */}
           <div className="max-w-[120px] flex-1">
-            <label className="mb-1 flex items-center gap-1 text-xs font-medium text-gray-400">
+            <label className="mb-1 flex items-center gap-1 text-xs font-medium text-[var(--foreground-muted)]">
               {t('parLevels.parLevel', 'Par Level')}
               <HelpTooltip content={getHelpText('parLevel', true)} title="Par Level" />
             </label>
@@ -106,7 +106,7 @@ export function ParLevelInlineForm({
               type="text"
               value={formData.parLevel}
               onChange={e => handleNumericChange('parLevel', e.target.value)}
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-3 py-2 text-sm text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
               placeholder="50"
               required
             />
@@ -114,7 +114,7 @@ export function ParLevelInlineForm({
 
           {/* Reorder Point Percentage Slider */}
           <div className="max-w-[160px] min-w-[140px] flex-1">
-            <label className="mb-1 flex items-center gap-1 text-xs font-medium text-gray-400">
+            <label className="mb-1 flex items-center gap-1 text-xs font-medium text-[var(--foreground-muted)]">
               {t('parLevels.reorderPoint', 'Reorder Point')}
               <HelpTooltip content={getHelpText('reorderPoint', true)} title="Reorder Point" />
             </label>
@@ -125,20 +125,20 @@ export function ParLevelInlineForm({
                 max="100"
                 value={formData.reorderPointPercentage ? formData.reorderPointPercentage : '50'}
                 onChange={e => onFormDataChange('reorderPointPercentage', e.target.value)}
-                className="slider h-3 w-24 flex-shrink-0 cursor-pointer appearance-none rounded-lg bg-[#2a2a2a]"
+                className="slider h-3 w-24 flex-shrink-0 cursor-pointer appearance-none rounded-lg bg-[var(--muted)]"
                 style={{
-                  background: `linear-gradient(to right, #29e7cd 0%, #29e7cd ${reorderPointPercentage}%, #2a2a2a ${reorderPointPercentage}%, #2a2a2a 100%)`,
+                  background: `linear-gradient(to right, #29e7cd 0%, #29e7cd ${reorderPointPercentage}%, var(--muted) ${reorderPointPercentage}%, var(--muted) 100%)`,
                 }}
                 required
               />
               <div className="w-10 text-center">
-                <div className="text-sm font-bold text-[#29E7CD]">
+                <div className="text-sm font-bold text-[var(--primary)]">
                   {String(Math.round(reorderPointPercentage))}%
                 </div>
               </div>
             </div>
             {parLevelValue > 0 && (
-              <p className="mt-0.5 text-xs text-gray-500">
+              <p className="mt-0.5 text-xs text-[var(--foreground-subtle)]">
                 {calculatedReorderPoint.toFixed(1)} {formData.unit}
               </p>
             )}
@@ -146,14 +146,14 @@ export function ParLevelInlineForm({
 
           {/* Unit Input */}
           <div className="max-w-[100px] flex-1">
-            <label className="mb-1 block text-xs font-medium text-gray-400">
+            <label className="mb-1 block text-xs font-medium text-[var(--foreground-muted)]">
               {t('parLevels.unit', 'Unit')}
             </label>
             <input
               type="text"
               value={formData.unit}
               onChange={e => onFormDataChange('unit', e.target.value)}
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-3 py-2 text-sm text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
               placeholder="kg"
               required
             />
@@ -164,7 +164,7 @@ export function ParLevelInlineForm({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2.5 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/80"
+              className="rounded-xl border border-[var(--border)] bg-[var(--muted)] px-3 py-2.5 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/80"
               aria-label="Cancel"
             >
               <Icon icon={X} size="sm" aria-hidden={true} />
@@ -172,7 +172,7 @@ export function ParLevelInlineForm({
             <button
               type="submit"
               disabled={!isValidParLevel}
-              className="rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
             >
               {t('parLevels.create', 'Add')}
             </button>
@@ -181,7 +181,7 @@ export function ParLevelInlineForm({
 
         {/* Validation Error Message */}
         {!isValidParLevel && formData.parLevel && formData.reorderPointPercentage && (
-          <p className="mt-2 text-xs text-red-400">
+          <p className="mt-2 text-xs text-[var(--color-error)]">
             {reorderPointPercentage > 100
               ? 'Reorder point percentage cannot exceed 100%'
               : calculatedReorderPoint >= parLevelValue

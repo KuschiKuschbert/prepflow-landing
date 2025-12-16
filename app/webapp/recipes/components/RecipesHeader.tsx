@@ -13,12 +13,12 @@ export function RecipesHeader() {
           className="rounded-lg"
           priority
         />
-        <h1 className="flex items-center gap-2 text-4xl font-bold text-white">
+        <h1 className="flex items-center gap-2 text-4xl font-bold text-[var(--foreground)]">
           <BookOpen className="h-8 w-8" />
           Recipe Book
         </h1>
       </div>
-      <p className="text-gray-400">Manage your saved recipes and create new ones</p>
+      <p className="text-[var(--foreground-muted)]">Manage your saved recipes and create new ones</p>
     </div>
   );
 }

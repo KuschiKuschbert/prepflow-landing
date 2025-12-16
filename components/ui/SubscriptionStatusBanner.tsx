@@ -77,12 +77,12 @@ export function SubscriptionStatusBanner({ className = '' }: SubscriptionStatusB
   const isTrial = subscriptionStatus === 'trial';
 
   const bannerStyles = isPastDue
-    ? 'border-yellow-500/30 bg-yellow-500/10'
+    ? 'border-[var(--color-warning)]/30 bg-[var(--color-warning)]/10'
     : isCancelled
-      ? 'border-red-500/30 bg-red-500/10'
-      : 'border-blue-500/30 bg-blue-500/10';
+      ? 'border-[var(--color-error)]/30 bg-[var(--color-error)]/10'
+      : 'border-[var(--color-info)]/30 bg-[var(--color-info)]/10';
 
-  const iconColor = isPastDue ? 'text-yellow-400' : isCancelled ? 'text-red-400' : 'text-blue-400';
+  const iconColor = isPastDue ? 'text-[var(--color-warning)]' : isCancelled ? 'text-[var(--color-error)]' : 'text-[var(--color-info)]';
 
   const icon = isPastDue || isCancelled ? AlertTriangle : Info;
 
@@ -123,15 +123,15 @@ export function SubscriptionStatusBanner({ className = '' }: SubscriptionStatusB
       <div className="flex items-center gap-3">
         <Icon icon={icon} size="md" className={iconColor} aria-hidden={true} />
         <div className="flex-1">
-          <p className="font-semibold text-white">{message.title}</p>
-          <p className="text-sm text-gray-300">{message.description}</p>
+          <p className="font-semibold text-[var(--foreground)]">{message.title}</p>
+          <p className="text-sm text-[var(--foreground-secondary)]">{message.description}</p>
         </div>
         <button
           onClick={e => {
             e.stopPropagation();
             handleDismiss();
           }}
-          className="rounded-lg p-1 text-gray-400 transition-colors hover:bg-black/20 hover:text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+          className="rounded-lg p-1 text-[var(--foreground-muted)] transition-colors hover:bg-black/20 hover:text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
           aria-label="Dismiss banner"
         >
           <Icon icon={X} size="sm" />

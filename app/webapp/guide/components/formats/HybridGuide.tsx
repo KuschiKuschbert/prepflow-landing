@@ -29,8 +29,8 @@ export function HybridGuide({ content, className = '' }: HybridGuideProps) {
       {content.threejs && (
         <Suspense
           fallback={
-            <div className="flex h-96 items-center justify-center rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
-              <div className="text-center text-gray-400">Loading 3D simulation...</div>
+            <div className="flex h-96 items-center justify-center rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
+              <div className="text-center text-[var(--foreground-muted)]">Loading 3D simulation...</div>
             </div>
           }
         >

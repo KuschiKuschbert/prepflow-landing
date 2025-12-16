@@ -100,7 +100,7 @@ export function VideoGuide({ content, className = '' }: VideoGuideProps) {
   return (
     <div className={`space-y-4 ${className}`}>
       {/* Video player */}
-      <div className="relative overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
+      <div className="relative overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
         <video
           ref={videoRef}
           src={content.src}
@@ -121,7 +121,7 @@ export function VideoGuide({ content, className = '' }: VideoGuideProps) {
             <Icon
               icon={playing ? Pause : Play}
               size="lg"
-              className="text-white"
+              className="text-[var(--foreground)]"
               aria-hidden={true}
             />
           </button>
@@ -135,10 +135,10 @@ export function VideoGuide({ content, className = '' }: VideoGuideProps) {
             max="100"
             value={duration ? (currentTime / duration) * 100 : 0}
             onChange={handleSeek}
-            className="h-2 w-full cursor-pointer appearance-none rounded-full bg-[#2a2a2a] accent-[#29E7CD]"
+            className="h-2 w-full cursor-pointer appearance-none rounded-full bg-[var(--muted)] accent-[#29E7CD]"
             aria-label="Video progress"
           />
-          <div className="mt-2 flex items-center justify-between text-xs text-white">
+          <div className="mt-2 flex items-center justify-between text-xs text-[var(--foreground)]">
             <span>{formatTime(currentTime)}</span>
             <div className="flex items-center gap-2">
               <button
@@ -156,8 +156,8 @@ export function VideoGuide({ content, className = '' }: VideoGuideProps) {
 
       {/* Chapters */}
       {content.chapters && content.chapters.length > 0 && (
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4">
-          <h3 className="mb-3 text-sm font-semibold text-white">Chapters</h3>
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+          <h3 className="mb-3 text-sm font-semibold text-[var(--foreground)]">Chapters</h3>
           <div className="space-y-2">
             {content.chapters.map((chapter, index) => (
               <button
@@ -166,13 +166,13 @@ export function VideoGuide({ content, className = '' }: VideoGuideProps) {
                 onClick={() => seekToChapter(index)}
                 className={`w-full rounded-xl border p-3 text-left text-sm transition-colors ${
                   activeChapter === index
-                    ? 'border-[#29E7CD] bg-[#29E7CD]/10 text-[#29E7CD]'
-                    : 'border-[#2a2a2a] bg-[#0a0a0a] text-gray-300 hover:border-[#2a2a2a] hover:bg-[#1f1f1f]'
+                    ? 'border-[var(--primary)] bg-[var(--primary)]/10 text-[var(--primary)]'
+                    : 'border-[var(--border)] bg-[var(--background)] text-[var(--foreground-secondary)] hover:border-[var(--border)] hover:bg-[var(--surface)]'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <span>{chapter.title}</span>
-                  <span className="text-xs text-gray-500">{formatTime(chapter.time)}</span>
+                  <span className="text-xs text-[var(--foreground-subtle)]">{formatTime(chapter.time)}</span>
                 </div>
               </button>
             ))}

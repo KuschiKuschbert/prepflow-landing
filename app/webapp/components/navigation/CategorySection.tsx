@@ -79,7 +79,7 @@ export function CategorySection({
     <div className="mb-3">
       {showLabels && (
         <h3
-          className="mb-1.5 text-[10px] font-semibold tracking-wider text-gray-500 uppercase"
+          className="mb-1.5 text-[10px] font-semibold tracking-wider text-[var(--foreground)]/40 uppercase"
           suppressHydrationWarning
         >
           {getCategoryLabel(category)}

@@ -79,29 +79,29 @@ export function EmptyState({
   // Container classes
   const containerClasses = useLanding
     ? WEBAPP_LANDING_PRESETS.emptyState.container
-    : 'overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]';
+    : 'overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]';
 
   // Icon classes
   const iconClasses = useLanding
-    ? `${WEBAPP_LANDING_PRESETS.emptyState.icon} text-[#29E7CD]`
-    : 'mx-auto mb-4 h-16 w-16 text-gray-400';
+    ? `${WEBAPP_LANDING_PRESETS.emptyState.icon} text-[var(--primary)]`
+    : 'mx-auto mb-4 h-16 w-16 text-[var(--foreground-muted)]';
 
   // Title classes
   const titleClasses = useLanding
     ? WEBAPP_LANDING_PRESETS.emptyState.title
-    : 'mb-2 text-xl font-semibold text-white';
+    : 'mb-2 text-xl font-semibold text-[var(--foreground)]';
 
   // Message classes
-  const messageClasses = useLanding ? WEBAPP_LANDING_PRESETS.emptyState.message : 'text-gray-400';
+  const messageClasses = useLanding ? WEBAPP_LANDING_PRESETS.emptyState.message : 'text-[var(--foreground-muted)]';
 
   // Content wrapper
   const content = (
     <div className={`${containerClasses} ${className}`}>
       {/* Optional header section */}
       {header && (
-        <div className="border-b border-[#2a2a2a] bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-6 py-4">
+        <div className="border-b border-[var(--border)] bg-gradient-to-r from-[var(--muted)]/50 to-[var(--muted)]/20 px-6 py-4">
           <div className="flex items-center justify-between">
-            <h2 className={`${LANDING_TYPOGRAPHY.xl} font-semibold text-white`}>{header.title}</h2>
+            <h2 className={`${LANDING_TYPOGRAPHY.xl} font-semibold text-[var(--button-active-text)]`}>{header.title}</h2>
             {header.actions && <div className="flex items-center gap-2">{header.actions}</div>}
           </div>
         </div>

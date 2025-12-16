@@ -57,19 +57,19 @@ export const BottomNavBar = memo(function BottomNavBar({
       href: '/webapp',
       icon: LayoutDashboard,
       label: 'Dashboard',
-      color: 'text-[#29E7CD]',
+      color: 'text-[var(--primary)]',
     },
     {
       href: '/webapp/recipes',
       icon: UtensilsCrossed,
       label: 'Recipes',
-      color: 'text-[#29E7CD]',
+      color: 'text-[var(--primary)]',
     },
     {
       href: '/webapp/performance',
       icon: BarChart3,
       label: 'Stats',
-      color: 'text-[#29E7CD]',
+      color: 'text-[var(--primary)]',
     },
   ];
 
@@ -80,7 +80,7 @@ export const BottomNavBar = memo(function BottomNavBar({
 
   return (
     <nav
-      className="fixed right-0 bottom-0 left-0 z-[60] h-[var(--bottom-navbar-height)] border-t border-[#2a2a2a]/30 bg-[#1f1f1f]/90 pb-[var(--safe-area-inset-bottom)] backdrop-blur-xl transition-transform duration-300"
+      className="fixed right-0 bottom-0 left-0 z-[60] h-[var(--bottom-navbar-height)] border-t border-[var(--border)]/30 bg-[var(--surface)]/90 pb-[var(--safe-area-inset-bottom)] backdrop-blur-xl transition-transform duration-300"
       style={{
         transform: isVisible ? 'translateY(0)' : 'translateY(100%)',
         transitionTimingFunction: 'var(--easing-standard)',
@@ -106,15 +106,15 @@ export const BottomNavBar = memo(function BottomNavBar({
               <span
                 className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all duration-200 ${
                   active
-                    ? 'border-[#29E7CD]/50 bg-[#29E7CD]/10'
-                    : 'border-transparent group-hover:border-[#2a2a2a]/50 group-hover:bg-[#2a2a2a]/30'
+                    ? 'border-[var(--primary)]/50 bg-[var(--primary)]/10'
+                    : 'border-transparent group-hover:border-[var(--border)]/50 group-hover:bg-[var(--muted)]/30'
                 }`}
                 style={{ transitionTimingFunction: 'var(--easing-standard)' }}
               >
                 <Icon
                   icon={item.icon}
                   size="sm"
-                  className={`transition-colors duration-200 ${active ? item.color : 'text-gray-400 group-hover:text-gray-300'}`}
+                  className={`transition-colors duration-200 ${active ? item.color : 'text-[var(--foreground)]/60 group-hover:text-[var(--foreground)]/80'}`}
                   aria-hidden={true}
                 />
               </span>
@@ -129,11 +129,11 @@ export const BottomNavBar = memo(function BottomNavBar({
           style={{ transitionTimingFunction: 'var(--easing-spring)' }}
           aria-label="Search"
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-transparent transition-all duration-200 group-hover:border-[#2a2a2a]/50 group-hover:bg-[#2a2a2a]/30">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-transparent transition-all duration-200 group-hover:border-[var(--border)]/50 group-hover:bg-[var(--muted)]/30">
             <Icon
               icon={Search}
               size="sm"
-              className="text-gray-400 transition-colors duration-200 group-hover:text-gray-300"
+              className="text-[var(--foreground)]/60 transition-colors duration-200 group-hover:text-[var(--foreground)]/80"
               aria-hidden={true}
             />
           </span>
@@ -147,11 +147,11 @@ export const BottomNavBar = memo(function BottomNavBar({
           style={{ transitionTimingFunction: 'var(--easing-spring)' }}
           aria-label="Open more menu"
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-transparent transition-all duration-200 group-hover:border-[#2a2a2a]/50 group-hover:bg-[#2a2a2a]/30">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-transparent transition-all duration-200 group-hover:border-[var(--border)]/50 group-hover:bg-[var(--muted)]/30">
             <Icon
               icon={Menu}
               size="sm"
-              className="text-gray-400 transition-colors duration-200 group-hover:text-gray-300"
+              className="text-[var(--foreground)]/60 transition-colors duration-200 group-hover:text-[var(--foreground)]/80"
               aria-hidden={true}
             />
           </span>

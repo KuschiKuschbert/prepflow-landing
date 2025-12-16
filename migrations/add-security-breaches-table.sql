@@ -46,3 +46,6 @@ COMMENT ON COLUMN security_breaches.affected_users IS 'Array of user emails affe
 COMMENT ON COLUMN security_breaches.status IS 'Status: pending (not yet notified), notified (users notified), failed (notification failed), resolved (breach resolved)';
 COMMENT ON COLUMN security_breaches.notification_sent_at IS 'Timestamp when notifications were sent to affected users';
 COMMENT ON COLUMN security_breaches.detected_at IS 'Timestamp when breach was detected (used for 72-hour compliance check)';
+
+
+

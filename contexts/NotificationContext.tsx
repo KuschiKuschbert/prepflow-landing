@@ -131,7 +131,7 @@ function Toast({ type, message }: ToastProps) {
     personality: {
       // More prominent styling for personality messages
       container:
-        'border-[#29E7CD]/50 bg-gradient-to-r from-[#29E7CD]/20 via-[#FF6B00]/20 via-[#D925C7]/20 to-[#29E7CD]/20 text-white shadow-2xl backdrop-blur-md',
+        'border-[#29E7CD]/50 bg-gradient-to-r from-[#29E7CD]/20 via-[#FF6B00]/20 via-[#D925C7]/20 to-[#29E7CD]/20 text-[var(--foreground)] shadow-2xl backdrop-blur-md',
       icon: 'text-[#29E7CD]',
     },
   };
@@ -175,7 +175,9 @@ function Toast({ type, message }: ToastProps) {
       <button
         onClick={() => setIsVisible(false)}
         className={`transition-colors ${
-          isPersonality ? 'text-white/70 hover:text-white' : 'text-gray-400 hover:text-white'
+          isPersonality
+            ? 'text-[var(--foreground)]/70 hover:text-[var(--foreground)]'
+            : 'text-[var(--foreground)]/60 hover:text-[var(--foreground)]'
         }`}
         aria-label="Close notification"
       >

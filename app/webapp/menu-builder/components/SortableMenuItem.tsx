@@ -102,7 +102,7 @@ export function SortableMenuItem({
   return (
     <div className="relative">
       {/* Vertical divider on top */}
-      <div className="absolute top-0 right-4 left-4 z-10 h-px bg-gradient-to-r from-transparent via-[#2a2a2a] to-transparent" />
+      <div className="absolute top-0 right-4 left-4 z-10 h-px bg-gradient-to-r from-transparent via-[var(--muted)] to-transparent" />
 
       <div
         ref={itemRef}
@@ -110,7 +110,7 @@ export function SortableMenuItem({
         onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className="group relative flex cursor-pointer items-center justify-between rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 transition-all hover:border-[#29E7CD]/50"
+        className="group relative flex cursor-pointer items-center justify-between rounded-lg border border-[var(--border)] bg-[var(--surface)] p-3 transition-all hover:border-[var(--primary)]/50"
       >
         <MenuItemContent item={item} menuId={menuId} />
 

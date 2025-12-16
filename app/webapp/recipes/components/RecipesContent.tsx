@@ -41,7 +41,7 @@ export function RecipesContent({
   capitalizeRecipeName,
 }: RecipesContentProps) {
   return (
-    <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] shadow">
+    <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow">
       <RecipeFilterBar
         recipes={recipes}
         searchTerm={filters.searchTerm}
@@ -64,18 +64,18 @@ export function RecipesContent({
         }
         onItemsPerPageChange={itemsPerPage => updateFilters({ itemsPerPage, currentPage: 1 })}
       />
-      <div className="tablet:px-6 border-b border-[#2a2a2a] bg-[#1f1f1f] px-4 py-4">
+      <div className="tablet:px-6 border-b border-[var(--border)] bg-[var(--surface)] px-4 py-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-white" suppressHydrationWarning>
+          <h2 className="text-lg font-semibold text-[var(--foreground)]" suppressHydrationWarning>
             Recipes ({filteredAndSortedRecipes.length}
             {filteredAndSortedRecipes.length !== recipes.length && ` of ${recipes.length}`})
           </h2>
           {selectedRecipes.size > 0 && (
             <div className="flex items-center">
-              <div className="mr-2 flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-r from-[#ef4444] to-[#dc2626]">
-                <span className="text-xs font-bold text-white">{selectedRecipes.size}</span>
+              <div className="mr-2 flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-error)] to-[#dc2626]">
+                <span className="text-xs font-bold text-[var(--button-active-text)]">{selectedRecipes.size}</span>
               </div>
-              <span className="text-sm text-gray-300">{selectedRecipes.size} selected</span>
+              <span className="text-sm text-[var(--foreground-secondary)]">{selectedRecipes.size} selected</span>
             </div>
           )}
         </div>
@@ -91,7 +91,7 @@ export function RecipesContent({
       />
 
       <div className="large-desktop:hidden block">
-        <div className="divide-y divide-[#2a2a2a]">
+        <div className="divide-y divide-[var(--muted)]">
           {paginatedRecipes.map(recipe => (
             <RecipeCard
               key={recipe.id}

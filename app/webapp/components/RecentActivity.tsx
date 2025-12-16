@@ -140,7 +140,7 @@ export default function RecentActivity() {
   // Show loading state only if we have no data and are loading
   if (loading && !activities) {
     return (
-      <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
+      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
         <LoadingSkeleton variant="list" count={5} height="64px" />
       </div>
     );
@@ -153,7 +153,7 @@ export default function RecentActivity() {
         error={ApiErrorHandler.createError(error)}
         context="Recent Activity"
         onRetry={refetch}
-        className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg"
+        className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg"
       />
     );
   }
@@ -161,18 +161,18 @@ export default function RecentActivity() {
   // Show empty state
   if (!activities || activities.length === 0) {
     return (
-      <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
+      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
         <div className="mb-4 flex items-center justify-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7]">
-            <Icon icon={Clock} size="lg" className="text-white" aria-hidden={true} />
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]">
+            <Icon icon={Clock} size="lg" className="text-[var(--button-active-text)]" aria-hidden={true} />
           </div>
         </div>
 
-        <h2 className="text-fluid-xl mb-2 text-center font-semibold text-white">
+        <h2 className="text-fluid-xl mb-2 text-center font-semibold text-[var(--foreground)]">
           No Recent Activity
         </h2>
 
-        <p className="text-fluid-sm text-center text-gray-400">
+        <p className="text-fluid-sm text-center text-[var(--foreground)]/60">
           Start by adding some ingredients or recipes to see recent activity here.
         </p>
       </div>
@@ -180,19 +180,19 @@ export default function RecentActivity() {
   }
 
   return (
-    <div className="tablet:rounded-3xl tablet:p-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
+    <div className="tablet:rounded-3xl tablet:p-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
       <div className="tablet:mb-6 mb-4 flex items-center justify-between">
-        <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-white">
+        <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
           Recent Activity
         </h2>
 
         <button
           onClick={refetch}
-          className="flex min-h-[44px] min-w-[44px] items-center justify-center text-[#29E7CD] transition-colors duration-200 hover:text-[#D925C7]"
+          className="flex min-h-[44px] min-w-[44px] items-center justify-center text-[var(--primary)] transition-colors duration-200 hover:text-[var(--accent)]"
           title="Refresh activity"
           aria-label="Refresh activity"
         >
-          <Icon icon={RefreshCw} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+          <Icon icon={RefreshCw} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
         </button>
       </div>
 
@@ -200,23 +200,23 @@ export default function RecentActivity() {
         {activities.slice(0, 5).map(activity => (
           <div
             key={activity.id}
-            className="tablet:space-x-4 tablet:rounded-2xl tablet:p-3 flex items-center space-x-3 rounded-xl bg-[#2a2a2a]/30 p-3 transition-colors duration-200 hover:bg-[#2a2a2a]/50"
+            className="tablet:space-x-4 tablet:rounded-2xl tablet:p-3 flex items-center space-x-3 rounded-xl bg-[var(--surface)]/30 p-3 transition-colors duration-200 hover:bg-[var(--surface)]/50"
           >
             <div className="flex-shrink-0">
               <div
                 className={`tablet:h-10 tablet:w-10 flex h-8 w-8 items-center justify-center rounded-full ${
                   activity.type === 'ingredient'
-                    ? 'bg-blue-500/20'
+                    ? 'bg-[var(--color-info)]/20'
                     : activity.type === 'recipe'
-                      ? 'bg-green-500/20'
+                      ? 'bg-[var(--color-success)]/20'
                       : 'bg-purple-500/20'
                 }`}
               >
                 {activity.type === 'ingredient' && (
-                  <Icon icon={Package} size="sm" className="text-blue-400" aria-hidden={true} />
+                  <Icon icon={Package} size="sm" className="text-[var(--color-info)]" aria-hidden={true} />
                 )}
                 {activity.type === 'recipe' && (
-                  <Icon icon={BookOpen} size="sm" className="text-green-400" aria-hidden={true} />
+                  <Icon icon={BookOpen} size="sm" className="text-[var(--color-success)]" aria-hidden={true} />
                 )}
                 {activity.type === 'menu_dish' && (
                   <Icon
@@ -230,10 +230,10 @@ export default function RecentActivity() {
             </div>
 
             <div className="min-w-0 flex-1">
-              <p className="text-fluid-sm tablet:text-fluid-base truncate font-medium text-white">
+              <p className="text-fluid-sm tablet:text-fluid-base truncate font-medium text-[var(--foreground)]">
                 {activity.name}
               </p>
-              <p className="text-fluid-xs tablet:text-fluid-sm text-gray-400">
+              <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground)]/60">
                 {activity.action === 'created' ? 'Created' : 'Updated'} •{' '}
                 {new Date(activity.created_at).toLocaleDateString()}
               </p>
@@ -243,9 +243,9 @@ export default function RecentActivity() {
               <span
                 className={`rounded-full px-2 py-1 text-xs font-medium ${
                   activity.type === 'ingredient'
-                    ? 'bg-blue-500/20 text-blue-400'
+                    ? 'bg-[var(--color-info)]/20 text-[var(--color-info)]'
                     : activity.type === 'recipe'
-                      ? 'bg-green-500/20 text-green-400'
+                      ? 'bg-[var(--color-success)]/20 text-[var(--color-success)]'
                       : 'bg-purple-500/20 text-purple-400'
                 }`}
               >

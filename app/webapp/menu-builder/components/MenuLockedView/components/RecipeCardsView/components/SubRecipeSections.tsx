@@ -27,7 +27,7 @@ export function SubRecipeSections({
       {/* Sauces */}
       {subRecipeCards.sauces.length > 0 && (
         <div>
-          <h3 className="mb-3 text-lg font-semibold text-[#29E7CD]">Sauces</h3>
+          <h3 className="mb-3 text-lg font-semibold text-[var(--primary)]">Sauces</h3>
           <div className="tablet:grid-cols-2 desktop:grid-cols-4 large-desktop:grid-cols-5 grid grid-cols-1 gap-4 transition-all duration-300 ease-in-out">
             {subRecipeCards.sauces.map(card => (
               <RecipeCard
@@ -51,7 +51,7 @@ export function SubRecipeSections({
       {/* Marinades */}
       {subRecipeCards.marinades.length > 0 && (
         <div>
-          <h3 className="mb-3 text-lg font-semibold text-[#29E7CD]">Marinades</h3>
+          <h3 className="mb-3 text-lg font-semibold text-[var(--primary)]">Marinades</h3>
           <div className="tablet:grid-cols-2 desktop:grid-cols-4 large-desktop:grid-cols-5 grid grid-cols-1 gap-4 transition-all duration-300 ease-in-out">
             {subRecipeCards.marinades.map(card => (
               <RecipeCard
@@ -75,7 +75,7 @@ export function SubRecipeSections({
       {/* Brines */}
       {subRecipeCards.brines.length > 0 && (
         <div>
-          <h3 className="mb-3 text-lg font-semibold text-[#29E7CD]">Brines</h3>
+          <h3 className="mb-3 text-lg font-semibold text-[var(--primary)]">Brines</h3>
           <div className="tablet:grid-cols-2 desktop:grid-cols-4 large-desktop:grid-cols-5 grid grid-cols-1 gap-4 transition-all duration-300 ease-in-out">
             {subRecipeCards.brines.map(card => (
               <RecipeCard
@@ -99,7 +99,7 @@ export function SubRecipeSections({
       {/* Slow-Cooked Items */}
       {subRecipeCards.slowCooked.length > 0 && (
         <div>
-          <h3 className="mb-3 text-lg font-semibold text-[#29E7CD]">Slow-Cooked Items</h3>
+          <h3 className="mb-3 text-lg font-semibold text-[var(--primary)]">Slow-Cooked Items</h3>
           <div className="tablet:grid-cols-2 desktop:grid-cols-4 large-desktop:grid-cols-5 grid grid-cols-1 gap-4 transition-all duration-300 ease-in-out">
             {subRecipeCards.slowCooked.map(card => (
               <RecipeCard
@@ -123,7 +123,7 @@ export function SubRecipeSections({
       {/* Other Prep Items */}
       {subRecipeCards.other.length > 0 && (
         <div>
-          <h3 className="mb-3 text-lg font-semibold text-[#29E7CD]">Other Prep Items</h3>
+          <h3 className="mb-3 text-lg font-semibold text-[var(--primary)]">Other Prep Items</h3>
           <div className="tablet:grid-cols-2 desktop:grid-cols-4 large-desktop:grid-cols-5 grid grid-cols-1 gap-4 transition-all duration-300 ease-in-out">
             {subRecipeCards.other.map(card => (
               <RecipeCard

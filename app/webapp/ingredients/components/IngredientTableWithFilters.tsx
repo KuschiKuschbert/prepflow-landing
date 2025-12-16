@@ -161,7 +161,7 @@ export default function IngredientTableWithFilters({
 
   if (loading) {
     return (
-      <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
+      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
         <LoadingSkeleton variant="table" />
       </div>
     );
@@ -192,7 +192,7 @@ export default function IngredientTableWithFilters({
     );
   }
   return (
-    <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
+    <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
       <IngredientTableFilterBar
         ingredients={ingredients}
         searchTerm={searchTerm}

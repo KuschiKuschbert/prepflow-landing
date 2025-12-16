@@ -176,12 +176,12 @@ export default function PrepListsPage() {
 
   return (
     <ResponsivePageContainer>
-      <div className="min-h-screen bg-transparent py-8 text-white">
+      <div className="min-h-screen bg-transparent py-8 text-[var(--foreground)]">
         <PrepListsHeader onGenerateClick={openGenerateModal} onCreateClick={openForm} />
 
         {formError && (
-          <div className="mb-6 rounded-2xl border border-red-400/20 bg-red-400/10 p-4">
-            <p className="text-red-400">{formError}</p>
+          <div className="mb-6 rounded-2xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-4">
+            <p className="text-[var(--color-error)]">{formError}</p>
           </div>
         )}
 

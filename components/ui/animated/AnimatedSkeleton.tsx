@@ -17,5 +17,5 @@ export function AnimatedSkeleton({ variant = 'card', className = '' }: AnimatedS
     rect: 'h-20 rounded-xl',
   };
 
-  return <div className={`animate-shimmer bg-[#2a2a2a] ${variants[variant]} ${className} `} />;
+  return <div className={`animate-shimmer bg-[var(--muted)] ${variants[variant]} ${className} `} />;
 }

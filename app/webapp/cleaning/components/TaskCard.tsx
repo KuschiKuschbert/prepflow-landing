@@ -34,12 +34,12 @@ interface TaskCardProps {
 function getStatusIcon(status: string) {
   switch (status) {
     case 'completed':
-      return <Icon icon={CheckCircle} size="lg" className="text-green-400" aria-hidden={true} />;
+      return <Icon icon={CheckCircle} size="lg" className="text-[var(--color-success)]" aria-hidden={true} />;
     case 'overdue':
-      return <Icon icon={AlertTriangle} size="lg" className="text-red-400" aria-hidden={true} />;
+      return <Icon icon={AlertTriangle} size="lg" className="text-[var(--color-error)]" aria-hidden={true} />;
     default:
       return (
-        <Icon icon={ClipboardCheck} size="lg" className="text-yellow-400" aria-hidden={true} />
+        <Icon icon={ClipboardCheck} size="lg" className="text-[var(--color-warning)]" aria-hidden={true} />
       );
   }
 }
@@ -47,11 +47,11 @@ function getStatusIcon(status: string) {
 function getStatusColor(status: string) {
   switch (status) {
     case 'completed':
-      return 'text-green-400 bg-green-400/10 border-green-400/20';
+      return 'text-[var(--color-success)] bg-[var(--color-success)]/10 border-[var(--color-success)]/20';
     case 'overdue':
-      return 'text-red-400 bg-red-400/10 border-red-400/20';
+      return 'text-[var(--color-error)] bg-[var(--color-error)]/10 border-[var(--color-error)]/20';
     default:
-      return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20';
+      return 'text-[var(--color-warning)] bg-[var(--color-warning)]/10 border-[var(--color-warning)]/20';
   }
 }
 
@@ -59,15 +59,15 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
   const { t } = useTranslation();
 
   return (
-    <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg transition-all duration-200 hover:shadow-xl">
+    <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg transition-all duration-200 hover:shadow-xl">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
             {getStatusIcon(task.status)}
           </div>
           <div>
-            <h3 className="text-xl font-semibold text-white">{task.cleaning_areas.name}</h3>
-            <p className="text-gray-400">{new Date(task.assigned_date).toLocaleDateString()}</p>
+            <h3 className="text-xl font-semibold text-[var(--foreground)]">{task.cleaning_areas.name}</h3>
+            <p className="text-[var(--foreground-muted)]">{new Date(task.assigned_date).toLocaleDateString()}</p>
           </div>
         </div>
         <span
@@ -77,10 +77,10 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
         </span>
       </div>
 
-      {task.notes && <p className="mb-4 text-gray-300">{task.notes}</p>}
+      {task.notes && <p className="mb-4 text-[var(--foreground-secondary)]">{task.notes}</p>}
 
       {task.completed_date && (
-        <p className="mb-4 flex items-center gap-2 text-sm text-green-400">
+        <p className="mb-4 flex items-center gap-2 text-sm text-[var(--color-success)]">
           <Icon icon={CheckCircle} size="sm" aria-hidden={true} />
           {t('cleaning.completedOn', 'Completed on')}{' '}
           {new Date(task.completed_date).toLocaleString()}
@@ -94,7 +94,7 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
             alt="Cleaning verification"
             width={128}
             height={128}
-            className="h-32 w-32 rounded-2xl border border-[#2a2a2a] object-cover"
+            className="h-32 w-32 rounded-2xl border border-[var(--border)] object-cover"
           />
         </div>
       )}
@@ -103,17 +103,17 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
         {task.status === 'pending' && (
           <button
             onClick={() => onComplete(task.id)}
-            className="flex items-center gap-2 rounded-xl bg-[#29E7CD] px-4 py-2 font-semibold text-black transition-all duration-200 hover:shadow-lg"
+            className="flex items-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-2 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg"
           >
             <Icon icon={CheckCircle} size="sm" aria-hidden={true} />
             {t('cleaning.markComplete', 'Mark Complete')}
           </button>
         )}
-        <button className="flex items-center gap-2 rounded-xl bg-[#2a2a2a] px-4 py-2 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]">
+        <button className="flex items-center gap-2 rounded-xl bg-[var(--muted)] px-4 py-2 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]">
           <Icon icon={Camera} size="sm" aria-hidden={true} />
           {t('cleaning.addPhoto', 'Add Photo')}
         </button>
-        <button className="flex items-center gap-2 rounded-xl bg-[#2a2a2a] px-4 py-2 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]">
+        <button className="flex items-center gap-2 rounded-xl bg-[var(--muted)] px-4 py-2 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]">
           <Icon icon={Edit} size="sm" aria-hidden={true} />
           {t('cleaning.edit', 'Edit')}
         </button>

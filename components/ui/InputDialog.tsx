@@ -115,12 +115,12 @@ export function InputDialog({
 
   const variantStyles = {
     info: {
-      icon: 'text-[#29E7CD]',
+      icon: 'text-[var(--primary)]',
       confirm:
-        'bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] hover:from-[#29E7CD]/80 hover:via-[#FF6B00]/80 hover:to-[#D925C7]/80 hover:shadow-[#FF6B00]/25',
+        'bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] hover:from-[var(--primary)]/80 hover:via-[var(--tertiary)]/80 hover:to-[var(--accent)]/80 hover:shadow-[var(--tertiary)]/25',
     },
     warning: {
-      icon: 'text-yellow-400',
+      icon: 'text-[var(--color-warning)]',
       confirm:
         'bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-500/80 hover:to-orange-500/80',
     },
@@ -138,10 +138,10 @@ export function InputDialog({
       />
 
       {/* Dialog with gradient border */}
-      <div className="relative z-50 w-full max-w-md rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
+      <div className="relative z-50 w-full max-w-md rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl">
         <div
           ref={dialogRef}
-          className="desktop:p-6 rounded-3xl bg-[#1f1f1f]/95 p-4"
+          className="desktop:p-6 rounded-3xl bg-[var(--surface)]/95 p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="dialog-title"
@@ -159,12 +159,12 @@ export function InputDialog({
           </div>
 
           {/* Title */}
-          <h2 id="dialog-title" className="text-fluid-xl mb-2 text-center font-bold text-white">
+          <h2 id="dialog-title" className="text-fluid-xl mb-2 text-center font-bold text-[var(--foreground)]">
             {title}
           </h2>
 
           {/* Message */}
-          <p id="dialog-description" className="text-fluid-sm mb-4 text-center text-gray-300">
+          <p id="dialog-description" className="text-fluid-sm mb-4 text-center text-[var(--foreground)]/70">
             {message}
           </p>
 
@@ -182,13 +182,13 @@ export function InputDialog({
               min={min}
               max={max}
               className={`w-full rounded-2xl border ${
-                error ? 'border-red-500' : 'border-[#2a2a2a]'
-              } bg-[#0a0a0a] px-4 py-3 text-white placeholder-gray-500 transition-all duration-200 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none`}
+                error ? 'border-[var(--color-error)]' : 'border-[var(--border)]'
+              } bg-[var(--background)] px-4 py-3 text-[var(--foreground)] placeholder-[var(--foreground)]/50 transition-all duration-200 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none`}
               aria-invalid={error ? 'true' : 'false'}
               aria-describedby={error ? 'error-message' : undefined}
             />
             {error && (
-              <p id="error-message" className="text-fluid-sm mt-2 text-red-400" role="alert">
+              <p id="error-message" className="text-fluid-sm mt-2 text-[var(--color-error)]" role="alert">
                 {error}
               </p>
             )}
@@ -199,14 +199,14 @@ export function InputDialog({
             <button
               ref={cancelButtonRef}
               onClick={onCancel}
-              className="flex-1 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-4 py-3 font-semibold text-gray-300 transition-all duration-200 hover:bg-[#2a2a2a]/60 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+              className="flex-1 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/40 px-4 py-3 font-semibold text-[var(--foreground)]/70 transition-all duration-200 hover:bg-[var(--muted)]/60 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none"
             >
               {cancelLabel}
             </button>
             <button
               ref={confirmButtonRef}
               onClick={handleConfirm}
-              className={`flex-1 rounded-2xl px-4 py-3 font-semibold text-white transition-all duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none ${styles.confirm}`}
+              className={`flex-1 rounded-2xl px-4 py-3 font-semibold text-[var(--foreground)] transition-all duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none ${styles.confirm}`}
             >
               {confirmLabel}
             </button>

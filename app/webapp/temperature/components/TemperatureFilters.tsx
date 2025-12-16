@@ -94,13 +94,13 @@ export function TemperatureFilters({
     <div className="tablet:flex-row tablet:items-center flex flex-col items-start justify-between gap-4">
       <div className="tablet:flex-row flex flex-col gap-4">
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
             {t('temperature.filterDate', 'Filter by Date')}
           </label>
           <div className="flex items-center space-x-2">
             <button
               onClick={() => adjustDate(-1)}
-              className="flex items-center justify-center rounded-xl bg-[#2a2a2a] px-3 py-2 text-white transition-all duration-200 hover:bg-[#3a3a3a]"
+              className="flex items-center justify-center rounded-xl bg-[var(--muted)] px-3 py-2 text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]"
               title="Previous day"
             >
               <span className="text-lg">←</span>
@@ -109,11 +109,11 @@ export function TemperatureFilters({
               type="date"
               value={getValidDate(selectedDate)}
               onChange={e => setSelectedDate(e.target.value)}
-              className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             />
             <button
               onClick={() => adjustDate(1)}
-              className="flex items-center justify-center rounded-xl bg-[#2a2a2a] px-3 py-2 text-white transition-all duration-200 hover:bg-[#3a3a3a]"
+              className="flex items-center justify-center rounded-xl bg-[var(--muted)] px-3 py-2 text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]"
               title="Next day"
             >
               <span className="text-lg">→</span>
@@ -122,7 +122,7 @@ export function TemperatureFilters({
               onClick={() => {
                 setSelectedDate(new Date().toISOString().split('T')[0]);
               }}
-              className="rounded-xl bg-[#29E7CD]/10 px-3 py-2 text-sm font-medium text-[#29E7CD] transition-all duration-200 hover:bg-[#29E7CD]/20"
+              className="rounded-xl bg-[var(--primary)]/10 px-3 py-2 text-sm font-medium text-[var(--primary)] transition-all duration-200 hover:bg-[var(--primary)]/20"
               title="Go to today"
             >
               Today
@@ -130,13 +130,13 @@ export function TemperatureFilters({
           </div>
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
             {t('temperature.filterEquipment', 'Filter by Equipment')}
           </label>
           <select
             value={selectedType}
             onChange={e => setSelectedType(e.target.value)}
-            className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+            className="rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
           >
             <option value="all">{t('temperature.allEquipment', 'All Equipment')}</option>
             {isMounted &&
@@ -172,9 +172,9 @@ export function TemperatureFilters({
       </div>
       <button
         onClick={onAddClick}
-        className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
+        className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
       >
-        <Icon icon={Plus} size="md" className="text-black" aria-hidden={true} />
+        <Icon icon={Plus} size="md" className="text-[var(--button-active-text)]" aria-hidden={true} />
         {t('temperature.addLog', 'Add Temperature Log')}
       </button>
     </div>

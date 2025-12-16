@@ -50,3 +50,6 @@ export function hasRecentActivity(days = 1): boolean {
 
   return lastActive >= cutoff;
 }
+
+
+

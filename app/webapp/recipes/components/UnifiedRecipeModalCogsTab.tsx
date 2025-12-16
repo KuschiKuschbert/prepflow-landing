@@ -30,7 +30,7 @@ export function UnifiedRecipeModalCogsTab({
 
   if (calculations.length === 0) {
     return (
-      <div className="py-12 text-center text-gray-400">
+      <div className="py-12 text-center text-[var(--foreground-muted)]">
         No ingredients found. Add ingredients to see COGS breakdown.
       </div>
     );

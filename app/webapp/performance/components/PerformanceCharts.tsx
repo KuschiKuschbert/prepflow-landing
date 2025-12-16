@@ -19,8 +19,8 @@ const PerformanceChartsContent = dynamic(() => import('./PerformanceChartsLazy')
   ssr: false,
   loading: () => (
     <div className="mb-8 space-y-6">
-      <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-        <div className="h-72 w-full animate-pulse bg-[#2a2a2a]" />
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
+        <div className="h-72 w-full animate-pulse bg-[var(--muted)]" />
       </div>
     </div>
   ),
@@ -59,8 +59,8 @@ export default function PerformanceCharts({ performanceItems, dateRange }: Perfo
       )}
       {!isIntersecting && (
         <div className="mb-8 space-y-6">
-          <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-            <div className="h-72 w-full animate-pulse bg-[#2a2a2a]" />
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
+            <div className="h-72 w-full animate-pulse bg-[var(--muted)]" />
           </div>
         </div>
       )}

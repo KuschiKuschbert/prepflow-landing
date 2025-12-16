@@ -12,10 +12,10 @@ interface BillingActionsCardProps {
  */
 export function BillingActionsCard({ openingPortal, onOpenPortal }: BillingActionsCardProps) {
   return (
-    <div className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+    <div className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
       <div>
         <h2 className="text-xl font-semibold">Billing Management</h2>
-        <p className="mt-1 text-sm text-gray-300">
+        <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
           Manage your payment method, view invoices, and update your subscription.
         </p>
       </div>
@@ -32,7 +32,7 @@ export function BillingActionsCard({ openingPortal, onOpenPortal }: BillingActio
         </Button>
       </div>
 
-      <p className="text-xs text-gray-500">
+      <p className="text-xs text-[var(--foreground-subtle)]">
         The billing portal allows you to update your payment method, view billing history, and
         manage your subscription.
       </p>

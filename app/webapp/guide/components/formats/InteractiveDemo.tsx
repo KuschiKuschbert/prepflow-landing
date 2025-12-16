@@ -93,13 +93,13 @@ export function InteractiveDemo({ content, className = '' }: InteractiveDemoProp
   const getHighlightClass = () => {
     switch (content.highlightType) {
       case 'pulse':
-        return 'animate-pulse border-2 border-[#29E7CD] bg-[#29E7CD]/20';
+        return 'animate-pulse border-2 border-[var(--primary)] bg-[var(--primary)]/20';
       case 'outline':
-        return 'border-4 border-[#29E7CD] shadow-[0_0_0_4px_rgba(41,231,205,0.2)]';
+        return 'border-4 border-[var(--primary)] shadow-[0_0_0_4px_rgba(41,231,205,0.2)]';
       case 'overlay':
-        return 'bg-[#29E7CD]/30 backdrop-blur-sm border-2 border-[#29E7CD]';
+        return 'bg-[var(--primary)]/30 backdrop-blur-sm border-2 border-[var(--primary)]';
       default:
-        return 'border-2 border-[#29E7CD]';
+        return 'border-2 border-[var(--primary)]';
     }
   };
 
@@ -162,9 +162,9 @@ export function InteractiveDemo({ content, className = '' }: InteractiveDemoProp
       )}
 
       {/* Instructions panel */}
-      <div className="mt-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4">
+      <div className="mt-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
         {!elementFound ? (
-          <div className="flex items-center gap-2 text-sm text-yellow-400">
+          <div className="flex items-center gap-2 text-sm text-[var(--color-warning)]">
             <Icon icon={MousePointerClick} size="sm" aria-hidden={true} />
             <span>
               Element not found: <code className="text-xs">{content.targetSelector}</code>
@@ -172,7 +172,7 @@ export function InteractiveDemo({ content, className = '' }: InteractiveDemoProp
           </div>
         ) : (
           <>
-            <p className="mb-3 text-sm text-gray-300">
+            <p className="mb-3 text-sm text-[var(--foreground-secondary)]">
               Look for the highlighted element on the page. Follow the instructions below to
               interact with it.
             </p>
@@ -188,14 +188,14 @@ export function InteractiveDemo({ content, className = '' }: InteractiveDemoProp
                       onClick={() => handleActionClick(index)}
                       className={`w-full rounded-xl border p-3 text-left transition-all ${
                         isActive
-                          ? 'border-[#29E7CD] bg-[#29E7CD]/10'
-                          : 'border-[#2a2a2a] bg-[#0a0a0a] hover:border-[#2a2a2a] hover:bg-[#1f1f1f]'
+                          ? 'border-[var(--primary)] bg-[var(--primary)]/10'
+                          : 'border-[var(--border)] bg-[var(--background)] hover:border-[var(--border)] hover:bg-[var(--surface)]'
                       }`}
                     >
                       <div className="flex items-center gap-3">
                         <span
                           className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${
-                            isActive ? 'bg-[#29E7CD] text-black' : 'bg-[#29E7CD]/20 text-[#29E7CD]'
+                            isActive ? 'bg-[var(--primary)] text-[var(--primary-text)]' : 'bg-[var(--primary)]/20 text-[var(--primary)]'
                           }`}
                         >
                           {index + 1}
@@ -203,18 +203,18 @@ export function InteractiveDemo({ content, className = '' }: InteractiveDemoProp
                         <Icon
                           icon={ActionIcon}
                           size="sm"
-                          className="text-gray-400"
+                          className="text-[var(--foreground-muted)]"
                           aria-hidden={true}
                         />
                         <div className="flex-1">
-                          <span className="text-sm text-gray-300">
+                          <span className="text-sm text-[var(--foreground-secondary)]">
                             {action.type === 'click' && `Click on ${action.target}`}
                             {action.type === 'type' &&
                               `Type "${action.value}" into ${action.target}`}
                             {action.type === 'scroll' && `Scroll to ${action.target}`}
                           </span>
                         </div>
-                        {isActive && <span className="text-xs text-[#29E7CD]">Executed</span>}
+                        {isActive && <span className="text-xs text-[var(--primary)]">Executed</span>}
                       </div>
                     </button>
                   );

@@ -89,17 +89,17 @@ export const IngredientsList: React.FC<IngredientsListProps> = ({
   }
 
   return (
-    <div className="mt-4 rounded-xl border border-[#2a2a2a]/50 bg-[#0a0a0a]/50 p-3">
-      <h4 className="mb-2 text-xs font-semibold tracking-wide text-gray-400 uppercase">
+    <div className="mt-4 rounded-xl border border-[var(--border)]/50 bg-[var(--background)]/50 p-3">
+      <h4 className="mb-2 text-xs font-semibold tracking-wide text-[var(--foreground-muted)] uppercase">
         Ingredients ({calculations.length})
       </h4>
       <div className="space-y-1.5">
         {calculations.map((calc, index) => (
           <div
             key={`${calc.recipeId || 'dish'}-${calc.ingredientId || calc.id || index}`}
-            className="group flex items-center justify-between rounded-lg bg-[#1f1f1f]/50 px-2 py-1.5 text-sm transition-colors hover:bg-[#2a2a2a]/50"
+            className="group flex items-center justify-between rounded-lg bg-[var(--surface)]/50 px-2 py-1.5 text-sm transition-colors hover:bg-[var(--muted)]/50"
           >
-            <span className="text-gray-300">{calc.ingredientName}</span>
+            <span className="text-[var(--foreground-secondary)]">{calc.ingredientName}</span>
             <div className="flex items-center gap-2">
               {editingIngredient === calc.ingredientId ? (
                 <>
@@ -108,12 +108,12 @@ export const IngredientsList: React.FC<IngredientsListProps> = ({
                       type="number"
                       value={editQuantity}
                       onChange={e => setEditQuantity(parseFloat(e.target.value) || 0)}
-                      className="w-16 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-2 py-1 text-xs text-white focus:border-[#29E7CD] focus:ring-1 focus:ring-[#29E7CD] focus:outline-none"
+                      className="w-16 rounded-lg border border-[var(--border)] bg-[var(--background)] px-2 py-1 text-xs text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] focus:outline-none"
                       step="0.1"
                       min="0"
                       autoFocus
                     />
-                    <span className="text-xs text-gray-400">{formatUnit(calc.unit)}</span>
+                    <span className="text-xs text-[var(--foreground-muted)]">{formatUnit(calc.unit)}</span>
                   </div>
                   <button
                     onClick={() => {
@@ -123,7 +123,7 @@ export const IngredientsList: React.FC<IngredientsListProps> = ({
                       setEditingIngredient(null);
                       setEditQuantity(0);
                     }}
-                    className="rounded-lg bg-[#29E7CD] p-1 text-white transition-colors hover:bg-[#29E7CD]/80"
+                    className="rounded-lg bg-[var(--primary)] p-1 text-[var(--button-active-text)] transition-colors hover:bg-[var(--primary)]/80"
                     aria-label="Save"
                   >
                     <Icon icon={Check} size="xs" aria-hidden={true} />
@@ -133,7 +133,7 @@ export const IngredientsList: React.FC<IngredientsListProps> = ({
                       setEditingIngredient(null);
                       setEditQuantity(0);
                     }}
-                    className="rounded-lg bg-gray-600 p-1 text-white transition-colors hover:bg-gray-500"
+                    className="rounded-lg bg-gray-600 p-1 text-[var(--foreground)] transition-colors hover:bg-gray-500"
                     aria-label="Cancel"
                   >
                     <Icon icon={X} size="xs" aria-hidden={true} />
@@ -141,7 +141,7 @@ export const IngredientsList: React.FC<IngredientsListProps> = ({
                 </>
               ) : (
                 <>
-                  <span className="font-medium text-gray-400">
+                  <span className="font-medium text-[var(--foreground-muted)]">
                     {formatQuantity(calc.quantity)} {formatUnit(calc.unit)}
                   </span>
                   <button
@@ -149,14 +149,14 @@ export const IngredientsList: React.FC<IngredientsListProps> = ({
                       setEditingIngredient(calc.ingredientId);
                       setEditQuantity(calc.quantity);
                     }}
-                    className="rounded-lg p-1 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+                    className="rounded-lg p-1 text-[var(--foreground-muted)] opacity-0 transition-all group-hover:opacity-100 hover:bg-[var(--muted)] hover:text-[var(--primary)]"
                     aria-label="Edit quantity"
                   >
                     <Icon icon={Edit} size="xs" aria-hidden={true} />
                   </button>
                   <button
                     onClick={() => onRemoveCalculation(calc.ingredientId)}
-                    className="rounded-lg p-1 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-red-500/20 hover:text-red-400"
+                    className="rounded-lg p-1 text-[var(--foreground-muted)] opacity-0 transition-all group-hover:opacity-100 hover:bg-[var(--color-error)]/20 hover:text-[var(--color-error)]"
                     aria-label="Remove ingredient"
                   >
                     <Icon icon={Trash2} size="xs" aria-hidden={true} />

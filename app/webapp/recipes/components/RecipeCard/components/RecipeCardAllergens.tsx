@@ -21,7 +21,7 @@ export function RecipeCardAllergens({ recipe }: RecipeCardAllergensProps) {
     <div className="mb-3 ml-7 space-y-2">
       {hasAllergens && (
         <div>
-          <span className="text-xs font-medium text-gray-400">Allergens:</span>
+          <span className="text-xs font-medium text-[var(--foreground-muted)]">Allergens:</span>
           <div className="mt-1">
             <AllergenDisplay allergens={recipe.allergens || []} size="sm" showEmpty={false} />
           </div>

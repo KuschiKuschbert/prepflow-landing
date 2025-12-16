@@ -42,7 +42,7 @@ export function MenuItemHoverStatistics({
   const tooltipContent = (
     <div
       ref={tooltipRef}
-      className="pointer-events-none fixed z-[60] w-64 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-xl"
+      className="pointer-events-none fixed z-[60] w-64 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-xl"
       style={{
         left: tooltipPosition.left !== undefined ? `${tooltipPosition.left}px` : undefined,
         top: tooltipPosition.top !== undefined ? `${tooltipPosition.top}px` : undefined,

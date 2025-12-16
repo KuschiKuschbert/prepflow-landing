@@ -3,12 +3,42 @@
 :root {
   --background: #0a0a0a;
   --foreground: #ffffff;
-  --primary: #29e7cd;
+  --primary: #29e7cd; /* Bright cyan for dark theme */
   --secondary: #3b82f6;
-  --accent: #d925c7;
+  --accent: #d925c7; /* Bright magenta for dark theme */
   --tertiary: #ff6b00;
-  --muted: #1f1f1f;
-  --border: #2a2a2a;
+  --muted: #2a2a2a; /* Lighter grey for cards/containers - improved readability */
+  --border: #3a3a3a; /* Lighter border for better contrast */
+  --surface: #3a3a3a; /* Lighter grey for elevated surfaces/cards - pale-light-dark grey */
+  --surface-variant: rgba(58, 58, 58, 0.5); /* Lighter variant */
+
+  /* Text contrast levels - better readability */
+  --foreground-secondary: rgba(255, 255, 255, 0.9); /* 90% opacity for better contrast */
+  --foreground-muted: rgba(255, 255, 255, 0.75); /* 75% opacity for muted text - improved readability */
+  --foreground-subtle: rgba(255, 255, 255, 0.6); /* 60% opacity for subtle text - improved readability */
+
+  /* Theme-specific cyber carrot colors - Dark theme (bright, vibrant) */
+  --primary-text: #ffffff; /* Light text for dark theme buttons */
+  --accent-text: #ffffff; /* Light text for dark theme buttons */
+
+  /* Active button states - Dark theme (bright, vibrant backgrounds with white text) */
+  --button-active-bg: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  --button-active-text: #ffffff; /* Always white for maximum contrast on bright gradients */
+  --button-active-shadow: 0 10px 25px -5px rgba(41, 231, 205, 0.4), 0 8px 10px -6px rgba(217, 37, 199, 0.3);
+
+  /* Semantic colors for chips/badges - Dark theme (bright, vibrant) */
+  --color-success: #34d399; /* Bright green */
+  --color-success-bg: rgba(52, 211, 153, 0.2); /* Green background */
+  --color-success-border: rgba(52, 211, 153, 0.3); /* Green border */
+  --color-warning: #fbbf24; /* Bright yellow/orange */
+  --color-warning-bg: rgba(251, 191, 36, 0.2); /* Yellow background */
+  --color-warning-border: rgba(251, 191, 36, 0.3); /* Yellow border */
+  --color-error: #f87171; /* Bright red */
+  --color-error-bg: rgba(248, 113, 113, 0.2); /* Red background */
+  --color-error-border: rgba(248, 113, 113, 0.3); /* Red border */
+  --color-info: #60a5fa; /* Bright blue */
+  --color-info-bg: rgba(96, 165, 250, 0.2); /* Blue background */
+  --color-info-border: rgba(96, 165, 250, 0.3); /* Blue border */
 
   /* Header height variables for mobile and desktop */
   --header-height-mobile: 56px;
@@ -38,6 +68,58 @@
   --easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
   --easing-decelerated: cubic-bezier(0, 0, 0.2, 1);
   --easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Background gradient - dark mode */
+  --background-gradient: linear-gradient(180deg, rgba(10,10,10,1) 0%, rgba(8,8,10,1) 100%);
+}
+
+/* Light Mode Theme Variables - Pale-light-dark grey for better readability */
+[data-theme="light"] {
+  --background: #f5f5f5; /* Softer off-white background */
+  --foreground: #1a1a1a; /* Darker text for better contrast */
+  --primary: #1a9d8a; /* Darker, more saturated cyan for better contrast in light theme */
+  --secondary: #3b82f6;
+  --accent: #a01a8a; /* Darker, more saturated magenta for better contrast in light theme */
+  --tertiary: #ff6b00;
+  --muted: #d8d8d8; /* Pale-light-dark grey for cards/containers */
+  --border: #c0c0c0; /* Darker borders for better visibility */
+  --surface: #e8e8e8; /* Pale-light-dark grey for elevated surfaces/cards */
+  --surface-variant: rgba(232, 232, 232, 0.8); /* Pale-light-dark grey variant */
+
+  /* Text contrast levels - higher opacity for better readability in light mode */
+  --foreground-secondary: rgba(26, 26, 26, 0.9); /* 90% opacity for better contrast */
+  --foreground-muted: rgba(26, 26, 26, 0.8); /* 80% opacity for muted text - improved readability */
+  --foreground-subtle: rgba(26, 26, 26, 0.65); /* 65% opacity for subtle text - less subtle */
+
+  /* Theme-specific cyber carrot colors - Light theme (darker, more saturated for contrast) */
+  --primary-text: #1a1a1a; /* Dark text for light theme buttons */
+  --accent-text: #1a1a1a; /* Dark text for light theme buttons */
+
+  /* Active button states - Light theme (darker, more saturated backgrounds with white text for contrast) */
+  --button-active-bg: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  --button-active-text: #ffffff; /* Always white for maximum contrast on darker gradients */
+  --button-active-shadow: 0 10px 25px -5px rgba(26, 157, 138, 0.4), 0 8px 10px -6px rgba(160, 26, 138, 0.3);
+
+  /* Semantic colors for chips/badges - Light theme (darker, more saturated for contrast) */
+  --color-success: #047857; /* Darker, more saturated green for better contrast */
+  --color-success-bg: rgba(4, 120, 87, 0.25); /* More visible green background (25% opacity) */
+  --color-success-border: rgba(4, 120, 87, 0.5); /* More visible green border (50% opacity) */
+  --color-warning: #b45309; /* Darker, more saturated orange/yellow for better contrast */
+  --color-warning-bg: rgba(180, 83, 9, 0.25); /* More visible orange background (25% opacity) */
+  --color-warning-border: rgba(180, 83, 9, 0.5); /* More visible orange border (50% opacity) */
+  --color-error: #b91c1c; /* Darker, more saturated red for better contrast */
+  --color-error-bg: rgba(185, 28, 28, 0.25); /* More visible red background (25% opacity) */
+  --color-error-border: rgba(185, 28, 28, 0.5); /* More visible red border (50% opacity) */
+  --color-info: #0369a1; /* Darker, more saturated blue for better contrast */
+  --color-info-bg: rgba(3, 105, 161, 0.25); /* More visible blue background (25% opacity) */
+  --color-info-border: rgba(3, 105, 161, 0.5); /* More visible blue border (50% opacity) */
+
+  /* QR Code colors - always white background, black foreground for maximum contrast */
+  --qr-background: #ffffff;
+  --qr-foreground: #000000;
+
+  /* Background gradient - light mode (subtle gradient for depth) */
+  --background-gradient: linear-gradient(180deg, rgba(245,245,245,1) 0%, rgba(240,240,242,1) 100%);
 }
 
 /* Landscape optimizations for mobile devices */

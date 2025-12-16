@@ -9,7 +9,7 @@ import { getAvatarUrl, getDefaultAvatar } from '@/lib/user-avatar';
 import { getUserDisplayName } from '@/lib/user-name';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Search } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Breadcrumbs } from './NavigationHeader/components/Breadcrumbs';
 import { LogoSection } from './NavigationHeader/components/LogoSection';
 import { UserAvatarButton } from './NavigationHeader/components/UserAvatarButton';
@@ -69,10 +69,16 @@ export function NavigationHeader({
   userButtonRef,
   onAchievementsClick,
 }: NavigationHeaderProps) {
+  const [isMounted, setIsMounted] = useState(false);
   const { user, error: userError, isLoading: userLoading } = useUser();
   // Handle nested user structure: user.user.email (Auth0 SDK sometimes returns nested structure)
   const userEmail = user?.email || (user as any)?.user?.email;
   const auth0UserName = user?.name || (user as any)?.user?.name;
+
+  // Prevent hydration mismatch by only computing user-dependent values after mount
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Log Auth0 useUser() result in NavigationHeader
   useEffect(() => {
@@ -133,7 +139,8 @@ export function NavigationHeader({
     userEmail,
   });
 
-  const userName = getUserDisplayName(userNameInput);
+  // Use fallback during SSR to prevent hydration mismatch
+  const userName = isMounted ? getUserDisplayName(userNameInput) : '';
   const { avatar: userAvatar } = useUserAvatar();
 
   const { isVisible, isDesktop } = useHeaderVisibility();
@@ -153,21 +160,35 @@ export function NavigationHeader({
 
   // Get avatar URL or default initials
   const avatarUrl = getAvatarUrl(userAvatar);
-  const defaultInitialsInput = {
-    first_name: profile?.first_name,
-    last_name: profile?.last_name,
-    name: userName,
-    email: userEmail,
-  };
+
+  // Use consistent fallback for defaultInitialsInput during SSR to prevent hydration mismatch
+  const defaultInitialsInput = isMounted
+    ? {
+        first_name: profile?.first_name,
+        last_name: profile?.last_name,
+        name: userName,
+        email: userEmail,
+      }
+    : {
+        first_name: undefined,
+        last_name: undefined,
+        name: '',
+        email: undefined,
+      };
+
   logger.dev('[NavigationHeader] defaultInitials input object:', {
     defaultInitialsInput,
     profileFirst: profile?.first_name,
     profileLast: profile?.last_name,
     auth0Name: auth0UserName,
     userEmail,
+    isMounted,
   });
 
-  const defaultInitials = getDefaultAvatar(defaultInitialsInput);
+  // Use fallback during SSR to prevent hydration mismatch
+  const defaultInitials = isMounted
+    ? getDefaultAvatar(defaultInitialsInput)
+    : 'U'; // Consistent fallback for SSR
 
   // Log computed values (only log when profile changes to avoid spam)
   useEffect(() => {
@@ -193,8 +214,8 @@ export function NavigationHeader({
         'right-0',
         'z-50',
         'border-b',
-        'border-[#2a2a2a]',
-        'bg-[#1f1f1f]',
+        'border-[var(--border)]',
+        'bg-[var(--surface)]',
         'pt-[var(--safe-area-inset-top)]',
         'h-[var(--header-height-mobile)]',
         'desktop:h-[var(--header-height-desktop)]',
@@ -204,9 +225,12 @@ export function NavigationHeader({
       )}
       style={{
         // Only apply transform on mobile/tablet (< 1025px)
-        transform: !isDesktop && !isVisible ? 'translateY(-100%)' : 'translateY(0)',
-        transitionTimingFunction: !isDesktop ? 'var(--easing-standard)' : undefined,
+        // During SSR, always use consistent values to prevent hydration mismatch
+        // After mount, the transform will update based on scroll position
+        transform: typeof window !== 'undefined' && !isDesktop && !isVisible ? 'translateY(-100%)' : 'translateY(0)',
+        transitionTimingFunction: typeof window !== 'undefined' && !isDesktop ? 'var(--easing-standard)' : undefined,
       }}
+      suppressHydrationWarning
     >
       <div className="desktop:px-4 relative flex items-center justify-between px-3 py-2">
         <LogoSection
@@ -233,18 +257,18 @@ export function NavigationHeader({
               'min-h-[44px]',
               'min-w-[44px]',
               'transition-colors',
-              'hover:bg-[#2a2a2a]/50',
+              'hover:bg-[var(--muted)]/50',
               'focus:outline-none',
               'focus:ring-2',
-              'focus:ring-[#29E7CD]',
+              'focus:ring-[var(--primary)]',
               'focus:ring-offset-2',
-              'focus:ring-offset-[#1f1f1f]',
+              'focus:ring-offset-[var(--surface)]',
             )}
             aria-label="Open search"
             aria-controls="search-modal"
             aria-expanded={isSearchOpen}
           >
-            <Icon icon={Search} size="md" className="text-gray-400" aria-hidden={true} />
+            <Icon icon={Search} size="md" className="text-[var(--foreground-muted)]" aria-hidden={true} />
           </button>
           <NavbarStats onClick={onAchievementsClick} />
 

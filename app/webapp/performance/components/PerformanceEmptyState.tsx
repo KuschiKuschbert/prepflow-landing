@@ -85,17 +85,17 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
   };
 
   return (
-    <div className="tablet:p-12 overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center">
+    <div className="tablet:p-12 overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center">
       <div className="mb-6 flex justify-center">
-        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20">
-          <Icon icon={BarChart3} size="xl" className="text-[#29E7CD]" />
+        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20">
+          <Icon icon={BarChart3} size="xl" className="text-[var(--primary)]" />
         </div>
       </div>
 
-      <h3 className={`${LANDING_TYPOGRAPHY['2xl']} mb-3 font-semibold text-white`}>
+      <h3 className={`${LANDING_TYPOGRAPHY['2xl']} mb-3 font-semibold text-[var(--foreground)]`}>
         No Performance Data Yet
       </h3>
-      <p className={`${LANDING_TYPOGRAPHY.base} mx-auto mb-8 max-w-2xl text-gray-400`}>
+      <p className={`${LANDING_TYPOGRAPHY.base} mx-auto mb-8 max-w-2xl text-[var(--foreground-muted)]`}>
         Performance analysis helps you understand which menu items are profitable, which are
         popular, and which need attention. Generate sales data from your recipes to see insights and
         recommendations.
@@ -103,33 +103,33 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
 
       {/* What You'll Get Section */}
       <div className="tablet:grid-cols-3 mx-auto mb-8 grid max-w-3xl grid-cols-1 gap-4">
-        <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
-          <Icon icon={Sparkles} size="md" className="mx-auto mb-2 text-[#29E7CD]" />
-          <h4 className="mb-1 text-sm font-semibold text-white">Smart Insights</h4>
-          <p className="text-xs text-gray-400">Automatic categorization of menu items</p>
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
+          <Icon icon={Sparkles} size="md" className="mx-auto mb-2 text-[var(--primary)]" />
+          <h4 className="mb-1 text-sm font-semibold text-[var(--foreground)]">Smart Insights</h4>
+          <p className="text-xs text-[var(--foreground-muted)]">Automatic categorization of menu items</p>
         </div>
-        <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
-          <Icon icon={TrendingUp} size="md" className="mx-auto mb-2 text-[#3B82F6]" />
-          <h4 className="mb-1 text-sm font-semibold text-white">Profit Analysis</h4>
-          <p className="text-xs text-gray-400">See which items make you money</p>
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
+          <Icon icon={TrendingUp} size="md" className="mx-auto mb-2 text-[var(--color-info)]" />
+          <h4 className="mb-1 text-sm font-semibold text-[var(--foreground)]">Profit Analysis</h4>
+          <p className="text-xs text-[var(--foreground-muted)]">See which items make you money</p>
         </div>
-        <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
-          <Icon icon={BarChart3} size="md" className="mx-auto mb-2 text-[#D925C7]" />
-          <h4 className="mb-1 text-sm font-semibold text-white">Recommendations</h4>
-          <p className="text-xs text-gray-400">Actionable advice to improve margins</p>
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
+          <Icon icon={BarChart3} size="md" className="mx-auto mb-2 text-[var(--accent)]" />
+          <h4 className="mb-1 text-sm font-semibold text-[var(--foreground)]">Recommendations</h4>
+          <p className="text-xs text-[var(--foreground-muted)]">Actionable advice to improve margins</p>
         </div>
       </div>
 
       {successMessage && (
-        <div className="mx-auto mb-6 max-w-md rounded-lg border border-green-500/30 bg-green-900/20 p-4 text-left">
-          <p className="text-sm text-green-400">{successMessage}</p>
+        <div className="mx-auto mb-6 max-w-md rounded-lg border border-[var(--color-success)]/30 bg-green-900/20 p-4 text-left">
+          <p className="text-sm text-[var(--color-success)]">{successMessage}</p>
           <p className="mt-2 text-xs text-green-300">Refreshing data...</p>
         </div>
       )}
 
       {error && (
-        <div className="mx-auto mb-6 max-w-md rounded-lg border border-red-500/30 bg-red-900/20 p-4 text-left">
-          <p className="mb-1 text-sm font-semibold text-red-400">Error generating sales data:</p>
+        <div className="mx-auto mb-6 max-w-md rounded-lg border border-[var(--color-error)]/30 bg-red-900/20 p-4 text-left">
+          <p className="mb-1 text-sm font-semibold text-[var(--color-error)]">Error generating sales data:</p>
           <p className="text-sm text-red-300">{error}</p>
           {error.includes('No recipes found') && (
             <p className="mt-2 text-xs text-red-200">
@@ -150,7 +150,7 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
           variant="primary"
           landingStyle={true}
           glow={true}
-          className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-8 py-4"
+          className="bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-8 py-4"
         >
           {isGenerating ? (
             <span className="flex items-center gap-2">
@@ -178,16 +178,16 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
 
         <Link
           href="/webapp/recipes"
-          className="flex items-center gap-2 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-6 py-4 font-semibold text-white transition-all hover:border-[#29E7CD]/50 hover:text-[#29E7CD]"
+          className="flex items-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-6 py-4 font-semibold text-[var(--foreground)] transition-all hover:border-[var(--primary)]/50 hover:text-[var(--primary)]"
         >
           <span>Add Recipes First</span>
           <Icon icon={ArrowRight} size="sm" />
         </Link>
       </div>
 
-      <p className="mt-6 text-sm text-gray-500">
+      <p className="mt-6 text-sm text-[var(--foreground-subtle)]">
         Or use the browser console:{' '}
-        <code className="rounded bg-[#2a2a2a] px-2 py-1 text-xs">
+        <code className="rounded bg-[var(--muted)] px-2 py-1 text-xs">
           fetch(&apos;/api/generate-sales-data&apos;, {'{'} method: &apos;POST&apos; {'}'})
         </code>
       </p>

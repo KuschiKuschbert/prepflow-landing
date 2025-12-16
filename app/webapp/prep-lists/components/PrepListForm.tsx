@@ -72,9 +72,9 @@ export function PrepListForm({
   };
 
   return (
-    <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
+    <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-white">
+        <h2 className="text-xl font-semibold text-[var(--foreground)]">
           {isEditing
             ? t('prepLists.editPrepList', 'Edit Prep List')
             : t('prepLists.createPrepList', 'Create Prep List')}
@@ -83,7 +83,7 @@ export function PrepListForm({
           <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 transition-colors hover:text-white"
+            className="p-2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
           >
             <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -100,13 +100,13 @@ export function PrepListForm({
       <form onSubmit={onSubmit} className="space-y-6">
         <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
               {t('prepLists.kitchenSection', 'Kitchen Section')}
             </label>
             <select
               value={formData.kitchenSectionId}
               onChange={e => setFormData({ ...formData, kitchenSectionId: e.target.value })}
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
               required
             >
               <option value="">{t('prepLists.selectSection', 'Select a kitchen section')}</option>
@@ -118,14 +118,14 @@ export function PrepListForm({
             </select>
           </div>
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
               {t('prepLists.name', 'Prep List Name')}
             </label>
             <input
               type="text"
               value={formData.name}
               onChange={e => setFormData({ ...formData, name: e.target.value })}
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
               placeholder="e.g., Morning Prep - Hot Kitchen"
               required
             />
@@ -133,13 +133,13 @@ export function PrepListForm({
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
             {t('prepLists.notes', 'Notes')}
           </label>
           <textarea
             value={formData.notes}
             onChange={e => setFormData({ ...formData, notes: e.target.value })}
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+            className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             rows={3}
             placeholder={String(
               t('prepLists.notesPlaceholder', 'Optional notes about this prep list'),
@@ -149,27 +149,27 @@ export function PrepListForm({
 
         <div>
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-white">{t('prepLists.items', 'Items')}</h3>
+            <h3 className="text-lg font-semibold text-[var(--foreground)]">{t('prepLists.items', 'Items')}</h3>
             <button
               type="button"
               onClick={addItem}
-              className="rounded-xl bg-[#29E7CD]/10 px-4 py-2 text-sm font-semibold text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/20"
+              className="rounded-xl bg-[var(--primary)]/10 px-4 py-2 text-sm font-semibold text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/20"
             >
               + {t('prepLists.addItem', 'Add Item')}
             </button>
           </div>
           <div className="space-y-3">
             {formData.items.map((item, index) => (
-              <div key={index} className="rounded-xl bg-[#2a2a2a]/30 p-4">
+              <div key={index} className="rounded-xl bg-[var(--muted)]/30 p-4">
                 <div className="tablet:grid-cols-2 desktop:grid-cols-4 mb-3 grid grid-cols-1 gap-3">
                   <div className="desktop:col-span-2">
-                    <label className="mb-1 block text-xs text-gray-400">
+                    <label className="mb-1 block text-xs text-[var(--foreground-muted)]">
                       {t('prepLists.ingredient', 'Ingredient')}
                     </label>
                     <select
                       value={item.ingredientId}
                       onChange={e => updateItem(index, 'ingredientId', e.target.value)}
-                      className="w-full rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                      className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                       required
                     >
                       <option value="">
@@ -183,7 +183,7 @@ export function PrepListForm({
                     </select>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs text-gray-400">
+                    <label className="mb-1 block text-xs text-[var(--foreground-muted)]">
                       {t('prepLists.quantity', 'Quantity')}
                     </label>
                     <input
@@ -191,20 +191,20 @@ export function PrepListForm({
                       step="0.01"
                       value={item.quantity}
                       onChange={e => updateItem(index, 'quantity', e.target.value)}
-                      className="w-full rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                      className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                       placeholder="0"
                       required
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs text-gray-400">
+                    <label className="mb-1 block text-xs text-[var(--foreground-muted)]">
                       {t('prepLists.unit', 'Unit')}
                     </label>
                     <input
                       type="text"
                       value={item.unit}
                       onChange={e => updateItem(index, 'unit', e.target.value)}
-                      className="w-full rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                      className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                       placeholder="kg"
                       required
                     />
@@ -215,13 +215,13 @@ export function PrepListForm({
                     type="text"
                     value={item.notes}
                     onChange={e => updateItem(index, 'notes', e.target.value)}
-                    className="mr-3 flex-1 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                    className="mr-3 flex-1 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                     placeholder={String(t('prepLists.itemNotes', 'Item notes (optional)'))}
                   />
                   <button
                     type="button"
                     onClick={() => removeItem(index)}
-                    className="rounded-lg p-2 text-red-400 transition-colors hover:bg-red-400/10"
+                    className="rounded-lg p-2 text-[var(--color-error)] transition-colors hover:bg-[var(--color-error)]/10"
                   >
                     <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
@@ -242,13 +242,13 @@ export function PrepListForm({
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 rounded-xl bg-[#2a2a2a] px-4 py-3 text-gray-300 transition-colors hover:bg-[#2a2a2a]/80"
+            className="flex-1 rounded-xl bg-[var(--muted)] px-4 py-3 text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/80"
           >
             {t('prepLists.cancel', 'Cancel')}
           </button>
           <button
             type="submit"
-            className="flex-1 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
+            className="flex-1 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
           >
             {isEditing ? t('prepLists.update', 'Update') : t('prepLists.create', 'Create')}
           </button>

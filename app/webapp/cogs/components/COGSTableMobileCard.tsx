@@ -30,20 +30,20 @@ export function COGSTableMobileCard({
   return (
     <div
       key={calc.ingredientId || `calc-${index}`}
-      className="rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] p-3"
+      className="rounded-lg border border-[var(--border)] bg-[var(--muted)] p-3"
     >
       <div className="mb-2 flex items-start justify-between">
-        <h4 className="text-sm font-medium text-white">{calc.ingredientName}</h4>
+        <h4 className="text-sm font-medium text-[var(--foreground)]">{calc.ingredientName}</h4>
         <div className="flex items-center space-x-2">
-          <span className="text-sm font-bold text-[#29E7CD]">
+          <span className="text-sm font-bold text-[var(--primary)]">
             ${calc.yieldAdjustedCost.toFixed(2)}
           </span>
           <button
             onClick={() => onEditIngredient(calc.ingredientId, calc.quantity)}
-            className="p-1 text-gray-400 transition-colors duration-200 hover:text-[#29E7CD]"
+            className="p-1 text-[var(--foreground-muted)] transition-colors duration-200 hover:text-[var(--primary)]"
             title="Edit quantity"
           >
-            <Icon icon={Edit} size="sm" className="text-gray-400" aria-hidden={true} />
+            <Icon icon={Edit} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
           </button>
           <button
             type="button"
@@ -52,10 +52,10 @@ export function COGSTableMobileCard({
               e.stopPropagation();
               void onRemoveIngredient(calc.ingredientId);
             }}
-            className="p-1 text-gray-400 transition-colors duration-200 hover:text-red-400"
+            className="p-1 text-[var(--foreground-muted)] transition-colors duration-200 hover:text-[var(--color-error)]"
             title="Remove ingredient"
           >
-            <Icon icon={Trash2} size="sm" className="text-gray-400" aria-hidden={true} />
+            <Icon icon={Trash2} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
           </button>
         </div>
       </div>
@@ -67,29 +67,29 @@ export function COGSTableMobileCard({
               type="number"
               value={editQuantity}
               onChange={e => onEditQuantityChange(parseFloat(e.target.value) || 0)}
-              className="w-20 rounded border border-[#3a3a3a] bg-[#0a0a0a] px-2 py-1 text-sm text-white focus:ring-1 focus:ring-[#29E7CD] focus:outline-none"
+              className="w-20 rounded border border-[var(--border)] bg-[var(--background)] px-2 py-1 text-sm text-[var(--foreground)] focus:ring-1 focus:ring-[var(--primary)] focus:outline-none"
               step="0.1"
               min="0"
             />
-            <span className="text-xs text-gray-400">{calc.unit}</span>
+            <span className="text-xs text-[var(--foreground-muted)]">{calc.unit}</span>
           </div>
           <div className="flex space-x-2">
             <button
               onClick={onSaveEdit}
-              className="rounded bg-[#29E7CD] px-3 py-1 text-xs text-white transition-colors duration-200 hover:bg-[#29E7CD]/80"
+              className="rounded bg-[var(--primary)] px-3 py-1 text-xs text-[var(--button-active-text)] transition-colors duration-200 hover:bg-[var(--primary)]/80"
             >
               Save
             </button>
             <button
               onClick={onCancelEdit}
-              className="rounded bg-gray-600 px-3 py-1 text-xs text-white transition-colors duration-200 hover:bg-gray-500"
+              className="rounded bg-gray-600 px-3 py-1 text-xs text-[var(--foreground)] transition-colors duration-200 hover:bg-gray-500"
             >
               Cancel
             </button>
           </div>
         </div>
       ) : (
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-[var(--foreground-muted)]">
           {calc.quantity} {calc.unit}
         </p>
       )}

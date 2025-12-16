@@ -47,7 +47,7 @@ export function useRecipeTableSort({
         return React.createElement(Icon, {
           icon: ChevronUp,
           size: 'xs',
-          className: 'ml-1 text-[#29E7CD]',
+          className: 'ml-1 text-[var(--primary)]',
           'aria-hidden': true,
         });
       }
@@ -55,7 +55,7 @@ export function useRecipeTableSort({
       return React.createElement(Icon, {
         icon: ChevronDown,
         size: 'xs',
-        className: 'ml-1 text-[#29E7CD]',
+        className: 'ml-1 text-[var(--primary)]',
         'aria-hidden': true,
       });
     },

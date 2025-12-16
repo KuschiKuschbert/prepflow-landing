@@ -162,11 +162,11 @@ export function EquipmentListTable({
   };
 
   const getSortIcon = (field: SortField) => {
-    if (sortField !== field) return <Icon icon={ArrowUpDown} size="sm" className="text-gray-500" />;
+    if (sortField !== field) return <Icon icon={ArrowUpDown} size="sm" className="text-[var(--foreground-subtle)]" />;
     return sortDirection === 'asc' ? (
-      <Icon icon={ArrowUp} size="sm" className="text-[#29E7CD]" />
+      <Icon icon={ArrowUp} size="sm" className="text-[var(--primary)]" />
     ) : (
-      <Icon icon={ArrowDown} size="sm" className="text-[#29E7CD]" />
+      <Icon icon={ArrowDown} size="sm" className="text-[var(--primary)]" />
     );
   };
 
@@ -205,8 +205,8 @@ export function EquipmentListTable({
       />
 
       {/* Results Count and Top Pagination */}
-      <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] px-6 py-4">
-        <div className="text-sm text-gray-400">
+      <div className="flex items-center justify-between rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-6 py-4">
+        <div className="text-sm text-[var(--foreground-muted)]">
           Showing {startIndex + 1} to {Math.min(endIndex, filteredAndSortedEquipment.length)} of{' '}
           {filteredAndSortedEquipment.length} equipment
           {filteredAndSortedEquipment.length !== equipment.length &&
@@ -263,8 +263,8 @@ export function EquipmentListTable({
       />
 
       {/* Pagination - Bottom */}
-      <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] px-6 py-4">
-        <div className="text-sm text-gray-400">
+      <div className="flex items-center justify-between rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-6 py-4">
+        <div className="text-sm text-[var(--foreground-muted)]">
           Showing {startIndex + 1} to {endIndex} of {filteredAndSortedEquipment.length} equipment
           {filteredAndSortedEquipment.length !== equipment.length &&
             ` (filtered from ${equipment.length})`}

@@ -51,7 +51,7 @@ export default function ComplianceTrackingPage() {
   if (loading) {
     return (
       <ResponsivePageContainer>
-        <div className="tablet:py-6 min-h-screen bg-[#0a0a0a] py-4">
+        <div className="tablet:py-6 min-h-screen bg-[var(--background)] py-4">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="adaptive-grid mt-8">
             <LoadingSkeleton variant="card" count={4} height="120px" />
@@ -65,11 +65,11 @@ export default function ComplianceTrackingPage() {
     <ResponsivePageContainer>
       <div className="tablet:py-6 min-h-screen bg-transparent py-4">
         <div className="mb-8">
-          <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-white">
+          <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-[var(--foreground)]">
             <Icon icon={ClipboardCheck} size="lg" aria-hidden={true} />
             {t('compliance.title', 'Compliance Tracking')}
           </h1>
-          <p className="text-gray-400">
+          <p className="text-[var(--foreground-muted)]">
             {t(
               'compliance.subtitle',
               'Track pest control, council inspections, licenses, and other compliance documents with automated reminders',
@@ -95,12 +95,12 @@ export default function ComplianceTrackingPage() {
 
         {activeTab === 'types' && (
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-2xl font-semibold text-white">
+            <h2 className="text-2xl font-semibold text-[var(--foreground)]">
               {t('compliance.manageTypes', 'Manage Compliance Types')}
             </h2>
             <button
               onClick={() => setShowAddType(true)}
-              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
+              className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
             >
               ➕ {t('compliance.addType', 'Add Type')}
             </button>
@@ -109,10 +109,10 @@ export default function ComplianceTrackingPage() {
 
         {activeTab === 'equipment' && (
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-2xl font-semibold text-white">Equipment Maintenance</h2>
+            <h2 className="text-2xl font-semibold text-[var(--foreground)]">Equipment Maintenance</h2>
             <button
               onClick={() => setShowAddEquipment(true)}
-              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
+              className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
             >
               ➕ Add Maintenance Record
             </button>

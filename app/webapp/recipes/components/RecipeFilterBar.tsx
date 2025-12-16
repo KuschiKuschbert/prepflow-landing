@@ -92,7 +92,7 @@ export function RecipeFilterBar({
     if (except !== 'sort') setShowSortMenu(false);
   };
   return (
-    <div className="sticky top-0 z-30 border-b border-[#2a2a2a] bg-[#1f1f1f]/95 p-3 backdrop-blur-sm">
+    <div className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--surface)]/95 p-3 backdrop-blur-sm">
       <div className="tablet:flex-row tablet:items-center tablet:gap-2 flex flex-col gap-2">
         <RecipeSearchBar
           searchTerm={localSearchTerm}
@@ -115,8 +115,8 @@ export function RecipeFilterBar({
                 closeOtherMenus('category');
               }}
               onChange={onCategoryFilterChange}
-              activeColor="border-[#D925C7]/50 bg-[#D925C7]/10 text-[#D925C7]"
-              activeBg="bg-[#D925C7]/20"
+              activeColor="border-[var(--accent)]/50 bg-[var(--accent)]/10 text-[var(--accent)]"
+              activeBg="bg-[var(--accent)]/20"
             />
           )}
 
@@ -130,8 +130,8 @@ export function RecipeFilterBar({
               setShowExcludeAllergenMenu(!showExcludeAllergenMenu);
               closeOtherMenus('exclude');
             }}
-            activeColor="border-red-500/50 bg-red-500/10 text-red-400"
-            activeBg="bg-red-500/20"
+            activeColor="border-[var(--color-error)]/50 bg-[var(--color-error)]/10 text-[var(--color-error)]"
+            activeBg="bg-[var(--color-error)]/20"
           />
 
           <AllergenFilterDropdown
@@ -144,16 +144,16 @@ export function RecipeFilterBar({
               setShowIncludeAllergenMenu(!showIncludeAllergenMenu);
               closeOtherMenus('include');
             }}
-            activeColor="border-blue-500/50 bg-blue-500/10 text-blue-400"
-            activeBg="bg-blue-500/20"
+            activeColor="border-[var(--color-info)]/50 bg-[var(--color-info)]/10 text-[var(--color-info)]"
+            activeBg="bg-[var(--color-info)]/20"
           />
 
           <button
             onClick={() => onVegetarianChange(!vegetarian)}
             className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-200 ${
               vegetarian
-                ? 'border-green-500/50 bg-green-500/10 text-green-400'
-                : 'border-[#2a2a2a] bg-[#0a0a0a]/80 text-gray-300 hover:border-[#2a2a2a] hover:bg-[#1f1f1f]'
+                ? 'border-[var(--color-success)]/50 bg-[var(--color-success)]/10 text-[var(--color-success)]'
+                : 'border-[var(--border)] bg-[var(--background)]/80 text-[var(--foreground-secondary)] hover:border-[var(--border)] hover:bg-[var(--surface)]'
             }`}
             title="Show only vegetarian recipes"
           >
@@ -165,8 +165,8 @@ export function RecipeFilterBar({
             onClick={() => onVeganChange(!vegan)}
             className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-200 ${
               vegan
-                ? 'border-green-500/50 bg-green-500/10 text-green-400'
-                : 'border-[#2a2a2a] bg-[#0a0a0a]/80 text-gray-300 hover:border-[#2a2a2a] hover:bg-[#1f1f1f]'
+                ? 'border-[var(--color-success)]/50 bg-[var(--color-success)]/10 text-[var(--color-success)]'
+                : 'border-[var(--border)] bg-[var(--background)]/80 text-[var(--foreground-secondary)] hover:border-[var(--border)] hover:bg-[var(--surface)]'
             }`}
             title="Show only vegan recipes"
           >
@@ -188,7 +188,7 @@ export function RecipeFilterBar({
           <select
             value={itemsPerPage}
             onChange={e => onItemsPerPageChange(Number(e.target.value))}
-            className="rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-2 text-sm text-gray-300 transition-all duration-200 hover:border-[#2a2a2a] hover:bg-[#1f1f1f] focus:border-[#29E7CD]/50 focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+            className="rounded-lg border border-[var(--border)] bg-[var(--background)]/80 px-3 py-2 text-sm text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--border)] hover:bg-[var(--surface)] focus:border-[var(--primary)]/50 focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
           >
             <option value={10}>10 per page</option>
             <option value={20}>20 per page</option>
@@ -199,7 +199,7 @@ export function RecipeFilterBar({
           {activeFilterCount > 0 && (
             <button
               onClick={handleClearAll}
-              className="flex items-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#2a2a2a] hover:bg-[#1f1f1f]"
+              className="flex items-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)]/80 px-3 py-2 text-sm font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--border)] hover:bg-[var(--surface)]"
             >
               <Icon icon={X} size="sm" aria-hidden={true} />
               Clear ({activeFilterCount})
@@ -215,14 +215,14 @@ export function RecipeFilterBar({
         vegan) && (
         <div className="mt-2 flex flex-wrap items-center gap-1.5">
           {searchTerm && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#29E7CD]/50 bg-[#29E7CD]/10 px-2.5 py-1 text-xs font-medium text-[#29E7CD]">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--primary)]/50 bg-[var(--primary)]/10 px-2.5 py-1 text-xs font-medium text-[var(--primary)]">
               Search: {searchTerm}
               <button
                 onClick={() => {
                   setLocalSearchTerm('');
                   onSearchChange('');
                 }}
-                className="hover:text-[#29E7CD]/80"
+                className="hover:text-[var(--primary)]/80"
                 aria-label="Clear search"
               >
                 <Icon icon={X} size="xs" aria-hidden={true} />
@@ -230,11 +230,11 @@ export function RecipeFilterBar({
             </span>
           )}
           {categoryFilter && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#D925C7]/50 bg-[#D925C7]/10 px-2.5 py-1 text-xs font-medium text-[#D925C7]">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--accent)]/50 bg-[var(--accent)]/10 px-2.5 py-1 text-xs font-medium text-[var(--accent)]">
               Category: {categoryFilter}
               <button
                 onClick={() => onCategoryFilterChange('')}
-                className="hover:text-[#D925C7]/80"
+                className="hover:text-[var(--accent)]/80"
                 aria-label="Clear category filter"
               >
                 <Icon icon={X} size="xs" aria-hidden={true} />
@@ -242,7 +242,7 @@ export function RecipeFilterBar({
             </span>
           )}
           {excludeAllergens.length > 0 && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-red-500/50 bg-red-500/10 px-2.5 py-1 text-xs font-medium text-red-400">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-error)]/50 bg-[var(--color-error)]/10 px-2.5 py-1 text-xs font-medium text-[var(--color-error)]">
               Exclude: {excludeAllergens.length} allergen{excludeAllergens.length > 1 ? 's' : ''}
               <button
                 onClick={() => onExcludeAllergensChange([])}
@@ -254,7 +254,7 @@ export function RecipeFilterBar({
             </span>
           )}
           {includeAllergens.length > 0 && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/50 bg-blue-500/10 px-2.5 py-1 text-xs font-medium text-blue-400">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-info)]/50 bg-[var(--color-info)]/10 px-2.5 py-1 text-xs font-medium text-[var(--color-info)]">
               Include: {includeAllergens.length} allergen{includeAllergens.length > 1 ? 's' : ''}
               <button
                 onClick={() => onIncludeAllergensChange([])}
@@ -266,7 +266,7 @@ export function RecipeFilterBar({
             </span>
           )}
           {vegetarian && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/50 bg-green-500/10 px-2.5 py-1 text-xs font-medium text-green-400">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-success)]/50 bg-[var(--color-success)]/10 px-2.5 py-1 text-xs font-medium text-[var(--color-success)]">
               Vegetarian
               <button
                 onClick={() => onVegetarianChange(false)}
@@ -278,7 +278,7 @@ export function RecipeFilterBar({
             </span>
           )}
           {vegan && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/50 bg-green-500/10 px-2.5 py-1 text-xs font-medium text-green-400">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-success)]/50 bg-[var(--color-success)]/10 px-2.5 py-1 text-xs font-medium text-[var(--color-success)]">
               Vegan
               <button
                 onClick={() => onVeganChange(false)}

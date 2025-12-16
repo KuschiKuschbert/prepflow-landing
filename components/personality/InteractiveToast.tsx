@@ -17,13 +17,13 @@ export function InteractiveToast({ message, tip, learnMoreUrl, onClose }: Intera
   const [showTip, setShowTip] = useState(false);
 
   return (
-    <div className="group relative max-w-md rounded-2xl border border-[#29E7CD]/50 bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-4 shadow-xl backdrop-blur-md">
+    <div className="group relative max-w-md rounded-2xl border border-[var(--primary)]/50 bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-4 shadow-xl backdrop-blur-md">
       <div className="flex items-start gap-3">
         <div className="flex-1">
-          <p className="text-sm font-medium text-white">{message}</p>
+          <p className="text-sm font-medium text-[var(--button-active-text)]">{message}</p>
           {showTip && tip && (
-            <div className="mt-2 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 p-3">
-              <p className="text-xs text-gray-300">{tip}</p>
+            <div className="mt-2 rounded-lg border border-[var(--primary)]/30 bg-[var(--primary)]/10 p-3">
+              <p className="text-xs text-[var(--foreground-secondary)]">{tip}</p>
             </div>
           )}
           {showTip && learnMoreUrl && (
@@ -31,7 +31,7 @@ export function InteractiveToast({ message, tip, learnMoreUrl, onClose }: Intera
               href={learnMoreUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 inline-block text-xs text-[#29E7CD] underline hover:text-[#D925C7]"
+              className="mt-2 inline-block text-xs text-[var(--primary)] underline hover:text-[var(--accent)]"
             >
               Learn more →
             </a>
@@ -41,7 +41,7 @@ export function InteractiveToast({ message, tip, learnMoreUrl, onClose }: Intera
           {tip && (
             <button
               onClick={() => setShowTip(!showTip)}
-              className="rounded-full p-1.5 text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/20"
+              className="rounded-full p-1.5 text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/20"
               aria-label={showTip ? 'Hide tip' : 'Show tip'}
             >
               <Icon icon={Info} size="sm" aria-hidden={true} />
@@ -49,7 +49,7 @@ export function InteractiveToast({ message, tip, learnMoreUrl, onClose }: Intera
           )}
           <button
             onClick={onClose}
-            className="rounded-full p-1.5 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+            className="rounded-full p-1.5 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
             aria-label="Close"
           >
             <Icon icon={X} size="sm" aria-hidden={true} />

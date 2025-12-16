@@ -46,37 +46,37 @@ export function EquipmentTable({
   return (
     <div className="space-y-4">
       {/* Table */}
-      <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
+      <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-lg">
         {/* Desktop Table */}
         <div className="large-desktop:block hidden overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-[#2a2a2a] bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
-                <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-gray-400 uppercase">
+              <tr className="border-b border-[var(--border)] bg-gradient-to-r from-[var(--muted)]/50 to-[var(--muted)]/20">
+                <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
                   Equipment
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-gray-400 uppercase">
+                <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
                   Type
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-gray-400 uppercase">
+                <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
                   Status
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-gray-400 uppercase">
+                <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
                   Temperature
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-gray-400 uppercase">
+                <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
                   Readings
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-gray-400 uppercase">
+                <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
                   Range
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
+            <tbody className="divide-y divide-[var(--muted)] bg-[var(--surface)]">
               {equipment.slice(startIndex, endIndex).map(item => {
                 const status = equipmentStatuses.get(item.id) || {
                   status: 'no-data',
-                  color: 'text-gray-400',
+                  color: 'text-[var(--foreground-muted)]',
                 };
                 const logs = equipmentLogs.get(item.id) || [];
                 const isSelected = selectedEquipmentId === item.id;
@@ -90,36 +90,36 @@ export function EquipmentTable({
                     onClick={() => onSelect(item)}
                     className={`group cursor-pointer transition-all duration-200 ${
                       isSelected
-                        ? 'border-l-4 border-l-[#29E7CD] bg-gradient-to-r from-[#29E7CD]/10 to-[#D925C7]/5'
+                        ? 'border-l-4 border-l-[#29E7CD] bg-gradient-to-r from-[var(--primary)]/10 to-[var(--accent)]/5'
                         : isOutOfRange
-                          ? 'hover:bg-red-500/5'
+                          ? 'hover:bg-[var(--color-error)]/5'
                           : needsSetup
-                            ? 'hover:bg-yellow-500/5'
-                            : 'hover:bg-[#29E7CD]/5'
+                            ? 'hover:bg-[var(--color-warning)]/5'
+                            : 'hover:bg-[var(--primary)]/5'
                     }`}
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
                           <Icon
                             icon={getTypeIcon(item.equipment_type)}
                             size="lg"
-                            className="text-[#29E7CD]"
+                            className="text-[var(--primary)]"
                             aria-hidden={true}
                           />
                         </div>
                         <div className="min-w-0">
-                          <div className="text-sm font-semibold text-white transition-colors group-hover:text-[#29E7CD]">
+                          <div className="text-sm font-semibold text-[var(--foreground)] transition-colors group-hover:text-[var(--primary)]">
                             {item.name}
                           </div>
                           {item.location && (
-                            <div className="truncate text-xs text-gray-500">{item.location}</div>
+                            <div className="truncate text-xs text-[var(--foreground-subtle)]">{item.location}</div>
                           )}
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-gray-300">
+                      <span className="text-sm text-[var(--foreground-secondary)]">
                         {getTypeLabel(item.equipment_type)}
                       </span>
                     </td>
@@ -128,23 +128,23 @@ export function EquipmentTable({
                         <div
                           className={`h-2 w-2 rounded-full shadow-lg ${
                             isOutOfRange
-                              ? 'animate-pulse bg-red-500'
+                              ? 'animate-pulse bg-[var(--color-error)]'
                               : needsSetup
-                                ? 'bg-yellow-500'
+                                ? 'bg-[var(--color-warning)]'
                                 : hasNoData
                                   ? 'bg-gray-500'
-                                  : 'bg-green-500'
+                                  : 'bg-[var(--color-success)]'
                           }`}
                         />
                         <span
                           className={`text-xs font-semibold ${
                             isOutOfRange
-                              ? 'text-red-400'
+                              ? 'text-[var(--color-error)]'
                               : needsSetup
-                                ? 'text-yellow-400'
+                                ? 'text-[var(--color-warning)]'
                                 : hasNoData
-                                  ? 'text-gray-400'
-                                  : 'text-green-400'
+                                  ? 'text-[var(--foreground-muted)]'
+                                  : 'text-[var(--color-success)]'
                           }`}
                         >
                           {hasNoData
@@ -159,7 +159,7 @@ export function EquipmentTable({
                           <Icon
                             icon={AlertTriangle}
                             size="xs"
-                            className="text-red-400"
+                            className="text-[var(--color-error)]"
                             aria-hidden={true}
                           />
                         )}
@@ -167,31 +167,31 @@ export function EquipmentTable({
                           <Icon
                             icon={Settings}
                             size="xs"
-                            className="text-yellow-400"
+                            className="text-[var(--color-warning)]"
                             aria-hidden={true}
                           />
                         )}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-lg font-bold text-white">
+                      <span className="text-lg font-bold text-[var(--foreground)]">
                         {status.temperature ? `${status.temperature.toFixed(1)}°C` : '--'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-gray-400">
+                      <span className="text-sm text-[var(--foreground-muted)]">
                         {logs.length} reading{logs.length !== 1 ? 's' : ''}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item.min_temp_celsius !== null && item.max_temp_celsius !== null ? (
-                        <span className="text-sm text-gray-300">
+                        <span className="text-sm text-[var(--foreground-secondary)]">
                           {item.min_temp_celsius}°C - {item.max_temp_celsius}°C
                         </span>
                       ) : item.min_temp_celsius !== null ? (
-                        <span className="text-sm text-gray-300">≥{item.min_temp_celsius}°C</span>
+                        <span className="text-sm text-[var(--foreground-secondary)]">≥{item.min_temp_celsius}°C</span>
                       ) : (
-                        <span className="text-sm text-gray-500">Not set</span>
+                        <span className="text-sm text-[var(--foreground-subtle)]">Not set</span>
                       )}
                     </td>
                   </tr>

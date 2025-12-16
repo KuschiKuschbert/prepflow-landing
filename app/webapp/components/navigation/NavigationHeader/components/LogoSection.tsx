@@ -61,7 +61,7 @@ export function LogoSection({
         </Link>
         <Link href="/webapp" className="desktop:inline hidden">
           <span
-            className={`${LANDING_TYPOGRAPHY.lg} font-semibold text-white transition-colors hover:text-[#29E7CD]`}
+            className={`${LANDING_TYPOGRAPHY.lg} font-semibold text-[var(--foreground)] transition-colors hover:text-[var(--primary)]`}
           >
             PrepFlow
           </span>

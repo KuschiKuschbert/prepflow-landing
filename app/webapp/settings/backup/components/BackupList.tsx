@@ -70,15 +70,15 @@ export function BackupList({ backups, onRestore, onRefresh }: BackupListProps) {
 
   if (backups.length === 0) {
     return (
-      <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
         <div className="mb-4 flex items-center gap-3">
-          <Icon icon={History} size="lg" className="text-[#29E7CD]" />
+          <Icon icon={History} size="lg" className="text-[var(--primary)]" />
           <div>
             <h2 className="text-xl font-semibold">Backup History</h2>
-            <p className="text-sm text-gray-400">Your backup files will appear here</p>
+            <p className="text-sm text-[var(--foreground-muted)]">Your backup files will appear here</p>
           </div>
         </div>
-        <div className="py-8 text-center text-gray-400">
+        <div className="py-8 text-center text-[var(--foreground-muted)]">
           <p>No backups yet. Create your first backup to get started.</p>
         </div>
       </div>
@@ -86,18 +86,18 @@ export function BackupList({ backups, onRestore, onRefresh }: BackupListProps) {
   }
 
   return (
-    <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+    <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Icon icon={History} size="lg" className="text-[#29E7CD]" />
+          <Icon icon={History} size="lg" className="text-[var(--primary)]" />
           <div>
             <h2 className="text-xl font-semibold">Backup History</h2>
-            <p className="text-sm text-gray-400">{backups.length} backup(s) available</p>
+            <p className="text-sm text-[var(--foreground-muted)]">{backups.length} backup(s) available</p>
           </div>
         </div>
         <button
           onClick={onRefresh}
-          className="flex items-center gap-2 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/20 px-3 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/40"
+          className="flex items-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/20 px-3 py-2 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/40"
         >
           <Icon icon={RefreshCw} size="sm" />
           Refresh
@@ -108,23 +108,23 @@ export function BackupList({ backups, onRestore, onRefresh }: BackupListProps) {
         {backups.map(backup => (
           <div
             key={backup.id}
-            className="flex items-center justify-between rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4 transition-colors hover:bg-[#2a2a2a]/30"
+            className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 p-4 transition-colors hover:bg-[var(--muted)]/30"
           >
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <span className="font-medium text-white">{backup.filename}</span>
+                <span className="font-medium text-[var(--foreground)]">{backup.filename}</span>
                 {backup.encryptionMode && (
-                  <span className="rounded-full bg-[#29E7CD]/10 px-2 py-0.5 text-xs text-[#29E7CD]">
+                  <span className="rounded-full bg-[var(--primary)]/10 px-2 py-0.5 text-xs text-[var(--primary)]">
                     {backup.encryptionMode === 'user-password' ? 'Password' : 'PrepFlow'}
                   </span>
                 )}
                 {backup.googleDriveFileId && (
-                  <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-xs text-blue-400">
+                  <span className="rounded-full bg-[var(--color-info)]/10 px-2 py-0.5 text-xs text-[var(--color-info)]">
                     Google Drive
                   </span>
                 )}
               </div>
-              <div className="mt-1 flex items-center gap-4 text-xs text-gray-400">
+              <div className="mt-1 flex items-center gap-4 text-xs text-[var(--foreground-muted)]">
                 <span>{formatFileSize(backup.size)}</span>
                 <span>•</span>
                 <span>{formatDistanceToNow(new Date(backup.createdAt), { addSuffix: true })}</span>
@@ -136,7 +136,7 @@ export function BackupList({ backups, onRestore, onRefresh }: BackupListProps) {
               <button
                 onClick={() => handleDownload(backup)}
                 disabled={downloading === backup.id}
-                className="flex items-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 px-3 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/40 disabled:opacity-50"
+                className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 px-3 py-2 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/40 disabled:opacity-50"
                 title="Download backup"
               >
                 <Icon icon={Download} size="sm" />
@@ -144,7 +144,7 @@ export function BackupList({ backups, onRestore, onRefresh }: BackupListProps) {
               </button>
               <button
                 onClick={() => onRestore(backup)}
-                className="flex items-center gap-2 rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-2 text-sm text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/20"
+                className="flex items-center gap-2 rounded-xl border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-3 py-2 text-sm text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/20"
                 title="Restore from backup"
               >
                 <Icon icon={RotateCcw} size="sm" />
@@ -157,3 +157,6 @@ export function BackupList({ backups, onRestore, onRefresh }: BackupListProps) {
     </div>
   );
 }
+
+
+

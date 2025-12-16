@@ -71,8 +71,8 @@ export default function OnboardingPage() {
     return (
       <div className="space-y-6">
         <PageHeader title="Employee Onboarding" icon={UserPlus} />
-        <div className="rounded-3xl border border-red-500/50 bg-red-500/10 p-6">
-          <p className="text-red-400">{error || 'Employee not found'}</p>
+        <div className="rounded-3xl border border-[var(--color-error)]/50 bg-[var(--color-error)]/10 p-6">
+          <p className="text-[var(--color-error)]">{error || 'Employee not found'}</p>
         </div>
       </div>
     );

@@ -74,7 +74,7 @@ export default function IngredientTable({
 
   if (loading) {
     return (
-      <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
+      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
         <LoadingSkeleton variant="table" />
       </div>
     );
@@ -82,8 +82,8 @@ export default function IngredientTable({
 
   if (ingredients.length === 0) {
     return (
-      <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 text-center">
-        <div className="mb-4 text-gray-400">
+      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 text-center">
+        <div className="mb-4 text-[var(--foreground-muted)]">
           <svg className="mx-auto mb-4 h-16 w-16" fill="currentColor" viewBox="0 0 20 20">
             <path
               fillRule="evenodd"
@@ -91,8 +91,8 @@ export default function IngredientTable({
               clipRule="evenodd"
             />
           </svg>
-          <h3 className="text-fluid-xl mb-2 font-semibold text-white">No Ingredients Found</h3>
-          <p className="text-fluid-sm text-gray-400">
+          <h3 className="text-fluid-xl mb-2 font-semibold text-[var(--foreground)]">No Ingredients Found</h3>
+          <p className="text-fluid-sm text-[var(--foreground-muted)]">
             Start by adding your first ingredient to get started.
           </p>
         </div>
@@ -101,17 +101,17 @@ export default function IngredientTable({
   }
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
-      <div className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-6 py-4">
+    <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
+      <div className="bg-gradient-to-r from-[var(--muted)]/50 to-[var(--muted)]/20 px-6 py-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-fluid-xl font-semibold text-white">
+          <h2 className="text-fluid-xl font-semibold text-[var(--button-active-text)]">
             Ingredients ({ingredients.length})
           </h2>
           <div className="flex items-center gap-2">
             {selectedIngredients.size > 0 ? (
               <button
                 onClick={() => onSelectAll(false)}
-                className="text-fluid-sm flex items-center gap-1.5 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1.5 font-medium text-[#29E7CD] transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/20"
+                className="text-fluid-sm flex items-center gap-1.5 rounded-lg border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-3 py-1.5 font-medium text-[var(--primary)] transition-all duration-200 hover:border-[var(--primary)]/50 hover:bg-[var(--primary)]/20"
                 aria-label="Deselect all ingredients"
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -127,7 +127,7 @@ export default function IngredientTable({
             ) : (
               <button
                 onClick={() => onSelectAll(true)}
-                className="text-fluid-sm flex items-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-1.5 font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] hover:text-[#29E7CD]"
+                className="text-fluid-sm flex items-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)]/80 px-3 py-1.5 font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--primary)]/50 hover:bg-[var(--surface)] hover:text-[var(--primary)]"
                 aria-label="Select all ingredients"
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -147,19 +147,19 @@ export default function IngredientTable({
 
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
+          <thead className="sticky top-0 z-10 bg-gradient-to-r from-[var(--muted)]/50 to-[var(--muted)]/20">
             <tr>
-              <th className="desktop:table-cell text-fluid-xs hidden px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
+              <th className="desktop:table-cell text-fluid-xs hidden px-6 py-3 text-left font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 <button
                   onClick={() => onSelectAll(selectedIngredients.size !== ingredients.length)}
-                  className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+                  className="flex items-center justify-center transition-colors hover:text-[var(--primary)]"
                   aria-label={
                     selectedIngredients.size === ingredients.length ? 'Deselect all' : 'Select all'
                   }
                 >
                   {selectedIngredients.size === ingredients.length && ingredients.length > 0 ? (
                     <svg
-                      className="h-4 w-4 text-[#29E7CD]"
+                      className="h-4 w-4 text-[var(--primary)]"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -172,34 +172,34 @@ export default function IngredientTable({
                       />
                     </svg>
                   ) : (
-                    <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+                    <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
                   )}
                 </button>
               </th>
-              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
+              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 Name
               </th>
-              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
+              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 Brand
               </th>
-              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
+              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 Pack Size
               </th>
-              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
+              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 Cost/Unit
               </th>
-              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
+              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 Supplier
               </th>
-              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
+              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 Stock
               </th>
-              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-gray-300 uppercase">
+              <th className="text-fluid-xs px-6 py-3 text-left font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
+          <tbody className="divide-y divide-[var(--muted)] bg-[var(--surface)]">
             {ingredients.map(ingredient => (
               <IngredientTableRow
                 key={ingredient.id}

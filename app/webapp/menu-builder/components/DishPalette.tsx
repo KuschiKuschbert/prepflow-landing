@@ -41,15 +41,15 @@ function TappableDish({
   return (
     <div
       onClick={handleClick}
-      className="cursor-pointer rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 transition-all hover:border-[#29E7CD]/50 hover:shadow-lg"
+      className="cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--surface)] p-3 transition-all hover:border-[var(--primary)]/50 hover:shadow-lg"
     >
       <div className="flex items-center gap-2">
-        <Icon icon={Utensils} size="sm" className="text-[#29E7CD]" />
+        <Icon icon={Utensils} size="sm" className="text-[var(--primary)]" />
         <div className="flex-1">
-          <div className="font-medium text-white">{dish.dish_name}</div>
-          <div className="text-sm text-gray-400">${dish.selling_price.toFixed(2)}</div>
+          <div className="font-medium text-[var(--foreground)]">{dish.dish_name}</div>
+          <div className="text-sm text-[var(--foreground-muted)]">${dish.selling_price.toFixed(2)}</div>
         </div>
-        {onTap && <Icon icon={Plus} size="sm" className="text-[#29E7CD]" aria-hidden={true} />}
+        {onTap && <Icon icon={Plus} size="sm" className="text-[var(--primary)]" aria-hidden={true} />}
       </div>
     </div>
   );
@@ -81,19 +81,19 @@ function TappableRecipe({
   return (
     <div
       onClick={handleClick}
-      className="cursor-pointer rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 transition-all hover:border-[#D925C7]/50 hover:shadow-lg"
+      className="cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--surface)] p-3 transition-all hover:border-[var(--accent)]/50 hover:shadow-lg"
     >
       <div className="flex items-center gap-2">
-        <Icon icon={ChefHat} size="sm" className="text-[#D925C7]" />
+        <Icon icon={ChefHat} size="sm" className="text-[var(--accent)]" />
         <div className="flex-1">
-          <div className="font-medium text-white">{recipe.recipe_name}</div>
+          <div className="font-medium text-[var(--foreground)]">{recipe.recipe_name}</div>
           {recipe.yield && (
-            <div className="text-sm text-gray-400">
+            <div className="text-sm text-[var(--foreground-muted)]">
               {recipe.yield} {recipe.yield_unit || 'servings'}
             </div>
           )}
         </div>
-        {onTap && <Icon icon={Plus} size="sm" className="text-[#D925C7]" aria-hidden={true} />}
+        {onTap && <Icon icon={Plus} size="sm" className="text-[var(--accent)]" aria-hidden={true} />}
       </div>
     </div>
   );
@@ -128,8 +128,8 @@ export default function DishPalette({ dishes, recipes, onItemTap }: DishPaletteP
   const hasFilteredItems = filteredDishes.length > 0 || filteredRecipes.length > 0;
 
   return (
-    <div className="rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-4">
-      <h3 className="mb-4 text-lg font-semibold text-white">Available Items</h3>
+    <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4">
+      <h3 className="mb-4 text-lg font-semibold text-[var(--foreground)]">Available Items</h3>
 
       {/* Search Bar */}
       {hasItems && (
@@ -137,7 +137,7 @@ export default function DishPalette({ dishes, recipes, onItemTap }: DishPaletteP
           <Icon
             icon={Search}
             size="sm"
-            className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"
+            className="absolute top-1/2 left-3 -translate-y-1/2 text-[var(--foreground-muted)]"
             aria-hidden={true}
           />
           <input
@@ -145,12 +145,12 @@ export default function DishPalette({ dishes, recipes, onItemTap }: DishPaletteP
             placeholder="Search dishes or recipes..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-10 py-2 pr-10 text-sm text-white placeholder-gray-500 transition-all duration-200 focus:border-[#29E7CD]/50 focus:bg-[#0a0a0a] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+            className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)]/80 px-10 py-2 pr-10 text-sm text-[var(--foreground)] placeholder-gray-500 transition-all duration-200 focus:border-[var(--primary)]/50 focus:bg-[var(--background)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 transition-colors hover:text-white"
+              className="absolute top-1/2 right-3 -translate-y-1/2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
               aria-label="Clear search"
             >
               <Icon icon={X} size="sm" aria-hidden={true} />
@@ -162,23 +162,23 @@ export default function DishPalette({ dishes, recipes, onItemTap }: DishPaletteP
       <div className="max-h-[600px] space-y-4 overflow-y-auto">
         {!hasItems ? (
           <div className="py-8 text-center">
-            <div className="mb-3 text-sm text-gray-400">No dishes or recipes available yet.</div>
-            <p className="mb-4 text-xs text-gray-500">
+            <div className="mb-3 text-sm text-[var(--foreground-muted)]">No dishes or recipes available yet.</div>
+            <p className="mb-4 text-xs text-[var(--foreground-subtle)]">
               Create dishes in the Dish Builder or recipes to add them to your menu.
             </p>
             <Link
               href="/webapp/recipes?builder=true#dishes"
-              className="inline-flex items-center gap-2 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-4 py-2 text-sm font-medium text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/20"
+              className="inline-flex items-center gap-2 rounded-lg border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-4 py-2 text-sm font-medium text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/20"
             >
               Go to Dish Builder
             </Link>
           </div>
         ) : !hasFilteredItems ? (
           <div className="py-8 text-center">
-            <div className="mb-3 text-sm text-gray-400">No items match your search.</div>
+            <div className="mb-3 text-sm text-[var(--foreground-muted)]">No items match your search.</div>
             <button
               onClick={() => setSearchQuery('')}
-              className="text-xs text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80"
+              className="text-xs text-[var(--primary)] transition-colors hover:text-[var(--primary)]/80"
             >
               Clear search
             </button>
@@ -189,8 +189,8 @@ export default function DishPalette({ dishes, recipes, onItemTap }: DishPaletteP
             {filteredDishes.length > 0 && (
               <div>
                 <div className="mb-2 flex items-center gap-2">
-                  <Icon icon={Utensils} size="sm" className="text-[#29E7CD]" />
-                  <div className="text-xs font-medium text-gray-400">
+                  <Icon icon={Utensils} size="sm" className="text-[var(--primary)]" />
+                  <div className="text-xs font-medium text-[var(--foreground-muted)]">
                     Dishes ({filteredDishes.length}
                     {searchQuery &&
                       dishes.length !== filteredDishes.length &&
@@ -210,8 +210,8 @@ export default function DishPalette({ dishes, recipes, onItemTap }: DishPaletteP
             {filteredRecipes.length > 0 && (
               <div>
                 <div className="mb-2 flex items-center gap-2">
-                  <Icon icon={ChefHat} size="sm" className="text-[#D925C7]" />
-                  <div className="text-xs font-medium text-gray-400">
+                  <Icon icon={ChefHat} size="sm" className="text-[var(--accent)]" />
+                  <div className="text-xs font-medium text-[var(--foreground-muted)]">
                     Recipes ({filteredRecipes.length}
                     {searchQuery &&
                       recipes.length !== filteredRecipes.length &&

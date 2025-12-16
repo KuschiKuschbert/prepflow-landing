@@ -29,10 +29,10 @@ export function SubscriptionManagementCard({
   if (!isActive) return null;
 
   return (
-    <div className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+    <div className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
       <div>
         <h2 className="text-xl font-semibold">Subscription Management</h2>
-        <p className="mt-1 text-sm text-gray-300">
+        <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
           Extend, cancel, or reactivate your subscription
         </p>
       </div>
@@ -74,7 +74,7 @@ export function SubscriptionManagementCard({
       </div>
 
       {cancelAtPeriodEnd && (
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-[var(--foreground-subtle)]">
           Your subscription is scheduled to cancel. Click &quot;Reactivate&quot; to keep your
           subscription active.
         </p>

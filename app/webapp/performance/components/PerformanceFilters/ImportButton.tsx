@@ -28,7 +28,7 @@ export function ImportButton({ onImportClick }: ImportButtonProps) {
       <button
         ref={importButtonRef}
         onClick={onImportClick}
-        className="flex items-center justify-center rounded-lg px-1.5 py-1 text-xs font-medium text-black transition-colors"
+        className="flex items-center justify-center rounded-lg px-1.5 py-1 text-xs font-medium text-[var(--primary-text)] transition-colors"
         style={{ backgroundColor: LANDING_COLORS.primary }}
         onMouseEnter={e => {
           e.currentTarget.style.backgroundColor = `${LANDING_COLORS.primary}CC`;
@@ -51,13 +51,13 @@ export function ImportButton({ onImportClick }: ImportButtonProps) {
         typeof window !== 'undefined' &&
         createPortal(
           <div
-            className="fixed z-[100] w-48 -translate-x-1/2 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-2 text-xs text-gray-300 shadow-lg"
+            className="fixed z-[100] w-48 -translate-x-1/2 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2 text-xs text-[var(--foreground-secondary)] shadow-lg"
             style={{ top: `${importTooltipPos.top - 40}px`, left: `${importTooltipPos.left}px` }}
             onMouseEnter={() => setImportTooltipVisible(true)}
             onMouseLeave={() => setImportTooltipVisible(false)}
           >
             Import sales data from CSV file
-            <div className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-4 border-t-[#1f1f1f] border-r-transparent border-b-transparent border-l-transparent" />
+            <div className="absolute top-full left-1/2 h-0 w-0 -translate-x-1/2 border-4 border-t-[var(--surface)] border-r-transparent border-b-transparent border-l-transparent" />
           </div>,
           document.body,
         )}

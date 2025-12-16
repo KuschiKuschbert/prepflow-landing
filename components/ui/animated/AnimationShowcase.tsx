@@ -23,8 +23,8 @@ export function AnimationShowcase() {
     <div className="space-y-8 p-6">
       {/* Header */}
       <AnimatedDiv animation="fadeInDown" className="text-center">
-        <h1 className="text-fluid-4xl mb-4 font-bold text-white">🎨 Modern Animation System</h1>
-        <p className="text-fluid-lg text-gray-400">
+        <h1 className="text-fluid-4xl mb-4 font-bold text-[var(--foreground)]">🎨 Modern Animation System</h1>
+        <p className="text-fluid-lg text-[var(--foreground-muted)]">
           Subtle, performant animations that enhance user experience
         </p>
       </AnimatedDiv>
@@ -34,19 +34,19 @@ export function AnimationShowcase() {
         <AnimatedCard
           title="Performance Optimized"
           description="All animations use CSS transforms and opacity for 60fps performance"
-          icon={<span className="text-fluid-xl text-white">⚡</span>}
+          icon={<span className="text-fluid-xl text-[var(--foreground)]">⚡</span>}
           onClick={handleCardClick}
         />
         <AnimatedCard
           title="Accessibility First"
           description="Respects prefers-reduced-motion and includes proper ARIA labels"
-          icon={<span className="text-fluid-xl text-white">♿</span>}
+          icon={<span className="text-fluid-xl text-[var(--foreground)]">♿</span>}
           onClick={handleCardClick}
         />
         <AnimatedCard
           title="Modern Design"
           description="Subtle effects that enhance UX without being distracting"
-          icon={<span className="text-fluid-xl text-white">✨</span>}
+          icon={<span className="text-fluid-xl text-[var(--foreground)]">✨</span>}
           onClick={handleCardClick}
         />
       </StaggeredContainer>

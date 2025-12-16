@@ -24,7 +24,7 @@ const RecipeCard = React.memo(function RecipeCard({
   return (
     <>
       <div
-        className="cursor-pointer border-l-2 border-[#3B82F6]/30 bg-[#3B82F6]/2 p-4 transition-colors hover:bg-[#3B82F6]/5"
+        className="cursor-pointer border-l-2 border-[var(--color-info)]/30 bg-[var(--color-info)]/2 p-4 transition-colors hover:bg-[var(--color-info)]/5"
         onClick={e => {
           // Don't trigger if clicking on buttons or checkbox
           if ((e.target as HTMLElement).closest('button')) return;

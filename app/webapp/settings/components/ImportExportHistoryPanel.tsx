@@ -97,24 +97,24 @@ export function ImportExportHistoryPanel() {
 
   if (loading) {
     return (
-      <div className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
-        <div className="h-6 w-48 animate-pulse rounded bg-[#2a2a2a]" />
-        <div className="h-4 w-64 animate-pulse rounded bg-[#2a2a2a]" />
+      <div className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
+        <div className="h-6 w-48 animate-pulse rounded bg-[var(--muted)]" />
+        <div className="h-4 w-64 animate-pulse rounded bg-[var(--muted)]" />
       </div>
     );
   }
 
   return (
-    <div className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+    <div className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
       <div>
         <h2 className="text-xl font-semibold">Import/Export History</h2>
-        <p className="mt-1 text-sm text-gray-300">
+        <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
           Track your data import, export, backup, and restore operations.
         </p>
       </div>
 
       {history.length === 0 ? (
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-[var(--foreground-muted)]">
           No import/export history found. History will be tracked after data structure updates are
           applied.
         </p>
@@ -125,20 +125,20 @@ export function ImportExportHistoryPanel() {
             return (
               <div
                 key={log.id}
-                className="flex items-center justify-between rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4"
+                className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 p-4"
               >
                 <div className="flex items-center gap-3">
                   <Icon
                     icon={IconComponent}
                     size="md"
-                    className="text-[#29E7CD]"
+                    className="text-[var(--primary)]"
                     aria-hidden={true}
                   />
                   <div>
-                    <p className="font-medium text-white">
+                    <p className="font-medium text-[var(--foreground)]">
                       {getOperationLabel(log.operation_type)}
                     </p>
-                    <div className="mt-0.5 flex items-center gap-3 text-xs text-gray-400">
+                    <div className="mt-0.5 flex items-center gap-3 text-xs text-[var(--foreground-muted)]">
                       {log.format && <span>Format: {log.format.toUpperCase()}</span>}
                       {log.records_count !== null && (
                         <span>{log.records_count.toLocaleString()} records</span>
@@ -158,3 +158,6 @@ export function ImportExportHistoryPanel() {
     </div>
   );
 }
+
+
+

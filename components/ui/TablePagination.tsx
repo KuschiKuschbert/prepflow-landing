@@ -41,7 +41,7 @@ export function TablePagination({
     <div className={`flex items-center justify-between ${className}`}>
       <div className="flex items-center gap-4">
         {total !== undefined && (
-          <span className="text-fluid-sm text-gray-400">
+          <span className="text-fluid-sm text-[var(--foreground-muted)]">
             {startItem !== undefined && endItem !== undefined
               ? `Showing ${startItem}-${endItem} of ${total}`
               : `Total: ${total}`}
@@ -51,7 +51,7 @@ export function TablePagination({
           <select
             value={itemsPerPage}
             onChange={e => onItemsPerPageChange(Number(e.target.value))}
-            className="text-fluid-sm rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-3 py-1.5 text-white focus:border-[#29E7CD] focus:ring-1 focus:ring-[#29E7CD] focus:outline-none"
+            className="text-fluid-sm rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] focus:outline-none"
           >
             <option value={10}>10 per page</option>
             <option value={25}>25 per page</option>
@@ -65,19 +65,19 @@ export function TablePagination({
           <button
             onClick={() => onPageChange(Math.max(1, page - 1))}
             disabled={page <= 1}
-            className="text-fluid-sm flex items-center gap-1.5 rounded-lg bg-[#2a2a2a] px-3 py-2 text-white transition-colors hover:bg-[#2a2a2a]/80 disabled:cursor-not-allowed disabled:opacity-50"
+            className="text-fluid-sm flex items-center gap-1.5 rounded-lg bg-[var(--muted)] px-3 py-2 text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]/80 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Previous page"
           >
             <Icon icon={ChevronLeft} size="sm" aria-hidden={true} />
             <span className="desktop:inline hidden">Previous</span>
           </button>
-          <span className="text-fluid-sm px-4 py-2 text-gray-300">
+          <span className="text-fluid-sm px-4 py-2 text-[var(--foreground-secondary)]">
             Page {page} of {totalPages}
           </span>
           <button
             onClick={() => onPageChange(Math.min(totalPages, page + 1))}
             disabled={page >= totalPages}
-            className="text-fluid-sm flex items-center gap-1.5 rounded-lg bg-[#2a2a2a] px-3 py-2 text-white transition-colors hover:bg-[#2a2a2a]/80 disabled:cursor-not-allowed disabled:opacity-50"
+            className="text-fluid-sm flex items-center gap-1.5 rounded-lg bg-[var(--muted)] px-3 py-2 text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]/80 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Next page"
           >
             <span className="desktop:inline hidden">Next</span>

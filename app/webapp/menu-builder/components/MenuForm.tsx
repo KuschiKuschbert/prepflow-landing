@@ -72,16 +72,16 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-md rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
-        <div className="rounded-2xl bg-[#1f1f1f]/95">
-          <div className="border-b border-[#2a2a2a] p-6">
+      <div className="w-full max-w-md rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl">
+        <div className="rounded-2xl bg-[var(--surface)]/95">
+          <div className="border-b border-[var(--border)] p-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-2xl font-bold text-[var(--foreground)]">
                 {menu ? 'Edit Menu' : 'Create Menu'}
               </h2>
               <button
                 onClick={onClose}
-                className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+                className="rounded-lg p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
               >
                 <Icon icon={X} size="md" />
               </button>
@@ -90,29 +90,29 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
 
           <form onSubmit={handleSubmit} className="p-6">
             {error && (
-              <div className="mb-4 rounded-lg border border-red-500/20 bg-red-500/10 p-4 text-red-400">
+              <div className="mb-4 rounded-lg border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-4 text-[var(--color-error)]">
                 {error}
               </div>
             )}
 
             <div className="mb-6">
-              <label className="mb-2 block text-sm font-medium text-gray-300">Menu Name *</label>
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Menu Name *</label>
               <input
                 type="text"
                 value={menuName}
                 onChange={e => setMenuName(e.target.value)}
-                className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
                 required
               />
             </div>
 
             <div className="mb-6">
-              <label className="mb-2 block text-sm font-medium text-gray-300">Description</label>
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Description</label>
               <textarea
                 value={description}
                 onChange={e => setDescription(e.target.value)}
                 rows={3}
-                className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
               />
             </div>
 
@@ -120,14 +120,14 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-6 py-3 text-white transition-colors hover:bg-[#2a2a2a]"
+                className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-6 py-3 text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-medium text-white transition-all hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 disabled:opacity-50"
+                className="flex-1 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-medium text-[var(--button-active-text)] transition-all hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 disabled:opacity-50"
               >
                 {loading ? 'Saving...' : menu ? 'Update Menu' : 'Create Menu'}
               </button>

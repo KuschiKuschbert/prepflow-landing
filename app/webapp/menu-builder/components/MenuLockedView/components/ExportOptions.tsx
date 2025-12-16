@@ -133,7 +133,7 @@ export function ExportOptions({ handleExport, exportLoading }: ExportOptionsProp
           }
         }}
         disabled={isAnyExporting}
-        className="flex items-center gap-2 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-4 py-2 text-sm font-medium text-gray-300 transition-all hover:bg-[#1f1f1f] disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--background)]/80 px-4 py-2 text-sm font-medium text-[var(--foreground-secondary)] transition-all hover:bg-[var(--surface)] disabled:cursor-not-allowed disabled:opacity-50"
       >
         <Icon icon={Download} size="sm" aria-hidden={true} />
         <span>Export</span>
@@ -149,17 +149,17 @@ export function ExportOptions({ handleExport, exportLoading }: ExportOptionsProp
           />
           <div
             ref={contentDropdownRef}
-            className="absolute top-full right-0 z-50 mt-2 w-64 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl"
+            className="absolute top-full right-0 z-50 mt-2 w-64 rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-xl"
           >
             <div className="p-2">
-              <div className="mb-2 px-3 py-1.5 text-xs font-semibold tracking-wider text-gray-400 uppercase">
+              <div className="mb-2 px-3 py-1.5 text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
                 What to export
               </div>
               {CONTENT_OPTIONS.map(option => (
                 <button
                   key={option.value}
                   onClick={() => handleContentSelect(option.value)}
-                  className="w-full rounded-lg px-3 py-2 text-left text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+                  className="w-full rounded-lg px-3 py-2 text-left text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
                 >
                   {option.label}
                 </button>
@@ -182,10 +182,10 @@ export function ExportOptions({ handleExport, exportLoading }: ExportOptionsProp
           />
           <div
             ref={formatDropdownRef}
-            className="absolute top-full right-0 z-50 mt-2 w-48 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl"
+            className="absolute top-full right-0 z-50 mt-2 w-48 rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-xl"
           >
             <div className="p-2">
-              <div className="mb-2 px-3 py-1.5 text-xs font-semibold tracking-wider text-gray-400 uppercase">
+              <div className="mb-2 px-3 py-1.5 text-xs font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
                 Export format
               </div>
               <button
@@ -193,8 +193,8 @@ export function ExportOptions({ handleExport, exportLoading }: ExportOptionsProp
                 disabled={isAnyExporting}
                 className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
                   isExporting(selectedContent, 'pdf')
-                    ? 'bg-[#29E7CD]/10 text-[#29E7CD]'
-                    : 'text-gray-300 hover:bg-[#2a2a2a] hover:text-white'
+                    ? 'bg-[var(--primary)]/10 text-[var(--primary)]'
+                    : 'text-[var(--foreground-secondary)] hover:bg-[var(--muted)] hover:text-[var(--foreground)]'
                 }`}
               >
                 <Icon icon={FileDown} size="sm" aria-hidden={true} />
@@ -205,8 +205,8 @@ export function ExportOptions({ handleExport, exportLoading }: ExportOptionsProp
                 disabled={isAnyExporting}
                 className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
                   isExporting(selectedContent, 'html')
-                    ? 'bg-[#29E7CD]/10 text-[#29E7CD]'
-                    : 'text-gray-300 hover:bg-[#2a2a2a] hover:text-white'
+                    ? 'bg-[var(--primary)]/10 text-[var(--primary)]'
+                    : 'text-[var(--foreground-secondary)] hover:bg-[var(--muted)] hover:text-[var(--foreground)]'
                 }`}
               >
                 <Icon icon={FileText} size="sm" aria-hidden={true} />
@@ -217,8 +217,8 @@ export function ExportOptions({ handleExport, exportLoading }: ExportOptionsProp
                 disabled={isAnyExporting}
                 className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
                   isExporting(selectedContent, 'csv')
-                    ? 'bg-[#29E7CD]/10 text-[#29E7CD]'
-                    : 'text-gray-300 hover:bg-[#2a2a2a] hover:text-white'
+                    ? 'bg-[var(--primary)]/10 text-[var(--primary)]'
+                    : 'text-[var(--foreground-secondary)] hover:bg-[var(--muted)] hover:text-[var(--foreground)]'
                 }`}
               >
                 <Icon icon={FileSpreadsheet} size="sm" aria-hidden={true} />

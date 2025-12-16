@@ -20,12 +20,12 @@ export function NavigationErrorBoundary({ children }: NavigationErrorBoundaryPro
   return (
     <ErrorBoundary
       fallback={
-        <div className="flex items-center justify-center p-4 text-gray-400">
+        <div className="flex items-center justify-center p-4 text-[var(--foreground)]/60">
           <div className="text-center">
             <p className="mb-2 text-sm">Navigation error. Please refresh the page.</p>
             <button
               onClick={() => window.location.reload()}
-              className="rounded-lg bg-[#29E7CD]/10 px-4 py-2 text-sm text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/20 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+              className="rounded-lg bg-[var(--primary)]/10 px-4 py-2 text-sm text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/20 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none"
             >
               Refresh Page
             </button>

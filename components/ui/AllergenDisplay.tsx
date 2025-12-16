@@ -30,7 +30,7 @@ export function AllergenDisplay({
   if (!allergens || allergens.length === 0) {
     if (!showEmpty) return null;
     return (
-      <div className={`text-sm text-gray-400 ${className}`}>
+      <div className={`text-sm text-[var(--foreground-muted)] ${className}`}>
         <span className="italic">{emptyMessage}</span>
       </div>
     );

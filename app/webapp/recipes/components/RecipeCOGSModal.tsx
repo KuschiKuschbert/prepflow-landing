@@ -149,17 +149,17 @@ export function RecipeCOGSModal({ isOpen, recipe, onClose }: RecipeCOGSModalProp
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
-      <div className="max-h-[90vh] w-full max-w-6xl rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
-        <div className="max-h-[90vh] w-full overflow-y-auto rounded-2xl bg-[#1f1f1f]/95">
+      <div className="max-h-[90vh] w-full max-w-6xl rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl">
+        <div className="max-h-[90vh] w-full overflow-y-auto rounded-2xl bg-[var(--surface)]/95">
           {/* Header */}
-          <div className="sticky top-0 border-b border-[#2a2a2a] bg-[#1f1f1f] p-6">
+          <div className="sticky top-0 border-b border-[var(--border)] bg-[var(--surface)] p-6">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <h2 className="mb-2 text-2xl font-bold text-white">
+                <h2 className="mb-2 text-2xl font-bold text-[var(--foreground)]">
                   {capitalizeRecipeName(recipe.recipe_name)} - COGS Breakdown
                 </h2>
-                {recipe.description && <p className="text-gray-400">{recipe.description}</p>}
-                <div className="mt-2 flex items-center gap-4 text-sm text-gray-400">
+                {recipe.description && <p className="text-[var(--foreground-muted)]">{recipe.description}</p>}
+                <div className="mt-2 flex items-center gap-4 text-sm text-[var(--foreground-muted)]">
                   <span>
                     Yield: {recipe.yield} {recipe.yield_unit}
                   </span>
@@ -169,7 +169,7 @@ export function RecipeCOGSModal({ isOpen, recipe, onClose }: RecipeCOGSModalProp
                       type="number"
                       value={dishPortions}
                       onChange={e => setDishPortions(Math.max(1, parseInt(e.target.value) || 1))}
-                      className="h-8 w-16 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] text-center text-sm font-medium text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                      className="h-8 w-16 rounded-lg border border-[var(--border)] bg-[var(--background)] text-center text-sm font-medium text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                       min="1"
                     />
                   </div>
@@ -177,7 +177,7 @@ export function RecipeCOGSModal({ isOpen, recipe, onClose }: RecipeCOGSModalProp
               </div>
               <button
                 onClick={onClose}
-                className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+                className="rounded-lg p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
                 aria-label="Close modal"
               >
                 <Icon icon={X} size="md" />
@@ -188,19 +188,19 @@ export function RecipeCOGSModal({ isOpen, recipe, onClose }: RecipeCOGSModalProp
           {/* Content */}
           <div className="p-6">
             {loading ? (
-              <div className="py-12 text-center text-gray-400">Loading ingredients...</div>
+              <div className="py-12 text-center text-[var(--foreground-muted)]">Loading ingredients...</div>
             ) : error ? (
-              <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-red-400">
+              <div className="rounded-lg border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 px-4 py-3 text-[var(--color-error)]">
                 {error}
               </div>
             ) : calculations.length === 0 ? (
-              <div className="py-12 text-center text-gray-400">
+              <div className="py-12 text-center text-[var(--foreground-muted)]">
                 No ingredients found for this recipe.
               </div>
             ) : (
               <>
                 {/* COGS Table */}
-                <div className="tablet:p-6 mb-6 rounded-lg bg-[#1f1f1f] p-4 shadow">
+                <div className="tablet:p-6 mb-6 rounded-lg bg-[var(--surface)] p-4 shadow">
                   <h3 className="tablet:text-xl mb-4 text-lg font-semibold">Cost Breakdown</h3>
                   <COGSTable
                     calculations={calculations}
@@ -219,7 +219,7 @@ export function RecipeCOGSModal({ isOpen, recipe, onClose }: RecipeCOGSModalProp
 
                 {/* Pricing Tool */}
                 {costPerPortion > 0 && (
-                  <div className="tablet:p-6 rounded-lg bg-[#1f1f1f] p-4 shadow">
+                  <div className="tablet:p-6 rounded-lg bg-[var(--surface)] p-4 shadow">
                     <PricingTool
                       costPerPortion={costPerPortion}
                       targetGrossProfit={targetGrossProfit}

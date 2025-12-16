@@ -69,8 +69,8 @@ export function PrepListPreview({
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/50 p-4">
-      <div className="flex h-[90vh] w-full max-w-6xl flex-col rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px]">
-        <div className="flex h-[90vh] w-full flex-col rounded-3xl bg-[#1f1f1f]/95">
+      <div className="flex h-[90vh] w-full max-w-6xl flex-col rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px]">
+        <div className="flex h-[90vh] w-full flex-col rounded-3xl bg-[var(--surface)]/95">
           {/* Header */}
           <PrepListPreviewHeader
             menuName={data.menuName}
@@ -83,14 +83,14 @@ export function PrepListPreview({
           {/* Content */}
           <div className="flex-1 overflow-y-auto p-6">
             {error && (
-              <div className="mb-4 rounded-xl border border-red-400/20 bg-red-400/10 p-3">
-                <p className="text-sm text-red-400">{error}</p>
+              <div className="mb-4 rounded-xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-3">
+                <p className="text-sm text-[var(--color-error)]">{error}</p>
               </div>
             )}
 
             {sections.length === 0 ? (
               <div className="py-12 text-center">
-                <p className="text-gray-400">No ingredients found in this menu.</p>
+                <p className="text-[var(--foreground-muted)]">No ingredients found in this menu.</p>
               </div>
             ) : (
               <div className="space-y-6">

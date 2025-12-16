@@ -98,12 +98,12 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
   return (
     <>
       <ConfirmDialog />
-      <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
         <div className="mb-4 flex items-center gap-3">
-          <Icon icon={Clock} size="lg" className="text-[#29E7CD]" />
+          <Icon icon={Clock} size="lg" className="text-[var(--primary)]" />
           <div>
             <h2 className="text-xl font-semibold">Scheduled Backups</h2>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-[var(--foreground-muted)]">
               Automatically backup your data at regular intervals
             </p>
           </div>
@@ -116,16 +116,16 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
               type="checkbox"
               checked={enabled}
               onChange={e => setEnabled(e.target.checked)}
-              className="h-5 w-5 rounded border-[#2a2a2a] bg-[#1f1f1f] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
+              className="h-5 w-5 rounded border-[var(--border)] bg-[var(--surface)] text-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
             />
-            <span className="text-sm text-gray-300">Enable scheduled backups</span>
+            <span className="text-sm text-[var(--foreground-secondary)]">Enable scheduled backups</span>
           </label>
 
           {enabled && (
             <>
               {/* Backup Interval */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-300">
+                <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
                   Backup Interval
                 </label>
                 <select
@@ -138,7 +138,7 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
                       setIntervalHours(value);
                     }
                   }}
-                  className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                  className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                 >
                   {intervalOptions.map(option => (
                     <option key={option.value} value={option.value}>
@@ -155,7 +155,7 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
                     value={intervalHours || ''}
                     onChange={e => setIntervalHours(parseInt(e.target.value, 10) || 24)}
                     placeholder="Hours (1-8760)"
-                    className="mt-2 w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                    className="mt-2 w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                   />
                 )}
               </div>
@@ -166,9 +166,9 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
                   type="checkbox"
                   checked={autoUploadToDrive}
                   onChange={e => setAutoUploadToDrive(e.target.checked)}
-                  className="h-5 w-5 rounded border-[#2a2a2a] bg-[#1f1f1f] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
+                  className="h-5 w-5 rounded border-[var(--border)] bg-[var(--surface)] text-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
                 />
-                <span className="text-sm text-gray-300">Automatically upload to Google Drive</span>
+                <span className="text-sm text-[var(--foreground-secondary)]">Automatically upload to Google Drive</span>
               </label>
 
               {/* Save Button */}
@@ -176,7 +176,7 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-sm font-medium text-white transition-all hover:shadow-lg disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all hover:shadow-lg disabled:opacity-50"
                 >
                   <Icon icon={Save} size="sm" />
                   {saving ? 'Saving...' : 'Save Settings'}
@@ -184,7 +184,7 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
                 <button
                   onClick={handleDisable}
                   disabled={saving}
-                  className="rounded-2xl border border-[#2a2a2a] px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/40 disabled:opacity-50"
+                  className="rounded-2xl border border-[var(--border)] px-4 py-2 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/40 disabled:opacity-50"
                 >
                   Disable
                 </button>

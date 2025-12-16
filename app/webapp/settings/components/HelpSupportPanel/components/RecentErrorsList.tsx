@@ -16,16 +16,16 @@ interface RecentErrorsListProps {
 export function RecentErrorsList({ errors, loading, onReportError }: RecentErrorsListProps) {
   if (loading) {
     return (
-      <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
-        <div className="animate-pulse text-sm text-gray-400">Loading errors...</div>
+      <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 p-4">
+        <div className="animate-pulse text-sm text-[var(--foreground-muted)]">Loading errors...</div>
       </div>
     );
   }
 
   if (errors.length === 0) {
     return (
-      <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4 text-center">
-        <p className="text-sm text-gray-400">No recent errors. Great job!</p>
+      <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 p-4 text-center">
+        <p className="text-sm text-[var(--foreground-muted)]">No recent errors. Great job!</p>
       </div>
     );
   }
@@ -35,7 +35,7 @@ export function RecentErrorsList({ errors, loading, onReportError }: RecentError
       {errors.map(error => (
         <div
           key={error.id}
-          className="flex items-start justify-between rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4 transition-colors hover:bg-[#2a2a2a]/40"
+          className="flex items-start justify-between rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 p-4 transition-colors hover:bg-[var(--muted)]/40"
         >
           <div className="flex-1">
             <div className="mb-2 flex items-center gap-2">
@@ -44,9 +44,9 @@ export function RecentErrorsList({ errors, loading, onReportError }: RecentError
               >
                 {error.severity}
               </span>
-              <span className="text-xs text-gray-500">{formatRelativeTime(error.created_at)}</span>
+              <span className="text-xs text-[var(--foreground-subtle)]">{formatRelativeTime(error.created_at)}</span>
             </div>
-            <p className="line-clamp-2 text-sm text-gray-300">
+            <p className="line-clamp-2 text-sm text-[var(--foreground-secondary)]">
               {error.error_message.length > 100
                 ? `${error.error_message.substring(0, 100)}...`
                 : error.error_message}
@@ -54,7 +54,7 @@ export function RecentErrorsList({ errors, loading, onReportError }: RecentError
           </div>
           <button
             onClick={() => onReportError(error)}
-            className="ml-4 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1.5 text-xs font-medium text-white transition-opacity hover:opacity-90"
+            className="ml-4 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-3 py-1.5 text-xs font-medium text-[var(--button-active-text)] transition-opacity hover:opacity-90"
           >
             Report
           </button>

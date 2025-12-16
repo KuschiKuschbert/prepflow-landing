@@ -43,14 +43,14 @@ export function EquipmentQRCodeModalActions({
     <div className="relative z-10 flex flex-shrink-0 gap-2">
       <button
         onClick={handlePrint}
-        className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-2 text-xs font-semibold text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-[#29E7CD]/30"
+        className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-3 py-2 text-xs font-semibold text-[var(--button-active-text)] transition-all hover:scale-105 hover:shadow-lg hover:shadow-[var(--primary)]/30"
       >
         <Icon icon={Printer} size="sm" />
         Print
       </button>
       <button
         onClick={onClose}
-        className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2 text-xs font-medium text-white transition-all hover:border-[#29E7CD]/30 hover:bg-[#3a3a3a]"
+        className="rounded-lg border border-[var(--border)] bg-[var(--muted)] px-3 py-2 text-xs font-medium text-[var(--foreground)] transition-all hover:border-[var(--primary)]/30 hover:bg-[var(--surface-variant)]"
       >
         Close
       </button>

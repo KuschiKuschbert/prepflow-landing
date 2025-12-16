@@ -22,10 +22,10 @@ export default function PerformanceImportModal({
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-2xl rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px]">
-        <div className="rounded-2xl bg-[#1f1f1f]/95 p-6">
-          <h3 className="mb-4 text-xl font-semibold text-white">Import Sales Data</h3>
-          <p className="mb-4 text-gray-300">
+      <div className="w-full max-w-2xl rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px]">
+        <div className="rounded-2xl bg-[var(--surface)]/95 p-6">
+          <h3 className="mb-4 text-xl font-semibold text-[var(--button-active-text)]">Import Sales Data</h3>
+          <p className="mb-4 text-[var(--foreground-secondary)]">
             Paste your CSV data below. Format: Dish, Number Sold, Popularity %
           </p>
           {csvData.importing ? (
@@ -45,19 +45,19 @@ export default function PerformanceImportModal({
                 value={csvData.csvData}
                 onChange={e => onCsvDataChange(e.target.value)}
                 placeholder="Dish, Number Sold, Popularity %&#10;Double Cheese Burger, 175, 10.85&#10;Hot Dog, 158, 9.80"
-                className="h-40 w-full resize-none rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+                className="h-40 w-full resize-none rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--foreground)] placeholder-[var(--foreground-muted)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
               />
               <div className="mt-6 flex justify-end space-x-4">
                 <button
                   onClick={onClose}
-                  className="rounded-lg bg-gray-600 px-6 py-2 text-white transition-colors hover:bg-gray-700"
+                  className="rounded-lg bg-[var(--muted)] px-6 py-2 text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]/80"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={onImport}
                   disabled={csvData.importing || !csvData.csvData.trim()}
-                  className="rounded-lg bg-[#29E7CD] px-6 py-2 text-black transition-colors hover:bg-[#29E7CD]/80 disabled:bg-gray-600"
+                  className="rounded-lg bg-[var(--primary)] px-6 py-2 text-[var(--primary-text)] transition-colors hover:bg-[var(--primary)]/80 disabled:bg-[var(--muted)] disabled:text-[var(--foreground-muted)]"
                 >
                   Import
                 </button>

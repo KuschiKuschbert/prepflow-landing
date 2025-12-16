@@ -99,7 +99,7 @@ export function AllergenFilterDropdown({
         className={`tablet:w-auto flex w-full items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-200 ${
           hasSelection
             ? `${activeColor} ${activeBg}`
-            : 'border-[#2a2a2a] bg-[#0a0a0a]/80 text-gray-300 hover:border-[#2a2a2a] hover:bg-[#1f1f1f]'
+            : 'border-[var(--border)] bg-[var(--background)]/80 text-[var(--foreground-secondary)] hover:border-[var(--border)] hover:bg-[var(--surface)]'
         }`}
       >
         <Icon icon={AlertTriangle} size="sm" className="text-current" aria-hidden={true} />
@@ -116,16 +116,16 @@ export function AllergenFilterDropdown({
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={onToggle} aria-hidden={true} />
-          <div className="absolute top-full left-0 z-50 mt-1.5 max-h-96 w-72 overflow-y-auto rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
-            <div className="sticky top-0 border-b border-[#2a2a2a] bg-[#1f1f1f] p-2">
+          <div className="absolute top-full left-0 z-50 mt-1.5 max-h-96 w-72 overflow-y-auto rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-xl">
+            <div className="sticky top-0 border-b border-[var(--border)] bg-[var(--surface)] p-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-gray-300">
+                <span className="text-xs font-semibold text-[var(--foreground-secondary)]">
                   {mode === 'exclude' ? 'Exclude recipes with:' : 'Include recipes with:'}
                 </span>
                 {hasSelection && (
                   <button
                     onClick={handleClearAll}
-                    className="flex items-center gap-1 rounded px-2 py-1 text-xs text-gray-400 transition-colors hover:text-white"
+                    className="flex items-center gap-1 rounded px-2 py-1 text-xs text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
                   >
                     <Icon icon={X} size="xs" aria-hidden={true} />
                     Clear
@@ -141,19 +141,19 @@ export function AllergenFilterDropdown({
                     key={allergen.code}
                     onClick={() => handleAllergenToggle(allergen.code)}
                     className={`mb-1 flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-sm transition-colors ${
-                      isSelected ? `${activeBg} ${activeColor}` : 'text-gray-300 hover:bg-[#2a2a2a]'
+                      isSelected ? `${activeBg} ${activeColor}` : 'text-[var(--foreground-secondary)] hover:bg-[var(--muted)]'
                     }`}
                   >
                     <div
                       className={`flex h-4 w-4 items-center justify-center rounded border transition-colors ${
                         isSelected
-                          ? 'border-[#29E7CD] bg-[#29E7CD]/20'
-                          : 'border-[#2a2a2a] bg-[#0a0a0a]'
+                          ? 'border-[var(--primary)] bg-[var(--primary)]/20'
+                          : 'border-[var(--border)] bg-[var(--background)]'
                       }`}
                     >
                       {isSelected && (
                         <svg
-                          className="h-3 w-3 text-[#29E7CD]"
+                          className="h-3 w-3 text-[var(--primary)]"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -171,7 +171,7 @@ export function AllergenFilterDropdown({
                       <Icon
                         icon={ALLERGEN_ICONS[allergen.icon]}
                         size="sm"
-                        className={isSelected ? 'text-[#29E7CD]' : 'text-gray-400'}
+                        className={isSelected ? 'text-[var(--primary)]' : 'text-[var(--foreground-muted)]'}
                         aria-hidden={true}
                       />
                     )}
@@ -181,7 +181,7 @@ export function AllergenFilterDropdown({
               })}
             </div>
             {hasSelection && (
-              <div className="sticky bottom-0 border-t border-[#2a2a2a] bg-[#1f1f1f] p-2">
+              <div className="sticky bottom-0 border-t border-[var(--border)] bg-[var(--surface)] p-2">
                 <div className="flex flex-wrap gap-1">
                   {selectedAllergens.map(code => (
                     <AllergenBadge key={code} allergenCode={code} size="sm" />

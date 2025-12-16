@@ -82,13 +82,13 @@ export function CompletionModal({ isOpen, task, date, onClose, onUpdate }: Compl
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="relative w-full max-w-md rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-xl">
-        <div className="rounded-3xl bg-[#1f1f1f]/95 p-6">
+      <div className="relative w-full max-w-md rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-xl">
+        <div className="rounded-3xl bg-[var(--surface)]/95 p-6">
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-xl font-bold text-white">Task Details</h2>
+            <h2 className="text-xl font-bold text-[var(--button-active-text)]">Task Details</h2>
             <button
               onClick={onClose}
-              className="p-2 text-gray-400 transition-colors hover:text-white"
+              className="p-2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
               aria-label="Close"
             >
               <Icon icon={X} size="lg" aria-hidden={true} />
@@ -97,50 +97,50 @@ export function CompletionModal({ isOpen, task, date, onClose, onUpdate }: Compl
 
           <div className="space-y-4">
             <div>
-              <div className="text-sm text-gray-400">Task</div>
-              <div className="text-lg font-semibold text-white">{task.task_name}</div>
+              <div className="text-sm text-[var(--foreground-muted)]">Task</div>
+              <div className="text-lg font-semibold text-[var(--foreground)]">{task.task_name}</div>
             </div>
 
             <div>
-              <div className="text-sm text-gray-400">Date</div>
-              <div className="text-lg text-white">{dateFormatted}</div>
+              <div className="text-sm text-[var(--foreground-muted)]">Date</div>
+              <div className="text-lg text-[var(--foreground)]">{dateFormatted}</div>
             </div>
 
             {task.frequency_type && (
               <div>
-                <div className="text-sm text-gray-400">Frequency</div>
-                <div className="text-lg text-white capitalize">{task.frequency_type}</div>
+                <div className="text-sm text-[var(--foreground-muted)]">Frequency</div>
+                <div className="text-lg text-[var(--foreground)] capitalize">{task.frequency_type}</div>
               </div>
             )}
 
             <div>
-              <div className="mb-2 text-sm text-gray-400">Status</div>
+              <div className="mb-2 text-sm text-[var(--foreground-muted)]">Status</div>
               <div className="flex items-center gap-2">
                 {isCompleted ? (
                   <>
                     <Icon
                       icon={CheckCircle2}
                       size="md"
-                      className="text-green-400"
+                      className="text-[var(--color-success)]"
                       aria-hidden={true}
                     />
-                    <span className="font-medium text-green-400">Completed</span>
+                    <span className="font-medium text-[var(--color-success)]">Completed</span>
                   </>
                 ) : (
                   <>
-                    <Icon icon={Circle} size="md" className="text-gray-500" aria-hidden={true} />
-                    <span className="font-medium text-gray-400">Pending</span>
+                    <Icon icon={Circle} size="md" className="text-[var(--foreground-subtle)]" aria-hidden={true} />
+                    <span className="font-medium text-[var(--foreground-muted)]">Pending</span>
                   </>
                 )}
               </div>
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">Notes</label>
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Notes</label>
               <textarea
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
-                className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white placeholder-gray-500 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] placeholder-gray-500 focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                 placeholder="Add notes about this task..."
                 rows={4}
               />
@@ -150,7 +150,7 @@ export function CompletionModal({ isOpen, task, date, onClose, onUpdate }: Compl
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-2xl bg-[#2a2a2a] px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a]"
+                className="rounded-2xl bg-[var(--muted)] px-6 py-3 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]"
               >
                 Close
               </button>
@@ -160,8 +160,8 @@ export function CompletionModal({ isOpen, task, date, onClose, onUpdate }: Compl
                 disabled={loading}
                 className={`rounded-2xl px-6 py-3 font-semibold transition-all duration-200 hover:shadow-xl disabled:opacity-50 ${
                   isCompleted
-                    ? 'bg-[#2a2a2a] text-white hover:bg-[#3a3a3a]'
-                    : 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-black'
+                    ? 'bg-[var(--muted)] text-[var(--button-active-text)] hover:bg-[var(--surface-variant)]'
+                    : 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)]'
                 }`}
               >
                 {loading ? 'Updating...' : isCompleted ? 'Mark Incomplete' : 'Mark Complete'}

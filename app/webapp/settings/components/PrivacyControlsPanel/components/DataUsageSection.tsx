@@ -28,25 +28,25 @@ function formatFileSize(bytes: number) {
 
 export function DataUsageSection({ dataUsage }: DataUsageSectionProps) {
   return (
-    <div className="space-y-3 border-t border-[#2a2a2a] pt-4">
+    <div className="space-y-3 border-t border-[var(--border)] pt-4">
       <div className="flex items-center gap-2">
-        <Icon icon={Database} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+        <Icon icon={Database} size="md" className="text-[var(--primary)]" aria-hidden={true} />
         <h3 className="text-lg font-medium">Data Usage</h3>
       </div>
       <div className="desktop:grid-cols-2 grid grid-cols-1 gap-3">
         {Object.entries(dataUsage.usage).map(([key, value]) => (
-          <div key={key} className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-3">
-            <p className="text-xs text-gray-500 capitalize">{key.replace(/_/g, ' ')}</p>
+          <div key={key} className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 p-3">
+            <p className="text-xs text-[var(--foreground-subtle)] capitalize">{key.replace(/_/g, ' ')}</p>
             <div className="mt-1 flex items-baseline gap-2">
-              <p className="text-lg font-semibold text-white">{value.count.toLocaleString()}</p>
-              <p className="text-xs text-gray-400">({formatFileSize(value.size_bytes)})</p>
+              <p className="text-lg font-semibold text-[var(--foreground)]">{value.count.toLocaleString()}</p>
+              <p className="text-xs text-[var(--foreground-muted)]">({formatFileSize(value.size_bytes)})</p>
             </div>
           </div>
         ))}
       </div>
-      <div className="rounded-xl border border-[#29E7CD]/20 bg-[#29E7CD]/5 p-3">
-        <p className="text-xs text-gray-500">Total Storage</p>
-        <p className="text-lg font-semibold text-[#29E7CD]">
+      <div className="rounded-xl border border-[var(--primary)]/20 bg-[var(--primary)]/5 p-3">
+        <p className="text-xs text-[var(--foreground-subtle)]">Total Storage</p>
+        <p className="text-lg font-semibold text-[var(--primary)]">
           {formatFileSize(dataUsage.total_size_bytes)}
         </p>
       </div>

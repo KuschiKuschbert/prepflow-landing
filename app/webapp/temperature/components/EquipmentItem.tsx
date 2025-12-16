@@ -56,14 +56,14 @@ export function EquipmentItem({
   return (
     <div
       onClick={handleCardClick}
-      className={`group relative overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg transition-all duration-300 ${
+      className={`group relative overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg transition-all duration-300 ${
         onEquipmentClick && !editingId
-          ? 'cursor-pointer hover:border-[#29E7CD]/30 hover:shadow-2xl'
-          : 'hover:border-[#29E7CD]/30 hover:shadow-2xl'
+          ? 'cursor-pointer hover:border-[var(--primary)]/30 hover:shadow-2xl'
+          : 'hover:border-[var(--primary)]/30 hover:shadow-2xl'
       }`}
     >
       {/* Gradient accent */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#29E7CD]/5 to-[#D925C7]/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 to-[var(--accent)]/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
 
       <div className="relative">
         <div className="tablet:flex-row tablet:items-start tablet:justify-between mb-6 flex flex-col gap-4">

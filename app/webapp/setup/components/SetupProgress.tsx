@@ -19,10 +19,10 @@ export default function SetupProgress({ setupProgress }: SetupProgressProps) {
   const completedCount = Object.values(setupProgress).filter(Boolean).length;
 
   return (
-    <div className="mb-8 rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
+    <div className="mb-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-white">Setup Progress</h2>
-        <div className="text-sm text-gray-400">{completedCount} of 4 completed</div>
+        <h2 className="text-xl font-semibold text-[var(--foreground)]">Setup Progress</h2>
+        <div className="text-sm text-[var(--foreground-muted)]">{completedCount} of 4 completed</div>
       </div>
 
       <div className="flex items-center space-x-4">
@@ -35,18 +35,18 @@ export default function SetupProgress({ setupProgress }: SetupProgressProps) {
               <div className="flex items-center space-x-2">
                 <div
                   className={`flex h-8 w-8 items-center justify-center rounded-full transition-all duration-200 ${
-                    isCompleted ? 'bg-[#29E7CD]' : 'border border-[#29E7CD]/30 bg-[#2a2a2a]'
+                    isCompleted ? 'bg-[var(--primary)]' : 'border border-[var(--primary)]/30 bg-[var(--muted)]'
                   }`}
                 >
                   {isCompleted ? (
-                    <span className="text-sm font-bold text-black">✓</span>
+                    <span className="text-sm font-bold text-[var(--primary-text)]">✓</span>
                   ) : (
-                    <span className="text-sm font-bold text-[#29E7CD]">{step.number}</span>
+                    <span className="text-sm font-bold text-[var(--primary)]">{step.number}</span>
                   )}
                 </div>
                 <span
                   className={`font-medium transition-colors duration-200 ${
-                    isCompleted ? 'text-[#29E7CD]' : 'text-white'
+                    isCompleted ? 'text-[var(--primary)]' : 'text-[var(--foreground)]'
                   }`}
                 >
                   {step.label}
@@ -56,8 +56,8 @@ export default function SetupProgress({ setupProgress }: SetupProgressProps) {
                 <div
                   className={`h-px w-8 transition-colors duration-200 ${
                     isCompleted
-                      ? 'bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#29E7CD]'
-                      : 'bg-[#2a2a2a]'
+                      ? 'bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--primary)]'
+                      : 'bg-[var(--muted)]'
                   }`}
                 ></div>
               )}
@@ -67,16 +67,16 @@ export default function SetupProgress({ setupProgress }: SetupProgressProps) {
       </div>
 
       <div className="mt-4">
-        <div className="h-2 w-full rounded-full bg-[#2a2a2a]">
+        <div className="h-2 w-full rounded-full bg-[var(--muted)]">
           <div
-            className="h-2 rounded-full bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] transition-all duration-500"
+            className="h-2 rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] transition-all duration-500"
             style={{ width: `${(completedCount / 4) * 100}%` }}
           ></div>
         </div>
-        <p className="mt-2 text-center text-sm text-gray-400">
+        <p className="mt-2 text-center text-sm text-[var(--foreground-muted)]">
           {completedCount === 4 ? (
             <span className="flex items-center justify-center gap-2">
-              <Icon icon={PartyPopper} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+              <Icon icon={PartyPopper} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
               Setup Complete! Ready to use PrepFlow.
             </span>
           ) : (

@@ -81,7 +81,7 @@ export function SuppliersContent({
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold text-white">
+          <h2 className="text-2xl font-semibold text-[var(--foreground)]">
             {t('suppliers.manageSuppliers', 'Manage Suppliers')}
           </h2>
           {/* Add Supplier button is handled by parent */}
@@ -106,13 +106,13 @@ export function SuppliersContent({
       <div className="space-y-6">
         <div className="tablet:flex-row tablet:items-center flex flex-col items-start justify-between gap-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
               {t('suppliers.filterSupplier', 'Filter by Supplier')}
             </label>
             <select
               value={selectedSupplier}
               onChange={e => onSupplierFilterChange(e.target.value)}
-              className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
             >
               <option value="all">{t('suppliers.allSuppliers', 'All Suppliers')}</option>
               {suppliers.map(supplier => (

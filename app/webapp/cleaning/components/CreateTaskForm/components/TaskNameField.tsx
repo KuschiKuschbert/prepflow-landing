@@ -13,8 +13,8 @@ interface TaskNameFieldProps {
 export function TaskNameField({ value, onChange, onBlur, error, inputRef }: TaskNameFieldProps) {
   return (
     <div>
-      <label className="mb-1.5 block text-sm font-semibold text-gray-300">
-        Task Name <span className="text-red-400">*</span>
+      <label className="mb-1.5 block text-sm font-semibold text-[var(--foreground-secondary)]">
+        Task Name <span className="text-[var(--color-error)]">*</span>
       </label>
       <input
         ref={inputRef}
@@ -23,18 +23,18 @@ export function TaskNameField({ value, onChange, onBlur, error, inputRef }: Task
         onChange={e => onChange(e.target.value)}
         onBlur={e => onBlur(e.target.value)}
         className={`w-full rounded-2xl border ${
-          error ? 'border-red-500/50' : 'border-[#2a2a2a]'
-        } bg-[#2a2a2a] px-4 py-2.5 text-white placeholder-gray-500 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]`}
+          error ? 'border-[var(--color-error)]/50' : 'border-[var(--border)]'
+        } bg-[var(--muted)] px-4 py-2.5 text-[var(--foreground)] placeholder-gray-500 focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]`}
         placeholder="e.g., Clean kitchen floor"
         required
       />
       {error && (
-        <p className="mt-1 text-xs text-red-400" role="alert">
+        <p className="mt-1 text-xs text-[var(--color-error)]" role="alert">
           {error}
         </p>
       )}
       {value && !error && (
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-[var(--foreground-subtle)]">
           Great! This task will be added to your cleaning grid.
         </p>
       )}

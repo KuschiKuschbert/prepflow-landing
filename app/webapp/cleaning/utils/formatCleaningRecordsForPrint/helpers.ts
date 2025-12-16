@@ -50,7 +50,7 @@ export function getTaskStatusForDate(
   const taskDate = new Date(date);
 
   if (taskDate < today) {
-    return { status: 'Overdue', color: '#ef4444' };
+    return { status: 'Overdue', color: 'var(--color-error)' };
   }
 
   return { status: 'Pending', color: '#f59e0b' };

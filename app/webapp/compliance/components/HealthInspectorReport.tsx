@@ -118,8 +118,8 @@ export function HealthInspectorReport() {
   return (
     <div className="space-y-6">
       {/* Controls */}
-      <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
-        <h3 className="mb-4 flex items-center gap-2 text-xl font-semibold text-white">
+      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
+        <h3 className="mb-4 flex items-center gap-2 text-xl font-semibold text-[var(--foreground)]">
           <Icon icon={FileText} size="md" aria-hidden={true} />
           Generate Health Inspector Report
         </h3>
@@ -127,7 +127,7 @@ export function HealthInspectorReport() {
         {/* Date Range */}
         <div className="desktop:grid-cols-2 mb-4 grid grid-cols-1 gap-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
               <Icon icon={Calendar} size="sm" className="mr-1 inline" aria-hidden={true} />
               Start Date
             </label>
@@ -135,11 +135,11 @@ export function HealthInspectorReport() {
               type="date"
               value={startDate}
               onChange={e => setStartDate(e.target.value)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             />
           </div>
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
               <Icon icon={Calendar} size="sm" className="mr-1 inline" aria-hidden={true} />
               End Date
             </label>
@@ -147,14 +147,14 @@ export function HealthInspectorReport() {
               type="date"
               value={endDate}
               onChange={e => setEndDate(e.target.value)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             />
           </div>
         </div>
 
         {/* Section Toggles */}
         <div className="mb-4">
-          <label className="mb-2 block text-sm font-medium text-gray-300">Include Sections</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Include Sections</label>
           <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-2 gap-2">
             {[
               { key: 'summary', label: 'Executive Summary', category: 'core' },
@@ -178,15 +178,15 @@ export function HealthInspectorReport() {
             ].map(section => (
               <label
                 key={section.key}
-                className="flex items-center space-x-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] p-3 transition-colors hover:bg-[#2a2a2a]/80"
+                className="flex items-center space-x-2 rounded-xl border border-[var(--border)] bg-[var(--muted)] p-3 transition-colors hover:bg-[var(--muted)]/80"
               >
                 <input
                   type="checkbox"
                   checked={includeSections.includes(section.key)}
                   onChange={() => toggleSection(section.key)}
-                  className="h-4 w-4 rounded border-[#2a2a2a] bg-[#0a0a0a] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
+                  className="h-4 w-4 rounded border-[var(--border)] bg-[var(--background)] text-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
                 />
-                <span className="text-sm text-white">{section.label}</span>
+                <span className="text-sm text-[var(--foreground)]">{section.label}</span>
               </label>
             ))}
           </div>
@@ -196,7 +196,7 @@ export function HealthInspectorReport() {
         <button
           onClick={generateReport}
           disabled={loading}
-          className="w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
         >
           {loading ? 'Generating Report...' : 'Generate Report'}
         </button>
@@ -204,14 +204,14 @@ export function HealthInspectorReport() {
 
       {/* Error State */}
       {error && (
-        <div className="rounded-3xl border border-red-500/20 bg-red-500/10 p-6">
-          <p className="text-red-400">{error}</p>
+        <div className="rounded-3xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-6">
+          <p className="text-[var(--color-error)]">{error}</p>
         </div>
       )}
 
       {/* Loading State */}
       {loading && (
-        <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8">
+        <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8">
           <LoadingSkeleton variant="card" count={3} height="100px" />
         </div>
       )}
@@ -223,21 +223,21 @@ export function HealthInspectorReport() {
           <div className="flex flex-wrap gap-3">
             <button
               onClick={handlePrint}
-              className="flex items-center gap-2 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 font-medium text-white transition-colors hover:bg-[#2a2a2a]/80"
+              className="flex items-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]/80"
             >
               <Icon icon={Printer} size="sm" aria-hidden={true} />
               Print
             </button>
             <button
               onClick={handleExportHTML}
-              className="flex items-center gap-2 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 font-medium text-white transition-colors hover:bg-[#2a2a2a]/80"
+              className="flex items-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]/80"
             >
               <Icon icon={Download} size="sm" aria-hidden={true} />
               Export HTML
             </button>
             <button
               onClick={handleExportJSON}
-              className="flex items-center gap-2 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 font-medium text-white transition-colors hover:bg-[#2a2a2a]/80"
+              className="flex items-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]/80"
             >
               <Icon icon={Download} size="sm" aria-hidden={true} />
               Export JSON
@@ -245,7 +245,7 @@ export function HealthInspectorReport() {
           </div>
 
           {/* Report Preview */}
-          <div className="rounded-3xl border border-[#2a2a2a] bg-white p-8 shadow-lg">
+          <div className="rounded-3xl border border-[var(--border)] bg-[var(--qr-background)] p-8 shadow-lg">
             <iframe
               srcDoc={generateHTMLReport(reportData)}
               className="h-[800px] w-full border-0"
@@ -257,12 +257,12 @@ export function HealthInspectorReport() {
 
       {/* Empty State */}
       {!reportData && !loading && !error && (
-        <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center">
-          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-            <Icon icon={FileText} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
+        <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center">
+          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
+            <Icon icon={FileText} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
           </div>
-          <h3 className="mb-2 text-xl font-semibold text-white">No Report Generated</h3>
-          <p className="text-gray-400">
+          <h3 className="mb-2 text-xl font-semibold text-[var(--button-active-text)]">No Report Generated</h3>
+          <p className="text-[var(--foreground-muted)]">
             Select your date range and sections, then click &quot;Generate Report&quot; to create a
             comprehensive health inspector compliance report.
           </p>

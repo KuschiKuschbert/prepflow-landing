@@ -27,13 +27,13 @@ export function RecipeManagementTabs({ activeTab, onTabChange }: RecipeManagemen
 
   return (
     <div className="mb-6">
-      <div className="flex flex-wrap gap-2 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-1">
+      <div className="flex flex-wrap gap-2 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-1">
         <button
           onClick={() => handleTabChange('ingredients')}
-          className={`tablet:px-6 flex min-w-0 flex-shrink items-center gap-2 rounded-xl px-4 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+          className={`tablet:px-6 flex min-w-0 flex-shrink items-center gap-2 rounded-xl px-4 py-3 font-semibold transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none ${
             activeTab === 'ingredients'
-              ? 'bg-[#29E7CD] text-black shadow-lg'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl border border-[var(--primary)]/30'
+              : 'text-[var(--foreground-secondary)] hover:text-[var(--button-active-text)]'
           }`}
           aria-pressed={activeTab === 'ingredients'}
           aria-label="View ingredients"
@@ -43,10 +43,10 @@ export function RecipeManagementTabs({ activeTab, onTabChange }: RecipeManagemen
         </button>
         <button
           onClick={() => handleTabChange('dishes')}
-          className={`tablet:px-6 flex min-w-0 flex-shrink items-center gap-2 rounded-xl px-4 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+          className={`tablet:px-6 flex min-w-0 flex-shrink items-center gap-2 rounded-xl px-4 py-3 font-semibold transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none ${
             activeTab === 'dishes'
-              ? 'bg-[#29E7CD] text-black shadow-lg'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl border border-[var(--primary)]/30'
+              : 'text-[var(--foreground-muted)] hover:text-[var(--button-active-text)]'
           }`}
           aria-pressed={activeTab === 'dishes'}
           aria-label="View dishes and recipes"
@@ -56,10 +56,10 @@ export function RecipeManagementTabs({ activeTab, onTabChange }: RecipeManagemen
         </button>
         <button
           onClick={() => handleTabChange('menu-builder')}
-          className={`tablet:px-6 flex min-w-0 flex-shrink items-center gap-2 rounded-xl px-4 py-3 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+          className={`tablet:px-6 flex min-w-0 flex-shrink items-center gap-2 rounded-xl px-4 py-3 font-semibold transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none ${
             activeTab === 'menu-builder'
-              ? 'bg-[#29E7CD] text-black shadow-lg'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl border border-[var(--primary)]/30'
+              : 'text-[var(--foreground-muted)] hover:text-[var(--button-active-text)]'
           }`}
           aria-pressed={activeTab === 'menu-builder'}
           aria-label="View menu builder"

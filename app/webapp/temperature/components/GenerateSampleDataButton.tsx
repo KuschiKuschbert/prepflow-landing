@@ -19,7 +19,7 @@ export function GenerateSampleDataButton({
       <button
         onClick={onGenerateSampleData}
         disabled={isGenerating}
-        className="group flex items-center gap-3 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-8 py-4 font-semibold text-black shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl disabled:opacity-50 disabled:hover:scale-100"
+        className="group flex items-center gap-3 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-8 py-4 font-semibold text-[var(--button-active-text)] shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl disabled:opacity-50 disabled:hover:scale-100"
       >
         <Icon
           icon={Sparkles}
@@ -40,7 +40,7 @@ export function GenerateSampleDataButton({
       <button
         onClick={onGenerateSampleData}
         disabled={isGenerating}
-        className="group flex items-center gap-2 rounded-2xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-6 py-3 text-sm font-semibold text-[#29E7CD] shadow-lg transition-all duration-300 hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/20 hover:shadow-xl disabled:opacity-50"
+        className="group flex items-center gap-2 rounded-2xl border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-6 py-3 text-sm font-semibold text-[var(--primary)] shadow-lg transition-all duration-300 hover:border-[var(--primary)]/50 hover:bg-[var(--primary)]/20 hover:shadow-xl disabled:opacity-50"
         title="Generate 5 sample logs per equipment (last 2 weeks)"
       >
         <Icon

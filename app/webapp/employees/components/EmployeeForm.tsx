@@ -99,21 +99,21 @@ export function EmployeeForm({
   };
 
   return (
-    <div className="mb-6 rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
+    <div className="mb-6 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-xl font-semibold text-white">
+        <h3 className="text-xl font-semibold text-[var(--foreground)]">
           {employee ? 'Edit Employee' : 'Add New Employee'}
         </h3>
       </div>
       <form onSubmit={handleSubmit} className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
         {/* Employee ID */}
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Employee ID</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Employee ID</label>
           <input
             type="text"
             value={formData.employee_id}
             onChange={e => handleChange('employee_id', e.target.value)}
-            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             placeholder="e.g., EMP001, STAFF-2024-001"
           />
         </div>
@@ -136,7 +136,7 @@ export function EmployeeForm({
             <button
               type="button"
               onClick={handleViewCertificates}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[#29E7CD]/20 bg-[#29E7CD]/10 px-6 py-3 font-medium text-[#29E7CD] transition-all duration-200 hover:bg-[#29E7CD]/20 hover:shadow-lg"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[var(--primary)]/20 bg-[var(--primary)]/10 px-6 py-3 font-medium text-[var(--primary)] transition-all duration-200 hover:bg-[var(--primary)]/20 hover:shadow-lg"
             >
               <Icon icon={Award} size="md" aria-hidden={true} />
               View Certificates & Qualifications ({employee.employee_qualifications.length})
@@ -148,13 +148,13 @@ export function EmployeeForm({
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-6 py-3 font-medium text-white transition-colors hover:bg-[#2a2a2a]/80"
+            className="rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-6 py-3 font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]/80"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
+            className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
           >
             {employee ? 'Update Employee' : 'Add Employee'}
           </button>

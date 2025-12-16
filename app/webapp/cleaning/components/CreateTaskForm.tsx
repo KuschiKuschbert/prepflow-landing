@@ -121,26 +121,26 @@ export function CreateTaskForm({
       aria-labelledby="create-task-modal-title"
     >
       <div
-        className="tablet:max-w-lg desktop:max-w-xl tablet:p-5 relative mb-8 w-full max-w-xl rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-xl"
+        className="tablet:max-w-lg desktop:max-w-xl tablet:p-5 relative mb-8 w-full max-w-xl rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-xl"
         onClick={e => e.stopPropagation()}
       >
-        <div className="mb-4 flex items-center justify-between border-b border-[#2a2a2a] pb-3">
+        <div className="mb-4 flex items-center justify-between border-b border-[var(--border)] pb-3">
           <div>
             <h2
               id="create-task-modal-title"
-              className="tablet:text-2xl text-xl font-bold text-white"
+              className="tablet:text-2xl text-xl font-bold text-[var(--foreground)]"
             >
               Create Cleaning Task
             </h2>
             {formProgress.completed > 0 && (
-              <p className="mt-0.5 text-xs text-gray-400">
+              <p className="mt-0.5 text-xs text-[var(--foreground-muted)]">
                 {formProgress.completed} of {formProgress.total} required fields completed
               </p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 transition-colors hover:text-white"
+            className="p-2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
             aria-label="Close"
           >
             <Icon icon={X} size="lg" aria-hidden={true} />
@@ -162,8 +162,8 @@ export function CreateTaskForm({
 
             {!preselectedAreaId && (
               <div>
-                <label className="mb-1.5 block text-sm font-semibold text-gray-300">
-                  Area <span className="text-red-400">*</span>
+                <label className="mb-1.5 block text-sm font-semibold text-[var(--foreground-secondary)]">
+                  Area <span className="text-[var(--color-error)]">*</span>
                 </label>
                 <select
                   value={formData.area_id}
@@ -174,8 +174,8 @@ export function CreateTaskForm({
                   onBlur={e => validateField('area_id', e.target.value)}
                   disabled={fetching}
                   className={`w-full rounded-2xl border ${
-                    errors.area_id ? 'border-red-500/50' : 'border-[#2a2a2a]'
-                  } bg-[#2a2a2a] px-4 py-2.5 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] ${
+                    errors.area_id ? 'border-[var(--color-error)]/50' : 'border-[var(--border)]'
+                  } bg-[var(--muted)] px-4 py-2.5 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)] ${
                     fetching ? 'opacity-50' : ''
                   }`}
                   required
@@ -188,7 +188,7 @@ export function CreateTaskForm({
                   ))}
                 </select>
                 {errors.area_id && (
-                  <p className="mt-1 text-xs text-red-400" role="alert">
+                  <p className="mt-1 text-xs text-[var(--color-error)]" role="alert">
                     {errors.area_id}
                   </p>
                 )}
@@ -235,12 +235,12 @@ export function CreateTaskForm({
             onDescriptionChange={desc => setFormData({ ...formData, description: desc })}
           />
 
-          <div className="desktop:flex-row desktop:justify-between flex flex-col-reverse gap-2 border-t border-[#2a2a2a] pt-3">
+          <div className="desktop:flex-row desktop:justify-between flex flex-col-reverse gap-2 border-t border-[var(--border)] pt-3">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="rounded-2xl bg-[#2a2a2a] px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-[#3a3a3a] disabled:opacity-50"
+              className="rounded-2xl bg-[var(--muted)] px-6 py-3 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)] disabled:opacity-50"
             >
               Cancel
             </button>
@@ -250,7 +250,7 @@ export function CreateTaskForm({
                   type="button"
                   onClick={e => handleSubmit(e as React.FormEvent, true)}
                   disabled={loading || !isFormValid}
-                  className="rounded-2xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-6 py-3 font-semibold text-[#29E7CD] transition-all duration-200 hover:bg-[#29E7CD]/20 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-2xl border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-6 py-3 font-semibold text-[var(--primary)] transition-all duration-200 hover:bg-[var(--primary)]/20 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Create & Add Another
                 </button>
@@ -258,7 +258,7 @@ export function CreateTaskForm({
               <button
                 type="submit"
                 disabled={loading || !isFormValid}
-                className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {loading ? 'Creating...' : 'Create Task'}
               </button>
@@ -266,9 +266,9 @@ export function CreateTaskForm({
           </div>
 
           <div className="pt-2 text-center">
-            <p className="text-xs text-gray-500">
-              Press <kbd className="rounded bg-[#2a2a2a] px-2 py-1 text-xs">Enter</kbd> to submit,{' '}
-              <kbd className="rounded bg-[#2a2a2a] px-2 py-1 text-xs">Esc</kbd> to close
+            <p className="text-xs text-[var(--foreground-subtle)]">
+              Press <kbd className="rounded bg-[var(--muted)] px-2 py-1 text-xs">Enter</kbd> to submit,{' '}
+              <kbd className="rounded bg-[var(--muted)] px-2 py-1 text-xs">Esc</kbd> to close
             </p>
           </div>
         </form>

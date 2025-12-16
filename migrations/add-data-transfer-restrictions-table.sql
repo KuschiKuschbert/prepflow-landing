@@ -38,3 +38,6 @@ COMMENT ON TABLE data_transfer_restrictions IS 'Tracks user country and enforces
 COMMENT ON COLUMN data_transfer_restrictions.country_code IS 'ISO 3166-1 alpha-2 country code (e.g., CN, RU, IR)';
 COMMENT ON COLUMN data_transfer_restrictions.restricted IS 'Whether user is in a restricted country (China, Russia, Iran)';
 COMMENT ON COLUMN data_transfer_restrictions.consent_given_at IS 'Timestamp when user gave explicit consent for restricted data transfer';
+
+
+

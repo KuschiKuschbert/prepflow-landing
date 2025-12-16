@@ -66,31 +66,31 @@ const GlobalWarning: React.FC<GlobalWarningProps> = ({ onHeightChange }) => {
       case 'error':
         return {
           container: 'bg-red-900/90 border-red-700/50 text-red-100',
-          icon: 'text-red-400',
+          icon: 'text-[var(--color-error)]',
           button: 'bg-red-800/50 hover:bg-red-700/50 text-red-100',
         };
       case 'warning':
         return {
           container: 'bg-yellow-900/90 border-yellow-700/50 text-yellow-100',
-          icon: 'text-yellow-400',
+          icon: 'text-[var(--color-warning)]',
           button: 'bg-yellow-800/50 hover:bg-yellow-700/50 text-yellow-100',
         };
       case 'info':
         return {
           container: 'bg-blue-900/90 border-blue-700/50 text-blue-100',
-          icon: 'text-blue-400',
+          icon: 'text-[var(--color-info)]',
           button: 'bg-blue-800/50 hover:bg-blue-700/50 text-blue-100',
         };
       case 'success':
         return {
           container: 'bg-green-900/90 border-green-700/50 text-green-100',
-          icon: 'text-green-400',
+          icon: 'text-[var(--color-success)]',
           button: 'bg-green-800/50 hover:bg-green-700/50 text-green-100',
         };
       default:
         return {
           container: 'bg-gray-900/90 border-gray-700/50 text-gray-100',
-          icon: 'text-gray-400',
+          icon: 'text-[var(--foreground-muted)]',
           button: 'bg-gray-800/50 hover:bg-gray-700/50 text-gray-100',
         };
     }

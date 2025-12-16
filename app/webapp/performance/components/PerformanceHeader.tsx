@@ -88,15 +88,15 @@ export default function PerformanceHeader({
   const scoreForColor = mounted ? performanceScore : 0;
   const performanceScoreColor =
     scoreForColor >= 90
-      ? 'text-green-400'
+      ? 'text-[var(--color-success)]'
       : scoreForColor >= 70
-        ? 'text-yellow-400'
-        : 'text-red-400';
+        ? 'text-[var(--color-warning)]'
+        : 'text-[var(--color-error)]';
 
   const metrics = (
     <div className="tablet:flex-row tablet:items-center tablet:gap-4 flex flex-col items-start gap-2">
       <div className="relative text-right" ref={scoreRef}>
-        <div className="text-sm text-gray-400">Performance Score</div>
+        <div className="text-sm text-[var(--foreground-muted)]">Performance Score</div>
         <div
           className={`relative inline-flex cursor-help items-center gap-2 ${performanceScoreColor}`}
           onMouseEnter={() => setShowTooltip(true)}
@@ -112,7 +112,7 @@ export default function PerformanceHeader({
           }}
         >
           <div className={`text-2xl font-bold`}>{mounted ? performanceScore : 0}/100</div>
-          <Sparkles className="h-4 w-4 text-[#29E7CD] transition-opacity hover:opacity-80" />
+          <Sparkles className="h-4 w-4 text-[var(--primary)] transition-opacity hover:opacity-80" />
         </div>
         <PerformanceScoreTooltip
           showTooltip={showTooltip}
@@ -136,12 +136,12 @@ export default function PerformanceHeader({
                 <button
                   ref={methodologyButtonRef}
                   onClick={() => setShowMethodologyTooltip(!showMethodologyTooltip)}
-                  className="flex items-center justify-center rounded-lg p-1 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+                  className="flex items-center justify-center rounded-lg p-1 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)]"
                   aria-label="Show methodology information"
                   onMouseEnter={() => setShowMethodologyTooltip(true)}
                   onMouseLeave={() => setShowMethodologyTooltip(false)}
                 >
-                  <Icon icon={Info} size="xs" className="text-[#29E7CD]" />
+                  <Icon icon={Info} size="xs" className="text-[var(--primary)]" />
                 </button>
                 <MethodologyTooltip
                   showMethodologyTooltip={showMethodologyTooltip}
@@ -160,9 +160,9 @@ export default function PerformanceHeader({
       />
 
       {performanceAlerts.length > 0 && (
-        <div className="tablet:mb-2 desktop:mb-3 mb-1.5 flex items-center gap-2 rounded-lg border border-yellow-500/20 bg-yellow-900/10 px-3 py-2">
+        <div className="tablet:mb-2 desktop:mb-3 mb-1.5 flex items-center gap-2 rounded-lg border border-[var(--color-warning)]/20 bg-yellow-900/10 px-3 py-2">
           <svg
-            className="h-4 w-4 flex-shrink-0 text-yellow-400"
+            className="h-4 w-4 flex-shrink-0 text-[var(--color-warning)]"
             fill="currentColor"
             viewBox="0 0 20 20"
           >
@@ -173,7 +173,7 @@ export default function PerformanceHeader({
             />
           </svg>
           <div className="flex-1">
-            <span className="text-xs font-medium text-yellow-400">
+            <span className="text-xs font-medium text-[var(--color-warning)]">
               {performanceAlerts.length} alert{performanceAlerts.length > 1 ? 's' : ''}
             </span>
             <div className="mt-0.5 text-xs text-yellow-300/80">

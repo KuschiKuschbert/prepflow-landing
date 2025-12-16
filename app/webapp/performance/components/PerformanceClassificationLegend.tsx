@@ -4,9 +4,9 @@ import { HelpTooltip } from '@/components/ui/HelpTooltip';
 
 export function PerformanceClassificationLegend() {
   return (
-    <div className="tablet:p-4 desktop:p-6 border-b border-[#2a2a2a] bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 p-3">
+    <div className="tablet:p-4 desktop:p-6 border-b border-[var(--border)] bg-gradient-to-r from-[var(--muted)]/50 to-[var(--muted)]/20 p-3">
       <div className="tablet:mb-2 mb-1.5 flex items-center gap-2">
-        <h3 className="tablet:text-sm text-xs font-semibold text-white">
+        <h3 className="tablet:text-sm text-xs font-semibold text-[var(--button-active-text)]">
           Menu Item Classifications
         </h3>
         <HelpTooltip
@@ -16,20 +16,20 @@ export function PerformanceClassificationLegend() {
       </div>
       <div className="flex flex-wrap gap-3 text-xs">
         <div className="flex items-center gap-2">
-          <span className="flex h-3 w-3 rounded-full border border-green-500/30 bg-green-500/20"></span>
-          <span className="text-gray-300">Chef&apos;s Kiss: High profit & high popularity</span>
+          <span className="flex h-3 w-3 rounded-full border border-[var(--color-success-border)] bg-[var(--color-success-bg)]"></span>
+          <span className="text-[var(--foreground-secondary)]">Chef&apos;s Kiss: High profit & high popularity</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="flex h-3 w-3 rounded-full border border-blue-500/30 bg-blue-500/20"></span>
-          <span className="text-gray-300">Hidden Gem: High profit, low sales</span>
+          <span className="flex h-3 w-3 rounded-full border border-[var(--color-info-border)] bg-[var(--color-info-bg)]"></span>
+          <span className="text-[var(--foreground-secondary)]">Hidden Gem: High profit, low sales</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="flex h-3 w-3 rounded-full border border-yellow-500/30 bg-yellow-500/20"></span>
-          <span className="text-gray-300">Bargain Bucket: Popular, low profit</span>
+          <span className="flex h-3 w-3 rounded-full border border-[var(--color-warning-border)] bg-[var(--color-warning-bg)]"></span>
+          <span className="text-[var(--foreground-secondary)]">Bargain Bucket: Popular, low profit</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="flex h-3 w-3 rounded-full border border-red-500/30 bg-red-500/20"></span>
-          <span className="text-gray-300">Burnt Toast: Low profit & low sales</span>
+          <span className="flex h-3 w-3 rounded-full border border-[var(--color-error-border)] bg-[var(--color-error-bg)]"></span>
+          <span className="text-[var(--foreground-secondary)]">Burnt Toast: Low profit & low sales</span>
         </div>
       </div>
     </div>

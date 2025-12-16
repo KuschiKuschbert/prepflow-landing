@@ -66,9 +66,9 @@ export function DishTableRow({
 
   return (
     <tr
-      className={`border-l-2 border-[#29E7CD]/30 bg-[#29E7CD]/2 transition-colors ${
-        isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[#29E7CD]/5'
-      } ${isSelected && isSelectionMode ? 'bg-[#29E7CD]/10' : ''}`}
+      className={`border-l-2 border-[var(--primary)]/30 bg-[var(--primary)]/2 transition-colors ${
+        isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[var(--primary)]/5'
+      } ${isSelected && isSelectionMode ? 'bg-[var(--primary)]/10' : ''}`}
       onClick={handleRowClick}
       title={isSelectionMode ? 'Tap to select' : 'Click to preview dish'}
       onTouchStart={isSelectionMode ? undefined : longPressHandlers.onTouchStart}
@@ -76,58 +76,58 @@ export function DishTableRow({
       onTouchEnd={isSelectionMode ? undefined : longPressHandlers.onTouchEnd}
     >
       <td
-        className="px-6 py-4 text-sm font-medium whitespace-nowrap text-white"
+        className="px-6 py-4 text-sm font-medium whitespace-nowrap text-[var(--foreground)]"
         onClick={e => e.stopPropagation()}
       >
         <button
           onClick={() => onSelectDish(dish.id)}
-          className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+          className="flex items-center justify-center transition-colors hover:text-[var(--primary)]"
           aria-label={`${isSelected ? 'Deselect' : 'Select'} dish ${capitalizeDishName(dish.dish_name)}`}
         >
           {isSelected ? (
-            <Icon icon={Check} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+            <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
           ) : (
-            <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+            <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
           )}
         </button>
       </td>
       <td
-        className={`px-6 py-4 text-sm font-medium text-white transition-all duration-300 ${
+        className={`px-6 py-4 text-sm font-medium text-[var(--foreground)] transition-all duration-300 ${
           !isSelectionMode ? 'cursor-pointer' : ''
         } ${
           isHighlighting
-            ? 'animate-[highlightPulse_0.5s_ease-in-out] border-l-4 border-[#29E7CD] bg-[#29E7CD]/10'
+            ? 'animate-[highlightPulse_0.5s_ease-in-out] border-l-4 border-[var(--primary)] bg-[var(--primary)]/10'
             : ''
         }`}
         onClick={!isSelectionMode ? () => onPreviewDish(dish) : undefined}
       >
         {capitalizeDishName(dish.dish_name)}
       </td>
-      <td className="px-6 py-4 text-sm text-gray-300">${dish.selling_price.toFixed(2)}</td>
-      <td className="desktop:table-cell hidden px-6 py-4 text-sm text-gray-300">
+      <td className="px-6 py-4 text-sm text-[var(--foreground-secondary)]">${dish.selling_price.toFixed(2)}</td>
+      <td className="desktop:table-cell hidden px-6 py-4 text-sm text-[var(--foreground-secondary)]">
         {cost ? `$${cost.total_cost.toFixed(2)}` : '—'}
       </td>
       <td className="desktop:table-cell hidden px-6 py-4 text-sm">
         {cost ? (
           <span
             className={`font-semibold ${
-              cost.gross_profit_margin >= 30 ? 'text-green-400' : 'text-yellow-400'
+              cost.gross_profit_margin >= 30 ? 'text-[var(--color-success)]' : 'text-[var(--color-warning)]'
             }`}
           >
             {cost.gross_profit_margin.toFixed(1)}%
           </span>
         ) : (
-          <span className="text-gray-500">—</span>
+          <span className="text-[var(--foreground-subtle)]">—</span>
         )}
       </td>
-      <td className="desktop:table-cell hidden px-6 py-4 text-sm text-gray-400">
+      <td className="desktop:table-cell hidden px-6 py-4 text-sm text-[var(--foreground-muted)]">
         {formatRecipeDate(dish.created_at)}
       </td>
       <td className="px-6 py-4 text-sm font-medium">
         <div className="flex gap-2">
           <button
             onClick={() => onPreviewDish(dish)}
-            className="text-gray-400 transition-colors hover:text-[#29E7CD]"
+            className="text-[var(--foreground-muted)] transition-colors hover:text-[var(--primary)]"
             aria-label={`Preview dish ${capitalizeDishName(dish.dish_name)}`}
             title="Preview full details"
           >
@@ -135,7 +135,7 @@ export function DishTableRow({
           </button>
           <button
             onClick={() => onEditDish(dish)}
-            className="text-gray-400 transition-colors hover:text-[#29E7CD]"
+            className="text-[var(--foreground-muted)] transition-colors hover:text-[var(--primary)]"
             aria-label={`Edit dish ${capitalizeDishName(dish.dish_name)}`}
             title="Edit dish"
           >
@@ -143,7 +143,7 @@ export function DishTableRow({
           </button>
           <button
             onClick={() => onDeleteDish(dish)}
-            className="text-gray-400 transition-colors hover:text-red-400"
+            className="text-[var(--foreground-muted)] transition-colors hover:text-[var(--color-error)]"
             aria-label={`Delete dish ${capitalizeDishName(dish.dish_name)}`}
             title="Delete dish"
           >

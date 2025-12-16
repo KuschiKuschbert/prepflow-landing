@@ -148,10 +148,10 @@ export function UnifiedRecipeModal({
       aria-modal="true"
       aria-labelledby="recipe-modal-title"
     >
-      <div className="animate-in zoom-in-95 max-h-[90vh] w-full max-w-6xl rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl duration-200">
+      <div className="animate-in zoom-in-95 max-h-[90vh] w-full max-w-6xl rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl duration-200">
         <div
           ref={modalRef}
-          className="flex max-h-[90vh] w-full flex-col overflow-hidden rounded-2xl bg-[#1f1f1f]/95 focus:outline-none"
+          className="flex max-h-[90vh] w-full flex-col overflow-hidden rounded-2xl bg-[var(--surface)]/95 focus:outline-none"
           tabIndex={-1}
         >
           <UnifiedRecipeModalHeader

@@ -17,8 +17,8 @@ export function CSVImportErrors({ parseErrors, validationErrors }: CSVImportErro
     <>
       {/* Parse Errors Display */}
       {parseErrors.length > 0 && (
-        <div className="rounded-lg border border-red-500/50 bg-red-900/20 p-4">
-          <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-red-400">
+        <div className="rounded-lg border border-[var(--color-error)]/50 bg-red-900/20 p-4">
+          <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-[var(--color-error)]">
             <Icon icon={AlertCircle} size="sm" aria-hidden={true} />
             <span>CSV Parse Errors ({parseErrors.length})</span>
           </div>
@@ -35,8 +35,8 @@ export function CSVImportErrors({ parseErrors, validationErrors }: CSVImportErro
 
       {/* Validation Errors */}
       {validationErrors.size > 0 && (
-        <div className="rounded-lg border border-yellow-500/50 bg-yellow-900/20 p-4">
-          <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-yellow-400">
+        <div className="rounded-lg border border-[var(--color-warning)]/50 bg-yellow-900/20 p-4">
+          <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-[var(--color-warning)]">
             <Icon icon={AlertCircle} size="sm" aria-hidden={true} />
             <span>Validation Errors ({validationErrors.size})</span>
           </div>

@@ -30,10 +30,10 @@ export function TimeInput({
           onChange(e.target.value);
           onClearErrors?.();
         }}
-        className={`w-full rounded-xl border bg-[#0a0a0a] px-4 py-3 text-white transition-colors ${
+        className={`w-full rounded-xl border bg-[var(--background)] px-4 py-3 text-[var(--foreground)] transition-colors ${
           error
-            ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-            : 'border-[#2a2a2a] focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20'
+            ? 'border-[var(--color-error)]/50 focus:border-[var(--color-error)] focus:ring-2 focus:ring-red-500/20'
+            : 'border-[var(--border)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20'
         }`}
         disabled={disabled}
       />

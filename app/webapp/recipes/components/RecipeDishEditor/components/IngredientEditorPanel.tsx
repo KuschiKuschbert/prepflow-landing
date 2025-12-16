@@ -85,8 +85,8 @@ export function IngredientEditorPanel({
     >
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-white">{capitalizeName(selectedItem!.name)}</h3>
-          <p className="text-sm text-gray-400">
+          <h3 className="text-lg font-semibold text-[var(--foreground)]">{capitalizeName(selectedItem!.name)}</h3>
+          <p className="text-sm text-[var(--foreground-muted)]">
             {selectedItem!.type === 'recipe' ? 'Recipe' : 'Dish'} Ingredients & Consumables
           </p>
         </div>
@@ -100,14 +100,14 @@ export function IngredientEditorPanel({
             onRemoveCalculation={onRemoveCalculation}
           />
         ) : (
-          <div className="flex h-32 items-center justify-center text-gray-400">
+          <div className="flex h-32 items-center justify-center text-[var(--foreground-muted)]">
             <p>No ingredients or consumables added yet</p>
           </div>
         )}
       </div>
-      <div className="border-t border-[#2a2a2a] pt-4">
+      <div className="border-t border-[var(--border)] pt-4">
         {dataError && (
-          <div className="mb-4 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
+          <div className="mb-4 rounded-lg border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-3 text-sm text-[var(--color-error)]">
             {dataError}
           </div>
         )}
@@ -129,11 +129,11 @@ export function IngredientEditorPanel({
           onAddIngredient={onAddIngredient}
         />
       </div>
-      <div className="mt-4 border-t border-[#2a2a2a] pt-4">
+      <div className="mt-4 border-t border-[var(--border)] pt-4">
         <button
           onClick={onSave}
           disabled={saving || calculations.length === 0 || !selectedItem}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-6 py-3 font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#29E7CD]/25 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-300 hover:shadow-lg hover:shadow-[var(--primary)]/25 disabled:cursor-not-allowed disabled:opacity-50"
           aria-label={
             saving
               ? 'Saving changes...'
@@ -144,7 +144,7 @@ export function IngredientEditorPanel({
                   : 'Save changes'
           }
         >
-          <Icon icon={Save} size="sm" className="text-white" aria-hidden={true} />
+          <Icon icon={Save} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
           <span>
             {saving
               ? 'Saving...'

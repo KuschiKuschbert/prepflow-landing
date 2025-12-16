@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import KitchenOnFire from '@/components/ErrorGame/KitchenOnFire';
+import { useErrorMessageSelector } from '@/components/ErrorGame/useErrorMessageSelector';
 import { usePathname } from 'next/navigation';
 
 interface ErrorProps {
@@ -11,6 +11,8 @@ interface ErrorProps {
 
 export default function Error({ error, reset }: ErrorProps) {
   const pathname = usePathname();
+  const ErrorComponent = useErrorMessageSelector();
+
   if (
     pathname &&
     (pathname.startsWith('/api/auth') ||
@@ -19,5 +21,5 @@ export default function Error({ error, reset }: ErrorProps) {
   ) {
     return null;
   }
-  return <KitchenOnFire />;
+  return <ErrorComponent />;
 }

@@ -28,14 +28,14 @@ export function ActiveFilterChips({
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="text-xs text-gray-400">Active:</span>
+      <span className="text-xs text-[var(--foreground-muted)]">Active:</span>
       {searchTerm && (
-        <div className="inline-flex items-center gap-1.5 rounded-full border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1 text-xs font-medium text-[#29E7CD]">
-          <Icon icon={Search} size="xs" className="text-[#29E7CD]" aria-hidden={true} />
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-3 py-1 text-xs font-medium text-[var(--primary)]">
+          <Icon icon={Search} size="xs" className="text-[var(--primary)]" aria-hidden={true} />
           <span>{searchTerm}</span>
           <button
             onClick={onClearSearch}
-            className="ml-1 text-[#29E7CD]/70 transition-colors hover:text-[#29E7CD]"
+            className="ml-1 text-[var(--primary)]/70 transition-colors hover:text-[var(--primary)]"
             aria-label="Remove search filter"
           >
             <Icon icon={X} size="xs" className="text-current" aria-hidden={true} />
@@ -43,12 +43,12 @@ export function ActiveFilterChips({
         </div>
       )}
       {supplierFilter && (
-        <div className="inline-flex items-center gap-1.5 rounded-full border border-[#3B82F6]/30 bg-[#3B82F6]/10 px-3 py-1 text-xs font-medium text-[#3B82F6]">
-          <Icon icon={Store} size="xs" className="text-[#3B82F6]" aria-hidden={true} />
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-info)]/30 bg-[var(--color-info)]/10 px-3 py-1 text-xs font-medium text-[var(--color-info)]">
+          <Icon icon={Store} size="xs" className="text-[var(--color-info)]" aria-hidden={true} />
           <span>{supplierFilter}</span>
           <button
             onClick={onClearSupplier}
-            className="ml-1 text-[#3B82F6]/70 transition-colors hover:text-[#3B82F6]"
+            className="ml-1 text-[var(--color-info)]/70 transition-colors hover:text-[var(--color-info)]"
             aria-label="Remove supplier filter"
           >
             <Icon icon={X} size="xs" className="text-current" aria-hidden={true} />
@@ -56,12 +56,12 @@ export function ActiveFilterChips({
         </div>
       )}
       {storageFilter && (
-        <div className="inline-flex items-center gap-1.5 rounded-full border border-[#D925C7]/30 bg-[#D925C7]/10 px-3 py-1 text-xs font-medium text-[#D925C7]">
-          <Icon icon={MapPin} size="xs" className="text-[#D925C7]" aria-hidden={true} />
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-3 py-1 text-xs font-medium text-[var(--accent)]">
+          <Icon icon={MapPin} size="xs" className="text-[var(--accent)]" aria-hidden={true} />
           <span>{storageFilter}</span>
           <button
             onClick={onClearStorage}
-            className="ml-1 text-[#D925C7]/70 transition-colors hover:text-[#D925C7]"
+            className="ml-1 text-[var(--accent)]/70 transition-colors hover:text-[var(--accent)]"
             aria-label="Remove storage filter"
           >
             <Icon icon={X} size="xs" className="text-current" aria-hidden={true} />
@@ -69,12 +69,12 @@ export function ActiveFilterChips({
         </div>
       )}
       {categoryFilter && onClearCategory && (
-        <div className="inline-flex items-center gap-1.5 rounded-full border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1 text-xs font-medium text-[#29E7CD]">
-          <Icon icon={Tag} size="xs" className="text-[#29E7CD]" aria-hidden={true} />
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-3 py-1 text-xs font-medium text-[var(--primary)]">
+          <Icon icon={Tag} size="xs" className="text-[var(--primary)]" aria-hidden={true} />
           <span>{categoryFilter}</span>
           <button
             onClick={onClearCategory}
-            className="ml-1 text-[#29E7CD]/70 transition-colors hover:text-[#29E7CD]"
+            className="ml-1 text-[var(--primary)]/70 transition-colors hover:text-[var(--primary)]"
             aria-label="Remove category filter"
           >
             <Icon icon={X} size="xs" className="text-current" aria-hidden={true} />

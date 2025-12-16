@@ -93,8 +93,8 @@ export function RecipeIngredientsTab({
   const emptyMessage =
     activeTab === 'ingredients' ? 'No ingredients added yet' : 'No consumables added yet';
   return (
-    <div className="flex flex-1 flex-col overflow-hidden border-t border-[#2a2a2a] pt-6">
-      <div className="mb-4 flex gap-2 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-2">
+    <div className="flex flex-1 flex-col overflow-hidden border-t border-[var(--border)] pt-6">
+      <div className="mb-4 flex gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2">
         {(['ingredients', 'consumables'] as const).map(tab => {
           const isActive = activeTab === tab;
           return (
@@ -103,8 +103,8 @@ export function RecipeIngredientsTab({
               onClick={() => onTabChange(tab)}
               className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2 font-medium transition-all ${
                 isActive
-                  ? 'bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white'
-                  : 'text-gray-400 hover:text-white'
+                  ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] text-[var(--button-active-text)]'
+                  : 'text-[var(--foreground-muted)] hover:text-[var(--button-active-text)]'
               }`}
             >
               <Icon
@@ -117,11 +117,11 @@ export function RecipeIngredientsTab({
           );
         })}
       </div>
-      <h3 className="mb-4 text-lg font-semibold text-white">
+      <h3 className="mb-4 text-lg font-semibold text-[var(--foreground)]">
         {activeTab === 'ingredients' ? 'Ingredients' : 'Consumables'}
       </h3>
       {dataError && (
-        <div className="mb-4 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
+        <div className="mb-4 rounded-lg border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-3 text-sm text-[var(--color-error)]">
           {dataError}
         </div>
       )}
@@ -134,7 +134,7 @@ export function RecipeIngredientsTab({
         <>
           <div className="mb-4 flex-1 overflow-y-auto">
             {currentCalculations.length === 0 ? (
-              <div className="flex h-32 items-center justify-center rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/50 text-gray-400">
+              <div className="flex h-32 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--background)]/50 text-[var(--foreground-muted)]">
                 <p>{emptyMessage}</p>
               </div>
             ) : (
@@ -145,7 +145,7 @@ export function RecipeIngredientsTab({
               />
             )}
           </div>
-          <div className="border-t border-[#2a2a2a] pt-4">
+          <div className="border-t border-[var(--border)] pt-4">
             {activeTab === 'ingredients' ? (
               <IngredientManager
                 showAddIngredient={showAddIngredient}

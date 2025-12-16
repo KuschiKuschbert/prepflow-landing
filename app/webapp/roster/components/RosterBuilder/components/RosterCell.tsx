@@ -85,11 +85,11 @@ export function RosterCell({
       onClick={handleClick}
       className={`min-h-[100px] rounded-xl border-2 p-1.5 transition-all duration-200 ${
         isOverCell
-          ? 'border-[#29E7CD] bg-[#29E7CD]/20 shadow-lg shadow-[#29E7CD]/20'
+          ? 'border-[var(--primary)] bg-[var(--primary)]/20 shadow-lg shadow-[var(--primary)]/20'
           : isActiveInlineEntry
-            ? 'border-[#29E7CD] bg-[#29E7CD]/10'
-            : 'border-[#2a2a2a] bg-[#1f1f1f]/30'
-      } ${!isActiveInlineEntry ? 'cursor-pointer hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/5' : ''}`}
+            ? 'border-[var(--primary)] bg-[var(--primary)]/10'
+            : 'border-[var(--border)] bg-[var(--surface)]/30'
+      } ${!isActiveInlineEntry ? 'cursor-pointer hover:border-[var(--primary)]/50 hover:bg-[var(--primary)]/5' : ''}`}
     >
       {isActiveInlineEntry && onInlineEntrySave && onInlineEntryCancel ? (
         <InlineTimeEntry
@@ -119,7 +119,7 @@ export function RosterCell({
                 onAddShift(employeeId, date, cellRect);
               }
             }}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-[#2a2a2a] bg-[#1f1f1f]/20 p-2 text-xs text-gray-400 transition-colors hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/5 hover:text-[#29E7CD]"
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-[var(--border)] bg-[var(--surface)]/20 p-2 text-xs text-[var(--foreground-muted)] transition-colors hover:border-[var(--primary)]/50 hover:bg-[var(--primary)]/5 hover:text-[var(--primary)]"
           >
             <Icon icon={Plus} size="sm" aria-hidden={true} />
             <span>Add shift</span>
@@ -149,7 +149,7 @@ export function RosterCell({
                   onAddShift(employeeId, date, cellRect);
                 }
               }}
-              className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-[#2a2a2a] bg-[#1f1f1f]/20 p-2 text-xs text-gray-400 transition-colors hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/5 hover:text-[#29E7CD]"
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-[var(--border)] bg-[var(--surface)]/20 p-2 text-xs text-[var(--foreground-muted)] transition-colors hover:border-[var(--primary)]/50 hover:bg-[var(--primary)]/5 hover:text-[var(--primary)]"
             >
               <Icon icon={Plus} size="sm" aria-hidden={true} />
               <span>Add shift</span>

@@ -59,7 +59,7 @@ export default function SimpleTemperatureChart({
         ? 'In Range'
         : 'Out of Range'
       : 'N/A';
-  const statusColor = latestStatus === 'In Range' ? 'text-green-400' : 'text-red-400';
+  const statusColor = latestStatus === 'In Range' ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]';
 
   if (!chartData || chartData.length === 0) {
     return (
@@ -72,7 +72,7 @@ export default function SimpleTemperatureChart({
   }
 
   return (
-    <div className="tablet:p-6 rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
+    <div className="tablet:p-6 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
       <div
         ref={chartContainerRef}
         className="relative w-full overflow-visible"
@@ -101,10 +101,10 @@ export default function SimpleTemperatureChart({
 
             {/* Safe Range Indicator - Overlay in top-right */}
             {equipment.min_temp_celsius !== null && equipment.max_temp_celsius !== null && (
-              <div className="absolute top-4 right-4 z-10 rounded-2xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-2 backdrop-blur-sm">
+              <div className="absolute top-4 right-4 z-10 rounded-2xl border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-3 py-2 backdrop-blur-sm">
                 <div className="flex items-center gap-2">
-                  <div className="h-3 w-3 rounded-full bg-[#29E7CD]" />
-                  <span className="text-xs font-medium text-[#29E7CD]">
+                  <div className="h-3 w-3 rounded-full bg-[var(--primary)]" />
+                  <span className="text-xs font-medium text-[var(--primary)]">
                     Safe Range: {equipment.min_temp_celsius}°C - {equipment.max_temp_celsius}°C
                   </span>
                 </div>
@@ -112,7 +112,7 @@ export default function SimpleTemperatureChart({
             )}
           </div>
         ) : (
-          <div className="flex h-full items-center justify-center text-gray-400">
+          <div className="flex h-full items-center justify-center text-[var(--foreground-muted)]">
             No chart data available
           </div>
         )}

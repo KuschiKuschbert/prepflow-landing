@@ -42,14 +42,14 @@ export function ReorderDropdown({
           onToggle();
         }}
         onMouseDown={e => e.stopPropagation()}
-        className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+        className="rounded-lg p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)]"
         aria-label="Reorder options"
       >
         <Icon icon={ChevronDown} size="sm" />
       </button>
       {isOpen && (
-        <div className="absolute top-full right-0 z-50 mt-1 min-w-[180px] rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
-          <div className="p-2 text-xs font-medium tracking-wider text-gray-400 uppercase">
+        <div className="absolute top-full right-0 z-50 mt-1 min-w-[180px] rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-lg">
+          <div className="p-2 text-xs font-medium tracking-wider text-[var(--foreground-muted)] uppercase">
             Reorder
           </div>
           <div className="max-h-60 overflow-y-auto">
@@ -61,7 +61,7 @@ export function ReorderDropdown({
                   onToggle();
                 }}
                 disabled={isFirst}
-                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-400"
+                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-[var(--foreground-muted)]"
               >
                 <Icon icon={ChevronUp} size="sm" />
                 <span>Move Up</span>
@@ -75,7 +75,7 @@ export function ReorderDropdown({
                   onToggle();
                 }}
                 disabled={isLast}
-                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-400"
+                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-[var(--foreground-muted)]"
               >
                 <Icon icon={ChevronDown} size="sm" />
                 <span>Move Down</span>

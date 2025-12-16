@@ -34,29 +34,29 @@ export function RecipeCardModalHeader({
   closeButtonRef,
 }: RecipeCardModalHeaderProps) {
   return (
-    <div className="sticky top-0 z-20 flex items-start justify-between border-b border-[#2a2a2a] bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a]/50 p-4 backdrop-blur-sm">
+    <div className="sticky top-0 z-20 flex items-start justify-between border-b border-[var(--border)] bg-gradient-to-r from-[#1f1f1f] to-[var(--muted)]/50 p-4 backdrop-blur-sm">
       <div className="min-w-0 flex-1 pr-4">
         <div className="mb-2 flex items-start justify-between gap-2">
           <h2
             id={`recipe-card-modal-title-${id}`}
-            className="desktop:text-2xl text-xl font-bold text-white"
+            className="desktop:text-2xl text-xl font-bold text-[var(--foreground)]"
           >
             {title}
           </h2>
           {isSubRecipe && (
-            <span className="shrink-0 rounded-full bg-[#D925C7]/20 px-2 py-1 text-xs font-medium text-[#D925C7]">
+            <span className="shrink-0 rounded-full bg-[var(--accent)]/20 px-2 py-1 text-xs font-medium text-[var(--accent)]">
               Sub-Recipe
             </span>
           )}
         </div>
         {isSubRecipe && usedByMenuItems && usedByMenuItems.length > 0 && (
           <div className="mt-2 mb-2">
-            <p className="text-xs text-gray-400">Used by:</p>
+            <p className="text-xs text-[var(--foreground-muted)]">Used by:</p>
             <div className="mt-1 flex flex-wrap gap-1.5">
               {usedByMenuItems.map(usage => (
                 <span
                   key={usage.menuItemId}
-                  className="rounded-full bg-[#29E7CD]/10 px-2 py-0.5 text-xs text-[#29E7CD]"
+                  className="rounded-full bg-[var(--primary)]/10 px-2 py-0.5 text-xs text-[var(--primary)]"
                 >
                   {usage.menuItemName}
                   {usage.quantity > 1 && ` (${usage.quantity})`}
@@ -77,7 +77,7 @@ export function RecipeCardModalHeader({
       <button
         ref={closeButtonRef}
         onClick={() => onClose?.()}
-        className="shrink-0 rounded-full p-2 text-gray-400 transition-all duration-200 hover:bg-[#2a2a2a] hover:text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+        className="shrink-0 rounded-full p-2 text-[var(--foreground-muted)] transition-all duration-200 hover:bg-[var(--muted)] hover:text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
         aria-label="Close recipe card"
       >
         <Icon icon={X} size="md" aria-hidden={true} />

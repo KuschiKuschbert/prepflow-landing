@@ -87,23 +87,23 @@ export default function RecipePreviewModal({
       aria-modal="true"
       aria-labelledby="recipe-preview-title"
     >
-      <div className="animate-in zoom-in-95 max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl duration-200">
+      <div className="animate-in zoom-in-95 max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl duration-200">
         <div
           ref={modalRef}
-          className="flex max-h-[90vh] w-full flex-col overflow-hidden rounded-2xl bg-[#1f1f1f]/95 focus:outline-none"
+          className="flex max-h-[90vh] w-full flex-col overflow-hidden rounded-2xl bg-[var(--surface)]/95 focus:outline-none"
           tabIndex={-1}
         >
           {/* Header */}
-          <div className="border-b border-[#2a2a2a] p-6">
+          <div className="border-b border-[var(--border)] p-6">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="mb-2 flex items-center justify-between">
-                  <h2 id="recipe-preview-title" className="text-2xl font-bold text-white">
+                  <h2 id="recipe-preview-title" className="text-2xl font-bold text-[var(--foreground)]">
                     {capitalizeRecipeName(selectedRecipe.recipe_name)}
                   </h2>
                   <button
                     onClick={onClose}
-                    className="ml-4 flex-shrink-0 rounded-lg p-2 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+                    className="ml-4 flex-shrink-0 rounded-lg p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
                     aria-label="Close recipe preview"
                   >
                     <Icon icon={X} size="md" aria-hidden={true} />
@@ -113,18 +113,18 @@ export default function RecipePreviewModal({
                 {/* Yield Adjustment Section */}
                 <div className="mb-4 flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-400">Original Yield:</span>
-                    <span className="font-medium text-white">
+                    <span className="text-sm text-[var(--foreground-muted)]">Original Yield:</span>
+                    <span className="font-medium text-[var(--foreground)]">
                       {selectedRecipe.yield} {selectedRecipe.yield_unit}
                     </span>
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-400">Adjust for:</span>
+                    <span className="text-sm text-[var(--foreground-muted)]">Adjust for:</span>
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => onUpdatePreviewYield(Math.max(1, previewYield - 1))}
-                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2a2a2a] text-sm font-medium text-white transition-colors hover:bg-[#3a3a3a]"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--muted)] text-sm font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--surface-variant)]"
                       >
                         −
                       </button>
@@ -134,24 +134,24 @@ export default function RecipePreviewModal({
                         onChange={e =>
                           onUpdatePreviewYield(Math.max(1, parseInt(e.target.value) || 1))
                         }
-                        className="h-8 w-16 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] text-center text-sm font-medium text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                        className="h-8 w-16 rounded-lg border border-[var(--border)] bg-[var(--background)] text-center text-sm font-medium text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                         min="1"
                       />
                       <button
                         onClick={() => onUpdatePreviewYield(previewYield + 1)}
-                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2a2a2a] text-sm font-medium text-white transition-colors hover:bg-[#3a3a3a]"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--muted)] text-sm font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--surface-variant)]"
                       >
                         +
                       </button>
                     </div>
-                    <span className="font-medium text-white">{selectedRecipe.yield_unit}</span>
+                    <span className="font-medium text-[var(--foreground)]">{selectedRecipe.yield_unit}</span>
                   </div>
 
                   {previewYield !== selectedRecipe.yield && (
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-400">Scale:</span>
+                      <span className="text-xs text-[var(--foreground-muted)]">Scale:</span>
                       <span
-                        className={`text-sm font-medium ${previewYield > selectedRecipe.yield ? 'text-[#29E7CD]' : 'text-[#3B82F6]'}`}
+                        className={`text-sm font-medium ${previewYield > selectedRecipe.yield ? 'text-[var(--primary)]' : 'text-[var(--color-info)]'}`}
                       >
                         {previewYield > selectedRecipe.yield ? '+' : ''}
                         {((previewYield / selectedRecipe.yield - 1) * 100).toFixed(0)}%
@@ -164,38 +164,38 @@ export default function RecipePreviewModal({
               <div className="flex gap-2">
                 <button
                   onClick={onEditFromPreview}
-                  className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
+                  className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--color-info)]/80"
                 >
-                  <Icon icon={Edit} size="sm" className="text-white" aria-hidden={true} />
+                  <Icon icon={Edit} size="sm" className="text-[var(--button-active-text)]" aria-hidden={true} />
                   Edit Recipe
                 </button>
                 <button
                   onClick={onShareRecipe}
                   disabled={shareLoading}
-                  className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#10B981] to-[#059669] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:from-[#10B981]/80 hover:to-[#059669]/80 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#10B981] to-[#059669] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[#10B981]/80 hover:to-[#059669]/80 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {shareLoading ? (
                     <>
                       <Icon
                         icon={Loader2}
                         size="sm"
-                        className="animate-spin text-white"
+                        className="animate-spin text-[var(--foreground)]"
                         aria-hidden={true}
                       />
                       <span>Sharing...</span>
                     </>
                   ) : (
                     <>
-                      <Icon icon={Share2} size="sm" className="text-white" aria-hidden={true} />
+                      <Icon icon={Share2} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
                       <span>Share Recipe</span>
                     </>
                   )}
                 </button>
                 <button
                   onClick={onPrint}
-                  className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#D925C7] to-[#29E7CD] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:from-[#D925C7]/80 hover:to-[#29E7CD]/80"
+                  className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[var(--accent)] to-[var(--primary)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[var(--accent)]/80 hover:to-[var(--primary)]/80"
                 >
-                  <Icon icon={Printer} size="sm" className="text-white" aria-hidden={true} />
+                  <Icon icon={Printer} size="sm" className="text-[var(--button-active-text)]" aria-hidden={true} />
                   Print
                 </button>
               </div>
@@ -206,9 +206,9 @@ export default function RecipePreviewModal({
           <div className="p-6">
             {/* Ingredients */}
             <div className="mb-6">
-              <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
+              <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
                 <svg
-                  className="h-6 w-6 text-[#29E7CD]"
+                  className="h-6 w-6 text-[var(--primary)]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -221,7 +221,7 @@ export default function RecipePreviewModal({
                   />
                 </svg>
                 Ingredients
-                <span className="ml-2 text-sm font-normal text-gray-400">
+                <span className="ml-2 text-sm font-normal text-[var(--foreground-muted)]">
                   ({recipeIngredients.length} item{recipeIngredients.length !== 1 ? 's' : ''})
                 </span>
               </h3>
@@ -236,9 +236,9 @@ export default function RecipePreviewModal({
 
             {/* AI-Generated Cooking Instructions */}
             <div className="mb-6">
-              <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
+              <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
                 <svg
-                  className="h-5 w-5 text-[#29E7CD]"
+                  className="h-5 w-5 text-[var(--primary)]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -252,14 +252,14 @@ export default function RecipePreviewModal({
                 </svg>
                 AI-Generated Cooking Method
               </h3>
-              <div className="rounded-lg bg-[#0a0a0a] p-4">
+              <div className="rounded-lg bg-[var(--background)] p-4">
                 {generatingInstructions ? (
                   <div className="flex items-center justify-center py-8">
-                    <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-[#29E7CD]"></div>
-                    <span className="ml-3 text-gray-400">Generating cooking instructions...</span>
+                    <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-[var(--primary)]"></div>
+                    <span className="ml-3 text-[var(--foreground-muted)]">Generating cooking instructions...</span>
                   </div>
                 ) : (
-                  <div className="whitespace-pre-wrap text-gray-300">{aiInstructions}</div>
+                  <div className="whitespace-pre-wrap text-[var(--foreground-secondary)]">{aiInstructions}</div>
                 )}
               </div>
             </div>
@@ -267,9 +267,9 @@ export default function RecipePreviewModal({
             {/* Manual Instructions (if available) */}
             {selectedRecipe.instructions && (
               <div>
-                <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
+                <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
                   <svg
-                    className="h-5 w-5 text-[#29E7CD]"
+                    className="h-5 w-5 text-[var(--primary)]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -283,8 +283,8 @@ export default function RecipePreviewModal({
                   </svg>
                   Manual Instructions
                 </h3>
-                <div className="rounded-lg bg-[#0a0a0a] p-4">
-                  <div className="whitespace-pre-wrap text-gray-300">
+                <div className="rounded-lg bg-[var(--background)] p-4">
+                  <div className="whitespace-pre-wrap text-[var(--foreground-secondary)]">
                     {selectedRecipe.instructions}
                   </div>
                 </div>

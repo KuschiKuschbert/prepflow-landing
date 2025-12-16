@@ -36,16 +36,16 @@ export function DietaryBadge({
     badges.push(
       <span
         key="vegan"
-        className={`inline-flex items-center gap-1.5 rounded-full border border-green-500/20 bg-green-500/10 text-green-400 ${sizeClasses[size]}`}
+        className={`inline-flex items-center gap-1.5 rounded-full border border-[var(--color-success-border)] bg-[var(--color-success-bg)] text-[var(--color-success)] font-semibold ${sizeClasses[size]}`}
         title="Vegan - Contains no animal products"
       >
-        <Icon icon={Leaf} size="xs" className="text-green-400" aria-hidden={true} />
+        <Icon icon={Leaf} size="xs" className="text-[var(--color-success)]" aria-hidden={true} />
         <span>Vegan</span>
         {showConfidence && confidence === 'low' && (
           <Icon
             icon={AlertCircle}
             size="xs"
-            className="text-yellow-400"
+            className="text-[var(--color-warning)]"
             aria-label="Low confidence"
             title="Low confidence - may need verification"
           />
@@ -56,16 +56,16 @@ export function DietaryBadge({
     badges.push(
       <span
         key="vegetarian"
-        className={`inline-flex items-center gap-1.5 rounded-full border border-green-500/20 bg-green-500/10 text-green-400 ${sizeClasses[size]}`}
+        className={`inline-flex items-center gap-1.5 rounded-full border border-[var(--color-success-border)] bg-[var(--color-success-bg)] text-[var(--color-success)] font-semibold ${sizeClasses[size]}`}
         title="Vegetarian - Contains no meat or fish"
       >
-        <Icon icon={Leaf} size="xs" className="text-green-400" aria-hidden={true} />
+        <Icon icon={Leaf} size="xs" className="text-[var(--color-success)]" aria-hidden={true} />
         <span>Vegetarian</span>
         {showConfidence && confidence === 'low' && (
           <Icon
             icon={AlertCircle}
             size="xs"
-            className="text-yellow-400"
+            className="text-[var(--color-warning)]"
             aria-label="Low confidence"
             title="Low confidence - may need verification"
           />

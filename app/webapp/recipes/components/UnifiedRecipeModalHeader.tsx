@@ -52,12 +52,12 @@ export function UnifiedRecipeModalHeader({
   ];
 
   return (
-    <div className="tablet:p-5 desktop:p-6 flex-shrink-0 border-b border-[#2a2a2a] p-4">
+    <div className="tablet:p-5 desktop:p-6 flex-shrink-0 border-b border-[var(--border)] p-4">
       <div className="mb-4 flex items-start justify-between">
         <div className="flex-1">
           <h2
             id="recipe-modal-title"
-            className="tablet:text-xl desktop:text-2xl text-xl font-bold text-white"
+            className="tablet:text-xl desktop:text-2xl text-xl font-bold text-[var(--foreground)]"
           >
             {capitalizeRecipeName(recipe.recipe_name)}
           </h2>
@@ -65,20 +65,20 @@ export function UnifiedRecipeModalHeader({
           {/* Yield and Portions */}
           <div className="mt-2 flex items-center gap-4 text-sm">
             <div className="flex items-center gap-2">
-              <span className="text-gray-400">Yield:</span>
-              <span className="font-medium text-white">
+              <span className="text-[var(--foreground-muted)]">Yield:</span>
+              <span className="font-medium text-[var(--foreground)]">
                 {recipe.yield} {recipe.yield_unit}
               </span>
             </div>
 
             {activeTab === 'cogs' && (
               <div className="flex items-center gap-2">
-                <span className="text-gray-400">Portions:</span>
+                <span className="text-[var(--foreground-muted)]">Portions:</span>
                 <input
                   type="number"
                   value={dishPortions}
                   onChange={e => onDishPortionsChange(Math.max(1, parseInt(e.target.value) || 1))}
-                  className="w-20 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] text-center text-sm font-medium text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                  className="w-20 rounded-lg border border-[var(--border)] bg-[var(--background)] text-center text-sm font-medium text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                   min="1"
                 />
               </div>
@@ -90,16 +90,16 @@ export function UnifiedRecipeModalHeader({
         <div className="ml-4 flex gap-2">
           <button
             onClick={() => onEditRecipe(recipe)}
-            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80"
+            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[#3B82F6] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[#3B82F6]/80"
             title="Edit recipe (Press E)"
           >
-            <Icon icon={Edit} size="sm" className="text-white" aria-hidden={true} />
+            <Icon icon={Edit} size="sm" className="text-[var(--button-active-text)]" aria-hidden={true} />
             <span className="tablet:inline hidden">Edit</span>
             <span className="tablet:inline hidden text-xs opacity-70">(E)</span>
           </button>
           <button
             onClick={onDuplicateRecipe}
-            className="flex items-center gap-2 rounded-lg bg-[#2a2a2a] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#3a3a3a]"
+            className="flex items-center gap-2 rounded-lg bg-[var(--muted)] px-4 py-2 text-sm font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--surface-variant)]"
             title="Duplicate recipe"
           >
             <Icon icon={Copy} size="sm" aria-hidden={true} />
@@ -108,7 +108,7 @@ export function UnifiedRecipeModalHeader({
           <button
             onClick={onShareRecipe}
             disabled={shareLoading}
-            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#10B981] to-[#059669] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:from-[#10B981]/80 hover:to-[#059669]/80 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#10B981] to-[#059669] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[#10B981]/80 hover:to-[#059669]/80 disabled:cursor-not-allowed disabled:opacity-50"
             title="Share recipe"
           >
             {shareLoading ? (
@@ -116,21 +116,21 @@ export function UnifiedRecipeModalHeader({
                 <Icon
                   icon={Loader2}
                   size="sm"
-                  className="animate-spin text-white"
+                  className="animate-spin text-[var(--foreground)]"
                   aria-hidden={true}
                 />
                 <span className="tablet:inline hidden">Sharing...</span>
               </>
             ) : (
               <>
-                <Icon icon={Share2} size="sm" className="text-white" aria-hidden={true} />
+                <Icon icon={Share2} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
                 <span className="tablet:inline hidden">Share</span>
               </>
             )}
           </button>
           <button
             onClick={onPrint}
-            className="flex items-center gap-2 rounded-lg bg-[#2a2a2a] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#3a3a3a]"
+            className="flex items-center gap-2 rounded-lg bg-[var(--muted)] px-4 py-2 text-sm font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--surface-variant)]"
             title="Print recipe"
           >
             <Icon icon={Printer} size="sm" aria-hidden={true} />
@@ -138,7 +138,7 @@ export function UnifiedRecipeModalHeader({
           </button>
           <button
             onClick={onClose}
-            className="flex-shrink-0 rounded-lg p-2 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+            className="flex-shrink-0 rounded-lg p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
             aria-label="Close recipe modal"
           >
             <Icon icon={X} size="md" aria-hidden={true} />
@@ -147,15 +147,15 @@ export function UnifiedRecipeModalHeader({
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 border-b border-[#2a2a2a]">
+      <div className="flex gap-1 border-b border-[var(--border)]">
         {tabs.map(tab => (
           <button
             key={tab.id}
             onClick={() => onSetActiveTab(tab.id)}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors ${
               activeTab === tab.id
-                ? 'border-b-2 border-[#29E7CD] text-[#29E7CD]'
-                : 'text-gray-400 hover:text-white'
+                ? 'border-b-2 border-[var(--primary)] text-[var(--primary)]'
+                : 'text-[var(--foreground-secondary)] hover:text-[var(--foreground)]'
             }`}
           >
             <Icon icon={tab.icon} size="sm" aria-hidden={true} />

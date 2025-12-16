@@ -61,10 +61,10 @@ export function MenuUnlockChangesDialog({
       />
 
       {/* Dialog */}
-      <div className="relative z-50 w-full max-w-2xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
+      <div className="relative z-50 w-full max-w-2xl rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl">
         <div
           ref={dialogRef}
-          className="desktop:p-8 rounded-3xl bg-[#1f1f1f]/95 p-6"
+          className="desktop:p-8 rounded-3xl bg-[var(--surface)]/95 p-6"
           role="dialog"
           aria-modal="true"
           aria-labelledby="dialog-title"

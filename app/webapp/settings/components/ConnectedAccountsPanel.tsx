@@ -109,10 +109,10 @@ export function ConnectedAccountsPanel() {
     return (
       <div
         ref={ref}
-        className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6"
+        className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6"
       >
-        <div className="h-6 w-48 animate-pulse rounded bg-[#2a2a2a]" />
-        <div className="h-4 w-64 animate-pulse rounded bg-[#2a2a2a]" />
+        <div className="h-6 w-48 animate-pulse rounded bg-[var(--muted)]" />
+        <div className="h-4 w-64 animate-pulse rounded bg-[var(--muted)]" />
       </div>
     );
   }
@@ -120,11 +120,11 @@ export function ConnectedAccountsPanel() {
   return (
     <div
       ref={ref}
-      className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6"
+      className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6"
     >
       <div>
         <h2 className="text-xl font-semibold">Connected Accounts</h2>
-        <p className="mt-1 text-sm text-gray-300">
+        <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
           Manage your connected accounts and third-party integrations.
         </p>
       </div>
@@ -133,32 +133,32 @@ export function ConnectedAccountsPanel() {
         {accounts.map(account => (
           <div
             key={account.provider}
-            className="flex items-center justify-between rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4"
+            className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 p-4"
           >
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2a2a2a]">
-                <Icon icon={LinkIcon} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--muted)]">
+                <Icon icon={LinkIcon} size="md" className="text-[var(--primary)]" aria-hidden={true} />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <p className="font-medium text-white">{account.provider}</p>
+                  <p className="font-medium text-[var(--foreground)]">{account.provider}</p>
                   {account.connected && (
                     <Icon
                       icon={CheckCircle}
                       size="sm"
-                      className="text-green-400"
+                      className="text-[var(--color-success)]"
                       aria-label="Connected"
                     />
                   )}
                 </div>
-                <p className="text-sm text-gray-400">{account.email}</p>
+                <p className="text-sm text-[var(--foreground-muted)]">{account.email}</p>
               </div>
             </div>
             <div>
               {account.connected ? (
                 <button
                   onClick={() => handleDisconnect(account.provider)}
-                  className="flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-sm text-red-400 transition-colors hover:bg-red-500/20"
+                  className="flex items-center gap-2 rounded-xl border border-[var(--color-error)]/30 bg-[var(--color-error)]/10 px-3 py-1.5 text-sm text-[var(--color-error)] transition-colors hover:bg-[var(--color-error)]/20"
                 >
                   <Icon icon={Unlink} size="sm" aria-hidden={true} />
                   Disconnect
@@ -166,7 +166,7 @@ export function ConnectedAccountsPanel() {
               ) : (
                 <button
                   onClick={() => handleConnect(account.provider)}
-                  className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-3 py-1.5 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/60"
+                  className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/40 px-3 py-1.5 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/60"
                 >
                   Connect
                 </button>
@@ -176,7 +176,7 @@ export function ConnectedAccountsPanel() {
         ))}
       </div>
 
-      <p className="text-xs text-gray-500">
+      <p className="text-xs text-[var(--foreground-subtle)]">
         Connected accounts allow you to access additional features and integrations. You can
         disconnect any account at any time.
       </p>

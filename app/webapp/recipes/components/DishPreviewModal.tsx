@@ -125,8 +125,8 @@ export default function DishPreviewModal({
       aria-modal="true"
       aria-labelledby="dish-modal-title"
     >
-      <div className="max-h-[90vh] w-full max-w-4xl rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
-        <div className="max-h-[90vh] w-full overflow-y-auto rounded-2xl bg-[#1f1f1f]/95">
+      <div className="max-h-[90vh] w-full max-w-4xl rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl">
+        <div className="max-h-[90vh] w-full overflow-y-auto rounded-2xl bg-[var(--surface)]/95">
           <DishPreviewModalHeader
             dish={dish}
             capitalizeDishName={capitalizeDishName}
@@ -137,7 +137,7 @@ export default function DishPreviewModal({
           {/* Content */}
           <div className="p-6">
             {loading ? (
-              <div className="py-12 text-center text-gray-400">Loading...</div>
+              <div className="py-12 text-center text-[var(--foreground-muted)]">Loading...</div>
             ) : (
               <>
                 {/* Food Image Generation */}
@@ -167,8 +167,8 @@ export default function DishPreviewModal({
 
                 {/* COGS Breakdown */}
                 {calculations.length > 0 && (
-                  <div className="tablet:p-6 mb-6 rounded-lg bg-[#1f1f1f] p-4 shadow">
-                    <h3 className="mb-4 text-lg font-semibold text-white">COGS Breakdown</h3>
+                  <div className="tablet:p-6 mb-6 rounded-lg bg-[var(--surface)] p-4 shadow">
+                    <h3 className="mb-4 text-lg font-semibold text-[var(--foreground)]">COGS Breakdown</h3>
                     {dishDetails ? (
                       <COGSTableGrouped
                         calculations={calculations}

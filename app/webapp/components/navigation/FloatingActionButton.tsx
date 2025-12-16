@@ -157,9 +157,9 @@ export function FloatingActionButton() {
             'mb-2',
             'w-64',
             'rounded-2xl',
-            'bg-[#1f1f1f]',
+            'bg-[var(--surface)]',
             'border',
-            'border-[#2a2a2a]',
+            'border-[var(--border)]',
             'shadow-xl',
             'overflow-hidden',
             'animate-fade-in-up',
@@ -169,7 +169,7 @@ export function FloatingActionButton() {
           aria-orientation="vertical"
         >
           <div className="p-2">
-            <div className="mb-2 px-3 py-1.5 text-xs font-semibold tracking-wider text-gray-400 uppercase">
+            <div className="mb-2 px-3 py-1.5 text-xs font-semibold tracking-wider text-[var(--foreground)]/60 uppercase">
               Create New
             </div>
             <div className="max-h-[60vh] space-y-1 overflow-y-auto">
@@ -187,14 +187,14 @@ export function FloatingActionButton() {
                     'py-2.5',
                     'text-left',
                     'text-sm',
-                    'text-gray-300',
+                    'text-[var(--foreground)]/80',
                     'transition-all',
                     'duration-200',
-                    'hover:bg-[#2a2a2a]',
-                    'hover:text-[#29E7CD]',
+                    'hover:bg-[var(--muted)]/50',
+                    'hover:text-[var(--primary)]',
                     'focus:outline-none',
-                    'focus:bg-[#2a2a2a]',
-                    'focus:text-[#29E7CD]',
+                    'focus:bg-[var(--muted)]/50',
+                    'focus:text-[var(--primary)]',
                     'active:scale-95',
                   )}
                   role="menuitem"
@@ -223,9 +223,9 @@ export function FloatingActionButton() {
           'w-14',
           'rounded-full',
           'bg-gradient-to-r',
-          'from-[#29E7CD]',
-          'to-[#D925C7]',
-          'text-white',
+          'from-[var(--primary)]',
+          'to-[var(--accent)]',
+          'text-[var(--foreground)]',
           'shadow-lg',
           'transition-all',
           'duration-300',
@@ -235,9 +235,9 @@ export function FloatingActionButton() {
           'active:scale-95',
           'focus:outline-none',
           'focus:ring-2',
-          'focus:ring-[#29E7CD]',
+          'focus:ring-[var(--primary)]',
           'focus:ring-offset-2',
-          'focus:ring-offset-[#0a0a0a]',
+          'focus:ring-offset-[var(--background)]',
           'touch-manipulation',
           isVisible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0',
         )}
@@ -245,7 +245,7 @@ export function FloatingActionButton() {
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <Icon icon={Plus} size="lg" className="text-white" aria-hidden={true} />
+        <Icon icon={Plus} size="lg" className="text-[var(--foreground)]" aria-hidden={true} />
       </button>
     </div>
   );

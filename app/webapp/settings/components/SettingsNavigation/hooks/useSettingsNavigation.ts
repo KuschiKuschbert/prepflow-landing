@@ -8,14 +8,22 @@ import type { FocusedIndex } from '../types';
 export function useSettingsNavigation() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeHash, setActiveHash] = useState<string>('#profile');
+  const [isMounted, setIsMounted] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set(categories.map(cat => cat.id)), // All categories expanded by default
   );
   const [focusedIndex, setFocusedIndex] = useState<FocusedIndex | null>(null);
   const navRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
 
-  // Update active hash from URL
+  // Track mount state to prevent hydration mismatch
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Update active hash from URL (only after mount to prevent hydration mismatch)
+  useEffect(() => {
+    if (!isMounted) return;
+
     const updateActiveHash = () => {
       if (typeof window === 'undefined') return;
       const hash = window.location.hash || '#profile';
@@ -25,7 +33,7 @@ export function useSettingsNavigation() {
     updateActiveHash();
     window.addEventListener('hashchange', updateActiveHash);
     return () => window.removeEventListener('hashchange', updateActiveHash);
-  }, []);
+  }, [isMounted]);
 
   const handleNavClick = useCallback((hash: string) => {
     setSidebarOpen(false);

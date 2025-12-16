@@ -45,11 +45,11 @@ export function RecipeDishSelector({
   };
 
   return (
-    <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
+    <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-white">Select Recipe or Dish</h3>
+        <h3 className="text-lg font-semibold text-[var(--foreground)]">Select Recipe or Dish</h3>
         {filteredItems.length !== allItems.length && (
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-[var(--foreground-muted)]">
             {filteredItems.length} of {allItems.length}
           </span>
         )}
@@ -61,7 +61,7 @@ export function RecipeDishSelector({
           <Icon
             icon={Search}
             size="sm"
-            className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"
+            className="absolute top-1/2 left-3 -translate-y-1/2 text-[var(--foreground-muted)]"
             aria-hidden={true}
           />
           <input
@@ -69,13 +69,13 @@ export function RecipeDishSelector({
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
             placeholder="Search recipes and dishes..."
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] py-2 pr-10 pl-10 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+            className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] py-2 pr-10 pl-10 text-[var(--foreground)] placeholder-gray-500 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
             aria-label="Search recipes and dishes"
           />
           {searchTerm && (
             <button
               onClick={clearSearch}
-              className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 transition-colors hover:text-white"
+              className="absolute top-1/2 right-3 -translate-y-1/2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
               aria-label="Clear search"
             >
               <Icon icon={X} size="sm" aria-hidden={true} />
@@ -87,14 +87,14 @@ export function RecipeDishSelector({
       {/* Items List */}
       <div className="max-h-[calc(100vh-400px)] space-y-2 overflow-y-auto">
         {filteredItems.length === 0 ? (
-          <div className="flex h-32 flex-col items-center justify-center text-gray-400">
+          <div className="flex h-32 flex-col items-center justify-center text-[var(--foreground-muted)]">
             <p className="mb-2">
               {searchTerm
                 ? 'No recipes or dishes found matching your search'
                 : 'No recipes or dishes found'}
             </p>
             {searchTerm && (
-              <button onClick={clearSearch} className="text-sm text-[#29E7CD] hover:underline">
+              <button onClick={clearSearch} className="text-sm text-[var(--primary)] hover:underline">
                 Clear search
               </button>
             )}
@@ -109,8 +109,8 @@ export function RecipeDishSelector({
               }}
               className={`w-full rounded-xl border p-4 text-left transition-all duration-200 ${
                 selectedItem?.id === item.id && selectedItem?.type === item.type
-                  ? 'border-[#29E7CD] bg-[#29E7CD]/10'
-                  : 'border-[#2a2a2a] bg-[#0a0a0a] hover:border-[#29E7CD]/50'
+                  ? 'border-[var(--primary)] bg-[var(--primary)]/10'
+                  : 'border-[var(--border)] bg-[var(--background)] hover:border-[var(--primary)]/50'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -118,12 +118,12 @@ export function RecipeDishSelector({
                   <Icon
                     icon={item.type === 'recipe' ? BookOpen : UtensilsCrossed}
                     size="md"
-                    className={item.type === 'recipe' ? 'text-[#3B82F6]' : 'text-[#29E7CD]'}
+                    className={item.type === 'recipe' ? 'text-[var(--color-info)]' : 'text-[var(--primary)]'}
                     aria-hidden={true}
                   />
                   <div>
-                    <p className="font-medium text-white">{capitalizeName(item.name)}</p>
-                    <p className="text-xs text-gray-400">
+                    <p className="font-medium text-[var(--foreground)]">{capitalizeName(item.name)}</p>
+                    <p className="text-xs text-[var(--foreground-muted)]">
                       {item.type === 'recipe' ? 'Recipe' : 'Dish'}
                     </p>
                   </div>

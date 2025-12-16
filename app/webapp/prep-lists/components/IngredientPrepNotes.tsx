@@ -16,7 +16,7 @@ export function IngredientPrepNotes({ ingredient }: IngredientPrepNotesProps) {
       {ingredient.prepNotes.map((note, index) => (
         <span
           key={index}
-          className="inline-flex items-center rounded-full bg-[#29E7CD]/10 px-2 py-1 text-xs font-medium text-[#29E7CD]"
+          className="inline-flex items-center rounded-full bg-[var(--primary)]/10 px-2 py-1 text-xs font-medium text-[var(--primary)]"
         >
           {note}
         </span>

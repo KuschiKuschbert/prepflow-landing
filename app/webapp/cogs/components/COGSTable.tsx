@@ -79,14 +79,14 @@ export const COGSTable: React.FC<COGSTableProps> = React.memo(function COGSTable
 
       {/* Desktop Table Layout */}
       <div className="large-desktop:block hidden overflow-x-auto">
-        <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
-          <table className="min-w-full divide-y divide-[#2a2a2a]">
+        <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
+          <table className="min-w-full divide-y divide-[var(--muted)]">
             <COGSTableHeader
               onSortChange={onSortChange}
               handleColumnSort={handleColumnSort}
               getSortIcon={getSortIcon}
             />
-            <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
+            <tbody className="divide-y divide-[var(--muted)] bg-[var(--surface)]">
               {calculations.map((calc, index) => (
                 <COGSTableRow
                   key={`${calc.recipeId || 'dish'}-${calc.ingredientId || calc.id || index}`}

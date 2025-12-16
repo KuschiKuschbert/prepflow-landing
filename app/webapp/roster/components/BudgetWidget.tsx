@@ -76,19 +76,19 @@ export function BudgetWidget({
 
   return (
     <div className="desktop:block fixed bottom-4 z-30 hidden" style={{ left: leftPosition }}>
-      <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-xl">
         {/* Compact Header */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex w-full items-center justify-between gap-3 rounded-t-2xl border-b border-[#2a2a2a] bg-[#1f1f1f] p-3 transition-colors hover:bg-[#2a2a2a]/50"
+          className="flex w-full items-center justify-between gap-3 rounded-t-2xl border-b border-[var(--border)] bg-[var(--surface)] p-3 transition-colors hover:bg-[var(--muted)]/50"
           aria-label={isExpanded ? 'Collapse budget widget' : 'Expand budget widget'}
           aria-expanded={isExpanded}
         >
           <div className="flex items-center gap-2">
-            <Icon icon={DollarSign} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+            <Icon icon={DollarSign} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
             <div className="text-left">
-              <div className="text-xs text-gray-400">Total Cost</div>
-              <div className="text-lg font-bold text-white">{formatCurrency(budget.totalCost)}</div>
+              <div className="text-xs text-[var(--foreground-muted)]">Total Cost</div>
+              <div className="text-lg font-bold text-[var(--foreground)]">{formatCurrency(budget.totalCost)}</div>
             </div>
           </div>
           {budget.laborCostPercentage !== null && (
@@ -96,10 +96,10 @@ export function BudgetWidget({
               <div
                 className={`rounded-lg px-2 py-1 text-xs font-semibold ${
                   isOverBudget
-                    ? 'bg-red-500/10 text-red-400'
+                    ? 'bg-[var(--color-error)]/10 text-[var(--color-error)]'
                     : isUnderBudget
-                      ? 'bg-green-500/10 text-green-400'
-                      : 'bg-[#2a2a2a] text-gray-300'
+                      ? 'bg-[var(--color-success)]/10 text-[var(--color-success)]'
+                      : 'bg-[var(--muted)] text-[var(--foreground-secondary)]'
                 }`}
               >
                 {budget.laborCostPercentage?.toFixed(1) ?? '0.0'}%
@@ -107,7 +107,7 @@ export function BudgetWidget({
               <Icon
                 icon={isExpanded ? ChevronUp : ChevronDown}
                 size="xs"
-                className="text-gray-400"
+                className="text-[var(--foreground-muted)]"
                 aria-hidden={true}
               />
             </div>
@@ -122,28 +122,28 @@ export function BudgetWidget({
               <div
                 className={`rounded-lg border p-3 ${
                   isOverBudget
-                    ? 'border-red-500/50 bg-red-500/10'
+                    ? 'border-[var(--color-error)]/50 bg-[var(--color-error)]/10'
                     : isUnderBudget
-                      ? 'border-green-500/50 bg-green-500/10'
-                      : 'border-[#2a2a2a] bg-[#2a2a2a]/30'
+                      ? 'border-[var(--color-success)]/50 bg-[var(--color-success)]/10'
+                      : 'border-[var(--border)] bg-[var(--muted)]/30'
                 }`}
               >
                 <div className="mb-1 flex items-center gap-2">
-                  <span className="text-xs text-gray-400">Labor Cost %</span>
+                  <span className="text-xs text-[var(--foreground-muted)]">Labor Cost %</span>
                   {isOverBudget && (
-                    <Icon icon={TrendingUp} size="xs" className="text-red-400" aria-hidden={true} />
+                    <Icon icon={TrendingUp} size="xs" className="text-[var(--color-error)]" aria-hidden={true} />
                   )}
                   {isUnderBudget && (
                     <Icon
                       icon={TrendingDown}
                       size="xs"
-                      className="text-green-400"
+                      className="text-[var(--color-success)]"
                       aria-hidden={true}
                     />
                   )}
                 </div>
                 <div
-                  className={`text-xl font-bold ${isOverBudget ? 'text-red-400' : isUnderBudget ? 'text-green-400' : 'text-white'}`}
+                  className={`text-xl font-bold ${isOverBudget ? 'text-[var(--color-error)]' : isUnderBudget ? 'text-[var(--color-success)]' : 'text-[var(--foreground)]'}`}
                 >
                   {budget.laborCostPercentage?.toFixed(1) ?? '0.0'}%
                 </div>
@@ -151,17 +151,17 @@ export function BudgetWidget({
             )}
 
             {/* Total Shifts */}
-            <div className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-2">
-              <div className="text-xs text-gray-400">Shifts</div>
-              <div className="text-lg font-semibold text-white">{budget.totalShifts}</div>
+            <div className="rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 p-2">
+              <div className="text-xs text-[var(--foreground-muted)]">Shifts</div>
+              <div className="text-lg font-semibold text-[var(--foreground)]">{budget.totalShifts}</div>
             </div>
 
             {/* Forecast Revenue (if available) */}
             {forecastRevenue && (
-              <div className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-2">
-                <div className="text-xs text-gray-400">Net Profit</div>
+              <div className="rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 p-2">
+                <div className="text-xs text-[var(--foreground-muted)]">Net Profit</div>
                 <div
-                  className={`text-lg font-semibold ${forecastRevenue - budget.totalCost >= 0 ? 'text-green-400' : 'text-red-400'}`}
+                  className={`text-lg font-semibold ${forecastRevenue - budget.totalCost >= 0 ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'}`}
                 >
                   {formatCurrency(forecastRevenue - budget.totalCost)}
                 </div>

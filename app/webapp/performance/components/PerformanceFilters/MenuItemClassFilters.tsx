@@ -55,16 +55,16 @@ export function MenuItemClassFilters({
           <button
             key={className}
             onClick={() => handleMenuItemClassToggle(className)}
-            className={`rounded-full px-1.5 py-0.5 text-xs font-medium transition-all ${
+            className={`rounded-full px-1.5 py-0.5 text-xs font-semibold transition-all ${
               isActive
                 ? className === "Chef's Kiss"
-                  ? 'border-2 border-green-500 bg-green-500/20 text-green-400'
+                  ? 'border-2 border-[var(--color-success-border)] bg-[var(--color-success-bg)] text-[var(--color-success)]'
                   : className === 'Hidden Gem'
-                    ? 'border-2 border-blue-500 bg-blue-500/20 text-blue-400'
+                    ? 'border-2 border-[var(--color-info-border)] bg-[var(--color-info-bg)] text-[var(--color-info)]'
                     : className === 'Bargain Bucket'
-                      ? 'border-2 border-yellow-500 bg-yellow-500/20 text-yellow-400'
-                      : 'border-2 border-red-500 bg-red-500/20 text-red-400'
-                : 'border border-[#2a2a2a] bg-[#2a2a2a] text-gray-400 hover:border-[#29E7CD]/50 hover:text-[#29E7CD]'
+                      ? 'border-2 border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] text-[var(--color-warning)]'
+                      : 'border-2 border-[var(--color-error-border)] bg-[var(--color-error-bg)] text-[var(--color-error)]'
+                : 'border border-[var(--border)] bg-[var(--muted)] text-[var(--foreground-muted)] hover:border-[var(--primary)]/50 hover:text-[var(--primary)]'
             }`}
             title={className}
           >
@@ -79,7 +79,7 @@ export function MenuItemClassFilters({
             onFilterChange('menuItemClass', []);
             onFilterChange('searchTerm', '');
           }}
-          className="px-1 text-xs text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80"
+          className="px-1 text-xs text-[var(--primary)] transition-colors hover:text-[var(--primary)]/80"
         >
           Clear
         </button>

@@ -33,12 +33,12 @@ export function AllergenTooltip({
   };
 
   const arrowClasses = {
-    top: 'top-full left-1/2 -translate-x-1/2 border-t-[#1f1f1f] border-l-transparent border-r-transparent border-b-transparent',
+    top: 'top-full left-1/2 -translate-x-1/2 border-t-[var(--surface)] border-l-transparent border-r-transparent border-b-transparent',
     bottom:
-      'bottom-full left-1/2 -translate-x-1/2 border-b-[#1f1f1f] border-l-transparent border-r-transparent border-t-transparent',
-    left: 'left-full top-1/2 -translate-y-1/2 border-l-[#1f1f1f] border-t-transparent border-r-transparent border-b-transparent',
+      'bottom-full left-1/2 -translate-x-1/2 border-b-[var(--surface)] border-l-transparent border-r-transparent border-t-transparent',
+    left: 'left-full top-1/2 -translate-y-1/2 border-l-[var(--surface)] border-t-transparent border-r-transparent border-b-transparent',
     right:
-      'right-full top-1/2 -translate-y-1/2 border-r-[#1f1f1f] border-t-transparent border-l-transparent border-b-transparent',
+      'right-full top-1/2 -translate-y-1/2 border-r-[var(--surface)] border-t-transparent border-l-transparent border-b-transparent',
   };
 
   return (
@@ -55,11 +55,11 @@ export function AllergenTooltip({
       {isVisible && allergen && (
         <div
           ref={tooltipRef}
-          className={`absolute z-50 w-64 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-3 shadow-lg ${positionClasses[position]}`}
+          className={`absolute z-50 w-64 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-3 shadow-lg ${positionClasses[position]}`}
           role="tooltip"
         >
-          <div className="mb-1 text-sm font-semibold text-white">{allergen.displayName}</div>
-          <div className="text-xs leading-relaxed text-gray-300">{allergen.description}</div>
+          <div className="mb-1 text-sm font-semibold text-[var(--foreground)]">{allergen.displayName}</div>
+          <div className="text-xs leading-relaxed text-[var(--foreground-secondary)]">{allergen.description}</div>
           <div className={`absolute h-0 w-0 border-4 ${arrowClasses[position]}`} />
         </div>
       )}

@@ -49,7 +49,7 @@ export function formatTemperatureLogsSection(
         statusColor = '#10b981';
       } else {
         complianceStatus = 'Out of Range';
-        statusColor = '#ef4444';
+        statusColor = 'var(--color-error)';
       }
     }
 

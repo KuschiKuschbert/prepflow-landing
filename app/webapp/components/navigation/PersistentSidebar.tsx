@@ -72,9 +72,9 @@ export default function PersistentSidebar() {
 
   return (
     <aside
-      className={`fixed top-[var(--header-height-desktop)] bottom-0 left-0 z-40 border-r border-[#2a2a2a] bg-[#1f1f1f] transition-all duration-300 ${
+      className={`fixed top-[var(--header-height-desktop)] bottom-0 left-0 z-40 border-r border-[var(--border)] bg-[var(--surface)] transition-all duration-300 ${
         isExpanded
-          ? 'tablet:w-72 desktop:w-80 desktop:rounded-r-3xl desktop:bg-gradient-to-r desktop:from-[#29E7CD]/20 desktop:via-[#D925C7]/20 desktop:to-[#29E7CD]/20 desktop:p-[1px] w-64'
+          ? 'tablet:w-72 desktop:w-80 desktop:rounded-r-3xl desktop:bg-gradient-to-r desktop:from-[var(--primary)]/20 desktop:via-[var(--accent)]/20 desktop:to-[var(--primary)]/20 desktop:p-[1px] w-64'
           : 'desktop:w-16 w-16'
       }`}
       style={{
@@ -85,10 +85,10 @@ export default function PersistentSidebar() {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="desktop:rounded-r-3xl desktop:bg-[#1f1f1f] flex h-full flex-col overflow-hidden">
+      <div className="desktop:rounded-r-3xl desktop:bg-[var(--surface)] flex h-full flex-col overflow-hidden">
         {/* New Button */}
         <div
-          className={`flex items-center border-b border-[#2a2a2a] ${isExpanded ? 'tablet:p-2 desktop:p-3 justify-start p-2' : 'justify-center p-2'}`}
+          className={`flex items-center border-b border-[var(--border)] ${isExpanded ? 'tablet:p-2 desktop:p-3 justify-start p-2' : 'justify-center p-2'}`}
         >
           <NewButton isCollapsed={!isExpanded} />
         </div>

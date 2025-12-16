@@ -164,18 +164,18 @@ export default function CSVImportModal({
   if (!isOpen) return null;
 
   return (
-    <div className="bg-opacity-50 fixed inset-0 z-[70] flex items-center justify-center bg-black p-4 backdrop-blur-sm">
-      <div className="max-h-[90vh] w-full max-w-4xl rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
-        <div className="max-h-[90vh] w-full overflow-y-auto rounded-2xl bg-[#1f1f1f]/95">
+    <div className="bg-opacity-50 fixed inset-0 z-[70] flex items-center justify-center bg-[var(--background)] p-4 backdrop-blur-sm">
+      <div className="max-h-[90vh] w-full max-w-4xl rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl">
+        <div className="max-h-[90vh] w-full overflow-y-auto rounded-2xl bg-[var(--surface)]/95">
           {/* Header */}
-          <div className="desktop:p-6 border-b border-[#2a2a2a] p-4">
+          <div className="desktop:p-6 border-b border-[var(--border)] p-4">
             <div className="flex items-center justify-between">
-              <h2 className="desktop:text-2xl text-xl font-bold text-white">
+              <h2 className="desktop:text-2xl text-xl font-bold text-[var(--foreground)]">
                 📁 Import Ingredients from CSV
               </h2>
               <button
                 onClick={handleClose}
-                className="rounded-full bg-[#2a2a2a] p-2 text-gray-400 transition-colors hover:bg-[#3a3a3a] hover:text-white"
+                className="rounded-full bg-[var(--surface)] p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
               >
                 <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -193,23 +193,23 @@ export default function CSVImportModal({
           <div className="desktop:space-y-6 desktop:p-6 space-y-4 p-4">
             {/* File Upload */}
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
                 Upload CSV File
               </label>
               <input
                 type="file"
                 accept=".csv"
                 onChange={handleFileUpload}
-                className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
               />
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-1 text-xs text-[var(--foreground-muted)]">
                 Supported columns: name, brand, cost, unit, supplier, code, location, pack_size
               </p>
             </div>
 
             {/* Error Display */}
             {error && (
-              <div className="rounded-lg border border-red-500 bg-red-900/20 px-4 py-3 text-red-400">
+              <div className="rounded-lg border border-[var(--color-error)] bg-red-900/20 px-4 py-3 text-[var(--color-error)]">
                 {error}
               </div>
             )}
@@ -242,14 +242,14 @@ export default function CSVImportModal({
                 <div className="mt-4 flex justify-end space-x-3">
                   <button
                     onClick={handleClose}
-                    className="px-4 py-2 text-gray-400 transition-colors hover:text-white"
+                    className="px-4 py-2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleImport}
                     disabled={loading || selectedIngredients.size === 0}
-                    className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+                    className="rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {`Import Selected (${selectedIngredients.size})`}
                   </button>
@@ -258,9 +258,9 @@ export default function CSVImportModal({
             )}
 
             {/* Instructions */}
-            <div className="rounded-lg border border-[#2a2a2a]/50 bg-[#2a2a2a]/30 p-4">
-              <h4 className="mb-2 text-sm font-semibold text-white">📋 CSV Format Instructions</h4>
-              <div className="space-y-1 text-xs text-gray-400">
+            <div className="rounded-lg border border-[var(--border)]/50 bg-[var(--muted)]/30 p-4">
+              <h4 className="mb-2 text-sm font-semibold text-[var(--foreground)]">📋 CSV Format Instructions</h4>
+              <div className="space-y-1 text-xs text-[var(--foreground-muted)]">
                 <p>• First row should contain column headers</p>
                 <p>• Required columns: name (or ingredient), cost (or price), unit</p>
                 <p>

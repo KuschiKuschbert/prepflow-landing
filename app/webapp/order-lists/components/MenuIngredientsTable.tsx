@@ -134,8 +134,8 @@ export function MenuIngredientsTable({
       {/* Header with export buttons */}
       <div className="tablet:flex-row tablet:items-center tablet:justify-between mb-6 flex flex-col gap-4 print:hidden">
         <div>
-          <h2 className="text-2xl font-bold text-white">{menuName}</h2>
-          <p className="text-gray-400">
+          <h2 className="text-2xl font-bold text-[var(--foreground)]">{menuName}</h2>
+          <p className="text-[var(--foreground-muted)]">
             Order List -{' '}
             {new Date().toLocaleDateString('en-AU', {
               weekday: 'long',
@@ -158,8 +158,8 @@ export function MenuIngredientsTable({
 
       {/* Header - visible in print */}
       <div className="mb-6 hidden print:mb-4 print:block">
-        <h2 className="text-2xl font-bold text-white print:text-xl print:text-black">{menuName}</h2>
-        <p className="text-gray-400 print:text-sm print:text-gray-600">
+        <h2 className="text-2xl font-bold text-[var(--foreground)] print:text-xl print:text-[var(--primary-text)]">{menuName}</h2>
+        <p className="text-[var(--foreground-muted)] print:text-sm print:text-[var(--foreground-subtle)]">
           Order List -{' '}
           {new Date().toLocaleDateString('en-AU', {
             weekday: 'long',
@@ -173,58 +173,58 @@ export function MenuIngredientsTable({
       {/* Table */}
       {groupKeys.length === 0 ? (
         <div className="py-12 text-center">
-          <p className="text-gray-400">No ingredients found for this menu.</p>
+          <p className="text-[var(--foreground-muted)]">No ingredients found for this menu.</p>
         </div>
       ) : (
         <div className="space-y-8 print:space-y-6">
           {groupKeys.map(groupKey => (
             <div key={groupKey} className="print:break-inside-avoid">
               {/* Group Header */}
-              <h3 className="mb-4 text-lg font-semibold text-white print:mb-2 print:border-b print:border-gray-300 print:pb-1 print:text-base print:text-black">
+              <h3 className="mb-4 text-lg font-semibold text-[var(--foreground)] print:mb-2 print:border-b print:border-gray-300 print:pb-1 print:text-base print:text-[var(--primary-text)]">
                 {groupKey}
               </h3>
 
               {/* Table */}
-              <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] print:rounded-none print:border print:border-gray-300 print:bg-white">
-                <table className="min-w-full divide-y divide-[#2a2a2a] print:divide-gray-300">
-                  <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 print:bg-gray-100">
+              <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] print:rounded-none print:border print:border-gray-300 print:bg-[var(--qr-background)]">
+                <table className="min-w-full divide-y divide-[var(--muted)] print:divide-gray-300">
+                  <thead className="sticky top-0 z-10 bg-gradient-to-r from-[var(--muted)]/50 to-[var(--muted)]/20 print:bg-gray-100">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase print:px-4 print:py-2 print:text-gray-700">
+                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase print:px-4 print:py-2 print:text-[var(--foreground-muted)]">
                         Item Name
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase print:px-4 print:py-2 print:text-gray-700">
+                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase print:px-4 print:py-2 print:text-[var(--foreground-muted)]">
                         Brand
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase print:px-4 print:py-2 print:text-gray-700">
+                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase print:px-4 print:py-2 print:text-[var(--foreground-muted)]">
                         Pack Size
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase print:px-4 print:py-2 print:text-gray-700">
+                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase print:px-4 print:py-2 print:text-[var(--foreground-muted)]">
                         Price Per Pack
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase print:px-4 print:py-2 print:text-gray-700">
+                      <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase print:px-4 print:py-2 print:text-[var(--foreground-muted)]">
                         Par Level
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f] print:divide-gray-300 print:bg-white">
+                  <tbody className="divide-y divide-[var(--muted)] bg-[var(--surface)] print:divide-gray-300 print:bg-[var(--qr-background)]">
                     {groupedIngredients[groupKey].map(ingredient => (
                       <tr
                         key={ingredient.id}
-                        className="transition-colors hover:bg-[#2a2a2a]/20 print:hover:bg-transparent"
+                        className="transition-colors hover:bg-[var(--muted)]/20 print:hover:bg-transparent"
                       >
-                        <td className="px-6 py-4 text-sm font-medium text-white print:px-4 print:py-2 print:text-black">
+                        <td className="px-6 py-4 text-sm font-medium text-[var(--foreground)] print:px-4 print:py-2 print:text-[var(--primary-text)]">
                           {ingredient.ingredient_name}
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-300 print:px-4 print:py-2 print:text-gray-700">
+                        <td className="px-6 py-4 text-sm text-[var(--foreground-secondary)] print:px-4 print:py-2 print:text-[var(--foreground-muted)]">
                           {ingredient.brand || '-'}
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-300 print:px-4 print:py-2 print:text-gray-700">
+                        <td className="px-6 py-4 text-sm text-[var(--foreground-secondary)] print:px-4 print:py-2 print:text-[var(--foreground-muted)]">
                           {formatPackSize(ingredient.pack_size, ingredient.pack_size_unit)}
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-300 print:px-4 print:py-2 print:text-gray-700">
+                        <td className="px-6 py-4 text-sm text-[var(--foreground-secondary)] print:px-4 print:py-2 print:text-[var(--foreground-muted)]">
                           {formatPrice(ingredient.pack_price)}
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-300 print:px-4 print:py-2 print:text-gray-700">
+                        <td className="px-6 py-4 text-sm text-[var(--foreground-secondary)] print:px-4 print:py-2 print:text-[var(--foreground-muted)]">
                           {formatParLevel(ingredient.par_level, ingredient.par_unit)}
                         </td>
                       </tr>

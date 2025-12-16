@@ -30,8 +30,8 @@ export function RosterHeader({
   return (
     <div className="tablet:flex-row tablet:items-center tablet:justify-between flex flex-col gap-4">
       <div>
-        <h1 className="text-fluid-2xl font-bold text-white">Roster Builder</h1>
-        <p className="text-gray-400">
+        <h1 className="text-fluid-2xl font-bold text-[var(--foreground)]">Roster Builder</h1>
+        <p className="text-[var(--foreground-muted)]">
           {format(currentWeekStart, 'MMM d')} -{' '}
           {format(addDays(currentWeekStart, 6), 'MMM d, yyyy')}
         </p>
@@ -57,7 +57,7 @@ export function RosterHeader({
           onClick={onDeleteAll}
           size="sm"
           disabled={loading || shiftsCount === 0}
-          className="border-red-500/50 text-red-400 hover:border-red-500 hover:bg-red-500/10 hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-50"
+          className="border-[var(--color-error)]/50 text-[var(--color-error)] hover:border-[var(--color-error)] hover:bg-[var(--color-error)]/10 hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-50"
           aria-label={
             shiftsCount > 0
               ? `Delete all ${shiftsCount} shift${shiftsCount > 1 ? 's' : ''}`

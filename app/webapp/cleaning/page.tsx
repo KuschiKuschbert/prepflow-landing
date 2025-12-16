@@ -223,7 +223,7 @@ export default function CleaningRosterPage() {
               activeTab === 'grid' ? (
                 <button
                   onClick={() => setShowCreateTask()}
-                  className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-sm font-semibold text-black transition-all duration-200 hover:shadow-lg"
+                  className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-sm font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg"
                   title="Create new task (N)"
                 >
                   <Icon icon={Plus} size="sm" aria-hidden={true} />
@@ -233,7 +233,7 @@ export default function CleaningRosterPage() {
               ) : (
                 <button
                   onClick={() => setShowAddArea(true)}
-                  className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
+                  className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
                   title="Add new cleaning area (A)"
                 >
                   <Icon icon={Plus} size="sm" className="mr-2 inline" aria-hidden={true} />
@@ -242,14 +242,14 @@ export default function CleaningRosterPage() {
               )
             }
           >
-            <div className="mt-2 flex items-center gap-4 text-xs text-gray-500">
+            <div className="mt-2 flex items-center gap-4 text-xs text-[var(--foreground-subtle)]">
               <span>
-                Press <kbd className="rounded bg-[#2a2a2a] px-2 py-1">N</kbd> to create task
+                Press <kbd className="rounded bg-[var(--muted)] px-2 py-1">N</kbd> to create task
               </span>
               <span>•</span>
               <span>
-                Press <kbd className="rounded bg-[#2a2a2a] px-2 py-1">G</kbd> for grid,{' '}
-                <kbd className="rounded bg-[#2a2a2a] px-2 py-1">M</kbd> for areas
+                Press <kbd className="rounded bg-[var(--muted)] px-2 py-1">G</kbd> for grid,{' '}
+                <kbd className="rounded bg-[var(--muted)] px-2 py-1">M</kbd> for areas
               </span>
             </div>
           </PageHeader>
@@ -288,8 +288,8 @@ export default function CleaningRosterPage() {
           {activeTab === 'areas' && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-semibold text-white">Manage Cleaning Areas</h2>
-                <p className="mt-1 text-sm text-gray-400">
+                <h2 className="text-2xl font-semibold text-[var(--foreground)]">Manage Cleaning Areas</h2>
+                <p className="mt-1 text-sm text-[var(--foreground-muted)]">
                   Organize your cleaning tasks by area. Click an area to add tasks.
                 </p>
               </div>
@@ -304,19 +304,19 @@ export default function CleaningRosterPage() {
                 />
               )}
               {areas.length === 0 ? (
-                <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-12 text-center">
+                <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-12 text-center">
                   <div className="mb-4 flex justify-center">
-                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20">
-                      <Icon icon={MapPin} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
+                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20">
+                      <Icon icon={MapPin} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
                     </div>
                   </div>
-                  <h3 className="mb-2 text-xl font-semibold text-white">No cleaning areas yet</h3>
-                  <p className="mb-6 text-gray-400">
+                  <h3 className="mb-2 text-xl font-semibold text-[var(--foreground)]">No cleaning areas yet</h3>
+                  <p className="mb-6 text-[var(--foreground-muted)]">
                     Create your first cleaning area to organize your cleaning tasks.
                   </p>
                   <button
                     onClick={() => setShowAddArea(true)}
-                    className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
+                    className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
                   >
                     <Icon icon={Plus} size="sm" aria-hidden={true} />
                     Create Your First Area

@@ -51,8 +51,8 @@ export function MenuDisplayView({ menu, menuItems }: MenuDisplayViewProps) {
 
   if (menuItems.length === 0) {
     return (
-      <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center">
-        <p className="text-gray-400">No items in this menu</p>
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center">
+        <p className="text-[var(--foreground-muted)]">No items in this menu</p>
       </div>
     );
   }
@@ -60,20 +60,20 @@ export function MenuDisplayView({ menu, menuItems }: MenuDisplayViewProps) {
   return (
     <div className="space-y-8">
       {/* Menu Header */}
-      <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-        <h2 className="text-2xl font-bold text-white">{menu.menu_name}</h2>
-        {menu.description && <p className="mt-2 text-sm text-gray-400">{menu.description}</p>}
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
+        <h2 className="text-2xl font-bold text-[var(--foreground)]">{menu.menu_name}</h2>
+        {menu.description && <p className="mt-2 text-sm text-[var(--foreground-muted)]">{menu.description}</p>}
       </div>
 
       {/* Menu Items by Category */}
       {itemsByCategory.map(({ category, items }) => (
         <div key={category} className="space-y-4">
           {/* Category Header */}
-          <div className="flex items-center gap-3 border-b border-[#2a2a2a] pb-2">
-            <h3 className="text-xl font-semibold tracking-wider text-white uppercase">
+          <div className="flex items-center gap-3 border-b border-[var(--border)] pb-2">
+            <h3 className="text-xl font-semibold tracking-wider text-[var(--foreground)] uppercase">
               {category}
             </h3>
-            <span className="text-sm text-gray-400">({items.length})</span>
+            <span className="text-sm text-[var(--foreground-muted)]">({items.length})</span>
           </div>
 
           {/* Items Grid */}
@@ -120,7 +120,7 @@ export function MenuDisplayView({ menu, menuItems }: MenuDisplayViewProps) {
               return (
                 <div
                   key={item.id}
-                  className="group rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-5 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-lg"
+                  className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 transition-all duration-200 hover:border-[var(--primary)]/50 hover:shadow-lg"
                 >
                   {/* Food Image */}
                   {(imageUrl || imageUrlAlternative || imageUrlModern || imageUrlMinimalist) && (
@@ -140,15 +140,15 @@ export function MenuDisplayView({ menu, menuItems }: MenuDisplayViewProps) {
 
                   {/* Item Header with Name and Price */}
                   <div className="mb-3 flex items-start justify-between gap-4">
-                    <h4 className="flex-1 text-lg font-semibold text-white">{itemName}</h4>
+                    <h4 className="flex-1 text-lg font-semibold text-[var(--foreground)]">{itemName}</h4>
                     <div className="flex-shrink-0">
-                      <span className="text-lg font-bold text-[#29E7CD]">${price.toFixed(2)}</span>
+                      <span className="text-lg font-bold text-[var(--primary)]">${price.toFixed(2)}</span>
                     </div>
                   </div>
 
                   {/* Description */}
                   {description && (
-                    <p className="mb-3 text-sm leading-relaxed text-gray-400">{description}</p>
+                    <p className="mb-3 text-sm leading-relaxed text-[var(--foreground-muted)]">{description}</p>
                   )}
 
                   {/* Dietary Badge */}

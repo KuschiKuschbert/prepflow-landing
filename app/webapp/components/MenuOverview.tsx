@@ -54,12 +54,12 @@ export default function MenuOverview() {
 
   if (loading && !data) {
     return (
-      <div className="tablet:rounded-3xl tablet:p-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
+      <div className="tablet:rounded-3xl tablet:p-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 w-32 rounded bg-[#2a2a2a]" />
+          <div className="h-6 w-32 rounded bg-[var(--muted)]" />
           <div className="space-y-2">
-            <div className="h-4 w-full rounded bg-[#2a2a2a]" />
-            <div className="h-4 w-3/4 rounded bg-[#2a2a2a]" />
+            <div className="h-4 w-full rounded bg-[var(--muted)]" />
+            <div className="h-4 w-3/4 rounded bg-[var(--muted)]" />
           </div>
         </div>
       </div>
@@ -68,8 +68,8 @@ export default function MenuOverview() {
 
   if (error && !data) {
     return (
-      <div className="tablet:rounded-3xl tablet:p-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
-        <p className="text-sm text-red-400">{error}</p>
+      <div className="tablet:rounded-3xl tablet:p-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
+        <p className="text-sm text-[var(--color-error)]">{error}</p>
       </div>
     );
   }
@@ -81,19 +81,19 @@ export default function MenuOverview() {
   const hasIssues = data.dishesWithoutRecipes > 0 || data.dishesWithoutCosts > 0;
 
   return (
-    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
+    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
       <div className="tablet:mb-6 mb-4 flex items-center justify-between">
         <div>
-          <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-white">
+          <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
             Menu Overview
           </h2>
-          <p className="text-fluid-xs tablet:text-fluid-sm mt-1 text-gray-400">
+          <p className="text-fluid-xs tablet:text-fluid-sm mt-1 text-[var(--foreground-muted)]">
             What&apos;s available to serve
           </p>
         </div>
         <Link
           href="/webapp/recipes#menu-builder"
-          className="text-fluid-xs tablet:text-fluid-sm flex items-center gap-1 text-[#29E7CD] transition-colors hover:text-[#D925C7]"
+          className="text-fluid-xs tablet:text-fluid-sm flex items-center gap-1 text-[var(--primary)] transition-colors hover:text-[var(--accent)]"
         >
           View Menus
           <Icon icon={ExternalLink} size="xs" aria-hidden={true} />
@@ -102,26 +102,26 @@ export default function MenuOverview() {
 
       <div className="desktop:grid-cols-4 desktop:gap-4 grid grid-cols-2 gap-3">
         {/* Active Menus */}
-        <div className="tablet:rounded-2xl tablet:p-4 min-w-0 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
+        <div className="tablet:rounded-2xl tablet:p-4 min-w-0 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
           <div className="mb-2 flex items-center gap-2">
-            <div className="tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
+            <div className="tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
               <Icon
                 icon={UtensilsCrossed}
                 size="sm"
-                className="text-[#29E7CD]"
+                className="text-[var(--primary)]"
                 aria-hidden={true}
               />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-fluid-xs tablet:text-fluid-sm truncate font-medium text-gray-400">
+              <p className="text-fluid-xs tablet:text-fluid-sm truncate font-medium text-[var(--foreground-muted)]">
                 Active Menus
               </p>
-              <p className="text-fluid-xl tablet:text-fluid-2xl font-bold text-white">
+              <p className="text-fluid-xl tablet:text-fluid-2xl font-bold text-[var(--foreground)]">
                 {data.activeMenus}
               </p>
             </div>
           </div>
-          <p className="text-fluid-xs line-clamp-2 text-gray-500">
+          <p className="text-fluid-xs line-clamp-2 text-[var(--foreground-muted)]">
             {data.activeMenus === 0
               ? 'No active menus'
               : data.activeMenus === 1
@@ -131,26 +131,26 @@ export default function MenuOverview() {
         </div>
 
         {/* Total Dishes Available */}
-        <div className="tablet:rounded-2xl tablet:p-4 min-w-0 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
+        <div className="tablet:rounded-2xl tablet:p-4 min-w-0 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
           <div className="mb-2 flex items-center gap-2">
-            <div className="tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#3B82F6]/20 to-[#3B82F6]/10">
+            <div className="tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--color-info)]/20 to-[var(--color-info)]/10">
               <Icon
                 icon={UtensilsCrossed}
                 size="sm"
-                className="text-[#3B82F6]"
+                className="text-[var(--color-info)]"
                 aria-hidden={true}
               />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-fluid-xs tablet:text-fluid-sm truncate font-medium text-gray-400">
+              <p className="text-fluid-xs tablet:text-fluid-sm truncate font-medium text-[var(--foreground-muted)]">
                 Dishes Available
               </p>
-              <p className="text-fluid-xl tablet:text-fluid-2xl font-bold text-white">
+              <p className="text-fluid-xl tablet:text-fluid-2xl font-bold text-[var(--foreground)]">
                 {data.totalDishes}
               </p>
             </div>
           </div>
-          <p className="text-fluid-xs line-clamp-2 text-gray-500">
+          <p className="text-fluid-xs line-clamp-2 text-[var(--foreground-muted)]">
             {data.totalDishes === 0
               ? 'No dishes on menus'
               : data.totalDishes === 1
@@ -160,36 +160,36 @@ export default function MenuOverview() {
         </div>
 
         {/* Dishes Without Recipes */}
-        <div className="tablet:rounded-2xl tablet:p-4 min-w-0 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
+        <div className="tablet:rounded-2xl tablet:p-4 min-w-0 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
           <div className="mb-2 flex items-center gap-2">
             <div
               className={`tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br ${
                 data.dishesWithoutRecipes > 0
-                  ? 'from-yellow-500/20 to-yellow-500/10'
-                  : 'from-green-500/20 to-green-500/10'
+                  ? 'from-[var(--color-warning)]/20 to-[var(--color-warning)]/10'
+                  : 'from-[var(--color-success)]/20 to-[var(--color-success)]/10'
               }`}
             >
               <Icon
                 icon={data.dishesWithoutRecipes > 0 ? AlertTriangle : UtensilsCrossed}
                 size="sm"
-                className={data.dishesWithoutRecipes > 0 ? 'text-yellow-400' : 'text-green-400'}
+                className={data.dishesWithoutRecipes > 0 ? 'text-[var(--color-warning)]' : 'text-[var(--color-success)]'}
                 aria-hidden={true}
               />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-fluid-xs tablet:text-fluid-sm truncate font-medium text-gray-400">
+              <p className="text-fluid-xs tablet:text-fluid-sm truncate font-medium text-[var(--foreground-muted)]">
                 Without Recipes
               </p>
               <p
                 className={`text-fluid-xl tablet:text-fluid-2xl font-bold ${
-                  data.dishesWithoutRecipes > 0 ? 'text-yellow-400' : 'text-green-400'
+                  data.dishesWithoutRecipes > 0 ? 'text-[var(--color-warning)]' : 'text-[var(--color-success)]'
                 }`}
               >
                 {data.dishesWithoutRecipes}
               </p>
             </div>
           </div>
-          <p className="text-fluid-xs line-clamp-2 text-gray-500">
+          <p className="text-fluid-xs line-clamp-2 text-[var(--foreground-muted)]">
             {data.dishesWithoutRecipes === 0
               ? 'All dishes have recipes'
               : data.dishesWithoutRecipes === 1
@@ -199,36 +199,36 @@ export default function MenuOverview() {
         </div>
 
         {/* Dishes Without Costs */}
-        <div className="tablet:rounded-2xl tablet:p-4 min-w-0 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
+        <div className="tablet:rounded-2xl tablet:p-4 min-w-0 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
           <div className="mb-2 flex items-center gap-2">
             <div
               className={`tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br ${
                 data.dishesWithoutCosts > 0
-                  ? 'from-yellow-500/20 to-yellow-500/10'
-                  : 'from-green-500/20 to-green-500/10'
+                  ? 'from-[var(--color-warning)]/20 to-[var(--color-warning)]/10'
+                  : 'from-[var(--color-success)]/20 to-[var(--color-success)]/10'
               }`}
             >
               <Icon
                 icon={data.dishesWithoutCosts > 0 ? AlertTriangle : UtensilsCrossed}
                 size="sm"
-                className={data.dishesWithoutCosts > 0 ? 'text-yellow-400' : 'text-green-400'}
+                className={data.dishesWithoutCosts > 0 ? 'text-[var(--color-warning)]' : 'text-[var(--color-success)]'}
                 aria-hidden={true}
               />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-fluid-xs tablet:text-fluid-sm truncate font-medium text-gray-400">
+              <p className="text-fluid-xs tablet:text-fluid-sm truncate font-medium text-[var(--foreground-muted)]">
                 Without Costs
               </p>
               <p
                 className={`text-fluid-xl tablet:text-fluid-2xl font-bold ${
-                  data.dishesWithoutCosts > 0 ? 'text-yellow-400' : 'text-green-400'
+                  data.dishesWithoutCosts > 0 ? 'text-[var(--color-warning)]' : 'text-[var(--color-success)]'
                 }`}
               >
                 {data.dishesWithoutCosts}
               </p>
             </div>
           </div>
-          <p className="text-fluid-xs line-clamp-2 text-gray-500">
+          <p className="text-fluid-xs line-clamp-2 text-[var(--foreground-muted)]">
             {data.dishesWithoutCosts === 0
               ? 'All dishes have pricing'
               : data.dishesWithoutCosts === 1
@@ -243,7 +243,7 @@ export default function MenuOverview() {
           {data.dishesWithoutRecipes > 0 && (
             <Link
               href="/webapp/recipes"
-              className="text-fluid-xs tablet:px-4 tablet:py-2.5 tablet:text-fluid-sm flex-1 rounded-lg border border-yellow-500/50 bg-yellow-500/10 px-3 py-2 text-center font-medium text-yellow-400 transition-colors hover:bg-yellow-500/20"
+              className="text-fluid-xs tablet:px-4 tablet:py-2.5 tablet:text-fluid-sm flex-1 rounded-lg border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] px-3 py-2 text-center font-medium text-[var(--color-warning)] transition-colors hover:bg-[var(--color-warning)]/20"
             >
               Add Recipes
             </Link>
@@ -251,7 +251,7 @@ export default function MenuOverview() {
           {data.dishesWithoutCosts > 0 && (
             <Link
               href="/webapp/recipes#menu-builder"
-              className="text-fluid-xs tablet:px-4 tablet:py-2.5 tablet:text-fluid-sm flex-1 rounded-lg border border-yellow-500/50 bg-yellow-500/10 px-3 py-2 text-center font-medium text-yellow-400 transition-colors hover:bg-yellow-500/20"
+              className="text-fluid-xs tablet:px-4 tablet:py-2.5 tablet:text-fluid-sm flex-1 rounded-lg border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] px-3 py-2 text-center font-medium text-[var(--color-warning)] transition-colors hover:bg-[var(--color-warning)]/20"
             >
               Fix Pricing
             </Link>
@@ -262,7 +262,7 @@ export default function MenuOverview() {
       <div className="tablet:mt-6 mt-4">
         <Link
           href="/webapp/recipes#menu-builder"
-          className="text-fluid-xs tablet:px-6 tablet:py-3 tablet:text-fluid-sm flex items-center justify-center gap-2 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 font-medium text-white transition-colors hover:border-[#29E7CD]/50 hover:bg-[#2a2a2a]/50"
+          className="text-fluid-xs tablet:px-6 tablet:py-3 tablet:text-fluid-sm flex items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 px-4 py-2 font-medium text-[var(--foreground)] transition-colors hover:border-[var(--primary)]/50 hover:bg-[var(--muted)]/50"
         >
           <Icon icon={Plus} size="sm" aria-hidden={true} />
           Add Dish to Menu

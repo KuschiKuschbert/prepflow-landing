@@ -16,27 +16,27 @@ export function Step4BankDetails({
 }: Step4BankDetailsProps) {
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-white">Step 4: Bank Details</h3>
+      <h3 className="text-lg font-semibold text-[var(--foreground)]">Step 4: Bank Details</h3>
       <div className="space-y-4">
         <div>
-          <label className="mb-2 block text-sm text-gray-400">BSB</label>
+          <label className="mb-2 block text-sm text-[var(--foreground-muted)]">BSB</label>
           <input
             type="text"
             value={bankBSB ?? ''}
             onChange={e => onBSBChange(e.target.value)}
             placeholder="000-000"
             maxLength={6}
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+            className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm text-gray-400">Account Number</label>
+          <label className="mb-2 block text-sm text-[var(--foreground-muted)]">Account Number</label>
           <input
             type="text"
             value={bankAccount ?? ''}
             onChange={e => onAccountChange(e.target.value)}
             placeholder="00000000"
-            className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+            className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
           />
         </div>
       </div>

@@ -70,44 +70,44 @@ export function UnifiedTable({
   const getSortIcon = (field: string) => {
     if (sortField !== field) return null;
     return sortDirection === 'asc' ? (
-      <Icon icon={ChevronUp} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+      <Icon icon={ChevronUp} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
     ) : (
-      <Icon icon={ChevronDown} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+      <Icon icon={ChevronDown} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
     );
   };
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
+    <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
       <div className="desktop:block hidden overflow-x-auto">
-        <table className="min-w-full divide-y divide-[#2a2a2a]">
-          <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
+        <table className="min-w-full divide-y divide-[var(--muted)]">
+          <thead className="sticky top-0 z-10 bg-gradient-to-r from-[var(--muted)]/50 to-[var(--muted)]/20">
             <tr>
               {/* Checkbox */}
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 <button
                   onClick={onSelectAll}
-                  className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+                  className="flex items-center justify-center transition-colors hover:text-[var(--primary)]"
                   aria-label={allSelected ? 'Deselect all' : 'Select all'}
                 >
                   {allSelected ? (
-                    <Icon icon={Check} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+                    <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
                   ) : (
-                    <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+                    <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
                   )}
                 </button>
               </th>
 
               {/* Type */}
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 Type
               </th>
 
               {/* Name */}
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 {onSortChange ? (
                   <button
                     onClick={() => handleColumnSort('name')}
-                    className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                    className="flex items-center gap-1 transition-colors hover:text-[var(--primary)]"
                     aria-label="Sort by name"
                   >
                     Name
@@ -119,7 +119,7 @@ export function UnifiedTable({
               </th>
 
               {/* Price */}
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 {onSortChange ? (
                   <button
                     onClick={() => {
@@ -128,7 +128,7 @@ export function UnifiedTable({
                         sortField === 'recommended_price' ? 'recommended_price' : 'selling_price';
                       handleColumnSort(field as UnifiedSortField);
                     }}
-                    className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                    className="flex items-center gap-1 transition-colors hover:text-[var(--primary)]"
                     aria-label="Sort by price"
                   >
                     Price
@@ -140,7 +140,7 @@ export function UnifiedTable({
               </th>
 
               {/* Contributing Margin */}
-              <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 {onSortChange ? (
                   <button
                     onClick={() => {
@@ -151,7 +151,7 @@ export function UnifiedTable({
                           : 'contributing_margin';
                       handleColumnSort(field as UnifiedSortField);
                     }}
-                    className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                    className="flex items-center gap-1 transition-colors hover:text-[var(--primary)]"
                     aria-label="Sort by contributing margin"
                   >
                     Contributing Margin
@@ -163,11 +163,11 @@ export function UnifiedTable({
               </th>
 
               {/* Profit Margin */}
-              <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 {onSortChange ? (
                   <button
                     onClick={() => handleColumnSort('profit_margin')}
-                    className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                    className="flex items-center gap-1 transition-colors hover:text-[var(--primary)]"
                     aria-label="Sort by profit margin"
                   >
                     Profit Margin
@@ -179,11 +179,11 @@ export function UnifiedTable({
               </th>
 
               {/* Created */}
-              <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 {onSortChange ? (
                   <button
                     onClick={() => handleColumnSort('created')}
-                    className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                    className="flex items-center gap-1 transition-colors hover:text-[var(--primary)]"
                     aria-label="Sort by created date"
                   >
                     Created
@@ -195,12 +195,12 @@ export function UnifiedTable({
               </th>
 
               {/* Actions */}
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
+          <tbody className="divide-y divide-[var(--muted)] bg-[var(--surface)]">
             {items.map(item => {
               const dishCost = item.itemType === 'dish' ? dishCosts.get(item.id) : undefined;
               const recipePrice = item.itemType === 'recipe' ? recipePrices[item.id] : undefined;

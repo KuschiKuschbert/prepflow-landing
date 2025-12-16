@@ -61,7 +61,7 @@ export default function DishSectionsPage() {
   if (loading) {
     return (
       <ResponsivePageContainer>
-        <div className="min-h-screen bg-transparent py-8 text-white">
+        <div className="min-h-screen bg-transparent py-8 text-[var(--foreground)]">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="mt-6 space-y-4">
             <LoadingSkeleton variant="card" count={5} height="80px" />
@@ -73,11 +73,11 @@ export default function DishSectionsPage() {
 
   return (
     <ResponsivePageContainer>
-      <div className="min-h-screen bg-transparent py-8 text-white">
+      <div className="min-h-screen bg-transparent py-8 text-[var(--foreground)]">
         <DishSectionsHeader onAddClick={() => setShowForm(true)} />
         {error && (
-          <div className="mb-6 rounded-2xl border border-red-400/20 bg-red-400/10 p-4">
-            <p className="text-red-400">{error}</p>
+          <div className="mb-6 rounded-2xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-4">
+            <p className="text-[var(--color-error)]">{error}</p>
           </div>
         )}
         <div className="space-y-6">

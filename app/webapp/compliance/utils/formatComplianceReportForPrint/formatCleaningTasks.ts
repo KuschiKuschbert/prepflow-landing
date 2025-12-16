@@ -52,7 +52,7 @@ export function formatCleaningTasksSection(cleaningTasks: TaskWithCompletions[])
         statusColor = '#f59e0b';
       } else {
         status = 'Overdue';
-        statusColor = '#ef4444';
+        statusColor = 'var(--color-error)';
       }
     }
 

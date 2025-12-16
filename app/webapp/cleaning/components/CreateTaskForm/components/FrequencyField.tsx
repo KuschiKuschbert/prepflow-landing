@@ -32,8 +32,8 @@ export function FrequencyField({
 }: FrequencyFieldProps) {
   return (
     <div>
-      <label className="mb-1.5 block text-sm font-semibold text-gray-300">
-        Frequency <span className="text-red-400">*</span>
+      <label className="mb-1.5 block text-sm font-semibold text-[var(--foreground-secondary)]">
+        Frequency <span className="text-[var(--color-error)]">*</span>
       </label>
 
       {/* Quick frequency buttons */}
@@ -48,8 +48,8 @@ export function FrequencyField({
             }}
             className={`rounded-xl border px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
               value === freq
-                ? 'border-[#29E7CD] bg-[#29E7CD]/20 text-[#29E7CD] shadow-lg shadow-[#29E7CD]/20'
-                : 'border-[#2a2a2a] bg-[#2a2a2a] text-gray-300 hover:border-[#29E7CD]/50 hover:bg-[#2a2a2a]/80'
+                ? 'border-[var(--primary)] bg-[var(--primary)]/20 text-[var(--primary)] shadow-lg shadow-[var(--primary)]/20'
+                : 'border-[var(--border)] bg-[var(--muted)] text-[var(--foreground-secondary)] hover:border-[var(--primary)]/50 hover:bg-[var(--muted)]/80'
             }`}
           >
             {freq.charAt(0).toUpperCase() + freq.slice(1)}
@@ -66,8 +66,8 @@ export function FrequencyField({
         }}
         onBlur={e => onBlur(e.target.value)}
         className={`w-full rounded-2xl border ${
-          error ? 'border-red-500/50' : 'border-[#2a2a2a]'
-        } bg-[#2a2a2a] px-4 py-2.5 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]`}
+          error ? 'border-[var(--color-error)]/50' : 'border-[var(--border)]'
+        } bg-[var(--muted)] px-4 py-2.5 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]`}
         required
       >
         <optgroup label="Quick Options">
@@ -94,7 +94,7 @@ export function FrequencyField({
       </select>
 
       {suggestedFrequency && value === suggestedFrequency && (
-        <p className="mt-2 flex items-center gap-1 text-xs text-[#29E7CD]">
+        <p className="mt-2 flex items-center gap-1 text-xs text-[var(--primary)]">
           <Icon icon={Info} size="xs" aria-hidden={true} />
           Auto-selected {suggestedFrequency.charAt(0).toUpperCase() +
             suggestedFrequency.slice(1)}{' '}
@@ -104,7 +104,7 @@ export function FrequencyField({
 
       {value === 'custom-days' && (
         <div className="mt-2">
-          <label className="mb-1.5 block text-sm font-medium text-gray-300">Number of Days</label>
+          <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Number of Days</label>
           <input
             type="number"
             min="1"
@@ -114,9 +114,9 @@ export function FrequencyField({
               const days = parseInt(e.target.value) || 3;
               onCustomDaysChange(days);
             }}
-            className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2.5 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2.5 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
           />
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-[var(--foreground-subtle)]">
             Task will repeat every {customDaysInterval} {customDaysInterval === 1 ? 'day' : 'days'}
           </p>
         </div>
@@ -130,7 +130,7 @@ export function FrequencyField({
       )}
 
       {error && (
-        <p className="mt-1 text-xs text-red-400" role="alert">
+        <p className="mt-1 text-xs text-[var(--color-error)]" role="alert">
           {error}
         </p>
       )}

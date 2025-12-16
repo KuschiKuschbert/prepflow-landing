@@ -26,28 +26,28 @@ export function AllergenOverviewMobileCard({ item }: AllergenOverviewMobileCardP
   const allIngredientNames = Object.keys(ingredientAllergenMap);
 
   return (
-    <div className="rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-4">
+    <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4">
       <div className="mb-3 flex items-start justify-between gap-3">
         <div className="flex-1">
           <div className="mb-2 flex items-center gap-2">
             <span
               className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
                 item.type === 'recipe'
-                  ? 'border border-[#29E7CD]/20 bg-[#29E7CD]/10 text-[#29E7CD]'
-                  : 'border border-[#D925C7]/20 bg-[#D925C7]/10 text-[#D925C7]'
+                  ? 'border border-[var(--primary)]/20 bg-[var(--primary)]/10 text-[var(--primary)]'
+                  : 'border border-[var(--accent)]/20 bg-[var(--accent)]/10 text-[var(--accent)]'
               }`}
             >
               {item.type === 'recipe' ? 'Recipe' : 'Dish'}
             </span>
-            <h3 className="text-base font-semibold text-white">{item.name}</h3>
+            <h3 className="text-base font-semibold text-[var(--foreground)]">{item.name}</h3>
           </div>
-          {item.description && <p className="text-sm text-gray-400">{item.description}</p>}
+          {item.description && <p className="text-sm text-[var(--foreground-muted)]">{item.description}</p>}
         </div>
       </div>
 
-      <div className="space-y-3 border-t border-[#2a2a2a] pt-3">
+      <div className="space-y-3 border-t border-[var(--border)] pt-3">
         <div>
-          <p className="mb-1.5 text-xs font-medium tracking-wider text-gray-400 uppercase">
+          <p className="mb-1.5 text-xs font-medium tracking-wider text-[var(--foreground-muted)] uppercase">
             Allergens
           </p>
           <AllergenDisplay
@@ -60,7 +60,7 @@ export function AllergenOverviewMobileCard({ item }: AllergenOverviewMobileCardP
 
         {allIngredientNames.length > 0 && (
           <div>
-            <p className="mb-1.5 text-xs font-medium tracking-wider text-gray-400 uppercase">
+            <p className="mb-1.5 text-xs font-medium tracking-wider text-[var(--foreground-muted)] uppercase">
               From Ingredients
             </p>
             <div className="flex flex-wrap gap-1.5">
@@ -72,7 +72,7 @@ export function AllergenOverviewMobileCard({ item }: AllergenOverviewMobileCardP
                   <span
                     key={ingredientName}
                     title={tooltipText}
-                    className="inline-flex cursor-help rounded-full bg-[#2a2a2a] px-2.5 py-0.5 text-xs font-medium text-gray-300 transition-colors hover:bg-[#29E7CD]/10 hover:text-[#29E7CD]"
+                    className="inline-flex cursor-help rounded-full bg-[var(--muted)] px-2.5 py-0.5 text-xs font-medium text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--primary)]/10 hover:text-[var(--primary)]"
                   >
                     {ingredientName}
                   </span>

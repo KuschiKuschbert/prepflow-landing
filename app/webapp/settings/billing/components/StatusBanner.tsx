@@ -17,24 +17,24 @@ export function StatusBanner({ isActive, isPastDue, isCancelled }: StatusBannerP
     <div
       className={`mb-6 rounded-2xl border p-4 ${
         isPastDue
-          ? 'border-yellow-500/30 bg-yellow-500/10'
+          ? 'border-[var(--color-warning)]/30 bg-[var(--color-warning)]/10'
           : isCancelled
-            ? 'border-red-500/30 bg-red-500/10'
-            : 'border-blue-500/30 bg-blue-500/10'
+            ? 'border-[var(--color-error)]/30 bg-[var(--color-error)]/10'
+            : 'border-[var(--color-info)]/30 bg-[var(--color-info)]/10'
       }`}
     >
       <div className="flex items-center gap-3">
         <Icon
           icon={isPastDue || isCancelled ? AlertCircle : CheckCircle}
           size="md"
-          className={isPastDue ? 'text-yellow-400' : isCancelled ? 'text-red-400' : 'text-blue-400'}
+          className={isPastDue ? 'text-[var(--color-warning)]' : isCancelled ? 'text-[var(--color-error)]' : 'text-[var(--color-info)]'}
           aria-hidden={true}
         />
         <div className="flex-1">
-          <p className="font-semibold text-white">
+          <p className="font-semibold text-[var(--foreground)]">
             {isPastDue ? 'Payment Failed' : isCancelled ? 'Subscription Cancelled' : 'Trial Period'}
           </p>
-          <p className="text-sm text-gray-300">
+          <p className="text-sm text-[var(--foreground-secondary)]">
             {isPastDue
               ? 'Your payment failed. Please update your payment method to continue using PrepFlow.'
               : isCancelled

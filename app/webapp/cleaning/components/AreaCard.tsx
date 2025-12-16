@@ -51,36 +51,36 @@ function AreaCardComponent({ area, onAddTask, onViewTasks, onDelete }: AreaCardP
   return (
     <>
       <div
-        className="group relative cursor-pointer rounded-3xl border-l-2 border-[#29E7CD]/30 bg-[#29E7CD]/2 p-6 transition-all duration-200 hover:bg-[#29E7CD]/5"
+        className="group relative cursor-pointer rounded-3xl border-l-2 border-[var(--primary)]/30 bg-[var(--primary)]/2 p-6 transition-all duration-200 hover:bg-[var(--primary)]/5"
         onClick={handleCardClick}
         title="Click to view tasks for this area"
       >
         <div className="mb-4 flex items-center justify-between">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-            <Icon icon={Sparkles} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
+            <Icon icon={Sparkles} size="md" className="text-[var(--primary)]" aria-hidden={true} />
           </div>
           <span
             className={`rounded-full px-3 py-1 text-xs font-medium ${
               area.is_active
-                ? 'border border-green-400/20 bg-green-400/10 text-green-400'
-                : 'border border-gray-400/20 bg-gray-400/10 text-gray-400'
+                ? 'border border-[var(--color-success)]/20 bg-[var(--color-success)]/10 text-[var(--color-success)]'
+                : 'border border-gray-400/20 bg-gray-400/10 text-[var(--foreground-muted)]'
             }`}
           >
             {area.is_active ? 'Active' : 'Inactive'}
           </span>
         </div>
-        <h3 className="mb-2 text-xl font-semibold text-white">{area.area_name}</h3>
-        <p className="mb-4 line-clamp-2 text-sm text-gray-400">
+        <h3 className="mb-2 text-xl font-semibold text-[var(--foreground)]">{area.area_name}</h3>
+        <p className="mb-4 line-clamp-2 text-sm text-[var(--foreground-muted)]">
           {area.description || 'No description provided'}
         </p>
         <div className="flex items-center justify-between">
           {area.cleaning_frequency && (
-            <span className="text-xs text-gray-500">{area.cleaning_frequency}</span>
+            <span className="text-xs text-[var(--foreground-subtle)]">{area.cleaning_frequency}</span>
           )}
           <div className="flex items-center gap-2">
             <button
               onClick={handleQRClick}
-              className="flex items-center gap-1.5 rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs font-medium text-gray-300 transition-all duration-200 hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+              className="flex items-center gap-1.5 rounded-lg bg-[var(--muted)]/50 px-3 py-1.5 text-xs font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:bg-[var(--muted)] hover:text-[var(--primary)]"
               title="Generate QR code for this area"
             >
               <Icon icon={QrCode} size="xs" aria-hidden={true} />
@@ -88,7 +88,7 @@ function AreaCardComponent({ area, onAddTask, onViewTasks, onDelete }: AreaCardP
             </button>
             <button
               onClick={handleAddTaskClick}
-              className="flex items-center gap-1.5 rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs font-medium text-gray-300 transition-all duration-200 hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+              className="flex items-center gap-1.5 rounded-lg bg-[var(--muted)]/50 px-3 py-1.5 text-xs font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:bg-[var(--muted)] hover:text-[var(--primary)]"
               title="Add task to this area"
             >
               <Icon icon={Plus} size="xs" aria-hidden={true} />
@@ -97,7 +97,7 @@ function AreaCardComponent({ area, onAddTask, onViewTasks, onDelete }: AreaCardP
             {onDelete && (
               <button
                 onClick={handleDeleteClick}
-                className="rounded-lg p-1.5 text-gray-500 opacity-0 transition-all duration-200 group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-400"
+                className="rounded-lg p-1.5 text-[var(--foreground-subtle)] opacity-0 transition-all duration-200 group-hover:opacity-100 hover:bg-[var(--color-error)]/10 hover:text-[var(--color-error)]"
                 title="Delete area"
                 aria-label={`Delete ${area.area_name}`}
               >

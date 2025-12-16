@@ -77,7 +77,7 @@ export function EmployeeChipBar({
         <Icon
           icon={Search}
           size="sm"
-          className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"
+          className="absolute top-1/2 left-3 -translate-y-1/2 text-[var(--foreground-muted)]"
           aria-hidden={true}
         />
         <input
@@ -85,7 +85,7 @@ export function EmployeeChipBar({
           placeholder="Search employees..."
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          className="w-full rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] py-2 pr-4 pl-10 text-white placeholder:text-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20"
+          className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] py-2 pr-4 pl-10 text-[var(--foreground)] placeholder:text-[var(--foreground-subtle)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20"
         />
       </div>
 
@@ -93,7 +93,7 @@ export function EmployeeChipBar({
       <div className="overflow-x-auto pb-2">
         <div className="flex gap-3">
           {filteredEmployees.length === 0 ? (
-            <div className="py-4 text-sm text-gray-400">No employees found</div>
+            <div className="py-4 text-sm text-[var(--foreground-muted)]">No employees found</div>
           ) : (
             filteredEmployees.map(employee => {
               const hourlyRate = formatCurrency(employee.hourly_rate);
@@ -106,43 +106,43 @@ export function EmployeeChipBar({
                 <div key={employee.id} className="group relative">
                   <button
                     onClick={() => handleChipClick(employee.id)}
-                    className="flex shrink-0 items-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] px-4 py-3 transition-all hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/10 hover:shadow-lg"
+                    className="flex shrink-0 items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 transition-all hover:border-[var(--primary)]/50 hover:bg-[var(--primary)]/10 hover:shadow-lg"
                     aria-label={`Select ${employee.first_name} ${employee.last_name}`}
                   >
                     <Icon
                       icon={User}
                       size="sm"
-                      className="text-gray-400 group-hover:text-[#29E7CD]"
+                      className="text-[var(--foreground-muted)] group-hover:text-[var(--primary)]"
                       aria-hidden={true}
                     />
                     <div className="flex flex-col items-start">
-                      <span className="text-sm font-medium text-white group-hover:text-[#29E7CD]">
+                      <span className="text-sm font-medium text-[var(--foreground)] group-hover:text-[var(--primary)]">
                         {employee.first_name} {employee.last_name}
                       </span>
-                      <span className="text-xs text-gray-400">{employee.role}</span>
+                      <span className="text-xs text-[var(--foreground-muted)]">{employee.role}</span>
                     </div>
                   </button>
 
                   {/* Tooltip with hourly cost - only visible on hover */}
                   <div
-                    className="pointer-events-none invisible absolute bottom-full left-1/2 z-50 mb-2 w-max max-w-xs -translate-x-1/2 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-3 py-2 text-xs whitespace-nowrap text-white opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:opacity-100"
+                    className="pointer-events-none invisible absolute bottom-full left-1/2 z-50 mb-2 w-max max-w-xs -translate-x-1/2 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs whitespace-nowrap text-[var(--foreground)] opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:opacity-100"
                     aria-hidden={true}
                   >
                     <div className="space-y-1">
-                      <div className="font-semibold text-[#29E7CD]">Hourly Rates</div>
+                      <div className="font-semibold text-[var(--primary)]">Hourly Rates</div>
                       <div className="flex items-center justify-between gap-4">
-                        <span className="text-gray-400">Weekday:</span>
+                        <span className="text-[var(--foreground-muted)]">Weekday:</span>
                         <span className="font-medium">{hourlyRate}/hr</span>
                       </div>
                       {saturdayRate && (
                         <div className="flex items-center justify-between gap-4">
-                          <span className="text-gray-400">Saturday:</span>
+                          <span className="text-[var(--foreground-muted)]">Saturday:</span>
                           <span className="font-medium">{saturdayRate}/hr</span>
                         </div>
                       )}
                       {sundayRate && (
                         <div className="flex items-center justify-between gap-4">
-                          <span className="text-gray-400">Sunday:</span>
+                          <span className="text-[var(--foreground-muted)]">Sunday:</span>
                           <span className="font-medium">{sundayRate}/hr</span>
                         </div>
                       )}

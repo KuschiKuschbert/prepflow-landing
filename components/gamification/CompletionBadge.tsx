@@ -30,9 +30,9 @@ interface CompletionBadgeProps {
 }
 
 const variantStyles = {
-  info: 'border-[#29E7CD]/30 bg-[#29E7CD]/10 text-[#29E7CD]',
-  hint: 'border-[#2a2a2a] bg-[#1f1f1f] text-gray-300',
-  milestone: 'border-[#FF6B00]/30 bg-[#FF6B00]/10 text-[#FF6B00]',
+  info: 'border-[var(--primary)]/30 bg-[var(--primary)]/10 text-[var(--primary)]',
+  hint: 'border-[var(--border)] bg-[var(--surface)] text-[var(--foreground-secondary)]',
+  milestone: 'border-[var(--tertiary)]/30 bg-[var(--tertiary)]/10 text-[var(--tertiary)]',
 };
 
 export function CompletionBadge({
@@ -43,7 +43,7 @@ export function CompletionBadge({
 }: CompletionBadgeProps) {
   return (
     <div
-      className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium ${variantStyles[variant]} ${className}`}
+      className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold ${variantStyles[variant]} ${className}`}
     >
       {icon && <span>{icon}</span>}
       <span>{message}</span>

@@ -95,10 +95,10 @@ export default function TemperatureEquipmentTab({
     <div className="space-y-6">
       <div className="tablet:flex-row tablet:items-center tablet:justify-between flex flex-col gap-4">
         <div>
-          <h2 className="tablet:text-3xl text-2xl font-bold text-white">
+          <h2 className="tablet:text-3xl text-2xl font-bold text-[var(--foreground)]">
             {t('temperature.equipment', 'Temperature Equipment')}
           </h2>
-          <p className="mt-2 text-base text-gray-400">
+          <p className="mt-2 text-base text-[var(--foreground-muted)]">
             {t('temperature.equipmentDesc', 'Manage your temperature monitoring equipment')}
           </p>
         </div>
@@ -109,7 +109,7 @@ export default function TemperatureEquipmentTab({
             <button
               onClick={handleGenerateSampleData}
               disabled={isGenerating}
-              className="group flex min-h-[44px] items-center justify-center gap-2 rounded-2xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-4 py-2.5 text-sm font-semibold text-[#29E7CD] shadow-lg transition-all duration-300 hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/20 hover:shadow-xl disabled:opacity-50 disabled:hover:bg-[#29E7CD]/10"
+              className="group flex min-h-[44px] items-center justify-center gap-2 rounded-2xl border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-4 py-2.5 text-sm font-semibold text-[var(--primary)] shadow-lg transition-all duration-300 hover:border-[var(--primary)]/50 hover:bg-[var(--primary)]/20 hover:shadow-xl disabled:opacity-50 disabled:hover:bg-[var(--primary)]/10"
               title="Generate 5 sample logs per equipment (last 2 weeks)"
             >
               <Icon
@@ -126,9 +126,9 @@ export default function TemperatureEquipmentTab({
           )}
           <button
             onClick={() => setShowCreateForm(!showCreateForm)}
-            className="group flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+            className="group flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
-            <Icon icon={Plus} size="md" className="text-black" aria-hidden={true} />
+            <Icon icon={Plus} size="md" className="text-[var(--button-active-text)]" aria-hidden={true} />
             <span>{t('temperature.addEquipment', 'Add Equipment')}</span>
           </button>
         </div>

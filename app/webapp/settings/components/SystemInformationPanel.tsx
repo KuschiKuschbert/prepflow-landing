@@ -73,40 +73,40 @@ Environment: ${process.env.NODE_ENV || 'unknown'}`;
   };
 
   return (
-    <div className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+    <div className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
       <div>
-        <h2 className="text-xl font-semibold">System Information</h2>
-        <p className="mt-1 text-sm text-gray-300">
+        <h2 className="text-xl font-semibold text-[var(--foreground)]">System Information</h2>
+        <p className="mt-1 text-sm text-[var(--foreground)]/80">
           Technical details for support and troubleshooting.
         </p>
       </div>
 
       <div className="space-y-3">
-        <div className="flex items-center justify-between rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
+        <div className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
           <div>
-            <p className="text-xs text-gray-500">App Version</p>
-            <p className="text-sm font-medium text-white">{systemInfo.appVersion}</p>
+            <p className="text-xs text-[var(--foreground)]/60">App Version</p>
+            <p className="text-sm font-medium text-[var(--foreground)]">{systemInfo.appVersion}</p>
           </div>
         </div>
 
-        <div className="flex items-center justify-between rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
+        <div className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
           <div>
-            <p className="text-xs text-gray-500">Browser</p>
-            <p className="text-sm font-medium text-white">{systemInfo.browser}</p>
+            <p className="text-xs text-[var(--foreground)]/60">Browser</p>
+            <p className="text-sm font-medium text-[var(--foreground)]">{systemInfo.browser}</p>
           </div>
         </div>
 
-        <div className="flex items-center justify-between rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
+        <div className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
           <div>
-            <p className="text-xs text-gray-500">Operating System</p>
-            <p className="text-sm font-medium text-white">{systemInfo.os}</p>
+            <p className="text-xs text-[var(--foreground)]/60">Operating System</p>
+            <p className="text-sm font-medium text-[var(--foreground)]">{systemInfo.os}</p>
           </div>
         </div>
 
-        <div className="flex items-center justify-between rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 p-4">
+        <div className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
           <div>
-            <p className="text-xs text-gray-500">Environment</p>
-            <p className="text-sm font-medium text-white capitalize">
+            <p className="text-xs text-[var(--foreground)]/60">Environment</p>
+            <p className="text-sm font-medium text-[var(--foreground)] capitalize">
               {process.env.NODE_ENV || 'unknown'}
             </p>
           </div>
@@ -115,11 +115,11 @@ Environment: ${process.env.NODE_ENV || 'unknown'}`;
 
       <button
         onClick={copySystemInfo}
-        className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/20 px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/40"
+        className="flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 px-4 py-2 text-sm text-[var(--foreground)]/80 transition-colors hover:bg-[var(--surface)]/40"
       >
         {copied ? (
           <>
-            <Icon icon={CheckCircle} size="sm" className="text-green-400" aria-hidden={true} />
+            <Icon icon={CheckCircle} size="sm" className="text-[var(--color-success)]" aria-hidden={true} />
             <span>Copied!</span>
           </>
         ) : (
@@ -130,9 +130,9 @@ Environment: ${process.env.NODE_ENV || 'unknown'}`;
         )}
       </button>
 
-      <div className="flex items-start gap-2 rounded-xl border border-[#29E7CD]/20 bg-[#29E7CD]/5 p-3">
-        <Icon icon={Info} size="sm" className="mt-0.5 text-[#29E7CD]" aria-hidden={true} />
-        <p className="text-xs text-gray-400">
+      <div className="flex items-start gap-2 rounded-xl border border-[var(--primary)]/20 bg-[var(--primary)]/5 p-3">
+        <Icon icon={Info} size="sm" className="mt-0.5 text-[var(--primary)]" aria-hidden={true} />
+        <p className="text-xs text-[var(--foreground)]/60">
           Copy this information when contacting support to help us troubleshoot issues faster.
         </p>
       </div>

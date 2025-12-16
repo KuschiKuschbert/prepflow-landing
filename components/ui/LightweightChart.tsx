@@ -49,7 +49,7 @@ function BarChart({
   const colors = ['#29E7CD', '#3B82F6', '#D925C7', '#10B981', '#F59E0B', '#EF4444'];
 
   return (
-    <div className={`rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 ${className}`}>
+    <div className={`rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 ${className}`}>
       <div className="flex h-48 items-end justify-between space-x-2">
         {data.map((item, index) => {
           const barHeight = (item.value / maxValue) * 100;
@@ -57,7 +57,7 @@ function BarChart({
 
           return (
             <div key={item.name} className="flex flex-1 flex-col items-center">
-              {showValues && <span className="text-fluid-xs mb-1 text-gray-400">{item.value}</span>}
+              {showValues && <span className="text-fluid-xs mb-1 text-[var(--foreground-muted)]">{item.value}</span>}
               <div
                 className="w-full rounded-t-lg transition-all duration-300 hover:opacity-80"
                 style={{
@@ -67,7 +67,7 @@ function BarChart({
                 }}
                 title={`${item.name}: ${item.value}`}
               />
-              <span className="text-fluid-xs mt-2 text-center leading-tight text-gray-300">
+              <span className="text-fluid-xs mt-2 text-center leading-tight text-[var(--foreground-secondary)]">
                 {item.name}
               </span>
             </div>
@@ -104,7 +104,7 @@ function PieChart({ data, size = 200, showLabels = true, className = '' }: PieCh
   );
 
   return (
-    <div className={`rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 ${className}`}>
+    <div className={`rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 ${className}`}>
       <div className="flex items-center justify-center">
         <div className="relative" style={{ width: size, height: size }}>
           <svg width={size} height={size} className="-rotate-90 transform">
@@ -138,8 +138,8 @@ function PieChart({ data, size = 200, showLabels = true, className = '' }: PieCh
           {/* Center text */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <div className="text-fluid-2xl font-bold text-white">{total}</div>
-              <div className="text-fluid-xs text-gray-400">Total</div>
+              <div className="text-fluid-2xl font-bold text-[var(--foreground)]">{total}</div>
+              <div className="text-fluid-xs text-[var(--foreground-muted)]">Total</div>
             </div>
           </div>
         </div>
@@ -155,9 +155,9 @@ function PieChart({ data, size = 200, showLabels = true, className = '' }: PieCh
               <div key={item.name} className="text-fluid-sm flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <div className="h-3 w-3 rounded-full" style={{ backgroundColor: color }} />
-                  <span className="text-gray-300">{item.name}</span>
+                  <span className="text-[var(--foreground-secondary)]">{item.name}</span>
                 </div>
-                <span className="text-gray-400">{percentage}%</span>
+                <span className="text-[var(--foreground-muted)]">{percentage}%</span>
               </div>
             );
           })}
@@ -191,7 +191,7 @@ function LineChart({
     .join(' ');
 
   return (
-    <div className={`rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 ${className}`}>
+    <div className={`rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 ${className}`}>
       <svg width={width} height={height} className="overflow-visible">
         {/* Grid lines */}
         {showGrid && (
@@ -205,7 +205,7 @@ function LineChart({
                   y1={y}
                   x2={width - 20}
                   y2={y}
-                  stroke="#2a2a2a"
+                  stroke="var(--muted)"
                   strokeWidth="1"
                 />
               );

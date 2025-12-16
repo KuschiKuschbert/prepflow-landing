@@ -203,7 +203,7 @@ export function EditDrawer({
       {/* Drawer with gradient border */}
       <div
         ref={drawerRef}
-        className={`fixed top-0 right-0 z-[75] h-full ${widthClass} transform rounded-l-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl transition-transform duration-200 ease-out ${
+        className={`fixed top-0 right-0 z-[75] h-full ${widthClass} transform rounded-l-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl transition-transform duration-200 ease-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         role="dialog"
@@ -217,21 +217,21 @@ export function EditDrawer({
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        <div className="flex h-full flex-col rounded-l-3xl bg-[#1f1f1f]">
+        <div className="flex h-full flex-col rounded-l-3xl bg-[var(--surface)]">
           {/* Header */}
           <div
-            className="desktop:px-6 desktop:py-4 sticky top-0 z-10 flex items-center justify-between border-b border-[#2a2a2a] bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a]/50 px-4 py-3 backdrop-blur-sm"
+            className="desktop:px-6 desktop:py-4 sticky top-0 z-10 flex items-center justify-between border-b border-[var(--border)] bg-gradient-to-r from-[#1f1f1f] to-[var(--muted)]/50 px-4 py-3 backdrop-blur-sm"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            <h2 id="edit-drawer-title" className="desktop:text-xl text-lg font-bold text-white">
+            <h2 id="edit-drawer-title" className="desktop:text-xl text-lg font-bold text-[var(--foreground)]">
               {title}
             </h2>
             <button
               onClick={preventClose ? undefined : onClose}
               disabled={preventClose}
-              className="rounded-full p-2 text-gray-400 transition-all duration-200 hover:bg-[#2a2a2a] hover:text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-full p-2 text-[var(--foreground-muted)] transition-all duration-200 hover:bg-[var(--muted)] hover:text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
               aria-label="Close drawer"
             >
               <Icon icon={X} size="md" />
@@ -252,7 +252,7 @@ export function EditDrawer({
 
           {/* Footer */}
           {footer && (
-            <div className="desktop:px-6 desktop:py-4 sticky bottom-0 border-t border-[#2a2a2a] bg-[#1f1f1f] px-4 py-3">
+            <div className="desktop:px-6 desktop:py-4 sticky bottom-0 border-t border-[var(--border)] bg-[var(--surface)] px-4 py-3">
               {footer}
             </div>
           )}

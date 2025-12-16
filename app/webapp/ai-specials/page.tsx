@@ -106,7 +106,7 @@ export default function AISpecialsPage() {
           <div className="mb-8">
             <LoadingSkeleton variant="stats" height="64px" />
           </div>
-          <div className="mb-8 rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg">
+          <div className="mb-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
             <LoadingSkeleton variant="form" height="200px" />
           </div>
           <div className="space-y-4">
@@ -118,21 +118,21 @@ export default function AISpecialsPage() {
   }
   return (
     <ResponsivePageContainer>
-      <div className="min-h-screen bg-transparent py-8 text-white">
+      <div className="min-h-screen bg-transparent py-8 text-[var(--foreground)]">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-white">
+            <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-[var(--foreground)]">
               <Icon icon={Bot} size="lg" aria-hidden={true} />
               {t('aiSpecials.title', 'AI Specials Generator')}
             </h1>
-            <p className="text-gray-400">
+            <p className="text-[var(--foreground-muted)]">
               {t('aiSpecials.subtitle', 'Generate specials from ingredient photos using AI')}
             </p>
           </div>
         </div>
         {error && (
-          <div className="mb-6 rounded-2xl border border-red-400/20 bg-red-400/10 p-4">
-            <p className="text-red-400">{error}</p>
+          <div className="mb-6 rounded-2xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-4">
+            <p className="text-[var(--color-error)]">{error}</p>
           </div>
         )}
         <UploadForm

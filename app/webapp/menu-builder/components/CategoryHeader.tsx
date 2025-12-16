@@ -111,12 +111,12 @@ export function CategoryHeader({
             onChange={e => setEditValue(e.target.value)}
             onKeyDown={handleKeyDown}
             disabled={isSaving}
-            className="flex-1 rounded-lg border border-[#29E7CD] bg-[#1f1f1f] px-3 py-1.5 text-lg font-semibold text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none disabled:opacity-50"
+            className="flex-1 rounded-lg border border-[var(--primary)] bg-[var(--surface)] px-3 py-1.5 text-lg font-semibold text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none disabled:opacity-50"
           />
           <button
             onClick={handleSaveEdit}
             disabled={isSaving}
-            className="rounded-lg bg-[#29E7CD] p-1.5 text-black transition-colors hover:bg-[#29E7CD]/80 disabled:opacity-50"
+            className="rounded-lg bg-[var(--primary)] p-1.5 text-[var(--primary-text)] transition-colors hover:bg-[var(--primary)]/80 disabled:opacity-50"
             aria-label="Save category name"
           >
             <Icon icon={Check} size="sm" />
@@ -124,7 +124,7 @@ export function CategoryHeader({
           <button
             onClick={handleCancelEdit}
             disabled={isSaving}
-            className="rounded-lg bg-[#2a2a2a] p-1.5 text-gray-400 transition-colors hover:bg-[#3a3a3a] hover:text-white disabled:opacity-50"
+            className="rounded-lg bg-[var(--muted)] p-1.5 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--surface-variant)] hover:text-[var(--foreground)] disabled:opacity-50"
             aria-label="Cancel editing"
           >
             <Icon icon={X} size="sm" />
@@ -132,7 +132,7 @@ export function CategoryHeader({
         </div>
       ) : (
         <>
-          <h3 className="flex-1 text-lg font-semibold text-white">{category}</h3>
+          <h3 className="flex-1 text-lg font-semibold text-[var(--foreground)]">{category}</h3>
           {/* Sort Dropdown */}
           {itemCount > 1 && (
             <div ref={sortDropdownRef} className="relative">
@@ -141,8 +141,8 @@ export function CategoryHeader({
                   e.stopPropagation();
                   setShowSortDropdown(!showSortDropdown);
                 }}
-                className={`rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD] ${
-                  sortBy !== 'position' ? 'text-[#29E7CD]' : ''
+                className={`rounded-lg p-1.5 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)] ${
+                  sortBy !== 'position' ? 'text-[var(--primary)]' : ''
                 }`}
                 aria-label="Sort items"
                 title="Sort items"
@@ -150,8 +150,8 @@ export function CategoryHeader({
                 <Icon icon={Filter} size="sm" />
               </button>
               {showSortDropdown && (
-                <div className="absolute top-full right-0 z-50 mt-1 min-w-[180px] rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
-                  <div className="p-2 text-xs font-medium tracking-wider text-gray-400 uppercase">
+                <div className="absolute top-full right-0 z-50 mt-1 min-w-[180px] rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-lg">
+                  <div className="p-2 text-xs font-medium tracking-wider text-[var(--foreground-muted)] uppercase">
                     Sort By
                   </div>
                   <div className="max-h-60 overflow-y-auto">
@@ -161,8 +161,8 @@ export function CategoryHeader({
                         onSortChange('position');
                         setShowSortDropdown(false);
                       }}
-                      className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD] ${
-                        sortBy === 'position' ? 'bg-[#2a2a2a] text-[#29E7CD]' : 'text-white'
+                      className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)] ${
+                        sortBy === 'position' ? 'bg-[var(--muted)] text-[var(--primary)]' : 'text-[var(--foreground)]'
                       }`}
                     >
                       <Icon icon={Filter} size="sm" />
@@ -174,8 +174,8 @@ export function CategoryHeader({
                         onSortChange('name-asc');
                         setShowSortDropdown(false);
                       }}
-                      className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD] ${
-                        sortBy === 'name-asc' ? 'bg-[#2a2a2a] text-[#29E7CD]' : 'text-white'
+                      className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)] ${
+                        sortBy === 'name-asc' ? 'bg-[var(--muted)] text-[var(--primary)]' : 'text-[var(--foreground)]'
                       }`}
                     >
                       <Icon icon={Filter} size="sm" />
@@ -187,8 +187,8 @@ export function CategoryHeader({
                         onSortChange('name-desc');
                         setShowSortDropdown(false);
                       }}
-                      className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD] ${
-                        sortBy === 'name-desc' ? 'bg-[#2a2a2a] text-[#29E7CD]' : 'text-white'
+                      className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)] ${
+                        sortBy === 'name-desc' ? 'bg-[var(--muted)] text-[var(--primary)]' : 'text-[var(--foreground)]'
                       }`}
                     >
                       <Icon icon={Filter} size="sm" />
@@ -200,8 +200,8 @@ export function CategoryHeader({
                         onSortChange('price-asc');
                         setShowSortDropdown(false);
                       }}
-                      className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD] ${
-                        sortBy === 'price-asc' ? 'bg-[#2a2a2a] text-[#29E7CD]' : 'text-white'
+                      className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)] ${
+                        sortBy === 'price-asc' ? 'bg-[var(--muted)] text-[var(--primary)]' : 'text-[var(--foreground)]'
                       }`}
                     >
                       <Icon icon={Filter} size="sm" />
@@ -213,8 +213,8 @@ export function CategoryHeader({
                         onSortChange('price-desc');
                         setShowSortDropdown(false);
                       }}
-                      className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD] ${
-                        sortBy === 'price-desc' ? 'bg-[#2a2a2a] text-[#29E7CD]' : 'text-white'
+                      className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)] ${
+                        sortBy === 'price-desc' ? 'bg-[var(--muted)] text-[var(--primary)]' : 'text-[var(--foreground)]'
                       }`}
                     >
                       <Icon icon={Filter} size="sm" />
@@ -228,7 +228,7 @@ export function CategoryHeader({
           {canRename && (
             <button
               onClick={handleStartEdit}
-              className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+              className="rounded-lg p-1.5 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)]"
               aria-label={`Rename category "${category}"`}
               title="Click to rename category"
             >

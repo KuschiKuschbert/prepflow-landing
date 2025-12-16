@@ -146,7 +146,7 @@ export default function EquipmentPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] p-4">
+      <div className="min-h-screen bg-[var(--background)] p-4">
         <div className="mx-auto max-w-2xl">
           <LoadingSkeleton variant="card" className="h-64" />
         </div>
@@ -156,13 +156,13 @@ export default function EquipmentPage() {
 
   if (!equipment) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] p-4">
+      <div className="min-h-screen bg-[var(--background)] p-4">
         <div className="mx-auto max-w-2xl">
-          <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center">
-            <h1 className="mb-4 text-2xl font-bold text-white">Equipment Not Found</h1>
+          <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center">
+            <h1 className="mb-4 text-2xl font-bold text-[var(--foreground)]">Equipment Not Found</h1>
             <Link
               href="/webapp/temperature"
-              className="inline-block rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black"
+              className="inline-block rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)]"
             >
               Back to Temperature
             </Link>
@@ -177,55 +177,55 @@ export default function EquipmentPage() {
     : { color: 'gray', label: 'No Logs' };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] p-4">
+    <div className="min-h-screen bg-[var(--background)] p-4">
       <div className="mx-auto max-w-2xl space-y-6">
         <div className="flex items-center gap-4">
           <Link
             href="/webapp/temperature"
-            className="rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-3 text-white transition-colors hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/10"
+            className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-3 text-[var(--foreground)] transition-colors hover:border-[var(--primary)]/50 hover:bg-[var(--primary)]/10"
           >
             <Icon icon={ArrowLeft} size="md" />
           </Link>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold text-white">{equipment.name}</h1>
-            {equipment.location && <p className="text-sm text-gray-400">{equipment.location}</p>}
+            <h1 className="text-2xl font-bold text-[var(--foreground)]">{equipment.name}</h1>
+            {equipment.location && <p className="text-sm text-[var(--foreground-muted)]">{equipment.location}</p>}
           </div>
         </div>
-        <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
+        <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
           <div className="mb-6 flex items-center gap-4">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-              <Icon icon={Thermometer} size="xl" className="text-[#29E7CD]" />
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
+              <Icon icon={Thermometer} size="xl" className="text-[var(--primary)]" />
             </div>
             <div className="flex-1">
-              <h2 className="text-xl font-bold text-white">{equipment.equipment_type}</h2>
-              <p className="text-sm text-gray-400">Temperature Range</p>
+              <h2 className="text-xl font-bold text-[var(--foreground)]">{equipment.equipment_type}</h2>
+              <p className="text-sm text-[var(--foreground-muted)]">Temperature Range</p>
             </div>
           </div>
 
           <div className="space-y-4">
             <div>
-              <p className="mb-2 text-sm text-gray-400">Temperature Range</p>
+              <p className="mb-2 text-sm text-[var(--foreground-muted)]">Temperature Range</p>
               {equipment.min_temp_celsius !== null && equipment.max_temp_celsius !== null ? (
-                <p className="text-lg font-semibold text-[#29E7CD]">
+                <p className="text-lg font-semibold text-[var(--primary)]">
                   {equipment.min_temp_celsius}°C - {equipment.max_temp_celsius}°C
                 </p>
               ) : equipment.min_temp_celsius !== null ? (
-                <p className="text-lg font-semibold text-[#29E7CD]">
+                <p className="text-lg font-semibold text-[var(--primary)]">
                   ≥{equipment.min_temp_celsius}°C
                 </p>
               ) : (
-                <p className="text-sm text-gray-500">Not set</p>
+                <p className="text-sm text-[var(--foreground-subtle)]">Not set</p>
               )}
             </div>
 
             <div>
-              <p className="mb-2 text-sm text-gray-400">Status</p>
+              <p className="mb-2 text-sm text-[var(--foreground-muted)]">Status</p>
               <div className="flex items-center gap-2">
                 <div
-                  className={`h-3 w-3 rounded-full ${status.color === 'green' ? 'bg-green-500' : status.color === 'red' ? 'bg-red-500' : 'bg-gray-500'}`}
+                  className={`h-3 w-3 rounded-full ${status.color === 'green' ? 'bg-[var(--color-success)]' : status.color === 'red' ? 'bg-[var(--color-error)]' : 'bg-gray-500'}`}
                 />
                 <p
-                  className={`font-semibold ${status.color === 'green' ? 'text-green-400' : status.color === 'red' ? 'text-red-400' : 'text-gray-400'}`}
+                  className={`font-semibold ${status.color === 'green' ? 'text-[var(--color-success)]' : status.color === 'red' ? 'text-[var(--color-error)]' : 'text-[var(--foreground-muted)]'}`}
                 >
                   {status.label}
                 </p>
@@ -233,11 +233,11 @@ export default function EquipmentPage() {
             </div>
           </div>
         </div>
-        <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-          <h2 className="mb-4 text-xl font-bold text-white">Log Temperature</h2>
+        <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
+          <h2 className="mb-4 text-xl font-bold text-[var(--foreground)]">Log Temperature</h2>
           <form onSubmit={handleSubmitTemperature} className="space-y-4">
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
                 Temperature (°C)
               </label>
               <input
@@ -246,60 +246,60 @@ export default function EquipmentPage() {
                 value={temperature}
                 onChange={e => setTemperature(e.target.value)}
                 required
-                className="w-full rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-lg text-white transition-all focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-lg text-[var(--foreground)] transition-all focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
                 placeholder="Enter temperature"
               />
             </div>
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
                 Notes (Optional)
               </label>
               <textarea
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
                 rows={3}
-                className="w-full rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white transition-all focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--foreground)] transition-all focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
                 placeholder="Add any notes..."
               />
             </div>
             <button
               type="submit"
               disabled={submitting || !temperature}
-              className="w-full rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-4 font-semibold text-black transition-all hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-4 font-semibold text-[var(--button-active-text)] transition-all hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {submitting ? 'Logging...' : 'Log Temperature'}
             </button>
           </form>
         </div>
         {recentLogs.length > 0 && (
-          <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-            <h2 className="mb-4 text-xl font-bold text-white">Recent Logs</h2>
+          <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
+            <h2 className="mb-4 text-xl font-bold text-[var(--foreground)]">Recent Logs</h2>
             <div className="space-y-3">
               {recentLogs.map(log => {
                 const logStatus = getTemperatureStatus(log.temperature_celsius);
                 return (
-                  <div key={log.id} className="rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] p-4">
+                  <div key={log.id} className="rounded-xl border border-[var(--border)] bg-[var(--background)] p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-lg font-semibold text-white">
+                        <p className="text-lg font-semibold text-[var(--foreground)]">
                           {log.temperature_celsius.toFixed(1)}°C
                         </p>
-                        <p className="text-sm text-gray-400">
+                        <p className="text-sm text-[var(--foreground-muted)]">
                           {formatDate(new Date(`${log.log_date}T${log.log_time}`))}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
                         <div
-                          className={`h-2 w-2 rounded-full ${logStatus.color === 'green' ? 'bg-green-500' : logStatus.color === 'red' ? 'bg-red-500' : 'bg-gray-500'}`}
+                          className={`h-2 w-2 rounded-full ${logStatus.color === 'green' ? 'bg-[var(--color-success)]' : logStatus.color === 'red' ? 'bg-[var(--color-error)]' : 'bg-gray-500'}`}
                         />
                         <span
-                          className={`text-xs font-semibold ${logStatus.color === 'green' ? 'text-green-400' : logStatus.color === 'red' ? 'text-red-400' : 'text-gray-400'}`}
+                          className={`text-xs font-semibold ${logStatus.color === 'green' ? 'text-[var(--color-success)]' : logStatus.color === 'red' ? 'text-[var(--color-error)]' : 'text-[var(--foreground-muted)]'}`}
                         >
                           {logStatus.label}
                         </span>
                       </div>
                     </div>
-                    {log.notes && <p className="mt-2 text-sm text-gray-400">{log.notes}</p>}
+                    {log.notes && <p className="mt-2 text-sm text-[var(--foreground-muted)]">{log.notes}</p>}
                   </div>
                 );
               })}

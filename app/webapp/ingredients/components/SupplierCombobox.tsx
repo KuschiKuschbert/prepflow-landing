@@ -151,7 +151,7 @@ export function SupplierCombobox({
         <Icon
           icon={Store}
           size="sm"
-          className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"
+          className="absolute top-1/2 left-3 -translate-y-1/2 text-[var(--foreground-muted)]"
           aria-hidden={true}
         />
         <input
@@ -166,12 +166,12 @@ export function SupplierCombobox({
           onFocus={() => setIsOpen(true)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-10 py-2 pr-10 text-sm text-white transition-all focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+          className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-10 py-2 pr-10 text-sm text-[var(--foreground)] transition-all focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
         />
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="absolute top-1/2 right-2 -translate-y-1/2 rounded-lg p-1 text-gray-400 transition-colors hover:text-white"
+          className="absolute top-1/2 right-2 -translate-y-1/2 rounded-lg p-1 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
           aria-label="Toggle dropdown"
         >
           <Icon icon={ChevronDown} size="sm" aria-hidden={true} />
@@ -179,7 +179,7 @@ export function SupplierCombobox({
       </div>
 
       {isOpen && (
-        <div className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
+        <div className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-lg">
           {filteredSuppliers.length > 0 ? (
             <div className="py-1">
               {filteredSuppliers.map((supplier, index) => {
@@ -189,9 +189,9 @@ export function SupplierCombobox({
                     key={supplier.id}
                     type="button"
                     onClick={() => handleSelect(supplierName)}
-                    className={`w-full px-4 py-2 text-left text-sm text-white transition-colors hover:bg-[#2a2a2a] ${
-                      highlightedIndex === index ? 'bg-[#2a2a2a]' : ''
-                    } ${value === supplierName ? 'bg-[#29E7CD]/20' : ''}`}
+                    className={`w-full px-4 py-2 text-left text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)] ${
+                      highlightedIndex === index ? 'bg-[var(--muted)]' : ''
+                    } ${value === supplierName ? 'bg-[var(--primary)]/20' : ''}`}
                   >
                     {supplierName}
                   </button>
@@ -203,8 +203,8 @@ export function SupplierCombobox({
             <button
               type="button"
               onClick={() => handleAddNew(searchQuery.trim())}
-              className={`w-full px-4 py-2 text-left text-sm text-[#29E7CD] transition-colors hover:bg-[#2a2a2a] ${
-                highlightedIndex === filteredSuppliers.length ? 'bg-[#2a2a2a]' : ''
+              className={`w-full px-4 py-2 text-left text-sm text-[var(--primary)] transition-colors hover:bg-[var(--muted)] ${
+                highlightedIndex === filteredSuppliers.length ? 'bg-[var(--muted)]' : ''
               }`}
             >
               <div className="flex items-center space-x-2">

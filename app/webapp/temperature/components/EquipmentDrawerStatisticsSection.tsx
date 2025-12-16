@@ -34,8 +34,8 @@ export function EquipmentDrawerStatisticsSection({
 
   if (logs.length === 0) {
     return (
-      <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center shadow-lg">
-        <p className="text-gray-400">
+      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center shadow-lg">
+        <p className="text-[var(--foreground-muted)]">
           {t('temperature.noLogsForEquipment', 'No temperature logs found for this equipment')}
         </p>
       </div>

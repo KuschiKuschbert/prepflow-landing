@@ -9,9 +9,9 @@ interface WizardErrorDisplayProps {
 export function WizardErrorDisplay({ error }: WizardErrorDisplayProps) {
   if (!error) return null;
   return (
-    <div className="mb-3 rounded-lg border border-red-500 bg-red-900/20 px-3 py-2 text-sm text-red-400">
+    <div className="mb-3 rounded-lg border border-[var(--color-error)] bg-red-900/20 px-3 py-2 text-sm text-[var(--color-error)]">
       <div className="flex items-center space-x-2">
-        <Icon icon={AlertTriangle} size="md" className="text-red-400" aria-hidden={true} />
+        <Icon icon={AlertTriangle} size="md" className="text-[var(--color-error)]" aria-hidden={true} />
         <span>{error}</span>
       </div>
     </div>

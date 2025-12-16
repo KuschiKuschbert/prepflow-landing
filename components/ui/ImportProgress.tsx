@@ -59,14 +59,14 @@ export function ImportProgress({
   }, [progress.errors]);
 
   return (
-    <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
+    <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
       {/* Header */}
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-white">{title}</h3>
+        <h3 className="text-lg font-semibold text-[var(--foreground)]">{title}</h3>
         {onCancel && !progress.isComplete && (
           <button
             onClick={onCancel}
-            className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+            className="rounded-lg p-1.5 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
             aria-label="Cancel import"
           >
             <Icon icon={X} size="sm" aria-hidden={true} />
@@ -77,14 +77,14 @@ export function ImportProgress({
       {/* Progress Bar */}
       <div className="mb-4">
         <div className="mb-2 flex items-center justify-between text-sm">
-          <span className="text-gray-300">
+          <span className="text-[var(--foreground-secondary)]">
             {progress.processed} of {progress.total} processed
           </span>
-          <span className="text-gray-400">{Math.round(progressPercent)}%</span>
+          <span className="text-[var(--foreground-muted)]">{Math.round(progressPercent)}%</span>
         </div>
-        <div className="h-2 overflow-hidden rounded-full bg-[#2a2a2a]">
+        <div className="h-2 overflow-hidden rounded-full bg-[var(--muted)]">
           <div
-            className="h-full bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] transition-all duration-300"
+            className="h-full bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] transition-all duration-300"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -92,31 +92,31 @@ export function ImportProgress({
 
       {/* Current Item */}
       {progress.currentItem && !progress.isComplete && (
-        <div className="mb-4 text-sm text-gray-400">
+        <div className="mb-4 text-sm text-[var(--foreground-muted)]">
           <span className="font-medium">Processing:</span> {progress.currentItem}
         </div>
       )}
 
       {/* Status Summary */}
       <div className="mb-4 grid grid-cols-3 gap-4">
-        <div className="rounded-lg bg-[#2a2a2a]/50 p-3">
-          <div className="text-2xl font-bold text-white">{progress.processed}</div>
-          <div className="text-xs text-gray-400">Processed</div>
+        <div className="rounded-lg bg-[var(--muted)]/50 p-3">
+          <div className="text-2xl font-bold text-[var(--foreground)]">{progress.processed}</div>
+          <div className="text-xs text-[var(--foreground-muted)]">Processed</div>
         </div>
-        <div className="rounded-lg bg-green-500/10 p-3">
+        <div className="rounded-lg bg-[var(--color-success)]/10 p-3">
           <div className="flex items-center gap-1.5">
-            <Icon icon={CheckCircle2} size="sm" className="text-green-400" aria-hidden={true} />
-            <span className="text-2xl font-bold text-green-400">{progress.successful}</span>
+            <Icon icon={CheckCircle2} size="sm" className="text-[var(--color-success)]" aria-hidden={true} />
+            <span className="text-2xl font-bold text-[var(--color-success)]">{progress.successful}</span>
           </div>
-          <div className="text-xs text-gray-400">Successful</div>
+          <div className="text-xs text-[var(--foreground-muted)]">Successful</div>
         </div>
         {progress.failed > 0 && (
-          <div className="rounded-lg bg-red-500/10 p-3">
+          <div className="rounded-lg bg-[var(--color-error)]/10 p-3">
             <div className="flex items-center gap-1.5">
-              <Icon icon={AlertCircle} size="sm" className="text-red-400" aria-hidden={true} />
-              <span className="text-2xl font-bold text-red-400">{progress.failed}</span>
+              <Icon icon={AlertCircle} size="sm" className="text-[var(--color-error)]" aria-hidden={true} />
+              <span className="text-2xl font-bold text-[var(--color-error)]">{progress.failed}</span>
             </div>
-            <div className="text-xs text-gray-400">Failed</div>
+            <div className="text-xs text-[var(--foreground-muted)]">Failed</div>
           </div>
         )}
       </div>
@@ -124,17 +124,17 @@ export function ImportProgress({
       {/* Errors List */}
       {progress.errors && progress.errors.length > 0 && (
         <div className="mt-4">
-          <div className="mb-2 flex items-center gap-2 text-sm font-medium text-red-400">
+          <div className="mb-2 flex items-center gap-2 text-sm font-medium text-[var(--color-error)]">
             <Icon icon={AlertCircle} size="sm" aria-hidden={true} />
             <span>Errors ({progress.errors.length})</span>
           </div>
           <div
             ref={progressRef}
-            className="max-h-40 overflow-y-auto rounded-lg bg-[#2a2a2a]/50 p-3"
+            className="max-h-40 overflow-y-auto rounded-lg bg-[var(--muted)]/50 p-3"
           >
             <div className="space-y-1 text-xs">
               {progress.errors.map((error, index) => (
-                <div key={index} className="text-red-400">
+                <div key={index} className="text-[var(--color-error)]">
                   <span className="font-medium">Row {error.row}:</span> {error.error}
                 </div>
               ))}
@@ -145,8 +145,8 @@ export function ImportProgress({
 
       {/* Completion Message */}
       {progress.isComplete && (
-        <div className="mt-4 rounded-lg bg-green-500/10 p-3">
-          <div className="flex items-center gap-2 text-sm text-green-400">
+        <div className="mt-4 rounded-lg bg-[var(--color-success)]/10 p-3">
+          <div className="flex items-center gap-2 text-sm text-[var(--color-success)]">
             <Icon icon={CheckCircle2} size="sm" aria-hidden={true} />
             <span className="font-medium">
               Import complete! {progress.successful} items imported successfully.

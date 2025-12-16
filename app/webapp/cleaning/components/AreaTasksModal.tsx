@@ -105,9 +105,9 @@ export function AreaTasksModal({
       aria-modal="true"
       aria-labelledby="area-tasks-modal-title"
     >
-      <div className="tablet:max-w-lg desktop:max-w-2xl tablet:mx-0 relative mx-2 mb-8 w-full max-w-full rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-xl">
+      <div className="tablet:max-w-lg desktop:max-w-2xl tablet:mx-0 relative mx-2 mb-8 w-full max-w-full rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-xl">
         <div
-          className="flex w-full flex-col rounded-3xl bg-[#1f1f1f]/95"
+          className="flex w-full flex-col rounded-3xl bg-[var(--surface)]/95"
           onClick={e => e.stopPropagation()}
         >
           <AreaTasksModalHeader
@@ -119,7 +119,7 @@ export function AreaTasksModal({
           <div className="tablet:p-5 tablet:max-h-[65vh] desktop:max-h-[70vh] max-h-[60vh] flex-1 overflow-y-auto p-4">
             {loading ? (
               <div className="flex items-center justify-center py-8">
-                <div className="text-gray-400">Loading tasks...</div>
+                <div className="text-[var(--foreground-muted)]">Loading tasks...</div>
               </div>
             ) : tasks.length === 0 ? (
               <EmptyTasksState onCreateTask={() => onCreateTask(area.id)} />
@@ -143,13 +143,13 @@ export function AreaTasksModal({
             )}
           </div>
 
-          <div className="tablet:px-5 tablet:py-3 border-t border-[#2a2a2a] bg-[#1f1f1f] px-4 py-2.5">
-            <div className="tablet:text-sm flex items-center justify-between text-xs text-gray-500">
+          <div className="tablet:px-5 tablet:py-3 border-t border-[var(--border)] bg-[var(--surface)] px-4 py-2.5">
+            <div className="tablet:text-sm flex items-center justify-between text-xs text-[var(--foreground-subtle)]">
               <span>
                 {tasks.length} {tasks.length === 1 ? 'task' : 'tasks'}
               </span>
               <span className="desktop:inline hidden">
-                Press <kbd className="rounded bg-[#2a2a2a] px-2 py-1 text-xs">Esc</kbd> to close
+                Press <kbd className="rounded bg-[var(--muted)] px-2 py-1 text-xs">Esc</kbd> to close
               </span>
             </div>
           </div>

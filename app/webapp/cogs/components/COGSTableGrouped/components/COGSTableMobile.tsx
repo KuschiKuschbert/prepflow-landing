@@ -48,33 +48,33 @@ export function COGSTableMobile({
               {/* Recipe Header */}
               <button
                 onClick={() => onToggleRecipe(group.recipeId)}
-                className="flex w-full items-center justify-between rounded-lg border border-[#29E7CD]/20 bg-[#29E7CD]/5 p-3 transition-colors hover:bg-[#29E7CD]/10"
+                className="flex w-full items-center justify-between rounded-lg border border-[var(--primary)]/20 bg-[var(--primary)]/5 p-3 transition-colors hover:bg-[var(--primary)]/10"
               >
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-2">
-                    <Icon icon={ChefHat} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
-                    <span className="font-semibold text-white">
+                    <Icon icon={ChefHat} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+                    <span className="font-semibold text-[var(--foreground)]">
                       {group.recipeName} ({group.quantity}x)
                     </span>
-                    <span className="text-sm text-gray-400">
+                    <span className="text-sm text-[var(--foreground-muted)]">
                       ${(group.totalCost / dishPortions).toFixed(2)}
                     </span>
                   </div>
-                  <div className="ml-6 text-xs text-gray-500">
+                  <div className="ml-6 text-xs text-[var(--foreground-subtle)]">
                     Recipe yield: {group.yield} {group.yieldUnit} (ingredients shown per portion)
                   </div>
                 </div>
                 <Icon
                   icon={isExpanded ? ChevronUp : ChevronDown}
                   size="sm"
-                  className="text-[#29E7CD]"
+                  className="text-[var(--primary)]"
                   aria-hidden={true}
                 />
               </button>
 
               {/* Recipe Ingredients */}
               {isExpanded && (
-                <div className="ml-4 space-y-2 border-l-2 border-[#29E7CD]/20 pl-4">
+                <div className="ml-4 space-y-2 border-l-2 border-[var(--primary)]/20 pl-4">
                   {group.calculations.map((calc, index) => (
                     <COGSTableMobileCard
                       key={`${calc.recipeId}-${calc.ingredientId || calc.id || index}`}
@@ -98,8 +98,8 @@ export function COGSTableMobile({
         {/* Standalone Ingredients */}
         {standaloneCalculations.length > 0 && (
           <div className="space-y-2">
-            <div className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
-              <h4 className="text-sm font-semibold text-white">Standalone Ingredients</h4>
+            <div className="rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 p-3">
+              <h4 className="text-sm font-semibold text-[var(--foreground)]">Standalone Ingredients</h4>
             </div>
             {standaloneCalculations.map((calc, index) => (
               <COGSTableMobileCard

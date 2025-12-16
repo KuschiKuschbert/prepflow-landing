@@ -33,7 +33,7 @@ export function FilterDropdown({
         className={`tablet:w-auto flex w-full items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-200 ${
           value
             ? `${activeColor} ${activeBg}`
-            : 'border-[#2a2a2a] bg-[#0a0a0a]/80 text-gray-300 hover:border-[#2a2a2a] hover:bg-[#1f1f1f]'
+            : 'border-[var(--border)] bg-[var(--background)]/80 text-[var(--foreground-secondary)] hover:border-[var(--border)] hover:bg-[var(--surface)]'
         }`}
       >
         <Icon icon={icon} size="sm" className="text-current" aria-hidden={true} />
@@ -48,7 +48,7 @@ export function FilterDropdown({
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={onToggle} aria-hidden={true} />
-          <div className="absolute top-full left-0 z-50 mt-1.5 max-h-60 w-56 overflow-y-auto rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-xl">
+          <div className="absolute top-full left-0 z-50 mt-1.5 max-h-60 w-56 overflow-y-auto rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-xl">
             <div className="p-1.5">
               <button
                 onClick={() => {
@@ -56,7 +56,7 @@ export function FilterDropdown({
                   onToggle();
                 }}
                 className={`w-full rounded-md px-2.5 py-1.5 text-left text-sm transition-colors ${
-                  !value ? `${activeBg} ${activeColor}` : 'text-gray-300 hover:bg-[#2a2a2a]'
+                  !value ? `${activeBg} ${activeColor}` : 'text-[var(--foreground-secondary)] hover:bg-[var(--muted)]'
                 }`}
               >
                 All {label}s
@@ -71,7 +71,7 @@ export function FilterDropdown({
                   className={`w-full rounded-md px-2.5 py-1.5 text-left text-sm transition-colors ${
                     value === option
                       ? `${activeBg} ${activeColor}`
-                      : 'text-gray-300 hover:bg-[#2a2a2a]'
+                      : 'text-[var(--foreground-secondary)] hover:bg-[var(--muted)]'
                   }`}
                 >
                   {option}

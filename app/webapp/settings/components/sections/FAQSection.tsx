@@ -44,11 +44,11 @@ function FAQItemComponent({ item, isExpanded, onToggle }: FAQItemComponentProps)
   };
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] transition-colors hover:border-[#2a2a2a]/60">
+    <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] transition-colors hover:border-[var(--border)]/60">
       <button
         onClick={onToggle}
         onKeyDown={handleKeyDown}
-        className="flex w-full items-center justify-between px-6 py-4 text-left focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+        className="flex w-full items-center justify-between px-6 py-4 text-left focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
         aria-expanded={isExpanded}
         aria-controls={`faq-answer-${item.id}`}
       >
@@ -56,15 +56,15 @@ function FAQItemComponent({ item, isExpanded, onToggle }: FAQItemComponentProps)
           <Icon
             icon={HelpCircle}
             size="md"
-            className="mt-0.5 flex-shrink-0 text-[#29E7CD]"
+            className="mt-0.5 flex-shrink-0 text-[var(--primary)]"
             aria-hidden={true}
           />
-          <span className="font-medium text-white">{item.question}</span>
+          <span className="font-medium text-[var(--foreground)]">{item.question}</span>
         </div>
         <Icon
           icon={ChevronDown}
           size="sm"
-          className={`ml-4 flex-shrink-0 text-gray-400 transition-transform duration-300 ${
+          className={`ml-4 flex-shrink-0 text-[var(--foreground-muted)] transition-transform duration-300 ${
             isExpanded ? 'rotate-180' : ''
           }`}
           aria-hidden={true}
@@ -80,7 +80,7 @@ function FAQItemComponent({ item, isExpanded, onToggle }: FAQItemComponentProps)
       >
         <div ref={contentRef} className="px-6 pb-4">
           <div className="pl-9">
-            <p className="text-sm leading-relaxed text-gray-300">{item.answer}</p>
+            <p className="text-sm leading-relaxed text-[var(--foreground-secondary)]">{item.answer}</p>
           </div>
         </div>
       </div>
@@ -207,8 +207,8 @@ export function FAQSection() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-semibold text-white">Frequently Asked Questions</h2>
-        <p className="mt-1 text-sm text-gray-400">
+        <h2 className="text-xl font-semibold text-[var(--foreground)]">Frequently Asked Questions</h2>
+        <p className="mt-1 text-sm text-[var(--foreground-muted)]">
           Find answers to common questions about using PrepFlow and managing your restaurant data.
         </p>
       </div>
@@ -219,8 +219,8 @@ export function FAQSection() {
           onClick={() => setActiveCategory('all')}
           className={`rounded-xl px-4 py-2 text-sm font-medium transition-colors ${
             activeCategory === 'all'
-              ? 'border border-[#29E7CD]/30 bg-[#29E7CD]/10 text-[#29E7CD]'
-              : 'border border-[#2a2a2a] bg-[#2a2a2a]/40 text-gray-300 hover:bg-[#2a2a2a]/60'
+              ? 'border border-[var(--primary)]/30 bg-[var(--primary)]/10 text-[var(--primary)]'
+              : 'border border-[var(--border)] bg-[var(--muted)]/40 text-[var(--foreground-secondary)] hover:bg-[var(--muted)]/60'
           }`}
         >
           All Questions
@@ -229,8 +229,8 @@ export function FAQSection() {
           onClick={() => setActiveCategory('webapp')}
           className={`rounded-xl px-4 py-2 text-sm font-medium transition-colors ${
             activeCategory === 'webapp'
-              ? 'border border-[#29E7CD]/30 bg-[#29E7CD]/10 text-[#29E7CD]'
-              : 'border border-[#2a2a2a] bg-[#2a2a2a]/40 text-gray-300 hover:bg-[#2a2a2a]/60'
+              ? 'border border-[var(--primary)]/30 bg-[var(--primary)]/10 text-[var(--primary)]'
+              : 'border border-[var(--border)] bg-[var(--muted)]/40 text-[var(--foreground-secondary)] hover:bg-[var(--muted)]/60'
           }`}
         >
           Webapp Usage
@@ -239,8 +239,8 @@ export function FAQSection() {
           onClick={() => setActiveCategory('general')}
           className={`rounded-xl px-4 py-2 text-sm font-medium transition-colors ${
             activeCategory === 'general'
-              ? 'border border-[#29E7CD]/30 bg-[#29E7CD]/10 text-[#29E7CD]'
-              : 'border border-[#2a2a2a] bg-[#2a2a2a]/40 text-gray-300 hover:bg-[#2a2a2a]/60'
+              ? 'border border-[var(--primary)]/30 bg-[var(--primary)]/10 text-[var(--primary)]'
+              : 'border border-[var(--border)] bg-[var(--muted)]/40 text-[var(--foreground-secondary)] hover:bg-[var(--muted)]/60'
           }`}
         >
           General
@@ -260,22 +260,22 @@ export function FAQSection() {
       </div>
 
       {/* Help Link */}
-      <div className="mt-8 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+      <div className="mt-8 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
         <div className="flex items-start gap-4">
           <Icon
             icon={HelpCircle}
             size="lg"
-            className="flex-shrink-0 text-[#29E7CD]"
+            className="flex-shrink-0 text-[var(--primary)]"
             aria-hidden={true}
           />
           <div>
-            <h3 className="mb-2 font-semibold text-white">Still have questions?</h3>
-            <p className="mb-4 text-sm text-gray-400">
+            <h3 className="mb-2 font-semibold text-[var(--foreground)]">Still have questions?</h3>
+            <p className="mb-4 text-sm text-[var(--foreground-muted)]">
               Can&apos;t find what you&apos;re looking for? Contact our support team for help.
             </p>
             <a
               href="mailto:hello@prepflow.org?subject=PrepFlow Support"
-              className="inline-flex items-center gap-2 rounded-xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-4 py-2 text-sm font-medium text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/20"
+              className="inline-flex items-center gap-2 rounded-xl border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-4 py-2 text-sm font-medium text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/20"
             >
               Contact Support
             </a>

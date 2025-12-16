@@ -79,20 +79,20 @@ export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuM
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-2xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px]">
-        <div className="rounded-3xl bg-[#1f1f1f]/95 p-6">
+      <div className="w-full max-w-2xl rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px]">
+        <div className="rounded-3xl bg-[var(--surface)]/95 p-6">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-                <Icon icon={ChefHat} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20">
+                <Icon icon={ChefHat} size="md" className="text-[var(--primary)]" aria-hidden={true} />
               </div>
-              <h2 className="text-xl font-semibold text-white">
+              <h2 className="text-xl font-semibold text-[var(--button-active-text)]">
                 {t('prepLists.generateFromMenu', 'Generate Prep List from Menu')}
               </h2>
             </div>
             <button
               onClick={onClose}
-              className="p-2 text-gray-400 transition-colors hover:text-white"
+              className="p-2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
               aria-label="Close"
             >
               <Icon icon={X} size="md" aria-hidden={true} />
@@ -100,24 +100,24 @@ export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuM
           </div>
 
           {error && (
-            <div className="mb-4 rounded-xl border border-red-400/20 bg-red-400/10 p-3">
-              <p className="text-sm text-red-400">{error}</p>
+            <div className="mb-4 rounded-xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-3">
+              <p className="text-sm text-[var(--color-error)]">{error}</p>
             </div>
           )}
 
           <div className="space-y-4">
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
                 {t('prepLists.selectMenu', 'Select Menu')}
               </label>
               {fetchingMenus ? (
-                <div className="flex items-center justify-center rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-8">
-                  <Loader2 className="h-5 w-5 animate-spin text-[#29E7CD]" />
-                  <span className="ml-2 text-sm text-gray-400">Loading menus...</span>
+                <div className="flex items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-8">
+                  <Loader2 className="h-5 w-5 animate-spin text-[var(--primary)]" />
+                  <span className="ml-2 text-sm text-[var(--foreground-muted)]">Loading menus...</span>
                 </div>
               ) : menus.length === 0 ? (
-                <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-8 text-center">
-                  <p className="text-sm text-gray-400">No menus found. Create a menu first.</p>
+                <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-8 text-center">
+                  <p className="text-sm text-[var(--foreground-muted)]">No menus found. Create a menu first.</p>
                 </div>
               ) : (
                 <select
@@ -126,7 +126,7 @@ export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuM
                     setSelectedMenuId(e.target.value);
                     setError(null);
                   }}
-                  className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                 >
                   <option value="">
                     {t('prepLists.selectMenuPlaceholder', 'Choose a menu...')}
@@ -141,8 +141,8 @@ export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuM
             </div>
 
             {selectedMenu && (
-              <div className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
-                <p className="text-sm text-gray-400">
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
+                <p className="text-sm text-[var(--foreground-muted)]">
                   {t(
                     'prepLists.menuInfo',
                     'This will generate prep lists for all recipes and dishes in the selected menu, grouped by kitchen section.',
@@ -156,7 +156,7 @@ export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuM
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-xl bg-[#2a2a2a] px-4 py-3 text-gray-300 transition-colors hover:bg-[#2a2a2a]/80"
+              className="flex-1 rounded-xl bg-[var(--muted)] px-4 py-3 text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/80"
             >
               {t('prepLists.cancel', 'Cancel')}
             </button>
@@ -164,7 +164,7 @@ export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuM
               type="button"
               onClick={handleGenerate}
               disabled={!selectedMenuId || loading || fetchingMenus}
-              className="flex-1 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex-1 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? (
                 <span className="flex items-center justify-center">

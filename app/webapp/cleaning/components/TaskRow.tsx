@@ -80,9 +80,9 @@ const TaskCell = React.memo(function TaskCell({
   return (
     <div
       onClick={handleClick}
-      className={`group relative z-0 flex flex-1 cursor-pointer items-center justify-center border-r border-[#2a2a2a] px-2 py-3 transition-all duration-200 ${
+      className={`group relative z-0 flex flex-1 cursor-pointer items-center justify-center border-r border-[var(--border)] px-2 py-3 transition-all duration-200 ${
         isClickable
-          ? 'hover:bg-[#2a2a2a]/40 active:bg-[#2a2a2a]/60'
+          ? 'hover:bg-[var(--muted)]/40 active:bg-[var(--muted)]/60'
           : 'cursor-not-allowed opacity-30'
       }`}
       title={
@@ -98,11 +98,11 @@ const TaskCell = React.memo(function TaskCell({
       {status.shouldAppear && (
         <>
           {status.isCompleted ? (
-            <Icon icon={CheckCircle2} size="md" className="text-green-400" aria-label="Completed" />
+            <Icon icon={CheckCircle2} size="md" className="text-[var(--color-success)]" aria-label="Completed" />
           ) : status.isOverdue ? (
-            <Icon icon={AlertTriangle} size="md" className="text-red-400" aria-label="Overdue" />
+            <Icon icon={AlertTriangle} size="md" className="text-[var(--color-error)]" aria-label="Overdue" />
           ) : (
-            <Icon icon={Circle} size="md" className="text-gray-500" aria-label="Pending" />
+            <Icon icon={Circle} size="md" className="text-[var(--foreground-subtle)]" aria-label="Pending" />
           )}
         </>
       )}
@@ -142,15 +142,15 @@ function TaskRow({ task, dates, onToggleCompletion }: TaskRowProps) {
   }, [task]);
 
   return (
-    <div className="flex border-b border-[#2a2a2a] transition-colors hover:bg-[#2a2a2a]/20">
+    <div className="flex border-b border-[var(--border)] transition-colors hover:bg-[var(--muted)]/20">
       {/* Task name column - sticky */}
-      <div className="desktop:min-w-[280px] desktop:max-w-[280px] sticky left-0 z-10 max-w-[220px] min-w-[220px] border-r border-[#2a2a2a] bg-[#1f1f1f] px-4 py-3">
+      <div className="desktop:min-w-[280px] desktop:max-w-[280px] sticky left-0 z-10 max-w-[220px] min-w-[220px] border-r border-[var(--border)] bg-[var(--surface)] px-4 py-3">
         <div className="flex flex-col gap-2">
           {/* Badges row */}
           <div className="flex flex-wrap items-center gap-2">
             {taskMetadata.areaName && (
               <div
-                className="flex h-6 items-center justify-center rounded-full bg-[#29E7CD]/10 px-2 text-xs text-[#29E7CD]"
+                className="flex h-6 items-center justify-center rounded-full bg-[var(--primary)]/10 px-2 text-xs text-[var(--primary)]"
                 title="Area"
               >
                 {taskMetadata.areaName}
@@ -158,7 +158,7 @@ function TaskRow({ task, dates, onToggleCompletion }: TaskRowProps) {
             )}
             {taskMetadata.hasEquipment && (
               <div
-                className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500/10 text-xs text-blue-400"
+                className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-info)]/10 text-xs text-[var(--color-info)]"
                 title="Equipment"
               >
                 E
@@ -166,7 +166,7 @@ function TaskRow({ task, dates, onToggleCompletion }: TaskRowProps) {
             )}
             {taskMetadata.hasSection && (
               <div
-                className="flex h-6 w-6 items-center justify-center rounded-full bg-[#D925C7]/10 text-xs text-[#D925C7]"
+                className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--accent)]/10 text-xs text-[var(--accent)]"
                 title="Section"
               >
                 S
@@ -175,11 +175,11 @@ function TaskRow({ task, dates, onToggleCompletion }: TaskRowProps) {
           </div>
           {/* Task name - now wraps */}
           <div className="min-w-0">
-            <div className="leading-tight font-medium break-words text-white">
+            <div className="leading-tight font-medium break-words text-[var(--foreground)]">
               {taskMetadata.taskName}
             </div>
             {taskMetadata.frequencyType && (
-              <div className="mt-1 text-xs text-gray-400">{taskMetadata.frequencyType}</div>
+              <div className="mt-1 text-xs text-[var(--foreground-muted)]">{taskMetadata.frequencyType}</div>
             )}
           </div>
         </div>

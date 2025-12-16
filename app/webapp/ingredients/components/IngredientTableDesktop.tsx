@@ -72,9 +72,9 @@ export function IngredientTableDesktop({
   return (
     <div className="desktop:block hidden overflow-x-auto">
       <table className="w-full">
-        <thead className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
+        <thead className="bg-gradient-to-r from-[var(--muted)]/50 to-[var(--muted)]/20">
           <tr>
-            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
               <button
                 onClick={() => {
                   const allSelected =
@@ -86,7 +86,7 @@ export function IngredientTableDesktop({
                     onEnterSelectionMode();
                   }
                 }}
-                className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+                className="flex items-center justify-center transition-colors hover:text-[var(--primary)]"
                 aria-label={
                   totalFiltered !== undefined &&
                   selectedIngredients.size === totalFiltered &&
@@ -101,7 +101,7 @@ export function IngredientTableDesktop({
                     : selectedIngredients.size === ingredients.length && ingredients.length > 0
                 ) ? (
                   <svg
-                    className="h-4 w-4 text-[#29E7CD]"
+                    className="h-4 w-4 text-[var(--primary)]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -114,73 +114,73 @@ export function IngredientTableDesktop({
                     />
                   </svg>
                 ) : (
-                  <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+                  <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
                 )}
               </button>
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+            <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
               <button
                 onClick={() => handleColumnSort('name')}
-                className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                className="flex items-center gap-1 transition-colors hover:text-[var(--primary)]"
               >
                 Name
                 {getSortIcon('name')}
               </button>
             </th>
-            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
               <button
                 onClick={() => handleColumnSort('brand')}
-                className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                className="flex items-center gap-1 transition-colors hover:text-[var(--primary)]"
               >
                 Brand
                 {getSortIcon('brand')}
               </button>
             </th>
-            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
               <button
                 onClick={() => handleColumnSort('pack_size')}
-                className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                className="flex items-center gap-1 transition-colors hover:text-[var(--primary)]"
               >
                 Pack Size
                 {getSortIcon('pack_size')}
               </button>
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+            <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
               <button
                 onClick={() => handleColumnSort('cost')}
-                className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                className="flex items-center gap-1 transition-colors hover:text-[var(--primary)]"
               >
                 Cost/Unit
                 {getSortIcon('cost')}
               </button>
             </th>
-            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
               <button
                 onClick={() => handleColumnSort('supplier')}
-                className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                className="flex items-center gap-1 transition-colors hover:text-[var(--primary)]"
               >
                 Supplier
                 {getSortIcon('supplier')}
               </button>
             </th>
-            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
               <button
                 onClick={() => handleColumnSort('stock')}
-                className="flex items-center gap-1 transition-colors hover:text-[#29E7CD]"
+                className="flex items-center gap-1 transition-colors hover:text-[var(--primary)]"
               >
                 Stock
                 {getSortIcon('stock')}
               </button>
             </th>
-            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+            <th className="desktop:table-cell hidden px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
               Created
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+            <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
               Actions
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-[#2a2a2a]">
+        <tbody className="divide-y divide-[var(--muted)]">
           {ingredients.map(ingredient => (
             <IngredientTableRow
               key={ingredient.id}

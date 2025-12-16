@@ -33,13 +33,13 @@ export function DeleteConfirmationModal({
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-md rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
-        <div className="rounded-2xl bg-[#1f1f1f]/95">
-          <div className="border-b border-[#2a2a2a] p-6">
+      <div className="w-full max-w-md rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl">
+        <div className="rounded-2xl bg-[var(--surface)]/95">
+          <div className="border-b border-[var(--border)] p-6">
             <div className="flex items-center">
-              <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#ef4444] to-[#dc2626]">
+              <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-error)] to-[#dc2626]">
                 <svg
-                  className="h-6 w-6 text-white"
+                  className="h-6 w-6 text-[var(--button-active-text)]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -53,29 +53,29 @@ export function DeleteConfirmationModal({
                 </svg>
               </div>
               <div>
-                <h3 className="text-xl font-bold text-white">
+                <h3 className="text-xl font-bold text-[var(--foreground)]">
                   Delete {itemTypeLabel.charAt(0).toUpperCase() + itemTypeLabel.slice(1)}
                 </h3>
-                <p className="text-sm text-gray-400">This action can&apos;t be undone</p>
+                <p className="text-sm text-[var(--foreground-muted)]">This action can&apos;t be undone</p>
               </div>
             </div>
           </div>
           <div className="p-6">
-            <p className="mb-6 text-gray-300">
+            <p className="mb-6 text-[var(--foreground-secondary)]">
               Are you sure you want to delete{' '}
-              <span className="font-semibold text-white">&quot;{displayName}&quot;</span>? This will
+              <span className="font-semibold text-[var(--foreground)]">&quot;{displayName}&quot;</span>? This will
               permanently remove the {itemTypeLabel} and all its associated data.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={onCancel}
-                className="flex-1 rounded-xl bg-[#2a2a2a] px-4 py-3 font-medium text-gray-300 transition-all duration-200 hover:bg-[#3a3a3a]"
+                className="flex-1 rounded-xl bg-[var(--surface)] px-4 py-3 font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:bg-[var(--muted)]"
               >
                 Cancel
               </button>
               <button
                 onClick={onConfirm}
-                className="flex-1 rounded-xl bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-4 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 hover:shadow-xl"
+                className="flex-1 rounded-xl bg-gradient-to-r from-[var(--color-error)] to-[#dc2626] px-4 py-3 font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--color-error)]/80 hover:to-[#dc2626]/80 hover:shadow-xl"
               >
                 Delete {itemTypeLabel.charAt(0).toUpperCase() + itemTypeLabel.slice(1)}
               </button>

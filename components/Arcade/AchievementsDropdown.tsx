@@ -125,15 +125,15 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative z-50 w-full max-w-md rounded-3xl border border-[#2a2a2a] bg-[#2E4053] p-6 shadow-2xl"
+            className="relative z-50 w-full max-w-md rounded-3xl border border-[var(--border)] bg-[#2E4053] p-6 shadow-2xl"
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-fluid-2xl font-bold text-white">🏆 Achievements</h2>
+              <h2 className="text-fluid-2xl font-bold text-[var(--foreground)]">🏆 Achievements</h2>
               <button
                 onClick={onClose}
-                className="rounded-full p-2 text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+                className="rounded-full p-2 text-[var(--foreground)]/80 transition-colors hover:bg-white/10 hover:text-[var(--foreground)]"
                 aria-label="Close achievements"
               >
                 ✕
@@ -141,13 +141,13 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
             </div>
 
             {/* Tabs */}
-            <div className="mb-6 flex gap-2 border-b border-[#2a2a2a]">
+            <div className="mb-6 flex gap-2 border-b border-[var(--border)]">
               <button
                 onClick={() => setActiveTab('arcade')}
                 className={`px-4 py-2 text-sm font-medium transition-colors ${
                   activeTab === 'arcade'
-                    ? 'border-b-2 border-[#29E7CD] text-[#29E7CD]'
-                    : 'text-gray-400 hover:text-white'
+                    ? 'border-b-2 border-[var(--primary)] text-[var(--primary)]'
+                    : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
                 }`}
               >
                 🎮 Arcade Games
@@ -156,8 +156,8 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
                 onClick={() => setActiveTab('achievements')}
                 className={`px-4 py-2 text-sm font-medium transition-colors ${
                   activeTab === 'achievements'
-                    ? 'border-b-2 border-[#29E7CD] text-[#29E7CD]'
-                    : 'text-gray-400 hover:text-white'
+                    ? 'border-b-2 border-[var(--primary)] text-[var(--primary)]'
+                    : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
                 }`}
               >
                 🏆 App Achievements ({achievementProgress.unlocked}/{achievementProgress.total})
@@ -168,36 +168,36 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
             {activeTab === 'arcade' && (
               <div className="space-y-4">
                 {/* Tomatoes */}
-                <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-4">
+                <div className="flex items-center justify-between rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-4">
                   <div className="flex items-center gap-3">
                     <span className="text-fluid-2xl">🍅</span>
                     <div>
-                      <div className="font-semibold text-white">Tomatoes Thrown</div>
-                      <div className="text-fluid-sm text-gray-400">Frustration splats.</div>
+                      <div className="font-semibold text-[var(--foreground)]">Tomatoes Thrown</div>
+                      <div className="text-fluid-sm text-[var(--foreground-muted)]">Frustration splats.</div>
                     </div>
                   </div>
                   <div className="text-fluid-2xl font-bold text-[#4CAF50]">{stats.tomatoes}</div>
                 </div>
 
                 {/* Dockets */}
-                <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-4">
+                <div className="flex items-center justify-between rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-4">
                   <div className="flex items-center gap-3">
                     <span className="text-fluid-2xl">🧾</span>
                     <div>
-                      <div className="font-semibold text-white">Dockets Caught</div>
-                      <div className="text-fluid-sm text-gray-400">Orders snatched.</div>
+                      <div className="font-semibold text-[var(--foreground)]">Dockets Caught</div>
+                      <div className="text-fluid-sm text-[var(--foreground-muted)]">Orders snatched.</div>
                     </div>
                   </div>
                   <div className="text-fluid-2xl font-bold text-[#4CAF50]">{stats.dockets}</div>
                 </div>
 
                 {/* Fires */}
-                <div className="flex items-center justify-between rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-4">
+                <div className="flex items-center justify-between rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-4">
                   <div className="flex items-center gap-3">
                     <span className="text-fluid-2xl">🔥</span>
                     <div>
-                      <div className="font-semibold text-white">Fires Extinguished</div>
-                      <div className="text-fluid-sm text-gray-400">Crises averted.</div>
+                      <div className="font-semibold text-[var(--foreground)]">Fires Extinguished</div>
+                      <div className="text-fluid-sm text-[var(--foreground-muted)]">Crises averted.</div>
                     </div>
                   </div>
                   <div className="text-fluid-2xl font-bold text-[#4CAF50]">{stats.fires}</div>
@@ -208,10 +208,10 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
             {activeTab === 'achievements' && (
               <div className="space-y-6">
                 {/* Overall Progress */}
-                <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-4">
+                <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-4">
                   <div className="mb-3 flex items-center justify-between">
-                    <h3 className="font-semibold text-white">Overall Progress</h3>
-                    <span className="text-sm text-gray-400">
+                    <h3 className="font-semibold text-[var(--foreground)]">Overall Progress</h3>
+                    <span className="text-sm text-[var(--foreground-muted)]">
                       {achievementProgress.unlocked} / {achievementProgress.total}
                     </span>
                   </div>
@@ -222,7 +222,7 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
                     showPercentage={true}
                   />
                   {streak > 0 && (
-                    <div className="mt-3 text-sm text-[#FF6B00]">
+                    <div className="mt-3 text-sm text-[var(--tertiary)]">
                       🔥 {streak} day{streak === 1 ? '' : 's'} streak
                     </div>
                   )}
@@ -238,7 +238,7 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
 
                   return (
                     <div key={category} className="space-y-3">
-                      <h3 className="text-sm font-semibold text-gray-300">{category}</h3>
+                      <h3 className="text-sm font-semibold text-[var(--foreground-secondary)]">{category}</h3>
                       <div className="space-y-2">
                         {categoryAchievements.map(achievement => (
                           <AchievementCard
@@ -273,7 +273,7 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
               onClick={onClose}
-              className="mt-6 w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl hover:shadow-[#FF6B00]/25"
+              className="mt-6 w-full rounded-2xl bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl hover:shadow-[var(--tertiary)]/25"
             >
               Close
             </motion.button>

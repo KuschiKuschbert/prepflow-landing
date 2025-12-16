@@ -135,7 +135,7 @@ export function ImageLightbox({
       {/* Close Button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-black/80 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-transparent focus:outline-none"
+        className="absolute top-4 right-4 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-[var(--foreground)] backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-black/80 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-transparent focus:outline-none"
         aria-label="Close image viewer"
       >
         <Icon icon={X} size="md" aria-hidden={true} />
@@ -150,20 +150,20 @@ export function ImageLightbox({
               <Icon
                 icon={Loader2}
                 size="xl"
-                className="animate-spin text-[#29E7CD]"
+                className="animate-spin text-[var(--primary)]"
                 aria-hidden={true}
               />
-              <p className="text-sm font-medium text-white">Loading image...</p>
+              <p className="text-sm font-medium text-[var(--foreground)]">Loading image...</p>
             </div>
           </div>
         )}
 
         {/* Error State */}
         {hasError && (
-          <div className="flex min-h-[400px] min-w-[400px] items-center justify-center rounded-3xl border border-red-500/20 bg-red-500/10 p-8">
+          <div className="flex min-h-[400px] min-w-[400px] items-center justify-center rounded-3xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-8">
             <div className="flex flex-col items-center gap-3 text-center">
-              <Icon icon={AlertCircle} size="xl" className="text-red-400" aria-hidden={true} />
-              <p className="text-sm font-medium text-red-400">Failed to load image</p>
+              <Icon icon={AlertCircle} size="xl" className="text-[var(--color-error)]" aria-hidden={true} />
+              <p className="text-sm font-medium text-[var(--color-error)]">Failed to load image</p>
               <p className="text-xs text-red-300/80">The image URL may be invalid or expired</p>
             </div>
           </div>
@@ -173,7 +173,7 @@ export function ImageLightbox({
         {!hasError && (
           <div
             ref={imageRef as React.RefObject<HTMLDivElement>}
-            className="relative overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-2xl"
+            className="relative overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-2xl"
             onClick={e => e.stopPropagation()}
           >
             {imageUrl.startsWith('data:') ? (
@@ -206,7 +206,7 @@ export function ImageLightbox({
 
             {/* Plating Method Label */}
             {platingMethod && (
-              <div className="absolute bottom-4 left-4 rounded-lg bg-black/60 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm">
+              <div className="absolute bottom-4 left-4 rounded-lg bg-black/60 px-3 py-1.5 text-xs font-medium text-[var(--foreground)] backdrop-blur-sm">
                 {platingMethod} Plating
               </div>
             )}

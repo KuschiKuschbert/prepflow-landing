@@ -31,14 +31,14 @@ export function PrepListAggregatedView({
       {section.aggregatedIngredients.map((ingredient, ingredientIndex) => (
         <div
           key={ingredientIndex}
-          className="flex items-center gap-4 rounded-xl bg-[#2a2a2a]/30 p-4"
+          className="flex items-center gap-4 rounded-xl bg-[var(--muted)]/30 p-4"
         >
           <div className="flex-1">
             {ingredient.ingredientId ? (
               <>
-                <p className="font-medium text-white">{ingredient.name}</p>
+                <p className="font-medium text-[var(--foreground)]">{ingredient.name}</p>
                 {ingredient.sources.length > 0 && (
-                  <p className="mt-1 text-xs text-gray-400">
+                  <p className="mt-1 text-xs text-[var(--foreground-muted)]">
                     {ingredient.sources.map(s => s.name).join(', ')}
                   </p>
                 )}
@@ -49,7 +49,7 @@ export function PrepListAggregatedView({
                 onChange={e =>
                   handleIngredientSelect(sectionIndex, ingredientIndex, e.target.value)
                 }
-                className="w-full rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                 value={ingredient.ingredientId || ''}
               >
                 <option value="">Select ingredient...</option>
@@ -73,12 +73,12 @@ export function PrepListAggregatedView({
               onChange={e =>
                 handleQuantityChange(sectionIndex, ingredientIndex, parseFloat(e.target.value) || 0)
               }
-              className="w-24 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-24 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             />
-            <span className="w-16 text-sm text-gray-300">{ingredient.unit}</span>
+            <span className="w-16 text-sm text-[var(--foreground-secondary)]">{ingredient.unit}</span>
             <button
               onClick={() => handleRemoveIngredient(sectionIndex, ingredientIndex)}
-              className="rounded-lg p-2 text-red-400 transition-colors hover:bg-red-400/10"
+              className="rounded-lg p-2 text-[var(--color-error)] transition-colors hover:bg-[var(--color-error)]/10"
               aria-label="Remove ingredient"
             >
               <Icon icon={Trash2} size="sm" aria-hidden={true} />

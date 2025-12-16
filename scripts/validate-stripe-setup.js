@@ -275,3 +275,6 @@ if (require.main === module) {
 }
 
 module.exports = { validateKeyFormat, validatePriceId, testStripeConnection, validatePriceIds };
+
+
+

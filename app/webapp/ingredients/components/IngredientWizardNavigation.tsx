@@ -27,14 +27,14 @@ export default function IngredientWizardNavigation({
   const isLastStep = currentStep === totalSteps;
 
   return (
-    <div className="flex items-center justify-between border-t border-[#2a2a2a] pt-3">
+    <div className="flex items-center justify-between border-t border-[var(--border)] pt-3">
       <div className="flex items-center space-x-3">
         {!isFirstStep && (
           <button
             type="button"
             onClick={onPrevious}
             disabled={loading}
-            className="rounded-xl bg-[#2a2a2a] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-[#3a3a3a] disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-xl bg-[var(--muted)] px-4 py-2 text-sm font-medium text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)] disabled:cursor-not-allowed disabled:opacity-50"
           >
             ← Previous
           </button>
@@ -44,7 +44,7 @@ export default function IngredientWizardNavigation({
           type="button"
           onClick={onCancel}
           disabled={loading}
-          className="rounded-xl bg-red-600/20 px-4 py-2 text-sm font-medium text-red-400 transition-all duration-200 hover:bg-red-600/30 disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-xl bg-red-600/20 px-4 py-2 text-sm font-medium text-[var(--color-error)] transition-all duration-200 hover:bg-red-600/30 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Cancel
         </button>
@@ -56,7 +56,7 @@ export default function IngredientWizardNavigation({
             type="button"
             onClick={onSkipStep2}
             disabled={loading}
-            className="rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-sm font-medium text-gray-400 transition-all duration-200 hover:border-[#29E7CD]/50 hover:text-[#29E7CD] disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-sm font-medium text-[var(--foreground-muted)] transition-all duration-200 hover:border-[var(--primary)]/50 hover:text-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-50"
           >
             Skip Step
           </button>
@@ -68,8 +68,8 @@ export default function IngredientWizardNavigation({
             disabled={!canProceed || loading}
             className={`rounded-xl px-6 py-2 text-sm font-medium transition-all duration-200 ${
               canProceed && !loading
-                ? 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white shadow-lg hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl'
-                : 'cursor-not-allowed bg-[#2a2a2a] text-gray-400'
+                ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-lg hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 hover:shadow-xl'
+                : 'cursor-not-allowed bg-[var(--muted)] text-[var(--foreground-muted)]'
             }`}
           >
             {loading ? (
@@ -90,8 +90,8 @@ export default function IngredientWizardNavigation({
             disabled={!canProceed || loading}
             className={`rounded-xl px-6 py-2 text-sm font-medium transition-all duration-200 ${
               canProceed && !loading
-                ? 'bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white shadow-lg hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 hover:shadow-xl'
-                : 'cursor-not-allowed bg-[#2a2a2a] text-gray-400'
+                ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] text-[var(--button-active-text)] shadow-lg hover:from-[var(--primary)]/80 hover:to-[var(--color-info)]/80 hover:shadow-xl'
+                : 'cursor-not-allowed bg-[var(--muted)] text-[var(--foreground-muted)]'
             }`}
           >
             {loading ? (

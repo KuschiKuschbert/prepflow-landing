@@ -16,17 +16,17 @@ interface DashboardErrorAlertProps {
 const VARIANT_STYLES = {
   critical: {
     icon: AlertCircle,
-    borderClass: 'border-red-500/50',
-    backgroundClass: 'bg-red-500/10',
-    textClass: 'text-red-400',
-    buttonClass: 'border-red-500/50 bg-red-500/20 text-red-400 hover:bg-red-500/30',
+    borderClass: 'border-[var(--color-error)]/50',
+    backgroundClass: 'bg-[var(--color-error)]/10',
+    textClass: 'text-[var(--color-error)]',
+    buttonClass: 'border-[var(--color-error)]/50 bg-[var(--color-error)]/20 text-[var(--color-error)] hover:bg-[var(--color-error)]/30',
   },
   warning: {
     icon: TriangleAlert,
-    borderClass: 'border-yellow-500/50',
-    backgroundClass: 'bg-yellow-500/10',
-    textClass: 'text-yellow-400',
-    buttonClass: 'border-yellow-500/50 bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30',
+    borderClass: 'border-[var(--color-warning)]/50',
+    backgroundClass: 'bg-[var(--color-warning)]/10',
+    textClass: 'text-[var(--color-warning)]',
+    buttonClass: 'border-[var(--color-warning)]/50 bg-[var(--color-warning)]/20 text-[var(--color-warning)] hover:bg-[var(--color-warning)]/30',
   },
 } as const;
 

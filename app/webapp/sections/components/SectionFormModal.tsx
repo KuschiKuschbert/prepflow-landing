@@ -58,10 +58,10 @@ export function SectionFormModal({
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-md rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px]">
-        <div className="rounded-3xl bg-[#1f1f1f]/95 p-6">
+      <div className="w-full max-w-md rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px]">
+        <div className="rounded-3xl bg-[var(--surface)]/95 p-6">
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-white">
+            <h2 className="text-xl font-semibold text-[var(--button-active-text)]">
               {editingSection
                 ? t('dishSections.editSection', 'Edit Section')
                 : t('dishSections.addSection', 'Add Section')}
@@ -70,7 +70,7 @@ export function SectionFormModal({
               <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
               <button
                 onClick={onCancel}
-                className="p-2 text-gray-400 transition-colors hover:text-white"
+                className="p-2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
               >
                 <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -86,34 +86,34 @@ export function SectionFormModal({
 
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
                 {t('dishSections.sectionName', 'Section Name')}
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={e => setFormData({ ...formData, name: e.target.value })}
-                className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                 placeholder="e.g., Hot Kitchen, Cold Kitchen, Pastry"
                 required
               />
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
                 {t('dishSections.description', 'Description')}
               </label>
               <textarea
                 value={formData.description}
                 onChange={e => setFormData({ ...formData, description: e.target.value })}
-                className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                 rows={3}
                 placeholder="Optional description of this section"
               />
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
                 {t('dishSections.color', 'Color')}
               </label>
               <div className="flex items-center space-x-3">
@@ -121,13 +121,13 @@ export function SectionFormModal({
                   type="color"
                   value={formData.color}
                   onChange={e => setFormData({ ...formData, color: e.target.value })}
-                  className="h-12 w-12 cursor-pointer rounded-xl border border-[#2a2a2a]"
+                  className="h-12 w-12 cursor-pointer rounded-xl border border-[var(--border)]"
                 />
                 <input
                   type="text"
                   value={formData.color}
                   onChange={e => setFormData({ ...formData, color: e.target.value })}
-                  className="flex-1 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                  className="flex-1 rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
                   placeholder="#29E7CD"
                 />
               </div>
@@ -137,13 +137,13 @@ export function SectionFormModal({
               <button
                 type="button"
                 onClick={onCancel}
-                className="flex-1 rounded-xl bg-[#2a2a2a] px-4 py-3 text-gray-300 transition-colors hover:bg-[#2a2a2a]/80"
+                className="flex-1 rounded-xl bg-[var(--muted)] px-4 py-3 text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/80"
               >
                 {t('dishSections.cancel', 'Cancel')}
               </button>
               <button
                 type="submit"
-                className="flex-1 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
+                className="flex-1 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
               >
                 {editingSection
                   ? t('dishSections.update', 'Update')

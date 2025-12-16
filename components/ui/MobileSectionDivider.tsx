@@ -20,7 +20,7 @@ export function MobileSectionDivider({
 
   return (
     <div
-      className={`${visibilityClass} tablet:my-6 my-4 h-px bg-gradient-to-r from-transparent via-[#2a2a2a] to-transparent ${className}`}
+      className={`${visibilityClass} tablet:my-6 my-4 h-px bg-gradient-to-r from-transparent via-[var(--muted)] to-transparent ${className}`}
       aria-hidden={true}
     />
   );

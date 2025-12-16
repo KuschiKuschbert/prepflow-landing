@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { Sparkles, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Sparkles, AlertTriangle, CheckCircle2, Check, X } from 'lucide-react';
 import { useConfirm } from '@/hooks/useConfirm';
 
 export default function PopulateAllAllergens() {
@@ -95,43 +95,43 @@ export default function PopulateAllAllergens() {
   return (
     <>
       <ConfirmDialog />
-      <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 shadow-lg">
+      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 shadow-lg">
         <div className="mx-auto max-w-2xl">
-          <div className="mb-6 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/50 p-6">
+          <div className="mb-6 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/50 p-6">
             <div className="mb-4 flex items-center justify-between">
-              <h4 className="text-lg font-semibold text-white">What this does:</h4>
-              <Icon icon={Sparkles} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+              <h4 className="text-lg font-semibold text-[var(--foreground)]">What this does:</h4>
+              <Icon icon={Sparkles} size="md" className="text-[var(--primary)]" aria-hidden={true} />
             </div>
-            <ul className="space-y-2 text-gray-300">
+            <ul className="space-y-2 text-[var(--foreground-secondary)]">
               <li className="flex items-center space-x-2">
-                <span className="text-[#29E7CD]">✓</span>
+                <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
                 <span>
                   Automatically detects allergens using keyword matching and AI (hybrid detection)
                 </span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-[#29E7CD]">✓</span>
+                <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
                 <span>
                   Only processes ingredients without manual allergens (won&apos;t overwrite)
                 </span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-[#29E7CD]">✓</span>
+                <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
                 <span>
                   Uses non-AI detection first (fast), falls back to AI for complex ingredients
                 </span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-[#29E7CD]">✓</span>
+                <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
                 <span>Processes ingredients in batches to respect rate limits</span>
               </li>
             </ul>
           </div>
 
           {dryRunResult && (
-            <div className="mb-6 rounded-2xl border border-blue-500/30 bg-blue-900/20 p-4 text-blue-300">
+            <div className="mb-6 rounded-2xl border border-[var(--color-info)]/30 bg-blue-900/20 p-4 text-blue-300">
               <div className="mb-2 flex items-center space-x-2">
-                <Icon icon={AlertTriangle} size="sm" className="text-blue-400" aria-hidden={true} />
+                <Icon icon={AlertTriangle} size="sm" className="text-[var(--color-info)]" aria-hidden={true} />
                 <span className="font-semibold">Dry Run Preview</span>
               </div>
               <ul className="space-y-1 text-sm">
@@ -143,25 +143,33 @@ export default function PopulateAllAllergens() {
           )}
 
           {error && (
-            <div className="mb-6 rounded-2xl border border-red-500/30 bg-red-900/20 p-4 text-red-300">
+            <div className="mb-6 rounded-2xl border border-[var(--color-error)]/30 bg-red-900/20 p-4 text-red-300">
               <div className="flex items-center space-x-2">
-                <span className="text-red-400">⚠️</span>
+                <Icon icon={AlertTriangle} size="sm" className="text-[var(--color-error)]" aria-hidden={true} />
                 <span>{error}</span>
               </div>
             </div>
           )}
 
           {result && (
-            <div className="mb-6 rounded-2xl border border-green-500/30 bg-green-900/20 p-4 text-green-300">
+            <div className="mb-6 rounded-2xl border border-[var(--color-success)]/30 bg-green-900/20 p-4 text-green-300">
               <div className="mb-2 flex items-center space-x-2">
-                <Icon icon={CheckCircle2} size="sm" className="text-green-400" aria-hidden={true} />
+                <Icon icon={CheckCircle2} size="sm" className="text-[var(--color-success)]" aria-hidden={true} />
                 <span className="font-semibold">Allergen Population Complete!</span>
               </div>
               <ul className="space-y-1 text-sm">
                 <li>Total ingredients: {result.total}</li>
                 <li>Processed: {result.processed}</li>
-                <li className="text-green-400">✓ Successful: {result.successful}</li>
-                {result.failed > 0 && <li className="text-red-400">✗ Failed: {result.failed}</li>}
+                <li className="flex items-center gap-2 text-[var(--color-success)]">
+                  <Icon icon={Check} size="xs" className="text-[var(--color-success)]" aria-hidden={true} />
+                  Successful: {result.successful}
+                </li>
+                {result.failed > 0 && (
+                  <li className="flex items-center gap-2 text-[var(--color-error)]">
+                    <Icon icon={X} size="xs" className="text-[var(--color-error)]" aria-hidden={true} />
+                    Failed: {result.failed}
+                  </li>
+                )}
                 <li>Skipped (has manual allergens): {result.skipped}</li>
               </ul>
             </div>
@@ -173,8 +181,8 @@ export default function PopulateAllAllergens() {
               disabled={loading}
               className={`flex-1 rounded-2xl px-6 py-3 text-base font-semibold transition-all duration-200 ${
                 loading
-                  ? 'cursor-not-allowed bg-[#2a2a2a] text-gray-400'
-                  : 'bg-[#2a2a2a] text-white hover:bg-[#3a3a3a]'
+                  ? 'cursor-not-allowed bg-[var(--muted)] text-[var(--foreground-muted)]'
+                  : 'bg-[var(--muted)] text-[var(--foreground)] hover:bg-[var(--surface-variant)]'
               }`}
             >
               {loading ? (
@@ -192,8 +200,8 @@ export default function PopulateAllAllergens() {
               disabled={loading}
               className={`flex-1 rounded-2xl px-6 py-3 text-base font-semibold transition-all duration-200 ${
                 loading
-                  ? 'cursor-not-allowed bg-[#2a2a2a] text-gray-400'
-                  : 'bg-gradient-to-r from-[#29E7CD] to-[#D925C7] text-white shadow-lg hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl'
+                  ? 'cursor-not-allowed bg-[var(--muted)] text-[var(--foreground-muted)]'
+                  : 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-lg hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 hover:shadow-xl'
               }`}
             >
               {loading ? (
@@ -203,7 +211,7 @@ export default function PopulateAllAllergens() {
                 </span>
               ) : (
                 <span className="flex items-center justify-center space-x-2">
-                  <Icon icon={Sparkles} size="sm" className="text-white" aria-hidden={true} />
+                  <Icon icon={Sparkles} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
                   <span>Populate All Allergens</span>
                 </span>
               )}
@@ -211,7 +219,7 @@ export default function PopulateAllAllergens() {
           </div>
 
           {!loading && (
-            <p className="mt-4 text-center text-sm text-gray-400">
+            <p className="mt-4 text-center text-sm text-[var(--foreground-muted)]">
               This operation can only be run once per hour. Use the preview button to see what would
               be processed.
             </p>

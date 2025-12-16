@@ -30,22 +30,22 @@ export function RegionSettingsPanel() {
 
   if (isLoading) {
     return (
-      <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-        <div className="h-6 w-32 animate-pulse rounded bg-[#2a2a2a]" />
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
+        <div className="h-6 w-32 animate-pulse rounded bg-[var(--muted)]" />
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
+    <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
       {/* Header */}
       <div className="mb-4 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#29E7CD]/10">
-          <Icon icon={Globe} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--primary)]/10">
+          <Icon icon={Globe} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
         </div>
         <div>
-          <h3 className="font-semibold text-white">Region & Units</h3>
-          <p className="text-sm text-gray-400">
+          <h3 className="font-semibold text-[var(--foreground)]">Region & Units</h3>
+          <p className="text-sm text-[var(--foreground-muted)]">
             Currently: {selectedCountry} • {getUnitSystemLabel(countryConfig.unitSystem)}
           </p>
         </div>
@@ -61,21 +61,21 @@ export function RegionSettingsPanel() {
               onClick={() => setCountry(country.code)}
               className={`flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-all duration-200 ${
                 isSelected
-                  ? 'border border-[#29E7CD]/30 bg-[#29E7CD]/10'
-                  : 'border border-[#2a2a2a] hover:bg-[#2a2a2a]/40 active:scale-[0.98]'
+                  ? 'border border-[var(--primary)]/30 bg-[var(--primary)]/10'
+                  : 'border border-[var(--border)] hover:bg-[var(--muted)]/40 active:scale-[0.98]'
               }`}
               style={{ transitionTimingFunction: 'var(--easing-standard)' }}
             >
               <div className="min-w-0 flex-1">
-                <div className={`font-medium ${isSelected ? 'text-[#29E7CD]' : 'text-white'}`}>
+                <div className={`font-medium ${isSelected ? 'text-[var(--primary)]' : 'text-[var(--foreground)]'}`}>
                   {country.name}
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-[var(--foreground-subtle)]">
                   {getUnitSystemLabel(country.unitSystem)} • {country.currency}
                 </div>
               </div>
               {isSelected && (
-                <Icon icon={Check} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+                <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
               )}
             </button>
           );

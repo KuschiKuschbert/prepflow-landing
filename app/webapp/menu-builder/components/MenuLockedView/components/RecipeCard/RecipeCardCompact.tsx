@@ -41,8 +41,8 @@ export function RecipeCardCompact({
     <div
       className={`relative rounded-2xl border shadow-lg transition-all duration-300 ease-in-out ${
         isSubRecipe
-          ? 'cursor-pointer border-[#D925C7]/30 bg-[#1f1f1f] hover:border-[#D925C7]/50'
-          : 'cursor-pointer border-[#2a2a2a] bg-[#1f1f1f] hover:border-[#29E7CD]/50'
+          ? 'cursor-pointer border-[var(--accent)]/30 bg-[var(--surface)] hover:border-[var(--accent)]/50'
+          : 'cursor-pointer border-[var(--border)] bg-[var(--surface)] hover:border-[var(--primary)]/50'
       }`}
       onClick={onCardClick}
       onKeyDown={onKeyDown}
@@ -54,9 +54,9 @@ export function RecipeCardCompact({
       <div className="p-4">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
-            <h3 className="truncate text-base font-semibold text-white">{title}</h3>
+            <h3 className="truncate text-base font-semibold text-[var(--foreground)]">{title}</h3>
             {isSubRecipe && usedByMenuItems && usedByMenuItems.length > 0 && (
-              <p className="mt-0.5 truncate text-xs text-gray-500">
+              <p className="mt-0.5 truncate text-xs text-[var(--foreground-subtle)]">
                 Used by {usedByMenuItems.length} {usedByMenuItems.length === 1 ? 'dish' : 'dishes'}
               </p>
             )}
@@ -72,8 +72,8 @@ export function RecipeCardCompact({
               }}
               className={`shrink-0 rounded-lg p-1.5 transition-colors ${
                 showQR
-                  ? 'bg-[#29E7CD] text-black'
-                  : 'bg-[#2a2a2a] text-gray-400 hover:bg-[#3a3a3a] hover:text-white'
+                  ? 'bg-[var(--primary)] text-[var(--button-active-text)]'
+                  : 'bg-[var(--muted)] text-[var(--foreground-muted)] hover:bg-[var(--surface-variant)] hover:text-[var(--foreground)]'
               }`}
               aria-label={showQR ? 'Hide QR code' : 'Show QR code'}
               data-prep-input
@@ -86,12 +86,12 @@ export function RecipeCardCompact({
         {/* Mini QR Code - Shows when toggled */}
         {showQR && recipeUrl && (
           <div
-            className="mt-3 flex flex-col items-center rounded-lg bg-white p-2"
+            className="mt-3 flex flex-col items-center rounded-lg bg-[var(--qr-background)] p-2"
             onClick={e => e.stopPropagation()}
             data-prep-input
           >
-            <QRCodeSVG value={recipeUrl} size={80} level="M" bgColor="#FFFFFF" fgColor="#000000" />
-            <p className="mt-1 text-[8px] text-gray-500">Scan to view recipe</p>
+            <QRCodeSVG value={recipeUrl} size={80} level="M" bgColor="var(--qr-background)" fgColor="var(--qr-foreground)" />
+            <p className="mt-1 text-[8px] text-[var(--foreground-subtle)]">Scan to view recipe</p>
           </div>
         )}
       </div>

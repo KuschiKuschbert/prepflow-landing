@@ -35,8 +35,8 @@ export function AutosaveStatus({
       aria-label={`Autosave status: ${status}`}
     >
       {status === 'saving' && (
-        <div className="text-fluid-sm flex items-center gap-2 rounded-lg bg-[#2a2a2a] px-3 py-1.5 text-gray-300">
-          <svg className="h-4 w-4 animate-spin text-[#29E7CD]" fill="none" viewBox="0 0 24 24">
+        <div className="text-fluid-sm flex items-center gap-2 rounded-lg bg-[var(--muted)] px-3 py-1.5 text-[var(--foreground-secondary)]">
+          <svg className="h-4 w-4 animate-spin text-[var(--primary)]" fill="none" viewBox="0 0 24 24">
             <circle
               className="opacity-25"
               cx="12"
@@ -56,7 +56,7 @@ export function AutosaveStatus({
       )}
 
       {status === 'saved' && (
-        <div className="text-fluid-sm flex items-center gap-2 rounded-lg bg-green-500/10 px-3 py-1.5 text-green-400">
+        <div className="text-fluid-sm flex items-center gap-2 rounded-lg bg-[var(--color-success)]/10 px-3 py-1.5 text-[var(--color-success)]">
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
@@ -65,7 +65,7 @@ export function AutosaveStatus({
       )}
 
       {status === 'error' && (
-        <div className="text-fluid-sm flex items-center gap-2 rounded-lg bg-red-500/10 px-3 py-1.5 text-red-400">
+        <div className="text-fluid-sm flex items-center gap-2 rounded-lg bg-[var(--color-error)]/10 px-3 py-1.5 text-[var(--color-error)]">
           <svg
             className="h-4 w-4 flex-shrink-0"
             fill="none"
@@ -85,7 +85,7 @@ export function AutosaveStatus({
           {onRetry && (
             <button
               onClick={onRetry}
-              className="text-fluid-xs flex-shrink-0 rounded px-2 py-0.5 font-medium hover:bg-red-500/20 focus:ring-2 focus:ring-red-500/50 focus:outline-none"
+              className="text-fluid-xs flex-shrink-0 rounded px-2 py-0.5 font-medium hover:bg-[var(--color-error)]/20 focus:ring-2 focus:ring-red-500/50 focus:outline-none"
               aria-label="Retry save"
             >
               Retry

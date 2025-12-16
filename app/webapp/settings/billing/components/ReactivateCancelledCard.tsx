@@ -21,10 +21,10 @@ export function ReactivateCancelledCard({
   if (!isCancelled || cancelAtPeriodEnd) return null;
 
   return (
-    <div className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+    <div className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
       <div>
         <h2 className="text-xl font-semibold">Reactivate Subscription</h2>
-        <p className="mt-1 text-sm text-gray-300">
+        <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
           Your subscription has been cancelled. Reactivate it to continue using PrepFlow.
         </p>
       </div>

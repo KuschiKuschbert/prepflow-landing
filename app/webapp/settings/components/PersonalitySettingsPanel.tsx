@@ -61,11 +61,11 @@ export function PersonalitySettingsPanel() {
   }, []);
 
   return (
-    <div className="mt-8 space-y-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6">
+    <div className="mt-8 space-y-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-semibold">PrepFlow Personality</h2>
-          <p className="mt-1 text-sm text-gray-400">
+          <p className="mt-1 text-sm text-[var(--foreground-muted)]">
             Add charming micro-moments, humor, and seasonal flair to your PrepFlow experience.
           </p>
         </div>
@@ -74,19 +74,19 @@ export function PersonalitySettingsPanel() {
             type="checkbox"
             checked={settings.enabled}
             onChange={e => set({ enabled: e.target.checked })}
-            className="h-5 w-5 rounded border-[#2a2a2a] bg-[#1f1f1f] text-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]"
+            className="h-5 w-5 rounded border-[var(--border)] bg-[var(--surface)] text-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
           />
-          <span className="text-sm text-gray-300">Enable</span>
+          <span className="text-sm text-[var(--foreground-secondary)]">Enable</span>
         </label>
       </div>
 
       {/* Achievements Section */}
       {settings.enabled && (
         <>
-          <div className="border-t border-[#2a2a2a] pt-4">
+          <div className="border-t border-[var(--border)] pt-4">
             <div className="mb-3 flex items-center justify-between">
-              <h3 className="text-sm font-medium text-gray-300">Achievements</h3>
-              <span className="text-xs text-gray-400">
+              <h3 className="text-sm font-medium text-[var(--foreground-secondary)]">Achievements</h3>
+              <span className="text-xs text-[var(--foreground-muted)]">
                 {progress.unlocked} / {progress.total} ({progress.percentage}%)
               </span>
             </div>
@@ -98,13 +98,13 @@ export function PersonalitySettingsPanel() {
                     key={achievement.id}
                     className={`rounded-lg border p-2 text-center ${
                       unlocked
-                        ? 'border-[#29E7CD]/50 bg-[#29E7CD]/10'
-                        : 'border-[#2a2a2a] bg-[#2a2a2a]/20 opacity-50'
+                        ? 'border-[var(--primary)]/50 bg-[var(--primary)]/10'
+                        : 'border-[var(--border)] bg-[var(--muted)]/20 opacity-50'
                     }`}
                   >
                     <div className="text-2xl">{achievement.icon}</div>
-                    <div className="mt-1 text-xs font-medium text-gray-300">{achievement.name}</div>
-                    {unlocked && <div className="mt-1 text-xs text-[#29E7CD]">Unlocked!</div>}
+                    <div className="mt-1 text-xs font-medium text-[var(--foreground-secondary)]">{achievement.name}</div>
+                    {unlocked && <div className="mt-1 text-xs text-[var(--primary)]">Unlocked!</div>}
                   </div>
                 );
               })}
@@ -112,24 +112,24 @@ export function PersonalitySettingsPanel() {
           </div>
 
           {/* Behavior Insights */}
-          <div className="border-t border-[#2a2a2a] pt-4">
-            <h3 className="mb-3 text-sm font-medium text-gray-300">Personality Insights</h3>
-            <div className="space-y-2 text-sm text-gray-400">
+          <div className="border-t border-[var(--border)] pt-4">
+            <h3 className="mb-3 text-sm font-medium text-[var(--foreground-secondary)]">Personality Insights</h3>
+            <div className="space-y-2 text-sm text-[var(--foreground-muted)]">
               <div>
-                <span className="font-medium text-gray-300">User Level:</span>{' '}
+                <span className="font-medium text-[var(--foreground-secondary)]">User Level:</span>{' '}
                 {behaviorProfile.userExperience === 'new' ? 'New Chef' : 'Experienced Chef'}
               </div>
               <div>
-                <span className="font-medium text-gray-300">Save Frequency:</span>{' '}
+                <span className="font-medium text-[var(--foreground-secondary)]">Save Frequency:</span>{' '}
                 {behaviorProfile.saveFrequency.charAt(0).toUpperCase() +
                   behaviorProfile.saveFrequency.slice(1)}
               </div>
               <div>
-                <span className="font-medium text-gray-300">Session Duration:</span>{' '}
+                <span className="font-medium text-[var(--foreground-secondary)]">Session Duration:</span>{' '}
                 {behaviorProfile.sessionDuration.charAt(0).toUpperCase() +
                   behaviorProfile.sessionDuration.slice(1)}
               </div>
-              <div className="mt-2 text-xs text-gray-500">
+              <div className="mt-2 text-xs text-[var(--foreground-subtle)]">
                 Personality adapts based on your usage patterns. Keep using PrepFlow to unlock more
                 insights!
               </div>
@@ -137,13 +137,13 @@ export function PersonalitySettingsPanel() {
           </div>
 
           {/* Quick Actions */}
-          <div className="flex gap-3 border-t border-[#2a2a2a] pt-4">
+          <div className="flex gap-3 border-t border-[var(--border)] pt-4">
             <button
               onClick={() => {
                 silenceFor24h();
                 showInfo('Personality silenced for 24 hours');
               }}
-              className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 px-4 py-2 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a]/50"
+              className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 px-4 py-2 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/50"
             >
               Silence for 24h
             </button>

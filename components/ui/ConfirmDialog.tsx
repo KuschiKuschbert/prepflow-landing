@@ -135,16 +135,16 @@ export function ConfirmDialog({
 
   const variantStyles = {
     danger: {
-      confirm: 'bg-red-500 hover:bg-red-600 text-white',
-      icon: 'text-red-400',
+      confirm: 'bg-[var(--color-error)] hover:bg-[var(--color-error)]/80 text-[var(--button-active-text)]',
+      icon: 'text-[var(--color-error)]',
     },
     warning: {
-      confirm: 'bg-yellow-500 hover:bg-yellow-600 text-black',
-      icon: 'text-yellow-400',
+      confirm: 'bg-[var(--color-warning)] hover:bg-[var(--color-warning)]/80 text-[var(--button-active-text)]',
+      icon: 'text-[var(--color-warning)]',
     },
     info: {
-      confirm: 'bg-[#29E7CD] hover:bg-[#29E7CD]/80 text-black',
-      icon: 'text-[#29E7CD]',
+      confirm: 'bg-[var(--primary)] hover:bg-[var(--primary)]/80 text-[var(--button-active-text)]',
+      icon: 'text-[var(--primary)]',
     },
   };
 
@@ -160,10 +160,10 @@ export function ConfirmDialog({
       />
 
       {/* Dialog with gradient border */}
-      <div className="relative z-50 mx-4 w-full max-w-md rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
+      <div className="relative z-50 mx-4 w-full max-w-md rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl">
         <div
           ref={dialogRef}
-          className="desktop:p-6 rounded-3xl bg-[#1f1f1f]/95 p-4"
+          className="desktop:p-6 rounded-3xl bg-[var(--surface)]/95 p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="dialog-title"
@@ -183,12 +183,12 @@ export function ConfirmDialog({
           </div>
 
           {/* Title */}
-          <h2 id="dialog-title" className="text-fluid-xl mb-3 text-center font-bold text-white">
+          <h2 id="dialog-title" className="text-fluid-xl mb-3 text-center font-bold text-[var(--foreground)]">
             {title}
           </h2>
 
           {/* Message */}
-          <p id="dialog-description" className="mb-6 text-center text-gray-300">
+          <p id="dialog-description" className="mb-6 text-center text-[var(--foreground)]/70">
             {message}
           </p>
 
@@ -197,14 +197,14 @@ export function ConfirmDialog({
             <button
               ref={cancelButtonRef}
               onClick={onCancel}
-              className="flex-1 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-4 py-3 font-semibold text-gray-300 transition-all duration-200 hover:bg-[#2a2a2a]/60 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+              className="flex-1 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/40 px-4 py-3 font-semibold text-[var(--foreground)]/70 transition-all duration-200 hover:bg-[var(--muted)]/60 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none"
             >
               {cancelLabel}
             </button>
             <button
               ref={confirmButtonRef}
               onClick={onConfirm}
-              className={`flex-1 rounded-2xl px-4 py-3 font-semibold transition-all duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none ${styles.confirm}`}
+              className={`flex-1 rounded-2xl px-4 py-3 font-semibold transition-all duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none ${styles.confirm}`}
             >
               {confirmLabel}
             </button>

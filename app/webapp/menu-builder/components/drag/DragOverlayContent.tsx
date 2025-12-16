@@ -16,31 +16,31 @@ export function DragOverlayContent({ menuItem }: DragOverlayContentProps) {
 
   // Match the exact structure of SortableMenuItem
   return (
-    <div className="group flex cursor-grabbing items-center justify-between rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] p-3 shadow-xl">
+    <div className="group flex cursor-grabbing items-center justify-between rounded-lg border border-[var(--border)] bg-[var(--surface)] p-3 shadow-xl">
       <div className="flex flex-1 items-center gap-2">
         {isDish ? (
-          <Icon icon={Utensils} size="sm" className="text-[#29E7CD]" />
+          <Icon icon={Utensils} size="sm" className="text-[var(--primary)]" />
         ) : isRecipe ? (
-          <Icon icon={ChefHat} size="sm" className="text-[#D925C7]" />
+          <Icon icon={ChefHat} size="sm" className="text-[var(--accent)]" />
         ) : null}
         <div className="flex-1">
           {isDish ? (
             <>
-              <div className="font-medium text-white">
+              <div className="font-medium text-[var(--foreground)]">
                 {menuItem.dishes?.dish_name || 'Unknown Dish'}
               </div>
-              <div className="text-sm text-gray-400">
+              <div className="text-sm text-[var(--foreground-muted)]">
                 ${menuItem.dishes?.selling_price.toFixed(2) || '0.00'}
               </div>
             </>
           ) : isRecipe ? (
             <>
-              <div className="font-medium text-white">
+              <div className="font-medium text-[var(--foreground)]">
                 {menuItem.recipes?.recipe_name || 'Unknown Recipe'}
               </div>
             </>
           ) : (
-            <div className="font-medium text-white">Unknown Item</div>
+            <div className="font-medium text-[var(--foreground)]">Unknown Item</div>
           )}
         </div>
       </div>

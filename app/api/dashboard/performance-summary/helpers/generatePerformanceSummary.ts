@@ -101,3 +101,6 @@ export function generatePerformanceSummary(performanceData: PerformanceItem[]): 
     categoryCounts,
   };
 }
+
+
+

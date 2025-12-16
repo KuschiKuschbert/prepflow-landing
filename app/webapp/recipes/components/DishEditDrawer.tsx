@@ -224,7 +224,7 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-2xl bg-[#2a2a2a] px-4 py-2.5 font-semibold text-white transition-all duration-300 hover:bg-[#3a3a3a]"
+              className="flex-1 rounded-2xl bg-[var(--muted)] px-4 py-2.5 font-semibold text-[var(--foreground)] transition-all duration-300 hover:bg-[var(--surface-variant)]"
             >
               Cancel
             </button>
@@ -232,7 +232,7 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
               type="button"
               onClick={handleSave}
               disabled={loading || status === 'saving'}
-              className="flex-1 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2.5 font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#29E7CD]/25 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex-1 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2.5 font-semibold text-[var(--button-active-text)] transition-all duration-300 hover:shadow-lg hover:shadow-[var(--primary)]/25 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading || status === 'saving' ? 'Saving...' : dish ? 'Update Dish' : 'Create Dish'}
             </button>
@@ -242,23 +242,23 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
     >
       <form onSubmit={e => e.preventDefault()} className="space-y-6">
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Dish Name *</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Dish Name *</label>
           <input
             type="text"
             value={dishName}
             onChange={e => setDishName(e.target.value)}
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+            className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
             required
           />
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Description</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Description</label>
           <textarea
             value={description}
             onChange={e => setDescription(e.target.value)}
             rows={3}
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+            className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
           />
         </div>
 

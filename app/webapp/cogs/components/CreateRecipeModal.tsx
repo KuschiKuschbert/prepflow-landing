@@ -81,15 +81,15 @@ export function CreateRecipeModal({
       onKeyDown={handleKeyDown}
     >
       <div
-        className="w-full max-w-md rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-xl"
+        className="w-full max-w-md rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-xl"
         onClick={e => e.stopPropagation()}
       >
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-white">Create New Recipe</h2>
+          <h2 className="text-xl font-semibold text-[var(--foreground)]">Create New Recipe</h2>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1 text-gray-400 transition-colors hover:text-white focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+            className="rounded-lg p-1 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
             aria-label="Close modal"
           >
             <Icon icon={X} size="md" aria-hidden={true} />
@@ -98,7 +98,7 @@ export function CreateRecipeModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="recipe-name" className="mb-2 block text-sm font-medium text-gray-300">
+            <label htmlFor="recipe-name" className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
               Recipe Name
             </label>
             <input
@@ -112,10 +112,10 @@ export function CreateRecipeModal({
               }}
               disabled={loading}
               placeholder="e.g., Chicken Curry"
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 text-white shadow-sm transition-all duration-200 hover:shadow-md focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--foreground)] shadow-sm transition-all duration-200 hover:shadow-md focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             />
             {error && (
-              <p className="mt-2 text-sm text-red-400" role="alert">
+              <p className="mt-2 text-sm text-[var(--color-error)]" role="alert">
                 {error}
               </p>
             )}
@@ -126,14 +126,14 @@ export function CreateRecipeModal({
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="flex-1 rounded-xl border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-3 font-medium text-white transition-colors hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex-1 rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--muted)] disabled:cursor-not-allowed disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading || !recipeName.trim()}
-              className="flex-1 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex-1 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-3 font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? 'Creating...' : 'Create Recipe'}
             </button>

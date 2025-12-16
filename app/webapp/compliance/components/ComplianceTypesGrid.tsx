@@ -18,22 +18,22 @@ export function ComplianceTypesGrid({ types }: ComplianceTypesGridProps) {
       {types.map(type => (
         <div
           key={type.id}
-          className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 shadow-lg transition-all duration-200 hover:shadow-xl"
+          className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg transition-all duration-200 hover:shadow-xl"
         >
           <div className="mb-4 flex items-center justify-between">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
               <Icon
                 icon={getTypeIcon(type.name)}
                 size="md"
-                className="text-[#29E7CD]"
+                className="text-[var(--primary)]"
                 aria-hidden={true}
               />
             </div>
             <span
               className={`rounded-full px-3 py-1 text-xs font-medium ${
                 type.is_active
-                  ? 'border border-green-400/20 bg-green-400/10 text-green-400'
-                  : 'border border-gray-400/20 bg-gray-400/10 text-gray-400'
+                  ? 'border border-[var(--color-success)]/20 bg-[var(--color-success)]/10 text-[var(--color-success)]'
+                  : 'border border-gray-400/20 bg-gray-400/10 text-[var(--foreground-muted)]'
               }`}
             >
               {type.is_active
@@ -41,17 +41,17 @@ export function ComplianceTypesGrid({ types }: ComplianceTypesGridProps) {
                 : t('compliance.inactive', 'Inactive')}
             </span>
           </div>
-          <h3 className="mb-2 text-xl font-semibold text-white">{type.name}</h3>
-          <p className="mb-4 text-gray-400">
+          <h3 className="mb-2 text-xl font-semibold text-[var(--foreground)]">{type.name}</h3>
+          <p className="mb-4 text-[var(--foreground-muted)]">
             {type.description || t('compliance.noDescription', 'No description provided')}
           </p>
           <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-[var(--foreground-subtle)]">
               {type.renewal_frequency_days
                 ? `${t('compliance.everyDays', 'Every')} ${type.renewal_frequency_days} ${t('compliance.days', 'days')}`
                 : t('compliance.noFrequency', 'No renewal frequency set')}
             </span>
-            <button className="text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80">
+            <button className="text-[var(--primary)] transition-colors hover:text-[var(--primary)]/80">
               {t('compliance.edit', 'Edit')}
             </button>
           </div>

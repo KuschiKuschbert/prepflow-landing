@@ -31,16 +31,16 @@ export default function DishForm({
   };
 
   return (
-    <div className="rounded-xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
+    <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-6">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
-          <Icon icon={ChefHat} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+        <h2 className="flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
+          <Icon icon={ChefHat} size="md" className="text-[var(--primary)]" aria-hidden={true} />
           {dishState.itemType === 'dish' ? 'Dish Details' : 'Recipe Details'}
         </h2>
         {ingredientCount > 0 && (
-          <div className="flex items-center gap-2 rounded-full bg-[#29E7CD]/20 px-3 py-1.5">
-            <Icon icon={Package} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
-            <span className="text-sm font-medium text-[#29E7CD]">
+          <div className="flex items-center gap-2 rounded-full bg-[var(--primary)]/20 px-3 py-1.5">
+            <Icon icon={Package} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+            <span className="text-sm font-medium text-[var(--primary)]">
               {ingredientCount} ingredients
             </span>
           </div>
@@ -50,7 +50,7 @@ export default function DishForm({
       <div className="space-y-4">
         {/* Item Type Selector */}
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">Item Type *</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Item Type *</label>
           <div className="flex gap-2">
             <button
               type="button"
@@ -63,8 +63,8 @@ export default function DishForm({
               }
               className={`flex flex-1 items-center justify-center gap-2 rounded-lg border px-4 py-3 font-medium transition-all duration-200 ${
                 dishState.itemType === 'dish'
-                  ? 'border-[#29E7CD] bg-[#29E7CD]/10 text-[#29E7CD]'
-                  : 'border-[#2a2a2a] bg-[#0a0a0a] text-gray-400 hover:border-[#29E7CD]/50 hover:text-white'
+                  ? 'border-[var(--primary)] bg-[var(--primary)]/10 text-[var(--primary)]'
+                  : 'border-[var(--border)] bg-[var(--background)] text-[var(--foreground-muted)] hover:border-[var(--primary)]/50 hover:text-[var(--foreground)]'
               }`}
             >
               <Icon icon={UtensilsCrossed} size="sm" />
@@ -83,8 +83,8 @@ export default function DishForm({
               }
               className={`flex flex-1 items-center justify-center gap-2 rounded-lg border px-4 py-3 font-medium transition-all duration-200 ${
                 dishState.itemType === 'recipe'
-                  ? 'border-[#3B82F6] bg-[#3B82F6]/10 text-[#3B82F6]'
-                  : 'border-[#2a2a2a] bg-[#0a0a0a] text-gray-400 hover:border-[#3B82F6]/50 hover:text-white'
+                  ? 'border-[var(--color-info)] bg-[var(--color-info)]/10 text-[var(--color-info)]'
+                  : 'border-[var(--border)] bg-[var(--background)] text-[var(--foreground-muted)] hover:border-[var(--color-info)]/50 hover:text-[var(--foreground)]'
               }`}
             >
               <Icon icon={BookOpen} size="sm" />
@@ -95,7 +95,7 @@ export default function DishForm({
 
         {/* Name */}
         <div>
-          <label htmlFor="dish-name" className="mb-2 block text-sm font-medium text-gray-300">
+          <label htmlFor="dish-name" className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
             {dishState.itemType === 'dish' ? 'Dish Name' : 'Recipe Name'} *
           </label>
           <input
@@ -113,7 +113,7 @@ export default function DishForm({
                 ? 'e.g., Grilled Salmon with Vegetables'
                 : 'e.g., Chicken Stir-fry'
             }
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+            className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] placeholder-gray-500 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
             required
           />
         </div>
@@ -122,7 +122,7 @@ export default function DishForm({
         <div>
           <label
             htmlFor="dish-description"
-            className="mb-2 block text-sm font-medium text-gray-300"
+            className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]"
           >
             Description (Optional)
           </label>
@@ -137,7 +137,7 @@ export default function DishForm({
             }
             placeholder="Brief description of the dish..."
             rows={3}
-            className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+            className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] placeholder-gray-500 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
           />
         </div>
 
@@ -148,7 +148,7 @@ export default function DishForm({
               <div>
                 <label
                   htmlFor="recipe-yield"
-                  className="mb-2 block text-sm font-medium text-gray-300"
+                  className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]"
                 >
                   Yield *
                 </label>
@@ -164,14 +164,14 @@ export default function DishForm({
                   }
                   placeholder="1"
                   min="1"
-                  className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] placeholder-gray-500 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
                   required
                 />
               </div>
               <div>
                 <label
                   htmlFor="recipe-yield-unit"
-                  className="mb-2 block text-sm font-medium text-gray-300"
+                  className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]"
                 >
                   Yield Unit *
                 </label>
@@ -186,7 +186,7 @@ export default function DishForm({
                     }))
                   }
                   placeholder="portion"
-                  className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] placeholder-gray-500 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
                   required
                 />
               </div>
@@ -194,7 +194,7 @@ export default function DishForm({
             <div>
               <label
                 htmlFor="recipe-instructions"
-                className="mb-2 block text-sm font-medium text-gray-300"
+                className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]"
               >
                 Instructions (Optional)
               </label>
@@ -209,7 +209,7 @@ export default function DishForm({
                 }
                 placeholder="Step-by-step cooking instructions..."
                 rows={4}
-                className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] placeholder-gray-500 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
               />
             </div>
           </>
@@ -220,9 +220,9 @@ export default function DishForm({
           <div>
             <label
               htmlFor="dish-price"
-              className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-300"
+              className="mb-2 flex items-center gap-2 text-sm font-medium text-[var(--foreground-secondary)]"
             >
-              <Icon icon={DollarSign} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+              <Icon icon={DollarSign} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
               Selling Price (incl. GST) *
             </label>
             <div className="flex gap-2">
@@ -239,14 +239,14 @@ export default function DishForm({
                 placeholder="0.00"
                 step="0.01"
                 min="0"
-                className="flex-1 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-white placeholder-gray-500 focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+                className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] placeholder-gray-500 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
                 required
               />
               {recommendedPrice > 0 && (
                 <button
                   type="button"
                   onClick={handleApplyRecommendedPrice}
-                  className="rounded-lg border border-[#29E7CD]/50 bg-[#29E7CD]/10 px-4 py-2 text-sm font-medium text-[#29E7CD] transition-colors hover:bg-[#29E7CD]/20"
+                  className="rounded-lg border border-[var(--primary)]/50 bg-[var(--primary)]/10 px-4 py-2 text-sm font-medium text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/20"
                 >
                   Use Recommended (${recommendedPrice.toFixed(2)})
                 </button>
@@ -266,7 +266,7 @@ export default function DishForm({
               (dishState.itemType === 'dish' && dishState.sellingPrice <= 0) ||
               (dishState.itemType === 'recipe' && (!dishState.yield || dishState.yield <= 0))
             }
-            className="w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
           >
             {saving
               ? 'Saving...'
@@ -277,7 +277,7 @@ export default function DishForm({
                   : 'Save Recipe'}
           </button>
           {ingredientCount === 0 && (
-            <p className="mt-2 text-center text-xs text-gray-400">
+            <p className="mt-2 text-center text-xs text-[var(--foreground-muted)]">
               Tap recipes or ingredients from the left panel to start building your{' '}
               {dishState.itemType === 'dish' ? 'dish' : 'recipe'}
             </p>

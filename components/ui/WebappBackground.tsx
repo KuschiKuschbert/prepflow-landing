@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { backgroundTheme } from '@/lib/theme';
 import { LogoWatermark } from './LogoWatermark';
 import { FloatingParticles } from './FloatingParticles';
+import { useTheme } from '@/lib/theme/useTheme';
 
 interface WebappBackgroundProps {
   /**
@@ -67,6 +68,7 @@ export function WebappBackground({
   className,
 }: WebappBackgroundProps) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const { theme, isHydrated } = useTheme();
 
   useEffect(() => {
     if (!spotlight) return;
@@ -81,11 +83,11 @@ export function WebappBackground({
 
   return (
     <>
-      {/* Base gradient */}
+      {/* Base gradient - uses CSS variable for theme-aware background */}
       <div
         className="fixed inset-0 -z-20"
         style={{
-          background: 'linear-gradient(180deg, rgba(10,10,10,1) 0%, rgba(8,8,10,1) 100%)',
+          background: 'var(--background-gradient)',
         }}
       />
 
@@ -102,12 +104,20 @@ export function WebappBackground({
       {/* Logo watermarks */}
       {watermarks && <LogoWatermark count={2} opacity={0.015} size={250} />}
 
-      {/* Tron-like neon grid */}
-      {grid && (
+      {/* Tron-like neon grid - theme-aware */}
+      {grid && isHydrated && (
         <div
           className="pointer-events-none fixed inset-0 -z-10"
           style={{
-            backgroundImage: `linear-gradient(rgba(41,231,205,${backgroundTheme.gridCyanOpacity}) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,${backgroundTheme.gridBlueOpacity}) 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(${
+              theme === 'light'
+                ? `rgba(26, 157, 138, ${backgroundTheme.gridCyanOpacity * 1.5})`
+                : `rgba(41, 231, 205, ${backgroundTheme.gridCyanOpacity})`
+            } 1px, transparent 1px), linear-gradient(90deg, ${
+              theme === 'light'
+                ? `rgba(42, 100, 198, ${backgroundTheme.gridBlueOpacity * 1.5})`
+                : `rgba(59, 130, 246, ${backgroundTheme.gridBlueOpacity})`
+            } 1px, transparent 1px)`,
             backgroundSize: `${backgroundTheme.gridSizePx}px ${backgroundTheme.gridSizePx}px`,
             backgroundPosition: '0px 0px, 0px 0px',
             maskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)',

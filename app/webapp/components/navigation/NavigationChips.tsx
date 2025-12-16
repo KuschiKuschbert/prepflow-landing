@@ -36,8 +36,8 @@ export const NavigationChips = memo(function NavigationChips({
   return (
     <div className="relative mb-4">
       {/* Fade edges for scroll indication */}
-      <div className="pointer-events-none absolute top-0 left-0 z-10 h-full w-6 bg-gradient-to-r from-[#1f1f1f] to-transparent" />
-      <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-6 bg-gradient-to-l from-[#1f1f1f] to-transparent" />
+      <div className="pointer-events-none absolute top-0 left-0 z-10 h-full w-6 bg-gradient-to-r from-[var(--surface)] to-transparent" />
+      <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-6 bg-gradient-to-l from-[var(--surface)] to-transparent" />
 
       {/* Scrollable chip container */}
       <div
@@ -51,8 +51,8 @@ export const NavigationChips = memo(function NavigationChips({
           onClick={() => onCategoryChange(null)}
           className={`flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
             activeCategory === null
-              ? 'bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white shadow-lg shadow-[#29E7CD]/25'
-              : 'border border-[#2a2a2a] bg-[#2a2a2a]/50 text-gray-300 hover:border-[#29E7CD]/30 hover:bg-[#2a2a2a] hover:text-white'
+              ? 'bg-gradient-to-r from-[var(--primary)] to-[#3B82F6] text-[var(--button-active-text)] shadow-lg shadow-[var(--primary)]/25'
+              : 'border border-[var(--border)] bg-[var(--muted)]/50 text-[var(--button-active-text)]/80 hover:border-[var(--primary)]/30 hover:bg-[var(--muted)] hover:text-[var(--button-active-text)]'
           }`}
           style={{ transitionTimingFunction: 'var(--easing-standard)' }}
           role="tab"
@@ -71,8 +71,8 @@ export const NavigationChips = memo(function NavigationChips({
               onClick={() => onCategoryChange(category)}
               className={`flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? 'bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white shadow-lg shadow-[#29E7CD]/25'
-                  : 'border border-[#2a2a2a] bg-[#2a2a2a]/50 text-gray-300 hover:border-[#29E7CD]/30 hover:bg-[#2a2a2a] hover:text-white'
+                  ? 'bg-gradient-to-r from-[var(--primary)] to-[#3B82F6] text-[var(--button-active-text)] shadow-lg shadow-[var(--primary)]/25'
+                  : 'border border-[var(--border)] bg-[var(--muted)]/50 text-[var(--button-active-text)]/80 hover:border-[var(--primary)]/30 hover:bg-[var(--muted)] hover:text-[var(--button-active-text)]'
               }`}
               style={{ transitionTimingFunction: 'var(--easing-standard)' }}
               role="tab"

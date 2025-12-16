@@ -16,14 +16,14 @@ export function CSVImportFileUpload({
 }: CSVImportFileUploadProps) {
   return (
     <div>
-      <label className="mb-2 block text-sm font-medium text-gray-300">Upload CSV File</label>
+      <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Upload CSV File</label>
       <input
         type="file"
         accept=".csv"
         onChange={onFileUpload}
-        className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-white transition-colors focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+        className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-[var(--foreground)] transition-colors focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
       />
-      <p className="mt-1 text-xs text-gray-400">
+      <p className="mt-1 text-xs text-[var(--foreground-muted)]">
         Required columns: {expectedColumns.join(', ')}
         {optionalColumns && optionalColumns.length > 0 && (
           <> | Optional: {optionalColumns.join(', ')}</>

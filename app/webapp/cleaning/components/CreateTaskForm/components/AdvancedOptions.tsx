@@ -63,17 +63,17 @@ export function AdvancedOptions({
   onAssignedToChange,
 }: AdvancedOptionsProps) {
   return (
-    <div className="border-t border-[#2a2a2a] pt-3">
+    <div className="border-t border-[var(--border)] pt-3">
       <button
         type="button"
         onClick={onToggle}
-        className="mb-3 flex w-full items-center justify-between text-sm font-medium text-gray-400 transition-colors hover:text-white"
+        className="mb-3 flex w-full items-center justify-between text-sm font-medium text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
       >
         <span>Advanced Options (Optional)</span>
         <Icon
           icon={showAdvanced ? ChevronUp : ChevronDown}
           size="sm"
-          className="text-gray-400"
+          className="text-[var(--foreground-muted)]"
           aria-hidden={true}
         />
       </button>
@@ -82,10 +82,10 @@ export function AdvancedOptions({
         <div className="animate-in fade-in slide-in-from-top-2 space-y-3 duration-200">
           <div className="desktop:grid-cols-2 grid grid-cols-1 gap-3">
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-300">
+              <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
                 Equipment
                 {filteredEquipment.length < equipment.length && (
-                  <span className="ml-2 text-xs text-gray-500">
+                  <span className="ml-2 text-xs text-[var(--foreground-subtle)]">
                     ({filteredEquipment.length} of {equipment.length} shown)
                   </span>
                 )}
@@ -93,7 +93,7 @@ export function AdvancedOptions({
               <select
                 value={equipmentId}
                 onChange={e => onEquipmentChange(e.target.value)}
-                className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2.5 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2.5 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
               >
                 <option value="">None</option>
                 {(filteredEquipment.length > 0 ? filteredEquipment : equipment).map(eq => (
@@ -103,17 +103,17 @@ export function AdvancedOptions({
                 ))}
               </select>
               {areaId && filteredEquipment.length < equipment.length && (
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-[var(--foreground-subtle)]">
                   Showing equipment relevant to selected area
                 </p>
               )}
             </div>
 
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-300">
+              <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
                 Section
                 {filteredSections.length < sections.length && (
-                  <span className="ml-2 text-xs text-gray-500">
+                  <span className="ml-2 text-xs text-[var(--foreground-subtle)]">
                     ({filteredSections.length} of {sections.length} shown)
                   </span>
                 )}
@@ -121,7 +121,7 @@ export function AdvancedOptions({
               <select
                 value={sectionId}
                 onChange={e => onSectionChange(e.target.value)}
-                className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2.5 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2.5 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
               >
                 <option value="">None</option>
                 {(filteredSections.length > 0 ? filteredSections : sections).map(section => (
@@ -131,7 +131,7 @@ export function AdvancedOptions({
                 ))}
               </select>
               {areaId && filteredSections.length < sections.length && (
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-[var(--foreground-subtle)]">
                   Showing sections relevant to selected area
                 </p>
               )}
@@ -139,11 +139,11 @@ export function AdvancedOptions({
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-300">Assigned To</label>
+            <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Assigned To</label>
             <select
               value={assignedToEmployeeId}
               onChange={e => onAssignedToChange(e.target.value)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2.5 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2.5 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
               disabled={staffLoading}
             >
               <option value="">None (Unassigned)</option>
@@ -157,11 +157,11 @@ export function AdvancedOptions({
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-300">Description</label>
+            <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Description</label>
             <textarea
               value={description}
               onChange={e => onDescriptionChange(e.target.value)}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2.5 text-white placeholder-gray-500 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2.5 text-[var(--foreground)] placeholder-gray-500 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
               placeholder="Additional details about this task"
               rows={2}
             />

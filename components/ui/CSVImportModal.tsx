@@ -220,22 +220,22 @@ export function CSVImportModal<T = any>({
 
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-      <div className="max-h-[90vh] w-full max-w-4xl rounded-3xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
-        <div className="max-h-[90vh] w-full overflow-y-auto rounded-3xl bg-[#1f1f1f]/95">
+      <div className="max-h-[90vh] w-full max-w-4xl rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl">
+        <div className="max-h-[90vh] w-full overflow-y-auto rounded-3xl bg-[var(--surface)]/95">
           {/* Header */}
-          <div className="desktop:p-6 border-b border-[#2a2a2a] p-4">
+          <div className="desktop:p-6 border-b border-[var(--border)] p-4">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="desktop:text-2xl text-xl font-bold text-white">
+                <h2 className="desktop:text-2xl text-xl font-bold text-[var(--foreground)]">
                   Import {config.entityName} from CSV
                 </h2>
-                <p className="mt-1 text-sm text-gray-400">
+                <p className="mt-1 text-sm text-[var(--foreground)]/60">
                   Upload a CSV file or download our template to get started
                 </p>
               </div>
               <button
                 onClick={handleClose}
-                className="rounded-full bg-[#2a2a2a] p-2 text-gray-400 transition-colors hover:bg-[#3a3a3a] hover:text-white"
+                className="rounded-full bg-[var(--muted)] p-2 text-[var(--foreground)]/60 transition-colors hover:bg-[var(--border)] hover:text-[var(--foreground)]"
                 aria-label="Close import modal"
               >
                 <Icon icon={X} size="md" aria-hidden={true} />

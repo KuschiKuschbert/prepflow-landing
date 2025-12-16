@@ -177,31 +177,31 @@ export function ClockIn({ employee, shift, venueLocation }: ClockInProps) {
     <Card className="p-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-white">Time & Attendance</h2>
-          <p className="text-sm text-gray-400">
+          <h2 className="text-xl font-semibold text-[var(--foreground)]">Time & Attendance</h2>
+          <p className="text-sm text-[var(--foreground-muted)]">
             {employee.first_name} {employee.last_name}
           </p>
         </div>
-        <Icon icon={Clock} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
+        <Icon icon={Clock} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
       </div>
 
       {/* Location Status */}
       <div className="mb-6 space-y-4">
         {locationError ? (
-          <div className="flex items-center gap-3 rounded-xl border border-red-500/50 bg-red-500/10 p-4">
-            <Icon icon={XCircle} size="md" className="text-red-400" aria-hidden={true} />
+          <div className="flex items-center gap-3 rounded-xl border border-[var(--color-error)]/50 bg-[var(--color-error)]/10 p-4">
+            <Icon icon={XCircle} size="md" className="text-[var(--color-error)]" aria-hidden={true} />
             <div>
-              <div className="font-medium text-red-400">Location Error</div>
+              <div className="font-medium text-[var(--color-error)]">Location Error</div>
               <div className="text-sm text-red-300">{locationError}</div>
             </div>
           </div>
         ) : location ? (
           <div className="space-y-3">
-            <div className="flex items-center gap-3 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
-              <Icon icon={MapPin} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+            <div className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
+              <Icon icon={MapPin} size="md" className="text-[var(--primary)]" aria-hidden={true} />
               <div className="flex-1">
-                <div className="font-medium text-white">Your Location</div>
-                <div className="text-sm text-gray-400">
+                <div className="font-medium text-[var(--foreground)]">Your Location</div>
+                <div className="text-sm text-[var(--foreground-muted)]">
                   {location.coords.latitude.toFixed(6)}, {location.coords.longitude.toFixed(6)}
                 </div>
               </div>
@@ -211,23 +211,23 @@ export function ClockIn({ employee, shift, venueLocation }: ClockInProps) {
               <div
                 className={`flex items-center gap-3 rounded-xl border p-4 ${
                   isValidLocation
-                    ? 'border-green-500/50 bg-green-500/10'
-                    : 'border-red-500/50 bg-red-500/10'
+                    ? 'border-[var(--color-success)]/50 bg-[var(--color-success)]/10'
+                    : 'border-[var(--color-error)]/50 bg-[var(--color-error)]/10'
                 }`}
               >
                 <Icon
                   icon={isValidLocation ? CheckCircle : XCircle}
                   size="md"
-                  className={isValidLocation ? 'text-green-400' : 'text-red-400'}
+                  className={isValidLocation ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'}
                   aria-hidden={true}
                 />
                 <div className="flex-1">
                   <div
-                    className={`font-medium ${isValidLocation ? 'text-green-400' : 'text-red-400'}`}
+                    className={`font-medium ${isValidLocation ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'}`}
                   >
                     {isValidLocation ? 'Within Geofence' : 'Outside Geofence'}
                   </div>
-                  <div className="text-sm text-gray-400">
+                  <div className="text-sm text-[var(--foreground-muted)]">
                     Distance: {Math.round(distance)}m / {defaultVenueLocation.radiusMeters}m
                   </div>
                 </div>
@@ -235,14 +235,14 @@ export function ClockIn({ employee, shift, venueLocation }: ClockInProps) {
             )}
           </div>
         ) : (
-          <div className="flex items-center gap-3 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
+          <div className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
             <Icon
               icon={Loader2}
               size="md"
-              className="animate-spin text-gray-400"
+              className="animate-spin text-[var(--foreground-muted)]"
               aria-hidden={true}
             />
-            <div className="text-sm text-gray-400">Getting your location...</div>
+            <div className="text-sm text-[var(--foreground-muted)]">Getting your location...</div>
           </div>
         )}
       </div>
@@ -274,9 +274,9 @@ export function ClockIn({ employee, shift, venueLocation }: ClockInProps) {
 
       {/* Shift Info */}
       {shift && (
-        <div className="mt-4 rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
-          <div className="text-xs text-gray-400">Current Shift</div>
-          <div className="text-sm font-medium text-white">
+        <div className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
+          <div className="text-xs text-[var(--foreground-muted)]">Current Shift</div>
+          <div className="text-sm font-medium text-[var(--foreground)]">
             {new Date(shift.start_time).toLocaleTimeString('en-AU', {
               hour: '2-digit',
               minute: '2-digit',

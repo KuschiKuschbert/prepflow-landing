@@ -75,7 +75,7 @@ const KitchenOnFire: React.FC = () => {
       <WebAppBackground />
       <ArcadeMuteButton />
       {/* Score/Timer UI removed per request */}
-      <main className="fixed inset-0 flex min-h-screen items-center justify-center p-6 text-white">
+      <main className="fixed inset-0 flex min-h-screen items-center justify-center p-6 text-[var(--foreground)]">
         <div className="flex max-w-2xl flex-col items-center text-center">
           <AnimatePresence mode="wait">
             {!extinguished ? (
@@ -92,7 +92,7 @@ const KitchenOnFire: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="text-fluid-base desktop:text-fluid-lg mb-8 text-gray-300"
+                  className="text-fluid-base desktop:text-fluid-lg mb-8 text-[var(--foreground)]/60"
                 >
                   <span className="desktop:inline hidden">Click</span>
                   <span className="desktop:hidden">Tap</span> to extinguish before service resumes.
@@ -144,7 +144,7 @@ const KitchenOnFire: React.FC = () => {
                     onClick={handleSprayWater}
                     whileHover={reducedMotion ? {} : { scale: 1.05 }}
                     whileTap={reducedMotion ? {} : { scale: 0.95, x: [0, -5, 5, -5, 0] }}
-                    className="text-fluid-lg desktop:px-8 desktop:py-4 desktop:text-fluid-xl desktop:hover:shadow-xl touch-manipulation rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3.5 font-semibold text-black shadow-lg transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none active:scale-95"
+                    className="text-fluid-lg desktop:px-8 desktop:py-4 desktop:text-fluid-xl desktop:hover:shadow-xl touch-manipulation rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3.5 font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none active:scale-95"
                     aria-label={`Spray water to extinguish flames. ${flames} flames remaining.`}
                   >
                     🧯 Spray Water
@@ -158,8 +158,8 @@ const KitchenOnFire: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-8 space-y-4"
                   >
-                    <div className="rounded-xl border border-[#D925C7] bg-[#D925C7]/10 px-6 py-4">
-                      <p className="text-fluid-lg font-semibold text-[#D925C7]">
+                    <div className="rounded-xl border border-[var(--accent)] bg-[var(--accent)]/10 px-6 py-4">
+                      <p className="text-fluid-lg font-semibold text-[var(--accent)]">
                         Hey Chef… back to the real fire 🔪🔥
                       </p>
                     </div>
@@ -169,7 +169,7 @@ const KitchenOnFire: React.FC = () => {
                       whileHover={reducedMotion ? {} : { scale: 1.05 }}
                       whileTap={reducedMotion ? {} : { scale: 0.95 }}
                       onClick={handleReturnToDashboard}
-                      className="text-fluid-base desktop:px-6 desktop:py-3 desktop:text-fluid-lg desktop:hover:bg-[#2a2a2a]/60 touch-manipulation rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/40 px-5 py-2.5 font-semibold text-white transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none active:scale-95"
+                      className="text-fluid-base desktop:px-6 desktop:py-3 desktop:text-fluid-lg desktop:hover:bg-[var(--muted)]/60 touch-manipulation rounded-2xl border border-[var(--border)] bg-[var(--muted)]/40 px-5 py-2.5 font-semibold text-[var(--foreground)] transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none active:scale-95"
                     >
                       Return to Dashboard
                     </motion.button>
@@ -181,7 +181,7 @@ const KitchenOnFire: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.6 }}
-                  className="text-fluid-sm mt-6 text-gray-500"
+                  className="text-fluid-sm mt-6 text-[var(--foreground)]/40"
                 >
                   Time: {playTime}s{fastestTime !== null && ` | Best: ${fastestTime}s`}
                 </motion.p>
@@ -196,7 +196,7 @@ const KitchenOnFire: React.FC = () => {
                 <motion.h1
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-fluid-4xl desktop:text-fluid-4xl mb-4 font-extrabold text-[#29E7CD]"
+                  className="text-fluid-4xl desktop:text-fluid-4xl mb-4 font-extrabold text-[var(--primary)]"
                 >
                   Fire out! Back to service ✅
                 </motion.h1>
@@ -205,11 +205,11 @@ const KitchenOnFire: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="text-fluid-lg mb-8 text-gray-300"
+                  className="text-fluid-lg mb-8 text-[var(--foreground)]/60"
                 >
                   You extinguished the fire in {playTime} seconds!
                   {fastestTime !== null && playTime === fastestTime && (
-                    <span className="mt-2 block text-[#29E7CD]">🏆 New record!</span>
+                    <span className="mt-2 block text-[var(--primary)]">🏆 New record!</span>
                   )}
                 </motion.p>
 
@@ -220,7 +220,7 @@ const KitchenOnFire: React.FC = () => {
                   whileHover={reducedMotion ? {} : { scale: 1.05 }}
                   whileTap={reducedMotion ? {} : { scale: 0.95 }}
                   onClick={handleReturnToDashboard}
-                  className="text-fluid-lg desktop:px-8 desktop:py-4 desktop:text-fluid-xl desktop:hover:shadow-xl touch-manipulation rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3.5 font-semibold text-black shadow-lg transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none active:scale-95"
+                  className="text-fluid-lg desktop:px-8 desktop:py-4 desktop:text-fluid-xl desktop:hover:shadow-xl touch-manipulation rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3.5 font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none active:scale-95"
                 >
                   Return to Dashboard
                 </motion.button>
@@ -230,7 +230,7 @@ const KitchenOnFire: React.FC = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="text-fluid-sm mt-6 text-gray-500"
+                    className="text-fluid-sm mt-6 text-[var(--foreground)]/40"
                   >
                     Took your time, but you got there! 👨‍🍳
                   </motion.p>

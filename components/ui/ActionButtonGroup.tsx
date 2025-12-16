@@ -128,7 +128,7 @@ export function ActionButtonGroup({
       <div className="desktop:hidden relative" ref={menuRef}>
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="flex items-center gap-2 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2 text-sm font-medium text-white transition-colors hover:border-[#29E7CD]/30 hover:bg-[#3a3a3a]"
+          className="flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--muted)] px-3 py-2 text-sm font-medium text-[var(--foreground)] transition-colors hover:border-[var(--primary)]/30 hover:bg-[var(--surface-variant)]"
           aria-label="More actions"
           aria-expanded={isMobileMenuOpen}
         >
@@ -136,7 +136,7 @@ export function ActionButtonGroup({
         </button>
 
         {isMobileMenuOpen && (
-          <div className="absolute right-0 z-50 mt-2 w-56 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
+          <div className="absolute right-0 z-50 mt-2 w-56 rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-lg">
             <div className="py-1">
               {onPrint && (
                 <button
@@ -145,15 +145,15 @@ export function ActionButtonGroup({
                     setIsMobileMenuOpen(false);
                   }}
                   disabled={printLoading}
-                  className="flex w-full items-center gap-3 px-4 py-2 text-sm text-white transition-colors hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex w-full items-center gap-3 px-4 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <Icon icon={Printer} size="sm" className="text-gray-400" aria-hidden={true} />
+                  <Icon icon={Printer} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
                   <span>{printLoading ? 'Printing...' : 'Print'}</span>
                 </button>
               )}
 
               {onExport && (
-                <div className="border-t border-[#2a2a2a]">
+                <div className="border-t border-[var(--border)]">
                   {availableExportFormats.map(format => (
                     <button
                       key={format}
@@ -162,12 +162,12 @@ export function ActionButtonGroup({
                         setIsMobileMenuOpen(false);
                       }}
                       disabled={exportLoading === format}
-                      className="flex w-full items-center gap-3 px-4 py-2 text-sm text-white transition-colors hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex w-full items-center gap-3 px-4 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)] disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       <Icon
                         icon={Download}
                         size="sm"
-                        className="text-gray-400"
+                        className="text-[var(--foreground-muted)]"
                         aria-hidden={true}
                       />
                       <span>
@@ -186,9 +186,9 @@ export function ActionButtonGroup({
                     // Trigger share - would open share modal
                     setIsMobileMenuOpen(false);
                   }}
-                  className="flex w-full items-center gap-3 px-4 py-2 text-sm text-white transition-colors hover:bg-[#2a2a2a]"
+                  className="flex w-full items-center gap-3 px-4 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]"
                 >
-                  <Icon icon={Share2} size="sm" className="text-gray-400" aria-hidden={true} />
+                  <Icon icon={Share2} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
                   <span>Share</span>
                 </button>
               )}
@@ -199,9 +199,9 @@ export function ActionButtonGroup({
                     navigator.clipboard.writeText(copyText);
                     setIsMobileMenuOpen(false);
                   }}
-                  className="flex w-full items-center gap-3 px-4 py-2 text-sm text-white transition-colors hover:bg-[#2a2a2a]"
+                  className="flex w-full items-center gap-3 px-4 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]"
                 >
-                  <Icon icon={Copy} size="sm" className="text-gray-400" aria-hidden={true} />
+                  <Icon icon={Copy} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
                   <span>{copyLabel}</span>
                 </button>
               )}
@@ -213,9 +213,9 @@ export function ActionButtonGroup({
                     setIsMobileMenuOpen(false);
                   }}
                   disabled={importLoading}
-                  className="flex w-full items-center gap-3 px-4 py-2 text-sm text-white transition-colors hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex w-full items-center gap-3 px-4 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <Icon icon={Upload} size="sm" className="text-gray-400" aria-hidden={true} />
+                  <Icon icon={Upload} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
                   <span>{importLoading ? 'Importing...' : 'Import CSV'}</span>
                 </button>
               )}

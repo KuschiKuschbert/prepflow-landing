@@ -81,23 +81,23 @@ export function EquipmentQRCodeModal({
       aria-modal="true"
       aria-labelledby="qr-code-title"
     >
-      <div className="tablet:p-4 desktop:max-w-lg relative max-h-[95vh] w-full max-w-md rounded-2xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl">
+      <div className="tablet:p-4 desktop:max-w-lg relative max-h-[95vh] w-full max-w-md rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl">
         <div
           ref={modalRef}
-          className="flex max-h-[95vh] w-full flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-[#1f1f1f]/95 to-[#2a2a2a]/95 p-3"
+          className="flex max-h-[95vh] w-full flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-[#1f1f1f]/95 to-[var(--muted)]/95 p-3"
           onClick={e => e.stopPropagation()}
         >
           {/* Gradient accent */}
-          <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-[#29E7CD]/10 via-transparent to-[#D925C7]/10 opacity-50" />
+          <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-[var(--primary)]/10 via-transparent to-[var(--accent)]/10 opacity-50" />
 
           {/* Close button */}
           <button
             ref={closeButtonRef}
             onClick={onClose}
-            className="absolute top-3 right-3 z-10 rounded-full bg-[#2a2a2a]/80 p-1.5 backdrop-blur-sm transition-all hover:scale-110 hover:bg-[#3a3a3a] focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
+            className="absolute top-3 right-3 z-10 rounded-full bg-[var(--muted)]/80 p-1.5 backdrop-blur-sm transition-all hover:scale-110 hover:bg-[var(--surface-variant)] focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none"
             aria-label="Close QR code modal"
           >
-            <Icon icon={X} size="sm" className="text-gray-400" />
+            <Icon icon={X} size="sm" className="text-[var(--foreground-muted)]" />
           </button>
 
           <EquipmentQRCodeModalHeader

@@ -1,8 +1,10 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { logger } from '@/lib/logger';
+import { useTheme } from '@/lib/theme/useTheme';
+
 interface AnimatedBackgroundProps {
   className?: string;
 }
@@ -11,6 +13,12 @@ export default function AnimatedBackground({ className = '' }: AnimatedBackgroun
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameRef = useRef<number | undefined>(undefined);
   const waveRef = useRef({ phase: 0, speed: 0.02 });
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     // Ensure we're on the client - SSR guard
@@ -79,21 +87,26 @@ export default function AnimatedBackground({ className = '' }: AnimatedBackgroun
         const waveCenterY = displayHeight * 0.45;
         const numRings = 4;
 
+        // Theme-aware opacity - more visible in light mode, subtle in dark mode
+        const baseOpacity = theme === 'light' ? 0.15 : 0.12;
+        const opacityStep = theme === 'light' ? 0.025 : 0.02;
+
         for (let i = 0; i < numRings; i++) {
           const ringPhase = phase + i * 0.4;
           const radius = 80 + i * 50 + Math.sin(ringPhase) * 15;
-          const opacity = 0.08 - i * 0.015;
+          const opacity = baseOpacity - i * opacityStep;
           const alpha = Math.max(0, opacity);
 
-          // Subtle cyan wave rings
+          // Theme-aware cyan wave rings - more visible in light mode
           ctx.strokeStyle = `rgba(41, 231, 205, ${alpha})`;
-          ctx.lineWidth = 1.5;
+          ctx.lineWidth = theme === 'light' ? 2 : 1.5;
           ctx.beginPath();
           ctx.arc(waveCenterX, waveCenterY, radius, 0, Math.PI * 2);
           ctx.stroke();
 
-          // Very subtle glow effect for inner rings
+          // Enhanced glow effect for inner rings - more visible in light mode
           if (i < 2) {
+            const glowOpacity = theme === 'light' ? alpha * 0.5 : alpha * 0.3;
             const glowGradient = ctx.createRadialGradient(
               waveCenterX,
               waveCenterY,
@@ -102,10 +115,10 @@ export default function AnimatedBackground({ className = '' }: AnimatedBackgroun
               waveCenterY,
               radius + 3,
             );
-            glowGradient.addColorStop(0, `rgba(41, 231, 205, ${alpha * 0.3})`);
+            glowGradient.addColorStop(0, `rgba(41, 231, 205, ${glowOpacity})`);
             glowGradient.addColorStop(1, 'rgba(41, 231, 205, 0)');
             ctx.strokeStyle = glowGradient;
-            ctx.lineWidth = 3;
+            ctx.lineWidth = theme === 'light' ? 4 : 3;
             ctx.beginPath();
             ctx.arc(waveCenterX, waveCenterY, radius, 0, Math.PI * 2);
             ctx.stroke();
@@ -129,7 +142,7 @@ export default function AnimatedBackground({ className = '' }: AnimatedBackgroun
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, []);
+  }, [theme, mounted]);
 
   return (
     <canvas

@@ -150,7 +150,7 @@ export default function ParLevelsPage() {
   if (loading && parLevels.length === 0) {
     return (
       <ResponsivePageContainer>
-        <div className="min-h-screen bg-transparent py-8 text-white">
+        <div className="min-h-screen bg-transparent py-8 text-[var(--foreground)]">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="mt-6 space-y-4">
             <LoadingSkeleton variant="card" count={5} height="80px" />
@@ -162,16 +162,16 @@ export default function ParLevelsPage() {
 
   return (
     <ResponsivePageContainer>
-      <div className="min-h-screen bg-transparent py-8 text-white">
+      <div className="min-h-screen bg-transparent py-8 text-[var(--foreground)]">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-white">
+            <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-[var(--foreground)]">
               <Icon icon={Package2} size="lg" aria-hidden={true} />
               {t('parLevels.title', 'Par Level Management')}
             </h1>
             <div className="flex items-center gap-2">
-              <p className="text-gray-400">
+              <p className="text-[var(--foreground-muted)]">
                 {t('parLevels.subtitle', 'Set minimum stock levels for automatic reordering')}
               </p>
               <HelpTooltip
@@ -183,7 +183,7 @@ export default function ParLevelsPage() {
           <div className="flex flex-wrap gap-3">
             <button
               onClick={() => setShowForm(true)}
-              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
+              className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
             >
               + {t('parLevels.addParLevel', 'Add Par Level')}
             </button>
@@ -221,13 +221,13 @@ export default function ParLevelsPage() {
         {/* Par Levels List */}
         {parLevels.length === 0 ? (
           <div className="py-12 text-center">
-            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-              <Icon icon={Package2} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20">
+              <Icon icon={Package2} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
             </div>
-            <h3 className="mb-2 text-xl font-semibold text-white">
+            <h3 className="mb-2 text-xl font-semibold text-[var(--button-active-text)]">
               {t('parLevels.noParLevels', 'No Par Levels Set')}
             </h3>
-            <p className="mb-6 text-gray-400">
+            <p className="mb-6 text-[var(--foreground-muted)]">
               {t(
                 'parLevels.noParLevelsDesc',
                 'Set par levels to automate your inventory management',
@@ -235,7 +235,7 @@ export default function ParLevelsPage() {
             </p>
             <button
               onClick={() => setShowForm(true)}
-              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
+              className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
             >
               {t('parLevels.addFirstParLevel', 'Add Your First Par Level')}
             </button>

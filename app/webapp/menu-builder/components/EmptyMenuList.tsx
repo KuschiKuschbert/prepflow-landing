@@ -13,20 +13,20 @@ export function EmptyMenuList() {
   return (
     <div className="py-16 text-center">
       <div className="mb-6 flex justify-center">
-        <div className="rounded-full bg-gradient-to-r from-[#29E7CD]/20 to-[#D925C7]/20 p-6">
-          <Icon icon={FileText} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
+        <div className="rounded-full bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20 p-6">
+          <Icon icon={FileText} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
         </div>
       </div>
-      <h3 className="mb-3 text-2xl font-semibold text-white">No menus yet</h3>
-      <p className="mx-auto mb-6 max-w-md text-gray-400">
+      <h3 className="mb-3 text-2xl font-semibold text-[var(--foreground)]">No menus yet</h3>
+      <p className="mx-auto mb-6 max-w-md text-[var(--foreground-muted)]">
         Create your first menu to organize your dishes into categories. You can drag and drop dishes
         from your recipe collection into menu categories.
       </p>
-      <div className="mx-auto max-w-md rounded-lg border border-[#2a2a2a] bg-[#1f1f1f]/50 p-4">
-        <p className="mb-2 text-sm text-gray-300">
+      <div className="mx-auto max-w-md rounded-lg border border-[var(--border)] bg-[var(--surface)]/50 p-4">
+        <p className="mb-2 text-sm text-[var(--foreground-secondary)]">
           💡 <strong>Tip:</strong> Before creating a menu, make sure you have:
         </p>
-        <ul className="ml-6 list-disc space-y-1 text-left text-sm text-gray-400">
+        <ul className="ml-6 list-disc space-y-1 text-left text-sm text-[var(--foreground-muted)]">
           <li>
             Created some dishes in the <strong>Dish Builder</strong>
           </li>

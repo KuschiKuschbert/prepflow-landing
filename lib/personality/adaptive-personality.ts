@@ -88,3 +88,6 @@ export function adjustMessageProbability(
 ): number {
   return baseProbability * adaptiveSettings.messageFrequencyMultiplier;
 }
+
+
+

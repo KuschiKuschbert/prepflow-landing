@@ -131,7 +131,7 @@ export function PlatingMethodSelectorPopup({
       {/* Popover positioned near the button */}
       <div
         ref={popupRef}
-        className="fixed z-[80] w-[200px] rounded-xl bg-gradient-to-r from-[#29E7CD]/20 via-[#D925C7]/20 via-[#FF6B00]/20 to-[#29E7CD]/20 p-[1px] shadow-2xl"
+        className="fixed z-[80] w-[200px] rounded-xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl"
         style={{
           left: `${popoverPosition.left}px`,
           top: `${popoverPosition.top}px`,
@@ -142,15 +142,15 @@ export function PlatingMethodSelectorPopup({
         aria-labelledby="plating-popup-title"
         onClick={e => e.stopPropagation()}
       >
-        <div className="rounded-xl bg-[#1f1f1f]/95" style={{ maxHeight: '240px' }}>
+        <div className="rounded-xl bg-[var(--surface)]/95" style={{ maxHeight: '240px' }}>
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-[#2a2a2a] px-3 py-2">
-            <p id="plating-popup-title" className="text-xs font-medium text-gray-300">
+          <div className="flex items-center justify-between border-b border-[var(--border)] px-3 py-2">
+            <p id="plating-popup-title" className="text-xs font-medium text-[var(--foreground-secondary)]">
               Select Plating Style
             </p>
             <button
               onClick={onClose}
-              className="rounded-lg p-1 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+              className="rounded-lg p-1 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
               aria-label="Close"
             >
               <Icon icon={X} size="xs" />
@@ -162,10 +162,10 @@ export function PlatingMethodSelectorPopup({
               <button
                 key={method}
                 onClick={() => handleSelectMethod(method)}
-                className="w-full border-b border-[#2a2a2a]/50 px-3 py-2 text-left transition-colors last:border-b-0 hover:bg-[#2a2a2a]/50 hover:text-[#29E7CD]"
+                className="w-full border-b border-[var(--border)]/50 px-3 py-2 text-left transition-colors last:border-b-0 hover:bg-[var(--muted)]/50 hover:text-[var(--primary)]"
               >
-                <div className="text-xs font-medium text-white">{platingMethodLabels[method]}</div>
-                <div className="mt-0.5 text-[10px] text-gray-400">
+                <div className="text-xs font-medium text-[var(--foreground)]">{platingMethodLabels[method]}</div>
+                <div className="mt-0.5 text-[10px] text-[var(--foreground-muted)]">
                   {platingMethodDescriptions[method]}
                 </div>
               </button>

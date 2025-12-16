@@ -44,13 +44,13 @@ export function getTypeIconEmoji(typeName: string): string {
 export function getStatusColor(status: 'active' | 'expired' | 'pending_renewal'): string {
   switch (status) {
     case 'active':
-      return 'border-green-400/20 bg-green-400/10 text-green-400';
+      return 'border-[var(--color-success)]/20 bg-[var(--color-success)]/10 text-[var(--color-success)]';
     case 'expired':
-      return 'border-red-400/20 bg-red-400/10 text-red-400';
+      return 'border-[var(--color-error)]/20 bg-[var(--color-error)]/10 text-[var(--color-error)]';
     case 'pending_renewal':
-      return 'border-yellow-400/20 bg-yellow-400/10 text-yellow-400';
+      return 'border-[var(--color-warning)]/20 bg-[var(--color-warning)]/10 text-[var(--color-warning)]';
     default:
-      return 'border-gray-400/20 bg-gray-400/10 text-gray-400';
+      return 'border-gray-400/20 bg-gray-400/10 text-[var(--foreground-muted)]';
   }
 }
 

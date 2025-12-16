@@ -78,7 +78,7 @@ export function MenuItemActions({
           e.stopPropagation();
           onRemove();
         }}
-        className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-500/20 hover:text-red-400"
+        className="rounded-lg p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--color-error)]/20 hover:text-[var(--color-error)]"
         aria-label="Remove item"
       >
         <Icon icon={Trash2} size="sm" />

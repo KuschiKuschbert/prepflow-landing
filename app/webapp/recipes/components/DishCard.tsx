@@ -36,7 +36,7 @@ const DishCard = React.memo(function DishCard({
 
   return (
     <div
-      className="cursor-pointer border-l-2 border-[#29E7CD]/30 bg-[#29E7CD]/2 p-4 transition-colors hover:bg-[#29E7CD]/5"
+      className="cursor-pointer border-l-2 border-[var(--primary)]/30 bg-[var(--primary)]/2 p-4 transition-colors hover:bg-[var(--primary)]/5"
       onClick={e => {
         // Don't trigger if clicking on buttons or checkbox
         if ((e.target as HTMLElement).closest('button')) return;
@@ -51,13 +51,13 @@ const DishCard = React.memo(function DishCard({
               e.stopPropagation();
               onSelectDish(dish.id);
             }}
-            className="mr-3 flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+            className="mr-3 flex items-center justify-center transition-colors hover:text-[var(--primary)]"
             aria-label={`${selectedDishes.has(dish.id) ? 'Deselect' : 'Select'} dish ${capitalizeDishName(dish.dish_name)}`}
             title={selectedDishes.has(dish.id) ? 'Deselect dish' : 'Select dish'}
           >
             {selectedDishes.has(dish.id) ? (
               <svg
-                className="h-4 w-4 text-[#29E7CD]"
+                className="h-4 w-4 text-[var(--primary)]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -70,29 +70,29 @@ const DishCard = React.memo(function DishCard({
                 />
               </svg>
             ) : (
-              <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+              <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
             )}
           </button>
-          <h3 className="text-sm font-medium text-white">{capitalizeDishName(dish.dish_name)}</h3>
+          <h3 className="text-sm font-medium text-[var(--foreground)]">{capitalizeDishName(dish.dish_name)}</h3>
         </div>
         <span
-          className="text-xs text-gray-500"
+          className="text-xs text-[var(--foreground-subtle)]"
           title={`Created on ${formatRecipeDate(dish.created_at)}`}
         >
           {formatRecipeDate(dish.created_at)}
         </span>
       </div>
 
-      <div className="mb-3 ml-7 space-y-1 text-xs text-gray-500">
+      <div className="mb-3 ml-7 space-y-1 text-xs text-[var(--foreground-subtle)]">
         <div title="The price customers pay for this dish">
           <span className="font-medium">Selling Price:</span>
-          <span className="ml-1 font-semibold text-white">${dish.selling_price.toFixed(2)}</span>
+          <span className="ml-1 font-semibold text-[var(--foreground)]">${dish.selling_price.toFixed(2)}</span>
         </div>
         {dishCost && (
           <>
             <div title="Total cost of all ingredients in this dish">
               <span className="font-medium">Cost:</span>
-              <span className="ml-1 font-semibold text-white">
+              <span className="ml-1 font-semibold text-[var(--foreground)]">
                 ${dishCost.total_cost.toFixed(2)}
               </span>
             </div>
@@ -102,7 +102,7 @@ const DishCard = React.memo(function DishCard({
               <span className="font-medium">Profit Margin:</span>
               <span
                 className={`ml-1 font-semibold ${
-                  dishCost.gross_profit_margin >= 30 ? 'text-green-400' : 'text-yellow-400'
+                  dishCost.gross_profit_margin >= 30 ? 'text-[var(--color-success)]' : 'text-[var(--color-warning)]'
                 }`}
               >
                 {dishCost.gross_profit_margin.toFixed(1)}%
@@ -111,7 +111,7 @@ const DishCard = React.memo(function DishCard({
           </>
         )}
         {!dishCost && (
-          <div className="text-xs text-gray-600 italic" title="Click Preview to see cost breakdown">
+          <div className="text-xs text-[var(--foreground-subtle)] italic" title="Click Preview to see cost breakdown">
             Cost calculation pending...
           </div>
         )}
@@ -122,7 +122,7 @@ const DishCard = React.memo(function DishCard({
         <div className="mb-3 ml-7 space-y-2">
           {dish.allergens && dish.allergens.length > 0 && (
             <div>
-              <span className="text-xs font-medium text-gray-400">Allergens:</span>
+              <span className="text-xs font-medium text-[var(--foreground-muted)]">Allergens:</span>
               <div className="mt-1">
                 <AllergenDisplay allergens={dish.allergens} size="sm" showEmpty={false} />
               </div>
@@ -143,7 +143,7 @@ const DishCard = React.memo(function DishCard({
             e.stopPropagation();
             onPreviewDish(dish);
           }}
-          className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+          className="rounded-lg bg-[var(--muted)]/50 px-3 py-1.5 text-xs text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
           title="View full dish details and cost breakdown"
         >
           Preview
@@ -153,7 +153,7 @@ const DishCard = React.memo(function DishCard({
             e.stopPropagation();
             onEditDish(dish);
           }}
-          className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+          className="rounded-lg bg-[var(--muted)]/50 px-3 py-1.5 text-xs text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)]"
           aria-label={`Edit dish ${capitalizeDishName(dish.dish_name)}`}
           title="Edit dish in builder"
         >
@@ -164,7 +164,7 @@ const DishCard = React.memo(function DishCard({
             e.stopPropagation();
             onDeleteDish(dish);
           }}
-          className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-red-400"
+          className="rounded-lg bg-[var(--muted)]/50 px-3 py-1.5 text-xs text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--color-error)]"
           aria-label={`Delete dish ${capitalizeDishName(dish.dish_name)}`}
           title="Delete this dish"
         >

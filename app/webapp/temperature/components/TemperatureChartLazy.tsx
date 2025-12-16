@@ -106,7 +106,7 @@ export default function TemperatureChartLazy({
         data={chartDataWithAreas}
         margin={{ top: 10, right: 20, left: 10, bottom: 30 }}
       >
-        <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" opacity={0.5} />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" opacity={0.5} />
         <ReferenceAreas
           chartDataLength={chartData.length}
           equipment={equipment}
@@ -120,42 +120,42 @@ export default function TemperatureChartLazy({
           domain={xAxisDomain}
           ticks={xAxisTicks}
           tickFormatter={formatXAxisLabel}
-          stroke="#ffffff"
-          style={{ fontSize: '12px' }}
-          tick={{ fill: '#ffffff' }}
+          stroke="var(--foreground-muted)"
+          style={{ fontSize: '12px', fontWeight: '500' }}
+          tick={{ fill: 'var(--foreground-muted)' }}
           scale="linear"
         />
         <YAxis
           domain={[yAxisMin, yAxisMax]}
-          stroke="#ffffff"
+          stroke="var(--foreground-muted)"
           tickFormatter={(v: number | string) => {
             const num = typeof v === 'number' ? v : parseFloat(String(v));
             return isNaN(num) ? String(v) : `${num.toFixed(1)}°`;
           }}
-          style={{ fontSize: '12px' }}
-          tick={{ fill: '#ffffff' }}
+          style={{ fontSize: '12px', fontWeight: '500' }}
+          tick={{ fill: 'var(--foreground-muted)' }}
         />
         <Tooltip
           labelFormatter={formatTooltipLabel}
           formatter={(value: any) => [formatTooltipValue(value as number), 'Temp']}
           contentStyle={{
-            backgroundColor: '#1f1f1f',
-            border: '1px solid #2a2a2a',
-            color: '#fff',
+            backgroundColor: 'var(--surface)',
+            border: '1px solid var(--border)',
+            color: 'var(--foreground)',
             borderRadius: '8px',
           }}
         />
         {equipment.min_temp_celsius !== null && (
           <ReferenceLine
             y={equipment.min_temp_celsius}
-            stroke="#29E7CD"
+            stroke="var(--primary)"
             strokeWidth={3}
             strokeDasharray="6 4"
             strokeOpacity={0.9}
             label={{
               value: `Min: ${equipment.min_temp_celsius}°C`,
               position: 'right',
-              fill: '#29E7CD',
+              fill: 'var(--primary)',
               fontSize: 12,
               fontWeight: 'bold',
               offset: 10,
@@ -166,14 +166,14 @@ export default function TemperatureChartLazy({
         {equipment.max_temp_celsius !== null && (
           <ReferenceLine
             y={equipment.max_temp_celsius}
-            stroke="#29E7CD"
+            stroke="var(--primary)"
             strokeWidth={3}
             strokeDasharray="6 4"
             strokeOpacity={0.9}
             label={{
               value: `Max: ${equipment.max_temp_celsius}°C`,
               position: 'right',
-              fill: '#29E7CD',
+              fill: 'var(--primary)',
               fontSize: 12,
               fontWeight: 'bold',
               offset: 10,
@@ -187,8 +187,8 @@ export default function TemperatureChartLazy({
             type="monotone"
             dataKey="redAreaBelow"
             baseValue={yMin}
-            fill="#f87171"
-            fillOpacity={0.3}
+            fill="var(--color-error)"
+            fillOpacity={0.25}
             stroke="none"
             isAnimationActive={false}
           />
@@ -199,8 +199,8 @@ export default function TemperatureChartLazy({
             type="monotone"
             dataKey="topBoundary"
             baseValue={equipment.max_temp_celsius}
-            fill="#f87171"
-            fillOpacity={0.3}
+            fill="var(--color-error)"
+            fillOpacity={0.25}
             stroke="none"
             isAnimationActive={false}
           />
@@ -208,10 +208,10 @@ export default function TemperatureChartLazy({
         <Line
           type="monotone"
           dataKey="temperature"
-          stroke="#29E7CD"
-          strokeWidth={3}
-          dot={{ fill: '#29E7CD', r: 4, strokeWidth: 0 }}
-          activeDot={{ r: 6, fill: '#29E7CD' }}
+          stroke="var(--primary)"
+          strokeWidth={4}
+          dot={{ fill: 'var(--primary)', r: 5, strokeWidth: 2, stroke: 'var(--background)' }}
+          activeDot={{ r: 7, fill: 'var(--primary)', strokeWidth: 2, stroke: 'var(--background)' }}
           isAnimationActive={true}
         />
       </ComposedChart>

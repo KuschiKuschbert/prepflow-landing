@@ -35,8 +35,8 @@ export function PrepTechniquesView({ prepTechniques }: PrepTechniquesViewProps) 
 
   return (
     <div className="mt-6 space-y-4">
-      <h3 className="flex items-center gap-2 text-lg font-semibold text-white">
-        <Icon icon={Sparkles} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+      <h3 className="flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
+        <Icon icon={Sparkles} size="md" className="text-[var(--primary)]" aria-hidden={true} />
         Prep Techniques
       </h3>
 
@@ -50,14 +50,14 @@ export function PrepTechniquesView({ prepTechniques }: PrepTechniquesViewProps) 
         >
           <div className="space-y-2">
             {prepTechniques.cutShapes.map((cs, index) => (
-              <div key={index} className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
+              <div key={index} className="rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 p-3">
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="font-medium text-white">{cs.ingredient}</span>
-                    <span className="ml-2 text-sm text-[#29E7CD]">{cs.shape}</span>
+                    <span className="font-medium text-[var(--foreground)]">{cs.ingredient}</span>
+                    <span className="ml-2 text-sm text-[var(--primary)]">{cs.shape}</span>
                   </div>
                   {cs.recipes.length > 0 && (
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-[var(--foreground-muted)]">
                       {cs.recipes.length} {cs.recipes.length === 1 ? 'recipe' : 'recipes'}
                     </span>
                   )}
@@ -78,14 +78,14 @@ export function PrepTechniquesView({ prepTechniques }: PrepTechniquesViewProps) 
         >
           <div className="space-y-3">
             {prepTechniques.sauces.map((sauce, index) => (
-              <div key={index} className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
-                <h4 className="font-semibold text-white">{sauce.name}</h4>
+              <div key={index} className="rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 p-3">
+                <h4 className="font-semibold text-[var(--foreground)]">{sauce.name}</h4>
                 {sauce.ingredients.length > 0 && (
-                  <p className="mt-1 text-sm text-gray-400">
+                  <p className="mt-1 text-sm text-[var(--foreground-muted)]">
                     Ingredients: {sauce.ingredients.join(', ')}
                   </p>
                 )}
-                <p className="mt-2 text-sm text-gray-300">{sauce.instructions}</p>
+                <p className="mt-2 text-sm text-[var(--foreground-secondary)]">{sauce.instructions}</p>
               </div>
             ))}
           </div>
@@ -102,13 +102,13 @@ export function PrepTechniquesView({ prepTechniques }: PrepTechniquesViewProps) 
         >
           <div className="space-y-2">
             {prepTechniques.marinations.map((marination, index) => (
-              <div key={index} className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
+              <div key={index} className="rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 p-3">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <span className="font-medium text-white">{marination.ingredient}</span>
-                    <p className="mt-1 text-sm text-gray-300">{marination.method}</p>
+                    <span className="font-medium text-[var(--foreground)]">{marination.ingredient}</span>
+                    <p className="mt-1 text-sm text-[var(--foreground-secondary)]">{marination.method}</p>
                     {marination.duration && (
-                      <p className="mt-1 text-xs text-gray-400">Duration: {marination.duration}</p>
+                      <p className="mt-1 text-xs text-[var(--foreground-muted)]">Duration: {marination.duration}</p>
                     )}
                   </div>
                 </div>
@@ -128,14 +128,14 @@ export function PrepTechniquesView({ prepTechniques }: PrepTechniquesViewProps) 
         >
           <div className="space-y-2">
             {prepTechniques.preCookingSteps.map((step, index) => (
-              <div key={index} className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
+              <div key={index} className="rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 p-3">
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="font-medium text-white">{step.ingredient}</span>
-                    <p className="mt-1 text-sm text-gray-300">{step.step}</p>
+                    <span className="font-medium text-[var(--foreground)]">{step.ingredient}</span>
+                    <p className="mt-1 text-sm text-[var(--foreground-secondary)]">{step.step}</p>
                   </div>
                   {step.recipes.length > 0 && (
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-[var(--foreground-muted)]">
                       {step.recipes.length} {step.recipes.length === 1 ? 'recipe' : 'recipes'}
                     </span>
                   )}
@@ -156,13 +156,13 @@ export function PrepTechniquesView({ prepTechniques }: PrepTechniquesViewProps) 
         >
           <div className="space-y-2">
             {prepTechniques.specialTechniques.map((technique, index) => (
-              <div key={index} className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3">
-                <p className="font-medium text-white">{technique.description}</p>
+              <div key={index} className="rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 p-3">
+                <p className="font-medium text-[var(--foreground)]">{technique.description}</p>
                 {technique.details && (
-                  <p className="mt-1 text-sm text-gray-300">{technique.details}</p>
+                  <p className="mt-1 text-sm text-[var(--foreground-secondary)]">{technique.details}</p>
                 )}
                 {technique.recipes.length > 0 && (
-                  <p className="mt-2 text-xs text-gray-400">
+                  <p className="mt-2 text-xs text-[var(--foreground-muted)]">
                     Used in: {technique.recipes.join(', ')}
                   </p>
                 )}
@@ -191,23 +191,23 @@ function PrepTechniqueSection({
   children,
 }: PrepTechniqueSectionProps) {
   return (
-    <div className="rounded-xl border border-[#29E7CD]/20 bg-[#29E7CD]/5">
+    <div className="rounded-xl border border-[var(--primary)]/20 bg-[var(--primary)]/5">
       <button
         onClick={onToggle}
-        className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-[#29E7CD]/10"
+        className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-[var(--primary)]/10"
       >
         <div className="flex items-center gap-3">
-          <IconComponent className="h-5 w-5 text-[#29E7CD]" />
-          <span className="font-semibold text-white">{title}</span>
+          <IconComponent className="h-5 w-5 text-[var(--primary)]" />
+          <span className="font-semibold text-[var(--foreground)]">{title}</span>
         </div>
         <Icon
           icon={isExpanded ? ChevronUp : ChevronDown}
           size="sm"
-          className="text-[#29E7CD]"
+          className="text-[var(--primary)]"
           aria-hidden={true}
         />
       </button>
-      {isExpanded && <div className="border-t border-[#29E7CD]/20 p-4">{children}</div>}
+      {isExpanded && <div className="border-t border-[var(--primary)]/20 p-4">{children}</div>}
     </div>
   );
 }

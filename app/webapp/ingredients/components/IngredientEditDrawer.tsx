@@ -112,7 +112,7 @@ export default function IngredientEditDrawer({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-2xl bg-[#2a2a2a] px-4 py-2.5 font-semibold text-white transition-all duration-300 hover:bg-[#3a3a3a]"
+              className="flex-1 rounded-2xl bg-[var(--muted)] px-4 py-2.5 font-semibold text-[var(--foreground)] transition-all duration-300 hover:bg-[var(--surface-variant)]"
             >
               Cancel
             </button>
@@ -120,7 +120,7 @@ export default function IngredientEditDrawer({
               type="button"
               onClick={handleSave}
               disabled={loading || status === 'saving'}
-              className="flex-1 rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-4 py-2.5 font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#29E7CD]/25 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex-1 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[#3B82F6] px-4 py-2.5 font-semibold text-[var(--button-active-text)] transition-all duration-300 hover:shadow-lg hover:shadow-[var(--primary)]/25 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading || status === 'saving' ? 'Saving...' : 'Save'}
             </button>

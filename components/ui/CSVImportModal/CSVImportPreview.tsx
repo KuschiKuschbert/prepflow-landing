@@ -34,29 +34,29 @@ export function CSVImportPreview<T>({
   ).length;
 
   return (
-    <div className="rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]">
+    <div className="rounded-lg border border-[var(--border)] bg-[var(--background)]">
       {/* Preview Header */}
-      <div className="border-b border-[#2a2a2a] p-4">
+      <div className="border-b border-[var(--border)] p-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-semibold text-white">
+            <h3 className="text-sm font-semibold text-[var(--foreground)]">
               Preview ({parsedEntities.length} {entityNamePlural} found)
             </h3>
-            <p className="mt-1 text-xs text-gray-400">
+            <p className="mt-1 text-xs text-[var(--foreground-muted)]">
               {validCount} valid, {validationErrors.size} with errors
             </p>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => onSelectAll(true)}
-              className="text-xs text-gray-400 transition-colors hover:text-[#29E7CD]"
+              className="text-xs text-[var(--foreground-muted)] transition-colors hover:text-[var(--primary)]"
             >
               Select All Valid
             </button>
-            <span className="text-gray-600">|</span>
+            <span className="text-[var(--foreground-subtle)]">|</span>
             <button
               onClick={() => onSelectAll(false)}
-              className="text-xs text-gray-400 transition-colors hover:text-[#29E7CD]"
+              className="text-xs text-[var(--foreground-muted)] transition-colors hover:text-[var(--primary)]"
             >
               Deselect All
             </button>
@@ -76,10 +76,10 @@ export function CSVImportPreview<T>({
               key={index}
               className={`rounded-lg border p-3 transition-colors ${
                 hasError
-                  ? 'border-red-500/50 bg-red-900/10'
+                  ? 'border-[var(--color-error)]/50 bg-red-900/10'
                   : isSelected
-                    ? 'border-[#29E7CD]/50 bg-[#29E7CD]/10'
-                    : 'border-[#2a2a2a] bg-[#1f1f1f] hover:border-[#2a2a2a]/80'
+                    ? 'border-[var(--primary)]/50 bg-[var(--primary)]/10'
+                    : 'border-[var(--border)] bg-[var(--surface)] hover:border-[var(--border)]/80'
               }`}
             >
               <div className="flex items-start gap-3">
@@ -88,10 +88,10 @@ export function CSVImportPreview<T>({
                   disabled={hasError}
                   className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-colors ${
                     hasError
-                      ? 'cursor-not-allowed border-red-500/50 bg-red-900/20'
+                      ? 'cursor-not-allowed border-[var(--color-error)]/50 bg-red-900/20'
                       : isSelected
-                        ? 'border-[#29E7CD] bg-[#29E7CD]/20'
-                        : 'border-[#2a2a2a] bg-[#0a0a0a] hover:border-[#29E7CD]/50'
+                        ? 'border-[var(--primary)] bg-[var(--primary)]/20'
+                        : 'border-[var(--border)] bg-[var(--background)] hover:border-[var(--primary)]/50'
                   }`}
                   aria-label={`${isSelected ? 'Deselect' : 'Select'} ${entityName} ${index + 1}`}
                 >
@@ -99,7 +99,7 @@ export function CSVImportPreview<T>({
                     <Icon
                       icon={CheckCircle2}
                       size="sm"
-                      className="text-[#29E7CD]"
+                      className="text-[var(--primary)]"
                       aria-hidden={true}
                     />
                   )}
@@ -107,7 +107,7 @@ export function CSVImportPreview<T>({
                 <div className="flex-1">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">{formatEntityForPreview(entity, index)}</div>
-                    {hasError && <div className="ml-2 text-xs text-red-400">{errorMessage}</div>}
+                    {hasError && <div className="ml-2 text-xs text-[var(--color-error)]">{errorMessage}</div>}
                   </div>
                 </div>
               </div>

@@ -34,11 +34,11 @@ export function ParLevelTable({
 }: ParLevelTableProps) {
   return (
     <div className="desktop:block hidden overflow-x-auto">
-      <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
-        <table className="min-w-full divide-y divide-[#2a2a2a]">
-          <thead className="sticky top-0 z-10 bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20">
+      <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
+        <table className="min-w-full divide-y divide-[var(--muted)]">
+          <thead className="sticky top-0 z-10 bg-gradient-to-r from-[var(--muted)]/50 to-[var(--muted)]/20">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 <button
                   onClick={() => {
                     const allSelected =
@@ -50,7 +50,7 @@ export function ParLevelTable({
                       onEnterSelectionMode();
                     }
                   }}
-                  className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+                  className="flex items-center justify-center transition-colors hover:text-[var(--primary)]"
                   aria-label={
                     totalFiltered !== undefined &&
                     selectedParLevels.size === totalFiltered &&
@@ -65,7 +65,7 @@ export function ParLevelTable({
                       : selectedParLevels.size === parLevels.length && parLevels.length > 0
                   ) ? (
                     <svg
-                      className="h-4 w-4 text-[#29E7CD]"
+                      className="h-4 w-4 text-[var(--primary)]"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -78,28 +78,28 @@ export function ParLevelTable({
                       />
                     </svg>
                   ) : (
-                    <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+                    <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
                   )}
                 </button>
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 Ingredient
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 Par Level
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 Reorder Point
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 Unit
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-secondary)] uppercase">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
+          <tbody className="divide-y divide-[var(--muted)] bg-[var(--surface)]">
             {parLevels.map(parLevel => (
               <ParLevelTableRow
                 key={parLevel.id}

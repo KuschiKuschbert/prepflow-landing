@@ -266,9 +266,9 @@ export default function IngredientWizard({
     detectingAllergens: wizardStep === 3 ? detectingAllergens : false,
   };
   return (
-    <div className="mb-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
+    <div className="mb-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
       <div className="mb-2">
-        <h2 className="text-base font-semibold text-white">Add New Ingredient</h2>
+        <h2 className="text-base font-semibold text-[var(--foreground)]">Add New Ingredient</h2>
       </div>
       <WizardProgressBar currentStep={wizardStep} totalSteps={totalSteps} />
       <WizardErrorDisplay error={errors.submit || null} />

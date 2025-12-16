@@ -59,8 +59,8 @@ export function GuideViewer({
           return (
             <Suspense
               fallback={
-                <div className="flex h-96 items-center justify-center rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
-                  <div className="text-center text-gray-400">Loading 3D simulation...</div>
+                <div className="flex h-96 items-center justify-center rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
+                  <div className="text-center text-[var(--foreground-muted)]">Loading 3D simulation...</div>
                 </div>
               }
             >
@@ -73,13 +73,13 @@ export function GuideViewer({
         return <HybridGuide content={step.content} />;
       default:
         return (
-          <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center text-gray-400">
+          <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center text-[var(--foreground-muted)]">
             Unknown guide format
           </div>
         );
     }
     return (
-      <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-8 text-center text-gray-400">
+      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center text-[var(--foreground-muted)]">
         Content not available for this step
       </div>
     );
@@ -89,15 +89,15 @@ export function GuideViewer({
     <div className="flex flex-col gap-6">
       {/* Step header */}
       <div className="space-y-2">
-        <h2 className="text-fluid-2xl font-semibold text-white">{step.title}</h2>
-        <p className="text-fluid-base text-gray-300">{step.description}</p>
+        <h2 className="text-fluid-2xl font-semibold text-[var(--foreground)]">{step.title}</h2>
+        <p className="text-fluid-base text-[var(--foreground-secondary)]">{step.description}</p>
       </div>
 
       {/* Step content */}
       <Suspense
         fallback={
-          <div className="flex h-96 items-center justify-center rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
-            <div className="animate-pulse text-gray-400">Loading guide content...</div>
+          <div className="flex h-96 items-center justify-center rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
+            <div className="animate-pulse text-[var(--foreground-muted)]">Loading guide content...</div>
           </div>
         }
       >

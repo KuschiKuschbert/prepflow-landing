@@ -109,9 +109,9 @@ export function ParLevelCard({
   return (
     <>
       <div
-        className={`rounded-xl border-l-2 border-[#29E7CD]/30 bg-[#29E7CD]/2 p-3 transition-all duration-200 ${
-          isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[#29E7CD]/5'
-        } ${isSelected && isSelectionMode ? 'border-[#29E7CD]/50 bg-[#29E7CD]/10' : ''}`}
+        className={`rounded-xl border-l-2 border-[var(--primary)]/30 bg-[var(--primary)]/2 p-3 transition-all duration-200 ${
+          isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[var(--primary)]/5'
+        } ${isSelected && isSelectionMode ? 'border-[var(--primary)]/50 bg-[var(--primary)]/10' : ''}`}
         onClick={handleCardClick}
         title={isSelectionMode ? 'Tap to select' : 'Click to edit par level'}
         onTouchStart={isSelectionMode ? undefined : longPressHandlers.onTouchStart}
@@ -121,25 +121,25 @@ export function ParLevelCard({
         {/* Header: Ingredient Name and Par Level */}
         <div className="mb-2 flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
-            <h3 className="truncate text-base font-semibold text-white">
+            <h3 className="truncate text-base font-semibold text-[var(--foreground)]">
               {parLevel.ingredients?.ingredient_name || 'Unknown Ingredient'}
             </h3>
             {parLevel.ingredients?.category && (
-              <p className="truncate text-xs text-gray-500">{parLevel.ingredients.category}</p>
+              <p className="truncate text-xs text-[var(--foreground-subtle)]">{parLevel.ingredients.category}</p>
             )}
           </div>
           <div className="flex-shrink-0 text-right">
-            <div className="text-base font-bold text-[#29E7CD]">
+            <div className="text-base font-bold text-[var(--primary)]">
               {parLevel.par_level} {parLevel.unit}
             </div>
-            <div className="text-xs text-gray-400">Par Level</div>
+            <div className="text-xs text-[var(--foreground-muted)]">Par Level</div>
           </div>
         </div>
 
         {/* Secondary Info: Reorder Point */}
-        <div className="mb-2 flex items-center gap-x-3 text-xs text-gray-400">
+        <div className="mb-2 flex items-center gap-x-3 text-xs text-[var(--foreground-muted)]">
           <span>
-            <span className="text-gray-500">Reorder Point:</span> {parLevel.reorder_point}{' '}
+            <span className="text-[var(--foreground-subtle)]">Reorder Point:</span> {parLevel.reorder_point}{' '}
             {parLevel.unit}
           </span>
         </div>
@@ -155,12 +155,12 @@ export function ParLevelCard({
                   const currentlySelected = selectedParLevels.has(parLevel.id);
                   onSelectParLevel(parLevel.id, !currentlySelected);
                 }}
-                className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+                className="flex items-center justify-center transition-colors hover:text-[var(--primary)]"
                 aria-label={`${isSelected ? 'Deselect' : 'Select'} par level for ${parLevel.ingredients?.ingredient_name || 'ingredient'}`}
               >
                 {isSelected ? (
                   <svg
-                    className="h-4 w-4 text-[#29E7CD]"
+                    className="h-4 w-4 text-[var(--primary)]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -173,7 +173,7 @@ export function ParLevelCard({
                     />
                   </svg>
                 ) : (
-                  <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+                  <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
                 )}
               </button>
             )}
@@ -182,17 +182,17 @@ export function ParLevelCard({
             <button
               onClick={handleEditClick}
               disabled={isSelectionMode}
-              className={`flex items-center justify-center gap-1 rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] px-3 py-1.5 text-xs font-medium text-white transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#3B82F6]/80 hover:drop-shadow-[0_0_8px_rgba(41,231,205,0.6)] disabled:opacity-50 ${
+              className={`flex items-center justify-center gap-1 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] px-3 py-1.5 text-xs font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--color-info)]/80 hover:drop-shadow-[0_0_8px_rgba(41,231,205,0.6)] disabled:opacity-50 ${
                 isSelectionMode ? 'cursor-not-allowed' : ''
               }`}
               aria-label={`Edit par level for ${parLevel.ingredients?.ingredient_name || 'ingredient'}`}
             >
-              <Icon icon={Edit2} size="xs" className="text-white" aria-hidden={true} />
+              <Icon icon={Edit2} size="xs" className="text-[var(--foreground)]" aria-hidden={true} />
             </button>
             <button
               onClick={handleDeleteClick}
               disabled={deletingId === parLevel.id || isSelectionMode}
-              className={`flex items-center justify-center gap-1 rounded-lg bg-gradient-to-r from-[#ef4444] to-[#dc2626] px-3 py-1.5 text-xs font-medium text-white transition-all duration-200 hover:from-[#ef4444]/80 hover:to-[#dc2626]/80 hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.6)] disabled:opacity-50 ${
+              className={`flex items-center justify-center gap-1 rounded-lg bg-gradient-to-r from-[var(--color-error)] to-[#dc2626] px-3 py-1.5 text-xs font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[var(--color-error)]/80 hover:to-[#dc2626]/80 hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.6)] disabled:opacity-50 ${
                 isSelectionMode ? 'cursor-not-allowed' : ''
               }`}
               aria-label={`Delete par level for ${parLevel.ingredients?.ingredient_name || 'ingredient'}`}
@@ -200,7 +200,7 @@ export function ParLevelCard({
               {deletingId === parLevel.id ? (
                 <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
               ) : (
-                <Icon icon={Trash2} size="xs" className="text-white" aria-hidden={true} />
+                <Icon icon={Trash2} size="xs" className="text-[var(--foreground)]" aria-hidden={true} />
               )}
             </button>
           </div>

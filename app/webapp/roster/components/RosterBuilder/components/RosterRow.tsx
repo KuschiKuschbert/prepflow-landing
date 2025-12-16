@@ -51,12 +51,12 @@ export function RosterRow({
       <div className="flex items-center">
         <div className="flex w-full items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Icon icon={Users} size="sm" className="text-gray-400" aria-hidden={true} />
+            <Icon icon={Users} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
             <div>
-              <div className="font-medium text-white">
+              <div className="font-medium text-[var(--foreground)]">
                 {employee.first_name} {employee.last_name}
               </div>
-              <div className="text-xs text-gray-400">{employee.role}</div>
+              <div className="text-xs text-[var(--foreground-muted)]">{employee.role}</div>
             </div>
           </div>
           {onDeleteEmployee && (
@@ -71,7 +71,7 @@ export function RosterRow({
                   logger.error('Error in handleDeleteEmployeeFromRoster:', err);
                 }
               }}
-              className="relative z-10 flex items-center justify-center rounded-full bg-red-500/20 p-1.5 text-red-400 opacity-60 transition-all hover:bg-red-500/30 hover:text-red-300 hover:opacity-100"
+              className="relative z-10 flex items-center justify-center rounded-full bg-[var(--color-error)]/20 p-1.5 text-[var(--color-error)] opacity-60 transition-all hover:bg-[var(--color-error)]/30 hover:text-red-300 hover:opacity-100"
               aria-label={`Remove ${employee.first_name} ${employee.last_name} from this week's roster`}
             >
               <Icon icon={X} size="xs" aria-hidden={true} />

@@ -18,7 +18,7 @@ export function MenuLockButton({ lockLoading, onLock }: MenuLockButtonProps) {
           onLock();
         }}
         disabled={lockLoading}
-        className="flex items-center gap-2 rounded-lg border border-[#29E7CD]/50 bg-[#29E7CD]/10 px-4 py-2 text-sm font-medium text-[#29E7CD] transition-all hover:bg-[#29E7CD]/20 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex items-center gap-2 rounded-lg border border-[var(--primary)]/50 bg-[var(--primary)]/10 px-4 py-2 text-sm font-medium text-[var(--primary)] transition-all hover:bg-[var(--primary)]/20 disabled:cursor-not-allowed disabled:opacity-50"
         title="Lock menu to finalize and show allergen matrix"
       >
         <Icon icon={Lock} size="sm" aria-hidden={true} />

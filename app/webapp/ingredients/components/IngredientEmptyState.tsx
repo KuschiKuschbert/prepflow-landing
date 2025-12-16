@@ -26,7 +26,7 @@ export function IngredientEmptyState({
     <div className="flex items-center gap-2">
       <button
         onClick={onAddIngredient}
-        className="rounded-lg bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl"
+        className="rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-3 py-1.5 text-sm font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 hover:shadow-xl"
         style={{
           background: `linear-gradient(to right, ${LANDING_COLORS.primary}, ${LANDING_COLORS.accent})`,
         }}
@@ -36,7 +36,7 @@ export function IngredientEmptyState({
       {onImportCSV && (
         <button
           onClick={onImportCSV}
-          className="rounded-lg bg-gradient-to-r from-[#3B82F6] to-[#29E7CD] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#3B82F6]/80 hover:to-[#29E7CD]/80 hover:shadow-xl"
+          className="rounded-lg bg-gradient-to-r from-[var(--color-info)] to-[var(--primary)] px-3 py-1.5 text-sm font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--color-info)]/80 hover:to-[var(--primary)]/80 hover:shadow-xl"
           style={{
             background: `linear-gradient(to right, ${LANDING_COLORS.secondary}, ${LANDING_COLORS.primary})`,
           }}
@@ -47,7 +47,7 @@ export function IngredientEmptyState({
       {onExportCSV && (
         <button
           onClick={onExportCSV}
-          className="rounded-lg bg-gradient-to-r from-[#D925C7] to-[#3B82F6] px-3 py-1.5 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:from-[#D925C7]/80 hover:to-[#3B82F6]/80 hover:shadow-xl"
+          className="rounded-lg bg-gradient-to-r from-[var(--accent)] to-[var(--color-info)] px-3 py-1.5 text-sm font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--accent)]/80 hover:to-[var(--color-info)]/80 hover:shadow-xl"
           style={{
             background: `linear-gradient(to right, ${LANDING_COLORS.accent}, ${LANDING_COLORS.secondary})`,
           }}

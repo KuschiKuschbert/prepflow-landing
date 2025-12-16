@@ -246,7 +246,8 @@ export default function DashboardStatsClient() {
   useTemperatureWarnings({ allLogs, equipment });
 
   // Calculate out of range temperature alerts
-  const today = new Date().toISOString().split('T')[0];
+  // Use useState to prevent hydration mismatch from Date.now() differences
+  const [today] = useState(() => new Date().toISOString().split('T')[0]);
   const todayLogs = allLogs.filter(log => log.log_date === today);
   const outOfRangeAlerts = todayLogs.filter(log => {
     const eq = equipment.find(e => e.location === log.location);

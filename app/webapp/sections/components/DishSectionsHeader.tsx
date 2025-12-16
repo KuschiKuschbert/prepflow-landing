@@ -12,17 +12,17 @@ export function DishSectionsHeader({ onAddClick }: DishSectionsHeaderProps) {
   return (
     <div className="mb-8 flex items-center justify-between">
       <div>
-        <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-white">
+        <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-[var(--foreground)]">
           <Icon icon={UtensilsCrossed} size="lg" aria-hidden={true} />
           {t('dishSections.title', 'Dish Sections')}
         </h1>
-        <p className="text-gray-400">
+        <p className="text-[var(--foreground-muted)]">
           {t('dishSections.subtitle', 'Organize dishes by kitchen sections for prep lists')}
         </p>
       </div>
       <button
         onClick={onAddClick}
-        className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl"
+        className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
       >
         + {t('dishSections.addSection', 'Add Section')}
       </button>

@@ -1,7 +1,7 @@
 export const SEVERITY_COLORS = {
-  safety: 'bg-red-500/20 text-red-400 border-red-500/30',
+  safety: 'bg-[var(--color-error)]/20 text-[var(--color-error)] border-[var(--color-error)]/30',
   critical: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
-  high: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-  medium: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  low: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
+  high: 'bg-[var(--color-warning)]/20 text-[var(--color-warning)] border-[var(--color-warning)]/30',
+  medium: 'bg-[var(--color-info)]/20 text-[var(--color-info)] border-[var(--color-info)]/30',
+  low: 'bg-gray-500/20 text-[var(--foreground-muted)] border-gray-500/30',
 } as const;

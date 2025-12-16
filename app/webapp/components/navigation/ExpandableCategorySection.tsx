@@ -78,7 +78,7 @@ export function ExpandableCategorySection({
         {/* Category header - compact version when sidebar is collapsed */}
         <button
           onClick={handleToggle}
-          className="mb-1.5 flex min-h-[32px] w-full items-center justify-center rounded-lg px-3 py-2 text-xs font-semibold tracking-wider text-gray-500 uppercase transition-colors hover:bg-[#2a2a2a] hover:text-gray-400"
+          className="mb-1.5 flex min-h-[32px] w-full items-center justify-center rounded-lg px-3 py-2 text-xs font-semibold tracking-wider text-[var(--foreground-subtle)] uppercase transition-colors hover:bg-[var(--muted)]/50 hover:text-[var(--foreground-muted)]"
           aria-expanded={isExpanded}
           aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${getCategoryLabel(category)} section`}
         >
@@ -87,7 +87,7 @@ export function ExpandableCategorySection({
           <Icon
             icon={isExpanded ? ChevronDown : ChevronRight}
             size="xs"
-            className="text-gray-500 transition-transform duration-200"
+            className="text-[var(--foreground-subtle)] transition-transform duration-200"
             style={{
               transitionTimingFunction: 'var(--easing-standard)',
               transform: isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)',
@@ -122,7 +122,7 @@ export function ExpandableCategorySection({
     <div className="mb-4">
       <button
         onClick={handleToggle}
-        className="mb-1.5 flex min-h-[44px] w-full items-center justify-between rounded-lg px-3 py-3 text-xs font-semibold tracking-wider text-gray-500 uppercase transition-colors hover:bg-[#2a2a2a] hover:text-gray-400"
+        className="mb-1.5 flex min-h-[44px] w-full items-center justify-between rounded-lg px-3 py-3 text-xs font-semibold tracking-wider text-[var(--foreground-subtle)] uppercase transition-colors hover:bg-[var(--muted)]/50 hover:text-[var(--foreground-muted)]"
         aria-expanded={isExpanded}
         aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${getCategoryLabel(category)} section`}
       >
@@ -130,7 +130,7 @@ export function ExpandableCategorySection({
         <Icon
           icon={isExpanded ? ChevronDown : ChevronRight}
           size="xs"
-          className="text-gray-500 transition-transform duration-200"
+          className="text-[var(--foreground-subtle)] transition-transform duration-200"
           style={{
             transitionTimingFunction: 'var(--easing-standard)',
             transform: isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)',

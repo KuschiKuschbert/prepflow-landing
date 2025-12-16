@@ -164,7 +164,7 @@ export default function OrderListsPage() {
   if (loading) {
     return (
       <ResponsivePageContainer>
-        <div className="min-h-screen bg-transparent py-8 text-white">
+        <div className="min-h-screen bg-transparent py-8 text-[var(--foreground)]">
           <LoadingSkeleton variant="stats" height="64px" />
           <div className="mt-6">
             <LoadingSkeleton variant="table" />
@@ -176,7 +176,7 @@ export default function OrderListsPage() {
 
   return (
     <ResponsivePageContainer>
-      <div className="min-h-screen bg-transparent py-8 text-white">
+      <div className="min-h-screen bg-transparent py-8 text-[var(--foreground)]">
         <PageHeader
           title="Order Lists"
           subtitle="Generate ingredient order lists from your menus"
@@ -186,8 +186,8 @@ export default function OrderListsPage() {
 
         {/* Error Message */}
         {error && (
-          <div className="mb-6 rounded-2xl border border-red-400/20 bg-red-400/10 p-4">
-            <p className="font-semibold text-red-400">{error}</p>
+          <div className="mb-6 rounded-2xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-4">
+            <p className="font-semibold text-[var(--color-error)]">{error}</p>
             {error.includes('column') && (
               <p className="mt-2 text-sm text-red-300">
                 This usually means your data structure needs to be updated. Check the server logs
@@ -201,14 +201,14 @@ export default function OrderListsPage() {
         <div className="tablet:flex-row tablet:items-center tablet:justify-between mb-6 flex flex-col gap-4 print:hidden">
           {/* Menu Selector */}
           <div className="flex-1">
-            <label htmlFor="menu-select" className="mb-2 block text-sm font-medium text-gray-300">
+            <label htmlFor="menu-select" className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
               Select Menu
             </label>
             <select
               id="menu-select"
               value={selectedMenuId}
               onChange={e => handleMenuChange(e.target.value)}
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
             >
               {menus.length === 0 ? (
                 <option value="">No menus available</option>
@@ -224,14 +224,14 @@ export default function OrderListsPage() {
 
           {/* Sort Selector */}
           <div className="tablet:max-w-xs flex-1">
-            <label htmlFor="sort-select" className="mb-2 block text-sm font-medium text-gray-300">
+            <label htmlFor="sort-select" className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
               Sort By
             </label>
             <select
               id="sort-select"
               value={sortBy}
               onChange={e => handleSortChange(e.target.value as 'storage' | 'name' | 'category')}
-              className="w-full rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
             >
               <option value="storage">Storage Location</option>
               <option value="name">Name</option>
@@ -253,17 +253,17 @@ export default function OrderListsPage() {
           />
         ) : menus.length === 0 ? (
           <div className="py-12 text-center">
-            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#D925C7]/20">
-              <Icon icon={ClipboardCheck} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20">
+              <Icon icon={ClipboardCheck} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
             </div>
-            <h3 className="mb-2 text-xl font-semibold text-white">No Menus Found</h3>
-            <p className="mb-6 text-gray-400">
+            <h3 className="mb-2 text-xl font-semibold text-[var(--button-active-text)]">No Menus Found</h3>
+            <p className="mb-6 text-[var(--foreground-muted)]">
               Create a menu in Menu Builder to generate order lists
             </p>
           </div>
         ) : (
           <div className="py-12 text-center">
-            <p className="text-gray-400">Select a menu to view ingredients</p>
+            <p className="text-[var(--foreground-muted)]">Select a menu to view ingredients</p>
           </div>
         )}
       </div>

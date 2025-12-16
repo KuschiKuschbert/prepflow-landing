@@ -75,16 +75,16 @@ export function PrepListPreviewSection({
   }
 
   return (
-    <div key={sectionIndex} className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
+    <div key={sectionIndex} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
       {/* Section Header */}
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <h3 className="text-lg font-semibold text-white">{section.sectionName}</h3>
+          <h3 className="text-lg font-semibold text-[var(--foreground)]">{section.sectionName}</h3>
           {section.sectionId === null && (
             <select
               value=""
               onChange={e => handleSectionChange(sectionIndex, e.target.value || null)}
-              className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-1 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="rounded-lg border border-[var(--border)] bg-[var(--muted)] px-3 py-1 text-sm text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
             >
               <option value="">Assign to section...</option>
               {kitchenSections.map(ks => (
@@ -104,7 +104,7 @@ export function PrepListPreviewSection({
                   e.target.value = '';
                 }
               }}
-              className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a] px-3 py-2 text-sm text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+              className="rounded-lg border border-[var(--border)] bg-[var(--muted)] px-3 py-2 text-sm text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
               defaultValue=""
             >
               <option value="">Add ingredient...</option>
@@ -141,8 +141,8 @@ export function PrepListPreviewSection({
 
       {/* Prep Techniques - shown in both views */}
       {loadingPrepDetails && !section.prepTechniques && (
-        <div className="mt-6 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
-          <div className="flex items-center gap-2 text-gray-400">
+        <div className="mt-6 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
+          <div className="flex items-center gap-2 text-[var(--foreground-muted)]">
             <Loader2 className="h-4 w-4 animate-spin" />
             <span className="text-sm">Analyzing prep techniques...</span>
           </div>

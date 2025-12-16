@@ -28,7 +28,7 @@ export function RecipeCardActions({
           e.stopPropagation();
           onPreview();
         }}
-        className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+        className="rounded-lg bg-[var(--muted)]/50 px-3 py-1.5 text-xs text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
         title="View full recipe details, ingredients, and instructions"
       >
         Preview
@@ -38,7 +38,7 @@ export function RecipeCardActions({
           e.stopPropagation();
           onShowQR();
         }}
-        className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+        className="rounded-lg bg-[var(--muted)]/50 px-3 py-1.5 text-xs text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)]"
         aria-label={`Generate QR code for ${capitalizeRecipeName(recipeName)}`}
         title="Generate QR code for this recipe"
       >
@@ -49,7 +49,7 @@ export function RecipeCardActions({
           e.stopPropagation();
           onEdit();
         }}
-        className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+        className="rounded-lg bg-[var(--muted)]/50 px-3 py-1.5 text-xs text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)]"
         aria-label={`Edit recipe ${capitalizeRecipeName(recipeName)}`}
         title="Edit recipe in builder"
       >
@@ -60,7 +60,7 @@ export function RecipeCardActions({
           e.stopPropagation();
           onDelete();
         }}
-        className="rounded-lg bg-[#2a2a2a]/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-red-400"
+        className="rounded-lg bg-[var(--muted)]/50 px-3 py-1.5 text-xs text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--color-error)]"
         aria-label={`Delete recipe ${capitalizeRecipeName(recipeName)}`}
         title="Delete this recipe"
       >

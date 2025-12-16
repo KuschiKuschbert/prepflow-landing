@@ -60,7 +60,7 @@ export function PrepQuantityInput({
 
   return (
     <div className="flex items-center gap-2">
-      <label htmlFor="prep-quantity" className="text-sm font-medium text-gray-300">
+      <label htmlFor="prep-quantity" className="text-sm font-medium text-[var(--foreground-secondary)]">
         Prep Quantity:
       </label>
       <div className="flex items-center gap-1">
@@ -68,7 +68,7 @@ export function PrepQuantityInput({
           type="button"
           onClick={handleDecrement}
           disabled={value <= min}
-          className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-2 py-1 text-sm text-white transition-colors hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-lg border border-[var(--border)] bg-[var(--surface)] px-2 py-1 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)] disabled:cursor-not-allowed disabled:opacity-50"
           aria-label="Decrease prep quantity"
         >
           −
@@ -81,19 +81,22 @@ export function PrepQuantityInput({
           onBlur={handleBlur}
           min={min}
           max={max}
-          className="w-20 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-3 py-1 text-center text-sm text-white focus:border-[#29E7CD] focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+          className="w-20 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-1 text-center text-sm text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
         />
         <button
           type="button"
           onClick={handleIncrement}
           disabled={value >= max}
-          className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] px-2 py-1 text-sm text-white transition-colors hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-lg border border-[var(--border)] bg-[var(--surface)] px-2 py-1 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)] disabled:cursor-not-allowed disabled:opacity-50"
           aria-label="Increase prep quantity"
         >
           +
         </button>
       </div>
-      <span className="text-xs text-gray-400">servings</span>
+      <span className="text-xs text-[var(--foreground-muted)]">servings</span>
     </div>
   );
 }
+
+
+

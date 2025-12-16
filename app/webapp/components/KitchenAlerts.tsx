@@ -27,12 +27,12 @@ export default function KitchenAlerts() {
 
   if (loading) {
     return (
-      <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
+      <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 w-32 rounded bg-[#2a2a2a]" />
+          <div className="h-6 w-32 rounded bg-[var(--surface)]" />
           <div className="space-y-2">
-            <div className="h-16 rounded-xl bg-[#2a2a2a]" />
-            <div className="h-16 rounded-xl bg-[#2a2a2a]" />
+            <div className="h-16 rounded-xl bg-[var(--surface)]" />
+            <div className="h-16 rounded-xl bg-[var(--surface)]" />
           </div>
         </div>
       </div>
@@ -41,16 +41,16 @@ export default function KitchenAlerts() {
 
   if (alerts.length === 0) {
     return (
-      <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
+      <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="tablet:h-12 tablet:w-12 flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-            <Icon icon={AlertCircle} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+          <div className="tablet:h-12 tablet:w-12 flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
+            <Icon icon={AlertCircle} size="md" className="text-[var(--primary)]" aria-hidden={true} />
           </div>
           <div>
-            <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-white">
+            <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
               Kitchen Alerts
             </h2>
-            <p className="text-fluid-xs tablet:text-fluid-sm text-gray-400">
+            <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground)]/60">
               All clear! No alerts at this time.
             </p>
           </div>
@@ -86,35 +86,35 @@ export default function KitchenAlerts() {
     switch (severity) {
       case 'critical':
         return {
-          border: 'border-red-500/50',
-          bg: 'bg-red-500/10',
-          text: 'text-red-400',
+          border: 'border-[var(--color-error)]/50',
+          bg: 'bg-[var(--color-error)]/10',
+          text: 'text-[var(--color-error)]',
           iconBg: 'from-red-500/20 to-red-500/10',
         };
       case 'warning':
         return {
-          border: 'border-yellow-500/50',
-          bg: 'bg-yellow-500/10',
-          text: 'text-yellow-400',
+          border: 'border-[var(--color-warning)]/50',
+          bg: 'bg-[var(--color-warning)]/10',
+          text: 'text-[var(--color-warning)]',
           iconBg: 'from-yellow-500/20 to-yellow-500/10',
         };
       case 'info':
         return {
-          border: 'border-blue-500/50',
-          bg: 'bg-blue-500/10',
-          text: 'text-blue-400',
+          border: 'border-[var(--color-info)]/50',
+          bg: 'bg-[var(--color-info)]/10',
+          text: 'text-[var(--color-info)]',
           iconBg: 'from-blue-500/20 to-blue-500/10',
         };
     }
   };
 
   return (
-    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
+    <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
       <div className="tablet:mb-6 mb-4">
-        <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-white">
+        <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">
           Kitchen Alerts
         </h2>
-        <p className="text-fluid-xs tablet:text-fluid-sm mt-1 text-gray-400">
+        <p className="text-fluid-xs tablet:text-fluid-sm mt-1 text-[var(--foreground)]/60">
           Action items requiring attention
         </p>
       </div>
@@ -145,26 +145,26 @@ export default function KitchenAlerts() {
                     <span
                       className={`rounded-full px-2 py-0.5 text-xs font-medium uppercase ${
                         alert.severity === 'critical'
-                          ? 'bg-red-500/20 text-red-400'
+                          ? 'bg-[var(--color-error)]/20 text-[var(--color-error)]'
                           : alert.severity === 'warning'
-                            ? 'bg-yellow-500/20 text-yellow-400'
-                            : 'bg-blue-500/20 text-blue-400'
+                            ? 'bg-[var(--color-warning)]/20 text-[var(--color-warning)]'
+                            : 'bg-[var(--color-info)]/20 text-[var(--color-info)]'
                       }`}
                     >
                       {alert.severity}
                     </span>
                   </div>
-                  <p className="text-fluid-xs tablet:text-fluid-sm mb-3 text-gray-300">
+                  <p className="text-fluid-xs tablet:text-fluid-sm mb-3 text-[var(--foreground)]/80">
                     {alert.message}
                   </p>
                   <Link
                     href={alert.actionHref}
                     className={`text-fluid-xs tablet:px-4 tablet:py-2 tablet:text-fluid-sm inline-flex items-center gap-1 rounded-lg px-3 py-1.5 font-medium transition-colors ${
                       alert.severity === 'critical'
-                        ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30'
+                        ? 'bg-[var(--color-error)]/20 text-[var(--color-error)] hover:bg-[var(--color-error)]/30'
                         : alert.severity === 'warning'
-                          ? 'bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30'
-                          : 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30'
+                          ? 'bg-[var(--color-warning)]/20 text-[var(--color-warning)] hover:bg-[var(--color-warning)]/30'
+                          : 'bg-[var(--color-info)]/20 text-[var(--color-info)] hover:bg-[var(--color-info)]/30'
                     }`}
                   >
                     {alert.actionLabel}

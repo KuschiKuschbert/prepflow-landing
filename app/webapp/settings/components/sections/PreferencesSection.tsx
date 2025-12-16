@@ -29,6 +29,9 @@ const PersonalitySettingsPanel = dynamic(
   },
 );
 
+// Import ThemeTogglePanel directly for immediate rendering
+import { ThemeTogglePanel } from '../ThemeTogglePanel';
+
 /**
  * Preferences section component.
  * Combines notifications, connected accounts, and personality settings.
@@ -39,6 +42,7 @@ const PersonalitySettingsPanel = dynamic(
 export function PreferencesSection() {
   return (
     <div className="space-y-6">
+      <ThemeTogglePanel />
       <NotificationsPanel />
       <ConnectedAccountsPanel />
       <PersonalitySettingsPanel />

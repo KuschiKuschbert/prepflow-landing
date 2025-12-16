@@ -236,10 +236,10 @@ export default function SuppliersPage() {
     <ResponsivePageContainer>
       <div className="tablet:py-6 min-h-screen bg-transparent py-4">
         <div className="mb-8">
-          <h1 className="mb-2 text-4xl font-bold text-white">
+          <h1 className="mb-2 text-4xl font-bold text-[var(--foreground)]">
             🚚 {t('suppliers.title', 'Supplier Management')}
           </h1>
-          <p className="text-gray-400">
+          <p className="text-[var(--foreground-muted)]">
             {t(
               'suppliers.subtitle',
               'Manage supplier contacts, price lists, and delivery schedules',
@@ -251,13 +251,13 @@ export default function SuppliersPage() {
 
         {activeTab === 'suppliers' && (
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-            <h2 className="text-2xl font-semibold text-white">
+            <h2 className="text-2xl font-semibold text-[var(--foreground)]">
               {t('suppliers.manageSuppliers', 'Manage Suppliers')}
             </h2>
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => setShowAddSupplier(true)}
-                className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
+                className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
               >
                 ➕ {t('suppliers.addSupplier', 'Add Supplier')}
               </button>
@@ -280,13 +280,13 @@ export default function SuppliersPage() {
         {activeTab === 'priceLists' && (
           <div className="tablet:flex-row tablet:items-center mb-6 flex flex-col items-start justify-between gap-4">
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
                 {t('suppliers.filterSupplier', 'Filter by Supplier')}
               </label>
               <select
                 value={selectedSupplier}
                 onChange={e => setSelectedSupplier(e.target.value)}
-                className="rounded-xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-2 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD]"
+                className="rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
               >
                 <option value="all">{t('suppliers.allSuppliers', 'All Suppliers')}</option>
                 {suppliers.map(supplier => (
@@ -298,7 +298,7 @@ export default function SuppliersPage() {
             </div>
             <button
               onClick={() => setShowAddPriceList(true)}
-              className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl"
+              className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
             >
               ➕ {t('suppliers.addPriceList', 'Add Price List')}
             </button>

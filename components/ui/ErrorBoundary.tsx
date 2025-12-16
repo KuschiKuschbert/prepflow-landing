@@ -1,8 +1,14 @@
 'use client';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import KitchenOnFire from '@/components/ErrorGame/KitchenOnFire';
+import { useErrorMessageSelector } from '@/components/ErrorGame/useErrorMessageSelector';
 
 import { logger } from '@/lib/logger';
+
+// Wrapper component to use hook in class component context
+const ErrorMessageDisplay: React.FC = () => {
+  const ErrorComponent = useErrorMessageSelector();
+  return <ErrorComponent />;
+};
 
 interface Props {
   children: ReactNode;
@@ -82,7 +88,7 @@ export class ErrorBoundary extends Component<Props, State> {
         return null;
       }
 
-      return <KitchenOnFire />;
+      return <ErrorMessageDisplay />;
     }
 
     return this.props.children;

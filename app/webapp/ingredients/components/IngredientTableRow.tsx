@@ -124,9 +124,9 @@ export function IngredientTableRow({
 
   return (
     <tr
-      className={`border-l-2 border-[#D925C7]/30 bg-[#D925C7]/2 transition-colors duration-200 ${
-        isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[#D925C7]/5'
-      } ${isSelected && isSelectionMode ? 'bg-[#D925C7]/10' : ''}`}
+      className={`border-l-2 border-[var(--accent)]/30 bg-[var(--accent)]/2 transition-colors duration-200 ${
+        isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-[var(--accent)]/5'
+      } ${isSelected && isSelectionMode ? 'bg-[var(--accent)]/10' : ''}`}
       onClick={handleRowClick}
       title={isSelectionMode ? 'Tap to select' : 'Click to edit ingredient'}
       onTouchStart={isSelectionMode ? undefined : longPressHandlers.onTouchStart}
@@ -152,12 +152,12 @@ export function IngredientTableRow({
               e.stopPropagation();
             }
           }}
-          className="flex items-center justify-center transition-colors hover:text-[#29E7CD]"
+          className="flex items-center justify-center transition-colors hover:text-[var(--primary)]"
           aria-label={`${selectedIngredients.has(ingredient.id) ? 'Deselect' : 'Select'} ingredient ${ingredient.ingredient_name}`}
         >
           {selectedIngredients.has(ingredient.id) ? (
             <svg
-              className="h-4 w-4 text-[#29E7CD]"
+              className="h-4 w-4 text-[var(--primary)]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -170,7 +170,7 @@ export function IngredientTableRow({
               />
             </svg>
           ) : (
-            <div className="h-4 w-4 rounded border border-[#2a2a2a] bg-[#0a0a0a] transition-colors hover:border-[#29E7CD]/50" />
+            <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
           )}
         </button>
       </td>
@@ -180,7 +180,7 @@ export function IngredientTableRow({
       <IngredientCostCell ingredient={ingredient} displayUnit={displayUnit} />
       <IngredientSupplierCell ingredient={ingredient} className="desktop:table-cell hidden" />
       <IngredientStockCell ingredient={ingredient} className="desktop:table-cell hidden" />
-      <td className="desktop:table-cell hidden px-6 py-4 text-sm text-gray-300">
+      <td className="desktop:table-cell hidden px-6 py-4 text-sm text-[var(--foreground-secondary)]">
         {ingredient.created_at ? formatRecipeDate(ingredient.created_at) : '—'}
       </td>
       <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
@@ -188,29 +188,29 @@ export function IngredientTableRow({
           <button
             onClick={handleEditClick}
             disabled={isSelectionMode}
-            className={`text-[#29E7CD] transition-all duration-200 hover:text-[#29E7CD] hover:drop-shadow-[0_0_8px_rgba(41,231,205,0.6)] ${isSelectionMode ? 'cursor-not-allowed opacity-50' : ''}`}
+            className={`text-[var(--primary)] transition-all duration-200 hover:text-[var(--primary)] hover:drop-shadow-[0_0_8px_rgba(41,231,205,0.6)] ${isSelectionMode ? 'cursor-not-allowed opacity-50' : ''}`}
             aria-label={`Edit ${ingredient.ingredient_name}`}
           >
             <Icon
               icon={Edit}
               size="sm"
-              className="text-[#29E7CD] transition-all duration-200 hover:drop-shadow-[0_0_8px_rgba(41,231,205,0.6)]"
+              className="text-[var(--primary)] transition-all duration-200 hover:drop-shadow-[0_0_8px_rgba(41,231,205,0.6)]"
               aria-hidden={true}
             />
           </button>
           <button
             onClick={handleDeleteClick}
             disabled={deletingId === ingredient.id || isSelectionMode}
-            className={`text-red-400 transition-all duration-200 hover:text-red-300 hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.6)] disabled:opacity-50 ${isSelectionMode ? 'cursor-not-allowed' : ''}`}
+            className={`text-[var(--color-error)] transition-all duration-200 hover:text-red-300 hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.6)] disabled:opacity-50 ${isSelectionMode ? 'cursor-not-allowed' : ''}`}
             aria-label={`Delete ${ingredient.ingredient_name}`}
           >
             {deletingId === ingredient.id ? (
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-red-400 border-t-transparent"></div>
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--color-error)] border-t-transparent"></div>
             ) : (
               <Icon
                 icon={Trash2}
                 size="sm"
-                className="text-red-400 transition-all duration-200 hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.6)]"
+                className="text-[var(--color-error)] transition-all duration-200 hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.6)]"
                 aria-hidden={true}
               />
             )}

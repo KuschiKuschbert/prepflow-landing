@@ -13,15 +13,15 @@ interface CleaningTabsProps {
 export function CleaningTabs({ activeTab, onTabChange }: CleaningTabsProps) {
   return (
     <div className="mb-8">
-      <div className="flex space-x-1 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-1">
+      <div className="flex space-x-1 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-1">
         {(['grid', 'areas'] as const).map(tab => {
           const isActive = activeTab === tab;
           return (
             <button
               key={tab}
               onClick={() => onTabChange(tab)}
-              className={`flex items-center rounded-xl px-6 py-3 font-medium transition-all duration-200 ${
-                isActive ? 'bg-[#29E7CD] text-black shadow-lg' : 'text-gray-400 hover:text-white'
+              className={`flex items-center rounded-xl px-6 py-3 font-semibold transition-all duration-200 ${
+                isActive ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl border border-[var(--primary)]/30' : 'text-[var(--foreground-muted)] hover:text-[var(--button-active-text)]'
               }`}
             >
               {tab === 'grid' ? (

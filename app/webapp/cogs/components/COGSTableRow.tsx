@@ -28,20 +28,20 @@ export function COGSTableRow({
   onEditQuantityChange,
 }: COGSTableRowProps) {
   return (
-    <tr className="transition-colors hover:bg-[#2a2a2a]/20">
-      <td className="px-6 py-4 text-sm text-white">{calc.ingredientName}</td>
-      <td className="px-6 py-4 text-sm text-gray-300">
+    <tr className="transition-colors hover:bg-[var(--muted)]/20">
+      <td className="px-6 py-4 text-sm text-[var(--foreground)]">{calc.ingredientName}</td>
+      <td className="px-6 py-4 text-sm text-[var(--foreground-secondary)]">
         {editingIngredient === calc.ingredientId ? (
           <div className="flex items-center space-x-2">
             <input
               type="number"
               value={editQuantity}
               onChange={e => onEditQuantityChange(parseFloat(e.target.value) || 0)}
-              className="w-20 rounded border border-[#3a3a3a] bg-[#0a0a0a] px-2 py-1 text-sm text-white focus:ring-1 focus:ring-[#29E7CD] focus:outline-none"
+              className="w-20 rounded border border-[var(--border)] bg-[var(--background)] px-2 py-1 text-sm text-[var(--foreground)] focus:ring-1 focus:ring-[var(--primary)] focus:outline-none"
               step="0.1"
               min="0"
             />
-            <span className="text-xs text-gray-400">{calc.unit}</span>
+            <span className="text-xs text-[var(--foreground-muted)]">{calc.unit}</span>
           </div>
         ) : (
           <span>
@@ -49,20 +49,20 @@ export function COGSTableRow({
           </span>
         )}
       </td>
-      <td className="px-6 py-4 text-sm text-gray-300">${calc.yieldAdjustedCost.toFixed(2)}</td>
+      <td className="px-6 py-4 text-sm text-[var(--foreground-secondary)]">${calc.yieldAdjustedCost.toFixed(2)}</td>
       <td className="px-6 py-4 text-sm">
         <div className="flex items-center space-x-2">
           {editingIngredient === calc.ingredientId ? (
             <>
               <button
                 onClick={onSaveEdit}
-                className="rounded bg-[#29E7CD] px-2 py-1 text-xs text-white transition-colors duration-200 hover:bg-[#29E7CD]/80"
+                className="rounded bg-[var(--primary)] px-2 py-1 text-xs text-[var(--button-active-text)] transition-colors duration-200 hover:bg-[var(--primary)]/80"
               >
                 Save
               </button>
               <button
                 onClick={onCancelEdit}
-                className="rounded bg-gray-600 px-2 py-1 text-xs text-white transition-colors duration-200 hover:bg-gray-500"
+                className="rounded bg-gray-600 px-2 py-1 text-xs text-[var(--foreground)] transition-colors duration-200 hover:bg-gray-500"
               >
                 Cancel
               </button>
@@ -71,10 +71,10 @@ export function COGSTableRow({
             <>
               <button
                 onClick={() => onEditIngredient(calc.ingredientId, calc.quantity)}
-                className="p-1 text-gray-400 transition-colors duration-200 hover:text-[#29E7CD]"
+                className="p-1 text-[var(--foreground-muted)] transition-colors duration-200 hover:text-[var(--primary)]"
                 title="Edit quantity"
               >
-                <Icon icon={Edit} size="sm" className="text-gray-400" aria-hidden={true} />
+                <Icon icon={Edit} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
               </button>
               <button
                 type="button"
@@ -83,10 +83,10 @@ export function COGSTableRow({
                   e.stopPropagation();
                   void onRemoveIngredient(calc.ingredientId);
                 }}
-                className="p-1 text-gray-400 transition-colors duration-200 hover:text-red-400"
+                className="p-1 text-[var(--foreground-muted)] transition-colors duration-200 hover:text-[var(--color-error)]"
                 title="Remove ingredient"
               >
-                <Icon icon={Trash2} size="sm" className="text-gray-400" aria-hidden={true} />
+                <Icon icon={Trash2} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
               </button>
             </>
           )}

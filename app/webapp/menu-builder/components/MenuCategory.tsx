@@ -169,7 +169,7 @@ export default function MenuCategory({
   return (
     <div
       ref={categoryRef}
-      className="rounded-xl border-2 border-dashed border-[#2a2a2a] bg-[#2a2a2a]/30 p-4 transition-colors"
+      className="rounded-xl border-2 border-dashed border-[var(--border)] bg-[var(--muted)]/30 p-4 transition-colors"
     >
       {/* Category Header */}
       <CategoryHeader
@@ -184,7 +184,7 @@ export default function MenuCategory({
 
       <div className="space-y-2">
         {sortedItems.length === 0 ? (
-          <div className="py-8 text-center text-sm text-gray-400">
+          <div className="py-8 text-center text-sm text-[var(--foreground-muted)]">
             Add dishes or recipes from the palette to this category
           </div>
         ) : (

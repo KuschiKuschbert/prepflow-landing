@@ -24,18 +24,18 @@ export function ScreenshotGuide({ content, className = '' }: ScreenshotGuideProp
   return (
     <div className={`relative ${className}`}>
       {/* Screenshot container */}
-      <div className="relative overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
+      <div className="relative overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
         {/* Image */}
         <div className="relative aspect-video w-full">
           {!imageLoaded && !imageError && (
-            <div className="absolute inset-0 animate-pulse bg-[#2a2a2a]" aria-hidden={true} />
+            <div className="absolute inset-0 animate-pulse bg-[var(--muted)]" aria-hidden={true} />
           )}
           {imageError ? (
             // Placeholder when image fails to load
-            <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a] p-8">
-              <Icon icon={ImageIcon} size="xl" className="mb-4 text-gray-500" aria-hidden={true} />
-              <p className="text-sm text-gray-400">Screenshot coming soon</p>
-              <p className="mt-2 text-xs text-gray-500">
+            <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-[#1f1f1f] to-[var(--muted)] p-8">
+              <Icon icon={ImageIcon} size="xl" className="mb-4 text-[var(--foreground-subtle)]" aria-hidden={true} />
+              <p className="text-sm text-[var(--foreground-muted)]">Screenshot coming soon</p>
+              <p className="mt-2 text-xs text-[var(--foreground-subtle)]">
                 This guide step will include a visual walkthrough
               </p>
             </div>
@@ -106,7 +106,7 @@ export function ScreenshotGuide({ content, className = '' }: ScreenshotGuideProp
                 )}
 
                 {/* Annotation text */}
-                <div className="rounded-2xl border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-4 py-2 text-sm text-white backdrop-blur-sm">
+                <div className="rounded-2xl border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-4 py-2 text-sm text-[var(--foreground)] backdrop-blur-sm">
                   {annotation.text}
                 </div>
               </div>
@@ -121,7 +121,7 @@ export function ScreenshotGuide({ content, className = '' }: ScreenshotGuideProp
               <button
                 key={`hotspot-${index}`}
                 type="button"
-                className="absolute rounded-full border-2 border-[#29E7CD] bg-[#29E7CD]/20 transition-all hover:scale-110 hover:bg-[#29E7CD]/30"
+                className="absolute rounded-full border-2 border-[var(--primary)] bg-[var(--primary)]/20 transition-all hover:scale-110 hover:bg-[var(--primary)]/30"
                 style={{
                   left: `${hotspot.x}%`,
                   top: `${hotspot.y}%`,
@@ -132,12 +132,12 @@ export function ScreenshotGuide({ content, className = '' }: ScreenshotGuideProp
                 onClick={() => setActiveHotspot(activeHotspot === index ? null : index)}
                 aria-label={`Hotspot ${index + 1}`}
               >
-                <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-[#29E7CD]">
+                <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-[var(--primary)]">
                   {index + 1}
                 </span>
                 {activeHotspot === index && (
                   <div
-                    className="absolute bottom-full left-1/2 mb-2 w-64 -translate-x-1/2 rounded-2xl border border-[#29E7CD]/30 bg-[#1f1f1f] p-4 text-sm text-white shadow-xl"
+                    className="absolute bottom-full left-1/2 mb-2 w-64 -translate-x-1/2 rounded-2xl border border-[var(--primary)]/30 bg-[var(--surface)] p-4 text-sm text-[var(--foreground)] shadow-xl"
                     style={{ zIndex: 10 }}
                   >
                     {hotspot.info}

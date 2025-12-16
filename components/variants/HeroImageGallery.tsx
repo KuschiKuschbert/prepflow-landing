@@ -28,27 +28,27 @@ export function HeroImageGallery({
           background: `linear-gradient(to bottom right, ${gradientFrom}/20, ${gradientTo}/20)`,
         }}
       />
-      <div className="rounded-3xl border border-gray-700 bg-[#1f1f1f]/80 p-6 shadow-2xl backdrop-blur-sm">
+      <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)]/80 p-6 shadow-2xl backdrop-blur-sm">
         <div className="relative">
           <OptimizedImage
             src="/images/dashboard-screenshot.png"
             alt="PrepFlow Dashboard showing COGS metrics, profit analysis, and item performance charts"
             width={800}
             height={500}
-            className="h-auto w-full rounded-xl border border-gray-600"
+            className="h-auto w-full rounded-xl border border-[var(--border)]"
             priority
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
           />
           {/* Action Overlay */}
           <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/40">
-            <div className="text-center text-white">
+            <div className="text-center text-[var(--foreground)]">
               <div
                 className="mb-2 rounded-lg px-4 py-2 font-semibold"
                 style={{ background: overlayBg, color: overlayText }}
               >
                 {overlayTitle}
               </div>
-              <button className="rounded-lg bg-white px-6 py-3 font-semibold text-black transition-colors hover:bg-gray-100">
+              <button className="rounded-lg bg-[var(--qr-background)] px-6 py-3 font-semibold text-[var(--primary-text)] transition-colors hover:bg-gray-100">
                 View Dashboard
               </button>
             </div>
@@ -60,7 +60,7 @@ export function HeroImageGallery({
             alt="PrepFlow Settings page with business configuration"
             width={200}
             height={96}
-            className="h-24 w-full rounded-lg border border-gray-600 object-cover"
+            className="h-24 w-full rounded-lg border border-[var(--border)] object-cover"
             sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
           />
           <OptimizedImage
@@ -68,7 +68,7 @@ export function HeroImageGallery({
             alt="PrepFlow Recipe costing for Double Cheese Burger"
             width={200}
             height={96}
-            className="h-24 w-full rounded-lg border border-gray-600 object-cover"
+            className="h-24 w-full rounded-lg border border-[var(--border)] object-cover"
             sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
           />
           <OptimizedImage
@@ -76,11 +76,11 @@ export function HeroImageGallery({
             alt="PrepFlow Infinite Stock List with ingredient management"
             width={200}
             height={96}
-            className="h-24 w-full rounded-lg border border-gray-600 object-cover"
+            className="h-24 w-full rounded-lg border border-[var(--border)] object-cover"
             sizes="(max-width: 768px) 33vw, (max-width: 1200px) 16vw, 12vw"
           />
         </div>
-        <p className="text-fluid-sm mt-4 text-center text-gray-500">
+        <p className="text-fluid-sm mt-4 text-center text-[var(--foreground-subtle)]">
           Dashboard · Settings · Recipe Costing · Stock Management
         </p>
       </div>

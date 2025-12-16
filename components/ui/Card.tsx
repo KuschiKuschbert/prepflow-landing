@@ -19,10 +19,10 @@ export const Card: React.FC<CardProps> = ({
   const baseClasses = 'rounded-2xl border backdrop-blur-sm shadow-lg transition-all duration-300';
 
   const variantClasses = {
-    default: 'border-gray-700 bg-[#1f1f1f]/80 hover:shadow-xl',
+    default: 'border-[var(--border)] bg-[var(--surface)]/80 hover:shadow-xl',
     highlight:
-      'border-[#29E7CD]/30 bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 hover:shadow-2xl',
-    feature: 'border-gray-700 bg-[#1f1f1f]/80 hover:shadow-xl hover:border-[#29E7CD]/50',
+      'border-[var(--primary)]/30 bg-gradient-to-br from-[var(--primary)]/10 to-[var(--accent)]/10 hover:shadow-2xl',
+    feature: 'border-[var(--border)] bg-[var(--surface)]/80 hover:shadow-xl hover:border-[var(--primary)]/50',
   };
 
   const interactiveClasses = interactive ? 'cursor-pointer hover:scale-[1.02]' : '';

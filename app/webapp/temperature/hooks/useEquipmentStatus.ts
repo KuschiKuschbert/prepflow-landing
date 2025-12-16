@@ -15,20 +15,20 @@ export function useEquipmentStatus({ getFilteredLogs }: UseEquipmentStatusProps)
   const getEquipmentStatus = useCallback(
     (equipment: TemperatureEquipment): EquipmentStatus => {
       const logs = getFilteredLogs(equipment);
-      if (logs.length === 0) return { status: 'no-data', color: 'text-gray-400' };
+      if (logs.length === 0) return { status: 'no-data', color: 'text-[var(--foreground-muted)]' };
 
       const latestLog = logs[logs.length - 1];
       const latestTemp = latestLog.temperature_celsius;
 
       if (equipment.min_temp_celsius === null || equipment.max_temp_celsius === null) {
-        return { status: 'no-thresholds', color: 'text-blue-400' };
+        return { status: 'no-thresholds', color: 'text-[var(--color-info)]' };
       }
 
       const inRange =
         latestTemp >= equipment.min_temp_celsius && latestTemp <= equipment.max_temp_celsius;
       return {
         status: inRange ? 'in-range' : 'out-of-range',
-        color: inRange ? 'text-green-400' : 'text-red-400',
+        color: inRange ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]',
         temperature: latestTemp,
       };
     },

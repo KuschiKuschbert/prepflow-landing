@@ -5,6 +5,7 @@ import ReactQueryProvider from '@/components/ReactQueryProvider';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import { useSessionTimeout } from '@/hooks/useSessionTimeout';
 import { useTranslation } from '@/lib/useTranslation';
+import { useTheme } from '@/lib/theme/useTheme';
 import { Inter } from 'next/font/google';
 import dynamic from 'next/dynamic';
 import { useUser } from '@auth0/nextjs-auth0/client';
@@ -92,32 +93,27 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default function WebAppLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params?: Promise<Record<string, string | string[]>>;
 }>) {
   const { t } = useTranslation();
-  // Initialize as disabled only for auth routes to prevent any initial render
-  const [disableArcadeOverlay, setDisableArcadeOverlay] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    try {
-      const path = window.location.pathname;
-      return path.startsWith('/api/auth') || path.startsWith('/login') || path.startsWith('/auth');
-    } catch {
-      return false;
-    }
-  });
+  // Initialize theme system - applies data-theme attribute to document root
+  useTheme();
+  // Initialize as disabled - will be updated in useEffect after mount to prevent hydration mismatch
+  const [disableArcadeOverlay, setDisableArcadeOverlay] = useState(false);
 
   // Session timeout configuration
   // 4 hours timeout with 15-minute warning (kitchen-optimized)
-  const timeoutMs =
-    typeof window !== 'undefined' && process.env.NEXT_PUBLIC_SESSION_TIMEOUT_MS
-      ? Number(process.env.NEXT_PUBLIC_SESSION_TIMEOUT_MS)
-      : 4 * 60 * 60 * 1000; // 4 hours default
+  // Use consistent values during SSR to prevent hydration mismatch
+  const timeoutMs = process.env.NEXT_PUBLIC_SESSION_TIMEOUT_MS
+    ? Number(process.env.NEXT_PUBLIC_SESSION_TIMEOUT_MS)
+    : 4 * 60 * 60 * 1000; // 4 hours default
 
-  const warningMs =
-    typeof window !== 'undefined' && process.env.NEXT_PUBLIC_SESSION_WARNING_MS
-      ? Number(process.env.NEXT_PUBLIC_SESSION_WARNING_MS)
-      : 15 * 60 * 1000; // 15 minutes default
+  const warningMs = process.env.NEXT_PUBLIC_SESSION_WARNING_MS
+    ? Number(process.env.NEXT_PUBLIC_SESSION_WARNING_MS)
+    : 15 * 60 * 1000; // 15 minutes default
 
   const { isWarning, remainingMs, resetTimeout } = useSessionTimeout({
     timeoutMs,
@@ -205,14 +201,14 @@ function WebAppLayoutContent({
   }, [hasWarnings]);
 
   return (
-    <div className={`${inter.className} min-h-screen bg-transparent text-white`}>
+    <div className={`${inter.className} min-h-screen bg-transparent text-[var(--foreground)]`}>
       {/* Pulsating Concentric Circles Background */}
       <SafeAnimatedBackground />
 
       {/* Webapp Background Effects (spotlight, grid, glows, particles) */}
       <WebappBackground
         spotlight={true}
-        grid={false}
+        grid={true}
         cornerGlows={false}
         watermarks={false}
         particles={true}

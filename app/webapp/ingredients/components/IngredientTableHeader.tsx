@@ -54,10 +54,10 @@ export function IngredientTableHeader({
   onEnterSelectionMode,
 }: IngredientTableHeaderProps) {
   return (
-    <div className="bg-gradient-to-r from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-6 py-4">
+    <div className="bg-gradient-to-r from-[var(--muted)]/50 to-[var(--muted)]/20 px-6 py-4">
       <div className="tablet:flex-row tablet:items-center tablet:justify-between flex flex-col gap-3">
         <div className="flex items-center gap-3">
-          <h2 className="text-xl font-semibold text-white">
+          <h2 className="text-xl font-semibold text-[var(--button-active-text)]">
             Ingredients{' '}
             {totalFiltered !== undefined
               ? `(${totalFiltered} total, showing ${ingredientsCount})`
@@ -99,9 +99,9 @@ export function IngredientTableHeader({
               )}
               {/* Selection Mode Indicator + Bulk Actions Button - Desktop: in action buttons section */}
               {isSelectionMode && (
-                <div className="large-desktop:flex hidden items-center gap-2 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1.5">
-                  <div className="h-2 w-2 animate-pulse rounded-full bg-[#29E7CD]" />
-                  <span className="text-sm font-medium text-[#29E7CD]">Selection Mode</span>
+                <div className="large-desktop:flex hidden items-center gap-2 rounded-lg border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-3 py-1.5">
+                  <div className="h-2 w-2 animate-pulse rounded-full bg-[var(--primary)]" />
+                  <span className="text-sm font-medium text-[var(--primary)]">Selection Mode</span>
                 </div>
               )}
               {selectedCount > 0 && onBulkDelete && (
@@ -126,7 +126,7 @@ export function IngredientTableHeader({
           <div className="flex items-center gap-1.5">
             <label
               htmlFor="items-per-page-header"
-              className="text-xs whitespace-nowrap text-gray-400"
+              className="text-xs whitespace-nowrap text-[var(--foreground-muted)]"
             >
               Show:
             </label>
@@ -134,7 +134,7 @@ export function IngredientTableHeader({
               id="items-per-page-header"
               value={itemsPerPage}
               onChange={e => onItemsPerPageChange(Number(e.target.value))}
-              className="rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-2.5 py-1.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] focus:border-[#29E7CD]/50 focus:ring-2 focus:ring-[#29E7CD]/20 focus:outline-none"
+              className="rounded-lg border border-[var(--border)] bg-[var(--background)]/80 px-2.5 py-1.5 text-sm font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--primary)]/50 hover:bg-[var(--surface)] focus:border-[var(--primary)]/50 focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
               title="Items per page"
             >
               <option value="10">10</option>
@@ -148,7 +148,7 @@ export function IngredientTableHeader({
             <>
               <button
                 onClick={() => onSelectAll(false)}
-                className="flex items-center gap-1.5 rounded-lg border border-[#29E7CD]/30 bg-[#29E7CD]/10 px-3 py-1.5 text-sm font-medium text-[#29E7CD] transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#29E7CD]/20"
+                className="flex items-center gap-1.5 rounded-lg border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-3 py-1.5 text-sm font-medium text-[var(--primary)] transition-all duration-200 hover:border-[var(--primary)]/50 hover:bg-[var(--primary)]/20"
                 aria-label="Deselect all ingredients"
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,7 +185,7 @@ export function IngredientTableHeader({
                   onEnterSelectionMode();
                 }
               }}
-              className="flex items-center gap-1.5 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a]/80 px-3 py-1.5 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#1f1f1f] hover:text-[#29E7CD]"
+              className="flex items-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)]/80 px-3 py-1.5 text-sm font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--primary)]/50 hover:bg-[var(--surface)] hover:text-[var(--primary)]"
               aria-label="Select all ingredients"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

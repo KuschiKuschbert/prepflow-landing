@@ -16,13 +16,13 @@ export function DishesViewModeToggle({
 }: DishesViewModeToggleProps) {
   return (
     <div className="mb-6 flex items-center justify-between">
-      <div className="flex items-center gap-2 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-1">
+      <div className="flex items-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-1">
         <button
           onClick={() => onViewModeChange('list')}
-          className={`tablet:px-6 flex items-center gap-2 rounded-xl px-4 py-2 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+          className={`tablet:px-6 flex items-center gap-2 rounded-xl px-4 py-2 font-medium transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none ${
             viewMode === 'list'
-              ? 'bg-[#29E7CD] text-black shadow-lg'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-[var(--primary)] text-[var(--button-active-text)] shadow-lg'
+              : 'text-[var(--foreground-muted)] hover:text-[var(--button-active-text)]'
           }`}
           aria-pressed={Boolean(viewMode === 'list')}
           aria-label="List view"
@@ -32,10 +32,10 @@ export function DishesViewModeToggle({
         </button>
         <button
           onClick={onEditorClick}
-          className={`tablet:px-6 flex items-center gap-2 rounded-xl px-4 py-2 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+          className={`tablet:px-6 flex items-center gap-2 rounded-xl px-4 py-2 font-medium transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none ${
             viewMode === 'editor'
-              ? 'bg-[#29E7CD] text-black shadow-lg'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-[var(--primary)] text-[var(--button-active-text)] shadow-lg'
+              : 'text-[var(--foreground-muted)] hover:text-[var(--button-active-text)]'
           }`}
           aria-pressed={viewMode === 'editor'}
           aria-label="Editor view"
@@ -45,10 +45,10 @@ export function DishesViewModeToggle({
         </button>
         <button
           onClick={() => onViewModeChange('builder')}
-          className={`tablet:px-6 flex items-center gap-2 rounded-xl px-4 py-2 font-medium transition-all duration-200 focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+          className={`tablet:px-6 flex items-center gap-2 rounded-xl px-4 py-2 font-medium transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none ${
             viewMode === 'builder'
-              ? 'bg-[#29E7CD] text-black shadow-lg'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-[var(--primary)] text-[var(--button-active-text)] shadow-lg'
+              : 'text-[var(--foreground-muted)] hover:text-[var(--button-active-text)]'
           }`}
           aria-pressed={viewMode === 'builder'}
           aria-label="Builder view"

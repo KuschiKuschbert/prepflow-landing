@@ -10,23 +10,23 @@ export function IngredientList({ ingredients }: IngredientListProps) {
 
   return (
     <div>
-      <h4 className="mb-2 text-xs font-semibold tracking-wider text-gray-300 uppercase">
+      <h4 className="mb-2 text-xs font-semibold tracking-wider text-[var(--foreground-secondary)] uppercase">
         Ingredients
       </h4>
       <div className="space-y-1.5">
         {ingredients.map(ingredient => (
           <div
             key={ingredient.id}
-            className="rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/30 p-2.5"
+            className="rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 p-2.5"
           >
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0 flex-1">
                 <div className="mb-1.5 flex items-center gap-1.5">
-                  <span className="truncate text-xs font-medium text-white">
+                  <span className="truncate text-xs font-medium text-[var(--foreground)]">
                     {ingredient.ingredient_name}
                   </span>
                   {ingredient.brand && (
-                    <span className="truncate text-xs text-gray-400">({ingredient.brand})</span>
+                    <span className="truncate text-xs text-[var(--foreground-muted)]">({ingredient.brand})</span>
                   )}
                 </div>
                 {ingredient.allergens && ingredient.allergens.length > 0 && (
@@ -43,7 +43,7 @@ export function IngredientList({ ingredients }: IngredientListProps) {
                 )}
               </div>
               {ingredient.quantity && ingredient.unit && (
-                <div className="flex-shrink-0 text-xs whitespace-nowrap text-gray-400">
+                <div className="flex-shrink-0 text-xs whitespace-nowrap text-[var(--foreground-muted)]">
                   {ingredient.quantity} {ingredient.unit}
                 </div>
               )}
@@ -54,3 +54,6 @@ export function IngredientList({ ingredients }: IngredientListProps) {
     </div>
   );
 }
+
+
+

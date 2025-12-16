@@ -79,13 +79,13 @@ export function EmployeeCard({
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
-        return 'bg-green-500/10 text-green-400 border-green-500/20';
+        return 'bg-[var(--color-success)]/10 text-[var(--color-success)] border-[var(--color-success)]/20';
       case 'inactive':
-        return 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20';
+        return 'bg-[var(--color-warning)]/10 text-[var(--color-warning)] border-[var(--color-warning)]/20';
       case 'terminated':
-        return 'bg-red-500/10 text-red-400 border-red-500/20';
+        return 'bg-[var(--color-error)]/10 text-[var(--color-error)] border-[var(--color-error)]/20';
       default:
-        return 'bg-gray-500/10 text-gray-400 border-gray-500/20';
+        return 'bg-gray-500/10 text-[var(--foreground-muted)] border-gray-500/20';
     }
   };
 
@@ -102,13 +102,13 @@ export function EmployeeCard({
     <div>
       <div
         id={`employee-${employee.id}`}
-        className="cursor-pointer rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg transition-all duration-200 hover:border-[#29E7CD]/30 hover:shadow-xl"
+        className="cursor-pointer rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg transition-all duration-200 hover:border-[var(--primary)]/30 hover:shadow-xl"
         onClick={() => setShowDetailModal(true)}
       >
         <div className="flex items-center gap-3">
           {/* Employee Photo or Initial Avatar */}
           {employee.photo_url ? (
-            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 border-[#29E7CD]/20">
+            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 border-[var(--primary)]/20">
               {employee.photo_url.startsWith('data:') ? (
                 <Image
                   src={employee.photo_url}
@@ -128,12 +128,12 @@ export function EmployeeCard({
               )}
             </div>
           ) : (
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-              <Icon icon={User} size="lg" className="text-[#29E7CD]" aria-hidden={true} />
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
+              <Icon icon={User} size="lg" className="text-[var(--primary)]" aria-hidden={true} />
             </div>
           )}
           <div className="min-w-0 flex-1">
-            <h3 className="text-lg font-semibold text-white">{employee.full_name}</h3>
+            <h3 className="text-lg font-semibold text-[var(--foreground)]">{employee.full_name}</h3>
           </div>
         </div>
       </div>

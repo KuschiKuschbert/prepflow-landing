@@ -26,17 +26,17 @@ function DayHeader({ date, isToday = false }: DayHeaderProps) {
 
   return (
     <div
-      className={`flex flex-1 flex-col items-center justify-center border-r border-[#2a2a2a] bg-gradient-to-br from-[#2a2a2a]/50 to-[#2a2a2a]/20 px-3 py-4 text-center ${
-        isToday ? 'bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10' : ''
+      className={`flex flex-1 flex-col items-center justify-center border-r border-[var(--border)] bg-gradient-to-br from-[var(--muted)]/50 to-[var(--muted)]/20 px-3 py-4 text-center ${
+        isToday ? 'bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10' : ''
       }`}
     >
-      <div className={`text-xs font-medium ${isToday ? 'text-[#29E7CD]' : 'text-gray-400'}`}>
+      <div className={`text-xs font-medium ${isToday ? 'text-[var(--primary)]' : 'text-[var(--foreground-muted)]'}`}>
         {dayName}
       </div>
-      <div className={`text-lg font-bold ${isToday ? 'text-[#29E7CD]' : 'text-white'}`}>
+      <div className={`text-lg font-bold ${isToday ? 'text-[var(--primary)]' : 'text-[var(--foreground)]'}`}>
         {dayNumber}
       </div>
-      <div className={`text-xs ${isToday ? 'text-[#29E7CD]' : 'text-gray-500'}`}>{monthName}</div>
+      <div className={`text-xs ${isToday ? 'text-[var(--primary)]' : 'text-[var(--foreground-subtle)]'}`}>{monthName}</div>
     </div>
   );
 }

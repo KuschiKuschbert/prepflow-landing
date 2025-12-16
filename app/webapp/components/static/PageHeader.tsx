@@ -33,16 +33,15 @@ export function PageHeader({
   // Determine title classes based on useLandingStyles prop
   const titleClasses = useLandingStyles
     ? `${WEBAPP_LANDING_PRESETS.header.title} flex items-center gap-2`
-    : 'text-fluid-xl tablet:text-fluid-2xl flex items-center gap-2 font-bold text-white';
+    : 'text-fluid-xl tablet:text-fluid-2xl flex items-center gap-2 font-bold text-[var(--foreground)]';
 
   // Determine subtitle classes based on useLandingStyles prop
   const subtitleClasses = useLandingStyles
     ? `${WEBAPP_LANDING_PRESETS.header.subtitle} truncate`
-    : 'text-fluid-base truncate text-gray-400';
+    : 'text-fluid-base truncate text-[var(--foreground-muted)]';
 
-  // Icon color uses landing color when landing styles enabled
-  // Use direct hex value for Tailwind JIT compilation
-  const iconColor = useLandingStyles ? 'text-[#29E7CD]' : 'text-[#29E7CD]';
+  // Icon color uses theme-aware primary color
+  const iconColor = 'text-[var(--primary)]';
 
   // Container component - wrap with ScrollReveal if landing styles enabled
   const Container = useLandingStyles ? ScrollReveal : 'div';
@@ -58,7 +57,7 @@ export function PageHeader({
             {backButton && onBack && (
               <button
                 onClick={onBack}
-                className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[#2a2a2a] text-white transition-colors hover:bg-[#3a3a3a]"
+                className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[var(--surface)] text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]"
                 aria-label="Go back"
               >
                 <Icon icon={ArrowLeft} size="md" />

@@ -17,7 +17,7 @@ export default function QuickActions() {
       description: 'Add new ingredients to your inventory',
       icon: Utensils,
       href: '/webapp/recipes#ingredients', // Use final destination to avoid redirect hydration mismatch
-      color: 'from-[#29E7CD] to-[#D925C7]', // primary to accent
+      color: 'from-[var(--primary)] to-[var(--accent)]', // primary to accent
       glowColor: LANDING_COLORS.primary,
     },
     {
@@ -25,7 +25,7 @@ export default function QuickActions() {
       description: 'Build new recipes with cost calculation',
       icon: BookOpen,
       href: '/webapp/recipes', // Simplified to avoid hydration mismatch
-      color: 'from-[#3B82F6] to-[#29E7CD]', // secondary to primary
+      color: 'from-[var(--color-info)] to-[var(--primary)]', // secondary to primary
       glowColor: LANDING_COLORS.secondary,
     },
     {
@@ -33,7 +33,7 @@ export default function QuickActions() {
       description: 'Log temperature readings for compliance',
       icon: ThermometerSun,
       href: '/webapp/temperature', // Simplified to avoid hydration mismatch
-      color: 'from-[#F59E0B] to-[#EF4444]', // Keep non-landing colors for this
+      color: 'from-[var(--color-warning)] to-[#EF4444]', // Keep non-landing colors for this
       glowColor: '#F59E0B',
     },
     {
@@ -41,21 +41,21 @@ export default function QuickActions() {
       description: 'Analyze menu profitability',
       icon: DollarSign,
       href: '/webapp/performance',
-      color: 'from-[#D925C7] to-[#3B82F6]', // accent to secondary
+      color: 'from-[var(--accent)] to-[var(--color-info)]', // accent to secondary
       glowColor: LANDING_COLORS.accent,
     },
   ];
 
   return (
-    <div className="desktop:mb-8 desktop:rounded-3xl desktop:p-6 mb-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-4 shadow-lg">
+    <div className="desktop:mb-8 desktop:rounded-3xl desktop:p-6 mb-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
       <div className="desktop:mb-6 mb-4">
         <h2
-          className={`${LANDING_TYPOGRAPHY.xl} desktop:mb-2 desktop:${LANDING_TYPOGRAPHY['2xl']} mb-1 flex items-center gap-2 font-semibold text-white`}
+          className={`${LANDING_TYPOGRAPHY.xl} desktop:mb-2 desktop:${LANDING_TYPOGRAPHY['2xl']} mb-1 flex items-center gap-2 font-semibold text-[var(--foreground)]`}
         >
-          <Icon icon={Rocket} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+          <Icon icon={Rocket} size="md" className="text-[var(--primary)]" aria-hidden={true} />
           Quick Actions
         </h2>
-        <p className={`${LANDING_TYPOGRAPHY.sm} desktop:${LANDING_TYPOGRAPHY.base} text-gray-400`}>
+        <p className={`${LANDING_TYPOGRAPHY.sm} desktop:${LANDING_TYPOGRAPHY.base} text-[var(--foreground)]/60`}>
           Get started with your kitchen management
         </p>
       </div>
@@ -71,7 +71,7 @@ export default function QuickActions() {
             <GlowCard glowColor={action.glowColor} className="h-full">
               <Link
                 href={action.href}
-                className="group desktop:rounded-2xl desktop:p-6 min-h-[44px] rounded-xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-3 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-lg hover:shadow-[#29E7CD]/10 active:scale-[0.98]"
+                className="group desktop:rounded-2xl desktop:p-6 min-h-[44px] rounded-xl border border-[var(--border)] bg-[var(--surface)]/30 p-3 transition-all duration-200 hover:border-[var(--primary)]/50 hover:shadow-lg hover:shadow-[var(--primary)]/10 active:scale-[0.98]"
               >
                 <div className="desktop:space-y-4 flex flex-col items-center space-y-2 text-center">
                   <div
@@ -80,19 +80,19 @@ export default function QuickActions() {
                     <Icon
                       icon={action.icon}
                       size="lg"
-                      className="desktop:h-8 desktop:w-8 text-white"
+                      className="desktop:h-8 desktop:w-8 text-[var(--foreground)]"
                       aria-hidden={true}
                     />
                   </div>
 
                   <div>
                     <h3
-                      className={`${LANDING_TYPOGRAPHY.sm} desktop:${LANDING_TYPOGRAPHY.lg} font-semibold text-white transition-colors duration-200 group-hover:text-[#29E7CD]`}
+                      className={`${LANDING_TYPOGRAPHY.sm} desktop:${LANDING_TYPOGRAPHY.lg} font-semibold text-[var(--foreground)] transition-colors duration-200 group-hover:text-[var(--primary)]`}
                     >
                       {action.title}
                     </h3>
                     <p
-                      className={`${LANDING_TYPOGRAPHY.xs} desktop:${LANDING_TYPOGRAPHY.sm} mt-0.5 text-gray-400`}
+                      className={`${LANDING_TYPOGRAPHY.xs} desktop:${LANDING_TYPOGRAPHY.sm} mt-0.5 text-[var(--foreground)]/60`}
                     >
                       {action.description}
                     </p>

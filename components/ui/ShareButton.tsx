@@ -139,7 +139,7 @@ export function ShareButton({
   };
 
   const baseClasses =
-    'flex items-center gap-2 rounded-lg font-medium text-white transition-all duration-200';
+    'flex items-center gap-2 rounded-lg font-medium text-[var(--foreground)] transition-all duration-200';
   const sizeClasses = {
     sm: 'px-3 py-1.5 text-xs',
     md: 'px-4 py-2 text-sm',
@@ -147,8 +147,8 @@ export function ShareButton({
   };
   const variantClasses = {
     primary:
-      'bg-gradient-to-r from-[#10B981] to-[#059669] hover:from-[#10B981]/80 hover:to-[#059669]/80 hover:shadow-lg hover:shadow-[#10B981]/30',
-    secondary: 'bg-[#2a2a2a] border border-[#2a2a2a] hover:border-[#29E7CD]/30 hover:bg-[#3a3a3a]',
+      'bg-gradient-to-r from-[var(--color-success)] to-[var(--color-success)]/80 hover:from-[var(--color-success)]/80 hover:to-[var(--color-success)]/60 hover:shadow-lg hover:shadow-[var(--color-success)]/30',
+    secondary: 'bg-[var(--muted)] border border-[var(--border)] hover:border-[var(--primary)]/30 hover:bg-[var(--surface-variant)]',
   };
 
   return (
@@ -174,7 +174,7 @@ export function ShareButton({
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 z-50 mt-2 w-48 rounded-lg border border-[#2a2a2a] bg-[#1f1f1f] shadow-lg">
+        <div className="absolute right-0 z-50 mt-2 w-48 rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-lg">
           <div className="py-1">
             {methods.map(method => {
               const IconComponent = methodIcons[method];
@@ -203,23 +203,23 @@ export function ShareButton({
                   key={method}
                   onClick={handleClick}
                   disabled={isLoading || disabled}
-                  className="flex w-full items-center gap-3 px-4 py-2 text-sm text-white transition-colors hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex w-full items-center gap-3 px-4 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)] disabled:cursor-not-allowed disabled:opacity-50"
                   aria-label={`Share via ${methodLabels[method]}`}
                 >
                   {isLoading ? (
                     <Icon
                       icon={Loader2}
                       size="sm"
-                      className="animate-spin text-[#29E7CD]"
+                      className="animate-spin text-[var(--primary)]"
                       aria-hidden={true}
                     />
                   ) : isCopied ? (
-                    <Icon icon={Check} size="sm" className="text-[#29E7CD]" aria-hidden={true} />
+                    <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
                   ) : (
                     <Icon
                       icon={IconComponent}
                       size="sm"
-                      className="text-gray-400"
+                      className="text-[var(--foreground-muted)]"
                       aria-hidden={true}
                     />
                   )}

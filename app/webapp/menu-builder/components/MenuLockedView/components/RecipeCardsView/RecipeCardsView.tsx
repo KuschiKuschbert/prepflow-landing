@@ -105,14 +105,14 @@ export function RecipeCardsView({ menuId }: RecipeCardsViewProps) {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center p-8">
-        <Loader2 className="h-8 w-8 animate-spin text-[#29E7CD]" />
-        <p className="mt-4 text-sm text-gray-400">
+        <Loader2 className="h-8 w-8 animate-spin text-[var(--primary)]" />
+        <p className="mt-4 text-sm text-[var(--foreground-muted)]">
           {generating
             ? 'Generating recipe cards... This may take 2-3 minutes for large menus.'
             : 'Loading recipe cards...'}
         </p>
         {generating && (
-          <p className="mt-2 text-xs text-gray-500">
+          <p className="mt-2 text-xs text-[var(--foreground-subtle)]">
             Processing menu items with AI. Please wait...
           </p>
         )}
@@ -122,8 +122,8 @@ export function RecipeCardsView({ menuId }: RecipeCardsViewProps) {
 
   if (error) {
     return (
-      <div className="rounded-lg border border-red-500/50 bg-red-500/10 p-6 text-center">
-        <p className="text-red-400">{error}</p>
+      <div className="rounded-lg border border-[var(--color-error)]/50 bg-[var(--color-error)]/10 p-6 text-center">
+        <p className="text-[var(--color-error)]">{error}</p>
       </div>
     );
   }
@@ -156,9 +156,9 @@ export function RecipeCardsView({ menuId }: RecipeCardsViewProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-4">
-        <div className="flex-1 rounded-lg border border-[#29E7CD]/20 bg-[#29E7CD]/5 p-3">
-          <p className="text-xs text-gray-300">
-            <strong className="text-[#29E7CD]">Recipe Cards:</strong> All ingredients are normalized
+        <div className="flex-1 rounded-lg border border-[var(--primary)]/20 bg-[var(--primary)]/5 p-3">
+          <p className="text-xs text-[var(--foreground-secondary)]">
+            <strong className="text-[var(--primary)]">Recipe Cards:</strong> All ingredients are normalized
             to 1 serving. Use the prep quantity input on each card to scale ingredients for your
             desired batch size.
           </p>
@@ -176,7 +176,7 @@ export function RecipeCardsView({ menuId }: RecipeCardsViewProps) {
             }
           }}
           disabled={generating || loading}
-          className="flex shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-sm font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
           aria-label="Regenerate recipe cards for this menu"
         >
           {generating ? (
@@ -194,8 +194,8 @@ export function RecipeCardsView({ menuId }: RecipeCardsViewProps) {
       </div>
 
       {error && (
-        <div className="rounded-lg border border-red-500/50 bg-red-500/10 p-4">
-          <p className="text-sm font-semibold text-red-400">Error:</p>
+        <div className="rounded-lg border border-[var(--color-error)]/50 bg-[var(--color-error)]/10 p-4">
+          <p className="text-sm font-semibold text-[var(--color-error)]">Error:</p>
           <p className="mt-2 text-sm whitespace-pre-line text-red-300">{error}</p>
         </div>
       )}
@@ -204,7 +204,7 @@ export function RecipeCardsView({ menuId }: RecipeCardsViewProps) {
         {/* Main Recipe Cards Section */}
         {cards.length > 0 && (
           <div className="mb-8">
-            <h2 className="mb-4 text-xl font-bold text-white">Main Recipe Cards</h2>
+            <h2 className="mb-4 text-xl font-bold text-[var(--foreground)]">Main Recipe Cards</h2>
             <MainCardsGrid
               cards={cards}
               expandedCardId={expandedCardId}
@@ -220,7 +220,7 @@ export function RecipeCardsView({ menuId }: RecipeCardsViewProps) {
           subRecipeCards.slowCooked.length > 0 ||
           subRecipeCards.other.length > 0) && (
           <div className="space-y-8">
-            <h2 className="text-xl font-bold text-white">Sub-Recipes & Prep Items</h2>
+            <h2 className="text-xl font-bold text-[var(--foreground)]">Sub-Recipes & Prep Items</h2>
             <SubRecipeSections
               subRecipeCards={subRecipeCards}
               expandedCardId={expandedCardId}

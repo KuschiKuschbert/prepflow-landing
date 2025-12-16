@@ -22,17 +22,17 @@ export function PrepListPreviewFooter({ saving, onCancel, onSave }: PrepListPrev
   const { t } = useTranslation();
 
   return (
-    <div className="flex items-center justify-between border-t border-[#2a2a2a] p-6">
+    <div className="flex items-center justify-between border-t border-[var(--border)] p-6">
       <button
         onClick={onCancel}
-        className="rounded-xl bg-[#2a2a2a] px-6 py-3 text-gray-300 transition-colors hover:bg-[#2a2a2a]/80"
+        className="rounded-xl bg-[var(--muted)] px-6 py-3 text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/80"
       >
         {t('prepLists.cancel', 'Cancel')}
       </button>
       <button
         onClick={onSave}
         disabled={saving}
-        className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
       >
         {saving ? (
           <>

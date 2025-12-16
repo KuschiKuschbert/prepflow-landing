@@ -11,7 +11,7 @@ export function GridFilterBar({ gridFilter, onFilterChange }: GridFilterBarProps
   return (
     <div className="desktop:flex-row desktop:items-center desktop:justify-between flex flex-col gap-4">
       <div className="flex items-center gap-4">
-        <h2 className="text-2xl font-semibold text-white">Cleaning Grid</h2>
+        <h2 className="text-2xl font-semibold text-[var(--foreground)]">Cleaning Grid</h2>
       </div>
 
       <div className="flex flex-wrap gap-2">
@@ -21,8 +21,8 @@ export function GridFilterBar({ gridFilter, onFilterChange }: GridFilterBarProps
             onClick={() => onFilterChange(filterOption)}
             className={`rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200 ${
               gridFilter === filterOption
-                ? 'bg-[#29E7CD] text-black shadow-lg'
-                : 'bg-[#2a2a2a] text-gray-400 hover:text-white'
+                ? 'bg-[var(--primary)] text-[var(--button-active-text)] shadow-lg'
+                : 'bg-[var(--muted)] text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
             }`}
           >
             {filterOption === 'today'
@@ -38,3 +38,6 @@ export function GridFilterBar({ gridFilter, onFilterChange }: GridFilterBarProps
     </div>
   );
 }
+
+
+

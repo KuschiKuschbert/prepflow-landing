@@ -33,7 +33,7 @@ export default function LanguageSwitcher({
       <select
         value={currentLanguage}
         onChange={e => changeLanguage(e.target.value)}
-        className={` ${sizeClasses[size]} cursor-pointer appearance-none rounded-lg border border-[#29E7CD]/30 bg-[#2a2a2a] pl-3 text-white transition-all duration-200 hover:border-[#29E7CD]/50 focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] focus:outline-none`}
+        className={` ${sizeClasses[size]} cursor-pointer appearance-none rounded-lg border border-[var(--primary)]/30 bg-[var(--muted)] pl-3 text-[var(--foreground)] transition-all duration-200 hover:border-[var(--primary)]/50 focus:border-transparent focus:ring-2 focus:ring-[var(--primary)] focus:outline-none`}
         style={{
           backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
           backgroundPosition: 'right 0.5rem center',
@@ -43,7 +43,7 @@ export default function LanguageSwitcher({
         }}
       >
         {availableLangs.map(lang => (
-          <option key={lang.code} value={lang.code} className="bg-[#2a2a2a] text-white">
+          <option key={lang.code} value={lang.code} className="bg-[var(--muted)] text-[var(--foreground)]">
             {showFlag && lang.flag} {showName && lang.name}
           </option>
         ))}

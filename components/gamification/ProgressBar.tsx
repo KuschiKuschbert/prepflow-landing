@@ -47,8 +47,8 @@ interface ProgressBarProps {
 }
 
 const variantColors = {
-  primary: 'bg-gradient-to-r from-[#29E7CD] to-[#3B82F6]',
-  success: 'bg-gradient-to-r from-[#29E7CD] to-[#10B981]',
+  primary: 'bg-gradient-to-r from-[var(--primary)] to-[#3B82F6]',
+  success: 'bg-gradient-to-r from-[var(--primary)] to-[#10B981]',
   warning: 'bg-gradient-to-r from-[#FF6B00] to-[#F59E0B]',
   info: 'bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6]',
 };
@@ -103,11 +103,11 @@ export function ProgressBar({
     <div className={`w-full ${className}`}>
       {(label || showPercentage) && (
         <div className="mb-2 flex items-center justify-between text-sm">
-          {label && <span className="text-gray-300">{label}</span>}
-          {showPercentage && <span className="text-gray-400">{Math.round(displayProgress)}%</span>}
+          {label && <span className="text-[var(--foreground-secondary)]">{label}</span>}
+          {showPercentage && <span className="text-[var(--foreground-muted)]">{Math.round(displayProgress)}%</span>}
         </div>
       )}
-      <div className={`${sizeClasses[size]} w-full overflow-hidden rounded-full bg-[#2a2a2a]`}>
+      <div className={`${sizeClasses[size]} w-full overflow-hidden rounded-full bg-[var(--muted)]`}>
         <div
           className={`${variantColors[variant]} h-full transition-all duration-300 ease-out`}
           style={{ width: `${displayProgress}%` }}
@@ -118,3 +118,6 @@ export function ProgressBar({
 }
 
 export default ProgressBar;
+
+
+

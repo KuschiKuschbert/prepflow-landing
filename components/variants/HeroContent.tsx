@@ -54,11 +54,11 @@ export function HeroContent({ t, handleEngagement, variant, children }: HeroCont
   return (
     <div>
       <h1 className="text-fluid-4xl tablet:text-fluid-4xl desktop:text-fluid-4xl font-extrabold tracking-tight">
-        <span className="bg-gradient-to-r from-[#29E7CD] to-[#D925C7] bg-clip-text text-transparent">
+        <span className="bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] bg-clip-text text-transparent">
           {getTitle()}
         </span>
       </h1>
-      <p className="text-fluid-lg desktop:text-fluid-xl mt-6 leading-8 text-gray-300">
+      <p className="text-fluid-lg desktop:text-fluid-xl mt-6 leading-8 text-[var(--foreground-secondary)]">
         {getSubtitle()}
       </p>
       {children}
@@ -70,7 +70,7 @@ export function HeroContent({ t, handleEngagement, variant, children }: HeroCont
 export function Bullet({ children }: { children: React.ReactNode }) {
   return (
     <li className="flex items-start gap-3">
-      <span className="mt-2 h-3 w-3 rounded-full bg-gradient-to-r from-[#29E7CD] to-[#D925C7]" />
+      <span className="mt-2 h-3 w-3 rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]" />
       {children}
     </li>
   );

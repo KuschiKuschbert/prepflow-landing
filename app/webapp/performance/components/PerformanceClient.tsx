@@ -107,7 +107,7 @@ export default function PerformanceClient() {
           />
 
           {/* Table Container with Filters */}
-          <div className="overflow-hidden rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f]">
+          <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
             {/* Filters - Attached to table */}
             <PerformanceFilters
               filters={filters}

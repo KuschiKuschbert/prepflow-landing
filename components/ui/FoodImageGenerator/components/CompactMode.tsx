@@ -37,7 +37,7 @@ export function CompactMode({
             ref={generateButtonRef}
             onClick={handleGenerateClick}
             disabled={isGenerating}
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#29E7CD] via-[#FF6B00] to-[#D925C7] px-4 py-2 text-sm font-medium text-black transition-all duration-200 hover:shadow-lg hover:shadow-[#FF6B00]/25 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg hover:shadow-[var(--tertiary)]/25 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label={`Generate images for ${entityName}`}
           >
             <Icon icon={Sparkles} size="sm" aria-hidden={true} />
@@ -57,7 +57,7 @@ export function CompactMode({
             ref={generateButtonRef}
             onClick={handleGenerateClick}
             disabled={isGenerating}
-            className="flex items-center gap-2 rounded-lg border border-[#2a2a2a] bg-[#2a2a2a]/40 px-3 py-1.5 text-xs font-medium text-gray-300 transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#2a2a2a]/60 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--muted)]/40 px-3 py-1.5 text-xs font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--primary)]/50 hover:bg-[var(--muted)]/60 hover:text-[var(--foreground)] disabled:cursor-not-allowed disabled:opacity-50"
             aria-label={`Regenerate images for ${entityName}`}
           >
             <Icon icon={Sparkles} size="xs" aria-hidden={true} />
@@ -72,13 +72,13 @@ export function CompactMode({
         </>
       )}
       {isGenerating && (
-        <div className="flex items-center gap-2 rounded-xl bg-[#2a2a2a]/40 px-4 py-2 text-sm font-medium text-gray-300">
+        <div className="flex items-center gap-2 rounded-xl bg-[var(--muted)]/40 px-4 py-2 text-sm font-medium text-[var(--foreground-secondary)]">
           <Icon icon={Loader2} size="sm" className="animate-spin" aria-hidden={true} />
           <span>Generating...</span>
         </div>
       )}
       {error && (
-        <div className="mt-2 flex items-center gap-2 rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-400">
+        <div className="mt-2 flex items-center gap-2 rounded-lg bg-[var(--color-error)]/10 px-3 py-2 text-xs text-[var(--color-error)]">
           <Icon icon={AlertCircle} size="sm" aria-hidden={true} />
           <span>{error}</span>
         </div>

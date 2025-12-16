@@ -135,9 +135,9 @@ export function NotificationsPanel() {
   }) => (
     <div className="flex items-start justify-between">
       <div className="flex-1">
-        <label className="text-sm font-medium text-white">{label}</label>
+        <label className="text-sm font-medium text-[var(--foreground)]">{label}</label>
         {description && (
-          <p className="mt-1 text-xs text-gray-400">
+          <p className="mt-1 text-xs text-[var(--foreground-muted)]">
             {typeof description === 'string' ? description : description}
           </p>
         )}
@@ -145,15 +145,15 @@ export function NotificationsPanel() {
       <button
         onClick={() => onChange(!checked)}
         disabled={saving}
-        className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors focus:ring-2 focus:ring-[#29E7CD] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none disabled:opacity-50 ${
-          checked ? 'bg-[#29E7CD]' : 'bg-[#2a2a2a]'
+        className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none disabled:opacity-50 ${
+          checked ? 'bg-[var(--primary)]' : 'bg-[var(--muted)]'
         }`}
         role="switch"
         aria-checked={checked}
         aria-label={label}
       >
         <span
-          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition-transform ${
+          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-[var(--qr-background)] shadow ring-0 transition-transform ${
             checked ? 'translate-x-5' : 'translate-x-0'
           }`}
         />
@@ -165,10 +165,10 @@ export function NotificationsPanel() {
     return (
       <div
         ref={ref}
-        className="mb-6 space-y-4 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6"
+        className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6"
       >
-        <div className="h-6 w-48 animate-pulse rounded bg-[#2a2a2a]" />
-        <div className="h-4 w-64 animate-pulse rounded bg-[#2a2a2a]" />
+        <div className="h-6 w-48 animate-pulse rounded bg-[var(--muted)]" />
+        <div className="h-4 w-64 animate-pulse rounded bg-[var(--muted)]" />
       </div>
     );
   }
@@ -176,19 +176,19 @@ export function NotificationsPanel() {
   return (
     <div
       ref={ref}
-      className="mb-6 space-y-6 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-6"
+      className="mb-6 space-y-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6"
     >
       <div>
         <h2 className="text-xl font-semibold">Notifications & Preferences</h2>
-        <p className="mt-1 text-sm text-gray-300">
+        <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
           Control how and when you receive notifications from PrepFlow.
         </p>
       </div>
 
       {/* Email Notifications */}
-      <div className="space-y-4 border-t border-[#2a2a2a] pt-4">
+      <div className="space-y-4 border-t border-[var(--border)] pt-4">
         <div className="flex items-center gap-2">
-          <Icon icon={Mail} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+          <Icon icon={Mail} size="md" className="text-[var(--primary)]" aria-hidden={true} />
           <h3 className="text-lg font-medium">Email Notifications</h3>
         </div>
         <div className="space-y-4">
@@ -220,9 +220,9 @@ export function NotificationsPanel() {
       </div>
 
       {/* In-App Preferences */}
-      <div className="space-y-4 border-t border-[#2a2a2a] pt-4">
+      <div className="space-y-4 border-t border-[var(--border)] pt-4">
         <div className="flex items-center gap-2">
-          <Icon icon={Bell} size="md" className="text-[#29E7CD]" aria-hidden={true} />
+          <Icon icon={Bell} size="md" className="text-[var(--primary)]" aria-hidden={true} />
           <h3 className="text-lg font-medium">In-App Preferences</h3>
         </div>
         <div className="space-y-4">
@@ -251,7 +251,7 @@ export function NotificationsPanel() {
             }
           />
           <div>
-            <label className="mb-2 block text-sm font-medium text-white">Email Digest</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground)]">Email Digest</label>
             <select
               value={preferences.inApp.emailDigest}
               onChange={e =>
@@ -261,14 +261,14 @@ export function NotificationsPanel() {
                 )
               }
               disabled={saving}
-              className="w-full rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a] px-4 py-3 text-white focus:border-transparent focus:ring-2 focus:ring-[#29E7CD] disabled:opacity-50"
+              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)] disabled:opacity-50"
             >
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
               <option value="monthly">Monthly</option>
               <option value="never">Never</option>
             </select>
-            <p className="mt-1 text-xs text-gray-400">
+            <p className="mt-1 text-xs text-[var(--foreground-muted)]">
               How often to receive summary emails of your activity
             </p>
           </div>

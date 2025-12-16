@@ -44,22 +44,22 @@ export function StandardTaskTemplates({ onPopulate }: StandardTaskTemplatesProps
   };
 
   return (
-    <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
+    <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
       <div className="mb-4 flex items-center gap-3">
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#29E7CD]/20 to-[#29E7CD]/10">
-          <Icon icon={Sparkles} size="lg" className="text-[#29E7CD]" aria-hidden={true} />
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
+          <Icon icon={Sparkles} size="lg" className="text-[var(--primary)]" aria-hidden={true} />
         </div>
         <div>
-          <h3 className="text-xl font-semibold text-white">Standard Tasks</h3>
-          <p className="text-sm text-gray-400">
+          <h3 className="text-xl font-semibold text-[var(--foreground)]">Standard Tasks</h3>
+          <p className="text-sm text-[var(--foreground-muted)]">
             Pre-populate cleaning tasks based on your equipment and sections
           </p>
         </div>
       </div>
 
-      <div className="mb-4 rounded-2xl border border-[#2a2a2a] bg-[#2a2a2a]/30 p-4">
-        <p className="text-sm text-gray-300">This will automatically create cleaning tasks for:</p>
-        <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-gray-400">
+      <div className="mb-4 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
+        <p className="text-sm text-[var(--foreground-secondary)]">This will automatically create cleaning tasks for:</p>
+        <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-[var(--foreground-muted)]">
           <li>Equipment: Fridge seals, ovens, grills, flat tops, cookers</li>
           <li>Sections: Floor cleaning and bench cleaning per section</li>
           <li>Standard frequencies: Daily, weekly, monthly based on task type</li>
@@ -69,7 +69,7 @@ export function StandardTaskTemplates({ onPopulate }: StandardTaskTemplatesProps
       <button
         onClick={handlePopulate}
         disabled={loading}
-        className="w-full rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-black transition-all duration-200 hover:shadow-xl disabled:opacity-50"
+        className="w-full rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl disabled:opacity-50"
       >
         {loading ? (
           <span className="flex items-center justify-center gap-2">

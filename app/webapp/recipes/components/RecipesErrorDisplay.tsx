@@ -29,13 +29,13 @@ export function RecipesErrorDisplay({
   const getErrorStyles = () => {
     switch (displayError.type) {
       case 'NETWORK':
-        return 'border-yellow-500/20 bg-yellow-500/10 text-yellow-400';
+        return 'border-[var(--color-warning)]/20 bg-[var(--color-warning)]/10 text-[var(--color-warning)]';
       case 'VALIDATION':
         return 'border-orange-500/20 bg-orange-500/10 text-orange-400';
       case 'SERVER':
-        return 'border-red-500/20 bg-red-500/10 text-red-400';
+        return 'border-[var(--color-error)]/20 bg-[var(--color-error)]/10 text-[var(--color-error)]';
       default:
-        return 'border-red-500/20 bg-red-500/10 text-red-400';
+        return 'border-[var(--color-error)]/20 bg-[var(--color-error)]/10 text-[var(--color-error)]';
     }
   };
 

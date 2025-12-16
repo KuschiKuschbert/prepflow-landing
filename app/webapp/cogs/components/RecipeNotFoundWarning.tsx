@@ -6,7 +6,7 @@ interface RecipeNotFoundWarningProps {
 
 export function RecipeNotFoundWarning({ onClearAndRefresh }: RecipeNotFoundWarningProps) {
   return (
-    <div className="mb-6 rounded border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-yellow-400">
+    <div className="mb-6 rounded border border-[var(--color-warning)]/30 bg-[var(--color-warning)]/10 px-4 py-3 text-[var(--color-warning)]">
       <p className="font-medium">Recipe not found</p>
       <p className="text-sm text-yellow-300/80">
         The selected recipe may have been deleted. Please select a different recipe or create a new

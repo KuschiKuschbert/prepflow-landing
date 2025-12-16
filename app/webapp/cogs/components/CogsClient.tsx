@@ -258,7 +258,7 @@ export default function CogsClient() {
           />
         </div>
 
-        <div className="tablet:p-6 rounded-lg bg-[#1f1f1f] p-4 shadow">
+        <div className="tablet:p-6 rounded-lg bg-[var(--surface)] p-4 shadow">
           <h2 className="tablet:text-xl mb-4 text-lg font-semibold">Cost Analysis</h2>
           {selectedRecipe ? (
             <>

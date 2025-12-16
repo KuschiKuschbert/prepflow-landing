@@ -28,10 +28,10 @@ export function UnifiedRecipeModalIngredientsTab({
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-white">Recipe Ingredients</h3>
+        <h3 className="text-lg font-semibold text-[var(--foreground)]">Recipe Ingredients</h3>
         <button
           onClick={() => onEditRecipe(recipe)}
-          className="rounded-lg bg-[#29E7CD] px-4 py-2 text-sm font-medium text-white hover:bg-[#29E7CD]/80"
+          className="rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] hover:bg-[var(--primary)]/80"
         >
           Add/Edit Ingredients
         </button>

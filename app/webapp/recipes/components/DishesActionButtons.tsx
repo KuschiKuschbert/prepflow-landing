@@ -12,7 +12,7 @@ export function DishesActionButtons({ onAddDish }: DishesActionButtonsProps) {
     <div className="mb-8 flex flex-wrap gap-3">
       <button
         onClick={onAddDish}
-        className="rounded-2xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-[#29E7CD]/80 hover:to-[#D925C7]/80 hover:shadow-xl"
+        className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 hover:shadow-xl"
         style={{
           background: `linear-gradient(to right, ${LANDING_COLORS.primary}, ${LANDING_COLORS.accent})`,
         }}
@@ -21,7 +21,7 @@ export function DishesActionButtons({ onAddDish }: DishesActionButtonsProps) {
       </button>
       <Link
         href="/webapp/recipes#menu-builder"
-        className="flex items-center gap-2 rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] px-6 py-3 font-medium text-white transition-all duration-200 hover:border-[#29E7CD]/50 hover:bg-[#2a2a2a] hover:shadow-lg"
+        className="flex items-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-6 py-3 font-medium text-[var(--foreground)] transition-all duration-200 hover:border-[var(--primary)]/50 hover:bg-[var(--muted)] hover:shadow-lg"
       >
         <Icon icon={FileText} size="sm" />
         <span>Menu Builder</span>

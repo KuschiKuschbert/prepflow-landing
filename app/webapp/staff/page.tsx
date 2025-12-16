@@ -88,8 +88,8 @@ export default function StaffPage() {
     return (
       <div className="space-y-6">
         <PageHeader title="Staff Management" icon={Users} />
-        <div className="rounded-3xl border border-red-500/50 bg-red-500/10 p-6">
-          <p className="text-red-400">Error: {error}</p>
+        <div className="rounded-3xl border border-[var(--color-error)]/50 bg-[var(--color-error)]/10 p-6">
+          <p className="text-[var(--color-error)]">Error: {error}</p>
         </div>
       </div>
     );
@@ -114,26 +114,26 @@ export default function StaffPage() {
         {employees.map(employee => (
           <div
             key={employee.id}
-            className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6 transition-all hover:border-[#29E7CD]/50 hover:shadow-lg"
+            className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 transition-all hover:border-[var(--primary)]/50 hover:shadow-lg"
           >
             <div className="mb-4 flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-semibold text-white">
+                <h3 className="text-lg font-semibold text-[var(--foreground)]">
                   {employee.first_name} {employee.last_name}
                 </h3>
-                <p className="text-sm text-gray-400">{employee.email}</p>
+                <p className="text-sm text-[var(--foreground-muted)]">{employee.email}</p>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => router.push(`/webapp/staff/${employee.id}`)}
-                  className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-[#2a2a2a] hover:text-[#29E7CD]"
+                  className="rounded-lg p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)]"
                   aria-label={`Edit ${employee.first_name} ${employee.last_name}`}
                 >
                   <Icon icon={Edit} size="sm" aria-hidden={true} />
                 </button>
                 <button
                   onClick={() => handleDelete(employee.id)}
-                  className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-500/10 hover:text-red-400"
+                  className="rounded-lg p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--color-error)]/10 hover:text-[var(--color-error)]"
                   aria-label={`Delete ${employee.first_name} ${employee.last_name}`}
                 >
                   <Icon icon={Trash2} size="sm" aria-hidden={true} />
@@ -143,16 +143,16 @@ export default function StaffPage() {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-400">Role</span>
-                <span className="text-white">{employee.role}</span>
+                <span className="text-[var(--foreground-muted)]">Role</span>
+                <span className="text-[var(--foreground)]">{employee.role}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-400">Employment Type</span>
-                <span className="text-white">{employee.employment_type}</span>
+                <span className="text-[var(--foreground-muted)]">Employment Type</span>
+                <span className="text-[var(--foreground)]">{employee.employment_type}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-400">Hourly Rate</span>
-                <span className="text-white">${employee.hourly_rate.toFixed(2)}</span>
+                <span className="text-[var(--foreground-muted)]">Hourly Rate</span>
+                <span className="text-[var(--foreground)]">${employee.hourly_rate.toFixed(2)}</span>
               </div>
             </div>
 
@@ -171,10 +171,10 @@ export default function StaffPage() {
       </div>
 
       {employees.length === 0 && (
-        <div className="rounded-3xl border border-[#2a2a2a] bg-[#1f1f1f] p-12 text-center">
-          <Icon icon={Users} size="xl" className="mx-auto mb-4 text-gray-400" aria-hidden={true} />
-          <h3 className="mb-2 text-lg font-semibold text-white">No employees yet</h3>
-          <p className="mb-6 text-gray-400">Get started by adding your first team member</p>
+        <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-12 text-center">
+          <Icon icon={Users} size="xl" className="mx-auto mb-4 text-[var(--foreground-muted)]" aria-hidden={true} />
+          <h3 className="mb-2 text-lg font-semibold text-[var(--foreground)]">No employees yet</h3>
+          <p className="mb-6 text-[var(--foreground-muted)]">Get started by adding your first team member</p>
           <Button variant="primary" onClick={() => router.push('/webapp/staff/new')}>
             <Icon icon={Plus} size="sm" aria-hidden={true} />
             Add Employee

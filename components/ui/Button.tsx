@@ -43,22 +43,22 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   // Base classes - use landing typography if landingStyle is enabled
   const baseClasses = landingStyle
-    ? `inline-flex items-center justify-center ${LANDING_TYPOGRAPHY.base} font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#0a0a0a]`
-    : 'inline-flex items-center justify-center font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#0a0a0a]';
+    ? `inline-flex items-center justify-center ${LANDING_TYPOGRAPHY.base} font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--background)]`
+    : 'inline-flex items-center justify-center font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--background)]';
 
   // Variant classes - use landing colors if landingStyle is enabled
   const variantClasses = landingStyle
     ? {
-        primary: `bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25`,
-        secondary: `bg-gradient-to-r from-[#D925C7] to-[#29E7CD] text-white shadow-lg hover:shadow-xl hover:shadow-[#D925C7]/25`,
-        outline: `border border-gray-600 text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD]`,
+        primary: `bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-[var(--button-active-text)] shadow-lg hover:shadow-xl hover:shadow-[var(--primary)]/25`,
+        secondary: `bg-gradient-to-r from-[var(--accent)] to-[var(--primary)] text-[var(--button-active-text)] shadow-lg hover:shadow-xl hover:shadow-[var(--accent)]/25`,
+        outline: `border border-[var(--border)] text-[var(--foreground-secondary)] hover:border-[var(--primary)] hover:text-[var(--primary)]`,
       }
     : {
         primary:
-          'bg-gradient-to-r from-[#29E7CD] to-[#3B82F6] text-white shadow-lg hover:shadow-xl hover:shadow-[#29E7CD]/25',
+          'bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-[var(--button-active-text)] shadow-lg hover:shadow-xl hover:shadow-[var(--primary)]/25',
         secondary:
-          'bg-gradient-to-r from-[#D925C7] to-[#29E7CD] text-white shadow-lg hover:shadow-xl hover:shadow-[#D925C7]/25',
-        outline: 'border border-gray-600 text-gray-300 hover:border-[#29E7CD] hover:text-[#29E7CD]',
+          'bg-gradient-to-r from-[var(--accent)] to-[var(--primary)] text-[var(--button-active-text)] shadow-lg hover:shadow-xl hover:shadow-[var(--accent)]/25',
+        outline: 'border border-[var(--border)] text-[var(--foreground-secondary)] hover:border-[var(--primary)] hover:text-[var(--primary)]',
       };
 
   // Size classes - use landing typography if landingStyle is enabled
@@ -76,7 +76,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   // Glow effect classes
   const glowClasses = glow
-    ? `hover:shadow-[0_0_20px_rgba(41,231,205,0.5)] hover:shadow-[#29E7CD]/50`
+    ? `hover:shadow-[0_0_20px_rgba(41,231,205,0.5)] hover:shadow-[var(--primary)]/50`
     : '';
 
   const classes = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${glowClasses} ${className}`;
