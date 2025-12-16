@@ -26,7 +26,7 @@ const TrainOffTrack: React.FC = () => {
       // Mobile/touch devices are now enabled by default
       // Users can still disable via PF_DISABLE_ARCADE_ERRORS if needed
       return false;
-    } catch (_) {
+    } catch {
       return false;
     }
   };
