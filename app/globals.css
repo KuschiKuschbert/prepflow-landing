@@ -14,8 +14,18 @@
 
   /* Text contrast levels - better readability */
   --foreground-secondary: rgba(255, 255, 255, 0.9); /* 90% opacity for better contrast */
-  --foreground-muted: rgba(255, 255, 255, 0.75); /* 75% opacity for muted text - improved readability */
-  --foreground-subtle: rgba(255, 255, 255, 0.6); /* 60% opacity for subtle text - improved readability */
+  --foreground-muted: rgba(
+    255,
+    255,
+    255,
+    0.75
+  ); /* 75% opacity for muted text - improved readability */
+  --foreground-subtle: rgba(
+    255,
+    255,
+    255,
+    0.6
+  ); /* 60% opacity for subtle text - improved readability */
 
   /* Theme-specific cyber carrot colors - Dark theme (bright, vibrant) */
   --primary-text: #ffffff; /* Light text for dark theme buttons */
@@ -24,7 +34,8 @@
   /* Active button states - Dark theme (bright, vibrant backgrounds with white text) */
   --button-active-bg: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   --button-active-text: #ffffff; /* Always white for maximum contrast on bright gradients */
-  --button-active-shadow: 0 10px 25px -5px rgba(41, 231, 205, 0.4), 0 8px 10px -6px rgba(217, 37, 199, 0.3);
+  --button-active-shadow:
+    0 10px 25px -5px rgba(41, 231, 205, 0.4), 0 8px 10px -6px rgba(217, 37, 199, 0.3);
 
   /* Semantic colors for chips/badges - Dark theme (bright, vibrant) */
   --color-success: #34d399; /* Bright green */
@@ -70,11 +81,11 @@
   --easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Background gradient - dark mode */
-  --background-gradient: linear-gradient(180deg, rgba(10,10,10,1) 0%, rgba(8,8,10,1) 100%);
+  --background-gradient: linear-gradient(180deg, rgba(10, 10, 10, 1) 0%, rgba(8, 8, 10, 1) 100%);
 }
 
 /* Light Mode Theme Variables - Pale-light-dark grey for better readability */
-[data-theme="light"] {
+[data-theme='light'] {
   --background: #f5f5f5; /* Softer off-white background */
   --foreground: #1a1a1a; /* Darker text for better contrast */
   --primary: #1a9d8a; /* Darker, more saturated cyan for better contrast in light theme */
@@ -85,6 +96,13 @@
   --border: #c0c0c0; /* Darker borders for better visibility */
   --surface: #e8e8e8; /* Pale-light-dark grey for elevated surfaces/cards */
   --surface-variant: rgba(232, 232, 232, 0.8); /* Pale-light-dark grey variant */
+
+  /* Background gradient - light mode */
+  --background-gradient: linear-gradient(
+    180deg,
+    rgba(245, 245, 245, 1) 0%,
+    rgba(240, 240, 242, 1) 100%
+  );
 
   /* Text contrast levels - higher opacity for better readability in light mode */
   --foreground-secondary: rgba(26, 26, 26, 0.9); /* 90% opacity for better contrast */
@@ -98,7 +116,8 @@
   /* Active button states - Light theme (darker, more saturated backgrounds with white text for contrast) */
   --button-active-bg: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   --button-active-text: #ffffff; /* Always white for maximum contrast on darker gradients */
-  --button-active-shadow: 0 10px 25px -5px rgba(26, 157, 138, 0.4), 0 8px 10px -6px rgba(160, 26, 138, 0.3);
+  --button-active-shadow:
+    0 10px 25px -5px rgba(26, 157, 138, 0.4), 0 8px 10px -6px rgba(160, 26, 138, 0.3);
 
   /* Semantic colors for chips/badges - Light theme (darker, more saturated for contrast) */
   --color-success: #047857; /* Darker, more saturated green for better contrast */
@@ -119,7 +138,11 @@
   --qr-foreground: #000000;
 
   /* Background gradient - light mode (subtle gradient for depth) */
-  --background-gradient: linear-gradient(180deg, rgba(245,245,245,1) 0%, rgba(240,240,242,1) 100%);
+  --background-gradient: linear-gradient(
+    180deg,
+    rgba(245, 245, 245, 1) 0%,
+    rgba(240, 240, 242, 1) 100%
+  );
 }
 
 /* Landscape optimizations for mobile devices */

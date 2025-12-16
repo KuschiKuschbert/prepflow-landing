@@ -15,11 +15,12 @@ interface WebAppBackgroundProps {
 const WebAppBackground: React.FC<WebAppBackgroundProps> = ({ compact = false }) => {
   return (
     <>
-      {/* Base gradient */}
+      {/* Base gradient - adapts to light/dark mode */}
       <div
         className="fixed inset-0 -z-10"
         style={{
-          background: 'linear-gradient(180deg, rgba(10,10,10,1) 0%, rgba(8,8,10,1) 100%)',
+          background:
+            'var(--background-gradient, linear-gradient(180deg, rgba(10,10,10,1) 0%, rgba(8,8,10,1) 100%))',
         }}
       />
 

@@ -65,6 +65,78 @@ const TrainOffTrack: React.FC = () => {
     <>
       <WebAppBackground />
       <ArcadeMuteButton />
+      {/* Train animation - full viewport width, positioned outside content container */}
+      {!fixed && (
+        <div className="pointer-events-none fixed inset-0 z-10 overflow-hidden">
+          <motion.div
+            className="absolute top-1/2 -translate-y-1/2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <motion.div
+              animate={
+                reducedMotion
+                  ? { x: 0 }
+                  : {
+                      x: ['-300px', 'calc(100vw + 300px)'],
+                    }
+              }
+              transition={
+                reducedMotion
+                  ? {}
+                  : {
+                      duration: 10,
+                      repeat: Infinity,
+                      ease: 'linear',
+                    }
+              }
+            >
+              <div className="inline-block" style={{ transform: 'scaleX(-1)' }}>
+                <span className="desktop:text-8xl inline-block text-6xl whitespace-nowrap">
+                  🚂🚃🚃🚃
+                </span>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      )}
+      {/* Train animation in success state - full viewport width, positioned outside content container */}
+      {fixed && (
+        <div className="pointer-events-none fixed inset-0 z-10 overflow-hidden opacity-30">
+          <motion.div
+            className="absolute top-1/2 -translate-y-1/2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.3 }}
+            transition={{ delay: 0.3 }}
+          >
+            <motion.div
+              animate={
+                reducedMotion
+                  ? { x: 0 }
+                  : {
+                      x: ['-300px', 'calc(100vw + 300px)'],
+                    }
+              }
+              transition={
+                reducedMotion
+                  ? {}
+                  : {
+                      duration: 10,
+                      repeat: Infinity,
+                      ease: 'linear',
+                    }
+              }
+            >
+              <div className="inline-block" style={{ transform: 'scaleX(-1)' }}>
+                <span className="desktop:text-8xl inline-block text-6xl whitespace-nowrap">
+                  🚂🚃🚃🚃
+                </span>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      )}
       <main className="fixed inset-0 flex min-h-screen items-center justify-center p-6 text-[var(--foreground)]">
         <div className="flex max-w-2xl flex-col items-center text-center">
           <AnimatePresence mode="wait">
@@ -87,35 +159,8 @@ const TrainOffTrack: React.FC = () => {
                   i like trains
                 </motion.p>
 
-                {/* Animated train running across screen */}
-                <motion.div
-                  className="relative mb-8 flex min-h-[180px] w-full items-center justify-center overflow-hidden desktop:min-h-[200px]"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <motion.div
-                    className="absolute"
-                    animate={
-                      reducedMotion
-                        ? { x: 0 }
-                        : {
-                            x: ['-150px', 'calc(100vw + 150px)'],
-                          }
-                    }
-                    transition={
-                      reducedMotion
-                        ? {}
-                        : {
-                            duration: 10,
-                            repeat: Infinity,
-                            ease: 'linear',
-                          }
-                    }
-                  >
-                    <span className="text-6xl desktop:text-8xl">🚂</span>
-                  </motion.div>
-                </motion.div>
+                {/* Spacer for train animation area */}
+                <div className="desktop:min-h-[200px] mb-8 min-h-[180px]" />
 
                 {/* Fix Track Button */}
                 <motion.div
@@ -158,35 +203,8 @@ const TrainOffTrack: React.FC = () => {
                   All aboard!
                 </motion.p>
 
-                {/* Train still animating in background */}
-                <motion.div
-                  className="relative mb-8 flex min-h-[180px] w-full items-center justify-center overflow-hidden desktop:min-h-[200px]"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 0.3 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <motion.div
-                    className="absolute"
-                    animate={
-                      reducedMotion
-                        ? { x: 0 }
-                        : {
-                            x: ['-150px', 'calc(100vw + 150px)'],
-                          }
-                    }
-                    transition={
-                      reducedMotion
-                        ? {}
-                        : {
-                            duration: 10,
-                            repeat: Infinity,
-                            ease: 'linear',
-                          }
-                    }
-                  >
-                    <span className="text-6xl desktop:text-8xl">🚂</span>
-                  </motion.div>
-                </motion.div>
+                {/* Spacer for train animation area */}
+                <div className="desktop:min-h-[200px] mb-8 min-h-[180px]" />
 
                 <motion.button
                   initial={{ opacity: 0, y: 20 }}
