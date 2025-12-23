@@ -5,6 +5,7 @@ import { Icon } from '@/components/ui/Icon';
 import { useNotification } from '@/contexts/NotificationContext';
 import { BarChart3 } from 'lucide-react';
 import { useState } from 'react';
+import { logger } from '@/lib/logger';
 
 export default function TestDataGenerator() {
   const [isGeneratingTestData, setIsGeneratingTestData] = useState(false);
@@ -33,6 +34,11 @@ export default function TestDataGenerator() {
         showError(`Error: ${data.error || 'Failed to generate test data'}`);
       }
     } catch (error) {
+      logger.error('[TestDataGenerator.tsx] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       showError('Connection issue while generating test data. Give it another go, chef.');
     } finally {
       setIsGeneratingTestData(false);

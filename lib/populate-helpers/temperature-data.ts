@@ -5,6 +5,7 @@
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { cleanSampleEquipment } from '@/lib/sample-equipment-clean';
 import { generateTemperatureLogs } from '@/lib/temperature-log-generator';
+import { logger } from '@/lib/logger';
 
 interface PopulateResults {
   cleaned: number;
@@ -82,6 +83,11 @@ export async function populateTemperatureData(
         }
       }
     } catch (logsErr) {
+      logger.error('[temperature-data.ts] Error in catch block:', {
+      error: logsErr instanceof Error ? logsErr.message : String(logsErr),
+      stack: logsErr instanceof Error ? logsErr.stack : undefined,
+    });
+
       results.errors.push({
         table: 'temperature_logs',
         error: logsErr instanceof Error ? logsErr.message : 'Unknown error',

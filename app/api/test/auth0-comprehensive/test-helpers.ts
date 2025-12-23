@@ -6,6 +6,7 @@
 import { ManagementClient } from 'auth0';
 import { testCallbackURLs } from './test-helpers/callback-url-tests';
 import { addTest, type TestResults } from './test-utils';
+import { logger } from '@/lib/logger';
 
 /**
  * Test environment variables
@@ -142,6 +143,11 @@ export async function testManagementAPI(results: TestResults): Promise<void> {
       });
     }
   } catch (error) {
+    logger.error('[test-helpers.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     addTest(results, 'Auth0 Management API', 'fail', 'Failed to connect to Auth0 Management API', {
       error: error instanceof Error ? error.message : String(error),
     });

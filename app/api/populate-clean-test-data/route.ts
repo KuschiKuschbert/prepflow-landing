@@ -1,19 +1,20 @@
-import { createSupabaseAdmin } from '@/lib/supabase';
-import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import {
-  cleanExistingData,
-  populateBasicData,
-  populateStaff,
-  populateTemperatureData,
-  populateCleaningData,
-  populateComplianceData,
-  populateMenuDishes,
-  populateKitchenSections,
-  populateSalesData,
-  populateDishes,
-  populateMenus,
+    cleanExistingData,
+    populateBasicData,
+    populateCleaningData,
+    populateComplianceData,
+    populateDishes,
+    populateKitchenSections,
+    populateMenuDishes,
+    populateMenus,
+    populateSalesData,
+    populateStaff,
+    populateTemperatureData,
 } from '@/lib/populate-helpers';
+import { createSupabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
@@ -63,7 +64,11 @@ export async function POST(request: NextRequest) {
         table: 'dishes',
         error: 'Dishes table does not exist. Please run menu-builder-schema.sql migration first.',
       });
-      logger.error('Dishes table does not exist. Run menu-builder-schema.sql migration.');
+      logger.error('[Populate Clean Test Data] Dishes table does not exist:', {
+        error: dishesTableError.message,
+        code: dishesTableError.code,
+        context: { operation: 'populateDishes', table: 'dishes' },
+      });
     } else if (!recipesData || recipesData.length === 0) {
       results.errors.push({
         table: 'dishes',
@@ -75,7 +80,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 11: Get dishes data for menu population
-    const { data: dishesData } = await supabaseAdmin.from('dishes').select('id, dish_name');
+    const { data: dishesData, error: dishesDataError } = await supabaseAdmin
+      .from('dishes')
+      .select('id, dish_name');
+    if (dishesDataError) {
+      logger.warn('[Populate Clean Test Data] Error fetching dishes data:', {
+        error: dishesDataError.message,
+        context: { operation: 'fetchDishesForMenus' },
+      });
+    }
 
     // Step 12: Populate menus and menu items
     logger.dev('📋 Populating menus...');
@@ -87,7 +100,11 @@ export async function POST(request: NextRequest) {
         table: 'menus',
         error: 'Menus table does not exist. Please run menu-builder-schema.sql migration first.',
       });
-      logger.error('Menus table does not exist. Run menu-builder-schema.sql migration.');
+      logger.error('[Populate Clean Test Data] Menus table does not exist:', {
+        error: menusTableError.message,
+        code: menusTableError.code,
+        context: { operation: 'populateMenus', table: 'menus' },
+      });
     } else {
       await populateMenus(supabaseAdmin, results, dishesData || [], recipesData || []);
     }
@@ -124,10 +141,11 @@ export async function POST(request: NextRequest) {
   } catch (err) {
     logger.error('Error during test data population:', err);
     return NextResponse.json(
-      {
-        error: 'Internal server error during test data population',
-        details: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        err instanceof Error ? err.message : 'Unknown error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

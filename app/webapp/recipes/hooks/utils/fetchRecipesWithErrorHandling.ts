@@ -2,6 +2,7 @@ import { cacheRecipes } from '@/lib/cache/recipe-cache';
 import { categorizeError, retryWithBackoff, RecipeError } from '../../types/errors';
 import { Recipe } from '../../types';
 import { precalculatePrices } from './precalculatePrices';
+import { logger } from '@/lib/logger';
 
 /**
  * Fetch recipes with error handling and caching.
@@ -66,6 +67,11 @@ export async function fetchRecipesWithErrorHandling(
       }
     });
   } catch (err) {
+    logger.error('[fetchRecipesWithErrorHandling.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     const categorized = categorizeError(err, async () => {});
     setRecipeError(categorized);
     setError(categorized.message);

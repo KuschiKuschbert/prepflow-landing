@@ -11,6 +11,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import GoogleAnalytics from '../components/GoogleAnalytics';
 import GoogleTagManager from '../components/GoogleTagManager';
 import { Providers } from './providers';
+import { logger } from '@/lib/logger';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -144,6 +145,11 @@ export default function RootLayout({
                   const theme = localStorage.getItem('prepflow-theme') || 'dark';
                   document.documentElement.setAttribute('data-theme', theme);
                 } catch (e) {
+                  logger.error('[layout.tsx] Error in catch block:', {
+      error: e instanceof Error ? e.message : String(e),
+      stack: e instanceof Error ? e.stack : undefined,
+    });
+
                   // Fallback to dark theme if localStorage fails
                   document.documentElement.setAttribute('data-theme', 'dark');
                 }

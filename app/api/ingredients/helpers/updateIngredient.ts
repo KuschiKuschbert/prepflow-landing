@@ -36,6 +36,15 @@ export async function updateIngredient(id: string, updates: any, userEmail?: str
       .eq('id', id)
       .maybeSingle();
 
+    if (fetchError && fetchError.code !== 'PGRST116') {
+      logger.warn('[Ingredients API] Error fetching current ingredient for allergen check:', {
+        error: fetchError.message,
+        code: (fetchError as any).code,
+        ingredientId: id,
+      });
+      // Continue without current ingredient - allergen detection will be skipped
+    }
+
     if (!fetchError && current) {
       currentIngredient = current;
     }
@@ -117,11 +126,16 @@ export async function updateIngredient(id: string, updates: any, userEmail?: str
   // Invalidate cached allergens for affected recipes and dishes if allergens changed
   if (allergensChanged) {
     // Don't await - run in background
-    Promise.all([invalidateRecipesWithIngredient(id), invalidateDishesWithIngredient(id)]).catch(
-      err => {
-        logger.error('[Ingredients API] Error invalidating allergen caches:', err);
-      },
-    );
+    (async () => {
+      try {
+        await Promise.all([invalidateRecipesWithIngredient(id), invalidateDishesWithIngredient(id)]);
+      } catch (err) {
+        logger.error('[Ingredients API] Error invalidating allergen caches:', {
+          error: err instanceof Error ? err.message : String(err),
+          context: { ingredientId: id, operation: 'invalidateAllergenCaches' },
+        });
+      }
+    })();
   }
 
   // Invalidate cached recommended prices if cost changed
@@ -169,11 +183,16 @@ export async function updateIngredient(id: string, updates: any, userEmail?: str
     const ingredientName = data.ingredient_name || 'Unknown Ingredient';
 
     // Don't await - run in background
-    invalidateMenuItemsWithIngredient(id, ingredientName, changeDetails, userEmail || null).catch(
-      err => {
-        logger.error('[Ingredients API] Error invalidating menu pricing cache:', err);
-      },
-    );
+    (async () => {
+      try {
+        await invalidateMenuItemsWithIngredient(id, ingredientName, changeDetails, userEmail || null);
+      } catch (err) {
+        logger.error('[Ingredients API] Error invalidating menu pricing cache:', {
+          error: err instanceof Error ? err.message : String(err),
+          context: { ingredientId: id, ingredientName, operation: 'invalidateMenuPricingCache' },
+        });
+      }
+    })();
   }
 
   return data;

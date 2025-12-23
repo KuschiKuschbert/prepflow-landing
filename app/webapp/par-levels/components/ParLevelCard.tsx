@@ -3,6 +3,7 @@
 import { useLongPress } from '@/app/webapp/ingredients/hooks/useLongPress';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Icon } from '@/components/ui/Icon';
+import { logger } from '@/lib/logger';
 import { Edit2, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import type { ParLevel } from '../types';
@@ -41,7 +42,15 @@ export function ParLevelCard({
 
   const confirmDelete = async () => {
     setShowDeleteConfirm(false);
-    await onDelete(parLevel.id);
+    try {
+      await onDelete(parLevel.id);
+    } catch (error) {
+      logger.error('[ParLevelCard] Error deleting par level:', {
+        error: error instanceof Error ? error.message : String(error),
+        parLevelId: parLevel.id,
+      });
+      // Optionally show a toast or alert to the user
+    }
   };
 
   const handleCardClick = (e: React.MouseEvent) => {

@@ -2,13 +2,10 @@
  * Auth0 Apple and Microsoft Connection Utilities
  * Functions to verify and enable Apple and Microsoft social connections
  */
+import { findAppleConnection, findMicrosoftConnection } from './auth0-apple-microsoft-connection/helpers/findConnection';
+import { verifyConnectionEnabled } from './auth0-apple-microsoft-connection/helpers/verifyConnection';
+import { enableConnectionForApp } from './auth0-apple-microsoft-connection/helpers/enableConnection';
 
-import { getManagementClient } from './auth0-management';
-import { logger } from './logger';
-
-/**
- * Get Auth0 application client ID
- */
 function getApplicationClientId(): string | null {
   return process.env.AUTH0_CLIENT_ID || null;
 }
@@ -19,42 +16,13 @@ function getApplicationClientId(): string | null {
  * @returns {Promise<boolean>} True if Apple connection is enabled
  */
 export async function verifyAppleConnection(): Promise<boolean> {
-  const client = getManagementClient();
   const applicationClientId = getApplicationClientId();
-
-  if (!client || !applicationClientId) {
+  if (!applicationClientId) {
     return false;
   }
 
-  try {
-    const connections = await client.connections.getAll();
-    const connectionsList = Array.isArray(connections)
-      ? connections
-      : (connections as any)?.data || [];
-
-    // Check both strategy and name (connection parameter might use name, not strategy)
-    const appleConnection = connectionsList.find(
-      (conn: any) => conn.strategy === 'apple' || conn.name?.toLowerCase().includes('apple'),
-    );
-
-    if (!appleConnection) {
-      logger.dev('[Auth0 Apple] Apple connection not found');
-      return false;
-    }
-
-    const isEnabled = appleConnection.enabled_clients?.includes(applicationClientId) || false;
-
-    logger.dev('[Auth0 Apple] Connection status:', {
-      id: appleConnection.id,
-      name: appleConnection.name,
-      enabled: isEnabled,
-    });
-
-    return isEnabled;
-  } catch (error) {
-    logger.error('[Auth0 Apple] Failed to verify Apple connection:', error);
-    return false;
-  }
+  const appleConnection = await findAppleConnection();
+  return verifyConnectionEnabled(appleConnection, applicationClientId, 'apple');
 }
 
 /**
@@ -63,49 +31,13 @@ export async function verifyAppleConnection(): Promise<boolean> {
  * @returns {Promise<boolean>} True if Microsoft connection is enabled
  */
 export async function verifyMicrosoftConnection(): Promise<boolean> {
-  const client = getManagementClient();
   const applicationClientId = getApplicationClientId();
-
-  if (!client || !applicationClientId) {
+  if (!applicationClientId) {
     return false;
   }
 
-  try {
-    const connections = await client.connections.getAll();
-    const connectionsList = Array.isArray(connections)
-      ? connections
-      : (connections as any)?.data || [];
-
-    // Microsoft can use 'windowslive', 'waad' (Windows Azure AD), or 'microsoft-account' strategy
-    // Also check connection name (connection parameter might use name, not strategy)
-    const microsoftConnection = connectionsList.find(
-      (conn: any) =>
-        conn.strategy === 'windowslive' ||
-        conn.strategy === 'waad' ||
-        conn.strategy === 'microsoft-account' ||
-        conn.name?.toLowerCase().includes('microsoft') ||
-        conn.name?.toLowerCase().includes('windows'),
-    );
-
-    if (!microsoftConnection) {
-      logger.dev('[Auth0 Microsoft] Microsoft connection not found');
-      return false;
-    }
-
-    const isEnabled = microsoftConnection.enabled_clients?.includes(applicationClientId) || false;
-
-    logger.dev('[Auth0 Microsoft] Connection status:', {
-      id: microsoftConnection.id,
-      name: microsoftConnection.name,
-      strategy: microsoftConnection.strategy,
-      enabled: isEnabled,
-    });
-
-    return isEnabled;
-  } catch (error) {
-    logger.error('[Auth0 Microsoft] Failed to verify Microsoft connection:', error);
-    return false;
-  }
+  const microsoftConnection = await findMicrosoftConnection();
+  return verifyConnectionEnabled(microsoftConnection, applicationClientId, 'microsoft');
 }
 
 /**
@@ -118,10 +50,8 @@ export async function enableAppleConnectionForApp(): Promise<{
   enabled: boolean;
   message: string;
 }> {
-  const client = getManagementClient();
   const applicationClientId = getApplicationClientId();
-
-  if (!client || !applicationClientId) {
+  if (!applicationClientId) {
     return {
       success: false,
       enabled: false,
@@ -129,61 +59,8 @@ export async function enableAppleConnectionForApp(): Promise<{
     };
   }
 
-  try {
-    const connections = await client.connections.getAll();
-    const connectionsList = Array.isArray(connections)
-      ? connections
-      : (connections as any)?.data || [];
-
-    const appleConnection = connectionsList.find((conn: any) => conn.strategy === 'apple');
-
-    if (!appleConnection) {
-      return {
-        success: false,
-        enabled: false,
-        message:
-          'Apple connection not found. Create it in Auth0 Dashboard > Connections > Social > Apple',
-      };
-    }
-
-    // Check if already enabled
-    if (appleConnection.enabled_clients?.includes(applicationClientId)) {
-      return {
-        success: true,
-        enabled: true,
-        message: 'Apple connection is already enabled for this application',
-      };
-    }
-
-    // Enable connection for application
-    const enabledClients = [...(appleConnection.enabled_clients || []), applicationClientId];
-
-    await client.connections.update(
-      { id: appleConnection.id },
-      { enabled_clients: enabledClients },
-    );
-
-    logger.info('[Auth0 Apple] Enabled Apple connection for application', {
-      connectionId: appleConnection.id,
-      applicationClientId,
-    });
-
-    return {
-      success: true,
-      enabled: true,
-      message: 'Apple connection enabled successfully',
-    };
-  } catch (error) {
-    logger.error('[Auth0 Apple] Failed to enable Apple connection:', error);
-    return {
-      success: false,
-      enabled: false,
-      message:
-        error instanceof Error
-          ? `Failed to enable Apple connection: ${error.message}`
-          : 'Failed to enable Apple connection',
-    };
-  }
+  const appleConnection = await findAppleConnection();
+  return enableConnectionForApp(appleConnection, applicationClientId, 'apple', 'Apple');
 }
 
 /**
@@ -196,10 +73,8 @@ export async function enableMicrosoftConnectionForApp(): Promise<{
   enabled: boolean;
   message: string;
 }> {
-  const client = getManagementClient();
   const applicationClientId = getApplicationClientId();
-
-  if (!client || !applicationClientId) {
+  if (!applicationClientId) {
     return {
       success: false,
       enabled: false,
@@ -207,69 +82,6 @@ export async function enableMicrosoftConnectionForApp(): Promise<{
     };
   }
 
-  try {
-    const connections = await client.connections.getAll();
-    const connectionsList = Array.isArray(connections)
-      ? connections
-      : (connections as any)?.data || [];
-
-    // Microsoft can use 'windowslive', 'waad' (Windows Azure AD), or 'microsoft-account' strategy
-    // Also check connection name (connection parameter might use name, not strategy)
-    const microsoftConnection = connectionsList.find(
-      (conn: any) =>
-        conn.strategy === 'windowslive' ||
-        conn.strategy === 'waad' ||
-        conn.strategy === 'microsoft-account' ||
-        conn.name?.toLowerCase().includes('microsoft') ||
-        conn.name?.toLowerCase().includes('windows'),
-    );
-
-    if (!microsoftConnection) {
-      return {
-        success: false,
-        enabled: false,
-        message:
-          'Microsoft connection not found. Create it in Auth0 Dashboard > Connections > Social > Microsoft',
-      };
-    }
-
-    // Check if already enabled
-    if (microsoftConnection.enabled_clients?.includes(applicationClientId)) {
-      return {
-        success: true,
-        enabled: true,
-        message: 'Microsoft connection is already enabled for this application',
-      };
-    }
-
-    // Enable connection for application
-    const enabledClients = [...(microsoftConnection.enabled_clients || []), applicationClientId];
-
-    await client.connections.update(
-      { id: microsoftConnection.id },
-      { enabled_clients: enabledClients },
-    );
-
-    logger.info('[Auth0 Microsoft] Enabled Microsoft connection for application', {
-      connectionId: microsoftConnection.id,
-      strategy: microsoftConnection.strategy,
-      applicationClientId,
-    });
-
-    return {
-      success: true,
-      enabled: true,
-      message: 'Microsoft connection enabled successfully',
-    };
-  } catch (error) {
-    logger.error('[Auth0 Microsoft] Failed to enable Microsoft connection:', error);
-    return {
-      success: false,
-      enabled: false,
-      message:
-        error instanceof Error
-          ? `Failed to enable Microsoft connection: ${error.message}`
-          : 'Failed to enable Microsoft connection',
-    };
-  }
+  const microsoftConnection = await findMicrosoftConnection();
+  return enableConnectionForApp(microsoftConnection, applicationClientId, 'microsoft', 'Microsoft');
 }

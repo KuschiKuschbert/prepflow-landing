@@ -23,6 +23,7 @@ import { useDishesSidePanelsHandlers } from './hooks/useDishesSidePanelsHandlers
 import { useDishesClientBulkActions } from './DishesClient/hooks/useDishesClientBulkActions';
 import { useSelectionMode } from '@/app/webapp/ingredients/hooks/useSelectionMode';
 import { createRecipeImagesGeneratedHandler } from './DishesClient/helpers/handleRecipeImagesGenerated';
+
 export default function DishesClient() {
   const { viewMode, setViewMode } = useDishesClientViewMode();
   const { recipePrices, updateVisibleRecipePrices } = useRecipePricing();
@@ -40,11 +41,7 @@ export default function DishesClient() {
   const { fetchRecipeIngredients, fetchBatchRecipeIngredients } = useRecipeIngredients(setError);
   const capitalizeRecipeName = formatRecipeName;
   const { generateAIInstructions } = useAIInstructions();
-  const previewState = useDishesClientPreview({
-    fetchRecipeIngredients,
-    generateAIInstructions,
-    setError,
-  });
+  const previewState = useDishesClientPreview({ fetchRecipeIngredients, generateAIInstructions, setError });
   const {
     selectedRecipeForPreview,
     setSelectedRecipeForPreview,
@@ -121,14 +118,7 @@ export default function DishesClient() {
       setHighlightingRowId(null);
       setHighlightingRowType(null);
     }
-  }, [
-    viewMode,
-    fetchItems,
-    setEditingRecipe,
-    setEditingItem,
-    setHighlightingRowId,
-    setHighlightingRowType,
-  ]);
+  }, [viewMode, fetchItems, setEditingRecipe, setEditingItem, setHighlightingRowId, setHighlightingRowType]);
   useDishesClientRecipePricing({
     paginatedRecipesList,
     recipePrices,
@@ -146,7 +136,6 @@ export default function DishesClient() {
     });
     return types;
   }, [dishes, recipes, selectedItems]);
-
   const {
     bulkActionLoading,
     bulkShareLoading,
@@ -177,28 +166,14 @@ export default function DishesClient() {
     setRecipes,
     onClearSelection: handleExitSelectionMode,
   });
-
   const selectedRecipeCount = selectedRecipeIds.length;
   const handleRecipeImagesGenerated = useCallback(
-    (
-      recipeId: string,
-      images: {
-        classic: string | null;
-        modern: string | null;
-        rustic: string | null;
-        minimalist: string | null;
-      },
-    ) => {
-      const handler = createRecipeImagesGeneratedHandler(
-        setRecipes,
-        selectedRecipeForPreview,
-        setSelectedRecipeForPreview,
-      );
+    (recipeId: string, images: { classic: string | null; modern: string | null; rustic: string | null; minimalist: string | null }) => {
+      const handler = createRecipeImagesGeneratedHandler(setRecipes, selectedRecipeForPreview, setSelectedRecipeForPreview);
       return handler(recipeId, images);
     },
     [setRecipes, selectedRecipeForPreview, setSelectedRecipeForPreview],
   );
-
   const sidePanelsHandlers = useDishesSidePanelsHandlers({
     setShowDishPanel,
     setSelectedDishForPreview,

@@ -3,23 +3,10 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { createEmployee } from './helpers/createEmployee';
-import { deleteEmployee } from './helpers/deleteEmployee';
 import { handleEmployeeError } from './helpers/handleEmployeeError';
 import { updateEmployee } from './helpers/updateEmployee';
-
-const EMPLOYEE_SELECT = `
-  *,
-  employee_qualifications (
-    *,
-    qualification_types (
-      id,
-      name,
-      description,
-      is_required,
-      default_expiry_days
-    )
-  )
-`;
+import { createEmployeeSchema, updateEmployeeSchema, EMPLOYEE_SELECT } from './helpers/schemas';
+import { handleDeleteEmployee } from './helpers/deleteEmployeeHandler';
 
 /**
  * GET /api/employees
@@ -69,6 +56,10 @@ export async function GET(request: NextRequest) {
       data: data || [],
     });
   } catch (err) {
+    logger.error('[Employees API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/employees', method: 'GET' },
+    });
     return handleEmployeeError(err, 'GET');
   }
 }
@@ -79,7 +70,31 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Employees API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = createEmployeeSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
     const {
       employee_id,
       full_name,
@@ -92,18 +107,7 @@ export async function POST(request: NextRequest) {
       emergency_contact,
       photo_url,
       notes,
-    } = body;
-
-    if (!full_name || !employment_start_date) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          'full_name and employment_start_date are required',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
+    } = validationResult.data;
 
     const data = await createEmployee({
       employee_id,
@@ -125,9 +129,10 @@ export async function POST(request: NextRequest) {
       data,
     });
   } catch (err: any) {
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
-    }
+    logger.error('[Employees API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/employees', method: 'POST' },
+    });
     return handleEmployeeError(err, 'POST');
   }
 }
@@ -138,15 +143,32 @@ export async function POST(request: NextRequest) {
  */
 export async function PUT(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { id, ...updates } = body;
-
-    if (!id) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Employees API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        ApiErrorHandler.createError('Employee ID is required', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
+
+    const validationResult = updateEmployeeSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { id, ...updates } = validationResult.data;
 
     const data = await updateEmployee(id, updates);
 
@@ -156,9 +178,10 @@ export async function PUT(request: NextRequest) {
       data,
     });
   } catch (err: any) {
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
-    }
+    logger.error('[Employees API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/employees', method: 'PUT' },
+    });
     return handleEmployeeError(err, 'PUT');
   }
 }
@@ -168,27 +191,5 @@ export async function PUT(request: NextRequest) {
  * Delete (deactivate) an employee
  */
 export async function DELETE(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
-
-    if (!id) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Employee ID is required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    await deleteEmployee(id);
-
-    return NextResponse.json({
-      success: true,
-      message: 'Employee deactivated successfully',
-    });
-  } catch (err: any) {
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
-    }
-    return handleEmployeeError(err, 'DELETE');
-  }
+  return handleDeleteEmployee(request);
 }

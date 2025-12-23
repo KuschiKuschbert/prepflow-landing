@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { runScheduledBackups } from '@/lib/backup/scheduler';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Cron job endpoint for running scheduled backups.
@@ -21,7 +22,7 @@ export async function GET(request: NextRequest) {
     const cronSecret = process.env.CRON_SECRET;
 
     if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
     }
 
     logger.info('[Backup Cron] Running scheduled backups');

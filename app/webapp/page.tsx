@@ -62,7 +62,7 @@ export default function WebAppDashboard() {
 
   return (
     <ResponsivePageContainer fullWidth={true}>
-      <div className="tablet:px-6 tablet:py-6 desktop:px-8 large-desktop:px-12 min-h-screen overflow-x-hidden bg-transparent px-4 py-4 xl:px-16 2xl:px-20">
+      <div className="tablet:px-6 tablet:py-6 desktop:px-8 large-desktop:px-12 min-h-screen overflow-x-hidden bg-transparent px-4 py-4 xl:px-16 2xl:px-20 mx-auto max-w-[1400px] large-desktop:max-w-[1400px] xl:max-w-[1400px] 2xl:max-w-[1600px]">
         {/* Static Header - Renders Instantly */}
         <PageHeader
           title="Kitchen Management Dashboard"
@@ -80,10 +80,10 @@ export default function WebAppDashboard() {
           </Suspense>
         </DashboardSection>
 
-        {/* Widget-Based Dashboard Layout */}
-        <div className="tablet:space-y-8 space-y-6">
+        {/* Widget-Based Dashboard Layout - Enhanced spacing for large screens */}
+        <div className="space-y-6 tablet:space-y-8 desktop:space-y-10 large-desktop:space-y-12 xl:space-y-14 2xl:space-y-16">
           {/* Row 1: Kitchen Operations + Menu Overview */}
-          <div className="desktop:grid-cols-2 desktop:gap-8 grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-6 tablet:gap-8 desktop:grid-cols-2 desktop:gap-10 large-desktop:gap-12 xl:gap-14 2xl:gap-16">
             <Suspense fallback={<PageSkeleton />}>
               <KitchenOperations />
             </Suspense>
@@ -93,7 +93,7 @@ export default function WebAppDashboard() {
           </div>
 
           {/* Row 2: Kitchen Alerts + Temperature Status */}
-          <div className="desktop:grid-cols-2 desktop:gap-8 grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-6 tablet:gap-8 desktop:grid-cols-2 desktop:gap-10 large-desktop:gap-12 xl:gap-14 2xl:gap-16">
             <Suspense fallback={<PageSkeleton />}>
               <KitchenAlerts />
             </Suspense>
@@ -103,7 +103,7 @@ export default function WebAppDashboard() {
           </div>
 
           {/* Row 3: Chef Performance Insights */}
-          <div className="desktop:gap-8 grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-6 tablet:gap-8 desktop:gap-10 large-desktop:gap-12 xl:gap-14 2xl:gap-16">
             <Suspense fallback={<PageSkeleton />}>
               <ChefPerformanceInsights />
             </Suspense>

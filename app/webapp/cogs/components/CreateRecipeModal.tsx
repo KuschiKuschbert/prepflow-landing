@@ -4,6 +4,7 @@ import { Icon } from '@/components/ui/Icon';
 import { formatDishName } from '@/lib/text-utils';
 import { X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { logger } from '@/lib/logger';
 
 interface CreateRecipeModalProps {
   isOpen: boolean;
@@ -60,6 +61,11 @@ export function CreateRecipeModal({
         setError('Failed to create recipe. Give it another go, chef.');
       }
     } catch (err) {
+      logger.error('[CreateRecipeModal.tsx] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       setError(err instanceof Error ? err.message : 'Failed to create recipe');
     } finally {
       setLoading(false);

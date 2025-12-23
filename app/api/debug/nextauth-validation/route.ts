@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Debug endpoint to investigate Auth0 SDK callback URL validation
@@ -60,9 +61,11 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('[Auth0 SDK Validation Debug] Error:', error);
     return NextResponse.json(
-      {
-        error: error instanceof Error ? error.message : String(error),
-      },
+      ApiErrorHandler.createError(
+        error instanceof Error ? error.message : String(error),
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getUserEmail as getEmailFromAuth0 } from '@/lib/auth0-api-helpers';
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 const isDev = process.env.NODE_ENV === 'development';
 const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
@@ -36,6 +37,10 @@ export async function validateAuth(
 
     return { userEmail, error: null };
   } catch (tokenError) {
+    logger.warn('[Menu Changes API] Authentication error in validateAuth:', {
+      error: tokenError instanceof Error ? tokenError.message : String(tokenError),
+      context: { endpoint: '/api/menus/[id]/changes', operation: 'validateAuth' },
+    });
     if (!(isDev && authBypassDev)) {
       return {
         userEmail: null,

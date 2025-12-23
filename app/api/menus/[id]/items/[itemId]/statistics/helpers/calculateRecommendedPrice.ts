@@ -47,9 +47,16 @@ export async function calculateRecommendedPrice(
       ...menuItem,
       recipes: recipeYield ? { yield: recipeYield } : undefined,
     };
-    cacheRecommendedPrice(menuId, menuItem.id, menuItemForCache).catch(err => {
-      logger.error('[Menu Item Statistics API] Failed to cache recommended price:', err);
-    });
+    (async () => {
+      try {
+        await cacheRecommendedPrice(menuId, menuItem.id, menuItemForCache);
+      } catch (err) {
+        logger.error('[Menu Item Statistics API] Failed to cache recommended price:', {
+          error: err instanceof Error ? err.message : String(err),
+          context: { menuId, menuItemId: menuItem.id },
+        });
+      }
+    })();
   }
 
   return recommendedPrice;

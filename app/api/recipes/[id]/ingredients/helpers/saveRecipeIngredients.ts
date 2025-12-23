@@ -22,7 +22,10 @@ export async function saveRecipeIngredients(
   recipeName?: string | null,
   userEmail?: string | null,
 ): Promise<any[]> {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[API] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
 
   // If updating, delete existing ingredients first
   if (isUpdate) {
@@ -64,20 +67,30 @@ export async function saveRecipeIngredients(
   }
 
   // Invalidate cached recommended prices for menu items using this recipe (with change tracking)
-  invalidateMenuItemsWithRecipe(
-    recipeId,
-    recipeName || undefined,
-    'ingredients_changed',
-    { field: 'ingredients', change: 'ingredients updated' },
-    userEmail || null,
-  ).catch(err => {
-    logger.error('[Recipes API] Error invalidating menu pricing cache:', err);
-  });
+  try {
+    await invalidateMenuItemsWithRecipe(
+      recipeId,
+      recipeName || undefined,
+      'ingredients_changed',
+      { field: 'ingredients', change: 'ingredients updated' },
+      userEmail || null,
+    );
+  } catch (err) {
+    logger.error('[Recipes API] Error invalidating menu pricing cache:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { recipeId, recipeName, operation: 'invalidateMenuPricingCache' },
+    });
+  }
 
   // Trigger dietary recalculation with force=true to ensure fresh status after ingredients change
-  aggregateRecipeDietaryStatus(recipeId, false, true).catch(err => {
-    logger.error('[Recipes API] Error recalculating dietary status:', err);
-  });
+  try {
+    await aggregateRecipeDietaryStatus(recipeId, false, true);
+  } catch (err) {
+    logger.error('[Recipes API] Error recalculating dietary status:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { recipeId, operation: 'aggregateRecipeDietaryStatus' },
+    });
+  }
 
   return data || [];
 }

@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import type { TierSlug } from '@/lib/tier-config';
 
 /**
@@ -47,12 +48,12 @@ export async function updateUserSubscription(
       tier,
       status,
     });
-    throw error;
+    throw ApiErrorHandler.fromSupabaseError(error, 500);
   }
 
   // Also update billing_customers table if subscription ID is provided
   if (subscriptionId && supabaseAdmin) {
-    await supabaseAdmin
+    const { error: billingError } = await supabaseAdmin
       .from('billing_customers')
       .update({
         stripe_subscription_id: subscriptionId,
@@ -60,6 +61,14 @@ export async function updateUserSubscription(
         last_synced_at: new Date().toISOString(),
       })
       .eq('user_email', userEmail);
+
+    if (billingError) {
+      logger.warn('[Stripe Webhook] Failed to update billing_customers table:', {
+        error: billingError.message,
+        userEmail,
+        subscriptionId,
+      });
+    }
   }
 
   logger.dev('[Stripe Webhook] Updated user subscription:', {

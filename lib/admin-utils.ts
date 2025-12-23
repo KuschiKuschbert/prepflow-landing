@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 /**
  * Admin role checking utilities (pure functions, no dependencies)
  * Extracted from admin-auth.ts to avoid importing authOptions in middleware
@@ -43,6 +44,11 @@ export function isAdmin(user: any): boolean {
       return customRoles.includes('admin') || customRoles.includes('super_admin');
     }
   } catch (error) {
+    logger.error('[admin-utils.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     // If there's any error accessing user properties, return false
     return false;
   }

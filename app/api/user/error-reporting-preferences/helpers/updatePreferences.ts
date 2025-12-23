@@ -36,11 +36,22 @@ export async function updatePreferences(userEmail: string, body: any): Promise<N
   const { autoReport } = validationResult.data;
 
   // Get existing user preferences
-  const { data: existingUser } = await supabaseAdmin
+  const { data: existingUser, error: fetchError } = await supabaseAdmin
     .from('users')
     .select('notification_preferences, id')
     .eq('email', userEmail)
     .single();
+
+  if (fetchError && fetchError.code !== 'PGRST116') {
+    // PGRST116 is "not found" - that's okay, we'll create the user
+    logger.error('[Error Reporting Preferences API] Error fetching user preferences:', {
+      error: fetchError.message,
+      userEmail,
+    });
+    return NextResponse.json(ApiErrorHandler.fromSupabaseError(fetchError, 500), {
+      status: 500,
+    });
+  }
 
   const existingPreferences =
     (existingUser?.notification_preferences as Record<string, unknown>) || {};

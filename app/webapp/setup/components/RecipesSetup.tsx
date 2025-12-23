@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { ChefHat, Info, AlertTriangle, CheckCircle2, Check } from 'lucide-react';
+import { logger } from '@/lib/logger';
 
 interface RecipesSetupProps {
   setupProgress: {
@@ -58,6 +59,11 @@ export default function RecipesSetup({ setupProgress, onProgressUpdate }: Recipe
         setRecipesError(data.error || 'Failed to populate recipes');
       }
     } catch (err) {
+      logger.error('[RecipesSetup.tsx] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       setRecipesError('Network error occurred');
     } finally {
       setRecipesLoading(false);

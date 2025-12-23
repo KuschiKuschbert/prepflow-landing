@@ -9,6 +9,7 @@ import {
   LANDING_LAYOUT,
   getSectionClasses,
 } from '@/lib/landing-styles';
+import { logger } from '@/lib/logger';
 
 interface FinalCTAProps {
   trackEngagement?: (event: string) => void;
@@ -26,7 +27,12 @@ export default function FinalCTA({ trackEngagement }: FinalCTAProps) {
       if (typeof window !== 'undefined') {
         sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
       }
-    } catch (_) {}
+    } catch (err) {
+      // SessionStorage might fail in private mode - log but continue
+      logger.dev('[FinalCTA] Error accessing sessionStorage (non-blocking):', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
     window.location.href = '/api/auth/login?returnTo=/webapp';
   };
 
@@ -38,7 +44,12 @@ export default function FinalCTA({ trackEngagement }: FinalCTAProps) {
       if (typeof window !== 'undefined') {
         sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
       }
-    } catch (_) {}
+    } catch (err) {
+      // SessionStorage might fail in private mode - log but continue
+      logger.dev('[FinalCTA] Error accessing sessionStorage (non-blocking):', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
     window.location.href = '/api/auth/login?returnTo=/webapp';
   };
 

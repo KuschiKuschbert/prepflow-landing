@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { getOrCreateUserId } from '@/lib/user-utils';
+import { logger } from '@/lib/logger';
 
 interface Props {
   defaultReseed?: boolean;
@@ -61,6 +62,11 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
         setResult(null);
       }, 1200);
     } catch (e: any) {
+      logger.error('[ResetSelfDataCard.tsx] Error in catch block:', {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      });
+
       setResult(e?.message || 'Error');
       if (typeof window !== 'undefined') {
         (window as any).dataLayer.push({ event: 'reset_self_error' });

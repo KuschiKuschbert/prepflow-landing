@@ -2,6 +2,13 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+
+const completeTaskSchema = z.object({
+  completion_date: z.string().min(1, 'completion_date is required'),
+  notes: z.string().optional(),
+  photo_url: z.string().url().optional().or(z.literal('')),
+});
 
 /**
  * POST /api/cleaning-tasks/[id]/complete
@@ -27,15 +34,32 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       );
     }
 
-    const body = await request.json();
-    const { completion_date, notes, photo_url } = body;
-
-    if (!completion_date) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Cleaning Tasks API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        ApiErrorHandler.createError('completion_date is required', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
+
+    const validationResult = completeTaskSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { completion_date, notes, photo_url } = validationResult.data;
 
     // Verify task exists
     const { data: task, error: taskError } = await supabaseAdmin
@@ -45,6 +69,13 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       .single();
 
     if (taskError || !task) {
+      if (taskError && taskError.code !== 'PGRST116') {
+        logger.warn('[Cleaning Tasks API] Error checking if task exists:', {
+          error: taskError.message,
+          code: (taskError as any).code,
+          taskId: id,
+        });
+      }
       return NextResponse.json(
         ApiErrorHandler.createError('Cleaning task not found', 'NOT_FOUND', 404),
         { status: 404 },
@@ -73,6 +104,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       logger.error('[Cleaning Tasks API] Database error creating completion:', {
         error: error.message,
         code: (error as any).code,
+        taskId: id,
         context: {
           endpoint: '/api/cleaning-tasks/[id]/complete',
           operation: 'POST',
@@ -102,12 +134,21 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       data,
     });
   } catch (err: any) {
-    logger.error('[Cleaning Tasks API] Error in complete endpoint:', err);
+    logger.error('[Cleaning Tasks API] Error in complete endpoint:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/cleaning-tasks/[id]/complete', method: 'POST' },
+    });
     if (err && typeof err === 'object' && 'status' in err) {
       return NextResponse.json(err, { status: err.status || 500 });
     }
     return NextResponse.json(
-      ApiErrorHandler.createError('Internal server error', 'INTERNAL_ERROR', 500),
+      ApiErrorHandler.createError(
+        'Internal server error',
+        'SERVER_ERROR',
+        500,
+        err instanceof Error ? err.message : String(err),
+      ),
       { status: 500 },
     );
   }

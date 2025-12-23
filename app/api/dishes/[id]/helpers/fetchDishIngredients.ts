@@ -3,11 +3,13 @@
  */
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /** Fetches ingredients for a dish with fallback logic */
 export async function fetchDishIngredients(dishId: string): Promise<any[]> {
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    logger.error('[Dishes API] Database connection not available for fetchDishIngredients');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   // First, try to fetch with join to ingredients table

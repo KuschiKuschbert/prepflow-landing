@@ -4,6 +4,8 @@
 
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 /**
  * Builds query for ingredients missing allergens
  *
@@ -13,7 +15,7 @@ import { supabaseAdmin } from '@/lib/supabase';
  */
 export function buildIngredientQuery(ingredientIds: string[] | null, force: boolean) {
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   let query = supabaseAdmin

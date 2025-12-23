@@ -2,10 +2,10 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { createSupplier } from './helpers/createSupplier';
-import { deleteSupplier } from './helpers/deleteSupplier';
 import { handleSupplierError } from './helpers/handleSupplierError';
-import { updateSupplier } from './helpers/updateSupplier';
+import { handleCreateSupplier } from './helpers/createSupplierHandler';
+import { handleUpdateSupplier } from './helpers/updateSupplierHandler';
+import { handleDeleteSupplier } from './helpers/deleteSupplierHandler';
 
 export async function GET(request: NextRequest) {
   try {
@@ -54,97 +54,22 @@ export async function GET(request: NextRequest) {
       total: count || 0,
     });
   } catch (err) {
+    logger.error('[Suppliers API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/suppliers', method: 'GET' },
+    });
     return handleSupplierError(err, 'GET');
   }
 }
 
 export async function POST(request: NextRequest) {
-  try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
-    const body = await request.json();
-    if (!body.supplier_name) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Supplier name is required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    const data = await createSupplier(body);
-
-    return NextResponse.json({
-      success: true,
-      message: 'Supplier created successfully',
-      data,
-    });
-  } catch (err: any) {
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
-    }
-    return handleSupplierError(err, 'POST');
-  }
+  return handleCreateSupplier(request);
 }
 
 export async function PUT(request: NextRequest) {
-  try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
-    const body = await request.json();
-    const { id, ...updates } = body;
-    if (!id) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Supplier ID is required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    const data = await updateSupplier(id, updates);
-
-    return NextResponse.json({
-      success: true,
-      message: 'Supplier updated successfully',
-      data,
-    });
-  } catch (err: any) {
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
-    }
-    return handleSupplierError(err, 'PUT');
-  }
+  return handleUpdateSupplier(request);
 }
 
 export async function DELETE(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
-
-    if (!id) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Supplier ID is required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    await deleteSupplier(id);
-
-    return NextResponse.json({
-      success: true,
-      message: 'Supplier deleted successfully',
-    });
-  } catch (err: any) {
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
-    }
-    return handleSupplierError(err, 'DELETE');
-  }
+  return handleDeleteSupplier(request);
 }

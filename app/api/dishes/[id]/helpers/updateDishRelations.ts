@@ -62,20 +62,30 @@ export async function updateIngredientsWithTracking(
   };
 
   // Invalidate caches in background
-  invalidateAllergenCache(dishId).catch(err => {
-    logger.error('[Dishes API] Error invalidating allergen cache:', err);
-  });
-  invalidateMenuPricingCache(
-    dishId,
-    dishName,
-    'ingredients_changed',
-    changeDetails.ingredients,
-    userEmail,
-  ).catch(err => {
-    logger.error('[Dishes API] Error invalidating menu pricing cache:', err);
-  });
+  (async () => {
+    try {
+      await invalidateAllergenCache(dishId);
+    } catch (err) {
+      logger.error('[Dishes API] Error invalidating allergen cache:', {
+        error: err instanceof Error ? err.message : String(err),
+        context: { dishId, operation: 'invalidateAllergenCache' },
+      });
+    }
+  })();
+  (async () => {
+    try {
+      await invalidateMenuPricingCache(
+        dishId,
+        dishName,
+        'ingredients_changed',
+        changeDetails.ingredients,
+        userEmail,
+      );
+    } catch (err) {
+      logger.error('[Dishes API] Error invalidating menu pricing cache:', {
+        error: err instanceof Error ? err.message : String(err),
+        context: { dishId, dishName, operation: 'invalidateMenuPricingCache' },
+      });
+    }
+  })();
 }
-
-
-
-

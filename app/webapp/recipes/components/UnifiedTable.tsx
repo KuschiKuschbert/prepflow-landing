@@ -2,6 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { Check, ChevronDown, ChevronUp } from 'lucide-react';
+import { useMemo } from 'react';
 import { Dish, DishCostData, Recipe, RecipePriceData } from '../types';
 import type { UnifiedSortField } from './DishesListView';
 import { UnifiedTableRow } from './UnifiedTableRow';
@@ -60,6 +61,28 @@ export function UnifiedTable({
   onEnterSelectionMode,
 }: UnifiedTableProps) {
   const allSelected = items.length > 0 && items.every(item => selectedItems.has(item.id));
+
+  // Memoize items with pre-calculated values to prevent recalculation on every render
+  const itemsWithCalculations = useMemo(() => {
+    return items.map(item => {
+      const dishCost = item.itemType === 'dish' ? dishCosts.get(item.id) : undefined;
+      const recipePrice = item.itemType === 'recipe' ? recipePrices[item.id] : undefined;
+      const isHighlighting =
+        (item.itemType === 'dish' &&
+          highlightingRowType === 'dish' &&
+          highlightingRowId === item.id) ||
+        (item.itemType === 'recipe' &&
+          highlightingRowType === 'recipe' &&
+          highlightingRowId === item.id);
+
+      return {
+        ...item,
+        dishCost,
+        recipePrice,
+        isHighlighting,
+      };
+    });
+  }, [items, dishCosts, recipePrices, highlightingRowId, highlightingRowType]);
 
   const handleColumnSort = (field: UnifiedSortField) => {
     if (!onSortChange) return;
@@ -201,26 +224,16 @@ export function UnifiedTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-[var(--muted)] bg-[var(--surface)]">
-            {items.map(item => {
-              const dishCost = item.itemType === 'dish' ? dishCosts.get(item.id) : undefined;
-              const recipePrice = item.itemType === 'recipe' ? recipePrices[item.id] : undefined;
-              const isHighlighting =
-                (item.itemType === 'dish' &&
-                  highlightingRowType === 'dish' &&
-                  highlightingRowId === item.id) ||
-                (item.itemType === 'recipe' &&
-                  highlightingRowType === 'recipe' &&
-                  highlightingRowId === item.id);
-
+            {itemsWithCalculations.map(item => {
               return (
                 <UnifiedTableRow
                   key={`${item.itemType}-${item.id}`}
                   item={item}
-                  dishCost={dishCost}
-                  recipePrice={recipePrice}
+                  dishCost={item.dishCost}
+                  recipePrice={item.recipePrice}
                   selectedItems={selectedItems}
                   isSelectionMode={isSelectionMode}
-                  isHighlighting={isHighlighting}
+                  isHighlighting={item.isHighlighting}
                   onSelectItem={onSelectItem}
                   onPreviewDish={onPreviewDish}
                   onPreviewRecipe={onPreviewRecipe}

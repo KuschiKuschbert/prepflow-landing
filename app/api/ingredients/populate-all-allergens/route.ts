@@ -11,22 +11,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { requireAuth } from '@/lib/auth0-api-helpers';
-// Rate limiting
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour
-const RATE_LIMIT_MAX = 1; // 1 request per hour (this is a heavy operation)
-
-function checkRateLimit(userId: string): boolean {
-  const now = Date.now();
-  const userLimit = rateLimitMap.get(userId);
-  if (!userLimit || now > userLimit.resetAt) {
-    rateLimitMap.set(userId, { count: 1, resetAt: now + RATE_LIMIT_WINDOW });
-    return true;
-  }
-  if (userLimit.count >= RATE_LIMIT_MAX) return false;
-  userLimit.count++;
-  return true;
-}
+import { checkRateLimit } from './helpers/rateLimit';
 
 export async function POST(request: NextRequest) {
   try {
@@ -48,7 +33,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json().catch(() => ({}));
+    let body = {};
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Populate All Allergens API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
     const { dry_run = false, batch_size = 50, force_ai = false } = body;
 
     if (!supabaseAdmin) {

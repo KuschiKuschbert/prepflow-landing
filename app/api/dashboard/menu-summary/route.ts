@@ -1,14 +1,12 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 export async function GET(_req: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -20,12 +18,13 @@ export async function GET(_req: NextRequest) {
       .order('created_at', { ascending: false });
 
     if (menusError) {
-      logger.error('Error fetching menus:', menusError);
+      logger.error('[Dashboard Menu Summary] Error fetching menus:', {
+        error: menusError.message,
+        code: (menusError as any).code,
+        context: { endpoint: '/api/dashboard/menu-summary', operation: 'GET' },
+      });
       return NextResponse.json(
-        {
-          error: 'Database error',
-          message: 'Could not retrieve menus from database',
-        },
+        ApiErrorHandler.fromSupabaseError(menusError, 500),
         { status: 500 },
       );
     }
@@ -36,12 +35,13 @@ export async function GET(_req: NextRequest) {
       .select('id, menu_id, dish_id, category');
 
     if (menuItemsError) {
-      logger.error('Error fetching menu items:', menuItemsError);
+      logger.error('[Dashboard Menu Summary] Error fetching menu items:', {
+        error: menuItemsError.message,
+        code: (menuItemsError as any).code,
+        context: { endpoint: '/api/dashboard/menu-summary', operation: 'GET' },
+      });
       return NextResponse.json(
-        {
-          error: 'Database error',
-          message: 'Could not retrieve menu items from database',
-        },
+        ApiErrorHandler.fromSupabaseError(menuItemsError, 500),
         { status: 500 },
       );
     }
@@ -52,12 +52,13 @@ export async function GET(_req: NextRequest) {
       .select('id, name, recipe_id, selling_price');
 
     if (dishesError) {
-      logger.error('Error fetching dishes:', dishesError);
+      logger.error('[Dashboard Menu Summary] Error fetching dishes:', {
+        error: dishesError.message,
+        code: (dishesError as any).code,
+        context: { endpoint: '/api/dashboard/menu-summary', operation: 'GET' },
+      });
       return NextResponse.json(
-        {
-          error: 'Database error',
-          message: 'Could not retrieve dishes from database',
-        },
+        ApiErrorHandler.fromSupabaseError(dishesError, 500),
         { status: 500 },
       );
     }
@@ -95,12 +96,21 @@ export async function GET(_req: NextRequest) {
       totalMenus: menus?.length || 0,
     });
   } catch (error) {
-    logger.error('Error in menu summary API:', error);
+    logger.error('[Dashboard Menu Summary] Unexpected error:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      context: { endpoint: '/api/dashboard/menu-summary', method: 'GET' },
+    });
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: 'An unexpected error occurred',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? error instanceof Error
+            ? error.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

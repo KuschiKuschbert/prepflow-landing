@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
+import { logger } from '@/lib/logger';
 import { Clock, User, Briefcase, Coffee, FileText, X } from 'lucide-react';
 import type { Shift, Employee } from '../types';
 import { buildShiftDataFromForm } from './ShiftForm/helpers/buildShiftData';
@@ -81,7 +82,15 @@ export function ShiftForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
-    await onSave(buildShiftDataFromForm(formData, editingShift));
+    try {
+      await onSave(buildShiftDataFromForm(formData, editingShift));
+    } catch (error) {
+      logger.error('[ShiftForm] Error saving shift:', {
+        error: error instanceof Error ? error.message : String(error),
+        editingShift: editingShift?.id,
+      });
+      // Optionally show a toast or alert to the user
+    }
   };
 
   if (!isOpen) return null;

@@ -5,6 +5,7 @@
 
 import { useEffect, useRef } from 'react';
 import IngredientForm from './IngredientForm';
+import { logger } from '@/lib/logger';
 
 interface Ingredient {
   id: string;
@@ -196,8 +197,15 @@ export default function IngredientEditModal({
                 suppliers={suppliers}
                 availableUnits={availableUnits}
                 onSave={async (ingredientData: Partial<Ingredient>) => {
-                  await onSave(ingredientData);
-                  onClose();
+                  try {
+                    await onSave(ingredientData);
+                    onClose();
+                  } catch (err) {
+                    logger.error('[IngredientEditModal] Error saving ingredient:', {
+                      error: err instanceof Error ? err.message : String(err),
+                      ingredientId: ingredient?.id,
+                    });
+                  }
                 }}
                 onCancel={onClose}
                 loading={loading}

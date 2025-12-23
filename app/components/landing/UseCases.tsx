@@ -50,7 +50,7 @@ export default function UseCases() {
         </p>
       </div>
 
-      <div className="desktop:grid-cols-2 large-desktop:grid-cols-4 mt-12 grid gap-6">
+      <div className="mt-12 grid gap-6 tablet:gap-8 desktop:gap-10 large-desktop:gap-12 xl:gap-14 [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] desktop:[grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]">
         {useCases.map(useCase => (
           <div
             key={useCase.title}

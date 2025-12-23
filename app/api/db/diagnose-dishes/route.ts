@@ -2,20 +2,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 /**
  * Diagnostic endpoint to check dish ingredients and recipes
  * Helps diagnose why dishes don't have ingredients
  */
 export async function GET(request: NextRequest) {
   if (process.env.NODE_ENV === 'production') {
-    return NextResponse.json({ error: 'Not available in production' }, { status: 403 });
+    return NextResponse.json(ApiErrorHandler.createError('Not available in production', 'FORBIDDEN', 403), { status: 403 });
   }
   const adminKey = request.headers.get('x-admin-key');
   if (!adminKey || adminKey !== process.env.SEED_ADMIN_KEY) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
   }
   if (!supabaseAdmin) {
-    return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+    return NextResponse.json(ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500), { status: 500 });
   }
 
   try {

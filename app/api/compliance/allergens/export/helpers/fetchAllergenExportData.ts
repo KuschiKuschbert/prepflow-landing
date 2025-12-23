@@ -6,6 +6,7 @@
 import { AUSTRALIAN_ALLERGENS, consolidateAllergens } from '@/lib/allergens/australian-allergens';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { aggregateDishAllergensForExport } from './aggregateDishAllergens';
 import { aggregateRecipeAllergens } from './aggregateRecipeAllergens';
 import { fetchMenuItemsMap } from './fetchMenuItems';
@@ -34,7 +35,8 @@ export async function fetchAllergenExportData(
   menuIds: string[] | null = null,
 ): Promise<AllergenExportData> {
   if (!supabaseAdmin) {
-    throw new Error('Supabase admin client not initialized');
+    logger.error('[Allergen Export] Supabase admin client not initialized');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   // Fetch all recipes
@@ -53,7 +55,11 @@ export async function fetchAllergenExportData(
         error: recipesError.message,
         code: errorCode,
       });
-      throw new Error(`Failed to fetch recipes: ${recipesError.message}`);
+      logger.error('[Allergen Export] Error fetching recipes:', {
+        error: recipesError.message,
+        code: (recipesError as any).code,
+      });
+      throw ApiErrorHandler.fromSupabaseError(recipesError, 500);
     }
   } else {
     recipes = recipesData || [];

@@ -2,6 +2,11 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+
+const uncompleteTaskSchema = z.object({
+  completion_date: z.string().min(1, 'completion_date is required'),
+});
 
 /**
  * POST /api/cleaning-tasks/[id]/uncomplete
@@ -25,15 +30,32 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       );
     }
 
-    const body = await request.json();
-    const { completion_date } = body;
-
-    if (!completion_date) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Cleaning Tasks API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        ApiErrorHandler.createError('completion_date is required', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
+
+    const validationResult = uncompleteTaskSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { completion_date } = validationResult.data;
 
     // Delete completion
     const { error } = await supabaseAdmin

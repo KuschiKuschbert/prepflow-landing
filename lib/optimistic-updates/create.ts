@@ -1,4 +1,5 @@
 import { logger } from '../logger';
+import { logger } from '@/lib/logger';
 
 /**
  * Generic optimistic create operation with revert capability.

@@ -19,11 +19,23 @@ export async function updateAvatar(
   }
 
   // Check if user exists
-  const { data: existingUser } = await supabaseAdmin
+  const { data: existingUser, error: checkError } = await supabaseAdmin
     .from('users')
     .select('id')
     .eq('email', userEmail)
     .maybeSingle();
+
+  if (checkError && checkError.code !== 'PGRST116') {
+    // PGRST116 is "not found" - that's okay, we'll create the user
+    logger.error('[Avatar API] Error checking if user exists:', {
+      error: checkError.message,
+      userEmail,
+    });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Failed to check user', 'DATABASE_ERROR', 500),
+      { status: 500 },
+    );
+  }
 
   // User doesn't exist, create them
   if (!existingUser) {
@@ -41,6 +53,13 @@ export async function updateAvatar(
     .eq('email', userEmail)
     .select('avatar')
     .single();
+
+  if (error) {
+    logger.error('[helpers/updateAvatar] Database error:', {
+      error: error.message,
+    });
+    throw ApiErrorHandler.fromSupabaseError(error, 500);
+  }
 
   if (error) {
     const errorMessage = error.message || '';

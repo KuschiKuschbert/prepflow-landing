@@ -11,6 +11,7 @@ import { AreaTasksModalHeader } from './AreaTasksModal/components/AreaTasksModal
 import { EmptyTasksState } from './AreaTasksModal/components/EmptyTasksState';
 import { TaskItem } from './AreaTasksModal/components/TaskItem';
 import { formatFrequencyType } from './AreaTasksModal/utils/formatFrequency';
+import { logger } from '@/lib/logger';
 
 interface CleaningArea {
   id: string;
@@ -64,25 +65,40 @@ export function AreaTasksModal({
   }, [isOpen, onClose]);
 
   const handleSaveEdit = async (taskId: string) => {
-    await handleUpdateTask(taskId, {
-      task_name: editFormData.task_name,
-      frequency_type: editFormData.frequency_type,
-    });
-    finishEdit();
+    try {
+      await handleUpdateTask(taskId, {
+        task_name: editFormData.task_name,
+        frequency_type: editFormData.frequency_type,
+      });
+      finishEdit();
+    } catch (err) {
+      logger.error('[AreaTasksModal] Error saving task edit:', {
+        error: err instanceof Error ? err.message : String(err),
+        taskId,
+      });
+    }
   };
 
   const handleDelete = async (taskId: string, taskName: string) => {
-    const confirmed = await showConfirm({
-      title: 'Delete Task?',
-      message: `Delete "${taskName}"? This action can't be undone.`,
-      variant: 'danger',
-      confirmLabel: 'Delete',
-      cancelLabel: 'Cancel',
-    });
+    try {
+      const confirmed = await showConfirm({
+        title: 'Delete Task?',
+        message: `Delete "${taskName}"? This action can't be undone.`,
+        variant: 'danger',
+        confirmLabel: 'Delete',
+        cancelLabel: 'Cancel',
+      });
 
-    if (!confirmed) return;
+      if (!confirmed) return;
 
-    await handleDeleteTask(taskId);
+      await handleDeleteTask(taskId);
+    } catch (err) {
+      logger.error('[AreaTasksModal] Error deleting task:', {
+        error: err instanceof Error ? err.message : String(err),
+        taskId,
+        taskName,
+      });
+    }
   };
 
   const [mounted, setMounted] = useState(false);

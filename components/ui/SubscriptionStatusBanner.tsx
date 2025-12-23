@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/navigation';
+import ErrorBoundary from './ErrorBoundary';
 import { Icon } from './Icon';
 import { AlertCircle, AlertTriangle, Info, X } from 'lucide-react';
 import { logger } from '@/lib/logger';
@@ -20,7 +21,7 @@ interface SubscriptionStatusBannerProps {
  * @param {string} [props.className] - Additional CSS classes
  * @returns {JSX.Element | null} Rendered banner or null if not needed
  */
-export function SubscriptionStatusBanner({ className = '' }: SubscriptionStatusBannerProps) {
+function SubscriptionStatusBannerContent({ className = '' }: SubscriptionStatusBannerProps) {
   const { user } = useUser();
   const router = useRouter();
   const [subscriptionStatus, setSubscriptionStatus] = useState<string | null>(null);
@@ -138,5 +139,13 @@ export function SubscriptionStatusBanner({ className = '' }: SubscriptionStatusB
         </button>
       </div>
     </div>
+  );
+}
+
+export function SubscriptionStatusBanner(props: SubscriptionStatusBannerProps) {
+  return (
+    <ErrorBoundary>
+      <SubscriptionStatusBannerContent {...props} />
+    </ErrorBoundary>
   );
 }

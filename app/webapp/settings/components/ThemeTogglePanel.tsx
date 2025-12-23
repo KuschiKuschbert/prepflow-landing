@@ -1,10 +1,11 @@
 'use client';
 
-import React from 'react';
+import { Icon } from '@/components/ui/Icon';
+import { Toggle } from '@/components/ui/Toggle';
+import { useIsVisible } from '@/hooks/useIsVisible';
 import { useTheme } from '@/lib/theme/useTheme';
 import { Moon, Sun } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
-import { useIsVisible } from '@/hooks/useIsVisible';
+import React from 'react';
 
 /**
  * Theme toggle panel component for settings page.
@@ -67,68 +68,12 @@ export function ThemeTogglePanel() {
                 : 'Light theme with brighter colors and Cyber Carrot accents'}
             </p>
           </div>
-          <button
-            onClick={toggleTheme}
-            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--muted)] focus:outline-none ${
-              displayIsLight ? 'bg-[var(--primary)]' : 'bg-[var(--border)]'
-            }`}
-            role="switch"
-            aria-checked={displayIsLight}
+          <Toggle
+            checked={displayIsLight}
+            onChange={toggleTheme}
             aria-label={displayIsDark ? 'Switch to light mode' : 'Switch to dark mode'}
-            suppressHydrationWarning
-          >
-            <span
-              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-[var(--qr-background)] shadow ring-0 transition-transform ${
-                displayIsLight ? 'translate-x-5' : 'translate-x-0'
-              }`}
-              suppressHydrationWarning
-            />
-          </button>
-        </div>
-
-        {/* Theme Preview */}
-        <div className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--background)] p-4">
-          <p className="mb-3 text-xs font-medium text-[var(--foreground)]/60 uppercase tracking-wider">
-            Preview
-          </p>
-          <div className="flex gap-3">
-            {/* Primary Color */}
-            <div className="flex-1">
-              <div
-                className="h-12 rounded-lg"
-                style={{ backgroundColor: 'var(--primary)' }}
-                title="Primary (Cyan)"
-              />
-              <p className="mt-2 text-xs text-[var(--foreground)]/60">Primary</p>
-            </div>
-            {/* Secondary Color */}
-            <div className="flex-1">
-              <div
-                className="h-12 rounded-lg"
-                style={{ backgroundColor: 'var(--secondary)' }}
-                title="Secondary (Blue)"
-              />
-              <p className="mt-2 text-xs text-[var(--foreground)]/60">Secondary</p>
-            </div>
-            {/* Accent Color */}
-            <div className="flex-1">
-              <div
-                className="h-12 rounded-lg"
-                style={{ backgroundColor: 'var(--accent)' }}
-                title="Accent (Magenta)"
-              />
-              <p className="mt-2 text-xs text-[var(--foreground)]/60">Accent</p>
-            </div>
-            {/* Tertiary Color */}
-            <div className="flex-1">
-              <div
-                className="h-12 rounded-lg"
-                style={{ backgroundColor: 'var(--tertiary)' }}
-                title="Tertiary (Orange)"
-              />
-              <p className="mt-2 text-xs text-[var(--foreground)]/60">Tertiary</p>
-            </div>
-          </div>
+            className={displayIsLight ? '' : '!bg-[var(--muted)]'}
+          />
         </div>
       </div>
     </div>

@@ -22,6 +22,7 @@ import IngredientWizard from './IngredientWizard';
 import { IngredientsBulkActions } from './IngredientsClient/components/IngredientsBulkActions';
 import { IngredientsErrorBanner } from './IngredientsClient/components/IngredientsErrorBanner';
 import { IngredientsHeader } from './IngredientsClient/components/IngredientsHeader';
+
 interface Ingredient {
   id: string;
   ingredient_name: string;
@@ -44,6 +45,7 @@ interface Ingredient {
   created_at?: string;
   updated_at?: string;
 }
+
 interface IngredientsClientProps {
   hideHeader?: boolean;
 }
@@ -94,15 +96,8 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   });
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
-  const {
-    data: ingredientsData,
-    isLoading,
-    refetch: refetchIngredients,
-  } = useIngredientsQuery(1, 10000);
-  useEffect(
-    () => setPage(1),
-    [itemsPerPage, searchTerm, supplierFilter, storageFilter, categoryFilter],
-  );
+  const { data: ingredientsData, isLoading, refetch: refetchIngredients } = useIngredientsQuery(1, 10000);
+  useEffect(() => setPage(1), [itemsPerPage, searchTerm, supplierFilter, storageFilter, categoryFilter]);
   useIngredientMigration(loading, isLoading, ingredientsData);
   useEffect(() => {
     const active = loading || isLoading;
@@ -182,17 +177,23 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   });
   const handleCSVImport = async () => {
     setImporting(true);
-    await handleCSVImportAction(parsedIngredients);
-    setImporting(false);
+    try {
+      await handleCSVImportAction(parsedIngredients);
+    } catch (err) {
+      logger.error('[IngredientsClient] Error importing CSV:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    } finally {
+      setImporting(false);
+    }
   };
   const filteredTotal = filteredIngredients?.length || 0;
   const totalPages = Math.max(1, Math.ceil(filteredTotal / itemsPerPage));
   const startIndex = (page - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedIngredients = filteredIngredients?.slice(startIndex, endIndex) || [];
+  const paginatedIngredients = filteredIngredients?.slice(startIndex, startIndex + itemsPerPage) || [];
   const [isHydrated, setIsHydrated] = useState(false);
-  useEffect(() => setIsHydrated(true), []);
   useEffect(() => {
+    setIsHydrated(true);
     if (page > totalPages && totalPages > 0) setPage(1);
     if (isSelectionMode && selectedIngredients.size === 0) exitSelectionMode();
   }, [page, totalPages, isSelectionMode, selectedIngredients.size, exitSelectionMode]);
@@ -220,15 +221,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
           loading={loading}
         />
       )}
-      {isHydrated && (
-        <IngredientPagination
-          page={page}
-          totalPages={totalPages}
-          total={filteredTotal}
-          onPageChange={setPage}
-          className="mb-4"
-        />
-      )}
+      {isHydrated && <IngredientPagination page={page} totalPages={totalPages} total={filteredTotal} onPageChange={setPage} className="mb-4" />}
       {(isHydrated || ingredients.length > 0) && (
         <IngredientTableWithFilters
           ingredients={paginatedIngredients}
@@ -266,22 +259,22 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
           onExitSelectionMode={exitSelectionMode}
         />
       )}
-      {isHydrated && (
-        <IngredientPagination
-          page={page}
-          totalPages={totalPages}
-          total={filteredTotal}
-          onPageChange={setPage}
-          className="mt-4"
-        />
-      )}
+      {isHydrated && <IngredientPagination page={page} totalPages={totalPages} total={filteredTotal} onPageChange={setPage} className="mt-4" />}
       <IngredientEditDrawer
         isOpen={!!editingIngredient}
         ingredient={editingIngredient}
         suppliers={suppliers}
         availableUnits={availableUnits}
         onSave={async (ingredientData: Partial<Ingredient>) => {
-          if (editingIngredient?.id) await handleEditSave(editingIngredient.id, ingredientData);
+          if (!editingIngredient?.id) return;
+          try {
+            await handleEditSave(editingIngredient.id, ingredientData);
+          } catch (err) {
+            logger.error('[IngredientsClient] Error saving ingredient:', {
+              error: err instanceof Error ? err.message : String(err),
+              ingredientId: editingIngredient.id,
+            });
+          }
         }}
         onClose={() => setEditingIngredient(null)}
         loading={loading}

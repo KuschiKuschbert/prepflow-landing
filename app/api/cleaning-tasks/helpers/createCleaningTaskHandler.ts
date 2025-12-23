@@ -1,0 +1,66 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { createCleaningTask } from '../helpers/createCleaningTask';
+import { handleCleaningTaskError } from './handleCleaningTaskError';
+import { validateCreateTaskRequest } from './validateCleaningTaskRequest';
+import { parseCreateTaskBody } from './parseCreateTaskBody';
+import { createCleaningTaskSchema } from './schemas';
+
+export async function handleCreateCleaningTask(request: NextRequest) {
+  try {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Cleaning Tasks API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = createCleaningTaskSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const taskData = parseCreateTaskBody(validationResult.data);
+
+    // Validate request (additional business logic validation)
+    const validationError = validateCreateTaskRequest(taskData);
+    if (validationError) {
+      return validationError;
+    }
+
+    const data = await createCleaningTask({
+      ...taskData,
+      is_standard_task: taskData.is_standard_task || false,
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: 'Cleaning task created successfully',
+      data,
+    });
+  } catch (err: any) {
+    if (err.status) {
+      logger.error('[Cleaning Tasks API] Error with status:', {
+        error: err instanceof Error ? err.message : String(err),
+        status: err.status,
+        context: { endpoint: '/api/cleaning-tasks', method: 'POST' },
+      });
+      return NextResponse.json(err, { status: err.status });
+    }
+    return handleCleaningTaskError(err, 'POST');
+  }
+}

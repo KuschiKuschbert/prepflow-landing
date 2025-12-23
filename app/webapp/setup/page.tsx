@@ -60,7 +60,7 @@ export default function SetupPageRefactored() {
 
   return (
     <div className="tablet:p-6 min-h-screen bg-transparent p-4">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-[1400px] large-desktop:max-w-[1400px] xl:max-w-[1400px] 2xl:max-w-[1600px]">
         {/* Header with Logo */}
         <div className="mb-8">
           <div className="mb-6 flex items-center space-x-4">

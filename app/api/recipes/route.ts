@@ -1,3 +1,10 @@
+/**
+ * Recipes API Routes
+ *
+ * 📚 Square Integration: This route automatically triggers Square sync hooks after recipe
+ * create/update operations. See `docs/SQUARE_API_REFERENCE.md` (Automatic Sync section) for details.
+ */
+
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
@@ -8,6 +15,17 @@ import { createRecipe } from './helpers/createRecipe';
 import { filterRecipes } from './helpers/filterRecipes';
 import { updateRecipe } from './helpers/updateRecipe';
 import { validateRequest } from './helpers/validateRequest';
+import { triggerRecipeSync } from '@/lib/square/sync/hooks';
+import { z } from 'zod';
+
+const createRecipeSchema = z.object({
+  name: z.string().min(1, 'Recipe name is required'),
+  yield: z.number().positive().optional(),
+  yield_unit: z.string().optional(),
+  category: z.string().optional(),
+  description: z.string().optional(),
+  instructions: z.string().optional(),
+});
 
 export async function GET(request: NextRequest) {
   try {
@@ -65,15 +83,32 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { name, yield: dishPortions, yield_unit, category, description, instructions } = body;
-
-    if (!name) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Recipes API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        ApiErrorHandler.createError('Recipe name is required', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
+
+    const validationResult = createRecipeSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { name, yield: dishPortions, yield_unit, category, description, instructions } = validationResult.data;
 
     const recipeData = {
       yield: dishPortions || 1,
@@ -97,6 +132,18 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(apiError, { status: apiError.status || 500 });
       }
 
+      // Trigger Square sync hook (non-blocking)
+      (async () => {
+        try {
+          await triggerRecipeSync(request, existingRecipe.id, 'update');
+        } catch (err) {
+          logger.error('[Recipes API] Error triggering Square sync:', {
+            error: err instanceof Error ? err.message : String(err),
+            recipeId: existingRecipe.id,
+          });
+        }
+      })();
+
       return NextResponse.json({ success: true, recipe: updatedRecipe, isNew: false });
     }
 
@@ -112,6 +159,18 @@ export async function POST(request: NextRequest) {
       const apiError = ApiErrorHandler.fromSupabaseError(createError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
+
+    // Trigger Square sync hook (non-blocking)
+    (async () => {
+      try {
+        await triggerRecipeSync(request, newRecipe.id, 'create');
+      } catch (err) {
+        logger.error('[Recipes API] Error triggering Square sync:', {
+          error: err instanceof Error ? err.message : String(err),
+          recipeId: newRecipe.id,
+        });
+      }
+    })();
 
     return NextResponse.json({ success: true, recipe: newRecipe, isNew: true });
   } catch (err) {

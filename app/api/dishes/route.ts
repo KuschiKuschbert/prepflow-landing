@@ -1,9 +1,34 @@
+/**
+ * Dishes API Routes
+ *
+ * 📚 Square Integration: This route automatically triggers Square sync hooks after dish
+ * create operations. See `docs/SQUARE_API_REFERENCE.md` (Automatic Sync section) for details.
+ */
+
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { createDishWithRelations } from './helpers/createDishWithRelations';
 import { handleDishListError } from './helpers/handleDishListError';
+import { triggerDishSync } from '@/lib/square/sync/hooks';
+import { z } from 'zod';
+
+const createDishSchema = z.object({
+  dish_name: z.string().min(1, 'Dish name is required'),
+  selling_price: z.number().positive('Selling price must be positive'),
+  description: z.string().optional(),
+  recipes: z.array(z.any()).optional(),
+  ingredients: z.array(z.any()).optional(),
+  category: z.string().optional(),
+}).refine(data => {
+  const hasRecipes = data.recipes && data.recipes.length > 0;
+  const hasIngredients = data.ingredients && data.ingredients.length > 0;
+  return hasRecipes || hasIngredients;
+}, {
+  message: 'Dish must contain at least one recipe or ingredient',
+  path: ['recipes'],
+});
 
 export async function GET(request: NextRequest) {
   try {
@@ -49,42 +74,47 @@ export async function GET(request: NextRequest) {
       pageSize,
     });
   } catch (err) {
+    logger.error('[Dishes API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/dishes', method: 'GET' },
+    });
     return handleDishListError(err, 'GET');
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { dish_name, description, selling_price, recipes, ingredients, category } = body;
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Dishes API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
 
-    if (!dish_name || !selling_price) {
+    const validationResult = createDishSchema.safeParse(body);
+    if (!validationResult.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(
-          'Dish name and selling price are required',
+          validationResult.error.issues[0]?.message || 'Invalid request body',
           'VALIDATION_ERROR',
           400,
         ),
         { status: 400 },
       );
     }
+
+    const { dish_name, description, selling_price, recipes, ingredients, category } = validationResult.data;
 
     if (!supabaseAdmin) {
       return NextResponse.json(
         ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
-      );
-    }
-
-    // Validate that at least one recipe or ingredient is provided
-    if ((!recipes || recipes.length === 0) && (!ingredients || ingredients.length === 0)) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          'Dish must contain at least one recipe or ingredient',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
       );
     }
 
@@ -99,11 +129,27 @@ export async function POST(request: NextRequest) {
       ingredients,
     );
 
+    // Trigger Square sync hook (non-blocking)
+    (async () => {
+      try {
+        await triggerDishSync(request, newDish.id, 'create');
+      } catch (err) {
+        logger.error('[Dishes API] Error triggering Square sync:', {
+          error: err instanceof Error ? err.message : String(err),
+          dishId: newDish.id,
+        });
+      }
+    })();
+
     return NextResponse.json({
       success: true,
       dish: newDish,
     });
   } catch (err: any) {
+    logger.error('[Dishes API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/dishes', method: 'POST' },
+    });
     if (err.status) {
       return NextResponse.json(err, { status: err.status });
     }

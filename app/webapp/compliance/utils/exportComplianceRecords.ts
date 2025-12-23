@@ -5,6 +5,7 @@
 
 import { exportToCSV } from '@/lib/csv/csv-utils';
 import { exportHTMLReport, exportPDFReport } from '@/lib/exports/export-html';
+import { logger } from '@/lib/logger';
 import type { ComplianceRecord } from '../types';
 import { CSV_HEADERS, mapComplianceRecordToCSVRow } from './exportComplianceRecords/csvMapping';
 import { formatComplianceRecordsForExport } from './exportComplianceRecords/formatRecords';
@@ -55,13 +56,21 @@ export async function exportComplianceRecordsToPDF(records: ComplianceRecord[]):
     return;
   }
 
-  const content = formatComplianceRecordsForExport(records);
+  try {
+    const content = formatComplianceRecordsForExport(records);
 
-  await exportPDFReport({
-    title: 'Compliance Records',
-    subtitle: 'Compliance Report',
-    content,
-    filename: `compliance-records-${new Date().toISOString().split('T')[0]}.pdf`,
-    totalItems: records.length,
-  });
+    await exportPDFReport({
+      title: 'Compliance Records',
+      subtitle: 'Compliance Report',
+      content,
+      filename: `compliance-records-${new Date().toISOString().split('T')[0]}.pdf`,
+      totalItems: records.length,
+    });
+  } catch (error) {
+    logger.error('[exportComplianceRecords] Error exporting to PDF:', {
+      error: error instanceof Error ? error.message : String(error),
+      recordCount: records.length,
+    });
+    throw error; // Re-throw to let caller handle
+  }
 }

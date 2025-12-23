@@ -5,6 +5,7 @@ import { markDataExported } from '@/lib/data-retention/schedule-deletion';
 import { checkTransferRestriction } from '@/lib/data-transfer/restrictions';
 import { logger } from '@/lib/logger';
 import { NextRequest } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * GET /api/account/export
@@ -30,12 +31,15 @@ export async function GET(req: NextRequest) {
       });
 
       return NextResponse.json(
-        {
-          error: 'Data export restricted',
-          message: restrictionCheck.reason || 'Data exports to your country are restricted.',
-          requiresConsent: restrictionCheck.requiresConsent,
-          countryCode: restrictionCheck.countryCode,
-        },
+        ApiErrorHandler.createError(
+          restrictionCheck.reason || 'Data exports to your country are restricted.',
+          'EXPORT_RESTRICTED',
+          403,
+          {
+            requiresConsent: restrictionCheck.requiresConsent,
+            countryCode: restrictionCheck.countryCode,
+          },
+        ),
         { status: 403 },
       );
     }
@@ -64,7 +68,9 @@ export async function GET(req: NextRequest) {
     });
 
     return NextResponse.json(
-      { error: 'Failed to export data', message: error.message },
+      ApiErrorHandler.createError('Failed to export data', 'EXPORT_FAILED', 500, {
+        details: error.message,
+      }),
       { status: 500 },
     );
   }

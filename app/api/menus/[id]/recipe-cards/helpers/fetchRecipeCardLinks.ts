@@ -5,6 +5,8 @@
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 export interface RecipeCardLink {
   menu_item_id: string;
   recipe_card_id: string;
@@ -83,13 +85,13 @@ export async function fetchRecipeCardLinks(
 
       if (cardsError) {
         logger.error('Failed to fetch recipe cards (old method):', cardsError);
-        throw new Error(`Failed to fetch recipe cards: ${cardsError.message}`);
+        throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
       }
 
       return { links: null, cards: (cards || []) as RecipeCardOld[], useOldMethod: true };
     } else {
       logger.error('Failed to fetch recipe card links:', linksError);
-      throw new Error(`Failed to fetch recipe cards: ${errorMessage}`);
+      throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
     }
   }
 

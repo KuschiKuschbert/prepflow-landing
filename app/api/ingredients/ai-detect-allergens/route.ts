@@ -8,18 +8,42 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { detectAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
+import { z } from 'zod';
+
+const detectAllergensSchema = z.object({
+  ingredient_name: z.string().min(1, 'ingredient_name is required'),
+  brand: z.string().optional(),
+  force_ai: z.boolean().optional(),
+});
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { ingredient_name, brand, force_ai } = body;
-
-    if (!ingredient_name || typeof ingredient_name !== 'string' || !ingredient_name.trim()) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[AI Allergen Detection API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        ApiErrorHandler.createError('ingredient_name is required', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
+
+    const validationResult = detectAllergensSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { ingredient_name, brand, force_ai } = validationResult.data;
 
     logger.dev(
       `[Hybrid Allergen Detection] Detecting allergens for: ${ingredient_name}${brand ? ` (${brand})` : ''}${force_ai ? ' (AI forced)' : ''}`,

@@ -10,7 +10,10 @@ import { supabaseAdmin } from '@/lib/supabase';
  * @throws {Error} If delete fails
  */
 export async function deleteCleaningTask(id: string): Promise<void> {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[API] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
 
   const { error } = await supabaseAdmin.from('cleaning_tasks').delete().eq('id', id);
 

@@ -7,6 +7,7 @@ import { TicketFilters } from './components/TicketFilters';
 import { TicketsTable } from './components/TicketsTable';
 import { useSupportTickets } from './hooks/useSupportTickets';
 import type { SupportTicket } from './types';
+import { logger } from '@/lib/logger';
 
 /**
  * Support tickets page component for admin dashboard.
@@ -62,26 +63,51 @@ export default function SupportTicketsPage() {
   };
 
   const handleStatusUpdate = async (ticketId: string, newStatus: string) => {
-    const success = await updateStatus(ticketId, newStatus);
-    if (success && selectedTicket?.id === ticketId) {
-      setSelectedTicket(null);
+    try {
+      const success = await updateStatus(ticketId, newStatus);
+      if (success && selectedTicket?.id === ticketId) {
+        setSelectedTicket(null);
+      }
+    } catch (err) {
+      logger.error('[SupportTicketsPage] Error updating status:', {
+        error: err instanceof Error ? err.message : String(err),
+        ticketId,
+        newStatus,
+      });
     }
   };
 
   const handleSaveNotes = async (ticketId: string, notes: string) => {
-    const updated = await saveNotes(ticketId, notes);
-    if (updated) {
-      setSelectedTicket(updated);
+    try {
+      const updated = await saveNotes(ticketId, notes);
+      if (updated) {
+        setSelectedTicket(updated);
+      }
+      return updated;
+    } catch (err) {
+      logger.error('[SupportTicketsPage] Error saving notes:', {
+        error: err instanceof Error ? err.message : String(err),
+        ticketId,
+      });
+      return null;
     }
-    return updated;
   };
 
   const handleLinkError = async (ticketId: string, errorId: string) => {
-    const updated = await linkError(ticketId, errorId);
-    if (updated) {
-      setSelectedTicket(updated);
+    try {
+      const updated = await linkError(ticketId, errorId);
+      if (updated) {
+        setSelectedTicket(updated);
+      }
+      return updated;
+    } catch (err) {
+      logger.error('[SupportTicketsPage] Error linking error:', {
+        error: err instanceof Error ? err.message : String(err),
+        ticketId,
+        errorId,
+      });
+      return null;
     }
-    return updated;
   };
 
   return (

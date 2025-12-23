@@ -7,6 +7,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { z } from 'zod';
+
+const scheduleBackupSchema = z.object({
+  intervalHours: z.number().int().min(1).max(8760).optional(),
+  enabled: z.boolean().optional(),
+  autoUploadToDrive: z.boolean().optional(),
+});
 
 /**
  * Configures scheduled backups.
@@ -18,20 +26,36 @@ export async function POST(request: NextRequest) {
   try {
     const user = await requireAuth(request);
     if (!user?.email) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
     }
 
     const userId = user.email;
-    const body = await request.json();
-    const { intervalHours, enabled, autoUploadToDrive } = body;
-
-    // Validate interval
-    if (intervalHours && (intervalHours < 1 || intervalHours > 8760)) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Backup Schedule] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        { error: 'Interval must be between 1 and 8760 hours (1 year)' },
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
+
+    const validationResult = scheduleBackupSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { intervalHours, enabled, autoUploadToDrive } = validationResult.data;
 
     const supabase = createSupabaseAdmin();
 
@@ -54,7 +78,12 @@ export async function POST(request: NextRequest) {
     );
 
     if (error) {
-      throw error;
+      logger.error('[Backup Schedule] Database error configuring schedule:', {
+        error: error.message,
+        code: (error as any).code,
+        userId,
+      });
+      throw ApiErrorHandler.fromSupabaseError(error, 500);
     }
 
     logger.info(
@@ -85,7 +114,7 @@ export async function DELETE(request: NextRequest) {
   try {
     const user = await requireAuth(request);
     if (!user?.email) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
     }
 
     const userId = user.email;
@@ -94,7 +123,7 @@ export async function DELETE(request: NextRequest) {
     const { error } = await supabase.from('backup_schedules').delete().eq('user_id', userId);
 
     if (error) {
-      throw error;
+      throw ApiErrorHandler.fromSupabaseError(error, 500);
     }
 
     logger.info(`[Backup Schedule] Scheduled backup cancelled for user ${userId}`);

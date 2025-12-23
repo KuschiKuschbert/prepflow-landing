@@ -12,6 +12,7 @@ import {
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { createDiagnosticStructure } from './diagnostic-helpers';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Test the complete sign-in flow and identify failure points.
@@ -65,6 +66,11 @@ export async function GET(req: NextRequest) {
               diagnostic.managementApiTests.actualUser.message = 'Profile not found';
             }
           } catch (error) {
+            logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
             diagnostic.managementApiTests.actualUser.status = 'error';
             diagnostic.managementApiTests.actualUser.error =
               error instanceof Error ? error.message : String(error);
@@ -80,6 +86,11 @@ export async function GET(req: NextRequest) {
               fallbackUsed: email === session.user.email,
             };
           } catch (error) {
+            logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
             diagnostic.managementApiTests.retryWithFallback = {
               status: 'error',
               error: error instanceof Error ? error.message : String(error),
@@ -114,11 +125,14 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     logger.error('[Auth0 SignIn Flow Diagnostic] Check failed:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : String(error),
-        message: 'Failed to perform sign-in flow diagnostic check',
-      },
+      ApiErrorHandler.createError(
+        'Failed to perform sign-in flow diagnostic check',
+        'SERVER_ERROR',
+        500,
+        {
+          details: error instanceof Error ? error.message : String(error),
+        },
+      ),
       { status: 500 },
     );
   }

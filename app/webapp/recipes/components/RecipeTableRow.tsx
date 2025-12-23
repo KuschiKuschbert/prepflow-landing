@@ -4,7 +4,7 @@ import { useLongPress } from '@/app/webapp/ingredients/hooks/useLongPress';
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { Check, Edit, Eye, Trash2 } from 'lucide-react';
-import React from 'react';
+import React, { memo } from 'react';
 import { Recipe, RecipePriceData } from '../types';
 import { formatRecipeDate } from '../utils/formatDate';
 
@@ -23,7 +23,7 @@ interface RecipeTableRowProps {
   onEnterSelectionMode?: () => void;
 }
 
-export function RecipeTableRow({
+function RecipeTableRowComponent({
   recipe,
   recipePrice,
   selectedRecipes,
@@ -185,3 +185,15 @@ export function RecipeTableRow({
     </tr>
   );
 }
+
+// Memoize component to prevent unnecessary re-renders when props don't change
+export const RecipeTableRow = memo(RecipeTableRowComponent, (prevProps, nextProps) => {
+  // Only re-render if relevant props actually changed
+  return (
+    prevProps.recipe.id === nextProps.recipe.id &&
+    prevProps.selectedRecipes === nextProps.selectedRecipes &&
+    prevProps.isSelectionMode === nextProps.isSelectionMode &&
+    prevProps.isHighlighting === nextProps.isHighlighting &&
+    prevProps.recipePrice === nextProps.recipePrice
+  );
+});

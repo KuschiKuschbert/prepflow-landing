@@ -2,6 +2,7 @@ import { createSupabaseAdmin } from '@/lib/supabase';
 import { normalizeUnit } from '@/lib/unit-conversion';
 import type { IngredientRow } from './types';
 import { convertIngredientCosts, determineStandardUnit } from './conversion';
+import { logger } from '@/lib/logger';
 
 /**
  * Migrate a single ingredient to standard units.
@@ -54,6 +55,11 @@ export async function migrateIngredient(
     if (error) return { success: false, error: error.message };
     return { success: true };
   } catch (err) {
+    logger.error('[migrateIngredient.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     const errorMsg = err instanceof Error ? err.message : 'Unknown error';
     return { success: false, error: errorMsg };
   }

@@ -44,11 +44,19 @@ export async function POST(request: NextRequest) {
     }
 
     // Get user ID from email (if user exists)
-    const { data: userData } = await supabaseAdmin
+    const { data: userData, error: userDataError } = await supabaseAdmin
       .from('users')
       .select('id')
       .eq('email', validated.email)
       .single();
+
+    if (userDataError && userDataError.code !== 'PGRST116') {
+      logger.warn('[Admin Features Enable All] Error fetching user:', {
+        error: userDataError.message,
+        code: (userDataError as any).code,
+        email: validated.email,
+      });
+    }
 
     const userId = userData?.id || null;
 
@@ -104,6 +112,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
+      logger.warn('[Admin Features Enable All] Validation error:', {
+        errors: error.issues,
+      });
       return NextResponse.json(
         ApiErrorHandler.createError('Invalid request data', 'VALIDATION_ERROR', 400, error.issues),
         { status: 400 },

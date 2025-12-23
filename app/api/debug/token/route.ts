@@ -4,8 +4,10 @@
  */
 
 import { auth0 } from '@/lib/auth0';
+import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { extractAuth0UserId } from '@/lib/auth0-management';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Decode JWT payload without verification
@@ -30,7 +32,7 @@ function decodeJWTPayload(token: string): Record<string, unknown> | null {
 export async function GET(request: NextRequest) {
   // Only allow in development
   if (process.env.NODE_ENV !== 'development') {
-    return NextResponse.json({ error: 'Not available in production' }, { status: 403 });
+    return NextResponse.json(ApiErrorHandler.createError('Not available in production', 'FORBIDDEN', 403), { status: 403 });
   }
 
   try {
@@ -129,6 +131,11 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
+    logger.error('[Debug Token API] Error getting token:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      context: { endpoint: '/api/debug/token', method: 'GET' },
+    });
     return NextResponse.json(
       {
         error: 'Failed to get token',

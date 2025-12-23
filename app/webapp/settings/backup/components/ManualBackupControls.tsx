@@ -10,6 +10,7 @@ import { useNotification } from '@/contexts/NotificationContext';
 import { Icon } from '@/components/ui/Icon';
 import { Download, CloudUpload, Lock, FileText } from 'lucide-react';
 import type { BackupFormat, EncryptionMode } from '@/lib/backup/types';
+import { logger } from '@/lib/logger';
 
 interface ManualBackupControlsProps {
   onBackupCreated?: () => void;
@@ -64,6 +65,11 @@ export function ManualBackupControls({ onBackupCreated }: ManualBackupControlsPr
         showError(data.error || 'Failed to create backup');
       }
     } catch (error: any) {
+      logger.error('[ManualBackupControls.tsx] Error in catch block:', {
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+
       showError('Failed to create backup');
     } finally {
       setCreating(false);
@@ -98,6 +104,11 @@ export function ManualBackupControls({ onBackupCreated }: ManualBackupControlsPr
         showError(data.error || 'Failed to upload backup to Google Drive');
       }
     } catch (error: any) {
+      logger.error('[ManualBackupControls.tsx] Error in catch block:', {
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+
       showError('Failed to upload backup to Google Drive');
     } finally {
       setUploading(false);
@@ -212,7 +223,3 @@ export function ManualBackupControls({ onBackupCreated }: ManualBackupControlsPr
     </div>
   );
 }
-
-
-
-

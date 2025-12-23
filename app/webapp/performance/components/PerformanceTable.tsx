@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { PerformanceItem } from '../types';
 import { usePerformanceTableSort } from '../hooks/usePerformanceTableSort';
 import { PerformanceClassificationLegend } from './PerformanceClassificationLegend';
@@ -14,7 +15,7 @@ interface PerformanceTableProps {
   onSortChange: (field: string, order: 'asc' | 'desc') => void;
 }
 
-export default function PerformanceTable({
+function PerformanceTableComponent({
   performanceItems,
   sortBy,
   sortOrder,
@@ -51,3 +52,6 @@ export default function PerformanceTable({
     </>
   );
 }
+
+// Memoize component to prevent unnecessary re-renders when props don't change
+export default memo(PerformanceTableComponent);

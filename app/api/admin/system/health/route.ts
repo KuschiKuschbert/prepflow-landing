@@ -37,10 +37,17 @@ export async function GET(request: NextRequest) {
     const databaseConnected = !dbError;
 
     // Get recent errors count (last 24 hours)
-    const { count: recentErrors } = await supabaseAdmin
+    const { count: recentErrors, error: errorsQueryError } = await supabaseAdmin
       .from('admin_error_logs')
       .select('*', { count: 'exact', head: true })
       .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+
+    if (errorsQueryError) {
+      logger.warn('[Admin System Health API] Error fetching recent errors count:', {
+        error: errorsQueryError.message,
+        code: (errorsQueryError as any).code,
+      });
+    }
 
     // Determine overall system status
     let status: 'healthy' | 'degraded' | 'down' = 'healthy';
@@ -91,7 +98,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-
-
-
-

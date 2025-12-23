@@ -69,6 +69,11 @@ export default function MenuBuilderClient({
           }
         }
       } catch (err) {
+        logger.error('[MenuBuilderClient.tsx] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
         if (err instanceof Error && err.message === 'DB_ERROR') {
           setDbError('Menu builder tables are not set up. Please run the database migration.');
         }

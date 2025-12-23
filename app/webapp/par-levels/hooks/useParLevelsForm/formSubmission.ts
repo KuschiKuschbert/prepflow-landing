@@ -65,6 +65,11 @@ export async function submitParLevelForm({
     try {
       result = await parseResponse(response);
     } catch (parseError) {
+      logger.error('[formSubmission.ts] Error in catch block:', {
+      error: parseError instanceof Error ? parseError.message : String(parseError),
+      stack: parseError instanceof Error ? parseError.stack : undefined,
+    });
+
       setParLevels(originalParLevels);
       showError(parseError instanceof Error ? parseError.message : 'Server error');
       return;

@@ -7,6 +7,7 @@ import { logger } from '@/lib/logger';
 // Wrapper component to use hook in class component context
 const ErrorMessageDisplay: React.FC = () => {
   const ErrorComponent = useErrorMessageSelector();
+  // eslint-disable-next-line react-hooks/static-components
   return <ErrorComponent />;
 };
 
@@ -74,6 +75,11 @@ export class ErrorBoundary extends Component<Props, State> {
           }
           return false;
         } catch (_) {
+          logger.error('[ErrorBoundary.tsx] Error in catch block:', {
+      error: _ instanceof Error ? _.message : String(_),
+      stack: _ instanceof Error ? _.stack : undefined,
+    });
+
           return false;
         }
       })();

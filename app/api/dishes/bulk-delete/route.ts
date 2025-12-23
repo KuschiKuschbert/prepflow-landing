@@ -1,21 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { z } from 'zod';
+
+const bulkDeleteDishesSchema = z.object({
+  dishIds: z.array(z.string()).min(1, 'dishIds array is required and must contain at least one dish ID'),
+});
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { dishIds } = body;
-
-    if (!Array.isArray(dishIds) || dishIds.length === 0) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Dishes Bulk Delete API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        { error: 'Missing required field', message: 'dishIds array is required' },
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
+    const validationResult = bulkDeleteDishesSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { dishIds } = validationResult.data;
+
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500), { status: 500 });
     }
 
     // Check if any dishes are used in menu_items before attempting deletion
@@ -28,7 +51,9 @@ export async function POST(request: NextRequest) {
     if (menuItemsError) {
       logger.error('Error checking menu items usage:', menuItemsError);
       return NextResponse.json(
-        { error: 'Failed to check dish usage', message: menuItemsError.message },
+        ApiErrorHandler.createError('Failed to check dish usage', 'DATABASE_ERROR', 500, {
+          details: menuItemsError.message,
+        }),
         { status: 500 },
       );
     }
@@ -37,10 +62,11 @@ export async function POST(request: NextRequest) {
 
     if (usedInMenuItems) {
       return NextResponse.json(
-        {
-          error: 'Cannot delete dishes',
-          message: 'One or more dishes are used in menus. Please remove them from all menus first.',
-        },
+        ApiErrorHandler.createError(
+          'One or more dishes are used in menus. Please remove them from all menus first.',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       );
     }
@@ -54,10 +80,9 @@ export async function POST(request: NextRequest) {
     if (dishIngredientsError) {
       logger.error('Error deleting dish ingredients:', dishIngredientsError);
       return NextResponse.json(
-        {
-          error: 'Failed to delete dish ingredients',
-          message: dishIngredientsError.message,
-        },
+        ApiErrorHandler.createError('Failed to delete dish ingredients', 'DATABASE_ERROR', 500, {
+          details: dishIngredientsError.message,
+        }),
         { status: 500 },
       );
     }
@@ -73,10 +98,9 @@ export async function POST(request: NextRequest) {
       // Don't fail if dish_recipes table doesn't exist or has no records
       if (!dishRecipesError.message.includes('does not exist')) {
         return NextResponse.json(
-          {
-            error: 'Failed to delete dish recipes',
-            message: dishRecipesError.message,
-          },
+          ApiErrorHandler.createError('Failed to delete dish recipes', 'DATABASE_ERROR', 500, {
+            details: dishRecipesError.message,
+          }),
           { status: 500 },
         );
       }
@@ -93,16 +117,18 @@ export async function POST(request: NextRequest) {
         dishesError.message.includes('menu_items')
       ) {
         return NextResponse.json(
-          {
-            error: 'Cannot delete dishes',
-            message:
-              'One or more dishes are used in menus. Please remove them from all menus first.',
-          },
+          ApiErrorHandler.createError(
+            'One or more dishes are used in menus. Please remove them from all menus first.',
+            'VALIDATION_ERROR',
+            400,
+          ),
           { status: 400 },
         );
       }
       return NextResponse.json(
-        { error: 'Failed to delete dishes', message: dishesError.message },
+        ApiErrorHandler.createError('Failed to delete dishes', 'DATABASE_ERROR', 500, {
+          details: dishesError.message,
+        }),
         { status: 500 },
       );
     }
@@ -114,15 +140,10 @@ export async function POST(request: NextRequest) {
   } catch (err) {
     logger.error('Unexpected error:', err);
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500, {
+        details: err instanceof Error ? err.message : 'Unknown error',
+      }),
       { status: 500 },
     );
   }
 }
-
-
-
-

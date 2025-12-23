@@ -7,6 +7,16 @@ import { fetchUser } from './helpers/fetchUser';
 import { updateUser } from './helpers/updateUser';
 import { deleteUser } from './helpers/deleteUser';
 import { handleUserApiError } from './helpers/handleError';
+import { logger } from '@/lib/logger';
+import { z } from 'zod';
+
+const updateUserSchema = z.object({
+  first_name: z.string().max(100).optional().nullable(),
+  last_name: z.string().max(100).optional().nullable(),
+  business_name: z.string().max(255).optional().nullable(),
+  subscription_status: z.enum(['trial', 'active', 'cancelled', 'past_due']).optional(),
+  subscription_expires: z.string().datetime().optional().nullable(),
+});
 
 /**
  * GET /api/admin/users/[id]
@@ -25,6 +35,11 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       user: result.user,
     });
   } catch (error) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     return handleUserApiError(error, 'GET');
   }
 }
@@ -46,9 +61,32 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     }
 
     const { id } = await context.params;
-    const body = await request.json();
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Admin Users API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
 
-    const result = await updateUser(id, body);
+    const validationResult = updateUserSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const result = await updateUser(id, validationResult.data);
     if (result instanceof NextResponse) return result;
 
     // Log admin action
@@ -63,6 +101,11 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       user: result.user,
     });
   } catch (error) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     return handleUserApiError(error, 'PUT');
   }
 }
@@ -100,6 +143,11 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
       message: 'User deleted successfully',
     });
   } catch (error) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     return handleUserApiError(error, 'DELETE');
   }
 }

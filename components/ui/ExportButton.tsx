@@ -8,6 +8,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Icon } from './Icon';
+import { logger } from '@/lib/logger';
 import { Download, FileText, FileSpreadsheet, FileCode, ChevronDown, Loader2 } from 'lucide-react';
 
 export type ExportFormat = 'csv' | 'pdf' | 'html';
@@ -62,8 +63,16 @@ export function ExportButton({
   };
 
   const handleExport = async (format: ExportFormat) => {
-    await onExport(format);
-    setIsOpen(false);
+    try {
+      await onExport(format);
+      setIsOpen(false);
+    } catch (error) {
+      logger.error('[ExportButton] Error exporting:', {
+        error: error instanceof Error ? error.message : String(error),
+        format,
+      });
+      // Error is handled by onExport callback
+    }
   };
 
   const baseClasses =

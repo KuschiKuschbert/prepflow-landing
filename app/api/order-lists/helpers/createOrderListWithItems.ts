@@ -19,7 +19,10 @@ export async function createOrderListWithItems(
   },
   items?: Array<{ ingredientId: string; quantity: number; unit: string; notes?: string }>,
 ) {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[API] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
 
   // Create the order list
   const { data: orderList, error: orderError } = await supabaseAdmin!

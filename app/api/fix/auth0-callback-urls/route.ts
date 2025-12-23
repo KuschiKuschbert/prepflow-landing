@@ -7,6 +7,7 @@ import { logger } from '@/lib/logger';
 import { ManagementClient } from 'auth0';
 import { NextResponse } from 'next/server';
 import { buildRequiredUrls } from './helpers/buildRequiredUrls';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Fix Auth0 Callback URLs via Management API
@@ -25,22 +26,14 @@ export async function POST() {
 
     if (!auth0Issuer) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Missing Auth0 issuer',
-          message: 'AUTH0_ISSUER_BASE_URL must be set',
-        },
+        ApiErrorHandler.createError('AUTH0_ISSUER_BASE_URL must be set', 'MISSING_ENV_VAR', 400),
         { status: 400 },
       );
     }
 
     if (!baseUrl) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Missing base URL',
-          message: 'AUTH0_BASE_URL must be set',
-        },
+        ApiErrorHandler.createError('AUTH0_BASE_URL must be set', 'MISSING_ENV_VAR', 400),
         { status: 400 },
       );
     }
@@ -52,13 +45,14 @@ export async function POST() {
 
     if (!managementClientId || !managementClientSecret) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Missing Auth0 credentials',
-          message:
-            'Either AUTH0_M2M_CLIENT_ID/AUTH0_M2M_CLIENT_SECRET (recommended) or AUTH0_CLIENT_ID/AUTH0_CLIENT_SECRET must be set',
-          hint: 'See docs/AUTH0_MANAGEMENT_API_SETUP.md for setup instructions',
-        },
+        ApiErrorHandler.createError(
+          'Either AUTH0_M2M_CLIENT_ID/AUTH0_M2M_CLIENT_SECRET (recommended) or AUTH0_CLIENT_ID/AUTH0_CLIENT_SECRET must be set',
+          'MISSING_AUTH0_CREDENTIALS',
+          400,
+          {
+            hint: 'See docs/AUTH0_MANAGEMENT_API_SETUP.md for setup instructions',
+          },
+        ),
         { status: 400 },
       );
     }
@@ -67,11 +61,11 @@ export async function POST() {
     const applicationClientId = auth0ClientId;
     if (!applicationClientId) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Missing application client ID',
-          message: 'AUTH0_CLIENT_ID must be set to identify which application to update',
-        },
+        ApiErrorHandler.createError(
+          'AUTH0_CLIENT_ID must be set to identify which application to update',
+          'MISSING_ENV_VAR',
+          400,
+        ),
         { status: 400 },
       );
     }
@@ -183,11 +177,14 @@ export async function POST() {
   } catch (error) {
     logger.error('[Auth0 Fix] Error updating Auth0 configuration:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : String(error),
-        message: 'Failed to update Auth0 configuration',
-      },
+      ApiErrorHandler.createError(
+        'Failed to update Auth0 configuration',
+        'SERVER_ERROR',
+        500,
+        {
+          details: error instanceof Error ? error.message : String(error),
+        },
+      ),
       { status: 500 },
     );
   }

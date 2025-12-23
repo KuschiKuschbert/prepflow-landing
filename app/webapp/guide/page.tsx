@@ -185,7 +185,7 @@ export default function GuidePage() {
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <div className="desktop:px-8 mx-auto max-w-7xl px-4 py-8">
+      <div className="desktop:px-8 mx-auto max-w-[1400px] large-desktop:max-w-[1400px] xl:max-w-[1400px] 2xl:max-w-[1600px] px-4 py-8">
         {!currentGuide ? (
           // Guide selection view
           <div className="space-y-8">

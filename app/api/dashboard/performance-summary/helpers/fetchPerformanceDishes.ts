@@ -4,6 +4,7 @@
 
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Fetches dishes for performance analysis with optional menu filtering
@@ -16,7 +17,8 @@ export async function fetchPerformanceDishes(targetMenuId: string | null): Promi
   isEmpty: boolean;
 }> {
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    logger.error('[Performance Summary API] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   // Build base query
@@ -66,13 +68,12 @@ export async function fetchPerformanceDishes(targetMenuId: string | null): Promi
   });
 
   if (dishesError) {
-    logger.error('Error fetching dishes:', dishesError);
-    throw new Error('Database error: Could not retrieve menu dishes from database');
+    logger.error('[Performance Summary API] Error fetching dishes:', {
+      error: dishesError.message,
+      code: (dishesError as any).code,
+    });
+    throw ApiErrorHandler.fromSupabaseError(dishesError, 500);
   }
 
   return { dishes: dishes || [], isEmpty: false };
 }
-
-
-
-

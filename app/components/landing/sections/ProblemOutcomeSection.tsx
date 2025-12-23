@@ -1,4 +1,5 @@
 import { useTranslation } from '../../../../lib/useTranslation';
+import { TextContainer } from '@/components/ui/TextContainer';
 import { LANDING_TYPOGRAPHY, LANDING_LAYOUT, getSectionClasses } from '@/lib/landing-styles';
 
 export function ProblemOutcomeSection() {
@@ -6,8 +7,10 @@ export function ProblemOutcomeSection() {
 
   return (
     <section id="problem-outcome" className={getSectionClasses({ padding: 'medium' })}>
-      <div className={`${LANDING_LAYOUT.container} desktop:grid-cols-2 grid gap-12`}>
-        <div className="space-y-6">
+      <div
+        className={`${LANDING_LAYOUT.container} desktop:grid-cols-2 grid gap-12 tablet:gap-10 desktop:gap-12 large-desktop:gap-14 xl:gap-16`}
+      >
+        <TextContainer variant="prose" className="space-y-6">
           <h2 className="text-fluid-3xl desktop:text-fluid-4xl font-bold tracking-tight">
             {t('problem.title', 'The Problem')}
           </h2>
@@ -26,8 +29,8 @@ export function ProblemOutcomeSection() {
             </p>
             <p>{t('problem.point3', 'Excel at 2 AM. Broken formulas. Hours wasted.')}</p>
           </div>
-        </div>
-        <div className="space-y-6">
+        </TextContainer>
+        <TextContainer variant="prose" className="space-y-6">
           <h2 className="text-fluid-3xl desktop:text-fluid-4xl font-bold tracking-tight">
             {t('outcome.title', 'The Solution')}
           </h2>
@@ -46,7 +49,7 @@ export function ProblemOutcomeSection() {
               )}
             </p>
           </div>
-        </div>
+        </TextContainer>
       </div>
     </section>
   );

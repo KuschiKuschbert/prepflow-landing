@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin-auth';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
 import { fetchTiers } from './helpers/fetchTiers';
 import { createTier, tierConfigSchema } from './helpers/createTier';
 import { updateTier } from './helpers/updateTier';
 import { deleteTier } from './helpers/deleteTier';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * GET /api/admin/tiers
@@ -21,7 +23,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ tiers: result.tiers });
   } catch (error) {
     logger.error('[Admin Tiers] Unexpected error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
   }
 }
 
@@ -34,12 +36,29 @@ export async function POST(request: NextRequest) {
     const adminUser = await requireAdmin(request);
     if (adminUser instanceof NextResponse) return adminUser;
 
-    const body = await request.json();
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Admin Tiers] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
     const validationResult = tierConfigSchema.safeParse(body);
 
     if (!validationResult.success) {
       return NextResponse.json(
-        { error: 'Invalid request body', details: validationResult.error },
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+          validationResult.error.issues,
+        ),
         { status: 400 },
       );
     }
@@ -50,7 +69,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ tier: result.tier });
   } catch (error) {
     logger.error('[Admin Tiers] Unexpected error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
   }
 }
 
@@ -63,12 +82,29 @@ export async function PUT(request: NextRequest) {
     const adminUser = await requireAdmin(request);
     if (adminUser instanceof NextResponse) return adminUser;
 
-    const body = await request.json();
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Admin Tiers] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
     const validationResult = tierConfigSchema.safeParse(body);
 
     if (!validationResult.success) {
       return NextResponse.json(
-        { error: 'Invalid request body', details: validationResult.error },
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+          validationResult.error.issues,
+        ),
         { status: 400 },
       );
     }
@@ -81,7 +117,7 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ tier: result.tier });
   } catch (error) {
     logger.error('[Admin Tiers] Unexpected error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
   }
 }
 
@@ -98,7 +134,7 @@ export async function DELETE(request: NextRequest) {
     const tierSlug = searchParams.get('tier_slug');
 
     if (!tierSlug) {
-      return NextResponse.json({ error: 'tier_slug is required' }, { status: 400 });
+      return NextResponse.json(ApiErrorHandler.createError('tier_slug is required', 'BAD_REQUEST', 400), { status: 400 });
     }
 
     const result = await deleteTier(tierSlug, adminUser, request);
@@ -107,6 +143,6 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ tier: result.tier });
   } catch (error) {
     logger.error('[Admin Tiers] Unexpected error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
   }
 }

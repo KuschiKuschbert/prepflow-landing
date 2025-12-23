@@ -1,9 +1,11 @@
 import { requireAdmin } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { fetchTicket } from './helpers/fetchTicket';
 import { handleTicketApiError } from './helpers/handleError';
 import { updateTicket, updateTicketSchema } from './helpers/updateTicket';
+import { logger } from '@/lib/logger';
 
 /**
  * GET /api/admin/support-tickets/[id]
@@ -22,6 +24,11 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       ticket: result.ticket,
     });
   } catch (error) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     return handleTicketApiError(error, 'GET');
   }
 }
@@ -34,7 +41,18 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
   try {
     const adminUser = await requireAdmin(request);
     const { id } = await context.params;
-    const body = await request.json();
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Admin Support Tickets API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
 
     // Validate request body
     const validationResult = updateTicketSchema.safeParse(body);
@@ -59,6 +77,11 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       message: 'Ticket updated successfully',
     });
   } catch (error) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     return handleTicketApiError(error, 'PUT');
   }
 }

@@ -1,4 +1,5 @@
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 /**
  * Fetch incident reports.
@@ -20,6 +21,10 @@ export async function fetchIncidents(startDate: string, endDate: string) {
     .limit(100);
 
   if (incidentsError) {
+    logger.warn('[Health Inspector Report] Error fetching incident reports:', {
+      error: incidentsError.message,
+      code: (incidentsError as any).code,
+    });
     return null;
   }
 
@@ -62,6 +67,10 @@ export async function fetchHACCP(startDate: string, endDate: string) {
     .limit(200);
 
   if (haccpError) {
+    logger.warn('[Health Inspector Report] Error fetching HACCP records:', {
+      error: haccpError.message,
+      code: (haccpError as any).code,
+    });
     return null;
   }
 

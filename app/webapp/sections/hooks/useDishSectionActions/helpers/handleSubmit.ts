@@ -1,5 +1,6 @@
 import { FormData } from '../../types';
 import { KitchenSection } from '../../types';
+import { logger } from '@/lib/logger';
 
 interface HandleSubmitParams {
   editingSection: KitchenSection | null;
@@ -48,6 +49,11 @@ export async function handleSubmit({
       setError(result.message || 'Failed to save kitchen section');
     }
   } catch (err) {
+    logger.error('[handleSubmit.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     setError('Failed to save kitchen section');
   }
 }

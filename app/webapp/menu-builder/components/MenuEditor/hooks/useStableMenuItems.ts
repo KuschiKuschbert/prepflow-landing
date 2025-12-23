@@ -8,11 +8,10 @@ import { detectItemChanges } from './useStableMenuItems/helpers/detectItemChange
 export function useStableMenuItems(rawMenuItems: MenuItem[], menuId: string): MenuItem[] {
   const prevRawMenuItemsRef = useRef<MenuItem[]>(rawMenuItems);
   const prevItemIdsRef = useRef<string>('');
-  const prevMenuItemsRef = useRef(rawMenuItems);
+  const stableMenuItemsRef = useRef<MenuItem[]>(rawMenuItems);
 
   const menuItems = useMemo(() => {
     const currentItemIds = rawMenuItems.map(i => i.id).join(',');
-    const prevItemIds = prevItemIdsRef.current;
     const referenceChanged = prevRawMenuItemsRef.current !== rawMenuItems;
 
     const { contentChanged, itemReferencesChanged, changedItems } = detectItemChanges(
@@ -29,35 +28,41 @@ export function useStableMenuItems(rawMenuItems: MenuItem[], menuId: string): Me
       changedItemsCount: changedItems.length,
     });
 
+    // If content hasn't changed, return the stable reference
     if (!contentChanged && prevRawMenuItemsRef.current.length === rawMenuItems.length) {
       logger.dev('[MenuEditor] menuItems content unchanged - returning previous reference', {
         menuId,
       });
-      return prevRawMenuItemsRef.current;
+      return stableMenuItemsRef.current;
     }
 
     logger.dev('[MenuEditor] menuItems content changed - returning new array reference', {
       menuId,
     });
 
-    prevRawMenuItemsRef.current = rawMenuItems;
-    prevItemIdsRef.current = currentItemIds;
-
+    // Content changed - update refs in useEffect, return new array
     return rawMenuItems;
   }, [rawMenuItems, menuId]);
 
+  // Update refs after memo calculation to avoid mutating during render
   useEffect(() => {
-    if (prevMenuItemsRef.current !== rawMenuItems) {
-      const prevIds = prevMenuItemsRef.current.map(i => i.id).join(',');
-      const newIds = rawMenuItems.map(i => i.id).join(',');
-      const contentChanged = prevIds !== newIds;
-      logger.dev('[MenuEditor] menuItems reference changed', {
+    const currentItemIds = rawMenuItems.map(i => i.id).join(',');
+    const prevItemIds = prevItemIdsRef.current;
+
+    const { contentChanged } = detectItemChanges(prevRawMenuItemsRef.current, rawMenuItems);
+
+    // Only update refs if content actually changed
+    if (contentChanged || prevRawMenuItemsRef.current.length !== rawMenuItems.length) {
+      prevRawMenuItemsRef.current = rawMenuItems;
+      prevItemIdsRef.current = currentItemIds;
+      stableMenuItemsRef.current = rawMenuItems;
+
+      logger.dev('[MenuEditor] menuItems refs updated', {
         menuId,
         contentChanged,
-        prevCount: prevMenuItemsRef.current.length,
+        prevCount: prevRawMenuItemsRef.current.length,
         newCount: rawMenuItems.length,
       });
-      prevMenuItemsRef.current = rawMenuItems;
     }
   }, [rawMenuItems, menuId]);
 

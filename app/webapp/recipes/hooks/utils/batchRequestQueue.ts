@@ -1,4 +1,5 @@
 import { RecipeIngredientWithDetails } from '../../types';
+import { logger } from '@/lib/logger';
 
 // Module-level shared cache for batch requests (shared across all hook instances)
 export const globalBatchRequestCache = new Map<
@@ -82,6 +83,11 @@ export async function processBatchRequestQueue(
         const result = await batchPromise;
         requests.forEach(req => req.resolve(result));
       } catch (err) {
+        logger.error('[batchRequestQueue.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
         requests.forEach(req => req.reject(err instanceof Error ? err : new Error(String(err))));
       }
     }

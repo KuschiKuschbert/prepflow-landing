@@ -2,6 +2,7 @@
 
 import { ApiErrorDisplay } from '@/components/ui/ApiErrorDisplay';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { supabase } from '@/lib/supabase';
@@ -19,7 +20,7 @@ interface RecentActivity {
   created_at: string;
 }
 
-export default function RecentActivity() {
+function RecentActivityContent() {
   const { t } = useTranslation();
   // Initialize with cached data for instant display
   const [activities, setActivities] = useState<RecentActivity[]>(
@@ -110,6 +111,11 @@ export default function RecentActivity() {
       // Cache the activity data
       cacheData('dashboard_recent_activity', data);
     } catch (err) {
+      logger.error('[RecentActivity.tsx] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       setError(err instanceof Error ? err.message : 'Failed to fetch recent activity');
     } finally {
       setLoading(false);
@@ -256,5 +262,13 @@ export default function RecentActivity() {
         ))}
       </div>
     </div>
+  );
+}
+
+export default function RecentActivity() {
+  return (
+    <ErrorBoundary>
+      <RecentActivityContent />
+    </ErrorBoundary>
   );
 }

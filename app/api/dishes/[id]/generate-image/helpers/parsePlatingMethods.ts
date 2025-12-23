@@ -17,7 +17,14 @@ export async function parsePlatingMethods(
   dishId: string,
 ): Promise<PlatingMethod[] | undefined> {
   try {
-    const body = await req.json().catch(() => ({}));
+    let body: { platingMethods?: PlatingMethod[] } = {};
+    try {
+      body = await req.json();
+    } catch (err) {
+      logger.warn('[Parse Plating Methods] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
     if (
       body.platingMethods &&
       Array.isArray(body.platingMethods) &&

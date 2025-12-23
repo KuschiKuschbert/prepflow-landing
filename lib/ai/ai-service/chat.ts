@@ -9,6 +9,7 @@ import { checkRateLimit } from '../utils/rate-limiter';
 import { parseAIError } from '../utils/errorParser';
 import { processAIResponse } from '../utils/responseProcessor';
 import type { AIRequestOptions, AIResponse, AIChatMessage } from '../types';
+import { logger } from '@/lib/logger';
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000;
@@ -112,6 +113,11 @@ Always provide responses that are:
         options,
       );
     } catch (error) {
+      logger.error('[chat.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       lastError = error as Error;
       const aiError = parseAIError(error as Error);
       if (!aiError.retryable || attempt === MAX_RETRIES - 1)

@@ -9,8 +9,14 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { applyTemplate, validateTemplateApplication } from '@/lib/services/roster/templateService';
 import { parse } from 'date-fns';
+
+const applyTemplateSchema = z.object({
+  target_week_start_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format. Use YYYY-MM-DD'),
+  overwrite_existing: z.boolean().optional().default(false),
+});
 
 /**
  * POST /api/roster/templates/[id]/apply
@@ -32,15 +38,32 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       );
     }
 
-    const body = await request.json();
-    const { target_week_start_date, overwrite_existing } = body;
-
-    if (!target_week_start_date) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Templates API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        ApiErrorHandler.createError('Target week start date is required', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
+
+    const zodValidation = applyTemplateSchema.safeParse(body);
+    if (!zodValidation.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          zodValidation.error.issues[0]?.message || 'Invalid request data',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { target_week_start_date, overwrite_existing } = zodValidation.data;
 
     // Get template
     const { data: template, error: templateError } = await supabaseAdmin
@@ -151,7 +174,3 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     );
   }
 }
-
-
-
-

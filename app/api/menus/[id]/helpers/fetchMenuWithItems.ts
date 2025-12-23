@@ -13,7 +13,10 @@ import { enrichMenuItems } from './enrichment/enrichMenuItems';
  * @throws {Error} If menu not found
  */
 export async function fetchMenuWithItems(menuId: string) {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[API] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
 
   // Fetch menu
   const { data: menu, error: menuError } = await supabaseAdmin

@@ -1,64 +1,65 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
-
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { updateOrderListSchema } from './helpers/schemas';
+import { updateOrderList } from './helpers/updateOrderList';
+import { deleteOrderList } from './helpers/deleteOrderList';
+
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
-    }
-
-    const { id } = await context.params;
-    const body = await request.json();
-    const { supplierId, name, notes, status, items } = body;
-
-    if (!id) {
       return NextResponse.json(
-        { error: 'Missing required fields', message: 'Order list ID is required' },
-        { status: 400 },
-      );
-    }
-
-    const updateData: any = { updated_at: new Date().toISOString() };
-    if (supplierId !== undefined) updateData.supplier_id = supplierId;
-    if (name !== undefined) updateData.name = name;
-    if (notes !== undefined) updateData.notes = notes;
-    if (status !== undefined) updateData.status = status;
-
-    const { data, error } = await supabaseAdmin
-      .from('order_lists')
-      .update(updateData)
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) {
-      logger.error('Error updating order list:', error);
-      return NextResponse.json(
-        { error: 'Failed to update order list', message: error.message },
+        ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500),
         { status: 500 },
       );
     }
 
-    if (items !== undefined) {
-      await supabaseAdmin.from('order_list_items').delete().eq('order_list_id', id);
-      if (items.length > 0) {
-        const orderItems = items.map((item: any) => ({
-          order_list_id: id,
-          ingredient_id: item.ingredientId,
-          quantity: item.quantity,
-          unit: item.unit,
-          notes: item.notes,
-        }));
-        await supabaseAdmin.from('order_list_items').insert(orderItems);
-      }
+    const { id } = await context.params;
+    if (!id) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Order list ID is required', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
     }
 
-    return NextResponse.json({ success: true, message: 'Order list updated successfully', data });
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Order Lists API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = updateOrderListSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const result = await updateOrderList(id, validationResult.data);
+    if ('error' in result) {
+      return NextResponse.json(result.error, { status: result.status });
+    }
+
+    return NextResponse.json(result);
   } catch (error) {
     logger.error('Order lists API error:', error);
     return NextResponse.json(
-      { error: 'Internal server error', message: 'An unexpected error occurred' },
+      ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500, {
+        details: error instanceof Error ? error.message : 'An unexpected error occurred',
+      }),
       { status: 500 },
     );
   }
@@ -67,33 +68,32 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 export async function DELETE(_request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     const { id } = await context.params;
     if (!id) {
       return NextResponse.json(
-        { error: 'Missing ID', message: 'Order list ID is required' },
+        ApiErrorHandler.createError('Order list ID is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
-    await supabaseAdmin.from('order_list_items').delete().eq('order_list_id', id);
-    const { error } = await supabaseAdmin.from('order_lists').delete().eq('id', id);
-
-    if (error) {
-      logger.error('Error deleting order list:', error);
-      return NextResponse.json(
-        { error: 'Failed to delete order list', message: error.message },
-        { status: 500 },
-      );
+    const result = await deleteOrderList(id);
+    if ('error' in result) {
+      return NextResponse.json(result.error, { status: result.status });
     }
 
-    return NextResponse.json({ success: true, message: 'Order list deleted successfully' });
+    return NextResponse.json(result);
   } catch (error) {
     logger.error('Order lists API error:', error);
     return NextResponse.json(
-      { error: 'Internal server error', message: 'An unexpected error occurred' },
+      ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500, {
+        details: error instanceof Error ? error.message : 'An unexpected error occurred',
+      }),
       { status: 500 },
     );
   }

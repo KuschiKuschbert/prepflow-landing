@@ -3,6 +3,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { generateLegacyTemperatureLogs } from '@/lib/generate-legacy-temperature-logs';
 
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 /**
  * @deprecated This endpoint is deprecated. Temperature logs are now automatically
  * generated as part of the populate-clean-test-data endpoint with regional standards.
@@ -12,9 +13,7 @@ export async function POST(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -30,10 +29,7 @@ export async function POST(request: NextRequest) {
     if (equipmentError) {
       logger.error('Error fetching equipment:', equipmentError);
       return NextResponse.json(
-        {
-          error: 'Failed to fetch equipment',
-          message: equipmentError.message,
-        },
+        ApiErrorHandler.fromSupabaseError(equipmentError, 500),
         { status: 500 },
       );
     }

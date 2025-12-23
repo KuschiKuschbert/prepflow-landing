@@ -72,6 +72,11 @@ export function useDishesClientData() {
       // Note: Recipe price calculation is handled by useDishesClientRecipePricing
       // based on visible/paginated recipes, not here
     } catch (err) {
+      logger.error('[useDishesClientData.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       setError('Failed to fetch items');
       setLoading(false);
     }

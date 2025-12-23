@@ -6,6 +6,8 @@ import { fetchParLevelWithIngredient } from './fetchParLevelWithIngredient';
 import { handleInsertError } from './handleInsertError';
 import { validateParLevelData } from './validateParLevelData';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 /**
  * Create a par level.
  *
@@ -43,7 +45,7 @@ export async function createParLevel(parLevelData: any) {
   }
 
   if (!insertedData) {
-    throw new Error('Failed to create par level: no data returned');
+    throw ApiErrorHandler.createError('Failed to create par level: no data returned', 'DATABASE_ERROR', 500);
   }
 
   // Fetch with ingredient join (with fallback)

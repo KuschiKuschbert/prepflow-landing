@@ -1,4 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Build temperature logs query with filters and pagination.
@@ -22,7 +24,10 @@ export async function buildTemperatureLogQuery(
   page: number,
   pageSize: number,
 ) {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[API] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
 
   let query = supabaseAdmin
     .from('temperature_logs')

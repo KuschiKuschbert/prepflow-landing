@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server';
 import { ManagementClient } from 'auth0';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 function getManagementClient(): ManagementClient | null {
   const issuerBaseUrl = process.env.AUTH0_ISSUER_BASE_URL;
@@ -36,11 +37,11 @@ export async function GET() {
 
     if (!client) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Management API client not available',
-          message: 'Check AUTH0_ISSUER_BASE_URL, AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET',
-        },
+        ApiErrorHandler.createError(
+          'Check AUTH0_ISSUER_BASE_URL, AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET',
+          'MISSING_ENV_VAR',
+          500,
+        ),
         { status: 500 },
       );
     }
@@ -108,11 +109,14 @@ export async function GET() {
   } catch (error) {
     logger.error('[Auth0 Connections] Failed to list connections:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : String(error),
-        message: 'Failed to list connections',
-      },
+      ApiErrorHandler.createError(
+        'Failed to list connections',
+        'SERVER_ERROR',
+        500,
+        {
+          details: error instanceof Error ? error.message : String(error),
+        },
+      ),
       { status: 500 },
     );
   }

@@ -125,6 +125,10 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
 
     return NextResponse.json({ items });
   } catch (err) {
+    logger.error('[Recipes API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/recipes/[id]/ingredients', method: 'GET', recipeId: normalizedId },
+    });
     return handleRecipeIngredientsError(err, 'GET');
   }
 }
@@ -186,9 +190,10 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       data,
     });
   } catch (err: any) {
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
-    }
+    logger.error('[Recipes API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/recipes/[id]/ingredients', method: 'POST', recipeId },
+    });
     return handleRecipeIngredientsError(err, 'POST');
   }
 }

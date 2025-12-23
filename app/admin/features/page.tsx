@@ -15,6 +15,7 @@ import { FeatureFlagsTable } from './components/FeatureFlagsTable';
 import { HiddenFeatureFlagsTable } from './components/HiddenFeatureFlagsTable';
 import { AddFlagModal } from './components/AddFlagModal';
 import { SuggestedFlagsSection } from './components/SuggestedFlagsSection';
+import { logger } from '@/lib/logger';
 
 /**
  * Feature flags page component for admin dashboard.
@@ -55,25 +56,41 @@ export default function FeatureFlagsPage() {
   }, [activeTab, fetchFlags, fetchHiddenFlags]);
 
   const handleDeleteFlag = async (flag: (typeof flags)[0]) => {
-    const confirmed = await showConfirm({
-      title: 'Delete Feature Flag',
-      message: `Are you sure you want to delete the feature flag "${flag.flag_key}"?`,
-      variant: 'danger',
-    });
+    try {
+      const confirmed = await showConfirm({
+        title: 'Delete Feature Flag',
+        message: `Are you sure you want to delete the feature flag "${flag.flag_key}"?`,
+        variant: 'danger',
+      });
 
-    if (!confirmed) return;
-    await deleteFlagAction(flag);
+      if (!confirmed) return;
+      await deleteFlagAction(flag);
+    } catch (err) {
+      logger.error('[FeatureFlagsPage] Error deleting flag:', {
+        error: err instanceof Error ? err.message : String(err),
+        flagKey: flag.flag_key,
+      });
+      showError('Failed to delete feature flag');
+    }
   };
 
   const handleDeleteHiddenFlag = async (flag: (typeof hiddenFlags)[0]) => {
-    const confirmed = await showConfirm({
-      title: 'Delete Hidden Feature Flag',
-      message: `Are you sure you want to delete the hidden feature flag "${flag.feature_key}"?`,
-      variant: 'danger',
-    });
+    try {
+      const confirmed = await showConfirm({
+        title: 'Delete Hidden Feature Flag',
+        message: `Are you sure you want to delete the hidden feature flag "${flag.feature_key}"?`,
+        variant: 'danger',
+      });
 
-    if (!confirmed) return;
-    await deleteHiddenFlagAction(flag);
+      if (!confirmed) return;
+      await deleteHiddenFlagAction(flag);
+    } catch (err) {
+      logger.error('[FeatureFlagsPage] Error deleting hidden flag:', {
+        error: err instanceof Error ? err.message : String(err),
+        flagKey: flag.feature_key,
+      });
+      showError('Failed to delete hidden feature flag');
+    }
   };
 
   const handleAddFlag = async (flagData: {
@@ -81,22 +98,37 @@ export default function FeatureFlagsPage() {
     description: string;
     enabled: boolean;
   }) => {
-    if (!flagData.flag_key.trim()) {
-      showError('Flag key is required');
-      return;
-    }
-    const success = await createFlag(flagData);
-    if (success) {
-      setShowAddModal(false);
+    try {
+      if (!flagData.flag_key.trim()) {
+        showError('Flag key is required');
+        return;
+      }
+      const success = await createFlag(flagData);
+      if (success) {
+        setShowAddModal(false);
+      }
+    } catch (err) {
+      logger.error('[FeatureFlagsPage] Error adding flag:', {
+        error: err instanceof Error ? err.message : String(err),
+        flagKey: flagData.flag_key,
+      });
+      showError('Failed to create feature flag');
     }
   };
 
   const handleAutoCreate = async () => {
-    await autoCreateFlags(() => {
-      setDiscoveredFlags({ regular: [], hidden: [] });
-      fetchFlags();
-      fetchHiddenFlags();
-    });
+    try {
+      await autoCreateFlags(() => {
+        setDiscoveredFlags({ regular: [], hidden: [] });
+        fetchFlags();
+        fetchHiddenFlags();
+      });
+    } catch (err) {
+      logger.error('[FeatureFlagsPage] Error auto-creating flags:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      showError('Failed to auto-create feature flags');
+    }
   };
 
   // Get existing flag keys for filtering discovered flags

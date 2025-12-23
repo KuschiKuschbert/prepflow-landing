@@ -2,14 +2,12 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { createCleaningTask } from './helpers/createCleaningTask';
-import { deleteCleaningTask } from './helpers/deleteCleaningTask';
 import { handleCleaningTaskError } from './helpers/handleCleaningTaskError';
-import { updateCleaningTask } from './helpers/updateCleaningTask';
-import { validateCreateTaskRequest } from './helpers/validateCleaningTaskRequest';
-import { parseCreateTaskBody } from './helpers/parseCreateTaskBody';
-import { buildUpdateData } from './helpers/buildUpdateData';
 import { handleGetRequest } from './helpers/handleGetRequest';
+import { createCleaningTaskSchema, updateCleaningTaskSchema } from './helpers/schemas';
+import { handleDeleteCleaningTask } from './helpers/deleteCleaningTaskHandler';
+import { handleCreateCleaningTask } from './helpers/createCleaningTaskHandler';
+import { handleUpdateCleaningTask } from './helpers/updateCleaningTaskHandler';
 
 /**
  * GET /api/cleaning-tasks
@@ -52,6 +50,10 @@ export async function GET(request: NextRequest) {
       pageSize: parseInt(searchParams.get('pageSize') || '100', 10),
     });
   } catch (err: any) {
+    logger.error('[Cleaning Tasks API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/cleaning-tasks', method: 'GET' },
+    });
     if (err && typeof err === 'object' && 'status' in err) {
       return NextResponse.json(err, { status: err.status || 500 });
     }
@@ -78,32 +80,7 @@ export async function GET(request: NextRequest) {
  * @returns {Promise<NextResponse>} Created cleaning task
  */
 export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const taskData = parseCreateTaskBody(body);
-
-    // Validate request
-    const validationError = validateCreateTaskRequest(taskData);
-    if (validationError) {
-      return validationError;
-    }
-
-    const data = await createCleaningTask({
-      ...taskData,
-      is_standard_task: taskData.is_standard_task || false,
-    });
-
-    return NextResponse.json({
-      success: true,
-      message: 'Cleaning task created successfully',
-      data,
-    });
-  } catch (err: any) {
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
-    }
-    return handleCleaningTaskError(err, 'POST');
-  }
+  return handleCreateCleaningTask(request);
 }
 
 /**
@@ -120,31 +97,7 @@ export async function POST(request: NextRequest) {
  * @returns {Promise<NextResponse>} Updated cleaning task
  */
 export async function PUT(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const { id } = body;
-
-    if (!id) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Cleaning task ID is required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    const updateData = buildUpdateData(body);
-    const data = await updateCleaningTask(id, updateData);
-
-    return NextResponse.json({
-      success: true,
-      message: 'Cleaning task updated successfully',
-      data,
-    });
-  } catch (err: any) {
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
-    }
-    return handleCleaningTaskError(err, 'PUT');
-  }
+  return handleUpdateCleaningTask(request);
 }
 
 /**
@@ -156,21 +109,5 @@ export async function PUT(request: NextRequest) {
  * @returns {Promise<NextResponse>} Deletion response
  */
 export async function DELETE(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
-
-    if (!id) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Cleaning task ID is required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    await deleteCleaningTask(id);
-    return NextResponse.json({ success: true, message: 'Cleaning task deleted successfully' });
-  } catch (err: any) {
-    if (err.status) return NextResponse.json(err, { status: err.status });
-    return handleCleaningTaskError(err, 'DELETE');
-  }
+  return handleDeleteCleaningTask(request);
 }

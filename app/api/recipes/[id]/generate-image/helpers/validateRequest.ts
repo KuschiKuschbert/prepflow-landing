@@ -21,7 +21,14 @@ export async function validateRequest(
   // Parse request body to get optional platingMethods array
   let selectedPlatingMethods: PlatingMethod[] | undefined;
   try {
-    const body = await req.json().catch(() => ({}));
+    let body = {};
+    try {
+      body = await req.json();
+    } catch (err) {
+      logger.warn('[Validate Request] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
     if (
       body.platingMethods &&
       Array.isArray(body.platingMethods) &&

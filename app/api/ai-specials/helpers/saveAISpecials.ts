@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { NextResponse } from 'next/server';
 
 /**
@@ -19,9 +20,7 @@ export async function saveAISpecials(
 ): Promise<{ aiRecord: any } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
-      {
-        error: 'Database connection not available',
-      },
+      ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
       { status: 500 },
     );
   }
@@ -47,10 +46,7 @@ export async function saveAISpecials(
       context: { endpoint: '/api/ai-specials', operation: 'POST', userId },
     });
     return NextResponse.json(
-      {
-        error: 'Failed to save AI analysis',
-        message: "couldn't save AI processing results",
-      },
+      ApiErrorHandler.createError("Couldn't save AI processing results", 'DATABASE_ERROR', 500),
       { status: 500 },
     );
   }

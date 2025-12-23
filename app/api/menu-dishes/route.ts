@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -144,12 +142,14 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Internal server error',
-        message: 'An unexpected error occurred while fetching dishes',
-        details: error?.message,
-      },
+      ApiErrorHandler.createError(
+        'An unexpected error occurred while fetching dishes',
+        'SERVER_ERROR',
+        500,
+        {
+          details: error?.message,
+        },
+      ),
       { status: 500 },
     );
   }

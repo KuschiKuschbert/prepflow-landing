@@ -1,9 +1,11 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchMenuItem } from './helpers/fetchMenuItem';
-import { syncPrice } from './helpers/syncPrice';
 import { validateMenuItemRequest } from './helpers/validateMenuItemRequest';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { updateMenuItemSchema } from './helpers/schemas';
+import { updateMenuItem } from './helpers/updateMenuItem';
+import { deleteMenuItem } from './helpers/deleteMenuItem';
 
 /**
  * PUT /api/menus/[id]/items/[itemId]
@@ -26,8 +28,30 @@ export async function PUT(
     const { id, itemId } = await context.params;
     const menuId = id;
     const menuItemId = itemId;
-    const body = await request.json();
-    const { category, position, actual_selling_price } = body;
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Menu Item API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = updateMenuItemSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
 
     // Validate request
     const validationError = validateMenuItemRequest(menuId, menuItemId);
@@ -37,87 +61,21 @@ export async function PUT(
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Database connection not available',
-          message: 'Database connection could not be established',
-        },
+        ApiErrorHandler.createError(
+          'Database connection could not be established',
+          'DATABASE_ERROR',
+          500,
+        ),
         { status: 500 },
       );
     }
 
-    // Fetch menu item first to get dish_id or recipe_id
-    const { menuItem, error: fetchError } = await fetchMenuItem(menuId, menuItemId);
-    if (fetchError) {
-      return fetchError;
+    const result = await updateMenuItem(menuId, menuItemId, validationResult.data);
+    if ('error' in result) {
+      return NextResponse.json(result.error, { status: result.status });
     }
 
-    const updateData: {
-      category?: string;
-      position?: number;
-      actual_selling_price?: number | null;
-    } = {};
-
-    if (category !== undefined) updateData.category = category;
-    if (position !== undefined) updateData.position = position;
-    if (actual_selling_price !== undefined) {
-      // Allow null to clear actual price (use recommended instead)
-      updateData.actual_selling_price = actual_selling_price === null ? null : actual_selling_price;
-    }
-
-    logger.dev('[Menu Item API] Updating menu item', {
-      menuId,
-      menuItemId,
-      updateData,
-      actual_selling_price,
-    });
-
-    // Update menu_items table
-    const { data: updatedItem, error: updateError } = await supabaseAdmin
-      .from('menu_items')
-      .update(updateData)
-      .eq('id', menuItemId)
-      .eq('menu_id', menuId)
-      .select()
-      .single();
-
-    if (updateError) {
-      logger.error('[Menu Item API] Error updating menu item:', updateError);
-      return NextResponse.json(
-        {
-          success: false,
-          error: updateError.message,
-          message: 'Failed to update menu item',
-        },
-        { status: 500 },
-      );
-    }
-
-    logger.dev('[Menu Item API] Menu item updated successfully', {
-      menuItemId,
-      updatedItem,
-      actual_selling_price: updatedItem?.actual_selling_price,
-    });
-
-    // Sync actual_selling_price to dish or recipe table
-    if (actual_selling_price !== undefined) {
-      logger.dev('[Menu Item API] Syncing price to dish/recipe', {
-        menuItemId,
-        dish_id: menuItem?.dish_id,
-        recipe_id: menuItem?.recipe_id,
-        actual_selling_price,
-      });
-      await syncPrice(menuItem!, actual_selling_price);
-      logger.dev('[Menu Item API] Price sync completed', {
-        menuItemId,
-      });
-    }
-
-    return NextResponse.json({
-      success: true,
-      item: updatedItem,
-      message: 'Menu item updated successfully',
-    });
+    return NextResponse.json(result);
   } catch (err) {
     logger.error('Unexpected error:', err);
     return NextResponse.json(
@@ -148,37 +106,21 @@ export async function DELETE(
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Database connection not available',
-          message: 'Database connection could not be established',
-        },
+        ApiErrorHandler.createError(
+          'Database connection could not be established',
+          'DATABASE_ERROR',
+          500,
+        ),
         { status: 500 },
       );
     }
 
-    const { error } = await supabaseAdmin
-      .from('menu_items')
-      .delete()
-      .eq('id', menuItemId)
-      .eq('menu_id', menuId);
-
-    if (error) {
-      logger.error('Error deleting menu item:', error);
-      return NextResponse.json(
-        {
-          success: false,
-          error: error.message,
-          message: 'Failed to delete menu item',
-        },
-        { status: 500 },
-      );
+    const result = await deleteMenuItem(menuId, menuItemId);
+    if ('error' in result) {
+      return NextResponse.json(result.error, { status: result.status });
     }
 
-    return NextResponse.json({
-      success: true,
-      message: 'Menu item deleted successfully',
-    });
+    return NextResponse.json(result);
   } catch (err) {
     logger.error('Unexpected error:', err);
     return NextResponse.json(

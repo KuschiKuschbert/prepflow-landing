@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import { calculateTaskDates } from '@/lib/cleaning/frequency-calculator';
 import type { FrequencyType } from '@/lib/cleaning/frequency-calculator';
+import { logger } from '@/lib/logger';
 
 interface FrequencyPreviewProps {
   frequencyType: FrequencyType | string;
@@ -26,6 +27,11 @@ export function FrequencyPreview({ frequencyType, startDate }: FrequencyPreviewP
       const dates = calculateTaskDates(frequencyType, today, endDate, today);
       return dates.slice(0, 5); // Show next 5 occurrences
     } catch (error) {
+      logger.error('[FrequencyPreview.tsx] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       return [];
     }
   }, [frequencyType, startDate]);

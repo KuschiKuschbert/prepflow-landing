@@ -46,6 +46,11 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (userError || !user) {
+      logger.warn('[Admin Impersonate API] User not found:', {
+        error: userError?.message,
+        code: (userError as any)?.code,
+        userId,
+      });
       return NextResponse.json(ApiErrorHandler.createError('User not found', 'NOT_FOUND', 404), {
         status: 404,
       });

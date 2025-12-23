@@ -5,6 +5,7 @@ import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useTranslation } from '@/lib/useTranslation';
 import { useState } from 'react';
 import { IngredientTableRow } from './IngredientTableRow';
+import { logger } from '@/lib/logger';
 
 interface Ingredient {
   id: string;
@@ -66,6 +67,11 @@ export default function IngredientTable({
     setDeletingId(deleteConfirmId);
     try {
       await onDelete(deleteConfirmId);
+    } catch (err) {
+      logger.error('[IngredientTable] Error deleting ingredient:', {
+        error: err instanceof Error ? err.message : String(err),
+        ingredientId: deleteConfirmId,
+      });
     } finally {
       setDeletingId(null);
       setDeleteConfirmId(null);

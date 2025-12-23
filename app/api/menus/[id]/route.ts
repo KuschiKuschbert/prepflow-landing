@@ -6,6 +6,14 @@ import { formatErrorResponse } from './helpers/formatErrorResponse';
 import { handleMenuError } from './helpers/handleMenuError';
 import { updateMenu } from './helpers/updateMenu';
 import { validateMenuId } from './helpers/validateMenuId';
+import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { z } from 'zod';
+
+const updateMenuSchema = z.object({
+  menu_name: z.string().min(1).optional(),
+  description: z.string().optional(),
+});
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -22,6 +30,10 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       menu,
     });
   } catch (err: any) {
+    logger.error('[Menus API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/menus/[id]', method: 'GET', menuId },
+    });
     if (err.status) {
       return formatErrorResponse(err);
     }
@@ -33,12 +45,36 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
   try {
     const { id } = await context.params;
     const menuId = id;
-    const body = await request.json();
 
     const validationError = validateMenuId(menuId);
     if (validationError) return validationError;
 
-    const updateData = buildMenuUpdateData(body);
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Menus API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = updateMenuSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const updateData = buildMenuUpdateData(validationResult.data);
     const updatedMenu = await updateMenu(menuId, updateData);
 
     return NextResponse.json({
@@ -47,6 +83,10 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       message: 'Menu updated successfully',
     });
   } catch (err: any) {
+    logger.error('[Menus API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/menus/[id]', method: 'PUT', menuId },
+    });
     if (err.status) {
       return formatErrorResponse(err);
     }
@@ -69,6 +109,10 @@ export async function DELETE(_req: NextRequest, context: { params: Promise<{ id:
       message: 'Menu deleted successfully',
     });
   } catch (err: any) {
+    logger.error('[Menus API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/menus/[id]', method: 'DELETE', menuId },
+    });
     if (err.status) {
       return formatErrorResponse(err);
     }

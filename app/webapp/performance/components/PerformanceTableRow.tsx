@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { PerformanceItem } from '../types';
 import { formatCurrency, formatNumber, formatPercentage } from '../utils/performanceUtils';
 
@@ -7,7 +8,7 @@ interface PerformanceTableRowProps {
   item: PerformanceItem;
 }
 
-export function PerformanceTableRow({ item }: PerformanceTableRowProps) {
+function PerformanceTableRowComponent({ item }: PerformanceTableRowProps) {
   return (
     <tr className="group transition-colors hover:bg-[var(--muted)]/20">
       <td className="sticky left-0 z-20 min-w-[160px] border-r border-[var(--border)] bg-[var(--surface)] px-6 py-4 text-sm shadow-[2px_0_4px_rgba(0,0,0,0.3)] transition-colors group-hover:bg-[var(--muted)]/20">
@@ -95,3 +96,9 @@ export function PerformanceTableRow({ item }: PerformanceTableRowProps) {
     </tr>
   );
 }
+
+// Memoize component to prevent unnecessary re-renders when props don't change
+export const PerformanceTableRow = memo(PerformanceTableRowComponent, (prevProps, nextProps) => {
+  // Only re-render if item id or item reference changed
+  return prevProps.item.id === nextProps.item.id && prevProps.item === nextProps.item;
+});

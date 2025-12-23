@@ -4,6 +4,8 @@
 
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 const CLEANING_TASKS_SELECT = `
   *,
   cleaning_areas (
@@ -42,7 +44,7 @@ export interface CleaningTasksQueryParams {
  */
 export function buildCleaningTasksQuery(params: CleaningTasksQueryParams) {
   if (!supabaseAdmin) {
-    throw new Error('Supabase admin client not initialized');
+    throw ApiErrorHandler.createError('Supabase admin client not initialized', 'DATABASE_ERROR', 500);
   }
 
   let query = supabaseAdmin.from('cleaning_tasks').select(CLEANING_TASKS_SELECT);

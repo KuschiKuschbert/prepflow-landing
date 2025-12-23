@@ -33,7 +33,11 @@ export function createMutateHandler<T>(
     } catch (err) {
       rollbackFn();
       const errorMsg = err instanceof Error ? err.message : 'Operation failed';
-      logger.error('Optimistic mutation failed:', err);
+      logger.error('[Optimistic Mutation] Mutation failed:', {
+        error: errorMsg,
+        stack: err instanceof Error ? err.stack : undefined,
+        context: { operation: 'optimisticMutation' },
+      });
       if (showErrorNotification) showErrorNotification(errorMsg);
       onError?.(errorMsg);
     } finally {

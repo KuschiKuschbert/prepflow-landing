@@ -3,6 +3,7 @@
 import { useCallback, useState } from 'react';
 import { Recipe } from '../types';
 import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
 
 export function useRecipeBulkOperations(
   recipes: Recipe[],
@@ -67,6 +68,11 @@ export function useRecipeBulkOperations(
       setSelectedRecipes(new Set());
       setShowBulkDeleteConfirm(false);
     } catch (err) {
+      logger.error('[useRecipeBulkOperations.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       rollbackRecipes();
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete recipes';
       showErrorNotification(errorMessage);

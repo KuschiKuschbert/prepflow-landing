@@ -3,6 +3,7 @@
  */
 
 import { useState, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 import type {
   ComplianceRecord,
   ComplianceRecordFormData,
@@ -59,15 +60,22 @@ export function useComplianceForms({
   const handleAddRecord = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      await handleAddComplianceRecord({
-        newRecord,
-        records,
-        selectedType,
-        selectedStatus,
-        setRecords,
-        setShowAddRecord,
-        resetForm: resetRecordForm,
-      });
+      try {
+        await handleAddComplianceRecord({
+          newRecord,
+          records,
+          selectedType,
+          selectedStatus,
+          setRecords,
+          setShowAddRecord,
+          resetForm: resetRecordForm,
+        });
+      } catch (error) {
+        logger.error('[useComplianceForms] Error adding compliance record:', {
+          error: error instanceof Error ? error.message : String(error),
+        });
+        // Error is handled by handleAddComplianceRecord
+      }
     },
     [
       newRecord,
@@ -82,13 +90,20 @@ export function useComplianceForms({
   const handleAddType = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      await handleAddComplianceType({
-        newType,
-        types,
-        setTypes,
-        setShowAddType,
-        resetForm: resetTypeForm,
-      });
+      try {
+        await handleAddComplianceType({
+          newType,
+          types,
+          setTypes,
+          setShowAddType,
+          resetForm: resetTypeForm,
+        });
+      } catch (error) {
+        logger.error('[useComplianceForms] Error adding compliance type:', {
+          error: error instanceof Error ? error.message : String(error),
+        });
+        // Error is handled by handleAddComplianceType
+      }
     },
     [newType, types, setTypes, setShowAddType, resetTypeForm],
   );

@@ -1,6 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { createPrepList } from './helpers/createPrepList';
 import { deletePrepList } from './helpers/deletePrepList';
 import {
@@ -11,6 +12,7 @@ import {
 } from './helpers/fetchPrepLists';
 import { handlePrepListError } from './helpers/handlePrepListError';
 import { updatePrepList } from './helpers/updatePrepList';
+import { createPrepListSchema } from './helpers/schemas';
 
 export async function GET(request: NextRequest) {
   try {
@@ -79,25 +81,42 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (err) {
+    logger.error('[Prep Lists API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/prep-lists', method: 'GET' },
+    });
     return handlePrepListError(err, 'GET');
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { userId, kitchenSectionId, name, notes, items } = body;
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Prep Lists API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
 
-    if (!userId || !kitchenSectionId || !name) {
+    const validationResult = createPrepListSchema.safeParse(body);
+    if (!validationResult.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(
-          'userId, kitchenSectionId, and name are required',
+          validationResult.error.issues[0]?.message || 'Invalid request body',
           'VALIDATION_ERROR',
           400,
         ),
         { status: 400 },
       );
     }
+
+    const { userId, kitchenSectionId, name, notes, items } = validationResult.data;
 
     const prepList = await createPrepList({ userId, kitchenSectionId, name, notes, items });
 
@@ -107,6 +126,10 @@ export async function POST(request: NextRequest) {
       data: prepList,
     });
   } catch (err: any) {
+    logger.error('[Prep Lists API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/prep-lists', method: 'POST' },
+    });
     if (err.status) {
       return NextResponse.json(err, { status: err.status });
     }
@@ -134,6 +157,10 @@ export async function PUT(request: NextRequest) {
       data,
     });
   } catch (err: any) {
+    logger.error('[Prep Lists API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/prep-lists', method: 'PUT' },
+    });
     if (err.status) {
       return NextResponse.json(err, { status: err.status });
     }
@@ -160,6 +187,10 @@ export async function DELETE(request: NextRequest) {
       message: 'Prep list deleted successfully',
     });
   } catch (err: any) {
+    logger.error('[Prep Lists API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/prep-lists', method: 'DELETE' },
+    });
     if (err.status) {
       return NextResponse.json(err, { status: err.status });
     }

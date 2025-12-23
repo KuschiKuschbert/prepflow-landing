@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { authenticateGoogleDrive, downloadBackupFromDrive } from '@/lib/backup/google-drive';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Downloads backup file from Google Drive.
@@ -20,7 +21,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ fil
   try {
     const user = await requireAuth(request);
     if (!user?.email) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
     }
 
     const userId = user.email;

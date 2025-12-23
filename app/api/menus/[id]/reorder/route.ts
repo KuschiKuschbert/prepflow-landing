@@ -2,31 +2,62 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { z } from 'zod';
+
+const reorderMenuItemsSchema = z.object({
+  items: z.array(z.object({
+    id: z.string().min(1, 'Item ID is required'),
+    category: z.string().min(1, 'Category is required'),
+    position: z.number().int().nonnegative('Position must be a non-negative integer'),
+  })).min(1, 'Items array must contain at least one item'),
+});
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
     const menuId = id;
-    const body = await request.json();
-    const { items } = body; // Array of { id, category, position }
 
-    if (!menuId || !items || !Array.isArray(items)) {
+    if (!menuId) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Missing required fields',
-          message: 'Menu id and items array are required',
-        },
+        ApiErrorHandler.createError('Menu ID is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Menu Reorder API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = reorderMenuItemsSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { items } = validationResult.data;
+
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Database connection not available',
-          message: 'Database connection could not be established',
-        },
+        ApiErrorHandler.createError(
+          'Database connection could not be established',
+          'DATABASE_ERROR',
+          500,
+        ),
         { status: 500 },
       );
     }
@@ -66,11 +97,11 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
   } catch (err) {
     logger.error('Unexpected error:', err);
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        err instanceof Error ? err.message : 'Unknown error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

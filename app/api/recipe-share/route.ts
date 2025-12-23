@@ -7,23 +7,43 @@ import { fetchRecipeWithIngredients } from './helpers/fetchRecipeWithIngredients
 import { generateRecipePDF } from './helpers/generateRecipePDF';
 import { handleRecipeShareError } from './helpers/handleRecipeShareError';
 import { normalizeRecipeForShare } from './helpers/normalizeRecipeForShare';
+import { z } from 'zod';
+
+const shareRecipeSchema = z.object({
+  recipeId: z.string().min(1, 'Recipe ID is required'),
+  shareType: z.string().min(1, 'Share type is required'),
+  recipientEmail: z.string().email().optional().or(z.literal('')),
+  notes: z.string().optional(),
+});
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { recipeId, shareType, recipientEmail, notes } = body;
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Recipe Share API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
 
-    if (!recipeId || !shareType) {
+    const validationResult = shareRecipeSchema.safeParse(body);
+    if (!validationResult.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(
-          'Recipe ID and share type are required',
+          validationResult.error.issues[0]?.message || 'Invalid request body',
           'VALIDATION_ERROR',
           400,
-          { message: 'Missing required fields' },
         ),
         { status: 400 },
       );
     }
+
+    const { recipeId, shareType, recipientEmail, notes } = validationResult.data;
 
     // Fetch recipe with ingredients
     const recipe = await fetchRecipeWithIngredients(recipeId);
@@ -50,6 +70,11 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error: any) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     if (error.status) {
       return NextResponse.json(error, { status: error.status });
     }
@@ -97,6 +122,13 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false });
 
     if (error) {
+      logger.error('[recipe-share/route] Database error:', {
+        error: error.message,
+      });
+      throw ApiErrorHandler.fromSupabaseError(error, 500);
+    }
+
+    if (error) {
       logger.error('[Recipe Share API] Database error fetching shares:', {
         error: error.message,
         code: (error as any).code,
@@ -111,6 +143,11 @@ export async function GET(request: NextRequest) {
       data: data || [],
     });
   } catch (error) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     return handleRecipeShareError(error, 'GET');
   }
 }

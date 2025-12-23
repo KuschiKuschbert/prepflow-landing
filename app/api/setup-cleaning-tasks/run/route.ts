@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * POST /api/setup-cleaning-tasks/run
@@ -19,20 +20,22 @@ export async function POST(request: NextRequest) {
     // Guard: dev-only
     if (process.env.NODE_ENV === 'production') {
       return NextResponse.json(
-        {
-          error: 'Migration execution is disabled in production',
-          message: 'Please run migrations manually in Supabase SQL Editor for production',
-        },
+        ApiErrorHandler.createError(
+          'Please run migrations manually in Supabase SQL Editor for production',
+          'FORBIDDEN',
+          403,
+        ),
         { status: 403 },
       );
     }
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-          message: 'Supabase admin client could not be initialized',
-        },
+        ApiErrorHandler.createError(
+          'Supabase admin client could not be initialized',
+          'DATABASE_ERROR',
+          500,
+        ),
         { status: 500 },
       );
     }
@@ -44,11 +47,17 @@ export async function POST(request: NextRequest) {
     try {
       sqlMigration = readFileSync(sqlPath, 'utf-8');
     } catch (err) {
+      logger.error('[route.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       return NextResponse.json(
-        {
-          error: 'Migration file not found',
-          message: 'Could not read migrations/fix-cleaning-tasks-schema.sql',
-        },
+        ApiErrorHandler.createError(
+          'Could not read migrations/fix-cleaning-tasks-schema.sql',
+          'FILE_NOT_FOUND',
+          500,
+        ),
         { status: 500 },
       );
     }

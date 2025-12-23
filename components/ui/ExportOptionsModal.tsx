@@ -8,6 +8,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Icon } from './Icon';
+import { logger } from '@/lib/logger';
 import { X, Download, FileText, FileSpreadsheet, FileCode, Check } from 'lucide-react';
 import type { TemplateVariant } from '@/lib/exports/template-utils';
 import { getVariantDisplayName, getVariantDescription } from '@/lib/exports/template-utils';
@@ -103,11 +104,20 @@ export function ExportOptionsModal({
   };
 
   const handleExport = async () => {
-    await onExport({
-      format: selectedFormat,
-      variant: selectedVariant,
-      filters: filterValues,
-    });
+    try {
+      await onExport({
+        format: selectedFormat,
+        variant: selectedVariant,
+        filters: filterValues,
+      });
+    } catch (error) {
+      logger.error('[ExportOptionsModal] Error exporting:', {
+        error: error instanceof Error ? error.message : String(error),
+        format: selectedFormat,
+        variant: selectedVariant,
+      });
+      // Error is handled by onExport callback
+    }
   };
 
   const handleFilterChange = (filterId: string, value: any) => {

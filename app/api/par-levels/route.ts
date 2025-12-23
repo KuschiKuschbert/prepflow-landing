@@ -8,6 +8,7 @@ import { deleteParLevel } from './helpers/deleteParLevel';
 import { fetchParLevels } from './helpers/fetchParLevels';
 import { handleParLevelError } from './helpers/handleParLevelError';
 import { updateParLevel } from './helpers/updateParLevel';
+import { createParLevelSchema, updateParLevelSchema } from './helpers/schemas';
 
 export async function GET(request: NextRequest) {
   try {
@@ -57,8 +58,32 @@ export async function POST(request: NextRequest) {
       return authError;
     }
 
-    const body = await request.json();
-    const data = await createParLevel(body);
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Par Levels API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = createParLevelSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const data = await createParLevel(validationResult.data);
 
     return NextResponse.json({
       success: true,
@@ -66,6 +91,10 @@ export async function POST(request: NextRequest) {
       data,
     });
   } catch (err: any) {
+    logger.error('[Par Levels API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/par-levels', method: 'POST' },
+    });
     if (err.status) {
       return NextResponse.json(err, { status: err.status });
     }
@@ -80,16 +109,32 @@ export async function PUT(request: NextRequest) {
       return authError;
     }
 
-    const body = await request.json();
-    const { id, ...updates } = body;
-
-    if (!id) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Par Levels API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        ApiErrorHandler.createError('Par level ID is required', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
+    const validationResult = updateParLevelSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { id, ...updates } = validationResult.data;
     const data = await updateParLevel(id, updates);
 
     return NextResponse.json({
@@ -98,6 +143,10 @@ export async function PUT(request: NextRequest) {
       data,
     });
   } catch (err: any) {
+    logger.error('[Par Levels API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/par-levels', method: 'PUT' },
+    });
     if (err.status) {
       return NextResponse.json(err, { status: err.status });
     }
@@ -129,6 +178,10 @@ export async function DELETE(request: NextRequest) {
       message: 'Par level deleted successfully',
     });
   } catch (err: any) {
+    logger.error('[Par Levels API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/par-levels', method: 'DELETE' },
+    });
     if (err.status) {
       return NextResponse.json(err, { status: err.status });
     }

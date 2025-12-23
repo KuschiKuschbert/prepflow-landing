@@ -3,6 +3,7 @@
  */
 
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 const COMPLIANCE_TYPES_SELECT = `
   *,
@@ -33,6 +34,10 @@ export async function fetchComplianceRecords(startDate: string, endDate: string)
     .order('expiry_date', { ascending: true });
 
   if (complianceError) {
+    logger.warn('[Health Inspector Report] Error fetching compliance records:', {
+      error: complianceError.message,
+      code: (complianceError as any).code,
+    });
     return null;
   }
 

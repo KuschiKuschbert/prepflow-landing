@@ -9,6 +9,8 @@ import { supabaseAdmin } from '@/lib/supabase';
  */
 import { logger } from '@/lib/logger';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 export async function calculateRecipeCost(recipeId: string, quantity: number = 1): Promise<number> {
   if (!supabaseAdmin) {
     logger.error('[calculateRecipeCost] Supabase admin client not available');
@@ -54,7 +56,7 @@ export async function calculateRecipeCost(recipeId: string, quantity: number = 1
         recipeId,
         error: recipeIngredientsError,
       });
-      throw new Error(`Failed to fetch recipe ingredients: ${recipeIngredientsError.message}`);
+      throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
     }
 
     if (!recipeIngredients || recipeIngredients.length === 0) {

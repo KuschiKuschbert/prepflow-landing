@@ -10,6 +10,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Icon } from './Icon';
 import { Share2, Link2, Mail, FileText, ChevronDown, Loader2, Check } from 'lucide-react';
 import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
 import {
   copyToClipboard,
   isWebShareAPIAvailable,
@@ -70,27 +71,42 @@ export function ShareButton({
   const displayText = shareText || `Check out ${title} on PrepFlow`;
 
   const handleCopyLink = async () => {
-    const success = await copyToClipboard(currentUrl);
-    if (success) {
-      setCopied(true);
-      showSuccess('Link copied to clipboard');
-      setTimeout(() => setCopied(false), 2000);
-      setIsOpen(false);
-    } else {
+    try {
+      const success = await copyToClipboard(currentUrl);
+      if (success) {
+        setCopied(true);
+        showSuccess('Link copied to clipboard');
+        setTimeout(() => setCopied(false), 2000);
+        setIsOpen(false);
+      } else {
+        showError('Failed to copy link. Please try again.');
+      }
+    } catch (error) {
+      logger.error('[ShareButton] Error copying link:', {
+        error: error instanceof Error ? error.message : String(error),
+      });
       showError('Failed to copy link. Please try again.');
     }
   };
 
   const handleWebShare = async () => {
-    const success = await shareViaWebAPI({
-      title,
-      text: displayText,
-      url: currentUrl,
-    });
+    try {
+      const success = await shareViaWebAPI({
+        title,
+        text: displayText,
+        url: currentUrl,
+      });
 
-    if (success) {
-      setIsOpen(false);
-    } else {
+      if (success) {
+        setIsOpen(false);
+      } else {
+        // Fallback to copy link
+        handleCopyLink();
+      }
+    } catch (error) {
+      logger.error('[ShareButton] Error sharing via Web API:', {
+        error: error instanceof Error ? error.message : String(error),
+      });
       // Fallback to copy link
       handleCopyLink();
     }

@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import type { SupportTicket } from '../types';
+import { logger } from '@/lib/logger';
 
 /**
  * Hook for linking support tickets to error logs.
@@ -34,6 +35,11 @@ export function useSupportTicketsLink() {
           return null;
         }
       } catch (error) {
+        logger.error('[useSupportTicketsLink.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
         showError('Failed to link error');
         return null;
       } finally {

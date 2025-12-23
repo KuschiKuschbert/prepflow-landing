@@ -5,6 +5,7 @@ import { CopyButton } from '@/components/ui/CopyButton';
 import type { ErrorLog } from '../types';
 import { SEVERITY_COLORS, STATUS_COLORS } from '../constants';
 import { formatErrorDetails } from '../utils';
+import { logger } from '@/lib/logger';
 
 interface ErrorDetailModalProps {
   error: ErrorLog | null;
@@ -41,7 +42,15 @@ export function ErrorDetailModal({
   if (!error) return null;
 
   const handleSaveNotes = async () => {
-    await onSaveNotes(error.id, adminNotes);
+    try {
+      await onSaveNotes(error.id, adminNotes);
+    } catch (err) {
+      logger.error('[ErrorDetailModal] Error saving admin notes:', {
+        error: err instanceof Error ? err.message : String(err),
+        errorId: error.id,
+      });
+      // Error handling is done by parent component, but we log it here for debugging
+    }
   };
 
   return (

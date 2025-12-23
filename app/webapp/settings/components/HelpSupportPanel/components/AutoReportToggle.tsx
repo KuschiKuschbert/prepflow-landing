@@ -1,4 +1,5 @@
 import { Icon } from '@/components/ui/Icon';
+import { Toggle } from '@/components/ui/Toggle';
 import { Shield } from 'lucide-react';
 
 interface AutoReportToggleProps {
@@ -23,20 +24,14 @@ export function AutoReportToggle({ enabled, loading, onToggle }: AutoReportToggl
           issues faster.
         </p>
       </div>
-      <button
-        onClick={() => onToggle(!enabled)}
-        disabled={loading}
-        className={`ml-4 flex h-6 w-11 items-center rounded-full transition-colors disabled:opacity-50 ${
-          enabled ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]' : 'bg-[var(--muted)]'
-        }`}
+      <Toggle
+        checked={enabled}
+        onChange={onToggle}
         aria-label={`${enabled ? 'Disable' : 'Enable'} auto-reporting`}
-      >
-        <span
-          className={`h-4 w-4 transform rounded-full bg-[var(--qr-background)] transition-transform ${
-            enabled ? 'translate-x-6' : 'translate-x-1'
-          }`}
-        />
-      </button>
+        disabled={loading}
+        variant="gradient"
+        className="ml-4"
+      />
     </div>
   );
 }

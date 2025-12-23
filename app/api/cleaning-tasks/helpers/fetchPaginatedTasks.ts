@@ -5,6 +5,8 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 /**
  * Fetches paginated cleaning tasks
  *
@@ -19,7 +21,7 @@ export async function fetchPaginatedTasks(
   pageSize: number,
 ): Promise<{ data: any[]; total: number }> {
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   const from = (page - 1) * pageSize;
@@ -53,7 +55,7 @@ export async function fetchPaginatedTasks(
       context: { endpoint: '/api/cleaning-tasks', operation: 'GET', table: 'cleaning_tasks' },
     });
 
-    throw error;
+    throw ApiErrorHandler.fromSupabaseError(error, 500);
   }
 
   return {

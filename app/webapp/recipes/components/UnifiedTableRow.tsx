@@ -1,8 +1,8 @@
 'use client';
-
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { Check, Edit, Eye, Trash2 } from 'lucide-react';
+import { memo } from 'react';
 import { Dish, DishCostData, Recipe, RecipePriceData } from '../types';
 import { formatRecipeDate } from '../utils/formatDate';
 import { useUnifiedTableRowHandlers } from './UnifiedTableRow/hooks/useUnifiedTableRowHandlers';
@@ -31,7 +31,7 @@ interface UnifiedTableRowProps {
   onEnterSelectionMode?: () => void;
 }
 
-export function UnifiedTableRow({
+function UnifiedTableRowComponent({
   item,
   dishCost,
   recipePrice,
@@ -283,3 +283,17 @@ export function UnifiedTableRow({
     </tr>
   );
 }
+
+// Memoize component to prevent unnecessary re-renders when props don't change
+export const UnifiedTableRow = memo(UnifiedTableRowComponent, (prevProps, nextProps) => {
+  // Only re-render if relevant props actually changed
+  return (
+    prevProps.item.id === nextProps.item.id &&
+    prevProps.item.itemType === nextProps.item.itemType &&
+    prevProps.selectedItems === nextProps.selectedItems &&
+    prevProps.isSelectionMode === nextProps.isSelectionMode &&
+    prevProps.isHighlighting === nextProps.isHighlighting &&
+    prevProps.dishCost === nextProps.dishCost &&
+    prevProps.recipePrice === nextProps.recipePrice
+  );
+});

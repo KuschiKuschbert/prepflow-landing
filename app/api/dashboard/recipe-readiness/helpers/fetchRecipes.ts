@@ -1,6 +1,7 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { isTableNotFound } from './checkTableExists';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Fetch recipes with error handling for missing tables.
@@ -9,7 +10,10 @@ import { isTableNotFound } from './checkTableExists';
  * @throws {Error} If fetch fails (non-table-not-found errors)
  */
 export async function fetchRecipes(): Promise<any[]> {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[API] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
 
   // Test connection first
   try {
@@ -47,11 +51,9 @@ export async function fetchRecipes(): Promise<any[]> {
       hint: errorHint,
     });
 
-    throw new Error(
-      process.env.NODE_ENV === 'development'
-        ? `${errorMessage}${errorHint ? ` (${errorHint})` : ''}${errorCode ? ` [${errorCode}]` : ''}`
-        : 'Could not retrieve recipes from database',
-    );
+    throw ApiErrorHandler.createError(process.env.NODE_ENV === 'development'
+      ? `${errorMessage}${errorHint ? ` (${errorHint})` : ''}${errorCode ? ` [${errorCode}]` : ''}`
+      : 'Could not retrieve recipes from database', 'DATABASE_ERROR', 500);
   }
 
   return recipes || [];

@@ -40,7 +40,10 @@ export async function updateEmployee(
     notes?: string | null;
   },
 ) {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[API] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
 
   const { data, error } = await supabaseAdmin
     .from('employees')

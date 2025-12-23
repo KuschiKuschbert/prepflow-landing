@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 /**
  * Quick temperature log handler.
  */
@@ -51,6 +52,11 @@ export async function handleQuickTempLog({
     }
     return false;
   } catch (error) {
+    logger.error('[quickTempLog.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     showError(
       "Couldn't log that temperature. Give it another shot - sometimes the system needs a moment.",
     );

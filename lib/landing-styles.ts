@@ -134,10 +134,15 @@ export const LANDING_CARD_STYLES = {
  * Container and layout presets
  */
 export const LANDING_LAYOUT = {
-  container: 'mx-auto max-w-7xl px-6',
-  containerNarrow: 'mx-auto max-w-4xl px-6',
-  sectionPadding: 'py-16 tablet:py-20',
-  sectionPaddingLarge: 'py-24 tablet:py-32',
+  container:
+    'mx-auto max-w-7xl px-6 tablet:px-8 desktop:px-10 large-desktop:px-12 xl:px-20 2xl:px-24',
+  containerNarrow: 'mx-auto max-w-4xl px-6 tablet:px-8 desktop:px-10',
+  sectionPadding: 'py-16 tablet:py-20 desktop:py-24 large-desktop:py-28 xl:py-32',
+  sectionPaddingLarge: 'py-24 tablet:py-32 desktop:py-36 large-desktop:py-40 xl:py-44',
+  // Modern large screen optimizations (2024/2025 best practices)
+  contentMaxWidth: 'max-w-[1400px]', // Optimal content width for readability
+  textMaxWidth: 'max-w-prose', // Optimal reading width (~65ch, 60-75 characters)
+  textMaxWidthWide: 'max-w-3xl', // Slightly wider text (~48rem)
 } as const;
 
 /**

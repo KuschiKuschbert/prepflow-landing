@@ -12,6 +12,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { findTargetMenuId } from './helpers/findTargetMenuId';
 import { fetchPerformanceDishes } from './helpers/fetchPerformanceDishes';
 import { generatePerformanceSummary } from './helpers/generatePerformanceSummary';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 export async function GET(request: NextRequest) {
   try {
@@ -117,10 +118,11 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('Error in performance summary API:', error);
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'An unexpected error occurred',
-      },
+      ApiErrorHandler.createError(
+        error instanceof Error ? error.message : 'An unexpected error occurred',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

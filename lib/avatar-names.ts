@@ -2,6 +2,7 @@
  * Avatar naming system for PrepFlow.
  * Provides funny, PrepFlow-style names for avatars based on their character/appearance.
  */
+import { matchFilenameToCategory } from './avatar-names/helpers/matchFilenameToCategory';
 
 /**
  * Naming categories for different avatar types.
@@ -123,32 +124,8 @@ export function generateAvatarName(index: number, originalFilename?: string): st
       name = AVATAR_NAME_CATEGORIES.CHEF_THEMED[0];
   }
 
-  // If we have filename context, try to match it to a more appropriate name
   if (originalFilename) {
-    const lowerFilename = originalFilename.toLowerCase();
-
-    // Match specific characters/items from filename
-    if (lowerFilename.includes('chef') || lowerFilename.includes('cook')) {
-      // Prefer chef-themed names
-      const chefIndex = index % AVATAR_NAME_CATEGORIES.CHEF_THEMED.length;
-      name = AVATAR_NAME_CATEGORIES.CHEF_THEMED[chefIndex];
-    } else if (
-      lowerFilename.includes('cat') ||
-      lowerFilename.includes('dog') ||
-      lowerFilename.includes('animal')
-    ) {
-      // Playful names for animal avatars
-      const punnyIndex = index % AVATAR_NAME_CATEGORIES.PUNNY_FOOD.length;
-      name = AVATAR_NAME_CATEGORIES.PUNNY_FOOD[punnyIndex];
-    } else if (
-      lowerFilename.includes('avocado') ||
-      lowerFilename.includes('chili') ||
-      lowerFilename.includes('pepper')
-    ) {
-      // Food-themed names for food avatars
-      const foodIndex = index % AVATAR_NAME_CATEGORIES.PUNNY_FOOD.length;
-      name = AVATAR_NAME_CATEGORIES.PUNNY_FOOD[foodIndex];
-    }
+    name = matchFilenameToCategory(originalFilename, index, name);
   }
 
   return name;

@@ -28,6 +28,7 @@ export async function populateComplianceData(
 
   if (complianceTypesError) {
     results.errors.push({ table: 'compliance_types', error: complianceTypesError.message });
+    logger.error('Error inserting compliance_types:', complianceTypesError);
   } else {
     results.populated.push({ table: 'compliance_types', count: complianceTypesData?.length || 0 });
   }
@@ -47,6 +48,7 @@ export async function populateKitchenSections(
 
   if (sectionsError) {
     results.errors.push({ table: 'kitchen_sections', error: sectionsError.message });
+    logger.error('Error inserting kitchen_sections:', sectionsError);
   } else {
     results.populated.push({ table: 'kitchen_sections', count: sectionsData?.length || 0 });
   }

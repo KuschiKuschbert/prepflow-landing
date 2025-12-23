@@ -2,6 +2,7 @@ import { auth0 } from '@/lib/auth0';
 import { isEmailAllowed } from '@/lib/allowlist';
 import { isAdmin } from '@/lib/admin-utils';
 import { logger } from '@/lib/logger';
+import { checkRateLimitFromRequest } from '@/lib/rate-limit';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
@@ -18,6 +19,39 @@ export default async function middleware(req: NextRequest) {
     const wwwUrl = new URL(req.url);
     wwwUrl.hostname = 'www.prepflow.org';
     return NextResponse.redirect(wwwUrl, 301); // Permanent redirect
+  }
+
+  // Rate limiting for API routes (skip for public routes)
+  const isApi = pathname.startsWith('/api/');
+  const isPublicApi =
+    pathname.startsWith('/api/leads') ||
+    pathname.startsWith('/api/debug') ||
+    pathname.startsWith('/api/test') ||
+    pathname.startsWith('/api/fix');
+
+  if (isApi && !isPublicApi) {
+    const rateLimitResult = checkRateLimitFromRequest(req);
+    if (!rateLimitResult.allowed) {
+      logger.warn('[Middleware] Rate limit exceeded:', {
+        pathname,
+        retryAfter: rateLimitResult.retryAfter,
+      });
+      return NextResponse.json(
+        {
+          error: 'Too many requests',
+          message: 'Rate limit exceeded. Please try again later.',
+          retryAfter: rateLimitResult.retryAfter,
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(rateLimitResult.retryAfter || 60),
+            'X-RateLimit-Limit': '100',
+            'X-RateLimit-Remaining': '0',
+          },
+        },
+      );
+    }
   }
 
   // CRITICAL: Call Auth0 SDK middleware FIRST for all routes

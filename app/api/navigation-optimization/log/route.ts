@@ -39,7 +39,14 @@ export async function POST(req: NextRequest) {
     }
 
     const userId = user.email;
-    const body = await req.json().catch(() => ({}));
+    let body = {};
+    try {
+      body = await req.json();
+    } catch (err) {
+      logger.warn('[Navigation Optimization Log API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
     const validationResult = navigationLogSchema.safeParse(body);
 
     if (!validationResult.success) {

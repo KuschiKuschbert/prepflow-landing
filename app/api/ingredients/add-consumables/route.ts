@@ -2,6 +2,7 @@ import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 import { cleanSampleConsumablesIngredients } from '@/data/sample-ingredients-consumables';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * POST /api/ingredients/add-consumables
@@ -16,10 +17,7 @@ export async function POST(request: NextRequest) {
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-          message: 'Unable to connect to database',
-        },
+        ApiErrorHandler.createError('Unable to connect to database', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -28,11 +26,18 @@ export async function POST(request: NextRequest) {
 
     // Step 1: Ensure "Restaurant Supplies Co" supplier exists (add if missing, don't delete existing)
     const supplierName = 'Restaurant Supplies Co';
-    const { data: existingSuppliers } = await supabaseAdmin
+    const { data: existingSuppliers, error: suppliersError } = await supabaseAdmin
       .from('suppliers')
       .select('id, supplier_name')
       .eq('supplier_name', supplierName)
       .maybeSingle();
+
+    if (suppliersError && suppliersError.code !== 'PGRST116') {
+      logger.warn('[Add Consumables] Error checking for existing supplier:', {
+        error: suppliersError.message,
+        code: (suppliersError as any).code,
+      });
+    }
 
     let supplierId: string | null = null;
 
@@ -64,9 +69,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 2: Check for existing ingredients by name (case-insensitive)
-    const { data: existingIngredients } = await supabaseAdmin
+    const { data: existingIngredients, error: ingredientsError } = await supabaseAdmin
       .from('ingredients')
       .select('ingredient_name');
+
+    if (ingredientsError) {
+      logger.warn('[Add Consumables] Error fetching existing ingredients:', {
+        error: ingredientsError.message,
+        code: (ingredientsError as any).code,
+      });
+      // Continue with empty array if fetch fails
+    }
 
     const existingIngredientNames = new Set(
       (existingIngredients || []).map(i => i.ingredient_name?.toLowerCase().trim()).filter(Boolean),
@@ -98,11 +111,9 @@ export async function POST(request: NextRequest) {
     if (insertError) {
       logger.error('Error inserting consumables:', insertError);
       return NextResponse.json(
-        {
-          error: 'Failed to add consumables',
-          message: insertError.message,
+        ApiErrorHandler.fromSupabaseError(insertError, 500, 'Failed to add consumables', {
           details: 'Some consumables may have been added before the error occurred',
-        },
+        }),
         { status: 500 },
       );
     }
@@ -127,11 +138,11 @@ export async function POST(request: NextRequest) {
   } catch (err) {
     logger.error('Unexpected error adding consumables:', err);
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: 'An unexpected error occurred while adding consumables',
-        details: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        err instanceof Error ? err.message : 'Unknown error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

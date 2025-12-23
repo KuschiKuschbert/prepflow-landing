@@ -290,7 +290,6 @@ export function CSVImportModal<T = any>({
                 />
               </>
             )}
-
             <CSVImportInstructions instructions={config.instructions} />
           </div>
         </div>

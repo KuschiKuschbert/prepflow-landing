@@ -53,7 +53,14 @@ export async function PUT(req: NextRequest) {
     }
 
     const userEmail = user.email;
-    const body = await req.json().catch(() => ({}));
+    let body = {};
+    try {
+      body = await req.json();
+    } catch (err) {
+      logger.warn('[User Avatar API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
     const validationResult = avatarSchema.safeParse(body);
 
     if (!validationResult.success) {

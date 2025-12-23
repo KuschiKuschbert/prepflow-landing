@@ -5,6 +5,7 @@ import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { ExternalLink, Sparkles, TrendingDown, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { logger } from '@/lib/logger';
 
 interface PerformanceSummary {
   topSellers: Array<{
@@ -63,6 +64,11 @@ export default function ChefPerformanceInsights() {
           throw new Error(result.message || 'Failed to load performance data');
         }
       } catch (err) {
+        logger.error('[ChefPerformanceInsights.tsx] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
         setError(err instanceof Error ? err.message : 'Failed to load performance insights');
       } finally {
         setLoading(false);

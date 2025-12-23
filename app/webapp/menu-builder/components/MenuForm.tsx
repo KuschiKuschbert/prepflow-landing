@@ -4,6 +4,7 @@ import { Icon } from '@/components/ui/Icon';
 import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Menu } from '../types';
+import { logger } from '@/lib/logger';
 
 interface MenuFormProps {
   menu?: Menu | null;
@@ -65,6 +66,11 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
         setLoading(false);
       }
     } catch (err) {
+      logger.error('[MenuForm.tsx] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       setError('Failed to save menu. Please check your connection and try again.');
       setLoading(false);
     }

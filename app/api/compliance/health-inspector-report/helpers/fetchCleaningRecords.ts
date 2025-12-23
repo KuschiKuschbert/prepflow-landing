@@ -3,6 +3,7 @@
  */
 
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 const CLEANING_AREAS_SELECT = `
   *,
@@ -33,6 +34,10 @@ export async function fetchCleaningRecords(startDate: string, endDate: string) {
     .limit(500);
 
   if (cleaningError) {
+    logger.warn('[Health Inspector Report] Error fetching cleaning records:', {
+      error: cleaningError.message,
+      code: (cleaningError as any).code,
+    });
     return null;
   }
 

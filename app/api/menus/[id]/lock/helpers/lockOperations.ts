@@ -17,7 +17,7 @@ export async function checkLockStatus(
   menuId: string,
 ): Promise<{ isLocked: boolean; error: NextResponse | null }> {
   if (!supabaseAdmin) {
-    throw new Error('Data connection not available');
+    throw ApiErrorHandler.createError('Data connection not available', 'DATABASE_ERROR', 500);
   }
 
   const migrationError = ApiErrorHandler.createError(
@@ -52,7 +52,7 @@ export async function lockMenu(
   userEmail: string,
 ): Promise<{ menu: any | null; error: NextResponse | null }> {
   if (!supabaseAdmin) {
-    throw new Error('Data connection not available');
+    throw ApiErrorHandler.createError('Data connection not available', 'DATABASE_ERROR', 500);
   }
 
   const migrationError = ApiErrorHandler.createError(
@@ -136,7 +136,7 @@ export async function unlockMenu(
   menuId: string,
 ): Promise<{ menu: any | null; error: NextResponse | null }> {
   if (!supabaseAdmin) {
-    throw new Error('Data connection not available');
+    throw ApiErrorHandler.createError('Data connection not available', 'DATABASE_ERROR', 500);
   }
 
   const { data: updatedMenu, error: updateError } = await supabaseAdmin

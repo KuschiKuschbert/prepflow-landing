@@ -23,6 +23,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import type { LucideIcon } from 'lucide-react';
+import { logger } from '@/lib/logger';
 
 interface NavItem {
   href: string;
@@ -80,7 +81,10 @@ export default function AdminNavigation() {
 
         setUnresolvedTicketsCount(count);
       } catch (error) {
-        // Silently fail - don't break navigation
+        // Don't break navigation, but log for debugging
+        logger.dev('[AdminNavigation] Error fetching unresolved tickets count (non-blocking):', {
+          error: error instanceof Error ? error.message : String(error),
+        });
       }
     }
 
@@ -123,7 +127,10 @@ export default function AdminNavigation() {
           setUnresolvedErrorsCount(count);
         }
       } catch (error) {
-        // Silently fail - don't break navigation
+        // Don't break navigation, but log for debugging
+        logger.dev('[AdminNavigation] Error fetching unresolved errors count (non-blocking):', {
+          error: error instanceof Error ? error.message : String(error),
+        });
       }
     }
 

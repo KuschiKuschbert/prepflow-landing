@@ -1,5 +1,5 @@
 import { supabaseAdmin } from '@/lib/supabase';
-
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 interface CreatePrepListParams {
   userId: string;
@@ -16,7 +16,7 @@ interface CreatePrepListParams {
 
 export async function createPrepList(params: CreatePrepListParams) {
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   const { userId, kitchenSectionId, name, notes, items } = params;
@@ -37,7 +37,12 @@ export async function createPrepList(params: CreatePrepListParams) {
     .single();
 
   if (prepError) {
-    throw new Error(`Failed to create prep list: ${prepError.message}`);
+    logger.error('[Prep Lists API] Database error creating prep list:', {
+      error: prepError.message,
+      code: (prepError as any).code,
+      context: { endpoint: '/api/prep-lists', operation: 'POST', table: 'prep_lists' },
+    });
+    throw ApiErrorHandler.fromSupabaseError(prepError, 500);
   }
 
   // Add items if provided
@@ -53,7 +58,11 @@ export async function createPrepList(params: CreatePrepListParams) {
     const { error: itemsError } = await supabaseAdmin.from('prep_list_items').insert(prepItems);
 
     if (itemsError) {
-      logger.error('Error creating prep list items:', itemsError);
+      logger.warn('[Prep Lists API] Warning: Could not create prep list items:', {
+        error: itemsError.message,
+        code: (itemsError as any).code,
+        prepListId: prepList.id,
+      });
       // Don't fail the entire request, just log the error
     }
   }

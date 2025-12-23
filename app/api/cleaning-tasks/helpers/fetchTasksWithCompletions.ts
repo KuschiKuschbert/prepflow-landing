@@ -5,6 +5,8 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 /**
  * Fetches cleaning tasks with completions for a date range
  *
@@ -34,11 +36,11 @@ export async function fetchTasksWithCompletions(
       context: { endpoint: '/api/cleaning-tasks', operation: 'GET', table: 'cleaning_tasks' },
     });
 
-    throw tasksError;
+    throw ApiErrorHandler.fromSupabaseError(tasksError, 500);
   }
 
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   // Fetch completions for date range

@@ -53,6 +53,7 @@ export async function POST(req: NextRequest) {
       logger.warn('[Billing API] User has no subscription:', {
         userEmail,
         error: userError?.message,
+        code: (userError as any)?.code,
       });
       return NextResponse.json(
         ApiErrorHandler.createError('No subscription found', 'SUBSCRIPTION_NOT_FOUND', 404),
@@ -68,6 +69,10 @@ export async function POST(req: NextRequest) {
       subscription = await stripe.subscriptions.retrieve(subscriptionId);
     } catch (error: any) {
       if (error.code === 'resource_missing') {
+        logger.warn('[Billing API] Subscription not found in Stripe:', {
+          subscriptionId,
+          userEmail,
+        });
         return NextResponse.json(
           ApiErrorHandler.createError(
             'Subscription not found in Stripe',
@@ -124,6 +129,7 @@ export async function POST(req: NextRequest) {
       if (updateError) {
         logger.error('[Billing API] Failed to update subscription in database:', {
           error: updateError.message,
+          code: (updateError as any).code,
           userEmail,
         });
       }

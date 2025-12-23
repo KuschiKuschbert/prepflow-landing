@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { z } from 'zod';
+
+const assignDishSectionSchema = z.object({
+  dishId: z.string().min(1, 'Dish ID is required'),
+  sectionId: z.string().nullable().optional(),
+});
 
 /**
  * POST /api/assign-dish-section
@@ -15,24 +22,36 @@ import { logger } from '@/lib/logger';
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { dishId, sectionId } = body;
-
-    if (!dishId) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Assign Dish Section API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        {
-          error: 'Missing required fields',
-          message: 'Dish ID is required',
-        },
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
+    const validationResult = assignDishSectionSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { dishId, sectionId } = validationResult.data;
+
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -61,10 +80,7 @@ export async function POST(request: NextRequest) {
     if (error) {
       logger.error('Error assigning dish to section:', error);
       return NextResponse.json(
-        {
-          error: 'Failed to assign dish to section',
-          message: 'Could not update dish section assignment',
-        },
+        ApiErrorHandler.fromSupabaseError(error, 500),
         { status: 500 },
       );
     }
@@ -77,10 +93,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     logger.error('Assign dish section API error:', error);
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: 'An unexpected error occurred',
-      },
+      ApiErrorHandler.createError('An unexpected error occurred', 'SERVER_ERROR', 500),
       { status: 500 },
     );
   }

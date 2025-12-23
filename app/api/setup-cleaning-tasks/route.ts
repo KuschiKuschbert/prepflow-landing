@@ -4,6 +4,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { logger } from '@/lib/logger';
 import { validateCleaningTables } from './helpers/validateCleaningTables';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * GET /api/setup-cleaning-tasks
@@ -20,11 +21,17 @@ export async function GET() {
     try {
       sqlMigration = readFileSync(sqlPath, 'utf-8');
     } catch (err) {
+      logger.error('[route.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       return NextResponse.json(
-        {
-          error: 'Migration file not found',
-          message: 'Could not read migrations/fix-cleaning-tasks-schema.sql',
-        },
+        ApiErrorHandler.createError(
+          'Could not read migrations/fix-cleaning-tasks-schema.sql',
+          'FILE_NOT_FOUND',
+          500,
+        ),
         { status: 500 },
       );
     }

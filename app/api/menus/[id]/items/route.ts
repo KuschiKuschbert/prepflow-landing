@@ -2,43 +2,67 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { z } from 'zod';
+
+const addMenuItemSchema = z.object({
+  dish_id: z.string().optional(),
+  recipe_id: z.string().optional(),
+  category: z.string().optional(),
+  position: z.number().int().nonnegative().optional(),
+}).refine(data => data.dish_id || data.recipe_id, {
+  message: 'Either dish_id or recipe_id must be provided',
+  path: ['dish_id'],
+}).refine(data => !(data.dish_id && data.recipe_id), {
+  message: 'Cannot specify both dish_id and recipe_id',
+  path: ['dish_id'],
+});
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
     const menuId = id;
-    const body = await request.json();
-    const { dish_id, recipe_id, category, position } = body;
 
-    // Must have either dish_id or recipe_id, but not both
-    if (!menuId || (!dish_id && !recipe_id)) {
+    if (!menuId) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Missing required fields',
-          message: 'Menu id and either dish id or recipe id are required',
-        },
+        ApiErrorHandler.createError('Menu ID is required', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
-    if (dish_id && recipe_id) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Menu Items API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Invalid request',
-          message: 'Cannot specify both dish_id and recipe_id',
-        },
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
+
+    const validationResult = addMenuItemSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { dish_id, recipe_id, category, position } = validationResult.data;
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Database connection not available',
-          message: 'Database connection could not be established',
-        },
+        ApiErrorHandler.createError(
+          'Database connection could not be established',
+          'DATABASE_ERROR',
+          500,
+        ),
         { status: 500 },
       );
     }
@@ -46,7 +70,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     // If position not provided, get the next position in the category
     let itemPosition = position;
     if (itemPosition === undefined) {
-      const { data: existingItems } = await supabaseAdmin
+      const { data: existingItems, error: positionError } = await supabaseAdmin
         .from('menu_items')
         .select('position')
         .eq('menu_id', menuId)
@@ -54,7 +78,17 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
         .order('position', { ascending: false })
         .limit(1);
 
-      itemPosition = existingItems && existingItems.length > 0 ? existingItems[0].position + 1 : 0;
+      if (positionError) {
+        logger.warn('[Menu Items API] Error fetching existing items for position:', {
+          error: positionError.message,
+          menuId,
+          category,
+        });
+        // Default to 0 if we can't fetch existing items
+        itemPosition = 0;
+      } else {
+        itemPosition = existingItems && existingItems.length > 0 ? existingItems[0].position + 1 : 0;
+      }
     }
 
     const insertData: {

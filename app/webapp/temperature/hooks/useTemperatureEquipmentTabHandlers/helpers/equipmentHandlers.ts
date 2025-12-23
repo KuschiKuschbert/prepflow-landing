@@ -3,6 +3,7 @@
  */
 import type { TemperatureEquipment } from '../../../types';
 import { handleGenerateSampleData } from '../../utils/generateSampleDataHandler';
+import { logger } from '@/lib/logger';
 
 export function createEquipmentHandlersHelper(
   equipment: TemperatureEquipment[],

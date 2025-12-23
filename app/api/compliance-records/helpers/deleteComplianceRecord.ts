@@ -10,7 +10,10 @@ import { supabaseAdmin } from '@/lib/supabase';
  * @throws {Error} If delete fails
  */
 export async function deleteComplianceRecord(id: string): Promise<void> {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[Compliance Records API] Database connection not available for deleteComplianceRecord');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
 
   const { error } = await supabaseAdmin.from('compliance_records').delete().eq('id', id);
 

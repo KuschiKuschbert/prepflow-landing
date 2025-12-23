@@ -1,12 +1,20 @@
+/**
+ * Recipe API Routes (by ID)
+ *
+ * 📚 Square Integration: This route automatically triggers Square sync hooks after recipe
+ * update operations. See `docs/SQUARE_API_REFERENCE.md` (Automatic Sync section) for details.
+ */
+
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { validateRecipeDelete } from './helpers/validateRecipeDelete';
 import { validateRecipeUpdate } from './helpers/validateRecipeUpdate';
-import { deleteRecipeAndCleanup } from './helpers/deleteRecipeAndCleanup';
 import { enrichRecipeWithAllergens } from './helpers/enrichRecipeWithAllergens';
 import { handleRecipeUpdate } from './helpers/handleRecipeUpdate';
+import { triggerRecipeSync } from '@/lib/square/sync/hooks';
+import { updateRecipeSchema } from './helpers/schemas';
+import { handleDeleteRecipe } from './helpers/deleteRecipeHandler';
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -63,13 +71,50 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
   try {
     const { id } = await context.params;
     const recipeId = id;
-    const body = await request.json();
-    const { name } = body;
+
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Recipes API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = updateRecipeSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { name } = validationResult.data;
 
     const validationError = await validateRecipeUpdate(recipeId, name);
     if (validationError) return validationError;
 
-    const updatedRecipe = await handleRecipeUpdate(recipeId, body, request);
+    const updatedRecipe = await handleRecipeUpdate(recipeId, validationResult.data, request);
+
+    // Trigger Square sync hook (non-blocking)
+    (async () => {
+      try {
+        await triggerRecipeSync(request, recipeId, 'update');
+      } catch (err) {
+        logger.error('[Recipes API] Error triggering Square sync:', {
+          error: err instanceof Error ? err.message : String(err),
+          recipeId,
+        });
+      }
+    })();
 
     return NextResponse.json({
       success: true,
@@ -88,70 +133,6 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 }
 
 export async function DELETE(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
-  try {
-    const { id } = await context.params;
-    const recipeId = id;
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
-    const validationError = await validateRecipeDelete(recipeId);
-    if (validationError) return validationError;
-
-    try {
-      await deleteRecipeAndCleanup(recipeId);
-    } catch (error: any) {
-      logger.error('[RecipeDelete] Error deleting recipe:', {
-        error: error.message,
-        code: error.code,
-        context: { endpoint: '/api/recipes/[id]', operation: 'DELETE', recipeId },
-      });
-
-      if (
-        error.message?.includes('foreign key constraint') ||
-        error.message?.includes('menu_dishes') ||
-        error.message?.includes('dish_recipes') ||
-        error.code === '23503'
-      ) {
-        return NextResponse.json(
-          ApiErrorHandler.createError(
-            'Recipe is used in dishes. Please remove it from all dishes first.',
-            'FOREIGN_KEY_VIOLATION',
-            400,
-          ),
-          { status: 400 },
-        );
-      }
-
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
-      return NextResponse.json(apiError, { status: apiError.status || 500 });
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: 'Recipe deleted successfully',
-    });
-  } catch (err) {
-    logger.error('[Recipes API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-      context: { endpoint: '/api/recipes/[id]', method: 'DELETE' },
-    });
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? err instanceof Error
-            ? err.message
-            : 'Unknown error'
-          : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
-  }
+  const { id } = await context.params;
+  return handleDeleteRecipe(id);
 }

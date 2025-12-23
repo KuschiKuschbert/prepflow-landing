@@ -178,12 +178,16 @@ export default function SuppliersPage() {
               });
             }
           } catch (err) {
+            const errorMessage = err instanceof Error ? err.message : 'Failed to import supplier';
+            logger.error(`[Suppliers Import] Failed to import row ${i + 1}:`, {
+              error: errorMessage,
+              err,
+            });
             failCount++;
             errors.push({
               row: i + 1,
-              error: err instanceof Error ? err.message : 'Failed to import supplier',
+              error: errorMessage,
             });
-            logger.error(`[Suppliers Import] Failed to import row ${i + 1}:`, err);
           }
         }
 

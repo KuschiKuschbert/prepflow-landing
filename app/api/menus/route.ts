@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
+
+const createMenuSchema = z.object({
+  menu_name: z.string().min(1, 'Menu name is required'),
+  description: z.string().optional(),
+});
 
 export async function GET(request: NextRequest) {
   try {
@@ -35,10 +41,17 @@ export async function GET(request: NextRequest) {
     // Fetch menu items count for each menu
     const menusWithCounts = await Promise.all(
       (menus || []).map(async menu => {
-        const { count: itemsCount } = await supabaseAdmin!
+        const { count: itemsCount, error: itemsError } = await supabaseAdmin!
           .from('menu_items')
           .select('*', { count: 'exact', head: true })
           .eq('menu_id', menu.id);
+
+        if (itemsError) {
+          logger.warn('[Menus API] Error fetching menu items count:', {
+            error: itemsError.message,
+            menuId: menu.id,
+          });
+        }
 
         return {
           ...menu,
@@ -76,15 +89,32 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { menu_name, description } = body;
-
-    if (!menu_name) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Menus API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        ApiErrorHandler.createError('Menu name is required', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
+
+    const validationResult = createMenuSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { menu_name, description } = validationResult.data;
 
     if (!supabaseAdmin) {
       return NextResponse.json(

@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Dish, Recipe } from '../../types';
 import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
 
 type UnifiedItem = (Dish & { itemType: 'dish' }) | (Recipe & { itemType: 'recipe' });
 
@@ -69,6 +70,11 @@ export function useDishesClientDelete({
       setShowDeleteConfirm(false);
       setItemToDelete(null);
     } catch (err) {
+      logger.error('[useDishesClientDelete.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       // Revert optimistic update on error
       if (itemType === 'dish') {
         setDishes(originalDishes);

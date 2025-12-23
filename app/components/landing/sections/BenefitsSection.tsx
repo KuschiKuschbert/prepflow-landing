@@ -53,7 +53,7 @@ export function BenefitsSection() {
             {t('benefits.title', 'What You Get')}
           </h3>
         </ScrollReveal>
-        <div className={`${LANDING_GRIDS['1-2-3']} gap-12`}>
+        <div className="grid gap-12 tablet:gap-10 desktop:gap-12 large-desktop:gap-14 xl:gap-16 [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] desktop:[grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]">
           {benefits.map((benefit, index) => (
             <ScrollReveal
               key={`benefit-${index}-${benefit.title}`}

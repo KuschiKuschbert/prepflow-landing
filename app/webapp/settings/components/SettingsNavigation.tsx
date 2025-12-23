@@ -5,10 +5,24 @@ import { MobileMenuButton } from './SettingsNavigation/components/MobileMenuButt
 import { NavigationSidebar } from './SettingsNavigation/components/NavigationSidebar';
 import { useKeyboardNavigation } from './SettingsNavigation/hooks/useKeyboardNavigation';
 import { useSettingsNavigation } from './SettingsNavigation/hooks/useSettingsNavigation';
-import { categories } from './SettingsNavigation/navItems';
+import { categories as allCategories } from './SettingsNavigation/navItems';
+import { useIsAdmin } from '@/hooks/useIsAdmin';
+import { useMemo } from 'react';
 
 export default function SettingsNavigation() {
   const pathname = usePathname();
+  const { isAdmin } = useIsAdmin();
+
+  // Filter admin-only items if user is not admin
+  const categories = useMemo(() => {
+    if (isAdmin) {
+      return allCategories;
+    }
+    return allCategories.map(category => ({
+      ...category,
+      items: category.items.filter(item => !item.adminOnly),
+    })).filter(category => category.items.length > 0);
+  }, [isAdmin]);
 
   const {
     sidebarOpen,

@@ -1,9 +1,10 @@
 import { useNotification } from '@/contexts/NotificationContext';
-import { logger } from '@/lib/logger';
 import { useCallback, useState } from 'react';
 import type { Shift } from '../../../types';
 import { handleCreateShiftHelper } from './useRosterShiftManagement/helpers/handleCreateShift';
+import { handleDeleteShiftHelper } from './useRosterShiftManagement/helpers/handleDeleteShift';
 import { handleUpdateShiftHelper } from './useRosterShiftManagement/helpers/handleUpdateShift';
+import { validateShiftCreation } from './useRosterShiftManagement/helpers/validateShiftCreation';
 
 interface UseRosterShiftManagementProps {
   shifts: Shift[];
@@ -42,15 +43,9 @@ export function useRosterShiftManagement({
     async (shiftData: Partial<Shift>) => {
       const isEdit = !!editingShiftId;
       if (!isEdit) {
-        const dateStr = shiftData.shift_date!;
-        const existingShifts = shifts.filter(
-          s =>
-            s.employee_id === shiftData.employee_id &&
-            s.shift_date === dateStr &&
-            s.id !== editingShiftId,
-        );
-        if (existingShifts.length >= 2) {
-          showError('Maximum 2 shifts per day allowed');
+        const validation = validateShiftCreation({ shiftData, shifts, editingShiftId });
+        if (!validation.isValid) {
+          showError(validation.error!);
           return;
         }
       }
@@ -103,32 +98,18 @@ export function useRosterShiftManagement({
 
   const handleDeleteShift = useCallback(
     async (shiftId: string) => {
-      const shiftToDelete = shifts.find(s => s.id === shiftId);
-      if (!shiftToDelete) return;
-      removeShift(shiftId);
-      try {
-        const response = await fetch(`/api/roster/shifts/${shiftId}`, { method: 'DELETE' });
-        const result = await response.json();
-        if (response.ok) {
-          showSuccess('Shift deleted successfully');
-          removeValidationWarning(shiftId);
-        } else {
-          addShift(shiftToDelete);
-          showError(result.error || result.message || 'Failed to delete shift');
-        }
-      } catch (err) {
-        addShift(shiftToDelete);
-        logger.error('Failed to delete shift', err);
-        showError('Failed to delete shift. Give it another go, chef.');
-      }
+      await handleDeleteShiftHelper({
+        shiftId,
+        shifts,
+        removeShift,
+        addShift,
+        showSuccess,
+        showError,
+        removeValidationWarning,
+      });
     },
     [shifts, removeShift, addShift, showSuccess, showError, removeValidationWarning],
   );
 
-  return {
-    handleCreateShift,
-    handleDeleteShift,
-    loading,
-    setLoading,
-  };
+  return { handleCreateShift, handleDeleteShift, loading, setLoading };
 }

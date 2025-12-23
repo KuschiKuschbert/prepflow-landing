@@ -15,11 +15,18 @@ async function isCacheInvalidated(): Promise<boolean> {
   if (!supabaseAdmin) return false;
 
   try {
-    const { data } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin
       .from('tier_config_cache')
       .select('invalidated_at')
       .eq('cache_key', 'tier_configs')
       .maybeSingle();
+
+    if (error && error.code !== 'PGRST116') {
+      logger.warn('[Tier Config DB] Error checking cache invalidation:', {
+        error: error.message,
+      });
+      return false;
+    }
 
     if (!data) return false;
 
@@ -176,13 +183,19 @@ export async function invalidateTierCache(): Promise<void> {
 
   try {
     // Update cache invalidation timestamp
-    await supabaseAdmin.from('tier_config_cache').upsert(
+    const { error: upsertError } = await supabaseAdmin.from('tier_config_cache').upsert(
       {
         cache_key: 'tier_configs',
         invalidated_at: new Date().toISOString(),
       },
       { onConflict: 'cache_key' },
     );
+
+    if (upsertError) {
+      logger.warn('[Tier Config DB] Error updating cache invalidation:', {
+        error: upsertError.message,
+      });
+    }
 
     // Clear in-memory cache
     tierConfigCache.clear();
@@ -198,7 +211,3 @@ export async function invalidateTierCache(): Promise<void> {
     featureMappingCache.clear();
   }
 }
-
-
-
-

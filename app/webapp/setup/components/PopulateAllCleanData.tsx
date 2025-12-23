@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { BulkAllergenDetection } from '../../ingredients/components/BulkAllergenDetection';
 import { Icon } from '@/components/ui/Icon';
 import { Info, AlertTriangle, CheckCircle2, Sparkles, Check } from 'lucide-react';
+import { logger } from '@/lib/logger';
 
 interface PopulateAllCleanDataProps {
   onDataPopulated?: () => void;
@@ -67,6 +68,11 @@ export default function PopulateAllCleanData({ onDataPopulated }: PopulateAllCle
         setError(data.error || 'Failed to populate clean test data');
       }
     } catch (err) {
+      logger.error('[PopulateAllCleanData.tsx] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       setError('Network error occurred');
     } finally {
       setLoading(false);

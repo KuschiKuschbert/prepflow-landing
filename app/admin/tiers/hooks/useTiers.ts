@@ -1,6 +1,7 @@
 import { useNotification } from '@/contexts/NotificationContext';
 import { useCallback, useState } from 'react';
 import type { TierConfiguration } from '../types';
+import { logger } from '@/lib/logger';
 
 /**
  * Hook for managing tier configurations.
@@ -34,6 +35,11 @@ export function useTiers() {
         showError(errorMessage);
       }
     } catch (error) {
+      logger.error('[useTiers.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch tiers';
       setError(errorMessage);
       showError(errorMessage);
@@ -59,6 +65,11 @@ export function useTiers() {
         showError(errorData.error || 'Failed to update tier');
         return false;
       } catch (error) {
+        logger.error('[useTiers.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
         showError('Failed to update tier');
         return false;
       }
@@ -81,6 +92,11 @@ export function useTiers() {
         showError(errorData.error || 'Failed to disable tier');
         return false;
       } catch (error) {
+        logger.error('[useTiers.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
         showError('Failed to disable tier');
         return false;
       }

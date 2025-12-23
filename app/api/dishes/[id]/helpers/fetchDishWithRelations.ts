@@ -12,7 +12,10 @@ import { fetchDishRecipes } from './fetchDishRecipes';
  * @throws {Error} If dish not found or database error
  */
 export async function fetchDishWithRelations(dishId: string) {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[API] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
 
   // Fetch dish
   const { data: dish, error: dishError } = await supabaseAdmin

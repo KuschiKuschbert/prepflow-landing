@@ -7,6 +7,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { buildCleaningTasksQuery } from './buildCleaningTasksQuery';
 import { fetchTasksWithCompletions } from './fetchTasksWithCompletions';
 import { fetchPaginatedTasks } from './fetchPaginatedTasks';
+import { logger } from '@/lib/logger';
 
 export interface GetRequestParams {
   startDate: string | null;
@@ -53,6 +54,11 @@ export async function handleGetRequest(params: GetRequestParams): Promise<NextRe
         total: tasksWithCompletions.length,
       });
     } catch (err: any) {
+      logger.error('[handleGetRequest.ts] Error in catch block:', {
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
+
       const apiError = ApiErrorHandler.fromSupabaseError(err, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
@@ -68,11 +74,12 @@ export async function handleGetRequest(params: GetRequestParams): Promise<NextRe
       total,
     });
   } catch (err: any) {
+    logger.error('[handleGetRequest.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     const apiError = ApiErrorHandler.fromSupabaseError(err, 500);
     return NextResponse.json(apiError, { status: apiError.status || 500 });
   }
 }
-
-
-
-

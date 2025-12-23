@@ -1,12 +1,21 @@
+/**
+ * Ingredients API Routes
+ *
+ * 📚 Square Integration: This route automatically triggers Square sync hooks after ingredient
+ * create/update operations. See `docs/SQUARE_API_REFERENCE.md` (Automatic Sync section) for details.
+ */
+
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserEmail } from '@/lib/auth0-api-helpers';
 import { createIngredient } from './helpers/createIngredient';
-import { deleteIngredient } from './helpers/deleteIngredient';
 import { handleIngredientError } from './helpers/handleIngredientError';
 import { updateIngredient } from './helpers/updateIngredient';
+import { triggerIngredientSync } from '@/lib/square/sync/hooks';
+import { createIngredientSchema, updateIngredientSchema } from './helpers/schemas';
+import { handleDeleteIngredient } from './helpers/deleteIngredientHandler';
 
 export async function GET(request: NextRequest) {
   try {
@@ -47,20 +56,64 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (err) {
+    logger.error('[Ingredients API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/ingredients', method: 'GET' },
+    });
     return handleIngredientError(err, 'GET');
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const data = await createIngredient(body);
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Ingredients API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = createIngredientSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const data = await createIngredient(validationResult.data);
+
+    // Trigger Square sync hook (non-blocking)
+    (async () => {
+      try {
+        await triggerIngredientSync(request, data.id, 'create');
+      } catch (err) {
+        logger.error('[Ingredients API] Error triggering Square sync:', {
+          error: err instanceof Error ? err.message : String(err),
+          ingredientId: data.id,
+        });
+      }
+    })();
 
     return NextResponse.json({
       success: true,
       data,
     });
   } catch (err: any) {
+    logger.error('[Ingredients API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/ingredients', method: 'POST' },
+    });
     if (err.status) {
       return NextResponse.json(err, { status: err.status });
     }
@@ -70,15 +123,32 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { id, ...updates } = body;
-
-    if (!id) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Ingredients API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        ApiErrorHandler.createError('Ingredient ID is required', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
+
+    const validationResult = updateIngredientSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { id, ...updates } = validationResult.data;
 
     // Get user email for change tracking
     let userEmail: string | null = null;
@@ -91,11 +161,27 @@ export async function PUT(request: NextRequest) {
 
     const data = await updateIngredient(id, updates, userEmail);
 
+    // Trigger Square sync hook (non-blocking)
+    (async () => {
+      try {
+        await triggerIngredientSync(request, id, 'update');
+      } catch (err) {
+        logger.error('[Ingredients API] Error triggering Square sync:', {
+          error: err instanceof Error ? err.message : String(err),
+          ingredientId: id,
+        });
+      }
+    })();
+
     return NextResponse.json({
       success: true,
       data,
     });
   } catch (err: any) {
+    logger.error('[Ingredients API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/ingredients', method: 'PUT' },
+    });
     if (err.status) {
       return NextResponse.json(err, { status: err.status });
     }
@@ -104,27 +190,5 @@ export async function PUT(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
-
-    if (!id) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Ingredient ID is required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    await deleteIngredient(id);
-
-    return NextResponse.json({
-      success: true,
-      message: 'Ingredient deleted successfully',
-    });
-  } catch (err: any) {
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
-    }
-    return handleIngredientError(err, 'DELETE');
-  }
+  return handleDeleteIngredient(request);
 }

@@ -7,8 +7,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import type { BackupFile } from '@/lib/backup/types';
-
 /**
  * Lists user's backups.
  *
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
   try {
     const user = await requireAuth(request);
     if (!user?.email) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
     }
 
     const userId = user.email;
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Backup List] Error fetching backups:', error);
       return NextResponse.json(
-        { error: 'Failed to fetch backups', message: error.message },
+        ApiErrorHandler.fromSupabaseError(error, 500),
         { status: 500 },
       );
     }
@@ -59,7 +59,11 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     logger.error('[Backup List] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to list backups', message: error.message },
+      ApiErrorHandler.createError(
+        error?.message || 'Failed to list backups',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

@@ -1,6 +1,7 @@
 import { auth0 } from '@/lib/auth0';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Test endpoint to check Auth0 SDK configuration
@@ -41,9 +42,11 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('[Auth Test] Error:', error);
     return NextResponse.json(
-      {
-        error: error instanceof Error ? error.message : String(error),
-      },
+      ApiErrorHandler.createError(
+        error instanceof Error ? error.message : String(error),
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

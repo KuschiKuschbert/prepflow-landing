@@ -11,6 +11,7 @@ import { logger } from '@/lib/logger';
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 export async function GET() {
   try {
@@ -26,7 +27,7 @@ export async function GET() {
 
     // Check if file exists
     if (!fs.existsSync(backgroundPath)) {
-      return NextResponse.json({ error: 'Background not found' }, { status: 404 });
+      return NextResponse.json(ApiErrorHandler.createError('Background not found', 'NOT_FOUND', 404), { status: 404 });
     }
 
     // Read the file
@@ -46,6 +47,6 @@ export async function GET() {
     });
   } catch (error) {
     logger.error('Error serving background:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
   }
 }

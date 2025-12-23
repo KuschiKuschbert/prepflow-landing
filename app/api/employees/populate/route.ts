@@ -1,6 +1,7 @@
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { populateStaff } from '@/lib/populate-helpers';
 
 /**
@@ -10,7 +11,7 @@ import { populateStaff } from '@/lib/populate-helpers';
 export async function POST(request: NextRequest) {
   try {
     if (process.env.NODE_ENV === 'production') {
-      return NextResponse.json({ error: 'Not available in production' }, { status: 403 });
+      return NextResponse.json(ApiErrorHandler.createError('Not available in production', 'FORBIDDEN', 403), { status: 403 });
     }
 
     const supabaseAdmin = createSupabaseAdmin();

@@ -75,5 +75,5 @@ export async function handlePricingFallback(
     }
   }
 
-  throw new Error('Unexpected state in pricing fallback');
+  throw ApiErrorHandler.createError('Unexpected state in pricing fallback', 'SERVER_ERROR', 500);
 }

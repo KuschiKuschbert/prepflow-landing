@@ -100,7 +100,14 @@ export async function PUT(req: NextRequest) {
     }
 
     const userId = user.email;
-    const body = await req.json().catch(() => ({}));
+    let body = {};
+    try {
+      body = await req.json();
+    } catch (err) {
+      logger.warn('[Navigation Optimization Preferences API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
     const validationResult = preferencesSchema.safeParse(body);
 
     if (!validationResult.success) {
@@ -137,6 +144,13 @@ export async function PUT(req: NextRequest) {
       )
       .select()
       .single();
+
+    if (error) {
+      logger.error('[preferences/route] Database error:', {
+        error: error.message,
+      });
+      throw ApiErrorHandler.fromSupabaseError(error, 500);
+    }
 
     if (error) {
       logger.error('[Navigation Optimization API] Failed to update preferences:', {

@@ -11,6 +11,7 @@ import { Icon } from '@/components/ui/Icon';
 import { RotateCcw, X, AlertTriangle } from 'lucide-react';
 import type { BackupFile, RestoreMode, MergeOptions } from '@/lib/backup/types';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { logger } from '@/lib/logger';
 
 interface RestoreDialogProps {
   backup: BackupFile;
@@ -44,6 +45,11 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
         showError('Loading backup from local storage not yet implemented');
       }
     } catch (error) {
+      logger.error('[RestoreDialog.tsx] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       showError('Failed to load backup file');
     }
   }, [backup, showError]);
@@ -105,6 +111,11 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
         showError(data.error || 'Failed to restore backup');
       }
     } catch (error: any) {
+      logger.error('[RestoreDialog.tsx] Error in catch block:', {
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+
       showError('Failed to restore backup');
     } finally {
       setLoading(false);

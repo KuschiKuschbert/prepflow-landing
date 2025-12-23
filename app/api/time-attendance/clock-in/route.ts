@@ -14,6 +14,7 @@ import { validateGeofence } from './helpers/validateGeofence';
 import { checkShift } from './helpers/checkShift';
 import { checkOpenClockIn } from './helpers/checkOpenClockIn';
 import { createClockIn } from './helpers/createClockIn';
+import { z } from 'zod';
 
 /**
  * POST /api/time-attendance/clock-in
@@ -26,13 +27,45 @@ import { createClockIn } from './helpers/createClockIn';
  * - longitude: GPS longitude (required)
  * - notes: Optional notes (optional)
  */
+const clockInSchema = z.object({
+  employee_id: z.string().uuid('Employee ID must be a valid UUID'),
+  shift_id: z.string().uuid().optional().nullable(),
+  latitude: z.number().min(-90).max(90, 'Latitude must be between -90 and 90'),
+  longitude: z.number().min(-180).max(180, 'Longitude must be between -180 and 180'),
+  notes: z.string().optional().nullable(),
+});
+
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { employee_id, shift_id, latitude, longitude, notes } = body;
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Time Attendance API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
 
-    // Validate request
-    const validation = validateRequest(body);
+    const zodValidation = clockInSchema.safeParse(body);
+    if (!zodValidation.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          zodValidation.error.issues[0]?.message || 'Invalid request data',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { employee_id, shift_id, latitude, longitude, notes } = zodValidation.data;
+
+    // Validate request (keep helper validation for additional checks)
+    const validation = validateRequest(zodValidation.data);
     if (!validation.isValid) {
       return validation.error!;
     }

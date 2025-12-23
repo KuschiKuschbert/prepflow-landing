@@ -49,12 +49,20 @@ export async function POST(request: NextRequest) {
       for (const flag of regularFlags) {
         try {
           // Check if flag already exists
-          const { data: existing } = await supabaseAdmin
+          const { data: existing, error: checkError } = await supabaseAdmin
             .from('feature_flags')
             .select('flag_key')
             .eq('flag_key', flag.flag_key)
             .is('user_id', null)
             .single();
+
+          if (checkError && checkError.code !== 'PGRST116') {
+            // PGRST116 is "not found" - that's okay, we'll create the flag
+            logger.warn('[Admin Auto-Create] Error checking if regular flag exists:', {
+              error: checkError.message,
+              flag_key: flag.flag_key,
+            });
+          }
 
           if (existing) {
             skippedCount++;
@@ -101,11 +109,19 @@ export async function POST(request: NextRequest) {
       for (const flag of hiddenFlags) {
         try {
           // Check if flag already exists
-          const { data: existing } = await supabaseAdmin
+          const { data: existing, error: checkError2 } = await supabaseAdmin
             .from('hidden_feature_flags')
             .select('feature_key')
             .eq('feature_key', flag.flag_key)
             .single();
+
+          if (checkError2 && checkError2.code !== 'PGRST116') {
+            // PGRST116 is "not found" - that's okay, we'll create the flag
+            logger.warn('[Admin Auto-Create] Error checking if hidden flag exists:', {
+              error: checkError2.message,
+              feature_key: flag.flag_key,
+            });
+          }
 
           if (existing) {
             skippedCount++;
@@ -165,6 +181,11 @@ export async function POST(request: NextRequest) {
       message: `Created ${createdCount} flags, skipped ${skippedCount} existing flags`,
     });
   } catch (error) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     const apiError = ApiErrorHandler.fromException(
       error instanceof Error ? error : new Error(String(error)),
     );

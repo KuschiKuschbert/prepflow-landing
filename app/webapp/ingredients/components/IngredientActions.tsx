@@ -7,6 +7,7 @@ import { Icon } from '@/components/ui/Icon';
 import { useConfirm } from '@/hooks/useConfirm';
 import { usePrompt } from '@/hooks/usePrompt';
 import { useAlert } from '@/hooks/useAlert';
+import { logger } from '@/lib/logger';
 
 interface Ingredient {
   id: string;
@@ -74,6 +75,11 @@ export default function IngredientActions({
     setBulkActionLoading(true);
     try {
       await onBulkDelete(Array.from(selectedIngredients));
+    } catch (err) {
+      logger.error('[IngredientActions] Error in bulk delete:', {
+        error: err instanceof Error ? err.message : String(err),
+        selectedCount,
+      });
     } finally {
       setBulkActionLoading(false);
       setShowBulkMenu(false);
@@ -96,6 +102,12 @@ export default function IngredientActions({
     setBulkActionLoading(true);
     try {
       await onBulkUpdate(Array.from(selectedIngredients), { supplier: newSupplier.trim() });
+    } catch (err) {
+      logger.error('[IngredientActions] Error in bulk update supplier:', {
+        error: err instanceof Error ? err.message : String(err),
+        selectedCount,
+        supplier: newSupplier.trim(),
+      });
     } finally {
       setBulkActionLoading(false);
       setShowBulkMenu(false);
@@ -118,6 +130,12 @@ export default function IngredientActions({
     setBulkActionLoading(true);
     try {
       await onBulkUpdate(Array.from(selectedIngredients), { storage_location: newStorage.trim() });
+    } catch (err) {
+      logger.error('[IngredientActions] Error in bulk update storage:', {
+        error: err instanceof Error ? err.message : String(err),
+        selectedCount,
+        storage: newStorage.trim(),
+      });
     } finally {
       setBulkActionLoading(false);
       setShowBulkMenu(false);
@@ -160,6 +178,12 @@ export default function IngredientActions({
       await onBulkUpdate(Array.from(selectedIngredients), {
         trim_peel_waste_percentage: wastage,
         yield_percentage: 100 - wastage,
+      });
+    } catch (err) {
+      logger.error('[IngredientActions] Error in bulk update wastage:', {
+        error: err instanceof Error ? err.message : String(err),
+        selectedCount,
+        wastage,
       });
     } finally {
       setBulkActionLoading(false);

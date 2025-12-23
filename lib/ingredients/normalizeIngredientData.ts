@@ -1,6 +1,4 @@
-// PrepFlow - Ingredient Data Normalization Utilities
-// Extracted from useIngredientCRUD.ts to meet file size limits
-
+// PrepFlow - Ingredient Data Normalization Utilities (extracted from useIngredientCRUD.ts)
 import {
   convertUnit,
   convertToStandardUnit,

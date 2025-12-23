@@ -3,6 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { CheckCircle2, Sparkles } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 
 interface FinishRecipeButtonProps {
   onFinish: () => void;
@@ -47,6 +48,11 @@ export function FinishRecipeButton({
         setIsFinishing(false);
       }, 2000);
     } catch (err) {
+      logger.error('[FinishRecipeButton.tsx] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       setIsFinishing(false);
     }
   };

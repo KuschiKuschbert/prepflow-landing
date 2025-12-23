@@ -5,6 +5,7 @@ import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { UtensilsCrossed, AlertTriangle, Plus, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { logger } from '@/lib/logger';
 
 interface MenuSummary {
   activeMenus: number;
@@ -43,6 +44,11 @@ export default function MenuOverview() {
           throw new Error(result.message || 'Failed to load menu data');
         }
       } catch (err) {
+        logger.error('[MenuOverview.tsx] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
         setError(err instanceof Error ? err.message : 'Failed to load menu overview');
       } finally {
         setLoading(false);

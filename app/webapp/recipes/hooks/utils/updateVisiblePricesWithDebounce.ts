@@ -59,6 +59,11 @@ export function updateVisiblePricesWithDebounce({
         });
         resolve();
       } catch (err) {
+        logger.error('[updateVisiblePricesWithDebounce.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
         reject(err);
       } finally {
         debounceTimerRef.current = null;

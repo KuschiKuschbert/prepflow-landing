@@ -8,6 +8,8 @@ import { logger } from '@/lib/logger';
 import { uploadImageToStorage } from '@/lib/storage/upload-image';
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 /**
  * Upload images to storage and update database
  *
@@ -73,13 +75,13 @@ export async function uploadAndSaveImages(
       error: uploadError instanceof Error ? uploadError.message : String(uploadError),
       dishId,
     });
-    throw new Error('Failed to upload images');
+    throw ApiErrorHandler.createError('Failed to upload images', 'DATABASE_ERROR', 500);
   }
 
   // Store public URLs in database
   if (Object.keys(updateData).length > 0) {
     if (!supabaseAdmin) {
-      throw new Error('Database connection not available');
+      throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
     }
     const { error: updateError } = await supabaseAdmin
       .from('dishes')
@@ -91,7 +93,11 @@ export async function uploadAndSaveImages(
         error: updateError.message,
         dishId,
       });
-      throw new Error('Images uploaded but failed to save URLs to database');
+      throw ApiErrorHandler.createError(
+        'Images uploaded but failed to save URLs to database',
+        'DATABASE_ERROR',
+        500,
+      );
     }
   }
 

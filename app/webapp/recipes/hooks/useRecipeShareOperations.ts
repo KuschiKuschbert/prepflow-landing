@@ -3,6 +3,7 @@
 import { useCallback, useState } from 'react';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
 
 export function useRecipeShareOperations() {
   const { showError: showErrorNotification } = useNotification();
@@ -55,6 +56,11 @@ export function useRecipeShareOperations() {
         setShareUrl(result.shareUrl);
         setShowShareModal(true);
       } catch (err) {
+        logger.error('[useRecipeShareOperations.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
         showErrorNotification('Failed to share recipe');
       } finally {
         setShareLoading(false);

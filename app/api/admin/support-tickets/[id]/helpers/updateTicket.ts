@@ -41,16 +41,27 @@ export async function updateTicket(
       updateData.resolved_at = new Date().toISOString();
       // Try to get admin user_id from email
       try {
-        const { data: adminData } = await supabaseAdmin
+        const { data: adminData, error: adminDataError } = await supabaseAdmin
           .from('users')
           .select('id')
           .eq('email', adminUser.email)
           .single();
+        if (adminDataError && adminDataError.code !== 'PGRST116') {
+          logger.warn('[Admin Support Tickets] Error fetching admin user:', {
+            error: adminDataError.message,
+            code: (adminDataError as any).code,
+            adminEmail: adminUser.email,
+          });
+        }
         if (adminData) {
           updateData.resolved_by = adminData.id;
         }
       } catch (err) {
         // Continue without resolved_by if admin not found
+        logger.warn('[Admin Support Tickets] Error fetching admin user:', {
+          error: err instanceof Error ? err.message : String(err),
+          adminEmail: adminUser.email,
+        });
       }
     }
   }

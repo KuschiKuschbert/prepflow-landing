@@ -65,6 +65,11 @@ export async function batchFetchWithRetry(
     );
     return items as Record<string, RecipeIngredientWithDetails[]>;
   } catch (err) {
+    logger.error('[batchFetchWithRetry.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     return await handleErrorHelper(
       err,
       recipeIds,

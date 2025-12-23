@@ -7,7 +7,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import type { BackupSettings } from '@/lib/backup/types';
+import { z } from 'zod';
+
+const updateBackupSettingsSchema = z.object({
+  defaultFormat: z.enum(['json', 'sql', 'encrypted']).optional(),
+  defaultEncryptionMode: z.enum(['prepflow-only', 'user-password', 'system-key']).optional(),
+  scheduledBackupEnabled: z.boolean().optional(),
+  scheduledBackupInterval: z.number().int().min(1).max(8760).optional(),
+  autoUploadToDrive: z.boolean().optional(),
+});
 
 /**
  * Gets backup settings for the current user.
@@ -19,7 +29,7 @@ export async function GET(request: NextRequest) {
   try {
     const user = await requireAuth(request);
     if (!user?.email) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
     }
 
     const userId = user.email;
@@ -65,18 +75,42 @@ export async function PUT(request: NextRequest) {
   try {
     const user = await requireAuth(request);
     if (!user?.email) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
     }
 
     const userId = user.email;
-    const body = await request.json();
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Backup Settings] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = updateBackupSettingsSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
     const {
       defaultFormat,
       defaultEncryptionMode,
       scheduledBackupEnabled,
       scheduledBackupInterval,
       autoUploadToDrive,
-    } = body;
+    } = validationResult.data;
 
     const supabase = createSupabaseAdmin();
 
@@ -95,7 +129,12 @@ export async function PUT(request: NextRequest) {
     );
 
     if (error) {
-      throw error;
+      logger.error('[Backup Settings] Database error updating schedule:', {
+        error: error.message,
+        code: (error as any).code,
+        userId,
+      });
+      throw ApiErrorHandler.fromSupabaseError(error, 500);
     }
 
     // Note: defaultFormat and defaultEncryptionMode are client-side preferences

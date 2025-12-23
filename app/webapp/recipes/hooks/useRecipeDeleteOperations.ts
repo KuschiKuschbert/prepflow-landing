@@ -53,6 +53,11 @@ export function useRecipeDeleteOperations(
       setShowDeleteConfirm(false);
       setRecipeToDelete(null);
     } catch (err) {
+      logger.error('[useRecipeDeleteOperations.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       rollbackRecipes();
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete recipe';
       showErrorNotification(errorMessage);

@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { PerformanceItem } from '../types';
 import { formatCurrency, formatNumber, formatPercentage } from '../utils/performanceUtils';
 
@@ -7,7 +8,7 @@ interface PerformanceTableMobileCardProps {
   item: PerformanceItem;
 }
 
-export function PerformanceTableMobileCard({ item }: PerformanceTableMobileCardProps) {
+function PerformanceTableMobileCardComponent({ item }: PerformanceTableMobileCardProps) {
   return (
     <div className="space-y-4 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4">
       <div className="flex items-start justify-between gap-3">
@@ -89,3 +90,9 @@ export function PerformanceTableMobileCard({ item }: PerformanceTableMobileCardP
     </div>
   );
 }
+
+// Memoize component to prevent unnecessary re-renders when props don't change
+export const PerformanceTableMobileCard = memo(PerformanceTableMobileCardComponent, (prevProps, nextProps) => {
+  // Only re-render if item id or item reference changed
+  return prevProps.item.id === nextProps.item.id && prevProps.item === nextProps.item;
+});

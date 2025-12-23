@@ -5,6 +5,7 @@ import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useTranslation } from '@/lib/useTranslation';
+import { logger } from '@/lib/logger';
 import { useEffect, useState } from 'react';
 
 // Lazy load prep list components to reduce initial bundle size
@@ -167,7 +168,14 @@ export default function PrepListsPage() {
   const handleSaveBatch = async (
     prepLists: Array<{ sectionId: string | null; name: string; items: any[] }>,
   ) => {
-    await handleSaveBatchPrepLists(prepLists, userId, refetchPrepLists, setError);
+    try {
+      await handleSaveBatchPrepLists(prepLists, userId, refetchPrepLists, setError);
+    } catch (error) {
+      logger.error('[PrepLists] Error saving batch prep lists:', {
+        error: error instanceof Error ? error.message : String(error),
+      });
+      // Error is already handled by handleSaveBatchPrepLists via setError
+    }
   };
 
   if (listsLoading) {

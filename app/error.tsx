@@ -21,5 +21,6 @@ export default function Error({ error, reset }: ErrorProps) {
   ) {
     return null;
   }
+  // eslint-disable-next-line react-hooks/static-components
   return <ErrorComponent />;
 }

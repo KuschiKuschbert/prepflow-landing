@@ -10,6 +10,7 @@ import { useFeatures } from './hooks/useFeatures';
 import { useCacheInvalidation } from './hooks/useCacheInvalidation';
 import { TiersTable } from './components/TiersTable';
 import { FeaturesTable } from './components/FeaturesTable';
+import { logger } from '@/lib/logger';
 
 /**
  * Tiers and features page component for admin dashboard.
@@ -43,27 +44,48 @@ export default function TiersPage() {
   }, [activeTab, fetchTiers, fetchFeatures]);
 
   const handleDisableTier = async (tierSlug: string) => {
-    const confirmed = await showConfirm({
-      title: 'Disable Tier',
-      message: `Are you sure you want to disable the ${tierSlug} tier? Users with this tier will be downgraded.`,
-      variant: 'warning',
-    });
+    try {
+      const confirmed = await showConfirm({
+        title: 'Disable Tier',
+        message: `Are you sure you want to disable the ${tierSlug} tier? Users with this tier will be downgraded.`,
+        variant: 'warning',
+      });
 
-    if (!confirmed) return;
-    await disableTier(tierSlug);
+      if (!confirmed) return;
+      await disableTier(tierSlug);
+    } catch (err) {
+      logger.error('[TiersPage] Error disabling tier:', {
+        error: err instanceof Error ? err.message : String(err),
+        tierSlug,
+      });
+    }
   };
 
   const handleUpdateTier = async (tier: (typeof tiers)[0]) => {
-    const success = await updateTier(tier);
-    if (success) {
-      setEditingTier(null);
+    try {
+      const success = await updateTier(tier);
+      if (success) {
+        setEditingTier(null);
+      }
+    } catch (err) {
+      logger.error('[TiersPage] Error updating tier:', {
+        error: err instanceof Error ? err.message : String(err),
+        tierSlug: tier.tier_slug,
+      });
     }
   };
 
   const handleUpdateFeature = async (feature: (typeof features)[0]) => {
-    const success = await updateFeature(feature);
-    if (success) {
-      setEditingFeature(null);
+    try {
+      const success = await updateFeature(feature);
+      if (success) {
+        setEditingFeature(null);
+      }
+    } catch (err) {
+      logger.error('[TiersPage] Error updating feature:', {
+        error: err instanceof Error ? err.message : String(err),
+        featureId: feature.id,
+      });
     }
   };
 

@@ -1,5 +1,8 @@
 /**
  * Helper for handling PUT requests to update dishes
+ *
+ * 📚 Square Integration: This helper automatically triggers Square sync hooks (dish sync and cost sync)
+ * after dish update operations. See `docs/SQUARE_API_REFERENCE.md` (Automatic Sync section) for details.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -16,6 +19,7 @@ import {
   trackChangeForLockedMenus,
 } from './invalidateDishCaches';
 import { getUserEmail } from './getUserEmail';
+import { triggerDishSync, triggerCostSync } from '@/lib/square/sync/hooks';
 
 /**
  * Handles PUT request for updating a dish
@@ -82,18 +86,32 @@ export async function handlePutRequest(
     try {
       await updateRecipesWithTracking(dishId, recipes, changes, changeDetails);
       // Invalidate caches in background
-      invalidateAllergenCache(dishId).catch(err => {
-        logger.error('[Dishes API] Error invalidating allergen cache:', err);
-      });
-      invalidateMenuPricingCache(
-        dishId,
-        dishName,
-        'recipes_changed',
-        changeDetails.recipes,
-        userEmail,
-      ).catch(err => {
-        logger.error('[Dishes API] Error invalidating menu pricing cache:', err);
-      });
+      (async () => {
+        try {
+          await invalidateAllergenCache(dishId);
+        } catch (err) {
+          logger.error('[Dishes API] Error invalidating allergen cache:', {
+            error: err instanceof Error ? err.message : String(err),
+            context: { dishId, operation: 'invalidateAllergenCache' },
+          });
+        }
+      })();
+      (async () => {
+        try {
+          await invalidateMenuPricingCache(
+            dishId,
+            dishName,
+            'recipes_changed',
+            changeDetails.recipes,
+            userEmail,
+          );
+        } catch (err) {
+          logger.error('[Dishes API] Error invalidating menu pricing cache:', {
+            error: err instanceof Error ? err.message : String(err),
+            context: { dishId, dishName, operation: 'invalidateMenuPricingCache' },
+          });
+        }
+      })();
     } catch (recipesError: any) {
       logger.error('[Dishes API] Database error updating dish recipes:', {
         error: recipesError.message,
@@ -129,15 +147,49 @@ export async function handlePutRequest(
 
   // Track price changes for locked menus
   if (changes.includes('price_changed')) {
-    trackChangeForLockedMenus(
-      dishId,
-      dishName,
-      'price_changed',
-      changeDetails.price,
-      userEmail,
-    ).catch(err => {
-      logger.error('[Dishes API] Error tracking price change:', err);
-    });
+    (async () => {
+      try {
+        await trackChangeForLockedMenus(
+          dishId,
+          dishName,
+          'price_changed',
+          changeDetails.price,
+          userEmail,
+        );
+      } catch (err) {
+        logger.error('[Dishes API] Error tracking price change:', {
+          error: err instanceof Error ? err.message : String(err),
+          context: { dishId, dishName, operation: 'trackChangeForLockedMenus' },
+        });
+      }
+    })();
+  }
+
+  // Trigger Square sync hooks (non-blocking)
+  // Always trigger dish sync for updates
+  (async () => {
+    try {
+      await triggerDishSync(request, dishId, 'update');
+    } catch (err) {
+      logger.error('[Dishes API] Error triggering Square dish sync:', {
+        error: err instanceof Error ? err.message : String(err),
+        dishId,
+      });
+    }
+  })();
+
+  // Trigger cost sync if recipes or ingredients changed
+  if (changes.includes('recipes_changed') || changes.includes('ingredients_changed')) {
+    (async () => {
+      try {
+        await triggerCostSync(request, dishId, 'dish_updated');
+      } catch (err) {
+        logger.error('[Dishes API] Error triggering Square cost sync:', {
+          error: err instanceof Error ? err.message : String(err),
+          dishId,
+        });
+      }
+    })();
   }
 
   return NextResponse.json({
@@ -145,7 +197,3 @@ export async function handlePutRequest(
     dish: updatedDish,
   });
 }
-
-
-
-

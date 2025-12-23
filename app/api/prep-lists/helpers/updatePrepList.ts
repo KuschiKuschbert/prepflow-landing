@@ -1,4 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 interface UpdatePrepListParams {
   id: string;
@@ -16,7 +18,7 @@ interface UpdatePrepListParams {
 
 export async function updatePrepList(params: UpdatePrepListParams) {
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   const { id, kitchenSectionId, name, notes, status, items } = params;
@@ -38,13 +40,36 @@ export async function updatePrepList(params: UpdatePrepListParams) {
     .single();
 
   if (error) {
-    throw new Error(`Failed to update prep list: ${error.message}`);
+    logger.error('[helpers/updatePrepList] Database error:', {
+      error: error.message,
+    });
+    throw ApiErrorHandler.fromSupabaseError(error, 500);
+  }
+
+  if (error) {
+    logger.error('[Prep Lists API] Database error updating prep list:', {
+      error: error.message,
+      code: (error as any).code,
+      prepListId: id,
+    });
+    throw ApiErrorHandler.fromSupabaseError(error, 500);
   }
 
   // Update items if provided
   if (items !== undefined) {
     // Delete existing items
-    await supabaseAdmin.from('prep_list_items').delete().eq('prep_list_id', id);
+    const { error: deleteItemsError } = await supabaseAdmin
+      .from('prep_list_items')
+      .delete()
+      .eq('prep_list_id', id);
+
+    if (deleteItemsError) {
+      logger.warn('[Prep Lists API] Warning: Could not delete existing prep list items:', {
+        error: deleteItemsError.message,
+        code: (deleteItemsError as any).code,
+        prepListId: id,
+      });
+    }
 
     // Add new items
     if (items.length > 0) {
@@ -56,7 +81,18 @@ export async function updatePrepList(params: UpdatePrepListParams) {
         notes: item.notes,
       }));
 
-      await supabaseAdmin.from('prep_list_items').insert(prepItems);
+      const { error: insertItemsError } = await supabaseAdmin
+        .from('prep_list_items')
+        .insert(prepItems);
+
+      if (insertItemsError) {
+        logger.error('[Prep Lists API] Error inserting prep list items:', {
+          error: insertItemsError.message,
+          code: (insertItemsError as any).code,
+          prepListId: id,
+        });
+        throw ApiErrorHandler.fromSupabaseError(insertItemsError, 500);
+      }
     }
   }
 

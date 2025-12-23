@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { Icon } from './Icon';
 import { Copy, Check, Loader2 } from 'lucide-react';
 import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
 import { copyToClipboard } from '@/lib/share/share-utils';
 
 export interface CopyButtonProps {
@@ -37,14 +38,22 @@ export function CopyButton({
     e.preventDefault();
     e.stopPropagation();
     setLoading(true);
-    const success = await copyToClipboard(text);
-    setLoading(false);
+    try {
+      const success = await copyToClipboard(text);
+      setLoading(false);
 
-    if (success) {
-      setCopied(true);
-      showSuccess(successMessage);
-      setTimeout(() => setCopied(false), 2000);
-    } else {
+      if (success) {
+        setCopied(true);
+        showSuccess(successMessage);
+        setTimeout(() => setCopied(false), 2000);
+      } else {
+        showError('Failed to copy. Please try again.');
+      }
+    } catch (error) {
+      setLoading(false);
+      logger.error('[CopyButton] Error copying to clipboard:', {
+        error: error instanceof Error ? error.message : String(error),
+      });
       showError('Failed to copy. Please try again.');
     }
   };

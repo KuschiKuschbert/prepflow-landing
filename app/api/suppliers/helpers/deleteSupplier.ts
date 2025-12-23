@@ -10,7 +10,10 @@ import { supabaseAdmin } from '@/lib/supabase';
  * @throws {Error} If delete fails
  */
 export async function deleteSupplier(id: string): Promise<void> {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[Suppliers API] Database connection not available for deleteSupplier');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
 
   const { error } = await supabaseAdmin.from('suppliers').delete().eq('id', id);
 

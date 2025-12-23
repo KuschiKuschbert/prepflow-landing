@@ -12,7 +12,10 @@ import { buildSupplierData } from './buildSupplierData';
  * @throws {Error} If update fails
  */
 export async function updateSupplier(id: string, updates: any) {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[API] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
 
   const updateData = buildSupplierData({
     ...updates,

@@ -1,4 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
+import { logger } from '@/lib/logger';
+
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Perform delete operation on a table with given IDs (dry-run or actual).
@@ -23,13 +26,32 @@ export async function performDeleteIn(
   }
   if (dryRun) {
     // Count matching rows
-    const { count } = await supabase
+    const { count, error: countError } = await supabase
       .from(table)
       .select('*', { count: 'exact', head: true })
       .in(idColumn, ids);
+    if (countError) {
+      logger.error('[Reset Self API] Error counting rows for delete:', {
+        error: countError.message,
+        code: (countError as any).code,
+        table,
+        idColumn,
+        idsCount: ids.length,
+      });
+      throw ApiErrorHandler.createError(countError.message, 'DATABASE_ERROR', 500);
+    }
     return count || 0;
   }
   const { error } = await supabase.from(table).delete().in(idColumn, ids);
-  if (error) throw new Error(error.message);
+  if (error) {
+    logger.error('[Reset Self API] Error deleting rows:', {
+      error: error.message,
+      code: (error as any).code,
+      table,
+      idColumn,
+      idsCount: ids.length,
+    });
+    throw ApiErrorHandler.createError(error.message, 'DATABASE_ERROR', 500);
+  }
   return ids.length; // best-effort summary (items count not returned precisely)
 }

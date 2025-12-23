@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { Sparkles, AlertTriangle, CheckCircle2, Check, X } from 'lucide-react';
 import { useConfirm } from '@/hooks/useConfirm';
+import { logger } from '@/lib/logger';
 
 export default function PopulateAllAllergens() {
   const { showConfirm, ConfirmDialog } = useConfirm();
@@ -44,6 +45,11 @@ export default function PopulateAllAllergens() {
         setError(data.error || 'Failed to run dry run');
       }
     } catch (err) {
+      logger.error('[PopulateAllAllergens.tsx] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       setError('Network error occurred');
     } finally {
       setLoading(false);
@@ -86,6 +92,11 @@ export default function PopulateAllAllergens() {
         setError(data.error || data.message || 'Failed to populate allergens');
       }
     } catch (err) {
+      logger.error('[PopulateAllAllergens.tsx] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       setError('Network error occurred');
     } finally {
       setLoading(false);

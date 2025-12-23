@@ -11,6 +11,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { validateShiftRequest } from './helpers/validateShiftRequest';
 import { buildShiftQuery } from './helpers/buildShiftQuery';
+import { handleCreateShift } from './helpers/createShiftHandler';
 
 /**
  * GET /api/roster/shifts
@@ -102,92 +103,5 @@ export async function GET(request: NextRequest) {
  * - template_shift_id: Template shift ID if created from template (optional)
  */
 export async function POST(request: NextRequest) {
-  try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
-    const body = await request.json();
-    const validation = validateShiftRequest(body);
-
-    if (!validation.isValid) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validation.error || 'Invalid request data',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const shiftData = validation.data!;
-
-    // Check if employee exists
-    const { data: employee, error: employeeError } = await supabaseAdmin
-      .from('employees')
-      .select('id')
-      .eq('id', shiftData.employee_id)
-      .single();
-
-    if (employeeError || !employee) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Employee not found', 'NOT_FOUND', 404),
-        { status: 404 },
-      );
-    }
-
-    // Insert shift
-    const { data: shift, error: insertError } = await supabaseAdmin
-      .from('shifts')
-      .insert(shiftData)
-      .select()
-      .single();
-
-    if (insertError) {
-      logger.error('[Shifts API] Database error creating shift:', {
-        error: insertError.message,
-        code: (insertError as any).code,
-        context: {
-          endpoint: '/api/roster/shifts',
-          operation: 'POST',
-          employeeId: shiftData.employee_id,
-        },
-      });
-
-      const apiError = ApiErrorHandler.fromSupabaseError(insertError, 500);
-      return NextResponse.json(apiError, { status: apiError.status || 500 });
-    }
-
-    return NextResponse.json({
-      success: true,
-      shift,
-      message: 'Shift created successfully',
-    });
-  } catch (err) {
-    logger.error('[Shifts API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-      context: { endpoint: '/api/roster/shifts', method: 'POST' },
-    });
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? err instanceof Error
-            ? err.message
-            : 'Unknown error'
-          : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
-  }
+  return handleCreateShift(request);
 }
-
-
-
-

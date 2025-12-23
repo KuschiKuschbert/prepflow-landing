@@ -1,6 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import {
   additionalIngredientsForRecipes,
   sampleRecipesForPopulate,
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500), { status: 500 });
     }
 
     logger.dev('Starting recipe population...');

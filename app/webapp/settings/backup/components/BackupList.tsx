@@ -11,6 +11,7 @@ import { Icon } from '@/components/ui/Icon';
 import { History, Download, RotateCcw, RefreshCw, Trash2 } from 'lucide-react';
 import type { BackupFile } from '@/lib/backup/types';
 import { formatDistanceToNow } from 'date-fns';
+import { logger } from '@/lib/logger';
 
 interface BackupListProps {
   backups: BackupFile[];
@@ -62,6 +63,11 @@ export function BackupList({ backups, onRestore, onRefresh }: BackupListProps) {
         showError('Download from local storage not yet implemented');
       }
     } catch (error: any) {
+      logger.error('[BackupList.tsx] Error in catch block:', {
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+
       showError('Failed to download backup');
     } finally {
       setDownloading(null);
@@ -157,7 +163,3 @@ export function BackupList({ backups, onRestore, onRefresh }: BackupListProps) {
     </div>
   );
 }
-
-
-
-

@@ -6,6 +6,11 @@ import { fetchDishes } from './helpers/fetchDishes';
 import { fetchDishIngredients } from './helpers/fetchDishIngredients';
 import { fetchDishRecipes } from './helpers/fetchDishRecipes';
 import { validateRequest } from './helpers/validateRequest';
+import { z } from 'zod';
+
+const batchCostSchema = z.object({
+  dishIds: z.array(z.string()).min(1, 'dishIds array is required and must contain at least one dish ID'),
+});
 
 /**
  * Calculate cost and recommended price for multiple dishes in batch.
@@ -13,12 +18,38 @@ import { validateRequest } from './helpers/validateRequest';
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const validation = validateRequest(body);
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Dishes Batch Cost API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = batchCostSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { dishIds } = validationResult.data;
+
+    // Additional validation using existing helper (for business logic)
+    const validation = validateRequest(validationResult.data);
     if ('error' in validation) {
       return validation.error;
     }
-    const { dishIds } = validation;
 
     // Fetch all data in parallel
     const [dishesResult, dishRecipesMap, dishIngredientsMap] = await Promise.all([

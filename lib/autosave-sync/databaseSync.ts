@@ -8,6 +8,8 @@ import {
 import { clearDraft, saveDraft } from '../autosave-storage';
 import { logger } from '@/lib/logger';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 interface SyncResult {
   success: boolean;
   error?: string;
@@ -44,8 +46,12 @@ export async function syncToDatabase(
         const errorCode = (error as { code?: string })?.code
           ? ` (Code: ${(error as { code: string }).code})`
           : '';
-        logger.error(`Supabase update error for ${entityType}/${entityId}:`, error);
-        throw new Error(`${errorMessage}${errorCode}`);
+        logger.error(`[Autosave Sync] Supabase update error for ${entityType}/${entityId}:`, {
+          error: errorMessage,
+          code: (error as { code?: string })?.code,
+          context: { entityType, entityId, operation: 'update' },
+        });
+        throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
       }
       if (!updatedData) {
         logger.warn(`Entity ${entityType}/${entityId} was deleted, skipping update`);
@@ -63,8 +69,12 @@ export async function syncToDatabase(
         const errorCode = (error as { code?: string })?.code
           ? ` (Code: ${(error as { code: string }).code})`
           : '';
-        logger.error(`Supabase insert error for ${entityType}/${entityId}:`, error);
-        throw new Error(`${errorMessage}${errorCode}`);
+        logger.error(`[Autosave Sync] Supabase insert error for ${entityType}/${entityId}:`, {
+          error: errorMessage,
+          code: (error as { code?: string })?.code,
+          context: { entityType, entityId, operation: 'insert' },
+        });
+        throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
       }
       savedEntityId = newData?.id || entityId;
     }
@@ -75,9 +85,12 @@ export async function syncToDatabase(
     }
     return { success: true, entityId: savedEntityId };
   } catch (error) {
-    logger.error(`Error syncing ${entityType} ${entityId}:`, error);
     const errorMessage = extractSupabaseErrorMessage(error, 'Failed to save changes');
-    logger.error('Full error object:', JSON.stringify(error, Object.getOwnPropertyNames(error)));
+    logger.error(`[Autosave Sync] Error syncing ${entityType} ${entityId}:`, {
+      error: errorMessage,
+      stack: error instanceof Error ? error.stack : undefined,
+      context: { entityType, entityId, operation: 'syncToDatabase' },
+    });
     return { success: false, error: errorMessage };
   }
 }

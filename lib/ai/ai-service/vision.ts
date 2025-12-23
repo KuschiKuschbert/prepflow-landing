@@ -7,6 +7,7 @@ import { buildKitchenContext } from '../prompts/kitchen-context';
 import type { AIRequestOptions, AIResponse } from '../types';
 import { parseAIError } from '../utils/errorParser';
 import { processAIResponse } from '../utils/responseProcessor';
+import { logger } from '@/lib/logger';
 
 /**
  * Generate AI response from vision (image analysis).
@@ -61,6 +62,11 @@ export async function generateAIVisionResponse(
       options,
     );
   } catch (error) {
+    logger.error('[vision.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     const aiError = parseAIError(error as Error);
     return { content: '', error: aiError.message };
   }

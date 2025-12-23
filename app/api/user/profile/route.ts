@@ -4,6 +4,7 @@ import { requireAuth } from '@/lib/auth0-api-helpers';
 import { NextRequest, NextResponse } from 'next/server';
 import { getProfile } from './helpers/getProfile';
 import { updateProfile } from './helpers/updateProfile';
+import { z } from 'zod';
 
 /**
  * GET /api/user/profile
@@ -43,13 +44,44 @@ export async function GET(req: NextRequest) {
  * @param {NextRequest} req - Request object with profile data
  * @returns {Promise<NextResponse>} Updated profile data
  */
+const updateProfileSchema = z.object({
+  name: z.string().min(1).optional(),
+  avatar_url: z.string().url().optional().nullable(),
+  timezone: z.string().optional(),
+  language: z.string().optional(),
+}).passthrough(); // Allow additional fields for profile updates
+
 export async function PUT(req: NextRequest) {
   try {
     const user = await requireAuth(req);
     const userEmail = user.email;
-    const body = await req.json();
 
-    return await updateProfile(userEmail, body);
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch (err) {
+      logger.warn('[Profile API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = updateProfileSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    return await updateProfile(userEmail, validationResult.data);
   } catch (error) {
     logger.error('[Profile API] Unexpected error:', {
       error: error instanceof Error ? error.message : String(error),

@@ -1,5 +1,4 @@
 'use client';
-
 import { NavbarStats } from '@/components/Arcade/NavbarStats';
 import { Icon } from '@/components/ui/Icon';
 import { useUserAvatar } from '@/hooks/useUserAvatar';
@@ -38,10 +37,7 @@ interface NavigationHeaderProps {
   // Gamification handlers
   onAchievementsClick?: () => void;
 }
-
-const cn = (...classes: (string | undefined | null | false)[]): string => {
-  return classes.filter(Boolean).join(' ');
-};
+const cn = (...classes: (string | undefined | null | false)[]): string => classes.filter(Boolean).join(' ');
 
 /**
  * Navigation header component for webapp.

@@ -3,6 +3,7 @@
  */
 
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import type { MenuItem } from './fetchMenuItems';
 
 export function handleGenerationErrors(
@@ -37,7 +38,7 @@ export function handleGenerationErrors(
       sampleErrors: errors.slice(0, 3),
       hasBillingError,
     });
-    throw new Error(errorMessage);
+    throw ApiErrorHandler.createError(errorMessage, 'GENERATION_ERROR', 500);
   }
 
   logger.dev(`Finished generating recipe cards`, {

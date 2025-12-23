@@ -66,7 +66,7 @@ export default function TestErrorPage() {
             <li>Build for production: <code className="rounded bg-[var(--muted)] px-1">npm run build</code></li>
             <li>Start production server: <code className="rounded bg-[var(--muted)] px-1">npm start</code></li>
             <li>Navigate to any page and trigger an error</li>
-            <li>Or use browser console: <code className="rounded bg-[var(--muted)] px-1">throw new Error('test')</code></li>
+            <li>Or use browser console: <code className="rounded bg-[var(--muted)] px-1">throw new Error(&apos;test&apos;)</code></li>
           </ol>
         </div>
       </div>

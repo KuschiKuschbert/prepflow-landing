@@ -3,6 +3,7 @@ import { Recipe } from '../../types';
 import { RecipeIngredientWithDetails } from '../../types';
 import { convertToCOGSCalculations } from './recipeCalculationHelpers';
 import { storeRecipeForEditing } from './recipeEditHelpers';
+import { logger } from '@/lib/logger';
 
 /**
  * Handle editing a recipe by loading it into dishes tab.
@@ -24,6 +25,11 @@ export async function handleEditRecipe(
     storeRecipeForEditing(recipe, calculations);
     router.push('/webapp/recipes#dishes');
   } catch (err) {
+    logger.error('[handleEditRecipe.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     setError('Failed to load recipe for editing');
   }
 }

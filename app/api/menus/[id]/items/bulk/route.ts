@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -11,38 +12,38 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
 
     if (!menuId) {
       return NextResponse.json(
-        { success: false, error: 'Missing required field', message: 'Menu id is required' },
+        ApiErrorHandler.createError('Menu id is required', 'MISSING_REQUIRED_FIELD', 400),
         { status: 400 },
       );
     }
     if (!Array.isArray(items) || items.length === 0) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Missing required field',
-          message: 'Items array is required and must not be empty',
-        },
+        ApiErrorHandler.createError(
+          'Items array is required and must not be empty',
+          'MISSING_REQUIRED_FIELD',
+          400,
+        ),
         { status: 400 },
       );
     }
     for (const item of items) {
       if (!item.dish_id && !item.recipe_id) {
         return NextResponse.json(
-          {
-            success: false,
-            error: 'Invalid item',
-            message: 'Each item must have either dish_id or recipe_id',
-          },
+          ApiErrorHandler.createError(
+            'Each item must have either dish_id or recipe_id',
+            'INVALID_REQUEST',
+            400,
+          ),
           { status: 400 },
         );
       }
       if (item.dish_id && item.recipe_id) {
         return NextResponse.json(
-          {
-            success: false,
-            error: 'Invalid item',
-            message: 'Cannot specify both dish_id and recipe_id for the same item',
-          },
+          ApiErrorHandler.createError(
+            'Cannot specify both dish_id and recipe_id for the same item',
+            'INVALID_REQUEST',
+            400,
+          ),
           { status: 400 },
         );
       }
@@ -50,11 +51,11 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Database connection not available',
-          message: 'Database connection could not be established',
-        },
+        ApiErrorHandler.createError(
+          'Database connection could not be established',
+          'DATABASE_ERROR',
+          500,
+        ),
         { status: 500 },
       );
     }

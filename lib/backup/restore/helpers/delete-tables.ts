@@ -1,61 +1,106 @@
 /**
  * Table deletion helpers for restore operations.
  */
-
 import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-/**
- * Delete records from a table by user_id.
- */
+/** Delete records from a table by user_id. */
 async function deleteByUserId(
   supabase: SupabaseClient,
   tableName: string,
   userId: string,
 ): Promise<void> {
-  await supabase.from(tableName).delete().eq('user_id', userId);
+  const { error } = await supabase.from(tableName).delete().eq('user_id', userId);
+  if (error) {
+    logger.warn('[Restore] Error deleting records by user_id:', {
+      error: error.message,
+      code: (error as any).code,
+      context: { tableName, userId, operation: 'deleteByUserId' },
+    });
+  }
 }
 
-/**
- * Delete order list items via parent order lists.
- */
+/** Delete order list items via parent order lists. */
 async function deleteOrderListItems(supabase: SupabaseClient, userId: string): Promise<void> {
-  const { data: orderLists } = await supabase
+  const { data: orderLists, error: fetchError } = await supabase
     .from('order_lists')
     .select('id')
     .eq('user_id', userId);
 
+  if (fetchError) {
+    logger.warn('[Restore] Error fetching order lists:', {
+      error: fetchError.message,
+      code: (fetchError as any).code,
+      context: { userId, operation: 'deleteOrderListItems' },
+    });
+  }
+
   if (orderLists && orderLists.length > 0) {
     const orderListIds = orderLists.map(r => r.id);
-    await supabase.from('order_list_items').delete().in('order_list_id', orderListIds);
+    const { error: deleteError } = await supabase
+      .from('order_list_items')
+      .delete()
+      .in('order_list_id', orderListIds);
+    if (deleteError) {
+      logger.warn('[Restore] Error deleting order list items:', {
+        error: deleteError.message,
+        code: (deleteError as any).code,
+        context: { orderListIds, operation: 'deleteOrderListItems' },
+      });
+    }
   }
 }
 
-/**
- * Delete prep list items via parent prep lists.
- */
+/** Delete prep list items via parent prep lists. */
 async function deletePrepListItems(supabase: SupabaseClient, userId: string): Promise<void> {
-  const { data: prepLists } = await supabase.from('prep_lists').select('id').eq('user_id', userId);
+  const { data: prepLists, error: fetchError } = await supabase
+    .from('prep_lists')
+    .select('id')
+    .eq('user_id', userId);
+
+  if (fetchError) {
+    logger.warn('[Restore] Error fetching prep lists:', {
+      error: fetchError.message,
+      code: (fetchError as any).code,
+      context: { userId, operation: 'deletePrepListItems' },
+    });
+  }
 
   if (prepLists && prepLists.length > 0) {
     const prepListIds = prepLists.map(r => r.id);
-    await supabase.from('prep_list_items').delete().in('prep_list_id', prepListIds);
+    const { error: deleteError } = await supabase
+      .from('prep_list_items')
+      .delete()
+      .in('prep_list_id', prepListIds);
+    if (deleteError) {
+      logger.warn('[Restore] Error deleting prep list items:', {
+        error: deleteError.message,
+        code: (deleteError as any).code,
+        context: { prepListIds, operation: 'deletePrepListItems' },
+      });
+    }
   }
 }
 
-/**
- * Delete records from a table, handling child tables appropriately.
- */
+/** Delete records from a table, handling child tables appropriately. */
 export async function deleteTableRecords(
   supabase: SupabaseClient,
   tableName: string,
   userId: string,
 ): Promise<void> {
   // Get user's records to delete
-  const { data: existingRecords } = await supabase
+  const { data: existingRecords, error: fetchError } = await supabase
     .from(tableName)
     .select('id')
     .eq('user_id', userId);
+
+  if (fetchError) {
+    logger.warn('[Restore] Error fetching existing records:', {
+      error: fetchError.message,
+      code: (fetchError as any).code,
+      context: { tableName, userId, operation: 'deleteTableRecords' },
+    });
+  }
 
   if (!existingRecords || existingRecords.length === 0) {
     return; // No records to delete
@@ -72,9 +117,7 @@ export async function deleteTableRecords(
   }
 }
 
-/**
- * Delete multiple tables, collecting errors.
- */
+/** Delete multiple tables, collecting errors. */
 export async function deleteTables(
   supabase: SupabaseClient,
   tableNames: string[],

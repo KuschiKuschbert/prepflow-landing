@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Test Auth0 SDK Authorization Flow
@@ -13,10 +14,11 @@ export async function GET(request: NextRequest) {
 
     if (!baseUrl) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'AUTH0_BASE_URL (or NEXTAUTH_URL for backward compatibility) must be set',
-        },
+        ApiErrorHandler.createError(
+          'AUTH0_BASE_URL (or NEXTAUTH_URL for backward compatibility) must be set',
+          'MISSING_ENV_VAR',
+          400,
+        ),
         { status: 400 },
       );
     }
@@ -74,10 +76,11 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     logger.error('[Auth0 Flow Test] Error:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : String(error),
-      },
+      ApiErrorHandler.createError(
+        error instanceof Error ? error.message : String(error),
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

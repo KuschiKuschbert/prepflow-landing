@@ -1,5 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   try {
@@ -7,13 +9,40 @@ export async function GET(req: NextRequest) {
     const name = String(url.searchParams.get('name') || '')
       .toLowerCase()
       .trim();
-    if (!name) return NextResponse.json({ exists: false });
-    if (!supabaseAdmin) return NextResponse.json({ error: 'DB unavailable' }, { status: 500 });
+    if (!name) return NextResponse.json({ success: true, exists: false });
+    if (!supabaseAdmin) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
+    }
 
     const { data, error } = await supabaseAdmin.from('recipes').select('id').ilike('name', name);
-    if (error) throw error;
-    return NextResponse.json({ exists: (data || []).length > 0 });
+    if (error) {
+      logger.error('[Recipes API] Database error checking recipe existence:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/recipes/exists', operation: 'GET', name },
+      });
+      return NextResponse.json(
+        ApiErrorHandler.fromSupabaseError(error, 500),
+        { status: 500 },
+      );
+    }
+    return NextResponse.json({ success: true, exists: (data || []).length > 0 });
   } catch (e: any) {
-    return NextResponse.json({ error: e?.message || String(e) }, { status: 500 });
+    logger.error('[Recipes API] Unexpected error checking recipe existence:', {
+      error: e instanceof Error ? e.message : String(e),
+      stack: e instanceof Error ? e.stack : undefined,
+      context: { endpoint: '/api/recipes/exists', method: 'GET' },
+    });
+    return NextResponse.json(
+      ApiErrorHandler.createError(
+        'Failed to check recipe existence',
+        'SERVER_ERROR',
+        500,
+      ),
+      { status: 500 },
+    );
   }
 }

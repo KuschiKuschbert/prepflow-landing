@@ -5,6 +5,8 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 /**
  * Fetches recipes for a dish
  *
@@ -13,7 +15,8 @@ import { supabaseAdmin } from '@/lib/supabase';
  */
 export async function fetchDishRecipes(dishId: string): Promise<any[]> {
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    logger.error('[Dishes API] Database connection not available for fetchDishRecipes');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   logger.dev('[fetchDishRecipes] Starting fetch for dishId:', { dishId });

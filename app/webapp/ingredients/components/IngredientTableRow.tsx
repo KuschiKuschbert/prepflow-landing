@@ -7,8 +7,9 @@ import { formatRecipeDate } from '@/app/webapp/recipes/utils/formatDate';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Icon } from '@/components/ui/Icon';
 import { Edit, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { useLongPress } from '../hooks/useLongPress';
+import { logger } from '@/lib/logger';
 import {
   IngredientBrandCell,
   IngredientCostCell,
@@ -50,7 +51,7 @@ interface IngredientTableRowProps {
   onEnterSelectionMode?: () => void;
 }
 
-export function IngredientTableRow({
+function IngredientTableRowComponent({
   ingredient,
   displayUnit,
   selectedIngredients,
@@ -69,7 +70,14 @@ export function IngredientTableRow({
   const handleDelete = () => setShowDeleteConfirm(true);
   const confirmDelete = async () => {
     setShowDeleteConfirm(false);
-    await onDelete(ingredient.id);
+    try {
+      await onDelete(ingredient.id);
+    } catch (err) {
+      logger.error('[IngredientTableRow] Error deleting ingredient:', {
+        error: err instanceof Error ? err.message : String(err),
+        ingredientId: ingredient.id,
+      });
+    }
   };
 
   const longPressHandlers = useLongPress({
@@ -231,3 +239,15 @@ export function IngredientTableRow({
     </tr>
   );
 }
+
+// Memoize component to prevent unnecessary re-renders when props don't change
+export const IngredientTableRow = memo(IngredientTableRowComponent, (prevProps, nextProps) => {
+  // Only re-render if relevant props actually changed
+  return (
+    prevProps.ingredient.id === nextProps.ingredient.id &&
+    prevProps.selectedIngredients === nextProps.selectedIngredients &&
+    prevProps.isSelectionMode === nextProps.isSelectionMode &&
+    prevProps.displayUnit === nextProps.displayUnit &&
+    prevProps.deletingId === nextProps.deletingId
+  );
+});

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Dev-only endpoint to preview duplicate ingredients and recipes.
@@ -10,21 +12,31 @@ import { supabaseAdmin } from '@/lib/supabase';
 export async function POST(req: NextRequest) {
   try {
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database not available' }, { status: 500 });
+      return NextResponse.json(ApiErrorHandler.createError('Database not available', 'SERVER_ERROR', 500), { status: 500 });
     }
 
     // Optional: only allow in non-production to be safe
     if (process.env.NODE_ENV === 'production') {
       const adminKey = req.headers.get('x-admin-key');
       if (!adminKey || adminKey !== process.env.SEED_ADMIN_KEY) {
-        return NextResponse.json({ error: 'Admin key required' }, { status: 403 });
+        return NextResponse.json(ApiErrorHandler.createError('Admin key required', 'FORBIDDEN', 403), { status: 403 });
       }
     }
 
     const { data: ingredients, error: ingErr } = await supabaseAdmin
       .from('ingredients')
       .select('id, ingredient_name, supplier, brand, pack_size, unit, cost_per_unit, updated_at');
-    if (ingErr) throw ingErr;
+    if (ingErr) {
+      logger.error('[Dedupe Preview API] Error fetching ingredients:', {
+        error: ingErr.message,
+        code: (ingErr as any).code,
+        context: { endpoint: '/api/dedupe/preview', operation: 'POST' },
+      });
+      return NextResponse.json(
+        ApiErrorHandler.fromSupabaseError(ingErr, 500),
+        { status: 500 },
+      );
+    }
 
     const ingredientGroups: Record<string, { key: string; ids: string[]; sample: any }> = {};
     (ingredients || []).forEach(row => {
@@ -48,7 +60,17 @@ export async function POST(req: NextRequest) {
     const { data: recipes, error: recErr } = await supabaseAdmin
       .from('recipes')
       .select('id, recipe_name, updated_at');
-    if (recErr) throw recErr;
+    if (recErr) {
+      logger.error('[Dedupe Preview API] Error fetching recipes:', {
+        error: recErr.message,
+        code: (recErr as any).code,
+        context: { endpoint: '/api/dedupe/preview', operation: 'POST' },
+      });
+      return NextResponse.json(
+        ApiErrorHandler.fromSupabaseError(recErr, 500),
+        { status: 500 },
+      );
+    }
 
     const recipeGroups: Record<string, { key: string; ids: string[]; sample: any }> = {};
     (recipes || []).forEach(row => {
@@ -68,6 +90,11 @@ export async function POST(req: NextRequest) {
       recipes: { duplicates: recipeDuplicates, total: recipes?.length || 0 },
     });
   } catch (e: any) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: e instanceof Error ? e.message : String(e),
+      stack: e instanceof Error ? e.stack : undefined,
+    });
+
     return NextResponse.json({ error: e?.message || String(e) }, { status: 500 });
   }
 }

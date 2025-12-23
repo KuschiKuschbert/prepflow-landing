@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
 
 /**
  * Hook for invalidating tier configuration cache.
@@ -28,6 +29,11 @@ export function useCacheInvalidation() {
         return false;
       }
     } catch (error) {
+      logger.error('[useCacheInvalidation.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       showError('Failed to invalidate cache');
       return false;
     } finally {

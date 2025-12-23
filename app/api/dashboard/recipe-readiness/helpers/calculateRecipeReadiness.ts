@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { isTableNotFound } from './checkTableExists';
 
 /**
@@ -20,7 +21,8 @@ export async function calculateRecipeReadiness(recipes: any[]) {
   }
 
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    logger.error('[Dashboard Recipe Readiness] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   // Fetch all recipe ingredients to check completeness
@@ -33,7 +35,11 @@ export async function calculateRecipeReadiness(recipes: any[]) {
       logger.warn('recipe_ingredients table not found, treating all recipes as incomplete');
       // Continue with empty recipeIngredients array
     } else {
-      throw new Error('Could not retrieve recipe ingredients from database');
+      logger.error('[Dashboard Recipe Readiness] Error fetching recipe ingredients:', {
+        error: recipeIngredientsError.message,
+        code: (recipeIngredientsError as any).code,
+      });
+      throw ApiErrorHandler.fromSupabaseError(recipeIngredientsError, 500);
     }
   }
 

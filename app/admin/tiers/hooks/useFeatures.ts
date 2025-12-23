@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import type { FeatureMapping } from '../types';
+import { logger } from '@/lib/logger';
 
 /**
  * Hook for managing feature-to-tier mappings.
@@ -34,6 +35,11 @@ export function useFeatures() {
         showError(errorMessage);
       }
     } catch (error) {
+      logger.error('[useFeatures.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       const errorMessage =
         error instanceof Error ? error.message : 'Failed to fetch feature mappings';
       setError(errorMessage);
@@ -62,6 +68,11 @@ export function useFeatures() {
           return false;
         }
       } catch (error) {
+        logger.error('[useFeatures.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
         showError('Failed to update feature mapping');
         return false;
       }

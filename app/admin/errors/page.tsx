@@ -7,6 +7,7 @@ import { ErrorFilters } from './components/ErrorFilters';
 import { ErrorLogsTable } from './components/ErrorLogsTable';
 import { useErrorLogs } from './hooks/useErrorLogs';
 import type { ErrorLog } from './types';
+import { logger } from '@/lib/logger';
 
 /**
  * Error logs page component for admin dashboard.
@@ -63,18 +64,34 @@ export default function ErrorLogsPage() {
   };
 
   const handleStatusUpdate = async (errorId: string, newStatus: string) => {
-    const success = await updateStatus(errorId, newStatus);
-    if (success && selectedError?.id === errorId) {
-      setSelectedError(null);
+    try {
+      const success = await updateStatus(errorId, newStatus);
+      if (success && selectedError?.id === errorId) {
+        setSelectedError(null);
+      }
+    } catch (err) {
+      logger.error('[ErrorLogsPage] Error updating status:', {
+        error: err instanceof Error ? err.message : String(err),
+        errorId,
+        newStatus,
+      });
     }
   };
 
   const handleSaveNotes = async (errorId: string, notes: string) => {
-    const updated = await saveNotes(errorId, notes);
-    if (updated) {
-      setSelectedError(updated);
+    try {
+      const updated = await saveNotes(errorId, notes);
+      if (updated) {
+        setSelectedError(updated);
+      }
+      return updated;
+    } catch (err) {
+      logger.error('[ErrorLogsPage] Error saving notes:', {
+        error: err instanceof Error ? err.message : String(err),
+        errorId,
+      });
+      return null;
     }
-    return updated;
   };
 
   return (

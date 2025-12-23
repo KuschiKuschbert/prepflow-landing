@@ -5,16 +5,13 @@ import { calculateRecipeReadiness } from './helpers/calculateRecipeReadiness';
 import { fetchRecipes } from './helpers/fetchRecipes';
 import { handleRecipeReadinessError } from './helpers/handleRecipeReadinessError';
 import { isTableNotFound } from './helpers/checkTableExists';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 export async function GET(_req: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Database connection not available',
-          message: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -40,6 +37,11 @@ export async function GET(_req: NextRequest) {
       ...statistics,
     });
   } catch (error) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     return handleRecipeReadinessError(error);
   }
 }

@@ -2,7 +2,7 @@
 
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { useCategorySort, type SortOption } from '../hooks/useCategorySort';
 import { MenuItem } from '../types';
 import { CategoryHeader } from './CategoryHeader';
@@ -24,7 +24,7 @@ interface MenuCategoryProps {
   availableCategories?: string[];
 }
 
-export default function MenuCategory({
+function MenuCategoryComponent({
   category,
   items,
   menuId,
@@ -227,3 +227,13 @@ export default function MenuCategory({
     </div>
   );
 }
+
+// Memoize component to prevent unnecessary re-renders when props don't change
+export default memo(MenuCategoryComponent, (prevProps, nextProps) => {
+  // Only re-render if relevant props actually changed
+  return (
+    prevProps.category === nextProps.category &&
+    prevProps.items === nextProps.items &&
+    prevProps.menuId === nextProps.menuId
+  );
+});

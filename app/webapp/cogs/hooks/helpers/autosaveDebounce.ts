@@ -45,23 +45,33 @@ export function useAutosaveDebounce({
       logger.dev('[Autosave] Starting save:', { recipeId, count: calculations.length, force });
       setStatus('saving');
       setError(null);
-      const result = await saveRecipeIngredients(recipeId, calculations);
-      if (result.success) {
-        logger.dev('[Autosave] Save successful:', { recipeId, count: calculations.length });
-        setStatus('saved');
-        if (typeof window !== 'undefined') {
-          sessionStorage.setItem('recipe_ingredients_last_change', Date.now().toString());
+      try {
+        const result = await saveRecipeIngredients(recipeId, calculations);
+        if (result.success) {
+          logger.dev('[Autosave] Save successful:', { recipeId, count: calculations.length });
+          setStatus('saved');
+          if (typeof window !== 'undefined') {
+            sessionStorage.setItem('recipe_ingredients_last_change', Date.now().toString());
+          }
+          if (onSave) onSave();
+          setTimeout(
+            () => setStatus((prev: AutosaveStatus) => (prev === 'saved' ? 'idle' : prev)),
+            2000,
+          );
+        } else {
+          logger.error('[Autosave] Save failed:', result.error);
+          setStatus('error');
+          setError(result.error || 'Failed to save');
+          if (onError && result.error) onError(result.error);
         }
-        if (onSave) onSave();
-        setTimeout(
-          () => setStatus((prev: AutosaveStatus) => (prev === 'saved' ? 'idle' : prev)),
-          2000,
-        );
-      } else {
-        logger.error('[Autosave] Save failed:', result.error);
+      } catch (error) {
+        logger.error('[Autosave] Error saving recipe ingredients:', {
+          error: error instanceof Error ? error.message : String(error),
+          recipeId,
+        });
         setStatus('error');
-        setError(result.error || 'Failed to save');
-        if (onError && result.error) onError(result.error);
+        setError('Failed to save');
+        if (onError) onError('Failed to save');
       }
     },
     [recipeId, calculations, enabled, onSave, onError, setStatus, setError],

@@ -21,31 +21,59 @@ export async function GET(request: NextRequest) {
     }
 
     // Get total users count
-    const { count: totalUsers } = await supabaseAdmin
+    const { count: totalUsers, error: usersError } = await supabaseAdmin
       .from('users')
       .select('*', { count: 'exact', head: true });
 
+    if (usersError) {
+      logger.warn('[Admin Dashboard Stats] Error fetching total users count:', {
+        error: usersError.message,
+        code: (usersError as any).code,
+      });
+    }
+
     // Get active subscriptions count (users with active subscription_status)
-    const { count: activeSubscriptions } = await supabaseAdmin
+    const { count: activeSubscriptions, error: subscriptionsError } = await supabaseAdmin
       .from('users')
       .select('*', { count: 'exact', head: true })
       .in('subscription_status', ['active', 'trialing']);
 
+    if (subscriptionsError) {
+      logger.warn('[Admin Dashboard Stats] Error fetching active subscriptions count:', {
+        error: subscriptionsError.message,
+        code: (subscriptionsError as any).code,
+      });
+    }
+
     // Get critical errors count (Safety + Critical, status = new or investigating)
-    const { count: criticalErrors } = await supabaseAdmin
+    const { count: criticalErrors, error: criticalErrorsQueryError } = await supabaseAdmin
       .from('admin_error_logs')
       .select('*', { count: 'exact', head: true })
       .in('severity', ['safety', 'critical'])
       .in('status', ['new', 'investigating']);
 
+    if (criticalErrorsQueryError) {
+      logger.warn('[Admin Dashboard Stats] Error fetching critical errors count:', {
+        error: criticalErrorsQueryError.message,
+        code: (criticalErrorsQueryError as any).code,
+      });
+    }
+
     // Get unresolved tickets count (open or investigating)
-    const { count: unresolvedTickets } = await supabaseAdmin
+    const { count: unresolvedTickets, error: ticketsError } = await supabaseAdmin
       .from('support_tickets')
       .select('*', { count: 'exact', head: true })
       .in('status', ['open', 'investigating']);
 
+    if (ticketsError) {
+      logger.warn('[Admin Dashboard Stats] Error fetching unresolved tickets count:', {
+        error: ticketsError.message,
+        code: (ticketsError as any).code,
+      });
+    }
+
     // Get recent safety errors (last 5, status = new or investigating)
-    const { data: recentSafetyErrors } = await supabaseAdmin
+    const { data: recentSafetyErrors, error: safetyErrorsError } = await supabaseAdmin
       .from('admin_error_logs')
       .select('id, error_message, severity, status, created_at')
       .eq('severity', 'safety')
@@ -53,13 +81,27 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false })
       .limit(5);
 
+    if (safetyErrorsError) {
+      logger.warn('[Admin Dashboard Stats] Error fetching recent safety errors:', {
+        error: safetyErrorsError.message,
+        code: (safetyErrorsError as any).code,
+      });
+    }
+
     // Get recent errors count (last 24 hours)
     const oneDayAgo = new Date();
     oneDayAgo.setDate(oneDayAgo.getDate() - 1);
-    const { count: recentErrors } = await supabaseAdmin
+    const { count: recentErrors, error: recentErrorsQueryError } = await supabaseAdmin
       .from('admin_error_logs')
       .select('*', { count: 'exact', head: true })
       .gte('created_at', oneDayAgo.toISOString());
+
+    if (recentErrorsQueryError) {
+      logger.warn('[Admin Dashboard Stats] Error fetching recent errors count:', {
+        error: recentErrorsQueryError.message,
+        code: (recentErrorsQueryError as any).code,
+      });
+    }
 
     // Get total data records across all tables
     const tables = ['ingredients', 'recipes', 'menu_dishes', 'temperature_logs', 'cleaning_tasks'];
@@ -67,13 +109,22 @@ export async function GET(request: NextRequest) {
 
     for (const table of tables) {
       try {
-        const { count } = await supabaseAdmin
+        const { count, error: tableError } = await supabaseAdmin
           .from(table)
           .select('*', { count: 'exact', head: true });
-        totalDataRecords += count || 0;
+        if (tableError) {
+          logger.warn(`[Admin Dashboard Stats] Error counting records in ${table}:`, {
+            error: tableError.message,
+            code: (tableError as any).code,
+          });
+        } else {
+          totalDataRecords += count || 0;
+        }
       } catch (error) {
         // Table might not exist, skip it
-        logger.warn(`[Admin Dashboard] Could not count records in ${table}:`, error);
+        logger.warn(`[Admin Dashboard Stats] Could not count records in ${table}:`, {
+          error: error instanceof Error ? error.message : String(error),
+        });
       }
     }
 

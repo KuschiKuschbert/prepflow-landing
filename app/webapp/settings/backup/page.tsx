@@ -16,6 +16,7 @@ import type { BackupFile, BackupSettings } from '@/lib/backup/types';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { logger } from '@/lib/logger';
 
 export default function BackupSettingsPage() {
   const [settings, setSettings] = useState<BackupSettings | null>(null);
@@ -33,6 +34,11 @@ export default function BackupSettingsPage() {
         setSettings(data.settings);
       }
     } catch (error) {
+      logger.error('[page.tsx] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       showError('Failed to load backup settings');
     } finally {
       setLoading(false);
@@ -47,6 +53,11 @@ export default function BackupSettingsPage() {
         setBackups(data.backups);
       }
     } catch (error) {
+      logger.error('[page.tsx] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       showError('Failed to load backups');
     }
   }, [showError]);
@@ -70,7 +81,7 @@ export default function BackupSettingsPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-4xl p-6 text-[var(--foreground)]">
+      <div className="mx-auto max-w-[1400px] large-desktop:max-w-[1400px] xl:max-w-[1400px] 2xl:max-w-[1600px] p-6 text-[var(--foreground)]">
         <div className="animate-pulse space-y-4">
           <div className="h-8 w-64 rounded bg-[var(--muted)]"></div>
           <div className="h-32 rounded bg-[var(--muted)]"></div>
@@ -81,7 +92,7 @@ export default function BackupSettingsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl p-6 text-[var(--foreground)]">
+    <div className="mx-auto max-w-[1400px] large-desktop:max-w-[1400px] xl:max-w-[1400px] 2xl:max-w-[1600px] p-6 text-[var(--foreground)]">
       {/* Header */}
       <div className="mb-6 flex items-center gap-4">
         <Link

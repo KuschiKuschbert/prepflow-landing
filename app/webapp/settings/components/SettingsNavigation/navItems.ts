@@ -8,6 +8,7 @@ import {
   ShieldCheck,
   User,
   Wrench,
+  Flag,
 } from 'lucide-react';
 import type { NavItem, Category } from './types';
 
@@ -83,6 +84,15 @@ export const navItems: NavItem[] = [
     category: 'advanced',
     ariaLabel: 'View advanced settings',
     description: 'Advanced configuration options',
+  },
+  {
+    hash: '#feature-flags',
+    label: 'Feature Flags',
+    icon: Flag,
+    category: 'advanced',
+    ariaLabel: 'View and manage feature flags',
+    description: 'Manage feature flags (admin only)',
+    adminOnly: true,
   },
 ];
 

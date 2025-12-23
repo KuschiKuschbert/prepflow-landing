@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdmin } from './admin-utils';
 import { isEmailAllowed } from './allowlist';
-import { auth0 } from './auth0';
-import { logger } from './logger';
+import { getDevUser } from './auth0-api-helpers/helpers/getDevUser';
+import { extractUserFromSession } from './auth0-api-helpers/helpers/extractUserFromSession';
 
 const isDev = process.env.NODE_ENV === 'development';
 const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
@@ -19,37 +19,10 @@ export async function getUserFromRequest(req: NextRequest): Promise<{
   roles?: string[];
   email_verified?: boolean;
 } | null> {
-  // Development bypass: Return mock user if configured
   if (isDev && authBypassDev) {
-    return {
-      email: 'dev@prepflow.org',
-      name: 'Dev User',
-      sub: 'dev|123',
-      roles: ['admin'],
-      email_verified: true,
-    };
+    return getDevUser();
   }
-
-  try {
-    const session = await auth0.getSession(req);
-    if (!session?.user) {
-      return null;
-    }
-
-    return {
-      email: session.user.email || '',
-      name: session.user.name,
-      picture: session.user.picture,
-      sub: session.user.sub || '',
-      roles: (session.user as any)['https://prepflow.org/roles'] || [],
-      email_verified: (session.user as any).email_verified || false,
-    };
-  } catch (error) {
-    logger.error('[Auth0 API Helpers] Failed to get user from request:', {
-      error: error instanceof Error ? error.message : String(error),
-    });
-    return null;
-  }
+  return extractUserFromSession(req);
 }
 
 /**
@@ -64,14 +37,8 @@ export async function requireAuth(req: NextRequest): Promise<{
   roles?: string[];
   email_verified?: boolean;
 }> {
-  // Development bypass: Return mock user
   if (isDev && authBypassDev) {
-    return {
-      email: 'dev@prepflow.org',
-      name: 'Dev User',
-      sub: 'dev|123',
-      roles: ['admin'],
-    };
+    return getDevUser();
   }
 
   const user = await getUserFromRequest(req);

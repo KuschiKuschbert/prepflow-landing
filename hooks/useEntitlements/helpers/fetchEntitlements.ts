@@ -23,7 +23,11 @@ export async function fetchEntitlementsHelper(
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : 'Failed to fetch entitlements';
     setError(errorMessage);
-    logger.error('[useEntitlements] Error fetching entitlements:', err);
+    logger.error('[useEntitlements] Error fetching entitlements:', {
+      error: errorMessage,
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/user/subscription', operation: 'fetchEntitlements' },
+    });
   } finally {
     setLoading(false);
   }

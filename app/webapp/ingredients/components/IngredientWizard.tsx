@@ -170,6 +170,11 @@ export default function IngredientWizard({
       await onSave(capitalizedIngredient);
       resetWizard();
     } catch (error: any) {
+      logger.error('[IngredientWizard.tsx] Error in catch block:', {
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+
       setErrors({
         submit:
           error?.message ||

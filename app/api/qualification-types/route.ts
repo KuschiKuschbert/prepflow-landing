@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
 
 /**
  * GET /api/qualification-types
@@ -11,9 +12,7 @@ export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -70,28 +69,53 @@ export async function GET(request: NextRequest) {
   }
 }
 
+const createQualificationTypeSchema = z.object({
+  name: z.string().min(1, 'Qualification type name is required'),
+  description: z.string().optional(),
+  is_required: z.boolean().optional().default(false),
+  default_expiry_days: z.number().int().positive().nullable().optional(),
+  is_active: z.boolean().optional().default(true),
+});
+
 /**
  * POST /api/qualification-types
  * Create a new qualification type
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { name, description, is_required, default_expiry_days, is_active } = body;
-
-    if (!name) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Qualification type name is required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
     if (!supabaseAdmin) {
       return NextResponse.json(
         ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
+
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Qualification Types API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = createQualificationTypeSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { name, description, is_required, default_expiry_days, is_active } = validationResult.data;
 
     const { data, error } = await supabaseAdmin
       .from('qualification_types')

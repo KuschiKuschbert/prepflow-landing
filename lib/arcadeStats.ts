@@ -1,3 +1,5 @@
+import { dispatchStatsEvent } from './arcadeStats/helpers/dispatchStatsEvent';
+
 export interface ArcadeStats {
   tomatoes: number;
   dockets: number;
@@ -33,16 +35,7 @@ export const addStat = (key: string, value: number = 1): number => {
   const current = Number(localStorage.getItem(key) || 0);
   const newValue = current + value;
   localStorage.setItem(key, String(newValue));
-
-  // Dispatch custom event asynchronously to avoid setState during render
-  // Use requestAnimationFrame + setTimeout to ensure it runs after render phase
-  // This prevents React 19 Strict Mode warnings about setState during render
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('arcade:statsUpdated'));
-    }, 0);
-  });
-
+  dispatchStatsEvent('arcade:statsUpdated');
   return newValue;
 };
 
@@ -50,17 +43,9 @@ export const setStat = (key: string, value: number): void => {
   if (typeof window === 'undefined') return;
 
   const current = Number(localStorage.getItem(key) || 0);
-  const newValue = Math.max(current, value); // Only update if new value is higher
+  const newValue = Math.max(current, value);
   localStorage.setItem(key, String(newValue));
-
-  // Dispatch custom event asynchronously to avoid setState during render
-  // Use requestAnimationFrame + setTimeout to ensure it runs after render phase
-  // This prevents React 19 Strict Mode warnings about setState during render
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('arcade:statsUpdated'));
-    }, 0);
-  });
+  dispatchStatsEvent('arcade:statsUpdated');
 };
 
 export const getSessionStats = (): ArcadeStats => {
@@ -86,16 +71,7 @@ export const addSessionStat = (key: string, value: number = 1): number => {
   const current = Number(sessionStorage.getItem(key) || 0);
   const newValue = current + value;
   sessionStorage.setItem(key, String(newValue));
-
-  // Dispatch custom event asynchronously to avoid setState during render
-  // Use requestAnimationFrame + setTimeout to ensure it runs after render phase
-  // This prevents React 19 Strict Mode warnings about setState during render
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('arcade:sessionStatsUpdated'));
-    }, 0);
-  });
-
+  dispatchStatsEvent('arcade:sessionStatsUpdated');
   return newValue;
 };
 
@@ -103,17 +79,9 @@ export const setSessionStat = (key: string, value: number): void => {
   if (typeof window === 'undefined') return;
 
   const current = Number(sessionStorage.getItem(key) || 0);
-  const newValue = Math.max(current, value); // Only update if new value is higher
+  const newValue = Math.max(current, value);
   sessionStorage.setItem(key, String(newValue));
-
-  // Dispatch custom event asynchronously to avoid setState during render
-  // Use requestAnimationFrame + setTimeout to ensure it runs after render phase
-  // This prevents React 19 Strict Mode warnings about setState during render
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('arcade:sessionStatsUpdated'));
-    }, 0);
-  });
+  dispatchStatsEvent('arcade:sessionStatsUpdated');
 };
 
 export const clearSessionStats = (): void => {
@@ -122,14 +90,7 @@ export const clearSessionStats = (): void => {
   Object.values(STAT_KEYS).forEach(key => {
     sessionStorage.removeItem(key);
   });
-
-  // Dispatch update event asynchronously to avoid setState during render
-  // Use requestAnimationFrame + setTimeout to ensure it runs after render phase
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('arcade:sessionStatsUpdated'));
-    }, 0);
-  });
+  dispatchStatsEvent('arcade:sessionStatsUpdated');
 };
 
 export const clearArcadeStats = (): void => {
@@ -138,14 +99,7 @@ export const clearArcadeStats = (): void => {
   Object.values(STAT_KEYS).forEach(key => {
     localStorage.removeItem(key);
   });
-
-  // Dispatch update event asynchronously to avoid setState during render
-  // Use requestAnimationFrame + setTimeout to ensure it runs after render phase
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('arcade:statsUpdated'));
-    }, 0);
-  });
+  dispatchStatsEvent('arcade:statsUpdated');
 };
 
 export { STAT_KEYS };

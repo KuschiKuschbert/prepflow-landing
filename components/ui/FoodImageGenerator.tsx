@@ -2,6 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
 import { AlertCircle, Loader2, Sparkles } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { FoodImageDisplay } from './FoodImageDisplay';
@@ -82,24 +83,33 @@ export function FoodImageGenerator({
   };
 
   const handleGenerate = async (selectedMethods: PlatingMethodOption[]) => {
-    await handleGenerateHelper(
-      endpoint,
-      selectedMethods,
-      setIsGenerating,
-      setError,
-      showError,
-      showSuccess,
-      setGeneratedClassic,
-      setGeneratedModern,
-      setGeneratedRustic,
-      setGeneratedMinimalist,
-      setGeneratedPlatingMethods,
-      generatedClassic,
-      generatedModern,
-      generatedRustic,
-      generatedMinimalist,
-      onImagesGenerated,
-    );
+    try {
+      await handleGenerateHelper(
+        endpoint,
+        selectedMethods,
+        setIsGenerating,
+        setError,
+        showError,
+        showSuccess,
+        setGeneratedClassic,
+        setGeneratedModern,
+        setGeneratedRustic,
+        setGeneratedMinimalist,
+        setGeneratedPlatingMethods,
+        generatedClassic,
+        generatedModern,
+        generatedRustic,
+        generatedMinimalist,
+        onImagesGenerated,
+      );
+    } catch (error) {
+      logger.error('[FoodImageGenerator] Error generating images:', {
+        error: error instanceof Error ? error.message : String(error),
+        entityType,
+        entityId,
+      });
+      // Error is handled by handleGenerateHelper via setError and showError
+    }
   };
 
   if (compact) {

@@ -6,6 +6,8 @@
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 const DEFAULT_BUCKET = 'recipe-images';
 
 /**
@@ -18,7 +20,7 @@ function dataUrlToBuffer(dataUrl: string): Buffer {
   // Remove data URL prefix (e.g., "data:image/png;base64,")
   const base64Data = dataUrl.split(',')[1];
   if (!base64Data) {
-    throw new Error('Invalid data URL format');
+    throw ApiErrorHandler.createError('Invalid data URL format', 'DATABASE_ERROR', 500);
   }
   return Buffer.from(base64Data, 'base64');
 }
@@ -77,9 +79,7 @@ export async function uploadImageToStorage(
 
       // Check if bucket exists, if not, provide helpful error
       if (uploadError.message.includes('Bucket not found')) {
-        throw new Error(
-          `Storage bucket '${bucket}' not found. Please create it in Supabase Dashboard > Storage.`,
-        );
+        throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
       }
 
       throw uploadError;

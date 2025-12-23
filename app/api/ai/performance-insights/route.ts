@@ -12,6 +12,14 @@ import {
   parsePerformanceInsightsResponse,
 } from '@/lib/ai/prompts/performance-insights';
 import type { PerformanceItem } from '@/app/webapp/performance/types';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { z } from 'zod';
+
+const performanceInsightsSchema = z.object({
+  performanceItems: z.array(z.any()).min(1, 'performanceItems array is required'),
+  performanceScore: z.number(),
+  countryCode: z.string().optional(),
+});
 
 /**
  * POST /api/ai/performance-insights
@@ -26,16 +34,36 @@ import type { PerformanceItem } from '@/app/webapp/performance/types';
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { performanceItems, performanceScore, countryCode } = body as {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[AI Performance Insights] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = performanceInsightsSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { performanceItems, performanceScore, countryCode } = validationResult.data as {
       performanceItems: PerformanceItem[];
       performanceScore: number;
       countryCode?: string;
     };
-
-    if (!Array.isArray(performanceItems) || typeof performanceScore !== 'number') {
-      return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
-    }
 
     // Try AI first
     try {

@@ -4,6 +4,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { prefetchApis } from '@/lib/cache/data-cache';
+import { logger } from '@/lib/logger';
 import type { TaskWithCompletions } from '@/lib/cleaning/completion-logic';
 import { fetchCleaningAreas, fetchCleaningTasks } from './useCleaningPageData/fetchFunctions';
 
@@ -31,11 +32,27 @@ export function useCleaningPageData(startDate: Date, endDate: Date, activeTab: '
   }, [startDate, endDate]);
 
   const fetchAreas = useCallback(async () => {
-    await fetchCleaningAreas(setAreas, setLoading);
+    try {
+      await fetchCleaningAreas(setAreas, setLoading);
+    } catch (error) {
+      logger.error('[useCleaningPageData] Error fetching areas:', {
+        error: error instanceof Error ? error.message : String(error),
+      });
+      // Error is handled by fetchCleaningAreas via setLoading
+    }
   }, []);
 
   const fetchTasks = useCallback(async () => {
-    await fetchCleaningTasks(startDate, endDate, setTasks, setLoading);
+    try {
+      await fetchCleaningTasks(startDate, endDate, setTasks, setLoading);
+    } catch (error) {
+      logger.error('[useCleaningPageData] Error fetching tasks:', {
+        error: error instanceof Error ? error.message : String(error),
+        startDate,
+        endDate,
+      });
+      // Error is handled by fetchCleaningTasks via setLoading
+    }
   }, [startDate, endDate]);
 
   useEffect(() => {

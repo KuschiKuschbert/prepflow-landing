@@ -9,6 +9,26 @@ import { generateAIResponse } from '@/lib/ai/ai-service';
 import type { AIChatMessage, AIRequestOptions } from '@/lib/ai/types';
 
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { z } from 'zod';
+
+const aiChatSchema = z.object({
+  messages: z
+    .array(
+      z.object({
+        role: z.enum(['user', 'assistant', 'system']),
+        content: z.string(),
+      }),
+    )
+    .min(1, 'At least one message is required'),
+  countryCode: z.string().optional().default('AU'),
+  options: z
+    .object({
+      temperature: z.number().min(0).max(2).optional(),
+      maxTokens: z.number().int().positive().optional(),
+    })
+    .optional(),
+});
 
 /**
  * POST /api/ai/chat
@@ -23,17 +43,32 @@ import { logger } from '@/lib/logger';
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { messages, countryCode, options } = body as {
-      messages: AIChatMessage[];
-      countryCode?: string;
-      options?: AIRequestOptions;
-    };
-
-    if (!messages || !Array.isArray(messages) || messages.length === 0) {
-      return NextResponse.json({ error: 'Messages array is required' }, { status: 400 });
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[AI Chat API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
     }
 
+    const validationResult = aiChatSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { messages, countryCode, options } = validationResult.data;
     const finalCountryCode = countryCode || 'AU';
     const response = await generateAIResponse(messages, finalCountryCode, options);
 

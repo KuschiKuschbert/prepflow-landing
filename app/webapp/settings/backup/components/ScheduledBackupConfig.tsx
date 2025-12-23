@@ -11,6 +11,7 @@ import type { BackupSettings } from '@/lib/backup/types';
 import { Icon } from '@/components/ui/Icon';
 import { Clock, Save } from 'lucide-react';
 import { useConfirm } from '@/hooks/useConfirm';
+import { logger } from '@/lib/logger';
 
 interface ScheduledBackupConfigProps {
   settings: BackupSettings | null;
@@ -54,6 +55,11 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
         showError(data.error || 'Failed to save settings');
       }
     } catch (error: any) {
+      logger.error('[ScheduledBackupConfig.tsx] Error in catch block:', {
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+
       showError('Failed to save scheduled backup settings');
     } finally {
       setSaving(false);
@@ -89,6 +95,11 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
         showError(data.error || 'Failed to disable scheduled backups');
       }
     } catch (error: any) {
+      logger.error('[ScheduledBackupConfig.tsx] Error in catch block:', {
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+
       showError('Failed to disable scheduled backups');
     } finally {
       setSaving(false);

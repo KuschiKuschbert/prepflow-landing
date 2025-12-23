@@ -3,6 +3,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { readFileSync } from 'fs';
 import { NextResponse } from 'next/server';
 import { join } from 'path';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * GET /api/setup-user-avatar
@@ -23,10 +24,11 @@ export async function GET() {
   } catch (error) {
     logger.error('[Setup Avatar] Failed to read migration file:', error);
     return NextResponse.json(
-      {
-        error: 'Migration file not found',
-        message: 'Could not read migrations/add-user-avatar.sql',
-      },
+      ApiErrorHandler.createError(
+        'Could not read migrations/add-user-avatar.sql',
+        'FILE_NOT_FOUND',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -43,20 +45,22 @@ export async function POST() {
     // Guard: dev-only
     if (process.env.NODE_ENV === 'production') {
       return NextResponse.json(
-        {
-          error: 'Migration execution is disabled in production',
-          message: 'Please run migrations manually in Supabase SQL Editor for production',
-        },
+        ApiErrorHandler.createError(
+          'Please run migrations manually in Supabase SQL Editor for production',
+          'FORBIDDEN',
+          403,
+        ),
         { status: 403 },
       );
     }
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-          message: 'Supabase admin client could not be initialized',
-        },
+        ApiErrorHandler.createError(
+          'Supabase admin client could not be initialized',
+          'DATABASE_ERROR',
+          500,
+        ),
         { status: 500 },
       );
     }
@@ -68,11 +72,17 @@ export async function POST() {
     try {
       sqlMigration = readFileSync(sqlPath, 'utf-8');
     } catch (err) {
+      logger.error('[route.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       return NextResponse.json(
-        {
-          error: 'Migration file not found',
-          message: 'Could not read migrations/add-user-avatar.sql',
-        },
+        ApiErrorHandler.createError(
+          'Could not read migrations/add-user-avatar.sql',
+          'FILE_NOT_FOUND',
+          500,
+        ),
         { status: 500 },
       );
     }
@@ -122,15 +132,12 @@ export async function POST() {
   } catch (error) {
     logger.error('[Setup Avatar] Unexpected error:', error);
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: error instanceof Error ? error.message : String(error),
-      },
+      ApiErrorHandler.createError(
+        error instanceof Error ? error.message : String(error),
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
 }
-
-
-
-

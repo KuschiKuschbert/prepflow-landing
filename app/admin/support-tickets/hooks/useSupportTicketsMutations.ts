@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import type { SupportTicket } from '../types';
+import { logger } from '@/lib/logger';
 
 /**
  * Hook for support ticket mutations (update status, save notes).
@@ -36,6 +37,11 @@ export function useSupportTicketsMutations(refresh: () => Promise<void>) {
           return false;
         }
       } catch (error) {
+        logger.error('[useSupportTicketsMutations.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
         showError('Failed to update ticket status');
         return false;
       } finally {
@@ -65,6 +71,11 @@ export function useSupportTicketsMutations(refresh: () => Promise<void>) {
           return null;
         }
       } catch (error) {
+        logger.error('[useSupportTicketsMutations.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
         showError('Failed to save notes');
         return null;
       } finally {

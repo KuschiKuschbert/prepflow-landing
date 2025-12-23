@@ -3,6 +3,7 @@
  */
 
 import { Menu } from '../../../types';
+import { logger } from '@/lib/logger';
 
 interface SaveMenuDescriptionProps {
   menu: Menu;
@@ -71,6 +72,11 @@ export async function saveMenuDescription({
       showError(`Failed to update menu description: ${errorMsg}`);
     }
   } catch (err) {
+    logger.error('[saveMenuDescription.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     // Revert optimistic update on error
     if (setMenus) {
       setMenus(prevMenus => prevMenus.map(m => (m.id === menu.id ? originalMenu : m)));

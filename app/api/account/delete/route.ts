@@ -3,6 +3,7 @@ import { requireAuth } from '@/lib/auth0-api-helpers';
 import { scheduleAccountDeletion } from '@/lib/data-retention/schedule-deletion';
 import { logger } from '@/lib/logger';
 import { NextRequest } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * POST /api/account/delete
@@ -17,7 +18,10 @@ export async function POST(req: NextRequest) {
     const userEmail = user.email;
 
     if (!userEmail) {
-      return NextResponse.json({ error: 'User email not found' }, { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('User email not found', 'MISSING_EMAIL', 400),
+        { status: 400 },
+      );
     }
 
     // Schedule deletion 30 days from now
@@ -36,10 +40,11 @@ export async function POST(req: NextRequest) {
       });
 
       return NextResponse.json(
-        {
-          success: false,
-          error: result.error || 'Failed to schedule account deletion',
-        },
+        ApiErrorHandler.createError(
+          result.error || 'Failed to schedule account deletion',
+          'DELETION_SCHEDULE_FAILED',
+          500,
+        ),
         { status: 500 },
       );
     }
@@ -74,15 +79,15 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(
-      {
-        success: false,
-        error:
-          process.env.NODE_ENV === 'development'
-            ? error instanceof Error
-              ? error.message
-              : 'Unknown error'
-            : 'Internal server error',
-      },
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development'
+          ? error instanceof Error
+            ? error.message
+            : 'Unknown error'
+          : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

@@ -9,6 +9,7 @@ import { fetchMenuData } from './helpers/fetchMenuData';
 import { mergeDishRecipeIngredients } from './helpers/mergeDishRecipeIngredients';
 import { processDish } from './helpers/processDish';
 import { processRecipe } from './helpers/processRecipe';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 interface SectionData {
   sectionId: string | null;
@@ -33,11 +34,11 @@ export async function POST(request: NextRequest) {
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Database connection not available',
-          message: 'Database connection could not be established',
-        },
+        ApiErrorHandler.createError(
+          'Database connection could not be established',
+          'DATABASE_ERROR',
+          500,
+        ),
         { status: 500 },
       );
     }

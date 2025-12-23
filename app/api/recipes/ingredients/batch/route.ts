@@ -53,6 +53,13 @@ export async function POST(request: NextRequest) {
       .in('recipe_id', normalizedIds);
 
     if (error) {
+      logger.error('[batch/route] Database error:', {
+        error: error.message,
+      });
+      throw ApiErrorHandler.fromSupabaseError(error, 500);
+    }
+
+    if (error) {
       logger.error('[Recipes API] Database error fetching batch recipe ingredients:', {
         error: error.message,
         code: (error as any).code,

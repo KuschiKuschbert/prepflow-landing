@@ -49,7 +49,14 @@ export default function TemperatureLogsTab({
   const { isGenerating, handleGenerateSampleData } = useSampleDataGeneration({
     onRefreshLogs: async () => {
       if (onRefreshLogs) {
-        await onRefreshLogs();
+        try {
+          await onRefreshLogs();
+        } catch (error) {
+          logger.error('[TemperatureLogsTab] Error refreshing logs:', {
+            error: error instanceof Error ? error.message : String(error),
+          });
+          // Optionally show a toast or alert to the user
+        }
       }
     },
   });

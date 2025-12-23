@@ -38,7 +38,14 @@ export async function POST(req: NextRequest) {
     const user = await requireAuth(req);
     const email = user.email;
 
-    const body = await req.json().catch(() => ({}));
+    let body = {};
+    try {
+      body = await req.json();
+    } catch (err) {
+      logger.warn('[Billing Checkout Session API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
     const validationResult = checkoutSessionSchema.safeParse(body);
 
     if (!validationResult.success) {

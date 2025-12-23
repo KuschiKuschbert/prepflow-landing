@@ -107,6 +107,11 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
         setEquipmentError(data.message || 'Failed to add equipment');
       }
     } catch (error) {
+      logger.error('[EquipmentSetup.tsx] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       setEquipmentError('Network error occurred');
     } finally {
       setEquipmentLoading(false);
@@ -136,6 +141,11 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
         setEquipmentError(data.message || 'Failed to delete equipment');
       }
     } catch (error) {
+      logger.error('[EquipmentSetup.tsx] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       setEquipmentError('Network error occurred');
     }
   };
@@ -173,6 +183,11 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
         setEquipmentError('Some equipment failed to delete. Give it another go, chef.');
       }
     } catch (error) {
+      logger.error('[EquipmentSetup.tsx] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       setEquipmentError('Network error occurred');
     } finally {
       setEquipmentLoading(false);

@@ -49,6 +49,11 @@ export async function insertRecords(
     logger.dev(`[Restore] Restored ${insertedCount} records to ${tableName}`);
     return { insertedCount };
   } catch (error: any) {
+    logger.error('[insert-records.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     return {
       insertedCount,
       error: `Failed to restore ${tableName}: ${error.message}`,

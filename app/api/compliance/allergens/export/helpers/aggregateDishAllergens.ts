@@ -4,6 +4,7 @@
 
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import {
   aggregateDishAllergens,
   extractAllergenSources,
@@ -43,7 +44,8 @@ export async function aggregateDishAllergensForExport(
 
         // Fetch dish ingredients to get allergen sources
         if (!supabaseAdmin) {
-          throw new Error('Supabase admin client not initialized');
+          logger.error('[Allergen Export] Supabase admin client not initialized');
+          throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
         }
         const { data: dishIngredients, error: dishIngredientsError } = await supabaseAdmin
           .from('dish_ingredients')
@@ -69,7 +71,8 @@ export async function aggregateDishAllergensForExport(
 
         // Also check dish recipes for allergens
         if (!supabaseAdmin) {
-          throw new Error('Supabase admin client not initialized');
+          logger.error('[Allergen Export] Supabase admin client not initialized');
+          throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
         }
         const { data: dishRecipes, error: dishRecipesError } = await supabaseAdmin
           .from('dish_recipes')
@@ -104,7 +107,3 @@ export async function aggregateDishAllergensForExport(
     }),
   );
 }
-
-
-
-

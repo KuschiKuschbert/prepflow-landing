@@ -1,12 +1,16 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { getStripe } from '@/lib/stripe';
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { clearTierCache } from '@/lib/feature-gate';
 import type Stripe from 'stripe';
+import { getUserSubscription } from './helpers/getUserSubscription';
+import { cancelStripeSubscription } from './helpers/cancelStripeSubscription';
+import { updateSubscriptionInDatabase } from './helpers/updateDatabase';
+import { scheduleAccountDeletionIfNeeded } from './helpers/scheduleDeletion';
+import { getCancellationMessage } from './helpers/getCancellationMessage';
 
 const cancelSubscriptionSchema = z.object({
   immediate: z.boolean().optional().default(false),
@@ -39,7 +43,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const body = await req.json().catch(() => ({}));
+    let body;
+    try {
+      body = await req.json();
+    } catch (jsonError) {
+      logger.warn('[Billing API] Failed to parse request JSON:', {
+        error: jsonError instanceof Error ? jsonError.message : String(jsonError),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
     const validationResult = cancelSubscriptionSchema.safeParse(body);
 
     if (!validationResult.success) {
@@ -57,31 +72,12 @@ export async function POST(req: NextRequest) {
     const userEmail = user.email as string;
 
     // Get user's subscription ID from database
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
+    const userSubscriptionResult = await getUserSubscription(userEmail);
+    if (userSubscriptionResult instanceof NextResponse) {
+      return userSubscriptionResult;
     }
 
-    const { data: userData, error: userError } = await supabaseAdmin
-      .from('users')
-      .select('stripe_subscription_id, subscription_tier, subscription_expires')
-      .eq('email', userEmail)
-      .single();
-
-    if (userError || !userData?.stripe_subscription_id) {
-      logger.warn('[Billing API] User has no active subscription:', {
-        userEmail,
-        error: userError?.message,
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('No active subscription found', 'SUBSCRIPTION_NOT_FOUND', 404),
-        { status: 404 },
-      );
-    }
-
-    const subscriptionId = userData.stripe_subscription_id;
+    const subscriptionId = userSubscriptionResult.stripe_subscription_id;
 
     // Retrieve current subscription from Stripe
     const subscription: Stripe.Subscription = await stripe.subscriptions.retrieve(subscriptionId);
@@ -97,93 +93,41 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let updatedSubscription: Stripe.Subscription;
-    let cancelAtPeriodEnd = false;
-    let expiresAt: Date | null = null;
-
-    if (immediate) {
-      // Cancel immediately
-      updatedSubscription = await stripe.subscriptions.cancel(subscriptionId);
-      expiresAt = null; // Access ends immediately
-    } else {
-      // Cancel at period end (scheduled cancellation)
-      updatedSubscription = await stripe.subscriptions.update(subscriptionId, {
-        cancel_at_period_end: true,
-      });
-      cancelAtPeriodEnd = true;
-      expiresAt = (subscription as any).current_period_end
-        ? new Date((subscription as any).current_period_end * 1000)
-        : null;
-    }
+    const { updatedSubscription, cancelAtPeriodEnd, expiresAt } = await cancelStripeSubscription({
+      stripe,
+      subscriptionId,
+      subscription,
+      immediate,
+    });
 
     // Update database
-    const updateData: any = {
-      subscription_cancel_at_period_end: cancelAtPeriodEnd,
-      updated_at: new Date().toISOString(),
-    };
-
-    if (immediate) {
-      updateData.subscription_status = 'cancelled';
-      updateData.subscription_expires = null;
-      updateData.subscription_tier = 'starter'; // Downgrade to starter
-    } else {
-      // Keep status active but mark as scheduled for cancellation
-      updateData.subscription_expires = expiresAt?.toISOString() || null;
-    }
-
-    const { error: updateError } = await supabaseAdmin
-      .from('users')
-      .update(updateData)
-      .eq('email', userEmail);
-
-    if (updateError) {
-      logger.error('[Billing API] Failed to update subscription in database:', {
-        error: updateError.message,
-        userEmail,
-      });
-      // Don't fail the request, subscription was cancelled in Stripe
-    }
+    await updateSubscriptionInDatabase({
+      userEmail,
+      immediate,
+      cancelAtPeriodEnd,
+      expiresAt,
+    });
 
     clearTierCache(userEmail);
 
-    // Check if user is EU customer for enhanced cancellation rights
+    // Check if user is EU customer and schedule deletion if needed
     let isEU = false;
     try {
       const { getUserEUStatus } = await import('@/lib/geo/eu-detection');
       isEU = await getUserEUStatus(userEmail, req);
     } catch (err) {
-      // Don't fail cancellation if EU detection fails
       logger.warn('[Billing API] Failed to detect EU status:', {
         error: err instanceof Error ? err.message : String(err),
         userEmail,
       });
     }
 
-    // Schedule account deletion 30 days after cancellation (if immediate cancellation)
-    // For scheduled cancellations, deletion will be scheduled when subscription actually ends
-    if (immediate) {
-      try {
-        const { scheduleAccountDeletion } = await import('@/lib/data-retention/schedule-deletion');
-        await scheduleAccountDeletion({
-          userEmail,
-          metadata: {
-            reason: 'subscription_cancelled_immediate',
-            subscriptionId: subscriptionId,
-            isEU,
-          },
-        });
-        logger.dev('[Billing API] Account deletion scheduled for cancelled subscription:', {
-          userEmail,
-          isEU,
-        });
-      } catch (err) {
-        // Don't fail the cancellation if deletion scheduling fails
-        logger.error('[Billing API] Failed to schedule account deletion:', {
-          error: err instanceof Error ? err.message : String(err),
-          userEmail,
-        });
-      }
-    }
+    await scheduleAccountDeletionIfNeeded({
+      userEmail,
+      subscriptionId,
+      immediate,
+      request: req,
+    });
 
     logger.dev('[Billing API] Subscription cancelled:', {
       userEmail,
@@ -194,14 +138,7 @@ export async function POST(req: NextRequest) {
       isEU,
     });
 
-    // EU customers have enhanced cancellation rights (can cancel at any time without penalty)
-    const cancellationMessage = isEU
-      ? immediate
-        ? 'Subscription cancelled immediately. As an EU customer, you can cancel at any time without penalty.'
-        : 'Subscription will be cancelled at the end of the billing period. As an EU customer, you can cancel at any time without penalty.'
-      : immediate
-        ? 'Subscription cancelled immediately'
-        : 'Subscription will be cancelled at the end of the billing period';
+    const cancellationMessage = getCancellationMessage(isEU, immediate);
 
     return NextResponse.json({
       success: true,

@@ -1,12 +1,14 @@
 /**
  * Merge conflict resolution helpers for restore operations.
  */
-
 import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { MergeOptions } from '../../types';
-
-const BATCH_SIZE = 100;
+import {
+  BATCH_SIZE,
+  processInsertBatch,
+  processUpdateBatch,
+} from './merge-records/helpers/processBatches';
 
 /**
  * Process merge conflicts and insert/update records accordingly.
@@ -55,54 +57,26 @@ export async function mergeRecords(
         batchToInsert.push(recordWithUserId);
       }
 
-      // Process batch when full
       if (batchToInsert.length >= BATCH_SIZE) {
-        const { error } = await supabase.from(tableName).insert(batchToInsert);
-        if (error) {
-          throw error;
-        }
+        await processInsertBatch(supabase, tableName, batchToInsert);
         insertedCount += batchToInsert.length;
         batchToInsert.length = 0;
       }
 
       if (batchToUpdate.length >= BATCH_SIZE) {
-        for (const updateRecord of batchToUpdate) {
-          const { error } = await supabase
-            .from(tableName)
-            .update(updateRecord)
-            .eq('id', updateRecord.id)
-            .eq('user_id', userId);
-
-          if (error) {
-            throw error;
-          }
-        }
+        await processUpdateBatch(supabase, tableName, batchToUpdate, userId);
         insertedCount += batchToUpdate.length;
         batchToUpdate.length = 0;
       }
     }
 
-    // Process remaining batches
     if (batchToInsert.length > 0) {
-      const { error } = await supabase.from(tableName).insert(batchToInsert);
-      if (error) {
-        throw error;
-      }
+      await processInsertBatch(supabase, tableName, batchToInsert);
       insertedCount += batchToInsert.length;
     }
 
     if (batchToUpdate.length > 0) {
-      for (const updateRecord of batchToUpdate) {
-        const { error } = await supabase
-          .from(tableName)
-          .update(updateRecord)
-          .eq('id', updateRecord.id)
-          .eq('user_id', userId);
-
-        if (error) {
-          throw error;
-        }
-      }
+      await processUpdateBatch(supabase, tableName, batchToUpdate, userId);
       insertedCount += batchToUpdate.length;
     }
 
@@ -120,9 +94,7 @@ export async function mergeRecords(
   }
 }
 
-/**
- * Get existing records for a table.
- */
+/** Get existing records for a table. */
 export async function getExistingRecords(
   supabase: SupabaseClient,
   tableName: string,
@@ -134,6 +106,13 @@ export async function getExistingRecords(
   }
 
   // Parent table - get existing by user_id
-  const { data } = await supabase.from(tableName).select('*').eq('user_id', userId);
+  const { data, error } = await supabase.from(tableName).select('*').eq('user_id', userId);
+  if (error) {
+    logger.warn('[Restore] Error fetching existing records:', {
+      error: error.message,
+      code: (error as any).code,
+      context: { tableName, userId, operation: 'getExistingRecords' },
+    });
+  }
   return data || [];
 }

@@ -1,12 +1,10 @@
 'use client';
 
-import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useEffect, useState } from 'react';
-
-const CACHE_KEY = 'user_profile_me';
-const CACHE_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes
+import { initializeProfileState } from './useUserProfile/helpers/initializeProfileState';
+import { fetchUserProfile } from './useUserProfile/helpers/fetchUserProfile';
 
 interface UserProfile {
   first_name: string | null;
@@ -56,45 +54,12 @@ export function useUserProfile(): UseUserProfileReturn {
     });
   }, [user, userEmail, userError, userLoading]);
 
-  // Initialize with cached data for instant display
-  const cachedProfile =
-    typeof window !== 'undefined' ? getCachedData<UserProfile>(CACHE_KEY) : null;
-
-  // Validate cached profile - must have email property to be valid
-  const validCachedProfile =
-    cachedProfile && typeof cachedProfile === 'object' && 'email' in cachedProfile
-      ? cachedProfile
-      : null;
-
-  logger.dev('[useUserProfile] Hook initialized:', {
-    hasUserEmail: !!userEmail,
+  const { initialProfile, initialLoading, validCachedProfile } = initializeProfileState({
     userEmail,
-    hasCachedProfile: !!cachedProfile,
-    cachedProfileData: cachedProfile,
-    isValidCachedProfile: !!validCachedProfile,
-    validCachedProfileData: validCachedProfile,
+    userName,
   });
-
-  const [profile, setProfile] = useState<UserProfile | null>(
-    validCachedProfile ||
-      (userEmail
-        ? {
-            email: userEmail,
-            first_name: null,
-            last_name: null,
-            display_name: null,
-            first_name_display: null,
-            name: userName || null,
-          }
-        : null),
-  );
-  // Use same validation variable as fetch effect to prevent unnecessary state updates
-  const [loading, setLoading] = useState(!validCachedProfile);
-
-  logger.dev('[useUserProfile] Initial state set:', {
-    profile,
-    loading,
-  });
+  const [profile, setProfile] = useState<UserProfile | null>(initialProfile);
+  const [loading, setLoading] = useState(initialLoading);
 
   // Update profile with session email if session becomes available
   useEffect(() => {
@@ -129,151 +94,13 @@ export function useUserProfile(): UseUserProfileReturn {
       return;
     }
 
-    // Prefetch for faster loading
-    prefetchApi('/api/me');
-
-    const loadProfile = async () => {
-      logger.dev('[useUserProfile] Starting loadProfile (will try /api/me even without userEmail)');
-      // Only show loading if we don't have valid cached data (better UX)
-      if (!validCachedProfile) {
-        setLoading(true);
-      }
-
-      try {
-        const response = await fetch('/api/me');
-
-        if (response.status === 401) {
-          // Not authenticated, set profile to null
-          logger.dev('[useUserProfile] User not authenticated (401), setting profile to null');
-          setProfile(null);
-          setLoading(false);
-          return;
-        }
-
-        if (!response.ok) {
-          // Error fetching, use session data as fallback
-          logger.dev('[useUserProfile] Failed to fetch profile, using session data', {
-            status: response.status,
-          });
-          setProfile({
-            email: userEmail || '',
-            first_name: null,
-            last_name: null,
-            display_name: null,
-            first_name_display: null,
-            name: userName || null,
-          });
-          setLoading(false);
-          return;
-        }
-
-        const data = await response.json();
-        logger.dev('[useUserProfile] Raw API response:', {
-          data,
-          dataKeys: Object.keys(data || {}),
-          hasUser: !!data.user,
-          userType: typeof data.user,
-        });
-
-        const userData = data.user;
-        logger.dev('[useUserProfile] Extracted userData:', {
-          userData,
-          userDataKeys: userData ? Object.keys(userData) : [],
-          userDataType: typeof userData,
-          hasUserData: !!userData,
-          userDataFirst: userData?.first_name,
-          userDataLast: userData?.last_name,
-          userDataDisplay: userData?.display_name,
-          userDataEmail: userData?.email,
-        });
-
-        if (userData) {
-          const profileData: UserProfile = {
-            email: userData.email || userEmail || '',
-            first_name: userData.first_name || null,
-            last_name: userData.last_name || null,
-            display_name: userData.display_name || null,
-            first_name_display: userData.first_name_display || null,
-            name: userData.name || user?.name || null,
-          };
-
-          // Validate profileData has at least email
-          if (!profileData.email) {
-            logger.error('[useUserProfile] Invalid profileData - missing email:', profileData);
-            // Fallback to session data
-            setProfile({
-              email: userEmail || '',
-              first_name: null,
-              last_name: null,
-              display_name: null,
-              first_name_display: null,
-              name: userName || null,
-            });
-            setLoading(false);
-            return;
-          }
-
-          logger.dev('[useUserProfile] Received API data:', {
-            first_name: userData.first_name,
-            last_name: userData.last_name,
-            display_name: userData.display_name,
-            first_name_display: userData.first_name_display,
-            email: profileData.email,
-          });
-
-          logger.dev('[useUserProfile] About to set profile state:', {
-            profileData,
-            profileDataKeys: Object.keys(profileData),
-            profileDataStringified: JSON.stringify(profileData),
-          });
-
-          setProfile(profileData);
-
-          // Log after state update (will show in next render)
-          logger.dev('[useUserProfile] Profile state set (check next render):', {
-            profileData,
-            email: profileData.email,
-            first_name: profileData.first_name,
-            last_name: profileData.last_name,
-          });
-
-          // Cache fresh data for next render
-          // This ensures UI updates immediately and cache is fresh for next mount
-          cacheData(CACHE_KEY, profileData, CACHE_EXPIRY_MS);
-        } else {
-          logger.dev('[useUserProfile] No userData in API response');
-          // Set fallback profile with email
-          setProfile({
-            email: userEmail || '',
-            first_name: null,
-            last_name: null,
-            display_name: null,
-            first_name_display: null,
-            name: userName || null,
-          });
-        }
-      } catch (error) {
-        // Network error, use session data as fallback
-        logger.dev('[useUserProfile] Network error, using session data:', {
-          error: error instanceof Error ? error.message : String(error),
-        });
-        // Ensure email has fallback to prevent invalid profile objects
-        setProfile({
-          email: userEmail || '',
-          first_name: null,
-          last_name: null,
-          display_name: null,
-          first_name_display: null,
-          name: user?.name || null,
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // Always try to load profile, even if userEmail is missing
-    // /api/me will return 401 if not authenticated, which we handle above
-    loadProfile();
+    fetchUserProfile({
+      userEmail,
+      userName: user?.name || null,
+      validCachedProfile,
+      setProfile,
+      setLoading,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userEmail, userLoading]);
 

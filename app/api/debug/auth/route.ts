@@ -1,6 +1,7 @@
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Diagnostic endpoint for Auth0 configuration
@@ -73,6 +74,9 @@ export async function GET(request: NextRequest) {
     diagnostics.actualRedirectUri = session ? 'Session active' : 'No session';
     diagnostics.providerCallbackURL = expectedCallbackUrl;
   } catch (error) {
+    logger.dev('[Auth Debug] Error checking provider:', {
+      error: error instanceof Error ? error.message : String(error),
+    });
     diagnostics.providerCheckError = error instanceof Error ? error.message : String(error);
   }
 

@@ -2,11 +2,13 @@
 
 import { type NavigationItemConfig } from '@/app/webapp/components/navigation/nav-items';
 import { type OptimizationResult } from './schema';
-import { type NavigationPattern } from './schema';
 import { getCachedOptimization, cacheOptimization } from './localStorage';
 import { getUsagePatterns, detectPatternChange } from './patternAnalyzer';
 import { getUsageLogs } from './localStorage';
 import { getAdaptiveNavSettings } from './store';
+import { logger } from '@/lib/logger';
+import { createOptimizationResult } from './optimizer/helpers/createOptimizationResult';
+import { applyOptimization } from './optimizer/helpers/applyOptimization';
 
 let patternVersion = 0;
 
@@ -61,7 +63,7 @@ export async function optimizeNavigationItems(
     }
 
     // Create optimization result
-    const optimizationResult = createOptimizationResult(items, patterns, selectedSections);
+    const optimizationResult = createOptimizationResult(items, patterns, selectedSections, patternVersion);
 
     // Cache the result
     cacheOptimization(optimizationResult);
@@ -69,134 +71,16 @@ export async function optimizeNavigationItems(
     // Apply optimization
     return applyOptimization(items, optimizationResult, selectedSections);
   } catch (error) {
+    logger.error('[optimizer.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     // On any error, return original items
     return items;
   }
 }
 
-/**
- * Create optimization result from patterns.
- *
- * @param {NavigationItemConfig[]} items - Original items
- * @param {NavigationPattern[]} patterns - Usage patterns
- * @param {string[]} selectedSections - Sections to optimize
- * @returns {OptimizationResult} Optimization result
- */
-function createOptimizationResult(
-  items: NavigationItemConfig[],
-  patterns: NavigationPattern[],
-  selectedSections: string[],
-): OptimizationResult {
-  // Create a map of href to pattern score
-  const patternMap = new Map<string, number>();
-  patterns.forEach(pattern => {
-    patternMap.set(pattern.href, pattern.score);
-  });
-
-  // Group items by category
-  const itemsByCategory = new Map<string, NavigationItemConfig[]>();
-  items.forEach((item, index) => {
-    const category = item.category || 'other';
-    if (!itemsByCategory.has(category)) {
-      itemsByCategory.set(category, []);
-    }
-    itemsByCategory.get(category)!.push({ ...item, originalIndex: index } as any);
-  });
-
-  // Optimize items within selected sections
-  const optimizedItems: Array<{
-    href: string;
-    originalIndex: number;
-    optimizedIndex: number;
-    score: number;
-  }> = [];
-
-  let currentIndex = 0;
-
-  itemsByCategory.forEach((categoryItems, category) => {
-    if (selectedSections.includes(category)) {
-      // Sort items in this category by pattern score
-      const sortedItems = [...categoryItems].sort((a, b) => {
-        const scoreA = patternMap.get(a.href) || 0;
-        const scoreB = patternMap.get(b.href) || 0;
-        return scoreB - scoreA; // Higher score first
-      });
-
-      sortedItems.forEach((item, sortedIndex) => {
-        const originalIndex = (item as any).originalIndex;
-        const score = patternMap.get(item.href) || 0;
-        optimizedItems.push({
-          href: item.href,
-          originalIndex,
-          optimizedIndex: currentIndex + sortedIndex,
-          score,
-        });
-      });
-
-      currentIndex += sortedItems.length;
-    } else {
-      // Keep original order for non-selected sections
-      categoryItems.forEach((item, categoryIndex) => {
-        const originalIndex = (item as any).originalIndex;
-        optimizedItems.push({
-          href: item.href,
-          originalIndex,
-          optimizedIndex: currentIndex + categoryIndex,
-          score: 0,
-        });
-      });
-
-      currentIndex += categoryItems.length;
-    }
-  });
-
-  return {
-    items: optimizedItems,
-    lastCalculated: Date.now(),
-    patternVersion,
-  };
-}
-
-/**
- * Apply optimization result to navigation items.
- *
- * @param {NavigationItemConfig[]} items - Original items
- * @param {OptimizationResult} result - Optimization result
- * @param {string[]} selectedSections - Sections to optimize
- * @returns {NavigationItemConfig[]} Optimized items
- */
-function applyOptimization(
-  items: NavigationItemConfig[],
-  result: OptimizationResult,
-  selectedSections: string[],
-): NavigationItemConfig[] {
-  // Create a map of href to item
-  const itemMap = new Map<string, NavigationItemConfig>();
-  items.forEach(item => {
-    itemMap.set(item.href, item);
-  });
-
-  // Sort optimization items by optimized index
-  const sortedOptimizations = [...result.items].sort((a, b) => a.optimizedIndex - b.optimizedIndex);
-
-  // Build optimized array
-  const optimized: NavigationItemConfig[] = [];
-  sortedOptimizations.forEach(opt => {
-    const item = itemMap.get(opt.href);
-    if (item) {
-      optimized.push(item);
-    }
-  });
-
-  // Add any items not in optimization result (shouldn't happen, but safety check)
-  items.forEach(item => {
-    if (!optimized.find(opt => opt.href === item.href)) {
-      optimized.push(item);
-    }
-  });
-
-  return optimized;
-}
 
 /**
  * Reset optimization cache (useful for testing or manual reset).

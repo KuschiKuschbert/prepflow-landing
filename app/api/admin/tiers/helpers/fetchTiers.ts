@@ -1,7 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { NextResponse } from 'next/server';
-
 /**
  * Fetches all tier configurations from the database.
  *
@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server';
  */
 export async function fetchTiers(): Promise<{ tiers: any[] } | NextResponse> {
   if (!supabaseAdmin) {
-    return NextResponse.json({ error: 'Database not available' }, { status: 503 });
+    return NextResponse.json(ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503), { status: 503 });
   }
 
   const { data, error } = await supabaseAdmin
@@ -19,7 +19,7 @@ export async function fetchTiers(): Promise<{ tiers: any[] } | NextResponse> {
 
   if (error) {
     logger.error('[Admin Tiers] Failed to fetch tiers:', error);
-    return NextResponse.json({ error: 'Failed to fetch tiers' }, { status: 500 });
+    return NextResponse.json(ApiErrorHandler.createError('Failed to fetch tiers', 'SERVER_ERROR', 500), { status: 500 });
   }
 
   return { tiers: data || [] };

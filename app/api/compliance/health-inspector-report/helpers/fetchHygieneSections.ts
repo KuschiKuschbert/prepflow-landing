@@ -1,4 +1,5 @@
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 /**
  * Fetch sanitizer logs.
@@ -20,7 +21,10 @@ export async function fetchSanitizerLogs(startDate: string, endDate: string) {
     .limit(200);
 
   if (sanitizerError) {
-    return null;
+    logger.warn('[Health Inspector Report] Error fetching sanitizer logs:', {
+      error: sanitizerError.message,
+      code: (sanitizerError as any).code,
+    });
   }
 
   const logs = sanitizerLogs || [];
@@ -54,7 +58,10 @@ export async function fetchStaffHealth(startDate: string, endDate: string) {
     .limit(200);
 
   if (healthError) {
-    return null;
+    logger.warn('[Health Inspector Report] Error fetching staff health declarations:', {
+      error: healthError.message,
+      code: (healthError as any).code,
+    });
   }
 
   const declarations = healthDeclarations || [];

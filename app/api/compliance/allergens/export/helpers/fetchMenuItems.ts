@@ -4,6 +4,7 @@
 
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 export interface MenuItem {
   menu_id: string;
@@ -17,7 +18,8 @@ export interface MenuItem {
  */
 export async function fetchMenuItemsMap(): Promise<Record<string, MenuItem[]>> {
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    logger.error('[Allergen Export] Database connection not available for fetchMenuItemsMap');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   const menuItemsMap: Record<string, MenuItem[]> = {};

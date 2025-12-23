@@ -3,6 +3,7 @@
 import React from 'react';
 // Auth0 SDK login handled via URL redirect
 import { trackEvent } from '@/lib/analytics';
+import { logger } from '@/lib/logger';
 
 interface Step {
   key: string;
@@ -88,7 +89,12 @@ export default function TourModal({ isOpen, onClose, steps }: TourModalProps) {
                       if (typeof window !== 'undefined') {
                         sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
                       }
-                    } catch (_) {}
+                    } catch (err) {
+                      // SessionStorage might fail in private mode - log but continue
+                      logger.dev('[TourModal] Failed to set sessionStorage flag:', {
+                        error: err instanceof Error ? err.message : String(err),
+                      });
+                    }
                     window.location.href = '/api/auth/login?returnTo=/webapp';
                   } else {
                     trackEvent('tour_next', 'engagement', steps[index]?.key, index + 1);

@@ -10,6 +10,7 @@ import { Inter } from 'next/font/google';
 import dynamic from 'next/dynamic';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import React, { useEffect, useState } from 'react';
+import { logger } from '@/lib/logger';
 import { CountryProvider } from '../../contexts/CountryContext';
 import { GlobalWarningProvider, useGlobalWarning } from '../../contexts/GlobalWarningContext';
 import { NotificationProvider } from '../../contexts/NotificationContext';
@@ -146,7 +147,12 @@ export default function WebAppLayout({
       if (authFlag) {
         sessionStorage.removeItem('PF_AUTH_IN_PROGRESS');
       }
-    } catch (_) {}
+    } catch (err) {
+      // SessionStorage might fail in private mode - log but continue
+      logger.dev('[WebAppLayout] Error accessing sessionStorage (non-blocking):', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
   }, []);
 
   return (
@@ -242,7 +248,9 @@ function WebAppLayoutContent({
 
       {/* Main Content - responsive padding handled by CSS in globals.css */}
       <main className="webapp-main-content bg-transparent">
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <ErrorBoundary>
+          <ReactQueryProvider>{children}</ReactQueryProvider>
+        </ErrorBoundary>
       </main>
 
       {/* Arcade Loading Overlay (disabled around auth flows) */}

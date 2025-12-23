@@ -2,12 +2,11 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAdmin } from '@/lib/admin-auth';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import {
-  notifyBreachAffectedUsers,
-  updateBreachNotificationStatus,
-} from '@/lib/security/breach-notification';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { logBreachToDatabase } from './helpers/logBreach';
+import { sendBreachNotifications } from './helpers/sendNotifications';
+import { handleBreachReportError } from './helpers/handleError';
 
 const breachReportSchema = z.object({
   breachType: z.enum([
@@ -48,7 +47,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const body = await req.json().catch(() => ({}));
+    let body = {};
+    try {
+      body = await req.json();
+    } catch (err) {
+      logger.warn('[Admin Breach Report API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
     const validationResult = breachReportSchema.safeParse(body);
 
     if (!validationResult.success) {
@@ -66,30 +72,18 @@ export async function POST(req: NextRequest) {
     const { breachType, description, affectedUsers, metadata } = validationResult.data;
 
     // Log breach to database
-    const { data: breachData, error: insertError } = await supabaseAdmin
-      .from('security_breaches')
-      .insert({
-        breach_type: breachType,
-        description,
-        affected_users: affectedUsers,
-        status: 'pending',
-        metadata: metadata || {},
-      })
-      .select('id, detected_at')
-      .single();
+    const breachResult = await logBreachToDatabase({
+      breachType,
+      description,
+      affectedUsers,
+      metadata,
+    });
 
-    if (insertError) {
-      logger.error('[Breach Report API] Failed to log breach:', {
-        error: insertError.message,
-        breachType,
-        affectedUsersCount: affectedUsers.length,
-      });
-
-      return NextResponse.json(
-        ApiErrorHandler.createError('Failed to log breach', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
+    if (breachResult instanceof NextResponse) {
+      return breachResult;
     }
+
+    const breachData = breachResult;
 
     logger.warn('[Breach Report API] Breach reported:', {
       breachId: breachData.id,
@@ -99,16 +93,13 @@ export async function POST(req: NextRequest) {
     });
 
     // Immediately notify affected users (within 72-hour window)
-    const breachNotificationData = {
+    const notificationResults = await sendBreachNotifications({
       breachId: breachData.id,
       breachType,
       description,
       affectedUsers,
       detectedAt: breachData.detected_at,
-    };
-
-    const notificationResults = await notifyBreachAffectedUsers(breachNotificationData);
-    await updateBreachNotificationStatus(breachData.id, notificationResults);
+    });
 
     return NextResponse.json(
       {
@@ -125,28 +116,7 @@ export async function POST(req: NextRequest) {
       { status: 201 },
     );
   } catch (error) {
-    // requireAdmin throws NextResponse for auth errors
-    if (error instanceof NextResponse) {
-      throw error;
-    }
-
-    logger.error('[Breach Report API] Unexpected error:', {
-      error: error instanceof Error ? error.message : String(error),
-      context: { endpoint: '/api/admin/security/breach-report', method: 'POST' },
-    });
-
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? error instanceof Error
-            ? error.message
-            : 'Unknown error'
-          : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
+    return handleBreachReportError(error, 'POST');
   }
 }
 
@@ -207,27 +177,6 @@ export async function GET(req: NextRequest) {
       count: breaches?.length || 0,
     });
   } catch (error) {
-    // requireAdmin throws NextResponse for auth errors
-    if (error instanceof NextResponse) {
-      throw error;
-    }
-
-    logger.error('[Breach Report API] Unexpected error:', {
-      error: error instanceof Error ? error.message : String(error),
-      context: { endpoint: '/api/admin/security/breach-report', method: 'GET' },
-    });
-
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? error instanceof Error
-            ? error.message
-            : 'Unknown error'
-          : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
+    return handleBreachReportError(error, 'GET');
   }
 }

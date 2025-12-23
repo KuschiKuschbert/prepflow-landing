@@ -5,6 +5,16 @@ import { handleAISpecialsError } from './helpers/handleAISpecialsError';
 import { validateAISpecialsRequest } from './helpers/validateRequest';
 import { generateAISpecials } from './helpers/generateAISpecials';
 import { saveAISpecials } from './helpers/saveAISpecials';
+import { z } from 'zod';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+
+const aiSpecialsSchema = z.object({
+  userId: z.string().min(1, 'User ID is required'),
+  imageData: z.string().min(1, 'Image data is required'),
+  prompt: z.string().optional(),
+  countryCode: z.string().optional().default('AU'),
+});
 
 /**
  * POST /api/ai-specials
@@ -33,8 +43,32 @@ export async function POST(request: NextRequest) {
       throw error;
     }
 
-    const body = await request.json();
-    const validationResult = validateAISpecialsRequest(body);
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[AI Specials API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const zodValidation = aiSpecialsSchema.safeParse(body);
+    if (!zodValidation.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          zodValidation.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = validateAISpecialsRequest(zodValidation.data);
     if (validationResult instanceof NextResponse) return validationResult;
 
     const { userId, imageData, prompt, countryCode } = validationResult;
@@ -56,11 +90,18 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     return handleAISpecialsError(error, 'POST');
   }
 }
 
 import { fetchAISpecialsHistory } from './helpers/fetchAISpecialsHistory';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 /**
  * GET /api/ai-specials
@@ -78,10 +119,7 @@ export async function GET(request: NextRequest) {
 
     if (!userId) {
       return NextResponse.json(
-        {
-          error: 'User ID is required',
-          message: 'Please provide a valid user ID',
-        },
+        ApiErrorHandler.createError('Please provide a valid user ID', 'MISSING_USER_ID', 400),
         { status: 400 },
       );
     }
@@ -94,6 +132,11 @@ export async function GET(request: NextRequest) {
       data: result.data,
     });
   } catch (error) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     return handleAISpecialsError(error, 'GET');
   }
 }

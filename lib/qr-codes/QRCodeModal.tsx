@@ -15,31 +15,18 @@ export interface QRCodeModalEntity {
 }
 
 export interface QRCodeModalProps<T extends QRCodeModalEntity> {
-  /** The entity to generate QR code for */
   entity: T;
-  /** Whether the modal is open */
   isOpen: boolean;
-  /** Close handler */
   onClose: () => void;
-  /** Entity type label for display (e.g., "Recipe", "Cleaning Area") */
   entityTypeLabel: string;
-  /** URL path pattern - use {id} as placeholder (e.g., "/webapp/recipes/{id}") */
   urlPattern: string;
-  /** Custom icon for the header */
   icon?: LucideIcon;
-  /** Optional subtitle extractor from entity */
   getSubtitle?: (entity: T) => string | null;
-  /** Optional type label extractor (for entities with types) */
   getTypeLabel?: (entity: T) => string;
-  /** Custom QR code instructions */
   instructions?: string;
-  /** Custom QR code hint */
   hint?: string;
-  /** Custom print instructions */
   printInstructions?: string;
-  /** Custom permanent link note */
   permanentLinkNote?: string;
-  /** Optional metadata badge content */
   metadataBadge?: React.ReactNode;
 }
 
@@ -87,13 +74,11 @@ export function QRCodeModal<T extends QRCodeModalEntity>({
     }
   };
 
-  // Generate the full URL
+  if (!isOpen) return null;
+
   const entityUrl = baseUrl
     ? `${baseUrl}${urlPattern.replace('{id}', entity.id)}`
     : urlPattern.replace('{id}', entity.id);
-
-  if (!isOpen) return null;
-
   const typeLabel = getTypeLabel ? getTypeLabel(entity) : entityTypeLabel;
   const subtitle = getSubtitle ? getSubtitle(entity) : null;
 
@@ -115,10 +100,8 @@ export function QRCodeModal<T extends QRCodeModalEntity>({
           className="flex max-h-[95vh] w-full flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-[#1f1f1f]/95 to-[#2a2a2a]/95 p-3"
           onClick={e => e.stopPropagation()}
         >
-          {/* Gradient accent */}
           <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-[#29E7CD]/10 via-transparent to-[#D925C7]/10 opacity-50" />
 
-          {/* Close button */}
           <button
             ref={closeButtonRef}
             onClick={onClose}

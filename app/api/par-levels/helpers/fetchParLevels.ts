@@ -73,18 +73,29 @@ export async function fetchParLevels(supabaseAdmin: any) {
         const ingredientIds = simpleData.map((pl: any) => pl.ingredient_id).filter((id: any) => id);
 
         if (ingredientIds.length > 0) {
-          const { data: ingredientsData } = await supabaseAdmin
+          const { data: ingredientsData, error: ingredientsError } = await supabaseAdmin
             .from('ingredients')
             .select('id, ingredient_name, unit, category')
             .in('id', ingredientIds);
 
-          // Merge ingredients into par levels
-          const ingredientsMap = new Map((ingredientsData || []).map((ing: any) => [ing.id, ing]));
-          data = simpleData.map((pl: any) => ({
-            ...pl,
-            ingredients: ingredientsMap.get(pl.ingredient_id) || null,
-          }));
-          error = null;
+          if (ingredientsError) {
+            logger.warn('[Par Levels API] Error fetching ingredients for par levels:', {
+              error: ingredientsError.message,
+              code: (ingredientsError as any).code,
+              ingredientIds,
+            });
+            // Continue without ingredients - par levels will have null ingredients
+            data = simpleData.map((pl: any) => ({ ...pl, ingredients: null }));
+            error = null;
+          } else {
+            // Merge ingredients into par levels
+            const ingredientsMap = new Map((ingredientsData || []).map((ing: any) => [ing.id, ing]));
+            data = simpleData.map((pl: any) => ({
+              ...pl,
+              ingredients: ingredientsMap.get(pl.ingredient_id) || null,
+            }));
+            error = null;
+          }
         } else {
           data = simpleData.map((pl: any) => ({ ...pl, ingredients: null }));
           error = null;

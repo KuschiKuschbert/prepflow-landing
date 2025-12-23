@@ -1,8 +1,10 @@
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 export async function fetchMenuData(menuId: string) {
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   // Fetch menu
@@ -13,7 +15,7 @@ export async function fetchMenuData(menuId: string) {
     .single();
 
   if (menuError || !menu) {
-    throw new Error('Menu not found');
+    throw ApiErrorHandler.createError('Menu not found', 'DATABASE_ERROR', 500);
   }
 
   // Fetch menu items with dishes and recipes
@@ -42,7 +44,7 @@ export async function fetchMenuData(menuId: string) {
     .eq('menu_id', menuId);
 
   if (itemsError) {
-    throw new Error(`Failed to fetch menu items: ${itemsError.message}`);
+    throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
   }
 
   return { menu, menuItems: menuItems || [] };

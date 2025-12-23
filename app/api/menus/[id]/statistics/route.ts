@@ -1,5 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { NextRequest, NextResponse } from 'next/server';
 import { calculateMenuStatistics } from './helpers/calculateMenuStatistics';
 import { handleMenuStatisticsError } from './helpers/handleMenuStatisticsError';
@@ -10,11 +11,11 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     const menuId = id;
 
     if (!menuId) {
-      return NextResponse.json({ error: 'Missing menu id' }, { status: 400 });
+      return NextResponse.json(ApiErrorHandler.createError('Missing menu id', 'SERVER_ERROR', 400), { status: 400 });
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500), { status: 500 });
     }
 
     // Fetch menu items with dishes and recipes
@@ -95,6 +96,11 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       statistics,
     });
   } catch (err) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     return handleMenuStatisticsError(err);
   }
 }

@@ -5,6 +5,8 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 /**
  * Invalidates and re-aggregates allergen caches for affected recipes and dishes
  *
@@ -13,7 +15,7 @@ import { supabaseAdmin } from '@/lib/supabase';
  */
 export async function invalidateAndReaggregate(ingredients: any[]): Promise<void> {
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   const { invalidateRecipesWithIngredient, invalidateDishesWithIngredient } =

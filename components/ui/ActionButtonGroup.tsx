@@ -10,6 +10,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Icon } from './Icon';
 import { MoreVertical, Printer, Download, Share2, Copy, Upload, X } from 'lucide-react';
+import { logger } from '@/lib/logger';
 import { PrintButton } from './PrintButton';
 import { ExportButton, type ExportFormat } from './ExportButton';
 import { ShareButton, type ShareMethod } from './ShareButton';
@@ -158,8 +159,16 @@ export function ActionButtonGroup({
                     <button
                       key={format}
                       onClick={async () => {
-                        await onExport(format);
-                        setIsMobileMenuOpen(false);
+                        try {
+                          await onExport(format);
+                          setIsMobileMenuOpen(false);
+                        } catch (error) {
+                          logger.error('[ActionButtonGroup] Error exporting:', {
+                            error: error instanceof Error ? error.message : String(error),
+                            format,
+                          });
+                          // Error is handled by onExport callback
+                        }
                       }}
                       disabled={exportLoading === format}
                       className="flex w-full items-center gap-3 px-4 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)] disabled:cursor-not-allowed disabled:opacity-50"

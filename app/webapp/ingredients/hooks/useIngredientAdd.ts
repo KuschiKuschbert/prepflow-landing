@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { useOnIngredientAdded } from '@/lib/personality/hooks';
 import { addIngredient, rollbackIngredientAdd } from './useIngredientAdd/addIngredient';
+import { logger } from '@/lib/logger';
 
 interface UseIngredientAddProps<
   T extends { id: string; ingredient_name: string; cost_per_unit: number },

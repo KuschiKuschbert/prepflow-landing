@@ -68,10 +68,17 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     // Generate recipe cards in background (non-blocking)
     // Fire and forget - don't wait for generation to complete
     // This allows the lock response to return immediately while cards generate in background
-    generateRecipeCardsForMenu(menuId).catch(genError => {
-      logger.error('Failed to generate recipe cards during lock (background)', genError);
-      // We don't fail the lock request if card generation fails, but we log it.
-    });
+    (async () => {
+      try {
+        await generateRecipeCardsForMenu(menuId);
+      } catch (genError) {
+        logger.error('[Menu Lock API] Failed to generate recipe cards during lock (background):', {
+          error: genError instanceof Error ? genError.message : String(genError),
+          context: { menuId, operation: 'generateRecipeCardsForMenu' },
+        });
+        // We don't fail the lock request if card generation fails, but we log it.
+      }
+    })();
 
     return NextResponse.json({
       success: true,
@@ -79,7 +86,11 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       message: 'Menu locked successfully. Recipe cards are being generated in the background.',
     });
   } catch (err) {
-    logger.error('[Menu Lock API] Error:', err);
+    logger.error('[Menu Lock API] Error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/menus/[id]/lock', method: 'POST' },
+    });
     return NextResponse.json(
       ApiErrorHandler.createError(
         'Failed to lock menu',
@@ -161,7 +172,11 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
       message: 'Menu unlocked successfully',
     });
   } catch (err) {
-    logger.error('[Menu Lock API] Error:', err);
+    logger.error('[Menu Lock API] Error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/menus/[id]/lock', method: 'DELETE' },
+    });
     return NextResponse.json(
       ApiErrorHandler.createError(
         'Failed to unlock menu',

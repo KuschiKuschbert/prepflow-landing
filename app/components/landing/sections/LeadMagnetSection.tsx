@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import { trackEvent, trackConversion, getSessionId } from '../../../../lib/analytics';
 import { useTranslation } from '../../../../lib/useTranslation';
 import { trackGTMEvent } from '../../../../components/GoogleTagManager';
+import { logger } from '@/lib/logger';
 
-export function LeadMagnetSection() {
+function LeadMagnetSectionContent() {
   const { t } = useTranslation();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -62,6 +64,11 @@ export function LeadMagnetSection() {
       setName('');
       setEmail('');
     } catch (err: any) {
+      logger.error('[LeadMagnetSection.tsx] Error in catch block:', {
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
+
       setError(err?.message || 'Submission failed');
     } finally {
       setIsSubmitting(false);
@@ -135,5 +142,13 @@ export function LeadMagnetSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+export function LeadMagnetSection() {
+  return (
+    <ErrorBoundary>
+      <LeadMagnetSectionContent />
+    </ErrorBoundary>
   );
 }

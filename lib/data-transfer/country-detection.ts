@@ -102,7 +102,28 @@ export async function getUserCountry(userEmail: string, request?: Request): Prom
       .eq('user_email', userEmail)
       .single();
 
-    if (error || !data) {
+    if (error) {
+      if ((error as any).code !== 'PGRST116') {
+        // PGRST116 is "not found" - that's okay, user not in database yet
+        logger.warn('[Country Detection] Error fetching user country:', {
+          error: error.message,
+          code: (error as any).code,
+          userEmail,
+        });
+      }
+      // Not in database, try to detect from request
+      if (request) {
+        const detectedCountry = await detectCountryFromRequest(request);
+        // Store detected country for future use
+        if (detectedCountry) {
+          await storeUserCountry(userEmail, detectedCountry);
+        }
+        return detectedCountry;
+      }
+      return null;
+    }
+
+    if (!data) {
       // Not in database, try to detect from request
       if (request) {
         const detectedCountry = await detectCountryFromRequest(request);
@@ -156,6 +177,7 @@ export async function storeUserCountry(userEmail: string, countryCode: string): 
     if (error) {
       logger.error('[Country Detection] Failed to store user country:', {
         error: error.message,
+        code: (error as any).code,
         userEmail,
         countryCode,
       });
@@ -178,7 +200,3 @@ export async function storeUserCountry(userEmail: string, countryCode: string): 
     return false;
   }
 }
-
-
-
-

@@ -2,6 +2,7 @@
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useEffect, useState } from 'react';
 import { useIngredientBulkActionsDialog } from '../hooks/useIngredientBulkActionsDialog';
+import { logger } from '@/lib/logger';
 import { type SortOption } from '../hooks/useIngredientFiltering';
 import { useIngredientTableSort } from '../hooks/useIngredientTableSort';
 import { IngredientCard } from './IngredientCard';
@@ -33,7 +34,6 @@ interface Ingredient {
   created_at?: string;
   updated_at?: string;
 }
-
 interface IngredientTableWithFiltersProps {
   ingredients: Ingredient[];
   displayUnit: string;
@@ -69,7 +69,6 @@ interface IngredientTableWithFiltersProps {
   onEnterSelectionMode?: () => void;
   onExitSelectionMode?: () => void;
 }
-
 export default function IngredientTableWithFilters({
   ingredients,
   displayUnit,
@@ -145,15 +144,18 @@ export default function IngredientTableWithFilters({
     return () => document.removeEventListener('keydown', handleEscape);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showBulkMenu]);
-
   const { handleColumnSort, getSortIcon } = useIngredientTableSort(sortBy, onSortChange);
-
   const handleDelete = async (id: string): Promise<void> => handleDeleteFromHook(id);
   const confirmDelete = async () => {
     if (!deleteConfirmId) return;
     setDeletingId(deleteConfirmId);
     try {
       await confirmDeleteFromHook(onDelete);
+    } catch (err) {
+      logger.error('[IngredientTableWithFilters] Error deleting ingredient:', {
+        error: err instanceof Error ? err.message : String(err),
+        ingredientId: deleteConfirmId,
+      });
     } finally {
       setDeletingId(null);
     }
@@ -210,7 +212,6 @@ export default function IngredientTableWithFilters({
         onDisplayUnitChange={onDisplayUnitChange}
         onItemsPerPageChange={onItemsPerPageChange}
       />
-
       <IngredientTableHeader
         totalFiltered={totalFiltered}
         ingredientsCount={ingredients.length}
@@ -234,7 +235,6 @@ export default function IngredientTableWithFilters({
         onSelectAll={onSelectAll}
         onEnterSelectionMode={onEnterSelectionMode}
       />
-
       <IngredientSelectionModeBanner
         isSelectionMode={isSelectionMode}
         onExitSelectionMode={() => {

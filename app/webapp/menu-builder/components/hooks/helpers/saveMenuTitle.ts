@@ -3,6 +3,7 @@
  */
 
 import { Menu } from '../../../types';
+import { logger } from '@/lib/logger';
 
 interface SaveMenuTitleProps {
   menu: Menu;
@@ -75,6 +76,11 @@ export async function saveMenuTitle({
       showError(`Failed to update menu name: ${errorMsg}`);
     }
   } catch (err) {
+    logger.error('[saveMenuTitle.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     // Revert optimistic update on error
     if (setMenus) {
       setMenus(prevMenus => prevMenus.map(m => (m.id === menu.id ? originalMenu : m)));

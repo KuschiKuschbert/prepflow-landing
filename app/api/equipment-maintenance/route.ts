@@ -2,6 +2,22 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+
+const createEquipmentMaintenanceSchema = z.object({
+  equipment_name: z.string().min(1, 'equipment_name is required'),
+  maintenance_date: z.string().min(1, 'maintenance_date is required'),
+  maintenance_type: z.string().min(1, 'maintenance_type is required'),
+  description: z.string().min(1, 'description is required'),
+  equipment_type: z.string().optional(),
+  service_provider: z.string().optional(),
+  cost: z.number().optional(),
+  next_maintenance_date: z.string().optional(),
+  is_critical: z.boolean().optional(),
+  performed_by: z.string().optional(),
+  notes: z.string().optional(),
+  photo_url: z.string().url().optional().or(z.literal('')),
+});
 
 /**
  * GET /api/equipment-maintenance
@@ -79,7 +95,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Equipment Maintenance API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = createEquipmentMaintenanceSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
     const {
       equipment_name,
       equipment_type,
@@ -93,19 +133,7 @@ export async function POST(request: NextRequest) {
       performed_by,
       notes,
       photo_url,
-    } = body;
-
-    // Validate required fields
-    if (!equipment_name || !maintenance_date || !maintenance_type || !description) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          'Missing required fields: equipment_name, maintenance_date, maintenance_type, and description are required',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
+    } = validationResult.data;
 
     const { data, error } = await supabaseAdmin
       .from('equipment_maintenance')
@@ -131,14 +159,8 @@ export async function POST(request: NextRequest) {
         error: error.message,
         code: (error as any).code,
       });
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          'Failed to create equipment maintenance record',
-          'DATABASE_ERROR',
-          500,
-        ),
-        { status: 500 },
-      );
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -154,7 +176,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-
-
-

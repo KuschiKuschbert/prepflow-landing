@@ -1,12 +1,12 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
+import { clearTierCache } from '@/lib/feature-gate';
+import { logger } from '@/lib/logger';
 import { getStripe } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-import { clearTierCache } from '@/lib/feature-gate';
 import type Stripe from 'stripe';
+import { z } from 'zod';
 
 const extendSubscriptionSchema = z.object({
   months: z.number().int().positive().max(12).optional().default(1),
@@ -39,7 +39,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const body = await req.json().catch(() => ({}));
+    let body;
+    try {
+      body = await req.json();
+    } catch (jsonError) {
+      logger.warn('[Billing API] Failed to parse request JSON:', {
+        error: jsonError instanceof Error ? jsonError.message : String(jsonError),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
     const validationResult = extendSubscriptionSchema.safeParse(body);
 
     if (!validationResult.success) {
@@ -74,6 +85,7 @@ export async function POST(req: NextRequest) {
       logger.warn('[Billing API] User has no active subscription:', {
         userEmail,
         error: userError?.message,
+        code: (userError as any)?.code,
       });
       return NextResponse.json(
         ApiErrorHandler.createError('No active subscription found', 'SUBSCRIPTION_NOT_FOUND', 404),
@@ -129,6 +141,7 @@ export async function POST(req: NextRequest) {
     if (updateError) {
       logger.error('[Billing API] Failed to update subscription in database:', {
         error: updateError.message,
+        code: (updateError as any).code,
         userEmail,
       });
       // Don't fail the request, subscription was extended in Stripe

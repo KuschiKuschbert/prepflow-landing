@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { detectCountryFromLocale } from '@/lib/country-config';
 
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 export async function GET(request: NextRequest) {
   try {
     // Vercel automatically provides geolocation headers

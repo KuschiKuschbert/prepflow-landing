@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateSalesDataForMonth } from '@/lib/populate-helpers/generate-sales-data';
 
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * POST /api/generate-sales-data
@@ -21,9 +22,7 @@ export async function POST(request: NextRequest) {
     if (!supabaseAdmin) {
       logger.error('❌ Database connection not available');
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -56,11 +55,7 @@ export async function POST(request: NextRequest) {
     if (recipesError) {
       logger.error('❌ Error fetching recipes:', recipesError);
       return NextResponse.json(
-        {
-          error: 'Database error',
-          message: 'Could not retrieve recipes from database',
-          details: recipesError,
-        },
+        ApiErrorHandler.fromSupabaseError(recipesError, 500),
         { status: 500 },
       );
     }
@@ -70,10 +65,11 @@ export async function POST(request: NextRequest) {
     if (!recipes || recipes.length === 0) {
       logger.warn('⚠️ No recipes found');
       return NextResponse.json(
-        {
-          error: 'No recipes found',
-          message: 'Please create recipes before generating sales data',
-        },
+        ApiErrorHandler.createError(
+          'Please create recipes before generating sales data',
+          'NO_RECIPES_FOUND',
+          400,
+        ),
         { status: 400 },
       );
     }

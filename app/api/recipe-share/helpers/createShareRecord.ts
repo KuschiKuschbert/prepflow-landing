@@ -15,7 +15,10 @@ export async function createShareRecord(shareData: {
   recipient_email?: string;
   notes?: string;
 }) {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[API] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
 
   const { data: shareRecord, error: shareError } = await supabaseAdmin
     .from('recipe_shares')

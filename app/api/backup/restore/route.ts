@@ -9,6 +9,22 @@ import { logger } from '@/lib/logger';
 import { decryptBackup, getPrepFlowServerKey } from '@/lib/backup/encryption';
 import { restoreFull, restoreSelective, restoreMerge } from '@/lib/backup/restore';
 import type { MergeOptions } from '@/lib/backup/types';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { z } from 'zod';
+
+const restoreBackupSchema = z.object({
+  backupId: z.string().optional(),
+  backupFile: z.string().optional(),
+  mode: z.enum(['full', 'selective', 'merge']),
+  tables: z.array(z.string()).optional(),
+  options: z
+    .object({
+      skipExisting: z.boolean().optional(),
+      mergeStrategy: z.enum(['replace', 'skip', 'merge']).optional(),
+    })
+    .optional(),
+  password: z.string().optional(),
+});
 
 /**
  * Restores from backup (full, selective, or merge).
@@ -20,25 +36,45 @@ export async function POST(request: NextRequest) {
   try {
     const user = await requireAuth(request);
     if (!user?.email) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
     }
 
     const userId = user.email;
-    const body = await request.json();
-    const { backupId, backupFile, mode, tables, options, password } = body;
-
-    // Validate mode
-    if (!['full', 'selective', 'merge'].includes(mode)) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Backup Restore] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        { error: 'Invalid restore mode. Must be full, selective, or merge' },
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
-    // Validate selective mode has tables
-    if (mode === 'selective' && (!tables || !Array.isArray(tables) || tables.length === 0)) {
+    const validationResult = restoreBackupSchema.safeParse(body);
+    if (!validationResult.success) {
       return NextResponse.json(
-        { error: 'tables array is required for selective restore mode' },
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { backupId, backupFile, mode, tables, options, password } = validationResult.data;
+
+    // Validate selective mode has tables
+    if (mode === 'selective' && (!tables || tables.length === 0)) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          'tables array is required for selective restore mode',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       );
     }
@@ -56,7 +92,7 @@ export async function POST(request: NextRequest) {
       // Try to detect encryption mode from file header
       const header = new TextDecoder().decode(encryptedData.slice(0, 16));
       if (header !== 'PREPFLOW_BACKUP') {
-        return NextResponse.json({ error: 'Invalid backup file format' }, { status: 400 });
+        return NextResponse.json(ApiErrorHandler.createError('Invalid backup file format', 'BAD_REQUEST', 400), { status: 400 });
       }
 
       const encryptionMode = encryptedData[17]; // After header (16) + version (1)

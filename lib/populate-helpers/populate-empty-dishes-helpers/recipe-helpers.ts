@@ -7,6 +7,8 @@ import { supabaseAdmin } from '@/lib/supabase';
 import type { IngredientMatch } from './types';
 import { getDefaultIngredientsForDish } from './dish-ingredients';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 /**
  * Get default ingredients for a recipe based on name patterns
  * Similar to dishes but with recipe-specific quantities
@@ -24,7 +26,7 @@ export function getDefaultIngredientsForRecipe(
  */
 export async function recipeHasIngredients(recipeId: string): Promise<boolean> {
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   const { data: recipeIngredients, error: riError } = await supabaseAdmin

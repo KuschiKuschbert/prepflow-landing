@@ -90,6 +90,11 @@ export function useIngredientUpdate<
         setIngredients(prev => prev.map(ing => (ing.id === id ? data[0] : ing)));
         if (setEditingIngredient) setEditingIngredient(null);
       } catch (error) {
+        logger.error('[useIngredientUpdate.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
         setError('Failed to update ingredient');
       }
     },

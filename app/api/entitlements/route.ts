@@ -1,5 +1,7 @@
 import { getEntitlementsForTierAsync } from '@/lib/entitlements';
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import type { TierSlug } from '@/lib/tier-config';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { NextRequest, NextResponse } from 'next/server';
@@ -24,6 +26,10 @@ export async function GET(req: NextRequest) {
         }
       } catch (error) {
         // Fallback to starter on error
+        logger.warn('[Entitlements API] Error fetching user tier, falling back to starter:', {
+          error: error instanceof Error ? error.message : String(error),
+          email,
+        });
       }
     }
 
@@ -35,6 +41,6 @@ export async function GET(req: NextRequest) {
     if (error instanceof NextResponse) {
       throw error;
     }
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
   }
 }

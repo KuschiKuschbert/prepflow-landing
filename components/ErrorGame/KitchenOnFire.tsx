@@ -15,6 +15,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { useKitchenFireGame } from './useKitchenFireGame';
+import { logger } from '@/lib/logger';
 
 const KitchenOnFire: React.FC = () => {
   const router = useRouter();
@@ -28,6 +29,11 @@ const KitchenOnFire: React.FC = () => {
       // Users can still disable via PF_DISABLE_ARCADE_ERRORS if needed
       return false;
     } catch (_) {
+      logger.error('[KitchenOnFire.tsx] Error in catch block:', {
+      error: _ instanceof Error ? _.message : String(_),
+      stack: _ instanceof Error ? _.stack : undefined,
+    });
+
       return false;
     }
   };

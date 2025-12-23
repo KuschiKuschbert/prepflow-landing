@@ -9,6 +9,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 
 /**
  * GET /api/roster/templates
@@ -76,6 +77,12 @@ export async function GET(request: NextRequest) {
   }
 }
 
+const createTemplateSchema = z.object({
+  name: z.string().min(1, 'Template name is required'),
+  description: z.string().optional(),
+  is_active: z.boolean().optional().default(true),
+});
+
 /**
  * POST /api/roster/templates
  * Create a new roster template.
@@ -94,15 +101,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
-    const { name, description, is_active } = body;
-
-    if (!name) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Templates API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        ApiErrorHandler.createError('Template name is required', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
+
+    const validationResult = createTemplateSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { name, description, is_active } = validationResult.data;
 
     const templateData = {
       name,
@@ -152,7 +176,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-
-
-

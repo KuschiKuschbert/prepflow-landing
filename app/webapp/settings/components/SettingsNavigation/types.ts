@@ -7,6 +7,7 @@ export interface NavItem {
   ariaLabel: string;
   category: string;
   description: string;
+  adminOnly?: boolean;
 }
 
 export interface Category {

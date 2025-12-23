@@ -5,6 +5,19 @@ import { NextRequest, NextResponse } from 'next/server';
 import { buildTemperatureLogQuery } from './helpers/buildTemperatureLogQuery';
 import { createTemperatureLog } from './helpers/createTemperatureLog';
 import { handleTemperatureLogError } from './helpers/handleTemperatureLogError';
+import { z } from 'zod';
+
+const createTemperatureLogSchema = z.object({
+  temperature_celsius: z.number(),
+  equipment_id: z.string().optional(),
+  temperature_type: z.string().optional(),
+  location: z.string().optional(),
+  notes: z.string().optional(),
+  logged_at: z.string().optional(),
+}).refine(data => data.equipment_id || data.temperature_type, {
+  message: 'Either equipment_id or temperature_type must be provided',
+  path: ['equipment_id'],
+});
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -19,7 +32,7 @@ export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
-        { success: false, error: 'Database connection not available' },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -55,6 +68,10 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (err: any) {
+    logger.error('[Temperature Logs API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/temperature-logs', method: 'GET' },
+    });
     if (err.status) {
       return NextResponse.json(err, { status: err.status });
     }
@@ -71,19 +88,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Temperature Logs API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
 
-    // Validate required fields - either equipment_id or temperature_type must be provided
-    if (!body.temperature_celsius || (!body.equipment_id && !body.temperature_type)) {
+    const validationResult = createTemperatureLogSchema.safeParse(body);
+    if (!validationResult.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(
-          'Missing required fields: temperature_celsius and (equipment_id or temperature_type)',
+          validationResult.error.issues[0]?.message || 'Invalid request body',
           'VALIDATION_ERROR',
           400,
         ),
         { status: 400 },
       );
     }
+
+    body = validationResult.data;
 
     // Validate temperature range (reasonable values)
     if (body.temperature_celsius < -50 || body.temperature_celsius > 200) {
@@ -97,6 +127,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, data });
   } catch (err: any) {
+    logger.error('[Temperature Logs API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/temperature-logs', method: 'POST' },
+    });
     if (err.status) {
       return NextResponse.json(err, { status: err.status });
     }

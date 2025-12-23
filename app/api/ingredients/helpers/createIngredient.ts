@@ -102,16 +102,20 @@ export async function createIngredient(ingredientData: any) {
     normalized.allergens.length > 0
   ) {
     // Don't await - run in background
-    import('@/lib/allergens/cache-invalidation').then(
-      ({ invalidateRecipesWithIngredient, invalidateDishesWithIngredient }) => {
-        Promise.all([
+    (async () => {
+      try {
+        const { invalidateRecipesWithIngredient, invalidateDishesWithIngredient } = await import('@/lib/allergens/cache-invalidation');
+        await Promise.all([
           invalidateRecipesWithIngredient(createdIngredient.id),
           invalidateDishesWithIngredient(createdIngredient.id),
-        ]).catch(err => {
-          logger.error('[Ingredients API] Error invalidating allergen caches:', err);
+        ]);
+      } catch (err) {
+        logger.error('[Ingredients API] Error invalidating allergen caches:', {
+          error: err instanceof Error ? err.message : String(err),
+          context: { ingredientId: createdIngredient.id, operation: 'invalidateAllergenCaches' },
         });
-      },
-    );
+      }
+    })();
   }
 
   return createdIngredient;

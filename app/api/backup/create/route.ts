@@ -5,11 +5,19 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth0-api-helpers';
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { exportUserData, convertToSQL } from '@/lib/backup/export';
 import { encryptBackup } from '@/lib/backup/encryption';
 import type { BackupFormat, EncryptionMode } from '@/lib/backup/types';
+import { storeBackupMetadata } from './helpers/storeMetadata';
+import { z } from 'zod';
+
+const createBackupSchema = z.object({
+  format: z.enum(['json', 'sql', 'encrypted']).optional().default('json'),
+  encryptionMode: z.enum(['user-password', 'system-key']).optional(),
+  password: z.string().optional(),
+});
 
 /**
  * Creates a manual backup of user data.
@@ -22,31 +30,53 @@ export async function POST(request: NextRequest) {
     const user = await requireAuth(request);
 
     const userId = user.email;
-    const body = await request.json();
-    const format: BackupFormat = body.format || 'json';
-    const encryptionMode: EncryptionMode | undefined = body.encryptionMode;
-    const password: string | undefined = body.password;
-
-    // Validate format
-    if (!['json', 'sql', 'encrypted'].includes(format)) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (jsonError) {
+      logger.warn('[Backup Create] Failed to parse request JSON:', {
+        error: jsonError instanceof Error ? jsonError.message : String(jsonError),
+      });
       return NextResponse.json(
-        { error: 'Invalid format. Must be json, sql, or encrypted' },
+        ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
+
+    const validationResult = createBackupSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { format, encryptionMode, password } = validationResult.data;
 
     // Validate encryption options
     if (format === 'encrypted') {
       if (!encryptionMode) {
         return NextResponse.json(
-          { error: 'encryptionMode is required for encrypted backups' },
+          ApiErrorHandler.createError(
+            'encryptionMode is required for encrypted backups',
+            'VALIDATION_ERROR',
+            400,
+          ),
           { status: 400 },
         );
       }
 
       if (encryptionMode === 'user-password' && !password) {
         return NextResponse.json(
-          { error: 'password is required for user-password encryption mode' },
+          ApiErrorHandler.createError(
+            'password is required for user-password encryption mode',
+            'VALIDATION_ERROR',
+            400,
+          ),
           { status: 400 },
         );
       }
@@ -74,15 +104,9 @@ export async function POST(request: NextRequest) {
       fileSize = encrypted.size;
 
       // Store metadata in database
-      const supabase = createSupabaseAdmin();
-      await supabase.from('backup_metadata').insert({
-        user_id: userId,
-        backup_type: 'manual',
-        format: 'encrypted',
-        encryption_mode: encryptionMode,
-        file_size_bytes: fileSize,
-        record_count: Object.values(backupData.metadata.recordCounts).reduce((a, b) => a + b, 0),
-        created_at: new Date().toISOString(),
+      await storeBackupMetadata(userId, 'encrypted', encryptionMode, {
+        recordCounts: backupData.metadata.recordCounts,
+        fileSize,
       });
     } else if (format === 'sql') {
       // Convert to SQL
@@ -93,14 +117,9 @@ export async function POST(request: NextRequest) {
       fileSize = new TextEncoder().encode(sql).length;
 
       // Store metadata
-      const supabase = createSupabaseAdmin();
-      await supabase.from('backup_metadata').insert({
-        user_id: userId,
-        backup_type: 'manual',
-        format: 'sql',
-        file_size_bytes: fileSize,
-        record_count: Object.values(backupData.metadata.recordCounts).reduce((a, b) => a + b, 0),
-        created_at: new Date().toISOString(),
+      await storeBackupMetadata(userId, 'sql', undefined, {
+        recordCounts: backupData.metadata.recordCounts,
+        fileSize,
       });
     } else {
       // JSON format
@@ -110,14 +129,9 @@ export async function POST(request: NextRequest) {
       fileSize = new TextEncoder().encode(backupContent as string).length;
 
       // Store metadata
-      const supabase = createSupabaseAdmin();
-      await supabase.from('backup_metadata').insert({
-        user_id: userId,
-        backup_type: 'manual',
-        format: 'json',
-        file_size_bytes: fileSize,
-        record_count: Object.values(backupData.metadata.recordCounts).reduce((a, b) => a + b, 0),
-        created_at: new Date().toISOString(),
+      await storeBackupMetadata(userId, 'json', undefined, {
+        recordCounts: backupData.metadata.recordCounts,
+        fileSize,
       });
     }
 
@@ -146,9 +160,18 @@ export async function POST(request: NextRequest) {
       });
     }
   } catch (error: any) {
-    logger.error('[Backup Create] Error creating backup:', error);
+    logger.error('[Backup Create] Error creating backup:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      context: { endpoint: '/api/backup/create', method: 'POST' },
+    });
     return NextResponse.json(
-      { error: 'Failed to create backup', message: error.message },
+      ApiErrorHandler.createError(
+        'Failed to create backup',
+        'SERVER_ERROR',
+        500,
+        error instanceof Error ? error.message : String(error),
+      ),
       { status: 500 },
     );
   }

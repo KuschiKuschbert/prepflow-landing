@@ -1,3 +1,5 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 
 /**
@@ -11,15 +13,32 @@ export async function updateDishRecipes(
   dishId: string,
   recipes: Array<{ recipe_id: string; quantity?: number }>,
 ) {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
-  await supabaseAdmin.from('dish_recipes').delete().eq('dish_id', dishId);
+  if (!supabaseAdmin) throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+
+  const { error: deleteError } = await supabaseAdmin.from('dish_recipes').delete().eq('dish_id', dishId);
+  if (deleteError) {
+    logger.error('[Dishes API] Database error deleting dish recipes:', {
+      error: deleteError.message,
+      code: (deleteError as any).code,
+      context: { dishId, operation: 'updateDishRecipes' },
+    });
+    throw ApiErrorHandler.fromSupabaseError(deleteError, 500);
+  }
+
   if (recipes.length > 0) {
     const dishRecipes = recipes.map(r => ({
       dish_id: dishId,
       recipe_id: r.recipe_id,
       quantity: r.quantity || 1,
     }));
-    const { error } = await supabaseAdmin.from('dish_recipes').insert(dishRecipes);
-    if (error) throw error;
+    const { error: insertError } = await supabaseAdmin.from('dish_recipes').insert(dishRecipes);
+    if (insertError) {
+      logger.error('[Dishes API] Database error inserting dish recipes:', {
+        error: insertError.message,
+        code: (insertError as any).code,
+        context: { dishId, operation: 'updateDishRecipes' },
+      });
+      throw ApiErrorHandler.fromSupabaseError(insertError, 500);
+    }
   }
 }

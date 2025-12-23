@@ -116,6 +116,36 @@ const STANDARDS_CONFIG = {
     severity: 'info',
     fixable: true,
   },
+  'api-patterns': {
+    name: 'API Patterns',
+    source: 'implementation.mdc#api-response-standards',
+    severity: 'critical',
+    fixable: false,
+  },
+  'optimistic-updates': {
+    name: 'Optimistic Updates Pattern',
+    source: 'development.mdc#optimistic-updates-pattern',
+    severity: 'critical',
+    fixable: false,
+  },
+  'react-patterns': {
+    name: 'React Patterns',
+    source: 'development.mdc#code-quality-requirements',
+    severity: 'warning',
+    fixable: false,
+  },
+  'database-patterns': {
+    name: 'Database Patterns',
+    source: 'core.mdc#supabase-typescript-gotcha',
+    severity: 'critical',
+    fixable: false,
+  },
+  'error-handling': {
+    name: 'Error Handling Standards',
+    source: 'ERROR_HANDLING_STANDARDS.md',
+    severity: 'critical',
+    fixable: false,
+  },
 };
 
 /**

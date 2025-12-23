@@ -5,6 +5,8 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import type { IngredientMatch } from './types';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 /**
  * Get ingredients from recipes for a dish
  * Returns ingredients that can be added as direct dish_ingredients
@@ -14,7 +16,7 @@ export async function getIngredientsFromRecipes(
   availableIngredients: Array<{ id: string; ingredient_name: string; unit: string }>,
 ): Promise<IngredientMatch[]> {
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   // Get dish recipes

@@ -2,6 +2,9 @@
  * Staff Employees API Route
  * Handles GET (list employees) and POST (create employee) operations for roster system.
  *
+ * 📚 Square Integration: This route automatically triggers Square sync hooks after employee
+ * create operations. See `docs/SQUARE_API_REFERENCE.md` (Automatic Sync section) for details.
+ *
  * @module api/staff/employees
  */
 
@@ -9,8 +12,9 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { validateEmployeeRequest } from './helpers/validateEmployeeRequest';
 import { buildEmployeeQuery } from './helpers/buildEmployeeQuery';
+import { handleStaffEmployeeError } from './helpers/handleError';
+import { handleCreateEmployee } from './helpers/createEmployeeHandler';
 
 /**
  * GET /api/staff/employees
@@ -67,18 +71,7 @@ export async function GET(request: NextRequest) {
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/staff/employees', method: 'GET' },
     });
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? err instanceof Error
-            ? err.message
-            : 'Unknown error'
-          : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
+    return handleStaffEmployeeError(err);
   }
 }
 
@@ -105,92 +98,5 @@ export async function GET(request: NextRequest) {
  * - user_id: Link to auth user (optional)
  */
 export async function POST(request: NextRequest) {
-  try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
-    const body = await request.json();
-    const validation = validateEmployeeRequest(body);
-
-    if (!validation.isValid) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validation.error || 'Invalid request data',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const employeeData = validation.data!;
-
-    // Check if email already exists
-    const { data: existingEmployee, error: checkError } = await supabaseAdmin
-      .from('employees')
-      .select('id')
-      .eq('email', employeeData.email)
-      .single();
-
-    if (existingEmployee) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          'Employee with this email already exists',
-          'DUPLICATE_ERROR',
-          409,
-        ),
-        { status: 409 },
-      );
-    }
-
-    // Insert employee
-    const { data: employee, error: insertError } = await supabaseAdmin
-      .from('employees')
-      .insert(employeeData)
-      .select()
-      .single();
-
-    if (insertError) {
-      logger.error('[Staff Employees API] Database error creating employee:', {
-        error: insertError.message,
-        code: (insertError as any).code,
-        context: { endpoint: '/api/staff/employees', operation: 'POST', email: employeeData.email },
-      });
-
-      const apiError = ApiErrorHandler.fromSupabaseError(insertError, 500);
-      return NextResponse.json(apiError, { status: apiError.status || 500 });
-    }
-
-    return NextResponse.json({
-      success: true,
-      employee,
-      message: 'Employee created successfully',
-    });
-  } catch (err) {
-    logger.error('[Staff Employees API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-      context: { endpoint: '/api/staff/employees', method: 'POST' },
-    });
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? err instanceof Error
-            ? err.message
-            : 'Unknown error'
-          : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
-  }
+  return handleCreateEmployee(request);
 }
-
-
-
-

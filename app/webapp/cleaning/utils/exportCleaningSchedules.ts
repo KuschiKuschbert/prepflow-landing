@@ -5,6 +5,7 @@
 
 import { exportToCSV } from '@/lib/csv/csv-utils';
 import { exportHTMLReport, exportPDFReport } from '@/lib/exports/export-html';
+import { logger } from '@/lib/logger';
 import { formatCleaningScheduleForPrint } from './formatCleaningScheduleForPrint';
 import type { CleaningTask } from './printCleaningSchedule';
 
@@ -98,15 +99,23 @@ export async function exportCleaningScheduleToPDF(
     return;
   }
 
-  const contentHtml = formatCleaningScheduleForPrint(tasks, startDate, endDate);
-  const dateRangeMeta = `From: ${startDate.toLocaleDateString('en-AU')} To: ${endDate.toLocaleDateString('en-AU')}`;
+  try {
+    const contentHtml = formatCleaningScheduleForPrint(tasks, startDate, endDate);
+    const dateRangeMeta = `From: ${startDate.toLocaleDateString('en-AU')} To: ${endDate.toLocaleDateString('en-AU')}`;
 
-  await exportPDFReport({
-    title: 'Cleaning Schedule',
-    subtitle: 'Overview of Cleaning Tasks',
-    content: contentHtml,
-    filename: `cleaning-schedule-${new Date().toISOString().split('T')[0]}.pdf`,
-    totalItems: tasks.length,
-    customMeta: dateRangeMeta,
-  });
+    await exportPDFReport({
+      title: 'Cleaning Schedule',
+      subtitle: 'Overview of Cleaning Tasks',
+      content: contentHtml,
+      filename: `cleaning-schedule-${new Date().toISOString().split('T')[0]}.pdf`,
+      totalItems: tasks.length,
+      customMeta: dateRangeMeta,
+    });
+  } catch (error) {
+    logger.error('[exportCleaningSchedules] Error exporting to PDF:', {
+      error: error instanceof Error ? error.message : String(error),
+      taskCount: tasks.length,
+    });
+    throw error; // Re-throw to let caller handle
+  }
 }

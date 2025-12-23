@@ -242,18 +242,24 @@ alwaysApply: true
 
 **Source:** `implementation.mdc` (API Response Standards)
 
-**Standards:**
-- RESTful design
-- Response format: `{ success, message, data }`
-- Error format: `{ error, message, details? }`
-- Proper HTTP status codes
+**Status:** ✅ Fully Implemented
+
+**MANDATORY Standards:**
+- Success responses must use `{ success: true, message, data }`
+- Error responses must use `ApiErrorHandler.createError()`
+- All error responses must include proper HTTP status codes
+- All API routes must use `ApiErrorHandler` for error responses
+- All API routes must use `logger.error()` for error logging (not console.error)
+- All API routes must have try-catch blocks for async operations
+- POST/PUT/PATCH routes must use Zod schemas for input validation
 
 **Enforcement:**
-- Check: Manual review (API patterns)
+- Check: `scripts/cleanup.js` (api-patterns check)
 - Fix: Manual fixes required
 
 **Related:**
 - See `implementation.mdc` (API Response Standards) for complete guidelines
+- See `ERROR_HANDLING_STANDARDS.md` for error handling patterns
 
 ---
 
@@ -261,14 +267,18 @@ alwaysApply: true
 
 **Source:** `implementation.mdc` (Database Schema Standards), `core.mdc` (Supabase TypeScript Gotcha)
 
+**Status:** ✅ Fully Implemented
+
 **MANDATORY Standards:**
-- Supabase parameterized queries ONLY
-- No `.catch()` chaining on query builders
-- Handle `error` explicitly
+- Supabase parameterized queries ONLY (no string concatenation)
+- No `.catch()` chaining on query builders (MANDATORY)
+- Use `const { data, error } = await` pattern with explicit error handling
+- Database errors must be handled with `ApiErrorHandler`
+- Database errors must be logged with `logger.error()`
 - Standard table structure with `created_at`, `updated_at`
 
 **Enforcement:**
-- Check: Manual review (database patterns)
+- Check: `scripts/cleanup.js` (database-patterns check)
 - Fix: Manual fixes required
 
 **Related:**
@@ -281,12 +291,15 @@ alwaysApply: true
 
 **Source:** `security.mdc` (Security Standards)
 
+**Status:** ✅ Fully Implemented
+
 **MANDATORY Standards:**
-- Input validation: Zod schemas
-- Rate limiting: 100 req/15min (default), 10 req/min (auth)
-- SQL injection: Parameterized queries only
-- XSS: Sanitize user content
-- Security headers: Configured in next.config.ts
+- Input validation: Zod schemas for all POST/PUT/PATCH routes
+- Validation must occur before database operations
+- Rate limiting: 100 req/15min (default), 10 req/min (auth) - warning if missing
+- SQL injection: Parameterized queries only (no string concatenation)
+- XSS: Sanitize user content (dangerouslySetInnerHTML must be sanitized)
+- Security headers: Configured in next.config.ts (X-Frame-Options, CSP, etc.)
 
 **Enforcement:**
 - Check: `scripts/cleanup.js` (security check)
@@ -369,6 +382,84 @@ alwaysApply: true
 **Related:**
 - See `technical.mdc` (Autosave & Drafts) for complete guidelines
 - See `lib/autosave-id.ts` for ID derivation utility
+
+---
+
+## ⚡ **Optimistic Updates Standards**
+
+**Source:** `development.mdc` (Optimistic Updates Pattern), `operations.mdc` (Optimistic Updates Standard)
+
+**Status:** ✅ Fully Implemented
+
+**MANDATORY Standards:**
+- All CRUD operations (Create, Update, Delete) must use optimistic updates
+- Store original state before updates
+- Update UI immediately (setState before await)
+- Implement rollback logic (setState(originalState) in catch blocks)
+- Use `useNotification` for user feedback
+- No loading states for mutations (no isLoading or skeleton screens)
+- No `fetchData()` calls after successful mutations
+
+**Enforcement:**
+- Check: `scripts/cleanup.js` (optimistic-updates check)
+- Fix: Manual fixes required (requires refactoring)
+
+**Related:**
+- See `development.mdc` (Optimistic Updates Pattern) for detailed pattern and examples
+- See `operations.mdc` (Optimistic Updates Standard) for performance targets
+- See `implementation.mdc` (Optimistic Updates Implementation Pattern) for code examples
+- See `lib/optimistic-updates.ts` for reusable utilities
+- See `hooks/useOptimisticMutation.ts` for reusable hook
+
+---
+
+## ⚛️ **React Patterns Standards**
+
+**Source:** `development.mdc` (Code Quality Requirements)
+
+**Status:** ✅ Fully Implemented
+
+**Standards:**
+- Components using hooks or browser APIs must have `"use client"` directive
+- Hooks must be called at top level (not conditionally)
+- useEffect hooks with timers/event listeners must have cleanup functions
+- useEffect hooks should have dependency arrays
+- State should be updated using setState (no direct mutations)
+- Consider useMemo/useCallback for expensive computations
+
+**Enforcement:**
+- Check: `scripts/cleanup.js` (react-patterns check)
+- Fix: Manual fixes required
+- Severity: `warning` (important but not blocking)
+
+**Related:**
+- See `development.mdc` (Code Quality Requirements) for complete guidelines
+- See React documentation for hooks rules
+
+---
+
+## 🚨 **Error Handling Standards**
+
+**Source:** `ERROR_HANDLING_STANDARDS.md`, `implementation.mdc` (Error Handling Standards)
+
+**Status:** ✅ Fully Implemented
+
+**MANDATORY Standards:**
+- All API routes must use `ApiErrorHandler.createError()` for error responses
+- All error logging must use `logger.error()` (not console.error)
+- All async operations must have try-catch blocks
+- Errors in catch blocks must be logged or re-thrown (not silently ignored)
+- Critical components with async operations should be wrapped in ErrorBoundary
+- ApiErrorHandler.createError() must include error code as second parameter
+
+**Enforcement:**
+- Check: `scripts/cleanup.js` (error-handling check)
+- Fix: Manual fixes required
+
+**Related:**
+- See `ERROR_HANDLING_STANDARDS.md` for complete error handling guidelines
+- See `implementation.mdc` (Error Handling Standards) for API error handling
+- See `lib/api-error-handler.ts` for ApiErrorHandler utility
 
 ---
 

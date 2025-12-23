@@ -2,6 +2,7 @@ import { auth0, isAuthRequired } from './auth0';
 import type { NextRequest } from 'next/server';
 import { isEmailAllowed } from './allowlist';
 import { isAdmin } from './admin-utils';
+import { logger } from '@/lib/logger';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -19,6 +20,11 @@ export async function getUserEmailFromSession(req: NextRequest): Promise<string 
     const session = await auth0.getSession(req);
     return session?.user?.email || null;
   } catch (error) {
+    logger.error('[auth0-middleware.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     // Session not available or error
     return null;
   }
@@ -43,6 +49,11 @@ export async function getUserRolesFromSession(req: NextRequest): Promise<string[
     const roles = (session.user as any)['https://prepflow.org/roles'] || [];
     return Array.isArray(roles) ? roles : [];
   } catch (error) {
+    logger.error('[auth0-middleware.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     return [];
   }
 }
@@ -115,6 +126,11 @@ export async function getUserFromSession(req: NextRequest): Promise<{
       roles: Array.isArray(roles) ? roles : [],
     };
   } catch (error) {
+    logger.error('[auth0-middleware.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     return null;
   }
 }

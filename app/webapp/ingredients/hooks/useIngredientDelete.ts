@@ -52,6 +52,11 @@ export function useIngredientDelete<T extends { id: string }>({
           }
         }
       } catch (error) {
+        logger.error('[useIngredientDelete.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
         // Revert optimistic update on error (if not already reverted)
         setIngredients(originalIngredients);
         setError('Failed to delete ingredient');

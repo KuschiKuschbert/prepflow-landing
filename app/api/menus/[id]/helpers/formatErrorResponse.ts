@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Format error response for menu API.
@@ -7,19 +8,17 @@ import { NextResponse } from 'next/server';
  * @returns {NextResponse} Formatted error response
  */
 export function formatErrorResponse(err: any): NextResponse {
-  const isDevelopment = process.env.NODE_ENV === 'development';
+  const status = err.status || 500;
+  const errorCode = err.code || 'SERVER_ERROR';
+  const message = err.message || 'An error occurred';
 
   return NextResponse.json(
-    {
-      success: false,
-      error: err.error || 'Error',
-      message: err.message || 'An error occurred',
-      ...(isDevelopment && {
+    ApiErrorHandler.createError(message, errorCode, status, {
+      ...(process.env.NODE_ENV === 'development' && {
         details: err.details,
-        code: err.code,
         timestamp: err.timestamp,
       }),
-    },
-    { status: err.status || 500 },
+    }),
+    { status },
   );
 }

@@ -1,4 +1,5 @@
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 /**
  * Fetch waste management logs.
@@ -19,7 +20,10 @@ export async function fetchWasteManagement(startDate: string, endDate: string) {
     .limit(200);
 
   if (wasteError) {
-    return null;
+    logger.warn('[Health Inspector Report] Error fetching waste management logs:', {
+      error: wasteError.message,
+      code: (wasteError as any).code,
+    });
   }
 
   const logs = wasteLogs || [];

@@ -4,6 +4,11 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { syncAllSubscriptions } from '@/lib/billing-sync';
 import { logAdminApiAction } from '@/lib/admin-audit';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
+
+const syncSubscriptionsSchema = z.object({
+  limit: z.number().int().positive().optional().default(100),
+});
 
 /**
  * POST /api/admin/billing/sync-subscriptions
@@ -19,8 +24,32 @@ export async function POST(req: NextRequest) {
   try {
     const adminUser = await requireAdmin(req);
 
-    const body = await req.json().catch(() => ({}));
-    const limit = typeof body.limit === 'number' && body.limit > 0 ? body.limit : 100;
+    let body: unknown = {};
+    try {
+      body = await req.json();
+    } catch (err) {
+      logger.warn('[Admin Billing Sync API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = syncSubscriptionsSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { limit } = validationResult.data;
 
     logger.info('[Admin Billing Sync] Starting subscription sync:', {
       adminEmail: adminUser.email,
@@ -46,6 +75,11 @@ export async function POST(req: NextRequest) {
       report: result.report,
     });
   } catch (error) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     const apiError = ApiErrorHandler.fromException(
       error instanceof Error ? error : new Error(String(error)),
     );

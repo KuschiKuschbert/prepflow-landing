@@ -32,13 +32,19 @@ export async function GET(request: NextRequest) {
     // If filtering by locked menu, find the locked menu first
     let targetMenuId: string | null = menuIdParam || null;
     if (lockedMenuOnly && !targetMenuId) {
-      const { data: lockedMenu } = await supabaseAdmin
+      const { data: lockedMenu, error: lockedMenuError } = await supabaseAdmin
         .from('menus')
         .select('id')
         .eq('is_locked', true)
         .single();
 
-      if (lockedMenu) {
+      if (lockedMenuError) {
+        logger.error('[Performance API] Error fetching locked menu:', {
+          error: lockedMenuError.message,
+          code: (lockedMenuError as any).code,
+          context: { endpoint: '/api/performance', operation: 'GET' },
+        });
+      } else if (lockedMenu) {
         targetMenuId = lockedMenu.id;
         logger.dev('[Performance API] Filtering by locked menu:', { menuId: targetMenuId });
       } else {
@@ -69,7 +75,11 @@ export async function GET(request: NextRequest) {
         .not('dish_id', 'is', null);
 
       if (menuItemsError) {
-        logger.error('[Performance API] Error fetching menu items:', menuItemsError);
+        logger.error('[Performance API] Error fetching menu items:', {
+          error: menuItemsError.message,
+          code: (menuItemsError as any).code,
+          context: { endpoint: '/api/performance', operation: 'GET', menuId: targetMenuId },
+        });
         // Continue without filtering if there's an error
       } else if (menuItems && menuItems.length > 0) {
         const dishIds = menuItems.map(item => item.dish_id).filter(Boolean) as string[];
@@ -122,6 +132,10 @@ export async function GET(request: NextRequest) {
       metadata,
     });
   } catch (err) {
+    logger.error('[Performance API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/performance', method: 'GET' },
+    });
     return handlePerformanceError(err, 'GET');
   }
 }
@@ -161,6 +175,10 @@ export async function POST(request: NextRequest) {
       message: 'Sales data updated successfully',
     });
   } catch (err: any) {
+    logger.error('[Performance API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/performance', method: 'POST' },
+    });
     if (err.status) {
       return NextResponse.json(err, { status: err.status });
     }

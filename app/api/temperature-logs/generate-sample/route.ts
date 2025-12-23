@@ -2,6 +2,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 /**
  * Generate 5 sample temperature log entries for each active equipment
  * Spreads entries randomly across the last 2 weeks (14 days) for better analytics visualization
@@ -10,9 +11,7 @@ export async function POST(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -28,20 +27,14 @@ export async function POST(request: NextRequest) {
     if (equipmentError) {
       logger.error('Error fetching equipment:', equipmentError);
       return NextResponse.json(
-        {
-          error: 'Failed to fetch equipment',
-          message: equipmentError.message,
-        },
+        ApiErrorHandler.fromSupabaseError(equipmentError, 500),
         { status: 500 },
       );
     }
 
     if (!equipment || equipment.length === 0) {
       return NextResponse.json(
-        {
-          error: 'No active equipment found',
-          message: 'Please create temperature equipment first',
-        },
+        ApiErrorHandler.createError('Please create temperature equipment first', 'NO_EQUIPMENT_FOUND', 400),
         { status: 400 },
       );
     }

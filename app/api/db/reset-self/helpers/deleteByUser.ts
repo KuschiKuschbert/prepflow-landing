@@ -1,5 +1,8 @@
 import { SupabaseClient } from '@supabase/supabase-js';
+import { logger } from '@/lib/logger';
 import { isMissingTableError } from './isMissingTableError';
+
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Delete rows from a table by user_id (dry-run or actual).
@@ -33,7 +36,15 @@ export async function deleteByUser(
       deletedCountsByTable[table] = 0;
       return;
     }
-    if (error) throw new Error(error.message);
+    if (error) {
+      logger.error('[Reset Self API] Error counting rows for delete by user:', {
+        error: error.message,
+        code: (error as any).code,
+        table,
+        userId,
+      });
+      throw ApiErrorHandler.createError(error.message, 'DATABASE_ERROR', 500);
+    }
     deletedCountsByTable[table] = count || 0;
     return;
   }
@@ -46,7 +57,15 @@ export async function deleteByUser(
     deletedCountsByTable[table] = 0;
     return;
   }
-  if (error) throw new Error(error.message);
+  if (error) {
+    logger.error('[Reset Self API] Error deleting rows by user:', {
+      error: error.message,
+      code: (error as any).code,
+      table,
+      userId,
+    });
+    throw ApiErrorHandler.createError(error.message, 'DATABASE_ERROR', 500);
+  }
   // Count unknown after delete; set to 0 to indicate success without count
   deletedCountsByTable[table] = deletedCountsByTable[table] || 0;
 }

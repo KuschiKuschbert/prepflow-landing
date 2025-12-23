@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 export const prefersReducedMotion = (): boolean => {
   if (typeof window === 'undefined') return false;
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -8,6 +9,11 @@ export const isArcadeDisabled = (): boolean => {
   try {
     return localStorage.getItem('PF_DISABLE_ARCADE_LOADING') === '1';
   } catch (_) {
+    logger.error('[arcadeGuards.ts] Error in catch block:', {
+      error: _ instanceof Error ? _.message : String(_),
+      stack: _ instanceof Error ? _.stack : undefined,
+    });
+
     return false;
   }
 };
@@ -38,6 +44,11 @@ export const isTouchDevice = (): boolean => {
     const hasTouch = hasTouchPoints || hasTouchStart || isMobileUA || isMobileViewport;
     return hasTouch;
   } catch (_) {
+    logger.error('[arcadeGuards.ts] Error in catch block:', {
+      error: _ instanceof Error ? _.message : String(_),
+      stack: _ instanceof Error ? _.stack : undefined,
+    });
+
     // On error, assume it's a touch device to be safe
     return true;
   }

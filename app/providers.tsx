@@ -7,6 +7,7 @@ import { initializeClientErrorHandlers } from '@/lib/error-handlers/client-error
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Auth0Provider } from '@auth0/nextjs-auth0/client';
 import { ReactNode, useEffect, useState } from 'react';
+import { logger } from '@/lib/logger';
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -65,7 +66,10 @@ function useDraftMigration(): void {
         }
       });
     } catch (e) {
-      // Silent: migration should never block UI
+      // Migration should never block UI, but log for debugging
+      logger.dev('[Providers] Draft migration error (non-blocking):', {
+        error: e instanceof Error ? e.message : String(e),
+      });
     }
   }, []);
 }

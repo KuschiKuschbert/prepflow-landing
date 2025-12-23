@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 /**
  * Move menu item to new category.
  */
@@ -32,6 +33,11 @@ export async function moveItemToCategory(
       );
     }
   } catch (err) {
+    logger.error('[moveItemToCategory.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     notifications?.showError('Failed to move item. Give it another go, chef.');
   }
 }

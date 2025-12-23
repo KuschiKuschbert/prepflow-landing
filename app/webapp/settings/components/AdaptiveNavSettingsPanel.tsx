@@ -8,6 +8,7 @@ import { useNotification } from '@/contexts/NotificationContext';
 import { useAdaptiveNavSettings } from '@/lib/navigation-optimization/store';
 import { Beaker, Download, Info } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
+import { logger } from '@/lib/logger';
 
 /**
  * Get display name for a category.
@@ -82,6 +83,11 @@ export function AdaptiveNavSettingsPanel() {
         showError('Failed to sync preferences');
       }
     } catch (err) {
+      logger.error('[AdaptiveNavSettingsPanel.tsx] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       showError('Failed to sync preferences');
     }
   };
@@ -104,6 +110,11 @@ export function AdaptiveNavSettingsPanel() {
         showError('Failed to load preferences from server');
       }
     } catch (err) {
+      logger.error('[AdaptiveNavSettingsPanel.tsx] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       showError('Failed to load preferences from server');
     } finally {
       setIsLoadingFromServer(false);

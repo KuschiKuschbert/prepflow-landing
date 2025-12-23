@@ -25,6 +25,11 @@ const deadCodeCheck = require('./cleanup/checks/dead-code');
 const securityCheck = require('./cleanup/checks/security');
 const performanceCheck = require('./cleanup/checks/performance');
 const voiceConsistencyCheck = require('./cleanup/checks/voice-consistency');
+const apiPatternsCheck = require('./cleanup/checks/api-patterns');
+const optimisticUpdatesCheck = require('./cleanup/checks/optimistic-updates');
+const reactPatternsCheck = require('./cleanup/checks/react-patterns');
+const databasePatternsCheck = require('./cleanup/checks/database-patterns');
+const errorHandlingCheck = require('./cleanup/checks/error-handling');
 
 // Import all fix modules
 const breakpointsFix = require('./cleanup/fixes/breakpoints');
@@ -58,6 +63,11 @@ const CHECK_MODULES = [
   securityCheck,
   performanceCheck,
   voiceConsistencyCheck,
+  apiPatternsCheck,
+  optimisticUpdatesCheck,
+  reactPatternsCheck,
+  databasePatternsCheck,
+  errorHandlingCheck,
 ];
 
 // All fix modules (mapped by check name)

@@ -78,7 +78,7 @@ function AppleStyleFeatures({
 
   return (
     <section className="tablet:py-32 relative bg-transparent py-24">
-      <div className="desktop:max-w-[92%] tablet:px-6 desktop:px-8 mx-auto w-full max-w-[95%] px-4 xl:max-w-[90%] 2xl:max-w-7xl">
+      <div className="tablet:px-6 desktop:px-8 large-desktop:px-12 mx-auto w-full max-w-[95%] px-4 xl:max-w-[1400px] xl:px-20 2xl:max-w-[1600px] 2xl:px-24">
         <ScrollReveal variant="fade-up" className="mb-20 text-center">
           <h2 className="text-fluid-4xl tablet:text-fluid-5xl desktop:text-fluid-6xl font-light tracking-tight text-white">
             {sectionTitle}
@@ -86,7 +86,7 @@ function AppleStyleFeatures({
         </ScrollReveal>
 
         <div
-          className="desktop:flex-row desktop:gap-8 desktop:items-stretch flex flex-col gap-12 xl:gap-12"
+          className="desktop:flex-row desktop:gap-8 desktop:items-stretch flex flex-col gap-12 large-desktop:gap-10 xl:gap-12 2xl:gap-14"
           style={{
             contain: 'layout',
           }}

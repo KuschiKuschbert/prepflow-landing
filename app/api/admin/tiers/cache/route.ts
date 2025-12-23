@@ -3,6 +3,7 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { logger } from '@/lib/logger';
 import { logCacheInvalidation } from '@/lib/admin-audit';
 import { invalidateTierCache } from '@/lib/tier-config-db';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * POST /api/admin/tiers/cache
@@ -19,7 +20,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, message: 'Cache invalidated' });
   } catch (error) {
     logger.error('[Admin Tiers Cache] Unexpected error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
   }
 }
 
@@ -39,7 +40,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     logger.error('[Admin Tiers Cache] Unexpected error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
   }
 }
 

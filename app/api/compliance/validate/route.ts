@@ -9,18 +9,8 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  validateShift,
-  validateShiftAvailability,
-  validateShiftSkills,
-  createValidationWarnings,
-} from '@/lib/services/compliance/validator';
-import type {
-  Shift,
-  Employee,
-  Availability,
-  ComplianceValidationResult,
-} from '@/app/webapp/roster/types';
+import { validateComplianceSchema } from './helpers/schemas';
+import { performComplianceValidation } from './helpers/validateCompliance';
 
 /**
  * POST /api/compliance/validate
@@ -41,122 +31,37 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
-    const { shift, employee_id, check_availability = true, check_skills = true } = body;
-
-    if (!shift) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Shift data is required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    const shiftEmployeeId = shift.employee_id || employee_id;
-    if (!shiftEmployeeId) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Employee ID is required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    // Get employee
-    const { data: employee, error: employeeError } = await supabaseAdmin
-      .from('employees')
-      .select('*')
-      .eq('id', shiftEmployeeId)
-      .single();
-
-    if (employeeError || !employee) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Employee not found', 'NOT_FOUND', 404),
-        {
-          status: 404,
-        },
-      );
-    }
-
-    // Get all shifts for this employee (for context)
-    const { data: employeeShifts, error: shiftsError } = await supabaseAdmin
-      .from('shifts')
-      .select('*')
-      .eq('employee_id', shiftEmployeeId)
-      .neq('status', 'cancelled');
-
-    if (shiftsError) {
-      logger.error('[Compliance API] Database error fetching employee shifts:', {
-        error: shiftsError.message,
-        code: (shiftsError as any).code,
-        context: {
-          endpoint: '/api/compliance/validate',
-          operation: 'POST',
-          employeeId: shiftEmployeeId,
-        },
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Compliance API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
       });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
     }
 
-    // Validate shift compliance
-    const complianceResult = validateShift(
-      shift as Shift,
-      (employeeShifts || []) as Shift[],
-      employee as Employee,
-    );
-
-    // Validate availability if requested
-    let availabilityResult: ComplianceValidationResult = {
-      isValid: true,
-      errors: [],
-      warnings: [],
-      violations: [],
-    };
-    if (check_availability) {
-      const { data: availability, error: availabilityError } = await supabaseAdmin
-        .from('availability')
-        .select('*')
-        .eq('employee_id', shiftEmployeeId);
-
-      if (!availabilityError && availability) {
-        availabilityResult = validateShiftAvailability(
-          shift as Shift,
-          availability as Availability[],
-        );
-      }
+    const validationResult = validateComplianceSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
     }
 
-    // Validate skills if requested
-    let skillsResult: ComplianceValidationResult = {
-      isValid: true,
-      errors: [],
-      warnings: [],
-      violations: [],
-    };
-    if (check_skills) {
-      skillsResult = validateShiftSkills(shift as Shift, employee as Employee);
+    const result = await performComplianceValidation(validationResult.data);
+    if ('error' in result) {
+      return NextResponse.json(result.error, { status: result.status });
     }
 
-    // Combine all validation results
-    const combinedResult = {
-      isValid: complianceResult.isValid && availabilityResult.isValid && skillsResult.isValid,
-      errors: [...complianceResult.errors, ...availabilityResult.errors, ...skillsResult.errors],
-      warnings: [
-        ...complianceResult.warnings,
-        ...availabilityResult.warnings,
-        ...skillsResult.warnings,
-      ],
-      violations: [
-        ...complianceResult.violations,
-        ...availabilityResult.violations,
-        ...skillsResult.violations,
-      ],
-    };
-
-    // Create validation warnings for UI
-    const warnings = createValidationWarnings(combinedResult, shift.id || 'temp');
-
-    return NextResponse.json({
-      success: true,
-      validation: combinedResult,
-      warnings,
-    });
+    return NextResponse.json(result);
   } catch (err) {
     logger.error('[Compliance API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

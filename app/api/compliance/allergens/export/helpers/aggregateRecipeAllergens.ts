@@ -8,6 +8,7 @@ import {
 } from '@/lib/allergens/allergen-aggregation';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 export interface RecipeAllergenData {
   allergensByRecipe: Record<string, string[]>;
@@ -31,7 +32,8 @@ export async function aggregateRecipeAllergens(recipes: any[]): Promise<RecipeAl
   }
 
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    logger.error('[Allergen Export] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   // Fetch ingredient sources for recipes

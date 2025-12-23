@@ -8,6 +8,7 @@ import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
 import { auth0 } from '@/lib/auth0';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Test endpoint to diagnose callback flow issues.
@@ -113,11 +114,14 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     logger.error('[Auth0 Callback Diagnostic] Diagnostic check failed:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : String(error),
-        message: 'Failed to run callback diagnostic',
-      },
+      ApiErrorHandler.createError(
+        'Failed to run callback diagnostic',
+        'SERVER_ERROR',
+        500,
+        {
+          details: error instanceof Error ? error.message : String(error),
+        },
+      ),
       { status: 500 },
     );
   }

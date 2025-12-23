@@ -1,7 +1,7 @@
 import { sampleIngredients } from '@/lib/sample-ingredients-updated';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 export async function POST(request: NextRequest) {
   try {
@@ -45,8 +45,13 @@ export async function POST(request: NextRequest) {
     const { data, error } = await supabaseAdmin.from('ingredients').insert(ingredientsData);
 
     if (error) {
-      logger.error('Error inserting ingredients:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      logger.error('[Setup Database API] Database error inserting ingredients:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/setup-database', operation: 'POST', table: 'ingredients' },
+      });
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
     return NextResponse.json({
@@ -56,6 +61,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     logger.error('Unexpected error:', err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
   }
 }

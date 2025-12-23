@@ -3,6 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { Copy, CheckCircle, Info } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { logger } from '@/lib/logger';
 
 /**
  * System information panel component for settings page.
@@ -60,6 +61,11 @@ Environment: ${process.env.NODE_ENV || 'unknown'}`;
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
+      logger.error('[SystemInformationPanel.tsx] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       // Fallback for older browsers
       const textArea = document.createElement('textarea');
       textArea.value = info;

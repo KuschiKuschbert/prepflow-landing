@@ -1,7 +1,7 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-
-import { logger } from '@/lib/logger';
 
 /**
  * Cleans up test data (dev-only).
@@ -13,10 +13,12 @@ export async function POST(request: NextRequest) {
   // Prevent cleanup in production
   if (process.env.NODE_ENV === 'production') {
     return NextResponse.json(
-      {
-        error: 'Test data cleanup is not allowed in production',
-        message: 'This endpoint is only available in development mode',
-      },
+      ApiErrorHandler.createError(
+        'Test data cleanup is not allowed in production',
+        'FORBIDDEN',
+        403,
+        { message: 'This endpoint is only available in development mode' },
+      ),
       { status: 403 },
     );
   }
@@ -55,20 +57,36 @@ export async function POST(request: NextRequest) {
     for (const table of tablesToClean) {
       try {
         // Get count before deletion
-        const { count } = await supabaseAdmin
+        const { count, error: countError } = await supabaseAdmin
           .from(table)
           .select('*', { count: 'exact', head: true });
+
+        if (countError) {
+          logger.warn(`[Cleanup Test Data] Error counting records in ${table}:`, {
+            error: countError.message,
+            code: (countError as any).code,
+          });
+        }
 
         // Delete all records
         const { error } = await supabaseAdmin.from(table).delete().neq('id', '0'); // Delete all
 
         if (error) {
+          logger.error(`[Cleanup Test Data] Error deleting from ${table}:`, {
+            error: error.message,
+            code: (error as any).code,
+          });
           results.errors.push({ table, error: error.message });
         } else {
           results.deleted.push({ table, count: count || 0 });
         }
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        logger.error(`[Cleanup Test Data] Error processing table ${table}:`, {
+          error: err instanceof Error ? err.message : String(err),
+          stack: err instanceof Error ? err.stack : undefined,
+          table,
+        });
         results.errors.push({ table, error: errorMessage });
       }
     }
@@ -82,12 +100,18 @@ export async function POST(request: NextRequest) {
       errors: results.errors.length > 0 ? results.errors : undefined,
     });
   } catch (err) {
-    logger.error('Error during test data cleanup:', err);
+    logger.error('[Cleanup Test Data] Error during test data cleanup:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/cleanup-test-data', method: 'POST' },
+    });
     return NextResponse.json(
-      {
-        error: 'Internal server error during test data cleanup',
-        details: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        'Internal server error during test data cleanup',
+        'SERVER_ERROR',
+        500,
+        err instanceof Error ? err.message : String(err),
+      ),
       { status: 500 },
     );
   }

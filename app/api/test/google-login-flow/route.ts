@@ -7,6 +7,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { auth0 } from '@/lib/auth0';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Test endpoint to check if Google login created a valid session.
@@ -38,11 +39,14 @@ export async function GET(req: NextRequest) {
   } catch (error: any) {
     logger.error('[Google Login Flow Test] Error:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: error.message,
-        message: 'Failed to check session',
-      },
+      ApiErrorHandler.createError(
+        'Failed to check session',
+        'SERVER_ERROR',
+        500,
+        {
+          details: error?.message || String(error),
+        },
+      ),
       { status: 500 },
     );
   }

@@ -19,9 +19,6 @@ interface UsePrepListsFormProps {
   userId: string;
 }
 
-/**
- * Hook for managing prep list form state and submission.
- */
 export function usePrepListsForm({
   prepLists,
   setPrepLists,

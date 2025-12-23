@@ -7,6 +7,7 @@ import {
   testURLConsistency,
 } from './test-helpers';
 import { addTest, createTestResults } from './test-utils';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Comprehensive Auth0 Test Endpoint
@@ -60,11 +61,16 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    logger.error('[Auth0 Test] Error during testing:', error);
+    logger.error('[Auth0 Test] Error during testing:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     addTest(results, 'Test Execution', 'fail', 'Error during test execution', {
       error: error instanceof Error ? error.message : String(error),
     });
 
+    // Test endpoints return test results format even on error (not error response format)
+    // This is intentional - test endpoints should always return test results for debugging
     return NextResponse.json(results, {
       status: 500,
       headers: {

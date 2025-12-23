@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { isAdmin } from '@/lib/admin-auth';
 import { NotificationProvider } from '@/contexts/NotificationContext';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import AdminNavigation from './components/AdminNavigation';
 import '../globals.css';
 
@@ -47,12 +48,14 @@ function AdminLayoutContent({
   }
 
   return (
-    <div className="flex min-h-screen bg-[#0a0a0a] text-white">
-      <AdminNavigation />
-      <main className="desktop:ml-64 flex-1 overflow-auto">
-        <div className="desktop:p-8 p-6">{children}</div>
-      </main>
-    </div>
+    <ErrorBoundary>
+      <div className="flex min-h-screen bg-[#0a0a0a] text-white">
+        <AdminNavigation />
+        <main className="desktop:ml-64 flex-1 overflow-auto">
+          <div className="desktop:p-8 p-6">{children}</div>
+        </main>
+      </div>
+    </ErrorBoundary>
   );
 }
 

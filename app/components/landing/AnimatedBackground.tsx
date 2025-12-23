@@ -53,6 +53,11 @@ export default function AnimatedBackground({ className = '' }: AnimatedBackgroun
       prefersReducedMotion =
         window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     } catch (e) {
+      logger.error('[AnimatedBackground.tsx] Error in catch block:', {
+      error: e instanceof Error ? e.message : String(e),
+      stack: e instanceof Error ? e.stack : undefined,
+    });
+
       // Fallback if matchMedia is not available
       prefersReducedMotion = false;
     }

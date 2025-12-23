@@ -1,5 +1,6 @@
 import { getUserFromRequest } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -12,7 +13,7 @@ export async function GET(req: NextRequest) {
   try {
     const authUser = await getUserFromRequest(req);
     if (!authUser) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+      return NextResponse.json(ApiErrorHandler.createError('Not authenticated', 'UNAUTHORIZED', 401), { status: 401 });
     }
 
     // Get database user data

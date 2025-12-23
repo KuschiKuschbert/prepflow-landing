@@ -60,19 +60,28 @@ export function DraftRecovery() {
   }, [userId]);
 
   const handleRestore = async () => {
-    setSyncing(true);
-    setProgress({ current: 0, total: drafts.length });
+    try {
+      setSyncing(true);
+      setProgress({ current: 0, total: drafts.length });
 
-    const result = await syncAllDrafts(userId, (synced, total) => {
-      setProgress({ current: synced, total });
-    });
+      const result = await syncAllDrafts(userId, (synced, total) => {
+        setProgress({ current: synced, total });
+      });
 
-    setSyncing(false);
-    setShowDialog(false);
+      setSyncing(false);
+      setShowDialog(false);
 
-    if (result.failed > 0) {
-      logger.warn(`Failed to sync ${result.failed} drafts:`, { errors: result.errors });
-      // Could show a toast notification here
+      if (result.failed > 0) {
+        logger.warn(`Failed to sync ${result.failed} drafts:`, { errors: result.errors });
+        // Could show a toast notification here
+      }
+    } catch (err) {
+      logger.error('[DraftRecovery] Error restoring drafts:', {
+        error: err instanceof Error ? err.message : String(err),
+        userId,
+      });
+      setSyncing(false);
+      setShowDialog(false);
     }
   };
 

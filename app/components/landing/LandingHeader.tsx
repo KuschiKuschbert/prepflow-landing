@@ -11,6 +11,7 @@ import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import { BUTTON_STYLES } from '../../../lib/tailwind-utils';
 import { useTranslation } from '../../../lib/useTranslation';
 import { MagneticButton } from '../../../components/ui/MagneticButton';
+import { logger } from '@/lib/logger';
 interface LandingHeaderProps {
   trackEngagement: (event: string) => void;
 }
@@ -90,7 +91,12 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
                         if (typeof window !== 'undefined') {
                           sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
                         }
-                      } catch (_) {}
+                      } catch (err) {
+                        // SessionStorage might fail in private mode - log but continue
+                        logger.dev('[LandingHeader] Error accessing sessionStorage (non-blocking):', {
+                          error: err instanceof Error ? err.message : String(err),
+                        });
+                      }
                       window.location.href = '/api/auth/login?returnTo=/webapp';
                     }}
                     strength={0.3}
@@ -106,7 +112,12 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
                         if (typeof window !== 'undefined') {
                           sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
                         }
-                      } catch (_) {}
+                      } catch (err) {
+                        // SessionStorage might fail in private mode - log but continue
+                        logger.dev('[LandingHeader] Error accessing sessionStorage (non-blocking):', {
+                          error: err instanceof Error ? err.message : String(err),
+                        });
+                      }
                       window.location.href = '/api/auth/login?returnTo=/webapp';
                     }}
                     strength={0.3}
@@ -133,7 +144,12 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
                       if (typeof window !== 'undefined') {
                         sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
                       }
-                    } catch (_) {}
+                    } catch (err) {
+                      // SessionStorage might fail in private mode - log but continue
+                      logger.dev('[LandingHeader] Error accessing sessionStorage (non-blocking):', {
+                        error: err instanceof Error ? err.message : String(err),
+                      });
+                    }
                     window.location.href = '/api/auth/login?returnTo=/webapp';
                   }
                 }}

@@ -14,6 +14,7 @@ import { Clock, X, Save } from 'lucide-react';
 import type { Shift } from '../types';
 import { calculatePopoverPosition } from './InlineTimeEntry/helpers/calculatePopoverPosition';
 import { buildShiftData } from './InlineTimeEntry/helpers/buildShiftData';
+import { logger } from '@/lib/logger';
 
 interface InlineTimeEntryProps {
   employeeId: string;
@@ -104,6 +105,11 @@ export function InlineTimeEntry({
     try {
       await onSave(buildShiftData(employeeId, date, startTime, endTime));
     } catch (err) {
+      logger.error('[InlineTimeEntry.tsx] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       setError('Failed to save shift');
       setSaving(false);
     }

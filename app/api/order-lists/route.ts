@@ -5,6 +5,20 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createOrderListWithItems } from './helpers/createOrderListWithItems';
 import { handleOrderListError } from './helpers/handleOrderListError';
 import { normalizeOrderListData } from './helpers/normalizeOrderListData';
+import { z } from 'zod';
+
+const createOrderListSchema = z.object({
+  userId: z.string().min(1, 'User ID is required'),
+  supplierId: z.string().min(1, 'Supplier ID is required'),
+  name: z.string().min(1, 'Order list name is required'),
+  notes: z.string().optional(),
+  items: z.array(z.object({
+    ingredient_id: z.string().optional(),
+    quantity: z.number().optional(),
+    unit: z.string().optional(),
+    notes: z.string().optional(),
+  })).optional(),
+});
 
 export async function GET(request: NextRequest) {
   try {
@@ -84,25 +98,42 @@ export async function GET(request: NextRequest) {
       total: count || 0,
     });
   } catch (err) {
+    logger.error('[Order Lists API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/order-lists', method: 'GET' },
+    });
     return handleOrderListError(err, 'GET');
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { userId, supplierId, name, notes, items } = body;
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Order Lists API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
 
-    if (!userId || !supplierId || !name) {
+    const validationResult = createOrderListSchema.safeParse(body);
+    if (!validationResult.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(
-          'userId, supplierId, and name are required',
+          validationResult.error.issues[0]?.message || 'Invalid request body',
           'VALIDATION_ERROR',
           400,
         ),
         { status: 400 },
       );
     }
+
+    const { userId, supplierId, name, notes, items } = validationResult.data;
 
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -127,6 +158,10 @@ export async function POST(request: NextRequest) {
       data: orderList,
     });
   } catch (err: any) {
+    logger.error('[Order Lists API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/order-lists', method: 'POST' },
+    });
     if (err.status) {
       return NextResponse.json(err, { status: err.status });
     }

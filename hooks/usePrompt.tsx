@@ -113,8 +113,5 @@ export function usePrompt() {
     );
   };
 
-  return {
-    showPrompt,
-    InputDialog: InputDialogComponent,
-  };
+  return { showPrompt, InputDialog: InputDialogComponent };
 }

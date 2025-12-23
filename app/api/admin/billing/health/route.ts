@@ -87,7 +87,11 @@ export async function GET(req: NextRequest) {
           }
         } catch (error: any) {
           if (error.code === 'resource_missing') {
-            // Subscription not found in Stripe
+            // Subscription not found in Stripe - log as warning, not error
+            logger.warn('[Billing Health] Subscription not found in Stripe:', {
+              email: user.email,
+              subscriptionId: user.stripe_subscription_id,
+            });
             healthReport.usersWithMissingSubscriptions.push(user.email);
             healthReport.healthy = false;
           } else {
@@ -113,11 +117,19 @@ export async function GET(req: NextRequest) {
     for (const subscription of subscriptions.data) {
       const customerId = subscription.customer as string;
 
-      const { data: billingData } = await supabaseAdmin
+      const { data: billingData, error: billingDataError } = await supabaseAdmin
         .from('billing_customers')
         .select('user_email')
         .eq('stripe_customer_id', customerId)
         .maybeSingle();
+
+      if (billingDataError && billingDataError.code !== 'PGRST116') {
+        logger.warn('[Billing Health] Error fetching billing customer:', {
+          error: billingDataError.message,
+          code: (billingDataError as any).code,
+          customerId,
+        });
+      }
 
       if (!billingData) {
         healthReport.subscriptionsWithMissingUsers.push(subscription.id);
@@ -131,6 +143,11 @@ export async function GET(req: NextRequest) {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     const apiError = ApiErrorHandler.fromException(
       error instanceof Error ? error : new Error(String(error)),
     );

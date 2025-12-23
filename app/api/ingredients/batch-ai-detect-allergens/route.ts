@@ -10,6 +10,11 @@ import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+
+const batchDetectAllergensSchema = z.object({
+  ingredient_ids: z.array(z.string()).min(1, 'ingredient_ids must be a non-empty array'),
+});
 // Simple rate limiting
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
@@ -47,19 +52,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
-    const { ingredient_ids } = body;
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Batch AI Detection] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
 
-    if (!Array.isArray(ingredient_ids) || ingredient_ids.length === 0) {
+    const validationResult = batchDetectAllergensSchema.safeParse(body);
+    if (!validationResult.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(
-          'ingredient_ids must be a non-empty array',
+          validationResult.error.issues[0]?.message || 'Invalid request body',
           'VALIDATION_ERROR',
           400,
         ),
         { status: 400 },
       );
     }
+
+    const { ingredient_ids } = validationResult.data;
     if (!supabaseAdmin) {
       return NextResponse.json(
         ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

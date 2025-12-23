@@ -68,28 +68,45 @@ export async function handleRecipeUpdate(
     .single();
 
   if (updateError) {
-    throw updateError;
+    logger.error('[Recipes API] Database error updating recipe:', {
+      error: updateError.message,
+      code: (updateError as any).code,
+      context: { endpoint: '/api/recipes/[id]', operation: 'PUT', recipeId },
+    });
+    throw ApiErrorHandler.fromSupabaseError(updateError, 500);
   }
 
   const recipeName = updatedRecipe.recipe_name || currentRecipe?.recipe_name || 'Unknown Recipe';
 
   // Invalidate caches if needed
   if (ingredientsChanged) {
-    Promise.all([
-      invalidateRecipeAllergenCache(recipeId),
-      invalidateDishesWithRecipe(recipeId),
-    ]).catch(err => {
-      logger.error('[Recipes API] Error invalidating allergen caches:', err);
-    });
+    (async () => {
+      try {
+        await Promise.all([
+          invalidateRecipeAllergenCache(recipeId),
+          invalidateDishesWithRecipe(recipeId),
+        ]);
+      } catch (err) {
+        logger.error('[Recipes API] Error invalidating allergen caches:', {
+          error: err instanceof Error ? err.message : String(err),
+          context: { recipeId, operation: 'invalidateAllergenCaches' },
+        });
+      }
+    })();
   }
 
   // Invalidate cached recommended prices if ingredients or yield changed
   if (ingredientsChanged || yieldChanged) {
-    invalidateMenuItemsWithRecipe(recipeId, recipeName, changeType, changeDetails, userEmail).catch(
-      err => {
-        logger.error('[Recipes API] Error invalidating menu pricing cache:', err);
-      },
-    );
+    (async () => {
+      try {
+        await invalidateMenuItemsWithRecipe(recipeId, recipeName, changeType, changeDetails, userEmail);
+      } catch (err) {
+        logger.error('[Recipes API] Error invalidating menu pricing cache:', {
+          error: err instanceof Error ? err.message : String(err),
+          context: { recipeId, recipeName, operation: 'invalidateMenuPricingCache' },
+        });
+      }
+    })();
   }
 
   return updatedRecipe;

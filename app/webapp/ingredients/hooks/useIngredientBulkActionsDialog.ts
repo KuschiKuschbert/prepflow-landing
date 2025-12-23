@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useIngredientBulkUpdateDialog } from './useIngredientBulkUpdateDialog';
+import { logger } from '@/lib/logger';
 
 interface UseIngredientBulkActionsDialogProps {
   selectedIngredients: Set<string>;

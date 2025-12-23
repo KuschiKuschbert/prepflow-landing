@@ -9,6 +9,17 @@ import { generateAIResponse } from '@/lib/ai/ai-service';
 import { buildMenuItemDescriptionPrompt } from '@/lib/ai/prompts/menu-item-description';
 import type { MenuItem } from '@/app/webapp/menu-builder/types';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { z } from 'zod';
+
+const menuItemDescriptionSchema = z.object({
+  menuItem: z.any(), // MenuItem is complex, validate structure if needed
+  ingredients: z.array(z.any()).optional(),
+  countryCode: z.string().optional(),
+}).refine(data => data.menuItem !== undefined && data.menuItem !== null, {
+  message: 'menuItem is required',
+  path: ['menuItem'],
+});
 
 /**
  * POST /api/ai/menu-item-description
@@ -23,16 +34,36 @@ import { logger } from '@/lib/logger';
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { menuItem, ingredients, countryCode } = body as {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[AI Menu Item Description] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = menuItemDescriptionSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { menuItem, ingredients, countryCode } = validationResult.data as {
       menuItem: MenuItem;
       ingredients?: any[];
       countryCode?: string;
     };
-
-    if (!menuItem) {
-      return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
-    }
 
     // Try AI first
     try {

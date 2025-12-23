@@ -1,4 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
+import { logger } from '@/lib/logger';
 import { isMissingTableError } from './isMissingTableError';
 
 /**
@@ -24,8 +25,18 @@ export async function getUserTableIds(
     error &&
     (isMissingTableError(error.message) || /column .*user_id.* does not exist/i.test(error.message))
   ) {
+    // Column missing: return empty array (non-fatal)
     return [];
   }
-  if (error) return [];
+  if (error) {
+    logger.warn('[Reset Self API] Error fetching user table IDs (non-fatal):', {
+      error: error.message,
+      code: (error as any).code,
+      table,
+      idColumn,
+      userId,
+    });
+    return [];
+  }
   return (data || []).map((r: any) => r[idColumn]) as string[];
 }

@@ -92,6 +92,11 @@ export async function submitPrepListForm({
       showError(errorMsg);
     }
   } catch (err) {
+    logger.error('[formSubmission.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     setError('Failed to save prep list');
     showError('Failed to save prep list. Please check your connection and try again.');
   }

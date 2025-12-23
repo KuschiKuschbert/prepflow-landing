@@ -193,8 +193,5 @@ export async function handleSubscriptionDeleted(
   // Send notification
   await subscriptionNotifications.subscriptionCancelled(userEmail, false);
 
-  logger.dev('[Stripe Webhook] Subscription deleted:', {
-    userEmail,
-    subscriptionId: sub.id,
-  });
+  logger.dev('[Stripe Webhook] Subscription deleted:', { userEmail, subscriptionId: sub.id });
 }

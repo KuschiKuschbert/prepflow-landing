@@ -7,6 +7,7 @@
 
 import { useMemo } from 'react';
 import dynamic from 'next/dynamic';
+import { logger } from '@/lib/logger';
 
 // Dynamically import error components to reduce initial bundle size
 const KitchenOnFire = dynamic(() => import('./KitchenOnFire'), {
@@ -47,6 +48,11 @@ export const useErrorMessageSelector = () => {
       localStorage.setItem('PF_LAST_ERROR_MESSAGE', newMessage);
       return newMessage;
     } catch (error) {
+      logger.error('[useErrorMessageSelector.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       // If localStorage fails, default to kitchen fire
       return 'kitchen-fire';
     }

@@ -9,6 +9,8 @@ import { calculateRecipeCost } from './calculateRecipeCost';
  */
 import { logger } from '@/lib/logger';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 export async function calculateDishCost(dishId: string): Promise<number> {
   if (!supabaseAdmin) {
     logger.error('[calculateDishCost] Supabase admin client not available');
@@ -38,7 +40,7 @@ export async function calculateDishCost(dishId: string): Promise<number> {
         dishId,
         error: dishRecipesError,
       });
-      throw new Error(`Failed to fetch dish recipes: ${dishRecipesError.message}`);
+      throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
     }
 
     if (dishRecipes && dishRecipes.length > 0) {
@@ -82,7 +84,7 @@ export async function calculateDishCost(dishId: string): Promise<number> {
         dishId,
         error: dishIngredientsError,
       });
-      throw new Error(`Failed to fetch dish ingredients: ${dishIngredientsError.message}`);
+      throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
     }
 
     if (dishIngredients) {

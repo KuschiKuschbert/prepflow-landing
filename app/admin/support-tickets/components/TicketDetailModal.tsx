@@ -6,6 +6,7 @@ import { Link as LinkIcon } from 'lucide-react';
 import Link from 'next/link';
 import type { SupportTicket } from '../types';
 import { SEVERITY_COLORS, STATUS_COLORS, TYPE_COLORS } from '../constants';
+import { logger } from '@/lib/logger';
 
 interface TicketDetailModalProps {
   ticket: SupportTicket | null;
@@ -48,17 +49,32 @@ export function TicketDetailModal({
   if (!ticket) return null;
 
   const handleSaveNotes = async () => {
-    const updated = await onSaveNotes(ticket.id, adminNotes);
-    if (updated) {
-      // Notes saved successfully, modal will update via parent
+    try {
+      const updated = await onSaveNotes(ticket.id, adminNotes);
+      if (updated) {
+        // Notes saved successfully, modal will update via parent
+      }
+    } catch (err) {
+      logger.error('[TicketDetailModal] Error saving notes:', {
+        error: err instanceof Error ? err.message : String(err),
+        ticketId: ticket.id,
+      });
     }
   };
 
   const handleLinkError = async () => {
     if (!linkErrorId) return;
-    const updated = await onLinkError(ticket.id, linkErrorId);
-    if (updated) {
-      setLinkErrorId('');
+    try {
+      const updated = await onLinkError(ticket.id, linkErrorId);
+      if (updated) {
+        setLinkErrorId('');
+      }
+    } catch (err) {
+      logger.error('[TicketDetailModal] Error linking error:', {
+        error: err instanceof Error ? err.message : String(err),
+        ticketId: ticket.id,
+        errorId: linkErrorId,
+      });
     }
   };
 

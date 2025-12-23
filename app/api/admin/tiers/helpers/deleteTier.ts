@@ -1,10 +1,10 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { invalidateTierCache } from '@/lib/tier-config-db';
 import { logAdminApiAction } from '@/lib/admin-audit';
 import { NextRequest, NextResponse } from 'next/server';
 import type { AdminUser } from '@/lib/admin-auth';
-
 /**
  * Disables a tier configuration (soft delete) in the database.
  *
@@ -19,7 +19,7 @@ export async function deleteTier(
   request: NextRequest,
 ): Promise<{ tier: any } | NextResponse> {
   if (!supabaseAdmin) {
-    return NextResponse.json({ error: 'Database not available' }, { status: 503 });
+    return NextResponse.json(ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503), { status: 503 });
   }
 
   const { data, error } = await supabaseAdmin
@@ -31,7 +31,7 @@ export async function deleteTier(
 
   if (error) {
     logger.error('[Admin Tiers] Failed to disable tier:', error);
-    return NextResponse.json({ error: 'Failed to disable tier' }, { status: 500 });
+    return NextResponse.json(ApiErrorHandler.createError('Failed to disable tier', 'SERVER_ERROR', 500), { status: 500 });
   }
 
   await invalidateTierCache();

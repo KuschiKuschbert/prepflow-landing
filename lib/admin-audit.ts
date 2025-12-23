@@ -2,10 +2,10 @@
  * Admin audit logging utilities.
  * Logs all admin actions to admin_audit_logs table for security and compliance.
  */
-
 import { supabaseAdmin } from './supabase';
 import { logger } from './logger';
 import type { AdminUser } from './admin-auth';
+import { extractRequestMetadata } from './admin-audit/helpers/extractRequestMetadata';
 
 export interface AuditLogEntry {
   admin_user_id: string;
@@ -54,13 +54,7 @@ export async function logAdminAction(entry: AuditLogEntry): Promise<void> {
 }
 
 /**
- * Log admin action from API route.
- * Extracts IP and user agent from request.
- *
- * @param {AdminUser} adminUser - Admin user performing the action
- * @param {string} action - Action name
- * @param {NextRequest} request - Next.js request object
- * @param {Object} options - Additional options
+ * Log admin action from API route. Extracts IP and user agent from request.
  */
 export async function logAdminApiAction(
   adminUser: AdminUser,
@@ -72,10 +66,7 @@ export async function logAdminApiAction(
     details?: Record<string, unknown>;
   } = {},
 ): Promise<void> {
-  const ipAddress =
-    request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
-  const userAgent = request.headers.get('user-agent') || 'unknown';
-
+  const { ipAddress, userAgent } = extractRequestMetadata(request);
   await logAdminAction({
     admin_user_id: adminUser.id,
     admin_user_email: adminUser.email,
@@ -88,21 +79,16 @@ export async function logAdminApiAction(
   });
 }
 
-/**
- * Log tier configuration change.
- */
+/** Log tier configuration change. */
 export async function logTierConfigChange(
   adminEmail: string,
   tier: string,
   changes: Record<string, unknown>,
   request?: { headers: Headers },
 ): Promise<void> {
-  const ipAddress =
-    request?.headers.get('x-forwarded-for') || request?.headers.get('x-real-ip') || 'unknown';
-  const userAgent = request?.headers.get('user-agent') || 'unknown';
-
+  const { ipAddress, userAgent } = extractRequestMetadata(request);
   await logAdminAction({
-    admin_user_id: adminEmail, // Using email as ID for now
+    admin_user_id: adminEmail,
     admin_user_email: adminEmail,
     action: 'tier_config_updated',
     target_type: 'tier_configuration',
@@ -113,9 +99,7 @@ export async function logTierConfigChange(
   });
 }
 
-/**
- * Log feature tier mapping change.
- */
+/** Log feature tier mapping change. */
 export async function logFeatureTierChange(
   adminEmail: string,
   featureKey: string,
@@ -123,10 +107,7 @@ export async function logFeatureTierChange(
   newTier: string,
   request?: { headers: Headers },
 ): Promise<void> {
-  const ipAddress =
-    request?.headers.get('x-forwarded-for') || request?.headers.get('x-real-ip') || 'unknown';
-  const userAgent = request?.headers.get('user-agent') || 'unknown';
-
+  const { ipAddress, userAgent } = extractRequestMetadata(request);
   await logAdminAction({
     admin_user_id: adminEmail,
     admin_user_email: adminEmail,
@@ -139,17 +120,12 @@ export async function logFeatureTierChange(
   });
 }
 
-/**
- * Log cache invalidation.
- */
+/** Log cache invalidation. */
 export async function logCacheInvalidation(
   adminEmail: string,
   request?: { headers: Headers },
 ): Promise<void> {
-  const ipAddress =
-    request?.headers.get('x-forwarded-for') || request?.headers.get('x-real-ip') || 'unknown';
-  const userAgent = request?.headers.get('user-agent') || 'unknown';
-
+  const { ipAddress, userAgent } = extractRequestMetadata(request);
   await logAdminAction({
     admin_user_id: adminEmail,
     admin_user_email: adminEmail,

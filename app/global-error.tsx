@@ -28,6 +28,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
   return (
     <html>
       <body>
+        {/* eslint-disable-next-line react-hooks/static-components */}
         <ErrorComponent />
       </body>
     </html>

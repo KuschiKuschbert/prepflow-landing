@@ -5,6 +5,7 @@
 
 import { useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 interface Ingredient {
   id: string;
@@ -55,6 +56,11 @@ export function useIngredientBulkActions({
       setIngredients(prev => prev.filter(ing => !selectedIngredients.has(ing.id)));
       if (setSelectedIngredients) setSelectedIngredients(new Set());
     } catch (error) {
+      logger.error('[useIngredientBulkActions.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       setError('Failed to delete selected ingredients');
     }
   }, [selectedIngredients, setIngredients, setError, setSelectedIngredients]);

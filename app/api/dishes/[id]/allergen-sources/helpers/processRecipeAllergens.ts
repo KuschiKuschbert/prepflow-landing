@@ -5,6 +5,8 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 export interface AllergenSource {
   source_type: 'recipe' | 'ingredient';
   source_id: string;
@@ -31,7 +33,7 @@ export async function processRecipeAllergens(
   allAllergens: Set<string>,
 ): Promise<void> {
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   const { data: dishRecipes, error: recipesError } = await supabaseAdmin
@@ -51,7 +53,18 @@ export async function processRecipeAllergens(
     )
     .eq('dish_id', dishId);
 
-  if (recipesError || !dishRecipes) {
+  if (recipesError) {
+    // Log error but don't throw - caller handles empty result
+    const { logger } = await import('@/lib/logger');
+    logger.warn('[Process Recipe Allergens] Error fetching dish recipes:', {
+      error: recipesError.message,
+      code: (recipesError as any).code,
+      context: { dishId, operation: 'fetchDishRecipes' },
+    });
+    return;
+  }
+
+  if (!dishRecipes) {
     return;
   }
 
@@ -88,7 +101,3 @@ export async function processRecipeAllergens(
     });
   });
 }
-
-
-
-

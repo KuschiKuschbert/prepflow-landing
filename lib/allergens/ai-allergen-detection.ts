@@ -16,6 +16,8 @@ import {
   consolidateAllergens,
 } from './australian-allergens';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 export interface AIAllergenDetectionResult {
   allergens: string[];
   composition?: string;
@@ -39,6 +41,13 @@ async function getCachedComposition(
       .eq('ingredient_name', ingredientName)
       .eq('brand', brand || null)
       .single();
+
+    if (error) {
+      logger.error('[allergens/ai-allergen-detection] Database error:', {
+        error: error.message,
+      });
+      throw ApiErrorHandler.fromSupabaseError(error, 500);
+    }
 
     if (error || !data) {
       return null;
@@ -224,7 +233,7 @@ Be thorough and check for hidden allergens in processed ingredients.`;
     });
 
     if (!result || !result.content) {
-      throw new Error('No response from AI');
+      throw ApiErrorHandler.createError('No response from AI', 'DATABASE_ERROR', 500);
     }
 
     const content = result.content;

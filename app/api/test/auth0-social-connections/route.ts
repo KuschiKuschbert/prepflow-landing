@@ -11,6 +11,7 @@ import {
 } from '@/lib/auth0-management';
 import { logger } from '@/lib/logger';
 import { NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Test endpoint to check social connection status and configuration.
@@ -87,11 +88,14 @@ export async function GET() {
   } catch (error) {
     logger.error('[Auth0 Social Connections] Diagnostic check failed:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : String(error),
-        message: 'Failed to check social connection status',
-      },
+      ApiErrorHandler.createError(
+        'Failed to check social connection status',
+        'SERVER_ERROR',
+        500,
+        {
+          details: error instanceof Error ? error.message : String(error),
+        },
+      ),
       { status: 500 },
     );
   }

@@ -1,4 +1,9 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { buildSectionsMap, buildItemsByPrepListIdMap } from './buildMaps';
+import { fetchIngredientsBatch } from './fetchIngredientsBatch';
+import { combinePrepListData } from './combinePrepListData';
 
 interface FetchPrepListsParams {
   userId: string | null;
@@ -42,7 +47,8 @@ interface Ingredient {
 }
 export async function fetchPrepListsData({ userId, page, pageSize }: FetchPrepListsParams) {
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    logger.error('[Prep Lists API] Database connection not available for fetchPrepListsData');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   const start = (page - 1) * pageSize;
@@ -67,7 +73,12 @@ export async function fetchPrepListsData({ userId, page, pageSize }: FetchPrepLi
     const fallbackResult = await fallbackQuery;
 
     if (fallbackResult.error) {
-      throw new Error(`Failed to fetch prep lists: ${fallbackResult.error.message}`);
+      logger.error('[Prep Lists API] Error fetching prep lists (fallback):', {
+        error: fallbackResult.error.message,
+        code: (fallbackResult.error as any).code,
+        context: { endpoint: '/api/prep-lists', operation: 'GET', table: 'prep_lists' },
+      });
+      throw ApiErrorHandler.fromSupabaseError(fallbackResult.error, 500);
     }
 
     return {
@@ -77,7 +88,12 @@ export async function fetchPrepListsData({ userId, page, pageSize }: FetchPrepLi
     };
   }
   if (prepListsError) {
-    throw new Error(`Failed to fetch prep lists: ${prepListsError.message}`);
+    logger.error('[Prep Lists API] Error fetching prep lists:', {
+      error: prepListsError.message,
+      code: (prepListsError as any).code,
+      context: { endpoint: '/api/prep-lists', operation: 'GET', table: 'prep_lists' },
+    });
+    throw ApiErrorHandler.fromSupabaseError(prepListsError, 500);
   }
 
   if (!prepLists || prepLists.length === 0) {
@@ -97,7 +113,8 @@ export async function fetchPrepListsData({ userId, page, pageSize }: FetchPrepLi
 
 export async function fetchRelatedData(prepLists: PrepListData[]) {
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    logger.error('[Prep Lists API] Database connection not available for fetchRelatedData');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   const prepListIds = prepLists.map((list: any) => list.id);
@@ -122,76 +139,26 @@ export async function fetchRelatedData(prepLists: PrepListData[]) {
       : Promise.resolve({ data: [], error: null }),
   ]);
 
+  // Check for errors in results
+  if (kitchenSectionsResult.error) {
+    logger.warn('[Prep Lists API] Error fetching kitchen sections (non-fatal):', {
+      error: kitchenSectionsResult.error.message,
+      code: (kitchenSectionsResult.error as any).code,
+      sectionIds,
+    });
+  }
+
+  if (prepListItemsResult.error) {
+    logger.warn('[Prep Lists API] Error fetching prep list items (non-fatal):', {
+      error: prepListItemsResult.error.message,
+      code: (prepListItemsResult.error as any).code,
+      prepListIds,
+    });
+  }
+
   const kitchenSections = (kitchenSectionsResult.data || []) as KitchenSection[];
   const prepListItems = (prepListItemsResult.data || []) as PrepListItem[];
-  // Build kitchen sections map
-  const sectionsMap = new Map();
-  kitchenSections.forEach((section: any) => {
-    sectionsMap.set(section.id, {
-      id: section.id,
-      name: section.name || section.section_name,
-      color: section.color || section.color_code || '#29E7CD',
-    });
-  });
-
-  // Build prep list items map
-  const itemsByPrepListId = new Map();
-  prepListItems.forEach((item: any) => {
-    if (!itemsByPrepListId.has(item.prep_list_id)) {
-      itemsByPrepListId.set(item.prep_list_id, []);
-    }
-    itemsByPrepListId.get(item.prep_list_id).push(item);
-  });
+  const sectionsMap = buildSectionsMap(kitchenSections);
+  const itemsByPrepListId = buildItemsByPrepListIdMap(prepListItems);
   return { sectionsMap, itemsByPrepListId, prepListItems };
-}
-
-export async function fetchIngredientsBatch(ingredientIds: string[]) {
-  if (!supabaseAdmin || ingredientIds.length === 0) {
-    return new Map();
-  }
-
-  const ingredientsMap = new Map();
-  // Fetch in batches of 100
-  for (let i = 0; i < ingredientIds.length; i += 100) {
-    const batch = ingredientIds.slice(i, i + 100);
-    const { data: ingredientsData } = await supabaseAdmin
-      .from('ingredients')
-      .select('id, ingredient_name, name, unit, category')
-      .in('id', batch);
-
-    if (ingredientsData) {
-      ingredientsData.forEach((ing: any) => {
-        ingredientsMap.set(ing.id, {
-          id: ing.id,
-          name: ing.ingredient_name || ing.name,
-          unit: ing.unit,
-          category: ing.category,
-        });
-      });
-    }
-  }
-
-  return ingredientsMap;
-}
-export function combinePrepListData(
-  prepLists: PrepListData[],
-  sectionsMap: Map<string, any>,
-  itemsByPrepListId: Map<string, PrepListItem[]>,
-  ingredientsMap: Map<string, Ingredient>,
-) {
-  return prepLists.map((list: any) => {
-    const sectionId = list.kitchen_section_id || list.section_id;
-    const items = itemsByPrepListId.get(list.id) || [];
-
-    return {
-      ...list,
-      kitchen_section_id: sectionId,
-      kitchen_sections: sectionId ? sectionsMap.get(sectionId) || null : null,
-      prep_list_items: items.map((item: any) => ({
-        ...item,
-        quantity: item.quantity || item.quantity_needed,
-        ingredients: item.ingredient_id ? ingredientsMap.get(item.ingredient_id) || null : null,
-      })),
-    };
-  });
 }

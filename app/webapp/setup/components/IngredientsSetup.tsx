@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { Carrot, Info, AlertTriangle, CheckCircle2, Check } from 'lucide-react';
+import { logger } from '@/lib/logger';
 
 interface IngredientsSetupProps {
   setupProgress: {
@@ -62,6 +63,11 @@ export default function IngredientsSetup({
         setError(data.error || 'Failed to populate ingredients');
       }
     } catch (err) {
+      logger.error('[IngredientsSetup.tsx] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       setError('Connection issue occurred. Give it another go, chef.');
     } finally {
       setLoading(false);

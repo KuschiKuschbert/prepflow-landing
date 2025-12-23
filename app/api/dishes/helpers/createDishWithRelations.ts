@@ -21,7 +21,10 @@ export async function createDishWithRelations(
   recipes?: Array<{ recipe_id: string; quantity?: number }>,
   ingredients?: Array<{ ingredient_id: string; quantity: number; unit: string }>,
 ) {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[API] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
 
   // Create the dish
   const { data: newDish, error: createError } = await supabaseAdmin
@@ -61,7 +64,13 @@ export async function createDishWithRelations(
         context: { endpoint: '/api/dishes', operation: 'POST', dishId: newDish.id },
       });
       // Rollback dish creation
-      await supabaseAdmin.from('dishes').delete().eq('id', newDish.id);
+      const { error: rollbackError } = await supabaseAdmin.from('dishes').delete().eq('id', newDish.id);
+      if (rollbackError) {
+        logger.error('[Dishes API] Failed to rollback dish creation after recipes error:', {
+          error: rollbackError.message,
+          dishId: newDish.id,
+        });
+      }
       throw ApiErrorHandler.fromSupabaseError(recipesError, 500);
     }
   }
@@ -86,7 +95,13 @@ export async function createDishWithRelations(
         context: { endpoint: '/api/dishes', operation: 'POST', dishId: newDish.id },
       });
       // Rollback dish creation
-      await supabaseAdmin.from('dishes').delete().eq('id', newDish.id);
+      const { error: rollbackError2 } = await supabaseAdmin.from('dishes').delete().eq('id', newDish.id);
+      if (rollbackError2) {
+        logger.error('[Dishes API] Failed to rollback dish creation after ingredients error:', {
+          error: rollbackError2.message,
+          dishId: newDish.id,
+        });
+      }
       throw ApiErrorHandler.fromSupabaseError(ingredientsError, 500);
     }
   }

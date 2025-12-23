@@ -31,7 +31,7 @@ export default function BillingSettingsPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-3xl p-6 text-[var(--foreground)]">
+      <div className="mx-auto max-w-[1400px] large-desktop:max-w-[1400px] xl:max-w-[1400px] 2xl:max-w-[1600px] p-6 text-[var(--foreground)]">
         <div className="h-8 w-48 animate-pulse rounded bg-[var(--muted)]" />
         <div className="mt-4 h-4 w-64 animate-pulse rounded bg-[var(--muted)]" />
       </div>
@@ -47,7 +47,7 @@ export default function BillingSettingsPage() {
   return (
     <>
       <ConfirmDialog />
-      <div className="mx-auto max-w-3xl p-6 text-[var(--foreground)]">
+      <div className="mx-auto max-w-[1400px] large-desktop:max-w-[1400px] xl:max-w-[1400px] 2xl:max-w-[1600px] p-6 text-[var(--foreground)]">
         <h1 className="mb-4 text-3xl font-bold">Billing & Subscription</h1>
 
         <StatusBanner isActive={isActive} isPastDue={isPastDue} isCancelled={isCancelled} />

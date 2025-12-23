@@ -54,7 +54,11 @@ export function useStaff() {
       }
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err));
-      logger.error('Error fetching staff members:', error);
+      logger.error('[useStaff] Error fetching staff members:', {
+        error: error.message,
+        stack: error.stack,
+        context: { endpoint: '/api/employees?status=active', operation: 'fetchStaff' },
+      });
       setError(error);
     } finally {
       setLoading(false);
@@ -75,7 +79,3 @@ export function useStaff() {
     refetch: fetchStaff,
   };
 }
-
-
-
-

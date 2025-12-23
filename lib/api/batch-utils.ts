@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 /**
  * Batch fetching utilities for optimizing API calls
  * Reduces N+1 query problems by batching multiple requests
@@ -37,6 +38,11 @@ export async function fetchInParallel<T>(
       requests.map((request, index) =>
         request().catch(error => {
           if (onError) {
+            logger.error('[batch-utils.ts] Error in catch block:', {
+              error: error instanceof Error ? error.message : String(error),
+              stack: error instanceof Error ? error.stack : undefined,
+            });
+
             onError(error instanceof Error ? error : new Error(String(error)), index);
           }
           if (!continueOnError) {

@@ -5,6 +5,8 @@
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 export interface MenuItem {
   id: string;
   category: string;
@@ -32,7 +34,7 @@ export async function fetchMenuItems(
 
   if (itemsError) {
     logger.error('Failed to fetch menu items:', itemsError);
-    throw new Error(`Failed to fetch menu items: ${itemsError.message}`);
+    throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
   }
 
   const items = (menuItems || []) as MenuItem[];

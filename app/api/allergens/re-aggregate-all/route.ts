@@ -32,7 +32,11 @@ export async function POST(request: NextRequest) {
     const { data: recipes, error: recipesError } = await supabaseAdmin.from('recipes').select('id');
 
     if (recipesError) {
-      logger.error('[Re-aggregate All Allergens API] Error fetching recipes:', recipesError);
+      logger.error('[Re-aggregate All Allergens API] Error fetching recipes:', {
+        error: recipesError.message,
+        code: (recipesError as any).code,
+        context: { endpoint: '/api/allergens/re-aggregate-all', operation: 'POST' },
+      });
       return NextResponse.json(
         ApiErrorHandler.createError('Failed to fetch recipes', 'DATABASE_ERROR', 500),
         { status: 500 },
@@ -66,10 +70,15 @@ export async function POST(request: NextRequest) {
           `[Re-aggregate All Allergens API] Successfully re-aggregated allergens for ${Object.keys(recipeResults).length} recipes`,
         );
       } catch (err) {
-        logger.error(
-          '[Re-aggregate All Allergens API] Error batch aggregating recipe allergens:',
-          err,
-        );
+        logger.error('[Re-aggregate All Allergens API] Error batch aggregating recipe allergens:', {
+          error: err instanceof Error ? err.message : String(err),
+          stack: err instanceof Error ? err.stack : undefined,
+          context: {
+            endpoint: '/api/allergens/re-aggregate-all',
+            operation: 'batchAggregateRecipeAllergens',
+            recipeCount: recipeIds.length,
+          },
+        });
       }
     }
 
@@ -84,8 +93,9 @@ export async function POST(request: NextRequest) {
               return { dishId, allergens };
             } catch (err) {
               logger.error('[Re-aggregate All Allergens API] Error aggregating dish allergens:', {
-                dishId,
-                error: err,
+                error: err instanceof Error ? err.message : String(err),
+                stack: err instanceof Error ? err.stack : undefined,
+                context: { dishId, operation: 'aggregateDishAllergens' },
               });
               return { dishId, allergens: [] };
             }

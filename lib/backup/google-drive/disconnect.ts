@@ -5,6 +5,8 @@
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 /**
  * Disconnect Google Drive for a user.
  *
@@ -16,7 +18,7 @@ export async function disconnectGoogleDrive(userId: string): Promise<void> {
   const { error } = await supabase.from('user_google_tokens').delete().eq('user_id', userId);
 
   if (error) {
-    throw new Error(`Failed to disconnect Google Drive: ${error.message}`);
+    throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
   }
 
   logger.info(`[Google Drive] Disconnected for user ${userId}`);

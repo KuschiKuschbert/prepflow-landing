@@ -1,4 +1,5 @@
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 /**
  * Fetch allergen records.
@@ -19,7 +20,10 @@ export async function fetchAllergens(startDate: string, endDate: string) {
     .limit(200);
 
   if (allergenError) {
-    return null;
+    logger.warn('[Health Inspector Report] Error fetching allergen records:', {
+      error: allergenError.message,
+      code: (allergenError as any).code,
+    });
   }
 
   const records = allergenRecords || [];
@@ -50,7 +54,10 @@ export async function fetchEquipmentMaintenance(startDate: string, endDate: stri
     .limit(200);
 
   if (maintenanceError) {
-    return null;
+    logger.warn('[Health Inspector Report] Error fetching equipment maintenance:', {
+      error: maintenanceError.message,
+      code: (maintenanceError as any).code,
+    });
   }
 
   const maintenanceRecords = maintenance || [];

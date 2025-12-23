@@ -59,6 +59,7 @@ async function storeErrorInDatabase(
       });
     } catch (err) {
       // Silently fail - don't let error logging break the app
+      // Use console.error directly to avoid circular dependency
       console.error('[Logger] Failed to store error in database:', err);
     }
   }, 0);

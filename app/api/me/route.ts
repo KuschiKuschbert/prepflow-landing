@@ -28,6 +28,13 @@ export async function GET(req: NextRequest) {
         .eq('email', authUser.email)
         .maybeSingle();
 
+      if (error) {
+        logger.error('[me/route] Database error:', {
+          error: error.message,
+        });
+        throw ApiErrorHandler.fromSupabaseError(error, 500);
+      }
+
       if (!error && data) {
         dbUser = data;
         logger.dev('[API /me] Database user data:', {

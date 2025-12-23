@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 import { calculateRecipeSellingPrice } from '@/app/api/menus/[id]/statistics/helpers/calculateRecipeSellingPrice';
 
 interface PriceAuditResult {
@@ -52,6 +53,12 @@ export async function auditRecipe(recipe: any): Promise<PriceAuditResult> {
       }
     }
   } catch (err) {
+    logger.error('[Audit Prices] Error auditing recipe:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      recipeId: recipe.id,
+      recipeName: recipe.name,
+    });
     result.issues.push(
       `Error auditing recipe: ${err instanceof Error ? err.message : String(err)}`,
     );

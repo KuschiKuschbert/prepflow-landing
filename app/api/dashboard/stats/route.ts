@@ -2,6 +2,8 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { fetchWithTimeout } from './helpers/fetchWithTimeout';
+import { checkQueryErrors } from './helpers/checkQueryErrors';
 
 export async function GET(_req: NextRequest) {
   try {
@@ -15,28 +17,15 @@ export async function GET(_req: NextRequest) {
     const today = new Date().toISOString().split('T')[0];
 
     // Fetch all data in parallel for better performance
-    // Add timeout to prevent hanging (10 seconds max)
-    const fetchWithTimeout = async <T>(
-      promise: Promise<T>,
-      timeoutMs: number = 10000,
-    ): Promise<T> => {
-      return Promise.race([
-        promise,
-        new Promise<T>((_, reject) =>
-          setTimeout(() => reject(new Error('Database query timeout')), timeoutMs),
-        ),
-      ]);
-    };
-
     const [
-      { count: ing },
-      { count: rec },
+      ingredientsResult,
+      recipesResult,
       dishesPricesResult,
-      { count: menuDishes },
-      { data: allRecipes },
-      { data: allIngredients },
-      { count: tempChecksToday },
-      { count: cleaningTasksPending },
+      menuItemsResult,
+      allRecipesResult,
+      allIngredientsResult,
+      tempChecksResult,
+      cleaningTasksResult,
     ] = await fetchWithTimeout(
       Promise.all([
         // Basic counts
@@ -63,6 +52,37 @@ export async function GET(_req: NextRequest) {
       ]),
       10000, // 10 second timeout
     );
+
+    // Check for errors in all queries
+    checkQueryErrors(
+      [
+        ingredientsResult,
+        recipesResult,
+        menuItemsResult,
+        allRecipesResult,
+        allIngredientsResult,
+        tempChecksResult,
+        cleaningTasksResult,
+      ],
+      [
+        'ingredients count',
+        'recipes count',
+        'menu items count',
+        'all recipes',
+        'all ingredients',
+        'temperature checks',
+        'cleaning tasks',
+      ],
+    );
+
+    // Extract counts and data with fallbacks
+    const ing = ingredientsResult.count || 0;
+    const rec = recipesResult.count || 0;
+    const menuDishes = menuItemsResult.count || 0;
+    const allRecipes = allRecipesResult.data || [];
+    const allIngredients = allIngredientsResult.data || [];
+    const tempChecksToday = tempChecksResult.count || 0;
+    const cleaningTasksPending = cleaningTasksResult.count || 0;
 
     // Calculate average dish price from dishes table
     // Handle case where dishes table doesn't exist gracefully

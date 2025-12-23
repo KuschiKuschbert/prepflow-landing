@@ -12,6 +12,7 @@ import { UploadForm } from './components/UploadForm';
 import { AISpecialCard } from './components/AISpecialCard';
 import { EmptyState } from './components/EmptyState';
 import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
+import { logger } from '@/lib/logger';
 interface AISpecial {
   id: string;
   image_data: string;
@@ -40,7 +41,15 @@ export default function AISpecialsPage() {
   }, [userId]);
 
   useEffect(() => {
-    fetchAISpecials();
+    (async () => {
+      try {
+        await fetchAISpecials();
+      } catch (err) {
+        logger.error('[AISpecialsPage] Error in useEffect:', {
+          error: err instanceof Error ? err.message : String(err),
+        });
+      }
+    })();
   }, []);
 
   const fetchAISpecials = async () => {
@@ -53,7 +62,11 @@ export default function AISpecialsPage() {
       } else {
         setError(result.message || 'Failed to fetch AI specials');
       }
-    } catch {
+    } catch (err) {
+      logger.error('[AISpecialsPage] Error fetching AI specials:', {
+        error: err instanceof Error ? err.message : String(err),
+        userId,
+      });
       setError('Failed to fetch AI specials');
     } finally {
       setLoading(false);
@@ -93,7 +106,11 @@ export default function AISpecialsPage() {
         setProcessing(false);
       };
       reader.readAsDataURL(selectedFile);
-    } catch {
+    } catch (err) {
+      logger.error('[AISpecialsPage] Error processing image:', {
+        error: err instanceof Error ? err.message : String(err),
+        userId,
+      });
       setError('Failed to process image');
       setProcessing(false);
     }

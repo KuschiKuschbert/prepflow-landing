@@ -114,7 +114,14 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
       );
     }
 
-    const body = await request.json().catch(() => ({}));
+    let body = {};
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Admin Features API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
     const userId = (body as any).user_id || null;
 
     let query = supabaseAdmin.from('feature_flags').delete().eq('flag_key', flag);

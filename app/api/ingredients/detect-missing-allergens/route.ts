@@ -27,7 +27,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json().catch(() => ({}));
+    let body = {};
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Detect Missing Allergens API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
     const { ingredient_ids, force = false } = body;
 
     // Build and execute query
@@ -95,12 +102,18 @@ export async function POST(request: NextRequest) {
       const successfulIngredients = ingredients.filter(ing =>
         results.find(r => r.ingredient_id === ing.id && r.status === 'success'),
       );
-      await invalidateAndReaggregate(successfulIngredients).catch(err => {
-        logger.error(
-          '[Detect Missing Allergens API] Error invalidating/re-aggregating caches:',
-          err,
-        );
-      });
+      try {
+        await invalidateAndReaggregate(successfulIngredients);
+      } catch (err) {
+        logger.error('[Detect Missing Allergens API] Error invalidating/re-aggregating caches:', {
+          error: err instanceof Error ? err.message : String(err),
+          context: {
+            endpoint: '/api/ingredients/detect-missing-allergens',
+            operation: 'invalidateAndReaggregate',
+            successfulCount: successfulIngredients.length,
+          },
+        });
+      }
     }
 
     return NextResponse.json({
@@ -114,7 +127,11 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (err) {
-    logger.error('[Detect Missing Allergens API] Unexpected error:', err);
+    logger.error('[Detect Missing Allergens API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/ingredients/detect-missing-allergens', method: 'POST' },
+    });
     return NextResponse.json(
       ApiErrorHandler.createError(
         'Failed to detect missing allergens',

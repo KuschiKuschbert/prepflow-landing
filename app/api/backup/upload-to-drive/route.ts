@@ -10,7 +10,22 @@ import { exportUserData } from '@/lib/backup/export';
 import { encryptBackup } from '@/lib/backup/encryption';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import type { EncryptionMode } from '@/lib/backup/types';
+import { z } from 'zod';
+
+const uploadToDriveSchema = z.object({
+  encryptionMode: z.enum(['prepflow-only', 'user-password']).optional(),
+  password: z.string().min(8).optional(),
+}).refine(data => {
+  if (data.encryptionMode === 'user-password') {
+    return data.password !== undefined;
+  }
+  return true;
+}, {
+  message: 'password is required for user-password encryption mode',
+  path: ['password'],
+});
 
 /**
  * Uploads backup file to Google Drive.
@@ -22,13 +37,37 @@ export async function POST(request: NextRequest) {
   try {
     const user = await requireAuth(request);
     if (!user?.email) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
     }
 
     const userId = user.email;
-    const body = await request.json();
-    const encryptionMode: EncryptionMode = body.encryptionMode || 'prepflow-only';
-    const password: string | undefined = body.password;
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Google Drive Upload] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = uploadToDriveSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const encryptionMode: EncryptionMode = validationResult.data.encryptionMode || 'prepflow-only';
+    const password: string | undefined = validationResult.data.password;
 
     // Authenticate Google Drive
     const client = await authenticateGoogleDrive(userId);
@@ -47,7 +86,7 @@ export async function POST(request: NextRequest) {
 
     // Store metadata in database
     const supabase = createSupabaseAdmin();
-    await supabase.from('backup_metadata').insert({
+    const { error: metadataError } = await supabase.from('backup_metadata').insert({
       user_id: userId,
       backup_type: 'manual',
       format: 'encrypted',
@@ -57,6 +96,14 @@ export async function POST(request: NextRequest) {
       google_drive_file_id: fileId,
       created_at: new Date().toISOString(),
     });
+    if (metadataError) {
+      logger.warn('[Google Drive Upload] Error storing backup metadata:', {
+        error: metadataError.message,
+        code: (metadataError as any).code,
+        userId,
+      });
+      // Don't fail the upload if metadata storage fails
+    }
 
     logger.info(`[Google Drive Upload] Successfully uploaded backup to Drive, file ID: ${fileId}`);
 
@@ -67,9 +114,18 @@ export async function POST(request: NextRequest) {
       filename: encrypted.filename,
     });
   } catch (error: any) {
-    logger.error('[Google Drive Upload] Error:', error);
+    logger.error('[Google Drive Upload] Error:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      context: { endpoint: '/api/backup/upload-to-drive', method: 'POST' },
+    });
     return NextResponse.json(
-      { error: 'Failed to upload backup to Google Drive', message: error.message },
+      ApiErrorHandler.createError(
+        'Failed to upload backup to Google Drive',
+        'SERVER_ERROR',
+        500,
+        error instanceof Error ? error.message : String(error),
+      ),
       { status: 500 },
     );
   }

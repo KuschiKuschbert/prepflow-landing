@@ -113,8 +113,5 @@ export function useRosterBulkActions({
     ],
   );
 
-  return {
-    handleDeleteAllShifts,
-    handleDeleteEmployeeFromRoster,
-  };
+  return { handleDeleteAllShifts, handleDeleteEmployeeFromRoster };
 }

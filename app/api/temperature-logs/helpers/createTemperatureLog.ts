@@ -19,20 +19,30 @@ export async function createTemperatureLog(logData: {
   notes?: string | null;
   logged_by?: string;
 }) {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[Temperature Logs API] Database connection not available for createTemperatureLog');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
 
   // If equipment_id is provided, fetch equipment details
   let temperatureType = logData.temperature_type;
   let equipmentLocation = logData.location;
 
   if (logData.equipment_id) {
-    const { data: equipment } = await supabaseAdmin
+    const { data: equipment, error: equipmentError } = await supabaseAdmin
       .from('temperature_equipment')
       .select('equipment_type, location, name')
       .eq('id', logData.equipment_id)
       .single();
 
-    if (equipment) {
+    if (equipmentError) {
+      logger.warn('[Temperature Logs API] Error fetching equipment details (non-fatal):', {
+        error: equipmentError.message,
+        code: (equipmentError as any).code,
+        equipmentId: logData.equipment_id,
+      });
+      // Continue without equipment details - use provided values or defaults
+    } else if (equipment) {
       temperatureType = temperatureType || equipment.equipment_type;
       equipmentLocation = equipmentLocation || equipment.location || equipment.name;
     }
@@ -56,6 +66,13 @@ export async function createTemperatureLog(logData: {
     ])
     .select()
     .single();
+
+  if (error) {
+    logger.error('[helpers/createTemperatureLog] Database error:', {
+      error: error.message,
+    });
+    throw ApiErrorHandler.fromSupabaseError(error, 500);
+  }
 
   if (error) {
     logger.error('[Temperature Logs API] Database error creating log:', {

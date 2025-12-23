@@ -1,5 +1,6 @@
 import { useOnTemperatureLogged } from '@/lib/personality/hooks';
 import { useState } from 'react';
+import { logger } from '@/lib/logger';
 
 interface UseTemperatureLogHandlersProps {
   activeTab: 'logs' | 'equipment' | 'analytics';

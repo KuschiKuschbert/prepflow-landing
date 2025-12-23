@@ -1,13 +1,14 @@
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import QRCode from 'qrcode';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
 
     if (!id) {
-      return NextResponse.json({ error: 'Compliance record ID is required' }, { status: 400 });
+      return NextResponse.json(ApiErrorHandler.createError('Compliance record ID is required', 'BAD_REQUEST', 400), { status: 400 });
     }
 
     // Generate URL that will be encoded in QR code
@@ -40,6 +41,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     });
   } catch (error) {
     logger.error('Error generating compliance record QR code:', error);
-    return NextResponse.json({ error: 'Failed to generate QR code' }, { status: 500 });
+    return NextResponse.json(ApiErrorHandler.createError('Failed to generate QR code', 'OPERATION_FAILED', 500), { status: 500 });
   }
 }

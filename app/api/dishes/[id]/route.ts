@@ -1,3 +1,10 @@
+/**
+ * Dish API Routes (by ID)
+ *
+ * 📚 Square Integration: This route automatically triggers Square sync hooks after dish
+ * update operations. See `docs/SQUARE_API_REFERENCE.md` (Automatic Sync section) for details.
+ */
+
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
@@ -6,6 +13,17 @@ import { enrichDishWithAllergens } from './helpers/enrichDishWithAllergens';
 import { fetchDishWithRelations } from './helpers/fetchDishWithRelations';
 import { handleDishError } from './helpers/handleDishError';
 import { handlePutRequest } from './helpers/handlePutRequest';
+import { triggerDishSync } from '@/lib/square/sync/hooks';
+import { z } from 'zod';
+
+const updateDishSchema = z.object({
+  dish_name: z.string().min(1).optional(),
+  description: z.string().optional(),
+  selling_price: z.union([z.number().positive(), z.string().transform(val => parseFloat(val))]).optional(),
+  recipes: z.array(z.any()).optional(),
+  ingredients: z.array(z.any()).optional(),
+  category: z.string().optional(),
+});
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -13,7 +31,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     const dishId = id;
 
     if (!dishId) {
-      return NextResponse.json({ error: 'Missing dish id' }, { status: 400 });
+      return NextResponse.json(ApiErrorHandler.createError('Missing dish id', 'BAD_REQUEST', 400), { status: 400 });
     }
 
     const dish = await fetchDishWithRelations(dishId);
@@ -24,6 +42,11 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       dish: enrichedDish,
     });
   } catch (err: any) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     return handleDishError(err, 'GET');
   }
 }
@@ -39,8 +62,39 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       );
     }
 
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Dishes API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = updateDishSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    // Validation passed - proceed to helper (it will parse body again, but structure is validated)
     return handlePutRequest(request, dishId);
   } catch (err) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     return handleDishError(err, 'PUT', dishId);
   }
 }
@@ -83,6 +137,11 @@ export async function DELETE(_req: NextRequest, context: { params: Promise<{ id:
       message: 'Dish deleted successfully',
     });
   } catch (err) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     return handleDishError(err, 'DELETE');
   }
 }

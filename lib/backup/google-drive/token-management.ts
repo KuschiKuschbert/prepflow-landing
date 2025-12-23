@@ -6,6 +6,8 @@ import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { encryptToken, decryptToken } from '../token-encryption';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 /**
  * Get encrypted refresh token from database.
  *
@@ -21,7 +23,19 @@ export async function getEncryptedRefreshToken(userId: string): Promise<string |
     .eq('user_id', userId)
     .single();
 
-  if (error || !data) {
+  if (error) {
+    if ((error as any).code !== 'PGRST116') {
+      // PGRST116 is "not found" - that's okay, user hasn't connected Google Drive
+      logger.warn('[Google Drive] Error fetching refresh token:', {
+        error: error.message,
+        code: (error as any).code,
+        userId,
+      });
+    }
+    return null;
+  }
+
+  if (!data) {
     return null;
   }
 
@@ -63,6 +77,11 @@ export async function storeEncryptedRefreshToken(
   );
 
   if (error) {
-    throw new Error(`Failed to store refresh token: ${error.message}`);
+    logger.error('[Google Drive] Error storing refresh token:', {
+      error: error.message,
+      code: (error as any).code,
+      userId,
+    });
+    throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
   }
 }

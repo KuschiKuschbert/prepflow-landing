@@ -48,7 +48,18 @@ export async function PUT(request: NextRequest) {
   try {
     const adminUser = await requireAdmin(request);
 
-    const body = await request.json();
+    let body;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Admin Hidden Features API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'INVALID_REQUEST', 400),
+        { status: 400 },
+      );
+    }
     const validated = updateHiddenFlagSchema.parse(body);
 
     const result = await updateHiddenFlag(validated);
@@ -71,6 +82,11 @@ export async function PUT(request: NextRequest) {
       flag: result.flag,
     });
   } catch (error) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     const apiError = ApiErrorHandler.fromException(
       error instanceof Error ? error : new Error(String(error)),
     );
@@ -86,7 +102,18 @@ export async function DELETE(request: NextRequest) {
   try {
     const adminUser = await requireAdmin(request);
 
-    const body = await request.json();
+    let body;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Admin Hidden Features API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'INVALID_REQUEST', 400),
+        { status: 400 },
+      );
+    }
     const { feature_key } = z.object({ feature_key: z.string().min(1) }).parse(body);
 
     const result = await deleteHiddenFlag(feature_key);
@@ -102,6 +129,11 @@ export async function DELETE(request: NextRequest) {
       message: `Hidden feature flag ${feature_key} deleted`,
     });
   } catch (error) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     const apiError = ApiErrorHandler.fromException(
       error instanceof Error ? error : new Error(String(error)),
     );

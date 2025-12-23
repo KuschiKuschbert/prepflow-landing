@@ -1,4 +1,5 @@
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Update a supplier price list.
@@ -26,6 +27,6 @@ export async function updatePriceList(id: number, updateData: any) {
     )
     .single();
 
-  if (error) throw error;
+  if (error) throw ApiErrorHandler.fromSupabaseError(error, 500);
   return updated;
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 const TABLE_NOT_FOUND_RESPONSE = {
   success: true,
@@ -19,10 +20,7 @@ export async function GET() {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Database connection not available',
-        },
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
@@ -173,12 +171,14 @@ export async function GET() {
       return NextResponse.json(TABLE_NOT_FOUND_RESPONSE);
     }
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Internal server error',
-        message: 'An unexpected error occurred while fetching kitchen sections',
-        details: error?.message,
-      },
+      ApiErrorHandler.createError(
+        'An unexpected error occurred while fetching kitchen sections',
+        'SERVER_ERROR',
+        500,
+        {
+          details: error?.message,
+        },
+      ),
       { status: 500 },
     );
   }

@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { calculateItemCOGS } from './helpers/calculateItemCOGS';
 import { calculateRecommendedPrice } from './helpers/calculateRecommendedPrice';
 import { calculateStatistics } from './helpers/calculateStatistics';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * GET /api/menus/[id]/items/[itemId]/statistics
@@ -38,11 +39,7 @@ export async function GET(
 
     if (!menuId || !menuItemId) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Missing menu id or item id',
-          message: 'Both menu id and item id are required',
-        },
+        ApiErrorHandler.createError('Both menu id and item id are required', 'MISSING_REQUIRED_FIELD', 400),
         { status: 400 },
       );
     }

@@ -3,6 +3,7 @@
  * Uses the same logic as /api/dishes/[id]/cost endpoint.
  */
 
+import { logger } from '@/lib/logger';
 import { calculateRecipeCost } from '@/app/api/menus/[id]/statistics/helpers/calculateRecipeCost';
 import type { AuditResult } from '../types';
 import type { DishData } from './fetchDishData';
@@ -31,6 +32,11 @@ export async function calculateAPICost(dishData: DishData, result: AuditResult):
         recipeCost,
       });
     } catch (err) {
+      logger.error('[Audit Costs] Failed to calculate recipe cost:', {
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+        recipeId,
+      });
       result.issues.push(
         `Failed to calculate recipe cost for ${recipeId}: ${err instanceof Error ? err.message : String(err)}`,
       );

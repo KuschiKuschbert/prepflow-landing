@@ -8,9 +8,7 @@
  *
  * This file is kept for reference only. Do not use in new code.
  */
-
 'use client';
-
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useEffect, useMemo, useState } from 'react';
 // Components
@@ -36,6 +34,7 @@ import { COGSEmptyState } from '../components/COGSEmptyState';
 import { COGSErrorDisplay } from '../components/COGSErrorDisplay';
 import { COGSHeader } from '../components/COGSHeader';
 import { RecipeNotFoundWarning } from '../components/RecipeNotFoundWarning';
+import { logger } from '@/lib/logger';
 export default function CogsClient() {
   const {
     ingredients,
@@ -55,27 +54,22 @@ export default function CogsClient() {
     hasManualIngredientsRef,
     lastManualChangeTimeRef,
   } = useCOGSCalculations();
-
   const [dishPortions, setDishPortions] = useState<number>(1);
   const [showAddIngredient, setShowAddIngredient] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-
   const {
     hasManualPortionsRef,
     lastPortionChangeTimeRef,
     handleDishPortionsChange,
     handleDishPortionsFromRecipe,
   } = usePortionHandling({ setDishPortions });
-
   const { createOrUpdateRecipe } = useRecipeCRUD({ setError: setSaveError });
-
   // Memoize selectedRecipeData to prevent unnecessary re-renders and effect triggers
   const selectedRecipeData = useMemo(
     () => recipes.find(r => r.id === selectedRecipe),
     [recipes, selectedRecipe],
   );
-
   const {
     autosaveStatus,
     ingredientsAutosaveError,
@@ -87,15 +81,10 @@ export default function CogsClient() {
     calculations,
     onError: err => setSaveError(err),
   });
-
   const recipeExistsLocally = Boolean(selectedRecipeData);
-
-  const { sortedCalculations, sortField, sortDirection, onSortChange } =
-    useCOGSSorting(calculations);
-
-  const totalCOGS = calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0);
+  const { sortedCalculations, sortField, sortDirection, onSortChange } = useCOGSSorting(calculations);
+  const totalCOGS = useMemo(() => calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0), [calculations]);
   const costPerPortion = totalCOGS / (dishPortions || 1);
-
   const {
     targetGrossProfit,
     pricingStrategy,
@@ -104,7 +93,6 @@ export default function CogsClient() {
     setTargetGrossProfit,
     setPricingStrategy,
   } = usePricing(costPerPortion);
-
   const {
     ingredientSearch,
     showSuggestions,
@@ -119,7 +107,6 @@ export default function CogsClient() {
     setNewIngredient,
     setShowSuggestions,
   } = useIngredientSearch(ingredients);
-
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -161,7 +148,6 @@ export default function CogsClient() {
     resetForm,
     setSaveError,
   });
-
   const {
     editingIngredient,
     editQuantity,
@@ -177,10 +163,15 @@ export default function CogsClient() {
   });
   const handleAddIngredientWrapper = async (e: React.FormEvent) => {
     e.preventDefault();
-    await handleAddIngredient(newIngredient, e);
+    try {
+      await handleAddIngredient(newIngredient, e);
+    } catch (err) {
+      logger.error('[CogsClient] Error adding ingredient:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
   };
-  const { handleRecipeSelect, handleCreateNewRecipe, handleCreateRecipe, handleFinishRecipe } =
-    useRecipeHandlers({
+  const { handleRecipeSelect, handleCreateNewRecipe, handleCreateRecipe, handleFinishRecipe } = useRecipeHandlers({
       recipes,
       selectedRecipe,
       dishPortions,
@@ -204,7 +195,6 @@ export default function CogsClient() {
         costPerPortion={costPerPortion}
         dishPortions={dishPortions}
       />
-
       <COGSErrorDisplay
         error={error}
         saveError={saveError}
@@ -218,14 +208,12 @@ export default function CogsClient() {
           }}
         />
       )}
-
       <CreateRecipeModal
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         onCreateRecipe={handleCreateRecipe}
         onSuccess={() => setShowCreateModal(false)}
       />
-
       <div className="tablet:gap-8 large-desktop:grid-cols-2 grid grid-cols-1 gap-4">
         <div>
           <DishForm
@@ -257,7 +245,6 @@ export default function CogsClient() {
             onFinishRecipe={handleFinishRecipe}
           />
         </div>
-
         <div className="tablet:p-6 rounded-lg bg-[var(--surface)] p-4 shadow">
           <h2 className="tablet:text-xl mb-4 text-lg font-semibold">Cost Analysis</h2>
           {selectedRecipe ? (
@@ -278,7 +265,6 @@ export default function CogsClient() {
                 sortDirection={sortDirection}
                 onSortChange={onSortChange}
               />
-
               <PricingTool
                 costPerPortion={costPerPortion}
                 targetGrossProfit={targetGrossProfit}

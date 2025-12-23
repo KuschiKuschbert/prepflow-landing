@@ -6,6 +6,8 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { enrichIngredientWithAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 export interface ProcessResult {
   ingredient_id: string;
   ingredient_name: string;
@@ -53,7 +55,7 @@ export async function processIngredient(ingredient: any, force: boolean): Promis
 
     // Update ingredient with detected allergens
     if (!supabaseAdmin) {
-      throw new Error('Database connection not available');
+      throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
     }
 
     const { error: updateError } = await supabaseAdmin

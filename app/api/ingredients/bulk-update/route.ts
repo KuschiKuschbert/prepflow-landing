@@ -2,26 +2,64 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createSupabaseAdmin } from '@/lib/supabase';
 
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { z } from 'zod';
+
+const bulkUpdateIngredientsSchema = z.object({
+  ids: z.array(z.string()).min(1, 'ids must be a non-empty array'),
+  updates: z.object({
+    supplier: z.string().optional(),
+    storage_location: z.string().optional(),
+    trim_peel_waste_percentage: z.number().min(0).max(100).optional(),
+    yield_percentage: z.number().min(0).max(100).optional(),
+    brand: z.string().optional(),
+    pack_size: z.number().optional(),
+    pack_size_unit: z.string().optional(),
+    pack_price: z.number().optional(),
+    unit: z.string().optional(),
+    cost_per_unit: z.number().optional(),
+    min_stock_level: z.number().optional(),
+    current_stock: z.number().optional(),
+  }).refine(data => Object.keys(data).length > 0, {
+    message: 'updates must contain at least one field',
+  }),
+});
 export async function PUT(request: NextRequest) {
   try {
     const supabaseAdmin = createSupabaseAdmin();
 
-    const body = await request.json();
-    const { ids, updates } = body;
-
-    if (!Array.isArray(ids) || ids.length === 0) {
-      return NextResponse.json({ error: 'ids must be a non-empty array' }, { status: 400 });
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Ingredients Bulk Update API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
     }
 
-    if (!updates || typeof updates !== 'object') {
-      return NextResponse.json({ error: 'updates must be an object' }, { status: 400 });
+    const validationResult = bulkUpdateIngredientsSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
     }
+
+    const { ids, updates } = validationResult.data;
 
     // Normalize IDs
     const normalizedIds = ids.map(id => String(id).trim()).filter(Boolean);
 
     if (normalizedIds.length === 0) {
-      return NextResponse.json({ error: 'No valid IDs provided' }, { status: 400 });
+      return NextResponse.json(ApiErrorHandler.createError('No valid IDs provided', 'SERVER_ERROR', 400), { status: 400 });
     }
 
     // Prepare update data - only include valid fields
@@ -56,7 +94,7 @@ export async function PUT(request: NextRequest) {
     }
 
     if (Object.keys(updateData).length === 0) {
-      return NextResponse.json({ error: 'No valid fields to update' }, { status: 400 });
+      return NextResponse.json(ApiErrorHandler.createError('No valid fields to update', 'SERVER_ERROR', 400), { status: 400 });
     }
 
     // Add updated_at timestamp

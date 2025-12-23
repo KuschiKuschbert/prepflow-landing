@@ -2,33 +2,47 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { createShareRecord } from '@/app/api/recipe-share/helpers/createShareRecord';
 import { fetchRecipeWithIngredients } from '@/app/api/recipe-share/helpers/fetchRecipeWithIngredients';
 import { normalizeRecipeForShare } from '@/app/api/recipe-share/helpers/normalizeRecipeForShare';
 import { generateRecipePDF } from '@/app/api/recipe-share/helpers/generateRecipePDF';
 
+const bulkShareSchema = z.object({
+  recipeIds: z.array(z.string().uuid('Recipe ID must be a valid UUID')).min(1, 'Recipe IDs array is required and must contain at least one recipe ID'),
+  shareType: z.enum(['email', 'link', 'pdf']),
+  recipientEmail: z.string().email('Invalid email address').optional(),
+  notes: z.string().optional().nullable(),
+});
+
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { recipeIds, shareType, recipientEmail, notes } = body;
-
-    if (!Array.isArray(recipeIds) || recipeIds.length === 0) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Bulk Share API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        ApiErrorHandler.createError('Recipe IDs array is required', 'VALIDATION_ERROR', 400, {
-          message: 'Missing required field: recipeIds',
-        }),
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
-    if (!shareType) {
+    const zodValidation = bulkShareSchema.safeParse(body);
+    if (!zodValidation.success) {
       return NextResponse.json(
-        ApiErrorHandler.createError('Share type is required', 'VALIDATION_ERROR', 400, {
-          message: 'Missing required field: shareType',
-        }),
+        ApiErrorHandler.createError(
+          zodValidation.error.issues[0]?.message || 'Invalid request data',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       );
     }
+
+    const { recipeIds, shareType, recipientEmail, notes } = zodValidation.data;
 
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -104,7 +118,14 @@ export async function POST(request: NextRequest) {
     });
 
     if (error.status) {
-      return NextResponse.json(error, { status: error.status });
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          error.message || 'Request failed',
+          'CLIENT_ERROR',
+          error.status,
+        ),
+        { status: error.status },
+      );
     }
 
     return NextResponse.json(
@@ -119,7 +140,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-
-
-

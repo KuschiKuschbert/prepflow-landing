@@ -44,6 +44,21 @@
 - Entitlements: `lib/tier-config.ts`, `lib/entitlements.ts`, `lib/feature-gate.ts`
 - **Documentation:** See `docs/AUTH0_STRIPE_REFERENCE.md` (Stripe Configuration section) for complete setup guide
 
+### Square POS Integration
+
+- Env:
+  - `SQUARE_APPLICATION_ID` - PrepFlow's Square Application ID (one app for all users)
+  - `SQUARE_APPLICATION_SECRET` - PrepFlow's Square Application Secret (keep secure)
+  - `SQUARE_TOKEN_ENCRYPTION_KEY` (MANDATORY - 64 hex characters)
+  - `SQUARE_WEBHOOK_SECRET` (optional - for webhook signature verification)
+- Feature Flag: `square_pos_integration` (enable in Settings → Feature Flags)
+- Routes: `/webapp/square` (main integration page)
+- API Endpoints: `/api/square/config`, `/api/square/sync`, `/api/square/status`, `/api/square/oauth`, `/api/square/callback`, `/api/webhook/square`
+- Core Services: `lib/square/client.ts`, `lib/square/config.ts`, `lib/square/oauth-client.ts`, `lib/square/oauth-flow.ts`, `lib/square/sync/*.ts`
+- **OAuth Flow:** Users click "Connect with Square" and login - PrepFlow automatically retrieves access tokens for their own Square accounts
+- **Documentation:** See `docs/SQUARE_API_REFERENCE.md` for comprehensive Square API configuration, setup, testing, and troubleshooting guide
+- **OAuth Simplification:** See `docs/SQUARE_OAUTH_SIMPLIFICATION.md` for implementation notes on the simplified OAuth flow (one-click connection, no credential entry)
+
 ## Landing v2 (Sign‑in + Tour)
 
 ### IA
@@ -2839,7 +2854,12 @@ The temperature analytics system uses **Recharts** for optimal performance and u
 - Prettier formatting (semicolons, quotes, width)
 - ESLint violations (hooks rules, unescaped entities)
 - Dead code detection (unused exports)
-- Security patterns (input validation, rate limiting)
+- **API patterns** (response formats, error handling, status codes, input validation) - **NEW**
+- **Optimistic updates** (MANDATORY for all CRUD operations) - **NEW**
+- **React patterns** (hooks usage, component structure, performance) - **NEW**
+- **Database patterns** (Supabase query patterns, error handling) - **NEW**
+- **Error handling** (ApiErrorHandler usage, logger usage, try-catch) - **NEW**
+- **Security patterns** (comprehensive: input validation, rate limiting, SQL injection, XSS, security headers) - **ENHANCED**
 - Performance standards (bundle size, API response times)
 
 **Integration:**
@@ -2890,6 +2910,16 @@ The temperature analytics system uses **Recharts** for optimal performance and u
    - ✅ Automatic CHANGELOG generation script created
    - ✅ Visual breakpoint map added to AGENTS.md
    - ✅ Comprehensive standards documentation in AGENTS.md
+
+6. **Comprehensive Best Practices Enforcement (January 2025):**
+   - ✅ API Pattern Enforcement - Validates API response formats, error handling, status codes, input validation
+   - ✅ Optimistic Updates Enforcement - Enforces optimistic updates pattern for all CRUD operations (MANDATORY)
+   - ✅ React Pattern Enforcement - Validates React hooks usage, component structure, performance patterns
+   - ✅ Database Pattern Enforcement - Validates Supabase query patterns and error handling
+   - ✅ Error Handling Enforcement - Enforces ApiErrorHandler usage and error handling standards
+   - ✅ Enhanced Security Enforcement - Comprehensive security pattern validation (input validation, rate limiting, SQL injection, XSS, security headers)
+   - ✅ All new checks integrated into cleanup system, CI pipeline, and pre-commit hooks
+   - ✅ Documentation updated with new enforcement capabilities
 
 ### **📋 Remaining Tasks**
 

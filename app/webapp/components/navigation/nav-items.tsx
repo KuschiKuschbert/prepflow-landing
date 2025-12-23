@@ -18,6 +18,7 @@ import {
   Settings,
   Settings2,
   Sparkles,
+  Square,
   Thermometer,
   Truck,
   Users,
@@ -126,6 +127,7 @@ export function useNavigationItems(
   // Check feature flags
   const kitchenStaffEnabled = useFeatureFlag('kitchen-staff');
   const rosterEnabled = useFeatureFlag('roster');
+  const squarePOSEnabled = useFeatureFlag('square_pos_integration');
 
   const baseItems: Omit<NavigationItemConfig, 'category'>[] = useMemo(() => {
     const allItems = [
@@ -237,6 +239,12 @@ export function useNavigationItems(
         icon: <Icon icon={Settings2} size="sm" className="text-current" aria-hidden={true} />,
         color: 'text-[var(--color-info)]',
       },
+      {
+        href: '/webapp/square',
+        label: 'Square POS',
+        icon: <Icon icon={Square} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[var(--primary)]',
+      },
     ];
 
     // Filter items based on feature flags
@@ -247,9 +255,12 @@ export function useNavigationItems(
       if (item.href === '/webapp/roster' && !rosterEnabled) {
         return false;
       }
+      if (item.href === '/webapp/square' && !squarePOSEnabled) {
+        return false;
+      }
       return true;
     });
-  }, [t, kitchenStaffEnabled, rosterEnabled]);
+  }, [t, kitchenStaffEnabled, rosterEnabled, squarePOSEnabled]);
 
   // Assign categories based on workflow
   const itemsWithCategories = useMemo(

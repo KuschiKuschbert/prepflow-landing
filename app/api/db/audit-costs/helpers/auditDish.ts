@@ -3,6 +3,7 @@
  * Orchestrates fetching dish data and calculating API/UI costs.
  */
 
+import { logger } from '@/lib/logger';
 import type { AuditResult } from '../types';
 import { calculateAPICost } from './calculateAPICost';
 import { calculateUICost } from './calculateUICost';
@@ -50,6 +51,12 @@ export async function auditDish(dish: { id: string; dish_name: string }): Promis
       );
     }
   } catch (err) {
+    logger.error('[Audit Costs] Error auditing dish:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      dishId: dish.id,
+      dishName: dish.dish_name,
+    });
     result.issues.push(`Error auditing dish: ${err instanceof Error ? err.message : String(err)}`);
   }
 

@@ -99,29 +99,12 @@ class PrepFlowAnalytics {
     sendPerformanceEvent(metrics);
   }
 
-  public getSessionId(): string {
-    return this.sessionManager.getSessionId();
-  }
-
-  public getUserId(): string | undefined {
-    return this.sessionManager.getUserId();
-  }
-
-  public setUserId(userId: string): void {
-    this.sessionManager.setUserId(userId);
-  }
-
-  public getEvents(): AnalyticsEvent[] {
-    return [...this.events];
-  }
-
-  public getConversions(): ConversionEvent[] {
-    return [...this.conversions];
-  }
-
-  public getPerformance(): PerformanceMetrics[] {
-    return [...this.performance];
-  }
+  public getSessionId = (): string => this.sessionManager.getSessionId();
+  public getUserId = (): string | undefined => this.sessionManager.getUserId();
+  public setUserId = (userId: string): void => this.sessionManager.setUserId(userId);
+  public getEvents = (): AnalyticsEvent[] => [...this.events];
+  public getConversions = (): ConversionEvent[] => [...this.conversions];
+  public getPerformance = (): PerformanceMetrics[] => [...this.performance];
 
   public exportData(): {
     sessionId: string;
@@ -143,7 +126,6 @@ class PrepFlowAnalytics {
 export const analytics = new PrepFlowAnalytics();
 export const trackEvent = analytics.trackEvent.bind(analytics);
 export const trackConversion = analytics.trackConversion.bind(analytics);
-// Export class method binding (not the helper function from performanceTracker.ts)
 export const trackPerformance = analytics.trackPerformanceMetrics.bind(analytics);
 export const getSessionId = analytics.getSessionId.bind(analytics);
 export const setUserId = analytics.setUserId.bind(analytics);

@@ -3,6 +3,7 @@
 import { StorageCombobox } from './StorageCombobox';
 import { SupplierCombobox } from './SupplierCombobox';
 import { WizardStepProps } from './types';
+import { logger } from '@/lib/logger';
 
 export default function IngredientWizardStep2({
   formData,
@@ -16,9 +17,16 @@ export default function IngredientWizardStep2({
 }: WizardStepProps) {
   const handleAddNewSupplier = async (supplierName: string) => {
     if (!supplierName.trim() || !onAddSupplier) return;
-    const { formatSupplierName } = await import('@/lib/text-utils');
-    const formattedName = formatSupplierName(supplierName);
-    await onAddSupplier(formattedName);
+    try {
+      const { formatSupplierName } = await import('@/lib/text-utils');
+      const formattedName = formatSupplierName(supplierName);
+      await onAddSupplier(formattedName);
+    } catch (err) {
+      logger.error('[IngredientWizardStep2] Error adding new supplier:', {
+        error: err instanceof Error ? err.message : String(err),
+        supplierName,
+      });
+    }
   };
 
   return (

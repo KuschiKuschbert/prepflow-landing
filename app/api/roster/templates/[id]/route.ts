@@ -11,6 +11,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getTemplate } from './helpers/getTemplate';
 import { updateTemplate } from './helpers/updateTemplate';
 import { deleteTemplate } from './helpers/deleteTemplate';
+import { z } from 'zod';
 
 /**
  * GET /api/roster/templates/[id]
@@ -50,11 +51,42 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
  * - description: Template description (optional)
  * - is_active: Whether template is active (optional)
  */
+const updateTemplateSchema = z.object({
+  name: z.string().min(1).optional(),
+  description: z.string().optional().nullable(),
+  is_active: z.boolean().optional(),
+});
+
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
-    const body = await request.json();
-    return await updateTemplate(id, body);
+
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Templates API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = updateTemplateSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    return await updateTemplate(id, validationResult.data);
   } catch (err) {
     logger.error('[Templates API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

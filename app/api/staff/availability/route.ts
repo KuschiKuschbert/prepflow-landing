@@ -9,6 +9,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { createAvailabilitySchema } from './helpers/schemas';
 
 /**
  * GET /api/staff/availability
@@ -96,26 +97,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
-    const { employee_id, day_of_week, start_time, end_time, is_available } = body;
-
-    if (!employee_id) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Availability API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
-        ApiErrorHandler.createError('Employee ID is required', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
-    if (day_of_week === undefined || day_of_week < 0 || day_of_week > 6) {
+    const validationResult = createAvailabilitySchema.safeParse(body);
+    if (!validationResult.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(
-          'Day of week must be between 0 (Sunday) and 6 (Saturday)',
+          validationResult.error.issues[0]?.message || 'Invalid request body',
           'VALIDATION_ERROR',
           400,
         ),
         { status: 400 },
       );
     }
+
+    const { employee_id, day_of_week, start_time, end_time, is_available } = validationResult.data;
 
     // Check if employee exists
     const { data: employee, error: employeeError } = await supabaseAdmin
@@ -188,7 +195,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-
-
-

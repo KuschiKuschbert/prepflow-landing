@@ -1,4 +1,5 @@
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -58,7 +59,7 @@ const STORAGE_EQUIPMENT_TYPES = [
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
-      return NextResponse.json({ error: 'Database connection not available' }, { status: 500 });
+      return NextResponse.json(ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500), { status: 500 });
     }
 
     const entities: QRCodeEntity[] = [];
@@ -188,6 +189,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     logger.error('[QR Codes API] Error fetching entities:', error);
-    return NextResponse.json({ error: 'Failed to fetch entities' }, { status: 500 });
+    return NextResponse.json(ApiErrorHandler.createError('Failed to fetch entities', 'SERVER_ERROR', 500), { status: 500 });
   }
 }

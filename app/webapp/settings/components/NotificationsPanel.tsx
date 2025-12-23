@@ -5,6 +5,7 @@ import { logger } from '@/lib/logger';
 import { Bell, Mail, Volume2, VolumeX } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
+import { Toggle } from '@/components/ui/Toggle';
 import { useIsVisible } from '@/hooks/useIsVisible';
 
 interface NotificationPreferences {
@@ -142,22 +143,12 @@ export function NotificationsPanel() {
           </p>
         )}
       </div>
-      <button
-        onClick={() => onChange(!checked)}
-        disabled={saving}
-        className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[#1f1f1f] focus:outline-none disabled:opacity-50 ${
-          checked ? 'bg-[var(--primary)]' : 'bg-[var(--muted)]'
-        }`}
-        role="switch"
-        aria-checked={checked}
+      <Toggle
+        checked={checked}
+        onChange={onChange}
         aria-label={label}
-      >
-        <span
-          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-[var(--qr-background)] shadow ring-0 transition-transform ${
-            checked ? 'translate-x-5' : 'translate-x-0'
-          }`}
-        />
-      </button>
+        disabled={saving}
+      />
     </div>
   );
 

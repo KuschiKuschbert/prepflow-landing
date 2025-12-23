@@ -2,6 +2,7 @@ import { logger } from '@/lib/logger';
 import { processAccountDeletions } from '@/lib/data-retention/cleanup';
 import { processPendingBreachNotifications } from '@/lib/security/breach-notification';
 import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * GET /api/cron/data-retention
@@ -21,7 +22,7 @@ export async function GET(req: NextRequest) {
       const authHeader = req.headers.get('authorization');
       if (authHeader !== `Bearer ${cronSecret}`) {
         logger.warn('[Cron Data Retention] Unauthorized cron request');
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
       }
     }
 

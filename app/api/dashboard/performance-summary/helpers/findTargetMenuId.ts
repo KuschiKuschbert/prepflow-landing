@@ -3,6 +3,7 @@
  */
 
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { supabaseAdmin } from '@/lib/supabase';
 
 /**
@@ -20,7 +21,8 @@ export async function findTargetMenuId(
 
   if (lockedMenuOnly && !targetMenuId) {
     if (!supabaseAdmin) {
-      throw new Error('Database connection not available');
+      logger.error('[Performance Summary API] Database connection not available');
+      throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
     }
 
     const { data: lockedMenu } = await supabaseAdmin
@@ -39,7 +41,3 @@ export async function findTargetMenuId(
 
   return targetMenuId;
 }
-
-
-
-

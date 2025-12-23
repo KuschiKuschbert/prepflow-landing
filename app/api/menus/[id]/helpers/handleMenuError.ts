@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Handle menu API errors consistently.
@@ -25,16 +26,17 @@ export function handleMenuError(err: Error | any, method: string): NextResponse 
   });
 
   return NextResponse.json(
-    {
-      success: false,
-      error: 'Internal server error',
-      message: errorMessage,
-      ...(isDevelopment && {
-        details: err.details,
-        code: err.code,
-        stack: errorStack,
-      }),
-    },
+    ApiErrorHandler.createError(
+      errorMessage,
+      err.code || 'SERVER_ERROR',
+      500,
+      {
+        ...(isDevelopment && {
+          details: err.details,
+          stack: errorStack,
+        }),
+      },
+    ),
     { status: 500 },
   );
 }

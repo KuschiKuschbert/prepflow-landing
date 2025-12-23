@@ -1,4 +1,5 @@
 import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Create a new supplier price list.
@@ -32,6 +33,6 @@ export async function createPriceList(data: {
     )
     .single();
 
-  if (error) throw error;
+  if (error) throw ApiErrorHandler.fromSupabaseError(error, 500);
   return created;
 }

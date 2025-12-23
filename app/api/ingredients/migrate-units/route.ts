@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { migrateIngredientsToStandardUnits } from '@/lib/ingredients/migrate-to-standard-units';
 
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 export async function POST(request: NextRequest) {
   try {
     const result = await migrateIngredientsToStandardUnits();
@@ -28,11 +29,11 @@ export async function POST(request: NextRequest) {
   } catch (err) {
     logger.error('Migration error:', err);
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to migrate ingredients',
-        details: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        err instanceof Error ? err.message : 'Unknown error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

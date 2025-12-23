@@ -1,10 +1,26 @@
 import { NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import {
   enableGoogleConnectionForApp,
   verifyGoogleConnection,
   configureAndEnableGoogleConnection,
 } from '@/lib/auth0-google-connection';
+import { z } from 'zod';
+
+const enableGoogleConnectionSchema = z.object({
+  googleClientId: z.string().min(1).optional(),
+  googleClientSecret: z.string().min(1).optional(),
+}).refine(data => {
+  // If one is provided, both must be provided
+  if (data.googleClientId || data.googleClientSecret) {
+    return data.googleClientId && data.googleClientSecret;
+  }
+  return true;
+}, {
+  message: 'Both googleClientId and googleClientSecret must be provided together',
+  path: ['googleClientId'],
+});
 
 /**
  * Configure and Enable Google Connection
@@ -14,14 +30,30 @@ import {
 export async function POST(request: Request) {
   try {
     // Check if request body contains OAuth credentials
-    let body: { googleClientId?: string; googleClientSecret?: string } = {};
+    let body: unknown = {};
     try {
       body = await request.json();
     } catch {
       // No body provided, just enable existing connection
     }
 
-    const { googleClientId, googleClientSecret } = body;
+    // Validate body if provided
+    if (body && typeof body === 'object' && Object.keys(body).length > 0) {
+      const validationResult = enableGoogleConnectionSchema.safeParse(body);
+      if (!validationResult.success) {
+        return NextResponse.json(
+          ApiErrorHandler.createError(
+            validationResult.error.issues[0]?.message || 'Invalid request body',
+            'VALIDATION_ERROR',
+            400,
+          ),
+          { status: 400 },
+        );
+      }
+      body = validationResult.data;
+    }
+
+    const { googleClientId, googleClientSecret } = body as { googleClientId?: string; googleClientSecret?: string };
 
     // If OAuth credentials provided, configure and enable
     if (googleClientId && googleClientSecret) {
@@ -110,11 +142,14 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('[Auth0 Fix] Error in Google connection endpoint:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : String(error),
-        message: 'Failed to process Google connection request',
-      },
+      ApiErrorHandler.createError(
+        'Failed to process Google connection request',
+        'SERVER_ERROR',
+        500,
+        {
+          details: error instanceof Error ? error.message : String(error),
+        },
+      ),
       { status: 500 },
     );
   }
@@ -150,11 +185,14 @@ export async function GET() {
   } catch (error) {
     logger.error('[Auth0 Fix] Error checking Google connection status:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : String(error),
-        message: 'Failed to check Google connection status',
-      },
+      ApiErrorHandler.createError(
+        'Failed to check Google connection status',
+        'SERVER_ERROR',
+        500,
+        {
+          details: error instanceof Error ? error.message : String(error),
+        },
+      ),
       { status: 500 },
     );
   }

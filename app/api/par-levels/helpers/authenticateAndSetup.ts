@@ -14,6 +14,11 @@ export async function authenticateAndSetup(req: NextRequest) {
   try {
     await requireAuth(req);
   } catch (error) {
+    logger.error('[authenticateAndSetup.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     if (error instanceof NextResponse) {
       return {
         supabaseAdmin: null,

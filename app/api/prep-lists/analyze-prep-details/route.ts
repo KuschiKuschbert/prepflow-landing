@@ -16,6 +16,7 @@ import type { RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
 import type { RecipePrepDetails, SectionData } from '@/app/webapp/prep-lists/types';
 
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * POST /api/prep-lists/analyze-prep-details
@@ -37,32 +38,37 @@ export async function POST(request: NextRequest) {
 
     if (!Array.isArray(recipeIds) || recipeIds.length === 0) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Invalid request data',
-          message: 'recipeIds must be a non-empty array',
-        },
+        ApiErrorHandler.createError('recipeIds must be a non-empty array', 'INVALID_REQUEST', 400),
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Database connection not available',
-          message: 'Database connection could not be established',
-        },
+        ApiErrorHandler.createError(
+          'Database connection could not be established',
+          'DATABASE_ERROR',
+          500,
+        ),
         { status: 500 },
       );
     }
 
     // Fetch recipes with instructions
-    const { data: recipes } = await supabaseAdmin
+    const { data: recipes, error: recipesError } = await supabaseAdmin
       .from('recipes')
       .select('id, recipe_name, description, yield, yield_unit, instructions')
       .in('id', recipeIds)
       .not('instructions', 'is', null);
+
+    if (recipesError) {
+      logger.warn('[Prep Details Analysis] Error fetching recipes:', {
+        error: recipesError.message,
+        code: (recipesError as any).code,
+        recipeIds,
+      });
+      // Continue with empty array if fetch fails
+    }
 
     if (!recipes || recipes.length === 0) {
       return NextResponse.json({
@@ -74,12 +80,21 @@ export async function POST(request: NextRequest) {
 
     // Batch fetch all recipe ingredients
     const recipeIngredientsMap = new Map<string, RecipeIngredientWithDetails[]>();
-    const { data: allRecipeIngredients } = await supabaseAdmin
+    const { data: allRecipeIngredients, error: ingredientsError } = await supabaseAdmin
       .from('recipe_ingredients')
       .select(
         'id, recipe_id, ingredient_id, quantity, unit, ingredients(id, ingredient_name, cost_per_unit, unit)',
       )
       .in('recipe_id', recipeIds);
+
+    if (ingredientsError) {
+      logger.warn('[Prep Details Analysis] Error fetching recipe ingredients:', {
+        error: ingredientsError.message,
+        code: (ingredientsError as any).code,
+        recipeIds,
+      });
+      // Continue with empty map if fetch fails
+    }
 
     if (allRecipeIngredients) {
       for (const ri of allRecipeIngredients) {
@@ -145,11 +160,11 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     logger.error('Prep details analysis error:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to analyze prep details',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        error instanceof Error ? error.message : 'Unknown error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

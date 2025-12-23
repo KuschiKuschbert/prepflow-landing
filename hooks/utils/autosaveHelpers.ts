@@ -42,6 +42,10 @@ export function broadcastAutosaveStatus(
 }
 
 export function logAutosaveError(entityType: string, entityId: string | null, err: unknown): void {
-  logger.error(`Autosave error for ${entityType}/${entityId}:`, err);
-  logger.error('Full error object:', JSON.stringify(err, Object.getOwnPropertyNames(err)));
+  const errorMessage = extractErrorMessage(err);
+  logger.error(`[Autosave] Error for ${entityType}/${entityId}:`, {
+    error: errorMessage,
+    stack: err instanceof Error ? err.stack : undefined,
+    context: { entityType, entityId, operation: 'autosave' },
+  });
 }

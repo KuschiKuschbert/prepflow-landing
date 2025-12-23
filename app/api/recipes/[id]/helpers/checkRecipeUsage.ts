@@ -1,4 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Check if a recipe is used in menu_dishes or dish_recipes.
@@ -8,7 +10,10 @@ import { supabaseAdmin } from '@/lib/supabase';
  * @throws {Error} If database connection is not available
  */
 export async function checkRecipeUsage(recipeId: string) {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[API] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
   const [menuDishesResult, dishRecipesResult] = await Promise.all([
     supabaseAdmin
       .from('menu_dishes')

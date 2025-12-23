@@ -33,6 +33,11 @@ export async function GET(request: NextRequest) {
         userId = userData.id;
       }
     } catch (err) {
+      logger.error('[route.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       // User not found - return empty array
       return NextResponse.json({
         success: true,

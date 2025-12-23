@@ -55,7 +55,11 @@ export function useSubscriptionStatus() {
         setPreviousStatus(currentStatus.status);
       }
     } catch (error) {
-      logger.error('[useSubscriptionStatus] Failed to fetch subscription:', error);
+      logger.error('[useSubscriptionStatus] Failed to fetch subscription:', {
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        context: { endpoint: '/api/user/subscription', operation: 'fetchSubscription' },
+      });
     } finally {
       setIsLoading(false);
     }

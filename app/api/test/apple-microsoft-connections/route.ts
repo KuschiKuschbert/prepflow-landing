@@ -12,6 +12,7 @@ import {
   enableMicrosoftConnectionForApp,
 } from '@/lib/auth0-apple-microsoft-connection';
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Check Apple and Microsoft connection status
@@ -66,11 +67,14 @@ export async function GET() {
   } catch (error) {
     logger.error('[Auth0 Apple/Microsoft] Error checking connection status:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : String(error),
-        message: 'Failed to check Apple/Microsoft connection status',
-      },
+      ApiErrorHandler.createError(
+        'Failed to check Apple/Microsoft connection status',
+        'SERVER_ERROR',
+        500,
+        {
+          details: error instanceof Error ? error.message : String(error),
+        },
+      ),
       { status: 500 },
     );
   }
@@ -115,11 +119,14 @@ export async function POST(request: Request) {
   } catch (error) {
     logger.error('[Auth0 Apple/Microsoft] Error enabling connections:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : String(error),
-        message: 'Failed to enable Apple/Microsoft connections',
-      },
+      ApiErrorHandler.createError(
+        'Failed to enable Apple/Microsoft connections',
+        'SERVER_ERROR',
+        500,
+        {
+          details: error instanceof Error ? error.message : String(error),
+        },
+      ),
       { status: 500 },
     );
   }

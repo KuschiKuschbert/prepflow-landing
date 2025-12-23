@@ -31,7 +31,10 @@ export async function createComplianceRecord(recordData: {
   reminder_enabled?: boolean;
   reminder_days_before?: number;
 }) {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[Compliance Records] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
 
   const status = calculateComplianceStatus(
     recordData.expiry_date || null,

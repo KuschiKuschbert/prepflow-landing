@@ -3,6 +3,7 @@
  */
 
 import type { BackupData } from '../types';
+import { logger } from '@/lib/logger';
 import {
   AUTH_TAG_LENGTH,
   BACKUP_HEADER,

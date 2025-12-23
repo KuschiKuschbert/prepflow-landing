@@ -87,7 +87,14 @@ async function sendBreachEmailNotification(
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
+      let errorData = {};
+      try {
+        errorData = await response.json();
+      } catch (err) {
+        logger.warn('[Breach Notification] Failed to parse error response:', {
+          error: err instanceof Error ? err.message : String(err),
+        });
+      }
       logger.error('[Breach Notification] Failed to send email:', {
         userEmail,
         status: response.status,
@@ -325,7 +332,3 @@ export async function processPendingBreachNotifications(): Promise<{
     return { processed: 0, notified: 0, failed: 0 };
   }
 }
-
-
-
-

@@ -1,6 +1,7 @@
 import OptimizedImage from '../../../../components/OptimizedImage';
 import { useTranslation } from '../../../../lib/useTranslation';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { TextContainer } from '@/components/ui/TextContainer';
 import {
   LANDING_COLORS,
   LANDING_TYPOGRAPHY,
@@ -21,12 +22,14 @@ export function MyStorySection() {
           >
             {t('story.title', 'Built by Someone Who Gets It')}
           </h2>
-          <p className={`${LANDING_TYPOGRAPHY.lg} mx-auto max-w-3xl text-gray-300`}>
-            {t('story.subtitle', "I've been where you are. This is the tool I wish I had.")}
-          </p>
+          <TextContainer variant="wide">
+            <p className={`${LANDING_TYPOGRAPHY.lg} text-gray-300`}>
+              {t('story.subtitle', "I've been where you are. This is the tool I wish I had.")}
+            </p>
+          </TextContainer>
         </ScrollReveal>
-        <div className="desktop:grid-cols-2 grid gap-12">
-          <div className="space-y-6">
+        <div className="desktop:grid-cols-2 grid gap-12 tablet:gap-10 desktop:gap-12 large-desktop:gap-14 xl:gap-16">
+          <TextContainer variant="prose" className="space-y-6">
             <ScrollReveal variant="fade-up" delay={0.1}>
               <div className="rounded-2xl bg-[#1f1f1f]/50 p-6">
                 <h3
@@ -59,7 +62,7 @@ export function MyStorySection() {
                 </p>
               </div>
             </ScrollReveal>
-          </div>
+          </TextContainer>
           <ScrollReveal variant="fade-up" delay={0.3}>
             <div className="flex items-center justify-center">
               <OptimizedImage

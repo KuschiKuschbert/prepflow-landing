@@ -21,20 +21,41 @@ export async function GET(request: NextRequest) {
     }
 
     // Get subscription counts from database
-    const { count: activeSubscriptions } = await supabaseAdmin
+    const { count: activeSubscriptions, error: activeSubscriptionsError } = await supabaseAdmin
       .from('users')
       .select('*', { count: 'exact', head: true })
       .eq('subscription_status', 'active');
 
-    const { count: trialSubscriptions } = await supabaseAdmin
+    if (activeSubscriptionsError) {
+      logger.warn('[Admin Billing Overview] Error fetching active subscriptions count:', {
+        error: activeSubscriptionsError.message,
+        code: (activeSubscriptionsError as any).code,
+      });
+    }
+
+    const { count: trialSubscriptions, error: trialSubscriptionsError } = await supabaseAdmin
       .from('users')
       .select('*', { count: 'exact', head: true })
       .eq('subscription_status', 'trial');
 
-    const { count: cancelledSubscriptions } = await supabaseAdmin
+    if (trialSubscriptionsError) {
+      logger.warn('[Admin Billing Overview] Error fetching trial subscriptions count:', {
+        error: trialSubscriptionsError.message,
+        code: (trialSubscriptionsError as any).code,
+      });
+    }
+
+    const { count: cancelledSubscriptions, error: cancelledSubscriptionsError } = await supabaseAdmin
       .from('users')
       .select('*', { count: 'exact', head: true })
       .eq('subscription_status', 'cancelled');
+
+    if (cancelledSubscriptionsError) {
+      logger.warn('[Admin Billing Overview] Error fetching cancelled subscriptions count:', {
+        error: cancelledSubscriptionsError.message,
+        code: (cancelledSubscriptionsError as any).code,
+      });
+    }
 
     // Try to get Stripe data if configured
     let monthlyRecurringRevenue = 0;

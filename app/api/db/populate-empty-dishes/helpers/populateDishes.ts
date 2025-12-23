@@ -11,6 +11,8 @@ import {
   getIngredientName,
 } from '@/lib/populate-helpers/populate-empty-dishes-helpers';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 export interface PopulatedDish {
   dish_id: string;
   dish_name: string;
@@ -89,7 +91,7 @@ export async function populateDishes(
       }));
 
       if (!supabaseAdmin) {
-        throw new Error('Supabase admin client not initialized');
+        throw ApiErrorHandler.createError('Supabase admin client not initialized', 'DATABASE_ERROR', 500);
       }
 
       const { error: insertError } = await supabaseAdmin

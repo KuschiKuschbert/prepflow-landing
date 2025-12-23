@@ -12,7 +12,14 @@ const leadRequestSchema = z.object({
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json().catch(() => ({}));
+    let body = {};
+    try {
+      body = await req.json();
+    } catch (err) {
+      logger.warn('[Leads API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
     const validationResult = leadRequestSchema.safeParse(body);
 
     if (!validationResult.success) {
@@ -31,9 +38,12 @@ export async function POST(req: Request) {
     const supabase = createSupabaseAdmin();
 
     // Ensure leads table exists; if not, return guidance instead of failing hard
-    try {
-      await supabase.from('leads').select('id').limit(1);
-    } catch (_) {
+    const { error: tableCheckError } = await supabase.from('leads').select('id').limit(1);
+    if (tableCheckError) {
+      logger.error('[Leads API] Table check error:', {
+        error: tableCheckError.message,
+        context: { endpoint: '/api/leads', operation: 'POST' },
+      });
       return NextResponse.json(
         ApiErrorHandler.createError(
           'Table leads does not exist. Please create tables first.',

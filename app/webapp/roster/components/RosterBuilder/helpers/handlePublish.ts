@@ -2,6 +2,7 @@
  * Handle publish draft shifts.
  */
 import type { Shift } from '../../../types';
+import { logger } from '@/lib/logger';
 
 export function createPublishHandler(
   shifts: Shift[],
@@ -22,6 +23,11 @@ export function createPublishHandler(
       publishShifts(shiftIds);
       showSuccess(`${draftShifts.length} shift(s) published successfully`);
     } catch (error) {
+      logger.error('[handlePublish.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       showError('Failed to publish shifts');
     } finally {
       setLoading(false);

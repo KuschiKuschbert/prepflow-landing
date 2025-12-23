@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 interface HandleAssignDishParams {
   fetchMenuDishes: () => Promise<void>;
   fetchKitchenSections: () => Promise<void>;
@@ -23,6 +24,11 @@ export async function handleAssignDish(
       setError(result.message || 'Failed to assign dish to section');
     }
   } catch (err) {
+    logger.error('[handleAssignDish.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     setError('Failed to assign dish to section');
   }
 }

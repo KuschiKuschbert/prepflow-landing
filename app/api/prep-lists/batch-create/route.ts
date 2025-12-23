@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 interface PrepListToCreate {
   sectionId: string | null;
   name: string;
@@ -21,33 +22,25 @@ export async function POST(request: NextRequest) {
 
     if (!prepLists || !Array.isArray(prepLists) || prepLists.length === 0) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Missing required fields',
-          message: 'Prep lists array is required',
-        },
+        ApiErrorHandler.createError('Prep lists array is required', 'MISSING_REQUIRED_FIELD', 400),
         { status: 400 },
       );
     }
 
     if (!userId) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Missing required fields',
-          message: 'User ID is required',
-        },
+        ApiErrorHandler.createError('User ID is required', 'MISSING_REQUIRED_FIELD', 400),
         { status: 400 },
       );
     }
 
     if (!supabaseAdmin) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Database connection not available',
-          message: 'Database connection could not be established',
-        },
+        ApiErrorHandler.createError(
+          'Database connection could not be established',
+          'DATABASE_ERROR',
+          500,
+        ),
         { status: 500 },
       );
     }
@@ -79,7 +72,11 @@ export async function POST(request: NextRequest) {
           .single();
 
         if (prepError) {
-          logger.error('Error creating prep list:', prepError);
+          logger.error('[Prep Lists API] Database error creating prep list:', {
+            error: prepError.message,
+            code: (prepError as any).code,
+            prepListName: prepListData.name,
+          });
           errors.push({
             prepListName: prepListData.name,
             error: prepError.message,
@@ -102,9 +99,22 @@ export async function POST(request: NextRequest) {
             .insert(prepItems);
 
           if (itemsError) {
-            logger.error('Error creating prep list items:', itemsError);
+            logger.error('[Prep Lists API] Error creating prep list items:', {
+              error: itemsError.message,
+              code: (itemsError as any).code,
+              prepListId: prepList.id,
+            });
             // Delete the prep list if items failed
-            await supabaseAdmin.from('prep_lists').delete().eq('id', prepList.id);
+            const { error: rollbackError } = await supabaseAdmin
+              .from('prep_lists')
+              .delete()
+              .eq('id', prepList.id);
+            if (rollbackError) {
+              logger.warn('[Prep Lists API] Warning: Failed to rollback prep list after items error:', {
+                error: rollbackError.message,
+                prepListId: prepList.id,
+              });
+            }
             errors.push({
               prepListName: prepListData.name,
               error: itemsError.message,
@@ -125,12 +135,9 @@ export async function POST(request: NextRequest) {
 
     if (createdPrepLists.length === 0 && errors.length > 0) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Failed to create prep lists',
-          message: 'All prep lists failed to create',
+        ApiErrorHandler.createError('All prep lists failed to create', 'BATCH_CREATE_FAILED', 500, {
           errors,
-        },
+        }),
         { status: 500 },
       );
     }
@@ -147,11 +154,11 @@ export async function POST(request: NextRequest) {
   } catch (err) {
     logger.error('Unexpected error:', err);
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        err instanceof Error ? err.message : 'Unknown error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

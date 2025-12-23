@@ -7,11 +7,19 @@ import { supabaseAdmin } from '@/lib/supabase';
 export async function isWebhookEventProcessed(eventId: string): Promise<boolean> {
   if (!supabaseAdmin) return false;
 
-  const { data } = await supabaseAdmin
+  const { data, error } = await supabaseAdmin
     .from('webhook_events')
     .select('processed')
     .eq('stripe_event_id', eventId)
     .maybeSingle();
+
+  if (error) {
+    logger.warn('[Webhook Events] Error checking if event is processed:', {
+      error: error.message,
+      eventId,
+    });
+    return false;
+  }
 
   return data?.processed === true;
 }
@@ -29,7 +37,7 @@ export async function markWebhookEventProcessed(
 ): Promise<void> {
   if (!supabaseAdmin) return;
 
-  await supabaseAdmin.from('webhook_events').upsert(
+  const { error } = await supabaseAdmin.from('webhook_events').upsert(
     {
       stripe_event_id: eventId,
       event_type: eventType,
@@ -42,6 +50,14 @@ export async function markWebhookEventProcessed(
     },
     { onConflict: 'stripe_event_id' },
   );
+
+  if (error) {
+    logger.error('[Webhook Events] Failed to mark event as processed:', {
+      error: error.message,
+      eventId,
+      eventType,
+    });
+  }
 }
 
 /**

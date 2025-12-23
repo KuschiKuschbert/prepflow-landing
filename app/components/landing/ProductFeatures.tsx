@@ -42,7 +42,10 @@ export default function ProductFeatures() {
   ];
 
   return (
-    <section id="features" className="mx-auto max-w-7xl px-6 py-16">
+    <section
+      id="features"
+      className="mx-auto max-w-7xl px-6 tablet:px-8 desktop:px-10 large-desktop:px-12 py-16 tablet:py-20 desktop:py-24 large-desktop:py-28 xl:px-20 xl:py-32 2xl:px-24"
+    >
       <div className="text-center">
         <h2 className="text-fluid-3xl desktop:text-fluid-4xl font-bold tracking-tight">
           Everything you need
@@ -52,9 +55,12 @@ export default function ProductFeatures() {
         </p>
       </div>
 
-      <div className="mt-12 space-y-16">
+      <div className="mt-12 space-y-16 tablet:space-y-18 desktop:space-y-20 large-desktop:space-y-24 xl:space-y-28">
         {features.map((feature, index) => (
-          <div key={feature.name} className="desktop:grid-cols-2 desktop:items-center grid gap-8">
+          <div
+            key={feature.name}
+            className="desktop:grid-cols-2 desktop:items-center grid gap-8 tablet:gap-10 desktop:gap-12 large-desktop:gap-14 xl:gap-16"
+          >
             {/* Screenshot */}
             <div className={index % 2 === 1 ? 'desktop:order-2' : ''}>
               <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-2 shadow-xl">

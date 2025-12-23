@@ -19,19 +19,28 @@ export async function getUsage(userEmail: string): Promise<UsageData> {
 
   try {
     // Count recipes
-    const { count: recipesCount } = await supabaseAdmin
+    const { count: recipesCount, error: recipesError } = await supabaseAdmin
       .from('recipes')
       .select('*', { count: 'exact', head: true });
 
     // Count ingredients
-    const { count: ingredientsCount } = await supabaseAdmin
+    const { count: ingredientsCount, error: ingredientsError } = await supabaseAdmin
       .from('ingredients')
       .select('*', { count: 'exact', head: true });
 
     // Count dishes
-    const { count: dishesCount } = await supabaseAdmin
+    const { count: dishesCount, error: dishesError } = await supabaseAdmin
       .from('menu_dishes')
       .select('*', { count: 'exact', head: true });
+
+    if (recipesError || ingredientsError || dishesError) {
+      logger.warn('[Usage Tracker] Error fetching usage counts:', {
+        recipesError: recipesError?.message,
+        ingredientsError: ingredientsError?.message,
+        dishesError: dishesError?.message,
+        userEmail,
+      });
+    }
 
     return {
       recipes: recipesCount || 0,
@@ -60,11 +69,18 @@ export async function checkLimit(
 
   try {
     // Get user tier
-    const { data: userData } = await supabaseAdmin
+    const { data: userData, error: userError } = await supabaseAdmin
       .from('users')
       .select('subscription_tier')
       .eq('email', userEmail)
       .maybeSingle();
+
+    if (userError) {
+      logger.warn('[Usage Tracker] Error fetching user tier:', {
+        error: userError.message,
+        userEmail,
+      });
+    }
 
     const tier = (userData?.subscription_tier as TierSlug) || 'starter';
     const config = getDefaultTierConfig(tier);
@@ -88,7 +104,3 @@ export async function checkLimit(
     return { atLimit: false, used: 0, limit: null };
   }
 }
-
-
-
-

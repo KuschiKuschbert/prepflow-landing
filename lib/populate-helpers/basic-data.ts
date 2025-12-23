@@ -23,7 +23,14 @@ export async function populateBasicData(
   results: PopulateResults,
 ): Promise<{ suppliersData?: any[]; ingredientsData?: any[]; recipesData?: any[] }> {
   // Suppliers - check for existing ones first
-  const { data: existingSuppliers } = await supabaseAdmin.from('suppliers').select('supplier_name');
+  const { data: existingSuppliers, error: suppliersCheckError } = await supabaseAdmin
+    .from('suppliers')
+    .select('supplier_name');
+  if (suppliersCheckError) {
+    logger.warn('[Populate Basic Data] Error checking existing suppliers:', {
+      error: suppliersCheckError.message,
+    });
+  }
   const existingSupplierNames = new Set(
     (existingSuppliers || []).map(s => s.supplier_name?.toLowerCase().trim()).filter(Boolean),
   );
@@ -53,15 +60,25 @@ export async function populateBasicData(
   } else {
     logger.dev('All suppliers already exist, skipping insert');
     // Fetch existing suppliers for use in recipe linking
-    const { data } = await supabaseAdmin.from('suppliers').select();
+    const { data, error: fetchError } = await supabaseAdmin.from('suppliers').select();
+    if (fetchError) {
+      logger.warn('[Populate Basic Data] Error fetching existing suppliers:', {
+        error: fetchError.message,
+      });
+    }
     suppliersData = data || [];
   }
 
   // Ingredients (including consumables) - check for existing ones first
   // Note: cleanSampleIngredients includes consumables from cleanSampleConsumablesIngredients
-  const { data: existingIngredients } = await supabaseAdmin
+  const { data: existingIngredients, error: ingredientsCheckError } = await supabaseAdmin
     .from('ingredients')
     .select('ingredient_name');
+  if (ingredientsCheckError) {
+    logger.warn('[Populate Basic Data] Error checking existing ingredients:', {
+      error: ingredientsCheckError.message,
+    });
+  }
   const existingIngredientNames = new Set(
     (existingIngredients || []).map(i => i.ingredient_name?.toLowerCase().trim()).filter(Boolean),
   );
@@ -88,7 +105,14 @@ export async function populateBasicData(
     } else {
       ingredientsData = data || [];
       // Fetch all ingredients (new + existing) for recipe linking
-      const { data: allIngredients } = await supabaseAdmin.from('ingredients').select();
+      const { data: allIngredients, error: allIngredientsError } = await supabaseAdmin
+        .from('ingredients')
+        .select();
+      if (allIngredientsError) {
+        logger.warn('[Populate Basic Data] Error fetching all ingredients:', {
+          error: allIngredientsError.message,
+        });
+      }
       ingredientsData = allIngredients || [];
       results.populated.push({ table: 'ingredients', count: ingredientsToInsert.length });
 
@@ -110,13 +134,25 @@ export async function populateBasicData(
   } else {
     logger.dev('All ingredients already exist, skipping insert');
     // Fetch existing ingredients for use in recipe linking
-    const { data } = await supabaseAdmin.from('ingredients').select();
+    const { data, error: fetchError } = await supabaseAdmin.from('ingredients').select();
+    if (fetchError) {
+      logger.warn('[Populate Basic Data] Error fetching existing ingredients:', {
+        error: fetchError.message,
+      });
+    }
     ingredientsData = data || [];
   }
 
   // Recipes - check for existing ones first
   // Handle both 'name' and 'recipe_name' column names
-  const { data: existingRecipes } = await supabaseAdmin.from('recipes').select('*');
+  const { data: existingRecipes, error: recipesCheckError } = await supabaseAdmin
+    .from('recipes')
+    .select('*');
+  if (recipesCheckError) {
+    logger.warn('[Populate Basic Data] Error checking existing recipes:', {
+      error: recipesCheckError.message,
+    });
+  }
 
   // Build set of existing recipe names (handle both column names)
   const existingRecipeNames = new Set(
@@ -155,7 +191,14 @@ export async function populateBasicData(
     } else {
       recipesData = data || [];
       // Fetch all recipes (new + existing) for recipe ingredient linking
-      const { data: allRecipes } = await supabaseAdmin.from('recipes').select();
+      const { data: allRecipes, error: allRecipesError } = await supabaseAdmin
+        .from('recipes')
+        .select();
+      if (allRecipesError) {
+        logger.warn('[Populate Basic Data] Error fetching all recipes:', {
+          error: allRecipesError.message,
+        });
+      }
       recipesData = allRecipes || [];
       results.populated.push({ table: 'recipes', count: recipesToInsert.length });
       if (recipesToInsert.length < cleanSampleRecipes.length) {
@@ -167,7 +210,12 @@ export async function populateBasicData(
   } else {
     logger.dev('All recipes already exist, skipping insert');
     // Fetch existing recipes for use in recipe ingredient linking
-    const { data } = await supabaseAdmin.from('recipes').select();
+    const { data, error: fetchError } = await supabaseAdmin.from('recipes').select();
+    if (fetchError) {
+      logger.warn('[Populate Basic Data] Error fetching existing recipes:', {
+        error: fetchError.message,
+      });
+    }
     recipesData = data || [];
   }
 

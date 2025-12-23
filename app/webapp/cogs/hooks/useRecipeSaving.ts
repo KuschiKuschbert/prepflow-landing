@@ -7,6 +7,7 @@ import { useRecipeCRUD } from './useRecipeCRUD';
 import { useNotification } from '@/contexts/NotificationContext';
 import { usePrompt } from '@/hooks/usePrompt';
 import { useOnRecipeCreated } from '@/lib/personality/hooks';
+import { logger } from '@/lib/logger';
 import { saveRecipeWithIngredients } from './useRecipeSaving/saveLogic';
 
 export const useRecipeSaving = () => {
@@ -20,31 +21,40 @@ export const useRecipeSaving = () => {
 
   const saveAsRecipe = useCallback(
     async (calculations: COGSCalculation[], dishName: string, dishPortions: number) => {
-      let rawRecipeName = dishName;
-      if (!rawRecipeName) {
-        const promptResult = await showPrompt({
-          title: 'Save Recipe',
-          message: 'What should we call this recipe?',
-          placeholder: 'Recipe name',
-          type: 'text',
-          validation: v => (v.trim().length > 0 ? null : 'Recipe name is required'),
-        });
-        if (!promptResult) return;
-        rawRecipeName = promptResult;
-      }
+      try {
+        let rawRecipeName = dishName;
+        if (!rawRecipeName) {
+          const promptResult = await showPrompt({
+            title: 'Save Recipe',
+            message: 'What should we call this recipe?',
+            placeholder: 'Recipe name',
+            type: 'text',
+            validation: v => (v.trim().length > 0 ? null : 'Recipe name is required'),
+          });
+          if (!promptResult) return;
+          rawRecipeName = promptResult;
+        }
 
-      await saveRecipeWithIngredients({
-        calculations,
-        dishName: rawRecipeName,
-        dishPortions,
-        validateCalculations,
-        createOrUpdateRecipe,
-        saveRecipeIngredients,
-        setError,
-        setLoading,
-        showSuccess,
-        onRecipeCreated,
-      });
+        await saveRecipeWithIngredients({
+          calculations,
+          dishName: rawRecipeName,
+          dishPortions,
+          validateCalculations,
+          createOrUpdateRecipe,
+          saveRecipeIngredients,
+          setError,
+          setLoading,
+          showSuccess,
+          onRecipeCreated,
+        });
+      } catch (error) {
+        logger.error('[useRecipeSaving] Error saving recipe:', {
+          error: error instanceof Error ? error.message : String(error),
+          dishName,
+        });
+        setError('Failed to save recipe');
+        // Error is already handled by saveRecipeWithIngredients via setError
+      }
     },
     [
       validateCalculations,

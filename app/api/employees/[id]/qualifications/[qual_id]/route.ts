@@ -2,17 +2,9 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-
-const QUALIFICATION_SELECT = `
-  *,
-  qualification_types (
-    id,
-    name,
-    description,
-    is_required,
-    default_expiry_days
-  )
-`;
+import { updateQualificationSchema } from './helpers/schemas';
+import { updateQualification } from './helpers/updateQualification';
+import { deleteQualification } from './helpers/deleteQualification';
 
 /**
  * PUT /api/employees/[id]/qualifications/[qual_id]
@@ -24,9 +16,30 @@ export async function PUT(
 ) {
   try {
     const { id, qual_id } = await context.params;
-    const body = await request.json();
-    const { certificate_number, issue_date, expiry_date, issuing_authority, document_url, notes } =
-      body;
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Employee Qualifications API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = updateQualificationSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
 
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -35,61 +48,12 @@ export async function PUT(
       );
     }
 
-    // Verify qualification belongs to employee
-    const { data: qualification, error: checkError } = await supabaseAdmin
-      .from('employee_qualifications')
-      .select('id, employee_id')
-      .eq('id', qual_id)
-      .eq('employee_id', id)
-      .single();
-
-    if (checkError || !qualification) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Qualification not found', 'NOT_FOUND', 404),
-        { status: 404 },
-      );
+    const result = await updateQualification(id, qual_id, validationResult.data);
+    if ('error' in result) {
+      return NextResponse.json(result.error, { status: result.status });
     }
 
-    const updateData: any = {
-      updated_at: new Date().toISOString(),
-    };
-
-    if (certificate_number !== undefined)
-      updateData.certificate_number = certificate_number || null;
-    if (issue_date !== undefined) updateData.issue_date = issue_date;
-    if (expiry_date !== undefined) updateData.expiry_date = expiry_date || null;
-    if (issuing_authority !== undefined) updateData.issuing_authority = issuing_authority || null;
-    if (document_url !== undefined) updateData.document_url = document_url || null;
-    if (notes !== undefined) updateData.notes = notes || null;
-
-    const { data, error } = await supabaseAdmin
-      .from('employee_qualifications')
-      .update(updateData)
-      .eq('id', qual_id)
-      .select(QUALIFICATION_SELECT)
-      .single();
-
-    if (error) {
-      logger.error('[Employee Qualifications API] Database error updating qualification:', {
-        error: error.message,
-        code: (error as any).code,
-        context: {
-          endpoint: '/api/employees/[id]/qualifications/[qual_id]',
-          operation: 'PUT',
-          table: 'employee_qualifications',
-          qualification_id: qual_id,
-        },
-      });
-
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
-      return NextResponse.json(apiError, { status: apiError.status || 500 });
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: 'Qualification updated successfully',
-      data,
-    });
+    return NextResponse.json(result);
   } catch (err) {
     logger.error('[Employee Qualifications API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
@@ -130,46 +94,12 @@ export async function DELETE(
       );
     }
 
-    // Verify qualification belongs to employee
-    const { data: qualification, error: checkError } = await supabaseAdmin
-      .from('employee_qualifications')
-      .select('id, employee_id')
-      .eq('id', qual_id)
-      .eq('employee_id', id)
-      .single();
-
-    if (checkError || !qualification) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Qualification not found', 'NOT_FOUND', 404),
-        { status: 404 },
-      );
+    const result = await deleteQualification(id, qual_id);
+    if ('error' in result) {
+      return NextResponse.json(result.error, { status: result.status });
     }
 
-    const { error } = await supabaseAdmin
-      .from('employee_qualifications')
-      .delete()
-      .eq('id', qual_id);
-
-    if (error) {
-      logger.error('[Employee Qualifications API] Database error deleting qualification:', {
-        error: error.message,
-        code: (error as any).code,
-        context: {
-          endpoint: '/api/employees/[id]/qualifications/[qual_id]',
-          operation: 'DELETE',
-          table: 'employee_qualifications',
-          qualification_id: qual_id,
-        },
-      });
-
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
-      return NextResponse.json(apiError, { status: apiError.status || 500 });
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: 'Qualification removed successfully',
-    });
+    return NextResponse.json(result);
   } catch (err) {
     logger.error('[Employee Qualifications API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

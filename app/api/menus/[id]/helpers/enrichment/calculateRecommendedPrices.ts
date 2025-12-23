@@ -31,9 +31,16 @@ export async function calculateRecommendedPrice(
       const recommendedPrice = await calculateDishSellingPrice(item.dishes.id);
       // Cache the calculated price (non-blocking)
       if (recommendedPrice != null && recommendedPrice > 0) {
-        cacheRecommendedPrice(menuId, item.id, item).catch(err => {
-          logger.error('[Menus API] Failed to cache dish recommended price:', err);
-        });
+        (async () => {
+          try {
+            await cacheRecommendedPrice(menuId, item.id, item);
+          } catch (err) {
+            logger.error('[Menus API] Failed to cache dish recommended price:', {
+              error: err instanceof Error ? err.message : String(err),
+              context: { menuId, itemId: item.id },
+            });
+          }
+        })();
       }
       return recommendedPrice;
     } catch (err) {
@@ -50,9 +57,16 @@ export async function calculateRecommendedPrice(
       const recommendedPrice = await calculateRecipeSellingPrice(item.recipe_id);
       // Cache the calculated price (non-blocking)
       if (recommendedPrice != null && recommendedPrice > 0) {
-        cacheRecommendedPrice(menuId, item.id, item).catch(err => {
-          logger.error('[Menus API] Failed to cache recipe recommended price:', err);
-        });
+        (async () => {
+          try {
+            await cacheRecommendedPrice(menuId, item.id, item);
+          } catch (err) {
+            logger.error('[Menus API] Failed to cache recipe recommended price:', {
+              error: err instanceof Error ? err.message : String(err),
+              context: { menuId, itemId: item.id },
+            });
+          }
+        })();
       }
       return recommendedPrice;
     } catch (err) {

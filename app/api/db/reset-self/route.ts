@@ -7,6 +7,13 @@ import { getUserTableIds } from './helpers/getUserTableIds';
 import { handleGlobalWipe } from './helpers/handleGlobalWipe';
 import { performDeleteIn } from './helpers/performDeleteIn';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { z } from 'zod';
+
+const resetSelfSchema = z.object({
+  userId: z.string().optional(),
+  all: z.boolean().optional(),
+});
 type DeleteSummary = {
   dryRun: boolean;
   reseeded: boolean;
@@ -17,10 +24,15 @@ export async function POST(request: NextRequest) {
   try {
     const user = await requireAuth(request);
   } catch (error) {
+    logger.error('[route.ts] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     if (error instanceof NextResponse) {
       return error;
     }
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
   }
 
   const user = await requireAuth(request);
@@ -28,13 +40,31 @@ export async function POST(request: NextRequest) {
   const supabase = createSupabaseAdmin();
 
   const dryRun = request.nextUrl.searchParams.get('dry') === '1';
-  let body: any = {};
+  let body: unknown = {};
   try {
     body = await request.json();
-  } catch {}
+  } catch (err) {
+    logger.warn('[DB Reset Self] Failed to parse request body:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    // Continue with empty body - dry run can proceed
+  }
 
-  const userId = (body?.userId as string) || '';
-  const wipeAll = body?.all === true;
+  const validationResult = resetSelfSchema.safeParse(body);
+  if (!validationResult.success && Object.keys(body as Record<string, unknown>).length > 0) {
+    return NextResponse.json(
+      ApiErrorHandler.createError(
+        validationResult.error.issues[0]?.message || 'Invalid request body',
+        'VALIDATION_ERROR',
+        400,
+      ),
+      { status: 400 },
+    );
+  }
+
+  const validatedBody = validationResult.success ? validationResult.data : {};
+  const userId = (validatedBody.userId as string) || '';
+  const wipeAll = validatedBody.all === true;
 
   logger.info('Reset request:', { userId, wipeAll, dryRun, hasUser: !!user });
 

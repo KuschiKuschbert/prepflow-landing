@@ -6,6 +6,11 @@ interface GlowCardProps {
   children: React.ReactNode;
   className?: string;
   glowColor?: string;
+  /**
+   * Whether to constrain card width to prevent stretching on large screens
+   * @default true - Prevents stretching, maintains optimal card proportions
+   */
+  constrainWidth?: boolean;
 }
 
 /**
@@ -33,6 +38,7 @@ export const GlowCard: React.FC<GlowCardProps> = ({
   children,
   className = '',
   glowColor = 'rgba(41, 231, 205, 0.15)', // Default to primary color
+  constrainWidth = true,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -60,7 +66,9 @@ export const GlowCard: React.FC<GlowCardProps> = ({
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm transition-colors duration-300 hover:border-white/20 ${className}`}
+      className={`relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm transition-colors duration-300 hover:border-white/20 ${
+        constrainWidth ? 'mx-auto w-full max-w-[400px]' : 'w-full'
+      } ${className}`}
     >
       <div
         className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300"

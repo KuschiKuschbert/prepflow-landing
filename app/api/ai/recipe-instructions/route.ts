@@ -10,6 +10,17 @@ import { buildRecipeInstructionsPrompt } from '@/lib/ai/prompts/recipe-instructi
 import type { Recipe, RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
 
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { z } from 'zod';
+
+const recipeInstructionsSchema = z.object({
+  recipe: z.any(), // Recipe is complex, validate structure if needed
+  ingredients: z.array(z.any()).min(1, 'ingredients array is required'),
+  countryCode: z.string().optional(),
+}).refine(data => data.recipe !== undefined && data.recipe !== null, {
+  message: 'recipe is required',
+  path: ['recipe'],
+});
 
 /**
  * POST /api/ai/recipe-instructions
@@ -24,16 +35,36 @@ import { logger } from '@/lib/logger';
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { recipe, ingredients, countryCode } = body as {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[AI Recipe Instructions] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = recipeInstructionsSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { recipe, ingredients, countryCode } = validationResult.data as {
       recipe: Recipe;
       ingredients: RecipeIngredientWithDetails[];
       countryCode?: string;
     };
-
-    if (!recipe || !Array.isArray(ingredients)) {
-      return NextResponse.json({ error: 'Invalid request data' }, { status: 400 });
-    }
 
     // Try AI first
     try {

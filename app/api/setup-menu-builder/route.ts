@@ -4,6 +4,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 
 import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 export async function GET() {
   try {
     // Read the SQL migration file
@@ -13,11 +14,13 @@ export async function GET() {
     try {
       sqlMigration = readFileSync(sqlPath, 'utf-8');
     } catch (err) {
+      logger.error('[route.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       return NextResponse.json(
-        {
-          error: 'Migration file not found',
-          message: 'Could not read menu-builder-schema.sql',
-        },
+        ApiErrorHandler.createError('Could not read menu-builder-schema.sql', 'FILE_NOT_FOUND', 500),
         { status: 500 },
       );
     }
@@ -36,12 +39,17 @@ export async function GET() {
       ],
     });
   } catch (err) {
-    logger.error('Error reading migration file:', err);
+    logger.error('[Setup Menu Builder API] Error reading migration file:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/setup-menu-builder', method: 'GET', operation: 'readMigrationFile' },
+    });
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        err instanceof Error ? err.message : 'Unknown error',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }
@@ -98,6 +106,14 @@ export async function POST(_request: NextRequest) {
 
     for (const table of requiredTables) {
       const { error: tableError } = await supabaseAdmin.from(table).select('id').limit(1);
+      if (tableError && tableError.code !== '42P01') {
+        // Log non-table-not-found errors
+        logger.warn('[Setup Menu Builder API] Error checking table:', {
+          error: tableError.message,
+          code: tableError.code,
+          context: { table, operation: 'checkTableExists' },
+        });
+      }
       if (tableError && tableError.code === '42P01') {
         missingTables.push(table);
       }
@@ -122,7 +138,11 @@ export async function POST(_request: NextRequest) {
       tablesExist: true,
     });
   } catch (err) {
-    logger.error('Unexpected error:', err);
+    logger.error('[Setup Menu Builder API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/setup-menu-builder', method: 'POST', operation: 'setupMenuBuilder' },
+    });
     return NextResponse.json(
       {
         success: false,

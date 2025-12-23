@@ -3,6 +3,7 @@
  */
 
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 export async function fetchTemperatureData(startDate: string, endDate: string) {
   if (!supabaseAdmin) return { logs: null, violations: null };
@@ -12,6 +13,13 @@ export async function fetchTemperatureData(startDate: string, endDate: string) {
     .from('temperature_equipment')
     .select('*')
     .eq('is_active', true);
+
+  if (equipmentError) {
+    logger.warn('[Health Inspector Report] Error fetching temperature equipment:', {
+      error: equipmentError.message,
+      code: (equipmentError as any).code,
+    });
+  }
 
   const equipmentMap = new Map();
   equipment?.forEach(eq => {
@@ -32,6 +40,10 @@ export async function fetchTemperatureData(startDate: string, endDate: string) {
     .limit(500);
 
   if (tempError) {
+    logger.warn('[Health Inspector Report] Error fetching temperature logs:', {
+      error: tempError.message,
+      code: (tempError as any).code,
+    });
     return { logs: null, violations: null };
   }
 

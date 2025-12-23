@@ -51,6 +51,13 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       .single();
 
     if (errorCheck || !errorLog) {
+      if (errorCheck && errorCheck.code !== 'PGRST116') {
+        logger.warn('[Admin Support Tickets API] Error checking error log:', {
+          error: errorCheck.message,
+          code: (errorCheck as any).code,
+          error_id,
+        });
+      }
       return NextResponse.json(
         ApiErrorHandler.createError('Error log not found', 'NOT_FOUND', 404),
         { status: 404 },
@@ -112,7 +119,3 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     );
   }
 }
-
-
-
-

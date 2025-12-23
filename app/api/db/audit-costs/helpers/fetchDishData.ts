@@ -81,13 +81,20 @@ export async function fetchDishData(dishId: string): Promise<DishData | null> {
     const recipeIds = (dishRecipesData || []).map(dr => dr.recipe_id).filter(Boolean);
     const recipeNamesMap: Record<string, string> = {};
     if (recipeIds.length > 0) {
-      const { data: recipesData } = await supabaseAdmin
+      const { data: recipesData, error: recipesError } = await supabaseAdmin
         .from('recipes')
         .select('id, recipe_name')
         .in('id', recipeIds);
-      (recipesData || []).forEach((r: any) => {
-        recipeNamesMap[r.id] = r.recipe_name || 'Unknown';
-      });
+      if (recipesError) {
+        logger.warn('[Audit Costs] Error fetching recipe names:', {
+          error: recipesError.message,
+          recipeIds,
+        });
+      } else {
+        (recipesData || []).forEach((r: any) => {
+          recipeNamesMap[r.id] = r.recipe_name || 'Unknown';
+        });
+      }
     }
 
     // Map recipe names to dish_recipes
@@ -97,11 +104,18 @@ export async function fetchDishData(dishId: string): Promise<DishData | null> {
     }));
 
     // Fetch dish name
-    const { data: dishData } = await supabaseAdmin
+    const { data: dishData, error: dishError } = await supabaseAdmin
       .from('dishes')
       .select('dish_name')
       .eq('id', dishId)
       .single();
+    if (dishError) {
+      logger.error('[Audit Costs] Error fetching dish name:', {
+        error: dishError.message,
+        dishId,
+      });
+      return null;
+    }
 
     return {
       id: dishId,

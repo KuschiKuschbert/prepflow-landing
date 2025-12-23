@@ -7,6 +7,7 @@ import { deriveAutosaveId } from '@/lib/autosave-id';
 import { useOnSave } from '@/lib/personality/hooks';
 import { IngredientFormFields } from './IngredientFormFields';
 import { useIngredientFormLogic } from './useIngredientFormLogic';
+import { logger } from '@/lib/logger';
 
 interface Ingredient {
   id: string;
@@ -88,10 +89,17 @@ export default function IngredientEditDrawer({
 
   const handleSave = async () => {
     if (validateForm()) {
-      await saveNow();
-      handlePersonalitySave();
-      await onSave(formData);
-      onClose();
+      try {
+        await saveNow();
+        handlePersonalitySave();
+        await onSave(formData);
+        onClose();
+      } catch (err) {
+        logger.error('[IngredientEditDrawer] Error saving ingredient:', {
+          error: err instanceof Error ? err.message : String(err),
+          ingredientId: ingredient?.id,
+        });
+      }
     }
   };
 

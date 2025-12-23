@@ -103,7 +103,6 @@ export async function populateStaff(
 
     if (staffToInsert.length === 0) {
       logger.dev('All staff members already exist, skipping insert');
-      // Fetch existing employees for return
       const { data } = await supabaseAdmin.from('employees').select().eq('status', 'active');
       return data || [];
     }
@@ -113,7 +112,11 @@ export async function populateStaff(
 
     if (error) {
       results.errors.push({ table: 'employees', error: error.message });
-      logger.error('Error populating staff:', error);
+      logger.error('[Populate Staff] Error inserting staff:', {
+        error: error.message,
+        code: error.code,
+        context: { table: 'employees', count: staffToInsert.length },
+      });
       return [];
     }
 
@@ -134,11 +137,10 @@ export async function populateStaff(
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : String(err);
     results.errors.push({ table: 'employees', error: errorMessage });
-    logger.error('Error populating staff:', err);
+    logger.error('[Populate Staff] Unexpected error:', {
+      error: errorMessage,
+      context: { operation: 'populateStaff' },
+    });
     return [];
   }
 }
-
-
-
-

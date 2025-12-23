@@ -1,4 +1,5 @@
 import { useConfirm } from '@/hooks/useConfirm';
+import { logger } from '@/lib/logger';
 
 interface HandleDeleteParams {
   fetchKitchenSections: () => Promise<void>;
@@ -33,6 +34,11 @@ export function useHandleDelete({
         setError(result.message || 'Failed to delete kitchen section');
       }
     } catch (err) {
+      logger.error('[handleDelete.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       setError('Failed to delete kitchen section');
     }
   };

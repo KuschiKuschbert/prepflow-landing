@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { MagneticButton } from '@/components/ui/MagneticButton';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { logger } from '@/lib/logger';
 
 interface HeroProps {
   onTourClick?: () => void;
@@ -23,7 +24,12 @@ export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
       if (typeof window !== 'undefined') {
         sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
       }
-    } catch (_) {}
+    } catch (err) {
+      // SessionStorage might fail in private mode - log but continue
+      logger.dev('[Hero] Error accessing sessionStorage (non-blocking):', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
     window.location.href = '/api/auth/login?returnTo=/webapp';
   };
 
@@ -35,7 +41,12 @@ export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
       if (typeof window !== 'undefined') {
         sessionStorage.setItem('PF_AUTH_IN_PROGRESS', '1');
       }
-    } catch (_) {}
+    } catch (err) {
+      // SessionStorage might fail in private mode - log but continue
+      logger.dev('[Hero] Error accessing sessionStorage (non-blocking):', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
     window.location.href = '/api/auth/login?returnTo=/webapp';
   };
 

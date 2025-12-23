@@ -2,19 +2,14 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { createComplianceRecord } from './helpers/createComplianceRecord';
-import { deleteComplianceRecord } from './helpers/deleteComplianceRecord';
 import { handleComplianceError } from './helpers/handleComplianceError';
 import { updateComplianceRecord } from './helpers/updateComplianceRecord';
-
-const COMPLIANCE_TYPES_SELECT = `
-  *,
-  compliance_types (
-    id,
-    type_name,
-    description
-  )
-`;
+import {
+  updateComplianceRecordSchema,
+  COMPLIANCE_TYPES_SELECT,
+} from './helpers/schemas';
+import { handleDeleteComplianceRecord } from './helpers/deleteComplianceRecordHandler';
+import { handleCreateComplianceRecord } from './helpers/createComplianceRecordHandler';
 
 export async function GET(request: NextRequest) {
   try {
@@ -74,32 +69,38 @@ export async function GET(request: NextRequest) {
       data: data || [],
     });
   } catch (err: any) {
-    if (err && typeof err === 'object' && 'status' in err) {
-      return NextResponse.json(err, { status: err.status || 500 });
-    }
+    logger.error('[Compliance Records API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/compliance-records', method: 'GET' },
+    });
     return handleComplianceError(err, 'GET');
   }
 }
 
 export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const {
-      compliance_type_id,
-      document_name,
-      issue_date,
-      expiry_date,
-      document_url,
-      photo_url,
-      notes,
-      reminder_enabled,
-      reminder_days_before,
-    } = body;
+  return handleCreateComplianceRecord(request);
+}
 
-    if (!compliance_type_id || !document_name) {
+export async function PUT(request: NextRequest) {
+  try {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Compliance Records API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = updateComplianceRecordSchema.safeParse(body);
+    if (!validationResult.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(
-          'compliance_type_id and document_name are required',
+          validationResult.error.issues[0]?.message || 'Invalid request body',
           'VALIDATION_ERROR',
           400,
         ),
@@ -107,32 +108,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const data = await createComplianceRecord({
-      compliance_type_id,
-      document_name,
-      issue_date,
-      expiry_date,
-      document_url,
-      photo_url,
-      notes,
-      reminder_enabled,
-      reminder_days_before,
-    });
-
-    return NextResponse.json({
-      success: true,
-      message: 'Compliance record created successfully',
-      data,
-    });
-  } catch (err: any) {
-    if (err.status) return NextResponse.json(err, { status: err.status });
-    return handleComplianceError(err, 'POST');
-  }
-}
-
-export async function PUT(request: NextRequest) {
-  try {
-    const body = await request.json();
     const {
       id,
       document_name,
@@ -143,14 +118,7 @@ export async function PUT(request: NextRequest) {
       notes,
       reminder_enabled,
       reminder_days_before,
-    } = body;
-
-    if (!id) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Compliance record ID is required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    } = validationResult.data;
 
     const data = await updateComplianceRecord(id, {
       document_name,
@@ -169,27 +137,14 @@ export async function PUT(request: NextRequest) {
       data,
     });
   } catch (err: any) {
-    if (err.status) return NextResponse.json(err, { status: err.status });
+    logger.error('[Compliance Records API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/compliance-records', method: 'PUT' },
+    });
     return handleComplianceError(err, 'PUT');
   }
 }
 
 export async function DELETE(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
-
-    if (!id) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Compliance record ID is required', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    await deleteComplianceRecord(id);
-    return NextResponse.json({ success: true, message: 'Compliance record deleted successfully' });
-  } catch (err: any) {
-    if (err.status) return NextResponse.json(err, { status: err.status });
-    return handleComplianceError(err, 'DELETE');
-  }
+  return handleDeleteComplianceRecord(request);
 }

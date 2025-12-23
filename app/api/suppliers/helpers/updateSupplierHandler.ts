@@ -1,0 +1,61 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { updateSupplier } from '../helpers/updateSupplier';
+import { handleSupplierError } from './handleSupplierError';
+import { updateSupplierSchema } from './schemas';
+
+export async function handleUpdateSupplier(request: NextRequest) {
+  try {
+    if (!supabaseAdmin) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
+    }
+
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Suppliers API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = updateSupplierSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { id, ...updates } = validationResult.data;
+    const data = await updateSupplier(id, updates);
+
+    return NextResponse.json({
+      success: true,
+      message: 'Supplier updated successfully',
+      data,
+    });
+  } catch (err: any) {
+    logger.error('[Suppliers API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/suppliers', method: 'PUT' },
+    });
+    if (err.status) {
+      return NextResponse.json(err, { status: err.status });
+    }
+    return handleSupplierError(err, 'PUT');
+  }
+}

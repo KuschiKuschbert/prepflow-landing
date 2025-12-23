@@ -1,4 +1,5 @@
 'use client';
+import { useCallback } from 'react';
 import { DishesListView } from './DishesListView';
 import { DishesSidePanels } from './DishesSidePanels';
 import { Dish, Recipe, DishCostData, RecipePriceData } from '../types';
@@ -89,6 +90,36 @@ export function DishesListViewSection({
   enterSelectionMode,
   setViewMode,
 }: DishesListViewSectionProps) {
+  // Memoize callback functions to prevent unnecessary re-renders
+  const handlePageChange = useCallback(
+    (page: number) => {
+      updateFilters({ currentPage: page });
+    },
+    [updateFilters],
+  );
+
+  const handleItemsPerPageChange = useCallback(
+    (itemsPerPage: number) => {
+      updateFilters({ itemsPerPage, currentPage: 1 });
+    },
+    [updateFilters],
+  );
+
+  const handleSearchChange = useCallback(
+    (searchTerm: string) => {
+      updateFilters({ searchTerm, currentPage: 1 });
+    },
+    [updateFilters],
+  );
+
+  const handleSortChange = useCallback(
+    (field: string, direction: 'asc' | 'desc') => {
+      // Accept both dish and recipe sort fields
+      updateFilters({ sortField: field, sortDirection: direction });
+    },
+    [updateFilters],
+  );
+
   return (
     <>
       <DishesListView
@@ -104,9 +135,9 @@ export function DishesListViewSection({
         filters={filters}
         isSelectionMode={isSelectionMode}
         capitalizeRecipeName={capitalizeRecipeName}
-        onPageChange={page => updateFilters({ currentPage: page })}
-        onItemsPerPageChange={itemsPerPage => updateFilters({ itemsPerPage, currentPage: 1 })}
-        onSearchChange={searchTerm => updateFilters({ searchTerm, currentPage: 1 })}
+        onPageChange={handlePageChange}
+        onItemsPerPageChange={handleItemsPerPageChange}
+        onSearchChange={handleSearchChange}
         onSelectAll={handleSelectAll}
         onSelectItem={handleSelectItem}
         onPreviewDish={handlePreviewDish}
@@ -115,10 +146,7 @@ export function DishesListViewSection({
         onEditRecipe={handleEditRecipe}
         onDeleteDish={handleDeleteDish}
         onDeleteRecipe={handleDeleteRecipe}
-        onSortChange={(field: string, direction: 'asc' | 'desc') => {
-          // Accept both dish and recipe sort fields
-          updateFilters({ sortField: field, sortDirection: direction });
-        }}
+        onSortChange={handleSortChange}
         onStartLongPress={startLongPress}
         onCancelLongPress={cancelLongPress}
         onEnterSelectionMode={enterSelectionMode}

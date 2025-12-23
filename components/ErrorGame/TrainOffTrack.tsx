@@ -10,10 +10,75 @@
 
 import { ArcadeMuteButton } from '@/components/Arcade/ArcadeMuteButton';
 import WebAppBackground from '@/components/Arcade/WebAppBackground';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, Variants } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { useTrainOffTrackGame } from './useTrainOffTrackGame';
+
+/**
+ * Animation variants for train movement
+ * Uses modern framer-motion best practices: explicit initial states, variants pattern, performance optimizations
+ */
+const trainVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    x: '-300px',
+  },
+  visible: {
+    opacity: 1,
+    x: ['-300px', 'calc(100vw + 300px)'],
+    transition: {
+      opacity: {
+        duration: 0.3,
+        delay: 0.3,
+        ease: 'easeOut',
+      },
+      x: {
+        duration: 10,
+        repeat: Infinity,
+        repeatType: 'loop',
+        ease: 'linear',
+      },
+    },
+  },
+  visibleFixed: {
+    opacity: 0.3,
+    x: ['-300px', 'calc(100vw + 300px)'],
+    transition: {
+      opacity: {
+        duration: 0.3,
+        delay: 0.3,
+        ease: 'easeOut',
+      },
+      x: {
+        duration: 10,
+        repeat: Infinity,
+        repeatType: 'loop',
+        ease: 'linear',
+      },
+    },
+  },
+  reduced: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      opacity: {
+        duration: 0.3,
+        delay: 0.3,
+      },
+    },
+  },
+  reducedFixed: {
+    opacity: 0.3,
+    x: 0,
+    transition: {
+      opacity: {
+        duration: 0.3,
+        delay: 0.3,
+      },
+    },
+  },
+};
 
 const TrainOffTrack: React.FC = () => {
   const router = useRouter();
@@ -69,69 +134,31 @@ const TrainOffTrack: React.FC = () => {
       {!fixed && (
         <div className="pointer-events-none fixed inset-0 z-10 overflow-hidden">
           <motion.div
-            className="absolute top-1/2 -translate-y-1/2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
+            className="absolute top-1/2 -translate-y-1/2 will-change-transform"
+            initial="hidden"
+            animate={reducedMotion ? 'reduced' : 'visible'}
+            variants={trainVariants}
+            style={{ transformOrigin: 'left center' }}
           >
-            <motion.div
-              animate={
-                reducedMotion
-                  ? { x: 0, scaleX: -1 }
-                  : {
-                      x: ['-300px', 'calc(100vw + 300px)'],
-                      scaleX: -1,
-                    }
-              }
-              transition={
-                reducedMotion
-                  ? {}
-                  : {
-                      duration: 10,
-                      repeat: Infinity,
-                      ease: 'linear',
-                    }
-              }
-            >
-              <span className="desktop:text-8xl inline-block text-6xl whitespace-nowrap">
-                🚂🚃🚃🚃
-              </span>
-            </motion.div>
+            <span className="desktop:text-8xl inline-block text-6xl whitespace-nowrap">
+              🚂🚃🚃🚃
+            </span>
           </motion.div>
         </div>
       )}
       {/* Train animation in success state - full viewport width, positioned outside content container */}
       {fixed && (
-        <div className="pointer-events-none fixed inset-0 z-10 overflow-hidden opacity-30">
+        <div className="pointer-events-none fixed inset-0 z-10 overflow-hidden">
           <motion.div
-            className="absolute top-1/2 -translate-y-1/2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.3 }}
-            transition={{ delay: 0.3 }}
+            className="absolute top-1/2 -translate-y-1/2 will-change-transform"
+            initial="hidden"
+            animate={reducedMotion ? 'reducedFixed' : 'visibleFixed'}
+            variants={trainVariants}
+            style={{ transformOrigin: 'left center' }}
           >
-            <motion.div
-              animate={
-                reducedMotion
-                  ? { x: 0, scaleX: -1 }
-                  : {
-                      x: ['-300px', 'calc(100vw + 300px)'],
-                      scaleX: -1,
-                    }
-              }
-              transition={
-                reducedMotion
-                  ? {}
-                  : {
-                      duration: 10,
-                      repeat: Infinity,
-                      ease: 'linear',
-                    }
-              }
-            >
-              <span className="desktop:text-8xl inline-block text-6xl whitespace-nowrap">
-                🚂🚃🚃🚃
-              </span>
-            </motion.div>
+            <span className="desktop:text-8xl inline-block text-6xl whitespace-nowrap">
+              🚂🚃🚃🚃
+            </span>
           </motion.div>
         </div>
       )}

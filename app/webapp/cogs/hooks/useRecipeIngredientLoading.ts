@@ -3,6 +3,7 @@
 import { useCallback } from 'react';
 import { COGSCalculation, RecipeIngredient } from '../types';
 import { mergeCalculations, mergeRecipeIngredients } from './utils/mergeCalculations';
+import { logger } from '@/lib/logger';
 import {
   mapApiItemsToCalculations,
   mapApiItemsToRecipeIngredients,
@@ -62,6 +63,11 @@ export function useRecipeIngredientLoading({
           if (setIsLoadingFromApi) setIsLoadingFromApi(false);
         });
       } catch (err) {
+        logger.error('[useRecipeIngredientLoading.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
         if (setError)
           setError(err instanceof Error ? err.message : 'Failed to load recipe ingredients');
       }

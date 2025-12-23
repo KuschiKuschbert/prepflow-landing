@@ -27,14 +27,6 @@ export function createLookupMaps(recipesData: any[], ingredientsData: any[]) {
         ingredientMap.set(name, i.id);
       }
     });
-
-    logger.dev('[createLookupMaps] Created ingredient map', {
-      totalIngredients: ingredientsData.length,
-      mapSize: ingredientMap.size,
-      sampleKeys: Array.from(ingredientMap.keys()).slice(0, 10),
-    });
-  } else {
-    logger.warn('[createLookupMaps] No ingredients data provided');
   }
 
   return { recipeMap, ingredientMap };
@@ -113,22 +105,12 @@ export function buildDishIngredientsData(
   }> = [];
   const skippedIngredients: string[] = [];
 
-  logger.dev('[buildDishIngredientsData] Starting ingredient linking', {
-    totalDishes: cleanSampleDishes.length,
-    dishesWithIngredients: cleanSampleDishes.filter(d => d.ingredients && d.ingredients.length > 0)
-      .length,
-    ingredientMapSize: ingredientMap.size,
-  });
-
   for (const dishDef of cleanSampleDishes) {
     if (!dishDef.ingredients || dishDef.ingredients.length === 0) continue;
 
     const dishId =
       dishMap.get(dishDef.dish_name.toLowerCase().trim()) || dishMap.get(dishDef.dish_name);
-    if (!dishId) {
-      logger.warn(`[buildDishIngredientsData] Dish "${dishDef.dish_name}" not found in dish map`);
-      continue;
-    }
+    if (!dishId) continue;
 
     for (const ingredientLink of dishDef.ingredients) {
       const ingredientNameLower = ingredientLink.ingredient_name.toLowerCase().trim();
@@ -136,16 +118,6 @@ export function buildDishIngredientsData(
         ingredientMap.get(ingredientNameLower) || ingredientMap.get(ingredientLink.ingredient_name);
 
       if (!ingredientId) {
-        const availableKeys = Array.from(ingredientMap.keys())
-          .filter(k => k.toLowerCase().includes(ingredientNameLower.slice(0, 3)))
-          .slice(0, 5);
-        logger.warn(
-          `[buildDishIngredientsData] Ingredient "${ingredientLink.ingredient_name}" not found for dish "${dishDef.dish_name}"`,
-          {
-            searchedKeys: [ingredientNameLower, ingredientLink.ingredient_name],
-            availableSimilarKeys: availableKeys,
-          },
-        );
         skippedIngredients.push(`${dishDef.dish_name} → ${ingredientLink.ingredient_name}`);
         continue;
       }
@@ -158,12 +130,6 @@ export function buildDishIngredientsData(
       });
     }
   }
-
-  logger.dev('[buildDishIngredientsData] Completed ingredient linking', {
-    totalLinked: dishIngredientsToInsert.length,
-    totalSkipped: skippedIngredients.length,
-    skippedDetails: skippedIngredients.length > 0 ? skippedIngredients : undefined,
-  });
 
   return { data: dishIngredientsToInsert, skipped: skippedIngredients };
 }

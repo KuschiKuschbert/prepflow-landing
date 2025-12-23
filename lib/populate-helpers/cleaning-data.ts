@@ -2,6 +2,7 @@
  * Helper functions for populating cleaning data
  */
 
+import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { cleanSampleCleaningAreas, cleanSampleCleaningTasks } from '@/lib/sample-cleaning-clean';
 
@@ -25,6 +26,7 @@ export async function populateCleaningData(
 
   if (cleaningAreasError) {
     results.errors.push({ table: 'cleaning_areas', error: cleaningAreasError.message });
+    logger.error('Error inserting cleaning_areas:', cleaningAreasError);
     return;
   }
 
@@ -45,6 +47,7 @@ export async function populateCleaningData(
 
     if (tasksError) {
       results.errors.push({ table: 'cleaning_tasks', error: tasksError.message });
+      logger.error('Error inserting cleaning_tasks:', tasksError);
     } else {
       results.populated.push({ table: 'cleaning_tasks', count: tasksToInsert.length });
     }

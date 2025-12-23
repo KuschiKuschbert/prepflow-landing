@@ -1,5 +1,6 @@
 import { useTranslation } from '../../../../lib/useTranslation';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { TextContainer } from '@/components/ui/TextContainer';
 import {
   LANDING_COLORS,
   LANDING_COLORS_RGBA,
@@ -25,14 +26,16 @@ export function GlobalFeaturesSection() {
               </h2>
             </ScrollReveal>
             <ScrollReveal variant="fade-up" delay={0.1}>
-              <p className={`${LANDING_TYPOGRAPHY.lg} mx-auto max-w-3xl text-gray-300`}>
-                {t(
-                  'globalFeatures.description',
-                  'QLD compliance built-in. GST calculations. Metric or imperial units. Made for Aussie restaurants, cafés, and food trucks.',
-                )}
-              </p>
+              <TextContainer variant="wide">
+                <p className={`${LANDING_TYPOGRAPHY.lg} text-gray-300`}>
+                  {t(
+                    'globalFeatures.description',
+                    'QLD compliance built-in. GST calculations. Metric or imperial units. Made for Aussie restaurants, cafés, and food trucks.',
+                  )}
+                </p>
+              </TextContainer>
             </ScrollReveal>
-            <div className="desktop:grid-cols-2 mt-8 grid gap-6">
+            <div className="mt-8 grid gap-6 tablet:gap-8 desktop:gap-10 large-desktop:gap-12 xl:gap-14 [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
               <ScrollReveal variant="fade-up" delay={getStaggerDelay(0, 0.2)}>
                 <div className="rounded-2xl bg-[#1f1f1f]/50 p-6">
                   <h3

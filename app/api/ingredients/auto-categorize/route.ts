@@ -3,6 +3,22 @@ import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { autoDetectCategory } from '@/lib/ingredients/category-detection';
+import { z } from 'zod';
+
+const autoCategorizeSchema = z.object({
+  ingredientIds: z.array(z.string()).optional(),
+  useAI: z.boolean().optional().default(true),
+  categorizeAll: z.boolean().optional().default(false),
+}).refine(data => {
+  // If categorizeAll is false, ingredientIds must be provided and non-empty
+  if (!data.categorizeAll) {
+    return data.ingredientIds && data.ingredientIds.length > 0;
+  }
+  return true;
+}, {
+  message: 'ingredientIds array is required when categorizeAll is false',
+  path: ['ingredientIds'],
+});
 
 /**
  * Bulk auto-categorize ingredients.
@@ -16,24 +32,32 @@ import { autoDetectCategory } from '@/lib/ingredients/category-detection';
 export async function POST(request: NextRequest) {
   try {
     const supabaseAdmin = createSupabaseAdmin();
-    const body = await request.json();
-    const { ingredientIds, useAI = true, categorizeAll = false } = body;
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Auto-Categorize API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
 
-    // If categorizeAll is true, fetch all uncategorized ingredients
-    // Otherwise, require ingredientIds array
-    if (
-      !categorizeAll &&
-      (!ingredientIds || !Array.isArray(ingredientIds) || ingredientIds.length === 0)
-    ) {
+    const validationResult = autoCategorizeSchema.safeParse(body);
+    if (!validationResult.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(
-          'ingredientIds array is required (or set categorizeAll=true)',
+          validationResult.error.issues[0]?.message || 'Invalid request body',
           'VALIDATION_ERROR',
           400,
         ),
         { status: 400 },
       );
     }
+
+    const { ingredientIds, useAI = true, categorizeAll = false } = validationResult.data;
 
     // Build query for uncategorized ingredients
     let query = supabaseAdmin

@@ -7,6 +7,7 @@ import { Edit, MapPin, Store, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useCardTouchHandlers } from '../hooks/useCardTouchHandlers';
 import { getStandardUnit } from '../utils/getStandardUnit';
+import { logger } from '@/lib/logger';
 
 interface Ingredient {
   id: string;
@@ -97,7 +98,14 @@ export function IngredientCard({
 
   const confirmDelete = async () => {
     setShowDeleteConfirm(false);
-    await onDelete(ingredient.id);
+    try {
+      await onDelete(ingredient.id);
+    } catch (err) {
+      logger.error('[IngredientCard] Error deleting ingredient:', {
+        error: err instanceof Error ? err.message : String(err),
+        ingredientId: ingredient.id,
+      });
+    }
   };
 
   const handleEditClick = (e: React.MouseEvent) => {

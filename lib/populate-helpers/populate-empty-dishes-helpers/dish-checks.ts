@@ -5,13 +5,15 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 /**
  * Check if a dish has direct ingredients (not via recipes)
  * The UI only shows direct dish_ingredients, so we need to ensure all dishes have them
  */
 export async function dishHasDirectIngredients(dishId: string): Promise<boolean> {
   if (!supabaseAdmin) {
-    throw new Error('Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   // Check direct ingredients only (UI requirement)

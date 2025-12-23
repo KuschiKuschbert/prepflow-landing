@@ -3,8 +3,12 @@
  */
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+
 function ensureSupabaseAdmin() {
-  if (!supabaseAdmin) throw new Error('Supabase admin client not initialized');
+  if (!supabaseAdmin) {
+    throw ApiErrorHandler.createError('Supabase admin client not initialized', 'DATABASE_ERROR', 500);
+  }
 }
 
 /** Query with all columns (pricing + dietary/allergen + description) */
@@ -49,7 +53,6 @@ export function buildFullQuery(menuId: string) {
     .order('category')
     .order('position');
 }
-
 /** Query without pricing columns (but with dietary/allergen) */
 export function buildQueryWithoutPricing(menuId: string) {
   ensureSupabaseAdmin();
@@ -90,7 +93,6 @@ export function buildQueryWithoutPricing(menuId: string) {
     .order('category')
     .order('position');
 }
-
 /** Query without dietary/allergen columns (but with pricing) */
 export function buildQueryWithoutDietary(menuId: string) {
   ensureSupabaseAdmin();
@@ -123,7 +125,6 @@ export function buildQueryWithoutDietary(menuId: string) {
     .order('category')
     .order('position');
 }
-
 /** Query without description (but with pricing and dietary) */
 export function buildQueryWithoutDescription(menuId: string) {
   ensureSupabaseAdmin();
@@ -154,7 +155,6 @@ export function buildQueryWithoutDescription(menuId: string) {
     .order('category')
     .order('position');
 }
-
 /** Minimal query (no pricing, no dietary, no description) */
 export function buildMinimalQuery(menuId: string) {
   ensureSupabaseAdmin();

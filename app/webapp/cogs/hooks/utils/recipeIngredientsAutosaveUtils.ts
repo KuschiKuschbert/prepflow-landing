@@ -1,6 +1,7 @@
 'use client';
 
 import { COGSCalculation } from '../../types';
+import { logger } from '@/lib/logger';
 
 export function serializeCalculations(calculations: COGSCalculation[]): string {
   return JSON.stringify(
@@ -43,6 +44,11 @@ export async function saveRecipeIngredients(
 
     return { success: true };
   } catch (err) {
+    logger.error('[recipeIngredientsAutosaveUtils.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     return {
       success: false,
       error: err instanceof Error ? err.message : 'Failed to save recipe ingredients',

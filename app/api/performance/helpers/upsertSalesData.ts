@@ -15,7 +15,10 @@ export async function upsertSalesData(salesData: {
   popularity_percentage: number;
   date?: string;
 }) {
-  if (!supabaseAdmin) throw new Error('Database connection not available');
+  if (!supabaseAdmin) {
+    logger.error('[API] Database connection not available');
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
 
   const { data, error } = await supabaseAdmin
     .from('sales_data')
@@ -31,6 +34,13 @@ export async function upsertSalesData(salesData: {
       },
     )
     .select();
+
+  if (error) {
+    logger.error('[helpers/upsertSalesData] Database error:', {
+      error: error.message,
+    });
+    throw ApiErrorHandler.fromSupabaseError(error, 500);
+  }
 
   if (error) {
     logger.error('[Performance API] Database error inserting sales data:', {

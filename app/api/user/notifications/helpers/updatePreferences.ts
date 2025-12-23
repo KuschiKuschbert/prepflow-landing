@@ -17,11 +17,19 @@ export async function updatePreferences(userEmail: string, updates: any): Promis
   }
 
   // Get current preferences
-  const { data: currentData } = await supabaseAdmin
+  const { data: currentData, error: fetchError } = await supabaseAdmin
     .from('users')
     .select('notification_preferences')
     .eq('email', userEmail)
     .single();
+
+  if (fetchError && fetchError.code !== 'PGRST116') {
+    // PGRST116 is "not found" - that's okay, we'll create the user
+    logger.warn('[Notifications API] Error fetching current preferences:', {
+      error: fetchError.message,
+      userEmail,
+    });
+  }
 
   const currentPreferences = currentData?.notification_preferences || {};
 
@@ -38,11 +46,23 @@ export async function updatePreferences(userEmail: string, updates: any): Promis
   });
 
   // Check if user exists, if not create them
-  const { data: existingUser } = await supabaseAdmin
+  const { data: existingUser, error: checkError } = await supabaseAdmin
     .from('users')
     .select('id')
     .eq('email', userEmail)
     .single();
+
+  if (checkError && checkError.code !== 'PGRST116') {
+    // PGRST116 is "not found" - that's okay, we'll create the user
+    logger.error('[Notifications API] Error checking if user exists:', {
+      error: checkError.message,
+      userEmail,
+    });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Failed to check user', 'DATABASE_ERROR', 500),
+      { status: 500 },
+    );
+  }
 
   if (!existingUser) {
     // Create user record if it doesn't exist

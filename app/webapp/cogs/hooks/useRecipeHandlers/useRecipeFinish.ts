@@ -5,6 +5,7 @@
 import { useCallback } from 'react';
 import type { Recipe } from '../../types';
 import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
 
 interface RecipeFinishParams {
   recipes: Recipe[];
@@ -36,6 +37,11 @@ export function useRecipeFinishHandler({
       if (saveNow) await saveNow();
       showSuccess(`Recipe "${selectedRecipeData.recipe_name}" is complete! 🎉`);
     } catch (err) {
+      logger.error('[useRecipeFinish.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
       const errorMsg = 'Failed to save recipe. Please try again.';
       if (setSaveError) setSaveError(errorMsg);
       showError(errorMsg);

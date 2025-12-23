@@ -1,8 +1,7 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
-import { trackEvent, trackConversion, getSessionId } from '../lib/analytics';
-import { trackGTMEvent } from './GoogleTagManager';
-import { logger } from '@/lib/logger';
+import React from 'react';
+import ErrorBoundary from './ui/ErrorBoundary';
+import { useExitIntentHandlers } from './ExitIntentPopup/helpers/useExitIntentHandlers';
 
 interface ExitIntentPopupProps {
   isVisible: boolean;
@@ -10,133 +9,9 @@ interface ExitIntentPopupProps {
   onSuccess?: (data: { name: string; email: string }) => void;
 }
 
-export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitIntentPopupProps) {
-  const [formData, setFormData] = useState({ name: '', email: '' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<{ name?: string; email?: string }>({});
-  const [isSuccess, setIsSuccess] = useState(false);
-  const popupRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-
-    if (isVisible) {
-      document.addEventListener('mousedown', handleClickOutside);
-      // Prevent body scroll when popup is open
-      document.body.style.overflow = 'hidden';
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isVisible, onClose]);
-
-  // Close popup on escape key
-  useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    if (isVisible) {
-      document.addEventListener('keydown', handleEscape);
-    }
-
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [isVisible, onClose]);
-
-  const validateForm = (): boolean => {
-    const newErrors: { name?: string; email?: string } = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      // Track the exit-intent conversion
-      trackEvent('exit_intent_conversion', 'conversion', 'lead_magnet', 1);
-
-      trackConversion({
-        type: 'signup_start',
-        element: 'exit_intent_popup',
-        page: typeof window !== 'undefined' ? window.location.pathname : '/',
-        timestamp: Date.now(),
-        sessionId: getSessionId(),
-        metadata: {
-          conversion_type: 'exit_intent_lead_magnet',
-          user_name: formData.name,
-        },
-      });
-
-      // Submit lead to API
-      const res = await fetch('/api/leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, source: 'exit_intent_popup' }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data?.message || 'Failed to submit');
-      }
-
-      // Success handling
-      setIsSuccess(true);
-      onSuccess?.(formData);
-
-      // Push success to GTM
-      trackGTMEvent('lead_submit_success', {
-        event_category: 'conversion',
-        event_label: 'exit_intent_popup',
-        page_path: typeof window !== 'undefined' ? window.location.pathname : '/',
-      });
-
-      // Auto-close after success
-      setTimeout(() => {
-        onClose();
-        // Reset form for next time
-        setFormData({ name: '', email: '' });
-        setIsSuccess(false);
-      }, 3000);
-    } catch (error) {
-      logger.error('Exit intent form submission failed:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleInputChange = (field: 'name' | 'email', value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
-    }
-  };
+function ExitIntentPopupContent({ isVisible, onClose, onSuccess }: ExitIntentPopupProps) {
+  const { formData, isSubmitting, errors, isSuccess, popupRef, handleSubmit, handleInputChange } =
+    useExitIntentHandlers({ isVisible, onClose, onSuccess });
 
   if (!isVisible) return null;
 
@@ -295,5 +170,13 @@ export default function ExitIntentPopup({ isVisible, onClose, onSuccess }: ExitI
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ExitIntentPopup(props: ExitIntentPopupProps) {
+  return (
+    <ErrorBoundary>
+      <ExitIntentPopupContent {...props} />
+    </ErrorBoundary>
   );
 }

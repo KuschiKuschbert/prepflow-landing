@@ -3,6 +3,7 @@
  */
 
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 const EMPLOYEE_SELECT = `
   *,
@@ -33,6 +34,10 @@ export async function fetchEmployees() {
     .order('full_name');
 
   if (employeesError) {
+    logger.warn('[Health Inspector Report] Error fetching employees:', {
+      error: employeesError.message,
+      code: (employeesError as any).code,
+    });
     return { employees: null, qualifications: null };
   }
 

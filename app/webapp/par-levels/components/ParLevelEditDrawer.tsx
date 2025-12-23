@@ -8,6 +8,7 @@ import { useAutosave } from '@/hooks/useAutosave';
 import { deriveAutosaveId } from '@/lib/autosave-id';
 import { useOnSave } from '@/lib/personality/hooks';
 import { useTranslation } from '@/lib/useTranslation';
+import { logger } from '@/lib/logger';
 import { useState, useEffect } from 'react';
 import type { ParLevel, Ingredient } from '../types';
 
@@ -114,10 +115,18 @@ export function ParLevelEditDrawer({
       unit: formData.unit,
     };
 
-    await saveNow();
-    handlePersonalitySave();
-    await onSave(updates);
-    onClose();
+    try {
+      await saveNow();
+      handlePersonalitySave();
+      await onSave(updates);
+      onClose();
+    } catch (error) {
+      logger.error('[ParLevelEditDrawer] Error saving par level:', {
+        error: error instanceof Error ? error.message : String(error),
+        parLevelId: parLevel.id,
+      });
+      // Optionally show a toast or alert to the user
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {

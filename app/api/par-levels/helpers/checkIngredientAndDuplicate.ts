@@ -23,11 +23,20 @@ export async function checkIngredientAndDuplicate(ingredientId: string) {
   }
 
   // Check if par level already exists for this ingredient
-  const { data: existing } = await supabaseAdmin
+  const { data: existing, error: duplicateError } = await supabaseAdmin
     .from('par_levels')
     .select('id')
     .eq('ingredient_id', ingredientId)
     .single();
+
+  if (duplicateError && duplicateError.code !== 'PGRST116') {
+    // PGRST116 is "not found" - that's okay, no duplicate exists
+    throw ApiErrorHandler.createError(
+      `Error checking for duplicate par level: ${duplicateError.message}`,
+      'DATABASE_ERROR',
+      500,
+    );
+  }
 
   if (existing) {
     throw ApiErrorHandler.createError(

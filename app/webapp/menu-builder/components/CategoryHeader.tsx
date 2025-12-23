@@ -4,6 +4,7 @@ import { Icon } from '@/components/ui/Icon';
 import { Check, Edit2, Filter, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import type { SortOption } from '../hooks/useCategorySort';
+import { logger } from '@/lib/logger';
 
 interface CategoryHeaderProps {
   category: string;
@@ -83,6 +84,11 @@ export function CategoryHeader({
       await onRename(category, trimmedValue);
       setIsEditing(false);
     } catch (error) {
+      logger.error('[CategoryHeader.tsx] Error in catch block:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
       onError(
         `Failed to rename category: ${error instanceof Error ? error.message : 'Unknown error'}`,
       );

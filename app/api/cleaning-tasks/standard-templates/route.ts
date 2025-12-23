@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 import { getStandardTaskTemplates } from '@/lib/cleaning/standard-tasks';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * GET /api/cleaning-tasks/standard-templates
@@ -16,12 +18,17 @@ export async function GET() {
       data: templates,
     });
   } catch (err: any) {
+    logger.error('[Cleaning Tasks API] Error fetching standard templates:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/cleaning-tasks/standard-templates', method: 'GET' },
+    });
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Internal server error',
-        message: err?.message || 'Failed to fetch standard task templates',
-      },
+      ApiErrorHandler.createError(
+        err?.message || 'Failed to fetch standard task templates',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

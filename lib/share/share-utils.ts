@@ -15,7 +15,6 @@ export interface ShareOptions {
 
 /**
  * Copy text to clipboard with fallback support
- *
  * @param {string} text - Text to copy
  * @returns {Promise<boolean>} Success status
  */
@@ -52,7 +51,6 @@ export async function copyToClipboard(text: string): Promise<boolean> {
 
 /**
  * Generate shareable URL with current filters/search params
- *
  * @param {string} basePath - Base path (e.g., '/webapp/recipes')
  * @param {Record<string, string>} params - URL parameters to include
  * @returns {string} Full shareable URL
@@ -78,7 +76,6 @@ export function generateShareableUrl(basePath: string, params?: Record<string, s
 
 /**
  * Copy current page URL to clipboard
- *
  * @param {Record<string, string>} params - Additional parameters to include
  * @returns {Promise<boolean>} Success status
  */
@@ -93,7 +90,6 @@ export async function copyCurrentPageUrl(params?: Record<string, string>): Promi
 
 /**
  * Use Web Share API if available (mobile devices)
- *
  * @param {ShareOptions} options - Share options
  * @returns {Promise<boolean>} Success status (false if not supported)
  */
@@ -122,7 +118,6 @@ export async function shareViaWebAPI(options: ShareOptions): Promise<boolean> {
 
 /**
  * Share via email (mailto link)
- *
  * @param {string} recipient - Email recipient
  * @param {string} subject - Email subject
  * @param {string} body - Email body
@@ -135,7 +130,6 @@ export function shareViaEmail(recipient: string, subject: string, body: string):
 
 /**
  * Check if Web Share API is available
- *
  * @returns {boolean} True if Web Share API is supported
  */
 export function isWebShareAPIAvailable(): boolean {
@@ -144,13 +138,8 @@ export function isWebShareAPIAvailable(): boolean {
 
 /**
  * Check if clipboard API is available
- *
  * @returns {boolean} True if clipboard API is supported
  */
 export function isClipboardAPIAvailable(): boolean {
   return typeof navigator !== 'undefined' && !!navigator.clipboard;
 }
-
-
-
-

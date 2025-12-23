@@ -4,6 +4,7 @@ import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { getPreferences } from './helpers/getPreferences';
 import { updatePreferences } from './helpers/updatePreferences';
+import { z } from 'zod';
 
 /**
  * GET /api/user/error-reporting-preferences
@@ -47,6 +48,14 @@ export async function GET(req: NextRequest) {
  * Update user's error reporting preferences
  * Requires authentication
  */
+const errorReportingPreferencesSchema = z.object({
+  auto_report_enabled: z.boolean().optional(),
+  report_level: z.enum(['none', 'errors', 'warnings', 'all']).optional(),
+  include_stack_trace: z.boolean().optional(),
+  include_user_context: z.boolean().optional(),
+  include_browser_info: z.boolean().optional(),
+}).passthrough(); // Allow additional fields
+
 export async function PUT(req: NextRequest) {
   try {
     const user = await requireAuth(req);
@@ -58,9 +67,33 @@ export async function PUT(req: NextRequest) {
     }
 
     const userEmail = user.email;
-    const body = await req.json();
 
-    return await updatePreferences(userEmail, body);
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch (err) {
+      logger.warn('[Error Reporting Preferences API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = errorReportingPreferencesSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    return await updatePreferences(userEmail, validationResult.data);
   } catch (error) {
     logger.error('[Error Reporting Preferences API] Unexpected error:', {
       error: error instanceof Error ? error.message : String(error),

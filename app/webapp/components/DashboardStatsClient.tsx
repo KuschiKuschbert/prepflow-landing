@@ -1,6 +1,7 @@
 'use client';
 
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
 import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
@@ -10,13 +11,14 @@ import { useEffect, useState } from 'react';
 import { DashboardErrorAlert } from './DashboardErrorAlert';
 import DashboardStats from './DashboardStats';
 import RecentActivity from './RecentActivity';
+import { getErrorAlerts } from './helpers/getErrorAlerts';
 import type {
   DashboardStatsData,
   TemperatureEquipment,
   TemperatureLog,
 } from './types/dashboard-stats';
 
-export default function DashboardStatsClient() {
+function DashboardStatsClientContent() {
   const [stats, setStats] = useState<DashboardStatsData>({
     totalIngredients: 0,
     totalRecipes: 0,
@@ -203,44 +205,7 @@ export default function DashboardStatsClient() {
   }, []);
 
   const handleRetry = () => fetchDashboardData({ forceLoading: true });
-
-  interface ErrorAlertConfig {
-    key: string;
-    error: string | null;
-    title: string;
-    variant: 'critical' | 'warning';
-    retryLabel: string;
-    className?: string;
-  }
-
-  const alertConfigs: ErrorAlertConfig[] = [
-    {
-      key: 'stats',
-      error: statsError,
-      title: 'Dashboard Stats Error',
-      variant: 'critical',
-      className: 'mb-6',
-      retryLabel: 'Retry loading dashboard stats',
-    },
-    {
-      key: 'logs',
-      error: temperatureLogsError,
-      title: 'Temperature Logs Warning',
-      variant: 'warning',
-      retryLabel: 'Retry loading temperature logs',
-    },
-    {
-      key: 'equipment',
-      error: temperatureEquipmentError,
-      title: 'Temperature Equipment Warning',
-      variant: 'warning',
-      retryLabel: 'Retry loading temperature equipment',
-    },
-  ];
-
-  const errorAlerts = alertConfigs.filter((alert): alert is ErrorAlertConfig & { error: string } =>
-    Boolean(alert.error),
-  );
+  const errorAlerts = getErrorAlerts(statsError, temperatureLogsError, temperatureEquipmentError);
 
   // Use temperature warnings hook
   useTemperatureWarnings({ allLogs, equipment });
@@ -288,5 +253,13 @@ export default function DashboardStatsClient() {
       <DashboardStats stats={stats} />
       <RecentActivity />
     </>
+  );
+}
+
+export default function DashboardStatsClient() {
+  return (
+    <ErrorBoundary>
+      <DashboardStatsClientContent />
+    </ErrorBoundary>
   );
 }

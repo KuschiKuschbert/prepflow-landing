@@ -6,6 +6,9 @@ import { createSupabaseAdmin } from '@/lib/supabase';
 import type { IngredientRow, MigrationResult } from './migrate-to-standard-units/types';
 import { migrateIngredient } from './migrate-to-standard-units/migrateIngredient';
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+
 // Re-export types
 export type { IngredientRow, MigrationResult } from './migrate-to-standard-units/types';
 
@@ -27,7 +30,7 @@ export async function migrateIngredientsToStandardUnits(): Promise<MigrationResu
       .is('standard_unit', null);
 
     if (fetchError) {
-      throw new Error(`Failed to fetch ingredients: ${fetchError.message}`);
+      throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
     }
 
     if (!ingredients || ingredients.length === 0) {
@@ -49,6 +52,11 @@ export async function migrateIngredientsToStandardUnits(): Promise<MigrationResu
           );
         }
       } catch (err) {
+        logger.error('[migrate-to-standard-units.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
         const errorMsg = err instanceof Error ? err.message : 'Unknown error';
         errors.push(`Ingredient ${ingredient.id} (${ingredient.ingredient_name}): ${errorMsg}`);
       }
@@ -61,6 +69,11 @@ export async function migrateIngredientsToStandardUnits(): Promise<MigrationResu
       errorDetails: errors.length > 0 ? errors : undefined,
     };
   } catch (err) {
+    logger.error('[migrate-to-standard-units.ts] Error in catch block:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
     const errorMsg = err instanceof Error ? err.message : 'Unknown error';
     return {
       success: false,
