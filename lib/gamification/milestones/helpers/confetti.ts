@@ -28,3 +28,4 @@ export function throwSubtleConfetti(intensity: number = 0.5): void {
     shapes: ['circle'],
   });
 }
+

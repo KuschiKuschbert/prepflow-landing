@@ -39,3 +39,4 @@ export async function checkCachedDishDietaryStatus(
 
   return null;
 }
+

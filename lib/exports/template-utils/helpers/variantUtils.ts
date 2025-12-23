@@ -76,3 +76,4 @@ export function getVariantDisplayName(variant: TemplateVariant): string {
   };
   return names[variant] || 'Standard';
 }
+

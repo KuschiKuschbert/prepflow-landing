@@ -54,3 +54,4 @@ export async function fetchRecipeIngredients(recipeId: string): Promise<Ingredie
     };
   });
 }
+

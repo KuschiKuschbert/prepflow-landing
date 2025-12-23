@@ -41,3 +41,4 @@ export function getErrorAlerts(
     (alert): alert is ErrorAlertConfig & { error: string } => Boolean(alert.error),
   );
 }
+

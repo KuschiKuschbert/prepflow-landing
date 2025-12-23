@@ -113,3 +113,4 @@ export async function handleCreateTemperatureEquipment(request: NextRequest) {
     return handleTemperatureEquipmentError(err, 'POST');
   }
 }
+

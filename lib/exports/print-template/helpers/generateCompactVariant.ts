@@ -39,3 +39,4 @@ export function generateCompactVariant(
 </body>
 </html>`;
 }
+

@@ -27,3 +27,4 @@ export const temperatureLogImportConfig: CSVImportConfig<TemperatureLogImportRow
     'Temperature should be in Celsius',
   ],
 };
+

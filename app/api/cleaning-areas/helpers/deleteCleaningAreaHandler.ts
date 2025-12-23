@@ -34,3 +34,4 @@ export async function handleDeleteCleaningArea(request: NextRequest) {
     return handleCleaningAreaError(err, 'DELETE');
   }
 }
+

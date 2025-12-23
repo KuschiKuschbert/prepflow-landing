@@ -40,3 +40,4 @@ export async function handleDeleteShiftHelper({
     showError('Failed to delete shift. Give it another go, chef.');
   }
 }
+

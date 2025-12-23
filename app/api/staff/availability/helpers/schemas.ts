@@ -7,3 +7,4 @@ export const createAvailabilitySchema = z.object({
   end_time: z.string().regex(/^\d{2}:\d{2}:\d{2}$/, 'End time must be in HH:MM:SS format').optional().nullable(),
   is_available: z.boolean().optional().default(true),
 });
+

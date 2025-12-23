@@ -54,3 +54,4 @@ export async function fetchIngredientsBatch(ingredientIds: string[]): Promise<Ma
   return ingredientsMap;
 }
 
+

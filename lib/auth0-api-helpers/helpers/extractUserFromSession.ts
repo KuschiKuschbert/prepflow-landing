@@ -33,3 +33,4 @@ export async function extractUserFromSession(req: { headers: Headers }): Promise
     return null;
   }
 }
+

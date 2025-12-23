@@ -55,3 +55,4 @@ export async function handleUpdateCleaningTask(request: NextRequest) {
     return handleCleaningTaskError(err, 'PUT');
   }
 }
+

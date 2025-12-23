@@ -55,3 +55,4 @@ export function mergeAllergenSources(
 
   return merged;
 }
+

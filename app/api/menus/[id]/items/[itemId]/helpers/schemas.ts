@@ -5,3 +5,4 @@ export const updateMenuItemSchema = z.object({
   position: z.number().int().positive().optional(),
   actual_selling_price: z.number().positive().nullable().optional(),
 });
+

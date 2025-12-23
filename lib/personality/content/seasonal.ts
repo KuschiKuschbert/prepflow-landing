@@ -52,3 +52,4 @@ export const seasonal = [
     message: 'Royal treatment for your menu profits.',
   },
 ];
+

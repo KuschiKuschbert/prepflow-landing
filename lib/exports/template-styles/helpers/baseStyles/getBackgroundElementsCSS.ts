@@ -70,3 +70,4 @@ export function getBackgroundElementsCSS(): string {
     .circle-4 { width: 230px; height: 230px; border-color: rgba(41, 231, 205, 0.04); }
   `;
 }
+

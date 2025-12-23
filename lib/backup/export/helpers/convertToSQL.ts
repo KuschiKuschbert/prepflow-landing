@@ -61,3 +61,4 @@ export function convertToSQL(backupData: BackupData): string {
 
   return sql.join('\n');
 }
+

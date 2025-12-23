@@ -34,3 +34,4 @@ export function isAIEnabled(): boolean {
   // Hugging Face API key is required for all features
   return !!getHuggingFaceApiKey();
 }
+

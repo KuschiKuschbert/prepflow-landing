@@ -126,3 +126,4 @@ export async function generateImageWithHuggingFace(
     return null;
   }
 }
+

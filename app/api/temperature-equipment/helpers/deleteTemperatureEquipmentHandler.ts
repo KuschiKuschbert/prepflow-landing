@@ -45,3 +45,4 @@ export async function handleDeleteTemperatureEquipment(request: NextRequest) {
     return handleTemperatureEquipmentError(err, 'DELETE');
   }
 }
+

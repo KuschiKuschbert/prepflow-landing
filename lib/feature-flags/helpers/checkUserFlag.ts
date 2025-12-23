@@ -42,3 +42,4 @@ export async function checkUserFlag(
     return { enabled: false, found: false };
   }
 }
+

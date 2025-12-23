@@ -12,3 +12,4 @@ export function getAuth0Domain(): string | undefined {
 
   return undefined;
 }
+

@@ -108,3 +108,4 @@ export function setupSquareSubscriptions({
     .subscribe();
   return channel;
 }
+

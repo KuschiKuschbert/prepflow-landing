@@ -123,3 +123,4 @@ export function buildTemperatureLogsPrintHTML({ logs, logsByEquipment, dateRange
 
   return `<div style="max-width: 100%;">${summarySection}${equipmentSections}</div>`;
 }
+

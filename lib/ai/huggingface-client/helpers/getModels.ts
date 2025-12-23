@@ -24,3 +24,4 @@ export function getHuggingFaceTextModel(): string {
 export function getHuggingFaceVisionModel(): string {
   return process.env.HUGGINGFACE_VISION_MODEL || DEFAULT_VISION_MODEL;
 }
+

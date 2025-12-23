@@ -99,3 +99,4 @@ export function getRemainingRequests(identifier: string, isAuthRoute = false): n
   const max = isAuthRoute ? AUTH_RATE_LIMIT_MAX : DEFAULT_RATE_LIMIT_MAX;
   return Math.max(0, max - entry.count);
 }
+

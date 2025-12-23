@@ -28,3 +28,4 @@ export function calculateWeekly(startDate: Date, endDate: Date, referenceDate: D
 
   return dates;
 }
+

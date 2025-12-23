@@ -26,3 +26,4 @@ export function validateShiftCreation({
   }
   return { isValid: true };
 }
+

@@ -14,3 +14,4 @@ export function formatSupplierPreview(supplier: SupplierImportRow, index: number
     </div>
   );
 }
+

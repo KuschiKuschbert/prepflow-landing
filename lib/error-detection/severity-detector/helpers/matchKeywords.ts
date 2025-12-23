@@ -24,3 +24,4 @@ export function matchKeywords(text: string): 'safety' | 'critical' | 'high' | nu
 
   return null;
 }
+

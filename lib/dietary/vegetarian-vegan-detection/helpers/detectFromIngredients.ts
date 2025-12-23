@@ -103,3 +103,4 @@ export function detectVegetarianVeganFromIngredients(
     method: 'non-ai',
   };
 }
+

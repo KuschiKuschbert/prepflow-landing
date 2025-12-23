@@ -14,3 +14,4 @@ export const DEFAULT_VISION_MODEL = 'Salesforce/blip-image-captioning-base';
 // Inference Providers for image generation (fal-ai or replicate)
 export const DEFAULT_IMAGE_PROVIDER = 'fal-ai';
 export const FALLBACK_IMAGE_PROVIDER = 'replicate';
+

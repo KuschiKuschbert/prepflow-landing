@@ -52,3 +52,4 @@ export function createAuth0Client(): Auth0Client {
     },
   });
 }
+

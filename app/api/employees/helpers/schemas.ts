@@ -29,3 +29,4 @@ export const updateEmployeeSchema = z.object({
 });
 
 export const EMPLOYEE_SELECT = `*, employee_qualifications (*, qualification_types (id, name, description, is_required, default_expiry_days))`;
+

@@ -35,3 +35,4 @@ export function findShiftConflict(
 
   return null;
 }
+

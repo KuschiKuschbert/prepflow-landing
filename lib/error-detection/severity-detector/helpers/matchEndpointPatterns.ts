@@ -22,3 +22,4 @@ export function matchEndpointPatterns(endpoint?: string): 'safety' | 'critical' 
 
   return null;
 }
+

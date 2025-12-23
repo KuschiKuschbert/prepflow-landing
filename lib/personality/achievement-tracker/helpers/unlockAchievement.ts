@@ -34,3 +34,4 @@ export function unlockAchievement(id: AchievementId): void {
     dispatchMilestoneReached(achievementMilestone);
   }
 }
+

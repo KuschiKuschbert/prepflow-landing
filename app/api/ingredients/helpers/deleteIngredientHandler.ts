@@ -33,3 +33,4 @@ export async function handleDeleteIngredient(request: NextRequest) {
     return handleIngredientError(err, 'DELETE');
   }
 }
+

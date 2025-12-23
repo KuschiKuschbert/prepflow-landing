@@ -21,3 +21,4 @@ export function validateComplianceRecord(
 
   return { valid: true };
 }
+

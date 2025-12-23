@@ -80,3 +80,4 @@ export function saveAchievements(achievements: any[]): void {
     // Ignore errors
   }
 }
+

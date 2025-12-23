@@ -27,3 +27,4 @@ export function getMilestoneProgress(
     nextThreshold: nextMilestone?.threshold ?? null,
   };
 }
+

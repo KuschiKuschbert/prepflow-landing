@@ -95,3 +95,4 @@ export async function fetchDishIngredients(dishId: string): Promise<Ingredient[]
 
   return allIngredients;
 }
+

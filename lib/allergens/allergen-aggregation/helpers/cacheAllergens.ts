@@ -66,3 +66,4 @@ export async function cacheDishAllergens(dishId: string, allergens: string[]): P
     });
   }
 }
+

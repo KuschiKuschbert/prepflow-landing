@@ -30,3 +30,4 @@ export async function handleDeleteCleaningTask(request: NextRequest) {
     return handleCleaningTaskError(err, 'DELETE');
   }
 }
+

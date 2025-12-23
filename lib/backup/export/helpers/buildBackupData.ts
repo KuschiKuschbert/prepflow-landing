@@ -27,3 +27,4 @@ export function buildBackupData(userId: string, tables: TableData[]): BackupData
     },
   };
 }
+

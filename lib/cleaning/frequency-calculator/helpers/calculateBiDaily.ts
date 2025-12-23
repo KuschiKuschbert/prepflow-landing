@@ -34,3 +34,4 @@ export function calculateBiDaily(
 
   return dates;
 }
+

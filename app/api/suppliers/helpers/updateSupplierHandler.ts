@@ -59,3 +59,4 @@ export async function handleUpdateSupplier(request: NextRequest) {
     return handleSupplierError(err, 'PUT');
   }
 }
+

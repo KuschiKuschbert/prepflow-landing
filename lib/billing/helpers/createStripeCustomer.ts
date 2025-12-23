@@ -30,3 +30,4 @@ export async function createStripeCustomer(userEmail: string): Promise<string | 
     return null;
   }
 }
+

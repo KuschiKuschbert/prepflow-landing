@@ -25,3 +25,4 @@ export const updateComplianceRecordSchema = z.object({
 });
 
 export const COMPLIANCE_TYPES_SELECT = `*, compliance_types (id, type_name, description)`;
+

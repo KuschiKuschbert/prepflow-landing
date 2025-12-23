@@ -38,3 +38,4 @@ export async function revokeTransferConsent(userEmail: string): Promise<boolean>
     return false;
   }
 }
+

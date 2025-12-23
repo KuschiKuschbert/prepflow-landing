@@ -58,3 +58,4 @@ export function generateDefaultVariant(
 </body>
 </html>`;
 }
+

@@ -71,3 +71,4 @@ export async function updateQualification(
     data: updatedQualification,
   };
 }
+

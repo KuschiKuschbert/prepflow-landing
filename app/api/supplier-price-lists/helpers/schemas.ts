@@ -11,3 +11,4 @@ export const createPriceListSchema = z.object({
   notes: z.string().optional().nullable(),
   is_current: z.boolean().optional().default(false),
 });
+

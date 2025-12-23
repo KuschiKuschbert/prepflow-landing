@@ -33,3 +33,4 @@ export async function handleEmptyDishIngredients(
   await cacheDietaryStatus(dishId, result, 'dish', []);
   return result;
 }
+

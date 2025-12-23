@@ -24,3 +24,4 @@ export function validateSupplier(
 
   return { valid: true };
 }
+

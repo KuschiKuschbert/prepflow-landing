@@ -65,3 +65,4 @@ export function clearSessionStats(): void {
 
   dispatchStatsEvent('arcade:sessionStatsUpdated');
 }
+

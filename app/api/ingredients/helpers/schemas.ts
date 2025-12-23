@@ -45,3 +45,4 @@ export const updateIngredientSchema = z.object({
   allergen_source: z.any().optional(),
   notes: z.string().optional(),
 });
+

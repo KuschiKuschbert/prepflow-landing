@@ -52,3 +52,4 @@ export function buildExportHTML(
 
   ${forPDF ? '<script>window.onload = function() { window.print(); }</script>' : ''}`;
 }
+

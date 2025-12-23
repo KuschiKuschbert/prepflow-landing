@@ -13,3 +13,4 @@ ADD COLUMN IF NOT EXISTS refresh_token_encrypted TEXT;
 COMMENT ON COLUMN square_configurations.refresh_token_encrypted IS 'Encrypted Square OAuth refresh token. Used to automatically refresh expired access tokens. Only present for OAuth-connected accounts.';
 
 
+

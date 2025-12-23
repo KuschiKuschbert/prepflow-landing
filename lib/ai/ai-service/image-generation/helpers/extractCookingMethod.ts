@@ -43,3 +43,4 @@ export function extractCookingMethod(instructions: string): string {
     return ` Prepared according to recipe instructions: ${instructionPreview}...`;
   }
 }
+

@@ -65,3 +65,4 @@ export function clearArcadeStats(): void {
 
   dispatchStatsEvent('arcade:statsUpdated');
 }
+

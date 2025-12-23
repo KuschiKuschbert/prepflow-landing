@@ -38,3 +38,4 @@ export function isNonVeganIngredient(ingredientName: string, allergens?: string[
   // Check against keywords
   return NON_VEGAN_KEYWORDS.some(keyword => lowerName.includes(keyword.toLowerCase()));
 }
+

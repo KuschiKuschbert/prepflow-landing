@@ -10,3 +10,4 @@ ADD COLUMN IF NOT EXISTS square_application_secret_encrypted TEXT;
 COMMENT ON COLUMN square_configurations.square_application_secret_encrypted IS 'Encrypted Square Application Secret. Used for OAuth token refresh. Only present for OAuth-connected accounts.';
 
 
+

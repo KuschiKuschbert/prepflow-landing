@@ -51,3 +51,4 @@ export async function logBreachToDatabase(breachData: BreachData): Promise<
   return breachRecord!;
 }
 
+

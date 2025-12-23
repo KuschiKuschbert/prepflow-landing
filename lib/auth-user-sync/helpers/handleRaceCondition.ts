@@ -56,3 +56,4 @@ export async function handleRaceCondition(email: string, name?: string | null): 
     logger.dev('[Auth0 Sync] User already exists, updated last_login:', { email });
   }
 }
+

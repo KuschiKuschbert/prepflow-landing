@@ -22,3 +22,4 @@ export function handleSquareConfigError(error: unknown): NextResponse {
   );
 }
 
+

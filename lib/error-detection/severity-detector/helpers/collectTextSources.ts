@@ -37,3 +37,4 @@ export function collectTextSources(context: SeverityDetectionContext): string {
 
   return textSources.join(' ');
 }
+

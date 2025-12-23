@@ -60,3 +60,4 @@ export async function handleUpdatePriceList(request: NextRequest) {
     return handlePriceListError(error, 'PUT');
   }
 }
+

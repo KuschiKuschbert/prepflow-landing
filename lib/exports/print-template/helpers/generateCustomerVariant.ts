@@ -40,3 +40,4 @@ export function generateCustomerVariant(
 </body>
 </html>`;
 }
+

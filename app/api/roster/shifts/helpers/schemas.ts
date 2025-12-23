@@ -18,3 +18,4 @@ export const createShiftSchema = z.object({
   message: 'End time must be after start time',
   path: ['end_time'],
 });
+

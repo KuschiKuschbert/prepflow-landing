@@ -39,3 +39,4 @@ export function generateKitchenVariant(
 </body>
 </html>`;
 }
+

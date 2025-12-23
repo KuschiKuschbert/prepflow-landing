@@ -38,3 +38,4 @@ export async function createNewUser(
 
   logger.dev('[Auth0 Sync] Created new user:', { email, emailVerified });
 }
+

@@ -25,3 +25,4 @@ export const CHILD_TABLES = [
     parentIdColumn: 'id',
   },
 ];
+

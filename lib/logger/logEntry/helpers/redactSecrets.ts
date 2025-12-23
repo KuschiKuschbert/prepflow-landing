@@ -28,3 +28,4 @@ export function redactSecrets(str: string): string {
 
   return redacted;
 }
+

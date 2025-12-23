@@ -70,3 +70,4 @@ export function buildRestrictedResult(
     consentGiven: false,
   };
 }
+

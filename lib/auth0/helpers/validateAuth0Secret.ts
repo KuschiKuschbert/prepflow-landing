@@ -40,3 +40,4 @@ export function getValidatedSecret(): string {
     throw error;
   }
 }
+

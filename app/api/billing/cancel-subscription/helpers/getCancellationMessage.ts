@@ -16,3 +16,4 @@ export function getCancellationMessage(isEU: boolean, immediate: boolean): strin
     : 'Subscription will be cancelled at the end of the billing period';
 }
 
+

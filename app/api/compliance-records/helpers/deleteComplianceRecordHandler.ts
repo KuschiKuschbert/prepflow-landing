@@ -26,3 +26,4 @@ export async function handleDeleteComplianceRecord(request: NextRequest) {
     return handleComplianceError(err, 'DELETE');
   }
 }
+

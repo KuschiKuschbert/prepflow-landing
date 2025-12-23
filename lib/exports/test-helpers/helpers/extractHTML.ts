@@ -15,3 +15,4 @@ export function extractContent(html: string): string {
   );
   return contentMatch ? contentMatch[1] : '';
 }
+

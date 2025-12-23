@@ -13,3 +13,4 @@ export const updateCleaningAreaSchema = z.object({
   cleaning_frequency: z.string().optional(),
   is_active: z.boolean().optional(),
 });
+

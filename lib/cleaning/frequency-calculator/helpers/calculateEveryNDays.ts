@@ -38,3 +38,4 @@ export function calculateEveryNDays(
 
   return dates;
 }
+

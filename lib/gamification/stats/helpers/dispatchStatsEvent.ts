@@ -10,3 +10,4 @@ export function dispatchStatsEvent(eventName: 'arcade:statsUpdated' | 'arcade:se
     }, 0);
   });
 }
+

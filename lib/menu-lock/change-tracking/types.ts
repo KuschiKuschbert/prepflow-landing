@@ -30,3 +30,4 @@ export interface MenuChangeTracking {
   handled: boolean;
   handled_at: string | null;
 }
+

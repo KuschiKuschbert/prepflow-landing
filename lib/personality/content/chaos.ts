@@ -5,3 +5,4 @@ export const chaos = [
   'Chaos index: elevated but manageable.',
   'Stress levels: pre-service normal.',
 ];
+

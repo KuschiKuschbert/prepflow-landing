@@ -15,3 +15,4 @@ export const validateComplianceSchema = z.object({
   message: 'Employee ID is required',
   path: ['employee_id'],
 });
+

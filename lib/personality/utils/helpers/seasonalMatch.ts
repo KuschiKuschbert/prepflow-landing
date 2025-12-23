@@ -66,3 +66,4 @@ export function checkSeasonalMatch(): string | null {
 
   return null;
 }
+

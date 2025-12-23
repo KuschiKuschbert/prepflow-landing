@@ -18,3 +18,4 @@ export const updateTemperatureEquipmentSchema = z.object({
   is_active: z.boolean().optional(),
   notes: z.string().optional(),
 });
+

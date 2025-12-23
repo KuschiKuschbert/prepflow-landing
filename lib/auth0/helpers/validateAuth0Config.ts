@@ -29,3 +29,4 @@ export function validateAuth0Config() {
     domain: domain || 'NOT_SET',
   };
 }
+

@@ -8,3 +8,4 @@ export const updateRecipeSchema = z.object({
   description: z.string().optional(),
   instructions: z.string().optional(),
 });
+

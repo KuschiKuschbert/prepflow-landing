@@ -58,3 +58,4 @@ export async function handleCreateSupplier(request: NextRequest) {
     return handleSupplierError(err, 'POST');
   }
 }
+

@@ -35,3 +35,4 @@ export function formatMetaInfo(meta: { totalItems?: number; customMeta?: string 
   }
   return parts.length > 0 ? parts.join(' | ') : '';
 }
+

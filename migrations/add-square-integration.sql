@@ -175,3 +175,4 @@ COMMENT ON COLUMN square_configurations.auto_sync_direction IS 'Auto-sync direct
 
 
 
+

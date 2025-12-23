@@ -19,3 +19,4 @@ export async function checkSquareFeatureFlag(email: string): Promise<NextRespons
   return null;
 }
 
+

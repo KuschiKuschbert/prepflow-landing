@@ -23,3 +23,4 @@ export function updateStreak(): number {
 
   return stats.streakDays;
 }
+

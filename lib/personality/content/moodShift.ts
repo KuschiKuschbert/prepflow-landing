@@ -7,3 +7,4 @@ export const moodShift = {
   evening: ['Dinner service: may your fryer stay calm.', 'Evening shift: peak performance time.'],
   late: ['Still here? The bed misses you.', 'Late night: when the real magic happens.'],
 };
+
