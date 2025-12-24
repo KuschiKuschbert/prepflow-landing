@@ -59,7 +59,10 @@ export function RosterCell({
     [setNodeRef],
   );
 
-  const cellWarnings = validationWarnings.filter(w => shifts.some(s => s.id === w.shiftId));
+  const cellWarnings = useMemo(
+    () => validationWarnings.filter(w => shifts.some(s => s.id === w.shiftId)),
+    [validationWarnings, shifts],
+  );
   const isEmpty = shifts.length === 0;
 
   // Check if this cell is the active inline entry

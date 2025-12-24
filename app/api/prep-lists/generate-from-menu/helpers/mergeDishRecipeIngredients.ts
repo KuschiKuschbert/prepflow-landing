@@ -28,7 +28,10 @@ export async function mergeDishRecipeIngredients(
     logger.error('[Prep Lists API] Error fetching dish recipe ingredients:', {
       error: ingredientsError.message,
       recipeIds: Array.from(recipeIds),
-      context: { endpoint: '/api/prep-lists/generate-from-menu', operation: 'mergeDishRecipeIngredients' },
+      context: {
+        endpoint: '/api/prep-lists/generate-from-menu',
+        operation: 'mergeDishRecipeIngredients',
+      },
     });
   }
 

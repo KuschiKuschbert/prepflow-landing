@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { Dish, Recipe } from '../types';
 
 interface UnifiedBulkDeleteConfirmationModalProps {
@@ -23,14 +24,16 @@ export function UnifiedBulkDeleteConfirmationModal({
   onConfirm,
   onCancel,
 }: UnifiedBulkDeleteConfirmationModalProps) {
-  if (!show) return null;
+  const selectedRecipes = useMemo(
+    () => Array.from(selectedItems).filter(id => selectedItemTypes.get(id) === 'recipe'),
+    [selectedItems, selectedItemTypes],
+  );
+  const selectedDishes = useMemo(
+    () => Array.from(selectedItems).filter(id => selectedItemTypes.get(id) === 'dish'),
+    [selectedItems, selectedItemTypes],
+  );
 
-  const selectedRecipes = Array.from(selectedItems).filter(
-    id => selectedItemTypes.get(id) === 'recipe',
-  );
-  const selectedDishes = Array.from(selectedItems).filter(
-    id => selectedItemTypes.get(id) === 'dish',
-  );
+  if (!show) return null;
 
   const recipeCount = selectedRecipes.length;
   const dishCount = selectedDishes.length;

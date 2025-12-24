@@ -53,12 +53,9 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ fla
       });
 
       return NextResponse.json(
-        ApiErrorHandler.createError(
-          'Failed to update feature flag',
-          'DATABASE_ERROR',
-          500,
-          { supabaseError: error.message },
-        ),
+        ApiErrorHandler.createError('Failed to update feature flag', 'DATABASE_ERROR', 500, {
+          supabaseError: error.message,
+        }),
         { status: 500 },
       );
     }
@@ -149,12 +146,9 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
       });
 
       return NextResponse.json(
-        ApiErrorHandler.createError(
-          'Failed to update feature flag',
-          'DATABASE_ERROR',
-          500,
-          { supabaseError: error.message },
-        ),
+        ApiErrorHandler.createError('Failed to update feature flag', 'DATABASE_ERROR', 500, {
+          supabaseError: error.message,
+        }),
         { status: 500 },
       );
     }

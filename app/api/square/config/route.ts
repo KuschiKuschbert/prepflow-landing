@@ -116,7 +116,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Map schema fields to SquareConfigInput format
-    if (!validationResult.data.square_application_id || !validationResult.data.square_access_token_encrypted) {
+    if (
+      !validationResult.data.square_application_id ||
+      !validationResult.data.square_access_token_encrypted
+    ) {
       return NextResponse.json(
         ApiErrorHandler.createError(
           'square_application_id and square_access_token_encrypted are required',

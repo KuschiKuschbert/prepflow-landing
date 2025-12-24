@@ -30,6 +30,7 @@
 **Goal:** Ensure everything builds and runs correctly before production
 
 **Steps:**
+
 1. ✅ Run `npm run type-check` - PASSED (0 errors)
 2. ✅ Run `npm run lint` - PASSED (2 non-critical warnings)
 3. Run `npm run build` - Verify production build works
@@ -44,6 +45,7 @@
 **Goal:** Get remaining 19 files under limits (mostly 1-12 lines over)
 
 **Approach:**
+
 - Quick wins: Remove blank lines, consolidate imports
 - Minor refactoring: Extract small helper functions
 - Focus on files that are easiest to fix
@@ -56,6 +58,7 @@
 **Goal:** Identify which violations are actual issues vs false positives
 
 **Steps:**
+
 1. Sample check optimistic update violations (review 10-20 files)
 2. Sample check React pattern violations (review 10-20 files)
 3. Document false positive patterns
@@ -70,6 +73,7 @@
 **Goal:** Add React.memo, useMemo, useCallback where beneficial
 
 **Approach:**
+
 - Use React DevTools Profiler to identify actual performance issues
 - Add memoization to expensive computations
 - Add memoization to components in lists
@@ -91,6 +95,7 @@ Since we've completed all critical phases and TypeScript/ESLint pass, the next l
    - Continue with minor file size fixes before deployment
 
 The remaining violations (file sizes, pattern detection) are:
+
 - **Non-blocking** (code compiles and runs)
 - **Minor** (small margins, not critical issues)
 - **Likely many false positives** (pattern detection can't account for all code patterns)

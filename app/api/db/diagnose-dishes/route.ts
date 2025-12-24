@@ -35,7 +35,10 @@ export async function GET(request: NextRequest) {
       .order('dish_name');
 
     if (dishesError) {
-      return NextResponse.json(ApiErrorHandler.createError('Failed to fetch dishes', 'DATABASE_ERROR', 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to fetch dishes', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     // Get all dish_ingredients
@@ -44,7 +47,10 @@ export async function GET(request: NextRequest) {
       .select('dish_id, ingredient_id, quantity, unit');
 
     if (diError) {
-      return NextResponse.json(ApiErrorHandler.createError('Failed to fetch dish ingredients', 'DATABASE_ERROR', 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to fetch dish ingredients', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     // Get all dish_recipes
@@ -53,7 +59,10 @@ export async function GET(request: NextRequest) {
       .select('dish_id, recipe_id, quantity');
 
     if (drError) {
-      return NextResponse.json(ApiErrorHandler.createError('Failed to fetch dish recipes', 'DATABASE_ERROR', 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to fetch dish recipes', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     // Get all recipe_ingredients to check if recipes have ingredients
@@ -74,7 +83,10 @@ export async function GET(request: NextRequest) {
       .order('ingredient_name');
 
     if (ingError) {
-      return NextResponse.json(ApiErrorHandler.createError('Failed to fetch ingredients', 'DATABASE_ERROR', 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to fetch ingredients', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     // Check for "Beef Burger Deluxe" specifically

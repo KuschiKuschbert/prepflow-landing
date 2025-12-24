@@ -87,9 +87,20 @@ function checkSecurityPatterns(content, filePath) {
     if (hasZodSchema && hasRequestParsing && hasMutationMethod) {
       // Extract each mutation method (POST, PUT, PATCH) and check validation within that method
       const mutationMethods = [
-        { name: 'POST', pattern: /export\s+async\s+function\s+POST\s*\([^)]*\)\s*\{([^}]+(?:\{[^}]*\}[^}]*)*)\}/gs },
-        { name: 'PUT', pattern: /export\s+async\s+function\s+PUT\s*\([^)]*\)\s*\{([^}]+(?:\{[^}]*\}[^}]*)*)\}/gs },
-        { name: 'PATCH', pattern: /export\s+async\s+function\s+PATCH\s*\([^)]*\)\s*\{([^}]+(?:\{[^}]*\}[^}]*)*)\}/gs },
+        {
+          name: 'POST',
+          pattern:
+            /export\s+async\s+function\s+POST\s*\([^)]*\)\s*\{([^}]+(?:\{[^}]*\}[^}]*)*)\}/gs,
+        },
+        {
+          name: 'PUT',
+          pattern: /export\s+async\s+function\s+PUT\s*\([^)]*\)\s*\{([^}]+(?:\{[^}]*\}[^}]*)*)\}/gs,
+        },
+        {
+          name: 'PATCH',
+          pattern:
+            /export\s+async\s+function\s+PATCH\s*\([^)]*\)\s*\{([^}]+(?:\{[^}]*\}[^}]*)*)\}/gs,
+        },
       ];
 
       for (const method of mutationMethods) {
@@ -114,8 +125,15 @@ function checkSecurityPatterns(content, filePath) {
           const deleteIndex = methodBody.indexOf('.delete(');
           const selectIndex = methodBody.indexOf('.select(');
 
-          const dbOperationIndices = [fromIndex, insertIndex, updateIndex, deleteIndex, selectIndex].filter(idx => idx !== -1);
-          const firstDBOperationIndex = dbOperationIndices.length > 0 ? Math.min(...dbOperationIndices) : -1;
+          const dbOperationIndices = [
+            fromIndex,
+            insertIndex,
+            updateIndex,
+            deleteIndex,
+            selectIndex,
+          ].filter(idx => idx !== -1);
+          const firstDBOperationIndex =
+            dbOperationIndices.length > 0 ? Math.min(...dbOperationIndices) : -1;
 
           // Only check if this method has DB operations
           if (firstDBOperationIndex !== -1) {
@@ -128,7 +146,9 @@ function checkSecurityPatterns(content, filePath) {
                 const methodStartLine = content.substring(0, methodStartIndex).split('\n').length;
                 violations.push({
                   type: 'validation-after-db',
-                  line: methodStartLine + findLineNumber(methodBody.split('\n'), /\.from\(|\.insert\(|\.update\(/),
+                  line:
+                    methodStartLine +
+                    findLineNumber(methodBody.split('\n'), /\.from\(|\.insert\(|\.update\(/),
                 });
               }
             } else {
@@ -140,7 +160,9 @@ function checkSecurityPatterns(content, filePath) {
                 const methodStartLine = content.substring(0, methodStartIndex).split('\n').length;
                 violations.push({
                   type: 'validation-after-db',
-                  line: methodStartLine + findLineNumber(methodBody.split('\n'), /\.from\(|\.insert\(|\.update\(/),
+                  line:
+                    methodStartLine +
+                    findLineNumber(methodBody.split('\n'), /\.from\(|\.insert\(|\.update\(/),
                 });
               }
             }

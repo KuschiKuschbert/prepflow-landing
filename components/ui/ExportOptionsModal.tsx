@@ -228,11 +228,15 @@ export function ExportOptionsModal({
                         disabled={loading}
                         className="h-4 w-4 rounded border-[var(--border)] bg-[var(--muted)]/30 text-[var(--primary)] focus:ring-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-50"
                       />
-                      <span className="text-sm text-[var(--foreground-secondary)]">{filter.label}</span>
+                      <span className="text-sm text-[var(--foreground-secondary)]">
+                        {filter.label}
+                      </span>
                     </label>
                   ) : filter.type === 'select' && filter.options ? (
                     <div>
-                      <label className="mb-1 block text-xs text-[var(--foreground-muted)]">{filter.label}</label>
+                      <label className="mb-1 block text-xs text-[var(--foreground-muted)]">
+                        {filter.label}
+                      </label>
                       <select
                         value={filterValues[filter.id] as string}
                         onChange={e => handleFilterChange(filter.id, e.target.value)}
@@ -248,7 +252,9 @@ export function ExportOptionsModal({
                     </div>
                   ) : (
                     <div>
-                      <label className="mb-1 block text-xs text-[var(--foreground-muted)]">{filter.label}</label>
+                      <label className="mb-1 block text-xs text-[var(--foreground-muted)]">
+                        {filter.label}
+                      </label>
                       <input
                         type="text"
                         value={filterValues[filter.id] as string}

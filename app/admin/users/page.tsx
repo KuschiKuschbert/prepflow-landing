@@ -67,7 +67,7 @@ export default function UsersPage() {
     }
 
     fetchUsers();
-  }, [page, searchQuery]);
+  }, [page, pageSize, searchQuery]);
 
   const filteredUsers = users.filter(user => {
     if (!searchQuery) return true;

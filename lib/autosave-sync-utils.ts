@@ -120,5 +120,15 @@ export async function checkEntityExists(
     .eq('id', entityId)
     .maybeSingle();
 
+  if (error) {
+    // Import logger dynamically to avoid circular dependencies
+    const { logger } = await import('./logger');
+    logger.error('[Autosave Sync] Error checking entity existence:', {
+      entityType,
+      entityId,
+      error: error.message,
+    });
+  }
+
   return !error && Boolean(data);
 }

@@ -32,7 +32,8 @@ function findFiles() {
         }
       } else if (/\.(ts|tsx|js|jsx)$/.test(entry.name)) {
         // Exclude logger.ts (intentional console usage)
-        if (!fullPath.includes('lib/logger.ts')) {
+        // Exclude cleanup scripts and protect-nachotaco - they're utility scripts
+        if (!fullPath.includes('lib/logger.ts') && !fullPath.includes('scripts/cleanup/') && !fullPath.includes('scripts/protect-nachotaco.js')) {
           files.push(fullPath);
         }
       }
@@ -53,11 +54,10 @@ function findConsoleUsage(content) {
     // Skip if this is in a script tag with documented exception (see ERROR_HANDLING_STANDARDS.md)
     // Check if previous lines contain the exception comment pattern
     const hasExceptionComment =
-      i > 0 && (
-        lines[i - 1].includes('logger is not available in script tag') ||
+      i > 0 &&
+      (lines[i - 1].includes('logger is not available in script tag') ||
         lines[i - 2]?.includes('logger is not available in script tag') ||
-        lines[i - 3]?.includes('logger is not available in script tag')
-      );
+        lines[i - 3]?.includes('logger is not available in script tag'));
 
     // Skip console.error/console.warn in script tags with documented exception
     if (hasExceptionComment && (line.includes('console.error') || line.includes('console.warn'))) {

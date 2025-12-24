@@ -6,14 +6,14 @@ import { Shield } from 'lucide-react';
 
 interface AutoReportToggleProps {
   enabled: boolean;
-  loading: boolean;
+  loading?: boolean;
   onToggle: (enabled: boolean) => void;
 }
 
 /**
  * Auto-report toggle component
  */
-export function AutoReportToggle({ enabled, loading, onToggle }: AutoReportToggleProps) {
+export function AutoReportToggle({ enabled, loading = false, onToggle }: AutoReportToggleProps) {
   return (
     <div className="flex items-start justify-between">
       <div className="flex-1">

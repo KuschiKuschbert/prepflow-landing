@@ -5,6 +5,7 @@
 ## ✅ Completed Fixes
 
 ### 1. Error Handling Violation
+
 - **File:** `app/api/db/populate-empty-dishes/route.ts`
 - **Fix:** Replaced plain error responses with `ApiErrorHandler.createError()`
 - **Bonus:** Also fixed file size (201 → 199 lines)
@@ -32,6 +33,7 @@
    - Method: Removed blank line between import and const declaration
 
 ### 3. Error Handling Fix (diagnose-dishes)
+
 - **File:** `app/api/db/diagnose-dishes/route.ts`
 - **Fix:** Replaced 4 plain error responses with `ApiErrorHandler.createError()`
 - **Status:** Checking if this resolves the remaining violation

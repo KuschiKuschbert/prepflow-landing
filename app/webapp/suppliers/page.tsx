@@ -203,14 +203,14 @@ export default function SuppliersPage() {
 
               // Replace temp supplier with real supplier from server
               setSuppliers(prevSuppliers =>
-                prevSuppliers.map(s => (s.id === tempId ? serverSupplier : s)),
+                prevSuppliers.map(s => (String(s.id) === tempId ? serverSupplier : s)),
               );
 
               importedSuppliers.push(serverSupplier);
               successCount++;
             } else {
               // Error - remove temp supplier
-              setSuppliers(prevSuppliers => prevSuppliers.filter(s => s.id !== tempId));
+              setSuppliers(prevSuppliers => prevSuppliers.filter(s => String(s.id) !== tempId));
               failCount++;
               errors.push({
                 row: i + 1,
@@ -219,7 +219,7 @@ export default function SuppliersPage() {
             }
           } catch (err) {
             // Error - remove temp supplier
-            setSuppliers(prevSuppliers => prevSuppliers.filter(s => s.id !== tempId));
+            setSuppliers(prevSuppliers => prevSuppliers.filter(s => String(s.id) !== tempId));
             const errorMessage = err instanceof Error ? err.message : 'Failed to import supplier';
             logger.error(`[Suppliers Import] Failed to import row ${i + 1}:`, {
               error: errorMessage,
@@ -236,7 +236,9 @@ export default function SuppliersPage() {
         // Cache final suppliers list
         if (importedSuppliers.length > 0) {
           setSuppliers(prevSuppliers => {
-            const finalList = prevSuppliers.filter(s => !tempSuppliers.some(t => t.tempId === s.id));
+            const finalList = prevSuppliers.filter(
+              s => !tempSuppliers.some(t => t.tempId === String(s.id)),
+            );
             const updatedList = [...finalList, ...importedSuppliers];
             cacheData('suppliers', updatedList);
             return updatedList;

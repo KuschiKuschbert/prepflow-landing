@@ -37,7 +37,8 @@ interface NavigationHeaderProps {
   // Gamification handlers
   onAchievementsClick?: () => void;
 }
-const cn = (...classes: (string | undefined | null | false)[]): string => classes.filter(Boolean).join(' ');
+const cn = (...classes: (string | undefined | null | false)[]): string =>
+  classes.filter(Boolean).join(' ');
 /**
  * Navigation header component for webapp.
  * Displays logo, breadcrumbs (desktop), search button, and user info.

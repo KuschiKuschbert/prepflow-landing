@@ -20,15 +20,8 @@ interface CatchTheDocketProps {
 const CatchTheDocket: React.FC<CatchTheDocketProps> = ({ isLoading, onLoadComplete }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const {
-    dockets,
-    caught,
-    playTime,
-    alertShown,
-    gameFinished,
-    spawnDocket,
-    handleDocketClick,
-  } = useCatchTheDocket({ isLoading, containerRef });
+  const { dockets, caught, playTime, alertShown, gameFinished, spawnDocket, handleDocketClick } =
+    useCatchTheDocket({ isLoading, containerRef });
 
   useEffect(() => {
     if (gameFinished && onLoadComplete) {

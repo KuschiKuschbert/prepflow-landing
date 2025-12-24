@@ -43,7 +43,7 @@ export async function GET() {
 
       if (error) {
         sectionsError = error;
-        if (result.error.code === '42P01') {
+        if (error.code === '42P01') {
           logger.warn('kitchen_sections table does not exist');
           return NextResponse.json(TABLE_NOT_FOUND_RESPONSE);
         }
@@ -116,9 +116,10 @@ export async function GET() {
         if (!dishesWithSectionError && dishesWithSectionData) {
           dishesWithSectionId = dishesWithSectionData;
         } else {
-          const { data: menuDishesWithSectionData, error: menuDishesWithSectionError } = await supabaseAdmin
-            .from('menu_dishes')
-            .select('id, name, description, selling_price, category, kitchen_section_id');
+          const { data: menuDishesWithSectionData, error: menuDishesWithSectionError } =
+            await supabaseAdmin
+              .from('menu_dishes')
+              .select('id, name, description, selling_price, category, kitchen_section_id');
           if (!menuDishesWithSectionError && menuDishesWithSectionData) {
             dishesWithSectionId = menuDishesWithSectionData;
           }

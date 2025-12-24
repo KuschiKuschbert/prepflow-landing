@@ -92,16 +92,23 @@ function analyzeOptimisticUpdates(content, filePath) {
   if (/restore|backup/i.test(filePath)) return violations;
 
   // Skip operations that navigate away after mutation (don't update local state)
-  if (/router\.push|router\.replace|window\.location/.test(content) && /method.*POST|method.*PUT/.test(content)) {
+  if (
+    /router\.push|router\.replace|window\.location/.test(content) &&
+    /method.*POST|method.*PUT/.test(content)
+  ) {
     // Check if mutation updates state before navigation
-    const mutationBeforeNav = /method.*POST|method.*PUT/.test(content) &&
+    const mutationBeforeNav =
+      /method.*POST|method.*PUT/.test(content) &&
       /set[A-Z]\w+\(.*prev/.test(content) &&
       content.indexOf('method') < content.indexOf('router.push');
     if (!mutationBeforeNav) return violations;
   }
 
   // Skip print/export operations - they don't mutate state, just open dialogs/download files
-  if (/print\w+|export\w+|download/i.test(content) && !/method.*POST|method.*PUT|method.*DELETE/.test(content)) {
+  if (
+    /print\w+|export\w+|download/i.test(content) &&
+    !/method.*POST|method.*PUT|method.*DELETE/.test(content)
+  ) {
     return violations;
   }
 
@@ -127,7 +134,7 @@ function analyzeOptimisticUpdates(content, filePath) {
   // Skip utility functions that don't manage state (they return values, don't update state)
   const isUtilityFunction =
     (/helpers\/|utils\/|helpers\.ts|utils\.ts/.test(filePath) ||
-     /handleFetch|handle\w+Fetch/.test(filePath)) && // Fetch handlers
+      /handleFetch|handle\w+Fetch/.test(filePath)) && // Fetch handlers
     !managesDataList && // Not managing array state
     /return\s+\{|return\s+null|return\s+undefined|return\s+response|return\s+Promise/.test(content); // Returns values
 
@@ -171,20 +178,29 @@ function analyzeOptimisticUpdates(content, filePath) {
   // Skip operations that don't update managed state (sharing, notifications, etc.)
   const isShareOperation = /share|Share/.test(content) && !managesDataList;
   const isNotificationOperation = /notification|Notification/.test(content) && !managesDataList;
-  const onlyCallsCallback = /onSuccess\(\)|onComplete\(\)|refreshSubscription\(\)/.test(content) && !managesDataList;
+  const onlyCallsCallback =
+    /onSuccess\(\)|onComplete\(\)|refreshSubscription\(\)/.test(content) && !managesDataList;
 
-  if ((isShareOperation || isNotificationOperation || onlyCallsCallback) && !/set[A-Z]\w+\(.*prev.*=>.*\[/.test(content)) {
+  if (
+    (isShareOperation || isNotificationOperation || onlyCallsCallback) &&
+    !/set[A-Z]\w+\(.*prev.*=>.*\[/.test(content)
+  ) {
     return violations; // Doesn't update managed state lists
   }
 
   // Skip AI generation hooks - they're not CRUD operations, just API calls for AI responses
-  if (/useAI|useAI\w+/.test(filePath) || (/generate|AI|ai/.test(content) && /\/api\/ai\//.test(content))) {
+  if (
+    /useAI|useAI\w+/.test(filePath) ||
+    (/generate|AI|ai/.test(content) && /\/api\/ai\//.test(content))
+  ) {
     return violations; // AI generation, not CRUD
   }
 
   // Skip sync/trigger utilities - they trigger background syncs, don't manage UI state
-  if (/createDebounceSync|sync.*trigger|triggerSync/i.test(filePath) ||
-      (/debounce.*sync|trigger.*sync/i.test(content) && !managesDataList)) {
+  if (
+    /createDebounceSync|sync.*trigger|triggerSync/i.test(filePath) ||
+    (/debounce.*sync|trigger.*sync/i.test(content) && !managesDataList)
+  ) {
     return violations; // Background sync utilities, not UI state mutations
   }
 
@@ -251,7 +267,10 @@ function analyzeOptimisticUpdates(content, filePath) {
   const fetchDataInUseEffect = /useEffect[^}]*fetchData|fetchData[^}]*useEffect/.test(content);
   const hasFetchDataAfterMutation =
     (/fetchData\(\)/.test(content) && !fetchDataInUseEffect) ||
-    (/fetch\w+\(\)/.test(content) && /\.then\(/.test(content) && /response\.ok/.test(content) && !/useEffect/.test(content));
+    (/fetch\w+\(\)/.test(content) &&
+      /\.then\(/.test(content) &&
+      /response\.ok/.test(content) &&
+      !/useEffect/.test(content));
 
   // Check for useOptimisticMutation hook usage
   const usesOptimisticHook = /useOptimisticMutation/.test(content);
@@ -316,13 +335,19 @@ function analyzeOptimisticUpdates(content, filePath) {
       // Utility functions can't use hooks, and hooks that just return data don't need notifications
       const isUtilityFunctionForNotification =
         /helpers\/|utils\/|helpers\.ts|utils\.ts/.test(filePath) ||
-        /handleFetch|handle\w+Fetch|load\w+Details|prepDetailsLoading|DetailsLoading/.test(filePath);
+        /handleFetch|handle\w+Fetch|load\w+Details|prepDetailsLoading|DetailsLoading/.test(
+          filePath,
+        );
       const isDataReturnHookForNotification =
         /use\w+CRUD|use\w+Save|use\w+Fetch/.test(filePath) &&
         !managesDataList &&
         /return\s+\{|return\s*\{/.test(content);
 
-      if (!hasNotification && !isUtilityFunctionForNotification && !isDataReturnHookForNotification) {
+      if (
+        !hasNotification &&
+        !isUtilityFunctionForNotification &&
+        !isDataReturnHookForNotification
+      ) {
         violations.push({
           type: 'missing-notification',
           line: findLineNumber(lines, /fetch/),

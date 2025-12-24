@@ -2,6 +2,7 @@
 
 import { useTranslation } from '@/lib/useTranslation';
 import { BarChart3 } from 'lucide-react';
+import { useMemo } from 'react';
 import { Icon } from '@/components/ui/Icon';
 
 interface Ingredient {
@@ -56,12 +57,14 @@ export default function IngredientFilters({
   const { t } = useTranslation();
 
   // Get unique suppliers and storage locations for filter options
-  const uniqueSuppliers = Array.from(
-    new Set(ingredients.map(i => i.supplier).filter(Boolean)),
-  ).sort();
-  const uniqueStorageLocations = Array.from(
-    new Set(ingredients.map(i => i.storage_location).filter(Boolean)),
-  ).sort();
+  const uniqueSuppliers = useMemo(
+    () => Array.from(new Set(ingredients.map(i => i.supplier).filter(Boolean))).sort(),
+    [ingredients],
+  );
+  const uniqueStorageLocations = useMemo(
+    () => Array.from(new Set(ingredients.map(i => i.storage_location).filter(Boolean))).sort(),
+    [ingredients],
+  );
 
   return (
     <div className="space-y-6">

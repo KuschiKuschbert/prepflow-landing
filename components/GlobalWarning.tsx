@@ -30,10 +30,11 @@ const GlobalWarning: React.FC<GlobalWarningProps> = ({ onHeightChange }) => {
       };
 
       // Initial measurement - use requestAnimationFrame for immediate update
+      let timeoutId: NodeJS.Timeout | null = null;
       requestAnimationFrame(() => {
         updateHeight();
         // Also measure after a short delay to catch any layout changes
-        setTimeout(updateHeight, 50);
+        timeoutId = setTimeout(updateHeight, 50);
       });
 
       // Set up ResizeObserver for dynamic height changes
@@ -41,6 +42,7 @@ const GlobalWarning: React.FC<GlobalWarningProps> = ({ onHeightChange }) => {
       resizeObserver.observe(warningRef.current);
 
       return () => {
+        if (timeoutId) clearTimeout(timeoutId);
         resizeObserver.disconnect();
         onHeightChange(0); // Reset height when warning is removed
         if (typeof document !== 'undefined') {

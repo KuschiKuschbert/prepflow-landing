@@ -88,11 +88,17 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get('userId');
 
     if (!userId) {
-      return NextResponse.json(ApiErrorHandler.createError('User ID is required', 'VALIDATION_ERROR', 400), { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('User ID is required', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json(ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     const { data, error } = await supabaseAdmin

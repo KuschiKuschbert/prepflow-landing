@@ -3,7 +3,16 @@ import React, { useState } from 'react';
 import { useCountry } from '@/contexts/CountryContext';
 import { getTaxBreakdown } from '@/lib/country-config';
 import { Icon } from '@/components/ui/Icon';
-import { Globe, MapPin, Settings, Calculator, BarChart3, Zap, Search, ChevronDown } from 'lucide-react';
+import {
+  Globe,
+  MapPin,
+  Settings,
+  Calculator,
+  BarChart3,
+  Zap,
+  Search,
+  ChevronDown,
+} from 'lucide-react';
 import { formatPrice, formatDate, formatNumber } from './CountrySetup/helpers/formatting';
 import { useCountryDropdown } from './CountrySetup/hooks/useCountryDropdown';
 
@@ -137,7 +146,9 @@ export default function CountrySetup() {
           <div className="flex items-center space-x-2 rounded-lg bg-[var(--surface)] px-3 py-2">
             <span className="font-medium text-[var(--primary)]">Date:</span>
             <span className="text-[var(--foreground)]">{countryConfig.dateFormat}</span>
-            <span className="text-[var(--foreground-muted)]">({formatDate(new Date(), countryConfig.locale)})</span>
+            <span className="text-[var(--foreground-muted)]">
+              ({formatDate(new Date(), countryConfig.locale)})
+            </span>
           </div>
 
           <div className="flex items-center space-x-2 rounded-lg bg-[var(--surface)] px-3 py-2">
@@ -217,18 +228,26 @@ export default function CountrySetup() {
         <div className="text-fluid-xs flex flex-wrap gap-3">
           <div className="flex items-center space-x-2 rounded-lg bg-[var(--surface)] px-3 py-2">
             <span className="font-medium text-[var(--primary)]">Currency:</span>
-            <span className="text-[var(--foreground)]">{formatPrice(testAmount, countryConfig, false)}</span>
+            <span className="text-[var(--foreground)]">
+              {formatPrice(testAmount, countryConfig, false)}
+            </span>
             <span className="text-[var(--foreground-muted)]">→</span>
-            <span className="text-[var(--primary)]">{formatPrice(testAmount, countryConfig, true)}</span>
+            <span className="text-[var(--primary)]">
+              {formatPrice(testAmount, countryConfig, true)}
+            </span>
           </div>
 
           <div className="flex items-center space-x-2 rounded-lg bg-[var(--surface)] px-3 py-2">
             <span className="font-medium text-[var(--primary)]">Number:</span>
-            <span className="text-[var(--foreground)]">{formatNumber(1234567.89, countryConfig.locale)}</span>
+            <span className="text-[var(--foreground)]">
+              {formatNumber(1234567.89, countryConfig.locale)}
+            </span>
           </div>
           <div className="flex items-center space-x-2 rounded-lg bg-[var(--surface)] px-3 py-2">
             <span className="font-medium text-[var(--primary)]">Date:</span>
-            <span className="text-[var(--foreground)]">{formatDate(new Date(), countryConfig.locale)}</span>
+            <span className="text-[var(--foreground)]">
+              {formatDate(new Date(), countryConfig.locale)}
+            </span>
           </div>
 
           <div className="flex items-center space-x-2 rounded-lg bg-[var(--surface)] px-3 py-2">

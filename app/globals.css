@@ -2666,9 +2666,15 @@ canvas {
 
 /* Nacho Tacos Animations */
 @keyframes gradient-slow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 .animate-gradient-slow {
   animation: gradient-slow 15s ease infinite;
@@ -2683,7 +2689,7 @@ canvas {
   height: 100vh;
   z-index: -1;
   background-color: #111;
-  background-image: 
+  background-image:
     linear-gradient(rgba(192, 255, 2, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(192, 255, 2, 0.05) 1px, transparent 1px);
   background-size: 50px 50px;
@@ -2692,9 +2698,18 @@ canvas {
 }
 
 @keyframes pulse-grid {
-  0% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.02); opacity: 1; }
-  100% { transform: scale(1); opacity: 0.8; }
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
 }
 
 .creative-wave {
@@ -2709,28 +2724,32 @@ canvas {
 }
 
 @keyframes wave-float {
-  0% { transform: translateY(0) skewX(0deg); }
-  100% { transform: translateY(-20px) skewX(5deg); }
+  0% {
+    transform: translateY(0) skewX(0deg);
+  }
+  100% {
+    transform: translateY(-20px) skewX(5deg);
+  }
 }
 
 /* Grid Enhancement */
 .pulsating-grid {
-    z-index: 0 !important; /* Ensure it is behind content but visible */
-    background-image: 
+  z-index: 0 !important; /* Ensure it is behind content but visible */
+  background-image:
     linear-gradient(rgba(204, 255, 0, 0.1) 1px, transparent 1px),
     linear-gradient(90deg, rgba(204, 255, 0, 0.1) 1px, transparent 1px);
 }
 
 .creative-wave {
-    z-index: 0 !important;
+  z-index: 0 !important;
 }
 
 /* Grid Enhancement Reform*/
 .pulsating-grid {
-    z-index: -1 !important; 
+  z-index: -1 !important;
 }
 .creative-wave {
-    z-index: -1 !important;
+  z-index: -1 !important;
 }
 
 /* Clean up old grid CSS - overridden by generic logic */

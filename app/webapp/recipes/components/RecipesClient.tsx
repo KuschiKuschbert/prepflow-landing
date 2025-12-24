@@ -49,7 +49,22 @@ export default function RecipesClient() {
       handleIngredientsChangeRef.current(recipeId);
     }
   }, []);
-  const { recipes, loading, error, recipeError, recipePrices, capitalizeRecipeName, fetchRecipes, fetchRecipeIngredients, fetchBatchRecipeIngredients, handleEditRecipe, updateVisibleRecipePrices, optimisticallyUpdateRecipes, rollbackRecipes, setError } = useRecipeManagement(trackRecipeChange);
+  const {
+    recipes,
+    loading,
+    error,
+    recipeError,
+    recipePrices,
+    capitalizeRecipeName,
+    fetchRecipes,
+    fetchRecipeIngredients,
+    fetchBatchRecipeIngredients,
+    handleEditRecipe,
+    updateVisibleRecipePrices,
+    optimisticallyUpdateRecipes,
+    rollbackRecipes,
+    setError,
+  } = useRecipeManagement(trackRecipeChange);
   const clearChangedFlag = useCallback((recipeId: string) => {
     setChangedRecipeIds(prev => {
       const next = new Set(prev);
@@ -73,7 +88,25 @@ export default function RecipesClient() {
   });
   useRecipeRefreshEffects({ loading, changedRecipeIds, fetchRecipes });
   const { aiInstructions, generatingInstructions, generateAIInstructions } = useAIInstructions();
-  const { recipeToDelete, showDeleteConfirm, setShowDeleteConfirm, selectedRecipes, setSelectedRecipes, showShareModal, setShowShareModal, shareUrl, handleAddRecipe: handleAddRecipeAction, handleEditFromPreview, handleDuplicateRecipe, handleDeleteRecipe, confirmDeleteRecipe, cancelDeleteRecipe, handleSelectRecipe, handleSelectAll, handleShareRecipe } = useRecipeActions({
+  const {
+    recipeToDelete,
+    showDeleteConfirm,
+    setShowDeleteConfirm,
+    selectedRecipes,
+    setSelectedRecipes,
+    showShareModal,
+    setShowShareModal,
+    shareUrl,
+    handleAddRecipe: handleAddRecipeAction,
+    handleEditFromPreview,
+    handleDuplicateRecipe,
+    handleDeleteRecipe,
+    confirmDeleteRecipe,
+    cancelDeleteRecipe,
+    handleSelectRecipe,
+    handleSelectAll,
+    handleShareRecipe,
+  } = useRecipeActions({
     recipes,
     fetchRecipes,
     fetchRecipeIngredients,
@@ -87,7 +120,15 @@ export default function RecipesClient() {
     selectedRecipes.forEach(id => types.set(id, 'recipe'));
     return types;
   }, [selectedRecipes]);
-  const { bulkActionLoading, showBulkDeleteConfirm: showUnifiedBulkDeleteConfirm, setShowBulkDeleteConfirm: setShowUnifiedBulkDeleteConfirm, handleBulkDelete: handleUnifiedBulkDelete, confirmBulkDelete: confirmUnifiedBulkDelete, cancelBulkDelete: cancelUnifiedBulkDelete, selectedRecipeIds } = useUnifiedBulkActions({
+  const {
+    bulkActionLoading,
+    showBulkDeleteConfirm: showUnifiedBulkDeleteConfirm,
+    setShowBulkDeleteConfirm: setShowUnifiedBulkDeleteConfirm,
+    handleBulkDelete: handleUnifiedBulkDelete,
+    confirmBulkDelete: confirmUnifiedBulkDelete,
+    cancelBulkDelete: cancelUnifiedBulkDelete,
+    selectedRecipeIds,
+  } = useUnifiedBulkActions({
     recipes,
     dishes: [],
     selectedItems: selectedRecipes,
@@ -102,14 +143,26 @@ export default function RecipesClient() {
     selectedRecipeIds,
     onSuccess: () => setSelectedRecipes(new Set()),
   });
-  const handleClearSelection = useCallback(() => setSelectedRecipes(new Set()), [setSelectedRecipes]);
-  const { handleBulkAddToMenu, handleSelectMenu, handleCreateNewMenu, menus, loadingMenus, showMenuDialog, setShowMenuDialog } = useBulkAddToMenu({
+  const handleClearSelection = useCallback(
+    () => setSelectedRecipes(new Set()),
+    [setSelectedRecipes],
+  );
+  const {
+    handleBulkAddToMenu,
+    handleSelectMenu,
+    handleCreateNewMenu,
+    menus,
+    loadingMenus,
+    showMenuDialog,
+    setShowMenuDialog,
+  } = useBulkAddToMenu({
     selectedItems: selectedRecipes,
     selectedItemTypes,
     onSuccess: handleClearSelection,
   });
   const [showBulkMenu, setShowBulkMenu] = useState(false);
-  const { filters, updateFilters, paginatedRecipes, filteredAndSortedRecipes, totalPages } = useRecipeFiltering(recipes, recipePrices);
+  const { filters, updateFilters, paginatedRecipes, filteredAndSortedRecipes, totalPages } =
+    useRecipeFiltering(recipes, recipePrices);
   usePriceCalculationEffect({
     paginatedRecipes,
     recipePrices,

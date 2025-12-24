@@ -33,6 +33,7 @@ Based on latest `npm run cleanup:check`:
 **Effort:** 🟢 Very Low (single violation)
 
 **Action:**
+
 1. Identify the 1 error handling violation
 2. Fix it
 3. Verify error handling check passes
@@ -48,6 +49,7 @@ Based on latest `npm run cleanup:check`:
 **Effort:** 🟡 Low-Medium (quick wins + minor refactoring)
 
 **Files to Fix (from cleanup check):**
+
 - API routes (4 files): 201-202 lines (1-2 lines over)
   - `app/api/db/populate-empty-dishes/route.ts` - 201 lines
   - `app/api/fix/enable-google-connection/route.ts` - 201 lines
@@ -61,6 +63,7 @@ Based on latest `npm run cleanup:check`:
 - Remaining files: Check for others
 
 **Strategy:**
+
 1. **Quick wins first:** Remove blank lines, consolidate code
 2. **Minor refactoring:** Extract small helper functions where easy
 3. **Focus on API routes:** They're only 1-2 lines over (easiest)
@@ -78,6 +81,7 @@ If we want to understand what's actually wrong vs false positives, we could:
 **Goal:** Identify actual violations vs false positives
 
 **Approach:**
+
 1. Sample 10-20 optimistic update violations
 2. Sample 10-20 React pattern violations
 3. Document false positive patterns
@@ -92,12 +96,14 @@ If we want to understand what's actually wrong vs false positives, we could:
 **Start with Phase 5.1 (Error Handling) + Phase 5.2 (File Sizes)**
 
 **Why:**
+
 - ✅ Quick wins (error handling: 5 min, file sizes: 2-4 hours)
 - ✅ Measurable progress (specific number of violations to fix)
 - ✅ Non-controversial (file size limits are clear, no false positives)
 - ✅ Builds momentum
 
 **After that, decide:**
+
 - Continue with pattern review (understand what's real vs false positives)
 - OR move to performance optimizations (memoization)
 - OR proceed with deployment (remaining violations are non-blocking)

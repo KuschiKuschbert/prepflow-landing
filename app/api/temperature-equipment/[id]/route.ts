@@ -17,7 +17,11 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       error instanceof Error ? error.message : 'Internal server error',
       'SERVER_ERROR',
       500,
-      process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.stack : undefined) : undefined,
+      process.env.NODE_ENV === 'development'
+        ? error instanceof Error
+          ? error.stack
+          : undefined
+        : undefined,
     );
     return NextResponse.json(apiError, { status: 500 });
   }
@@ -40,7 +44,11 @@ export async function DELETE(
       error instanceof Error ? error.message : 'Internal server error',
       'SERVER_ERROR',
       500,
-      process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.stack : undefined) : undefined,
+      process.env.NODE_ENV === 'development'
+        ? error instanceof Error
+          ? error.stack
+          : undefined
+        : undefined,
     );
     return NextResponse.json(apiError, { status: 500 });
   }

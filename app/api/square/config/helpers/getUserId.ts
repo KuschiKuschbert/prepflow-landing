@@ -10,7 +10,11 @@ import { logger } from '@/lib/logger';
 export async function getUserIdFromEmail(email: string): Promise<string | null> {
   if (!supabaseAdmin) return null;
   try {
-    const { data, error } = await supabaseAdmin.from('users').select('id').eq('email', email).single();
+    const { data, error } = await supabaseAdmin
+      .from('users')
+      .select('id')
+      .eq('email', email)
+      .single();
     if (error) {
       logger.error('[Square Config API] Error fetching user ID from email:', {
         error: error.message,

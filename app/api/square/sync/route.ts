@@ -92,7 +92,10 @@ export async function POST(request: NextRequest) {
       logger.warn('[Square Sync API] Failed to parse request body:', {
         error: err instanceof Error ? err.message : String(err),
       });
-      return NextResponse.json(ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400), { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
     }
 
     const validationResult = syncRequestSchema.safeParse(body);
@@ -183,7 +186,10 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    logger.error('[Square Sync API] Error:', { error: errorMessage, context: { endpoint: '/api/square/sync', method: 'POST' } });
+    logger.error('[Square Sync API] Error:', {
+      error: errorMessage,
+      context: { endpoint: '/api/square/sync', method: 'POST' },
+    });
     return NextResponse.json(
       ApiErrorHandler.createError(
         process.env.NODE_ENV === 'development' ? errorMessage : 'Internal server error',

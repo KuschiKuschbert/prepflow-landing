@@ -97,7 +97,10 @@ export async function POST(req: NextRequest) {
     if (e && typeof e === 'object' && 'status' in e && 'json' in e) {
       return e as NextResponse;
     }
-    return NextResponse.json(ApiErrorHandler.createError('Failed to generate deduplication preview', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Failed to generate deduplication preview', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }
 

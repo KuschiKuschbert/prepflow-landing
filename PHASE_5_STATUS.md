@@ -8,12 +8,14 @@
 ### File Sizes: 10 files (mostly 1-2 lines over)
 
 **API Routes (4 files):**
+
 - `app/api/qr-codes/route.ts` - 201 lines (1 over)
 - `app/api/db/populate-empty-dishes/route.ts` - 201 lines (1 over)
 - `app/api/fix/enable-google-connection/route.ts` - 201 lines (1 over)
 - `app/api/menus/[id]/helpers/queryBuilders/menuItemQueries.ts` - 202-203 lines (2-3 over)
 
 **Component Files (6 files):**
+
 - `app/webapp/components/navigation/NavigationHeader.tsx` - 308 lines (8 over)
 - `app/webapp/ingredients/components/IngredientActions.tsx` - 307 lines (7 over)
 - `app/webapp/ingredients/components/IngredientsClient.tsx` - 306 lines (6 over)
@@ -30,6 +32,7 @@
 ### Option 1: Quick Wins (1-2 hours)
 
 Focus on files that are only 1 line over:
+
 - `RecipePreviewModal.tsx` (1 line over) - Easy fix
 - 3 API routes (1 line over each) - Easy fixes
 - `menuItemQueries.ts` (2-3 lines over) - Requires consolidation
@@ -39,6 +42,7 @@ Focus on files that are only 1 line over:
 ### Option 2: Complete File Sizes (3-4 hours)
 
 Fix all 10 files systematically:
+
 - Quick wins first (1-2 line over)
 - Then component files (6-8 lines over) - may require minor refactoring
 
@@ -47,6 +51,7 @@ Fix all 10 files systematically:
 ### Option 3: Move to Pattern Review
 
 Skip minor file sizes for now and focus on understanding:
+
 - Error handling violation (1 - quick win)
 - Optimistic updates (186 - sample review needed)
 - React patterns (247 - sample review needed)

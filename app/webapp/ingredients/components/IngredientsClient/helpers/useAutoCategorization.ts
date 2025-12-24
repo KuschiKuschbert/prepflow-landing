@@ -9,7 +9,10 @@ interface Ingredient {
 interface UseAutoCategorizationProps {
   ingredients: Ingredient[];
   isLoading: boolean;
-  handleCategorizeAllUncategorized: (silent: boolean, refetchIngredients: () => void) => Promise<void>;
+  handleCategorizeAllUncategorized: (
+    silent: boolean,
+    refetchIngredients: () => void,
+  ) => Promise<void>;
   refetchIngredients: () => void;
 }
 
@@ -36,7 +39,13 @@ export function useAutoCategorization({
         logger.error('Auto-categorization failed:', err);
       });
     }
-  }, [ingredients, isLoading, hasAutoCategorized, handleCategorizeAllUncategorized, refetchIngredients]);
+  }, [
+    ingredients,
+    isLoading,
+    hasAutoCategorized,
+    handleCategorizeAllUncategorized,
+    refetchIngredients,
+  ]);
 
   return hasAutoCategorized;
 }

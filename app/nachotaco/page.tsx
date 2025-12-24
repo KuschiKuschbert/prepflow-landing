@@ -1,12 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase-pos'
 import { logger } from '@/lib/logger'
-import MenuItemCard from './components/MenuItemCard'
-import { Plus, BarChart3, Settings } from 'lucide-react'
+import { supabase } from '@/lib/supabase-pos'
+import { BarChart3, Plus, Settings } from 'lucide-react'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { logout } from './actions'
+import MenuItemCard from './components/MenuItemCard'
 import { seedInitialData } from './seed-actions'
 
 // Define types locally for simplicity
@@ -123,11 +123,17 @@ export default function NachoTacosAdmin() {
                     </button>
                  </form>
 
+                <Link href="/nachotaco/kitchen" className="text-neutral-400 hover:text-[#C0FF02] flex items-center gap-2 transition-colors">
+                    <span className="text-lg">👨‍🍳</span> Kitchen
+                </Link>
                 <Link href="/nachotaco/stats" className="text-neutral-400 hover:text-white flex items-center gap-2 transition-colors">
                     <BarChart3 size={20} /> Stats
                 </Link>
                 <Link href="/nachotaco/modifiers" className="text-neutral-400 hover:text-white flex items-center gap-2 transition-colors">
                     <Settings size={20} /> Modifiers
+                </Link>
+                <Link href="/nachotaco/display" className="text-neutral-400 hover:text-[#C0FF02] flex items-center gap-2 transition-colors">
+                    <span className="text-lg">📺</span> Display
                 </Link>
                  <form action={logout}>
                     <button className="text-neutral-400 hover:text-red-400 text-sm font-bold uppercase tracking-wider">Logout</button>

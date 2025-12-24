@@ -1,0 +1,256 @@
+'use client'
+
+import { logger } from '@/lib/logger'
+import { supabase } from '@/lib/supabase-pos'
+import { Check, ChevronRight, Clock } from 'lucide-react'
+import { useEffect, useState } from 'react'
+
+// types based on Android model
+interface Transaction {
+    id: string
+    timestamp: number
+    order_number: number | null
+    customer_name: string | null
+    fulfillment_status: string
+    items_json: any // Can be string or JSON object depending on how Postgrest returns JSONB
+}
+
+export default function KitchenKDS() {
+    const [orders, setOrders] = useState<Transaction[]>([])
+    const [isLoading, setIsLoading] = useState(true)
+
+    async function fetchOrders() {
+        // We need to fetch the results from the 'transactions' table
+        const { data, error } = await supabase
+            .from('transactions')
+            .select('*')
+            .neq('fulfillment_status', 'COMPLETED')
+            .order('timestamp', { ascending: true })
+
+        if (error) {
+            logger.error('Error fetching kitchen orders:', error)
+        } else {
+            setOrders(data || [])
+        }
+        setIsLoading(false)
+    }
+
+    useEffect(() => {
+        fetchOrders()
+
+        // Subscribe to changes
+        const channel = supabase.channel('table-db-changes')
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'transactions',
+                },
+                (payload) => {
+                    logger.dev('Change received!', payload)
+                    fetchOrders()
+                }
+            )
+            .subscribe()
+
+        return () => {
+            supabase.removeChannel(channel)
+        }
+    }, [])
+
+    async function updateStatus(id: string, status: string) {
+        const { error } = await supabase
+            .from('transactions')
+            .update({ fulfillment_status: status })
+            .eq('id', id)
+
+        if (error) {
+            logger.error('Error updating status:', error)
+        }
+    }
+
+    async function bumpOrder(order: Transaction) {
+        let nextStatus = 'IN_PROGRESS'
+        if (order.fulfillment_status === 'IN_PROGRESS') nextStatus = 'READY'
+        else if (order.fulfillment_status === 'READY') nextStatus = 'COMPLETED'
+
+        await updateStatus(order.id, nextStatus)
+    }
+
+    function getTimerColor(timestamp: number) {
+        const elapsedMinutes = (Date.now() - timestamp) / 60000
+        if (elapsedMinutes < 5) return 'text-[#C0FF02]'
+        if (elapsedMinutes < 10) return 'text-orange-400'
+        return 'text-red-500'
+    }
+
+    function getBorderColor(timestamp: number) {
+        const elapsedMinutes = (Date.now() - timestamp) / 60000
+        if (elapsedMinutes < 5) return 'border-[#C0FF02]/30'
+        if (elapsedMinutes < 10) return 'border-orange-400/30'
+        return 'border-red-500/30'
+    }
+
+    function parseItems(itemsJson: any) {
+        if (!itemsJson) return []
+        try {
+            // it can be already parsed by supabase-js if it's a JSONB column
+            const items = typeof itemsJson === 'string' ? JSON.parse(itemsJson) : itemsJson
+            return items.map((item: any) => ({
+                name: item.name,
+                quantity: item.quantity || 1,
+                modifiers: item.modifiers || [] // These are now a list of strings in the new model
+            }))
+        } catch (e) {
+            logger.error('Parse error:', {
+                error: e instanceof Error ? e.message : String(e),
+                stack: e instanceof Error ? e.stack : undefined,
+            });
+            return []
+        }
+    }
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-black flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-[#C0FF02]"></div>
+            </div>
+        )
+    }
+
+    return (
+        <div className="min-h-screen bg-black p-6 font-sans">
+            <header className="flex justify-between items-center mb-8 pb-4 border-b border-neutral-800">
+                <div className="flex items-center gap-3">
+                    <span className="text-3xl">👨‍🍳</span>
+                    <h1 className="text-2xl font-bold text-white tracking-widest uppercase">
+                        Kitchen <span className="text-[#C0FF02]">Display</span> System
+                    </h1>
+                </div>
+                <div className="flex items-center gap-4 text-neutral-500 text-sm">
+                    <Clock size={16} />
+                    <span>REALTIME SYNC ACTIVE</span>
+                </div>
+            </header>
+
+            {orders.length === 0 ? (
+                <div className="h-[60vh] flex flex-col items-center justify-center text-neutral-600 gap-4">
+                    <span className="text-6xl">🌮</span>
+                    <p className="text-xl font-medium tracking-wide">NO ACTIVE ORDERS</p>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {orders.map((order) => {
+                        const items = parseItems(order.items_json)
+                        const timerColor = getTimerColor(order.timestamp)
+                        const borderColor = getBorderColor(order.timestamp)
+
+                        return (
+                            <div
+                                key={order.id}
+                                className={`bg-neutral-900 border-l-4 ${borderColor} rounded-xl shadow-2xl p-6 flex flex-col justify-between hover:bg-neutral-800/80 transition-all`}
+                            >
+                                <div>
+                                    <div className="flex justify-between items-start mb-4">
+                                        <h2 className={`text-4xl font-black ${timerColor}`}>
+                                            #{order.order_number || '??'}
+                                        </h2>
+                                        <div className={`flex items-center gap-1 font-mono font-bold ${timerColor}`}>
+                                            <Timer timestamp={order.timestamp} />
+                                        </div>
+                                    </div>
+
+                                    {order.customer_name && (
+                                        <p className="text-white text-xl font-bold mb-4 uppercase tracking-wider">
+                                            {order.customer_name}
+                                        </p>
+                                    )}
+
+                                    <div className="space-y-4 mb-8">
+                                        {items.map((item: any, idx: number) => (
+                                            <div key={idx} className="border-b border-neutral-800 pb-2">
+                                                <div className="flex items-center gap-3">
+                                                    <span className="bg-neutral-800 text-white w-8 h-8 rounded flex items-center justify-center font-bold">
+                                                        {item.quantity}
+                                                    </span>
+                                                    <span className="text-white text-lg font-medium">{item.name}</span>
+                                                </div>
+                                                {item.modifiers?.length > 0 && (
+                                                     <div className="ml-11 mt-1 flex flex-wrap gap-2">
+                                                         {item.modifiers.map((mod: any, midx: number) => (
+                                                             <span key={midx} className="text-neutral-500 text-xs uppercase bg-black/30 px-2 py-0.5 rounded">
+                                                                 + {typeof mod === 'string' ? mod : mod.name || mod}
+                                                             </span>
+                                                         ))}
+                                                     </div>
+                                                 )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col gap-2">
+                                    <button
+                                        onClick={() => bumpOrder(order)}
+                                        className={`w-full py-4 rounded-xl font-black text-lg flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-[0_4px_20px_rgba(0,0,0,0.4)]
+                                            ${order.fulfillment_status === 'READY'
+                                                ? 'bg-red-500 text-white'
+                                                : order.fulfillment_status === 'IN_PROGRESS'
+                                                    ? 'bg-orange-500 text-white'
+                                                    : 'bg-[#C0FF02] text-black'
+                                            }`}
+                                    >
+                                        {order.fulfillment_status === 'READY' ? (
+                                            <>FINISH & DELIVER <Check size={20}/></>
+                                        ) : order.fulfillment_status === 'IN_PROGRESS' ? (
+                                            <>MARK AS READY <ChevronRight size={20}/></>
+                                        ) : (
+                                            <>START COOKING <ChevronRight size={20}/></>
+                                        )}
+                                    </button>
+
+                                    {order.fulfillment_status !== 'READY' && (
+                                        <button
+                                            onClick={() => updateStatus(order.id, 'COMPLETED')}
+                                            className="w-full py-2 rounded-lg text-neutral-500 text-xs font-bold border border-neutral-800 hover:border-neutral-600 transition-colors uppercase"
+                                        >
+                                            Fast Complete ✅
+                                        </button>
+                                    )}
+                                </div>
+
+                                <div className="mt-4 text-[10px] text-neutral-600 font-bold uppercase tracking-widest text-center">
+                                    {order.fulfillment_status}
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
+            )}
+
+            <footer className="mt-12 text-center">
+                <Link href="/nachotaco" className="text-neutral-700 hover:text-white text-xs font-bold transition-colors">
+                    BACK TO ADMIN PANEL
+                </Link>
+            </footer>
+        </div>
+    )
+}
+
+function Timer({ timestamp }: { timestamp: number }) {
+    const [elapsed, setElapsed] = useState(0)
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setElapsed(Math.floor((Date.now() - timestamp) / 60000))
+        }, 10000)
+
+        setElapsed(Math.floor((Date.now() - timestamp) / 60000))
+        return () => clearInterval(interval)
+    }, [timestamp])
+
+    return <span>{elapsed}M</span>
+}
+
+import Link from 'next/link'

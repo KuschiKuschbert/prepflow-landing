@@ -7,7 +7,11 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 function ensureSupabaseAdmin() {
   if (!supabaseAdmin) {
-    throw ApiErrorHandler.createError('Supabase admin client not initialized', 'DATABASE_ERROR', 500);
+    throw ApiErrorHandler.createError(
+      'Supabase admin client not initialized',
+      'DATABASE_ERROR',
+      500,
+    );
   }
 }
 

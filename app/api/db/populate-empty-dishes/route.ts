@@ -35,7 +35,10 @@ export async function GET(request: NextRequest) {
       .order('dish_name');
 
     if (dishesError) {
-      return NextResponse.json(ApiErrorHandler.createError('Failed to fetch dishes', 'DATABASE_ERROR', 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to fetch dishes', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     if (!dishes || dishes.length === 0) {
@@ -109,7 +112,10 @@ export async function POST(request: NextRequest) {
       .order('dish_name');
 
     if (dishesError) {
-      return NextResponse.json(ApiErrorHandler.createError('Failed to fetch dishes', 'DATABASE_ERROR', 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to fetch dishes', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     if (!dishes || dishes.length === 0) {
@@ -134,7 +140,10 @@ export async function POST(request: NextRequest) {
       .order('ingredient_name');
 
     if (ingredientsError) {
-      return NextResponse.json(ApiErrorHandler.createError('Failed to fetch ingredients', 'DATABASE_ERROR', 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to fetch ingredients', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     if (!ingredients || ingredients.length === 0) {
@@ -193,6 +202,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     logger.error('[Populate Empty Dishes] Error:', err);
-    return NextResponse.json(ApiErrorHandler.createError('Failed to populate dishes', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Failed to populate dishes', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }

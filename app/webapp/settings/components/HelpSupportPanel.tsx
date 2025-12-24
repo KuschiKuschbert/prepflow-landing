@@ -22,7 +22,7 @@ export function HelpSupportPanel() {
   const userEmail = user?.email || undefined;
 
   const { recentErrors, loadingErrors, refreshErrors } = useRecentErrors(userEmail);
-  const { autoReport, loadingAutoReport, handleAutoReportToggle } = useAutoReport(userEmail);
+  const { autoReport, handleAutoReportToggle } = useAutoReport(userEmail);
   const {
     formData,
     setFormData,
@@ -67,11 +67,7 @@ export function HelpSupportPanel() {
       {/* Auto-Report Toggle */}
       {userEmail && (
         <div className="border-t border-[var(--border)] pt-4">
-          <AutoReportToggle
-            enabled={autoReport}
-            loading={loadingAutoReport}
-            onToggle={handleAutoReportToggle}
-          />
+          <AutoReportToggle enabled={autoReport} onToggle={handleAutoReportToggle} />
         </div>
       )}
 

@@ -23,7 +23,11 @@ function findDatabaseFiles() {
       if (entry.isDirectory()) {
         walkDir(fullPath);
       } else if (/\.(ts|tsx|js|jsx)$/.test(entry.name)) {
-        files.push(fullPath);
+        // Exclude logger.ts - it uses console.error intentionally to avoid circular dependencies
+        // Exclude cleanup scripts - they're utility scripts, not application code
+        if (!fullPath.includes('lib/logger.ts') && !fullPath.includes('scripts/cleanup/')) {
+          files.push(fullPath);
+        }
       }
     }
   }
@@ -39,6 +43,21 @@ function analyzeDatabasePatterns(content, filePath) {
   // Check for Supabase usage
   const hasSupabase = /supabase/.test(content) || /from\(['"]/.test(content);
   if (!hasSupabase) return violations;
+
+  // Exclude files that only reference Supabase in strings/comments but don't perform actual queries
+  // These files don't need error logging for database operations
+  const hasActualQuery =
+    /await\s+supabase[^}]*\.(from|select|insert|update|delete)\(/.test(content) ||
+    /const\s+\{[^}]*\b(error|data|count)\b[^}]*\}\s*=\s*await.*supabase/.test(content) ||
+    /const\s+\{[^}]*:\s*\w+Error[^}]*\}\s*=\s*await.*supabase/.test(content) ||
+    /(let|const)\s+\w+Result\s*=\s*await.*supabase/.test(content);
+
+  // Exclude specific files that don't perform database operations
+  const isExcludedFile =
+    filePath.includes('lib/api-error-handler.ts') || // Only imports supabaseErrorParser
+    filePath.includes('lib/error-detection/category-detector.ts'); // Only checks if text includes 'supabase'
+
+  if (!hasActualQuery || isExcludedFile) return violations;
 
   // Check for .catch() chaining on Supabase queries (MANDATORY - should not use)
   const hasCatchChaining =
@@ -157,7 +176,13 @@ function analyzeDatabasePatterns(content, filePath) {
 
   // Only check for error logging if error is actually checked
   // Exclude cases where error is checked but logging is intentionally skipped (e.g., non-critical lookups)
-  if (hasDatabaseError && !hasLogger && !hasConsoleError && hasErrorHandling && !isQueryBuilderFunction) {
+  if (
+    hasDatabaseError &&
+    !hasLogger &&
+    !hasConsoleError &&
+    hasErrorHandling &&
+    !isQueryBuilderFunction
+  ) {
     // Exclude Promise.all patterns - they handle errors in result objects
     const hasPromiseAll = /Promise\.all\(/.test(content);
     if (!hasPromiseAll) {

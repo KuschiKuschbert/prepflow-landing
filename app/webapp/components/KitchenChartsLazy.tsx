@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import {
   Bar,
   BarChart,
@@ -40,21 +41,30 @@ export default function KitchenChartsLazy({
   temperatureChecks,
 }: KitchenChartsLazyProps) {
   // Prepare chart data
-  const topDishesData =
-    performanceData?.topSellers.slice(0, 5).map((item, index) => ({
-      name: item.name.length > 15 ? `${item.name.substring(0, 15)}...` : item.name,
-      fullName: item.name,
-      value: item.number_sold,
-      color: index === 0 ? COLORS.primary : index === 1 ? COLORS.secondary : COLORS.accent,
-    })) || [];
+  const topDishesData = useMemo(
+    () =>
+      performanceData?.topSellers.slice(0, 5).map((item, index) => ({
+        name: item.name.length > 15 ? `${item.name.substring(0, 15)}...` : item.name,
+        fullName: item.name,
+        value: item.number_sold,
+        color: index === 0 ? COLORS.primary : index === 1 ? COLORS.secondary : COLORS.accent,
+      })) || [],
+    [performanceData],
+  );
 
-  const temperatureData =
-    temperatureChecks.length > 0
-      ? temperatureChecks.map(item => ({
-          date: new Date(item.date).toLocaleDateString('en-AU', { month: 'short', day: 'numeric' }),
-          count: item.count,
-        }))
-      : [];
+  const temperatureData = useMemo(
+    () =>
+      temperatureChecks.length > 0
+        ? temperatureChecks.map(item => ({
+            date: new Date(item.date).toLocaleDateString('en-AU', {
+              month: 'short',
+              day: 'numeric',
+            }),
+            count: item.count,
+          }))
+        : [],
+    [temperatureChecks],
+  );
 
   const hasData = topDishesData.length > 0 || temperatureData.length > 0;
 

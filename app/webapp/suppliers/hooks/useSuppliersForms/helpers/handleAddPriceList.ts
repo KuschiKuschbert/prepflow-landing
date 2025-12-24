@@ -51,7 +51,7 @@ export async function handleAddPriceListHelper(
     if (data.success && data.data) {
       // Replace temp price list with real price list from server
       setPriceLists(prevPriceLists =>
-        prevPriceLists.map(pl => (pl.id === tempId ? data.data : pl)),
+        prevPriceLists.map(pl => (String(pl.id) === tempId ? data.data : pl)),
       );
       if (selectedSupplier === 'all') {
         cacheData('supplier_price_lists', [data.data, ...originalPriceLists]);

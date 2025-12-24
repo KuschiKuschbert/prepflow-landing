@@ -53,7 +53,9 @@ export async function GET(request: NextRequest) {
     const { sectionsMap, itemsByPrepListId, prepListItems } = await fetchRelatedData(prepLists);
 
     // Step 3: Fetch ingredients in batch
-    const ingredientIds = Array.from(new Set(prepListItems.map((item: any) => item.ingredient_id).filter(Boolean)));
+    const ingredientIds = Array.from(
+      new Set(prepListItems.map((item: any) => item.ingredient_id).filter(Boolean)),
+    );
     const ingredientsMap = await fetchIngredientsBatch(ingredientIds);
 
     // Step 4: Combine all data

@@ -1,7 +1,11 @@
 import { CountryConfig } from '@/lib/country-config';
 import { formatCurrencyWithTax } from '@/lib/country-config';
 
-export function formatPrice(amount: number, countryConfig: CountryConfig, includeTax: boolean = true) {
+export function formatPrice(
+  amount: number,
+  countryConfig: CountryConfig,
+  includeTax: boolean = true,
+) {
   return formatCurrencyWithTax(amount, countryConfig.code, includeTax);
 }
 

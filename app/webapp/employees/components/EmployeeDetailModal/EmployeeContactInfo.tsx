@@ -22,18 +22,30 @@ export function EmployeeContactInfo({ employee }: EmployeeContactInfoProps) {
       <div className="space-y-3">
         {employee.phone && (
           <div className="flex items-center gap-3">
-            <Icon icon={Phone} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+            <Icon
+              icon={Phone}
+              size="sm"
+              className="text-[var(--foreground-muted)]"
+              aria-hidden={true}
+            />
             <div>
               <span className="text-sm text-[var(--foreground-muted)]">Phone</span>
               <p className="text-[var(--foreground)]">
-                {employee.phone.startsWith('+61') ? employee.phone : `+61 ${employee.phone.replace(/^\+?61\s*/, '')}`}
+                {employee.phone.startsWith('+61')
+                  ? employee.phone
+                  : `+61 ${employee.phone.replace(/^\+?61\s*/, '')}`}
               </p>
             </div>
           </div>
         )}
         {employee.email && (
           <div className="flex items-center gap-3">
-            <Icon icon={Mail} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+            <Icon
+              icon={Mail}
+              size="sm"
+              className="text-[var(--foreground-muted)]"
+              aria-hidden={true}
+            />
             <div>
               <span className="text-sm text-[var(--foreground-muted)]">Email</span>
               <p className="text-[var(--foreground)]">{employee.email}</p>
@@ -42,7 +54,12 @@ export function EmployeeContactInfo({ employee }: EmployeeContactInfoProps) {
         )}
         {employee.emergency_contact && (
           <div className="flex items-center gap-3">
-            <Icon icon={User} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+            <Icon
+              icon={User}
+              size="sm"
+              className="text-[var(--foreground-muted)]"
+              aria-hidden={true}
+            />
             <div>
               <span className="text-sm text-[var(--foreground-muted)]">Emergency Contact</span>
               <p className="text-[var(--foreground)]">{employee.emergency_contact}</p>

@@ -73,8 +73,20 @@ export default function DishesClient() {
     handlePreviewDish,
     handlePreviewRecipe,
   } = previewState;
-  const { selectedItems, isSelectionMode, handleSelectItem, handleSelectAll, handleExitSelectionMode } = useDishesClientSelection(dishes, recipes);
-  const { allItems, paginatedItems, paginatedDishesList, paginatedRecipesList, filters, updateFilters,
+  const {
+    selectedItems,
+    isSelectionMode,
+    handleSelectItem,
+    handleSelectAll,
+    handleExitSelectionMode,
+  } = useDishesClientSelection(dishes, recipes);
+  const {
+    allItems,
+    paginatedItems,
+    paginatedDishesList,
+    paginatedRecipesList,
+    filters,
+    updateFilters,
   } = useDishesClientPagination({ dishes, recipes, dishCosts, recipePrices });
   const {
     showDeleteConfirm,

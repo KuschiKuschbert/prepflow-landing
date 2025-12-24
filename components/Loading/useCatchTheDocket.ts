@@ -172,7 +172,6 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
           throwConfetti(1);
         }
       }, 0);
-
     }
   }, [isLoading, gameFinished, caught]);
 

@@ -33,6 +33,7 @@ export async function GET(req: NextRequest) {
     // Get counts for each table with individual error handling
     // Use Promise.allSettled to handle missing tables gracefully
     const getTableCount = async (tableName: string): Promise<number> => {
+      if (!supabaseAdmin) return 0;
       const { count, error } = await supabaseAdmin
         .from(tableName)
         .select('*', { count: 'exact', head: true });

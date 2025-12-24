@@ -86,12 +86,9 @@ export async function POST(request: NextRequest) {
       });
 
       return NextResponse.json(
-        ApiErrorHandler.createError(
-          'Failed to store error log',
-          'DATABASE_ERROR',
-          500,
-          { supabaseError: dbError.message },
-        ),
+        ApiErrorHandler.createError('Failed to store error log', 'DATABASE_ERROR', 500, {
+          supabaseError: dbError.message,
+        }),
         { status: 500 },
       );
     }

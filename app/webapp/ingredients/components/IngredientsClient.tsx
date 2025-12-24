@@ -127,7 +127,16 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
       router.replace(newUrl);
     }
   }, [searchParams, showAddForm, setShowAddForm, resetWizard, router]);
-  const { handleAddIngredient, handleUpdateIngredient, handleDeleteIngredient, handleBulkDelete, exportToCSV, handleCSVImport: handleCSVImportAction, handleSelectIngredient, handleSelectAll } = useIngredientActions({
+  const {
+    handleAddIngredient,
+    handleUpdateIngredient,
+    handleDeleteIngredient,
+    handleBulkDelete,
+    exportToCSV,
+    handleCSVImport: handleCSVImportAction,
+    handleSelectIngredient,
+    handleSelectAll,
+  } = useIngredientActions({
     ingredients,
     setIngredients,
     setError,
@@ -139,10 +148,11 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     setCsvData,
     setParsedIngredients,
     setSelectedIngredients,
-      selectedIngredients,
-      filteredIngredients,
+    selectedIngredients,
+    filteredIngredients,
   });
-  const { handleBulkUpdate, handleBulkAutoCategorize, handleCategorizeAllUncategorized } = useIngredientBulkUpdate({
+  const { handleBulkUpdate, handleBulkAutoCategorize, handleCategorizeAllUncategorized } =
+    useIngredientBulkUpdate({
       ingredients,
       setIngredients,
       setSelectedIngredients,

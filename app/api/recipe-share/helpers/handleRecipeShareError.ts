@@ -17,7 +17,11 @@ export function handleRecipeShareError(error: Error | any, operation: string): N
   });
 
   return NextResponse.json(
-    ApiErrorHandler.createError('Something went wrong while sharing the recipe. Give it another go, chef.', 'SERVER_ERROR', 500),
+    ApiErrorHandler.createError(
+      'Something went wrong while sharing the recipe. Give it another go, chef.',
+      'SERVER_ERROR',
+      500,
+    ),
     { status: 500 },
   );
 }

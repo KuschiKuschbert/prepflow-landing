@@ -2,6 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { Sparkles } from 'lucide-react';
+import { useMemo } from 'react';
 import type { DiscoveredFlag, FeatureFlag, HiddenFeatureFlag } from '../types';
 
 interface SuggestedFlagsSectionProps {
@@ -32,10 +33,14 @@ export function SuggestedFlagsSection({
   onAutoCreate,
   autoCreating,
 }: SuggestedFlagsSectionProps) {
-  const missingRegularFlags = discoveredFlags.regular.filter(
-    f => !existingRegularKeys.has(f.flagKey),
+  const missingRegularFlags = useMemo(
+    () => discoveredFlags.regular.filter(f => !existingRegularKeys.has(f.flagKey)),
+    [discoveredFlags.regular, existingRegularKeys],
   );
-  const missingHiddenFlags = discoveredFlags.hidden.filter(f => !existingHiddenKeys.has(f.flagKey));
+  const missingHiddenFlags = useMemo(
+    () => discoveredFlags.hidden.filter(f => !existingHiddenKeys.has(f.flagKey)),
+    [discoveredFlags.hidden, existingHiddenKeys],
+  );
 
   const hasMissingFlags = missingRegularFlags.length > 0 || missingHiddenFlags.length > 0;
 

@@ -26,11 +26,26 @@ export function useRecipeStateSetters({
     setSelectedRecipe(null);
   }, [setShowUnifiedModal, setSelectedRecipe]);
 
-  const handleSetSelectedRecipe = useCallback((recipe: Recipe | null) => setSelectedRecipe(recipe), [setSelectedRecipe]);
-  const handleSetShowUnifiedModal = useCallback((show: boolean) => setShowUnifiedModal(show), [setShowUnifiedModal]);
-  const handleSetPreviewYield = useCallback((yieldValue: number) => setPreviewYield(yieldValue), [setPreviewYield]);
-  const handleSetShowRecipeEditDrawer = useCallback((show: boolean) => setShowRecipeEditDrawer(show), [setShowRecipeEditDrawer]);
-  const handleSetEditingRecipe = useCallback((recipe: Recipe | null) => setEditingRecipe(recipe), [setEditingRecipe]);
+  const handleSetSelectedRecipe = useCallback(
+    (recipe: Recipe | null) => setSelectedRecipe(recipe),
+    [setSelectedRecipe],
+  );
+  const handleSetShowUnifiedModal = useCallback(
+    (show: boolean) => setShowUnifiedModal(show),
+    [setShowUnifiedModal],
+  );
+  const handleSetPreviewYield = useCallback(
+    (yieldValue: number) => setPreviewYield(yieldValue),
+    [setPreviewYield],
+  );
+  const handleSetShowRecipeEditDrawer = useCallback(
+    (show: boolean) => setShowRecipeEditDrawer(show),
+    [setShowRecipeEditDrawer],
+  );
+  const handleSetEditingRecipe = useCallback(
+    (recipe: Recipe | null) => setEditingRecipe(recipe),
+    [setEditingRecipe],
+  );
   const handleRefreshRecipes = useCallback(() => fetchRecipes(), [fetchRecipes]);
 
   return {

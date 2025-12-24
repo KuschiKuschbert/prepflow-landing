@@ -4,7 +4,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { prefersReducedMotion } from '@/lib/arcadeGuards';
 import { prefetchRoute } from '@/lib/cache/prefetch-config';
 import Link from 'next/link';
-import React, { RefObject } from 'react';
+import React, { RefObject, useCallback } from 'react';
 import { LogoutButton } from '../LogoutButton';
 
 interface SidebarProps {
@@ -19,8 +19,10 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: SidebarProps) {
-  const cn = (...classes: (string | undefined | null | false)[]) =>
-    classes.filter(Boolean).join(' ');
+  const cn = useCallback(
+    (...classes: (string | undefined | null | false)[]) => classes.filter(Boolean).join(' '),
+    [],
+  );
 
   // Click outside to close
   React.useEffect(() => {

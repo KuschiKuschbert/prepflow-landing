@@ -19,17 +19,17 @@ export default async function middleware(req: NextRequest) {
     const wwwUrl = new URL(req.url);
     wwwUrl.hostname = 'www.prepflow.org';
     return NextResponse.redirect(wwwUrl, 301); // Permanent redirect
-  // Nacho Tacos Admin Auth (Simple Password Protection)
-  if (pathname.startsWith("/nachotaco")) {
-    const isLoginPage = pathname === "/nachotaco/login";
-    const nachoAuth = req.cookies.get("nacho_auth")?.value;
+    // Nacho Tacos Admin Auth (Simple Password Protection)
+    if (pathname.startsWith('/nachotaco')) {
+      const isLoginPage = pathname === '/nachotaco/login';
+      const nachoAuth = req.cookies.get('nacho_auth')?.value;
 
-    if (!nachoAuth && !isLoginPage) {
-      return NextResponse.redirect(new URL("/nachotaco/login", req.url));
+      if (!nachoAuth && !isLoginPage) {
+        return NextResponse.redirect(new URL('/nachotaco/login', req.url));
+      }
+      // Allow access - bypass Auth0
+      return NextResponse.next();
     }
-    // Allow access - bypass Auth0
-    return NextResponse.next();
-  }
   }
 
   // Rate limiting for API routes (skip for public routes)

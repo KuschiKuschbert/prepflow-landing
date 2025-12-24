@@ -50,7 +50,7 @@ export async function seedInitialData() {
 
     if (!data) {
         // Map camelCase to snake_case for DB if needed, but assuming table columns match snake_case or we map here
-        // The Android model has priceDelta, type. 
+        // The Android model has priceDelta, type.
         // Supabase often uses snake_case. Let's assume price_delta.
         const dbMod = {
             id: crypto.randomUUID(),
@@ -59,7 +59,7 @@ export async function seedInitialData() {
             type: mod.type,
             is_available: mod.isAvailable
         }
-        
+
         const { error: insertError } = await supabase.from('modifier_options').insert([dbMod])
         if (insertError) logger.error('Error inserting modifier:', { error: insertError.message })
         else logger.dev('Inserted modifier:', { modName: mod.name })

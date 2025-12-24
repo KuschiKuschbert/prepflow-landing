@@ -246,7 +246,9 @@ export function DishesListView({
               <h3 className="mb-2 text-lg font-medium text-[var(--foreground)]">
                 No dishes or recipes found
               </h3>
-              <p className="text-[var(--foreground-subtle)]">Try adjusting your search or filters.</p>
+              <p className="text-[var(--foreground-subtle)]">
+                Try adjusting your search or filters.
+              </p>
             </div>
           )}
         </div>

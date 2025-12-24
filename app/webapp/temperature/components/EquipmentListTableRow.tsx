@@ -1,8 +1,9 @@
 'use client';
 import { Icon } from '@/components/ui/Icon';
 import { Edit, Power, PowerOff, QrCode, Trash2, LucideIcon } from 'lucide-react';
-import React from 'react';
+import React, { memo } from 'react';
 import { TemperatureEquipment } from '../types';
+import { EquipmentRowEditForm } from './EquipmentRowEditForm';
 
 interface EquipmentListTableRowProps {
   item: TemperatureEquipment;
@@ -26,7 +27,8 @@ interface EquipmentListTableRowProps {
   formatDate?: (date: Date) => string;
   handleRowClick: (e: React.MouseEvent, item: TemperatureEquipment) => void;
 }
-export function EquipmentListTableRow({
+
+function EquipmentListTableRowComponent({
   item,
   editingId,
   setEditingId,
@@ -93,7 +95,8 @@ export function EquipmentListTableRow({
         <td className="px-6 py-4 whitespace-nowrap">
           {(() => {
             const lastLogDate = getLastLogDate ? getLastLogDate(item) : null;
-            if (!lastLogDate) return <span className="text-sm text-[var(--foreground-subtle)]">Never</span>;
+            if (!lastLogDate)
+              return <span className="text-sm text-[var(--foreground-subtle)]">Never</span>;
             return (
               <span className="text-sm text-[var(--foreground-secondary)]">
                 {formatDate ? formatDate(new Date(lastLogDate)) : lastLogDate}
@@ -104,7 +107,8 @@ export function EquipmentListTableRow({
         <td className="px-6 py-4 whitespace-nowrap">
           {(() => {
             const lastLogInfo = getLastLogInfo ? getLastLogInfo(item) : null;
-            if (!lastLogInfo) return <span className="text-sm text-[var(--foreground-subtle)]">—</span>;
+            if (!lastLogInfo)
+              return <span className="text-sm text-[var(--foreground-subtle)]">—</span>;
             return (
               <span className="text-sm font-semibold text-[var(--foreground-secondary)]">
                 {lastLogInfo.temperature.toFixed(1)}°C
@@ -121,13 +125,15 @@ export function EquipmentListTableRow({
             return (
               <div className="flex items-center gap-2">
                 <div
-                  className={`h-2 w-2 rounded-full shadow-lg animate-pulse ${
+                  className={`h-2 w-2 animate-pulse rounded-full shadow-lg ${
                     lastLogInfo.isInRange ? 'bg-[var(--color-success)]' : 'bg-[var(--color-error)]'
                   }`}
                 />
                 <span
                   className={`text-xs font-semibold ${
-                    lastLogInfo.isInRange ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'
+                    lastLogInfo.isInRange
+                      ? 'text-[var(--color-success)]'
+                      : 'text-[var(--color-error)]'
                   }`}
                 >
                   {lastLogInfo.isInRange ? 'In Range' : 'Out of Range'}
@@ -179,117 +185,41 @@ export function EquipmentListTableRow({
           </div>
         </td>
       </tr>
-      {editingId === item.id && (
-        <tr>
-          <td colSpan={8} className="bg-[var(--muted)]/30 px-6 py-4">
-            <form
-              onSubmit={e => {
-                e.preventDefault();
-                e.stopPropagation();
-                const formData = new FormData(e.currentTarget);
-                onUpdate(item.id, {
-                  name: formData.get('name') as string,
-                  equipment_type: formData.get('equipmentType') as string,
-                  location: (formData.get('location') as string) || null,
-                  min_temp_celsius: formData.get('minTemp')
-                    ? parseFloat(formData.get('minTemp') as string)
-                    : null,
-                  max_temp_celsius: formData.get('maxTemp')
-                    ? parseFloat(formData.get('maxTemp') as string)
-                    : null,
-                });
-              }}
-              onClick={e => e.stopPropagation()}
-              className="space-y-4"
-            >
-              <div className="desktop:grid-cols-2 large-desktop:grid-cols-5 grid grid-cols-1 gap-4">
-                <div>
-                  <label className="mb-2 block text-xs font-medium text-[var(--foreground-secondary)]">
-                    Equipment Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    defaultValue={item.name}
-                    className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] transition-all focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="mb-2 block text-xs font-medium text-[var(--foreground-secondary)]">
-                    Type
-                  </label>
-                  <select
-                    name="equipmentType"
-                    defaultValue={item.equipment_type}
-                    className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] transition-all focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
-                    required
-                  >
-                    {temperatureTypes.map(type => (
-                      <option key={type.value} value={type.value}>
-                        {type.icon} {type.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="mb-2 block text-xs font-medium text-[var(--foreground-secondary)]">
-                    Location
-                  </label>
-                  <input
-                    type="text"
-                    name="location"
-                    defaultValue={item.location || ''}
-                    className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] transition-all focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
-                    placeholder="Optional"
-                  />
-                </div>
-                <div>
-                  <label className="mb-2 block text-xs font-medium text-[var(--foreground-secondary)]">
-                    Min Temp (°C)
-                  </label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    name="minTemp"
-                    defaultValue={item.min_temp_celsius || ''}
-                    className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] transition-all focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
-                    placeholder="Optional"
-                  />
-                </div>
-                <div>
-                  <label className="mb-2 block text-xs font-medium text-[var(--foreground-secondary)]">
-                    Max Temp (°C)
-                  </label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    name="maxTemp"
-                    defaultValue={item.max_temp_celsius || ''}
-                    className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] transition-all focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
-                    placeholder="Optional"
-                  />
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  type="submit"
-                  className="rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-sm font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
-                >
-                  Update Equipment
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setEditingId(null)}
-                  className="rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 text-sm font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:bg-[var(--surface-variant)] hover:text-[var(--foreground)]"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </td>
-        </tr>
-      )}
+      <EquipmentRowEditForm
+        item={item}
+        editingId={editingId}
+        setEditingId={setEditingId}
+        temperatureTypes={temperatureTypes}
+        onUpdate={onUpdate}
+      />
     </React.Fragment>
   );
 }
+
+// Memoize component to prevent unnecessary re-renders when props don't change
+export const EquipmentListTableRow = memo(
+  EquipmentListTableRowComponent,
+  (prevProps, nextProps) => {
+    // Compare item properties that affect rendering
+    const itemChanged =
+      prevProps.item.id !== nextProps.item.id ||
+      prevProps.item.name !== nextProps.item.name ||
+      prevProps.item.equipment_type !== nextProps.item.equipment_type ||
+      prevProps.item.location !== nextProps.item.location ||
+      prevProps.item.min_temp_celsius !== nextProps.item.min_temp_celsius ||
+      prevProps.item.max_temp_celsius !== nextProps.item.max_temp_celsius ||
+      prevProps.item.is_active !== nextProps.item.is_active;
+
+    // Compare editing state
+    const editingStateChanged =
+      (prevProps.editingId === prevProps.item.id) !== (nextProps.editingId === nextProps.item.id);
+
+    // If item or editing state changed, allow re-render
+    if (itemChanged || editingStateChanged) {
+      return false; // Props changed, allow re-render
+    }
+
+    // Otherwise, prevent re-render (props are equal)
+    return true; // Props are equal, prevent re-render
+  },
+);

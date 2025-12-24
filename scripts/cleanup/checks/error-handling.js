@@ -52,7 +52,10 @@ function findComponentFiles() {
           walkDir(fullPath);
         }
       } else if (/\.(tsx|jsx)$/.test(entry.name)) {
-        files.push(fullPath);
+        // Exclude cleanup scripts - they're utility scripts, not application code
+        if (!fullPath.includes('scripts/cleanup/')) {
+          files.push(fullPath);
+        }
       }
     }
   }
@@ -155,8 +158,7 @@ function analyzeErrorHandling(content, filePath) {
       // Check if this catch block is in a script tag with the exception comment
       const isInScriptTag = /dangerouslySetInnerHTML/.test(content);
       const hasExceptionComment =
-        /logger is not available in script tag/.test(content) ||
-        /before React loads/.test(content);
+        /logger is not available in script tag/.test(content) || /before React loads/.test(content);
 
       if (hasConsoleErrorInCatch && !(isInScriptTag && hasExceptionComment)) {
         violations.push({

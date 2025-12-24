@@ -19,7 +19,7 @@ function runCommand(command, options = {}) {
     return execSync(command, {
       encoding: 'utf-8',
       stdio: options.silent ? 'pipe' : 'inherit',
-      ...options
+      ...options,
     });
   } catch (error) {
     if (!options.silent) {
@@ -35,22 +35,17 @@ function checkStatus() {
 
   try {
     // Check for modified files
-    const modified = runCommand(
-      `git diff --name-only ${NACHOTACO_PATH}`,
-      { silent: true }
-    ).trim();
+    const modified = runCommand(`git diff --name-only ${NACHOTACO_PATH}`, { silent: true }).trim();
 
     // Check for staged files
-    const staged = runCommand(
-      `git diff --cached --name-only ${NACHOTACO_PATH}`,
-      { silent: true }
-    ).trim();
+    const staged = runCommand(`git diff --cached --name-only ${NACHOTACO_PATH}`, {
+      silent: true,
+    }).trim();
 
     // Check for untracked files
-    const untracked = runCommand(
-      `git ls-files --others --exclude-standard ${NACHOTACO_PATH}`,
-      { silent: true }
-    ).trim();
+    const untracked = runCommand(`git ls-files --others --exclude-standard ${NACHOTACO_PATH}`, {
+      silent: true,
+    }).trim();
 
     if (!modified && !staged && !untracked) {
       console.log('✅ Nachotaco area is clean - no modifications detected');

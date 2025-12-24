@@ -19,7 +19,10 @@ export async function fetchKitchenSections() {
   if (sectionsError) {
     logger.error('[Prep Lists API] Error fetching kitchen sections:', {
       error: sectionsError.message,
-      context: { endpoint: '/api/prep-lists/generate-from-menu', operation: 'fetchKitchenSections' },
+      context: {
+        endpoint: '/api/prep-lists/generate-from-menu',
+        operation: 'fetchKitchenSections',
+      },
     });
   }
 

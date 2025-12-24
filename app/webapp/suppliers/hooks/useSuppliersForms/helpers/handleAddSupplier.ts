@@ -28,7 +28,9 @@ export async function handleAddSupplierHelper(
     website: newSupplier.website || null,
     payment_terms: newSupplier.payment_terms || null,
     delivery_schedule: newSupplier.delivery_schedule || null,
-    minimum_order_amount: newSupplier.minimum_order_amount ? parseFloat(newSupplier.minimum_order_amount) : null,
+    minimum_order_amount: newSupplier.minimum_order_amount
+      ? parseFloat(newSupplier.minimum_order_amount)
+      : null,
     is_active: true,
     notes: newSupplier.notes || null,
     created_at: new Date().toISOString(),
@@ -51,7 +53,9 @@ export async function handleAddSupplierHelper(
       website: newSupplier.website || null,
       payment_terms: newSupplier.payment_terms || null,
       delivery_schedule: newSupplier.delivery_schedule || null,
-      minimum_order_amount: newSupplier.minimum_order_amount ? parseFloat(newSupplier.minimum_order_amount) : null,
+      minimum_order_amount: newSupplier.minimum_order_amount
+        ? parseFloat(newSupplier.minimum_order_amount)
+        : null,
       is_active: true,
       notes: newSupplier.notes || null,
     };
@@ -70,7 +74,7 @@ export async function handleAddSupplierHelper(
       };
       // Replace temp supplier with real supplier from server
       setSuppliers(prevSuppliers =>
-        prevSuppliers.map(s => (s.id === tempId ? serverSupplier : s)),
+        prevSuppliers.map(s => (String(s.id) === tempId ? serverSupplier : s)),
       );
       cacheData('suppliers', [...originalSuppliers, serverSupplier]);
     } else {

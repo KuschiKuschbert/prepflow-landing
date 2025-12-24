@@ -5,12 +5,14 @@
 ## ✅ Completed Quick Wins (5 files)
 
 ### File Size Fixes (4 files)
+
 1. `app/api/db/populate-empty-dishes/route.ts` - 201 → 199 lines
 2. `app/webapp/recipes/components/RecipePreviewModal.tsx` - 301 → 300 lines
 3. `app/api/qr-codes/route.ts` - 201 → 200 lines
 4. `app/api/fix/enable-google-connection/route.ts` - 201 → 200 lines
 
 ### Error Handling Fixes (5 files)
+
 1. `app/api/db/populate-empty-dishes/route.ts` - Fixed 4 error responses
 2. `app/api/db/diagnose-dishes/route.ts` - Fixed 4 error responses
 3. `app/api/ingredients/exists/route.ts` - Fixed catch block error response
