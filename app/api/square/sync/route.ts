@@ -11,9 +11,17 @@ import { isSquarePOSEnabled } from '@/lib/square/feature-flags';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { syncCatalogFromSquare, syncCatalogToSquare, syncCatalogBidirectional } from '@/lib/square/sync/catalog';
+import {
+  syncCatalogFromSquare,
+  syncCatalogToSquare,
+  syncCatalogBidirectional,
+} from '@/lib/square/sync/catalog';
 import { syncOrdersFromSquare, syncRecentOrdersFromSquare } from '@/lib/square/sync/orders';
-import { syncStaffFromSquare, syncStaffToSquare, syncStaffBidirectional } from '@/lib/square/sync/staff';
+import {
+  syncStaffFromSquare,
+  syncStaffToSquare,
+  syncStaffBidirectional,
+} from '@/lib/square/sync/staff';
 import { syncCostsToSquare } from '@/lib/square/sync/costs';
 import { performInitialSync } from '@/lib/square/sync/initial-sync';
 import { z } from 'zod';
@@ -31,14 +39,16 @@ async function getUserIdFromEmail(email: string): Promise<string | null> {
 const syncRequestSchema = z.object({
   operation: z.enum(['catalog', 'orders', 'staff', 'costs', 'initial_sync']),
   direction: z.enum(['from_square', 'to_square', 'bidirectional']).optional(),
-  options: z.object({
-    locationId: z.string().optional(),
-    dishIds: z.array(z.string().uuid()).optional(),
-    employeeIds: z.array(z.string().uuid()).optional(),
-    startDate: z.string().optional(),
-    endDate: z.string().optional(),
-    days: z.number().int().positive().optional(),
-  }).optional(),
+  options: z
+    .object({
+      locationId: z.string().optional(),
+      dishIds: z.array(z.string().uuid()).optional(),
+      employeeIds: z.array(z.string().uuid()).optional(),
+      startDate: z.string().optional(),
+      endDate: z.string().optional(),
+      days: z.number().int().positive().optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -58,7 +68,11 @@ export async function POST(request: NextRequest) {
     const enabled = await isSquarePOSEnabled(user.email, user.email);
     if (!enabled) {
       return NextResponse.json(
-        ApiErrorHandler.createError('Square POS integration is not enabled', 'FEATURE_DISABLED', 403),
+        ApiErrorHandler.createError(
+          'Square POS integration is not enabled',
+          'FEATURE_DISABLED',
+          403,
+        ),
         { status: 403 },
       );
     }
@@ -78,10 +92,7 @@ export async function POST(request: NextRequest) {
       logger.warn('[Square Sync API] Failed to parse request body:', {
         error: err instanceof Error ? err.message : String(err),
       });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400), { status: 400 });
     }
 
     const validationResult = syncRequestSchema.safeParse(body);
@@ -107,15 +118,24 @@ export async function POST(request: NextRequest) {
         } else if (direction === 'to_square') {
           result = await syncCatalogToSquare(userId, options?.dishIds);
         } else {
-          result = await syncCatalogBidirectional(userId, options?.locationId);
+          result = await syncCatalogBidirectional(userId);
         }
         break;
 
       case 'orders':
         if (options?.startDate && options?.endDate) {
-          result = await syncOrdersFromSquare(userId, options.startDate, options.endDate, options?.locationId);
+          result = await syncOrdersFromSquare(
+            userId,
+            options.startDate,
+            options.endDate,
+            options?.locationId,
+          );
         } else {
-          result = await syncRecentOrdersFromSquare(userId, options?.days || 30);
+          result = await syncRecentOrdersFromSquare(
+            userId,
+            options?.days || 30,
+            options?.locationId,
+          );
         }
         break;
 
@@ -133,35 +153,40 @@ export async function POST(request: NextRequest) {
         result = await syncCostsToSquare(userId, options?.dishIds);
         break;
 
-      case 'initial_sync':
-        result = await performInitialSync(userId);
+      case 'initial_sync': {
+        const { getSquareConfig } = await import('@/lib/square/config');
+        const config = await getSquareConfig(userId);
+        if (!config) {
+          return NextResponse.json(
+            ApiErrorHandler.createError('Square configuration not found', 'CONFIG_NOT_FOUND', 404),
+            { status: 404 },
+          );
+        }
+        result = await performInitialSync(userId, config);
         break;
+      }
 
       default:
         return NextResponse.json(
-          ApiErrorHandler.createError(`Unknown sync operation: ${operation}`, 'INVALID_OPERATION', 400),
+          ApiErrorHandler.createError(
+            `Unknown sync operation: ${operation}`,
+            'INVALID_OPERATION',
+            400,
+          ),
           { status: 400 },
         );
     }
 
     return NextResponse.json({
       success: result.success,
-      message: result.message,
       details: result,
     });
   } catch (error) {
-    logger.error('[Square Sync API] Error:', {
-      error: error instanceof Error ? error.message : String(error),
-      context: { endpoint: '/api/square/sync', method: 'POST' },
-    });
-
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error('[Square Sync API] Error:', { error: errorMessage, context: { endpoint: '/api/square/sync', method: 'POST' } });
     return NextResponse.json(
       ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? error instanceof Error
-            ? error.message
-            : 'Unknown error'
-          : 'Internal server error',
+        process.env.NODE_ENV === 'development' ? errorMessage : 'Internal server error',
         'SERVER_ERROR',
         500,
       ),

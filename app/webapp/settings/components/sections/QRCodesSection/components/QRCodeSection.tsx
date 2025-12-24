@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { Check, ChevronDown, ChevronRight, Printer } from 'lucide-react';
 import type { QRCodeEntity } from '../types';
@@ -83,10 +85,14 @@ export function QRCodeSection({
             >
               <div
                 className={`flex h-4 w-4 items-center justify-center rounded border ${
-                  allSelected ? 'border-[var(--primary)] bg-[var(--primary)]' : 'border-[var(--border)]'
+                  allSelected
+                    ? 'border-[var(--primary)] bg-[var(--primary)]'
+                    : 'border-[var(--border)]'
                 }`}
               >
-                {allSelected && <Icon icon={Check} size="xs" className="text-[var(--button-active-text)]" />}
+                {allSelected && (
+                  <Icon icon={Check} size="xs" className="text-[var(--button-active-text)]" />
+                )}
               </div>
               Select All ({entities.length})
             </button>

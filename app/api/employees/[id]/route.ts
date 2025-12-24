@@ -2,17 +2,17 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { updateEmployee } from '../helpers/updateEmployee';
+import { z } from 'zod';
 import { deleteEmployee } from '../helpers/deleteEmployee';
 import { handleEmployeeError } from '../helpers/handleEmployeeError';
-import { z } from 'zod';
+import { updateEmployee } from '../helpers/updateEmployee';
 
 const updateEmployeeByIdSchema = z.object({
   full_name: z.string().optional(),
   role: z.string().optional(),
   employment_start_date: z.string().optional(),
   employment_end_date: z.string().optional(),
-  status: z.string().optional(),
+  status: z.enum(['active', 'inactive', 'terminated']).optional(),
   phone: z.string().optional(),
   email: z.string().email().optional().or(z.literal('')),
   emergency_contact: z.string().optional(),
@@ -39,9 +39,8 @@ const EMPLOYEE_SELECT = `
  * Get a single employee by ID
  */
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
   try {
-    const { id } = await context.params;
-
     if (!supabaseAdmin) {
       return NextResponse.json(
         ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
@@ -96,8 +95,8 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
  * Update an employee
  */
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
   try {
-    const { id } = await context.params;
     let body: unknown;
     try {
       body = await request.json();
@@ -148,9 +147,8 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
  * Delete (deactivate) an employee
  */
 export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
   try {
-    const { id } = await context.params;
-
     await deleteEmployee(id);
 
     return NextResponse.json({

@@ -46,7 +46,9 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
                 className="rounded-lg border border-[var(--border)] bg-[var(--muted)] p-3"
               >
                 <div className="mb-2 flex items-start justify-between">
-                  <h4 className="text-sm font-medium text-[var(--foreground)]">{calc.ingredientName}</h4>
+                  <h4 className="text-sm font-medium text-[var(--foreground)]">
+                    {calc.ingredientName}
+                  </h4>
                   <div className="flex items-center space-x-2">
                     <span className="text-sm font-bold text-[var(--primary)]">
                       ${calc.yieldAdjustedCost.toFixed(2)}
@@ -56,7 +58,12 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
                       className="p-1 text-[var(--foreground-muted)] transition-colors duration-200 hover:text-[var(--primary)]"
                       title="Edit quantity"
                     >
-                      <Icon icon={Edit} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+                      <Icon
+                        icon={Edit}
+                        size="sm"
+                        className="text-[var(--foreground-muted)]"
+                        aria-hidden={true}
+                      />
                     </button>
                     <button
                       type="button"
@@ -68,7 +75,12 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
                       className="p-1 text-[var(--foreground-muted)] transition-colors duration-200 hover:text-[var(--color-error)]"
                       title="Remove ingredient"
                     >
-                      <Icon icon={Trash2} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+                      <Icon
+                        icon={Trash2}
+                        size="sm"
+                        className="text-[var(--foreground-muted)]"
+                        aria-hidden={true}
+                      />
                     </button>
                   </div>
                 </div>
@@ -137,7 +149,9 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
                     key={calc.ingredientId || `calc-${index}`}
                     className="transition-colors hover:bg-[var(--muted)]/20"
                   >
-                    <td className="px-6 py-4 text-sm text-[var(--foreground)]">{calc.ingredientName}</td>
+                    <td className="px-6 py-4 text-sm text-[var(--foreground)]">
+                      {calc.ingredientName}
+                    </td>
                     <td className="px-6 py-4 text-sm text-[var(--foreground-secondary)]">
                       {editingIngredient === calc.ingredientId ? (
                         <div className="flex items-center space-x-2">
@@ -149,7 +163,9 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
                             step="0.1"
                             min="0"
                           />
-                          <span className="text-xs text-[var(--foreground-muted)]">{calc.unit}</span>
+                          <span className="text-xs text-[var(--foreground-muted)]">
+                            {calc.unit}
+                          </span>
                         </div>
                       ) : (
                         <span>
@@ -228,7 +244,9 @@ export const DishIngredientTable: React.FC<DishIngredientTableProps> = React.mem
           {costPerPortion > 0 && (
             <div className="mb-4 flex items-center justify-between">
               <span className="text-sm text-[var(--foreground-muted)]">Cost per portion:</span>
-              <span className="text-sm font-medium text-[var(--foreground)]">${costPerPortion.toFixed(2)}</span>
+              <span className="text-sm font-medium text-[var(--foreground)]">
+                ${costPerPortion.toFixed(2)}
+              </span>
             </div>
           )}
         </div>

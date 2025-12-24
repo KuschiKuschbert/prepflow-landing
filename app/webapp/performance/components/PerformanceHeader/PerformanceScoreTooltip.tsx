@@ -24,7 +24,11 @@ export function PerformanceScoreTooltip({
   onMouseLeave,
 }: PerformanceScoreTooltipProps) {
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const priorityColors = { high: 'text-[var(--color-error)]', medium: 'text-[var(--color-warning)]', low: 'text-[var(--color-success)]' };
+  const priorityColors = {
+    high: 'text-[var(--color-error)]',
+    medium: 'text-[var(--color-warning)]',
+    low: 'text-[var(--color-success)]',
+  };
   const priorityLabels = { high: 'High Priority', medium: 'Medium Priority', low: 'Low Priority' };
 
   if (!showTooltip || tips.length === 0) return null;
@@ -39,15 +43,22 @@ export function PerformanceScoreTooltip({
     >
       <div className="mb-3 flex items-center gap-2">
         <Sparkles className="h-4 w-4 text-[var(--primary)]" />
-        <h4 className="text-sm font-semibold text-[var(--foreground)]">AI-Enhanced Improvement Tips</h4>
-        {tipsLoading && <span className="ml-auto text-xs text-[var(--foreground-muted)]">Loading...</span>}
+        <h4 className="text-sm font-semibold text-[var(--foreground)]">
+          AI-Enhanced Improvement Tips
+        </h4>
+        {tipsLoading && (
+          <span className="ml-auto text-xs text-[var(--foreground-muted)]">Loading...</span>
+        )}
       </div>
       <div className="max-h-96 space-y-3 overflow-y-auto">
         {tipsLoading && tips.length === 0 ? (
           <div className="text-sm text-[var(--foreground-muted)]">Generating tips...</div>
         ) : (
           tips.slice(0, 5).map((tip: PerformanceTip, index: number) => (
-            <div key={index} className="border-b border-[var(--border)] pb-3 last:border-0 last:pb-0">
+            <div
+              key={index}
+              className="border-b border-[var(--border)] pb-3 last:border-0 last:pb-0"
+            >
               <div className="mb-1 flex items-center gap-2">
                 <span className={`text-xs font-medium ${priorityColors[tip.priority]}`}>
                   {priorityLabels[tip.priority]}
@@ -55,7 +66,9 @@ export function PerformanceScoreTooltip({
                 <span className="text-xs text-[var(--foreground-subtle)]">•</span>
                 <span className="text-xs text-[var(--foreground-muted)]">{tip.category}</span>
               </div>
-              <p className="mb-1 text-sm leading-relaxed text-[var(--foreground-secondary)]">{tip.message}</p>
+              <p className="mb-1 text-sm leading-relaxed text-[var(--foreground-secondary)]">
+                {tip.message}
+              </p>
               {tip.action && (
                 <p className="text-xs leading-relaxed text-[var(--primary)]">💡 {tip.action}</p>
               )}

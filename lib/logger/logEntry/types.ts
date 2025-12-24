@@ -28,4 +28,3 @@ export interface LogEntry {
   };
   data?: unknown;
 }
-

@@ -174,7 +174,12 @@ export function TemperatureFilters({
         onClick={onAddClick}
         className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
       >
-        <Icon icon={Plus} size="md" className="text-[var(--button-active-text)]" aria-hidden={true} />
+        <Icon
+          icon={Plus}
+          size="md"
+          className="text-[var(--button-active-text)]"
+          aria-hidden={true}
+        />
         {t('temperature.addLog', 'Add Temperature Log')}
       </button>
     </div>

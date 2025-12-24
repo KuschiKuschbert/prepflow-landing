@@ -134,7 +134,9 @@ export function ParLevelCard({
               {parLevel.ingredients?.ingredient_name || 'Unknown Ingredient'}
             </h3>
             {parLevel.ingredients?.category && (
-              <p className="truncate text-xs text-[var(--foreground-subtle)]">{parLevel.ingredients.category}</p>
+              <p className="truncate text-xs text-[var(--foreground-subtle)]">
+                {parLevel.ingredients.category}
+              </p>
             )}
           </div>
           <div className="flex-shrink-0 text-right">
@@ -148,8 +150,8 @@ export function ParLevelCard({
         {/* Secondary Info: Reorder Point */}
         <div className="mb-2 flex items-center gap-x-3 text-xs text-[var(--foreground-muted)]">
           <span>
-            <span className="text-[var(--foreground-subtle)]">Reorder Point:</span> {parLevel.reorder_point}{' '}
-            {parLevel.unit}
+            <span className="text-[var(--foreground-subtle)]">Reorder Point:</span>{' '}
+            {parLevel.reorder_point} {parLevel.unit}
           </span>
         </div>
 
@@ -196,7 +198,12 @@ export function ParLevelCard({
               }`}
               aria-label={`Edit par level for ${parLevel.ingredients?.ingredient_name || 'ingredient'}`}
             >
-              <Icon icon={Edit2} size="xs" className="text-[var(--foreground)]" aria-hidden={true} />
+              <Icon
+                icon={Edit2}
+                size="xs"
+                className="text-[var(--foreground)]"
+                aria-hidden={true}
+              />
             </button>
             <button
               onClick={handleDeleteClick}
@@ -209,7 +216,12 @@ export function ParLevelCard({
               {deletingId === parLevel.id ? (
                 <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
               ) : (
-                <Icon icon={Trash2} size="xs" className="text-[var(--foreground)]" aria-hidden={true} />
+                <Icon
+                  icon={Trash2}
+                  size="xs"
+                  className="text-[var(--foreground)]"
+                  aria-hidden={true}
+                />
               )}
             </button>
           </div>

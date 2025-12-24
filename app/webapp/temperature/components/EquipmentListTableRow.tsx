@@ -1,5 +1,4 @@
 'use client';
-
 import { Icon } from '@/components/ui/Icon';
 import { Edit, Power, PowerOff, QrCode, Trash2, LucideIcon } from 'lucide-react';
 import React from 'react';
@@ -10,7 +9,6 @@ interface EquipmentListTableRowProps {
   editingId: string | null;
   setEditingId: (id: string | null) => void;
   temperatureTypes: Array<{ value: string; label: string; icon: string }>;
-  quickTempLoading: Record<string, boolean>;
   onQuickTempLog: (id: string, name: string, type: string) => Promise<void>;
   onToggleStatus: (id: string, current: boolean) => void;
   onDelete: (id: string) => void;
@@ -28,13 +26,11 @@ interface EquipmentListTableRowProps {
   formatDate?: (date: Date) => string;
   handleRowClick: (e: React.MouseEvent, item: TemperatureEquipment) => void;
 }
-
 export function EquipmentListTableRow({
   item,
   editingId,
   setEditingId,
   temperatureTypes,
-  quickTempLoading,
   onQuickTempLog,
   onToggleStatus,
   onDelete,
@@ -74,7 +70,9 @@ export function EquipmentListTableRow({
           </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          <span className="text-sm text-[var(--foreground-secondary)]">{getTypeLabel(item.equipment_type)}</span>
+          <span className="text-sm text-[var(--foreground-secondary)]">
+            {getTypeLabel(item.equipment_type)}
+          </span>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <span className="text-sm text-[var(--foreground-muted)]">{item.location || '—'}</span>
@@ -85,7 +83,9 @@ export function EquipmentListTableRow({
               {item.min_temp_celsius}°C - {item.max_temp_celsius}°C
             </span>
           ) : item.min_temp_celsius !== null ? (
-            <span className="text-sm font-medium text-[var(--primary)]">≥{item.min_temp_celsius}°C</span>
+            <span className="text-sm font-medium text-[var(--primary)]">
+              ≥{item.min_temp_celsius}°C
+            </span>
           ) : (
             <span className="text-sm text-[var(--foreground-subtle)]">Not set</span>
           )}
@@ -93,22 +93,18 @@ export function EquipmentListTableRow({
         <td className="px-6 py-4 whitespace-nowrap">
           {(() => {
             const lastLogDate = getLastLogDate ? getLastLogDate(item) : null;
-            if (!lastLogDate) {
-              return <span className="text-sm text-[var(--foreground-subtle)]">Never</span>;
-            }
-            if (formatDate) {
-              const date = new Date(lastLogDate);
-              return <span className="text-sm text-[var(--foreground-secondary)]">{formatDate(date)}</span>;
-            }
-            return <span className="text-sm text-[var(--foreground-secondary)]">{lastLogDate}</span>;
+            if (!lastLogDate) return <span className="text-sm text-[var(--foreground-subtle)]">Never</span>;
+            return (
+              <span className="text-sm text-[var(--foreground-secondary)]">
+                {formatDate ? formatDate(new Date(lastLogDate)) : lastLogDate}
+              </span>
+            );
           })()}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           {(() => {
             const lastLogInfo = getLastLogInfo ? getLastLogInfo(item) : null;
-            if (!lastLogInfo) {
-              return <span className="text-sm text-[var(--foreground-subtle)]">—</span>;
-            }
+            if (!lastLogInfo) return <span className="text-sm text-[var(--foreground-subtle)]">—</span>;
             return (
               <span className="text-sm font-semibold text-[var(--foreground-secondary)]">
                 {lastLogInfo.temperature.toFixed(1)}°C
@@ -119,34 +115,32 @@ export function EquipmentListTableRow({
         <td className="px-6 py-4 whitespace-nowrap">
           {(() => {
             const lastLogInfo = getLastLogInfo ? getLastLogInfo(item) : null;
-            if (lastLogInfo && lastLogInfo.isInRange !== null) {
-              return (
-                <div className="flex items-center gap-2">
-                  <div
-                    className={`h-2 w-2 rounded-full shadow-lg ${
-                      lastLogInfo.isInRange
-                        ? 'animate-pulse bg-[var(--color-success)]'
-                        : 'animate-pulse bg-[var(--color-error)]'
-                    }`}
-                  />
-                  <span
-                    className={`text-xs font-semibold ${
-                      lastLogInfo.isInRange ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'
-                    }`}
-                  >
-                    {lastLogInfo.isInRange ? 'In Range' : 'Out of Range'}
-                  </span>
-                </div>
-              );
+            if (!lastLogInfo || lastLogInfo.isInRange === null) {
+              return <span className="text-xs text-[var(--foreground-subtle)]">—</span>;
             }
-            return <span className="text-xs text-[var(--foreground-subtle)]">—</span>;
+            return (
+              <div className="flex items-center gap-2">
+                <div
+                  className={`h-2 w-2 rounded-full shadow-lg animate-pulse ${
+                    lastLogInfo.isInRange ? 'bg-[var(--color-success)]' : 'bg-[var(--color-error)]'
+                  }`}
+                />
+                <span
+                  className={`text-xs font-semibold ${
+                    lastLogInfo.isInRange ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'
+                  }`}
+                >
+                  {lastLogInfo.isInRange ? 'In Range' : 'Out of Range'}
+                </span>
+              </div>
+            );
           })()}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
             <button
               onClick={() => onQuickTempLog(item.id, item.name, item.equipment_type)}
-              disabled={quickTempLoading[item.id] || !item.is_active}
+              disabled={!item.is_active}
               className="rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-3 py-1.5 text-xs font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Quick Log
@@ -154,7 +148,7 @@ export function EquipmentListTableRow({
             {onShowQRCode && (
               <button
                 onClick={() => onShowQRCode(item)}
-                className="group relative rounded-lg border-2 border-[var(--primary)]/60 bg-gradient-to-br from-[var(--primary)]/10 to-[var(--accent)]/10 p-1.5 text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--primary)] hover:from-[var(--primary)]/20 hover:to-[var(--accent)]/20 hover:text-[var(--button-active-text)] hover:shadow-lg hover:shadow-[var(--primary)]/20"
+                className="group relative rounded-lg border-2 border-[var(--primary)]/60 bg-gradient-to-br from-[var(--primary)]/10 to-[var(--accent)]/10 p-1.5 text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--primary)] hover:from-[var(--primary)]/20 hover:to-[var(--accent)]/20 hover:text-[var(--button-active-text)] hover:shadow-[var(--primary)]/20 hover:shadow-lg"
                 title="Show QR Code"
               >
                 <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
@@ -222,7 +216,9 @@ export function EquipmentListTableRow({
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block text-xs font-medium text-[var(--foreground-secondary)]">Type</label>
+                  <label className="mb-2 block text-xs font-medium text-[var(--foreground-secondary)]">
+                    Type
+                  </label>
                   <select
                     name="equipmentType"
                     defaultValue={item.equipment_type}
@@ -237,7 +233,9 @@ export function EquipmentListTableRow({
                   </select>
                 </div>
                 <div>
-                  <label className="mb-2 block text-xs font-medium text-[var(--foreground-secondary)]">Location</label>
+                  <label className="mb-2 block text-xs font-medium text-[var(--foreground-secondary)]">
+                    Location
+                  </label>
                   <input
                     type="text"
                     name="location"

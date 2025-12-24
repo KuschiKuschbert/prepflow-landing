@@ -5,6 +5,7 @@ import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { logger } from '@/lib/logger';
 import { useOnRecipeShared } from '@/lib/personality/hooks';
+import { useNotification } from '@/contexts/NotificationContext';
 import { EmptyState } from './components/EmptyState';
 import { ShareCard } from './components/ShareCard';
 import { ShareFormModal } from './components/ShareFormModal';
@@ -30,6 +31,7 @@ interface RecipeShare {
 
 export default function RecipeSharingPage() {
   const { t } = useTranslation();
+  const { showSuccess, showError } = useNotification();
   const onRecipeShared = useOnRecipeShared();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [recipeShares, setRecipeShares] = useState<RecipeShare[]>([]);
@@ -77,28 +79,65 @@ export default function RecipeSharingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Find the recipe for the share
+    const recipe = recipes.find(r => r.id === formData.recipeId);
+    if (!recipe) {
+      showError('Recipe not found');
+      return;
+    }
+
+    // Store original state for rollback
+    const originalShares = [...recipeShares];
+    const shareFormData = { ...formData };
+
+    // Create temporary share for optimistic update
+    const tempId = `temp-${Date.now()}`;
+    const tempShare: RecipeShare = {
+      id: tempId,
+      recipe_id: shareFormData.recipeId,
+      share_type: shareFormData.shareType,
+      recipient_email:
+        shareFormData.shareType === 'email' ? shareFormData.recipientEmail : undefined,
+      notes: shareFormData.notes || undefined,
+      status: 'pending',
+      created_at: new Date().toISOString(),
+      recipes: recipe,
+    };
+
+    // Optimistically add to UI immediately
+    setRecipeShares(prev => [tempShare, ...prev]);
+    resetForm();
+    setError(null);
+
+    // Trigger personality hook for recipe sharing
+    onRecipeShared();
+
     try {
       const response = await fetch('/api/recipe-share', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(shareFormData),
       });
       const result = await response.json();
-      if (result.success) {
-        // Trigger personality hook for recipe sharing
-        onRecipeShared();
+      if (result.success && result.data) {
+        // Replace temp share with real one from server
+        setRecipeShares(prev => prev.map(share => (share.id === tempId ? result.data : share)));
+        showSuccess('Recipe shared successfully');
 
-        await fetchRecipeShares();
-        resetForm();
-        setError(null);
-        if (formData.shareType === 'pdf' && result.data.pdfContent) {
+        if (shareFormData.shareType === 'pdf' && result.data.pdfContent) {
           downloadPDF(result.data.recipe, result.data.pdfContent);
         }
       } else {
-        setError(result.message || 'Failed to share recipe');
+        // Error - revert optimistic update
+        setRecipeShares(originalShares);
+        showError(result.message || result.error || 'Failed to share recipe');
       }
-    } catch {
-      setError('Failed to share recipe');
+    } catch (err) {
+      // Error - revert optimistic update
+      setRecipeShares(originalShares);
+      logger.error('Error sharing recipe:', err);
+      showError("Couldn't share that recipe, chef. Try again.");
     }
   };
 

@@ -185,7 +185,7 @@ export default function GuidePage() {
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <div className="desktop:px-8 mx-auto max-w-[1400px] large-desktop:max-w-[1400px] xl:max-w-[1400px] 2xl:max-w-[1600px] px-4 py-8">
+      <div className="desktop:px-8 large-desktop:max-w-[1400px] mx-auto max-w-[1400px] px-4 py-8 xl:max-w-[1400px] 2xl:max-w-[1600px]">
         {!currentGuide ? (
           // Guide selection view
           <div className="space-y-8">
@@ -211,8 +211,12 @@ export default function GuidePage() {
                 >
                   ← Back to Guides
                 </button>
-                <h1 className="text-fluid-2xl font-bold text-[var(--foreground)]">{currentGuide.title}</h1>
-                <p className="mt-1 text-sm text-[var(--foreground-muted)]">{currentGuide.description}</p>
+                <h1 className="text-fluid-2xl font-bold text-[var(--foreground)]">
+                  {currentGuide.title}
+                </h1>
+                <p className="mt-1 text-sm text-[var(--foreground-muted)]">
+                  {currentGuide.description}
+                </p>
               </div>
               <div className="text-right text-sm text-[var(--foreground-subtle)]">
                 Step {currentStepIndex + 1} of {currentGuide.steps.length}

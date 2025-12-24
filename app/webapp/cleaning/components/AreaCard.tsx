@@ -75,7 +75,9 @@ function AreaCardComponent({ area, onAddTask, onViewTasks, onDelete }: AreaCardP
         </p>
         <div className="flex items-center justify-between">
           {area.cleaning_frequency && (
-            <span className="text-xs text-[var(--foreground-subtle)]">{area.cleaning_frequency}</span>
+            <span className="text-xs text-[var(--foreground-subtle)]">
+              {area.cleaning_frequency}
+            </span>
           )}
           <div className="flex items-center gap-2">
             <button

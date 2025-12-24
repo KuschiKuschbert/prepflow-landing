@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Tab navigation component for suppliers page.
  */

@@ -32,7 +32,11 @@ export function formatComplianceRecordsSection(complianceRecords: ComplianceReco
 
   complianceRecords.forEach(record => {
     const statusColor =
-      record.status === 'active' ? '#10b981' : record.status === 'expired' ? 'var(--color-error)' : '#f59e0b';
+      record.status === 'active'
+        ? '#10b981'
+        : record.status === 'expired'
+          ? 'var(--color-error)'
+          : '#f59e0b';
 
     html += `
       <tr>

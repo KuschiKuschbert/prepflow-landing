@@ -115,7 +115,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name, description, is_required, default_expiry_days, is_active } = validationResult.data;
+    const { name, description, is_required, default_expiry_days, is_active } =
+      validationResult.data;
 
     const { data, error } = await supabaseAdmin
       .from('qualification_types')

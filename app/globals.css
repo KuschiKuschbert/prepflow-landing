@@ -2663,3 +2663,75 @@ canvas {
     padding: 3rem;
   }
 }
+
+/* Nacho Tacos Animations */
+@keyframes gradient-slow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient-slow {
+  animation: gradient-slow 15s ease infinite;
+}
+
+/* Creative Pulsating Grid Background */
+.pulsating-grid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background-color: #111;
+  background-image: 
+    linear-gradient(rgba(192, 255, 2, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(192, 255, 2, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: pulse-grid 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse-grid {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.02); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+.creative-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(to top, rgba(192, 255, 2, 0.1), transparent);
+  filter: blur(40px);
+  animation: wave-float 6s ease-in-out infinite alternate;
+}
+
+@keyframes wave-float {
+  0% { transform: translateY(0) skewX(0deg); }
+  100% { transform: translateY(-20px) skewX(5deg); }
+}
+
+/* Grid Enhancement */
+.pulsating-grid {
+    z-index: 0 !important; /* Ensure it is behind content but visible */
+    background-image: 
+    linear-gradient(rgba(204, 255, 0, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(204, 255, 0, 0.1) 1px, transparent 1px);
+}
+
+.creative-wave {
+    z-index: 0 !important;
+}
+
+/* Grid Enhancement Reform*/
+.pulsating-grid {
+    z-index: -1 !important; 
+}
+.creative-wave {
+    z-index: -1 !important;
+}
+
+/* Clean up old grid CSS - overridden by generic logic */
+/* pulsating-grid and creative-wave usage removed from layout.tsx */

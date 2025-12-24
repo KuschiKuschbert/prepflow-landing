@@ -92,7 +92,12 @@ function analyzeFile(filePath) {
     const hasErrorWithoutHandler =
       (hasErrorStatus || hasErrorField) && !hasApiErrorHandlerUsage && !isTestEndpoint;
 
-    if (hasErrorResponse && !hasApiErrorHandlerImport && (hasErrorStatus || hasErrorField) && !isTestEndpoint) {
+    if (
+      hasErrorResponse &&
+      !hasApiErrorHandlerImport &&
+      (hasErrorStatus || hasErrorField) &&
+      !isTestEndpoint
+    ) {
       violations.push({
         type: 'missing-api-error-handler-import',
         line: findLineNumber(lines, /import/),
@@ -165,15 +170,23 @@ function analyzeFile(filePath) {
     // Only flag components in shared locations that might be used elsewhere
     const isWebappComponent = filePath.includes('app/webapp/components/');
     const isAdminComponent = filePath.includes('app/admin/components/');
-    const isSharedComponent = filePath.includes('components/ui/') ||
-                               filePath.includes('components/landing/') ||
-                               filePath.startsWith('components/');
+    const isSharedComponent =
+      filePath.includes('components/ui/') ||
+      filePath.includes('components/landing/') ||
+      filePath.startsWith('components/');
 
     // Skip admin and webapp pages - they're wrapped in ErrorBoundary via layout
     // Skip webapp/admin components - they're used within protected pages
     // Only flag shared components that might be used outside protected contexts
-    if (hasCriticalOperation && !hasErrorBoundary && !isAdminPage && !isWebappPage &&
-        !isWebappComponent && !isAdminComponent && isSharedComponent) {
+    if (
+      hasCriticalOperation &&
+      !hasErrorBoundary &&
+      !isAdminPage &&
+      !isWebappPage &&
+      !isWebappComponent &&
+      !isAdminComponent &&
+      isSharedComponent
+    ) {
       violations.push({
         type: 'missing-error-boundary',
         line: findLineNumber(lines, /export|function|const/),
@@ -264,8 +277,12 @@ if (results.length > 0) {
     });
 
   // List files with specific critical violations
-  const missingTryCatchFiles = results.filter(r => r.violations.some(v => v.type === 'missing-try-catch')).map(r => r.file);
-  const silentErrorFiles = results.filter(r => r.violations.some(v => v.type === 'silent-error-handling')).map(r => r.file);
+  const missingTryCatchFiles = results
+    .filter(r => r.violations.some(v => v.type === 'missing-try-catch'))
+    .map(r => r.file);
+  const silentErrorFiles = results
+    .filter(r => r.violations.some(v => v.type === 'silent-error-handling'))
+    .map(r => r.file);
 
   if (missingTryCatchFiles.length > 0) {
     console.log('\n🔴 Files with missing-try-catch violations:');
@@ -277,7 +294,9 @@ if (results.length > 0) {
     silentErrorFiles.forEach(f => console.log(`  ${f}`));
   }
 
-  const missingLoggerImportFiles = results.filter(r => r.violations.some(v => v.type === 'missing-logger-import')).map(r => r.file);
+  const missingLoggerImportFiles = results
+    .filter(r => r.violations.some(v => v.type === 'missing-logger-import'))
+    .map(r => r.file);
   if (missingLoggerImportFiles.length > 0) {
     console.log('\n🔴 Files with missing-logger-import violations:');
     missingLoggerImportFiles.forEach(f => console.log(`  ${f}`));

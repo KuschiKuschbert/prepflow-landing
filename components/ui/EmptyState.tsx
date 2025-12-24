@@ -92,7 +92,9 @@ export function EmptyState({
     : 'mb-2 text-xl font-semibold text-[var(--foreground)]';
 
   // Message classes
-  const messageClasses = useLanding ? WEBAPP_LANDING_PRESETS.emptyState.message : 'text-[var(--foreground-muted)]';
+  const messageClasses = useLanding
+    ? WEBAPP_LANDING_PRESETS.emptyState.message
+    : 'text-[var(--foreground-muted)]';
 
   // Content wrapper
   const content = (
@@ -101,7 +103,11 @@ export function EmptyState({
       {header && (
         <div className="border-b border-[var(--border)] bg-gradient-to-r from-[var(--muted)]/50 to-[var(--muted)]/20 px-6 py-4">
           <div className="flex items-center justify-between">
-            <h2 className={`${LANDING_TYPOGRAPHY.xl} font-semibold text-[var(--button-active-text)]`}>{header.title}</h2>
+            <h2
+              className={`${LANDING_TYPOGRAPHY.xl} font-semibold text-[var(--button-active-text)]`}
+            >
+              {header.title}
+            </h2>
             {header.actions && <div className="flex items-center gap-2">{header.actions}</div>}
           </div>
         </div>

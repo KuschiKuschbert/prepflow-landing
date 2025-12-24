@@ -3,10 +3,10 @@
  */
 
 import type { BackupData, TableData } from './types';
-import { fetchAllTableData } from './helpers/fetchAllTableData';
-import { buildBackupData } from './helpers/buildBackupData';
-import { convertToSQL } from './helpers/convertToSQL';
-import { getUserTablesWithData } from './helpers/getUserTablesWithData';
+import { fetchAllTableData } from './export/helpers/fetchAllTableData';
+import { buildBackupData } from './export/helpers/buildBackupData';
+import { convertToSQL } from './export/helpers/convertToSQL';
+import { getUserTablesWithData } from './export/helpers/getUserTablesWithData';
 
 /**
  * Export user data to JSON format.

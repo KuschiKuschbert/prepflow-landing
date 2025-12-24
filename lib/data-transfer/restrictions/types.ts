@@ -6,4 +6,3 @@ export interface TransferRestrictionResult {
   requiresConsent: boolean;
   consentGiven: boolean;
 }
-

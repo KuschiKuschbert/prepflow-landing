@@ -230,7 +230,9 @@ export default function ModernIngredientFilters({
                         aria-hidden={true}
                       />
                       <span>{option.label}</span>
-                      {sortBy === option.value && <span className="ml-auto text-[var(--primary)]">✓</span>}
+                      {sortBy === option.value && (
+                        <span className="ml-auto text-[var(--primary)]">✓</span>
+                      )}
                     </button>
                   ))}
                 </div>

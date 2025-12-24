@@ -4,22 +4,27 @@ import { logger } from '@/lib/logger';
 import { dishHasDirectIngredients } from '@/lib/populate-helpers/populate-empty-dishes-helpers';
 import { populateDishes } from './helpers/populateDishes';
 import { populateRecipes, type PopulateRecipesResult } from './helpers/populateRecipes';
-
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-/**
- * GET: Diagnostic endpoint - returns dishes with no ingredients
- * POST: Populates empty dishes with default ingredients
- */
+
+/** GET: Diagnostic endpoint - returns dishes with no ingredients. POST: Populates empty dishes with default ingredients */
 export async function GET(request: NextRequest) {
   if (process.env.NODE_ENV === 'production') {
-    return NextResponse.json(ApiErrorHandler.createError('Not available in production', 'FORBIDDEN', 403), { status: 403 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Not available in production', 'FORBIDDEN', 403),
+      { status: 403 },
+    );
   }
   const adminKey = request.headers.get('x-admin-key');
   if (!adminKey || adminKey !== process.env.SEED_ADMIN_KEY) {
-    return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
+    return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), {
+      status: 401,
+    });
   }
   if (!supabaseAdmin) {
-    return NextResponse.json(ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 
   try {
@@ -30,7 +35,7 @@ export async function GET(request: NextRequest) {
       .order('dish_name');
 
     if (dishesError) {
-      return NextResponse.json({ error: dishesError.message }, { status: 500 });
+      return NextResponse.json(ApiErrorHandler.createError('Failed to fetch dishes', 'DATABASE_ERROR', 500), { status: 500 });
     }
 
     if (!dishes || dishes.length === 0) {
@@ -78,14 +83,22 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   if (process.env.NODE_ENV === 'production') {
-    return NextResponse.json(ApiErrorHandler.createError('Not available in production', 'FORBIDDEN', 403), { status: 403 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Not available in production', 'FORBIDDEN', 403),
+      { status: 403 },
+    );
   }
   const adminKey = request.headers.get('x-admin-key');
   if (!adminKey || adminKey !== process.env.SEED_ADMIN_KEY) {
-    return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
+    return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), {
+      status: 401,
+    });
   }
   if (!supabaseAdmin) {
-    return NextResponse.json(ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 
   try {
@@ -96,7 +109,7 @@ export async function POST(request: NextRequest) {
       .order('dish_name');
 
     if (dishesError) {
-      return NextResponse.json({ error: dishesError.message }, { status: 500 });
+      return NextResponse.json(ApiErrorHandler.createError('Failed to fetch dishes', 'DATABASE_ERROR', 500), { status: 500 });
     }
 
     if (!dishes || dishes.length === 0) {
@@ -121,7 +134,7 @@ export async function POST(request: NextRequest) {
       .order('ingredient_name');
 
     if (ingredientsError) {
-      return NextResponse.json({ error: ingredientsError.message }, { status: 500 });
+      return NextResponse.json(ApiErrorHandler.createError('Failed to fetch ingredients', 'DATABASE_ERROR', 500), { status: 500 });
     }
 
     if (!ingredients || ingredients.length === 0) {
@@ -180,9 +193,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     logger.error('[Populate Empty Dishes] Error:', err);
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Unknown error' },
-      { status: 500 },
-    );
+    return NextResponse.json(ApiErrorHandler.createError('Failed to populate dishes', 'SERVER_ERROR', 500), { status: 500 });
   }
 }

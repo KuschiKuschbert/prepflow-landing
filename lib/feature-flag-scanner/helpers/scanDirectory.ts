@@ -17,10 +17,7 @@ export function scanDirectory(
     const entries = readdirSync(dir);
 
     for (const entry of entries) {
-      if (
-        entry.startsWith('.') ||
-        SKIP_DIRECTORIES.includes(entry)
-      ) {
+      if (entry.startsWith('.') || SKIP_DIRECTORIES.includes(entry)) {
         continue;
       }
 

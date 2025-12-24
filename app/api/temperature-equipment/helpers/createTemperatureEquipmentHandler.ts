@@ -40,21 +40,24 @@ export async function handleCreateTemperatureEquipment(request: NextRequest) {
       );
     }
 
-    body = validationResult.data;
+    const validatedBody = validationResult.data;
 
     // Automatically detect thresholds if not provided (only if explicitly null/undefined)
     let minTemp =
-      body.min_temp_celsius !== undefined && body.min_temp_celsius !== null
-        ? body.min_temp_celsius
+      validatedBody.min_temp_celsius !== undefined && validatedBody.min_temp_celsius !== null
+        ? validatedBody.min_temp_celsius
         : null;
     let maxTemp =
-      body.max_temp_celsius !== undefined && body.max_temp_celsius !== null
-        ? body.max_temp_celsius
+      validatedBody.max_temp_celsius !== undefined && validatedBody.max_temp_celsius !== null
+        ? validatedBody.max_temp_celsius
         : null;
 
     // Auto-detect if thresholds are null/undefined
     if (minTemp === null || maxTemp === null) {
-      const detectedThresholds = detectTemperatureThresholds(body.name, body.equipment_type);
+      const detectedThresholds = detectTemperatureThresholds(
+        validatedBody.name,
+        validatedBody.equipment_type || '',
+      );
       if (minTemp === null) {
         minTemp = detectedThresholds.min_temp_celsius;
       }
@@ -62,8 +65,8 @@ export async function handleCreateTemperatureEquipment(request: NextRequest) {
         maxTemp = detectedThresholds.max_temp_celsius;
       }
       logger.dev('[Temperature Equipment API] Auto-detected thresholds:', {
-        name: body.name,
-        equipment_type: body.equipment_type,
+        name: validatedBody.name,
+        equipment_type: validatedBody.equipment_type,
         detected: detectedThresholds,
         applied: { min_temp_celsius: minTemp, max_temp_celsius: maxTemp },
       });
@@ -73,12 +76,12 @@ export async function handleCreateTemperatureEquipment(request: NextRequest) {
       .from('temperature_equipment')
       .insert([
         {
-          name: body.name,
-          equipment_type: body.equipment_type,
-          location: body.location || null,
+          name: validatedBody.name,
+          equipment_type: validatedBody.equipment_type,
+          location: validatedBody.location || null,
           min_temp_celsius: minTemp,
           max_temp_celsius: maxTemp,
-          is_active: body.is_active !== false,
+          is_active: validatedBody.is_active !== false,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         },
@@ -113,4 +116,3 @@ export async function handleCreateTemperatureEquipment(request: NextRequest) {
     return handleTemperatureEquipmentError(err, 'POST');
   }
 }
-

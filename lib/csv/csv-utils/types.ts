@@ -12,4 +12,3 @@ export interface ParseCSVResult<T = any> {
   errors: Papa.ParseError[];
   meta: Papa.ParseMeta;
 }
-

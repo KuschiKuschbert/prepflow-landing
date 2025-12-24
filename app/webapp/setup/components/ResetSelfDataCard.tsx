@@ -79,7 +79,9 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
   return (
     <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
       <div className="mb-3 text-sm font-semibold text-[var(--foreground)]">Danger Zone</div>
-      <h3 className="mb-2 text-2xl font-bold text-[var(--foreground)]">Clean the bench (my data)</h3>
+      <h3 className="mb-2 text-2xl font-bold text-[var(--foreground)]">
+        Clean the bench (my data)
+      </h3>
       <p className="mb-4 text-[var(--foreground-muted)]">
         Wipe the kitchen clean: this will clear all demo data in the workspace (ingredients,
         recipes, suppliers, equipment, logs, lists). Use the Populate Clean Test Data button to
@@ -98,8 +100,8 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
           <div className="w-full max-w-md rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
             <h4 className="mb-2 text-xl font-bold text-[var(--foreground)]">Confirm cleanup</h4>
             <p className="mb-4 text-sm text-[var(--foreground-muted)]">
-              Type <span className="font-mono text-[var(--foreground)]">RESET</span> to wipe your station. This
-              can’t be undone.
+              Type <span className="font-mono text-[var(--foreground)]">RESET</span> to wipe your
+              station. This can’t be undone.
             </p>
             <div className="mb-3">
               <input
@@ -121,13 +123,17 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
                 onClick={handleConfirm}
                 disabled={!canConfirm}
                 className={`rounded-xl px-4 py-2 text-[var(--button-active-text)] ${
-                  canConfirm ? 'bg-[var(--primary)] hover:bg-[var(--primary)]/80' : 'bg-[var(--muted)] text-[var(--foreground-muted)]'
+                  canConfirm
+                    ? 'bg-[var(--primary)] hover:bg-[var(--primary)]/80'
+                    : 'bg-[var(--muted)] text-[var(--foreground-muted)]'
                 }`}
               >
                 {loading ? 'Wiping…' : 'Confirm wipe'}
               </button>
             </div>
-            {result && <div className="mt-3 text-sm text-[var(--foreground-secondary)]">{result}</div>}
+            {result && (
+              <div className="mt-3 text-sm text-[var(--foreground-secondary)]">{result}</div>
+            )}
           </div>
         </div>
       )}

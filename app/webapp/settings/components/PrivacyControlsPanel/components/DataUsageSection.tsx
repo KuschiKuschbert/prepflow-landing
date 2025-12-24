@@ -35,11 +35,20 @@ export function DataUsageSection({ dataUsage }: DataUsageSectionProps) {
       </div>
       <div className="desktop:grid-cols-2 grid grid-cols-1 gap-3">
         {Object.entries(dataUsage.usage).map(([key, value]) => (
-          <div key={key} className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 p-3">
-            <p className="text-xs text-[var(--foreground-subtle)] capitalize">{key.replace(/_/g, ' ')}</p>
+          <div
+            key={key}
+            className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 p-3"
+          >
+            <p className="text-xs text-[var(--foreground-subtle)] capitalize">
+              {key.replace(/_/g, ' ')}
+            </p>
             <div className="mt-1 flex items-baseline gap-2">
-              <p className="text-lg font-semibold text-[var(--foreground)]">{value.count.toLocaleString()}</p>
-              <p className="text-xs text-[var(--foreground-muted)]">({formatFileSize(value.size_bytes)})</p>
+              <p className="text-lg font-semibold text-[var(--foreground)]">
+                {value.count.toLocaleString()}
+              </p>
+              <p className="text-xs text-[var(--foreground-muted)]">
+                ({formatFileSize(value.size_bytes)})
+              </p>
             </div>
           </div>
         ))}

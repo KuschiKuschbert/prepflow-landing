@@ -2,6 +2,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
 import { createPrepList } from './helpers/createPrepList';
 import { deletePrepList } from './helpers/deletePrepList';
 import {
@@ -13,6 +14,8 @@ import {
 import { handlePrepListError } from './helpers/handlePrepListError';
 import { updatePrepList } from './helpers/updatePrepList';
 import { createPrepListSchema } from './helpers/schemas';
+import { parseDeleteRequest } from './helpers/parseDeleteRequest';
+import { transformItems } from './helpers/transformItems';
 
 export async function GET(request: NextRequest) {
   try {
@@ -34,20 +37,15 @@ export async function GET(request: NextRequest) {
     // If empty or fallback case, return early
     if (empty) {
       const totalPages = Math.max(1, Math.ceil(count / pageSize));
+      const mappedPrepLists = prepLists.map((list: any) => ({
+        ...list,
+        kitchen_section_id: list.kitchen_section_id || list.section_id,
+        kitchen_sections: null,
+        prep_list_items: [],
+      }));
       return NextResponse.json({
         success: true,
-        data: {
-          items: prepLists.map((list: any) => ({
-            ...list,
-            kitchen_section_id: list.kitchen_section_id || list.section_id,
-            kitchen_sections: null,
-            prep_list_items: [],
-          })),
-          total: count,
-          page,
-          pageSize,
-          totalPages,
-        },
+        data: { items: mappedPrepLists, total: count, page, pageSize, totalPages },
       });
     }
 
@@ -55,9 +53,7 @@ export async function GET(request: NextRequest) {
     const { sectionsMap, itemsByPrepListId, prepListItems } = await fetchRelatedData(prepLists);
 
     // Step 3: Fetch ingredients in batch
-    const ingredientIds = Array.from(
-      new Set(prepListItems.map((item: any) => item.ingredient_id).filter(Boolean)),
-    );
+    const ingredientIds = Array.from(new Set(prepListItems.map((item: any) => item.ingredient_id).filter(Boolean)));
     const ingredientsMap = await fetchIngredientsBatch(ingredientIds);
 
     // Step 4: Combine all data
@@ -117,8 +113,13 @@ export async function POST(request: NextRequest) {
     }
 
     const { userId, kitchenSectionId, name, notes, items } = validationResult.data;
-
-    const prepList = await createPrepList({ userId, kitchenSectionId, name, notes, items });
+    const prepList = await createPrepList({
+      userId,
+      kitchenSectionId,
+      name,
+      notes,
+      items: transformItems(items),
+    });
 
     return NextResponse.json({
       success: true,
@@ -170,8 +171,7 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
+    const id = parseDeleteRequest(request);
 
     if (!id) {
       return NextResponse.json(

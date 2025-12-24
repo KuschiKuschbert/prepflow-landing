@@ -62,4 +62,3 @@ export function hasAppropriateBranding(html: string, variant: TemplateVariant): 
 
   return true;
 }
-

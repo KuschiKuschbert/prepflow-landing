@@ -143,7 +143,9 @@ export function IngredientCard({
               {ingredient.ingredient_name}
             </h3>
             {ingredient.product_code && (
-              <p className="truncate text-xs text-[var(--foreground-subtle)]">{ingredient.product_code}</p>
+              <p className="truncate text-xs text-[var(--foreground-subtle)]">
+                {ingredient.product_code}
+              </p>
             )}
           </div>
           <div className="flex-shrink-0 text-right">
@@ -163,15 +165,27 @@ export function IngredientCard({
           )}
           {ingredient.supplier && (
             <span className="flex items-center gap-1">
-              <Icon icon={Store} size="xs" className="text-[var(--foreground-subtle)]" aria-hidden={true} />
+              <Icon
+                icon={Store}
+                size="xs"
+                className="text-[var(--foreground-subtle)]"
+                aria-hidden={true}
+              />
               {ingredient.supplier}
             </span>
           )}
           {ingredient.pack_size != null && (
             <span className="flex items-center gap-1">
-              <Icon icon={MapPin} size="xs" className="text-[var(--foreground-subtle)]" aria-hidden={true} />
+              <Icon
+                icon={MapPin}
+                size="xs"
+                className="text-[var(--foreground-subtle)]"
+                aria-hidden={true}
+              />
               {String(ingredient.pack_size)} {packSizeUnit}
-              {showUnitTooltip && <span className="text-[var(--foreground-subtle)]">({standardUnit})</span>}
+              {showUnitTooltip && (
+                <span className="text-[var(--foreground-subtle)]">({standardUnit})</span>
+              )}
             </span>
           )}
         </div>
@@ -213,7 +227,12 @@ export function IngredientCard({
               {deletingId === ingredient.id ? (
                 <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
               ) : (
-                <Icon icon={Trash2} size="xs" className="text-[var(--foreground)]" aria-hidden={true} />
+                <Icon
+                  icon={Trash2}
+                  size="xs"
+                  className="text-[var(--foreground)]"
+                  aria-hidden={true}
+                />
               )}
             </button>
           </div>

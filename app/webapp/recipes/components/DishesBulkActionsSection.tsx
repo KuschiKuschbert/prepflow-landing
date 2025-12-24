@@ -7,8 +7,6 @@ interface DishesBulkActionsSectionProps {
   selectedCount: number;
   selectedRecipeCount: number;
   bulkActionLoading: boolean;
-  bulkShareLoading: boolean;
-  addToMenuLoading: boolean;
   showBulkMenu: boolean;
   onExitSelectionMode: () => void;
   onBulkDelete: () => void;
@@ -22,8 +20,6 @@ export function DishesBulkActionsSection({
   selectedCount,
   selectedRecipeCount,
   bulkActionLoading,
-  bulkShareLoading,
-  addToMenuLoading,
   showBulkMenu,
   onExitSelectionMode,
   onBulkDelete,
@@ -43,7 +39,7 @@ export function DishesBulkActionsSection({
           <UnifiedBulkActionsMenu
             selectedCount={selectedCount}
             selectedRecipeCount={selectedRecipeCount}
-            bulkActionLoading={bulkActionLoading || bulkShareLoading || addToMenuLoading}
+            bulkActionLoading={bulkActionLoading}
             onBulkDelete={onBulkDelete}
             onBulkShare={onBulkShare}
             onBulkAddToMenu={onBulkAddToMenu}

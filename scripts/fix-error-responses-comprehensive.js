@@ -45,12 +45,18 @@ function fixFile(filePath) {
   }
 
   // Skip if file already uses ApiErrorHandler.createError everywhere
-  if (!content.includes('NextResponse.json') || content.match(/NextResponse\.json\([^)]*error[^)]*\)/g)?.every(m => m.includes('ApiErrorHandler'))) {
+  if (
+    !content.includes('NextResponse.json') ||
+    content
+      .match(/NextResponse\.json\([^)]*error[^)]*\)/g)
+      ?.every(m => m.includes('ApiErrorHandler'))
+  ) {
     return false;
   }
 
   // Pattern: Multi-line error with message field
-  const pattern1 = /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*,\s*message:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/gs;
+  const pattern1 =
+    /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*,\s*message:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/gs;
   content = content.replace(pattern1, (match, error, message, status) => {
     changed = true;
     const errorCode = getErrorCode(message || error, status);
@@ -58,7 +64,8 @@ function fixFile(filePath) {
   });
 
   // Pattern: Simple error object
-  const pattern2 = /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/gs;
+  const pattern2 =
+    /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/gs;
   content = content.replace(pattern2, (match, errorMsg, status) => {
     // Skip if already replaced by pattern1
     if (match.includes('ApiErrorHandler')) return match;
@@ -68,7 +75,8 @@ function fixFile(filePath) {
   });
 
   // Pattern: success: false with error
-  const pattern3 = /NextResponse\.json\(\s*\{\s*success:\s*false\s*,\s*error:\s*['"]([^'"]+)['"]\s*(?:,\s*message:\s*['"]([^'"]+)['"])?\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/gs;
+  const pattern3 =
+    /NextResponse\.json\(\s*\{\s*success:\s*false\s*,\s*error:\s*['"]([^'"]+)['"]\s*(?:,\s*message:\s*['"]([^'"]+)['"])?\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/gs;
   content = content.replace(pattern3, (match, error, message, status) => {
     changed = true;
     const errorCode = getErrorCode(message || error, status);
@@ -77,7 +85,8 @@ function fixFile(filePath) {
 
   // Pattern: Dynamic error messages (handle common cases)
   // { error: 'Failed to...', message: error.message }
-  const pattern4 = /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*,\s*message:\s*([^}]+)\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/gs;
+  const pattern4 =
+    /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*,\s*message:\s*([^}]+)\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/gs;
   content = content.replace(pattern4, (match, errorPrefix, messageExpr, status) => {
     // Only replace if messageExpr is a simple variable reference
     if (/^[a-zA-Z_$][a-zA-Z0-9_$]*\.message$/.test(messageExpr.trim())) {
@@ -132,6 +141,3 @@ for (const file of apiFiles) {
 }
 
 console.log(`\n✅ Fixed ${fixedCount} files.`);
-
-
-

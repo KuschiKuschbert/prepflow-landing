@@ -81,6 +81,21 @@ const FIX_MODULES = {
 };
 
 /**
+ * Check if file is in protected nachotaco area
+ */
+function isNachotacoFile(filePath) {
+  return filePath.replace(/\\/g, '/').includes('/app/nachotaco/');
+}
+
+/**
+ * Filter out nachotaco files from file list
+ */
+function filterNachotacoFiles(files) {
+  if (!files) return null;
+  return files.filter(file => !isNachotacoFile(file));
+}
+
+/**
  * Get staged files from git
  */
 function getStagedFiles() {
@@ -93,7 +108,8 @@ function getStagedFiles() {
       .trim()
       .split('\n')
       .filter(Boolean)
-      .filter(file => /\.(ts|tsx|js|jsx)$/.test(file));
+      .filter(file => /\.(ts|tsx|js|jsx)$/.test(file))
+      .filter(file => !isNachotacoFile(file)); // Exclude nachotaco files
   } catch (error) {
     return [];
   }
@@ -128,11 +144,14 @@ async function runChecks(files = null) {
   const allViolations = [];
   const results = [];
 
+  // Filter out nachotaco files from all checks
+  const filteredFiles = filterNachotacoFiles(files);
+
   console.log('🔍 Running cleanup checks...\n');
   for (const checkModule of CHECK_MODULES) {
     try {
       console.log(`  Checking ${checkModule.name}...`);
-      const result = await checkModule.check(files);
+      const result = await checkModule.check(filteredFiles);
       results.push({
         name: checkModule.name,
         ...result,
@@ -158,11 +177,14 @@ async function runChecks(files = null) {
 async function runFixes(files = null) {
   const fixResults = [];
 
+  // Filter out nachotaco files from all fixes
+  const filteredFiles = filterNachotacoFiles(files);
+
   console.log('🔧 Running cleanup fixes...\n');
   for (const [checkName, fixModule] of Object.entries(FIX_MODULES)) {
     try {
       console.log(`  Fixing ${checkName}...`);
-      const result = await fixModule.fix(files);
+      const result = await fixModule.fix(filteredFiles);
       fixResults.push({
         name: checkName,
         ...result,

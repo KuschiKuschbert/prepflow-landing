@@ -182,7 +182,7 @@ export function AvatarSelectionPanel() {
                 <div
                   className={`relative overflow-hidden rounded-2xl border-2 transition-all ${
                     isSelected
-                      ? 'border-[var(--primary)] bg-[var(--primary)]/10 shadow-lg shadow-[var(--primary)]/20'
+                      ? 'border-[var(--primary)] bg-[var(--primary)]/10 shadow-[var(--primary)]/20 shadow-lg'
                       : 'border-[var(--border)] bg-[var(--muted)]/20 hover:border-[var(--primary)]/50'
                   }`}
                 >
@@ -202,7 +202,12 @@ export function AvatarSelectionPanel() {
                   {/* Selection Indicator */}
                   {isSelected && (
                     <div className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--primary)] shadow-lg">
-                      <Icon icon={Check} size="xs" className="text-[var(--button-active-text)]" aria-hidden={true} />
+                      <Icon
+                        icon={Check}
+                        size="xs"
+                        className="text-[var(--button-active-text)]"
+                        aria-hidden={true}
+                      />
                     </div>
                   )}
 

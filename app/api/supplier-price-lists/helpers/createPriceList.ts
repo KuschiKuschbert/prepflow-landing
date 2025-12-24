@@ -1,5 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 /**
  * Create a new supplier price list.
@@ -33,6 +34,12 @@ export async function createPriceList(data: {
     )
     .single();
 
-  if (error) throw ApiErrorHandler.fromSupabaseError(error, 500);
+  if (error) {
+    logger.error('[Supplier Price Lists API] Error creating price list:', {
+      error: error.message,
+      context: { endpoint: '/api/supplier-price-lists', operation: 'createPriceList' },
+    });
+    throw ApiErrorHandler.createError(error.message, 'DATABASE_ERROR', 500, error);
+  }
   return created;
 }

@@ -30,4 +30,3 @@ export async function handleDeleteEmployee(request: NextRequest) {
     return handleEmployeeError(err, 'DELETE');
   }
 }
-

@@ -48,7 +48,9 @@ export function EquipmentForm({
       </div>
       <form onSubmit={onSubmit} className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Equipment Name</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Equipment Name
+          </label>
           <input
             type="text"
             value={equipment.name}
@@ -59,7 +61,9 @@ export function EquipmentForm({
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Equipment Type</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Equipment Type
+          </label>
           <select
             value={equipment.equipment_type}
             onChange={e => {
@@ -82,7 +86,9 @@ export function EquipmentForm({
           </select>
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Location</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Location
+          </label>
           <input
             type="text"
             value={equipment.location}
@@ -93,7 +99,9 @@ export function EquipmentForm({
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Temperature Range</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Temperature Range
+          </label>
           <div className="rounded-2xl bg-[var(--muted)] p-3 text-[var(--foreground)]">
             <span className="text-lg font-semibold">
               {(() => {

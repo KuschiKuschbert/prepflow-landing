@@ -1,3 +1,5 @@
+'use client';
+
 import { useRef, useCallback, useMemo } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { format } from 'date-fns';
@@ -85,7 +87,7 @@ export function RosterCell({
       onClick={handleClick}
       className={`min-h-[100px] rounded-xl border-2 p-1.5 transition-all duration-200 ${
         isOverCell
-          ? 'border-[var(--primary)] bg-[var(--primary)]/20 shadow-lg shadow-[var(--primary)]/20'
+          ? 'border-[var(--primary)] bg-[var(--primary)]/20 shadow-[var(--primary)]/20 shadow-lg'
           : isActiveInlineEntry
             ? 'border-[var(--primary)] bg-[var(--primary)]/10'
             : 'border-[var(--border)] bg-[var(--surface)]/30'

@@ -8,7 +8,6 @@ interface HandleDeleteParams {
   id: string;
   parLevels: ParLevel[];
   setParLevels: React.Dispatch<React.SetStateAction<ParLevel[]>>;
-  fetchParLevels: () => Promise<void>;
   showError: (message: string) => void;
   showSuccess: (message: string) => void;
 }
@@ -17,7 +16,6 @@ export async function handleDelete({
   id,
   parLevels,
   setParLevels,
-  fetchParLevels,
   showError,
   showSuccess,
 }: HandleDeleteParams): Promise<void> {
@@ -31,7 +29,7 @@ export async function handleDelete({
     setParLevels,
     () => {
       showSuccess('Par level deleted successfully');
-      fetchParLevels();
+      // No refetch needed - optimistic update handles UI
     },
     showError,
   );

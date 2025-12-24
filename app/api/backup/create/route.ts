@@ -15,7 +15,7 @@ import { z } from 'zod';
 
 const createBackupSchema = z.object({
   format: z.enum(['json', 'sql', 'encrypted']).optional().default('json'),
-  encryptionMode: z.enum(['user-password', 'system-key']).optional(),
+  encryptionMode: z.enum(['user-password', 'prepflow-only']).optional(),
   password: z.string().optional(),
 });
 

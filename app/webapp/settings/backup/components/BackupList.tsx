@@ -81,7 +81,9 @@ export function BackupList({ backups, onRestore, onRefresh }: BackupListProps) {
           <Icon icon={History} size="lg" className="text-[var(--primary)]" />
           <div>
             <h2 className="text-xl font-semibold">Backup History</h2>
-            <p className="text-sm text-[var(--foreground-muted)]">Your backup files will appear here</p>
+            <p className="text-sm text-[var(--foreground-muted)]">
+              Your backup files will appear here
+            </p>
           </div>
         </div>
         <div className="py-8 text-center text-[var(--foreground-muted)]">
@@ -98,7 +100,9 @@ export function BackupList({ backups, onRestore, onRefresh }: BackupListProps) {
           <Icon icon={History} size="lg" className="text-[var(--primary)]" />
           <div>
             <h2 className="text-xl font-semibold">Backup History</h2>
-            <p className="text-sm text-[var(--foreground-muted)]">{backups.length} backup(s) available</p>
+            <p className="text-sm text-[var(--foreground-muted)]">
+              {backups.length} backup(s) available
+            </p>
           </div>
         </div>
         <button

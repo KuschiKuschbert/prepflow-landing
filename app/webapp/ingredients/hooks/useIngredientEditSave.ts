@@ -2,6 +2,7 @@
 
 import { supabase } from '@/lib/supabase';
 import { useCallback } from 'react';
+import { useNotification } from '@/contexts/NotificationContext';
 
 import { logger } from '@/lib/logger';
 interface UseIngredientEditSaveProps<T extends { id: string }> {
@@ -27,12 +28,27 @@ export function useIngredientEditSave<T extends { id: string }>({
   setEditingIngredient,
   setError,
 }: UseIngredientEditSaveProps<T>) {
+  const { showSuccess } = useNotification();
   const handleSave = useCallback(
     async (ingredientId: string, ingredientData: Partial<T>) => {
+      // Store original state for rollback
+      let originalIngredients: T[] = [];
+      setIngredients(prev => {
+        originalIngredients = [...prev];
+        return prev;
+      });
+
+      const updates = { ...ingredientData, updated_at: new Date().toISOString() };
+
+      // Optimistically update UI immediately
+      setIngredients(prev =>
+        prev.map(ing => (ing.id === ingredientId ? { ...ing, ...updates } : ing)),
+      );
+
       try {
         const { data, error } = await supabase
           .from('ingredients')
-          .update({ ...ingredientData, updated_at: new Date().toISOString() })
+          .update(updates)
           .eq('id', ingredientId)
           .select()
           .maybeSingle();
@@ -48,34 +64,46 @@ export function useIngredientEditSave<T extends { id: string }>({
 
             const result = await response.json();
             if (!response.ok || !result.success) {
+              // Revert optimistic update on error
+              setIngredients(originalIngredients);
               const errorMsg = result.details || result.error || 'Failed to update ingredient';
               setError(`Ingredient not found. It may have been deleted. Please refresh the page.`);
               setEditingIngredient(null);
               return;
             }
 
+            // Replace optimistic update with server response
             setIngredients(prev => prev.map(ing => (ing.id === ingredientId ? result.data : ing)));
             setEditingIngredient(null);
+            showSuccess('Ingredient updated successfully');
             return;
           } else {
+            // Revert optimistic update on error
+            setIngredients(originalIngredients);
             throw new Error(extractSupabaseError(error));
           }
         }
 
         if (!data) {
+          // Revert optimistic update on error
+          setIngredients(originalIngredients);
           setError(`Ingredient not found. It may have been deleted. Please refresh the page.`);
           setEditingIngredient(null);
           return;
         }
 
+        // Replace optimistic update with server response
         setIngredients(prev => prev.map(ing => (ing.id === ingredientId ? data : ing)));
         setEditingIngredient(null);
+        showSuccess('Ingredient updated successfully');
       } catch (error) {
+        // Revert optimistic update on error
+        setIngredients(originalIngredients);
         setError(extractSupabaseError(error));
         throw error;
       }
     },
-    [setIngredients, setEditingIngredient, setError],
+    [setIngredients, setEditingIngredient, setError, showSuccess],
   );
 
   return { handleSave };

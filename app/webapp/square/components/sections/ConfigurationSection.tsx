@@ -66,14 +66,21 @@ export function ConfigurationSection() {
   };
 
   const handleSave = async () => {
-    await saveSquareConfig({ config, setSaving, setShowConnectionWorkflow, showSuccess, showError, fetchConfig });
+    await saveSquareConfig({
+      config,
+      setSaving,
+      setShowConnectionWorkflow,
+      showSuccess,
+      showError,
+      fetchConfig,
+    });
   };
 
   const handleDelete = async () => {
     const confirmed = await showConfirm({
       title: 'Delete Square Configuration',
       message:
-        'Are you sure you want to delete your Square configuration? This will disconnect your Square POS integration and stop all syncing. This action can\'t be undone.',
+        "Are you sure you want to delete your Square configuration? This will disconnect your Square POS integration and stop all syncing. This action can't be undone.",
       variant: 'danger',
       confirmLabel: 'Delete',
       cancelLabel: 'Cancel',
@@ -89,7 +96,7 @@ export function ConfigurationSection() {
       window.location.href = `/api/square/oauth?environment=${environment}`;
     } catch (error: any) {
       logger.error('[Square Config] OAuth redirect error:', { error: error.message });
-      showError('Failed to start OAuth flow. Please try again.');
+      showError('Failed to start Square connection. Give it another go, chef.');
       setSaving(false);
     }
   };
@@ -102,7 +109,12 @@ export function ConfigurationSection() {
     return (
       <div className="space-y-6">
         <ConnectionWorkflow onConnectClick={handleOAuthConnect} />
-        <ConnectionWorkflowForm config={config} setConfig={setConfig} saving={saving} onConnect={handleOAuthConnect} />
+        <ConnectionWorkflowForm
+          config={config}
+          setConfig={setConfig}
+          saving={saving}
+          onConnect={handleOAuthConnect}
+        />
       </div>
     );
   }
@@ -115,7 +127,13 @@ export function ConfigurationSection() {
           Configure your Square POS integration credentials and sync preferences
         </p>
       </div>
-      <ConfigurationForm config={config} setConfig={setConfig} saving={saving} onSave={handleSave} onDelete={handleDelete} />
+      <ConfigurationForm
+        config={config}
+        setConfig={setConfig}
+        saving={saving}
+        onSave={handleSave}
+        onDelete={handleDelete}
+      />
       <ConfirmDialog />
     </div>
   );

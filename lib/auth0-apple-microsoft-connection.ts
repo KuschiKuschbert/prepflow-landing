@@ -2,7 +2,10 @@
  * Auth0 Apple and Microsoft Connection Utilities
  * Functions to verify and enable Apple and Microsoft social connections
  */
-import { findAppleConnection, findMicrosoftConnection } from './auth0-apple-microsoft-connection/helpers/findConnection';
+import {
+  findAppleConnection,
+  findMicrosoftConnection,
+} from './auth0-apple-microsoft-connection/helpers/findConnection';
 import { verifyConnectionEnabled } from './auth0-apple-microsoft-connection/helpers/verifyConnection';
 import { enableConnectionForApp } from './auth0-apple-microsoft-connection/helpers/enableConnection';
 
@@ -55,7 +58,7 @@ export async function enableAppleConnectionForApp(): Promise<{
     return {
       success: false,
       enabled: false,
-      message: 'Management API client or application client ID not available',
+      message: 'Auth0 configuration is missing. Please check your Auth0 environment variables.',
     };
   }
 
@@ -78,7 +81,7 @@ export async function enableMicrosoftConnectionForApp(): Promise<{
     return {
       success: false,
       enabled: false,
-      message: 'Management API client or application client ID not available',
+      message: 'Auth0 configuration is missing. Please check your Auth0 environment variables.',
     };
   }
 

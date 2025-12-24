@@ -16,7 +16,11 @@ import { buildPromptForPlatingMethod } from './image-generation/helpers/buildPro
 import { extractCookingMethod } from './image-generation/helpers/extractCookingMethod';
 import { generateImageWithRetry } from './image-generation/helpers/generateImageWithRetry';
 
-export type { PlatingMethod, FoodImageGenerationOptions, FoodImageResult } from './image-generation/types';
+export type {
+  PlatingMethod,
+  FoodImageGenerationOptions,
+  FoodImageResult,
+} from './image-generation/types';
 
 /**
  * Build a detailed prompt for food image generation based on plating method

@@ -1,17 +1,17 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import {
-    cleanExistingData,
-    populateBasicData,
-    populateCleaningData,
-    populateComplianceData,
-    populateDishes,
-    populateKitchenSections,
-    populateMenuDishes,
-    populateMenus,
-    populateSalesData,
-    populateStaff,
-    populateTemperatureData,
+  cleanExistingData,
+  populateBasicData,
+  populateCleaningData,
+  populateComplianceData,
+  populateDishes,
+  populateKitchenSections,
+  populateMenuDishes,
+  populateMenus,
+  populateSalesData,
+  populateStaff,
+  populateTemperatureData,
 } from '@/lib/populate-helpers';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';

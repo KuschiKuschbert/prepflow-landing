@@ -1,0 +1,292 @@
+{
+  "total": 13,
+  "byType": {
+    "generic-message": 11,
+    "technical-jargon": 2
+  },
+  "bySeverity": {
+    "info": 12,
+    "warning": 1
+  },
+  "files": {
+    "app/webapp/ai-specials/page.tsx": [
+      {
+        "file": "app/webapp/ai-specials/page.tsx",
+        "line": 143,
+        "message": "generic-message: \"Failed to process image. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to process image. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to process image. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      },
+      {
+        "file": "app/webapp/ai-specials/page.tsx",
+        "line": 159,
+        "message": "generic-message: \"Failed to process image. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to process image. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to process image. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "app/webapp/cleaning/components/CompletionModal.tsx": [
+      {
+        "file": "app/webapp/cleaning/components/CompletionModal.tsx",
+        "line": 77,
+        "message": "generic-message: \"Failed to update task completion. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to update task completion. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to update task completion. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "app/webapp/cogs/hooks/useRecipeHandlers/useRecipeCreate.ts": [
+      {
+        "file": "app/webapp/cogs/hooks/useRecipeHandlers/useRecipeCreate.ts",
+        "line": 69,
+        "message": "generic-message: \"Failed to create recipe. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to create recipe. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to create recipe. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "app/webapp/employees/page.tsx": [
+      {
+        "file": "app/webapp/employees/page.tsx",
+        "line": 143,
+        "message": "generic-message: \"Failed to add employee. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to add employee. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to add employee. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      },
+      {
+        "file": "app/webapp/employees/page.tsx",
+        "line": 200,
+        "message": "generic-message: \"Failed to update employee. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to update employee. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to update employee. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      },
+      {
+        "file": "app/webapp/employees/page.tsx",
+        "line": 238,
+        "message": "generic-message: \"Failed to deactivate employee. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to deactivate employee. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to deactivate employee. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "app/webapp/equipment/[id]/page.tsx": [
+      {
+        "file": "app/webapp/equipment/[id]/page.tsx",
+        "line": 152,
+        "message": "generic-message: \"Failed to log temperature. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to log temperature. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to log temperature. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "app/webapp/recipe-sharing/page.tsx": [
+      {
+        "file": "app/webapp/recipe-sharing/page.tsx",
+        "line": 141,
+        "message": "generic-message: \"Failed to share recipe. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to share recipe. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to share recipe. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "app/webapp/settings/components/AdaptiveNavSettingsPanel.tsx": [
+      {
+        "file": "app/webapp/settings/components/AdaptiveNavSettingsPanel.tsx",
+        "line": 99,
+        "message": "generic-message: \"Failed to sync preferences. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to sync preferences. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to sync preferences. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      },
+      {
+        "file": "app/webapp/settings/components/AdaptiveNavSettingsPanel.tsx",
+        "line": 134,
+        "message": "generic-message: \"Failed to load preferences from server. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "text": "Failed to load preferences from server. Please try again.",
+        "violation": {
+          "type": "generic-message",
+          "text": "Failed to load preferences from server. Please try again.",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Add PrepFlow personality",
+            "severity": "info"
+          },
+          "suggestion": "Add PrepFlow personality",
+          "severity": "info"
+        },
+        "stringType": "notification"
+      }
+    ],
+    "app/webapp/settings/components/sections/QRCodesSection/utils/generatePrintHTML.ts": [
+      {
+        "file": "app/webapp/settings/components/sections/QRCodesSection/utils/generatePrintHTML.ts",
+        "line": 89,
+        "message": "technical-jargon: \"${entity.name}\" - Use 'item', 'ingredient', 'recipe', etc.",
+        "severity": "warning",
+        "fixable": false,
+        "text": "${entity.name}",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "${entity.name}",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Use 'item', 'ingredient', 'recipe', etc.",
+            "severity": "warning"
+          },
+          "suggestion": "Use 'item', 'ingredient', 'recipe', etc.",
+          "severity": "warning"
+        },
+        "stringType": "accessibility"
+      }
+    ],
+    "app/webapp/square/components/sections/ConfigurationSection/components/ConfigurationForm.tsx": [
+      {
+        "file": "app/webapp/square/components/sections/ConfigurationSection/components/ConfigurationForm.tsx",
+        "line": 141,
+        "message": "technical-jargon: \"https://your-restaurant.com/api/webhook/square\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "https://your-restaurant.com/api/webhook/square",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "https://your-restaurant.com/api/webhook/square",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "accessibility"
+      }
+    ]
+  },
+  "timestamp": "2025-12-23T13:01:48.874Z"
+}

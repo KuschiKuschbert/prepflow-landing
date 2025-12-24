@@ -1,3 +1,5 @@
+'use client';
+
 import { useDroppable } from '@dnd-kit/core';
 import { format } from 'date-fns';
 import { Icon } from '@/components/ui/Icon';
@@ -51,7 +53,12 @@ export function RosterRow({
       <div className="flex items-center">
         <div className="flex w-full items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Icon icon={Users} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+            <Icon
+              icon={Users}
+              size="sm"
+              className="text-[var(--foreground-muted)]"
+              aria-hidden={true}
+            />
             <div>
               <div className="font-medium text-[var(--foreground)]">
                 {employee.first_name} {employee.last_name}

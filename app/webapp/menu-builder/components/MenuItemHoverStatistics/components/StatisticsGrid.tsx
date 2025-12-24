@@ -39,7 +39,8 @@ function getFoodCostColor(foodCostPercent: number): string {
 
 export function StatisticsGrid({ statistics }: { statistics: ItemStatistics }) {
   // Gross Profit (dollar amount) uses positive/negative logic
-  const profitColor = (value: number) => (value >= 0 ? 'text-[var(--primary)]' : 'text-[var(--color-error)]');
+  const profitColor = (value: number) =>
+    value >= 0 ? 'text-[var(--primary)]' : 'text-[var(--color-error)]';
 
   return (
     <div className="grid grid-cols-2 gap-2 text-xs">
@@ -49,7 +50,9 @@ export function StatisticsGrid({ statistics }: { statistics: ItemStatistics }) {
       </div>
       <div>
         <div className="text-[var(--foreground-muted)]">Revenue</div>
-        <div className="font-medium text-[var(--foreground)]">${statistics.selling_price.toFixed(2)}</div>
+        <div className="font-medium text-[var(--foreground)]">
+          ${statistics.selling_price.toFixed(2)}
+        </div>
       </div>
       <div>
         <div className="text-[var(--foreground-muted)]">Gross Profit</div>

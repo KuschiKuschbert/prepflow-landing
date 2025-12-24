@@ -32,7 +32,7 @@ export function RecipeManagementTabs({ activeTab, onTabChange }: RecipeManagemen
           onClick={() => handleTabChange('ingredients')}
           className={`tablet:px-6 flex min-w-0 flex-shrink items-center gap-2 rounded-xl px-4 py-3 font-semibold transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none ${
             activeTab === 'ingredients'
-              ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl border border-[var(--primary)]/30'
+              ? 'border border-[var(--primary)]/30 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl'
               : 'text-[var(--foreground-secondary)] hover:text-[var(--button-active-text)]'
           }`}
           aria-pressed={activeTab === 'ingredients'}
@@ -45,7 +45,7 @@ export function RecipeManagementTabs({ activeTab, onTabChange }: RecipeManagemen
           onClick={() => handleTabChange('dishes')}
           className={`tablet:px-6 flex min-w-0 flex-shrink items-center gap-2 rounded-xl px-4 py-3 font-semibold transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none ${
             activeTab === 'dishes'
-              ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl border border-[var(--primary)]/30'
+              ? 'border border-[var(--primary)]/30 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl'
               : 'text-[var(--foreground-muted)] hover:text-[var(--button-active-text)]'
           }`}
           aria-pressed={activeTab === 'dishes'}
@@ -58,7 +58,7 @@ export function RecipeManagementTabs({ activeTab, onTabChange }: RecipeManagemen
           onClick={() => handleTabChange('menu-builder')}
           className={`tablet:px-6 flex min-w-0 flex-shrink items-center gap-2 rounded-xl px-4 py-3 font-semibold transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none ${
             activeTab === 'menu-builder'
-              ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl border border-[var(--primary)]/30'
+              ? 'border border-[var(--primary)]/30 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl'
               : 'text-[var(--foreground-muted)] hover:text-[var(--button-active-text)]'
           }`}
           aria-pressed={activeTab === 'menu-builder'}

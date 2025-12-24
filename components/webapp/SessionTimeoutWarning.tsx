@@ -67,7 +67,9 @@ export const SessionTimeoutWarning: React.FC<SessionTimeoutWarningProps> = ({
               <div className="mb-6 flex items-center justify-center">
                 <div className="rounded-xl border border-[var(--accent)]/50 bg-[var(--accent)]/10 px-8 py-4">
                   <div className="text-center">
-                    <div className="text-fluid-xs mb-1 text-[var(--foreground)]/60">Time remaining</div>
+                    <div className="text-fluid-xs mb-1 text-[var(--foreground)]/60">
+                      Time remaining
+                    </div>
                     <div className="text-fluid-4xl font-bold text-[var(--accent)]">
                       {formatTime(remainingMs)}
                     </div>
@@ -79,7 +81,7 @@ export const SessionTimeoutWarning: React.FC<SessionTimeoutWarningProps> = ({
               <div className="flex flex-col gap-3">
                 <button
                   onClick={onStayActive}
-                  className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg hover:shadow-[var(--primary)]/20 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none"
+                  className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-[var(--primary)]/20 hover:shadow-lg focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] focus:outline-none"
                 >
                   Stay Active
                 </button>

@@ -1,7 +1,9 @@
 import { logger } from '@/lib/logger';
 
 interface QueryResult {
-  error?: { message: string; code?: string };
+  error?: { message: string; code?: string } | null;
+  data?: any;
+  count?: number | null;
 }
 
 /**
@@ -21,5 +23,3 @@ export function checkQueryErrors(results: QueryResult[], names: string[]): void 
     }
   });
 }
-
-

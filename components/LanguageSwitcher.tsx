@@ -43,7 +43,11 @@ export default function LanguageSwitcher({
         }}
       >
         {availableLangs.map(lang => (
-          <option key={lang.code} value={lang.code} className="bg-[var(--muted)] text-[var(--foreground)]">
+          <option
+            key={lang.code}
+            value={lang.code}
+            className="bg-[var(--muted)] text-[var(--foreground)]"
+          >
             {showFlag && lang.flag} {showName && lang.name}
           </option>
         ))}

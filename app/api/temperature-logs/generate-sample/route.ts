@@ -26,15 +26,18 @@ export async function POST(request: NextRequest) {
 
     if (equipmentError) {
       logger.error('Error fetching equipment:', equipmentError);
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(equipmentError, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(equipmentError, 500), {
+        status: 500,
+      });
     }
 
     if (!equipment || equipment.length === 0) {
       return NextResponse.json(
-        ApiErrorHandler.createError('Please create temperature equipment first', 'NO_EQUIPMENT_FOUND', 400),
+        ApiErrorHandler.createError(
+          'Please create temperature equipment first',
+          'NO_EQUIPMENT_FOUND',
+          400,
+        ),
         { status: 400 },
       );
     }

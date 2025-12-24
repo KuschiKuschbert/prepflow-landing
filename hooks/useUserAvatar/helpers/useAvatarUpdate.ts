@@ -33,9 +33,9 @@ export function useAvatarUpdate({
       }
       if (avatar === avatarId) return;
       const originalAvatar = avatar;
+      // Optimistically update UI immediately
       setAvatarState(avatarId);
       storeAvatar(avatarId);
-      setLoading(true);
       setError(null);
       if (typeof window !== 'undefined') {
         window.dispatchEvent(
@@ -62,21 +62,17 @@ export function useAvatarUpdate({
           storeAvatar(serverAvatar);
           showSuccess('Avatar updated successfully');
         } catch (err) {
+          // Rollback on error
           setAvatarState(originalAvatar);
           storeAvatar(originalAvatar);
           const errorMessage = err instanceof Error ? err.message : 'Failed to update avatar';
           setError(errorMessage);
           showError(errorMessage);
-        } finally {
-          setLoading(false);
         }
-      } else {
-        setLoading(false);
       }
     },
-    [avatar, userEmail, setAvatarState, setLoading, setError, showSuccess, showError],
+    [avatar, userEmail, setAvatarState, setError, showSuccess, showError],
   );
 
   return { setAvatar };
 }
-

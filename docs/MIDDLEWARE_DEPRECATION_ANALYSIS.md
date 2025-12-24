@@ -7,6 +7,7 @@ Next.js 16 has deprecated the `middleware` file convention in favor of `proxy`. 
 ## Current State
 
 ### Middleware File Location
+
 - **File:** `middleware.ts` (root directory)
 - **Function:** `export default async function middleware(req: NextRequest)`
 - **Runtime:** Node.js (no Edge runtime specified, so defaults to Node.js)
@@ -48,12 +49,14 @@ Next.js 16 has deprecated the `middleware` file convention in favor of `proxy`. 
 ### Option 1: Simple Rename (Recommended)
 
 **Steps:**
+
 1. Rename `middleware.ts` → `proxy.ts`
 2. Change function name: `middleware` → `proxy`
 3. Remove redundant www redirect (already in `next.config.ts`)
 4. Test all auth flows
 
 **Code Changes:**
+
 ```typescript
 // Before: middleware.ts
 export default async function middleware(req: NextRequest) {
@@ -67,6 +70,7 @@ export default async function proxy(req: NextRequest) {
 ```
 
 **Migration Command:**
+
 ```bash
 npx @next/codemod@canary middleware-to-proxy .
 ```
@@ -82,6 +86,7 @@ npx @next/codemod@canary middleware-to-proxy .
 ### 1. www Redirect is Redundant ✅
 
 **Current State:**
+
 - `middleware.ts` handles www redirect (lines 17-21)
 - `next.config.ts` also handles www redirect (lines 202-212)
 
@@ -90,6 +95,7 @@ npx @next/codemod@canary middleware-to-proxy .
 ### 2. Auth0 SDK Compatibility ✅
 
 **Current Usage:**
+
 - `auth0.middleware(req)` - Called in middleware
 - `auth0.getSession(req)` - Used in multiple route handlers
 
@@ -107,6 +113,7 @@ npx @next/codemod@canary middleware-to-proxy .
 ### 4. Functionality Preservation ✅
 
 All current middleware functionality can be preserved:
+
 - Auth0 authentication ✅
 - Admin route protection ✅
 - Allowlist enforcement ✅
@@ -117,6 +124,7 @@ All current middleware functionality can be preserved:
 ## Migration Checklist
 
 ### Pre-Migration
+
 - [x] Document current middleware responsibilities
 - [x] Verify www redirect redundancy
 - [x] Check Auth0 SDK compatibility
@@ -126,6 +134,7 @@ All current middleware functionality can be preserved:
 - [ ] Test allowlist enforcement
 
 ### Migration Steps
+
 - [ ] Run Next.js codemod: `npx @next/codemod@canary middleware-to-proxy .`
 - [ ] Or manually:
   - [ ] Rename `middleware.ts` → `proxy.ts`
@@ -139,6 +148,7 @@ All current middleware functionality can be preserved:
 - [ ] Test development bypass
 
 ### Post-Migration
+
 - [ ] Verify no deprecation warnings
 - [ ] Update documentation
 - [ ] Update AGENTS.md with migration status
@@ -146,6 +156,7 @@ All current middleware functionality can be preserved:
 ## Testing Plan
 
 ### Critical Tests
+
 1. **Authentication Flow**
    - Login redirects correctly
    - Callback processes successfully
@@ -170,31 +181,37 @@ All current middleware functionality can be preserved:
 ## Risk Assessment
 
 ### Low Risk ✅
+
 - Simple rename operation
 - No runtime changes
 - Auth0 SDK compatibility confirmed
 - Redundant redirect removal is safe
 
 ### Medium Risk ⚠️
+
 - Need to verify Auth0 SDK `middleware()` method works with proxy
 - Need to test all auth flows thoroughly
 
 ### High Risk ❌
+
 - None identified
 
 ## Recommendations
 
 ### Immediate (This Week)
+
 1. **Run Migration:** Use Next.js codemod or manual rename
 2. **Remove Redundant Code:** Remove www redirect from middleware/proxy
 3. **Test Thoroughly:** Run all critical tests above
 
 ### Short-term (This Month)
+
 1. Monitor for any edge cases
 2. Update documentation
 3. Consider further optimizations
 
 ### Long-term (Future)
+
 1. Consider moving more logic to route handlers if patterns emerge
 2. Monitor Next.js updates for further proxy pattern improvements
 
@@ -222,12 +239,9 @@ All current middleware functionality can be preserved:
 ## Conclusion
 
 The migration is **straightforward and low-risk**. The main steps are:
+
 1. Rename file and function
 2. Remove redundant www redirect
 3. Test thoroughly
 
 The deprecation warning can be resolved quickly with minimal code changes.
-
-
-
-

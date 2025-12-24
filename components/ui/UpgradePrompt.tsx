@@ -65,13 +65,17 @@ export function UpgradePrompt({
           </div>
           <div>
             <h2 className="text-2xl font-bold text-[var(--foreground)]">Ready to level up?</h2>
-            <p className="text-sm text-[var(--foreground-muted)]">Here&apos;s what you&apos;re missing</p>
+            <p className="text-sm text-[var(--foreground-muted)]">
+              Here&apos;s what you&apos;re missing
+            </p>
           </div>
         </div>
 
         {/* Feature message */}
         <div className="mb-6 rounded-xl border border-[var(--primary)]/20 bg-[var(--muted)]/50 p-4">
-          <p className="text-[var(--foreground)]">{getUpgradeMessage(featureKey, currentTier, requiredTier)}</p>
+          <p className="text-[var(--foreground)]">
+            {getUpgradeMessage(featureKey, currentTier, requiredTier)}
+          </p>
         </div>
 
         {/* New features list */}
@@ -82,7 +86,10 @@ export function UpgradePrompt({
             </h3>
             <ul className="space-y-2">
               {newFeatures.map((feature, index) => (
-                <li key={index} className="flex items-center gap-2 text-[var(--foreground-secondary)]">
+                <li
+                  key={index}
+                  className="flex items-center gap-2 text-[var(--foreground-secondary)]"
+                >
                   <div className="h-1.5 w-1.5 rounded-full bg-[var(--primary)]" />
                   <span>{feature.name}</span>
                 </li>

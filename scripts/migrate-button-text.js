@@ -18,10 +18,7 @@ const { glob } = require('glob');
 const DRY_RUN = !process.argv.includes('--write');
 
 // Files to process
-const filePatterns = [
-  'app/webapp/**/*.{tsx,ts}',
-  'components/**/*.{tsx,ts}',
-];
+const filePatterns = ['app/webapp/**/*.{tsx,ts}', 'components/**/*.{tsx,ts}'];
 
 // Files to skip
 const skipPatterns = [
@@ -58,10 +55,15 @@ function processFile(filePath) {
   let newContent = content;
 
   // Replace pattern 1: Direct className strings with text-[var(--primary-text)]
-  const directMatchesPrimary = content.matchAll(/(className=["'`][^"'`]*bg-gradient[^"'`]*text-\[var\(--primary-text\)\][^"'`]*["'`])/g);
+  const directMatchesPrimary = content.matchAll(
+    /(className=["'`][^"'`]*bg-gradient[^"'`]*text-\[var\(--primary-text\)\][^"'`]*["'`])/g,
+  );
   for (const match of directMatchesPrimary) {
     const original = match[0];
-    const updated = original.replace(/text-\[var\(--primary-text\)\]/g, 'text-[var(--button-active-text)]');
+    const updated = original.replace(
+      /text-\[var\(--primary-text\)\]/g,
+      'text-[var(--button-active-text)]',
+    );
     if (original !== updated) {
       newContent = newContent.replace(original, updated);
       modified = true;
@@ -74,10 +76,15 @@ function processFile(filePath) {
   }
 
   // Replace pattern 2: Direct className strings with text-[var(--foreground)]
-  const directMatchesForeground = content.matchAll(/(className=["'`][^"'`]*bg-gradient[^"'`]*text-\[var\(--foreground\)\][^"'`]*["'`])/g);
+  const directMatchesForeground = content.matchAll(
+    /(className=["'`][^"'`]*bg-gradient[^"'`]*text-\[var\(--foreground\)\][^"'`]*["'`])/g,
+  );
   for (const match of directMatchesForeground) {
     const original = match[0];
-    const updated = original.replace(/text-\[var\(--foreground\)\]/g, 'text-[var(--button-active-text)]');
+    const updated = original.replace(
+      /text-\[var\(--foreground\)\]/g,
+      'text-[var(--button-active-text)]',
+    );
     if (original !== updated) {
       newContent = newContent.replace(original, updated);
       modified = true;
@@ -90,10 +97,15 @@ function processFile(filePath) {
   }
 
   // Replace pattern 3: Template literals with text-[var(--primary-text)]
-  const templateMatchesPrimary = content.matchAll(/(className=\{`[^`]*bg-gradient[^`]*text-\[var\(--primary-text\)\][^`]*`\})/g);
+  const templateMatchesPrimary = content.matchAll(
+    /(className=\{`[^`]*bg-gradient[^`]*text-\[var\(--primary-text\)\][^`]*`\})/g,
+  );
   for (const match of templateMatchesPrimary) {
     const original = match[0];
-    const updated = original.replace(/text-\[var\(--primary-text\)\]/g, 'text-[var(--button-active-text)]');
+    const updated = original.replace(
+      /text-\[var\(--primary-text\)\]/g,
+      'text-[var(--button-active-text)]',
+    );
     if (original !== updated) {
       newContent = newContent.replace(original, updated);
       modified = true;
@@ -106,10 +118,15 @@ function processFile(filePath) {
   }
 
   // Replace pattern 4: Template literals with text-[var(--foreground)]
-  const templateMatchesForeground = content.matchAll(/(className=\{`[^`]*bg-gradient[^`]*text-\[var\(--foreground\)\][^`]*`\})/g);
+  const templateMatchesForeground = content.matchAll(
+    /(className=\{`[^`]*bg-gradient[^`]*text-\[var\(--foreground\)\][^`]*`\})/g,
+  );
   for (const match of templateMatchesForeground) {
     const original = match[0];
-    const updated = original.replace(/text-\[var\(--foreground\)\]/g, 'text-[var(--button-active-text)]');
+    const updated = original.replace(
+      /text-\[var\(--foreground\)\]/g,
+      'text-[var(--button-active-text)]',
+    );
     if (original !== updated) {
       newContent = newContent.replace(original, updated);
       modified = true;
@@ -132,7 +149,10 @@ function processFile(filePath) {
         /className/.test(lines.slice(Math.max(0, index - 2), index + 2).join('\n'));
 
       if (isButtonContext) {
-        const updatedLine = line.replace(/text-\[var\(--primary-text\)\]/g, 'text-[var(--button-active-text)]');
+        const updatedLine = line.replace(
+          /text-\[var\(--primary-text\)\]/g,
+          'text-[var(--button-active-text)]',
+        );
         if (updatedLine !== line) {
           const lineContent = newContent.split('\n');
           lineContent[index] = updatedLine;
@@ -141,7 +161,8 @@ function processFile(filePath) {
           changes.push({
             line: index + 1,
             original: line.trim().substring(0, 80) + (line.trim().length > 80 ? '...' : ''),
-            updated: updatedLine.trim().substring(0, 80) + (updatedLine.trim().length > 80 ? '...' : ''),
+            updated:
+              updatedLine.trim().substring(0, 80) + (updatedLine.trim().length > 80 ? '...' : ''),
           });
         }
       }
@@ -155,12 +176,16 @@ function processFile(filePath) {
         /className/.test(lines.slice(Math.max(0, index - 2), index + 2).join('\n'));
 
       // Skip subtle gradients (opacity < 20%) - these might intentionally use foreground text
-      const hasSubtleGradient = /from-\[var\([^)]+\)\]\/\d+/.test(line) &&
+      const hasSubtleGradient =
+        /from-\[var\([^)]+\)\]\/\d+/.test(line) &&
         /from-\[var\([^)]+\)\]\/(\d+)/.test(line) &&
         parseInt(/from-\[var\([^)]+\)\]\/(\d+)/.exec(line)?.[1] || '0') < 20;
 
       if (isButtonContext && !hasSubtleGradient) {
-        const updatedLine = line.replace(/text-\[var\(--foreground\)\]/g, 'text-[var(--button-active-text)]');
+        const updatedLine = line.replace(
+          /text-\[var\(--foreground\)\]/g,
+          'text-[var(--button-active-text)]',
+        );
         if (updatedLine !== line) {
           const lineContent = newContent.split('\n');
           lineContent[index] = updatedLine;
@@ -169,7 +194,8 @@ function processFile(filePath) {
           changes.push({
             line: index + 1,
             original: line.trim().substring(0, 80) + (line.trim().length > 80 ? '...' : ''),
-            updated: updatedLine.trim().substring(0, 80) + (updatedLine.trim().length > 80 ? '...' : ''),
+            updated:
+              updatedLine.trim().substring(0, 80) + (updatedLine.trim().length > 80 ? '...' : ''),
           });
         }
       }

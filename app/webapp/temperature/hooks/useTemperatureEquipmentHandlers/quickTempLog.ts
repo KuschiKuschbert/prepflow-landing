@@ -9,7 +9,6 @@ interface QuickTempLogProps {
   equipmentType: string;
   activeTab: 'logs' | 'equipment' | 'analytics';
   fetchAllLogs: (limit?: number, forceRefresh?: boolean) => Promise<void>;
-  setQuickTempLoading: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>;
   showError: (message: string) => void;
 }
 
@@ -25,10 +24,8 @@ export async function handleQuickTempLog({
   equipmentType,
   activeTab,
   fetchAllLogs,
-  setQuickTempLoading,
   showError,
 }: QuickTempLogProps): Promise<boolean> {
-  setQuickTempLoading(prev => ({ ...prev, [equipmentId]: true }));
   try {
     const response = await fetch('/api/temperature-logs', {
       method: 'POST',
@@ -61,7 +58,5 @@ export async function handleQuickTempLog({
       "Couldn't log that temperature. Give it another shot - sometimes the system needs a moment.",
     );
     return false;
-  } finally {
-    setQuickTempLoading(prev => ({ ...prev, [equipmentId]: false }));
   }
 }

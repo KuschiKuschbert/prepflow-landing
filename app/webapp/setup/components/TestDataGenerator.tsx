@@ -35,9 +35,9 @@ export default function TestDataGenerator() {
       }
     } catch (error) {
       logger.error('[TestDataGenerator.tsx] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       showError('Connection issue while generating test data. Give it another go, chef.');
     } finally {
@@ -49,7 +49,12 @@ export default function TestDataGenerator() {
     <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
       <div className="text-center">
         <div className="mb-4 flex justify-center">
-          <Icon icon={BarChart3} size="xl" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+          <Icon
+            icon={BarChart3}
+            size="xl"
+            className="text-[var(--foreground-muted)]"
+            aria-hidden={true}
+          />
         </div>
         <h3 className="mb-2 text-xl font-bold text-[var(--foreground)]">Test Data Generator</h3>
         <p className="mb-6 text-[var(--foreground-muted)]">
@@ -80,7 +85,12 @@ export default function TestDataGenerator() {
             </span>
           ) : (
             <span className="flex items-center justify-center space-x-2">
-              <Icon icon={BarChart3} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+              <Icon
+                icon={BarChart3}
+                size="sm"
+                className="text-[var(--primary)]"
+                aria-hidden={true}
+              />
               <span>Generate Test Data</span>
             </span>
           )}

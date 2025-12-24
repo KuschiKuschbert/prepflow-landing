@@ -36,9 +36,9 @@ export function useFeatures() {
       }
     } catch (error) {
       logger.error('[useFeatures.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       const errorMessage =
         error instanceof Error ? error.message : 'Failed to fetch feature mappings';
@@ -69,9 +69,9 @@ export function useFeatures() {
         }
       } catch (error) {
         logger.error('[useFeatures.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+          error: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+        });
 
         showError('Failed to update feature mapping');
         return false;

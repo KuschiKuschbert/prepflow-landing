@@ -150,7 +150,9 @@ export default function DishIngredientCombobox({
                     <div className="flex-1">
                       <div className="font-medium text-[var(--foreground)]">{name}</div>
                       {ingredient.unit && (
-                        <div className="text-xs text-[var(--foreground-muted)]">Unit: {ingredient.unit}</div>
+                        <div className="text-xs text-[var(--foreground-muted)]">
+                          Unit: {ingredient.unit}
+                        </div>
                       )}
                     </div>
                     {ingredient.id === selectedIngredient.ingredient_id && (

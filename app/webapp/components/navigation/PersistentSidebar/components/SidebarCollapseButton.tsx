@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Sidebar collapse button component
  */

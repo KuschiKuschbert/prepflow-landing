@@ -1,14 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import {
-  LayoutDashboard,
-  Settings,
-  RefreshCw,
-  Link2,
-  History,
-  Webhook,
-} from 'lucide-react';
+import { LayoutDashboard, Settings, RefreshCw, Link2, History, Webhook } from 'lucide-react';
 
 type SquareSection = 'overview' | 'configuration' | 'sync' | 'mappings' | 'history' | 'webhooks';
 
@@ -76,7 +69,7 @@ export function SquareNavigation({ activeSection }: SquareNavigationProps) {
   return (
     <nav className="sticky top-[calc(var(--header-height-desktop)+1rem)] space-y-1">
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-        <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[var(--foreground-muted)]">
+        <h3 className="mb-4 text-sm font-semibold tracking-wider text-[var(--foreground-muted)] uppercase">
           Navigation
         </h3>
         <ul className="space-y-1">

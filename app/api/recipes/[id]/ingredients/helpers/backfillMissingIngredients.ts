@@ -42,7 +42,7 @@ export async function backfillMissingIngredients(rows: any[], recipeId: string):
       context: { endpoint: '/api/recipes/[id]/ingredients', recipeId },
     });
 
-    const retryResult = await supabaseAdmin
+    const { data: retryData, error: retryError } = await supabaseAdmin
       .from('ingredients')
       .select(
         'id, ingredient_name, cost_per_unit, cost_per_unit_incl_trim, unit, trim_peel_waste_percentage, yield_percentage',
@@ -50,11 +50,11 @@ export async function backfillMissingIngredients(rows: any[], recipeId: string):
       .in('id', uniqueIds);
 
     // Normalize the retry result to include category as null for type compatibility
-    ingRows = retryResult.data?.map((ing: any) => ({
+    ingRows = retryData?.map((ing: any) => ({
       ...ing,
       category: ing.category ?? null,
     })) as typeof ingRows;
-    ingError = retryResult.error;
+    ingError = retryError;
   }
 
   if (ingError || !ingRows) return rows;

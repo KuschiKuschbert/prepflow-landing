@@ -7,14 +7,13 @@ import type { TemperatureEquipment } from '../../../types';
 interface EquipmentCRUDProps {
   equipment: TemperatureEquipment[];
   setEquipment: React.Dispatch<React.SetStateAction<TemperatureEquipment[]>>;
-  fetchEquipment: () => Promise<void>;
   showError: (message: string) => void;
   showSuccess: (message: string) => void;
 }
 
 export async function deleteEquipment(
   equipmentId: string,
-  { equipment, setEquipment, fetchEquipment, showError, showSuccess }: EquipmentCRUDProps,
+  { equipment, setEquipment, showError, showSuccess }: EquipmentCRUDProps,
 ): Promise<void> {
   const originalEquipment = [...equipment];
   const equipmentToDelete = equipment.find(eq => eq.id === equipmentId);
@@ -28,7 +27,6 @@ export async function deleteEquipment(
     const data = await response.json();
     if (data.success) {
       showSuccess('Equipment deleted successfully');
-      fetchEquipment().catch(err => logger.error('Failed to refresh equipment:', err));
     } else {
       setEquipment(originalEquipment);
       showError(data.error || 'Failed to delete equipment');

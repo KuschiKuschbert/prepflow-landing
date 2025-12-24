@@ -22,7 +22,9 @@ export default function SetupProgress({ setupProgress }: SetupProgressProps) {
     <div className="mb-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-xl font-semibold text-[var(--foreground)]">Setup Progress</h2>
-        <div className="text-sm text-[var(--foreground-muted)]">{completedCount} of 4 completed</div>
+        <div className="text-sm text-[var(--foreground-muted)]">
+          {completedCount} of 4 completed
+        </div>
       </div>
 
       <div className="flex items-center space-x-4">
@@ -35,7 +37,9 @@ export default function SetupProgress({ setupProgress }: SetupProgressProps) {
               <div className="flex items-center space-x-2">
                 <div
                   className={`flex h-8 w-8 items-center justify-center rounded-full transition-all duration-200 ${
-                    isCompleted ? 'bg-[var(--primary)]' : 'border border-[var(--primary)]/30 bg-[var(--muted)]'
+                    isCompleted
+                      ? 'bg-[var(--primary)]'
+                      : 'border border-[var(--primary)]/30 bg-[var(--muted)]'
                   }`}
                 >
                   {isCompleted ? (
@@ -76,7 +80,12 @@ export default function SetupProgress({ setupProgress }: SetupProgressProps) {
         <p className="mt-2 text-center text-sm text-[var(--foreground-muted)]">
           {completedCount === 4 ? (
             <span className="flex items-center justify-center gap-2">
-              <Icon icon={PartyPopper} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+              <Icon
+                icon={PartyPopper}
+                size="sm"
+                className="text-[var(--primary)]"
+                aria-hidden={true}
+              />
               Setup Complete! Ready to use PrepFlow.
             </span>
           ) : (

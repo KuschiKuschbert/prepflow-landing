@@ -8,7 +8,6 @@ import { logger } from '@/lib/logger';
 export function useAutoReport(userEmail: string | undefined) {
   const { showSuccess, showError } = useNotification();
   const [autoReport, setAutoReport] = useState(false);
-  const [loadingAutoReport, setLoadingAutoReport] = useState(false);
 
   useEffect(() => {
     if (!userEmail) return;
@@ -29,7 +28,12 @@ export function useAutoReport(userEmail: string | undefined) {
   }, [userEmail]);
 
   const handleAutoReportToggle = async (enabled: boolean) => {
-    setLoadingAutoReport(true);
+    // Store original state for rollback
+    const originalAutoReport = autoReport;
+
+    // Optimistically update UI immediately
+    setAutoReport(enabled);
+
     try {
       const response = await fetch('/api/user/error-reporting-preferences', {
         method: 'PUT',
@@ -42,24 +46,25 @@ export function useAutoReport(userEmail: string | undefined) {
       const data = await response.json();
 
       if (!response.ok) {
+        // Error - revert optimistic update
+        setAutoReport(originalAutoReport);
         throw new Error(data.error || data.message || 'Failed to update preference');
       }
 
-      setAutoReport(enabled);
+      // Success - state already updated optimistically
       showSuccess(
         enabled ? 'Auto-reporting enabled for critical errors' : 'Auto-reporting disabled',
       );
     } catch (error) {
+      // Error - revert optimistic update
+      setAutoReport(originalAutoReport);
       logger.error('Failed to update auto-report preference:', error);
       showError(error instanceof Error ? error.message : 'Failed to update preference');
-    } finally {
-      setLoadingAutoReport(false);
     }
   };
 
   return {
     autoReport,
-    loadingAutoReport,
     handleAutoReportToggle,
   };
 }

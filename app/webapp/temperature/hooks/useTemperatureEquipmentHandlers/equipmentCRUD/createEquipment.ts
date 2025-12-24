@@ -7,7 +7,6 @@ import type { TemperatureEquipment } from '../../../types';
 interface EquipmentCRUDProps {
   equipment: TemperatureEquipment[];
   setEquipment: React.Dispatch<React.SetStateAction<TemperatureEquipment[]>>;
-  fetchEquipment: () => Promise<void>;
   showError: (message: string) => void;
   showSuccess: (message: string) => void;
 }
@@ -18,7 +17,7 @@ export async function createEquipment(
   location: string | null,
   minTemp: number | null,
   maxTemp: number | null,
-  { equipment, setEquipment, fetchEquipment, showError, showSuccess }: EquipmentCRUDProps,
+  { equipment, setEquipment, showError, showSuccess }: EquipmentCRUDProps,
 ): Promise<void> {
   const originalEquipment = [...equipment];
   const tempId = `temp-${Date.now()}`;
@@ -51,7 +50,6 @@ export async function createEquipment(
     if (data.success && data.item) {
       setEquipment(prevEquipment => prevEquipment.map(eq => (eq.id === tempId ? data.item : eq)));
       showSuccess('Equipment created successfully');
-      fetchEquipment().catch(err => logger.error('Failed to refresh equipment:', err));
     } else {
       setEquipment(originalEquipment);
       showError(data.error || 'Failed to create equipment');

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { MagneticButton } from './MagneticButton';
 import { LANDING_COLORS, LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
@@ -58,7 +60,8 @@ export const Button: React.FC<ButtonProps> = ({
           'bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-[var(--button-active-text)] shadow-lg hover:shadow-xl hover:shadow-[var(--primary)]/25',
         secondary:
           'bg-gradient-to-r from-[var(--accent)] to-[var(--primary)] text-[var(--button-active-text)] shadow-lg hover:shadow-xl hover:shadow-[var(--accent)]/25',
-        outline: 'border border-[var(--border)] text-[var(--foreground-secondary)] hover:border-[var(--primary)] hover:text-[var(--primary)]',
+        outline:
+          'border border-[var(--border)] text-[var(--foreground-secondary)] hover:border-[var(--primary)] hover:text-[var(--primary)]',
       };
 
   // Size classes - use landing typography if landingStyle is enabled

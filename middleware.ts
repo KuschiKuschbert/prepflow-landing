@@ -1,6 +1,6 @@
-import { auth0 } from '@/lib/auth0';
-import { isEmailAllowed } from '@/lib/allowlist';
 import { isAdmin } from '@/lib/admin-utils';
+import { isEmailAllowed } from '@/lib/allowlist';
+import { auth0 } from '@/lib/auth0';
 import { logger } from '@/lib/logger';
 import { checkRateLimitFromRequest } from '@/lib/rate-limit';
 import type { NextRequest } from 'next/server';
@@ -19,6 +19,17 @@ export default async function middleware(req: NextRequest) {
     const wwwUrl = new URL(req.url);
     wwwUrl.hostname = 'www.prepflow.org';
     return NextResponse.redirect(wwwUrl, 301); // Permanent redirect
+  // Nacho Tacos Admin Auth (Simple Password Protection)
+  if (pathname.startsWith("/nachotaco")) {
+    const isLoginPage = pathname === "/nachotaco/login";
+    const nachoAuth = req.cookies.get("nacho_auth")?.value;
+
+    if (!nachoAuth && !isLoginPage) {
+      return NextResponse.redirect(new URL("/nachotaco/login", req.url));
+    }
+    // Allow access - bypass Auth0
+    return NextResponse.next();
+  }
   }
 
   // Rate limiting for API routes (skip for public routes)
@@ -39,7 +50,7 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.json(
         {
           error: 'Too many requests',
-          message: 'Rate limit exceeded. Please try again later.',
+          message: 'Too many requests! Slow down a bit, chef. Try again in a moment.',
           retryAfter: rateLimitResult.retryAfter,
         },
         {
@@ -130,7 +141,6 @@ export default async function middleware(req: NextRequest) {
 
   // Get session for protected routes
   const session = await auth0.getSession(req);
-  const isApi = pathname.startsWith('/api/');
 
   // Admin routes require admin role
   if (pathname.startsWith('/admin') || pathname.startsWith('/api/admin')) {

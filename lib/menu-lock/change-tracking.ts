@@ -71,7 +71,13 @@ export async function trackChangeForLockedMenus(
     logger.error('[Menu Change Tracking] Error tracking changes:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
-      context: { entityType, entityId, entityName, changeType, operation: 'trackChangeForLockedMenus' },
+      context: {
+        entityType,
+        entityId,
+        entityName,
+        changeType,
+        operation: 'trackChangeForLockedMenus',
+      },
     });
   }
 }

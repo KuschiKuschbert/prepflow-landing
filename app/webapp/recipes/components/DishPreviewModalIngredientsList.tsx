@@ -13,10 +13,15 @@ export function DishPreviewModalIngredientsList({
 
   return (
     <div className="mb-6">
-      <h3 className="mb-3 text-lg font-semibold text-[var(--foreground)]">Standalone Ingredients</h3>
+      <h3 className="mb-3 text-lg font-semibold text-[var(--foreground)]">
+        Standalone Ingredients
+      </h3>
       <div className="space-y-2">
         {dishDetails.ingredients.map((di, index) => (
-          <div key={index} className="rounded-lg bg-[var(--muted)]/30 p-3 text-sm text-[var(--foreground-secondary)]">
+          <div
+            key={index}
+            className="rounded-lg bg-[var(--muted)]/30 p-3 text-sm text-[var(--foreground-secondary)]"
+          >
             <span className="font-medium text-[var(--foreground)]">
               {di.ingredients?.ingredient_name || 'Unknown Ingredient'}
             </span>

@@ -145,9 +145,11 @@ export default function PerformanceChartsLazy({
       {topProfitItems.length > 0 && (
         <div className="rounded-2xl border border-[var(--border)] bg-gradient-to-r from-[var(--primary)]/10 to-[var(--accent)]/10 p-4">
           <p className="text-sm text-[var(--foreground-secondary)]">
-            <span className="font-semibold text-[var(--button-active-text)]">Insight:</span> Your top 3 items (
-            {topProfitItems.map(item => item.name).join(', ')}) generate{' '}
-            <span className="font-semibold text-[var(--primary)]">{top3ProfitPercentage.toFixed(1)}%</span>{' '}
+            <span className="font-semibold text-[var(--button-active-text)]">Insight:</span> Your
+            top 3 items ({topProfitItems.map(item => item.name).join(', ')}) generate{' '}
+            <span className="font-semibold text-[var(--primary)]">
+              {top3ProfitPercentage.toFixed(1)}%
+            </span>{' '}
             of total profit (
             {formatCurrency(
               topProfitItems.reduce((sum, item) => sum + item.gross_profit * item.number_sold, 0),

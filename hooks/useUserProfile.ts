@@ -84,7 +84,7 @@ export function useUserProfile(): UseUserProfileReturn {
       userEmail,
       userLoading,
       userError: userError?.message,
-      hasCachedProfile: !!cachedProfile,
+      hasCachedProfile: !!validCachedProfile,
       currentProfile: profile,
     });
 

@@ -54,10 +54,9 @@ export async function POST(request: NextRequest) {
 
     if (recipesError) {
       logger.error('❌ Error fetching recipes:', recipesError);
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(recipesError, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(recipesError, 500), {
+        status: 500,
+      });
     }
 
     logger.dev(`✅ Found ${recipes?.length || 0} recipes`);

@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { consolidateAllergens } from '../australian-allergens';
+import { consolidateAllergens } from '../../australian-allergens';
 import { collectAllergensFromIngredients, collectAllergensFromRecipes } from './collectAllergens';
 import { cacheDishAllergens } from './cacheAllergens';
 
@@ -55,7 +55,11 @@ export async function aggregateDishAllergens(
       .eq('dish_id', dishId);
 
     if (!recipesError && dishRecipes) {
-      const recipeAllergens = collectAllergensFromRecipes(dishRecipes);
+      // Transform Supabase response format to match function signature
+      const transformedRecipes = dishRecipes.map(item => ({
+        recipes: Array.isArray(item.recipes) ? item.recipes[0] : item.recipes,
+      }));
+      const recipeAllergens = collectAllergensFromRecipes(transformedRecipes);
       recipeAllergens.forEach(allergen => allergenSet.add(allergen));
     }
 
@@ -73,7 +77,11 @@ export async function aggregateDishAllergens(
       .eq('dish_id', dishId);
 
     if (!ingredientsError && dishIngredients) {
-      const ingredientAllergens = collectAllergensFromIngredients(dishIngredients);
+      // Transform Supabase response format to match function signature
+      const transformedIngredients = dishIngredients.map(item => ({
+        ingredients: Array.isArray(item.ingredients) ? item.ingredients[0] : item.ingredients,
+      }));
+      const ingredientAllergens = collectAllergensFromIngredients(transformedIngredients);
       ingredientAllergens.forEach(allergen => allergenSet.add(allergen));
     }
 
@@ -93,4 +101,3 @@ export async function aggregateDishAllergens(
     return [];
   }
 }
-

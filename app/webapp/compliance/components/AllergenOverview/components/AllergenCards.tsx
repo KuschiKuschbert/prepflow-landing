@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Mobile card view for allergen overview
  */

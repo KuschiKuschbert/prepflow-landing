@@ -31,7 +31,11 @@ export function MenuItemTooltipContent({
     );
   }
   if (error) {
-    return <div className="text-xs text-[var(--color-error)] transition-opacity duration-200">{error}</div>;
+    return (
+      <div className="text-xs text-[var(--color-error)] transition-opacity duration-200">
+        {error}
+      </div>
+    );
   }
   if (!statistics) return null;
 
@@ -51,7 +55,9 @@ export function MenuItemTooltipContent({
     <div className="space-y-3 transition-opacity duration-200">
       {hasCogsError && (
         <div className="mb-2 rounded-lg border border-[var(--color-warning)]/30 bg-[var(--color-warning)]/10 p-2">
-          <div className="text-xs font-medium text-[var(--color-warning)]">⚠️ Calculation Warning</div>
+          <div className="text-xs font-medium text-[var(--color-warning)]">
+            ⚠️ Calculation Warning
+          </div>
           <div className="mt-1 text-xs text-yellow-300/80">{statistics.cogs_error}</div>
         </div>
       )}
@@ -66,7 +72,9 @@ export function MenuItemTooltipContent({
               {hasRecommendedPrice && (
                 <div
                   className={`text-xs ${
-                    recommendedHigher ? 'font-medium text-[var(--color-warning)]' : 'text-[var(--foreground-subtle)]'
+                    recommendedHigher
+                      ? 'font-medium text-[var(--color-warning)]'
+                      : 'text-[var(--foreground-subtle)]'
                   }`}
                 >
                   (${statistics.recommended_selling_price!.toFixed(2)})

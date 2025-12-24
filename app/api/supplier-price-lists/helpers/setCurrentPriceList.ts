@@ -1,4 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Set a price list as current and unset all others for the same supplier.
@@ -11,7 +13,11 @@ export async function setCurrentPriceList(
   supplierId: number,
   excludeId: number | null = null,
 ): Promise<void> {
-  let query = supabaseAdmin!
+  if (!supabaseAdmin) {
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
+
+  let query = supabaseAdmin
     .from('supplier_price_lists')
     .update({ is_current: false })
     .eq('supplier_id', supplierId);
@@ -20,5 +26,15 @@ export async function setCurrentPriceList(
     query = query.neq('id', excludeId);
   }
 
-  await query;
+  const { error } = await query;
+
+  if (error) {
+    logger.error('[Supplier Price Lists API] Error setting current price list:', {
+      error: error.message,
+      supplierId,
+      excludeId,
+      context: { endpoint: '/api/supplier-price-lists', operation: 'setCurrentPriceList' },
+    });
+    throw ApiErrorHandler.createError(error.message, 'DATABASE_ERROR', 500, error);
+  }
 }

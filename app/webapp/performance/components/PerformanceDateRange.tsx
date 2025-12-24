@@ -128,7 +128,7 @@ export default function PerformanceDateRange({
             onClick={() => handlePresetChange(preset.value)}
             className={`tablet:px-3 tablet:py-1.5 rounded-full px-2 py-1 text-xs font-medium transition-all ${
               dateRange.preset === preset.value
-                ? 'border-2 border-[var(--primary)] bg-[var(--primary)]/20 text-[var(--primary)] shadow-lg shadow-[var(--primary)]/20'
+                ? 'border-2 border-[var(--primary)] bg-[var(--primary)]/20 text-[var(--primary)] shadow-[var(--primary)]/20 shadow-lg'
                 : 'border border-[var(--border)] bg-[var(--muted)] text-[var(--foreground-muted)] hover:border-[var(--primary)]/50 hover:text-[var(--primary)]'
             }`}
           >
@@ -141,7 +141,9 @@ export default function PerformanceDateRange({
       {dateRange.preset === 'custom' && (
         <div className="tablet:grid-cols-2 grid grid-cols-1 gap-3">
           <div className="flex flex-col">
-            <label className="mb-1.5 text-xs font-medium text-[var(--foreground-secondary)]">Start Date</label>
+            <label className="mb-1.5 text-xs font-medium text-[var(--foreground-secondary)]">
+              Start Date
+            </label>
             <input
               type="date"
               value={formatDate(dateRange.startDate)}
@@ -151,7 +153,9 @@ export default function PerformanceDateRange({
             />
           </div>
           <div className="flex flex-col">
-            <label className="mb-1.5 text-xs font-medium text-[var(--foreground-secondary)]">End Date</label>
+            <label className="mb-1.5 text-xs font-medium text-[var(--foreground-secondary)]">
+              End Date
+            </label>
             <input
               type="date"
               value={formatDate(dateRange.endDate)}

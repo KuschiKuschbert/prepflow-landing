@@ -11,6 +11,7 @@ interface UseRecipeHandlersProps {
   selectedRecipe: string;
   dishPortions: number;
   calculations: import('../types').COGSCalculation[];
+  setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>;
   setSelectedRecipe: (id: string) => void;
   setDishPortions: (portions: number) => void;
   setShowCreateModal: (show: boolean) => void;
@@ -18,7 +19,6 @@ interface UseRecipeHandlersProps {
     name: string,
     portions: number,
   ) => Promise<{ recipe: Recipe; isNew: boolean } | null>;
-  fetchData: () => Promise<void>;
   saveNow?: () => Promise<void>;
   setSaveError?: (error: string) => void;
 }
@@ -35,7 +35,14 @@ export function useRecipeHandlers(props: UseRecipeHandlersProps) {
     setShowCreateModal(true);
   }, [setShowCreateModal]);
 
-  const handleCreateRecipe = useRecipeCreateHandler(props);
+  const handleCreateRecipe = useRecipeCreateHandler({
+    dishPortions: props.dishPortions,
+    recipes: props.recipes,
+    createOrUpdateRecipe: props.createOrUpdateRecipe,
+    setRecipes: props.setRecipes,
+    setSelectedRecipe: props.setSelectedRecipe,
+    setDishPortions: props.setDishPortions,
+  });
   const handleFinishRecipe = useRecipeFinishHandler(props);
 
   return {

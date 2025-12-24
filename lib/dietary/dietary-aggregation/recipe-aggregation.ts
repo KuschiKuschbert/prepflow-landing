@@ -41,11 +41,19 @@ export async function aggregateRecipeDietaryStatus(
     const ingredients = await fetchRecipeIngredients(recipeId);
 
     // Fetch recipe name (needed for detection and name-based check)
-    const { data: recipeData } = await supabaseAdmin
+    const { data: recipeData, error: recipeDataError } = await supabaseAdmin
       .from('recipes')
       .select('recipe_name, description')
       .eq('id', recipeId)
       .single();
+
+    if (recipeDataError) {
+      logger.error('[Dietary Aggregation] Error fetching recipe data:', {
+        error: recipeDataError.message,
+        recipeId,
+        context: { operation: 'aggregateRecipeDietaryStatus' },
+      });
+    }
 
     if (ingredients.length === 0) {
       // No ingredients - check recipe name for non-vegetarian keywords

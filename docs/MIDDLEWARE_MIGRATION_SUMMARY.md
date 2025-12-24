@@ -10,16 +10,20 @@
 ## What Needs to Change
 
 ### 1. File Rename
+
 - `middleware.ts` → `proxy.ts`
 
 ### 2. Function Rename
+
 - `export default async function middleware(req: NextRequest)`
 - → `export default async function proxy(req: NextRequest)`
 
 ### 3. Code Cleanup
+
 - Remove redundant www redirect (lines 17-21) - already handled by `next.config.ts`
 
 ### 4. Documentation Updates
+
 - Update references in docs (see list below)
 
 ## Migration Command
@@ -37,6 +41,7 @@ npx @next/codemod@canary middleware-to-proxy .
 ## Verification Steps
 
 After migration, verify:
+
 1. ✅ Build succeeds: `npm run build`
 2. ✅ No deprecation warnings
 3. ✅ Login flow works
@@ -88,7 +93,3 @@ These files reference middleware and should be updated after migration:
 2. Run migration when ready
 3. Test thoroughly
 4. Update documentation references
-
-
-
-

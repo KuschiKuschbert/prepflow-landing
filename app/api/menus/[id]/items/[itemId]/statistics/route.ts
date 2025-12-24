@@ -39,7 +39,11 @@ export async function GET(
 
     if (!menuId || !menuItemId) {
       return NextResponse.json(
-        ApiErrorHandler.createError('Both menu id and item id are required', 'MISSING_REQUIRED_FIELD', 400),
+        ApiErrorHandler.createError(
+          'Both menu id and item id are required',
+          'MISSING_REQUIRED_FIELD',
+          400,
+        ),
         { status: 400 },
       );
     }

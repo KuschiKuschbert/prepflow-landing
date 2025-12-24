@@ -16,7 +16,10 @@ export async function GET(req: NextRequest) {
     const cost_per_unit = url.searchParams.get('cost_per_unit');
 
     if (!name) return NextResponse.json({ exists: false });
-    if (!supabaseAdmin) return NextResponse.json(ApiErrorHandler.createError('DB unavailable', 'SERVER_ERROR', 500), { status: 500 });
+    if (!supabaseAdmin)
+      return NextResponse.json(ApiErrorHandler.createError('DB unavailable', 'SERVER_ERROR', 500), {
+        status: 500,
+      });
 
     const { data, error } = await supabaseAdmin
       .from('ingredients')
@@ -35,7 +38,9 @@ export async function GET(req: NextRequest) {
       error: e instanceof Error ? e.message : String(e),
       stack: e instanceof Error ? e.stack : undefined,
     });
-
-    return NextResponse.json({ error: e?.message || String(e) }, { status: 500 });
+    if (e && typeof e === 'object' && 'status' in e && 'json' in e) {
+      return e as NextResponse;
+    }
+    return NextResponse.json(ApiErrorHandler.createError('Failed to check ingredient existence', 'SERVER_ERROR', 500), { status: 500 });
   }
 }

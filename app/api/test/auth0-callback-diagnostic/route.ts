@@ -114,14 +114,9 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     logger.error('[Auth0 Callback Diagnostic] Diagnostic check failed:', error);
     return NextResponse.json(
-      ApiErrorHandler.createError(
-        'Failed to run callback diagnostic',
-        'SERVER_ERROR',
-        500,
-        {
-          details: error instanceof Error ? error.message : String(error),
-        },
-      ),
+      ApiErrorHandler.createError('Failed to run callback diagnostic', 'SERVER_ERROR', 500, {
+        details: error instanceof Error ? error.message : String(error),
+      }),
       { status: 500 },
     );
   }

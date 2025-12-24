@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Desktop table view for allergen overview
  */
@@ -27,7 +29,12 @@ export function AllergenTable({
           <div className="text-center">
             <div className="mb-4 flex justify-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20">
-                <Icon icon={Search} size="lg" className="text-[var(--primary)]" aria-hidden={true} />
+                <Icon
+                  icon={Search}
+                  size="lg"
+                  className="text-[var(--primary)]"
+                  aria-hidden={true}
+                />
               </div>
             </div>
             <h3 className="mb-2 text-lg font-semibold text-[var(--foreground)]">
@@ -106,10 +113,14 @@ export function AllergenTable({
                       >
                         {item.type === 'recipe' ? 'Recipe' : 'Dish'}
                       </span>
-                      <div className="text-sm font-medium text-[var(--foreground)]">{item.name}</div>
+                      <div className="text-sm font-medium text-[var(--foreground)]">
+                        {item.name}
+                      </div>
                     </div>
                     {item.description && (
-                      <div className="mt-1 text-xs text-[var(--foreground-muted)]">{item.description}</div>
+                      <div className="mt-1 text-xs text-[var(--foreground-muted)]">
+                        {item.description}
+                      </div>
                     )}
                   </td>
                   <td className="px-6 py-4">

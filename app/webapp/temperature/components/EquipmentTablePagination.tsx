@@ -47,7 +47,9 @@ export function EquipmentTablePagination({
               const showEllipsisBefore = index > 0 && array[index - 1] < page - 1;
               return (
                 <React.Fragment key={`equipment-table-page-${page}`}>
-                  {showEllipsisBefore && <span className="px-2 text-sm text-[var(--foreground-subtle)]">...</span>}
+                  {showEllipsisBefore && (
+                    <span className="px-2 text-sm text-[var(--foreground-subtle)]">...</span>
+                  )}
                   <button
                     onClick={() => onPageChange(page)}
                     className={`min-w-[40px] rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 ${

@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { ChefHat, List, Edit } from 'lucide-react';
 

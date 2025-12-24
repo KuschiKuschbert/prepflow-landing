@@ -19,7 +19,6 @@ interface UnifiedRecipeModalProps {
   aiInstructions: string;
   generatingInstructions: boolean;
   previewYield: number;
-  shareLoading: boolean;
   onClose: () => void;
   onEditRecipe: (recipe: Recipe) => void;
   onShareRecipe: () => void;
@@ -46,7 +45,6 @@ export function UnifiedRecipeModal({
   aiInstructions,
   generatingInstructions,
   previewYield,
-  shareLoading,
   onClose,
   onEditRecipe,
   onShareRecipe,
@@ -158,7 +156,6 @@ export function UnifiedRecipeModal({
             recipe={recipe}
             activeTab={activeTab}
             dishPortions={dishPortions}
-            shareLoading={shareLoading}
             capitalizeRecipeName={capitalizeRecipeName}
             onEditRecipe={onEditRecipe}
             onShareRecipe={onShareRecipe}

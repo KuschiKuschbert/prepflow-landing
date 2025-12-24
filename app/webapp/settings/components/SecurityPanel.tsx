@@ -2,6 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { useNotification } from '@/contexts/NotificationContext';
+import { useConfirm } from '@/hooks/useConfirm';
 import { useIsVisible } from '@/hooks/useIsVisible';
 import { Shield } from 'lucide-react';
 import Link from 'next/link';
@@ -39,6 +40,7 @@ interface LoginLog {
  */
 export function SecurityPanel() {
   const { showSuccess, showError } = useNotification();
+  const { showConfirm, ConfirmDialog } = useConfirm();
   const [ref, isVisible] = useIsVisible<HTMLDivElement>({ threshold: 0.1 });
   const [loading, setLoading] = useState(true);
   const [sessions, setSessions] = useState<Session[]>([]);
@@ -51,7 +53,14 @@ export function SecurityPanel() {
   }, [isVisible]);
 
   const handleRevokeSession = (sessionId: string) =>
-    handleRevokeSessionHelper(sessionId, setRevokingSession, setSessions, showSuccess, showError);
+    handleRevokeSessionHelper(
+      sessionId,
+      showConfirm,
+      setRevokingSession,
+      setSessions,
+      showSuccess,
+      showError,
+    );
 
   if (loading) {
     return (
@@ -66,52 +75,55 @@ export function SecurityPanel() {
   }
 
   return (
-    <div
-      ref={ref}
-      className="mb-6 space-y-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6"
-    >
-      <div>
-        <h2 className="text-xl font-semibold">Account Security</h2>
-        <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
-          Manage your account security settings and monitor login activity.
-        </p>
-      </div>
-
-      {/* Password Management */}
-      <div className="space-y-3 border-t border-[var(--border)] pt-4">
-        <h3 className="text-lg font-medium">Password</h3>
-        <p className="text-sm text-[var(--foreground-muted)]">
-          Your password is managed by Auth0. To change your password, please visit your Auth0
-          dashboard or use the password reset feature.
-        </p>
-        <div className="flex gap-3">
-          <Link
-            href="/api/auth/signout"
-            className="rounded-2xl border border-[var(--border)] px-4 py-2 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/40"
-          >
-            Sign Out
-          </Link>
+    <>
+      <ConfirmDialog />
+      <div
+        ref={ref}
+        className="mb-6 space-y-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6"
+      >
+        <div>
+          <h2 className="text-xl font-semibold">Account Security</h2>
+          <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
+            Manage your account security settings and monitor login activity.
+          </p>
         </div>
-      </div>
 
-      {/* Two-Factor Authentication */}
-      <div className="space-y-3 border-t border-[var(--border)] pt-4">
-        <h3 className="text-lg font-medium">Two-Factor Authentication</h3>
-        <p className="text-sm text-[var(--foreground-muted)]">
-          2FA is managed through Auth0. Enable it in your Auth0 dashboard for enhanced security.
-        </p>
-        <div className="flex items-center gap-2 text-sm text-[var(--foreground-subtle)]">
-          <Icon icon={Shield} size="sm" aria-hidden={true} />
-          <span>Configure in Auth0 dashboard</span>
+        {/* Password Management */}
+        <div className="space-y-3 border-t border-[var(--border)] pt-4">
+          <h3 className="text-lg font-medium">Password</h3>
+          <p className="text-sm text-[var(--foreground-muted)]">
+            Your password is managed by Auth0. To change your password, please visit your Auth0
+            dashboard or use the password reset feature.
+          </p>
+          <div className="flex gap-3">
+            <Link
+              href="/api/auth/signout"
+              className="rounded-2xl border border-[var(--border)] px-4 py-2 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/40"
+            >
+              Sign Out
+            </Link>
+          </div>
         </div>
-      </div>
 
-      <ActiveSessionsSection
-        sessions={sessions}
-        revokingSession={revokingSession}
-        onRevokeSession={handleRevokeSession}
-      />
-      <LoginHistorySection loginHistory={loginHistory} />
-    </div>
+        {/* Two-Factor Authentication */}
+        <div className="space-y-3 border-t border-[var(--border)] pt-4">
+          <h3 className="text-lg font-medium">Two-Factor Authentication</h3>
+          <p className="text-sm text-[var(--foreground-muted)]">
+            2FA is managed through Auth0. Enable it in your Auth0 dashboard for enhanced security.
+          </p>
+          <div className="flex items-center gap-2 text-sm text-[var(--foreground-subtle)]">
+            <Icon icon={Shield} size="sm" aria-hidden={true} />
+            <span>Configure in Auth0 dashboard</span>
+          </div>
+        </div>
+
+        <ActiveSessionsSection
+          sessions={sessions}
+          revokingSession={revokingSession}
+          onRevokeSession={handleRevokeSession}
+        />
+        <LoginHistorySection loginHistory={loginHistory} />
+      </div>
+    </>
   );
 }

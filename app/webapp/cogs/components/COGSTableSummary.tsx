@@ -20,7 +20,9 @@ export function COGSTableSummary({
       {dishPortions > 0 && (
         <div className="mb-4 flex items-center justify-between">
           <span className="text-sm text-[var(--foreground-muted)]">Cost per portion:</span>
-          <span className="text-sm font-medium text-[var(--foreground)]">${costPerPortion.toFixed(2)}</span>
+          <span className="text-sm font-medium text-[var(--foreground)]">
+            ${costPerPortion.toFixed(2)}
+          </span>
         </div>
       )}
     </div>

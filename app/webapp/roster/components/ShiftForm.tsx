@@ -108,7 +108,12 @@ export function ShiftForm({
             className="rounded-full p-2 transition-colors hover:bg-[var(--muted)]"
             aria-label="Close"
           >
-            <Icon icon={X} size="md" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+            <Icon
+              icon={X}
+              size="md"
+              className="text-[var(--foreground-muted)]"
+              aria-hidden={true}
+            />
           </button>
         </div>
 

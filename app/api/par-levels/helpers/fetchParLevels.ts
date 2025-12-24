@@ -89,7 +89,9 @@ export async function fetchParLevels(supabaseAdmin: any) {
             error = null;
           } else {
             // Merge ingredients into par levels
-            const ingredientsMap = new Map((ingredientsData || []).map((ing: any) => [ing.id, ing]));
+            const ingredientsMap = new Map(
+              (ingredientsData || []).map((ing: any) => [ing.id, ing]),
+            );
             data = simpleData.map((pl: any) => ({
               ...pl,
               ingredients: ingredientsMap.get(pl.ingredient_id) || null,

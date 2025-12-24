@@ -53,7 +53,9 @@ export function EquipmentDrawerHeader({
             <h2 id="equipment-detail-title" className="text-xl font-bold text-[var(--foreground)]">
               {equipment.name}
             </h2>
-            <p className="text-sm text-[var(--foreground-muted)]">{getTypeLabel(equipment.equipment_type)}</p>
+            <p className="text-sm text-[var(--foreground-muted)]">
+              {getTypeLabel(equipment.equipment_type)}
+            </p>
           </div>
         </div>
         <button

@@ -60,7 +60,10 @@ export function IngredientPopover({
       <div className="flex max-h-[500px] w-full flex-col overflow-hidden rounded-2xl bg-[var(--surface)]/95">
         <div className="flex items-center justify-between border-b border-[var(--border)] p-4">
           <div className="min-w-0 flex-1">
-            <h3 id="popover-title" className="truncate text-sm font-semibold text-[var(--foreground)]">
+            <h3
+              id="popover-title"
+              className="truncate text-sm font-semibold text-[var(--foreground)]"
+            >
               {menuItemName}
             </h3>
             <p className="mt-0.5 text-xs text-[var(--foreground-muted)]">

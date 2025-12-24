@@ -44,7 +44,7 @@ export default function ProductFeatures() {
   return (
     <section
       id="features"
-      className="mx-auto max-w-7xl px-6 tablet:px-8 desktop:px-10 large-desktop:px-12 py-16 tablet:py-20 desktop:py-24 large-desktop:py-28 xl:px-20 xl:py-32 2xl:px-24"
+      className="tablet:px-8 desktop:px-10 large-desktop:px-12 tablet:py-20 desktop:py-24 large-desktop:py-28 mx-auto max-w-7xl px-6 py-16 xl:px-20 xl:py-32 2xl:px-24"
     >
       <div className="text-center">
         <h2 className="text-fluid-3xl desktop:text-fluid-4xl font-bold tracking-tight">
@@ -55,11 +55,11 @@ export default function ProductFeatures() {
         </p>
       </div>
 
-      <div className="mt-12 space-y-16 tablet:space-y-18 desktop:space-y-20 large-desktop:space-y-24 xl:space-y-28">
+      <div className="tablet:space-y-18 desktop:space-y-20 large-desktop:space-y-24 mt-12 space-y-16 xl:space-y-28">
         {features.map((feature, index) => (
           <div
             key={feature.name}
-            className="desktop:grid-cols-2 desktop:items-center grid gap-8 tablet:gap-10 desktop:gap-12 large-desktop:gap-14 xl:gap-16"
+            className="desktop:grid-cols-2 desktop:items-center tablet:gap-10 desktop:gap-12 large-desktop:gap-14 grid gap-8 xl:gap-16"
           >
             {/* Screenshot */}
             <div className={index % 2 === 1 ? 'desktop:order-2' : ''}>

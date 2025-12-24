@@ -38,7 +38,7 @@ function fixFile(filePath) {
       const newImport = "import { ApiErrorHandler } from '@/lib/api-error-handler';\n";
 
       // Check if already imported via other imports
-      if (!content.includes("@/lib/api-error-handler")) {
+      if (!content.includes('@/lib/api-error-handler')) {
         content = content.replace(importMatch[0], importMatch[0] + newImport);
         changed = true;
       }
@@ -46,7 +46,10 @@ function fixFile(filePath) {
       // No imports found, add at top
       const firstLine = content.split('\n')[0];
       if (firstLine.includes('import')) {
-        content = content.replace(firstLine, firstLine + "\nimport { ApiErrorHandler } from '@/lib/api-error-handler';");
+        content = content.replace(
+          firstLine,
+          firstLine + "\nimport { ApiErrorHandler } from '@/lib/api-error-handler';",
+        );
       } else {
         content = "import { ApiErrorHandler } from '@/lib/api-error-handler';\n" + content;
       }
@@ -56,24 +59,38 @@ function fixFile(filePath) {
 
   // Replace error responses
   // Pattern 1: NextResponse.json({ error: '...' }, { status: XXX })
-  const errorResponsePattern = /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\s*\)/g;
+  const errorResponsePattern =
+    /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\s*\)/g;
   content = content.replace(errorResponsePattern, (match, errorMsg, status) => {
     changed = true;
-    const errorCode = status === '401' ? 'UNAUTHORIZED' :
-                     status === '403' ? 'FORBIDDEN' :
-                     status === '404' ? 'NOT_FOUND' :
-                     status === '503' ? 'DATABASE_ERROR' : 'SERVER_ERROR';
+    const errorCode =
+      status === '401'
+        ? 'UNAUTHORIZED'
+        : status === '403'
+          ? 'FORBIDDEN'
+          : status === '404'
+            ? 'NOT_FOUND'
+            : status === '503'
+              ? 'DATABASE_ERROR'
+              : 'SERVER_ERROR';
     return `NextResponse.json(ApiErrorHandler.createError('${errorMsg}', '${errorCode}', ${status}), { status: ${status} })`;
   });
 
   // Pattern 2: NextResponse.json({ error: '...', message: '...' }, { status: XXX })
-  const errorWithMessagePattern = /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*,\s*message:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\s*\)/g;
+  const errorWithMessagePattern =
+    /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*,\s*message:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\s*\)/g;
   content = content.replace(errorWithMessagePattern, (match, errorMsg, message, status) => {
     changed = true;
-    const errorCode = status === '401' ? 'UNAUTHORIZED' :
-                     status === '403' ? 'FORBIDDEN' :
-                     status === '404' ? 'NOT_FOUND' :
-                     status === '503' ? 'DATABASE_ERROR' : 'SERVER_ERROR';
+    const errorCode =
+      status === '401'
+        ? 'UNAUTHORIZED'
+        : status === '403'
+          ? 'FORBIDDEN'
+          : status === '404'
+            ? 'NOT_FOUND'
+            : status === '503'
+              ? 'DATABASE_ERROR'
+              : 'SERVER_ERROR';
     return `NextResponse.json(ApiErrorHandler.createError('${message}', '${errorCode}', ${status}), { status: ${status} })`;
   });
 
@@ -106,6 +123,3 @@ if (require.main === module) {
 }
 
 module.exports = { fixFile };
-
-
-

@@ -38,9 +38,9 @@ export function useErrorLogsMutations(refresh: () => Promise<void>) {
         }
       } catch (error) {
         logger.error('[useErrorLogsMutations.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+          error: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+        });
 
         showError('Failed to update error status');
         return false;
@@ -72,9 +72,9 @@ export function useErrorLogsMutations(refresh: () => Promise<void>) {
         }
       } catch (error) {
         logger.error('[useErrorLogsMutations.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+          error: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+        });
 
         showError('Failed to save notes');
         return null;

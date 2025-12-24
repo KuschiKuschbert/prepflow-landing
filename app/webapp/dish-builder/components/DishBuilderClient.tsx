@@ -92,7 +92,7 @@ export default function DishBuilderClient({
   });
 
   // Save handler
-  const { saving, handleSave } = useSaveHandler({
+  const { handleSave } = useSaveHandler({
     dishState,
     saveDish,
     setError,
@@ -145,7 +145,6 @@ export default function DishBuilderClient({
               recommendedPrice={pricingCalculation?.sellPriceInclGST || 0}
               ingredientCount={calculations.length}
               onSave={handleSave}
-              saving={saving}
             />
 
             {/* Cost Analysis Section - Only show when ingredients are added */}

@@ -23,7 +23,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ tiers: result.tiers });
   } catch (error) {
     logger.error('[Admin Tiers] Unexpected error:', error);
-    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }
 
@@ -69,7 +72,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ tier: result.tier });
   } catch (error) {
     logger.error('[Admin Tiers] Unexpected error:', error);
-    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }
 
@@ -117,7 +123,10 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ tier: result.tier });
   } catch (error) {
     logger.error('[Admin Tiers] Unexpected error:', error);
-    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }
 
@@ -134,7 +143,10 @@ export async function DELETE(request: NextRequest) {
     const tierSlug = searchParams.get('tier_slug');
 
     if (!tierSlug) {
-      return NextResponse.json(ApiErrorHandler.createError('tier_slug is required', 'BAD_REQUEST', 400), { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('tier_slug is required', 'BAD_REQUEST', 400),
+        { status: 400 },
+      );
     }
 
     const result = await deleteTier(tierSlug, adminUser, request);
@@ -143,6 +155,9 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ tier: result.tier });
   } catch (error) {
     logger.error('[Admin Tiers] Unexpected error:', error);
-    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }

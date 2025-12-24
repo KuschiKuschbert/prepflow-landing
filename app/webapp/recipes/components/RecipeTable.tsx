@@ -72,7 +72,12 @@ const RecipeTable = React.memo(function RecipeTable({
                   }
                 >
                   {selectedRecipes.size === recipes.length && recipes.length > 0 ? (
-                    <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+                    <Icon
+                      icon={Check}
+                      size="sm"
+                      className="text-[var(--primary)]"
+                      aria-hidden={true}
+                    />
                   ) : (
                     <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
                   )}

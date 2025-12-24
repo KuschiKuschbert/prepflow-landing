@@ -57,4 +57,3 @@ export async function handleCreateCleaningArea(request: NextRequest) {
     return handleCleaningAreaError(err, 'POST');
   }
 }
-

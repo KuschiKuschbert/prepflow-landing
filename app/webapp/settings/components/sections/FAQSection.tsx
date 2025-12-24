@@ -80,7 +80,9 @@ function FAQItemComponent({ item, isExpanded, onToggle }: FAQItemComponentProps)
       >
         <div ref={contentRef} className="px-6 pb-4">
           <div className="pl-9">
-            <p className="text-sm leading-relaxed text-[var(--foreground-secondary)]">{item.answer}</p>
+            <p className="text-sm leading-relaxed text-[var(--foreground-secondary)]">
+              {item.answer}
+            </p>
           </div>
         </div>
       </div>
@@ -207,7 +209,9 @@ export function FAQSection() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-semibold text-[var(--foreground)]">Frequently Asked Questions</h2>
+        <h2 className="text-xl font-semibold text-[var(--foreground)]">
+          Frequently Asked Questions
+        </h2>
         <p className="mt-1 text-sm text-[var(--foreground-muted)]">
           Find answers to common questions about using PrepFlow and managing your restaurant data.
         </p>

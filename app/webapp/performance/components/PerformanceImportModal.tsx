@@ -24,7 +24,9 @@ export default function PerformanceImportModal({
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50">
       <div className="w-full max-w-2xl rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px]">
         <div className="rounded-2xl bg-[var(--surface)]/95 p-6">
-          <h3 className="mb-4 text-xl font-semibold text-[var(--button-active-text)]">Import Sales Data</h3>
+          <h3 className="mb-4 text-xl font-semibold text-[var(--button-active-text)]">
+            Import Sales Data
+          </h3>
           <p className="mb-4 text-[var(--foreground-secondary)]">
             Paste your CSV data below. Format: Dish, Number Sold, Popularity %
           </p>

@@ -41,7 +41,11 @@ export async function GET(request: NextRequest) {
     const enabled = await isSquarePOSEnabled(user.email, user.email);
     if (!enabled) {
       return NextResponse.json(
-        ApiErrorHandler.createError('Square POS integration is not enabled', 'FEATURE_DISABLED', 403),
+        ApiErrorHandler.createError(
+          'Square POS integration is not enabled',
+          'FEATURE_DISABLED',
+          403,
+        ),
         { status: 403 },
       );
     }
@@ -85,6 +89,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-
-
-

@@ -44,7 +44,9 @@ function PrepInstructionCard({ instruction }: { instruction: PrepInstructionItem
         <div className="flex-1">
           <h4 className="font-semibold text-[var(--foreground)]">{instruction.recipeName}</h4>
           {instruction.dishName && (
-            <p className="mt-1 text-sm text-[var(--foreground-muted)]">From: {instruction.dishName}</p>
+            <p className="mt-1 text-sm text-[var(--foreground-muted)]">
+              From: {instruction.dishName}
+            </p>
           )}
         </div>
         <Icon

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Section component for PrepListPreview.
  */
@@ -75,7 +77,10 @@ export function PrepListPreviewSection({
   }
 
   return (
-    <div key={sectionIndex} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
+    <div
+      key={sectionIndex}
+      className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6"
+    >
       {/* Section Header */}
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">

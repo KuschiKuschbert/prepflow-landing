@@ -57,7 +57,3 @@ export function useImageAnimations({
     setNewImageLoaded,
   };
 }
-
-
-
-

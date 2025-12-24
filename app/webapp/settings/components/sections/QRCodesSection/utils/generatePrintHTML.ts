@@ -81,12 +81,13 @@ export function generatePrintHTML(entitiesToPrint: QRCodeEntity[]): string {
         </div>
         <div class="grid">
           ${entitiesToPrint
-            .map((entity, idx) => {
-              const config = typeConfig[entity.type] || { label: entity.type };
+            .map((item, idx) => {
+              const config = typeConfig[item.type] || { label: item.type };
+              const itemName = item.name || 'Item';
               return `
               <div class="qr-card">
                 <div class="qr-code" id="qr-${idx}"></div>
-                <div class="name" title="${entity.name}">${entity.name}</div>
+                <div class="name" title="${itemName}">${itemName}</div>
                 <div class="type">${config.label}</div>
                 <div class="scan-text">Scan to view</div>
               </div>

@@ -124,7 +124,10 @@ export const MoreDrawer = memo(function MoreDrawer({ isOpen, onClose }: MoreDraw
           {/* Scrollable Navigation List */}
           <div className="overflow-y-auto overscroll-contain">
             {groupedItems.map(({ category, items }, catIndex) => (
-              <div key={category} className={catIndex > 0 ? 'border-t border-[var(--border)]/50' : ''}>
+              <div
+                key={category}
+                className={catIndex > 0 ? 'border-t border-[var(--border)]/50' : ''}
+              >
                 {/* Category Header */}
                 <div className="sticky top-0 bg-[var(--surface)] px-4 pt-3 pb-1">
                   <span className="text-[10px] font-semibold tracking-wider text-[var(--foreground-subtle)] uppercase">

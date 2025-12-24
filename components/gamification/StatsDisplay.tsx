@@ -77,7 +77,9 @@ export function StatsDisplay({
     <div className={`space-y-4 ${className}`}>
       {showArcade && (
         <div>
-          <h3 className="mb-2 text-sm font-medium text-[var(--foreground-secondary)]">Arcade Stats</h3>
+          <h3 className="mb-2 text-sm font-medium text-[var(--foreground-secondary)]">
+            Arcade Stats
+          </h3>
           <div className="space-y-2 text-sm">
             <div className="flex items-center justify-between">
               <span className="text-[var(--foreground-muted)]">Tomatoes Thrown</span>
@@ -97,7 +99,9 @@ export function StatsDisplay({
 
       {showAchievements && (
         <div>
-          <h3 className="mb-2 text-sm font-medium text-[var(--foreground-secondary)]">Achievements</h3>
+          <h3 className="mb-2 text-sm font-medium text-[var(--foreground-secondary)]">
+            Achievements
+          </h3>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-sm text-[var(--foreground-muted)]">Progress</span>
@@ -121,7 +125,3 @@ export function StatsDisplay({
     </div>
   );
 }
-
-
-
-

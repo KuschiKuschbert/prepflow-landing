@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Tab navigation component for cleaning page
  */
@@ -21,7 +23,9 @@ export function CleaningTabs({ activeTab, onTabChange }: CleaningTabsProps) {
               key={tab}
               onClick={() => onTabChange(tab)}
               className={`flex items-center rounded-xl px-6 py-3 font-semibold transition-all duration-200 ${
-                isActive ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl border border-[var(--primary)]/30' : 'text-[var(--foreground-muted)] hover:text-[var(--button-active-text)]'
+                isActive
+                  ? 'border border-[var(--primary)]/30 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl'
+                  : 'text-[var(--foreground-muted)] hover:text-[var(--button-active-text)]'
               }`}
             >
               {tab === 'grid' ? (

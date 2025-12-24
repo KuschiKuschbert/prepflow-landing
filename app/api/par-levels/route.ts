@@ -1,6 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { authenticateAndSetup } from './helpers/authenticateAndSetup';
 import { checkTableExists } from './helpers/checkTableExists';
 import { createParLevel } from './helpers/createParLevel';

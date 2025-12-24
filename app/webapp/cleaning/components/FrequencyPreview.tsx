@@ -28,9 +28,9 @@ export function FrequencyPreview({ frequencyType, startDate }: FrequencyPreviewP
       return dates.slice(0, 5); // Show next 5 occurrences
     } catch (error) {
       logger.error('[FrequencyPreview.tsx] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       return [];
     }
@@ -42,7 +42,9 @@ export function FrequencyPreview({ frequencyType, startDate }: FrequencyPreviewP
 
   return (
     <div className="mt-3 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
-      <div className="mb-2 text-xs font-medium text-[var(--foreground-muted)]">Next Occurrences</div>
+      <div className="mb-2 text-xs font-medium text-[var(--foreground-muted)]">
+        Next Occurrences
+      </div>
       <div className="flex flex-wrap gap-2">
         {previewDates.map((dateStr, index) => {
           const date = new Date(dateStr);

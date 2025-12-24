@@ -56,7 +56,3 @@ The issue might be that NextAuth is still seeing a different origin. Let's test 
    ```
 3. **Check if it redirects to Auth0** (not error page)
 4. **If still failing**, check Vercel logs for `[Auth0 Config]` entries
-
-
-
-

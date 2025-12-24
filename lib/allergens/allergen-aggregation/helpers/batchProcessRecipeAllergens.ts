@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { consolidateAllergens } from '../australian-allergens';
+import { consolidateAllergens } from '../../australian-allergens';
 import { cacheRecipeAllergens } from './cacheAllergens';
 
 /**
@@ -76,4 +76,3 @@ export async function processAndCacheBatchAllergens(
 
   return result;
 }
-

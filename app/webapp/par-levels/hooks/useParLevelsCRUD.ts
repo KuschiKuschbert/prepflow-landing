@@ -9,7 +9,6 @@ import { handleUpdate } from './useParLevelsCRUD/helpers/handleUpdate';
 interface UseParLevelsCRUDProps {
   parLevels: ParLevel[];
   setParLevels: React.Dispatch<React.SetStateAction<ParLevel[]>>;
-  fetchParLevels: () => Promise<void>;
   showError: (message: string) => void;
   showSuccess: (message: string) => void;
 }
@@ -20,7 +19,6 @@ interface UseParLevelsCRUDProps {
 export function useParLevelsCRUD({
   parLevels,
   setParLevels,
-  fetchParLevels,
   showError,
   showSuccess,
 }: UseParLevelsCRUDProps) {
@@ -33,12 +31,11 @@ export function useParLevelsCRUD({
         updates,
         parLevels,
         setParLevels,
-        fetchParLevels,
         showError,
         showSuccess,
       });
     },
-    [parLevels, setParLevels, fetchParLevels, showError, showSuccess],
+    [parLevels, setParLevels, showError, showSuccess],
   );
   const handleEdit = useCallback((parLevel: ParLevel) => setEditingParLevel(parLevel), []);
   const handleDeleteCallback = useCallback(
@@ -47,12 +44,11 @@ export function useParLevelsCRUD({
         id,
         parLevels,
         setParLevels,
-        fetchParLevels,
         showError,
         showSuccess,
       });
     },
-    [parLevels, setParLevels, fetchParLevels, showSuccess, showError],
+    [parLevels, setParLevels, showSuccess, showError],
   );
   const handleDeleteClick = useCallback((id: string) => {
     setDeleteConfirmId(id);

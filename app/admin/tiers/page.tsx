@@ -84,7 +84,7 @@ export default function TiersPage() {
     } catch (err) {
       logger.error('[TiersPage] Error updating feature:', {
         error: err instanceof Error ? err.message : String(err),
-        featureId: feature.id,
+        featureKey: feature.feature_key,
       });
     }
   };

@@ -17,7 +17,7 @@ export async function enableGoogleConnectionForApp(): Promise<{
     return {
       success: false,
       message:
-        'Management API client not available. Check AUTH0_ISSUER_BASE_URL, AUTH0_CLIENT_ID, and AUTH0_CLIENT_SECRET.',
+        'Auth0 configuration is missing. Please check your AUTH0_ISSUER_BASE_URL, AUTH0_CLIENT_ID, and AUTH0_CLIENT_SECRET environment variables.',
     };
   }
 
@@ -52,12 +52,9 @@ export async function enableGoogleConnectionForApp(): Promise<{
         enabled: true,
       };
     }
-    await client.connections.update(
-      { id: googleConnection.id },
-      {
-        enabled_clients: [...new Set([...enabledClients, auth0ClientId])],
-      } as any,
-    );
+    await client.connections.update({ id: googleConnection.id }, {
+      enabled_clients: [...new Set([...enabledClients, auth0ClientId])],
+    } as any);
     logger.info('[Auth0 Google Connection] Enabled Google connection for application', {
       connectionId: googleConnection.id,
       clientId: auth0ClientId,
@@ -75,4 +72,3 @@ export async function enableGoogleConnectionForApp(): Promise<{
     };
   }
 }
-

@@ -54,13 +54,17 @@ export function BudgetHeader({ shifts, employees, forecastRevenue }: BudgetHeade
         {/* Total Hours */}
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
           <div className="mb-1 text-xs text-[var(--foreground-muted)]">Total Hours</div>
-          <div className="text-2xl font-bold text-[var(--foreground)]">{formatHours(budget.totalHours)}</div>
+          <div className="text-2xl font-bold text-[var(--foreground)]">
+            {formatHours(budget.totalHours)}
+          </div>
         </div>
 
         {/* Total Cost */}
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
           <div className="mb-1 text-xs text-[var(--foreground-muted)]">Total Cost</div>
-          <div className="text-2xl font-bold text-[var(--foreground)]">{formatCurrency(budget.totalCost)}</div>
+          <div className="text-2xl font-bold text-[var(--foreground)]">
+            {formatCurrency(budget.totalCost)}
+          </div>
         </div>
 
         {/* Labor Cost % */}
@@ -77,10 +81,20 @@ export function BudgetHeader({ shifts, employees, forecastRevenue }: BudgetHeade
             <div className="mb-1 flex items-center gap-2">
               <span className="text-xs text-[var(--foreground-muted)]">Labor Cost %</span>
               {isOverBudget && (
-                <Icon icon={TrendingUp} size="sm" className="text-[var(--color-error)]" aria-hidden={true} />
+                <Icon
+                  icon={TrendingUp}
+                  size="sm"
+                  className="text-[var(--color-error)]"
+                  aria-hidden={true}
+                />
               )}
               {isUnderBudget && (
-                <Icon icon={TrendingDown} size="sm" className="text-[var(--color-success)]" aria-hidden={true} />
+                <Icon
+                  icon={TrendingDown}
+                  size="sm"
+                  className="text-[var(--color-success)]"
+                  aria-hidden={true}
+                />
               )}
             </div>
             <div

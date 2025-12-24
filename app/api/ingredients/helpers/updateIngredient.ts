@@ -8,6 +8,7 @@ import {
 } from '@/lib/allergens/cache-invalidation';
 import { invalidateMenuItemsWithIngredient } from '@/lib/menu-pricing/cache-invalidation';
 import { enrichIngredientWithAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
+import { buildChangeDetails } from './buildChangeDetails';
 
 /**
  * Update an ingredient.
@@ -128,7 +129,10 @@ export async function updateIngredient(id: string, updates: any, userEmail?: str
     // Don't await - run in background
     (async () => {
       try {
-        await Promise.all([invalidateRecipesWithIngredient(id), invalidateDishesWithIngredient(id)]);
+        await Promise.all([
+          invalidateRecipesWithIngredient(id),
+          invalidateDishesWithIngredient(id),
+        ]);
       } catch (err) {
         logger.error('[Ingredients API] Error invalidating allergen caches:', {
           error: err instanceof Error ? err.message : String(err),
@@ -147,45 +151,19 @@ export async function updateIngredient(id: string, updates: any, userEmail?: str
     formattedUpdates.yield_percentage !== undefined;
 
   if (costChanged) {
-    // Build change details
-    const changeDetails: any = {};
-    if (formattedUpdates.cost_per_unit !== undefined) {
-      changeDetails.cost_per_unit = {
-        field: 'cost_per_unit',
-        change: 'cost per unit updated',
-      };
-    }
-    if (formattedUpdates.cost_per_unit_as_purchased !== undefined) {
-      changeDetails.cost_per_unit_as_purchased = {
-        field: 'cost_per_unit_as_purchased',
-        change: 'cost per unit as purchased updated',
-      };
-    }
-    if (formattedUpdates.cost_per_unit_incl_trim !== undefined) {
-      changeDetails.cost_per_unit_incl_trim = {
-        field: 'cost_per_unit_incl_trim',
-        change: 'cost per unit including trim updated',
-      };
-    }
-    if (formattedUpdates.trim_peel_waste_percentage !== undefined) {
-      changeDetails.trim_peel_waste_percentage = {
-        field: 'trim_peel_waste_percentage',
-        change: 'trim/peel/waste percentage updated',
-      };
-    }
-    if (formattedUpdates.yield_percentage !== undefined) {
-      changeDetails.yield_percentage = {
-        field: 'yield_percentage',
-        change: 'yield percentage updated',
-      };
-    }
+    const changeDetails = buildChangeDetails(formattedUpdates);
 
     const ingredientName = data.ingredient_name || 'Unknown Ingredient';
 
     // Don't await - run in background
     (async () => {
       try {
-        await invalidateMenuItemsWithIngredient(id, ingredientName, changeDetails, userEmail || null);
+        await invalidateMenuItemsWithIngredient(
+          id,
+          ingredientName,
+          changeDetails,
+          userEmail || null,
+        );
       } catch (err) {
         logger.error('[Ingredients API] Error invalidating menu pricing cache:', {
           error: err instanceof Error ? err.message : String(err),
@@ -194,6 +172,5 @@ export async function updateIngredient(id: string, updates: any, userEmail?: str
       }
     })();
   }
-
   return data;
 }

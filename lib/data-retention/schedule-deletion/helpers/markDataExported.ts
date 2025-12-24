@@ -38,4 +38,3 @@ export async function markDataExported(userEmail: string): Promise<boolean> {
     return false;
   }
 }
-

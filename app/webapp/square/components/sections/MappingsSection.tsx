@@ -23,7 +23,8 @@ export function MappingsSection() {
 
   useEffect(() => {
     fetchMappings();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // fetchMappings is stable and only needed on mount
 
   const fetchMappings = async () => {
     const startTime = performance.now();
@@ -82,19 +83,19 @@ export function MappingsSection() {
           <table className="min-w-full divide-y divide-[var(--border)]">
             <thead className="sticky top-0 z-10 bg-gradient-to-r from-[var(--border)]/50 to-[var(--border)]/20">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
-                  Entity Type
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-muted)] uppercase">
+                  Item Type
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-muted)] uppercase">
                   PrepFlow ID
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-muted)] uppercase">
                   Square ID
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-muted)] uppercase">
                   Sync Direction
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-muted)] uppercase">
                   Last Synced
                 </th>
               </tr>
@@ -105,10 +106,10 @@ export function MappingsSection() {
                   <td className="px-6 py-4 text-sm text-[var(--foreground)] capitalize">
                     {mapping.entity_type}
                   </td>
-                  <td className="px-6 py-4 text-sm text-[var(--foreground-muted)] font-mono">
+                  <td className="px-6 py-4 font-mono text-sm text-[var(--foreground-muted)]">
                     {mapping.prepflow_id.slice(0, 8)}...
                   </td>
-                  <td className="px-6 py-4 text-sm text-[var(--foreground-muted)] font-mono">
+                  <td className="px-6 py-4 font-mono text-sm text-[var(--foreground-muted)]">
                     {mapping.square_id.slice(0, 8)}...
                   </td>
                   <td className="px-6 py-4 text-sm text-[var(--foreground-muted)] capitalize">

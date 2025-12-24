@@ -63,7 +63,12 @@ export function LoginHistorySection({ loginHistory }: LoginHistorySectionProps) 
                       aria-hidden={true}
                     />
                   ) : (
-                    <Icon icon={XCircle} size="sm" className="text-[var(--color-error)]" aria-hidden={true} />
+                    <Icon
+                      icon={XCircle}
+                      size="sm"
+                      className="text-[var(--color-error)]"
+                      aria-hidden={true}
+                    />
                   )}
                   <div>
                     <p className="text-sm font-medium text-[var(--foreground)]">

@@ -45,9 +45,7 @@ export function OverviewSection() {
           title="Connection Status"
           value={status.configured && status.credentialsValid ? 'Connected' : 'Not Connected'}
           icon={status.configured && status.credentialsValid ? CheckCircle2 : XCircle}
-          color={
-            status.configured && status.credentialsValid ? 'text-green-400' : 'text-red-400'
-          }
+          color={status.configured && status.credentialsValid ? 'text-green-400' : 'text-red-400'}
         />
         <StatusCard
           title="Environment"
@@ -94,7 +92,11 @@ export function OverviewSection() {
   if (error || !status) {
     return (
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center">
-        <Icon icon={AlertCircle} size="lg" className="mx-auto mb-4 text-[var(--foreground-muted)]" />
+        <Icon
+          icon={AlertCircle}
+          size="lg"
+          className="mx-auto mb-4 text-[var(--foreground-muted)]"
+        />
         <p className="text-[var(--foreground-muted)]">{error || 'Failed to load Square status'}</p>
       </div>
     );
@@ -136,14 +138,14 @@ export function OverviewSection() {
       </div>
 
       {/* Status Cards */}
-      <div className="grid grid-cols-1 gap-4 tablet:grid-cols-2 desktop:grid-cols-3">
+      <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-4">
         {statusCards}
       </div>
 
       {/* Quick Actions */}
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
         <h3 className="mb-4 text-lg font-semibold text-[var(--foreground)]">Quick Actions</h3>
-        <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 desktop:grid-cols-3">
+        <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-3">
           <a
             href="#configuration"
             className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--background)] p-4 transition-colors hover:bg-[var(--surface-variant)]"
@@ -179,7 +181,9 @@ export function OverviewSection() {
                 className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--background)] p-3"
               >
                 <div>
-                  <p className="text-sm font-medium text-[var(--foreground)]">{sync.operation_type}</p>
+                  <p className="text-sm font-medium text-[var(--foreground)]">
+                    {sync.operation_type}
+                  </p>
                   <p className="text-xs text-[var(--foreground-muted)]">
                     {new Date(sync.created_at).toLocaleString()}
                   </p>

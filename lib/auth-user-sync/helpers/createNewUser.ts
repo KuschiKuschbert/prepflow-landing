@@ -11,6 +11,11 @@ export async function createNewUser(
   emailVerified: boolean,
   name?: string | null,
 ): Promise<void> {
+  if (!supabaseAdmin) {
+    logger.error('[Auth0 Sync] Database connection not available');
+    throw new Error('Database connection not available');
+  }
+
   const { first_name, last_name } = splitName(name);
   const { error: createError } = await supabaseAdmin.from('users').insert({
     email,
@@ -38,4 +43,3 @@ export async function createNewUser(
 
   logger.dev('[Auth0 Sync] Created new user:', { email, emailVerified });
 }
-

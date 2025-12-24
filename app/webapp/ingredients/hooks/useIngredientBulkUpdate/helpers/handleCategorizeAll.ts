@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
 
 interface HandleCategorizeAllParams {
+  ingredients: any[];
   setIngredients: React.Dispatch<React.SetStateAction<any[]>>;
   showSuccess: (message: string) => void;
   showError: (message: string) => void;
@@ -10,8 +11,20 @@ interface HandleCategorizeAllParams {
 export async function handleCategorizeAllUncategorized(
   useAI: boolean,
   onRefresh: (() => void) | undefined,
-  { setIngredients, showSuccess, showError }: HandleCategorizeAllParams,
+  { ingredients, setIngredients, showSuccess, showError }: HandleCategorizeAllParams,
 ) {
+  // Store original state for rollback
+  const originalIngredientsState = [...ingredients];
+
+  // Optimistically update UI immediately - mark uncategorized ingredients as "Categorizing..."
+  setIngredients(prevIngredients =>
+    prevIngredients.map(ing =>
+      ing.category === 'Uncategorized'
+        ? { ...ing, category: 'Categorizing...', is_active: true }
+        : ing,
+    ),
+  );
+
   try {
     const response = await fetch('/api/ingredients/auto-categorize', {
       method: 'POST',
@@ -22,8 +35,12 @@ export async function handleCategorizeAllUncategorized(
     const result = await response.json();
 
     if (!response.ok) {
+      // Error - revert optimistic update
+      setIngredients(originalIngredientsState);
       throw new Error(result.error || result.message || 'Failed to categorize all ingredients');
     }
+
+    // Update state based on API response or refresh
     if (onRefresh) {
       onRefresh();
     } else {
@@ -45,12 +62,10 @@ export async function handleCategorizeAllUncategorized(
         `Successfully categorized ${result.updated} ingredient${result.updated !== 1 ? 's' : ''}`,
     );
   } catch (error) {
+    // Error - revert optimistic update
+    setIngredients(originalIngredientsState);
     logger.error('Categorize all failed:', error);
     showError(error instanceof Error ? error.message : 'Failed to categorize all ingredients');
     throw error;
   }
 }
-
-
-
-

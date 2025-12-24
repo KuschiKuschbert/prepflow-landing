@@ -1,0 +1,57 @@
+{
+  "total": 2,
+  "byType": {
+    "technical-jargon": 2
+  },
+  "bySeverity": {
+    "warning": 1,
+    "info": 1
+  },
+  "files": {
+    "app/webapp/settings/components/sections/QRCodesSection/utils/generatePrintHTML.ts": [
+      {
+        "file": "app/webapp/settings/components/sections/QRCodesSection/utils/generatePrintHTML.ts",
+        "line": 89,
+        "message": "technical-jargon: \"${entity.name}\" - Use 'item', 'ingredient', 'recipe', etc.",
+        "severity": "warning",
+        "fixable": false,
+        "text": "${entity.name}",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "${entity.name}",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Use 'item', 'ingredient', 'recipe', etc.",
+            "severity": "warning"
+          },
+          "suggestion": "Use 'item', 'ingredient', 'recipe', etc.",
+          "severity": "warning"
+        },
+        "stringType": "accessibility"
+      }
+    ],
+    "app/webapp/square/components/sections/ConfigurationSection/components/ConfigurationForm.tsx": [
+      {
+        "file": "app/webapp/square/components/sections/ConfigurationSection/components/ConfigurationForm.tsx",
+        "line": 141,
+        "message": "technical-jargon: \"https://your-restaurant.com/api/webhook/square\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "text": "https://your-restaurant.com/api/webhook/square",
+        "violation": {
+          "type": "technical-jargon",
+          "text": "https://your-restaurant.com/api/webhook/square",
+          "rule": {
+            "pattern": {},
+            "suggestion": "Avoid technical terms",
+            "severity": "info"
+          },
+          "suggestion": "Avoid technical terms",
+          "severity": "info"
+        },
+        "stringType": "accessibility"
+      }
+    ]
+  },
+  "timestamp": "2025-12-23T13:04:36.248Z"
+}

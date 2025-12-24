@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Compact mode rendering for FoodImageGenerator.
  */
@@ -37,7 +39,7 @@ export function CompactMode({
             ref={generateButtonRef}
             onClick={handleGenerateClick}
             disabled={isGenerating}
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg hover:shadow-[var(--tertiary)]/25 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:shadow-[var(--tertiary)]/25 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
             aria-label={`Generate images for ${entityName}`}
           >
             <Icon icon={Sparkles} size="sm" aria-hidden={true} />

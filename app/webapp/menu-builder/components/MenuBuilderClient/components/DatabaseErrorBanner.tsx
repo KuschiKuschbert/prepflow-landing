@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { Database, RefreshCw } from 'lucide-react';
 
@@ -15,7 +17,9 @@ export function DatabaseErrorBanner({ dbError, onCheckAgain }: DatabaseErrorBann
       <div className="mb-4 flex items-start gap-3">
         <Icon icon={Database} size="lg" className="mt-0.5 text-[var(--color-warning)]" />
         <div className="flex-1">
-          <h3 className="mb-2 text-lg font-semibold text-[var(--color-warning)]">Database Setup Required</h3>
+          <h3 className="mb-2 text-lg font-semibold text-[var(--color-warning)]">
+            Database Setup Required
+          </h3>
           <p className="mb-4 text-sm text-yellow-300">{dbError}</p>
           <div className="mb-4 rounded-lg border border-[var(--color-warning)]/20 bg-yellow-900/10 p-4">
             <p className="mb-2 text-sm font-medium text-yellow-200">To set up the menu builder:</p>
@@ -46,7 +50,3 @@ export function DatabaseErrorBanner({ dbError, onCheckAgain }: DatabaseErrorBann
     </div>
   );
 }
-
-
-
-

@@ -35,9 +35,9 @@ export default function BackupSettingsPage() {
       }
     } catch (error) {
       logger.error('[page.tsx] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       showError('Failed to load backup settings');
     } finally {
@@ -54,9 +54,9 @@ export default function BackupSettingsPage() {
       }
     } catch (error) {
       logger.error('[page.tsx] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       showError('Failed to load backups');
     }
@@ -81,7 +81,7 @@ export default function BackupSettingsPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-[1400px] large-desktop:max-w-[1400px] xl:max-w-[1400px] 2xl:max-w-[1600px] p-6 text-[var(--foreground)]">
+      <div className="large-desktop:max-w-[1400px] mx-auto max-w-[1400px] p-6 text-[var(--foreground)] xl:max-w-[1400px] 2xl:max-w-[1600px]">
         <div className="animate-pulse space-y-4">
           <div className="h-8 w-64 rounded bg-[var(--muted)]"></div>
           <div className="h-32 rounded bg-[var(--muted)]"></div>
@@ -92,7 +92,7 @@ export default function BackupSettingsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-[1400px] large-desktop:max-w-[1400px] xl:max-w-[1400px] 2xl:max-w-[1600px] p-6 text-[var(--foreground)]">
+    <div className="large-desktop:max-w-[1400px] mx-auto max-w-[1400px] p-6 text-[var(--foreground)] xl:max-w-[1400px] 2xl:max-w-[1600px]">
       {/* Header */}
       <div className="mb-6 flex items-center gap-4">
         <Link

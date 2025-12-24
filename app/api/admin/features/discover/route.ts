@@ -55,9 +55,12 @@ export async function GET(request: NextRequest) {
       context: { endpoint: '/api/admin/features/discover', method: 'GET' },
     });
 
-    const apiError = ApiErrorHandler.fromException(
-      error instanceof Error ? error : new Error(String(error)),
+    const apiError = ApiErrorHandler.createError(
+      error instanceof Error ? error.message : 'Internal server error',
+      'SERVER_ERROR',
+      500,
+      process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.stack : undefined) : undefined,
     );
-    return NextResponse.json(apiError, { status: apiError.status || 500 });
+    return NextResponse.json(apiError, { status: 500 });
   }
 }

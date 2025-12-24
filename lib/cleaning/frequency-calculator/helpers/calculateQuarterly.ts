@@ -6,11 +6,7 @@
  * @param {Date} referenceDate - Reference date for calculation
  * @returns {string[]} Array of ISO date strings
  */
-export function calculateQuarterly(
-  startDate: Date,
-  endDate: Date,
-  referenceDate: Date,
-): string[] {
+export function calculateQuarterly(startDate: Date, endDate: Date, referenceDate: Date): string[] {
   const dates: string[] = [];
   const current = new Date(startDate);
   const end = new Date(endDate);
@@ -34,4 +30,3 @@ export function calculateQuarterly(
 
   return dates;
 }
-

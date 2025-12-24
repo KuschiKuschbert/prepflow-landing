@@ -82,7 +82,9 @@ export function EquipmentMaintenanceForm({
   return (
     <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-xl font-semibold text-[var(--foreground)]">Add Equipment Maintenance Record</h3>
+        <h3 className="text-xl font-semibold text-[var(--foreground)]">
+          Add Equipment Maintenance Record
+        </h3>
         <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
       </div>
       <form onSubmit={onSubmit} className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
@@ -100,7 +102,9 @@ export function EquipmentMaintenanceForm({
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Equipment Type</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Equipment Type
+          </label>
           <select
             value={formData.equipment_type}
             onChange={e => onChange({ ...formData, equipment_type: e.target.value })}
@@ -145,7 +149,9 @@ export function EquipmentMaintenanceForm({
           </select>
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Service Provider</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Service Provider
+          </label>
           <input
             type="text"
             value={formData.service_provider}
@@ -155,7 +161,9 @@ export function EquipmentMaintenanceForm({
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Cost (AUD)</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Cost (AUD)
+          </label>
           <input
             type="number"
             step="0.01"
@@ -190,7 +198,9 @@ export function EquipmentMaintenanceForm({
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Performed By</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Performed By
+          </label>
           <select
             value={formData.performed_by || ''}
             onChange={e => {
@@ -220,12 +230,17 @@ export function EquipmentMaintenanceForm({
             onChange={e => onChange({ ...formData, is_critical: e.target.checked })}
             className="h-4 w-4 rounded border-[var(--border)] bg-[var(--muted)] text-[var(--primary)] focus:ring-[var(--primary)]"
           />
-          <label htmlFor="is_critical" className="text-sm font-medium text-[var(--foreground-secondary)]">
+          <label
+            htmlFor="is_critical"
+            className="text-sm font-medium text-[var(--foreground-secondary)]"
+          >
             Critical for food safety
           </label>
         </div>
         <div className="desktop:col-span-2">
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Notes</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Notes
+          </label>
           <textarea
             value={formData.notes}
             onChange={e => onChange({ ...formData, notes: e.target.value })}

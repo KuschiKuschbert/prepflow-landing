@@ -7,22 +7,24 @@ import { z } from 'zod';
 
 const bulkUpdateIngredientsSchema = z.object({
   ids: z.array(z.string()).min(1, 'ids must be a non-empty array'),
-  updates: z.object({
-    supplier: z.string().optional(),
-    storage_location: z.string().optional(),
-    trim_peel_waste_percentage: z.number().min(0).max(100).optional(),
-    yield_percentage: z.number().min(0).max(100).optional(),
-    brand: z.string().optional(),
-    pack_size: z.number().optional(),
-    pack_size_unit: z.string().optional(),
-    pack_price: z.number().optional(),
-    unit: z.string().optional(),
-    cost_per_unit: z.number().optional(),
-    min_stock_level: z.number().optional(),
-    current_stock: z.number().optional(),
-  }).refine(data => Object.keys(data).length > 0, {
-    message: 'updates must contain at least one field',
-  }),
+  updates: z
+    .object({
+      supplier: z.string().optional(),
+      storage_location: z.string().optional(),
+      trim_peel_waste_percentage: z.number().min(0).max(100).optional(),
+      yield_percentage: z.number().min(0).max(100).optional(),
+      brand: z.string().optional(),
+      pack_size: z.number().optional(),
+      pack_size_unit: z.string().optional(),
+      pack_price: z.number().optional(),
+      unit: z.string().optional(),
+      cost_per_unit: z.number().optional(),
+      min_stock_level: z.number().optional(),
+      current_stock: z.number().optional(),
+    })
+    .refine(data => Object.keys(data).length > 0, {
+      message: 'updates must contain at least one field',
+    }),
 });
 export async function PUT(request: NextRequest) {
   try {
@@ -59,7 +61,10 @@ export async function PUT(request: NextRequest) {
     const normalizedIds = ids.map(id => String(id).trim()).filter(Boolean);
 
     if (normalizedIds.length === 0) {
-      return NextResponse.json(ApiErrorHandler.createError('No valid IDs provided', 'SERVER_ERROR', 400), { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('No valid IDs provided', 'SERVER_ERROR', 400),
+        { status: 400 },
+      );
     }
 
     // Prepare update data - only include valid fields
@@ -81,7 +86,8 @@ export async function PUT(request: NextRequest) {
     const updateData: Record<string, any> = {};
     for (const field of validFields) {
       if (field in updates) {
-        updateData[field] = updates[field];
+        // Type assertion needed because TypeScript can't narrow the type when using string index
+        updateData[field] = (updates as Record<string, any>)[field];
       }
     }
 
@@ -94,7 +100,10 @@ export async function PUT(request: NextRequest) {
     }
 
     if (Object.keys(updateData).length === 0) {
-      return NextResponse.json(ApiErrorHandler.createError('No valid fields to update', 'SERVER_ERROR', 400), { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('No valid fields to update', 'SERVER_ERROR', 400),
+        { status: 400 },
+      );
     }
 
     // Add updated_at timestamp

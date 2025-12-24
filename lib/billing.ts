@@ -1,8 +1,8 @@
 import { getStripe } from './stripe';
 import { logger } from './logger';
-import { getCachedCustomerId } from './helpers/getCachedCustomerId';
-import { searchCustomerByEmail } from './helpers/searchCustomerByEmail';
-import { createStripeCustomer } from './helpers/createStripeCustomer';
+import { getCachedCustomerId } from './billing/helpers/getCachedCustomerId';
+import { searchCustomerByEmail } from './billing/helpers/searchCustomerByEmail';
+import { createStripeCustomer } from './billing/helpers/createStripeCustomer';
 
 /**
  * Get or create Stripe customer ID for a user email

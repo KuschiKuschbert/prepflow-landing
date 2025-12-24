@@ -1,7 +1,5 @@
 // PrepFlow Adaptive Navigation Optimization - Settings Panel Component
-
 'use client';
-
 import { useNavigationItems } from '@/app/webapp/components/navigation/nav-items';
 import { Icon } from '@/components/ui/Icon';
 import { useNotification } from '@/contexts/NotificationContext';
@@ -33,20 +31,15 @@ function getCategoryDisplayName(category: string): string {
   };
   return displayNames[category] || category.charAt(0).toUpperCase() + category.slice(1);
 }
-
 export function AdaptiveNavSettingsPanel() {
   const { settings, updateSettings } = useAdaptiveNavSettings();
-  const { showInfo, showError } = useNotification();
+  const { showInfo, showError, showSuccess } = useNotification();
   const allItems = useNavigationItems();
-  const [isLoadingFromServer, setIsLoadingFromServer] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // Prevent hydration mismatch by only rendering conditional content after mount
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  // Get available categories for current workflow
   const availableCategories = useMemo(() => {
     const categories = new Set<string>();
     allItems.forEach(item => {
@@ -56,7 +49,6 @@ export function AdaptiveNavSettingsPanel() {
     });
     return Array.from(categories).sort();
   }, [allItems]);
-
   const handleToggleSection = (category: string) => {
     const currentSections = settings.selectedSections || [];
     const newSections = currentSections.includes(category)
@@ -65,8 +57,13 @@ export function AdaptiveNavSettingsPanel() {
 
     updateSettings({ selectedSections: newSections });
   };
-
   const handleSyncToServer = async () => {
+    // Store original settings for rollback
+    const originalSettings = { ...settings };
+
+    // Optimistically update UI immediately (settings are already updated locally)
+    showInfo('Syncing preferences to server...');
+
     try {
       const response = await fetch('/api/navigation-optimization/preferences', {
         method: 'PUT',
@@ -78,22 +75,28 @@ export function AdaptiveNavSettingsPanel() {
       });
 
       if (response.ok) {
-        showInfo('Preferences synced to server');
+        showSuccess('Preferences synced to server');
       } else {
+        // Error - revert settings (though they were already local-only)
+        updateSettings(originalSettings);
         showError('Failed to sync preferences');
       }
     } catch (err) {
-      logger.error('[AdaptiveNavSettingsPanel.tsx] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
-
-      showError('Failed to sync preferences');
+      // Error - revert settings
+      updateSettings(originalSettings);
+      logger.error('[AdaptiveNavSettingsPanel] Error syncing:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      showError("Couldn't sync your preferences, chef. Give it another go.");
     }
   };
-
   const handleLoadFromServer = async () => {
-    setIsLoadingFromServer(true);
+    // Store original settings for rollback
+    const originalSettings = { ...settings };
+
+    // Optimistically show loading state via notification
+    showInfo('Loading preferences from server...');
+
     try {
       const response = await fetch('/api/navigation-optimization/preferences', {
         method: 'GET',
@@ -101,32 +104,30 @@ export function AdaptiveNavSettingsPanel() {
 
       if (response.ok) {
         const data = await response.json();
+        // Optimistically update UI immediately
         updateSettings({
           enabled: data.enabled || false,
           selectedSections: data.selectedSections || [],
         });
-        showInfo('Preferences loaded from server');
+        showSuccess('Preferences loaded from server');
       } else {
+        // Error - keep original settings
         showError('Failed to load preferences from server');
       }
     } catch (err) {
-      logger.error('[AdaptiveNavSettingsPanel.tsx] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
-
-      showError('Failed to load preferences from server');
-    } finally {
-      setIsLoadingFromServer(false);
+      // Error - revert to original settings
+      updateSettings(originalSettings);
+      logger.error('[AdaptiveNavSettingsPanel] Error loading:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      showError("Couldn't load preferences from server, chef. Try again.");
     }
   };
 
   const formatLastUpdated = (timestamp?: number) => {
     if (!timestamp) return 'Never';
-    const date = new Date(timestamp);
-    return date.toLocaleString();
+    return new Date(timestamp).toLocaleString();
   };
-
   return (
     <div className="mt-8 space-y-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
       <div className="flex items-center justify-between">
@@ -137,7 +138,12 @@ export function AdaptiveNavSettingsPanel() {
               className="inline-flex items-center gap-1 rounded-full border border-[var(--color-warning)]/30 bg-[var(--color-warning)]/10 px-2 py-0.5 text-xs font-medium text-[var(--color-warning)]"
               title="This feature is experimental and may change"
             >
-              <Icon icon={Beaker} size="xs" className="text-[var(--color-warning)]" aria-hidden={true} />
+              <Icon
+                icon={Beaker}
+                size="xs"
+                className="text-[var(--color-warning)]"
+                aria-hidden={true}
+              />
               Experimental
             </span>
           </div>
@@ -160,7 +166,9 @@ export function AdaptiveNavSettingsPanel() {
         <>
           {/* Section Selection */}
           <div>
-            <h3 className="mb-3 text-sm font-medium text-[var(--foreground)]/80">Sections to Optimize</h3>
+            <h3 className="mb-3 text-sm font-medium text-[var(--foreground)]/80">
+              Sections to Optimize
+            </h3>
             <p className="mb-4 text-xs text-[var(--foreground)]/60">
               Select which navigation sections should be reordered based on your usage patterns.
               Items within selected sections will be reordered by time of day.
@@ -217,11 +225,15 @@ export function AdaptiveNavSettingsPanel() {
               </div>
               <div className="flex justify-between">
                 <span className="text-[var(--foreground)]/60">Sections optimized:</span>
-                <span className="text-[var(--foreground)]/80">{settings.selectedSections?.length || 0}</span>
+                <span className="text-[var(--foreground)]/80">
+                  {settings.selectedSections?.length || 0}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[var(--foreground)]/60">Last updated:</span>
-                <span className="text-[var(--foreground)]/80">{formatLastUpdated(settings.lastUpdated)}</span>
+                <span className="text-[var(--foreground)]/80">
+                  {formatLastUpdated(settings.lastUpdated)}
+                </span>
               </div>
             </div>
           </div>
@@ -235,7 +247,12 @@ export function AdaptiveNavSettingsPanel() {
                 aria-label="Sync to Server - Syncs your local preferences to your account so they persist across devices and browser sessions"
               >
                 Sync to Server
-                <Icon icon={Info} size="xs" className="text-[var(--foreground)]/60" aria-hidden={true} />
+                <Icon
+                  icon={Info}
+                  size="xs"
+                  className="text-[var(--foreground)]/60"
+                  aria-hidden={true}
+                />
               </button>
               <div className="pointer-events-none absolute bottom-full left-0 z-10 mb-2 hidden w-64 rounded-lg border border-[var(--border)] bg-[var(--surface)] p-3 text-xs text-[var(--foreground)]/80 shadow-lg group-hover:block">
                 Syncs your local preferences (enabled state and selected sections) to your account
@@ -245,20 +262,15 @@ export function AdaptiveNavSettingsPanel() {
             </div>
             <button
               onClick={handleLoadFromServer}
-              disabled={isLoadingFromServer}
-              className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 px-4 py-2 text-sm text-[var(--foreground)]/80 transition-colors hover:bg-[var(--muted)]/50 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 px-4 py-2 text-sm text-[var(--foreground)]/80 transition-colors hover:bg-[var(--muted)]/50"
             >
-              {isLoadingFromServer ? (
-                <>
-                  <div className="h-3 w-3 animate-spin rounded-full border-2 border-[var(--foreground)]/60 border-t-transparent" />
-                  Loading...
-                </>
-              ) : (
-                <>
-                  <Icon icon={Download} size="xs" className="text-[var(--foreground)]/80" aria-hidden={true} />
-                  Load from Server
-                </>
-              )}
+              <Icon
+                icon={Download}
+                size="xs"
+                className="text-[var(--foreground)]/80"
+                aria-hidden={true}
+              />
+              Load from Server
             </button>
             <button
               onClick={() => {

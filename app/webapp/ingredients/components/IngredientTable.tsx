@@ -97,7 +97,9 @@ export default function IngredientTable({
               clipRule="evenodd"
             />
           </svg>
-          <h3 className="text-fluid-xl mb-2 font-semibold text-[var(--foreground)]">No Ingredients Found</h3>
+          <h3 className="text-fluid-xl mb-2 font-semibold text-[var(--foreground)]">
+            No Ingredients Found
+          </h3>
           <p className="text-fluid-sm text-[var(--foreground-muted)]">
             Start by adding your first ingredient to get started.
           </p>

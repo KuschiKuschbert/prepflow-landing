@@ -1,9 +1,12 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { consolidateAllergens } from '../australian-allergens';
+import { consolidateAllergens } from '../../australian-allergens';
 import { collectAllergensFromIngredients } from './collectAllergens';
 import { cacheRecipeAllergens } from './cacheAllergens';
-import { groupAllergensByRecipe, processAndCacheBatchAllergens } from './batchProcessRecipeAllergens';
+import {
+  groupAllergensByRecipe,
+  processAndCacheBatchAllergens,
+} from './batchProcessRecipeAllergens';
 
 /**
  * Aggregate allergens for a single recipe
@@ -76,7 +79,11 @@ export async function aggregateRecipeAllergens(
     }
 
     // Collect, consolidate, and cache allergens
-    const allergenSet = collectAllergensFromIngredients(recipeIngredients);
+    // Transform Supabase response format to match function signature
+    const transformedIngredients = recipeIngredients.map(item => ({
+      ingredients: Array.isArray(item.ingredients) ? item.ingredients[0] : item.ingredients,
+    }));
+    const allergenSet = collectAllergensFromIngredients(transformedIngredients);
     const allergens = consolidateAllergens(Array.from(allergenSet)).sort();
     await cacheRecipeAllergens(recipeId, allergens);
 
@@ -84,7 +91,6 @@ export async function aggregateRecipeAllergens(
   } catch (err) {
     logger.error('[Allergen Aggregation] Error aggregating recipe allergens:', {
       error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
       context: { recipeId, operation: 'aggregateRecipeAllergens' },
     });
     return [];
@@ -125,17 +131,18 @@ export async function batchAggregateRecipeAllergens(
       return {};
     }
 
+    // Transform Supabase response format to match function signature
+    const transformedIngredients = (recipeIngredients || []).map(item => ({
+      recipe_id: String(item.recipe_id),
+      ingredients: Array.isArray(item.ingredients) ? item.ingredients[0] : item.ingredients,
+    }));
     // Group by recipe_id and aggregate allergens
-    const allergensByRecipe = groupAllergensByRecipe(recipeIngredients || [], recipeIds);
+    const allergensByRecipe = groupAllergensByRecipe(transformedIngredients, recipeIds);
 
-    // Process and cache results
-    const result = await processAndCacheBatchAllergens(allergensByRecipe);
-
-    return result;
+    return await processAndCacheBatchAllergens(allergensByRecipe);
   } catch (err) {
     logger.error('[Allergen Aggregation] Error batch aggregating recipe allergens:', {
       error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
       context: { recipeIds, operation: 'batchAggregateRecipeAllergens' },
     });
     return {};

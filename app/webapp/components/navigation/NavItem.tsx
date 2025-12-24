@@ -130,7 +130,9 @@ export function NavItem({
         {showLabel && (
           <span
             className={`text-sm font-medium ${
-              isActive ? 'text-[var(--foreground-secondary)]' : 'text-[var(--foreground-secondary)] group-hover:text-[var(--foreground)]'
+              isActive
+                ? 'text-[var(--foreground-secondary)]'
+                : 'text-[var(--foreground-secondary)] group-hover:text-[var(--foreground)]'
             }`}
           >
             {label}
@@ -192,7 +194,9 @@ export function NavItem({
       {showLabel && (
         <span
           className={`text-sm font-medium ${
-            isActive ? 'text-[var(--foreground)]' : 'text-[var(--foreground-secondary)] group-hover:text-[var(--foreground)]'
+            isActive
+              ? 'text-[var(--foreground)]'
+              : 'text-[var(--foreground-secondary)] group-hover:text-[var(--foreground)]'
           }`}
         >
           {label}

@@ -16,4 +16,3 @@ export function aggregateIngredientAllergens(ingredients: Ingredient[]): string[
   });
   return consolidateAllergens(allIngredientAllergens);
 }
-

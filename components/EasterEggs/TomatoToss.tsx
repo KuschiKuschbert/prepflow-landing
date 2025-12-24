@@ -4,11 +4,9 @@
  * Tomato Toss - Humorous Easter-Egg Mini-Game
  *
  * A light-hearted interactive component that appears when users click the logo 9 times.
- * Users can throw tomatoes at a wall for stress relief. Sound effects are generated using
- * Web Audio API for a fully self-contained experience.
+ * Users can throw tomatoes at a wall for stress relief.
  */
 
-import { ArcadeMuteButton } from '@/components/Arcade/ArcadeMuteButton';
 import WebAppBackground from '@/components/Arcade/WebAppBackground';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
@@ -98,7 +96,6 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
       {/* Blurred dark overlay to separate game from background */}
       <div className="pointer-events-none fixed inset-0 z-30 bg-black/40 backdrop-blur-md" />
       {showConfetti && <Confetti />}
-      <ArcadeMuteButton className="top-16" />
       <AnimatePresence>
         <motion.div
           initial={{ opacity: 0 }}
@@ -115,7 +112,9 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
             <h1 className="text-fluid-4xl desktop:text-fluid-4xl mb-2 font-extrabold">
               🍅 Tomato Toss!
             </h1>
-            <p className="text-fluid-lg text-[var(--foreground-secondary)]">Let it all out, Chef — aim for the wall.</p>
+            <p className="text-fluid-lg text-[var(--foreground-secondary)]">
+              Let it all out, Chef — aim for the wall.
+            </p>
           </motion.div>
 
           {/* Wall Area */}

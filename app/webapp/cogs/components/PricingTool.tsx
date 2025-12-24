@@ -55,7 +55,12 @@ export const PricingTool: React.FC<PricingToolProps> = ({
         {/* Header with Title and Target Gross Profit */}
         <div className="tablet:flex-row tablet:items-center tablet:justify-between mb-4 flex flex-col gap-3">
           <h3 className="flex items-center text-lg font-semibold text-[var(--foreground)]">
-            <Icon icon={DollarSign} size="md" className="mr-2 text-[var(--primary)]" aria-hidden={true} />
+            <Icon
+              icon={DollarSign}
+              size="md"
+              className="mr-2 text-[var(--primary)]"
+              aria-hidden={true}
+            />
             Costing Tool
             <div className="ml-2 h-2 w-2 animate-pulse rounded-full bg-[var(--primary)]"></div>
           </h3>
@@ -155,14 +160,20 @@ export const PricingTool: React.FC<PricingToolProps> = ({
           <div className="grid grid-cols-2 gap-3">
             {/* Food Cost */}
             <div className="rounded-lg border border-[var(--border)]/50 bg-[var(--muted)]/30 p-2.5">
-              <div className="mb-1 text-xs tracking-wide text-[var(--foreground-subtle)] uppercase">Food Cost</div>
-              <div className="text-lg font-bold text-[var(--foreground)]">${costPerPortion.toFixed(2)}</div>
+              <div className="mb-1 text-xs tracking-wide text-[var(--foreground-subtle)] uppercase">
+                Food Cost
+              </div>
+              <div className="text-lg font-bold text-[var(--foreground)]">
+                ${costPerPortion.toFixed(2)}
+              </div>
               <div className="text-xs text-[var(--foreground-muted)]">per portion</div>
             </div>
 
             {/* Gross Profit */}
             <div className="rounded-lg border border-[var(--border)]/50 bg-[var(--muted)]/30 p-2.5">
-              <div className="mb-1 text-xs tracking-wide text-[var(--foreground-subtle)] uppercase">Gross Profit</div>
+              <div className="mb-1 text-xs tracking-wide text-[var(--foreground-subtle)] uppercase">
+                Gross Profit
+              </div>
               <div className="text-lg font-bold text-[var(--color-success)]">
                 ${pricingCalculation.grossProfitDollar.toFixed(2)}
               </div>

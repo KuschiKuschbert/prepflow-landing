@@ -1,3 +1,5 @@
+'use client';
+
 import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { snapCenterToCursor } from '@dnd-kit/modifiers';
 import { format, addDays } from 'date-fns';

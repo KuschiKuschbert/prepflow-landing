@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { Check } from 'lucide-react';
 import QRCodeSVG from 'react-qr-code';
@@ -44,11 +46,16 @@ export function QRCodeCard({ entity, isSelected, onToggle }: QRCodeCardProps) {
 
       {/* Info */}
       <div className="text-center">
-        <div className="truncate text-[10px] font-medium text-[var(--foreground)]" title={entity.name}>
+        <div
+          className="truncate text-[10px] font-medium text-[var(--foreground)]"
+          title={entity.name}
+        >
           {entity.name}
         </div>
         {entity.subtitle && (
-          <div className="truncate text-[8px] text-[var(--foreground-subtle)]">{entity.subtitle}</div>
+          <div className="truncate text-[8px] text-[var(--foreground-subtle)]">
+            {entity.subtitle}
+          </div>
         )}
       </div>
     </div>

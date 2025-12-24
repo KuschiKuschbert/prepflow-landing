@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { getManagementClient } from '../auth0-management';
+import { getManagementClient } from '../../auth0-management';
 
 /**
  * Get user roles from Auth0 Management API
@@ -34,4 +34,3 @@ export async function getUserRoles(auth0UserId: string): Promise<string[]> {
     return [];
   }
 }
-

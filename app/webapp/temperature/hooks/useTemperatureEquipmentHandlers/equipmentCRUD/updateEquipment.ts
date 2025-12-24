@@ -7,7 +7,6 @@ import type { TemperatureEquipment } from '../../../types';
 interface EquipmentCRUDProps {
   equipment: TemperatureEquipment[];
   setEquipment: React.Dispatch<React.SetStateAction<TemperatureEquipment[]>>;
-  fetchEquipment: () => Promise<void>;
   showError: (message: string) => void;
   showSuccess: (message: string) => void;
 }
@@ -15,7 +14,7 @@ interface EquipmentCRUDProps {
 export async function updateEquipment(
   equipmentId: string,
   updates: Partial<TemperatureEquipment>,
-  { equipment, setEquipment, fetchEquipment, showError }: EquipmentCRUDProps,
+  { equipment, setEquipment, showError, showSuccess }: EquipmentCRUDProps,
 ): Promise<void> {
   const originalEquipment = [...equipment];
   const equipmentToUpdate = equipment.find(eq => eq.id === equipmentId);
@@ -34,7 +33,13 @@ export async function updateEquipment(
     });
     const data = await response.json();
     if (data.success) {
-      fetchEquipment().catch(err => logger.error('Failed to refresh equipment:', err));
+      // Replace optimistic update with server response if different
+      if (data.item) {
+        setEquipment(prevEquipment =>
+          prevEquipment.map(eq => (eq.id === equipmentId ? data.item : eq)),
+        );
+      }
+      showSuccess('Equipment updated successfully');
     } else {
       setEquipment(originalEquipment);
       showError(data.error || 'Failed to update equipment');

@@ -62,4 +62,3 @@ async function removeCachedCustomer(customerId: string): Promise<void> {
     });
   }
 }
-

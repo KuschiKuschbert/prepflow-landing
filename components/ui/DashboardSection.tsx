@@ -32,7 +32,9 @@ export function DashboardSection({
               </h2>
             )}
             {subtitle && (
-              <p className="text-fluid-sm desktop:text-fluid-base text-[var(--foreground-muted)]">{subtitle}</p>
+              <p className="text-fluid-sm desktop:text-fluid-base text-[var(--foreground-muted)]">
+                {subtitle}
+              </p>
             )}
           </div>
           {actions && <div className="flex items-center gap-2">{actions}</div>}

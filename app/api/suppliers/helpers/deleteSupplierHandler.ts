@@ -33,4 +33,3 @@ export async function handleDeleteSupplier(request: NextRequest) {
     return handleSupplierError(err, 'DELETE');
   }
 }
-

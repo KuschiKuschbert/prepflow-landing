@@ -35,4 +35,3 @@ export async function getCachedCustomerId(userEmail: string): Promise<string | n
 
   return null;
 }
-

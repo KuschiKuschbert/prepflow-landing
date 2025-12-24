@@ -64,12 +64,13 @@ export function useIngredientBulkUpdate({
   const handleCategorizeAllUncategorized = useCallback(
     async (useAI: boolean = true, onRefresh?: () => void) => {
       await categorizeAll(useAI, onRefresh, {
+        ingredients,
         setIngredients,
         showSuccess,
         showError,
       });
     },
-    [setIngredients, showSuccess, showError],
+    [ingredients, setIngredients, showSuccess, showError],
   );
 
   return { handleBulkUpdate, handleBulkAutoCategorize, handleCategorizeAllUncategorized };

@@ -9,7 +9,8 @@ import { supabaseAdmin } from '@/lib/supabase';
  * @throws {Error} If deletion fails
  */
 export async function deleteRecipeAndCleanup(recipeId: string) {
-  if (!supabaseAdmin) throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  if (!supabaseAdmin)
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
 
   const { error: ingredientsError } = await supabaseAdmin
     .from('recipe_ingredients')

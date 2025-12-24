@@ -11,7 +11,6 @@ interface UseBulkShareProps {
 
 export function useBulkShare({ selectedRecipeIds, onSuccess }: UseBulkShareProps) {
   const { showSuccess, showError } = useNotification();
-  const [shareLoading, setShareLoading] = useState(false);
 
   const handleBulkShare = useCallback(
     async (shareType: string, recipientEmail?: string, notes?: string) => {
@@ -19,8 +18,6 @@ export function useBulkShare({ selectedRecipeIds, onSuccess }: UseBulkShareProps
         showError('No recipes selected for sharing');
         return;
       }
-
-      setShareLoading(true);
 
       try {
         const response = await fetch('/api/recipes/bulk-share', {
@@ -62,8 +59,6 @@ export function useBulkShare({ selectedRecipeIds, onSuccess }: UseBulkShareProps
       } catch (err) {
         logger.error('Bulk share failed:', err);
         showError('Failed to share recipes. Please check your connection and try again.');
-      } finally {
-        setShareLoading(false);
       }
     },
     [selectedRecipeIds, showSuccess, showError, onSuccess],
@@ -71,10 +66,5 @@ export function useBulkShare({ selectedRecipeIds, onSuccess }: UseBulkShareProps
 
   return {
     handleBulkShare,
-    shareLoading,
   };
 }
-
-
-
-

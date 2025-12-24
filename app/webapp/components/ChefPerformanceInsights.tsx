@@ -65,9 +65,9 @@ export default function ChefPerformanceInsights() {
         }
       } catch (err) {
         logger.error('[ChefPerformanceInsights.tsx] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+          error: err instanceof Error ? err.message : String(err),
+          stack: err instanceof Error ? err.stack : undefined,
+        });
 
         setError(err instanceof Error ? err.message : 'Failed to load performance insights');
       } finally {
@@ -129,7 +129,12 @@ export default function ChefPerformanceInsights() {
         {data.topSellers.length > 0 && (
           <div className="tablet:rounded-2xl tablet:p-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
             <div className="mb-2 flex items-center gap-2">
-              <Icon icon={TrendingUp} size="sm" className="text-[var(--color-success)]" aria-hidden={true} />
+              <Icon
+                icon={TrendingUp}
+                size="sm"
+                className="text-[var(--color-success)]"
+                aria-hidden={true}
+              />
               <h3 className="text-fluid-sm tablet:text-fluid-base font-medium text-[var(--foreground)]">
                 Top 3 Selling Items
               </h3>
@@ -164,7 +169,12 @@ export default function ChefPerformanceInsights() {
         {data.bottomSellers.length > 0 && (
           <div className="tablet:rounded-2xl tablet:p-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
             <div className="mb-2 flex items-center gap-2">
-              <Icon icon={TrendingDown} size="sm" className="text-[var(--color-error)]" aria-hidden={true} />
+              <Icon
+                icon={TrendingDown}
+                size="sm"
+                className="text-[var(--color-error)]"
+                aria-hidden={true}
+              />
               <h3 className="text-fluid-sm tablet:text-fluid-base font-medium text-[var(--foreground)]">
                 Items Needing Attention
               </h3>
@@ -199,7 +209,12 @@ export default function ChefPerformanceInsights() {
         {data.hiddenGems.length > 0 && (
           <div className="tablet:rounded-2xl tablet:p-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
             <div className="mb-2 flex items-center gap-2">
-              <Icon icon={Sparkles} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+              <Icon
+                icon={Sparkles}
+                size="sm"
+                className="text-[var(--primary)]"
+                aria-hidden={true}
+              />
               <h3 className="text-fluid-sm tablet:text-fluid-base font-medium text-[var(--foreground)]">
                 Hidden Gems
               </h3>
@@ -244,25 +259,33 @@ export default function ChefPerformanceInsights() {
           </h3>
           <div className="tablet:grid-cols-4 grid grid-cols-2 gap-2">
             <div className="tablet:p-3 rounded-lg bg-[var(--surface)] p-2 text-center">
-              <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground-muted)]">Chef&apos;s Kiss</p>
+              <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground-muted)]">
+                Chef&apos;s Kiss
+              </p>
               <p className="text-fluid-lg tablet:text-fluid-xl font-bold text-[var(--color-success)]">
                 {data.categoryCounts.chefsKiss}
               </p>
             </div>
             <div className="tablet:p-3 rounded-lg bg-[var(--surface)] p-2 text-center">
-              <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground-muted)]">Hidden Gem</p>
+              <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground-muted)]">
+                Hidden Gem
+              </p>
               <p className="text-fluid-lg tablet:text-fluid-xl font-bold text-[var(--primary)]">
                 {data.categoryCounts.hiddenGem}
               </p>
             </div>
             <div className="tablet:p-3 rounded-lg bg-[var(--surface)] p-2 text-center">
-              <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground-muted)]">Bargain Bucket</p>
+              <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground-muted)]">
+                Bargain Bucket
+              </p>
               <p className="text-fluid-lg tablet:text-fluid-xl font-bold text-[var(--color-warning)]">
                 {data.categoryCounts.bargainBucket}
               </p>
             </div>
             <div className="tablet:p-3 rounded-lg bg-[var(--surface)] p-2 text-center">
-              <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground-muted)]">Burnt Toast</p>
+              <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground-muted)]">
+                Burnt Toast
+              </p>
               <p className="text-fluid-lg tablet:text-fluid-xl font-bold text-[var(--color-error)]">
                 {data.categoryCounts.burntToast}
               </p>

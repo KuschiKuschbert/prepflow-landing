@@ -1,3 +1,5 @@
+'use client';
+
 interface ProfileFormActionsProps {
   hasChanges: boolean;
   saving: boolean;

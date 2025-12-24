@@ -104,7 +104,8 @@ export async function createIngredient(ingredientData: any) {
     // Don't await - run in background
     (async () => {
       try {
-        const { invalidateRecipesWithIngredient, invalidateDishesWithIngredient } = await import('@/lib/allergens/cache-invalidation');
+        const { invalidateRecipesWithIngredient, invalidateDishesWithIngredient } =
+          await import('@/lib/allergens/cache-invalidation');
         await Promise.all([
           invalidateRecipesWithIngredient(createdIngredient.id),
           invalidateDishesWithIngredient(createdIngredient.id),

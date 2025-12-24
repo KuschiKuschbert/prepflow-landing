@@ -132,7 +132,9 @@ export function PrepListExport({
                           onChange={() => toggleSection(section.sectionId || '')}
                           className="h-4 w-4 rounded border-[var(--border)] bg-[var(--background)] text-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
                         />
-                        <span className="flex-1 text-sm text-[var(--foreground)]">{section.sectionName}</span>
+                        <span className="flex-1 text-sm text-[var(--foreground)]">
+                          {section.sectionName}
+                        </span>
                         <span className="text-xs text-[var(--foreground-muted)]">
                           {section.aggregatedIngredients.length} ingredients
                           {section.prepInstructions && section.prepInstructions.length > 0

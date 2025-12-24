@@ -5,10 +5,7 @@ import { detectTemperatureThresholds } from '../../helpers/detectTemperatureThre
 import { logger } from '@/lib/logger';
 import { updateTemperatureEquipmentSchema } from '../../helpers/schemas';
 
-export async function handleUpdateTemperatureEquipment(
-  request: NextRequest,
-  id: string,
-) {
+export async function handleUpdateTemperatureEquipment(request: NextRequest, id: string) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -49,7 +46,7 @@ export async function handleUpdateTemperatureEquipment(
       );
     }
 
-    body = validationResult.data;
+    const validatedBody = validationResult.data;
 
     // Get current equipment to use name/type for threshold detection if needed
     const { data: currentEquipment, error: fetchError } = await supabaseAdmin
@@ -68,11 +65,11 @@ export async function handleUpdateTemperatureEquipment(
     }
 
     // Automatically detect thresholds if not provided and name/type changed
-    let minTemp = body.min_temp_celsius ?? null;
-    let maxTemp = body.max_temp_celsius ?? null;
+    let minTemp = validatedBody.min_temp_celsius ?? null;
+    let maxTemp = validatedBody.max_temp_celsius ?? null;
 
-    const name = body.name || currentEquipment?.name || '';
-    const equipmentType = body.equipment_type || currentEquipment?.equipment_type || '';
+    const name = validatedBody.name || currentEquipment?.name || '';
+    const equipmentType = validatedBody.equipment_type || currentEquipment?.equipment_type || '';
 
     // Auto-detect if thresholds are null and we have name/type
     if ((minTemp === null || maxTemp === null) && (name || equipmentType)) {
@@ -96,12 +93,13 @@ export async function handleUpdateTemperatureEquipment(
       updated_at: new Date().toISOString(),
     };
 
-    if (body.name !== undefined) updateData.name = body.name;
-    if (body.equipment_type !== undefined) updateData.equipment_type = body.equipment_type;
-    if (body.location !== undefined) updateData.location = body.location;
+    if (validatedBody.name !== undefined) updateData.name = validatedBody.name;
+    if (validatedBody.equipment_type !== undefined)
+      updateData.equipment_type = validatedBody.equipment_type;
+    if (validatedBody.location !== undefined) updateData.location = validatedBody.location;
     if (minTemp !== undefined) updateData.min_temp_celsius = minTemp;
     if (maxTemp !== undefined) updateData.max_temp_celsius = maxTemp;
-    if (body.is_active !== undefined) updateData.is_active = body.is_active;
+    if (validatedBody.is_active !== undefined) updateData.is_active = validatedBody.is_active;
 
     const { data, error } = await supabaseAdmin
       .from('temperature_equipment')
@@ -150,4 +148,3 @@ export async function handleUpdateTemperatureEquipment(
     );
   }
 }
-

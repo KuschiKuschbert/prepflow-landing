@@ -119,7 +119,9 @@ export function EmployeeChipBar({
                       <span className="text-sm font-medium text-[var(--foreground)] group-hover:text-[var(--primary)]">
                         {employee.first_name} {employee.last_name}
                       </span>
-                      <span className="text-xs text-[var(--foreground-muted)]">{employee.role}</span>
+                      <span className="text-xs text-[var(--foreground-muted)]">
+                        {employee.role}
+                      </span>
                     </div>
                   </button>
 

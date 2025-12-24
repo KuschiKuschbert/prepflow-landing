@@ -72,7 +72,12 @@ export default function RecipeReadiness() {
         <div className="tablet:rounded-2xl tablet:p-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
           <div className="mb-2 flex items-center gap-2">
             <div className="tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-green-500/20 to-green-500/10">
-              <Icon icon={CheckCircle} size="sm" className="text-[var(--color-success)]" aria-hidden={true} />
+              <Icon
+                icon={CheckCircle}
+                size="sm"
+                className="text-[var(--color-success)]"
+                aria-hidden={true}
+              />
             </div>
             <div>
               <p className="text-fluid-xs tablet:text-fluid-sm font-medium text-[var(--foreground-muted)]">
@@ -105,7 +110,11 @@ export default function RecipeReadiness() {
               <Icon
                 icon={data.incompleteRecipes > 0 ? AlertTriangle : CheckCircle}
                 size="sm"
-                className={data.incompleteRecipes > 0 ? 'text-[var(--color-warning)]' : 'text-[var(--color-success)]'}
+                className={
+                  data.incompleteRecipes > 0
+                    ? 'text-[var(--color-warning)]'
+                    : 'text-[var(--color-success)]'
+                }
                 aria-hidden={true}
               />
             </div>
@@ -115,7 +124,9 @@ export default function RecipeReadiness() {
               </p>
               <p
                 className={`text-fluid-xl tablet:text-fluid-2xl font-bold ${
-                  data.incompleteRecipes > 0 ? 'text-[var(--color-warning)]' : 'text-[var(--color-success)]'
+                  data.incompleteRecipes > 0
+                    ? 'text-[var(--color-warning)]'
+                    : 'text-[var(--color-success)]'
                 }`}
               >
                 {data.incompleteRecipes}
@@ -144,7 +155,11 @@ export default function RecipeReadiness() {
               <Icon
                 icon={data.recipesWithoutCost > 0 ? AlertTriangle : CheckCircle}
                 size="sm"
-                className={data.recipesWithoutCost > 0 ? 'text-[var(--color-warning)]' : 'text-[var(--color-success)]'}
+                className={
+                  data.recipesWithoutCost > 0
+                    ? 'text-[var(--color-warning)]'
+                    : 'text-[var(--color-success)]'
+                }
                 aria-hidden={true}
               />
             </div>
@@ -154,7 +169,9 @@ export default function RecipeReadiness() {
               </p>
               <p
                 className={`text-fluid-xl tablet:text-fluid-2xl font-bold ${
-                  data.recipesWithoutCost > 0 ? 'text-[var(--color-warning)]' : 'text-[var(--color-success)]'
+                  data.recipesWithoutCost > 0
+                    ? 'text-[var(--color-warning)]'
+                    : 'text-[var(--color-success)]'
                 }`}
               >
                 {data.recipesWithoutCost}
@@ -175,7 +192,12 @@ export default function RecipeReadiness() {
       {data.mostUsedRecipes.length > 0 && (
         <div className="tablet:mt-6 tablet:rounded-2xl tablet:p-4 mt-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
           <div className="mb-3 flex items-center gap-2">
-            <Icon icon={TrendingUp} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+            <Icon
+              icon={TrendingUp}
+              size="sm"
+              className="text-[var(--primary)]"
+              aria-hidden={true}
+            />
             <h3 className="text-fluid-sm tablet:text-fluid-base font-medium text-[var(--foreground)]">
               Most Used Recipes
             </h3>

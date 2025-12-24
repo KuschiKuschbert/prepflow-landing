@@ -31,4 +31,3 @@ export async function checkHiddenFeature(
     return { enabled: false, exists: false };
   }
 }
-

@@ -52,7 +52,7 @@ function fixFile(filePath) {
     const insertLine = loggerIndex >= 0 ? loggerIndex + 1 : insertIndex + 1;
     const newImport = "import { ApiErrorHandler } from '@/lib/api-error-handler';";
 
-    if (!content.includes("@/lib/api-error-handler")) {
+    if (!content.includes('@/lib/api-error-handler')) {
       lines.splice(insertLine, 0, newImport);
       content = lines.join('\n');
       changed = true;
@@ -60,24 +60,38 @@ function fixFile(filePath) {
   }
 
   // Replace error responses
-  const errorResponsePattern = /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\s*\)/g;
+  const errorResponsePattern =
+    /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\s*\)/g;
   content = content.replace(errorResponsePattern, (match, errorMsg, status) => {
     changed = true;
-    const errorCode = status === '401' ? 'UNAUTHORIZED' :
-                     status === '403' ? 'FORBIDDEN' :
-                     status === '404' ? 'NOT_FOUND' :
-                     status === '503' ? 'DATABASE_ERROR' : 'SERVER_ERROR';
+    const errorCode =
+      status === '401'
+        ? 'UNAUTHORIZED'
+        : status === '403'
+          ? 'FORBIDDEN'
+          : status === '404'
+            ? 'NOT_FOUND'
+            : status === '503'
+              ? 'DATABASE_ERROR'
+              : 'SERVER_ERROR';
     return `NextResponse.json(ApiErrorHandler.createError('${errorMsg}', '${errorCode}', ${status}), { status: ${status} })`;
   });
 
   // Replace error with message
-  const errorWithMessagePattern = /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*,\s*message:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\s*\)/g;
+  const errorWithMessagePattern =
+    /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*,\s*message:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\s*\)/g;
   content = content.replace(errorWithMessagePattern, (match, errorMsg, message, status) => {
     changed = true;
-    const errorCode = status === '401' ? 'UNAUTHORIZED' :
-                     status === '403' ? 'FORBIDDEN' :
-                     status === '404' ? 'NOT_FOUND' :
-                     status === '503' ? 'DATABASE_ERROR' : 'SERVER_ERROR';
+    const errorCode =
+      status === '401'
+        ? 'UNAUTHORIZED'
+        : status === '403'
+          ? 'FORBIDDEN'
+          : status === '404'
+            ? 'NOT_FOUND'
+            : status === '503'
+              ? 'DATABASE_ERROR'
+              : 'SERVER_ERROR';
     return `NextResponse.json(ApiErrorHandler.createError('${message}', '${errorCode}', ${status}), { status: ${status} })`;
   });
 
@@ -110,6 +124,3 @@ if (require.main === module) {
 }
 
 module.exports = { fixFile };
-
-
-

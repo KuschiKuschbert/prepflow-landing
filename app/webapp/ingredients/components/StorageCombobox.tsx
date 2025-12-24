@@ -146,7 +146,9 @@ export function StorageCombobox({
               ))}
             </div>
           ) : (
-            <div className="px-4 py-2 text-sm text-[var(--foreground-muted)]">No equipment found</div>
+            <div className="px-4 py-2 text-sm text-[var(--foreground-muted)]">
+              No equipment found
+            </div>
           )}
         </div>
       )}

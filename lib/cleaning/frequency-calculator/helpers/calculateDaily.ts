@@ -16,4 +16,3 @@ export function calculateDaily(startDate: Date, endDate: Date): string[] {
 
   return dates;
 }
-

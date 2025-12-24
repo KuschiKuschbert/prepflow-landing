@@ -31,6 +31,8 @@ import { useRecipeHandlers } from './hooks/useRecipeHandlers';
 import { useUnifiedBulkActions } from '../hooks/useUnifiedBulkActions';
 import { useBulkShare } from '../hooks/useBulkShare';
 import { useBulkAddToMenu } from '../hooks/useBulkAddToMenu';
+import { useRecipeStateSetters } from './RecipesClient/helpers/useRecipeStateSetters';
+
 export default function RecipesClient() {
   const router = useRouter();
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
@@ -47,22 +49,7 @@ export default function RecipesClient() {
       handleIngredientsChangeRef.current(recipeId);
     }
   }, []);
-  const {
-    recipes,
-    loading,
-    error,
-    recipeError,
-    recipePrices,
-    capitalizeRecipeName,
-    fetchRecipes,
-    fetchRecipeIngredients,
-    fetchBatchRecipeIngredients,
-    handleEditRecipe,
-    updateVisibleRecipePrices,
-    optimisticallyUpdateRecipes,
-    rollbackRecipes,
-    setError,
-  } = useRecipeManagement(trackRecipeChange);
+  const { recipes, loading, error, recipeError, recipePrices, capitalizeRecipeName, fetchRecipes, fetchRecipeIngredients, fetchBatchRecipeIngredients, handleEditRecipe, updateVisibleRecipePrices, optimisticallyUpdateRecipes, rollbackRecipes, setError } = useRecipeManagement(trackRecipeChange);
   const clearChangedFlag = useCallback((recipeId: string) => {
     setChangedRecipeIds(prev => {
       const next = new Set(prev);
@@ -84,29 +71,9 @@ export default function RecipesClient() {
       fetchRecipes().catch(err => logger.error('Failed to refresh recipes after autosave:', err));
     },
   });
-
   useRecipeRefreshEffects({ loading, changedRecipeIds, fetchRecipes });
   const { aiInstructions, generatingInstructions, generateAIInstructions } = useAIInstructions();
-  const {
-    recipeToDelete,
-    showDeleteConfirm,
-    setShowDeleteConfirm,
-    selectedRecipes,
-    setSelectedRecipes,
-    showShareModal,
-    setShowShareModal,
-    shareUrl,
-    shareLoading,
-    handleAddRecipe: handleAddRecipeAction,
-    handleEditFromPreview,
-    handleDuplicateRecipe,
-    handleDeleteRecipe,
-    confirmDeleteRecipe,
-    cancelDeleteRecipe,
-    handleSelectRecipe,
-    handleSelectAll,
-    handleShareRecipe,
-  } = useRecipeActions({
+  const { recipeToDelete, showDeleteConfirm, setShowDeleteConfirm, selectedRecipes, setSelectedRecipes, showShareModal, setShowShareModal, shareUrl, handleAddRecipe: handleAddRecipeAction, handleEditFromPreview, handleDuplicateRecipe, handleDeleteRecipe, confirmDeleteRecipe, cancelDeleteRecipe, handleSelectRecipe, handleSelectAll, handleShareRecipe } = useRecipeActions({
     recipes,
     fetchRecipes,
     fetchRecipeIngredients,
@@ -115,21 +82,12 @@ export default function RecipesClient() {
     optimisticallyUpdateRecipes,
     rollbackRecipes,
   });
-
   const selectedItemTypes = useMemo(() => {
     const types = new Map<string, 'recipe' | 'dish'>();
     selectedRecipes.forEach(id => types.set(id, 'recipe'));
     return types;
   }, [selectedRecipes]);
-  const {
-    bulkActionLoading,
-    showBulkDeleteConfirm: showUnifiedBulkDeleteConfirm,
-    setShowBulkDeleteConfirm: setShowUnifiedBulkDeleteConfirm,
-    handleBulkDelete: handleUnifiedBulkDelete,
-    confirmBulkDelete: confirmUnifiedBulkDelete,
-    cancelBulkDelete: cancelUnifiedBulkDelete,
-    selectedRecipeIds,
-  } = useUnifiedBulkActions({
+  const { bulkActionLoading, showBulkDeleteConfirm: showUnifiedBulkDeleteConfirm, setShowBulkDeleteConfirm: setShowUnifiedBulkDeleteConfirm, handleBulkDelete: handleUnifiedBulkDelete, confirmBulkDelete: confirmUnifiedBulkDelete, cancelBulkDelete: cancelUnifiedBulkDelete, selectedRecipeIds } = useUnifiedBulkActions({
     recipes,
     dishes: [],
     selectedItems: selectedRecipes,
@@ -140,21 +98,12 @@ export default function RecipesClient() {
     rollbackDishes: () => {},
     onClearSelection: () => setSelectedRecipes(new Set()),
   });
-  const { handleBulkShare, shareLoading: bulkShareLoading } = useBulkShare({
+  const { handleBulkShare } = useBulkShare({
     selectedRecipeIds,
     onSuccess: () => setSelectedRecipes(new Set()),
   });
-  const handleClearSelection = useCallback(() => setSelectedRecipes(new Set()), []);
-  const {
-    handleBulkAddToMenu,
-    handleSelectMenu,
-    handleCreateNewMenu,
-    menus,
-    loadingMenus,
-    addLoading: addToMenuLoading,
-    showMenuDialog,
-    setShowMenuDialog,
-  } = useBulkAddToMenu({
+  const handleClearSelection = useCallback(() => setSelectedRecipes(new Set()), [setSelectedRecipes]);
+  const { handleBulkAddToMenu, handleSelectMenu, handleCreateNewMenu, menus, loadingMenus, showMenuDialog, setShowMenuDialog } = useBulkAddToMenu({
     selectedItems: selectedRecipes,
     selectedItemTypes,
     onSuccess: handleClearSelection,
@@ -195,16 +144,22 @@ export default function RecipesClient() {
     handleDuplicateRecipe,
     handleShareRecipe,
   });
-  const handleCloseModal = useCallback(() => {
-    setShowUnifiedModal(false);
-    setSelectedRecipe(null);
-  }, []);
-  const handleSetSelectedRecipe = useCallback((recipe: Recipe | null) => setSelectedRecipe(recipe), []);
-  const handleSetShowUnifiedModal = useCallback((show: boolean) => setShowUnifiedModal(show), []);
-  const handleSetPreviewYield = useCallback((yieldValue: number) => setPreviewYield(yieldValue), []);
-  const handleSetShowRecipeEditDrawer = useCallback((show: boolean) => setShowRecipeEditDrawer(show), []);
-  const handleSetEditingRecipe = useCallback((recipe: Recipe | null) => setEditingRecipe(recipe), []);
-  const handleRefreshRecipes = useCallback(() => fetchRecipes(), [fetchRecipes]);
+  const {
+    handleCloseModal,
+    handleSetSelectedRecipe,
+    handleSetShowUnifiedModal,
+    handleSetPreviewYield,
+    handleSetShowRecipeEditDrawer,
+    handleSetEditingRecipe,
+    handleRefreshRecipes,
+  } = useRecipeStateSetters({
+    setSelectedRecipe,
+    setShowUnifiedModal,
+    setPreviewYield,
+    setShowRecipeEditDrawer,
+    setEditingRecipe,
+    fetchRecipes,
+  });
   if (loading && recipes.length === 0) return <PageSkeleton />;
   return (
     <>
@@ -218,7 +173,7 @@ export default function RecipesClient() {
         <UnifiedBulkActionsMenu
           selectedCount={selectedRecipes.size}
           selectedRecipeCount={selectedRecipes.size}
-          bulkActionLoading={bulkActionLoading || bulkShareLoading || addToMenuLoading}
+          bulkActionLoading={bulkActionLoading}
           onBulkDelete={handleUnifiedBulkDelete}
           onBulkShare={() => handleBulkShare('pdf')}
           onBulkAddToMenu={handleBulkAddToMenu}
@@ -264,7 +219,6 @@ export default function RecipesClient() {
         aiInstructions={aiInstructions}
         generatingInstructions={generatingInstructions}
         previewYieldValue={previewYield}
-        shareLoading={shareLoading}
         showDeleteConfirm={showDeleteConfirm}
         recipeToDelete={recipeToDelete}
         showBulkDeleteConfirm={showUnifiedBulkDeleteConfirm}

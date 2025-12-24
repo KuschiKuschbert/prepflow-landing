@@ -13,4 +13,3 @@ export async function getGoogleConnection(client: ManagementClient): Promise<any
   }
   return connections.find((conn: any) => conn.strategy === 'google-oauth2') as any;
 }
-

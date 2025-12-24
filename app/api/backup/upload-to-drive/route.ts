@@ -14,18 +14,23 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import type { EncryptionMode } from '@/lib/backup/types';
 import { z } from 'zod';
 
-const uploadToDriveSchema = z.object({
-  encryptionMode: z.enum(['prepflow-only', 'user-password']).optional(),
-  password: z.string().min(8).optional(),
-}).refine(data => {
-  if (data.encryptionMode === 'user-password') {
-    return data.password !== undefined;
-  }
-  return true;
-}, {
-  message: 'password is required for user-password encryption mode',
-  path: ['password'],
-});
+const uploadToDriveSchema = z
+  .object({
+    encryptionMode: z.enum(['prepflow-only', 'user-password']).optional(),
+    password: z.string().min(8).optional(),
+  })
+  .refine(
+    data => {
+      if (data.encryptionMode === 'user-password') {
+        return data.password !== undefined;
+      }
+      return true;
+    },
+    {
+      message: 'password is required for user-password encryption mode',
+      path: ['password'],
+    },
+  );
 
 /**
  * Uploads backup file to Google Drive.
@@ -37,7 +42,9 @@ export async function POST(request: NextRequest) {
   try {
     const user = await requireAuth(request);
     if (!user?.email) {
-      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), {
+        status: 401,
+      });
     }
 
     const userId = user.email;

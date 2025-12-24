@@ -55,7 +55,9 @@ export default function QuickActions() {
           <Icon icon={Rocket} size="md" className="text-[var(--primary)]" aria-hidden={true} />
           Quick Actions
         </h2>
-        <p className={`${LANDING_TYPOGRAPHY.sm} desktop:${LANDING_TYPOGRAPHY.base} text-[var(--foreground)]/60`}>
+        <p
+          className={`${LANDING_TYPOGRAPHY.sm} desktop:${LANDING_TYPOGRAPHY.base} text-[var(--foreground)]/60`}
+        >
           Get started with your kitchen management
         </p>
       </div>
@@ -71,7 +73,7 @@ export default function QuickActions() {
             <GlowCard glowColor={action.glowColor} className="h-full">
               <Link
                 href={action.href}
-                className="group desktop:rounded-2xl desktop:p-6 min-h-[44px] rounded-xl border border-[var(--border)] bg-[var(--surface)]/30 p-3 transition-all duration-200 hover:border-[var(--primary)]/50 hover:shadow-lg hover:shadow-[var(--primary)]/10 active:scale-[0.98]"
+                className="group desktop:rounded-2xl desktop:p-6 min-h-[44px] rounded-xl border border-[var(--border)] bg-[var(--surface)]/30 p-3 transition-all duration-200 hover:border-[var(--primary)]/50 hover:shadow-[var(--primary)]/10 hover:shadow-lg active:scale-[0.98]"
               >
                 <div className="desktop:space-y-4 flex flex-col items-center space-y-2 text-center">
                   <div

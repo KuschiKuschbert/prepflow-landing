@@ -1,3 +1,5 @@
+'use client';
+
 import { DietaryBadge } from '@/components/ui/DietaryBadge';
 import { Icon } from '@/components/ui/Icon';
 import { AUSTRALIAN_ALLERGENS } from '@/lib/allergens/australian-allergens';

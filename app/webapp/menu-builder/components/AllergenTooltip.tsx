@@ -58,15 +58,15 @@ export function AllergenTooltip({
           className={`absolute z-50 w-64 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-3 shadow-lg ${positionClasses[position]}`}
           role="tooltip"
         >
-          <div className="mb-1 text-sm font-semibold text-[var(--foreground)]">{allergen.displayName}</div>
-          <div className="text-xs leading-relaxed text-[var(--foreground-secondary)]">{allergen.description}</div>
+          <div className="mb-1 text-sm font-semibold text-[var(--foreground)]">
+            {allergen.displayName}
+          </div>
+          <div className="text-xs leading-relaxed text-[var(--foreground-secondary)]">
+            {allergen.description}
+          </div>
           <div className={`absolute h-0 w-0 border-4 ${arrowClasses[position]}`} />
         </div>
       )}
     </div>
   );
 }
-
-
-
-

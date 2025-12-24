@@ -135,11 +135,13 @@ export function ConfirmDialog({
 
   const variantStyles = {
     danger: {
-      confirm: 'bg-[var(--color-error)] hover:bg-[var(--color-error)]/80 text-[var(--button-active-text)]',
+      confirm:
+        'bg-[var(--color-error)] hover:bg-[var(--color-error)]/80 text-[var(--button-active-text)]',
       icon: 'text-[var(--color-error)]',
     },
     warning: {
-      confirm: 'bg-[var(--color-warning)] hover:bg-[var(--color-warning)]/80 text-[var(--button-active-text)]',
+      confirm:
+        'bg-[var(--color-warning)] hover:bg-[var(--color-warning)]/80 text-[var(--button-active-text)]',
       icon: 'text-[var(--color-warning)]',
     },
     info: {
@@ -183,7 +185,10 @@ export function ConfirmDialog({
           </div>
 
           {/* Title */}
-          <h2 id="dialog-title" className="text-fluid-xl mb-3 text-center font-bold text-[var(--foreground)]">
+          <h2
+            id="dialog-title"
+            className="text-fluid-xl mb-3 text-center font-bold text-[var(--foreground)]"
+          >
             {title}
           </h2>
 

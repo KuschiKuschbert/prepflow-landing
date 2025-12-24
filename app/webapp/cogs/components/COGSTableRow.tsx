@@ -49,7 +49,9 @@ export function COGSTableRow({
           </span>
         )}
       </td>
-      <td className="px-6 py-4 text-sm text-[var(--foreground-secondary)]">${calc.yieldAdjustedCost.toFixed(2)}</td>
+      <td className="px-6 py-4 text-sm text-[var(--foreground-secondary)]">
+        ${calc.yieldAdjustedCost.toFixed(2)}
+      </td>
       <td className="px-6 py-4 text-sm">
         <div className="flex items-center space-x-2">
           {editingIngredient === calc.ingredientId ? (
@@ -74,7 +76,12 @@ export function COGSTableRow({
                 className="p-1 text-[var(--foreground-muted)] transition-colors duration-200 hover:text-[var(--primary)]"
                 title="Edit quantity"
               >
-                <Icon icon={Edit} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+                <Icon
+                  icon={Edit}
+                  size="sm"
+                  className="text-[var(--foreground-muted)]"
+                  aria-hidden={true}
+                />
               </button>
               <button
                 type="button"
@@ -86,7 +93,12 @@ export function COGSTableRow({
                 className="p-1 text-[var(--foreground-muted)] transition-colors duration-200 hover:text-[var(--color-error)]"
                 title="Remove ingredient"
               >
-                <Icon icon={Trash2} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+                <Icon
+                  icon={Trash2}
+                  size="sm"
+                  className="text-[var(--foreground-muted)]"
+                  aria-hidden={true}
+                />
               </button>
             </>
           )}

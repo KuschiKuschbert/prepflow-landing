@@ -29,7 +29,12 @@ export function EquipmentItemHeader({
           <p className="mb-2 text-sm font-medium text-[var(--foreground-muted)]">{typeLabel}</p>
           {location && (
             <div className="flex items-center gap-1.5 text-sm text-[var(--foreground-subtle)]">
-              <Icon icon={MapPin} size="sm" className="text-[var(--foreground-subtle)]" aria-hidden={true} />
+              <Icon
+                icon={MapPin}
+                size="sm"
+                className="text-[var(--foreground-subtle)]"
+                aria-hidden={true}
+              />
               <span>{location}</span>
             </div>
           )}

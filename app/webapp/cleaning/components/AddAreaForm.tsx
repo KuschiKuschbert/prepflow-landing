@@ -24,7 +24,10 @@ export function AddAreaForm({ newArea, onAreaChange, onSubmit, onCancel }: AddAr
         <h3 className="text-xl font-semibold text-[var(--foreground)]">
           {t('cleaning.addNewArea', 'Add New Cleaning Area')}
         </h3>
-        <button onClick={onCancel} className="p-2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]">
+        <button
+          onClick={onCancel}
+          className="p-2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
+        >
           <Icon icon={X} size="lg" aria-hidden={true} />
         </button>
       </div>

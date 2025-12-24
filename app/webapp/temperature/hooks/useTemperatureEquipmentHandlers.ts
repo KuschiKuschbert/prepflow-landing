@@ -24,7 +24,6 @@ export function useTemperatureEquipmentHandlers({
 }: UseTemperatureEquipmentHandlersProps) {
   const { showError, showSuccess } = useNotification();
   const onTemperatureLogged = useOnTemperatureLogged();
-  const [quickTempLoading, setQuickTempLoading] = useState<{ [key: string]: boolean }>({});
 
   const handleQuickTempLog = async (
     equipmentId: string,
@@ -37,7 +36,6 @@ export function useTemperatureEquipmentHandlers({
       equipmentType,
       activeTab,
       fetchAllLogs,
-      setQuickTempLoading,
       showError,
     });
 
@@ -47,7 +45,7 @@ export function useTemperatureEquipmentHandlers({
     }
   };
   const { handleUpdateEquipment, handleCreateEquipment, handleDeleteEquipment } =
-    createEquipmentHandlers(equipment, setEquipment, fetchEquipment, showError, showSuccess);
+    createEquipmentHandlers(equipment, setEquipment, showError, showSuccess);
   const handleRefreshLogs = async () => {
     await handleRefreshLogsHelper({
       fetchAllLogs,
@@ -57,7 +55,6 @@ export function useTemperatureEquipmentHandlers({
     });
   };
   return {
-    quickTempLoading,
     handleQuickTempLog,
     handleUpdateEquipment,
     handleCreateEquipment,

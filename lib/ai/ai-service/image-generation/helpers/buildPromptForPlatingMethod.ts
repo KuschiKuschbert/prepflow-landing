@@ -35,4 +35,3 @@ export function buildPromptForPlatingMethod(
       return `${basePrompt} It is beautifully plated on a white ceramic plate or elegant dish, with professional garnishing and food styling. ${qualitySuffix}`;
   }
 }
-

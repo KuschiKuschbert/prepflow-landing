@@ -1,3 +1,5 @@
+'use client';
+
 interface Step4BankDetailsProps {
   bankBSB: string;
   bankAccount: string;
@@ -30,7 +32,9 @@ export function Step4BankDetails({
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm text-[var(--foreground-muted)]">Account Number</label>
+          <label className="mb-2 block text-sm text-[var(--foreground-muted)]">
+            Account Number
+          </label>
           <input
             type="text"
             value={bankAccount ?? ''}

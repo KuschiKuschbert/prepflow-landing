@@ -253,7 +253,3 @@ export interface GeofenceValidationResult {
   isWithinRadius: boolean;
   message: string;
 }
-
-
-
-

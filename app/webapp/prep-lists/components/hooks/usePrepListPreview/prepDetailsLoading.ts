@@ -8,7 +8,6 @@ import type { SectionData, RecipePrepDetails } from '../../../types';
 interface PrepDetailsLoadingProps {
   sectionsWithPrepInstructions: SectionData[];
   setSections: React.Dispatch<React.SetStateAction<SectionData[]>>;
-  setLoadingPrepDetails: (loading: boolean) => void;
 }
 
 /**
@@ -19,7 +18,6 @@ interface PrepDetailsLoadingProps {
 export async function loadPrepDetails({
   sectionsWithPrepInstructions,
   setSections,
-  setLoadingPrepDetails,
 }: PrepDetailsLoadingProps): Promise<void> {
   const recipeIds = sectionsWithPrepInstructions
     .flatMap(section => section.recipeGrouped)
@@ -28,8 +26,12 @@ export async function loadPrepDetails({
     .filter((id): id is string => id !== undefined);
   if (recipeIds.length === 0) return;
 
+  // Store original state for rollback
+  const originalSections = [...sectionsWithPrepInstructions];
+
   try {
-    setLoadingPrepDetails(true);
+    // Optimistically update UI immediately (show loading state in UI if needed, but don't block)
+    // Note: The actual data update happens after API response
     const response = await fetch('/api/prep-lists/analyze-prep-details', {
       method: 'POST',
       headers: {
@@ -47,6 +49,7 @@ export async function loadPrepDetails({
 
     const result = await response.json();
     if (result.success && result.prepDetails) {
+      // Update state with API response
       setSections(prevSections => {
         return prevSections.map(section => {
           const updatedRecipeGrouped = section.recipeGrouped.map(recipeItem => {
@@ -78,11 +81,12 @@ export async function loadPrepDetails({
       });
     }
   } catch (err) {
+    // Rollback on error
+    setSections(originalSections);
     logger.warn(
       'Failed to load prep details:',
       err instanceof Error ? { error: err.message } : undefined,
     );
-  } finally {
-    setLoadingPrepDetails(false);
+    throw err; // Re-throw so caller can handle
   }
 }

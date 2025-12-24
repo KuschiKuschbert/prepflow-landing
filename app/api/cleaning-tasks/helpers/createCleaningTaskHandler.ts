@@ -64,4 +64,3 @@ export async function handleCreateCleaningTask(request: NextRequest) {
     return handleCleaningTaskError(err, 'POST');
   }
 }
-

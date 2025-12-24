@@ -13,7 +13,10 @@ export async function GET(req: NextRequest) {
   try {
     const authUser = await getUserFromRequest(req);
     if (!authUser) {
-      return NextResponse.json(ApiErrorHandler.createError('Not authenticated', 'UNAUTHORIZED', 401), { status: 401 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Not authenticated', 'UNAUTHORIZED', 401),
+        { status: 401 },
+      );
     }
 
     // Get database user data

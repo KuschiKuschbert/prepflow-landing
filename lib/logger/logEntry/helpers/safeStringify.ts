@@ -70,4 +70,3 @@ export function safeStringify(obj: unknown, pretty = false): string {
     return `[Error stringifying: ${err instanceof Error ? err.message : String(err)}]`;
   }
 }
-

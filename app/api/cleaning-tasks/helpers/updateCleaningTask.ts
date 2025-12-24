@@ -34,7 +34,8 @@ export async function updateCleaningTask(
     photo_url?: string | null;
   },
 ) {
-  if (!supabaseAdmin) throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
+  if (!supabaseAdmin)
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
 
   const finalUpdateData: any = { ...updateData };
   if (updateData.status === 'completed' && !updateData.completed_date) {

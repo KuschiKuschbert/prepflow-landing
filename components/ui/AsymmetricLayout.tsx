@@ -95,11 +95,7 @@ export function AsymmetricLayout({
 
   // If no sidebar, just render main content with constraints
   if (!sidebar) {
-    return (
-      <div className={`mx-auto ${mainWidthClasses[mainWidth]} ${className}`}>
-        {main}
-      </div>
-    );
+    return <div className={`mx-auto ${mainWidthClasses[mainWidth]} ${className}`}>{main}</div>;
   }
 
   return (
@@ -110,15 +106,9 @@ export function AsymmetricLayout({
       <div className={`flex-1 ${mainWidthClasses[mainWidth]}`}>{main}</div>
 
       {/* Sidebar - uses remaining space */}
-      <aside
-        className={`desktop:flex-shrink-0 flex-shrink-0 ${sidebarWidthClasses[sidebarWidth]}`}
-      >
+      <aside className={`desktop:flex-shrink-0 flex-shrink-0 ${sidebarWidthClasses[sidebarWidth]}`}>
         {sidebar}
       </aside>
     </div>
   );
 }
-
-
-
-

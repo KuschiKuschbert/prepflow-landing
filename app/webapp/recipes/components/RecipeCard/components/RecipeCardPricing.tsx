@@ -24,7 +24,10 @@ export function RecipeCardPricing({
           <span className="font-medium">Recommended Price:</span>
           <LoadingSkeleton variant="text" width="w-24" height="h-4" className="ml-1" />
         </div>
-        <div className="text-xs text-[var(--foreground-subtle)] italic" title="Click Preview to see cost breakdown">
+        <div
+          className="text-xs text-[var(--foreground-subtle)] italic"
+          title="Click Preview to see cost breakdown"
+        >
           Price calculation pending...
         </div>
       </div>
@@ -51,7 +54,9 @@ export function RecipeCardPricing({
         title={`Profit margin: ${priceData.gross_profit_margin >= 30 ? 'Excellent' : 'Good'} - Percentage of profit relative to selling price`}
       >
         <span className="font-medium">Profit Margin:</span>
-        <span className="ml-1 text-[var(--foreground)]">{priceData.gross_profit_margin.toFixed(1)}%</span>
+        <span className="ml-1 text-[var(--foreground)]">
+          {priceData.gross_profit_margin.toFixed(1)}%
+        </span>
         <span className="ml-1 text-[var(--foreground-muted)]">
           (${priceData.gross_profit.toFixed(2)} profit/portion)
         </span>

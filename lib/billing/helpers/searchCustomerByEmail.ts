@@ -31,4 +31,3 @@ export async function searchCustomerByEmail(userEmail: string): Promise<string |
 
   return null;
 }
-

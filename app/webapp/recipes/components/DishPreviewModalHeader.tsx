@@ -32,7 +32,12 @@ export function DishPreviewModalHeader({
             className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[#3B82F6] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[#3B82F6]/80"
             title="Edit dish (Press E)"
           >
-            <Icon icon={Edit} size="sm" className="text-[var(--button-active-text)]" aria-hidden={true} />
+            <Icon
+              icon={Edit}
+              size="sm"
+              className="text-[var(--button-active-text)]"
+              aria-hidden={true}
+            />
             <span className="tablet:inline hidden">Edit</span>
             <span className="tablet:inline hidden text-xs opacity-70">(E)</span>
           </button>

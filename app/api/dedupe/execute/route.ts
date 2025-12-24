@@ -15,11 +15,17 @@ import { processRecipeDeduplication } from './helpers/processRecipes';
  */
 export async function POST(req: NextRequest) {
   try {
-    if (!supabaseAdmin) return NextResponse.json(ApiErrorHandler.createError('DB unavailable', 'SERVER_ERROR', 500), { status: 500 });
+    if (!supabaseAdmin)
+      return NextResponse.json(ApiErrorHandler.createError('DB unavailable', 'SERVER_ERROR', 500), {
+        status: 500,
+      });
     if (process.env.NODE_ENV === 'production') {
       const adminKey = req.headers.get('x-admin-key');
       if (!adminKey || adminKey !== process.env.SEED_ADMIN_KEY) {
-        return NextResponse.json(ApiErrorHandler.createError('Admin key required', 'FORBIDDEN', 403), { status: 403 });
+        return NextResponse.json(
+          ApiErrorHandler.createError('Admin key required', 'FORBIDDEN', 403),
+          { status: 403 },
+        );
       }
     }
 
@@ -36,10 +42,7 @@ export async function POST(req: NextRequest) {
         code: (ingErr as any).code,
         context: { endpoint: '/api/dedupe/execute', operation: 'POST' },
       });
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(ingErr, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(ingErr, 500), { status: 500 });
     }
 
     const { data: riRows, error: riErr } = await supabaseAdmin
@@ -51,10 +54,7 @@ export async function POST(req: NextRequest) {
         code: (riErr as any).code,
         context: { endpoint: '/api/dedupe/execute', operation: 'POST' },
       });
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(riErr, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(riErr, 500), { status: 500 });
     }
     const usageByIng = buildUsageMap(riRows || [], 'ingredient_id');
     const ingMerges = await processIngredientDeduplication(ingredients || [], usageByIng, dry);
@@ -69,10 +69,7 @@ export async function POST(req: NextRequest) {
         code: (recErr as any).code,
         context: { endpoint: '/api/dedupe/execute', operation: 'POST' },
       });
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(recErr, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(recErr, 500), { status: 500 });
     }
 
     const { data: riByRecipe, error: riRecErr } = await supabaseAdmin
@@ -84,10 +81,7 @@ export async function POST(req: NextRequest) {
         code: (riRecErr as any).code,
         context: { endpoint: '/api/dedupe/execute', operation: 'POST' },
       });
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(riRecErr, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(riRecErr, 500), { status: 500 });
     }
     const usageByRecipe = buildUsageMap(riByRecipe || [], 'recipe_id');
     const recipeMerges = await processRecipeDeduplication(recipes || [], usageByRecipe, dry);
@@ -106,7 +100,12 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(
-      ApiErrorHandler.createError('Failed to execute deduplication', 'SERVER_ERROR', 500, e?.message || String(e)),
+      ApiErrorHandler.createError(
+        'Failed to execute deduplication',
+        'SERVER_ERROR',
+        500,
+        e?.message || String(e),
+      ),
       { status: 500 },
     );
   }

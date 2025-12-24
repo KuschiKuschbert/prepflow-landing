@@ -100,8 +100,6 @@ export async function POST(request: NextRequest) {
 }
 
 import { fetchAISpecialsHistory } from './helpers/fetchAISpecialsHistory';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { logger } from '@/lib/logger';
 
 /**
  * GET /api/ai-specials

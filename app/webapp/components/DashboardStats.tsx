@@ -54,7 +54,12 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
             </p>
           </div>
           <div className="tablet:h-12 tablet:w-12 tablet:rounded-2xl flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--color-info)]/20 to-[var(--color-info)]/10">
-            <Icon icon={BookOpen} size="md" className="text-[var(--color-info)]" aria-hidden={true} />
+            <Icon
+              icon={BookOpen}
+              size="md"
+              className="text-[var(--color-info)]"
+              aria-hidden={true}
+            />
           </div>
         </div>
         <div className="tablet:mt-4 mt-3">
@@ -74,7 +79,12 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
             </p>
           </div>
           <div className="tablet:h-12 tablet:w-12 tablet:rounded-2xl flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--color-warning)]/20 to-[var(--color-warning)]/10">
-            <Icon icon={DollarSign} size="md" className="text-[var(--color-warning)]" aria-hidden={true} />
+            <Icon
+              icon={DollarSign}
+              size="md"
+              className="text-[var(--color-warning)]"
+              aria-hidden={true}
+            />
           </div>
         </div>
         <div className="tablet:mt-4 mt-3">
@@ -114,7 +124,9 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
             </div>
           </div>
           <div className="tablet:mt-4 mt-3">
-            <p className="text-fluid-xs text-[var(--foreground-muted)]">Dishes available to serve</p>
+            <p className="text-fluid-xs text-[var(--foreground-muted)]">
+              Dishes available to serve
+            </p>
           </div>
         </Link>
       )}
@@ -146,11 +158,18 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
               </p>
             </div>
             <div className="tablet:h-12 tablet:w-12 tablet:rounded-2xl flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--color-info)]/20 to-[var(--color-info)]/10">
-              <Icon icon={BookOpen} size="md" className="text-[var(--color-info)]" aria-hidden={true} />
+              <Icon
+                icon={BookOpen}
+                size="md"
+                className="text-[var(--color-info)]"
+                aria-hidden={true}
+              />
             </div>
           </div>
           <div className="tablet:mt-4 mt-3">
-            <p className="text-fluid-xs text-[var(--foreground-muted)]">Complete recipes ready to cook</p>
+            <p className="text-fluid-xs text-[var(--foreground-muted)]">
+              Complete recipes ready to cook
+            </p>
           </div>
         </Link>
       )}
@@ -179,7 +198,9 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
               </div>
               <p
                 className={`text-fluid-2xl tablet:text-fluid-3xl font-bold ${
-                  stats.ingredientsLowStock > 0 ? 'text-[var(--color-warning)]' : 'text-[var(--primary)]'
+                  stats.ingredientsLowStock > 0
+                    ? 'text-[var(--color-warning)]'
+                    : 'text-[var(--primary)]'
                 }`}
               >
                 {stats.ingredientsLowStock}
@@ -195,13 +216,19 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
               <Icon
                 icon={AlertTriangle}
                 size="md"
-                className={stats.ingredientsLowStock > 0 ? 'text-[var(--color-warning)]' : 'text-[var(--primary)]'}
+                className={
+                  stats.ingredientsLowStock > 0
+                    ? 'text-[var(--color-warning)]'
+                    : 'text-[var(--primary)]'
+                }
                 aria-hidden={true}
               />
             </div>
           </div>
           <div className="tablet:mt-4 mt-3">
-            <p className="text-fluid-xs text-[var(--foreground-muted)]">Ingredients needing restock</p>
+            <p className="text-fluid-xs text-[var(--foreground-muted)]">
+              Ingredients needing restock
+            </p>
           </div>
         </Link>
       )}

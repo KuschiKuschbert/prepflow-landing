@@ -5,7 +5,7 @@ import { useTranslation } from '@/lib/useTranslation';
 import { Icon } from '@/components/ui/Icon';
 import { X, ChefHat, Loader2 } from 'lucide-react';
 import type { Menu, GeneratedPrepListData } from '../types';
-
+import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 interface GenerateFromMenuModalProps {
   onClose: () => void;
@@ -14,9 +14,9 @@ interface GenerateFromMenuModalProps {
 
 export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuModalProps) {
   const { t } = useTranslation();
+  const { showError } = useNotification();
   const [menus, setMenus] = useState<Menu[]>([]);
   const [selectedMenuId, setSelectedMenuId] = useState<string>('');
-  const [loading, setLoading] = useState(false);
   const [fetchingMenus, setFetchingMenus] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -45,18 +45,23 @@ export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuM
 
   const handleGenerate = async () => {
     if (!selectedMenuId) {
-      setError('Please select a menu');
+      showError('Please select a menu');
       return;
     }
 
-    try {
-      setLoading(true);
-      setError(null);
+    // Store original state for rollback
+    const menuIdToGenerate = selectedMenuId;
+    const originalSelectedMenuId = selectedMenuId;
 
+    // Optimistically close modal and clear selection (parent handles optimistic update)
+    setSelectedMenuId('');
+    setError(null);
+
+    try {
       const response = await fetch('/api/prep-lists/generate-from-menu', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ menuId: selectedMenuId }),
+        body: JSON.stringify({ menuId: menuIdToGenerate }),
       });
 
       const result = await response.json();
@@ -65,13 +70,20 @@ export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuM
         onGenerate(result as GeneratedPrepListData);
         onClose();
       } else {
-        setError((result as { message?: string }).message || 'Failed to generate prep list');
+        // Error - restore selection and show error
+        setSelectedMenuId(originalSelectedMenuId);
+        const errorMessage =
+          (result as { message?: string }).message || 'Failed to generate prep list';
+        setError(errorMessage);
+        showError(errorMessage);
       }
     } catch (err) {
-      setError('Failed to generate prep list');
+      // Error - restore selection and show error
+      setSelectedMenuId(originalSelectedMenuId);
       logger.error('Error generating prep list:', err);
-    } finally {
-      setLoading(false);
+      const errorMessage = 'Failed to generate prep list. Please try again.';
+      setError(errorMessage);
+      showError(errorMessage);
     }
   };
 
@@ -84,7 +96,12 @@ export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuM
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20">
-                <Icon icon={ChefHat} size="md" className="text-[var(--primary)]" aria-hidden={true} />
+                <Icon
+                  icon={ChefHat}
+                  size="md"
+                  className="text-[var(--primary)]"
+                  aria-hidden={true}
+                />
               </div>
               <h2 className="text-xl font-semibold text-[var(--button-active-text)]">
                 {t('prepLists.generateFromMenu', 'Generate Prep List from Menu')}
@@ -113,11 +130,15 @@ export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuM
               {fetchingMenus ? (
                 <div className="flex items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-8">
                   <Loader2 className="h-5 w-5 animate-spin text-[var(--primary)]" />
-                  <span className="ml-2 text-sm text-[var(--foreground-muted)]">Loading menus...</span>
+                  <span className="ml-2 text-sm text-[var(--foreground-muted)]">
+                    Loading menus...
+                  </span>
                 </div>
               ) : menus.length === 0 ? (
                 <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-8 text-center">
-                  <p className="text-sm text-[var(--foreground-muted)]">No menus found. Create a menu first.</p>
+                  <p className="text-sm text-[var(--foreground-muted)]">
+                    No menus found. Create a menu first.
+                  </p>
                 </div>
               ) : (
                 <select
@@ -163,17 +184,10 @@ export function GenerateFromMenuModal({ onClose, onGenerate }: GenerateFromMenuM
             <button
               type="button"
               onClick={handleGenerate}
-              disabled={!selectedMenuId || loading || fetchingMenus}
+              disabled={!selectedMenuId || fetchingMenus}
               className="flex-1 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {loading ? (
-                <span className="flex items-center justify-center">
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {t('prepLists.generating', 'Generating...')}
-                </span>
-              ) : (
-                t('prepLists.generate', 'Generate Prep List')
-              )}
+              {t('prepLists.generate', 'Generate Prep List')}
             </button>
           </div>
         </div>

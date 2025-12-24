@@ -29,4 +29,3 @@ export async function verifyGoogleConnection(): Promise<boolean> {
     return false;
   }
 }
-

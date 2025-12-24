@@ -120,13 +120,20 @@ export function ShiftCard({
         <span className="text-xs font-medium text-[var(--foreground)]">
           {format(startTime, 'HH:mm')} - {format(endTime, 'HH:mm')}
         </span>
-        <span className="text-[10px] text-[var(--foreground-muted)]">({durationHours.toFixed(1)}h)</span>
+        <span className="text-[10px] text-[var(--foreground-muted)]">
+          ({durationHours.toFixed(1)}h)
+        </span>
       </button>
 
       {/* Employee name */}
       {employeeName && (
         <div className="mb-1 flex items-center gap-1.5">
-          <Icon icon={User} size="xs" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+          <Icon
+            icon={User}
+            size="xs"
+            className="text-[var(--foreground-muted)]"
+            aria-hidden={true}
+          />
           <span className="text-xs text-[var(--foreground-secondary)]">{employeeName}</span>
         </div>
       )}
@@ -147,7 +154,9 @@ export function ShiftCard({
             <div
               key={index}
               className={`flex items-start gap-2 text-xs ${
-                warning.severity === 'error' ? 'text-[var(--color-error)]' : 'text-[var(--color-warning)]'
+                warning.severity === 'error'
+                  ? 'text-[var(--color-error)]'
+                  : 'text-[var(--color-warning)]'
               }`}
             >
               <Icon icon={AlertTriangle} size="xs" aria-hidden={true} />

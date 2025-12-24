@@ -173,7 +173,9 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
                     <span className="text-fluid-2xl">🍅</span>
                     <div>
                       <div className="font-semibold text-[var(--foreground)]">Tomatoes Thrown</div>
-                      <div className="text-fluid-sm text-[var(--foreground-muted)]">Frustration splats.</div>
+                      <div className="text-fluid-sm text-[var(--foreground-muted)]">
+                        Frustration splats.
+                      </div>
                     </div>
                   </div>
                   <div className="text-fluid-2xl font-bold text-[#4CAF50]">{stats.tomatoes}</div>
@@ -185,7 +187,9 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
                     <span className="text-fluid-2xl">🧾</span>
                     <div>
                       <div className="font-semibold text-[var(--foreground)]">Dockets Caught</div>
-                      <div className="text-fluid-sm text-[var(--foreground-muted)]">Orders snatched.</div>
+                      <div className="text-fluid-sm text-[var(--foreground-muted)]">
+                        Orders snatched.
+                      </div>
                     </div>
                   </div>
                   <div className="text-fluid-2xl font-bold text-[#4CAF50]">{stats.dockets}</div>
@@ -196,8 +200,12 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
                   <div className="flex items-center gap-3">
                     <span className="text-fluid-2xl">🔥</span>
                     <div>
-                      <div className="font-semibold text-[var(--foreground)]">Fires Extinguished</div>
-                      <div className="text-fluid-sm text-[var(--foreground-muted)]">Crises averted.</div>
+                      <div className="font-semibold text-[var(--foreground)]">
+                        Fires Extinguished
+                      </div>
+                      <div className="text-fluid-sm text-[var(--foreground-muted)]">
+                        Crises averted.
+                      </div>
                     </div>
                   </div>
                   <div className="text-fluid-2xl font-bold text-[#4CAF50]">{stats.fires}</div>
@@ -238,7 +246,9 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
 
                   return (
                     <div key={category} className="space-y-3">
-                      <h3 className="text-sm font-semibold text-[var(--foreground-secondary)]">{category}</h3>
+                      <h3 className="text-sm font-semibold text-[var(--foreground-secondary)]">
+                        {category}
+                      </h3>
                       <div className="space-y-2">
                         {categoryAchievements.map(achievement => (
                           <AchievementCard
@@ -273,7 +283,7 @@ export const AchievementsDropdown: React.FC<AchievementsDropdownProps> = ({ isOp
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
               onClick={onClose}
-              className="mt-6 w-full rounded-2xl bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl hover:shadow-[var(--tertiary)]/25"
+              className="mt-6 w-full rounded-2xl bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-[var(--tertiary)]/25 hover:shadow-xl"
             >
               Close
             </motion.button>

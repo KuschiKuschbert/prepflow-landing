@@ -39,4 +39,3 @@ export function saveShownMilestone(milestoneId: string): void {
 export function hasMilestoneBeenShown(milestoneId: string): boolean {
   return loadShownMilestones().has(milestoneId);
 }
-

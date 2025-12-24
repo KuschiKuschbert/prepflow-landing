@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { useTranslation } from '@/lib/useTranslation';
 import { useAutosave } from '@/hooks/useAutosave';
@@ -65,7 +67,9 @@ export function CreateEquipmentForm({
       <form onSubmit={onSubmit} className="space-y-4">
         <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Equipment Name</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+              Equipment Name
+            </label>
             <input
               type="text"
               value={newEquipment.name}
@@ -76,7 +80,9 @@ export function CreateEquipmentForm({
             />
           </div>
           <div>
-            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Equipment Type</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+              Equipment Type
+            </label>
             <select
               value={newEquipment.equipmentType}
               onChange={e => {

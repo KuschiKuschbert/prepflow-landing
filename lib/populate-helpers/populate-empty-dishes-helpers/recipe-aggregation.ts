@@ -2,10 +2,10 @@
  * Aggregate ingredients from recipes for dishes.
  */
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import type { IngredientMatch } from './types';
-
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Get ingredients from recipes for a dish
@@ -25,7 +25,16 @@ export async function getIngredientsFromRecipes(
     .select('recipe_id, quantity as recipe_quantity')
     .eq('dish_id', dishId);
 
-  if (drError || !dishRecipes || dishRecipes.length === 0) {
+  if (drError) {
+    logger.error('[Populate Helpers] Error fetching dish recipes:', {
+      error: drError.message,
+      dishId,
+      context: { operation: 'getIngredientsFromRecipes' },
+    });
+    return [];
+  }
+
+  if (!dishRecipes || dishRecipes.length === 0) {
     return [];
   }
 
@@ -42,7 +51,16 @@ export async function getIngredientsFromRecipes(
     .select('recipe_id, ingredient_id, quantity, unit')
     .in('recipe_id', recipeIds);
 
-  if (riError || !recipeIngredients || recipeIngredients.length === 0) {
+  if (riError) {
+    logger.error('[Populate Helpers] Error fetching recipe ingredients:', {
+      error: riError.message,
+      recipeIds,
+      context: { operation: 'getIngredientsFromRecipes' },
+    });
+    return [];
+  }
+
+  if (!recipeIngredients || recipeIngredients.length === 0) {
     return [];
   }
 

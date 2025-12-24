@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback } from 'react';
-import { usePersonality } from '../../../store';
-import { dispatchSuccessCelebration } from '../../../ui';
+import { usePersonality } from '@/lib/personality/store';
+import { dispatchSuccessCelebration } from '@/lib/personality/ui';
 
 interface CreateAchievementHookOptions {
   feature?: string;
@@ -27,7 +27,7 @@ export function createAchievementHook({
       if (!settings.enabled) return;
 
       if (feature) {
-        const { trackFeatureUsage } = require('../../../behavior-tracker');
+        const { trackFeatureUsage } = require('../../../../behavior-tracker');
         trackFeatureUsage(feature);
       }
 
@@ -43,4 +43,3 @@ export function createAchievementHook({
     }, [settings]);
   };
 }
-

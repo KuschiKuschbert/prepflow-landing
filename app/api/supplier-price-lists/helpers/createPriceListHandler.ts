@@ -55,6 +55,14 @@ export async function handleCreatePriceList(request: NextRequest) {
       await setCurrentPriceList(supplier_id);
     }
 
+    // document_url is required, so ensure it's not null/undefined
+    if (!document_url) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Document URL is required', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
     const data = await createPriceList({
       supplier_id,
       document_name,
@@ -83,4 +91,3 @@ export async function handleCreatePriceList(request: NextRequest) {
     return handlePriceListError(error, 'POST');
   }
 }
-

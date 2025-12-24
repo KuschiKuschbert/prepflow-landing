@@ -83,7 +83,9 @@ export function EquipmentQRCodeDisplay({
           <div className="animate-pulse rounded-xl bg-[var(--muted)] p-6 shadow-xl">
             <div className="h-40 w-40 rounded-lg bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20"></div>
           </div>
-          <p className="text-center text-xs font-medium text-[var(--foreground-muted)]">Generating QR code...</p>
+          <p className="text-center text-xs font-medium text-[var(--foreground-muted)]">
+            Generating QR code...
+          </p>
         </div>
       )}
     </div>

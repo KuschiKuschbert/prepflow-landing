@@ -73,9 +73,9 @@ export function useUnifiedItems(): UseUnifiedItemsReturn {
       setLoading(false);
     } catch (err) {
       logger.error('[useUnifiedItems.ts] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
       setError('Failed to fetch items');
       setLoading(false);

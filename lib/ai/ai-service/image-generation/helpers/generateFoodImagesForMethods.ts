@@ -1,6 +1,7 @@
 import { logger } from '@/lib/logger';
-import type { AIResponse, FoodImageResult, FoodImageGenerationOptions, PlatingMethod } from '../types';
-import { buildFoodImagePrompt } from '../image-generation';
+import type { AIResponse } from '../../../types';
+import type { FoodImageResult, FoodImageGenerationOptions, PlatingMethod } from '../types';
+import { buildFoodImagePrompt } from '../../image-generation';
 import { generateImageWithRetry } from './generateImageWithRetry';
 
 /**

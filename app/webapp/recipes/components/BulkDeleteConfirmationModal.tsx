@@ -43,8 +43,12 @@ export function BulkDeleteConfirmationModal({
                 </svg>
               </div>
               <div>
-                <h3 className="text-xl font-bold text-[var(--foreground)]">Delete Multiple Recipes</h3>
-                <p className="text-sm text-[var(--foreground-muted)]">This action can&apos;t be undone</p>
+                <h3 className="text-xl font-bold text-[var(--foreground)]">
+                  Delete Multiple Recipes
+                </h3>
+                <p className="text-sm text-[var(--foreground-muted)]">
+                  This action can&apos;t be undone
+                </p>
               </div>
             </div>
           </div>
@@ -58,7 +62,9 @@ export function BulkDeleteConfirmationModal({
               Recipe Book.
             </p>
             <div className="mb-6 max-h-32 overflow-y-auto rounded-lg bg-[var(--background)] p-4">
-              <h4 className="mb-2 text-sm font-medium text-[var(--foreground)]">Selected Recipes:</h4>
+              <h4 className="mb-2 text-sm font-medium text-[var(--foreground)]">
+                Selected Recipes:
+              </h4>
               <div className="space-y-1">
                 {Array.from(selectedRecipeIds).map(recipeId => {
                   const recipe = recipes.find(r => r.id === recipeId);

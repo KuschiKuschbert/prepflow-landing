@@ -27,4 +27,3 @@ export const mindful = {
     'Zen mode: loading... please wait.',
   ],
 };
-

@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { IngredientsList } from '../../../../cogs/components/IngredientsList';
@@ -85,7 +87,9 @@ export function IngredientEditorPanel({
     >
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-[var(--foreground)]">{capitalizeName(selectedItem!.name)}</h3>
+          <h3 className="text-lg font-semibold text-[var(--foreground)]">
+            {capitalizeName(selectedItem!.name)}
+          </h3>
           <p className="text-sm text-[var(--foreground-muted)]">
             {selectedItem!.type === 'recipe' ? 'Recipe' : 'Dish'} Ingredients & Consumables
           </p>
@@ -133,7 +137,7 @@ export function IngredientEditorPanel({
         <button
           onClick={onSave}
           disabled={saving || calculations.length === 0 || !selectedItem}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-300 hover:shadow-lg hover:shadow-[var(--primary)]/25 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-300 hover:shadow-[var(--primary)]/25 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
           aria-label={
             saving
               ? 'Saving changes...'

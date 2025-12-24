@@ -5,8 +5,16 @@ import { logAdminApiAction } from '@/lib/admin-audit';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { fetchHiddenFlags } from './helpers/fetchHiddenFlags';
-import { updateHiddenFlag, updateHiddenFlagSchema } from './helpers/updateHiddenFlag';
+import { updateHiddenFlag } from './helpers/updateHiddenFlag';
 import { deleteHiddenFlag } from './helpers/deleteHiddenFlag';
+
+const updateHiddenFlagSchema = z.object({
+  feature_key: z.string().min(1),
+  is_unlocked: z.boolean().optional(),
+  is_enabled: z.boolean().optional(),
+  description: z.string().optional().nullable(),
+});
+const deleteHiddenFlagSchema = z.object({ feature_key: z.string().min(1) });
 
 /**
  * GET /api/admin/features/hidden
@@ -114,7 +122,7 @@ export async function DELETE(request: NextRequest) {
         { status: 400 },
       );
     }
-    const { feature_key } = z.object({ feature_key: z.string().min(1) }).parse(body);
+    const { feature_key } = deleteHiddenFlagSchema.parse(body);
 
     const result = await deleteHiddenFlag(feature_key);
     if (result instanceof NextResponse) return result;

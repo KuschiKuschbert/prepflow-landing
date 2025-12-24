@@ -15,7 +15,9 @@ export function CurrentPlanCard({ subscriptionData }: CurrentPlanCardProps) {
     <div className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
       <div>
         <h2 className="text-xl font-semibold">Current Plan</h2>
-        <p className="mt-1 text-sm text-[var(--foreground-secondary)]">Your active subscription details</p>
+        <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
+          Your active subscription details
+        </p>
       </div>
 
       <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">

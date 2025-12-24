@@ -55,7 +55,6 @@ export default function SuppliersPage() {
   const [exportLoading, setExportLoading] = useState<ExportFormat | null>(null);
   const [printLoading, setPrintLoading] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
-  const [importLoading, setImportLoading] = useState(false);
   const [importProgress, setImportProgress] = useState<ImportProgressState | undefined>(undefined);
 
   const handlePrint = useCallback(() => {
@@ -116,7 +115,9 @@ export default function SuppliersPage() {
         return;
       }
 
-      setImportLoading(true);
+      // Store original state for rollback
+      const originalSuppliers = [...suppliers];
+
       setImportProgress({
         total: importRows.length,
         processed: 0,
@@ -126,6 +127,7 @@ export default function SuppliersPage() {
       });
 
       const importedSuppliers: any[] = [];
+      const tempSuppliers: Array<{ tempId: string; supplier: any }> = [];
       let successCount = 0;
       let failCount = 0;
       const errors: Array<{ row: number; error: string }> = [];
@@ -133,6 +135,31 @@ export default function SuppliersPage() {
       try {
         for (let i = 0; i < importRows.length; i++) {
           const row = importRows[i];
+          const tempId = `temp-${Date.now()}-${i}`;
+
+          // Create temporary supplier for optimistic update
+          const tempSupplier: any = {
+            id: tempId,
+            name: row.name,
+            supplier_name: row.name, // API format
+            contact_person: row.contact_person || null,
+            email: row.email || null,
+            phone: row.phone || null,
+            address: row.address || null,
+            website: row.website || null,
+            payment_terms: row.payment_terms || null,
+            delivery_schedule: row.delivery_schedule || null,
+            minimum_order_amount: row.minimum_order_amount || null,
+            is_active: row.is_active !== undefined ? row.is_active : true,
+            notes: row.notes || null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          };
+
+          // Optimistically add to UI immediately
+          setSuppliers(prevSuppliers => [...prevSuppliers, tempSupplier]);
+          tempSuppliers.push({ tempId, supplier: tempSupplier });
+
           setImportProgress({
             total: importRows.length,
             processed: i + 1,
@@ -168,9 +195,22 @@ export default function SuppliersPage() {
             const result = await response.json();
 
             if (response.ok && result.success) {
-              importedSuppliers.push(result.data);
+              // Transform API response (supplier_name -> name) to match Supplier interface
+              const serverSupplier: any = {
+                ...result.data,
+                name: result.data.supplier_name || result.data.name,
+              };
+
+              // Replace temp supplier with real supplier from server
+              setSuppliers(prevSuppliers =>
+                prevSuppliers.map(s => (s.id === tempId ? serverSupplier : s)),
+              );
+
+              importedSuppliers.push(serverSupplier);
               successCount++;
             } else {
+              // Error - remove temp supplier
+              setSuppliers(prevSuppliers => prevSuppliers.filter(s => s.id !== tempId));
               failCount++;
               errors.push({
                 row: i + 1,
@@ -178,6 +218,8 @@ export default function SuppliersPage() {
               });
             }
           } catch (err) {
+            // Error - remove temp supplier
+            setSuppliers(prevSuppliers => prevSuppliers.filter(s => s.id !== tempId));
             const errorMessage = err instanceof Error ? err.message : 'Failed to import supplier';
             logger.error(`[Suppliers Import] Failed to import row ${i + 1}:`, {
               error: errorMessage,
@@ -191,11 +233,17 @@ export default function SuppliersPage() {
           }
         }
 
-        // Update suppliers list
+        // Cache final suppliers list
         if (importedSuppliers.length > 0) {
-          const updatedSuppliers = [...suppliers, ...importedSuppliers];
-          setSuppliers(updatedSuppliers);
-          cacheData('suppliers', updatedSuppliers);
+          setSuppliers(prevSuppliers => {
+            const finalList = prevSuppliers.filter(s => !tempSuppliers.some(t => t.tempId === s.id));
+            const updatedList = [...finalList, ...importedSuppliers];
+            cacheData('suppliers', updatedList);
+            return updatedList;
+          });
+        } else {
+          // No successful imports - revert all optimistic updates
+          setSuppliers(originalSuppliers);
         }
 
         setImportProgress({
@@ -222,11 +270,11 @@ export default function SuppliersPage() {
           setImportProgress(undefined);
         }, 2000);
       } catch (err) {
+        // Error - revert all optimistic updates
+        setSuppliers(originalSuppliers);
         logger.error('[Suppliers Import] Import error:', err);
         showError('Failed to import suppliers. Give it another go, chef.');
         setImportProgress(undefined);
-      } finally {
-        setImportLoading(false);
       }
     },
     [suppliers, setSuppliers, showSuccess, showError],
@@ -336,7 +384,6 @@ export default function SuppliersPage() {
           }}
           onImport={handleImport}
           config={supplierImportConfig}
-          loading={importLoading}
           progress={importProgress}
         />
       </div>

@@ -25,5 +25,6 @@ export function useTrackFormDataChanges(
       });
       prevFormDataRef.current = formData;
     }
-  }, [formData, mountIdRef]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData, mountIdRef]); // userHasModifiedRef is a ref and doesn't need to be in deps
 }

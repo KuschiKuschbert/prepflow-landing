@@ -16,37 +16,37 @@ export async function GET(request: NextRequest) {
     let dishes: any[] = [];
     let dishesError: any = null;
 
-    const dishesResult = await supabaseAdmin
+    const { data: dishesData, error: dishesQueryError } = await supabaseAdmin
       .from('dishes')
       .select('id, dish_name, description, selling_price, category, kitchen_section_id')
       .limit(1);
 
-    if (!dishesResult.error && dishesResult.data) {
+    if (!dishesQueryError && dishesData) {
       // Table exists, fetch all dishes
-      const allDishesResult = await supabaseAdmin
+      const { data: allDishesData, error: allDishesError } = await supabaseAdmin
         .from('dishes')
         .select('id, dish_name, description, selling_price, category, kitchen_section_id');
-      if (!allDishesResult.error && allDishesResult.data) {
-        dishes = allDishesResult.data;
+      if (!allDishesError && allDishesData) {
+        dishes = allDishesData;
       }
-    } else if (dishesResult.error?.code === '42P01') {
+    } else if (dishesQueryError?.code === '42P01') {
       // Table doesn't exist (42P01 = undefined_table)
       logger.warn('dishes table does not exist, trying menu_dishes table');
       // Fallback to 'menu_dishes' table (older schema)
-      const menuDishesResult = await supabaseAdmin
+      const { data: menuDishesData, error: menuDishesError } = await supabaseAdmin
         .from('menu_dishes')
         .select('id, name, description, selling_price, category, kitchen_section_id')
         .limit(1);
 
-      if (!menuDishesResult.error && menuDishesResult.data) {
+      if (!menuDishesError && menuDishesData) {
         // Table exists, fetch all dishes
-        const allMenuDishesResult = await supabaseAdmin
+        const { data: allMenuDishesData, error: allMenuDishesError } = await supabaseAdmin
           .from('menu_dishes')
           .select('id, name, description, selling_price, category, kitchen_section_id');
-        if (!allMenuDishesResult.error && allMenuDishesResult.data) {
-          dishes = allMenuDishesResult.data;
+        if (!allMenuDishesError && allMenuDishesData) {
+          dishes = allMenuDishesData;
         }
-      } else if (menuDishesResult.error?.code === '42P01') {
+      } else if (menuDishesError?.code === '42P01') {
         // Neither table exists
         logger.warn('Neither dishes nor menu_dishes table exists');
         return NextResponse.json({
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
           message: 'No dishes tables found. Tables may need to be created.',
         });
       } else {
-        dishesError = menuDishesResult.error;
+        dishesError = menuDishesError;
         logger.error('Error fetching from menu_dishes:', dishesError);
         return NextResponse.json({
           success: true,
@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
         });
       }
     } else {
-      dishesError = dishesResult.error;
+      dishesError = dishesQueryError; // Use the error from the query above
       logger.error('Error fetching dishes:', dishesError);
       return NextResponse.json({
         success: true,

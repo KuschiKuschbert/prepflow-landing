@@ -1,3 +1,5 @@
+'use client';
+
 import { useTranslation } from '../../../../lib/useTranslation';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { TextContainer } from '@/components/ui/TextContainer';
@@ -35,7 +37,7 @@ export function GlobalFeaturesSection() {
                 </p>
               </TextContainer>
             </ScrollReveal>
-            <div className="mt-8 grid gap-6 tablet:gap-8 desktop:gap-10 large-desktop:gap-12 xl:gap-14 [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
+            <div className="tablet:gap-8 desktop:gap-10 large-desktop:gap-12 tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] mt-8 grid [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] gap-6 xl:gap-14">
               <ScrollReveal variant="fade-up" delay={getStaggerDelay(0, 0.2)}>
                 <div className="rounded-2xl bg-[#1f1f1f]/50 p-6">
                   <h3

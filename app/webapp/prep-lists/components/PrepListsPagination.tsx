@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Pagination component for prep lists page.
  */

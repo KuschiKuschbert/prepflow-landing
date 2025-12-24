@@ -5,7 +5,9 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { z } from 'zod';
 
 const bulkDeleteDishesSchema = z.object({
-  dishIds: z.array(z.string()).min(1, 'dishIds array is required and must contain at least one dish ID'),
+  dishIds: z
+    .array(z.string())
+    .min(1, 'dishIds array is required and must contain at least one dish ID'),
 });
 
 export async function POST(request: NextRequest) {
@@ -38,7 +40,10 @@ export async function POST(request: NextRequest) {
     const { dishIds } = validationResult.data;
 
     if (!supabaseAdmin) {
-      return NextResponse.json(ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     // Check if any dishes are used in menu_items before attempting deletion

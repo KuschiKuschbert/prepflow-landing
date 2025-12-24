@@ -19,14 +19,16 @@ const VARIANT_STYLES = {
     borderClass: 'border-[var(--color-error)]/50',
     backgroundClass: 'bg-[var(--color-error)]/10',
     textClass: 'text-[var(--color-error)]',
-    buttonClass: 'border-[var(--color-error)]/50 bg-[var(--color-error)]/20 text-[var(--color-error)] hover:bg-[var(--color-error)]/30',
+    buttonClass:
+      'border-[var(--color-error)]/50 bg-[var(--color-error)]/20 text-[var(--color-error)] hover:bg-[var(--color-error)]/30',
   },
   warning: {
     icon: TriangleAlert,
     borderClass: 'border-[var(--color-warning)]/50',
     backgroundClass: 'bg-[var(--color-warning)]/10',
     textClass: 'text-[var(--color-warning)]',
-    buttonClass: 'border-[var(--color-warning)]/50 bg-[var(--color-warning)]/20 text-[var(--color-warning)] hover:bg-[var(--color-warning)]/30',
+    buttonClass:
+      'border-[var(--color-warning)]/50 bg-[var(--color-warning)]/20 text-[var(--color-warning)] hover:bg-[var(--color-warning)]/30',
   },
 } as const;
 

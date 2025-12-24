@@ -61,7 +61,6 @@ export function exportRecipesToCSV(recipes: Recipe[]): void {
   exportToCSV(csvData, CSV_HEADERS, filename);
 }
 
-
 /**
  * Export recipes to HTML
  *

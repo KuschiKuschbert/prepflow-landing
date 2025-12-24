@@ -15,5 +15,3 @@ export function handleTiersFeaturesError(error: unknown): NextResponse {
     { status: 500 },
   );
 }
-
-

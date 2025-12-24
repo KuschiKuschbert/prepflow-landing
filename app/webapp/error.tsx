@@ -31,7 +31,7 @@ export default function WebAppError({ error, reset }: ErrorProps) {
           </p>
           <button
             onClick={reset}
-            className="rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg hover:shadow-[var(--primary)]/20"
+            className="rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-[var(--primary)]/20 hover:shadow-lg"
           >
             Try again
           </button>

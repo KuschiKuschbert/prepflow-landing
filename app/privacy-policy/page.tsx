@@ -49,8 +49,8 @@ export default function PrivacyPolicy() {
               </p>
               <p className="mt-4 leading-relaxed text-gray-300">
                 By using PrepFlow, you agree to the collection and use of information in accordance
-                with this policy. If you do not agree with our policies and practices, please do not
-                use our service.
+                with this policy. If you don&apos;t agree with our policies and practices, please
+                don&apos;t use our service.
               </p>
             </section>
 
@@ -108,8 +108,8 @@ export default function PrivacyPolicy() {
                 4. Information Sharing and Disclosure
               </h2>
               <p className="mb-4 leading-relaxed text-gray-300">
-                We do not sell, trade, or rent your personal information to third parties. We may
-                share your information only in the following circumstances:
+                We don&apos;t sell, trade, or rent your personal information to third parties. We
+                may share your information only in the following circumstances:
               </p>
               <ul className="ml-4 list-inside list-disc space-y-2 text-gray-300">
                 <li>
@@ -239,9 +239,9 @@ export default function PrivacyPolicy() {
                 10. Children&apos;s Privacy
               </h2>
               <p className="leading-relaxed text-gray-300">
-                PrepFlow is not intended for use by individuals under the age of 18. We do not
-                knowingly collect personal information from children. If you believe we have
-                collected information from a child, please contact us immediately.
+                PrepFlow isn&apos;t intended for use by individuals under the age of 18. We
+                don&apos;t knowingly collect personal information from children. If you believe we
+                have collected information from a child, please contact us immediately.
               </p>
             </section>
 

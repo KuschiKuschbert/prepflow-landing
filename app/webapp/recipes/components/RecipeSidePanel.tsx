@@ -201,7 +201,12 @@ export function RecipeSidePanel({
             {/* Ingredients Summary */}
             <div>
               <div className="mb-3 flex items-center gap-2">
-                <Icon icon={ChefHat} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+                <Icon
+                  icon={ChefHat}
+                  size="sm"
+                  className="text-[var(--primary)]"
+                  aria-hidden={true}
+                />
                 <h3 className="text-sm font-semibold text-[var(--foreground)]">
                   Ingredients ({recipeIngredients.length})
                 </h3>
@@ -220,7 +225,9 @@ export function RecipeSidePanel({
             {/* Instructions Preview */}
             {recipe.instructions && (
               <div>
-                <h3 className="mb-3 text-sm font-semibold text-[var(--foreground)]">Instructions</h3>
+                <h3 className="mb-3 text-sm font-semibold text-[var(--foreground)]">
+                  Instructions
+                </h3>
                 <div className="rounded-lg bg-[var(--background)] p-4">
                   <p className="line-clamp-4 text-sm whitespace-pre-wrap text-[var(--foreground-secondary)]">
                     {recipe.instructions}

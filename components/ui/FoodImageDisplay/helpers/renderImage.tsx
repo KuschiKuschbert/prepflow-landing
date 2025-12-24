@@ -14,7 +14,9 @@ export function renderImageComponent(
 ) {
   if (!currentImageUrl) return null;
   if (currentImageUrl.startsWith('data:')) {
+    // Next.js Image component doesn't support data URLs (base64), so we use native img tag
     return (
+      // eslint-disable-next-line @next/next/no-img-element
       <img
         src={currentImageUrl}
         alt={alt}

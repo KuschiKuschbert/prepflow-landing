@@ -29,16 +29,10 @@ const solidBackgroundPatterns = [
 ];
 
 // Text patterns to replace (raw patterns, will be escaped in regex)
-const textPatterns = [
-  'text-[var(--primary-text)]',
-  'text-[var(--foreground)]',
-];
+const textPatterns = ['text-[var(--primary-text)]', 'text-[var(--foreground)]'];
 
 // Files to process
-const filePatterns = [
-  'app/webapp/**/*.{tsx,ts}',
-  'components/**/*.{tsx,ts}',
-];
+const filePatterns = ['app/webapp/**/*.{tsx,ts}', 'components/**/*.{tsx,ts}'];
 
 // Files to skip
 const skipPatterns = [
@@ -116,7 +110,12 @@ function processFile(filePath) {
       const escapedBgPattern = bgPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       const escapedTextPattern = textPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       // Build regex pattern using string concatenation to avoid template literal issues
-      const regexPattern = '(className=["\'`][^"\'`]*' + escapedBgPattern + '[^"\'`]*' + escapedTextPattern + '[^"\'`]*["\'`])';
+      const regexPattern =
+        '(className=["\'`][^"\'`]*' +
+        escapedBgPattern +
+        '[^"\'`]*' +
+        escapedTextPattern +
+        '[^"\'`]*["\'`])';
       const regex = new RegExp(regexPattern, 'g');
 
       const matches = content.matchAll(regex);
@@ -129,7 +128,7 @@ function processFile(filePath) {
 
         const updated = original.replace(
           new RegExp(textPattern, 'g'),
-          'text-[var(--button-active-text)]'
+          'text-[var(--button-active-text)]',
         );
 
         if (original !== updated) {
@@ -152,7 +151,8 @@ function processFile(filePath) {
       const escapedBgPattern = bgPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       const escapedTextPattern = textPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       // Build regex pattern using string concatenation
-      const regexPattern = '(className=\\{`[^`]*' + escapedBgPattern + '[^`]*' + escapedTextPattern + '[^`]*`\\})';
+      const regexPattern =
+        '(className=\\{`[^`]*' + escapedBgPattern + '[^`]*' + escapedTextPattern + '[^`]*`\\})';
       const regex = new RegExp(regexPattern, 'g');
 
       const matches = content.matchAll(regex);
@@ -166,7 +166,10 @@ function processFile(filePath) {
         const escapedTextPattern = textPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         // Use simple string replace - escape special regex chars in the pattern
         const escapedPattern = textPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const updated = original.replace(new RegExp(escapedPattern, 'g'), 'text-[var(--button-active-text)]');
+        const updated = original.replace(
+          new RegExp(escapedPattern, 'g'),
+          'text-[var(--button-active-text)]',
+        );
 
         if (original !== updated) {
           newContent = newContent.replace(original, updated);
@@ -196,7 +199,8 @@ function processFile(filePath) {
         /file:/.test(lines.slice(Math.max(0, index - 2), index + 2).join('\n')); // File input buttons
 
       // Skip outline buttons (have border but no solid background in this line)
-      const isOutlineButton = /border.*border-\[var\(--border\)\]/.test(line) &&
+      const isOutlineButton =
+        /border.*border-\[var\(--border\)\]/.test(line) &&
         !solidBackgroundPatterns.some(pattern => new RegExp(pattern).test(line));
 
       if (isButtonContext && !isOutlineButton) {
@@ -205,7 +209,10 @@ function processFile(filePath) {
           if (updatedLine.includes(textPattern)) {
             // Escape special regex chars for replacement
             const escapedPattern = textPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            updatedLine = updatedLine.replace(new RegExp(escapedPattern, 'g'), 'text-[var(--button-active-text)]');
+            updatedLine = updatedLine.replace(
+              new RegExp(escapedPattern, 'g'),
+              'text-[var(--button-active-text)]',
+            );
           }
         }
 
@@ -217,7 +224,8 @@ function processFile(filePath) {
           changes.push({
             line: index + 1,
             original: line.trim().substring(0, 100) + (line.trim().length > 100 ? '...' : ''),
-            updated: updatedLine.trim().substring(0, 100) + (updatedLine.trim().length > 100 ? '...' : ''),
+            updated:
+              updatedLine.trim().substring(0, 100) + (updatedLine.trim().length > 100 ? '...' : ''),
           });
         }
       }

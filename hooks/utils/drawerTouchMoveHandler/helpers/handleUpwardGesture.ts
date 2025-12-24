@@ -49,4 +49,3 @@ export function handleUpwardGesture({
   }
   return false;
 }
-

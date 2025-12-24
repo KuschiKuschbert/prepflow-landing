@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Tab navigation component for compliance page.
  */
@@ -36,9 +38,9 @@ export function ComplianceTabs({ activeTab, onTabChange }: ComplianceTabsProps) 
             <button
               key={tab}
               onClick={() => onTabChange(tab)}
-              className={`rounded-xl px-6 py-3 flex items-center gap-2 font-semibold transition-all duration-200 ${
+              className={`flex items-center gap-2 rounded-xl px-6 py-3 font-semibold transition-all duration-200 ${
                 activeTab === tab
-                  ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl border border-[var(--primary)]/30'
+                  ? 'border border-[var(--primary)]/30 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl'
                   : 'text-[var(--foreground-secondary)] hover:text-[var(--button-active-text)]'
               }`}
             >

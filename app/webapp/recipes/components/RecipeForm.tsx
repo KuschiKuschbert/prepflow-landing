@@ -50,7 +50,9 @@ export default function RecipeForm({
       </div>
       <form onSubmit={onSubmit} className="space-y-4">
         <div>
-          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">Recipe Name *</label>
+          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Recipe Name *
+          </label>
           <input
             type="text"
             required
@@ -74,7 +76,9 @@ export default function RecipeForm({
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">Yield Portions</label>
+          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Yield Portions
+          </label>
           <input
             type="number"
             min="1"
@@ -84,7 +88,9 @@ export default function RecipeForm({
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">Instructions</label>
+          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Instructions
+          </label>
           <textarea
             value={newRecipe.instructions || ''}
             onChange={e => onUpdateRecipe({ instructions: e.target.value })}

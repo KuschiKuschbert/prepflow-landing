@@ -16,47 +16,50 @@ export function SyncSection() {
   const [syncing, setSyncing] = useState<Set<SyncOperation>>(new Set());
   const [lastResults, setLastResults] = useState<Record<string, any>>({});
 
-  const handleSync = useCallback(async (operation: SyncOperation, direction?: SyncDirection) => {
-    try {
-      setSyncing(prev => new Set(prev).add(operation));
+  const handleSync = useCallback(
+    async (operation: SyncOperation, direction?: SyncDirection) => {
+      try {
+        setSyncing(prev => new Set(prev).add(operation));
 
-      const response = await fetch('/api/square/sync', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        const response = await fetch('/api/square/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            operation,
+            direction: direction || (operation === 'orders' ? 'from_square' : 'bidirectional'),
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Sync failed');
+        }
+
+        setLastResults(prev => ({
+          ...prev,
+          [operation]: data,
+        }));
+
+        showSuccess(`${operation} sync completed: ${data.message}`);
+        // Refresh status to update recent syncs
+        refreshStatus();
+      } catch (error) {
+        logger.error('[Square Sync] Error:', {
+          error: error instanceof Error ? error.message : String(error),
           operation,
-          direction: direction || (operation === 'orders' ? 'from_square' : 'bidirectional'),
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Sync failed');
+        });
+        showError(`Failed to sync ${operation}`);
+      } finally {
+        setSyncing(prev => {
+          const next = new Set(prev);
+          next.delete(operation);
+          return next;
+        });
       }
-
-      setLastResults(prev => ({
-        ...prev,
-        [operation]: data,
-      }));
-
-      showSuccess(`${operation} sync completed: ${data.message}`);
-      // Refresh status to update recent syncs
-      refreshStatus();
-    } catch (error) {
-      logger.error('[Square Sync] Error:', {
-        error: error instanceof Error ? error.message : String(error),
-        operation,
-      });
-      showError(`Failed to sync ${operation}`);
-    } finally {
-      setSyncing(prev => {
-        const next = new Set(prev);
-        next.delete(operation);
-        return next;
-      });
-    }
-  }, [showSuccess, showError, refreshStatus]);
+    },
+    [showSuccess, showError, refreshStatus],
+  );
 
   const SyncButton = ({
     operation,
@@ -115,7 +118,11 @@ export function SyncSection() {
 
       <div className="space-y-4">
         <SyncButton operation="initial_sync" label="Initial Sync (All Data)" />
-        <SyncButton operation="catalog" direction="bidirectional" label="Sync Catalog (Menu Items)" />
+        <SyncButton
+          operation="catalog"
+          direction="bidirectional"
+          label="Sync Catalog (Menu Items)"
+        />
         <SyncButton operation="orders" direction="from_square" label="Sync Orders (Sales Data)" />
         <SyncButton operation="staff" direction="bidirectional" label="Sync Staff (Employees)" />
         <SyncButton operation="costs" direction="to_square" label="Sync Food Costs" />

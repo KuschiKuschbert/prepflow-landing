@@ -19,7 +19,6 @@ export async function saveSquareConfig({
   fetchConfig,
 }: SaveConfigParams) {
   try {
-    setSaving(true);
     const response = await fetch('/api/square/config', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -32,16 +31,13 @@ export async function saveSquareConfig({
       const { clearCache } = await import('@/lib/cache/data-cache');
       clearCache('square_status');
     }
-    await fetchConfig();
+    // Refresh config in background (non-blocking)
+    fetchConfig().catch(err => logger.error('Failed to refresh config:', err));
     setShowConnectionWorkflow(false);
   } catch (error) {
     logger.error('[Square Config] Error saving config:', {
       error: error instanceof Error ? error.message : String(error),
     });
     showError('Failed to save configuration');
-  } finally {
-    setSaving(false);
   }
 }
-
-

@@ -22,7 +22,9 @@ export function TrendCard({ direction, percentageChange }: TrendCardProps) {
         ) : (
           <Icon icon={Minus} size="sm" className="text-[var(--foreground-muted)]" />
         )}
-        <h3 className="text-sm font-semibold text-[var(--foreground)]">{t('temperature.trend', 'Trend')}</h3>
+        <h3 className="text-sm font-semibold text-[var(--foreground)]">
+          {t('temperature.trend', 'Trend')}
+        </h3>
       </div>
       <div className="space-y-2">
         <div className="flex items-baseline gap-2">
@@ -36,7 +38,9 @@ export function TrendCard({ direction, percentageChange }: TrendCardProps) {
           ) : direction === 'declining' ? (
             <>
               <Icon icon={ArrowUp} size="xs" className="text-[var(--color-error)]" />
-              <span className="text-xl font-bold text-[var(--color-error)]">{Math.abs(percentageChange)}%</span>
+              <span className="text-xl font-bold text-[var(--color-error)]">
+                {Math.abs(percentageChange)}%
+              </span>
             </>
           ) : (
             <span className="text-xl font-bold text-[var(--foreground-muted)]">
@@ -51,12 +55,10 @@ export function TrendCard({ direction, percentageChange }: TrendCardProps) {
               ? t('temperature.declining', 'Declining')
               : ''}
         </p>
-        <p className="text-xs text-[var(--foreground-subtle)]">{t('temperature.last7Days', 'vs prev 7d')}</p>
+        <p className="text-xs text-[var(--foreground-subtle)]">
+          {t('temperature.last7Days', 'vs prev 7d')}
+        </p>
       </div>
     </div>
   );
 }
-
-
-
-

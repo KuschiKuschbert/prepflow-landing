@@ -24,4 +24,3 @@ export function verifyConnectionEnabled(
 
   return isEnabled;
 }
-

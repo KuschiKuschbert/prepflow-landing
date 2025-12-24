@@ -30,10 +30,11 @@ export function QuantityInputModal({
       setQuantity(defaultQuantity.toString());
       setError(null);
       // Focus input when modal opens
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         inputRef.current?.focus();
         inputRef.current?.select();
       }, 100);
+      return () => clearTimeout(timeoutId);
     }
   }, [isOpen, defaultQuantity]);
 
@@ -96,13 +97,18 @@ export function QuantityInputModal({
           </h2>
 
           {/* Ingredient Name */}
-          <p id="dialog-description" className="mb-4 text-center text-sm text-[var(--foreground-secondary)]">
+          <p
+            id="dialog-description"
+            className="mb-4 text-center text-sm text-[var(--foreground-secondary)]"
+          >
             {ingredientName}
           </p>
 
           {/* Quantity Input */}
           <div className="mb-4">
-            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Quantity</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+              Quantity
+            </label>
             <div className="flex items-center gap-3">
               <input
                 ref={inputRef}

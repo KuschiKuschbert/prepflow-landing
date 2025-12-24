@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { FileText } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';

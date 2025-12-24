@@ -1,3 +1,5 @@
+'use client';
+
 import OptimizedImage from '../../../../components/OptimizedImage';
 import { useTranslation } from '../../../../lib/useTranslation';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
@@ -28,7 +30,7 @@ export function MyStorySection() {
             </p>
           </TextContainer>
         </ScrollReveal>
-        <div className="desktop:grid-cols-2 grid gap-12 tablet:gap-10 desktop:gap-12 large-desktop:gap-14 xl:gap-16">
+        <div className="desktop:grid-cols-2 tablet:gap-10 desktop:gap-12 large-desktop:gap-14 grid gap-12 xl:gap-16">
           <TextContainer variant="prose" className="space-y-6">
             <ScrollReveal variant="fade-up" delay={0.1}>
               <div className="rounded-2xl bg-[#1f1f1f]/50 p-6">

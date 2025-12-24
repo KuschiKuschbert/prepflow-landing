@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Export dropdown component
  */
@@ -75,7 +77,3 @@ export function ExportDropdown({ exportLoading, onExport }: ExportDropdownProps)
     </div>
   );
 }
-
-
-
-

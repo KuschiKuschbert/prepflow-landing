@@ -36,13 +36,17 @@ export default function BulkActionsBar({
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <div className="mr-3 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-error)] to-[#dc2626]">
-            <span className="text-sm font-bold text-[var(--button-active-text)]">{selectedCount}</span>
+            <span className="text-sm font-bold text-[var(--button-active-text)]">
+              {selectedCount}
+            </span>
           </div>
           <div>
             <h3 className="font-semibold text-[var(--foreground)]">
               {selectedCount} recipe{selectedCount > 1 ? 's' : ''} selected
             </h3>
-            <p className="text-sm text-[var(--foreground-muted)]">Choose an action for the selected recipes</p>
+            <p className="text-sm text-[var(--foreground-muted)]">
+              Choose an action for the selected recipes
+            </p>
           </div>
         </div>
         <div className="flex gap-2">
@@ -50,7 +54,12 @@ export default function BulkActionsBar({
             onClick={onBulkDelete}
             className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[var(--color-error)] to-[#dc2626] px-4 py-2 font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--color-error)]/80 hover:to-[#dc2626]/80 hover:shadow-xl"
           >
-            <Icon icon={Trash2} size="sm" className="text-[var(--button-active-text)]" aria-hidden={true} />
+            <Icon
+              icon={Trash2}
+              size="sm"
+              className="text-[var(--button-active-text)]"
+              aria-hidden={true}
+            />
             Delete Selected
           </button>
           <button
@@ -58,7 +67,12 @@ export default function BulkActionsBar({
             className="flex items-center gap-2 rounded-lg bg-[var(--muted)] px-4 py-2 font-medium text-[var(--foreground-secondary)] transition-all duration-200 hover:bg-[var(--surface-variant)]"
             title="Press Esc to clear selection"
           >
-            <Icon icon={X} size="sm" className="text-[var(--foreground-secondary)]" aria-hidden={true} />
+            <Icon
+              icon={X}
+              size="sm"
+              className="text-[var(--foreground-secondary)]"
+              aria-hidden={true}
+            />
             Clear Selection
           </button>
         </div>

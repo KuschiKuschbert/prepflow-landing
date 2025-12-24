@@ -38,5 +38,3 @@ export async function deleteSquareConfig({
     setSaving(false);
   }
 }
-
-

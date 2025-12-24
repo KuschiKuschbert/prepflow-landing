@@ -146,8 +146,12 @@ export function FoodImageGenerator({
                     className="animate-spin text-[var(--primary)]"
                     aria-hidden={true}
                   />
-                  <p className="text-sm font-medium text-[var(--foreground)]">Generating images...</p>
-                  <p className="text-xs text-[var(--foreground-muted)]">This may take up to 10 seconds</p>
+                  <p className="text-sm font-medium text-[var(--foreground)]">
+                    Generating images...
+                  </p>
+                  <p className="text-xs text-[var(--foreground-muted)]">
+                    This may take up to 10 seconds
+                  </p>
                 </div>
               </div>
             </div>
@@ -173,7 +177,7 @@ export function FoodImageGenerator({
             ref={generateButtonRef}
             onClick={handleGenerateClick}
             disabled={isGenerating}
-            className="w-full rounded-2xl bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl hover:shadow-[var(--tertiary)]/25 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-2xl bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-[var(--tertiary)]/25 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
             aria-label={`Generate images for ${entityName}`}
           >
             <div className="flex items-center justify-center gap-2">

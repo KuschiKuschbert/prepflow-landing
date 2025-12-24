@@ -82,7 +82,10 @@ function findMissingErrorHandling(content, filePath) {
         file: filePath,
         queryStartLine: i + 1,
         queryEndLine: queryEndLine + 1,
-        queryPreview: lines.slice(i, Math.min(i + 3, lines.length)).join(' ').substring(0, 100),
+        queryPreview: lines
+          .slice(i, Math.min(i + 3, lines.length))
+          .join(' ')
+          .substring(0, 100),
       });
     }
   }
@@ -126,9 +129,13 @@ function main() {
     });
 
     console.log(`\n\nFiles needing fixes (${Object.keys(byFile).length} files):\n`);
-    Object.keys(byFile).slice(0, 20).forEach((file, i) => {
-      console.log(`${i + 1}. ${file} (${byFile[file].length} violation${byFile[file].length > 1 ? 's' : ''})`);
-    });
+    Object.keys(byFile)
+      .slice(0, 20)
+      .forEach((file, i) => {
+        console.log(
+          `${i + 1}. ${file} (${byFile[file].length} violation${byFile[file].length > 1 ? 's' : ''})`,
+        );
+      });
   } else {
     console.log('No violations found!');
   }
@@ -139,7 +146,3 @@ if (require.main === module) {
 }
 
 module.exports = { findMissingErrorHandling };
-
-
-
-

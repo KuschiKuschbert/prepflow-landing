@@ -91,7 +91,9 @@ export default function CategorySelectorModal({
         <div className="rounded-xl bg-[var(--surface)]/95" style={{ maxHeight: `320px` }}>
           {/* Header */}
           <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">
-            <p className="text-sm font-medium text-[var(--foreground-secondary)]">Add to category</p>
+            <p className="text-sm font-medium text-[var(--foreground-secondary)]">
+              Add to category
+            </p>
             <button
               onClick={onClose}
               className="rounded-lg p-1 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"

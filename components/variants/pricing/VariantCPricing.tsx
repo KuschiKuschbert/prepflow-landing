@@ -24,7 +24,12 @@ export function VariantCPricing({ t, handleEngagement }: PricingProps) {
             <div className="mt-8 space-y-6">
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--primary)]/20">
-                  <Icon icon={BarChart3} size="lg" className="text-[var(--primary)]" aria-hidden={true} />
+                  <Icon
+                    icon={BarChart3}
+                    size="lg"
+                    className="text-[var(--primary)]"
+                    aria-hidden={true}
+                  />
                 </div>
                 <div>
                   <h4 className="font-semibold text-[var(--foreground)]">Complete Dashboard</h4>
@@ -36,7 +41,12 @@ export function VariantCPricing({ t, handleEngagement }: PricingProps) {
 
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--primary)]/20">
-                  <Icon icon={Calculator} size="lg" className="text-[var(--primary)]" aria-hidden={true} />
+                  <Icon
+                    icon={Calculator}
+                    size="lg"
+                    className="text-[var(--primary)]"
+                    aria-hidden={true}
+                  />
                 </div>
                 <div>
                   <h4 className="font-semibold text-[var(--foreground)]">Recipe Builder</h4>
@@ -48,7 +58,12 @@ export function VariantCPricing({ t, handleEngagement }: PricingProps) {
 
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--primary)]/20">
-                  <Icon icon={Globe} size="lg" className="text-[var(--primary)]" aria-hidden={true} />
+                  <Icon
+                    icon={Globe}
+                    size="lg"
+                    className="text-[var(--primary)]"
+                    aria-hidden={true}
+                  />
                 </div>
                 <div>
                   <h4 className="font-semibold text-[var(--foreground)]">GST Ready</h4>
@@ -76,20 +91,24 @@ export function VariantCPricing({ t, handleEngagement }: PricingProps) {
             <p className="text-fluid-4xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] bg-clip-text font-extrabold tracking-tight text-transparent">
               AUD $29
             </p>
-            <p className="text-fluid-sm mb-6 text-[var(--foreground-subtle)]">One-time purchase · Lifetime access</p>
+            <p className="text-fluid-sm mb-6 text-[var(--foreground-subtle)]">
+              One-time purchase · Lifetime access
+            </p>
 
             <a
               href="https://7495573591101.gumroad.com/l/prepflow"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-fluid-base inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-8 py-4 font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-[var(--primary)]/25"
+              className="text-fluid-base inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-8 py-4 font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-300 hover:shadow-[var(--primary)]/25 hover:shadow-xl"
             >
               Get Complete Access
             </a>
 
             <div className="mt-6 text-center">
               <p className="text-fluid-sm text-[var(--foreground-subtle)]">7-day refund policy</p>
-              <p className="text-fluid-xs mt-2 text-[var(--foreground-muted)]">Secure checkout via Gumroad</p>
+              <p className="text-fluid-xs mt-2 text-[var(--foreground-muted)]">
+                Secure checkout via Gumroad
+              </p>
             </div>
           </div>
         </div>

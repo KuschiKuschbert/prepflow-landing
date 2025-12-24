@@ -15,4 +15,3 @@ export interface FoodImageResult {
   imageData?: string; // Base64 image data if returned directly
   mimeType?: string; // Image MIME type (image/jpeg, image/png)
 }
-

@@ -17,7 +17,11 @@
 
 import { logger } from '@/lib/logger';
 import { isAIEnabled as checkAIEnabled } from './huggingface-client/helpers/getClient';
-import { getHuggingFaceImageModel, getHuggingFaceTextModel, getHuggingFaceVisionModel } from './huggingface-client/helpers/getModels';
+import {
+  getHuggingFaceImageModel,
+  getHuggingFaceTextModel,
+  getHuggingFaceVisionModel,
+} from './huggingface-client/helpers/getModels';
 import { generateImageWithHuggingFace as generateImage } from './huggingface-client/helpers/generateImage';
 import { generateTextWithHuggingFace as generateText } from './huggingface-client/helpers/generateText';
 

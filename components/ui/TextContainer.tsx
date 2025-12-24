@@ -30,22 +30,12 @@ interface TextContainerProps {
  * </TextContainer>
  * ```
  */
-export function TextContainer({
-  children,
-  className = '',
-  variant = 'prose',
-}: TextContainerProps) {
+export function TextContainer({ children, className = '', variant = 'prose' }: TextContainerProps) {
   const widthClasses = {
     prose: 'max-w-prose', // ~65ch, optimal reading width
     wide: 'max-w-3xl', // ~48rem, slightly wider
     full: '', // No constraint
   };
 
-  return (
-    <div className={`mx-auto ${widthClasses[variant]} ${className}`}>{children}</div>
-  );
+  return <div className={`mx-auto ${widthClasses[variant]} ${className}`}>{children}</div>;
 }
-
-
-
-

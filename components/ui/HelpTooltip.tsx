@@ -110,8 +110,12 @@ export function HelpTooltip({
           className={`absolute z-50 w-64 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-xl ${positionClasses[position]}`}
           role="tooltip"
         >
-          {title && <h4 className="text-fluid-sm mb-2 font-semibold text-[var(--foreground)]">{title}</h4>}
-          <p className="text-fluid-sm leading-relaxed text-[var(--foreground-secondary)]">{content}</p>
+          {title && (
+            <h4 className="text-fluid-sm mb-2 font-semibold text-[var(--foreground)]">{title}</h4>
+          )}
+          <p className="text-fluid-sm leading-relaxed text-[var(--foreground-secondary)]">
+            {content}
+          </p>
           <div className={`absolute h-0 w-0 border-4 ${arrowClasses[position]}`} />
         </div>
       )}

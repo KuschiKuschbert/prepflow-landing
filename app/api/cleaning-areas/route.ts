@@ -2,6 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { createCleaningArea } from './helpers/createCleaningArea';
 import { handleCleaningAreaError } from './helpers/handleCleaningAreaError';
 import { updateCleaningArea } from './helpers/updateCleaningArea';

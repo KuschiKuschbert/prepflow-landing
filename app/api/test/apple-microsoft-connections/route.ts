@@ -4,6 +4,7 @@
  *
  * @returns {Promise<NextResponse>} JSON response with connection status
  */
+import { z } from 'zod';
 import { NextResponse } from 'next/server';
 import {
   verifyAppleConnection,

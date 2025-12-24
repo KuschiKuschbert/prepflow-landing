@@ -9,7 +9,3 @@ import LandingBackground from '@/app/components/landing/LandingBackground';
 export default function TermsBackground() {
   return <LandingBackground />;
 }
-
-
-
-

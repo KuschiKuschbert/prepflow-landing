@@ -34,7 +34,7 @@ function fixFile(filePath, hasLogger) {
   // Add logger.error before errors.push
   content = content.replace(
     /catch\s*\(err\)\s*\{[\s]*const\s+recipeName\s*=.*?errors\.push\(/gs,
-    (match) => {
+    match => {
       if (!match.includes('logger.error')) {
         changed = true;
         return match.replace(
@@ -48,12 +48,12 @@ function fixFile(filePath, hasLogger) {
         );
       }
       return match;
-    }
+    },
   );
 
   content = content.replace(
     /catch\s*\(err\)\s*\{[\s]*errors\.push\(\{[\s]*dish_id:\s*dish\.id,/gs,
-    (match) => {
+    match => {
       if (!match.includes('logger.error')) {
         changed = true;
         return match.replace(
@@ -68,7 +68,7 @@ function fixFile(filePath, hasLogger) {
         );
       }
       return match;
-    }
+    },
   );
 
   if (changed) {
@@ -98,6 +98,3 @@ if (require.main === module) {
 }
 
 module.exports = { fixFile };
-
-
-

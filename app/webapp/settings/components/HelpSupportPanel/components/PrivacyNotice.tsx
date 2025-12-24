@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { ChevronDown, ChevronUp, Shield } from 'lucide-react';
 import Link from 'next/link';
@@ -16,8 +18,15 @@ export function PrivacyNotice() {
         className="flex w-full items-center justify-between text-left"
       >
         <div className="flex items-center gap-2">
-          <Icon icon={Shield} size="sm" className="text-[var(--foreground)]/60" aria-hidden={true} />
-          <span className="text-sm font-medium text-[var(--foreground)]/80">Privacy & Data Collection</span>
+          <Icon
+            icon={Shield}
+            size="sm"
+            className="text-[var(--foreground)]/60"
+            aria-hidden={true}
+          />
+          <span className="text-sm font-medium text-[var(--foreground)]/80">
+            Privacy & Data Collection
+          </span>
         </div>
         <Icon
           icon={showPrivacyNotice ? ChevronUp : ChevronDown}
@@ -32,7 +41,7 @@ export function PrivacyNotice() {
           <ul className="mb-3 ml-4 list-disc space-y-1">
             <li>Error messages and stack traces</li>
             <li>Browser and device information</li>
-            <li>Page where error occurred</li>
+            <li>Where the error happened</li>
             <li>Timestamp of the error</li>
           </ul>
           <p className="mb-2 font-medium text-[var(--foreground)]/80">Why is it collected?</p>

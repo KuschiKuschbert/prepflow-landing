@@ -197,7 +197,3 @@ If you find accessibility issues:
 - **Q1 2025:** Achieve WCAG 2.1 AA compliance
 - **Ongoing:** Regular accessibility audits
 - **Continuous:** Fix accessibility issues as they're discovered
-
-
-
-

@@ -76,9 +76,9 @@ export class ErrorBoundary extends Component<Props, State> {
           return false;
         } catch (_) {
           logger.error('[ErrorBoundary.tsx] Error in catch block:', {
-      error: _ instanceof Error ? _.message : String(_),
-      stack: _ instanceof Error ? _.stack : undefined,
-    });
+            error: _ instanceof Error ? _.message : String(_),
+            stack: _ instanceof Error ? _.stack : undefined,
+          });
 
           return false;
         }

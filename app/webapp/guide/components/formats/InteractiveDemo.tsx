@@ -195,7 +195,9 @@ export function InteractiveDemo({ content, className = '' }: InteractiveDemoProp
                       <div className="flex items-center gap-3">
                         <span
                           className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${
-                            isActive ? 'bg-[var(--primary)] text-[var(--primary-text)]' : 'bg-[var(--primary)]/20 text-[var(--primary)]'
+                            isActive
+                              ? 'bg-[var(--primary)] text-[var(--primary-text)]'
+                              : 'bg-[var(--primary)]/20 text-[var(--primary)]'
                           }`}
                         >
                           {index + 1}
@@ -214,7 +216,9 @@ export function InteractiveDemo({ content, className = '' }: InteractiveDemoProp
                             {action.type === 'scroll' && `Scroll to ${action.target}`}
                           </span>
                         </div>
-                        {isActive && <span className="text-xs text-[var(--primary)]">Executed</span>}
+                        {isActive && (
+                          <span className="text-xs text-[var(--primary)]">Executed</span>
+                        )}
                       </div>
                     </button>
                   );

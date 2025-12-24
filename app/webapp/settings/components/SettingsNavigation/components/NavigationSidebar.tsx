@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import type { Category, FocusedIndex } from '../types';
@@ -41,7 +43,9 @@ export function NavigationSidebar({
         {/* Header */}
         <div className="rounded-t-3xl border-b border-[var(--border)] p-4">
           <h1 className="text-lg font-semibold text-[var(--foreground)]">Settings</h1>
-          <p className="mt-0.5 text-xs text-[var(--foreground)]/60">Manage your account and preferences</p>
+          <p className="mt-0.5 text-xs text-[var(--foreground)]/60">
+            Manage your account and preferences
+          </p>
         </div>
 
         {/* Navigation */}

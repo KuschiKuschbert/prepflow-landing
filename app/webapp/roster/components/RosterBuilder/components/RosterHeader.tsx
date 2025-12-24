@@ -1,3 +1,5 @@
+'use client';
+
 import { format, addDays } from 'date-fns';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';

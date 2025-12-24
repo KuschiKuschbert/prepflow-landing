@@ -146,13 +146,6 @@ export async function PUT(req: NextRequest) {
       .single();
 
     if (error) {
-      logger.error('[preferences/route] Database error:', {
-        error: error.message,
-      });
-      throw ApiErrorHandler.fromSupabaseError(error, 500);
-    }
-
-    if (error) {
       logger.error('[Navigation Optimization API] Failed to update preferences:', {
         error: error.message,
         userId,

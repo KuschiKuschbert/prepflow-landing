@@ -35,6 +35,3 @@ export function getSquareOAuthConfig() {
     redirectUri,
   };
 }
-
-
-

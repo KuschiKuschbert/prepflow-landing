@@ -29,7 +29,7 @@ export function AnimatedCard({
     <AnimatedDiv
       animation="fadeInUp"
       delay={delay}
-      className={`group relative cursor-pointer rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--primary)]/50 hover:shadow-xl hover:shadow-[var(--primary)]/10 ${className} `}
+      className={`group relative cursor-pointer rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--primary)]/50 hover:shadow-[var(--primary)]/10 hover:shadow-xl ${className} `}
       onClick={onClick}
     >
       {/* Floating Icon */}
@@ -44,7 +44,9 @@ export function AnimatedCard({
         <h3 className="text-fluid-lg font-semibold text-[var(--foreground)] transition-colors duration-300 group-hover:text-[var(--primary)]">
           {title}
         </h3>
-        <p className="text-fluid-sm leading-relaxed text-[var(--foreground-muted)]">{description}</p>
+        <p className="text-fluid-sm leading-relaxed text-[var(--foreground-muted)]">
+          {description}
+        </p>
       </div>
 
       {/* Hover Effect Overlay */}

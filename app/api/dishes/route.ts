@@ -14,21 +14,26 @@ import { handleDishListError } from './helpers/handleDishListError';
 import { triggerDishSync } from '@/lib/square/sync/hooks';
 import { z } from 'zod';
 
-const createDishSchema = z.object({
-  dish_name: z.string().min(1, 'Dish name is required'),
-  selling_price: z.number().positive('Selling price must be positive'),
-  description: z.string().optional(),
-  recipes: z.array(z.any()).optional(),
-  ingredients: z.array(z.any()).optional(),
-  category: z.string().optional(),
-}).refine(data => {
-  const hasRecipes = data.recipes && data.recipes.length > 0;
-  const hasIngredients = data.ingredients && data.ingredients.length > 0;
-  return hasRecipes || hasIngredients;
-}, {
-  message: 'Dish must contain at least one recipe or ingredient',
-  path: ['recipes'],
-});
+const createDishSchema = z
+  .object({
+    dish_name: z.string().min(1, 'Dish name is required'),
+    selling_price: z.number().positive('Selling price must be positive'),
+    description: z.string().optional(),
+    recipes: z.array(z.any()).optional(),
+    ingredients: z.array(z.any()).optional(),
+    category: z.string().optional(),
+  })
+  .refine(
+    data => {
+      const hasRecipes = data.recipes && data.recipes.length > 0;
+      const hasIngredients = data.ingredients && data.ingredients.length > 0;
+      return hasRecipes || hasIngredients;
+    },
+    {
+      message: 'Dish must contain at least one recipe or ingredient',
+      path: ['recipes'],
+    },
+  );
 
 export async function GET(request: NextRequest) {
   try {
@@ -109,7 +114,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { dish_name, description, selling_price, recipes, ingredients, category } = validationResult.data;
+    const { dish_name, description, selling_price, recipes, ingredients, category } =
+      validationResult.data;
 
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -122,7 +128,7 @@ export async function POST(request: NextRequest) {
       {
         dish_name,
         description,
-        selling_price: parseFloat(selling_price),
+        selling_price, // Already validated as number by Zod schema
         category,
       },
       recipes,

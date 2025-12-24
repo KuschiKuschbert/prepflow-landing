@@ -32,7 +32,9 @@ export function LegalCompliancePanel() {
             <Icon icon={FileText} size="md" className="text-[var(--primary)]" aria-hidden={true} />
             <div>
               <p className="font-medium text-[var(--foreground)]">Terms of Service</p>
-              <p className="text-xs text-[var(--foreground-muted)]">Read our terms and conditions</p>
+              <p className="text-xs text-[var(--foreground-muted)]">
+                Read our terms and conditions
+              </p>
             </div>
           </Link>
 
@@ -64,7 +66,3 @@ export function LegalCompliancePanel() {
     </div>
   );
 }
-
-
-
-

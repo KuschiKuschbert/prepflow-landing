@@ -13,7 +13,6 @@ const DEFAULT_FORM_DATA: PrepListFormData = {
 interface UsePrepListsFormProps {
   prepLists: PrepList[];
   setPrepLists: React.Dispatch<React.SetStateAction<PrepList[]>>;
-  refetchPrepLists: () => Promise<unknown>;
   showError: (message: string) => void;
   showSuccess: (message: string) => void;
   userId: string;
@@ -22,7 +21,6 @@ interface UsePrepListsFormProps {
 export function usePrepListsForm({
   prepLists,
   setPrepLists,
-  refetchPrepLists,
   showError,
   showSuccess,
   userId,
@@ -48,7 +46,6 @@ export function usePrepListsForm({
         showError,
         showSuccess,
         resetForm,
-        refetchPrepLists,
         setError,
       });
     },
@@ -61,7 +58,6 @@ export function usePrepListsForm({
       showError,
       showSuccess,
       resetForm,
-      refetchPrepLists,
       setError,
     ],
   );

@@ -62,7 +62,7 @@ export function HowItWorksSection() {
         >
           {t('howItWorks.title', 'How PrepFlow Works')}
         </motion.h2>
-        <div className="grid gap-12 tablet:gap-10 desktop:gap-12 large-desktop:gap-14 xl:gap-16 [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] desktop:[grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]">
+        <div className="tablet:gap-10 desktop:gap-12 large-desktop:gap-14 tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] desktop:[grid-template-columns:repeat(auto-fit,minmax(320px,1fr))] grid [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] gap-12 xl:gap-16">
           {steps.map((step, index) => (
             <motion.div
               key={step.number}

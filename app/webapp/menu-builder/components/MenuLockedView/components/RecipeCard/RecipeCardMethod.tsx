@@ -19,7 +19,9 @@ export function RecipeCardMethod({ methodSteps }: RecipeCardMethodProps) {
             <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--primary)]/20 text-xs font-medium text-[var(--primary)]">
               {index + 1}
             </span>
-            <span className="desktop:text-sm text-xs leading-relaxed text-[var(--foreground-secondary)]">{step}</span>
+            <span className="desktop:text-sm text-xs leading-relaxed text-[var(--foreground-secondary)]">
+              {step}
+            </span>
           </li>
         ))}
       </ol>

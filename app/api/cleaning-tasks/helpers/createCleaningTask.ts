@@ -54,7 +54,8 @@ export async function createCleaningTask(taskData: {
   assigned_to_employee_id?: string | null;
   assigned_by_employee_id?: string | null;
 }) {
-  if (!supabaseAdmin) throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
+  if (!supabaseAdmin)
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
 
   // Build insert data
   const insertData: any = {

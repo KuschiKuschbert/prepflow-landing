@@ -3,10 +3,14 @@
  * Provides consistent formatting, logo loading, and content escaping
  */
 
-export { formatDateAustralian, formatDateShort, formatDateRange } from './template-utils/helpers/formatDate';
-export { formatCurrency } from './template-utils/helpers/formatCurrency';
 export {
-  TemplateVariant,
+  formatDateAustralian,
+  formatDateShort,
+  formatDateRange,
+} from './template-utils/helpers/formatDate';
+export { formatCurrency } from './template-utils/helpers/formatCurrency';
+export type { TemplateVariant } from './template-utils/helpers/variantUtils';
+export {
   getRecommendedVariant,
   getVariantDescription,
   getVariantDisplayName,

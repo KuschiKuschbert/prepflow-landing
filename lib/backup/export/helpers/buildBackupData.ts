@@ -1,4 +1,4 @@
-import type { BackupData, TableData } from '../types';
+import type { BackupData, TableData } from '../../types';
 
 /**
  * Build backup data structure from table data.
@@ -27,4 +27,3 @@ export function buildBackupData(userId: string, tables: TableData[]): BackupData
     },
   };
 }
-

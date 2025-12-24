@@ -23,7 +23,9 @@ export function DishSidePanelHeader({
             {capitalizeDishName(dish.dish_name)}
           </h2>
           {dish.description && (
-            <p className="line-clamp-2 text-sm text-[var(--foreground-muted)]">{dish.description}</p>
+            <p className="line-clamp-2 text-sm text-[var(--foreground-muted)]">
+              {dish.description}
+            </p>
           )}
         </div>
         <button

@@ -28,7 +28,8 @@ export async function addDishToMenu(
     const result = await response.json();
 
     if (response.ok) {
-      await onMenuDataReload();
+      // Refresh data in background (non-blocking)
+      onMenuDataReload().catch(err => logger.error('Failed to reload menu data:', err));
       onStatisticsUpdate();
     } else {
       logger.error('Failed to add dish to menu:', result.error || result.message);
@@ -64,7 +65,8 @@ export async function addRecipeToMenu(
     const result = await response.json();
 
     if (response.ok) {
-      await onMenuDataReload();
+      // Refresh data in background (non-blocking)
+      onMenuDataReload().catch(err => logger.error('Failed to reload menu data:', err));
       onStatisticsUpdate();
     } else {
       logger.error('Failed to add recipe to menu:', result.error || result.message);
@@ -104,6 +106,13 @@ export async function reorderMenuItems(
     position: index,
   }));
 
+  // Store original state for rollback
+  const originalMenuItems = [...menuItems];
+
+  // Optimistically update UI immediately
+  const otherItems = menuItems.filter(item => item.category !== activeItem.category);
+  setMenuItems([...otherItems, ...updatedItems]);
+
   try {
     const response = await fetch(`/api/menus/${menuId}/reorder`, {
       method: 'POST',
@@ -120,17 +129,16 @@ export async function reorderMenuItems(
     const result = await response.json();
 
     if (response.ok) {
-      const otherItems = menuItems.filter(item => item.category !== activeItem.category);
-      setMenuItems([...otherItems, ...updatedItems]);
+      // Refresh statistics in background (non-blocking)
       onStatisticsUpdate();
     } else {
+      // Rollback on error
+      setMenuItems(originalMenuItems);
       logger.error('Failed to reorder items:', result.error || result.message);
-      // Revert the UI change on error
-      await onMenuDataReload();
     }
   } catch (err) {
+    // Rollback on error
+    setMenuItems(originalMenuItems);
     logger.error('Failed to reorder items:', err);
-    // Revert the UI change on error
-    await onMenuDataReload();
   }
 }

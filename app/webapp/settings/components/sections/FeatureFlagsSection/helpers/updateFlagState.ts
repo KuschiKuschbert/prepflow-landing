@@ -16,5 +16,3 @@ export function updateUpdatingState(
     return next;
   });
 }
-
-

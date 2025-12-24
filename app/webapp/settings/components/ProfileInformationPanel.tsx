@@ -45,8 +45,9 @@ function ProfileInformationPanelComponent() {
     },
   });
 
-  const { saving, handleSave } = useProfileSave({
+  const { handleSave } = useProfileSave({
     formData,
+    profile,
     setProfile,
     setFormData,
     userHasModifiedRef,
@@ -86,7 +87,7 @@ function ProfileInformationPanelComponent() {
 
       <ProfileFormActions
         hasChanges={hasChanges}
-        saving={saving}
+        saving={false}
         onSave={handleSave}
         onCancel={resetForm}
       />

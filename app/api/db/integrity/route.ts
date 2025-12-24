@@ -13,10 +13,9 @@ export async function GET(request: NextRequest) {
     }
     const adminKey = request.headers.get('x-admin-key');
     if (!adminKey || adminKey !== process.env.SEED_ADMIN_KEY) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), {
+        status: 401,
+      });
     }
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -26,19 +25,16 @@ export async function GET(request: NextRequest) {
     }
 
     // Recipes without any recipe_ingredients
-    const { data: recipes, error: recipesError } = await supabaseAdmin
-      .from('recipes')
-      .select('id');
+    const { data: recipes, error: recipesError } = await supabaseAdmin.from('recipes').select('id');
     if (recipesError) {
       logger.error('[DB Integrity API] Database error fetching recipes:', {
         error: recipesError.message,
         code: (recipesError as any).code,
         context: { endpoint: '/api/db/integrity', operation: 'GET' },
       });
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(recipesError, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(recipesError, 500), {
+        status: 500,
+      });
     }
 
     const recipeIds = (recipes || []).map(r => r.id);
@@ -53,10 +49,7 @@ export async function GET(request: NextRequest) {
           code: (countErr as any).code,
           context: { endpoint: '/api/db/integrity', operation: 'GET' },
         });
-        return NextResponse.json(
-          ApiErrorHandler.fromSupabaseError(countErr, 500),
-          { status: 500 },
-        );
+        return NextResponse.json(ApiErrorHandler.fromSupabaseError(countErr, 500), { status: 500 });
       }
       const withLines = new Set((counts || []).map(r => r.recipe_id));
       recipesWithNoLines = recipeIds.filter(id => !withLines.has(id)).length;
@@ -72,10 +65,7 @@ export async function GET(request: NextRequest) {
         code: (riErr as any).code,
         context: { endpoint: '/api/db/integrity', operation: 'GET' },
       });
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(riErr, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(riErr, 500), { status: 500 });
     }
     const uniqueIngIds = Array.from(
       new Set((riRows || []).map(r => r.ingredient_id).filter(Boolean)),
@@ -92,10 +82,7 @@ export async function GET(request: NextRequest) {
           code: (ingErr as any).code,
           context: { endpoint: '/api/db/integrity', operation: 'GET' },
         });
-        return NextResponse.json(
-          ApiErrorHandler.fromSupabaseError(ingErr, 500),
-          { status: 500 },
-        );
+        return NextResponse.json(ApiErrorHandler.fromSupabaseError(ingErr, 500), { status: 500 });
       }
       const present = new Set((ingRows || []).map(r => r.id));
       missingIngredientRefs = uniqueIngIds.filter(id => !present.has(id)).length;

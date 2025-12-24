@@ -160,7 +160,7 @@ export function ParLevelEditDrawer({
               type="button"
               onClick={handleSave}
               disabled={loading || status === 'saving' || !isValidParLevel}
-              className="flex-1 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] px-4 py-2.5 font-semibold text-[var(--button-active-text)] transition-all duration-300 hover:shadow-lg hover:shadow-[var(--primary)]/25 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex-1 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] px-4 py-2.5 font-semibold text-[var(--button-active-text)] transition-all duration-300 hover:shadow-[var(--primary)]/25 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading || status === 'saving' ? 'Saving...' : 'Save'}
             </button>

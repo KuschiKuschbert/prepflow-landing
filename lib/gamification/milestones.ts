@@ -6,7 +6,11 @@
  */
 
 import type { Milestone } from './types';
-import { ARCADE_MILESTONES, USAGE_MILESTONES, ACHIEVEMENT_MILESTONES } from './milestones/constants';
+import {
+  ARCADE_MILESTONES,
+  USAGE_MILESTONES,
+  ACHIEVEMENT_MILESTONES,
+} from './milestones/constants';
 import { throwSubtleConfetti } from './milestones/helpers/confetti';
 import {
   checkArcadeMilestone,

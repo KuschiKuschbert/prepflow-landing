@@ -33,7 +33,7 @@ export async function logAdminAction(entry: AuditLogEntry): Promise<void> {
         return;
       }
 
-      await supabaseAdmin.from('admin_audit_logs').insert({
+      const { error: insertError } = await supabaseAdmin.from('admin_audit_logs').insert({
         admin_user_id: entry.admin_user_id,
         admin_user_email: entry.admin_user_email,
         action: entry.action,
@@ -43,6 +43,13 @@ export async function logAdminAction(entry: AuditLogEntry): Promise<void> {
         ip_address: entry.ip_address || null,
         user_agent: entry.user_agent || null,
       });
+
+      if (insertError) {
+        logger.error('[Admin Audit] Error inserting audit log:', {
+          error: insertError.message,
+          context: { operation: 'logAdminAction' },
+        });
+      }
     } catch (error) {
       // Silently fail - don't let audit logging break the app
       logger.error('[Admin Audit] Failed to log admin action:', {

@@ -19,6 +19,11 @@ export async function handleAutoReport(
   }
 
   try {
+    if (!supabaseAdmin) {
+      logger.warn('[Client Error API] Database connection not available for auto-report');
+      return;
+    }
+
     // Get user's auto-report preference
     const { data: userData } = await supabaseAdmin
       .from('users')
@@ -58,5 +63,3 @@ export async function handleAutoReport(
     });
   }
 }
-
-

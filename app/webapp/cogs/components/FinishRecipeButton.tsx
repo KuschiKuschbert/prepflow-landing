@@ -49,9 +49,9 @@ export function FinishRecipeButton({
       }, 2000);
     } catch (err) {
       logger.error('[FinishRecipeButton.tsx] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
       setIsFinishing(false);
     }
@@ -64,7 +64,9 @@ export function FinishRecipeButton({
           <Icon icon={CheckCircle2} size="md" aria-hidden={true} />
           <span className="font-semibold">Recipe Finished!</span>
         </div>
-        <p className="text-sm text-[var(--foreground-muted)]">Your recipe is saved and ready to use</p>
+        <p className="text-sm text-[var(--foreground-muted)]">
+          Your recipe is saved and ready to use
+        </p>
       </div>
     );
   }

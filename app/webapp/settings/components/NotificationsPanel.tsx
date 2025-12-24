@@ -33,7 +33,6 @@ export function NotificationsPanel() {
   const { showSuccess, showError } = useNotification();
   const [ref, isVisible] = useIsVisible<HTMLDivElement>({ threshold: 0.1 });
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [preferences, setPreferences] = useState<NotificationPreferences>({
     email: {
       weeklyReports: true,
@@ -81,7 +80,18 @@ export function NotificationsPanel() {
       },
     };
 
-    setSaving(true);
+    // Store original preferences for rollback
+    const originalPreferences = { ...preferences };
+
+    // Optimistically update UI immediately
+    setPreferences(prev => ({
+      ...prev,
+      [category]: {
+        ...prev[category as keyof NotificationPreferences],
+        [key]: value,
+      },
+    }));
+
     try {
       const response = await fetch('/api/user/notifications', {
         method: 'PUT',
@@ -97,29 +107,14 @@ export function NotificationsPanel() {
         throw new Error(data.error || data.message || 'Failed to update preferences');
       }
 
-      // Update local state
-      setPreferences(prev => ({
-        ...prev,
-        [category]: {
-          ...prev[category as keyof NotificationPreferences],
-          [key]: value,
-        },
-      }));
-
       showSuccess('Preferences updated successfully');
     } catch (error) {
+      // Error - revert optimistic update
+      setPreferences(originalPreferences);
       logger.error('Failed to update preferences:', error);
-      showError(error instanceof Error ? error.message : 'Failed to update preferences');
-      // Revert on error
-      const response = await fetch('/api/user/notifications');
-      if (response.ok) {
-        const data = await response.json();
-        if (data.preferences) {
-          setPreferences(data.preferences);
-        }
-      }
-    } finally {
-      setSaving(false);
+      showError(
+        error instanceof Error ? error.message : 'Failed to update preferences. Please try again.',
+      );
     }
   };
 
@@ -143,12 +138,7 @@ export function NotificationsPanel() {
           </p>
         )}
       </div>
-      <Toggle
-        checked={checked}
-        onChange={onChange}
-        aria-label={label}
-        disabled={saving}
-      />
+      <Toggle checked={checked} onChange={onChange} aria-label={label} />
     </div>
   );
 
@@ -242,7 +232,9 @@ export function NotificationsPanel() {
             }
           />
           <div>
-            <label className="mb-2 block text-sm font-medium text-[var(--foreground)]">Email Digest</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground)]">
+              Email Digest
+            </label>
             <select
               value={preferences.inApp.emailDigest}
               onChange={e =>
@@ -251,8 +243,7 @@ export function NotificationsPanel() {
                   e.target.value as NotificationPreferences['inApp']['emailDigest'],
                 )
               }
-              disabled={saving}
-              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)] disabled:opacity-50"
+              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             >
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>

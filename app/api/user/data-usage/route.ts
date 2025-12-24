@@ -32,33 +32,39 @@ export async function GET(req: NextRequest) {
 
     // Get counts for each table with individual error handling
     // Use Promise.allSettled to handle missing tables gracefully
+    const getTableCount = async (tableName: string): Promise<number> => {
+      const { count, error } = await supabaseAdmin
+        .from(tableName)
+        .select('*', { count: 'exact', head: true });
+      if (error) {
+        const errorCode = (error as any).code;
+        // Handle missing table gracefully (PostgreSQL error code 42P01)
+        if (errorCode === '42P01') {
+          logger.dev(`[Data Usage API] Table '${tableName}' does not exist, using 0`);
+          return 0;
+        }
+        logger.warn(`[Data Usage API] Error fetching count for '${tableName}':`, {
+          error: error.message,
+          code: errorCode,
+        });
+        return 0;
+      }
+      return count || 0;
+    };
+
     const results = await Promise.allSettled([
-      supabaseAdmin.from('ingredients').select('*', { count: 'exact', head: true }),
-      supabaseAdmin.from('recipes').select('*', { count: 'exact', head: true }),
-      supabaseAdmin.from('menu_dishes').select('*', { count: 'exact', head: true }),
-      supabaseAdmin.from('temperature_logs').select('*', { count: 'exact', head: true }),
-      supabaseAdmin.from('cleaning_tasks').select('*', { count: 'exact', head: true }),
-      supabaseAdmin.from('compliance_records').select('*', { count: 'exact', head: true }),
+      getTableCount('ingredients'),
+      getTableCount('recipes'),
+      getTableCount('menu_dishes'),
+      getTableCount('temperature_logs'),
+      getTableCount('cleaning_tasks'),
+      getTableCount('compliance_records'),
     ]);
 
     // Helper to extract count from result, handling errors gracefully
-    const getCount = (result: PromiseSettledResult<any>, tableName: string): number => {
+    const getCount = (result: PromiseSettledResult<number>, tableName: string): number => {
       if (result.status === 'fulfilled') {
-        const { data, error, count } = result.value;
-        if (error) {
-          const errorCode = (error as any).code;
-          // Handle missing table gracefully (PostgreSQL error code 42P01)
-          if (errorCode === '42P01') {
-            logger.dev(`[Data Usage API] Table '${tableName}' does not exist, using 0`);
-            return 0;
-          }
-          logger.warn(`[Data Usage API] Error fetching count for '${tableName}':`, {
-            error: error.message,
-            code: errorCode,
-          });
-          return 0;
-        }
-        return count || 0;
+        return result.value;
       } else {
         logger.warn(`[Data Usage API] Promise rejected for '${tableName}':`, {
           error: result.reason,

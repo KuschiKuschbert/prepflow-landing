@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Content rendering component for suppliers page based on active tab.
  */

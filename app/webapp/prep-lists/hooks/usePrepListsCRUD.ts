@@ -9,7 +9,6 @@ import { performPrepListStatusChange } from './helpers/performPrepListStatusChan
 interface UsePrepListsCRUDProps {
   prepLists: PrepList[];
   setPrepLists: React.Dispatch<React.SetStateAction<PrepList[]>>;
-  refetchPrepLists: () => Promise<unknown>;
   showError: (message: string) => void;
   showSuccess: (message: string) => void;
 }
@@ -20,7 +19,6 @@ interface UsePrepListsCRUDProps {
 export function usePrepListsCRUD({
   prepLists,
   setPrepLists,
-  refetchPrepLists,
   showError,
   showSuccess,
 }: UsePrepListsCRUDProps) {
@@ -49,14 +47,13 @@ export function usePrepListsCRUD({
             id,
             prepLists,
             setPrepLists,
-            refetchPrepLists,
             showError,
             showSuccess,
           });
         },
       });
     },
-    [prepLists, setPrepLists, refetchPrepLists, showError, showSuccess],
+    [prepLists, setPrepLists, showError, showSuccess],
   );
 
   const handleStatusChange = useCallback(
@@ -66,12 +63,11 @@ export function usePrepListsCRUD({
         status,
         prepLists,
         setPrepLists,
-        refetchPrepLists,
         showError,
         showSuccess,
       });
     },
-    [prepLists, setPrepLists, refetchPrepLists, showError, showSuccess],
+    [prepLists, setPrepLists, showError, showSuccess],
   );
 
   const cancelConfirmDialog = useCallback(() => {

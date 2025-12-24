@@ -59,7 +59,6 @@ export function exportSuppliersToCSV(suppliers: Supplier[]): void {
   exportToCSV(csvData, CSV_HEADERS, filename);
 }
 
-
 /**
  * Export suppliers to HTML
  *

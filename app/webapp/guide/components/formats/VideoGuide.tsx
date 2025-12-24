@@ -172,7 +172,9 @@ export function VideoGuide({ content, className = '' }: VideoGuideProps) {
               >
                 <div className="flex items-center justify-between">
                   <span>{chapter.title}</span>
-                  <span className="text-xs text-[var(--foreground-subtle)]">{formatTime(chapter.time)}</span>
+                  <span className="text-xs text-[var(--foreground-subtle)]">
+                    {formatTime(chapter.time)}
+                  </span>
                 </div>
               </button>
             ))}

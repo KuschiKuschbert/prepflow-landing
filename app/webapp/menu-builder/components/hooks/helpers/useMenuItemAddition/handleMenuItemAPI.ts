@@ -31,6 +31,9 @@ export async function handleMenuItemAPI({
   refreshStatistics,
   showError,
 }: HandleMenuItemAPIParams): Promise<void> {
+  // Store original state for rollback
+  const originalItems = [...prevItems];
+
   try {
     const response = await fetch(`/api/menus/${menuId}/items`, {
       method: 'POST',
@@ -69,8 +72,11 @@ export async function handleMenuItemAPI({
         }),
       );
 
+      // Refresh statistics in background (non-blocking)
       refreshStatistics().catch(err => logger.error('Failed to refresh statistics:', err));
     } else {
+      // Rollback on error
+      setMenuItems(originalItems);
       const errorMessage =
         result.error || result.message || `Failed to add item (${response.status})`;
       logger.error('[Menu Editor] API Error:', {
@@ -78,12 +84,12 @@ export async function handleMenuItemAPI({
         error: errorMessage,
         result,
       });
-      setMenuItems(prevItems => prevItems.filter(item => item.id !== optimisticItem.id));
       showError(errorMessage);
     }
   } catch (err) {
+    // Rollback on error
+    setMenuItems(originalItems);
     logger.error('[Menu Editor] Network Error:', err);
-    setMenuItems(prevItems => prevItems.filter(item => item.id !== optimisticItem.id));
     showError('Failed to add item. Please check your connection and try again.');
   }
 }

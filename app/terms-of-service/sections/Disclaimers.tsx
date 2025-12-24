@@ -2,19 +2,22 @@ export function Disclaimers() {
   return (
     <>
       <p className="mb-4 leading-relaxed text-gray-300">
-        <strong>Service Availability:</strong> We strive to provide reliable service but cannot guarantee uninterrupted
-        access. The Service may be temporarily unavailable due to maintenance, updates, or technical issues.
+        <strong>Service Availability:</strong> We strive to provide reliable service but can&apos;t
+        guarantee uninterrupted access. The Service may be temporarily unavailable due to
+        maintenance, updates, or technical issues.
       </p>
       <p className="mb-4 leading-relaxed text-gray-300">
-        <strong>Data Accuracy:</strong> While PrepFlow provides tools for analysis, the accuracy of results depends on
-        the data you input. We are not responsible for decisions made based on PrepFlow insights.
+        <strong>Data Accuracy:</strong> While PrepFlow provides tools for analysis, the accuracy of
+        results depends on the data you input. We are not responsible for decisions made based on
+        PrepFlow insights.
       </p>
       <p className="mb-4 leading-relaxed text-gray-300">
-        <strong>Business Outcomes:</strong> PrepFlow is a tool to assist decision-making, but we do not guarantee
-        specific financial results, increased profits, or business success.
+        <strong>Business Outcomes:</strong> PrepFlow is a tool to assist decision-making, but we
+        don&apos;t guarantee specific financial results, increased profits, or business success.
       </p>
       <p className="mb-4 leading-relaxed text-gray-300">
-        <strong>Third-Party Services:</strong> PrepFlow integrates with third-party services including{' '}
+        <strong>Third-Party Services:</strong> PrepFlow integrates with third-party services
+        including{' '}
         <a
           href="https://stripe.com/legal/ssa"
           target="_blank"
@@ -41,8 +44,8 @@ export function Disclaimers() {
         >
           Supabase
         </a>{' '}
-        (database hosting). We are not responsible for their availability, functionality, or terms of service. Your use
-        of these third-party services is subject to their respective{' '}
+        (database hosting). We are not responsible for their availability, functionality, or terms
+        of service. Your use of these third-party services is subject to their respective{' '}
         <a
           href="https://stripe.com/legal/ssa"
           target="_blank"
@@ -72,9 +75,9 @@ export function Disclaimers() {
         >
           Supabase
         </a>
-        , our database hosting provider. While we implement industry-standard security measures, we cannot guarantee
-        absolute security of data transmitted over the internet or stored in cloud databases. Your use of Supabase is
-        subject to their{' '}
+        , our database hosting provider. While we implement industry-standard security measures, we
+        can&apos;t guarantee absolute security of data transmitted over the internet or stored in
+        cloud databases. Your use of Supabase is subject to their{' '}
         <a
           href="https://supabase.com/terms"
           target="_blank"
@@ -95,12 +98,11 @@ export function Disclaimers() {
         .
       </p>
       <p className="text-fluid-base leading-relaxed text-gray-300">
-        <strong>Limitation of Liability:</strong> To the maximum extent permitted by law, PrepFlow shall not be liable
-        for any indirect, incidental, special, consequential, or punitive damages, including lost profits, data loss, or
-        business interruption, arising from your use of or inability to use PrepFlow.
+        <strong>Limitation of Liability:</strong> To the maximum extent permitted by law, PrepFlow
+        shall not be liable for any indirect, incidental, special, consequential, or punitive
+        damages, including lost profits, data loss, or business interruption, arising from your use
+        of or inability to use PrepFlow.
       </p>
     </>
   );
 }
-
-

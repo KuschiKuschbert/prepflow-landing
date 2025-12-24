@@ -67,9 +67,9 @@ export async function GET(req: NextRequest) {
             }
           } catch (error) {
             logger.error('[route.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+              error: error instanceof Error ? error.message : String(error),
+              stack: error instanceof Error ? error.stack : undefined,
+            });
 
             diagnostic.managementApiTests.actualUser.status = 'error';
             diagnostic.managementApiTests.actualUser.error =
@@ -87,9 +87,9 @@ export async function GET(req: NextRequest) {
             };
           } catch (error) {
             logger.error('[route.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+              error: error instanceof Error ? error.message : String(error),
+              stack: error instanceof Error ? error.stack : undefined,
+            });
 
             diagnostic.managementApiTests.retryWithFallback = {
               status: 'error',

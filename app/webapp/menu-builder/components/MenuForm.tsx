@@ -15,7 +15,6 @@ interface MenuFormProps {
 export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
   const [menuName, setMenuName] = useState('');
   const [description, setDescription] = useState('');
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -27,12 +26,10 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
 
     if (!menuName) {
       setError('Menu name is required');
-      setLoading(false);
       return;
     }
 
@@ -55,7 +52,6 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
         setError(
           result.error || result.message || 'Failed to save menu. Give it another go, chef.',
         );
-        setLoading(false);
         return;
       }
 
@@ -63,16 +59,14 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
         onSave(result.menu);
       } else {
         setError('Failed to save menu. Give it another go, chef.');
-        setLoading(false);
       }
     } catch (err) {
       logger.error('[MenuForm.tsx] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
       setError('Failed to save menu. Please check your connection and try again.');
-      setLoading(false);
     }
   };
 
@@ -102,7 +96,9 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
             )}
 
             <div className="mb-6">
-              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Menu Name *</label>
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+                Menu Name *
+              </label>
               <input
                 type="text"
                 value={menuName}
@@ -113,7 +109,9 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
             </div>
 
             <div className="mb-6">
-              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Description</label>
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+                Description
+              </label>
               <textarea
                 value={description}
                 onChange={e => setDescription(e.target.value)}
@@ -132,10 +130,9 @@ export default function MenuForm({ menu, onClose, onSave }: MenuFormProps) {
               </button>
               <button
                 type="submit"
-                disabled={loading}
-                className="flex-1 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-medium text-[var(--button-active-text)] transition-all hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 disabled:opacity-50"
+                className="flex-1 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-medium text-[var(--button-active-text)] transition-all hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80"
               >
-                {loading ? 'Saving...' : menu ? 'Update Menu' : 'Create Menu'}
+                {menu ? 'Update Menu' : 'Create Menu'}
               </button>
             </div>
           </form>

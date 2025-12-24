@@ -4,6 +4,7 @@
  * Batch fetch and aggregate allergens for multiple recipes
  */
 
+import { z } from 'zod';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { groupBy } from '@/lib/api/batch-utils';
 import { logger } from '@/lib/logger';

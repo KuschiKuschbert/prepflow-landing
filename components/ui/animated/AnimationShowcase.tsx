@@ -23,7 +23,9 @@ export function AnimationShowcase() {
     <div className="space-y-8 p-6">
       {/* Header */}
       <AnimatedDiv animation="fadeInDown" className="text-center">
-        <h1 className="text-fluid-4xl mb-4 font-bold text-[var(--foreground)]">🎨 Modern Animation System</h1>
+        <h1 className="text-fluid-4xl mb-4 font-bold text-[var(--foreground)]">
+          🎨 Modern Animation System
+        </h1>
         <p className="text-fluid-lg text-[var(--foreground-muted)]">
           Subtle, performant animations that enhance user experience
         </p>

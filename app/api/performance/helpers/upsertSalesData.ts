@@ -36,13 +36,6 @@ export async function upsertSalesData(salesData: {
     .select();
 
   if (error) {
-    logger.error('[helpers/upsertSalesData] Database error:', {
-      error: error.message,
-    });
-    throw ApiErrorHandler.fromSupabaseError(error, 500);
-  }
-
-  if (error) {
     logger.error('[Performance API] Database error inserting sales data:', {
       error: error.message,
       code: (error as any).code,

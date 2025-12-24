@@ -28,14 +28,18 @@ export function EquipmentLastLogInfo({ lastLogInfo, formatDate }: EquipmentLastL
       </div>
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-lg font-bold text-[var(--foreground)]">{lastLogInfo.temperature.toFixed(1)}°C</div>
+          <div className="text-lg font-bold text-[var(--foreground)]">
+            {lastLogInfo.temperature.toFixed(1)}°C
+          </div>
           <div className="text-xs text-[var(--foreground-muted)]">{formattedDate}</div>
         </div>
         {lastLogInfo.isInRange !== null && (
           <div className="flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--muted)]/50 px-3 py-1.5">
             <div
               className={`h-2 w-2 rounded-full shadow-lg ${
-                lastLogInfo.isInRange ? 'animate-pulse bg-[var(--color-success)]' : 'animate-pulse bg-[var(--color-error)]'
+                lastLogInfo.isInRange
+                  ? 'animate-pulse bg-[var(--color-success)]'
+                  : 'animate-pulse bg-[var(--color-error)]'
               }`}
             />
             <span

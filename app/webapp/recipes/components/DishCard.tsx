@@ -73,7 +73,9 @@ const DishCard = React.memo(function DishCard({
               <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
             )}
           </button>
-          <h3 className="text-sm font-medium text-[var(--foreground)]">{capitalizeDishName(dish.dish_name)}</h3>
+          <h3 className="text-sm font-medium text-[var(--foreground)]">
+            {capitalizeDishName(dish.dish_name)}
+          </h3>
         </div>
         <span
           className="text-xs text-[var(--foreground-subtle)]"
@@ -86,7 +88,9 @@ const DishCard = React.memo(function DishCard({
       <div className="mb-3 ml-7 space-y-1 text-xs text-[var(--foreground-subtle)]">
         <div title="The price customers pay for this dish">
           <span className="font-medium">Selling Price:</span>
-          <span className="ml-1 font-semibold text-[var(--foreground)]">${dish.selling_price.toFixed(2)}</span>
+          <span className="ml-1 font-semibold text-[var(--foreground)]">
+            ${dish.selling_price.toFixed(2)}
+          </span>
         </div>
         {dishCost && (
           <>
@@ -102,7 +106,9 @@ const DishCard = React.memo(function DishCard({
               <span className="font-medium">Profit Margin:</span>
               <span
                 className={`ml-1 font-semibold ${
-                  dishCost.gross_profit_margin >= 30 ? 'text-[var(--color-success)]' : 'text-[var(--color-warning)]'
+                  dishCost.gross_profit_margin >= 30
+                    ? 'text-[var(--color-success)]'
+                    : 'text-[var(--color-warning)]'
                 }`}
               >
                 {dishCost.gross_profit_margin.toFixed(1)}%
@@ -111,7 +117,10 @@ const DishCard = React.memo(function DishCard({
           </>
         )}
         {!dishCost && (
-          <div className="text-xs text-[var(--foreground-subtle)] italic" title="Click Preview to see cost breakdown">
+          <div
+            className="text-xs text-[var(--foreground-subtle)] italic"
+            title="Click Preview to see cost breakdown"
+          >
             Cost calculation pending...
           </div>
         )}

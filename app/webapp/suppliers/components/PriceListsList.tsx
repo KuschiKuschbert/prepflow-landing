@@ -43,14 +43,23 @@ export function PriceListsList({ priceLists }: PriceListsListProps) {
                 <span className="text-2xl">{getSupplierIcon(priceList.suppliers?.name)}</span>
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-[var(--foreground)]">{priceList.document_name}</h3>
-                <p className="text-[var(--foreground-muted)]">{priceList.suppliers?.name || 'Unknown Supplier'}</p>
+                <h3 className="text-xl font-semibold text-[var(--foreground)]">
+                  {priceList.document_name}
+                </h3>
+                <p className="text-[var(--foreground-muted)]">
+                  {priceList.suppliers?.name || 'Unknown Supplier'}
+                </p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
               {priceList.is_current && (
-                <span className="rounded-full border border-[var(--color-success)]/20 bg-[var(--color-success)]/10 px-3 py-1 flex items-center gap-1 text-xs font-medium text-[var(--color-success)]">
-                  <Icon icon={CheckCircle2} size="xs" className="text-[var(--color-success)]" aria-hidden={true} />
+                <span className="flex items-center gap-1 rounded-full border border-[var(--color-success)]/20 bg-[var(--color-success)]/10 px-3 py-1 text-xs font-medium text-[var(--color-success)]">
+                  <Icon
+                    icon={CheckCircle2}
+                    size="xs"
+                    className="text-[var(--color-success)]"
+                    aria-hidden={true}
+                  />
                   {t('suppliers.current', 'Current')}
                 </span>
               )}
@@ -58,9 +67,14 @@ export function PriceListsList({ priceLists }: PriceListsListProps) {
                 href={priceList.document_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-xl bg-[var(--primary)] px-4 py-2 flex items-center gap-2 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg"
+                className="flex items-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-2 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg"
               >
-                <Icon icon={FileText} size="sm" className="text-[var(--primary-text)]" aria-hidden={true} />
+                <Icon
+                  icon={FileText}
+                  size="sm"
+                  className="text-[var(--primary-text)]"
+                  aria-hidden={true}
+                />
                 {t('suppliers.viewDocument', 'View Document')}
               </a>
             </div>
@@ -89,15 +103,22 @@ export function PriceListsList({ priceLists }: PriceListsListProps) {
             )}
           </div>
 
-          {priceList.notes && <p className="mb-4 text-[var(--foreground-secondary)]">{priceList.notes}</p>}
+          {priceList.notes && (
+            <p className="mb-4 text-[var(--foreground-secondary)]">{priceList.notes}</p>
+          )}
 
           <div className="flex space-x-4">
-            <button className="rounded-xl bg-[var(--muted)] px-4 py-2 flex items-center gap-2 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]">
+            <button className="flex items-center gap-2 rounded-xl bg-[var(--muted)] px-4 py-2 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]">
               <Icon icon={Edit} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
               {t('suppliers.edit', 'Edit')}
             </button>
-            <button className="rounded-xl bg-[var(--muted)] px-4 py-2 flex items-center gap-2 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]">
-              <Icon icon={Camera} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
+            <button className="flex items-center gap-2 rounded-xl bg-[var(--muted)] px-4 py-2 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]">
+              <Icon
+                icon={Camera}
+                size="sm"
+                className="text-[var(--foreground)]"
+                aria-hidden={true}
+              />
               {t('suppliers.addPhoto', 'Add Photo')}
             </button>
           </div>

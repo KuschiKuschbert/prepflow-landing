@@ -79,7 +79,11 @@ function analyzeFile(filePath) {
   }
 
   // Check for throw new Error('Database connection not available')
-  if (/if\s*\(!supabaseAdmin\)\s*\{\s*throw\s+new\s+Error\(['"]Database connection not available['"]\)/.test(content)) {
+  if (
+    /if\s*\(!supabaseAdmin\)\s*\{\s*throw\s+new\s+Error\(['"]Database connection not available['"]\)/.test(
+      content,
+    )
+  ) {
     violations.push({
       type: 'throw-db-connection',
       file: filePath,

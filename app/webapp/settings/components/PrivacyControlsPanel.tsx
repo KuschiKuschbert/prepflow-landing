@@ -110,7 +110,12 @@ export function PrivacyControlsPanel() {
         {/* Account Deletion */}
         <div className="space-y-3 border-t border-[var(--border)] pt-4">
           <div className="flex items-center gap-2">
-            <Icon icon={AlertTriangle} size="md" className="text-[var(--color-error)]" aria-hidden={true} />
+            <Icon
+              icon={AlertTriangle}
+              size="md"
+              className="text-[var(--color-error)]"
+              aria-hidden={true}
+            />
             <h3 className="text-lg font-medium text-[var(--color-error)]">Delete Your Account</h3>
           </div>
           {deletionRequested ? (

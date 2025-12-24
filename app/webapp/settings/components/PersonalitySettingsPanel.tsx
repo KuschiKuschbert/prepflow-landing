@@ -85,7 +85,9 @@ export function PersonalitySettingsPanel() {
         <>
           <div className="border-t border-[var(--border)] pt-4">
             <div className="mb-3 flex items-center justify-between">
-              <h3 className="text-sm font-medium text-[var(--foreground-secondary)]">Achievements</h3>
+              <h3 className="text-sm font-medium text-[var(--foreground-secondary)]">
+                Achievements
+              </h3>
               <span className="text-xs text-[var(--foreground-muted)]">
                 {progress.unlocked} / {progress.total} ({progress.percentage}%)
               </span>
@@ -103,8 +105,12 @@ export function PersonalitySettingsPanel() {
                     }`}
                   >
                     <div className="text-2xl">{achievement.icon}</div>
-                    <div className="mt-1 text-xs font-medium text-[var(--foreground-secondary)]">{achievement.name}</div>
-                    {unlocked && <div className="mt-1 text-xs text-[var(--primary)]">Unlocked!</div>}
+                    <div className="mt-1 text-xs font-medium text-[var(--foreground-secondary)]">
+                      {achievement.name}
+                    </div>
+                    {unlocked && (
+                      <div className="mt-1 text-xs text-[var(--primary)]">Unlocked!</div>
+                    )}
                   </div>
                 );
               })}
@@ -113,19 +119,25 @@ export function PersonalitySettingsPanel() {
 
           {/* Behavior Insights */}
           <div className="border-t border-[var(--border)] pt-4">
-            <h3 className="mb-3 text-sm font-medium text-[var(--foreground-secondary)]">Personality Insights</h3>
+            <h3 className="mb-3 text-sm font-medium text-[var(--foreground-secondary)]">
+              Personality Insights
+            </h3>
             <div className="space-y-2 text-sm text-[var(--foreground-muted)]">
               <div>
                 <span className="font-medium text-[var(--foreground-secondary)]">User Level:</span>{' '}
                 {behaviorProfile.userExperience === 'new' ? 'New Chef' : 'Experienced Chef'}
               </div>
               <div>
-                <span className="font-medium text-[var(--foreground-secondary)]">Save Frequency:</span>{' '}
+                <span className="font-medium text-[var(--foreground-secondary)]">
+                  Save Frequency:
+                </span>{' '}
                 {behaviorProfile.saveFrequency.charAt(0).toUpperCase() +
                   behaviorProfile.saveFrequency.slice(1)}
               </div>
               <div>
-                <span className="font-medium text-[var(--foreground-secondary)]">Session Duration:</span>{' '}
+                <span className="font-medium text-[var(--foreground-secondary)]">
+                  Session Duration:
+                </span>{' '}
                 {behaviorProfile.sessionDuration.charAt(0).toUpperCase() +
                   behaviorProfile.sessionDuration.slice(1)}
               </div>

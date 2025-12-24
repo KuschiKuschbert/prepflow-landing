@@ -118,4 +118,3 @@ export const NON_VEGAN_KEYWORDS = [
   // Already covered in non-vegetarian
   ...NON_VEGETARIAN_KEYWORDS,
 ];
-

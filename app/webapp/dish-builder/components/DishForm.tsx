@@ -10,7 +10,6 @@ interface DishFormProps {
   recommendedPrice: number;
   ingredientCount: number;
   onSave: () => void;
-  saving?: boolean;
 }
 
 export default function DishForm({
@@ -19,7 +18,6 @@ export default function DishForm({
   recommendedPrice,
   ingredientCount,
   onSave,
-  saving = false,
 }: DishFormProps) {
   const handleApplyRecommendedPrice = () => {
     if (recommendedPrice > 0) {
@@ -50,7 +48,9 @@ export default function DishForm({
       <div className="space-y-4">
         {/* Item Type Selector */}
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Item Type *</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Item Type *
+          </label>
           <div className="flex gap-2">
             <button
               type="button"
@@ -95,7 +95,10 @@ export default function DishForm({
 
         {/* Name */}
         <div>
-          <label htmlFor="dish-name" className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          <label
+            htmlFor="dish-name"
+            className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]"
+          >
             {dishState.itemType === 'dish' ? 'Dish Name' : 'Recipe Name'} *
           </label>
           <input
@@ -222,7 +225,12 @@ export default function DishForm({
               htmlFor="dish-price"
               className="mb-2 flex items-center gap-2 text-sm font-medium text-[var(--foreground-secondary)]"
             >
-              <Icon icon={DollarSign} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+              <Icon
+                icon={DollarSign}
+                size="sm"
+                className="text-[var(--primary)]"
+                aria-hidden={true}
+              />
               Selling Price (incl. GST) *
             </label>
             <div className="flex gap-2">
@@ -260,7 +268,6 @@ export default function DishForm({
           <button
             onClick={onSave}
             disabled={
-              saving ||
               !dishState.dishName.trim() ||
               ingredientCount === 0 ||
               (dishState.itemType === 'dish' && dishState.sellingPrice <= 0) ||
@@ -268,13 +275,11 @@ export default function DishForm({
             }
             className="w-full rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {saving
-              ? 'Saving...'
-              : ingredientCount === 0
-                ? 'Add Ingredients First'
-                : dishState.itemType === 'dish'
-                  ? 'Save Dish'
-                  : 'Save Recipe'}
+            {ingredientCount === 0
+              ? 'Add Ingredients First'
+              : dishState.itemType === 'dish'
+                ? 'Save Dish'
+                : 'Save Recipe'}
           </button>
           {ingredientCount === 0 && (
             <p className="mt-2 text-center text-xs text-[var(--foreground-muted)]">

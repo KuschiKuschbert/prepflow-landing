@@ -1,6 +1,5 @@
 'use client';
 
-
 export interface ToggleProps {
   /**
    * Whether the toggle is checked/enabled
@@ -57,9 +56,7 @@ export function Toggle({
   const baseClasses =
     'relative inline-flex items-center h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border transition-all focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--muted)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50';
 
-  const borderClasses = checked
-    ? 'border-[var(--primary)]/30'
-    : 'border-[var(--border)]/60';
+  const borderClasses = checked ? 'border-[var(--primary)]/30' : 'border-[var(--border)]/60';
 
   const backgroundClasses =
     variant === 'gradient'

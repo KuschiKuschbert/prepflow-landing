@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * CSV Import Actions Component
  * Action buttons for CSV import modal

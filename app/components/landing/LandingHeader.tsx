@@ -93,9 +93,12 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
                         }
                       } catch (err) {
                         // SessionStorage might fail in private mode - log but continue
-                        logger.dev('[LandingHeader] Error accessing sessionStorage (non-blocking):', {
-                          error: err instanceof Error ? err.message : String(err),
-                        });
+                        logger.dev(
+                          '[LandingHeader] Error accessing sessionStorage (non-blocking):',
+                          {
+                            error: err instanceof Error ? err.message : String(err),
+                          },
+                        );
                       }
                       window.location.href = '/api/auth/login?returnTo=/webapp';
                     }}
@@ -114,9 +117,12 @@ const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: Lan
                         }
                       } catch (err) {
                         // SessionStorage might fail in private mode - log but continue
-                        logger.dev('[LandingHeader] Error accessing sessionStorage (non-blocking):', {
-                          error: err instanceof Error ? err.message : String(err),
-                        });
+                        logger.dev(
+                          '[LandingHeader] Error accessing sessionStorage (non-blocking):',
+                          {
+                            error: err instanceof Error ? err.message : String(err),
+                          },
+                        );
                       }
                       window.location.href = '/api/auth/login?returnTo=/webapp';
                     }}

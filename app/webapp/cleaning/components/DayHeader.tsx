@@ -30,13 +30,21 @@ function DayHeader({ date, isToday = false }: DayHeaderProps) {
         isToday ? 'bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10' : ''
       }`}
     >
-      <div className={`text-xs font-medium ${isToday ? 'text-[var(--primary)]' : 'text-[var(--foreground-muted)]'}`}>
+      <div
+        className={`text-xs font-medium ${isToday ? 'text-[var(--primary)]' : 'text-[var(--foreground-muted)]'}`}
+      >
         {dayName}
       </div>
-      <div className={`text-lg font-bold ${isToday ? 'text-[var(--primary)]' : 'text-[var(--foreground)]'}`}>
+      <div
+        className={`text-lg font-bold ${isToday ? 'text-[var(--primary)]' : 'text-[var(--foreground)]'}`}
+      >
         {dayNumber}
       </div>
-      <div className={`text-xs ${isToday ? 'text-[var(--primary)]' : 'text-[var(--foreground-subtle)]'}`}>{monthName}</div>
+      <div
+        className={`text-xs ${isToday ? 'text-[var(--primary)]' : 'text-[var(--foreground-subtle)]'}`}
+      >
+        {monthName}
+      </div>
     </div>
   );
 }

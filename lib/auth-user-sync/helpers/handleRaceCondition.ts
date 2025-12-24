@@ -6,6 +6,11 @@ import { splitName } from './splitName';
  * Handle race condition when user is created by another request
  */
 export async function handleRaceCondition(email: string, name?: string | null): Promise<void> {
+  if (!supabaseAdmin) {
+    logger.error('[Auth0 Sync] Database connection not available');
+    return;
+  }
+
   const updateData: {
     last_login: string;
     updated_at: string;
@@ -56,4 +61,3 @@ export async function handleRaceCondition(email: string, name?: string | null): 
     logger.dev('[Auth0 Sync] User already exists, updated last_login:', { email });
   }
 }
-

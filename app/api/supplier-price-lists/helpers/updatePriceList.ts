@@ -1,5 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 /**
  * Update a supplier price list.
@@ -27,6 +28,12 @@ export async function updatePriceList(id: number, updateData: any) {
     )
     .single();
 
-  if (error) throw ApiErrorHandler.fromSupabaseError(error, 500);
+  if (error) {
+    logger.error('[Supplier Price Lists API] Error updating price list:', {
+      error: error.message,
+      context: { endpoint: '/api/supplier-price-lists', operation: 'updatePriceList' },
+    });
+    throw ApiErrorHandler.createError(error.message, 'DATABASE_ERROR', 500, error);
+  }
   return updated;
 }

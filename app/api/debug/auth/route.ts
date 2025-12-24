@@ -74,8 +74,9 @@ export async function GET(request: NextRequest) {
     diagnostics.actualRedirectUri = session ? 'Session active' : 'No session';
     diagnostics.providerCallbackURL = expectedCallbackUrl;
   } catch (error) {
-    logger.dev('[Auth Debug] Error checking provider:', {
+    logger.error('[Auth Debug] Error checking provider:', {
       error: error instanceof Error ? error.message : String(error),
+      context: { endpoint: '/api/debug/auth', method: 'GET' },
     });
     diagnostics.providerCheckError = error instanceof Error ? error.message : String(error);
   }

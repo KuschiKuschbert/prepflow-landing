@@ -64,12 +64,12 @@ export async function moveItemsToUncategorized({
     setMenuItems(originalMenuItems);
     setCategories(originalCategories);
     showError('Some items could not be moved. Please try again.');
-    // Refresh statistics to revert optimistic change
-    refreshStatistics().catch(err => {
-      logger.error('Failed to refresh statistics:', err);
-    });
     return false;
   }
 
+  // Refresh statistics in background (non-blocking) on success
+  refreshStatistics().catch(err => {
+    logger.error('Failed to refresh statistics:', err);
+  });
   return true;
 }

@@ -44,7 +44,6 @@ export function useCategoryRename({
         );
       }
       setCategories(categories.map(c => (c === oldName ? newName : c)));
-      refreshStatistics().catch(err => logger.error('Failed to refresh statistics:', err));
       if (itemsToUpdate.length === 0) return;
       let hasError = false;
       const errors: string[] = [];
@@ -82,6 +81,7 @@ export function useCategoryRename({
         setCategories(originalCategories);
         throw new Error(`Some items could not be updated:\n${errors.join('\n')}`);
       }
+      // Refresh statistics in background (non-blocking)
       refreshStatistics().catch(err => logger.error('Failed to refresh statistics:', err));
     },
     [menuId, menuItems, categories, setMenuItems, setCategories, refreshStatistics],

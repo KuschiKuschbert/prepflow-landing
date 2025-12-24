@@ -1,5 +1,4 @@
 'use client';
-
 import { Icon } from '@/components/ui/Icon';
 import { Edit, Power, PowerOff, QrCode, Trash2, LucideIcon, MapPin } from 'lucide-react';
 import React from 'react';
@@ -10,7 +9,6 @@ interface EquipmentListTableMobileCardsProps {
   editingId: string | null;
   setEditingId: (id: string | null) => void;
   temperatureTypes: Array<{ value: string; label: string; icon: string }>;
-  quickTempLoading: Record<string, boolean>;
   onQuickTempLog: (id: string, name: string, type: string) => Promise<void>;
   onToggleStatus: (id: string, current: boolean) => void;
   onDelete: (id: string) => void;
@@ -26,13 +24,11 @@ interface EquipmentListTableMobileCardsProps {
   } | null;
   formatDate?: (date: Date) => string;
 }
-
 export function EquipmentListTableMobileCards({
   paginatedEquipment,
   editingId,
   setEditingId,
   temperatureTypes,
-  quickTempLoading,
   onQuickTempLog,
   onToggleStatus,
   onDelete,
@@ -76,11 +72,20 @@ export function EquipmentListTableMobileCards({
               />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="mb-2 text-base font-semibold text-[var(--foreground)]">{item.name}</div>
-              <div className="mb-2 text-sm text-[var(--foreground-muted)]">{getTypeLabel(item.equipment_type)}</div>
+              <div className="mb-2 text-base font-semibold text-[var(--foreground)]">
+                {item.name}
+              </div>
+              <div className="mb-2 text-sm text-[var(--foreground-muted)]">
+                {getTypeLabel(item.equipment_type)}
+              </div>
               {item.location && (
                 <div className="mb-2 flex items-center gap-1 text-xs text-[var(--foreground-subtle)]">
-                  <Icon icon={MapPin} size="xs" className="text-[var(--foreground-subtle)]" aria-hidden={true} />
+                  <Icon
+                    icon={MapPin}
+                    size="xs"
+                    className="text-[var(--foreground-subtle)]"
+                    aria-hidden={true}
+                  />
                   <span>{item.location}</span>
                 </div>
               )}
@@ -98,7 +103,9 @@ export function EquipmentListTableMobileCards({
                   const formattedDate = formatDate ? formatDate(date) : lastLogInfo.date;
                   return (
                     <div className="mb-2 space-y-1">
-                      <div className="text-xs text-[var(--foreground-muted)]">Last log: {formattedDate}</div>
+                      <div className="text-xs text-[var(--foreground-muted)]">
+                        Last log: {formattedDate}
+                      </div>
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-semibold text-[var(--foreground-secondary)]">
                           {lastLogInfo.temperature.toFixed(1)}°C
@@ -107,12 +114,16 @@ export function EquipmentListTableMobileCards({
                           <div className="flex items-center gap-1">
                             <div
                               className={`h-1.5 w-1.5 rounded-full ${
-                                lastLogInfo.isInRange ? 'bg-[var(--color-success)]' : 'bg-[var(--color-error)]'
+                                lastLogInfo.isInRange
+                                  ? 'bg-[var(--color-success)]'
+                                  : 'bg-[var(--color-error)]'
                               }`}
                             />
                             <span
                               className={`text-xs font-semibold ${
-                                lastLogInfo.isInRange ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'
+                                lastLogInfo.isInRange
+                                  ? 'text-[var(--color-success)]'
+                                  : 'text-[var(--color-error)]'
                               }`}
                             >
                               {lastLogInfo.isInRange ? 'In Range' : 'Out of Range'}
@@ -123,7 +134,11 @@ export function EquipmentListTableMobileCards({
                     </div>
                   );
                 }
-                return <div className="mb-2 text-xs text-[var(--foreground-subtle)]">Last log: Never</div>;
+                return (
+                  <div className="mb-2 text-xs text-[var(--foreground-subtle)]">
+                    Last log: Never
+                  </div>
+                );
               })()}
               <div className="flex items-center gap-2">
                 <div
@@ -172,7 +187,9 @@ export function EquipmentListTableMobileCards({
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-[var(--foreground-secondary)]">Type</label>
+                      <label className="mb-1 block text-xs font-medium text-[var(--foreground-secondary)]">
+                        Type
+                      </label>
                       <select
                         name="equipmentType"
                         defaultValue={item.equipment_type}
@@ -236,7 +253,7 @@ export function EquipmentListTableMobileCards({
             <div className="flex flex-col gap-2">
               <button
                 onClick={() => onQuickTempLog(item.id, item.name, item.equipment_type)}
-                disabled={quickTempLoading[item.id] || !item.is_active}
+                disabled={!item.is_active}
                 className="rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-3 py-1.5 text-xs font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Quick Log
@@ -245,7 +262,7 @@ export function EquipmentListTableMobileCards({
                 {onShowQRCode && (
                   <button
                     onClick={() => onShowQRCode(item)}
-                    className="group relative rounded-lg border-2 border-[var(--primary)]/60 bg-gradient-to-br from-[var(--primary)]/10 to-[var(--accent)]/10 p-1.5 text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--primary)] hover:from-[var(--primary)]/20 hover:to-[var(--accent)]/20 hover:text-[var(--button-active-text)] hover:shadow-lg hover:shadow-[var(--primary)]/20"
+                    className="group relative rounded-lg border-2 border-[var(--primary)]/60 bg-gradient-to-br from-[var(--primary)]/10 to-[var(--accent)]/10 p-1.5 text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--primary)] hover:from-[var(--primary)]/20 hover:to-[var(--accent)]/20 hover:text-[var(--button-active-text)] hover:shadow-[var(--primary)]/20 hover:shadow-lg"
                     title="Show QR Code"
                   >
                     <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />

@@ -74,7 +74,9 @@ export function EquipmentStatistics({ logs, equipment }: EquipmentStatisticsProp
           </div>
           <div className="space-y-1">
             <div className="flex items-baseline gap-1">
-              <span className="text-lg font-bold text-[var(--foreground)]">{stats.compliance.rate}%</span>
+              <span className="text-lg font-bold text-[var(--foreground)]">
+                {stats.compliance.rate}%
+              </span>
             </div>
             <div className="h-1 w-full overflow-hidden rounded-full bg-[var(--muted)]">
               <div

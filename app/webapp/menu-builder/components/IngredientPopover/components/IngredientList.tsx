@@ -26,7 +26,9 @@ export function IngredientList({ ingredients }: IngredientListProps) {
                     {ingredient.ingredient_name}
                   </span>
                   {ingredient.brand && (
-                    <span className="truncate text-xs text-[var(--foreground-muted)]">({ingredient.brand})</span>
+                    <span className="truncate text-xs text-[var(--foreground-muted)]">
+                      ({ingredient.brand})
+                    </span>
                   )}
                 </div>
                 {ingredient.allergens && ingredient.allergens.length > 0 && (
@@ -54,7 +56,3 @@ export function IngredientList({ ingredients }: IngredientListProps) {
     </div>
   );
 }
-
-
-
-

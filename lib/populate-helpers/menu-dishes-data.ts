@@ -82,13 +82,13 @@ export async function populateMenuDishes(
       .select();
 
     if (menuDishesError) {
+      logger.error('[Populate Helpers] Error populating menu dishes:', {
+        error: menuDishesError.message,
+        context: { operation: 'populateMenuDishes' },
+      });
       results.errors.push({ table: 'menu_dishes', error: menuDishesError.message });
     } else {
       results.populated.push({ table: 'menu_dishes', count: menuDishesData?.length || 0 });
     }
   }
 }
-
-
-
-

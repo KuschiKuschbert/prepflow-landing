@@ -39,7 +39,9 @@ const formatCurrency = (amount: number) => {
 export function IngredientNameCell({ ingredient }: { ingredient: Ingredient }) {
   return (
     <td className="px-6 py-4 whitespace-nowrap">
-      <div className="text-sm font-medium text-[var(--foreground)]">{ingredient.ingredient_name}</div>
+      <div className="text-sm font-medium text-[var(--foreground)]">
+        {ingredient.ingredient_name}
+      </div>
       {ingredient.product_code && (
         <div className="text-sm text-[var(--foreground-muted)]">{ingredient.product_code}</div>
       )}
@@ -55,7 +57,9 @@ export function IngredientBrandCell({
   className?: string;
 }) {
   return (
-    <td className={`px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${className || ''}`}>
+    <td
+      className={`px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${className || ''}`}
+    >
       {ingredient.brand || '-'}
     </td>
   );
@@ -74,7 +78,9 @@ export function IngredientPackSizeCell({
   const showUnitTooltip = originalUnit && originalUnit !== standardUnit;
 
   return (
-    <td className={`px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${className || ''}`}>
+    <td
+      className={`px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${className || ''}`}
+    >
       <div className="flex items-center gap-1">
         <span>
           {ingredient.pack_size != null ? `${ingredient.pack_size} ${packSizeUnit}` : '-'}
@@ -84,7 +90,12 @@ export function IngredientPackSizeCell({
             className="cursor-help text-xs text-[var(--foreground-subtle)]"
             title={`Original unit: ${originalUnit}, Standard: ${standardUnit}`}
           >
-            <Icon icon={Info} size="xs" className="text-[var(--foreground-subtle)]" aria-hidden={true} />
+            <Icon
+              icon={Info}
+              size="xs"
+              className="text-[var(--foreground-subtle)]"
+              aria-hidden={true}
+            />
           </span>
         )}
       </div>
@@ -110,7 +121,9 @@ export function IngredientCostCell({ ingredient, displayUnit }: IngredientTableC
         <span>
           {formatCurrency(convertedCost)}/{displayUnit}
         </span>
-        {showUnitTooltip && <span className="text-xs text-[var(--foreground-subtle)]">(std: {standardUnit})</span>}
+        {showUnitTooltip && (
+          <span className="text-xs text-[var(--foreground-subtle)]">(std: {standardUnit})</span>
+        )}
       </div>
     </td>
   );
@@ -124,7 +137,9 @@ export function IngredientSupplierCell({
   className?: string;
 }) {
   return (
-    <td className={`px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${className || ''}`}>
+    <td
+      className={`px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${className || ''}`}
+    >
       {ingredient.supplier || '-'}
     </td>
   );
@@ -145,7 +160,9 @@ export function IngredientStockCell({
   return (
     <td className={`px-6 py-4 whitespace-nowrap ${className || ''}`}>
       <div className="flex items-center gap-2">
-        <span className={`text-sm ${isLowStock ? 'text-[var(--color-error)]' : 'text-[var(--foreground-secondary)]'}`}>
+        <span
+          className={`text-sm ${isLowStock ? 'text-[var(--color-error)]' : 'text-[var(--foreground-secondary)]'}`}
+        >
           {ingredient.current_stock != null ? String(ingredient.current_stock) : '0'}{' '}
           {ingredient.unit || ''}
         </span>

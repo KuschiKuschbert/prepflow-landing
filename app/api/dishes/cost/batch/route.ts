@@ -9,7 +9,9 @@ import { validateRequest } from './helpers/validateRequest';
 import { z } from 'zod';
 
 const batchCostSchema = z.object({
-  dishIds: z.array(z.string()).min(1, 'dishIds array is required and must contain at least one dish ID'),
+  dishIds: z
+    .array(z.string())
+    .min(1, 'dishIds array is required and must contain at least one dish ID'),
 });
 
 /**

@@ -24,7 +24,9 @@ export default function DishFormPricing({
   return (
     <div className="mb-6">
       <div className="mb-2 flex items-center justify-between">
-        <label className="block text-sm font-medium text-[var(--foreground-secondary)]">Selling Price *</label>
+        <label className="block text-sm font-medium text-[var(--foreground-secondary)]">
+          Selling Price *
+        </label>
         {!priceOverride && totalCost > 0 && (
           <button
             type="button"
@@ -60,7 +62,11 @@ export default function DishFormPricing({
         <div className="mt-2 space-y-1 text-xs text-[var(--foreground-muted)]">
           <div className="flex justify-between">
             <span>Food Cost:</span>
-            <span className={costLoading ? 'text-[var(--foreground-subtle)]' : 'text-[var(--foreground)]'}>
+            <span
+              className={
+                costLoading ? 'text-[var(--foreground-subtle)]' : 'text-[var(--foreground)]'
+              }
+            >
               {costLoading ? 'Calculating...' : `$${totalCost.toFixed(2)}`}
             </span>
           </div>

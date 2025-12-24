@@ -13,15 +13,24 @@ export async function mergeDishRecipeIngredients(
   }
 
   const { supabaseAdmin } = await import('@/lib/supabase');
+  const { logger } = await import('@/lib/logger');
 
   if (!supabaseAdmin) {
     return;
   }
 
-  const { data: dishRecipeIngredients } = await supabaseAdmin
+  const { data: dishRecipeIngredients, error: ingredientsError } = await supabaseAdmin
     .from('recipe_ingredients')
     .select('recipe_id, ingredient_id, quantity, unit, ingredients(id, ingredient_name)')
     .in('recipe_id', Array.from(recipeIds));
+
+  if (ingredientsError) {
+    logger.error('[Prep Lists API] Error fetching dish recipe ingredients:', {
+      error: ingredientsError.message,
+      recipeIds: Array.from(recipeIds),
+      context: { endpoint: '/api/prep-lists/generate-from-menu', operation: 'mergeDishRecipeIngredients' },
+    });
+  }
 
   if (dishRecipeIngredients) {
     for (const ri of dishRecipeIngredients) {

@@ -65,7 +65,3 @@ async function checkColumn() {
 }
 
 checkColumn();
-
-
-
-

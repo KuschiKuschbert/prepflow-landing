@@ -112,9 +112,9 @@ function RecentActivityContent() {
       cacheData('dashboard_recent_activity', data);
     } catch (err) {
       logger.error('[RecentActivity.tsx] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
       setError(err instanceof Error ? err.message : 'Failed to fetch recent activity');
     } finally {
@@ -170,7 +170,12 @@ function RecentActivityContent() {
       <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg">
         <div className="mb-4 flex items-center justify-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]">
-            <Icon icon={Clock} size="lg" className="text-[var(--button-active-text)]" aria-hidden={true} />
+            <Icon
+              icon={Clock}
+              size="lg"
+              className="text-[var(--button-active-text)]"
+              aria-hidden={true}
+            />
           </div>
         </div>
 
@@ -219,10 +224,20 @@ function RecentActivityContent() {
                 }`}
               >
                 {activity.type === 'ingredient' && (
-                  <Icon icon={Package} size="sm" className="text-[var(--color-info)]" aria-hidden={true} />
+                  <Icon
+                    icon={Package}
+                    size="sm"
+                    className="text-[var(--color-info)]"
+                    aria-hidden={true}
+                  />
                 )}
                 {activity.type === 'recipe' && (
-                  <Icon icon={BookOpen} size="sm" className="text-[var(--color-success)]" aria-hidden={true} />
+                  <Icon
+                    icon={BookOpen}
+                    size="sm"
+                    className="text-[var(--color-success)]"
+                    aria-hidden={true}
+                  />
                 )}
                 {activity.type === 'menu_dish' && (
                   <Icon

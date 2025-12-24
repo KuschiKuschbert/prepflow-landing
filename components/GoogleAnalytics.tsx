@@ -61,16 +61,20 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
   // Initialize when component mounts
   useEffect(() => {
     // Wait for scripts to load
+    let timeoutId: NodeJS.Timeout | null = null;
     const checkGtag = () => {
       if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
         initializeGtag();
       } else {
         // Retry after a short delay
-        setTimeout(checkGtag, 100);
+        timeoutId = setTimeout(checkGtag, 100);
       }
     };
 
     checkGtag();
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, [measurementId, initializeGtag]);
 
   return (

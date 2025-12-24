@@ -55,7 +55,9 @@ export function IngredientFormFields({
       {/* Basic Information */}
       <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
         <div>
-          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">Ingredient Name *</label>
+          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Ingredient Name *
+          </label>
           <input
             type="text"
             value={formData.ingredient_name || ''}
@@ -70,7 +72,9 @@ export function IngredientFormFields({
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">Brand</label>
+          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Brand
+          </label>
           <input
             type="text"
             value={formData.brand || ''}
@@ -84,7 +88,9 @@ export function IngredientFormFields({
       {/* Category */}
       <div className="grid grid-cols-1 gap-4">
         <div>
-          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">Category</label>
+          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Category
+          </label>
           <select
             value={formData.category || ''}
             onChange={e => handleInputChange('category', e.target.value)}
@@ -99,7 +105,12 @@ export function IngredientFormFields({
           </select>
           {autoDetectedCategory && formData.category === autoDetectedCategory && (
             <div className="mt-1.5 flex items-center gap-1.5 text-xs text-[var(--primary)]">
-              <Icon icon={Sparkles} size="xs" className="text-[var(--primary)]" aria-hidden={true} />
+              <Icon
+                icon={Sparkles}
+                size="xs"
+                className="text-[var(--primary)]"
+                aria-hidden={true}
+              />
               <span>Category auto-detected: {autoDetectedCategory}</span>
             </div>
           )}
@@ -109,7 +120,9 @@ export function IngredientFormFields({
       {/* Pack Information */}
       <div className="desktop:grid-cols-3 grid grid-cols-1 gap-4">
         <div>
-          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">Pack Size *</label>
+          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Pack Size *
+          </label>
           <input
             type="number"
             step="0.01"
@@ -119,7 +132,9 @@ export function IngredientFormFields({
             placeholder="e.g., 5"
             required
           />
-          {errors.pack_size && <p className="mt-1 text-sm text-[var(--color-error)]">{errors.pack_size}</p>}
+          {errors.pack_size && (
+            <p className="mt-1 text-sm text-[var(--color-error)]">{errors.pack_size}</p>
+          )}
         </div>
 
         <div>
@@ -141,7 +156,9 @@ export function IngredientFormFields({
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">Pack Price *</label>
+          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Pack Price *
+          </label>
           <input
             type="number"
             step="0.01"
@@ -151,7 +168,9 @@ export function IngredientFormFields({
             placeholder="e.g., 12.50"
             required
           />
-          {errors.pack_price && <p className="mt-1 text-sm text-[var(--color-error)]">{errors.pack_price}</p>}
+          {errors.pack_price && (
+            <p className="mt-1 text-sm text-[var(--color-error)]">{errors.pack_price}</p>
+          )}
           {formData.pack_price !== undefined &&
             formData.pack_price > 0 &&
             formData.pack_size &&
@@ -170,7 +189,9 @@ export function IngredientFormFields({
       <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
         {/* Supplier */}
         <div>
-          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">Supplier</label>
+          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Supplier
+          </label>
           <SupplierCombobox
             value={formData.supplier || ''}
             onChange={value => handleInputChange('supplier', value)}
@@ -180,7 +201,9 @@ export function IngredientFormFields({
 
         {/* Storage Location */}
         <div>
-          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">Storage Location</label>
+          <label className="mb-1 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Storage Location
+          </label>
           <StorageCombobox
             value={formData.storage_location || ''}
             onChange={value => handleInputChange('storage_location', value)}
@@ -192,7 +215,9 @@ export function IngredientFormFields({
       {/* Yield - Slider like wizard Step 2 */}
       <div className="grid grid-cols-1 gap-4">
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Yield %</label>
+          <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Yield %
+          </label>
           <div className="flex items-center space-x-2">
             <input
               type="range"

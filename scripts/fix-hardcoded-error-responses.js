@@ -46,7 +46,8 @@ function fixFile(filePath) {
   }
 
   // Pattern 1: NextResponse.json({ error: '...' }, { status: XXX })
-  const pattern1 = /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/g;
+  const pattern1 =
+    /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/g;
   content = content.replace(pattern1, (match, errorMsg, status) => {
     changed = true;
     const errorCode = getErrorCode(errorMsg, status);
@@ -54,7 +55,8 @@ function fixFile(filePath) {
   });
 
   // Pattern 2: NextResponse.json({ error: '...', message: '...' }, { status: XXX })
-  const pattern2 = /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*,\s*message:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/g;
+  const pattern2 =
+    /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*,\s*message:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/g;
   content = content.replace(pattern2, (match, error, message, status) => {
     changed = true;
     const errorCode = getErrorCode(error, status);
@@ -62,7 +64,8 @@ function fixFile(filePath) {
   });
 
   // Pattern 3: NextResponse.json({ success: false, error: '...' }, { status: XXX })
-  const pattern3 = /NextResponse\.json\(\s*\{\s*success:\s*false\s*,\s*error:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/g;
+  const pattern3 =
+    /NextResponse\.json\(\s*\{\s*success:\s*false\s*,\s*error:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/g;
   content = content.replace(pattern3, (match, errorMsg, status) => {
     changed = true;
     const errorCode = getErrorCode(errorMsg, status);
@@ -71,7 +74,8 @@ function fixFile(filePath) {
 
   // Pattern 4: Multi-line error responses (more complex, handle common cases)
   // This is a simplified version - may need manual review for complex cases
-  const pattern4 = /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*,\s*details:\s*([^}]+)\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/g;
+  const pattern4 =
+    /NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*,\s*details:\s*([^}]+)\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/g;
   content = content.replace(pattern4, (match, errorMsg, details, status) => {
     changed = true;
     const errorCode = getErrorCode(errorMsg, status);
@@ -98,8 +102,8 @@ function getErrorCode(errorMessage, statusCode) {
     'Internal server error': 'SERVER_ERROR',
     'Failed to': 'OPERATION_FAILED',
     'Not found': 'NOT_FOUND',
-    'Unauthorized': 'UNAUTHORIZED',
-    'Forbidden': 'FORBIDDEN',
+    Unauthorized: 'UNAUTHORIZED',
+    Forbidden: 'FORBIDDEN',
   };
 
   for (const [key, code] of Object.entries(errorCodeMap)) {
@@ -129,6 +133,3 @@ for (const file of apiFiles) {
 }
 
 console.log(`\n✅ Fixed ${fixedCount} files.`);
-
-
-

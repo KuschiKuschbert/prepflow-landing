@@ -18,4 +18,3 @@ export const createEmployeeSchema = z.object({
   emergency_contact_phone: z.string().optional().nullable(),
   user_id: z.string().uuid().optional().nullable(),
 });
-

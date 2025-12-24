@@ -105,16 +105,30 @@ export function ImportProgress({
         </div>
         <div className="rounded-lg bg-[var(--color-success)]/10 p-3">
           <div className="flex items-center gap-1.5">
-            <Icon icon={CheckCircle2} size="sm" className="text-[var(--color-success)]" aria-hidden={true} />
-            <span className="text-2xl font-bold text-[var(--color-success)]">{progress.successful}</span>
+            <Icon
+              icon={CheckCircle2}
+              size="sm"
+              className="text-[var(--color-success)]"
+              aria-hidden={true}
+            />
+            <span className="text-2xl font-bold text-[var(--color-success)]">
+              {progress.successful}
+            </span>
           </div>
           <div className="text-xs text-[var(--foreground-muted)]">Successful</div>
         </div>
         {progress.failed > 0 && (
           <div className="rounded-lg bg-[var(--color-error)]/10 p-3">
             <div className="flex items-center gap-1.5">
-              <Icon icon={AlertCircle} size="sm" className="text-[var(--color-error)]" aria-hidden={true} />
-              <span className="text-2xl font-bold text-[var(--color-error)]">{progress.failed}</span>
+              <Icon
+                icon={AlertCircle}
+                size="sm"
+                className="text-[var(--color-error)]"
+                aria-hidden={true}
+              />
+              <span className="text-2xl font-bold text-[var(--color-error)]">
+                {progress.failed}
+              </span>
             </div>
             <div className="text-xs text-[var(--foreground-muted)]">Failed</div>
           </div>

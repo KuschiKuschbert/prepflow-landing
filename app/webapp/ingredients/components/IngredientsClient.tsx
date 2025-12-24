@@ -22,6 +22,8 @@ import IngredientWizard from './IngredientWizard';
 import { IngredientsBulkActions } from './IngredientsClient/components/IngredientsBulkActions';
 import { IngredientsErrorBanner } from './IngredientsClient/components/IngredientsErrorBanner';
 import { IngredientsHeader } from './IngredientsClient/components/IngredientsHeader';
+import { useAutoCategorization } from './IngredientsClient/helpers/useAutoCategorization';
+import { usePagination } from './IngredientsClient/helpers/usePagination';
 
 interface Ingredient {
   id: string;
@@ -45,7 +47,6 @@ interface Ingredient {
   created_at?: string;
   updated_at?: string;
 }
-
 interface IngredientsClientProps {
   hideHeader?: boolean;
 }
@@ -96,8 +97,15 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   });
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
-  const { data: ingredientsData, isLoading, refetch: refetchIngredients } = useIngredientsQuery(1, 10000);
-  useEffect(() => setPage(1), [itemsPerPage, searchTerm, supplierFilter, storageFilter, categoryFilter]);
+  const {
+    data: ingredientsData,
+    isLoading,
+    refetch: refetchIngredients,
+  } = useIngredientsQuery(1, 10000);
+  useEffect(
+    () => setPage(1),
+    [itemsPerPage, searchTerm, supplierFilter, storageFilter, categoryFilter],
+  );
   useIngredientMigration(loading, isLoading, ingredientsData);
   useEffect(() => {
     const active = loading || isLoading;
@@ -119,16 +127,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
       router.replace(newUrl);
     }
   }, [searchParams, showAddForm, setShowAddForm, resetWizard, router]);
-  const {
-    handleAddIngredient,
-    handleUpdateIngredient,
-    handleDeleteIngredient,
-    handleBulkDelete,
-    exportToCSV,
-    handleCSVImport: handleCSVImportAction,
-    handleSelectIngredient,
-    handleSelectAll,
-  } = useIngredientActions({
+  const { handleAddIngredient, handleUpdateIngredient, handleDeleteIngredient, handleBulkDelete, exportToCSV, handleCSVImport: handleCSVImportAction, handleSelectIngredient, handleSelectAll } = useIngredientActions({
     ingredients,
     setIngredients,
     setError,
@@ -140,36 +139,21 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     setCsvData,
     setParsedIngredients,
     setSelectedIngredients,
-    selectedIngredients,
-    filteredIngredients,
+      selectedIngredients,
+      filteredIngredients,
   });
-  const { handleBulkUpdate, handleBulkAutoCategorize, handleCategorizeAllUncategorized } =
-    useIngredientBulkUpdate({
+  const { handleBulkUpdate, handleBulkAutoCategorize, handleCategorizeAllUncategorized } = useIngredientBulkUpdate({
       ingredients,
       setIngredients,
       setSelectedIngredients,
       exitSelectionMode,
     });
-  const [hasAutoCategorized, setHasAutoCategorized] = useState(false);
-  useEffect(() => {
-    if (
-      !hasAutoCategorized &&
-      !isLoading &&
-      ingredients.length > 0 &&
-      ingredients.some(ing => !ing.category || ing.category.trim() === '')
-    ) {
-      setHasAutoCategorized(true);
-      handleCategorizeAllUncategorized(true, refetchIngredients).catch(err => {
-        logger.error('Auto-categorization failed:', err);
-      });
-    }
-  }, [
+  useAutoCategorization({
     ingredients,
     isLoading,
-    hasAutoCategorized,
     handleCategorizeAllUncategorized,
     refetchIngredients,
-  ]);
+  });
   const { handleSave: handleEditSave } = useIngredientEditSave({
     setIngredients,
     setEditingIngredient,
@@ -188,9 +172,9 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     }
   };
   const filteredTotal = filteredIngredients?.length || 0;
-  const totalPages = Math.max(1, Math.ceil(filteredTotal / itemsPerPage));
-  const startIndex = (page - 1) * itemsPerPage;
-  const paginatedIngredients = filteredIngredients?.slice(startIndex, startIndex + itemsPerPage) || [];
+  const { totalPages, startIndex } = usePagination({ filteredTotal, itemsPerPage, page });
+  const paginatedIngredients =
+    filteredIngredients?.slice(startIndex, startIndex + itemsPerPage) || [];
   const [isHydrated, setIsHydrated] = useState(false);
   useEffect(() => {
     setIsHydrated(true);
@@ -221,7 +205,15 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
           loading={loading}
         />
       )}
-      {isHydrated && <IngredientPagination page={page} totalPages={totalPages} total={filteredTotal} onPageChange={setPage} className="mb-4" />}
+      {isHydrated && (
+        <IngredientPagination
+          page={page}
+          totalPages={totalPages}
+          total={filteredTotal}
+          onPageChange={setPage}
+          className="mb-4"
+        />
+      )}
       {(isHydrated || ingredients.length > 0) && (
         <IngredientTableWithFilters
           ingredients={paginatedIngredients}
@@ -259,7 +251,15 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
           onExitSelectionMode={exitSelectionMode}
         />
       )}
-      {isHydrated && <IngredientPagination page={page} totalPages={totalPages} total={filteredTotal} onPageChange={setPage} className="mt-4" />}
+      {isHydrated && (
+        <IngredientPagination
+          page={page}
+          totalPages={totalPages}
+          total={filteredTotal}
+          onPageChange={setPage}
+          className="mt-4"
+        />
+      )}
       <IngredientEditDrawer
         isOpen={!!editingIngredient}
         ingredient={editingIngredient}

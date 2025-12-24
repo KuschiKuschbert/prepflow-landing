@@ -40,13 +40,13 @@ export default function TestErrorPage() {
         <div className="mb-6 flex flex-wrap justify-center gap-4">
           <button
             onClick={() => setPreviewMode('kitchen-fire')}
-            className="rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg hover:shadow-[var(--primary)]/20"
+            className="rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-[var(--primary)]/20 hover:shadow-lg"
           >
             🔥 Preview Kitchen Fire
           </button>
           <button
             onClick={() => setPreviewMode('train-off-track')}
-            className="rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg hover:shadow-[var(--primary)]/20"
+            className="rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-[var(--primary)]/20 hover:shadow-lg"
           >
             🚂 Preview Train Off Track
           </button>
@@ -63,10 +63,21 @@ export default function TestErrorPage() {
             <strong>To test actual error handling:</strong>
           </p>
           <ol className="list-inside list-decimal space-y-1 text-left">
-            <li>Build for production: <code className="rounded bg-[var(--muted)] px-1">npm run build</code></li>
-            <li>Start production server: <code className="rounded bg-[var(--muted)] px-1">npm start</code></li>
+            <li>
+              Build for production:{' '}
+              <code className="rounded bg-[var(--muted)] px-1">npm run build</code>
+            </li>
+            <li>
+              Start production server:{' '}
+              <code className="rounded bg-[var(--muted)] px-1">npm start</code>
+            </li>
             <li>Navigate to any page and trigger an error</li>
-            <li>Or use browser console: <code className="rounded bg-[var(--muted)] px-1">throw new Error(&apos;test&apos;)</code></li>
+            <li>
+              Or use browser console:{' '}
+              <code className="rounded bg-[var(--muted)] px-1">
+                throw new Error(&apos;test&apos;)
+              </code>
+            </li>
           </ol>
         </div>
       </div>

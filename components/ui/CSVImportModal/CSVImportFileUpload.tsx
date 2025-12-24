@@ -16,7 +16,9 @@ export function CSVImportFileUpload({
 }: CSVImportFileUploadProps) {
   return (
     <div>
-      <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Upload CSV File</label>
+      <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+        Upload CSV File
+      </label>
       <input
         type="file"
         accept=".csv"

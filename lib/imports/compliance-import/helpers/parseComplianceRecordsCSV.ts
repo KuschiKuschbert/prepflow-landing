@@ -1,6 +1,12 @@
 import { parseCSV, type ParseCSVResult } from '@/lib/csv/csv-utils';
-import { normalizeColumnName, mapCSVRowToEntity, parseDate, parseBoolean, parseNumber } from '../../import-utils';
-import type { ComplianceRecordImportRow } from '../compliance-import';
+import {
+  normalizeColumnName,
+  mapCSVRowToEntity,
+  parseDate,
+  parseBoolean,
+  parseNumber,
+} from '../../import-utils';
+import type { ComplianceRecordImportRow } from '../../compliance-import';
 
 /**
  * Parse compliance records from CSV text
@@ -61,4 +67,3 @@ export function parseComplianceRecordsCSV(
     data: records,
   };
 }
-

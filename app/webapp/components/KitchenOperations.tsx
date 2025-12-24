@@ -173,7 +173,7 @@ export default function KitchenOperations() {
           <Link
             key={op.title}
             href={op.href}
-            className="group tablet:rounded-2xl tablet:p-5 rounded-xl border border-[var(--border)] bg-[var(--surface)]/30 p-4 transition-all duration-200 hover:border-[var(--primary)]/50 hover:shadow-lg hover:shadow-[var(--primary)]/10 active:scale-[0.98]"
+            className="group tablet:rounded-2xl tablet:p-5 rounded-xl border border-[var(--border)] bg-[var(--surface)]/30 p-4 transition-all duration-200 hover:border-[var(--primary)]/50 hover:shadow-[var(--primary)]/10 hover:shadow-lg active:scale-[0.98]"
           >
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
@@ -233,7 +233,9 @@ export default function KitchenOperations() {
               </div>
             </div>
             <div className="tablet:mt-4 mt-3">
-              <p className="text-fluid-xs line-clamp-2 text-[var(--foreground)]/60">{op.description}</p>
+              <p className="text-fluid-xs line-clamp-2 text-[var(--foreground)]/60">
+                {op.description}
+              </p>
             </div>
           </Link>
         ))}

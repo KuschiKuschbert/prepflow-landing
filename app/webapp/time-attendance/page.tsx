@@ -80,7 +80,9 @@ export default function TimeAttendancePage() {
       <div className="space-y-6">
         <PageHeader title="Time & Attendance" icon={Clock} />
         <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
-          <p className="text-[var(--foreground-muted)]">No employee found. Please contact your administrator.</p>
+          <p className="text-[var(--foreground-muted)]">
+            No employee found. Please contact your administrator.
+          </p>
         </div>
       </div>
     );

@@ -1,25 +1,38 @@
-import { supabaseAdmin } from '@/lib/supabase';
+import type {
+  Availability,
+  ComplianceValidationResult,
+  Employee,
+  Shift,
+} from '@/app/webapp/roster/types';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import {
+  createValidationWarnings,
   validateShift,
   validateShiftAvailability,
   validateShiftSkills,
-  createValidationWarnings,
 } from '@/lib/services/compliance/validator';
-import type {
-  Shift,
-  Employee,
-  Availability,
-  ComplianceValidationResult,
-} from '@/app/webapp/roster/types';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function performComplianceValidation(data: {
   shift: any;
   employee_id?: string;
   check_availability: boolean;
   check_skills: boolean;
-}): Promise<{ success: boolean; validation: any; warnings: any[] } | { error: any; status: number }> {
+}): Promise<
+  { success: boolean; validation: any; warnings: any[] } | { error: any; status: number }
+> {
+  if (!supabaseAdmin) {
+    return {
+      error: ApiErrorHandler.createError(
+        'Database connection not available',
+        'DATABASE_ERROR',
+        500,
+      ),
+      status: 500,
+    };
+  }
+
   const { shift, employee_id, check_availability = true, check_skills = true } = data;
   const shiftEmployeeId = shift.employee_id || employee_id;
 
@@ -45,15 +58,18 @@ export async function performComplianceValidation(data: {
     .neq('status', 'cancelled');
 
   if (shiftsError) {
-    logger.warn('[Compliance API] Database error fetching employee shifts (continuing with empty array):', {
-      error: shiftsError.message,
-      code: (shiftsError as any).code,
-      context: {
-        endpoint: '/api/compliance/validate',
-        operation: 'POST',
-        employeeId: shiftEmployeeId,
+    logger.warn(
+      '[Compliance API] Database error fetching employee shifts (continuing with empty array):',
+      {
+        error: shiftsError.message,
+        code: (shiftsError as any).code,
+        context: {
+          endpoint: '/api/compliance/validate',
+          operation: 'POST',
+          employeeId: shiftEmployeeId,
+        },
       },
-    });
+    );
     // Continue with empty array - validation can still proceed
   }
 
@@ -121,4 +137,3 @@ export async function performComplianceValidation(data: {
     warnings,
   };
 }
-

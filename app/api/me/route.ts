@@ -35,18 +35,12 @@ export async function GET(req: NextRequest) {
         throw ApiErrorHandler.fromSupabaseError(error, 500);
       }
 
-      if (!error && data) {
+      if (data) {
         dbUser = data;
         logger.dev('[API /me] Database user data:', {
           email: authUser.email,
           first_name: dbUser.first_name,
           last_name: dbUser.last_name,
-          hasError: !!error,
-        });
-      } else if (error) {
-        logger.dev('[API /me] Database query error:', {
-          email: authUser.email,
-          error: error.message,
         });
       } else {
         logger.dev('[API /me] No database user found:', {

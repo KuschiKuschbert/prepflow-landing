@@ -19,7 +19,6 @@ interface UseCleaningHandlersProps {
   areas: CleaningArea[];
   tasks: TaskWithCompletions[];
   activeTab: 'grid' | 'areas';
-  refetchTasks: () => Promise<void>;
   onCreateTask: () => void;
 }
 
@@ -27,7 +26,6 @@ export function useCleaningHandlers({
   areas,
   tasks,
   activeTab,
-  refetchTasks,
   onCreateTask,
 }: UseCleaningHandlersProps) {
   // Memoize area tasks lookup to avoid recalculating on every render
@@ -61,22 +59,12 @@ export function useCleaningHandlers({
   );
 
   const handleTaskCreated = useCallback(() => {
-    if (activeTab === 'grid') {
-      // Small delay to allow optimistic updates to complete
-      setTimeout(() => {
-        refetchTasks();
-      }, 100);
-    }
-  }, [activeTab, refetchTasks]);
+    // Optimistic updates handle UI updates, no refetch needed
+  }, []);
 
   const handleTaskUpdate = useCallback(() => {
-    if (activeTab === 'grid') {
-      // Small delay to allow optimistic updates to complete
-      setTimeout(() => {
-        refetchTasks();
-      }, 100);
-    }
-  }, [activeTab, refetchTasks]);
+    // Optimistic updates handle UI updates, no refetch needed
+  }, []);
 
   return {
     areaTasksMap,
@@ -85,7 +73,3 @@ export function useCleaningHandlers({
     handleTaskUpdate,
   };
 }
-
-
-
-

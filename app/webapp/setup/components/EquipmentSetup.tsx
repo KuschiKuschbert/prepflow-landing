@@ -37,7 +37,6 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
     max_temp: '8',
     is_active: true,
   });
-  const [equipmentLoading, setEquipmentLoading] = useState(false);
   const [equipmentError, setEquipmentError] = useState<string | null>(null);
   const [equipmentResult, setEquipmentResult] = useState<string | null>(null);
 
@@ -57,10 +56,6 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
 
   // Utility functions moved to equipment-utils.ts
 
-  useEffect(() => {
-    fetchEquipment();
-  }, []);
-
   const fetchEquipment = async () => {
     try {
       const response = await fetch('/api/temperature-equipment');
@@ -73,48 +68,76 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
     }
   };
 
+  useEffect(() => {
+    fetchEquipment();
+  }, []);
+
   const handleAddEquipment = async (e: React.FormEvent) => {
     e.preventDefault();
-    setEquipmentLoading(true);
+    // Store original state for rollback
+    const originalEquipment = [...equipment];
+
+    // Create temporary equipment for optimistic update
+    const tempId = `temp-${Date.now()}`;
+    const tempEquipment: TemperatureEquipment = {
+      id: undefined, // Will be set by server
+      name: newEquipment.name,
+      equipment_type: newEquipment.equipment_type,
+      location: newEquipment.location || '',
+      min_temp: newEquipment.min_temp,
+      max_temp: newEquipment.max_temp,
+      is_active: newEquipment.is_active,
+    };
+
+    // Optimistically add to UI immediately (use any to bypass type check for temp equipment)
+    setEquipment([tempEquipment as any, ...equipment]);
+    setNewEquipment({
+      name: '',
+      equipment_type: 'fridge',
+      location: '',
+      min_temp: '2',
+      max_temp: '8',
+      is_active: true,
+    });
+    setShowAddEquipment(false);
     setEquipmentError(null);
     setEquipmentResult(null);
+    onProgressUpdate({ ...setupProgress, equipment: true });
 
     try {
       const response = await fetch('/api/temperature-equipment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...newEquipment,
+          name: newEquipment.name,
+          equipment_type: newEquipment.equipment_type,
+          location: newEquipment.location || '',
           min_temp: newEquipment.min_temp ? parseFloat(newEquipment.min_temp) : null,
           max_temp: newEquipment.max_temp ? parseFloat(newEquipment.max_temp) : null,
+          is_active: newEquipment.is_active,
         }),
       });
       const data = await response.json();
-      if (data.success) {
-        setEquipment([...equipment, data.data]);
-        setNewEquipment({
-          name: '',
-          equipment_type: 'fridge',
-          location: '',
-          min_temp: '2',
-          max_temp: '8',
-          is_active: true,
-        });
-        setShowAddEquipment(false);
+      if (data.success && data.data) {
+        // Replace temp equipment with real one from server
+        setEquipment(prev =>
+          prev.map(eq => (eq.id === undefined || String(eq.id) === tempId ? data.data : eq)),
+        );
         setEquipmentResult('Equipment added successfully!');
-        onProgressUpdate({ ...setupProgress, equipment: true });
       } else {
+        // Rollback on error
+        setEquipment(originalEquipment);
         setEquipmentError(data.message || 'Failed to add equipment');
       }
     } catch (error) {
+      // Rollback on error
+      setEquipment(originalEquipment);
       logger.error('[EquipmentSetup.tsx] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       setEquipmentError('Network error occurred');
-    } finally {
-      setEquipmentLoading(false);
     }
   };
 
@@ -129,22 +152,39 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
 
     if (!confirmed) return;
 
+    // Store original state for rollback
+    const originalEquipment = [...equipment];
+    const equipmentToDelete = equipment.find(eq => eq.id === id);
+
+    if (!equipmentToDelete) {
+      setEquipmentError('Equipment not found');
+      return;
+    }
+
+    // Optimistically remove from UI immediately
+    setEquipment(prev => prev.filter(eq => eq.id !== id));
+    setEquipmentError(null);
+    setEquipmentResult(null);
+
     try {
       const response = await fetch(`/api/temperature-equipment?id=${id}`, {
         method: 'DELETE',
       });
       const data = await response.json();
       if (data.success) {
-        setEquipment(equipment.filter(eq => eq.id !== id));
         setEquipmentResult('Equipment deleted successfully!');
       } else {
+        // Rollback on error
+        setEquipment(originalEquipment);
         setEquipmentError(data.message || 'Failed to delete equipment');
       }
     } catch (error) {
+      // Rollback on error
+      setEquipment(originalEquipment);
       logger.error('[EquipmentSetup.tsx] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       setEquipmentError('Network error occurred');
     }
@@ -161,11 +201,16 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
 
     if (!confirmed) return;
 
-    try {
-      setEquipmentLoading(true);
-      setEquipmentError(null);
-      setEquipmentResult(null);
+    // Store original state for rollback
+    const originalEquipment = [...equipment];
+    const equipmentCount = equipment.length;
 
+    // Optimistically remove all equipment from UI immediately
+    setEquipment([]);
+    setEquipmentError(null);
+    setEquipmentResult(null);
+
+    try {
       // Delete all equipment one by one
       const deletePromises = equipment.map(eq =>
         fetch(`/api/temperature-equipment?id=${eq.id}`, {
@@ -177,20 +222,21 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
       const allSuccess = results.every(response => response.ok);
 
       if (allSuccess) {
-        setEquipment([]);
-        setEquipmentResult(`Successfully deleted all ${equipment.length} pieces of equipment!`);
+        setEquipmentResult(`Successfully deleted all ${equipmentCount} pieces of equipment!`);
       } else {
+        // Rollback on error
+        setEquipment(originalEquipment);
         setEquipmentError('Some equipment failed to delete. Give it another go, chef.');
       }
     } catch (error) {
+      // Rollback on error
+      setEquipment(originalEquipment);
       logger.error('[EquipmentSetup.tsx] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       setEquipmentError('Network error occurred');
-    } finally {
-      setEquipmentLoading(false);
     }
   };
 
@@ -222,7 +268,7 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
             setEquipment={setNewEquipment}
             onSubmit={handleAddEquipment}
             onCancel={() => setShowAddEquipment(false)}
-            loading={equipmentLoading}
+            loading={false}
             error={equipmentError}
             result={equipmentResult}
           />

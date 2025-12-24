@@ -85,9 +85,9 @@ export function CategoryHeader({
       setIsEditing(false);
     } catch (error) {
       logger.error('[CategoryHeader.tsx] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       onError(
         `Failed to rename category: ${error instanceof Error ? error.message : 'Unknown error'}`,
@@ -168,7 +168,9 @@ export function CategoryHeader({
                         setShowSortDropdown(false);
                       }}
                       className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)] ${
-                        sortBy === 'position' ? 'bg-[var(--muted)] text-[var(--primary)]' : 'text-[var(--foreground)]'
+                        sortBy === 'position'
+                          ? 'bg-[var(--muted)] text-[var(--primary)]'
+                          : 'text-[var(--foreground)]'
                       }`}
                     >
                       <Icon icon={Filter} size="sm" />
@@ -181,7 +183,9 @@ export function CategoryHeader({
                         setShowSortDropdown(false);
                       }}
                       className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)] ${
-                        sortBy === 'name-asc' ? 'bg-[var(--muted)] text-[var(--primary)]' : 'text-[var(--foreground)]'
+                        sortBy === 'name-asc'
+                          ? 'bg-[var(--muted)] text-[var(--primary)]'
+                          : 'text-[var(--foreground)]'
                       }`}
                     >
                       <Icon icon={Filter} size="sm" />
@@ -194,7 +198,9 @@ export function CategoryHeader({
                         setShowSortDropdown(false);
                       }}
                       className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)] ${
-                        sortBy === 'name-desc' ? 'bg-[var(--muted)] text-[var(--primary)]' : 'text-[var(--foreground)]'
+                        sortBy === 'name-desc'
+                          ? 'bg-[var(--muted)] text-[var(--primary)]'
+                          : 'text-[var(--foreground)]'
                       }`}
                     >
                       <Icon icon={Filter} size="sm" />
@@ -207,7 +213,9 @@ export function CategoryHeader({
                         setShowSortDropdown(false);
                       }}
                       className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)] ${
-                        sortBy === 'price-asc' ? 'bg-[var(--muted)] text-[var(--primary)]' : 'text-[var(--foreground)]'
+                        sortBy === 'price-asc'
+                          ? 'bg-[var(--muted)] text-[var(--primary)]'
+                          : 'text-[var(--foreground)]'
                       }`}
                     >
                       <Icon icon={Filter} size="sm" />
@@ -220,7 +228,9 @@ export function CategoryHeader({
                         setShowSortDropdown(false);
                       }}
                       className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)] ${
-                        sortBy === 'price-desc' ? 'bg-[var(--muted)] text-[var(--primary)]' : 'text-[var(--foreground)]'
+                        sortBy === 'price-desc'
+                          ? 'bg-[var(--muted)] text-[var(--primary)]'
+                          : 'text-[var(--foreground)]'
                       }`}
                     >
                       <Icon icon={Filter} size="sm" />

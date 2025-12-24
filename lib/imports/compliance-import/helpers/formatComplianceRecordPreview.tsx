@@ -1,5 +1,5 @@
 import { formatEntityPreview } from '../../import-utils';
-import type { ComplianceRecordImportRow } from '../compliance-import';
+import type { ComplianceRecordImportRow } from '../../compliance-import';
 
 /**
  * Format compliance record for preview
@@ -17,4 +17,3 @@ export function formatComplianceRecordPreview(
     </div>
   );
 }
-

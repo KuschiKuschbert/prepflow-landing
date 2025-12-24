@@ -86,7 +86,11 @@ export async function populateRecipes(
       }));
 
       if (!supabaseAdmin) {
-        throw ApiErrorHandler.createError('Supabase admin client not initialized', 'DATABASE_ERROR', 500);
+        throw ApiErrorHandler.createError(
+          'Supabase admin client not initialized',
+          'DATABASE_ERROR',
+          500,
+        );
       }
 
       const { error: insertError } = await supabaseAdmin
@@ -141,7 +145,3 @@ export async function populateRecipes(
 
   return { populated, skipped, errors };
 }
-
-
-
-

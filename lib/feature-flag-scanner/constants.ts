@@ -16,4 +16,3 @@ export const SOURCE_DIRECTORIES = ['app', 'components', 'hooks', 'lib'];
  * Directories to skip during scanning
  */
 export const SKIP_DIRECTORIES = ['.next', 'dist', 'build', 'node_modules'];
-

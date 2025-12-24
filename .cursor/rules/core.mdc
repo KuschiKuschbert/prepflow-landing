@@ -177,6 +177,56 @@ alwaysApply: true
   - Both require header `X-Admin-Key: $SEED_ADMIN_KEY` and are blocked in production.
   - Optional `?dry=1` for a dry-run plan.
 
+## ⚡ Optimistic Updates (MANDATORY)
+
+**Quick Reference:**
+- **MANDATORY:** All CRUD operations (Create, Update, Delete) must use optimistic updates to eliminate loading delays
+- **Pattern:** Store original state → Update UI immediately → Make API call → Revert on error
+- **Utilities:**
+  - `lib/optimistic-updates.ts` - Generic CRUD operations (`createOptimisticDelete`, `createOptimisticUpdate`, `createOptimisticCreate`, `createOptimisticReorder`)
+  - `hooks/useOptimisticMutation.ts` - Reusable hook for custom mutations with automatic rollback
+- **Performance Target:** < 50ms perceived response time (no loading states for mutations)
+- **State Management:** Works with React state (`useState`) - store original state before updates, revert on error
+- **User Feedback:** Use `useNotification` hook for success/error notifications, never show loading states for mutations
+- **Error Handling:** Always implement rollback logic - restore original state if API call fails
+- **Background Refresh:** Optionally refresh statistics or related data in background (non-blocking) after successful mutations
+- **Never:** Call `fetchData()` after successful mutations - rely on optimistic updates
+
+**Standard Pattern:**
+```typescript
+// 1. Store original state for rollback
+const originalState = [...currentState];
+
+// 2. Optimistically update UI immediately
+setState(optimisticUpdate);
+
+// 3. Make API call in background
+try {
+  const response = await fetch('/api/endpoint', { method: 'DELETE' });
+  const result = await response.json();
+
+  if (response.ok) {
+    // Success - show notification, refresh stats in background if needed
+    showSuccess('Item deleted');
+    refreshStatistics().catch(err => logger.error(err));
+  } else {
+    // Error - revert optimistic update
+    setState(originalState);
+    showError(result.error || 'Operation failed');
+  }
+} catch (err) {
+  // Error - revert optimistic update
+  setState(originalState);
+  showError('Operation failed');
+}
+```
+
+**See Also:**
+- `development.mdc` (Optimistic Updates Pattern) - Detailed pattern and examples
+- `implementation.mdc` (Optimistic Updates Implementation Pattern) - Code examples
+- `operations.mdc` (Optimistic Updates Standard) - Performance targets
+- `technical.mdc` (Optimistic Updates Global) - Quick reference
+
 ### Supabase TypeScript Gotcha (Vercel Build)
 
 - Do not chain `.catch()` on Supabase query builders; they are not Promises until awaited.

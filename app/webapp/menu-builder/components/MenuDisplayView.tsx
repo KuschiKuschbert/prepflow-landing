@@ -62,7 +62,9 @@ export function MenuDisplayView({ menu, menuItems }: MenuDisplayViewProps) {
       {/* Menu Header */}
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
         <h2 className="text-2xl font-bold text-[var(--foreground)]">{menu.menu_name}</h2>
-        {menu.description && <p className="mt-2 text-sm text-[var(--foreground-muted)]">{menu.description}</p>}
+        {menu.description && (
+          <p className="mt-2 text-sm text-[var(--foreground-muted)]">{menu.description}</p>
+        )}
       </div>
 
       {/* Menu Items by Category */}
@@ -140,15 +142,21 @@ export function MenuDisplayView({ menu, menuItems }: MenuDisplayViewProps) {
 
                   {/* Item Header with Name and Price */}
                   <div className="mb-3 flex items-start justify-between gap-4">
-                    <h4 className="flex-1 text-lg font-semibold text-[var(--foreground)]">{itemName}</h4>
+                    <h4 className="flex-1 text-lg font-semibold text-[var(--foreground)]">
+                      {itemName}
+                    </h4>
                     <div className="flex-shrink-0">
-                      <span className="text-lg font-bold text-[var(--primary)]">${price.toFixed(2)}</span>
+                      <span className="text-lg font-bold text-[var(--primary)]">
+                        ${price.toFixed(2)}
+                      </span>
                     </div>
                   </div>
 
                   {/* Description */}
                   {description && (
-                    <p className="mb-3 text-sm leading-relaxed text-[var(--foreground-muted)]">{description}</p>
+                    <p className="mb-3 text-sm leading-relaxed text-[var(--foreground-muted)]">
+                      {description}
+                    </p>
                   )}
 
                   {/* Dietary Badge */}

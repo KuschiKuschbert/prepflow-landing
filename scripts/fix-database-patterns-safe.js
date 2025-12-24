@@ -37,7 +37,8 @@ function fixThrowDbConnection(content, filePath) {
     return { changed: false, content };
   }
 
-  const pattern = /if\s*\(!supabaseAdmin\)\s*\{\s*throw\s+new\s+Error\(['"]Database connection not available['"]\)/g;
+  const pattern =
+    /if\s*\(!supabaseAdmin\)\s*\{\s*throw\s+new\s+Error\(['"]Database connection not available['"]\)/g;
 
   if (!pattern.test(content)) return { changed: false, content };
 
@@ -144,7 +145,3 @@ if (require.main === module) {
 }
 
 module.exports = { fixThrowDbConnection, findMissingErrorHandling };
-
-
-
-

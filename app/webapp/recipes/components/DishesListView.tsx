@@ -1,3 +1,4 @@
+'use client';
 import { Icon } from '@/components/ui/Icon';
 import { Search, X } from 'lucide-react';
 import { Dish, DishCostData, Recipe, RecipePriceData } from '../types';
@@ -15,7 +16,6 @@ type RecipeSortField =
   | 'contributing_margin'
   | 'created';
 export type UnifiedSortField = DishSortField | RecipeSortField;
-
 interface DishesListViewProps {
   allItems: UnifiedItem[];
   paginatedItems: UnifiedItem[];
@@ -52,7 +52,6 @@ interface DishesListViewProps {
   onEnterSelectionMode: () => void;
   onViewModeChange: (mode: 'builder') => void;
 }
-
 export function DishesListView({
   allItems,
   paginatedItems,
@@ -85,7 +84,6 @@ export function DishesListView({
 }: DishesListViewProps) {
   const totalPages = Math.ceil(allItems.length / filters.itemsPerPage);
   const searchTerm = filters.searchTerm || '';
-
   return (
     <>
       {/* Top Pagination */}
@@ -112,7 +110,6 @@ export function DishesListView({
           </div>
         </div>
       )}
-
       {/* Main Container with Search Bar */}
       <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
         {/* Search Bar - Sticky Filter Bar */}
@@ -148,7 +145,10 @@ export function DishesListView({
 
               {/* Items Per Page Selector */}
               <div className="flex items-center gap-1.5">
-                <label htmlFor="items-per-page" className="text-xs whitespace-nowrap text-[var(--foreground-muted)]">
+                <label
+                  htmlFor="items-per-page"
+                  className="text-xs whitespace-nowrap text-[var(--foreground-muted)]"
+                >
                   Per page:
                 </label>
                 <select
@@ -243,7 +243,9 @@ export function DishesListView({
           ) : (
             <div className="py-12 text-center">
               <div className="mb-4 text-6xl text-[var(--foreground-muted)]">🍽️</div>
-              <h3 className="mb-2 text-lg font-medium text-[var(--foreground)]">No dishes or recipes found</h3>
+              <h3 className="mb-2 text-lg font-medium text-[var(--foreground)]">
+                No dishes or recipes found
+              </h3>
               <p className="text-[var(--foreground-subtle)]">Try adjusting your search or filters.</p>
             </div>
           )}
@@ -274,12 +276,13 @@ export function DishesListView({
           </div>
         </div>
       )}
-
       {/* Empty State */}
       {allItems.length === 0 && (
         <div className="py-12 text-center">
           <div className="mb-4 text-6xl text-[var(--foreground-muted)]">🍽️</div>
-          <h3 className="mb-2 text-lg font-medium text-[var(--foreground)]">No dishes or recipes yet</h3>
+          <h3 className="mb-2 text-lg font-medium text-[var(--foreground)]">
+            No dishes or recipes yet
+          </h3>
           <p className="mb-4 text-[var(--foreground-subtle)]">
             Create your first dish or recipe by combining ingredients.
           </p>

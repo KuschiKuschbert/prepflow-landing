@@ -9,7 +9,9 @@ import { normalizeRecipeForShare } from '@/app/api/recipe-share/helpers/normaliz
 import { generateRecipePDF } from '@/app/api/recipe-share/helpers/generateRecipePDF';
 
 const bulkShareSchema = z.object({
-  recipeIds: z.array(z.string().uuid('Recipe ID must be a valid UUID')).min(1, 'Recipe IDs array is required and must contain at least one recipe ID'),
+  recipeIds: z
+    .array(z.string().uuid('Recipe ID must be a valid UUID'))
+    .min(1, 'Recipe IDs array is required and must contain at least one recipe ID'),
   shareType: z.enum(['email', 'link', 'pdf']),
   recipientEmail: z.string().email('Invalid email address').optional(),
   notes: z.string().optional().nullable(),
@@ -65,12 +67,12 @@ export async function POST(request: NextRequest) {
         // Fetch recipe with ingredients
         const recipe = await fetchRecipeWithIngredients(recipeId);
 
-        // Create share record
+        // Create share record (convert null to undefined)
         const shareRecord = await createShareRecord({
           recipe_id: recipeId,
           share_type: shareType,
           recipient_email: recipientEmail,
-          notes,
+          notes: notes ?? undefined,
         });
 
         // Normalize and generate PDF

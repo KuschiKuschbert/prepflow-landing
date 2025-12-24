@@ -133,7 +133,3 @@ The script uses values from `lib/theme.ts`:
 - Corner magenta opacity: 0.16
 
 To adjust these, edit `lib/theme.ts` and regenerate the PNG.
-
-
-
-

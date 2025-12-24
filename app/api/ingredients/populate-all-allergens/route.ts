@@ -6,12 +6,19 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { enrichIngredientWithAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { checkRateLimit } from './helpers/rateLimit';
+
+const populateAllAllergensSchema = z.object({
+  dry_run: z.boolean().optional().default(false),
+  batch_size: z.number().int().positive().optional().default(50),
+  force_ai: z.boolean().optional().default(false),
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,13 +40,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let body = {};
+    let body: z.infer<typeof populateAllAllergensSchema> = {
+      dry_run: false,
+      batch_size: 50,
+      force_ai: false,
+    };
     try {
-      body = await request.json();
+      const rawBody = await request.json();
+      body = populateAllAllergensSchema.parse(rawBody);
     } catch (err) {
       logger.warn('[Populate All Allergens API] Failed to parse request body:', {
         error: err instanceof Error ? err.message : String(err),
       });
+      if (err instanceof z.ZodError) {
+        return NextResponse.json(
+          ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+          { status: 400 },
+        );
+      }
     }
     const { dry_run = false, batch_size = 50, force_ai = false } = body;
 
@@ -113,50 +131,14 @@ export async function POST(request: NextRequest) {
     let successful = 0;
     let failed = 0;
     let skipped = 0;
+    const { processIngredientBatch } = await import('./helpers/processIngredientBatch');
     for (let i = 0; i < ingredientsToProcess.length; i += batch_size) {
       const batch = ingredientsToProcess.slice(i, i + batch_size);
-      for (const ingredient of batch) {
-        try {
-          const enriched = await enrichIngredientWithAllergensHybrid({
-            ingredient_name: ingredient.ingredient_name,
-            brand: ingredient.brand || undefined,
-            allergens: (ingredient.allergens as string[]) || [],
-            allergen_source:
-              (ingredient.allergen_source as { manual?: boolean; ai?: boolean }) || {},
-            forceAI: force_ai,
-          });
-          const { error: updateError } = await supabaseAdmin
-            .from('ingredients')
-            .update({
-              allergens: enriched.allergens,
-              allergen_source: enriched.allergen_source,
-            })
-            .eq('id', ingredient.id);
-          if (updateError) throw updateError;
-          successful++;
-          results.push({
-            ingredient_id: ingredient.id,
-            ingredient_name: ingredient.ingredient_name,
-            status: 'success',
-            allergens: enriched.allergens,
-            method: enriched.method || 'unknown',
-          });
-          await new Promise(resolve => setTimeout(resolve, 200));
-        } catch (err) {
-          failed++;
-          logger.error('[Populate All Allergens] Failed to process ingredient:', {
-            ingredient_id: ingredient.id,
-            ingredient_name: ingredient.ingredient_name,
-            error: err instanceof Error ? err.message : String(err),
-          });
-          results.push({
-            ingredient_id: ingredient.id,
-            ingredient_name: ingredient.ingredient_name,
-            status: 'failed',
-            error: err instanceof Error ? err.message : 'Unknown error',
-          });
-        }
-      }
+      const batchResult = await processIngredientBatch(batch, force_ai);
+      results.push(...batchResult.results);
+      successful += batchResult.successful;
+      failed += batchResult.failed;
+      await new Promise(resolve => setTimeout(resolve, 200));
       if (i + batch_size < ingredientsToProcess.length) {
         await new Promise(resolve => setTimeout(resolve, 1000));
       }

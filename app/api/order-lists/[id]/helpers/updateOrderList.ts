@@ -1,6 +1,6 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { z } from 'zod';
 import { updateOrderListSchema } from './schemas';
 
@@ -8,6 +8,17 @@ export async function updateOrderList(
   id: string,
   body: z.infer<typeof updateOrderListSchema>,
 ): Promise<{ success: boolean; message: string; data: any } | { error: any; status: number }> {
+  if (!supabaseAdmin) {
+    return {
+      error: ApiErrorHandler.createError(
+        'Database connection not available',
+        'DATABASE_ERROR',
+        500,
+      ),
+      status: 500,
+    };
+  }
+
   const { supplierId, name, notes, status, items } = body;
 
   const updateData: any = { updated_at: new Date().toISOString() };
@@ -83,4 +94,3 @@ export async function updateOrderList(
 
   return { success: true, message: 'Order list updated successfully', data };
 }
-

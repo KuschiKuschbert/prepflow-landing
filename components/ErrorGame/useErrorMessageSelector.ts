@@ -49,9 +49,9 @@ export const useErrorMessageSelector = () => {
       return newMessage;
     } catch (error) {
       logger.error('[useErrorMessageSelector.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       // If localStorage fails, default to kitchen fire
       return 'kitchen-fire';

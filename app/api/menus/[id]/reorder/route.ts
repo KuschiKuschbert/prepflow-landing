@@ -6,11 +6,15 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { z } from 'zod';
 
 const reorderMenuItemsSchema = z.object({
-  items: z.array(z.object({
-    id: z.string().min(1, 'Item ID is required'),
-    category: z.string().min(1, 'Category is required'),
-    position: z.number().int().nonnegative('Position must be a non-negative integer'),
-  })).min(1, 'Items array must contain at least one item'),
+  items: z
+    .array(
+      z.object({
+        id: z.string().min(1, 'Item ID is required'),
+        category: z.string().min(1, 'Category is required'),
+        position: z.number().int().nonnegative('Position must be a non-negative integer'),
+      }),
+    )
+    .min(1, 'Items array must contain at least one item'),
 });
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {

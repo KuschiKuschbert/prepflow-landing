@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Mobile card layout for COGS table.
  */
@@ -52,7 +54,12 @@ export function COGSTableMobile({
               >
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-2">
-                    <Icon icon={ChefHat} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+                    <Icon
+                      icon={ChefHat}
+                      size="sm"
+                      className="text-[var(--primary)]"
+                      aria-hidden={true}
+                    />
                     <span className="font-semibold text-[var(--foreground)]">
                       {group.recipeName} ({group.quantity}x)
                     </span>
@@ -99,7 +106,9 @@ export function COGSTableMobile({
         {standaloneCalculations.length > 0 && (
           <div className="space-y-2">
             <div className="rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 p-3">
-              <h4 className="text-sm font-semibold text-[var(--foreground)]">Standalone Ingredients</h4>
+              <h4 className="text-sm font-semibold text-[var(--foreground)]">
+                Standalone Ingredients
+              </h4>
             </div>
             {standaloneCalculations.map((calc, index) => (
               <COGSTableMobileCard

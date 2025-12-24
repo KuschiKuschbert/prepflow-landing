@@ -1,5 +1,5 @@
 import { formatEntityPreview } from '../../import-utils';
-import type { SupplierImportRow } from '../supplier-import';
+import type { SupplierImportRow } from '../../supplier-import';
 
 /**
  * Format supplier for preview
@@ -14,4 +14,3 @@ export function formatSupplierPreview(supplier: SupplierImportRow, index: number
     </div>
   );
 }
-

@@ -48,7 +48,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
           <Icon icon={Utensils} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
           Add Ingredients
         </h4>
-        <p className="text-xs flex items-center gap-1 text-[var(--foreground-muted)]">
+        <p className="flex items-center gap-1 text-xs text-[var(--foreground-muted)]">
           <Icon icon={Sparkles} size="xs" className="text-[var(--primary)]" aria-hidden={true} />
           Automatic unit conversion: Use any unit (tsp, tbsp, cups, ml, g, kg)
         </p>
@@ -61,7 +61,12 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
         >
           <div className="ingredient-search-container relative">
             <label className="mb-2 flex items-center gap-2 text-sm font-medium text-[var(--foreground-secondary)]">
-              <Icon icon={Search} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+              <Icon
+                icon={Search}
+                size="sm"
+                className="text-[var(--foreground-muted)]"
+                aria-hidden={true}
+              />
               Search & Select Ingredient
             </label>
             <div className="relative">
@@ -80,7 +85,12 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
                 className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] py-3 pr-10 pl-10 text-[var(--foreground)] shadow-sm transition-all duration-200 hover:border-[var(--primary)]/50 hover:shadow-md focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
               />
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <Icon icon={Search} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+                <Icon
+                  icon={Search}
+                  size="sm"
+                  className="text-[var(--foreground-muted)]"
+                  aria-hidden={true}
+                />
               </div>
               {ingredientSearch && (
                 <button
@@ -155,8 +165,13 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
           {/* No results message */}
           {showSuggestions && filteredIngredients.length === 0 && ingredientSearch && (
             <div className="relative z-50 mt-1 w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
-              <p className="text-center flex items-center justify-center gap-2 text-sm text-[var(--foreground-muted)]">
-                <Icon icon={Search} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+              <p className="flex items-center justify-center gap-2 text-center text-sm text-[var(--foreground-muted)]">
+                <Icon
+                  icon={Search}
+                  size="sm"
+                  className="text-[var(--foreground-muted)]"
+                  aria-hidden={true}
+                />
                 No ingredients found matching &quot;{ingredientSearch}&quot;
               </p>
               <p className="mt-1 text-center text-xs text-[var(--foreground-subtle)]">
@@ -171,7 +186,12 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2 font-medium text-[var(--primary)]">
-                    <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+                    <Icon
+                      icon={Check}
+                      size="sm"
+                      className="text-[var(--primary)]"
+                      aria-hidden={true}
+                    />
                     {selectedIngredient.ingredient_name}
                   </div>
                   <div className="mt-1 text-xs text-[var(--foreground-muted)]">
@@ -198,7 +218,9 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">⚖️ Quantity</label>
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+                ⚖️ Quantity
+              </label>
               <input
                 type="number"
                 step="0.01"
@@ -216,7 +238,9 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
               />
             </div>
             <div>
-              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Unit</label>
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+                Unit
+              </label>
               <RecipeUnitSelect value={newIngredient.unit || 'kg'} onChange={onUnitChange} />
             </div>
           </div>
@@ -226,7 +250,12 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
             disabled={!selectedIngredient || !newIngredient.quantity || newIngredient.quantity <= 0}
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--primary)]/90 hover:to-[var(--accent)]/90 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <Icon icon={Plus} size="sm" className="text-[var(--button-active-text)]" aria-hidden={true} />
+            <Icon
+              icon={Plus}
+              size="sm"
+              className="text-[var(--button-active-text)]"
+              aria-hidden={true}
+            />
             <span>Add Ingredient</span>
           </button>
         </form>

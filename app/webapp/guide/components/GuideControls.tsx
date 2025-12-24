@@ -57,7 +57,7 @@ export function GuideControls({
       {isLastStep ? (
         <button
           onClick={onComplete || onNext}
-          className="rounded-2xl bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] px-6 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all hover:shadow-lg hover:shadow-[var(--tertiary)]/25"
+          className="rounded-2xl bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] px-6 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all hover:shadow-[var(--tertiary)]/25 hover:shadow-lg"
           aria-label="Complete guide"
         >
           Complete
@@ -65,7 +65,7 @@ export function GuideControls({
       ) : (
         <button
           onClick={onNext}
-          className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all hover:shadow-lg hover:shadow-[var(--tertiary)]/25"
+          className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] via-[var(--tertiary)] to-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all hover:shadow-[var(--tertiary)]/25 hover:shadow-lg"
           aria-label="Next step"
         >
           Next

@@ -148,7 +148,12 @@ export function ActionButtonGroup({
                   disabled={printLoading}
                   className="flex w-full items-center gap-3 px-4 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <Icon icon={Printer} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+                  <Icon
+                    icon={Printer}
+                    size="sm"
+                    className="text-[var(--foreground-muted)]"
+                    aria-hidden={true}
+                  />
                   <span>{printLoading ? 'Printing...' : 'Print'}</span>
                 </button>
               )}
@@ -197,7 +202,12 @@ export function ActionButtonGroup({
                   }}
                   className="flex w-full items-center gap-3 px-4 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]"
                 >
-                  <Icon icon={Share2} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+                  <Icon
+                    icon={Share2}
+                    size="sm"
+                    className="text-[var(--foreground-muted)]"
+                    aria-hidden={true}
+                  />
                   <span>Share</span>
                 </button>
               )}
@@ -210,7 +220,12 @@ export function ActionButtonGroup({
                   }}
                   className="flex w-full items-center gap-3 px-4 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]"
                 >
-                  <Icon icon={Copy} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+                  <Icon
+                    icon={Copy}
+                    size="sm"
+                    className="text-[var(--foreground-muted)]"
+                    aria-hidden={true}
+                  />
                   <span>{copyLabel}</span>
                 </button>
               )}
@@ -224,7 +239,12 @@ export function ActionButtonGroup({
                   disabled={importLoading}
                   className="flex w-full items-center gap-3 px-4 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <Icon icon={Upload} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+                  <Icon
+                    icon={Upload}
+                    size="sm"
+                    className="text-[var(--foreground-muted)]"
+                    aria-hidden={true}
+                  />
                   <span>{importLoading ? 'Importing...' : 'Import CSV'}</span>
                 </button>
               )}

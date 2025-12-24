@@ -22,10 +22,15 @@ import {
 export async function POST(req: Request) {
   const stripe = getStripe();
   if (!stripe) {
-    return NextResponse.json(ApiErrorHandler.createError('Stripe not configured', 'ERROR', 501), { status: 501 });
+    return NextResponse.json(ApiErrorHandler.createError('Stripe not configured', 'ERROR', 501), {
+      status: 501,
+    });
   }
   const sig = req.headers.get('stripe-signature');
-  if (!sig) return NextResponse.json(ApiErrorHandler.createError('Missing signature', 'BAD_REQUEST', 400), { status: 400 });
+  if (!sig)
+    return NextResponse.json(ApiErrorHandler.createError('Missing signature', 'BAD_REQUEST', 400), {
+      status: 400,
+    });
 
   // Get environment-specific webhook secret (Stripe best practice)
   const webhookSecret = getWebhookSecret();
@@ -36,7 +41,9 @@ export async function POST(req: Request) {
       hasProdSecret: !!process.env.STRIPE_WEBHOOK_SECRET_PROD,
       hasFallbackSecret: !!process.env.STRIPE_WEBHOOK_SECRET,
     });
-    return NextResponse.json(ApiErrorHandler.createError('Missing webhook secret', 'ERROR', 501), { status: 501 });
+    return NextResponse.json(ApiErrorHandler.createError('Missing webhook secret', 'ERROR', 501), {
+      status: 501,
+    });
   }
 
   const rawBody = await req.text();
@@ -48,7 +55,9 @@ export async function POST(req: Request) {
       error: err instanceof Error ? err.message : String(err),
       nodeEnv: process.env.NODE_ENV,
     });
-    return NextResponse.json(ApiErrorHandler.createError('Invalid signature', 'BAD_REQUEST', 400), { status: 400 });
+    return NextResponse.json(ApiErrorHandler.createError('Invalid signature', 'BAD_REQUEST', 400), {
+      status: 400,
+    });
   }
 
   const eventId = event.id;

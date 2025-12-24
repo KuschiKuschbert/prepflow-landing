@@ -10,7 +10,8 @@ import { supabaseAdmin } from '@/lib/supabase';
  * @throws {Error} If delete fails
  */
 export async function deleteCleaningArea(id: string): Promise<void> {
-  if (!supabaseAdmin) throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  if (!supabaseAdmin)
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
 
   const { error } = await supabaseAdmin.from('cleaning_areas').delete().eq('id', id);
 

@@ -21,5 +21,3 @@ export function handleSquareConfigError(error: unknown): NextResponse {
     { status: 500 },
   );
 }
-
-

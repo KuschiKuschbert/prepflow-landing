@@ -135,7 +135,12 @@ export function RegionSelector() {
                     </div>
                   </div>
                   {isSelected && (
-                    <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+                    <Icon
+                      icon={Check}
+                      size="sm"
+                      className="text-[var(--primary)]"
+                      aria-hidden={true}
+                    />
                   )}
                 </button>
               );

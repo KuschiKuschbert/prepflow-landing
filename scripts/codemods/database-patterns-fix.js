@@ -35,119 +35,120 @@ function transform(file, api) {
   });
 
   // Find all Supabase query patterns with .catch()
-  root.find(j.CallExpression, {
-    callee: {
-      property: { name: 'catch' }
-    }
-  }).forEach(path => {
-    // Check if this is a Supabase query chain
-    const parent = path.parentPath.value;
-    const isSupabaseQuery = j(path)
-      .closest(j.CallExpression, {
-        callee: {
-          property: { name: /^(from|select|insert|update|delete|upsert)$/ }
-        }
-      })
-      .size() > 0;
+  root
+    .find(j.CallExpression, {
+      callee: {
+        property: { name: 'catch' },
+      },
+    })
+    .forEach(path => {
+      // Check if this is a Supabase query chain
+      const parent = path.parentPath.value;
+      const isSupabaseQuery =
+        j(path)
+          .closest(j.CallExpression, {
+            callee: {
+              property: { name: /^(from|select|insert|update|delete|upsert)$/ },
+            },
+          })
+          .size() > 0;
 
-    if (isSupabaseQuery) {
-      // This needs manual fixing - .catch() on Supabase queries
-      // We'll mark it but can't auto-fix without context
-      hasChanges = true;
-    }
-  });
+      if (isSupabaseQuery) {
+        // This needs manual fixing - .catch() on Supabase queries
+        // We'll mark it but can't auto-fix without context
+        hasChanges = true;
+      }
+    });
 
   // Find throw new Error patterns that should use ApiErrorHandler
-  root.find(j.ThrowStatement, {
-    argument: {
-      type: 'NewExpression',
-      callee: { name: 'Error' }
-    }
-  }).forEach(path => {
-    const errorArg = path.value.argument.arguments[0];
-    if (errorArg && errorArg.type === 'StringLiteral') {
-      const errorMessage = errorArg.value;
+  root
+    .find(j.ThrowStatement, {
+      argument: {
+        type: 'NewExpression',
+        callee: { name: 'Error' },
+      },
+    })
+    .forEach(path => {
+      const errorArg = path.value.argument.arguments[0];
+      if (errorArg && errorArg.type === 'StringLiteral') {
+        const errorMessage = errorArg.value;
 
-      // Replace with ApiErrorHandler.createError
-      const newThrow = j.throwStatement(
-        j.callExpression(
-          j.memberExpression(
-            j.identifier('ApiErrorHandler'),
-            j.identifier('createError')
+        // Replace with ApiErrorHandler.createError
+        const newThrow = j.throwStatement(
+          j.callExpression(
+            j.memberExpression(j.identifier('ApiErrorHandler'), j.identifier('createError')),
+            [j.stringLiteral(errorMessage), j.stringLiteral('DATABASE_ERROR'), j.literal(500)],
           ),
-          [
-            j.stringLiteral(errorMessage),
-            j.stringLiteral('DATABASE_ERROR'),
-            j.literal(500)
-          ]
-        )
+        );
+
+        j(path).replaceWith(newThrow);
+        hasChanges = true;
+
+        if (!hasApiErrorHandlerImport) {
+          // Add import at top
+          const firstImport = root.find(j.ImportDeclaration).at(0);
+          if (firstImport.size() > 0) {
+            firstImport.insertBefore(
+              j.importDeclaration(
+                [j.importSpecifier(j.identifier('ApiErrorHandler'))],
+                j.stringLiteral('@/lib/api-error-handler'),
+              ),
+            );
+          } else {
+            root
+              .get()
+              .node.program.body.unshift(
+                j.importDeclaration(
+                  [j.importSpecifier(j.identifier('ApiErrorHandler'))],
+                  j.stringLiteral('@/lib/api-error-handler'),
+                ),
+              );
+          }
+          hasApiErrorHandlerImport = true;
+        }
+      }
+    });
+
+  // Find console.error() and replace with logger.error()
+  root
+    .find(j.CallExpression, {
+      callee: {
+        object: { name: 'console' },
+        property: { name: 'error' },
+      },
+    })
+    .forEach(path => {
+      const args = path.value.arguments;
+      const newCall = j.callExpression(
+        j.memberExpression(j.identifier('logger'), j.identifier('error')),
+        args,
       );
 
-      j(path).replaceWith(newThrow);
+      j(path).replaceWith(newCall);
       hasChanges = true;
 
-      if (!hasApiErrorHandlerImport) {
-        // Add import at top
+      if (!hasLoggerImport) {
         const firstImport = root.find(j.ImportDeclaration).at(0);
         if (firstImport.size() > 0) {
           firstImport.insertBefore(
             j.importDeclaration(
-              [j.importSpecifier(j.identifier('ApiErrorHandler'))],
-              j.stringLiteral('@/lib/api-error-handler')
-            )
+              [j.importSpecifier(j.identifier('logger'))],
+              j.stringLiteral('@/lib/logger'),
+            ),
           );
         } else {
-          root.get().node.program.body.unshift(
-            j.importDeclaration(
-              [j.importSpecifier(j.identifier('ApiErrorHandler'))],
-              j.stringLiteral('@/lib/api-error-handler')
-            )
-          );
+          root
+            .get()
+            .node.program.body.unshift(
+              j.importDeclaration(
+                [j.importSpecifier(j.identifier('logger'))],
+                j.stringLiteral('@/lib/logger'),
+              ),
+            );
         }
-        hasApiErrorHandlerImport = true;
+        hasLoggerImport = true;
       }
-    }
-  });
-
-  // Find console.error() and replace with logger.error()
-  root.find(j.CallExpression, {
-    callee: {
-      object: { name: 'console' },
-      property: { name: 'error' }
-    }
-  }).forEach(path => {
-    const args = path.value.arguments;
-    const newCall = j.callExpression(
-      j.memberExpression(
-        j.identifier('logger'),
-        j.identifier('error')
-      ),
-      args
-    );
-
-    j(path).replaceWith(newCall);
-    hasChanges = true;
-
-    if (!hasLoggerImport) {
-      const firstImport = root.find(j.ImportDeclaration).at(0);
-      if (firstImport.size() > 0) {
-        firstImport.insertBefore(
-          j.importDeclaration(
-            [j.importSpecifier(j.identifier('logger'))],
-            j.stringLiteral('@/lib/logger')
-          )
-        );
-      } else {
-        root.get().node.program.body.unshift(
-          j.importDeclaration(
-            [j.importSpecifier(j.identifier('logger'))],
-            j.stringLiteral('@/lib/logger')
-          )
-        );
-      }
-      hasLoggerImport = true;
-    }
-  });
+    });
 
   if (!hasChanges) {
     return null;
@@ -162,7 +163,3 @@ function transform(file, api) {
 
 module.exports = transform;
 module.exports.parser = 'tsx';
-
-
-
-

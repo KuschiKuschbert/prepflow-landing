@@ -27,34 +27,50 @@ export function VariantAPricing({ t, handleEngagement }: PricingProps) {
               <p className="text-fluid-4xl bg-gradient-to-r from-[var(--accent)] to-[var(--primary)] bg-clip-text font-extrabold tracking-tight text-transparent">
                 AUD $29
               </p>
-              <p className="text-fluid-lg mt-2 text-[var(--foreground-secondary)]">One-time purchase</p>
-              <p className="text-fluid-sm text-[var(--foreground-subtle)]">Lifetime access · No recurring fees</p>
+              <p className="text-fluid-lg mt-2 text-[var(--foreground-secondary)]">
+                One-time purchase
+              </p>
+              <p className="text-fluid-sm text-[var(--foreground-subtle)]">
+                Lifetime access · No recurring fees
+              </p>
             </div>
 
             <div className="mb-8 grid gap-4 text-left">
               <div className="flex items-center gap-3">
                 <Icon icon={Check} size="lg" className="text-[var(--accent)]" aria-hidden={true} />
-                <span className="text-[var(--foreground-secondary)]">Complete Google Sheets template</span>
+                <span className="text-[var(--foreground-secondary)]">
+                  Complete Google Sheets template
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 <Icon icon={Check} size="lg" className="text-[var(--accent)]" aria-hidden={true} />
-                <span className="text-[var(--foreground-secondary)]">Automated COGS calculations</span>
+                <span className="text-[var(--foreground-secondary)]">
+                  Automated COGS calculations
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 <Icon icon={Check} size="lg" className="text-[var(--accent)]" aria-hidden={true} />
-                <span className="text-[var(--foreground-secondary)]">Profit analysis & menu optimization</span>
+                <span className="text-[var(--foreground-secondary)]">
+                  Profit analysis & menu optimization
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 <Icon icon={Check} size="lg" className="text-[var(--accent)]" aria-hidden={true} />
-                <span className="text-[var(--foreground-secondary)]">GST-ready for Australian businesses</span>
+                <span className="text-[var(--foreground-secondary)]">
+                  GST-ready for Australian businesses
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 <Icon icon={Check} size="lg" className="text-[var(--accent)]" aria-hidden={true} />
-                <span className="text-[var(--foreground-secondary)]">AI-powered cooking insights</span>
+                <span className="text-[var(--foreground-secondary)]">
+                  AI-powered cooking insights
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 <Icon icon={Check} size="lg" className="text-[var(--accent)]" aria-hidden={true} />
-                <span className="text-[var(--foreground-secondary)]">Setup guide & support resources</span>
+                <span className="text-[var(--foreground-secondary)]">
+                  Setup guide & support resources
+                </span>
               </div>
             </div>
 
@@ -62,7 +78,7 @@ export function VariantAPricing({ t, handleEngagement }: PricingProps) {
               href="https://7495573591101.gumroad.com/l/prepflow"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-fluid-base inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[var(--accent)] to-[var(--primary)] px-8 py-4 font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-[var(--accent)]/25"
+              className="text-fluid-base inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[var(--accent)] to-[var(--primary)] px-8 py-4 font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-300 hover:shadow-[var(--accent)]/25 hover:shadow-xl"
             >
               Get PrepFlow Now
             </a>
@@ -72,7 +88,12 @@ export function VariantAPricing({ t, handleEngagement }: PricingProps) {
                 7-day refund policy · Secure checkout via Gumroad
               </p>
               <p className="text-fluid-xs mt-2 flex items-center justify-center gap-1 text-[var(--foreground-muted)]">
-                <Icon icon={Globe} size="xs" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+                <Icon
+                  icon={Globe}
+                  size="xs"
+                  className="text-[var(--foreground-muted)]"
+                  aria-hidden={true}
+                />
                 Available in USD, EUR, GBP, AUD
               </p>
             </div>

@@ -24,9 +24,9 @@ export function createPublishHandler(
       showSuccess(`${draftShifts.length} shift(s) published successfully`);
     } catch (error) {
       logger.error('[handlePublish.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       showError('Failed to publish shifts');
     } finally {

@@ -15,7 +15,9 @@ interface Ingredient {
  * @param {string[]} ingredientIds - Array of ingredient IDs to fetch
  * @returns {Promise<Map<string, Ingredient>>} Map of ingredient ID to ingredient data
  */
-export async function fetchIngredientsBatch(ingredientIds: string[]): Promise<Map<string, Ingredient>> {
+export async function fetchIngredientsBatch(
+  ingredientIds: string[],
+): Promise<Map<string, Ingredient>> {
   if (!supabaseAdmin || ingredientIds.length === 0) {
     return new Map();
   }
@@ -53,5 +55,3 @@ export async function fetchIngredientsBatch(ingredientIds: string[]): Promise<Ma
 
   return ingredientsMap;
 }
-
-

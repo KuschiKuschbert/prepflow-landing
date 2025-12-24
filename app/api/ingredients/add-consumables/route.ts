@@ -110,12 +110,13 @@ export async function POST(request: NextRequest) {
 
     if (insertError) {
       logger.error('Error inserting consumables:', insertError);
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(insertError, 500, 'Failed to add consumables', {
-          details: 'Some consumables may have been added before the error occurred',
-        }),
-        { status: 500 },
-      );
+      const apiError = ApiErrorHandler.fromSupabaseError(insertError, 500);
+      apiError.details = {
+        ...apiError.details,
+        message: 'Failed to add consumables',
+        note: 'Some consumables may have been added before the error occurred',
+      };
+      return NextResponse.json(apiError, { status: 500 });
     }
 
     const addedCount = insertedConsumables?.length || 0;

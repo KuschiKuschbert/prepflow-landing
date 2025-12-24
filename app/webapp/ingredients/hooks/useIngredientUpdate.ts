@@ -2,14 +2,9 @@
 
 import { supabase } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
-import {
-  formatBrandName,
-  formatIngredientName,
-  formatStorageLocation,
-  formatSupplierName,
-  formatTextInput,
-} from '@/lib/text-utils';
 import { useCallback } from 'react';
+import { useNotification } from '@/contexts/NotificationContext';
+import { formatIngredientUpdates } from './helpers/formatIngredientUpdates';
 
 interface UseIngredientUpdateProps<
   T extends { id: string; ingredient_name: string; cost_per_unit: number },
@@ -22,33 +17,24 @@ interface UseIngredientUpdateProps<
 export function useIngredientUpdate<
   T extends { id: string; ingredient_name: string; cost_per_unit: number },
 >({ setIngredients, setError, setEditingIngredient }: UseIngredientUpdateProps<T>) {
+  const { showSuccess } = useNotification();
   const handleUpdateIngredient = useCallback(
     async (id: string, updates: Partial<T>) => {
-      try {
-        const formattedUpdates = {
-          ...updates,
-          ingredient_name:
-            'ingredient_name' in updates && updates.ingredient_name
-              ? formatIngredientName(String(updates.ingredient_name))
-              : undefined,
-          brand:
-            'brand' in updates && updates.brand
-              ? formatBrandName(String(updates.brand))
-              : undefined,
-          supplier:
-            'supplier' in updates && updates.supplier
-              ? formatSupplierName(String(updates.supplier))
-              : undefined,
-          storage_location:
-            'storage_location' in updates && updates.storage_location
-              ? formatStorageLocation(String(updates.storage_location))
-              : undefined,
-          product_code:
-            'product_code' in updates && updates.product_code
-              ? formatTextInput(String(updates.product_code))
-              : undefined,
-        };
+      // Store original state for rollback
+      let originalIngredients: T[] = [];
+      setIngredients(prev => {
+        originalIngredients = [...prev];
+        return prev;
+      });
 
+      const formattedUpdates = formatIngredientUpdates(updates);
+
+      // Optimistically update UI immediately
+      setIngredients(prev =>
+        prev.map(ing => (ing.id === id ? { ...ing, ...formattedUpdates } : ing)),
+      );
+
+      try {
         const { data, error } = await supabase
           .from('ingredients')
           .update(formattedUpdates)
@@ -66,39 +52,48 @@ export function useIngredientUpdate<
 
             const result = await response.json();
             if (!response.ok || !result.success) {
+              // Revert optimistic update on error
+              setIngredients(originalIngredients);
               setError('Ingredient not found. It may have been deleted.');
               if (setEditingIngredient) setEditingIngredient(null);
-              setIngredients(prev => prev.filter(ing => ing.id !== id));
               return;
             }
 
+            // Replace optimistic update with server response
             setIngredients(prev => prev.map(ing => (ing.id === id ? result.data : ing)));
             if (setEditingIngredient) setEditingIngredient(null);
+            showSuccess('Ingredient updated successfully');
             return;
           } else {
+            // Revert optimistic update on error
+            setIngredients(originalIngredients);
             throw error;
           }
         }
 
         if (!data || data.length === 0) {
+          // Revert optimistic update on error
+          setIngredients(originalIngredients);
           setError('Ingredient not found. It may have been deleted.');
           if (setEditingIngredient) setEditingIngredient(null);
-          setIngredients(prev => prev.filter(ing => ing.id !== id));
           return;
         }
 
+        // Replace optimistic update with server response
         setIngredients(prev => prev.map(ing => (ing.id === id ? data[0] : ing)));
         if (setEditingIngredient) setEditingIngredient(null);
+        showSuccess('Ingredient updated successfully');
       } catch (error) {
+        // Revert optimistic update on error
+        setIngredients(originalIngredients);
         logger.error('[useIngredientUpdate.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
-
+          error: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+        });
         setError('Failed to update ingredient');
       }
     },
-    [setIngredients, setError, setEditingIngredient],
+    [setIngredients, setError, setEditingIngredient, showSuccess],
   );
   return { handleUpdateIngredient };
 }

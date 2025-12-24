@@ -63,7 +63,3 @@ export interface Guide {
   estimatedTime?: number; // Estimated time in seconds
   difficulty?: Difficulty;
 }
-
-
-
-

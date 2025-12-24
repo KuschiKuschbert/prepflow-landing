@@ -85,7 +85,15 @@ export async function POST(request: NextRequest) {
         context: { endpoint: '/api/admin/errors/client', method: 'POST' },
       });
 
-      return NextResponse.json(ApiErrorHandler.fromSupabaseError(dbError, 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          'Failed to store error log',
+          'DATABASE_ERROR',
+          500,
+          { supabaseError: dbError.message },
+        ),
+        { status: 500 },
+      );
     }
 
     // Handle auto-reporting for critical/safety errors

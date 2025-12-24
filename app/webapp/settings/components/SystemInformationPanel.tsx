@@ -62,9 +62,9 @@ Environment: ${process.env.NODE_ENV || 'unknown'}`;
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
       logger.error('[SystemInformationPanel.tsx] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       // Fallback for older browsers
       const textArea = document.createElement('textarea');
@@ -125,7 +125,12 @@ Environment: ${process.env.NODE_ENV || 'unknown'}`;
       >
         {copied ? (
           <>
-            <Icon icon={CheckCircle} size="sm" className="text-[var(--color-success)]" aria-hidden={true} />
+            <Icon
+              icon={CheckCircle}
+              size="sm"
+              className="text-[var(--color-success)]"
+              aria-hidden={true}
+            />
             <span>Copied!</span>
           </>
         ) : (

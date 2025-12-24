@@ -1,6 +1,11 @@
 import { parseCSV, type ParseCSVResult } from '@/lib/csv/csv-utils';
-import { normalizeColumnName, mapCSVRowToEntity, parseNumber, parseBoolean } from '../../import-utils';
-import type { SupplierImportRow } from '../supplier-import';
+import {
+  normalizeColumnName,
+  mapCSVRowToEntity,
+  parseNumber,
+  parseBoolean,
+} from '../../import-utils';
+import type { SupplierImportRow } from '../../supplier-import';
 
 /**
  * Parse suppliers from CSV text
@@ -52,4 +57,3 @@ export function parseSuppliersCSV(csvText: string): ParseCSVResult<SupplierImpor
     data: suppliers,
   };
 }
-

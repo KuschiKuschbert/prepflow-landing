@@ -80,7 +80,3 @@ export function useAllergenExport(selectedAllergenFilter: string) {
 
   return { exportLoading, handleExport };
 }
-
-
-
-

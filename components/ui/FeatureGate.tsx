@@ -42,7 +42,9 @@ export function FeatureGate({ featureKey, requiredTier, children, fallback }: Fe
     <>
       {fallback || (
         <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center">
-          <p className="mb-4 text-[var(--foreground-muted)]">This feature requires {requiredTier} tier</p>
+          <p className="mb-4 text-[var(--foreground-muted)]">
+            This feature requires {requiredTier} tier
+          </p>
           <button
             onClick={() => setShowUpgradePrompt(true)}
             className="text-[var(--primary)] underline transition-colors hover:text-[var(--primary)]/80"

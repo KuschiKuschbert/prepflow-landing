@@ -33,9 +33,13 @@ export function EquipmentQRCodeModalHeader({
             {equipment.name}
           </h2>
           <div className="mt-0.5 flex items-center gap-2">
-            <span className="text-xs text-[var(--foreground-muted)]">{getTypeLabel(equipment.equipment_type)}</span>
+            <span className="text-xs text-[var(--foreground-muted)]">
+              {getTypeLabel(equipment.equipment_type)}
+            </span>
             {equipment.location && (
-              <span className="text-xs text-[var(--foreground-subtle)]">• {equipment.location}</span>
+              <span className="text-xs text-[var(--foreground-subtle)]">
+                • {equipment.location}
+              </span>
             )}
           </div>
         </div>
@@ -65,9 +69,9 @@ export function EquipmentQRCodeModalHeader({
       {/* Permanent Link Note */}
       <div className="mt-1.5 ml-10 rounded-lg border border-[var(--primary)]/20 bg-[var(--muted)]/50 px-2 py-1">
         <p className="text-xs leading-relaxed text-[var(--foreground-muted)]">
-          <span className="font-semibold text-[var(--primary)]">Permanently linked</span> — This QR code is
-          like a well-seasoned pan: it&apos;ll stick around even if you rename the equipment. No
-          reprinting needed!
+          <span className="font-semibold text-[var(--primary)]">Permanently linked</span> — This QR
+          code is like a well-seasoned pan: it&apos;ll stick around even if you rename the
+          equipment. No reprinting needed!
         </p>
       </div>
     </div>

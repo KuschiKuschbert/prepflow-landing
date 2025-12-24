@@ -113,7 +113,9 @@ export function EquipmentTable({
                             {item.name}
                           </div>
                           {item.location && (
-                            <div className="truncate text-xs text-[var(--foreground-subtle)]">{item.location}</div>
+                            <div className="truncate text-xs text-[var(--foreground-subtle)]">
+                              {item.location}
+                            </div>
                           )}
                         </div>
                       </div>
@@ -189,7 +191,9 @@ export function EquipmentTable({
                           {item.min_temp_celsius}°C - {item.max_temp_celsius}°C
                         </span>
                       ) : item.min_temp_celsius !== null ? (
-                        <span className="text-sm text-[var(--foreground-secondary)]">≥{item.min_temp_celsius}°C</span>
+                        <span className="text-sm text-[var(--foreground-secondary)]">
+                          ≥{item.min_temp_celsius}°C
+                        </span>
                       ) : (
                         <span className="text-sm text-[var(--foreground-subtle)]">Not set</span>
                       )}

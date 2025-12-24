@@ -30,7 +30,10 @@ export async function updateSubscriptionInDatabase(params: UpdateDatabaseParams)
     updateData.subscription_expires = expiresAt?.toISOString() || null;
   }
 
-  const { error: updateError } = await supabaseAdmin!.from('users').update(updateData).eq('email', userEmail);
+  const { error: updateError } = await supabaseAdmin!
+    .from('users')
+    .update(updateData)
+    .eq('email', userEmail);
 
   if (updateError) {
     logger.error('[Billing API] Failed to update subscription in database:', {
@@ -41,5 +44,3 @@ export async function updateSubscriptionInDatabase(params: UpdateDatabaseParams)
     // Don't fail the request, subscription was cancelled in Stripe
   }
 }
-
-

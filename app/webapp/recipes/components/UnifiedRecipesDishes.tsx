@@ -70,7 +70,9 @@ export default function UnifiedRecipesDishes() {
         <div className="py-12 text-center">
           <div className="mb-4 text-6xl text-[var(--foreground-muted)]">🍽️</div>
           <h3 className="mb-2 text-lg font-medium text-[var(--foreground)]">No items yet</h3>
-          <p className="text-[var(--foreground-subtle)]">Create your first recipe or dish to get started.</p>
+          <p className="text-[var(--foreground-subtle)]">
+            Create your first recipe or dish to get started.
+          </p>
         </div>
       ) : (
         <div className="space-y-8">
@@ -79,7 +81,9 @@ export default function UnifiedRecipesDishes() {
               {/* Category Header */}
               <div className="flex items-center justify-between border-b border-[var(--border)] pb-2">
                 <h2 className="text-xl font-semibold text-[var(--foreground)]">{category}</h2>
-                <span className="text-sm text-[var(--foreground-muted)]">{categoryItems.length} items</span>
+                <span className="text-sm text-[var(--foreground-muted)]">
+                  {categoryItems.length} items
+                </span>
               </div>
 
               {/* Items Grid */}
@@ -94,7 +98,11 @@ export default function UnifiedRecipesDishes() {
                         <Icon
                           icon={item.type === 'recipe' ? ChefHat : UtensilsCrossed}
                           size="sm"
-                          className={item.type === 'recipe' ? 'text-[var(--primary)]' : 'text-[var(--color-info)]'}
+                          className={
+                            item.type === 'recipe'
+                              ? 'text-[var(--primary)]'
+                              : 'text-[var(--color-info)]'
+                          }
                           aria-hidden={true}
                         />
                         <h3 className="font-semibold text-[var(--foreground)]">{item.name}</h3>
@@ -105,7 +113,9 @@ export default function UnifiedRecipesDishes() {
                     </div>
 
                     {item.description && (
-                      <p className="mb-3 line-clamp-2 text-sm text-[var(--foreground-muted)]">{item.description}</p>
+                      <p className="mb-3 line-clamp-2 text-sm text-[var(--foreground-muted)]">
+                        {item.description}
+                      </p>
                     )}
 
                     <div className="flex items-center justify-between">

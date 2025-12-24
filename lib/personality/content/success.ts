@@ -64,4 +64,3 @@ export const success = {
     'Milestone achieved! Time to celebrate.',
   ],
 };
-

@@ -49,7 +49,6 @@ export async function runScheduledBackups(): Promise<void> {
   }
 }
 
-
 /** Schedule backup for a user. */
 export async function scheduleBackup(
   userId: string,

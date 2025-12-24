@@ -12,14 +12,20 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 export async function POST(req: NextRequest) {
   try {
     if (!supabaseAdmin) {
-      return NextResponse.json(ApiErrorHandler.createError('Database not available', 'SERVER_ERROR', 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database not available', 'SERVER_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     // Optional: only allow in non-production to be safe
     if (process.env.NODE_ENV === 'production') {
       const adminKey = req.headers.get('x-admin-key');
       if (!adminKey || adminKey !== process.env.SEED_ADMIN_KEY) {
-        return NextResponse.json(ApiErrorHandler.createError('Admin key required', 'FORBIDDEN', 403), { status: 403 });
+        return NextResponse.json(
+          ApiErrorHandler.createError('Admin key required', 'FORBIDDEN', 403),
+          { status: 403 },
+        );
       }
     }
 
@@ -32,10 +38,7 @@ export async function POST(req: NextRequest) {
         code: (ingErr as any).code,
         context: { endpoint: '/api/dedupe/preview', operation: 'POST' },
       });
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(ingErr, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(ingErr, 500), { status: 500 });
     }
 
     const ingredientGroups: Record<string, { key: string; ids: string[]; sample: any }> = {};
@@ -66,10 +69,7 @@ export async function POST(req: NextRequest) {
         code: (recErr as any).code,
         context: { endpoint: '/api/dedupe/preview', operation: 'POST' },
       });
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(recErr, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(recErr, 500), { status: 500 });
     }
 
     const recipeGroups: Record<string, { key: string; ids: string[]; sample: any }> = {};
@@ -94,8 +94,10 @@ export async function POST(req: NextRequest) {
       error: e instanceof Error ? e.message : String(e),
       stack: e instanceof Error ? e.stack : undefined,
     });
-
-    return NextResponse.json({ error: e?.message || String(e) }, { status: 500 });
+    if (e && typeof e === 'object' && 'status' in e && 'json' in e) {
+      return e as NextResponse;
+    }
+    return NextResponse.json(ApiErrorHandler.createError('Failed to generate deduplication preview', 'SERVER_ERROR', 500), { status: 500 });
   }
 }
 

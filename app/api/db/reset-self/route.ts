@@ -32,7 +32,9 @@ export async function POST(request: NextRequest) {
     if (error instanceof NextResponse) {
       return error;
     }
-    return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
+    return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), {
+      status: 401,
+    });
   }
 
   const user = await requireAuth(request);

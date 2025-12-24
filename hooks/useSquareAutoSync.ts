@@ -8,7 +8,7 @@
 import { useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { createDebounceSync } from './useSquareAutoSync/helpers/createDebounceSync';
 import { setupSquareSubscriptions } from './useSquareAutoSync/helpers/setupSquareSubscriptions';
 // Note: This hook triggers syncs via API endpoints, not direct server-side calls
@@ -24,8 +24,9 @@ export interface UseSquareAutoSyncOptions {
  * Listens for changes to employees, dishes, recipes, and ingredients
  */
 export function useSquareAutoSync(options: UseSquareAutoSyncOptions = {}) {
-  const { data: session } = useSession();
-  const userId = session?.user?.id;
+  const { user } = useUser();
+  // Extract user ID from Auth0 user (user.sub or user.user_id)
+  const userId = user?.sub || (user as any)?.user_id;
   const debounceTimersRef = useRef<Map<string, NodeJS.Timeout>>(new Map());
 
   useEffect(() => {
@@ -65,8 +66,10 @@ export function useSquareAutoSync(options: UseSquareAutoSyncOptions = {}) {
     }
 
     const debounceDelay = options.debounceMs || 5000;
+    // Capture ref value at effect execution time for cleanup
+    const timersRef = debounceTimersRef;
     const debounceSync = createDebounceSync({
-      debounceTimersRef,
+      debounceTimersRef: timersRef,
       debounceDelay,
       userId,
     });
@@ -75,8 +78,9 @@ export function useSquareAutoSync(options: UseSquareAutoSyncOptions = {}) {
     return () => {
       // Cleanup: unsubscribe and clear timers
       channel.unsubscribe();
-      debounceTimersRef.current.forEach(timer => clearTimeout(timer));
-      debounceTimersRef.current.clear();
+      const timers = timersRef.current;
+      timers.forEach(timer => clearTimeout(timer));
+      timers.clear();
       logger.dev('[Square Auto-Sync Hook] Subscriptions cleaned up');
     };
   }, [userId, options.enabled, options.debounceMs]);

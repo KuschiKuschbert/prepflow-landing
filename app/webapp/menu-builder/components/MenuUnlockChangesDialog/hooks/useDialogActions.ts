@@ -19,10 +19,8 @@ export function useDialogActions({
   onClose,
 }: UseDialogActionsProps) {
   const { showSuccess, showError } = useNotification();
-  const [recalculating, setRecalculating] = useState(false);
 
   const handleRecalculatePrices = async () => {
-    setRecalculating(true);
     try {
       await onRecalculatePrices();
       showSuccess('Prices recalculated successfully');
@@ -30,8 +28,6 @@ export function useDialogActions({
     } catch (err) {
       logger.error('[MenuUnlockChangesDialog] Error recalculating prices:', err);
       showError('Failed to recalculate prices. Give it another go, chef.');
-    } finally {
-      setRecalculating(false);
     }
   };
 
@@ -56,12 +52,7 @@ export function useDialogActions({
   };
 
   return {
-    recalculating,
     handleRecalculatePrices,
     handleDismiss,
   };
 }
-
-
-
-

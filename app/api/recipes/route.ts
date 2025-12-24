@@ -108,7 +108,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name, yield: dishPortions, yield_unit, category, description, instructions } = validationResult.data;
+    const {
+      name,
+      yield: dishPortions,
+      yield_unit,
+      category,
+      description,
+      instructions,
+    } = validationResult.data;
 
     const recipeData = {
       yield: dishPortions || 1,
@@ -174,18 +181,15 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, recipe: newRecipe, isNew: true });
   } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
     logger.error('[Recipes API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
+      error: errorMessage,
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/recipes', method: 'POST' },
     });
     return NextResponse.json(
       ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? err instanceof Error
-            ? err.message
-            : 'Unknown error'
-          : 'Internal server error',
+        process.env.NODE_ENV === 'development' ? errorMessage : 'Internal server error',
         'SERVER_ERROR',
         500,
       ),

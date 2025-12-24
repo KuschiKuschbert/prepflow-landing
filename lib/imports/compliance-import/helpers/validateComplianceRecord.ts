@@ -1,4 +1,4 @@
-import type { ComplianceRecordImportRow } from '../compliance-import';
+import type { ComplianceRecordImportRow } from '../../compliance-import';
 
 /**
  * Validate compliance record import row
@@ -21,4 +21,3 @@ export function validateComplianceRecord(
 
   return { valid: true };
 }
-

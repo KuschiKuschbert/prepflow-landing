@@ -9,4 +9,3 @@ export const metrics = [
   'Butter Evaporation Factor: suspiciously high.',
   'Label Adhesion Confidence: 95%. The other 5% is chaos.',
 ];
-

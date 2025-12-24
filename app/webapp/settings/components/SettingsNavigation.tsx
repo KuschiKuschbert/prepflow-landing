@@ -18,10 +18,12 @@ export default function SettingsNavigation() {
     if (isAdmin) {
       return allCategories;
     }
-    return allCategories.map(category => ({
-      ...category,
-      items: category.items.filter(item => !item.adminOnly),
-    })).filter(category => category.items.length > 0);
+    return allCategories
+      .map(category => ({
+        ...category,
+        items: category.items.filter(item => !item.adminOnly),
+      }))
+      .filter(category => category.items.length > 0);
   }, [isAdmin]);
 
   const {

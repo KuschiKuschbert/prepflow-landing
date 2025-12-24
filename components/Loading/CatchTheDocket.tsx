@@ -10,8 +10,6 @@
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import WebAppBackground from '@/components/Arcade/WebAppBackground';
-import { GameScoreboard } from '@/components/Arcade/GameScoreboard';
-import { ArcadeMuteButton } from '@/components/Arcade/ArcadeMuteButton';
 import { useCatchTheDocket } from './useCatchTheDocket';
 
 interface CatchTheDocketProps {
@@ -30,12 +28,12 @@ const CatchTheDocket: React.FC<CatchTheDocketProps> = ({ isLoading, onLoadComple
     gameFinished,
     spawnDocket,
     handleDocketClick,
-    initSounds,
   } = useCatchTheDocket({ isLoading, containerRef });
 
   useEffect(() => {
     if (gameFinished && onLoadComplete) {
-      setTimeout(() => onLoadComplete(), 1000);
+      const timeoutId = setTimeout(() => onLoadComplete(), 1000);
+      return () => clearTimeout(timeoutId);
     }
   }, [gameFinished, onLoadComplete]);
 
@@ -51,16 +49,12 @@ const CatchTheDocket: React.FC<CatchTheDocketProps> = ({ isLoading, onLoadComple
           (navigator.maxTouchPoints > 0 || (window as any).ontouchstart !== undefined)
         }
       />
-      <ArcadeMuteButton />
       <motion.div
         ref={containerRef}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-40 flex min-h-screen flex-col items-center justify-center p-6 text-[var(--foreground)]"
-        onPointerDown={e => {
-          initSounds();
-        }}
         onClick={e => {
           // Click anywhere to spawn docket (for testing)
           if (e.target === containerRef.current) {

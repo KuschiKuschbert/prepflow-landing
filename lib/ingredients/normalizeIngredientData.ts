@@ -129,18 +129,11 @@ export function normalizeUnitAndCosts(
     (category === 'volume' && normalizedInput === 'ml') ||
     (category === 'piece' && normalizedInput === 'pc')
   ) {
-    return {
-      unit: standardUnit,
-      costPerUnit,
-      costPerUnitAsPurchased,
-      costPerUnitInclTrim,
-    };
+    return { unit: standardUnit, costPerUnit, costPerUnitAsPurchased, costPerUnitInclTrim };
   }
-
   // Convert to standard unit
   const conversion = convertToStandardUnit(1, normalizedInput);
   const divisor = conversion.value;
-
   return {
     unit: standardUnit,
     costPerUnit: costPerUnit / divisor,

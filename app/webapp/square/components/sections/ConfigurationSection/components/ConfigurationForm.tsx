@@ -11,7 +11,13 @@ interface ConfigurationFormProps {
   onDelete: () => void;
 }
 
-export function ConfigurationForm({ config, setConfig, saving, onSave, onDelete }: ConfigurationFormProps) {
+export function ConfigurationForm({
+  config,
+  setConfig,
+  saving,
+  onSave,
+  onDelete,
+}: ConfigurationFormProps) {
   return (
     <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
       <form
@@ -31,12 +37,14 @@ export function ConfigurationForm({ config, setConfig, saving, onSave, onDelete 
           </div>
           <div className="rounded-xl border border-[var(--border)] bg-[var(--background)] p-4">
             <p className="text-sm text-[var(--foreground-muted)]">
-              Your Square account is connected via OAuth. PrepFlow automatically manages your access tokens and refreshes
-              them when needed.
+              Your Square account is connected via OAuth. PrepFlow automatically manages your access
+              tokens and refreshes them when needed.
             </p>
           </div>
           <div>
-            <label className="mb-2 block text-sm font-medium text-[var(--foreground)]">Environment</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground)]">
+              Environment
+            </label>
             <select
               value={config.square_environment || 'sandbox'}
               onChange={e =>
@@ -45,12 +53,14 @@ export function ConfigurationForm({ config, setConfig, saving, onSave, onDelete 
                   square_environment: e.target.value as 'sandbox' | 'production',
                 })
               }
-              className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
             >
               <option value="sandbox">Sandbox (Testing)</option>
               <option value="production">Production</option>
             </select>
-            <p className="mt-1 text-xs text-[var(--foreground-muted)]">Change environment and reconnect if needed</p>
+            <p className="mt-1 text-xs text-[var(--foreground-muted)]">
+              Change environment and reconnect if needed
+            </p>
           </div>
           <div>
             <label className="mb-2 block text-sm font-medium text-[var(--foreground)]">
@@ -60,7 +70,7 @@ export function ConfigurationForm({ config, setConfig, saving, onSave, onDelete 
               type="text"
               value={config.default_location_id || ''}
               onChange={e => setConfig({ ...config, default_location_id: e.target.value })}
-              className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
               placeholder="Location ID"
             />
             <p className="mt-1 text-xs text-[var(--foreground-muted)]">
@@ -127,27 +137,33 @@ export function ConfigurationForm({ config, setConfig, saving, onSave, onDelete 
               onChange={e => setConfig({ ...config, webhook_enabled: e.target.checked })}
               className="h-4 w-4 rounded border-[var(--border)] text-[var(--primary)] focus:ring-[var(--primary)]"
             />
-            <span className="text-sm text-[var(--foreground)]">Enable webhooks for real-time updates</span>
+            <span className="text-sm text-[var(--foreground)]">
+              Enable webhooks for real-time updates
+            </span>
           </label>
           {config.webhook_enabled && (
             <>
               <div>
-                <label className="mb-2 block text-sm font-medium text-[var(--foreground)]">Webhook URL</label>
+                <label className="mb-2 block text-sm font-medium text-[var(--foreground)]">
+                  Webhook URL
+                </label>
                 <input
                   type="url"
                   value={config.webhook_url || ''}
                   onChange={e => setConfig({ ...config, webhook_url: e.target.value })}
-                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20"
-                  placeholder="https://yourdomain.com/api/webhook/square"
+                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
+                  placeholder="Enter your webhook URL"
                 />
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium text-[var(--foreground)]">Webhook Secret</label>
+                <label className="mb-2 block text-sm font-medium text-[var(--foreground)]">
+                  Webhook Secret
+                </label>
                 <input
                   type="password"
                   value={config.webhook_secret || ''}
                   onChange={e => setConfig({ ...config, webhook_secret: e.target.value })}
-                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20"
+                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
                   placeholder="Webhook signing secret"
                 />
               </div>
@@ -177,5 +193,3 @@ export function ConfigurationForm({ config, setConfig, saving, onSave, onDelete 
     </div>
   );
 }
-
-

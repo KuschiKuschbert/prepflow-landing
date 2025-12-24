@@ -5,7 +5,6 @@ import { useNotification } from '@/contexts/NotificationContext';
 import { useConfirm } from '@/hooks/useConfirm';
 import { Icon } from '@/components/ui/Icon';
 import { Loader2, RefreshCw, AlertCircle, Power } from 'lucide-react';
-import { updateUpdatingState } from './FeatureFlagsSection/helpers/updateFlagState';
 
 interface FeatureFlag {
   id: string;
@@ -20,7 +19,6 @@ interface FeatureFlag {
 export function FeatureFlagsSection() {
   const [flags, setFlags] = useState<FeatureFlag[]>([]);
   const [loading, setLoading] = useState(true);
-  const [updating, setUpdating] = useState<Set<string>>(new Set());
   const { showSuccess, showError } = useNotification();
   const { showConfirm, ConfirmDialog } = useConfirm();
 
@@ -47,11 +45,23 @@ export function FeatureFlagsSection() {
 
   useEffect(() => {
     fetchFlags();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // fetchFlags is stable and only needed on mount
 
   const toggleFlag = async (flagKey: string, currentEnabled: boolean, userId: string | null) => {
+    // Store original state for rollback
+    const originalFlags = [...flags];
+
+    // Optimistically update UI immediately
+    setFlags(prevFlags =>
+      prevFlags.map(flag =>
+        flag.flag_key === flagKey && flag.user_id === userId
+          ? { ...flag, enabled: !currentEnabled }
+          : flag,
+      ),
+    );
+
     try {
-      updateUpdatingState(setUpdating, flagKey, true);
       const response = await fetch(`/api/admin/features/${flagKey}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -59,20 +69,15 @@ export function FeatureFlagsSection() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Failed to update feature flag');
-      setFlags(prevFlags =>
-        prevFlags.map(flag =>
-          flag.flag_key === flagKey && flag.user_id === userId ? { ...flag, enabled: !currentEnabled } : flag,
-        ),
-      );
       showSuccess(`Feature flag "${flagKey}" ${!currentEnabled ? 'enabled' : 'disabled'}`);
     } catch (error) {
+      // Rollback on error
+      setFlags(originalFlags);
       logger.error('[Feature Flags] Error updating flag:', {
         error: error instanceof Error ? error.message : String(error),
         flagKey,
       });
       showError('Failed to update feature flag');
-    } finally {
-      updateUpdatingState(setUpdating, flagKey, false);
     }
   };
 
@@ -85,8 +90,16 @@ export function FeatureFlagsSection() {
       cancelLabel: 'Cancel',
     });
     if (!confirmed) return;
+
+    // Store original state for rollback
+    const originalFlags = [...flags];
+
+    // Optimistically remove from UI immediately
+    setFlags(prevFlags =>
+      prevFlags.filter(flag => !(flag.flag_key === flagKey && flag.user_id === userId)),
+    );
+
     try {
-      updateUpdatingState(setUpdating, flagKey, true);
       const response = await fetch(`/api/admin/features/${flagKey}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
@@ -96,27 +109,29 @@ export function FeatureFlagsSection() {
         const data = await response.json();
         throw new Error(data.error || 'Failed to delete feature flag');
       }
-      setFlags(prevFlags => prevFlags.filter(flag => !(flag.flag_key === flagKey && flag.user_id === userId)));
       showSuccess(`Feature flag "${flagKey}" deleted`);
     } catch (error) {
+      // Rollback on error
+      setFlags(originalFlags);
       logger.error('[Feature Flags] Error deleting flag:', {
         error: error instanceof Error ? error.message : String(error),
         flagKey,
       });
       showError('Failed to delete feature flag');
-    } finally {
-      updateUpdatingState(setUpdating, flagKey, false);
     }
   };
 
   // Group flags by flag_key (global + user-specific)
-  const groupedFlags = flags.reduce((acc, flag) => {
-    if (!acc[flag.flag_key]) {
-      acc[flag.flag_key] = [];
-    }
-    acc[flag.flag_key].push(flag);
-    return acc;
-  }, {} as Record<string, FeatureFlag[]>);
+  const groupedFlags = flags.reduce(
+    (acc, flag) => {
+      if (!acc[flag.flag_key]) {
+        acc[flag.flag_key] = [];
+      }
+      acc[flag.flag_key].push(flag);
+      return acc;
+    },
+    {} as Record<string, FeatureFlag[]>,
+  );
 
   if (loading) {
     return (
@@ -141,12 +156,12 @@ export function FeatureFlagsSection() {
         <button
           onClick={async () => {
             try {
-              setLoading(true);
               const response = await fetch('/api/admin/features/seed', { method: 'POST' });
               const data = await response.json();
               if (response.ok) {
                 showSuccess('Feature flags seeded successfully');
-                await fetchFlags();
+                // Refresh flags in background (non-blocking)
+                fetchFlags().catch(err => logger.error('Failed to refresh flags:', err));
               } else {
                 showError(data.error || 'Failed to seed feature flags');
               }
@@ -155,12 +170,9 @@ export function FeatureFlagsSection() {
                 error: error instanceof Error ? error.message : String(error),
               });
               showError('Failed to seed feature flags');
-            } finally {
-              setLoading(false);
             }
           }}
-          disabled={loading}
-          className="flex items-center gap-2 rounded-xl border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-4 py-2 text-sm font-medium text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/20 disabled:opacity-50"
+          className="flex items-center gap-2 rounded-xl border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-4 py-2 text-sm font-medium text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/20"
         >
           <Icon icon={RefreshCw} size="sm" />
           Seed Flags
@@ -178,7 +190,11 @@ export function FeatureFlagsSection() {
       {/* Flags List */}
       {Object.keys(groupedFlags).length === 0 ? (
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center">
-          <Icon icon={AlertCircle} size="lg" className="mx-auto mb-4 text-[var(--foreground-muted)]" />
+          <Icon
+            icon={AlertCircle}
+            size="lg"
+            className="mx-auto mb-4 text-[var(--foreground-muted)]"
+          />
           <p className="text-[var(--foreground-muted)]">No feature flags found</p>
         </div>
       ) : (
@@ -235,22 +251,16 @@ export function FeatureFlagsSection() {
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => toggleFlag(flag.flag_key, flag.enabled, flag.user_id)}
-                        disabled={updating.has(flag.flag_key)}
-                        className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--surface-variant)] disabled:opacity-50"
+                        className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--surface-variant)]"
                         aria-label={`${flag.enabled ? 'Disable' : 'Enable'} ${flag.flag_key}`}
                       >
-                        {updating.has(flag.flag_key) ? (
-                          <Icon icon={Loader2} size="sm" className="animate-spin" />
-                        ) : (
-                          <Icon icon={Power} size="sm" />
-                        )}
+                        <Icon icon={Power} size="sm" />
                         {flag.enabled ? 'Disable' : 'Enable'}
                       </button>
 
                       <button
                         onClick={() => deleteFlag(flag.flag_key, flag.user_id)}
-                        disabled={updating.has(flag.flag_key)}
-                        className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/20 disabled:opacity-50"
+                        className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/20"
                         aria-label={`Delete ${flag.flag_key}`}
                       >
                         Delete

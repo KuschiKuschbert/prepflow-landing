@@ -22,7 +22,12 @@ export function RecipeSidePanelActions({
         className="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] px-4 py-3 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--color-info)]/80"
         title="Edit recipe (Press E)"
       >
-        <Icon icon={Edit} size="sm" className="text-[var(--button-active-text)]" aria-hidden={true} />
+        <Icon
+          icon={Edit}
+          size="sm"
+          className="text-[var(--button-active-text)]"
+          aria-hidden={true}
+        />
         <span>Edit Recipe</span>
       </button>
       <button

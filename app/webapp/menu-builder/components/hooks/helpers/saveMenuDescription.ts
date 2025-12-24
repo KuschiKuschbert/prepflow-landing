@@ -11,7 +11,6 @@ interface SaveMenuDescriptionProps {
   setMenus?: (menus: Menu[] | ((prev: Menu[]) => Menu[])) => void;
   onMenuUpdated?: () => void;
   handleCancelEdit: () => void;
-  setIsSaving: (saving: boolean) => void;
   showError: (message: string) => void;
   showSuccess: (message: string) => void;
 }
@@ -27,7 +26,6 @@ export async function saveMenuDescription({
   setMenus,
   onMenuUpdated,
   handleCancelEdit,
-  setIsSaving,
   showError,
   showSuccess,
 }: SaveMenuDescriptionProps): Promise<void> {
@@ -47,8 +45,6 @@ export async function saveMenuDescription({
       ),
     );
   }
-
-  setIsSaving(true);
 
   try {
     const response = await fetch(`/api/menus/${menu.id}`, {
@@ -82,7 +78,5 @@ export async function saveMenuDescription({
       setMenus(prevMenus => prevMenus.map(m => (m.id === menu.id ? originalMenu : m)));
     }
     showError('Failed to update menu description. Please try again.');
-  } finally {
-    setIsSaving(false);
   }
 }

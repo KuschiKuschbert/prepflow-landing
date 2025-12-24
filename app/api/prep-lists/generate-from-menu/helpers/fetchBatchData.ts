@@ -1,4 +1,5 @@
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 /**
  * Batch fetch recipe ingredients.
@@ -13,10 +14,18 @@ export async function fetchRecipeIngredients(recipeIds: Set<string>) {
     return recipeIngredientsMap;
   }
 
-  const { data: allRecipeIngredients } = await supabaseAdmin
+  const { data: allRecipeIngredients, error: recipeIngredientsError } = await supabaseAdmin
     .from('recipe_ingredients')
     .select('recipe_id, ingredient_id, quantity, unit, ingredients(id, ingredient_name)')
     .in('recipe_id', Array.from(recipeIds));
+
+  if (recipeIngredientsError) {
+    logger.error('[Prep Lists API] Error fetching recipe ingredients:', {
+      error: recipeIngredientsError.message,
+      recipeIds: Array.from(recipeIds),
+      context: { endpoint: '/api/prep-lists/generate-from-menu', operation: 'fetchBatchData' },
+    });
+  }
 
   if (allRecipeIngredients) {
     for (const ri of allRecipeIngredients) {
@@ -58,10 +67,18 @@ export async function fetchDishData(
   const dishIdsArray = Array.from(dishIds);
 
   // Batch fetch dish sections
-  const { data: allDishSections } = await supabaseAdmin
+  const { data: allDishSections, error: dishSectionsError } = await supabaseAdmin
     .from('dish_sections')
     .select('dish_id, section_id, kitchen_sections(id, name)')
     .in('dish_id', dishIdsArray);
+
+  if (dishSectionsError) {
+    logger.error('[Prep Lists API] Error fetching dish sections:', {
+      error: dishSectionsError.message,
+      dishIds: dishIdsArray,
+      context: { endpoint: '/api/prep-lists/generate-from-menu', operation: 'fetchBatchData' },
+    });
+  }
 
   if (allDishSections) {
     for (const ds of allDishSections) {
@@ -76,10 +93,18 @@ export async function fetchDishData(
   }
 
   // Batch fetch dish recipes
-  const { data: allDishRecipes } = await supabaseAdmin
+  const { data: allDishRecipes, error: dishRecipesError } = await supabaseAdmin
     .from('dish_recipes')
     .select('dish_id, recipe_id, quantity, recipes(id, recipe_name, instructions)')
     .in('dish_id', dishIdsArray);
+
+  if (dishRecipesError) {
+    logger.error('[Prep Lists API] Error fetching dish recipes:', {
+      error: dishRecipesError.message,
+      dishIds: dishIdsArray,
+      context: { endpoint: '/api/prep-lists/generate-from-menu', operation: 'fetchBatchData' },
+    });
+  }
 
   if (allDishRecipes) {
     for (const dr of allDishRecipes) {
@@ -101,10 +126,18 @@ export async function fetchDishData(
   }
 
   // Batch fetch dish ingredients
-  const { data: allDishIngredients } = await supabaseAdmin
+  const { data: allDishIngredients, error: dishIngredientsError } = await supabaseAdmin
     .from('dish_ingredients')
     .select('dish_id, ingredient_id, quantity, unit, ingredients(id, ingredient_name)')
     .in('dish_id', dishIdsArray);
+
+  if (dishIngredientsError) {
+    logger.error('[Prep Lists API] Error fetching dish ingredients:', {
+      error: dishIngredientsError.message,
+      dishIds: dishIdsArray,
+      context: { endpoint: '/api/prep-lists/generate-from-menu', operation: 'fetchBatchData' },
+    });
+  }
 
   if (allDishIngredients) {
     for (const di of allDishIngredients) {

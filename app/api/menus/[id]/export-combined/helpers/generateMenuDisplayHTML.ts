@@ -66,7 +66,3 @@ export function generateMenuDisplayHTML(menuData: MenuDisplayData[]): string {
 
   return menuContent;
 }
-
-
-
-

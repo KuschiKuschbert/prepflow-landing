@@ -7,7 +7,6 @@ import { updateEquipment, createEquipment, deleteEquipment } from '../equipmentC
 export function createEquipmentHandlers(
   equipment: TemperatureEquipment[],
   setEquipment: React.Dispatch<React.SetStateAction<TemperatureEquipment[]>>,
-  fetchEquipment: () => Promise<void>,
   showError: (message: string) => void,
   showSuccess: (message: string) => void,
 ) {
@@ -16,7 +15,6 @@ export function createEquipmentHandlers(
       await updateEquipment(equipmentId, updates, {
         equipment,
         setEquipment,
-        fetchEquipment,
         showError,
         showSuccess,
       });
@@ -31,7 +29,6 @@ export function createEquipmentHandlers(
       await createEquipment(name, equipmentType, location, minTemp, maxTemp, {
         equipment,
         setEquipment,
-        fetchEquipment,
         showError,
         showSuccess,
       });
@@ -40,7 +37,6 @@ export function createEquipmentHandlers(
       await deleteEquipment(equipmentId, {
         equipment,
         setEquipment,
-        fetchEquipment,
         showError,
         showSuccess,
       });

@@ -79,7 +79,12 @@ export function AllergenBadge({
       )}
       <span>{displayName}</span>
       {source === 'ai' && (
-        <Icon icon={Sparkles} size="xs" className="text-[var(--primary)]" aria-label="AI detected" />
+        <Icon
+          icon={Sparkles}
+          size="xs"
+          className="text-[var(--primary)]"
+          aria-label="AI detected"
+        />
       )}
     </span>
   );

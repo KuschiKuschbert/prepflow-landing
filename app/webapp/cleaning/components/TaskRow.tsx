@@ -98,11 +98,26 @@ const TaskCell = React.memo(function TaskCell({
       {status.shouldAppear && (
         <>
           {status.isCompleted ? (
-            <Icon icon={CheckCircle2} size="md" className="text-[var(--color-success)]" aria-label="Completed" />
+            <Icon
+              icon={CheckCircle2}
+              size="md"
+              className="text-[var(--color-success)]"
+              aria-label="Completed"
+            />
           ) : status.isOverdue ? (
-            <Icon icon={AlertTriangle} size="md" className="text-[var(--color-error)]" aria-label="Overdue" />
+            <Icon
+              icon={AlertTriangle}
+              size="md"
+              className="text-[var(--color-error)]"
+              aria-label="Overdue"
+            />
           ) : (
-            <Icon icon={Circle} size="md" className="text-[var(--foreground-subtle)]" aria-label="Pending" />
+            <Icon
+              icon={Circle}
+              size="md"
+              className="text-[var(--foreground-subtle)]"
+              aria-label="Pending"
+            />
           )}
         </>
       )}
@@ -179,7 +194,9 @@ function TaskRow({ task, dates, onToggleCompletion }: TaskRowProps) {
               {taskMetadata.taskName}
             </div>
             {taskMetadata.frequencyType && (
-              <div className="mt-1 text-xs text-[var(--foreground-muted)]">{taskMetadata.frequencyType}</div>
+              <div className="mt-1 text-xs text-[var(--foreground-muted)]">
+                {taskMetadata.frequencyType}
+              </div>
             )}
           </div>
         </div>

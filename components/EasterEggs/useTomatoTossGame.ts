@@ -7,7 +7,6 @@
 import { throwConfetti } from '@/hooks/useConfetti';
 import { addStat, addSessionStat, STAT_KEYS } from '@/lib/arcadeStats';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useTomatoTossSounds } from './useTomatoTossSounds';
 
 interface Splatter {
   x: number;
@@ -34,7 +33,6 @@ export const useTomatoTossGame = () => {
   const [alertShown, setAlertShown] = useState(false);
   const [tomatoes, setTomatoes] = useState<Tomato[]>([]);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [audioReady, setAudioReady] = useState(false);
   const [gameFinished, setGameFinished] = useState(false);
 
   const rafRef = useRef<number | null>(null);
@@ -42,7 +40,6 @@ export const useTomatoTossGame = () => {
   const lastSecondRef = useRef<number>(0);
   const gameFinishedRef = useRef<boolean>(false);
   const alertShownRef = useRef<boolean>(false);
-  const sounds = useTomatoTossSounds();
   const MAX_SPLATTERS = 150;
   const GAME_DURATION = 5; // 5 seconds
 
@@ -61,13 +58,6 @@ export const useTomatoTossGame = () => {
     }
   }, []);
 
-  // Initialize audio on mount
-  useEffect(() => {
-    const initialized = sounds.initAudio();
-    setAudioReady(initialized);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // sounds object is stable, initialize once on mount
-
   // Initialize timer on mount (click-independent via requestAnimationFrame)
   useEffect(() => {
     startTimestampRef.current = performance.now();
@@ -83,13 +73,11 @@ export const useTomatoTossGame = () => {
         // Auto-finish after 10 seconds
         if (elapsedSec >= GAME_DURATION && !gameFinishedRef.current) {
           setGameFinished(true);
-          sounds.playAlertSound();
         }
 
         // Alert after 30 seconds (legacy)
         if (elapsedSec >= 30 && !alertShownRef.current) {
           setAlertShown(true);
-          sounds.playAlertSound();
         }
       }
 
@@ -102,7 +90,7 @@ export const useTomatoTossGame = () => {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [sounds]);
+  }, []);
 
   // Keep refs in sync with state (avoid restarting effect)
   useEffect(() => {
@@ -115,12 +103,11 @@ export const useTomatoTossGame = () => {
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      sounds.cleanup();
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [sounds]); // sounds object is stable, cleanup only on unmount
+  }, []);
 
   // Easing function for aggressive, fast throws
   const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
@@ -130,12 +117,6 @@ export const useTomatoTossGame = () => {
     (clientX: number, clientY: number, wallBounds: DOMRect) => {
       // Ignore input when game has finished
       if (gameFinishedRef.current) return;
-      if (!audioReady) {
-        const initialized = sounds.initAudio();
-        setAudioReady(initialized);
-      }
-
-      sounds.playThrowSound();
 
       // Calculate start position (center-bottom of screen, relative to wall)
       const startX = window.innerWidth / 2 - wallBounds.left;
@@ -173,8 +154,6 @@ export const useTomatoTossGame = () => {
           requestAnimationFrame(animate);
         } else {
           // Impact - create splatter
-          sounds.playSplatSound();
-
           // Aggressive splash: core splat + radial droplets
           const now = Date.now();
           const newSplatters: Splatter[] = [];
@@ -232,11 +211,6 @@ export const useTomatoTossGame = () => {
               throwConfetti(1);
             }
 
-            // Play confetti sound at >20 throws (legacy)
-            if (newThrows === 21) {
-              sounds.playConfettiSound();
-            }
-
             return newThrows;
           });
 
@@ -247,7 +221,7 @@ export const useTomatoTossGame = () => {
 
       requestAnimationFrame(animate);
     },
-    [audioReady, sounds, reducedMotion],
+    [reducedMotion],
   );
 
   return {

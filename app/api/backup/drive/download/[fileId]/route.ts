@@ -21,7 +21,9 @@ export async function GET(request: NextRequest, context: { params: Promise<{ fil
   try {
     const user = await requireAuth(request);
     if (!user?.email) {
-      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), {
+        status: 401,
+      });
     }
 
     const userId = user.email;

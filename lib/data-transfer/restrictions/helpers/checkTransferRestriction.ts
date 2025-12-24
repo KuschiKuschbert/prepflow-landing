@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { isRestrictedCountry, getUserCountry } from '../country-detection';
+import { isRestrictedCountry, getUserCountry } from '../../country-detection';
 import type { TransferRestrictionResult } from '../types';
 import { checkUserConsent, buildRestrictedResult } from './checkConsent';
 
@@ -71,4 +71,3 @@ export async function checkTransferRestriction(
     };
   }
 }
-

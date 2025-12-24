@@ -63,7 +63,3 @@ All components already reference `/images/prepflow-logo.png`:
 - `app/webapp/menu-builder/utils/menuPrintTemplate.ts`
 
 No code changes needed - just replace the image file!
-
-
-
-

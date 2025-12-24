@@ -43,7 +43,6 @@ export default function EquipmentPage() {
   const [equipment, setEquipment] = useState<TemperatureEquipment | null>(null);
   const [recentLogs, setRecentLogs] = useState<TemperatureLog[]>([]);
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
   const [temperature, setTemperature] = useState('');
   const [notes, setNotes] = useState('');
 
@@ -92,15 +91,41 @@ export default function EquipmentPage() {
     e.preventDefault();
     if (!temperature || !equipment) return;
 
+    // Store original state for rollback
+    const originalLogs = [...recentLogs];
+    const tempTemperature = parseFloat(temperature);
+    const tempNotes = notes || null;
+    const tempEquipmentId = equipment.id;
+
+    // Create temporary log for optimistic update
+    const tempId = `temp-${Date.now()}`;
+    const tempLog: TemperatureLog = {
+      id: tempId,
+      equipment_id: tempEquipmentId,
+      temperature_celsius: tempTemperature,
+      log_date: new Date().toISOString().split('T')[0],
+      log_time: new Date().toTimeString().split(' ')[0].substring(0, 5),
+      logged_by: null,
+      notes: tempNotes,
+      created_at: new Date().toISOString(),
+    };
+
+    // Optimistically add to UI immediately (at the top of the list)
+    setRecentLogs(prev => [tempLog, ...prev.slice(0, 4)]); // Keep only top 5
+    setTemperature('');
+    setNotes('');
+
+    // Trigger personality hook for temperature logging
+    onTemperatureLogged();
+
     try {
-      setSubmitting(true);
       const response = await fetch('/api/temperature-logs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          equipment_id: equipment.id,
-          temperature_celsius: parseFloat(temperature),
-          notes: notes || null,
+          equipment_id: tempEquipmentId,
+          temperature_celsius: tempTemperature,
+          notes: tempNotes,
         }),
       });
 
@@ -108,22 +133,21 @@ export default function EquipmentPage() {
         throw new Error('Failed to log temperature');
       }
 
-      // Trigger personality hook for temperature logging
-      onTemperatureLogged();
-
-      showSuccess('Temperature logged successfully');
-      setTemperature('');
-      setNotes('');
-      const logsRes = await fetch(
-        `/api/temperature-logs?equipment_id=${equipmentId}&limit=5&pageSize=5`,
-      );
-      const logsData = await logsRes.json();
-      setRecentLogs(logsData.data?.items || logsData.data || []);
+      const data = await response.json();
+      if (data.success && data.data) {
+        // Replace temp log with real one from server
+        setRecentLogs(prev => prev.map(log => (log.id === tempId ? data.data : log)));
+        showSuccess('Temperature logged successfully');
+      } else {
+        // Error - revert optimistic update
+        setRecentLogs(originalLogs);
+        showError(data.message || data.error || 'Failed to log temperature');
+      }
     } catch (error) {
+      // Error - revert optimistic update
+      setRecentLogs(originalLogs);
       logger.error('Error logging temperature:', error);
-      showError('Failed to log temperature');
-    } finally {
-      setSubmitting(false);
+      showError("Couldn't log that temperature, chef. Give it another shot.");
     }
   };
 
@@ -159,7 +183,9 @@ export default function EquipmentPage() {
       <div className="min-h-screen bg-[var(--background)] p-4">
         <div className="mx-auto max-w-2xl">
           <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center">
-            <h1 className="mb-4 text-2xl font-bold text-[var(--foreground)]">Equipment Not Found</h1>
+            <h1 className="mb-4 text-2xl font-bold text-[var(--foreground)]">
+              Equipment Not Found
+            </h1>
             <Link
               href="/webapp/temperature"
               className="inline-block rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)]"
@@ -188,7 +214,9 @@ export default function EquipmentPage() {
           </Link>
           <div className="flex-1">
             <h1 className="text-2xl font-bold text-[var(--foreground)]">{equipment.name}</h1>
-            {equipment.location && <p className="text-sm text-[var(--foreground-muted)]">{equipment.location}</p>}
+            {equipment.location && (
+              <p className="text-sm text-[var(--foreground-muted)]">{equipment.location}</p>
+            )}
           </div>
         </div>
         <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
@@ -197,7 +225,9 @@ export default function EquipmentPage() {
               <Icon icon={Thermometer} size="xl" className="text-[var(--primary)]" />
             </div>
             <div className="flex-1">
-              <h2 className="text-xl font-bold text-[var(--foreground)]">{equipment.equipment_type}</h2>
+              <h2 className="text-xl font-bold text-[var(--foreground)]">
+                {equipment.equipment_type}
+              </h2>
               <p className="text-sm text-[var(--foreground-muted)]">Temperature Range</p>
             </div>
           </div>
@@ -264,10 +294,10 @@ export default function EquipmentPage() {
             </div>
             <button
               type="submit"
-              disabled={submitting || !temperature}
+              disabled={!temperature}
               className="w-full rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-4 font-semibold text-[var(--button-active-text)] transition-all hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {submitting ? 'Logging...' : 'Log Temperature'}
+              Log Temperature
             </button>
           </form>
         </div>
@@ -278,7 +308,10 @@ export default function EquipmentPage() {
               {recentLogs.map(log => {
                 const logStatus = getTemperatureStatus(log.temperature_celsius);
                 return (
-                  <div key={log.id} className="rounded-xl border border-[var(--border)] bg-[var(--background)] p-4">
+                  <div
+                    key={log.id}
+                    className="rounded-xl border border-[var(--border)] bg-[var(--background)] p-4"
+                  >
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-lg font-semibold text-[var(--foreground)]">
@@ -299,7 +332,9 @@ export default function EquipmentPage() {
                         </span>
                       </div>
                     </div>
-                    {log.notes && <p className="mt-2 text-sm text-[var(--foreground-muted)]">{log.notes}</p>}
+                    {log.notes && (
+                      <p className="mt-2 text-sm text-[var(--foreground-muted)]">{log.notes}</p>
+                    )}
                   </div>
                 );
               })}

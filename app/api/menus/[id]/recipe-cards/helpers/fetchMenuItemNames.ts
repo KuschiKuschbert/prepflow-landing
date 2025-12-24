@@ -3,6 +3,7 @@
  */
 
 import { SupabaseClient } from '@supabase/supabase-js';
+import { logger } from '@/lib/logger';
 
 /**
  * Fetch menu item names and create a map.
@@ -11,7 +12,7 @@ export async function fetchMenuItemNames(
   supabase: SupabaseClient,
   menuItemIds: string[],
 ): Promise<Map<string, string>> {
-  const { data: menuItemsWithNames } = await supabase
+  const { data: menuItemsWithNames, error: menuItemsError } = await supabase
     .from('menu_items')
     .select(
       `
@@ -28,6 +29,14 @@ export async function fetchMenuItemNames(
     `,
     )
     .in('id', menuItemIds);
+
+  if (menuItemsError) {
+    logger.error('[Menus API] Error fetching menu item names:', {
+      error: menuItemsError.message,
+      menuItemIds,
+      context: { endpoint: '/api/menus/[id]/recipe-cards', operation: 'fetchMenuItemNames' },
+    });
+  }
 
   const menuItemNameMap = new Map<string, string>();
   if (menuItemsWithNames) {

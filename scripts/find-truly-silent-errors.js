@@ -17,7 +17,11 @@ function findFiles(dir, extensions = ['.ts', '.tsx']) {
     for (const entry of entries) {
       const fullPath = path.join(currentDir, entry.name);
       if (entry.isDirectory()) {
-        if (!entry.name.startsWith('.') && entry.name !== 'node_modules' && entry.name !== '.next') {
+        if (
+          !entry.name.startsWith('.') &&
+          entry.name !== 'node_modules' &&
+          entry.name !== '.next'
+        ) {
           walkDir(fullPath);
         }
       } else if (extensions.some(ext => entry.name.endsWith(ext))) {
@@ -64,15 +68,20 @@ function analyzeFile(filePath) {
     const hasLoggerDev = /logger\.dev\(/.test(catchBlock);
     const hasConsoleError = /console\.error\(/.test(catchBlock);
     const hasConsoleWarn = /console\.warn\(/.test(catchBlock);
-    const hasAnyLogging = hasLoggerError || hasLoggerWarn || hasLoggerDev || hasConsoleError || hasConsoleWarn;
+    const hasAnyLogging =
+      hasLoggerError || hasLoggerWarn || hasLoggerDev || hasConsoleError || hasConsoleWarn;
 
     // Check if catch block throws or returns error
     const hasThrow = /throw\s+/.test(catchBlock);
-    const hasReturnError = /return.*error|return.*Error|return.*NextResponse\.json.*error/i.test(catchBlock);
+    const hasReturnError = /return.*error|return.*Error|return.*NextResponse\.json.*error/i.test(
+      catchBlock,
+    );
     const hasErrorHandling = hasThrow || hasReturnError;
 
     // Check if it's intentionally silent (background operation comment)
-    const hasSilentComment = /silently|background|non-blocking|don't break|don't reveal/i.test(catchBlock);
+    const hasSilentComment = /silently|background|non-blocking|don't break|don't reveal/i.test(
+      catchBlock,
+    );
 
     // Violation: catch block doesn't log AND doesn't throw/return error, and no silent comment
     if (!hasAnyLogging && !hasErrorHandling && !hasSilentComment && trimmedBlock.length > 0) {
@@ -138,6 +147,3 @@ if (require.main === module) {
 }
 
 module.exports = { findFiles, analyzeFile };
-
-
-

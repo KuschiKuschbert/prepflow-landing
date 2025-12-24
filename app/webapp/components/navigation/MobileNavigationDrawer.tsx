@@ -156,7 +156,12 @@ export const MobileNavigationDrawer = memo(function MobileNavigationDrawer({
             className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-[var(--muted)]/50 active:scale-95"
             aria-label="Close menu"
           >
-            <Icon icon={X} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+            <Icon
+              icon={X}
+              size="sm"
+              className="text-[var(--foreground-muted)]"
+              aria-hidden={true}
+            />
           </button>
         </div>
 

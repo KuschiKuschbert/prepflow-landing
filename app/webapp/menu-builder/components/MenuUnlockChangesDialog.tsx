@@ -40,7 +40,7 @@ export function MenuUnlockChangesDialog({
     dismissButtonRef,
   });
 
-  const { recalculating, handleRecalculatePrices, handleDismiss } = useDialogActions({
+  const { handleRecalculatePrices, handleDismiss } = useDialogActions({
     menuId,
     onRecalculatePrices,
     onDismiss,
@@ -73,7 +73,6 @@ export function MenuUnlockChangesDialog({
           <DialogHeader summary={summary} onClose={onClose} />
           <ChangesList changes={changes} />
           <DialogActions
-            recalculating={recalculating}
             onRecalculatePrices={handleRecalculatePrices}
             onReviewChanges={onReviewChanges}
             onDismiss={handleDismiss}
@@ -84,7 +83,3 @@ export function MenuUnlockChangesDialog({
     </div>
   );
 }
-
-
-
-

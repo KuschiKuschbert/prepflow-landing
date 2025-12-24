@@ -25,7 +25,11 @@ export function WebhooksSection() {
   if (error) {
     return (
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center">
-        <Icon icon={AlertCircle} size="lg" className="mx-auto mb-4 text-[var(--foreground-muted)]" />
+        <Icon
+          icon={AlertCircle}
+          size="lg"
+          className="mx-auto mb-4 text-[var(--foreground-muted)]"
+        />
         <p className="text-[var(--foreground-muted)]">{error}</p>
       </div>
     );
@@ -69,7 +73,9 @@ export function WebhooksSection() {
             <div className="flex items-start gap-3">
               <Icon icon={AlertCircle} size="sm" className="mt-0.5 text-[var(--primary)]" />
               <div className="flex-1">
-                <p className="text-sm font-medium text-[var(--foreground)]">Webhook Configuration</p>
+                <p className="text-sm font-medium text-[var(--foreground)]">
+                  Webhook Configuration
+                </p>
                 <p className="mt-1 text-xs text-[var(--foreground-muted)]">
                   Configure webhooks in the Configuration section. Webhooks allow Square to send
                   real-time updates to PrepFlow when data changes in Square POS.

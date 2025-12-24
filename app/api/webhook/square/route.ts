@@ -16,7 +16,6 @@ import { getWebhookSecret } from './helpers/getWebhookSecret';
 import { getUserIdFromEvent } from './helpers/getUserId';
 import { routeWebhookEvent } from './helpers/routeEvent';
 
-
 export async function POST(req: NextRequest) {
   const startTime = Date.now();
   let eventId: string | null = null;
@@ -29,7 +28,10 @@ export async function POST(req: NextRequest) {
 
     if (!signature) {
       logger.error('[Square Webhook] Missing signature header');
-      return NextResponse.json(ApiErrorHandler.createError('Missing signature', 'SERVER_ERROR', 400), { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Missing signature', 'SERVER_ERROR', 400),
+        { status: 400 },
+      );
     }
 
     // Parse event to get event_id and location_id
@@ -40,7 +42,9 @@ export async function POST(req: NextRequest) {
       logger.error('[Square Webhook] Invalid JSON payload:', {
         error: error.message,
       });
-      return NextResponse.json(ApiErrorHandler.createError('Invalid JSON', 'SERVER_ERROR', 400), { status: 400 });
+      return NextResponse.json(ApiErrorHandler.createError('Invalid JSON', 'SERVER_ERROR', 400), {
+        status: 400,
+      });
     }
 
     eventId = event.event_id || event.id || `square-${Date.now()}`;
@@ -51,10 +55,7 @@ export async function POST(req: NextRequest) {
     if (!userId) {
       logger.warn('[Square Webhook] Could not determine user ID from event');
       // Return 200 to prevent Square from retrying (this is a configuration issue)
-      return NextResponse.json(
-        { error: 'User not found for location' },
-        { status: 200 },
-      );
+      return NextResponse.json({ error: 'User not found for location' }, { status: 200 });
     }
 
     // Get webhook secret for user
@@ -65,7 +66,10 @@ export async function POST(req: NextRequest) {
         userId,
         hasEnvSecret: !!process.env.SQUARE_WEBHOOK_SECRET,
       });
-      return NextResponse.json(ApiErrorHandler.createError('Missing webhook secret', 'SERVER_ERROR', 501), { status: 501 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Missing webhook secret', 'SERVER_ERROR', 501),
+        { status: 501 },
+      );
     }
 
     // Verify webhook signature
@@ -76,10 +80,19 @@ export async function POST(req: NextRequest) {
         eventId,
         userId,
       });
-      return NextResponse.json(ApiErrorHandler.createError('Invalid signature', 'SERVER_ERROR', 400), { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid signature', 'SERVER_ERROR', 400),
+        { status: 400 },
+      );
     }
 
     // Check idempotency - skip if already processed
+    if (!eventId || !userId) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Missing event ID or user ID', 'SERVER_ERROR', 400),
+        { status: 400 },
+      );
+    }
     const alreadyProcessed = await isWebhookEventProcessed(eventId, userId);
     if (alreadyProcessed) {
       logger.dev('[Square Webhook] Event already processed, skipping:', {
@@ -95,15 +108,17 @@ export async function POST(req: NextRequest) {
 
     const processingTime = Date.now() - startTime;
 
-    // Mark event as processed successfully
-    await markWebhookEventProcessed({
-      eventId,
-      eventType: event.type,
-      userId,
-      success: true,
-      processingTimeMs: processingTime,
-      eventData: event.data,
-    });
+    // Mark event as processed successfully (eventId and userId already validated above)
+    if (eventId && userId) {
+      await markWebhookEventProcessed({
+        eventId,
+        eventType: event.type || 'unknown',
+        userId,
+        success: true,
+        processingTimeMs: processingTime,
+        eventData: event.data,
+      });
+    }
 
     return NextResponse.json({ received: true, type: event.type });
   } catch (error: any) {

@@ -48,7 +48,3 @@ export function useIsAdmin(): { isAdmin: boolean; loading: boolean } {
 
   return { isAdmin, loading };
 }
-
-
-
-

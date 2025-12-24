@@ -12,7 +12,8 @@ const fs = require('fs');
 const path = require('path');
 
 // Pattern to find Supabase queries without error handling
-const SUPABASE_QUERY_PATTERN = /const\s+\{\s*data\s*,\s*error\s*\}\s*=\s*await\s+supabase[^}]*\.(from|select|insert|update|delete|upsert)\([^}]*\)[^}]*;/g;
+const SUPABASE_QUERY_PATTERN =
+  /const\s+\{\s*data\s*,\s*error\s*\}\s*=\s*await\s+supabase[^}]*\.(from|select|insert|update|delete|upsert)\([^}]*\)[^}]*;/g;
 const MISSING_ERROR_CHECK = /const\s+\{\s*data\s*,\s*error\s*\}\s*=\s*await[^}]*if\s*\(!error\)/;
 
 function findFiles() {
@@ -47,7 +48,8 @@ function analyzeFile(filePath) {
   // Find Supabase queries
   const queryMatches = [];
   let match;
-  const queryRegex = /const\s+\{\s*data\s*,\s*error\s*\}\s*=\s*await\s+supabase[^}]*\.(from|select|insert|update|delete|upsert)\([^}]*\)[^}]*;/g;
+  const queryRegex =
+    /const\s+\{\s*data\s*,\s*error\s*\}\s*=\s*await\s+supabase[^}]*\.(from|select|insert|update|delete|upsert)\([^}]*\)[^}]*;/g;
 
   while ((match = queryRegex.exec(content)) !== null) {
     const lineNum = content.substring(0, match.index).split('\n').length;
@@ -61,7 +63,7 @@ function analyzeFile(filePath) {
       issues.push({
         line: lineNum,
         query: queryLine.trim(),
-        type: 'missing-error-handling'
+        type: 'missing-error-handling',
       });
     }
   }
@@ -121,7 +123,8 @@ ${indent}}`;
     if (needsLogger && !hasLoggerImport) {
       const lastImport = content.lastIndexOf('import ');
       const nextLine = content.indexOf('\n', lastImport);
-      content = content.slice(0, nextLine + 1) +
+      content =
+        content.slice(0, nextLine + 1) +
         "import { logger } from '@/lib/logger';\n" +
         content.slice(nextLine + 1);
     }
@@ -129,7 +132,8 @@ ${indent}}`;
     if (needsApiErrorHandler && !hasApiErrorHandlerImport) {
       const lastImport = content.lastIndexOf('import ');
       const nextLine = content.indexOf('\n', lastImport);
-      content = content.slice(0, nextLine + 1) +
+      content =
+        content.slice(0, nextLine + 1) +
         "import { ApiErrorHandler } from '@/lib/api-error-handler';\n" +
         content.slice(nextLine + 1);
     }
@@ -193,7 +197,3 @@ if (require.main === module) {
 }
 
 module.exports = { findFiles, analyzeFile, fixFile };
-
-
-
-

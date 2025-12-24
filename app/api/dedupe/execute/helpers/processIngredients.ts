@@ -44,7 +44,9 @@ export async function processIngredientDeduplication(
   const ingGroups: Record<string, IngredientGroup> = {};
   ingredients.forEach(row => {
     const key = [
-      String(row.ingredient_name || '').toLowerCase().trim(),
+      String(row.ingredient_name || '')
+        .toLowerCase()
+        .trim(),
       row.supplier || '',
       row.brand || '',
       row.pack_size || '',
@@ -88,7 +90,10 @@ export async function processIngredientDeduplication(
         }
 
         // Delete removed ingredients
-        const { error: deleteError } = await supabaseAdmin!.from('ingredients').delete().in('id', m.removed);
+        const { error: deleteError } = await supabaseAdmin!
+          .from('ingredients')
+          .delete()
+          .in('id', m.removed);
         if (deleteError) {
           logger.error('[Dedupe Execute API] Error deleting duplicate ingredients:', {
             error: deleteError.message,
@@ -104,5 +109,3 @@ export async function processIngredientDeduplication(
 
   return ingMerges;
 }
-
-

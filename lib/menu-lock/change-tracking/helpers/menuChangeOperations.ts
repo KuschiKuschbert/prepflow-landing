@@ -84,7 +84,10 @@ export async function clearMenuChanges(menuId: string): Promise<void> {
   }
 
   try {
-    const { error } = await supabaseAdmin.from('menu_change_tracking').delete().eq('menu_id', menuId);
+    const { error } = await supabaseAdmin
+      .from('menu_change_tracking')
+      .delete()
+      .eq('menu_id', menuId);
 
     if (error) {
       logger.error('[Menu Change Tracking] Failed to clear menu changes:', {
@@ -132,4 +135,3 @@ export async function isMenuLocked(menuId: string): Promise<boolean> {
     return false;
   }
 }
-

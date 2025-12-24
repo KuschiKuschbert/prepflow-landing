@@ -68,4 +68,3 @@ export const ACHIEVEMENT_MILESTONES: Milestone[] = [
     icon: '👑',
   },
 ];
-

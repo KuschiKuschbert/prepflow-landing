@@ -17,7 +17,11 @@ function findFiles(dir, extensions = ['.ts', '.tsx']) {
     for (const entry of entries) {
       const fullPath = path.join(currentDir, entry.name);
       if (entry.isDirectory()) {
-        if (!entry.name.startsWith('.') && entry.name !== 'node_modules' && entry.name !== '.next') {
+        if (
+          !entry.name.startsWith('.') &&
+          entry.name !== 'node_modules' &&
+          entry.name !== '.next'
+        ) {
           walkDir(fullPath);
         }
       } else if (extensions.some(ext => entry.name.endsWith(ext))) {
@@ -59,14 +63,21 @@ function analyzeFile(filePath) {
 
     // Check if catch block throws or returns error
     const hasThrow = /throw\s+/.test(catchBlock);
-    const hasReturnError = /return.*error|return.*Error|return.*NextResponse\.json.*error/i.test(catchBlock);
+    const hasReturnError = /return.*error|return.*Error|return.*NextResponse\.json.*error/i.test(
+      catchBlock,
+    );
     const hasErrorHandling = hasThrow || hasReturnError;
 
     // Check if it's intentionally silent (background operation comment)
     const hasSilentComment = /silently|background|non-blocking|don't break/i.test(catchBlock);
 
     // Violation: catch block doesn't log and doesn't throw/return error, and no silent comment
-    if (!hasErrorLogging && !hasErrorHandling && !hasSilentComment && catchBlock.trim().length > 0) {
+    if (
+      !hasErrorLogging &&
+      !hasErrorHandling &&
+      !hasSilentComment &&
+      catchBlock.trim().length > 0
+    ) {
       issues.push({
         file: filePath,
         line: catchLine,
@@ -139,6 +150,3 @@ if (require.main === module) {
 }
 
 module.exports = { findFiles, analyzeFile };
-
-
-

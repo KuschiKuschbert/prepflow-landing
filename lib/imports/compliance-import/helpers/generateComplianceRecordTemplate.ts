@@ -28,4 +28,3 @@ export function generateComplianceRecordTemplate(): string {
 
   return [headers.join(','), exampleRow.join(',')].join('\n');
 }
-

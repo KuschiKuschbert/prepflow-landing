@@ -35,7 +35,3 @@ export function createTempParLevel({
     },
   };
 }
-
-
-
-

@@ -38,7 +38,9 @@ export const GameScoreboard: React.FC<GameScoreboardProps> = ({
         <div className="desktop:gap-2 flex items-center gap-1.5">
           <span className="text-fluid-lg desktop:text-fluid-xl">{icon}</span>
           <div className="flex flex-col">
-            <span className="desktop:text-fluid-xs text-[10px] text-[var(--foreground-muted)]">Session</span>
+            <span className="desktop:text-fluid-xs text-[10px] text-[var(--foreground-muted)]">
+              Session
+            </span>
             <span className="text-fluid-base desktop:text-fluid-lg font-semibold text-[var(--primary)]">
               {sessionScore}
             </span>
@@ -48,7 +50,9 @@ export const GameScoreboard: React.FC<GameScoreboardProps> = ({
         {/* Global Score */}
         {globalScore !== undefined && (
           <div className="desktop:gap-2 desktop:pt-2 flex items-center gap-1.5 border-t border-[var(--border)] pt-1.5">
-            <span className="desktop:text-fluid-xs text-[10px] text-[var(--foreground-muted)]">Total:</span>
+            <span className="desktop:text-fluid-xs text-[10px] text-[var(--foreground-muted)]">
+              Total:
+            </span>
             <span className="text-fluid-xs desktop:text-fluid-sm font-semibold text-[var(--foreground)]">
               {globalScore}
             </span>
@@ -58,7 +62,9 @@ export const GameScoreboard: React.FC<GameScoreboardProps> = ({
         {/* Flames Remaining (variant) */}
         {variant === 'flames' && flamesRemaining !== undefined && (
           <div className="desktop:gap-2 desktop:pt-2 flex items-center gap-1.5 border-t border-[var(--border)] pt-1.5">
-            <span className="desktop:text-fluid-xs text-[10px] text-[var(--foreground-muted)]">Flames:</span>
+            <span className="desktop:text-fluid-xs text-[10px] text-[var(--foreground-muted)]">
+              Flames:
+            </span>
             <span className="text-fluid-xs desktop:text-fluid-sm font-semibold text-[#E74C3C]">
               {flamesRemaining}
             </span>
@@ -68,7 +74,9 @@ export const GameScoreboard: React.FC<GameScoreboardProps> = ({
         {/* Time */}
         {time !== undefined && (
           <div className="desktop:gap-2 desktop:pt-2 flex items-center gap-1.5 border-t border-[var(--border)] pt-1.5">
-            <span className="desktop:text-fluid-xs text-[10px] text-[var(--foreground-muted)]">Time:</span>
+            <span className="desktop:text-fluid-xs text-[10px] text-[var(--foreground-muted)]">
+              Time:
+            </span>
             <span className="text-fluid-xs desktop:text-fluid-sm font-semibold text-[var(--accent)]">
               {time}s
             </span>
@@ -78,7 +86,9 @@ export const GameScoreboard: React.FC<GameScoreboardProps> = ({
         {/* Tip Text */}
         {tipText && (
           <div className="desktop:mt-2 desktop:pt-2 mt-1.5 border-t border-[var(--border)] pt-1.5">
-            <p className="desktop:text-fluid-xs text-[10px] text-[var(--foreground-subtle)] italic">{tipText}</p>
+            <p className="desktop:text-fluid-xs text-[10px] text-[var(--foreground-subtle)] italic">
+              {tipText}
+            </p>
           </div>
         )}
       </div>

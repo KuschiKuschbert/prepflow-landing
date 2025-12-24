@@ -71,12 +71,12 @@ export function MethodologyTooltip({
         <div className="border-t border-[var(--border)] pt-3">
           <div className="space-y-1.5 text-xs text-[var(--foreground-secondary)]">
             <p>
-              <strong className="text-[var(--foreground)]">Profit Check:</strong> HIGH if above menu average (
-              {metadata.averageProfitMargin?.toFixed(1)}%), LOW if below
+              <strong className="text-[var(--foreground)]">Profit Check:</strong> HIGH if above menu
+              average ({metadata.averageProfitMargin?.toFixed(1)}%), LOW if below
             </p>
             <p>
-              <strong className="text-[var(--foreground)]">Popularity Check:</strong> HIGH if ≥ 80% of average
-              popularity ({metadata.popularityThreshold?.toFixed(1)}%), LOW if below
+              <strong className="text-[var(--foreground)]">Popularity Check:</strong> HIGH if ≥ 80%
+              of average popularity ({metadata.popularityThreshold?.toFixed(1)}%), LOW if below
             </p>
             <p className="mt-2 text-xs text-[var(--foreground-muted)]">
               The PrepFlow COGS Dynamic methodology automatically adapts thresholds based on your

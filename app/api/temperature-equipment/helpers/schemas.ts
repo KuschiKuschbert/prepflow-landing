@@ -6,6 +6,7 @@ export const createTemperatureEquipmentSchema = z.object({
   location: z.string().optional(),
   min_temp_celsius: z.number().nullable().optional(),
   max_temp_celsius: z.number().nullable().optional(),
+  is_active: z.boolean().optional(),
   notes: z.string().optional(),
 });
 
@@ -18,4 +19,3 @@ export const updateTemperatureEquipmentSchema = z.object({
   is_active: z.boolean().optional(),
   notes: z.string().optional(),
 });
-

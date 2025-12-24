@@ -49,7 +49,7 @@ function fixFile(filePath) {
     const insertLine = loggerIndex >= 0 ? loggerIndex + 1 : insertIndex + 1;
     const newImport = "import { ApiErrorHandler } from '@/lib/api-error-handler';";
 
-    if (!content.includes("@/lib/api-error-handler")) {
+    if (!content.includes('@/lib/api-error-handler')) {
       lines.splice(insertLine, 0, newImport);
       content = lines.join('\n');
       changed = true;
@@ -57,34 +57,37 @@ function fixFile(filePath) {
   }
 
   // Replace throw new Error('Database connection not available')
-  content = content.replace(
-    /throw new Error\(['"]Database connection not available['"]\)/g,
-    () => {
-      changed = true;
-      return "throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503)";
-    }
-  );
+  content = content.replace(/throw new Error\(['"]Database connection not available['"]\)/g, () => {
+    changed = true;
+    return "throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503)";
+  });
 
   // Replace other throw new Error patterns
   // Pattern: throw new Error('message')
-  content = content.replace(
-    /throw new Error\(['"]([^'"]+)['"]\)/g,
-    (match, errorMsg) => {
-      changed = true;
-      // Determine error code based on message
-      let errorCode = 'SERVER_ERROR';
-      if (errorMsg.toLowerCase().includes('database') || errorMsg.toLowerCase().includes('connection')) {
-        errorCode = 'DATABASE_ERROR';
-      } else if (errorMsg.toLowerCase().includes('unauthorized') || errorMsg.toLowerCase().includes('auth')) {
-        errorCode = 'UNAUTHORIZED';
-      } else if (errorMsg.toLowerCase().includes('not found')) {
-        errorCode = 'NOT_FOUND';
-      } else if (errorMsg.toLowerCase().includes('validation') || errorMsg.toLowerCase().includes('invalid')) {
-        errorCode = 'VALIDATION_ERROR';
-      }
-      return `throw ApiErrorHandler.createError('${errorMsg}', '${errorCode}', 500)`;
+  content = content.replace(/throw new Error\(['"]([^'"]+)['"]\)/g, (match, errorMsg) => {
+    changed = true;
+    // Determine error code based on message
+    let errorCode = 'SERVER_ERROR';
+    if (
+      errorMsg.toLowerCase().includes('database') ||
+      errorMsg.toLowerCase().includes('connection')
+    ) {
+      errorCode = 'DATABASE_ERROR';
+    } else if (
+      errorMsg.toLowerCase().includes('unauthorized') ||
+      errorMsg.toLowerCase().includes('auth')
+    ) {
+      errorCode = 'UNAUTHORIZED';
+    } else if (errorMsg.toLowerCase().includes('not found')) {
+      errorCode = 'NOT_FOUND';
+    } else if (
+      errorMsg.toLowerCase().includes('validation') ||
+      errorMsg.toLowerCase().includes('invalid')
+    ) {
+      errorCode = 'VALIDATION_ERROR';
     }
-  );
+    return `throw ApiErrorHandler.createError('${errorMsg}', '${errorCode}', 500)`;
+  });
 
   if (changed) {
     fs.writeFileSync(filePath, content, 'utf8');
@@ -115,6 +118,3 @@ if (require.main === module) {
 }
 
 module.exports = { fixFile };
-
-
-

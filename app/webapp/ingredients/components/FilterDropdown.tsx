@@ -56,7 +56,9 @@ export function FilterDropdown({
                   onToggle();
                 }}
                 className={`w-full rounded-md px-2.5 py-1.5 text-left text-sm transition-colors ${
-                  !value ? `${activeBg} ${activeColor}` : 'text-[var(--foreground-secondary)] hover:bg-[var(--muted)]'
+                  !value
+                    ? `${activeBg} ${activeColor}`
+                    : 'text-[var(--foreground-secondary)] hover:bg-[var(--muted)]'
                 }`}
               >
                 All {label}s

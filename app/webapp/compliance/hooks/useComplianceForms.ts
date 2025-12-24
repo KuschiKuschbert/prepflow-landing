@@ -4,6 +4,7 @@
 
 import { useState, useCallback } from 'react';
 import { logger } from '@/lib/logger';
+import { useNotification } from '@/contexts/NotificationContext';
 import type {
   ComplianceRecord,
   ComplianceRecordFormData,
@@ -51,6 +52,7 @@ export function useComplianceForms({
   setShowAddRecord,
   setShowAddType,
 }: UseComplianceFormsProps) {
+  const { showSuccess, showError } = useNotification();
   const [newRecord, setNewRecord] = useState<ComplianceRecordFormData>(DEFAULT_RECORD_FORM);
   const [newType, setNewType] = useState<ComplianceTypeFormData>(DEFAULT_TYPE_FORM);
 
@@ -69,6 +71,8 @@ export function useComplianceForms({
           setRecords,
           setShowAddRecord,
           resetForm: resetRecordForm,
+          showSuccess,
+          showError,
         });
       } catch (error) {
         logger.error('[useComplianceForms] Error adding compliance record:', {
@@ -85,6 +89,8 @@ export function useComplianceForms({
       setRecords,
       setShowAddRecord,
       resetRecordForm,
+      showSuccess,
+      showError,
     ],
   );
   const handleAddType = useCallback(
@@ -97,6 +103,8 @@ export function useComplianceForms({
           setTypes,
           setShowAddType,
           resetForm: resetTypeForm,
+          showSuccess,
+          showError,
         });
       } catch (error) {
         logger.error('[useComplianceForms] Error adding compliance type:', {
@@ -105,7 +113,7 @@ export function useComplianceForms({
         // Error is handled by handleAddComplianceType
       }
     },
-    [newType, types, setTypes, setShowAddType, resetTypeForm],
+    [newType, types, setTypes, setShowAddType, resetTypeForm, showSuccess, showError],
   );
   return { newRecord, setNewRecord, newType, setNewType, handleAddRecord, handleAddType };
 }

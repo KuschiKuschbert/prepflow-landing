@@ -3,8 +3,10 @@
  */
 
 import { useState, useCallback } from 'react';
-import { logger } from '@/lib/logger';
+import { useNotification } from '@/contexts/NotificationContext';
 import type { GeneratedPrepListData } from '../types';
+import type { PrepList } from '../types';
+import { handleSaveBatchPrepLists as handleSaveBatchPrepListsHelper } from './helpers/handleSaveBatchPrepLists';
 
 /**
  * Hook for managing prep list modal and preview state.
@@ -12,6 +14,7 @@ import type { GeneratedPrepListData } from '../types';
  * @returns {Object} Modal state and handlers
  */
 export function usePrepListsModals() {
+  const { showSuccess, showError } = useNotification();
   const [showForm, setShowForm] = useState(false);
   const [showGenerateModal, setShowGenerateModal] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -46,35 +49,26 @@ export function usePrepListsModals() {
 
   const handleSaveBatchPrepLists = useCallback(
     async (
-      prepLists: Array<{ sectionId: string | null; name: string; items: any[] }>,
+      prepListsToCreate: Array<{ sectionId: string | null; name: string; items: any[] }>,
       userId: string,
-      refetchPrepLists: () => Promise<unknown>,
+      currentPrepLists: PrepList[],
+      setPrepLists: React.Dispatch<React.SetStateAction<PrepList[]>>,
       setError: (error: string | null) => void,
     ) => {
-      try {
-        setError(null);
-        const response = await fetch('/api/prep-lists/batch-create', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prepLists, userId }),
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-          await refetchPrepLists();
-          setShowPreview(false);
-          setGeneratedData(null);
-          setError(null);
-        } else {
-          setError(result.message || 'Failed to save prep lists');
-        }
-      } catch (err) {
-        setError('Failed to save prep lists');
-        logger.error('Error saving batch prep lists:', err);
-      }
+      await handleSaveBatchPrepListsHelper({
+        prepListsToCreate,
+        userId,
+        currentPrepLists,
+        setPrepLists,
+        setError,
+        setShowPreview,
+        setGeneratedData,
+        generatedData,
+        showSuccess,
+        showError,
+      });
     },
-    [],
+    [generatedData, showSuccess, showError, setShowPreview, setGeneratedData],
   );
 
   return {

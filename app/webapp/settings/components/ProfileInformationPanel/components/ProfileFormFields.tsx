@@ -1,3 +1,5 @@
+'use client';
+
 import type { ProfileFormData } from '../types';
 
 interface ProfileFormFieldsProps {
@@ -14,7 +16,10 @@ export function ProfileFormFields({ email, formData, onFieldChange }: ProfileFor
     <div className="space-y-4">
       {/* Email (Read-only) */}
       <div>
-        <label htmlFor="email" className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+        <label
+          htmlFor="email"
+          className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]"
+        >
           Email Address
         </label>
         <input
@@ -31,7 +36,10 @@ export function ProfileFormFields({ email, formData, onFieldChange }: ProfileFor
 
       {/* First Name */}
       <div>
-        <label htmlFor="first_name" className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+        <label
+          htmlFor="first_name"
+          className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]"
+        >
           First Name
         </label>
         <input
@@ -47,7 +55,10 @@ export function ProfileFormFields({ email, formData, onFieldChange }: ProfileFor
 
       {/* Last Name */}
       <div>
-        <label htmlFor="last_name" className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+        <label
+          htmlFor="last_name"
+          className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]"
+        >
           Last Name
         </label>
         <input
@@ -63,7 +74,10 @@ export function ProfileFormFields({ email, formData, onFieldChange }: ProfileFor
 
       {/* Business Name */}
       <div>
-        <label htmlFor="business_name" className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+        <label
+          htmlFor="business_name"
+          className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]"
+        >
           Business Name
         </label>
         <input

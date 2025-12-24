@@ -64,9 +64,9 @@ export default function IngredientsSetup({
       }
     } catch (err) {
       logger.error('[IngredientsSetup.tsx] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
       setError('Connection issue occurred. Give it another go, chef.');
     } finally {
@@ -89,7 +89,9 @@ export default function IngredientsSetup({
 
       <div className="mx-auto max-w-2xl">
         <div className="mb-6 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/50 p-6">
-          <h4 className="mb-4 text-lg font-semibold text-[var(--foreground)]">What you&apos;ll get:</h4>
+          <h4 className="mb-4 text-lg font-semibold text-[var(--foreground)]">
+            What you&apos;ll get:
+          </h4>
           <ul className="space-y-2 text-[var(--foreground-secondary)]">
             <li className="flex items-center space-x-2">
               <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
@@ -117,7 +119,12 @@ export default function IngredientsSetup({
         {isProduction && (
           <div className="mb-6 rounded-2xl border border-[var(--primary)]/30 bg-[var(--primary)]/10 p-4 text-[var(--primary)]">
             <div className="flex items-start space-x-2">
-              <Icon icon={Info} size="sm" className="text-[var(--primary)] flex-shrink-0 mt-0.5" aria-hidden={true} />
+              <Icon
+                icon={Info}
+                size="sm"
+                className="mt-0.5 flex-shrink-0 text-[var(--primary)]"
+                aria-hidden={true}
+              />
               <div className="flex-1">
                 <p className="font-semibold">Development Feature</p>
                 <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
@@ -132,7 +139,12 @@ export default function IngredientsSetup({
         {error && !isProduction && (
           <div className="mb-6 rounded-2xl border border-[var(--color-error)]/30 bg-red-900/20 p-4 text-red-300">
             <div className="flex items-center space-x-2">
-              <Icon icon={AlertTriangle} size="sm" className="text-[var(--color-error)]" aria-hidden={true} />
+              <Icon
+                icon={AlertTriangle}
+                size="sm"
+                className="text-[var(--color-error)]"
+                aria-hidden={true}
+              />
               <span>{error}</span>
             </div>
           </div>
@@ -141,7 +153,12 @@ export default function IngredientsSetup({
         {result && (
           <div className="mb-6 rounded-2xl border border-[var(--color-success)]/30 bg-green-900/20 p-4 text-green-300">
             <div className="flex items-center space-x-2">
-              <Icon icon={CheckCircle2} size="sm" className="text-[var(--color-success)]" aria-hidden={true} />
+              <Icon
+                icon={CheckCircle2}
+                size="sm"
+                className="text-[var(--color-success)]"
+                aria-hidden={true}
+              />
               <span>{result}</span>
             </div>
           </div>
@@ -161,7 +178,12 @@ export default function IngredientsSetup({
           >
             {setupProgress.ingredients ? (
               <span className="flex items-center justify-center space-x-2">
-                <Icon icon={CheckCircle2} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
+                <Icon
+                  icon={CheckCircle2}
+                  size="sm"
+                  className="text-[var(--foreground)]"
+                  aria-hidden={true}
+                />
                 <span>Ingredients Added Successfully!</span>
               </span>
             ) : loading ? (
@@ -171,7 +193,12 @@ export default function IngredientsSetup({
               </span>
             ) : (
               <span className="flex items-center justify-center space-x-2">
-                <Icon icon={Carrot} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
+                <Icon
+                  icon={Carrot}
+                  size="sm"
+                  className="text-[var(--foreground)]"
+                  aria-hidden={true}
+                />
                 <span>Add ~95 Ingredients (including consumables)</span>
               </span>
             )}

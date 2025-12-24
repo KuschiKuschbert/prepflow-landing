@@ -20,7 +20,6 @@ export function useBulkAddToMenu({
   const { showSuccess, showError } = useNotification();
   const [menus, setMenus] = useState<Menu[]>([]);
   const [loadingMenus, setLoadingMenus] = useState(false);
-  const [addLoading, setAddLoading] = useState(false);
   const [showMenuDialog, setShowMenuDialog] = useState(false);
 
   const fetchMenus = useCallback(async () => {
@@ -55,7 +54,6 @@ export function useBulkAddToMenu({
         showError('No items selected');
         return;
       }
-      setAddLoading(true);
       setShowMenuDialog(false);
       try {
         const items = Array.from(selectedItems).map(id => {
@@ -83,8 +81,6 @@ export function useBulkAddToMenu({
       } catch (err) {
         logger.error('Bulk add to menu failed:', err);
         showError('Failed to add items to menu. Please check your connection and try again.');
-      } finally {
-        setAddLoading(false);
       }
     },
     [selectedItems, selectedItemTypes, router, showSuccess, showError, onSuccess],
@@ -99,7 +95,6 @@ export function useBulkAddToMenu({
     handleCreateNewMenu,
     menus,
     loadingMenus,
-    addLoading,
     showMenuDialog,
     setShowMenuDialog,
   };

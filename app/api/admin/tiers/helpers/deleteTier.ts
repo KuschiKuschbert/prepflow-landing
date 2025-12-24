@@ -19,7 +19,10 @@ export async function deleteTier(
   request: NextRequest,
 ): Promise<{ tier: any } | NextResponse> {
   if (!supabaseAdmin) {
-    return NextResponse.json(ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503), { status: 503 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503),
+      { status: 503 },
+    );
   }
 
   const { data, error } = await supabaseAdmin
@@ -31,7 +34,10 @@ export async function deleteTier(
 
   if (error) {
     logger.error('[Admin Tiers] Failed to disable tier:', error);
-    return NextResponse.json(ApiErrorHandler.createError('Failed to disable tier', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Failed to disable tier', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 
   await invalidateTierCache();

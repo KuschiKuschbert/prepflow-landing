@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { BrandMark } from '@/components/BrandMark';
 import AutosaveGlobalIndicator from '@/app/webapp/components/AutosaveGlobalIndicator';

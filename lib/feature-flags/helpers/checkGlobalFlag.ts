@@ -33,4 +33,3 @@ export async function checkGlobalFlag(flagKey: string): Promise<boolean> {
     return false;
   }
 }
-

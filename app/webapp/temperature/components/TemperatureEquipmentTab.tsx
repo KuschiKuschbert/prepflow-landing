@@ -20,7 +20,6 @@ import { temperatureTypesForSelect } from '../utils/temperatureUtils';
 interface TemperatureEquipmentTabProps {
   equipment: TemperatureEquipment[];
   allLogs?: any[]; // Optional logs for last log date calculation
-  quickTempLoading: Record<string, boolean>;
   onUpdateEquipment: (equipmentId: string, updates: Partial<TemperatureEquipment>) => Promise<void>;
   onCreateEquipment: (
     name: string,
@@ -41,7 +40,6 @@ interface TemperatureEquipmentTabProps {
 export default function TemperatureEquipmentTab({
   equipment,
   allLogs = [],
-  quickTempLoading,
   onUpdateEquipment,
   onCreateEquipment,
   onDeleteEquipment,
@@ -128,7 +126,12 @@ export default function TemperatureEquipmentTab({
             onClick={() => setShowCreateForm(!showCreateForm)}
             className="group flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
-            <Icon icon={Plus} size="md" className="text-[var(--button-active-text)]" aria-hidden={true} />
+            <Icon
+              icon={Plus}
+              size="md"
+              className="text-[var(--button-active-text)]"
+              aria-hidden={true}
+            />
             <span>{t('temperature.addEquipment', 'Add Equipment')}</span>
           </button>
         </div>
@@ -152,7 +155,6 @@ export default function TemperatureEquipmentTab({
           editingId={editingEquipment}
           setEditingId={setEditingEquipment}
           temperatureTypes={temperatureTypesForSelect}
-          quickTempLoading={quickTempLoading}
           onQuickTempLog={onQuickTempLog}
           onToggleStatus={toggleEquipmentStatus}
           onDelete={handleDeleteEquipment}
@@ -185,7 +187,6 @@ export default function TemperatureEquipmentTab({
                 editingId={editingEquipment}
                 setEditingId={setEditingEquipment}
                 temperatureTypes={temperatureTypesForSelect}
-                quickTempLoading={quickTempLoading}
                 onQuickTempLog={onQuickTempLog}
                 onToggleStatus={toggleEquipmentStatus}
                 onDelete={handleDeleteEquipment}

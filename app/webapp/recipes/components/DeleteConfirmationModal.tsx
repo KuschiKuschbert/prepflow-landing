@@ -56,15 +56,19 @@ export function DeleteConfirmationModal({
                 <h3 className="text-xl font-bold text-[var(--foreground)]">
                   Delete {itemTypeLabel.charAt(0).toUpperCase() + itemTypeLabel.slice(1)}
                 </h3>
-                <p className="text-sm text-[var(--foreground-muted)]">This action can&apos;t be undone</p>
+                <p className="text-sm text-[var(--foreground-muted)]">
+                  This action can&apos;t be undone
+                </p>
               </div>
             </div>
           </div>
           <div className="p-6">
             <p className="mb-6 text-[var(--foreground-secondary)]">
               Are you sure you want to delete{' '}
-              <span className="font-semibold text-[var(--foreground)]">&quot;{displayName}&quot;</span>? This will
-              permanently remove the {itemTypeLabel} and all its associated data.
+              <span className="font-semibold text-[var(--foreground)]">
+                &quot;{displayName}&quot;
+              </span>
+              ? This will permanently remove the {itemTypeLabel} and all its associated data.
             </p>
             <div className="flex gap-3">
               <button

@@ -9,7 +9,6 @@ import { TemperatureEquipment } from '../types';
 interface EquipmentActionButtonsProps {
   item: TemperatureEquipment;
   editingId: string | null;
-  quickTempLoading: Record<string, boolean>;
   onQuickTempLog: (id: string, name: string, type: string) => Promise<void>;
   onToggleStatus: (id: string, current: boolean) => void;
   onDelete: (id: string) => void;
@@ -21,7 +20,6 @@ interface EquipmentActionButtonsProps {
 export function EquipmentActionButtons({
   item,
   editingId,
-  quickTempLoading,
   onQuickTempLog,
   onToggleStatus,
   onDelete,
@@ -38,15 +36,13 @@ export function EquipmentActionButtons({
           handleButtonClick(e);
           onQuickTempLog(item.id, item.name, item.equipment_type);
         }}
-        disabled={quickTempLoading[item.id] || !item.is_active}
+        disabled={!item.is_active}
         className="flex-1 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
         style={{
           background: `linear-gradient(to right, ${LANDING_COLORS.primary}, ${LANDING_COLORS.accent})`,
         }}
       >
-        {quickTempLoading[item.id]
-          ? t('temperature.logging', 'Logging...')
-          : t('temperature.quickLog', 'Quick Log')}
+        {t('temperature.quickLog', 'Quick Log')}
       </button>
       {onShowQRCode && (
         <button
@@ -54,7 +50,7 @@ export function EquipmentActionButtons({
             handleButtonClick(e);
             onShowQRCode(item);
           }}
-          className="group relative rounded-xl border-2 border-[var(--primary)]/60 bg-gradient-to-br from-[var(--primary)]/10 to-[var(--accent)]/10 p-2.5 text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--primary)] hover:from-[var(--primary)]/20 hover:to-[var(--accent)]/20 hover:text-[var(--button-active-text)] hover:shadow-lg hover:shadow-[var(--primary)]/20"
+          className="group relative rounded-xl border-2 border-[var(--primary)]/60 bg-gradient-to-br from-[var(--primary)]/10 to-[var(--accent)]/10 p-2.5 text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--primary)] hover:from-[var(--primary)]/20 hover:to-[var(--accent)]/20 hover:text-[var(--button-active-text)] hover:shadow-[var(--primary)]/20 hover:shadow-lg"
           title="Show QR Code"
         >
           <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />

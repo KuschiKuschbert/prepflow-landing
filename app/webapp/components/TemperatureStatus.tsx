@@ -61,7 +61,7 @@ export default function TemperatureStatus() {
         </div>
         <Link
           href="/webapp/temperature"
-          className="tablet:rounded-2xl flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg hover:shadow-[var(--primary)]/20 active:scale-[0.98]"
+          className="tablet:rounded-2xl flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-[var(--button-active-text)] transition-all duration-200 hover:shadow-[var(--primary)]/20 hover:shadow-lg active:scale-[0.98]"
         >
           <Icon icon={Plus} size="sm" aria-hidden={true} />
           <span className="text-fluid-xs tablet:inline tablet:text-fluid-sm ml-2 hidden font-medium">
@@ -126,7 +126,12 @@ export default function TemperatureStatus() {
         <div className="tablet:rounded-2xl tablet:p-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
           <div className="mb-2 flex items-center gap-2">
             <div className="tablet:h-10 tablet:w-10 tablet:rounded-xl flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--color-info)]/20 to-[var(--color-info)]/10">
-              <Icon icon={Thermometer} size="sm" className="text-[var(--color-info)]" aria-hidden={true} />
+              <Icon
+                icon={Thermometer}
+                size="sm"
+                className="text-[var(--color-info)]"
+                aria-hidden={true}
+              />
             </div>
             <div>
               <p className="text-fluid-xs tablet:text-fluid-sm font-medium text-[var(--foreground-muted)]">
@@ -159,7 +164,9 @@ export default function TemperatureStatus() {
               <Icon
                 icon={outOfRangeAlerts > 0 ? AlertTriangle : CheckCircle}
                 size="sm"
-                className={outOfRangeAlerts > 0 ? 'text-[var(--color-error)]' : 'text-[var(--color-success)]'}
+                className={
+                  outOfRangeAlerts > 0 ? 'text-[var(--color-error)]' : 'text-[var(--color-success)]'
+                }
                 aria-hidden={true}
               />
             </div>
@@ -189,7 +196,8 @@ export default function TemperatureStatus() {
       {lastCheckTime && (
         <div className="tablet:mt-6 tablet:rounded-2xl tablet:p-4 mt-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-3">
           <p className="text-fluid-xs tablet:text-fluid-sm text-[var(--foreground-muted)]">
-            Last check: <span className="text-[var(--foreground)]">{formatLastCheckTime(lastCheckTime)}</span>
+            Last check:{' '}
+            <span className="text-[var(--foreground)]">{formatLastCheckTime(lastCheckTime)}</span>
           </p>
         </div>
       )}

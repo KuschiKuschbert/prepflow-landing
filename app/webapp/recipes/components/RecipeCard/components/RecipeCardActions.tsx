@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { Edit, QrCode, Trash2 } from 'lucide-react';
 

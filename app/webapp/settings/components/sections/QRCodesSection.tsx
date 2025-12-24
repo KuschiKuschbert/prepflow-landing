@@ -2,6 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { useNotification } from '@/contexts/NotificationContext';
 import { Printer, QrCode, X } from 'lucide-react';
 import { useCallback } from 'react';
 import { QRCodeSection } from './QRCodesSection/components/QRCodeSection';
@@ -15,10 +16,11 @@ import { useState } from 'react';
  * QR Codes Section component for settings page
  */
 export function QRCodesSection() {
+  const { showError } = useNotification();
   const { entities, loading, error, refetch } = useQRCodes();
   const { selectedItems, toggleSelect, selectAllInSection, clearSelection } =
     useQRCodeSelection(entities);
-  const { handlePrint } = useQRCodePrint();
+  const { handlePrint } = useQRCodePrint(showError);
 
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     new Set(['recipe', 'cleaning-area', 'storage-area']),

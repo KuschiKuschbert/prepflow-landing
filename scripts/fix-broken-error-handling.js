@@ -33,7 +33,8 @@ function fixBrokenErrorHandling(content) {
   // Pattern: const { data, error } = await supabaseAdmin\n  if (error) { ... }\n    .from(
   // This is broken - error handling is in the middle of the query chain
 
-  const brokenPattern = /const\s+\{\s*data\s*,\s*error\s*\}\s*=\s*await\s+supabaseAdmin\s*\n\s*if\s*\(error\)\s*\{[^}]*\}\s*\n\s*\.from\(/g;
+  const brokenPattern =
+    /const\s+\{\s*data\s*,\s*error\s*\}\s*=\s*await\s+supabaseAdmin\s*\n\s*if\s*\(error\)\s*\{[^}]*\}\s*\n\s*\.from\(/g;
 
   if (!brokenPattern.test(content)) {
     return { changed: false, content };
@@ -136,7 +137,3 @@ if (require.main === module) {
 }
 
 module.exports = { fixBrokenErrorHandling };
-
-
-
-

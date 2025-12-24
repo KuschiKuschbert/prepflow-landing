@@ -141,7 +141,9 @@ export function AllergenFilterDropdown({
                     key={allergen.code}
                     onClick={() => handleAllergenToggle(allergen.code)}
                     className={`mb-1 flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-sm transition-colors ${
-                      isSelected ? `${activeBg} ${activeColor}` : 'text-[var(--foreground-secondary)] hover:bg-[var(--muted)]'
+                      isSelected
+                        ? `${activeBg} ${activeColor}`
+                        : 'text-[var(--foreground-secondary)] hover:bg-[var(--muted)]'
                     }`}
                   >
                     <div
@@ -171,7 +173,9 @@ export function AllergenFilterDropdown({
                       <Icon
                         icon={ALLERGEN_ICONS[allergen.icon]}
                         size="sm"
-                        className={isSelected ? 'text-[var(--primary)]' : 'text-[var(--foreground-muted)]'}
+                        className={
+                          isSelected ? 'text-[var(--primary)]' : 'text-[var(--foreground-muted)]'
+                        }
                         aria-hidden={true}
                       />
                     )}

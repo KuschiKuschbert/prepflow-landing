@@ -5,20 +5,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import { autoDetectCategory } from '@/lib/ingredients/category-detection';
 import { z } from 'zod';
 
-const autoCategorizeSchema = z.object({
-  ingredientIds: z.array(z.string()).optional(),
-  useAI: z.boolean().optional().default(true),
-  categorizeAll: z.boolean().optional().default(false),
-}).refine(data => {
-  // If categorizeAll is false, ingredientIds must be provided and non-empty
-  if (!data.categorizeAll) {
-    return data.ingredientIds && data.ingredientIds.length > 0;
-  }
-  return true;
-}, {
-  message: 'ingredientIds array is required when categorizeAll is false',
-  path: ['ingredientIds'],
-});
+const autoCategorizeSchema = z
+  .object({
+    ingredientIds: z.array(z.string()).optional(),
+    useAI: z.boolean().optional().default(true),
+    categorizeAll: z.boolean().optional().default(false),
+  })
+  .refine(
+    data => {
+      // If categorizeAll is false, ingredientIds must be provided and non-empty
+      if (!data.categorizeAll) {
+        return data.ingredientIds && data.ingredientIds.length > 0;
+      }
+      return true;
+    },
+    {
+      message: 'ingredientIds array is required when categorizeAll is false',
+      path: ['ingredientIds'],
+    },
+  );
 
 /**
  * Bulk auto-categorize ingredients.

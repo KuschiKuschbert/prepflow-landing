@@ -1,4 +1,10 @@
-import { calculateEaster, calculateMothersDay, calculateFathersDay, calculateLabourDay, calculateRoyalBirthday } from './dateCalculations';
+import {
+  calculateEaster,
+  calculateMothersDay,
+  calculateFathersDay,
+  calculateLabourDay,
+  calculateRoyalBirthday,
+} from './dateCalculations';
 
 /**
  * Check if two dates are the same day (ignoring time)
@@ -66,4 +72,3 @@ export function checkSeasonalMatch(): string | null {
 
   return null;
 }
-

@@ -8,7 +8,6 @@ interface HandleUpdateParams {
   updates: Partial<ParLevel>;
   parLevels: ParLevel[];
   setParLevels: React.Dispatch<React.SetStateAction<ParLevel[]>>;
-  fetchParLevels: () => Promise<void>;
   showError: (message: string) => void;
   showSuccess: (message: string) => void;
 }
@@ -17,7 +16,6 @@ export async function handleUpdate({
   updates,
   parLevels,
   setParLevels,
-  fetchParLevels,
   showError,
   showSuccess,
 }: HandleUpdateParams): Promise<void> {
@@ -40,7 +38,7 @@ export async function handleUpdate({
     setParLevels,
     () => {
       showSuccess('Par level updated successfully');
-      fetchParLevels();
+      // No refetch needed - optimistic update handles UI
     },
     showError,
   );

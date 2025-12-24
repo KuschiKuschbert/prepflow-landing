@@ -3,6 +3,7 @@ import { evaluateGate } from '@/lib/feature-gate';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { handlePerformanceError } from './helpers/handlePerformanceError';
 import { processPerformanceData } from './helpers/processPerformanceData';
 import { upsertSalesData } from './helpers/upsertSalesData';

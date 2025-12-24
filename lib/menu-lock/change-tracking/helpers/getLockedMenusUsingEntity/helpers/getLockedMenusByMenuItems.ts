@@ -23,4 +23,3 @@ export async function getLockedMenusByMenuItems(menuIds: string[]): Promise<stri
 
   return lockedMenus ? lockedMenus.map(m => m.id) : [];
 }
-

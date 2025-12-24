@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Filter controls for compliance records.
  */
@@ -142,9 +144,14 @@ export function ComplianceFilters({
         <div className="flex flex-wrap gap-3">
           <button
             onClick={onAddRecord}
-            className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 flex items-center gap-2 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
+            className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
           >
-            <Icon icon={Plus} size="sm" className="text-[var(--button-active-text)]" aria-hidden={true} />
+            <Icon
+              icon={Plus}
+              size="sm"
+              className="text-[var(--button-active-text)]"
+              aria-hidden={true}
+            />
             {t('compliance.addRecord', 'Add Compliance Record')}
           </button>
           <PrintButton

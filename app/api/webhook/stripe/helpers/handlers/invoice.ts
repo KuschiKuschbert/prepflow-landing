@@ -95,11 +95,21 @@ export async function handleInvoicePaymentFailed(
     return;
   }
 
-  const { data: userData } = await supabaseAdmin
+  const { data: userData, error: userError } = await supabaseAdmin
     .from('users')
     .select('subscription_tier, stripe_subscription_id')
     .eq('email', userEmail)
     .single();
+
+  if (userError) {
+    logger.error('[Stripe Webhook] Error fetching user data for payment failed:', {
+      error: userError.message,
+      userEmail,
+      invoiceId: invoice.id,
+      context: { endpoint: '/api/webhook/stripe', operation: 'handleInvoicePaymentFailed' },
+    });
+    // Continue with default tier if user not found
+  }
 
   const tier = (userData?.subscription_tier as TierSlug) || 'starter';
   const subscriptionId = userData?.stripe_subscription_id || undefined;

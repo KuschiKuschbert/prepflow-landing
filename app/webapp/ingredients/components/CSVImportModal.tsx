@@ -259,7 +259,9 @@ export default function CSVImportModal({
 
             {/* Instructions */}
             <div className="rounded-lg border border-[var(--border)]/50 bg-[var(--muted)]/30 p-4">
-              <h4 className="mb-2 text-sm font-semibold text-[var(--foreground)]">📋 CSV Format Instructions</h4>
+              <h4 className="mb-2 text-sm font-semibold text-[var(--foreground)]">
+                📋 CSV Format Instructions
+              </h4>
               <div className="space-y-1 text-xs text-[var(--foreground-muted)]">
                 <p>• First row should contain column headers</p>
                 <p>• Required columns: name (or ingredient), cost (or price), unit</p>

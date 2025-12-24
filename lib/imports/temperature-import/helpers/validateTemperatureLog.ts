@@ -1,7 +1,7 @@
 /**
  * Validate temperature log import row
  */
-import type { TemperatureLogImportRow } from '../temperature-import';
+import type { TemperatureLogImportRow } from '../../temperature-import';
 
 export function validateTemperatureLog(
   row: TemperatureLogImportRow,
@@ -21,4 +21,3 @@ export function validateTemperatureLog(
 
   return { valid: true };
 }
-

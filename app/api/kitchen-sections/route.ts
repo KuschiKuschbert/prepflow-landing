@@ -28,19 +28,21 @@ export async function GET() {
     let sections: any[] = [];
     let sectionsError: any = null;
     try {
-      let sectionsQuery = supabaseAdmin
+      const sectionsQuery = supabaseAdmin
         .from('kitchen_sections')
         .select('id, name, section_name, description, color_code, color, created_at, updated_at');
-      let result = await sectionsQuery.eq('is_active', true);
-      if (result.error) {
+      let { data, error } = await sectionsQuery.eq('is_active', true);
+      if (error) {
         const fallbackQuery = supabaseAdmin
           .from('kitchen_sections')
           .select('id, name, section_name, description, color_code, color, created_at, updated_at');
-        result = await fallbackQuery;
+        const fallbackResult = await fallbackQuery;
+        data = fallbackResult.data;
+        error = fallbackResult.error;
       }
 
-      if (result.error) {
-        sectionsError = result.error;
+      if (error) {
+        sectionsError = error;
         if (result.error.code === '42P01') {
           logger.warn('kitchen_sections table does not exist');
           return NextResponse.json(TABLE_NOT_FOUND_RESPONSE);
@@ -48,7 +50,7 @@ export async function GET() {
         logger.error('Error fetching kitchen sections:', sectionsError);
         sections = [];
       } else {
-        sections = result.data || [];
+        sections = data || [];
       }
     } catch (err: any) {
       sectionsError = err;
@@ -69,19 +71,19 @@ export async function GET() {
 
     let dishes: any[] = [];
     let dishesError: any = null;
-    const dishesResult = await supabaseAdmin
+    const { data: dishesData, error: dishesQueryError } = await supabaseAdmin
       .from('dishes')
       .select('id, dish_name, description, selling_price, category');
-    if (!dishesResult.error && dishesResult.data) {
-      dishes = dishesResult.data;
+    if (!dishesQueryError && dishesData) {
+      dishes = dishesData;
     } else {
-      const menuDishesResult = await supabaseAdmin
+      const { data: menuDishesData, error: menuDishesQueryError } = await supabaseAdmin
         .from('menu_dishes')
         .select('id, name, description, selling_price, category');
-      if (!menuDishesResult.error && menuDishesResult.data) {
-        dishes = menuDishesResult.data;
+      if (!menuDishesQueryError && menuDishesData) {
+        dishes = menuDishesData;
       } else {
-        dishesError = menuDishesResult.error || dishesResult.error;
+        dishesError = menuDishesQueryError || dishesQueryError;
         logger.warn('Could not fetch dishes from either table:', dishesError);
         dishes = [];
       }
@@ -89,13 +91,13 @@ export async function GET() {
     let dishSections: any[] = [];
     let dishSectionsError: any = null;
     try {
-      const dishSectionsResult = await supabaseAdmin
+      const { data: dishSectionsData, error: dishSectionsQueryError } = await supabaseAdmin
         .from('dish_sections')
         .select('dish_id, section_id');
-      if (!dishSectionsResult.error && dishSectionsResult.data) {
-        dishSections = dishSectionsResult.data;
+      if (!dishSectionsQueryError && dishSectionsData) {
+        dishSections = dishSectionsData;
       } else {
-        dishSectionsError = dishSectionsResult.error;
+        dishSectionsError = dishSectionsQueryError;
         logger.warn('dish_sections table might not exist:', dishSectionsError);
       }
     } catch (err) {
@@ -108,17 +110,17 @@ export async function GET() {
     let dishesWithSectionId: any[] = [];
     if (dishSectionsError || dishSections.length === 0) {
       try {
-        const dishesWithSection = await supabaseAdmin
+        const { data: dishesWithSectionData, error: dishesWithSectionError } = await supabaseAdmin
           .from('dishes')
           .select('id, dish_name, description, selling_price, category, kitchen_section_id');
-        if (!dishesWithSection.error && dishesWithSection.data) {
-          dishesWithSectionId = dishesWithSection.data;
+        if (!dishesWithSectionError && dishesWithSectionData) {
+          dishesWithSectionId = dishesWithSectionData;
         } else {
-          const menuDishesWithSection = await supabaseAdmin
+          const { data: menuDishesWithSectionData, error: menuDishesWithSectionError } = await supabaseAdmin
             .from('menu_dishes')
             .select('id, name, description, selling_price, category, kitchen_section_id');
-          if (!menuDishesWithSection.error && menuDishesWithSection.data) {
-            dishesWithSectionId = menuDishesWithSection.data;
+          if (!menuDishesWithSectionError && menuDishesWithSectionData) {
+            dishesWithSectionId = menuDishesWithSectionData;
           }
         }
       } catch (err) {

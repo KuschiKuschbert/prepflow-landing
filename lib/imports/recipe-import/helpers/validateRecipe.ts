@@ -21,4 +21,3 @@ export function validateRecipe(
 
   return { valid: true };
 }
-

@@ -14,4 +14,3 @@ export function checkAdminAccess(userId?: string, userEmail?: string): boolean {
 
   return false;
 }
-

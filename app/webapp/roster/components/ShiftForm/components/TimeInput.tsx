@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Time input field component.
  */

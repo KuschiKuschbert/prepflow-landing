@@ -1,14 +1,19 @@
 import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 import type { Ingredient } from '../../types';
 
 /**
  * Fetch and combine ingredients from dish recipes and dish ingredients
  */
 export async function fetchDishIngredients(dishId: string): Promise<Ingredient[]> {
+  if (!supabaseAdmin) {
+    return [];
+  }
+
   const allIngredients: Ingredient[] = [];
 
-  const { data: dishRecipes } = await supabaseAdmin
+  const { data: dishRecipes, error: dishRecipesError } = await supabaseAdmin
     .from('dish_recipes')
     .select(
       `
@@ -27,6 +32,14 @@ export async function fetchDishIngredients(dishId: string): Promise<Ingredient[]
     `,
     )
     .eq('dish_id', dishId);
+
+  if (dishRecipesError) {
+    logger.error('[Dietary Aggregation] Error fetching dish recipes:', {
+      error: dishRecipesError.message,
+      dishId,
+      context: { operation: 'fetchDishIngredients' },
+    });
+  }
 
   if (dishRecipes) {
     dishRecipes.forEach(dr => {
@@ -58,7 +71,7 @@ export async function fetchDishIngredients(dishId: string): Promise<Ingredient[]
     });
   }
 
-  const { data: dishIngredients } = await supabaseAdmin
+  const { data: dishIngredients, error: dishIngredientsError } = await supabaseAdmin
     .from('dish_ingredients')
     .select(
       `
@@ -71,6 +84,14 @@ export async function fetchDishIngredients(dishId: string): Promise<Ingredient[]
     `,
     )
     .eq('dish_id', dishId);
+
+  if (dishIngredientsError) {
+    logger.error('[Dietary Aggregation] Error fetching dish ingredients:', {
+      error: dishIngredientsError.message,
+      dishId,
+      context: { operation: 'fetchDishIngredients' },
+    });
+  }
 
   if (dishIngredients) {
     dishIngredients.forEach(di => {
@@ -95,4 +116,3 @@ export async function fetchDishIngredients(dishId: string): Promise<Ingredient[]
 
   return allIngredients;
 }
-

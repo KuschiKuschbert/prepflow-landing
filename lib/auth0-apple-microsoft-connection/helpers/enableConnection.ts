@@ -21,7 +21,7 @@ export async function enableConnectionForApp(
     return {
       success: false,
       enabled: false,
-      message: 'Management API client or application client ID not available',
+      message: 'Auth0 configuration is missing. Please check your Auth0 environment variables.',
     };
   }
 
@@ -68,4 +68,3 @@ export async function enableConnectionForApp(
     };
   }
 }
-

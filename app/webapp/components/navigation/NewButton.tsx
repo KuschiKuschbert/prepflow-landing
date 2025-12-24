@@ -146,7 +146,12 @@ function NewButton({ isCollapsed = false }: NewButtonProps) {
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <Icon icon={Plus} size="md" className="text-[var(--button-active-text)]" aria-hidden={true} />
+        <Icon
+          icon={Plus}
+          size="md"
+          className="text-[var(--button-active-text)]"
+          aria-hidden={true}
+        />
         <span>New</span>
       </button>
 
@@ -209,10 +214,14 @@ function NewButton({ isCollapsed = false }: NewButtonProps) {
                     'transition-all',
                     'duration-200',
                     'hover:bg-[var(--muted)]/50',
-                    index % 2 === 0 ? 'hover:text-[var(--primary)]' : 'hover:text-[var(--tertiary)]',
+                    index % 2 === 0
+                      ? 'hover:text-[var(--primary)]'
+                      : 'hover:text-[var(--tertiary)]',
                     'focus:outline-none',
                     'focus:bg-[var(--muted)]/50',
-                    index % 2 === 0 ? 'focus:text-[var(--primary)]' : 'focus:text-[var(--tertiary)]',
+                    index % 2 === 0
+                      ? 'focus:text-[var(--primary)]'
+                      : 'focus:text-[var(--tertiary)]',
                     'active:scale-95',
                   )}
                   role="menuitem"

@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getUserEmail } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
@@ -9,6 +10,7 @@ import { mapRecipeIngredients } from './helpers/mapRecipeIngredients';
 import { saveRecipeIngredients } from './helpers/saveRecipeIngredients';
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  let normalizedId: string | undefined;
   try {
     const { id } = await context.params;
     const recipeId = id;
@@ -26,7 +28,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       );
     }
 
-    const normalizedId = String(recipeId).trim();
+    normalizedId = String(recipeId).trim();
 
     // First try with category, fallback without if column doesn't exist
     let { data, error } = await supabaseAdmin
@@ -61,7 +63,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         context: { endpoint: '/api/recipes/[id]/ingredients', recipeId: normalizedId },
       });
 
-      const retryResult = await supabaseAdmin
+      const { data: retryData, error: retryError } = await supabaseAdmin
         .from('recipe_ingredients')
         .select(
           `
@@ -87,14 +89,14 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         .eq('recipe_id', normalizedId);
 
       // Normalize the retry result to include category as null for type compatibility
-      data = retryResult.data?.map((item: any) => ({
+      data = retryData?.map((item: any) => ({
         ...item,
         ingredients: item.ingredients?.map((ing: any) => ({
           ...ing,
           category: ing.category ?? null,
         })),
       })) as typeof data;
-      error = retryResult.error;
+      error = retryError;
     }
 
     if (error) {
@@ -127,16 +129,21 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
   } catch (err) {
     logger.error('[Recipes API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
-      context: { endpoint: '/api/recipes/[id]/ingredients', method: 'GET', recipeId: normalizedId },
+      context: {
+        endpoint: '/api/recipes/[id]/ingredients',
+        method: 'GET',
+        recipeId: normalizedId || 'unknown',
+      },
     });
     return handleRecipeIngredientsError(err, 'GET');
   }
 }
 
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  let recipeId: string | undefined;
   try {
     const { id } = await context.params;
-    const recipeId = id;
+    recipeId = id;
     const body = await request.json();
     const { ingredients, isUpdate } = body;
 
@@ -154,27 +161,8 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       );
     }
 
-    // Get user email for change tracking
-    let userEmail: string | null = null;
-    try {
-      userEmail = await getUserEmail(request);
-    } catch (tokenError) {
-      // Continue without user email if auth fails (for development)
-      logger.warn('[Recipes API] Could not get user email for change tracking:', tokenError);
-    }
-
-    // Fetch recipe name for change tracking
-    let recipeName: string | null = null;
-    try {
-      const { data } = await supabaseAdmin
-        .from('recipes')
-        .select('recipe_name')
-        .eq('id', recipeId)
-        .single();
-      recipeName = data?.recipe_name || null;
-    } catch (err) {
-      logger.warn('[Recipes API] Could not fetch recipe name for change tracking:', err);
-    }
+    const { fetchRecipeMetadata } = await import('./helpers/fetchRecipeMetadata');
+    const { userEmail, recipeName } = await fetchRecipeMetadata(request, recipeId);
 
     const data = await saveRecipeIngredients(
       recipeId,
@@ -192,7 +180,11 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
   } catch (err: any) {
     logger.error('[Recipes API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
-      context: { endpoint: '/api/recipes/[id]/ingredients', method: 'POST', recipeId },
+      context: {
+        endpoint: '/api/recipes/[id]/ingredients',
+        method: 'POST',
+        recipeId: recipeId || 'unknown',
+      },
     });
     return handleRecipeIngredientsError(err, 'POST');
   }

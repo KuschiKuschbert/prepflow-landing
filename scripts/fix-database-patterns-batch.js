@@ -52,25 +52,39 @@ function detectViolations(content, filePath) {
   const violations = [];
 
   if (PATTERNS.catchChaining.test(content)) {
-    violations.push({ type: 'catch-chaining', fixable: false, description: 'Replace .catch() with try-catch' });
+    violations.push({
+      type: 'catch-chaining',
+      fixable: false,
+      description: 'Replace .catch() with try-catch',
+    });
   }
 
   if (PATTERNS.throwNewError.test(content)) {
-    violations.push({ type: 'throw-new-error', fixable: true, description: 'Replace with ApiErrorHandler.createError' });
+    violations.push({
+      type: 'throw-new-error',
+      fixable: true,
+      description: 'Replace with ApiErrorHandler.createError',
+    });
   }
 
   if (PATTERNS.consoleError.test(content)) {
-    violations.push({ type: 'console-error', fixable: true, description: 'Replace with logger.error()' });
+    violations.push({
+      type: 'console-error',
+      fixable: true,
+      description: 'Replace with logger.error()',
+    });
   }
 
   // Count Supabase queries without error handling
-  const supabaseQueries = (content.match(/await\s+supabase[^}]*\.(from|select|insert|update|delete)\(/g) || []).length;
+  const supabaseQueries = (
+    content.match(/await\s+supabase[^}]*\.(from|select|insert|update|delete)\(/g) || []
+  ).length;
   const errorChecks = (content.match(/if\s*\(error\)/g) || []).length;
   if (supabaseQueries > errorChecks) {
     violations.push({
       type: 'missing-error-handling',
       fixable: false,
-      description: `Missing error handling (${supabaseQueries} queries, ${errorChecks} checks)`
+      description: `Missing error handling (${supabaseQueries} queries, ${errorChecks} checks)`,
     });
   }
 
@@ -100,10 +114,11 @@ function autoFixFile(filePath, violations) {
       changed = true;
 
       // Add logger import if missing
-      if (!content.includes("import { logger }")) {
+      if (!content.includes('import { logger }')) {
         const lastImport = content.lastIndexOf('import ');
         const nextLine = content.indexOf('\n', lastImport);
-        content = content.slice(0, nextLine + 1) +
+        content =
+          content.slice(0, nextLine + 1) +
           "import { logger } from '@/lib/logger';\n" +
           content.slice(nextLine + 1);
       }
@@ -121,10 +136,11 @@ function autoFixFile(filePath, violations) {
       changed = true;
 
       // Add ApiErrorHandler import if missing
-      if (!content.includes("import { ApiErrorHandler }")) {
+      if (!content.includes('import { ApiErrorHandler }')) {
         const lastImport = content.lastIndexOf('import ');
         const nextLine = content.indexOf('\n', lastImport);
-        content = content.slice(0, nextLine + 1) +
+        content =
+          content.slice(0, nextLine + 1) +
           "import { ApiErrorHandler } from '@/lib/api-error-handler';\n" +
           content.slice(nextLine + 1);
       }
@@ -198,7 +214,3 @@ if (require.main === module) {
 }
 
 module.exports = { findFilesWithViolations, detectViolations, autoFixFile };
-
-
-
-

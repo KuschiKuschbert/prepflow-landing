@@ -6,10 +6,9 @@ import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 
 export function useRecipeShareOperations() {
-  const { showError: showErrorNotification } = useNotification();
+  const { showError: showErrorNotification, showSuccess } = useNotification();
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareUrl, setShareUrl] = useState('');
-  const [shareLoading, setShareLoading] = useState(false);
 
   const handleShareRecipe = useCallback(
     async (
@@ -22,7 +21,6 @@ export function useRecipeShareOperations() {
         return;
       }
 
-      setShareLoading(true);
       try {
         const recipeData = {
           name: selectedRecipe.recipe_name,
@@ -55,25 +53,23 @@ export function useRecipeShareOperations() {
         const result = await response.json();
         setShareUrl(result.shareUrl);
         setShowShareModal(true);
+        showSuccess('Share link created successfully!');
       } catch (err) {
         logger.error('[useRecipeShareOperations.ts] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+          error: err instanceof Error ? err.message : String(err),
+          stack: err instanceof Error ? err.stack : undefined,
+        });
 
         showErrorNotification('Failed to share recipe');
-      } finally {
-        setShareLoading(false);
       }
     },
-    [showErrorNotification],
+    [showErrorNotification, showSuccess],
   );
 
   return {
     showShareModal,
     setShowShareModal,
     shareUrl,
-    shareLoading,
     handleShareRecipe,
   };
 }

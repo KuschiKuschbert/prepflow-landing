@@ -79,13 +79,13 @@ export function ShareButton({
         setTimeout(() => setCopied(false), 2000);
         setIsOpen(false);
       } else {
-        showError('Failed to copy link. Please try again.');
+        showError('Couldn&apos;t copy the link. Try again, chef.');
       }
     } catch (error) {
       logger.error('[ShareButton] Error copying link:', {
         error: error instanceof Error ? error.message : String(error),
       });
-      showError('Failed to copy link. Please try again.');
+      showError('Couldn&apos;t copy that link, chef! Give it another try.');
     }
   };
 
@@ -164,7 +164,8 @@ export function ShareButton({
   const variantClasses = {
     primary:
       'bg-gradient-to-r from-[var(--color-success)] to-[var(--color-success)]/80 hover:from-[var(--color-success)]/80 hover:to-[var(--color-success)]/60 hover:shadow-lg hover:shadow-[var(--color-success)]/30',
-    secondary: 'bg-[var(--muted)] border border-[var(--border)] hover:border-[var(--primary)]/30 hover:bg-[var(--surface-variant)]',
+    secondary:
+      'bg-[var(--muted)] border border-[var(--border)] hover:border-[var(--primary)]/30 hover:bg-[var(--surface-variant)]',
   };
 
   return (
@@ -230,7 +231,12 @@ export function ShareButton({
                       aria-hidden={true}
                     />
                   ) : isCopied ? (
-                    <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+                    <Icon
+                      icon={Check}
+                      size="sm"
+                      className="text-[var(--primary)]"
+                      aria-hidden={true}
+                    />
                   ) : (
                     <Icon
                       icon={IconComponent}

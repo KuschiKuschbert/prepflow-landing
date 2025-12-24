@@ -19,6 +19,9 @@ export function MilestoneToast() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    let timeoutId1: NodeJS.Timeout | null = null;
+    let timeoutId2: NodeJS.Timeout | null = null;
+
     const handleMilestoneReached = (event: CustomEvent<{ milestone: Milestone }>) => {
       const milestone = event.detail.milestone;
       setCurrentMilestone(milestone);
@@ -28,15 +31,19 @@ export function MilestoneToast() {
       throwSubtleConfetti(0.5);
 
       // Auto-hide after 4 seconds
-      setTimeout(() => {
+      timeoutId1 = setTimeout(() => {
         setIsVisible(false);
-        setTimeout(() => setCurrentMilestone(null), 300); // Wait for fade-out animation
+        timeoutId2 = setTimeout(() => setCurrentMilestone(null), 300); // Wait for fade-out animation
       }, 4000);
     };
 
     const unsubscribe = subscribeMilestones(handleMilestoneReached);
 
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+      if (timeoutId1) clearTimeout(timeoutId1);
+      if (timeoutId2) clearTimeout(timeoutId2);
+    };
   }, []);
 
   if (!currentMilestone || !isVisible) return null;
@@ -48,7 +55,9 @@ export function MilestoneToast() {
           {currentMilestone.icon && <span className="text-2xl">{currentMilestone.icon}</span>}
           <div className="flex-1">
             <div className="font-semibold text-[var(--foreground)]">{currentMilestone.name}</div>
-            <div className="text-sm text-[var(--foreground-muted)]">{currentMilestone.description}</div>
+            <div className="text-sm text-[var(--foreground-muted)]">
+              {currentMilestone.description}
+            </div>
           </div>
           <button
             onClick={() => {

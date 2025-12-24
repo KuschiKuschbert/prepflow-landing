@@ -24,10 +24,7 @@ export function verifyWebhookSignature(
     const receivedSignature = signature.replace('sha256=', '');
 
     // Use constant-time comparison to prevent timing attacks
-    return crypto.timingSafeEqual(
-      Buffer.from(calculatedSignature),
-      Buffer.from(receivedSignature),
-    );
+    return crypto.timingSafeEqual(Buffer.from(calculatedSignature), Buffer.from(receivedSignature));
   } catch (error: any) {
     logger.error('[Square Webhook] Error verifying signature:', {
       error: error.message,
@@ -35,5 +32,3 @@ export function verifyWebhookSignature(
     return false;
   }
 }
-
-

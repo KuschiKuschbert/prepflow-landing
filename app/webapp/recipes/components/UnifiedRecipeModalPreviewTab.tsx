@@ -77,10 +77,14 @@ export function UnifiedRecipeModalPreviewTab({
                 className="animate-spin text-[var(--primary)]"
                 aria-hidden={true}
               />
-              <span className="ml-3 text-[var(--foreground-muted)]">Generating cooking instructions...</span>
+              <span className="ml-3 text-[var(--foreground-muted)]">
+                Generating cooking instructions...
+              </span>
             </div>
           ) : (
-            <div className="whitespace-pre-wrap text-[var(--foreground-secondary)]">{aiInstructions}</div>
+            <div className="whitespace-pre-wrap text-[var(--foreground-secondary)]">
+              {aiInstructions}
+            </div>
           )}
         </div>
       </div>
@@ -93,7 +97,9 @@ export function UnifiedRecipeModalPreviewTab({
             Manual Instructions
           </h3>
           <div className="rounded-lg bg-[var(--background)] p-4">
-            <p className="whitespace-pre-wrap text-[var(--foreground-secondary)]">{recipe.instructions}</p>
+            <p className="whitespace-pre-wrap text-[var(--foreground-secondary)]">
+              {recipe.instructions}
+            </p>
           </div>
         </div>
       ) : (

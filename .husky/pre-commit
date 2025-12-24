@@ -4,9 +4,31 @@
 # Get staged files
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | tr '\n' ' ')
 
-# Run unified cleanup check on staged files (if any)
-if [ -n "$STAGED_FILES" ]; then
-  echo "Running cleanup checks on staged files..."
+# Protect nachotaco area from modifications
+# Allow bypass with ALLOW_NACHOTACO_MODIFY=1 for emergency cases
+if [ -z "$ALLOW_NACHOTACO_MODIFY" ]; then
+  NACHOTACO_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '^app/nachotaco/' || true)
+
+  if [ -n "$NACHOTACO_FILES" ]; then
+    echo "❌ ERROR: Attempted to modify protected nachotaco area!"
+    echo ""
+    echo "The following files in app/nachotaco/ are protected:"
+    echo "$NACHOTACO_FILES" | sed 's/^/  - /'
+    echo ""
+    echo "These files are tracked in git but should not be modified."
+    echo "If you need to modify them (emergency only), use:"
+    echo "  ALLOW_NACHOTACO_MODIFY=1 git commit ..."
+    echo ""
+    exit 1
+  fi
+fi
+
+# Filter out nachotaco files from staged files for checks
+FILTERED_STAGED_FILES=$(echo "$STAGED_FILES" | tr ' ' '\n' | grep -v '^app/nachotaco/' | tr '\n' ' ')
+
+# Run unified cleanup check on staged files (if any, excluding nachotaco)
+if [ -n "$FILTERED_STAGED_FILES" ]; then
+  echo "Running cleanup checks on staged files (nachotaco area excluded)..."
   # Only fail on critical violations, warnings are allowed in pre-commit
   npm run cleanup:staged
   CLEANUP_EXIT=$?
@@ -18,5 +40,5 @@ if [ -n "$STAGED_FILES" ]; then
   # Exit code 2 (warnings) or 0 (pass) are allowed
 fi
 
-# Run lint-staged for formatting
+# Run lint-staged for formatting (excludes nachotaco via .prettierignore)
 npm run format:staged

@@ -2,10 +2,10 @@ export function Termination() {
   return (
     <>
       <p className="mb-4 leading-relaxed text-gray-300">
-        <strong>Termination by You:</strong> You may cancel your subscription and stop using PrepFlow
-        at any time through your account settings or by contacting us. Your access to the Service will
-        continue until the end of your current billing period. After the billing period ends, your
-        subscription will not renew and your access will be terminated.
+        <strong>Termination by You:</strong> You may cancel your subscription and stop using
+        PrepFlow at any time through your account settings or by contacting us. Your access to the
+        Service will continue until the end of your current billing period. After the billing period
+        ends, your subscription won&apos;t renew and your access will be terminated.
       </p>
       <p className="mb-4 leading-relaxed text-gray-300">
         <strong>Termination by Us:</strong> We may terminate or suspend your access to PrepFlow
@@ -21,7 +21,7 @@ export function Termination() {
           Your right to access and use PrepFlow will cease at the end of your billing period
         </li>
         <li className="text-fluid-base">
-          You will lose access to all features and data stored in your account
+          You&apos;ll lose access to all features and data stored in your account
         </li>
         <li className="text-fluid-base">
           You may export your data before termination using available export features
@@ -30,7 +30,7 @@ export function Termination() {
           We may delete your account and associated data after a reasonable retention period
         </li>
         <li className="text-fluid-base">
-          You will not be entitled to any refund for unused subscription time
+          You won&apos;t be entitled to any refund for unused subscription time
         </li>
       </ul>
       <p className="mt-4 leading-relaxed text-gray-300">

@@ -59,4 +59,3 @@ export async function fetchAllTableData(
 
   return { tables, recordCounts };
 }
-

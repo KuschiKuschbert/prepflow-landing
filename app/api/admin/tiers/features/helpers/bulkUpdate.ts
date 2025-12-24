@@ -16,9 +16,7 @@ interface BulkUpdateParams {
  * @param {BulkUpdateParams} params - Bulk update parameters
  * @returns {Promise<NextResponse>} Success response with mappings data
  */
-export async function bulkUpdateFeatureMappings(
-  params: BulkUpdateParams,
-): Promise<NextResponse> {
+export async function bulkUpdateFeatureMappings(params: BulkUpdateParams): Promise<NextResponse> {
   const { mappings, adminEmail, request } = params;
 
   // Get current mappings for audit log
@@ -77,5 +75,3 @@ export async function bulkUpdateFeatureMappings(
 
   return NextResponse.json({ mappings: data || [], updated: mappings.length });
 }
-
-

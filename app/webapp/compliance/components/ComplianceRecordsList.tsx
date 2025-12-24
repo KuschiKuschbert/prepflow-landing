@@ -25,7 +25,12 @@ export function ComplianceRecordsList({ records }: ComplianceRecordsListProps) {
     return (
       <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center shadow-lg">
         <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
-          <Icon icon={ClipboardCheck} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
+          <Icon
+            icon={ClipboardCheck}
+            size="xl"
+            className="text-[var(--primary)]"
+            aria-hidden={true}
+          />
         </div>
         <h3 className="mb-2 text-xl font-semibold text-[var(--button-active-text)]">
           {t('compliance.noRecords', 'No Compliance Records')}
@@ -57,7 +62,9 @@ export function ComplianceRecordsList({ records }: ComplianceRecordsListProps) {
                   />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-[var(--foreground)]">{record.document_name}</h3>
+                  <h3 className="text-xl font-semibold text-[var(--foreground)]">
+                    {record.document_name}
+                  </h3>
                   <p className="text-[var(--foreground-muted)]">{record.compliance_types.name}</p>
                 </div>
               </div>
@@ -111,7 +118,9 @@ export function ComplianceRecordsList({ records }: ComplianceRecordsListProps) {
               )}
             </div>
 
-            {record.notes && <p className="mb-4 text-[var(--foreground-secondary)]">{record.notes}</p>}
+            {record.notes && (
+              <p className="mb-4 text-[var(--foreground-secondary)]">{record.notes}</p>
+            )}
 
             {(record.document_url || record.photo_url) && (
               <div className="mb-4 flex space-x-4">

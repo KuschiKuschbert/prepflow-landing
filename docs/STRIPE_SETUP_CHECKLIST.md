@@ -288,7 +288,3 @@ After completing setup:
 6. ✅ Deploy to production with live keys in Vercel
 
 For detailed integration documentation, see: [STRIPE_INTEGRATION.md](./STRIPE_INTEGRATION.md)
-
-
-
-

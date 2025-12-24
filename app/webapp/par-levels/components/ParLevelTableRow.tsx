@@ -154,7 +154,9 @@ export function ParLevelTableRow({
               {parLevel.ingredients?.ingredient_name || 'Unknown Ingredient'}
             </div>
             {parLevel.ingredients?.category && (
-              <div className="text-xs text-[var(--foreground-muted)]">{parLevel.ingredients.category}</div>
+              <div className="text-xs text-[var(--foreground-muted)]">
+                {parLevel.ingredients.category}
+              </div>
             )}
           </div>
         </td>
@@ -164,7 +166,9 @@ export function ParLevelTableRow({
         <td className="px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground)]">
           {parLevel.reorder_point} {parLevel.unit}
         </td>
-        <td className="px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)]">{parLevel.unit}</td>
+        <td className="px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)]">
+          {parLevel.unit}
+        </td>
         <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
           <div className="flex items-center justify-end gap-2">
             <button

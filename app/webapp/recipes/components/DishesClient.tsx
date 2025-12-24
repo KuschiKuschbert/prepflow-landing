@@ -41,7 +41,11 @@ export default function DishesClient() {
   const { fetchRecipeIngredients, fetchBatchRecipeIngredients } = useRecipeIngredients(setError);
   const capitalizeRecipeName = formatRecipeName;
   const { generateAIInstructions } = useAIInstructions();
-  const previewState = useDishesClientPreview({ fetchRecipeIngredients, generateAIInstructions, setError });
+  const previewState = useDishesClientPreview({
+    fetchRecipeIngredients,
+    generateAIInstructions,
+    setError,
+  });
   const {
     selectedRecipeForPreview,
     setSelectedRecipeForPreview,
@@ -69,20 +73,8 @@ export default function DishesClient() {
     handlePreviewDish,
     handlePreviewRecipe,
   } = previewState;
-  const {
-    selectedItems,
-    isSelectionMode,
-    handleSelectItem,
-    handleSelectAll,
-    handleExitSelectionMode,
-  } = useDishesClientSelection(dishes, recipes);
-  const {
-    allItems,
-    paginatedItems,
-    paginatedDishesList,
-    paginatedRecipesList,
-    filters,
-    updateFilters,
+  const { selectedItems, isSelectionMode, handleSelectItem, handleSelectAll, handleExitSelectionMode } = useDishesClientSelection(dishes, recipes);
+  const { allItems, paginatedItems, paginatedDishesList, paginatedRecipesList, filters, updateFilters,
   } = useDishesClientPagination({ dishes, recipes, dishCosts, recipePrices });
   const {
     showDeleteConfirm,
@@ -118,7 +110,14 @@ export default function DishesClient() {
       setHighlightingRowId(null);
       setHighlightingRowType(null);
     }
-  }, [viewMode, fetchItems, setEditingRecipe, setEditingItem, setHighlightingRowId, setHighlightingRowType]);
+  }, [
+    viewMode,
+    fetchItems,
+    setEditingRecipe,
+    setEditingItem,
+    setHighlightingRowId,
+    setHighlightingRowType,
+  ]);
   useDishesClientRecipePricing({
     paginatedRecipesList,
     recipePrices,
@@ -138,8 +137,6 @@ export default function DishesClient() {
   }, [dishes, recipes, selectedItems]);
   const {
     bulkActionLoading,
-    bulkShareLoading,
-    addToMenuLoading,
     showBulkMenu,
     setShowBulkMenu,
     showBulkDeleteConfirm,
@@ -168,8 +165,20 @@ export default function DishesClient() {
   });
   const selectedRecipeCount = selectedRecipeIds.length;
   const handleRecipeImagesGenerated = useCallback(
-    (recipeId: string, images: { classic: string | null; modern: string | null; rustic: string | null; minimalist: string | null }) => {
-      const handler = createRecipeImagesGeneratedHandler(setRecipes, selectedRecipeForPreview, setSelectedRecipeForPreview);
+    (
+      recipeId: string,
+      images: {
+        classic: string | null;
+        modern: string | null;
+        rustic: string | null;
+        minimalist: string | null;
+      },
+    ) => {
+      const handler = createRecipeImagesGeneratedHandler(
+        setRecipes,
+        selectedRecipeForPreview,
+        setSelectedRecipeForPreview,
+      );
       return handler(recipeId, images);
     },
     [setRecipes, selectedRecipeForPreview, setSelectedRecipeForPreview],
@@ -200,8 +209,6 @@ export default function DishesClient() {
         selectedCount={selectedItems.size}
         selectedRecipeCount={selectedRecipeCount}
         bulkActionLoading={bulkActionLoading}
-        bulkShareLoading={bulkShareLoading}
-        addToMenuLoading={addToMenuLoading}
         showBulkMenu={showBulkMenu}
         onExitSelectionMode={handleExitSelectionMode}
         onBulkDelete={handleBulkDelete}

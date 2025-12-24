@@ -8,7 +8,6 @@
  * Simple, non-distracting game mechanics - no timer pressure.
  */
 
-import { ArcadeMuteButton } from '@/components/Arcade/ArcadeMuteButton';
 import WebAppBackground from '@/components/Arcade/WebAppBackground';
 import { AnimatePresence, motion, Variants } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
@@ -129,7 +128,6 @@ const TrainOffTrack: React.FC = () => {
   return (
     <>
       <WebAppBackground />
-      <ArcadeMuteButton />
       {/* Train animation - full viewport width, positioned outside content container */}
       {!fixed && (
         <div className="pointer-events-none fixed inset-0 z-10 overflow-hidden">

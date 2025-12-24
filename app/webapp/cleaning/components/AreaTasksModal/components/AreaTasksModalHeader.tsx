@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Header component for area tasks modal
  */
@@ -53,7 +55,3 @@ export function AreaTasksModalHeader({ area, onClose, onCreateTask }: AreaTasksM
     </div>
   );
 }
-
-
-
-

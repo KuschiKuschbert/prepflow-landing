@@ -22,7 +22,10 @@ export function UploadForm({
 }: UploadFormProps) {
   const { t } = useTranslation();
   return (
-    <form onSubmit={onSubmit} className="mb-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
+    <form
+      onSubmit={onSubmit}
+      className="mb-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6"
+    >
       <div className="mb-4 flex items-center gap-3">
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20">
           <Icon icon={Bot} size="lg" className="text-[var(--primary)]" aria-hidden={true} />

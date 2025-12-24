@@ -36,7 +36,10 @@ export function AddTaskForm({
         <h3 className="text-xl font-semibold text-[var(--foreground)]">
           {t('cleaning.addNewTask', 'Add New Cleaning Task')}
         </h3>
-        <button onClick={onCancel} className="p-2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]">
+        <button
+          onClick={onCancel}
+          className="p-2 text-[var(--foreground-muted)] transition-colors hover:text-[var(--foreground)]"
+        >
           <Icon icon={X} size="lg" aria-hidden={true} />
         </button>
       </div>

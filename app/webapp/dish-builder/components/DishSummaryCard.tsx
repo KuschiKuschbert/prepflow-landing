@@ -35,7 +35,12 @@ export default function DishSummaryCard({
         {/* Total COGS */}
         <div className="rounded-xl border border-[var(--border)]/50 bg-[var(--surface)]/50 p-4">
           <div className="mb-2 flex items-center gap-2">
-            <Icon icon={Calculator} size="sm" className="text-[var(--color-info)]" aria-hidden={true} />
+            <Icon
+              icon={Calculator}
+              size="sm"
+              className="text-[var(--color-info)]"
+              aria-hidden={true}
+            />
             <span className="text-xs font-medium tracking-wide text-[var(--foreground-muted)] uppercase">
               Total COGS
             </span>
@@ -52,14 +57,21 @@ export default function DishSummaryCard({
               Per Portion
             </span>
           </div>
-          <div className="text-2xl font-bold text-[var(--foreground)]">${costPerPortion.toFixed(2)}</div>
+          <div className="text-2xl font-bold text-[var(--foreground)]">
+            ${costPerPortion.toFixed(2)}
+          </div>
           <div className="text-xs text-[var(--foreground-muted)]">cost per serving</div>
         </div>
 
         {/* Recommended Price */}
         <div className="rounded-xl border border-[var(--primary)]/50 bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20 p-4">
           <div className="mb-2 flex items-center gap-2">
-            <Icon icon={TrendingUp} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+            <Icon
+              icon={TrendingUp}
+              size="sm"
+              className="text-[var(--primary)]"
+              aria-hidden={true}
+            />
             <span className="text-xs font-medium tracking-wide text-[var(--primary)] uppercase">
               Recommended
             </span>

@@ -16,7 +16,6 @@ export interface TemperatureLogExportData {
   };
 }
 
-
 /**
  * Format temperature logs data as HTML for print/export
  *

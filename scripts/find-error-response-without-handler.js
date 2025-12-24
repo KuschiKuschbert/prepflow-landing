@@ -94,7 +94,9 @@ for (const file of apiFiles) {
   }
 }
 
-console.log(`\n📊 Found ${results.length} API route files with error responses without ApiErrorHandler:\n`);
+console.log(
+  `\n📊 Found ${results.length} API route files with error responses without ApiErrorHandler:\n`,
+);
 
 results.forEach(result => {
   console.log(`${result.file}:`);
@@ -104,7 +106,6 @@ results.forEach(result => {
   console.log('');
 });
 
-console.log(`\nTotal: ${results.reduce((sum, r) => sum + r.violations.length, 0)} error responses without ApiErrorHandler`);
-
-
-
+console.log(
+  `\nTotal: ${results.reduce((sum, r) => sum + r.violations.length, 0)} error responses without ApiErrorHandler`,
+);

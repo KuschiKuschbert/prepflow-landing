@@ -37,7 +37,6 @@ export function ClockIn({ employee, shift, venueLocation }: ClockInProps) {
   const [location, setLocation] = useState<GeolocationPosition | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [isClockIn, setIsClockIn] = useState(true); // true = clock in, false = clock out
-  const [loading, setLoading] = useState(false);
   const [distance, setDistance] = useState<number | null>(null);
   const [isValidLocation, setIsValidLocation] = useState<boolean | null>(null);
 
@@ -138,9 +137,14 @@ export function ClockIn({ employee, shift, venueLocation }: ClockInProps) {
       return;
     }
 
-    setLoading(true);
+    // Store original state for rollback
+    const originalIsClockIn = isClockIn;
+
+    // Optimistically toggle immediately
+    setIsClockIn(!isClockIn);
+
     try {
-      const endpoint = isClockIn
+      const endpoint = originalIsClockIn
         ? '/api/time-attendance/clock-in'
         : '/api/time-attendance/clock-out';
       const response = await fetch(endpoint, {
@@ -162,14 +166,13 @@ export function ClockIn({ employee, shift, venueLocation }: ClockInProps) {
         throw new Error(data.error || data.message || 'Clock action failed');
       }
 
-      showSuccess(isClockIn ? 'Clocked in successfully' : 'Clocked out successfully');
-      setIsClockIn(!isClockIn);
+      showSuccess(originalIsClockIn ? 'Clocked in successfully' : 'Clocked out successfully');
     } catch (error) {
+      // Rollback on error
+      setIsClockIn(originalIsClockIn);
       const errorMessage = error instanceof Error ? error.message : 'Clock action failed';
       showError(errorMessage);
       logger.error('Clock action failed', error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -189,7 +192,12 @@ export function ClockIn({ employee, shift, venueLocation }: ClockInProps) {
       <div className="mb-6 space-y-4">
         {locationError ? (
           <div className="flex items-center gap-3 rounded-xl border border-[var(--color-error)]/50 bg-[var(--color-error)]/10 p-4">
-            <Icon icon={XCircle} size="md" className="text-[var(--color-error)]" aria-hidden={true} />
+            <Icon
+              icon={XCircle}
+              size="md"
+              className="text-[var(--color-error)]"
+              aria-hidden={true}
+            />
             <div>
               <div className="font-medium text-[var(--color-error)]">Location Error</div>
               <div className="text-sm text-red-300">{locationError}</div>
@@ -218,7 +226,9 @@ export function ClockIn({ employee, shift, venueLocation }: ClockInProps) {
                 <Icon
                   icon={isValidLocation ? CheckCircle : XCircle}
                   size="md"
-                  className={isValidLocation ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'}
+                  className={
+                    isValidLocation ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'
+                  }
                   aria-hidden={true}
                 />
                 <div className="flex-1">
@@ -251,15 +261,10 @@ export function ClockIn({ employee, shift, venueLocation }: ClockInProps) {
       <Button
         variant="primary"
         onClick={handleClockAction}
-        disabled={loading || !location || !isValidLocation}
+        disabled={!location || !isValidLocation}
         className="w-full"
       >
-        {loading ? (
-          <>
-            <Icon icon={Loader2} size="sm" className="animate-spin" aria-hidden={true} />
-            Processing...
-          </>
-        ) : isClockIn ? (
+        {isClockIn ? (
           <>
             <Icon icon={Clock} size="sm" aria-hidden={true} />
             Clock In

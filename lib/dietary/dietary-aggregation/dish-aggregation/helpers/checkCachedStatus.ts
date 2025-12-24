@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import type { DietaryDetectionResult } from '../../vegetarian-vegan-detection';
+import type { DietaryDetectionResult } from '../../../vegetarian-vegan-detection';
 
 /**
  * Check if dish has cached dietary status that's still valid
@@ -9,6 +9,10 @@ export async function checkCachedDishDietaryStatus(
   dishId: string,
   force: boolean,
 ): Promise<DietaryDetectionResult | null> {
+  if (!supabaseAdmin) {
+    return null;
+  }
+
   const { data: dish, error: dishError } = await supabaseAdmin
     .from('dishes')
     .select('is_vegetarian, is_vegan, dietary_confidence, dietary_method, dietary_checked_at')
@@ -16,6 +20,14 @@ export async function checkCachedDishDietaryStatus(
     .single();
 
   if (dishError) {
+    // PGRST116 is "not found" - that's okay, no cached status exists
+    if (dishError.code !== 'PGRST116') {
+      logger.error('[Dietary Aggregation] Error checking cached dish dietary status:', {
+        error: dishError.message,
+        dishId,
+        context: { operation: 'checkCachedDishDietaryStatus' },
+      });
+    }
     return null;
   }
 
@@ -39,4 +51,3 @@ export async function checkCachedDishDietaryStatus(
 
   return null;
 }
-

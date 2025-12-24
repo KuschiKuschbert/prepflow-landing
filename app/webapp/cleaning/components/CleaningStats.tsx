@@ -67,11 +67,20 @@ export function CleaningStats({ tasks, dates }: CleaningStatsProps) {
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg transition-all duration-200 hover:shadow-xl">
         <div className="flex items-center justify-between">
           <div>
-            <p className="mb-1 text-xs font-medium text-[var(--foreground-muted)]">Completion Rate</p>
-            <p className="text-2xl font-bold text-[var(--button-active-text)]">{stats.completionRate}%</p>
+            <p className="mb-1 text-xs font-medium text-[var(--foreground-muted)]">
+              Completion Rate
+            </p>
+            <p className="text-2xl font-bold text-[var(--button-active-text)]">
+              {stats.completionRate}%
+            </p>
           </div>
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
-            <Icon icon={TrendingUp} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+            <Icon
+              icon={TrendingUp}
+              size="sm"
+              className="text-[var(--primary)]"
+              aria-hidden={true}
+            />
           </div>
         </div>
         <div className="mt-2">
@@ -89,7 +98,12 @@ export function CleaningStats({ tasks, dates }: CleaningStatsProps) {
             <p className="text-2xl font-bold text-[var(--color-success)]">{stats.completedTasks}</p>
           </div>
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-green-400/20 to-green-400/10">
-            <Icon icon={CheckCircle2} size="sm" className="text-[var(--color-success)]" aria-hidden={true} />
+            <Icon
+              icon={CheckCircle2}
+              size="sm"
+              className="text-[var(--color-success)]"
+              aria-hidden={true}
+            />
           </div>
         </div>
         <div className="mt-2">
@@ -105,7 +119,12 @@ export function CleaningStats({ tasks, dates }: CleaningStatsProps) {
             <p className="text-2xl font-bold text-[var(--color-error)]">{stats.overdueTasks}</p>
           </div>
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-red-400/20 to-red-400/10">
-            <Icon icon={AlertTriangle} size="sm" className="text-[var(--color-error)]" aria-hidden={true} />
+            <Icon
+              icon={AlertTriangle}
+              size="sm"
+              className="text-[var(--color-error)]"
+              aria-hidden={true}
+            />
           </div>
         </div>
         <div className="mt-2">
@@ -121,7 +140,12 @@ export function CleaningStats({ tasks, dates }: CleaningStatsProps) {
             <p className="text-2xl font-bold text-[var(--color-info)]">{stats.upcomingTasks}</p>
           </div>
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-400/20 to-blue-400/10">
-            <Icon icon={Calendar} size="sm" className="text-[var(--color-info)]" aria-hidden={true} />
+            <Icon
+              icon={Calendar}
+              size="sm"
+              className="text-[var(--color-info)]"
+              aria-hidden={true}
+            />
           </div>
         </div>
         <div className="mt-2">
@@ -131,7 +155,3 @@ export function CleaningStats({ tasks, dates }: CleaningStatsProps) {
     </div>
   );
 }
-
-
-
-

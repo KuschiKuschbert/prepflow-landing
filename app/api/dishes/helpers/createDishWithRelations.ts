@@ -64,7 +64,10 @@ export async function createDishWithRelations(
         context: { endpoint: '/api/dishes', operation: 'POST', dishId: newDish.id },
       });
       // Rollback dish creation
-      const { error: rollbackError } = await supabaseAdmin.from('dishes').delete().eq('id', newDish.id);
+      const { error: rollbackError } = await supabaseAdmin
+        .from('dishes')
+        .delete()
+        .eq('id', newDish.id);
       if (rollbackError) {
         logger.error('[Dishes API] Failed to rollback dish creation after recipes error:', {
           error: rollbackError.message,
@@ -95,7 +98,10 @@ export async function createDishWithRelations(
         context: { endpoint: '/api/dishes', operation: 'POST', dishId: newDish.id },
       });
       // Rollback dish creation
-      const { error: rollbackError2 } = await supabaseAdmin.from('dishes').delete().eq('id', newDish.id);
+      const { error: rollbackError2 } = await supabaseAdmin
+        .from('dishes')
+        .delete()
+        .eq('id', newDish.id);
       if (rollbackError2) {
         logger.error('[Dishes API] Failed to rollback dish creation after ingredients error:', {
           error: rollbackError2.message,

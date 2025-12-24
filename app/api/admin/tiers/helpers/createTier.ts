@@ -36,7 +36,10 @@ export async function createTier(
   request: NextRequest,
 ): Promise<{ tier: any } | NextResponse> {
   if (!supabaseAdmin) {
-    return NextResponse.json(ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503), { status: 503 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503),
+      { status: 503 },
+    );
   }
 
   const { data, error } = await supabaseAdmin
@@ -50,7 +53,10 @@ export async function createTier(
 
   if (error) {
     logger.error('[Admin Tiers] Failed to create tier:', error);
-    return NextResponse.json(ApiErrorHandler.createError('Failed to create tier', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Failed to create tier', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 
   await invalidateTierCache();

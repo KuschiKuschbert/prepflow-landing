@@ -72,7 +72,6 @@ export default function ParLevelsPage() {
   } = useParLevelsCRUD({
     parLevels,
     setParLevels,
-    fetchParLevels,
     showError,
     showSuccess,
   });
@@ -222,7 +221,12 @@ export default function ParLevelsPage() {
         {parLevels.length === 0 ? (
           <div className="py-12 text-center">
             <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20">
-              <Icon icon={Package2} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
+              <Icon
+                icon={Package2}
+                size="xl"
+                className="text-[var(--primary)]"
+                aria-hidden={true}
+              />
             </div>
             <h3 className="mb-2 text-xl font-semibold text-[var(--button-active-text)]">
               {t('parLevels.noParLevels', 'No Par Levels Set')}

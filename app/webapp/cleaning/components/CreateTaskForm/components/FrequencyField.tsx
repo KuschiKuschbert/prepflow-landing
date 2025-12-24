@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Frequency selection field component
  */
@@ -48,7 +50,7 @@ export function FrequencyField({
             }}
             className={`rounded-xl border px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
               value === freq
-                ? 'border-[var(--primary)] bg-[var(--primary)]/20 text-[var(--primary)] shadow-lg shadow-[var(--primary)]/20'
+                ? 'border-[var(--primary)] bg-[var(--primary)]/20 text-[var(--primary)] shadow-[var(--primary)]/20 shadow-lg'
                 : 'border-[var(--border)] bg-[var(--muted)] text-[var(--foreground-secondary)] hover:border-[var(--primary)]/50 hover:bg-[var(--muted)]/80'
             }`}
           >
@@ -104,7 +106,9 @@ export function FrequencyField({
 
       {value === 'custom-days' && (
         <div className="mt-2">
-          <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Number of Days</label>
+          <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Number of Days
+          </label>
           <input
             type="number"
             min="1"

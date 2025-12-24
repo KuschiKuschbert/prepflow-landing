@@ -90,4 +90,3 @@ Respond in JSON format:
     return detectVegetarianVeganFromIngredients(ingredients, recipeName);
   }
 }
-

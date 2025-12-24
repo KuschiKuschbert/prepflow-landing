@@ -12,14 +12,16 @@ import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { z } from 'zod';
 
-const menuItemDescriptionSchema = z.object({
-  menuItem: z.any(), // MenuItem is complex, validate structure if needed
-  ingredients: z.array(z.any()).optional(),
-  countryCode: z.string().optional(),
-}).refine(data => data.menuItem !== undefined && data.menuItem !== null, {
-  message: 'menuItem is required',
-  path: ['menuItem'],
-});
+const menuItemDescriptionSchema = z
+  .object({
+    menuItem: z.any(), // MenuItem is complex, validate structure if needed
+    ingredients: z.array(z.any()).optional(),
+    countryCode: z.string().optional(),
+  })
+  .refine(data => data.menuItem !== undefined && data.menuItem !== null, {
+    message: 'menuItem is required',
+    path: ['menuItem'],
+  });
 
 /**
  * POST /api/ai/menu-item-description

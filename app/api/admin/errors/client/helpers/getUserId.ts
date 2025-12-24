@@ -16,6 +16,11 @@ export async function getUserIdFromRequest(request: NextRequest): Promise<string
       return null;
     }
 
+    if (!supabaseAdmin) {
+      logger.warn('[Client Error API] Database connection not available');
+      return null;
+    }
+
     // Look up user_id from email
     const { data: userData, error: userDataError } = await supabaseAdmin
       .from('users')
@@ -40,5 +45,3 @@ export async function getUserIdFromRequest(request: NextRequest): Promise<string
     return null;
   }
 }
-
-

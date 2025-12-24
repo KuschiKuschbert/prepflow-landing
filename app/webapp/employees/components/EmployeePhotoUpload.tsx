@@ -96,7 +96,12 @@ export function EmployeePhotoUpload({
                 aria-hidden={true}
               />
             ) : (
-              <Icon icon={Upload} size="md" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+              <Icon
+                icon={Upload}
+                size="md"
+                className="text-[var(--foreground-muted)]"
+                aria-hidden={true}
+              />
             )}
           </div>
         )}

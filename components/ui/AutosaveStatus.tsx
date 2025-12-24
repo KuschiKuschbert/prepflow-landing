@@ -36,7 +36,11 @@ export function AutosaveStatus({
     >
       {status === 'saving' && (
         <div className="text-fluid-sm flex items-center gap-2 rounded-lg bg-[var(--muted)] px-3 py-1.5 text-[var(--foreground-secondary)]">
-          <svg className="h-4 w-4 animate-spin text-[var(--primary)]" fill="none" viewBox="0 0 24 24">
+          <svg
+            className="h-4 w-4 animate-spin text-[var(--primary)]"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
             <circle
               className="opacity-25"
               cx="12"

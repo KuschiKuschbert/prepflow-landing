@@ -37,7 +37,8 @@ function fixFile(filePath) {
   }
 
   // Pattern: Database connection not available
-  const pattern1 = /return NextResponse\.json\(\s*\{\s*error:\s*['"]Database connection not available['"]\s*(?:,\s*message:\s*['"]([^'"]+)['"])?\s*\}\s*,\s*\{\s*status:\s*500\s*\}\)/g;
+  const pattern1 =
+    /return NextResponse\.json\(\s*\{\s*error:\s*['"]Database connection not available['"]\s*(?:,\s*message:\s*['"]([^'"]+)['"])?\s*\}\s*,\s*\{\s*status:\s*500\s*\}\)/g;
   content = content.replace(pattern1, (match, message) => {
     changed = true;
     const errorMsg = message || 'Database connection not available';
@@ -45,7 +46,8 @@ function fixFile(filePath) {
   });
 
   // Pattern: Simple error with message
-  const pattern2 = /return NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*,\s*message:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/g;
+  const pattern2 =
+    /return NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*,\s*message:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/g;
   content = content.replace(pattern2, (match, error, message, status) => {
     changed = true;
     const errorCode = getErrorCode(message || error, status);
@@ -53,7 +55,8 @@ function fixFile(filePath) {
   });
 
   // Pattern: Simple error object
-  const pattern3 = /return NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/g;
+  const pattern3 =
+    /return NextResponse\.json\(\s*\{\s*error:\s*['"]([^'"]+)['"]\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/g;
   content = content.replace(pattern3, (match, errorMsg, status) => {
     // Skip if already contains ApiErrorHandler
     if (match.includes('ApiErrorHandler')) return match;
@@ -63,7 +66,8 @@ function fixFile(filePath) {
   });
 
   // Pattern: success: false with error
-  const pattern4 = /return NextResponse\.json\(\s*\{\s*success:\s*false\s*,\s*error:\s*['"]([^'"]+)['"]\s*(?:,\s*message:\s*['"]([^'"]+)['"])?\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/g;
+  const pattern4 =
+    /return NextResponse\.json\(\s*\{\s*success:\s*false\s*,\s*error:\s*['"]([^'"]+)['"]\s*(?:,\s*message:\s*['"]([^'"]+)['"])?\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/g;
   content = content.replace(pattern4, (match, error, message, status) => {
     changed = true;
     const errorCode = getErrorCode(message || error, status);
@@ -71,7 +75,8 @@ function fixFile(filePath) {
   });
 
   // Pattern: Catch block with error response
-  const pattern5 = /catch\s*\([^)]*\)\s*\{[\s\S]*?return NextResponse\.json\(\s*\{\s*error:\s*([^}]+)\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/g;
+  const pattern5 =
+    /catch\s*\([^)]*\)\s*\{[\s\S]*?return NextResponse\.json\(\s*\{\s*error:\s*([^}]+)\s*\}\s*,\s*\{\s*status:\s*(\d+)\s*\}\)/g;
   content = content.replace(pattern5, (match, errorContent, status) => {
     // Extract error message if it's a simple string
     const errorMatch = errorContent.match(/['"]([^'"]+)['"]/);
@@ -124,6 +129,3 @@ for (const file of filesToFix) {
 }
 
 console.log(`\n✅ Fixed ${fixedCount} files.`);
-
-
-

@@ -103,7 +103,9 @@ export function DishTableRow({
       >
         {capitalizeDishName(dish.dish_name)}
       </td>
-      <td className="px-6 py-4 text-sm text-[var(--foreground-secondary)]">${dish.selling_price.toFixed(2)}</td>
+      <td className="px-6 py-4 text-sm text-[var(--foreground-secondary)]">
+        ${dish.selling_price.toFixed(2)}
+      </td>
       <td className="desktop:table-cell hidden px-6 py-4 text-sm text-[var(--foreground-secondary)]">
         {cost ? `$${cost.total_cost.toFixed(2)}` : '—'}
       </td>
@@ -111,7 +113,9 @@ export function DishTableRow({
         {cost ? (
           <span
             className={`font-semibold ${
-              cost.gross_profit_margin >= 30 ? 'text-[var(--color-success)]' : 'text-[var(--color-warning)]'
+              cost.gross_profit_margin >= 30
+                ? 'text-[var(--color-success)]'
+                : 'text-[var(--color-warning)]'
             }`}
           >
             {cost.gross_profit_margin.toFixed(1)}%

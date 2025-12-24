@@ -51,7 +51,7 @@ export const NavigationChips = memo(function NavigationChips({
           onClick={() => onCategoryChange(null)}
           className={`flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
             activeCategory === null
-              ? 'bg-gradient-to-r from-[var(--primary)] to-[#3B82F6] text-[var(--button-active-text)] shadow-lg shadow-[var(--primary)]/25'
+              ? 'bg-gradient-to-r from-[var(--primary)] to-[#3B82F6] text-[var(--button-active-text)] shadow-[var(--primary)]/25 shadow-lg'
               : 'border border-[var(--border)] bg-[var(--muted)]/50 text-[var(--button-active-text)]/80 hover:border-[var(--primary)]/30 hover:bg-[var(--muted)] hover:text-[var(--button-active-text)]'
           }`}
           style={{ transitionTimingFunction: 'var(--easing-standard)' }}
@@ -71,7 +71,7 @@ export const NavigationChips = memo(function NavigationChips({
               onClick={() => onCategoryChange(category)}
               className={`flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? 'bg-gradient-to-r from-[var(--primary)] to-[#3B82F6] text-[var(--button-active-text)] shadow-lg shadow-[var(--primary)]/25'
+                  ? 'bg-gradient-to-r from-[var(--primary)] to-[#3B82F6] text-[var(--button-active-text)] shadow-[var(--primary)]/25 shadow-lg'
                   : 'border border-[var(--border)] bg-[var(--muted)]/50 text-[var(--button-active-text)]/80 hover:border-[var(--primary)]/30 hover:bg-[var(--muted)] hover:text-[var(--button-active-text)]'
               }`}
               style={{ transitionTimingFunction: 'var(--easing-standard)' }}

@@ -15,12 +15,30 @@ interface Session {
 
 export async function handleRevokeSessionHelper(
   sessionId: string,
+  showConfirm: (options: {
+    title: string;
+    message: string;
+    variant?: 'danger' | 'warning' | 'info';
+    confirmLabel?: string;
+    cancelLabel?: string;
+  }) => Promise<boolean>,
   setRevokingSession: (id: string | null) => void,
   setSessions: (sessions: Session[]) => void,
   showSuccess: (message: string) => void,
   showError: (message: string) => void,
 ): Promise<void> {
-  if (!confirm('Are you sure you want to revoke this session? You will be signed out.')) return;
+  const confirmed = await showConfirm({
+    title: 'Revoke Session',
+    message: 'Are you sure you want to revoke this session? You&apos;ll be signed out.',
+    variant: 'warning',
+    confirmLabel: 'Revoke',
+    cancelLabel: 'Cancel',
+  });
+
+  if (!confirmed) {
+    return;
+  }
+
   setRevokingSession(sessionId);
   try {
     const response = await fetch(`/api/user/sessions/${sessionId}/revoke`, { method: 'POST' });

@@ -81,6 +81,41 @@ try {
 }
 ```
 
+#### Exceptions: Script Tags Before React Loads
+
+**When `logger` is not available:**
+
+In rare cases where code runs in `<script>` tags via `dangerouslySetInnerHTML` before React loads, `logger` is not available. In these cases, `console.error()` or `console.warn()` is acceptable.
+
+**Example (from `app/layout.tsx`):**
+
+```typescript
+<script
+  dangerouslySetInnerHTML={{
+    __html: `
+      (function() {
+        try {
+          const theme = localStorage.getItem('prepflow-theme') || 'dark';
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {
+          // Error handled: Fallback to dark theme if localStorage fails
+          // Note: Using console.error here as logger is not available in script tag before React loads
+          console.error('Failed to read theme from localStorage, using dark theme fallback:', e);
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    `,
+  }}
+/>
+```
+
+**Guidelines:**
+
+- ✅ Use `console.error()` or `console.warn()` only in script tags that run before React loads
+- ✅ Always include a comment explaining why `logger` cannot be used
+- ✅ Ensure errors are properly handled (fallback behavior, user feedback, etc.)
+- ❌ Never use `console.*` in React components, hooks, or API routes (use `logger` instead)
+
 #### `logger.warn()` - Always Log (Production-Safe)
 
 **When to use:**

@@ -65,7 +65,6 @@ export function useMenuDescriptionEditing({
         setMenus,
         onMenuUpdated,
         handleCancelEdit,
-        setIsSaving,
         showError,
         showSuccess,
       });

@@ -1,0 +1,64 @@
+/**
+ * Create new dish from Square catalog item.
+ */
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { createAutoMapping } from '../../../mappings';
+import { logCatalogSyncOperation } from './common';
+import type { SyncResult } from '../../catalog';
+
+export async function createNewDish(
+  dishData: any,
+  squareItemId: string,
+  userId: string,
+  locationId: string,
+  result: SyncResult,
+): Promise<void> {
+  if (!supabaseAdmin) {
+    return;
+  }
+
+  const { data: newDish, error: createError } = await supabaseAdmin
+    .from('dishes')
+    .insert({
+      dish_name: dishData.dish_name,
+      description: dishData.description,
+      selling_price: dishData.selling_price,
+      category: dishData.category,
+    })
+    .select()
+    .single();
+
+  if (createError || !newDish) {
+    logger.error('[Square Catalog Sync] Error creating dish:', {
+      error: createError?.message,
+      squareItemId,
+    });
+    result.errors++;
+    result.errorMessages?.push(`Failed to create dish: ${createError?.message || 'Unknown error'}`);
+    return;
+  }
+
+  const newMapping = await createAutoMapping(newDish.id, squareItemId, 'dish', userId, locationId);
+
+  if (!newMapping) {
+    logger.error('[Square Catalog Sync] Error creating mapping:', {
+      dishId: newDish.id,
+      squareItemId,
+    });
+    result.errors++;
+    result.errorMessages?.push(`Failed to create mapping for dish ${newDish.id}`);
+    return;
+  }
+
+  result.created++;
+  result.synced++;
+
+  await logCatalogSyncOperation({
+    userId,
+    direction: 'square_to_prepflow',
+    entityId: newDish.id,
+    squareId: squareItemId,
+    status: 'success',
+  });
+}

@@ -8,7 +8,7 @@
 
 import { useState } from 'react';
 import { Icon } from './Icon';
-import { Copy, Check, Loader2 } from 'lucide-react';
+import { Copy, Check } from 'lucide-react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { copyToClipboard } from '@/lib/share/share-utils';
@@ -32,29 +32,25 @@ export function CopyButton({
 }: CopyButtonProps) {
   const { showSuccess, showError } = useNotification();
   const [copied, setCopied] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const handleCopy = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    setLoading(true);
     try {
       const success = await copyToClipboard(text);
-      setLoading(false);
 
       if (success) {
         setCopied(true);
         showSuccess(successMessage);
         setTimeout(() => setCopied(false), 2000);
       } else {
-        showError('Failed to copy. Please try again.');
+        showError('Couldn&apos;t copy that. Give it another go, chef.');
       }
     } catch (error) {
-      setLoading(false);
       logger.error('[CopyButton] Error copying to clipboard:', {
         error: error instanceof Error ? error.message : String(error),
       });
-      showError('Failed to copy. Please try again.');
+      showError('Couldn&apos;t copy that. Give it another go, chef.');
     }
   };
 
@@ -68,7 +64,8 @@ export function CopyButton({
   const variantClasses = {
     primary:
       'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 hover:shadow-lg hover:shadow-[var(--primary)]/30 text-[var(--button-active-text)]',
-    secondary: 'bg-[var(--muted)] border border-[var(--border)] hover:border-[var(--primary)]/30 hover:bg-[var(--surface-variant)]',
+    secondary:
+      'bg-[var(--muted)] border border-[var(--border)] hover:border-[var(--primary)]/30 hover:bg-[var(--surface-variant)]',
     icon: 'p-2 rounded-lg bg-[var(--muted)] border border-[var(--border)] hover:border-[var(--primary)]/30 hover:bg-[var(--surface-variant)]',
   };
 
@@ -77,16 +74,11 @@ export function CopyButton({
   return (
     <button
       onClick={handleCopy}
-      disabled={loading}
-      className={`${baseClasses} ${variant === 'icon' ? '' : sizeClasses[size]} ${variantClasses[variant]} ${className} ${
-        loading ? 'cursor-not-allowed opacity-50' : ''
-      }`}
+      className={`${baseClasses} ${variant === 'icon' ? '' : sizeClasses[size]} ${variantClasses[variant]} ${className}`}
       aria-label={label}
       title={label}
     >
-      {loading ? (
-        <Icon icon={Loader2} size={iconSize} className="animate-spin" aria-hidden={true} />
-      ) : copied ? (
+      {copied ? (
         <>
           <Icon icon={Check} size={iconSize} className="text-[var(--primary)]" aria-hidden={true} />
           {variant !== 'icon' && <span className="tablet:inline hidden">Copied!</span>}

@@ -147,7 +147,9 @@ export default function PerformanceSummaryCards({
           </div>
           <div className="text-fluid-xs flex items-center justify-between">
             <span className="text-[var(--color-info)]">Hidden Gem</span>
-            <span className="font-semibold text-[var(--foreground)]">{summary.categoryCounts['Hidden Gem']}</span>
+            <span className="font-semibold text-[var(--foreground)]">
+              {summary.categoryCounts['Hidden Gem']}
+            </span>
           </div>
           <div className="text-fluid-xs flex items-center justify-between">
             <span className="text-[var(--color-warning)]">Bargain</span>

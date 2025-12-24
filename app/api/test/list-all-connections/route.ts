@@ -109,14 +109,9 @@ export async function GET() {
   } catch (error) {
     logger.error('[Auth0 Connections] Failed to list connections:', error);
     return NextResponse.json(
-      ApiErrorHandler.createError(
-        'Failed to list connections',
-        'SERVER_ERROR',
-        500,
-        {
-          details: error instanceof Error ? error.message : String(error),
-        },
-      ),
+      ApiErrorHandler.createError('Failed to list connections', 'SERVER_ERROR', 500, {
+        details: error instanceof Error ? error.message : String(error),
+      }),
       { status: 500 },
     );
   }

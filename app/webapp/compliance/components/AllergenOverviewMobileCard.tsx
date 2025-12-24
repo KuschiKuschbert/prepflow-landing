@@ -41,7 +41,9 @@ export function AllergenOverviewMobileCard({ item }: AllergenOverviewMobileCardP
             </span>
             <h3 className="text-base font-semibold text-[var(--foreground)]">{item.name}</h3>
           </div>
-          {item.description && <p className="text-sm text-[var(--foreground-muted)]">{item.description}</p>}
+          {item.description && (
+            <p className="text-sm text-[var(--foreground-muted)]">{item.description}</p>
+          )}
         </div>
       </div>
 

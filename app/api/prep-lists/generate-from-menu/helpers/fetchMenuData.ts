@@ -1,6 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase';
-
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 
 export async function fetchMenuData(menuId: string) {
   if (!supabaseAdmin) {
@@ -15,6 +15,13 @@ export async function fetchMenuData(menuId: string) {
     .single();
 
   if (menuError || !menu) {
+    if (menuError) {
+      logger.error('[Prep Lists API] Error fetching menu:', {
+        error: menuError.message,
+        menuId,
+        context: { endpoint: '/api/prep-lists/generate-from-menu', operation: 'fetchMenuData' },
+      });
+    }
     throw ApiErrorHandler.createError('Menu not found', 'DATABASE_ERROR', 500);
   }
 
@@ -44,6 +51,11 @@ export async function fetchMenuData(menuId: string) {
     .eq('menu_id', menuId);
 
   if (itemsError) {
+    logger.error('[Prep Lists API] Error fetching menu items:', {
+      error: itemsError.message,
+      menuId,
+      context: { endpoint: '/api/prep-lists/generate-from-menu', operation: 'fetchMenuData' },
+    });
     throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
   }
 

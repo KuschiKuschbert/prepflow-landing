@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Empty state component for area tasks modal
  */
@@ -22,7 +24,9 @@ export function EmptyTasksState({ onCreateTask }: EmptyTasksStateProps) {
           />
         </div>
       </div>
-      <h3 className="tablet:text-xl mb-1.5 text-lg font-semibold text-[var(--foreground)]">No tasks yet</h3>
+      <h3 className="tablet:text-xl mb-1.5 text-lg font-semibold text-[var(--foreground)]">
+        No tasks yet
+      </h3>
       <p className="mb-4 text-[var(--foreground-muted)]">Create your first task for this area.</p>
       <button
         onClick={onCreateTask}
@@ -34,7 +38,3 @@ export function EmptyTasksState({ onCreateTask }: EmptyTasksStateProps) {
     </div>
   );
 }
-
-
-
-

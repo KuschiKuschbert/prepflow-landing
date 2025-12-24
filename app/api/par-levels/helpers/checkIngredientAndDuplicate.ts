@@ -1,4 +1,5 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 
 /**
@@ -19,6 +20,13 @@ export async function checkIngredientAndDuplicate(ingredientId: string) {
     .single();
 
   if (ingredientError || !ingredient) {
+    if (ingredientError) {
+      logger.error('[Par Levels API] Error checking ingredient:', {
+        error: ingredientError.message,
+        code: (ingredientError as any).code,
+        ingredientId,
+      });
+    }
     throw ApiErrorHandler.createError('Ingredient not found', 'NOT_FOUND', 404);
   }
 
@@ -31,6 +39,11 @@ export async function checkIngredientAndDuplicate(ingredientId: string) {
 
   if (duplicateError && duplicateError.code !== 'PGRST116') {
     // PGRST116 is "not found" - that's okay, no duplicate exists
+    logger.error('[Par Levels API] Error checking for duplicate par level:', {
+      error: duplicateError.message,
+      code: (duplicateError as any).code,
+      ingredientId,
+    });
     throw ApiErrorHandler.createError(
       `Error checking for duplicate par level: ${duplicateError.message}`,
       'DATABASE_ERROR',

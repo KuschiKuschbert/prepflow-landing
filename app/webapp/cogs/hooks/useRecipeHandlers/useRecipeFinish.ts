@@ -38,9 +38,9 @@ export function useRecipeFinishHandler({
       showSuccess(`Recipe "${selectedRecipeData.recipe_name}" is complete! 🎉`);
     } catch (err) {
       logger.error('[useRecipeFinish.ts] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
       const errorMsg = 'Failed to save recipe. Please try again.';
       if (setSaveError) setSaveError(errorMsg);

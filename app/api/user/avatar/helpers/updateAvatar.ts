@@ -55,13 +55,6 @@ export async function updateAvatar(
     .single();
 
   if (error) {
-    logger.error('[helpers/updateAvatar] Database error:', {
-      error: error.message,
-    });
-    throw ApiErrorHandler.fromSupabaseError(error, 500);
-  }
-
-  if (error) {
     const errorMessage = error.message || '';
     const errorCode = error.code || '';
     const errorDetails = error.details || '';

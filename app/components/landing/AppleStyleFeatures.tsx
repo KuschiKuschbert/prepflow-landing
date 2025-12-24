@@ -86,7 +86,7 @@ function AppleStyleFeatures({
         </ScrollReveal>
 
         <div
-          className="desktop:flex-row desktop:gap-8 desktop:items-stretch flex flex-col gap-12 large-desktop:gap-10 xl:gap-12 2xl:gap-14"
+          className="desktop:flex-row desktop:gap-8 desktop:items-stretch large-desktop:gap-10 flex flex-col gap-12 xl:gap-12 2xl:gap-14"
           style={{
             contain: 'layout',
           }}

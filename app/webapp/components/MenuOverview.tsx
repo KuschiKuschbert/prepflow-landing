@@ -45,9 +45,9 @@ export default function MenuOverview() {
         }
       } catch (err) {
         logger.error('[MenuOverview.tsx] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+          error: err instanceof Error ? err.message : String(err),
+          stack: err instanceof Error ? err.stack : undefined,
+        });
 
         setError(err instanceof Error ? err.message : 'Failed to load menu overview');
       } finally {
@@ -178,7 +178,11 @@ export default function MenuOverview() {
               <Icon
                 icon={data.dishesWithoutRecipes > 0 ? AlertTriangle : UtensilsCrossed}
                 size="sm"
-                className={data.dishesWithoutRecipes > 0 ? 'text-[var(--color-warning)]' : 'text-[var(--color-success)]'}
+                className={
+                  data.dishesWithoutRecipes > 0
+                    ? 'text-[var(--color-warning)]'
+                    : 'text-[var(--color-success)]'
+                }
                 aria-hidden={true}
               />
             </div>
@@ -188,7 +192,9 @@ export default function MenuOverview() {
               </p>
               <p
                 className={`text-fluid-xl tablet:text-fluid-2xl font-bold ${
-                  data.dishesWithoutRecipes > 0 ? 'text-[var(--color-warning)]' : 'text-[var(--color-success)]'
+                  data.dishesWithoutRecipes > 0
+                    ? 'text-[var(--color-warning)]'
+                    : 'text-[var(--color-success)]'
                 }`}
               >
                 {data.dishesWithoutRecipes}
@@ -217,7 +223,11 @@ export default function MenuOverview() {
               <Icon
                 icon={data.dishesWithoutCosts > 0 ? AlertTriangle : UtensilsCrossed}
                 size="sm"
-                className={data.dishesWithoutCosts > 0 ? 'text-[var(--color-warning)]' : 'text-[var(--color-success)]'}
+                className={
+                  data.dishesWithoutCosts > 0
+                    ? 'text-[var(--color-warning)]'
+                    : 'text-[var(--color-success)]'
+                }
                 aria-hidden={true}
               />
             </div>
@@ -227,7 +237,9 @@ export default function MenuOverview() {
               </p>
               <p
                 className={`text-fluid-xl tablet:text-fluid-2xl font-bold ${
-                  data.dishesWithoutCosts > 0 ? 'text-[var(--color-warning)]' : 'text-[var(--color-success)]'
+                  data.dishesWithoutCosts > 0
+                    ? 'text-[var(--color-warning)]'
+                    : 'text-[var(--color-success)]'
                 }`}
               >
                 {data.dishesWithoutCosts}

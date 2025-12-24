@@ -1,14 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useTranslation } from '@/lib/useTranslation';
-import { Trash2, Store, MapPin, Target, Zap } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { useAlert } from '@/hooks/useAlert';
 import { useConfirm } from '@/hooks/useConfirm';
 import { usePrompt } from '@/hooks/usePrompt';
-import { useAlert } from '@/hooks/useAlert';
 import { logger } from '@/lib/logger';
-
+import { useTranslation } from '@/lib/useTranslation';
+import { MapPin, Store, Target, Trash2, Zap } from 'lucide-react';
+import { useEffect, useState } from 'react';
 interface Ingredient {
   id: string;
   ingredient_name: string;
@@ -31,7 +30,6 @@ interface Ingredient {
   created_at?: string;
   updated_at?: string;
 }
-
 interface IngredientActionsProps {
   selectedIngredients: Set<string>;
   filteredIngredients: Ingredient[];
@@ -58,7 +56,6 @@ export default function IngredientActions({
   const selectedIngredientsData = filteredIngredients.filter(ingredient =>
     selectedIngredients.has(ingredient.id),
   );
-
   const handleBulkDelete = async () => {
     if (selectedCount === 0) return;
 
@@ -85,7 +82,6 @@ export default function IngredientActions({
       setShowBulkMenu(false);
     }
   };
-
   const handleBulkUpdateSupplier = async () => {
     if (selectedCount === 0) return;
 
@@ -113,7 +109,6 @@ export default function IngredientActions({
       setShowBulkMenu(false);
     }
   };
-
   const handleBulkUpdateStorage = async () => {
     if (selectedCount === 0) return;
 
@@ -141,7 +136,6 @@ export default function IngredientActions({
       setShowBulkMenu(false);
     }
   };
-
   const handleBulkUpdateWastage = async () => {
     if (selectedCount === 0) return;
 
@@ -238,7 +232,12 @@ export default function IngredientActions({
                         disabled={bulkActionLoading}
                         className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-[var(--color-error)] transition-colors hover:bg-[var(--color-error)]/10 disabled:opacity-50"
                       >
-                        <Icon icon={Trash2} size="xs" className="text-[var(--color-error)]" aria-hidden={true} />
+                        <Icon
+                          icon={Trash2}
+                          size="xs"
+                          className="text-[var(--color-error)]"
+                          aria-hidden={true}
+                        />
                         <span>Delete Selected</span>
                       </button>
 
@@ -290,7 +289,9 @@ export default function IngredientActions({
             <span>Selected:</span>
             <span className="font-medium text-[var(--primary)]">{selectedCount}</span>
             <span>of</span>
-            <span className="font-medium text-[var(--foreground)]">{filteredIngredients.length}</span>
+            <span className="font-medium text-[var(--foreground)]">
+              {filteredIngredients.length}
+            </span>
           </div>
         )}
       </div>

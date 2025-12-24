@@ -47,10 +47,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       logger.error('[Admin Tiers Features] Failed to fetch mappings:', error);
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(error, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(error, 500), { status: 500 });
     }
 
     return NextResponse.json({ mappings: data || [] });

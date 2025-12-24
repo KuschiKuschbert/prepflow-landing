@@ -168,7 +168,9 @@ export default function DishPreviewModal({
                 {/* COGS Breakdown */}
                 {calculations.length > 0 && (
                   <div className="tablet:p-6 mb-6 rounded-lg bg-[var(--surface)] p-4 shadow">
-                    <h3 className="mb-4 text-lg font-semibold text-[var(--foreground)]">COGS Breakdown</h3>
+                    <h3 className="mb-4 text-lg font-semibold text-[var(--foreground)]">
+                      COGS Breakdown
+                    </h3>
                     {dishDetails ? (
                       <COGSTableGrouped
                         calculations={calculations}

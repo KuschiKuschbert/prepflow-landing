@@ -91,7 +91,11 @@ export async function populateDishes(
       }));
 
       if (!supabaseAdmin) {
-        throw ApiErrorHandler.createError('Supabase admin client not initialized', 'DATABASE_ERROR', 500);
+        throw ApiErrorHandler.createError(
+          'Supabase admin client not initialized',
+          'DATABASE_ERROR',
+          500,
+        );
       }
 
       const { error: insertError } = await supabaseAdmin
@@ -145,7 +149,3 @@ export async function populateDishes(
 
   return { populated, skipped, errors };
 }
-
-
-
-

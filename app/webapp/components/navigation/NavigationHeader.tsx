@@ -38,7 +38,6 @@ interface NavigationHeaderProps {
   onAchievementsClick?: () => void;
 }
 const cn = (...classes: (string | undefined | null | false)[]): string => classes.filter(Boolean).join(' ');
-
 /**
  * Navigation header component for webapp.
  * Displays logo, breadcrumbs (desktop), search button, and user info.
@@ -89,8 +88,6 @@ export function NavigationHeader({
       userNameValue: auth0UserName,
     });
   }, [user, userEmail, userError, userLoading, auth0UserName]);
-
-  // Fetch user profile from database to get first_name and last_name
   const { profile } = useUserProfile();
 
   // Log profile changes with detailed inspection
@@ -118,8 +115,6 @@ export function NavigationHeader({
       email: profile?.email,
     });
   }, [profile]);
-
-  // Use helper function to get display name with proper fallback chain
   // Priority: Database first_name/last_name → Auth0 session name → Email prefix
   const userNameInput = {
     first_name: profile?.first_name,
@@ -134,11 +129,8 @@ export function NavigationHeader({
     auth0Name: auth0UserName,
     userEmail,
   });
-
-  // Use fallback during SSR to prevent hydration mismatch
   const userName = isMounted ? getUserDisplayName(userNameInput) : '';
   const { avatar: userAvatar } = useUserAvatar();
-
   const { isVisible, isDesktop } = useHeaderVisibility();
   const { seasonalEffect, bannerText, bannerColor } = useSeasonalEffects();
 
@@ -171,7 +163,6 @@ export function NavigationHeader({
         name: '',
         email: undefined,
       };
-
   logger.dev('[NavigationHeader] defaultInitials input object:', {
     defaultInitialsInput,
     profileFirst: profile?.first_name,
@@ -182,11 +173,7 @@ export function NavigationHeader({
   });
 
   // Use fallback during SSR to prevent hydration mismatch
-  const defaultInitials = isMounted
-    ? getDefaultAvatar(defaultInitialsInput)
-    : 'U'; // Consistent fallback for SSR
-
-  // Log computed values (only log when profile changes to avoid spam)
+  const defaultInitials = isMounted ? getDefaultAvatar(defaultInitialsInput) : 'U';
   useEffect(() => {
     logger.dev('[NavigationHeader] Computed values:', {
       userName,
@@ -199,7 +186,6 @@ export function NavigationHeader({
       profileDisplayName: profile?.display_name,
     });
   }, [profile, userName, defaultInitials, user?.name, userEmail, auth0UserName]);
-
   return (
     <header
       role="banner"
@@ -223,8 +209,12 @@ export function NavigationHeader({
         // Only apply transform on mobile/tablet (< 1025px)
         // During SSR, always use consistent values to prevent hydration mismatch
         // After mount, the transform will update based on scroll position
-        transform: typeof window !== 'undefined' && !isDesktop && !isVisible ? 'translateY(-100%)' : 'translateY(0)',
-        transitionTimingFunction: typeof window !== 'undefined' && !isDesktop ? 'var(--easing-standard)' : undefined,
+        transform:
+          typeof window !== 'undefined' && !isDesktop && !isVisible
+            ? 'translateY(-100%)'
+            : 'translateY(0)',
+        transitionTimingFunction:
+          typeof window !== 'undefined' && !isDesktop ? 'var(--easing-standard)' : undefined,
       }}
       suppressHydrationWarning
     >
@@ -264,7 +254,12 @@ export function NavigationHeader({
             aria-controls="search-modal"
             aria-expanded={isSearchOpen}
           >
-            <Icon icon={Search} size="md" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+            <Icon
+              icon={Search}
+              size="md"
+              className="text-[var(--foreground-muted)]"
+              aria-hidden={true}
+            />
           </button>
           <NavbarStats onClick={onAchievementsClick} />
 

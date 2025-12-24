@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Filter bar component for allergen overview
  */
@@ -128,7 +130,10 @@ export function FilterBar({
             onChange={e => onShowOnlyWithAllergensChange(e.target.checked)}
             className="h-4 w-4 rounded border-[var(--border)] bg-[var(--background)] text-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
           />
-          <label htmlFor="showOnlyWithAllergens" className="text-sm text-[var(--foreground-secondary)]">
+          <label
+            htmlFor="showOnlyWithAllergens"
+            className="text-sm text-[var(--foreground-secondary)]"
+          >
             Show only items with allergens
           </label>
         </div>
@@ -136,7 +141,3 @@ export function FilterBar({
     </div>
   );
 }
-
-
-
-

@@ -22,7 +22,12 @@ export interface ComplianceRecordImportRow {
 }
 
 // Re-export helper functions for external use
-export { parseComplianceRecordsCSV, validateComplianceRecord, formatComplianceRecordPreview, generateComplianceRecordTemplate };
+export {
+  parseComplianceRecordsCSV,
+  validateComplianceRecord,
+  formatComplianceRecordPreview,
+  generateComplianceRecordTemplate,
+};
 
 /**
  * Compliance record import configuration

@@ -1,3 +1,4 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextResponse } from 'next/server';
 
@@ -16,10 +17,7 @@ export function handleRecipeShareError(error: Error | any, operation: string): N
   });
 
   return NextResponse.json(
-    {
-      error: 'Internal server error',
-      message: 'Something went wrong while sharing the recipe. Give it another go, chef.',
-    },
+    ApiErrorHandler.createError('Something went wrong while sharing the recipe. Give it another go, chef.', 'SERVER_ERROR', 500),
     { status: 500 },
   );
 }

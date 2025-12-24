@@ -18,7 +18,9 @@ export function RecipesHeader() {
           Recipe Book
         </h1>
       </div>
-      <p className="text-[var(--foreground-muted)]">Manage your saved recipes and create new ones</p>
+      <p className="text-[var(--foreground-muted)]">
+        Manage your saved recipes and create new ones
+      </p>
     </div>
   );
 }

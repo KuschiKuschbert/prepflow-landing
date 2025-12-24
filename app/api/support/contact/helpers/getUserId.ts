@@ -10,11 +10,19 @@ export async function getUserId(userEmail: string): Promise<string | null> {
   }
 
   try {
-    const { data: userData } = await supabaseAdmin
+    const { data: userData, error: userError } = await supabaseAdmin
       .from('users')
       .select('id')
       .eq('email', userEmail)
       .single();
+    if (userError && userError.code !== 'PGRST116') {
+      // PGRST116 is "not found" - that's okay, continue with null userId
+      logger.error('[Support API] Error fetching user ID:', {
+        error: userError.message,
+        userEmail,
+        context: { endpoint: '/api/support/contact', operation: 'getUserId' },
+      });
+    }
     if (userData) {
       return userData.id;
     }

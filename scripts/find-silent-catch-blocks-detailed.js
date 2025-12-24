@@ -113,7 +113,6 @@ results.forEach(result => {
   console.log('');
 });
 
-console.log(`\nTotal: ${results.reduce((sum, r) => sum + r.violations.length, 0)} silent catch blocks`);
-
-
-
+console.log(
+  `\nTotal: ${results.reduce((sum, r) => sum + r.violations.length, 0)} silent catch blocks`,
+);

@@ -37,7 +37,3 @@ export function ThreeJSGuide({ content, className = '' }: ThreeJSGuideProps) {
     </div>
   );
 }
-
-
-
-

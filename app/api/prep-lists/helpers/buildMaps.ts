@@ -40,7 +40,9 @@ export function buildSectionsMap(kitchenSections: KitchenSection[]): Map<string,
  * @param {PrepListItem[]} prepListItems - Prep list items data
  * @returns {Map<string, PrepListItem[]>} Items map by prep list ID
  */
-export function buildItemsByPrepListIdMap(prepListItems: PrepListItem[]): Map<string, PrepListItem[]> {
+export function buildItemsByPrepListIdMap(
+  prepListItems: PrepListItem[],
+): Map<string, PrepListItem[]> {
   const itemsByPrepListId = new Map();
   prepListItems.forEach((item: any) => {
     if (!itemsByPrepListId.has(item.prep_list_id)) {

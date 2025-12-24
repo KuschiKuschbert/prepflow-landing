@@ -106,9 +106,9 @@ export function InlineTimeEntry({
       await onSave(buildShiftData(employeeId, date, startTime, endTime));
     } catch (err) {
       logger.error('[InlineTimeEntry.tsx] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
       setError('Failed to save shift');
       setSaving(false);

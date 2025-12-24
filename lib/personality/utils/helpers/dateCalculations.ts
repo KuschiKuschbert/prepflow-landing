@@ -72,4 +72,3 @@ export function calculateRoyalBirthday(year: number): Date {
   const firstMonday = june.getDay() === 1 ? 1 : june.getDay() === 0 ? 2 : 9 - june.getDay();
   return new Date(year, 5, firstMonday + 7); // 2nd Monday
 }
-

@@ -3,10 +3,8 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Howl } from 'howler';
 import { addStat, addSessionStat, STAT_KEYS } from '@/lib/arcadeStats';
 import { throwConfetti } from '@/hooks/useConfetti';
-import { isArcadeMuted } from '@/lib/arcadeMute';
 
 export interface Docket {
   id: string;
@@ -30,61 +28,6 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
   const [gameFinished, setGameFinished] = useState(false);
   const animationRef = useRef<number | null>(null);
   const timeIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Sound effects
-  const clickSound = useRef<Howl | null>(null);
-  const whooshSound = useRef<Howl | null>(null);
-  const successSound = useRef<Howl | null>(null);
-  const alertSound = useRef<Howl | null>(null);
-  const soundsInitialized = useRef<boolean>(false);
-
-  const initSounds = useCallback(() => {
-    if (typeof window === 'undefined' || soundsInitialized.current) return;
-    try {
-      clickSound.current = new Howl({ src: ['/sfx/click.mp3'], volume: 0.5, preload: false });
-      whooshSound.current = new Howl({ src: ['/sfx/whoosh.mp3'], volume: 0.3, preload: false });
-      successSound.current = new Howl({ src: ['/sfx/success.mp3'], volume: 0.6, preload: false });
-      alertSound.current = new Howl({ src: ['/sfx/alert.mp3'], volume: 0.7, preload: false });
-      soundsInitialized.current = true;
-    } catch (error) {
-      // ignore; will fall back to silent
-    }
-  }, []);
-
-  // Play sound helper
-  const playSound = useCallback((sound: Howl | null, fallbackFreq: number = 800) => {
-    if (isArcadeMuted()) return;
-
-    if (sound) {
-      try {
-        sound.play();
-      } catch (error) {
-        // Fallback beep
-        try {
-          const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-          const oscillator = audioContext.createOscillator();
-          const gainNode = audioContext.createGain();
-
-          oscillator.connect(gainNode);
-          gainNode.connect(audioContext.destination);
-
-          oscillator.frequency.value = fallbackFreq;
-          oscillator.type = 'sine';
-
-          gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-
-          oscillator.start(audioContext.currentTime);
-          oscillator.stop(audioContext.currentTime + 0.1);
-        } catch (e) {
-          // Silently fail
-        }
-      }
-    } else {
-      // If sounds are not initialized, skip fallback to avoid gesture errors
-      if (!soundsInitialized.current) return;
-    }
-  }, []);
 
   // Spawn new docket
   const spawnDocket = useCallback(() => {
@@ -136,8 +79,7 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
     };
 
     setDockets(prev => [...prev, newDocket]);
-    playSound(whooshSound.current, 600);
-  }, [gameFinished, containerRef, playSound, dockets.length]);
+  }, [gameFinished, containerRef, dockets.length]);
 
   // Update dockets animation
   useEffect(() => {
@@ -201,7 +143,6 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
 
         if (newTime >= 30 && !alertShown) {
           setAlertShown(true);
-          playSound(alertSound.current, 400);
         }
 
         return newTime;
@@ -213,7 +154,7 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
         clearInterval(timeIntervalRef.current);
       }
     };
-  }, [isLoading, gameFinished, alertShown, playSound]);
+  }, [isLoading, gameFinished, alertShown]);
 
   // Handle load complete
   useEffect(() => {
@@ -232,9 +173,8 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
         }
       }, 0);
 
-      playSound(successSound.current, 1000);
     }
-  }, [isLoading, gameFinished, caught, playSound]);
+  }, [isLoading, gameFinished, caught]);
 
   // Handle docket click
   const handleDocketClick = useCallback(
@@ -242,11 +182,7 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
       if (gameFinished) return;
 
       setDockets(prev => prev.filter(d => d.id !== id));
-      setCaught(prev => {
-        const newCaught = prev + 1;
-        playSound(clickSound.current, 800);
-        return newCaught;
-      });
+      setCaught(prev => prev + 1);
 
       // Update stats outside the state setter to avoid setState during render
       // Use setTimeout to ensure it runs after the current render cycle
@@ -258,7 +194,7 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
         }
       }, 0);
     },
-    [gameFinished, playSound],
+    [gameFinished],
   );
 
   return {
@@ -269,7 +205,5 @@ export const useCatchTheDocket = ({ isLoading, containerRef }: UseCatchTheDocket
     gameFinished,
     spawnDocket,
     handleDocketClick,
-    initSounds,
-    soundsReady: soundsInitialized.current,
   };
 };

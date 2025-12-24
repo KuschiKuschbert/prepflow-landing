@@ -67,4 +67,3 @@ export const HIGH_KEYWORDS = [
   'method not allowed',
   '405',
 ];
-

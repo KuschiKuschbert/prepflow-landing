@@ -20,4 +20,3 @@ export const QUALIFICATION_SELECT = `
     default_expiry_days
   )
 `;
-

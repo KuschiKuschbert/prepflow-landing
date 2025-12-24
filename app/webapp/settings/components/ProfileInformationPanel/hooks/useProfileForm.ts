@@ -37,10 +37,7 @@ export function useProfileForm({
   USER_MODIFIED_KEY,
   onProfileUpdate,
 }: UseProfileFormProps) {
-  const initialFormData = useMemo(
-    () => createInitialFormData(cachedProfile),
-    [cachedProfile?.first_name, cachedProfile?.last_name, cachedProfile?.business_name],
-  );
+  const initialFormData = useMemo(() => createInitialFormData(cachedProfile), [cachedProfile]);
   const initialFormValuesRef = useRef<ProfileFormData | null>(null);
   if (initialFormValuesRef.current === null) initialFormValuesRef.current = initialFormData;
   const [formData, setFormData] = useState(initialFormData);

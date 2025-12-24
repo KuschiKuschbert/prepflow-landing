@@ -128,7 +128,9 @@ export default function PerformanceTrends({
       <div className="tablet:p-2 desktop:p-3 p-1.5">
         <div className="tablet:mb-1.5 mb-1 flex items-center justify-between">
           <div>
-            <h3 className="mb-0.5 text-sm font-semibold text-[var(--foreground)]">Trend Analysis</h3>
+            <h3 className="mb-0.5 text-sm font-semibold text-[var(--foreground)]">
+              Trend Analysis
+            </h3>
             <p className="text-xs text-[var(--foreground-muted)]">
               Comparing current period to {getPreviousPeriodLabel()}
             </p>

@@ -28,7 +28,3 @@ export function loadImage(
     onError?.();
   };
 }
-
-
-
-

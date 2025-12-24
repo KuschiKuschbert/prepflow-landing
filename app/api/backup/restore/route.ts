@@ -36,7 +36,9 @@ export async function POST(request: NextRequest) {
   try {
     const user = await requireAuth(request);
     if (!user?.email) {
-      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), {
+        status: 401,
+      });
     }
 
     const userId = user.email;
@@ -92,7 +94,10 @@ export async function POST(request: NextRequest) {
       // Try to detect encryption mode from file header
       const header = new TextDecoder().decode(encryptedData.slice(0, 16));
       if (header !== 'PREPFLOW_BACKUP') {
-        return NextResponse.json(ApiErrorHandler.createError('Invalid backup file format', 'BAD_REQUEST', 400), { status: 400 });
+        return NextResponse.json(
+          ApiErrorHandler.createError('Invalid backup file format', 'BAD_REQUEST', 400),
+          { status: 400 },
+        );
       }
 
       const encryptionMode = encryptedData[17]; // After header (16) + version (1)
@@ -141,7 +146,7 @@ export async function POST(request: NextRequest) {
     if (mode === 'full') {
       restoreResult = await restoreFull(userId, backupData);
     } else if (mode === 'selective') {
-      restoreResult = await restoreSelective(userId, backupData, tables);
+      restoreResult = await restoreSelective(userId, backupData, tables || []);
     } else {
       // Merge mode
       restoreResult = await restoreMerge(userId, backupData, options as MergeOptions);

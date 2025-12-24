@@ -64,9 +64,9 @@ export function useRecipeIngredientLoading({
         });
       } catch (err) {
         logger.error('[useRecipeIngredientLoading.ts] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+          error: err instanceof Error ? err.message : String(err),
+          stack: err instanceof Error ? err.stack : undefined,
+        });
 
         if (setError)
           setError(err instanceof Error ? err.message : 'Failed to load recipe ingredients');

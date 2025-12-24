@@ -2,13 +2,15 @@ export function UserResponsibilities() {
   return (
     <>
       <p className="mb-4 leading-relaxed text-gray-300">
-        <strong>Accurate Information:</strong> You are responsible for providing accurate and complete information when
-        using PrepFlow. This includes ingredient costs, recipe quantities, menu prices, and other business data. The
-        accuracy of PrepFlow&apos;s calculations and insights depends on the quality of data you provide.
+        <strong>Accurate Information:</strong> You are responsible for providing accurate and
+        complete information when using PrepFlow. This includes ingredient costs, recipe quantities,
+        menu prices, and other business data. The accuracy of PrepFlow&apos;s calculations and
+        insights depends on the quality of data you provide.
       </p>
       <p className="mb-4 leading-relaxed text-gray-300">
-        <strong>Compliance:</strong> You agree to use PrepFlow in compliance with all applicable laws and regulations,
-        including food safety regulations, data protection laws, and business licensing requirements.
+        <strong>Compliance:</strong> You agree to use PrepFlow in compliance with all applicable
+        laws and regulations, including food safety regulations, data protection laws, and business
+        licensing requirements.
       </p>
       <p className="mb-4 leading-relaxed text-gray-300">
         <strong>Prohibited Uses:</strong> You may not use PrepFlow to:
@@ -22,12 +24,10 @@ export function UserResponsibilities() {
         <li className="text-fluid-base">Impersonate others or provide false information</li>
       </ul>
       <p className="text-fluid-base leading-relaxed text-gray-300">
-        <strong>Indemnification:</strong> You agree to indemnify and hold PrepFlow harmless from any claims, damages,
-        losses, liabilities, and expenses (including legal fees) arising from your use of PrepFlow, violation of these
-        Terms, or infringement of any rights of another party.
+        <strong>Indemnification:</strong> You agree to indemnify and hold PrepFlow harmless from any
+        claims, damages, losses, liabilities, and expenses (including legal fees) arising from your
+        use of PrepFlow, violation of these Terms, or infringement of any rights of another party.
       </p>
     </>
   );
 }
-
-

@@ -36,9 +36,9 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       }
     } catch (authError) {
       logger.error('[route.ts] Error in catch block:', {
-      error: authError instanceof Error ? authError.message : String(authError),
-      stack: authError instanceof Error ? authError.stack : undefined,
-    });
+        error: authError instanceof Error ? authError.message : String(authError),
+        stack: authError instanceof Error ? authError.stack : undefined,
+      });
 
       if (process.env.NODE_ENV === 'production') {
         return NextResponse.json(

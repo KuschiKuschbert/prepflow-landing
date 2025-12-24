@@ -5,11 +5,9 @@
  *
  * A light-hearted interactive component that appears whenever an error occurs.
  * Users click to extinguish flames while a timer tracks playtime. After 45 seconds,
- * an alert reminds users to get back to work. Sound effects are generated using
- * Web Audio API for a fully self-contained experience.
+ * an alert reminds users to get back to work.
  */
 
-import { ArcadeMuteButton } from '@/components/Arcade/ArcadeMuteButton';
 import WebAppBackground from '@/components/Arcade/WebAppBackground';
 import { AnimatePresence, motion } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
@@ -30,9 +28,9 @@ const KitchenOnFire: React.FC = () => {
       return false;
     } catch (_) {
       logger.error('[KitchenOnFire.tsx] Error in catch block:', {
-      error: _ instanceof Error ? _.message : String(_),
-      stack: _ instanceof Error ? _.stack : undefined,
-    });
+        error: _ instanceof Error ? _.message : String(_),
+        stack: _ instanceof Error ? _.stack : undefined,
+      });
 
       return false;
     }
@@ -79,7 +77,6 @@ const KitchenOnFire: React.FC = () => {
   return (
     <>
       <WebAppBackground />
-      <ArcadeMuteButton />
       {/* Score/Timer UI removed per request */}
       <main className="fixed inset-0 flex min-h-screen items-center justify-center p-6 text-[var(--foreground)]">
         <div className="flex max-w-2xl flex-col items-center text-center">

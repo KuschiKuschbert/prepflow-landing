@@ -11,11 +11,17 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     const menuId = id;
 
     if (!menuId) {
-      return NextResponse.json(ApiErrorHandler.createError('Missing menu id', 'SERVER_ERROR', 400), { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Missing menu id', 'SERVER_ERROR', 400),
+        { status: 400 },
+      );
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json(ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     // Fetch menu items with dishes and recipes

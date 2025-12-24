@@ -31,4 +31,3 @@ export function validateCSVData(
     errors,
   };
 }
-

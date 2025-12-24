@@ -132,7 +132,7 @@ export default function SquarePage() {
           subtitle="Connect your Square POS system to sync menu items, staff, sales data, and food costs"
         />
 
-        <div className="flex flex-col desktop:flex-row desktop:gap-8">
+        <div className="desktop:flex-row desktop:gap-8 flex flex-col">
           {/* Navigation Sidebar */}
           <div className="desktop:w-64 desktop:flex-shrink-0">
             <SquareNavigation activeSection={activeSection} />

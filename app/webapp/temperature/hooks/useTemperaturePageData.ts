@@ -39,7 +39,7 @@ export function useTemperaturePageData(activeTab: 'logs' | 'equipment' | 'analyt
         setLastAnalyticsFetch,
       );
     },
-    [allLogs.length, lastAnalyticsFetch],
+    [allLogs, lastAnalyticsFetch],
   );
   const fetchEquipment = useCallback(async () => {
     await fetchEquipmentHelper(setEquipment);

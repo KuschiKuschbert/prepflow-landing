@@ -14,15 +14,17 @@ import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { z } from 'zod';
 
-const prepDetailsSchema = z.object({
-  recipe: z.any(), // Recipe is complex, validate structure if needed
-  ingredients: z.array(z.any()).min(1, 'ingredients array is required'),
-  instructions: z.string().nullable().optional(),
-  countryCode: z.string().optional(),
-}).refine(data => data.recipe !== undefined && data.recipe !== null, {
-  message: 'recipe is required',
-  path: ['recipe'],
-});
+const prepDetailsSchema = z
+  .object({
+    recipe: z.any(), // Recipe is complex, validate structure if needed
+    ingredients: z.array(z.any()).min(1, 'ingredients array is required'),
+    instructions: z.string().nullable().optional(),
+    countryCode: z.string().optional(),
+  })
+  .refine(data => data.recipe !== undefined && data.recipe !== null, {
+    message: 'recipe is required',
+    path: ['recipe'],
+  });
 
 /**
  * POST /api/ai/prep-details

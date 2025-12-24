@@ -62,7 +62,7 @@ export function useDishesClientBulkActions({
     onClearSelection,
   });
 
-  const { handleBulkShare, shareLoading: bulkShareLoading } = useBulkShare({
+  const { handleBulkShare } = useBulkShare({
     selectedRecipeIds,
     onSuccess: onClearSelection,
   });
@@ -73,7 +73,6 @@ export function useDishesClientBulkActions({
     handleCreateNewMenu,
     menus,
     loadingMenus,
-    addLoading: addToMenuLoading,
     showMenuDialog,
     setShowMenuDialog,
   } = useBulkAddToMenu({
@@ -86,8 +85,6 @@ export function useDishesClientBulkActions({
 
   return {
     bulkActionLoading,
-    bulkShareLoading,
-    addToMenuLoading,
     showBulkMenu,
     setShowBulkMenu,
     showBulkDeleteConfirm,

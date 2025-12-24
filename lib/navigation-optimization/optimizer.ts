@@ -1,7 +1,7 @@
 // PrepFlow Adaptive Navigation Optimization - Optimization Engine
 
 import { type NavigationItemConfig } from '@/app/webapp/components/navigation/nav-items';
-import { type OptimizationResult } from './schema';
+import { type OptimizationResult, type NavigationPattern } from './schema';
 import { getCachedOptimization, cacheOptimization } from './localStorage';
 import { getUsagePatterns, detectPatternChange } from './patternAnalyzer';
 import { getUsageLogs } from './localStorage';
@@ -63,7 +63,12 @@ export async function optimizeNavigationItems(
     }
 
     // Create optimization result
-    const optimizationResult = createOptimizationResult(items, patterns, selectedSections, patternVersion);
+    const optimizationResult = createOptimizationResult(
+      items,
+      patterns,
+      selectedSections,
+      patternVersion,
+    );
 
     // Cache the result
     cacheOptimization(optimizationResult);
@@ -80,7 +85,6 @@ export async function optimizeNavigationItems(
     return items;
   }
 }
-
 
 /**
  * Reset optimization cache (useful for testing or manual reset).

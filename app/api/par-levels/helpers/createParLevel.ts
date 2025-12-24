@@ -45,7 +45,11 @@ export async function createParLevel(parLevelData: any) {
   }
 
   if (!insertedData) {
-    throw ApiErrorHandler.createError('Failed to create par level: no data returned', 'DATABASE_ERROR', 500);
+    throw ApiErrorHandler.createError(
+      'Failed to create par level: no data returned',
+      'DATABASE_ERROR',
+      500,
+    );
   }
 
   // Fetch with ingredient join (with fallback)

@@ -24,4 +24,3 @@ export function generateTemperatureLogTemplate(): string {
 
   return [headers.join(','), exampleRow.join(',')].join('\n');
 }
-

@@ -92,8 +92,10 @@ export default function PerformanceFilters({
 
         {/* Result count */}
         <div className="text-xs whitespace-nowrap text-[var(--foreground-muted)]">
-          <span className="font-semibold text-[var(--foreground)]">{filteredAndSortedItems.length}</span>/
-          <span className="font-semibold text-[var(--foreground)]">{performanceItems.length}</span>
+          <span className="font-semibold text-[var(--foreground)]">
+            {filteredAndSortedItems.length}
+          </span>
+          /<span className="font-semibold text-[var(--foreground)]">{performanceItems.length}</span>
         </div>
 
         <MenuItemClassFilters

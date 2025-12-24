@@ -38,9 +38,9 @@ export function useSupportTicketsMutations(refresh: () => Promise<void>) {
         }
       } catch (error) {
         logger.error('[useSupportTicketsMutations.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+          error: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+        });
 
         showError('Failed to update ticket status');
         return false;
@@ -72,9 +72,9 @@ export function useSupportTicketsMutations(refresh: () => Promise<void>) {
         }
       } catch (error) {
         logger.error('[useSupportTicketsMutations.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+          error: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+        });
 
         showError('Failed to save notes');
         return null;

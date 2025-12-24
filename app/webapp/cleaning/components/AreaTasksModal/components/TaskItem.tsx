@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Task item component for area tasks modal
  */
@@ -34,7 +36,9 @@ export function TaskItem({
       <div className="tablet:p-4 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-3 transition-all duration-200 hover:border-[var(--primary)]/30">
         <div className="space-y-3">
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Task Name</label>
+            <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
+              Task Name
+            </label>
             <input
               type="text"
               value={editFormData.task_name}
@@ -44,7 +48,9 @@ export function TaskItem({
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Frequency</label>
+            <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
+              Frequency
+            </label>
             <select
               value={editFormData.frequency_type}
               onChange={e => onEditFormChange({ ...editFormData, frequency_type: e.target.value })}
@@ -88,17 +94,23 @@ export function TaskItem({
               </span>
             )}
           </div>
-          {task.description && <p className="text-sm text-[var(--foreground-muted)]">{task.description}</p>}
+          {task.description && (
+            <p className="text-sm text-[var(--foreground-muted)]">{task.description}</p>
+          )}
           {task.equipment_id && task.temperature_equipment && (
             <div className="mt-2 flex items-center gap-2 text-xs text-[var(--foreground-subtle)]">
               <span>Equipment:</span>
-              <span className="text-[var(--color-info)]">{(task.temperature_equipment as any)?.name}</span>
+              <span className="text-[var(--color-info)]">
+                {(task.temperature_equipment as any)?.name}
+              </span>
             </div>
           )}
           {task.section_id && task.kitchen_sections && (
             <div className="mt-1 flex items-center gap-2 text-xs text-[var(--foreground-subtle)]">
               <span>Section:</span>
-              <span className="text-[var(--accent)]">{(task.kitchen_sections as any)?.section_name}</span>
+              <span className="text-[var(--accent)]">
+                {(task.kitchen_sections as any)?.section_name}
+              </span>
             </div>
           )}
         </div>
@@ -122,7 +134,3 @@ export function TaskItem({
     </div>
   );
 }
-
-
-
-

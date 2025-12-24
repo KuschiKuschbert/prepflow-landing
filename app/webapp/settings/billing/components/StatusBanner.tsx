@@ -27,7 +27,13 @@ export function StatusBanner({ isActive, isPastDue, isCancelled }: StatusBannerP
         <Icon
           icon={isPastDue || isCancelled ? AlertCircle : CheckCircle}
           size="md"
-          className={isPastDue ? 'text-[var(--color-warning)]' : isCancelled ? 'text-[var(--color-error)]' : 'text-[var(--color-info)]'}
+          className={
+            isPastDue
+              ? 'text-[var(--color-warning)]'
+              : isCancelled
+                ? 'text-[var(--color-error)]'
+                : 'text-[var(--color-info)]'
+          }
           aria-hidden={true}
         />
         <div className="flex-1">

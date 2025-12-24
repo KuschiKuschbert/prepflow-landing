@@ -49,12 +49,12 @@ export async function GET(req: NextRequest) {
         userId,
       });
 
-    if (error) {
-      logger.error('[patterns/route] Database error:', {
-        error: error.message,
-      });
-      throw ApiErrorHandler.fromSupabaseError(error, 500);
-    }
+      if (error) {
+        logger.error('[patterns/route] Database error:', {
+          error: error.message,
+        });
+        throw ApiErrorHandler.fromSupabaseError(error, 500);
+      }
       return NextResponse.json(
         ApiErrorHandler.createError('Failed to fetch usage patterns', 'DATABASE_ERROR', 500),
         { status: 500 },

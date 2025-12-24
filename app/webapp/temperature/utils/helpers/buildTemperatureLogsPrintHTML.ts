@@ -9,7 +9,11 @@ interface BuildPrintHTMLParams {
 /**
  * Build summary section HTML
  */
-function buildSummarySection(logs: TemperatureLog[], logsByEquipment: Record<string, any>, dateRange?: { start: string; end: string }): string {
+function buildSummarySection(
+  logs: TemperatureLog[],
+  logsByEquipment: Record<string, any>,
+  dateRange?: { start: string; end: string },
+): string {
   return `
     <div style="margin-bottom: 32px; padding: 20px; background: rgba(42, 42, 42, 0.3); border-radius: 12px;">
       <h2 style="font-size: 24px; font-weight: 600; color: #ffffff; margin-bottom: 16px;">Summary</h2>
@@ -42,7 +46,11 @@ function buildSummarySection(logs: TemperatureLog[], logsByEquipment: Record<str
 /**
  * Build equipment logs table HTML
  */
-function buildEquipmentLogsTable(equipmentName: string, eq: TemperatureEquipment | undefined, equipmentLogs: TemperatureLog[]): string {
+function buildEquipmentLogsTable(
+  equipmentName: string,
+  eq: TemperatureEquipment | undefined,
+  equipmentLogs: TemperatureLog[],
+): string {
   return `
     <div style="margin-bottom: 32px; page-break-inside: avoid;">
       <h3 style="font-size: 20px; font-weight: 600; color: #ffffff; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(42, 42, 42, 0.8);">
@@ -113,7 +121,11 @@ function buildEquipmentLogsTable(equipmentName: string, eq: TemperatureEquipment
 /**
  * Build temperature logs print HTML content
  */
-export function buildTemperatureLogsPrintHTML({ logs, logsByEquipment, dateRange }: BuildPrintHTMLParams): string {
+export function buildTemperatureLogsPrintHTML({
+  logs,
+  logsByEquipment,
+  dateRange,
+}: BuildPrintHTMLParams): string {
   const summarySection = buildSummarySection(logs, logsByEquipment, dateRange);
   const equipmentSections = Object.entries(logsByEquipment)
     .map(([equipmentName, { equipment: eq, logs: equipmentLogs }]) =>
@@ -123,4 +135,3 @@ export function buildTemperatureLogsPrintHTML({ logs, logsByEquipment, dateRange
 
   return `<div style="max-width: 100%;">${summarySection}${equipmentSections}</div>`;
 }
-

@@ -9,7 +9,8 @@ import { supabaseAdmin } from '@/lib/supabase';
  * @throws {Error} If deletion fails
  */
 export async function deleteEmployee(id: string) {
-  if (!supabaseAdmin) throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  if (!supabaseAdmin)
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
 
   // Soft delete by setting status to 'terminated' instead of actually deleting
   const { error } = await supabaseAdmin

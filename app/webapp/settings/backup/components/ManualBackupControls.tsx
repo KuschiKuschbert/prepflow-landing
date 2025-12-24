@@ -20,8 +20,6 @@ export function ManualBackupControls({ onBackupCreated }: ManualBackupControlsPr
   const [format, setFormat] = useState<BackupFormat>('encrypted');
   const [encryptionMode, setEncryptionMode] = useState<EncryptionMode>('prepflow-only');
   const [password, setPassword] = useState('');
-  const [creating, setCreating] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const { showSuccess, showError } = useNotification();
 
   const handleCreateBackup = async () => {
@@ -30,7 +28,6 @@ export function ManualBackupControls({ onBackupCreated }: ManualBackupControlsPr
       return;
     }
 
-    setCreating(true);
     try {
       const res = await fetch('/api/backup/create', {
         method: 'POST',
@@ -71,8 +68,6 @@ export function ManualBackupControls({ onBackupCreated }: ManualBackupControlsPr
       });
 
       showError('Failed to create backup');
-    } finally {
-      setCreating(false);
     }
   };
 
@@ -82,7 +77,6 @@ export function ManualBackupControls({ onBackupCreated }: ManualBackupControlsPr
       return;
     }
 
-    setUploading(true);
     try {
       const res = await fetch('/api/backup/upload-to-drive', {
         method: 'POST',
@@ -110,8 +104,6 @@ export function ManualBackupControls({ onBackupCreated }: ManualBackupControlsPr
       });
 
       showError('Failed to upload backup to Google Drive');
-    } finally {
-      setUploading(false);
     }
   };
 
@@ -128,7 +120,9 @@ export function ManualBackupControls({ onBackupCreated }: ManualBackupControlsPr
       <div className="space-y-4">
         {/* Format Selection */}
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Backup Format</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Backup Format
+          </label>
           <div className="grid grid-cols-3 gap-3">
             {(['json', 'sql', 'encrypted'] as BackupFormat[]).map(fmt => (
               <button
@@ -152,7 +146,9 @@ export function ManualBackupControls({ onBackupCreated }: ManualBackupControlsPr
         {/* Encryption Mode (for encrypted format) */}
         {format === 'encrypted' && (
           <div>
-            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Encryption Mode</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+              Encryption Mode
+            </label>
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => {
@@ -166,7 +162,9 @@ export function ManualBackupControls({ onBackupCreated }: ManualBackupControlsPr
                 }`}
               >
                 <div className="font-medium">PrepFlow-Only</div>
-                <div className="mt-1 text-xs text-[var(--foreground-muted)]">Convenient, locked to PrepFlow</div>
+                <div className="mt-1 text-xs text-[var(--foreground-muted)]">
+                  Convenient, locked to PrepFlow
+                </div>
               </button>
               <button
                 onClick={() => setEncryptionMode('user-password')}
@@ -177,7 +175,9 @@ export function ManualBackupControls({ onBackupCreated }: ManualBackupControlsPr
                 }`}
               >
                 <div className="font-medium">Password-Protected</div>
-                <div className="mt-1 text-xs text-[var(--foreground-muted)]">Portable, works anywhere</div>
+                <div className="mt-1 text-xs text-[var(--foreground-muted)]">
+                  Portable, works anywhere
+                </div>
               </button>
             </div>
           </div>
@@ -186,7 +186,9 @@ export function ManualBackupControls({ onBackupCreated }: ManualBackupControlsPr
         {/* Password Input (for user-password mode) */}
         {format === 'encrypted' && encryptionMode === 'user-password' && (
           <div>
-            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Password</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+              Password
+            </label>
             <input
               type="password"
               value={password}
@@ -204,19 +206,17 @@ export function ManualBackupControls({ onBackupCreated }: ManualBackupControlsPr
         <div className="flex gap-3">
           <button
             onClick={handleCreateBackup}
-            disabled={creating || uploading}
-            className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-3 font-medium text-[var(--button-active-text)] transition-all hover:shadow-lg disabled:opacity-50"
+            className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-3 font-medium text-[var(--button-active-text)] transition-all hover:shadow-lg"
           >
             <Icon icon={Download} size="sm" />
-            {creating ? 'Creating...' : 'Create & Download Backup'}
+            Create & Download Backup
           </button>
           <button
             onClick={handleUploadToDrive}
-            disabled={creating || uploading}
-            className="flex items-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/20 px-4 py-3 text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/40 disabled:opacity-50"
+            className="flex items-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/20 px-4 py-3 text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/40"
           >
             <Icon icon={CloudUpload} size="sm" />
-            {uploading ? 'Uploading...' : 'Upload to Drive'}
+            Upload to Drive
           </button>
         </div>
       </div>

@@ -6,7 +6,7 @@ import { parseTemperatureLogsCSV } from './parseTemperatureLogsCSV';
 import { validateTemperatureLog } from './validateTemperatureLog';
 import { formatTemperatureLogPreview } from './formatTemperatureLogPreview';
 import { generateTemperatureLogTemplate } from './generateTemperatureLogTemplate';
-import type { TemperatureLogImportRow } from '../temperature-import';
+import type { TemperatureLogImportRow } from '../../temperature-import';
 
 export const temperatureLogImportConfig: CSVImportConfig<TemperatureLogImportRow> = {
   entityName: 'Temperature Log',
@@ -27,4 +27,3 @@ export const temperatureLogImportConfig: CSVImportConfig<TemperatureLogImportRow
     'Temperature should be in Celsius',
   ],
 };
-

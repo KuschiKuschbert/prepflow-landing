@@ -44,7 +44,7 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
               onClick={() => onTabChange(tab.id)}
               className={`group tablet:px-6 relative flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-2xl px-4 py-3 font-semibold transition-all duration-300 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none ${
                 isActive
-                  ? 'scale-[1.02] bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl border border-[var(--primary)]/30'
+                  ? 'scale-[1.02] border border-[var(--primary)]/30 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl'
                   : 'text-[var(--foreground-secondary)] hover:bg-[var(--muted)] hover:text-[var(--button-active-text)]'
               }`}
               aria-pressed={isActive}

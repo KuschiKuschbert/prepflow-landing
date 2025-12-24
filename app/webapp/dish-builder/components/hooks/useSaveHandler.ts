@@ -23,15 +23,11 @@ export function useSaveHandler({
   setError,
   onSaveSuccess,
 }: UseSaveHandlerProps) {
-  const [saving, setSaving] = useState(false);
   const { showSuccess, showError } = useNotification();
   const onRecipeCreated = useOnRecipeCreated();
   const onDishCreated = useOnDishCreated();
 
   const handleSave = async () => {
-    if (saving) return; // Prevent double-clicks
-
-    setSaving(true);
     try {
       const result = await saveDish();
       if (result.success) {
@@ -61,10 +57,8 @@ export function useSaveHandler({
         err instanceof Error ? err.message : `Failed to save ${dishState.itemType}`;
       setError(errorMessage);
       showError(errorMessage);
-    } finally {
-      setSaving(false);
     }
   };
 
-  return { saving, handleSave };
+  return { handleSave };
 }

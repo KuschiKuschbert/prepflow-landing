@@ -72,7 +72,8 @@ export function useProfileApiFetch({
       showError,
       currentMountId,
     );
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Effect should only run once on mount; refs and constants don't need to be in deps
 
   return {
     profile,

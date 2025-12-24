@@ -81,7 +81,10 @@ export function DishSidePanelContent({
               const recipeYield = dr.recipes?.yield || 1;
               const recipeYieldUnit = dr.recipes?.yield_unit || 'servings';
               return (
-                <div key={index} className="rounded-lg bg-[var(--muted)]/30 p-3 text-sm text-[var(--foreground-secondary)]">
+                <div
+                  key={index}
+                  className="rounded-lg bg-[var(--muted)]/30 p-3 text-sm text-[var(--foreground-secondary)]"
+                >
                   <span className="font-medium text-[var(--foreground)]">
                     {dr.recipes?.recipe_name || (dr.recipes as any)?.name || 'Unknown Recipe'}
                   </span>
@@ -99,12 +102,20 @@ export function DishSidePanelContent({
       {dishDetails?.ingredients && dishDetails.ingredients.length > 0 && (
         <div>
           <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-[var(--foreground)]">
-            <Icon icon={UtensilsCrossed} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+            <Icon
+              icon={UtensilsCrossed}
+              size="sm"
+              className="text-[var(--primary)]"
+              aria-hidden={true}
+            />
             Standalone Ingredients
           </h3>
           <div className="space-y-2">
             {dishDetails.ingredients.map((di, index) => (
-              <div key={index} className="rounded-lg bg-[var(--muted)]/30 p-3 text-sm text-[var(--foreground-secondary)]">
+              <div
+                key={index}
+                className="rounded-lg bg-[var(--muted)]/30 p-3 text-sm text-[var(--foreground-secondary)]"
+              >
                 <span className="font-medium text-[var(--foreground)]">
                   {di.ingredients?.ingredient_name || 'Unknown Ingredient'}
                 </span>

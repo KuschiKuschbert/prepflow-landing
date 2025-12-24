@@ -31,7 +31,12 @@ export function AutosaveGlobalIndicator() {
     return () => window.removeEventListener('autosave:status', onStatus as EventListener);
   }, []);
 
-  const color = status === 'saving' ? '#29E7CD' : status === 'saved' ? 'var(--color-success)' : 'var(--color-error)';
+  const color =
+    status === 'saving'
+      ? '#29E7CD'
+      : status === 'saved'
+        ? 'var(--color-success)'
+        : 'var(--color-error)';
   const label =
     status === 'saving' ? 'Saving…' : status === 'saved' ? 'Saved to PrepFlow' : 'Save error';
 

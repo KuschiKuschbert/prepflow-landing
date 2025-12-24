@@ -31,7 +31,9 @@ export function BulkAddToMenuDialog({
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-xl font-bold text-[var(--foreground)]">Add to Menu</h3>
-                <p className="text-sm text-[var(--foreground-muted)]">Select a menu to add selected items</p>
+                <p className="text-sm text-[var(--foreground-muted)]">
+                  Select a menu to add selected items
+                </p>
               </div>
               <button
                 onClick={onClose}
@@ -71,11 +73,18 @@ export function BulkAddToMenuDialog({
                   className="flex w-full items-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--background)] p-4 text-left transition-colors hover:border-[var(--primary)]/50 hover:bg-[var(--muted)]"
                 >
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]">
-                    <Icon icon={Plus} size="sm" className="text-[var(--button-active-text)]" aria-hidden={true} />
+                    <Icon
+                      icon={Plus}
+                      size="sm"
+                      className="text-[var(--button-active-text)]"
+                      aria-hidden={true}
+                    />
                   </div>
                   <div>
                     <div className="font-medium text-[var(--foreground)]">Create New Menu</div>
-                    <div className="text-sm text-[var(--foreground-muted)]">Start a new menu from scratch</div>
+                    <div className="text-sm text-[var(--foreground-muted)]">
+                      Start a new menu from scratch
+                    </div>
                   </div>
                 </button>
 
@@ -92,7 +101,9 @@ export function BulkAddToMenuDialog({
                       <div className="flex-1">
                         <div className="font-medium text-[var(--foreground)]">{menu.menu_name}</div>
                         {menu.description && (
-                          <div className="mt-1 text-sm text-[var(--foreground-muted)]">{menu.description}</div>
+                          <div className="mt-1 text-sm text-[var(--foreground-muted)]">
+                            {menu.description}
+                          </div>
                         )}
                         <div className="mt-1 text-xs text-[var(--foreground-subtle)]">
                           {menu.items_count || 0} item{(menu.items_count || 0) !== 1 ? 's' : ''}

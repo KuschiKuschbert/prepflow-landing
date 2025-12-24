@@ -45,6 +45,7 @@ export default function CogsClient() {
     error,
     fetchData,
     setSelectedRecipe,
+    setRecipes,
     updateCalculation,
     removeCalculation,
     addCalculation,
@@ -82,8 +83,12 @@ export default function CogsClient() {
     onError: err => setSaveError(err),
   });
   const recipeExistsLocally = Boolean(selectedRecipeData);
-  const { sortedCalculations, sortField, sortDirection, onSortChange } = useCOGSSorting(calculations);
-  const totalCOGS = useMemo(() => calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0), [calculations]);
+  const { sortedCalculations, sortField, sortDirection, onSortChange } =
+    useCOGSSorting(calculations);
+  const totalCOGS = useMemo(
+    () => calculations.reduce((sum, calc) => sum + calc.yieldAdjustedCost, 0),
+    [calculations],
+  );
   const costPerPortion = totalCOGS / (dishPortions || 1);
   const {
     targetGrossProfit,
@@ -171,16 +176,17 @@ export default function CogsClient() {
       });
     }
   };
-  const { handleRecipeSelect, handleCreateNewRecipe, handleCreateRecipe, handleFinishRecipe } = useRecipeHandlers({
+  const { handleRecipeSelect, handleCreateNewRecipe, handleCreateRecipe, handleFinishRecipe } =
+    useRecipeHandlers({
       recipes,
       selectedRecipe,
       dishPortions,
       calculations,
+      setRecipes,
       setSelectedRecipe,
       setDishPortions: handleDishPortionsFromRecipe,
       setShowCreateModal,
       createOrUpdateRecipe,
-      fetchData,
       saveNow: saveNowAutosave,
       setSaveError,
     });

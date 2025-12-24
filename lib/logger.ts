@@ -47,7 +47,7 @@ async function storeErrorInDatabase(
       const severity = context?.severity || detectSeverity(detectionContext);
       const category = context?.category || detectCategory(detectionContext);
 
-      await supabaseAdmin.from('admin_error_logs').insert({
+      const { error: insertError } = await supabaseAdmin.from('admin_error_logs').insert({
         user_id: context?.userId || null,
         endpoint: context?.endpoint || null,
         error_message: message,
@@ -57,9 +57,15 @@ async function storeErrorInDatabase(
         category,
         status: 'new',
       });
+
+      if (insertError) {
+        // Silently fail - don't let error logging break the app
+        // Use console.error directly to avoid circular dependency (logger.error would cause infinite loop)
+        console.error('[Logger] Failed to store error in database:', insertError);
+      }
     } catch (err) {
       // Silently fail - don't let error logging break the app
-      // Use console.error directly to avoid circular dependency
+      // Use console.error directly to avoid circular dependency (logger.error would cause infinite loop)
       console.error('[Logger] Failed to store error in database:', err);
     }
   }, 0);

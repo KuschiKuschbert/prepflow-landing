@@ -32,4 +32,3 @@ export function generateSupplierTemplate(): string {
 
   return [headers.join(','), exampleRow.join(',')].join('\n');
 }
-

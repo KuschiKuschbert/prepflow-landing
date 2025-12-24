@@ -12,12 +12,16 @@ const createOrderListSchema = z.object({
   supplierId: z.string().min(1, 'Supplier ID is required'),
   name: z.string().min(1, 'Order list name is required'),
   notes: z.string().optional(),
-  items: z.array(z.object({
-    ingredient_id: z.string().optional(),
-    quantity: z.number().optional(),
-    unit: z.string().optional(),
-    notes: z.string().optional(),
-  })).optional(),
+  items: z
+    .array(
+      z.object({
+        ingredient_id: z.string().optional(),
+        quantity: z.number().optional(),
+        unit: z.string().optional(),
+        notes: z.string().optional(),
+      }),
+    )
+    .optional(),
 });
 
 export async function GET(request: NextRequest) {
@@ -142,14 +146,34 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Convert supplierId from string to number
+    const supplierIdNum = parseInt(supplierId, 10);
+    if (isNaN(supplierIdNum)) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid supplier ID', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    // Transform items array from schema format (snake_case) to function format (camelCase)
+    const transformedItems =
+      items
+        ?.map(item => ({
+          ingredientId: item.ingredient_id || '',
+          quantity: item.quantity || 0,
+          unit: item.unit || '',
+          notes: item.notes,
+        }))
+        .filter(item => item.ingredientId) || undefined;
+
     const orderList = await createOrderListWithItems(
       {
         user_id: userId,
-        supplier_id: supplierId,
+        supplier_id: supplierIdNum,
         name,
         notes,
       },
-      items,
+      transformedItems,
     );
 
     return NextResponse.json({

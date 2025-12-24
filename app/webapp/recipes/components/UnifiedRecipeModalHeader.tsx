@@ -20,7 +20,6 @@ interface UnifiedRecipeModalHeaderProps {
   recipe: Recipe;
   activeTab: ModalTab;
   dishPortions: number;
-  shareLoading: boolean;
   capitalizeRecipeName: (name: string) => string;
   onEditRecipe: (recipe: Recipe) => void;
   onShareRecipe: () => void;
@@ -35,7 +34,6 @@ export function UnifiedRecipeModalHeader({
   recipe,
   activeTab,
   dishPortions,
-  shareLoading,
   capitalizeRecipeName,
   onEditRecipe,
   onShareRecipe,
@@ -93,7 +91,12 @@ export function UnifiedRecipeModalHeader({
             className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[#3B82F6] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[#3B82F6]/80"
             title="Edit recipe (Press E)"
           >
-            <Icon icon={Edit} size="sm" className="text-[var(--button-active-text)]" aria-hidden={true} />
+            <Icon
+              icon={Edit}
+              size="sm"
+              className="text-[var(--button-active-text)]"
+              aria-hidden={true}
+            />
             <span className="tablet:inline hidden">Edit</span>
             <span className="tablet:inline hidden text-xs opacity-70">(E)</span>
           </button>
@@ -107,26 +110,11 @@ export function UnifiedRecipeModalHeader({
           </button>
           <button
             onClick={onShareRecipe}
-            disabled={shareLoading}
-            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#10B981] to-[#059669] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[#10B981]/80 hover:to-[#059669]/80 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#10B981] to-[#059669] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[#10B981]/80 hover:to-[#059669]/80"
             title="Share recipe"
           >
-            {shareLoading ? (
-              <>
-                <Icon
-                  icon={Loader2}
-                  size="sm"
-                  className="animate-spin text-[var(--foreground)]"
-                  aria-hidden={true}
-                />
-                <span className="tablet:inline hidden">Sharing...</span>
-              </>
-            ) : (
-              <>
-                <Icon icon={Share2} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
-                <span className="tablet:inline hidden">Share</span>
-              </>
-            )}
+            <Icon icon={Share2} size="sm" aria-hidden={true} />
+            <span className="tablet:inline hidden">Share</span>
           </button>
           <button
             onClick={onPrint}

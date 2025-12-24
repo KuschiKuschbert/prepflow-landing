@@ -10,7 +10,8 @@ import { supabaseAdmin } from '@/lib/supabase';
  * @throws {Error} If recipe not found
  */
 export async function fetchRecipeWithIngredients(recipeId: string) {
-  if (!supabaseAdmin) throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  if (!supabaseAdmin)
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
 
   const { data: recipe, error: recipeError } = await supabaseAdmin
     .from('recipes')

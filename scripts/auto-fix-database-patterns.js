@@ -12,7 +12,10 @@ const { execSync } = require('child_process');
 // Get files with violations from cleanup check
 function getViolationsFromCleanup() {
   try {
-    const output = execSync('npm run cleanup:check 2>&1', { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
+    const output = execSync('npm run cleanup:check 2>&1', {
+      encoding: 'utf8',
+      maxBuffer: 10 * 1024 * 1024,
+    });
     // Parse output to find database pattern violations
     // This is a simplified approach - in reality we'd parse the JSON report
     return [];
@@ -46,7 +49,8 @@ function findViolationFiles() {
 
 // Pattern 1: Fix throw new Error('Database connection not available')
 function fixThrowDbConnection(content, filePath) {
-  const pattern = /if\s*\(!supabaseAdmin\)\s*\{\s*throw\s+new\s+Error\(['"]Database connection not available['"]\)/g;
+  const pattern =
+    /if\s*\(!supabaseAdmin\)\s*\{\s*throw\s+new\s+Error\(['"]Database connection not available['"]\)/g;
 
   if (!pattern.test(content)) return { changed: false, content };
 
@@ -201,7 +205,9 @@ function main() {
     console.log(`${i + 1}. ${fix.file} (${fix.pattern})`);
   });
 
-  console.log(`\nFound ${needsReview.length} files with .catch() chaining (needs manual review):\n`);
+  console.log(
+    `\nFound ${needsReview.length} files with .catch() chaining (needs manual review):\n`,
+  );
   needsReview.forEach((item, i) => {
     console.log(`${i + 1}. ${item.file} (${item.count} instances)`);
   });

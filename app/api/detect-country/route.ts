@@ -23,8 +23,11 @@ export async function GET(request: NextRequest) {
       source: countryCode ? 'ip' : 'browser',
     });
   } catch (error) {
-    logger.error('Error detecting country:', error);
-    // Return default fallback
+    logger.error('[Detect Country API] Error detecting country:', {
+      error: error instanceof Error ? error.message : String(error),
+      context: { endpoint: '/api/detect-country', method: 'GET' },
+    });
+    // Return default fallback (graceful degradation)
     return NextResponse.json({
       success: true,
       country: 'AU',

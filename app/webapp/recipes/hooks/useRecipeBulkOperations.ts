@@ -47,6 +47,9 @@ export function useRecipeBulkOperations(
     const selectedRecipeIds = Array.from(selectedRecipes);
     const count = selectedRecipes.size;
 
+    // Store original state for rollback
+    const originalRecipes = [...recipes];
+
     try {
       optimisticallyUpdateRecipes(prev => prev.filter(r => !selectedRecipeIds.includes(r.id)));
       const response = await fetch('/api/recipes/bulk-delete', {
@@ -58,7 +61,7 @@ export function useRecipeBulkOperations(
       const result = await response.json();
 
       if (!response.ok) {
-        rollbackRecipes();
+        optimisticallyUpdateRecipes(() => originalRecipes);
         const errorMessage = result.message || result.error || 'Failed to delete recipes';
         showErrorNotification(errorMessage);
         return;
@@ -69,21 +72,15 @@ export function useRecipeBulkOperations(
       setShowBulkDeleteConfirm(false);
     } catch (err) {
       logger.error('[useRecipeBulkOperations.ts] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
-      rollbackRecipes();
+      optimisticallyUpdateRecipes(() => originalRecipes);
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete recipes';
       showErrorNotification(errorMessage);
     }
-  }, [
-    selectedRecipes,
-    showSuccess,
-    showErrorNotification,
-    optimisticallyUpdateRecipes,
-    rollbackRecipes,
-  ]);
+  }, [selectedRecipes, recipes, showSuccess, showErrorNotification, optimisticallyUpdateRecipes]);
 
   const cancelBulkDelete = useCallback(() => {
     setShowBulkDeleteConfirm(false);

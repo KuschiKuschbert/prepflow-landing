@@ -37,9 +37,9 @@ export function useRecipeCRUD({ setError }: UseRecipeCRUDProps) {
         return { recipe: result.recipe, isNew: result.isNew };
       } catch (err) {
         logger.error('[useRecipeCRUD.ts] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+          error: err instanceof Error ? err.message : String(err),
+          stack: err instanceof Error ? err.stack : undefined,
+        });
 
         const errorMessage = err instanceof Error ? err.message : 'Failed to save recipe';
         setError(errorMessage);
@@ -70,9 +70,9 @@ export function useRecipeCRUD({ setError }: UseRecipeCRUDProps) {
         return { success: true };
       } catch (err) {
         logger.error('[useRecipeCRUD.ts] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+          error: err instanceof Error ? err.message : String(err),
+          stack: err instanceof Error ? err.stack : undefined,
+        });
 
         const errorMessage =
           err instanceof Error ? err.message : 'Failed to save recipe ingredients';

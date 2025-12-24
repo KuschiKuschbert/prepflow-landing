@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Active sessions section component.
  */

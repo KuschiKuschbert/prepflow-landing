@@ -114,6 +114,388 @@ openssl rand -base64 32  # For AUTH0_SECRET
 - **Verify origin headers** for API requests
 - **Use SameSite cookies** for session management
 
+**See Also:**
+- `security.mdc` (Database Query Security Patterns) - Secure database query patterns
+- `security.mdc` (Input Sanitization & Validation Standards) - Input validation requirements
+
+### **Database Query Security Patterns**
+
+**MANDATORY:** All database queries must follow these security patterns to prevent SQL injection and ensure data integrity.
+
+#### **Supabase Query Safety**
+
+**Safe Patterns (✅ Use These):**
+
+```typescript
+// ✅ SAFE: Use Supabase query builder methods
+const { data, error } = await supabase
+  .from('recipes')
+  .select('*')
+  .eq('id', recipeId) // Parameterized automatically
+  .like('name', `%${searchTerm}%`) // Handles escaping
+
+// ✅ SAFE: Use .in() with array
+const { data, error } = await supabase
+  .from('ingredients')
+  .select('*')
+  .in('id', ingredientIds) // Array is safely parameterized
+
+// ✅ SAFE: Use .ilike() with proper escaping
+const { data, error } = await supabase
+  .from('recipes')
+  .select('*')
+  .ilike('name', `%${searchTerm}%`) // Supabase handles escaping
+
+// ✅ SAFE: Filter objects
+const { data, error } = await supabase
+  .from('recipes')
+  .select('*')
+  .filter('name', 'ilike', `%${searchTerm}%`) // Explicit filter method
+```
+
+**Unsafe Patterns (❌ NEVER Use These):**
+
+```typescript
+// ❌ UNSAFE: String interpolation in .or() clause
+query.or(`name.ilike.%${userInput}%,email.ilike.%${userInput}%`)
+// Problem: While Supabase escapes values, string interpolation is error-prone
+
+// ❌ UNSAFE: Raw SQL with user input
+await supabase.rpc('custom_function', { query: userInput })
+// Problem: If function uses string concatenation, vulnerable to SQL injection
+
+// ❌ UNSAFE: Direct value insertion without validation
+await supabase.from('table').insert({ name: userInput })
+// Problem: Should validate and sanitize userInput first
+```
+
+**Recommended Safe Pattern for Complex Queries:**
+
+```typescript
+// ✅ SAFE: Build queries incrementally with validation
+function buildSafeSearchQuery(searchTerm: string) {
+  // Validate and sanitize input first
+  const sanitized = searchTerm.trim().slice(0, 200); // Limit length
+
+  // Use filter() method for complex queries (safer than string interpolation)
+  let query = supabase.from('recipes').select('*');
+
+  query = query.or(`name.ilike.%${sanitized}%,description.ilike.%${sanitized}%`);
+  // Note: Supabase escapes values in .or() clauses, but sanitize first anyway
+
+  return query;
+}
+
+// Better: Use separate .or() calls or .filter() with explicit escaping
+function buildSaferSearchQuery(searchTerm: string) {
+  const sanitized = escapeSearchTerm(searchTerm); // Custom sanitization
+
+  return supabase
+    .from('recipes')
+    .select('*')
+    .or(`name.ilike.%${sanitized}%,description.ilike.%${sanitized}%`);
+}
+```
+
+#### **Input Sanitization for Search Queries**
+
+```typescript
+// lib/utils/sanitize.ts
+/**
+ * Sanitize search input to prevent injection attacks
+ */
+export function sanitizeSearchInput(input: string): string {
+  return input
+    .trim()
+    .slice(0, 200) // Limit length
+    .replace(/[%_]/g, '') // Remove SQL wildcards (optional - Supabase handles this)
+    .replace(/[<>]/g, ''); // Remove potential HTML (defense in depth)
+}
+
+/**
+ * Escape special characters for Supabase .ilike() queries
+ */
+export function escapeSearchTerm(term: string): string {
+  // Supabase handles escaping, but we sanitize anyway for safety
+  return term
+    .trim()
+    .slice(0, 200)
+    .replace(/[\\%_]/g, (char) => `\\${char}`); // Escape backslash, %, _
+}
+```
+
+#### **Query Parameter Validation**
+
+**MANDATORY:** Validate all query parameters before use:
+
+```typescript
+// ✅ SAFE: Validate before query
+const schema = z.object({
+  page: z.number().int().positive().default(1),
+  pageSize: z.number().int().positive().max(100).default(20),
+  search: z.string().max(200).optional(),
+});
+
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+  const params = schema.parse({
+    page: Number(searchParams.get('page')) || 1,
+    pageSize: Number(searchParams.get('pageSize')) || 20,
+    search: searchParams.get('search') || undefined,
+  });
+
+  // Now params are validated and safe to use
+  const query = supabase.from('recipes').select('*');
+
+  if (params.search) {
+    const sanitized = sanitizeSearchInput(params.search);
+    query.ilike('name', `%${sanitized}%`);
+  }
+
+  // ... rest of query
+}
+```
+
+#### **Query Timeout Protection**
+
+**RECOMMENDED:** Add timeout protection for all database queries:
+
+```typescript
+// lib/utils/query-timeout.ts
+export async function withQueryTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number = 10000
+): Promise<T> {
+  const timeout = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error('Query timeout')), timeoutMs)
+  );
+
+  return Promise.race([promise, timeout]);
+}
+
+// Usage:
+const { data, error } = await withQueryTimeout(
+  supabase.from('recipes').select('*'),
+  5000 // 5 second timeout
+);
+```
+
+#### **Query Result Validation**
+
+**RECOMMENDED:** Validate query results match expected schema:
+
+```typescript
+// Define result schema
+const RecipeSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  description: z.string().optional(),
+  // ... other fields
+});
+
+// Validate results
+const { data, error } = await supabase.from('recipes').select('*');
+
+if (error) {
+  throw new Error(`Query failed: ${error.message}`);
+}
+
+// Validate all results match schema
+const validatedData = data?.map(recipe => RecipeSchema.parse(recipe)) || [];
+```
+
+#### **Connection Pooling Best Practices**
+
+**MANDATORY:** Follow these patterns for database connections:
+
+```typescript
+// ✅ CORRECT: Use singleton Supabase client
+import { supabaseAdmin } from '@/lib/supabase';
+
+// ✅ CORRECT: Use connection pooling (Supabase handles automatically)
+// No need to manage connections manually
+
+// ❌ INCORRECT: Creating new clients for each request
+const supabase = createClient(...); // Don't do this in route handlers
+```
+
+#### **Query Security Checklist**
+
+For every database query, verify:
+- [ ] User input is validated before use
+- [ ] User input is sanitized (search terms, filters)
+- [ ] Supabase query builder methods are used (no raw SQL)
+- [ ] Query parameters are type-checked
+- [ ] Query results are validated against schema
+- [ ] Query timeouts are implemented (for long-running queries)
+- [ ] Error handling doesn't expose sensitive information
+- [ ] Queries use indexes (where applicable)
+- [ ] Queries are paginated (for large datasets)
+
+**See Also:**
+- `security.mdc` (Input Sanitization & Validation Standards) - Comprehensive input validation patterns
+- `core.mdc` (Supabase TypeScript Gotcha) - Query builder patterns
+
+### **Input Sanitization & Validation Standards**
+
+**MANDATORY:** All user input must be validated and sanitized before use.
+
+#### **Input Sanitization Library**
+
+**RECOMMENDED:** Use DOMPurify for HTML sanitization when needed:
+
+```typescript
+// lib/utils/sanitize.ts
+import DOMPurify from 'isomorphic-dompurify';
+
+/**
+ * Sanitize HTML content to prevent XSS attacks
+ */
+export function sanitizeHTML(html: string): string {
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'p', 'br'],
+    ALLOWED_ATTR: [],
+  });
+}
+
+/**
+ * Sanitize text input (removes HTML tags)
+ */
+export function sanitizeText(input: string): string {
+  return DOMPurify.sanitize(input, { ALLOWED_TAGS: [] });
+}
+
+/**
+ * Sanitize search input
+ */
+export function sanitizeSearchInput(input: string): string {
+  return input
+    .trim()
+    .slice(0, 200) // Limit length
+    .replace(/[<>]/g, '') // Remove HTML brackets
+    .replace(/javascript:/gi, '') // Remove javascript: protocol
+    .replace(/on\w+=/gi, ''); // Remove event handlers
+}
+```
+
+#### **React XSS Prevention**
+
+**MANDATORY:** Follow these patterns in React components:
+
+```typescript
+// ✅ SAFE: React automatically escapes JSX
+<div>{userInput}</div> // Automatically escaped
+
+// ✅ SAFE: Using dangerouslySetInnerHTML with sanitization
+<div dangerouslySetInnerHTML={{ __html: sanitizeHTML(userContent) }} />
+
+// ❌ UNSAFE: Using dangerouslySetInnerHTML without sanitization
+<div dangerouslySetInnerHTML={{ __html: userContent }} />
+
+// ❌ UNSAFE: Direct HTML string manipulation
+element.innerHTML = userContent;
+
+// ❌ UNSAFE: eval() with user input
+eval(userInput);
+```
+
+#### **URL Validation**
+
+**MANDATORY:** Validate URLs before use:
+
+```typescript
+// lib/utils/validate-url.ts
+import { z } from 'zod';
+
+const urlSchema = z.string().url().refine(
+  (url) => {
+    try {
+      const parsed = new URL(url);
+      // Only allow http/https protocols
+      return ['http:', 'https:'].includes(parsed.protocol);
+    } catch {
+      return false;
+    }
+  },
+  { message: 'Invalid URL protocol' }
+);
+
+export function validateURL(url: string): boolean {
+  return urlSchema.safeParse(url).success;
+}
+
+// Usage:
+if (!validateURL(userProvidedURL)) {
+  throw new Error('Invalid URL');
+}
+```
+
+#### **File Upload Security**
+
+**MANDATORY:** Secure file upload handling:
+
+```typescript
+// lib/utils/validate-file.ts
+import { z } from 'zod';
+
+const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
+export function validateFile(file: File): { valid: boolean; error?: string } {
+  // Check file type
+  if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+    return { valid: false, error: 'Invalid file type' };
+  }
+
+  // Check file size
+  if (file.size > MAX_FILE_SIZE) {
+    return { valid: false, error: 'File too large' };
+  }
+
+  // Check file name
+  if (!/^[a-zA-Z0-9._-]+$/.test(file.name)) {
+    return { valid: false, error: 'Invalid file name' };
+  }
+
+  return { valid: true };
+}
+```
+
+#### **JSON Input Validation**
+
+**MANDATORY:** Validate JSON input with Zod:
+
+```typescript
+// Always validate JSON input
+const body = await request.json();
+const validatedData = schema.parse(body); // Throws if invalid
+
+// Never trust JSON structure without validation
+// ❌ BAD:
+const data = await request.json();
+const name = data.name; // No validation!
+
+// ✅ GOOD:
+const schema = z.object({ name: z.string().min(1) });
+const { name } = schema.parse(await request.json());
+```
+
+#### **Input Sanitization Checklist**
+
+For every user input, verify:
+- [ ] Input is validated with Zod schema
+- [ ] Input is sanitized (if needed for display)
+- [ ] Input length is limited
+- [ ] Input type is checked (string, number, etc.)
+- [ ] Special characters are handled safely
+- [ ] HTML content is sanitized (if displayed)
+- [ ] URLs are validated (if used in links/redirects)
+- [ ] File uploads are validated (type, size, name)
+
+**See Also:**
+- `security.mdc` (Database Query Security Patterns) - Query parameter validation
+- `security.mdc` (API Security) - API input validation requirements
+
 ### **Authentication & Authorization**
 
 **📚 Auth0 Implementation:** See `docs/AUTH0_STRIPE_REFERENCE.md` (Auth0 Configuration section) for complete Auth0 setup, session management, and role extraction.
@@ -272,6 +654,174 @@ For every new API endpoint:
 - [ ] No secrets in logs or error messages
 - [ ] SQL injection prevention verified
 - [ ] XSS prevention verified
+
+### **Security Hardening Patterns**
+
+**MANDATORY:** Apply these security hardening patterns throughout the codebase.
+
+#### **Content Security Policy (CSP) Hardening**
+
+**RECOMMENDED:** Implement strict CSP with nonce-based inline scripts:
+
+```typescript
+// middleware.ts or next.config.ts
+const nonce = Buffer.from(crypto.randomBytes(16)).toString('base64');
+
+// In headers:
+{
+  key: 'Content-Security-Policy',
+  value: `
+    default-src 'self';
+    script-src 'self' 'nonce-${nonce}' https://www.googletagmanager.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    img-src 'self' data: https:;
+    connect-src 'self' https://*.supabase.co;
+    font-src 'self' https://fonts.gstatic.com;
+  `.replace(/\s+/g, ' ').trim()
+}
+```
+
+#### **HTTP Security Headers**
+
+**MANDATORY:** Include all security headers (see Security Headers section for full list):
+
+- X-Frame-Options: DENY
+- X-Content-Type-Options: nosniff
+- X-XSS-Protection: 1; mode=block
+- Strict-Transport-Security: max-age=31536000
+- Content-Security-Policy: (configured per application)
+- Referrer-Policy: origin-when-cross-origin
+- Permissions-Policy: (restrictive)
+- Cross-Origin-Embedder-Policy: require-corp
+- Cross-Origin-Opener-Policy: same-origin
+- Cross-Origin-Resource-Policy: same-origin
+
+#### **Rate Limiting Hardening**
+
+**RECOMMENDED:** Implement progressive rate limiting:
+
+```typescript
+// lib/rate-limit.ts (enhanced)
+interface RateLimitConfig {
+  windowMs: number;
+  maxRequests: number;
+  blockDuration?: number; // Block IP after exceeding limit
+}
+
+// Progressive rate limiting
+const RATE_LIMITS: Record<string, RateLimitConfig> = {
+  '/api/auth/login': {
+    windowMs: 15 * 60 * 1000,
+    maxRequests: 5,
+    blockDuration: 30 * 60 * 1000, // Block for 30 minutes
+  },
+  '/api/auth/register': {
+    windowMs: 60 * 60 * 1000,
+    maxRequests: 3,
+    blockDuration: 60 * 60 * 1000, // Block for 1 hour
+  },
+};
+```
+
+#### **Session Security Hardening**
+
+**MANDATORY:** Implement secure session management:
+
+```typescript
+// Session configuration
+const sessionConfig = {
+  httpOnly: true, // Prevent XSS access
+  secure: process.env.NODE_ENV === 'production', // HTTPS only
+  sameSite: 'strict' as const, // CSRF protection
+  maxAge: 4 * 60 * 60, // 4 hours
+  path: '/',
+};
+```
+
+#### **API Key Security**
+
+**MANDATORY:** Secure API key handling:
+
+```typescript
+// ✅ GOOD: Environment variables
+const apiKey = process.env.SECRET_API_KEY;
+
+// ✅ GOOD: Validate API key format
+function validateApiKey(key: string): boolean {
+  return /^[a-zA-Z0-9]{32,}$/.test(key);
+}
+
+// ❌ BAD: Hardcoded keys
+const apiKey = 'hardcoded-key-123';
+
+// ❌ BAD: Exposed in client code
+const apiKey = process.env.NEXT_PUBLIC_API_KEY; // Don't use NEXT_PUBLIC_ for secrets
+```
+
+#### **Logging Security**
+
+**MANDATORY:** Never log sensitive information:
+
+```typescript
+// ✅ GOOD: Sanitized logging
+logger.info('User action', {
+  userId: user.id,
+  action: 'login',
+  // Never log: passwords, tokens, PII
+});
+
+// ❌ BAD: Logging sensitive data
+logger.info('User login', {
+  email: user.email,
+  password: user.password, // NEVER!
+  token: user.token, // NEVER!
+});
+```
+
+#### **Dependency Security**
+
+**MANDATORY:** Regular security audits:
+
+```bash
+# Weekly: Check for vulnerabilities
+npm audit
+
+# Monthly: Update dependencies
+npm update
+
+# Quarterly: Major updates with testing
+npm audit fix --force
+```
+
+#### **Secrets Rotation**
+
+**MANDATORY:** Regular secret rotation schedule:
+
+- **Production secrets:** Rotate every 90 days
+- **Development secrets:** Rotate every 180 days
+- **Compromised secrets:** Rotate immediately
+- **Service account keys:** Rotate every 60 days
+
+#### **Security Hardening Checklist**
+
+For every security-sensitive operation, verify:
+- [ ] Input is validated and sanitized
+- [ ] Output is sanitized (if user-generated)
+- [ ] Authentication is verified
+- [ ] Authorization is checked
+- [ ] Rate limiting is applied
+- [ ] Secrets are not logged
+- [ ] Errors don't leak sensitive information
+- [ ] Security headers are present
+- [ ] HTTPS is enforced (production)
+- [ ] Session security is configured
+- [ ] Dependencies are up-to-date
+- [ ] Security audits are run regularly
+
+**See Also:**
+- `security.mdc` (Security Headers) - Complete security headers configuration
+- `security.mdc` (API Security) - API security requirements
+- `operations.mdc` (Dependency Management) - Dependency update procedures
 
 ## 🤖 **Automated Enforcement**
 

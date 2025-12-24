@@ -34,9 +34,9 @@ export async function GET(request: NextRequest) {
       }
     } catch (err) {
       logger.error('[route.ts] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
       // User not found - return empty array
       return NextResponse.json({

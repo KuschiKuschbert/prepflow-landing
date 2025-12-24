@@ -83,7 +83,11 @@ function SubscriptionStatusBannerContent({ className = '' }: SubscriptionStatusB
       ? 'border-[var(--color-error)]/30 bg-[var(--color-error)]/10'
       : 'border-[var(--color-info)]/30 bg-[var(--color-info)]/10';
 
-  const iconColor = isPastDue ? 'text-[var(--color-warning)]' : isCancelled ? 'text-[var(--color-error)]' : 'text-[var(--color-info)]';
+  const iconColor = isPastDue
+    ? 'text-[var(--color-warning)]'
+    : isCancelled
+      ? 'text-[var(--color-error)]'
+      : 'text-[var(--color-info)]';
 
   const icon = isPastDue || isCancelled ? AlertTriangle : Info;
 

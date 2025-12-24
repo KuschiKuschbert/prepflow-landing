@@ -87,4 +87,3 @@ export async function syncCustomerEmails(limit: number = 100): Promise<{
     return { synced, errors: errors + 1 };
   }
 }
-

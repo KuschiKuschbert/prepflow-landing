@@ -42,15 +42,8 @@ export async function GET(request: NextRequest) {
 
     const config = await getSquareConfig(userId);
 
-    return NextResponse.json({
-      success: true,
-      config: config
-        ? {
-            ...config,
-            square_access_token_encrypted: undefined, // Don't send encrypted token to client
-          }
-        : null,
-    });
+    const safeConfig = config ? { ...config, square_access_token_encrypted: undefined } : null;
+    return NextResponse.json({ success: true, config: safeConfig });
   } catch (error) {
     logger.error('[Square Config API] Error:', {
       error: error instanceof Error ? error.message : String(error),
@@ -60,15 +53,17 @@ export async function GET(request: NextRequest) {
   }
 }
 
-const squareConfigSchema = z.object({
-  square_location_id: z.string().min(1).optional(),
-  square_access_token_encrypted: z.string().optional(),
-  square_application_id: z.string().optional(),
-  square_application_secret: z.string().optional(),
-  sync_enabled: z.boolean().optional(),
-  sync_direction: z.enum(['from_square', 'to_square', 'bidirectional']).optional(),
-  auto_sync_interval: z.number().int().positive().optional(),
-}).passthrough(); // Allow additional fields
+const squareConfigSchema = z
+  .object({
+    square_location_id: z.string().min(1).optional(),
+    square_access_token_encrypted: z.string().optional(),
+    square_application_id: z.string().optional(),
+    square_application_secret: z.string().optional(),
+    sync_enabled: z.boolean().optional(),
+    sync_direction: z.enum(['from_square', 'to_square', 'bidirectional']).optional(),
+    auto_sync_interval: z.number().int().positive().optional(),
+  })
+  .passthrough(); // Allow additional fields
 
 /**
  * POST /api/square/config
@@ -120,14 +115,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const config = await saveSquareConfig(userId, validationResult.data);
-
-    if (!config) {
+    // Map schema fields to SquareConfigInput format
+    if (!validationResult.data.square_application_id || !validationResult.data.square_access_token_encrypted) {
       return NextResponse.json(
-        ApiErrorHandler.createError('Failed to save Square configuration', 'SAVE_ERROR', 500),
-        { status: 500 },
+        ApiErrorHandler.createError(
+          'square_application_id and square_access_token_encrypted are required',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
       );
     }
+    const { buildConfigInput } = await import('./helpers/buildConfigInput');
+    const configInput: Parameters<typeof saveSquareConfig>[1] = {
+      square_application_id: validationResult.data.square_application_id,
+      square_access_token: validationResult.data.square_access_token_encrypted,
+      ...(validationResult.data.square_application_secret && {
+        square_application_secret: validationResult.data.square_application_secret,
+      }),
+      ...buildConfigInput(validationResult),
+    };
+    const config = await saveSquareConfig(userId, configInput);
 
     return NextResponse.json({
       success: true,
@@ -170,14 +178,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const deleted = await deleteSquareConfig(userId);
-
-    if (!deleted) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Failed to delete Square configuration', 'DELETE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    await deleteSquareConfig(userId);
 
     return NextResponse.json({
       success: true,

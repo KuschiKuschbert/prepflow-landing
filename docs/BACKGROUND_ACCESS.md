@@ -112,7 +112,3 @@ You can:
 - It's excluded from git (won't be committed)
 - The API endpoint serves it with proper caching headers
 - File size: ~509KB (1920x1080px PNG)
-
-
-
-

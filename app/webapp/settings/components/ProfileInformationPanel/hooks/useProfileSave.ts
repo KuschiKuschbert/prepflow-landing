@@ -1,7 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { cacheData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
+import type { ProfileData } from '../types';
 
 interface ProfileFormData {
   first_name: string;
@@ -11,7 +12,8 @@ interface ProfileFormData {
 
 interface UseProfileSaveProps {
   formData: ProfileFormData;
-  setProfile: (profile: any) => void;
+  profile: ProfileData | null;
+  setProfile: (profile: ProfileData | null) => void;
   setFormData: (data: ProfileFormData) => void;
   userHasModifiedRef: React.MutableRefObject<boolean>;
   USER_MODIFIED_KEY: string;
@@ -23,6 +25,7 @@ interface UseProfileSaveProps {
  */
 export function useProfileSave({
   formData,
+  profile,
   setProfile,
   setFormData,
   userHasModifiedRef,
@@ -30,11 +33,26 @@ export function useProfileSave({
   mountIdRef,
 }: UseProfileSaveProps) {
   const { showSuccess, showError } = useNotification();
-  const [saving, setSaving] = useState(false);
 
   const handleSave = useCallback(async () => {
-    setSaving(true);
+    // Store original profile for rollback
+    const originalProfile = profile ? { ...profile } : null;
+
     try {
+      // Optimistically update profile immediately from formData
+      const optimisticProfile: ProfileData = {
+        ...profile,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        business_name: formData.business_name,
+      } as ProfileData;
+      setProfile(optimisticProfile);
+      setFormData({
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        business_name: formData.business_name,
+      });
+
       const response = await fetch('/api/user/profile', {
         method: 'PUT',
         headers: {
@@ -50,6 +68,7 @@ export function useProfileSave({
       }
 
       if (data.profile) {
+        // Replace optimistic update with server response
         setProfile(data.profile);
         logger.dev('[ProfileInformationPanel] Updating formData after successful save', {
           mountId: mountIdRef.current,
@@ -69,13 +88,21 @@ export function useProfileSave({
 
       showSuccess('Profile updated successfully');
     } catch (error) {
+      // Rollback on error - restore original profile
+      if (originalProfile) {
+        setProfile(originalProfile);
+        setFormData({
+          first_name: originalProfile.first_name || '',
+          last_name: originalProfile.last_name || '',
+          business_name: originalProfile.business_name || '',
+        });
+      }
       logger.error('Failed to update profile:', error);
       showError(error instanceof Error ? error.message : 'Failed to update profile');
-    } finally {
-      setSaving(false);
     }
   }, [
     formData,
+    profile,
     setProfile,
     setFormData,
     userHasModifiedRef,
@@ -86,7 +113,6 @@ export function useProfileSave({
   ]);
 
   return {
-    saving,
     handleSave,
   };
 }

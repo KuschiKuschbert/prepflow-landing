@@ -11,6 +11,15 @@ export async function rescheduleCancelledDeletion(
   requestedAt: Date,
   scheduledDeletionAt: Date,
 ): Promise<{ success: boolean; scheduledDeletionAt: Date | null; error?: string }> {
+  if (!supabaseAdmin) {
+    logger.error('[Data Retention] Database connection not available');
+    return {
+      success: false,
+      scheduledDeletionAt: null,
+      error: 'Database connection not available',
+    };
+  }
+
   const { error: updateError } = await supabaseAdmin
     .from('account_deletions')
     .update({
@@ -42,4 +51,3 @@ export async function rescheduleCancelledDeletion(
 
   return { success: true, scheduledDeletionAt };
 }
-

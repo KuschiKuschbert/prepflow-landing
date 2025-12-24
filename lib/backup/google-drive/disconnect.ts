@@ -18,6 +18,11 @@ export async function disconnectGoogleDrive(userId: string): Promise<void> {
   const { error } = await supabase.from('user_google_tokens').delete().eq('user_id', userId);
 
   if (error) {
+    logger.error('[Google Drive] Error disconnecting user:', {
+      error: error.message,
+      userId,
+      context: { operation: 'disconnectGoogleDrive' },
+    });
     throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
   }
 

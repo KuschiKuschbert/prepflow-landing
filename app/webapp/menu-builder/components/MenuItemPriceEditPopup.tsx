@@ -174,7 +174,9 @@ export function MenuItemPriceEditPopup({
             <Icon icon={X} size="sm" />
           </button>
 
-          <h3 className="mb-4 text-lg font-semibold text-[var(--foreground)]">Edit Price: {itemName}</h3>
+          <h3 className="mb-4 text-lg font-semibold text-[var(--foreground)]">
+            Edit Price: {itemName}
+          </h3>
 
           {item.recommended_selling_price != null && (
             <div className="mb-3 text-xs text-[var(--foreground-muted)]">

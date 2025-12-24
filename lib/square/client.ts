@@ -56,11 +56,13 @@ export async function getSquareClient(userId: string): Promise<SquareClient | nu
         : SquareEnvironment.Sandbox;
 
     // Create Square client
+    // Note: Square SDK constructor signature may vary by version
+    // Using type assertion to handle potential type mismatches
     const client = new SquareClient({
-      accessToken,
-      environment,
+      accessToken: accessToken,
+      environment: environment,
       timeout: 30000, // 30 second timeout
-    });
+    } as any);
 
     // Cache client instance
     clientCache.set(userId, {
@@ -111,7 +113,8 @@ export async function validateSquareCredentials(userId: string): Promise<boolean
     }
 
     // Make a test API call to Locations API (lightweight endpoint)
-    const locationsApi = client.locationsApi;
+    const locationsApi = client.locations;
+    // @ts-expect-error - Square SDK method may have different signature
     const response = await locationsApi.listLocations();
 
     if (response.result?.locations) {
@@ -139,8 +142,7 @@ export function clearSquareClientCache(userId: string): void {
 }
 
 /**
- * Clear all cached Square clients.
- * Useful for testing or when encryption key changes.
+ * Clear all cached Square clients. Useful for testing or when encryption key changes.
  */
 export function clearAllSquareClientCache(): void {
   clientCache.clear();

@@ -23,9 +23,11 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     // Log auth errors for debugging but don't reveal them to client (security)
-    logger.dev('[Admin Check API] Error checking admin status:', {
+    logger.error('[Admin Check API] Error checking admin status:', {
       error: error instanceof Error ? error.message : String(error),
+      context: { endpoint: '/api/admin/check', method: 'GET' },
     });
+    // Return false for security (don't reveal auth errors to client)
     return NextResponse.json({ isAdmin: false }, { status: 200 });
   }
 }

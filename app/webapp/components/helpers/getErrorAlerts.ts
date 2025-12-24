@@ -37,8 +37,7 @@ export function getErrorAlerts(
     },
   ];
 
-  return alertConfigs.filter(
-    (alert): alert is ErrorAlertConfig & { error: string } => Boolean(alert.error),
+  return alertConfigs.filter((alert): alert is ErrorAlertConfig & { error: string } =>
+    Boolean(alert.error),
   );
 }
-

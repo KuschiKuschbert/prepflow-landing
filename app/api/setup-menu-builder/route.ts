@@ -15,12 +15,16 @@ export async function GET() {
       sqlMigration = readFileSync(sqlPath, 'utf-8');
     } catch (err) {
       logger.error('[route.ts] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
       return NextResponse.json(
-        ApiErrorHandler.createError('Could not read menu-builder-schema.sql', 'FILE_NOT_FOUND', 500),
+        ApiErrorHandler.createError(
+          'Could not read menu-builder-schema.sql',
+          'FILE_NOT_FOUND',
+          500,
+        ),
         { status: 500 },
       );
     }
@@ -42,7 +46,11 @@ export async function GET() {
     logger.error('[Setup Menu Builder API] Error reading migration file:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
-      context: { endpoint: '/api/setup-menu-builder', method: 'GET', operation: 'readMigrationFile' },
+      context: {
+        endpoint: '/api/setup-menu-builder',
+        method: 'GET',
+        operation: 'readMigrationFile',
+      },
     });
     return NextResponse.json(
       ApiErrorHandler.createError(
@@ -141,7 +149,11 @@ export async function POST(_request: NextRequest) {
     logger.error('[Setup Menu Builder API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
-      context: { endpoint: '/api/setup-menu-builder', method: 'POST', operation: 'setupMenuBuilder' },
+      context: {
+        endpoint: '/api/setup-menu-builder',
+        method: 'POST',
+        operation: 'setupMenuBuilder',
+      },
     });
     return NextResponse.json(
       {

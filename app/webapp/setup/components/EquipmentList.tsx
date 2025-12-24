@@ -50,7 +50,9 @@ export function EquipmentList({
         <div className="mb-4 flex justify-center">
           <Icon icon={Thermometer} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
         </div>
-        <h3 className="mb-2 text-xl font-semibold text-[var(--foreground)]">No Equipment Added Yet</h3>
+        <h3 className="mb-2 text-xl font-semibold text-[var(--foreground)]">
+          No Equipment Added Yet
+        </h3>
         <p className="mb-6 text-[var(--foreground-muted)]">
           Add your first piece of temperature monitoring equipment to get started
         </p>
@@ -61,7 +63,9 @@ export function EquipmentList({
   return (
     <div className="mb-6 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold text-[var(--foreground)]">Your Equipment ({equipment.length})</h3>
+        <h3 className="text-xl font-semibold text-[var(--foreground)]">
+          Your Equipment ({equipment.length})
+        </h3>
         <div className="flex items-center gap-3">
           {equipment.length > 6 && (
             <button
@@ -89,7 +93,10 @@ export function EquipmentList({
       </div>
       <div className="desktop:grid-cols-2 large-desktop:grid-cols-3 grid grid-cols-1 gap-4">
         {(showAll ? equipment : equipment.slice(0, 6)).map(eq => (
-          <div key={eq.id} className="rounded-2xl border border-[var(--border)] bg-[var(--muted)] p-4">
+          <div
+            key={eq.id}
+            className="rounded-2xl border border-[var(--border)] bg-[var(--muted)] p-4"
+          >
             <div className="mb-3 flex items-start justify-between">
               <div className="flex items-center space-x-2">
                 <div className="flex items-center justify-center">
@@ -102,7 +109,9 @@ export function EquipmentList({
                 </div>
                 <div>
                   <h4 className="font-semibold text-[var(--foreground)]">{eq.name}</h4>
-                  <p className="text-sm text-[var(--foreground-muted)]">{getEquipmentLabel(eq.equipment_type)}</p>
+                  <p className="text-sm text-[var(--foreground-muted)]">
+                    {getEquipmentLabel(eq.equipment_type)}
+                  </p>
                 </div>
               </div>
               <button
@@ -122,7 +131,9 @@ export function EquipmentList({
               </p>
               <p className="text-sm text-[var(--foreground-secondary)]">
                 <span className="font-medium">Status:</span>
-                <span className={`ml-1 ${eq.is_active ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'}`}>
+                <span
+                  className={`ml-1 ${eq.is_active ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'}`}
+                >
                   {eq.is_active ? 'Active' : 'Inactive'}
                 </span>
               </p>

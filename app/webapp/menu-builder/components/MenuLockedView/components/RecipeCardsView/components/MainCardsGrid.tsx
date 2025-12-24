@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Main recipe cards grid component.
  */

@@ -48,13 +48,15 @@ export async function GET(req: NextRequest) {
  * Update user's error reporting preferences
  * Requires authentication
  */
-const errorReportingPreferencesSchema = z.object({
-  auto_report_enabled: z.boolean().optional(),
-  report_level: z.enum(['none', 'errors', 'warnings', 'all']).optional(),
-  include_stack_trace: z.boolean().optional(),
-  include_user_context: z.boolean().optional(),
-  include_browser_info: z.boolean().optional(),
-}).passthrough(); // Allow additional fields
+const errorReportingPreferencesSchema = z
+  .object({
+    auto_report_enabled: z.boolean().optional(),
+    report_level: z.enum(['none', 'errors', 'warnings', 'all']).optional(),
+    include_stack_trace: z.boolean().optional(),
+    include_user_context: z.boolean().optional(),
+    include_browser_info: z.boolean().optional(),
+  })
+  .passthrough(); // Allow additional fields
 
 export async function PUT(req: NextRequest) {
   try {

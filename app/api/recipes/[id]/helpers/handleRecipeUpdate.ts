@@ -5,6 +5,7 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { getUserEmail } from '@/lib/auth0-api-helpers';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { NextRequest } from 'next/server';
 import { buildUpdateData } from './buildUpdateData';
 import { detectRecipeChanges } from './detectRecipeChanges';
@@ -99,7 +100,13 @@ export async function handleRecipeUpdate(
   if (ingredientsChanged || yieldChanged) {
     (async () => {
       try {
-        await invalidateMenuItemsWithRecipe(recipeId, recipeName, changeType, changeDetails, userEmail);
+        await invalidateMenuItemsWithRecipe(
+          recipeId,
+          recipeName,
+          changeType,
+          changeDetails,
+          userEmail,
+        );
       } catch (err) {
         logger.error('[Recipes API] Error invalidating menu pricing cache:', {
           error: err instanceof Error ? err.message : String(err),

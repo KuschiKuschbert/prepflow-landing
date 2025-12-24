@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import type { PrintTemplateOptions } from '../print-template';
+import type { PrintTemplateOptions } from '../../print-template';
 import { generateCustomerVariant } from './generateCustomerVariant';
 import { generateSupplierVariant } from './generateSupplierVariant';
 import { generateComplianceVariant } from './generateComplianceVariant';

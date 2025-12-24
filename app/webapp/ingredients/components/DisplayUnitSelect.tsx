@@ -17,7 +17,10 @@ export function DisplayUnitSelect({ value, onChange }: DisplayUnitSelectProps) {
 
   return (
     <div className="flex items-center gap-3">
-      <label htmlFor="ingredients-display-unit" className="text-sm font-medium text-[var(--foreground-secondary)]">
+      <label
+        htmlFor="ingredients-display-unit"
+        className="text-sm font-medium text-[var(--foreground-secondary)]"
+      >
         {translate('ingredients.displayUnitLabel', 'Show costs per:')}
       </label>
       <select

@@ -44,12 +44,14 @@ export async function GET(req: NextRequest) {
  * @param {NextRequest} req - Request object with profile data
  * @returns {Promise<NextResponse>} Updated profile data
  */
-const updateProfileSchema = z.object({
-  name: z.string().min(1).optional(),
-  avatar_url: z.string().url().optional().nullable(),
-  timezone: z.string().optional(),
-  language: z.string().optional(),
-}).passthrough(); // Allow additional fields for profile updates
+const updateProfileSchema = z
+  .object({
+    name: z.string().min(1).optional(),
+    avatar_url: z.string().url().optional().nullable(),
+    timezone: z.string().optional(),
+    language: z.string().optional(),
+  })
+  .passthrough(); // Allow additional fields for profile updates
 
 export async function PUT(req: NextRequest) {
   try {

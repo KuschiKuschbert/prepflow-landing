@@ -1,11 +1,4 @@
 'use client';
-
-/**
- * Unified export options modal component
- * Provides format, variant, and filter selection for complex exports
- * Uses Cyber Carrot styling and PrepFlow voice
- */
-
 import { useState, useEffect, useRef } from 'react';
 import { Icon } from './Icon';
 import { logger } from '@/lib/logger';
@@ -57,7 +50,6 @@ export function ExportOptionsModal({
   const [filterValues, setFilterValues] = useState<Record<string, any>>({});
   const modalRef = useRef<HTMLDivElement>(null);
 
-  // Initialize filter values
   useEffect(() => {
     if (isOpen) {
       const initialFilters: Record<string, any> = {};
@@ -69,24 +61,15 @@ export function ExportOptionsModal({
       setSelectedVariant(defaultVariant);
     }
   }, [isOpen, filters, defaultFormat, defaultVariant]);
-
-  // Close on Escape key
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isOpen) {
-        onClose();
-      }
+      if (event.key === 'Escape' && isOpen) onClose();
     };
-
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose]);
-
-  // Focus trap
   useEffect(() => {
-    if (isOpen && modalRef.current) {
-      return setupFocusTrap(modalRef);
-    }
+    if (isOpen && modalRef.current) return setupFocusTrap(modalRef);
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -156,7 +139,9 @@ export function ExportOptionsModal({
 
         {/* Format Selection */}
         <div className="mb-6">
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Export Format</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Export Format
+          </label>
           <div className="grid grid-cols-3 gap-3">
             {availableFormats.map(format => {
               const IconComponent = formatIcons[format];
@@ -177,7 +162,9 @@ export function ExportOptionsModal({
                   <Icon
                     icon={IconComponent}
                     size="md"
-                    className={isSelected ? 'text-[var(--primary)]' : 'text-[var(--foreground-muted)]'}
+                    className={
+                      isSelected ? 'text-[var(--primary)]' : 'text-[var(--foreground-muted)]'
+                    }
                     aria-hidden={true}
                   />
                   <span
@@ -186,7 +173,12 @@ export function ExportOptionsModal({
                     {formatLabels[format]}
                   </span>
                   {isSelected && (
-                    <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+                    <Icon
+                      icon={Check}
+                      size="sm"
+                      className="text-[var(--primary)]"
+                      aria-hidden={true}
+                    />
                   )}
                 </button>
               );
@@ -197,7 +189,9 @@ export function ExportOptionsModal({
         {/* Variant Selection */}
         {availableVariants.length > 1 && (
           <div className="mb-6">
-            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Template Style</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+              Template Style
+            </label>
             <select
               value={selectedVariant}
               onChange={e => setSelectedVariant(e.target.value as TemplateVariant)}
@@ -210,14 +204,18 @@ export function ExportOptionsModal({
                 </option>
               ))}
             </select>
-            <p className="mt-1 text-xs text-[var(--foreground-muted)]">{getVariantDescription(selectedVariant)}</p>
+            <p className="mt-1 text-xs text-[var(--foreground-muted)]">
+              {getVariantDescription(selectedVariant)}
+            </p>
           </div>
         )}
 
         {/* Filters */}
         {filters.length > 0 && (
           <div className="mb-6">
-            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Filters</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+              Filters
+            </label>
             <div className="space-y-3">
               {filters.map(filter => (
                 <div key={filter.id}>
@@ -278,7 +276,7 @@ export function ExportOptionsModal({
           <button
             onClick={handleExport}
             disabled={loading}
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all hover:shadow-lg hover:shadow-[var(--primary)]/30 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all hover:shadow-[var(--primary)]/30 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Icon icon={Download} size="sm" aria-hidden={true} />
             {loading ? 'Exporting...' : 'Export'}

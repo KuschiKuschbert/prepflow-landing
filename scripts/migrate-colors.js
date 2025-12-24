@@ -183,7 +183,10 @@ const colorReplacements = [
   { pattern: /hover:text-\[#29E7CD\]/g, replacement: 'hover:text-[var(--primary)]' },
   { pattern: /focus:ring-\[#29E7CD\]/g, replacement: 'focus:ring-[var(--primary)]' },
   { pattern: /shadow-\[#29E7CD\]/g, replacement: 'shadow-[var(--primary)]' },
-  { pattern: /focus:ring-offset-\[#0a0a0a\]/g, replacement: 'focus:ring-offset-[var(--background)]' },
+  {
+    pattern: /focus:ring-offset-\[#0a0a0a\]/g,
+    replacement: 'focus:ring-offset-[var(--background)]',
+  },
 
   // Gradient patterns - must come after individual color patterns
   { pattern: /to-\[#29E7CD\]/g, replacement: 'to-[var(--primary)]' },
@@ -227,7 +230,11 @@ function processFile(filePath, dryRun = true) {
     const content = fs.readFileSync(filePath, 'utf8');
 
     // Skip if file doesn't have any color patterns
-    if (!/text-white|bg-\[#|border-\[#|text-gray-|border-gray-|text-\[#29E7CD\]|text-\[#D925C7\]|text-\[#3B82F6\]|text-\[#F59E0B\]|text-\[#FF6B00\]|from-\[#29E7CD\]|to-\[#29E7CD\]|from-\[#D925C7\]|to-\[#D925C7\]|text-black|bg-white|bg-black|text-(red|green|blue|yellow|orange|purple|pink|cyan|indigo|violet|amber|emerald|lime|teal|sky|rose|fuchsia)-|bg-(red|green|blue|yellow|orange|purple|pink|cyan|indigo|violet|amber|emerald|lime|teal|sky|rose|fuchsia)-|border-(red|green|blue|yellow|orange|purple|pink|cyan|indigo|violet|amber|emerald|lime|teal|sky|rose|fuchsia)-|#22c55e|#3b82f6|#f97316|#ef4444|#2a2a2a|#9ca3af/.test(content)) {
+    if (
+      !/text-white|bg-\[#|border-\[#|text-gray-|border-gray-|text-\[#29E7CD\]|text-\[#D925C7\]|text-\[#3B82F6\]|text-\[#F59E0B\]|text-\[#FF6B00\]|from-\[#29E7CD\]|to-\[#29E7CD\]|from-\[#D925C7\]|to-\[#D925C7\]|text-black|bg-white|bg-black|text-(red|green|blue|yellow|orange|purple|pink|cyan|indigo|violet|amber|emerald|lime|teal|sky|rose|fuchsia)-|bg-(red|green|blue|yellow|orange|purple|pink|cyan|indigo|violet|amber|emerald|lime|teal|sky|rose|fuchsia)-|border-(red|green|blue|yellow|orange|purple|pink|cyan|indigo|violet|amber|emerald|lime|teal|sky|rose|fuchsia)-|#22c55e|#3b82f6|#f97316|#ef4444|#2a2a2a|#9ca3af/.test(
+        content,
+      )
+    ) {
       return { changed: false, replacements: 0 };
     }
 

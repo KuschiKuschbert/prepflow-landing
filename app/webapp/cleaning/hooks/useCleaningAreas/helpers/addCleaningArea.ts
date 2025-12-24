@@ -70,7 +70,3 @@ export async function addCleaningArea({
     return { success: false, error: 'Failed to create cleaning area' };
   }
 }
-
-
-
-

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Desktop table layout for COGS table.
  */
@@ -124,7 +126,9 @@ export function COGSTableDesktop({
             {standaloneCalculations.length > 0 && (
               <tr className="bg-[var(--muted)]/30">
                 <td colSpan={4} className="px-6 py-3">
-                  <span className="text-sm font-semibold text-[var(--foreground)]">Standalone Ingredients</span>
+                  <span className="text-sm font-semibold text-[var(--foreground)]">
+                    Standalone Ingredients
+                  </span>
                 </td>
               </tr>
             )}

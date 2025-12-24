@@ -21,5 +21,3 @@ export function handleStaffEmployeeError(err: unknown): NextResponse {
     { status: 500 },
   );
 }
-
-

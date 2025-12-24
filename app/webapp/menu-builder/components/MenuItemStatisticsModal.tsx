@@ -149,7 +149,11 @@ export function MenuItemStatisticsModal({
           </div>
 
           {/* Loading State */}
-          {loading && <div className="py-8 text-center text-[var(--foreground-muted)]">Loading statistics...</div>}
+          {loading && (
+            <div className="py-8 text-center text-[var(--foreground-muted)]">
+              Loading statistics...
+            </div>
+          )}
 
           {/* Error State */}
           {error && !loading && (
@@ -167,7 +171,9 @@ export function MenuItemStatisticsModal({
                 <div className="space-y-3">
                   {statistics.recommended_selling_price != null && (
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-[var(--foreground-muted)]">Recommended Price</span>
+                      <span className="text-xs text-[var(--foreground-muted)]">
+                        Recommended Price
+                      </span>
                       <span className="text-xs font-medium text-[var(--foreground-secondary)]">
                         ${statistics.recommended_selling_price.toFixed(2)}
                       </span>
@@ -219,7 +225,9 @@ export function MenuItemStatisticsModal({
                     )}
                   </div>
                   <div className="flex items-center justify-between border-t border-[var(--border)] pt-3">
-                    <span className="text-sm font-medium text-[var(--foreground)]">Selling Price Used</span>
+                    <span className="text-sm font-medium text-[var(--foreground)]">
+                      Selling Price Used
+                    </span>
                     <span className="text-lg font-bold text-[var(--primary)]">
                       ${statistics.selling_price.toFixed(2)}
                     </span>
@@ -231,13 +239,19 @@ export function MenuItemStatisticsModal({
               <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
                 <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
                   <h3 className="mb-3 text-sm font-medium text-[var(--foreground-muted)]">COGS</h3>
-                  <p className="text-2xl font-bold text-[var(--foreground)]">${statistics.cogs.toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-[var(--foreground)]">
+                    ${statistics.cogs.toFixed(2)}
+                  </p>
                 </div>
                 <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
-                  <h3 className="mb-3 text-sm font-medium text-[var(--foreground-muted)]">Gross Profit</h3>
+                  <h3 className="mb-3 text-sm font-medium text-[var(--foreground-muted)]">
+                    Gross Profit
+                  </h3>
                   <p
                     className={`text-2xl font-bold ${
-                      statistics.gross_profit >= 0 ? 'text-[var(--primary)]' : 'text-[var(--color-error)]'
+                      statistics.gross_profit >= 0
+                        ? 'text-[var(--primary)]'
+                        : 'text-[var(--color-error)]'
                     }`}
                   >
                     ${statistics.gross_profit.toFixed(2)}
@@ -248,17 +262,23 @@ export function MenuItemStatisticsModal({
               {/* Margins Section */}
               <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
                 <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
-                  <h3 className="mb-3 text-sm font-medium text-[var(--foreground-muted)]">Gross Profit Margin</h3>
+                  <h3 className="mb-3 text-sm font-medium text-[var(--foreground-muted)]">
+                    Gross Profit Margin
+                  </h3>
                   <p
                     className={`text-2xl font-bold ${
-                      statistics.gross_profit_margin >= 0 ? 'text-[var(--primary)]' : 'text-[var(--color-error)]'
+                      statistics.gross_profit_margin >= 0
+                        ? 'text-[var(--primary)]'
+                        : 'text-[var(--color-error)]'
                     }`}
                   >
                     {statistics.gross_profit_margin.toFixed(1)}%
                   </p>
                 </div>
                 <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
-                  <h3 className="mb-3 text-sm font-medium text-[var(--foreground-muted)]">Food Cost %</h3>
+                  <h3 className="mb-3 text-sm font-medium text-[var(--foreground-muted)]">
+                    Food Cost %
+                  </h3>
                   <p className="text-2xl font-bold text-[var(--foreground)]">
                     {statistics.food_cost_percent.toFixed(1)}%
                   </p>

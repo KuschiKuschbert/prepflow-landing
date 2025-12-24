@@ -32,13 +32,17 @@ export function PrepListCard({ prepList, onEdit, onDelete, onStatusChange }: Pre
             </div>
             <div>
               <h3 className="text-lg font-semibold text-[var(--foreground)]">{prepList.name}</h3>
-              <p className="text-sm text-[var(--foreground-muted)]">{prepList.kitchen_sections.name}</p>
+              <p className="text-sm text-[var(--foreground-muted)]">
+                {prepList.kitchen_sections.name}
+              </p>
             </div>
           </div>
 
           <div className="mb-4 flex items-center space-x-4">
             <div>
-              <p className="mb-1 text-xs text-[var(--foreground-muted)]">{t('prepLists.status', 'Status')}</p>
+              <p className="mb-1 text-xs text-[var(--foreground-muted)]">
+                {t('prepLists.status', 'Status')}
+              </p>
               <span
                 className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(prepList.status)}`}
               >
@@ -46,18 +50,26 @@ export function PrepListCard({ prepList, onEdit, onDelete, onStatusChange }: Pre
               </span>
             </div>
             <div>
-              <p className="mb-1 text-xs text-[var(--foreground-muted)]">{t('prepLists.items', 'Items')}</p>
-              <p className="font-semibold text-[var(--foreground)]">{prepList.prep_list_items.length}</p>
+              <p className="mb-1 text-xs text-[var(--foreground-muted)]">
+                {t('prepLists.items', 'Items')}
+              </p>
+              <p className="font-semibold text-[var(--foreground)]">
+                {prepList.prep_list_items.length}
+              </p>
             </div>
             <div>
-              <p className="mb-1 text-xs text-[var(--foreground-muted)]">{t('prepLists.created', 'Created')}</p>
+              <p className="mb-1 text-xs text-[var(--foreground-muted)]">
+                {t('prepLists.created', 'Created')}
+              </p>
               <p className="font-semibold text-[var(--foreground)]">
                 {new Date(prepList.created_at).toLocaleDateString()}
               </p>
             </div>
           </div>
 
-          {prepList.notes && <p className="mb-4 text-sm text-[var(--foreground-secondary)]">{prepList.notes}</p>}
+          {prepList.notes && (
+            <p className="mb-4 text-sm text-[var(--foreground-secondary)]">{prepList.notes}</p>
+          )}
 
           {prepList.prep_list_items.length > 0 && (
             <div className="rounded-xl bg-[var(--muted)]/30 p-4">
@@ -67,7 +79,9 @@ export function PrepListCard({ prepList, onEdit, onDelete, onStatusChange }: Pre
               <div className="space-y-2">
                 {prepList.prep_list_items.slice(0, 3).map(item => (
                   <div key={item.id} className="flex items-center justify-between text-sm">
-                    <span className="text-[var(--foreground-secondary)]">{item.ingredients.name}</span>
+                    <span className="text-[var(--foreground-secondary)]">
+                      {item.ingredients.name}
+                    </span>
                     <span className="font-semibold text-[var(--foreground)]">
                       {item.quantity} {item.unit}
                     </span>

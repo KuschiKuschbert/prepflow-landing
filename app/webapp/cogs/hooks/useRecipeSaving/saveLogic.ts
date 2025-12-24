@@ -20,7 +20,6 @@ interface SaveRecipeParams {
     isUpdate: boolean,
   ) => Promise<{ error?: string }>;
   setError: (error: string | null) => void;
-  setLoading: (loading: boolean) => void;
   showSuccess: (message: string) => void;
   onRecipeCreated: () => void;
 }
@@ -39,7 +38,6 @@ export async function saveRecipeWithIngredients({
   createOrUpdateRecipe,
   saveRecipeIngredients,
   setError,
-  setLoading,
   showSuccess,
   onRecipeCreated,
 }: SaveRecipeParams): Promise<Recipe | null> {
@@ -49,7 +47,6 @@ export async function saveRecipeWithIngredients({
   }
 
   try {
-    setLoading(true);
     setError(null);
 
     const result = await createOrUpdateRecipe(dishName, dishPortions);
@@ -90,7 +87,5 @@ export async function saveRecipeWithIngredients({
       err?.message || (err?.code ? `Database error (${err.code})` : 'Failed to save recipe');
     setError(`Failed to save recipe: ${errorMessage}`);
     return null;
-  } finally {
-    setLoading(false);
   }
 }

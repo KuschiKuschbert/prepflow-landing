@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Empty state component for RecipeCardsView.
  */
@@ -43,7 +45,7 @@ export function EmptyState({
             Cards will appear automatically as they&apos;re ready. This typically takes 30-40
             seconds with parallel processing.
           </p>
-          <p className="mt-2 text-xs flex items-center justify-center gap-1 text-[var(--foreground-subtle)]">
+          <p className="mt-2 flex items-center justify-center gap-1 text-xs text-[var(--foreground-subtle)]">
             <Icon icon={Zap} size="xs" className="text-[var(--primary)]" aria-hidden={true} />
             Using parallel batch processing for faster generation
           </p>
@@ -56,7 +58,7 @@ export function EmptyState({
             automatically generated when a menu is locked. You can also generate them manually
             below.
           </p>
-          <p className="mb-6 text-xs flex items-center justify-center gap-1 text-[var(--foreground-subtle)]">
+          <p className="mb-6 flex items-center justify-center gap-1 text-xs text-[var(--foreground-subtle)]">
             <Icon icon={Clock} size="xs" className="text-[var(--primary)]" aria-hidden={true} />
             Generation typically takes 30-40 seconds with parallel processing (was 2-3 minutes).
           </p>

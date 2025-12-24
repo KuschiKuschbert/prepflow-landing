@@ -17,5 +17,3 @@ export function TermsSection({ id, title, children }: TermsSectionProps) {
     </section>
   );
 }
-
-

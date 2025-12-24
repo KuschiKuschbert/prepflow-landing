@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { Lock } from 'lucide-react';
 import type { Menu } from '@/app/webapp/menu-builder/types';

@@ -165,7 +165,8 @@ export function AreaTasksModal({
                 {tasks.length} {tasks.length === 1 ? 'task' : 'tasks'}
               </span>
               <span className="desktop:inline hidden">
-                Press <kbd className="rounded bg-[var(--muted)] px-2 py-1 text-xs">Esc</kbd> to close
+                Press <kbd className="rounded bg-[var(--muted)] px-2 py-1 text-xs">Esc</kbd> to
+                close
               </span>
             </div>
           </div>

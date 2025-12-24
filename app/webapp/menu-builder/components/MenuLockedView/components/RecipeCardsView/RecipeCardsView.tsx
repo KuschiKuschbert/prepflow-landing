@@ -158,9 +158,9 @@ export function RecipeCardsView({ menuId }: RecipeCardsViewProps) {
       <div className="flex items-center justify-between gap-4">
         <div className="flex-1 rounded-lg border border-[var(--primary)]/20 bg-[var(--primary)]/5 p-3">
           <p className="text-xs text-[var(--foreground-secondary)]">
-            <strong className="text-[var(--primary)]">Recipe Cards:</strong> All ingredients are normalized
-            to 1 serving. Use the prep quantity input on each card to scale ingredients for your
-            desired batch size.
+            <strong className="text-[var(--primary)]">Recipe Cards:</strong> All ingredients are
+            normalized to 1 serving. Use the prep quantity input on each card to scale ingredients
+            for your desired batch size.
           </p>
         </div>
         <button

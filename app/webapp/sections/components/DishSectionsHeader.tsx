@@ -1,3 +1,5 @@
+'use client';
+
 import { useTranslation } from '@/lib/useTranslation';
 import { UtensilsCrossed } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';

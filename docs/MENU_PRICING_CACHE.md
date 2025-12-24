@@ -103,7 +103,3 @@ The `menu_items` table includes:
 - `recommended_selling_price` (DECIMAL) - Cached calculated price (nullable)
 
 When `recommended_selling_price` is NULL, it will be calculated dynamically on next access and cached.
-
-
-
-

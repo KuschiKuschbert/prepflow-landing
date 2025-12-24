@@ -61,7 +61,12 @@ export function IngredientBulkActionsMenu({
                   disabled={bulkActionLoading}
                   className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-[var(--color-error)] transition-colors hover:bg-[var(--color-error)]/10 disabled:opacity-50"
                 >
-                  <Icon icon={Trash2} size="xs" className="text-[var(--color-error)]" aria-hidden={true} />
+                  <Icon
+                    icon={Trash2}
+                    size="xs"
+                    className="text-[var(--color-error)]"
+                    aria-hidden={true}
+                  />
                   <span>Delete Selected</span>
                 </button>
 
@@ -98,7 +103,12 @@ export function IngredientBulkActionsMenu({
                     disabled={bulkActionLoading}
                     className="flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/10 disabled:opacity-50"
                   >
-                    <Icon icon={Sparkles} size="xs" className="text-[var(--primary)]" aria-hidden={true} />
+                    <Icon
+                      icon={Sparkles}
+                      size="xs"
+                      className="text-[var(--primary)]"
+                      aria-hidden={true}
+                    />
                     <span>Auto-categorize</span>
                   </button>
                 )}

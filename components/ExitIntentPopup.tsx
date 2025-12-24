@@ -38,7 +38,9 @@ function ExitIntentPopupContent({ isVisible, onClose, onSuccess }: ExitIntentPop
           {isSuccess ? (
             <div className="text-center">
               <div className="text-fluid-4xl mb-4">🎉</div>
-              <h3 className="text-fluid-2xl mb-2 font-bold text-[var(--primary)]">Don&apos;t go yet!</h3>
+              <h3 className="text-fluid-2xl mb-2 font-bold text-[var(--primary)]">
+                Don&apos;t go yet!
+              </h3>
               <p className="mb-4 text-[var(--foreground-secondary)]">
                 We&apos;ve sent the sample dashboard to your email.
               </p>
@@ -51,7 +53,9 @@ function ExitIntentPopupContent({ isVisible, onClose, onSuccess }: ExitIntentPop
               {/* Header */}
               <div className="mb-6 text-center">
                 <div className="text-fluid-4xl mb-3">🚨</div>
-                <h3 className="text-fluid-2xl mb-2 font-bold text-[var(--foreground)]">Wait! Before you go...</h3>
+                <h3 className="text-fluid-2xl mb-2 font-bold text-[var(--foreground)]">
+                  Wait! Before you go...
+                </h3>
                 <p className="text-[var(--foreground-secondary)]">
                   Get your free sample dashboard and see exactly how PrepFlow can transform your
                   menu profitability.
@@ -81,7 +85,10 @@ function ExitIntentPopupContent({ isVisible, onClose, onSuccess }: ExitIntentPop
                     aria-describedby={errors.name ? 'popup-name-error' : undefined}
                   />
                   {errors.name && (
-                    <p id="popup-name-error" className="text-fluid-sm mt-1 text-[var(--color-error)]">
+                    <p
+                      id="popup-name-error"
+                      className="text-fluid-sm mt-1 text-[var(--color-error)]"
+                    >
                       {errors.name}
                     </p>
                   )}
@@ -108,7 +115,10 @@ function ExitIntentPopupContent({ isVisible, onClose, onSuccess }: ExitIntentPop
                     aria-describedby={errors.email ? 'popup-email-error' : undefined}
                   />
                   {errors.email && (
-                    <p id="popup-email-error" className="text-fluid-sm mt-1 text-[var(--color-error)]">
+                    <p
+                      id="popup-email-error"
+                      className="text-fluid-sm mt-1 text-[var(--color-error)]"
+                    >
                       {errors.email}
                     </p>
                   )}
@@ -120,7 +130,7 @@ function ExitIntentPopupContent({ isVisible, onClose, onSuccess }: ExitIntentPop
                   className={`text-fluid-base w-full rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] px-6 py-3 font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-300 ${
                     isSubmitting
                       ? 'cursor-not-allowed opacity-50'
-                      : 'hover:shadow-xl hover:shadow-[var(--primary)]/25'
+                      : 'hover:shadow-[var(--primary)]/25 hover:shadow-xl'
                   }`}
                 >
                   {isSubmitting ? (

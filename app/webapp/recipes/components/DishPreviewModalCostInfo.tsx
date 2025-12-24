@@ -31,7 +31,9 @@ export function DishPreviewModalCostInfo({ costData }: DishPreviewModalCostInfoP
         </div>
         <div>
           <div className="text-xs text-[var(--foreground-muted)]">Total Cost</div>
-          <div className="text-lg font-semibold text-[var(--foreground)]">${costData.total_cost.toFixed(2)}</div>
+          <div className="text-lg font-semibold text-[var(--foreground)]">
+            ${costData.total_cost.toFixed(2)}
+          </div>
         </div>
         <div>
           <div className="text-xs text-[var(--foreground-muted)]">Gross Profit</div>
@@ -43,7 +45,9 @@ export function DishPreviewModalCostInfo({ costData }: DishPreviewModalCostInfoP
           <div className="text-xs text-[var(--foreground-muted)]">Profit Margin</div>
           <div
             className={`text-lg font-semibold ${
-              recommendedGrossProfitMargin >= 30 ? 'text-[var(--color-success)]' : 'text-[var(--color-warning)]'
+              recommendedGrossProfitMargin >= 30
+                ? 'text-[var(--color-success)]'
+                : 'text-[var(--color-warning)]'
             }`}
           >
             {recommendedGrossProfitMargin.toFixed(1)}%

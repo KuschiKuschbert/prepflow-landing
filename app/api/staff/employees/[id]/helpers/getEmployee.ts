@@ -21,6 +21,11 @@ export async function getEmployee(employeeId: string): Promise<NextResponse> {
     .single();
 
   if (fetchError || !employee) {
+    logger.error('[Staff Employees API] Error fetching employee or employee not found:', {
+      employeeId,
+      error: fetchError?.message,
+      context: { endpoint: '/api/staff/employees/[id]', operation: 'getEmployee' },
+    });
     return NextResponse.json(ApiErrorHandler.createError('Employee not found', 'NOT_FOUND', 404), {
       status: 404,
     });

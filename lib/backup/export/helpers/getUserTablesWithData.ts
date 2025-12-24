@@ -1,6 +1,6 @@
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
-import type { TableData } from '../types';
+import type { TableData } from '../../types';
 import { getUserTableData, getChildTableData } from './fetchTableData';
 import { USER_TABLES, CHILD_TABLES } from './tableConfig';
 

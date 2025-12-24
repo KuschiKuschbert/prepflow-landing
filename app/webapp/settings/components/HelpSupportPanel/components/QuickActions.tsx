@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { Icon } from '@/components/ui/Icon';
 import { HelpCircle, Mail, MessageSquare, FileText } from 'lucide-react';

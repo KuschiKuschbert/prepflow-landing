@@ -6,10 +6,9 @@ import { Recipe } from '../types';
 
 import { logger } from '@/lib/logger';
 export function useRecipeDeleteOperations(
-  fetchRecipes: () => Promise<void>,
+  recipes: Recipe[],
   capitalizeRecipeName: (name: string) => string,
   optimisticallyUpdateRecipes: (updater: (recipes: Recipe[]) => Recipe[]) => void,
-  rollbackRecipes: () => void,
 ) {
   const { showSuccess, showError: showErrorNotification } = useNotification();
   const [recipeToDelete, setRecipeToDelete] = useState<Recipe | null>(null);
@@ -26,6 +25,9 @@ export function useRecipeDeleteOperations(
     const recipeIdToDelete = recipeToDelete.id;
     const recipeName = capitalizeRecipeName(recipeToDelete.recipe_name);
 
+    // Store original state for rollback
+    const originalRecipes = [...recipes];
+
     try {
       // Optimistically remove recipe from list
       optimisticallyUpdateRecipes(prev => prev.filter(r => r.id !== recipeIdToDelete));
@@ -41,7 +43,7 @@ export function useRecipeDeleteOperations(
       logger.dev('[RecipeDelete] API response:', { status: response.status, result });
 
       if (!response.ok) {
-        rollbackRecipes();
+        optimisticallyUpdateRecipes(() => originalRecipes);
         const errorMessage = result.message || result.error || 'Failed to delete recipe';
         logger.error('[RecipeDelete] Deletion failed:', errorMessage, result);
         showErrorNotification(errorMessage);
@@ -54,21 +56,21 @@ export function useRecipeDeleteOperations(
       setRecipeToDelete(null);
     } catch (err) {
       logger.error('[useRecipeDeleteOperations.ts] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
-      rollbackRecipes();
+      optimisticallyUpdateRecipes(() => originalRecipes);
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete recipe';
       showErrorNotification(errorMessage);
     }
   }, [
     recipeToDelete,
+    recipes,
     capitalizeRecipeName,
     showSuccess,
     showErrorNotification,
     optimisticallyUpdateRecipes,
-    rollbackRecipes,
   ]);
 
   const cancelDeleteRecipe = useCallback(() => {

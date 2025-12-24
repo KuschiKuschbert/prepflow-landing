@@ -57,4 +57,3 @@ export function handleDraggingGesture({
     setDragProgress(0);
   }
 }
-

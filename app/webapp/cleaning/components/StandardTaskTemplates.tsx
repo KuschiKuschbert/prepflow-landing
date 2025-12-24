@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { Sparkles, Loader2 } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 
@@ -16,11 +16,8 @@ interface StandardTaskTemplatesProps {
  */
 export function StandardTaskTemplates({ onPopulate }: StandardTaskTemplatesProps) {
   const { showSuccess, showError } = useNotification();
-  const [loading, setLoading] = useState(false);
 
   const handlePopulate = async () => {
-    setLoading(true);
-
     try {
       const response = await fetch('/api/cleaning-tasks/populate-standard', {
         method: 'POST',
@@ -38,8 +35,6 @@ export function StandardTaskTemplates({ onPopulate }: StandardTaskTemplatesProps
     } catch (error) {
       logger.error('Error populating standard tasks:', error);
       showError('Failed to populate standard tasks');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -58,7 +53,9 @@ export function StandardTaskTemplates({ onPopulate }: StandardTaskTemplatesProps
       </div>
 
       <div className="mb-4 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
-        <p className="text-sm text-[var(--foreground-secondary)]">This will automatically create cleaning tasks for:</p>
+        <p className="text-sm text-[var(--foreground-secondary)]">
+          This will automatically create cleaning tasks for:
+        </p>
         <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-[var(--foreground-muted)]">
           <li>Equipment: Fridge seals, ovens, grills, flat tops, cookers</li>
           <li>Sections: Floor cleaning and bench cleaning per section</li>
@@ -68,22 +65,10 @@ export function StandardTaskTemplates({ onPopulate }: StandardTaskTemplatesProps
 
       <button
         onClick={handlePopulate}
-        disabled={loading}
-        className="w-full rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl disabled:opacity-50"
+        className="w-full rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
       >
-        {loading ? (
-          <span className="flex items-center justify-center gap-2">
-            <Icon icon={Loader2} size="sm" className="animate-spin" aria-hidden={true} />
-            Populating...
-          </span>
-        ) : (
-          'Populate Standard Tasks'
-        )}
+        Populate Standard Tasks
       </button>
     </div>
   );
 }
-
-
-
-

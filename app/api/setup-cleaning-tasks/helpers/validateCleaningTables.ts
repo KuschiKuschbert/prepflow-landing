@@ -3,6 +3,7 @@
  */
 
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 export interface ValidationResult {
   success: boolean;
@@ -74,6 +75,10 @@ export async function validateCleaningTables(): Promise<ValidationResult> {
     .limit(1);
 
   if (descCheckError) {
+    logger.error('[Setup Cleaning Tasks API] Error checking description column:', {
+      error: descCheckError.message,
+      context: { endpoint: '/api/setup-cleaning-tasks', operation: 'validateCleaningTables' },
+    });
     const errorMessage = descCheckError.message || '';
     if (errorMessage.includes('description') || errorMessage.includes('column')) {
       return {

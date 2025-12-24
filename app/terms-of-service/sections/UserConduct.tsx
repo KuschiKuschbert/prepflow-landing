@@ -2,8 +2,8 @@ export function UserConduct() {
   return (
     <>
       <p className="mb-4 leading-relaxed text-gray-300">
-        You agree to use PrepFlow responsibly and in accordance with these Terms. You are responsible
-        for:
+        You agree to use PrepFlow responsibly and in accordance with these Terms. You are
+        responsible for:
       </p>
       <ul className="ml-4 list-inside list-disc space-y-2 text-gray-300">
         <li className="text-fluid-base">Ensuring the accuracy of data you input</li>
@@ -17,5 +17,3 @@ export function UserConduct() {
     </>
   );
 }
-
-

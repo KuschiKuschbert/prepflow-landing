@@ -10,4 +10,3 @@ export function getDevUser() {
     email_verified: true,
   };
 }
-

@@ -1,9 +1,6 @@
 import { type Achievement, type AchievementId, ACHIEVEMENTS } from '../../achievements';
 import { loadAchievements, saveAchievements } from './storage';
-import {
-  checkAchievementMilestone,
-  dispatchMilestoneReached,
-} from '@/lib/gamification/milestones';
+import { checkAchievementMilestone, dispatchMilestoneReached } from '@/lib/gamification/milestones';
 
 export function unlockAchievement(id: AchievementId): void {
   const achievements = loadAchievements();
@@ -34,4 +31,3 @@ export function unlockAchievement(id: AchievementId): void {
     dispatchMilestoneReached(achievementMilestone);
   }
 }
-

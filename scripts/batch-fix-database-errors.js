@@ -9,7 +9,8 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const PATTERN = /if\s*\(!supabaseAdmin\)\s*throw\s+new\s+Error\(['"]Database connection not available['"]\);/g;
+const PATTERN =
+  /if\s*\(!supabaseAdmin\)\s*throw\s+new\s+Error\(['"]Database connection not available['"]\);/g;
 const REPLACEMENT = `if (!supabaseAdmin) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
@@ -48,12 +49,14 @@ function fixFile(filePath) {
 
   // Add imports if needed
   const needsLogger = /logger\.error/.test(content) && !/import.*logger.*from/.test(content);
-  const needsApiErrorHandler = /ApiErrorHandler/.test(content) && !/import.*ApiErrorHandler.*from/.test(content);
+  const needsApiErrorHandler =
+    /ApiErrorHandler/.test(content) && !/import.*ApiErrorHandler.*from/.test(content);
 
   if (needsLogger || needsApiErrorHandler) {
     const imports = [];
     if (needsLogger) imports.push("import { logger } from '@/lib/logger';");
-    if (needsApiErrorHandler) imports.push("import { ApiErrorHandler } from '@/lib/api-error-handler';");
+    if (needsApiErrorHandler)
+      imports.push("import { ApiErrorHandler } from '@/lib/api-error-handler';");
 
     // Find the last import statement
     const importRegex = /^import\s+.*from\s+['"].*['"];$/gm;
@@ -110,7 +113,3 @@ if (require.main === module) {
 }
 
 module.exports = { findFiles, fixFile };
-
-
-
-

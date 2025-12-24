@@ -2,6 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { createQualificationSchema, QUALIFICATION_SELECT } from './helpers/schemas';
 import { createQualification } from './helpers/createQualification';
 

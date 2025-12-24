@@ -18,7 +18,3 @@ export function handleEdit(
   });
   setShowForm(true);
 }
-
-
-
-

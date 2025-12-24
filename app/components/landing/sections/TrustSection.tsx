@@ -1,3 +1,5 @@
+'use client';
+
 import { useTranslation } from '../../../../lib/useTranslation';
 import { LANDING_TYPOGRAPHY, LANDING_LAYOUT, getSectionClasses } from '@/lib/landing-styles';
 

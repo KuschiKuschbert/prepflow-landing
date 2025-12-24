@@ -231,8 +231,15 @@ export function RosterBuilder({
       {/* Empty State - Show when no employees in roster */}
       {employeesInRoster.length === 0 && (
         <div className="flex min-h-[400px] flex-col items-center justify-center rounded-3xl border border-[var(--border)] bg-[var(--surface)]/30 p-12">
-          <Icon icon={Users} size="xl" className="mb-4 text-[var(--foreground-subtle)]" aria-hidden={true} />
-          <h3 className="mb-2 text-lg font-semibold text-[var(--foreground)]">No Shifts Scheduled</h3>
+          <Icon
+            icon={Users}
+            size="xl"
+            className="mb-4 text-[var(--foreground-subtle)]"
+            aria-hidden={true}
+          />
+          <h3 className="mb-2 text-lg font-semibold text-[var(--foreground)]">
+            No Shifts Scheduled
+          </h3>
           <p className="mb-6 text-center text-sm text-[var(--foreground-muted)]">
             Click on an employee chip above to add them to the roster
           </p>

@@ -34,9 +34,10 @@ export default function SetupPageRefactored() {
 
   // Mark country setup as complete (since CountrySetup component is always rendered)
   useEffect(() => {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       setSetupProgress(prev => ({ ...prev, country: true }));
     }, 0);
+    return () => clearTimeout(timeoutId);
   }, []);
 
   // When clean data is populated, mark ingredients and recipes as complete
@@ -60,7 +61,7 @@ export default function SetupPageRefactored() {
 
   return (
     <div className="tablet:p-6 min-h-screen bg-transparent p-4">
-      <div className="mx-auto max-w-[1400px] large-desktop:max-w-[1400px] xl:max-w-[1400px] 2xl:max-w-[1600px]">
+      <div className="large-desktop:max-w-[1400px] mx-auto max-w-[1400px] xl:max-w-[1400px] 2xl:max-w-[1600px]">
         {/* Header with Logo */}
         <div className="mb-8">
           <div className="mb-6 flex items-center space-x-4">
@@ -111,11 +112,21 @@ export default function SetupPageRefactored() {
           <div>
             <div className="mb-8 text-center">
               <div className="mb-4 flex items-center justify-center space-x-3">
-                <Icon icon={Sparkles} size="md" className="text-[var(--primary)]" aria-hidden={true} />
+                <Icon
+                  icon={Sparkles}
+                  size="md"
+                  className="text-[var(--primary)]"
+                  aria-hidden={true}
+                />
                 <span className="text-sm font-semibold text-[var(--foreground)]">2. Test Data</span>
               </div>
               <h2 className="mb-2 flex items-center gap-2 text-3xl font-bold text-[var(--foreground)]">
-                <Icon icon={Sparkles} size="lg" className="text-[var(--primary)]" aria-hidden={true} />
+                <Icon
+                  icon={Sparkles}
+                  size="lg"
+                  className="text-[var(--primary)]"
+                  aria-hidden={true}
+                />
                 Populate Clean Test Data
               </h2>
               <p className="text-lg text-[var(--foreground-muted)]">
@@ -131,11 +142,23 @@ export default function SetupPageRefactored() {
           <div>
             <div className="mb-8 text-center">
               <div className="mb-4 flex items-center justify-center space-x-3">
-                <Icon icon={Sparkles} size="md" className="text-[var(--primary)]" aria-hidden={true} />
-                <span className="text-sm font-semibold text-[var(--foreground-subtle)]">3. Allergens (Optional)</span>
+                <Icon
+                  icon={Sparkles}
+                  size="md"
+                  className="text-[var(--primary)]"
+                  aria-hidden={true}
+                />
+                <span className="text-sm font-semibold text-[var(--foreground-subtle)]">
+                  3. Allergens (Optional)
+                </span>
               </div>
               <h2 className="mb-2 flex items-center gap-2 text-3xl font-bold text-[var(--foreground)]">
-                <Icon icon={Sparkles} size="lg" className="text-[var(--primary)]" aria-hidden={true} />
+                <Icon
+                  icon={Sparkles}
+                  size="lg"
+                  className="text-[var(--primary)]"
+                  aria-hidden={true}
+                />
                 Auto-Detect Allergens
               </h2>
               <p className="text-lg text-[var(--foreground-muted)]">
@@ -154,11 +177,23 @@ export default function SetupPageRefactored() {
           <div>
             <div className="mb-8 text-center">
               <div className="mb-4 flex items-center justify-center space-x-3">
-                <Icon icon={Thermometer} size="md" className="text-[var(--primary)]" aria-hidden={true} />
-                <span className="text-sm font-semibold text-[var(--foreground-subtle)]">4. Equipment (Optional)</span>
+                <Icon
+                  icon={Thermometer}
+                  size="md"
+                  className="text-[var(--primary)]"
+                  aria-hidden={true}
+                />
+                <span className="text-sm font-semibold text-[var(--foreground-subtle)]">
+                  4. Equipment (Optional)
+                </span>
               </div>
               <h2 className="mb-2 flex items-center gap-2 text-3xl font-bold text-[var(--foreground)]">
-                <Icon icon={Thermometer} size="lg" className="text-[var(--primary)]" aria-hidden={true} />
+                <Icon
+                  icon={Thermometer}
+                  size="lg"
+                  className="text-[var(--primary)]"
+                  aria-hidden={true}
+                />
                 Temperature Equipment Setup
               </h2>
               <p className="text-lg text-[var(--foreground-muted)]">
@@ -207,7 +242,9 @@ export default function SetupPageRefactored() {
                     aria-hidden={true}
                   />
                 </div>
-                <h2 className="mb-4 text-3xl font-bold text-[var(--foreground)]">Setup Complete!</h2>
+                <h2 className="mb-4 text-3xl font-bold text-[var(--foreground)]">
+                  Setup Complete!
+                </h2>
                 <p className="mb-6 text-lg text-[var(--foreground-secondary)]">
                   Your PrepFlow system is ready to use. You can now start managing your recipes,
                   calculating COGS, and monitoring temperature equipment.

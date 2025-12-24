@@ -11,7 +11,6 @@ import { logger } from '@/lib/logger';
 import { saveRecipeWithIngredients } from './useRecipeSaving/saveLogic';
 
 export const useRecipeSaving = () => {
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { showSuccess } = useNotification();
   const { showPrompt, InputDialog } = usePrompt();
@@ -43,7 +42,6 @@ export const useRecipeSaving = () => {
           createOrUpdateRecipe,
           saveRecipeIngredients,
           setError,
-          setLoading,
           showSuccess,
           onRecipeCreated,
         });
@@ -71,7 +69,6 @@ export const useRecipeSaving = () => {
   }, []);
 
   return {
-    loading,
     error,
     saveAsRecipe,
     clearMessages,

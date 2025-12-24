@@ -68,7 +68,9 @@ export default function IngredientFilters({
       {/* Unit Selector */}
       <div className="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-4">
         <div className="flex items-center gap-3">
-          <label className="text-sm font-medium text-[var(--foreground-secondary)]">Show costs per:</label>
+          <label className="text-sm font-medium text-[var(--foreground-secondary)]">
+            Show costs per:
+          </label>
           <select
             value={displayUnit}
             onChange={e => onDisplayUnitChange(e.target.value)}
@@ -93,7 +95,9 @@ export default function IngredientFilters({
         <div className="desktop:grid-cols-4 grid grid-cols-1 gap-4">
           {/* Search */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">🔍 Search</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+              🔍 Search
+            </label>
             <input
               type="text"
               placeholder="Search ingredients&hellip;"
@@ -105,7 +109,9 @@ export default function IngredientFilters({
 
           {/* Supplier Filter */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">🏪 Supplier</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+              🏪 Supplier
+            </label>
             <select
               value={supplierFilter}
               onChange={e => onSupplierFilterChange(e.target.value)}
@@ -122,7 +128,9 @@ export default function IngredientFilters({
 
           {/* Storage Filter */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">📍 Storage</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+              📍 Storage
+            </label>
             <select
               value={storageFilter}
               onChange={e => onStorageFilterChange(e.target.value)}
@@ -140,7 +148,12 @@ export default function IngredientFilters({
           {/* Sort By */}
           <div>
             <label className="mb-2 block flex items-center gap-1 text-sm font-medium text-[var(--foreground-secondary)]">
-              <Icon icon={BarChart3} size="xs" className="text-[var(--primary)]" aria-hidden={true} />
+              <Icon
+                icon={BarChart3}
+                size="xs"
+                className="text-[var(--primary)]"
+                aria-hidden={true}
+              />
               Sort By
             </label>
             <select

@@ -84,7 +84,9 @@ export function EquipmentListTableFilters({
       {showFilters && (
         <div className="tablet:grid-cols-2 grid grid-cols-1 gap-3 border-t border-[var(--border)] pt-3">
           <div>
-            <label className="mb-2 block text-xs font-medium text-[var(--foreground-muted)]">Equipment Type</label>
+            <label className="mb-2 block text-xs font-medium text-[var(--foreground-muted)]">
+              Equipment Type
+            </label>
             <select
               value={filterType}
               onChange={e => {
@@ -102,7 +104,9 @@ export function EquipmentListTableFilters({
             </select>
           </div>
           <div>
-            <label className="mb-2 block text-xs font-medium text-[var(--foreground-muted)]">Status</label>
+            <label className="mb-2 block text-xs font-medium text-[var(--foreground-muted)]">
+              Status
+            </label>
             <select
               value={filterStatus}
               onChange={e => {

@@ -33,7 +33,8 @@ function fixCatchChaining(content, filePath) {
   // Pattern 1: functionCall().catch(err => { logger.error(...); });
   // Replace with: (async () => { try { await functionCall(); } catch (err) { logger.error(...); } })();
 
-  const pattern1 = /(\s+)([a-zA-Z_$][a-zA-Z0-9_$]*\([^)]*\))\.catch\(err\s*=>\s*\{([^}]+logger\.error\([^}]+\})\s*\}\);/g;
+  const pattern1 =
+    /(\s+)([a-zA-Z_$][a-zA-Z0-9_$]*\([^)]*\))\.catch\(err\s*=>\s*\{([^}]+logger\.error\([^}]+\})\s*\}\);/g;
 
   let changed = false;
   let newContent = content;
@@ -62,7 +63,10 @@ ${m.indent}    ${m.errorHandler}
 ${m.indent}  }
 ${m.indent}})();`;
 
-    newContent = newContent.substring(0, m.index) + replacement + newContent.substring(m.index + m.fullMatch.length);
+    newContent =
+      newContent.substring(0, m.index) +
+      replacement +
+      newContent.substring(m.index + m.fullMatch.length);
     changed = true;
   }
 
@@ -110,6 +114,3 @@ if (require.main === module) {
 }
 
 module.exports = { fixCatchChaining };
-
-
-

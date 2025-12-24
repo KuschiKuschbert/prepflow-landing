@@ -46,7 +46,9 @@ export function AccountActivitySection({ recentActivity }: AccountActivitySectio
                 <p className="text-sm font-medium text-[var(--foreground)] capitalize">
                   {activity.action_type} {activity.entity_type}
                 </p>
-                <p className="text-xs text-[var(--foreground-muted)]">{formatDate(activity.created_at)}</p>
+                <p className="text-xs text-[var(--foreground-muted)]">
+                  {formatDate(activity.created_at)}
+                </p>
               </div>
             </div>
           ))}

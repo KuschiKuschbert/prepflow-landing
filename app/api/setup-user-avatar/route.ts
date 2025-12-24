@@ -73,9 +73,9 @@ export async function POST() {
       sqlMigration = readFileSync(sqlPath, 'utf-8');
     } catch (err) {
       logger.error('[route.ts] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
       return NextResponse.json(
         ApiErrorHandler.createError(

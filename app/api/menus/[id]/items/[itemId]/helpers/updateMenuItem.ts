@@ -1,10 +1,10 @@
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { fetchMenuItem } from './fetchMenuItem';
-import { syncPrice } from './syncPrice';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { z } from 'zod';
+import { fetchMenuItem } from './fetchMenuItem';
 import { updateMenuItemSchema } from './schemas';
+import { syncPrice } from './syncPrice';
 
 export async function updateMenuItem(
   menuId: string,
@@ -37,6 +37,17 @@ export async function updateMenuItem(
     updateData,
     actual_selling_price,
   });
+
+  if (!supabaseAdmin) {
+    return {
+      error: ApiErrorHandler.createError(
+        'Database connection not available',
+        'DATABASE_ERROR',
+        500,
+      ),
+      status: 500,
+    };
+  }
 
   // Update menu_items table
   const { data: updatedItem, error: updateError } = await supabaseAdmin
@@ -81,4 +92,3 @@ export async function updateMenuItem(
     message: 'Menu item updated successfully',
   };
 }
-

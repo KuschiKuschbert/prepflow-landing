@@ -65,7 +65,6 @@ function TemperatureLogsPageContent() {
   } = useTemperaturePageData(activeTab);
 
   const {
-    quickTempLoading,
     newLog,
     setNewLog,
     showAddLog,
@@ -169,7 +168,6 @@ function TemperatureLogsPageContent() {
           <TemperatureEquipmentTab
             equipment={equipment}
             allLogs={allLogs}
-            quickTempLoading={quickTempLoading}
             onUpdateEquipment={handleUpdateEquipment}
             onCreateEquipment={handleCreateEquipment}
             onDeleteEquipment={handleDeleteEquipment}

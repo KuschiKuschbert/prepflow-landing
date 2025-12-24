@@ -24,5 +24,3 @@ export async function getWebhookSecret(userId: string): Promise<string | null> {
     return null;
   }
 }
-
-

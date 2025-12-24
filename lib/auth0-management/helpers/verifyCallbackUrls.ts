@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
-import { getManagementClient } from '../auth0-management';
-import type { CallbackUrlStatus } from '../auth0-management';
+import { getManagementClient } from '../../auth0-management';
+import type { CallbackUrlStatus } from '../../auth0-management';
 
 /**
  * Verify callback URLs match Auth0 configuration
@@ -43,4 +43,3 @@ export async function verifyCallbackUrls(expectedUrls: string[]): Promise<Callba
     };
   }
 }
-

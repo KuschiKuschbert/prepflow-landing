@@ -36,9 +36,9 @@ export function useSupportTicketsLink() {
         }
       } catch (error) {
         logger.error('[useSupportTicketsLink.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+          error: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+        });
 
         showError('Failed to link error');
         return null;

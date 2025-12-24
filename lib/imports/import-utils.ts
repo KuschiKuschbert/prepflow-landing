@@ -100,7 +100,3 @@ export function formatEntityPreview(entity: any, fields: string[]): string {
     .filter(Boolean)
     .join(' | ');
 }
-
-
-
-

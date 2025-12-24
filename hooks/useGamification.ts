@@ -88,7 +88,3 @@ export function useGamification() {
     refreshStats,
   };
 }
-
-
-
-

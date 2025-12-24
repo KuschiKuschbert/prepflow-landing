@@ -33,7 +33,9 @@ export default function IngredientWizardStep2({
     <div className="tablet:grid-cols-2 large-desktop:grid-cols-4 grid grid-cols-1 gap-3">
       {/* Supplier */}
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Supplier</label>
+        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
+          Supplier
+        </label>
         <SupplierCombobox
           value={formData.supplier || ''}
           onChange={value => onInputChange('supplier', value)}
@@ -59,7 +61,9 @@ export default function IngredientWizardStep2({
 
       {/* Storage Location */}
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Storage Location</label>
+        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
+          Storage Location
+        </label>
         <StorageCombobox
           value={formData.storage_location || ''}
           onChange={value => onInputChange('storage_location', value)}
@@ -69,7 +73,9 @@ export default function IngredientWizardStep2({
 
       {/* Yield Percentage */}
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Yield %</label>
+        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
+          Yield %
+        </label>
         <div className="flex items-center space-x-2">
           <input
             type="range"

@@ -20,7 +20,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, message: 'Cache invalidated' });
   } catch (error) {
     logger.error('[Admin Tiers Cache] Unexpected error:', error);
-    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }
 
@@ -40,10 +43,9 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     logger.error('[Admin Tiers Cache] Unexpected error:', error);
-    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }
-
-
-
-

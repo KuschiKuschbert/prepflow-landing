@@ -3,7 +3,7 @@
  */
 
 // Re-export types and configs
-export type { CountryConfig } from './country-config/configs';
+export type { CountryConfig } from './country-config/types';
 export { COUNTRY_CONFIGS } from './country-config/configs';
 
 // Re-export utility functions

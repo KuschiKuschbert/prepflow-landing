@@ -15,7 +15,7 @@ export async function configureGoogleOAuthCredentials(
     return {
       success: false,
       message:
-        'Management API client not available. Check AUTH0_ISSUER_BASE_URL, AUTH0_CLIENT_ID, and AUTH0_CLIENT_SECRET.',
+        'Auth0 configuration is missing. Please check your AUTH0_ISSUER_BASE_URL, AUTH0_CLIENT_ID, and AUTH0_CLIENT_SECRET environment variables.',
     };
   }
 
@@ -49,17 +49,14 @@ export async function configureGoogleOAuthCredentials(
       };
     }
 
-    await client.connections.update(
-      { id: googleConnection.id },
-      {
-        options: {
-          ...googleConnection.options,
-          client_id: googleClientId,
-          client_secret: googleClientSecret,
-          scope: ['email', 'profile'],
-        },
-      } as any,
-    );
+    await client.connections.update({ id: googleConnection.id }, {
+      options: {
+        ...googleConnection.options,
+        client_id: googleClientId,
+        client_secret: googleClientSecret,
+        scope: ['email', 'profile'],
+      },
+    } as any);
 
     logger.info('[Auth0 Google Connection] Configured Google OAuth credentials', {
       connectionId: googleConnection.id,
@@ -77,4 +74,3 @@ export async function configureGoogleOAuthCredentials(
     };
   }
 }
-

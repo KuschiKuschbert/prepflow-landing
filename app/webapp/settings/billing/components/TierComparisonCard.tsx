@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 import { tierNames, tierDescriptions } from '../constants';
@@ -17,7 +19,9 @@ export function TierComparisonCard({ subscriptionData, onUpgrade }: TierComparis
     <div className="mb-6 space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
       <div>
         <h2 className="text-xl font-semibold">Available Plans</h2>
-        <p className="mt-1 text-sm text-[var(--foreground-secondary)]">Choose the plan that fits your needs</p>
+        <p className="mt-1 text-sm text-[var(--foreground-secondary)]">
+          Choose the plan that fits your needs
+        </p>
       </div>
 
       <div className="desktop:grid-cols-3 grid grid-cols-1 gap-4">

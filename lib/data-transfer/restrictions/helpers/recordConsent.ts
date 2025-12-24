@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { isRestrictedCountry } from '../country-detection';
+import { isRestrictedCountry } from '../../country-detection';
 
 /**
  * Record user consent for restricted data transfer
@@ -57,4 +57,3 @@ export async function recordTransferConsent(
     return false;
   }
 }
-

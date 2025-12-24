@@ -27,7 +27,9 @@ export function ChangesList({ changes }: ChangesListProps) {
                 className="rounded-lg border border-[var(--border)] bg-[var(--background)]/50 p-3"
               >
                 <div className="font-medium text-[var(--foreground)]">{change.entity_name}</div>
-                <div className="mt-1 text-sm text-[var(--foreground-muted)]">{formatChangeDetails(change)}</div>
+                <div className="mt-1 text-sm text-[var(--foreground-muted)]">
+                  {formatChangeDetails(change)}
+                </div>
               </div>
             ))}
           </div>
@@ -47,7 +49,9 @@ export function ChangesList({ changes }: ChangesListProps) {
                 className="rounded-lg border border-[var(--border)] bg-[var(--background)]/50 p-3"
               >
                 <div className="font-medium text-[var(--foreground)]">{change.entity_name}</div>
-                <div className="mt-1 text-sm text-[var(--foreground-muted)]">{formatChangeDetails(change)}</div>
+                <div className="mt-1 text-sm text-[var(--foreground-muted)]">
+                  {formatChangeDetails(change)}
+                </div>
               </div>
             ))}
           </div>
@@ -67,7 +71,9 @@ export function ChangesList({ changes }: ChangesListProps) {
                 className="rounded-lg border border-[var(--border)] bg-[var(--background)]/50 p-3"
               >
                 <div className="font-medium text-[var(--foreground)]">{change.entity_name}</div>
-                <div className="mt-1 text-sm text-[var(--foreground-muted)]">{formatChangeDetails(change)}</div>
+                <div className="mt-1 text-sm text-[var(--foreground-muted)]">
+                  {formatChangeDetails(change)}
+                </div>
               </div>
             ))}
           </div>

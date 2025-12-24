@@ -45,7 +45,9 @@ function PerformanceTableMobileCardComponent({ item }: PerformanceTableMobileCar
         </div>
         <div>
           <p className="mb-1 text-xs text-[var(--foreground-muted)]">Sold</p>
-          <p className="text-sm text-[var(--foreground-secondary)]">{formatNumber(item.number_sold)}</p>
+          <p className="text-sm text-[var(--foreground-secondary)]">
+            {formatNumber(item.number_sold)}
+          </p>
         </div>
         <div>
           <p className="mb-1 text-xs text-[var(--foreground-muted)]">Profit ex GST</p>
@@ -92,7 +94,10 @@ function PerformanceTableMobileCardComponent({ item }: PerformanceTableMobileCar
 }
 
 // Memoize component to prevent unnecessary re-renders when props don't change
-export const PerformanceTableMobileCard = memo(PerformanceTableMobileCardComponent, (prevProps, nextProps) => {
-  // Only re-render if item id or item reference changed
-  return prevProps.item.id === nextProps.item.id && prevProps.item === nextProps.item;
-});
+export const PerformanceTableMobileCard = memo(
+  PerformanceTableMobileCardComponent,
+  (prevProps, nextProps) => {
+    // Only re-render if item id or item reference changed
+    return prevProps.item.id === nextProps.item.id && prevProps.item === nextProps.item;
+  },
+);

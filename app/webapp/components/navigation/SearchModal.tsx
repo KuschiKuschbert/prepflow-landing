@@ -184,12 +184,18 @@ export function SearchModal({ isOpen, query, onChange, onClose, filtered }: Sear
                       >
                         <span className="text-[var(--foreground)]/60">{item.icon}</span>
                         <span className="text-[var(--foreground)]/80">{item.label}</span>
-                        <span className="ml-auto text-xs text-[var(--foreground)]/50">{item.category}</span>
+                        <span className="ml-auto text-xs text-[var(--foreground)]/50">
+                          {item.category}
+                        </span>
                       </Link>
                     ))}
                   </div>
                 ) : (
-                  <div className="py-8 text-center text-[var(--foreground)]/50" role="status" aria-live="polite">
+                  <div
+                    className="py-8 text-center text-[var(--foreground)]/50"
+                    role="status"
+                    aria-live="polite"
+                  >
                     No results found for &quot;{query}&quot;
                   </div>
                 )}

@@ -37,7 +37,9 @@ export function RecipeSidePanelCostSummary({
           </div>
           <div>
             <div className="text-xs text-[var(--foreground-muted)]">Total Cost</div>
-            <div className="text-lg font-semibold text-[var(--foreground)]">${costPerPortion.toFixed(2)}</div>
+            <div className="text-lg font-semibold text-[var(--foreground)]">
+              ${costPerPortion.toFixed(2)}
+            </div>
           </div>
           <div>
             <div className="text-xs text-[var(--foreground-muted)]">Gross Profit</div>
@@ -49,7 +51,9 @@ export function RecipeSidePanelCostSummary({
             <div className="text-xs text-[var(--foreground-muted)]">Profit Margin</div>
             <div
               className={`text-lg font-semibold ${
-                recipePrice.gross_profit_margin >= 30 ? 'text-[var(--color-success)]' : 'text-[var(--color-warning)]'
+                recipePrice.gross_profit_margin >= 30
+                  ? 'text-[var(--color-success)]'
+                  : 'text-[var(--color-warning)]'
               }`}
             >
               {recipePrice.gross_profit_margin.toFixed(1)}%
@@ -71,11 +75,15 @@ export function RecipeSidePanelCostSummary({
         <div className="grid grid-cols-2 gap-4">
           <div>
             <div className="text-xs text-[var(--foreground-muted)]">Total Cost</div>
-            <div className="text-lg font-semibold text-[var(--foreground)]">${totalCOGS.toFixed(2)}</div>
+            <div className="text-lg font-semibold text-[var(--foreground)]">
+              ${totalCOGS.toFixed(2)}
+            </div>
           </div>
           <div>
             <div className="text-xs text-[var(--foreground-muted)]">Cost per Portion</div>
-            <div className="text-lg font-semibold text-[var(--primary)]">${costPerPortion.toFixed(2)}</div>
+            <div className="text-lg font-semibold text-[var(--primary)]">
+              ${costPerPortion.toFixed(2)}
+            </div>
           </div>
           <div className="col-span-2">
             <LoadingSkeleton variant="text" width="w-full" height="h-4" />

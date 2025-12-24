@@ -88,7 +88,9 @@ export function TemperatureLogCard({
             </div>
           </div>
           <div className="flex shrink-0 flex-col items-end gap-2">
-            <span className="text-3xl font-bold text-[var(--primary)]">{log.temperature_celsius}°C</span>
+            <span className="text-3xl font-bold text-[var(--primary)]">
+              {log.temperature_celsius}°C
+            </span>
             <span
               className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${getStatusColor(status)}`}
             >
@@ -132,19 +134,33 @@ export function TemperatureLogCard({
           <div className="mb-4 space-y-2 rounded-2xl bg-[var(--muted)]/30 p-3">
             {log.location && log.location !== getTypeLabel(log.temperature_type) && (
               <div className="flex items-center gap-2 text-sm text-[var(--foreground-secondary)]">
-                <Icon icon={MapPin} size="sm" className="text-[var(--foreground-secondary)]" aria-hidden={true} />
+                <Icon
+                  icon={MapPin}
+                  size="sm"
+                  className="text-[var(--foreground-secondary)]"
+                  aria-hidden={true}
+                />
                 <span>{log.location}</span>
               </div>
             )}
             {log.logged_by && (
               <div className="flex items-center gap-2 text-xs text-[var(--foreground-muted)]">
-                <Icon icon={User} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+                <Icon
+                  icon={User}
+                  size="sm"
+                  className="text-[var(--foreground-muted)]"
+                  aria-hidden={true}
+                />
                 <span>
                   {t('temperature.loggedBy', 'Logged by')}: {log.logged_by}
                 </span>
               </div>
             )}
-            {log.notes && <p className="text-sm leading-relaxed text-[var(--foreground-secondary)]">{log.notes}</p>}
+            {log.notes && (
+              <p className="text-sm leading-relaxed text-[var(--foreground-secondary)]">
+                {log.notes}
+              </p>
+            )}
           </div>
         )}
 

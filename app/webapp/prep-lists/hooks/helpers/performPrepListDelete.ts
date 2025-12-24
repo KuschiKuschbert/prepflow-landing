@@ -8,7 +8,6 @@ interface PerformPrepListDeleteParams {
   id: string;
   prepLists: PrepList[];
   setPrepLists: React.Dispatch<React.SetStateAction<PrepList[]>>;
-  refetchPrepLists: () => Promise<unknown>;
   showError: (message: string) => void;
   showSuccess: (message: string) => void;
 }
@@ -17,7 +16,6 @@ export async function performPrepListDelete({
   id,
   prepLists,
   setPrepLists,
-  refetchPrepLists,
   showError,
   showSuccess,
 }: PerformPrepListDeleteParams): Promise<void> {
@@ -38,7 +36,6 @@ export async function performPrepListDelete({
 
     if (result.success) {
       showSuccess('Prep list deleted successfully');
-      refetchPrepLists().catch(err => logger.error('Failed to refresh prep lists:', err));
     } else {
       setPrepLists(originalPrepLists);
       showError(result.message || 'Failed to delete prep list');

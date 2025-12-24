@@ -22,7 +22,10 @@ export async function POST(request: NextRequest) {
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json(ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     logger.dev('Starting recipe population...');

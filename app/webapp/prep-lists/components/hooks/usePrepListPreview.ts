@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { GeneratedPrepListData, SectionData, KitchenSection } from '../../types';
 import { usePrepListHandlers } from './usePrepListHandlers';
 import { loadPrepDetails } from './usePrepListPreview/prepDetailsLoading';
+import { logger } from '@/lib/logger';
 
 interface UsePrepListPreviewProps {
   data: GeneratedPrepListData;
@@ -22,7 +23,8 @@ export function usePrepListPreview({
   );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [loadingPrepDetails, setLoadingPrepDetails] = useState(false);
+  // No loading state for mutations - optimistic updates handle UI updates
+  const loadingPrepDetails = false;
 
   useEffect(() => {
     // Ensure all sections have prepInstructions array initialized
@@ -36,9 +38,10 @@ export function usePrepListPreview({
     loadPrepDetails({
       sectionsWithPrepInstructions,
       setSections,
-      setLoadingPrepDetails,
+    }).catch(err => {
+      logger.error('Failed to load prep details:', err);
     });
-  }, [data, setSections, setLoadingPrepDetails]);
+  }, [data, setSections]);
 
   const safeIngredients = Array.isArray(ingredients) ? ingredients : [];
 

@@ -55,7 +55,7 @@ export function FeaturesSection() {
   return (
     <section id="features" className={getSectionClasses({ padding: 'large' })}>
       <div
-        className={`${LANDING_LAYOUT.container} grid gap-12 tablet:gap-10 desktop:gap-12 large-desktop:gap-14 xl:gap-16 [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] desktop:[grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]`}
+        className={`${LANDING_LAYOUT.container} tablet:gap-10 desktop:gap-12 large-desktop:gap-14 tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] desktop:[grid-template-columns:repeat(auto-fit,minmax(320px,1fr))] grid [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] gap-12 xl:gap-16`}
       >
         {features.map((feature, index) => (
           <motion.div

@@ -5,12 +5,12 @@ import { useOnRecipeCreated } from '@/lib/personality/hooks';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
+import { createHandleAddRecipe } from './useRecipeActions/helpers/createHandleAddRecipe';
+import { createHandleDuplicateRecipe } from './useRecipeActions/helpers/createHandleDuplicateRecipe';
+import { handleEditFromPreview as handleEditFromPreviewHelper } from './useRecipeActions/helpers/handleEditFromPreview';
 import { useRecipeBulkOperations } from './useRecipeBulkOperations';
 import { useRecipeDeleteOperations } from './useRecipeDeleteOperations';
 import { useRecipeShareOperations } from './useRecipeShareOperations';
-import { handleAddRecipe as handleAddRecipeHelper } from './useRecipeActions/helpers/handleAddRecipe';
-import { handleEditFromPreview as handleEditFromPreviewHelper } from './useRecipeActions/helpers/handleEditFromPreview';
-import { handleDuplicateRecipe as handleDuplicateRecipeHelper } from './useRecipeActions/helpers/handleDuplicateRecipe';
 interface UseRecipeActionsProps {
   recipes: Recipe[];
   fetchRecipes: () => Promise<void>;
@@ -40,27 +40,23 @@ export function useRecipeActions({
     rollbackRecipes,
   );
   const deleteOps = useRecipeDeleteOperations(
-    fetchRecipes,
+    recipes,
     capitalizeRecipeName,
     optimisticallyUpdateRecipes,
-    rollbackRecipes,
   );
   const shareOps = useRecipeShareOperations();
   const handleAddRecipe = useCallback(
     async (newRecipe: Partial<Recipe>) => {
-      try {
-        return await handleAddRecipeHelper(
-          newRecipe,
-          fetchRecipes,
-          onRecipeCreated,
-          showErrorNotification,
-        );
-      } catch {
-        showErrorNotification('Failed to add recipe');
-        return false;
-      }
+      const handler = createHandleAddRecipe(
+        recipes,
+        optimisticallyUpdateRecipes,
+        onRecipeCreated,
+        showErrorNotification,
+        showSuccess,
+      );
+      return handler(newRecipe);
     },
-    [fetchRecipes, showErrorNotification, onRecipeCreated],
+    [recipes, optimisticallyUpdateRecipes, onRecipeCreated, showErrorNotification, showSuccess],
   );
   const handleEditFromPreview = useCallback(
     async (selectedRecipe: Recipe, recipeIngredients: any[]) => {
@@ -80,21 +76,22 @@ export function useRecipeActions({
   );
   const handleDuplicateRecipe = useCallback(
     async (recipe: Recipe) => {
-      try {
-        return await handleDuplicateRecipeHelper(
-          recipe,
-          fetchRecipeIngredients,
-          fetchRecipes,
-          showErrorNotification,
-          showSuccess,
-        );
-      } catch (err) {
-        logger.error('Error duplicating recipe:', err);
-        showErrorNotification('Failed to duplicate recipe');
-        return null;
-      }
+      const handler = createHandleDuplicateRecipe(
+        recipes,
+        fetchRecipeIngredients,
+        optimisticallyUpdateRecipes,
+        showErrorNotification,
+        showSuccess,
+      );
+      return handler(recipe);
     },
-    [fetchRecipes, fetchRecipeIngredients, showErrorNotification, showSuccess],
+    [
+      recipes,
+      fetchRecipeIngredients,
+      optimisticallyUpdateRecipes,
+      showErrorNotification,
+      showSuccess,
+    ],
   );
   return {
     ...deleteOps,

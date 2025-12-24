@@ -21,7 +21,10 @@ export async function updateTier(
   request: NextRequest,
 ): Promise<{ tier: any } | NextResponse> {
   if (!supabaseAdmin) {
-    return NextResponse.json(ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503), { status: 503 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503),
+      { status: 503 },
+    );
   }
 
   // Get current config for audit log
@@ -51,7 +54,10 @@ export async function updateTier(
 
   if (error) {
     logger.error('[Admin Tiers] Failed to update tier:', error);
-    return NextResponse.json(ApiErrorHandler.createError('Failed to update tier', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Failed to update tier', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 
   await invalidateTierCache();

@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { AlertCircle, X } from 'lucide-react';
 
@@ -13,7 +15,12 @@ export function DialogHeader({ summary, onClose }: DialogHeaderProps) {
   return (
     <div className="mb-6 flex items-start justify-between">
       <div className="flex items-center gap-3">
-        <Icon icon={AlertCircle} size="xl" className="text-[var(--color-warning)]" aria-hidden={true} />
+        <Icon
+          icon={AlertCircle}
+          size="xl"
+          className="text-[var(--color-warning)]"
+          aria-hidden={true}
+        />
         <div>
           <h2 id="dialog-title" className="text-fluid-xl font-bold text-[var(--foreground)]">
             Changes Detected While Menu Was Locked
@@ -33,7 +40,3 @@ export function DialogHeader({ summary, onClose }: DialogHeaderProps) {
     </div>
   );
 }
-
-
-
-

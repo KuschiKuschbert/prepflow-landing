@@ -158,7 +158,9 @@ export function MenuIngredientsTable({
 
       {/* Header - visible in print */}
       <div className="mb-6 hidden print:mb-4 print:block">
-        <h2 className="text-2xl font-bold text-[var(--foreground)] print:text-xl print:text-[var(--primary-text)]">{menuName}</h2>
+        <h2 className="text-2xl font-bold text-[var(--foreground)] print:text-xl print:text-[var(--primary-text)]">
+          {menuName}
+        </h2>
         <p className="text-[var(--foreground-muted)] print:text-sm print:text-[var(--foreground-subtle)]">
           Order List -{' '}
           {new Date().toLocaleDateString('en-AU', {

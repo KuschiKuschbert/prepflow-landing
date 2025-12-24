@@ -51,9 +51,13 @@ export async function fetchRecipes(): Promise<any[]> {
       hint: errorHint,
     });
 
-    throw ApiErrorHandler.createError(process.env.NODE_ENV === 'development'
-      ? `${errorMessage}${errorHint ? ` (${errorHint})` : ''}${errorCode ? ` [${errorCode}]` : ''}`
-      : 'Could not retrieve recipes from database', 'DATABASE_ERROR', 500);
+    throw ApiErrorHandler.createError(
+      process.env.NODE_ENV === 'development'
+        ? `${errorMessage}${errorHint ? ` (${errorHint})` : ''}${errorCode ? ` [${errorCode}]` : ''}`
+        : 'Could not retrieve recipes from database',
+      'DATABASE_ERROR',
+      500,
+    );
   }
 
   return recipes || [];

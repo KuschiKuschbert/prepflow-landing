@@ -10,6 +10,10 @@ import type { Ingredient } from '../../types';
  * @returns {Promise<Ingredient[]>} Array of ingredients
  */
 export async function fetchRecipeIngredients(recipeId: string): Promise<Ingredient[]> {
+  if (!supabaseAdmin) {
+    return [];
+  }
+
   const { data: recipeIngredients, error: ingredientsError } = await supabaseAdmin
     .from('recipe_ingredients')
     .select(
@@ -54,4 +58,3 @@ export async function fetchRecipeIngredients(recipeId: string): Promise<Ingredie
     };
   });
 }
-

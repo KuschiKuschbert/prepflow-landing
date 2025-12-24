@@ -36,6 +36,7 @@ export function useUpdateFormFromProfile(
       initialDataLoadedRef.current = true;
       onProfileUpdate(profile);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     profile,
     initialDataLoadedRef,
@@ -43,5 +44,6 @@ export function useUpdateFormFromProfile(
     USER_MODIFIED_KEY,
     mountIdRef,
     onProfileUpdate,
+    // setFormData is stable from useState and doesn't need to be in deps
   ]);
 }

@@ -19,7 +19,9 @@ export async function GET(request: NextRequest) {
   try {
     const user = await requireAuth(request);
     if (!user?.email) {
-      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), {
+        status: 401,
+      });
     }
 
     const userId = user.email;
@@ -34,10 +36,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       logger.error('[Backup List] Error fetching backups:', error);
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(error, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(error, 500), { status: 500 });
     }
 
     // Convert to BackupFile format
@@ -59,11 +58,7 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     logger.error('[Backup List] Error:', error);
     return NextResponse.json(
-      ApiErrorHandler.createError(
-        error?.message || 'Failed to list backups',
-        'SERVER_ERROR',
-        500,
-      ),
+      ApiErrorHandler.createError(error?.message || 'Failed to list backups', 'SERVER_ERROR', 500),
       { status: 500 },
     );
   }

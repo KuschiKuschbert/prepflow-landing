@@ -62,7 +62,9 @@ export default function DishIngredientSelector({
   return (
     <div className="mb-6">
       <div className="mb-3 flex items-center justify-between">
-        <label className="text-sm font-medium text-[var(--foreground-secondary)]">Standalone Ingredients</label>
+        <label className="text-sm font-medium text-[var(--foreground-secondary)]">
+          Standalone Ingredients
+        </label>
         <button
           type="button"
           onClick={handleAddIngredient}

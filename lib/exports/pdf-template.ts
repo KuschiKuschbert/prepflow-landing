@@ -37,7 +37,16 @@ export function generateExportTemplate({
   const logoUrl = forPDF ? getInlineSVGLogo() : getLogoUrl();
   const generatedDate = new Date().toLocaleString();
   const styles = getExportStyles();
-  const bodyHTML = buildExportHTML(logoUrl, title, subtitle, content, generatedDate, totalItems, customMeta, forPDF);
+  const bodyHTML = buildExportHTML(
+    logoUrl,
+    title,
+    subtitle,
+    content,
+    generatedDate,
+    totalItems,
+    customMeta,
+    forPDF,
+  );
 
   return `<!DOCTYPE html>
 <html lang="en">

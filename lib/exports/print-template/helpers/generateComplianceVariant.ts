@@ -43,4 +43,3 @@ export function generateComplianceVariant(
 </body>
 </html>`;
 }
-

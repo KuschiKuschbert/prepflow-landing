@@ -33,11 +33,15 @@ export function ProfileAccountMetadata({
       <div className="desktop:grid-cols-2 grid grid-cols-1 gap-3">
         <div>
           <p className="text-xs text-[var(--foreground-subtle)]">Account Created</p>
-          <p className="text-sm font-medium text-[var(--foreground-secondary)]">{formatDate(created_at)}</p>
+          <p className="text-sm font-medium text-[var(--foreground-secondary)]">
+            {formatDate(created_at)}
+          </p>
         </div>
         <div>
           <p className="text-xs text-[var(--foreground-subtle)]">Last Login</p>
-          <p className="text-sm font-medium text-[var(--foreground-secondary)]">{formatDate(last_login)}</p>
+          <p className="text-sm font-medium text-[var(--foreground-secondary)]">
+            {formatDate(last_login)}
+          </p>
         </div>
         <div>
           <p className="text-xs text-[var(--foreground-subtle)]">Email Verification</p>

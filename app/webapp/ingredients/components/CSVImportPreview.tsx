@@ -91,7 +91,9 @@ export function CSVImportPreview({
                   )}
                 </button>
                 <div className="flex-1">
-                  <div className="font-medium text-[var(--foreground)]">{ingredient.ingredient_name}</div>
+                  <div className="font-medium text-[var(--foreground)]">
+                    {ingredient.ingredient_name}
+                  </div>
                   <div className="text-sm text-[var(--foreground-muted)]">
                     {ingredient.brand && `Brand: ${ingredient.brand} • `}
                     Cost: ${displayCost.formattedCost}/{displayCost.unit}

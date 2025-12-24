@@ -91,7 +91,9 @@ export function RecipeCombobox({
 
   return (
     <div ref={comboboxRef} className="relative">
-      <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Recipe</label>
+      <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+        Recipe
+      </label>
       <div className="relative">
         <div className="relative">
           <Icon
@@ -140,11 +142,18 @@ export function RecipeCombobox({
               className="flex w-full items-center gap-3 rounded-t-xl border-b border-[var(--border)] px-4 py-3 text-left transition-colors hover:bg-[var(--muted)] focus:bg-[var(--muted)] focus:outline-none"
             >
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]">
-                <Icon icon={Plus} size="sm" className="text-[var(--button-active-text)]" aria-hidden={true} />
+                <Icon
+                  icon={Plus}
+                  size="sm"
+                  className="text-[var(--button-active-text)]"
+                  aria-hidden={true}
+                />
               </div>
               <div>
                 <div className="font-medium text-[var(--foreground)]">Create New Recipe</div>
-                <div className="text-xs text-[var(--foreground-muted)]">Start a new recipe from scratch</div>
+                <div className="text-xs text-[var(--foreground-muted)]">
+                  Start a new recipe from scratch
+                </div>
               </div>
             </button>
 
@@ -180,7 +189,9 @@ export function RecipeCombobox({
                     } ${index === filteredRecipes.length - 1 ? 'rounded-b-xl' : ''}`}
                   >
                     <div className="flex-1">
-                      <div className="font-medium text-[var(--foreground)]">{recipe.recipe_name}</div>
+                      <div className="font-medium text-[var(--foreground)]">
+                        {recipe.recipe_name}
+                      </div>
                       <div className="text-xs text-[var(--foreground-muted)]">
                         {recipe.yield} {recipe.yield_unit || 'servings'}
                       </div>

@@ -105,7 +105,9 @@ export function AchievementToast() {
               Achievement Unlocked!
             </div>
             <div className="font-semibold text-[var(--foreground)]">{currentAchievement.name}</div>
-            <div className="text-sm text-[var(--foreground)]/60">{currentAchievement.description}</div>
+            <div className="text-sm text-[var(--foreground)]/60">
+              {currentAchievement.description}
+            </div>
           </div>
           <button
             onClick={handleDismiss}

@@ -84,9 +84,9 @@ export async function processBatchRequestQueue(
         requests.forEach(req => req.resolve(result));
       } catch (err) {
         logger.error('[batchRequestQueue.ts] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+          error: err instanceof Error ? err.message : String(err),
+          stack: err instanceof Error ? err.stack : undefined,
+        });
 
         requests.forEach(req => req.reject(err instanceof Error ? err : new Error(String(err))));
       }

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Empty state component for prep lists page.
  */

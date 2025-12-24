@@ -45,5 +45,3 @@ export async function routeWebhookEvent(event: any, userId: string): Promise<voi
       logger.dev('[Square Webhook] Unhandled event type:', eventType);
   }
 }
-
-

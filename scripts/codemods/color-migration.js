@@ -67,7 +67,7 @@ module.exports = function transformer(file, api) {
         const basePattern = old.slice(0, -1); // Remove trailing /
         const regex = new RegExp(
           basePattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '/(\\d+)',
-          'g'
+          'g',
         );
         const matches = newStr.match(regex);
         if (matches) {

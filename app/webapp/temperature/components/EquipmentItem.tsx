@@ -1,3 +1,5 @@
+'use client';
+
 import { TemperatureEquipment } from '../types';
 import { getTypeIconComponent, getTypeLabel } from '../utils/temperatureUtils';
 import { EquipmentItemHeader } from './EquipmentItemHeader';
@@ -11,7 +13,6 @@ interface EquipmentItemProps {
   editingId: string | null;
   setEditingId: (id: string | null) => void;
   temperatureTypes: Array<{ value: string; label: string; icon: string }>;
-  quickTempLoading: Record<string, boolean>;
   onQuickTempLog: (id: string, name: string, type: string) => Promise<void>;
   onToggleStatus: (id: string, current: boolean) => void;
   onDelete: (id: string) => void;
@@ -31,7 +32,6 @@ export function EquipmentItem({
   editingId,
   setEditingId,
   temperatureTypes,
-  quickTempLoading,
   onQuickTempLog,
   onToggleStatus,
   onDelete,
@@ -88,7 +88,6 @@ export function EquipmentItem({
         <EquipmentActionButtons
           item={item}
           editingId={editingId}
-          quickTempLoading={quickTempLoading}
           onQuickTempLog={onQuickTempLog}
           onToggleStatus={onToggleStatus}
           onDelete={onDelete}

@@ -41,9 +41,16 @@ export function RecipeIngredientsList({
         {recipeIngredients.length === 0 ? (
           <div className="px-4 py-8 text-center">
             <div className="mb-2 flex justify-center text-[var(--foreground-muted)]">
-              <Icon icon={Package} size="xl" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+              <Icon
+                icon={Package}
+                size="xl"
+                className="text-[var(--foreground-muted)]"
+                aria-hidden={true}
+              />
             </div>
-            <p className="text-sm text-[var(--foreground-muted)]">No ingredients found for this recipe</p>
+            <p className="text-sm text-[var(--foreground-muted)]">
+              No ingredients found for this recipe
+            </p>
             <p className="mt-1 text-xs text-[var(--foreground-subtle)]">
               Add ingredients in the COGS Calculator and save as recipe
             </p>
@@ -55,7 +62,10 @@ export function RecipeIngredientsList({
                 ingredient: JSON.stringify(ri),
               });
               return (
-                <div key={ri.id || index} className="px-4 py-3 text-center text-sm text-[var(--color-warning)]">
+                <div
+                  key={ri.id || index}
+                  className="px-4 py-3 text-center text-sm text-[var(--color-warning)]"
+                >
                   ⚠️ Ingredient data incomplete (ID: {ri.ingredient_id || 'unknown'})
                 </div>
               );
@@ -69,7 +79,10 @@ export function RecipeIngredientsList({
                 ingredient: JSON.stringify(ingredient),
               });
               return (
-                <div key={ri.id || index} className="px-4 py-3 text-center text-sm text-[var(--color-warning)]">
+                <div
+                  key={ri.id || index}
+                  className="px-4 py-3 text-center text-sm text-[var(--color-warning)]"
+                >
                   ⚠️ Ingredient name missing (ID: {ingredient.id || 'unknown'})
                 </div>
               );
@@ -84,7 +97,9 @@ export function RecipeIngredientsList({
                     </span>
                   </div>
                   <div className="col-span-8">
-                    <div className="font-medium text-[var(--foreground)]">{ingredient.ingredient_name}</div>
+                    <div className="font-medium text-[var(--foreground)]">
+                      {ingredient.ingredient_name}
+                    </div>
                   </div>
                   <div className="col-span-3 text-center">
                     <span className="font-medium text-[var(--foreground)]">

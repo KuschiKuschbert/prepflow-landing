@@ -93,4 +93,3 @@ export async function processImageResult(
 
   return { imageUrl: dataUrl, mimeType };
 }
-

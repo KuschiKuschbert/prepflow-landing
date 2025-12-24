@@ -109,7 +109,9 @@ export default function ComplianceTrackingPage() {
 
         {activeTab === 'equipment' && (
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-2xl font-semibold text-[var(--foreground)]">Equipment Maintenance</h2>
+            <h2 className="text-2xl font-semibold text-[var(--foreground)]">
+              Equipment Maintenance
+            </h2>
             <button
               onClick={() => setShowAddEquipment(true)}
               className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"

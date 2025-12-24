@@ -25,7 +25,6 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
   const [password, setPassword] = useState('');
   const [backupFile, setBackupFile] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const { showSuccess, showError } = useNotification();
 
@@ -46,9 +45,9 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
       }
     } catch (error) {
       logger.error('[RestoreDialog.tsx] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       showError('Failed to load backup file');
     }
@@ -77,7 +76,6 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
       return;
     }
 
-    setLoading(true);
     try {
       const mergeOptions: MergeOptions | undefined =
         mode === 'merge'
@@ -118,7 +116,6 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
 
       showError('Failed to restore backup');
     } finally {
-      setLoading(false);
       setShowConfirm(false);
     }
   };
@@ -174,7 +171,9 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
 
             {/* Restore Mode Selection */}
             <div className="mb-6">
-              <label className="mb-3 block text-sm font-medium text-[var(--foreground-secondary)]">Restore Mode</label>
+              <label className="mb-3 block text-sm font-medium text-[var(--foreground-secondary)]">
+                Restore Mode
+              </label>
               <div className="grid grid-cols-3 gap-3">
                 {(['full', 'selective', 'merge'] as RestoreMode[]).map(m => (
                   <button
@@ -253,20 +252,17 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
             <div className="flex justify-end gap-3">
               <button
                 onClick={onClose}
-                disabled={loading}
                 className="rounded-2xl border border-[var(--border)] px-4 py-2 text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/40 disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
                 onClick={() => setShowConfirm(true)}
-                disabled={
-                  loading || !backupFile || (mode === 'selective' && selectedTables.length === 0)
-                }
+                disabled={!backupFile || (mode === 'selective' && selectedTables.length === 0)}
                 className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 font-medium text-[var(--button-active-text)] transition-all hover:shadow-lg disabled:opacity-50"
               >
                 <Icon icon={RotateCcw} size="sm" />
-                {loading ? 'Restoring...' : 'Restore Backup'}
+                Restore Backup
               </button>
             </div>
           </div>

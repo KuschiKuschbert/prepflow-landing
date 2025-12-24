@@ -32,10 +32,9 @@ interface SubscriptionData {
  * @returns {JSX.Element} Billing section
  */
 export function BillingSection() {
-  const { showError } = useNotification();
+  const { showError, showSuccess } = useNotification();
   const [loading, setLoading] = useState(true);
   const [subscriptionData, setSubscriptionData] = useState<SubscriptionData | null>(null);
-  const [openingPortal, setOpeningPortal] = useState(false);
 
   useEffect(() => {
     const loadSubscription = async () => {
@@ -59,7 +58,9 @@ export function BillingSection() {
   }, [showError]);
 
   const handleOpenPortal = async () => {
-    setOpeningPortal(true);
+    // Store original subscription data for rollback (though this redirects, so not strictly necessary)
+    const originalData = subscriptionData;
+
     try {
       const response = await fetch('/api/billing/create-portal-session', {
         method: 'POST',
@@ -72,12 +73,16 @@ export function BillingSection() {
       }
 
       if (data.url) {
+        // Optimistically show success message (redirect happens immediately)
+        showSuccess('Opening billing portal...');
         window.location.href = data.url;
       }
     } catch (error) {
       logger.error('Failed to open billing portal:', error);
-      showError(error instanceof Error ? error.message : 'Failed to open billing portal');
-      setOpeningPortal(false);
+      showError(
+        error instanceof Error ? error.message : 'Failed to open billing portal. Please try again.',
+      );
+      // Note: No state to rollback since we redirect on success
     }
   };
 
@@ -111,7 +116,9 @@ export function BillingSection() {
           <div className="space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
             <div>
               <h2 className="text-xl font-semibold text-[var(--foreground)]">Current Plan</h2>
-              <p className="mt-1 text-sm text-[var(--foreground)]/80">Your active subscription details</p>
+              <p className="mt-1 text-sm text-[var(--foreground)]/80">
+                Your active subscription details
+              </p>
             </div>
 
             <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
@@ -166,7 +173,12 @@ export function BillingSection() {
             <div className="desktop:grid-cols-3 grid grid-cols-1 gap-4">
               <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
                 <div className="flex items-center gap-2">
-                  <Icon icon={Package} size="md" className="text-[var(--primary)]" aria-hidden={true} />
+                  <Icon
+                    icon={Package}
+                    size="md"
+                    className="text-[var(--primary)]"
+                    aria-hidden={true}
+                  />
                   <div>
                     <p className="text-xs text-[var(--foreground)]/60">Ingredients</p>
                     <p className="text-2xl font-bold text-[var(--foreground)]">
@@ -177,7 +189,12 @@ export function BillingSection() {
               </div>
               <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
                 <div className="flex items-center gap-2">
-                  <Icon icon={TrendingUp} size="md" className="text-[var(--color-info)]" aria-hidden={true} />
+                  <Icon
+                    icon={TrendingUp}
+                    size="md"
+                    className="text-[var(--color-info)]"
+                    aria-hidden={true}
+                  />
                   <div>
                     <p className="text-xs text-[var(--foreground)]/60">Recipes</p>
                     <p className="text-2xl font-bold text-[var(--foreground)]">
@@ -188,10 +205,17 @@ export function BillingSection() {
               </div>
               <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
                 <div className="flex items-center gap-2">
-                  <Icon icon={CreditCard} size="md" className="text-[var(--accent)]" aria-hidden={true} />
+                  <Icon
+                    icon={CreditCard}
+                    size="md"
+                    className="text-[var(--accent)]"
+                    aria-hidden={true}
+                  />
                   <div>
                     <p className="text-xs text-[var(--foreground)]/60">Menu Dishes</p>
-                    <p className="text-2xl font-bold text-[var(--foreground)]">{subscriptionData.usage.dishes}</p>
+                    <p className="text-2xl font-bold text-[var(--foreground)]">
+                      {subscriptionData.usage.dishes}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -219,10 +243,9 @@ export function BillingSection() {
               </form>
               <button
                 onClick={handleOpenPortal}
-                disabled={openingPortal}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/40 px-4 py-2 text-[var(--foreground)] transition-colors hover:bg-[var(--surface)]/60 disabled:opacity-50"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/40 px-4 py-2 text-[var(--foreground)] transition-colors hover:bg-[var(--surface)]/60"
               >
-                {openingPortal ? 'Opening...' : 'Manage Billing'}
+                Manage Billing
               </button>
             </div>
 

@@ -6,13 +6,24 @@
 import { logger } from '@/lib/logger';
 import { detectVegetarianVeganFromIngredients } from './vegetarian-vegan-detection/helpers/detectFromIngredients';
 import { detectVegetarianVeganWithAI } from './vegetarian-vegan-detection/helpers/detectWithAI';
-import { isNonVegetarianIngredient, isNonVeganIngredient } from './vegetarian-vegan-detection/helpers/checkIngredients';
+import {
+  isNonVegetarianIngredient,
+  isNonVeganIngredient,
+} from './vegetarian-vegan-detection/helpers/checkIngredients';
 
 // Re-export types and interfaces
-export type { DietaryDetectionResult, Ingredient } from './vegetarian-vegan-detection/helpers/detectFromIngredients';
+export type {
+  DietaryDetectionResult,
+  Ingredient,
+} from './vegetarian-vegan-detection/helpers/detectFromIngredients';
 
 // Re-export helper functions
-export { isNonVegetarianIngredient, isNonVeganIngredient, detectVegetarianVeganFromIngredients, detectVegetarianVeganWithAI };
+export {
+  isNonVegetarianIngredient,
+  isNonVeganIngredient,
+  detectVegetarianVeganFromIngredients,
+  detectVegetarianVeganWithAI,
+};
 
 /**
  * Hybrid detection function
@@ -24,7 +35,9 @@ export async function detectDietarySuitability(
   recipeName?: string,
   description?: string,
   useAI?: boolean,
-): Promise<import('./vegetarian-vegan-detection/helpers/detectFromIngredients').DietaryDetectionResult> {
+): Promise<
+  import('./vegetarian-vegan-detection/helpers/detectFromIngredients').DietaryDetectionResult
+> {
   // First try non-AI detection (includes name check)
   const nonAIResult = detectVegetarianVeganFromIngredients(ingredients, recipeName);
 

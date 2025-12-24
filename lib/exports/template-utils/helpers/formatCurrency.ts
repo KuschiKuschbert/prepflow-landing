@@ -13,4 +13,3 @@ export function formatCurrency(amount: number, includeSymbol: boolean = true): s
     maximumFractionDigits: 2,
   }).format(amount);
 }
-

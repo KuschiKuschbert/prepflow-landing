@@ -18,7 +18,11 @@ import {
   useOnRecipeShared,
   useOnMenuBuilt,
 } from './hooks/helpers/useAchievementHooks';
-import { useContextualPersonality, useOnSuccess, useOnMoodShift } from './hooks/helpers/useContextHooks';
+import {
+  useContextualPersonality,
+  useOnSuccess,
+  useOnMoodShift,
+} from './hooks/helpers/useContextHooks';
 
 export function useOnSave() {
   const { settings } = usePersonality();
@@ -94,4 +98,8 @@ export {
 } from './hooks/helpers/useAchievementHooks';
 
 // Re-export context hooks
-export { useContextualPersonality, useOnSuccess, useOnMoodShift } from './hooks/helpers/useContextHooks';
+export {
+  useContextualPersonality,
+  useOnSuccess,
+  useOnMoodShift,
+} from './hooks/helpers/useContextHooks';

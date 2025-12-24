@@ -98,7 +98,9 @@ export default function IngredientForm({
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        {!ingredient && <h2 className="text-xl font-bold text-[var(--foreground)]">Add Ingredient</h2>}
+        {!ingredient && (
+          <h2 className="text-xl font-bold text-[var(--foreground)]">Add Ingredient</h2>
+        )}
         <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
       </div>
 
@@ -115,7 +117,7 @@ export default function IngredientForm({
           <button
             type="button"
             disabled={loading || status === 'saving'}
-            className="flex-1 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[#3B82F6] px-4 py-2.5 font-semibold text-[var(--button-active-text)] transition-all duration-300 hover:shadow-lg hover:shadow-[var(--primary)]/25 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex-1 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[#3B82F6] px-4 py-2.5 font-semibold text-[var(--button-active-text)] transition-all duration-300 hover:shadow-[var(--primary)]/25 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
             onClick={async e => {
               e.preventDefault();
               if (validateForm()) {

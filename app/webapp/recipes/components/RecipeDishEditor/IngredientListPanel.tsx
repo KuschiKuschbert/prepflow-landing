@@ -74,7 +74,9 @@ export function IngredientListPanel({
         >
           <Icon icon={ArrowLeft} size="sm" aria-hidden={true} />
         </button>
-        <h3 className="text-lg font-semibold text-[var(--foreground)]">Add Ingredients & Consumables</h3>
+        <h3 className="text-lg font-semibold text-[var(--foreground)]">
+          Add Ingredients & Consumables
+        </h3>
       </div>
 
       {/* Search */}

@@ -59,7 +59,3 @@ export function useFilteredOptions(
 
   return { filteredEquipment, filteredSections };
 }
-
-
-
-

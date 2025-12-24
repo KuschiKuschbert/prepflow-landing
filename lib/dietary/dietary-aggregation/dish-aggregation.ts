@@ -11,7 +11,7 @@ import { cacheDietaryStatus } from './cache-management';
 import { checkCachedDishDietaryStatus } from './dish-aggregation/helpers/checkCachedStatus';
 import { fetchDishIngredients } from './dish-aggregation/helpers/fetchDishIngredients';
 import { handleEmptyDishIngredients } from './dish-aggregation/helpers/handleEmptyIngredients';
-import { aggregateIngredientAllergens } from '../recipe-aggregation/helpers/aggregateAllergens';
+import { aggregateIngredientAllergens } from './recipe-aggregation/helpers/aggregateAllergens';
 
 /**
  * Aggregate dietary status for a single dish
@@ -34,11 +34,19 @@ export async function aggregateDishDietaryStatus(
 
     const allIngredients = await fetchDishIngredients(dishId);
 
-    const { data: dishData } = await supabaseAdmin
+    const { data: dishData, error: dishDataError } = await supabaseAdmin
       .from('dishes')
       .select('dish_name, description')
       .eq('id', dishId)
       .single();
+
+    if (dishDataError) {
+      logger.error('[Dietary Aggregation] Error fetching dish data:', {
+        error: dishDataError.message,
+        dishId,
+        context: { operation: 'aggregateDishDietaryStatus' },
+      });
+    }
 
     if (allIngredients.length === 0) {
       return await handleEmptyDishIngredients(dishId, dishData?.dish_name);

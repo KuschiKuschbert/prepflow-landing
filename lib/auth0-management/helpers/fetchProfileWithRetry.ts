@@ -35,11 +35,12 @@ export async function fetchProfileWithRetry(
         );
         return fallbackEmail;
       }
-      logger.dev(`[Auth0 Management] Retry attempt ${attempt + 1}/${maxRetries} for ${auth0UserId}`);
+      logger.dev(
+        `[Auth0 Management] Retry attempt ${attempt + 1}/${maxRetries} for ${auth0UserId}`,
+      );
       await new Promise(resolve => setTimeout(resolve, 500));
     }
   }
 
   return fallbackEmail;
 }
-

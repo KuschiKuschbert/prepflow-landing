@@ -34,7 +34,8 @@ function analyzeFile(content, filePath) {
   const lines = content.split('\n');
 
   // Check 1: .catch() chaining on Supabase queries (actual chaining, not background ops)
-  const catchChainingPattern = /(supabaseAdmin|supabase)\s*\.(from|select|insert|update|delete)\([^)]*\)[^}]*\.catch\(/;
+  const catchChainingPattern =
+    /(supabaseAdmin|supabase)\s*\.(from|select|insert|update|delete)\([^)]*\)[^}]*\.catch\(/;
   if (catchChainingPattern.test(content)) {
     violations.push({ type: 'catch-chaining', file: filePath });
   }
@@ -194,6 +195,3 @@ if (require.main === module) {
 }
 
 module.exports = { analyzeFile };
-
-
-

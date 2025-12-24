@@ -50,7 +50,9 @@ export function EquipmentTemperatureRange({
         </div>
         <div className="flex flex-col gap-1">
           <div className="text-xl font-bold text-[var(--primary)]">{displayText}</div>
-          {isRecommended && <span className="text-xs text-[var(--foreground-subtle)] italic">(Recommended)</span>}
+          {isRecommended && (
+            <span className="text-xs text-[var(--foreground-subtle)] italic">(Recommended)</span>
+          )}
         </div>
       </div>
       <div className="flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--muted)]/50 px-3 py-1.5">

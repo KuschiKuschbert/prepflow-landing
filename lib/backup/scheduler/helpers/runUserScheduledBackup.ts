@@ -28,7 +28,10 @@ export async function runUserScheduledBackup(schedule: BackupSchedule): Promise<
         googleDriveFileId = await uploadBackupToDrive(client, encrypted, userId);
         logger.info(`[Backup Scheduler] Uploaded backup to Google Drive for user ${userId}`);
       } catch (error: any) {
-        logger.warn(`[Backup Scheduler] Failed to upload to Google Drive for user ${userId}:`, error);
+        logger.warn(
+          `[Backup Scheduler] Failed to upload to Google Drive for user ${userId}:`,
+          error,
+        );
       }
     }
 
@@ -78,4 +81,3 @@ export async function runUserScheduledBackup(schedule: BackupSchedule): Promise<
     throw error;
   }
 }
-

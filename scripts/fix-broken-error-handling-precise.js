@@ -121,7 +121,3 @@ if (require.main === module) {
 }
 
 module.exports = { fixBrokenPattern };
-
-
-
-

@@ -11,6 +11,11 @@ export async function updateExistingUser(
   existingUserEmailVerified: boolean,
   name?: string | null,
 ): Promise<void> {
+  if (!supabaseAdmin) {
+    logger.error('[Auth0 Sync] Database connection not available');
+    return;
+  }
+
   const { data: userWithName, error: userWithNameError } = await supabaseAdmin
     .from('users')
     .select('first_name, last_name')
@@ -60,8 +65,11 @@ export async function updateExistingUser(
   } else {
     logger.dev('[Auth0 Sync] Updated user:', {
       email,
-      updatedName: !!(name && userWithName && (!userWithName.first_name || !userWithName.last_name)),
+      updatedName: !!(
+        name &&
+        userWithName &&
+        (!userWithName.first_name || !userWithName.last_name)
+      ),
     });
   }
 }
-

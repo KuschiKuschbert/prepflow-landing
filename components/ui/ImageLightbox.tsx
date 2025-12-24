@@ -162,7 +162,12 @@ export function ImageLightbox({
         {hasError && (
           <div className="flex min-h-[400px] min-w-[400px] items-center justify-center rounded-3xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-8">
             <div className="flex flex-col items-center gap-3 text-center">
-              <Icon icon={AlertCircle} size="xl" className="text-[var(--color-error)]" aria-hidden={true} />
+              <Icon
+                icon={AlertCircle}
+                size="xl"
+                className="text-[var(--color-error)]"
+                aria-hidden={true}
+              />
               <p className="text-sm font-medium text-[var(--color-error)]">Failed to load image</p>
               <p className="text-xs text-red-300/80">The image URL may be invalid or expired</p>
             </div>
@@ -177,6 +182,8 @@ export function ImageLightbox({
             onClick={e => e.stopPropagation()}
           >
             {imageUrl.startsWith('data:') ? (
+              // Next.js Image component doesn't support data URLs (base64), so we use native img tag
+              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={imageUrl}
                 alt={alt}

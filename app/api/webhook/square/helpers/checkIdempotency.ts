@@ -46,5 +46,3 @@ export async function isWebhookEventProcessed(eventId: string, userId: string): 
     return false;
   }
 }
-
-

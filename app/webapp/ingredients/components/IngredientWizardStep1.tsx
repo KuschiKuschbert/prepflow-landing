@@ -85,7 +85,9 @@ export default function IngredientWizardStep1({
   return (
     <div className="tablet:grid-cols-2 large-desktop:grid-cols-5 grid grid-cols-1 gap-3">
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Ingredient Name *</label>
+        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
+          Ingredient Name *
+        </label>
         <input
           type="text"
           required
@@ -101,7 +103,9 @@ export default function IngredientWizardStep1({
       </div>
 
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Brand (Optional)</label>
+        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
+          Brand (Optional)
+        </label>
         <input
           type="text"
           value={formData.brand || ''}
@@ -113,7 +117,9 @@ export default function IngredientWizardStep1({
       </div>
 
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Pack Size *</label>
+        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
+          Pack Size *
+        </label>
         <input
           type="text"
           required
@@ -122,11 +128,15 @@ export default function IngredientWizardStep1({
           className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--foreground)] transition-all focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
           placeholder="e.g., 5"
         />
-        {errors.pack_size && <p className="mt-1 text-xs text-[var(--color-error)]">{errors.pack_size}</p>}
+        {errors.pack_size && (
+          <p className="mt-1 text-xs text-[var(--color-error)]">{errors.pack_size}</p>
+        )}
       </div>
 
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Pack Unit *</label>
+        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
+          Pack Unit *
+        </label>
         <select
           required
           value={formData.pack_size_unit || ''}
@@ -146,7 +156,9 @@ export default function IngredientWizardStep1({
       </div>
 
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Pack Price *</label>
+        <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
+          Pack Price *
+        </label>
         <input
           type="text"
           required
@@ -156,7 +168,9 @@ export default function IngredientWizardStep1({
           className="w-full rounded-lg border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--foreground)] transition-all focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
           placeholder="e.g., 12.99 or 1,234.56"
         />
-        {errors.pack_price && <p className="mt-1 text-xs text-[var(--color-error)]">{errors.pack_price}</p>}
+        {errors.pack_price && (
+          <p className="mt-1 text-xs text-[var(--color-error)]">{errors.pack_price}</p>
+        )}
         {formData.pack_price !== undefined &&
           formData.pack_price > 0 &&
           formData.pack_size &&

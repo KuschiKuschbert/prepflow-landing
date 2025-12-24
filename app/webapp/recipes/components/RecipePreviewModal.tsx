@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useRef } from 'react';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 import { RecipeIngredientsList } from './RecipeIngredientsList';
@@ -13,7 +12,6 @@ interface RecipePreviewModalProps {
   aiInstructions: string;
   generatingInstructions: boolean;
   previewYield: number;
-  shareLoading: boolean;
   onClose: () => void;
   onEditFromPreview: () => void;
   onShareRecipe: () => void;
@@ -37,7 +35,6 @@ export default function RecipePreviewModal({
   aiInstructions,
   generatingInstructions,
   previewYield,
-  shareLoading,
   onClose,
   onEditFromPreview,
   onShareRecipe,
@@ -98,7 +95,10 @@ export default function RecipePreviewModal({
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="mb-2 flex items-center justify-between">
-                  <h2 id="recipe-preview-title" className="text-2xl font-bold text-[var(--foreground)]">
+                  <h2
+                    id="recipe-preview-title"
+                    className="text-2xl font-bold text-[var(--foreground)]"
+                  >
                     {capitalizeRecipeName(selectedRecipe.recipe_name)}
                   </h2>
                   <button
@@ -144,7 +144,9 @@ export default function RecipePreviewModal({
                         +
                       </button>
                     </div>
-                    <span className="font-medium text-[var(--foreground)]">{selectedRecipe.yield_unit}</span>
+                    <span className="font-medium text-[var(--foreground)]">
+                      {selectedRecipe.yield_unit}
+                    </span>
                   </div>
 
                   {previewYield !== selectedRecipe.yield && (
@@ -166,36 +168,31 @@ export default function RecipePreviewModal({
                   onClick={onEditFromPreview}
                   className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--color-info)]/80"
                 >
-                  <Icon icon={Edit} size="sm" className="text-[var(--button-active-text)]" aria-hidden={true} />
+                  <Icon
+                    icon={Edit}
+                    size="sm"
+                    className="text-[var(--button-active-text)]"
+                    aria-hidden={true}
+                  />
                   Edit Recipe
                 </button>
                 <button
                   onClick={onShareRecipe}
-                  disabled={shareLoading}
-                  className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#10B981] to-[#059669] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[#10B981]/80 hover:to-[#059669]/80 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#10B981] to-[#059669] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[#10B981]/80 hover:to-[#059669]/80"
                 >
-                  {shareLoading ? (
-                    <>
-                      <Icon
-                        icon={Loader2}
-                        size="sm"
-                        className="animate-spin text-[var(--foreground)]"
-                        aria-hidden={true}
-                      />
-                      <span>Sharing...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Icon icon={Share2} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
-                      <span>Share Recipe</span>
-                    </>
-                  )}
+                  <Icon icon={Share2} size="sm" aria-hidden={true} />
+                  <span>Share Recipe</span>
                 </button>
                 <button
                   onClick={onPrint}
                   className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[var(--accent)] to-[var(--primary)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all duration-200 hover:from-[var(--accent)]/80 hover:to-[var(--primary)]/80"
                 >
-                  <Icon icon={Printer} size="sm" className="text-[var(--button-active-text)]" aria-hidden={true} />
+                  <Icon
+                    icon={Printer}
+                    size="sm"
+                    className="text-[var(--button-active-text)]"
+                    aria-hidden={true}
+                  />
                   Print
                 </button>
               </div>
@@ -256,10 +253,14 @@ export default function RecipePreviewModal({
                 {generatingInstructions ? (
                   <div className="flex items-center justify-center py-8">
                     <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-[var(--primary)]"></div>
-                    <span className="ml-3 text-[var(--foreground-muted)]">Generating cooking instructions...</span>
+                    <span className="ml-3 text-[var(--foreground-muted)]">
+                      Generating cooking instructions...
+                    </span>
                   </div>
                 ) : (
-                  <div className="whitespace-pre-wrap text-[var(--foreground-secondary)]">{aiInstructions}</div>
+                  <div className="whitespace-pre-wrap text-[var(--foreground-secondary)]">
+                    {aiInstructions}
+                  </div>
                 )}
               </div>
             </div>

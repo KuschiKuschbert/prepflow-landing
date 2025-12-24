@@ -65,10 +65,8 @@ export const ENHANCED_GAP_CLASSES = {
  * Enhanced padding classes for large screens
  */
 export const ENHANCED_PADDING_CLASSES = {
-  container:
-    'px-4 tablet:px-6 desktop:px-8 large-desktop:px-12 xl:px-20 2xl:px-24',
-  section:
-    'py-16 tablet:py-20 desktop:py-24 large-desktop:py-28 xl:py-32 2xl:py-36',
+  container: 'px-4 tablet:px-6 desktop:px-8 large-desktop:px-12 xl:px-20 2xl:px-24',
+  section: 'py-16 tablet:py-20 desktop:py-24 large-desktop:py-28 xl:py-32 2xl:py-36',
 } as const;
 
 /**
@@ -89,9 +87,7 @@ export const CARD_MAX_WIDTH_CLASSES = {
  * @param {keyof typeof CONTENT_WIDTH_CLASSES} type - Content type
  * @returns {string} Tailwind class for optimal content width
  */
-export function getContentWidthClass(
-  type: keyof typeof CONTENT_WIDTH_CLASSES = 'content',
-): string {
+export function getContentWidthClass(type: keyof typeof CONTENT_WIDTH_CLASSES = 'content'): string {
   return CONTENT_WIDTH_CLASSES[type];
 }
 
@@ -113,9 +109,7 @@ export function getReadingWidthClass(
  * @param {keyof typeof AUTO_FIT_GRID_CLASSES} type - Grid type
  * @returns {string} Tailwind class for auto-fit grid
  */
-export function getAutoFitGridClass(
-  type: keyof typeof AUTO_FIT_GRID_CLASSES = 'cards',
-): string {
+export function getAutoFitGridClass(type: keyof typeof AUTO_FIT_GRID_CLASSES = 'cards'): string {
   return AUTO_FIT_GRID_CLASSES[type];
 }
 
@@ -140,7 +134,3 @@ export function getCardMaxWidthClass(
 ): string {
   return CARD_MAX_WIDTH_CLASSES[type];
 }
-
-
-
-

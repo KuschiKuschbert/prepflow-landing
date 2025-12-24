@@ -59,10 +59,7 @@ export function ThemeTogglePanel() {
                 {displayIsDark ? 'Dark Mode' : 'Light Mode'}
               </label>
             </div>
-            <p
-              className="mt-1 text-xs text-[var(--foreground)]/60"
-              suppressHydrationWarning
-            >
+            <p className="mt-1 text-xs text-[var(--foreground)]/60" suppressHydrationWarning>
               {displayIsDark
                 ? 'Dark theme with Cyber Carrot accents'
                 : 'Light theme with brighter colors and Cyber Carrot accents'}

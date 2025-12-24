@@ -35,7 +35,9 @@ export function QuickTaskButtons({ onSelect, selectedAreaId }: QuickTaskButtonsP
 
   return (
     <div className="mb-4">
-      <div className="mb-2 text-xs font-medium text-[var(--foreground-muted)]">Quick Add Common Tasks</div>
+      <div className="mb-2 text-xs font-medium text-[var(--foreground-muted)]">
+        Quick Add Common Tasks
+      </div>
       <div className="flex flex-wrap gap-2">
         {quickTasks.map((task, index) => (
           <button
@@ -52,7 +54,3 @@ export function QuickTaskButtons({ onSelect, selectedAreaId }: QuickTaskButtonsP
     </div>
   );
 }
-
-
-
-

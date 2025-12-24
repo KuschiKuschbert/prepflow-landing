@@ -114,9 +114,9 @@ Always provide responses that are:
       );
     } catch (error) {
       logger.error('[chat.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       lastError = error as Error;
       const aiError = parseAIError(error as Error);

@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
@@ -110,10 +111,13 @@ export async function POST(request: NextRequest) {
               .delete()
               .eq('id', prepList.id);
             if (rollbackError) {
-              logger.warn('[Prep Lists API] Warning: Failed to rollback prep list after items error:', {
-                error: rollbackError.message,
-                prepListId: prepList.id,
-              });
+              logger.warn(
+                '[Prep Lists API] Warning: Failed to rollback prep list after items error:',
+                {
+                  error: rollbackError.message,
+                  prepListId: prepList.id,
+                },
+              );
             }
             errors.push({
               prepListName: prepListData.name,

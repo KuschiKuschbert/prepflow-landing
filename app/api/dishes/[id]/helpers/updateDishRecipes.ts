@@ -13,9 +13,13 @@ export async function updateDishRecipes(
   dishId: string,
   recipes: Array<{ recipe_id: string; quantity?: number }>,
 ) {
-  if (!supabaseAdmin) throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  if (!supabaseAdmin)
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
 
-  const { error: deleteError } = await supabaseAdmin.from('dish_recipes').delete().eq('dish_id', dishId);
+  const { error: deleteError } = await supabaseAdmin
+    .from('dish_recipes')
+    .delete()
+    .eq('dish_id', dishId);
   if (deleteError) {
     logger.error('[Dishes API] Database error deleting dish recipes:', {
       error: deleteError.message,

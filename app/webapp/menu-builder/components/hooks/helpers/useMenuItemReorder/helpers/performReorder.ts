@@ -43,8 +43,9 @@ export async function performReorder({
   }));
 
   const otherItems = menuItems.filter(item => item.category !== category);
+
+  // Optimistically update UI immediately
   setMenuItems([...otherItems, ...updatedItems]);
-  refreshStatistics().catch(err => logger.error('Failed to refresh statistics:', err));
 
   try {
     const response = await fetch(`/api/menus/${menuId}/reorder`, {
@@ -60,17 +61,18 @@ export async function performReorder({
     });
     const result = await response.json();
     if (response.ok) {
+      // Refresh statistics in background (non-blocking)
       refreshStatistics().catch(err => logger.error('Failed to refresh statistics:', err));
     } else {
+      // Rollback on error
       setMenuItems(originalMenuItems);
       logger.error('Failed to reorder items:', result.error || result.message);
       showError(`Failed to reorder items: ${result.error || result.message || 'Unknown error'}`);
-      refreshStatistics().catch(err => logger.error('Failed to refresh statistics:', err));
     }
   } catch (err) {
+    // Rollback on error
     setMenuItems(originalMenuItems);
     logger.error('Failed to reorder items:', err);
     showError('Failed to reorder items. Give it another go, chef.');
-    refreshStatistics().catch(err => logger.error('Failed to refresh statistics:', err));
   }
 }

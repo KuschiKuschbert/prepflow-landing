@@ -1,4 +1,5 @@
 import { supabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 /**
  * Fetch all active kitchen sections.
@@ -10,10 +11,17 @@ export async function fetchKitchenSections() {
     return new Map();
   }
 
-  const { data: kitchenSections } = await supabaseAdmin
+  const { data: kitchenSections, error: sectionsError } = await supabaseAdmin
     .from('kitchen_sections')
     .select('id, name')
     .eq('is_active', true);
+
+  if (sectionsError) {
+    logger.error('[Prep Lists API] Error fetching kitchen sections:', {
+      error: sectionsError.message,
+      context: { endpoint: '/api/prep-lists/generate-from-menu', operation: 'fetchKitchenSections' },
+    });
+  }
 
   const sectionsMap = new Map<string, { id: string; name: string }>();
   if (kitchenSections) {

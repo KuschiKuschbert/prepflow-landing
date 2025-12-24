@@ -85,10 +85,17 @@ export function BudgetWidget({
           aria-expanded={isExpanded}
         >
           <div className="flex items-center gap-2">
-            <Icon icon={DollarSign} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+            <Icon
+              icon={DollarSign}
+              size="sm"
+              className="text-[var(--primary)]"
+              aria-hidden={true}
+            />
             <div className="text-left">
               <div className="text-xs text-[var(--foreground-muted)]">Total Cost</div>
-              <div className="text-lg font-bold text-[var(--foreground)]">{formatCurrency(budget.totalCost)}</div>
+              <div className="text-lg font-bold text-[var(--foreground)]">
+                {formatCurrency(budget.totalCost)}
+              </div>
             </div>
           </div>
           {budget.laborCostPercentage !== null && (
@@ -131,7 +138,12 @@ export function BudgetWidget({
                 <div className="mb-1 flex items-center gap-2">
                   <span className="text-xs text-[var(--foreground-muted)]">Labor Cost %</span>
                   {isOverBudget && (
-                    <Icon icon={TrendingUp} size="xs" className="text-[var(--color-error)]" aria-hidden={true} />
+                    <Icon
+                      icon={TrendingUp}
+                      size="xs"
+                      className="text-[var(--color-error)]"
+                      aria-hidden={true}
+                    />
                   )}
                   {isUnderBudget && (
                     <Icon
@@ -153,7 +165,9 @@ export function BudgetWidget({
             {/* Total Shifts */}
             <div className="rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 p-2">
               <div className="text-xs text-[var(--foreground-muted)]">Shifts</div>
-              <div className="text-lg font-semibold text-[var(--foreground)]">{budget.totalShifts}</div>
+              <div className="text-lg font-semibold text-[var(--foreground)]">
+                {budget.totalShifts}
+              </div>
             </div>
 
             {/* Forecast Revenue (if available) */}

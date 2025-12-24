@@ -88,22 +88,11 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get('userId');
 
     if (!userId) {
-      return NextResponse.json(
-        {
-          error: 'User ID is required',
-          message: 'Please provide a valid user ID',
-        },
-        { status: 400 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('User ID is required', 'VALIDATION_ERROR', 400), { status: 400 });
     }
 
     if (!supabaseAdmin) {
-      return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500), { status: 500 });
     }
 
     const { data, error } = await supabaseAdmin
@@ -120,13 +109,6 @@ export async function GET(request: NextRequest) {
       )
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
-
-    if (error) {
-      logger.error('[recipe-share/route] Database error:', {
-        error: error.message,
-      });
-      throw ApiErrorHandler.fromSupabaseError(error, 500);
-    }
 
     if (error) {
       logger.error('[Recipe Share API] Database error fetching shares:', {

@@ -145,7 +145,10 @@ export function PlatingMethodSelectorPopup({
         <div className="rounded-xl bg-[var(--surface)]/95" style={{ maxHeight: '240px' }}>
           {/* Header */}
           <div className="flex items-center justify-between border-b border-[var(--border)] px-3 py-2">
-            <p id="plating-popup-title" className="text-xs font-medium text-[var(--foreground-secondary)]">
+            <p
+              id="plating-popup-title"
+              className="text-xs font-medium text-[var(--foreground-secondary)]"
+            >
               Select Plating Style
             </p>
             <button
@@ -164,7 +167,9 @@ export function PlatingMethodSelectorPopup({
                 onClick={() => handleSelectMethod(method)}
                 className="w-full border-b border-[var(--border)]/50 px-3 py-2 text-left transition-colors last:border-b-0 hover:bg-[var(--muted)]/50 hover:text-[var(--primary)]"
               >
-                <div className="text-xs font-medium text-[var(--foreground)]">{platingMethodLabels[method]}</div>
+                <div className="text-xs font-medium text-[var(--foreground)]">
+                  {platingMethodLabels[method]}
+                </div>
                 <div className="mt-0.5 text-[10px] text-[var(--foreground-muted)]">
                   {platingMethodDescriptions[method]}
                 </div>

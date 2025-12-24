@@ -43,7 +43,7 @@ export function EquipmentQRCodeModalActions({
     <div className="relative z-10 flex flex-shrink-0 gap-2">
       <button
         onClick={handlePrint}
-        className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-3 py-2 text-xs font-semibold text-[var(--button-active-text)] transition-all hover:scale-105 hover:shadow-lg hover:shadow-[var(--primary)]/30"
+        className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-3 py-2 text-xs font-semibold text-[var(--button-active-text)] transition-all hover:scale-105 hover:shadow-[var(--primary)]/30 hover:shadow-lg"
       >
         <Icon icon={Printer} size="sm" />
         Print

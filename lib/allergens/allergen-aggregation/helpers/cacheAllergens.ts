@@ -8,10 +8,12 @@ import { invalidateDietaryCache } from '@/lib/dietary/dietary-aggregation';
  * @param {string} recipeId - Recipe ID
  * @param {string[]} allergens - Allergen codes to cache
  */
-export async function cacheRecipeAllergens(
-  recipeId: string,
-  allergens: string[],
-): Promise<void> {
+export async function cacheRecipeAllergens(recipeId: string, allergens: string[]): Promise<void> {
+  if (!supabaseAdmin) {
+    logger.error('[Allergen Aggregation] Database connection not available');
+    return;
+  }
+
   const { error: cacheError } = await supabaseAdmin
     .from('recipes')
     .update({ allergens })
@@ -43,6 +45,11 @@ export async function cacheRecipeAllergens(
  * @param {string[]} allergens - Allergen codes to cache
  */
 export async function cacheDishAllergens(dishId: string, allergens: string[]): Promise<void> {
+  if (!supabaseAdmin) {
+    logger.error('[Allergen Aggregation] Database connection not available');
+    return;
+  }
+
   const { error: cacheError } = await supabaseAdmin
     .from('dishes')
     .update({ allergens })
@@ -66,4 +73,3 @@ export async function cacheDishAllergens(dishId: string, allergens: string[]): P
     });
   }
 }
-

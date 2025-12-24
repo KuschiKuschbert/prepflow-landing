@@ -118,7 +118,6 @@ export default function PrepListsPage() {
   } = usePrepListsForm({
     prepLists,
     setPrepLists,
-    refetchPrepLists,
     showError,
     showSuccess,
     userId,
@@ -129,7 +128,6 @@ export default function PrepListsPage() {
     {
       prepLists,
       setPrepLists,
-      refetchPrepLists,
       showError,
       showSuccess,
     },
@@ -166,15 +164,15 @@ export default function PrepListsPage() {
   };
 
   const handleSaveBatch = async (
-    prepLists: Array<{ sectionId: string | null; name: string; items: any[] }>,
+    prepListsToCreate: Array<{ sectionId: string | null; name: string; items: any[] }>,
   ) => {
     try {
-      await handleSaveBatchPrepLists(prepLists, userId, refetchPrepLists, setError);
+      await handleSaveBatchPrepLists(prepListsToCreate, userId, prepLists, setPrepLists, setError);
     } catch (error) {
       logger.error('[PrepLists] Error saving batch prep lists:', {
         error: error instanceof Error ? error.message : String(error),
       });
-      // Error is already handled by handleSaveBatchPrepLists via setError
+      // Error is already handled by handleSaveBatchPrepLists via setError and showError
     }
   };
 

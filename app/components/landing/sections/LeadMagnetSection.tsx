@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import { trackEvent, trackConversion, getSessionId } from '../../../../lib/analytics';

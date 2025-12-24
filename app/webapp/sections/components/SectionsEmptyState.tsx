@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Empty state component for sections page.
  */
@@ -16,7 +18,12 @@ export function SectionsEmptyState({ onAddClick }: SectionsEmptyStateProps) {
   return (
     <div className="py-12 text-center">
       <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20">
-        <Icon icon={UtensilsCrossed} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
+        <Icon
+          icon={UtensilsCrossed}
+          size="xl"
+          className="text-[var(--primary)]"
+          aria-hidden={true}
+        />
       </div>
       <h3 className="mb-2 text-xl font-semibold text-[var(--button-active-text)]">
         {t('dishSections.noSections', 'No Kitchen Sections')}

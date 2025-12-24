@@ -71,9 +71,9 @@ export function useDishesClientDelete({
       setItemToDelete(null);
     } catch (err) {
       logger.error('[useDishesClientDelete.ts] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
       // Revert optimistic update on error
       if (itemType === 'dish') {

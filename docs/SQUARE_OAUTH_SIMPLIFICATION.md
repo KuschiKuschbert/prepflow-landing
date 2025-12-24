@@ -111,27 +111,32 @@ SQUARE_WEBHOOK_SECRET=your-webhook-secret-from-square-dashboard
 ### OAuth Flow Functions
 
 **`getSquareAuthUrl(userId, environment)`**
+
 - Uses PrepFlow's Application ID from `getSquareOAuthConfig()`
 - Generates state token with environment included
 - Returns Square authorization URL
 
 **`exchangeCodeForTokens(code, environment)`**
+
 - Uses PrepFlow's Application ID/Secret from `getSquareOAuthConfig()`
 - Exchanges authorization code for user's access token
 - Returns token response with user's access token (for their Square account)
 
 **`handleSquareCallback(code, stateToken, expectedUserId, environment?)`**
+
 - Verifies state token (includes environment)
 - Exchanges code for tokens using PrepFlow's credentials
 - Stores user's access token (for their Square account) encrypted
 
 **`refreshAccessToken(refreshToken, environment)`**
+
 - Uses PrepFlow's Application ID/Secret from `getSquareOAuthConfig()`
 - Refreshes user's access token using their refresh token
 
 ### State Token
 
 State token now includes:
+
 - `userId` - User ID for verification
 - `environment` - Square environment (sandbox/production)
 - `timestamp` - For expiration checking
@@ -140,6 +145,7 @@ State token now includes:
 ### Database Schema
 
 **`square_configurations` table:**
+
 - `square_application_id` - Stores PrepFlow's app ID (for reference)
 - `square_access_token_encrypted` - User's access token (for their account) - encrypted
 - `refresh_token_encrypted` - User's refresh token - encrypted
@@ -191,6 +197,7 @@ State token now includes:
 **Cause:** Missing `SQUARE_APPLICATION_ID` or `SQUARE_APPLICATION_SECRET` environment variables.
 
 **Solution:**
+
 1. Verify your `.env.local` file contains both variables:
    ```bash
    SQUARE_APPLICATION_ID=your-actual-application-id
@@ -202,12 +209,14 @@ State token now includes:
 ### Verifying Your Credentials Are Loaded
 
 **Quick Check:**
+
 1. Visit `/webapp/square` in your browser
 2. Navigate to Configuration section
 3. If you see "Connect with Square" button → OAuth is configured ✅
 4. If you see an error about missing environment variables → Check your `.env.local` file
 
 **API Check:**
+
 - Call `/api/square/status` - it will return `503` with error `OAUTH_NOT_CONFIGURED` if environment variables are missing
 
 ### Users Getting Wrong Account Access

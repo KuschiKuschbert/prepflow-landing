@@ -36,9 +36,9 @@ export function useTiers() {
       }
     } catch (error) {
       logger.error('[useTiers.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch tiers';
       setError(errorMessage);
@@ -66,9 +66,9 @@ export function useTiers() {
         return false;
       } catch (error) {
         logger.error('[useTiers.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+          error: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+        });
 
         showError('Failed to update tier');
         return false;
@@ -93,9 +93,9 @@ export function useTiers() {
         return false;
       } catch (error) {
         logger.error('[useTiers.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+          error: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+        });
 
         showError('Failed to disable tier');
         return false;

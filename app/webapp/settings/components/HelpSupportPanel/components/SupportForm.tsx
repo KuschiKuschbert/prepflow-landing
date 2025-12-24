@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { AlertTriangle } from 'lucide-react';
 import type { SupportFormData } from '../types';
@@ -29,7 +31,10 @@ export function SupportForm({
         </div>
       )}
       <div>
-        <label htmlFor="support-type" className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+        <label
+          htmlFor="support-type"
+          className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]"
+        >
           Request Type
         </label>
         <select
@@ -52,7 +57,10 @@ export function SupportForm({
       )}
 
       <div>
-        <label htmlFor="support-subject" className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+        <label
+          htmlFor="support-subject"
+          className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]"
+        >
           Subject
         </label>
         <input
@@ -68,7 +76,10 @@ export function SupportForm({
       </div>
 
       <div>
-        <label htmlFor="support-message" className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+        <label
+          htmlFor="support-message"
+          className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]"
+        >
           Message
         </label>
         <textarea

@@ -59,7 +59,8 @@ export default function SimpleTemperatureChart({
         ? 'In Range'
         : 'Out of Range'
       : 'N/A';
-  const statusColor = latestStatus === 'In Range' ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]';
+  const statusColor =
+    latestStatus === 'In Range' ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]';
 
   if (!chartData || chartData.length === 0) {
     return (

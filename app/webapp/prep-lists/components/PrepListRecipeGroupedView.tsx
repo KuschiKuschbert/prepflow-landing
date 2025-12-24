@@ -13,10 +13,15 @@ export function PrepListRecipeGroupedView({ section }: PrepListRecipeGroupedView
   return (
     <div className="space-y-4">
       {section.recipeGrouped.map((recipe, recipeIndex) => (
-        <div key={recipeIndex} className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
+        <div
+          key={recipeIndex}
+          className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4"
+        >
           <div className="mb-3">
             <h4 className="font-semibold text-[var(--foreground)]">{recipe.recipeName}</h4>
-            {recipe.dishName && <p className="text-sm text-[var(--foreground-muted)]">From: {recipe.dishName}</p>}
+            {recipe.dishName && (
+              <p className="text-sm text-[var(--foreground-muted)]">From: {recipe.dishName}</p>
+            )}
           </div>
           <div className="space-y-2">
             {recipe.ingredients.map((ing, ingIndex) => (
@@ -79,7 +84,9 @@ function RecipeInstructions({
       </button>
       {isExpanded && (
         <div className="border-t border-[var(--primary)]/20 p-3">
-          <div className="text-sm whitespace-pre-wrap text-[var(--foreground-secondary)]">{instructions}</div>
+          <div className="text-sm whitespace-pre-wrap text-[var(--foreground-secondary)]">
+            {instructions}
+          </div>
         </div>
       )}
     </div>

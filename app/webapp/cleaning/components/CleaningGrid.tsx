@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
 import { MemoizedTaskRow } from './TaskRow';
 import { MemoizedDayHeader } from './DayHeader';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
@@ -34,7 +34,28 @@ export function CleaningGrid({
   onCreateTask,
 }: CleaningGridProps) {
   const { showSuccess, showError } = useNotification();
-  const [updatingTasks, setUpdatingTasks] = useState<Set<string>>(new Set());
+  // Optimistic completions: Map<`${taskId}_${date}`, { completed: boolean, tempId?: string }>
+  const [optimisticCompletions, setOptimisticCompletions] = useState<
+    Map<string, { completed: boolean; tempId?: string }>
+  >(new Map());
+
+  // Sync optimistic completions with tasks when they update (for background refresh)
+  useEffect(() => {
+    // Clear optimistic completions that match server state (background refresh completed)
+    setOptimisticCompletions(prev => {
+      const updated = new Map(prev);
+      tasks.forEach(task => {
+        task.completions.forEach(completion => {
+          const key = `${task.id}_${completion.completion_date}`;
+          if (updated.has(key)) {
+            // Server state matches optimistic - clear optimistic state
+            updated.delete(key);
+          }
+        });
+      });
+      return updated;
+    });
+  }, [tasks]);
 
   // Calculate filtered date range based on filter type
   const { filteredStartDate, filteredEndDate, dates } = useMemo(() => {
@@ -96,13 +117,33 @@ export function CleaningGrid({
 
   const handleToggleCompletion = useCallback(
     async (taskId: string, date: string, isCompleted: boolean) => {
-      // Optimistic update
-      setUpdatingTasks(prev => new Set(prev).add(`${taskId}_${date}`));
+      const key = `${taskId}_${date}`;
+      const newCompleted = !isCompleted; // Toggle the completion state
+
+      // Store original state for rollback - check if task was originally completed
+      const originalTask = tasks.find(t => t.id === taskId);
+      const originalCompletion = originalTask?.completions.find(c => c.completion_date === date);
+      const originallyCompleted = !!originalCompletion;
+      // Store whether there was an existing optimistic change
+      const existingOptimistic = optimisticCompletions.get(key);
+
+      // Optimistically update UI immediately
+      setOptimisticCompletions(prev => {
+        const updated = new Map(prev);
+        if (newCompleted) {
+          // Adding completion - create temp completion entry
+          updated.set(key, { completed: true, tempId: `temp-${Date.now()}` });
+        } else {
+          // Removing completion
+          updated.set(key, { completed: false });
+        }
+        return updated;
+      });
 
       try {
-        const endpoint = isCompleted
-          ? `/api/cleaning-tasks/${taskId}/uncomplete`
-          : `/api/cleaning-tasks/${taskId}/complete`;
+        const endpoint = newCompleted
+          ? `/api/cleaning-tasks/${taskId}/complete`
+          : `/api/cleaning-tasks/${taskId}/uncomplete`;
 
         const response = await fetch(endpoint, {
           method: 'POST',
@@ -116,31 +157,77 @@ export function CleaningGrid({
           throw new Error(data.error || data.message || 'Failed to update task');
         }
 
-        showSuccess(isCompleted ? 'Task marked as incomplete' : 'Task marked as complete');
+        showSuccess(newCompleted ? 'Task marked as complete' : 'Task marked as incomplete');
+        // Background refresh - optimistic state will be cleared when tasks update
         onTaskUpdate?.();
       } catch (error) {
+        // Error - revert optimistic update
+        setOptimisticCompletions(prev => {
+          const updated = new Map(prev);
+          // Remove our optimistic change
+          updated.delete(key);
+          // Restore any previous optimistic change if there was one
+          if (existingOptimistic) {
+            updated.set(key, existingOptimistic);
+          }
+          return updated;
+        });
         logger.error('Error toggling task completion:', error);
         showError(
-          isCompleted ? 'Failed to mark task as incomplete' : 'Failed to mark task as complete',
+          newCompleted ? 'Failed to mark task as complete' : 'Failed to mark task as incomplete',
         );
-      } finally {
-        setUpdatingTasks(prev => {
-          const next = new Set(prev);
-          next.delete(`${taskId}_${date}`);
-          return next;
-        });
       }
     },
-    [showSuccess, showError, onTaskUpdate],
+    [showSuccess, showError, onTaskUpdate, optimisticCompletions, tasks],
   );
+
+  // Merge tasks with optimistic completions
+  const optimisticTasks = useMemo(() => {
+    return tasks.map(task => {
+      const optimisticCompletionsForTask: typeof task.completions = [];
+      dates.forEach(date => {
+        const key = `${task.id}_${date}`;
+        const optimistic = optimisticCompletions.get(key);
+        if (optimistic) {
+          if (optimistic.completed) {
+            // Add optimistic completion
+            optimisticCompletionsForTask.push({
+              id: optimistic.tempId || `temp-${task.id}-${date}`,
+              task_id: task.id,
+              completion_date: date,
+              completed_at: new Date().toISOString(),
+            });
+          }
+          // If optimistic.completed is false, don't include completion (it's removed)
+        } else {
+          // Use original completion if no optimistic change
+          const original = task.completions.find(c => c.completion_date === date);
+          if (original) {
+            optimisticCompletionsForTask.push(original);
+          }
+        }
+      });
+      return {
+        ...task,
+        completions: optimisticCompletionsForTask,
+      };
+    });
+  }, [tasks, optimisticCompletions, dates]);
 
   if (tasks.length === 0) {
     return (
       <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-12 text-center">
         <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/20">
-          <Icon icon={ClipboardCheck} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
+          <Icon
+            icon={ClipboardCheck}
+            size="xl"
+            className="text-[var(--primary)]"
+            aria-hidden={true}
+          />
         </div>
-        <h3 className="mb-2 text-xl font-semibold text-[var(--button-active-text)]">No cleaning tasks yet</h3>
+        <h3 className="mb-2 text-xl font-semibold text-[var(--button-active-text)]">
+          No cleaning tasks yet
+        </h3>
         <p className="mb-6 text-[var(--foreground-muted)]">
           Create your first cleaning task to start tracking your cleaning schedule.
         </p>
@@ -152,8 +239,8 @@ export function CleaningGrid({
             Create Your First Task
           </button>
           <p className="flex items-center justify-center text-sm text-[var(--foreground-subtle)]">
-            Press <kbd className="mx-1 rounded bg-[var(--muted)] px-2 py-1 text-xs">N</kbd> for quick
-            create
+            Press <kbd className="mx-1 rounded bg-[var(--muted)] px-2 py-1 text-xs">N</kbd> for
+            quick create
           </p>
         </div>
       </div>
@@ -184,7 +271,7 @@ export function CleaningGrid({
 
       {/* Task rows */}
       <div className="max-h-[600px] overflow-y-auto">
-        {tasks.map(task => (
+        {optimisticTasks.map(task => (
           <MemoizedTaskRow
             key={task.id}
             task={task}

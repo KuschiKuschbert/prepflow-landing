@@ -110,7 +110,9 @@ export function MenuItemContent({ item, menuId }: MenuItemContentProps) {
       <div className="flex-1">
         {isDish ? (
           <>
-            <div className="font-medium text-[var(--foreground)]">{item.dishes?.dish_name || 'Unknown Dish'}</div>
+            <div className="font-medium text-[var(--foreground)]">
+              {item.dishes?.dish_name || 'Unknown Dish'}
+            </div>
             <div className="flex items-baseline gap-2">
               {/* Show "Recommended:" label only if actual price exists and differs from recommended */}
               {item.actual_selling_price != null &&

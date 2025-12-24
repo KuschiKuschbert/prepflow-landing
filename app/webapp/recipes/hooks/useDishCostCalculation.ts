@@ -62,7 +62,7 @@ export function useDishCostCalculation(
       }
     };
     fetchRecipeIngredients();
-  }, [selectedRecipes.map(sr => sr.recipe_id).join(',')]);
+  }, [selectedRecipes]);
 
   // Calculate total cost
   const calculation = useMemo<DishCostCalculation>(() => {

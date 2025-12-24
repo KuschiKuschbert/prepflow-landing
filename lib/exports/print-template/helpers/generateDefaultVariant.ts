@@ -1,5 +1,11 @@
 import { getAllTemplateStyles } from '../../template-styles';
-import { formatDateAustralian, getLogoUrl, formatMetaInfo, getFooterHtml, escapeHtml } from '../../template-utils';
+import {
+  formatDateAustralian,
+  getLogoUrl,
+  formatMetaInfo,
+  getFooterHtml,
+  escapeHtml,
+} from '../../template-utils';
 
 export function generateDefaultVariant(
   title: string,
@@ -58,4 +64,3 @@ export function generateDefaultVariant(
 </body>
 </html>`;
 }
-

@@ -20,4 +20,3 @@ export const updateSupplierSchema = z.object({
   notes: z.string().optional(),
   is_active: z.boolean().optional(),
 });
-

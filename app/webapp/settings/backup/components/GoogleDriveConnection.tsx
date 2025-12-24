@@ -14,9 +14,7 @@ export function GoogleDriveConnection({ onConnectionChange }: GoogleDriveConnect
       <h3 className="mb-4 text-lg font-semibold text-[var(--foreground)]">
         Google Drive Connection
       </h3>
-      <p className="text-sm text-[var(--foreground)]/60">
-        Google Drive integration coming soon.
-      </p>
+      <p className="text-sm text-[var(--foreground)]/60">Google Drive integration coming soon.</p>
     </div>
   );
 }

@@ -16,7 +16,7 @@ export function RecipeBookTabs({ activeTab, onTabChange }: RecipeBookTabsProps) 
           onClick={() => onTabChange('recipes')}
           className={`flex items-center gap-2 rounded-xl px-6 py-3 font-semibold transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none ${
             activeTab === 'recipes'
-              ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl border border-[var(--primary)]/30'
+              ? 'border border-[var(--primary)]/30 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl'
               : 'text-[var(--foreground-secondary)] hover:text-[var(--button-active-text)]'
           }`}
           aria-pressed={activeTab === 'recipes'}
@@ -29,7 +29,7 @@ export function RecipeBookTabs({ activeTab, onTabChange }: RecipeBookTabsProps) 
           onClick={() => onTabChange('dishes')}
           className={`flex items-center gap-2 rounded-xl px-6 py-3 font-semibold transition-all duration-200 focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--background)] focus:outline-none ${
             activeTab === 'dishes'
-              ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl border border-[var(--primary)]/30'
+              ? 'border border-[var(--primary)]/30 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)] shadow-xl'
               : 'text-[var(--foreground-secondary)] hover:text-[var(--button-active-text)]'
           }`}
           aria-pressed={activeTab === 'dishes'}

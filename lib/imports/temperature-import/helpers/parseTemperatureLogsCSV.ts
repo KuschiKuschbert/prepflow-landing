@@ -8,7 +8,7 @@ import {
   parseNumber,
   parseDate,
 } from '@/lib/imports/import-utils';
-import type { TemperatureLogImportRow } from '../temperature-import';
+import type { TemperatureLogImportRow } from '../../temperature-import';
 
 export function parseTemperatureLogsCSV(csvText: string): ParseCSVResult<TemperatureLogImportRow> {
   const result = parseCSV<Record<string, any>>(csvText, {

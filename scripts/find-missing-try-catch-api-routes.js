@@ -99,7 +99,6 @@ results.forEach(result => {
   console.log('');
 });
 
-console.log(`\nTotal: ${results.reduce((sum, r) => sum + r.violations.length, 0)} handlers missing try-catch`);
-
-
-
+console.log(
+  `\nTotal: ${results.reduce((sum, r) => sum + r.violations.length, 0)} handlers missing try-catch`,
+);

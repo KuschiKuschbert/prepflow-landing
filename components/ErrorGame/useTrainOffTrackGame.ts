@@ -6,7 +6,6 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import { useTrainOffTrackSounds } from './useTrainOffTrackSounds';
 import { throwConfetti } from '@/hooks/useConfetti';
 
 export const useTrainOffTrackGame = () => {
@@ -15,9 +14,6 @@ export const useTrainOffTrackGame = () => {
   const [fixesNeeded, setFixesNeeded] = useState(4);
   const [fixed, setFixed] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [audioReady, setAudioReady] = useState(false);
-
-  const sounds = useTrainOffTrackSounds();
 
   // Set random fixes needed value after mount to prevent hydration mismatch
   useEffect(() => {
@@ -39,36 +35,21 @@ export const useTrainOffTrackGame = () => {
     }
   }, []);
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      sounds.cleanup();
-    };
-  }, [sounds]);
-
   // Handle fix track click
   const handleFixTrack = useCallback(() => {
     if (fixed) return;
-
-    if (!audioReady) {
-      const initialized = sounds.initAudio();
-      setAudioReady(initialized);
-    }
-
-    sounds.playTrainWhistleSound();
 
     setFixesNeeded(prev => {
       const newFixes = prev - 1;
       if (newFixes === 0) {
         setFixed(true);
-        sounds.playSuccessSound();
 
         // Trigger confetti
         throwConfetti(1.5);
       }
       return newFixes;
     });
-  }, [fixed, audioReady, sounds]);
+  }, [fixed]);
 
   return {
     fixesNeeded,

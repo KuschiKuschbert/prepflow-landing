@@ -1,4 +1,5 @@
-import { COUNTRY_CONFIGS, type CountryConfig } from './configs';
+import { COUNTRY_CONFIGS } from './configs';
+import type { CountryConfig } from './types';
 
 /**
  * Get country configuration for a given country code.

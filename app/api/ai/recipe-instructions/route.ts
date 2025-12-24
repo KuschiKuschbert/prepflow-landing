@@ -13,14 +13,16 @@ import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { z } from 'zod';
 
-const recipeInstructionsSchema = z.object({
-  recipe: z.any(), // Recipe is complex, validate structure if needed
-  ingredients: z.array(z.any()).min(1, 'ingredients array is required'),
-  countryCode: z.string().optional(),
-}).refine(data => data.recipe !== undefined && data.recipe !== null, {
-  message: 'recipe is required',
-  path: ['recipe'],
-});
+const recipeInstructionsSchema = z
+  .object({
+    recipe: z.any(), // Recipe is complex, validate structure if needed
+    ingredients: z.array(z.any()).min(1, 'ingredients array is required'),
+    countryCode: z.string().optional(),
+  })
+  .refine(data => data.recipe !== undefined && data.recipe !== null, {
+    message: 'recipe is required',
+    path: ['recipe'],
+  });
 
 /**
  * POST /api/ai/recipe-instructions

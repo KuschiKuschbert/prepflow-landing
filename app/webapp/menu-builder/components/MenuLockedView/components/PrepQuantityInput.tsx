@@ -60,7 +60,10 @@ export function PrepQuantityInput({
 
   return (
     <div className="flex items-center gap-2">
-      <label htmlFor="prep-quantity" className="text-sm font-medium text-[var(--foreground-secondary)]">
+      <label
+        htmlFor="prep-quantity"
+        className="text-sm font-medium text-[var(--foreground-secondary)]"
+      >
         Prep Quantity:
       </label>
       <div className="flex items-center gap-1">
@@ -97,7 +100,3 @@ export function PrepQuantityInput({
     </div>
   );
 }
-
-
-
-

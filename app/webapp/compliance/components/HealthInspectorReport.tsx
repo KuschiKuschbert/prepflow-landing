@@ -154,7 +154,9 @@ export function HealthInspectorReport() {
 
         {/* Section Toggles */}
         <div className="mb-4">
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Include Sections</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Include Sections
+          </label>
           <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-2 gap-2">
             {[
               { key: 'summary', label: 'Executive Summary', category: 'core' },
@@ -261,7 +263,9 @@ export function HealthInspectorReport() {
           <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
             <Icon icon={FileText} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
           </div>
-          <h3 className="mb-2 text-xl font-semibold text-[var(--button-active-text)]">No Report Generated</h3>
+          <h3 className="mb-2 text-xl font-semibold text-[var(--button-active-text)]">
+            No Report Generated
+          </h3>
           <p className="text-[var(--foreground-muted)]">
             Select your date range and sections, then click &quot;Generate Report&quot; to create a
             comprehensive health inspector compliance report.

@@ -14,7 +14,6 @@ interface RecipesModalsProps {
   aiInstructions: string;
   generatingInstructions: boolean;
   previewYieldValue: number;
-  shareLoading: boolean;
   showDeleteConfirm: boolean;
   recipeToDelete: Recipe | null;
   showBulkDeleteConfirm: boolean;
@@ -57,7 +56,6 @@ export function RecipesModals({
   aiInstructions,
   generatingInstructions,
   previewYieldValue,
-  shareLoading,
   showDeleteConfirm,
   recipeToDelete,
   showBulkDeleteConfirm,
@@ -94,7 +92,6 @@ export function RecipesModals({
         aiInstructions={aiInstructions}
         generatingInstructions={generatingInstructions}
         previewYield={previewYieldValue}
-        shareLoading={shareLoading}
         onClose={onCloseModal}
         onEditRecipe={onEditRecipe}
         onShareRecipe={onShareRecipe}

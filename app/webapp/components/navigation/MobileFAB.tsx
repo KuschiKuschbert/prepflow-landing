@@ -108,8 +108,12 @@ export const MobileFAB = memo(function MobileFAB() {
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-medium text-[var(--foreground)] landscape:text-xs">New Recipe</span>
-              <span className="text-xs text-[var(--foreground)]/60 landscape:text-[10px]">Create a dish</span>
+              <span className="text-sm font-medium text-[var(--foreground)] landscape:text-xs">
+                New Recipe
+              </span>
+              <span className="text-xs text-[var(--foreground)]/60 landscape:text-[10px]">
+                Create a dish
+              </span>
             </div>
           </button>
 
@@ -119,13 +123,20 @@ export const MobileFAB = memo(function MobileFAB() {
             aria-label="Create Ingredient"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[var(--color-info)]/30 bg-[var(--color-info)]/10 landscape:h-8 landscape:w-8">
-              <Icon icon={Package} size="sm" className="text-[var(--color-info)]" aria-hidden={true} />
+              <Icon
+                icon={Package}
+                size="sm"
+                className="text-[var(--color-info)]"
+                aria-hidden={true}
+              />
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-medium text-[var(--foreground)] landscape:text-xs">
                 New Ingredient
               </span>
-              <span className="text-xs text-[var(--foreground)]/60 landscape:text-[10px]">Add an item</span>
+              <span className="text-xs text-[var(--foreground)]/60 landscape:text-[10px]">
+                Add an item
+              </span>
             </div>
           </button>
         </div>
@@ -138,7 +149,7 @@ export const MobileFAB = memo(function MobileFAB() {
         className={cn(
           'flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-200',
           'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]',
-          'hover:shadow-xl hover:shadow-[var(--primary)]/25',
+          'hover:shadow-[var(--primary)]/25 hover:shadow-xl',
           'active:scale-95',
           'focus:outline-none',
           'landscape:h-10 landscape:w-10',

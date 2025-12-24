@@ -28,10 +28,9 @@ export async function POST(request: NextRequest) {
 
     if (equipmentError) {
       logger.error('Error fetching equipment:', equipmentError);
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(equipmentError, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(equipmentError, 500), {
+        status: 500,
+      });
     }
 
     // If no equipment exists, create 5 sample equipment items

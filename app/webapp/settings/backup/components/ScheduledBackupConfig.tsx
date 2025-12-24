@@ -23,7 +23,6 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
   const [enabled, setEnabled] = useState(settings?.scheduledBackupEnabled || false);
   const [intervalHours, setIntervalHours] = useState(settings?.scheduledBackupInterval || 24);
   const [autoUploadToDrive, setAutoUploadToDrive] = useState(settings?.autoUploadToDrive || false);
-  const [saving, setSaving] = useState(false);
   const { showSuccess, showError } = useNotification();
 
   const intervalOptions = [
@@ -34,7 +33,6 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
   ];
 
   const handleSave = async () => {
-    setSaving(true);
     try {
       const res = await fetch('/api/backup/schedule', {
         method: 'POST',
@@ -61,8 +59,6 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
       });
 
       showError('Failed to save scheduled backup settings');
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -80,29 +76,35 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
       return;
     }
 
-    setSaving(true);
+    // Store original state for rollback
+    const originalEnabled = enabled;
+
+    // Optimistically disable immediately
+    setEnabled(false);
+
     try {
       const res = await fetch('/api/backup/schedule', {
         method: 'DELETE',
       });
 
       if (res.ok) {
-        setEnabled(false);
         showSuccess('Scheduled backups disabled');
         onSettingsChange?.();
       } else {
+        // Rollback on error
+        setEnabled(originalEnabled);
         const data = await res.json();
         showError(data.error || 'Failed to disable scheduled backups');
       }
     } catch (error: any) {
+      // Rollback on error
+      setEnabled(originalEnabled);
       logger.error('[ScheduledBackupConfig.tsx] Error in catch block:', {
         error: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,
       });
 
       showError('Failed to disable scheduled backups');
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -129,7 +131,9 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
               onChange={e => setEnabled(e.target.checked)}
               className="h-5 w-5 rounded border-[var(--border)] bg-[var(--surface)] text-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
             />
-            <span className="text-sm text-[var(--foreground-secondary)]">Enable scheduled backups</span>
+            <span className="text-sm text-[var(--foreground-secondary)]">
+              Enable scheduled backups
+            </span>
           </label>
 
           {enabled && (
@@ -179,23 +183,23 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
                   onChange={e => setAutoUploadToDrive(e.target.checked)}
                   className="h-5 w-5 rounded border-[var(--border)] bg-[var(--surface)] text-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]"
                 />
-                <span className="text-sm text-[var(--foreground-secondary)]">Automatically upload to Google Drive</span>
+                <span className="text-sm text-[var(--foreground-secondary)]">
+                  Automatically upload to Google Drive
+                </span>
               </label>
 
               {/* Save Button */}
               <div className="flex gap-3">
                 <button
                   onClick={handleSave}
-                  disabled={saving}
-                  className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all hover:shadow-lg disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--button-active-text)] transition-all hover:shadow-lg"
                 >
                   <Icon icon={Save} size="sm" />
-                  {saving ? 'Saving...' : 'Save Settings'}
+                  Save Settings
                 </button>
                 <button
                   onClick={handleDisable}
-                  disabled={saving}
-                  className="rounded-2xl border border-[var(--border)] px-4 py-2 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/40 disabled:opacity-50"
+                  className="rounded-2xl border border-[var(--border)] px-4 py-2 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/40"
                 >
                   Disable
                 </button>

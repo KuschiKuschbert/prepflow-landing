@@ -24,4 +24,3 @@ export interface ValidationResult {
   errors: ValidationError[];
   warnings: ValidationError[];
 }
-

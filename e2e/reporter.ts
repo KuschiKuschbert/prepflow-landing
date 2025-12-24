@@ -54,7 +54,3 @@ class QAReporter implements Reporter {
 }
 
 export default QAReporter;
-
-
-
-

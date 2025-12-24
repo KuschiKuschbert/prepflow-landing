@@ -31,4 +31,3 @@ export function calculateMonthly(startDate: Date, endDate: Date, referenceDate: 
 
   return dates;
 }
-

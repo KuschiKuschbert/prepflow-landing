@@ -40,13 +40,6 @@ export async function updatePrepList(params: UpdatePrepListParams) {
     .single();
 
   if (error) {
-    logger.error('[helpers/updatePrepList] Database error:', {
-      error: error.message,
-    });
-    throw ApiErrorHandler.fromSupabaseError(error, 500);
-  }
-
-  if (error) {
     logger.error('[Prep Lists API] Database error updating prep list:', {
       error: error.message,
       code: (error as any).code,

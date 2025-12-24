@@ -90,16 +90,9 @@ module.exports = function transformer(file, api) {
         // Replace with ApiErrorHandler.createError
         const newThrow = j.throwStatement(
           j.callExpression(
-            j.memberExpression(
-              j.identifier('ApiErrorHandler'),
-              j.identifier('createError')
-            ),
-            [
-              errorMessage,
-              j.stringLiteral('DATABASE_ERROR'),
-              j.literal(500)
-            ]
-          )
+            j.memberExpression(j.identifier('ApiErrorHandler'), j.identifier('createError')),
+            [errorMessage, j.stringLiteral('DATABASE_ERROR'), j.literal(500)],
+          ),
         );
 
         j(path).replaceWith(newThrow);
@@ -132,33 +125,27 @@ module.exports = function transformer(file, api) {
           throwArg.callee.name === 'Error'
         ) {
           // Replace with block containing logger.error and ApiErrorHandler
-          const errorMessage = throwArg.arguments[0] || j.stringLiteral('Database connection not available');
+          const errorMessage =
+            throwArg.arguments[0] || j.stringLiteral('Database connection not available');
 
           const newBlock = j.blockStatement([
             j.expressionStatement(
-              j.callExpression(
-                j.memberExpression(
-                  j.identifier('logger'),
-                  j.identifier('error')
-                ),
-                [
-                  j.stringLiteral('[API] Database connection not available')
-                ]
-              )
+              j.callExpression(j.memberExpression(j.identifier('logger'), j.identifier('error')), [
+                j.stringLiteral('[API] Database connection not available'),
+              ]),
             ),
             j.throwStatement(
               j.callExpression(
-                j.memberExpression(
-                  j.identifier('ApiErrorHandler'),
-                  j.identifier('createError')
-                ),
+                j.memberExpression(j.identifier('ApiErrorHandler'), j.identifier('createError')),
                 [
-                  errorMessage.type === 'StringLiteral' ? errorMessage : j.stringLiteral('Database connection not available'),
+                  errorMessage.type === 'StringLiteral'
+                    ? errorMessage
+                    : j.stringLiteral('Database connection not available'),
                   j.stringLiteral('DATABASE_ERROR'),
-                  j.literal(500)
-                ]
-              )
-            )
+                  j.literal(500),
+                ],
+              ),
+            ),
           ]);
 
           path.value.consequent = newBlock;
@@ -171,22 +158,22 @@ module.exports = function transformer(file, api) {
   });
 
   // 4. Add missing imports
-  if ((needsLoggerImport && !hasLoggerImport) || (needsApiErrorHandlerImport && !hasApiErrorHandlerImport)) {
+  if (
+    (needsLoggerImport && !hasLoggerImport) ||
+    (needsApiErrorHandlerImport && !hasApiErrorHandlerImport)
+  ) {
     const imports = [];
     if (needsLoggerImport && !hasLoggerImport) {
       imports.push(
-        j.importDeclaration(
-          [j.importSpecifier(j.identifier('logger'))],
-          j.literal('@/lib/logger')
-        )
+        j.importDeclaration([j.importSpecifier(j.identifier('logger'))], j.literal('@/lib/logger')),
       );
     }
     if (needsApiErrorHandlerImport && !hasApiErrorHandlerImport) {
       imports.push(
         j.importDeclaration(
           [j.importSpecifier(j.identifier('ApiErrorHandler'))],
-          j.literal('@/lib/api-error-handler')
-        )
+          j.literal('@/lib/api-error-handler'),
+        ),
       );
     }
 
@@ -213,7 +200,3 @@ module.exports = function transformer(file, api) {
     lineTerminator: '\n',
   });
 };
-
-
-
-

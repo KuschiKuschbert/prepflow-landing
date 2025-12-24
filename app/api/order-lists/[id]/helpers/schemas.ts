@@ -16,4 +16,3 @@ export const updateOrderListSchema = z.object({
     )
     .optional(),
 });
-

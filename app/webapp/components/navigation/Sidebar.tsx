@@ -198,7 +198,11 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
                         opacity: reducedMotion ? 1 : 0,
                       }}
                     >
-                      <span className={cn(isActive(item.href) ? item.color : `text-[var(--foreground-muted)]`)}>
+                      <span
+                        className={cn(
+                          isActive(item.href) ? item.color : `text-[var(--foreground-muted)]`,
+                        )}
+                      >
                         {item.icon}
                       </span>
                       <span
@@ -223,7 +227,9 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
         {/* Mobile-only: Language and Logout */}
         <div className="desktop:hidden space-y-3 border-t border-[var(--border)] p-4">
           <div>
-            <div className="mb-2 text-xs tracking-wider text-[var(--foreground-muted)] uppercase">Settings</div>
+            <div className="mb-2 text-xs tracking-wider text-[var(--foreground-muted)] uppercase">
+              Settings
+            </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-[var(--foreground)]/80">Language</span>

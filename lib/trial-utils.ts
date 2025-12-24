@@ -3,16 +3,11 @@ import { logger } from './logger';
 
 const DEFAULT_TRIAL_DAYS = 7;
 
-/**
- * Get trial days from environment or use default.
- */
 function getTrialDays(): number {
   const envDays = process.env.TRIAL_DAYS;
   if (envDays) {
     const parsed = parseInt(envDays, 10);
-    if (!isNaN(parsed) && parsed > 0) {
-      return parsed;
-    }
+    if (!isNaN(parsed) && parsed > 0) return parsed;
   }
   return DEFAULT_TRIAL_DAYS;
 }
@@ -65,12 +60,8 @@ export async function getTrialDaysRemaining(userEmail: string): Promise<number> 
       .maybeSingle();
 
     if (!data?.subscription_expires) {
-      // No expiration set, check if user is in trial
       const isTrial = await isTrialActive(userEmail);
-      if (isTrial) {
-        // Return default trial days
-        return getTrialDays();
-      }
+      if (isTrial) return getTrialDays();
       return 0;
     }
 
@@ -103,10 +94,8 @@ export async function getTrialEndDate(userEmail: string): Promise<Date | null> {
       .maybeSingle();
 
     if (!data?.subscription_expires) {
-      // Calculate trial end date if not set
-      const trialDays = getTrialDays();
       const endDate = new Date();
-      endDate.setDate(endDate.getDate() + trialDays);
+      endDate.setDate(endDate.getDate() + getTrialDays());
       return endDate;
     }
 
@@ -140,7 +129,6 @@ export async function initializeTrial(userEmail: string): Promise<void> {
         updated_at: new Date().toISOString(),
       })
       .eq('email', userEmail);
-
     if (error) {
       logger.error('[Trial Utils] Failed to initialize trial:', {
         error: error.message,

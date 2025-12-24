@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Sub-recipe card sections component.
  */

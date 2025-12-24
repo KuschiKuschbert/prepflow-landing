@@ -18,10 +18,7 @@ const SQUARE_POS_FLAG_KEY = 'square_pos_integration';
  * @param {string} [userEmail] - Optional user email for admin check
  * @returns {Promise<boolean>} True if Square POS is enabled
  */
-export async function isSquarePOSEnabled(
-  userId?: string,
-  userEmail?: string,
-): Promise<boolean> {
+export async function isSquarePOSEnabled(userId?: string, userEmail?: string): Promise<boolean> {
   try {
     return await isFeatureEnabled(SQUARE_POS_FLAG_KEY, userId, userEmail);
   } catch (error: any) {
@@ -43,10 +40,7 @@ export async function isSquarePOSEnabled(
  * @param {string} feature - Feature name (e.g., 'catalog_sync', 'staff_sync')
  * @returns {Promise<boolean>} True if feature is accessible
  */
-export async function checkSquareFeatureAccess(
-  userId: string,
-  feature: string,
-): Promise<boolean> {
+export async function checkSquareFeatureAccess(userId: string, feature: string): Promise<boolean> {
   try {
     // For now, all Square features are gated by the main flag
     // Future: Could add feature-specific flags if needed

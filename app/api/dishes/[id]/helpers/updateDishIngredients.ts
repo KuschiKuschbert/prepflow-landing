@@ -38,7 +38,9 @@ export async function updateDishIngredients(
       quantity: typeof i.quantity === 'string' ? parseFloat(i.quantity) : i.quantity,
       unit: i.unit,
     }));
-    const { error: insertError } = await supabaseAdmin.from('dish_ingredients').insert(dishIngredients);
+    const { error: insertError } = await supabaseAdmin
+      .from('dish_ingredients')
+      .insert(dishIngredients);
     if (insertError) {
       logger.error('[Dishes API] Database error inserting dish ingredients:', {
         error: insertError.message,

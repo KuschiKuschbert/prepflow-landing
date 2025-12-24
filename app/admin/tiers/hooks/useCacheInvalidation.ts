@@ -30,9 +30,9 @@ export function useCacheInvalidation() {
       }
     } catch (error) {
       logger.error('[useCacheInvalidation.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       showError('Failed to invalidate cache');
       return false;

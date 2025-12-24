@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 
@@ -28,7 +30,3 @@ export function ErrorBanner({ error, onRetry }: ErrorBannerProps) {
     </div>
   );
 }
-
-
-
-

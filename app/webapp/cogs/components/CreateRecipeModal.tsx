@@ -20,7 +20,6 @@ export function CreateRecipeModal({
   onSuccess,
 }: CreateRecipeModalProps) {
   const [recipeName, setRecipeName] = useState('');
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -36,7 +35,6 @@ export function CreateRecipeModal({
     if (!isOpen) {
       setRecipeName('');
       setError(null);
-      setLoading(false);
     }
   }, [isOpen]);
 
@@ -49,7 +47,6 @@ export function CreateRecipeModal({
       return;
     }
 
-    setLoading(true);
     setError(null);
 
     try {
@@ -62,13 +59,11 @@ export function CreateRecipeModal({
       }
     } catch (err) {
       logger.error('[CreateRecipeModal.tsx] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
       setError(err instanceof Error ? err.message : 'Failed to create recipe');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -104,7 +99,10 @@ export function CreateRecipeModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="recipe-name" className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            <label
+              htmlFor="recipe-name"
+              className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]"
+            >
               Recipe Name
             </label>
             <input
@@ -116,7 +114,6 @@ export function CreateRecipeModal({
                 setRecipeName(formatDishName(e.target.value));
                 setError(null);
               }}
-              disabled={loading}
               placeholder="e.g., Chicken Curry"
               className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--foreground)] shadow-sm transition-all duration-200 hover:shadow-md focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             />
@@ -131,17 +128,16 @@ export function CreateRecipeModal({
             <button
               type="button"
               onClick={onClose}
-              disabled={loading}
-              className="flex-1 rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--muted)] disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex-1 rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]"
             >
               Cancel
             </button>
             <button
               type="submit"
-              disabled={loading || !recipeName.trim()}
+              disabled={!recipeName.trim()}
               className="flex-1 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-3 font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {loading ? 'Creating...' : 'Create Recipe'}
+              Create Recipe
             </button>
           </div>
         </form>

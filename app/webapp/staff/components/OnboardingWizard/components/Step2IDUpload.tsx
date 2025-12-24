@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { Upload } from 'lucide-react';
 import type { DocumentType } from '@/app/webapp/roster/types';
@@ -14,9 +16,16 @@ export function Step2IDUpload({ idFile, onFileUpload }: Step2IDUploadProps) {
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold text-[var(--foreground)]">Step 2: ID Upload</h3>
-      <p className="text-sm text-[var(--foreground-muted)]">Please upload a photo of your government-issued ID</p>
+      <p className="text-sm text-[var(--foreground-muted)]">
+        Please upload a photo of your government-issued ID
+      </p>
       <div className="rounded-xl border-2 border-dashed border-[var(--border)] p-8 text-center">
-        <Icon icon={Upload} size="xl" className="mx-auto mb-4 text-[var(--foreground-muted)]" aria-hidden={true} />
+        <Icon
+          icon={Upload}
+          size="xl"
+          className="mx-auto mb-4 text-[var(--foreground-muted)]"
+          aria-hidden={true}
+        />
         <input
           type="file"
           accept="image/*,.pdf"
@@ -30,7 +39,9 @@ export function Step2IDUpload({ idFile, onFileUpload }: Step2IDUploadProps) {
         >
           Choose File
         </label>
-        {idFile && <p className="mt-4 text-sm text-[var(--foreground-secondary)]">Selected: {idFile.name}</p>}
+        {idFile && (
+          <p className="mt-4 text-sm text-[var(--foreground-secondary)]">Selected: {idFile.name}</p>
+        )}
       </div>
     </div>
   );

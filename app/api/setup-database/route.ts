@@ -61,6 +61,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     logger.error('Unexpected error:', err);
-    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }

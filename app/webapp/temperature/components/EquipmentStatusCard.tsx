@@ -122,13 +122,23 @@ export function EquipmentStatusCard({
           <div className="border-t border-[var(--border)] pt-3">
             {isOutOfRange && (
               <div className="flex items-center gap-2 text-xs text-[var(--color-error)]">
-                <Icon icon={AlertTriangle} size="xs" className="text-[var(--color-error)]" aria-hidden={true} />
+                <Icon
+                  icon={AlertTriangle}
+                  size="xs"
+                  className="text-[var(--color-error)]"
+                  aria-hidden={true}
+                />
                 <span>Attention required</span>
               </div>
             )}
             {needsSetup && (
               <div className="flex items-center gap-2 text-xs text-[var(--color-warning)]">
-                <Icon icon={Settings} size="xs" className="text-[var(--color-warning)]" aria-hidden={true} />
+                <Icon
+                  icon={Settings}
+                  size="xs"
+                  className="text-[var(--color-warning)]"
+                  aria-hidden={true}
+                />
                 <span>Configure thresholds</span>
               </div>
             )}
@@ -138,7 +148,12 @@ export function EquipmentStatusCard({
         {/* Compact mode critical indicators */}
         {isCompact && isOutOfRange && (
           <div className="flex items-center justify-center text-xs text-[var(--color-error)]">
-            <Icon icon={AlertCircle} size="xs" className="text-[var(--color-error)]" aria-hidden={true} />
+            <Icon
+              icon={AlertCircle}
+              size="xs"
+              className="text-[var(--color-error)]"
+              aria-hidden={true}
+            />
           </div>
         )}
       </div>

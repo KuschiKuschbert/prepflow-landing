@@ -19,7 +19,8 @@ export async function updateCleaningArea(
     is_active?: boolean;
   },
 ) {
-  if (!supabaseAdmin) throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
+  if (!supabaseAdmin)
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
 
   const { data, error } = await supabaseAdmin
     .from('cleaning_areas')

@@ -477,7 +477,3 @@ export const COLORS = {
 
 **Last Updated:** December 2024
 **Maintained By:** PrepFlow Design Team
-
-
-
-

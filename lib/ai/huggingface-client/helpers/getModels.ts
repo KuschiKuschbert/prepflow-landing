@@ -1,8 +1,4 @@
-import {
-  DEFAULT_IMAGE_MODEL,
-  DEFAULT_TEXT_MODEL,
-  DEFAULT_VISION_MODEL,
-} from '../constants';
+import { DEFAULT_IMAGE_MODEL, DEFAULT_TEXT_MODEL, DEFAULT_VISION_MODEL } from '../constants';
 
 /**
  * Get the image generation model to use
@@ -24,4 +20,3 @@ export function getHuggingFaceTextModel(): string {
 export function getHuggingFaceVisionModel(): string {
   return process.env.HUGGINGFACE_VISION_MODEL || DEFAULT_VISION_MODEL;
 }
-

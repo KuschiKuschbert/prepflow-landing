@@ -33,7 +33,7 @@ interface SelectedIngredient {
 }
 
 export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawerProps) {
-  const { showWarning, showError } = useNotification();
+  const { showWarning, showError, showSuccess } = useNotification();
   const [dishName, setDishName] = useState('');
   const [description, setDescription] = useState('');
   const [sellingPrice, setSellingPrice] = useState('');
@@ -152,17 +152,14 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
   }, [dish, isOpen, showError]);
 
   const handleSave = async () => {
-    setLoading(true);
-
+    // Validation (no loading state - instant feedback)
     if (!dishName || !sellingPrice) {
       showWarning('Dish name and selling price are required');
-      setLoading(false);
       return;
     }
 
     if (selectedRecipes.length === 0 && selectedIngredients.length === 0) {
       showWarning('Dish must contain at least one recipe or ingredient');
-      setLoading(false);
       return;
     }
 
@@ -186,16 +183,16 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
 
       if (!response.ok) {
         showError(result.message || result.error || 'Failed to save dish');
-        setLoading(false);
         return;
       }
 
+      // Success - close drawer immediately (optimistic pattern)
+      showSuccess(dish ? 'Dish updated successfully!' : 'Dish created successfully!');
       onSave();
       onClose();
     } catch (err) {
       logger.error('Failed to save dish:', err);
       showError('Failed to save dish');
-      setLoading(false);
     }
   };
   useEffect(() => {
@@ -216,7 +213,7 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
       title={dish ? `Edit ${dish.dish_name}` : 'Create Dish'}
       maxWidth="4xl"
       onSave={handleSave}
-      saving={loading || status === 'saving'}
+      saving={status === 'saving'}
       footer={
         <div className="flex items-center justify-between">
           <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
@@ -231,10 +228,10 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
             <button
               type="button"
               onClick={handleSave}
-              disabled={loading || status === 'saving'}
-              className="flex-1 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2.5 font-semibold text-[var(--button-active-text)] transition-all duration-300 hover:shadow-lg hover:shadow-[var(--primary)]/25 disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={status === 'saving'}
+              className="flex-1 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2.5 font-semibold text-[var(--button-active-text)] transition-all duration-300 hover:shadow-[var(--primary)]/25 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {loading || status === 'saving' ? 'Saving...' : dish ? 'Update Dish' : 'Create Dish'}
+              {status === 'saving' ? 'Saving...' : dish ? 'Update Dish' : 'Create Dish'}
             </button>
           </div>
         </div>
@@ -242,7 +239,9 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
     >
       <form onSubmit={e => e.preventDefault()} className="space-y-6">
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Dish Name *</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Dish Name *
+          </label>
           <input
             type="text"
             value={dishName}
@@ -253,7 +252,9 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Description</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Description
+          </label>
           <textarea
             value={description}
             onChange={e => setDescription(e.target.value)}

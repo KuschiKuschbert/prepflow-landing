@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * List of kitchen sections component.
  */

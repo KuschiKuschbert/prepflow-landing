@@ -91,7 +91,10 @@ export default function KitchenChartsLazy({
                   stroke="var(--foreground)"
                   tick={{ fill: 'var(--foreground)', fontSize: 10 }}
                 />
-                <YAxis stroke="var(--foreground)" tick={{ fill: 'var(--foreground)', fontSize: 10 }} />
+                <YAxis
+                  stroke="var(--foreground)"
+                  tick={{ fill: 'var(--foreground)', fontSize: 10 }}
+                />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: 'var(--surface)',
@@ -126,8 +129,15 @@ export default function KitchenChartsLazy({
                 margin={{ top: 10, right: 10, left: 0, bottom: 20 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.5} />
-                <XAxis dataKey="date" stroke="var(--foreground)" tick={{ fill: 'var(--foreground)', fontSize: 10 }} />
-                <YAxis stroke="var(--foreground)" tick={{ fill: 'var(--foreground)', fontSize: 10 }} />
+                <XAxis
+                  dataKey="date"
+                  stroke="var(--foreground)"
+                  tick={{ fill: 'var(--foreground)', fontSize: 10 }}
+                />
+                <YAxis
+                  stroke="var(--foreground)"
+                  tick={{ fill: 'var(--foreground)', fontSize: 10 }}
+                />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: 'var(--surface)',

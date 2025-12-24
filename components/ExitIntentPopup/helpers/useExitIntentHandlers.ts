@@ -9,7 +9,11 @@ interface UseExitIntentHandlersProps {
   onSuccess?: (data: { name: string; email: string }) => void;
 }
 
-export function useExitIntentHandlers({ isVisible, onClose, onSuccess }: UseExitIntentHandlersProps) {
+export function useExitIntentHandlers({
+  isVisible,
+  onClose,
+  onSuccess,
+}: UseExitIntentHandlersProps) {
   const [formData, setFormData] = useState({ name: '', email: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ name?: string; email?: string }>({});
@@ -108,12 +112,15 @@ export function useExitIntentHandlers({ isVisible, onClose, onSuccess }: UseExit
     [formData, validateForm, onSuccess, onClose],
   );
 
-  const handleInputChange = useCallback((field: 'name' | 'email', value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
-    }
-  }, [errors]);
+  const handleInputChange = useCallback(
+    (field: 'name' | 'email', value: string) => {
+      setFormData(prev => ({ ...prev, [field]: value }));
+      if (errors[field]) {
+        setErrors(prev => ({ ...prev, [field]: undefined }));
+      }
+    },
+    [errors],
+  );
 
   return {
     formData,
@@ -125,4 +132,3 @@ export function useExitIntentHandlers({ isVisible, onClose, onSuccess }: UseExit
     handleInputChange,
   };
 }
-

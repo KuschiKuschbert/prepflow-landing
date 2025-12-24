@@ -112,7 +112,9 @@ export function AchievementCard({
   return (
     <div
       className={`rounded-2xl border p-4 transition-all ${
-        unlocked ? 'border-[var(--primary)]/30 bg-[var(--primary)]/10' : 'border-[var(--border)] bg-[var(--surface)]'
+        unlocked
+          ? 'border-[var(--primary)]/30 bg-[var(--primary)]/10'
+          : 'border-[var(--border)] bg-[var(--surface)]'
       }`}
     >
       <div className="flex items-start gap-4">
@@ -128,7 +130,9 @@ export function AchievementCard({
         {/* Content */}
         <div className="flex-1">
           <div className="mb-2 flex items-center justify-between">
-            <h3 className={`font-semibold ${unlocked ? 'text-[var(--primary)]' : 'text-[var(--foreground-secondary)]'}`}>
+            <h3
+              className={`font-semibold ${unlocked ? 'text-[var(--primary)]' : 'text-[var(--foreground-secondary)]'}`}
+            >
               {achievement.name}
             </h3>
             {unlocked && <span className="text-xs text-[var(--primary)]">✓ Unlocked</span>}
@@ -159,7 +163,3 @@ export function AchievementCard({
 }
 
 export default AchievementCard;
-
-
-
-

@@ -84,9 +84,9 @@ export async function populateTemperatureData(
       }
     } catch (logsErr) {
       logger.error('[temperature-data.ts] Error in catch block:', {
-      error: logsErr instanceof Error ? logsErr.message : String(logsErr),
-      stack: logsErr instanceof Error ? logsErr.stack : undefined,
-    });
+        error: logsErr instanceof Error ? logsErr.message : String(logsErr),
+        stack: logsErr instanceof Error ? logsErr.stack : undefined,
+      });
 
       results.errors.push({
         table: 'temperature_logs',

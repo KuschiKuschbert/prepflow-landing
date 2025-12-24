@@ -1,15 +1,29 @@
 import { logger } from '@/lib/logger';
+import type { MenuDish } from '../../../types';
+
 interface HandleAssignDishParams {
-  fetchMenuDishes: () => Promise<void>;
-  fetchKitchenSections: () => Promise<void>;
+  menuDishes: MenuDish[];
+  setMenuDishes: React.Dispatch<React.SetStateAction<MenuDish[]>>;
   setError: (error: string | null) => void;
+  showSuccess: (message: string) => void;
+  showError: (message: string) => void;
 }
 
 export async function handleAssignDish(
   dishId: string,
   sectionId: string | null,
-  { fetchMenuDishes, fetchKitchenSections, setError }: HandleAssignDishParams,
+  { menuDishes, setMenuDishes, setError, showSuccess, showError }: HandleAssignDishParams,
 ) {
+  // Store original state for rollback
+  const originalMenuDishes = [...menuDishes];
+
+  // Optimistically update dish assignment immediately
+  setMenuDishes(prev =>
+    prev.map(dish =>
+      dish.id === dishId ? ({ ...dish, kitchen_section_id: sectionId } as MenuDish) : dish,
+    ),
+  );
+
   try {
     const response = await fetch('/api/assign-dish-section', {
       method: 'POST',
@@ -18,21 +32,24 @@ export async function handleAssignDish(
     });
     const result = await response.json();
     if (result.success) {
-      await fetchMenuDishes();
-      await fetchKitchenSections();
+      showSuccess('Dish assigned successfully!');
     } else {
-      setError(result.message || 'Failed to assign dish to section');
+      // Rollback on error
+      setMenuDishes(originalMenuDishes);
+      const errorMessage = result.message || 'Failed to assign dish to section';
+      setError(errorMessage);
+      showError(errorMessage);
     }
   } catch (err) {
+    // Rollback on error
+    setMenuDishes(originalMenuDishes);
     logger.error('[handleAssignDish.ts] Error in catch block:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
     });
 
-    setError('Failed to assign dish to section');
+    const errorMessage = 'Failed to assign dish to section';
+    setError(errorMessage);
+    showError(errorMessage);
   }
 }
-
-
-
-

@@ -177,14 +177,9 @@ export async function POST() {
   } catch (error) {
     logger.error('[Auth0 Fix] Error updating Auth0 configuration:', error);
     return NextResponse.json(
-      ApiErrorHandler.createError(
-        'Failed to update Auth0 configuration',
-        'SERVER_ERROR',
-        500,
-        {
-          details: error instanceof Error ? error.message : String(error),
-        },
-      ),
+      ApiErrorHandler.createError('Failed to update Auth0 configuration', 'SERVER_ERROR', 500, {
+        details: error instanceof Error ? error.message : String(error),
+      }),
       { status: 500 },
     );
   }

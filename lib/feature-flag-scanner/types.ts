@@ -5,4 +5,3 @@ export interface DiscoveredFlag {
   line?: number;
   description?: string | null;
 }
-

@@ -37,7 +37,9 @@ export function EmployeeList({
           </svg>
         </div>
         <h3 className="mb-2 text-xl font-semibold text-[var(--foreground)]">No Employees</h3>
-        <p className="text-[var(--foreground-muted)]">Start by adding your kitchen staff and food handlers</p>
+        <p className="text-[var(--foreground-muted)]">
+          Start by adding your kitchen staff and food handlers
+        </p>
       </div>
     );
   }

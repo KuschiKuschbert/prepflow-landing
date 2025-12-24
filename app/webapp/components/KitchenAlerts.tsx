@@ -44,7 +44,12 @@ export default function KitchenAlerts() {
       <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
         <div className="flex items-center gap-3">
           <div className="tablet:h-12 tablet:w-12 flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
-            <Icon icon={AlertCircle} size="md" className="text-[var(--primary)]" aria-hidden={true} />
+            <Icon
+              icon={AlertCircle}
+              size="md"
+              className="text-[var(--primary)]"
+              aria-hidden={true}
+            />
           </div>
           <div>
             <h2 className="text-fluid-lg tablet:text-fluid-xl font-semibold text-[var(--foreground)]">

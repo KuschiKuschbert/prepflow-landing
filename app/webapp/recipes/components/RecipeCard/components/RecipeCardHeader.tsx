@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { Check } from 'lucide-react';
 import { formatRecipeDate } from '../../../utils/formatDate';
@@ -38,9 +40,14 @@ export function RecipeCardHeader({
             <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
           )}
         </button>
-        <h3 className="text-sm font-medium text-[var(--foreground)]">{capitalizeRecipeName(recipeName)}</h3>
+        <h3 className="text-sm font-medium text-[var(--foreground)]">
+          {capitalizeRecipeName(recipeName)}
+        </h3>
       </div>
-      <span className="text-xs text-[var(--foreground-subtle)]" title={`Created on ${formatRecipeDate(createdAt)}`}>
+      <span
+        className="text-xs text-[var(--foreground-subtle)]"
+        title={`Created on ${formatRecipeDate(createdAt)}`}
+      >
         {formatRecipeDate(createdAt)}
       </span>
     </div>

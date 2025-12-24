@@ -4,6 +4,7 @@
  * Batch detect dietary suitability for multiple recipes
  */
 
+import { z } from 'zod';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';

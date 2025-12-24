@@ -79,10 +79,7 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       logger.error('Error assigning dish to section:', error);
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(error, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(error, 500), { status: 500 });
     }
 
     return NextResponse.json({

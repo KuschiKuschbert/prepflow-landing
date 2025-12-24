@@ -33,5 +33,3 @@ export function handleBreachReportError(error: unknown, method: string): NextRes
     { status: 500 },
   );
 }
-
-

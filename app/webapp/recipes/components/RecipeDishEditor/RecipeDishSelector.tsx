@@ -94,7 +94,10 @@ export function RecipeDishSelector({
                 : 'No recipes or dishes found'}
             </p>
             {searchTerm && (
-              <button onClick={clearSearch} className="text-sm text-[var(--primary)] hover:underline">
+              <button
+                onClick={clearSearch}
+                className="text-sm text-[var(--primary)] hover:underline"
+              >
                 Clear search
               </button>
             )}
@@ -118,11 +121,15 @@ export function RecipeDishSelector({
                   <Icon
                     icon={item.type === 'recipe' ? BookOpen : UtensilsCrossed}
                     size="md"
-                    className={item.type === 'recipe' ? 'text-[var(--color-info)]' : 'text-[var(--primary)]'}
+                    className={
+                      item.type === 'recipe' ? 'text-[var(--color-info)]' : 'text-[var(--primary)]'
+                    }
                     aria-hidden={true}
                   />
                   <div>
-                    <p className="font-medium text-[var(--foreground)]">{capitalizeName(item.name)}</p>
+                    <p className="font-medium text-[var(--foreground)]">
+                      {capitalizeName(item.name)}
+                    </p>
                     <p className="text-xs text-[var(--foreground-muted)]">
                       {item.type === 'recipe' ? 'Recipe' : 'Dish'}
                     </p>

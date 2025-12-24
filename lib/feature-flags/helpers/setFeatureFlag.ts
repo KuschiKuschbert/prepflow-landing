@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import type { FeatureFlag } from '../feature-flags';
+import type { FeatureFlag } from '../../feature-flags';
 
 /**
  * Set a feature flag
@@ -44,4 +44,3 @@ export async function setFeatureFlag(
     return null;
   }
 }
-

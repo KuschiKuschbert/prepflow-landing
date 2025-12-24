@@ -40,7 +40,11 @@ export function HistorySection() {
   if (error) {
     return (
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-8 text-center">
-        <Icon icon={AlertCircle} size="lg" className="mx-auto mb-4 text-[var(--foreground-muted)]" />
+        <Icon
+          icon={AlertCircle}
+          size="lg"
+          className="mx-auto mb-4 text-[var(--foreground-muted)]"
+        />
         <p className="text-[var(--foreground-muted)]">{error}</p>
       </div>
     );
@@ -76,19 +80,19 @@ export function HistorySection() {
           <table className="min-w-full divide-y divide-[var(--border)]">
             <thead className="sticky top-0 z-10 bg-gradient-to-r from-[var(--border)]/50 to-[var(--border)]/20">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-muted)] uppercase">
                   Operation
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-muted)] uppercase">
                   Direction
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-muted)] uppercase">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-muted)] uppercase">
                   Date
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--foreground-muted)]">
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-[var(--foreground-muted)] uppercase">
                   Error
                 </th>
               </tr>
@@ -105,15 +109,15 @@ export function HistorySection() {
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       {getStatusIcon(log.status)}
-                      <span className="text-sm capitalize text-[var(--foreground-muted)]">{log.status}</span>
+                      <span className="text-sm text-[var(--foreground-muted)] capitalize">
+                        {log.status}
+                      </span>
                     </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-[var(--foreground-muted)]">
                     {new Date(log.created_at).toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 text-sm text-red-400">
-                    {log.error_message || '-'}
-                  </td>
+                  <td className="px-6 py-4 text-sm text-red-400">{log.error_message || '-'}</td>
                 </tr>
               ))}
             </tbody>

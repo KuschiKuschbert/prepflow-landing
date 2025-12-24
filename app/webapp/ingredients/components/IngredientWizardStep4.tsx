@@ -75,7 +75,9 @@ export default function IngredientWizardStep4({
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="mb-2 text-sm font-semibold text-[var(--foreground)]">Allergen Information</h3>
+        <h3 className="mb-2 text-sm font-semibold text-[var(--foreground)]">
+          Allergen Information
+        </h3>
         <div className="mb-2 rounded-lg border border-[var(--color-warning)]/30 bg-[var(--color-warning)]/5 px-3 py-2">
           <p className="text-xs font-medium text-[var(--color-warning)]">
             ⚠️ Experimental: Allergen detection is currently experimental and may not be 100%
@@ -104,7 +106,12 @@ export default function IngredientWizardStep4({
       ) : (
         <div className="mb-4 rounded-lg border border-[var(--primary)]/30 bg-[var(--primary)]/5 p-3">
           <div className="flex items-start gap-2">
-            <Icon icon={Check} size="sm" className="mt-0.5 text-[var(--primary)]" aria-hidden={true} />
+            <Icon
+              icon={Check}
+              size="sm"
+              className="mt-0.5 text-[var(--primary)]"
+              aria-hidden={true}
+            />
             <div className="flex-1 text-xs text-[var(--foreground-secondary)]">
               <div className="font-semibold text-[var(--primary)]">
                 {selectedAllergens.length > 0
@@ -195,10 +202,14 @@ export default function IngredientWizardStep4({
                           aria-hidden={true}
                         />
                       )}
-                      <span className="text-sm font-medium text-[var(--foreground)]">{allergen.displayName}</span>
+                      <span className="text-sm font-medium text-[var(--foreground)]">
+                        {allergen.displayName}
+                      </span>
                     </div>
                     {allergen.description && (
-                      <p className="mt-0.5 text-xs text-[var(--foreground-muted)]">{allergen.description}</p>
+                      <p className="mt-0.5 text-xs text-[var(--foreground-muted)]">
+                        {allergen.description}
+                      </p>
                     )}
                   </div>
                 </label>
@@ -208,7 +219,9 @@ export default function IngredientWizardStep4({
         </div>
       )}
 
-      {errors.allergens && <p className="mt-1 text-xs text-[var(--color-error)]">{errors.allergens}</p>}
+      {errors.allergens && (
+        <p className="mt-1 text-xs text-[var(--color-error)]">{errors.allergens}</p>
+      )}
     </div>
   );
 }

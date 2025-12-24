@@ -70,35 +70,39 @@ export async function getLockedMenusUsingEntity(
 
       if (recipeIds.length > 0) {
         menuItemQueries.push(
-          supabaseAdmin
-            .from('menu_items')
-            .select('menu_id')
-            .in('recipe_id', recipeIds)
-            .then(({ data, error }) => {
-              if (error) {
-                logger.warn('[Menu Change Tracking] Error fetching menu items with recipes:', {
-                  error: error.message,
-                });
-              }
-              return data || [];
-            }),
+          Promise.resolve(
+            supabaseAdmin
+              .from('menu_items')
+              .select('menu_id')
+              .in('recipe_id', recipeIds)
+              .then(({ data, error }) => {
+                if (error) {
+                  logger.warn('[Menu Change Tracking] Error fetching menu items with recipes:', {
+                    error: error.message,
+                  });
+                }
+                return data || [];
+              }),
+          ),
         );
       }
 
       if (dishIds.length > 0) {
         menuItemQueries.push(
-          supabaseAdmin
-            .from('menu_items')
-            .select('menu_id')
-            .in('dish_id', dishIds)
-            .then(({ data, error }) => {
-              if (error) {
-                logger.warn('[Menu Change Tracking] Error fetching menu items with dishes:', {
-                  error: error.message,
-                });
-              }
-              return data || [];
-            }),
+          Promise.resolve(
+            supabaseAdmin
+              .from('menu_items')
+              .select('menu_id')
+              .in('dish_id', dishIds)
+              .then(({ data, error }) => {
+                if (error) {
+                  logger.warn('[Menu Change Tracking] Error fetching menu items with dishes:', {
+                    error: error.message,
+                  });
+                }
+                return data || [];
+              }),
+          ),
         );
       }
 

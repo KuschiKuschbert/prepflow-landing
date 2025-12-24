@@ -53,9 +53,9 @@ export async function migrateIngredientsToStandardUnits(): Promise<MigrationResu
         }
       } catch (err) {
         logger.error('[migrate-to-standard-units.ts] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+          error: err instanceof Error ? err.message : String(err),
+          stack: err instanceof Error ? err.stack : undefined,
+        });
 
         const errorMsg = err instanceof Error ? err.message : 'Unknown error';
         errors.push(`Ingredient ${ingredient.id} (${ingredient.ingredient_name}): ${errorMsg}`);

@@ -34,12 +34,31 @@ interface TaskCardProps {
 function getStatusIcon(status: string) {
   switch (status) {
     case 'completed':
-      return <Icon icon={CheckCircle} size="lg" className="text-[var(--color-success)]" aria-hidden={true} />;
+      return (
+        <Icon
+          icon={CheckCircle}
+          size="lg"
+          className="text-[var(--color-success)]"
+          aria-hidden={true}
+        />
+      );
     case 'overdue':
-      return <Icon icon={AlertTriangle} size="lg" className="text-[var(--color-error)]" aria-hidden={true} />;
+      return (
+        <Icon
+          icon={AlertTriangle}
+          size="lg"
+          className="text-[var(--color-error)]"
+          aria-hidden={true}
+        />
+      );
     default:
       return (
-        <Icon icon={ClipboardCheck} size="lg" className="text-[var(--color-warning)]" aria-hidden={true} />
+        <Icon
+          icon={ClipboardCheck}
+          size="lg"
+          className="text-[var(--color-warning)]"
+          aria-hidden={true}
+        />
       );
   }
 }
@@ -66,8 +85,12 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
             {getStatusIcon(task.status)}
           </div>
           <div>
-            <h3 className="text-xl font-semibold text-[var(--foreground)]">{task.cleaning_areas.name}</h3>
-            <p className="text-[var(--foreground-muted)]">{new Date(task.assigned_date).toLocaleDateString()}</p>
+            <h3 className="text-xl font-semibold text-[var(--foreground)]">
+              {task.cleaning_areas.name}
+            </h3>
+            <p className="text-[var(--foreground-muted)]">
+              {new Date(task.assigned_date).toLocaleDateString()}
+            </p>
           </div>
         </div>
         <span

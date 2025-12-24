@@ -16,4 +16,3 @@ export function getFooterCSS(): string {
     }
   `;
 }
-

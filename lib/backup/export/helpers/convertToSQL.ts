@@ -1,4 +1,4 @@
-import type { BackupData } from '../types';
+import type { BackupData } from '../../types';
 
 /**
  * Convert backup data to SQL format.
@@ -16,22 +16,23 @@ export function convertToSQL(backupData: BackupData): string {
 
   // Generate INSERT statements for each table
   for (const [tableName, records] of Object.entries(backupData.tables)) {
-    if (records.length === 0) {
+    const typedRecords = records as Record<string, any>[];
+    if (typedRecords.length === 0) {
       continue;
     }
 
     sql.push(`-- Table: ${tableName}`);
-    sql.push(`-- Records: ${records.length}`);
+    sql.push(`-- Records: ${typedRecords.length}`);
     sql.push('');
 
     // Get column names from first record
-    const columns = Object.keys(records[0]);
+    const columns = Object.keys(typedRecords[0]);
     const columnsStr = columns.map(col => `"${col}"`).join(', ');
 
     // Generate INSERT statements (batch inserts for efficiency)
     const batchSize = 100;
-    for (let i = 0; i < records.length; i += batchSize) {
-      const batch = records.slice(i, i + batchSize);
+    for (let i = 0; i < typedRecords.length; i += batchSize) {
+      const batch = typedRecords.slice(i, i + batchSize);
       const values = batch.map(record => {
         const rowValues = columns.map(col => {
           const value = record[col];
@@ -61,4 +62,3 @@ export function convertToSQL(backupData: BackupData): string {
 
   return sql.join('\n');
 }
-

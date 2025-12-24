@@ -20,7 +20,9 @@ export async function createTemperatureLog(logData: {
   logged_by?: string;
 }) {
   if (!supabaseAdmin) {
-    logger.error('[Temperature Logs API] Database connection not available for createTemperatureLog');
+    logger.error(
+      '[Temperature Logs API] Database connection not available for createTemperatureLog',
+    );
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
@@ -66,13 +68,6 @@ export async function createTemperatureLog(logData: {
     ])
     .select()
     .single();
-
-  if (error) {
-    logger.error('[helpers/createTemperatureLog] Database error:', {
-      error: error.message,
-    });
-    throw ApiErrorHandler.fromSupabaseError(error, 500);
-  }
 
   if (error) {
     logger.error('[Temperature Logs API] Database error creating log:', {

@@ -3,7 +3,14 @@ import nextConfig from 'eslint-config-next/core-web-vitals';
 
 export default defineConfig([
   {
-    ignores: ['**/node_modules', '**/.next', '**/out', '**/build', '**/dist'],
+    ignores: [
+      '**/node_modules',
+      '**/.next',
+      '**/out',
+      '**/build',
+      '**/dist',
+      '**/app/nachotaco/**', // Exclude nachotaco area from all linting
+    ],
   },
   ...nextConfig,
   {

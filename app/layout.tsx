@@ -11,7 +11,6 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import GoogleAnalytics from '../components/GoogleAnalytics';
 import GoogleTagManager from '../components/GoogleTagManager';
 import { Providers } from './providers';
-import { logger } from '@/lib/logger';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -145,12 +144,9 @@ export default function RootLayout({
                   const theme = localStorage.getItem('prepflow-theme') || 'dark';
                   document.documentElement.setAttribute('data-theme', theme);
                 } catch (e) {
-                  logger.error('[layout.tsx] Error in catch block:', {
-      error: e instanceof Error ? e.message : String(e),
-      stack: e instanceof Error ? e.stack : undefined,
-    });
-
-                  // Fallback to dark theme if localStorage fails
+                  // Error handled: Fallback to dark theme if localStorage fails (e.g., private browsing)
+                  // Note: Using console.error here as logger is not available in script tag before React loads
+                  console.error('Failed to read theme from localStorage, using dark theme fallback:', e);
                   document.documentElement.setAttribute('data-theme', 'dark');
                 }
               })();

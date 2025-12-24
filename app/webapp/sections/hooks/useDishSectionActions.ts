@@ -1,5 +1,6 @@
 'use client';
 import { useCallback } from 'react';
+import { useNotification } from '@/contexts/NotificationContext';
 import { KitchenSection, MenuDish, FormData } from './types';
 import { handleSubmit as submitForm } from './useDishSectionActions/helpers/handleSubmit';
 import { useHandleDelete } from './useDishSectionActions/helpers/handleDelete';
@@ -24,9 +25,12 @@ interface UseDishSectionActionsProps {
 
 export function useDishSectionActions({
   userId,
+  kitchenSections,
   menuDishes,
   editingSection,
   formData,
+  setKitchenSections,
+  setMenuDishes,
   setError,
   setFormData,
   setShowForm,
@@ -34,6 +38,8 @@ export function useDishSectionActions({
   fetchKitchenSections,
   fetchMenuDishes,
 }: UseDishSectionActionsProps) {
+  const { showSuccess, showError } = useNotification();
+
   const resetForm = useCallback(() => {
     setFormData({ name: '', description: '', color: '#29E7CD' });
     setShowForm(false);
@@ -63,20 +69,24 @@ export function useDishSectionActions({
   );
 
   const { handleDelete, ConfirmDialog } = useHandleDelete({
-    fetchKitchenSections,
-    fetchMenuDishes,
+    kitchenSections,
+    menuDishes,
+    setKitchenSections,
+    setMenuDishes,
     setError,
   });
 
   const onAssignDish = useCallback(
     async (dishId: string, sectionId: string | null) => {
       await assignDish(dishId, sectionId, {
-        fetchMenuDishes,
-        fetchKitchenSections,
+        menuDishes,
+        setMenuDishes,
         setError,
+        showSuccess,
+        showError,
       });
     },
-    [fetchMenuDishes, fetchKitchenSections, setError],
+    [menuDishes, setMenuDishes, setError, showSuccess, showError],
   );
 
   const getUnassignedDishes = useCallback(

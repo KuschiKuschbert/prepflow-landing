@@ -1,4 +1,4 @@
-import type { SupplierImportRow } from '../supplier-import';
+import type { SupplierImportRow } from '../../supplier-import';
 
 /**
  * Validate supplier import row
@@ -24,4 +24,3 @@ export function validateSupplier(
 
   return { valid: true };
 }
-

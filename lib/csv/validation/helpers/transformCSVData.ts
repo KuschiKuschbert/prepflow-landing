@@ -20,4 +20,3 @@ export function transformCSVData(data: any[], schema: ValidationSchema): any[] {
     return transformedRow;
   });
 }
-

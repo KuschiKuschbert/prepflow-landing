@@ -31,7 +31,6 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
   const [editedName, setEditedName] = useState('');
   const [editedYield, setEditedYield] = useState(1);
   const [editedInstructions, setEditedInstructions] = useState('');
-  const [saving, setSaving] = useState(false);
   const [showAddIngredient, setShowAddIngredient] = useState(false);
   const [activeTab, setActiveTab] = useState<'ingredients' | 'consumables'>('ingredients');
   const {
@@ -49,18 +48,9 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
     convertIngredientQuantity,
     showError,
   });
-  const ingredientCalculations = useMemo(
-    () => calculations.filter(calc => !calc.isConsumable),
-    [calculations],
-  );
-  const consumableCalculations = useMemo(
-    () => calculations.filter(calc => calc.isConsumable),
-    [calculations],
-  );
-  const consumables = useMemo(
-    () => ingredients.filter(ing => ing.category === 'Consumables'),
-    [ingredients],
-  );
+  const ingredientCalculations = useMemo(() => calculations.filter(calc => !calc.isConsumable), [calculations]);
+  const consumableCalculations = useMemo(() => calculations.filter(calc => calc.isConsumable), [calculations]);
+  const consumables = useMemo(() => ingredients.filter(ing => ing.category === 'Consumables'), [ingredients]);
   const {
     ingredientSearch,
     showSuggestions,
@@ -91,18 +81,22 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
     setCalculations,
   });
   const updateCalculationWrapper = useCallback(
-    (ingredientId: string, quantity: number) => {
-      updateCalculation(ingredientId, quantity, ingredients, setCalculations);
-    },
+    (ingredientId: string, quantity: number) =>
+      updateCalculation(ingredientId, quantity, ingredients, setCalculations),
     [ingredients, updateCalculation, setCalculations],
   );
+  const addCalculationWithRollback = useCallback(
+    (calc: COGSCalculation) => {
+      setCalculations(prev => [...prev, calc]);
+    },
+    [],
+  );
+
   const { handleAddIngredient } = useIngredientAddition({
     calculations,
     ingredients,
     selectedRecipe: recipe?.id || null,
-    addCalculation: (calc: COGSCalculation) => {
-      setCalculations(prev => [...prev, calc]);
-    },
+    addCalculation: addCalculationWithRollback,
     updateCalculation: updateCalculationWrapper,
     resetForm,
     setSaveError: setDataError,
@@ -112,7 +106,7 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
     newIngredient,
     newConsumable,
   });
-  const { savingIngredients, handleSaveIngredients } = useRecipeEditIngredientSave({
+  const { handleSaveIngredients } = useRecipeEditIngredientSave({
     recipe,
     calculations,
     showError,
@@ -152,9 +146,19 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
       return;
     }
 
-    setSaving(true);
+    // Store original state for rollback
+    const originalName = recipe.recipe_name || '';
+    const originalYield = recipe.yield || 1;
+    const originalInstructions = recipe.instructions || '';
+    const originalCalculations = [...calculations];
+    const rollback = () => {
+      setEditedName(originalName);
+      setEditedYield(originalYield);
+      setEditedInstructions(originalInstructions);
+      setCalculations(originalCalculations);
+    };
+
     try {
-      // Save recipe metadata
       const response = await fetch(`/api/recipes/${recipe.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -166,26 +170,21 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
       });
 
       if (!response.ok) {
+        rollback();
         const error = await response.json();
         showWarning(error.message || 'Failed to save recipe');
-        setSaving(false);
         return;
       }
       const ingredientsSaved = await handleSaveIngredients();
       if (!ingredientsSaved) {
-        setSaving(false);
+        rollback();
         return;
-      }
-
-      if (onRefresh) {
-        await onRefresh();
       }
       onClose();
     } catch (err) {
+      rollback();
       logger.error('Failed to save recipe:', err);
       showWarning('Failed to save recipe');
-    } finally {
-      setSaving(false);
     }
   }, [
     recipe,
@@ -194,18 +193,17 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
     editedInstructions,
     calculations,
     onClose,
-    onRefresh,
     showWarning,
     showError,
     handleSaveIngredients,
+    setCalculations,
   ]);
   if (!recipe) return null;
-  const capitalizeRecipeName = (name: string) => {
-    return name
+  const capitalizeRecipeName = (name: string) =>
+    name
       .split(' ')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
-  };
   return (
     <EditDrawer
       isOpen={isOpen}
@@ -213,11 +211,10 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
       title={`Edit ${capitalizeRecipeName(recipe.recipe_name)}`}
       maxWidth="xl"
       onSave={handleSave}
-      saving={saving || savingIngredients || status === 'saving'}
+      saving={status === 'saving'}
       footer={
         <RecipeEditFooter
-          saving={saving}
-          savingIngredients={savingIngredients}
+          saving={status === 'saving'}
           autosaveStatus={status}
           autosaveError={autosaveError}
           editedName={editedName}

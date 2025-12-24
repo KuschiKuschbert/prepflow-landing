@@ -52,7 +52,15 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ fla
         context: { endpoint: `/api/admin/features/${flag}`, method: 'PUT' },
       });
 
-      return NextResponse.json(ApiErrorHandler.fromSupabaseError(error, 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          'Failed to update feature flag',
+          'DATABASE_ERROR',
+          500,
+          { supabaseError: error.message },
+        ),
+        { status: 500 },
+      );
     }
 
     // Log admin action
@@ -140,7 +148,15 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
         context: { endpoint: `/api/admin/features/${flag}`, method: 'DELETE' },
       });
 
-      return NextResponse.json(ApiErrorHandler.fromSupabaseError(error, 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          'Failed to update feature flag',
+          'DATABASE_ERROR',
+          500,
+          { supabaseError: error.message },
+        ),
+        { status: 500 },
+      );
     }
 
     // Log admin action

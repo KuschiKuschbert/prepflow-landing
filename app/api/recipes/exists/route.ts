@@ -24,10 +24,7 @@ export async function GET(req: NextRequest) {
         code: (error as any).code,
         context: { endpoint: '/api/recipes/exists', operation: 'GET', name },
       });
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(error, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(error, 500), { status: 500 });
     }
     return NextResponse.json({ success: true, exists: (data || []).length > 0 });
   } catch (e: any) {
@@ -37,11 +34,7 @@ export async function GET(req: NextRequest) {
       context: { endpoint: '/api/recipes/exists', method: 'GET' },
     });
     return NextResponse.json(
-      ApiErrorHandler.createError(
-        'Failed to check recipe existence',
-        'SERVER_ERROR',
-        500,
-      ),
+      ApiErrorHandler.createError('Failed to check recipe existence', 'SERVER_ERROR', 500),
       { status: 500 },
     );
   }

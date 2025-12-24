@@ -13,6 +13,7 @@ import { AISpecialCard } from './components/AISpecialCard';
 import { EmptyState } from './components/EmptyState';
 import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
+import { useNotification } from '@/contexts/NotificationContext';
 interface AISpecial {
   id: string;
   image_data: string;
@@ -24,13 +25,13 @@ interface AISpecial {
 
 export default function AISpecialsPage() {
   const { t } = useTranslation();
+  const { showSuccess, showError } = useNotification();
   // Initialize with cached data for instant display
   const [aiSpecials, setAiSpecials] = useState<AISpecial[]>(
     () => getCachedData('ai_specials') || [],
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [processing, setProcessing] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [prompt, setPrompt] = useState('');
   const userId = 'user-123';
@@ -80,39 +81,82 @@ export default function AISpecialsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedFile) {
-      setError('Please select an image file');
+      showError('Please select an image file');
       return;
     }
-    setProcessing(true);
+
+    // Store original state for rollback
+    const originalSpecials = [...aiSpecials];
+
+    // Create temporary special for optimistic update
+    const tempId = `temp-${Date.now()}`;
+    const tempSpecial: AISpecial = {
+      id: tempId,
+      image_data: '',
+      prompt: prompt || undefined,
+      ai_response: null,
+      status: 'processing',
+      created_at: new Date().toISOString(),
+    };
+
+    // Optimistically add to UI immediately
+    setAiSpecials(prev => [tempSpecial, ...prev]);
     setError(null);
+    const fileToSubmit = selectedFile;
+    const promptToSubmit = prompt;
+    setSelectedFile(null);
+    setPrompt('');
+
     try {
       const reader = new FileReader();
       reader.onload = async () => {
         const imageData = reader.result as string;
-        const response = await fetch('/api/ai-specials', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId, imageData, prompt: prompt || undefined }),
-        });
-        const result = await response.json();
-        if (result.success) {
-          // Refresh list and cache will be updated by fetchAISpecials
-          await fetchAISpecials();
-          setSelectedFile(null);
-          setPrompt('');
-        } else {
-          setError(result.message || 'Failed to process image');
+        try {
+          const response = await fetch('/api/ai-specials', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId,
+              imageData,
+              prompt: promptToSubmit || undefined,
+            }),
+          });
+          const result = await response.json();
+          if (result.success && result.data) {
+            // Replace temp special with real one from server
+            setAiSpecials(prev =>
+              prev.map(special => (special.id === tempId ? result.data : special)),
+            );
+            showSuccess('Image submitted successfully! Processing your AI special...');
+          } else {
+            // Error - revert optimistic update
+            setAiSpecials(originalSpecials);
+            showError(result.message || 'Failed to process image');
+          }
+        } catch (fetchErr) {
+          // Error - revert optimistic update
+          setAiSpecials(originalSpecials);
+          logger.error('[AISpecialsPage] Error processing image:', {
+            error: fetchErr instanceof Error ? fetchErr.message : String(fetchErr),
+            userId,
+          });
+          showError("Couldn't process that image, chef. Give it another shot.");
         }
-        setProcessing(false);
       };
-      reader.readAsDataURL(selectedFile);
+      reader.onerror = () => {
+        // File read error - revert optimistic update
+        setAiSpecials(originalSpecials);
+        showError("Couldn't read that image file, chef. Try a different one.");
+      };
+      reader.readAsDataURL(fileToSubmit);
     } catch (err) {
-      logger.error('[AISpecialsPage] Error processing image:', {
+      // Error - revert optimistic update
+      setAiSpecials(originalSpecials);
+      logger.error('[AISpecialsPage] Error setting up file reader:', {
         error: err instanceof Error ? err.message : String(err),
         userId,
       });
-      setError('Failed to process image');
-      setProcessing(false);
+      showError("Couldn't process that image, chef. Give it another shot.");
     }
   };
 
@@ -155,7 +199,7 @@ export default function AISpecialsPage() {
         <UploadForm
           selectedFile={selectedFile}
           prompt={prompt}
-          processing={processing}
+          processing={false}
           onFileSelect={handleFileSelect}
           onPromptChange={setPrompt}
           onSubmit={handleSubmit}

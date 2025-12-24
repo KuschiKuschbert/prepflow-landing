@@ -64,7 +64,9 @@ export function EquipmentTableMobileCards({
                 />
               </div>
               <div className="min-w-0 flex-1">
-                <div className="mb-1 text-base font-semibold text-[var(--foreground)]">{item.name}</div>
+                <div className="mb-1 text-base font-semibold text-[var(--foreground)]">
+                  {item.name}
+                </div>
                 <div className="mb-2 flex items-center gap-2">
                   <div
                     className={`h-2 w-2 rounded-full ${

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Filter bar component for cleaning grid
  */
@@ -38,7 +40,3 @@ export function GridFilterBar({ gridFilter, onFilterChange }: GridFilterBarProps
     </div>
   );
 }
-
-
-
-

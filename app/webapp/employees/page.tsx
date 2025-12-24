@@ -10,8 +10,10 @@ import { EmployeeList } from './components/EmployeeList';
 import { EmployeeForm } from './components/EmployeeForm';
 import { Users } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { useNotification } from '@/contexts/NotificationContext';
 
 export default function EmployeesPage() {
+  const { showSuccess, showError } = useNotification();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [qualificationTypes, setQualificationTypes] = useState<QualificationType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -75,6 +77,40 @@ export default function EmployeesPage() {
 
   const handleAddEmployee = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Store original state for rollback
+    const originalEmployees = [...employees];
+
+    // Create temporary employee for optimistic update
+    const tempId = `temp-${Date.now()}`;
+    const tempEmployee: Employee = {
+      id: tempId,
+      ...newEmployee,
+      employment_end_date: newEmployee.employment_end_date || null,
+      phone: newEmployee.phone || null,
+      email: newEmployee.email || null,
+      emergency_contact: newEmployee.emergency_contact || null,
+      notes: newEmployee.notes || null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    // Optimistically add to UI immediately
+    setEmployees([tempEmployee, ...employees]);
+    setNewEmployee({
+      employee_id: '',
+      full_name: '',
+      role: '',
+      employment_start_date: new Date().toISOString().split('T')[0],
+      employment_end_date: '',
+      status: 'active',
+      phone: '',
+      email: '',
+      emergency_contact: '',
+      photo_url: '',
+      notes: '',
+    });
+    setShowAddForm(false);
+
     try {
       const response = await fetch('/api/employees', {
         method: 'POST',
@@ -89,29 +125,45 @@ export default function EmployeesPage() {
         }),
       });
       const data = await response.json();
-      if (data.success) {
-        setEmployees([data.data, ...employees]);
-        setNewEmployee({
-          employee_id: '',
-          full_name: '',
-          role: '',
-          employment_start_date: new Date().toISOString().split('T')[0],
-          employment_end_date: '',
-          status: 'active',
-          phone: '',
-          email: '',
-          emergency_contact: '',
-          photo_url: '',
-          notes: '',
-        });
-        setShowAddForm(false);
+      if (data.success && data.data) {
+        // Replace temp employee with real one from server
+        setEmployees(prev => prev.map(emp => (emp.id === tempId ? data.data : emp)));
+        showSuccess('Employee added successfully');
+      } else {
+        // Error - revert optimistic update
+        setEmployees(originalEmployees);
+        showError(data.message || data.error || 'Failed to add employee');
       }
     } catch (error) {
+      // Error - revert optimistic update
+      setEmployees(originalEmployees);
       logger.error('Error adding employee:', error);
+      showError("Couldn't add that employee, chef. Give it another go.");
     }
   };
 
   const handleUpdateEmployee = async (employee: Employee, updates: Partial<EmployeeFormData>) => {
+    // Store original state for rollback
+    const originalEmployees = [...employees];
+
+    // Optimistically update UI immediately
+    setEmployees(prev =>
+      prev.map(emp =>
+        emp.id === employee.id
+          ? {
+              ...emp,
+              ...updates,
+              employment_end_date: updates.employment_end_date || null,
+              phone: updates.phone || null,
+              email: updates.email || null,
+              emergency_contact: updates.emergency_contact || null,
+              notes: updates.notes || null,
+            }
+          : emp,
+      ),
+    );
+    setEditingEmployee(null);
+
     try {
       const response = await fetch(`/api/employees/${employee.id}`, {
         method: 'PUT',
@@ -126,12 +178,22 @@ export default function EmployeesPage() {
         }),
       });
       const data = await response.json();
-      if (data.success) {
-        setEmployees(employees.map(emp => (emp.id === employee.id ? data.data : emp)));
-        setEditingEmployee(null);
+      if (data.success && data.data) {
+        // Update with server response to get latest data
+        setEmployees(prev => prev.map(emp => (emp.id === employee.id ? data.data : emp)));
+        showSuccess('Employee updated successfully');
+      } else {
+        // Error - revert optimistic update
+        setEmployees(originalEmployees);
+        setEditingEmployee(employee); // Reopen edit form
+        showError(data.message || data.error || 'Failed to update employee');
       }
     } catch (error) {
+      // Error - revert optimistic update
+      setEmployees(originalEmployees);
+      setEditingEmployee(employee); // Reopen edit form
       logger.error('Error updating employee:', error);
+      showError("Couldn't update that employee, chef. Give it another shot.");
     }
   };
 
@@ -142,19 +204,34 @@ export default function EmployeesPage() {
 
   const confirmDeleteEmployee = async () => {
     if (!employeeToDelete) return;
+
+    // Store original state for rollback
+    const originalEmployees = [...employees];
+    const employeeId = employeeToDelete.id;
+    const employeeName = employeeToDelete.full_name;
+
+    // Optimistically remove from UI immediately
+    setEmployees(prev => prev.filter(emp => emp.id !== employeeId));
+    setShowDeleteConfirm(false);
+    setEmployeeToDelete(null);
+
     try {
-      const response = await fetch(`/api/employees/${employeeToDelete.id}`, {
+      const response = await fetch(`/api/employees/${employeeId}`, {
         method: 'DELETE',
       });
       const data = await response.json();
       if (data.success) {
-        setEmployees(employees.filter(emp => emp.id !== employeeToDelete.id));
+        showSuccess(`${employeeName} has been deactivated`);
+      } else {
+        // Error - revert optimistic update
+        setEmployees(originalEmployees);
+        showError(data.message || data.error || 'Failed to deactivate employee');
       }
     } catch (error) {
+      // Error - revert optimistic update
+      setEmployees(originalEmployees);
       logger.error('Error deleting employee:', error);
-    } finally {
-      setShowDeleteConfirm(false);
-      setEmployeeToDelete(null);
+      showError("Couldn't deactivate that employee, chef. Try again.");
     }
   };
 
@@ -188,7 +265,9 @@ export default function EmployeesPage() {
         {/* Filters and Add Button */}
         <div className="tablet:flex-row tablet:items-center mb-6 flex flex-col items-start justify-between gap-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Filter by Status</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+              Filter by Status
+            </label>
             <select
               value={selectedStatus}
               onChange={e =>

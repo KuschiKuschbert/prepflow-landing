@@ -5,12 +5,18 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { buildIngredientQuery } from './helpers/buildIngredientQuery';
 import { processIngredient } from './helpers/processIngredient';
 import { invalidateAndReaggregate } from './helpers/invalidateAndReaggregate';
+
+const detectMissingAllergensSchema = z.object({
+  ingredient_ids: z.array(z.string()).optional(),
+  force: z.boolean().optional().default(false),
+});
 
 /**
  * Detects allergens for ingredients missing them.
@@ -27,13 +33,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let body = {};
+    let body: z.infer<typeof detectMissingAllergensSchema> = {
+      ingredient_ids: undefined,
+      force: false,
+    };
     try {
-      body = await request.json();
+      const rawBody = await request.json();
+      body = detectMissingAllergensSchema.parse(rawBody);
     } catch (err) {
       logger.warn('[Detect Missing Allergens API] Failed to parse request body:', {
         error: err instanceof Error ? err.message : String(err),
       });
+      if (err instanceof z.ZodError) {
+        return NextResponse.json(
+          ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+          { status: 400 },
+        );
+      }
     }
     const { ingredient_ids, force = false } = body;
 

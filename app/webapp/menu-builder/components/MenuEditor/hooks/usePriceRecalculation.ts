@@ -26,7 +26,3 @@ export function usePriceRecalculation(menuId: string, onMenuUpdated: () => void)
 
   return { handleRecalculatePrices };
 }
-
-
-
-

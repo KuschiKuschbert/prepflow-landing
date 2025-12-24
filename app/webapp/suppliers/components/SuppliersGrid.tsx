@@ -42,13 +42,25 @@ export function SuppliersGrid({ suppliers }: SuppliersGridProps) {
           <div className="mb-4 space-y-2">
             {supplier.contact_person && (
               <div className="flex items-center space-x-2">
-                <Icon icon={User} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
-                <span className="text-sm text-[var(--foreground-secondary)]">{supplier.contact_person}</span>
+                <Icon
+                  icon={User}
+                  size="sm"
+                  className="text-[var(--foreground-muted)]"
+                  aria-hidden={true}
+                />
+                <span className="text-sm text-[var(--foreground-secondary)]">
+                  {supplier.contact_person}
+                </span>
               </div>
             )}
             {supplier.email && (
               <div className="flex items-center space-x-2">
-                <Icon icon={Mail} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+                <Icon
+                  icon={Mail}
+                  size="sm"
+                  className="text-[var(--foreground-muted)]"
+                  aria-hidden={true}
+                />
                 <a
                   href={`mailto:${supplier.email}`}
                   className="text-sm text-[var(--primary)] hover:underline"
@@ -59,7 +71,12 @@ export function SuppliersGrid({ suppliers }: SuppliersGridProps) {
             )}
             {supplier.phone && (
               <div className="flex items-center space-x-2">
-                <Icon icon={Phone} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+                <Icon
+                  icon={Phone}
+                  size="sm"
+                  className="text-[var(--foreground-muted)]"
+                  aria-hidden={true}
+                />
                 <a
                   href={`tel:${supplier.phone}`}
                   className="text-sm text-[var(--primary)] hover:underline"
@@ -70,7 +87,12 @@ export function SuppliersGrid({ suppliers }: SuppliersGridProps) {
             )}
             {supplier.website && (
               <div className="flex items-center space-x-2">
-                <Icon icon={Globe} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
+                <Icon
+                  icon={Globe}
+                  size="sm"
+                  className="text-[var(--foreground-muted)]"
+                  aria-hidden={true}
+                />
                 <a
                   href={supplier.website}
                   target="_blank"
@@ -106,19 +128,33 @@ export function SuppliersGrid({ suppliers }: SuppliersGridProps) {
               <span className="text-sm text-[var(--foreground-muted)]">
                 {t('suppliers.minimumOrder', 'Minimum Order')}:{' '}
               </span>
-              <span className="text-sm text-[var(--foreground)]">${supplier.minimum_order_amount}</span>
+              <span className="text-sm text-[var(--foreground)]">
+                ${supplier.minimum_order_amount}
+              </span>
             </div>
           )}
 
-          {supplier.notes && <p className="mb-4 text-sm text-[var(--foreground-secondary)]">{supplier.notes}</p>}
+          {supplier.notes && (
+            <p className="mb-4 text-sm text-[var(--foreground-secondary)]">{supplier.notes}</p>
+          )}
 
           <div className="flex space-x-4">
-            <button className="rounded-xl bg-[var(--primary)] px-4 py-2 flex items-center gap-2 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg">
-              <Icon icon={Edit} size="sm" className="text-[var(--button-active-text)]" aria-hidden={true} />
+            <button className="flex items-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-2 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg">
+              <Icon
+                icon={Edit}
+                size="sm"
+                className="text-[var(--button-active-text)]"
+                aria-hidden={true}
+              />
               {t('suppliers.edit', 'Edit')}
             </button>
-            <button className="rounded-xl bg-[var(--muted)] px-4 py-2 flex items-center gap-2 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]">
-              <Icon icon={FileText} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
+            <button className="flex items-center gap-2 rounded-xl bg-[var(--muted)] px-4 py-2 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)]">
+              <Icon
+                icon={FileText}
+                size="sm"
+                className="text-[var(--foreground)]"
+                aria-hidden={true}
+              />
               {t('suppliers.addPriceList', 'Add Price List')}
             </button>
           </div>

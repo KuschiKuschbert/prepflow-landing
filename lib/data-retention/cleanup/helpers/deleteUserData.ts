@@ -95,4 +95,3 @@ export async function deleteUserData(userEmail: string): Promise<{
     };
   }
 }
-

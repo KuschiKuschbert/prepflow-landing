@@ -1,4 +1,3 @@
-import { logger } from '../logger';
 import { logger } from '@/lib/logger';
 
 /**

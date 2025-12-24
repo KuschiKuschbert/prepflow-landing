@@ -4,8 +4,8 @@ import {
   getHuggingFaceImageModel,
 } from '../../../huggingface-client';
 import { logger } from '@/lib/logger';
-import type { AIResponse, FoodImageResult } from '../types';
-import type { FoodImageGenerationOptions } from '../types';
+import type { AIResponse } from '../../../types';
+import type { FoodImageResult, FoodImageGenerationOptions } from '../types';
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000;
@@ -95,4 +95,3 @@ export async function generateImageWithRetry(
     error: lastError?.message || 'Failed to generate image after retries',
   };
 }
-

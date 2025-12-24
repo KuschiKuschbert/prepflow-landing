@@ -5,7 +5,9 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { z } from 'zod';
 
 const bulkDeleteRecipesSchema = z.object({
-  recipeIds: z.array(z.string().uuid('Recipe ID must be a valid UUID')).min(1, 'recipeIds array is required and must contain at least one recipe ID'),
+  recipeIds: z
+    .array(z.string().uuid('Recipe ID must be a valid UUID'))
+    .min(1, 'recipeIds array is required and must contain at least one recipe ID'),
 });
 export async function POST(request: NextRequest) {
   try {
@@ -37,7 +39,10 @@ export async function POST(request: NextRequest) {
     const { recipeIds } = zodValidation.data;
 
     if (!supabaseAdmin) {
-      return NextResponse.json(ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500), { status: 500 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500),
+        { status: 500 },
+      );
     }
 
     // Check if any recipes are used in menu dishes or dish_recipes before attempting deletion

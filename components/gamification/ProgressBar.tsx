@@ -104,7 +104,9 @@ export function ProgressBar({
       {(label || showPercentage) && (
         <div className="mb-2 flex items-center justify-between text-sm">
           {label && <span className="text-[var(--foreground-secondary)]">{label}</span>}
-          {showPercentage && <span className="text-[var(--foreground-muted)]">{Math.round(displayProgress)}%</span>}
+          {showPercentage && (
+            <span className="text-[var(--foreground-muted)]">{Math.round(displayProgress)}%</span>
+          )}
         </div>
       )}
       <div className={`${sizeClasses[size]} w-full overflow-hidden rounded-full bg-[var(--muted)]`}>
@@ -118,7 +120,3 @@ export function ProgressBar({
 }
 
 export default ProgressBar;
-
-
-
-

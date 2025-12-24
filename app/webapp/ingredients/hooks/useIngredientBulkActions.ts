@@ -57,9 +57,9 @@ export function useIngredientBulkActions({
       if (setSelectedIngredients) setSelectedIngredients(new Set());
     } catch (error) {
       logger.error('[useIngredientBulkActions.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       setError('Failed to delete selected ingredients');
     }

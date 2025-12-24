@@ -16,8 +16,6 @@ export function useRecipeEditIngredientSave({
   showError,
   showSuccess,
 }: UseRecipeEditIngredientSaveProps) {
-  const [savingIngredients, setSavingIngredients] = useState(false);
-
   const handleSaveIngredients = useCallback(async () => {
     if (!recipe || !recipe.id) {
       showError('Recipe not found');
@@ -29,7 +27,6 @@ export function useRecipeEditIngredientSave({
       return false;
     }
 
-    setSavingIngredients(true);
     try {
       const recipeYield = recipe.yield || 1;
       const recipeIngredients = calculations.map(calc => ({
@@ -69,14 +66,8 @@ export function useRecipeEditIngredientSave({
       logger.error('Failed to save recipe ingredients:', err);
       showError('Failed to save recipe ingredients');
       return false;
-    } finally {
-      setSavingIngredients(false);
     }
   }, [calculations, recipe, showError, showSuccess]);
 
-  return { savingIngredients, handleSaveIngredients };
+  return { handleSaveIngredients };
 }
-
-
-
-

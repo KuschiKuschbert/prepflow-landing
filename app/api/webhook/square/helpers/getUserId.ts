@@ -46,5 +46,3 @@ export async function getUserIdFromEvent(event: any): Promise<string | null> {
     return null;
   }
 }
-
-

@@ -73,9 +73,13 @@ export function RecipesContent({
           {selectedRecipes.size > 0 && (
             <div className="flex items-center">
               <div className="mr-2 flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-r from-[var(--color-error)] to-[#dc2626]">
-                <span className="text-xs font-bold text-[var(--button-active-text)]">{selectedRecipes.size}</span>
+                <span className="text-xs font-bold text-[var(--button-active-text)]">
+                  {selectedRecipes.size}
+                </span>
               </div>
-              <span className="text-sm text-[var(--foreground-secondary)]">{selectedRecipes.size} selected</span>
+              <span className="text-sm text-[var(--foreground-secondary)]">
+                {selectedRecipes.size} selected
+              </span>
             </div>
           )}
         </div>

@@ -27,7 +27,10 @@ export async function GET() {
 
     // Check if file exists
     if (!fs.existsSync(backgroundPath)) {
-      return NextResponse.json(ApiErrorHandler.createError('Background not found', 'NOT_FOUND', 404), { status: 404 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Background not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
     }
 
     // Read the file
@@ -47,6 +50,9 @@ export async function GET() {
     });
   } catch (error) {
     logger.error('Error serving background:', error);
-    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }

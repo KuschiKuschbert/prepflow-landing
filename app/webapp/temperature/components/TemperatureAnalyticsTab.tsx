@@ -72,7 +72,7 @@ export default function TemperatureAnalyticsTab({
     // Only initialize once when data becomes available
     if (equipment.length > 0 && !hasInitialized.current) {
       // Use setTimeout to avoid synchronous setState in effect
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         setIsLoaded(true);
 
         // Smart equipment selection logic (only if not already selected)
@@ -97,6 +97,7 @@ export default function TemperatureAnalyticsTab({
 
         hasInitialized.current = true;
       }, 0);
+      return () => clearTimeout(timeoutId);
     } else if (equipment.length > 0 && hasInitialized.current) {
       // If already initialized but data changed, update loaded state
       setIsLoaded(true);

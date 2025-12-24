@@ -134,7 +134,6 @@ export default function CleaningRosterPage() {
     areas,
     tasks,
     activeTab,
-    refetchTasks,
     onCreateTask: () => setShowCreateTask(),
   });
 
@@ -288,7 +287,9 @@ export default function CleaningRosterPage() {
           {activeTab === 'areas' && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-semibold text-[var(--foreground)]">Manage Cleaning Areas</h2>
+                <h2 className="text-2xl font-semibold text-[var(--foreground)]">
+                  Manage Cleaning Areas
+                </h2>
                 <p className="mt-1 text-sm text-[var(--foreground-muted)]">
                   Organize your cleaning tasks by area. Click an area to add tasks.
                 </p>
@@ -307,10 +308,17 @@ export default function CleaningRosterPage() {
                 <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-12 text-center">
                   <div className="mb-4 flex justify-center">
                     <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20">
-                      <Icon icon={MapPin} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
+                      <Icon
+                        icon={MapPin}
+                        size="xl"
+                        className="text-[var(--primary)]"
+                        aria-hidden={true}
+                      />
                     </div>
                   </div>
-                  <h3 className="mb-2 text-xl font-semibold text-[var(--foreground)]">No cleaning areas yet</h3>
+                  <h3 className="mb-2 text-xl font-semibold text-[var(--foreground)]">
+                    No cleaning areas yet
+                  </h3>
                   <p className="mb-6 text-[var(--foreground-muted)]">
                     Create your first cleaning area to organize your cleaning tasks.
                   </p>

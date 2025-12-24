@@ -39,14 +39,9 @@ export async function GET(req: NextRequest) {
   } catch (error: any) {
     logger.error('[Google Login Flow Test] Error:', error);
     return NextResponse.json(
-      ApiErrorHandler.createError(
-        'Failed to check session',
-        'SERVER_ERROR',
-        500,
-        {
-          details: error?.message || String(error),
-        },
-      ),
+      ApiErrorHandler.createError('Failed to check session', 'SERVER_ERROR', 500, {
+        details: error?.message || String(error),
+      }),
       { status: 500 },
     );
   }

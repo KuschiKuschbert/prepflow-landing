@@ -4,7 +4,9 @@ import { logger } from '@/lib/logger';
 /**
  * Extract user from Auth0 session
  */
-export async function extractUserFromSession(req: { headers: Headers }): Promise<{
+import type { NextRequest } from 'next/server';
+
+export async function extractUserFromSession(req: NextRequest | { headers: Headers }): Promise<{
   email: string;
   name?: string;
   picture?: string;
@@ -13,7 +15,8 @@ export async function extractUserFromSession(req: { headers: Headers }): Promise
   email_verified?: boolean;
 } | null> {
   try {
-    const session = await auth0.getSession(req);
+    // Type assertion: auth0.getSession accepts NextRequest, but we may have a simpler request object
+    const session = await auth0.getSession(req as NextRequest);
     if (!session?.user) {
       return null;
     }
@@ -33,4 +36,3 @@ export async function extractUserFromSession(req: { headers: Headers }): Promise
     return null;
   }
 }
-

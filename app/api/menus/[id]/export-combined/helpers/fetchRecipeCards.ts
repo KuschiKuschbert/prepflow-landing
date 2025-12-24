@@ -3,6 +3,7 @@
  */
 
 import { createSupabaseAdmin } from '@/lib/supabase';
+import { logger } from '@/lib/logger';
 
 export interface RecipeCardData {
   id: string;
@@ -20,7 +21,7 @@ export interface RecipeCardData {
  */
 export async function fetchRecipeCards(menuId: string): Promise<RecipeCardData[]> {
   const supabase = createSupabaseAdmin();
-  const { data: cards } = await supabase
+  const { data: cards, error: cardsError } = await supabase
     .from('menu_recipe_cards')
     .select(
       `
@@ -40,16 +41,32 @@ export async function fetchRecipeCards(menuId: string): Promise<RecipeCardData[]
     )
     .eq('menu_items.menu_id', menuId);
 
+  if (cardsError) {
+    logger.error('[Menus API] Error fetching recipe cards:', {
+      error: cardsError.message,
+      menuId,
+      context: { endpoint: '/api/menus/[id]/export-combined', operation: 'fetchRecipeCards' },
+    });
+  }
+
   if (!cards || cards.length === 0) {
     return [];
   }
 
-  const { data: menuItems } = await supabase
+  const { data: menuItems, error: menuItemsError } = await supabase
     .from('menu_items')
     .select('id, category, position')
     .eq('menu_id', menuId)
     .order('category', { ascending: true })
     .order('position', { ascending: true });
+
+  if (menuItemsError) {
+    logger.error('[Menus API] Error fetching menu items:', {
+      error: menuItemsError.message,
+      menuId,
+      context: { endpoint: '/api/menus/[id]/export-combined', operation: 'fetchRecipeCards' },
+    });
+  }
 
   const itemOrderMap = new Map<string, { category: string; position: number }>();
   if (menuItems) {

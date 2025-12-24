@@ -22,7 +22,6 @@ interface CompletionModalProps {
  */
 export function CompletionModal({ isOpen, task, date, onClose, onUpdate }: CompletionModalProps) {
   const { showSuccess, showError } = useNotification();
-  const [loading, setLoading] = useState(false);
   const [notes, setNotes] = useState('');
 
   // Initialize notes when modal opens
@@ -39,19 +38,27 @@ export function CompletionModal({ isOpen, task, date, onClose, onUpdate }: Compl
   const isCompleted = !!completion;
 
   const handleToggleCompletion = async () => {
-    setLoading(true);
+    // Store original state for rollback
+    const originalIsCompleted = isCompleted;
+    const originalNotes = notes;
+    const taskId = task.id;
+    const completionDate = date;
+
+    // Optimistically close modal and trigger update (parent handles optimistic UI)
+    onClose();
+    onUpdate(); // Trigger immediate refresh in parent (which has optimistic updates)
 
     try {
-      const endpoint = isCompleted
-        ? `/api/cleaning-tasks/${task.id}/uncomplete`
-        : `/api/cleaning-tasks/${task.id}/complete`;
+      const endpoint = originalIsCompleted
+        ? `/api/cleaning-tasks/${taskId}/uncomplete`
+        : `/api/cleaning-tasks/${taskId}/complete`;
 
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          completion_date: date,
-          notes: notes || null,
+          completion_date: completionDate,
+          notes: originalNotes || null,
         }),
       });
 
@@ -61,14 +68,13 @@ export function CompletionModal({ isOpen, task, date, onClose, onUpdate }: Compl
         throw new Error(data.error || data.message || 'Failed to update task');
       }
 
-      showSuccess(isCompleted ? 'Task marked as incomplete' : 'Task marked as complete');
-      onUpdate();
-      onClose();
+      showSuccess(originalIsCompleted ? 'Task marked as incomplete' : 'Task marked as complete');
+      // Background refresh already triggered by onUpdate above
     } catch (error) {
       logger.error('Error toggling completion:', error);
-      showError('Failed to update task completion');
-    } finally {
-      setLoading(false);
+      showError("Couldn't update that task, chef. Give it another go.");
+      // Note: Modal is already closed, error is shown via notification
+      // Parent's optimistic update will rollback when it receives the error state
     }
   };
 
@@ -109,7 +115,9 @@ export function CompletionModal({ isOpen, task, date, onClose, onUpdate }: Compl
             {task.frequency_type && (
               <div>
                 <div className="text-sm text-[var(--foreground-muted)]">Frequency</div>
-                <div className="text-lg text-[var(--foreground)] capitalize">{task.frequency_type}</div>
+                <div className="text-lg text-[var(--foreground)] capitalize">
+                  {task.frequency_type}
+                </div>
               </div>
             )}
 
@@ -128,7 +136,12 @@ export function CompletionModal({ isOpen, task, date, onClose, onUpdate }: Compl
                   </>
                 ) : (
                   <>
-                    <Icon icon={Circle} size="md" className="text-[var(--foreground-subtle)]" aria-hidden={true} />
+                    <Icon
+                      icon={Circle}
+                      size="md"
+                      className="text-[var(--foreground-subtle)]"
+                      aria-hidden={true}
+                    />
                     <span className="font-medium text-[var(--foreground-muted)]">Pending</span>
                   </>
                 )}
@@ -136,7 +149,9 @@ export function CompletionModal({ isOpen, task, date, onClose, onUpdate }: Compl
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Notes</label>
+              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+                Notes
+              </label>
               <textarea
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
@@ -157,14 +172,13 @@ export function CompletionModal({ isOpen, task, date, onClose, onUpdate }: Compl
               <button
                 type="button"
                 onClick={handleToggleCompletion}
-                disabled={loading}
-                className={`rounded-2xl px-6 py-3 font-semibold transition-all duration-200 hover:shadow-xl disabled:opacity-50 ${
+                className={`rounded-2xl px-6 py-3 font-semibold transition-all duration-200 hover:shadow-xl ${
                   isCompleted
                     ? 'bg-[var(--muted)] text-[var(--button-active-text)] hover:bg-[var(--surface-variant)]'
                     : 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-[var(--button-active-text)]'
                 }`}
               >
-                {loading ? 'Updating...' : isCompleted ? 'Mark Incomplete' : 'Mark Complete'}
+                {isCompleted ? 'Mark Incomplete' : 'Mark Complete'}
               </button>
             </div>
           </div>

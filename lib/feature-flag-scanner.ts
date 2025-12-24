@@ -8,6 +8,7 @@ import { join } from 'path';
 import { logger } from './logger';
 import { SOURCE_DIRECTORIES } from './feature-flag-scanner/constants';
 import { scanDirectory } from './feature-flag-scanner/helpers/scanDirectory';
+import type { DiscoveredFlag } from './feature-flag-scanner/types';
 
 export type { DiscoveredFlag } from './feature-flag-scanner/types';
 

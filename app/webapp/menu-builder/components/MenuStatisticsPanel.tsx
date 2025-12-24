@@ -45,7 +45,9 @@ export default function MenuStatisticsPanel({ statistics }: MenuStatisticsPanelP
       <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-3 shadow-lg transition-all duration-200 hover:shadow-xl">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <p className="mb-1 text-xs font-medium text-[var(--foreground-muted)]">Avg. Profit Margin</p>
+            <p className="mb-1 text-xs font-medium text-[var(--foreground-muted)]">
+              Avg. Profit Margin
+            </p>
             <p
               className={`text-xl font-bold ${
                 stats.average_profit_margin >= 60

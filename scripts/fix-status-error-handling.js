@@ -52,7 +52,7 @@ function fixFile(filePath) {
 
     const newImport = "import { logger } from '@/lib/logger';";
 
-    if (!content.includes("@/lib/logger")) {
+    if (!content.includes('@/lib/logger')) {
       lines.splice(lastImportIndex + 1, 0, newImport);
       content = lines.join('\n');
       changed = true;
@@ -73,7 +73,7 @@ function fixFile(filePath) {
     });
     if (${errVar}.status) {
       return NextResponse.json(${errVar}, { status: ${errVar}.status });`;
-    }
+    },
   );
 
   // Fix pattern: catch (err) { if (err && typeof err === 'object' && 'status' in err) { return NextResponse.json(err, { status: err.status || 500 }); } }
@@ -89,7 +89,7 @@ function fixFile(filePath) {
     });
     if (${errVar} && typeof ${errVar} === 'object' && 'status' in ${errVar}) {
       return NextResponse.json(${errVar}, { status: ${errVar}.status || 500 });`;
-    }
+    },
   );
 
   // Fix pattern: catch (err: any) { if (err.status) return NextResponse.json(err, { status: err.status }); }
@@ -104,7 +104,7 @@ function fixFile(filePath) {
       context: { endpoint: '${filePath.replace('app/api/', '/api/').replace('/route.ts', '')}' },
     });
     if (${errVar}.status) return NextResponse.json(${errVar}, { status: ${errVar}.status });`;
-    }
+    },
   );
 
   if (changed) {
@@ -136,6 +136,3 @@ if (require.main === module) {
 }
 
 module.exports = { fixFile };
-
-
-

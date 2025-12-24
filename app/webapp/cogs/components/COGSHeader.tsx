@@ -135,7 +135,9 @@ export function COGSHeader({
 
         {showGuide && (
           <div className="mt-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-            <h3 className="mb-3 text-sm font-semibold text-[var(--foreground)]">Step-by-Step Workflow:</h3>
+            <h3 className="mb-3 text-sm font-semibold text-[var(--foreground)]">
+              Step-by-Step Workflow:
+            </h3>
             <ol className="space-y-2 text-sm text-[var(--foreground-secondary)]">
               <li className="flex items-start gap-2">
                 <span className="font-bold text-[var(--primary)]">1.</span>

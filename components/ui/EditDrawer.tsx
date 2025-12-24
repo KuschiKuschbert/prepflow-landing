@@ -225,7 +225,10 @@ export function EditDrawer({
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            <h2 id="edit-drawer-title" className="desktop:text-xl text-lg font-bold text-[var(--foreground)]">
+            <h2
+              id="edit-drawer-title"
+              className="desktop:text-xl text-lg font-bold text-[var(--foreground)]"
+            >
               {title}
             </h2>
             <button

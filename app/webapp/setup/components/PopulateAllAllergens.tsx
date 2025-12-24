@@ -46,9 +46,9 @@ export default function PopulateAllAllergens() {
       }
     } catch (err) {
       logger.error('[PopulateAllAllergens.tsx] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
       setError('Network error occurred');
     } finally {
@@ -93,9 +93,9 @@ export default function PopulateAllAllergens() {
       }
     } catch (err) {
       logger.error('[PopulateAllAllergens.tsx] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
       setError('Network error occurred');
     } finally {
@@ -111,7 +111,12 @@ export default function PopulateAllAllergens() {
           <div className="mb-6 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/50 p-6">
             <div className="mb-4 flex items-center justify-between">
               <h4 className="text-lg font-semibold text-[var(--foreground)]">What this does:</h4>
-              <Icon icon={Sparkles} size="md" className="text-[var(--primary)]" aria-hidden={true} />
+              <Icon
+                icon={Sparkles}
+                size="md"
+                className="text-[var(--primary)]"
+                aria-hidden={true}
+              />
             </div>
             <ul className="space-y-2 text-[var(--foreground-secondary)]">
               <li className="flex items-center space-x-2">
@@ -142,7 +147,12 @@ export default function PopulateAllAllergens() {
           {dryRunResult && (
             <div className="mb-6 rounded-2xl border border-[var(--color-info)]/30 bg-blue-900/20 p-4 text-blue-300">
               <div className="mb-2 flex items-center space-x-2">
-                <Icon icon={AlertTriangle} size="sm" className="text-[var(--color-info)]" aria-hidden={true} />
+                <Icon
+                  icon={AlertTriangle}
+                  size="sm"
+                  className="text-[var(--color-info)]"
+                  aria-hidden={true}
+                />
                 <span className="font-semibold">Dry Run Preview</span>
               </div>
               <ul className="space-y-1 text-sm">
@@ -156,7 +166,12 @@ export default function PopulateAllAllergens() {
           {error && (
             <div className="mb-6 rounded-2xl border border-[var(--color-error)]/30 bg-red-900/20 p-4 text-red-300">
               <div className="flex items-center space-x-2">
-                <Icon icon={AlertTriangle} size="sm" className="text-[var(--color-error)]" aria-hidden={true} />
+                <Icon
+                  icon={AlertTriangle}
+                  size="sm"
+                  className="text-[var(--color-error)]"
+                  aria-hidden={true}
+                />
                 <span>{error}</span>
               </div>
             </div>
@@ -165,19 +180,34 @@ export default function PopulateAllAllergens() {
           {result && (
             <div className="mb-6 rounded-2xl border border-[var(--color-success)]/30 bg-green-900/20 p-4 text-green-300">
               <div className="mb-2 flex items-center space-x-2">
-                <Icon icon={CheckCircle2} size="sm" className="text-[var(--color-success)]" aria-hidden={true} />
+                <Icon
+                  icon={CheckCircle2}
+                  size="sm"
+                  className="text-[var(--color-success)]"
+                  aria-hidden={true}
+                />
                 <span className="font-semibold">Allergen Population Complete!</span>
               </div>
               <ul className="space-y-1 text-sm">
                 <li>Total ingredients: {result.total}</li>
                 <li>Processed: {result.processed}</li>
                 <li className="flex items-center gap-2 text-[var(--color-success)]">
-                  <Icon icon={Check} size="xs" className="text-[var(--color-success)]" aria-hidden={true} />
+                  <Icon
+                    icon={Check}
+                    size="xs"
+                    className="text-[var(--color-success)]"
+                    aria-hidden={true}
+                  />
                   Successful: {result.successful}
                 </li>
                 {result.failed > 0 && (
                   <li className="flex items-center gap-2 text-[var(--color-error)]">
-                    <Icon icon={X} size="xs" className="text-[var(--color-error)]" aria-hidden={true} />
+                    <Icon
+                      icon={X}
+                      size="xs"
+                      className="text-[var(--color-error)]"
+                      aria-hidden={true}
+                    />
                     Failed: {result.failed}
                   </li>
                 )}
@@ -222,7 +252,12 @@ export default function PopulateAllAllergens() {
                 </span>
               ) : (
                 <span className="flex items-center justify-center space-x-2">
-                  <Icon icon={Sparkles} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
+                  <Icon
+                    icon={Sparkles}
+                    size="sm"
+                    className="text-[var(--foreground)]"
+                    aria-hidden={true}
+                  />
                   <span>Populate All Allergens</span>
                 </span>
               )}

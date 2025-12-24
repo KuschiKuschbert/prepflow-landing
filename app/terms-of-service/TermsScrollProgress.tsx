@@ -9,7 +9,3 @@ import { ScrollProgress } from '@/components/ui/ScrollProgress';
 export default function TermsScrollProgress() {
   return <ScrollProgress />;
 }
-
-
-
-

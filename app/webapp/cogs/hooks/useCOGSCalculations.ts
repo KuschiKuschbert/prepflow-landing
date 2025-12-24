@@ -78,6 +78,7 @@ export const useCOGSCalculations = () => {
     clearCalculations,
     loadCalculations,
     setSelectedRecipe,
+    setRecipes,
     setError,
     hasManualIngredientsRef,
     lastManualChangeTimeRef,

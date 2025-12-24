@@ -30,4 +30,3 @@ export function buildProfileData({
     name: userData.name || userName || null,
   };
 }
-

@@ -1,11 +1,22 @@
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function deleteMenuItem(
   menuId: string,
   menuItemId: string,
 ): Promise<{ success: boolean; message: string } | { error: any; status: number }> {
+  if (!supabaseAdmin) {
+    return {
+      error: ApiErrorHandler.createError(
+        'Database connection not available',
+        'DATABASE_ERROR',
+        500,
+      ),
+      status: 500,
+    };
+  }
+
   const { error } = await supabaseAdmin
     .from('menu_items')
     .delete()
@@ -25,4 +36,3 @@ export async function deleteMenuItem(
     message: 'Menu item deleted successfully',
   };
 }
-

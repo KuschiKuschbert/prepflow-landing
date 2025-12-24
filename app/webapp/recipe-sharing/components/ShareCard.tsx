@@ -58,7 +58,9 @@ export function ShareCard({ share }: ShareCardProps) {
               <span className="text-lg">{getShareTypeIcon(share.share_type)}</span>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-[var(--foreground)]">{share.recipes.recipe_name}</h3>
+              <h3 className="text-lg font-semibold text-[var(--foreground)]">
+                {share.recipes.recipe_name}
+              </h3>
               <p className="text-sm text-[var(--foreground-muted)]">
                 {share.share_type.toUpperCase()} • {share.recipient_email || 'No recipient'}
               </p>
@@ -66,7 +68,9 @@ export function ShareCard({ share }: ShareCardProps) {
           </div>
           <div className="mb-4 flex items-center space-x-4">
             <div>
-              <p className="mb-1 text-xs text-[var(--foreground-muted)]">{t('recipeSharing.status', 'Status')}</p>
+              <p className="mb-1 text-xs text-[var(--foreground-muted)]">
+                {t('recipeSharing.status', 'Status')}
+              </p>
               <span
                 className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(share.status)}`}
               >
@@ -74,13 +78,17 @@ export function ShareCard({ share }: ShareCardProps) {
               </span>
             </div>
             <div>
-              <p className="mb-1 text-xs text-[var(--foreground-muted)]">{t('recipeSharing.shared', 'Shared')}</p>
+              <p className="mb-1 text-xs text-[var(--foreground-muted)]">
+                {t('recipeSharing.shared', 'Shared')}
+              </p>
               <p className="font-semibold text-[var(--foreground)]">
                 {new Date(share.created_at).toLocaleDateString()}
               </p>
             </div>
           </div>
-          {share.notes && <p className="text-sm text-[var(--foreground-secondary)]">{share.notes}</p>}
+          {share.notes && (
+            <p className="text-sm text-[var(--foreground-secondary)]">{share.notes}</p>
+          )}
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@
 **Purpose:** Complete reference for Square POS integration configuration, implementation, and troubleshooting
 
 **📚 See Also:**
+
 - `docs/AUTH0_STRIPE_REFERENCE.md` - Auth0 and Stripe configuration guide
 - `docs/SQUARE_OAUTH_SIMPLIFICATION.md` - **OAuth Simplification Implementation Notes** - Complete documentation of the simplified OAuth flow
 - `.cursor/rules/implementation.mdc` - API and database patterns
@@ -46,6 +47,7 @@ SQUARE_WEBHOOK_SECRET=your-webhook-secret-from-square-dashboard
 ```
 
 **⚠️ IMPORTANT:**
+
 - PrepFlow has **ONE Square Application** that all users connect through
 - Users don't need to create their own Square applications
 - Users just click "Connect with Square" and login - no credential entry needed
@@ -62,6 +64,7 @@ openssl rand -hex 32
 ```
 
 **⚠️ CRITICAL:** The encryption key must be:
+
 - Exactly 64 hex characters (32 bytes)
 - Stored securely (never commit to git)
 - Different for each environment (dev/staging/production)
@@ -96,6 +99,7 @@ openssl rand -hex 32
   - **Production:** Use production access token for live integration
 
 **⚠️ IMPORTANT:**
+
 - Access tokens are sensitive and must be encrypted before storage
 - Never commit access tokens to git
 - Use different tokens for sandbox and production environments
@@ -186,9 +190,10 @@ When you connect your Square account through PrepFlow:
 - ✅ **Secure storage** - All tokens are encrypted before storage using AES-256-GCM encryption
 
 **Important:** This is standard OAuth behavior - like when you connect Google Drive, you authorize Google's app to access YOUR Google Drive account, not Google's account. Same with Square - you authorize PrepFlow's app to access YOUR Square account.
-  - `TEAM_READ` - Read team members/staff
-  - `TEAM_WRITE` - Create/update team members (if needed)
-  - `LABOR_READ` - Read labor data (if needed)
+
+- `TEAM_READ` - Read team members/staff
+- `TEAM_WRITE` - Create/update team members (if needed)
+- `LABOR_READ` - Read labor data (if needed)
 
 ### 4. Configure Webhooks (Optional)
 
@@ -661,6 +666,7 @@ AES-256-GCM encryption for Square access tokens.
 - `decryptSquareToken(encryptedToken: string): Promise<string>` - Decrypt token
 
 **⚠️ SECURITY:**
+
 - Uses AES-256-GCM encryption
 - Requires `SQUARE_TOKEN_ENCRYPTION_KEY` environment variable
 - Never log decrypted tokens
@@ -687,7 +693,7 @@ const mapping = await findOrCreateMapping(
   dishId, // PrepFlow dish ID
   squareItemId, // Square catalog item ID
   'dish', // Entity type
-  userId
+  userId,
 );
 ```
 
@@ -761,7 +767,7 @@ const result = await syncOrdersFromSquare(
   userId,
   '2025-01-01T00:00:00Z',
   '2025-01-31T23:59:59Z',
-  locationId
+  locationId,
 );
 
 // Sync last 30 days
@@ -1031,6 +1037,7 @@ try {
 Pulls data from Square and creates/updates PrepFlow entities.
 
 **Use Cases:**
+
 - Initial data import from Square
 - Syncing menu items from Square POS
 - Syncing staff from Square Team API
@@ -1041,6 +1048,7 @@ Pulls data from Square and creates/updates PrepFlow entities.
 Pushes data from PrepFlow to Square.
 
 **Use Cases:**
+
 - Syncing menu items to Square POS
 - Syncing staff to Square Team API
 - Syncing food costs to Square catalog items
@@ -1050,6 +1058,7 @@ Pushes data from PrepFlow to Square.
 Syncs in both directions, handling conflicts.
 
 **Use Cases:**
+
 - Full catalog sync (menu items)
 - Full staff sync (employees)
 - Initial sync (all data)
@@ -1059,12 +1068,14 @@ Syncs in both directions, handling conflicts.
 #### Catalog Sync
 
 **From Square:**
+
 - Fetches Square catalog items
 - Maps to PrepFlow dishes
 - Creates/updates dishes based on mappings
 - Creates mappings for new items
 
 **To Square:**
+
 - Fetches PrepFlow dishes
 - Maps to Square catalog items
 - Creates/updates Square items based on mappings
@@ -1082,11 +1093,13 @@ Syncs in both directions, handling conflicts.
 #### Staff Sync
 
 **From Square:**
+
 - Fetches Square team members
 - Maps to PrepFlow employees
 - Creates/updates employees based on mappings
 
 **To Square:**
+
 - Fetches PrepFlow employees
 - Maps to Square team members
 - Creates/updates Square team members based on mappings
@@ -1175,6 +1188,7 @@ curl -X POST https://yourdomain.com/api/square/sync \
 **Cause:** User doesn't have Square configuration saved.
 
 **Solution:**
+
 1. Go to Configuration section
 2. Enter Square credentials
 3. Click "Save Configuration"
@@ -1185,6 +1199,7 @@ curl -X POST https://yourdomain.com/api/square/sync \
 **Cause:** Encryption key mismatch or token corrupted.
 
 **Solution:**
+
 1. Verify `SQUARE_TOKEN_ENCRYPTION_KEY` is set correctly
 2. Re-enter Square access token in Configuration
 3. Save configuration (token will be re-encrypted)
@@ -1194,6 +1209,7 @@ curl -X POST https://yourdomain.com/api/square/sync \
 **Cause:** Access token expired or invalid.
 
 **Solution:**
+
 1. Go to Square Developer Dashboard
 2. Generate new access token
 3. Update configuration with new token
@@ -1204,6 +1220,7 @@ curl -X POST https://yourdomain.com/api/square/sync \
 **Cause:** Various (API rate limits, network errors, invalid data).
 
 **Solution:**
+
 1. Check sync history for error details
 2. Verify Square API status
 3. Check network connectivity
@@ -1215,6 +1232,7 @@ curl -X POST https://yourdomain.com/api/square/sync \
 **Cause:** Entities haven't been synced yet.
 
 **Solution:**
+
 1. Run initial sync first
 2. Mappings are created automatically during sync
 3. Check Mappings section after sync completes

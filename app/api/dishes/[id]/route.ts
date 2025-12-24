@@ -19,7 +19,9 @@ import { z } from 'zod';
 const updateDishSchema = z.object({
   dish_name: z.string().min(1).optional(),
   description: z.string().optional(),
-  selling_price: z.union([z.number().positive(), z.string().transform(val => parseFloat(val))]).optional(),
+  selling_price: z
+    .union([z.number().positive(), z.string().transform(val => parseFloat(val))])
+    .optional(),
   recipes: z.array(z.any()).optional(),
   ingredients: z.array(z.any()).optional(),
   category: z.string().optional(),
@@ -31,7 +33,9 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     const dishId = id;
 
     if (!dishId) {
-      return NextResponse.json(ApiErrorHandler.createError('Missing dish id', 'BAD_REQUEST', 400), { status: 400 });
+      return NextResponse.json(ApiErrorHandler.createError('Missing dish id', 'BAD_REQUEST', 400), {
+        status: 400,
+      });
     }
 
     const dish = await fetchDishWithRelations(dishId);

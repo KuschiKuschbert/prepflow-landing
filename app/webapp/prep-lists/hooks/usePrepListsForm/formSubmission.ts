@@ -4,6 +4,10 @@
 
 import { logger } from '@/lib/logger';
 import type { PrepList, PrepListFormData } from '../../types';
+import { buildRequestBody } from './helpers/buildRequestBody';
+import { createTempPrepList } from './helpers/createTempPrepList';
+import { applyOptimisticUpdate } from './helpers/applyOptimisticUpdate';
+import { replaceWithServerResponse } from './helpers/replaceWithServerResponse';
 
 interface FormSubmissionProps {
   formData: PrepListFormData;
@@ -14,7 +18,6 @@ interface FormSubmissionProps {
   showError: (message: string) => void;
   showSuccess: (message: string) => void;
   resetForm: () => void;
-  refetchPrepLists: () => Promise<unknown>;
   setError: (error: string | null) => void;
 }
 
@@ -32,30 +35,37 @@ export async function submitPrepListForm({
   showError,
   showSuccess,
   resetForm,
-  refetchPrepLists,
   setError,
 }: FormSubmissionProps): Promise<void> {
+  // Store original state for rollback
+  const originalPrepLists = [...prepLists];
+
+  // Build request body
+  const { url, method, body } = buildRequestBody({ formData, editingPrepList, userId });
+
+  // Store tempId for CREATE operations
+  let tempId: string | undefined;
+  let tempPrepList: PrepList | undefined;
+
+  // Create temp prep list if needed
+  if (!editingPrepList) {
+    tempId = `temp-${Date.now()}`;
+    tempPrepList = createTempPrepList(formData, tempId);
+  }
+
+  // Optimistically update UI immediately
+  applyOptimisticUpdate({
+    editingPrepList,
+    formData,
+    tempPrepList,
+    prepLists,
+    setPrepLists,
+  });
+
+  resetForm();
+  setError(null);
+
   try {
-    const url = editingPrepList ? '/api/prep-lists' : '/api/prep-lists';
-    const method = editingPrepList ? 'PUT' : 'POST';
-
-    const body = editingPrepList
-      ? {
-          id: editingPrepList.id,
-          kitchenSectionId: formData.kitchenSectionId,
-          name: formData.name,
-          notes: formData.notes,
-          status: 'draft',
-          items: formData.items.filter(item => item.ingredientId && item.quantity),
-        }
-      : {
-          userId,
-          kitchenSectionId: formData.kitchenSectionId,
-          name: formData.name,
-          notes: formData.notes,
-          items: formData.items.filter(item => item.ingredientId && item.quantity),
-        };
-
     const response = await fetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
@@ -64,34 +74,28 @@ export async function submitPrepListForm({
 
     const result = await response.json();
 
-    if (result.success) {
-      // Optimistically update UI
-      if (editingPrepList) {
-        // Update existing prep list
-        setPrepLists(prevLists =>
-          prevLists.map(list =>
-            list.id === editingPrepList.id ? { ...list, ...result.prepList } : list,
-          ),
-        );
-      } else {
-        // Add new prep list
-        if (result.prepList) {
-          setPrepLists(prevLists => [...prevLists, result.prepList]);
-        }
-      }
-      resetForm();
-      setError(null);
+    if (result.success && result.prepList) {
+      // Replace optimistic update with server response
+      replaceWithServerResponse({
+        editingPrepList,
+        tempId,
+        serverPrepList: result.prepList,
+        prepLists,
+        setPrepLists,
+      });
       showSuccess(
         editingPrepList ? 'Prep list updated successfully' : 'Prep list created successfully',
       );
-      // Optionally refresh in background for accuracy (non-blocking)
-      refetchPrepLists().catch(err => logger.error('Failed to refresh prep lists:', err));
     } else {
+      // Rollback on error
+      setPrepLists(originalPrepLists);
       const errorMsg = result.message || 'Failed to save prep list';
       setError(errorMsg);
       showError(errorMsg);
     }
   } catch (err) {
+    // Rollback on error
+    setPrepLists(originalPrepLists);
     logger.error('[formSubmission.ts] Error in catch block:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,

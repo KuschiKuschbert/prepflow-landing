@@ -25,13 +25,18 @@ export async function findTargetMenuId(
       throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
     }
 
-    const { data: lockedMenu } = await supabaseAdmin
+    const { data: lockedMenu, error: lockedMenuError } = await supabaseAdmin
       .from('menus')
       .select('id')
       .eq('is_locked', true)
       .single();
 
-    if (lockedMenu) {
+    if (lockedMenuError) {
+      logger.warn('[Performance Summary API] Error fetching locked menu:', {
+        error: lockedMenuError.message,
+        code: (lockedMenuError as any).code,
+      });
+    } else if (lockedMenu) {
       targetMenuId = lockedMenu.id;
       logger.dev('[Performance Summary API] Filtering by locked menu:', { menuId: targetMenuId });
     } else {

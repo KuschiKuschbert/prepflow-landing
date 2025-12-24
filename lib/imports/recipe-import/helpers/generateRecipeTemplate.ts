@@ -30,4 +30,3 @@ export function generateRecipeTemplate(): string {
 
   return [headers.join(','), exampleRow.join(',')].join('\n');
 }
-

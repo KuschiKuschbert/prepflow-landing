@@ -11,7 +11,10 @@ import { populateStaff } from '@/lib/populate-helpers';
 export async function POST(request: NextRequest) {
   try {
     if (process.env.NODE_ENV === 'production') {
-      return NextResponse.json(ApiErrorHandler.createError('Not available in production', 'FORBIDDEN', 403), { status: 403 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Not available in production', 'FORBIDDEN', 403),
+        { status: 403 },
+      );
     }
 
     const supabaseAdmin = createSupabaseAdmin();
@@ -45,7 +48,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-
-
-

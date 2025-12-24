@@ -72,9 +72,10 @@ export function checkRateLimit(
  * Check rate limit from NextRequest.
  * Convenience function that extracts identifier from request.
  */
-export function checkRateLimitFromRequest(
-  req: { headers: Headers; ip?: string; url?: string },
-): { allowed: boolean; retryAfter?: number } {
+export function checkRateLimitFromRequest(req: { headers: Headers; ip?: string; url?: string }): {
+  allowed: boolean;
+  retryAfter?: number;
+} {
   const identifier = getClientIdentifier(req);
   const isAuthRoute = req.url?.includes('/api/auth/') || false;
   return checkRateLimit(identifier, isAuthRoute);
@@ -99,4 +100,3 @@ export function getRemainingRequests(identifier: string, isAuthRoute = false): n
   const max = isAuthRoute ? AUTH_RATE_LIMIT_MAX : DEFAULT_RATE_LIMIT_MAX;
   return Math.max(0, max - entry.count);
 }
-

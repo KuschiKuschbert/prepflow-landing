@@ -38,4 +38,3 @@ export function calculateDayOfWeek(startDate: Date, endDate: Date, dayName: stri
 
   return dates;
 }
-

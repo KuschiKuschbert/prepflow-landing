@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
-import { getManagementClient } from '../auth0-management';
-import type { Connection } from '../auth0-management';
+import { getManagementClient } from '../../auth0-management';
+import type { Connection } from '../../auth0-management';
 
 /**
  * Get all social connections from Auth0
@@ -38,4 +38,3 @@ export async function getSocialConnections(): Promise<Connection[]> {
     return [];
   }
 }
-

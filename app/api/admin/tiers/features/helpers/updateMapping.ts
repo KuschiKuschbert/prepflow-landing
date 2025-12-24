@@ -64,5 +64,3 @@ export async function updateFeatureMapping(params: UpdateMappingParams): Promise
 
   return NextResponse.json({ mapping: data });
 }
-
-

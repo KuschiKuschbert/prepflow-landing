@@ -44,7 +44,6 @@ export function useTaskSubmission({
   validateField,
 }: UseTaskSubmissionProps) {
   const { showSuccess, showError } = useNotification();
-  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent, keepOpen = false) => {
     e.preventDefault();
@@ -58,8 +57,6 @@ export function useTaskSubmission({
       showError('Please fix the errors before submitting');
       return;
     }
-
-    setLoading(true);
 
     // Convert custom-days to every-X-days format
     let frequencyType = formData.frequency_type;
@@ -125,10 +122,8 @@ export function useTaskSubmission({
     } catch (error) {
       logger.error('Error creating task:', error);
       showError('Failed to create cleaning task');
-    } finally {
-      setLoading(false);
     }
   };
 
-  return { loading, handleSubmit };
+  return { handleSubmit };
 }

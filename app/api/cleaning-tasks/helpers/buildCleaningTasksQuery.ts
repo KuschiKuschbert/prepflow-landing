@@ -44,7 +44,11 @@ export interface CleaningTasksQueryParams {
  */
 export function buildCleaningTasksQuery(params: CleaningTasksQueryParams) {
   if (!supabaseAdmin) {
-    throw ApiErrorHandler.createError('Supabase admin client not initialized', 'DATABASE_ERROR', 500);
+    throw ApiErrorHandler.createError(
+      'Supabase admin client not initialized',
+      'DATABASE_ERROR',
+      500,
+    );
   }
 
   let query = supabaseAdmin.from('cleaning_tasks').select(CLEANING_TASKS_SELECT);
@@ -62,7 +66,3 @@ export function buildCleaningTasksQuery(params: CleaningTasksQueryParams) {
 
   return query;
 }
-
-
-
-

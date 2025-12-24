@@ -52,7 +52,9 @@ export function QualificationForm({
           </select>
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Certificate Number</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Certificate Number
+          </label>
           <input
             type="text"
             value={formData.certificate_number}
@@ -73,7 +75,9 @@ export function QualificationForm({
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Expiry Date</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Expiry Date
+          </label>
           <input
             type="date"
             value={formData.expiry_date}
@@ -82,7 +86,9 @@ export function QualificationForm({
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Issuing Authority</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Issuing Authority
+          </label>
           <input
             type="text"
             value={formData.issuing_authority}
@@ -92,7 +98,9 @@ export function QualificationForm({
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Document URL</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Document URL
+          </label>
           <input
             type="url"
             value={formData.document_url}
@@ -102,7 +110,9 @@ export function QualificationForm({
           />
         </div>
         <div className="desktop:col-span-2">
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Notes</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Notes
+          </label>
           <textarea
             value={formData.notes}
             onChange={e => setFormData({ ...formData, notes: e.target.value })}

@@ -47,9 +47,13 @@ function TappableDish({
         <Icon icon={Utensils} size="sm" className="text-[var(--primary)]" />
         <div className="flex-1">
           <div className="font-medium text-[var(--foreground)]">{dish.dish_name}</div>
-          <div className="text-sm text-[var(--foreground-muted)]">${dish.selling_price.toFixed(2)}</div>
+          <div className="text-sm text-[var(--foreground-muted)]">
+            ${dish.selling_price.toFixed(2)}
+          </div>
         </div>
-        {onTap && <Icon icon={Plus} size="sm" className="text-[var(--primary)]" aria-hidden={true} />}
+        {onTap && (
+          <Icon icon={Plus} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+        )}
       </div>
     </div>
   );
@@ -93,7 +97,9 @@ function TappableRecipe({
             </div>
           )}
         </div>
-        {onTap && <Icon icon={Plus} size="sm" className="text-[var(--accent)]" aria-hidden={true} />}
+        {onTap && (
+          <Icon icon={Plus} size="sm" className="text-[var(--accent)]" aria-hidden={true} />
+        )}
       </div>
     </div>
   );
@@ -162,7 +168,9 @@ export default function DishPalette({ dishes, recipes, onItemTap }: DishPaletteP
       <div className="max-h-[600px] space-y-4 overflow-y-auto">
         {!hasItems ? (
           <div className="py-8 text-center">
-            <div className="mb-3 text-sm text-[var(--foreground-muted)]">No dishes or recipes available yet.</div>
+            <div className="mb-3 text-sm text-[var(--foreground-muted)]">
+              No dishes or recipes available yet.
+            </div>
             <p className="mb-4 text-xs text-[var(--foreground-subtle)]">
               Create dishes in the Dish Builder or recipes to add them to your menu.
             </p>
@@ -175,7 +183,9 @@ export default function DishPalette({ dishes, recipes, onItemTap }: DishPaletteP
           </div>
         ) : !hasFilteredItems ? (
           <div className="py-8 text-center">
-            <div className="mb-3 text-sm text-[var(--foreground-muted)]">No items match your search.</div>
+            <div className="mb-3 text-sm text-[var(--foreground-muted)]">
+              No items match your search.
+            </div>
             <button
               onClick={() => setSearchQuery('')}
               className="text-xs text-[var(--primary)] transition-colors hover:text-[var(--primary)]/80"

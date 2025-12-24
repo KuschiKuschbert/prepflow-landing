@@ -21,7 +21,9 @@ export function EmployeeFormFields({ formData, onChange }: EmployeeFormFieldsPro
   return (
     <>
       <div>
-        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Employee ID</label>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          Employee ID
+        </label>
         <input
           type="text"
           value={formData.employee_id}
@@ -44,7 +46,9 @@ export function EmployeeFormFields({ formData, onChange }: EmployeeFormFieldsPro
         />
       </div>
       <div>
-        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Role/Position</label>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          Role/Position
+        </label>
         <input
           type="text"
           value={formData.role}
@@ -66,7 +70,9 @@ export function EmployeeFormFields({ formData, onChange }: EmployeeFormFieldsPro
         />
       </div>
       <div>
-        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Employment End Date</label>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          Employment End Date
+        </label>
         <input
           type="date"
           value={formData.employment_end_date}
@@ -75,7 +81,9 @@ export function EmployeeFormFields({ formData, onChange }: EmployeeFormFieldsPro
         />
       </div>
       <div>
-        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Status</label>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          Status
+        </label>
         <select
           value={formData.status}
           onChange={e => onChange('status', e.target.value as 'active' | 'inactive' | 'terminated')}
@@ -87,7 +95,9 @@ export function EmployeeFormFields({ formData, onChange }: EmployeeFormFieldsPro
         </select>
       </div>
       <div>
-        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Phone</label>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          Phone
+        </label>
         <input
           type="tel"
           value={formData.phone}
@@ -96,7 +106,9 @@ export function EmployeeFormFields({ formData, onChange }: EmployeeFormFieldsPro
         />
       </div>
       <div>
-        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Email</label>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          Email
+        </label>
         <input
           type="email"
           value={formData.email}
@@ -105,7 +117,9 @@ export function EmployeeFormFields({ formData, onChange }: EmployeeFormFieldsPro
         />
       </div>
       <div>
-        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Emergency Contact</label>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          Emergency Contact
+        </label>
         <input
           type="text"
           value={formData.emergency_contact}
@@ -115,7 +129,9 @@ export function EmployeeFormFields({ formData, onChange }: EmployeeFormFieldsPro
         />
       </div>
       <div className="desktop:col-span-2">
-        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Notes</label>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          Notes
+        </label>
         <textarea
           value={formData.notes}
           onChange={e => onChange('notes', e.target.value)}

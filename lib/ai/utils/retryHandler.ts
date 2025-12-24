@@ -16,9 +16,9 @@ export async function retryWithBackoff<T>(
       return { result };
     } catch (error) {
       logger.error('[retryHandler.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       lastError = error as Error;
       const aiError = parseError(error as Error);

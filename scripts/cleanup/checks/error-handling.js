@@ -91,7 +91,12 @@ function analyzeErrorHandling(content, filePath) {
     const hasErrorWithoutHandler =
       (hasErrorStatus || hasErrorField) && !hasApiErrorHandlerUsage && !isTestEndpoint;
 
-    if (hasErrorResponse && !hasApiErrorHandlerImport && (hasErrorStatus || hasErrorField) && !isTestEndpoint) {
+    if (
+      hasErrorResponse &&
+      !hasApiErrorHandlerImport &&
+      (hasErrorStatus || hasErrorField) &&
+      !isTestEndpoint
+    ) {
       violations.push({
         type: 'missing-api-error-handler-import',
         line: findLineNumber(lines, /import/),
@@ -132,7 +137,8 @@ function analyzeErrorHandling(content, filePath) {
       const hasConsoleErrorInCatch = /console\.(error|warn|log)\(/.test(catchBlock);
       const hasThrowInCatch = /throw/.test(catchBlock);
       const hasReturnInCatch = /return/.test(catchBlock);
-      const hasErrorHandling = hasLoggingInCatch || hasConsoleErrorInCatch || hasThrowInCatch || hasReturnInCatch;
+      const hasErrorHandling =
+        hasLoggingInCatch || hasConsoleErrorInCatch || hasThrowInCatch || hasReturnInCatch;
 
       // Skip empty catch blocks or those with only comments
       const trimmedCatch = catchBlock.trim();
@@ -145,7 +151,14 @@ function analyzeErrorHandling(content, filePath) {
         });
       }
 
-      if (hasConsoleErrorInCatch) {
+      // Skip console.error/console.warn in script tags with documented exception (see ERROR_HANDLING_STANDARDS.md)
+      // Check if this catch block is in a script tag with the exception comment
+      const isInScriptTag = /dangerouslySetInnerHTML/.test(content);
+      const hasExceptionComment =
+        /logger is not available in script tag/.test(content) ||
+        /before React loads/.test(content);
+
+      if (hasConsoleErrorInCatch && !(isInScriptTag && hasExceptionComment)) {
         violations.push({
           type: 'console-error-in-catch',
           line: findLineNumber(lines, /console\.error/),
@@ -174,16 +187,24 @@ function analyzeErrorHandling(content, filePath) {
     // Only flag components in shared locations that might be used elsewhere
     const isWebappComponent = filePath.includes('app/webapp/components/');
     const isAdminComponent = filePath.includes('app/admin/components/');
-    const isSharedComponent = filePath.includes('components/ui/') ||
-                               filePath.includes('components/landing/') ||
-                               filePath.startsWith('components/');
+    const isSharedComponent =
+      filePath.includes('components/ui/') ||
+      filePath.includes('components/landing/') ||
+      filePath.startsWith('components/');
 
     // This is a warning, not critical
     // Skip admin and webapp pages - they're wrapped in ErrorBoundary via layout
     // Skip webapp/admin components - they're used within protected pages
     // Only flag shared components that might be used outside protected contexts
-    if (hasCriticalOperation && !hasErrorBoundary && !isAdminPage && !isWebappPage &&
-        !isWebappComponent && !isAdminComponent && isSharedComponent) {
+    if (
+      hasCriticalOperation &&
+      !hasErrorBoundary &&
+      !isAdminPage &&
+      !isWebappPage &&
+      !isWebappComponent &&
+      !isAdminComponent &&
+      isSharedComponent
+    ) {
       violations.push({
         type: 'missing-error-boundary',
         line: findLineNumber(lines, /export|function|const/),
@@ -196,7 +217,9 @@ function analyzeErrorHandling(content, filePath) {
   // Only check createError calls (fromException and fromSupabaseError handle codes automatically)
   if (isAPIRoute && /ApiErrorHandler\.createError/.test(content)) {
     // Use multiline flag to match across lines, and check for error code pattern
-    const hasProperFormat = /ApiErrorHandler\.createError\([\s\S]*?,\s*['"][A-Z_]+['"]/s.test(content);
+    const hasProperFormat = /ApiErrorHandler\.createError\([\s\S]*?,\s*['"][A-Z_]+['"]/s.test(
+      content,
+    );
     if (!hasProperFormat) {
       violations.push({
         type: 'improper-error-format',

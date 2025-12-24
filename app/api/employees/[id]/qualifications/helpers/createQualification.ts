@@ -5,7 +5,7 @@ import { QUALIFICATION_SELECT } from './schemas';
 
 export async function createQualification(
   employeeId: string,
-  data: {
+  qualificationData: {
     qualification_type_id: string;
     certificate_number?: string;
     issue_date: string;
@@ -15,6 +15,17 @@ export async function createQualification(
     notes?: string;
   },
 ): Promise<{ success: boolean; message: string; data: any } | { error: any; status: number }> {
+  if (!supabaseAdmin) {
+    return {
+      error: ApiErrorHandler.createError(
+        'Database connection not available',
+        'DATABASE_ERROR',
+        500,
+      ),
+      status: 500,
+    };
+  }
+
   // Verify employee exists
   const { data: employee, error: employeeError } = await supabaseAdmin
     .from('employees')
@@ -33,13 +44,13 @@ export async function createQualification(
     .from('employee_qualifications')
     .insert({
       employee_id: employeeId,
-      qualification_type_id: data.qualification_type_id,
-      certificate_number: data.certificate_number || null,
-      issue_date: data.issue_date,
-      expiry_date: data.expiry_date || null,
-      issuing_authority: data.issuing_authority || null,
-      document_url: data.document_url || null,
-      notes: data.notes || null,
+      qualification_type_id: qualificationData.qualification_type_id,
+      certificate_number: qualificationData.certificate_number || null,
+      issue_date: qualificationData.issue_date,
+      expiry_date: qualificationData.expiry_date || null,
+      issuing_authority: qualificationData.issuing_authority || null,
+      document_url: qualificationData.document_url || null,
+      notes: qualificationData.notes || null,
     })
     .select(QUALIFICATION_SELECT)
     .single();
@@ -66,4 +77,3 @@ export async function createQualification(
     data,
   };
 }
-

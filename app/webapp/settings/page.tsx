@@ -125,7 +125,7 @@ export default function SettingsPage() {
     <div className="flex min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       <SettingsNavigation />
       <main className="desktop:ml-64 flex-1 overflow-auto">
-        <div className="desktop:p-8 p-6 mx-auto max-w-[1400px] large-desktop:max-w-[1400px] xl:max-w-[1400px] 2xl:max-w-[1600px]">
+        <div className="desktop:p-8 large-desktop:max-w-[1400px] mx-auto max-w-[1400px] p-6 xl:max-w-[1400px] 2xl:max-w-[1600px]">
           {/* Section Content - Render all sections with IDs for hash navigation */}
           {isMounted && (
             <div className="space-y-6">
@@ -140,7 +140,9 @@ export default function SettingsPage() {
               <div id="backup">{activeSection === 'backup' && renderSectionContent()}</div>
               <div id="qr-codes">{activeSection === 'qr-codes' && renderSectionContent()}</div>
               <div id="advanced">{activeSection === 'advanced' && renderSectionContent()}</div>
-              <div id="feature-flags">{activeSection === 'feature-flags' && renderSectionContent()}</div>
+              <div id="feature-flags">
+                {activeSection === 'feature-flags' && renderSectionContent()}
+              </div>
             </div>
           )}
         </div>

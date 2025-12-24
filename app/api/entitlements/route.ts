@@ -26,9 +26,9 @@ export async function GET(req: NextRequest) {
         }
       } catch (error) {
         // Fallback to starter on error
-        logger.warn('[Entitlements API] Error fetching user tier, falling back to starter:', {
+        logger.error('[Entitlements API] Error fetching user tier, falling back to starter:', {
           error: error instanceof Error ? error.message : String(error),
-          email,
+          context: { endpoint: '/api/entitlements', method: 'GET', email },
         });
       }
     }
@@ -41,6 +41,9 @@ export async function GET(req: NextRequest) {
     if (error instanceof NextResponse) {
       throw error;
     }
-    return NextResponse.json(ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 }

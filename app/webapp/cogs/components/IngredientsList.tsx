@@ -113,7 +113,9 @@ export const IngredientsList: React.FC<IngredientsListProps> = ({
                       min="0"
                       autoFocus
                     />
-                    <span className="text-xs text-[var(--foreground-muted)]">{formatUnit(calc.unit)}</span>
+                    <span className="text-xs text-[var(--foreground-muted)]">
+                      {formatUnit(calc.unit)}
+                    </span>
                   </div>
                   <button
                     onClick={() => {

@@ -10,5 +10,3 @@ export interface SquareConfig {
   webhook_url?: string;
   webhook_secret?: string;
 }
-
-

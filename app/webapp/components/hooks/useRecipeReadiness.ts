@@ -75,9 +75,9 @@ export function useRecipeReadiness() {
       }
     } catch (err) {
       logger.error('[useRecipeReadiness.ts] Error in catch block:', {
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      });
 
       setError(err instanceof Error ? err.message : 'Failed to fetch recipe readiness');
     } finally {

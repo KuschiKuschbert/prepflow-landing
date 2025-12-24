@@ -17,19 +17,27 @@ export function PerformanceClassificationLegend() {
       <div className="flex flex-wrap gap-3 text-xs">
         <div className="flex items-center gap-2">
           <span className="flex h-3 w-3 rounded-full border border-[var(--color-success-border)] bg-[var(--color-success-bg)]"></span>
-          <span className="text-[var(--foreground-secondary)]">Chef&apos;s Kiss: High profit & high popularity</span>
+          <span className="text-[var(--foreground-secondary)]">
+            Chef&apos;s Kiss: High profit & high popularity
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="flex h-3 w-3 rounded-full border border-[var(--color-info-border)] bg-[var(--color-info-bg)]"></span>
-          <span className="text-[var(--foreground-secondary)]">Hidden Gem: High profit, low sales</span>
+          <span className="text-[var(--foreground-secondary)]">
+            Hidden Gem: High profit, low sales
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="flex h-3 w-3 rounded-full border border-[var(--color-warning-border)] bg-[var(--color-warning-bg)]"></span>
-          <span className="text-[var(--foreground-secondary)]">Bargain Bucket: Popular, low profit</span>
+          <span className="text-[var(--foreground-secondary)]">
+            Bargain Bucket: Popular, low profit
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="flex h-3 w-3 rounded-full border border-[var(--color-error-border)] bg-[var(--color-error-bg)]"></span>
-          <span className="text-[var(--foreground-secondary)]">Burnt Toast: Low profit & low sales</span>
+          <span className="text-[var(--foreground-secondary)]">
+            Burnt Toast: Low profit & low sales
+          </span>
         </div>
       </div>
     </div>

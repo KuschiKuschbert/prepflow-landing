@@ -17,7 +17,11 @@ function findFiles(dir, extensions = ['.ts', '.tsx']) {
     for (const entry of entries) {
       const fullPath = path.join(currentDir, entry.name);
       if (entry.isDirectory()) {
-        if (!entry.name.startsWith('.') && entry.name !== 'node_modules' && entry.name !== '.next') {
+        if (
+          !entry.name.startsWith('.') &&
+          entry.name !== 'node_modules' &&
+          entry.name !== '.next'
+        ) {
           walkDir(fullPath);
         }
       } else if (extensions.some(ext => entry.name.endsWith(ext))) {
@@ -54,7 +58,7 @@ function fixFile(filePath) {
       }
     }
 
-    if (lastImportIndex >= 0 && !content.includes("@/lib/logger")) {
+    if (lastImportIndex >= 0 && !content.includes('@/lib/logger')) {
       const newImport = "import { logger } from '@/lib/logger';";
       lines.splice(lastImportIndex + 1, 0, newImport);
       content = lines.join('\n');
@@ -68,10 +72,17 @@ function fixFile(filePath) {
 
   // Fix pattern: catch (err: any) { if (err.status) { return NextResponse.json(err, { status: err.status }); } }
   // Add logging before the if statement
-  const pattern1 = /catch\s*\(([^)]+)\)\s*\{[\s]*if\s*\(\1\.status\)\s*\{[\s]*return\s+NextResponse\.json\(\1,\s*\{\s*status:\s*\1\.status[^}]*\}\);/g;
+  const pattern1 =
+    /catch\s*\(([^)]+)\)\s*\{[\s]*if\s*\(\1\.status\)\s*\{[\s]*return\s+NextResponse\.json\(\1,\s*\{\s*status:\s*\1\.status[^}]*\}\);/g;
   content = content.replace(pattern1, (match, errVar) => {
     changed = true;
-    const method = match.includes('POST') ? 'POST' : match.includes('PUT') ? 'PUT' : match.includes('DELETE') ? 'DELETE' : 'GET';
+    const method = match.includes('POST')
+      ? 'POST'
+      : match.includes('PUT')
+        ? 'PUT'
+        : match.includes('DELETE')
+          ? 'DELETE'
+          : 'GET';
     return `catch (${errVar}) {
     logger.error('[API] Error with status:', {
       error: ${errVar} instanceof Error ? ${errVar}.message : String(${errVar}),
@@ -87,7 +98,13 @@ function fixFile(filePath) {
     /catch\s*\(([^)]+)\)\s*\{[\s]*if\s*\(\1\s*&&\s*typeof\s+\1\s*===\s*['"]object['"]\s*&&\s*['"]status['"]\s+in\s+\1\)\s*\{[\s]*return\s+NextResponse\.json\(\1,\s*\{\s*status:\s*\1\.status[^}]*\}\);/g,
     (match, errVar) => {
       changed = true;
-      const method = match.includes('POST') ? 'POST' : match.includes('PUT') ? 'PUT' : match.includes('DELETE') ? 'DELETE' : 'GET';
+      const method = match.includes('POST')
+        ? 'POST'
+        : match.includes('PUT')
+          ? 'PUT'
+          : match.includes('DELETE')
+            ? 'DELETE'
+            : 'GET';
       return `catch (${errVar}) {
     logger.error('[API] Error with status:', {
       error: ${errVar} instanceof Error ? ${errVar}.message : String(${errVar}),
@@ -96,7 +113,7 @@ function fixFile(filePath) {
     });
     if (${errVar} && typeof ${errVar} === 'object' && 'status' in ${errVar}) {
       return NextResponse.json(${errVar}, { status: ${errVar}.status || 500 });`;
-    }
+    },
   );
 
   // Fix pattern: catch (err: any) { if (err.status) return NextResponse.json(err, { status: err.status }); }
@@ -104,7 +121,13 @@ function fixFile(filePath) {
     /catch\s*\(([^)]+)\)\s*\{[\s]*if\s*\(\1\.status\)\s+return\s+NextResponse\.json\(\1,\s*\{\s*status:\s*\1\.status[^}]*\}\);/g,
     (match, errVar) => {
       changed = true;
-      const method = match.includes('POST') ? 'POST' : match.includes('PUT') ? 'PUT' : match.includes('DELETE') ? 'DELETE' : 'GET';
+      const method = match.includes('POST')
+        ? 'POST'
+        : match.includes('PUT')
+          ? 'PUT'
+          : match.includes('DELETE')
+            ? 'DELETE'
+            : 'GET';
       return `catch (${errVar}) {
     logger.error('[API] Error with status:', {
       error: ${errVar} instanceof Error ? ${errVar}.message : String(${errVar}),
@@ -112,7 +135,7 @@ function fixFile(filePath) {
       context: { endpoint: '${endpoint}', method: '${method}' },
     });
     if (${errVar}.status) return NextResponse.json(${errVar}, { status: ${errVar}.status });`;
-    }
+    },
   );
 
   if (changed) {
@@ -153,6 +176,3 @@ if (require.main === module) {
 }
 
 module.exports = { fixFile };
-
-
-

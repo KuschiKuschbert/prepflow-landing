@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/ui/Icon';
 import { AlertTriangle } from 'lucide-react';
 import type { UserError } from '../types';
@@ -17,7 +19,9 @@ export function RecentErrorsList({ errors, loading, onReportError }: RecentError
   if (loading) {
     return (
       <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 p-4">
-        <div className="animate-pulse text-sm text-[var(--foreground-muted)]">Loading errors...</div>
+        <div className="animate-pulse text-sm text-[var(--foreground-muted)]">
+          Loading errors...
+        </div>
       </div>
     );
   }
@@ -44,7 +48,9 @@ export function RecentErrorsList({ errors, loading, onReportError }: RecentError
               >
                 {error.severity}
               </span>
-              <span className="text-xs text-[var(--foreground-subtle)]">{formatRelativeTime(error.created_at)}</span>
+              <span className="text-xs text-[var(--foreground-subtle)]">
+                {formatRelativeTime(error.created_at)}
+              </span>
             </div>
             <p className="line-clamp-2 text-sm text-[var(--foreground-secondary)]">
               {error.error_message.length > 100

@@ -108,7 +108,9 @@ export function EmployeeForm({
       <form onSubmit={handleSubmit} className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
         {/* Employee ID */}
         <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">Employee ID</label>
+          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+            Employee ID
+          </label>
           <input
             type="text"
             value={formData.employee_id}

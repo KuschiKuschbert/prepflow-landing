@@ -34,7 +34,8 @@ export async function updateComplianceRecord(
     reminder_days_before?: number;
   },
 ) {
-  if (!supabaseAdmin) throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
+  if (!supabaseAdmin)
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
 
   const finalUpdateData: any = {};
   if (updateData.document_name !== undefined)

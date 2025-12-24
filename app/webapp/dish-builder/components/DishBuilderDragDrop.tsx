@@ -120,13 +120,16 @@ export default function DishBuilderDragDrop({
           />
           <div className="flex-1 space-y-1">
             <div>
-              <span className="font-medium text-[var(--foreground)]">Tap a recipe</span> to add all ingredients at
-              once
+              <span className="font-medium text-[var(--foreground)]">Tap a recipe</span> to add all
+              ingredients at once
             </div>
             <div>
-              <span className="font-medium text-[var(--foreground)]">Tap an ingredient</span> to add individually
+              <span className="font-medium text-[var(--foreground)]">Tap an ingredient</span> to add
+              individually
             </div>
-            <div className="text-[var(--foreground-muted)]">COGS and pricing calculate automatically</div>
+            <div className="text-[var(--foreground-muted)]">
+              COGS and pricing calculate automatically
+            </div>
           </div>
         </div>
       </div>

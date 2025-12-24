@@ -1,3 +1,5 @@
+'use client';
+
 import { useTranslation } from '../../../../lib/useTranslation';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import {

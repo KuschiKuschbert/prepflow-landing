@@ -1,11 +1,22 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function deleteQualification(
   employeeId: string,
   qualificationId: string,
 ): Promise<{ success: boolean; message: string } | { error: any; status: number }> {
+  if (!supabaseAdmin) {
+    return {
+      error: ApiErrorHandler.createError(
+        'Database connection not available',
+        'DATABASE_ERROR',
+        500,
+      ),
+      status: 500,
+    };
+  }
+
   // Verify qualification belongs to employee
   const { data: qualification, error: checkError } = await supabaseAdmin
     .from('employee_qualifications')
@@ -47,4 +58,3 @@ export async function deleteQualification(
     message: 'Qualification removed successfully',
   };
 }
-

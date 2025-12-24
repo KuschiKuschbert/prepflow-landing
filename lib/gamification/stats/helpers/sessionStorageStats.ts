@@ -1,4 +1,4 @@
-import { STAT_KEYS } from '../stats';
+import { STAT_KEYS } from '../../stats';
 import type { ArcadeStats } from '@/lib/gamification/types';
 import { dispatchStatsEvent } from './dispatchStatsEvent';
 
@@ -59,10 +59,9 @@ export function setSessionStat(key: string, value: number): void {
 export function clearSessionStats(): void {
   if (typeof window === 'undefined') return;
 
-  Object.values(STAT_KEYS).forEach(key => {
+  Object.values(STAT_KEYS).forEach((key: string) => {
     sessionStorage.removeItem(key);
   });
 
   dispatchStatsEvent('arcade:sessionStatsUpdated');
 }
-

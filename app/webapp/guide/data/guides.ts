@@ -335,7 +335,3 @@ export function searchGuides(query: string): Guide[] {
       guide.description.toLowerCase().includes(lowerQuery),
   );
 }
-
-
-
-

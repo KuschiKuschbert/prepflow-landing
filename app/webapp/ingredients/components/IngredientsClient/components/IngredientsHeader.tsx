@@ -1,3 +1,5 @@
+'use client';
+
 import { PageHeader } from '@/app/webapp/components/static/PageHeader';
 import { useTranslation } from '@/lib/useTranslation';
 import { Package } from 'lucide-react';
@@ -28,7 +30,3 @@ export function IngredientsHeader({ hideHeader }: IngredientsHeaderProps) {
     />
   );
 }
-
-
-
-

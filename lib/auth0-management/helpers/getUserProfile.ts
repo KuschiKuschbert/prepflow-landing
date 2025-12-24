@@ -1,12 +1,10 @@
 import { logger } from '@/lib/logger';
-import { getManagementClient } from '../auth0-management';
+import { getManagementClient } from '../../auth0-management';
 
 /**
  * Get user profile from Auth0 Management API
  */
-export async function getUserProfileFromManagementAPI(
-  auth0UserId: string,
-): Promise<any | null> {
+export async function getUserProfileFromManagementAPI(auth0UserId: string): Promise<any | null> {
   const client = getManagementClient();
 
   if (!client) {
@@ -33,4 +31,3 @@ export async function getUserProfileFromManagementAPI(
     return null;
   }
 }
-

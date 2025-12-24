@@ -158,7 +158,9 @@ export function RecipeCOGSModal({ isOpen, recipe, onClose }: RecipeCOGSModalProp
                 <h2 className="mb-2 text-2xl font-bold text-[var(--foreground)]">
                   {capitalizeRecipeName(recipe.recipe_name)} - COGS Breakdown
                 </h2>
-                {recipe.description && <p className="text-[var(--foreground-muted)]">{recipe.description}</p>}
+                {recipe.description && (
+                  <p className="text-[var(--foreground-muted)]">{recipe.description}</p>
+                )}
                 <div className="mt-2 flex items-center gap-4 text-sm text-[var(--foreground-muted)]">
                   <span>
                     Yield: {recipe.yield} {recipe.yield_unit}
@@ -188,7 +190,9 @@ export function RecipeCOGSModal({ isOpen, recipe, onClose }: RecipeCOGSModalProp
           {/* Content */}
           <div className="p-6">
             {loading ? (
-              <div className="py-12 text-center text-[var(--foreground-muted)]">Loading ingredients...</div>
+              <div className="py-12 text-center text-[var(--foreground-muted)]">
+                Loading ingredients...
+              </div>
             ) : error ? (
               <div className="rounded-lg border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 px-4 py-3 text-[var(--color-error)]">
                 {error}

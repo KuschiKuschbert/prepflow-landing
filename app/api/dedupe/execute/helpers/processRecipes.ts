@@ -28,7 +28,9 @@ export async function processRecipeDeduplication(
   // Group recipes by normalized name
   const recGroups: Record<string, { ids: string[]; survivor?: string }> = {};
   recipes.forEach(row => {
-    const key = String(row.recipe_name || '').toLowerCase().trim();
+    const key = String(row.recipe_name || '')
+      .toLowerCase()
+      .trim();
     if (!recGroups[key]) recGroups[key] = { ids: [] };
     recGroups[key].ids.push(row.id);
   });
@@ -66,7 +68,10 @@ export async function processRecipeDeduplication(
         }
 
         // Delete removed recipes
-        const { error: deleteError } = await supabaseAdmin!.from('recipes').delete().in('id', m.removed);
+        const { error: deleteError } = await supabaseAdmin!
+          .from('recipes')
+          .delete()
+          .in('id', m.removed);
         if (deleteError) {
           logger.error('[Dedupe Execute API] Error deleting duplicate recipes:', {
             error: deleteError.message,
@@ -82,5 +87,3 @@ export async function processRecipeDeduplication(
 
   return recMerges;
 }
-
-

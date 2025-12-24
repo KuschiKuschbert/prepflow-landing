@@ -23,10 +23,7 @@ export async function GET(_req: NextRequest) {
         code: (menusError as any).code,
         context: { endpoint: '/api/dashboard/menu-summary', operation: 'GET' },
       });
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(menusError, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(menusError, 500), { status: 500 });
     }
 
     // Fetch all menu items
@@ -40,10 +37,9 @@ export async function GET(_req: NextRequest) {
         code: (menuItemsError as any).code,
         context: { endpoint: '/api/dashboard/menu-summary', operation: 'GET' },
       });
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(menuItemsError, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(menuItemsError, 500), {
+        status: 500,
+      });
     }
 
     // Fetch all dishes to check for recipes and costs
@@ -57,10 +53,9 @@ export async function GET(_req: NextRequest) {
         code: (dishesError as any).code,
         context: { endpoint: '/api/dashboard/menu-summary', operation: 'GET' },
       });
-      return NextResponse.json(
-        ApiErrorHandler.fromSupabaseError(dishesError, 500),
-        { status: 500 },
-      );
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(dishesError, 500), {
+        status: 500,
+      });
     }
 
     // Create dish lookup map

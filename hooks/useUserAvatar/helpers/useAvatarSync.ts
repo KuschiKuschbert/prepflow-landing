@@ -65,4 +65,3 @@ export function useAvatarSync({ userEmail }: UseAvatarSyncProps) {
 
   return { avatar, setAvatarState, isHydrated };
 }
-

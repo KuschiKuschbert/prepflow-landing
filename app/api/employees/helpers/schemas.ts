@@ -6,7 +6,7 @@ export const createEmployeeSchema = z.object({
   employment_start_date: z.string().min(1, 'employment_start_date is required'),
   role: z.string().optional(),
   employment_end_date: z.string().optional(),
-  status: z.string().optional(),
+  status: z.enum(['active', 'inactive', 'terminated']).optional(),
   phone: z.string().optional(),
   email: z.string().email().optional().or(z.literal('')),
   emergency_contact: z.string().optional(),
@@ -20,7 +20,7 @@ export const updateEmployeeSchema = z.object({
   role: z.string().optional(),
   employment_start_date: z.string().optional(),
   employment_end_date: z.string().optional(),
-  status: z.string().optional(),
+  status: z.enum(['active', 'inactive', 'terminated']).optional(),
   phone: z.string().optional(),
   email: z.string().email().optional().or(z.literal('')),
   emergency_contact: z.string().optional(),
@@ -29,4 +29,3 @@ export const updateEmployeeSchema = z.object({
 });
 
 export const EMPLOYEE_SELECT = `*, employee_qualifications (*, qualification_types (id, name, description, is_required, default_expiry_days))`;
-

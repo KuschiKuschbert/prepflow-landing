@@ -45,10 +45,11 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const { count: cancelledSubscriptions, error: cancelledSubscriptionsError } = await supabaseAdmin
-      .from('users')
-      .select('*', { count: 'exact', head: true })
-      .eq('subscription_status', 'cancelled');
+    const { count: cancelledSubscriptions, error: cancelledSubscriptionsError } =
+      await supabaseAdmin
+        .from('users')
+        .select('*', { count: 'exact', head: true })
+        .eq('subscription_status', 'cancelled');
 
     if (cancelledSubscriptionsError) {
       logger.warn('[Admin Billing Overview] Error fetching cancelled subscriptions count:', {

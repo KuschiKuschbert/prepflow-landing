@@ -68,7 +68,12 @@ export function UserMenu({
               ) : userName ? (
                 userName[0].toUpperCase()
               ) : (
-                <Icon icon={User} size="sm" className="text-[var(--primary-text)]" aria-hidden={true} />
+                <Icon
+                  icon={User}
+                  size="sm"
+                  className="text-[var(--primary-text)]"
+                  aria-hidden={true}
+                />
               )}
             </div>
             {/* Camera icon overlay (optional) */}
@@ -148,7 +153,12 @@ export function UserMenu({
 
           <div className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-[var(--foreground)]/80 transition-colors hover:bg-[var(--surface)] hover:text-[var(--foreground)]">
             <div className="flex items-center space-x-3">
-              <Icon icon={Globe} size="sm" className="text-[var(--foreground)]/60" aria-hidden={true} />
+              <Icon
+                icon={Globe}
+                size="sm"
+                className="text-[var(--foreground)]/60"
+                aria-hidden={true}
+              />
               <span>Language</span>
             </div>
             <div className="ml-auto">

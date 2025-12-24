@@ -2,6 +2,7 @@
 
 import { supabase } from '@/lib/supabase';
 import { useCallback } from 'react';
+import { useNotification } from '@/contexts/NotificationContext';
 
 import { logger } from '@/lib/logger';
 interface UseIngredientDeleteProps<T extends { id: string }> {
@@ -13,6 +14,7 @@ export function useIngredientDelete<T extends { id: string }>({
   setIngredients,
   setError,
 }: UseIngredientDeleteProps<T>) {
+  const { showSuccess } = useNotification();
   const handleDeleteIngredient = useCallback(
     async (id: string, currentIngredients: T[]) => {
       // Store original state for rollback
@@ -45,24 +47,29 @@ export function useIngredientDelete<T extends { id: string }>({
               setError(`Failed to delete ingredient: ${errorMsg}`);
               throw new Error(errorMsg);
             }
+            // Success - show notification
+            showSuccess('Ingredient deleted successfully');
           } else {
             // Revert optimistic update on error
             setIngredients(originalIngredients);
             throw error;
           }
+        } else {
+          // Success - show notification
+          showSuccess('Ingredient deleted successfully');
         }
       } catch (error) {
         logger.error('[useIngredientDelete.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+          error: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+        });
 
         // Revert optimistic update on error (if not already reverted)
         setIngredients(originalIngredients);
         setError('Failed to delete ingredient');
       }
     },
-    [setIngredients, setError],
+    [setIngredients, setError, showSuccess],
   );
 
   return { handleDeleteIngredient };

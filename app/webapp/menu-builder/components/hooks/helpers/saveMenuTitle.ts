@@ -11,7 +11,6 @@ interface SaveMenuTitleProps {
   setMenus?: (menus: Menu[] | ((prev: Menu[]) => Menu[])) => void;
   onMenuUpdated?: () => void;
   handleCancelEdit: () => void;
-  setIsSaving: (saving: boolean) => void;
   showError: (message: string) => void;
   showSuccess: (message: string) => void;
 }
@@ -27,7 +26,6 @@ export async function saveMenuTitle({
   setMenus,
   onMenuUpdated,
   handleCancelEdit,
-  setIsSaving,
   showError,
   showSuccess,
 }: SaveMenuTitleProps): Promise<void> {
@@ -51,8 +49,6 @@ export async function saveMenuTitle({
       prevMenus.map(m => (m.id === menu.id ? { ...m, menu_name: trimmedTitle } : m)),
     );
   }
-
-  setIsSaving(true);
 
   try {
     const response = await fetch(`/api/menus/${menu.id}`, {
@@ -86,7 +82,5 @@ export async function saveMenuTitle({
       setMenus(prevMenus => prevMenus.map(m => (m.id === menu.id ? originalMenu : m)));
     }
     showError('Failed to update menu name. Please try again.');
-  } finally {
-    setIsSaving(false);
   }
 }

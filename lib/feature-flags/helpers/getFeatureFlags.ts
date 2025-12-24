@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import type { FeatureFlag } from '../feature-flags';
+import type { FeatureFlag } from '../../feature-flags';
 
 /**
  * Get all feature flags
@@ -32,4 +32,3 @@ export async function getFeatureFlags(userId?: string): Promise<FeatureFlag[]> {
     return [];
   }
 }
-

@@ -47,7 +47,9 @@ export default function CostAnalysisSection({
 }: CostAnalysisSectionProps) {
   return (
     <div className="tablet:p-6 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow">
-      <h2 className="tablet:text-xl mb-4 text-lg font-semibold text-[var(--foreground)]">Cost Analysis</h2>
+      <h2 className="tablet:text-xl mb-4 text-lg font-semibold text-[var(--foreground)]">
+        Cost Analysis
+      </h2>
 
       {/* Ingredients Table */}
       <DishIngredientTable

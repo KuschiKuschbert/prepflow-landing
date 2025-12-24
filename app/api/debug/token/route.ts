@@ -32,7 +32,10 @@ function decodeJWTPayload(token: string): Record<string, unknown> | null {
 export async function GET(request: NextRequest) {
   // Only allow in development
   if (process.env.NODE_ENV !== 'development') {
-    return NextResponse.json(ApiErrorHandler.createError('Not available in production', 'FORBIDDEN', 403), { status: 403 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Not available in production', 'FORBIDDEN', 403),
+      { status: 403 },
+    );
   }
 
   try {

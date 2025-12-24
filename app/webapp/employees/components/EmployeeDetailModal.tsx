@@ -1,11 +1,14 @@
 'use client';
 import { Icon } from '@/components/ui/Icon';
 import { QRCodeModal } from '@/lib/qr-codes';
-import { Award, Calendar, FileText, Mail, Phone, QrCode, User, X } from 'lucide-react';
+import { Award, FileText, QrCode, User, X } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { Employee, QualificationType } from '../types';
 import { QualificationCard } from './QualificationCard';
+import { getStatusColor } from './EmployeeDetailModal/helpers/getStatusColor';
+import { EmployeeEmploymentInfo } from './EmployeeDetailModal/EmployeeEmploymentInfo';
+import { EmployeeContactInfo } from './EmployeeDetailModal/EmployeeContactInfo';
 
 interface EmployeeDetailModalProps {
   isOpen: boolean;
@@ -52,18 +55,6 @@ export function EmployeeDetailModal({
     };
   }, [isOpen, onClose]);
   if (!isOpen || !employee) return null;
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active':
-        return 'bg-[var(--color-success)]/10 text-[var(--color-success)] border-[var(--color-success)]/20';
-      case 'inactive':
-        return 'bg-[var(--color-warning)]/10 text-[var(--color-warning)] border-[var(--color-warning)]/20';
-      case 'terminated':
-        return 'bg-[var(--color-error)]/10 text-[var(--color-error)] border-[var(--color-error)]/20';
-      default:
-        return 'bg-gray-500/10 text-[var(--foreground-muted)] border-gray-500/20';
-    }
-  };
   const qualifications = employee.employee_qualifications || [];
   return (
     <>
@@ -112,16 +103,28 @@ export function EmployeeDetailModal({
                   </div>
                 ) : (
                   <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
-                    <Icon icon={User} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
+                    <Icon
+                      icon={User}
+                      size="xl"
+                      className="text-[var(--primary)]"
+                      aria-hidden={true}
+                    />
                   </div>
                 )}
                 <div>
-                  <h2 id="employee-modal-title" className="text-2xl font-bold text-[var(--foreground)]">
+                  <h2
+                    id="employee-modal-title"
+                    className="text-2xl font-bold text-[var(--foreground)]"
+                  >
                     {employee.full_name}
                   </h2>
-                  <p className="text-lg text-[var(--foreground-muted)]">{employee.role || 'No role specified'}</p>
+                  <p className="text-lg text-[var(--foreground-muted)]">
+                    {employee.role || 'No role specified'}
+                  </p>
                   {employee.employee_id && (
-                    <p className="text-sm text-[var(--foreground-subtle)]">ID: {employee.employee_id}</p>
+                    <p className="text-sm text-[var(--foreground-subtle)]">
+                      ID: {employee.employee_id}
+                    </p>
                   )}
                 </div>
               </div>
@@ -141,78 +144,8 @@ export function EmployeeDetailModal({
               </div>
             </div>
 
-            {/* Employment Information */}
-            <div className="mb-6 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
-              <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
-                <Icon icon={Calendar} size="md" className="text-[var(--primary)]" aria-hidden={true} />
-                Employment Information
-              </h3>
-              <div className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
-                <div>
-                  <span className="text-sm text-[var(--foreground-muted)]">Start Date</span>
-                  <p className="text-[var(--foreground)]">
-                    {new Date(employee.employment_start_date).toLocaleDateString('en-AU', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric',
-                    })}
-                  </p>
-                </div>
-                {employee.employment_end_date && (
-                  <div>
-                    <span className="text-sm text-[var(--foreground-muted)]">End Date</span>
-                    <p className="text-[var(--foreground)]">
-                      {new Date(employee.employment_end_date).toLocaleDateString('en-AU', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                      })}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-            {(employee.phone || employee.email || employee.emergency_contact) && (
-              <div className="mb-6 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
-                <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
-                  <Icon icon={Phone} size="md" className="text-[var(--primary)]" aria-hidden={true} />
-                  Contact Information
-                </h3>
-                <div className="space-y-3">
-                  {employee.phone && (
-                    <div className="flex items-center gap-3">
-                      <Icon icon={Phone} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
-                      <div>
-                        <span className="text-sm text-[var(--foreground-muted)]">Phone</span>
-                        <p className="text-[var(--foreground)]">
-                          {employee.phone.startsWith('+61')
-                            ? employee.phone
-                            : `+61 ${employee.phone.replace(/^\+?61\s*/, '')}`}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                  {employee.email && (
-                    <div className="flex items-center gap-3">
-                      <Icon icon={Mail} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
-                      <div>
-                        <span className="text-sm text-[var(--foreground-muted)]">Email</span>
-                        <p className="text-[var(--foreground)]">{employee.email}</p>
-                      </div>
-                    </div>
-                  )}
-                  {employee.emergency_contact && (
-                    <div className="flex items-center gap-3">
-                      <Icon icon={User} size="sm" className="text-[var(--foreground-muted)]" aria-hidden={true} />
-                      <div>
-                        <span className="text-sm text-[var(--foreground-muted)]">Emergency Contact</span>
-                        <p className="text-[var(--foreground)]">{employee.emergency_contact}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
+            <EmployeeEmploymentInfo employee={employee} />
+            <EmployeeContactInfo employee={employee} />
 
             {/* Qualifications */}
             <div className="mb-6 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
@@ -224,7 +157,9 @@ export function EmployeeDetailModal({
                 </span>
               </h3>
               {qualifications.length === 0 ? (
-                <p className="text-sm text-[var(--foreground-muted)]">No qualifications added yet</p>
+                <p className="text-sm text-[var(--foreground-muted)]">
+                  No qualifications added yet
+                </p>
               ) : (
                 <div className="space-y-3">
                   {qualifications.map(qual => (
@@ -242,10 +177,17 @@ export function EmployeeDetailModal({
             {employee.notes && (
               <div className="mb-6 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
                 <h3 className="mb-2 flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
-                  <Icon icon={FileText} size="md" className="text-[var(--primary)]" aria-hidden={true} />
+                  <Icon
+                    icon={FileText}
+                    size="md"
+                    className="text-[var(--primary)]"
+                    aria-hidden={true}
+                  />
                   Notes
                 </h3>
-                <p className="text-sm whitespace-pre-wrap text-[var(--foreground-secondary)]">{employee.notes}</p>
+                <p className="text-sm whitespace-pre-wrap text-[var(--foreground-secondary)]">
+                  {employee.notes}
+                </p>
               </div>
             )}
 

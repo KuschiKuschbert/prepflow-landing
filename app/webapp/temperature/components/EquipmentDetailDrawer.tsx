@@ -63,11 +63,12 @@ export function EquipmentDetailDrawer({ equipment, isOpen, onClose }: EquipmentD
   useEffect(() => {
     if (isOpen && contentRef.current) {
       // Small delay to ensure drawer is fully rendered
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         if (contentRef.current) {
           contentRef.current.scrollTop = 0;
         }
       }, 100);
+      return () => clearTimeout(timeoutId);
     }
   }, [isOpen]);
 

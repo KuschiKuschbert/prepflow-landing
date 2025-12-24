@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import type { DietaryDetectionResult } from '../../vegetarian-vegan-detection';
+import type { DietaryDetectionResult } from '../../../vegetarian-vegan-detection';
 
 /**
  * Check if recipe has cached dietary status that's still valid
@@ -13,6 +13,10 @@ export async function checkCachedRecipeDietaryStatus(
   recipeId: string,
   force: boolean,
 ): Promise<DietaryDetectionResult | null> {
+  if (!supabaseAdmin) {
+    return null;
+  }
+
   const { data: recipe, error: recipeError } = await supabaseAdmin
     .from('recipes')
     .select('is_vegetarian, is_vegan, dietary_confidence, dietary_method, dietary_checked_at')
@@ -48,4 +52,3 @@ export async function checkCachedRecipeDietaryStatus(
 
   return null;
 }
-

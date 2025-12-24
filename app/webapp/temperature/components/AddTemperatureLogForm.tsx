@@ -1,3 +1,5 @@
+'use client';
+
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 import { Icon } from '@/components/ui/Icon';
 import { useAutosave } from '@/hooks/useAutosave';

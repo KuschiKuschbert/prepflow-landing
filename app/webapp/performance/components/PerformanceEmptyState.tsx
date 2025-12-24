@@ -5,6 +5,7 @@ import { Icon } from '@/components/ui/Icon';
 import { Button } from '@/components/ui/Button';
 import { LANDING_COLORS, LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
 import Link from 'next/link';
+import { useNotification } from '@/contexts/NotificationContext';
 
 import { logger } from '@/lib/logger';
 
@@ -13,12 +14,11 @@ interface PerformanceEmptyStateProps {
 }
 
 export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEmptyStateProps) {
-  const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const { showSuccess, showError: showNotificationError } = useNotification();
 
   const handleGenerateSalesData = async () => {
-    setIsGenerating(true);
     setError(null);
     setSuccessMessage(null);
 
@@ -44,6 +44,7 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
           response: errorText,
         });
         setError(errorMsg);
+        showNotificationError(errorMsg);
         throw new Error(errorMsg);
       }
 
@@ -53,13 +54,14 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
       if (data.success) {
         const successMsg = `Successfully generated sales data for ${data.summary.recipesProcessed} recipes over ${data.summary.daysGenerated} days. ${data.summary.salesRecordsCreated} sales records created.`;
         setSuccessMessage(successMsg);
+        showSuccess(successMsg);
 
         // Clear cache and trigger data refresh
         if (typeof window !== 'undefined') {
           sessionStorage.removeItem('performance_data');
         }
 
-        // Call the callback to refresh data
+        // Call the callback to refresh data (non-blocking)
         if (onDataGenerated) {
           // Wait a moment for the database to be ready
           setTimeout(() => {
@@ -74,13 +76,13 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
       } else {
         const errorMsg = data.message || data.error || 'Unknown error';
         setError(errorMsg);
+        showNotificationError(errorMsg);
       }
     } catch (error) {
       logger.error('❌ Error generating sales data:', error);
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
       setError(errorMsg);
-    } finally {
-      setIsGenerating(false);
+      showNotificationError(errorMsg);
     }
   };
 
@@ -95,7 +97,9 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
       <h3 className={`${LANDING_TYPOGRAPHY['2xl']} mb-3 font-semibold text-[var(--foreground)]`}>
         No Performance Data Yet
       </h3>
-      <p className={`${LANDING_TYPOGRAPHY.base} mx-auto mb-8 max-w-2xl text-[var(--foreground-muted)]`}>
+      <p
+        className={`${LANDING_TYPOGRAPHY.base} mx-auto mb-8 max-w-2xl text-[var(--foreground-muted)]`}
+      >
         Performance analysis helps you understand which menu items are profitable, which are
         popular, and which need attention. Generate sales data from your recipes to see insights and
         recommendations.
@@ -106,7 +110,9 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
         <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
           <Icon icon={Sparkles} size="md" className="mx-auto mb-2 text-[var(--primary)]" />
           <h4 className="mb-1 text-sm font-semibold text-[var(--foreground)]">Smart Insights</h4>
-          <p className="text-xs text-[var(--foreground-muted)]">Automatic categorization of menu items</p>
+          <p className="text-xs text-[var(--foreground-muted)]">
+            Automatic categorization of menu items
+          </p>
         </div>
         <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
           <Icon icon={TrendingUp} size="md" className="mx-auto mb-2 text-[var(--color-info)]" />
@@ -116,7 +122,9 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
         <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
           <Icon icon={BarChart3} size="md" className="mx-auto mb-2 text-[var(--accent)]" />
           <h4 className="mb-1 text-sm font-semibold text-[var(--foreground)]">Recommendations</h4>
-          <p className="text-xs text-[var(--foreground-muted)]">Actionable advice to improve margins</p>
+          <p className="text-xs text-[var(--foreground-muted)]">
+            Actionable advice to improve margins
+          </p>
         </div>
       </div>
 
@@ -129,7 +137,9 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
 
       {error && (
         <div className="mx-auto mb-6 max-w-md rounded-lg border border-[var(--color-error)]/30 bg-red-900/20 p-4 text-left">
-          <p className="mb-1 text-sm font-semibold text-[var(--color-error)]">Error generating sales data:</p>
+          <p className="mb-1 text-sm font-semibold text-[var(--color-error)]">
+            Error generating sales data:
+          </p>
           <p className="text-sm text-red-300">{error}</p>
           {error.includes('No recipes found') && (
             <p className="mt-2 text-xs text-red-200">
@@ -146,34 +156,12 @@ export default function PerformanceEmptyState({ onDataGenerated }: PerformanceEm
       <div className="tablet:flex-row flex flex-col items-center justify-center gap-4">
         <Button
           onClick={handleGenerateSalesData}
-          disabled={isGenerating}
           variant="primary"
           landingStyle={true}
           glow={true}
           className="bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-8 py-4"
         >
-          {isGenerating ? (
-            <span className="flex items-center gap-2">
-              <svg className="h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                />
-              </svg>
-              Generating...
-            </span>
-          ) : (
-            'Generate Sales Data'
-          )}
+          Generate Sales Data
         </Button>
 
         <Link

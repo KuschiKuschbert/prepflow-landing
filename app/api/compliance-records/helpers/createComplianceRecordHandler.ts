@@ -47,4 +47,3 @@ export async function handleCreateComplianceRecord(request: NextRequest) {
     return handleComplianceError(err, 'POST');
   }
 }
-

@@ -5,6 +5,9 @@ import { buildSectionsMap, buildItemsByPrepListIdMap } from './buildMaps';
 import { fetchIngredientsBatch } from './fetchIngredientsBatch';
 import { combinePrepListData } from './combinePrepListData';
 
+// Re-export for use in route.ts
+export { fetchIngredientsBatch, combinePrepListData };
+
 interface FetchPrepListsParams {
   userId: string | null;
   page: number;

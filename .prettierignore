@@ -109,3 +109,6 @@ pnpm-lock.yaml
 # Generated files
 *.generated.*
 next-env.d.ts
+
+# Protected nachotaco area (excluded from all formatting)
+app/nachotaco/

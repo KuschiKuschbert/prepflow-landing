@@ -39,31 +39,67 @@ export function ControlPricing({ t, handleEngagement }: PricingProps) {
 
             <div className="mt-6 space-y-4">
               <div className="flex items-center gap-3">
-                <Icon icon={CheckCircle2} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+                <Icon
+                  icon={CheckCircle2}
+                  size="sm"
+                  className="text-[var(--primary)]"
+                  aria-hidden={true}
+                />
                 <span className="text-[var(--foreground-secondary)]">
                   Google Sheet template — ready to use immediately
                 </span>
               </div>
               <div className="flex items-center gap-3">
-                <Icon icon={CheckCircle2} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
-                <span className="text-[var(--foreground-secondary)]">Automated COGS, GP%, GP$ per item</span>
+                <Icon
+                  icon={CheckCircle2}
+                  size="sm"
+                  className="text-[var(--primary)]"
+                  aria-hidden={true}
+                />
+                <span className="text-[var(--foreground-secondary)]">
+                  Automated COGS, GP%, GP$ per item
+                </span>
               </div>
               <div className="flex items-center gap-3">
-                <Icon icon={CheckCircle2} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+                <Icon
+                  icon={CheckCircle2}
+                  size="sm"
+                  className="text-[var(--primary)]"
+                  aria-hidden={true}
+                />
                 <span className="text-[var(--foreground-secondary)]">
                   Popularity & profit classes (Chef&apos;s Kiss etc.)
                 </span>
               </div>
               <div className="flex items-center gap-3">
-                <Icon icon={CheckCircle2} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
-                <span className="text-[var(--foreground-secondary)]">AI Method Generator for cooking optimization</span>
+                <Icon
+                  icon={CheckCircle2}
+                  size="sm"
+                  className="text-[var(--primary)]"
+                  aria-hidden={true}
+                />
+                <span className="text-[var(--foreground-secondary)]">
+                  AI Method Generator for cooking optimization
+                </span>
               </div>
               <div className="flex items-center gap-3">
-                <Icon icon={CheckCircle2} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
-                <span className="text-[var(--foreground-secondary)]">Comprehensive setup guide and resources</span>
+                <Icon
+                  icon={CheckCircle2}
+                  size="sm"
+                  className="text-[var(--primary)]"
+                  aria-hidden={true}
+                />
+                <span className="text-[var(--foreground-secondary)]">
+                  Comprehensive setup guide and resources
+                </span>
               </div>
               <div className="flex items-center gap-3">
-                <Icon icon={CheckCircle2} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+                <Icon
+                  icon={CheckCircle2}
+                  size="sm"
+                  className="text-[var(--primary)]"
+                  aria-hidden={true}
+                />
                 <span className="text-[var(--foreground-secondary)]">7-day refund policy</span>
               </div>
             </div>
@@ -72,16 +108,20 @@ export function ControlPricing({ t, handleEngagement }: PricingProps) {
             <p className="text-fluid-4xl mt-2 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] bg-clip-text font-extrabold tracking-tight text-transparent">
               AUD $29
             </p>
-            <p className="text-fluid-sm text-[var(--foreground-subtle)]">one-time purchase · Lifetime access</p>
+            <p className="text-fluid-sm text-[var(--foreground-subtle)]">
+              one-time purchase · Lifetime access
+            </p>
             <a
               href="https://7495573591101.gumroad.com/l/prepflow"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-fluid-base mt-8 inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] px-8 py-4 font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-[var(--primary)]/25"
+              className="text-fluid-base mt-8 inline-flex w-full justify-center rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--color-info)] px-8 py-4 font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-300 hover:shadow-[var(--primary)]/25 hover:shadow-xl"
             >
               Start Now — Get Menu Clarity Today
             </a>
-            <p className="text-fluid-sm mt-4 text-[var(--foreground-subtle)]">Secure checkout via Gumroad</p>
+            <p className="text-fluid-sm mt-4 text-[var(--foreground-subtle)]">
+              Secure checkout via Gumroad
+            </p>
             <p className="text-fluid-xs mt-2 text-[var(--foreground-muted)]">
               Not satisfied in 7 days? Full refund.
             </p>
@@ -94,15 +134,30 @@ export function ControlPricing({ t, handleEngagement }: PricingProps) {
             <div className="mt-4 border-t border-[var(--border)] pt-4">
               <div className="text-fluid-xs flex items-center justify-center gap-4 text-[var(--foreground-muted)]">
                 <div className="flex items-center gap-1">
-                  <Icon icon={Lock} size="xs" className="text-[var(--color-success)]" aria-hidden={true} />
+                  <Icon
+                    icon={Lock}
+                    size="xs"
+                    className="text-[var(--color-success)]"
+                    aria-hidden={true}
+                  />
                   <span>SSL Secure</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Icon icon={Shield} size="xs" className="text-[var(--color-info)]" aria-hidden={true} />
+                  <Icon
+                    icon={Shield}
+                    size="xs"
+                    className="text-[var(--color-info)]"
+                    aria-hidden={true}
+                  />
                   <span>Privacy Focused</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Icon icon={Check} size="xs" className="text-[var(--accent)]" aria-hidden={true} />
+                  <Icon
+                    icon={Check}
+                    size="xs"
+                    className="text-[var(--accent)]"
+                    aria-hidden={true}
+                  />
                   <span>20 years of real kitchen experience</span>
                 </div>
               </div>

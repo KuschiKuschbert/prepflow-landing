@@ -53,7 +53,7 @@ export function CreateTaskForm({
     formData.area_id,
   );
 
-  const { loading, handleSubmit } = useTaskSubmission({
+  const { handleSubmit } = useTaskSubmission({
     formData,
     preselectedAreaId,
     onSuccess,
@@ -239,7 +239,7 @@ export function CreateTaskForm({
             <button
               type="button"
               onClick={onClose}
-              disabled={loading}
+              disabled={false}
               className="rounded-2xl bg-[var(--muted)] px-6 py-3 font-semibold text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--surface-variant)] disabled:opacity-50"
             >
               Cancel
@@ -249,7 +249,7 @@ export function CreateTaskForm({
                 <button
                   type="button"
                   onClick={e => handleSubmit(e as React.FormEvent, true)}
-                  disabled={loading || !isFormValid}
+                  disabled={!isFormValid}
                   className="rounded-2xl border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-6 py-3 font-semibold text-[var(--primary)] transition-all duration-200 hover:bg-[var(--primary)]/20 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Create & Add Another
@@ -257,18 +257,19 @@ export function CreateTaskForm({
               )}
               <button
                 type="submit"
-                disabled={loading || !isFormValid}
+                disabled={!isFormValid}
                 className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {loading ? 'Creating...' : 'Create Task'}
+                Create Task
               </button>
             </div>
           </div>
 
           <div className="pt-2 text-center">
             <p className="text-xs text-[var(--foreground-subtle)]">
-              Press <kbd className="rounded bg-[var(--muted)] px-2 py-1 text-xs">Enter</kbd> to submit,{' '}
-              <kbd className="rounded bg-[var(--muted)] px-2 py-1 text-xs">Esc</kbd> to close
+              Press <kbd className="rounded bg-[var(--muted)] px-2 py-1 text-xs">Enter</kbd> to
+              submit, <kbd className="rounded bg-[var(--muted)] px-2 py-1 text-xs">Esc</kbd> to
+              close
             </p>
           </div>
         </form>

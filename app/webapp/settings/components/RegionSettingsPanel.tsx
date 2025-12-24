@@ -67,7 +67,9 @@ export function RegionSettingsPanel() {
               style={{ transitionTimingFunction: 'var(--easing-standard)' }}
             >
               <div className="min-w-0 flex-1">
-                <div className={`font-medium ${isSelected ? 'text-[var(--primary)]' : 'text-[var(--foreground)]'}`}>
+                <div
+                  className={`font-medium ${isSelected ? 'text-[var(--primary)]' : 'text-[var(--foreground)]'}`}
+                >
                   {country.name}
                 </div>
                 <div className="text-xs text-[var(--foreground-subtle)]">

@@ -8,10 +8,7 @@ import { logger } from '@/lib/logger';
  * @param userEmail - User email address
  * @param customerId - Stripe customer ID
  */
-export async function upsertCustomerMapping(
-  userEmail: string,
-  customerId: string,
-): Promise<void> {
+export async function upsertCustomerMapping(userEmail: string, customerId: string): Promise<void> {
   if (!supabaseAdmin) return;
 
   try {
@@ -39,4 +36,3 @@ export async function upsertCustomerMapping(
     });
   }
 }
-

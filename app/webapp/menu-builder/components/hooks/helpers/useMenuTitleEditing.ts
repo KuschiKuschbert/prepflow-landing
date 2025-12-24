@@ -61,7 +61,6 @@ export function useMenuTitleEditing({ menus, setMenus, onMenuUpdated }: UseMenuT
         setMenus,
         onMenuUpdated,
         handleCancelEdit,
-        setIsSaving,
         showError,
         showSuccess,
       });

@@ -50,7 +50,7 @@ export function ShareModal({
       showSuccess('Link copied to clipboard');
       setTimeout(() => setCopied(false), 2000);
     } else {
-      showError('Failed to copy link. Please try again.');
+      showError('Couldn&apos;t copy the link. Try again, chef.');
     }
   };
 

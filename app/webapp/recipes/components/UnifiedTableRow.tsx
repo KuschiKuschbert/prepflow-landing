@@ -30,7 +30,6 @@ interface UnifiedTableRowProps {
   onCancelLongPress?: () => void;
   onEnterSelectionMode?: () => void;
 }
-
 function UnifiedTableRowComponent({
   item,
   dishCost,
@@ -216,7 +215,9 @@ function UnifiedTableRowComponent({
               return (
                 <span
                   className={`font-semibold ${
-                    recommendedGrossProfitMargin >= 30 ? 'text-[var(--color-success)]' : 'text-[var(--color-warning)]'
+                    recommendedGrossProfitMargin >= 30
+                      ? 'text-[var(--color-success)]'
+                      : 'text-[var(--color-warning)]'
                   }`}
                 >
                   {recommendedGrossProfitMargin.toFixed(1)}%

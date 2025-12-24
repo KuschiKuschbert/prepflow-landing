@@ -45,6 +45,9 @@ export function useMenuItemRemoval({
         showError('Item not found');
         return;
       }
+      // Store original state for rollback
+      const originalItems = [...menuItems];
+      // Optimistically remove from UI immediately
       setMenuItems(prevItems => prevItems.filter(item => item.id !== itemId));
 
       try {
@@ -56,18 +59,21 @@ export function useMenuItemRemoval({
 
         if (response.ok) {
           showSuccess(`"${itemName}" removed from menu`);
+          // Refresh statistics in background (non-blocking)
           refreshStatistics().catch(err => logger.error('Failed to refresh statistics:', err));
         } else {
-          setMenuItems(prevItems => revertItemRemoval(itemToRemove, prevItems));
+          // Rollback on error
+          setMenuItems(originalItems);
           showError(`Failed to remove item: ${result.error || result.message || 'Unknown error'}`);
         }
       } catch (err) {
-        setMenuItems(prevItems => revertItemRemoval(itemToRemove, prevItems));
+        // Rollback on error
+        setMenuItems(originalItems);
         logger.error('Failed to remove item:', err);
         showError('Failed to remove item. Please check your connection and try again.');
       }
     },
-    [menuId, menuItems, setMenuItems, refreshStatistics, showError, showSuccess, revertItemRemoval],
+    [menuId, menuItems, setMenuItems, refreshStatistics, showError, showSuccess],
   );
   const handleRemoveItem = useCallback(
     (itemId: string, onConfirm: () => void) => {

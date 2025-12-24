@@ -9,7 +9,10 @@ import { NextResponse } from 'next/server';
  */
 export async function fetchTiers(): Promise<{ tiers: any[] } | NextResponse> {
   if (!supabaseAdmin) {
-    return NextResponse.json(ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503), { status: 503 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503),
+      { status: 503 },
+    );
   }
 
   const { data, error } = await supabaseAdmin
@@ -19,7 +22,10 @@ export async function fetchTiers(): Promise<{ tiers: any[] } | NextResponse> {
 
   if (error) {
     logger.error('[Admin Tiers] Failed to fetch tiers:', error);
-    return NextResponse.json(ApiErrorHandler.createError('Failed to fetch tiers', 'SERVER_ERROR', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Failed to fetch tiers', 'SERVER_ERROR', 500),
+      { status: 500 },
+    );
   }
 
   return { tiers: data || [] };

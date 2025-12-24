@@ -41,5 +41,3 @@ export async function storeBackupMetadata(
     // Don't fail the backup if metadata storage fails
   }
 }
-
-

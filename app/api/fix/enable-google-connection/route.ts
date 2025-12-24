@@ -7,20 +7,24 @@ import {
   configureAndEnableGoogleConnection,
 } from '@/lib/auth0-google-connection';
 import { z } from 'zod';
-
-const enableGoogleConnectionSchema = z.object({
-  googleClientId: z.string().min(1).optional(),
-  googleClientSecret: z.string().min(1).optional(),
-}).refine(data => {
-  // If one is provided, both must be provided
-  if (data.googleClientId || data.googleClientSecret) {
-    return data.googleClientId && data.googleClientSecret;
-  }
-  return true;
-}, {
-  message: 'Both googleClientId and googleClientSecret must be provided together',
-  path: ['googleClientId'],
-});
+const enableGoogleConnectionSchema = z
+  .object({
+    googleClientId: z.string().min(1).optional(),
+    googleClientSecret: z.string().min(1).optional(),
+  })
+  .refine(
+    data => {
+      // If one is provided, both must be provided
+      if (data.googleClientId || data.googleClientSecret) {
+        return data.googleClientId && data.googleClientSecret;
+      }
+      return true;
+    },
+    {
+      message: 'Both googleClientId and googleClientSecret must be provided together',
+      path: ['googleClientId'],
+    },
+  );
 
 /**
  * Configure and Enable Google Connection
@@ -53,7 +57,10 @@ export async function POST(request: Request) {
       body = validationResult.data;
     }
 
-    const { googleClientId, googleClientSecret } = body as { googleClientId?: string; googleClientSecret?: string };
+    const { googleClientId, googleClientSecret } = body as {
+      googleClientId?: string;
+      googleClientSecret?: string;
+    };
 
     // If OAuth credentials provided, configure and enable
     if (googleClientId && googleClientSecret) {
@@ -155,9 +162,7 @@ export async function POST(request: Request) {
   }
 }
 
-/**
- * Check Google Connection Status
- */
+/** Check Google Connection Status */
 export async function GET() {
   try {
     const isEnabled = await verifyGoogleConnection();
@@ -185,14 +190,9 @@ export async function GET() {
   } catch (error) {
     logger.error('[Auth0 Fix] Error checking Google connection status:', error);
     return NextResponse.json(
-      ApiErrorHandler.createError(
-        'Failed to check Google connection status',
-        'SERVER_ERROR',
-        500,
-        {
-          details: error instanceof Error ? error.message : String(error),
-        },
-      ),
+      ApiErrorHandler.createError('Failed to check Google connection status', 'SERVER_ERROR', 500, {
+        details: error instanceof Error ? error.message : String(error),
+      }),
       { status: 500 },
     );
   }

@@ -1,3 +1,5 @@
+'use client';
+
 import { useTranslation } from '../../../../lib/useTranslation';
 import { TextContainer } from '@/components/ui/TextContainer';
 import { LANDING_TYPOGRAPHY, LANDING_LAYOUT, getSectionClasses } from '@/lib/landing-styles';
@@ -8,7 +10,7 @@ export function ProblemOutcomeSection() {
   return (
     <section id="problem-outcome" className={getSectionClasses({ padding: 'medium' })}>
       <div
-        className={`${LANDING_LAYOUT.container} desktop:grid-cols-2 grid gap-12 tablet:gap-10 desktop:gap-12 large-desktop:gap-14 xl:gap-16`}
+        className={`${LANDING_LAYOUT.container} desktop:grid-cols-2 tablet:gap-10 desktop:gap-12 large-desktop:gap-14 grid gap-12 xl:gap-16`}
       >
         <TextContainer variant="prose" className="space-y-6">
           <h2 className="text-fluid-3xl desktop:text-fluid-4xl font-bold tracking-tight">

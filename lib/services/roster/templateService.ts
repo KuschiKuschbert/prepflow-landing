@@ -103,7 +103,6 @@ export function applyTemplate(
   return result;
 }
 
-
 /**
  * Calculates the date range for a week starting from a given date.
  * @param {Date} weekStartDate - The start date of the week

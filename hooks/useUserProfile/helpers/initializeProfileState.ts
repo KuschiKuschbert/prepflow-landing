@@ -20,10 +20,7 @@ interface InitializeProfileStateParams {
 /**
  * Initialize profile state with cached data or session data
  */
-export function initializeProfileState({
-  userEmail,
-  userName,
-}: InitializeProfileStateParams): {
+export function initializeProfileState({ userEmail, userName }: InitializeProfileStateParams): {
   initialProfile: UserProfile | null;
   initialLoading: boolean;
   validCachedProfile: UserProfile | null;
@@ -70,4 +67,3 @@ export function initializeProfileState({
     validCachedProfile,
   };
 }
-

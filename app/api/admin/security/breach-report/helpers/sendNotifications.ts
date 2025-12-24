@@ -30,5 +30,3 @@ export async function sendBreachNotifications(
   await updateBreachNotificationStatus(params.breachId, notificationResults);
   return notificationResults;
 }
-
-

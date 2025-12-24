@@ -116,4 +116,3 @@ export async function syncUserSubscription(userEmail: string): Promise<boolean> 
     return false;
   }
 }
-

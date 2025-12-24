@@ -8,7 +8,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const { id } = await params;
 
     if (!id) {
-      return NextResponse.json(ApiErrorHandler.createError('Equipment ID is required', 'BAD_REQUEST', 400), { status: 400 });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Equipment ID is required', 'BAD_REQUEST', 400),
+        { status: 400 },
+      );
     }
 
     // Generate URL that will be encoded in QR code
@@ -42,6 +45,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     });
   } catch (error) {
     logger.error('Error generating QR code:', error);
-    return NextResponse.json(ApiErrorHandler.createError('Failed to generate QR code', 'OPERATION_FAILED', 500), { status: 500 });
+    return NextResponse.json(
+      ApiErrorHandler.createError('Failed to generate QR code', 'OPERATION_FAILED', 500),
+      { status: 500 },
+    );
   }
 }

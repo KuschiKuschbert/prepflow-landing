@@ -20,5 +20,3 @@ export function checkRateLimit(userId: string): boolean {
   userLimit.count++;
   return true;
 }
-
-

@@ -49,7 +49,9 @@ function BarChart({
   const colors = ['#29E7CD', '#3B82F6', '#D925C7', '#10B981', '#F59E0B', '#EF4444'];
 
   return (
-    <div className={`rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 ${className}`}>
+    <div
+      className={`rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 ${className}`}
+    >
       <div className="flex h-48 items-end justify-between space-x-2">
         {data.map((item, index) => {
           const barHeight = (item.value / maxValue) * 100;
@@ -57,7 +59,11 @@ function BarChart({
 
           return (
             <div key={item.name} className="flex flex-1 flex-col items-center">
-              {showValues && <span className="text-fluid-xs mb-1 text-[var(--foreground-muted)]">{item.value}</span>}
+              {showValues && (
+                <span className="text-fluid-xs mb-1 text-[var(--foreground-muted)]">
+                  {item.value}
+                </span>
+              )}
               <div
                 className="w-full rounded-t-lg transition-all duration-300 hover:opacity-80"
                 style={{
@@ -104,7 +110,9 @@ function PieChart({ data, size = 200, showLabels = true, className = '' }: PieCh
   );
 
   return (
-    <div className={`rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 ${className}`}>
+    <div
+      className={`rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 ${className}`}
+    >
       <div className="flex items-center justify-center">
         <div className="relative" style={{ width: size, height: size }}>
           <svg width={size} height={size} className="-rotate-90 transform">
@@ -191,7 +199,9 @@ function LineChart({
     .join(' ');
 
   return (
-    <div className={`rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 ${className}`}>
+    <div
+      className={`rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 ${className}`}
+    >
       <svg width={width} height={height} className="overflow-visible">
         {/* Grid lines */}
         {showGrid && (

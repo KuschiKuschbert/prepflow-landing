@@ -16,7 +16,8 @@ export async function POST(request: NextRequest) {
       {
         flag_key: 'square_pos_integration',
         enabled: false,
-        description: 'Square POS integration - bidirectional sync of menu items, staff, sales data, and food costs',
+        description:
+          'Square POS integration - bidirectional sync of menu items, staff, sales data, and food costs',
       },
       {
         flag_key: 'kitchen-staff',
@@ -34,7 +35,12 @@ export async function POST(request: NextRequest) {
 
     for (const flag of initialFlags) {
       try {
-        const result = await setFeatureFlag(flag.flag_key, flag.enabled, undefined, flag.description);
+        const result = await setFeatureFlag(
+          flag.flag_key,
+          flag.enabled,
+          undefined,
+          flag.description,
+        );
         results.push({
           flag_key: flag.flag_key,
           success: !!result,
@@ -82,7 +88,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-
-
-

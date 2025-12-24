@@ -3,6 +3,7 @@
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
+import { useNotification } from '@/contexts/NotificationContext';
 import { User } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -22,6 +23,7 @@ export function EmployeeCard({
   onEdit,
   onDelete,
 }: EmployeeCardProps) {
+  const { showSuccess, showError } = useNotification();
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showQualifications, setShowQualifications] = useState(false);
   const [showAddQualification, setShowAddQualification] = useState(false);
@@ -30,6 +32,25 @@ export function EmployeeCard({
   const [qualifications, setQualifications] = useState(employee.employee_qualifications || []);
 
   const handleAddQualification = async (qualificationData: any) => {
+    // Store original state for rollback
+    const originalQualifications = [...qualifications];
+
+    // Create temporary qualification for optimistic update
+    const tempId = `temp-${Date.now()}`;
+    const tempQualification = {
+      id: tempId,
+      ...qualificationData,
+      certificate_number: qualificationData.certificate_number || null,
+      expiry_date: qualificationData.expiry_date || null,
+      issuing_authority: qualificationData.issuing_authority || null,
+      document_url: qualificationData.document_url || null,
+      notes: qualificationData.notes || null,
+    };
+
+    // Optimistically add to UI immediately
+    setQualifications([...qualifications, tempQualification]);
+    setShowAddQualification(false);
+
     try {
       const response = await fetch(`/api/employees/${employee.id}/qualifications`, {
         method: 'POST',
@@ -44,12 +65,22 @@ export function EmployeeCard({
         }),
       });
       const data = await response.json();
-      if (data.success) {
-        setQualifications([...qualifications, data.data]);
-        setShowAddQualification(false);
+      if (data.success && data.data) {
+        // Replace temp qualification with real one from server
+        setQualifications(prev => prev.map(q => (q.id === tempId ? data.data : q)));
+        showSuccess('Qualification added successfully');
+      } else {
+        // Rollback on error
+        setQualifications(originalQualifications);
+        setShowAddQualification(true);
+        showError(data.message || data.error || 'Failed to add qualification');
       }
     } catch (error) {
+      // Rollback on error
+      setQualifications(originalQualifications);
+      setShowAddQualification(true);
       logger.error('Error adding qualification:', error);
+      showError('Failed to add qualification. Please check your connection and try again.');
     }
   };
 
@@ -60,19 +91,39 @@ export function EmployeeCard({
 
   const confirmDeleteQualification = async () => {
     if (!qualToDelete) return;
+
+    // Store original state for rollback
+    const originalQualifications = [...qualifications];
+    const qualificationToDelete = qualifications.find(q => q.id === qualToDelete);
+
+    if (!qualificationToDelete) {
+      setShowDeleteQualConfirm(false);
+      setQualToDelete(null);
+      return;
+    }
+
+    // Optimistically remove from UI immediately
+    setQualifications(prev => prev.filter(q => q.id !== qualToDelete));
+    setShowDeleteQualConfirm(false);
+    setQualToDelete(null);
+
     try {
       const response = await fetch(`/api/employees/${employee.id}/qualifications/${qualToDelete}`, {
         method: 'DELETE',
       });
       const data = await response.json();
       if (data.success) {
-        setQualifications(qualifications.filter(q => q.id !== qualToDelete));
+        showSuccess('Qualification deleted successfully');
+      } else {
+        // Rollback on error
+        setQualifications(originalQualifications);
+        showError(data.message || data.error || 'Failed to delete qualification');
       }
     } catch (error) {
+      // Rollback on error
+      setQualifications(originalQualifications);
       logger.error('Error deleting qualification:', error);
-    } finally {
-      setShowDeleteQualConfirm(false);
-      setQualToDelete(null);
+      showError('Failed to delete qualification. Please check your connection and try again.');
     }
   };
 

@@ -10,4 +10,3 @@ export function extractRequestMetadata(request?: { headers: Headers }): {
   const userAgent = request?.headers.get('user-agent') || 'unknown';
   return { ipAddress, userAgent };
 }
-

@@ -5,18 +5,21 @@ import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { z } from 'zod';
 
-const addMenuItemSchema = z.object({
-  dish_id: z.string().optional(),
-  recipe_id: z.string().optional(),
-  category: z.string().optional(),
-  position: z.number().int().nonnegative().optional(),
-}).refine(data => data.dish_id || data.recipe_id, {
-  message: 'Either dish_id or recipe_id must be provided',
-  path: ['dish_id'],
-}).refine(data => !(data.dish_id && data.recipe_id), {
-  message: 'Cannot specify both dish_id and recipe_id',
-  path: ['dish_id'],
-});
+const addMenuItemSchema = z
+  .object({
+    dish_id: z.string().optional(),
+    recipe_id: z.string().optional(),
+    category: z.string().optional(),
+    position: z.number().int().nonnegative().optional(),
+  })
+  .refine(data => data.dish_id || data.recipe_id, {
+    message: 'Either dish_id or recipe_id must be provided',
+    path: ['dish_id'],
+  })
+  .refine(data => !(data.dish_id && data.recipe_id), {
+    message: 'Cannot specify both dish_id and recipe_id',
+    path: ['dish_id'],
+  });
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
@@ -68,8 +71,8 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     }
 
     // If position not provided, get the next position in the category
-    let itemPosition = position;
-    if (itemPosition === undefined) {
+    let itemPosition: number = position ?? 0;
+    if (position === undefined) {
       const { data: existingItems, error: positionError } = await supabaseAdmin
         .from('menu_items')
         .select('position')
@@ -87,7 +90,8 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
         // Default to 0 if we can't fetch existing items
         itemPosition = 0;
       } else {
-        itemPosition = existingItems && existingItems.length > 0 ? existingItems[0].position + 1 : 0;
+        itemPosition =
+          existingItems && existingItems.length > 0 ? existingItems[0].position + 1 : 0;
       }
     }
 

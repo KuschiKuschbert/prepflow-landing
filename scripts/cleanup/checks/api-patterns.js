@@ -41,6 +41,10 @@ function analyzeAPIPatterns(content, filePath) {
 
   if (!isAPIRoute) return violations;
 
+  // Skip test/debug endpoints - they return test results, not error responses
+  const isTestEndpoint = /\/test\/|\/debug\//.test(filePath);
+  if (isTestEndpoint) return violations; // Test endpoints have different response patterns
+
   // Check for exported HTTP method handlers
   const hasGET = /export\s+(async\s+)?function\s+GET/.test(content);
   const hasPOST = /export\s+(async\s+)?function\s+POST/.test(content);
@@ -71,7 +75,10 @@ function analyzeAPIPatterns(content, filePath) {
   // 5. Check for input validation (Zod) for mutation methods
   const hasZodImport = /import.*z.*from.*['"]zod['"]/.test(content);
   const hasZodSchema = /z\.object\(/.test(content) || /z\.string\(/.test(content);
-  const hasRequestParsing = /req\.json\(\)/.test(content) || /request\.json\(\)/.test(content) || /await.*json\(\)/.test(content);
+  const hasRequestParsing =
+    /req\.json\(\)/.test(content) ||
+    /request\.json\(\)/.test(content) ||
+    /await.*json\(\)/.test(content);
 
   // 6. Check for proper status codes in error responses
   const hasStatus400 = /status:\s*400/.test(content);
@@ -82,12 +89,26 @@ function analyzeAPIPatterns(content, filePath) {
 
   // Check for error responses without ApiErrorHandler
   const hasErrorResponse = /NextResponse\.json\(/.test(content);
-  const hasErrorWithoutHandler = hasErrorResponse && !hasApiErrorHandlerUsage && /error|Error/.test(content);
+
+  // Check if response in catch block is a success response (graceful degradation)
+  // Success responses have: success: true, isAdmin: false, or status: 200
+  // Check for success patterns in catch blocks (multiline)
+  const hasSuccessInCatch =
+    /catch\s*\([^)]*\)\s*\{[\s\S]*?NextResponse\.json\([\s\S]*?success:\s*true/.test(content) ||
+    /catch\s*\([^)]*\)\s*\{[\s\S]*?NextResponse\.json\([\s\S]*?isAdmin:\s*false/.test(content) ||
+    /catch\s*\([^)]*\)\s*\{[\s\S]*?status:\s*200/.test(content) ||
+    /catch\s*\([^)]*\)\s*\{[\s\S]*?NextResponse\.json\([^,}]*\{[^}]*isAdmin:\s*false/.test(content);
+
+  const hasErrorWithoutHandler =
+    hasErrorResponse &&
+    !hasApiErrorHandlerUsage &&
+    /error|Error/.test(content) &&
+    !hasSuccessInCatch; // Exclude success responses in catch blocks
 
   // Violation checks
   if (hasAnyMethod) {
     // Check for ApiErrorHandler usage for errors
-    if (hasErrorResponse && !hasApiErrorHandlerImport) {
+    if (hasErrorResponse && !hasApiErrorHandlerImport && !hasSuccessInCatch) {
       violations.push({
         type: 'missing-api-error-handler-import',
         line: findLineNumber(lines, /import/),
@@ -178,7 +199,8 @@ async function checkAPIPatterns(files = null) {
 
     for (const violation of found) {
       let message;
-      let reference = 'See cleanup.mdc (API Standards) and implementation.mdc (API Response Standards)';
+      let reference =
+        'See cleanup.mdc (API Standards) and implementation.mdc (API Response Standards)';
 
       switch (violation.type) {
         case 'missing-api-error-handler-import':

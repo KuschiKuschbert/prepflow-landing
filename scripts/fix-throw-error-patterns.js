@@ -40,7 +40,7 @@ function fixFile(filePath) {
 
   // Replace throw error; with ApiErrorHandler (only for database errors)
   // Pattern: if (error) throw error; or throw error; after Supabase query
-  content = content.replace(/if\s*\(error\)\s*throw\s+error;/g, (match) => {
+  content = content.replace(/if\s*\(error\)\s*throw\s+error;/g, match => {
     return match.replace('throw error;', 'throw ApiErrorHandler.fromSupabaseError(error, 500);');
   });
 
@@ -55,9 +55,14 @@ function fixFile(filePath) {
     if (/^\s*throw\s+error;/.test(line)) {
       // Check previous 5 lines for Supabase query pattern
       const context = lines.slice(Math.max(0, i - 5), i).join('\n');
-      if (/const\s+\{\s*data\s*,\s*error\s*\}\s*=\s*await\s+supabase/.test(context) ||
-          /await\s+supabase/.test(context)) {
-        lines[i] = line.replace('throw error;', 'throw ApiErrorHandler.fromSupabaseError(error, 500);');
+      if (
+        /const\s+\{\s*data\s*,\s*error\s*\}\s*=\s*await\s+supabase/.test(context) ||
+        /await\s+supabase/.test(context)
+      ) {
+        lines[i] = line.replace(
+          'throw error;',
+          'throw ApiErrorHandler.fromSupabaseError(error, 500);',
+        );
         needsApiErrorHandler = true;
       }
     }
@@ -65,9 +70,14 @@ function fixFile(filePath) {
     if (/^\s*throw\s+(\w+Error);/.test(line)) {
       const errorVar = line.match(/throw\s+(\w+Error);/)[1];
       const context = lines.slice(Math.max(0, i - 5), i).join('\n');
-      if (/const\s+\{\s*data\s*,\s*error\s*\}\s*=\s*await\s+supabase/.test(context) ||
-          new RegExp(`const\\s+\\{\\s*.*\\s*,\\s*error:\\s*${errorVar}`).test(context)) {
-        lines[i] = line.replace(`throw ${errorVar};`, `throw ApiErrorHandler.fromSupabaseError(${errorVar}, 500);`);
+      if (
+        /const\s+\{\s*data\s*,\s*error\s*\}\s*=\s*await\s+supabase/.test(context) ||
+        new RegExp(`const\\s+\\{\\s*.*\\s*,\\s*error:\\s*${errorVar}`).test(context)
+      ) {
+        lines[i] = line.replace(
+          `throw ${errorVar};`,
+          `throw ApiErrorHandler.fromSupabaseError(${errorVar}, 500);`,
+        );
         needsApiErrorHandler = true;
       }
     }
@@ -76,10 +86,11 @@ function fixFile(filePath) {
   content = lines.join('\n');
 
   // Add ApiErrorHandler import if needed
-  if (needsApiErrorHandler && !content.includes("import { ApiErrorHandler }")) {
+  if (needsApiErrorHandler && !content.includes('import { ApiErrorHandler }')) {
     const lastImport = content.lastIndexOf('import ');
     const nextLine = content.indexOf('\n', lastImport);
-    content = content.slice(0, nextLine + 1) +
+    content =
+      content.slice(0, nextLine + 1) +
       "import { ApiErrorHandler } from '@/lib/api-error-handler';\n" +
       content.slice(nextLine + 1);
   }
@@ -126,7 +137,3 @@ if (require.main === module) {
 }
 
 module.exports = { findFiles, fixFile };
-
-
-
-

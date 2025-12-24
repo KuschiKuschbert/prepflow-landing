@@ -1,4 +1,4 @@
-import { AVATAR_NAME_CATEGORIES } from '../avatar-names';
+import { AVATAR_NAME_CATEGORIES } from '../../avatar-names';
 
 /**
  * Match filename to appropriate name category
@@ -31,4 +31,3 @@ export function matchFilenameToCategory(
 
   return currentName;
 }
-

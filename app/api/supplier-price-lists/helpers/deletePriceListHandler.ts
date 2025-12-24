@@ -49,4 +49,3 @@ export async function handleDeletePriceList(request: NextRequest) {
     return handlePriceListError(error, 'DELETE');
   }
 }
-

@@ -1,3 +1,5 @@
+'use client';
+
 interface SuccessMessageProps {
   message: string | null;
   onClose: () => void;

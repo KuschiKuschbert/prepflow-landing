@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Advanced options section component
  */
@@ -139,7 +141,9 @@ export function AdvancedOptions({
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Assigned To</label>
+            <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
+              Assigned To
+            </label>
             <select
               value={assignedToEmployeeId}
               onChange={e => onAssignedToChange(e.target.value)}
@@ -157,7 +161,9 @@ export function AdvancedOptions({
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">Description</label>
+            <label className="mb-1.5 block text-sm font-medium text-[var(--foreground-secondary)]">
+              Description
+            </label>
             <textarea
               value={description}
               onChange={e => onDescriptionChange(e.target.value)}

@@ -7,17 +7,19 @@ import { createTemperatureLog } from './helpers/createTemperatureLog';
 import { handleTemperatureLogError } from './helpers/handleTemperatureLogError';
 import { z } from 'zod';
 
-const createTemperatureLogSchema = z.object({
-  temperature_celsius: z.number(),
-  equipment_id: z.string().optional(),
-  temperature_type: z.string().optional(),
-  location: z.string().optional(),
-  notes: z.string().optional(),
-  logged_at: z.string().optional(),
-}).refine(data => data.equipment_id || data.temperature_type, {
-  message: 'Either equipment_id or temperature_type must be provided',
-  path: ['equipment_id'],
-});
+const createTemperatureLogSchema = z
+  .object({
+    temperature_celsius: z.number(),
+    equipment_id: z.string().optional(),
+    temperature_type: z.string().optional(),
+    location: z.string().optional(),
+    notes: z.string().optional(),
+    logged_at: z.string().optional(),
+  })
+  .refine(data => data.equipment_id || data.temperature_type, {
+    message: 'Either equipment_id or temperature_type must be provided',
+    path: ['equipment_id'],
+  });
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -113,17 +115,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    body = validationResult.data;
+    const validatedBody = validationResult.data;
 
     // Validate temperature range (reasonable values)
-    if (body.temperature_celsius < -50 || body.temperature_celsius > 200) {
+    if (validatedBody.temperature_celsius < -50 || validatedBody.temperature_celsius > 200) {
       return NextResponse.json(
         ApiErrorHandler.createError('Temperature out of reasonable range', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
-    const data = await createTemperatureLog(body);
+    const data = await createTemperatureLog(validatedBody);
 
     return NextResponse.json({ success: true, data });
   } catch (err: any) {

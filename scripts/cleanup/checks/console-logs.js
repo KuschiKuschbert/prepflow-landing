@@ -49,6 +49,21 @@ function findConsoleUsage(content) {
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
+
+    // Skip if this is in a script tag with documented exception (see ERROR_HANDLING_STANDARDS.md)
+    // Check if previous lines contain the exception comment pattern
+    const hasExceptionComment =
+      i > 0 && (
+        lines[i - 1].includes('logger is not available in script tag') ||
+        lines[i - 2]?.includes('logger is not available in script tag') ||
+        lines[i - 3]?.includes('logger is not available in script tag')
+      );
+
+    // Skip console.error/console.warn in script tags with documented exception
+    if (hasExceptionComment && (line.includes('console.error') || line.includes('console.warn'))) {
+      continue;
+    }
+
     for (const method of CONSOLE_METHODS) {
       const regex = new RegExp(`console\\.${method}\\s*\\(`, 'g');
       let match;

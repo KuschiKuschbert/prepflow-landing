@@ -25,27 +25,22 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     // For now, we return all data (admin has full access)
 
     // Get counts and data for each table
-    const [
-      ingredientsResult,
-      recipesResult,
-      dishesResult,
-      temperatureResult,
-      cleaningResult,
-    ] = await Promise.all([
-      supabaseAdmin
-        .from('ingredients')
-        .select('id, ingredient_name, created_at', { count: 'exact' }),
-      supabaseAdmin.from('recipes').select('id, recipe_name, created_at', { count: 'exact' }),
-      supabaseAdmin.from('dishes').select('id, dish_name, created_at', { count: 'exact' }),
-      supabaseAdmin
-        .from('temperature_logs')
-        .select('id, created_at', { count: 'exact' })
-        .limit(100),
-      supabaseAdmin
-        .from('cleaning_tasks')
-        .select('id, task_name, created_at', { count: 'exact' })
-        .limit(100),
-    ]);
+    const [ingredientsResult, recipesResult, dishesResult, temperatureResult, cleaningResult] =
+      await Promise.all([
+        supabaseAdmin
+          .from('ingredients')
+          .select('id, ingredient_name, created_at', { count: 'exact' }),
+        supabaseAdmin.from('recipes').select('id, recipe_name, created_at', { count: 'exact' }),
+        supabaseAdmin.from('dishes').select('id, dish_name, created_at', { count: 'exact' }),
+        supabaseAdmin
+          .from('temperature_logs')
+          .select('id, created_at', { count: 'exact' })
+          .limit(100),
+        supabaseAdmin
+          .from('cleaning_tasks')
+          .select('id, task_name, created_at', { count: 'exact' })
+          .limit(100),
+      ]);
 
     // Check for errors in each result
     const errors: string[] = [];

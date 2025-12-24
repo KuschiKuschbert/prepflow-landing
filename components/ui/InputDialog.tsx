@@ -159,12 +159,18 @@ export function InputDialog({
           </div>
 
           {/* Title */}
-          <h2 id="dialog-title" className="text-fluid-xl mb-2 text-center font-bold text-[var(--foreground)]">
+          <h2
+            id="dialog-title"
+            className="text-fluid-xl mb-2 text-center font-bold text-[var(--foreground)]"
+          >
             {title}
           </h2>
 
           {/* Message */}
-          <p id="dialog-description" className="text-fluid-sm mb-4 text-center text-[var(--foreground)]/70">
+          <p
+            id="dialog-description"
+            className="text-fluid-sm mb-4 text-center text-[var(--foreground)]/70"
+          >
             {message}
           </p>
 
@@ -188,7 +194,11 @@ export function InputDialog({
               aria-describedby={error ? 'error-message' : undefined}
             />
             {error && (
-              <p id="error-message" className="text-fluid-sm mt-2 text-[var(--color-error)]" role="alert">
+              <p
+                id="error-message"
+                className="text-fluid-sm mt-2 text-[var(--color-error)]"
+                role="alert"
+              >
                 {error}
               </p>
             )}

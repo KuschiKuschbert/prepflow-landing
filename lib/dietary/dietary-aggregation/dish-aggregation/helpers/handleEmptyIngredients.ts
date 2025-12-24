@@ -1,5 +1,5 @@
 import { cacheDietaryStatus } from '../../cache-management';
-import type { DietaryDetectionResult } from '../../vegetarian-vegan-detection';
+import type { DietaryDetectionResult } from '../../../vegetarian-vegan-detection';
 
 /**
  * Handle dish with no ingredients - check name and return default result
@@ -33,4 +33,3 @@ export async function handleEmptyDishIngredients(
   await cacheDietaryStatus(dishId, result, 'dish', []);
   return result;
 }
-
