@@ -1,7 +1,12 @@
+'use client'
+
 import Link from 'next/link'
+import { useRouter, usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { BarChart3, Cog, LogOut, Monitor, RotateCw, UtensilsCrossed } from 'lucide-react'
 import '../globals.css'
-import { logout } from './actions'
+import { supabase } from '@/lib/supabase-pos'
+import { logger } from '@/lib/logger'
 import RotatingTaco from './components/RotatingTaco'
 import SpotlightCursor from './components/SpotlightCursor'
 import TriangleGridBackground from './components/TriangleGridBackground'
@@ -21,11 +26,71 @@ function NavLink({ href, icon, label }: { href: string; icon: React.ReactNode; l
   )
 }
 
+/**
+ * Layout component for Nacho Taco admin console.
+ * Enforces separate authentication independent of PrepFlow login.
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - Child components to render
+ * @returns {JSX.Element} Rendered layout with authentication check
+ */
 export default function NachoTacoLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const [isChecking, setIsChecking] = useState(true)
+
+  useEffect(() => {
+    // Check authentication on mount and when pathname changes
+    async function checkAuth() {
+      // Skip check on login page
+      if (pathname === '/nachotaco/login') {
+        setIsChecking(false)
+        return
+      }
+
+      try {
+        // Check for Supabase session
+        const { data: { session }, error } = await supabase.auth.getSession()
+        
+        if (error || !session) {
+          // No valid session, redirect to login
+          logger.warn('Nacho Taco: No valid session, redirecting to login', {
+            error: error?.message,
+            pathname,
+          })
+          router.push('/nachotaco/login')
+          return
+        }
+
+        // Valid session, allow access
+        setIsChecking(false)
+      } catch (error) {
+        // Error checking session, redirect to login
+        logger.error('Nacho Taco: Error checking session', {
+          error: error instanceof Error ? error.message : String(error),
+          pathname,
+        })
+        router.push('/nachotaco/login')
+      }
+    }
+
+    checkAuth()
+  }, [pathname, router])
+
+  // Show loading state while checking authentication
+  if (isChecking && pathname !== '/nachotaco/login') {
+    return (
+      <div className="min-h-screen bg-transparent flex items-center justify-center">
+        <div className="text-white text-xl font-bold">Checking authentication...</div>
+      </div>
+    )
+  }
+
   return (
     <>
       <TriangleGridBackground />
@@ -64,12 +129,19 @@ export default function NachoTacoLayout({
 
              <div className="h-6 tablet:h-8 w-px bg-white/10" />
 
-             <form action={logout}>
-                <button className="flex items-center gap-1 tablet:gap-2 text-neutral-400 hover:text-red-400 transition-colors group px-1 tablet:px-2 py-1">
-                    <LogOut size={16} className="tablet:w-4 tablet:h-4 group-hover:-translate-x-1 transition-transform" />
-                    <span className="hidden tablet:inline text-xs font-bold uppercase tracking-wider group-hover:underline decoration-red-400/50 underline-offset-4">Logout</span>
-                </button>
-             </form>
+             <button
+                onClick={async () => {
+                  await supabase.auth.signOut()
+                  // Clear the cookie as well
+                  document.cookie = "nacho_auth=; path=/; max-age=0"
+                  router.push('/nachotaco/login')
+                  router.refresh()
+                }}
+                className="flex items-center gap-1 tablet:gap-2 text-neutral-400 hover:text-red-400 transition-colors group px-1 tablet:px-2 py-1"
+              >
+                <LogOut size={16} className="tablet:w-4 tablet:h-4 group-hover:-translate-x-1 transition-transform" />
+                <span className="hidden tablet:inline text-xs font-bold uppercase tracking-wider group-hover:underline decoration-red-400/50 underline-offset-4">Logout</span>
+              </button>
         </div>
       </header>
 

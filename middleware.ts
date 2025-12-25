@@ -13,23 +13,30 @@ const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
 export default async function middleware(req: NextRequest) {
   const { pathname, origin, search } = req.nextUrl;
 
+  // CRITICAL: Nacho Taco routes require separate authentication
+  // This MUST run BEFORE Auth0 checks to ensure even PrepFlow users must log in
+  if (pathname.startsWith('/nachotaco')) {
+    const isLoginPage = pathname === '/nachotaco/login';
+
+    // Check for nacho_auth cookie (set after successful Supabase login)
+    // The client-side layout will also verify the Supabase session
+    const nachoAuthCookie = req.cookies.get('nacho_auth')?.value;
+
+    // If no auth cookie and not on login page, redirect to login
+    if (!nachoAuthCookie && !isLoginPage) {
+      return NextResponse.redirect(new URL('/nachotaco/login', req.url));
+    }
+
+    // Allow access to nachotaco routes - bypass Auth0 completely
+    return NextResponse.next();
+  }
+
   // CRITICAL: Redirect non-www to www FIRST, before any auth processing
   // This ensures Auth0 SDK constructs callback URLs using www.prepflow.org
   if (isProduction && origin.includes('prepflow.org') && !origin.includes('www.prepflow.org')) {
     const wwwUrl = new URL(req.url);
     wwwUrl.hostname = 'www.prepflow.org';
     return NextResponse.redirect(wwwUrl, 301); // Permanent redirect
-    // Nacho Tacos Admin Auth (Simple Password Protection)
-    if (pathname.startsWith('/nachotaco')) {
-      const isLoginPage = pathname === '/nachotaco/login';
-      const nachoAuth = req.cookies.get('nacho_auth')?.value;
-
-      if (!nachoAuth && !isLoginPage) {
-        return NextResponse.redirect(new URL('/nachotaco/login', req.url));
-      }
-      // Allow access - bypass Auth0
-      return NextResponse.next();
-    }
   }
 
   // Rate limiting for API routes (skip for public routes)
