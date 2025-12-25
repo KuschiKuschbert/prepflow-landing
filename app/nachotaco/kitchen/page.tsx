@@ -120,11 +120,11 @@ export default function KitchenKDS() {
     }
 
     return (
-        <div className="p-6 font-sans">
-            <div className="flex justify-between items-center mb-12">
+        <div className="p-4 tablet:p-6 font-sans">
+            <div className="flex flex-col tablet:flex-row tablet:justify-between tablet:items-center gap-4 tablet:gap-0 mb-8 tablet:mb-12">
                 <div>
-                     <h2 className="text-4xl font-bold text-white mb-2">Kitchen Display</h2>
-                     <p className="text-neutral-400 flex items-center gap-2">
+                     <h2 className="text-2xl tablet:text-3xl desktop:text-4xl font-bold text-white mb-2">Kitchen Display</h2>
+                     <p className="text-neutral-400 text-sm tablet:text-base flex items-center gap-2">
                         <Clock size={14} /> Realtime Orders
                      </p>
                 </div>
@@ -136,7 +136,7 @@ export default function KitchenKDS() {
                     <p className="text-xl font-medium tracking-wide">NO ACTIVE ORDERS</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 gap-4 tablet:gap-6">
                     {orders.map((order) => {
                         const items = parseItems(order.items_json)
                         const timerColor = getTimerColor(order.timestamp)
@@ -145,20 +145,20 @@ export default function KitchenKDS() {
                         return (
                             <div
                                 key={order.id}
-                                className={`bg-neutral-900 border-l-4 ${borderColor} rounded-xl shadow-2xl p-6 flex flex-col justify-between hover:bg-neutral-800/80 transition-all`}
+                                className={`bg-neutral-900 border-l-4 ${borderColor} rounded-xl shadow-2xl p-4 tablet:p-6 flex flex-col justify-between hover:bg-neutral-800/80 transition-all`}
                             >
                                 <div>
                                     <div className="flex justify-between items-start mb-4">
-                                        <h2 className={`text-4xl font-black ${timerColor}`}>
+                                        <h2 className={`text-3xl tablet:text-4xl font-black ${timerColor}`}>
                                             #{order.order_number || '??'}
                                         </h2>
-                                        <div className={`flex items-center gap-1 font-mono font-bold ${timerColor}`}>
+                                        <div className={`flex items-center gap-1 font-mono font-bold text-sm tablet:text-base ${timerColor}`}>
                                             <Timer timestamp={order.timestamp} />
                                         </div>
                                     </div>
 
                                     {order.customer_name && (
-                                        <p className="text-white text-xl font-bold mb-4 uppercase tracking-wider">
+                                        <p className="text-white text-lg tablet:text-xl font-bold mb-4 uppercase tracking-wider">
                                             {order.customer_name}
                                         </p>
                                     )}
@@ -170,7 +170,7 @@ export default function KitchenKDS() {
                                                     <span className="bg-neutral-800 text-white w-8 h-8 rounded flex items-center justify-center font-bold">
                                                         {item.quantity}
                                                     </span>
-                                                    <span className="text-white text-lg font-medium">{item.name}</span>
+                                                    <span className="text-white text-base tablet:text-lg font-medium">{item.name}</span>
                                                 </div>
                                                 {item.modifiers?.length > 0 && (
                                                      <div className="ml-11 mt-2 flex flex-col gap-1.5">
@@ -189,7 +189,7 @@ export default function KitchenKDS() {
                                 <div className="flex flex-col gap-2">
                                     <button
                                         onClick={() => bumpOrder(order)}
-                                        className={`w-full py-4 rounded-xl font-black text-lg flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-[0_4px_20px_rgba(0,0,0,0.4)]
+                                        className={`w-full py-3 tablet:py-4 rounded-xl font-black text-base tablet:text-lg flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-[0_4px_20px_rgba(0,0,0,0.4)]
                                             ${order.fulfillment_status === 'READY'
                                                 ? 'bg-red-500 text-white'
                                                 : order.fulfillment_status === 'IN_PROGRESS'

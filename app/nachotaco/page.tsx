@@ -2,12 +2,9 @@
 
 import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase-pos'
-import { BarChart3, Plus, Settings } from 'lucide-react'
-import Link from 'next/link'
+import { Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { logout } from './actions'
 import MenuItemCard from './components/MenuItemCard'
-import { seedInitialData } from './seed-actions'
 
 // Define types locally for simplicity
 interface MenuItem {
@@ -106,66 +103,31 @@ export default function NachoTacosAdmin() {
   }
 
   return (
-    <div className="min-h-screen bg-transparent text-neutral-100 font-sans">
-      {/* Header */}
-      <header className="border-b border-neutral-800 bg-transparent/50 backdrop-blur sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-                <span className="text-3xl">🌮</span>
-                <h1 className="text-2xl font-bold tracking-tight text-[#C0FF02]">NACHO TACOS <span className="text-neutral-500 font-normal text-lg">| Admin</span></h1>
-            </div>
-
-            <nav className="flex items-center gap-6">
-                 {/* Seed Data Trigger */}
-                 <form action={seedInitialData}>
-                    <button className="text-xs text-neutral-600 hover:text-[#C0FF02] uppercase tracking-widest transition-colors font-bold">
-                        [Restore Defaults]
-                    </button>
-                 </form>
-
-                <Link href="/nachotaco/kitchen" className="text-neutral-400 hover:text-[#C0FF02] flex items-center gap-2 transition-colors">
-                    <span className="text-lg">👨‍🍳</span> Kitchen
-                </Link>
-                <Link href="/nachotaco/stats" className="text-neutral-400 hover:text-white flex items-center gap-2 transition-colors">
-                    <BarChart3 size={20} /> Stats
-                </Link>
-                <Link href="/nachotaco/modifiers" className="text-neutral-400 hover:text-white flex items-center gap-2 transition-colors">
-                    <Settings size={20} /> Modifiers
-                </Link>
-                <Link href="/nachotaco/display" className="text-neutral-400 hover:text-[#C0FF02] flex items-center gap-2 transition-colors">
-                    <span className="text-lg">📺</span> Display
-                </Link>
-                 <form action={logout}>
-                    <button className="text-neutral-400 hover:text-red-400 text-sm font-bold uppercase tracking-wider">Logout</button>
-                 </form>
-            </nav>
-        </div>
-      </header>
-
+    <div className="text-neutral-100 font-sans">
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-12">
-        <div className="flex justify-between items-center mb-12">
+      <main className="max-w-7xl mx-auto px-4 tablet:px-6 py-8 tablet:py-12">
+        <div className="flex flex-col tablet:flex-row tablet:justify-between tablet:items-center gap-4 tablet:gap-0 mb-8 tablet:mb-12">
             <div>
-                <h2 className="text-4xl font-bold text-white mb-2">Menu Items</h2>
-                <p className="text-neutral-400">Manage your delicious offerings.</p>
+                <h2 className="text-2xl tablet:text-3xl desktop:text-4xl font-bold text-white mb-2">Menu Items</h2>
+                <p className="text-neutral-400 text-sm tablet:text-base">Manage your delicious offerings.</p>
             </div>
 
             <button
                 onClick={() => openModal()}
-                className="bg-[#C0FF02] hover:bg-[#b0e602] text-black font-bold px-6 py-3 rounded-full flex items-center gap-2 shadow-[0_0_20px_rgba(192,255,2,0.2)] transition-all transform hover:scale-105"
+                className="bg-[#C0FF02] hover:bg-[#b0e602] text-black font-bold px-4 tablet:px-6 py-2.5 tablet:py-3 rounded-full flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(192,255,2,0.2)] transition-all transform hover:scale-105 text-sm tablet:text-base"
             >
-                <Plus size={20} /> ADD NEW ITEM
+                <Plus size={18} className="tablet:w-5 tablet:h-5" /> ADD NEW ITEM
             </button>
         </div>
 
         {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-pulse">
+            <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 gap-4 tablet:gap-6 animate-pulse">
                 {[1,2,3,4].map(i => (
                     <div key={i} className="bg-neutral-800 h-80 rounded-xl"></div>
                 ))}
             </div>
         ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 gap-4 tablet:gap-6">
                 {items.map(item => (
                     <MenuItemCard
                         key={item.id}
@@ -180,7 +142,7 @@ export default function NachoTacosAdmin() {
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 tablet:p-6">
             <div className="bg-neutral-800 rounded-2xl w-full max-w-md border border-neutral-700 shadow-2xl overflow-hidden">
                 <div className="p-6 border-b border-neutral-700 bg-transparent/50">
                     <h3 className="text-xl font-bold text-white">{editingItem ? 'Edit Item' : 'New Creation'}</h3>

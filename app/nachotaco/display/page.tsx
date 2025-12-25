@@ -71,11 +71,11 @@ export default function CustomerDisplay() {
     }
 
     return (
-        <div className="min-h-screen bg-transparent font-sans flex text-white overflow-hidden">
+        <div className="min-h-screen bg-transparent font-sans flex flex-col tablet:flex-row text-white overflow-hidden">
             {/* LEFT COLUMN: PREPARING */}
-            <div className="w-1/2 border-r-2 border-neutral-800 p-8 flex flex-col">
-                <h1 className="text-4xl font-bold text-center mb-12 uppercase tracking-widest text-neutral-400 flex items-center justify-center gap-3">
-                    <ChefHat size={32} /> Preparing
+            <div className="w-full tablet:w-1/2 border-b-2 tablet:border-b-0 tablet:border-r-2 border-neutral-800 p-4 tablet:p-6 desktop:p-8 flex flex-col">
+                <h1 className="text-2xl tablet:text-3xl desktop:text-4xl font-bold text-center mb-6 tablet:mb-12 uppercase tracking-widest text-neutral-400 flex items-center justify-center gap-2 tablet:gap-3">
+                    <ChefHat size={24} className="tablet:w-8 tablet:h-8" /> Preparing
                 </h1>
 
                 <div className="flex flex-col gap-6 overflow-y-auto pr-4 custom-scrollbar">
@@ -85,10 +85,10 @@ export default function CustomerDisplay() {
                         </div>
                     ) : (
                         preparing.map(order => (
-                            <div key={order.id} className="bg-neutral-900 rounded-xl p-8 flex items-center justify-between border border-neutral-800">
-                                <span className="text-5xl font-black text-neutral-500">#{order.order_number}</span>
+                            <div key={order.id} className="bg-neutral-900 rounded-xl p-4 tablet:p-6 desktop:p-8 flex items-center justify-between border border-neutral-800">
+                                <span className="text-3xl tablet:text-4xl desktop:text-5xl font-black text-neutral-500">#{order.order_number}</span>
                                 {order.customer_name && (
-                                    <span className="text-3xl font-bold text-neutral-300 uppercase">{order.customer_name}</span>
+                                    <span className="text-xl tablet:text-2xl desktop:text-3xl font-bold text-neutral-300 uppercase">{order.customer_name}</span>
                                 )}
                             </div>
                         ))
@@ -97,9 +97,9 @@ export default function CustomerDisplay() {
             </div>
 
             {/* RIGHT COLUMN: READY */}
-            <div className="w-1/2 p-8 flex flex-col bg-[#111]/50">
-                <h1 className="text-4xl font-black text-center mb-12 uppercase tracking-widest text-[#C0FF02] animate-pulse flex items-center justify-center gap-3">
-                    Ready to Pickup <Bell size={32} className="text-[#C0FF02]" />
+            <div className="w-full tablet:w-1/2 p-4 tablet:p-6 desktop:p-8 flex flex-col bg-[#111]/50">
+                <h1 className="text-2xl tablet:text-3xl desktop:text-4xl font-black text-center mb-6 tablet:mb-12 uppercase tracking-widest text-[#C0FF02] animate-pulse flex items-center justify-center gap-2 tablet:gap-3">
+                    Ready to Pickup <Bell size={24} className="tablet:w-8 tablet:h-8 text-[#C0FF02]" />
                 </h1>
 
                 <div className="flex flex-col gap-6 overflow-y-auto pr-4 custom-scrollbar">
@@ -109,10 +109,10 @@ export default function CustomerDisplay() {
                         </div>
                     ) : (
                         ready.map(order => (
-                            <div key={order.id} className="bg-[#C0FF02] rounded-xl p-10 flex items-center justify-between shadow-[0_0_50px_rgba(192,255,2,0.2)]">
-                                <span className="text-6xl font-black text-black">#{order.order_number}</span>
+                            <div key={order.id} className="bg-[#C0FF02] rounded-xl p-6 tablet:p-8 desktop:p-10 flex items-center justify-between shadow-[0_0_50px_rgba(192,255,2,0.2)]">
+                                <span className="text-4xl tablet:text-5xl desktop:text-6xl font-black text-black">#{order.order_number}</span>
                                 {order.customer_name && (
-                                    <span className="text-4xl font-black text-black uppercase">{order.customer_name}</span>
+                                    <span className="text-2xl tablet:text-3xl desktop:text-4xl font-black text-black uppercase">{order.customer_name}</span>
                                 )}
                             </div>
                         ))

@@ -66,17 +66,17 @@ export default function StatsPage() {
   return (
     <div className="min-h-screen bg-transparent text-neutral-100 font-sans">
        <header className="border-b border-neutral-800 bg-transparent backdrop-blur sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center gap-4">
+        <div className="max-w-7xl mx-auto px-4 tablet:px-6 h-16 tablet:h-20 flex items-center gap-3 tablet:gap-4">
              <Link href="/nachotaco" className="text-neutral-400 hover:text-white transition-colors">
-                <ArrowLeft size={24} />
+                <ArrowLeft size={20} className="tablet:w-6 tablet:h-6" />
             </Link>
-            <h1 className="text-2xl font-bold tracking-tight text-[#C0FF02]">Sales Analytics</h1>
+            <h1 className="text-xl tablet:text-2xl font-bold tracking-tight text-[#C0FF02]">Sales Analytics</h1>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-12 space-y-8">
+      <main className="max-w-7xl mx-auto px-4 tablet:px-6 py-8 tablet:py-12 space-y-6 tablet:space-y-8">
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4 gap-4 tablet:gap-6">
             <MetricCard title="Total Revenue" value={`$${totalSales.toFixed(2)}`} icon={<DollarSign size={24} />} delay={0} />
             <MetricCard title="Total Orders" value={totalOrders.toString()} icon={<TrendingUp size={24} />} delay={1} />
             <MetricCard title="Today's Revenue" value={`$${todaySales.toFixed(2)}`} icon={<DollarSign size={24} />} highlight delay={2} />
@@ -84,7 +84,7 @@ export default function StatsPage() {
         </div>
 
         {/* Recent Transactions & Top Items */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 desktop:grid-cols-2 gap-6 tablet:gap-8">
             <div className="bg-neutral-800 p-6 rounded-2xl border border-neutral-700">
                 <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2"><TrendingUp className="text-[#C0FF02]"/> Recent Activity</h2>
                 <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
@@ -142,7 +142,7 @@ function MetricCard({ title, value, icon, highlight = false, delay }: any) {
                 {highlight && <span className="px-2 py-1 bg-[#C0FF02]/20 text-[#C0FF02] text-xs font-bold rounded uppercase">Trending</span>}
             </div>
             <p className="text-neutral-400 text-sm mb-1">{title}</p>
-            <h3 className="text-3xl font-bold text-white">{value}</h3>
+            <h3 className="text-2xl tablet:text-3xl font-bold text-white">{value}</h3>
         </div>
     )
 }

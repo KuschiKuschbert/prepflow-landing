@@ -67,10 +67,10 @@ export default function LoginPage() {
           <div className="absolute bottom-20 right-20 w-0 h-0 border-l-[30px] border-l-transparent border-t-[50px] border-t-[#C0FF02] border-r-[30px] border-r-transparent -rotate-12"></div>
       </div>
 
-      <div className="w-full max-w-md bg-[#111] p-8 rounded-2xl border border-neutral-800 shadow-[0_0_50px_rgba(0,0,0,0.5)] z-10">
-        <div className="text-center mb-8">
-            <h1 className="text-3xl font-black text-white tracking-tight">NACHO <span className="text-[#C0FF02]">TACO</span></h1>
-            <p className="text-neutral-500 text-sm mt-2 uppercase tracking-widest font-bold">Internal System Access</p>
+      <div className="w-full max-w-md bg-[#111] p-4 tablet:p-6 desktop:p-8 rounded-2xl border border-neutral-800 shadow-[0_0_50px_rgba(0,0,0,0.5)] z-10 mx-4">
+        <div className="text-center mb-6 tablet:mb-8">
+            <h1 className="text-2xl tablet:text-3xl font-black text-white tracking-tight">NACHO <span className="text-[#C0FF02]">TACO</span></h1>
+            <p className="text-neutral-500 text-xs tablet:text-sm mt-2 uppercase tracking-widest font-bold">Internal System Access</p>
         </div>
 
         <div className="flex bg-[#1a1a1a] rounded-lg p-1 mb-6">
@@ -121,7 +121,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#C0FF02] text-black font-black py-4 rounded-lg hover:bg-[#b0eb02] transition-transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-sm mt-4"
+            className="w-full bg-[#C0FF02] text-black font-black py-3 tablet:py-4 rounded-lg hover:bg-[#b0eb02] transition-transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-xs tablet:text-sm mt-4"
           >
             {loading ? 'Processing...' : (mode === 'login' ? 'Authenticate' : 'Register System')}
           </button>
