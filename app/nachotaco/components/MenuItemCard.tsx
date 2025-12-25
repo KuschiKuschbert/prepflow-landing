@@ -1,8 +1,6 @@
 'use client'
 
-import { Edit, Trash2 } from 'lucide-react'
-import { FaIceCream, FaTshirt, FaUtensils } from 'react-icons/fa'
-import { GiChiliPepper, GiNachos, GiSodaCan, GiTacos } from 'react-icons/gi'
+import { Edit, Flame, GlassWater, IceCream2, Shirt, Trash2, UtensilsCrossed } from 'lucide-react'
 
 interface MenuItemCardProps {
   item: any
@@ -12,13 +10,13 @@ interface MenuItemCardProps {
 
 function getIconForCategory(category: string) {
   const cat = category.toLowerCase()
-  if (cat.includes('taco')) return <GiTacos className="w-16 h-16 text-[#C0FF02]" />
-  if (cat.includes('nacho')) return <GiNachos className="w-16 h-16 text-[#C0FF02]" />
-  if (cat.includes('drink') || cat.includes('beverage')) return <GiSodaCan className="w-16 h-16 text-cyan-400" />
-  if (cat.includes('merch') || cat.includes('shirt')) return <FaTshirt className="w-16 h-16 text-pink-400" />
-  if (cat.includes('dessert') || cat.includes('cream')) return <FaIceCream className="w-16 h-16 text-purple-400" />
-  if (cat.includes('salsa') || cat.includes('side')) return <GiChiliPepper className="w-16 h-16 text-red-500" />
-  return <FaUtensils className="w-16 h-16 text-neutral-500" />
+  if (cat.includes('taco')) return <UtensilsCrossed className="w-16 h-16 text-[#C0FF02]" />
+  if (cat.includes('nacho')) return <UtensilsCrossed className="w-16 h-16 text-[#C0FF02]" />
+  if (cat.includes('drink') || cat.includes('beverage')) return <GlassWater className="w-16 h-16 text-cyan-400" />
+  if (cat.includes('merch') || cat.includes('shirt')) return <Shirt className="w-16 h-16 text-pink-400" />
+  if (cat.includes('dessert') || cat.includes('cream')) return <IceCream2 className="w-16 h-16 text-purple-400" />
+  if (cat.includes('salsa') || cat.includes('side')) return <Flame className="w-16 h-16 text-red-500" />
+  return <UtensilsCrossed className="w-16 h-16 text-neutral-500" />
 }
 
 export default function MenuItemCard({ item, onEdit, onDelete }: MenuItemCardProps) {

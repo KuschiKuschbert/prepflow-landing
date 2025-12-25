@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import { UtensilsCrossed } from 'lucide-react'
-import { FaChartBar, FaCogs, FaRedo, FaSignOutAlt, FaTv, FaUtensils } from 'react-icons/fa'
+import { BarChart3, Cog, LogOut, Monitor, RotateCw, UtensilsCrossed } from 'lucide-react'
 import '../globals.css'
 import { logout } from './actions'
 import RotatingTaco from './components/RotatingTaco'
@@ -47,18 +46,18 @@ export default function NachoTacoLayout({
         </Link>
 
         <nav className="flex items-center gap-0.5 tablet:gap-1 bg-black/20 p-1 tablet:p-1.5 rounded-xl border border-white/5">
-             <NavLink href="/nachotaco/stats" icon={<FaChartBar size={16} />} label="Stats" />
-             <NavLink href="/nachotaco/modifiers" icon={<FaCogs size={16} />} label="Modifiers" />
+             <NavLink href="/nachotaco/stats" icon={<BarChart3 size={16} />} label="Stats" />
+             <NavLink href="/nachotaco/modifiers" icon={<Cog size={16} />} label="Modifiers" />
              <div className="w-px h-4 bg-white/10 mx-0.5 tablet:mx-1"></div>
-             <NavLink href="/nachotaco/kitchen" icon={<FaUtensils size={16} />} label="Kitchen" />
-             <NavLink href="/nachotaco/display" icon={<FaTv size={16} />} label="Display" />
+             <NavLink href="/nachotaco/kitchen" icon={<UtensilsCrossed size={16} />} label="Kitchen" />
+             <NavLink href="/nachotaco/display" icon={<Monitor size={16} />} label="Display" />
         </nav>
 
         <div className="flex items-center gap-2 tablet:gap-4 desktop:gap-6">
              {/* Seed Data (Subtle) */}
              <form action={seedInitialData}>
                 <button className="flex items-center gap-1 tablet:gap-2 text-[8px] tablet:text-[10px] text-neutral-600 hover:text-[#C0FF02] uppercase tracking-widest transition-colors font-bold border border-white/5 hover:border-[#C0FF02]/30 px-2 tablet:px-3 py-1 tablet:py-1.5 rounded-lg group">
-                    <FaRedo className="group-hover:rotate-180 transition-transform duration-500" />
+                    <RotateCw size={14} className="tablet:w-4 tablet:h-4 group-hover:rotate-180 transition-transform duration-500" />
                     <span className="hidden tablet:inline">Restore Defaults</span>
                 </button>
              </form>
@@ -67,7 +66,7 @@ export default function NachoTacoLayout({
 
              <form action={logout}>
                 <button className="flex items-center gap-1 tablet:gap-2 text-neutral-400 hover:text-red-400 transition-colors group px-1 tablet:px-2 py-1">
-                    <FaSignOutAlt className="group-hover:-translate-x-1 transition-transform" />
+                    <LogOut size={16} className="tablet:w-4 tablet:h-4 group-hover:-translate-x-1 transition-transform" />
                     <span className="hidden tablet:inline text-xs font-bold uppercase tracking-wider group-hover:underline decoration-red-400/50 underline-offset-4">Logout</span>
                 </button>
              </form>
