@@ -34,15 +34,15 @@ export default function TriangleGridBackground() {
         this.size = Math.random() * 40 + 20 // Different sizes: 20px to 60px
         this.rotation = Math.random() * Math.PI * 2
         this.speed = Math.random() * 0.5 + 0.1
-        this.opacity = Math.random() * 0.3 + 0.05 // Subtle opacity
+        this.opacity = Math.random() * 0.5 + 0.15 // More visible opacity
       }
 
       update() {
         this.rotation += 0.005 * this.speed
-        
+
         // Pulse effect
-        this.opacity = 0.1 + Math.sin(Date.now() * 0.001 * this.speed) * 0.05
-        
+        this.opacity = 0.2 + Math.sin(Date.now() * 0.001 * this.speed) * 0.1
+
         // Gentle float
         this.y -= this.speed * 0.5
         if (this.y + this.size < 0) {
@@ -55,7 +55,7 @@ export default function TriangleGridBackground() {
         ctx.save()
         ctx.translate(this.x, this.y)
         ctx.rotate(this.rotation)
-        
+
         ctx.beginPath()
         // Draw centered triangle
         ctx.moveTo(0, -this.size / 2)
@@ -64,9 +64,9 @@ export default function TriangleGridBackground() {
         ctx.closePath()
 
         ctx.strokeStyle = `rgba(204, 255, 0, ${this.opacity})` // Electric Lime
-        ctx.lineWidth = 1.5
+        ctx.lineWidth = 2
         ctx.stroke()
-        
+
         ctx.restore()
       }
     }
@@ -76,7 +76,7 @@ export default function TriangleGridBackground() {
       height = window.innerHeight
       canvas.width = width
       canvas.height = height
-      
+
       triangles.length = 0
       for (let i = 0; i < numTriangles; i++) {
         triangles.push(new Triangle())

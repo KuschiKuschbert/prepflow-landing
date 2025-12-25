@@ -2,6 +2,7 @@
 
 import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase-pos'
+import { Bell, ChefHat } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 interface Transaction {
@@ -70,11 +71,11 @@ export default function CustomerDisplay() {
     }
 
     return (
-        <div className="min-h-screen bg-black font-sans flex text-white overflow-hidden">
+        <div className="min-h-screen bg-transparent font-sans flex text-white overflow-hidden">
             {/* LEFT COLUMN: PREPARING */}
             <div className="w-1/2 border-r-2 border-neutral-800 p-8 flex flex-col">
-                <h1 className="text-4xl font-bold text-center mb-12 uppercase tracking-widest text-neutral-400">
-                    Preparing 👨‍🍳
+                <h1 className="text-4xl font-bold text-center mb-12 uppercase tracking-widest text-neutral-400 flex items-center justify-center gap-3">
+                    <ChefHat size={32} /> Preparing
                 </h1>
 
                 <div className="flex flex-col gap-6 overflow-y-auto pr-4 custom-scrollbar">
@@ -96,9 +97,9 @@ export default function CustomerDisplay() {
             </div>
 
             {/* RIGHT COLUMN: READY */}
-            <div className="w-1/2 p-8 flex flex-col bg-[#111]">
-                <h1 className="text-4xl font-black text-center mb-12 uppercase tracking-widest text-[#C0FF02] animate-pulse">
-                    Ready to Pickup 🔔
+            <div className="w-1/2 p-8 flex flex-col bg-[#111]/50">
+                <h1 className="text-4xl font-black text-center mb-12 uppercase tracking-widest text-[#C0FF02] animate-pulse flex items-center justify-center gap-3">
+                    Ready to Pickup <Bell size={32} className="text-[#C0FF02]" />
                 </h1>
 
                 <div className="flex flex-col gap-6 overflow-y-auto pr-4 custom-scrollbar">

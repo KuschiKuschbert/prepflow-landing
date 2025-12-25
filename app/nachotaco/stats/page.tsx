@@ -64,8 +64,8 @@ export default function StatsPage() {
     .slice(0, 5)
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-neutral-100 font-sans">
-       <header className="border-b border-neutral-800 bg-neutral-900/50 backdrop-blur sticky top-0 z-10">
+    <div className="min-h-screen bg-transparent text-neutral-100 font-sans">
+       <header className="border-b border-neutral-800 bg-transparent backdrop-blur sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center gap-4">
              <Link href="/nachotaco" className="text-neutral-400 hover:text-white transition-colors">
                 <ArrowLeft size={24} />

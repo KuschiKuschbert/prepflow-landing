@@ -2,7 +2,7 @@
 
 import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase-pos'
-import { Check, ChevronRight, Clock } from 'lucide-react'
+import { Check, ChevronRight, ChefHat, Clock } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 // types based on Android model
@@ -120,23 +120,19 @@ export default function KitchenKDS() {
     }
 
     return (
-        <div className="min-h-screen bg-black p-6 font-sans">
-            <header className="flex justify-between items-center mb-8 pb-4 border-b border-neutral-800">
-                <div className="flex items-center gap-3">
-                    <span className="text-3xl">👨‍🍳</span>
-                    <h1 className="text-2xl font-bold text-white tracking-widest uppercase">
-                        Kitchen <span className="text-[#C0FF02]">Display</span> System
-                    </h1>
+        <div className="p-6 font-sans">
+            <div className="flex justify-between items-center mb-12">
+                <div>
+                     <h2 className="text-4xl font-bold text-white mb-2">Kitchen Display</h2>
+                     <p className="text-neutral-400 flex items-center gap-2">
+                        <Clock size={14} /> Realtime Orders
+                     </p>
                 </div>
-                <div className="flex items-center gap-4 text-neutral-500 text-sm">
-                    <Clock size={16} />
-                    <span>REALTIME SYNC ACTIVE</span>
-                </div>
-            </header>
+            </div>
 
             {orders.length === 0 ? (
                 <div className="h-[60vh] flex flex-col items-center justify-center text-neutral-600 gap-4">
-                    <span className="text-6xl">🌮</span>
+                    <ChefHat size={64} className="text-[#C0FF02]" />
                     <p className="text-xl font-medium tracking-wide">NO ACTIVE ORDERS</p>
                 </div>
             ) : (
@@ -177,11 +173,11 @@ export default function KitchenKDS() {
                                                     <span className="text-white text-lg font-medium">{item.name}</span>
                                                 </div>
                                                 {item.modifiers?.length > 0 && (
-                                                     <div className="ml-11 mt-1 flex flex-wrap gap-2">
+                                                     <div className="ml-11 mt-2 flex flex-col gap-1.5">
                                                          {item.modifiers.map((mod: any, midx: number) => (
-                                                             <span key={midx} className="text-neutral-500 text-xs uppercase bg-black/30 px-2 py-0.5 rounded">
+                                                             <div key={midx} className="text-[#C0FF02] text-sm font-bold uppercase bg-[#C0FF02]/10 border-l-2 border-[#C0FF02] pl-2 py-1">
                                                                  + {typeof mod === 'string' ? mod : mod.name || mod}
-                                                             </span>
+                                                             </div>
                                                          ))}
                                                      </div>
                                                  )}
