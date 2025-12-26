@@ -13,6 +13,14 @@ interface Transaction {
   fulfillment_status: string;
 }
 
+/**
+ * Customer-facing display page showing preparing and ready orders.
+ * Displays orders in two columns: preparing (left) and ready to pickup (right).
+ * Updates in real-time via Supabase subscriptions.
+ *
+ * @component
+ * @returns {JSX.Element} Customer display interface
+ */
 export default function CustomerDisplay() {
   const [orders, setOrders] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
