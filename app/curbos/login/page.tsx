@@ -38,9 +38,11 @@ export default function LoginPage() {
         // If auto-confirm is on, we can try logging in immediately or just switch to login
         if (data.session && data.user?.email) {
             setMessage({ text: 'Account created and logged in!', type: 'success' })
-            // Store email for tier-based access check
-            document.cookie = `curbos_user_email=${data.user.email}; path=/; max-age=86400` // 24 hours
-            document.cookie = "curbos_auth=true; path=/; max-age=86400"
+            // Store email for tier-based access check (normalized: lowercase, trimmed)
+            const normalizedEmail = data.user.email.toLowerCase().trim();
+            document.cookie = `curbos_user_email=${encodeURIComponent(normalizedEmail)}; path=/; max-age=86400; SameSite=Lax`; // 24 hours
+            document.cookie = "curbos_auth=true; path=/; max-age=86400; SameSite=Lax"
+            logger.dev('[CurbOS Login] Stored email in cookie (signup):', { email: normalizedEmail });
             setTimeout(() => router.push('/curbos'), 1000)
         }
       } else {
@@ -55,9 +57,11 @@ export default function LoginPage() {
         setMessage({ text: 'Login successful! Redirecting...', type: 'success' })
 
         // Set cookies for middleware compatibility and tier checking
-        // Store email for tier-based access check
+        // Store email for tier-based access check (normalized: lowercase, trimmed)
         if (data.user?.email) {
-          document.cookie = `curbos_user_email=${data.user.email}; path=/; max-age=86400` // 24 hours
+          const normalizedEmail = data.user.email.toLowerCase().trim();
+          document.cookie = `curbos_user_email=${encodeURIComponent(normalizedEmail)}; path=/; max-age=86400; SameSite=Lax`; // 24 hours
+          logger.dev('[CurbOS Login] Stored email in cookie:', { email: normalizedEmail });
         }
         document.cookie = "curbos_auth=true; path=/; max-age=86400"
 

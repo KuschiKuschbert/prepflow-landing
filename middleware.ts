@@ -20,50 +20,66 @@ export default async function middleware(req: NextRequest) {
   }
 
   // CRITICAL: CurbOS routes require separate authentication
-  // This MUST run BEFORE Auth0 checks to ensure even PrepFlow users must log in
+  // EXCEPTION: PrepFlow admins (in allowlist) can access without CurbOS login
   if (pathname.startsWith('/curbos')) {
     const isLoginPage = pathname === '/curbos/login';
     const isUnauthorizedPage = pathname === '/curbos/unauthorized';
+    const isPublicRoute = pathname.startsWith('/curbos/public/');
 
-    // Check for curbos_auth cookie (set after successful Supabase login)
-    // The client-side layout will also verify the Supabase session
-    const curbosAuthCookie = req.cookies.get('curbos_auth')?.value;
-
-    // If no auth cookie and not on login/unauthorized page, redirect to login
-    if (!curbosAuthCookie && !isLoginPage && !isUnauthorizedPage) {
-      return NextResponse.redirect(new URL('/curbos/login', req.url));
+    // Skip checks for login, unauthorized, and public routes
+    if (isLoginPage || isUnauthorizedPage || isPublicRoute) {
+      return NextResponse.next();
     }
 
-    // If authenticated, check tier-based access (Business tier required)
-    if (curbosAuthCookie && !isLoginPage && !isUnauthorizedPage) {
-      try {
-        const { hasCurbOSAccess, getCurbOSUserEmail } = await import('@/lib/curbos/tier-access');
-        const userEmail = await getCurbOSUserEmail(req);
+    try {
+      const { hasCurbOSAccess, getCurbOSUserEmail } = await import('@/lib/curbos/tier-access');
+      const { getUserEmailFromSession } = await import('@/lib/auth0-middleware');
+      const { isEmailAllowed } = await import('@/lib/allowlist');
 
-        if (userEmail) {
-          const hasAccess = await hasCurbOSAccess(userEmail, req);
-          if (!hasAccess) {
-            logger.warn('[CurbOS] Access denied - Business tier required:', {
-              userEmail,
-              pathname,
-            });
-            return NextResponse.redirect(new URL('/curbos/unauthorized', req.url));
-          }
-        } else {
-          // No email found - deny access (fail secure)
-          logger.warn('[CurbOS] No user email found for tier check:', {
-            pathname,
-          });
-          return NextResponse.redirect(new URL('/curbos/unauthorized', req.url));
-        }
-      } catch (error) {
-        // Error checking tier - deny access (fail secure)
-        logger.error('[CurbOS] Error checking tier access:', {
-          error: error instanceof Error ? error.message : String(error),
+      // Try to get email from CurbOS cookie first, then fallback to PrepFlow session (for admin bypass)
+      let userEmail = await getCurbOSUserEmail(req);
+      let emailSource = 'curbos_cookie';
+
+      if (!userEmail) {
+        // No CurbOS email - try PrepFlow session (for admin bypass)
+        userEmail = await getUserEmailFromSession(req);
+        emailSource = 'prepflow_session';
+      }
+
+      if (!userEmail) {
+        logger.warn('[CurbOS] No user email found, redirecting to login:', { pathname });
+        return NextResponse.redirect(new URL('/curbos/login', req.url));
+      }
+
+      // Check if admin first (bypass tier check)
+      if (isEmailAllowed(userEmail)) {
+        logger.dev('[CurbOS] Admin access granted:', {
+          email: userEmail,
+          source: emailSource,
+          pathname,
+        });
+        return NextResponse.next();
+      }
+
+      // Not admin - check tier-based access (Business tier required)
+      const hasAccess = await hasCurbOSAccess(userEmail, req);
+      if (!hasAccess) {
+        logger.warn('[CurbOS] Access denied - Business tier required:', {
+          userEmail,
+          source: emailSource,
           pathname,
         });
         return NextResponse.redirect(new URL('/curbos/unauthorized', req.url));
       }
+
+      // Tier check passed - allow access
+      logger.dev('[CurbOS] Access granted:', { userEmail, source: emailSource, pathname });
+    } catch (error) {
+      logger.error('[CurbOS] Error checking tier access:', {
+        error: error instanceof Error ? error.message : String(error),
+        pathname,
+      });
+      return NextResponse.redirect(new URL('/curbos/unauthorized', req.url));
     }
 
     // Allow access to curbos routes - bypass Auth0 completely

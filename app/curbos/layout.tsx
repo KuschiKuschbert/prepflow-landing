@@ -59,7 +59,28 @@ export default function CurbLayout({
         const { data: { session }, error } = await supabase.auth.getSession()
 
         if (error || !session) {
-          // No valid session, redirect to login
+          // No Supabase session - check if user is PrepFlow admin (fallback for admins)
+          try {
+            const adminCheckResponse = await fetch('/api/admin/check')
+            if (adminCheckResponse.ok) {
+              const adminData = await adminCheckResponse.json()
+              if (adminData.isAdmin) {
+                logger.dev('CurbOS: Admin access granted via PrepFlow session (no Supabase session):', {
+                  email: adminData.email,
+                  pathname,
+                })
+                // Allow access - admin bypass
+                setIsChecking(false)
+                return
+              }
+            }
+          } catch (adminError) {
+            logger.warn('CurbOS: Error checking admin status:', {
+              error: adminError instanceof Error ? adminError.message : String(adminError),
+            })
+          }
+
+          // No valid session and not admin, redirect to login
           logger.warn('CurbOS: No valid session, redirecting to login', {
             error: error?.message,
             pathname,
@@ -73,6 +94,27 @@ export default function CurbLayout({
         if (userEmail) {
           const hasAccess = await checkCurbOSAccess(userEmail)
           if (!hasAccess) {
+            // Check if user is PrepFlow admin (fallback for admins)
+            try {
+              const adminCheckResponse = await fetch('/api/admin/check')
+              if (adminCheckResponse.ok) {
+                const adminData = await adminCheckResponse.json()
+                if (adminData.isAdmin) {
+                  logger.dev('CurbOS: Admin access granted via PrepFlow session:', {
+                    email: adminData.email,
+                    pathname,
+                  })
+                  // Allow access - admin bypass
+                  setIsChecking(false)
+                  return
+                }
+              }
+            } catch (error) {
+              logger.warn('CurbOS: Error checking admin status:', {
+                error: error instanceof Error ? error.message : String(error),
+              })
+            }
+
             logger.warn('CurbOS: Access denied - Business tier required', {
               userEmail,
               pathname,
@@ -81,6 +123,27 @@ export default function CurbLayout({
             return
           }
         } else {
+          // No email in session - check if user is PrepFlow admin (fallback)
+          try {
+            const adminCheckResponse = await fetch('/api/admin/check')
+            if (adminCheckResponse.ok) {
+              const adminData = await adminCheckResponse.json()
+              if (adminData.isAdmin) {
+                logger.dev('CurbOS: Admin access granted via PrepFlow session (no CurbOS email):', {
+                  email: adminData.email,
+                  pathname,
+                })
+                // Allow access - admin bypass
+                setIsChecking(false)
+                return
+              }
+            }
+          } catch (error) {
+            logger.warn('CurbOS: Error checking admin status:', {
+              error: error instanceof Error ? error.message : String(error),
+            })
+          }
+
           // No email in session - deny access
           logger.warn('CurbOS: No email found in session', {
             pathname,
@@ -104,12 +167,27 @@ export default function CurbLayout({
     // Helper function to check CurbOS access via CurbOS-specific API endpoint
     async function checkCurbOSAccess(userEmail: string): Promise<boolean> {
       try {
+        // Normalize email for consistency
+        const normalizedEmail = userEmail.toLowerCase().trim();
+
         // Use the CurbOS-specific API endpoint that accepts email parameter
         // This endpoint doesn't require Auth0 (CurbOS uses Supabase auth)
-        const response = await fetch(`/api/curbos/check-access?email=${encodeURIComponent(userEmail)}`)
+        const response = await fetch(`/api/curbos/check-access?email=${encodeURIComponent(normalizedEmail)}`)
         if (response.ok) {
           const data = await response.json()
+          logger.dev('CurbOS: Access check result:', {
+            userEmail: normalizedEmail,
+            allowed: data.allowed,
+            reason: data.reason,
+          })
           return data.allowed || false
+        } else {
+          const errorData = await response.json().catch(() => ({}))
+          logger.warn('CurbOS: Access check failed:', {
+            userEmail: normalizedEmail,
+            status: response.status,
+            error: errorData.error || errorData.message,
+          })
         }
       } catch (error) {
         logger.error('CurbOS: Error checking access:', {
@@ -121,7 +199,8 @@ export default function CurbLayout({
     }
 
     checkAuth()
-  }, [pathname, router])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname])
 
   // Show loading state while checking authentication
   if (isChecking && pathname !== '/curbos/login') {

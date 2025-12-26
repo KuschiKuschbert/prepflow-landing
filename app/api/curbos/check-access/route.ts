@@ -1,5 +1,5 @@
 import { evaluateTierGate } from '@/lib/feature-gate/helpers/evaluateTierGate';
-import { isEmailAllowed } from '@/lib/allowlist';
+import { isEmailAllowed, getAllowedEmails } from '@/lib/allowlist';
 import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { NextRequest, NextResponse } from 'next/server';
@@ -25,12 +25,28 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    // Normalize email for comparison (lowercase, trimmed)
+    const normalizedEmail = userEmail.toLowerCase().trim();
+
     // Admin access (allowlist) - automatic access regardless of tier
-    if (isEmailAllowed(userEmail)) {
-      logger.dev('[CurbOS API] Admin access granted via allowlist:', { userEmail });
+    if (isEmailAllowed(normalizedEmail)) {
+      logger.dev('[CurbOS API] Admin access granted via allowlist:', {
+        userEmail: normalizedEmail,
+        originalEmail: userEmail,
+      });
       return NextResponse.json({
         allowed: true,
         reason: 'admin-access',
+      });
+    }
+
+    // Log for debugging if admin check fails (only in development)
+    if (process.env.NODE_ENV === 'development') {
+      const allowedEmails = getAllowedEmails();
+      logger.dev('[CurbOS API] Admin check failed, checking tier:', {
+        userEmail: normalizedEmail,
+        allowedEmailsCount: allowedEmails.length,
+        isInAllowedList: allowedEmails.includes(normalizedEmail),
       });
     }
 
