@@ -2,7 +2,7 @@
 
 import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase-pos'
-import { BarChart3, Cog, LogOut, Monitor, RotateCw, UtensilsCrossed } from 'lucide-react'
+import { BarChart3, Cog, LogOut, Monitor, RotateCw, Settings, UtensilsCrossed } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -48,8 +48,8 @@ export default function CurbLayout({
   useEffect(() => {
     // Check authentication on mount and when pathname changes
     async function checkAuth() {
-      // Skip check on login page
-      if (pathname === '/curbos/login') {
+      // Skip check on login and unauthorized pages
+      if (pathname === '/curbos/login' || pathname === '/curbos/unauthorized') {
         setIsChecking(false)
         return
       }
@@ -68,16 +68,56 @@ export default function CurbLayout({
           return
         }
 
-        // Valid session, allow access
+        // Valid session - check tier access (Business tier required)
+        const userEmail = session.user?.email
+        if (userEmail) {
+          const hasAccess = await checkCurbOSAccess(userEmail)
+          if (!hasAccess) {
+            logger.warn('CurbOS: Access denied - Business tier required', {
+              userEmail,
+              pathname,
+            })
+            router.push('/curbos/unauthorized')
+            return
+          }
+        } else {
+          // No email in session - deny access
+          logger.warn('CurbOS: No email found in session', {
+            pathname,
+          })
+          router.push('/curbos/unauthorized')
+          return
+        }
+
+        // Valid session and tier access, allow access
         setIsChecking(false)
       } catch (error) {
-        // Error checking session, redirect to login
-        logger.error('CurbOS: Error checking session', {
+        // Error checking session or tier, redirect to login
+        logger.error('CurbOS: Error checking session or tier', {
           error: error instanceof Error ? error.message : String(error),
           pathname,
         })
         router.push('/curbos/login')
       }
+    }
+
+    // Helper function to check CurbOS access via CurbOS-specific API endpoint
+    async function checkCurbOSAccess(userEmail: string): Promise<boolean> {
+      try {
+        // Use the CurbOS-specific API endpoint that accepts email parameter
+        // This endpoint doesn't require Auth0 (CurbOS uses Supabase auth)
+        const response = await fetch(`/api/curbos/check-access?email=${encodeURIComponent(userEmail)}`)
+        if (response.ok) {
+          const data = await response.json()
+          return data.allowed || false
+        }
+      } catch (error) {
+        logger.error('CurbOS: Error checking access:', {
+          error: error instanceof Error ? error.message : String(error),
+          userEmail,
+        })
+      }
+      return false
     }
 
     checkAuth()
@@ -118,6 +158,7 @@ export default function CurbLayout({
              <div className="w-px h-4 bg-white/10 mx-0.5 tablet:mx-1"></div>
              <NavLink href="/curbos/kitchen" icon={<UtensilsCrossed size={16} />} label="Kitchen" />
              <NavLink href="/curbos/display" icon={<Monitor size={16} />} label="Display" />
+             <NavLink href="/curbos/settings" icon={<Settings size={16} />} label="Settings" />
         </nav>
 
         <div className="flex items-center gap-2 tablet:gap-4 desktop:gap-6">

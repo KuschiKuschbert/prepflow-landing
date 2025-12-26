@@ -4,6 +4,13 @@ import { logger } from '@/lib/logger'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
+/**
+ * CurbOS login page component
+ * Handles Supabase authentication for CurbOS users
+ *
+ * @component
+ * @returns {JSX.Element} Login page with signup/login functionality
+ */
 export default function LoginPage() {
   const router = useRouter()
   const [email, setEmail] = useState('')
@@ -29,8 +36,11 @@ export default function LoginPage() {
         }
         setMessage({ text: 'Account created! Please check your email for confirmation (if enabled).', type: 'success' })
         // If auto-confirm is on, we can try logging in immediately or just switch to login
-        if (data.session) {
+        if (data.session && data.user?.email) {
             setMessage({ text: 'Account created and logged in!', type: 'success' })
+            // Store email for tier-based access check
+            document.cookie = `curbos_user_email=${data.user.email}; path=/; max-age=86400` // 24 hours
+            document.cookie = "curbos_auth=true; path=/; max-age=86400"
             setTimeout(() => router.push('/curbos'), 1000)
         }
       } else {
@@ -44,8 +54,11 @@ export default function LoginPage() {
         }
         setMessage({ text: 'Login successful! Redirecting...', type: 'success' })
 
-        // Set cookie for middleware compatibility (migration phase)
-        // Ideally middleware checks supabase session, but if we have legacy check:
+        // Set cookies for middleware compatibility and tier checking
+        // Store email for tier-based access check
+        if (data.user?.email) {
+          document.cookie = `curbos_user_email=${data.user.email}; path=/; max-age=86400` // 24 hours
+        }
         document.cookie = "curbos_auth=true; path=/; max-age=86400"
 
         router.push('/curbos')

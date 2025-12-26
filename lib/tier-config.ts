@@ -65,6 +65,7 @@ export const TIER_TO_ENTITLEMENTS: Record<TierSlug, EntitlementConfig> = {
       advanced_analytics: true,
       multi_user: true,
       api_access: true,
+      curbos: true, // Add CurbOS access for Business tier
     },
   },
 };
@@ -95,5 +96,6 @@ export function getDefaultFeatureTierMapping(): Record<string, TierSlug> {
     advanced_analytics: 'pro',
     multi_user: 'business',
     api_access: 'business',
+    curbos: 'business', // Add CurbOS mapping
   };
 }
