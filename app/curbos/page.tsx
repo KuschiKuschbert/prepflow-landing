@@ -17,7 +17,7 @@ interface MenuItem {
   updatedAt?: string
 }
 
-export default function NachoTacosAdmin() {
+export default function CurbOSAdmin() {
   const [items, setItems] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -37,12 +37,12 @@ export default function NachoTacosAdmin() {
         .order('name')
 
       if (error) {
-        logger.error('Error fetching menu:', { error: error.message, context: { endpoint: '/nachotaco' } })
+        logger.error('Error fetching menu:', { error: error.message, context: { endpoint: '/curbos' } })
       } else {
         setItems(data || [])
       }
     } catch (err) {
-      logger.error('Unexpected error fetching menu:', { error: err instanceof Error ? err.message : String(err), context: { endpoint: '/nachotaco' } })
+      logger.error('Unexpected error fetching menu:', { error: err instanceof Error ? err.message : String(err), context: { endpoint: '/curbos' } })
     } finally {
       setIsLoading(false)
     }

@@ -110,5 +110,5 @@ pnpm-lock.yaml
 *.generated.*
 next-env.d.ts
 
-# Protected nachotaco area (excluded from all formatting)
-app/nachotaco/
+# Protected curbos area (excluded from all formatting)
+app/curbos/

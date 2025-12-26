@@ -9,7 +9,7 @@ export default defineConfig([
       '**/out',
       '**/build',
       '**/dist',
-      '**/app/nachotaco/**', // Exclude nachotaco area from all linting
+      '**/app/curbos/**', // Exclude curbos area from all linting
     ],
   },
   ...nextConfig,

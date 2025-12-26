@@ -226,7 +226,7 @@ export default function KitchenKDS() {
             )}
 
             <footer className="mt-12 text-center">
-                <Link href="/nachotaco" className="text-neutral-700 hover:text-white text-xs font-bold transition-colors">
+                <Link href="/curbos" className="text-neutral-700 hover:text-white text-xs font-bold transition-colors">
                     BACK TO ADMIN PANEL
                 </Link>
             </footer>

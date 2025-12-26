@@ -13,21 +13,21 @@ const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
 export default async function middleware(req: NextRequest) {
   const { pathname, origin, search } = req.nextUrl;
 
-  // CRITICAL: Nacho Taco routes require separate authentication
+  // CRITICAL: CurbOS routes require separate authentication
   // This MUST run BEFORE Auth0 checks to ensure even PrepFlow users must log in
-  if (pathname.startsWith('/nachotaco')) {
-    const isLoginPage = pathname === '/nachotaco/login';
+  if (pathname.startsWith('/curbos')) {
+    const isLoginPage = pathname === '/curbos/login';
 
-    // Check for nacho_auth cookie (set after successful Supabase login)
+    // Check for curbos_auth cookie (set after successful Supabase login)
     // The client-side layout will also verify the Supabase session
-    const nachoAuthCookie = req.cookies.get('nacho_auth')?.value;
+    const curbosAuthCookie = req.cookies.get('curbos_auth')?.value;
 
     // If no auth cookie and not on login page, redirect to login
-    if (!nachoAuthCookie && !isLoginPage) {
-      return NextResponse.redirect(new URL('/nachotaco/login', req.url));
+    if (!curbosAuthCookie && !isLoginPage) {
+      return NextResponse.redirect(new URL('/curbos/login', req.url));
     }
 
-    // Allow access to nachotaco routes - bypass Auth0 completely
+    // Allow access to curbos routes - bypass Auth0 completely
     return NextResponse.next();
   }
 

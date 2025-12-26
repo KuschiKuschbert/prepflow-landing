@@ -39,12 +39,12 @@ export default function ModifiersPage() {
         .order('name')
 
       if (error) {
-        logger.error('Error fetching modifiers:', { error: error.message, context: { endpoint: '/nachotaco/modifiers' } })
+        logger.error('Error fetching modifiers:', { error: error.message, context: { endpoint: '/curbos/modifiers' } })
       } else {
         setModifiers(data || [])
       }
     } catch (err) {
-      logger.error('Unexpected error fetching modifiers:', { error: err instanceof Error ? err.message : String(err), context: { endpoint: '/nachotaco/modifiers' } })
+      logger.error('Unexpected error fetching modifiers:', { error: err instanceof Error ? err.message : String(err), context: { endpoint: '/curbos/modifiers' } })
     } finally {
       setLoading(false)
     }
@@ -55,12 +55,12 @@ export default function ModifiersPage() {
     try {
       const { error } = await supabase.from('modifier_options').delete().eq('id', id)
       if (error) {
-        logger.error('Error deleting modifier:', { error: error.message, context: { endpoint: '/nachotaco/modifiers', modifierId: id } })
+        logger.error('Error deleting modifier:', { error: error.message, context: { endpoint: '/curbos/modifiers', modifierId: id } })
       } else {
         fetchModifiers()
       }
     } catch (err) {
-      logger.error('Unexpected error deleting modifier:', { error: err instanceof Error ? err.message : String(err), context: { endpoint: '/nachotaco/modifiers', modifierId: id } })
+      logger.error('Unexpected error deleting modifier:', { error: err instanceof Error ? err.message : String(err), context: { endpoint: '/curbos/modifiers', modifierId: id } })
     }
   }
 
@@ -98,7 +98,7 @@ export default function ModifiersPage() {
           .update(itemData)
           .eq('id', editingItem.id)
         if (error) {
-          logger.error('Error updating modifier:', { error: error.message, context: { endpoint: '/nachotaco/modifiers', modifierId: editingItem.id } })
+          logger.error('Error updating modifier:', { error: error.message, context: { endpoint: '/curbos/modifiers', modifierId: editingItem.id } })
         } else {
           fetchModifiers()
         }
@@ -107,14 +107,14 @@ export default function ModifiersPage() {
           .from('modifier_options')
           .insert([itemData])
         if (error) {
-          logger.error('Error inserting modifier:', { error: error.message, context: { endpoint: '/nachotaco/modifiers' } })
+          logger.error('Error inserting modifier:', { error: error.message, context: { endpoint: '/curbos/modifiers' } })
         } else {
           fetchModifiers()
         }
       }
       setIsModalOpen(false)
     } catch (err) {
-      logger.error('Unexpected error saving modifier:', { error: err instanceof Error ? err.message : String(err), context: { endpoint: '/nachotaco/modifiers' } })
+      logger.error('Unexpected error saving modifier:', { error: err instanceof Error ? err.message : String(err), context: { endpoint: '/curbos/modifiers' } })
     }
   }
 
@@ -123,7 +123,7 @@ export default function ModifiersPage() {
       <header className="border-b border-neutral-800 bg-transparent backdrop-blur sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 tablet:px-6 h-16 tablet:h-20 flex flex-col tablet:flex-row tablet:items-center tablet:justify-between gap-3 tablet:gap-0 py-3 tablet:py-0">
             <div className="flex items-center gap-3 tablet:gap-4">
-                <Link href="/nachotaco" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/curbos" className="text-neutral-400 hover:text-white transition-colors">
                     <ArrowLeft size={20} className="tablet:w-6 tablet:h-6" />
                 </Link>
                 <h1 className="text-xl tablet:text-2xl font-bold tracking-tight text-[#C0FF02]">Modifier Options</h1>

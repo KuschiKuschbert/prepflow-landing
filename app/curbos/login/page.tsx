@@ -24,14 +24,14 @@ export default function LoginPage() {
           password,
         })
         if (error) {
-          logger.error('Error during signup:', { error: error.message, context: { endpoint: '/nachotaco/login' } })
+          logger.error('Error during signup:', { error: error.message, context: { endpoint: '/curbos/login' } })
           throw error
         }
         setMessage({ text: 'Account created! Please check your email for confirmation (if enabled).', type: 'success' })
         // If auto-confirm is on, we can try logging in immediately or just switch to login
         if (data.session) {
             setMessage({ text: 'Account created and logged in!', type: 'success' })
-            setTimeout(() => router.push('/nachotaco'), 1000)
+            setTimeout(() => router.push('/curbos'), 1000)
         }
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -39,20 +39,20 @@ export default function LoginPage() {
           password,
         })
         if (error) {
-          logger.error('Error during login:', { error: error.message, context: { endpoint: '/nachotaco/login' } })
+          logger.error('Error during login:', { error: error.message, context: { endpoint: '/curbos/login' } })
           throw error
         }
         setMessage({ text: 'Login successful! Redirecting...', type: 'success' })
 
         // Set cookie for middleware compatibility (migration phase)
         // Ideally middleware checks supabase session, but if we have legacy check:
-        document.cookie = "nacho_auth=true; path=/; max-age=86400"
+        document.cookie = "curbos_auth=true; path=/; max-age=86400"
 
-        router.push('/nachotaco')
+        router.push('/curbos')
         router.refresh()
       }
     } catch (err: any) {
-      logger.error('Unexpected error during auth:', { error: err instanceof Error ? err.message : String(err), context: { endpoint: '/nachotaco/login', mode } })
+      logger.error('Unexpected error during auth:', { error: err instanceof Error ? err.message : String(err), context: { endpoint: '/curbos/login', mode } })
       setMessage({ text: err.message || 'An error occurred', type: 'error' })
     } finally {
       setLoading(false)
@@ -69,8 +69,8 @@ export default function LoginPage() {
 
       <div className="w-full max-w-md bg-[#111] p-4 tablet:p-6 desktop:p-8 rounded-2xl border border-neutral-800 shadow-[0_0_50px_rgba(0,0,0,0.5)] z-10 mx-4">
         <div className="text-center mb-6 tablet:mb-8">
-            <h1 className="text-2xl tablet:text-3xl font-black text-white tracking-tight">NACHO <span className="text-[#C0FF02]">TACO</span></h1>
-            <p className="text-neutral-500 text-xs tablet:text-sm mt-2 uppercase tracking-widest font-bold">Internal System Access</p>
+            <h1 className="text-2xl tablet:text-3xl font-black text-white tracking-tight">CURB<span className="text-[#C0FF02]">OS</span></h1>
+            <p className="text-neutral-500 text-xs tablet:text-sm mt-2 uppercase tracking-widest font-bold">POS System Access</p>
         </div>
 
         <div className="flex bg-[#1a1a1a] rounded-lg p-1 mb-6">
@@ -95,7 +95,7 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@nachotacos.com"
+              placeholder="admin@curbos.com"
               className="w-full bg-[#0a0a0a] text-white rounded-lg px-4 py-3 border border-neutral-800 focus:border-[#C0FF02] outline-none transition-all placeholder:text-neutral-700"
               required
             />

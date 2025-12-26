@@ -81,18 +81,18 @@ const FIX_MODULES = {
 };
 
 /**
- * Check if file is in protected nachotaco area
+ * Check if file is in protected curbos area
  */
-function isNachotacoFile(filePath) {
-  return filePath.replace(/\\/g, '/').includes('/app/nachotaco/');
+function isCurbosFile(filePath) {
+  return filePath.replace(/\\/g, '/').includes('/app/curbos/');
 }
 
 /**
- * Filter out nachotaco files from file list
+ * Filter out curbos files from file list
  */
-function filterNachotacoFiles(files) {
+function filterCurbosFiles(files) {
   if (!files) return null;
-  return files.filter(file => !isNachotacoFile(file));
+  return files.filter(file => !isCurbosFile(file));
 }
 
 /**
@@ -109,7 +109,7 @@ function getStagedFiles() {
       .split('\n')
       .filter(Boolean)
       .filter(file => /\.(ts|tsx|js|jsx)$/.test(file))
-      .filter(file => !isNachotacoFile(file)); // Exclude nachotaco files
+      .filter(file => !isCurbosFile(file)); // Exclude curbos files
   } catch (error) {
     return [];
   }
@@ -144,8 +144,8 @@ async function runChecks(files = null) {
   const allViolations = [];
   const results = [];
 
-  // Filter out nachotaco files from all checks
-  const filteredFiles = filterNachotacoFiles(files);
+  // Filter out curbos files from all checks
+  const filteredFiles = filterCurbosFiles(files);
 
   console.log('🔍 Running cleanup checks...\n');
   for (const checkModule of CHECK_MODULES) {
@@ -177,8 +177,8 @@ async function runChecks(files = null) {
 async function runFixes(files = null) {
   const fixResults = [];
 
-  // Filter out nachotaco files from all fixes
-  const filteredFiles = filterNachotacoFiles(files);
+  // Filter out curbos files from all fixes
+  const filteredFiles = filterCurbosFiles(files);
 
   console.log('🔧 Running cleanup fixes...\n');
   for (const [checkName, fixModule] of Object.entries(FIX_MODULES)) {

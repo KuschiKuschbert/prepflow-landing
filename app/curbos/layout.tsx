@@ -1,12 +1,13 @@
 'use client'
 
-import Link from 'next/link'
-import { useRouter, usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { BarChart3, Cog, LogOut, Monitor, RotateCw, UtensilsCrossed } from 'lucide-react'
-import '../globals.css'
-import { supabase } from '@/lib/supabase-pos'
 import { logger } from '@/lib/logger'
+import { supabase } from '@/lib/supabase-pos'
+import { BarChart3, Cog, LogOut, Monitor, RotateCw, UtensilsCrossed } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import '../globals.css'
+import PulsatingConcentricTriangles from './components/PulsatingConcentricTriangles'
 import RotatingTaco from './components/RotatingTaco'
 import SpotlightCursor from './components/SpotlightCursor'
 import TriangleGridBackground from './components/TriangleGridBackground'
@@ -27,7 +28,7 @@ function NavLink({ href, icon, label }: { href: string; icon: React.ReactNode; l
 }
 
 /**
- * Layout component for Nacho Taco admin console.
+ * Layout component for CurbOS admin console.
  * Enforces separate authentication independent of PrepFlow login.
  *
  * @component
@@ -35,7 +36,7 @@ function NavLink({ href, icon, label }: { href: string; icon: React.ReactNode; l
  * @param {React.ReactNode} props.children - Child components to render
  * @returns {JSX.Element} Rendered layout with authentication check
  */
-export default function NachoTacoLayout({
+export default function CurbLayout({
   children,
 }: {
   children: React.ReactNode
@@ -48,7 +49,7 @@ export default function NachoTacoLayout({
     // Check authentication on mount and when pathname changes
     async function checkAuth() {
       // Skip check on login page
-      if (pathname === '/nachotaco/login') {
+      if (pathname === '/curbos/login') {
         setIsChecking(false)
         return
       }
@@ -56,14 +57,14 @@ export default function NachoTacoLayout({
       try {
         // Check for Supabase session
         const { data: { session }, error } = await supabase.auth.getSession()
-        
+
         if (error || !session) {
           // No valid session, redirect to login
-          logger.warn('Nacho Taco: No valid session, redirecting to login', {
+          logger.warn('CurbOS: No valid session, redirecting to login', {
             error: error?.message,
             pathname,
           })
-          router.push('/nachotaco/login')
+          router.push('/curbos/login')
           return
         }
 
@@ -71,11 +72,11 @@ export default function NachoTacoLayout({
         setIsChecking(false)
       } catch (error) {
         // Error checking session, redirect to login
-        logger.error('Nacho Taco: Error checking session', {
+        logger.error('CurbOS: Error checking session', {
           error: error instanceof Error ? error.message : String(error),
           pathname,
         })
-        router.push('/nachotaco/login')
+        router.push('/curbos/login')
       }
     }
 
@@ -83,7 +84,7 @@ export default function NachoTacoLayout({
   }, [pathname, router])
 
   // Show loading state while checking authentication
-  if (isChecking && pathname !== '/nachotaco/login') {
+  if (isChecking && pathname !== '/curbos/login') {
     return (
       <div className="min-h-screen bg-transparent flex items-center justify-center">
         <div className="text-white text-xl font-bold">Checking authentication...</div>
@@ -94,28 +95,29 @@ export default function NachoTacoLayout({
   return (
     <>
       <TriangleGridBackground />
+      <PulsatingConcentricTriangles />
       <div className="fixed inset-0 bg-gradient-to-br from-neutral-900/80 via-black/80 to-[#1a1a1a]/80 -z-10 header-animate-gradient pointer-events-none"></div>
       <RotatingTaco />
       <SpotlightCursor />
 
       {/* Premium Glass Header (Global) */}
       <header className="fixed top-4 left-4 right-4 tablet:top-6 tablet:left-6 tablet:right-6 h-16 tablet:h-20 bg-neutral-900/80 backdrop-blur-xl border border-white/10 rounded-2xl z-50 flex items-center justify-between px-4 tablet:px-6 desktop:px-8 shadow-2xl shadow-black/50">
-        <Link href="/nachotaco" className="flex items-center gap-2 tablet:gap-4 group cursor-pointer">
+        <Link href="/curbos" className="flex items-center gap-2 tablet:gap-4 group cursor-pointer">
             <div className="bg-[#C0FF02] p-1.5 tablet:p-2 rounded-lg text-black transform group-hover:rotate-12 transition-transform duration-300">
                 <UtensilsCrossed size={20} className="tablet:w-6 tablet:h-6" />
             </div>
             <div>
-                <h1 className="text-xl tablet:text-2xl font-black tracking-tight text-white leading-none">NACHO <span className="text-[#C0FF02]">TACOS</span></h1>
+                <h1 className="text-xl tablet:text-2xl font-black tracking-tight text-white leading-none">CURB<span className="text-[#C0FF02]">OS</span></h1>
                 <p className="text-[8px] tablet:text-[10px] font-bold text-neutral-500 tracking-[0.2em] uppercase">Admin Console</p>
             </div>
         </Link>
 
         <nav className="flex items-center gap-0.5 tablet:gap-1 bg-black/20 p-1 tablet:p-1.5 rounded-xl border border-white/5">
-             <NavLink href="/nachotaco/stats" icon={<BarChart3 size={16} />} label="Stats" />
-             <NavLink href="/nachotaco/modifiers" icon={<Cog size={16} />} label="Modifiers" />
+             <NavLink href="/curbos/stats" icon={<BarChart3 size={16} />} label="Stats" />
+             <NavLink href="/curbos/modifiers" icon={<Cog size={16} />} label="Modifiers" />
              <div className="w-px h-4 bg-white/10 mx-0.5 tablet:mx-1"></div>
-             <NavLink href="/nachotaco/kitchen" icon={<UtensilsCrossed size={16} />} label="Kitchen" />
-             <NavLink href="/nachotaco/display" icon={<Monitor size={16} />} label="Display" />
+             <NavLink href="/curbos/kitchen" icon={<UtensilsCrossed size={16} />} label="Kitchen" />
+             <NavLink href="/curbos/display" icon={<Monitor size={16} />} label="Display" />
         </nav>
 
         <div className="flex items-center gap-2 tablet:gap-4 desktop:gap-6">
@@ -133,8 +135,8 @@ export default function NachoTacoLayout({
                 onClick={async () => {
                   await supabase.auth.signOut()
                   // Clear the cookie as well
-                  document.cookie = "nacho_auth=; path=/; max-age=0"
-                  router.push('/nachotaco/login')
+                  document.cookie = "curbos_auth=; path=/; max-age=0"
+                  router.push('/curbos/login')
                   router.refresh()
                 }}
                 className="flex items-center gap-1 tablet:gap-2 text-neutral-400 hover:text-red-400 transition-colors group px-1 tablet:px-2 py-1"

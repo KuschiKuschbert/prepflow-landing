@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 
 /**
- * Nachotaco Area Protection Script
+ * Curbos Area Protection Script
  *
- * This script helps manage the protected nachotaco area:
- * - Check if any nachotaco files have been modified
- * - Reset nachotaco files to their last committed state
- * - Show status of nachotaco files
+ * This script helps manage the protected curbos area:
+ * - Check if any curbos files have been modified
+ * - Reset curbos files to their last committed state
+ * - Show status of curbos files
  */
 
 const { execSync } = require('child_process');
 const path = require('path');
 
-const NACHOTACO_PATH = 'app/nachotaco/';
+const CURBOS_PATH = 'app/curbos/';
 
 function runCommand(command, options = {}) {
   try {
@@ -31,24 +31,24 @@ function runCommand(command, options = {}) {
 }
 
 function checkStatus() {
-  console.log('🔍 Checking nachotaco area status...\n');
+  console.log('🔍 Checking curbos area status...\n');
 
   try {
     // Check for modified files
-    const modified = runCommand(`git diff --name-only ${NACHOTACO_PATH}`, { silent: true }).trim();
+    const modified = runCommand(`git diff --name-only ${CURBOS_PATH}`, { silent: true }).trim();
 
     // Check for staged files
-    const staged = runCommand(`git diff --cached --name-only ${NACHOTACO_PATH}`, {
+    const staged = runCommand(`git diff --cached --name-only ${CURBOS_PATH}`, {
       silent: true,
     }).trim();
 
     // Check for untracked files
-    const untracked = runCommand(`git ls-files --others --exclude-standard ${NACHOTACO_PATH}`, {
+    const untracked = runCommand(`git ls-files --others --exclude-standard ${CURBOS_PATH}`, {
       silent: true,
     }).trim();
 
     if (!modified && !staged && !untracked) {
-      console.log('✅ Nachotaco area is clean - no modifications detected');
+      console.log('✅ Curbos area is clean - no modifications detected');
       return 0;
     }
 
@@ -84,12 +84,12 @@ function checkStatus() {
 }
 
 function resetFiles() {
-  console.log('🔄 Resetting nachotaco files to last committed state...\n');
+  console.log('🔄 Resetting curbos files to last committed state...\n');
 
   try {
     // Reset modified files
-    runCommand(`git checkout -- ${NACHOTACO_PATH}`);
-    console.log('✅ Nachotaco files reset to last committed state');
+    runCommand(`git checkout -- ${CURBOS_PATH}`);
+    console.log('✅ Curbos files reset to last committed state');
     return 0;
   } catch (error) {
     console.error('Error resetting files:', error.message);
@@ -98,11 +98,11 @@ function resetFiles() {
 }
 
 function unstageFiles() {
-  console.log('📤 Unstaging nachotaco files...\n');
+  console.log('📤 Unstaging curbos files...\n');
 
   try {
-    runCommand(`git reset HEAD -- ${NACHOTACO_PATH}`);
-    console.log('✅ Nachotaco files unstaged');
+    runCommand(`git reset HEAD -- ${CURBOS_PATH}`);
+    console.log('✅ Curbos files unstaged');
     return 0;
   } catch (error) {
     console.error('Error unstaging files:', error.message);
@@ -112,21 +112,21 @@ function unstageFiles() {
 
 function showHelp() {
   console.log(`
-Nachotaco Area Protection Script
+Curbos Area Protection Script
 
-Usage: node scripts/protect-nachotaco.js [command]
+Usage: node scripts/protect-curbos.js [command]
 
 Commands:
-  status    Check if any nachotaco files have been modified (default)
-  reset     Reset nachotaco files to their last committed state
-  unstage   Unstage nachotaco files from the staging area
+  status    Check if any curbos files have been modified (default)
+  reset     Reset curbos files to their last committed state
+  unstage   Unstage curbos files from the staging area
   help      Show this help message
 
-The nachotaco area (app/nachotaco/) is protected from modifications.
+The curbos area (app/curbos/) is protected from modifications.
 Files in this area are tracked in git but should not be modified.
 
-If you need to modify nachotaco files (emergency only):
-  ALLOW_NACHOTACO_MODIFY=1 git commit ...
+If you need to modify curbos files (emergency only):
+  ALLOW_CURBOS_MODIFY=1 git commit ...
 `);
 }
 

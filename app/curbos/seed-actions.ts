@@ -12,7 +12,7 @@ export async function seedInitialData() {
     { name: "Vegan 'Chorizo' Dream", category: "Tacos", price: 4.00, is_available: true },
     { name: "Horchata Gold", category: "Drinks", price: 3.50, is_available: true },
     { name: "Jarritos Lime", category: "Drinks", price: 3.00, is_available: true },
-    { name: "Nacho Tacos Cap", category: "Merch", price: 25.00, is_available: true },
+    { name: "CurbOS Cap", category: "Merch", price: 25.00, is_available: true },
     { name: "Spicy Sauce Bottle", category: "Merch", price: 12.00, is_available: true }
   ]
 
@@ -23,7 +23,7 @@ export async function seedInitialData() {
     { name: "Salsa Verde", priceDelta: 0.50, type: "ADDON", isAvailable: true }
   ]
 
-  logger.dev('Starting seed process...', { context: { endpoint: '/nachotaco/seed' } })
+  logger.dev('Starting seed process...', { context: { endpoint: '/curbos/seed' } })
 
   // --- Seed Menu Items ---
   for (const item of initialItems) {
@@ -66,6 +66,6 @@ export async function seedInitialData() {
     }
   }
 
-  logger.dev('Seeding complete. Revalidating...', { context: { endpoint: '/nachotaco/seed' } })
-  revalidatePath('/nachotaco')
+  logger.dev('Seeding complete. Revalidating...', { context: { endpoint: '/curbos/seed' } })
+  revalidatePath('/curbos')
 }

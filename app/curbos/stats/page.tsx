@@ -19,12 +19,12 @@ export default function StatsPage() {
         .order('timestamp', { ascending: false })
 
       if (error) {
-        logger.error('Error fetching transactions:', { error: error.message, context: { endpoint: '/nachotaco/stats' } })
+        logger.error('Error fetching transactions:', { error: error.message, context: { endpoint: '/curbos/stats' } })
       } else {
         setTransactions(data || [])
       }
     } catch (err) {
-      logger.error('Unexpected error fetching transactions:', { error: err instanceof Error ? err.message : String(err), context: { endpoint: '/nachotaco/stats' } })
+      logger.error('Unexpected error fetching transactions:', { error: err instanceof Error ? err.message : String(err), context: { endpoint: '/curbos/stats' } })
     } finally {
       setLoading(false)
     }
@@ -67,7 +67,7 @@ export default function StatsPage() {
     <div className="min-h-screen bg-transparent text-neutral-100 font-sans">
        <header className="border-b border-neutral-800 bg-transparent backdrop-blur sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 tablet:px-6 h-16 tablet:h-20 flex items-center gap-3 tablet:gap-4">
-             <Link href="/nachotaco" className="text-neutral-400 hover:text-white transition-colors">
+             <Link href="/curbos" className="text-neutral-400 hover:text-white transition-colors">
                 <ArrowLeft size={20} className="tablet:w-6 tablet:h-6" />
             </Link>
             <h1 className="text-xl tablet:text-2xl font-bold tracking-tight text-[#C0FF02]">Sales Analytics</h1>

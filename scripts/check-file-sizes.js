@@ -57,8 +57,8 @@ function detectCategory(filePath) {
   // Exclude config files and scripts
   if (p.includes('next.config.') || p.includes('/scripts/')) return null;
 
-  // Exclude protected nachotaco area
-  if (p.includes('/app/nachotaco/')) return null;
+  // Exclude protected curbos area
+  if (p.includes('/app/curbos/')) return null;
 
   // Standard detection logic
   if (p.includes('/app/api/')) return 'api';
@@ -107,8 +107,8 @@ function main() {
     const ext = path.extname(file);
     if (!exts.has(ext)) continue;
 
-    // Skip nachotaco area completely
-    if (file.replace(/\\/g, '/').includes('/app/nachotaco/')) continue;
+    // Skip curbos area completely
+    if (file.replace(/\\/g, '/').includes('/app/curbos/')) continue;
 
     const content = fs.readFileSync(file, 'utf8');
     const lines = countLines(content);
