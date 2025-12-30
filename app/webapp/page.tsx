@@ -62,7 +62,7 @@ export default function WebAppDashboard() {
 
   return (
     <ResponsivePageContainer fullWidth={true}>
-      <div className="tablet:px-6 tablet:py-6 desktop:px-8 large-desktop:px-12 large-desktop:max-w-[1400px] mx-auto min-h-screen max-w-[1400px] overflow-x-hidden bg-transparent px-4 py-4 xl:max-w-[1400px] xl:px-16 2xl:max-w-[1600px] 2xl:px-20">
+      <div className="tablet:px-6 tablet:py-6 desktop:px-8 large-desktop:px-12 large-desktop:max-w-[1400px] mx-auto min-h-screen max-w-[1400px] overflow-x-hidden bg-transparent py-4 xl:max-w-[1400px] xl:px-16 2xl:max-w-[1600px] 2xl:px-20">
         {/* Static Header - Renders Instantly */}
         <PageHeader
           title="Kitchen Management Dashboard"

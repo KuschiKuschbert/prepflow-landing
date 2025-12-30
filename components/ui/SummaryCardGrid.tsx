@@ -12,7 +12,7 @@ interface SummaryCardGridProps {
  * SummaryCardGrid - Standardized grid for summary cards with dynamic column widths
  *
  * Grid layout uses auto-fit with minmax() to dynamically expand columns:
- * - Mobile: min 360px per card (wider cards for better content display)
+ * - Mobile: min 280px per card (fits mobile screens with proper padding)
  * - Tablet: min 400px per card
  * - Desktop: min 420px per card
  * - Large Desktop: min 380px per card (allows more columns while maintaining width)
@@ -29,7 +29,7 @@ export function SummaryCardGrid({ children, className = '', gap = 'md' }: Summar
 
   return (
     <div
-      className={`grid w-full ${gapClasses[gap]} tablet:[grid-template-columns:repeat(auto-fit,minmax(400px,1fr))] desktop:[grid-template-columns:repeat(auto-fit,minmax(420px,1fr))] large-desktop:[grid-template-columns:repeat(auto-fit,minmax(380px,1fr))] [grid-template-columns:repeat(auto-fit,minmax(360px,1fr))] xl:[grid-template-columns:repeat(auto-fit,minmax(380px,1fr))] 2xl:[grid-template-columns:repeat(auto-fit,minmax(380px,1fr))] ${className}`}
+      className={`grid w-full ${gapClasses[gap]} tablet:[grid-template-columns:repeat(auto-fit,minmax(400px,1fr))] desktop:[grid-template-columns:repeat(auto-fit,minmax(420px,1fr))] large-desktop:[grid-template-columns:repeat(auto-fit,minmax(380px,1fr))] [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] xl:[grid-template-columns:repeat(auto-fit,minmax(380px,1fr))] 2xl:[grid-template-columns:repeat(auto-fit,minmax(380px,1fr))] ${className}`}
     >
       {children}
     </div>
