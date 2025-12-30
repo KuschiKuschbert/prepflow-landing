@@ -39,3 +39,4 @@ export function calculatePopularityPercentages(salesData: SalesData[]): void {
 
 
 
+

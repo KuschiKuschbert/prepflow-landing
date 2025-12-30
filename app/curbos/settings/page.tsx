@@ -208,14 +208,14 @@ export default function CurbOSSettings() {
           <div className="space-y-4">
             <div className="flex items-center gap-4">
               <a
-                href="https://github.com/KuschiKuschbert/CurbOS/releases/latest/download/curbos-v0.2.0-experimental-dev.apk"
+                href="https://github.com/KuschiKuschbert/CurbOS/releases/latest/download/curbos-v0.2.1-experimental-dev.apk"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors"
               >
                 <ExternalLink size={16} />
                 Download APK
               </a>
               <div className="flex flex-col gap-1">
-                <p className="text-[#C0FF02] font-black text-xs uppercase tracking-widest">v0.2.0-experimental-dev</p>
+                <p className="text-[#C0FF02] font-black text-xs uppercase tracking-widest">v0.2.1-experimental-dev</p>
                 <p className="text-neutral-500 text-[10px] font-bold uppercase tracking-tighter">Current Build</p>
               </div>
             </div>
