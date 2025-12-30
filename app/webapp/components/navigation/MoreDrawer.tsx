@@ -2,10 +2,9 @@
 
 import { useNavigationTracking } from '@/hooks/useNavigationTracking';
 import { usePathname } from 'next/navigation';
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
-import { getCategoryLabel } from './CategorySection';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ExpandableCategorySection } from './ExpandableCategorySection';
 import { useNavigationItems } from './nav-items';
-import { NavItem } from './NavItem';
 
 interface MoreDrawerProps {
   isOpen: boolean;
@@ -24,10 +23,10 @@ export const MoreDrawer = memo(function MoreDrawer({ isOpen, onClose }: MoreDraw
   const menuRef = useRef<HTMLDivElement>(null);
   const { trackNavigation } = useNavigationTracking();
   const allItems = useNavigationItems();
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
   // Group items by category (excluding primary - they're in bottom nav)
   const groupedItems = useMemo(() => {
-    const categoryOrder = ['kitchen', 'team', 'inventory', 'tools'];
     const groups = allItems.reduce(
       (acc, item) => {
         const category = item.category || 'other';
@@ -38,10 +37,7 @@ export const MoreDrawer = memo(function MoreDrawer({ isOpen, onClose }: MoreDraw
       },
       {} as Record<string, typeof allItems>,
     );
-    // Return in order
-    return categoryOrder
-      .filter(cat => groups[cat]?.length > 0)
-      .map(cat => ({ category: cat, items: groups[cat] }));
+    return groups;
   }, [allItems]);
 
   const isActive = useCallback(
@@ -52,9 +48,13 @@ export const MoreDrawer = memo(function MoreDrawer({ isOpen, onClose }: MoreDraw
     [pathname],
   );
 
-  const handleItemClick = () => {
+  const handleItemClick = useCallback(() => {
     onClose();
-  };
+  }, [onClose]);
+
+  const handleCategoryToggle = useCallback((category: string) => {
+    setExpandedCategory(prev => (prev === category ? null : category));
+  }, []);
 
   // Close on outside click
   useEffect(() => {
@@ -122,38 +122,19 @@ export const MoreDrawer = memo(function MoreDrawer({ isOpen, onClose }: MoreDraw
           aria-label="Navigation menu"
         >
           {/* Scrollable Navigation List */}
-          <div className="overflow-y-auto overscroll-contain">
-            {groupedItems.map(({ category, items }, catIndex) => (
-              <div
+          <div className="overflow-y-auto overscroll-contain p-4">
+            {Object.entries(groupedItems).map(([category, items]) => (
+              <ExpandableCategorySection
                 key={category}
-                className={catIndex > 0 ? 'border-t border-[var(--border)]/50' : ''}
-              >
-                {/* Category Header */}
-                <div className="sticky top-0 bg-[var(--surface)] px-4 pt-3 pb-1">
-                  <span className="text-[10px] font-semibold tracking-wider text-[var(--foreground-subtle)] uppercase">
-                    {getCategoryLabel(category)}
-                  </span>
-                </div>
-
-                {/* Items */}
-                <div className="space-y-0.5 px-2 pb-2">
-                  {items.map(item => (
-                    <NavItem
-                      key={item.href}
-                      href={item.href}
-                      label={item.label}
-                      icon={item.icon}
-                      color={item.color}
-                      isActive={isActive(item.href)}
-                      onClick={handleItemClick}
-                      onTrack={trackNavigation}
-                      iconSize="sm"
-                      showLabel={true}
-                      compact={true}
-                    />
-                  ))}
-                </div>
-              </div>
+                category={category}
+                items={items}
+                isActive={isActive}
+                onItemClick={handleItemClick}
+                onTrack={trackNavigation}
+                isExpanded={expandedCategory === category}
+                onToggle={handleCategoryToggle}
+                defaultExpanded={false}
+              />
             ))}
           </div>
         </div>

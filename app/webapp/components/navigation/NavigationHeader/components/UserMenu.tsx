@@ -174,7 +174,7 @@ export function UserMenu({
         </div>
 
         {/* Footer */}
-        <div className="mt-4 flex justify-center text-[10px] text-[var(--foreground)]/60">
+        <div className="text-fluid-xs mt-4 flex justify-center text-[var(--foreground)]/60">
           <Link href="/privacy" className="mx-2 hover:text-[var(--foreground)]/80">
             Privacy Policy
           </Link>
