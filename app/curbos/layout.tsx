@@ -72,10 +72,14 @@ export default function CurbLayout({
                 // Allow access - admin bypass
                 setIsChecking(false)
                 return
+              } else {
+                logger.warn('CurbOS: Not an admin and no Supabase session found', { email: adminData.email });
               }
+            } else {
+              logger.warn('CurbOS: Admin check API failed with status:', adminCheckResponse.status);
             }
           } catch (adminError) {
-            logger.warn('CurbOS: Error checking admin status:', {
+            logger.error('CurbOS: Error checking admin status:', {
               error: adminError instanceof Error ? adminError.message : String(adminError),
             })
           }

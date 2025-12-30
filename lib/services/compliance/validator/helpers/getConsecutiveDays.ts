@@ -33,3 +33,4 @@ export function getConsecutiveDays(date: Date, shifts: Shift[]): number {
 }
 
 
+

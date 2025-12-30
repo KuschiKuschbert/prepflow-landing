@@ -34,3 +34,4 @@ echo "SQUARE_TOKEN_ENCRYPTION_KEY=$(openssl rand -hex 32)"
 Copy the output and add to your `.env.local` file, replacing the placeholder values.
 
 
+

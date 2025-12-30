@@ -19,6 +19,13 @@ export async function GET(request: NextRequest) {
     const hasAdminRole = checkUserAdminRole(user);
     const isAdmin = isEmailInAllowlist || hasAdminRole;
 
+    logger.dev('[Admin Check API] Status check:', {
+      email: user.email,
+      isAdmin,
+      hasAdminRole,
+      isEmailInAllowlist
+    });
+
     return NextResponse.json({
       isAdmin,
       email: user.email,

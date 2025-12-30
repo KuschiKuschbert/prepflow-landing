@@ -69,3 +69,4 @@ npm run dev
 - Supabase Setup: `docs/SUPABASE_SETUP.md`
 
 
+

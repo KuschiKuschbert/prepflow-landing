@@ -1,6 +1,6 @@
 'use client'
-import { supabase } from '@/lib/supabase-pos'
 import { logger } from '@/lib/logger'
+import { supabase } from '@/lib/supabase-pos'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -133,6 +133,30 @@ export default function LoginPage() {
             <div className={`p-3 rounded-lg text-sm font-bold text-center ${message.type === 'success' ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-400'}`}>
                 {message.text}
             </div>
+          )}
+
+          {mode === 'login' && (
+            <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                    <div className="w-full border-t border-neutral-800"></div>
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                    <span className="px-2 bg-[#111] text-neutral-600 font-bold tracking-widest">Or securely via</span>
+                </div>
+            </div>
+          )}
+
+          {mode === 'login' && (
+            <button
+                type="button"
+                onClick={() => {
+                   // Redirect to the regular PrepFlow login but return to /curbos
+                   window.location.href = `/api/auth/login?returnTo=${encodeURIComponent('/curbos')}`
+                }}
+                className="w-full bg-white text-black font-black py-3 rounded-lg hover:bg-gray-200 transition-all active:scale-95 flex items-center justify-center gap-2 uppercase tracking-wider text-xs tablet:text-sm"
+            >
+                Login with PrepFlow
+            </button>
           )}
 
           <button

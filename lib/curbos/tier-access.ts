@@ -20,12 +20,17 @@ export async function hasCurbOSAccess(userEmail: string, req?: NextRequest): Pro
       try {
         const { auth0 } = await import('@/lib/auth0');
         const session = await auth0.getSession(req as any);
-        if (session?.user && checkUserAdminRole(session.user)) {
-          logger.dev('[CurbOS] Access granted via Auth0 admin role:', { userEmail: session.user.email });
-          return true;
+        if (session?.user) {
+          const isUserAdmin = checkUserAdminRole(session.user);
+          if (isUserAdmin) {
+            logger.dev('[CurbOS] Access granted via Auth0 admin role:', { email: session.user.email });
+            return true;
+          }
         }
       } catch (authError) {
-        // Fallback to tier check if session check fails
+        logger.warn('[CurbOS] Auth0 session check failed:', {
+          error: authError instanceof Error ? authError.message : String(authError)
+        });
       }
     }
 

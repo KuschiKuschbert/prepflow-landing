@@ -291,3 +291,4 @@ if (error) {
 - [Implementation Patterns](.cursor/rules/implementation.mdc) - API and database patterns
 
 
+

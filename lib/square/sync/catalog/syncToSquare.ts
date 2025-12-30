@@ -110,3 +110,4 @@ export async function syncCatalogToSquare(userId: string, dishIds?: string[]): P
 }
 
 
+
