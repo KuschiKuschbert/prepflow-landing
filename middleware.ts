@@ -15,7 +15,7 @@ export default async function middleware(req: NextRequest) {
 
   // CRITICAL: Public CurbOS display route - no authentication required
   // Token validation happens in the page component
-  if (pathname.startsWith('/curbos/public/')) {
+  if (pathname.startsWith('/curbos/public/') || pathname.startsWith('/curbos/order/')) {
     return NextResponse.next();
   }
 
@@ -27,7 +27,7 @@ export default async function middleware(req: NextRequest) {
     const isPublicRoute = pathname.startsWith('/curbos/public/');
 
     // Skip checks for login, unauthorized, and public routes
-    if (isLoginPage || isUnauthorizedPage || isPublicRoute) {
+    if (isLoginPage || isUnauthorizedPage || pathname.startsWith('/curbos/public/') || pathname.startsWith('/curbos/order/')) {
       return NextResponse.next();
     }
 
@@ -113,6 +113,7 @@ export default async function middleware(req: NextRequest) {
     pathname.startsWith('/api/leads') ||
     pathname.startsWith('/api/debug') ||
     pathname.startsWith('/api/test') ||
+    pathname.startsWith('/api/order/status') ||
     pathname.startsWith('/api/fix');
 
   if (isApi && !isPublicApi && !isAuthRoute) {
@@ -203,7 +204,8 @@ export default async function middleware(req: NextRequest) {
     pathname.startsWith('/api/leads') ||
     pathname.startsWith('/api/debug') ||
     pathname.startsWith('/api/test') ||
-    pathname.startsWith('/api/fix')
+    pathname.startsWith('/api/fix') ||
+    pathname.startsWith('/api/order/status')
   ) {
     return NextResponse.next();
   }

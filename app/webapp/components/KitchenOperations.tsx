@@ -99,7 +99,7 @@ export default function KitchenOperations() {
       <div className="tablet:mb-8 tablet:rounded-3xl tablet:p-6 mb-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-lg">
         <div className="animate-pulse space-y-4">
           <div className="h-6 w-32 rounded bg-[var(--surface)]" />
-          <div className="tablet:grid-cols-2 tablet:gap-4 desktop:grid-cols-3 grid grid-cols-1 gap-3">
+          <div className="tablet:grid-cols-2 tablet:gap-4 desktop:[grid-template-columns:repeat(auto-fit,minmax(240px,1fr))] grid grid-cols-1 gap-3">
             {[1, 2, 3, 4, 5].map(i => (
               <div key={i} className="h-24 rounded-xl bg-[var(--surface)]" />
             ))}
@@ -168,7 +168,7 @@ export default function KitchenOperations() {
         </p>
       </div>
 
-      <div className="tablet:grid-cols-2 tablet:gap-4 desktop:grid-cols-3 grid grid-cols-1 gap-3">
+      <div className="tablet:grid-cols-2 tablet:gap-4 desktop:[grid-template-columns:repeat(auto-fit,minmax(240px,1fr))] grid grid-cols-1 gap-3">
         {operations.map((op, index) => (
           <Link
             key={op.title}
@@ -177,22 +177,22 @@ export default function KitchenOperations() {
           >
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
-                <div className="mb-1 flex items-center gap-2">
-                  <p className="text-fluid-xs tablet:text-fluid-sm truncate font-medium text-[var(--foreground)]/60">
+                <div className="mb-1 flex flex-wrap items-center gap-2">
+                  <p className="text-fluid-xs tablet:text-fluid-sm truncate min-w-0 flex-1 font-medium text-[var(--foreground)]/60">
                     {op.title}
                   </p>
                   {op.status === 'good' && (
-                    <span className="rounded-full border border-[var(--color-success-border)] bg-[var(--color-success-bg)] px-1.5 py-0.5 text-xs font-semibold text-[var(--color-success)]">
+                    <span className="flex-shrink-0 whitespace-nowrap rounded-full border border-[var(--color-success-border)] bg-[var(--color-success-bg)] px-1.5 py-0.5 text-xs font-semibold text-[var(--color-success)]">
                       Ready
                     </span>
                   )}
                   {op.status === 'warning' && (
-                    <span className="rounded-full border border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] px-1.5 py-0.5 text-xs font-semibold text-[var(--color-warning)]">
+                    <span className="flex-shrink-0 whitespace-nowrap rounded-full border border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] px-1.5 py-0.5 text-xs font-semibold text-[var(--color-warning)]">
                       Needs Attention
                     </span>
                   )}
                   {op.title === 'Low Stock Alerts' && op.value > 0 && (
-                    <span className="rounded-full border border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] px-1.5 py-0.5 text-xs font-semibold text-[var(--color-warning)]">
+                    <span className="flex-shrink-0 whitespace-nowrap rounded-full border border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] px-1.5 py-0.5 text-xs font-semibold text-[var(--color-warning)]">
                       Low Stock
                     </span>
                   )}

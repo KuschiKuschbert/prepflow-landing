@@ -1,9 +1,10 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { Copy, CheckCircle, Info } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import { logger } from '@/lib/logger';
+import { supabase } from '@/lib/supabase';
+import { CheckCircle, Copy, Info } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 /**
  * System information panel component for settings page.
@@ -46,6 +47,27 @@ export function SystemInformationPanel() {
       os,
       userAgent,
     });
+
+    // Fetch latest Android version from Supabase
+    const fetchAndroidVersion = async () => {
+      try {
+        const { data } = await supabase
+          .from('app_settings')
+          .select('value')
+          .eq('key', 'android_version')
+          .single();
+
+        if (data?.value) {
+          // Remove quotes if the JSONB value is a stringified string
+          const version = typeof data.value === 'string' ? data.value.replace(/^"|"$/g, '') : String(data.value);
+          setSystemInfo(prev => ({ ...prev, appVersion: version }));
+        }
+      } catch (e) {
+        logger.error('Failed to fetch android version', { error: e });
+      }
+    };
+
+    fetchAndroidVersion();
   }, []);
 
   const copySystemInfo = async () => {

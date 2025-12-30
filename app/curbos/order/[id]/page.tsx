@@ -1,5 +1,6 @@
 'use client';
 
+import { logger } from '@/lib/logger';
 import { Check, ChefHat, Clock, Utensils } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -12,6 +13,10 @@ interface OrderStatus {
   items_json: any;
 }
 
+/**
+ * Public order status page.
+ * Displays real-time status of an order for customers.
+ */
 export default function PublicOrderStatusPage() {
   const params = useParams();
   const id = params?.id as string;
@@ -19,6 +24,8 @@ export default function PublicOrderStatusPage() {
   const [order, setOrder] = useState<OrderStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [startTime] = useState(Date.now());
+  const [elapsedMillis, setElapsedMillis] = useState(0);
 
   useEffect(() => {
     if (!id) return;
@@ -34,8 +41,8 @@ export default function PublicOrderStatusPage() {
         setOrder(data);
         setError(null);
       } catch (err) {
-        console.error(err);
-        setError('Could not load order status.');
+        logger.error('Failed to load order status', { error: err });
+        setError(err instanceof Error ? err.message : 'Could not load order status.');
       } finally {
         setLoading(false);
       }
@@ -45,14 +52,24 @@ export default function PublicOrderStatusPage() {
     fetchStatus();
 
     // Poll every 5 seconds
-    const interval = setInterval(fetchStatus, 5000);
+    const interval = setInterval(() => {
+        setElapsedMillis(Date.now() - startTime);
+        fetchStatus();
+    }, 5000);
     return () => clearInterval(interval);
   }, [id]);
 
-  if (loading) {
+  // Graceful 404 handling during sync delay
+  // If error is 404 (Order not found) and we've been polling for less than 10 seconds, show a "Preparing" state
+  const isSyncDelay = error === 'Order not found' && elapsedMillis < 10000;
+
+  if (loading || isSyncDelay) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center space-y-4">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-[#C0FF02]"></div>
+        {isSyncDelay && (
+           <p className="text-neutral-500 text-sm animate-pulse">Syncing your order...</p>
+        )}
       </div>
     );
   }

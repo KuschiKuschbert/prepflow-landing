@@ -48,8 +48,12 @@ export default function CurbLayout({
   useEffect(() => {
     // Check authentication on mount and when pathname changes
     async function checkAuth() {
-      // Skip check on login and unauthorized pages
-      if (pathname === '/curbos/login' || pathname === '/curbos/unauthorized') {
+      // Skip check on login, unauthorized, and public order pages
+      if (
+        pathname === '/curbos/login' ||
+        pathname === '/curbos/unauthorized' ||
+        pathname.startsWith('/curbos/order/')
+      ) {
         setIsChecking(false)
         return
       }
@@ -223,31 +227,32 @@ export default function CurbLayout({
       <RotatingTaco />
       <SpotlightCursor />
 
-      {/* Premium Glass Header (Global) */}
-      <header className="fixed top-4 left-4 right-4 tablet:top-6 tablet:left-6 tablet:right-6 h-16 tablet:h-20 bg-neutral-900/80 backdrop-blur-xl border border-white/10 rounded-2xl z-50 flex items-center justify-between px-4 tablet:px-6 desktop:px-8 shadow-2xl shadow-black/50">
-        <Link href="/curbos" className="flex items-center gap-2 tablet:gap-4 group cursor-pointer">
-            <div className="bg-[#C0FF02] p-1.5 tablet:p-2 rounded-lg text-black transform group-hover:rotate-12 transition-transform duration-300">
-                <UtensilsCrossed size={20} className="tablet:w-6 tablet:h-6" />
-            </div>
-            <div>
-                <h1 className="text-xl tablet:text-2xl font-black tracking-tight text-white leading-none">CURB<span className="text-[#C0FF02]">OS</span></h1>
-                <div className="flex flex-col">
-                  <p className="text-[8px] tablet:text-[10px] font-bold text-neutral-500 tracking-[0.2em] uppercase">Admin Console</p>
-                  <p className="text-[7px] font-black text-[#C0FF02]/40 tracking-widest uppercase">v0.2.3-experimental-dev</p>
-                </div>
-            </div>
-        </Link>
+      {/* Premium Glass Header (Global) - Hide on public order status pages */}
+      {!pathname.startsWith('/curbos/order/') && (
+        <header className="fixed top-4 left-4 right-4 tablet:top-6 tablet:left-6 tablet:right-6 h-16 tablet:h-20 bg-neutral-900/80 backdrop-blur-xl border border-white/10 rounded-2xl z-50 flex items-center justify-between px-4 tablet:px-6 desktop:px-8 shadow-2xl shadow-black/50">
+          <Link href="/curbos" className="flex items-center gap-2 tablet:gap-4 group cursor-pointer">
+              <div className="bg-[#C0FF02] p-1.5 tablet:p-2 rounded-lg text-black transform group-hover:rotate-12 transition-transform duration-300">
+                  <UtensilsCrossed size={20} className="tablet:w-6 tablet:h-6" />
+              </div>
+              <div>
+                  <h1 className="text-xl tablet:text-2xl font-black tracking-tight text-white leading-none">CURB<span className="text-[#C0FF02]">OS</span></h1>
+                  <div className="flex flex-col">
+                    <p className="text-[8px] tablet:text-[10px] font-bold text-neutral-500 tracking-[0.2em] uppercase">Admin Console</p>
+                    <p className="text-[7px] font-black text-[#C0FF02]/40 tracking-widest uppercase">v0.2.3-experimental-dev</p>
+                  </div>
+              </div>
+          </Link>
 
-        <nav className="flex items-center gap-0.5 tablet:gap-1 bg-black/20 p-1 tablet:p-1.5 rounded-xl border border-white/5">
-             <NavLink href="/curbos/stats" icon={<BarChart3 size={16} />} label="Stats" />
-             <NavLink href="/curbos/modifiers" icon={<Cog size={16} />} label="Modifiers" />
-             <div className="w-px h-4 bg-white/10 mx-0.5 tablet:mx-1"></div>
-             <NavLink href="/curbos/kitchen" icon={<UtensilsCrossed size={16} />} label="Kitchen" />
-             <NavLink href="/curbos/display" icon={<Monitor size={16} />} label="Display" />
-             <NavLink href="/curbos/settings" icon={<Settings size={16} />} label="Settings" />
-        </nav>
+          <nav className="flex items-center gap-0.5 tablet:gap-1 bg-black/20 p-1 tablet:p-1.5 rounded-xl border border-white/5">
+               <NavLink href="/curbos/stats" icon={<BarChart3 size={16} />} label="Stats" />
+               <NavLink href="/curbos/modifiers" icon={<Cog size={16} />} label="Modifiers" />
+               <div className="w-px h-4 bg-white/10 mx-0.5 tablet:mx-1"></div>
+               <NavLink href="/curbos/kitchen" icon={<UtensilsCrossed size={16} />} label="Kitchen" />
+               <NavLink href="/curbos/display" icon={<Monitor size={16} />} label="Display" />
+               <NavLink href="/curbos/settings" icon={<Settings size={16} />} label="Settings" />
+          </nav>
 
-        <div className="flex items-center gap-2 tablet:gap-4 desktop:gap-6">
+          <div className="flex items-center gap-2 tablet:gap-4 desktop:gap-6">
              {/* Seed Data (Subtle) */}
              <form action={seedInitialData}>
                 <button className="flex items-center gap-1 tablet:gap-2 text-[8px] tablet:text-[10px] text-neutral-600 hover:text-[#C0FF02] uppercase tracking-widest transition-colors font-bold border border-white/5 hover:border-[#C0FF02]/30 px-2 tablet:px-3 py-1 tablet:py-1.5 rounded-lg group">
@@ -273,6 +278,7 @@ export default function CurbLayout({
               </button>
         </div>
       </header>
+      )}
 
       <div className="relative z-10 pt-24 tablet:pt-32 min-h-screen">
         {children}
