@@ -192,6 +192,30 @@ export default function CurbOSSettings() {
           </div>
         )}
       </div>
+
+      <div className="bg-neutral-900 rounded-2xl p-6 tablet:p-8 border border-neutral-800 mt-8">
+          <div className="flex justify-between items-start mb-4">
+              <h3 className="text-xl font-bold text-white">Android POS App</h3>
+              <span className="px-2 py-1 bg-yellow-500/10 text-yellow-500 text-[10px] font-black uppercase tracking-widest border border-yellow-500/20 rounded">
+                  Pre-Alpha
+              </span>
+          </div>
+          <p className="text-gray-400 mb-6 text-sm tablet:text-base">
+              Download the latest pre-alpha version of the CurbOS Android POS application.
+              Requires Android 8.0+.
+          </p>
+
+          <a
+              href="https://github.com/KuschiKuschbert/CurbOS/releases/latest/download/app-release.apk"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors"
+          >
+              <ExternalLink size={16} />
+              Download APK
+          </a>
+          <p className="text-xs text-gray-500 mt-2">
+              Note: You may need to enable "Install unknown apps" permission on your Android device.
+          </p>
+      </div>
     </div>
   );
 }
