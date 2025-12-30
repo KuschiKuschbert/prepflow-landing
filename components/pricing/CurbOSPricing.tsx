@@ -1,9 +1,10 @@
 'use client';
-
 import { Icon } from '@/components/ui/Icon';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Check, Zap } from 'lucide-react';
 import { useState } from 'react';
+
+import { logger } from '@/lib/logger';
 
 export function CurbOSPricing() {
   const { user, isLoading } = useUser();
@@ -24,7 +25,7 @@ export function CurbOSPricing() {
       const data = await response.json();
       if (data.url) window.location.href = data.url;
     } catch (error) {
-      console.error('Subscription error:', error);
+      logger.error('Subscription error:', error);
     }
   };
 

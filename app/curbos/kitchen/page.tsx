@@ -15,6 +15,10 @@ interface Transaction {
     items_json: any // Can be string or JSON object depending on how Postgrest returns JSONB
 }
 
+/**
+ * Kitchen Display System (KDS) page.
+ * Displays real-time orders and allows kitchen staff to update status.
+ */
 export default function KitchenKDS() {
     const [orders, setOrders] = useState<Transaction[]>([])
     const [isLoading, setIsLoading] = useState(true)
@@ -69,13 +73,25 @@ export default function KitchenKDS() {
     }, [])
 
     async function updateStatus(id: string, status: string) {
-        const { error } = await supabase
-            .from('transactions')
-            .update({ fulfillment_status: status })
-            .eq('id', id)
+        try {
+            const response = await fetch('/api/kds/update-status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id, status }),
+            })
 
-        if (error) {
-            logger.error('Error updating status:', error)
+            if (!response.ok) {
+                const data = await response.json()
+                logger.error('Error updating status:', data.error || 'Unknown error')
+                // Revert optimistic update if we implemented one,
+                // but for now relying on realtime subscription to update UI
+                // is fine, though fetching again immediately might be safer if realtime is laggy.
+                // fetchOrders() // Optional: force refresh
+            }
+        } catch (e) {
+            logger.error('Network error updating status:', e)
         }
     }
 
