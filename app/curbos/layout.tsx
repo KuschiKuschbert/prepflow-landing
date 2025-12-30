@@ -233,7 +233,7 @@ export default function CurbLayout({
                 <h1 className="text-xl tablet:text-2xl font-black tracking-tight text-white leading-none">CURB<span className="text-[#C0FF02]">OS</span></h1>
                 <div className="flex flex-col">
                   <p className="text-[8px] tablet:text-[10px] font-bold text-neutral-500 tracking-[0.2em] uppercase">Admin Console</p>
-                  <p className="text-[7px] font-black text-[#C0FF02]/40 tracking-widest uppercase">v0.2.1-experimental-dev</p>
+                  <p className="text-[7px] font-black text-[#C0FF02]/40 tracking-widest uppercase">v0.2.3-experimental-dev</p>
                 </div>
             </div>
         </Link>
