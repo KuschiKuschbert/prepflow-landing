@@ -13,93 +13,26 @@ const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
 export default async function middleware(req: NextRequest) {
   const { pathname, origin, search } = req.nextUrl;
 
+  // Helper to apply security headers to every response path
+  const withSecurityHeaders = async (res: NextResponse) => {
+    const { applySecurityHeaders } = await import('@/lib/security/SecurityHeaders');
+    return applySecurityHeaders(req, res);
+  };
+
   // CRITICAL: Public CurbOS display route - no authentication required
   // Token validation happens in the page component
   if (pathname.startsWith('/curbos/public/') || pathname.startsWith('/curbos/order/')) {
-    return NextResponse.next();
+    return withSecurityHeaders(NextResponse.next());
   }
 
   // CRITICAL: CurbOS routes require separate authentication
   // EXCEPTION: PrepFlow admins (in allowlist) can access without CurbOS login
   if (pathname.startsWith('/curbos')) {
-    const isLoginPage = pathname === '/curbos/login';
-    const isUnauthorizedPage = pathname === '/curbos/unauthorized';
-    const isPublicRoute = pathname.startsWith('/curbos/public/');
+    const { handleCurbOSMiddleware } = await import('@/lib/security/CurbOSMiddleware');
+    const response = await handleCurbOSMiddleware(req);
 
-    // Skip checks for login, unauthorized, and public routes
-    if (
-      isLoginPage ||
-      isUnauthorizedPage ||
-      pathname.startsWith('/curbos/public/') ||
-      pathname.startsWith('/curbos/order/')
-    ) {
-      return NextResponse.next();
-    }
-
-    try {
-      const { hasCurbOSAccess, getCurbOSUserEmail } = await import('@/lib/curbos/tier-access');
-      const { getUserFromSession } = await import('@/lib/auth0-middleware');
-      const { isEmailAllowed } = await import('@/lib/allowlist');
-
-      // Try to get email from CurbOS cookie first, then fallback to PrepFlow session (for admin bypass)
-      let userEmail = await getCurbOSUserEmail(req);
-      let emailSource = 'curbos_cookie';
-      let user = null;
-
-      if (!userEmail) {
-        // No CurbOS email - try PrepFlow session (for admin bypass)
-        user = await getUserFromSession(req);
-        if (user) {
-          userEmail = user.email;
-          emailSource = 'prepflow_session';
-        }
-      }
-
-      if (!userEmail) {
-        logger.warn('[CurbOS] No user email found, redirecting to login:', { pathname });
-        return NextResponse.redirect(new URL('/curbos/login', req.url));
-      }
-
-      // Check if admin first (bypass tier check)
-      // Check both ALLOWED_EMAILS and Auth0 admin roles
-      const isEmailInAllowlist = isEmailAllowed(userEmail);
-      const isUserAdminRole = user ? isAdmin(user) : false;
-      const canBypass = isEmailInAllowlist || isUserAdminRole;
-
-      if (canBypass) {
-        logger.dev('[CurbOS] Admin access granted (bypass):', {
-          email: userEmail,
-          source: emailSource,
-          hasAdminRole: isUserAdminRole,
-          isEmailAllowed: isEmailInAllowlist,
-          pathname,
-        });
-        return NextResponse.next();
-      }
-
-      // Not admin - check tier-based access (Business tier required)
-      const hasAccess = await hasCurbOSAccess(userEmail, req);
-      if (!hasAccess) {
-        logger.warn('[CurbOS] Access denied - Business tier required:', {
-          userEmail,
-          source: emailSource,
-          pathname,
-        });
-        return NextResponse.redirect(new URL('/curbos/unauthorized', req.url));
-      }
-
-      // Tier check passed - allow access
-      logger.dev('[CurbOS] Access granted:', { userEmail, source: emailSource, pathname });
-    } catch (error) {
-      logger.error('[CurbOS] Error checking tier access:', {
-        error: error instanceof Error ? error.message : String(error),
-        pathname,
-      });
-      return NextResponse.redirect(new URL('/curbos/unauthorized', req.url));
-    }
-
-    // Allow access to curbos routes - bypass Auth0 completely
-    return NextResponse.next();
+    // If handleCurbOSMiddleware returns a redirect or response, apply headers if it matches our criteria
+    return withSecurityHeaders(response);
   }
 
   // CRITICAL: Redirect non-www to www FIRST, before any auth processing
@@ -107,7 +40,7 @@ export default async function middleware(req: NextRequest) {
   if (isProduction && origin.includes('prepflow.org') && !origin.includes('www.prepflow.org')) {
     const wwwUrl = new URL(req.url);
     wwwUrl.hostname = 'www.prepflow.org';
-    return NextResponse.redirect(wwwUrl, 301); // Permanent redirect
+    return withSecurityHeaders(NextResponse.redirect(wwwUrl, 301)); // Permanent redirect
   }
 
   // Rate limiting for API routes (skip for public routes and auth routes)
@@ -299,8 +232,8 @@ export default async function middleware(req: NextRequest) {
     }
   }
 
-  // Allow all other routes (landing page, etc.)
-  return NextResponse.next();
+  // 4. Wrap final response with security headers
+  return withSecurityHeaders(NextResponse.next());
 }
 
 export const config = {

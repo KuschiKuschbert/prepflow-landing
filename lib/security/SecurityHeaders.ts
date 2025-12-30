@@ -1,0 +1,47 @@
+import { NextRequest, NextResponse } from 'next/server';
+
+/**
+ * Security Headers Utility
+ * Injects modern security headers into NexResponse
+ */
+export function applySecurityHeaders(request: NextRequest, response: NextResponse): NextResponse {
+  // 1. Content Security Policy (CSP)
+  // We use a permissive but structured CSP to allow Auth0, Supabase, and Google Fonts
+  const cspHeader = `
+    default-src 'self';
+    script-src 'self' 'unsafe-eval' 'unsafe-inline' *.auth0.com *.googletagmanager.com;
+    style-src 'self' 'unsafe-inline' fonts.googleapis.com;
+    img-src 'self' blob: data: *.auth0.com *.googleusercontent.com *.gravatar.com *.supabase.co;
+    font-src 'self' fonts.gstatic.com;
+    connect-src 'self' *.auth0.com *.supabase.co *.google-analytics.com;
+    frame-src 'self' *.auth0.com;
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self' *.auth0.com;
+    frame-ancestors 'none';
+    upgrade-insecure-requests;
+  `
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+
+  // 2. Security Headers
+  response.headers.set('Content-Security-Policy', cspHeader);
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-XSS-Protection', '1; mode=block');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set(
+    'Permissions-Policy',
+    'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+  );
+
+  // 3. Strict-Transport-Security (HSTS) - 2 years
+  if (process.env.NODE_ENV === 'production') {
+    response.headers.set(
+      'Strict-Transport-Security',
+      'max-age=63072000; includeSubDomains; preload',
+    );
+  }
+
+  return response;
+}
