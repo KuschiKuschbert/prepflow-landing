@@ -1,7 +1,7 @@
 'use client';
 
+import LatestVersionBadge from '@/app/curbos/components/LatestVersionBadge';
 import Link from 'next/link';
-import React from 'react';
 
 export default function LandingFooter() {
   const currentYear = new Date().getFullYear();
@@ -56,10 +56,19 @@ export default function LandingFooter() {
         </div>
 
         {/* Bottom */}
-        <div className="mt-8 border-t border-gray-800 pt-8 text-center">
+        <div className="tablet:flex-row mt-8 flex flex-col items-center justify-between gap-4 border-t border-gray-800 pt-8">
           <p className="text-fluid-sm text-gray-500">
             © {currentYear} PrepFlow. All rights reserved.
           </p>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/curbos"
+              className="text-fluid-sm text-gray-500 transition-colors hover:text-white"
+            >
+              CurbOS Admin
+            </Link>
+            <LatestVersionBadge />
+          </div>
         </div>
       </div>
     </footer>
