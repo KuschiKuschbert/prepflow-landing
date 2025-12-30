@@ -71,6 +71,16 @@ export async function POST(req: NextRequest) {
     }
 
     // ... customer resolution ...
+    // Resolve Stripe Customer
+    let customerId: string;
+    const existingCustomers = await stripe.customers.list({ email: email, limit: 1 });
+
+    if (existingCustomers.data.length > 0) {
+      customerId = existingCustomers.data[0].id;
+    } else {
+      const newCustomer = await stripe.customers.create({ email: email });
+      customerId = newCustomer.id;
+    }
 
     // Determine tier from priceId or provided tier
     // Map CurbOS/Bundle prices to 'business' tier for entitlements
