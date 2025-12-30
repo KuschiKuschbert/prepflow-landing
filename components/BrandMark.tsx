@@ -73,10 +73,13 @@ export function BrandMark({
       checkSeasonal();
     });
 
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-seasonal'],
-    });
+    const target = document.documentElement;
+    if (target) {
+      observer.observe(target, {
+        attributes: true,
+        attributeFilter: ['data-seasonal'],
+      });
+    }
 
     // Check for reduced motion preference
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');

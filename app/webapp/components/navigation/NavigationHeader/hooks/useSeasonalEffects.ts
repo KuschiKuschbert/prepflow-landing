@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * Banner text mapping for seasonal effects
@@ -73,10 +73,13 @@ export function useSeasonalEffects() {
       checkSeasonal();
     });
 
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-seasonal'],
-    });
+    const target = document.documentElement;
+    if (target) {
+      observer.observe(target, {
+        attributes: true,
+        attributeFilter: ['data-seasonal'],
+      });
+    }
 
     return () => observer.disconnect();
   }, []);

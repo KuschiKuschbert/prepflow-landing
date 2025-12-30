@@ -16,12 +16,16 @@ export async function getLatestRelease(): Promise<ReleaseData | null> {
   const GITHUB_REPO = 'KuschiKuschbert/CurbOS';
 
   try {
+    const headers: HeadersInit = {
+      Accept: 'application/vnd.github.v3+json',
+    };
+
+    if (process.env.GITHUB_TOKEN) {
+      headers['Authorization'] = `token ${process.env.GITHUB_TOKEN}`;
+    }
+
     const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/releases/latest`, {
-      headers: {
-        Accept: 'application/vnd.github.v3+json',
-        // Add Authorization header if you have a private repo or hit rate limits
-        // 'Authorization': `token ${process.env.GITHUB_TOKEN}`
-      },
+      headers,
       next: { revalidate: 300 }, // Cache for 5 minutes
     });
 
