@@ -205,13 +205,21 @@ export default function CurbOSSettings() {
               Requires Android 8.0+.
           </p>
 
-          <a
-              href="https://github.com/KuschiKuschbert/CurbOS/releases/latest/download/app-release.apk"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors"
-          >
-              <ExternalLink size={16} />
-              Download APK
-          </a>
+          <div className="space-y-4">
+            <div className="flex items-center gap-4">
+              <a
+                href="https://github.com/KuschiKuschbert/CurbOS/releases/latest/download/curbos-v0.2.0-experimental-dev.apk"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                <ExternalLink size={16} />
+                Download APK
+              </a>
+              <div className="flex flex-col gap-1">
+                <p className="text-[#C0FF02] font-black text-xs uppercase tracking-widest">v0.2.0-experimental-dev</p>
+                <p className="text-neutral-500 text-[10px] font-bold uppercase tracking-tighter">Current Build</p>
+              </div>
+            </div>
+          </div>
           <p className="text-xs text-gray-500 mt-2">
               Note: You may need to enable "Install unknown apps" permission on your Android device.
           </p>

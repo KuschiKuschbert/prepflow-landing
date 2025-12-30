@@ -49,11 +49,19 @@ export default function KitchenKDS() {
                     table: 'transactions',
                 },
                 (payload) => {
-                    logger.dev('Change received!', payload)
+                    logger.dev('KDS: Change received!', payload)
                     fetchOrders()
                 }
             )
-            .subscribe()
+            .subscribe((status) => {
+                if (status === 'SUBSCRIBED') {
+                    logger.dev('KDS: Realtime subscription active!')
+                } else if (status === 'CLOSED') {
+                    logger.warn('KDS: Realtime subscription closed')
+                } else if (status === 'CHANNEL_ERROR') {
+                    logger.error('KDS: Realtime subscription error')
+                }
+            })
 
         return () => {
             supabase.removeChannel(channel)
