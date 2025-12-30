@@ -283,6 +283,19 @@ export default function CurbLayout({
       <div className="relative z-10 pt-24 tablet:pt-32 min-h-screen">
         {children}
       </div>
+
+      {/* Powered by Prepflow Branding */}
+      <div className="fixed bottom-3 right-4 z-40 pointer-events-none select-none opacity-40 hover:opacity-100 transition-opacity duration-300">
+        <a
+          href="https://prepflow.io"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 pointer-events-auto"
+        >
+          <span className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Powered by</span>
+          <img src="/prepflow-logo.webp" alt="Prepflow" className="h-5 w-auto" />
+        </a>
+      </div>
     </>
   )
 }
