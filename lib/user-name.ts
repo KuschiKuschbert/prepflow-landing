@@ -2,7 +2,6 @@
  * User name utility functions for consistent name display throughout the app
  */
 
-
 /**
  * Get email prefix (part before @) as fallback
  *

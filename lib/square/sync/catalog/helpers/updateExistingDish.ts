@@ -68,7 +68,3 @@ export async function updateExistingDish(
     status: 'success',
   });
 }
-
-
-
-

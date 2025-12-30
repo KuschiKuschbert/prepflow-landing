@@ -1,4 +1,3 @@
-
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
@@ -12,10 +11,7 @@ export async function GET(request: NextRequest) {
     const orderId = searchParams.get('id');
 
     if (!orderId) {
-      return NextResponse.json(
-        { error: 'Missing order ID' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing order ID' }, { status: 400 });
     }
 
     const supabaseAdmin = createSupabaseAdmin();
@@ -29,10 +25,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       logger.error('Error fetching order status:', error);
-      return NextResponse.json(
-        { error: 'Order not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
     }
 
     // Success response
@@ -41,14 +34,10 @@ export async function GET(request: NextRequest) {
       order_number: order.order_number,
       customer_name: order.customer_name,
       fulfillment_status: order.fulfillment_status,
-      items_json: order.items_json
+      items_json: order.items_json,
     });
-
   } catch (error) {
     logger.error('Error processing order status request:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

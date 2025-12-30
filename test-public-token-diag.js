@@ -32,13 +32,14 @@ async function testSupabase() {
     }
 
     // 2. Try a simple health check if table fails
-    const { data: health, error: healthError } = await supabase.from('menu_items').select('count', { count: 'exact', head: true });
+    const { data: health, error: healthError } = await supabase
+      .from('menu_items')
+      .select('count', { count: 'exact', head: true });
     if (healthError) {
       console.error('General Health Check Error:', healthError);
     } else {
       console.log('General Health Check Success (menu_items exists)');
     }
-
   } catch (err) {
     console.error('Unexpected Error:', err);
   }

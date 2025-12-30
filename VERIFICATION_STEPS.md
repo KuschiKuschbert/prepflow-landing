@@ -129,7 +129,3 @@ npm run dev
    - Test authentication flow
 
 3. Start development!
-
-
-
-

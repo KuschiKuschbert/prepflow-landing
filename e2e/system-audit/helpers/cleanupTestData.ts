@@ -24,7 +24,3 @@ export async function cleanupTestData(cleanupPage: Page, TEST_PREFIX: string): P
     console.error('Error during teardown:', err);
   }
 }
-
-
-
-

@@ -110,7 +110,3 @@ export const subscriptionNotifications = {
     });
   },
 };
-
-
-
-

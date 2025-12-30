@@ -59,7 +59,8 @@ export function SystemInformationPanel() {
 
         if (data?.value) {
           // Remove quotes if the JSONB value is a stringified string
-          const version = typeof data.value === 'string' ? data.value.replace(/^"|"$/g, '') : String(data.value);
+          const version =
+            typeof data.value === 'string' ? data.value.replace(/^"|"$/g, '') : String(data.value);
           setSystemInfo(prev => ({ ...prev, appVersion: version }));
         }
       } catch (e) {

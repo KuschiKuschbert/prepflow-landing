@@ -43,4 +43,8 @@ export async function isFeatureEnabled(
   return await checkGlobalFlag(flagKey);
 }
 
-export { deleteFeatureFlagHelper as deleteFeatureFlag, getFeatureFlagsHelper as getFeatureFlags, setFeatureFlagHelper as setFeatureFlag };
+export {
+  deleteFeatureFlagHelper as deleteFeatureFlag,
+  getFeatureFlagsHelper as getFeatureFlags,
+  setFeatureFlagHelper as setFeatureFlag,
+};

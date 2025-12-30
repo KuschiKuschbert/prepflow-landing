@@ -72,7 +72,3 @@ export async function updateInitialSyncStatus(
     );
   }
 }
-
-
-
-

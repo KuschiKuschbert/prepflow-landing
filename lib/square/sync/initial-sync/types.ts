@@ -13,7 +13,3 @@ export interface InitialSyncResult {
   startedAt: string;
   completedAt?: string;
 }
-
-
-
-

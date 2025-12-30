@@ -80,7 +80,3 @@ export async function getAllTierConfigsFromDB(): Promise<Record<TierSlug, Entitl
 
   return configs;
 }
-
-
-
-

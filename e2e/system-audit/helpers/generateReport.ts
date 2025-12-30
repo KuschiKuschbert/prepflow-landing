@@ -58,7 +58,3 @@ export function generateQAReport(
   console.log(`   📊 Summary: ${visitedPages.size} pages visited, ${errors.length} errors found`);
   console.log(`   📸 Screenshots: ${screenshots.length} taken`);
 }
-
-
-
-

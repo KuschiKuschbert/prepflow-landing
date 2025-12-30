@@ -27,7 +27,12 @@ export default async function middleware(req: NextRequest) {
     const isPublicRoute = pathname.startsWith('/curbos/public/');
 
     // Skip checks for login, unauthorized, and public routes
-    if (isLoginPage || isUnauthorizedPage || pathname.startsWith('/curbos/public/') || pathname.startsWith('/curbos/order/')) {
+    if (
+      isLoginPage ||
+      isUnauthorizedPage ||
+      pathname.startsWith('/curbos/public/') ||
+      pathname.startsWith('/curbos/order/')
+    ) {
       return NextResponse.next();
     }
 

@@ -125,7 +125,3 @@ export function clearQueue(): void {
   const { clearQueueState } = require('./helpers/syncQueueState');
   clearQueueState();
 }
-
-
-
-

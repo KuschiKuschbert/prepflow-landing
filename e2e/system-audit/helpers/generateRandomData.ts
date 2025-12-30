@@ -50,7 +50,3 @@ export function generateRandomData(inputType: string, fieldName: string): string
 
   return `${randomWord}_${randomNum}`;
 }
-
-
-
-

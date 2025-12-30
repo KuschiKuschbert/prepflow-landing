@@ -18,7 +18,3 @@ export interface SalesData {
   popularity_percentage: number;
   date: string;
 }
-
-
-
-

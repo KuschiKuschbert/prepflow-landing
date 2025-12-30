@@ -61,7 +61,3 @@ export async function getWebhookEventLogs(
     return [];
   }
 }
-
-
-
-

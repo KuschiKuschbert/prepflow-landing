@@ -26,7 +26,3 @@ export function calculateTotalHours(shifts: Shift[]): number {
 
   return totalHours;
 }
-
-
-
-

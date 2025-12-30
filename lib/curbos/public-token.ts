@@ -32,7 +32,7 @@ export async function getOrCreatePublicToken(userEmail: string): Promise<string 
       logger.error('[CurbOS Public Token] Error fetching existing token:', {
         error: fetchError.message,
         code: fetchError.code,
-        userEmail
+        userEmail,
       });
       return null;
     }
@@ -55,7 +55,7 @@ export async function getOrCreatePublicToken(userEmail: string): Promise<string 
       logger.error('[CurbOS Public Token] Error inserting new token:', {
         error: insertError.message,
         code: insertError.code,
-        userEmail
+        userEmail,
       });
       return null;
     }

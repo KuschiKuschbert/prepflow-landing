@@ -37,7 +37,3 @@ export function applyOptimisticUpdate({
     setPrepLists(prevLists => [...prevLists, tempPrepList]);
   }
 }
-
-
-
-

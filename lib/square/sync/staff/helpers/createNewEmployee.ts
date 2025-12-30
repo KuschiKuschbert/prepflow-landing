@@ -74,7 +74,3 @@ export async function createNewEmployee(
     status: 'success',
   });
 }
-
-
-
-

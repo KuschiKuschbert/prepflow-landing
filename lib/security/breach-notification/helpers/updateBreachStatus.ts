@@ -65,7 +65,3 @@ export async function updateBreachNotificationStatus(
     return false;
   }
 }
-
-
-
-

@@ -23,13 +23,15 @@ export async function hasCurbOSAccess(userEmail: string, req?: NextRequest): Pro
         if (session?.user) {
           const isUserAdmin = checkUserAdminRole(session.user);
           if (isUserAdmin) {
-            logger.dev('[CurbOS] Access granted via Auth0 admin role:', { email: session.user.email });
+            logger.dev('[CurbOS] Access granted via Auth0 admin role:', {
+              email: session.user.email,
+            });
             return true;
           }
         }
       } catch (authError) {
         logger.warn('[CurbOS] Auth0 session check failed:', {
-          error: authError instanceof Error ? authError.message : String(authError)
+          error: authError instanceof Error ? authError.message : String(authError),
         });
       }
     }

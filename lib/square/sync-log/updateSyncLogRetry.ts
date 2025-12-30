@@ -61,7 +61,3 @@ export async function updateSyncLogRetry(
     throw ApiErrorHandler.createError('Failed to update retry info', 'DATABASE_ERROR', 500);
   }
 }
-
-
-
-

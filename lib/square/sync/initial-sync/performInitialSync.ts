@@ -140,7 +140,3 @@ export async function performInitialSync(
     return result;
   }
 }
-
-
-
-

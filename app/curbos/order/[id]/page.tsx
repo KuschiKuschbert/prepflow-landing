@@ -3,7 +3,7 @@
 import { logger } from '@/lib/logger';
 import { Check, ChefHat, Clock, Utensils } from 'lucide-react';
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface OrderStatus {
   id: string;
@@ -27,6 +27,37 @@ export default function PublicOrderStatusPage() {
   const [startTime] = useState(Date.now());
   const [elapsedMillis, setElapsedMillis] = useState(0);
 
+  // Sound Effect Helper (Web Audio API)
+  const playNotificationSound = () => {
+    try {
+      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContext) return;
+
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      // Nice "Ding" sound
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+      osc.frequency.exponentialRampToValueAtTime(1046.5, ctx.currentTime + 0.1); // C6
+
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+
+      osc.start();
+      osc.stop(ctx.currentTime + 0.5);
+    } catch (e) {
+      console.error('Audio play failed', e);
+    }
+  };
+
+  const prevStatus = useState<string | null>(null);
+  const prevStatusRef = useRef<string | null>(null);
+
   useEffect(() => {
     if (!id) return;
 
@@ -38,6 +69,17 @@ export default function PublicOrderStatusPage() {
             throw new Error('Failed to fetch status');
         }
         const data = await res.json();
+
+        // Check for status change to READY
+        if (data.fulfillment_status === 'READY' && prevStatusRef.current && prevStatusRef.current !== 'READY') {
+             // Play Notification
+             playNotificationSound();
+             if (typeof navigator !== 'undefined' && navigator.vibrate) {
+                 navigator.vibrate([200, 100, 200]);
+             }
+        }
+        prevStatusRef.current = data.fulfillment_status;
+
         setOrder(data);
         setError(null);
       } catch (err) {
@@ -57,7 +99,7 @@ export default function PublicOrderStatusPage() {
         fetchStatus();
     }, 5000);
     return () => clearInterval(interval);
-  }, [id]);
+  }, [id, startTime]);
 
   // Graceful 404 handling during sync delay
   // If error is 404 (Order not found) and we've been polling for less than 10 seconds, show a "Preparing" state

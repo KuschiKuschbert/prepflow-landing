@@ -57,7 +57,3 @@ export async function fuzzFormInputs(page: Page): Promise<void> {
     // Page might not have forms, continue
   }
 }
-
-
-
-

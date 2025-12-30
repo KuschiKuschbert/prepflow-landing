@@ -7,12 +7,14 @@ description: Standard feature development workflow (Branch -> Code -> Verify -> 
 Automatically follow this process for all coding tasks.
 
 1.  **Check Main**: Ensure strict synchronization with `main` before starting.
+
     ```bash
     git checkout main
     git pull origin main
     ```
 
 2.  **Feature Branch**: ALWAYS create a new branch. Never push directly to `main`.
+
     ```bash
     git checkout -b feature/[concise-name]
     ```

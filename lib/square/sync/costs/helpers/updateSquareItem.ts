@@ -115,7 +115,3 @@ export async function updateSquareItemCosts(
     return false;
   }
 }
-
-
-
-

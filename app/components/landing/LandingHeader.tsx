@@ -16,7 +16,9 @@ interface LandingHeaderProps {
   trackEngagement?: (event: string) => void;
 }
 
-const LandingHeader = React.memo(function LandingHeader({ trackEngagement = () => {} }: LandingHeaderProps) {
+const LandingHeader = React.memo(function LandingHeader({
+  trackEngagement = () => {},
+}: LandingHeaderProps) {
   const { t } = useTranslation();
   const { user, isLoading } = useUser();
   const isAuthenticated = !!user;

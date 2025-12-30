@@ -108,6 +108,10 @@ function NavigationHeaderBase({
   const { isVisible, isDesktop } = useHeaderVisibility();
   const { seasonalEffect, bannerText, bannerColor } = useSeasonalEffects();
 
+  // Ensure consistent initial render to prevent hydration mismatches
+  // Use isVisible only after mount to avoid server/client differences
+  const shouldHideHeader = isMounted ? !isVisible : false;
+
   const {
     isDesktopUserMenuOpen,
     setIsDesktopUserMenuOpen,
@@ -129,7 +133,7 @@ function NavigationHeaderBase({
       <div
         className={cn(
           'desktop:h-20 fixed inset-x-0 top-0 z-50 flex h-16 transform items-center transition-all duration-300',
-          !isVisible && '-translate-y-full',
+          shouldHideHeader && '-translate-y-full',
           className,
         )}
       >

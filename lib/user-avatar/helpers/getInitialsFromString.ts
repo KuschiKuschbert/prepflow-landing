@@ -11,7 +11,3 @@ export function getInitialsFromString(userName: string): string {
   // First letter of name or email
   return userName[0].toUpperCase();
 }
-
-
-
-

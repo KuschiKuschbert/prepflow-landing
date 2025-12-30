@@ -13,7 +13,3 @@ export interface QueuedSyncOperation {
   created_at: string;
   metadata?: Record<string, any>;
 }
-
-
-
-

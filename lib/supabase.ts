@@ -101,7 +101,7 @@ export function createSupabaseAdmin() {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
-    }
+    },
   });
 }
 

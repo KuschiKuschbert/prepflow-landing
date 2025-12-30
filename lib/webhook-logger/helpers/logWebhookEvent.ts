@@ -46,7 +46,3 @@ export async function logWebhookEvent(logData: WebhookEventLog): Promise<boolean
     return false;
   }
 }
-
-
-
-

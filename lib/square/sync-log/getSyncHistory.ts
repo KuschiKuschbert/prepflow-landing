@@ -62,7 +62,3 @@ export async function getSyncHistory(
     return [];
   }
 }
-
-
-
-

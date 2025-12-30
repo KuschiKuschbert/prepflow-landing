@@ -107,7 +107,3 @@ If we want to understand what's actually wrong vs false positives, we could:
 - Continue with pattern review (understand what's real vs false positives)
 - OR move to performance optimizations (memoization)
 - OR proceed with deployment (remaining violations are non-blocking)
-
-
-
-

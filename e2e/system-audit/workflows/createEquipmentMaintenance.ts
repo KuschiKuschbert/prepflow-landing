@@ -54,7 +54,3 @@ export async function chefWorkflowCreateEquipmentMaintenance(
       .first(),
   ).toBeVisible({ timeout: 10000 });
 }
-
-
-
-

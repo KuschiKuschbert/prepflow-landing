@@ -44,7 +44,3 @@ export async function createTemperatureLogFlow(page: Page, testSteps: string[]):
   await collectPageErrors(page);
   testSteps.push('Step 23: Temperature log submitted');
 }
-
-
-
-

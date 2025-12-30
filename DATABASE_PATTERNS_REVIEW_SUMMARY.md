@@ -50,7 +50,3 @@ The 493 remaining violations are likely:
 3. Code quality improvements in `lib/` files
 
 **Recommendation:** Mark as reviewed and move to next priority (Optimistic Updates).
-
-
-
-

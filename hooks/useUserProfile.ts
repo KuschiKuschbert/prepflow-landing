@@ -32,9 +32,9 @@ export function useUserProfile(): UseUserProfileReturn {
   const userName = user?.name || (user as any)?.user?.name;
 
   // Get initial state (cached in localStorage or derived from session)
-  const { initialProfile, validCachedProfile } = useMemo(() =>
-    initializeProfileState({ userEmail, userName }),
-    [userEmail, userName]
+  const { initialProfile, validCachedProfile } = useMemo(
+    () => initializeProfileState({ userEmail, userName }),
+    [userEmail, userName],
   );
 
   const { data: profile, isLoading: queryLoading } = useQuery({
@@ -48,7 +48,9 @@ export function useUserProfile(): UseUserProfileReturn {
         userEmail,
         userName,
         validCachedProfile,
-        setProfile: (p) => { result = p; },
+        setProfile: p => {
+          result = p;
+        },
         setLoading: () => {}, // Not needed for useQuery
       });
 

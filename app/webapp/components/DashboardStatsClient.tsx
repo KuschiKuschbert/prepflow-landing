@@ -11,9 +11,7 @@ import { DashboardErrorAlert } from './DashboardErrorAlert';
 import DashboardStats from './DashboardStats';
 import RecentActivity from './RecentActivity';
 import { getErrorAlerts } from './helpers/getErrorAlerts';
-import type {
-    DashboardStatsData
-} from './types/dashboard-stats';
+import type { DashboardStatsData } from './types/dashboard-stats';
 
 function DashboardStatsClientContent() {
   const queryClient = useQueryClient();
@@ -22,7 +20,7 @@ function DashboardStatsClientContent() {
   const {
     data: statsData,
     isLoading: statsLoading,
-    error: statsQueryError
+    error: statsQueryError,
   } = useQuery({
     queryKey: ['dashboard', 'stats'],
     queryFn: async () => {
@@ -56,7 +54,7 @@ function DashboardStatsClientContent() {
   const {
     data: logsData,
     isLoading: logsLoading,
-    error: logsQueryError
+    error: logsQueryError,
   } = useQuery({
     queryKey: ['dashboard', 'temperature-logs'],
     queryFn: async () => {
@@ -80,7 +78,7 @@ function DashboardStatsClientContent() {
   const {
     data: equipmentData,
     isLoading: equipmentLoading,
-    error: equipmentQueryError
+    error: equipmentQueryError,
   } = useQuery({
     queryKey: ['dashboard', 'temperature-equipment'],
     queryFn: async () => {
@@ -109,7 +107,8 @@ function DashboardStatsClientContent() {
 
   const statsError = statsQueryError instanceof Error ? statsQueryError.message : null;
   const temperatureLogsError = logsQueryError instanceof Error ? logsQueryError.message : null;
-  const temperatureEquipmentError = equipmentQueryError instanceof Error ? equipmentQueryError.message : null;
+  const temperatureEquipmentError =
+    equipmentQueryError instanceof Error ? equipmentQueryError.message : null;
 
   // Loading gate integration
   useEffect(() => {

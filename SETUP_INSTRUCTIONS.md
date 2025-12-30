@@ -35,7 +35,3 @@ brew install node@22
 ```
 
 After installing Node.js, return to the setup process.
-
-
-
-

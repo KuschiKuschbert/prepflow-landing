@@ -113,7 +113,3 @@ import { ScrollReveal } from '@/components/ui/ScrollReveal';
 - [Project Architecture](PROJECT_ARCHITECTURE.md) - Technical architecture overview
 - [Design System](.cursor/rules/design.mdc) - Cyber Carrot design system
 - [Landing Page Style Guide](LANDING_PAGE_STYLE_GUIDE.md) - Complete style reference
-
-
-
-

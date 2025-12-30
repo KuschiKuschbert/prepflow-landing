@@ -24,7 +24,3 @@ export async function syncAllDishesToSquare(
     return { synced: 0, errors: 1 };
   }
 }
-
-
-
-

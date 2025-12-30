@@ -62,7 +62,3 @@ export async function createNewDish(
     status: 'success',
   });
 }
-
-
-
-

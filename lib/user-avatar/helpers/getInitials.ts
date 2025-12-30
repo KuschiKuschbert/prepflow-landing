@@ -36,7 +36,3 @@ export function getInitialsFromUserObject(user: {
 
   return 'U';
 }
-
-
-
-

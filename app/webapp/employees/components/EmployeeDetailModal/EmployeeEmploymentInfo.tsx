@@ -42,7 +42,3 @@ export function EmployeeEmploymentInfo({ employee }: EmployeeEmploymentInfoProps
     </div>
   );
 }
-
-
-
-

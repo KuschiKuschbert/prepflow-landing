@@ -227,7 +227,3 @@ When refactoring these components:
 - ❌ `setLoading(true/false)` in mutation functions
 - ❌ `fetchData()` after mutation success
 - ❌ Rollback via refetch (should restore from stored state)
-
-
-
-

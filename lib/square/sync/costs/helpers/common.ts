@@ -34,7 +34,3 @@ export async function logCostSyncOperation(params: {
       : undefined,
   });
 }
-
-
-
-

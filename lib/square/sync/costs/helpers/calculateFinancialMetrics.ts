@@ -30,7 +30,3 @@ export function calculateFinancialMetrics(
     contributing_margin_percent: contributingMarginPercent,
   };
 }
-
-
-
-

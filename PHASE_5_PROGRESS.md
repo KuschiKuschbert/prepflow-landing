@@ -29,7 +29,3 @@
 1. Identify and fix remaining error handling violation
 2. Continue with remaining file sizes (if desired)
 3. Or move on to other priorities
-
-
-
-

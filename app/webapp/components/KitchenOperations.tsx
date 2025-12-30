@@ -178,21 +178,21 @@ export default function KitchenOperations() {
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
                 <div className="mb-1 flex flex-wrap items-center gap-2">
-                  <p className="text-fluid-xs tablet:text-fluid-sm truncate min-w-0 flex-1 font-medium text-[var(--foreground)]/60">
+                  <p className="text-fluid-xs tablet:text-fluid-sm min-w-0 flex-1 truncate font-medium text-[var(--foreground)]/60">
                     {op.title}
                   </p>
                   {op.status === 'good' && (
-                    <span className="flex-shrink-0 whitespace-nowrap rounded-full border border-[var(--color-success-border)] bg-[var(--color-success-bg)] px-1.5 py-0.5 text-xs font-semibold text-[var(--color-success)]">
+                    <span className="flex-shrink-0 rounded-full border border-[var(--color-success-border)] bg-[var(--color-success-bg)] px-1.5 py-0.5 text-xs font-semibold whitespace-nowrap text-[var(--color-success)]">
                       Ready
                     </span>
                   )}
                   {op.status === 'warning' && (
-                    <span className="flex-shrink-0 whitespace-nowrap rounded-full border border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] px-1.5 py-0.5 text-xs font-semibold text-[var(--color-warning)]">
+                    <span className="flex-shrink-0 rounded-full border border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] px-1.5 py-0.5 text-xs font-semibold whitespace-nowrap text-[var(--color-warning)]">
                       Needs Attention
                     </span>
                   )}
                   {op.title === 'Low Stock Alerts' && op.value > 0 && (
-                    <span className="flex-shrink-0 whitespace-nowrap rounded-full border border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] px-1.5 py-0.5 text-xs font-semibold text-[var(--color-warning)]">
+                    <span className="flex-shrink-0 rounded-full border border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] px-1.5 py-0.5 text-xs font-semibold whitespace-nowrap text-[var(--color-warning)]">
                       Low Stock
                     </span>
                   )}

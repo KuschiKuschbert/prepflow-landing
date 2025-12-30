@@ -109,7 +109,3 @@ export async function saveSquareConfig(
     throw ApiErrorHandler.createError('Failed to save Square configuration', 'DATABASE_ERROR', 500);
   }
 }
-
-
-
-

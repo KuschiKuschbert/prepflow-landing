@@ -33,7 +33,3 @@ export function calculateWeeklyCost(
 
   return totalCost;
 }
-
-
-
-

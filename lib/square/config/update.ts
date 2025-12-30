@@ -129,7 +129,3 @@ export async function updateSquareConfig(
     );
   }
 }
-
-
-
-

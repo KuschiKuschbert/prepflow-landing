@@ -59,7 +59,3 @@ export async function retryWebhookEvent(eventId: string): Promise<boolean> {
     return false;
   }
 }
-
-
-
-

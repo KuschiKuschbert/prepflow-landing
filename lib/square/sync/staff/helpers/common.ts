@@ -54,7 +54,3 @@ export async function logStaffSyncOperation(params: {
     error_details: params.errorDetails,
   });
 }
-
-
-
-

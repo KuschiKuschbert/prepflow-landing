@@ -68,7 +68,3 @@ export async function createEquipmentMaintenanceFlow(
     testSteps.push('Step 31: Submit button not found');
   }
 }
-
-
-
-

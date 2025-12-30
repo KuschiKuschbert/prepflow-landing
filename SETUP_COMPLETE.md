@@ -89,7 +89,3 @@ export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
 - **Verification**: `VERIFICATION_STEPS.md`
 
 Happy coding! 🚀
-
-
-
-

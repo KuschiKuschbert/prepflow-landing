@@ -70,7 +70,3 @@ export async function upsertSalesData(
     }
   }
 }
-
-
-
-

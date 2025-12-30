@@ -5,7 +5,7 @@ import { getStripe } from '@/lib/stripe';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
-    const checkoutSessionSchema = z
+const checkoutSessionSchema = z
   .object({
     priceId: z.string().optional(),
     tier: z.enum(['starter', 'pro', 'business', 'curbos', 'bundle']).optional(),
@@ -52,20 +52,24 @@ export async function POST(req: NextRequest) {
 
     // Helper to resolve price ID
     const resolvePriceId = (t: string | undefined): string | null => {
-         if (!t) return null;
-         if (t === 'starter') return process.env.STRIPE_PRICE_STARTER_MONTHLY || null;
-         if (t === 'pro') return process.env.STRIPE_PRICE_PRO_MONTHLY || null;
-         if (t === 'business') return process.env.STRIPE_PRICE_BUSINESS_MONTHLY || null;
-         if (t === 'curbos') return process.env.STRIPE_PRICE_CURBOS_MONTHLY || null;
-         if (t === 'bundle') return process.env.STRIPE_PRICE_BUNDLE_MONTHLY || null;
-         return null;
+      if (!t) return null;
+      if (t === 'starter') return process.env.STRIPE_PRICE_STARTER_MONTHLY || null;
+      if (t === 'pro') return process.env.STRIPE_PRICE_PRO_MONTHLY || null;
+      if (t === 'business') return process.env.STRIPE_PRICE_BUSINESS_MONTHLY || null;
+      if (t === 'curbos') return process.env.STRIPE_PRICE_CURBOS_MONTHLY || null;
+      if (t === 'bundle') return process.env.STRIPE_PRICE_BUNDLE_MONTHLY || null;
+      return null;
     };
 
     const priceId: string | null = validatedPriceId || resolvePriceId(tier);
 
     if (!priceId) {
       return NextResponse.json(
-        ApiErrorHandler.createError('Missing priceId or tier configuration', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError(
+          'Missing priceId or tier configuration',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       );
     }
@@ -84,20 +88,19 @@ export async function POST(req: NextRequest) {
 
     // Determine tier from priceId or provided tier
     // Map CurbOS/Bundle prices to 'business' tier for entitlements
-    const determinedTier =
-      (() => {
-        // Explicit tier overrides
-        if (tier === 'curbos' || tier === 'bundle') return 'business';
-        if (tier) return tier;
+    const determinedTier = (() => {
+      // Explicit tier overrides
+      if (tier === 'curbos' || tier === 'bundle') return 'business';
+      if (tier) return tier;
 
-        // Price ID lookups
-        if (priceId === process.env.STRIPE_PRICE_STARTER_MONTHLY) return 'starter';
-        if (priceId === process.env.STRIPE_PRICE_PRO_MONTHLY) return 'pro';
-        if (priceId === process.env.STRIPE_PRICE_BUSINESS_MONTHLY) return 'business';
-        if (priceId === process.env.STRIPE_PRICE_CURBOS_MONTHLY) return 'business';
-        if (priceId === process.env.STRIPE_PRICE_BUNDLE_MONTHLY) return 'business';
-        return null;
-      })();
+      // Price ID lookups
+      if (priceId === process.env.STRIPE_PRICE_STARTER_MONTHLY) return 'starter';
+      if (priceId === process.env.STRIPE_PRICE_PRO_MONTHLY) return 'pro';
+      if (priceId === process.env.STRIPE_PRICE_BUSINESS_MONTHLY) return 'business';
+      if (priceId === process.env.STRIPE_PRICE_CURBOS_MONTHLY) return 'business';
+      if (priceId === process.env.STRIPE_PRICE_BUNDLE_MONTHLY) return 'business';
+      return null;
+    })();
 
     const origin =
       req.headers.get('origin') || process.env.AUTH0_BASE_URL || 'http://localhost:3000';

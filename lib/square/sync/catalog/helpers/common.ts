@@ -54,7 +54,3 @@ export async function logCatalogSyncOperation(params: {
     error_details: params.errorDetails,
   });
 }
-
-
-
-

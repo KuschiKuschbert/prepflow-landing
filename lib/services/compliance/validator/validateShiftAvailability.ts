@@ -67,7 +67,3 @@ export function validateShiftAvailability(
     violations,
   };
 }
-
-
-
-

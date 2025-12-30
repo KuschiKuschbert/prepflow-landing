@@ -25,7 +25,3 @@ export async function syncRecentOrdersFromSquare(
     locationId,
   );
 }
-
-
-
-

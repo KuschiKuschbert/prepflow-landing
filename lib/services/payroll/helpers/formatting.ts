@@ -33,7 +33,3 @@ export function formatHours(hours: number): string {
 
   return `${wholeHours}h ${minutes}m`;
 }
-
-
-
-

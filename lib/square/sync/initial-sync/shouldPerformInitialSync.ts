@@ -41,7 +41,3 @@ export async function shouldPerformInitialSync(userId: string): Promise<boolean>
     return false;
   }
 }
-
-
-
-

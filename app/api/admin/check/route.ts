@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
       email: user.email,
       isAdmin,
       hasAdminRole,
-      isEmailInAllowlist
+      isEmailInAllowlist,
     });
 
     return NextResponse.json({

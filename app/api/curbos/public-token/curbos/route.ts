@@ -29,18 +29,28 @@ export async function GET(req: NextRequest) {
           if (isEmailInAllowlist || hasAdminRole) {
             targetEmail = user.email;
             isAdminBypass = true;
-            logger.dev('[API /curbos/public-token/curbos] Admin bypass granted via internal check:', { email: targetEmail });
+            logger.dev(
+              '[API /curbos/public-token/curbos] Admin bypass granted via internal check:',
+              { email: targetEmail },
+            );
           }
         }
       } catch (adminError) {
-        logger.warn('[API /curbos/public-token/curbos] Error checking admin status internally:', adminError);
+        logger.warn(
+          '[API /curbos/public-token/curbos] Error checking admin status internally:',
+          adminError,
+        );
       }
     }
 
     if (!targetEmail) {
       logger.warn('[API /curbos/public-token/curbos] No target email found (not authenticated)');
       return NextResponse.json(
-        ApiErrorHandler.createError('Not authenticated with CurbOS or PrepFlow Admin', 'AUTH_ERROR', 401),
+        ApiErrorHandler.createError(
+          'Not authenticated with CurbOS or PrepFlow Admin',
+          'AUTH_ERROR',
+          401,
+        ),
         { status: 401 },
       );
     }
@@ -49,14 +59,18 @@ export async function GET(req: NextRequest) {
     if (!isAdminBypass) {
       const hasAccess = await hasCurbOSAccess(targetEmail, req);
       if (!hasAccess) {
-        logger.warn('[API /curbos/public-token/curbos] Access denied (tier required):', { email: targetEmail });
+        logger.warn('[API /curbos/public-token/curbos] Access denied (tier required):', {
+          email: targetEmail,
+        });
         return NextResponse.json(
           ApiErrorHandler.createError('Business tier required', 'UPGRADE_REQUIRED', 403),
           { status: 403 },
         );
       }
     } else {
-      logger.dev('[API /curbos/public-token/curbos] Skipping tier check for admin:', { email: targetEmail });
+      logger.dev('[API /curbos/public-token/curbos] Skipping tier check for admin:', {
+        email: targetEmail,
+      });
     }
 
     // Get or create token
@@ -110,18 +124,30 @@ export async function POST(req: NextRequest) {
           if (isEmailInAllowlist || hasAdminRole) {
             targetEmail = user.email;
             isAdminBypass = true;
-            logger.dev('[API /curbos/public-token/curbos] Admin bypass granted (POST) via internal check:', { email: targetEmail });
+            logger.dev(
+              '[API /curbos/public-token/curbos] Admin bypass granted (POST) via internal check:',
+              { email: targetEmail },
+            );
           }
         }
       } catch (adminError) {
-        logger.warn('[API /curbos/public-token/curbos] Error checking admin status internally (POST):', adminError);
+        logger.warn(
+          '[API /curbos/public-token/curbos] Error checking admin status internally (POST):',
+          adminError,
+        );
       }
     }
 
     if (!targetEmail) {
-      logger.warn('[API /curbos/public-token/curbos] No target email found (POST, not authenticated)');
+      logger.warn(
+        '[API /curbos/public-token/curbos] No target email found (POST, not authenticated)',
+      );
       return NextResponse.json(
-        ApiErrorHandler.createError('Not authenticated with CurbOS or PrepFlow Admin', 'AUTH_ERROR', 401),
+        ApiErrorHandler.createError(
+          'Not authenticated with CurbOS or PrepFlow Admin',
+          'AUTH_ERROR',
+          401,
+        ),
         { status: 401 },
       );
     }
@@ -130,14 +156,18 @@ export async function POST(req: NextRequest) {
     if (!isAdminBypass) {
       const hasAccess = await hasCurbOSAccess(targetEmail, req);
       if (!hasAccess) {
-        logger.warn('[API /curbos/public-token/curbos] Access denied (POST, tier required):', { email: targetEmail });
+        logger.warn('[API /curbos/public-token/curbos] Access denied (POST, tier required):', {
+          email: targetEmail,
+        });
         return NextResponse.json(
           ApiErrorHandler.createError('Business tier required', 'UPGRADE_REQUIRED', 403),
           { status: 403 },
         );
       }
     } else {
-      logger.dev('[API /curbos/public-token/curbos] Skipping tier check (POST) for admin:', { email: targetEmail });
+      logger.dev('[API /curbos/public-token/curbos] Skipping tier check (POST) for admin:', {
+        email: targetEmail,
+      });
     }
 
     // Regenerate token

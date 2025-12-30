@@ -33,7 +33,11 @@ function findFiles() {
       } else if (/\.(ts|tsx|js|jsx)$/.test(entry.name)) {
         // Exclude logger.ts (intentional console usage)
         // Exclude cleanup scripts and protect-curbos - they're utility scripts
-        if (!fullPath.includes('lib/logger.ts') && !fullPath.includes('scripts/cleanup/') && !fullPath.includes('scripts/protect-curbos.js')) {
+        if (
+          !fullPath.includes('lib/logger.ts') &&
+          !fullPath.includes('scripts/cleanup/') &&
+          !fullPath.includes('scripts/protect-curbos.js')
+        ) {
           files.push(fullPath);
         }
       }

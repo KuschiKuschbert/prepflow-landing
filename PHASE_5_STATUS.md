@@ -70,7 +70,3 @@ Skip minor file sizes for now and focus on understanding:
    - OR proceed with deployment (violations are non-blocking)
 
 This gives us measurable progress quickly, then we can reassess priorities.
-
-
-
-

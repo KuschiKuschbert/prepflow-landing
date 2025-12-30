@@ -11,7 +11,3 @@ export interface WebhookEventLog {
   error_message?: string;
   event_data?: any;
 }
-
-
-
-

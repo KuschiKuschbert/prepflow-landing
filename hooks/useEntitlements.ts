@@ -4,9 +4,9 @@ import type { TierSlug } from '@/lib/tier-config';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 import {
-    checkLimitHelper,
-    getUpgradeTierHelper,
-    hasFeatureHelper,
+  checkLimitHelper,
+  getUpgradeTierHelper,
+  hasFeatureHelper,
 } from './useEntitlements/helpers/entitlementHelpers';
 import { fetchEntitlementsHelper } from './useEntitlements/helpers/fetchEntitlements';
 import type { SubscriptionData, UserEntitlements } from './useEntitlements/types';
@@ -34,11 +34,17 @@ export function useEntitlements() {
       };
 
       await fetchEntitlementsHelper(
-        (e) => { result.entitlements = e; },
-        (s) => { result.subscription = s; },
-        (u) => { result.usage = u; },
+        e => {
+          result.entitlements = e;
+        },
+        s => {
+          result.subscription = s;
+        },
+        u => {
+          result.usage = u;
+        },
         () => {}, // setLoading
-        () => {}  // setError
+        () => {}, // setError
       );
 
       return result;
@@ -64,7 +70,8 @@ export function useEntitlements() {
   const getUpgradeTier = useCallback(() => getUpgradeTierHelper(tier), [tier]);
 
   const checkLimit = useCallback(
-    (resourceType: 'recipes' | 'ingredients') => checkLimitHelper(usage, entitlements, resourceType),
+    (resourceType: 'recipes' | 'ingredients') =>
+      checkLimitHelper(usage, entitlements, resourceType),
     [usage, entitlements],
   );
 

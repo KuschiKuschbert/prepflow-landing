@@ -38,7 +38,3 @@ export function getMaxWeeklyHours(employmentType: string): number {
       return COMPLIANCE_RULES.MAX_HOURS_PER_WEEK_CASUAL;
   }
 }
-
-
-
-
