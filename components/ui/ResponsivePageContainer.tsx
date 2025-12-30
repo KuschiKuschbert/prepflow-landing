@@ -17,12 +17,14 @@ interface ResponsivePageContainerProps {
  * - Content-first approach: Don't stretch content, use space for sidebars/complementary content
  *
  * Max-width constraints:
- * - Mobile: full width (0-480px)
+ * - Mobile: full width (0-480px) - no horizontal padding (webapp-main-content provides it)
  * - Tablet (tablet:): max-w-2xl mx-auto (481px-1024px)
  * - Desktop (desktop:): max-w-7xl mx-auto (1025px-1439px) - 1280px (optimal)
  * - Large Desktop (large-desktop:): max-w-[1400px] mx-auto (1440px-1919px) - slightly wider
  * - XL: max-w-[1400px] mx-auto (1920px-2559px) - optimal reading width, don't go wider
  * - 2XL: max-w-[1600px] mx-auto (2560px+) - only slightly wider, use space for sidebars
+ *
+ * Note: Mobile horizontal padding is handled by webapp-main-content CSS to avoid double padding.
  */
 export function ResponsivePageContainer({
   children,
@@ -35,7 +37,7 @@ export function ResponsivePageContainer({
 
   return (
     <div
-      className={`tablet:px-6 desktop:px-8 large-desktop:px-12 tablet:max-w-2xl desktop:max-w-7xl large-desktop:max-w-[1400px] mx-auto w-full px-4 xl:max-w-[1400px] xl:px-20 2xl:max-w-[1600px] 2xl:px-24 ${className}`}
+      className={`tablet:px-6 desktop:px-8 large-desktop:px-12 tablet:max-w-2xl desktop:max-w-7xl large-desktop:max-w-[1400px] mx-auto w-full xl:max-w-[1400px] xl:px-20 2xl:max-w-[1600px] 2xl:px-24 ${className}`}
     >
       {children}
     </div>
