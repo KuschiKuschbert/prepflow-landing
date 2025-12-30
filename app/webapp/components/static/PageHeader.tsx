@@ -57,7 +57,7 @@ export function PageHeader({
             {backButton && onBack && (
               <button
                 onClick={onBack}
-                className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[var(--surface)] text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]"
+                className="flex min-h-[44px] min-w-[44px] flex-shrink-0 items-center justify-center rounded-lg bg-[var(--surface)] text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]"
                 aria-label="Go back"
               >
                 <Icon icon={ArrowLeft} size="md" />

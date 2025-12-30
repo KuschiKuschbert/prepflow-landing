@@ -211,7 +211,7 @@ function RecentActivityContent() {
         {activities.slice(0, 5).map(activity => (
           <div
             key={activity.id}
-            className="tablet:space-x-4 tablet:rounded-2xl tablet:p-3 flex items-center space-x-3 rounded-xl bg-[var(--surface)]/30 p-3 transition-colors duration-200 hover:bg-[var(--surface)]/50"
+            className="tablet:space-x-4 tablet:rounded-2xl tablet:p-3 flex items-center space-x-3 rounded-xl bg-[var(--surface)]/30 p-4 transition-colors duration-200 hover:bg-[var(--surface)]/50"
           >
             <div className="flex-shrink-0">
               <div
