@@ -1,11 +1,13 @@
-/* eslint-disable no-console */
-"use client";
+'use client';
 
-import { Edit, Plus, Save, Trash, X } from "lucide-react";
+import { Icon } from '@/components/ui/Icon';
+import { useConfirm } from '@/hooks/useConfirm';
+import { logger } from '@/lib/logger';
+import { Edit, Plus, Save, Trash, X } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase";
-import PageLayout from "./components/PageLayout";
+import { useCallback, useEffect, useState } from 'react';
+import { supabase } from '../lib/supabase';
+import PageLayout from './components/PageLayout';
 
 type MenuItem = {
   id: string;
@@ -15,50 +17,82 @@ type MenuItem = {
   isAvailable: boolean;
 };
 
+/**
+ * Home Page for CurbOS Admin (Menu Items Management)
+ */
 export default function Home() {
   const [items, setItems] = useState<MenuItem[]>([]);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [newItem, setNewItem] = useState<Partial<MenuItem> | null>(null);
+  const { showConfirm, ConfirmDialog } = useConfirm();
+
+  const fetchItems = useCallback(async () => {
+    try {
+      const { data, error } = await supabase.from('menu_items').select('*').order('category');
+      if (data) setItems(data);
+      if (error) {
+        logger.error('Error fetching menu items', { error, operation: 'fetchMenuItems' });
+      }
+    } catch (err) {
+      logger.error('Unexpected error fetching menu items', {
+        error: err,
+        operation: 'fetchMenuItems',
+      });
+    }
+  }, []);
 
   useEffect(() => {
     fetchItems();
-  }, []);
-
-  /* eslint-disable react-hooks/exhaustive-deps */
-  const fetchItems = async () => {
-    const { data, error } = await supabase.from("menu_items").select("*").order('category');
-    if (data) setItems(data);
-    if (error) console.error("Error fetching items:", error);
-  };
-  /* eslint-enable react-hooks/exhaustive-deps */
+  }, [fetchItems]);
 
   const handleSave = async (item: Partial<MenuItem>) => {
     if (!item.name || !item.price) return;
+    const originalItems = [...items];
 
-    if (item.id) {
-      // Update
-      const { error } = await supabase.from("menu_items").update({
-        name: item.name,
-        price: item.price,
-        category: item.category || 'Tacos',
-        isAvailable: true // item.isAvailable
-      }).eq('id', item.id);
-      if (error) console.error(error);
-    } else {
-      // Insert
-      // Generate a random UUID locally or let DB handle it? DB default is likely fine if set, but android expects UUID string
-      // Let's use crypto.randomUUID()
-      const newItem = {
-        id: crypto.randomUUID(),
-        name: item.name,
-        price: item.price,
-        category: item.category || 'Tacos',
-        isAvailable: true,
-        imageUrl: null,
-        taxRate: 0.1
-      };
-      const { error } = await supabase.from("menu_items").insert(newItem);
-      if (error) console.error(error);
+    try {
+      if (item.id) {
+        // Optimistic Update
+        setItems(prev => prev.map(i => (i.id === item.id ? ({ ...i, ...item } as MenuItem) : i)));
+
+        const { error } = await supabase
+          .from('menu_items')
+          .update({
+            name: item.name,
+            price: item.price,
+            category: item.category || 'Tacos',
+            isAvailable: true,
+          })
+          .eq('id', item.id);
+
+        if (error) {
+          setItems(originalItems);
+          logger.error('Error updating menu item', { error, item, operation: 'updateMenuItem' });
+        }
+      } else {
+        const tempId = crypto.randomUUID();
+        const newEntry = {
+          id: tempId,
+          name: item.name as string,
+          price: item.price as number,
+          category: item.category || 'Tacos',
+          isAvailable: true,
+          imageUrl: null,
+          taxRate: 0.1,
+        };
+
+        // Optimistic Create
+        setItems(prev => [...prev, newEntry]);
+
+        const { error } = await supabase.from('menu_items').insert(newEntry);
+
+        if (error) {
+          setItems(originalItems);
+          logger.error('Error inserting menu item', { error, item, operation: 'insertMenuItem' });
+        }
+      }
+    } catch (err) {
+      setItems(originalItems);
+      logger.error('Unexpected error saving menu item', { error: err, operation: 'saveMenuItem' });
     }
 
     setEditingItem(null);
@@ -67,47 +101,77 @@ export default function Home() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete this item?")) return;
-    const { error } = await supabase.from("menu_items").delete().eq('id', id);
-    if (error) console.error(error);
+    const confirmed = await showConfirm({
+      title: 'Delete Menu Item',
+      message:
+        'Are you sure you want to delete this menu item? Standard Prepflow warning: this is irreversible.',
+      variant: 'danger',
+      confirmLabel: 'Delete',
+      cancelLabel: 'Cancel',
+    });
+
+    if (!confirmed) return;
+
+    const originalItems = [...items];
+    // Optimistic Delete
+    setItems(prev => prev.filter(i => i.id !== id));
+
+    try {
+      const { error } = await supabase.from('menu_items').delete().eq('id', id);
+      if (error) {
+        setItems(originalItems);
+        logger.error('Error deleting menu item', { error, id, operation: 'deleteMenuItem' });
+      }
+    } catch (err) {
+      setItems(originalItems);
+      logger.error('Unexpected error deleting menu item', {
+        error: err,
+        id,
+        operation: 'deleteMenuItem',
+      });
+    }
     fetchItems();
   };
 
   return (
     <PageLayout>
       <div className="p-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
+        <div className="mx-auto max-w-4xl">
+          <div className="mb-8 flex items-center justify-between">
             <h1 className="text-3xl font-bold text-lime-400">CurbOS Admin</h1>
             <div className="space-x-4">
-              <Link href="/modifiers" className="text-gray-300 hover:text-white">Manage Modifiers</Link>
+              <Link
+                href="/modifiers"
+                className="text-gray-300 underline decoration-lime-400/30 transition-colors hover:text-white"
+              >
+                Manage Modifiers
+              </Link>
             </div>
           </div>
 
-          <div className="bg-neutral-800 rounded-lg p-6">
-            <div className="flex justify-between items-center mb-6">
+          <div className="rounded-lg bg-neutral-800 p-6">
+            <div className="mb-6 flex items-center justify-between">
               <h2 className="text-xl font-semibold">Menu Items</h2>
               <button
                 onClick={() => setNewItem({ category: 'Tacos', price: 0 })}
-                className="bg-lime-500 text-black px-4 py-2 rounded-md flex items-center gap-2 font-bold hover:bg-lime-400"
+                className="flex items-center gap-2 rounded-md bg-lime-500 px-4 py-2 font-bold text-black transition-colors hover:bg-lime-400"
               >
-                <Plus size={20} /> Add Item
+                <Icon icon={Plus} size="sm" /> Add Item
               </button>
             </div>
 
             {newItem && (
-              <div className="bg-neutral-700 p-4 rounded mb-4 animate-in fade-in slide-in-from-top-4">
-                <ItemForm
-                  item={newItem}
-                  onSave={handleSave}
-                  onCancel={() => setNewItem(null)}
-                />
+              <div className="animate-in fade-in slide-in-from-top-4 mb-4 rounded bg-neutral-700 p-4">
+                <ItemForm item={newItem} onSave={handleSave} onCancel={() => setNewItem(null)} />
               </div>
             )}
 
             <div className="space-y-2">
               {items.map(item => (
-                <div key={item.id} className="bg-neutral-700/50 p-4 rounded flex items-center justify-between">
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between rounded bg-neutral-700/50 p-4"
+                >
                   {editingItem?.id === item.id ? (
                     <ItemForm
                       item={editingItem}
@@ -117,15 +181,27 @@ export default function Home() {
                   ) : (
                     <>
                       <div>
-                        <h3 className="font-bold text-lg">{item.name}</h3>
-                        <div className="text-sm text-gray-400 flex gap-4">
+                        <h3 className="text-lg font-bold">{item.name}</h3>
+                        <div className="flex gap-4 text-sm text-gray-400">
                           <span>${item.price.toFixed(2)}</span>
-                          <span className="bg-neutral-600 px-2 rounded text-xs py-0.5">{item.category}</span>
+                          <span className="rounded bg-neutral-600 px-2 py-0.5 text-xs">
+                            {item.category}
+                          </span>
                         </div>
                       </div>
                       <div className="flex gap-2">
-                        <button onClick={() => setEditingItem(item)} className="p-2 hover:bg-neutral-600 rounded text-blue-400"><Edit size={18} /></button>
-                        <button onClick={() => handleDelete(item.id)} className="p-2 hover:bg-neutral-600 rounded text-red-400"><Trash size={18} /></button>
+                        <button
+                          onClick={() => setEditingItem(item)}
+                          className="rounded p-2 text-blue-400 hover:bg-neutral-600"
+                        >
+                          <Icon icon={Edit} size="sm" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item.id)}
+                          className="rounded p-2 text-red-400 hover:bg-neutral-600"
+                        >
+                          <Icon icon={Trash} size="sm" />
+                        </button>
                       </div>
                     </>
                   )}
@@ -135,36 +211,49 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <ConfirmDialog />
     </PageLayout>
   );
 }
 
-function ItemForm({ item, onSave, onCancel }: { item: Partial<MenuItem>, onSave: (i: Partial<MenuItem>) => void, onCancel: () => void }) {
+function ItemForm({
+  item,
+  onSave,
+  onCancel,
+}: {
+  item: Partial<MenuItem>;
+  onSave: (_: Partial<MenuItem>) => void;
+  onCancel: () => void;
+}) {
   const [formData, setFormData] = useState(item);
 
   return (
-    <div className="flex gap-4 items-center w-full">
+    <div className="flex w-full items-center gap-4">
       <input
-        className="bg-neutral-900 border border-neutral-600 rounded px-3 py-2 flex-1"
+        className="flex-1 rounded border border-neutral-600 bg-neutral-900 px-3 py-2"
         placeholder="Name"
         value={formData.name || ''}
         onChange={e => setFormData({ ...formData, name: e.target.value })}
       />
       <input
-        className="bg-neutral-900 border border-neutral-600 rounded px-3 py-2 w-24"
+        className="w-24 rounded border border-neutral-600 bg-neutral-900 px-3 py-2"
         placeholder="Price"
         type="number"
         value={formData.price || ''}
         onChange={e => setFormData({ ...formData, price: parseFloat(e.target.value) })}
       />
       <input
-        className="bg-neutral-900 border border-neutral-600 rounded px-3 py-2 w-32"
+        className="w-32 rounded border border-neutral-600 bg-neutral-900 px-3 py-2"
         placeholder="Category"
         value={formData.category || ''}
         onChange={e => setFormData({ ...formData, category: e.target.value })}
       />
-      <button onClick={() => onSave(formData)} className="text-lime-400 p-2"><Save size={20} /></button>
-      <button onClick={onCancel} className="text-gray-400 p-2"><X size={20} /></button>
+      <button onClick={() => onSave(formData)} className="p-2 text-lime-400">
+        <Icon icon={Save} size="md" />
+      </button>
+      <button onClick={onCancel} className="p-2 text-gray-400">
+        <Icon icon={X} size="md" />
+      </button>
     </div>
-  )
+  );
 }

@@ -1,0 +1,35 @@
+---
+description: Standards and rules for the legacy CurbOS web component (Admin/Modifiers)
+globs: app/curbos-import/**/*
+---
+
+# CurbOS Legacy Standards
+
+These standards apply specifically to the components migrated from the CurbOS repository into the `app/curbos-import` directory.
+
+## 🏗️ Architecture
+
+- **Root Directory**: `app/curbos-import`
+- **Authentication**: Uses Auth0 sessions checked via `app/curbos-import/admin/layout.tsx`.
+- **Subscription**: Controlled via `lib/check-subscription.ts`. Access requires `business` tier.
+- **Supabase**: Uses a specialized client in `lib/supabase.ts` (independent of the main Prepflow Supabase integration).
+
+## 🎨 Layout & Components
+
+- **Background**: Always include the legacy `<Background />` component for visual consistency with the mobile app.
+- **Page Wrapper**: Use `<PageLayout />` from `admin/components` for basic structure.
+- **Icons**: Wrap all Lucide icons in the project's `<Icon />` component for consistent sizing and accessibility.
+- **Confirmations**: Use the `useConfirm` hook for all destructive actions (never use browser `confirm()`).
+
+## 🔧 Development Rules
+
+- **Client Side**: Most pages are `"use client"` as they involve heavy interaction with the Supabase client.
+- **Data Fetching**: Use the locally provided `supabase` client for CRUD operations on `menu_items` and `modifier_options`.
+- **UX**: Implement **Optimistic Updates** for all CRUD operations to ensure a snappy experience.
+- **Error Handling**: Use `logger.error()` from `@/lib/logger` for all error logging (replaces `console.error`).
+- **Dependencies**: Ensure compatibility with `lucide-react` and `@supabase/supabase-js`.
+
+## ⚠️ Known Debt (To be Refactored)
+
+- **Supabase Keys**: Hardcoded keys in `lib/supabase.ts` should eventually be moved to environment variables.
+- **Code Duplication**: `lib/supabase.ts` and `lib/check-subscription.ts` are local copies; avoid changing these unless necessary for CurbOS functionality.

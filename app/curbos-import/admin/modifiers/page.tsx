@@ -1,163 +1,256 @@
-/* eslint-disable no-console */
-"use client";
+'use client';
 
-import { ArrowLeft, Edit, Plus, Save, Trash, X } from "lucide-react";
+import { Icon } from '@/components/ui/Icon';
+import { useConfirm } from '@/hooks/useConfirm';
+import { logger } from '@/lib/logger';
+import { ArrowLeft, Edit, Plus, Save, Trash, X } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from "react";
-import { supabase } from "../../lib/supabase";
-import PageLayout from "../components/PageLayout";
+import { useCallback, useEffect, useState } from 'react';
+import { supabase } from '../../lib/supabase';
+import PageLayout from '../components/PageLayout';
 
 type ModifierOption = {
-    id: string;
-    name: string;
-    priceDelta: number;
-    type: string;
-    isAvailable: boolean;
+  id: string;
+  name: string;
+  priceDelta: number;
+  type: string;
+  isAvailable: boolean;
 };
 
+/**
+ * Modifiers Page for CurbOS Admin
+ */
 export default function ModifiersPage() {
-    const [modifiers, setModifiers] = useState<ModifierOption[]>([]);
-    const [editingItem, setEditingItem] = useState<ModifierOption | null>(null);
-    const [newItem, setNewItem] = useState<Partial<ModifierOption> | null>(null);
+  const [modifiers, setModifiers] = useState<ModifierOption[]>([]);
+  const [editingItem, setEditingItem] = useState<ModifierOption | null>(null);
+  const [newItem, setNewItem] = useState<Partial<ModifierOption> | null>(null);
+  const { showConfirm, ConfirmDialog } = useConfirm();
 
-    const fetchItems = async () => {
-        const { data, error } = await supabase.from("modifier_options").select("*").order('name');
-        if (data) setModifiers(data);
-        if (error) console.error("Error fetching modifiers:", error);
-    };
+  const fetchItems = useCallback(async () => {
+    try {
+      const { data, error } = await supabase.from('modifier_options').select('*').order('name');
+      if (data) setModifiers(data);
+      if (error) {
+        logger.error('Error fetching modifiers', { error, operation: 'fetchModifiers' });
+      }
+    } catch (err) {
+      logger.error('Unexpected error fetching modifiers', {
+        error: err,
+        operation: 'fetchModifiers',
+      });
+    }
+  }, []);
 
-    useEffect(() => {
-        fetchItems();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+  useEffect(() => {
+    fetchItems();
+  }, [fetchItems]);
 
-    const handleSave = async (item: Partial<ModifierOption>) => {
-        if (!item.name) return;
-        // Auto-detect type based on price
-        const type = (item.priceDelta || 0) < 0 ? 'REMOVAL' : 'ADDON';
+  const handleSave = async (item: Partial<ModifierOption>) => {
+    if (!item.name) return;
 
-        if (item.id) {
-            // Update
-            const { error } = await supabase.from("modifier_options").update({
-                name: item.name,
-                priceDelta: item.priceDelta || 0,
-                type: type
-            }).eq('id', item.id);
-            if (error) console.error(error);
-        } else {
-            // Insert
-            const newItem = {
-                id: crypto.randomUUID(),
-                name: item.name,
-                priceDelta: item.priceDelta || 0,
-                type: type,
-                isAvailable: true
-            };
-            const { error } = await supabase.from("modifier_options").insert(newItem);
-            if (error) console.error(error);
+    // Auto-detect type based on price
+    const type = (item.priceDelta || 0) < 0 ? 'REMOVAL' : 'ADDON';
+    const originalModifiers = [...modifiers];
+
+    try {
+      if (item.id) {
+        // Optimistic Update
+        setModifiers(prev =>
+          prev.map(m => (m.id === item.id ? ({ ...m, ...item, type } as ModifierOption) : m)),
+        );
+
+        const { error } = await supabase
+          .from('modifier_options')
+          .update({
+            name: item.name,
+            priceDelta: item.priceDelta || 0,
+            type: type,
+          })
+          .eq('id', item.id);
+
+        if (error) {
+          setModifiers(originalModifiers);
+          logger.error('Error updating modifier', { error, item, operation: 'updateModifier' });
         }
+      } else {
+        const tempId = crypto.randomUUID();
+        const newEntry = {
+          id: tempId,
+          name: item.name as string,
+          priceDelta: item.priceDelta || 0,
+          type: type,
+          isAvailable: true,
+        };
 
-        setEditingItem(null);
-        setNewItem(null);
-        fetchItems();
-    };
+        // Optimistic Create
+        setModifiers(prev => [...prev, newEntry]);
 
-    const handleDelete = async (id: string) => {
-        if (!confirm("Delete this modifier?")) return;
-        const { error } = await supabase.from("modifier_options").delete().eq('id', id);
-        if (error) console.error(error);
-        fetchItems();
-    };
+        const { error } = await supabase.from('modifier_options').insert(newEntry);
 
-    return (
-        <PageLayout>
-            <div className="p-8">
-                <div className="max-w-4xl mx-auto">
-                    <div className="flex justify-between items-center mb-8">
-                        <div className="flex items-center gap-4">
-                            <Link href="/" className="p-2 hover:bg-neutral-800 rounded-full"><ArrowLeft /></Link>
-                            <h1 className="text-3xl font-bold text-lime-400">Modifiers</h1>
-                        </div>
-                    </div>
+        if (error) {
+          setModifiers(originalModifiers);
+          logger.error('Error inserting modifier', { error, item, operation: 'insertModifier' });
+        }
+      }
+    } catch (err) {
+      setModifiers(originalModifiers);
+      logger.error('Unexpected error saving modifier', { error: err, operation: 'saveModifier' });
+    }
 
-                    <div className="bg-neutral-800 rounded-lg p-6">
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-xl font-semibold">Available Modifiers</h2>
-                            <button
-                                onClick={() => setNewItem({ priceDelta: 0 })}
-                                className="bg-lime-500 text-black px-4 py-2 rounded-md flex items-center gap-2 font-bold hover:bg-lime-400"
-                            >
-                                <Plus size={20} /> Add Modifier
-                            </button>
-                        </div>
+    setEditingItem(null);
+    setNewItem(null);
+    fetchItems();
+  };
 
-                        {newItem && (
-                            <div className="bg-neutral-700 p-4 rounded mb-4 animate-in fade-in slide-in-from-top-4">
-                                <ItemForm
-                                    item={newItem}
-                                    onSave={handleSave}
-                                    onCancel={() => setNewItem(null)}
-                                />
-                            </div>
-                        )}
+  const handleDelete = async (id: string) => {
+    const confirmed = await showConfirm({
+      title: 'Delete Modifier',
+      message: 'Are you sure you want to delete this modifier? This choice is final.',
+      variant: 'danger',
+      confirmLabel: 'Delete',
+      cancelLabel: 'Wait, go back',
+    });
 
-                        <div className="space-y-2">
-                            {modifiers.map(item => (
-                                <div key={item.id} className="bg-neutral-700/50 p-4 rounded flex items-center justify-between">
-                                    {editingItem?.id === item.id ? (
-                                        <ItemForm
-                                            item={editingItem}
-                                            onSave={handleSave}
-                                            onCancel={() => setEditingItem(null)}
-                                        />
-                                    ) : (
-                                        <>
-                                            <div>
-                                                <h3 className="font-bold text-lg">{item.name}</h3>
-                                                <div className="text-sm text-gray-400 flex gap-4">
-                                                    <span className={item.priceDelta < 0 ? "text-red-400" : "text-lime-400"}>
-                                                        {item.priceDelta >= 0 ? '+' : ''}${item.priceDelta.toFixed(2)}
-                                                    </span>
-                                                    <span className="bg-neutral-600 px-2 rounded text-xs py-0.5">{item.type}</span>
-                                                </div>
-                                            </div>
-                                            <div className="flex gap-2">
-                                                <button onClick={() => setEditingItem(item)} className="p-2 hover:bg-neutral-600 rounded text-blue-400"><Edit size={18} /></button>
-                                                <button onClick={() => handleDelete(item.id)} className="p-2 hover:bg-neutral-600 rounded text-red-400"><Trash size={18} /></button>
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
+    if (!confirmed) return;
+
+    const originalModifiers = [...modifiers];
+    // Optimistic Delete
+    setModifiers(prev => prev.filter(m => m.id !== id));
+
+    try {
+      const { error } = await supabase.from('modifier_options').delete().eq('id', id);
+      if (error) {
+        setModifiers(originalModifiers);
+        logger.error('Error deleting modifier', { error, id, operation: 'deleteModifier' });
+      }
+    } catch (err) {
+      setModifiers(originalModifiers);
+      logger.error('Unexpected error deleting modifier', {
+        error: err,
+        id,
+        operation: 'deleteModifier',
+      });
+    }
+    fetchItems();
+  };
+
+  return (
+    <PageLayout>
+      <div className="p-8">
+        <div className="mx-auto max-w-4xl">
+          <div className="mb-8 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link href="/" className="rounded-full p-2 hover:bg-neutral-800">
+                <Icon icon={ArrowLeft} />
+              </Link>
+              <h1 className="text-3xl font-bold text-lime-400">Modifiers</h1>
             </div>
-        </PageLayout>
-    );
+          </div>
+
+          <div className="rounded-lg bg-neutral-800 p-6">
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-xl font-semibold">Available Modifiers</h2>
+              <button
+                onClick={() => setNewItem({ priceDelta: 0 })}
+                className="transitions-colors flex items-center gap-2 rounded-md bg-lime-500 px-4 py-2 font-bold text-black hover:bg-lime-400"
+              >
+                <Icon icon={Plus} size="sm" /> Add Modifier
+              </button>
+            </div>
+
+            {newItem && (
+              <div className="animate-in fade-in slide-in-from-top-4 mb-4 rounded bg-neutral-700 p-4">
+                <ItemForm item={newItem} onSave={handleSave} onCancel={() => setNewItem(null)} />
+              </div>
+            )}
+
+            <div className="space-y-2">
+              {modifiers.map(item => (
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between rounded bg-neutral-700/50 p-4"
+                >
+                  {editingItem?.id === item.id ? (
+                    <ItemForm
+                      item={editingItem}
+                      onSave={handleSave}
+                      onCancel={() => setEditingItem(null)}
+                    />
+                  ) : (
+                    <>
+                      <div>
+                        <h3 className="text-lg font-bold">{item.name}</h3>
+                        <div className="flex gap-4 text-sm text-gray-400">
+                          <span className={item.priceDelta < 0 ? 'text-red-400' : 'text-lime-400'}>
+                            {item.priceDelta >= 0 ? '\u002b' : '\u002d'}
+                            {'$'}
+                            {Math.abs(item.priceDelta).toFixed(2)}
+                          </span>
+                          <span className="rounded bg-neutral-600 px-2 py-0.5 text-xs">
+                            {item.type}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setEditingItem(item)}
+                          className="rounded p-2 text-blue-400 hover:bg-neutral-600"
+                        >
+                          <Icon icon={Edit} size="sm" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item.id)}
+                          className="rounded p-2 text-red-400 hover:bg-neutral-600"
+                        >
+                          <Icon icon={Trash} size="sm" />
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      <ConfirmDialog />
+    </PageLayout>
+  );
 }
 
-function ItemForm({ item, onSave, onCancel }: { item: Partial<ModifierOption>, onSave: (i: Partial<ModifierOption>) => void, onCancel: () => void }) {
-    const [formData, setFormData] = useState(item);
+function ItemForm({
+  item,
+  onSave,
+  onCancel,
+}: {
+  item: Partial<ModifierOption>;
+  onSave: (_: Partial<ModifierOption>) => void;
+  onCancel: () => void;
+}) {
+  const [formData, setFormData] = useState(item);
 
-    return (
-        <div className="flex gap-4 items-center w-full">
-            <input
-                className="bg-neutral-900 border border-neutral-600 rounded px-3 py-2 flex-1"
-                placeholder="Name (e.g. Extra Cheese)"
-                value={formData.name || ''}
-                onChange={e => setFormData({ ...formData, name: e.target.value })}
-            />
-            <input
-                className="bg-neutral-900 border border-neutral-600 rounded px-3 py-2 w-32"
-                placeholder="Price (+/-)"
-                type="number"
-                step="0.10"
-                value={formData.priceDelta || ''}
-                onChange={e => setFormData({ ...formData, priceDelta: parseFloat(e.target.value) })}
-            />
-            <button onClick={() => onSave(formData)} className="text-lime-400 p-2"><Save size={20} /></button>
-            <button onClick={onCancel} className="text-gray-400 p-2"><X size={20} /></button>
-        </div>
-    )
+  return (
+    <div className="flex w-full items-center gap-4">
+      <input
+        className="flex-1 rounded border border-neutral-600 bg-neutral-900 px-3 py-2"
+        placeholder="Name (e.g. Extra Cheese)"
+        value={formData.name || ''}
+        onChange={e => setFormData({ ...formData, name: e.target.value })}
+      />
+      <input
+        className="w-32 rounded border border-neutral-600 bg-neutral-900 px-3 py-2"
+        placeholder="Price (plus/minus)"
+        type="number"
+        step="0.10"
+        value={formData.priceDelta || ''}
+        onChange={e => setFormData({ ...formData, priceDelta: parseFloat(e.target.value) })}
+      />
+      <button onClick={() => onSave(formData)} className="p-2 text-lime-400">
+        <Icon icon={Save} size="md" />
+      </button>
+      <button onClick={onCancel} className="p-2 text-gray-400">
+        <Icon icon={X} size="md" />
+      </button>
+    </div>
+  );
 }
