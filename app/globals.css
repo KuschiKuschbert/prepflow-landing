@@ -786,15 +786,15 @@ nav[aria-label='Bottom navigation'] {
 /* Fluid Typography Utility Classes - Scales from 360px to 4K displays */
 /* Updated minimums to meet 16px mobile readability requirement */
 .text-fluid-xs {
-  font-size: clamp(1rem, 1.4vw, 1rem); /* 16px minimum for mobile readability */
+  font-size: clamp(1rem, 1.4vw, 1.25rem); /* 16px minimum for mobile readability, scales to 20px */
 }
 
 .text-fluid-sm {
-  font-size: clamp(1rem, 1.4vw, 1rem); /* 16px minimum for mobile readability */
+  font-size: clamp(1rem, 1.4vw, 1.25rem); /* 16px minimum for mobile readability, scales to 20px */
 }
 
 .text-fluid-base {
-  font-size: clamp(1rem, 1.6vw, 1.125rem); /* 16px minimum for mobile readability */
+  font-size: clamp(1rem, 1.6vw, 1.25rem); /* 16px minimum for mobile readability, scales to 20px */
 }
 
 .text-fluid-lg {
