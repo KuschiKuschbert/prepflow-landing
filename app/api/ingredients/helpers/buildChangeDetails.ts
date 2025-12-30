@@ -19,3 +19,5 @@ export function buildChangeDetails(formattedUpdates: any): any {
 
   return changeDetails;
 }
+
+

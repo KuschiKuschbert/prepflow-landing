@@ -109,3 +109,5 @@ export async function syncStaffToSquare(
     return result;
   }
 }
+
+

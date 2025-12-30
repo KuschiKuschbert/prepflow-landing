@@ -8,7 +8,7 @@ import { getAvatarUrl, getDefaultAvatar } from '@/lib/user-avatar';
 import { getUserDisplayName } from '@/lib/user-name';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Search } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { Breadcrumbs } from './NavigationHeader/components/Breadcrumbs';
 import { LogoSection } from './NavigationHeader/components/LogoSection';
 import { UserAvatarButton } from './NavigationHeader/components/UserAvatarButton';
@@ -37,18 +37,18 @@ interface NavigationHeaderProps {
   // Gamification handlers
   onAchievementsClick?: () => void;
 }
+
 const cn = (...classes: (string | undefined | null | false)[]): string =>
   classes.filter(Boolean).join(' ');
+
 /**
  * Navigation header component for webapp.
  * Displays logo, breadcrumbs (desktop), search button, and user info.
  * Auto-hides on mobile/tablet when scrolling down, shows on scroll up or at top.
  *
  * @component
- * @param {Object} props - Component props
- * @returns {JSX.Element} Navigation header
  */
-export function NavigationHeader({
+function NavigationHeaderBase({
   className = '',
   onSearchClick,
   isSearchOpen,
@@ -89,47 +89,17 @@ export function NavigationHeader({
       userNameValue: auth0UserName,
     });
   }, [user, userEmail, userError, userLoading, auth0UserName]);
+
   const { profile } = useUserProfile();
 
-  // Log profile changes with detailed inspection
-  useEffect(() => {
-    logger.dev('[NavigationHeader] Profile data received:', {
-      profile,
-      profileType: typeof profile,
-      profileIsNull: profile === null,
-      profileIsUndefined: profile === undefined,
-      profileStringified: JSON.stringify(profile),
-      profileKeys: profile ? Object.keys(profile) : [],
-      profileValues: profile
-        ? Object.entries(profile).map(([key, value]) => ({
-            key,
-            value,
-            valueType: typeof value,
-            isNull: value === null,
-            isUndefined: value === undefined,
-          }))
-        : [],
-      first_name: profile?.first_name,
-      last_name: profile?.last_name,
-      display_name: profile?.display_name,
-      first_name_display: profile?.first_name_display,
-      email: profile?.email,
-    });
-  }, [profile]);
   // Priority: Database first_name/last_name → Auth0 session name → Email prefix
-  const userNameInput = {
+  const userNameInput = useMemo(() => ({
     first_name: profile?.first_name,
     last_name: profile?.last_name,
     name: auth0UserName,
     email: userEmail,
-  };
-  logger.dev('[NavigationHeader] userName input object:', {
-    userNameInput,
-    profileFirst: profile?.first_name,
-    profileLast: profile?.last_name,
-    auth0Name: auth0UserName,
-    userEmail,
-  });
+  }), [profile?.first_name, profile?.last_name, auth0UserName, userEmail]);
+
   const userName = isMounted ? getUserDisplayName(userNameInput) : '';
   const { avatar: userAvatar } = useUserAvatar();
   const { isVisible, isDesktop } = useHeaderVisibility();
@@ -148,148 +118,87 @@ export function NavigationHeader({
   });
 
   // Get avatar URL or default initials
-  const avatarUrl = getAvatarUrl(userAvatar);
+  const avatarUrl = useMemo(() => getAvatarUrl(userAvatar), [userAvatar]);
+  const initials = useMemo(() => getDefaultAvatar(userNameInput), [userNameInput]);
 
-  // Use consistent fallback for defaultInitialsInput during SSR to prevent hydration mismatch
-  const defaultInitialsInput = isMounted
-    ? {
-        first_name: profile?.first_name,
-        last_name: profile?.last_name,
-        name: userName,
-        email: userEmail,
-      }
-    : {
-        first_name: undefined,
-        last_name: undefined,
-        name: '',
-        email: undefined,
-      };
-  logger.dev('[NavigationHeader] defaultInitials input object:', {
-    defaultInitialsInput,
-    profileFirst: profile?.first_name,
-    profileLast: profile?.last_name,
-    auth0Name: auth0UserName,
-    userEmail,
-    isMounted,
-  });
-
-  // Use fallback during SSR to prevent hydration mismatch
-  const defaultInitials = isMounted ? getDefaultAvatar(defaultInitialsInput) : 'U';
-  useEffect(() => {
-    logger.dev('[NavigationHeader] Computed values:', {
-      userName,
-      defaultInitials,
-      profileFirst: profile?.first_name,
-      profileLast: profile?.last_name,
-      auth0Name: auth0UserName,
-      userEmail,
-      profileEmail: profile?.email,
-      profileDisplayName: profile?.display_name,
-    });
-  }, [profile, userName, defaultInitials, user?.name, userEmail, auth0UserName]);
   return (
-    <header
-      role="banner"
-      className={cn(
-        'fixed',
-        'top-0',
-        'left-0',
-        'right-0',
-        'z-50',
-        'border-b',
-        'border-[var(--border)]',
-        'bg-[var(--surface)]',
-        'pt-[var(--safe-area-inset-top)]',
-        'h-[var(--header-height-mobile)]',
-        'desktop:h-[var(--header-height-desktop)]',
-        // Auto-hide transition only on mobile/tablet (< 1025px)
-        !isDesktop && 'transition-transform duration-300',
-        className,
-      )}
-      style={{
-        // Only apply transform on mobile/tablet (< 1025px)
-        // During SSR, always use consistent values to prevent hydration mismatch
-        // After mount, the transform will update based on scroll position
-        transform:
-          typeof window !== 'undefined' && !isDesktop && !isVisible
-            ? 'translateY(-100%)'
-            : 'translateY(0)',
-        transitionTimingFunction:
-          typeof window !== 'undefined' && !isDesktop ? 'var(--easing-standard)' : undefined,
-      }}
-      suppressHydrationWarning
-    >
-      <div className="desktop:px-4 relative flex items-center justify-between px-3 py-2">
-        <LogoSection
-          shouldPreventNavigation={shouldPreventNavigation}
-          handleLogoClick={handleLogoClick}
-          handleLogoTouchStart={handleLogoTouchStart}
-          handleLogoTouchEnd={handleLogoTouchEnd}
-          handleLogoMouseDown={handleLogoMouseDown}
-          handleLogoMouseUp={handleLogoMouseUp}
-          handleLogoMouseLeave={handleLogoMouseLeave}
-          seasonalBannerText={bannerText}
-          seasonalBannerColor={bannerColor}
-          isDesktop={isDesktop}
-        />
-
-        <Breadcrumbs pathname={pathname} navigationItems={navigationItems} isActive={isActive} />
-
-        <div className="desktop:space-x-3 relative flex items-center space-x-2">
-          <button
-            onClick={onSearchClick}
-            className={cn(
-              'rounded-lg',
-              'p-1.5',
-              'min-h-[44px]',
-              'min-w-[44px]',
-              'transition-colors',
-              'hover:bg-[var(--muted)]/50',
-              'focus:outline-none',
-              'focus:ring-2',
-              'focus:ring-[var(--primary)]',
-              'focus:ring-offset-2',
-              'focus:ring-offset-[var(--surface)]',
-            )}
-            aria-label="Open search"
-            aria-controls="search-modal"
-            aria-expanded={isSearchOpen}
-          >
-            <Icon
-              icon={Search}
-              size="md"
-              className="text-[var(--foreground-muted)]"
-              aria-hidden={true}
+    <>
+      <div
+        className={cn(
+          'fixed inset-x-0 top-0 z-50 flex h-16 transform items-center transition-all duration-300 desktop:h-20',
+          !isVisible && '-translate-y-full',
+          className,
+        )}
+      >
+        <div className="mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4 desktop:px-6">
+          <div className="flex items-center gap-4 desktop:gap-8">
+            <LogoSection
+              handleLogoClick={handleLogoClick}
+              handleLogoTouchStart={handleLogoTouchStart}
+              handleLogoTouchEnd={handleLogoTouchEnd}
+              handleLogoMouseDown={handleLogoMouseDown}
+              handleLogoMouseUp={handleLogoMouseUp}
+              handleLogoMouseLeave={handleLogoMouseLeave}
+              shouldPreventNavigation={shouldPreventNavigation}
+              seasonalBannerText={seasonalEffect || bannerText || null}
+              seasonalBannerColor={bannerColor}
+              isDesktop={isDesktop}
             />
-          </button>
-          <NavbarStats onClick={onAchievementsClick} />
+            {isDesktop && (
+              <Breadcrumbs
+                pathname={pathname}
+                navigationItems={navigationItems}
+                isActive={isActive}
+              />
+            )}
+          </div>
 
-          {/* User Avatar Trigger */}
-          <div className="relative">
+          <div className="flex items-center gap-2 desktop:gap-4">
+            <button
+              onClick={onSearchClick}
+              className={cn(
+                'relative flex h-10 w-10 items-center justify-center rounded-xl transition-all hover:bg-[var(--surface-variant)] active:scale-95',
+                isSearchOpen && 'bg-[var(--surface-variant)] text-[var(--primary)]',
+              )}
+              aria-label="Search"
+            >
+              <Icon icon={Search} size="sm" />
+            </button>
+
+            <NavbarStats onClick={onAchievementsClick} />
+
+            <div className="h-6 w-px bg-[var(--border)] desktop:h-8" />
+
             <UserAvatarButton
               buttonRef={buttonRef}
-              avatarUrl={avatarUrl || null}
-              userName={userName || null}
-              defaultInitials={defaultInitials}
-              isMenuOpen={isDesktopUserMenuOpen}
               onClick={handleUserAvatarClick}
-            />
-
-            <UserMenu
-              isOpen={isDesktopUserMenuOpen}
-              dropdownPosition={dropdownPosition}
-              desktopMenuRef={desktopMenuRef}
-              avatarUrl={avatarUrl || null}
-              userName={userName || null}
-              userEmail={userEmail || undefined}
-              firstName={profile?.first_name || null}
-              lastName={profile?.last_name || null}
-              defaultInitials={defaultInitials}
-              onClose={() => setIsDesktopUserMenuOpen(false)}
+              avatarUrl={avatarUrl}
+              defaultInitials={initials}
+              userName={userName}
+              isMenuOpen={isDesktopUserMenuOpen}
             />
           </div>
         </div>
+
+        {/* User Menu Popover */}
+        <UserMenu
+          isOpen={isDesktopUserMenuOpen}
+          onClose={() => setIsDesktopUserMenuOpen(false)}
+          desktopMenuRef={desktopMenuRef}
+          dropdownPosition={dropdownPosition}
+          userName={userName}
+          userEmail={userEmail || ''}
+          firstName={profile?.first_name || null}
+          lastName={profile?.last_name || null}
+          avatarUrl={avatarUrl}
+          defaultInitials={initials}
+        />
       </div>
-    </header>
+
+      {/* Spacer for fixed header */}
+      <div className="h-16 desktop:h-20" />
+    </>
   );
 }
+
+export const NavigationHeader = memo(NavigationHeaderBase);

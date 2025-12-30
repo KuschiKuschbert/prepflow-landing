@@ -24,3 +24,5 @@ export async function syncAllStaffToSquare(
     return { synced: 0, errors: 1 };
   }
 }
+
+

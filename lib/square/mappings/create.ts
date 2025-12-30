@@ -58,3 +58,5 @@ export async function createMapping(mapping: SquareMappingInput): Promise<Square
     throw ApiErrorHandler.createError('Failed to create mapping', 'DATABASE_ERROR', 500);
   }
 }
+
+

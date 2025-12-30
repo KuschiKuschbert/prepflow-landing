@@ -64,3 +64,5 @@ export async function logSyncOperation(operation: SyncOperation): Promise<SyncLo
     throw ApiErrorHandler.createError('Failed to log sync operation', 'DATABASE_ERROR', 500);
   }
 }
+
+

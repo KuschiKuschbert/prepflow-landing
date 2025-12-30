@@ -24,3 +24,5 @@ export async function createAutoMapping(
     sync_direction: 'prepflow_to_square', // Default for auto-created mappings
   });
 }
+
+

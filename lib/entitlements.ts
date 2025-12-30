@@ -1,4 +1,4 @@
-import type { TierSlug, EntitlementConfig } from './tier-config';
+import type { TierSlug } from './tier-config';
 import { getDefaultTierConfig } from './tier-config';
 import { getTierConfigFromDB } from './tier-config-db';
 
@@ -40,6 +40,33 @@ export async function getEntitlementsForTierAsync(
 export function getEntitlementsForTier(userId: string, tier: TierSlug): UserEntitlements {
   const cfg = getDefaultTierConfig(tier);
   return { userId, tier, features: cfg.features, limits: cfg.limits };
+}
+
+/**
+ * Get full entitlements for admin users.
+ */
+export function getAdminEntitlements(userId: string): UserEntitlements {
+  return {
+    userId,
+    tier: 'business',
+    features: {
+      cogs: true,
+      recipes: true,
+      analytics: true,
+      temperature: true,
+      cleaning: true,
+      compliance: true,
+      curbos: true,
+      employees: true,
+      roster: true,
+      ai_specials: true,
+      square_pos: true,
+    },
+    limits: {
+      recipes: 999999,
+      ingredients: 999999,
+    },
+  };
 }
 
 export function hasFeature(entitlements: UserEntitlements, featureKey: string): boolean {

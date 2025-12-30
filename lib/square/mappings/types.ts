@@ -27,3 +27,5 @@ export interface SquareMappingInput {
   sync_direction?: 'bidirectional' | 'square_to_prepflow' | 'prepflow_to_square';
   sync_metadata?: Record<string, any>;
 }
+
+

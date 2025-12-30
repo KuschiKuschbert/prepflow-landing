@@ -23,7 +23,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ flagKey
     const userEmail = user.email || undefined;
 
     // Check feature flag
-    const enabled = await isFeatureEnabled(flagKey, userId, userEmail);
+    const enabled = await isFeatureEnabled(flagKey, userId, userEmail, user);
 
     return NextResponse.json({ enabled });
   } catch (error) {

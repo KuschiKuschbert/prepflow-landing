@@ -4,11 +4,11 @@
  */
 
 import { checkAdminAccess } from './feature-flags/helpers/checkAdminAccess';
-import { checkUserFlag } from './feature-flags/helpers/checkUserFlag';
 import { checkGlobalFlag } from './feature-flags/helpers/checkGlobalFlag';
+import { checkUserFlag } from './feature-flags/helpers/checkUserFlag';
+import { deleteFeatureFlag as deleteFeatureFlagHelper } from './feature-flags/helpers/deleteFeatureFlag';
 import { getFeatureFlags as getFeatureFlagsHelper } from './feature-flags/helpers/getFeatureFlags';
 import { setFeatureFlag as setFeatureFlagHelper } from './feature-flags/helpers/setFeatureFlag';
-import { deleteFeatureFlag as deleteFeatureFlagHelper } from './feature-flags/helpers/deleteFeatureFlag';
 
 export interface FeatureFlag {
   id: string;
@@ -27,8 +27,9 @@ export async function isFeatureEnabled(
   flagKey: string,
   userId?: string,
   userEmail?: string,
+  user?: any,
 ): Promise<boolean> {
-  if (checkAdminAccess(userId, userEmail)) {
+  if (checkAdminAccess(userId, userEmail, user)) {
     return true;
   }
 
@@ -42,6 +43,4 @@ export async function isFeatureEnabled(
   return await checkGlobalFlag(flagKey);
 }
 
-export { getFeatureFlagsHelper as getFeatureFlags };
-export { setFeatureFlagHelper as setFeatureFlag };
-export { deleteFeatureFlagHelper as deleteFeatureFlag };
+export { deleteFeatureFlagHelper as deleteFeatureFlag, getFeatureFlagsHelper as getFeatureFlags, setFeatureFlagHelper as setFeatureFlag };

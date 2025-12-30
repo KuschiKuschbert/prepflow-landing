@@ -61,3 +61,5 @@ export interface SquareConfigInput {
   sync_debounce_ms?: number;
   sync_queue_batch_size?: number;
 }
+
+

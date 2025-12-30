@@ -23,3 +23,5 @@ export const COMPLIANCE_RULES = {
   MAX_HOURS_PER_WEEK_PART_TIME: 30,
   MAX_HOURS_PER_WEEK_CASUAL: 50, // Higher limit for casual with penalty rates
 } as const;
+
+

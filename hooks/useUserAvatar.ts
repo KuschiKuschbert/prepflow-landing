@@ -1,7 +1,7 @@
 'use client';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useAvatarSync } from './useUserAvatar/helpers/useAvatarSync';
 import { useAvatarUpdate } from './useUserAvatar/helpers/useAvatarUpdate';
 
@@ -39,5 +39,14 @@ export function useUserAvatar(): UseUserAvatarReturn {
     setLoading,
     setError,
   });
-  return { avatar, setAvatar, loading, error };
+
+  return useMemo(
+    () => ({
+      avatar,
+      setAvatar,
+      loading,
+      error,
+    }),
+    [avatar, setAvatar, loading, error],
+  );
 }

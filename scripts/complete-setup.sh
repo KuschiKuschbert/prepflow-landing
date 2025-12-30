@@ -67,3 +67,5 @@ echo "1. Add your credentials to .env.local (see SETUP_CREDENTIALS.md)"
 echo "2. Set up database schema (see docs/SUPABASE_SETUP.md)"
 echo "3. Start dev server: npm run dev"
 echo ""
+
+

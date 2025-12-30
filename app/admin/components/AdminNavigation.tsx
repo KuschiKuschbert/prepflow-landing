@@ -5,6 +5,7 @@ import {
   Activity,
   AlertTriangle,
   BarChart3,
+  ChefHat,
   CreditCard,
   Database,
   Flag,
@@ -44,6 +45,7 @@ const navItems: NavItem[] = [
   { href: '/admin/features', label: 'Feature Flags', icon: Flag },
   { href: '/admin/tiers', label: 'Tiers & Features', icon: Package },
   { href: '/admin/support', label: 'Support Tools', icon: Wrench },
+  { href: '/curbos', label: 'CurbOS', icon: ChefHat },
 ];
 
 /**

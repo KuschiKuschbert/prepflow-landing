@@ -50,3 +50,5 @@ echo "2. Add your Auth0 credentials (AUTH0_ISSUER_BASE_URL, AUTH0_CLIENT_ID, AUT
 echo "3. Add your Stripe credentials (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_*_MONTHLY)"
 echo "4. Run: npm install"
 echo "5. Run: npm run dev"
+
+

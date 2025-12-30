@@ -2,6 +2,8 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { useIsAdmin } from '@/hooks/useIsAdmin';
+import { useEntitlements } from '@/hooks/useEntitlements';
 import { optimizeNavigationItems } from '@/lib/navigation-optimization/optimizer';
 import { useAdaptiveNavSettings } from '@/lib/navigation-optimization/store';
 import { useTranslation } from '@/lib/useTranslation';
@@ -10,6 +12,7 @@ import {
   BookOpen,
   Bot,
   Calendar,
+  ChefHat,
   ClipboardCheck,
   FileText,
   LayoutDashboard,
@@ -64,6 +67,7 @@ function getCategoryForWorkflow(href: string, workflow: WorkflowType): string {
       '/webapp/guide': 'tools',
       '/webapp/setup': 'tools',
       '/webapp/settings': 'tools',
+      '/curbos': 'tools',
     },
     'setup-planning-operations': {
       '/webapp': 'analysis',
@@ -84,6 +88,7 @@ function getCategoryForWorkflow(href: string, workflow: WorkflowType): string {
       '/webapp/guide': 'tools',
       '/webapp/setup': 'setup',
       '/webapp/settings': 'setup',
+      '/curbos': 'tools',
     },
     'menu-first': {
       '/webapp': 'overview',
@@ -104,6 +109,7 @@ function getCategoryForWorkflow(href: string, workflow: WorkflowType): string {
       '/webapp/guide': 'tools',
       '/webapp/setup': 'tools',
       '/webapp/settings': 'tools',
+      '/curbos': 'tools',
     },
   };
 
@@ -123,6 +129,10 @@ export function useNavigationItems(
   const { t } = useTranslation();
   const { settings } = useAdaptiveNavSettings();
   const [optimizedItems, setOptimizedItems] = useState<NavigationItemConfig[] | null>(null);
+
+  // Check admin status and entitlements for CurbOS access
+  const { isAdmin } = useIsAdmin();
+  const { hasFeature } = useEntitlements();
 
   // Check feature flags
   const kitchenStaffEnabled = useFeatureFlag('kitchen-staff');
@@ -245,9 +255,15 @@ export function useNavigationItems(
         icon: <Icon icon={Square} size="sm" className="text-current" aria-hidden={true} />,
         color: 'text-[var(--primary)]',
       },
+      {
+        href: '/curbos',
+        label: 'CurbOS',
+        icon: <Icon icon={ChefHat} size="sm" className="text-current" aria-hidden={true} />,
+        color: 'text-[var(--primary)]',
+      },
     ];
 
-    // Filter items based on feature flags
+    // Filter items based on feature flags and access control
     return allItems.filter(item => {
       if (item.href === '/webapp/employees' && !kitchenStaffEnabled) {
         return false;
@@ -258,9 +274,13 @@ export function useNavigationItems(
       if (item.href === '/webapp/square' && !squarePOSEnabled) {
         return false;
       }
+      // CurbOS: Show if admin or has Business tier (curbos feature)
+      if (item.href === '/curbos') {
+        return isAdmin || hasFeature('curbos');
+      }
       return true;
     });
-  }, [t, kitchenStaffEnabled, rosterEnabled, squarePOSEnabled]);
+  }, [t, kitchenStaffEnabled, rosterEnabled, squarePOSEnabled, isAdmin, hasFeature]);
 
   // Assign categories based on workflow
   const itemsWithCategories = useMemo(

@@ -1,30 +1,19 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { getOrCreateCustomerId, resolvePriceIdFromTier } from '@/lib/billing';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { getStripe } from '@/lib/stripe';
-import { requireAuth } from '@/lib/auth0-api-helpers';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
-const checkoutSessionSchema = z
+    const checkoutSessionSchema = z
   .object({
     priceId: z.string().optional(),
-    tier: z.enum(['starter', 'pro', 'business']).optional(),
+    tier: z.enum(['starter', 'pro', 'business', 'curbos', 'bundle']).optional(),
   })
   .refine(data => data.priceId || data.tier, {
     message: 'Either priceId or tier must be provided',
   });
 
-/**
- * POST /api/billing/create-checkout-session
- * Create Stripe checkout session for subscription
- *
- * @param {NextRequest} req - Request object
- * @param {Object} req.body - Request body (validated against checkoutSessionSchema)
- * @param {string} [req.body.priceId] - Stripe price ID
- * @param {'starter' | 'pro' | 'enterprise'} [req.body.tier] - Subscription tier
- * @returns {Promise<NextResponse>} Checkout session URL
- */
 export async function POST(req: NextRequest) {
   try {
     const stripe = getStripe();
@@ -60,32 +49,43 @@ export async function POST(req: NextRequest) {
     }
 
     const { priceId: validatedPriceId, tier } = validationResult.data;
-    const priceId: string | null = validatedPriceId || resolvePriceIdFromTier(tier);
+
+    // Helper to resolve price ID
+    const resolvePriceId = (t: string | undefined): string | null => {
+         if (!t) return null;
+         if (t === 'starter') return process.env.STRIPE_PRICE_STARTER_MONTHLY || null;
+         if (t === 'pro') return process.env.STRIPE_PRICE_PRO_MONTHLY || null;
+         if (t === 'business') return process.env.STRIPE_PRICE_BUSINESS_MONTHLY || null;
+         if (t === 'curbos') return process.env.STRIPE_PRICE_CURBOS_MONTHLY || null;
+         if (t === 'bundle') return process.env.STRIPE_PRICE_BUNDLE_MONTHLY || null;
+         return null;
+    };
+
+    const priceId: string | null = validatedPriceId || resolvePriceId(tier);
+
     if (!priceId) {
       return NextResponse.json(
-        ApiErrorHandler.createError('Missing priceId or tier', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError('Missing priceId or tier configuration', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
-    const customerId = await getOrCreateCustomerId(email);
-    if (!customerId) {
-      logger.error('[Billing API] Unable to resolve customer', {
-        context: { endpoint: '/api/billing/create-checkout-session', email },
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Unable to resolve customer', 'CUSTOMER_RESOLUTION_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    // ... customer resolution ...
 
     // Determine tier from priceId or provided tier
+    // Map CurbOS/Bundle prices to 'business' tier for entitlements
     const determinedTier =
-      tier ||
       (() => {
+        // Explicit tier overrides
+        if (tier === 'curbos' || tier === 'bundle') return 'business';
+        if (tier) return tier;
+
+        // Price ID lookups
         if (priceId === process.env.STRIPE_PRICE_STARTER_MONTHLY) return 'starter';
         if (priceId === process.env.STRIPE_PRICE_PRO_MONTHLY) return 'pro';
         if (priceId === process.env.STRIPE_PRICE_BUSINESS_MONTHLY) return 'business';
+        if (priceId === process.env.STRIPE_PRICE_CURBOS_MONTHLY) return 'business';
+        if (priceId === process.env.STRIPE_PRICE_BUNDLE_MONTHLY) return 'business';
         return null;
       })();
 

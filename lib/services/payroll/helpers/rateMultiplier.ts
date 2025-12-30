@@ -43,3 +43,5 @@ export function getRateMultiplier(dayOfWeek: number, employee: Employee): number
   // Weekdays (Monday-Friday)
   return 1.0;
 }
+
+

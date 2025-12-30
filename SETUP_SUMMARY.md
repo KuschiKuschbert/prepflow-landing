@@ -67,3 +67,5 @@ npm run dev
 - Auth0 Setup: `docs/AUTH0_STRIPE_REFERENCE.md`
 - Stripe Setup: `docs/STRIPE_SETUP_CHECKLIST.md`
 - Supabase Setup: `docs/SUPABASE_SETUP.md`
+
+

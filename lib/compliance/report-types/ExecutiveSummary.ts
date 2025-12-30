@@ -20,3 +20,5 @@ export interface ExecutiveSummary {
   compliance_gaps_count?: number;
   alerts: string[];
 }
+
+

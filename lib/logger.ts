@@ -8,6 +8,7 @@ import { createLogEntry, formatLogEntry, type ErrorContext } from './logger/logE
 import { supabaseAdmin } from './supabase';
 
 const isDev = process.env.NODE_ENV === 'development';
+const enableProdLogs = process.env.NEXT_PUBLIC_ENABLE_PROD_LOGS === 'true';
 
 // Re-export types
 export type { ErrorContext } from './logger/logEntry';
@@ -73,7 +74,7 @@ async function storeErrorInDatabase(
 
 export const logger = {
   dev: (message: string, data?: unknown): void => {
-    if (isDev) {
+    if (isDev || enableProdLogs) {
       const entry = createLogEntry('dev', message, data);
       const formatted = formatLogEntry(entry);
       console.log(`[DEV] ${formatted}`);
@@ -111,7 +112,7 @@ export const logger = {
   },
 
   info: (message: string, context?: ErrorContext | unknown): void => {
-    if (isDev) {
+    if (isDev || enableProdLogs) {
       const entry = createLogEntry('info', message, context);
       const formatted = formatLogEntry(entry);
       console.info(`[INFO] ${formatted}`);
@@ -119,7 +120,7 @@ export const logger = {
   },
 
   debug: (message: string, data?: unknown): void => {
-    if (isDev) {
+    if (isDev || enableProdLogs) {
       const entry = createLogEntry('debug', message, data);
       const formatted = formatLogEntry(entry);
       console.debug(`[DEBUG] ${formatted}`);

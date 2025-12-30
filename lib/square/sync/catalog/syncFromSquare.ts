@@ -99,3 +99,5 @@ export async function syncCatalogFromSquare(
     return result;
   }
 }
+
+

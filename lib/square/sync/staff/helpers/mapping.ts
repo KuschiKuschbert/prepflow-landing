@@ -111,3 +111,5 @@ export function mapEmployeeToSquareTeamMember(employee: Employee): any {
 
   return teamMemberData;
 }
+
+

@@ -1,5 +1,5 @@
 {
-  "name": "prepflow-landing",
+  "name": "curbos",
   "version": "0.1.1",
   "private": true,
   "engines": {
@@ -56,9 +56,9 @@
     "cleanup:all": "node scripts/cleanup.js --check --fix --report",
     "cleanup:staged": "node scripts/cleanup.js --staged",
     "check:voice": "node scripts/check-voice-consistency.js",
-    "nachotaco:status": "node scripts/protect-nachotaco.js status",
-    "nachotaco:reset": "node scripts/protect-nachotaco.js reset",
-    "nachotaco:unstage": "node scripts/protect-nachotaco.js unstage",
+    "curbos:status": "node scripts/protect-curbos.js status",
+    "curbos:reset": "node scripts/protect-curbos.js reset",
+    "curbos:unstage": "node scripts/protect-curbos.js unstage",
     "pre-deploy": "bash scripts/pre-deploy-check.sh",
     "diagnose:build": "node scripts/diagnose-vercel-build.js",
     "auth0:validate-env": "node scripts/validate-auth0-env.js",
@@ -125,6 +125,7 @@
     "qrcode.react": "^4.2.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
+    "react-icons": "^5.5.0",
     "react-qr-code": "^2.0.18",
     "react-signature-canvas": "^1.0.7",
     "recharts": "^2.8.0",

@@ -1,50 +1,46 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { logger } from '@/lib/logger';
+import { useQuery } from '@tanstack/react-query';
 
 /**
  * Hook to check if current user is an admin (email in ALLOWED_EMAILS)
+ * Uses React Query for caching and deduplication to prevent 429 errors.
  *
  * @returns {Object} Admin status hook
  * @returns {boolean} returns.isAdmin - True if user is admin
  * @returns {boolean} returns.loading - Loading state
- *
- * @example
- * ```typescript
- * const { isAdmin, loading } = useIsAdmin();
- * if (isAdmin) {
- *   // Show admin features
- * }
- * ```
  */
 export function useIsAdmin(): { isAdmin: boolean; loading: boolean } {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const checkAdmin = async () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['admin-check'],
+    queryFn: async () => {
       try {
         const response = await fetch('/api/admin/check');
-        const data = await response.json();
-
-        if (response.ok) {
-          setIsAdmin(data.isAdmin || false);
-        } else {
-          setIsAdmin(false);
+        if (!response.ok) {
+          if (response.status === 429) {
+            logger.error('[useIsAdmin] Rate limited (429)');
+          }
+          return { isAdmin: false };
         }
+        return await response.json();
       } catch (error) {
         logger.error('[useIsAdmin] Error checking admin status:', {
           error: error instanceof Error ? error.message : String(error),
         });
-        setIsAdmin(false);
-      } finally {
-        setLoading(false);
+        return { isAdmin: false };
       }
-    };
+    },
+    // Cache admin status for 5 minutes
+    staleTime: 5 * 60 * 1000,
+    // Keep in cache for 10 minutes
+    gcTime: 10 * 60 * 1000,
+    // Don't retry on failure to avoid additional pressure on API
+    retry: false,
+  });
 
-    checkAdmin();
-  }, []);
-
-  return { isAdmin, loading };
+  return {
+    isAdmin: data?.isAdmin || false,
+    loading: isLoading,
+  };
 }

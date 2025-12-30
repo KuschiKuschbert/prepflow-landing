@@ -1,12 +1,12 @@
-import { getUserFromRequest } from '@/lib/auth0-api-helpers';
+import { isAdmin as checkUserAdminRole } from '@/lib/admin-utils';
 import { isEmailAllowed } from '@/lib/allowlist';
+import { getUserFromRequest } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * GET /api/admin/check
- * Check if current user is an admin (email in ALLOWED_EMAILS)
+ * Check if current user is an admin (email in ALLOWED_EMAILS or has admin role)
  */
 export async function GET(request: NextRequest) {
   try {
@@ -15,11 +15,15 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ isAdmin: false }, { status: 200 });
     }
 
-    const isAdmin = isEmailAllowed(user.email);
+    const isEmailInAllowlist = isEmailAllowed(user.email);
+    const hasAdminRole = checkUserAdminRole(user);
+    const isAdmin = isEmailInAllowlist || hasAdminRole;
 
     return NextResponse.json({
       isAdmin,
       email: user.email,
+      hasAdminRole,
+      isEmailInAllowlist,
     });
   } catch (error) {
     // Log auth errors for debugging but don't reveal them to client (security)

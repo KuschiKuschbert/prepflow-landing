@@ -2,7 +2,6 @@
  * User name utility functions for consistent name display throughout the app
  */
 
-import { logger } from './logger';
 
 /**
  * Get email prefix (part before @) as fallback
@@ -64,15 +63,8 @@ export function getUserFirstName(user: {
   name?: string | null;
   email?: string | null;
 }): string | null {
-  logger.dev('[getUserFirstName] Input:', {
-    first_name: user.first_name,
-    name: user.name,
-    email: user.email,
-  });
-
   // First choice: Database first_name
   if (user.first_name) {
-    logger.dev('[getUserFirstName] Using first_name:', user.first_name);
     return user.first_name;
   }
 
@@ -80,18 +72,15 @@ export function getUserFirstName(user: {
   if (user.name) {
     const parts = user.name.trim().split(/\s+/);
     const firstName = parts[0] || null;
-    logger.dev('[getUserFirstName] Using Auth0 name (first word):', firstName);
     return firstName;
   }
 
   // Third choice: Email prefix (before @)
   if (user.email) {
     const emailPrefix = getEmailPrefix(user.email);
-    logger.dev('[getUserFirstName] Using email prefix:', emailPrefix);
     return emailPrefix;
   }
 
-  logger.dev('[getUserFirstName] No valid data, returning null');
   return null;
 }
 
@@ -112,24 +101,11 @@ export function getUserGreeting(
   },
   greetingPrefix: string = 'Hi',
 ): string {
-  logger.dev('[getUserGreeting] Input:', {
-    first_name: user.first_name,
-    last_name: user.last_name,
-    name: user.name,
-    email: user.email,
-    greetingPrefix,
-  });
-
   const firstName = getUserFirstName(user);
-  logger.dev('[getUserGreeting] Computed firstName:', firstName);
 
   if (firstName) {
-    const greeting = `${greetingPrefix}, ${firstName}!`;
-    logger.dev('[getUserGreeting] Returning personalized greeting:', greeting);
-    return greeting;
+    return `${greetingPrefix}, ${firstName}!`;
   }
 
-  const fallback = `${greetingPrefix} there!`;
-  logger.dev('[getUserGreeting] Returning fallback greeting:', fallback);
-  return fallback;
+  return `${greetingPrefix} there!`;
 }

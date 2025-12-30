@@ -33,17 +33,21 @@ export default async function middleware(req: NextRequest) {
 
     try {
       const { hasCurbOSAccess, getCurbOSUserEmail } = await import('@/lib/curbos/tier-access');
-      const { getUserEmailFromSession } = await import('@/lib/auth0-middleware');
+      const { getUserFromSession } = await import('@/lib/auth0-middleware');
       const { isEmailAllowed } = await import('@/lib/allowlist');
 
       // Try to get email from CurbOS cookie first, then fallback to PrepFlow session (for admin bypass)
       let userEmail = await getCurbOSUserEmail(req);
       let emailSource = 'curbos_cookie';
+      let user = null;
 
       if (!userEmail) {
         // No CurbOS email - try PrepFlow session (for admin bypass)
-        userEmail = await getUserEmailFromSession(req);
-        emailSource = 'prepflow_session';
+        user = await getUserFromSession(req);
+        if (user) {
+          userEmail = user.email;
+          emailSource = 'prepflow_session';
+        }
       }
 
       if (!userEmail) {
@@ -52,10 +56,17 @@ export default async function middleware(req: NextRequest) {
       }
 
       // Check if admin first (bypass tier check)
-      if (isEmailAllowed(userEmail)) {
-        logger.dev('[CurbOS] Admin access granted:', {
+      // Check both ALLOWED_EMAILS and Auth0 admin roles
+      const isEmailInAllowlist = isEmailAllowed(userEmail);
+      const isUserAdminRole = user ? isAdmin(user) : false;
+      const canBypass = isEmailInAllowlist || isUserAdminRole;
+
+      if (canBypass) {
+        logger.dev('[CurbOS] Admin access granted (bypass):', {
           email: userEmail,
           source: emailSource,
+          hasAdminRole: isUserAdminRole,
+          isEmailAllowed: isEmailInAllowlist,
           pathname,
         });
         return NextResponse.next();
@@ -94,15 +105,17 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(wwwUrl, 301); // Permanent redirect
   }
 
-  // Rate limiting for API routes (skip for public routes)
+  // Rate limiting for API routes (skip for public routes and auth routes)
+  // Auth routes are handled by Auth0 SDK and have their own security mechanisms
   const isApi = pathname.startsWith('/api/');
+  const isAuthRoute = pathname.startsWith('/api/auth/');
   const isPublicApi =
     pathname.startsWith('/api/leads') ||
     pathname.startsWith('/api/debug') ||
     pathname.startsWith('/api/test') ||
     pathname.startsWith('/api/fix');
 
-  if (isApi && !isPublicApi) {
+  if (isApi && !isPublicApi && !isAuthRoute) {
     const rateLimitResult = checkRateLimitFromRequest(req);
     if (!rateLimitResult.allowed) {
       logger.warn('[Middleware] Rate limit exceeded:', {
@@ -237,8 +250,11 @@ export default async function middleware(req: NextRequest) {
     }
 
     // Check allowlist only in production/preview and if allowlist is enabled
+    // Admins bypass allowlist restrictions
     const allowlistEnabled = process.env.DISABLE_ALLOWLIST !== 'true';
-    if (allowlistEnabled && !isEmailAllowed(session.user.email)) {
+    const isUserAdmin = isAdmin(session.user);
+
+    if (allowlistEnabled && !isEmailAllowed(session.user.email) && !isUserAdmin) {
       if (isApi) {
         return NextResponse.json({ error: 'Forbidden - Email not in allowlist' }, { status: 403 });
       }

@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Copy, RefreshCw, ExternalLink } from 'lucide-react';
+import { useIsAdmin } from '@/hooks/useIsAdmin';
+import { useUserProfile } from '@/hooks/useUserProfile';
 import { logger } from '@/lib/logger';
 import { supabase } from '@/lib/supabase-pos';
+import { Copy, ExternalLink, RefreshCw } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 /**
  * CurbOS settings page component
@@ -15,41 +17,54 @@ import { supabase } from '@/lib/supabase-pos';
 export default function CurbOSSettings() {
   const [publicUrl, setPublicUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [posUserEmail, setPosUserEmail] = useState<string | null>(null);
+
+  // PrepFlow Admin Bypass
+  const { isAdmin } = useIsAdmin();
+  const { profile } = useUserProfile();
+
+  // Unified email for display/checks
+  const userEmail = posUserEmail || (isAdmin ? profile?.email : null);
+  const canGenerate = isAdmin || !!posUserEmail;
 
   useEffect(() => {
     // Get user email from Supabase session
-    async function getUserEmail() {
+    async function getPosUserEmail() {
       try {
         const {
           data: { session },
         } = await supabase.auth.getSession();
         if (session?.user?.email) {
-          setUserEmail(session.user.email);
+          setPosUserEmail(session.user.email);
         }
       } catch (error) {
         logger.error('[CurbOS Settings] Error getting user email:', error);
       }
     }
-    getUserEmail();
+    getPosUserEmail();
   }, []);
 
   async function getPublicLink() {
-    if (!userEmail) {
-      logger.warn('[CurbOS Settings] No user email available');
+    if (!canGenerate) {
+      logger.warn('[CurbOS Settings] No authorized user available');
       return;
     }
 
     setLoading(true);
     try {
-      // Use CurbOS-specific endpoint that works with Supabase auth
+      // Use CurbOS-specific endpoint that works with Supabase auth OR Admin bypass
       const response = await fetch('/api/curbos/public-token/curbos');
       const data = await response.json();
+
       if (response.ok) {
         setPublicUrl(data.publicUrl);
       } else {
-        logger.error('[CurbOS Settings] Failed to generate link:', data);
-        alert(data.error || 'Failed to generate link. Make sure you have Business tier access.');
+        logger.error('[CurbOS Settings] Failed to generate link:', {
+          status: response.status,
+          data
+        });
+        const errorMsg = data.message || data.error || 'Failed to generate link. Make sure you have Business tier access.';
+        alert(errorMsg);
       }
     } catch (error) {
       logger.error('[CurbOS Settings] Error generating link:', error);
@@ -60,21 +75,25 @@ export default function CurbOSSettings() {
   }
 
   async function regenerateLink() {
-    if (!userEmail) {
+    if (!canGenerate) {
       return;
     }
 
     setLoading(true);
     try {
-      // Use CurbOS-specific endpoint that works with Supabase auth
+      // Use CurbOS-specific endpoint that works with Supabase auth OR Admin bypass
       const response = await fetch('/api/curbos/public-token/curbos', { method: 'POST' });
       const data = await response.json();
       if (response.ok) {
         setPublicUrl(data.publicUrl);
         alert('Link regenerated - old link is now invalid');
       } else {
-        logger.error('[CurbOS Settings] Failed to regenerate link:', data);
-        alert(data.error || 'Failed to regenerate link');
+        logger.error('[CurbOS Settings] Failed to regenerate link:', {
+          status: response.status,
+          data
+        });
+        const errorMsg = data.message || data.error || 'Failed to regenerate link';
+        alert(errorMsg);
       }
     } catch (error) {
       logger.error('[CurbOS Settings] Error regenerating link:', error);
@@ -103,11 +122,20 @@ export default function CurbOSSettings() {
       </div>
 
       <div className="bg-neutral-900 rounded-2xl p-6 tablet:p-8 border border-neutral-800">
-        <h3 className="text-xl font-bold text-white mb-4">Public Display Link</h3>
+        <div className="flex justify-between items-start mb-4">
+          <h3 className="text-xl font-bold text-white">Public Display Link</h3>
+          {isAdmin && (
+            <span className="px-2 py-1 bg-[#C0FF02]/10 text-[#C0FF02] text-[10px] font-black uppercase tracking-widest border border-[#C0FF02]/20 rounded">
+              Admin Bypass Active
+            </span>
+          )}
+        </div>
+
         <p className="text-gray-400 mb-6 text-sm tablet:text-base">
           Share this link with your customers to show the order display. The link is read-only and
           does not require authentication. Only Business tier subscribers can generate public links.
         </p>
+
         {publicUrl ? (
           <div className="space-y-4">
             <div className="flex items-center gap-2 bg-black rounded-lg p-3 border border-neutral-800">
@@ -145,15 +173,20 @@ export default function CurbOSSettings() {
           <div className="space-y-4">
             <button
               onClick={getPublicLink}
-              disabled={loading || !userEmail}
+              disabled={loading || !canGenerate}
               className="px-6 py-3 bg-[#C0FF02] text-black font-bold rounded-lg hover:bg-[#b0eb02] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {loading ? 'Generating...' : 'Generate Public Link'}
             </button>
-            {!userEmail && (
+            {!canGenerate && (
               <p className="text-xs text-yellow-500">
                 Note: You need to be logged into PrepFlow with Business tier access to generate a
                 public link.
+              </p>
+            )}
+            {isAdmin && !posUserEmail && (
+              <p className="text-xs text-[#C0FF02]/60">
+                Logged in as Admin: {profile?.email}. You can generate links without a CurbOS session.
               </p>
             )}
           </div>

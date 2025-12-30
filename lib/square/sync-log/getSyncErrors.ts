@@ -47,3 +47,5 @@ export async function getSyncErrors(userId: string, days: number = 7): Promise<S
     return [];
   }
 }
+
+

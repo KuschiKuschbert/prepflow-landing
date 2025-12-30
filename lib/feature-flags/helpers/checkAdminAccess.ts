@@ -1,9 +1,16 @@
+import { isAdmin as checkUserAdminRole } from '@/lib/admin-utils';
 import { isEmailAllowed } from '@/lib/allowlist';
 
 /**
  * Check if user has admin access (all features enabled)
  */
-export function checkAdminAccess(userId?: string, userEmail?: string): boolean {
+export function checkAdminAccess(userId?: string, userEmail?: string, user?: any): boolean {
+  // If user object is provided, check Auth0 roles first
+  if (user && checkUserAdminRole(user)) {
+    return true;
+  }
+
+  // Fallback to allowlist check
   if (userEmail && isEmailAllowed(userEmail)) {
     return true;
   }

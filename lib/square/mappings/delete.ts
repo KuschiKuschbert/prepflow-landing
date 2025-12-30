@@ -40,3 +40,5 @@ export async function deleteMapping(mappingId: string): Promise<void> {
     throw ApiErrorHandler.createError('Failed to delete mapping', 'DATABASE_ERROR', 500);
   }
 }
+
+

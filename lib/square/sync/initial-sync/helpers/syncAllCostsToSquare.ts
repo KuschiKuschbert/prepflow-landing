@@ -24,3 +24,5 @@ export async function syncAllCostsToSquare(
     return { synced: 0, errors: 1 };
   }
 }
+
+

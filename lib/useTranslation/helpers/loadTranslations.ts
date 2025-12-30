@@ -37,3 +37,5 @@ export async function loadTranslations(language: string): Promise<any> {
 export function getCachedTranslations(): Record<string, any> {
   return translations;
 }
+
+

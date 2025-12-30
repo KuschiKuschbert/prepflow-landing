@@ -2,7 +2,7 @@
 
 import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase-pos'
-import { Check, ChevronRight, ChefHat, Clock } from 'lucide-react'
+import { Check, ChefHat, ChevronRight, Clock } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 // types based on Android model
@@ -18,6 +18,7 @@ interface Transaction {
 export default function KitchenKDS() {
     const [orders, setOrders] = useState<Transaction[]>([])
     const [isLoading, setIsLoading] = useState(true)
+    const [selectedOrder, setSelectedOrder] = useState<Transaction | null>(null)
 
     async function fetchOrders() {
         // We need to fetch the results from the 'transactions' table
@@ -70,7 +71,8 @@ export default function KitchenKDS() {
         }
     }
 
-    async function bumpOrder(order: Transaction) {
+    async function bumpOrder(order: Transaction, e: React.MouseEvent) {
+        e.stopPropagation(); // Prevent opening modal
         let nextStatus = 'IN_PROGRESS'
         if (order.fulfillment_status === 'IN_PROGRESS') nextStatus = 'READY'
         else if (order.fulfillment_status === 'READY') nextStatus = 'COMPLETED'
@@ -145,7 +147,8 @@ export default function KitchenKDS() {
                         return (
                             <div
                                 key={order.id}
-                                className={`bg-neutral-900 border-l-4 ${borderColor} rounded-xl shadow-2xl p-4 tablet:p-6 flex flex-col justify-between hover:bg-neutral-800/80 transition-all`}
+                                onClick={() => setSelectedOrder(order)}
+                                className={`bg-neutral-900 border-l-4 ${borderColor} rounded-xl shadow-2xl p-4 tablet:p-6 flex flex-col justify-between hover:bg-neutral-800/80 transition-all cursor-pointer ring-offset-2 ring-offset-black hover:ring-2 hover:ring-[#C0FF02]/50`}
                             >
                                 <div>
                                     <div className="flex justify-between items-start mb-4">
@@ -188,7 +191,7 @@ export default function KitchenKDS() {
 
                                 <div className="flex flex-col gap-2">
                                     <button
-                                        onClick={() => bumpOrder(order)}
+                                        onClick={(e) => bumpOrder(order, e)}
                                         className={`w-full py-3 tablet:py-4 rounded-xl font-black text-base tablet:text-lg flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-[0_4px_20px_rgba(0,0,0,0.4)]
                                             ${order.fulfillment_status === 'READY'
                                                 ? 'bg-red-500 text-white'
@@ -208,7 +211,10 @@ export default function KitchenKDS() {
 
                                     {order.fulfillment_status !== 'READY' && (
                                         <button
-                                            onClick={() => updateStatus(order.id, 'COMPLETED')}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                updateStatus(order.id, 'COMPLETED');
+                                            }}
                                             className="w-full py-2 rounded-lg text-neutral-500 text-xs font-bold border border-neutral-800 hover:border-neutral-600 transition-colors uppercase"
                                         >
                                             Fast Complete ✅
@@ -225,6 +231,44 @@ export default function KitchenKDS() {
                 </div>
             )}
 
+            {/* Order Detail Modal with QR Code */}
+            {selectedOrder && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                     onClick={() => setSelectedOrder(null)}>
+                    <div className="bg-neutral-900 rounded-2xl p-8 max-w-lg w-full border border-neutral-800 shadow-2xl space-y-8"
+                         onClick={(e) => e.stopPropagation()}>
+
+                        <div className="text-center">
+                             <h2 className="text-4xl font-black text-white mb-2">Order #{selectedOrder.order_number}</h2>
+                             {selectedOrder.customer_name && (
+                                <p className="text-xl text-neutral-400">{selectedOrder.customer_name}</p>
+                             )}
+                        </div>
+
+                        <div className="bg-white p-6 rounded-xl mx-auto w-fit">
+                            <QRCode
+                                value={`${typeof window !== 'undefined' ? window.location.origin : ''}/order/${selectedOrder.id}`}
+                                size={256}
+                            />
+                        </div>
+
+                        <div className="text-center space-y-2">
+                             <p className="text-sm font-bold text-[#C0FF02] uppercase tracking-widest">
+                                Status: {selectedOrder.fulfillment_status}
+                             </p>
+                             <p className="text-neutral-500 text-xs">Scan to track order on mobile</p>
+                        </div>
+
+                        <button
+                            onClick={() => setSelectedOrder(null)}
+                            className="w-full py-4 bg-neutral-800 hover:bg-neutral-700 text-white font-bold rounded-xl transition-colors"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
+
             <footer className="mt-12 text-center">
                 <Link href="/curbos" className="text-neutral-700 hover:text-white text-xs font-bold transition-colors">
                     BACK TO ADMIN PANEL
@@ -233,6 +277,8 @@ export default function KitchenKDS() {
         </div>
     )
 }
+
+import QRCode from 'react-qr-code'
 
 function Timer({ timestamp }: { timestamp: number }) {
     const [elapsed, setElapsed] = useState(0)

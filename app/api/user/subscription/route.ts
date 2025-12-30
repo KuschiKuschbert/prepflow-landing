@@ -1,10 +1,11 @@
+import { isAdmin } from '@/lib/admin-utils';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { getEntitlementsForTierAsync } from '@/lib/entitlements';
+import { requireAuth } from '@/lib/auth0-api-helpers';
+import { getAdminEntitlements, getEntitlementsForTierAsync } from '@/lib/entitlements';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import type { TierSlug } from '@/lib/tier-config';
 import { getUsage } from '@/lib/usage-tracker';
-import { requireAuth } from '@/lib/auth0-api-helpers';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -17,6 +18,25 @@ export async function GET(req: NextRequest) {
   try {
     const user = await requireAuth(req);
     const userEmail = user.email;
+    const isUserAdmin = isAdmin(user);
+
+    // If admin, return full entitlements bypassing database checks
+    if (isUserAdmin) {
+      const usage = await getUsage(userEmail);
+      const entitlements = getAdminEntitlements(userEmail);
+
+      return NextResponse.json({
+        subscription: {
+          tier: 'business' as TierSlug,
+          status: 'active',
+          expires_at: null,
+          created_at: null,
+          is_admin: true,
+        },
+        entitlements,
+        usage,
+      });
+    }
 
     if (!supabaseAdmin) {
       logger.warn('[Subscription API] Supabase not available');

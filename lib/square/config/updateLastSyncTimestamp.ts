@@ -68,3 +68,5 @@ export async function updateLastSyncTimestamp(
     throw ApiErrorHandler.createError('Failed to update sync timestamp', 'DATABASE_ERROR', 500);
   }
 }
+
+

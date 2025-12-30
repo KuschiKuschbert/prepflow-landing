@@ -229,3 +229,5 @@ Add `useNotification` hook and success/error messages.
 - ✅ All mutations provide user feedback (notifications)
 - ✅ No loading states on mutations
 - ✅ No refetch calls after mutations
+
+

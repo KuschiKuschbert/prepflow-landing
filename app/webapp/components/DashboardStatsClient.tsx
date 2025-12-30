@@ -1,210 +1,126 @@
 'use client';
 
-import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useTemperatureWarnings } from '@/hooks/useTemperatureWarnings';
-import { cacheData, getCachedData, prefetchApis } from '@/lib/cache/data-cache';
 import { startLoadingGate, stopLoadingGate } from '@/lib/loading-gate';
-import { logger } from '@/lib/logger';
 import { supabase } from '@/lib/supabase';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { DashboardErrorAlert } from './DashboardErrorAlert';
 import DashboardStats from './DashboardStats';
 import RecentActivity from './RecentActivity';
 import { getErrorAlerts } from './helpers/getErrorAlerts';
 import type {
-  DashboardStatsData,
-  TemperatureEquipment,
-  TemperatureLog,
+    DashboardStatsData
 } from './types/dashboard-stats';
 
 function DashboardStatsClientContent() {
-  const [stats, setStats] = useState<DashboardStatsData>({
+  const queryClient = useQueryClient();
+
+  // Fetch stats data
+  const {
+    data: statsData,
+    isLoading: statsLoading,
+    error: statsQueryError
+  } = useQuery({
+    queryKey: ['dashboard', 'stats'],
+    queryFn: async () => {
+      const response = await fetch('/api/dashboard/stats', { cache: 'no-store' });
+      if (!response.ok) {
+        const json = await response.json().catch(() => ({}));
+        throw new Error(json.error || 'Failed to load dashboard statistics');
+      }
+      const json = await response.json();
+      if (!json?.success) {
+        throw new Error(json?.error || 'Failed to load dashboard statistics');
+      }
+      return {
+        totalIngredients: json.totalIngredients || 0,
+        totalRecipes: json.totalRecipes || 0,
+        averageDishPrice: json.averageDishPrice || 0,
+        totalMenuDishes: json.totalMenuDishes,
+        recipesReady: json.recipesReady,
+        recipesWithoutCost: json.recipesWithoutCost,
+        ingredientsLowStock: json.ingredientsLowStock,
+        temperatureChecksToday: json.temperatureChecksToday,
+        cleaningTasksPending: json.cleaningTasksPending,
+      } as DashboardStatsData;
+    },
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    retry: 1,
+  });
+
+  // Fetch temperature logs
+  const {
+    data: logsData,
+    isLoading: logsLoading,
+    error: logsQueryError
+  } = useQuery({
+    queryKey: ['dashboard', 'temperature-logs'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('temperature_logs')
+        .select(
+          'id, log_date, log_time, temperature_type, temperature_celsius, location, notes, photo_url, logged_by, created_at, updated_at',
+        )
+        .order('log_date', { ascending: false })
+        .order('log_time', { ascending: false })
+        .limit(20);
+
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 2 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,
+  });
+
+  // Fetch temperature equipment
+  const {
+    data: equipmentData,
+    isLoading: equipmentLoading,
+    error: equipmentQueryError
+  } = useQuery({
+    queryKey: ['dashboard', 'temperature-equipment'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('temperature_equipment')
+        .select(
+          'id, name, equipment_type, location, min_temp_celsius, max_temp_celsius, is_active, created_at, updated_at',
+        )
+        .eq('is_active', true);
+
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+  });
+
+  const stats = statsData || {
     totalIngredients: 0,
     totalRecipes: 0,
     averageDishPrice: 0,
-  });
-  const [allLogs, setAllLogs] = useState<TemperatureLog[]>([]);
-  const [equipment, setEquipment] = useState<TemperatureEquipment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [statsError, setStatsError] = useState<string | null>(null);
-  const [temperatureLogsError, setTemperatureLogsError] = useState<string | null>(null);
-  const [temperatureEquipmentError, setTemperatureEquipmentError] = useState<string | null>(null);
-
-  // Fetch dashboard data in parallel for better performance
-  const fetchDashboardData = async ({
-    forceLoading = false,
-    hasPrefetchedData = false,
-  }: {
-    forceLoading?: boolean;
-    hasPrefetchedData?: boolean;
-  } = {}) => {
-    const hasData =
-      hasPrefetchedData ||
-      stats.totalIngredients > 0 ||
-      stats.totalRecipes > 0 ||
-      allLogs.length > 0 ||
-      equipment.length > 0;
-    const shouldShowLoading = forceLoading || !hasData;
-    if (shouldShowLoading) {
-      setLoading(true);
-    }
-    setStatsError(null);
-    setTemperatureLogsError(null);
-    setTemperatureEquipmentError(null);
-
-    try {
-      // Fetch stats and temperature data in parallel
-      // Limit temperature logs to recent entries only (last 20) for better performance
-      let statsResponse: Response;
-      try {
-        statsResponse = await fetch('/api/dashboard/stats', { cache: 'no-store' });
-      } catch (err) {
-        logger.error('Network error fetching stats:', err);
-        setStatsError(
-          'Network error: Unable to fetch dashboard stats. Please check your connection.',
-        );
-        setLoading(false);
-        return;
-      }
-
-      // Supabase queries return { data, error } objects, not promises that can be caught
-      const [logsResult, equipmentResult] = await Promise.all([
-        supabase
-          .from('temperature_logs')
-          .select(
-            'id, log_date, log_time, temperature_type, temperature_celsius, location, notes, photo_url, logged_by, created_at, updated_at',
-          )
-          .order('log_date', { ascending: false })
-          .order('log_time', { ascending: false })
-          .limit(20),
-        supabase
-          .from('temperature_equipment')
-          .select(
-            'id, name, equipment_type, location, min_temp_celsius, max_temp_celsius, is_active, created_at, updated_at',
-          )
-          .eq('is_active', true),
-      ]);
-
-      // Process stats response
-      try {
-        const statsJson = await statsResponse.json();
-        if (!statsResponse.ok || !statsJson?.success) {
-          setStatsError(statsJson?.error || 'Failed to load dashboard statistics');
-        } else {
-          const newStats: DashboardStatsData = {
-            totalIngredients: statsJson.totalIngredients || 0,
-            totalRecipes: statsJson.totalRecipes || 0,
-            averageDishPrice: statsJson.averageDishPrice || 0,
-            totalMenuDishes: statsJson.totalMenuDishes,
-            recipesReady: statsJson.recipesReady,
-            recipesWithoutCost: statsJson.recipesWithoutCost,
-            ingredientsLowStock: statsJson.ingredientsLowStock,
-            temperatureChecksToday: statsJson.temperatureChecksToday,
-            cleaningTasksPending: statsJson.cleaningTasksPending,
-          };
-          setStats(newStats);
-          cacheData('dashboard_stats', newStats);
-        }
-      } catch (err) {
-        logger.error('Error parsing stats response:', err);
-        setStatsError('Failed to parse dashboard statistics. Give it another go, chef.');
-      }
-
-      // Process temperature logs data
-      if (logsResult.error) {
-        const errorMessage =
-          logsResult.error.message ||
-          'Failed to load temperature logs. The dashboard will still work without this data.';
-        setTemperatureLogsError(errorMessage);
-        logger.error('Error fetching temperature logs:', logsResult.error);
-        // Keep existing logs from cache if available, don't clear them
-      } else if (logsResult.data) {
-        const logs = logsResult.data || [];
-        setAllLogs(logs);
-        cacheData('dashboard_temperature_logs', logs);
-      }
-
-      // Process temperature equipment data
-      if (equipmentResult.error) {
-        const errorMessage =
-          equipmentResult.error.message ||
-          'Failed to load temperature equipment. The dashboard will still work without this data.';
-        setTemperatureEquipmentError(errorMessage);
-        logger.error('Error fetching temperature equipment:', equipmentResult.error);
-        // Keep existing equipment from cache if available, don't clear them
-      } else if (equipmentResult.data) {
-        const equip = equipmentResult.data || [];
-        setEquipment(equip);
-        cacheData('dashboard_temperature_equipment', equip);
-      }
-    } catch (error) {
-      logger.error('Unexpected error fetching dashboard data:', error);
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : 'An unexpected error occurred while loading the dashboard. Please try again.';
-      setStatsError(errorMessage);
-
-      // Check if it's a network error
-      if (error instanceof TypeError && error.message.includes('fetch')) {
-        setStatsError(
-          'Network error: Unable to connect to the server. Please check your internet connection.',
-        );
-      }
-    } finally {
-      setLoading(false);
-    }
   };
+  const allLogs = logsData || [];
+  const equipment = equipmentData || [];
+  const loading = statsLoading || logsLoading || equipmentLoading;
 
-  // Loading gate integration - trigger docket catch game on slow loads
+  const statsError = statsQueryError instanceof Error ? statsQueryError.message : null;
+  const temperatureLogsError = logsQueryError instanceof Error ? logsQueryError.message : null;
+  const temperatureEquipmentError = equipmentQueryError instanceof Error ? equipmentQueryError.message : null;
+
+  // Loading gate integration
   useEffect(() => {
     if (loading) startLoadingGate('dashboard');
     else stopLoadingGate('dashboard');
     return () => stopLoadingGate('dashboard');
   }, [loading]);
 
-  useEffect(() => {
-    let hasCache = false;
-    if (typeof window !== 'undefined') {
-      const cachedStats = getCachedData<DashboardStatsData>('dashboard_stats');
-      const cachedLogs = getCachedData<TemperatureLog[]>('dashboard_temperature_logs');
-      const cachedEquipment = getCachedData<TemperatureEquipment[]>(
-        'dashboard_temperature_equipment',
-      );
-
-      if (cachedStats) {
-        setStats(cachedStats);
-        hasCache = true;
-      }
-
-      if (cachedLogs && cachedLogs.length > 0) {
-        setAllLogs(cachedLogs);
-        hasCache = true;
-      }
-
-      if (cachedEquipment && cachedEquipment.length > 0) {
-        setEquipment(cachedEquipment);
-        hasCache = true;
-      }
-
-      if (hasCache) {
-        setLoading(false);
-      }
-    }
-
-    // Prefetch dashboard APIs
-    prefetchApis([
-      '/api/dashboard/stats',
-      '/api/dashboard/performance-summary',
-      '/api/dashboard/menu-summary',
-      '/api/dashboard/recipe-readiness',
-    ]);
-    fetchDashboardData({ hasPrefetchedData: hasCache });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleRetry = () => fetchDashboardData({ forceLoading: true });
+  const handleRetry = () => {
+    queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+  };
   const errorAlerts = getErrorAlerts(statsError, temperatureLogsError, temperatureEquipmentError);
 
   // Use temperature warnings hook

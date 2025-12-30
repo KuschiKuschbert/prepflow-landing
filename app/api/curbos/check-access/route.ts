@@ -1,7 +1,6 @@
-import { evaluateTierGate } from '@/lib/feature-gate/helpers/evaluateTierGate';
-import { isEmailAllowed, getAllowedEmails } from '@/lib/allowlist';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { hasCurbOSAccess } from '@/lib/curbos/tier-access';
+import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -28,34 +27,19 @@ export async function GET(req: NextRequest) {
     // Normalize email for comparison (lowercase, trimmed)
     const normalizedEmail = userEmail.toLowerCase().trim();
 
-    // Admin access (allowlist) - automatic access regardless of tier
-    if (isEmailAllowed(normalizedEmail)) {
-      logger.dev('[CurbOS API] Admin access granted via allowlist:', {
-        userEmail: normalizedEmail,
-        originalEmail: userEmail,
-      });
+    // Check access using unified helper (Allowlist + Auth0 Admin + Tier)
+    const hasAccess = await hasCurbOSAccess(normalizedEmail, req);
+
+    if (hasAccess) {
       return NextResponse.json({
         allowed: true,
-        reason: 'admin-access',
+        reason: 'authorized',
       });
     }
-
-    // Log for debugging if admin check fails (only in development)
-    if (process.env.NODE_ENV === 'development') {
-      const allowedEmails = getAllowedEmails();
-      logger.dev('[CurbOS API] Admin check failed, checking tier:', {
-        userEmail: normalizedEmail,
-        allowedEmailsCount: allowedEmails.length,
-        isInAllowedList: allowedEmails.includes(normalizedEmail),
-      });
-    }
-
-    // Check tier-based access (Business tier required)
-    const result = await evaluateTierGate('curbos', userEmail);
 
     return NextResponse.json({
-      allowed: result.allowed,
-      reason: result.reason,
+      allowed: false,
+      reason: 'upgrade-required',
     });
   } catch (error) {
     logger.error('[API /curbos/check-access] Failed to check CurbOS access:', {

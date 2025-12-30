@@ -25,3 +25,5 @@ export async function syncRecentOrdersFromSquareForInitialSync(
     return { synced: 0, errors: 1 };
   }
 }
+
+

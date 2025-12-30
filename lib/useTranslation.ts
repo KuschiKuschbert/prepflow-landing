@@ -1,12 +1,12 @@
 'use client';
-import { useState, useEffect } from 'react';
 import { logger } from '@/lib/logger';
-import { loadTranslations, getCachedTranslations } from './useTranslation/helpers/loadTranslations';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  getBrowserLanguage,
-  availableLanguages,
+    availableLanguages,
+    getBrowserLanguage,
 } from './useTranslation/helpers/getBrowserLanguage';
 import { getNestedValue } from './useTranslation/helpers/getNestedValue';
+import { getCachedTranslations, loadTranslations } from './useTranslation/helpers/loadTranslations';
 
 // Main translation hook
 export function useTranslation() {
@@ -58,16 +58,19 @@ export function useTranslation() {
   }, []);
 
   // Get translation function
-  const t = (key: string, fallback?: string | any[]): string | any[] => {
-    const translations = getCachedTranslations();
-    const currentTranslations = translations[currentLanguage] || translations['en-AU'];
-    const translation = getNestedValue(currentTranslations, key);
-    if (translation !== undefined) return translation;
-    return fallback || key;
-  };
+  const t = useCallback(
+    (key: string, fallback?: string | any[]): string | any[] => {
+      const translations = getCachedTranslations();
+      const currentTranslations = translations[currentLanguage] || translations['en-AU'];
+      const translation = getNestedValue(currentTranslations, key);
+      if (translation !== undefined) return translation;
+      return fallback || key;
+    },
+    [currentLanguage],
+  );
 
   // Change language
-  const changeLanguage = async (language: string) => {
+  const changeLanguage = useCallback(async (language: string) => {
     if (availableLanguages[language as keyof typeof availableLanguages]) {
       try {
         setCurrentLanguage(language);
@@ -95,29 +98,35 @@ export function useTranslation() {
         }
       }
     }
-  };
+  }, []);
 
   // Get current language info
-  const getCurrentLanguageInfo = () =>
-    availableLanguages[currentLanguage as keyof typeof availableLanguages] ||
-    availableLanguages['en-AU'];
+  const getCurrentLanguageInfo = useCallback(
+    () =>
+      availableLanguages[currentLanguage as keyof typeof availableLanguages] ||
+      availableLanguages['en-AU'],
+    [currentLanguage],
+  );
 
   // Get all available languages
-  const getAvailableLanguages = () => {
+  const getAvailableLanguages = useCallback(() => {
     return Object.entries(availableLanguages).map(([code, info]) => ({
       code,
       ...info,
     }));
-  };
+  }, []);
 
-  return {
-    t,
-    currentLanguage,
-    changeLanguage,
-    getCurrentLanguageInfo,
-    getAvailableLanguages,
-    isLoading,
-  };
+  return useMemo(
+    () => ({
+      t,
+      currentLanguage,
+      changeLanguage,
+      getCurrentLanguageInfo,
+      getAvailableLanguages,
+      isLoading,
+    }),
+    [t, currentLanguage, changeLanguage, getCurrentLanguageInfo, getAvailableLanguages, isLoading],
+  );
 }
 
 // Utility function for components that need translation outside of hook

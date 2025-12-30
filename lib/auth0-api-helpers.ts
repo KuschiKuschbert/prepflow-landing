@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdmin } from './admin-utils';
 import { isEmailAllowed } from './allowlist';
-import { getDevUser } from './auth0-api-helpers/helpers/getDevUser';
 import { extractUserFromSession } from './auth0-api-helpers/helpers/extractUserFromSession';
+import { getDevUser } from './auth0-api-helpers/helpers/getDevUser';
 
 const isDev = process.env.NODE_ENV === 'development';
 const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
@@ -49,9 +49,16 @@ export async function requireAuth(req: NextRequest): Promise<{
     );
   }
 
-  // Enforce allowlist in production if enabled
+  // Enforce allowlist in production if enabled (Admins bypass allowlist)
   const allowlistEnabled = process.env.DISABLE_ALLOWLIST !== 'true';
-  if (process.env.NODE_ENV === 'production' && allowlistEnabled && !isEmailAllowed(user.email)) {
+  const isUserAdmin = isAdmin(user);
+
+  if (
+    process.env.NODE_ENV === 'production' &&
+    allowlistEnabled &&
+    !isEmailAllowed(user.email) &&
+    !isUserAdmin
+  ) {
     throw NextResponse.json(
       { error: 'Forbidden', message: 'Email not in allowlist' },
       { status: 403 },

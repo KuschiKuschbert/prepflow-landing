@@ -1,23 +1,21 @@
 'use client';
 
 import GlobalWarning from '@/components/GlobalWarning';
-import ReactQueryProvider from '@/components/ReactQueryProvider';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
+import { SubscriptionStatusBanner } from '@/components/ui/SubscriptionStatusBanner';
 import { useSessionTimeout } from '@/hooks/useSessionTimeout';
-import { useTranslation } from '@/lib/useTranslation';
-import { useTheme } from '@/lib/theme/useTheme';
-import { Inter } from 'next/font/google';
-import dynamic from 'next/dynamic';
-import { useUser } from '@auth0/nextjs-auth0/client';
-import React, { useEffect, useState } from 'react';
 import { logger } from '@/lib/logger';
+import { useTheme } from '@/lib/theme/useTheme';
+import { useTranslation } from '@/lib/useTranslation';
+import dynamic from 'next/dynamic';
+import { Inter } from 'next/font/google';
+import React, { useCallback, useEffect, useState } from 'react';
 import { CountryProvider } from '../../contexts/CountryContext';
 import { GlobalWarningProvider, useGlobalWarning } from '../../contexts/GlobalWarningContext';
 import { NotificationProvider } from '../../contexts/NotificationContext';
 import '../globals.css';
 import ModernNavigation from './components/ModernNavigation';
 import { NetworkStatusBanner } from './components/NetworkStatusBanner';
-import { SubscriptionStatusBanner } from '@/components/ui/SubscriptionStatusBanner';
 
 // Lazy load non-critical components to reduce initial bundle size
 const CatchTheDocketOverlay = dynamic(() => import('@/components/Loading/CatchTheDocketOverlay'), {
@@ -116,14 +114,17 @@ export default function WebAppLayout({
     ? Number(process.env.NEXT_PUBLIC_SESSION_WARNING_MS)
     : 15 * 60 * 1000; // 15 minutes default
 
+  // Memoize onTimeout handler to prevent useSessionTimeout from resetting its internal effects
+  const handleTimeout = useCallback(async () => {
+    // Logout via Auth0 SDK - redirects to Auth0 logout then back to home
+    const returnTo = `${window.location.origin}/`;
+    window.location.href = `/api/auth/logout?returnTo=${encodeURIComponent(returnTo)}`;
+  }, []);
+
   const { isWarning, remainingMs, resetTimeout } = useSessionTimeout({
     timeoutMs,
     warningMs,
-    onTimeout: async () => {
-      // Logout via Auth0 SDK - redirects to Auth0 logout then back to home
-      const returnTo = `${window.location.origin}/`;
-      window.location.href = `/api/auth/logout?returnTo=${encodeURIComponent(returnTo)}`;
-    },
+    onTimeout: handleTimeout,
     enabled: true,
   });
 
@@ -248,9 +249,7 @@ function WebAppLayoutContent({
 
       {/* Main Content - responsive padding handled by CSS in globals.css */}
       <main className="webapp-main-content bg-transparent">
-        <ErrorBoundary>
-          <ReactQueryProvider>{children}</ReactQueryProvider>
-        </ErrorBoundary>
+        <ErrorBoundary>{children}</ErrorBoundary>
       </main>
 
       {/* Arcade Loading Overlay (disabled around auth flows) */}
