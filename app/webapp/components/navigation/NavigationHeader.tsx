@@ -93,12 +93,15 @@ function NavigationHeaderBase({
   const { profile } = useUserProfile();
 
   // Priority: Database first_name/last_name → Auth0 session name → Email prefix
-  const userNameInput = useMemo(() => ({
-    first_name: profile?.first_name,
-    last_name: profile?.last_name,
-    name: auth0UserName,
-    email: userEmail,
-  }), [profile?.first_name, profile?.last_name, auth0UserName, userEmail]);
+  const userNameInput = useMemo(
+    () => ({
+      first_name: profile?.first_name,
+      last_name: profile?.last_name,
+      name: auth0UserName,
+      email: userEmail,
+    }),
+    [profile?.first_name, profile?.last_name, auth0UserName, userEmail],
+  );
 
   const userName = isMounted ? getUserDisplayName(userNameInput) : '';
   const { avatar: userAvatar } = useUserAvatar();
@@ -125,13 +128,13 @@ function NavigationHeaderBase({
     <>
       <div
         className={cn(
-          'fixed inset-x-0 top-0 z-50 flex h-16 transform items-center transition-all duration-300 desktop:h-20',
+          'desktop:h-20 fixed inset-x-0 top-0 z-50 flex h-16 transform items-center transition-all duration-300',
           !isVisible && '-translate-y-full',
           className,
         )}
       >
-        <div className="mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4 desktop:px-6">
-          <div className="flex items-center gap-4 desktop:gap-8">
+        <div className="desktop:px-6 mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4">
+          <div className="desktop:gap-8 flex items-center gap-4">
             <LogoSection
               handleLogoClick={handleLogoClick}
               handleLogoTouchStart={handleLogoTouchStart}
@@ -153,7 +156,7 @@ function NavigationHeaderBase({
             )}
           </div>
 
-          <div className="flex items-center gap-2 desktop:gap-4">
+          <div className="desktop:gap-4 flex items-center gap-2">
             <button
               onClick={onSearchClick}
               className={cn(
@@ -167,7 +170,7 @@ function NavigationHeaderBase({
 
             <NavbarStats onClick={onAchievementsClick} />
 
-            <div className="h-6 w-px bg-[var(--border)] desktop:h-8" />
+            <div className="desktop:h-8 h-6 w-px bg-[var(--border)]" />
 
             <UserAvatarButton
               buttonRef={buttonRef}
@@ -194,9 +197,6 @@ function NavigationHeaderBase({
           defaultInitials={initials}
         />
       </div>
-
-      {/* Spacer for fixed header */}
-      <div className="h-16 desktop:h-20" />
     </>
   );
 }
