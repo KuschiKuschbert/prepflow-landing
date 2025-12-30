@@ -43,7 +43,7 @@ interface LandingPageClientProps {
  * Client-side wrapper for the landing page.
  * Handles state, hooks, and layout, receiving server-fetched data as props.
  */
-export default function LandingPageClient({ initialRelease }: LandingPageClientProps) {
+export default function LandingPageClient() {
   // Translation hook (unused in this wrapper)
   // const { t } = useTranslation();
 
@@ -156,7 +156,7 @@ export default function LandingPageClient({ initialRelease }: LandingPageClientP
         {/* Content overlay - ensures content is above background */}
         <div className="relative z-10">
           {/* Header - now receiving server-fetched release data */}
-          <LandingHeader trackEngagement={trackEngagement} releaseData={initialRelease} />
+          <LandingHeader trackEngagement={trackEngagement} />
 
           {/* Hero - Full-viewport with product title and large dashboard screenshot */}
           <AppHero trackEngagement={trackEngagement} />

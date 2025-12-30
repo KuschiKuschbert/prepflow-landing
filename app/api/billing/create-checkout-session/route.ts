@@ -1,5 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
+import { resolvePriceIdFromTier } from '@/lib/billing';
 import { logger } from '@/lib/logger';
 import { getStripe } from '@/lib/stripe';
 import { NextRequest, NextResponse } from 'next/server';
@@ -50,18 +51,7 @@ export async function POST(req: NextRequest) {
 
     const { priceId: validatedPriceId, tier } = validationResult.data;
 
-    // Helper to resolve price ID
-    const resolvePriceId = (t: string | undefined): string | null => {
-      if (!t) return null;
-      if (t === 'starter') return process.env.STRIPE_PRICE_STARTER_MONTHLY || null;
-      if (t === 'pro') return process.env.STRIPE_PRICE_PRO_MONTHLY || null;
-      if (t === 'business') return process.env.STRIPE_PRICE_BUSINESS_MONTHLY || null;
-      if (t === 'curbos') return process.env.STRIPE_PRICE_CURBOS_MONTHLY || null;
-      if (t === 'bundle') return process.env.STRIPE_PRICE_BUNDLE_MONTHLY || null;
-      return null;
-    };
-
-    const priceId: string | null = validatedPriceId || resolvePriceId(tier);
+    const priceId: string | null = validatedPriceId || resolvePriceIdFromTier(tier);
 
     if (!priceId) {
       return NextResponse.json(

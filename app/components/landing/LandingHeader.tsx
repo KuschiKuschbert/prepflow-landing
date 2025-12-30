@@ -5,7 +5,6 @@
 
 import { logger } from '@/lib/logger';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Download } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 import { BrandMark } from '../../../components/BrandMark';
@@ -15,19 +14,14 @@ import { BUTTON_STYLES } from '../../../lib/tailwind-utils';
 import { useTranslation } from '../../../lib/useTranslation';
 interface LandingHeaderProps {
   trackEngagement?: (eventName: string) => void;
-  releaseData?: { tag_name: string; download_url: string } | null;
 }
 
 const LandingHeader = React.memo(function LandingHeader({
   trackEngagement = () => {},
-  releaseData = null,
 }: LandingHeaderProps) {
   const { t } = useTranslation();
   const { user, isLoading } = useUser();
   const isAuthenticated = !!user;
-
-  // Use prop if available, otherwise default to null (no client-side fallback needed for version)
-  const release = releaseData;
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-gray-700 bg-[#0a0a0a]/95 backdrop-blur-md">
@@ -75,20 +69,6 @@ const LandingHeader = React.memo(function LandingHeader({
 
           {/* Desktop Actions */}
           <div className="desktop:flex hidden items-center gap-4">
-            {release && (
-              <MagneticButton
-                className="flex items-center gap-2 rounded-full border border-[#C0FF02]/30 bg-[#C0FF02]/10 px-4 py-2 text-sm font-bold text-[#C0FF02] transition-colors hover:bg-[#C0FF02]/20"
-                onClick={() => {
-                  trackEngagement('download_apk_click');
-                  window.open(release.download_url, '_blank');
-                }}
-                strength={0.2}
-                maxDistance={5}
-              >
-                <Download size={16} />
-                <span>CurbOS {release.tag_name}</span>
-              </MagneticButton>
-            )}
             <LanguageSwitcher className="mr-4" />
             {!isLoading &&
               (isAuthenticated ? (

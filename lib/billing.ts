@@ -1,8 +1,8 @@
-import { getStripe } from './stripe';
-import { logger } from './logger';
+import { createStripeCustomer } from './billing/helpers/createStripeCustomer';
 import { getCachedCustomerId } from './billing/helpers/getCachedCustomerId';
 import { searchCustomerByEmail } from './billing/helpers/searchCustomerByEmail';
-import { createStripeCustomer } from './billing/helpers/createStripeCustomer';
+import { logger } from './logger';
+import { getStripe } from './stripe';
 
 /**
  * Get or create Stripe customer ID for a user email
@@ -47,6 +47,10 @@ export function resolvePriceIdFromTier(tier: string | undefined): string | null 
       return process.env.STRIPE_PRICE_PRO_MONTHLY || null;
     case 'business':
       return process.env.STRIPE_PRICE_BUSINESS_MONTHLY || null;
+    case 'curbos':
+      return process.env.STRIPE_PRICE_CURBOS_MONTHLY || null;
+    case 'bundle':
+      return process.env.STRIPE_PRICE_BUNDLE_MONTHLY || null;
     default:
       return null;
   }
