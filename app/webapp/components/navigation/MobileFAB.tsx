@@ -152,7 +152,7 @@ export const MobileFAB = memo(function MobileFAB() {
           'hover:shadow-[var(--primary)]/25 hover:shadow-xl',
           'active:scale-95',
           'focus:outline-none',
-          'landscape:h-10 landscape:w-10',
+          'landscape:h-11 landscape:min-h-[44px] landscape:w-11 landscape:min-w-[44px]',
         )}
         style={{
           willChange: 'transform',
