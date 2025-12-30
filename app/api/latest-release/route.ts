@@ -1,52 +1,42 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { getLatestRelease } from '@/lib/github-release';
 import { logger } from '@/lib/logger';
 import { NextResponse } from 'next/server';
 
 /**
- * Proxy to fetch the latest release from GitHub to avoid exposing tokens (if used)
- * and to provide a stable endpoint for the frontend.
+ * Proxy to fetch the latest release from GitHub.
+ * Now improved to use the shared helper.
  * @returns JSON object with release details.
  */
 export async function GET() {
   try {
-    // Replace with your actual repo details
-    const GITHUB_REPO = 'KuschiKuschbert/CurbOS';
-    const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/releases/latest`, {
-      headers: {
-        'Accept': 'application/vnd.github.v3+json',
-      },
-      next: { revalidate: 3600 } // Cache for 1 hour
-    });
+    const release = await getLatestRelease();
 
-    if (!response.ok) {
-        if (response.status === 404) {
-             const error = ApiErrorHandler.createError('No releases found', 'NOT_FOUND', 404);
-             return NextResponse.json(error, { status: 404 });
-        }
-        logger.error('Failed to fetch release from GitHub', { status: response.status });
-        const error = ApiErrorHandler.createError('Failed to fetch release', 'GITHUB_ERROR', response.status);
-        return NextResponse.json(error, { status: response.status });
+    if (!release) {
+      const error = ApiErrorHandler.createError('Failed to fetch release', 'GITHUB_ERROR', 404);
+      logger.error('[Latest Release API] No release found');
+      return NextResponse.json(error, { status: 404 });
     }
 
-    const data = await response.json();
-
-    // Extract relevant data
-    const releaseValue = {
-      tag_name: data.tag_name, // e.g., "v0.2.7"
-      name: data.name,
-      published_at: data.published_at,
-      html_url: data.html_url,
-      // Find the APK asset if multiple assets exist
-      assets: data.assets.map((asset: any) => ({
-        name: asset.name,
-        browser_download_url: asset.browser_download_url
-      }))
+    // Map to the format expected by consumers (though now identical to ReleaseData)
+    // Maintaining for backward compatibility/clarity
+    const responseData = {
+      tag_name: release.tag_name,
+      name: release.name,
+      published_at: release.published_at,
+      html_url: release.html_url,
+      assets: [
+        {
+          name: 'curbos.apk', // generic name or from asset
+          browser_download_url: release.download_url,
+        },
+      ],
     };
 
-    return NextResponse.json(releaseValue);
-  } catch (e) {
-    logger.error('Release API Error:', e);
-    const errorObj = e instanceof Error ? e : new Error(String(e));
+    return NextResponse.json(responseData);
+  } catch (error) {
+    logger.error('[Latest Release API] Unexpected error', error);
+    const errorObj = error instanceof Error ? error : new Error(String(error));
     const apiError = ApiErrorHandler.fromException(errorObj);
     return NextResponse.json(apiError, { status: 500 });
   }

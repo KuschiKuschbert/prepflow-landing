@@ -7,47 +7,27 @@ import { logger } from '@/lib/logger';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Download } from 'lucide-react';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { BrandMark } from '../../../components/BrandMark';
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import { MagneticButton } from '../../../components/ui/MagneticButton';
 import { BUTTON_STYLES } from '../../../lib/tailwind-utils';
 import { useTranslation } from '../../../lib/useTranslation';
 interface LandingHeaderProps {
-  trackEngagement?: (event: string) => void;
+  trackEngagement?: (eventName: string) => void;
+  releaseData?: { tag_name: string; download_url: string } | null;
 }
 
 const LandingHeader = React.memo(function LandingHeader({
   trackEngagement = () => {},
+  releaseData = null,
 }: LandingHeaderProps) {
   const { t } = useTranslation();
   const { user, isLoading } = useUser();
   const isAuthenticated = !!user;
 
-  const [release, setRelease] = useState<{ tag_name: string; download_url: string } | null>(null);
-
-  useEffect(() => {
-    async function fetchLatestRelease() {
-      try {
-        const res = await fetch('/api/latest-release');
-        if (res.ok) {
-          const data = await res.json();
-          const apkAsset =
-            data.assets?.find((a: any) => a.name.endsWith('.apk')) || data.assets?.[0];
-
-          if (data.tag_name) {
-            setRelease({
-              tag_name: data.tag_name,
-              download_url: apkAsset ? apkAsset.browser_download_url : data.html_url,
-            });
-          }
-        }
-      } catch (e) {
-        logger.error('Failed to fetch latest release', e);
-      }
-    }
-    fetchLatestRelease();
-  }, []);
+  // Use prop if available, otherwise default to null (no client-side fallback needed for version)
+  const release = releaseData;
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-gray-700 bg-[#0a0a0a]/95 backdrop-blur-md">
