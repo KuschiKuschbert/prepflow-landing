@@ -108,11 +108,11 @@ export const MoreDrawer = memo(function MoreDrawer({ isOpen, onClose }: MoreDraw
         aria-hidden={true}
       />
 
-      {/* Fixed Menu Card */}
-      <div className="fixed right-4 bottom-[calc(var(--bottom-navbar-height)+1rem)] z-[70] max-h-[70vh] w-[280px] rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-2xl">
+      {/* Fixed Menu Card - Matches desktop sidebar styling */}
+      <div className="fixed right-4 bottom-[calc(var(--bottom-navbar-height)+1rem)] z-[70] max-h-[70vh] w-[280px] rounded-2xl bg-gradient-to-r from-[var(--primary)]/20 via-[var(--accent)]/20 via-[var(--tertiary)]/20 to-[var(--primary)]/20 p-[1px] shadow-2xl">
         <div
           ref={menuRef}
-          className="flex max-h-[calc(70vh-2px)] flex-col rounded-2xl"
+          className="flex max-h-[calc(70vh-2px)] flex-col rounded-2xl bg-[var(--surface)]"
           style={{
             transformOrigin: 'bottom right',
             animation: isOpen ? 'scale-in-bubble 0.2s var(--easing-standard) forwards' : 'none',

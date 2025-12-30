@@ -14,6 +14,6 @@ export function getBaseUrl(): string {
     return `${protocol}://${process.env.VERCEL_URL}`;
   }
 
-  // Default to localhost for local development
+  // Fallback for local development
   return 'http://localhost:3000';
 }
