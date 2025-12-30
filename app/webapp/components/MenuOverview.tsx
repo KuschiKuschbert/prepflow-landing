@@ -119,7 +119,7 @@ export default function MenuOverview() {
               />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-fluid-xs tablet:text-fluid-sm truncate font-medium text-[var(--foreground-muted)]">
+              <p className="text-fluid-xs tablet:text-fluid-sm min-w-0 truncate font-medium text-[var(--foreground-muted)]">
                 Active Menus
               </p>
               <p className="text-fluid-xl tablet:text-fluid-2xl font-bold text-[var(--foreground)]">
@@ -148,7 +148,7 @@ export default function MenuOverview() {
               />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-fluid-xs tablet:text-fluid-sm truncate font-medium text-[var(--foreground-muted)]">
+              <p className="text-fluid-xs tablet:text-fluid-sm min-w-0 truncate font-medium text-[var(--foreground-muted)]">
                 Dishes Available
               </p>
               <p className="text-fluid-xl tablet:text-fluid-2xl font-bold text-[var(--foreground)]">
@@ -187,7 +187,7 @@ export default function MenuOverview() {
               />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-fluid-xs tablet:text-fluid-sm truncate font-medium text-[var(--foreground-muted)]">
+              <p className="text-fluid-xs tablet:text-fluid-sm min-w-0 truncate font-medium text-[var(--foreground-muted)]">
                 Without Recipes
               </p>
               <p
@@ -232,7 +232,7 @@ export default function MenuOverview() {
               />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-fluid-xs tablet:text-fluid-sm truncate font-medium text-[var(--foreground-muted)]">
+              <p className="text-fluid-xs tablet:text-fluid-sm min-w-0 truncate font-medium text-[var(--foreground-muted)]">
                 Without Costs
               </p>
               <p
