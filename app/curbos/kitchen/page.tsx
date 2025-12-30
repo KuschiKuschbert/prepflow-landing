@@ -271,7 +271,7 @@ export default function KitchenKDS() {
 
                         <div className="bg-white p-6 rounded-xl mx-auto w-fit">
                             <QRCode
-                                value={`${typeof window !== 'undefined' ? window.location.origin : ''}/order/${selectedOrder.id}`}
+                                value={`${typeof window !== 'undefined' ? window.location.origin : ''}/curbos/order/${selectedOrder.id}`}
                                 size={256}
                             />
                         </div>
