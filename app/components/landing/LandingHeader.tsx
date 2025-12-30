@@ -3,20 +3,20 @@
  * Landing page header component
  */
 
+import { logger } from '@/lib/logger';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Link from 'next/link';
 import React from 'react';
 import { BrandMark } from '../../../components/BrandMark';
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
+import { MagneticButton } from '../../../components/ui/MagneticButton';
 import { BUTTON_STYLES } from '../../../lib/tailwind-utils';
 import { useTranslation } from '../../../lib/useTranslation';
-import { MagneticButton } from '../../../components/ui/MagneticButton';
-import { logger } from '@/lib/logger';
 interface LandingHeaderProps {
-  trackEngagement: (event: string) => void;
+  trackEngagement?: (event: string) => void;
 }
 
-const LandingHeader = React.memo(function LandingHeader({ trackEngagement }: LandingHeaderProps) {
+const LandingHeader = React.memo(function LandingHeader({ trackEngagement = () => {} }: LandingHeaderProps) {
   const { t } = useTranslation();
   const { user, isLoading } = useUser();
   const isAuthenticated = !!user;
