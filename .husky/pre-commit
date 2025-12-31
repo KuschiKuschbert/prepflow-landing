@@ -4,31 +4,14 @@
 # Get staged files
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | tr '\n' ' ')
 
-# Protect curbos area from modifications
-# Allow bypass with ALLOW_CURBOS_MODIFY=1 for emergency cases
-if [ -z "$ALLOW_CURBOS_MODIFY" ]; then
-  CURBOS_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '^app/curbos/' || true)
 
-  if [ -n "$CURBOS_FILES" ]; then
-    echo "❌ ERROR: Attempted to modify protected curbos area!"
-    echo ""
-    echo "The following files in app/curbos/ are protected:"
-    echo "$CURBOS_FILES" | sed 's/^/  - /'
-    echo ""
-    echo "These files are tracked in git but should not be modified."
-    echo "If you need to modify them (emergency only), use:"
-    echo "  ALLOW_CURBOS_MODIFY=1 git commit ..."
-    echo ""
-    exit 1
-  fi
-fi
 
 # Filter out curbos files from staged files for checks
-FILTERED_STAGED_FILES=$(echo "$STAGED_FILES" | tr ' ' '\n' | grep -v '^app/curbos/' | tr '\n' ' ')
+FILTERED_STAGED_FILES="$STAGED_FILES"
 
 # Run unified cleanup check on staged files (if any, excluding curbos)
 if [ -n "$FILTERED_STAGED_FILES" ]; then
-  echo "Running cleanup checks on staged files (curbos area excluded)..."
+  echo "Running cleanup checks on staged files..."
   # Only fail on critical violations, warnings are allowed in pre-commit
   npm run cleanup:staged
   CLEANUP_EXIT=$?

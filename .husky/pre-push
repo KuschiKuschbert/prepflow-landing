@@ -1,0 +1,14 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🚀 Running pre-push checks for Web..."
+
+# Run full build (includes TypeCheck)
+npm run build
+
+if [ $? -ne 0 ]; then
+  echo "❌ Web Build Failed! Push rejected."
+  exit 1
+fi
+
+echo "✅ Web Build Passed!"
