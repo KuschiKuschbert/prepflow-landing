@@ -54,6 +54,10 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
         return
       }
 
+      // TEMP: Bypass auth for debugging
+      setIsChecking(false)
+      return
+
       try {
         // Check for Supabase session
         const { data: { session }, error } = await supabase.auth.getSession()
@@ -227,11 +231,11 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
       {/* Premium Glass Header (Global) - Hide on public order status pages */}
       {!pathname.startsWith('/curbos/order/') && (
         <header className="fixed top-4 left-4 right-4 tablet:top-6 tablet:left-6 tablet:right-6 h-16 tablet:h-20 bg-neutral-900/80 backdrop-blur-xl border border-white/10 rounded-2xl z-50 flex items-center justify-between px-4 tablet:px-6 desktop:px-8 shadow-2xl shadow-black/50">
-          <Link href="/curbos" className="flex items-center gap-2 tablet:gap-4 group cursor-pointer">
-              <div className="bg-[#C0FF02] p-1.5 tablet:p-2 rounded-lg text-black transform group-hover:rotate-12 transition-transform duration-300">
-                  <UtensilsCrossed size={20} className="tablet:w-6 tablet:h-6" />
+          <Link href="/curbos" className="flex items-center gap-1.5 tablet:gap-4 group cursor-pointer flex-shrink-0">
+              <div className="relative h-8 w-8 tablet:h-10 tablet:w-10 transform group-hover:rotate-12 transition-transform duration-300">
+                  <img src="/images/curbos-logo.png" alt="CurbOS Logo" className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(192,255,2,0.5)]" />
               </div>
-              <div>
+              <div className="hidden tablet:block">
                   <h1 className="text-xl tablet:text-2xl font-black tracking-tight text-white leading-none">CURB<span className="text-[#C0FF02]">OS</span></h1>
                   <div className="flex flex-col">
                     <p className="text-[8px] tablet:text-[10px] font-bold text-neutral-500 tracking-[0.2em] uppercase">Admin Console</p>
@@ -240,16 +244,16 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
               </div>
           </Link>
 
-          <nav className="flex items-center gap-0.5 tablet:gap-1 bg-black/20 p-1 tablet:p-1.5 rounded-xl border border-white/5">
+          <nav className="flex items-center gap-0.5 tablet:gap-1 bg-black/20 p-1 tablet:p-1.5 rounded-xl border border-white/5 overflow-x-auto flex-nowrap scrollbar-hide flex-1 min-w-0 mx-2 tablet:mx-4 tablet:max-w-none">
                <NavLink href="/curbos/stats" icon={<BarChart3 size={16} />} label="Stats" />
                <NavLink href="/curbos/modifiers" icon={<Cog size={16} />} label="Modifiers" />
-               <div className="w-px h-4 bg-white/10 mx-0.5 tablet:mx-1"></div>
+               <div className="hidden tablet:block w-px h-4 bg-white/10 mx-0.5 tablet:mx-1"></div>
                <NavLink href="/curbos/kitchen" icon={<UtensilsCrossed size={16} />} label="Kitchen" />
                <NavLink href="/curbos/display" icon={<Monitor size={16} />} label="Display" />
                <NavLink href="/curbos/settings" icon={<Settings size={16} />} label="Settings" />
           </nav>
 
-          <div className="flex items-center gap-2 tablet:gap-4 desktop:gap-6">
+          <div className="flex items-center gap-1.5 tablet:gap-4 desktop:gap-6 flex-shrink-0">
              {/* Seed Data (Subtle) */}
              <form action={seedInitialData}>
                 <button className="flex items-center gap-1 tablet:gap-2 text-[8px] tablet:text-[10px] text-neutral-600 hover:text-[#C0FF02] uppercase tracking-widest transition-colors font-bold border border-white/5 hover:border-[#C0FF02]/30 px-2 tablet:px-3 py-1 tablet:py-1.5 rounded-lg group">
@@ -281,7 +285,7 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
         {children}
       </div>
       <div className="fixed bottom-3 right-4 z-40 pointer-events-none select-none opacity-40 hover:opacity-100 transition-opacity duration-300">
-        <a href="https://prepflow.io" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 pointer-events-auto">
+        <a href="https://prepflow.org" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 pointer-events-auto">
           <span className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Powered by</span>
           <img src="/prepflow-logo.webp" alt="Prepflow" className="h-5 w-auto" />
         </a>

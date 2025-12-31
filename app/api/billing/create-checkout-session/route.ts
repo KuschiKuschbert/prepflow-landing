@@ -15,6 +15,13 @@ const checkoutSessionSchema = z
     message: 'Either priceId or tier must be provided',
   });
 
+/**
+ * Handles the creation of a Stripe Checkout session.
+ * Standardizes metadata, error handling, and success/cancel URLs.
+ *
+ * @param {NextRequest} req - The incoming request object.
+ * @returns {Promise<NextResponse>} The response object containing the session URL or an error.
+ */
 export async function POST(req: NextRequest) {
   try {
     const stripe = getStripe();

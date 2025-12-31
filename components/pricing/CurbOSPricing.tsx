@@ -5,6 +5,12 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { Check, ChefHat, Shield, Star, Zap } from 'lucide-react';
 import { useState } from 'react';
 
+/**
+ * CurbOSPricing component.
+ * Renders the 4-tier pricing grid (Starter, Pro, Business, CurbOS Only).
+ *
+ * @returns {JSX.Element} The rendered pricing section.
+ */
 export function CurbOSPricing() {
   const { user } = useUser();
   const [loadingTier, setLoadingTier] = useState<string | null>(null);

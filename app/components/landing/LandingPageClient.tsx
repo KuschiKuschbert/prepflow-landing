@@ -32,12 +32,7 @@ const SafeGradientOrbs = lazy(() => import('./SafeGradientOrbs'));
 const BackgroundLogo = lazy(() => import('../../../components/ui/BackgroundLogo'));
 
 // Hooks and utilities
-import { ReleaseData } from '@/lib/github-release';
 import { useEngagementTracking } from '../../../hooks/useEngagementTracking';
-
-interface LandingPageClientProps {
-  initialRelease?: ReleaseData | null;
-}
 
 /**
  * Client-side wrapper for the landing page.
