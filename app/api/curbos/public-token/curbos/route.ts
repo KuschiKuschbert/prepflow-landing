@@ -76,8 +76,21 @@ export async function GET(req: NextRequest) {
     // Get or create token
     const token = await getOrCreatePublicToken(targetEmail);
     if (!token) {
+      logger.error('[API /curbos/public-token/curbos] Failed to get or create token:', {
+        email: targetEmail,
+        possibleCauses: [
+          'Database table curbos_public_tokens may not exist',
+          'Database connection issue',
+          'RLS policy blocking access',
+          'Insert operation failed',
+        ],
+      });
       return NextResponse.json(
-        ApiErrorHandler.createError('Failed to generate token', 'SERVER_ERROR', 500),
+        ApiErrorHandler.createError(
+          'Failed to generate token. Please check server logs for details.',
+          'SERVER_ERROR',
+          500,
+        ),
         { status: 500 },
       );
     }

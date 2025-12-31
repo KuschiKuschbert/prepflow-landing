@@ -11,6 +11,7 @@ import PulsatingConcentricTriangles from './components/PulsatingConcentricTriang
 import RotatingTaco from './components/RotatingTaco'
 import SpotlightCursor from './components/SpotlightCursor'
 import TriangleGridBackground from './components/TriangleGridBackground'
+import { NavLink } from './components/NavLink'
 import { seedInitialData } from './seed-actions'
 
 /**
@@ -26,19 +27,6 @@ function getErrorMessage(error: unknown): string {
   return 'Unknown error'
 }
 
-// Helper for Navigation Links
-function NavLink({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
-  return (
-    <Link
-        href={href}
-        className="flex items-center gap-2 px-2 tablet:px-4 py-2 rounded-lg text-sm font-bold text-neutral-400 hover:text-white hover:bg-white/5 transition-all hover:scale-105 active:scale-95 group"
-        title={label}
-    >
-        <span className="text-neutral-500 group-hover:text-[#C0FF02] transition-colors">{icon}</span>
-        <span className="hidden tablet:inline">{label}</span>
-    </Link>
-  )
-}
 
 interface CurbOSLayoutClientProps {
   children: React.ReactNode;
@@ -221,8 +209,7 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
     }
 
     checkAuth()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname])
+  }, [pathname, router])
 
   // Show loading state while checking authentication
   if (isChecking && pathname !== '/curbos/login') {
@@ -299,11 +286,11 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
       <div className="relative z-10 pt-24 tablet:pt-32 min-h-screen">
         {children}
       </div>
-      <div className="fixed bottom-3 right-4 z-40 pointer-events-none select-none opacity-40 hover:opacity-100 transition-opacity duration-300">
-        <a href="https://prepflow.org" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 pointer-events-auto">
+      <div className="fixed bottom-3 right-4 z-40 pointer-events-none select-none opacity-25 hover:opacity-100 transition-opacity duration-300">
+        <Link href="/curbos" className="flex items-center gap-2 pointer-events-auto">
           <span className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Powered by</span>
-          <img src="/prepflow-logo.webp" alt="Prepflow" className="h-5 w-auto" />
-        </a>
+          <img src="/images/curbos-logo.png" alt="CurbOS" className="h-5 w-auto" />
+        </Link>
       </div>
     </>
   )

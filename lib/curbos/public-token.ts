@@ -32,8 +32,18 @@ export async function getOrCreatePublicToken(userEmail: string): Promise<string 
       logger.error('[CurbOS Public Token] Error fetching existing token:', {
         error: fetchError.message,
         code: fetchError.code,
+        details: fetchError.details,
+        hint: fetchError.hint,
         userEmail,
       });
+
+      // Check if table doesn't exist (common error code)
+      if (fetchError.code === '42P01' || fetchError.message?.includes('does not exist')) {
+        logger.error(
+          '[CurbOS Public Token] Table curbos_public_tokens does not exist. Please run migration: migrations/add-curbos-public-tokens.sql',
+        );
+      }
+
       return null;
     }
 
@@ -55,8 +65,22 @@ export async function getOrCreatePublicToken(userEmail: string): Promise<string 
       logger.error('[CurbOS Public Token] Error inserting new token:', {
         error: insertError.message,
         code: insertError.code,
+        details: insertError.details,
+        hint: insertError.hint,
         userEmail,
       });
+
+      // Check for common errors
+      if (insertError.code === '42P01' || insertError.message?.includes('does not exist')) {
+        logger.error(
+          '[CurbOS Public Token] Table curbos_public_tokens does not exist. Please run migration: migrations/add-curbos-public-tokens.sql',
+        );
+      } else if (insertError.code === '23505') {
+        logger.error(
+          '[CurbOS Public Token] Unique constraint violation. Token or email already exists.',
+        );
+      }
+
       return null;
     }
 

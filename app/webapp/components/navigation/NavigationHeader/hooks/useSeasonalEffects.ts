@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { logger } from '@/lib/logger';
 
 /**
  * Banner text mapping for seasonal effects
@@ -74,11 +75,20 @@ export function useSeasonalEffects() {
     });
 
     const target = document.documentElement;
-    if (target) {
-      observer.observe(target, {
-        attributes: true,
-        attributeFilter: ['data-seasonal'],
-      });
+    // Defensive check: ensure target is a valid Node before observing
+    if (target && target instanceof Node) {
+      try {
+        observer.observe(target, {
+          attributes: true,
+          attributeFilter: ['data-seasonal'],
+        });
+      } catch (error) {
+        // Log error but don't throw - observation failures are non-critical
+        // (e.g., element not ready, browser extension interference)
+        logger.warn('[useSeasonalEffects] Failed to observe documentElement:', {
+          error: error instanceof Error ? error.message : String(error),
+        });
+      }
     }
 
     return () => observer.disconnect();

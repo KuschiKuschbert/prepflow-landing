@@ -61,7 +61,7 @@ export default function KitchenKDS() {
                 if (status === 'SUBSCRIBED') {
                     logger.dev('KDS: Realtime subscription active!')
                 } else if (status === 'CLOSED') {
-                    logger.warn('KDS: Realtime subscription closed')
+                    logger.dev('KDS: Realtime subscription closed')
                 } else if (status === 'CHANNEL_ERROR') {
                     logger.error('KDS: Realtime subscription error')
                 }

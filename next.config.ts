@@ -60,7 +60,7 @@ const nextConfig: NextConfig = {
   // Remove dev tools from production
   ...(process.env.NODE_ENV === 'production'
     ? {
-        webpack: (config, { dev, isServer }) => {
+        webpack: config => {
           // Remove Next.js dev tools from production
           config.resolve.alias = {
             ...config.resolve.alias,
@@ -264,7 +264,7 @@ const nextConfig: NextConfig = {
       {
         key: 'Content-Security-Policy',
         value:
-          "default-src 'self'; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://vercel.live https://va.vercel-scripts.com; connect-src 'self' https: wss: https://*.supabase.co wss://*.supabase.co https://vercel.live https://dev-7myakdl4itf644km.us.auth0.com; frame-src 'self' https://vercel.live https://dev-7myakdl4itf644km.us.auth0.com; frame-ancestors 'none'",
+          "default-src 'self'; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://vercel.live https://va.vercel-scripts.com; connect-src 'self' https: wss: https://*.supabase.co wss://*.supabase.co https://*.supabase.co/realtime/v1/websocket https://vercel.live https://dev-7myakdl4itf644km.us.auth0.com *.auth0.com *.google-analytics.com; frame-src 'self' https://vercel.live https://dev-7myakdl4itf644km.us.auth0.com; frame-ancestors 'none'",
       },
     ];
 

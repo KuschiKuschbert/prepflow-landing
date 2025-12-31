@@ -9,11 +9,11 @@ export function applySecurityHeaders(request: NextRequest, response: NextRespons
   // We use a permissive but structured CSP to allow Auth0, Supabase, and Google Fonts
   const cspHeader = `
     default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' *.auth0.com *.googletagmanager.com;
+    script-src 'self' 'unsafe-eval' 'unsafe-inline' *.auth0.com *.googletagmanager.com https://va.vercel-scripts.com;
     style-src 'self' 'unsafe-inline' fonts.googleapis.com;
     img-src 'self' blob: data: *.auth0.com *.googleusercontent.com *.gravatar.com *.supabase.co;
     font-src 'self' fonts.gstatic.com;
-    connect-src 'self' *.auth0.com *.supabase.co *.google-analytics.com;
+    connect-src 'self' https: wss: *.auth0.com *.supabase.co wss://*.supabase.co https://*.supabase.co/realtime/v1/websocket *.google-analytics.com https://vercel.live;
     frame-src 'self' *.auth0.com;
     object-src 'none';
     base-uri 'self';

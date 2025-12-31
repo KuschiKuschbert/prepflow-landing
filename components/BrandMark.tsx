@@ -4,6 +4,7 @@
 
 import OptimizedImage from '@/components/OptimizedImage';
 import { checkSeasonalMatch } from '@/lib/personality/utils';
+import { logger } from '@/lib/logger';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
@@ -74,11 +75,19 @@ export function BrandMark({
     });
 
     const target = document.documentElement;
-    if (target) {
-      observer.observe(target, {
-        attributes: true,
-        attributeFilter: ['data-seasonal'],
-      });
+    // Defensive check: ensure target is a valid Node before observing
+    if (target && target instanceof Node) {
+      try {
+        observer.observe(target, {
+          attributes: true,
+          attributeFilter: ['data-seasonal'],
+        });
+      } catch (error) {
+        // Silently fail if observation fails (e.g., element not ready)
+        logger.warn('[BrandMark] Failed to observe documentElement:', {
+          error: error instanceof Error ? error.message : String(error),
+        });
+      }
     }
 
     // Check for reduced motion preference
