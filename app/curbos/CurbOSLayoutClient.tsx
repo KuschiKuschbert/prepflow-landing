@@ -13,6 +13,19 @@ import SpotlightCursor from './components/SpotlightCursor'
 import TriangleGridBackground from './components/TriangleGridBackground'
 import { seedInitialData } from './seed-actions'
 
+/**
+ * Safely extract error message from unknown error type
+ */
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message
+  }
+  if (typeof error === 'string') {
+    return error
+  }
+  return 'Unknown error'
+}
+
 // Helper for Navigation Links
 function NavLink({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
   return (
@@ -82,9 +95,9 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
             } else {
               logger.warn('CurbOS: Admin check API failed with status:', adminCheckResponse.status);
             }
-          } catch (adminError) {
+          } catch (adminError: unknown) {
             logger.error('CurbOS: Error checking admin status:', {
-              error: adminError instanceof Error ? adminError.message : String(adminError),
+              error: getErrorMessage(adminError),
             })
           }
 
@@ -98,9 +111,11 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
         }
 
         // Valid session - check tier access (Business tier required)
-        const userEmail = session.user?.email
+        // At this point, TypeScript knows session is not null due to the early return above
+        const userEmail = session!.user?.email
         if (userEmail) {
-          const hasAccess = await checkCurbOSAccess(userEmail)
+          // TypeScript should narrow userEmail to string here, but if not, use explicit assertion
+          const hasAccess = await checkCurbOSAccess(userEmail as string)
           if (!hasAccess) {
             // Check if user is PrepFlow admin (fallback for admins)
             try {
@@ -117,9 +132,9 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
                   return
                 }
               }
-            } catch (error) {
+            } catch (error: unknown) {
               logger.warn('CurbOS: Error checking admin status:', {
-                error: error instanceof Error ? error.message : String(error),
+                error: getErrorMessage(error),
               })
             }
 
@@ -146,9 +161,9 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
                 return
               }
             }
-          } catch (error) {
+          } catch (error: unknown) {
             logger.warn('CurbOS: Error checking admin status:', {
-              error: error instanceof Error ? error.message : String(error),
+              error: getErrorMessage(error),
             })
           }
 
@@ -162,10 +177,10 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
 
         // Valid session and tier access, allow access
         setIsChecking(false)
-      } catch (error) {
+      } catch (error: unknown) {
         // Error checking session or tier, redirect to login
         logger.error('CurbOS: Error checking session or tier', {
-          error: error instanceof Error ? error.message : String(error),
+          error: getErrorMessage(error),
           pathname,
         })
         router.push('/curbos/login')
@@ -196,9 +211,9 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
             error: errorData.error || errorData.message,
           })
         }
-      } catch (error) {
+      } catch (error: unknown) {
         logger.error('CurbOS: Error checking access:', {
-          error: error instanceof Error ? error.message : String(error),
+          error: getErrorMessage(error),
           userEmail,
         })
       }
