@@ -1,6 +1,5 @@
 'use client'
 
-import { LogoWatermark } from '@/components/ui/LogoWatermark'
 import { ReleaseData } from '@/lib/github-release'
 import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase-pos'
@@ -220,13 +219,6 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
 
   return (
     <>
-      <LogoWatermark
-        src="/images/curbos-logo.png"
-        count={2}
-        opacity={0.015}
-        size={300}
-        className="-z-[15]"
-      />
       <TriangleGridBackground />
       <PulsatingConcentricTriangles />
       <div className="fixed inset-0 bg-gradient-to-br from-neutral-900/80 via-black/80 to-[#1a1a1a]/80 -z-10 header-animate-gradient pointer-events-none"></div>
