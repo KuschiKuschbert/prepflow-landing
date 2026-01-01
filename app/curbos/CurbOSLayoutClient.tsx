@@ -281,7 +281,7 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
       <div className="relative z-10 pt-24 tablet:pt-32 min-h-screen pointer-events-auto">
         {children}
       </div>
-      <div className="fixed bottom-3 right-4 z-40 pointer-events-none select-none opacity-25 hover:opacity-100 transition-opacity duration-300">
+      <div className="fixed bottom-3 right-4 z-0 pointer-events-none select-none opacity-25 hover:opacity-100 transition-opacity duration-300">
         <Link href="/curbos" className="flex items-center gap-2 pointer-events-auto">
           <span className="text-[10px] font-medium text-neutral-500 uppercase tracking-widest">Powered by</span>
           <img src="/images/curbos-logo.png" alt="CurbOS" className="h-5 w-auto" />
