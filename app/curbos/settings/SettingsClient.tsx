@@ -220,7 +220,16 @@ export default function SettingsClient({ releaseData }: SettingsClientProps) {
                 <div className="flex items-center gap-4">
                   <a
                     href={downloadUrl}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors"
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={(e) => {
+                      if (!downloadUrl) {
+                        e.preventDefault();
+                        alert('Download URL not available. Please check GitHub releases.');
+                      }
+                    }}
                   >
                     <Download size={16} />
                     Download APK

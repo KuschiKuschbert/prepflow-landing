@@ -1,5 +1,6 @@
 'use client'
 
+import { LogoWatermark } from '@/components/ui/LogoWatermark'
 import { ReleaseData } from '@/lib/github-release'
 import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase-pos'
@@ -7,11 +8,11 @@ import { BarChart3, Cog, LogOut, Monitor, RotateCw, Settings, UtensilsCrossed } 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { NavLink } from './components/NavLink'
 import PulsatingConcentricTriangles from './components/PulsatingConcentricTriangles'
 import RotatingTaco from './components/RotatingTaco'
 import SpotlightCursor from './components/SpotlightCursor'
 import TriangleGridBackground from './components/TriangleGridBackground'
-import { NavLink } from './components/NavLink'
 import { seedInitialData } from './seed-actions'
 
 /**
@@ -26,7 +27,6 @@ function getErrorMessage(error: unknown): string {
   }
   return 'Unknown error'
 }
-
 
 interface CurbOSLayoutClientProps {
   children: React.ReactNode;
@@ -58,7 +58,6 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
       // TEMP: Bypass auth for debugging
       setIsChecking(false)
       return
-
       try {
         // Check for Supabase session
         const { data: { session }, error } = await supabase.auth.getSession()
@@ -97,7 +96,6 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
           router.push('/curbos/login')
           return
         }
-
         // Valid session - check tier access (Business tier required)
         // At this point, TypeScript knows session is not null due to the early return above
         const userEmail = session!.user?.email
@@ -159,10 +157,9 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
           logger.warn('CurbOS: No email found in session', {
             pathname,
           })
-          router.push('/curbos/unauthorized')
-          return
+            router.push('/curbos/unauthorized')
+            return
         }
-
         // Valid session and tier access, allow access
         setIsChecking(false)
       } catch (error: unknown) {
@@ -207,7 +204,6 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
       }
       return false
     }
-
     checkAuth()
   }, [pathname, router])
 
@@ -224,6 +220,13 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
 
   return (
     <>
+      <LogoWatermark
+        src="/images/curbos-logo.png"
+        count={2}
+        opacity={0.015}
+        size={300}
+        className="-z-[15]"
+      />
       <TriangleGridBackground />
       <PulsatingConcentricTriangles />
       <div className="fixed inset-0 bg-gradient-to-br from-neutral-900/80 via-black/80 to-[#1a1a1a]/80 -z-10 header-animate-gradient pointer-events-none"></div>
