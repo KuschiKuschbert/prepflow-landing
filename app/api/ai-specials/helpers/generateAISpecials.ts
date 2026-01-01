@@ -23,7 +23,47 @@ export async function generateAISpecials(
   processing_time?: number;
 }> {
   try {
-    const aiPrompt = buildAISpecialsPrompt(prompt);
+    // First, do a quick ingredient detection pass to get recipe database context
+    let detectedIngredients: string[] = [];
+    try {
+      const ingredientDetectionPrompt = `Analyze this image and list all visible ingredients. Return only a JSON array of ingredient names: ["ingredient1", "ingredient2", ...]`;
+      const ingredientResponse = await generateAIVisionResponse(
+        imageData,
+        ingredientDetectionPrompt,
+        countryCode || 'AU',
+        {
+          temperature: 0.3,
+          maxTokens: 200,
+          useCache: false, // Don't cache ingredient detection
+        },
+      );
+
+      if (ingredientResponse.content && !ingredientResponse.error) {
+        try {
+          const jsonMatch = ingredientResponse.content.match(/\[[\s\S]*\]/);
+          if (jsonMatch) {
+            detectedIngredients = JSON.parse(jsonMatch[0]);
+          }
+        } catch (e) {
+          // Ignore parsing errors, continue without recipe context
+          logger.debug(
+            'Failed to parse ingredient detection response, continuing without recipe context',
+            {
+              error: e instanceof Error ? e.message : String(e),
+            },
+          );
+        }
+      }
+    } catch (error) {
+      // If ingredient detection fails, continue without recipe context
+      logger.debug(
+        'Ingredient detection failed, continuing without recipe database context:',
+        error,
+      );
+    }
+
+    // Build prompt with recipe database context
+    const aiPrompt = await buildAISpecialsPrompt(prompt, detectedIngredients);
     const visionResponse = await generateAIVisionResponse(
       imageData,
       aiPrompt,

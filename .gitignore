@@ -21,6 +21,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+logs/
+*.log
 
 # Runtime data
 pids
@@ -127,3 +129,7 @@ pnpm-lock.yaml
 
 # Note: public/images/_hidden/ is NOT ignored so background.png gets deployed
 # It's "hidden" by being in a _hidden subdirectory but still accessible via API
+
+# Recipe database (can be large, optionally commit index.json)
+data/recipe-database/**/*.json
+!data/recipe-database/index.json

@@ -1,11 +1,16 @@
 import { logger } from '@/lib/logger';
+import { searchRecipesByIngredients, formatRecipesForPrompt } from '../recipe-database';
+
 /**
  * AI Specials Prompt
  *
  * Generates prompt for analyzing food images and suggesting specials
  */
 
-export function buildAISpecialsPrompt(customPrompt?: string): string {
+export async function buildAISpecialsPrompt(
+  customPrompt?: string,
+  detectedIngredients?: string[],
+): Promise<string> {
   const basePrompt = `You are a professional restaurant chef analyzing a photo of ingredients or prepared food.
 
 **Your Task:**
@@ -20,8 +25,22 @@ Analyze the image and identify:
 - Suggest 3-5 menu specials that would work well
 - Consider seasonal availability and ingredient combinations
 - Provide professional kitchen recommendations
-- Think about cost-effectiveness and profit margins
+- Think about cost-effectiveness and profit margins`;
 
+  // Add recipe database context if ingredients are detected
+  let recipeContext = '';
+  if (detectedIngredients && detectedIngredients.length > 0) {
+    try {
+      const similarRecipes = searchRecipesByIngredients(detectedIngredients, 3);
+      if (similarRecipes.length > 0) {
+        recipeContext = formatRecipesForPrompt(similarRecipes);
+      }
+    } catch (error) {
+      logger.warn('Error loading recipe database context:', error);
+    }
+  }
+
+  const outputFormat = `
 **Output Format:**
 Return a JSON object with this structure:
 {
@@ -31,11 +50,19 @@ Return a JSON object with this structure:
   "notes": "Additional professional insights"
 }`;
 
-  if (customPrompt) {
-    return `${basePrompt}\n\n**Additional Context:**\n${customPrompt}`;
+  let fullPrompt = basePrompt;
+
+  if (recipeContext) {
+    fullPrompt += `\n\n${recipeContext}\n\n**Use these similar recipes as inspiration, but adapt them to create unique specials that showcase the ingredients in the photo.**`;
   }
 
-  return basePrompt;
+  fullPrompt += outputFormat;
+
+  if (customPrompt) {
+    fullPrompt += `\n\n**Additional Context:**\n${customPrompt}`;
+  }
+
+  return fullPrompt;
 }
 
 /**
