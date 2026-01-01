@@ -236,11 +236,11 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
       {/* Premium Glass Header (Global) - Hide on public order status pages */}
       {!pathname.startsWith('/curbos/order/') && (
         <header className="fixed top-4 left-4 right-4 tablet:top-6 tablet:left-6 tablet:right-6 h-16 tablet:h-20 bg-neutral-900/80 backdrop-blur-xl border border-white/10 rounded-2xl z-50 flex items-center justify-between px-4 tablet:px-6 desktop:px-8 shadow-2xl shadow-black/50">
-          <Link href="/curbos" className="flex items-center gap-1.5 tablet:gap-4 group cursor-pointer flex-shrink-0">
-              <div className="relative h-8 w-8 tablet:h-10 tablet:w-10 transform group-hover:rotate-12 transition-transform duration-300">
+          <Link href="/curbos" className="flex items-center gap-1.5 tablet:gap-4 group cursor-pointer flex-shrink-0 max-w-fit">
+              <div className="relative h-8 w-8 tablet:h-10 tablet:w-10 transform group-hover:rotate-12 transition-transform duration-300 flex-shrink-0">
                   <img src="/images/curbos-logo.png" alt="CurbOS Logo" className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(192,255,2,0.5)]" />
               </div>
-              <div className="hidden tablet:block">
+              <div className="hidden tablet:block flex-shrink-0">
                   <h1 className="text-xl tablet:text-2xl font-black tracking-tight text-white leading-none">CURB<span className="text-[#C0FF02]">OS</span></h1>
                   <div className="flex flex-col">
                     <p className="text-[8px] tablet:text-[10px] font-bold text-neutral-500 tracking-[0.2em] uppercase">Admin Console</p>
@@ -286,7 +286,7 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
       </header>
       )}
 
-      <div className="relative z-10 pt-24 tablet:pt-32 min-h-screen">
+      <div className="relative z-10 pt-24 tablet:pt-32 min-h-screen pointer-events-auto">
         {children}
       </div>
       <div className="fixed bottom-3 right-4 z-40 pointer-events-none select-none opacity-25 hover:opacity-100 transition-opacity duration-300">
