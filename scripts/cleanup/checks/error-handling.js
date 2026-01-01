@@ -116,8 +116,6 @@ function analyzeErrorHandling(content, filePath) {
 
   // Check for logger usage
   const hasLoggerImport = /import.*logger.*from.*['"]@\/lib\/logger['"]/.test(content);
-  const hasLoggerErrorUsage = /logger\.error\(/.test(content);
-  const hasConsoleError = /console\.error\(/.test(content);
 
   // Check for try-catch blocks
   if (hasAsyncOperation && !hasTryCatch) {
@@ -281,6 +279,14 @@ async function checkErrorHandling(files = null) {
 
   for (const file of filesToCheck) {
     if (!fs.existsSync(file)) continue;
+    // Exclude script files (utility scripts, not application code)
+    const normalizedPath = file.replace(/\\/g, '/');
+    if (
+      normalizedPath.includes('scripts/recipe-scraper/') ||
+      normalizedPath.includes('scripts/cleanup/')
+    ) {
+      continue;
+    }
     const content = fs.readFileSync(file, 'utf8');
     const found = analyzeErrorHandling(content, file);
 

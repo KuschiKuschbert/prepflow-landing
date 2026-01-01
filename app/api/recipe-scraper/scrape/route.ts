@@ -12,13 +12,15 @@ import { BBCGoodFoodScraper } from '../../../../scripts/recipe-scraper/scrapers/
 import { FoodNetworkScraper } from '../../../../scripts/recipe-scraper/scrapers/food-network-scraper';
 import { JSONStorage } from '../../../../scripts/recipe-scraper/storage/json-storage';
 import { SOURCES, SourceType } from '../../../../scripts/recipe-scraper/config';
+import { getComprehensiveScraperJob } from '../../../../scripts/recipe-scraper/jobs/comprehensive-scraper';
 import { z } from 'zod';
 
 const scrapeSchema = z.object({
-  source: z.enum(['allrecipes', 'bbc-good-food', 'food-network']),
+  source: z.enum(['allrecipes', 'bbc-good-food', 'food-network']).optional(),
   urls: z.array(z.string().url()).optional(),
   discovery: z.boolean().optional().default(false),
   limit: z.number().int().positive().max(200).optional().default(50),
+  comprehensive: z.boolean().optional().default(false),
 });
 
 /**
@@ -55,7 +57,41 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { source, urls, discovery, limit } = validationResult.data;
+    const { source, urls, discovery, limit, comprehensive } = validationResult.data;
+
+    // Comprehensive mode - start background job for all sources
+    if (comprehensive) {
+      logger.info('[Recipe Scraper API] Starting comprehensive scraping job');
+      const job = getComprehensiveScraperJob();
+      const status = job.getStatus();
+
+      // Start job in background (don't await)
+      job.start().catch(error => {
+        logger.error('[Recipe Scraper API] Comprehensive scraping job failed:', {
+          error: error instanceof Error ? error.message : String(error),
+        });
+      });
+
+      return NextResponse.json({
+        success: true,
+        message: 'Comprehensive scraping job started',
+        data: {
+          jobStatus: status,
+        },
+      });
+    }
+
+    // Regular scraping mode (existing logic)
+    if (!source) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          'Source is required for non-comprehensive scraping',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
 
     // Get scraper instance
     let scraper: AllRecipesScraper | BBCGoodFoodScraper | FoodNetworkScraper;

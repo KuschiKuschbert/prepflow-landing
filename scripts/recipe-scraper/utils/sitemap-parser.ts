@@ -7,13 +7,7 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { scraperLogger } from './logger';
 import { SourceType, SOURCES } from '../config';
-
-interface SitemapUrl {
-  loc: string;
-  lastmod?: string;
-  changefreq?: string;
-  priority?: string;
-}
+import { logger } from '@/lib/logger';
 
 export class SitemapParser {
   private httpClient = axios.create({
@@ -57,6 +51,10 @@ export class SitemapParser {
             // Small delay between sitemap requests
             await new Promise(resolve => setTimeout(resolve, 500));
           } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            logger.warn(`[Sitemap Parser] Failed to parse sub-sitemap ${subSitemapUrl}:`, {
+              error: errorMessage,
+            });
             scraperLogger.warn(`Failed to parse sub-sitemap ${subSitemapUrl}:`, error);
           }
         }
@@ -155,9 +153,11 @@ export class SitemapParser {
       return recipeUrls;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
-      scraperLogger.error(`Failed to discover recipe URLs from sitemap for ${source}:`, errorMessage);
+      scraperLogger.error(
+        `Failed to discover recipe URLs from sitemap for ${source}:`,
+        errorMessage,
+      );
       return [];
     }
   }
 }
-

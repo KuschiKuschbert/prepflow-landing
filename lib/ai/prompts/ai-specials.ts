@@ -31,7 +31,7 @@ Analyze the image and identify:
   let recipeContext = '';
   if (detectedIngredients && detectedIngredients.length > 0) {
     try {
-      const similarRecipes = searchRecipesByIngredients(detectedIngredients, 3);
+      const similarRecipes = await searchRecipesByIngredients(detectedIngredients, 3);
       if (similarRecipes.length > 0) {
         recipeContext = formatRecipesForPrompt(similarRecipes);
       }

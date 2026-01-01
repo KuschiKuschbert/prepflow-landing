@@ -5,7 +5,6 @@
 
 import { JSONStorage } from './json-storage';
 import { ScrapedRecipe } from '../parsers/types';
-import { scraperLogger } from '../utils/logger';
 
 export class IndexManager {
   private storage: JSONStorage;
@@ -17,13 +16,13 @@ export class IndexManager {
   /**
    * Search recipes by multiple criteria
    */
-  searchRecipes(criteria: {
+  async searchRecipes(criteria: {
     ingredients?: string[];
     category?: string;
     cuisine?: string;
     dietaryTags?: string[];
     limit?: number;
-  }): ScrapedRecipe[] {
+  }): Promise<ScrapedRecipe[]> {
     const { ingredients, category, cuisine, dietaryTags, limit = 10 } = criteria;
     const allRecipes = this.storage.getAllRecipes();
     const results: ScrapedRecipe[] = [];
@@ -31,7 +30,7 @@ export class IndexManager {
     for (const entry of allRecipes) {
       if (results.length >= limit) break;
 
-      const recipe = this.storage.loadRecipe(entry.file_path);
+      const recipe = await this.storage.loadRecipe(entry.file_path);
       if (!recipe) continue;
 
       // Filter by ingredients
@@ -71,7 +70,7 @@ export class IndexManager {
   /**
    * Get recipes similar to given ingredients
    */
-  findSimilarRecipes(ingredients: string[], limit: number = 5): ScrapedRecipe[] {
+  async findSimilarRecipes(ingredients: string[], limit: number = 5): Promise<ScrapedRecipe[]> {
     return this.searchRecipes({ ingredients, limit });
   }
 

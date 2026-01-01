@@ -7,6 +7,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { scraperLogger } from './logger';
 import { SourceType, STORAGE_PATH } from '../config';
+import { logger } from '@/lib/logger';
 
 export interface ScrapingProgress {
   source: SourceType;
@@ -67,10 +68,15 @@ export class ProgressTracker {
     try {
       const content = fs.readFileSync(filePath, 'utf-8');
       const progress = JSON.parse(content) as ScrapingProgress;
-      scraperLogger.info(`Loaded progress for ${source}: ${progress.scraped.length}/${progress.discovered.length} scraped`);
+      scraperLogger.info(
+        `Loaded progress for ${source}: ${progress.scraped.length}/${progress.discovered.length} scraped`,
+      );
       return progress;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
+      logger.error(`[Progress Tracker] Failed to load progress for ${source}:`, {
+        error: errorMessage,
+      });
       scraperLogger.error(`Failed to load progress for ${source}:`, errorMessage);
       return null;
     }
@@ -213,4 +219,3 @@ export class ProgressTracker {
     return progress.scraped.length >= progress.discovered.length;
   }
 }
-

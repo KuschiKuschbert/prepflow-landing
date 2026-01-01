@@ -12,7 +12,7 @@ import { JSONStorage } from './storage/json-storage';
 import { IndexManager } from './storage/index-manager';
 import { SOURCES, SourceType } from './config';
 import { scraperLogger } from './utils/logger';
-import { logger } from '../../lib/logger';
+import { logger } from '@/lib/logger';
 
 interface ScrapeOptions {
   source?: SourceType;
@@ -55,8 +55,6 @@ class RecipeScraperCLI {
     dryRun: boolean = false,
   ): Promise<void> {
     const scraper = this.getScraper(source);
-    let successCount = 0;
-    let errorCount = 0;
 
     scraperLogger.info(
       `Starting automatic discovery and scrape from ${source} (limit: ${limit}, dry-run: ${dryRun})`,
@@ -152,8 +150,8 @@ class RecipeScraperCLI {
   /**
    * Search recipes
    */
-  searchRecipes(ingredients: string[], limit: number = 10): void {
-    const results = this.indexManager.findSimilarRecipes(ingredients, limit);
+  async searchRecipes(ingredients: string[], limit: number = 10): Promise<void> {
+    const results = await this.indexManager.findSimilarRecipes(ingredients, limit);
     scraperLogger.info(
       `\n🔍 Found ${results.length} recipes with ingredients: ${ingredients.join(', ')}`,
     );
@@ -201,8 +199,9 @@ function parseArgs(): ScrapeOptions {
           ? parseInt(args[args.indexOf('--limit') + 1], 10)
           : 10;
         const searchCli = new RecipeScraperCLI();
-        searchCli.searchRecipes(searchIngredients, searchLimit);
-        process.exit(0);
+        searchCli.searchRecipes(searchIngredients, searchLimit).then(() => {
+          process.exit(0);
+        });
         break;
       case '--help':
         scraperLogger.info(`

@@ -1,14 +1,19 @@
 /**
  * JSON Storage
- * Stores recipes as JSON files with index management
+ * Stores recipes as JSON files with index management and compression
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
+import * as zlib from 'zlib';
+import { promisify } from 'util';
 import { ScrapedRecipe } from '../parsers/types';
 import { STORAGE_PATH } from '../config';
 import { scraperLogger } from '../utils/logger';
 import { v4 as uuidv4 } from 'uuid';
+
+const gzip = promisify(zlib.gzip);
+const gunzip = promisify(zlib.gunzip);
 
 interface RecipeIndex {
   recipes: RecipeIndexEntry[];
@@ -56,7 +61,7 @@ export class JSONStorage {
   }
 
   /**
-   * Generate filename for recipe
+   * Generate filename for recipe (with .json.gz extension for compression)
    */
   private generateFilename(recipe: ScrapedRecipe): string {
     // Sanitize recipe name for filename
@@ -66,7 +71,7 @@ export class JSONStorage {
       .replace(/^-+|-+$/g, '')
       .substring(0, 100);
     const id = recipe.id || uuidv4();
-    return `${sanitized}-${id.substring(0, 8)}.json`;
+    return `${sanitized}-${id.substring(0, 8)}.json.gz`;
   }
 
   /**
@@ -125,6 +130,14 @@ export class JSONStorage {
   }
 
   /**
+   * Check if a URL already exists in the database (for pre-scraping duplicate check)
+   */
+  urlExists(source: string, url: string): boolean {
+    const index = this.loadIndex();
+    return index.recipes.some(entry => entry.source_url === url && entry.source === source);
+  }
+
+  /**
    * Save a recipe to JSON file
    */
   async saveRecipe(
@@ -146,8 +159,10 @@ export class JSONStorage {
       const filename = this.generateFilename(recipe);
       const filePath = path.join(sourceDir, filename);
 
-      // Save recipe JSON
-      fs.writeFileSync(filePath, JSON.stringify(recipe, null, 2), 'utf-8');
+      // Save recipe JSON with compression
+      const jsonString = JSON.stringify(recipe, null, 2);
+      const compressed = await gzip(Buffer.from(jsonString, 'utf-8'));
+      fs.writeFileSync(filePath, compressed);
 
       // Update index
       index.recipes.push({
@@ -170,12 +185,31 @@ export class JSONStorage {
   }
 
   /**
-   * Load a recipe from file
+   * Load a recipe from file (handles both compressed .json.gz and uncompressed .json files)
    */
-  loadRecipe(filePath: string): ScrapedRecipe | null {
+  async loadRecipe(filePath: string): Promise<ScrapedRecipe | null> {
     try {
       const fullPath = path.isAbsolute(filePath) ? filePath : path.join(this.storagePath, filePath);
-      const content = fs.readFileSync(fullPath, 'utf-8');
+
+      // Check if file exists
+      if (!fs.existsSync(fullPath)) {
+        scraperLogger.warn(`Recipe file not found: ${fullPath}`);
+        return null;
+      }
+
+      const buffer = fs.readFileSync(fullPath);
+
+      // Check if file is compressed (.json.gz) or uncompressed (.json)
+      let content: string;
+      if (fullPath.endsWith('.json.gz')) {
+        // Decompress gzip file
+        const decompressed = await gunzip(buffer);
+        content = decompressed.toString('utf-8');
+      } else {
+        // Uncompressed JSON file (for backward compatibility)
+        content = buffer.toString('utf-8');
+      }
+
       return JSON.parse(content) as ScrapedRecipe;
     } catch (error) {
       scraperLogger.error(`Error loading recipe from ${filePath}:`, error);
@@ -194,7 +228,7 @@ export class JSONStorage {
   /**
    * Search recipes by ingredient name
    */
-  searchByIngredient(ingredientName: string, limit: number = 10): ScrapedRecipe[] {
+  async searchByIngredient(ingredientName: string, limit: number = 10): Promise<ScrapedRecipe[]> {
     const index = this.loadIndex();
     const results: ScrapedRecipe[] = [];
     const lowerIngredient = ingredientName.toLowerCase();
@@ -202,7 +236,7 @@ export class JSONStorage {
     for (const entry of index.recipes) {
       if (results.length >= limit) break;
 
-      const recipe = this.loadRecipe(entry.file_path);
+      const recipe = await this.loadRecipe(entry.file_path);
       if (!recipe) continue;
 
       // Check if recipe contains ingredient

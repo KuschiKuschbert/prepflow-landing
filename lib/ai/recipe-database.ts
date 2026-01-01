@@ -5,8 +5,12 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import * as zlib from 'zlib';
+import { promisify } from 'util';
 import { ScrapedRecipe } from '../../scripts/recipe-scraper/parsers/types';
-import { logger } from '../logger';
+import { logger } from '@/lib/logger';
+
+const gunzip = promisify(zlib.gunzip);
 
 const RECIPE_DATABASE_PATH = path.join(process.cwd(), 'data', 'recipe-database');
 const INDEX_PATH = path.join(RECIPE_DATABASE_PATH, 'index.json');
@@ -45,14 +49,32 @@ function loadIndex(): RecipeIndex | null {
 }
 
 /**
- * Load a recipe from file
+ * Load a recipe from file (handles both compressed .json.gz and uncompressed .json files)
  */
-function loadRecipe(filePath: string): ScrapedRecipe | null {
+async function loadRecipe(filePath: string): Promise<ScrapedRecipe | null> {
   try {
     const fullPath = path.isAbsolute(filePath)
       ? filePath
       : path.join(RECIPE_DATABASE_PATH, filePath);
-    const content = fs.readFileSync(fullPath, 'utf-8');
+
+    if (!fs.existsSync(fullPath)) {
+      logger.debug(`Recipe file not found: ${fullPath}`);
+      return null;
+    }
+
+    const buffer = fs.readFileSync(fullPath);
+
+    // Check if file is compressed (.json.gz) or uncompressed (.json)
+    let content: string;
+    if (fullPath.endsWith('.json.gz')) {
+      // Decompress gzip file
+      const decompressed = await gunzip(buffer);
+      content = decompressed.toString('utf-8');
+    } else {
+      // Uncompressed JSON file (for backward compatibility)
+      content = buffer.toString('utf-8');
+    }
+
     return JSON.parse(content) as ScrapedRecipe;
   } catch (error) {
     logger.error(`Error loading recipe from ${filePath}:`, error);
@@ -63,10 +85,10 @@ function loadRecipe(filePath: string): ScrapedRecipe | null {
 /**
  * Search recipes by ingredients
  */
-export function searchRecipesByIngredients(
+export async function searchRecipesByIngredients(
   ingredientNames: string[],
   limit: number = 5,
-): ScrapedRecipe[] {
+): Promise<ScrapedRecipe[]> {
   const index = loadIndex();
   if (!index || index.recipes.length === 0) {
     logger.debug('No recipes in database');
@@ -79,7 +101,7 @@ export function searchRecipesByIngredients(
   for (const entry of index.recipes) {
     if (results.length >= limit) break;
 
-    const recipe = loadRecipe(entry.file_path);
+    const recipe = await loadRecipe(entry.file_path);
     if (!recipe) continue;
 
     // Check if recipe contains any of the ingredients

@@ -9,6 +9,7 @@ import { logger } from '@/lib/logger';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { JSONStorage } from '../../../../scripts/recipe-scraper/storage/json-storage';
 import { searchRecipesByIngredients, getRecipeDatabaseStats } from '@/lib/ai/recipe-database';
+import { ScrapedRecipe } from '../../../../scripts/recipe-scraper/parsers/types';
 
 /**
  * GET /api/recipe-scraper/recipes
@@ -32,14 +33,15 @@ export async function GET(request: NextRequest) {
         .split(',')
         .map(i => i.trim())
         .filter(Boolean);
-      recipes = searchRecipesByIngredients(ingredients, limit);
+      recipes = await searchRecipesByIngredients(ingredients, limit);
     } else {
       // Get all recipes
       const allRecipes = storage.getAllRecipes();
-      recipes = allRecipes
+      const recipePromises = allRecipes
         .slice(0, limit)
-        .map(entry => storage.loadRecipe(entry.file_path))
-        .filter(Boolean);
+        .map(entry => storage.loadRecipe(entry.file_path));
+      const loadedRecipes = await Promise.all(recipePromises);
+      recipes = loadedRecipes.filter((recipe): recipe is ScrapedRecipe => recipe !== null);
     }
 
     const stats = getRecipeDatabaseStats();
