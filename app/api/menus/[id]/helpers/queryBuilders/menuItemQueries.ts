@@ -27,6 +27,7 @@ export function buildFullQuery(menuId: string) {
       recipe_id,
       category,
       position,
+      region,
       actual_selling_price,
       recommended_selling_price,
       dishes (
@@ -69,6 +70,7 @@ export function buildQueryWithoutPricing(menuId: string) {
       recipe_id,
       category,
       position,
+      region,
       dishes (
         id,
         dish_name,
@@ -109,6 +111,7 @@ export function buildQueryWithoutDietary(menuId: string) {
       recipe_id,
       category,
       position,
+      region,
       actual_selling_price,
       recommended_selling_price,
       dishes (
@@ -141,6 +144,7 @@ export function buildQueryWithoutDescription(menuId: string) {
       recipe_id,
       category,
       position,
+      region,
       actual_selling_price,
       recommended_selling_price,
       dishes (
@@ -171,6 +175,7 @@ export function buildMinimalQuery(menuId: string) {
       recipe_id,
       category,
       position,
+      region,
       dishes (
         id,
         dish_name,
@@ -191,7 +196,7 @@ export function buildQueryWithoutRelations(menuId: string) {
   ensureSupabaseAdmin();
   return supabaseAdmin!
     .from('menu_items')
-    .select('id, dish_id, recipe_id, category, position')
+    .select('id, dish_id, recipe_id, category, position, region')
     .eq('menu_id', menuId)
     .order('category')
     .order('position');

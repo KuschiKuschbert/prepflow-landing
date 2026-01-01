@@ -35,7 +35,6 @@ function writeLog(level: string, message: string, data?: unknown): void {
 
   // Also log to console in development (intentional for CLI tool)
   if (process.env.NODE_ENV !== 'production') {
-    // eslint-disable-next-line no-console
     console.log(`[${timestamp}] [${level}] ${message}`, data || '');
   }
 }

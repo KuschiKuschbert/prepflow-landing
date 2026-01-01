@@ -47,6 +47,7 @@ export interface MenuItem {
   is_vegan?: boolean;
   dietary_confidence?: string;
   dietary_method?: string;
+  region?: string | null;
 }
 
 export interface MenuStatistics {

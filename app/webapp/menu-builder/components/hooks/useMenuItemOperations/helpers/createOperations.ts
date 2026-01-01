@@ -22,6 +22,7 @@ interface CreateOperationsParams {
     performMoveToCategory: (itemId: string, targetCategory: string, item: any) => Promise<void>;
   };
   priceResult: { handleUpdateActualPrice: (itemId: string, price: number | null) => Promise<void> };
+  regionResult: { handleUpdateRegion: (itemId: string, region: string | null) => Promise<void> };
 }
 
 export function createOperations({
@@ -30,6 +31,7 @@ export function createOperations({
   reorderResult,
   categoryResult,
   priceResult,
+  regionResult,
 }: CreateOperationsParams) {
   return {
     handleCategorySelect: additionResult.handleCategorySelect,
@@ -40,6 +42,7 @@ export function createOperations({
     performReorder: reorderResult.performReorder,
     handleMoveToCategory: categoryResult.handleMoveToCategory,
     handleUpdateActualPrice: priceResult.handleUpdateActualPrice,
+    handleUpdateRegion: regionResult.handleUpdateRegion,
     performMoveToCategory: categoryResult.performMoveToCategory,
   };
 }

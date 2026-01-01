@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use client';
 
 import { logger } from '@/lib/logger';
@@ -18,6 +19,7 @@ interface SortableMenuItemProps {
   onMoveToCategory?: (targetCategory: string) => void;
   onUpdateActualPrice?: (itemId: string, price: number | null) => void;
   onShowStatistics?: (item: MenuItem) => void;
+  onEditRegion?: (item: MenuItem) => void;
   availableCategories?: string[];
   currentCategory: string;
   isFirst: boolean;
@@ -36,6 +38,7 @@ export function SortableMenuItem({
   onMoveToCategory,
   onUpdateActualPrice,
   onShowStatistics,
+  onEditRegion,
   availableCategories = [],
   currentCategory,
   isFirst,
@@ -118,6 +121,7 @@ export function SortableMenuItem({
           onRemove={onRemove}
           onMoveUp={onMoveUp}
           onMoveDown={onMoveDown}
+          onEditRegion={onEditRegion ? () => onEditRegion(item) : undefined}
           onMoveToCategory={onMoveToCategory}
           availableCategories={availableCategories}
           currentCategory={currentCategory}

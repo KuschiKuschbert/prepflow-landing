@@ -1,14 +1,15 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { Trash2 } from 'lucide-react';
-import { ReorderDropdown } from './ReorderDropdown';
+import { Globe, Trash2 } from 'lucide-react';
 import { CategoryDropdown } from './CategoryDropdown';
+import { ReorderDropdown } from './ReorderDropdown';
 
 interface MenuItemActionsProps {
   onRemove: () => void;
   onMoveUp?: () => void;
   onMoveDown?: () => void;
+  onEditRegion?: () => void;
   onMoveToCategory?: (targetCategory: string) => void;
   availableCategories?: string[];
   currentCategory: string;
@@ -35,6 +36,7 @@ export function MenuItemActions({
   onRemove,
   onMoveUp,
   onMoveDown,
+  onEditRegion,
   onMoveToCategory,
   availableCategories = [],
   currentCategory,
@@ -71,6 +73,20 @@ export function MenuItemActions({
           availableCategories={availableCategories}
           dropdownRef={categoryDropdownRef}
         />
+      )}
+
+      {onEditRegion && (
+        <button
+          onClick={e => {
+            e.stopPropagation();
+            onEditRegion();
+          }}
+          className="rounded-lg p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--primary)]/20 hover:text-[var(--primary)]"
+          aria-label="Edit Region"
+          title="Edit Region"
+        >
+          <Icon icon={Globe} size="sm" />
+        </button>
       )}
 
       <button

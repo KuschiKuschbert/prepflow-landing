@@ -11,6 +11,7 @@ import { Icon } from '@/components/ui/Icon';
 import { UploadForm } from './components/UploadForm';
 import { AISpecialCard } from './components/AISpecialCard';
 import { EmptyState } from './components/EmptyState';
+import { RecipeScraper } from './components/RecipeScraper';
 import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
 import { useNotification } from '@/contexts/NotificationContext';
@@ -34,6 +35,7 @@ export default function AISpecialsPage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [prompt, setPrompt] = useState('');
+  const [showRecipeScraper, setShowRecipeScraper] = useState(false);
   const userId = 'user-123';
 
   // Prefetch API on mount
@@ -190,10 +192,21 @@ export default function AISpecialsPage() {
               {t('aiSpecials.subtitle', 'Generate specials from ingredient photos using AI')}
             </p>
           </div>
+          <button
+            onClick={() => setShowRecipeScraper(!showRecipeScraper)}
+            className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]"
+          >
+            {showRecipeScraper ? 'Hide' : 'Show'} Recipe Database
+          </button>
         </div>
         {error && (
           <div className="mb-6 rounded-2xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-4">
             <p className="text-[var(--color-error)]">{error}</p>
+          </div>
+        )}
+        {showRecipeScraper && (
+          <div className="mb-6">
+            <RecipeScraper />
           </div>
         )}
         <UploadForm

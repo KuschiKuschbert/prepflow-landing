@@ -7,6 +7,7 @@ import * as cheerio from 'cheerio';
 import { BaseScraper } from './base-scraper';
 import { ScrapedRecipe, RecipeIngredient } from '../parsers/types';
 import { scraperLogger } from '../utils/logger';
+import { SitemapParser } from '../utils/sitemap-parser';
 
 export class BBCGoodFoodScraper extends BaseScraper {
   constructor(config?: Partial<import('../parsers/types').ScraperConfig>) {
@@ -207,10 +208,167 @@ export class BBCGoodFoodScraper extends BaseScraper {
   }
 
   /**
-   * Get recipe URLs
+   * Get recipe URLs from BBC Good Food by browsing categories
    */
-  async getRecipeUrls(limit: number = 10): Promise<string[]> {
-    scraperLogger.warn('BBC Good Food URL discovery not implemented - provide URLs manually');
-    return [];
+  async getRecipeUrls(limit: number = 50): Promise<string[]> {
+    const urls: string[] = [];
+    const visited = new Set<string>();
+
+    try {
+      // Browse popular recipe categories
+      const categoryPages = [
+        'https://www.bbcgoodfood.com/recipes',
+        'https://www.bbcgoodfood.com/recipes/collection/easy-recipes',
+        'https://www.bbcgoodfood.com/recipes/collection/quick-recipes',
+        'https://www.bbcgoodfood.com/recipes/collection/dinner-recipes',
+        'https://www.bbcgoodfood.com/recipes/collection/healthy-recipes',
+        'https://www.bbcgoodfood.com/recipes/collection/vegetarian-recipes',
+        'https://www.bbcgoodfood.com/recipes/collection/dessert-recipes',
+      ];
+
+      for (const pageUrl of categoryPages) {
+        if (urls.length >= limit) break;
+
+        try {
+          const html = await this.fetchPage(pageUrl);
+          const $ = cheerio.load(html);
+
+          // Extract recipe links
+          const recipeLinks = $('a[href*="/recipes/"]')
+            .map((_, el) => {
+              const href = $(el).attr('href');
+              if (!href) return null;
+              // Convert relative URLs to absolute
+              if (href.startsWith('/')) {
+                return `https://www.bbcgoodfood.com${href}`;
+              }
+              if (href.includes('bbcgoodfood.com/recipes/')) {
+                const cleanUrl = href.split('?')[0].split('#')[0];
+                // Only include actual recipe pages, not category pages
+                if (cleanUrl.match(/\/recipes\/[^/]+$/)) {
+                  return cleanUrl;
+                }
+              }
+              return null;
+            })
+            .get()
+            .filter((url): url is string => {
+              if (!url) return false;
+              return (
+                url.includes('/recipes/') && !visited.has(url) && !url.includes('/collection/')
+              );
+            });
+
+          for (const url of recipeLinks) {
+            if (urls.length >= limit) break;
+            visited.add(url);
+            urls.push(url);
+          }
+
+          scraperLogger.info(`Found ${recipeLinks.length} recipes on ${pageUrl}`);
+        } catch (error) {
+          scraperLogger.warn(`Failed to fetch ${pageUrl}:`, error);
+        }
+      }
+
+      scraperLogger.info(`Discovered ${urls.length} recipe URLs from BBC Good Food`);
+      return urls;
+    } catch (error) {
+      scraperLogger.error('Error discovering BBC Good Food URLs:', error);
+      return urls;
+    }
+  }
+
+  /**
+   * Get ALL recipe URLs (comprehensive, no limit)
+   * Uses sitemap parsing first, then falls back to pagination crawling
+   */
+  async getAllRecipeUrls(): Promise<string[]> {
+    const urls: string[] = [];
+    const visited = new Set<string>();
+
+    // Try sitemap parsing first
+    try {
+      scraperLogger.info('Attempting to discover BBC Good Food URLs via sitemap...');
+      const sitemapParser = new SitemapParser();
+      const sitemapUrls = await sitemapParser.discoverRecipeUrls('bbc-good-food');
+      if (sitemapUrls.length > 0) {
+        scraperLogger.info(`Discovered ${sitemapUrls.length} recipe URLs from sitemap`);
+        return sitemapUrls;
+      }
+    } catch (error) {
+      scraperLogger.warn('Sitemap parsing failed, falling back to pagination:', error);
+    }
+
+    // Fallback to pagination crawling
+    scraperLogger.info('Falling back to pagination crawling for BBC Good Food...');
+    try {
+      const categoryPages = [
+        'https://www.bbcgoodfood.com/recipes',
+        'https://www.bbcgoodfood.com/recipes/collection/easy-recipes',
+        'https://www.bbcgoodfood.com/recipes/collection/quick-recipes',
+        'https://www.bbcgoodfood.com/recipes/collection/dinner-recipes',
+        'https://www.bbcgoodfood.com/recipes/collection/healthy-recipes',
+        'https://www.bbcgoodfood.com/recipes/collection/vegetarian-recipes',
+        'https://www.bbcgoodfood.com/recipes/collection/dessert-recipes',
+      ];
+
+      for (const pageUrl of categoryPages) {
+        try {
+          let currentPage = 1;
+          let hasMorePages = true;
+
+          while (hasMorePages) {
+            const paginatedUrl = currentPage === 1 ? pageUrl : `${pageUrl}?page=${currentPage}`;
+            const html = await this.fetchPage(paginatedUrl);
+            const $ = cheerio.load(html);
+
+            // Extract recipe links
+            const recipeLinks = $('a[href*="/recipes/"]')
+              .map((_, el) => {
+                const href = $(el).attr('href');
+                if (!href) return null;
+                if (href.startsWith('/')) {
+                  return `https://www.bbcgoodfood.com${href}`;
+                }
+                if (href.includes('bbcgoodfood.com/recipes/')) {
+                  const cleanUrl = href.split('?')[0].split('#')[0];
+                  if (cleanUrl.match(/\/recipes\/[^/]+$/)) {
+                    return cleanUrl;
+                  }
+                }
+                return null;
+              })
+              .get()
+              .filter((url): url is string => {
+                if (!url) return false;
+                return url.includes('/recipes/') && !visited.has(url) && !url.includes('/collection/');
+              });
+
+            if (recipeLinks.length === 0) {
+              hasMorePages = false;
+            } else {
+              for (const url of recipeLinks) {
+                visited.add(url);
+                urls.push(url);
+              }
+              scraperLogger.info(`Found ${recipeLinks.length} recipes on page ${currentPage} of ${pageUrl}`);
+              currentPage++;
+              if (currentPage > 100) {
+                hasMorePages = false;
+              }
+            }
+          }
+        } catch (error) {
+          scraperLogger.warn(`Failed to fetch ${pageUrl}:`, error);
+        }
+      }
+
+      scraperLogger.info(`Discovered ${urls.length} recipe URLs from BBC Good Food via pagination`);
+      return urls;
+    } catch (error) {
+      scraperLogger.error('Error in pagination crawling for BBC Good Food:', error);
+      return urls;
+    }
   }
 }

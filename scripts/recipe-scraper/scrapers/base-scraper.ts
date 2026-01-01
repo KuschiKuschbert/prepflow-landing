@@ -65,6 +65,12 @@ export abstract class BaseScraper {
           const waitTime = attempt * 1000; // Exponential backoff
           scraperLogger.warn(`Request failed, retrying in ${waitTime}ms:`, lastError.message);
           await new Promise(resolve => setTimeout(resolve, waitTime));
+        } else {
+          // Log final failure
+          scraperLogger.error(`Request failed after ${this.config.maxRetries} attempts`, {
+            error: lastError.message,
+            url,
+          });
         }
       }
     }
@@ -74,7 +80,9 @@ export abstract class BaseScraper {
       error: errorMessage,
       url,
     });
-    throw new Error(`Failed to fetch ${url} after ${this.config.maxRetries} attempts: ${errorMessage}`);
+    throw new Error(
+      `Failed to fetch ${url} after ${this.config.maxRetries} attempts: ${errorMessage}`,
+    );
   }
 
   /**
@@ -157,8 +165,15 @@ export abstract class BaseScraper {
   }
 
   /**
-   * Get recipe URLs to scrape
+   * Get recipe URLs to scrape (limited)
    * Must be implemented by subclasses for discovery
    */
   abstract getRecipeUrls(limit?: number): Promise<string[]>;
+
+  /**
+   * Get ALL recipe URLs (comprehensive, no limit)
+   * Must be implemented by subclasses for comprehensive discovery
+   * Should use sitemap parsing first, then fallback to pagination
+   */
+  abstract getAllRecipeUrls(): Promise<string[]>;
 }

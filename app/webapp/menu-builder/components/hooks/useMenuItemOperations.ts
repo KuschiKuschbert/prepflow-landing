@@ -6,6 +6,7 @@ import type { Dish, MenuItem, Recipe } from '../../types';
 import { useMenuItemAddition } from './helpers/useMenuItemAddition';
 import { useMenuItemCategory } from './helpers/useMenuItemCategory';
 import { useMenuItemPrice } from './helpers/useMenuItemPrice';
+import { useMenuItemRegion } from './helpers/useMenuItemRegion';
 import { useMenuItemRemoval } from './helpers/useMenuItemRemoval';
 import { useMenuItemReorder } from './helpers/useMenuItemReorder';
 import { createOperations } from './useMenuItemOperations/helpers/createOperations';
@@ -36,6 +37,7 @@ interface UseMenuItemOperationsReturn {
   performReorder: (activeId: string, overId: string, category: string) => Promise<void>;
   handleMoveToCategory: (itemId: string, targetCategory: string) => Promise<void>;
   handleUpdateActualPrice: (itemId: string, price: number | null) => Promise<void>;
+  handleUpdateRegion: (itemId: string, region: string | null) => Promise<void>;
   performMoveToCategory: (itemId: string, targetCategory: string, item: MenuItem) => Promise<void>;
 }
 
@@ -47,6 +49,7 @@ export function useMenuItemOperations(
   const reorderResult = useMenuItemReorder(props);
   const categoryResult = useMenuItemCategory(props);
   const priceResult = useMenuItemPrice(props);
+  const regionResult = useMenuItemRegion(props);
 
   return createOperations({
     additionResult,
@@ -54,5 +57,6 @@ export function useMenuItemOperations(
     reorderResult,
     categoryResult,
     priceResult,
+    regionResult,
   });
 }

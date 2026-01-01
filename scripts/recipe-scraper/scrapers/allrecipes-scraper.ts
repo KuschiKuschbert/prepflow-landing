@@ -7,6 +7,7 @@ import * as cheerio from 'cheerio';
 import { BaseScraper } from './base-scraper';
 import { ScrapedRecipe, RecipeIngredient } from '../parsers/types';
 import { scraperLogger } from '../utils/logger';
+import { SitemapParser } from '../utils/sitemap-parser';
 
 export class AllRecipesScraper extends BaseScraper {
   constructor(config?: Partial<import('../parsers/types').ScraperConfig>) {
@@ -187,13 +188,160 @@ export class AllRecipesScraper extends BaseScraper {
   }
 
   /**
-   * Get recipe URLs from AllRecipes
-   * This is a placeholder - in production, you'd implement search/discovery
+   * Get recipe URLs from AllRecipes by browsing popular/trending pages
    */
-  async getRecipeUrls(limit: number = 10): Promise<string[]> {
-    // For now, return empty array - URLs should be provided manually
-    // In production, you could implement search or category browsing
-    scraperLogger.warn('AllRecipes URL discovery not implemented - provide URLs manually');
-    return [];
+  async getRecipeUrls(limit: number = 50): Promise<string[]> {
+    const urls: string[] = [];
+    const visited = new Set<string>();
+
+    try {
+      // Browse popular recipes pages
+      const popularPages = [
+        'https://www.allrecipes.com/recipes/',
+        'https://www.allrecipes.com/recipes/76/appetizers-and-snacks/',
+        'https://www.allrecipes.com/recipes/78/breakfast-and-brunch/',
+        'https://www.allrecipes.com/recipes/79/desserts/',
+        'https://www.allrecipes.com/recipes/156/bread/',
+        'https://www.allrecipes.com/recipes/17562/lunch/',
+        'https://www.allrecipes.com/recipes/17561/dinner/',
+      ];
+
+      for (const pageUrl of popularPages) {
+        if (urls.length >= limit) break;
+
+        try {
+          const html = await this.fetchPage(pageUrl);
+          const $ = cheerio.load(html);
+
+          // Extract recipe links - AllRecipes uses various selectors
+          const recipeLinks = $('a[href*="/recipe/"]')
+            .map((_, el) => {
+              const href = $(el).attr('href');
+              if (!href) return null;
+              // Convert relative URLs to absolute
+              if (href.startsWith('/')) {
+                return `https://www.allrecipes.com${href}`;
+              }
+              if (href.includes('allrecipes.com/recipe/')) {
+                return href.split('?')[0]; // Remove query params
+              }
+              return null;
+            })
+            .get()
+            .filter((url): url is string => {
+              if (!url) return false;
+              // Filter to actual recipe pages (not category pages)
+              return url.includes('/recipe/') && !visited.has(url);
+            });
+
+          for (const url of recipeLinks) {
+            if (urls.length >= limit) break;
+            visited.add(url);
+            urls.push(url);
+          }
+
+          scraperLogger.info(`Found ${recipeLinks.length} recipes on ${pageUrl}`);
+        } catch (error) {
+          scraperLogger.warn(`Failed to fetch ${pageUrl}:`, error);
+        }
+      }
+
+      scraperLogger.info(`Discovered ${urls.length} recipe URLs from AllRecipes`);
+      return urls;
+    } catch (error) {
+      scraperLogger.error('Error discovering AllRecipes URLs:', error);
+      return urls; // Return what we found so far
+    }
+  }
+
+  /**
+   * Get ALL recipe URLs (comprehensive, no limit)
+   * Uses sitemap parsing first, then falls back to pagination crawling
+   */
+  async getAllRecipeUrls(): Promise<string[]> {
+    const urls: string[] = [];
+    const visited = new Set<string>();
+
+    // Try sitemap parsing first (fastest and most complete)
+    try {
+      scraperLogger.info('Attempting to discover AllRecipes URLs via sitemap...');
+      const sitemapParser = new SitemapParser();
+      const sitemapUrls = await sitemapParser.discoverRecipeUrls('allrecipes');
+      if (sitemapUrls.length > 0) {
+        scraperLogger.info(`Discovered ${sitemapUrls.length} recipe URLs from sitemap`);
+        return sitemapUrls;
+      }
+    } catch (error) {
+      scraperLogger.warn('Sitemap parsing failed, falling back to pagination:', error);
+    }
+
+    // Fallback to pagination crawling
+    scraperLogger.info('Falling back to pagination crawling for AllRecipes...');
+    try {
+      const categoryPages = [
+        'https://www.allrecipes.com/recipes/',
+        'https://www.allrecipes.com/recipes/76/appetizers-and-snacks/',
+        'https://www.allrecipes.com/recipes/78/breakfast-and-brunch/',
+        'https://www.allrecipes.com/recipes/79/desserts/',
+        'https://www.allrecipes.com/recipes/156/bread/',
+        'https://www.allrecipes.com/recipes/17562/lunch/',
+        'https://www.allrecipes.com/recipes/17561/dinner/',
+      ];
+
+      for (const pageUrl of categoryPages) {
+        try {
+          let currentPage = 1;
+          let hasMorePages = true;
+
+          while (hasMorePages) {
+            const paginatedUrl = currentPage === 1 ? pageUrl : `${pageUrl}?page=${currentPage}`;
+            const html = await this.fetchPage(paginatedUrl);
+            const $ = cheerio.load(html);
+
+            // Extract recipe links
+            const recipeLinks = $('a[href*="/recipe/"]')
+              .map((_, el) => {
+                const href = $(el).attr('href');
+                if (!href) return null;
+                if (href.startsWith('/')) {
+                  return `https://www.allrecipes.com${href}`;
+                }
+                if (href.includes('allrecipes.com/recipe/')) {
+                  return href.split('?')[0];
+                }
+                return null;
+              })
+              .get()
+              .filter((url): url is string => {
+                if (!url) return false;
+                return url.includes('/recipe/') && !visited.has(url);
+              });
+
+            if (recipeLinks.length === 0) {
+              hasMorePages = false;
+            } else {
+              for (const url of recipeLinks) {
+                visited.add(url);
+                urls.push(url);
+              }
+              scraperLogger.info(`Found ${recipeLinks.length} recipes on page ${currentPage} of ${pageUrl}`);
+              currentPage++;
+              // Limit pagination depth to prevent infinite loops
+              if (currentPage > 100) {
+                hasMorePages = false;
+              }
+            }
+          }
+        } catch (error) {
+          scraperLogger.warn(`Failed to fetch ${pageUrl}:`, error);
+        }
+      }
+
+      scraperLogger.info(`Discovered ${urls.length} recipe URLs from AllRecipes via pagination`);
+      return urls;
+    } catch (error) {
+      scraperLogger.error('Error in pagination crawling for AllRecipes:', error);
+      return urls;
+    }
   }
 }

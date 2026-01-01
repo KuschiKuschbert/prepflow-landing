@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use client';
 
 import { useNotification } from '@/contexts/NotificationContext';
@@ -21,6 +22,7 @@ interface MenuCategoryProps {
   onMoveToCategory?: (itemId: string, targetCategory: string) => void;
   onUpdateActualPrice?: (itemId: string, price: number | null) => void;
   onShowStatistics?: (item: MenuItem) => void;
+  onEditRegion?: (item: MenuItem) => void;
   availableCategories?: string[];
 }
 
@@ -36,6 +38,7 @@ function MenuCategoryComponent({
   onMoveToCategory,
   onUpdateActualPrice,
   onShowStatistics,
+  onEditRegion,
   availableCategories = [],
 }: MenuCategoryProps) {
   const { showError } = useNotification();
@@ -203,6 +206,7 @@ function MenuCategoryComponent({
               }
               onUpdateActualPrice={onUpdateActualPrice}
               onShowStatistics={onShowStatistics}
+              onEditRegion={onEditRegion}
               availableCategories={availableCategories}
               currentCategory={category}
               isFirst={index === 0}

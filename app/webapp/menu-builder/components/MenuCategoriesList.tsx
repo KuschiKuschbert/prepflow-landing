@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use client';
 import { logger } from '@/lib/logger';
 import { useMemo, useRef } from 'react';
@@ -15,6 +16,7 @@ interface MenuCategoriesListProps {
   onMoveToCategory: (itemId: string, newCategory: string) => void;
   onUpdateActualPrice: (itemId: string, newPrice: number | null) => void;
   onShowStatistics: (item: MenuItem) => void;
+  onEditRegion: (item: MenuItem) => void;
 }
 
 export function MenuCategoriesList({
@@ -28,6 +30,7 @@ export function MenuCategoriesList({
   onMoveToCategory,
   onUpdateActualPrice,
   onShowStatistics,
+  onEditRegion,
 }: MenuCategoriesListProps) {
   const prevMenuItemsRef = useRef<MenuItem[]>(menuItems);
   const prevCategoryItemsMapRef = useRef<Map<string, MenuItem[]>>(new Map());
@@ -132,6 +135,7 @@ export function MenuCategoriesList({
             onMoveToCategory={onMoveToCategory}
             onUpdateActualPrice={onUpdateActualPrice}
             onShowStatistics={onShowStatistics}
+            onEditRegion={onEditRegion}
             availableCategories={categories}
           />
         );

@@ -40,6 +40,7 @@ export function useMenuEditorUI({
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
   const [selectedItemForStats, setSelectedItemForStats] = useState<MenuItem | null>(null);
+  const [selectedItemForRegion, setSelectedItemForRegion] = useState<MenuItem | null>(null);
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
     title: string;
@@ -84,6 +85,8 @@ export function useMenuEditorUI({
     setAnchorElement,
     selectedItemForStats,
     setSelectedItemForStats,
+    selectedItemForRegion,
+    setSelectedItemForRegion,
     confirmDialog,
     setConfirmDialog,
     handleAddCategory,

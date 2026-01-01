@@ -17,6 +17,7 @@ import { useMenuLockManagement } from './MenuEditor/hooks/useMenuLockManagement'
 import { usePriceRecalculation } from './MenuEditor/hooks/usePriceRecalculation';
 import { useRenderTracking } from './MenuEditor/hooks/useRenderTracking';
 import { useStableMenuItems } from './MenuEditor/hooks/useStableMenuItems';
+import { MenuItemRegionPopup } from './MenuItemRegionPopup';
 import { MenuLockButton } from './MenuLockButton';
 import MenuStatisticsPanel from './MenuStatisticsPanel';
 
@@ -84,6 +85,7 @@ function MenuEditorComponent({ menu, onMenuUpdated }: MenuEditorProps) {
     handleMoveDown,
     handleMoveToCategory,
     handleUpdateActualPrice,
+    handleUpdateRegion,
   } = useMenuItemOperations({
     menuId: menu.id,
     menuItems,
@@ -108,6 +110,8 @@ function MenuEditorComponent({ menu, onMenuUpdated }: MenuEditorProps) {
     setAnchorElement,
     selectedItemForStats,
     setSelectedItemForStats,
+    selectedItemForRegion,
+    setSelectedItemForRegion,
     confirmDialog,
     setConfirmDialog,
     handleAddCategory,
@@ -191,6 +195,7 @@ function MenuEditorComponent({ menu, onMenuUpdated }: MenuEditorProps) {
             onMoveToCategory={handleMoveToCategory}
             onUpdateActualPrice={handleUpdateActualPrice}
             onShowStatistics={item => setSelectedItemForStats(item)}
+            onEditRegion={item => setSelectedItemForRegion(item)}
           />
         </div>
       </div>
@@ -214,6 +219,12 @@ function MenuEditorComponent({ menu, onMenuUpdated }: MenuEditorProps) {
         handleRecalculatePrices={handleRecalculatePrices}
         handleDismissChanges={handleDismissChanges}
         handleCloseUnlockDialog={handleCloseUnlockDialog}
+      />
+      <MenuItemRegionPopup
+        isOpen={selectedItemForRegion !== null}
+        item={selectedItemForRegion}
+        onClose={() => setSelectedItemForRegion(null)}
+        onSave={handleUpdateRegion}
       />
     </div>
   );

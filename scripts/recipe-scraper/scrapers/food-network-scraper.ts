@@ -8,6 +8,7 @@ import puppeteer from 'puppeteer';
 import { BaseScraper } from './base-scraper';
 import { ScrapedRecipe, RecipeIngredient } from '../parsers/types';
 import { scraperLogger } from '../utils/logger';
+import { SitemapParser } from '../utils/sitemap-parser';
 
 export class FoodNetworkScraper extends BaseScraper {
   private usePuppeteer: boolean = true;
@@ -292,10 +293,168 @@ export class FoodNetworkScraper extends BaseScraper {
   }
 
   /**
-   * Get recipe URLs
+   * Get recipe URLs from Food Network by browsing categories
    */
-  async getRecipeUrls(limit: number = 10): Promise<string[]> {
-    scraperLogger.warn('Food Network URL discovery not implemented - provide URLs manually');
-    return [];
+  async getRecipeUrls(limit: number = 50): Promise<string[]> {
+    const urls: string[] = [];
+    const visited = new Set<string>();
+
+    try {
+      // Browse popular recipe categories
+      const categoryPages = [
+        'https://www.foodnetwork.com/recipes',
+        'https://www.foodnetwork.com/recipes/photos/easy-recipes',
+        'https://www.foodnetwork.com/recipes/photos/quick-recipes',
+        'https://www.foodnetwork.com/recipes/photos/dinner-recipes',
+        'https://www.foodnetwork.com/recipes/photos/healthy-recipes',
+        'https://www.foodnetwork.com/recipes/photos/dessert-recipes',
+      ];
+
+      for (const pageUrl of categoryPages) {
+        if (urls.length >= limit) break;
+
+        try {
+          // Use Puppeteer for Food Network as it's JS-heavy
+          const html = this.usePuppeteer
+            ? await this.fetchPageWithPuppeteer(pageUrl)
+            : await this.fetchPage(pageUrl);
+          const $ = cheerio.load(html);
+
+          // Extract recipe links
+          const recipeLinks = $('a[href*="/recipes/"]')
+            .map((_, el) => {
+              const href = $(el).attr('href');
+              if (!href) return null;
+              // Convert relative URLs to absolute
+              if (href.startsWith('/')) {
+                return `https://www.foodnetwork.com${href}`;
+              }
+              if (href.includes('foodnetwork.com/recipes/')) {
+                const cleanUrl = href.split('?')[0].split('#')[0];
+                // Only include actual recipe pages
+                if (cleanUrl.match(/\/recipes\/[^/]+$/)) {
+                  return cleanUrl;
+                }
+              }
+              return null;
+            })
+            .get()
+            .filter((url): url is string => {
+              if (!url) return false;
+              return url.includes('/recipes/') && !visited.has(url) && !url.includes('/photos/');
+            });
+
+          for (const url of recipeLinks) {
+            if (urls.length >= limit) break;
+            visited.add(url);
+            urls.push(url);
+          }
+
+          scraperLogger.info(`Found ${recipeLinks.length} recipes on ${pageUrl}`);
+        } catch (error) {
+          scraperLogger.warn(`Failed to fetch ${pageUrl}:`, error);
+        }
+      }
+
+      scraperLogger.info(`Discovered ${urls.length} recipe URLs from Food Network`);
+      return urls;
+    } catch (error) {
+      scraperLogger.error('Error discovering Food Network URLs:', error);
+      return urls;
+    }
+  }
+
+  /**
+   * Get ALL recipe URLs (comprehensive, no limit)
+   * Uses sitemap parsing first, then falls back to pagination crawling
+   */
+  async getAllRecipeUrls(): Promise<string[]> {
+    const urls: string[] = [];
+    const visited = new Set<string>();
+
+    // Try sitemap parsing first
+    try {
+      scraperLogger.info('Attempting to discover Food Network URLs via sitemap...');
+      const sitemapParser = new SitemapParser();
+      const sitemapUrls = await sitemapParser.discoverRecipeUrls('food-network');
+      if (sitemapUrls.length > 0) {
+        scraperLogger.info(`Discovered ${sitemapUrls.length} recipe URLs from sitemap`);
+        return sitemapUrls;
+      }
+    } catch (error) {
+      scraperLogger.warn('Sitemap parsing failed, falling back to pagination:', error);
+    }
+
+    // Fallback to pagination crawling
+    scraperLogger.info('Falling back to pagination crawling for Food Network...');
+    try {
+      const categoryPages = [
+        'https://www.foodnetwork.com/recipes',
+        'https://www.foodnetwork.com/recipes/photos/easy-recipes',
+        'https://www.foodnetwork.com/recipes/photos/quick-recipes',
+        'https://www.foodnetwork.com/recipes/photos/dinner-recipes',
+        'https://www.foodnetwork.com/recipes/photos/healthy-recipes',
+        'https://www.foodnetwork.com/recipes/photos/dessert-recipes',
+      ];
+
+      for (const pageUrl of categoryPages) {
+        try {
+          let currentPage = 1;
+          let hasMorePages = true;
+
+          while (hasMorePages) {
+            const paginatedUrl = currentPage === 1 ? pageUrl : `${pageUrl}?page=${currentPage}`;
+            const html = this.usePuppeteer
+              ? await this.fetchPageWithPuppeteer(paginatedUrl)
+              : await this.fetchPage(paginatedUrl);
+            const $ = cheerio.load(html);
+
+            // Extract recipe links
+            const recipeLinks = $('a[href*="/recipes/"]')
+              .map((_, el) => {
+                const href = $(el).attr('href');
+                if (!href) return null;
+                if (href.startsWith('/')) {
+                  return `https://www.foodnetwork.com${href}`;
+                }
+                if (href.includes('foodnetwork.com/recipes/')) {
+                  const cleanUrl = href.split('?')[0].split('#')[0];
+                  if (cleanUrl.match(/\/recipes\/[^/]+$/)) {
+                    return cleanUrl;
+                  }
+                }
+                return null;
+              })
+              .get()
+              .filter((url): url is string => {
+                if (!url) return false;
+                return url.includes('/recipes/') && !visited.has(url) && !url.includes('/photos/');
+              });
+
+            if (recipeLinks.length === 0) {
+              hasMorePages = false;
+            } else {
+              for (const url of recipeLinks) {
+                visited.add(url);
+                urls.push(url);
+              }
+              scraperLogger.info(`Found ${recipeLinks.length} recipes on page ${currentPage} of ${pageUrl}`);
+              currentPage++;
+              if (currentPage > 100) {
+                hasMorePages = false;
+              }
+            }
+          }
+        } catch (error) {
+          scraperLogger.warn(`Failed to fetch ${pageUrl}:`, error);
+        }
+      }
+
+      scraperLogger.info(`Discovered ${urls.length} recipe URLs from Food Network via pagination`);
+      return urls;
+    } catch (error) {
+      scraperLogger.error('Error in pagination crawling for Food Network:', error);
+      return urls;
+    }
   }
 }

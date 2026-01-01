@@ -47,6 +47,43 @@ class RecipeScraperCLI {
   }
 
   /**
+   * Discover and scrape recipes automatically
+   */
+  async scrapeFromDiscovery(
+    source: SourceType,
+    limit: number = 50,
+    dryRun: boolean = false,
+  ): Promise<void> {
+    const scraper = this.getScraper(source);
+    let successCount = 0;
+    let errorCount = 0;
+
+    scraperLogger.info(
+      `Starting automatic discovery and scrape from ${source} (limit: ${limit}, dry-run: ${dryRun})`,
+    );
+
+    try {
+      // Discover recipe URLs
+      scraperLogger.info('Discovering recipe URLs...');
+      const urls = await scraper.getRecipeUrls(limit);
+
+      if (urls.length === 0) {
+        scraperLogger.warn('No recipe URLs discovered');
+        return;
+      }
+
+      scraperLogger.info(`Discovered ${urls.length} recipe URLs, starting scrape...`);
+
+      // Scrape discovered URLs
+      await this.scrapeFromUrls(urls, source, dryRun);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      logger.error(`[Recipe Scraper] Error in discovery scrape:`, { error: errorMessage, source });
+      scraperLogger.error(`Error in discovery scrape:`, error);
+    }
+  }
+
+  /**
    * Scrape recipes from URLs
    */
   async scrapeFromUrls(urls: string[], source: SourceType, dryRun: boolean = false): Promise<void> {
@@ -168,7 +205,7 @@ function parseArgs(): ScrapeOptions {
         process.exit(0);
         break;
       case '--help':
-        console.log(`
+        scraperLogger.info(`
 Recipe Scraper CLI
 
 Usage:

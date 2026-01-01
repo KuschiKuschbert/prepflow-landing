@@ -11,7 +11,7 @@ export async function updateMenuItem(
   menuItemId: string,
   data: z.infer<typeof updateMenuItemSchema>,
 ): Promise<{ success: boolean; item: any; message: string } | { error: any; status: number }> {
-  const { category, position, actual_selling_price } = data;
+  const { category, position, actual_selling_price, region } = data;
 
   // Fetch menu item first to get dish_id or recipe_id
   const { menuItem, error: fetchError } = await fetchMenuItem(menuId, menuItemId);
@@ -23,12 +23,16 @@ export async function updateMenuItem(
     category?: string;
     position?: number;
     actual_selling_price?: number | null;
+    region?: string | null;
   } = {};
 
   if (category !== undefined) updateData.category = category;
   if (position !== undefined) updateData.position = position;
   if (actual_selling_price !== undefined) {
     updateData.actual_selling_price = actual_selling_price === null ? null : actual_selling_price;
+  }
+  if (region !== undefined) {
+    updateData.region = region === null ? null : region;
   }
 
   logger.dev('[Menu Item API] Updating menu item', {
