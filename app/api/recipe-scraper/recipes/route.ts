@@ -7,9 +7,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { requireAuth } from '@/lib/auth0-api-helpers';
-import { JSONStorage } from '../../../../scripts/recipe-scraper/storage/json-storage';
 import { searchRecipesByIngredients, getRecipeDatabaseStats } from '@/lib/ai/recipe-database';
-import { ScrapedRecipe } from '../../../../scripts/recipe-scraper/parsers/types';
+
+// Dynamic imports to handle potential import failures gracefully
+async function loadJSONStorage() {
+  try {
+    const storageMod = await import('../../../../scripts/recipe-scraper/storage/json-storage');
+    return storageMod.JSONStorage;
+  } catch (importErr) {
+    logger.error('[Recipe Scraper API] Failed to import JSONStorage:', {
+      error: importErr instanceof Error ? importErr.message : String(importErr),
+    });
+    throw new Error('Failed to load JSONStorage module');
+  }
+}
+
+// ScrapedRecipe is a type, not needed as a value
 
 /**
  * GET /api/recipe-scraper/recipes
@@ -38,10 +51,32 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search'); // Comma-separated ingredients
     const limit = parseInt(searchParams.get('limit') || '50', 10);
 
-    // Initialize storage with error handling
-    let storage: JSONStorage;
+    // Load modules dynamically
+    let JSONStorageClass;
     try {
-      storage = new JSONStorage();
+      JSONStorageClass = await loadJSONStorage();
+    } catch (loadErr) {
+      logger.error('[Recipe Scraper API] Failed to load JSONStorage:', {
+        error: loadErr instanceof Error ? loadErr.message : String(loadErr),
+      });
+      // Return empty results instead of failing
+      return NextResponse.json({
+        success: true,
+        data: {
+          recipes: [],
+          stats: {
+            totalRecipes: 0,
+            bySource: {},
+            lastUpdated: null,
+          },
+        },
+      });
+    }
+
+    // Initialize storage with error handling
+    let storage;
+    try {
+      storage = new JSONStorageClass();
     } catch (storageErr) {
       logger.error('[Recipe Scraper API] Error initializing storage:', {
         error: storageErr instanceof Error ? storageErr.message : String(storageErr),
@@ -60,7 +95,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    let recipes: ScrapedRecipe[] = [];
+    let recipes: any[] = [];
     try {
       if (search) {
         // Search by ingredients
@@ -78,7 +113,7 @@ export async function GET(request: NextRequest) {
               .slice(0, limit)
               .map(entry => storage.loadRecipe(entry.file_path));
             const loadedRecipes = await Promise.all(recipePromises);
-            recipes = loadedRecipes.filter((recipe): recipe is ScrapedRecipe => recipe !== null);
+            recipes = loadedRecipes.filter(recipe => recipe !== null);
           }
         } catch (loadErr) {
           logger.error('[Recipe Scraper API] Error loading recipes:', {
