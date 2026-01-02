@@ -7,12 +7,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { requireAuth } from '@/lib/auth0-api-helpers';
-import { AllRecipesScraper } from '../../../../../scripts/recipe-scraper/scrapers/allrecipes-scraper';
-import { BBCGoodFoodScraper } from '../../../../../scripts/recipe-scraper/scrapers/bbc-good-food-scraper';
-import { FoodNetworkScraper } from '../../../../../scripts/recipe-scraper/scrapers/food-network-scraper';
-import { SOURCES, SourceType } from '../../../../../scripts/recipe-scraper/config';
-import { getComprehensiveScraperJob } from '../../../../../scripts/recipe-scraper/jobs/comprehensive-scraper';
-import { JSONStorage } from '../../../../../scripts/recipe-scraper/storage/json-storage';
+import { AllRecipesScraper } from '../../../../scripts/recipe-scraper/scrapers/allrecipes-scraper';
+import { BBCGoodFoodScraper } from '../../../../scripts/recipe-scraper/scrapers/bbc-good-food-scraper';
+import { FoodNetworkScraper } from '../../../../scripts/recipe-scraper/scrapers/food-network-scraper';
+import { SOURCES, SourceType } from '../../../../scripts/recipe-scraper/config';
+import { getComprehensiveScraperJob } from '../../../../scripts/recipe-scraper/jobs/comprehensive-scraper';
+import { JSONStorage } from '../../../../scripts/recipe-scraper/storage/json-storage';
 
 /**
  * Handle authentication with proper error handling
