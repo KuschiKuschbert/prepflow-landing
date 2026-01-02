@@ -31,6 +31,11 @@ ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
 
 -- Create Policies (Universal Public Access for Demo/QR)
 -- Note: In production, you'd lock this down, but for the requested "Public Portal" and POS sync:
+DROP POLICY IF EXISTS "Public Read Access" ON customers;
 CREATE POLICY "Public Read Access" ON customers FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Public Insert Access" ON customers;
 CREATE POLICY "Public Insert Access" ON customers FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Public Update Access" ON customers;
 CREATE POLICY "Public Update Access" ON customers FOR UPDATE USING (true);
