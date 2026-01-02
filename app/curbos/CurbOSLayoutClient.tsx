@@ -48,7 +48,8 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
       if (
         pathname === '/curbos/login' ||
         pathname === '/curbos/unauthorized' ||
-        pathname.startsWith('/curbos/order/')
+        pathname.startsWith('/curbos/order/') ||
+        pathname.startsWith('/curbos/quests/')
       ) {
         setIsChecking(false)
         return
@@ -225,8 +226,8 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
       <RotatingTaco />
       <SpotlightCursor />
 
-      {/* Premium Glass Header (Global) - Hide on public order status pages */}
-      {!pathname.startsWith('/curbos/order/') && (
+      {/* Premium Glass Header (Global) - Hide on public order status and quest pages */}
+      {!pathname.startsWith('/curbos/order/') && !pathname.startsWith('/curbos/quests/') && (
         <header className="fixed top-4 left-4 right-4 tablet:top-6 tablet:left-6 tablet:right-6 h-16 tablet:h-20 bg-neutral-900/80 backdrop-blur-xl border border-white/10 rounded-2xl z-50 flex items-center justify-between px-4 tablet:px-6 desktop:px-8 shadow-2xl shadow-black/50">
           <Link href="/curbos" className="flex items-center gap-1.5 tablet:gap-4 group cursor-pointer flex-shrink-0 max-w-fit">
               <div className="relative h-8 w-8 tablet:h-10 tablet:w-10 transform group-hover:rotate-12 transition-transform duration-300 flex-shrink-0">
