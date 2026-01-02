@@ -112,6 +112,23 @@ import { fetchAISpecialsHistory } from './helpers/fetchAISpecialsHistory';
  */
 export async function GET(request: NextRequest) {
   try {
+    // Add authentication check
+    try {
+      await requireAuth(request);
+    } catch (authErr) {
+      // requireAuth throws NextResponse for auth errors, return it
+      if (authErr instanceof NextResponse) {
+        return authErr;
+      }
+      logger.error('[AI Specials API] Authentication error:', {
+        error: authErr instanceof Error ? authErr.message : String(authErr),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
+        { status: 401 },
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
 

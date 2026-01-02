@@ -1,5 +1,4 @@
 import { logger } from '@/lib/logger';
-import { searchRecipesByIngredients, formatRecipesForPrompt } from '../recipe-database';
 
 /**
  * AI Specials Prompt
@@ -31,12 +30,21 @@ Analyze the image and identify:
   let recipeContext = '';
   if (detectedIngredients && detectedIngredients.length > 0) {
     try {
-      const similarRecipes = await searchRecipesByIngredients(detectedIngredients, 3);
+      // Dynamic import to handle module load failures gracefully
+      const recipeDatabase = await import('../recipe-database');
+      const similarRecipes = await recipeDatabase.searchRecipesByIngredients(
+        detectedIngredients,
+        3,
+      );
       if (similarRecipes.length > 0) {
-        recipeContext = formatRecipesForPrompt(similarRecipes);
+        recipeContext = recipeDatabase.formatRecipesForPrompt(similarRecipes);
       }
     } catch (error) {
-      logger.warn('Error loading recipe database context:', error);
+      // Gracefully degrade - continue without recipe context
+      logger.warn('Recipe database unavailable, continuing without context:', {
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
     }
   }
 
