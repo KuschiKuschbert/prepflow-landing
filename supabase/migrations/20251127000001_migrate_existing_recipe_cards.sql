@@ -129,6 +129,18 @@ cards_to_merge_dishes AS (
     AND dg.signature = ctk.signature
   WHERE mrc.id != ctk.id
 )
+  WHERE mrc.id != ctk.id
+)
+-- resolve conflicts by deleting links pointing to old_card if a link to keep_card already exists
+DELETE FROM menu_item_recipe_card_links t1
+USING cards_to_merge_dishes ctm
+WHERE t1.recipe_card_id = ctm.old_card_id
+AND EXISTS (
+  SELECT 1 FROM menu_item_recipe_card_links t2
+  WHERE t2.menu_item_id = t1.menu_item_id
+  AND t2.recipe_card_id = ctm.keep_card_id
+);
+
 -- Update links to point to the kept card
 UPDATE menu_item_recipe_card_links
 SET recipe_card_id = ctm.keep_card_id

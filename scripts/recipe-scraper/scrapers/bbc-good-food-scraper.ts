@@ -342,7 +342,9 @@ export class BBCGoodFoodScraper extends BaseScraper {
               .get()
               .filter((url): url is string => {
                 if (!url) return false;
-                return url.includes('/recipes/') && !visited.has(url) && !url.includes('/collection/');
+                return (
+                  url.includes('/recipes/') && !visited.has(url) && !url.includes('/collection/')
+                );
               });
 
             if (recipeLinks.length === 0) {
@@ -352,7 +354,9 @@ export class BBCGoodFoodScraper extends BaseScraper {
                 visited.add(url);
                 urls.push(url);
               }
-              scraperLogger.info(`Found ${recipeLinks.length} recipes on page ${currentPage} of ${pageUrl}`);
+              scraperLogger.info(
+                `Found ${recipeLinks.length} recipes on page ${currentPage} of ${pageUrl}`,
+              );
               currentPage++;
               if (currentPage > 100) {
                 hasMorePages = false;

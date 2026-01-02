@@ -324,7 +324,9 @@ export class AllRecipesScraper extends BaseScraper {
                 visited.add(url);
                 urls.push(url);
               }
-              scraperLogger.info(`Found ${recipeLinks.length} recipes on page ${currentPage} of ${pageUrl}`);
+              scraperLogger.info(
+                `Found ${recipeLinks.length} recipes on page ${currentPage} of ${pageUrl}`,
+              );
               currentPage++;
               // Limit pagination depth to prevent infinite loops
               if (currentPage > 100) {

@@ -438,7 +438,9 @@ export class FoodNetworkScraper extends BaseScraper {
                 visited.add(url);
                 urls.push(url);
               }
-              scraperLogger.info(`Found ${recipeLinks.length} recipes on page ${currentPage} of ${pageUrl}`);
+              scraperLogger.info(
+                `Found ${recipeLinks.length} recipes on page ${currentPage} of ${pageUrl}`,
+              );
               currentPage++;
               if (currentPage > 100) {
                 hasMorePages = false;
