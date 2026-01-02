@@ -1,5 +1,4 @@
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { NextResponse } from 'next/server';
 
@@ -18,38 +17,55 @@ export async function saveAISpecials(
   prompt: string | undefined,
   aiResponse: any,
 ): Promise<{ aiRecord: any } | NextResponse> {
-  if (!supabaseAdmin) {
-    return NextResponse.json(
-      ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-      { status: 500 },
-    );
-  }
+  try {
+    // Dynamic import to handle module load failures gracefully
+    const { supabaseAdmin } = await import('@/lib/supabase');
 
-  const { data: aiRecord, error: aiError } = await supabaseAdmin
-    .from('ai_specials_ingredients')
-    .insert({
-      user_id: userId,
-      image_data: imageData,
-      prompt: prompt,
-      ai_response: aiResponse,
-      status: 'completed',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    })
-    .select()
-    .single();
+    if (!supabaseAdmin) {
+      logger.error('[AI Specials API] Database connection not available');
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
+    }
 
-  if (aiError) {
-    logger.error('[AI Specials API] Database error saving:', {
-      error: aiError.message,
-      code: (aiError as any).code,
+    const { data: aiRecord, error: aiError } = await supabaseAdmin
+      .from('ai_specials_ingredients')
+      .insert({
+        user_id: userId,
+        image_data: imageData,
+        prompt: prompt,
+        ai_response: aiResponse,
+        status: 'completed',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .select()
+      .single();
+
+    if (aiError) {
+      logger.error('[AI Specials API] Database error saving:', {
+        error: aiError.message,
+        code: (aiError as any).code,
+        context: { endpoint: '/api/ai-specials', operation: 'POST', userId },
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError("Couldn't save AI processing results", 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
+    }
+
+    return { aiRecord };
+  } catch (error) {
+    // Handle module load failures or other unexpected errors
+    logger.error('[AI Specials API] Error in saveAISpecials:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
       context: { endpoint: '/api/ai-specials', operation: 'POST', userId },
     });
     return NextResponse.json(
-      ApiErrorHandler.createError("Couldn't save AI processing results", 'DATABASE_ERROR', 500),
+      ApiErrorHandler.createError('Failed to save AI specials', 'SERVER_ERROR', 500),
       { status: 500 },
     );
   }
-
-  return { aiRecord };
 }

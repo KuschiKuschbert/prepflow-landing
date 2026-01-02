@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Fetches AI specials history for a user.
@@ -11,35 +11,47 @@ import { NextResponse } from 'next/server';
 export async function fetchAISpecialsHistory(
   userId: string,
 ): Promise<{ data: any[] } | NextResponse> {
-  if (!supabaseAdmin) {
-    return NextResponse.json(
-      {
-        error: 'Database connection not available',
-      },
-      { status: 500 },
-    );
-  }
+  try {
+    // Dynamic import to handle module load failures gracefully
+    const { supabaseAdmin } = await import('@/lib/supabase');
 
-  const { data, error } = await supabaseAdmin
-    .from('ai_specials_ingredients')
-    .select('*')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false });
+    if (!supabaseAdmin) {
+      logger.error('[AI Specials API] Database connection not available');
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
+    }
 
-  if (error) {
-    logger.error('[AI Specials API] Database error fetching:', {
-      error: error.message,
-      code: (error as any).code,
+    const { data, error } = await supabaseAdmin
+      .from('ai_specials_ingredients')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      logger.error('[AI Specials API] Database error fetching:', {
+        error: error.message,
+        code: (error as any).code,
+        context: { endpoint: '/api/ai-specials', operation: 'GET', userId },
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError("Couldn't retrieve AI analysis data", 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
+    }
+
+    return { data: data || [] };
+  } catch (error) {
+    // Handle module load failures or other unexpected errors
+    logger.error('[AI Specials API] Error in fetchAISpecialsHistory:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
       context: { endpoint: '/api/ai-specials', operation: 'GET', userId },
     });
     return NextResponse.json(
-      {
-        error: 'Failed to fetch AI specials',
-        message: "couldn't retrieve AI analysis data",
-      },
+      ApiErrorHandler.createError('Failed to fetch AI specials history', 'SERVER_ERROR', 500),
       { status: 500 },
     );
   }
-
-  return { data: data || [] };
 }
