@@ -6,14 +6,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { requireAuth } from '@/lib/auth0-api-helpers';
-import { AllRecipesScraper } from '../../../../scripts/recipe-scraper/scrapers/allrecipes-scraper';
-import { BBCGoodFoodScraper } from '../../../../scripts/recipe-scraper/scrapers/bbc-good-food-scraper';
-import { FoodNetworkScraper } from '../../../../scripts/recipe-scraper/scrapers/food-network-scraper';
+import { SourceType } from '../../../../scripts/recipe-scraper/config';
 import { JSONStorage } from '../../../../scripts/recipe-scraper/storage/json-storage';
-import { SOURCES, SourceType } from '../../../../scripts/recipe-scraper/config';
-import { getComprehensiveScraperJob } from '../../../../scripts/recipe-scraper/jobs/comprehensive-scraper';
 import { z } from 'zod';
+import { handleAuth, handleComprehensiveScrape, createScraper, scrapeRecipes } from './helpers';
 
 const scrapeSchema = z.object({
   source: z.enum(['allrecipes', 'bbc-good-food', 'food-network']).optional(),
@@ -30,7 +26,8 @@ const scrapeSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     // Require authentication
-    await requireAuth(request);
+    const authResponse = await handleAuth(request);
+    if (authResponse) return authResponse;
 
     let body: unknown;
     try {
@@ -61,24 +58,7 @@ export async function POST(request: NextRequest) {
 
     // Comprehensive mode - start background job for all sources
     if (comprehensive) {
-      logger.info('[Recipe Scraper API] Starting comprehensive scraping job');
-      const job = getComprehensiveScraperJob();
-      const status = job.getStatus();
-
-      // Start job in background (don't await)
-      job.start().catch(error => {
-        logger.error('[Recipe Scraper API] Comprehensive scraping job failed:', {
-          error: error instanceof Error ? error.message : String(error),
-        });
-      });
-
-      return NextResponse.json({
-        success: true,
-        message: 'Comprehensive scraping job started',
-        data: {
-          jobStatus: status,
-        },
-      });
+      return handleComprehensiveScrape();
     }
 
     // Regular scraping mode (existing logic)
@@ -94,34 +74,61 @@ export async function POST(request: NextRequest) {
     }
 
     // Get scraper instance
-    let scraper: AllRecipesScraper | BBCGoodFoodScraper | FoodNetworkScraper;
-    switch (source as SourceType) {
-      case SOURCES.ALLRECIPES:
-        scraper = new AllRecipesScraper();
-        break;
-      case SOURCES.BBC_GOOD_FOOD:
-        scraper = new BBCGoodFoodScraper();
-        break;
-      case SOURCES.FOOD_NETWORK:
-        scraper = new FoodNetworkScraper();
-        break;
-      default:
-        return NextResponse.json(
-          ApiErrorHandler.createError(`Unknown source: ${source}`, 'VALIDATION_ERROR', 400),
-          { status: 400 },
-        );
+    let scraper;
+    try {
+      scraper = createScraper(source as SourceType);
+    } catch (scraperErr) {
+      logger.error('[Recipe Scraper API] Error creating scraper:', {
+        error: scraperErr instanceof Error ? scraperErr.message : String(scraperErr),
+        source,
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          `Failed to initialize scraper for ${source}`,
+          'SERVER_ERROR',
+          500,
+        ),
+        { status: 500 },
+      );
     }
 
     // Initialize storage
-    const storage = new JSONStorage();
+    let storage: JSONStorage;
+    try {
+      storage = new JSONStorage();
+    } catch (storageErr) {
+      logger.error('[Recipe Scraper API] Error initializing storage:', {
+        error: storageErr instanceof Error ? storageErr.message : String(storageErr),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to initialize storage', 'SERVER_ERROR', 500),
+        { status: 500 },
+      );
+    }
 
     let recipeUrls: string[] = [];
 
     // Discovery mode - automatically find recipes
     if (discovery) {
-      logger.info(`[Recipe Scraper API] Starting discovery mode for ${source} (limit: ${limit})`);
-      recipeUrls = await scraper.getRecipeUrls(limit);
-      logger.info(`[Recipe Scraper API] Discovered ${recipeUrls.length} recipe URLs`);
+      try {
+        logger.info(`[Recipe Scraper API] Starting discovery mode for ${source} (limit: ${limit})`);
+        recipeUrls = await scraper.getRecipeUrls(limit);
+        logger.info(`[Recipe Scraper API] Discovered ${recipeUrls.length} recipe URLs`);
+      } catch (discoveryErr) {
+        logger.error('[Recipe Scraper API] Error in discovery mode:', {
+          error: discoveryErr instanceof Error ? discoveryErr.message : String(discoveryErr),
+          source,
+          limit,
+        });
+        return NextResponse.json(
+          ApiErrorHandler.createError(
+            `Failed to discover recipes from ${source}`,
+            'SERVER_ERROR',
+            500,
+          ),
+          { status: 500 },
+        );
+      }
     } else {
       // Manual URLs provided
       if (!urls || urls.length === 0) {
@@ -153,71 +160,27 @@ export async function POST(request: NextRequest) {
     }
 
     // Scrape recipes
-    const results = [];
-    let successCount = 0;
-    let errorCount = 0;
-
-    for (const url of recipeUrls) {
-      try {
-        const result = await scraper.scrapeRecipe(url);
-        if (result.success && result.recipe) {
-          const saveResult = await storage.saveRecipe(result.recipe);
-          if (saveResult.saved) {
-            successCount++;
-            results.push({
-              success: true,
-              recipe: result.recipe,
-              url,
-            });
-          } else {
-            results.push({
-              success: false,
-              error: saveResult.reason || 'Failed to save',
-              url,
-            });
-          }
-        } else {
-          errorCount++;
-          results.push({
-            success: false,
-            error: result.error || 'Failed to scrape',
-            url,
-          });
-        }
-      } catch (error) {
-        errorCount++;
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        logger.error(`[Recipe Scraper API] Error scraping ${url}:`, { error: errorMessage });
-        results.push({
-          success: false,
-          error: errorMessage,
-          url,
-        });
-      }
-    }
+    const { results, summary } = await scrapeRecipes(scraper, storage, recipeUrls);
 
     return NextResponse.json({
       success: true,
-      message: `Scraped ${successCount} recipe(s) successfully, ${errorCount} failed`,
-      data: {
-        results,
-        summary: {
-          total: recipeUrls.length,
-          success: successCount,
-          errors: errorCount,
-        },
-      },
+      message: `Scraped ${summary.success} recipe(s) successfully, ${summary.errors} failed`,
+      data: { results, summary },
     });
   } catch (err) {
+    // Catch any unexpected errors and ensure JSON response
     logger.error('[Recipe Scraper API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/recipe-scraper/scrape', operation: 'POST' },
     });
 
+    // requireAuth and other helpers may throw NextResponse
     if (err instanceof NextResponse) {
       return err;
     }
 
+    // Always return JSON, never let Next.js return HTML error page
     return NextResponse.json(
       ApiErrorHandler.createError('Failed to scrape recipes', 'INTERNAL_ERROR', 500),
       { status: 500 },

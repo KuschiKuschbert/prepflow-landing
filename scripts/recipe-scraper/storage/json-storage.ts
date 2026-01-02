@@ -103,9 +103,16 @@ export class JSONStorage {
    * Save recipe index
    */
   private saveIndex(index: RecipeIndex): void {
-    index.lastUpdated = new Date().toISOString();
-    index.totalCount = index.recipes.length;
-    fs.writeFileSync(this.indexPath, JSON.stringify(index, null, 2), 'utf-8');
+    try {
+      // Ensure directory exists before writing
+      this.ensureDirectoryExists();
+      index.lastUpdated = new Date().toISOString();
+      index.totalCount = index.recipes.length;
+      fs.writeFileSync(this.indexPath, JSON.stringify(index, null, 2), 'utf-8');
+    } catch (error) {
+      scraperLogger.error('Error saving index:', error);
+      // Don't throw - allow operation to continue even if index save fails
+    }
   }
 
   /**
@@ -133,8 +140,17 @@ export class JSONStorage {
    * Check if a URL already exists in the database (for pre-scraping duplicate check)
    */
   urlExists(source: string, url: string): boolean {
-    const index = this.loadIndex();
-    return index.recipes.some(entry => entry.source_url === url && entry.source === source);
+    try {
+      // Ensure directory exists
+      if (!fs.existsSync(this.storagePath)) {
+        return false;
+      }
+      const index = this.loadIndex();
+      return index.recipes.some(entry => entry.source_url === url && entry.source === source);
+    } catch (error) {
+      scraperLogger.error('Error checking if URL exists:', error);
+      return false;
+    }
   }
 
   /**
@@ -189,6 +205,12 @@ export class JSONStorage {
    */
   async loadRecipe(filePath: string): Promise<ScrapedRecipe | null> {
     try {
+      // Ensure directory exists
+      if (!fs.existsSync(this.storagePath)) {
+        scraperLogger.debug('Storage directory does not exist');
+        return null;
+      }
+
       const fullPath = path.isAbsolute(filePath) ? filePath : path.join(this.storagePath, filePath);
 
       // Check if file exists
@@ -221,50 +243,86 @@ export class JSONStorage {
    * Get all recipes from index
    */
   getAllRecipes(): RecipeIndexEntry[] {
-    const index = this.loadIndex();
-    return index.recipes;
+    try {
+      // Ensure directory exists
+      if (!fs.existsSync(this.storagePath)) {
+        scraperLogger.debug('Storage directory does not exist');
+        return [];
+      }
+      const index = this.loadIndex();
+      return index.recipes;
+    } catch (error) {
+      scraperLogger.error('Error getting all recipes:', error);
+      return [];
+    }
   }
 
   /**
    * Search recipes by ingredient name
    */
   async searchByIngredient(ingredientName: string, limit: number = 10): Promise<ScrapedRecipe[]> {
-    const index = this.loadIndex();
-    const results: ScrapedRecipe[] = [];
-    const lowerIngredient = ingredientName.toLowerCase();
-
-    for (const entry of index.recipes) {
-      if (results.length >= limit) break;
-
-      const recipe = await this.loadRecipe(entry.file_path);
-      if (!recipe) continue;
-
-      // Check if recipe contains ingredient
-      const hasIngredient = recipe.ingredients.some(ing => {
-        const ingName = typeof ing === 'string' ? ing : ing.name || ing.original_text;
-        return ingName.toLowerCase().includes(lowerIngredient);
-      });
-
-      if (hasIngredient) {
-        results.push(recipe);
+    try {
+      // Ensure directory exists
+      if (!fs.existsSync(this.storagePath)) {
+        scraperLogger.debug('Storage directory does not exist');
+        return [];
       }
-    }
 
-    return results;
+      const index = this.loadIndex();
+      const results: ScrapedRecipe[] = [];
+      const lowerIngredient = ingredientName.toLowerCase();
+
+      for (const entry of index.recipes) {
+        if (results.length >= limit) break;
+
+        try {
+          const recipe = await this.loadRecipe(entry.file_path);
+          if (!recipe) continue;
+
+          // Check if recipe contains ingredient
+          const hasIngredient = recipe.ingredients.some(ing => {
+            const ingName = typeof ing === 'string' ? ing : ing.name || ing.original_text;
+            return ingName.toLowerCase().includes(lowerIngredient);
+          });
+
+          if (hasIngredient) {
+            results.push(recipe);
+          }
+        } catch (error) {
+          scraperLogger.error(`Error processing recipe entry ${entry.id}:`, error);
+          // Continue to next recipe instead of failing entire search
+          continue;
+        }
+      }
+
+      return results;
+    } catch (error) {
+      scraperLogger.error('Error searching by ingredient:', error);
+      return [];
+    }
   }
 
   /**
    * Get recipe count by source
    */
   getCountBySource(): Record<string, number> {
-    const index = this.loadIndex();
-    const counts: Record<string, number> = {};
+    try {
+      // Ensure directory exists
+      if (!fs.existsSync(this.storagePath)) {
+        return {};
+      }
+      const index = this.loadIndex();
+      const counts: Record<string, number> = {};
 
-    for (const entry of index.recipes) {
-      counts[entry.source] = (counts[entry.source] || 0) + 1;
+      for (const entry of index.recipes) {
+        counts[entry.source] = (counts[entry.source] || 0) + 1;
+      }
+
+      return counts;
+    } catch (error) {
+      scraperLogger.error('Error getting count by source:', error);
+      return {};
     }
-
-    return counts;
   }
 
   /**
@@ -275,11 +333,28 @@ export class JSONStorage {
     bySource: Record<string, number>;
     lastUpdated: string;
   } {
-    const index = this.loadIndex();
-    return {
-      totalRecipes: index.totalCount,
-      bySource: this.getCountBySource(),
-      lastUpdated: index.lastUpdated,
-    };
+    try {
+      // Ensure directory exists
+      if (!fs.existsSync(this.storagePath)) {
+        return {
+          totalRecipes: 0,
+          bySource: {},
+          lastUpdated: new Date().toISOString(),
+        };
+      }
+      const index = this.loadIndex();
+      return {
+        totalRecipes: index.totalCount,
+        bySource: this.getCountBySource(),
+        lastUpdated: index.lastUpdated,
+      };
+    } catch (error) {
+      scraperLogger.error('Error getting statistics:', error);
+      return {
+        totalRecipes: 0,
+        bySource: {},
+        lastUpdated: new Date().toISOString(),
+      };
+    }
   }
 }

@@ -18,33 +18,99 @@ import { ScrapedRecipe } from '../../../../scripts/recipe-scraper/parsers/types'
 export async function GET(request: NextRequest) {
   try {
     // Require authentication
-    await requireAuth(request);
+    try {
+      await requireAuth(request);
+    } catch (authErr) {
+      // requireAuth throws NextResponse for auth errors, return it
+      if (authErr instanceof NextResponse) {
+        return authErr;
+      }
+      logger.error('[Recipe Scraper API] Authentication error:', {
+        error: authErr instanceof Error ? authErr.message : String(authErr),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
+        { status: 401 },
+      );
+    }
 
     const searchParams = request.nextUrl.searchParams;
     const search = searchParams.get('search'); // Comma-separated ingredients
     const limit = parseInt(searchParams.get('limit') || '50', 10);
 
-    const storage = new JSONStorage();
-
-    let recipes;
-    if (search) {
-      // Search by ingredients
-      const ingredients = search
-        .split(',')
-        .map(i => i.trim())
-        .filter(Boolean);
-      recipes = await searchRecipesByIngredients(ingredients, limit);
-    } else {
-      // Get all recipes
-      const allRecipes = storage.getAllRecipes();
-      const recipePromises = allRecipes
-        .slice(0, limit)
-        .map(entry => storage.loadRecipe(entry.file_path));
-      const loadedRecipes = await Promise.all(recipePromises);
-      recipes = loadedRecipes.filter((recipe): recipe is ScrapedRecipe => recipe !== null);
+    // Initialize storage with error handling
+    let storage: JSONStorage;
+    try {
+      storage = new JSONStorage();
+    } catch (storageErr) {
+      logger.error('[Recipe Scraper API] Error initializing storage:', {
+        error: storageErr instanceof Error ? storageErr.message : String(storageErr),
+      });
+      // Return empty results instead of failing
+      return NextResponse.json({
+        success: true,
+        data: {
+          recipes: [],
+          stats: {
+            totalRecipes: 0,
+            bySource: {},
+            lastUpdated: null,
+          },
+        },
+      });
     }
 
-    const stats = getRecipeDatabaseStats();
+    let recipes: ScrapedRecipe[] = [];
+    try {
+      if (search) {
+        // Search by ingredients
+        const ingredients = search
+          .split(',')
+          .map(i => i.trim())
+          .filter(Boolean);
+        recipes = await searchRecipesByIngredients(ingredients, limit);
+      } else {
+        // Get all recipes
+        try {
+          const allRecipes = storage.getAllRecipes();
+          if (allRecipes.length > 0) {
+            const recipePromises = allRecipes
+              .slice(0, limit)
+              .map(entry => storage.loadRecipe(entry.file_path));
+            const loadedRecipes = await Promise.all(recipePromises);
+            recipes = loadedRecipes.filter((recipe): recipe is ScrapedRecipe => recipe !== null);
+          }
+        } catch (loadErr) {
+          logger.error('[Recipe Scraper API] Error loading recipes:', {
+            error: loadErr instanceof Error ? loadErr.message : String(loadErr),
+          });
+          // Continue with empty recipes array
+          recipes = [];
+        }
+      }
+    } catch (recipeErr) {
+      logger.error('[Recipe Scraper API] Error fetching recipes:', {
+        error: recipeErr instanceof Error ? recipeErr.message : String(recipeErr),
+      });
+      // Continue with empty recipes array instead of failing
+      recipes = [];
+    }
+
+    // Get statistics with error handling
+    let stats;
+    try {
+      stats = getRecipeDatabaseStats();
+    } catch (statsErr) {
+      logger.error('[Recipe Scraper API] Error getting stats:', {
+        error: statsErr instanceof Error ? statsErr.message : String(statsErr),
+      });
+      // Return default stats instead of failing
+      stats = {
+        totalRecipes: 0,
+        bySource: {},
+        lastUpdated: null,
+      };
+    }
 
     return NextResponse.json({
       success: true,
@@ -54,18 +120,30 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (err) {
-    logger.error('[Recipe Scraper API] Error fetching recipes:', {
+    // Catch any unexpected errors and ensure JSON response
+    logger.error('[Recipe Scraper API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/recipe-scraper/recipes', operation: 'GET' },
     });
 
+    // requireAuth and other helpers may throw NextResponse
     if (err instanceof NextResponse) {
       return err;
     }
 
-    return NextResponse.json(
-      ApiErrorHandler.createError('Failed to fetch recipes', 'INTERNAL_ERROR', 500),
-      { status: 500 },
-    );
+    // Always return JSON, never let Next.js return HTML error page
+    // Return empty results instead of error to allow UI to render
+    return NextResponse.json({
+      success: true,
+      data: {
+        recipes: [],
+        stats: {
+          totalRecipes: 0,
+          bySource: {},
+          lastUpdated: null,
+        },
+      },
+    });
   }
 }

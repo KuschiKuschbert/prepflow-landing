@@ -35,6 +35,13 @@ interface RecipeIndex {
  */
 function loadIndex(): RecipeIndex | null {
   try {
+    // Check if database directory exists
+    if (!fs.existsSync(RECIPE_DATABASE_PATH)) {
+      logger.debug('Recipe database directory not found');
+      return null;
+    }
+
+    // Check if index file exists
     if (!fs.existsSync(INDEX_PATH)) {
       logger.debug('Recipe database index not found');
       return null;
@@ -53,6 +60,12 @@ function loadIndex(): RecipeIndex | null {
  */
 async function loadRecipe(filePath: string): Promise<ScrapedRecipe | null> {
   try {
+    // Check if database directory exists
+    if (!fs.existsSync(RECIPE_DATABASE_PATH)) {
+      logger.debug('Recipe database directory not found');
+      return null;
+    }
+
     const fullPath = path.isAbsolute(filePath)
       ? filePath
       : path.join(RECIPE_DATABASE_PATH, filePath);
@@ -89,36 +102,53 @@ export async function searchRecipesByIngredients(
   ingredientNames: string[],
   limit: number = 5,
 ): Promise<ScrapedRecipe[]> {
-  const index = loadIndex();
-  if (!index || index.recipes.length === 0) {
-    logger.debug('No recipes in database');
+  try {
+    // Check if database directory exists
+    if (!fs.existsSync(RECIPE_DATABASE_PATH)) {
+      logger.debug('Recipe database directory not found');
+      return [];
+    }
+
+    const index = loadIndex();
+    if (!index || index.recipes.length === 0) {
+      logger.debug('No recipes in database');
+      return [];
+    }
+
+    const results: ScrapedRecipe[] = [];
+    const lowerIngredients = ingredientNames.map(ing => ing.toLowerCase());
+
+    for (const entry of index.recipes) {
+      if (results.length >= limit) break;
+
+      try {
+        const recipe = await loadRecipe(entry.file_path);
+        if (!recipe) continue;
+
+        // Check if recipe contains any of the ingredients
+        const recipeIngredientNames = recipe.ingredients.map(ing =>
+          (typeof ing === 'string' ? ing : ing.name || ing.original_text).toLowerCase(),
+        );
+
+        const hasMatchingIngredient = lowerIngredients.some(searchIng =>
+          recipeIngredientNames.some(recipeIng => recipeIng.includes(searchIng)),
+        );
+
+        if (hasMatchingIngredient) {
+          results.push(recipe);
+        }
+      } catch (error) {
+        logger.error(`Error processing recipe entry ${entry.id}:`, error);
+        // Continue to next recipe instead of failing entire search
+        continue;
+      }
+    }
+
+    return results;
+  } catch (error) {
+    logger.error('Error searching recipes by ingredients:', error);
     return [];
   }
-
-  const results: ScrapedRecipe[] = [];
-  const lowerIngredients = ingredientNames.map(ing => ing.toLowerCase());
-
-  for (const entry of index.recipes) {
-    if (results.length >= limit) break;
-
-    const recipe = await loadRecipe(entry.file_path);
-    if (!recipe) continue;
-
-    // Check if recipe contains any of the ingredients
-    const recipeIngredientNames = recipe.ingredients.map(ing =>
-      (typeof ing === 'string' ? ing : ing.name || ing.original_text).toLowerCase(),
-    );
-
-    const hasMatchingIngredient = lowerIngredients.some(searchIng =>
-      recipeIngredientNames.some(recipeIng => recipeIng.includes(searchIng)),
-    );
-
-    if (hasMatchingIngredient) {
-      results.push(recipe);
-    }
-  }
-
-  return results;
 }
 
 /**
@@ -159,23 +189,42 @@ export function getRecipeDatabaseStats(): {
   bySource: Record<string, number>;
   lastUpdated: string | null;
 } {
-  const index = loadIndex();
-  if (!index) {
+  try {
+    // Check if database directory exists
+    if (!fs.existsSync(RECIPE_DATABASE_PATH)) {
+      logger.debug('Recipe database directory not found');
+      return {
+        totalRecipes: 0,
+        bySource: {},
+        lastUpdated: null,
+      };
+    }
+
+    const index = loadIndex();
+    if (!index) {
+      return {
+        totalRecipes: 0,
+        bySource: {},
+        lastUpdated: null,
+      };
+    }
+
+    const bySource: Record<string, number> = {};
+    for (const entry of index.recipes) {
+      bySource[entry.source] = (bySource[entry.source] || 0) + 1;
+    }
+
+    return {
+      totalRecipes: index.totalCount,
+      bySource,
+      lastUpdated: index.lastUpdated,
+    };
+  } catch (error) {
+    logger.error('Error getting recipe database stats:', error);
     return {
       totalRecipes: 0,
       bySource: {},
       lastUpdated: null,
     };
   }
-
-  const bySource: Record<string, number> = {};
-  for (const entry of index.recipes) {
-    bySource[entry.source] = (bySource[entry.source] || 0) + 1;
-  }
-
-  return {
-    totalRecipes: index.totalCount,
-    bySource,
-    lastUpdated: index.lastUpdated,
-  };
 }
