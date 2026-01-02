@@ -37,8 +37,8 @@ $$ LANGUAGE plpgsql;
 -- Step 3: Deduplicate BEFORE setting unique constraint fields
 -- For each recipe_id, keep only the oldest card and update all links to point to it
 
--- First, identify which cards should share the same recipe_id
--- Keep the oldest card for each recipe_id, update links for others
+-- RECIPES
+CREATE TEMP TABLE temp_cards_to_merge_recipes AS
 WITH recipe_groups AS (
   SELECT
     mi.recipe_id,
@@ -54,25 +54,30 @@ cards_to_keep_recipes AS (
   INNER JOIN menu_items mi ON mrc.menu_item_id = mi.id
   INNER JOIN recipe_groups rg ON mi.recipe_id = rg.recipe_id
   WHERE mrc.created_at = rg.oldest_created_at
-),
-cards_to_merge_recipes AS (
-  SELECT
+)
+SELECT
     mrc.id as old_card_id,
     ctk.id as keep_card_id,
     ctk.recipe_id
-  FROM menu_recipe_cards mrc
-  INNER JOIN menu_items mi ON mrc.menu_item_id = mi.id
-  INNER JOIN recipe_groups rg ON mi.recipe_id = rg.recipe_id
-  INNER JOIN cards_to_keep_recipes ctk ON rg.recipe_id = ctk.recipe_id
-  WHERE mrc.id != ctk.id
-)
--- Update links to point to the kept card
-UPDATE menu_item_recipe_card_links
-SET recipe_card_id = ctm.keep_card_id
-FROM cards_to_merge_recipes ctm
-WHERE recipe_card_id = ctm.old_card_id;
+FROM menu_recipe_cards mrc
+INNER JOIN menu_items mi ON mrc.menu_item_id = mi.id
+INNER JOIN recipe_groups rg ON mi.recipe_id = rg.recipe_id
+INNER JOIN cards_to_keep_recipes ctk ON rg.recipe_id = ctk.recipe_id
+WHERE mrc.id != ctk.id;
 
--- Delete duplicate recipe cards (after updating links)
+-- Logic for recipes: INSERT new mapping (ignoringdupes), then DELETE old
+INSERT INTO menu_item_recipe_card_links (menu_item_id, recipe_card_id)
+SELECT t1.menu_item_id, ctm.keep_card_id
+FROM menu_item_recipe_card_links t1
+JOIN temp_cards_to_merge_recipes ctm ON t1.recipe_card_id = ctm.old_card_id
+ON CONFLICT (menu_item_id, recipe_card_id) DO NOTHING;
+
+DELETE FROM menu_item_recipe_card_links
+WHERE recipe_card_id IN (SELECT old_card_id FROM temp_cards_to_merge_recipes);
+
+DROP TABLE temp_cards_to_merge_recipes;
+
+-- DELETE duplicate recipe cards entirely
 WITH recipe_groups AS (
   SELECT
     mi.recipe_id,
@@ -98,7 +103,9 @@ WHERE id IN (
     AND mrc.id NOT IN (SELECT id FROM cards_to_keep_recipes)
 );
 
--- Now do the same for dishes
+
+-- DISHES
+CREATE TEMP TABLE temp_cards_to_merge_dishes AS
 WITH dish_groups AS (
   SELECT
     mi.dish_id,
@@ -116,38 +123,34 @@ cards_to_keep_dishes AS (
   INNER JOIN dish_groups dg ON mi.dish_id = dg.dish_id
     AND calculate_dish_recipe_signature(mi.dish_id) = dg.signature
   WHERE mrc.created_at = dg.oldest_created_at
-),
-cards_to_merge_dishes AS (
-  SELECT
+)
+SELECT
     mrc.id as old_card_id,
     ctk.id as keep_card_id
-  FROM menu_recipe_cards mrc
-  INNER JOIN menu_items mi ON mrc.menu_item_id = mi.id
-  INNER JOIN dish_groups dg ON mi.dish_id = dg.dish_id
+FROM menu_recipe_cards mrc
+INNER JOIN menu_items mi ON mrc.menu_item_id = mi.id
+INNER JOIN dish_groups dg ON mi.dish_id = dg.dish_id
     AND calculate_dish_recipe_signature(mi.dish_id) = dg.signature
-  INNER JOIN cards_to_keep_dishes ctk ON dg.dish_id = ctk.dish_id
+INNER JOIN cards_to_keep_dishes ctk ON dg.dish_id = ctk.dish_id
     AND dg.signature = ctk.signature
-  WHERE mrc.id != ctk.id
-)
-  WHERE mrc.id != ctk.id
-)
--- resolve conflicts by deleting links pointing to old_card if a link to keep_card already exists
-DELETE FROM menu_item_recipe_card_links t1
-USING cards_to_merge_dishes ctm
-WHERE t1.recipe_card_id = ctm.old_card_id
-AND EXISTS (
-  SELECT 1 FROM menu_item_recipe_card_links t2
-  WHERE t2.menu_item_id = t1.menu_item_id
-  AND t2.recipe_card_id = ctm.keep_card_id
-);
+WHERE mrc.id != ctk.id;
 
--- Update links to point to the kept card
-UPDATE menu_item_recipe_card_links
-SET recipe_card_id = ctm.keep_card_id
-FROM cards_to_merge_dishes ctm
-WHERE recipe_card_id = ctm.old_card_id;
 
--- Delete duplicate dish cards (after updating links)
+-- Logic for dishes: INSERT new mapping (ignoring dupes), then DELETE old
+INSERT INTO menu_item_recipe_card_links (menu_item_id, recipe_card_id)
+SELECT t1.menu_item_id, ctm.keep_card_id
+FROM menu_item_recipe_card_links t1
+JOIN temp_cards_to_merge_dishes ctm ON t1.recipe_card_id = ctm.old_card_id
+ON CONFLICT (menu_item_id, recipe_card_id) DO NOTHING;
+
+DELETE FROM menu_item_recipe_card_links
+WHERE recipe_card_id IN (SELECT old_card_id FROM temp_cards_to_merge_dishes);
+
+
+DROP TABLE temp_cards_to_merge_dishes;
+
+
+-- Delete duplicate dish cards entirely
 WITH dish_groups AS (
   SELECT
     mi.dish_id,
