@@ -28,7 +28,7 @@ export default function Home() {
 
   const fetchItems = useCallback(async () => {
     try {
-      const { data, error } = await supabase.from('menu_items').select('*').order('category');
+      const { data, error } = await supabase.from('pos_menu_items').select('*').order('category');
       if (data) setItems(data);
       if (error) {
         logger.error('Error fetching menu items', { error, operation: 'fetchMenuItems' });
@@ -55,7 +55,7 @@ export default function Home() {
         setItems(prev => prev.map(i => (i.id === item.id ? ({ ...i, ...item } as MenuItem) : i)));
 
         const { error } = await supabase
-          .from('menu_items')
+          .from('pos_menu_items')
           .update({
             name: item.name,
             price: item.price,
@@ -83,7 +83,7 @@ export default function Home() {
         // Optimistic Create
         setItems(prev => [...prev, newEntry]);
 
-        const { error } = await supabase.from('menu_items').insert(newEntry);
+        const { error } = await supabase.from('pos_menu_items').insert(newEntry);
 
         if (error) {
           setItems(originalItems);
@@ -117,7 +117,7 @@ export default function Home() {
     setItems(prev => prev.filter(i => i.id !== id));
 
     try {
-      const { error } = await supabase.from('menu_items').delete().eq('id', id);
+      const { error } = await supabase.from('pos_menu_items').delete().eq('id', id);
       if (error) {
         setItems(originalItems);
         logger.error('Error deleting menu item', { error, id, operation: 'deleteMenuItem' });

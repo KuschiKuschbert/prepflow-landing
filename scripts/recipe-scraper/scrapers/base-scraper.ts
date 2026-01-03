@@ -28,7 +28,8 @@ export abstract class BaseScraper {
   constructor(source: string, config: Partial<ScraperConfig> = {}) {
     this.source = source;
     this.config = { ...DEFAULT_CONFIG, ...config };
-    this.rateLimiter = new RateLimiter(this.config.delayBetweenRequests);
+    // Allow up to 3 concurrent requests before enforcing delays (matches CONCURRENT_REQUESTS_PER_SOURCE)
+    this.rateLimiter = new RateLimiter(this.config.delayBetweenRequests, 3);
     this.httpClient = axios.create({
       timeout: this.config.timeout,
       headers: {

@@ -23567,8 +23567,1136 @@
       "source_url": "https://www.epicurious.com/recipes/food/views/gin-rickey",
       "file_path": "epicurious/gin-rickey-gin-rickey.json.gz",
       "scraped_at": "2026-01-03T16:54:49.587Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/garlic-lemon-shrimp",
+      "recipe_name": "Garlic Lemon Shrimp Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/garlic-lemon-shrimp",
+      "file_path": "tasty/garlic-lemon-shrimp-recipe-by-tasty-garlic-lemon-shrimp.json.gz",
+      "scraped_at": "2026-01-03T17:02:34.122Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/chicken-fajita-soup",
+      "recipe_name": "Chicken Fajita Soup Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/chicken-fajita-soup",
+      "file_path": "tasty/chicken-fajita-soup-recipe-by-tasty-chicken-fajita-soup.json.gz",
+      "scraped_at": "2026-01-03T17:02:49.845Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/dutch-oven-jalapeno-cheddar-bread",
+      "recipe_name": "Dutch Oven Jalapeño Cheddar Bread Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/dutch-oven-jalapeno-cheddar-bread",
+      "file_path": "tasty/dutch-oven-jalape-o-cheddar-bread-recipe-by-tasty-dutch-oven-jalapeno-cheddar-brea.json.gz",
+      "scraped_at": "2026-01-03T17:02:59.544Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/melon-berry-fruit-salad",
+      "recipe_name": "Melon Berry Fruit Salad Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/melon-berry-fruit-salad",
+      "file_path": "tasty/melon-berry-fruit-salad-recipe-by-tasty-melon-berry-fruit-salad.json.gz",
+      "scraped_at": "2026-01-03T17:03:16.401Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/chocolate-strawberry-crepes",
+      "recipe_name": "Chocolate Strawberry Crepes Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/chocolate-strawberry-crepes",
+      "file_path": "tasty/chocolate-strawberry-crepes-recipe-by-tasty-chocolate-strawberry-crepes.json.gz",
+      "scraped_at": "2026-01-03T17:03:46.367Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/loaded-bbq-chicken-nachos",
+      "recipe_name": "Loaded BBQ Chicken Nachos Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/loaded-bbq-chicken-nachos",
+      "file_path": "tasty/loaded-bbq-chicken-nachos-recipe-by-tasty-loaded-bbq-chicken-nachos.json.gz",
+      "scraped_at": "2026-01-03T17:03:52.668Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/egg-breakfast-cups",
+      "recipe_name": "Egg Breakfast Cups Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/egg-breakfast-cups",
+      "file_path": "tasty/egg-breakfast-cups-recipe-by-tasty-egg-breakfast-cups.json.gz",
+      "scraped_at": "2026-01-03T17:04:22.953Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/one-pan-southwestern-chicken-quinoa",
+      "recipe_name": "One-Pan Southwestern Chicken Quinoa Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/one-pan-southwestern-chicken-quinoa",
+      "file_path": "tasty/one-pan-southwestern-chicken-quinoa-recipe-by-tasty-one-pan-southwestern-chicken-qui.json.gz",
+      "scraped_at": "2026-01-03T17:04:36.030Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/chicken-and-broccoli-alfredo",
+      "recipe_name": "Chicken and Broccoli Alfredo Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/chicken-and-broccoli-alfredo",
+      "file_path": "tasty/chicken-and-broccoli-alfredo-recipe-by-tasty-chicken-and-broccoli-alfredo.json.gz",
+      "scraped_at": "2026-01-03T17:04:55.265Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/peruvian-lomo-saltado",
+      "recipe_name": "Peruvian Lomo Saltado Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/peruvian-lomo-saltado",
+      "file_path": "tasty/peruvian-lomo-saltado-recipe-by-tasty-peruvian-lomo-saltado.json.gz",
+      "scraped_at": "2026-01-03T17:05:58.094Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/honey-garlic-chicken-wings",
+      "recipe_name": "Honey Garlic Chicken Wings Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/honey-garlic-chicken-wings",
+      "file_path": "tasty/honey-garlic-chicken-wings-recipe-by-tasty-honey-garlic-chicken-wings.json.gz",
+      "scraped_at": "2026-01-03T17:06:00.186Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/the-ultimate-waffle",
+      "recipe_name": "The Ultimate Waffle Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/the-ultimate-waffle",
+      "file_path": "tasty/the-ultimate-waffle-recipe-by-tasty-the-ultimate-waffle.json.gz",
+      "scraped_at": "2026-01-03T17:06:02.081Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/roasted-carrots",
+      "recipe_name": "Roasted Carrots Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/roasted-carrots",
+      "file_path": "tasty/roasted-carrots-recipe-by-tasty-roasted-carrots.json.gz",
+      "scraped_at": "2026-01-03T17:06:20.966Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/chicken-and-asparagus-pasta",
+      "recipe_name": "Chicken And Asparagus Pasta Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/chicken-and-asparagus-pasta",
+      "file_path": "tasty/chicken-and-asparagus-pasta-recipe-by-tasty-chicken-and-asparagus-pasta.json.gz",
+      "scraped_at": "2026-01-03T17:06:22.030Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/avocado-chicken-salad",
+      "recipe_name": "Avocado Chicken Salad Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/avocado-chicken-salad",
+      "file_path": "tasty/avocado-chicken-salad-recipe-by-tasty-avocado-chicken-salad.json.gz",
+      "scraped_at": "2026-01-03T17:06:27.211Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/gourmet-salmon-dinner",
+      "recipe_name": "Gourmet Salmon Dinner Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/gourmet-salmon-dinner",
+      "file_path": "tasty/gourmet-salmon-dinner-recipe-by-tasty-gourmet-salmon-dinner.json.gz",
+      "scraped_at": "2026-01-03T17:06:45.018Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/spaghetti-squash-and-meatballs",
+      "recipe_name": "Spaghetti Squash And Meatballs Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/spaghetti-squash-and-meatballs",
+      "file_path": "tasty/spaghetti-squash-and-meatballs-recipe-by-tasty-spaghetti-squash-and-meatballs.json.gz",
+      "scraped_at": "2026-01-03T17:07:15.135Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/bourbon-hot-toddy",
+      "recipe_name": "Bourbon Hot Toddy",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/bourbon-hot-toddy",
+      "file_path": "bon-appetit/bourbon-hot-toddy-bourbon-hot-toddy.json.gz",
+      "scraped_at": "2026-01-03T17:08:26.536Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/hot-chocolate-cookies",
+      "recipe_name": "Hot Chocolate Cookies",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/hot-chocolate-cookies",
+      "file_path": "bon-appetit/hot-chocolate-cookies-hot-chocolate-cookies.json.gz",
+      "scraped_at": "2026-01-03T17:08:27.529Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/pecan-cake",
+      "recipe_name": "Pecan Cake",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/pecan-cake",
+      "file_path": "bon-appetit/pecan-cake-pecan-cake.json.gz",
+      "scraped_at": "2026-01-03T17:08:28.487Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/basically-queso",
+      "recipe_name": "Best Queso Dip",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/basically-queso",
+      "file_path": "bon-appetit/best-queso-dip-basically-queso.json.gz",
+      "scraped_at": "2026-01-03T17:08:29.511Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/pigs-in-a-pretzel-blanket",
+      "recipe_name": "Pigs In A Pretzel Blanket Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/pigs-in-a-pretzel-blanket",
+      "file_path": "tasty/pigs-in-a-pretzel-blanket-recipe-by-tasty-pigs-in-a-pretzel-blanket.json.gz",
+      "scraped_at": "2026-01-03T17:08:29.854Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/five-spice-crackle-cookies",
+      "recipe_name": "Five-Spice Crackle Cookies",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/five-spice-crackle-cookies",
+      "file_path": "bon-appetit/five-spice-crackle-cookies-five-spice-crackle-cookies.json.gz",
+      "scraped_at": "2026-01-03T17:08:30.534Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/back-pocket-caper-butter-chicken",
+      "recipe_name": "Back-Pocket Caper-Butter Chicken",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/back-pocket-caper-butter-chicken",
+      "file_path": "bon-appetit/back-pocket-caper-butter-chicken-back-pocket-caper-butter-chicken.json.gz",
+      "scraped_at": "2026-01-03T17:08:31.548Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/cherry-ice-pops",
+      "recipe_name": "Cherry Ice Pops",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/cherry-ice-pops",
+      "file_path": "bon-appetit/cherry-ice-pops-cherry-ice-pops.json.gz",
+      "scraped_at": "2026-01-03T17:08:32.940Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/garlic-coconut-shrimp-and-green-beans",
+      "recipe_name": "Garlic-Coconut Shrimp and Green Beans",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/garlic-coconut-shrimp-and-green-beans",
+      "file_path": "bon-appetit/garlic-coconut-shrimp-and-green-beans-garlic-coconut-shrimp-and-green-.json.gz",
+      "scraped_at": "2026-01-03T17:08:33.521Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/seeni-sambol-grilled-cheese-rolls",
+      "recipe_name": "Seeni Sambol Grilled Cheese Rolls",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/seeni-sambol-grilled-cheese-rolls",
+      "file_path": "bon-appetit/seeni-sambol-grilled-cheese-rolls-seeni-sambol-grilled-cheese-roll.json.gz",
+      "scraped_at": "2026-01-03T17:08:34.639Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/caramel-cake",
+      "recipe_name": "Caramel Cake",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/caramel-cake",
+      "file_path": "bon-appetit/caramel-cake-caramel-cake.json.gz",
+      "scraped_at": "2026-01-03T17:08:35.524Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/blueberry-cobbler",
+      "recipe_name": "Blueberry Cobbler",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/blueberry-cobbler",
+      "file_path": "bon-appetit/blueberry-cobbler-blueberry-cobbler.json.gz",
+      "scraped_at": "2026-01-03T17:08:36.680Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/crispy-buttermilk-fried-catfish",
+      "recipe_name": "Crispy Buttermilk-Fried Catfish",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/crispy-buttermilk-fried-catfish",
+      "file_path": "bon-appetit/crispy-buttermilk-fried-catfish-crispy-buttermilk-fried-catfish.json.gz",
+      "scraped_at": "2026-01-03T17:08:37.577Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/tomato-gravy-recipe",
+      "recipe_name": "Tomato Gravy",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/tomato-gravy-recipe",
+      "file_path": "bon-appetit/tomato-gravy-tomato-gravy-recipe.json.gz",
+      "scraped_at": "2026-01-03T17:08:38.596Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/classic-caesar-salad",
+      "recipe_name": "Classic Caesar Salad",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/classic-caesar-salad",
+      "file_path": "bon-appetit/classic-caesar-salad-classic-caesar-salad.json.gz",
+      "scraped_at": "2026-01-03T17:08:39.925Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/chile-cheese-cookies",
+      "recipe_name": "Chile-Cheese Cookies",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/chile-cheese-cookies",
+      "file_path": "bon-appetit/chile-cheese-cookies-chile-cheese-cookies.json.gz",
+      "scraped_at": "2026-01-03T17:08:41.787Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/matcha-swirl-spritz-cookies",
+      "recipe_name": "Matcha Swirl Spritz Cookies",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/matcha-swirl-spritz-cookies",
+      "file_path": "bon-appetit/matcha-swirl-spritz-cookies-matcha-swirl-spritz-cookies.json.gz",
+      "scraped_at": "2026-01-03T17:08:44.075Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/jam-shortbread-diagonal-cookies",
+      "recipe_name": "Jam Shortbread",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/jam-shortbread-diagonal-cookies",
+      "file_path": "bon-appetit/jam-shortbread-jam-shortbread-diagonal-cookies.json.gz",
+      "scraped_at": "2026-01-03T17:08:44.390Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/squash-with-salsa-verde-and-boquerones",
+      "recipe_name": "Kuri Squash With Calabrian Salsa Verde and Boquerones",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/squash-with-salsa-verde-and-boquerones",
+      "file_path": "bon-appetit/kuri-squash-with-calabrian-salsa-verde-and-boquerones-squash-with-salsa-verde-and-boqu.json.gz",
+      "scraped_at": "2026-01-03T17:08:44.795Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/pimiento-cheese-ball",
+      "recipe_name": "Pimiento Cheese Ball",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/pimiento-cheese-ball",
+      "file_path": "bon-appetit/pimiento-cheese-ball-pimiento-cheese-ball.json.gz",
+      "scraped_at": "2026-01-03T17:08:46.098Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/pumpernickel-panzanella",
+      "recipe_name": "Winter Panzanella",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/pumpernickel-panzanella",
+      "file_path": "bon-appetit/winter-panzanella-pumpernickel-panzanella.json.gz",
+      "scraped_at": "2026-01-03T17:08:46.268Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/mezcal-martini",
+      "recipe_name": "Mezcal Martini",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/mezcal-martini",
+      "file_path": "bon-appetit/mezcal-martini-mezcal-martini.json.gz",
+      "scraped_at": "2026-01-03T17:08:46.673Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/swiss-chard-pasta-salad",
+      "recipe_name": "Swiss Chard Pasta Salad",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/swiss-chard-pasta-salad",
+      "file_path": "bon-appetit/swiss-chard-pasta-salad-swiss-chard-pasta-salad.json.gz",
+      "scraped_at": "2026-01-03T17:08:47.740Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/port-cheese-ball",
+      "recipe_name": "Port Wine Cheese Ball",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/port-cheese-ball",
+      "file_path": "bon-appetit/port-wine-cheese-ball-port-cheese-ball.json.gz",
+      "scraped_at": "2026-01-03T17:08:49.036Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/smoked-salmon-tartare",
+      "recipe_name": "Smoked Salmon Tartare",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/smoked-salmon-tartare",
+      "file_path": "bon-appetit/smoked-salmon-tartare-smoked-salmon-tartare.json.gz",
+      "scraped_at": "2026-01-03T17:08:50.512Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/gochujang-steak-wraps",
+      "recipe_name": "Gochujang Steak Wraps",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/gochujang-steak-wraps",
+      "file_path": "bon-appetit/gochujang-steak-wraps-gochujang-steak-wraps.json.gz",
+      "scraped_at": "2026-01-03T17:08:51.749Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/sheet-pan-spinach-lasagna",
+      "recipe_name": "Sheet-Pan Spinach Lasagna",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/sheet-pan-spinach-lasagna",
+      "file_path": "bon-appetit/sheet-pan-spinach-lasagna-sheet-pan-spinach-lasagna.json.gz",
+      "scraped_at": "2026-01-03T17:08:52.066Z"
+    },
+    {
+      "id": "https://www.epicurious.com/recipes/food/views/peanut-butter-and-ginger-cookies",
+      "recipe_name": "Peanut Butter & Ginger Cookies (PB&Gs)",
+      "source": "epicurious",
+      "source_url": "https://www.epicurious.com/recipes/food/views/peanut-butter-and-ginger-cookies",
+      "file_path": "epicurious/peanut-butter-ginger-cookies-pb-gs-peanut-butter-and-ginger-cookies.json.gz",
+      "scraped_at": "2026-01-03T17:08:52.387Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/extra-large-latkes",
+      "recipe_name": "Extra-Large Latkes",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/extra-large-latkes",
+      "file_path": "bon-appetit/extra-large-latkes-extra-large-latkes.json.gz",
+      "scraped_at": "2026-01-03T17:08:53.273Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/carrot-halwa-cookies",
+      "recipe_name": "Chewy Halwa Cookies",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/carrot-halwa-cookies",
+      "file_path": "bon-appetit/chewy-halwa-cookies-carrot-halwa-cookies.json.gz",
+      "scraped_at": "2026-01-03T17:08:54.922Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/tiramisu-snowball-cookies",
+      "recipe_name": "Tiramisu Snowball Cookies",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/tiramisu-snowball-cookies",
+      "file_path": "bon-appetit/tiramisu-snowball-cookies-tiramisu-snowball-cookies.json.gz",
+      "scraped_at": "2026-01-03T17:08:56.654Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/turon-banana-lumpia",
+      "recipe_name": "Turon (Banana Lumpia)",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/turon-banana-lumpia",
+      "file_path": "bon-appetit/turon-banana-lumpia-turon-banana-lumpia.json.gz",
+      "scraped_at": "2026-01-03T17:08:57.211Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/filipino-spaghetti",
+      "recipe_name": "Filipino Spaghetti",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/filipino-spaghetti",
+      "file_path": "bon-appetit/filipino-spaghetti-filipino-spaghetti.json.gz",
+      "scraped_at": "2026-01-03T17:08:57.830Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/butternut-squash-coffee-cake",
+      "recipe_name": "Butternut Squash Coffee Cake",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/butternut-squash-coffee-cake",
+      "file_path": "bon-appetit/butternut-squash-coffee-cake-butternut-squash-coffee-cake.json.gz",
+      "scraped_at": "2026-01-03T17:08:58.612Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/herb-roasted-lamb-chops",
+      "recipe_name": "Herb-Roasted Lamb Chops",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/herb-roasted-lamb-chops",
+      "file_path": "bon-appetit/herb-roasted-lamb-chops-herb-roasted-lamb-chops.json.gz",
+      "scraped_at": "2026-01-03T17:08:58.684Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/french-75-3",
+      "recipe_name": "French 75",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/french-75-3",
+      "file_path": "bon-appetit/french-75-french-75-3.json.gz",
+      "scraped_at": "2026-01-03T17:08:59.638Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/vegan-coquito",
+      "recipe_name": "Vegan Coquito",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/vegan-coquito",
+      "file_path": "bon-appetit/vegan-coquito-vegan-coquito.json.gz",
+      "scraped_at": "2026-01-03T17:08:59.733Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/chewy-molasses-cookies",
+      "recipe_name": "Chewy Molasses Cookies",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/chewy-molasses-cookies",
+      "file_path": "bon-appetit/chewy-molasses-cookies-chewy-molasses-cookies.json.gz",
+      "scraped_at": "2026-01-03T17:09:02.310Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/baked-potato-wedges",
+      "recipe_name": "Spice-Roasted Potato Wedges",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/baked-potato-wedges",
+      "file_path": "bon-appetit/spice-roasted-potato-wedges-baked-potato-wedges.json.gz",
+      "scraped_at": "2026-01-03T17:09:02.674Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/buche-de-noel-recipe",
+      "recipe_name": "Bûche de Noël",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/buche-de-noel-recipe",
+      "file_path": "bon-appetit/b-che-de-no-l-buche-de-noel-recipe.json.gz",
+      "scraped_at": "2026-01-03T17:09:03.706Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/upside-down-cornbread",
+      "recipe_name": "Upside-Down Cornbread",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/upside-down-cornbread",
+      "file_path": "bon-appetit/upside-down-cornbread-upside-down-cornbread.json.gz",
+      "scraped_at": "2026-01-03T17:09:03.770Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/new-years-day-black-eyed-peas",
+      "recipe_name": "New Year's Black-Eyed Peas",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/new-years-day-black-eyed-peas",
+      "file_path": "bon-appetit/new-year-s-black-eyed-peas-new-years-day-black-eyed-peas.json.gz",
+      "scraped_at": "2026-01-03T17:09:04.695Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/coquito-recipe",
+      "recipe_name": "Coquito",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/coquito-recipe",
+      "file_path": "bon-appetit/coquito-coquito-recipe.json.gz",
+      "scraped_at": "2026-01-03T17:09:05.456Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/turkey-skillet-pot-pie-with-buttermilk-biscuits",
+      "recipe_name": "Turkey Skillet Pot Pie With Buttermilk Biscuits Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/turkey-skillet-pot-pie-with-buttermilk-biscuits",
+      "file_path": "tasty/turkey-skillet-pot-pie-with-buttermilk-biscuits-recipe-by-tasty-turkey-skillet-pot-pie-with-butt.json.gz",
+      "scraped_at": "2026-01-03T17:09:06.070Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/tamale-pie",
+      "recipe_name": "Tamale Pie Recipe",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/tamale-pie",
+      "file_path": "bon-appetit/tamale-pie-recipe-tamale-pie.json.gz",
+      "scraped_at": "2026-01-03T17:09:10.712Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/shrimp-scampi",
+      "recipe_name": "Shrimp Scampi",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/shrimp-scampi",
+      "file_path": "bon-appetit/shrimp-scampi-shrimp-scampi.json.gz",
+      "scraped_at": "2026-01-03T17:09:11.132Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/mozzarella-arancini-stuffed-rice-balls",
+      "recipe_name": "Arancini (Stuffed Italian Rice Balls)",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/mozzarella-arancini-stuffed-rice-balls",
+      "file_path": "bon-appetit/arancini-stuffed-italian-rice-balls-mozzarella-arancini-stuffed-rice.json.gz",
+      "scraped_at": "2026-01-03T17:09:12.144Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/fresh-pasta-dough",
+      "recipe_name": "Homemade Pasta Dough",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/fresh-pasta-dough",
+      "file_path": "bon-appetit/homemade-pasta-dough-fresh-pasta-dough.json.gz",
+      "scraped_at": "2026-01-03T17:09:12.232Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/mustard-chicken-shallots-cream",
+      "recipe_name": "Creamy Mustard Shallot Chicken",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/mustard-chicken-shallots-cream",
+      "file_path": "bon-appetit/creamy-mustard-shallot-chicken-mustard-chicken-shallots-cream.json.gz",
+      "scraped_at": "2026-01-03T17:09:13.797Z"
+    },
+    {
+      "id": "https://www.epicurious.com/recipes/food/views/mofongo",
+      "recipe_name": "Mofongo",
+      "source": "epicurious",
+      "source_url": "https://www.epicurious.com/recipes/food/views/mofongo",
+      "file_path": "epicurious/mofongo-mofongo.json.gz",
+      "scraped_at": "2026-01-03T17:09:14.796Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/melted-fennel-pasta",
+      "recipe_name": "Melted Fennel Pasta",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/melted-fennel-pasta",
+      "file_path": "bon-appetit/melted-fennel-pasta-melted-fennel-pasta.json.gz",
+      "scraped_at": "2026-01-03T17:09:15.076Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/beefy-cheesy-sweet-potatoes-kimchi",
+      "recipe_name": "Beefy Cheesy Sweet Potatoes With Kimchi",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/beefy-cheesy-sweet-potatoes-kimchi",
+      "file_path": "bon-appetit/beefy-cheesy-sweet-potatoes-with-kimchi-beefy-cheesy-sweet-potatoes-kimc.json.gz",
+      "scraped_at": "2026-01-03T17:09:15.526Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/hoppin-john",
+      "recipe_name": "Hoppin’ John",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/hoppin-john",
+      "file_path": "bon-appetit/hoppin-john-hoppin-john.json.gz",
+      "scraped_at": "2026-01-03T17:09:16.953Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/best-turkey-pot-pie-recipe",
+      "recipe_name": "Leftover-Turkey Pot Pie",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/best-turkey-pot-pie-recipe",
+      "file_path": "bon-appetit/leftover-turkey-pot-pie-best-turkey-pot-pie-recipe.json.gz",
+      "scraped_at": "2026-01-03T17:09:18.182Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/slow-cooker-roasted-tomato-basil-soup",
+      "recipe_name": "Slow Cooker Roasted Tomato Basil Soup Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/slow-cooker-roasted-tomato-basil-soup",
+      "file_path": "tasty/slow-cooker-roasted-tomato-basil-soup-recipe-by-tasty-slow-cooker-roasted-tomato-basil.json.gz",
+      "scraped_at": "2026-01-03T17:09:18.217Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/shaved-fennel-salad-with-croutons-and-walnuts",
+      "recipe_name": "Fennel Salad With Walnuts and Croutons",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/shaved-fennel-salad-with-croutons-and-walnuts",
+      "file_path": "bon-appetit/fennel-salad-with-walnuts-and-croutons-shaved-fennel-salad-with-crouton.json.gz",
+      "scraped_at": "2026-01-03T17:09:19.688Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/cornbread-dressing",
+      "recipe_name": "Cornbread Dressing With Sausage",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/cornbread-dressing",
+      "file_path": "bon-appetit/cornbread-dressing-with-sausage-cornbread-dressing.json.gz",
+      "scraped_at": "2026-01-03T17:09:20.046Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/sweet-potato-cake",
+      "recipe_name": "Sweet Potato Cake With Cream Cheese Frosting",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/sweet-potato-cake",
+      "file_path": "bon-appetit/sweet-potato-cake-with-cream-cheese-frosting-sweet-potato-cake.json.gz",
+      "scraped_at": "2026-01-03T17:09:21.047Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/foolproof-lemon-bars",
+      "recipe_name": "Foolproof Lemon Bars",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/foolproof-lemon-bars",
+      "file_path": "bon-appetit/foolproof-lemon-bars-foolproof-lemon-bars.json.gz",
+      "scraped_at": "2026-01-03T17:09:22.095Z"
+    },
+    {
+      "id": "https://www.epicurious.com/recipes/food/views/peppermint-bark-brownies",
+      "recipe_name": "Peppermint Bark Brownies",
+      "source": "epicurious",
+      "source_url": "https://www.epicurious.com/recipes/food/views/peppermint-bark-brownies",
+      "file_path": "epicurious/peppermint-bark-brownies-peppermint-bark-brownies.json.gz",
+      "scraped_at": "2026-01-03T17:09:22.282Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/brisket-bourguignon",
+      "recipe_name": "Brisket Bourguignon",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/brisket-bourguignon",
+      "file_path": "bon-appetit/brisket-bourguignon-brisket-bourguignon.json.gz",
+      "scraped_at": "2026-01-03T17:09:22.361Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/extra-corny-cornbread-muffins",
+      "recipe_name": "Corn Muffins With Fresh Corn",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/extra-corny-cornbread-muffins",
+      "file_path": "bon-appetit/corn-muffins-with-fresh-corn-extra-corny-cornbread-muffins.json.gz",
+      "scraped_at": "2026-01-03T17:09:24.528Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/green-beans-and-mushrooms-with-crispy-shallots",
+      "recipe_name": "Green Beans and Mushrooms With Crispy Shallots",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/green-beans-and-mushrooms-with-crispy-shallots",
+      "file_path": "bon-appetit/green-beans-and-mushrooms-with-crispy-shallots-green-beans-and-mushrooms-with-c.json.gz",
+      "scraped_at": "2026-01-03T17:09:24.926Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/cranberry-orange-chutney",
+      "recipe_name": "Cranberry-Orange Chutney",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/cranberry-orange-chutney",
+      "file_path": "bon-appetit/cranberry-orange-chutney-cranberry-orange-chutney.json.gz",
+      "scraped_at": "2026-01-03T17:09:25.892Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/mashed-baked-potatoes-with-chives",
+      "recipe_name": "Baked Mashed Potatoes",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/mashed-baked-potatoes-with-chives",
+      "file_path": "bon-appetit/baked-mashed-potatoes-mashed-baked-potatoes-with-chive.json.gz",
+      "scraped_at": "2026-01-03T17:09:25.957Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/hurricane-chips",
+      "recipe_name": "Nori-Sesame Hurricane Chips",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/hurricane-chips",
+      "file_path": "bon-appetit/nori-sesame-hurricane-chips-hurricane-chips.json.gz",
+      "scraped_at": "2026-01-03T17:09:26.934Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/buttery-milk-buns",
+      "recipe_name": "Buttery Milk Buns",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/buttery-milk-buns",
+      "file_path": "bon-appetit/buttery-milk-buns-buttery-milk-buns.json.gz",
+      "scraped_at": "2026-01-03T17:09:26.993Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/salted-graham-cracker-crust",
+      "recipe_name": "Salted Graham Cracker Crust",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/salted-graham-cracker-crust",
+      "file_path": "bon-appetit/salted-graham-cracker-crust-salted-graham-cracker-crust.json.gz",
+      "scraped_at": "2026-01-03T17:09:29.479Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/spam-and-brie-bites",
+      "recipe_name": "Spam and Brie Bites",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/spam-and-brie-bites",
+      "file_path": "bon-appetit/spam-and-brie-bites-spam-and-brie-bites.json.gz",
+      "scraped_at": "2026-01-03T17:09:29.829Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/cheesy-roasted-cabbage-wedges",
+      "recipe_name": "Cheesy Roasted Cabbage Wedges",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/cheesy-roasted-cabbage-wedges",
+      "file_path": "bon-appetit/cheesy-roasted-cabbage-wedges-cheesy-roasted-cabbage-wedges.json.gz",
+      "scraped_at": "2026-01-03T17:09:31.666Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/teriyaki-style-brussels-sprouts",
+      "recipe_name": "Teriyaki-Style Brussels Sprouts",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/teriyaki-style-brussels-sprouts",
+      "file_path": "bon-appetit/teriyaki-style-brussels-sprouts-teriyaki-style-brussels-sprouts.json.gz",
+      "scraped_at": "2026-01-03T17:09:32.144Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/stuffing-crusted-fish",
+      "recipe_name": "Stuffing-Crusted Fish",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/stuffing-crusted-fish",
+      "file_path": "bon-appetit/stuffing-crusted-fish-stuffing-crusted-fish.json.gz",
+      "scraped_at": "2026-01-03T17:09:32.505Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/creamy-pumpkin-pasta",
+      "recipe_name": "Creamy Pumpkin Pasta",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/creamy-pumpkin-pasta",
+      "file_path": "bon-appetit/creamy-pumpkin-pasta-creamy-pumpkin-pasta.json.gz",
+      "scraped_at": "2026-01-03T17:09:33.648Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/chocolate-and-coconut-cream-pie",
+      "recipe_name": "Chocolate and Coconut Cream Pie",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/chocolate-and-coconut-cream-pie",
+      "file_path": "bon-appetit/chocolate-and-coconut-cream-pie-chocolate-and-coconut-cream-pie.json.gz",
+      "scraped_at": "2026-01-03T17:09:36.375Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/three-minute-red-wine-vinaigrette",
+      "recipe_name": "The Quickest Red-Wine Vinaigrette",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/three-minute-red-wine-vinaigrette",
+      "file_path": "bon-appetit/the-quickest-red-wine-vinaigrette-three-minute-red-wine-vinaigrett.json.gz",
+      "scraped_at": "2026-01-03T17:09:37.858Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/leftover-turkey-melts",
+      "recipe_name": "Leftover-Turkey Melts",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/leftover-turkey-melts",
+      "file_path": "bon-appetit/leftover-turkey-melts-leftover-turkey-melts.json.gz",
+      "scraped_at": "2026-01-03T17:09:38.888Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/sour-cream-and-onion-hasselback-potatoes",
+      "recipe_name": "Mini Hasselback Potatoes",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/sour-cream-and-onion-hasselback-potatoes",
+      "file_path": "bon-appetit/mini-hasselback-potatoes-sour-cream-and-onion-hasselback-.json.gz",
+      "scraped_at": "2026-01-03T17:09:41.527Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/creamed-onions-alla-vodka",
+      "recipe_name": "Creamed Onions Alla Vodka",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/creamed-onions-alla-vodka",
+      "file_path": "bon-appetit/creamed-onions-alla-vodka-creamed-onions-alla-vodka.json.gz",
+      "scraped_at": "2026-01-03T17:09:42.431Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/kkwabaegi",
+      "recipe_name": "Kkwabaegi Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/kkwabaegi",
+      "file_path": "tasty/kkwabaegi-recipe-by-tasty-kkwabaegi.json.gz",
+      "scraped_at": "2026-01-03T17:09:42.733Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/green-beans-with-almond-butter-sauce",
+      "recipe_name": "Green Beans With Almond Butter Sauce",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/green-beans-with-almond-butter-sauce",
+      "file_path": "bon-appetit/green-beans-with-almond-butter-sauce-green-beans-with-almond-butter-s.json.gz",
+      "scraped_at": "2026-01-03T17:09:43.497Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/classic-french-toast",
+      "recipe_name": "BA's Best French Toast",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/classic-french-toast",
+      "file_path": "bon-appetit/ba-s-best-french-toast-classic-french-toast.json.gz",
+      "scraped_at": "2026-01-03T17:09:44.029Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/roasted-squash-with-crispy-onions",
+      "recipe_name": "Roasted Delicata Squash With Crispy Onions",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/roasted-squash-with-crispy-onions",
+      "file_path": "bon-appetit/roasted-delicata-squash-with-crispy-onions-roasted-squash-with-crispy-onion.json.gz",
+      "scraped_at": "2026-01-03T17:09:44.104Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/greek-yogurt-green-smoothie",
+      "recipe_name": "Greek Yogurt Green Smoothie Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/greek-yogurt-green-smoothie",
+      "file_path": "tasty/greek-yogurt-green-smoothie-recipe-by-tasty-greek-yogurt-green-smoothie.json.gz",
+      "scraped_at": "2026-01-03T17:09:50.700Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/burnt-toast-soup",
+      "recipe_name": "Burnt Toast Soup With an Egg on It",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/burnt-toast-soup",
+      "file_path": "bon-appetit/burnt-toast-soup-with-an-egg-on-it-burnt-toast-soup.json.gz",
+      "scraped_at": "2026-01-03T17:09:56.233Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/gingerbread-cookies",
+      "recipe_name": "Gingerbread Cookies",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/gingerbread-cookies",
+      "file_path": "bon-appetit/gingerbread-cookies-gingerbread-cookies.json.gz",
+      "scraped_at": "2026-01-03T17:09:56.632Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/pear-snacking-cake-rosemary-chocolate",
+      "recipe_name": "Pear Snacking Cake With Chocolate and Rosemary",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/pear-snacking-cake-rosemary-chocolate",
+      "file_path": "bon-appetit/pear-snacking-cake-with-chocolate-and-rosemary-pear-snacking-cake-rosemary-choc.json.gz",
+      "scraped_at": "2026-01-03T17:09:57.636Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/make-ahead-gravy",
+      "recipe_name": "Make-Ahead Gravy",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/make-ahead-gravy",
+      "file_path": "bon-appetit/make-ahead-gravy-make-ahead-gravy.json.gz",
+      "scraped_at": "2026-01-03T17:09:57.696Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/strawberry-frosty-lemonade",
+      "recipe_name": "Strawberry Frosty Lemonade Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/strawberry-frosty-lemonade",
+      "file_path": "tasty/strawberry-frosty-lemonade-recipe-by-tasty-strawberry-frosty-lemonade.json.gz",
+      "scraped_at": "2026-01-03T17:09:57.767Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/banana-buttermilk-cake",
+      "recipe_name": "Buttermilk Banana Cake",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/banana-buttermilk-cake",
+      "file_path": "bon-appetit/buttermilk-banana-cake-banana-buttermilk-cake.json.gz",
+      "scraped_at": "2026-01-03T17:09:58.801Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/dry-rubbed-roast-turkey",
+      "recipe_name": "Dry-Brined Turkey With Tangy Honey Glaze",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/dry-rubbed-roast-turkey",
+      "file_path": "bon-appetit/dry-brined-turkey-with-tangy-honey-glaze-dry-rubbed-roast-turkey.json.gz",
+      "scraped_at": "2026-01-03T17:09:58.945Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/tres-leches-cake",
+      "recipe_name": "Tres Leches Cake",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/tres-leches-cake",
+      "file_path": "bon-appetit/tres-leches-cake-tres-leches-cake.json.gz",
+      "scraped_at": "2026-01-03T17:09:59.011Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/banoffee-pie",
+      "recipe_name": "Banoffee Pie",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/banoffee-pie",
+      "file_path": "bon-appetit/banoffee-pie-banoffee-pie.json.gz",
+      "scraped_at": "2026-01-03T17:09:59.951Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/hot-buttered-rum-buttermilk-pie",
+      "recipe_name": "Hot Buttered Rum Buttermilk Pie",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/hot-buttered-rum-buttermilk-pie",
+      "file_path": "bon-appetit/hot-buttered-rum-buttermilk-pie-hot-buttered-rum-buttermilk-pie.json.gz",
+      "scraped_at": "2026-01-03T17:10:00.318Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/chocolate-pecan-pie-with-chantilly-cream-recipe",
+      "recipe_name": "Chocolate Pecan Pie",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/chocolate-pecan-pie-with-chantilly-cream-recipe",
+      "file_path": "bon-appetit/chocolate-pecan-pie-chocolate-pecan-pie-with-chantil.json.gz",
+      "scraped_at": "2026-01-03T17:10:07.904Z"
+    },
+    {
+      "id": "https://tasty.co/recipe/one-pot-cheesy-lemon-chicken-pasta",
+      "recipe_name": "One-Pot Cheesy Lemon Chicken Pasta Recipe by Tasty",
+      "source": "tasty",
+      "source_url": "https://tasty.co/recipe/one-pot-cheesy-lemon-chicken-pasta",
+      "file_path": "tasty/one-pot-cheesy-lemon-chicken-pasta-recipe-by-tasty-one-pot-cheesy-lemon-chicken-pas.json.gz",
+      "scraped_at": "2026-01-03T17:10:08.294Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/black-bean-stuffed-peppers",
+      "recipe_name": "Black-Bean-Stuffed Peppers",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/black-bean-stuffed-peppers",
+      "file_path": "bon-appetit/black-bean-stuffed-peppers-black-bean-stuffed-peppers.json.gz",
+      "scraped_at": "2026-01-03T17:10:09.314Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/alton-brown-s-classic-brined-and-roasted-turkey",
+      "recipe_name": "Alton Brown's Brined and Roasted Turkey",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/alton-brown-s-classic-brined-and-roasted-turkey",
+      "file_path": "bon-appetit/alton-brown-s-brined-and-roasted-turkey-alton-brown-s-classic-brined-and.json.gz",
+      "scraped_at": "2026-01-03T17:10:09.571Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/raspberry-jello-salad",
+      "recipe_name": "Raspberry Jell-O Salad",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/raspberry-jello-salad",
+      "file_path": "bon-appetit/raspberry-jell-o-salad-raspberry-jello-salad.json.gz",
+      "scraped_at": "2026-01-03T17:10:10.946Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/turkey-brine",
+      "recipe_name": "Simple Wet Turkey Brine",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/turkey-brine",
+      "file_path": "bon-appetit/simple-wet-turkey-brine-turkey-brine.json.gz",
+      "scraped_at": "2026-01-03T17:10:12.160Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/spatchcock-turkey-recipe",
+      "recipe_name": "Spatchcock Turkey With Anise and Orange",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/spatchcock-turkey-recipe",
+      "file_path": "bon-appetit/spatchcock-turkey-with-anise-and-orange-spatchcock-turkey-recipe.json.gz",
+      "scraped_at": "2026-01-03T17:10:12.887Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/corn-pudding",
+      "recipe_name": "Corn Pudding",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/corn-pudding",
+      "file_path": "bon-appetit/corn-pudding-corn-pudding.json.gz",
+      "scraped_at": "2026-01-03T17:10:15.533Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/mulled-wine",
+      "recipe_name": "Mulled Wine",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/mulled-wine",
+      "file_path": "bon-appetit/mulled-wine-mulled-wine.json.gz",
+      "scraped_at": "2026-01-03T17:10:16.361Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/cosmopolitan",
+      "recipe_name": "Cosmopolitan Drink",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/cosmopolitan",
+      "file_path": "bon-appetit/cosmopolitan-drink-cosmopolitan.json.gz",
+      "scraped_at": "2026-01-03T17:10:17.201Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/spicy-salmon-bowl",
+      "recipe_name": "Spicy Salmon Bowl",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/spicy-salmon-bowl",
+      "file_path": "bon-appetit/spicy-salmon-bowl-spicy-salmon-bowl.json.gz",
+      "scraped_at": "2026-01-03T17:10:18.190Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/tofu-nuggets",
+      "recipe_name": "Crispy Baked Tofu Nuggets",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/tofu-nuggets",
+      "file_path": "bon-appetit/crispy-baked-tofu-nuggets-tofu-nuggets.json.gz",
+      "scraped_at": "2026-01-03T17:10:18.666Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/best-sugar-cookie-recipe",
+      "recipe_name": "BA’s Best Sugar Cookies",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/best-sugar-cookie-recipe",
+      "file_path": "bon-appetit/ba-s-best-sugar-cookies-best-sugar-cookie-recipe.json.gz",
+      "scraped_at": "2026-01-03T17:10:20.266Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/glazed-carrots",
+      "recipe_name": "Glazed Carrots",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/glazed-carrots",
+      "file_path": "bon-appetit/glazed-carrots-glazed-carrots.json.gz",
+      "scraped_at": "2026-01-03T17:10:22.140Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/best-banana-cream-pie",
+      "recipe_name": "Banana Cream Pie",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/best-banana-cream-pie",
+      "file_path": "bon-appetit/banana-cream-pie-best-banana-cream-pie.json.gz",
+      "scraped_at": "2026-01-03T17:10:22.595Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/sweet-potato-casserole",
+      "recipe_name": "Sweet Potato Casserole",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/sweet-potato-casserole",
+      "file_path": "bon-appetit/sweet-potato-casserole-sweet-potato-casserole.json.gz",
+      "scraped_at": "2026-01-03T17:10:23.870Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/seafood-chowder",
+      "recipe_name": "Seafood Chowder",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/seafood-chowder",
+      "file_path": "bon-appetit/seafood-chowder-seafood-chowder.json.gz",
+      "scraped_at": "2026-01-03T17:10:24.426Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/bas-best-risotto",
+      "recipe_name": "BA’s Best Risotto",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/bas-best-risotto",
+      "file_path": "bon-appetit/ba-s-best-risotto-bas-best-risotto.json.gz",
+      "scraped_at": "2026-01-03T17:10:25.399Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/biscuits-with-sausage-gravy",
+      "recipe_name": "Easy Biscuits and Gravy",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/biscuits-with-sausage-gravy",
+      "file_path": "bon-appetit/easy-biscuits-and-gravy-biscuits-with-sausage-gravy.json.gz",
+      "scraped_at": "2026-01-03T17:10:26.251Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/cottage-cheese-lasagna",
+      "recipe_name": "Cottage Cheese Lasagna",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/cottage-cheese-lasagna",
+      "file_path": "bon-appetit/cottage-cheese-lasagna-cottage-cheese-lasagna.json.gz",
+      "scraped_at": "2026-01-03T17:10:26.381Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/smoked-turkey",
+      "recipe_name": "Smoked Turkey",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/smoked-turkey",
+      "file_path": "bon-appetit/smoked-turkey-smoked-turkey.json.gz",
+      "scraped_at": "2026-01-03T17:10:27.029Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/shoofly-pie",
+      "recipe_name": "Shoofly Pie",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/shoofly-pie",
+      "file_path": "bon-appetit/shoofly-pie-shoofly-pie.json.gz",
+      "scraped_at": "2026-01-03T17:10:27.550Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/aleppo-chicken-and-broccolini-grain-bowls",
+      "recipe_name": "Aleppo-Chicken and Broccolini Grain Bowls",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/aleppo-chicken-and-broccolini-grain-bowls",
+      "file_path": "bon-appetit/aleppo-chicken-and-broccolini-grain-bowls-aleppo-chicken-and-broccolini-gr.json.gz",
+      "scraped_at": "2026-01-03T17:10:30.312Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/cornmeal-crusted-sweet-potato-wedges",
+      "recipe_name": "Cornmeal-Crusted Sweet Potato Wedges",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/cornmeal-crusted-sweet-potato-wedges",
+      "file_path": "bon-appetit/cornmeal-crusted-sweet-potato-wedges-cornmeal-crusted-sweet-potato-we.json.gz",
+      "scraped_at": "2026-01-03T17:10:30.770Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/roast-cod-with-chorizo-crisp",
+      "recipe_name": "Roast Cod With Chorizo Crisp",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/roast-cod-with-chorizo-crisp",
+      "file_path": "bon-appetit/roast-cod-with-chorizo-crisp-roast-cod-with-chorizo-crisp.json.gz",
+      "scraped_at": "2026-01-03T17:10:33.010Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/masa-battered-swordfish-tacos",
+      "recipe_name": "Masa-Battered Swordfish Tacos",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/masa-battered-swordfish-tacos",
+      "file_path": "bon-appetit/masa-battered-swordfish-tacos-masa-battered-swordfish-tacos.json.gz",
+      "scraped_at": "2026-01-03T17:10:33.095Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/sweet-potato-pecan-pie-recipe",
+      "recipe_name": "Sweet Potato Pecan Pie",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/sweet-potato-pecan-pie-recipe",
+      "file_path": "bon-appetit/sweet-potato-pecan-pie-sweet-potato-pecan-pie-recipe.json.gz",
+      "scraped_at": "2026-01-03T17:10:34.548Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/cote-de-boeuf",
+      "recipe_name": "Côte de Boeuf",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/cote-de-boeuf",
+      "file_path": "bon-appetit/c-te-de-boeuf-cote-de-boeuf.json.gz",
+      "scraped_at": "2026-01-03T17:10:35.915Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/pancit-sotanghon",
+      "recipe_name": "Pancit Sotanghon",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/pancit-sotanghon",
+      "file_path": "bon-appetit/pancit-sotanghon-pancit-sotanghon.json.gz",
+      "scraped_at": "2026-01-03T17:10:36.245Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/tuna-carnitas",
+      "recipe_name": "Tuna Carnitas",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/tuna-carnitas",
+      "file_path": "bon-appetit/tuna-carnitas-tuna-carnitas.json.gz",
+      "scraped_at": "2026-01-03T17:10:37.586Z"
+    },
+    {
+      "id": "https://www.bonappetit.com/recipe/roasted-sweet-potatoes-with-triple-cream-cheese",
+      "recipe_name": "Roasted Sweet Potatoes With Triple-Cream Cheese",
+      "source": "bon-appetit",
+      "source_url": "https://www.bonappetit.com/recipe/roasted-sweet-potatoes-with-triple-cream-cheese",
+      "file_path": "bon-appetit/roasted-sweet-potatoes-with-triple-cream-cheese-roasted-sweet-potatoes-with-trip.json.gz",
+      "scraped_at": "2026-01-03T17:10:38.100Z"
     }
   ],
-  "lastUpdated": "2026-01-03T16:54:49.599Z",
-  "totalCount": 2946
+  "lastUpdated": "2026-01-03T17:10:38.107Z",
+  "totalCount": 3087
 }

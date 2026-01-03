@@ -28,7 +28,7 @@ export default function ModifiersPage() {
 
   const fetchItems = useCallback(async () => {
     try {
-      const { data, error } = await supabase.from('modifier_options').select('*').order('name');
+      const { data, error } = await supabase.from('pos_modifier_options').select('*').order('name');
       if (data) setModifiers(data);
       if (error) {
         logger.error('Error fetching modifiers', { error, operation: 'fetchModifiers' });
@@ -60,7 +60,7 @@ export default function ModifiersPage() {
         );
 
         const { error } = await supabase
-          .from('modifier_options')
+          .from('pos_modifier_options')
           .update({
             name: item.name,
             priceDelta: item.priceDelta || 0,
@@ -85,7 +85,7 @@ export default function ModifiersPage() {
         // Optimistic Create
         setModifiers(prev => [...prev, newEntry]);
 
-        const { error } = await supabase.from('modifier_options').insert(newEntry);
+        const { error } = await supabase.from('pos_modifier_options').insert(newEntry);
 
         if (error) {
           setModifiers(originalModifiers);
@@ -118,7 +118,7 @@ export default function ModifiersPage() {
     setModifiers(prev => prev.filter(m => m.id !== id));
 
     try {
-      const { error } = await supabase.from('modifier_options').delete().eq('id', id);
+      const { error } = await supabase.from('pos_modifier_options').delete().eq('id', id);
       if (error) {
         setModifiers(originalModifiers);
         logger.error('Error deleting modifier', { error, id, operation: 'deleteModifier' });
