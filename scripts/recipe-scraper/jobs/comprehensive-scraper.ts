@@ -11,6 +11,12 @@ import { ProgressTracker, ScrapingProgress } from '../utils/progress-tracker';
 import { SOURCES, SourceType } from '../config';
 import { scraperLogger } from '../utils/logger';
 import { logger } from '@/lib/logger';
+import {
+  isRetryableError,
+  shouldSkipPermanently,
+  getRetryDelay,
+  categorizeError,
+} from '../utils/error-categorizer';
 
 export interface JobStatus {
   isRunning: boolean;
@@ -38,6 +44,14 @@ export interface JobStatus {
 }
 
 const BATCH_SIZE = 50;
+const MAX_RETRY_ATTEMPTS = 3; // Maximum retry attempts per URL
+
+interface RetryQueueItem {
+  url: string;
+  error: string;
+  retryCount: number;
+  lastRetryAt?: number;
+}
 
 export class ComprehensiveScraperJob {
   private storage: JSONStorage;
@@ -45,6 +59,7 @@ export class ComprehensiveScraperJob {
   private isRunning: boolean = false;
   private startTime: Date | null = null;
   private activeSources: Set<SourceType> = new Set();
+  private retryQueues: Map<SourceType, RetryQueueItem[]> = new Map();
 
   constructor() {
     this.storage = new JSONStorage();
@@ -65,6 +80,7 @@ export class ComprehensiveScraperJob {
     this.isRunning = true;
     this.startTime = new Date();
     this.activeSources = new Set(sources);
+    this.retryQueues.clear(); // Clear retry queues when starting new job
 
     scraperLogger.info(`Starting comprehensive scraping for sources: ${sources.join(', ')}`);
 
@@ -83,6 +99,12 @@ export class ComprehensiveScraperJob {
       });
       scraperLogger.error('Error during comprehensive scraping:', error);
     } finally {
+      // Retry any remaining failed URLs across all sources before finishing
+      for (const source of this.activeSources) {
+        const scraper = this.getScraper(source);
+        await this.retryFailedUrls(source, scraper);
+      }
+
       this.isRunning = false;
       this.activeSources.clear();
     }
@@ -99,6 +121,7 @@ export class ComprehensiveScraperJob {
 
     this.isRunning = true;
     this.startTime = new Date();
+    // Don't clear retry queues when resuming - they may contain URLs to retry
 
     scraperLogger.info('Resuming comprehensive scraping from saved progress');
 
@@ -125,6 +148,21 @@ export class ComprehensiveScraperJob {
       });
       scraperLogger.error('Error resuming comprehensive scraping:', error);
     } finally {
+      // Retry any remaining failed URLs across all sources before finishing
+      const sources: SourceType[] = [
+        SOURCES.ALLRECIPES,
+        SOURCES.BBC_GOOD_FOOD,
+        SOURCES.FOOD_NETWORK,
+      ];
+
+      for (const source of sources) {
+        const progress = this.progressTracker.loadProgress(source);
+        if (progress && !this.progressTracker.isComplete(progress)) {
+          const scraper = this.getScraper(source);
+          await this.retryFailedUrls(source, scraper);
+        }
+      }
+
       this.isRunning = false;
       this.activeSources.clear();
     }
@@ -211,18 +249,26 @@ export class ComprehensiveScraperJob {
               scraperLogger.debug(`⚠️  Skipped: ${url} (${saveResult.reason})`);
             }
           } else {
-            this.progressTracker.updateProgress(
-              source,
-              url,
-              false,
-              result.error || 'Failed to scrape',
-            );
-            scraperLogger.warn(`❌ Failed: ${url} - ${result.error}`);
+            const errorMessage = result.error || 'Failed to scrape';
+            this.progressTracker.updateProgress(source, url, false, errorMessage);
+
+            // Check if error should be retried
+            if (isRetryableError(errorMessage) && !shouldSkipPermanently(errorMessage)) {
+              this.addToRetryQueue(source, url, errorMessage);
+            } else {
+              scraperLogger.warn(`❌ Failed (permanent): ${url} - ${errorMessage}`);
+            }
           }
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : String(error);
           this.progressTracker.updateProgress(source, url, false, errorMessage);
-          scraperLogger.error(`❌ Error scraping ${url}:`, errorMessage);
+
+          // Check if error should be retried
+          if (isRetryableError(error) && !shouldSkipPermanently(error)) {
+            this.addToRetryQueue(source, url, errorMessage);
+          } else {
+            scraperLogger.error(`❌ Error scraping (permanent): ${url} - ${errorMessage}`);
+          }
         }
       }
 
@@ -237,7 +283,138 @@ export class ComprehensiveScraperJob {
       );
     }
 
+    // Retry failed URLs that are retryable
+    await this.retryFailedUrls(source, scraper);
+
     scraperLogger.info(`Completed scraping for ${source}`);
+  }
+
+  /**
+   * Add URL to retry queue
+   */
+  private addToRetryQueue(source: SourceType, url: string, error: string): void {
+    if (!this.retryQueues.has(source)) {
+      this.retryQueues.set(source, []);
+    }
+
+    const queue = this.retryQueues.get(source)!;
+
+    // Check if URL is already in queue
+    const existingItem = queue.find(item => item.url === url);
+    if (existingItem) {
+      existingItem.retryCount++;
+      existingItem.error = error;
+      existingItem.lastRetryAt = Date.now();
+    } else {
+      queue.push({
+        url,
+        error,
+        retryCount: 0,
+        lastRetryAt: Date.now(),
+      });
+    }
+
+    scraperLogger.debug(`Added to retry queue: ${url} (attempt ${existingItem ? existingItem.retryCount : 0})`);
+  }
+
+  /**
+   * Retry failed URLs from retry queue
+   */
+  private async retryFailedUrls(
+    source: SourceType,
+    scraper: AllRecipesScraper | BBCGoodFoodScraper | FoodNetworkScraper,
+  ): Promise<void> {
+    const queue = this.retryQueues.get(source);
+    if (!queue || queue.length === 0) {
+      return;
+    }
+
+    // Filter URLs that haven't exceeded max retry attempts
+    const retryableUrls = queue.filter(item => item.retryCount < MAX_RETRY_ATTEMPTS);
+
+    if (retryableUrls.length === 0) {
+      scraperLogger.info(`No retryable URLs for ${source} (all exceeded max retry attempts)`);
+      this.retryQueues.set(source, []);
+      return;
+    }
+
+    scraperLogger.info(`Retrying ${retryableUrls.length} failed URLs for ${source}`);
+
+    for (const item of retryableUrls) {
+      // Check if we should still retry this error
+      if (!isRetryableError(item.error) || shouldSkipPermanently(item.error)) {
+        scraperLogger.debug(`Skipping retry for ${item.url} - ${item.error} (not retryable)`);
+        continue;
+      }
+
+      // Calculate retry delay with exponential backoff
+      const retryDelay = getRetryDelay(item.error, item.retryCount + 1, 2000);
+
+      // Wait before retrying (exponential backoff)
+      if (item.lastRetryAt) {
+        const timeSinceLastRetry = Date.now() - item.lastRetryAt;
+        if (timeSinceLastRetry < retryDelay) {
+          const waitTime = retryDelay - timeSinceLastRetry;
+          scraperLogger.debug(`Waiting ${waitTime}ms before retrying ${item.url}`);
+          await new Promise(resolve => setTimeout(resolve, waitTime));
+        }
+      } else {
+        await new Promise(resolve => setTimeout(resolve, retryDelay));
+      }
+
+      try {
+        scraperLogger.debug(`Retrying ${item.url} (attempt ${item.retryCount + 1}/${MAX_RETRY_ATTEMPTS})`);
+
+        const result = await scraper.scrapeRecipe(item.url);
+        if (result.success && result.recipe) {
+          const saveResult = await this.storage.saveRecipe(result.recipe);
+          if (saveResult.saved) {
+            this.progressTracker.updateProgress(source, item.url, true);
+            scraperLogger.info(`✅ Retry successful: ${item.url}`);
+
+            // Remove from retry queue
+            const queue = this.retryQueues.get(source);
+            if (queue) {
+              const index = queue.findIndex(q => q.url === item.url);
+              if (index !== -1) {
+                queue.splice(index, 1);
+              }
+            }
+          } else {
+            // Still failed, increment retry count
+            item.retryCount++;
+            item.error = saveResult.reason || 'Failed to save';
+            item.lastRetryAt = Date.now();
+            scraperLogger.warn(`⚠️  Retry failed (save error): ${item.url} - ${item.error}`);
+          }
+        } else {
+          // Still failed, increment retry count
+          item.retryCount++;
+          item.error = result.error || 'Failed to scrape';
+          item.lastRetryAt = Date.now();
+          scraperLogger.warn(`⚠️  Retry failed: ${item.url} - ${item.error}`);
+        }
+      } catch (error) {
+        // Still failed, increment retry count
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        item.retryCount++;
+        item.error = errorMessage;
+        item.lastRetryAt = Date.now();
+        scraperLogger.error(`❌ Retry error: ${item.url} - ${errorMessage}`);
+      }
+    }
+
+    // Remove URLs that exceeded max retry attempts
+    const remainingQueue = queue.filter(item => item.retryCount < MAX_RETRY_ATTEMPTS);
+    this.retryQueues.set(source, remainingQueue);
+
+    if (remainingQueue.length > 0) {
+      scraperLogger.info(
+        `${remainingQueue.length} URLs still in retry queue for ${source} (will retry in next batch)`,
+      );
+    } else {
+      scraperLogger.info(`All retryable URLs processed for ${source}`);
+    }
   }
 
   /**

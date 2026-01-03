@@ -1,9 +1,9 @@
-import { requireAuth } from '@/lib/auth0-api-helpers';
-import { NextRequest, NextResponse } from 'next/server';
-import { handleAISpecialsError } from './handleAISpecialsError';
-import { fetchAISpecialsHistory } from './fetchAISpecialsHistory';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
+import { fetchAISpecialsHistory } from './fetchAISpecialsHistory';
+import { handleAISpecialsError } from './handleAISpecialsError';
 import { safeLogger } from './safeLogger';
 
 /**
@@ -25,8 +25,9 @@ export async function handleGetRequest(request: NextRequest): Promise<NextRespon
   try {
     logger.debug('[AI Specials API] Starting authentication check', { requestId });
 
+    let user;
     try {
-      const user = await requireAuth(request);
+      user = await requireAuth(request);
       logger.info('[AI Specials API] Authentication successful', {
         requestId,
         userId: user.sub,
@@ -53,18 +54,17 @@ export async function handleGetRequest(request: NextRequest): Promise<NextRespon
       );
     }
 
-    // Log userId extraction
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-    logger.debug('[AI Specials API] Extracted userId from query params', {
+    // Extract user ID from authenticated session (more secure than query parameter)
+    const userId = user.sub;
+    logger.debug('[AI Specials API] Extracted userId from authenticated session', {
       requestId,
       userId: userId || 'MISSING',
     });
 
     if (!userId) {
-      logger.warn('[AI Specials API] Missing userId in query params', { requestId });
+      logger.warn('[AI Specials API] Missing userId in authenticated session', { requestId });
       return NextResponse.json(
-        ApiErrorHandler.createError('Please provide a valid user ID', 'MISSING_USER_ID', 400),
+        ApiErrorHandler.createError('User ID not found in session', 'MISSING_USER_ID', 400),
         { status: 400 },
       );
     }

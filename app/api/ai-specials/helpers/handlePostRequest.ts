@@ -10,7 +10,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 
 const aiSpecialsSchema = z.object({
-  userId: z.string().min(1, 'User ID is required'),
+  userId: z.string().min(1, 'User ID is required'), // Will be set from session
   imageData: z.string().min(1, 'Image data is required'),
   prompt: z.string().optional(),
   countryCode: z.string().optional().default('AU'),
@@ -35,8 +35,9 @@ export async function handlePostRequest(request: NextRequest): Promise<NextRespo
   try {
     // Check feature access (requires Pro tier)
     logger.debug('[AI Specials API] Starting authentication and feature check', { requestId });
+    let user;
     try {
-      const user = await requireAuth(request);
+      user = await requireAuth(request);
       logger.info('[AI Specials API] Authentication successful', {
         requestId,
         userId: user.sub,
@@ -79,7 +80,9 @@ export async function handlePostRequest(request: NextRequest): Promise<NextRespo
     }
 
     logger.debug('[AI Specials API] Validating request body with Zod schema', { requestId });
-    const zodValidation = aiSpecialsSchema.safeParse(body);
+    // Use session user ID instead of body userId for security (prevents users from accessing other users' data)
+    const bodyWithSessionUserId = { ...body, userId: user.sub };
+    const zodValidation = aiSpecialsSchema.safeParse(bodyWithSessionUserId);
     if (!zodValidation.success) {
       logger.warn('[AI Specials API] Zod validation failed', {
         requestId,

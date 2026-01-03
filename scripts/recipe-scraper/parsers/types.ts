@@ -41,6 +41,7 @@ export interface ScraperConfig {
   timeout: number; // Milliseconds
   userAgent: string;
   respectRobotsTxt: boolean;
+  rateLimitRetryDelay?: number; // Milliseconds - delay after 429 rate limit errors
 }
 
 export interface ScrapeResult {

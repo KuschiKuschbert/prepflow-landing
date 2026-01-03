@@ -6,8 +6,10 @@
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
 
 // Default rate limits for public API endpoints
+// In development, use higher limits to prevent 429 errors from simultaneous React Query hooks
 const DEFAULT_RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
-const DEFAULT_RATE_LIMIT_MAX = 100; // 100 requests per 15 minutes
+const DEFAULT_RATE_LIMIT_MAX =
+  process.env.NODE_ENV === 'development' ? 1000 : 100; // 1000 in dev, 100 in prod
 
 // Stricter rate limits for authentication endpoints
 const AUTH_RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute

@@ -1,20 +1,21 @@
 'use client';
-import { useState, useEffect } from 'react';
-
-// Force dynamic rendering to prevent SSR issues with Auth0 SDK
-export const dynamic = 'force-dynamic';
-import { useTranslation } from '@/lib/useTranslation';
+import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
+import { useNotification } from '@/contexts/NotificationContext';
+import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
+import { logger } from '@/lib/logger';
+import { useTranslation } from '@/lib/useTranslation';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { Bot } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
-import { UploadForm } from './components/UploadForm';
+import { useEffect, useState } from 'react';
 import { AISpecialCard } from './components/AISpecialCard';
 import { EmptyState } from './components/EmptyState';
 import { RecipeScraper } from './components/RecipeScraper';
-import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
-import { logger } from '@/lib/logger';
-import { useNotification } from '@/contexts/NotificationContext';
+import { UploadForm } from './components/UploadForm';
+
+// Force dynamic rendering to prevent SSR issues with Auth0 SDK
+export const dynamic = 'force-dynamic';
 interface AISpecial {
   id: string;
   image_data: string;
@@ -27,6 +28,34 @@ interface AISpecial {
 export default function AISpecialsPage() {
   const { t } = useTranslation();
   const { showSuccess, showError } = useNotification();
+  const { user, isLoading: userLoading } = useUser();
+
+  // Extract user ID from Auth0 user object (handle nested structure)
+  // Auth0 SDK can return user in different structures:
+  // - Flat: user.sub
+  // - Nested: user.user.sub
+  // Check all possibilities
+  const userId = user?.sub || (user as any)?.user?.sub || null;
+
+  // Check if user is actually authenticated (not just loading)
+  // Wait for loading to complete before checking authentication
+  const isAuthenticated = !userLoading && !!userId;
+
+  // Debug logging to help diagnose authentication issues
+  useEffect(() => {
+    if (!userLoading) {
+      logger.dev('[AISpecialsPage] Auth state:', {
+        hasUser: !!user,
+        userId,
+        isAuthenticated,
+        userKeys: user ? Object.keys(user) : [],
+        userSub: user?.sub,
+        nestedUserSub: (user as any)?.user?.sub,
+        userEmail: user?.email || (user as any)?.user?.email,
+      });
+    }
+  }, [user, userLoading, userId, isAuthenticated]);
+
   // Initialize with cached data for instant display
   const [aiSpecials, setAiSpecials] = useState<AISpecial[]>(
     () => getCachedData('ai_specials') || [],
@@ -36,14 +65,17 @@ export default function AISpecialsPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [prompt, setPrompt] = useState('');
   const [showRecipeScraper, setShowRecipeScraper] = useState(false);
-  const userId = 'user-123';
 
-  // Prefetch API on mount
+  // Prefetch API on mount (no userId needed - API extracts from session)
   useEffect(() => {
-    prefetchApi(`/api/ai-specials?userId=${userId}`);
-  }, [userId]);
+    if (isAuthenticated) {
+      prefetchApi('/api/ai-specials');
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
+    if (!isAuthenticated) return; // Don't fetch if user is not authenticated
+
     (async () => {
       try {
         await fetchAISpecials();
@@ -53,15 +85,23 @@ export default function AISpecialsPage() {
         });
       }
     })();
-  }, []);
+  }, [isAuthenticated]);
 
   const fetchAISpecials = async () => {
+    if (!isAuthenticated) {
+      setError('Please log in to view AI specials');
+      return;
+    }
+
+    setLoading(true);
     try {
-      const response = await fetch(`/api/ai-specials?userId=${userId}`);
+      // No userId needed - API extracts from authenticated session
+      const response = await fetch('/api/ai-specials');
       const result = await response.json();
       if (result.success) {
         setAiSpecials(result.data);
         cacheData('ai_specials', result.data);
+        setError(null);
       } else {
         setError(result.message || 'Failed to fetch AI specials');
       }
@@ -82,6 +122,10 @@ export default function AISpecialsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!userId) {
+      showError('Please log in to submit AI specials');
+      return;
+    }
     if (!selectedFile) {
       showError('Please select an image file');
       return;
@@ -114,11 +158,11 @@ export default function AISpecialsPage() {
       reader.onload = async () => {
         const imageData = reader.result as string;
         try {
+          // No userId needed - API extracts from authenticated session
           const response = await fetch('/api/ai-specials', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              userId,
               imageData,
               prompt: promptToSubmit || undefined,
             }),
@@ -162,7 +206,8 @@ export default function AISpecialsPage() {
     }
   };
 
-  if (loading) {
+  // Show loading state while checking authentication
+  if (userLoading || loading) {
     return (
       <ResponsivePageContainer>
         <div className="tablet:py-6 min-h-screen bg-transparent py-4">
@@ -174,6 +219,30 @@ export default function AISpecialsPage() {
           </div>
           <div className="space-y-4">
             <LoadingSkeleton variant="card" count={3} height="120px" />
+          </div>
+        </div>
+      </ResponsivePageContainer>
+    );
+  }
+
+  // Show error state if user is not authenticated (only after loading is complete)
+  if (!isAuthenticated) {
+    return (
+      <ResponsivePageContainer>
+        <div className="min-h-screen bg-transparent py-8 text-[var(--foreground)]">
+          <div className="mb-8">
+            <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-[var(--foreground)]">
+              <Icon icon={Bot} size="lg" aria-hidden={true} />
+              {t('aiSpecials.title', 'AI Specials Generator')}
+            </h1>
+            <p className="text-[var(--foreground-muted)]">
+              {t('aiSpecials.subtitle', 'Generate specials from ingredient photos using AI')}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-6">
+            <p className="text-[var(--color-error)]">
+              Please log in to view and create AI specials.
+            </p>
           </div>
         </div>
       </ResponsivePageContainer>

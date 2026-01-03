@@ -3,7 +3,7 @@
  * Abstract base class for all recipe scrapers
  */
 
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosError } from 'axios';
 import { ScrapedRecipe, ScrapeResult, ScraperConfig } from '../parsers/types';
 import { RateLimiter } from '../utils/rate-limiter';
 import { isUrlAllowed, getCrawlDelay } from '../utils/robots-checker';
@@ -11,6 +11,13 @@ import { scraperLogger } from '../utils/logger';
 import { DEFAULT_CONFIG } from '../config';
 import { validateRecipe } from '../parsers/schema-validator';
 import { normalizeRecipe } from '../parsers/recipe-normalizer';
+import {
+  categorizeError,
+  getRetryDelay,
+  getMaxRetries,
+  shouldSkipPermanently,
+  logErrorCategory,
+} from '../utils/error-categorizer';
 
 export abstract class BaseScraper {
   protected config: ScraperConfig;
@@ -31,6 +38,27 @@ export abstract class BaseScraper {
   }
 
   /**
+   * Extract HTTP status code from axios error
+   */
+  private extractHttpStatus(error: unknown): number | null {
+    if (axios.isAxiosError(error)) {
+      return error.response?.status ?? null;
+    }
+    return null;
+  }
+
+  /**
+   * Create error message with HTTP status code if available
+   */
+  private createErrorMessage(error: unknown, statusCode: number | null): string {
+    const baseMessage = error instanceof Error ? error.message : String(error);
+    if (statusCode) {
+      return `HTTP ${statusCode}: ${baseMessage}`;
+    }
+    return baseMessage;
+  }
+
+  /**
    * Fetch a page and return HTML content
    */
   protected async fetchPage(url: string): Promise<string> {
@@ -38,7 +66,9 @@ export abstract class BaseScraper {
     if (this.config.respectRobotsTxt) {
       const allowed = await isUrlAllowed(url, this.config.userAgent);
       if (!allowed) {
-        throw new Error(`URL disallowed by robots.txt: ${url}`);
+        const error = new Error(`URL disallowed by robots.txt: ${url}`);
+        logErrorCategory(error, url);
+        throw error;
       }
 
       // Get crawl delay from robots.txt
@@ -52,36 +82,80 @@ export abstract class BaseScraper {
     // Rate limiting
     await this.rateLimiter.wait();
 
-    // Fetch with retries
+    // Fetch with retries using error categorization
     let lastError: Error | null = null;
-    for (let attempt = 1; attempt <= this.config.maxRetries; attempt++) {
+    let lastStatusCode: number | null = null;
+    const maxRetries = this.config.maxRetries;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        scraperLogger.debug(`Fetching ${url} (attempt ${attempt}/${this.config.maxRetries})`);
+        scraperLogger.debug(`Fetching ${url} (attempt ${attempt}/${maxRetries})`);
         const response = await this.httpClient.get(url);
         return response.data;
       } catch (error) {
-        lastError = error instanceof Error ? error : new Error(String(error));
-        if (attempt < this.config.maxRetries) {
-          const waitTime = attempt * 1000; // Exponential backoff
-          scraperLogger.warn(`Request failed, retrying in ${waitTime}ms:`, lastError.message);
-          await new Promise(resolve => setTimeout(resolve, waitTime));
+        // Extract HTTP status code from axios error
+        const statusCode = this.extractHttpStatus(error);
+        lastStatusCode = statusCode;
+
+        // Create error with status code
+        const errorMessage = this.createErrorMessage(error, statusCode);
+        lastError = new Error(errorMessage);
+
+        // Categorize error to determine retry strategy
+        const errorCategory = categorizeError(error);
+        logErrorCategory(error, url);
+
+        // Check if we should skip permanently (404, 403, etc.)
+        if (shouldSkipPermanently(error)) {
+          scraperLogger.warn(`Skipping permanently: ${url} - ${errorCategory.reason}`);
+          throw lastError;
+        }
+
+        // Check if we should retry
+        if (!errorCategory.isRetryable || attempt >= maxRetries) {
+          if (attempt >= maxRetries) {
+            scraperLogger.error(`Request failed after ${maxRetries} attempts`, {
+              error: errorMessage,
+              url,
+              statusCode,
+            });
+          }
+          throw lastError;
+        }
+
+        // Calculate retry delay based on error category
+        const retryDelay = getRetryDelay(error, attempt, 1000);
+
+        // Special handling for rate limit errors (429)
+        if (statusCode === 429 && this.config.rateLimitRetryDelay) {
+          const rateLimitDelay = this.config.rateLimitRetryDelay;
+          scraperLogger.warn(
+            `Rate limit (429) detected, waiting ${rateLimitDelay}ms before retry: ${url}`,
+          );
+          await new Promise(resolve => setTimeout(resolve, rateLimitDelay));
         } else {
-          // Log final failure
-          scraperLogger.error(`Request failed after ${this.config.maxRetries} attempts`, {
-            error: lastError.message,
-            url,
-          });
+          scraperLogger.warn(
+            `Request failed, retrying in ${retryDelay}ms (attempt ${attempt}/${maxRetries}): ${errorCategory.reason}`,
+            {
+              error: errorMessage,
+              url,
+              statusCode,
+            },
+          );
+          await new Promise(resolve => setTimeout(resolve, retryDelay));
         }
       }
     }
 
+    // Should not reach here, but handle it just in case
     const errorMessage = lastError instanceof Error ? lastError.message : String(lastError);
-    scraperLogger.error(`Failed to fetch ${url} after ${this.config.maxRetries} attempts`, {
+    scraperLogger.error(`Failed to fetch ${url} after ${maxRetries} attempts`, {
       error: errorMessage,
       url,
+      statusCode: lastStatusCode,
     });
     throw new Error(
-      `Failed to fetch ${url} after ${this.config.maxRetries} attempts: ${errorMessage}`,
+      `Failed to fetch ${url} after ${maxRetries} attempts: ${errorMessage}`,
     );
   }
 
