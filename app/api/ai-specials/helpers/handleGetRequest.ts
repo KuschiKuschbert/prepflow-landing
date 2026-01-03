@@ -55,14 +55,23 @@ export async function handleGetRequest(request: NextRequest): Promise<NextRespon
     }
 
     // Extract user ID from authenticated session (more secure than query parameter)
-    const userId = user.sub;
+    const userId = user?.sub?.trim() || '';
     logger.debug('[AI Specials API] Extracted userId from authenticated session', {
       requestId,
       userId: userId || 'MISSING',
+      userSub: user?.sub,
+      userEmail: user?.email,
+      hasUser: !!user,
     });
 
-    if (!userId) {
-      logger.warn('[AI Specials API] Missing userId in authenticated session', { requestId });
+    // Validate userId is not empty (check for empty string, null, undefined)
+    if (!userId || userId.length === 0) {
+      logger.error('[AI Specials API] Missing or empty userId in authenticated session', {
+        requestId,
+        userSub: user?.sub,
+        userEmail: user?.email,
+        userKeys: user ? Object.keys(user) : [],
+      });
       return NextResponse.json(
         ApiErrorHandler.createError('User ID not found in session', 'MISSING_USER_ID', 400),
         { status: 400 },

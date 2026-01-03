@@ -82,18 +82,26 @@ export async function saveAISpecials(
     logger.debug('[saveAISpecials] Executing database insert', {
       userId,
       requestId,
-      table: 'ai_specials_ingredients',
+      table: 'ai_specials',
     });
 
     const insertStartTime = Date.now();
+    // Insert into ai_specials table (main table for AI specials records)
+    // Map the data to match the ai_specials schema:
+    // - image_data -> image_url (store as base64 data URL or save to storage)
+    // - prompt -> ai_prompt
+    // - ai_response -> store as JSON in description or create separate column
+    // - status -> status
+    // Note: If user_id column doesn't exist, we need to add it to the schema
     const { data: aiRecord, error: aiError } = await supabaseAdmin
-      .from('ai_specials_ingredients')
+      .from('ai_specials')
       .insert({
         user_id: userId,
-        image_data: imageData,
-        prompt: prompt,
-        ai_response: aiResponse,
-        status: 'completed',
+        name: aiResponse?.suggestions?.[0] || 'AI Generated Special',
+        description: JSON.stringify(aiResponse), // Store full AI response as JSON
+        image_url: imageData, // Store base64 image data URL
+        ai_prompt: prompt || '',
+        status: 'generated',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })

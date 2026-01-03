@@ -237,12 +237,69 @@ export function RecipeScraper() {
     }
   };
 
+  const handleStopComprehensiveScrape = async () => {
+    try {
+      const response = await fetch('/api/recipe-scraper/stop', {
+        method: 'POST',
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        setStatusPolling(true); // Continue polling to see status update
+        showSuccess('Scraping job stopped successfully');
+        // Refresh status immediately
+        setTimeout(() => {
+          fetch('/api/recipe-scraper/status')
+            .then(res => res.json())
+            .then(data => {
+              if (data.success) {
+                setComprehensiveStatus(data.data);
+              }
+            })
+            .catch(err => {
+              logger.error('[RecipeScraper] Error fetching status after stop:', {
+                error: err instanceof Error ? err.message : String(err),
+              });
+            });
+        }, 1000);
+      } else {
+        showError(result.message || 'Failed to stop scraping job');
+      }
+    } catch (err) {
+      logger.error('[RecipeScraper] Error stopping comprehensive scrape:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      showError('Failed to stop scraping job');
+    }
+  };
+
+  const handleRefreshStatus = async () => {
+    try {
+      const response = await fetch('/api/recipe-scraper/status');
+      const result = await response.json();
+      if (result.success) {
+        setComprehensiveStatus(result.data);
+        if (result.data.isRunning) {
+          setStatusPolling(true);
+        }
+        showSuccess('Status refreshed');
+      }
+    } catch (err) {
+      logger.error('[RecipeScraper] Error refreshing status:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      showError('Failed to refresh status');
+    }
+  };
+
   return (
     <div className="space-y-6">
       <ComprehensiveScraperSection
         comprehensiveScraping={comprehensiveScraping}
         comprehensiveStatus={comprehensiveStatus}
         onStartComprehensive={handleComprehensiveScrape}
+        onStopComprehensive={handleStopComprehensiveScrape}
+        onRefreshStatus={handleRefreshStatus}
       />
 
       <RegularScraperSection

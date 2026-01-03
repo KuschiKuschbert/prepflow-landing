@@ -6,7 +6,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { Download, Loader2 } from 'lucide-react';
+import { Download, Loader2, Square, RefreshCw } from 'lucide-react';
 
 interface ComprehensiveSourceStatus {
   discovered: number;
@@ -34,6 +34,8 @@ interface ComprehensiveScraperSectionProps {
   comprehensiveScraping: boolean;
   comprehensiveStatus: ComprehensiveJobStatus | null;
   onStartComprehensive: () => void;
+  onStopComprehensive?: () => void;
+  onRefreshStatus?: () => void;
 }
 
 const formatTime = (seconds?: number): string => {
@@ -50,6 +52,8 @@ export function ComprehensiveScraperSection({
   comprehensiveScraping,
   comprehensiveStatus,
   onStartComprehensive,
+  onStopComprehensive,
+  onRefreshStatus,
 }: ComprehensiveScraperSectionProps) {
   return (
     <div className="rounded-3xl border border-[#29E7CD]/20 bg-gradient-to-r from-[#29E7CD]/10 to-[#D925C7]/10 p-6 shadow-lg">
@@ -61,23 +65,44 @@ export function ComprehensiveScraperSection({
         discover and scrape every available recipe from all sources. Progress is saved and can be
         resumed if interrupted.
       </p>
-      <button
-        onClick={onStartComprehensive}
-        disabled={comprehensiveScraping || (comprehensiveStatus?.isRunning ?? false)}
-        className="rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#29E7CD]/25 disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        {comprehensiveScraping || comprehensiveStatus?.isRunning ? (
-          <>
-            <Icon icon={Loader2} className="mr-2 inline animate-spin" aria-hidden={true} />
-            Scraping in Progress...
-          </>
-        ) : (
-          <>
-            <Icon icon={Download} className="mr-2 inline" aria-hidden={true} />
-            Start Comprehensive Scrape
-          </>
+      <div className="flex gap-3">
+        <button
+          onClick={onStartComprehensive}
+          disabled={comprehensiveScraping || (comprehensiveStatus?.isRunning ?? false)}
+          className="rounded-xl bg-gradient-to-r from-[#29E7CD] to-[#D925C7] px-6 py-3 font-semibold text-white transition-all hover:shadow-lg hover:shadow-[#29E7CD]/25 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {comprehensiveScraping || comprehensiveStatus?.isRunning ? (
+            <>
+              <Icon icon={Loader2} className="mr-2 inline animate-spin" aria-hidden={true} />
+              Scraping in Progress...
+            </>
+          ) : (
+            <>
+              <Icon icon={Download} className="mr-2 inline" aria-hidden={true} />
+              Start Comprehensive Scrape
+            </>
+          )}
+        </button>
+        {onStopComprehensive && (
+          <button
+            onClick={onStopComprehensive}
+            disabled={!comprehensiveStatus?.isRunning && !comprehensiveScraping}
+            className="rounded-xl border-2 border-[var(--color-error)] bg-transparent px-6 py-3 font-semibold text-[var(--color-error)] transition-all hover:bg-[var(--color-error)] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <Icon icon={Square} className="mr-2 inline" aria-hidden={true} />
+            Stop Scraping
+          </button>
         )}
-      </button>
+        {onRefreshStatus && (
+          <button
+            onClick={onRefreshStatus}
+            className="rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 font-semibold text-[var(--foreground)] transition-all hover:bg-[var(--surface)]"
+            title="Refresh scraper status"
+          >
+            <Icon icon={RefreshCw} className="inline" aria-hidden={true} />
+          </button>
+        )}
+      </div>
 
       {/* Progress Dashboard */}
       {comprehensiveStatus && (

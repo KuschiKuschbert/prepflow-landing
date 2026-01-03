@@ -32,7 +32,17 @@ export class AllRecipesScraper extends BaseScraper {
             const parsed = JSON.parse(content);
             // Handle both single objects and arrays
             const items = Array.isArray(parsed) ? parsed : [parsed];
-            recipeData = items.find((item: any) => item['@type'] === 'Recipe');
+            recipeData = items.find((item: any) => {
+              // Handle @type as both string and array (e.g., ["Recipe", "NewsArticle"])
+              const type = item['@type'];
+              if (typeof type === 'string') {
+                return type === 'Recipe';
+              }
+              if (Array.isArray(type)) {
+                return type.includes('Recipe');
+              }
+              return false;
+            });
             if (recipeData) break;
           }
         } catch (e) {
@@ -84,33 +94,113 @@ export class AllRecipesScraper extends BaseScraper {
 
   /**
    * Fallback HTML parsing if JSON-LD is not available
+   * Uses multiple selector strategies to handle AllRecipes page variations
    */
   private parseFromHTML($: cheerio.CheerioAPI, url: string): Partial<ScrapedRecipe> | null {
     try {
-      const recipe: Partial<ScrapedRecipe> = {
-        id: url,
-        recipe_name: $('h1').first().text().trim() || '',
-        description: $('.recipe-summary').text().trim() || '',
-        instructions: $('.recipe-instructions li, .directions--section__step')
+      // Try multiple selectors for recipe name
+      const recipeName =
+        $('h1.article-heading, h1.heading-content, h1').first().text().trim() || '';
+
+      // Try multiple selectors for description
+      const description =
+        $('.recipe-summary, .article-subheading, [data-testid="recipe-summary"]')
+          .first()
+          .text()
+          .trim() || '';
+
+      // Try multiple selectors for instructions (AllRecipes uses various structures)
+      let instructions: string[] = [];
+      const instructionSelectors = [
+        '.recipe-instructions li',
+        '.directions--section__step',
+        '[data-testid="recipe-instructions"] li',
+        '.mntl-sc-block-group--OL li',
+        '.comp.recipe__steps-content ol li',
+        '.recipe-instructions ol li',
+        '.directions ol li',
+        'ol.recipe-instructions li',
+      ];
+
+      for (const selector of instructionSelectors) {
+        const found = $(selector)
           .map((_, el) => $(el).text().trim())
           .get()
-          .filter(text => text.length > 0),
-        ingredients: $('.ingredients-item-name, .recipe-ingred_txt')
-          .map((_, el) => ({
-            name: '',
-            original_text: $(el).text().trim(),
-          }))
+          .filter(text => text.length > 0);
+        if (found.length > 0) {
+          instructions = found;
+          break;
+        }
+      }
+
+      // Try multiple selectors for ingredients
+      let ingredients: RecipeIngredient[] = [];
+      const ingredientSelectors = [
+        '.mm-recipes-structured-ingredients__list-item', // Current AllRecipes structure (2025)
+        '.ingredients-item-name',
+        '.recipe-ingred_txt',
+        '[data-testid="ingredient-item"]',
+        '.mntl-structured-ingredients__list-item',
+        '.comp.ingredients-list li',
+        '.recipe-ingredients li',
+        'ul.ingredients-section li',
+        '.ingredients-section li',
+      ];
+
+      for (const selector of ingredientSelectors) {
+        const found = $(selector)
+          .map((_, el) => {
+            const text = $(el).text().trim();
+            return text.length > 0
+              ? {
+                  name: '',
+                  original_text: text,
+                }
+              : null;
+          })
           .get()
-          .filter(ing => ing.original_text.length > 0) as RecipeIngredient[],
+          .filter((ing): ing is RecipeIngredient => ing !== null);
+        if (found.length > 0) {
+          ingredients = found;
+          break;
+        }
+      }
+
+      const recipe: Partial<ScrapedRecipe> = {
+        id: url,
+        recipe_name: recipeName,
+        description,
+        instructions,
+        ingredients,
         image_url: $('meta[property="og:image"]').attr('content') || undefined,
       };
 
-      // Parse yield
-      const yieldText = $('.recipe-adjust-servings__size-input').attr('value') || '';
-      const yieldMatch = yieldText.match(/(\d+)/);
-      if (yieldMatch) {
-        recipe.yield = parseInt(yieldMatch[1], 10);
-        recipe.yield_unit = 'servings';
+      // Parse yield - try multiple selectors
+      const yieldSelectors = [
+        '.recipe-adjust-servings__size-input',
+        '[data-testid="recipe-servings"]',
+        '.mntl-recipe-details__item[data-ingredient-serving]',
+        '.recipe-servings',
+      ];
+
+      for (const selector of yieldSelectors) {
+        const yieldText = $(selector).attr('value') || $(selector).text() || '';
+        const yieldMatch = yieldText.match(/(\d+)/);
+        if (yieldMatch) {
+          recipe.yield = parseInt(yieldMatch[1], 10);
+          recipe.yield_unit = 'servings';
+          break;
+        }
+      }
+
+      // Log if we couldn't find critical data
+      if (instructions.length === 0 || ingredients.length === 0) {
+        scraperLogger.warn(`[AllRecipes HTML Parse] Missing data for ${url}:`, {
+          hasInstructions: instructions.length > 0,
+          hasIngredients: ingredients.length > 0,
+          instructionCount: instructions.length,
+          ingredientCount: ingredients.length,
+        });
       }
 
       return recipe;

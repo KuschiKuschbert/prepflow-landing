@@ -3,12 +3,14 @@
  * Orchestrates comprehensive scraping across all sources with batch processing and progress tracking
  */
 
+import * as fs from 'fs';
+import * as path from 'path';
 import { AllRecipesScraper } from '../scrapers/allrecipes-scraper';
 import { BBCGoodFoodScraper } from '../scrapers/bbc-good-food-scraper';
 import { FoodNetworkScraper } from '../scrapers/food-network-scraper';
 import { JSONStorage } from '../storage/json-storage';
 import { ProgressTracker, ScrapingProgress } from '../utils/progress-tracker';
-import { SOURCES, SourceType } from '../config';
+import { SOURCES, SourceType, STORAGE_PATH } from '../config';
 import { scraperLogger } from '../utils/logger';
 import { logger } from '@/lib/logger';
 import {
@@ -77,6 +79,9 @@ export class ComprehensiveScraperJob {
       return;
     }
 
+    // Remove any existing stop flag before starting
+    this.removeStopFlag();
+
     this.isRunning = true;
     this.startTime = new Date();
     this.activeSources = new Set(sources);
@@ -100,13 +105,22 @@ export class ComprehensiveScraperJob {
       scraperLogger.error('Error during comprehensive scraping:', error);
     } finally {
       // Retry any remaining failed URLs across all sources before finishing
-      for (const source of this.activeSources) {
-        const scraper = this.getScraper(source);
-        await this.retryFailedUrls(source, scraper);
+      // But only if not stopped
+      if (this.isRunning && !this.checkStopFlag()) {
+        for (const source of this.activeSources) {
+          // Check stop flag before each source retry
+          if (!this.isRunning || this.checkStopFlag()) {
+            scraperLogger.info('Scraping stopped, skipping final retry phase');
+            break;
+          }
+          const scraper = this.getScraper(source);
+          await this.retryFailedUrls(source, scraper);
+        }
       }
 
       this.isRunning = false;
       this.activeSources.clear();
+      this.removeStopFlag(); // Clean up stop flag when done
     }
   }
 
@@ -114,6 +128,13 @@ export class ComprehensiveScraperJob {
    * Resume scraping from saved progress
    */
   async resume(): Promise<void> {
+    // Check stop flag first
+    if (this.checkStopFlag()) {
+      scraperLogger.info('Stop flag detected, cannot resume. Remove stop flag file to resume.');
+      this.removeStopFlag(); // Clear it so user can resume later
+      return;
+    }
+
     if (this.isRunning) {
       scraperLogger.warn('Comprehensive scraping job is already running');
       return;
@@ -149,22 +170,31 @@ export class ComprehensiveScraperJob {
       scraperLogger.error('Error resuming comprehensive scraping:', error);
     } finally {
       // Retry any remaining failed URLs across all sources before finishing
-      const sources: SourceType[] = [
-        SOURCES.ALLRECIPES,
-        SOURCES.BBC_GOOD_FOOD,
-        SOURCES.FOOD_NETWORK,
-      ];
+      // But only if not stopped
+      if (this.isRunning && !this.checkStopFlag()) {
+        const sources: SourceType[] = [
+          SOURCES.ALLRECIPES,
+          SOURCES.BBC_GOOD_FOOD,
+          SOURCES.FOOD_NETWORK,
+        ];
 
-      for (const source of sources) {
-        const progress = this.progressTracker.loadProgress(source);
-        if (progress && !this.progressTracker.isComplete(progress)) {
-          const scraper = this.getScraper(source);
-          await this.retryFailedUrls(source, scraper);
+        for (const source of sources) {
+          // Check stop flag before each source retry
+          if (!this.isRunning || this.checkStopFlag()) {
+            scraperLogger.info('Scraping stopped, skipping final retry phase');
+            break;
+          }
+          const progress = this.progressTracker.loadProgress(source);
+          if (progress && !this.progressTracker.isComplete(progress)) {
+            const scraper = this.getScraper(source);
+            await this.retryFailedUrls(source, scraper);
+          }
         }
       }
 
       this.isRunning = false;
       this.activeSources.clear();
+      this.removeStopFlag(); // Clean up stop flag when done
     }
   }
 
@@ -215,6 +245,13 @@ export class ComprehensiveScraperJob {
     const totalBatches = Math.ceil(remainingUrls.length / BATCH_SIZE);
 
     for (let batchIndex = 0; batchIndex < totalBatches; batchIndex++) {
+      // Check if job was stopped (check both flag and file)
+      if (!this.isRunning || this.checkStopFlag()) {
+        scraperLogger.info(`Scraping stopped by user for ${source}`);
+        this.isRunning = false; // Ensure flag is set
+        return;
+      }
+
       const batchStart = batchIndex * BATCH_SIZE;
       const batchEnd = Math.min(batchStart + BATCH_SIZE, remainingUrls.length);
       const batch = remainingUrls.slice(batchStart, batchEnd);
@@ -225,6 +262,12 @@ export class ComprehensiveScraperJob {
 
       // Process batch
       for (const url of batch) {
+        // Check if job was stopped during batch processing (check both flag and file)
+        if (!this.isRunning || this.checkStopFlag()) {
+          scraperLogger.info(`Scraping stopped by user for ${source}`);
+          this.isRunning = false; // Ensure flag is set
+          return;
+        }
         try {
           // Check if URL already exists before scraping (skip duplicate scraping)
           if (this.storage.urlExists(source, url)) {
@@ -260,6 +303,13 @@ export class ComprehensiveScraperJob {
             }
           }
         } catch (error) {
+          // Check if job was stopped before processing error
+          if (!this.isRunning || this.checkStopFlag()) {
+            scraperLogger.info(`Scraping stopped by user for ${source} (during error handling)`);
+            this.isRunning = false;
+            return;
+          }
+
           const errorMessage = error instanceof Error ? error.message : String(error);
           this.progressTracker.updateProgress(source, url, false, errorMessage);
 
@@ -341,6 +391,13 @@ export class ComprehensiveScraperJob {
     scraperLogger.info(`Retrying ${retryableUrls.length} failed URLs for ${source}`);
 
     for (const item of retryableUrls) {
+      // Check if job was stopped (check both flag and file)
+      if (!this.isRunning || this.checkStopFlag()) {
+        scraperLogger.info(`Scraping stopped by user during retry for ${source}`);
+        this.isRunning = false; // Ensure flag is set
+        return;
+      }
+
       // Check if we should still retry this error
       if (!isRetryableError(item.error) || shouldSkipPermanently(item.error)) {
         scraperLogger.debug(`Skipping retry for ${item.url} - ${item.error} (not retryable)`);
@@ -351,15 +408,43 @@ export class ComprehensiveScraperJob {
       const retryDelay = getRetryDelay(item.error, item.retryCount + 1, 2000);
 
       // Wait before retrying (exponential backoff)
+      // Check stop flag during wait with periodic checks
       if (item.lastRetryAt) {
         const timeSinceLastRetry = Date.now() - item.lastRetryAt;
         if (timeSinceLastRetry < retryDelay) {
           const waitTime = retryDelay - timeSinceLastRetry;
           scraperLogger.debug(`Waiting ${waitTime}ms before retrying ${item.url}`);
-          await new Promise(resolve => setTimeout(resolve, waitTime));
+
+          // Check stop flag every 2 seconds during wait
+          const checkInterval = 2000;
+          const totalChecks = Math.ceil(waitTime / checkInterval);
+          for (let i = 0; i < totalChecks; i++) {
+            if (!this.isRunning || this.checkStopFlag()) {
+              scraperLogger.info(`Scraping stopped by user during retry wait for ${source}`);
+              this.isRunning = false;
+              return;
+            }
+            const remainingWait = Math.min(checkInterval, waitTime - i * checkInterval);
+            if (remainingWait > 0) {
+              await new Promise(resolve => setTimeout(resolve, remainingWait));
+            }
+          }
         }
       } else {
-        await new Promise(resolve => setTimeout(resolve, retryDelay));
+        // Check stop flag periodically during initial retry delay
+        const checkInterval = 2000;
+        const totalChecks = Math.ceil(retryDelay / checkInterval);
+        for (let i = 0; i < totalChecks; i++) {
+          if (!this.isRunning || this.checkStopFlag()) {
+            scraperLogger.info(`Scraping stopped by user during retry wait for ${source}`);
+            this.isRunning = false;
+            return;
+          }
+          const remainingWait = Math.min(checkInterval, retryDelay - i * checkInterval);
+          if (remainingWait > 0) {
+            await new Promise(resolve => setTimeout(resolve, remainingWait));
+          }
+        }
       }
 
       try {
@@ -395,6 +480,13 @@ export class ComprehensiveScraperJob {
           scraperLogger.warn(`⚠️  Retry failed: ${item.url} - ${item.error}`);
         }
       } catch (error) {
+        // Check if job was stopped before processing retry error
+        if (!this.isRunning || this.checkStopFlag()) {
+          scraperLogger.info(`Scraping stopped by user during retry error handling for ${source}`);
+          this.isRunning = false;
+          return;
+        }
+
         // Still failed, increment retry count
         const errorMessage = error instanceof Error ? error.message : String(error);
         item.retryCount++;
@@ -422,8 +514,30 @@ export class ComprehensiveScraperJob {
    */
   getStatus(): JobStatus {
     const sources: SourceType[] = [SOURCES.ALLRECIPES, SOURCES.BBC_GOOD_FOOD, SOURCES.FOOD_NETWORK];
+
+    // Check if scraper is actually running by checking for recent progress updates
+    // If progress files were updated in the last 30 seconds, consider it running
+    let actuallyRunning = this.isRunning;
+    if (!actuallyRunning) {
+      const now = Date.now();
+      const RECENT_THRESHOLD = 30 * 1000; // 30 seconds
+
+      for (const source of sources) {
+        const progress = this.progressTracker.loadProgress(source);
+        if (progress && progress.lastUpdated) {
+          const lastUpdated = new Date(progress.lastUpdated).getTime();
+          if (now - lastUpdated < RECENT_THRESHOLD) {
+            // Progress was updated recently, scraper is likely running
+            actuallyRunning = true;
+            scraperLogger.debug(`Detected active scraping for ${source} (recent progress update)`);
+            break;
+          }
+        }
+      }
+    }
+
     const status: JobStatus = {
-      isRunning: this.isRunning,
+      isRunning: actuallyRunning,
       sources: {} as JobStatus['sources'],
       overall: {
         totalDiscovered: 0,
@@ -499,12 +613,62 @@ export class ComprehensiveScraperJob {
   }
 
   /**
+   * Get stop flag file path
+   */
+  private getStopFlagPath(): string {
+    const storagePath = this.storage.getStoragePath ? this.storage.getStoragePath() : STORAGE_PATH;
+    return path.join(storagePath, '.stop-flag');
+  }
+
+  /**
+   * Check if stop flag exists
+   */
+  private checkStopFlag(): boolean {
+    try {
+      const stopFlagPath = this.getStopFlagPath();
+      return fs.existsSync(stopFlagPath);
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Create stop flag file
+   */
+  private createStopFlag(): void {
+    try {
+      const stopFlagPath = this.getStopFlagPath();
+      fs.writeFileSync(stopFlagPath, JSON.stringify({ stoppedAt: new Date().toISOString() }), 'utf-8');
+      scraperLogger.info('Stop flag file created');
+    } catch (error) {
+      scraperLogger.error('Failed to create stop flag file:', error);
+    }
+  }
+
+  /**
+   * Remove stop flag file
+   */
+  private removeStopFlag(): void {
+    try {
+      const stopFlagPath = this.getStopFlagPath();
+      if (fs.existsSync(stopFlagPath)) {
+        fs.unlinkSync(stopFlagPath);
+        scraperLogger.debug('Stop flag file removed');
+      }
+    } catch (error) {
+      scraperLogger.error('Failed to remove stop flag file:', error);
+    }
+  }
+
+  /**
    * Stop the job (graceful shutdown)
+   * Creates a stop flag file that will be checked by all instances
    */
   stop(): void {
-    if (this.isRunning) {
+    if (this.isRunning || this.checkStopFlag()) {
       scraperLogger.info('Stopping comprehensive scraping job...');
       this.isRunning = false;
+      this.createStopFlag(); // Create flag file so other instances can see it
     }
   }
 }

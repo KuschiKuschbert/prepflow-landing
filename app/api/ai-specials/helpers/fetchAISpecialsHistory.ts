@@ -70,12 +70,14 @@ export async function fetchAISpecialsHistory(
     logger.debug('[fetchAISpecialsHistory] Executing database query', {
       userId,
       requestId,
-      table: 'ai_specials_ingredients',
+      table: 'ai_specials',
     });
 
     const queryStartTime = Date.now();
+    // Query ai_specials table (main table for AI specials records)
+    // If user_id column doesn't exist, this will fail and we'll need to add it to the schema
     const { data, error } = await supabaseAdmin
-      .from('ai_specials_ingredients')
+      .from('ai_specials')
       .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
