@@ -31,7 +31,10 @@ export class BBCGoodFoodScraper extends BaseScraper {
           if (content) {
             const parsed = JSON.parse(content);
             const items = Array.isArray(parsed) ? parsed : [parsed];
-            recipeData = items.find((item: any) => item['@type'] === 'Recipe');
+            recipeData = items.find((item: any) => {
+              const itemTypes = Array.isArray(item['@type']) ? item['@type'] : [item['@type']];
+              return itemTypes.includes('Recipe');
+            });
             if (recipeData) break;
           }
         } catch (e) {
@@ -67,7 +70,8 @@ export class BBCGoodFoodScraper extends BaseScraper {
       cook_time_minutes: this.parseDuration(recipeData.cookTime),
       total_time_minutes: this.parseDuration(recipeData.totalTime),
       image_url: this.parseImage(recipeData.image),
-      author: recipeData.author?.name || recipeData.author,
+      author: this.parseAuthor(recipeData.author),
+      rating: this.parseRating(recipeData.aggregateRating?.ratingValue || recipeData.ratingValue),
     };
 
     if (recipeData.recipeCategory) {
@@ -99,10 +103,13 @@ export class BBCGoodFoodScraper extends BaseScraper {
           .get()
           .filter(text => text.length > 0),
         ingredients: $('.ingredients-list__item, .recipe-ingredients__list-item')
-          .map((_, el) => ({
-            name: '',
-            original_text: $(el).text().trim(),
-          }))
+          .map((_, el) => {
+            const text = $(el).text().trim();
+            return {
+              name: this.parseIngredientName(text),
+              original_text: text,
+            };
+          })
           .get()
           .filter(ing => ing.original_text.length > 0) as RecipeIngredient[],
         image_url: $('meta[property="og:image"]').attr('content') || undefined,
@@ -150,7 +157,7 @@ export class BBCGoodFoodScraper extends BaseScraper {
   private parseIngredients(ingredients: any[]): RecipeIngredient[] {
     if (!Array.isArray(ingredients)) return [];
     return ingredients.map(ing => ({
-      name: '',
+      name: this.parseIngredientName(typeof ing === 'string' ? ing : String(ing)),
       original_text: typeof ing === 'string' ? ing : String(ing),
     }));
   }

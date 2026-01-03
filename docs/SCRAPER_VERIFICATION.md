@@ -48,91 +48,102 @@
 
 ---
 
-## BBC Good Food ⚠️ NEEDS VERIFICATION
+## BBC Good Food ✅ VERIFIED (JSON-LD Primary)
 
-**Test URL Attempted:** https://www.bbcgoodfood.com/recipes/classic-spaghetti-carbonara-recipe
-**Result:** 404 - Page not found
+**Test URL:** https://www.bbcgoodfood.com/recipes/potato-crust-quiche
 
-### Current Selectors (Not Verified)
+### Verification Results
+
+✅ **JSON-LD:** Present and working (primary method)
+✅ **JSON-LD Instructions:** Present (4 steps in HowToStep format)
+✅ **JSON-LD Ingredients:** Present (10 ingredients)
+✅ **Recipe Name:** `h1` - **WORKING** (1 element found)
+✅ **Ingredients HTML:** `.ingredients-list__item` - **WORKING** (10 elements found)
+⚠️ **Instructions HTML:** No working selectors found (but JSON-LD has instructions, so this is OK)
+
+### Selector Status
+
+**Primary Method:** JSON-LD (✅ Working - has both instructions and ingredients)
+
+**HTML Fallback (for when JSON-LD fails):**
 
 **Recipe Name:**
-
-- `h1.recipe-header__title`
-- `h1`
-
-**Description:**
-
-- `.recipe-header__description`
-- `.recipe-description`
-
-**Instructions:**
-
-- `.method__list-item`
-- `.recipe-method__list-item`
-- `ol.recipe-method__list li`
+- `h1` - **VERIFIED WORKING**
+- `h1.recipe-header__title` - Not tested (fallback)
 
 **Ingredients:**
+- `.ingredients-list__item` - **VERIFIED WORKING** (10 elements found)
+- `.ingredients-list li` - **VERIFIED WORKING** (10 elements found)
+- `.recipe-ingredients__list-item` - Not tested (fallback)
 
-- `.ingredients-list__item`
-- `.recipe-ingredients__list-item`
+**Instructions:**
+- ⚠️ **No HTML selectors found** - All tested selectors returned 0 elements:
+  - `.method__list-item`
+  - `.recipe-method__list-item`
+  - `ol.recipe-method__list li`
+  - `.recipe-method ol li`
+  - `.method ol li`
+  - `.method__list li`
+  - `.recipe-method li`
+  - `.method li`
+  - `[data-testid="method-step"]`
+  - `.recipe-instructions li`
 
-### Action Required
+### Notes
 
-1. Find a working BBC Good Food recipe URL
-2. Verify JSON-LD structure
-3. Test all HTML selectors
-4. Update selectors if needed
-
-### Suggested Test URLs
-
-Try searching for popular recipes:
-
-- Search: "carbonara" or "chocolate cake" on bbcgoodfood.com
-- Use sitemap to find valid recipe URLs
+- **JSON-LD is the primary method** and works correctly (has instructions and ingredients)
+- HTML fallback for ingredients works correctly
+- HTML fallback for instructions doesn't work, but this is acceptable since JSON-LD is primary
+- Scraper correctly uses `parseIngredientName`, `parseAuthor`, and `parseRating` from BaseScraper
+- JSON-LD parsing correctly handles `@type` as both string and array (fixed)
+- Scraper should rely on JSON-LD first, then fall back to HTML for ingredients only
+- If JSON-LD fails, instructions may not be extractable via HTML (this is a limitation)
 
 ---
 
-## Food Network ⚠️ NEEDS VERIFICATION
+## Food Network ✅ VERIFIED
 
-**Test URL Attempted:** https://www.foodnetwork.com/recipes/alton-brown/good-eats-rib-eye-recipe-1939524
-**Result:** 404 - Page not found
+**Test URL:** https://www.foodnetwork.com/recipes/food-network-kitchen/3-ingredient-mac-and-cheese-18926685
 
-### Current Selectors (Not Verified)
+### Verification Results
+
+✅ **JSON-LD:** Present and working (primary method)
+✅ **JSON-LD Instructions:** Present (2 steps in HowToStep format)
+✅ **JSON-LD Ingredients:** Present (4 ingredients)
+✅ **JSON-LD Rating:** Present (4.5/5.0)
+✅ **Recipe Name:** `h1` - **WORKING** (1 element found)
+✅ **Ingredients HTML:** `.o-Ingredients__a-ListItem, .recipe-ingredients li` - **WORKING** (fallback)
+✅ **Instructions HTML:** `.o-Method__m-Step, .recipe-instructions li` - **WORKING** (fallback)
+
+### Selector Status
+
+**Primary Method:** JSON-LD (✅ Working - has instructions, ingredients, and rating)
+
+**HTML Fallback (for when JSON-LD fails):**
 
 **Recipe Name:**
-
-- `h1.o-AssetTitle__a-Headline`
-- `h1`
+- `h1.o-AssetTitle__a-Headline` - **VERIFIED WORKING**
+- `h1` - **VERIFIED WORKING** (fallback)
 
 **Description:**
-
-- `.o-AssetDescription__a-Description`
-- `.recipe-description`
+- `.o-AssetDescription__a-Description` - **VERIFIED WORKING**
+- `.recipe-description` - Not tested (fallback)
 
 **Instructions:**
-
-- `.o-Method__m-Step`
-- `.recipe-method-step`
+- `.o-Method__m-Step` - **VERIFIED WORKING** (2 elements found)
+- `.recipe-instructions li` - **VERIFIED WORKING** (fallback)
 
 **Ingredients:**
+- `.o-Ingredients__a-ListItem` - **VERIFIED WORKING** (4 elements found)
+- `.recipe-ingredients li` - **VERIFIED WORKING** (fallback)
 
-- `.o-Ingredients__a-ListItem`
-- `.recipe-ingredients-item`
+### Notes
 
-### Action Required
-
-1. Find a working Food Network recipe URL
-2. Verify JSON-LD structure (Food Network may require Puppeteer for JS-heavy pages)
-3. Test all HTML selectors
-4. Update selectors if needed
-5. Verify Puppeteer integration is working correctly
-
-### Suggested Test URLs
-
-Try searching for popular recipes:
-
-- Search: "chocolate chip cookies" or "pasta" on foodnetwork.com
-- Use sitemap to find valid recipe URLs
+- **JSON-LD is the primary method** and works correctly (has instructions, ingredients, and rating)
+- JSON-LD parsing correctly handles `@type` as both string and array (fixed)
+- HTML fallback selectors work correctly for both instructions and ingredients
+- Puppeteer integration is available but not required for this recipe (regular fetch works)
+- Scraper correctly uses `parseIngredientName`, `parseAuthor`, and `parseRating` from BaseScraper
 
 ---
 
@@ -148,20 +159,20 @@ Try searching for popular recipes:
 - [x] AllRecipes - JSON-LD parsing verified
 - [x] AllRecipes - HTML selectors verified
 - [x] AllRecipes - Selector priority updated
-- [ ] BBC Good Food - Find working recipe URL
-- [ ] BBC Good Food - Verify JSON-LD structure
-- [ ] BBC Good Food - Verify HTML selectors
-- [ ] Food Network - Find working recipe URL
-- [ ] Food Network - Verify JSON-LD structure (with Puppeteer)
-- [ ] Food Network - Verify HTML selectors
+- [x] BBC Good Food - Found working recipe URL
+- [x] BBC Good Food - Verified JSON-LD structure (✅ Working)
+- [x] BBC Good Food - Verified HTML selectors (Ingredients ✅, Instructions ⚠️)
+- [x] Food Network - Find working recipe URL
+- [x] Food Network - Verify JSON-LD structure (✅ Working)
+- [x] Food Network - Verify HTML selectors (✅ Working)
 
 ---
 
 ## Recommendations
 
 1. **AllRecipes:** ✅ Selectors are working correctly after priority update
-2. **BBC Good Food:** Need to find working recipe URLs and verify selectors
-3. **Food Network:** Need to find working recipe URLs and verify selectors (may require Puppeteer)
+2. **BBC Good Food:** ✅ JSON-LD is primary method and works correctly. HTML fallback for ingredients works, but instructions HTML selectors don't work (acceptable since JSON-LD is primary)
+3. **Food Network:** ✅ JSON-LD is primary method and works correctly. HTML fallback selectors also work correctly. Scraper correctly handles HowToStep format instructions.
 4. **Ongoing:** Periodically re-verify selectors as websites change their HTML structure
 
 ---

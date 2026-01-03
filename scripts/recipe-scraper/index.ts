@@ -6,13 +6,17 @@
  */
 
 import { AllRecipesScraper } from './scrapers/allrecipes-scraper';
-import { BBCGoodFoodScraper } from './scrapers/bbc-good-food-scraper';
+// import { BBCGoodFoodScraper } from './scrapers/bbc-good-food-scraper'; // REMOVED - Terms of Service violation
 import { FoodNetworkScraper } from './scrapers/food-network-scraper';
+import { EpicuriousScraper } from './scrapers/epicurious-scraper';
+import { BonAppetitScraper } from './scrapers/bon-appetit-scraper';
+import { TastyScraper } from './scrapers/tasty-scraper';
 import { JSONStorage } from './storage/json-storage';
 import { IndexManager } from './storage/index-manager';
 import { SOURCES, SourceType } from './config';
 import { scraperLogger } from './utils/logger';
 import { logger } from '@/lib/logger';
+import { shouldIncludeRecipe } from './utils/rating-filter';
 
 interface ScrapeOptions {
   source?: SourceType;
@@ -38,9 +42,15 @@ class RecipeScraperCLI {
       case SOURCES.ALLRECIPES:
         return new AllRecipesScraper();
       case SOURCES.BBC_GOOD_FOOD:
-        return new BBCGoodFoodScraper();
+        throw new Error('BBC Good Food scraper is disabled due to Terms of Service violation. See docs/BBC_GOOD_FOOD_LEGAL_ANALYSIS.md');
       case SOURCES.FOOD_NETWORK:
         return new FoodNetworkScraper();
+      case SOURCES.EPICURIOUS:
+        return new EpicuriousScraper();
+      case SOURCES.BON_APPETIT:
+        return new BonAppetitScraper();
+      case SOURCES.TASTY:
+        return new TastyScraper();
       default:
         throw new Error(`Unknown source: ${source}`);
     }
@@ -105,6 +115,15 @@ class RecipeScraperCLI {
       try {
         const result = await scraper.scrapeRecipe(url);
         if (result.success && result.recipe) {
+          // Apply rating filter
+          if (!shouldIncludeRecipe(result.recipe, source)) {
+            const reason = result.recipe.rating
+              ? `rating ${result.recipe.rating} below threshold`
+              : 'no rating (unrated not allowed)';
+            scraperLogger.warn(`⚠️  Skipped (rating filter): ${result.recipe.recipe_name} - ${reason}`);
+            continue;
+          }
+
           const saveResult = await this.storage.saveRecipe(result.recipe);
           if (saveResult.saved) {
             successCount++;

@@ -1,8 +1,7 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://akcnwnchvowibwjybgvi.supabase.co';
-const supabaseKey =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFrY253bmNodm93aWJ3anliZ3ZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0OTAzMDcsImV4cCI6MjA4MjA2NjMwN30.0PShsumawBDH3iSNhEoz4NFHqwimaJqvS2I_SB_2pKQ';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
 // Global singleton pattern - use window object to persist across HMR
 // This ensures only one instance exists even with hot module reloading

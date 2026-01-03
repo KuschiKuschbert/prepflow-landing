@@ -8,8 +8,11 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { AllRecipesScraper } from '../../../../scripts/recipe-scraper/scrapers/allrecipes-scraper';
-import { BBCGoodFoodScraper } from '../../../../scripts/recipe-scraper/scrapers/bbc-good-food-scraper';
+// import { BBCGoodFoodScraper } from '../../../../scripts/recipe-scraper/scrapers/bbc-good-food-scraper'; // DISABLED - Terms of Service violation
 import { FoodNetworkScraper } from '../../../../scripts/recipe-scraper/scrapers/food-network-scraper';
+import { EpicuriousScraper } from '../../../../scripts/recipe-scraper/scrapers/epicurious-scraper';
+import { BonAppetitScraper } from '../../../../scripts/recipe-scraper/scrapers/bon-appetit-scraper';
+import { TastyScraper } from '../../../../scripts/recipe-scraper/scrapers/tasty-scraper';
 import { SOURCES, SourceType } from '../../../../scripts/recipe-scraper/config';
 import { getComprehensiveScraperJob } from '../../../../scripts/recipe-scraper/jobs/comprehensive-scraper';
 import { JSONStorage } from '../../../../scripts/recipe-scraper/storage/json-storage';
@@ -96,14 +99,25 @@ export async function handleComprehensiveScrape(): Promise<NextResponse> {
  */
 export function createScraper(
   source: SourceType,
-): AllRecipesScraper | BBCGoodFoodScraper | FoodNetworkScraper {
+):
+  | AllRecipesScraper
+  | FoodNetworkScraper
+  | EpicuriousScraper
+  | BonAppetitScraper
+  | TastyScraper {
   switch (source) {
     case SOURCES.ALLRECIPES:
       return new AllRecipesScraper();
     case SOURCES.BBC_GOOD_FOOD:
-      return new BBCGoodFoodScraper();
+      throw new Error('BBC Good Food scraper is disabled due to Terms of Service violation. See docs/BBC_GOOD_FOOD_LEGAL_ANALYSIS.md');
     case SOURCES.FOOD_NETWORK:
       return new FoodNetworkScraper();
+    case SOURCES.EPICURIOUS:
+      return new EpicuriousScraper();
+    case SOURCES.BON_APPETIT:
+      return new BonAppetitScraper();
+    case SOURCES.TASTY:
+      return new TastyScraper();
     default:
       throw new Error(`Unknown source: ${source}`);
   }
@@ -113,7 +127,12 @@ export function createScraper(
  * Scrape recipes from URLs
  */
 export async function scrapeRecipes(
-  scraper: AllRecipesScraper | BBCGoodFoodScraper | FoodNetworkScraper,
+  scraper:
+    | AllRecipesScraper
+    | FoodNetworkScraper
+    | EpicuriousScraper
+    | BonAppetitScraper
+    | TastyScraper,
   storage: JSONStorage,
   urls: string[],
 ): Promise<{

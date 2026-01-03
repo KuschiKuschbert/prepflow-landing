@@ -21,25 +21,51 @@ export class FoodNetworkScraper extends BaseScraper {
 
   /**
    * Fetch page with Puppeteer if needed, otherwise use base method
+   * Optimized with better timeout handling and error recovery
    */
   protected async fetchPageWithPuppeteer(url: string): Promise<string> {
     if (!this.usePuppeteer) {
+      scraperLogger.debug('Puppeteer not available, using regular fetch');
       return this.fetchPage(url);
     }
 
+    let browser;
     try {
-      const browser = await puppeteer.launch({
+      scraperLogger.debug(`Using Puppeteer to fetch: ${url}`);
+      browser = await puppeteer.launch({
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+        timeout: 30000, // 30 second launch timeout
       });
       const page = await browser.newPage();
       await page.setUserAgent(this.config.userAgent);
-      await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+
+      // Use domcontentloaded for faster loading, with timeout
+      await page.goto(url, {
+        waitUntil: 'domcontentloaded',
+        timeout: this.config.timeout || 30000,
+      });
+
+      // Wait a bit for any dynamic content (using setTimeout instead of waitForTimeout for compatibility)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
       const html = await page.content();
       await browser.close();
+      scraperLogger.debug('Puppeteer fetch successful');
       return html;
     } catch (error) {
-      scraperLogger.warn('Puppeteer fetch failed, falling back to regular fetch:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      scraperLogger.warn(`Puppeteer fetch failed (${errorMessage}), falling back to regular fetch`);
+
+      // Ensure browser is closed even on error
+      if (browser) {
+        try {
+          await browser.close();
+        } catch (closeError) {
+          // Ignore close errors
+        }
+      }
+
       return this.fetchPage(url);
     }
   }
@@ -61,7 +87,10 @@ export class FoodNetworkScraper extends BaseScraper {
           if (content) {
             const parsed = JSON.parse(content);
             const items = Array.isArray(parsed) ? parsed : [parsed];
-            recipeData = items.find((item: any) => item['@type'] === 'Recipe');
+            recipeData = items.find((item: any) => {
+              const itemTypes = Array.isArray(item['@type']) ? item['@type'] : [item['@type']];
+              return itemTypes.includes('Recipe');
+            });
             if (recipeData) break;
           }
         } catch (e) {
@@ -157,19 +186,44 @@ export class FoodNetworkScraper extends BaseScraper {
    * Parse from JSON-LD
    */
   private parseFromJSONLD(recipeData: any, url: string): Partial<ScrapedRecipe> {
+    // Extract temperature from JSON-LD (check multiple possible locations)
+    // First try JSON-LD temperature fields
+    const temperatureFromJSONLD =
+      recipeData.cookingMethod?.temperature || recipeData.temperature;
+
+    // If not found in JSON-LD, extract from instructions using BaseScraper method
+    const temperatureFromInstructions = this.extractTemperatureFromInstructions(
+      recipeData.recipeInstructions || [],
+    );
+
+    // Use JSON-LD temperature if available, otherwise use extracted temperature
+    const temperatureData =
+      temperatureFromJSONLD ||
+      (temperatureFromInstructions.temperature_celsius ||
+      temperatureFromInstructions.temperature_fahrenheit
+        ? temperatureFromInstructions
+        : undefined);
+
+    // Parse temperature data (returns object with temperature_celsius, temperature_fahrenheit, temperature_unit)
+    const parsedTemperature = this.parseTemperature(temperatureData);
+
     const recipe: Partial<ScrapedRecipe> = {
       id: recipeData.url || url,
-      recipe_name: recipeData.name || '',
+      recipe_name: recipeData.name || recipeData.headline || 'Untitled Recipe',
       description: recipeData.description || '',
-      instructions: this.parseInstructions(recipeData.recipeInstructions || []),
+        instructions: this.parseInstructions(recipeData.recipeInstructions || []), // Uses BaseScraper.parseInstructions
       ingredients: this.parseIngredients(recipeData.recipeIngredient || []),
       yield: this.parseYield(recipeData.recipeYield),
       yield_unit: 'servings',
       prep_time_minutes: this.parseDuration(recipeData.prepTime),
       cook_time_minutes: this.parseDuration(recipeData.cookTime),
       total_time_minutes: this.parseDuration(recipeData.totalTime),
+      ...(parsedTemperature.temperature_celsius || parsedTemperature.temperature_fahrenheit
+        ? parsedTemperature
+        : {}), // Only spread if temperature data exists
       image_url: this.parseImage(recipeData.image),
-      author: recipeData.author?.name || recipeData.author,
+      author: this.parseAuthor(recipeData.author),
+      rating: this.parseRating(recipeData.aggregateRating?.ratingValue || recipeData.ratingValue),
     };
 
     if (recipeData.recipeCategory) {
@@ -202,10 +256,13 @@ export class FoodNetworkScraper extends BaseScraper {
           .get()
           .filter(text => text.length > 0),
         ingredients: $('.o-Ingredients__a-ListItem, .recipe-ingredients li')
-          .map((_, el) => ({
-            name: '',
-            original_text: $(el).text().trim(),
-          }))
+          .map((_, el) => {
+            const text = $(el).text().trim();
+            return {
+              name: this.parseIngredientName(text),
+              original_text: text,
+            };
+          })
           .get()
           .filter(ing => ing.original_text.length > 0) as RecipeIngredient[],
         image_url: $('meta[property="og:image"]').attr('content') || undefined,
@@ -229,17 +286,7 @@ export class FoodNetworkScraper extends BaseScraper {
   /**
    * Parse instructions
    */
-  private parseInstructions(instructions: any): string[] {
-    if (Array.isArray(instructions)) {
-      return instructions.map(inst => {
-        if (typeof inst === 'string') return inst;
-        if (inst.text) return inst.text;
-        if (inst['@type'] === 'HowToStep' && inst.text) return inst.text;
-        return String(inst);
-      });
-    }
-    return [];
-  }
+  // parseInstructions is now inherited from BaseScraper (handles all JSON-LD formats)
 
   /**
    * Parse ingredients
@@ -247,7 +294,7 @@ export class FoodNetworkScraper extends BaseScraper {
   private parseIngredients(ingredients: any[]): RecipeIngredient[] {
     if (!Array.isArray(ingredients)) return [];
     return ingredients.map(ing => ({
-      name: '',
+      name: this.parseIngredientName(typeof ing === 'string' ? ing : String(ing)),
       original_text: typeof ing === 'string' ? ing : String(ing),
     }));
   }
@@ -292,6 +339,8 @@ export class FoodNetworkScraper extends BaseScraper {
     return undefined;
   }
 
+  // extractTemperatureFromInstructions is inherited from BaseScraper (protected method)
+
   /**
    * Get recipe URLs from Food Network by browsing categories
    */
@@ -325,17 +374,85 @@ export class FoodNetworkScraper extends BaseScraper {
             .map((_, el) => {
               const href = $(el).attr('href');
               if (!href) return null;
-              // Convert relative URLs to absolute
-              if (href.startsWith('/')) {
-                return `https://www.foodnetwork.com${href}`;
+
+              // Normalize URL: handle various formats
+              let normalizedUrl: string | null = null;
+
+              // Protocol-relative URL (starts with //)
+              if (href.startsWith('//')) {
+                normalizedUrl = `https:${href}`;
               }
-              if (href.includes('foodnetwork.com/recipes/')) {
-                const cleanUrl = href.split('?')[0].split('#')[0];
-                // Only include actual recipe pages
-                if (cleanUrl.match(/\/recipes\/[^/]+$/)) {
+              // Already absolute URL (starts with http:// or https://)
+              else if (href.startsWith('http://') || href.startsWith('https://')) {
+                normalizedUrl = href;
+              }
+              // Relative URL starting with / (but check if it contains domain)
+              else if (href.startsWith('/')) {
+                // Check if it's a malformed absolute URL like /www.foodnetwork.com/...
+                if (href.includes('foodnetwork.com')) {
+                  // Extract the path after the domain
+                  const match = href.match(/\/www\.foodnetwork\.com(\/.*)/);
+                  if (match && match[1]) {
+                    normalizedUrl = `https://www.foodnetwork.com${match[1]}`;
+                  } else {
+                    // Just use the href as-is but fix the domain
+                    normalizedUrl = href.replace(/^\/www\.foodnetwork\.com/, 'https://www.foodnetwork.com');
+                  }
+                } else {
+                  // Normal relative URL
+                  normalizedUrl = `https://www.foodnetwork.com${href}`;
+                }
+              }
+              // Contains domain but not absolute (malformed)
+              else if (href.includes('foodnetwork.com')) {
+                normalizedUrl = `https://${href}`;
+              }
+
+              if (!normalizedUrl) return null;
+
+              // Clean URL (remove query params and fragments)
+              const cleanUrl = normalizedUrl.split('?')[0].split('#')[0];
+
+              // Only include actual recipe pages (not category/collection pages)
+              // Food Network recipe URLs have pattern: /recipes/[author]/[recipe-slug]-[id]
+              // or sometimes: /recipes/[recipe-slug]-[id]
+              // Category pages are single words like /recipes/breakfast
+              const recipePattern = /\/recipes\/[^/]+\/[^/]+-\d+$/; // /recipes/author/recipe-id
+              const recipePattern2 = /\/recipes\/[^/]+-\d+$/; // /recipes/recipe-id (no author)
+
+              if (recipePattern.test(cleanUrl) || recipePattern2.test(cleanUrl)) {
+                return cleanUrl;
+              }
+
+              // Also check for recipe URLs that might not have numeric ID but have author
+              // Pattern: /recipes/[author]/[recipe-slug] where author is not a category
+              const authorRecipePattern = /\/recipes\/[^/]+\/[^/]+$/;
+              if (authorRecipePattern.test(cleanUrl)) {
+                const categoryNames = [
+                  'breakfast',
+                  'lunch',
+                  'dinner',
+                  'appetizers',
+                  'side-dishes',
+                  'main-dish',
+                  'desserts',
+                  'meals',
+                  'ingredients',
+                  'photos',
+                  'videos',
+                  'collections',
+                  'main-dishes',
+                  'healthy-main-dishes',
+                ];
+                const urlPath = cleanUrl.replace('https://www.foodnetwork.com/recipes/', '');
+                const segments = urlPath.split('/');
+                // If it has 2+ segments, it's likely a recipe (author/recipe-slug)
+                // If first segment is a category, exclude it
+                if (segments.length >= 2 && !categoryNames.includes(segments[0].toLowerCase())) {
                   return cleanUrl;
                 }
               }
+
               return null;
             })
             .get()
@@ -414,15 +531,85 @@ export class FoodNetworkScraper extends BaseScraper {
               .map((_, el) => {
                 const href = $(el).attr('href');
                 if (!href) return null;
-                if (href.startsWith('/')) {
-                  return `https://www.foodnetwork.com${href}`;
+
+                // Normalize URL: handle various formats
+                let normalizedUrl: string | null = null;
+
+                // Protocol-relative URL (starts with //)
+                if (href.startsWith('//')) {
+                  normalizedUrl = `https:${href}`;
                 }
-                if (href.includes('foodnetwork.com/recipes/')) {
-                  const cleanUrl = href.split('?')[0].split('#')[0];
-                  if (cleanUrl.match(/\/recipes\/[^/]+$/)) {
+                // Already absolute URL (starts with http:// or https://)
+                else if (href.startsWith('http://') || href.startsWith('https://')) {
+                  normalizedUrl = href;
+                }
+                // Relative URL starting with / (but check if it contains domain)
+                else if (href.startsWith('/')) {
+                  // Check if it's a malformed absolute URL like /www.foodnetwork.com/...
+                  if (href.includes('foodnetwork.com')) {
+                    // Extract the path after the domain
+                    const match = href.match(/\/www\.foodnetwork\.com(\/.*)/);
+                    if (match && match[1]) {
+                      normalizedUrl = `https://www.foodnetwork.com${match[1]}`;
+                    } else {
+                      // Just use the href as-is but fix the domain
+                      normalizedUrl = href.replace(/^\/www\.foodnetwork\.com/, 'https://www.foodnetwork.com');
+                    }
+                  } else {
+                    // Normal relative URL
+                    normalizedUrl = `https://www.foodnetwork.com${href}`;
+                  }
+                }
+                // Contains domain but not absolute (malformed)
+                else if (href.includes('foodnetwork.com')) {
+                  normalizedUrl = `https://${href}`;
+                }
+
+                if (!normalizedUrl) return null;
+
+                // Clean URL (remove query params and fragments)
+                const cleanUrl = normalizedUrl.split('?')[0].split('#')[0];
+
+                // Only include actual recipe pages (not category/collection pages)
+                // Food Network recipe URLs have pattern: /recipes/[author]/[recipe-slug]-[id]
+                // or sometimes: /recipes/[recipe-slug]-[id]
+                // Category pages are single words like /recipes/breakfast
+                const recipePattern = /\/recipes\/[^/]+\/[^/]+-\d+$/; // /recipes/author/recipe-id
+                const recipePattern2 = /\/recipes\/[^/]+-\d+$/; // /recipes/recipe-id (no author)
+
+                if (recipePattern.test(cleanUrl) || recipePattern2.test(cleanUrl)) {
+                  return cleanUrl;
+                }
+
+                // Also check for recipe URLs that might not have numeric ID but have author
+                // Pattern: /recipes/[author]/[recipe-slug] where author is not a category
+                const authorRecipePattern = /\/recipes\/[^/]+\/[^/]+$/;
+                if (authorRecipePattern.test(cleanUrl)) {
+                  const categoryNames = [
+                    'breakfast',
+                    'lunch',
+                    'dinner',
+                    'appetizers',
+                    'side-dishes',
+                    'main-dish',
+                    'desserts',
+                    'meals',
+                    'ingredients',
+                    'photos',
+                    'videos',
+                    'collections',
+                    'main-dishes',
+                    'healthy-main-dishes',
+                  ];
+                  const urlPath = cleanUrl.replace('https://www.foodnetwork.com/recipes/', '');
+                  const segments = urlPath.split('/');
+                  // If it has 2+ segments, it's likely a recipe (author/recipe-slug)
+                  // If first segment is a category, exclude it
+                  if (segments.length >= 2 && !categoryNames.includes(segments[0].toLowerCase())) {
                     return cleanUrl;
                   }
                 }
+
                 return null;
               })
               .get()

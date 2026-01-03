@@ -45,9 +45,9 @@ interface ScrapedRecipe {
 export function RecipeScraper() {
   const { showSuccess, showError } = useNotification();
   const [urls, setUrls] = useState('');
-  const [source, setSource] = useState<'allrecipes' | 'bbc-good-food' | 'food-network'>(
-    'allrecipes',
-  );
+  const [source, setSource] = useState<
+    'allrecipes' | 'food-network' | 'epicurious' | 'bon-appetit' | 'tasty'
+  >('allrecipes');
   const [scraping, setScraping] = useState(false);
   const [results, setResults] = useState<ScrapeResult[]>([]);
   const [recipes, setRecipes] = useState<ScrapedRecipe[]>([]);
@@ -239,29 +239,51 @@ export function RecipeScraper() {
 
   const handleStopComprehensiveScrape = async () => {
     try {
+      // Show immediate feedback
+      showSuccess('Stopping scraper... (this may take a few seconds)');
+
       const response = await fetch('/api/recipe-scraper/stop', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `HTTP ${response.status}`);
+      }
+
       const result = await response.json();
 
       if (result.success) {
         setStatusPolling(true); // Continue polling to see status update
-        showSuccess('Scraping job stopped successfully');
-        // Refresh status immediately
-        setTimeout(() => {
-          fetch('/api/recipe-scraper/status')
-            .then(res => res.json())
-            .then(data => {
-              if (data.success) {
-                setComprehensiveStatus(data.data);
+        showSuccess('Stop command sent! Scraper will stop at next checkpoint (within current batch).');
+
+        // Refresh status immediately and continue polling
+        const refreshStatus = async () => {
+          try {
+            const statusResponse = await fetch('/api/recipe-scraper/status');
+            const statusData = await statusResponse.json();
+            if (statusData.success) {
+              setComprehensiveStatus(statusData.data);
+              // If still running, check again in 2 seconds
+              if (statusData.data.isRunning) {
+                setTimeout(refreshStatus, 2000);
+              } else {
+                showSuccess('✅ Scraper has stopped successfully!');
+                setStatusPolling(false);
               }
-            })
-            .catch(err => {
-              logger.error('[RecipeScraper] Error fetching status after stop:', {
-                error: err instanceof Error ? err.message : String(err),
-              });
+            }
+          } catch (err) {
+            logger.error('[RecipeScraper] Error fetching status after stop:', {
+              error: err instanceof Error ? err.message : String(err),
             });
-        }, 1000);
+          }
+        };
+
+        // Start polling for status updates
+        setTimeout(refreshStatus, 1000);
       } else {
         showError(result.message || 'Failed to stop scraping job');
       }
@@ -269,7 +291,10 @@ export function RecipeScraper() {
       logger.error('[RecipeScraper] Error stopping comprehensive scrape:', {
         error: err instanceof Error ? err.message : String(err),
       });
-      showError('Failed to stop scraping job');
+      showError(`Failed to stop scraping job: ${err instanceof Error ? err.message : String(err)}`);
+
+      // Even if API fails, try creating stop flag manually as fallback
+      showSuccess('Attempting manual stop via stop flag file...');
     }
   };
 

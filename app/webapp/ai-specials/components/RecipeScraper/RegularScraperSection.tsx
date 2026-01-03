@@ -22,8 +22,10 @@ interface ScrapeResult {
 }
 
 interface RegularScraperSectionProps {
-  source: 'allrecipes' | 'bbc-good-food' | 'food-network';
-  setSource: (source: 'allrecipes' | 'bbc-good-food' | 'food-network') => void;
+  source: 'allrecipes' | 'food-network' | 'epicurious' | 'bon-appetit' | 'tasty';
+  setSource: (
+    source: 'allrecipes' | 'food-network' | 'epicurious' | 'bon-appetit' | 'tasty',
+  ) => void;
   urls: string;
   setUrls: (urls: string) => void;
   discoveryMode: boolean;
@@ -64,13 +66,23 @@ export function RegularScraperSection({
           <select
             value={source}
             onChange={e =>
-              setSource(e.target.value as 'allrecipes' | 'bbc-good-food' | 'food-network')
+              setSource(
+                e.target.value as
+                  | 'allrecipes'
+                  | 'food-network'
+                  | 'epicurious'
+                  | 'bon-appetit'
+                  | 'tasty',
+              )
             }
             className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] focus:ring-2 focus:ring-[#29E7CD]"
           >
             <option value="allrecipes">AllRecipes</option>
-            <option value="bbc-good-food">BBC Good Food</option>
+            {/* <option value="bbc-good-food">BBC Good Food</option> - DISABLED - Terms of Service violation */}
             <option value="food-network">Food Network</option>
+            <option value="epicurious">Epicurious</option>
+            <option value="bon-appetit">Bon Appétit</option>
+            <option value="tasty">Tasty</option>
           </select>
         </div>
 

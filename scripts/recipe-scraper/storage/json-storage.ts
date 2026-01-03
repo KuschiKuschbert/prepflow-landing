@@ -70,8 +70,43 @@ export class JSONStorage {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '')
       .substring(0, 100);
-    const id = recipe.id || uuidv4();
-    return `${sanitized}-${id.substring(0, 8)}.json.gz`;
+
+    // Sanitize ID - handle URLs and special characters
+    let id = recipe.id || uuidv4();
+
+    // If ID is a URL, extract a safe identifier from it
+    if (id.startsWith('http://') || id.startsWith('https://')) {
+      try {
+        const urlObj = new URL(id);
+        const pathParts = urlObj.pathname.split('/').filter(Boolean);
+
+        // Try to extract numeric ID (common pattern: /recipe/12345/...)
+        const numericId = pathParts.find(part => /^\d+$/.test(part));
+        if (numericId) {
+          id = numericId;
+        } else {
+          // Extract last meaningful part (usually slug)
+          const lastPart = pathParts[pathParts.length - 1] || '';
+          id = lastPart || urlObj.pathname.replace(/[^a-z0-9]/gi, '-').substring(0, 32);
+        }
+      } catch {
+        // If URL parsing fails, extract from string
+        const urlParts = id.split('/').filter(Boolean);
+        const lastPart = urlParts[urlParts.length - 1] || urlParts[urlParts.length - 2] || '';
+        id = lastPart || uuidv4();
+      }
+    }
+
+    // Sanitize ID to remove any remaining special characters
+    const sanitizedId = id
+      .replace(/[^a-z0-9-]/gi, '')
+      .replace(/^-+|-+$/g, '')
+      .substring(0, 32); // Limit ID length
+
+    // Fallback to UUID if ID is empty after sanitization
+    const finalId = sanitizedId || uuidv4().substring(0, 8);
+
+    return `${sanitized}-${finalId}.json.gz`;
   }
 
   /**
@@ -168,12 +203,18 @@ export class JSONStorage {
         return { saved: false, reason: 'duplicate' };
       }
 
-      // Get source directory
+      // Get source directory (this ensures it exists)
       const sourceDir = this.getSourceDir(recipe.source);
 
       // Generate filename
       const filename = this.generateFilename(recipe);
       const filePath = path.join(sourceDir, filename);
+
+      // Ensure parent directory exists (double-check)
+      const parentDir = path.dirname(filePath);
+      if (!fs.existsSync(parentDir)) {
+        fs.mkdirSync(parentDir, { recursive: true });
+      }
 
       // Save recipe JSON with compression
       const jsonString = JSON.stringify(recipe, null, 2);

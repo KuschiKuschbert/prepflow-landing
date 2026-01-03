@@ -16,6 +16,9 @@ export interface ScrapedRecipe {
   prep_time_minutes?: number;
   cook_time_minutes?: number;
   total_time_minutes?: number;
+  temperature_celsius?: number; // Cooking/baking temperature in Celsius
+  temperature_fahrenheit?: number; // Cooking/baking temperature in Fahrenheit
+  temperature_unit?: 'celsius' | 'fahrenheit'; // Preferred unit
   difficulty?: 'easy' | 'medium' | 'hard';
   category?: string; // e.g., "main-course", "dessert"
   cuisine?: string; // e.g., "italian", "asian"

@@ -6,7 +6,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { Search, Loader2, ExternalLink } from 'lucide-react';
+import { Clock, ExternalLink, Loader2, Search, Thermometer } from 'lucide-react';
 
 interface ScrapedRecipe {
   id: string;
@@ -18,6 +18,12 @@ interface ScrapedRecipe {
   instructions: string[];
   yield?: number;
   yield_unit?: string;
+  prep_time_minutes?: number;
+  cook_time_minutes?: number;
+  total_time_minutes?: number;
+  temperature_celsius?: number;
+  temperature_fahrenheit?: number;
+  temperature_unit?: 'celsius' | 'fahrenheit';
   category?: string;
   cuisine?: string;
   image_url?: string;
@@ -114,6 +120,46 @@ export function RecipeListSection({
                 <p className="mb-2 text-sm text-[var(--foreground-muted)]">{recipe.description}</p>
               )}
 
+              {/* Cooking Times and Temperature */}
+              {(recipe.prep_time_minutes ||
+                recipe.cook_time_minutes ||
+                recipe.total_time_minutes ||
+                recipe.temperature_celsius ||
+                recipe.temperature_fahrenheit) && (
+                <div className="mb-3 flex flex-wrap gap-4 text-xs text-[var(--foreground-muted)]">
+                  {recipe.prep_time_minutes && (
+                    <div className="flex items-center gap-1">
+                      <Icon icon={Clock} size="xs" aria-hidden={true} />
+                      <span>Prep: {recipe.prep_time_minutes} min</span>
+                    </div>
+                  )}
+                  {recipe.cook_time_minutes && (
+                    <div className="flex items-center gap-1">
+                      <Icon icon={Clock} size="xs" aria-hidden={true} />
+                      <span>Cook: {recipe.cook_time_minutes} min</span>
+                    </div>
+                  )}
+                  {recipe.total_time_minutes && (
+                    <div className="flex items-center gap-1">
+                      <Icon icon={Clock} size="xs" aria-hidden={true} />
+                      <span>Total: {recipe.total_time_minutes} min</span>
+                    </div>
+                  )}
+                  {(recipe.temperature_celsius || recipe.temperature_fahrenheit) && (
+                    <div className="flex items-center gap-1">
+                      <Icon icon={Thermometer} size="xs" aria-hidden={true} />
+                      <span>
+                        {recipe.temperature_unit === 'celsius' || !recipe.temperature_fahrenheit
+                          ? `${recipe.temperature_celsius}°C`
+                          : `${recipe.temperature_fahrenheit}°F`}
+                        {(recipe.temperature_celsius && recipe.temperature_fahrenheit) &&
+                          ` (${recipe.temperature_unit === 'celsius' ? recipe.temperature_fahrenheit : recipe.temperature_celsius}°${recipe.temperature_unit === 'celsius' ? 'F' : 'C'})`}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div className="mt-2">
                 <p className="mb-1 text-xs font-medium text-[var(--foreground-muted)]">
                   Ingredients ({recipe.ingredients.length}):
@@ -134,6 +180,22 @@ export function RecipeListSection({
                   )}
                 </div>
               </div>
+
+              {/* Full Instructions */}
+              {recipe.instructions && recipe.instructions.length > 0 && (
+                <div className="mt-3">
+                  <p className="mb-2 text-xs font-medium text-[var(--foreground-muted)]">
+                    Instructions ({recipe.instructions.length} steps):
+                  </p>
+                  <ol className="list-inside list-decimal space-y-1 text-sm text-[var(--foreground)]">
+                    {recipe.instructions.map((instruction, idx) => (
+                      <li key={idx} className="pl-2">
+                        {instruction}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
             </div>
           ))}
         </div>

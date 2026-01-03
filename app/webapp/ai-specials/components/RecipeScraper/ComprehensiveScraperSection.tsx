@@ -27,6 +27,7 @@ interface ComprehensiveJobStatus {
     totalFailed: number;
     totalRemaining: number;
     overallProgressPercent: number;
+    estimatedTimeRemaining?: number; // in seconds
   };
 }
 
@@ -61,9 +62,9 @@ export function ComprehensiveScraperSection({
         Comprehensive Database Scraping
       </h2>
       <p className="mb-4 text-sm text-[var(--foreground-muted)]">
-        Scrape ALL recipes from AllRecipes, BBC Good Food, and Food Network automatically. This will
-        discover and scrape every available recipe from all sources. Progress is saved and can be
-        resumed if interrupted.
+        Scrape ALL recipes from AllRecipes, Food Network, Epicurious, Bon Appétit, and Tasty
+        automatically. This will discover and scrape every available recipe from all sources. Progress
+        is saved and can be resumed if interrupted.
       </p>
       <div className="flex gap-3">
         <button
@@ -149,6 +150,15 @@ export function ComprehensiveScraperSection({
                 </div>
               </div>
             </div>
+            {comprehensiveStatus.overall?.estimatedTimeRemaining &&
+              comprehensiveStatus.overall.estimatedTimeRemaining > 0 && (
+                <div className="mt-3 rounded-lg bg-[var(--surface)] p-3 text-center">
+                  <div className="text-xs text-[var(--foreground-muted)]">Estimated Time Remaining</div>
+                  <div className="text-lg font-semibold text-[#29E7CD]">
+                    {formatTime(comprehensiveStatus.overall.estimatedTimeRemaining)}
+                  </div>
+                </div>
+              )}
           </div>
 
           {/* Per-Source Progress */}

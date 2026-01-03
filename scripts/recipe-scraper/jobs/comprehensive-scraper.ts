@@ -8,12 +8,16 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { SOURCES, SourceType, STORAGE_PATH } from '../config';
 import { AllRecipesScraper } from '../scrapers/allrecipes-scraper';
-import { BBCGoodFoodScraper } from '../scrapers/bbc-good-food-scraper';
+// import { BBCGoodFoodScraper } from '../scrapers/bbc-good-food-scraper'; // REMOVED - Terms of Service violation
 import { FoodNetworkScraper } from '../scrapers/food-network-scraper';
+import { EpicuriousScraper } from '../scrapers/epicurious-scraper';
+import { BonAppetitScraper } from '../scrapers/bon-appetit-scraper';
+import { TastyScraper } from '../scrapers/tasty-scraper';
 import { JSONStorage } from '../storage/json-storage';
 import { getRetryDelay, isRetryableError, shouldSkipPermanently } from '../utils/error-categorizer';
 import { scraperLogger } from '../utils/logger';
 import { ProgressTracker, ScrapingProgress } from '../utils/progress-tracker';
+import { shouldIncludeRecipe } from '../utils/rating-filter';
 
 export interface JobStatus {
   isRunning: boolean;
@@ -35,12 +39,16 @@ export interface JobStatus {
     totalFailed: number;
     totalRemaining: number;
     overallProgressPercent: number;
+    estimatedTimeRemaining?: number; // in seconds
   };
   startedAt?: string;
   lastUpdated: string;
 }
 
 const BATCH_SIZE = 50;
+// Concurrency: Process 3-5 recipes simultaneously per source for maximum speed
+// With 5 sources × 3-5 concurrent = 15-25 total concurrent requests
+const CONCURRENT_REQUESTS_PER_SOURCE = 3; // Conservative: 3 concurrent requests per source
 const MAX_RETRY_ATTEMPTS = 3; // Maximum retry attempts per URL
 
 interface RetryQueueItem {
@@ -67,7 +75,14 @@ export class ComprehensiveScraperJob {
    * Start comprehensive scraping for specified sources
    */
   async start(
-    sources: SourceType[] = [SOURCES.ALLRECIPES, SOURCES.BBC_GOOD_FOOD, SOURCES.FOOD_NETWORK],
+    sources: SourceType[] = [
+      SOURCES.ALLRECIPES,
+      // SOURCES.BBC_GOOD_FOOD, // REMOVED - Terms of Service violation (see docs/BBC_GOOD_FOOD_LEGAL_ANALYSIS.md)
+      SOURCES.FOOD_NETWORK,
+      SOURCES.EPICURIOUS,
+      SOURCES.BON_APPETIT,
+      SOURCES.TASTY,
+    ],
   ): Promise<void> {
     if (this.isRunning) {
       scraperLogger.warn('Comprehensive scraping job is already running');
@@ -83,12 +98,28 @@ export class ComprehensiveScraperJob {
     this.retryQueues.clear(); // Clear retry queues when starting new job
 
     scraperLogger.info(`Starting comprehensive scraping for sources: ${sources.join(', ')}`);
+    scraperLogger.info('⚠️  Processing all sources in PARALLEL for maximum speed');
 
     try {
-      // Process each source
-      for (const source of sources) {
-        await this.processSource(source);
-      }
+      // Process all sources in parallel (best practice for speed)
+      // Each source has its own rate limiting and progress tracking
+      const sourcePromises = sources.map(async (source) => {
+        try {
+          await this.processSource(source);
+          scraperLogger.info(`✅ Completed scraping for ${source}`);
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          logger.error(`[Comprehensive Scraper] Error processing ${source}:`, {
+            error: errorMessage,
+            source,
+          });
+          scraperLogger.error(`❌ Error processing ${source}:`, errorMessage);
+          // Don't throw - let other sources continue
+        }
+      });
+
+      // Wait for all sources to complete (or fail independently)
+      await Promise.all(sourcePromises);
 
       scraperLogger.info('Comprehensive scraping completed for all sources');
     } catch (error) {
@@ -102,15 +133,24 @@ export class ComprehensiveScraperJob {
       // Retry any remaining failed URLs across all sources before finishing
       // But only if not stopped
       if (this.isRunning && !this.checkStopFlag()) {
-        for (const source of this.activeSources) {
+        scraperLogger.info('Retrying failed URLs for all sources in parallel...');
+        const retryPromises = Array.from(this.activeSources).map(async (source) => {
           // Check stop flag before each source retry
           if (!this.isRunning || this.checkStopFlag()) {
-            scraperLogger.info('Scraping stopped, skipping final retry phase');
-            break;
+            return;
           }
-          const scraper = this.getScraper(source);
-          await this.retryFailedUrls(source, scraper);
-        }
+          try {
+            const scraper = this.getScraper(source);
+            await this.retryFailedUrls(source, scraper);
+          } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            scraperLogger.error(`Error retrying failed URLs for ${source}:`, errorMessage);
+            // Don't throw - let other sources continue
+          }
+        });
+
+        // Wait for all retries to complete
+        await Promise.all(retryPromises);
       }
 
       this.isRunning = false;
@@ -140,21 +180,42 @@ export class ComprehensiveScraperJob {
     // Don't clear retry queues when resuming - they may contain URLs to retry
 
     scraperLogger.info('Resuming comprehensive scraping from saved progress');
+    scraperLogger.info('⚠️  Processing all sources in PARALLEL for maximum speed');
 
     try {
       const sources: SourceType[] = [
         SOURCES.ALLRECIPES,
-        SOURCES.BBC_GOOD_FOOD,
+        // SOURCES.BBC_GOOD_FOOD, // REMOVED - Terms of Service violation
         SOURCES.FOOD_NETWORK,
+        SOURCES.EPICURIOUS,
+        SOURCES.BON_APPETIT,
+        SOURCES.TASTY,
       ];
 
-      for (const source of sources) {
-        const progress = this.progressTracker.loadProgress(source);
-        if (progress && !this.progressTracker.isComplete(progress)) {
-          this.activeSources.add(source);
-          await this.processSource(source, progress);
+      // Process all sources in parallel (best practice for speed)
+      const resumePromises = sources.map(async (source) => {
+        try {
+          const progress = this.progressTracker.loadProgress(source);
+          if (progress && !this.progressTracker.isComplete(progress)) {
+            this.activeSources.add(source);
+            await this.processSource(source, progress);
+            scraperLogger.info(`✅ Resumed and completed scraping for ${source}`);
+          } else {
+            scraperLogger.info(`⏭️  Skipping ${source} (already complete or no progress)`);
+          }
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          logger.error(`[Comprehensive Scraper] Error resuming ${source}:`, {
+            error: errorMessage,
+            source,
+          });
+          scraperLogger.error(`❌ Error resuming ${source}:`, errorMessage);
+          // Don't throw - let other sources continue
         }
-      }
+      });
+
+      // Wait for all sources to complete (or fail independently)
+      await Promise.all(resumePromises);
 
       scraperLogger.info('Resumed comprehensive scraping completed');
     } catch (error) {
@@ -167,29 +228,151 @@ export class ComprehensiveScraperJob {
       // Retry any remaining failed URLs across all sources before finishing
       // But only if not stopped
       if (this.isRunning && !this.checkStopFlag()) {
-        const sources: SourceType[] = [
-          SOURCES.ALLRECIPES,
-          SOURCES.BBC_GOOD_FOOD,
-          SOURCES.FOOD_NETWORK,
-        ];
-
-        for (const source of sources) {
+        scraperLogger.info('Retrying failed URLs for all sources in parallel...');
+        const retryPromises = Array.from(this.activeSources).map(async (source) => {
           // Check stop flag before each source retry
           if (!this.isRunning || this.checkStopFlag()) {
-            scraperLogger.info('Scraping stopped, skipping final retry phase');
-            break;
+            return;
           }
-          const progress = this.progressTracker.loadProgress(source);
-          if (progress && !this.progressTracker.isComplete(progress)) {
-            const scraper = this.getScraper(source);
-            await this.retryFailedUrls(source, scraper);
+          try {
+            const progress = this.progressTracker.loadProgress(source);
+            if (progress && !this.progressTracker.isComplete(progress)) {
+              const scraper = this.getScraper(source);
+              await this.retryFailedUrls(source, scraper);
+            }
+          } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            scraperLogger.error(`Error retrying failed URLs for ${source}:`, errorMessage);
+            // Don't throw - let other sources continue
           }
-        }
+        });
+
+        // Wait for all retries to complete
+        await Promise.all(retryPromises);
       }
 
       this.isRunning = false;
       this.activeSources.clear();
       this.removeStopFlag(); // Clean up stop flag when done
+    }
+  }
+
+  /**
+   * Process a batch of URLs with concurrency limit (3-5 recipes simultaneously)
+   * This dramatically improves speed while respecting rate limits
+   */
+  private async processBatchWithConcurrency(
+    batch: string[],
+    source: SourceType,
+    scraper: AllRecipesScraper | FoodNetworkScraper | EpicuriousScraper | BonAppetitScraper | TastyScraper,
+  ): Promise<void> {
+    // Process URLs with concurrency limit using a simple queue pattern
+    const processUrl = async (url: string): Promise<void> => {
+      // Check if job was stopped
+      if (!this.isRunning || this.checkStopFlag()) {
+        return;
+      }
+
+      try {
+        // Check if URL already exists before scraping (skip duplicate scraping)
+        if (this.storage.urlExists(source, url)) {
+          scraperLogger.debug(`⚠️  Skipping duplicate URL (already exists): ${url}`);
+          this.progressTracker.updateProgress(source, url, true);
+          return;
+        }
+
+        const result = await scraper.scrapeRecipe(url);
+
+        // Check stop flag immediately after scraping (responsive stop)
+        if (!this.isRunning || this.checkStopFlag()) {
+          scraperLogger.info(`🛑 Stop flag detected after scraping ${url}, stopping immediately`);
+          return;
+        }
+
+        if (result.success && result.recipe) {
+          // Apply rating filter
+          if (!shouldIncludeRecipe(result.recipe, source)) {
+            const reason = result.recipe.rating
+              ? `rating ${result.recipe.rating} below threshold`
+              : 'no rating (unrated not allowed)';
+            this.progressTracker.updateProgress(source, url, false, reason);
+            scraperLogger.debug(`⚠️  Skipped (rating filter): ${result.recipe.recipe_name} - ${reason}`);
+            return;
+          }
+
+          const saveResult = await this.storage.saveRecipe(result.recipe);
+          if (saveResult.saved) {
+            this.progressTracker.updateProgress(source, url, true);
+            scraperLogger.debug(`✅ Scraped: ${result.recipe.recipe_name}`);
+          } else {
+            this.progressTracker.updateProgress(
+              source,
+              url,
+              false,
+              saveResult.reason || 'Duplicate or invalid',
+            );
+            scraperLogger.debug(`⚠️  Skipped: ${url} (${saveResult.reason})`);
+          }
+        } else {
+          const errorMessage = result.error || 'Failed to scrape';
+          this.progressTracker.updateProgress(source, url, false, errorMessage);
+
+          // Check if error should be retried
+          if (isRetryableError(errorMessage) && !shouldSkipPermanently(errorMessage)) {
+            this.addToRetryQueue(source, url, errorMessage);
+          } else {
+            scraperLogger.warn(`❌ Failed (permanent): ${url} - ${errorMessage}`);
+          }
+        }
+      } catch (error) {
+        // Check if job was stopped before processing error
+        if (!this.isRunning || this.checkStopFlag()) {
+          return;
+        }
+
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        this.progressTracker.updateProgress(source, url, false, errorMessage);
+
+        // Check if error should be retried
+        if (isRetryableError(error) && !shouldSkipPermanently(error)) {
+          this.addToRetryQueue(source, url, errorMessage);
+        } else {
+          scraperLogger.error(`❌ Error scraping (permanent): ${url} - ${errorMessage}`);
+        }
+      }
+    };
+
+    // Process batch with concurrency limit (3-5 concurrent requests per source)
+    // This allows multiple recipes to be scraped simultaneously while respecting rate limits
+    const concurrencyLimit = CONCURRENT_REQUESTS_PER_SOURCE;
+    const chunks: string[][] = [];
+
+    // Split batch into chunks for concurrent processing
+    for (let i = 0; i < batch.length; i += concurrencyLimit) {
+      chunks.push(batch.slice(i, i + concurrencyLimit));
+    }
+
+    // Process each chunk concurrently, but chunks sequentially
+    for (const chunk of chunks) {
+      // Check if job was stopped (check BEFORE processing chunk)
+      if (!this.isRunning || this.checkStopFlag()) {
+        scraperLogger.info(`Scraping stopped by user for ${source} (before chunk processing)`);
+        this.isRunning = false;
+        return;
+      }
+
+      // Process all URLs in chunk concurrently
+      // Use Promise.allSettled to ensure all promises complete even if one fails
+      // This allows us to check stop flag after each chunk
+      const results = await Promise.allSettled(chunk.map(url => processUrl(url)));
+
+      // Check stop flag AFTER processing chunk (more responsive)
+      // This ensures we stop as soon as possible after the chunk completes
+      if (!this.isRunning || this.checkStopFlag()) {
+        scraperLogger.info(`Scraping stopped by user for ${source} (after chunk processing)`);
+        this.isRunning = false;
+        return;
+      }
     }
   }
 
@@ -212,9 +395,35 @@ export class ComprehensiveScraperJob {
         `Resuming ${source}: ${progress.scraped.length}/${progress.discovered.length} already scraped`,
       );
     } else {
+      // Check stop flag before starting URL discovery
+      if (!this.isRunning || this.checkStopFlag()) {
+        scraperLogger.info(`🛑 Stop flag detected before URL discovery for ${source}, stopping immediately`);
+        this.isRunning = false;
+        return;
+      }
+
       // Discover all URLs
       scraperLogger.info(`Discovering all recipe URLs for ${source}...`);
-      const discoveredUrls = await scraper.getAllRecipeUrls();
+      let discoveredUrls: string[];
+      try {
+        discoveredUrls = await scraper.getAllRecipeUrls();
+      } catch (error) {
+        // If it's a stop error, handle it gracefully
+        if (error instanceof Error && error.message === 'Scraping stopped by user') {
+          scraperLogger.info(`🛑 Stop flag detected during URL discovery for ${source}, stopping immediately`);
+          this.isRunning = false;
+          return;
+        }
+        // Re-throw other errors
+        throw error;
+      }
+
+      // Check stop flag after URL discovery (in case it was stopped during discovery)
+      if (!this.isRunning || this.checkStopFlag()) {
+        scraperLogger.info(`🛑 Stop flag detected after URL discovery for ${source}, stopping immediately`);
+        this.isRunning = false;
+        return;
+      }
 
       if (discoveredUrls.length === 0) {
         scraperLogger.warn(`No recipe URLs discovered for ${source}`);
@@ -255,67 +464,9 @@ export class ComprehensiveScraperJob {
         `Processing batch ${batchIndex + 1}/${totalBatches} for ${source} (${batch.length} recipes)`,
       );
 
-      // Process batch
-      for (const url of batch) {
-        // Check if job was stopped during batch processing (check both flag and file)
-        if (!this.isRunning || this.checkStopFlag()) {
-          scraperLogger.info(`Scraping stopped by user for ${source}`);
-          this.isRunning = false; // Ensure flag is set
-          return;
-        }
-        try {
-          // Check if URL already exists before scraping (skip duplicate scraping)
-          if (this.storage.urlExists(source, url)) {
-            scraperLogger.debug(`⚠️  Skipping duplicate URL (already exists): ${url}`);
-            this.progressTracker.updateProgress(source, url, true);
-            continue;
-          }
-
-          const result = await scraper.scrapeRecipe(url);
-          if (result.success && result.recipe) {
-            const saveResult = await this.storage.saveRecipe(result.recipe);
-            if (saveResult.saved) {
-              this.progressTracker.updateProgress(source, url, true);
-              scraperLogger.debug(`✅ Scraped: ${result.recipe.recipe_name}`);
-            } else {
-              this.progressTracker.updateProgress(
-                source,
-                url,
-                false,
-                saveResult.reason || 'Duplicate or invalid',
-              );
-              scraperLogger.debug(`⚠️  Skipped: ${url} (${saveResult.reason})`);
-            }
-          } else {
-            const errorMessage = result.error || 'Failed to scrape';
-            this.progressTracker.updateProgress(source, url, false, errorMessage);
-
-            // Check if error should be retried
-            if (isRetryableError(errorMessage) && !shouldSkipPermanently(errorMessage)) {
-              this.addToRetryQueue(source, url, errorMessage);
-            } else {
-              scraperLogger.warn(`❌ Failed (permanent): ${url} - ${errorMessage}`);
-            }
-          }
-        } catch (error) {
-          // Check if job was stopped before processing error
-          if (!this.isRunning || this.checkStopFlag()) {
-            scraperLogger.info(`Scraping stopped by user for ${source} (during error handling)`);
-            this.isRunning = false;
-            return;
-          }
-
-          const errorMessage = error instanceof Error ? error.message : String(error);
-          this.progressTracker.updateProgress(source, url, false, errorMessage);
-
-          // Check if error should be retried
-          if (isRetryableError(error) && !shouldSkipPermanently(error)) {
-            this.addToRetryQueue(source, url, errorMessage);
-          } else {
-            scraperLogger.error(`❌ Error scraping (permanent): ${url} - ${errorMessage}`);
-          }
-        }
-      }
+      // Process batch with concurrency limit (3-5 recipes simultaneously per source)
+      // This dramatically improves speed while respecting rate limits
+      await this.processBatchWithConcurrency(batch, source, scraper);
 
       // Save progress after each batch
       const updatedProgress = this.progressTracker.loadProgress(source);
@@ -369,7 +520,7 @@ export class ComprehensiveScraperJob {
    */
   private async retryFailedUrls(
     source: SourceType,
-    scraper: AllRecipesScraper | BBCGoodFoodScraper | FoodNetworkScraper,
+    scraper: AllRecipesScraper | FoodNetworkScraper | EpicuriousScraper | BonAppetitScraper | TastyScraper,
   ): Promise<void> {
     const queue = this.retryQueues.get(source);
     if (!queue || queue.length === 0) {
@@ -512,7 +663,7 @@ export class ComprehensiveScraperJob {
    * Get current job status
    */
   getStatus(): JobStatus {
-    const sources: SourceType[] = [SOURCES.ALLRECIPES, SOURCES.BBC_GOOD_FOOD, SOURCES.FOOD_NETWORK];
+    const sources: SourceType[] = [SOURCES.ALLRECIPES, SOURCES.FOOD_NETWORK, SOURCES.EPICURIOUS, SOURCES.BON_APPETIT, SOURCES.TASTY];
 
     // Check if scraper is actually running by checking for recent progress updates
     // If progress files were updated in the last 30 seconds, consider it running
@@ -556,7 +707,11 @@ export class ComprehensiveScraperJob {
     for (const source of sources) {
       const progress = this.progressTracker.loadProgress(source);
       if (progress) {
-        const stats = this.progressTracker.getStatistics(progress, this.startTime || undefined);
+        // Use progress.startedAt as fallback if this.startTime is not set
+        const progressStartTime = progress.startedAt
+          ? new Date(progress.startedAt)
+          : this.startTime || undefined;
+        const stats = this.progressTracker.getStatistics(progress, progressStartTime);
         status.sources[source] = {
           discovered: stats.totalDiscovered,
           scraped: stats.totalScraped,
@@ -590,6 +745,27 @@ export class ComprehensiveScraperJob {
       );
     }
 
+    // Calculate overall time estimate (in seconds)
+    // Use the maximum time estimate from all sources (since they run in parallel)
+    // This gives a realistic estimate for when all sources will complete
+    if (status.overall.totalRemaining > 0 && this.startTime) {
+      const sourceEstimates = Object.values(status.sources)
+        .map(s => s.estimatedTimeRemaining)
+        .filter((t): t is number => t !== undefined && t > 0);
+
+      if (sourceEstimates.length > 0) {
+        // Use maximum estimate (longest-running source determines completion time)
+        // With parallel processing, all sources finish around the same time
+        status.overall.estimatedTimeRemaining = Math.max(...sourceEstimates);
+      } else {
+        // Fallback: estimate based on remaining recipes and average rate
+        // Conservative estimate: 30 recipes per minute (accounts for delays, retries, etc.)
+        const RECIPES_PER_MINUTE = 30;
+        const estimatedMinutes = status.overall.totalRemaining / RECIPES_PER_MINUTE;
+        status.overall.estimatedTimeRemaining = Math.round(estimatedMinutes * 60);
+      }
+    }
+
     return status;
   }
 
@@ -598,14 +774,27 @@ export class ComprehensiveScraperJob {
    */
   private getScraper(
     source: SourceType,
-  ): AllRecipesScraper | BBCGoodFoodScraper | FoodNetworkScraper {
+  ):
+    | AllRecipesScraper
+    | FoodNetworkScraper
+    | EpicuriousScraper
+    | BonAppetitScraper
+    | TastyScraper {
     switch (source) {
       case SOURCES.ALLRECIPES:
         return new AllRecipesScraper();
       case SOURCES.BBC_GOOD_FOOD:
-        return new BBCGoodFoodScraper();
+        throw new Error(
+          'BBC Good Food scraper is disabled due to Terms of Service violation. See docs/BBC_GOOD_FOOD_LEGAL_ANALYSIS.md',
+        );
       case SOURCES.FOOD_NETWORK:
         return new FoodNetworkScraper();
+      case SOURCES.EPICURIOUS:
+        return new EpicuriousScraper();
+      case SOURCES.BON_APPETIT:
+        return new BonAppetitScraper();
+      case SOURCES.TASTY:
+        return new TastyScraper();
       default:
         throw new Error(`Unknown source: ${source}`);
     }
@@ -668,13 +857,13 @@ export class ComprehensiveScraperJob {
   /**
    * Stop the job (graceful shutdown)
    * Creates a stop flag file that will be checked by all instances
+   * This method is called by the API and should stop the scraper immediately
    */
   stop(): void {
-    if (this.isRunning || this.checkStopFlag()) {
-      scraperLogger.info('Stopping comprehensive scraping job...');
-      this.isRunning = false;
-      this.createStopFlag(); // Create flag file so other instances can see it
-    }
+    scraperLogger.info('🛑 Stop command received - stopping comprehensive scraping job...');
+    this.isRunning = false;
+    this.createStopFlag(); // Create flag file so other instances can see it
+    scraperLogger.info('✅ Stop flag created - scraper will stop at next checkpoint');
   }
 }
 

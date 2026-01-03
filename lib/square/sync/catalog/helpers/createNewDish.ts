@@ -4,8 +4,8 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { createAutoMapping } from '../../../mappings';
-import { logCatalogSyncOperation } from './common';
 import type { SyncResult } from '../../catalog';
+import { logCatalogSyncOperation } from './common';
 
 export async function createNewDish(
   dishData: any,
@@ -61,4 +61,19 @@ export async function createNewDish(
     squareId: squareItemId,
     status: 'success',
   });
+
+  // Dual-write to POS Table
+  try {
+     await supabaseAdmin
+       .from('pos_menu_items')
+       .upsert({
+           name: dishData.dish_name,
+           category: dishData.category || 'Uncategorized',
+           price: dishData.selling_price || 0,
+           is_available: true,
+           square_id: squareItemId
+       }, { onConflict: 'square_id' });
+  } catch (e) {
+      logger.warn('[Square Catalog Sync] Failed to sync to POS table:', e);
+  }
 }

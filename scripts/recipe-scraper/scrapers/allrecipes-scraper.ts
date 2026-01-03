@@ -55,21 +55,28 @@ export class AllRecipesScraper extends BaseScraper {
         return this.parseFromHTML($, url);
       }
 
+      // Extract temperature from JSON-LD (check multiple possible locations)
+      const temperatureData =
+        recipeData.cookingMethod?.temperature ||
+        recipeData.temperature ||
+        this.extractTemperatureFromInstructions(recipeData.recipeInstructions || []);
+
       // Extract data from JSON-LD
       const recipe: Partial<ScrapedRecipe> = {
         id: recipeData.url || url,
-        recipe_name: recipeData.name || '',
+        recipe_name: recipeData.name || recipeData.headline || 'Untitled Recipe',
         description: recipeData.description || '',
-        instructions: this.parseInstructions(recipeData.recipeInstructions || []),
+        instructions: this.parseInstructions(recipeData.recipeInstructions || []), // Uses BaseScraper.parseInstructions
         ingredients: this.parseIngredients(recipeData.recipeIngredient || []),
         yield: this.parseYield(recipeData.recipeYield),
         yield_unit: 'servings',
         prep_time_minutes: this.parseDuration(recipeData.prepTime),
         cook_time_minutes: this.parseDuration(recipeData.cookTime),
         total_time_minutes: this.parseDuration(recipeData.totalTime),
+        ...this.parseTemperature(temperatureData), // Spread temperature fields
         image_url: this.parseImage(recipeData.image),
-        author: recipeData.author?.name || recipeData.author,
-        rating: recipeData.aggregateRating?.ratingValue,
+        author: this.parseAuthor(recipeData.author),
+        rating: this.parseRating(recipeData.aggregateRating?.ratingValue),
       };
 
       // Extract category and cuisine from keywords or category
@@ -152,12 +159,14 @@ export class AllRecipesScraper extends BaseScraper {
         const found = $(selector)
           .map((_, el) => {
             const text = $(el).text().trim();
-            return text.length > 0
-              ? {
-                  name: '',
-                  original_text: text,
-                }
-              : null;
+            if (text.length > 0) {
+              const name = this.parseIngredientName(text);
+              return {
+                name: name || text, // Fallback to original_text if parsing fails
+                original_text: text,
+              };
+            }
+            return null;
           })
           .get()
           .filter((ing): ing is RecipeIngredient => ing !== null);
@@ -211,30 +220,34 @@ export class AllRecipesScraper extends BaseScraper {
     }
   }
 
-  /**
-   * Parse instructions from JSON-LD
-   */
-  private parseInstructions(instructions: any): string[] {
-    if (Array.isArray(instructions)) {
-      return instructions.map(inst => {
-        if (typeof inst === 'string') return inst;
-        if (inst.text) return inst.text;
-        if (inst['@type'] === 'HowToStep' && inst.text) return inst.text;
-        return String(inst);
-      });
-    }
-    return [];
-  }
+  // parseInstructions is now inherited from BaseScraper (handles all JSON-LD formats)
 
   /**
    * Parse ingredients from JSON-LD
    */
   private parseIngredients(ingredients: any[]): RecipeIngredient[] {
     if (!Array.isArray(ingredients)) return [];
-    return ingredients.map(ing => ({
-      name: '',
-      original_text: typeof ing === 'string' ? ing : String(ing),
-    }));
+    return ingredients.map(ing => {
+      const originalText = typeof ing === 'string' ? ing : String(ing);
+      const name = this.extractIngredientName(originalText);
+      return {
+        name: name || originalText,
+        original_text: originalText,
+      };
+    });
+  }
+
+  /**
+   * Extract ingredient name from ingredient text
+   */
+  private extractIngredientName(text: string): string {
+    const cleaned = text
+      .replace(/^\d+\s*/, '')
+      .replace(/^\d+\/\d+\s*/, '')
+      .replace(/\s*(cup|cups|tbsp|tsp|oz|lb|g|kg|ml|l|tablespoon|teaspoon|ounce|pound|gram|kilogram|milliliter|liter)s?\s*/gi, '')
+      .replace(/\s*(and|or|plus)\s*/gi, ' ')
+      .trim();
+    return cleaned.length > 2 ? cleaned : text;
   }
 
   /**
@@ -277,6 +290,52 @@ export class AllRecipesScraper extends BaseScraper {
     if (image.url) return image.url;
     return undefined;
   }
+
+  /**
+   * Extract temperature from instructions text (fallback method)
+   * Looks for temperature patterns in instruction text
+   */
+  private extractTemperatureFromInstructions(instructions: any): string | undefined {
+    if (!instructions) return undefined;
+
+    const instructionTexts: string[] = [];
+
+    // Collect all instruction text
+    if (Array.isArray(instructions)) {
+      instructions.forEach(inst => {
+        if (typeof inst === 'string') {
+          instructionTexts.push(inst);
+        } else if (inst.text) {
+          instructionTexts.push(inst.text);
+        } else if (inst['@type'] === 'HowToStep' && inst.text) {
+          instructionTexts.push(inst.text);
+        }
+      });
+    }
+
+    // Search for temperature patterns in instruction text
+    const combinedText = instructionTexts.join(' ');
+    const tempPatterns = [
+      /(\d+)\s*°?\s*F\b/i, // Fahrenheit
+      /(\d+)\s*°?\s*C\b/i, // Celsius
+      /bake.*?(\d+)\s*°?\s*F/i, // "bake at 350°F"
+      /bake.*?(\d+)\s*°?\s*C/i, // "bake at 180°C"
+      /preheat.*?(\d+)\s*°?\s*F/i, // "preheat to 350°F"
+      /preheat.*?(\d+)\s*°?\s*C/i, // "preheat to 180°C"
+    ];
+
+    for (const pattern of tempPatterns) {
+      const match = combinedText.match(pattern);
+      if (match) {
+        const unit = pattern.source.includes('C') ? 'C' : 'F';
+        return `${match[1]}°${unit}`;
+      }
+    }
+
+    return undefined;
+  }
+
+  // parseAuthor, parseRating, and parseTemperature are inherited from BaseScraper (protected methods)
 
   /**
    * Get recipe URLs from AllRecipes by browsing popular/trending pages
