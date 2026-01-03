@@ -30,31 +30,33 @@ export default function AISpecialsPage() {
   const { showSuccess, showError } = useNotification();
   const { user, isLoading: userLoading } = useUser();
 
-  // Extract user ID from Auth0 user object (handle nested structure)
+  // Extract user email from Auth0 user object (handle nested structure)
   // Auth0 SDK can return user in different structures:
-  // - Flat: user.sub
-  // - Nested: user.user.sub
-  // Check all possibilities
-  const userId = user?.sub || (user as any)?.user?.sub || null;
+  // - Flat: user.email
+  // - Nested: user.user.email
+  const userEmail = user?.email || (user as any)?.user?.email || null;
+  const hasUser = !!user || !!userEmail;
 
   // Check if user is actually authenticated (not just loading)
-  // Wait for loading to complete before checking authentication
-  const isAuthenticated = !userLoading && !!userId;
+  // Since API extracts userId from session, we only need to check if user exists
+  // Wait for loading to complete AND user object exists (more reliable than just email)
+  // Use hasUser check to ensure user object is present (even if nested)
+  const isAuthenticated = !userLoading && hasUser;
 
   // Debug logging to help diagnose authentication issues
   useEffect(() => {
     if (!userLoading) {
       logger.dev('[AISpecialsPage] Auth state:', {
         hasUser: !!user,
-        userId,
+        userEmail,
         isAuthenticated,
         userKeys: user ? Object.keys(user) : [],
         userSub: user?.sub,
         nestedUserSub: (user as any)?.user?.sub,
-        userEmail: user?.email || (user as any)?.user?.email,
+        nestedUser: (user as any)?.user,
       });
     }
-  }, [user, userLoading, userId, isAuthenticated]);
+  }, [user, userLoading, userEmail, isAuthenticated]);
 
   // Initialize with cached data for instant display
   const [aiSpecials, setAiSpecials] = useState<AISpecial[]>(
@@ -108,7 +110,7 @@ export default function AISpecialsPage() {
     } catch (err) {
       logger.error('[AISpecialsPage] Error fetching AI specials:', {
         error: err instanceof Error ? err.message : String(err),
-        userId,
+        userEmail,
       });
       setError('Failed to fetch AI specials');
     } finally {
@@ -122,7 +124,7 @@ export default function AISpecialsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!userId) {
+    if (!isAuthenticated) {
       showError('Please log in to submit AI specials');
       return;
     }
@@ -184,7 +186,7 @@ export default function AISpecialsPage() {
           setAiSpecials(originalSpecials);
           logger.error('[AISpecialsPage] Error processing image:', {
             error: fetchErr instanceof Error ? fetchErr.message : String(fetchErr),
-            userId,
+            userEmail,
           });
           showError("Couldn't process that image, chef. Give it another shot.");
         }
@@ -200,7 +202,7 @@ export default function AISpecialsPage() {
       setAiSpecials(originalSpecials);
       logger.error('[AISpecialsPage] Error setting up file reader:', {
         error: err instanceof Error ? err.message : String(err),
-        userId,
+        userEmail,
       });
       showError("Couldn't process that image, chef. Give it another shot.");
     }

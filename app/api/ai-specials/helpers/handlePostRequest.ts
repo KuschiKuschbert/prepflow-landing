@@ -1,13 +1,13 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { checkFeatureAccess } from '@/lib/api-feature-gate';
 import { requireAuth } from '@/lib/auth0-api-helpers';
-import { NextRequest, NextResponse } from 'next/server';
-import { handleAISpecialsError } from './handleAISpecialsError';
-import { validateAISpecialsRequest } from './validateRequest';
-import { generateAISpecials } from './generateAISpecials';
-import { saveAISpecials } from './saveAISpecials';
-import { z } from 'zod';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { generateAISpecials } from './generateAISpecials';
+import { handleAISpecialsError } from './handleAISpecialsError';
+import { saveAISpecials } from './saveAISpecials';
+import { validateAISpecialsRequest } from './validateRequest';
 
 const aiSpecialsSchema = z.object({
   userId: z.string().min(1, 'User ID is required'), // Will be set from session
@@ -81,7 +81,8 @@ export async function handlePostRequest(request: NextRequest): Promise<NextRespo
 
     logger.debug('[AI Specials API] Validating request body with Zod schema', { requestId });
     // Use session user ID instead of body userId for security (prevents users from accessing other users' data)
-    const bodyWithSessionUserId = { ...body, userId: user.sub };
+    const bodyObj = body && typeof body === 'object' ? body : {};
+    const bodyWithSessionUserId = { ...bodyObj, userId: user.sub };
     const zodValidation = aiSpecialsSchema.safeParse(bodyWithSessionUserId);
     if (!zodValidation.success) {
       logger.warn('[AI Specials API] Zod validation failed', {
