@@ -5,7 +5,6 @@
 import { detectCategory } from './error-detection/category-detector';
 import { detectSeverity } from './error-detection/severity-detector';
 import { createLogEntry, formatLogEntry, type ErrorContext } from './logger/logEntry';
-import { supabaseAdmin } from './supabase';
 
 const isDev = process.env.NODE_ENV === 'development';
 const enableProdLogs = process.env.NEXT_PUBLIC_ENABLE_PROD_LOGS === 'true';
@@ -33,6 +32,18 @@ async function storeErrorInDatabase(
   const scheduleAsync = typeof setImmediate !== 'undefined' ? setImmediate : setTimeout;
   scheduleAsync(async () => {
     try {
+      // Lazy import supabaseAdmin to prevent module load failures if env vars are missing
+      // This allows logger to work even if Supabase is unavailable
+      let supabaseAdminModule;
+      try {
+        supabaseAdminModule = await import('./supabase');
+      } catch (importErr) {
+        // Supabase module failed to load (likely missing env vars) - skip database storage
+        // Logger still works, just won't store errors in DB
+        return;
+      }
+
+      const supabaseAdmin = supabaseAdminModule.supabaseAdmin;
       if (!supabaseAdmin) return;
 
       // Auto-detect severity and category if not explicitly provided

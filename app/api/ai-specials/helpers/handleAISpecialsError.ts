@@ -28,12 +28,25 @@ export function handleAISpecialsError(
     },
   });
 
-  return NextResponse.json(
-    {
-      error: 'Internal server error',
-      message: 'Something went wrong while processing your request. Give it another go, chef.',
-      ...(context?.requestId && { requestId: context.requestId }),
-    },
-    { status: 500 },
-  );
+  // Include requestId in all error responses for correlation
+  const errorResponse: {
+    error: string;
+    message: string;
+    requestId?: string;
+    code?: string;
+  } = {
+    error: 'Internal server error',
+    message: 'Something went wrong while processing your request. Give it another go, chef.',
+  };
+
+  if (context?.requestId) {
+    errorResponse.requestId = context.requestId;
+  }
+
+  // Add error code if available
+  if (error && typeof error === 'object' && 'code' in error) {
+    errorResponse.code = String(error.code);
+  }
+
+  return NextResponse.json(errorResponse, { status: 500 });
 }

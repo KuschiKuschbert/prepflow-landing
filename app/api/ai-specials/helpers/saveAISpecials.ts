@@ -29,9 +29,32 @@ export async function saveAISpecials(
   });
 
   try {
-    logger.debug('[saveAISpecials] Attempting dynamic import of supabase', {
+    // Validate environment variables before attempting import
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !serviceRoleKey) {
+      logger.error('[saveAISpecials] Missing Supabase environment variables', {
+        userId,
+        requestId,
+        hasSupabaseUrl: !!supabaseUrl,
+        hasServiceRoleKey: !!serviceRoleKey,
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          'Database configuration error. Please check environment variables.',
+          'CONFIGURATION_ERROR',
+          500,
+        ),
+        { status: 500 },
+      );
+    }
+
+    logger.debug('[saveAISpecials] Environment variables validated, attempting dynamic import of supabase', {
       userId,
       requestId,
+      hasSupabaseUrl: true,
+      hasServiceRoleKey: true,
     });
 
     const importStartTime = Date.now();

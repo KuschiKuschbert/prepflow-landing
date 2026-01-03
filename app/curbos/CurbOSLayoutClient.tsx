@@ -3,7 +3,7 @@
 import { ReleaseData } from '@/lib/github-release'
 import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase-pos'
-import { BarChart3, Cog, LogOut, Monitor, RotateCw, Settings, UtensilsCrossed } from 'lucide-react'
+import { BarChart3, Cog, LogOut, Monitor, RotateCw, Settings, User, UtensilsCrossed } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -244,7 +244,7 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
 
           <nav className="flex items-center gap-0.5 tablet:gap-1 bg-black/20 p-1 tablet:p-1.5 rounded-xl border border-white/5 overflow-x-auto flex-nowrap scrollbar-hide flex-1 min-w-0 mx-2 tablet:mx-4 tablet:max-w-none">
                <NavLink href="/curbos/stats" icon={<BarChart3 size={16} />} label="Stats" />
-               <NavLink href="/curbos/customers" icon={<Users size={16} />} label="Customers" />
+               <NavLink href="/curbos/customers" icon={<User size={16} />} label="Customers" />
                <NavLink href="/curbos/modifiers" icon={<Cog size={16} />} label="Modifiers" />
                <div className="hidden tablet:block w-px h-4 bg-white/10 mx-0.5 tablet:mx-1"></div>
                <NavLink href="/curbos/kitchen" icon={<UtensilsCrossed size={16} />} label="Kitchen" />
