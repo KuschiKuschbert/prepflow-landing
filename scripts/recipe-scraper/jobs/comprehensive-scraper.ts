@@ -3,22 +3,17 @@
  * Orchestrates comprehensive scraping across all sources with batch processing and progress tracking
  */
 
+import { logger } from '@/lib/logger';
 import * as fs from 'fs';
 import * as path from 'path';
+import { SOURCES, SourceType, STORAGE_PATH } from '../config';
 import { AllRecipesScraper } from '../scrapers/allrecipes-scraper';
 import { BBCGoodFoodScraper } from '../scrapers/bbc-good-food-scraper';
 import { FoodNetworkScraper } from '../scrapers/food-network-scraper';
 import { JSONStorage } from '../storage/json-storage';
-import { ProgressTracker, ScrapingProgress } from '../utils/progress-tracker';
-import { SOURCES, SourceType, STORAGE_PATH } from '../config';
+import { getRetryDelay, isRetryableError, shouldSkipPermanently } from '../utils/error-categorizer';
 import { scraperLogger } from '../utils/logger';
-import { logger } from '@/lib/logger';
-import {
-  isRetryableError,
-  shouldSkipPermanently,
-  getRetryDelay,
-  categorizeError,
-} from '../utils/error-categorizer';
+import { ProgressTracker, ScrapingProgress } from '../utils/progress-tracker';
 
 export interface JobStatus {
   isRunning: boolean;
@@ -364,7 +359,9 @@ export class ComprehensiveScraperJob {
       });
     }
 
-    scraperLogger.debug(`Added to retry queue: ${url} (attempt ${existingItem ? existingItem.retryCount : 0})`);
+    scraperLogger.debug(
+      `Added to retry queue: ${url} (attempt ${existingItem ? existingItem.retryCount : 0})`,
+    );
   }
 
   /**
@@ -448,7 +445,9 @@ export class ComprehensiveScraperJob {
       }
 
       try {
-        scraperLogger.debug(`Retrying ${item.url} (attempt ${item.retryCount + 1}/${MAX_RETRY_ATTEMPTS})`);
+        scraperLogger.debug(
+          `Retrying ${item.url} (attempt ${item.retryCount + 1}/${MAX_RETRY_ATTEMPTS})`,
+        );
 
         const result = await scraper.scrapeRecipe(item.url);
         if (result.success && result.recipe) {
@@ -616,7 +615,9 @@ export class ComprehensiveScraperJob {
    * Get stop flag file path
    */
   private getStopFlagPath(): string {
-    const storagePath = this.storage.getStoragePath ? this.storage.getStoragePath() : STORAGE_PATH;
+    const storagePath = (this.storage as any).getStoragePath
+      ? (this.storage as any).getStoragePath()
+      : STORAGE_PATH;
     return path.join(storagePath, '.stop-flag');
   }
 
@@ -638,7 +639,11 @@ export class ComprehensiveScraperJob {
   private createStopFlag(): void {
     try {
       const stopFlagPath = this.getStopFlagPath();
-      fs.writeFileSync(stopFlagPath, JSON.stringify({ stoppedAt: new Date().toISOString() }), 'utf-8');
+      fs.writeFileSync(
+        stopFlagPath,
+        JSON.stringify({ stoppedAt: new Date().toISOString() }),
+        'utf-8',
+      );
       scraperLogger.info('Stop flag file created');
     } catch (error) {
       scraperLogger.error('Failed to create stop flag file:', error);

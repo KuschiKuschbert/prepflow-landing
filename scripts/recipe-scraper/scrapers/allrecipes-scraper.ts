@@ -110,12 +110,13 @@ export class AllRecipesScraper extends BaseScraper {
           .trim() || '';
 
       // Try multiple selectors for instructions (AllRecipes uses various structures)
+      // Verified 2025-01-03: .mntl-sc-block-group--OL li is the current working selector
       let instructions: string[] = [];
       const instructionSelectors = [
+        '.mntl-sc-block-group--OL li', // Current AllRecipes structure (2025) - VERIFIED WORKING
         '.recipe-instructions li',
         '.directions--section__step',
         '[data-testid="recipe-instructions"] li',
-        '.mntl-sc-block-group--OL li',
         '.comp.recipe__steps-content ol li',
         '.recipe-instructions ol li',
         '.directions ol li',
