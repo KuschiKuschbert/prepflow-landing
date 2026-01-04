@@ -4,10 +4,10 @@
  */
 
 import * as cheerio from 'cheerio';
-import { BaseScraper } from './base-scraper';
-import { ScrapedRecipe, RecipeIngredient } from '../parsers/types';
+import { RecipeIngredient, ScrapedRecipe } from '../parsers/types';
 import { scraperLogger } from '../utils/logger';
 import { SitemapParser } from '../utils/sitemap-parser';
+import { BaseScraper } from './base-scraper';
 
 export class DelishScraper extends BaseScraper {
   constructor(config?: Partial<import('../parsers/types').ScraperConfig>) {
@@ -197,6 +197,15 @@ export class DelishScraper extends BaseScraper {
     }
     if (image.url) return image.url;
     return undefined;
+  }
+
+  /**
+   * Get recipe URLs to scrape (limited)
+   * Wrapper around getAllRecipeUrls for now
+   */
+  async getRecipeUrls(limit?: number): Promise<string[]> {
+    const urls = await this.getAllRecipeUrls();
+    return limit ? urls.slice(0, limit) : urls;
   }
 
   /**
