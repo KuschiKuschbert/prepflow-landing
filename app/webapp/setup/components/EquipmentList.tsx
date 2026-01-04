@@ -91,7 +91,7 @@ export function EquipmentList({
           )}
         </div>
       </div>
-      <div className="desktop:grid-cols-2 large-desktop:grid-cols-3 grid grid-cols-1 gap-4">
+      <div className="tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5 grid grid-cols-1 gap-4">
         {(showAll ? equipment : equipment.slice(0, 6)).map(eq => (
           <div
             key={eq.id}

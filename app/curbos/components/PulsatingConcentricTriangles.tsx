@@ -99,8 +99,12 @@ export default function PulsatingConcentricTriangles({
           return;
         }
 
-        // Clear the entire canvas first
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Calculate display dimensions (CSS pixel space, not buffer dimensions)
+        const displayWidth = window.innerWidth || 1920;
+        const displayHeight = window.innerHeight || 1080;
+
+        // Clear the entire canvas first (use CSS dimensions since context is scaled)
+        ctx.clearRect(0, 0, displayWidth, displayHeight);
 
         const { phase, speed } = waveRef.current;
         const { phase: rotationPhase, speed: rotationSpeed } = rotationRef.current;
@@ -108,8 +112,6 @@ export default function PulsatingConcentricTriangles({
         rotationRef.current.phase += rotationSpeed;
 
         // Position at 80% width, 45% height (matching PrepFlow)
-        const displayWidth = window.innerWidth || 1920;
-        const displayHeight = window.innerHeight || 1080;
         const triangleCenterX = displayWidth * 0.8;
         const triangleCenterY = displayHeight * 0.45;
         const numTriangles = 4;
@@ -177,5 +179,3 @@ export default function PulsatingConcentricTriangles({
     />
   );
 }
-
-

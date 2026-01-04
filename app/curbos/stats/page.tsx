@@ -76,7 +76,7 @@ export default function StatsPage() {
 
       <main className="max-w-7xl mx-auto px-4 tablet:px-6 py-8 tablet:py-12 space-y-6 tablet:space-y-8">
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4 gap-4 tablet:gap-6">
+        <div className="grid grid-cols-1 tablet:grid-cols-3 desktop:grid-cols-4 gap-4 tablet:gap-6">
             <MetricCard title="Total Revenue" value={`$${totalSales.toFixed(2)}`} icon={<DollarSign size={24} />} delay={0} />
             <MetricCard title="Total Orders" value={totalOrders.toString()} icon={<TrendingUp size={24} />} delay={1} />
             <MetricCard title="Today's Revenue" value={`$${todaySales.toFixed(2)}`} icon={<DollarSign size={24} />} highlight delay={2} />

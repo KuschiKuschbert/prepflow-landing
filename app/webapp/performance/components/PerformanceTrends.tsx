@@ -148,7 +148,7 @@ export default function PerformanceTrends({
       {/* Expandable content */}
       {isExpanded && (
         <div className="tablet:p-2 desktop:p-3 border-t border-[var(--border)] bg-[var(--muted)]/30 p-1.5">
-          <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-2">
+          <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-1 gap-2">
             {/* Profit Trend */}
             <div className="rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 p-2">
               <div className="mb-1 flex items-center justify-between">

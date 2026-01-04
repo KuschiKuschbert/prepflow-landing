@@ -24,3 +24,4 @@ BEGIN
     UPDATE ai_specials SET name = special_name WHERE name IS NULL;
   END IF;
 END $$;
+

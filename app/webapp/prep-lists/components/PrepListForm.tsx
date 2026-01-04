@@ -163,7 +163,7 @@ export function PrepListForm({
           <div className="space-y-3">
             {formData.items.map((item, index) => (
               <div key={index} className="rounded-xl bg-[var(--muted)]/30 p-4">
-                <div className="tablet:grid-cols-2 desktop:grid-cols-4 mb-3 grid grid-cols-1 gap-3">
+                <div className="tablet:grid-cols-3 desktop:grid-cols-4 mb-3 grid grid-cols-1 gap-3">
                   <div className="desktop:col-span-2">
                     <label className="mb-1 block text-xs text-[var(--foreground-muted)]">
                       {t('prepLists.ingredient', 'Ingredient')}

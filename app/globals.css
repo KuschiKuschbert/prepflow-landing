@@ -145,6 +145,25 @@
   );
 }
 
+/* Hover capability detection for device-appropriate UI */
+@media (hover: hover) and (pointer: fine) {
+  .hover-capable-show {
+    display: flex !important;
+  }
+  .hover-capable-hide {
+    display: none !important;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .hover-capable-show {
+    display: none !important;
+  }
+  .hover-capable-hide {
+    display: flex !important;
+  }
+}
+
 /* Landscape optimizations for mobile devices */
 @media (orientation: landscape) and (max-height: 600px) {
   :root {

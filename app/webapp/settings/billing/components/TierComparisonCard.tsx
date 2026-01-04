@@ -24,7 +24,7 @@ export function TierComparisonCard({ subscriptionData, onUpgrade }: TierComparis
         </p>
       </div>
 
-      <div className="desktop:grid-cols-3 grid grid-cols-1 gap-4">
+      <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-1 gap-4">
         {(['starter', 'pro', 'business'] as TierSlug[]).map(tier => {
           const isCurrentTier = subscriptionData?.subscription.tier === tier;
           const isUpgrade =

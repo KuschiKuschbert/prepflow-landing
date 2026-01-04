@@ -26,6 +26,50 @@ alwaysApply: true
   - `export async function GET(req, context: { params: Promise<{ id: string }> }) { const { id } = await context.params; }`
 - Prefer proxy over middleware per deprecation notice. Middleware is still present for prod allowlist, but should be migrated to proxy when feasible.
 
+## Canvas Rendering with Device Pixel Ratio (DPR)
+
+**MANDATORY:** When using HTML5 Canvas with DPR scaling, always use display dimensions (CSS pixel space) for `clearRect()`, not buffer dimensions.
+
+**The Problem:**
+After scaling the canvas context with `ctx.scale(dpr, dpr)`, the coordinate system is in CSS pixel space, but `canvas.width` and `canvas.height` are buffer dimensions (physical pixels). Using buffer dimensions for `clearRect()` after scaling causes incorrect clearing and visual artifacts (e.g., constantly drawing/disturbances).
+
+**The Solution:**
+Always calculate and use display dimensions (CSS pixel space) for `clearRect()` after scaling:
+
+```typescript
+// Set canvas size with DPR scaling
+const dpr = window.devicePixelRatio || 1;
+const width = window.innerWidth;
+const height = window.innerHeight;
+canvas.width = width * dpr;  // Buffer dimensions (physical pixels)
+canvas.height = height * dpr;
+canvas.style.width = `${width}px`;  // Display dimensions (CSS pixels)
+canvas.style.height = `${height}px`;
+ctx.scale(dpr, dpr);  // Scale context to CSS pixel space
+
+// In animation loop:
+// Calculate display dimensions (CSS pixel space, not buffer dimensions)
+const displayWidth = window.innerWidth || 1920;
+const displayHeight = window.innerHeight || 1080;
+
+// Clear the entire canvas first (use CSS dimensions since context is scaled)
+ctx.clearRect(0, 0, displayWidth, displayHeight);
+
+// Draw operations also use display dimensions
+const centerX = displayWidth * 0.8;
+const centerY = displayHeight * 0.45;
+```
+
+**Key Points:**
+- ✅ **DO:** Use `displayWidth` and `displayHeight` (from `window.innerWidth/innerHeight`) for `clearRect()` after scaling
+- ❌ **DON'T:** Use `canvas.width` and `canvas.height` for `clearRect()` after scaling - these are buffer dimensions
+- The context coordinate system matches display dimensions after `ctx.scale(dpr, dpr)`
+- All drawing operations should also use display dimensions
+
+**Examples:**
+- `app/curbos/components/PulsatingConcentricTriangles.tsx` - Fixed to use display dimensions
+- `app/components/landing/AnimatedBackground.tsx` - Fixed to use display dimensions
+
 ## Autosave & Drafts (Global)
 
 - Standardize IDs: Use `deriveAutosaveId(entityType, serverId?, keyFields)` for new entities to avoid `"new"` key churn.

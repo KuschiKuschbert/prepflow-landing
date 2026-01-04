@@ -173,7 +173,7 @@ export function AdaptiveNavSettingsPanel() {
               Select which navigation sections should be reordered based on your usage patterns.
               Items within selected sections will be reordered by time of day.
             </p>
-            <div className="desktop:grid-cols-3 grid grid-cols-2 gap-3">
+            <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-2 gap-3">
               {availableCategories.map(category => {
                 const isSelected = settings.selectedSections?.includes(category) || false;
                 return (

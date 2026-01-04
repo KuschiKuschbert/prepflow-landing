@@ -147,11 +147,24 @@ export const LANDING_LAYOUT = {
 
 /**
  * Grid layout presets
+ * Updated to use 3 columns at tablet (481px+) - modern industry standard (2024-2025)
+ *
+ * @deprecated '1-2-3' and '1-2-4' - Use '1-3-4' instead for 3 columns at tablet
  */
 export const LANDING_GRIDS = {
+  /** @deprecated Use '1-3-4' instead - 1 mobile, 2 tablet, 3 desktop */
   '1-2-3': 'grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3',
+  /** @deprecated Use '1-3-4' instead - 1 mobile, 2 tablet, 4 desktop */
   '1-2-4': 'grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4',
+  /** Standard pattern: 1 mobile, 3 tablet, 4 desktop */
+  '1-3-4': 'grid grid-cols-1 tablet:grid-cols-3 desktop:grid-cols-4',
+  /** Dense pattern: 1 mobile, 3 tablet, 4 desktop, 5 large desktop */
+  '1-3-4-5': 'grid grid-cols-1 tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5',
+  /** Wide pattern: 1 mobile, 2 tablet, 3 desktop (for larger card content) */
+  '1-2-3-wide': 'grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3',
+  /** Skip tablet: 1 mobile, 3 desktop */
   '1-3': 'grid grid-cols-1 desktop:grid-cols-3',
+  /** Skip tablet: 1 mobile, 4 desktop */
   '1-4': 'grid grid-cols-1 desktop:grid-cols-4',
 } as const;
 

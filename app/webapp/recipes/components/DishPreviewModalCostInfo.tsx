@@ -22,7 +22,7 @@ export function DishPreviewModalCostInfo({ costData }: DishPreviewModalCostInfoP
   return (
     <div className="mb-6 rounded-xl bg-[var(--muted)]/30 p-4">
       <h3 className="mb-4 text-lg font-semibold text-[var(--foreground)]">Cost Information</h3>
-      <div className="desktop:grid-cols-3 grid grid-cols-2 gap-4">
+      <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-2 gap-4">
         <div>
           <div className="text-xs text-[var(--foreground-muted)]">Recommended Price</div>
           <div className="text-lg font-semibold text-[var(--foreground)]">

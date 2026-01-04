@@ -119,7 +119,7 @@ export default function MenuList({
   }
 
   return (
-    <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid gap-4 overflow-visible">
+    <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid gap-4 overflow-visible">
       {menus.map(menu => {
         const isEditingThisMenu = editing.editingMenuId === menu.id;
         const isEditingTitle = isEditingThisMenu && editing.editingField === 'title';

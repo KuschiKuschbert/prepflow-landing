@@ -84,17 +84,45 @@ export class ProgressTracker {
 
   /**
    * Save progress for a source
+   * Uses atomic write (write to temp file then rename) to prevent corruption
+   * if process is killed mid-write
    */
   saveProgress(progress: ScrapingProgress): void {
     const filePath = this.getProgressFilePath(progress.source);
+    const tempFilePath = `${filePath}.tmp`;
     progress.lastUpdated = new Date().toISOString();
 
     try {
-      fs.writeFileSync(filePath, JSON.stringify(progress, null, 2), 'utf-8');
+      // Write to temporary file first (atomic write pattern)
+      const jsonContent = JSON.stringify(progress, null, 2);
+      fs.writeFileSync(tempFilePath, jsonContent, 'utf-8');
+
+      // Atomically rename temp file to final file (atomic on most filesystems)
+      // This ensures the file is either fully written or not present at all
+      fs.renameSync(tempFilePath, filePath);
+
       scraperLogger.debug(`Saved progress for ${progress.source}`);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       scraperLogger.error(`Failed to save progress for ${progress.source}:`, errorMessage);
+
+      // Clean up temp file if it exists
+      try {
+        if (fs.existsSync(tempFilePath)) {
+          fs.unlinkSync(tempFilePath);
+        }
+      } catch (cleanupError) {
+        // Ignore cleanup errors
+      }
+
+      // Try fallback: direct write (non-atomic, but better than nothing)
+      try {
+        const filePath = this.getProgressFilePath(progress.source);
+        fs.writeFileSync(filePath, JSON.stringify(progress, null, 2), 'utf-8');
+        scraperLogger.warn(`Saved progress for ${progress.source} using fallback method`);
+      } catch (fallbackError) {
+        scraperLogger.error(`Fallback save also failed for ${progress.source}:`, fallbackError);
+      }
     }
   }
 

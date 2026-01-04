@@ -114,7 +114,7 @@ export default function SystemHealthPage() {
       )}
 
       {/* Metrics Grid */}
-      <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-4">
+      <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-1 gap-4">
         {/* Database Status */}
         <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
           <div className="mb-4 flex items-center justify-between">

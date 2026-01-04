@@ -44,7 +44,7 @@ export function BudgetHeader({ shifts, employees, forecastRevenue }: BudgetHeade
         <Icon icon={DollarSign} size="lg" className="text-[var(--primary)]" aria-hidden={true} />
       </div>
 
-      <div className="tablet:grid-cols-2 desktop:grid-cols-4 grid grid-cols-1 gap-4">
+      <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-1 gap-4">
         {/* Total Shifts */}
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)]/30 p-4">
           <div className="mb-1 text-xs text-[var(--foreground-muted)]">Total Shifts</div>

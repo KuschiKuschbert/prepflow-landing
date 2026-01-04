@@ -79,7 +79,7 @@ export function MenuDisplayView({ menu, menuItems }: MenuDisplayViewProps) {
           </div>
 
           {/* Items Grid */}
-          <div className="desktop:grid-cols-2 large-desktop:grid-cols-3 grid grid-cols-1 gap-4">
+          <div className="tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5 grid grid-cols-1 gap-4">
             {items.map(item => {
               const isDish = !!item.dish_id;
               const itemName = isDish

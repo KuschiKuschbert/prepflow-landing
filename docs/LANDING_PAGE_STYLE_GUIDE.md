@@ -357,8 +357,8 @@ className = 'p-8 tablet:p-10 desktop:p-12';
 **Responsive Grid:**
 
 ```tsx
-// 1 column mobile, 2 tablet, 4 desktop
-<div className="grid grid-cols-1 gap-12 tablet:grid-cols-2 desktop:grid-cols-4">
+// 1 column mobile, 3 tablet, 4 desktop (modern standard)
+<div className="grid grid-cols-1 gap-12 tablet:grid-cols-3 desktop:grid-cols-4">
   {items.map(item => (
     <ItemCard key={item.id} item={item} />
   ))}
@@ -368,14 +368,29 @@ className = 'p-8 tablet:p-10 desktop:p-12';
 **Common Grid Patterns:**
 
 ```tsx
-// 2 columns tablet+
-grid-cols-1 tablet:grid-cols-2
-
-// 3 columns desktop+
-grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3
+// 3 columns tablet+ (modern standard for card grids)
+grid-cols-1 tablet:grid-cols-3
 
 // 4 columns desktop+
-grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4
+grid-cols-1 tablet:grid-cols-3 desktop:grid-cols-4
+
+// 5 columns large desktop+
+grid-cols-1 tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5
+
+// Forms: 2 columns tablet+ (wider inputs)
+grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-2 large-desktop:grid-cols-3
+```
+
+**Using Reusable Grid Utilities:**
+
+```tsx
+// Fixed-column patterns (recommended for consistent layouts)
+import { FIXED_GRID_PATTERNS, ENHANCED_GAP_CLASSES } from '@/lib/large-screen-utils';
+<div className={`${FIXED_GRID_PATTERNS.cards} ${ENHANCED_GAP_CLASSES.md}`}>
+
+// Landing page grids
+import { LANDING_GRIDS } from '@/lib/landing-styles';
+<div className={LANDING_GRIDS['1-3-4']}> // 1 mobile, 3 tablet, 4 desktop
 ```
 
 ### Spacing
@@ -783,7 +798,7 @@ Is this a landing/marketing page?
       <h2 className="text-fluid-4xl tablet:text-fluid-5xl font-light text-white">Features</h2>
     </ScrollReveal>
 
-    <div className="grid grid-cols-1 gap-8 tablet:grid-cols-2 desktop:grid-cols-3">
+    <div className="grid grid-cols-1 gap-8 tablet:grid-cols-3 desktop:grid-cols-4">
       {features.map((feature, index) => (
         <ScrollReveal key={feature.id} variant="fade-up" delay={index * 0.1}>
           <GlowCard glowColor={feature.color} className="p-8">

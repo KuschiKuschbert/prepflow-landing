@@ -160,7 +160,7 @@ export default function AdminDashboard() {
 
       {/* Stats Grid */}
       {loading ? (
-        <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-4">
+        <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-1 gap-4">
           {[1, 2, 3, 4, 5].map(i => (
             <div
               key={i}
@@ -172,7 +172,7 @@ export default function AdminDashboard() {
           ))}
         </div>
       ) : (
-        <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-4">
+        <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-1 gap-4">
           {statCards.map(card => (
             <Link
               key={card.title}
@@ -248,7 +248,7 @@ export default function AdminDashboard() {
       {/* Quick Actions */}
       <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
         <h2 className="mb-4 text-xl font-bold text-white">Quick Actions</h2>
-        <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-3">
+        <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-1 gap-3">
           <Link
             href="/admin/users"
             className="rounded-lg bg-[#2a2a2a] p-4 transition-colors hover:bg-[#2a2a2a]/80"

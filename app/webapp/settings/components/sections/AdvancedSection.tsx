@@ -53,7 +53,7 @@ export function AdvancedSection() {
         <p className="mb-4 text-sm text-[var(--foreground-subtle)]">
           Your all-time stats across all sessions. Just for fun! 🎮
         </p>
-        <div className="desktop:grid-cols-3 desktop:gap-4 grid grid-cols-2 gap-3">
+        <div className="tablet:grid-cols-3 desktop:grid-cols-4 desktop:gap-4 grid grid-cols-2 gap-3">
           <div className="rounded-xl border border-[var(--border)]/50 bg-[var(--muted)]/20 p-4">
             <div className="mb-1 text-2xl">🍅</div>
             <div className="mb-1 text-xs text-[var(--foreground-subtle)]">Tomatoes Thrown</div>

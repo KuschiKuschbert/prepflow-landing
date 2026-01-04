@@ -92,7 +92,7 @@ export function PersonalitySettingsPanel() {
                 {progress.unlocked} / {progress.total} ({progress.percentage}%)
               </span>
             </div>
-            <div className="desktop:grid-cols-3 grid grid-cols-2 gap-2">
+            <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-2 gap-2">
               {getAllAchievements().map(achievement => {
                 const unlocked = achievements.find(a => a.id === achievement.id);
                 return (

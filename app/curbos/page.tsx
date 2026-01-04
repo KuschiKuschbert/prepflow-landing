@@ -4,6 +4,7 @@ import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase-pos'
 import { Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useConfirm } from '@/hooks/useConfirm'
 import MenuItemCard from './components/MenuItemCard'
 
 // Define types locally for simplicity
@@ -22,6 +23,7 @@ export default function CurbOSAdmin() {
   const [isLoading, setIsLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
+  const { showConfirm, ConfirmDialog } = useConfirm()
 
   // Form State
   const [name, setName] = useState('')
@@ -31,15 +33,16 @@ export default function CurbOSAdmin() {
   async function fetchItems() {
     setIsLoading(true)
     try {
-      const { data, error } = await supabase
+      const { data: menuItems, error } = await supabase
         .from('pos_menu_items')
         .select('*')
+        .is('deleted_at', null)
         .order('name')
 
       if (error) {
         logger.error('Error fetching menu:', { error: error.message, context: { endpoint: '/curbos' } })
       } else {
-        setItems(data || [])
+        setItems(menuItems || [])
       }
     } catch (err) {
       logger.error('Unexpected error fetching menu:', { error: err instanceof Error ? err.message : String(err), context: { endpoint: '/curbos' } })
@@ -76,8 +79,23 @@ export default function CurbOSAdmin() {
   }
 
   async function deleteItem(id: string) {
-    if (!confirm('Are you sure?')) return
-    const { error } = await supabase.from('pos_menu_items').delete().eq('id', id)
+    const item = items.find(i => i.id === id)
+    const itemName = item?.name || 'this item'
+
+    const confirmed = await showConfirm({
+      title: 'Delete Menu Item?',
+      message: `Delete "${itemName}"? This action can't be undone. Last chance to back out.`,
+      variant: 'danger',
+      confirmLabel: 'Delete',
+      cancelLabel: 'Cancel',
+    })
+
+    if (!confirmed) return
+
+    const { error } = await supabase
+        .from('pos_menu_items')
+        .update({ deleted_at: new Date().toISOString() })
+        .eq('id', id)
     if (!error) fetchItems()
   }
 
@@ -120,13 +138,13 @@ export default function CurbOSAdmin() {
         </div>
 
         {isLoading ? (
-            <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 gap-4 tablet:gap-6 animate-pulse">
+            <div className="grid grid-cols-1 tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5 gap-4 tablet:gap-6 animate-pulse">
                 {[1,2,3,4].map(i => (
                     <div key={i} className="bg-neutral-800 h-80 rounded-xl"></div>
                 ))}
             </div>
         ) : (
-            <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 gap-4 tablet:gap-6">
+            <div className="grid grid-cols-1 tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5 gap-4 tablet:gap-6">
                 {items.map(item => (
                     <MenuItemCard
                         key={item.id}
@@ -205,6 +223,8 @@ export default function CurbOSAdmin() {
             </div>
         </div>
       )}
+
+      <ConfirmDialog />
     </div>
   )
 }

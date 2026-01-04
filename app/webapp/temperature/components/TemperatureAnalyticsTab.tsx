@@ -155,7 +155,7 @@ export default function TemperatureAnalyticsTab({
         </div>
 
         {/* Equipment Cards Skeleton */}
-        <div className="tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 grid grid-cols-1 gap-3 xl:grid-cols-6">
+        <div className="tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5 grid grid-cols-1 gap-3 xl:grid-cols-6">
           <LoadingSkeleton variant="card" count={6} height="80px" />
         </div>
       </div>
@@ -181,12 +181,12 @@ export default function TemperatureAnalyticsTab({
           equipment.length <= 2
             ? 'tablet:grid-cols-2 grid-cols-1'
             : equipment.length <= 4
-              ? 'tablet:grid-cols-2 desktop:grid-cols-4 grid-cols-1'
+              ? 'tablet:grid-cols-3 desktop:grid-cols-4 grid-cols-1'
               : equipment.length <= 6
-                ? 'tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-6 grid-cols-1'
+                ? 'tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-6 grid-cols-1'
                 : equipment.length <= 12
-                  ? 'tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 grid-cols-1 xl:grid-cols-6'
-                  : 'tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 grid-cols-1 xl:grid-cols-5 2xl:grid-cols-6'
+                  ? 'tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5 grid-cols-1 xl:grid-cols-6'
+                  : 'tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5 grid-cols-1 xl:grid-cols-5 2xl:grid-cols-6'
         }`}
       >
         {isLoaded ? (

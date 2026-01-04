@@ -38,17 +38,44 @@ export const READING_WIDTH_CLASSES = {
 /**
  * CSS Grid auto-fit template column classes
  * Uses repeat(auto-fit, minmax()) for truly responsive layouts
+ * Updated to support 3 columns at tablet (481px+) - modern industry standard (2024-2025)
  */
 export const AUTO_FIT_GRID_CLASSES = {
-  // Cards: min 280px mobile, 300px tablet, 320px desktop
+  // Cards: min 280px mobile, ~320px tablet (3 cols), ~300px desktop (4 cols)
   cards:
-    '[grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] desktop:[grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]',
-  // Feature cards: min 300px mobile, 320px tablet, 340px desktop
+    '[grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] tablet:[grid-template-columns:repeat(auto-fit,minmax(320px,1fr))] desktop:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]',
+  // Feature cards: min 300px mobile, ~320px tablet (3 cols), ~340px desktop (3-4 cols)
   features:
     '[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] tablet:[grid-template-columns:repeat(auto-fit,minmax(320px,1fr))] desktop:[grid-template-columns:repeat(auto-fit,minmax(340px,1fr))]',
-  // Stats/metrics: min 200px mobile, 220px tablet, 240px desktop
+  // Stats/metrics: min 200px mobile, ~220px tablet (3 cols), ~240px desktop (4 cols)
   stats:
     '[grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] tablet:[grid-template-columns:repeat(auto-fit,minmax(220px,1fr))] desktop:[grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]',
+} as const;
+
+/**
+ * Fixed-column grid patterns for consistent layouts
+ * Based on modern industry standards (2024-2025)
+ * Standard pattern: 1 column mobile, 3 columns tablet (481px+), 4 columns desktop (1025px+)
+ *
+ * Usage:
+ * import { FIXED_GRID_PATTERNS, ENHANCED_GAP_CLASSES } from '@/lib/large-screen-utils';
+ * <div className={`${FIXED_GRID_PATTERNS.cards} ${ENHANCED_GAP_CLASSES.md}`}>
+ */
+export const FIXED_GRID_PATTERNS = {
+  // Standard card grid: 1 mobile, 3 tablet, 4 desktop
+  cards: 'grid grid-cols-1 tablet:grid-cols-3 desktop:grid-cols-4',
+
+  // Dense cards: 1 mobile, 3 tablet, 4 desktop, 5 large desktop
+  cardsDense: 'grid grid-cols-1 tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5',
+
+  // Wide cards: 1 mobile, 2 tablet, 3 desktop (for larger card content)
+  cardsWide: 'grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3',
+
+  // Stats/metrics: 1 mobile, 3 tablet, 4 desktop
+  stats: 'grid grid-cols-1 tablet:grid-cols-3 desktop:grid-cols-4',
+
+  // Forms: 1 mobile, 2 tablet, 2-3 desktop (wider inputs)
+  forms: 'grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-2 large-desktop:grid-cols-3',
 } as const;
 
 /**
@@ -133,4 +160,21 @@ export function getCardMaxWidthClass(
   type: keyof typeof CARD_MAX_WIDTH_CLASSES = 'standard',
 ): string {
   return CARD_MAX_WIDTH_CLASSES[type];
+}
+
+/**
+ * Get fixed-column grid pattern based on content type
+ * Based on modern industry standards (2024-2025): 3 columns at tablet (481px+)
+ *
+ * @param {keyof typeof FIXED_GRID_PATTERNS} type - Grid pattern type
+ * @returns {string} Tailwind classes for fixed-column grid
+ *
+ * @example
+ * ```typescript
+ * import { getFixedGridPattern, getEnhancedGapClass } from '@/lib/large-screen-utils';
+ * <div className={`${getFixedGridPattern('cards')} ${getEnhancedGapClass('md')}`}>
+ * ```
+ */
+export function getFixedGridPattern(type: keyof typeof FIXED_GRID_PATTERNS = 'cards'): string {
+  return FIXED_GRID_PATTERNS[type];
 }

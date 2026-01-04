@@ -22,7 +22,7 @@ export default function MenuStatisticsPanel({ statistics }: MenuStatisticsPanelP
   };
 
   return (
-    <div className="tablet:grid-cols-3 desktop:grid-cols-3 mb-4 grid grid-cols-1 gap-3">
+    <div className="tablet:grid-cols-3 desktop:grid-cols-4 mb-4 grid grid-cols-1 gap-3">
       {/* Total Items */}
       <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-3 shadow-lg transition-all duration-200 hover:shadow-xl">
         <div className="flex items-center justify-between">

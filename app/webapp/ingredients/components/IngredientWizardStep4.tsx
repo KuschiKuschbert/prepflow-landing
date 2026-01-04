@@ -173,7 +173,7 @@ export default function IngredientWizardStep4({
       {/* Allergen Checkboxes - Only show when manual edit is enabled */}
       {showManualEdit && (
         <div className="space-y-4">
-          <div className="tablet:grid-cols-2 large-desktop:grid-cols-3 grid grid-cols-1 gap-2">
+          <div className="tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5 grid grid-cols-1 gap-2">
             {AUSTRALIAN_FSANZ_ALLERGENS.map(allergen => {
               const isSelected = selectedAllergens.includes(allergen.code);
 

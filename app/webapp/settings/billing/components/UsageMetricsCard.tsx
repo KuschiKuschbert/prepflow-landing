@@ -20,7 +20,7 @@ export function UsageMetricsCard({ subscriptionData }: UsageMetricsCardProps) {
         </p>
       </div>
 
-      <div className="desktop:grid-cols-3 grid grid-cols-1 gap-4">
+      <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-1 gap-4">
         <div className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/20 p-4">
           <div className="flex items-center gap-2">
             <Icon icon={Package} size="md" className="text-[var(--primary)]" aria-hidden={true} />

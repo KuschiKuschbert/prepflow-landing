@@ -170,7 +170,7 @@ export function BillingSection() {
               <p className="mt-1 text-sm text-[var(--foreground)]/80">Your current data usage</p>
             </div>
 
-            <div className="desktop:grid-cols-3 grid grid-cols-1 gap-4">
+            <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-1 gap-4">
               <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
                 <div className="flex items-center gap-2">
                   <Icon

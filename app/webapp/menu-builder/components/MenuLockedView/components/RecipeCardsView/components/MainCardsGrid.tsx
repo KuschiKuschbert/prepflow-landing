@@ -21,7 +21,7 @@ export function MainCardsGrid({ cards, expandedCardId, onCardClick }: MainCardsG
   return (
     <div>
       <h3 className="mb-3 text-lg font-semibold text-[var(--primary)]">Main Recipe Cards</h3>
-      <div className="tablet:grid-cols-2 desktop:grid-cols-4 large-desktop:grid-cols-5 grid grid-cols-1 gap-4 transition-all duration-300 ease-in-out">
+      <div className="tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5 grid grid-cols-1 gap-4 transition-all duration-300 ease-in-out">
         {cards.map(card => (
           <RecipeCard
             key={card.id}

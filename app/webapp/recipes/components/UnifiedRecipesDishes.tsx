@@ -87,7 +87,7 @@ export default function UnifiedRecipesDishes() {
               </div>
 
               {/* Items Grid */}
-              <div className="tablet:grid-cols-2 large-desktop:grid-cols-3 grid grid-cols-1 gap-4">
+              <div className="tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5 grid grid-cols-1 gap-4">
                 {categoryItems.map(item => (
                   <div
                     key={`${item.type}-${item.id}`}

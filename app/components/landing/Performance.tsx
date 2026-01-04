@@ -123,7 +123,7 @@ function Performance() {
         </ScrollReveal>
 
         {/* Metrics Grid - MacBook Pro Style */}
-        <div className="tablet:grid-cols-2 desktop:grid-cols-4 grid gap-12">
+        <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid gap-12">
           {metrics.map((metric, index) => (
             <ScrollReveal key={metric.label} variant="fade-up" delay={index * 0.1}>
               <GlowCard glowColor={getGlowColor(metric.color)} className="p-10 text-center">

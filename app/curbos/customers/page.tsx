@@ -52,7 +52,7 @@ export default async function CustomerDirectory() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 tablet:grid-cols-3 desktop:grid-cols-4 gap-6">
           {customers.map((customer) => (
             <div
               key={customer.id}

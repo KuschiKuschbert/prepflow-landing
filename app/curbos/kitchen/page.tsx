@@ -162,7 +162,7 @@ export default function KitchenKDS() {
                     <p className="text-xl font-medium tracking-wide">NO ACTIVE ORDERS</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 gap-4 tablet:gap-6">
+                <div className="grid grid-cols-1 tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5 gap-4 tablet:gap-6">
                     {orders.map((order) => {
                         const items = parseItems(order.items_json)
                         const timerColor = getTimerColor(order.timestamp)

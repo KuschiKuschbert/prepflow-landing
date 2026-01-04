@@ -5,7 +5,11 @@ import { useUserProfile } from '@/hooks/useUserProfile';
 import { ReleaseData } from '@/lib/github-release';
 import { logger } from '@/lib/logger';
 import { supabase } from '@/lib/supabase-pos';
-import { Copy, Download, ExternalLink, Info, RefreshCw } from 'lucide-react';
+import { useConfirm } from '@/hooks/useConfirm';
+import { useNotification } from '@/contexts/NotificationContext';
+import { seedInitialData } from '../seed-actions';
+import { useRouter } from 'next/navigation';
+import { Copy, Download, ExternalLink, Info, RefreshCw, RotateCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface SettingsClientProps {
@@ -20,6 +24,10 @@ export default function SettingsClient({ releaseData }: SettingsClientProps) {
   const [publicUrl, setPublicUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [posUserEmail, setPosUserEmail] = useState<string | null>(null);
+  const [seeding, setSeeding] = useState(false);
+  const { showConfirm, ConfirmDialog } = useConfirm();
+  const { showSuccess, showError } = useNotification();
+  const router = useRouter();
 
   // PrepFlow Admin Bypass
   const { isAdmin } = useIsAdmin();
@@ -107,6 +115,30 @@ export default function SettingsClient({ releaseData }: SettingsClientProps) {
     if (publicUrl) {
       navigator.clipboard.writeText(publicUrl);
       alert('Link copied to clipboard!');
+    }
+  }
+
+  async function handleRestoreDefaults() {
+    const confirmed = await showConfirm({
+      title: 'Restore Default Data?',
+      message: 'This will add default menu items and modifiers to your database. Only missing items will be added - existing data will not be deleted or modified. Continue?',
+      variant: 'info',
+      confirmLabel: 'Restore Defaults',
+      cancelLabel: 'Cancel',
+    });
+
+    if (!confirmed) return;
+
+    setSeeding(true);
+    try {
+      await seedInitialData();
+      showSuccess('Default data restored successfully!');
+      router.refresh();
+    } catch (error) {
+      logger.error('[CurbOS Settings] Error restoring defaults:', error);
+      showError('Failed to restore default data. Please try again.');
+    } finally {
+      setSeeding(false);
     }
   }
 
@@ -252,6 +284,28 @@ export default function SettingsClient({ releaseData }: SettingsClientProps) {
               Note: You may need to enable "Install unknown apps" permission on your Android device.
           </p>
       </div>
+
+      <div className="bg-neutral-900 rounded-2xl p-6 tablet:p-8 border border-neutral-800 mt-8">
+        <div className="flex justify-between items-start mb-4">
+          <h3 className="text-xl font-bold text-white">Data Management</h3>
+        </div>
+        <p className="text-gray-400 mb-6 text-sm tablet:text-base">
+          Restore default menu items and modifiers. This action only adds missing items - it will never delete or modify existing data. Useful for setting up a new CurbOS instance or adding demo data.
+        </p>
+        <button
+          onClick={handleRestoreDefaults}
+          disabled={seeding}
+          className="flex items-center gap-2 px-6 py-3 bg-[#C0FF02] text-black font-bold rounded-lg hover:bg-[#b0eb02] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          <RotateCw size={16} className={seeding ? 'animate-spin' : ''} />
+          {seeding ? 'Restoring...' : 'Restore Defaults'}
+        </button>
+        <p className="text-xs text-gray-500 mt-4">
+          Default items include: Al Pastor Elysium, Carne Asada Supreme, Baja Fish Nirvana, and more. Default modifiers include: Extra Cheese, Guacamole, Salsa Verde, and No Onions.
+        </p>
+      </div>
+
+      <ConfirmDialog />
     </div>
   );
 }

@@ -77,17 +77,15 @@ export default function AnimatedBackground({ className = '' }: AnimatedBackgroun
 
         // Canvas is transparent - GradientOrbs component handles gradient effects
         // This canvas focuses on animated wave rings (like Apple's audio waves)
-        // Clear the entire canvas first
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        const { phase, speed } = waveRef.current;
-        waveRef.current.phase += speed;
-
-        // Draw subtle concentric wave rings (like Apple's audio waves)
-        // Positioned on the right side to complement the content
         // Context is already scaled by DPR, so use display dimensions
         const displayWidth = window.innerWidth || 1920;
         const displayHeight = window.innerHeight || 1080;
+
+        // Clear the entire canvas first (use CSS dimensions since context is scaled)
+        ctx.clearRect(0, 0, displayWidth, displayHeight);
+
+        const { phase, speed } = waveRef.current;
+        waveRef.current.phase += speed;
         const waveCenterX = displayWidth * 0.8;
         const waveCenterY = displayHeight * 0.45;
         const numRings = 4;

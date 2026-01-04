@@ -78,7 +78,7 @@ export default function PerformanceInsights({
   const getGridColsClass = () => {
     // Responsive grid: 1 col mobile, 2 cols tablet, 4 cols desktop
     // This prevents layout shifts when insights change
-    return 'tablet:grid-cols-2 desktop:grid-cols-4';
+    return 'tablet:grid-cols-3 desktop:grid-cols-4';
   };
 
   return (

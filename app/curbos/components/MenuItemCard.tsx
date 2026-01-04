@@ -1,7 +1,9 @@
 'use client'
 
-import { Edit, Flame, GlassWater, IceCream2, MoreVertical, Shirt, Trash2, UtensilsCrossed, X } from 'lucide-react'
-import { useState } from 'react'
+import type { Action } from '@/components/ui/ResponsiveCardActions'
+import { ResponsiveCardActionsMenu } from '@/components/ui/ResponsiveCardActionsMenu'
+import { ResponsiveCardActionsOverlay } from '@/components/ui/ResponsiveCardActionsOverlay'
+import { Edit, Flame, GlassWater, IceCream2, Shirt, Trash2, UtensilsCrossed } from 'lucide-react'
 
 interface MenuItemCardProps {
   item: any
@@ -21,80 +23,41 @@ function getIconForCategory(category: string) {
 }
 
 export default function MenuItemCard({ item, onEdit, onDelete }: MenuItemCardProps) {
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const actions: Action[] = [
+    {
+      id: 'edit',
+      label: 'Edit Item',
+      icon: Edit,
+      onClick: onEdit,
+      variant: 'primary',
+    },
+    {
+      id: 'delete',
+      label: 'Delete Item',
+      icon: Trash2,
+      onClick: onDelete,
+      variant: 'danger',
+    },
+  ];
 
   return (
-    <div
-        className="group relative bg-neutral-900/50 backdrop-blur-xl border border-white/5 rounded-3xl overflow-hidden hover:border-[#C0FF02]/30 transition-all duration-300 hover:shadow-[0_0_40px_rgba(192,255,2,0.15)] hover:-translate-y-1"
-        onClick={() => {
-            // Close menu if clicking elsewhere on the card
-            if (showMobileMenu) setShowMobileMenu(false);
-        }}
-    >
+    <div className="group relative bg-neutral-900/50 backdrop-blur-xl border border-white/5 rounded-3xl overflow-hidden hover:border-[#C0FF02]/30 transition-all duration-300 hover:shadow-[0_0_40px_rgba(192,255,2,0.15)] hover:-translate-y-1">
       {/* Image / Icon Area */}
       <div className="h-48 bg-gradient-to-br from-white/5 to-transparent flex items-center justify-center relative overflow-hidden group-hover:bg-white/10 transition-colors duration-500">
         {item.imageUrl ? (
-            <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" />
+          <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" />
         ) : (
-            <div className="transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-500 drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-                {getIconForCategory(item.category)}
-            </div>
+          <div className="transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-500 drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+            {getIconForCategory(item.category)}
+          </div>
         )}
 
-        {/* --- DESKTOP: HOVER OVERLAY --- */}
-        <div className="hidden tablet:flex absolute inset-0 bg-black/40 backdrop-blur-[2px] items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0 z-20">
-            <button
-                onClick={(e) => { e.stopPropagation(); onEdit(); }}
-                className="p-3 bg-[#C0FF02] text-black rounded-full hover:scale-110 hover:bg-white transition-all shadow-lg"
-                title="Edit Item"
-            >
-                <Edit size={18} strokeWidth={2.5} />
-            </button>
-            <button
-                onClick={(e) => { e.stopPropagation(); onDelete(); }}
-                className="p-3 bg-red-500/20 text-red-500 border border-red-500/50 rounded-full hover:bg-red-500 hover:text-white hover:scale-110 transition-all shadow-lg backdrop-blur-sm"
-                title="Delete Item"
-            >
-                <Trash2 size={18} strokeWidth={2.5} />
-            </button>
-        </div>
-
-        {/* --- MOBILE: MEATBALL MENU --- */}
-        <div className="tablet:hidden absolute top-3 right-3 z-30 flex flex-row-reverse items-center">
-            {/* The Toggle Button */}
-            {!showMobileMenu ? (
-                <button
-                    onClick={(e) => { e.stopPropagation(); setShowMobileMenu(true); }}
-                    className="p-2 bg-black/40 text-white rounded-full backdrop-blur-md border border-white/10 shadow-lg active:scale-90 transition-all"
-                >
-                    <MoreVertical size={20} />
-                </button>
-            ) : (
-                /* The Expanded Menu */
-                <div className="flex items-center gap-2 p-1.5 bg-neutral-900/90 backdrop-blur-xl border border-white/10 rounded-full shadow-2xl animate-in fade-in slide-in-from-right-4 duration-200">
-                    <button
-                        onClick={(e) => { e.stopPropagation(); onEdit(); setShowMobileMenu(false); }}
-                        className="p-2 bg-[#C0FF02] text-black rounded-full active:scale-95 transition-transform"
-                    >
-                        <Edit size={16} strokeWidth={2.5} />
-                    </button>
-                    <button
-                        onClick={(e) => { e.stopPropagation(); onDelete(); setShowMobileMenu(false); }}
-                        className="p-2 bg-red-500/20 text-red-500 border border-red-500/50 rounded-full active:scale-95 transition-transform"
-                    >
-                        <Trash2 size={16} strokeWidth={2.5} />
-                    </button>
-                    <div className="w-px h-4 bg-white/10 mx-0.5" />
-                    <button
-                        onClick={(e) => { e.stopPropagation(); setShowMobileMenu(false); }}
-                        className="p-1 px-1.5 text-neutral-400 hover:text-white"
-                    >
-                        <X size={16} />
-                    </button>
-                </div>
-            )}
-        </div>
+        {/* Desktop: Hover Overlay (inside image area for correct positioning) */}
+        <ResponsiveCardActionsOverlay actions={actions} theme="curbos" />
       </div>
+
+      {/* Mobile: Meatball Menu (at card level) */}
+      <ResponsiveCardActionsMenu actions={actions} theme="curbos" position="top-right" />
 
       {/* Content */}
       <div className="p-6">

@@ -158,7 +158,7 @@ export default function SupportToolsPage() {
         </div>
 
         {/* Tools Grid */}
-        <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-4">
+        <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-1 gap-4">
           {tools.map(tool => (
             <button
               key={tool.title}

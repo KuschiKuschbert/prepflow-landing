@@ -2,9 +2,11 @@
 
 import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase-pos'
-import { ArrowLeft, CheckCircle, Plus, Trash2, XCircle } from 'lucide-react'
+import { ArrowLeft, CheckCircle, Plus, XCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { useConfirm } from '@/hooks/useConfirm'
+import ModifierCard from '../components/ModifierCard'
 
 interface ModifierOption {
   id: string
@@ -20,6 +22,7 @@ export default function ModifiersPage() {
   const [loading, setLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
+  const { showConfirm, ConfirmDialog } = useConfirm()
 
   // Form
   const [name, setName] = useState('')
@@ -36,6 +39,7 @@ export default function ModifiersPage() {
       const { data, error } = await supabase
         .from('pos_modifier_options')
         .select('*')
+        .is('deleted_at', null)
         .order('name')
 
       if (error) {
@@ -51,9 +55,24 @@ export default function ModifiersPage() {
   }
 
   async function handleDelete(id: string) {
-    if (!confirm('Are you sure?')) return
+    const modifier = modifiers.find(m => m.id === id)
+    const modifierName = modifier?.name || 'this modifier'
+
+    const confirmed = await showConfirm({
+      title: 'Delete Modifier?',
+      message: `Delete "${modifierName}"? This action can't be undone. Last chance to back out.`,
+      variant: 'danger',
+      confirmLabel: 'Delete',
+      cancelLabel: 'Cancel',
+    })
+
+    if (!confirmed) return
+
     try {
-      const { error } = await supabase.from('pos_modifier_options').delete().eq('id', id)
+      const { error } = await supabase
+        .from('pos_modifier_options')
+        .update({ deleted_at: new Date().toISOString() })
+        .eq('id', id)
       if (error) {
         logger.error('Error deleting modifier:', { error: error.message, context: { endpoint: '/curbos/modifiers', modifierId: id } })
       } else {
@@ -145,27 +164,14 @@ export default function ModifiersPage() {
              </div>
         ) : (
              <div className="grid gap-4">
-                {modifiers.map(item => {
-                    const price = item.price_delta ?? 0
-                    return (
-                        <div key={item.id} className="bg-neutral-800 p-4 rounded-xl flex justify-between items-center border border-neutral-700 hover:border-[#C0FF02] transition-colors group">
-                            <div className="flex items-center gap-4">
-                                <div className={`p-2 rounded-lg ${item.type === 'ADDON' ? 'bg-lime-900/30 text-[#C0FF02]' : 'bg-red-900/30 text-red-400'}`}>
-                                    {item.type === 'ADDON' ? <Plus size={20} /> : <Trash2 size={20} />}
-                                </div>
-                                <div>
-                                    <h3 className="font-bold text-lg text-white group-hover:text-[#C0FF02]">{item.name}</h3>
-                                    <p className="text-neutral-400 text-sm">{item.type} • {price >= 0 ? '+' : ''}${price.toFixed(2)}</p>
-                                </div>
-                            </div>
-
-                            <div className="flex gap-2">
-                                <button onClick={() => openModal(item)} className="px-4 py-2 bg-neutral-700 hover:bg-neutral-600 rounded-lg text-sm font-bold transition-colors">EDIT</button>
-                                <button onClick={() => handleDelete(item.id)} className="p-2 bg-red-900/20 hover:bg-red-900/50 text-red-400 rounded-lg transition-colors"><Trash2 size={18} /></button>
-                            </div>
-                        </div>
-                    )
-                })}
+                {modifiers.map(item => (
+                    <ModifierCard
+                        key={item.id}
+                        item={item}
+                        onEdit={() => openModal(item)}
+                        onDelete={() => handleDelete(item.id)}
+                    />
+                ))}
              </div>
         )}
       </main>
@@ -204,6 +210,8 @@ export default function ModifiersPage() {
             </div>
         </div>
       )}
+
+      <ConfirmDialog />
     </div>
   )
 }

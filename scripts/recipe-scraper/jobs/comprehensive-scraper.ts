@@ -130,6 +130,23 @@ export class ComprehensiveScraperJob {
       });
       scraperLogger.error('Error during comprehensive scraping:', error);
     } finally {
+      // CRITICAL: Save progress for all active sources before finishing
+      // This ensures progress is saved even if there's an unexpected error or stop
+      scraperLogger.info('Saving final progress for all sources...');
+      for (const source of Array.from(this.activeSources)) {
+        try {
+          const progress = this.progressTracker.loadProgress(source);
+          if (progress) {
+            this.progressTracker.saveProgress(progress);
+            scraperLogger.debug(`✅ Saved final progress for ${source}`);
+          }
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          scraperLogger.error(`Failed to save final progress for ${source}:`, errorMessage);
+          // Continue with other sources even if one fails
+        }
+      }
+
       // Retry any remaining failed URLs across all sources before finishing
       // But only if not stopped
       if (this.isRunning && !this.checkStopFlag()) {
@@ -153,9 +170,28 @@ export class ComprehensiveScraperJob {
         await Promise.all(retryPromises);
       }
 
+      // Final save after retries (in case retries updated progress)
+      scraperLogger.info('Saving final progress after retries...');
+      for (const source of Array.from(this.activeSources)) {
+        try {
+          const progress = this.progressTracker.loadProgress(source);
+          if (progress) {
+            this.progressTracker.saveProgress(progress);
+            scraperLogger.debug(`✅ Saved final progress after retries for ${source}`);
+          }
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          scraperLogger.error(
+            `Failed to save final progress after retries for ${source}:`,
+            errorMessage,
+          );
+        }
+      }
+
       this.isRunning = false;
       this.activeSources.clear();
       this.removeStopFlag(); // Clean up stop flag when done
+      scraperLogger.info('✅ Comprehensive scraping job finished - all progress saved');
     }
   }
 
@@ -479,21 +515,61 @@ export class ComprehensiveScraperJob {
 
       // Process batch with concurrency limit (3-5 recipes simultaneously per source)
       // This dramatically improves speed while respecting rate limits
-      await this.processBatchWithConcurrency(batch, source, scraper);
+      try {
+        await this.processBatchWithConcurrency(batch, source, scraper);
+      } catch (error) {
+        // Save progress even if batch processing fails
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        scraperLogger.error(
+          `Error processing batch ${batchIndex + 1} for ${source}:`,
+          errorMessage,
+        );
+        // Continue to save progress and next batch
+      }
 
-      // Save progress after each batch
-      const updatedProgress = this.progressTracker.loadProgress(source);
-      if (updatedProgress) {
-        this.progressTracker.saveProgress(updatedProgress);
+      // CRITICAL: Save progress after each batch (even if batch failed)
+      // This ensures progress is never lost
+      try {
+        const updatedProgress = this.progressTracker.loadProgress(source);
+        if (updatedProgress) {
+          this.progressTracker.saveProgress(updatedProgress);
+          scraperLogger.debug(`✅ Saved progress after batch ${batchIndex + 1} for ${source}`);
+        }
+      } catch (saveError) {
+        const errorMessage = saveError instanceof Error ? saveError.message : String(saveError);
+        scraperLogger.error(
+          `Failed to save progress after batch ${batchIndex + 1} for ${source}:`,
+          errorMessage,
+        );
+        // Continue processing even if save fails (progress is already saved after each recipe)
       }
 
       scraperLogger.info(
-        `Batch ${batchIndex + 1}/${totalBatches} completed for ${source}. Progress: ${updatedProgress?.scraped.length || 0}/${updatedProgress?.discovered.length || 0}`,
+        `Batch ${batchIndex + 1}/${totalBatches} completed for ${source}. Progress: ${this.progressTracker.loadProgress(source)?.scraped.length || 0}/${this.progressTracker.loadProgress(source)?.discovered.length || 0}`,
       );
     }
 
     // Retry failed URLs that are retryable
-    await this.retryFailedUrls(source, scraper);
+    try {
+      await this.retryFailedUrls(source, scraper);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      scraperLogger.error(`Error during retry phase for ${source}:`, errorMessage);
+      // Continue to save progress even if retry fails
+    }
+
+    // CRITICAL: Final save after processing source (including retries)
+    // This ensures progress is saved even if there's an error
+    try {
+      const finalProgress = this.progressTracker.loadProgress(source);
+      if (finalProgress) {
+        this.progressTracker.saveProgress(finalProgress);
+        scraperLogger.debug(`✅ Saved final progress for ${source}`);
+      }
+    } catch (saveError) {
+      const errorMessage = saveError instanceof Error ? saveError.message : String(saveError);
+      scraperLogger.error(`Failed to save final progress for ${source}:`, errorMessage);
+    }
 
     scraperLogger.info(`Completed scraping for ${source}`);
   }
@@ -898,12 +974,33 @@ export class ComprehensiveScraperJob {
    * Stop the job (graceful shutdown)
    * Creates a stop flag file that will be checked by all instances
    * This method is called by the API and should stop the scraper immediately
+   * CRITICAL: Saves progress for all active sources before stopping
    */
   stop(): void {
     scraperLogger.info('🛑 Stop command received - stopping comprehensive scraping job...');
     this.isRunning = false;
     this.createStopFlag(); // Create flag file so other instances can see it
-    scraperLogger.info('✅ Stop flag created - scraper will stop at next checkpoint');
+
+    // CRITICAL: Save progress for all active sources before stopping
+    // This ensures no progress is lost when stopping
+    scraperLogger.info('Saving progress for all active sources before stopping...');
+    for (const source of Array.from(this.activeSources)) {
+      try {
+        const progress = this.progressTracker.loadProgress(source);
+        if (progress) {
+          this.progressTracker.saveProgress(progress);
+          scraperLogger.info(`✅ Saved progress for ${source} before stop`);
+        }
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        scraperLogger.error(`Failed to save progress for ${source} before stop:`, errorMessage);
+        // Continue with other sources even if one fails
+      }
+    }
+
+    scraperLogger.info(
+      '✅ Stop flag created - scraper will stop at next checkpoint (progress saved)',
+    );
   }
 }
 

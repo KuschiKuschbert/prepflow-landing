@@ -222,7 +222,7 @@ export default function BillingPage() {
               </h2>
             </div>
 
-            <div className="tablet:grid-cols-2 desktop:grid-cols-4 mb-4 grid grid-cols-1 gap-4">
+            <div className="tablet:grid-cols-3 desktop:grid-cols-4 mb-4 grid grid-cols-1 gap-4">
               <div>
                 <p className="text-sm text-gray-400">Total Users</p>
                 <p className="text-2xl font-bold text-white">{healthReport.totalUsers}</p>
@@ -292,7 +292,7 @@ export default function BillingPage() {
         )}
 
         {/* Stats Grid */}
-        <div className="tablet:grid-cols-2 desktop:grid-cols-4 grid grid-cols-1 gap-4">
+        <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-1 gap-4">
           <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-lg font-semibold text-white">MRR</h3>

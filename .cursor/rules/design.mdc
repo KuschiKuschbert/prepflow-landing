@@ -1190,14 +1190,49 @@ Run `npm run detect-breakpoints` to analyze breakpoint usage across the codebase
 - Mobile/Tablet: `block desktop:hidden` for card layouts
 - Desktop: `hidden desktop:block` for table layouts
 
-**Grid Patterns:**
+**Grid Patterns (Updated 2025 - Modern Industry Standards):**
 
-- Single column mobile: `grid-cols-1`
-- Two columns tablet: `tablet:grid-cols-2`
-- Three columns desktop: `desktop:grid-cols-3`
-- Four columns large desktop: `large-desktop:grid-cols-4`
-- Five columns extra-large: `xl:grid-cols-5`
-- Example: `grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6`
+- Single column mobile: `grid-cols-1` (0-480px)
+- Three columns tablet: `tablet:grid-cols-3` (481px+) - **Modern standard for card grids**
+- Four columns desktop: `desktop:grid-cols-4` (1025px+)
+- Five columns large desktop: `large-desktop:grid-cols-5` (1440px+)
+- Six columns extra-large: `xl:grid-cols-6` (1920px+)
+- Example: `grid grid-cols-1 tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5 xl:grid-cols-6`
+
+**Reusable Grid Utilities:**
+
+- **Fixed-column patterns:** Use `FIXED_GRID_PATTERNS` from `lib/large-screen-utils.ts` for consistent layouts
+  - `FIXED_GRID_PATTERNS.cards` - Standard card grid (1 mobile, 3 tablet, 4 desktop)
+  - `FIXED_GRID_PATTERNS.cardsDense` - Dense cards (1 mobile, 3 tablet, 4 desktop, 5 large desktop)
+  - `FIXED_GRID_PATTERNS.cardsWide` - Wide cards (1 mobile, 2 tablet, 3 desktop)
+  - `FIXED_GRID_PATTERNS.stats` - Stats/metrics (1 mobile, 3 tablet, 4 desktop)
+  - `FIXED_GRID_PATTERNS.forms` - Forms (1 mobile, 2 tablet, 2-3 desktop)
+
+- **Auto-fit patterns:** Use `AUTO_FIT_GRID_CLASSES` from `lib/large-screen-utils.ts` for flexible layouts
+  - `AUTO_FIT_GRID_CLASSES.cards` - Auto-fit cards (~320px min at tablet, ~300px at desktop)
+  - `AUTO_FIT_GRID_CLASSES.features` - Auto-fit feature cards
+  - `AUTO_FIT_GRID_CLASSES.stats` - Auto-fit stats/metrics
+
+- **Helper functions:**
+  - `getFixedGridPattern('cards')` - Get fixed-column pattern
+  - `getAutoFitGridClass('cards')` - Get auto-fit pattern
+  - `getEnhancedGapClass('md')` - Get responsive gap classes
+
+**Usage Examples:**
+
+```typescript
+// Fixed-column pattern (for consistent layouts)
+import { FIXED_GRID_PATTERNS, ENHANCED_GAP_CLASSES } from '@/lib/large-screen-utils';
+<div className={`${FIXED_GRID_PATTERNS.cards} ${ENHANCED_GAP_CLASSES.md}`}>
+
+// Auto-fit pattern (for flexible layouts)
+import { getAutoFitGridClass, getEnhancedGapClass } from '@/lib/large-screen-utils';
+<div className={`grid ${getAutoFitGridClass('cards')} ${getEnhancedGapClass('md')}`}>
+
+// Landing page grids
+import { LANDING_GRIDS } from '@/lib/landing-styles';
+<div className={LANDING_GRIDS['1-3-4']}> // 1 mobile, 3 tablet, 4 desktop
+```
 
 **Text Size Patterns:**
 

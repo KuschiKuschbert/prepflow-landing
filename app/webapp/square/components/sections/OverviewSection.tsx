@@ -138,14 +138,14 @@ export function OverviewSection() {
       </div>
 
       {/* Status Cards */}
-      <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-4">
+      <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-1 gap-4">
         {statusCards}
       </div>
 
       {/* Quick Actions */}
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
         <h3 className="mb-4 text-lg font-semibold text-[var(--foreground)]">Quick Actions</h3>
-        <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-3">
+        <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid grid-cols-1 gap-3">
           <a
             href="#configuration"
             className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--background)] p-4 transition-colors hover:bg-[var(--surface-variant)]"

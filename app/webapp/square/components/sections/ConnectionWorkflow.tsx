@@ -48,7 +48,7 @@ export function ConnectionWorkflow({ onConnectClick }: ConnectionWorkflowProps) 
       </div>
 
       {/* Connection Options */}
-      <div className="tablet:grid-cols-2 grid gap-6">
+      <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid gap-6">
         {/* Connect Existing Square Account */}
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
           <div className="flex items-start gap-4">

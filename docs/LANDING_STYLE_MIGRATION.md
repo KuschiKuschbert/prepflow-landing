@@ -200,7 +200,7 @@ import { GlowCard } from '@/components/ui/GlowCard';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { LANDING_COLORS } from '@/lib/landing-styles';
 
-<div className="tablet:grid-cols-2 desktop:grid-cols-3 grid gap-8">
+<div className="tablet:grid-cols-3 desktop:grid-cols-4 grid gap-8">
   {features.map((feature, index) => (
     <ScrollReveal
       key={feature.id}
@@ -332,7 +332,7 @@ import { LANDING_COLORS } from '@/lib/landing-styles';
 
 export function FeatureGrid({ features }: { features: Feature[] }) {
   return (
-    <div className="tablet:grid-cols-2 desktop:grid-cols-3 grid gap-8">
+    <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid gap-8">
       {features.map((feature, index) => (
         <ScrollReveal
           key={feature.id}
@@ -410,7 +410,7 @@ import { getGlowColor } from '@/lib/landing-styles';
 
 export function MetricDisplay({ metrics }: { metrics: Metric[] }) {
   return (
-    <div className="tablet:grid-cols-2 desktop:grid-cols-4 grid gap-12">
+    <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid gap-12">
       {metrics.map((metric, index) => (
         <ScrollReveal
           key={metric.label}
