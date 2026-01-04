@@ -3,24 +3,43 @@ import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 
 const AUTH0_JWKS_URL = `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`;
 const JWKS = createRemoteJWKSet(new URL(AUTH0_JWKS_URL));
 
+const itemSchema = z.object({
+  id_token: z.string(),
+});
+
+/**
+ * Exchange Auth0 ID Token for Supabase Session
+ * @param req Request containing id_token
+ */
 export async function POST(req: NextRequest) {
   try {
-    const { id_token } = await req.json();
+    const body = await req.json();
+    const result = itemSchema.safeParse(body);
 
-    if (!id_token) {
+    if (!result.success) {
       return NextResponse.json(
         ApiErrorHandler.createError('Missing id_token', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
+    const { id_token } = result.data;
+
     // 1. Verify Auth0 ID Token
+    // Allow both canonical and custom domain issuers
+    const acceptedIssuers = [
+      `https://${process.env.AUTH0_DOMAIN}/`,
+      'https://auth.prepflow.org/',
+      'https://dev-7myakdl4itf644km.us.auth0.com/',
+    ];
+
     const { payload } = await jwtVerify(id_token, JWKS, {
-      issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+      issuer: acceptedIssuers,
       audience: process.env.AUTH0_CLIENT_ID,
     });
 
