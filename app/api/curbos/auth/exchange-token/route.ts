@@ -1,7 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
-import { createRemoteJWKSet, jwtVerify } from 'jose';
+import { createRemoteJWKSet, decodeJwt, jwtVerify } from 'jose';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -30,12 +30,27 @@ export async function POST(req: NextRequest) {
 
     const { id_token } = result.data;
 
+    // Debug: Decode token without verification to inspect claims
+    try {
+      const decoded = decodeJwt(id_token);
+      logger.info('[Auth Bridge] Token Claims Preview:', {
+        iss: decoded.iss,
+        aud: decoded.aud,
+        sub: decoded.sub,
+      });
+    } catch (e) {
+      logger.warn('[Auth Bridge] Failed to decode token for preview:', e);
+    }
+
     // 1. Verify Auth0 ID Token
-    // Allow both canonical and custom domain issuers
+    // Allow both canonical and custom domain issuers (with and without trailing slash)
     const acceptedIssuers = [
       `https://${process.env.AUTH0_DOMAIN}/`,
+      `https://${process.env.AUTH0_DOMAIN}`,
       'https://auth.prepflow.org/',
+      'https://auth.prepflow.org',
       'https://dev-7myakdl4itf644km.us.auth0.com/',
+      'https://dev-7myakdl4itf644km.us.auth0.com',
     ];
 
     const { payload } = await jwtVerify(id_token, JWKS, {
