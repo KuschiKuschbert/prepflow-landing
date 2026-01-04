@@ -155,9 +155,7 @@ export abstract class BaseScraper {
       url,
       statusCode: lastStatusCode,
     });
-    throw new Error(
-      `Failed to fetch ${url} after ${maxRetries} attempts: ${errorMessage}`,
-    );
+    throw new Error(`Failed to fetch ${url} after ${maxRetries} attempts: ${errorMessage}`);
   }
 
   /**
@@ -202,7 +200,9 @@ export abstract class BaseScraper {
         const aiExtractor = getAIExtractor();
 
         if (aiExtractor.isEnabled()) {
-          scraperLogger.info(`[${this.source}] Traditional parsing failed, trying FREE AI extraction...`);
+          scraperLogger.info(
+            `[${this.source}] Traditional parsing failed, trying FREE AI extraction...`,
+          );
           parsed = await aiExtractor.extractRecipe(html, url);
 
           if (parsed) {
@@ -321,17 +321,86 @@ export abstract class BaseScraper {
 
     // Common measurement units and words to remove (with and without periods)
     const measurementUnits = [
-      'tbsp', 'tablespoon', 'tablespoons', 'tbsp.', 'tsp', 'teaspoon', 'teaspoons', 'tsp.',
-      'cup', 'cups', 'c.', 'c', 'fl', 'fl.', 'oz', 'ounce', 'ounces', 'oz.', 'lb', 'pound', 'pounds', 'lb.',
-      'ml', 'milliliter', 'milliliters', 'ml.', 'l', 'liter', 'liters', 'l.',
-      'g', 'gram', 'grams', 'g.', 'kg', 'kilogram', 'kilograms', 'kg.',
-      'piece', 'pieces', 'pcs', 'pc', 'whole', 'halves', 'half',
-      'clove', 'cloves', 'head', 'heads', 'bunch', 'bunches',
-      'can', 'cans', 'package', 'packages', 'pack', 'packs',
-      'bottle', 'bottles', 'jar', 'jars', 'box', 'boxes',
-      'dash', 'pinch', 'pinches', 'sprinkle', 'sprinkles',
-      'slice', 'slices', 'strip', 'strips', 'chunk', 'chunks',
-      'plus', 'more', 'optional', 'divided', 'for', 'garnish',
+      'tbsp',
+      'tablespoon',
+      'tablespoons',
+      'tbsp.',
+      'tsp',
+      'teaspoon',
+      'teaspoons',
+      'tsp.',
+      'cup',
+      'cups',
+      'c.',
+      'c',
+      'fl',
+      'fl.',
+      'oz',
+      'ounce',
+      'ounces',
+      'oz.',
+      'lb',
+      'pound',
+      'pounds',
+      'lb.',
+      'ml',
+      'milliliter',
+      'milliliters',
+      'ml.',
+      'l',
+      'liter',
+      'liters',
+      'l.',
+      'g',
+      'gram',
+      'grams',
+      'g.',
+      'kg',
+      'kilogram',
+      'kilograms',
+      'kg.',
+      'piece',
+      'pieces',
+      'pcs',
+      'pc',
+      'whole',
+      'halves',
+      'half',
+      'clove',
+      'cloves',
+      'head',
+      'heads',
+      'bunch',
+      'bunches',
+      'can',
+      'cans',
+      'package',
+      'packages',
+      'pack',
+      'packs',
+      'bottle',
+      'bottles',
+      'jar',
+      'jars',
+      'box',
+      'boxes',
+      'dash',
+      'pinch',
+      'pinches',
+      'sprinkle',
+      'sprinkles',
+      'slice',
+      'slices',
+      'strip',
+      'strips',
+      'chunk',
+      'chunks',
+      'plus',
+      'more',
+      'optional',
+      'divided',
+      'for',
+      'garnish',
     ];
 
     // Handle parentheses - take content before parentheses as main ingredient
@@ -341,7 +410,12 @@ export abstract class BaseScraper {
     // Split into words and clean
     let words = beforeParentheses
       .split(/\s+/)
-      .map(w => w.trim().toLowerCase().replace(/[.,;:!?]+$/, '')) // Remove trailing punctuation
+      .map(w =>
+        w
+          .trim()
+          .toLowerCase()
+          .replace(/[.,;:!?]+$/, ''),
+      ) // Remove trailing punctuation
       .filter(w => w.length > 0);
 
     // Remove leading quantities (numbers, fractions including Unicode, measurements)
@@ -371,12 +445,42 @@ export abstract class BaseScraper {
     // Remove common descriptors that come before the ingredient
     // But be careful with compound ingredients like "black pepper" or "all-purpose flour"
     const descriptors = [
-      'fresh', 'freshly', 'dried', 'frozen', 'canned', 'whole', 'chopped', 'diced',
-      'minced', 'sliced', 'grated', 'peeled', 'seeded', 'stemmed',
-      'boneless', 'skinless', 'large', 'small', 'medium', 'extra',
-      'fine', 'coarse', 'powdered', 'raw', 'cooked',
-      'unsalted', 'salted', 'sweet', 'sour', 'hot', 'mild',
-      'cubed', 'torn', 'cut', 'bite-size', 'pieces',
+      'fresh',
+      'freshly',
+      'dried',
+      'frozen',
+      'canned',
+      'whole',
+      'chopped',
+      'diced',
+      'minced',
+      'sliced',
+      'grated',
+      'peeled',
+      'seeded',
+      'stemmed',
+      'boneless',
+      'skinless',
+      'large',
+      'small',
+      'medium',
+      'extra',
+      'fine',
+      'coarse',
+      'powdered',
+      'raw',
+      'cooked',
+      'unsalted',
+      'salted',
+      'sweet',
+      'sour',
+      'hot',
+      'mild',
+      'cubed',
+      'torn',
+      'cut',
+      'bite-size',
+      'pieces',
     ];
 
     // Special handling: "ground" should only be removed if it's standalone
@@ -611,7 +715,11 @@ export abstract class BaseScraper {
       }
 
       // Priority 2: howToDirection (common in structured data)
-      if (inst.howToDirection && typeof inst.howToDirection === 'string' && inst.howToDirection.trim().length > 0) {
+      if (
+        inst.howToDirection &&
+        typeof inst.howToDirection === 'string' &&
+        inst.howToDirection.trim().length > 0
+      ) {
         // Only add if different from text (avoid duplicates)
         if (!inst.text || inst.howToDirection.trim() !== inst.text.trim()) {
           texts.push(inst.howToDirection.trim());
@@ -629,13 +737,21 @@ export abstract class BaseScraper {
 
       // Priority 4: name property (sometimes used for step titles)
       // Only use if we don't already have text from other sources
-      if (texts.length === 0 && inst.name && typeof inst.name === 'string' && inst.name.trim().length > 0) {
+      if (
+        texts.length === 0 &&
+        inst.name &&
+        typeof inst.name === 'string' &&
+        inst.name.trim().length > 0
+      ) {
         texts.push(inst.name.trim());
       }
 
       // Priority 5: Check for nested HowToStep or HowToSection
       // Only process if we haven't already extracted from text/howToDirection
-      if ((inst['@type'] === 'HowToStep' || inst['@type'] === 'HowToSection') && texts.length === 0) {
+      if (
+        (inst['@type'] === 'HowToStep' || inst['@type'] === 'HowToSection') &&
+        texts.length === 0
+      ) {
         // If we already have text, don't re-extract from nested structure
         // This prevents duplication when both text and nested structure exist
         if (inst.itemListElement && Array.isArray(inst.itemListElement)) {
@@ -660,9 +776,7 @@ export abstract class BaseScraper {
    * Searches through instructions for temperature patterns like "350°F", "180C", etc.
    * Returns structured temperature data (same format as parseTemperature)
    */
-  protected extractTemperatureFromInstructions(
-    instructions: any,
-  ): {
+  protected extractTemperatureFromInstructions(instructions: any): {
     temperature_celsius?: number;
     temperature_fahrenheit?: number;
     temperature_unit?: 'celsius' | 'fahrenheit';

@@ -25,9 +25,7 @@ export class RateLimiter {
     const now = Date.now();
 
     // Remove request times older than delayMs (they're no longer relevant)
-    this.requestTimes = this.requestTimes.filter(
-      time => now - time < this.delayMs,
-    );
+    this.requestTimes = this.requestTimes.filter(time => now - time < this.delayMs);
 
     // If we have fewer than maxConcurrent recent requests, allow immediately
     if (this.requestTimes.length < this.maxConcurrent) {
@@ -42,7 +40,9 @@ export class RateLimiter {
 
     if (timeSinceOldest < this.delayMs) {
       const waitTime = this.delayMs - timeSinceOldest;
-      scraperLogger.debug(`Rate limiting: waiting ${waitTime}ms (${this.requestTimes.length} concurrent requests)`);
+      scraperLogger.debug(
+        `Rate limiting: waiting ${waitTime}ms (${this.requestTimes.length} concurrent requests)`,
+      );
       await new Promise(resolve => setTimeout(resolve, waitTime));
     }
 

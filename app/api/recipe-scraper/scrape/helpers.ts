@@ -99,17 +99,14 @@ export async function handleComprehensiveScrape(): Promise<NextResponse> {
  */
 export function createScraper(
   source: SourceType,
-):
-  | AllRecipesScraper
-  | FoodNetworkScraper
-  | EpicuriousScraper
-  | BonAppetitScraper
-  | TastyScraper {
+): AllRecipesScraper | FoodNetworkScraper | EpicuriousScraper | BonAppetitScraper | TastyScraper {
   switch (source) {
     case SOURCES.ALLRECIPES:
       return new AllRecipesScraper();
     case SOURCES.BBC_GOOD_FOOD:
-      throw new Error('BBC Good Food scraper is disabled due to Terms of Service violation. See docs/BBC_GOOD_FOOD_LEGAL_ANALYSIS.md');
+      throw new Error(
+        'BBC Good Food scraper is disabled due to Terms of Service violation. See docs/BBC_GOOD_FOOD_LEGAL_ANALYSIS.md',
+      );
     case SOURCES.FOOD_NETWORK:
       return new FoodNetworkScraper();
     case SOURCES.EPICURIOUS:

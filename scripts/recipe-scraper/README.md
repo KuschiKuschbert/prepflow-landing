@@ -159,6 +159,7 @@ The scraper includes an optional AI-enhanced extraction system that automaticall
 ### Configuration
 
 **Recommended: Get Free API Key (Best Experience)**
+
 ```bash
 # 1. Sign up at https://huggingface.co (free, no credit card)
 # 2. Get API key from https://huggingface.co/settings/tokens
@@ -168,12 +169,14 @@ export HUGGINGFACE_API_KEY=your_free_api_key_here
 ```
 
 **Alternative: Enable Without API Key**
+
 ```bash
 export ENABLE_AI_EXTRACTION=true
 # Works but may have rate limits (less reliable)
 ```
 
 **Disable AI Extraction**
+
 ```bash
 export ENABLE_AI_EXTRACTION=false
 # Traditional methods only (still 95%+ success rate)
@@ -188,6 +191,7 @@ export ENABLE_AI_EXTRACTION=false
 3. **Fallback:** AI extraction (robust, ~3-5% of recipes, only when needed) ✅ NEW
 
 **AI extraction only runs when:**
+
 - Traditional parsing (JSON-LD + HTML) both fail
 - AI extraction is enabled
 - Recipe has sufficient text content
@@ -197,12 +201,14 @@ export ENABLE_AI_EXTRACTION=false
 ### Cost
 
 **FREE Option (Recommended):**
+
 - Cost: $0.00
 - Requirements: Free Hugging Face account + API key
 - Rate Limits: ~30 requests/minute (more than enough for fallback use)
 - Reliability: Excellent
 
 **Without API Key:**
+
 - Cost: $0.00
 - Rate Limits: Very limited (may not work reliably)
 - Recommendation: Get free API key for better experience
@@ -210,6 +216,7 @@ export ENABLE_AI_EXTRACTION=false
 ### Legal Compliance
 
 ✅ **All legal safeguards maintained:**
+
 - Robots.txt checking (before AI extraction)
 - Rate limiting (respects API limits)
 - User-Agent identification
@@ -221,6 +228,7 @@ export ENABLE_AI_EXTRACTION=false
 ### Testing
 
 Run comparison test:
+
 ```bash
 npx tsx scripts/recipe-scraper/test-ai-extractor.ts
 ```
@@ -239,6 +247,7 @@ npx tsx scripts/recipe-scraper/test-ai-extractor.ts
 ✅ **Smart:** Only used when needed (<5% of recipes)
 
 **See Also:**
+
 - `docs/AI_SCRAPER_IMPLEMENTATION.md` - Complete implementation guide
 - `docs/AI_SCRAPER_RESEARCH.md` - Research and alternatives
 - `docs/LEGAL_COMPLIANCE.md` - Legal compliance documentation
@@ -278,7 +287,7 @@ export const RATING_CONFIG = {
   DEFAULT_INCLUDE_UNRATED: true, // Change default for unrated recipes
 
   SOURCE_CONFIG: {
-    'allrecipes': { minRating: 4.75, includeUnrated: false },
+    allrecipes: { minRating: 4.75, includeUnrated: false },
     // Add or modify source configurations
   },
 };

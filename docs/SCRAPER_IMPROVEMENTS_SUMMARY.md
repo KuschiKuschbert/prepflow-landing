@@ -6,6 +6,7 @@
 ## What We Built
 
 A **world-class recipe scraper** that is:
+
 - ✅ **FREE** (no costs)
 - ✅ **Legal** (respects robots.txt, rate limiting, attribution)
 - ✅ **Robust** (98%+ success rate with AI fallback)
@@ -17,6 +18,7 @@ A **world-class recipe scraper** that is:
 ### 1. Multi-Source Support ✅
 
 Scrapes from **6 major recipe websites:**
+
 - AllRecipes.com
 - BBC Good Food
 - Food Network
@@ -27,16 +29,19 @@ Scrapes from **6 major recipe websites:**
 ### 2. Three-Tier Parsing System ✅
 
 **Tier 1: JSON-LD Structured Data** (Primary - ~90% of recipes)
+
 - Fastest and most reliable
 - Uses structured data embedded in HTML
 - No parsing needed
 
 **Tier 2: HTML Parsing** (Secondary - ~5% of recipes)
+
 - CSS selector-based extraction
 - Site-specific selectors with fallbacks
 - Handles sites without JSON-LD
 
 **Tier 3: AI Extraction** (Fallback - ~3-5% of recipes) ✅ NEW
+
 - FREE Hugging Face Inference API
 - Only runs when traditional methods fail
 - Improves success rate from 95% to 98%+
@@ -44,11 +49,13 @@ Scrapes from **6 major recipe websites:**
 ### 3. Rating-Based Filtering ✅
 
 **Smart Quality Control:**
+
 - Only saves recipes with 4.75+ stars (95%+ rating) from user-rated sites
 - Includes all recipes from professional sites (BBC Good Food, Bon Appétit)
 - Configurable per-source thresholds
 
 **Default Behavior:**
+
 - User-rated sites: 4.75/5.0 minimum
 - Professional sites: All recipes included
 - Dataset sources: All recipes included
@@ -56,6 +63,7 @@ Scrapes from **6 major recipe websites:**
 ### 4. Legal Compliance ✅
 
 **Fully Compliant:**
+
 - ✅ Robots.txt checking (before every request)
 - ✅ Rate limiting (2-second default, respects crawl-delay)
 - ✅ User-Agent identification (with contact info)
@@ -68,6 +76,7 @@ Scrapes from **6 major recipe websites:**
 ### 5. Robust Error Handling ✅
 
 **Smart Retry Logic:**
+
 - Categorizes errors (permanent vs. retryable)
 - Exponential backoff for rate limits
 - 60-second delay after 429 errors
@@ -77,6 +86,7 @@ Scrapes from **6 major recipe websites:**
 ### 6. Progress Tracking ✅
 
 **Resume Capability:**
+
 - Saves progress after each recipe
 - Can resume interrupted jobs
 - Tracks success/failure per URL
@@ -85,6 +95,7 @@ Scrapes from **6 major recipe websites:**
 ### 7. Stop Mechanism ✅
 
 **Graceful Stopping:**
+
 - Stop button in UI
 - API endpoint for stopping
 - Cross-process stop flag file
@@ -95,12 +106,14 @@ Scrapes from **6 major recipe websites:**
 ### Total Cost: **$0.00** (FREE)
 
 **Breakdown:**
+
 - Traditional Parsing: FREE (local processing)
 - AI Extraction: FREE (Hugging Face free tier)
 - Storage: FREE (local JSON files)
 - API Costs: $0.00
 
 **Optional Enhancement:**
+
 - Get free Hugging Face API key for better AI reliability
 - Still $0.00 (free account, no credit card needed)
 - Improves AI extraction from "limited" to "excellent"
@@ -128,6 +141,7 @@ Scrapes from **6 major recipe websites:**
 ## Legal Status
 
 ✅ **Fully Compliant with:**
+
 - Robots.txt standards
 - Rate limiting best practices
 - Copyright fair use guidelines
@@ -169,27 +183,32 @@ npx tsx scripts/recipe-scraper/test-scrapers.ts
 ## What Makes This the Best Scraper
 
 ### 1. **Free & Legal** ✅
+
 - No costs whatsoever
 - Fully compliant with all legal requirements
 - Respects website terms and robots.txt
 
 ### 2. **Robust & Reliable** ✅
+
 - 98%+ success rate (with AI fallback)
 - Multiple parsing strategies
 - Smart error handling and retries
 
 ### 3. **Smart & Efficient** ✅
+
 - Only uses AI when needed (<5% of recipes)
 - Rating-based quality filtering
 - Automatic retry for failed URLs
 
 ### 4. **User-Friendly** ✅
+
 - Web UI for easy operation
 - Progress tracking and resume
 - Stop/start controls
 - Statistics and reporting
 
 ### 5. **Maintainable** ✅
+
 - Well-documented code
 - Modular architecture
 - Easy to add new sources
@@ -198,6 +217,7 @@ npx tsx scripts/recipe-scraper/test-scrapers.ts
 ## Technical Excellence
 
 ### Code Quality
+
 - ✅ TypeScript with strict typing
 - ✅ Comprehensive error handling
 - ✅ Modular, reusable components
@@ -205,12 +225,14 @@ npx tsx scripts/recipe-scraper/test-scrapers.ts
 - ✅ Follows all project standards
 
 ### Architecture
+
 - ✅ Base scraper pattern (DRY)
 - ✅ Site-specific scrapers (extensible)
 - ✅ Utility functions (reusable)
 - ✅ Storage abstraction (flexible)
 
 ### Testing
+
 - ✅ Test script for all scrapers
 - ✅ Comparison testing (traditional vs. AI)
 - ✅ Validation and normalization
@@ -221,12 +243,14 @@ npx tsx scripts/recipe-scraper/test-scrapers.ts
 ### vs. Commercial Scrapers
 
 **Our Scraper:**
+
 - ✅ FREE ($0.00)
 - ✅ Legal compliance built-in
 - ✅ Customizable and extensible
 - ✅ No vendor lock-in
 
 **Commercial:**
+
 - ❌ Costs $50-500/month
 - ⚠️ May not respect robots.txt
 - ❌ Limited customization
@@ -235,12 +259,14 @@ npx tsx scripts/recipe-scraper/test-scrapers.ts
 ### vs. Other Open Source
 
 **Our Scraper:**
+
 - ✅ AI-enhanced fallback
 - ✅ Rating-based filtering
 - ✅ Legal compliance focus
 - ✅ Production-ready
 
 **Others:**
+
 - ⚠️ Basic parsing only
 - ⚠️ No quality filtering
 - ⚠️ Legal compliance varies
@@ -249,12 +275,14 @@ npx tsx scripts/recipe-scraper/test-scrapers.ts
 ## Next Steps
 
 ### Immediate
+
 - ✅ All features implemented
 - ✅ All scrapers tested
 - ✅ Documentation complete
 - ✅ Legal compliance verified
 
 ### Future Enhancements (Optional)
+
 - Fine-tune recipe extraction model (better AI accuracy)
 - Add more recipe sources
 - Implement batch processing
@@ -264,6 +292,7 @@ npx tsx scripts/recipe-scraper/test-scrapers.ts
 ## Summary
 
 **We've built the best recipe scraper possible:**
+
 - ✅ FREE (no costs)
 - ✅ Legal (fully compliant)
 - ✅ Robust (98%+ success)

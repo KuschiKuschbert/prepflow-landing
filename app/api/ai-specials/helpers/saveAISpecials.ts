@@ -50,12 +50,15 @@ export async function saveAISpecials(
       );
     }
 
-    logger.debug('[saveAISpecials] Environment variables validated, attempting dynamic import of supabase', {
-      userId,
-      requestId,
-      hasSupabaseUrl: true,
-      hasServiceRoleKey: true,
-    });
+    logger.debug(
+      '[saveAISpecials] Environment variables validated, attempting dynamic import of supabase',
+      {
+        userId,
+        requestId,
+        hasSupabaseUrl: true,
+        hasServiceRoleKey: true,
+      },
+    );
 
     const importStartTime = Date.now();
     const { supabaseAdmin } = await import('@/lib/supabase');

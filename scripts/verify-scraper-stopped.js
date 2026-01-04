@@ -47,8 +47,12 @@ if (fs.existsSync(PROGRESS_DIR)) {
 
       console.log(`   ${file}:`);
       console.log(`      Last updated: ${minutesAgo} minutes ago`);
-      console.log(`      Scraped: ${progress.scraped?.length || 0}/${progress.discovered?.length || 0}`);
-      console.log(`      Status: ${isRecent ? '🟢 ACTIVE (recent updates)' : '🔴 INACTIVE (no recent updates)'}`);
+      console.log(
+        `      Scraped: ${progress.scraped?.length || 0}/${progress.discovered?.length || 0}`,
+      );
+      console.log(
+        `      Status: ${isRecent ? '🟢 ACTIVE (recent updates)' : '🔴 INACTIVE (no recent updates)'}`,
+      );
     }
 
     console.log('');

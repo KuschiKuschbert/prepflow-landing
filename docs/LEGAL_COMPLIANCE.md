@@ -74,6 +74,7 @@
 ### Current Implementation Status
 
 **✅ Fully Compliant:**
+
 - Robots.txt checking
 - Rate limiting
 - User-Agent identification
@@ -81,6 +82,7 @@
 - No personal data collection
 
 **⚠️ Recommended:**
+
 - Periodic review of terms of service for each site
 - Monitor for robots.txt changes
 - Update scrapers when site structures change
@@ -88,6 +90,7 @@
 ### Legal Disclaimer
 
 This scraper is designed for educational and internal use. Always:
+
 - Review and comply with each website's Terms of Service
 - Respect copyright and intellectual property rights
 - Use scraped data responsibly and ethically
@@ -104,12 +107,14 @@ This scraper is designed for educational and internal use. Always:
 **Status:** ✅ Compliant
 
 **Findings:**
+
 - Recipe pages (`/recipes/`) are **NOT disallowed** - scraping is technically allowed
 - Sitemap available: `https://www.bbcgoodfood.com/sitemap.xml`
 - No crawl-delay specified for general user-agents
 - Disallowed paths: `/account/*`, `/api/*`, `/search*`, `/subscribe/`, etc. (we don't scrape these)
 
 **Our Implementation:**
+
 - ✅ Respects robots.txt directives
 - ✅ Only scrapes `/recipes/` paths (allowed)
 - ✅ Uses sitemap for URL discovery (recommended method)
@@ -121,6 +126,7 @@ This scraper is designed for educational and internal use. Always:
 **Critical Restrictions Found:**
 
 1. **Section 5 - Personal and Non-Commercial Use Only:**
+
    > "In accessing our Services, you agree that you will only access its contents for your own **personal and non-commercial use** and not for any commercial or other purposes, including advertising or selling any goods or services."
 
 2. **Section 10 - Prohibition on Copying/Storing:**
@@ -151,12 +157,14 @@ This scraper is designed for educational and internal use. Always:
    - Would require removing from production scraper
 
 **Current Status:**
+
 - ✅ **REMOVED from production scraper** (2026-01-03)
 - ✅ **Decision:** Removed to avoid Terms of Service violation
 - ✅ **Documentation:** See `docs/BBC_GOOD_FOOD_REMOVAL.md` for removal details
 - ✅ **Legal Analysis:** See `docs/BBC_GOOD_FOOD_LEGAL_ANALYSIS.md` for complete analysis
 
 **Action Taken:**
+
 - ✅ Removed BBC Good Food from all production code
 - ✅ Scraper implementation kept for reference (disabled)
 - ✅ All attempts to use BBC Good Food scraper throw error with explanation
@@ -165,6 +173,7 @@ This scraper is designed for educational and internal use. Always:
 ### Other Sites
 
 **Active Sources (5):**
+
 - ✅ **AllRecipes** - robots.txt compliant, terms review pending
 - ✅ **Food Network** - robots.txt compliant, terms review pending
 - ✅ **Epicurious** - robots.txt compliant, terms review pending
@@ -172,6 +181,7 @@ This scraper is designed for educational and internal use. Always:
 - ✅ **Tasty** - robots.txt compliant, terms review pending
 
 **Status:**
+
 - Currently relying on robots.txt compliance and fair use
 - **Recommended:** Review each site's terms before production use
 - **Action:** Periodic legal review of all active sources
@@ -179,5 +189,6 @@ This scraper is designed for educational and internal use. Always:
 ### Contact
 
 For questions or concerns about our scraping practices:
+
 - Email: hello@prepflow.org
 - User-Agent: PrepFlow Recipe Scraper (contact: hello@prepflow.org)

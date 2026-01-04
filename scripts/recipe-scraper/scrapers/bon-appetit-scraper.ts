@@ -57,8 +57,7 @@ export class BonAppetitScraper extends BaseScraper {
 
       // Extract temperature from JSON-LD (check multiple possible locations)
       // First try JSON-LD temperature fields
-      const temperatureFromJSONLD =
-        recipeData.cookingMethod?.temperature || recipeData.temperature;
+      const temperatureFromJSONLD = recipeData.cookingMethod?.temperature || recipeData.temperature;
 
       // If not found in JSON-LD, extract from instructions using BaseScraper method
       const temperatureFromInstructions = this.extractTemperatureFromInstructions(
@@ -229,15 +228,17 @@ export class BonAppetitScraper extends BaseScraper {
     const visited = new Set<string>();
 
     // Try sitemap parsing first (fastest and most complete)
-    // Add timeout to prevent long waits (Bon Appétit has 1000+ sitemaps)
+    // Bon Appétit has 1000+ sitemaps, so we allow up to 10 minutes for complete discovery
     try {
-      scraperLogger.info('Attempting to discover Bon Appétit URLs via sitemap...');
+      scraperLogger.info(
+        'Attempting to discover Bon Appétit URLs via sitemap (this may take 5-10 minutes for 1000+ sitemaps)...',
+      );
       const sitemapParser = new SitemapParser();
 
-      // Set 30-second timeout for sitemap parsing
+      // Set 10-minute timeout for sitemap parsing (Bon Appétit needs time for 1000+ sitemaps)
       const sitemapPromise = sitemapParser.discoverRecipeUrls('bon-appetit');
       const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => reject(new Error('Sitemap parsing timeout (30s)')), 30000);
+        setTimeout(() => reject(new Error('Sitemap parsing timeout (10min)')), 600000); // 10 minutes
       });
 
       const sitemapUrls = await Promise.race([sitemapPromise, timeoutPromise]);
@@ -245,11 +246,18 @@ export class BonAppetitScraper extends BaseScraper {
       if (sitemapUrls.length > 0) {
         scraperLogger.info(`Discovered ${sitemapUrls.length} recipe URLs from sitemap`);
         return sitemapUrls;
+      } else {
+        scraperLogger.warn('Sitemap parsing returned 0 URLs, falling back to pagination');
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       if (errorMessage.includes('timeout')) {
-        scraperLogger.warn('Sitemap parsing timed out (taking too long), falling back to pagination');
+        scraperLogger.warn(
+          'Sitemap parsing timed out after 10 minutes, falling back to pagination',
+        );
+      } else if (errorMessage.includes('Scraping stopped by user')) {
+        // Re-throw stop errors
+        throw error;
       } else {
         scraperLogger.warn('Sitemap parsing failed, falling back to pagination:', error);
       }
@@ -320,8 +328,12 @@ export class BonAppetitScraper extends BaseScraper {
             `Found ${recipeLinks.length} recipes on page ${currentPage} of ${baseUrl}`,
           );
           currentPage++;
-          // Limit pagination depth to prevent infinite loops
-          if (currentPage > 100) {
+          // Increased pagination limit to 200 pages for maximum discovery
+          // Bon Appétit has many recipes, so we need to go deeper
+          if (currentPage > 200) {
+            scraperLogger.info(
+              `Reached pagination limit (200 pages) for ${baseUrl}, found ${urls.length} recipes so far`,
+            );
             hasMorePages = false;
           }
         }

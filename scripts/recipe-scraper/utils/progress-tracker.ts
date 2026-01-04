@@ -176,20 +176,47 @@ export class ProgressTracker {
     let estimatedTimeRemaining: number | undefined;
     let averageTimePerRecipe: number | undefined;
 
-    // Use progress.startedAt as fallback if startTime is not provided
-    const actualStartTime = startTime || new Date(progress.startedAt);
+    // Only calculate estimate if there are remaining recipes
+    if (remaining > 0) {
+      // Use progress.startedAt as fallback if startTime is not provided
+      let actualStartTime: Date;
+      if (startTime) {
+        actualStartTime = startTime;
+      } else if (progress.startedAt) {
+        const parsedStartTime = new Date(progress.startedAt);
+        // Validate the date
+        if (isNaN(parsedStartTime.getTime())) {
+          // Invalid date, use current time minus a small offset to avoid division issues
+          actualStartTime = new Date(Date.now() - 1000);
+        } else {
+          actualStartTime = parsedStartTime;
+        }
+      } else {
+        // No start time available, use current time minus a small offset
+        actualStartTime = new Date(Date.now() - 1000);
+      }
 
-    if (totalScraped > 0) {
-      // Calculate based on actual performance
-      const elapsedSeconds = (new Date().getTime() - actualStartTime.getTime()) / 1000;
-      averageTimePerRecipe = elapsedSeconds / totalScraped;
-      estimatedTimeRemaining = averageTimePerRecipe * remaining;
-    } else if (remaining > 0) {
-      // Fallback: use conservative default rate (30 recipes per minute)
-      // This provides an estimate even before any recipes are scraped
-      const RECIPES_PER_MINUTE = 30;
-      const estimatedMinutes = remaining / RECIPES_PER_MINUTE;
-      estimatedTimeRemaining = Math.round(estimatedMinutes * 60);
+      if (totalScraped > 0) {
+        // Calculate based on actual performance
+        const elapsedSeconds = (new Date().getTime() - actualStartTime.getTime()) / 1000;
+        // Ensure elapsedSeconds is positive and reasonable
+        if (elapsedSeconds > 0 && elapsedSeconds < 86400 * 7) {
+          // Less than 7 days (reasonable for a scraping job)
+          averageTimePerRecipe = elapsedSeconds / totalScraped;
+          estimatedTimeRemaining = averageTimePerRecipe * remaining;
+          // Ensure estimate is positive and reasonable (less than 7 days)
+          if (estimatedTimeRemaining < 0 || estimatedTimeRemaining > 86400 * 7) {
+            estimatedTimeRemaining = undefined;
+          }
+        }
+      }
+
+      // Fallback: use conservative default rate (30 recipes per minute) if no valid estimate
+      if (estimatedTimeRemaining === undefined || estimatedTimeRemaining <= 0) {
+        const RECIPES_PER_MINUTE = 30;
+        const estimatedMinutes = remaining / RECIPES_PER_MINUTE;
+        estimatedTimeRemaining = Math.round(estimatedMinutes * 60);
+      }
     }
 
     return {

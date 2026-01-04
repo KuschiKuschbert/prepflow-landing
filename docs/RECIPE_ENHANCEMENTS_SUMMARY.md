@@ -10,16 +10,19 @@
 **What:** Added overall time estimate display to the scraper status UI
 
 **Implementation:**
+
 - Calculates time estimate based on remaining recipes and average scraping rate
 - Uses maximum estimate from all sources (since they run in parallel)
 - Displays in hours and minutes format (e.g., "4h 30m")
 - Shows both overall estimate and per-source estimates
 
 **Location:**
+
 - `scripts/recipe-scraper/jobs/comprehensive-scraper.ts` - Time calculation logic
 - `app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx` - UI display
 
 **UI Display:**
+
 - Overall time estimate shown prominently in progress dashboard
 - Per-source time estimates shown in each source's progress card
 - Updates in real-time as scraping progresses
@@ -29,6 +32,7 @@
 **What:** Enhanced scrapers to extract cooking/baking temperatures from recipes
 
 **Implementation:**
+
 - Added `temperature_celsius`, `temperature_fahrenheit`, and `temperature_unit` fields to `ScrapedRecipe` type
 - Created `parseTemperature()` method in `BaseScraper` to handle various temperature formats:
   - String formats: "350°F", "180°C", "350 F", "180 C"
@@ -41,6 +45,7 @@
   3. AI extractor (as fallback)
 
 **Scrapers Updated:**
+
 - ✅ `EpicuriousScraper` - Extracts temperature from JSON-LD and instructions
 - ✅ `AllRecipesScraper` - Extracts temperature from JSON-LD and instructions
 - 🔄 `FoodNetworkScraper` - Needs update (will extract from JSON-LD)
@@ -48,6 +53,7 @@
 - 🔄 `TastyScraper` - Needs update (will extract from JSON-LD)
 
 **AI Extractor Enhanced:**
+
 - ✅ Updated prompt to include temperature fields
 - ✅ Parses temperature from AI-generated JSON
 - ✅ Handles both Celsius and Fahrenheit formats
@@ -57,6 +63,7 @@
 **What:** Enhanced UI to show complete recipe information including instructions, times, and temperatures
 
 **Implementation:**
+
 - Updated `RecipeListSection` component to display:
   - **Full Instructions:** All steps shown in numbered list
   - **Cooking Times:** Prep time, cook time, and total time with clock icons
@@ -64,6 +71,7 @@
   - **Dual Units:** Shows both Celsius and Fahrenheit when available
 
 **UI Features:**
+
 - Clock icons for time information
 - Thermometer icon for temperature
 - Numbered list for instructions
@@ -93,6 +101,7 @@ export interface ScrapedRecipe {
 ### 1. JSON-LD Structured Data (Primary)
 
 Scrapers check for temperature in:
+
 - `recipeData.cookingMethod?.temperature`
 - `recipeData.temperature`
 - Instruction steps with temperature data
@@ -100,6 +109,7 @@ Scrapers check for temperature in:
 ### 2. Instruction Text Parsing (Fallback)
 
 Searches instruction text for patterns:
+
 - `"350°F"`, `"180°C"`
 - `"bake at 350°F"`
 - `"preheat to 180°C"`

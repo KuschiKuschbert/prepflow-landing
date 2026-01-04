@@ -1,4 +1,3 @@
-/* eslint-disable */
 'use client';
 import { logger } from '@/lib/logger';
 import { useMemo, useRef } from 'react';

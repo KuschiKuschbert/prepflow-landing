@@ -6,7 +6,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { Download, Loader2, Square, RefreshCw } from 'lucide-react';
+import { Download, Loader2, RefreshCw, Square } from 'lucide-react';
 
 interface ComprehensiveSourceStatus {
   discovered: number;
@@ -63,8 +63,8 @@ export function ComprehensiveScraperSection({
       </h2>
       <p className="mb-4 text-sm text-[var(--foreground-muted)]">
         Scrape ALL recipes from AllRecipes, Food Network, Epicurious, Bon Appétit, and Tasty
-        automatically. This will discover and scrape every available recipe from all sources. Progress
-        is saved and can be resumed if interrupted.
+        automatically. This will discover and scrape every available recipe from all sources.
+        Progress is saved and can be resumed if interrupted.
       </p>
       <div className="flex gap-3">
         <button
@@ -153,7 +153,9 @@ export function ComprehensiveScraperSection({
             {comprehensiveStatus.overall?.estimatedTimeRemaining &&
               comprehensiveStatus.overall.estimatedTimeRemaining > 0 && (
                 <div className="mt-3 rounded-lg bg-[var(--surface)] p-3 text-center">
-                  <div className="text-xs text-[var(--foreground-muted)]">Estimated Time Remaining</div>
+                  <div className="text-xs text-[var(--foreground-muted)]">
+                    Estimated Time Remaining
+                  </div>
                   <div className="text-lg font-semibold text-[#29E7CD]">
                     {formatTime(comprehensiveStatus.overall.estimatedTimeRemaining)}
                   </div>
@@ -208,9 +210,13 @@ export function ComprehensiveScraperSection({
                       </div>
                     </div>
                   </div>
-                  {stats.estimatedTimeRemaining && stats.estimatedTimeRemaining > 0 && (
+                  {stats.remaining > 0 && (
                     <div className="mt-2 text-xs text-[var(--foreground-muted)]">
-                      Estimated time remaining: {formatTime(stats.estimatedTimeRemaining)}
+                      {stats.estimatedTimeRemaining && stats.estimatedTimeRemaining > 0 ? (
+                        <>Estimated time remaining: {formatTime(stats.estimatedTimeRemaining)}</>
+                      ) : (
+                        <>Estimated time remaining: {formatTime(undefined)}</>
+                      )}
                     </div>
                   )}
                 </div>

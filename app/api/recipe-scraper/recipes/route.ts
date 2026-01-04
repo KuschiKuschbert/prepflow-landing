@@ -49,7 +49,10 @@ export async function GET(request: NextRequest) {
 
     const searchParams = request.nextUrl.searchParams;
     const search = searchParams.get('search'); // Comma-separated ingredients
-    const limit = parseInt(searchParams.get('limit') || '50', 10);
+    // Pagination support: page (1-based) and pageSize
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
+    const pageSize = Math.max(1, Math.min(100, parseInt(searchParams.get('pageSize') || '25', 10))); // Max 100 per page
+    const offset = (page - 1) * pageSize;
 
     // Load modules dynamically
     let JSONStorageClass;
@@ -96,22 +99,29 @@ export async function GET(request: NextRequest) {
     }
 
     let recipes: any[] = [];
+    let totalRecipes = 0;
     try {
       if (search) {
-        // Search by ingredients
+        // Search by ingredients - get all matching recipes first, then paginate
         const ingredients = search
           .split(',')
           .map(i => i.trim())
           .filter(Boolean);
-        recipes = await searchRecipesByIngredients(ingredients, limit);
+        const allMatchingRecipes = await searchRecipesByIngredients(ingredients, 10000); // Get all matches
+        totalRecipes = allMatchingRecipes.length;
+        recipes = allMatchingRecipes.slice(offset, offset + pageSize);
       } else {
-        // Get all recipes
+        // Get all recipes with pagination
         try {
           const allRecipes = storage.getAllRecipes();
+          totalRecipes = allRecipes.length;
+
           if (allRecipes.length > 0) {
-            const recipePromises = allRecipes
-              .slice(0, limit)
-              .map(entry => storage.loadRecipe(entry.file_path));
+            // Apply pagination to file paths first (more efficient than loading all recipes)
+            const paginatedEntries = allRecipes.slice(offset, offset + pageSize);
+            const recipePromises = paginatedEntries.map(entry =>
+              storage.loadRecipe(entry.file_path),
+            );
             const loadedRecipes = await Promise.all(recipePromises);
             recipes = loadedRecipes.filter(recipe => recipe !== null);
           }
@@ -147,11 +157,19 @@ export async function GET(request: NextRequest) {
       };
     }
 
+    const totalPages = Math.ceil(totalRecipes / pageSize);
+
     return NextResponse.json({
       success: true,
       data: {
         recipes,
         stats,
+        pagination: {
+          page,
+          pageSize,
+          total: totalRecipes,
+          totalPages,
+        },
       },
     });
   } catch (err) {

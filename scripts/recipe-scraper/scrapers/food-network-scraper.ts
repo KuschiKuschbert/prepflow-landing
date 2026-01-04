@@ -188,8 +188,7 @@ export class FoodNetworkScraper extends BaseScraper {
   private parseFromJSONLD(recipeData: any, url: string): Partial<ScrapedRecipe> {
     // Extract temperature from JSON-LD (check multiple possible locations)
     // First try JSON-LD temperature fields
-    const temperatureFromJSONLD =
-      recipeData.cookingMethod?.temperature || recipeData.temperature;
+    const temperatureFromJSONLD = recipeData.cookingMethod?.temperature || recipeData.temperature;
 
     // If not found in JSON-LD, extract from instructions using BaseScraper method
     const temperatureFromInstructions = this.extractTemperatureFromInstructions(
@@ -211,7 +210,7 @@ export class FoodNetworkScraper extends BaseScraper {
       id: recipeData.url || url,
       recipe_name: recipeData.name || recipeData.headline || 'Untitled Recipe',
       description: recipeData.description || '',
-        instructions: this.parseInstructions(recipeData.recipeInstructions || []), // Uses BaseScraper.parseInstructions
+      instructions: this.parseInstructions(recipeData.recipeInstructions || []), // Uses BaseScraper.parseInstructions
       ingredients: this.parseIngredients(recipeData.recipeIngredient || []),
       yield: this.parseYield(recipeData.recipeYield),
       yield_unit: 'servings',
@@ -396,7 +395,10 @@ export class FoodNetworkScraper extends BaseScraper {
                     normalizedUrl = `https://www.foodnetwork.com${match[1]}`;
                   } else {
                     // Just use the href as-is but fix the domain
-                    normalizedUrl = href.replace(/^\/www\.foodnetwork\.com/, 'https://www.foodnetwork.com');
+                    normalizedUrl = href.replace(
+                      /^\/www\.foodnetwork\.com/,
+                      'https://www.foodnetwork.com',
+                    );
                   }
                 } else {
                   // Normal relative URL
@@ -489,22 +491,43 @@ export class FoodNetworkScraper extends BaseScraper {
     const urls: string[] = [];
     const visited = new Set<string>();
 
-    // Try sitemap parsing first
+    // Try sitemap parsing first (fastest and most complete)
     try {
-      scraperLogger.info('Attempting to discover Food Network URLs via sitemap...');
+      scraperLogger.info(
+        'Attempting to discover Food Network URLs via sitemap (this may take a few minutes)...',
+      );
       const sitemapParser = new SitemapParser();
-      const sitemapUrls = await sitemapParser.discoverRecipeUrls('food-network');
+
+      // Set 5-minute timeout for sitemap parsing (Food Network has many sitemaps)
+      const sitemapPromise = sitemapParser.discoverRecipeUrls('food-network');
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('Sitemap parsing timeout (5min)')), 300000); // 5 minutes
+      });
+
+      const sitemapUrls = await Promise.race([sitemapPromise, timeoutPromise]);
+
       if (sitemapUrls.length > 0) {
         scraperLogger.info(`Discovered ${sitemapUrls.length} recipe URLs from sitemap`);
         return sitemapUrls;
+      } else {
+        scraperLogger.warn('Sitemap parsing returned 0 URLs, falling back to pagination');
       }
     } catch (error) {
-      scraperLogger.warn('Sitemap parsing failed, falling back to pagination:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (errorMessage.includes('timeout')) {
+        scraperLogger.warn('Sitemap parsing timed out after 5 minutes, falling back to pagination');
+      } else if (errorMessage.includes('Scraping stopped by user')) {
+        // Re-throw stop errors
+        throw error;
+      } else {
+        scraperLogger.warn('Sitemap parsing failed, falling back to pagination:', error);
+      }
     }
 
     // Fallback to pagination crawling
     scraperLogger.info('Falling back to pagination crawling for Food Network...');
     try {
+      // Comprehensive category list for maximum recipe discovery
       const categoryPages = [
         'https://www.foodnetwork.com/recipes',
         'https://www.foodnetwork.com/recipes/photos/easy-recipes',
@@ -512,6 +535,14 @@ export class FoodNetworkScraper extends BaseScraper {
         'https://www.foodnetwork.com/recipes/photos/dinner-recipes',
         'https://www.foodnetwork.com/recipes/photos/healthy-recipes',
         'https://www.foodnetwork.com/recipes/photos/dessert-recipes',
+        'https://www.foodnetwork.com/recipes/photos/breakfast-recipes',
+        'https://www.foodnetwork.com/recipes/photos/lunch-recipes',
+        'https://www.foodnetwork.com/recipes/photos/appetizer-recipes',
+        'https://www.foodnetwork.com/recipes/photos/side-dish-recipes',
+        'https://www.foodnetwork.com/recipes/photos/main-dish-recipes',
+        'https://www.foodnetwork.com/recipes/photos/soup-recipes',
+        'https://www.foodnetwork.com/recipes/photos/salad-recipes',
+        'https://www.foodnetwork.com/recipes/photos/bread-recipes',
       ];
 
       for (const pageUrl of categoryPages) {
@@ -553,7 +584,10 @@ export class FoodNetworkScraper extends BaseScraper {
                       normalizedUrl = `https://www.foodnetwork.com${match[1]}`;
                     } else {
                       // Just use the href as-is but fix the domain
-                      normalizedUrl = href.replace(/^\/www\.foodnetwork\.com/, 'https://www.foodnetwork.com');
+                      normalizedUrl = href.replace(
+                        /^\/www\.foodnetwork\.com/,
+                        'https://www.foodnetwork.com',
+                      );
                     }
                   } else {
                     // Normal relative URL
@@ -629,7 +663,12 @@ export class FoodNetworkScraper extends BaseScraper {
                 `Found ${recipeLinks.length} recipes on page ${currentPage} of ${pageUrl}`,
               );
               currentPage++;
-              if (currentPage > 100) {
+              // Increased pagination limit to 200 pages per category for maximum discovery
+              // Food Network has thousands of recipes, so we need to go deeper
+              if (currentPage > 200) {
+                scraperLogger.info(
+                  `Reached pagination limit (200 pages) for ${pageUrl}, found ${urls.length} recipes so far`,
+                );
                 hasMorePages = false;
               }
             }

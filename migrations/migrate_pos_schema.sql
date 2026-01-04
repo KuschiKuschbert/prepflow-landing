@@ -27,13 +27,11 @@ CREATE TABLE IF NOT EXISTS public.transactions (
 ALTER TABLE public.transactions ENABLE ROW LEVEL SECURITY;
 
 -- Policy: Allow Anon (Public) to Insert/Select/Update for now (Development Mode)
--- In production, restrict this to authenticated users or specific API keys
+DROP POLICY IF EXISTS "Enable all access for anon" ON public.transactions;
 CREATE POLICY "Enable all access for anon" ON public.transactions
 FOR ALL USING (true) WITH CHECK (true);
 
 -- 2. Create Menu Items Table (POS specific)
--- Note: PrepFlow has a 'dishes' table, but POS uses 'menu_items' with specific schema.
--- Renaming to 'pos_menu_items' to avoid conflict with existing Menu Builder 'menu_items' table.
 CREATE TABLE IF NOT EXISTS public.pos_menu_items (
   id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
   name text NOT NULL,
@@ -41,34 +39,52 @@ CREATE TABLE IF NOT EXISTS public.pos_menu_items (
   price numeric NOT NULL,
   tax_rate numeric DEFAULT 0.1,
   is_available boolean DEFAULT true,
-  image_url text, -- Android expects 'imageUrl' mapped to this
-  square_id text UNIQUE, -- For Square Sync
+  image_url text,
+  square_id text UNIQUE,
   created_at timestamptz DEFAULT now()
 );
 
 ALTER TABLE public.pos_menu_items ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Enable all access for anon" ON public.pos_menu_items;
 CREATE POLICY "Enable all access for anon" ON public.pos_menu_items
 FOR ALL USING (true) WITH CHECK (true);
 
--- 3. Create Modifier Options Table
--- Renaming to 'pos_modifier_options' for consistency and safety.
+-- 3. Create Modifier Options Table and Handle Schema Updates
 CREATE TABLE IF NOT EXISTS public.pos_modifier_options (
   id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
   name text NOT NULL,
-  category text, -- e.g. 'Size', 'Topping'
-  price numeric DEFAULT 0.0,
+  category text,
+  price_delta numeric DEFAULT 0.0,
+  type text DEFAULT 'ADDON',
   is_available boolean DEFAULT true,
-  square_id text UNIQUE, -- For Square Sync
+  square_id text UNIQUE,
   created_at timestamptz DEFAULT now()
 );
 
+-- Schema Migration: If table existed with 'price' column, rename it to 'price_delta'
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'pos_modifier_options' AND column_name = 'price') THEN
+        ALTER TABLE public.pos_modifier_options RENAME COLUMN price TO price_delta;
+    END IF;
+END $$;
+
+-- Schema Migration: If table existed without 'type' column, add it
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'pos_modifier_options' AND column_name = 'type') THEN
+        ALTER TABLE public.pos_modifier_options ADD COLUMN type text DEFAULT 'ADDON';
+    END IF;
+END $$;
+
 ALTER TABLE public.pos_modifier_options ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Enable all access for anon" ON public.pos_modifier_options;
 CREATE POLICY "Enable all access for anon" ON public.pos_modifier_options
 FOR ALL USING (true) WITH CHECK (true);
 
 -- 4. Create Customers Table (POS specific loyalty)
--- 'users' table exists for Admin/Web auth, but 'customers' is for POS Walk-in/Loyalty
--- Renaming to 'pos_customers' to avoid potential conflicts.
 CREATE TABLE IF NOT EXISTS public.pos_customers (
   id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
   name text,
@@ -83,6 +99,8 @@ CREATE TABLE IF NOT EXISTS public.pos_customers (
 );
 
 ALTER TABLE public.pos_customers ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Enable all access for anon" ON public.pos_customers;
 CREATE POLICY "Enable all access for anon" ON public.pos_customers
 FOR ALL USING (true) WITH CHECK (true);
 

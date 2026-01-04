@@ -58,39 +58,70 @@ export class SitemapParser {
           }
         });
 
-        // Parse each sitemap in the index
-        for (const subSitemapUrl of sitemapUrls) {
-          // Check stop flag before parsing each sub-sitemap
+        // Parse sitemaps in parallel batches for better performance
+        // Process 10 sitemaps concurrently to speed up discovery (1000+ sitemaps would take hours sequentially)
+        const BATCH_SIZE = 10;
+        const totalSitemaps = sitemapUrls.length;
+        scraperLogger.info(`Parsing ${totalSitemaps} sitemaps in batches of ${BATCH_SIZE}...`);
+
+        for (let i = 0; i < sitemapUrls.length; i += BATCH_SIZE) {
+          // Check stop flag before processing batch
           if (this.checkStopFlag()) {
-            scraperLogger.info(`🛑 Stop flag detected during sitemap parsing, stopping immediately`);
+            scraperLogger.info(
+              `🛑 Stop flag detected during sitemap parsing, stopping immediately`,
+            );
             throw new Error('Scraping stopped by user');
           }
 
-          try {
-            const subUrls = await this.parseSitemap(subSitemapUrl);
+          const batch = sitemapUrls.slice(i, i + BATCH_SIZE);
+          const batchNumber = Math.floor(i / BATCH_SIZE) + 1;
+          const totalBatches = Math.ceil(totalSitemaps / BATCH_SIZE);
+
+          scraperLogger.info(
+            `Processing sitemap batch ${batchNumber}/${totalBatches} (${batch.length} sitemaps, ${urls.length} URLs found so far)...`,
+          );
+
+          // Process batch in parallel
+          const batchPromises = batch.map(async subSitemapUrl => {
+            try {
+              const subUrls = await this.parseSitemap(subSitemapUrl);
+              return subUrls;
+            } catch (error) {
+              // If it's a stop error, re-throw it
+              if (error instanceof Error && error.message === 'Scraping stopped by user') {
+                throw error;
+              }
+
+              const errorMessage = error instanceof Error ? error.message : String(error);
+              logger.warn(`[Sitemap Parser] Failed to parse sub-sitemap ${subSitemapUrl}:`, {
+                error: errorMessage,
+              });
+              scraperLogger.warn(`Failed to parse sub-sitemap ${subSitemapUrl}:`, error);
+              return []; // Return empty array on error
+            }
+          });
+
+          // Wait for batch to complete
+          const batchResults = await Promise.all(batchPromises);
+          for (const subUrls of batchResults) {
             urls.push(...subUrls);
+          }
 
-            // Check stop flag after parsing each sub-sitemap
-            if (this.checkStopFlag()) {
-              scraperLogger.info(`🛑 Stop flag detected after parsing sub-sitemap, stopping immediately`);
-              throw new Error('Scraping stopped by user');
-            }
+          // Check stop flag after processing batch
+          if (this.checkStopFlag()) {
+            scraperLogger.info(`🛑 Stop flag detected after parsing batch, stopping immediately`);
+            throw new Error('Scraping stopped by user');
+          }
 
-            // Small delay between sitemap requests
-            await new Promise(resolve => setTimeout(resolve, 500));
-          } catch (error) {
-            // If it's a stop error, re-throw it
-            if (error instanceof Error && error.message === 'Scraping stopped by user') {
-              throw error;
-            }
-
-            const errorMessage = error instanceof Error ? error.message : String(error);
-            logger.warn(`[Sitemap Parser] Failed to parse sub-sitemap ${subSitemapUrl}:`, {
-              error: errorMessage,
-            });
-            scraperLogger.warn(`Failed to parse sub-sitemap ${subSitemapUrl}:`, error);
+          // Small delay between batches to respect rate limits
+          if (i + BATCH_SIZE < sitemapUrls.length) {
+            await new Promise(resolve => setTimeout(resolve, 200)); // Reduced delay since we're batching
           }
         }
+
+        scraperLogger.info(
+          `Completed parsing all ${totalSitemaps} sitemaps, found ${urls.length} total URLs`,
+        );
 
         return urls;
       }
@@ -186,7 +217,9 @@ export class SitemapParser {
   async discoverRecipeUrls(source: SourceType): Promise<string[]> {
     // Check stop flag before starting discovery
     if (this.checkStopFlag()) {
-      scraperLogger.info(`🛑 Stop flag detected before URL discovery for ${source}, stopping immediately`);
+      scraperLogger.info(
+        `🛑 Stop flag detected before URL discovery for ${source}, stopping immediately`,
+      );
       throw new Error('Scraping stopped by user');
     }
 
@@ -201,7 +234,9 @@ export class SitemapParser {
 
       // Check stop flag after parsing
       if (this.checkStopFlag()) {
-        scraperLogger.info(`🛑 Stop flag detected after URL discovery for ${source}, stopping immediately`);
+        scraperLogger.info(
+          `🛑 Stop flag detected after URL discovery for ${source}, stopping immediately`,
+        );
         throw new Error('Scraping stopped by user');
       }
 

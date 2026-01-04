@@ -36,7 +36,8 @@ function loadProgress(source: string): ProgressData | null {
     // Progress file format: { discovered: string[], scraped: string[], failed: Record<string, string> }
     const total = Array.isArray(data.discovered) ? data.discovered.length : 0;
     const scraped = Array.isArray(data.scraped) ? data.scraped.length : 0;
-    const failed = data.failed && typeof data.failed === 'object' ? Object.keys(data.failed).length : 0;
+    const failed =
+      data.failed && typeof data.failed === 'object' ? Object.keys(data.failed).length : 0;
     const filtered = typeof data.filtered === 'number' ? data.filtered : 0;
 
     return {
@@ -55,7 +56,10 @@ function loadProgress(source: string): ProgressData | null {
 /**
  * Estimate time for scraping
  */
-function estimateTime(remaining: number, recipesPerMinute: number = 30): {
+function estimateTime(
+  remaining: number,
+  recipesPerMinute: number = 30,
+): {
   minutes: number;
   hours: number;
   days: number;
@@ -155,32 +159,48 @@ async function calculateEstimates() {
   }
 
   // Calculate parallel time estimate (longest source determines total time)
-  const maxSourceTime = Math.max(...sourceStats.map(stat => {
-    const estimate = estimateTime(stat.remaining, recipesPerMinute);
-    return estimate.minutes;
-  }), 0);
+  const maxSourceTime = Math.max(
+    ...sourceStats.map(stat => {
+      const estimate = estimateTime(stat.remaining, recipesPerMinute);
+      return estimate.minutes;
+    }),
+    0,
+  );
   const parallelEstimate = estimateTime(maxSourceTime * recipesPerMinute, recipesPerMinute);
 
   // Sequential estimate (sum of all sources - old method)
   const sequentialEstimate = estimateTime(totalRemaining, recipesPerMinute);
 
-  const totalPercentage = totalScraped + totalFailed + totalFiltered > 0
-    ? Math.round(((totalScraped + totalFailed + totalFiltered) / (totalScraped + totalFailed + totalFiltered + totalRemaining)) * 100)
-    : 0;
+  const totalPercentage =
+    totalScraped + totalFailed + totalFiltered > 0
+      ? Math.round(
+          ((totalScraped + totalFailed + totalFiltered) /
+            (totalScraped + totalFailed + totalFiltered + totalRemaining)) *
+            100,
+        )
+      : 0;
 
   scraperLogger.info('\n' + '='.repeat(80));
   scraperLogger.info('📊 OVERALL STATISTICS:');
   scraperLogger.info('='.repeat(80));
-  scraperLogger.info(`Total recipes to scrape:  ${(totalScraped + totalFailed + totalFiltered + totalRemaining).toLocaleString()}`);
+  scraperLogger.info(
+    `Total recipes to scrape:  ${(totalScraped + totalFailed + totalFiltered + totalRemaining).toLocaleString()}`,
+  );
   scraperLogger.info(`Already scraped:         ${totalScraped.toLocaleString()}`);
   scraperLogger.info(`Failed:                  ${totalFailed.toLocaleString()}`);
   scraperLogger.info(`Filtered (rating):      ${totalFiltered.toLocaleString()}`);
   scraperLogger.info(`Remaining:               ${totalRemaining.toLocaleString()}`);
   scraperLogger.info(`Progress:                ${totalPercentage}%`);
   scraperLogger.info(`\n⏱️  ESTIMATED TIME TO COMPLETE:`);
-  scraperLogger.info(`   🚀 PARALLEL (current): ${parallelEstimate.formatted} (all sources simultaneously)`);
-  scraperLogger.info(`   📊 Sequential (old):   ${sequentialEstimate.formatted} (one source at a time)`);
-  scraperLogger.info(`   💡 Speed improvement:   ~${Math.round((1 - parallelEstimate.minutes / sequentialEstimate.minutes) * 100)}% faster with parallel processing`);
+  scraperLogger.info(
+    `   🚀 PARALLEL (current): ${parallelEstimate.formatted} (all sources simultaneously)`,
+  );
+  scraperLogger.info(
+    `   📊 Sequential (old):   ${sequentialEstimate.formatted} (one source at a time)`,
+  );
+  scraperLogger.info(
+    `   💡 Speed improvement:   ~${Math.round((1 - parallelEstimate.minutes / sequentialEstimate.minutes) * 100)}% faster with parallel processing`,
+  );
   scraperLogger.info(`   (Based on ${recipesPerMinute} recipes/minute - conservative estimate)`);
   scraperLogger.info('\n📝 Notes:');
   scraperLogger.info('   - Estimate assumes continuous scraping without interruptions');

@@ -32,7 +32,7 @@ export default function CurbOSAdmin() {
     setIsLoading(true)
     try {
       const { data, error } = await supabase
-        .from('menu_items')
+        .from('pos_menu_items')
         .select('*')
         .order('name')
 
@@ -57,19 +57,18 @@ export default function CurbOSAdmin() {
     const itemData = {
       name,
       price: parseFloat(price),
-      category,
-      updated_at: new Date().toISOString()
+      category
     }
 
     if (editingItem) {
       const { error } = await supabase
-        .from('menu_items')
+        .from('pos_menu_items')
         .update(itemData)
         .eq('id', editingItem.id)
        if (!error) fetchItems()
     } else {
       const { error } = await supabase
-        .from('menu_items')
+        .from('pos_menu_items')
         .insert([{ ...itemData, id: crypto.randomUUID() }]) // Client-side ID generation for speed
        if (!error) fetchItems()
     }
@@ -78,7 +77,7 @@ export default function CurbOSAdmin() {
 
   async function deleteItem(id: string) {
     if (!confirm('Are you sure?')) return
-    const { error } = await supabase.from('menu_items').delete().eq('id', id)
+    const { error } = await supabase.from('pos_menu_items').delete().eq('id', id)
     if (!error) fetchItems()
   }
 

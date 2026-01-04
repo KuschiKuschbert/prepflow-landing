@@ -11,21 +11,7 @@ import { useState, useEffect } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { ComprehensiveScraperSection } from './RecipeScraper/ComprehensiveScraperSection';
-import { RegularScraperSection } from './RecipeScraper/RegularScraperSection';
 import { RecipeListSection } from './RecipeScraper/RecipeListSection';
-
-interface ScrapeResult {
-  success: boolean;
-  recipe?: {
-    id: string;
-    recipe_name: string;
-    source: string;
-    source_url: string;
-    ingredients: Array<{ name: string; original_text: string }>;
-  };
-  error?: string;
-  url: string;
-}
 
 interface ScrapedRecipe {
   id: string;
@@ -44,109 +30,37 @@ interface ScrapedRecipe {
 
 export function RecipeScraper() {
   const { showSuccess, showError } = useNotification();
-  const [urls, setUrls] = useState('');
-  const [source, setSource] = useState<
-    'allrecipes' | 'food-network' | 'epicurious' | 'bon-appetit' | 'tasty'
-  >('allrecipes');
-  const [scraping, setScraping] = useState(false);
-  const [results, setResults] = useState<ScrapeResult[]>([]);
   const [recipes, setRecipes] = useState<ScrapedRecipe[]>([]);
   const [loadingRecipes, setLoadingRecipes] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [discoveryMode, setDiscoveryMode] = useState(true);
-  const [limit, setLimit] = useState(50);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
+  const [totalRecipes, setTotalRecipes] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [comprehensiveScraping, setComprehensiveScraping] = useState(false);
   const [comprehensiveStatus, setComprehensiveStatus] = useState<any>(null);
   const [statusPolling, setStatusPolling] = useState(false);
 
-  const handleScrape = async () => {
-    if (!discoveryMode) {
-      // Manual URL mode
-      if (!urls.trim()) {
-        showError('Please enter at least one recipe URL');
-        return;
-      }
-
-      const urlList = urls
-        .split('\n')
-        .map(u => u.trim())
-        .filter(Boolean);
-
-      if (urlList.length === 0) {
-        showError('Please enter at least one valid URL');
-        return;
-      }
-    }
-
-    // Note: Scraping is a CREATE operation (adds new recipes), not UPDATE/DELETE
-    // Loading state is appropriate here as we're fetching external data
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    setScraping(true);
-    setResults([]);
-
-    try {
-      const requestBody: {
-        source: string;
-        urls?: string[];
-        discovery: boolean;
-        limit?: number;
-      } = {
-        source,
-        discovery: discoveryMode,
-      };
-
-      if (!discoveryMode) {
-        const urlList = urls
-          .split('\n')
-          .map(u => u.trim())
-          .filter(Boolean);
-        requestBody.urls = urlList;
-      } else {
-        requestBody.limit = limit;
-      }
-
-      const response = await fetch('/api/recipe-scraper/scrape', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody),
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        setResults(result.data.results);
-        const { success, errors } = result.data.summary;
-        if (success > 0) {
-          showSuccess(`Successfully scraped ${success} recipe(s)!`);
-          // Refresh recipe list
-          fetchRecipes();
-        }
-        if (errors > 0) {
-          showError(`${errors} recipe(s) failed to scrape`);
-        }
-      } else {
-        showError(result.message || 'Failed to scrape recipes');
-      }
-    } catch (error) {
-      // Note: No rollback needed - scraping is a CREATE operation that doesn't modify existing state
-      logger.error('[RecipeScraper] Error scraping recipes:', {
-        error: error instanceof Error ? error.message : String(error),
-      });
-      showError('Failed to scrape recipes. Please try again.');
-    } finally {
-      setScraping(false);
-    }
-  };
-
-  const fetchRecipes = async () => {
+  const fetchRecipes = async (pageNum: number = page, pageSizeNum: number = pageSize) => {
     setLoadingRecipes(true);
     try {
-      const searchParam = searchTerm ? `?search=${encodeURIComponent(searchTerm)}` : '';
-      const response = await fetch(`/api/recipe-scraper/recipes${searchParam}`);
+      const params = new URLSearchParams();
+      if (searchTerm) {
+        params.set('search', searchTerm);
+      }
+      params.set('page', pageNum.toString());
+      params.set('pageSize', pageSizeNum.toString());
+
+      const response = await fetch(`/api/recipe-scraper/recipes?${params.toString()}`);
       const result = await response.json();
 
       if (result.success) {
         setRecipes(result.data.recipes || []);
+        if (result.data.pagination) {
+          setTotalRecipes(result.data.pagination.total || 0);
+          setTotalPages(result.data.pagination.totalPages || 0);
+          setPage(result.data.pagination.page || 1);
+        }
       }
     } catch (error) {
       logger.error('[RecipeScraper] Error fetching recipes:', {
@@ -159,7 +73,7 @@ export function RecipeScraper() {
 
   // Load recipes and check comprehensive scraping status on mount
   useEffect(() => {
-    fetchRecipes();
+    fetchRecipes(1, pageSize); // Initial load - start at page 1
     const checkStatus = async () => {
       try {
         const response = await fetch('/api/recipe-scraper/status');
@@ -191,7 +105,8 @@ export function RecipeScraper() {
           setComprehensiveStatus(result.data);
           if (!result.data.isRunning) {
             setStatusPolling(false);
-            fetchRecipes(); // Refresh recipe list
+            setPage(1); // Reset to first page
+            fetchRecipes(1, pageSize); // Refresh recipe list
           }
         }
       } catch (err) {
@@ -258,7 +173,9 @@ export function RecipeScraper() {
 
       if (result.success) {
         setStatusPolling(true); // Continue polling to see status update
-        showSuccess('Stop command sent! Scraper will stop at next checkpoint (within current batch).');
+        showSuccess(
+          'Stop command sent! Scraper will stop at next checkpoint (within current batch).',
+        );
 
         // Refresh status immediately and continue polling
         const refreshStatus = async () => {
@@ -327,26 +244,28 @@ export function RecipeScraper() {
         onRefreshStatus={handleRefreshStatus}
       />
 
-      <RegularScraperSection
-        source={source}
-        setSource={setSource}
-        urls={urls}
-        setUrls={setUrls}
-        discoveryMode={discoveryMode}
-        setDiscoveryMode={setDiscoveryMode}
-        limit={limit}
-        setLimit={setLimit}
-        scraping={scraping}
-        results={results}
-        onScrape={handleScrape}
-      />
-
       <RecipeListSection
         recipes={recipes}
         loadingRecipes={loadingRecipes}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
-        onFetchRecipes={fetchRecipes}
+        onFetchRecipes={() => {
+          setPage(1); // Reset to first page when refreshing/searching
+          fetchRecipes(1, pageSize);
+        }}
+        page={page}
+        pageSize={pageSize}
+        totalRecipes={totalRecipes}
+        totalPages={totalPages}
+        onPageChange={newPage => {
+          setPage(newPage);
+          fetchRecipes(newPage, pageSize);
+        }}
+        onPageSizeChange={newPageSize => {
+          setPageSize(newPageSize);
+          setPage(1); // Reset to first page when changing page size
+          fetchRecipes(1, newPageSize);
+        }}
       />
     </div>
   );

@@ -68,15 +68,18 @@
 **HTML Fallback (for when JSON-LD fails):**
 
 **Recipe Name:**
+
 - `h1` - **VERIFIED WORKING**
 - `h1.recipe-header__title` - Not tested (fallback)
 
 **Ingredients:**
+
 - `.ingredients-list__item` - **VERIFIED WORKING** (10 elements found)
 - `.ingredients-list li` - **VERIFIED WORKING** (10 elements found)
 - `.recipe-ingredients__list-item` - Not tested (fallback)
 
 **Instructions:**
+
 - ⚠️ **No HTML selectors found** - All tested selectors returned 0 elements:
   - `.method__list-item`
   - `.recipe-method__list-item`
@@ -122,18 +125,22 @@
 **HTML Fallback (for when JSON-LD fails):**
 
 **Recipe Name:**
+
 - `h1.o-AssetTitle__a-Headline` - **VERIFIED WORKING**
 - `h1` - **VERIFIED WORKING** (fallback)
 
 **Description:**
+
 - `.o-AssetDescription__a-Description` - **VERIFIED WORKING**
 - `.recipe-description` - Not tested (fallback)
 
 **Instructions:**
+
 - `.o-Method__m-Step` - **VERIFIED WORKING** (2 elements found)
 - `.recipe-instructions li` - **VERIFIED WORKING** (fallback)
 
 **Ingredients:**
+
 - `.o-Ingredients__a-ListItem` - **VERIFIED WORKING** (4 elements found)
 - `.recipe-ingredients li` - **VERIFIED WORKING** (fallback)
 

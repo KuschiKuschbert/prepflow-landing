@@ -6,10 +6,12 @@
 ## Current Approach
 
 Our current scrapers use a two-tier approach:
+
 1. **Primary:** JSON-LD structured data parsing (most reliable, ~90% success rate)
 2. **Fallback:** HTML parsing with CSS selectors (cheerio-based, site-specific)
 
 **Limitations:**
+
 - HTML selectors break when sites change their structure
 - Some sites have complex/nested HTML that's hard to parse
 - Manual selector maintenance required for each site
@@ -19,6 +21,7 @@ Our current scrapers use a two-tier approach:
 ### 1. Crawl4AI (Python-based)
 
 **Pros:**
+
 - LLM-based extraction (can use Hugging Face models)
 - Automatic HTML-to-Markdown conversion
 - Multiple extraction strategies (LLM, CSS/XPath)
@@ -26,12 +29,14 @@ Our current scrapers use a two-tier approach:
 - Open source
 
 **Cons:**
+
 - Python-based (we're Node.js/TypeScript)
 - Would require Python service or API wrapper
 - Slower than direct HTML parsing
 - API costs if using cloud LLMs
 
 **Integration Options:**
+
 - **Option A:** Python microservice with REST API
 - **Option B:** Direct Python script called from Node.js
 - **Option C:** Use Crawl4AI's Hugging Face Space API
@@ -42,17 +47,20 @@ Our current scrapers use a two-tier approach:
 ### 2. Hugging Face Inference API (Direct)
 
 **Pros:**
+
 - Direct API access (no Python service needed)
 - Can use fine-tuned models for structured extraction
 - Pay-per-use pricing
 - Fast inference
 
 **Cons:**
+
 - Need to find/use appropriate models
 - May need to fine-tune for recipe extraction
 - API rate limits and costs
 
 **Potential Models:**
+
 - **Information Extraction Models:** `microsoft/deberta-v3-base`, `dslim/bert-base-NER`
 - **Question Answering:** For extracting specific fields
 - **Text Classification:** For identifying recipe sections
@@ -62,12 +70,14 @@ Our current scrapers use a two-tier approach:
 ### 3. OpenAI/Anthropic API (Structured Extraction)
 
 **Pros:**
+
 - Excellent structured data extraction
 - JSON mode support
 - High accuracy
 - Easy to use
 
 **Cons:**
+
 - Expensive for large-scale scraping
 - Rate limits
 - External dependency
@@ -75,11 +85,13 @@ Our current scrapers use a two-tier approach:
 ### 4. JigsawStack AI Scraper
 
 **Pros:**
+
 - Hugging Face Space available
 - Structured data extraction
 - No setup required
 
 **Cons:**
+
 - External service dependency
 - May have rate limits
 - Less control
@@ -91,12 +103,14 @@ Our current scrapers use a two-tier approach:
 ### Phase 1: Test Hugging Face Inference API
 
 **Test Plan:**
+
 1. Use Hugging Face Inference API with a text extraction model
 2. Send HTML content to model with a prompt for recipe extraction
 3. Parse structured JSON response
 4. Compare accuracy vs. current JSON-LD/HTML parsing
 
 **Models to Test:**
+
 - `microsoft/deberta-v3-base` (general extraction)
 - `dslim/bert-base-NER` (named entity recognition for ingredients)
 - `google/flan-t5-base` (instruction following for structured extraction)
@@ -104,11 +118,13 @@ Our current scrapers use a two-tier approach:
 ### Phase 2: Fallback Integration
 
 **Strategy:**
+
 1. Try JSON-LD parsing first (fastest, most reliable)
 2. Try HTML parsing with selectors (fast, site-specific)
 3. **NEW:** Fallback to AI extraction if both fail (robust, slower)
 
 **Implementation:**
+
 - Add `AIExtractor` class that uses Hugging Face API
 - Integrate as fallback in `BaseScraper.parseRecipe()`
 - Only use AI when traditional methods fail (cost optimization)
@@ -116,6 +132,7 @@ Our current scrapers use a two-tier approach:
 ### Phase 3: Selective AI Enhancement
 
 **Strategy:**
+
 - Use AI extraction for:
   - Sites with complex/nested HTML
   - Sites that frequently change structure
@@ -128,6 +145,7 @@ Our current scrapers use a two-tier approach:
 **Goal:** Test if we can extract recipe data using HF Inference API
 
 **Steps:**
+
 1. Create `scripts/recipe-scraper/utils/ai-extractor.ts`
 2. Implement HF Inference API client
 3. Test on 5-10 recipe URLs (mix of working and failing ones)
@@ -138,6 +156,7 @@ Our current scrapers use a two-tier approach:
 **Goal:** Understand API costs for large-scale scraping
 
 **Metrics:**
+
 - Cost per recipe extraction
 - Success rate improvement
 - Speed comparison
@@ -147,6 +166,7 @@ Our current scrapers use a two-tier approach:
 **Goal:** Integrate AI extraction as fallback
 
 **Steps:**
+
 1. Add AI extractor to `BaseScraper`
 2. Test on comprehensive scraper job
 3. Monitor success rate and costs
@@ -154,11 +174,13 @@ Our current scrapers use a two-tier approach:
 ## Recipe-Specific Models
 
 **Search Results:**
+
 - No dedicated recipe extraction models found on Hugging Face
 - Recipe generation models exist (GPT-2 fine-tuned)
 - General NER and extraction models can be adapted
 
 **Recommendation:**
+
 - Use general structured extraction models
 - Fine-tune on recipe dataset if needed (future work)
 
@@ -190,19 +212,23 @@ Our current scrapers use a two-tier approach:
 ## Recommended Models to Test
 
 ### Option 1: Text-to-JSON Models
+
 - **`google/flan-t5-base`** - Instruction following, can generate JSON
 - **`microsoft/phi-2`** - Small, efficient, good for structured output
 - **`mistralai/Mistral-7B-Instruct-v0.2`** - Strong instruction following
 
 ### Option 2: Named Entity Recognition (NER)
+
 - **`dslim/bert-base-NER`** - Extract ingredients as entities
 - **`dbmdz/bert-large-cased-finetuned-conll03-english`** - General NER
 
 ### Option 3: Question Answering
+
 - **`deepset/roberta-base-squad2`** - Extract specific fields via questions
 - **`distilbert-base-cased-distilled-squad`** - Faster QA model
 
 ### Option 4: Fine-Tuning Approach
+
 - Fine-tune a base model (like `bert-base-uncased`) on recipe extraction dataset
 - Use Recipe-NLG dataset or create custom dataset from scraped recipes
 - Deploy fine-tuned model to Hugging Face Hub
@@ -210,11 +236,13 @@ Our current scrapers use a two-tier approach:
 ## Cost Considerations
 
 **Hugging Face Inference API:**
+
 - Free tier: Limited requests
 - Pay-per-use: ~$0.001-0.01 per request (depends on model)
 - For 10,000 recipes: ~$10-100 (one-time cost)
 
 **Recommendation:**
+
 - Use AI extraction only as fallback (when traditional methods fail)
 - Estimate: ~5-10% of recipes would need AI extraction
 - Cost: ~$0.50-5.00 per 10,000 recipes (acceptable)
@@ -222,16 +250,19 @@ Our current scrapers use a two-tier approach:
 ## Integration Strategy
 
 ### Phase 1: Testing (Current)
+
 - Test AI extractor on sample URLs
 - Compare accuracy vs. traditional methods
 - Measure speed and cost
 
 ### Phase 2: Selective Integration
+
 - Add AI extraction as fallback in `BaseScraper`
 - Only use when JSON-LD and HTML parsing both fail
 - Log usage for monitoring
 
 ### Phase 3: Optimization
+
 - Cache AI extraction results
 - Batch similar requests
 - Fine-tune model for better accuracy
@@ -239,11 +270,13 @@ Our current scrapers use a two-tier approach:
 ## Alternative: Local Model
 
 **Option:** Run model locally instead of API
+
 - Use `@xenova/transformers` (JavaScript/TypeScript)
 - No API costs
 - Slower but more control
 - Good for high-volume scraping
 
 **Models to consider:**
+
 - `Xenova/bert-base-uncased` (NER)
 - `Xenova/distilbert-base-uncased` (faster)

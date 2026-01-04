@@ -18,10 +18,12 @@
 **Optimization:** Process 3-5 recipes concurrently per source
 
 **Impact:**
+
 - **3x-5x faster** within each source
 - **Total time reduction:** ~75-80% (from 26h to ~5-7 hours)
 
 **Implementation:**
+
 - Use `Promise.all()` with concurrency limit (3-5 concurrent requests per source)
 - Each source can have 3-5 requests in flight simultaneously
 - With 5 sources × 3-5 concurrent = 15-25 total concurrent requests
@@ -34,10 +36,12 @@
 **Optimization:** Start with 1 second, increase if rate limited
 
 **Impact:**
+
 - **2x faster** if no rate limits hit
 - Falls back to 2 seconds if rate limited
 
 **Implementation:**
+
 - Start with 1-second delay
 - Monitor for 429 errors
 - Increase delay if rate limited
@@ -51,10 +55,12 @@
 **Optimization:** Explicit keep-alive, connection limits
 
 **Impact:**
+
 - **10-20% faster** (reduces connection overhead)
 - Better for high-volume scraping
 
 **Implementation:**
+
 - Configure HTTP agent with keep-alive
 - Set max connections per host
 - Reuse connections across requests
@@ -74,6 +80,7 @@
 **Optimization:** Stream parsing for very large pages
 
 **Impact:**
+
 - **5-10% faster** for large pages
 - Lower memory usage
 
@@ -87,12 +94,12 @@
 
 ## Expected Performance After Optimizations
 
-| Optimization | Time Reduction | New Estimated Time |
-|--------------|----------------|-------------------|
-| Current (Parallel Sources) | Baseline | ~26 hours |
-| + Within-Source Parallel (3x) | -67% | ~8.5 hours |
-| + Adaptive Rate Limiting (2x) | -50% | ~4-5 hours |
-| + HTTP Optimization (10%) | -10% | ~4-4.5 hours |
+| Optimization                  | Time Reduction | New Estimated Time |
+| ----------------------------- | -------------- | ------------------ |
+| Current (Parallel Sources)    | Baseline       | ~26 hours          |
+| + Within-Source Parallel (3x) | -67%           | ~8.5 hours         |
+| + Adaptive Rate Limiting (2x) | -50%           | ~4-5 hours         |
+| + HTTP Optimization (10%)     | -10%           | ~4-4.5 hours       |
 
 **Total Improvement:** From ~26 hours to **~4-5 hours** (80-85% faster!)
 
@@ -119,12 +126,14 @@
 ## Risk Assessment
 
 **Low Risk:**
+
 - Each optimization has fallback mechanisms
 - Rate limiting prevents abuse
 - Progress tracking remains accurate
 - Error handling isolated per request
 
 **Monitoring:**
+
 - Track rate limit errors
 - Monitor request success rate
 - Watch for connection errors

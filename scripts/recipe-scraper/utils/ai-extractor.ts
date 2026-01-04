@@ -186,7 +186,9 @@ export class AIExtractor {
     const recipeText = [
       `Recipe Name: ${recipeName}`,
       description ? `Description: ${description}` : '',
-      ingredients.length > 0 ? `Ingredients:\n${ingredients.map((ing, i) => `${i + 1}. ${ing}`).join('\n')}` : '',
+      ingredients.length > 0
+        ? `Ingredients:\n${ingredients.map((ing, i) => `${i + 1}. ${ing}`).join('\n')}`
+        : '',
       instructions.length > 0
         ? `Instructions:\n${instructions.map((inst, i) => `${i + 1}. ${inst}`).join('\n')}`
         : '',
@@ -427,7 +429,10 @@ JSON:`;
     const cleaned = text
       .replace(/^\d+\s*/, '')
       .replace(/^\d+\/\d+\s*/, '')
-      .replace(/\s*(cup|cups|tbsp|tsp|oz|lb|g|kg|ml|l|tablespoon|teaspoon|ounce|pound|gram|kilogram|milliliter|liter)s?\s*/gi, '')
+      .replace(
+        /\s*(cup|cups|tbsp|tsp|oz|lb|g|kg|ml|l|tablespoon|teaspoon|ounce|pound|gram|kilogram|milliliter|liter)s?\s*/gi,
+        '',
+      )
       .replace(/\s*(and|or|plus)\s*/gi, ' ')
       .trim();
     return cleaned.length > 2 ? cleaned : text;

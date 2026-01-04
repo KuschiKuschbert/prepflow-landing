@@ -112,7 +112,11 @@ export function categorizeError(error: unknown): ErrorCategory {
   }
 
   // 503 Service Unavailable - Retry with backoff
-  if (statusCode === 503 || errorString.includes('503') || errorString.includes('service unavailable')) {
+  if (
+    statusCode === 503 ||
+    errorString.includes('503') ||
+    errorString.includes('service unavailable')
+  ) {
     return {
       isRetryable: true,
       shouldSkipPermanently: false,
@@ -123,7 +127,11 @@ export function categorizeError(error: unknown): ErrorCategory {
   }
 
   // 500 Internal Server Error - Retry with backoff
-  if (statusCode === 500 || errorString.includes('500') || errorString.includes('internal server error')) {
+  if (
+    statusCode === 500 ||
+    errorString.includes('500') ||
+    errorString.includes('internal server error')
+  ) {
     return {
       isRetryable: true,
       shouldSkipPermanently: false,

@@ -260,21 +260,140 @@ export class TastyScraper extends BaseScraper {
    */
   async getAllRecipeUrls(): Promise<string[]> {
     const urls: string[] = [];
+    const visited = new Set<string>();
 
     // Try sitemap parsing first (fastest and most complete)
     try {
-      scraperLogger.info('Attempting to discover Tasty URLs via sitemap...');
+      scraperLogger.info(
+        'Attempting to discover Tasty URLs via sitemap (this may take a few minutes)...',
+      );
       const sitemapParser = new SitemapParser();
-      const sitemapUrls = await sitemapParser.discoverRecipeUrls('tasty');
+
+      // Set 5-minute timeout for sitemap parsing
+      const sitemapPromise = sitemapParser.discoverRecipeUrls('tasty');
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('Sitemap parsing timeout (5min)')), 300000); // 5 minutes
+      });
+
+      const sitemapUrls = await Promise.race([sitemapPromise, timeoutPromise]);
+
       if (sitemapUrls.length > 0) {
         scraperLogger.info(`Discovered ${sitemapUrls.length} recipe URLs from sitemap`);
         return sitemapUrls;
+      } else {
+        scraperLogger.warn('Sitemap parsing returned 0 URLs, falling back to pagination');
       }
     } catch (error) {
-      scraperLogger.warn('Sitemap parsing failed for Tasty:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (errorMessage.includes('timeout')) {
+        scraperLogger.warn('Sitemap parsing timed out after 5 minutes, falling back to pagination');
+      } else if (errorMessage.includes('Scraping stopped by user')) {
+        // Re-throw stop errors
+        throw error;
+      } else {
+        scraperLogger.warn('Sitemap parsing failed, falling back to pagination:', error);
+      }
     }
 
-    scraperLogger.warn('Tasty sitemap parsing not available, manual URL discovery needed');
-    return urls;
+    // Fallback to pagination crawling
+    scraperLogger.info('Falling back to pagination crawling for Tasty...');
+    try {
+      const baseUrl = 'https://tasty.co/recipe';
+      let currentPage = 1;
+      let hasMorePages = true;
+
+      while (hasMorePages) {
+        // Tasty uses different pagination patterns - try multiple approaches
+        const paginatedUrls = [
+          currentPage === 1 ? baseUrl : `${baseUrl}?page=${currentPage}`,
+          currentPage === 1
+            ? 'https://tasty.co/recipes'
+            : `https://tasty.co/recipes?page=${currentPage}`,
+        ];
+
+        let foundAny = false;
+
+        for (const paginatedUrl of paginatedUrls) {
+          try {
+            const html = await this.fetchPage(paginatedUrl);
+            const $ = cheerio.load(html);
+
+            // Extract recipe links matching pattern: /recipe/[recipe-slug]
+            const recipeLinks = $('a[href*="/recipe/"]')
+              .map((_, el) => {
+                const href = $(el).attr('href');
+                if (!href) return null;
+
+                // Normalize URL: handle relative and absolute URLs
+                let normalizedUrl: string | null = null;
+
+                // Already absolute URL
+                if (href.startsWith('http://') || href.startsWith('https://')) {
+                  normalizedUrl = href;
+                }
+                // Relative URL starting with /
+                else if (href.startsWith('/')) {
+                  normalizedUrl = `https://tasty.co${href}`;
+                }
+                // Protocol-relative URL
+                else if (href.startsWith('//')) {
+                  normalizedUrl = `https:${href}`;
+                }
+                // Relative URL without leading /
+                else {
+                  normalizedUrl = `https://tasty.co/${href}`;
+                }
+
+                // Clean URL (remove query params and fragments)
+                const cleanUrl = normalizedUrl.split('?')[0].split('#')[0];
+
+                // Only include actual recipe pages (must match pattern: /recipe/[recipe-slug])
+                if (cleanUrl.match(/\/recipe\/[^/]+$/)) {
+                  return cleanUrl;
+                }
+                return null;
+              })
+              .get()
+              .filter((url): url is string => {
+                if (!url) return false;
+                return url.includes('/recipe/') && !visited.has(url);
+              });
+
+            if (recipeLinks.length > 0) {
+              foundAny = true;
+              for (const url of recipeLinks) {
+                visited.add(url);
+                urls.push(url);
+              }
+              scraperLogger.info(
+                `Found ${recipeLinks.length} recipes on page ${currentPage} of ${paginatedUrl}`,
+              );
+            }
+          } catch (error) {
+            scraperLogger.warn(`Failed to fetch ${paginatedUrl}:`, error);
+          }
+        }
+
+        if (!foundAny) {
+          hasMorePages = false;
+        } else {
+          currentPage++;
+          // Limit pagination depth to prevent infinite loops
+          // Tasty has many recipes, so we allow up to 200 pages
+          if (currentPage > 200) {
+            scraperLogger.info(
+              `Reached pagination limit (200 pages) for Tasty, found ${urls.length} recipes so far`,
+            );
+            hasMorePages = false;
+          }
+        }
+      }
+
+      scraperLogger.info(`Discovered ${urls.length} recipe URLs from Tasty via pagination`);
+      return urls;
+    } catch (error) {
+      scraperLogger.error('Error in pagination crawling for Tasty:', error);
+      return urls;
+    }
   }
 }

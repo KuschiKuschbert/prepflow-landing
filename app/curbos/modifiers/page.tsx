@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase-pos'
-import { Plus, Trash2, ArrowLeft, CheckCircle, XCircle } from 'lucide-react'
-import Link from 'next/link'
 import { logger } from '@/lib/logger'
+import { supabase } from '@/lib/supabase-pos'
+import { ArrowLeft, CheckCircle, Plus, Trash2, XCircle } from 'lucide-react'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 interface ModifierOption {
   id: string
@@ -34,7 +34,7 @@ export default function ModifiersPage() {
     setLoading(true)
     try {
       const { data, error } = await supabase
-        .from('modifier_options')
+        .from('pos_modifier_options')
         .select('*')
         .order('name')
 
@@ -53,7 +53,7 @@ export default function ModifiersPage() {
   async function handleDelete(id: string) {
     if (!confirm('Are you sure?')) return
     try {
-      const { error } = await supabase.from('modifier_options').delete().eq('id', id)
+      const { error } = await supabase.from('pos_modifier_options').delete().eq('id', id)
       if (error) {
         logger.error('Error deleting modifier:', { error: error.message, context: { endpoint: '/curbos/modifiers', modifierId: id } })
       } else {
@@ -94,7 +94,7 @@ export default function ModifiersPage() {
     try {
       if (editingItem) {
         const { error } = await supabase
-          .from('modifier_options')
+          .from('pos_modifier_options')
           .update(itemData)
           .eq('id', editingItem.id)
         if (error) {
@@ -104,7 +104,7 @@ export default function ModifiersPage() {
         }
       } else {
         const { error } = await supabase
-          .from('modifier_options')
+          .from('pos_modifier_options')
           .insert([itemData])
         if (error) {
           logger.error('Error inserting modifier:', { error: error.message, context: { endpoint: '/curbos/modifiers' } })

@@ -244,7 +244,10 @@ export class AllRecipesScraper extends BaseScraper {
     const cleaned = text
       .replace(/^\d+\s*/, '')
       .replace(/^\d+\/\d+\s*/, '')
-      .replace(/\s*(cup|cups|tbsp|tsp|oz|lb|g|kg|ml|l|tablespoon|teaspoon|ounce|pound|gram|kilogram|milliliter|liter)s?\s*/gi, '')
+      .replace(
+        /\s*(cup|cups|tbsp|tsp|oz|lb|g|kg|ml|l|tablespoon|teaspoon|ounce|pound|gram|kilogram|milliliter|liter)s?\s*/gi,
+        '',
+      )
       .replace(/\s*(and|or|plus)\s*/gi, ' ')
       .trim();
     return cleaned.length > 2 ? cleaned : text;
@@ -414,20 +417,41 @@ export class AllRecipesScraper extends BaseScraper {
 
     // Try sitemap parsing first (fastest and most complete)
     try {
-      scraperLogger.info('Attempting to discover AllRecipes URLs via sitemap...');
+      scraperLogger.info(
+        'Attempting to discover AllRecipes URLs via sitemap (this may take a few minutes)...',
+      );
       const sitemapParser = new SitemapParser();
-      const sitemapUrls = await sitemapParser.discoverRecipeUrls('allrecipes');
+
+      // Set 5-minute timeout for sitemap parsing (AllRecipes has many sitemaps)
+      const sitemapPromise = sitemapParser.discoverRecipeUrls('allrecipes');
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('Sitemap parsing timeout (5min)')), 300000); // 5 minutes
+      });
+
+      const sitemapUrls = await Promise.race([sitemapPromise, timeoutPromise]);
+
       if (sitemapUrls.length > 0) {
         scraperLogger.info(`Discovered ${sitemapUrls.length} recipe URLs from sitemap`);
         return sitemapUrls;
+      } else {
+        scraperLogger.warn('Sitemap parsing returned 0 URLs, falling back to pagination');
       }
     } catch (error) {
-      scraperLogger.warn('Sitemap parsing failed, falling back to pagination:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (errorMessage.includes('timeout')) {
+        scraperLogger.warn('Sitemap parsing timed out after 5 minutes, falling back to pagination');
+      } else if (errorMessage.includes('Scraping stopped by user')) {
+        // Re-throw stop errors
+        throw error;
+      } else {
+        scraperLogger.warn('Sitemap parsing failed, falling back to pagination:', error);
+      }
     }
 
     // Fallback to pagination crawling
     scraperLogger.info('Falling back to pagination crawling for AllRecipes...');
     try {
+      // Comprehensive category list for maximum recipe discovery
       const categoryPages = [
         'https://www.allrecipes.com/recipes/',
         'https://www.allrecipes.com/recipes/76/appetizers-and-snacks/',
@@ -436,6 +460,14 @@ export class AllRecipesScraper extends BaseScraper {
         'https://www.allrecipes.com/recipes/156/bread/',
         'https://www.allrecipes.com/recipes/17562/lunch/',
         'https://www.allrecipes.com/recipes/17561/dinner/',
+        'https://www.allrecipes.com/recipes/17560/side-dishes/',
+        'https://www.allrecipes.com/recipes/17559/salads/',
+        'https://www.allrecipes.com/recipes/17558/soups-stews-and-chili/',
+        'https://www.allrecipes.com/recipes/17557/main-dishes/',
+        'https://www.allrecipes.com/recipes/17556/drinks/',
+        'https://www.allrecipes.com/recipes/17555/healthy-recipes/',
+        'https://www.allrecipes.com/recipes/17554/world-cuisine/',
+        'https://www.allrecipes.com/recipes/17553/ingredients/',
       ];
 
       for (const pageUrl of categoryPages) {
@@ -478,8 +510,12 @@ export class AllRecipesScraper extends BaseScraper {
                 `Found ${recipeLinks.length} recipes on page ${currentPage} of ${pageUrl}`,
               );
               currentPage++;
-              // Limit pagination depth to prevent infinite loops
-              if (currentPage > 100) {
+              // Increased pagination limit to 200 pages per category for maximum discovery
+              // AllRecipes has thousands of recipes, so we need to go deeper
+              if (currentPage > 200) {
+                scraperLogger.info(
+                  `Reached pagination limit (200 pages) for ${pageUrl}, found ${urls.length} recipes so far`,
+                );
                 hasMorePages = false;
               }
             }

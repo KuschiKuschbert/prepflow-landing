@@ -10,6 +10,7 @@
 **What:** All 5 sources now scrape simultaneously instead of sequentially
 
 **Impact:**
+
 - **Time Reduction:** ~37% faster (from 1.7 days to 1.1 days)
 - **Method:** Uses `Promise.all()` to process all sources concurrently
 
@@ -20,11 +21,13 @@
 **What:** Each source now processes 3 recipes simultaneously instead of one at a time
 
 **Impact:**
+
 - **Time Reduction:** ~67% faster within each source
 - **Total Impact:** Combined with parallel sources = **~80% faster overall**
 - **New Estimated Time:** ~4-5 hours (down from 26 hours)
 
 **Implementation:**
+
 - Processes 3 concurrent requests per source
 - With 5 sources × 3 concurrent = **15 total concurrent requests**
 - Uses chunked `Promise.all()` pattern for concurrency control
@@ -36,6 +39,7 @@
 **What:** Reduced default delay from 2 seconds to 1 second
 
 **Impact:**
+
 - **Time Reduction:** ~50% faster if no rate limits hit
 - **Adaptive:** Falls back to 2 seconds if rate limited (handled by existing logic)
 
@@ -43,12 +47,12 @@
 
 ## Performance Comparison
 
-| Optimization Level | Estimated Time | Improvement |
-|-------------------|----------------|-------------|
-| **Sequential (Original)** | ~1.7 days (41 hours) | Baseline |
-| **+ Parallel Sources** | ~1.1 days (26 hours) | 37% faster |
-| **+ Within-Source Parallel (3x)** | ~8.5 hours | 67% faster |
-| **+ Optimized Rate Limiting (2x)** | **~4-5 hours** | **80-85% faster** |
+| Optimization Level                 | Estimated Time       | Improvement       |
+| ---------------------------------- | -------------------- | ----------------- |
+| **Sequential (Original)**          | ~1.7 days (41 hours) | Baseline          |
+| **+ Parallel Sources**             | ~1.1 days (26 hours) | 37% faster        |
+| **+ Within-Source Parallel (3x)**  | ~8.5 hours           | 67% faster        |
+| **+ Optimized Rate Limiting (2x)** | **~4-5 hours**       | **80-85% faster** |
 
 ## Total Speed Improvement
 
@@ -62,7 +66,7 @@
 
 ```typescript
 // All 5 sources run simultaneously
-const sourcePromises = sources.map(async (source) => {
+const sourcePromises = sources.map(async source => {
   await this.processSource(source);
 });
 await Promise.all(sourcePromises);
@@ -86,9 +90,11 @@ delayBetweenRequests: 1000, // 1 second (was 2000ms)
 ## Concurrent Request Breakdown
 
 **Total Concurrent Requests:**
+
 - 5 sources × 3 concurrent per source = **15 total concurrent requests**
 
 **Per Source:**
+
 - AllRecipes: 3 concurrent
 - Food Network: 3 concurrent
 - Epicurious: 3 concurrent
@@ -113,11 +119,13 @@ delayBetweenRequests: 1000, // 1 second (was 2000ms)
 ## Usage
 
 **To use the optimizations, restart the scraper:**
+
 1. Stop current scraper (progress is saved)
 2. Restart via UI or API
 3. New code will automatically use all optimizations
 
 **The scraper will:**
+
 - Process all 5 sources simultaneously
 - Process 3 recipes concurrently per source
 - Use 1-second delays (increases if rate limited)
@@ -125,6 +133,7 @@ delayBetweenRequests: 1000, // 1 second (was 2000ms)
 ## Monitoring
 
 Watch for:
+
 - ✅ **Rate limit errors (429):** Should be rare with current settings
 - ✅ **Success rate:** Should remain high (>95%)
 - ✅ **Progress:** All sources should show progress simultaneously

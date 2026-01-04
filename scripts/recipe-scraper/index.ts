@@ -42,7 +42,9 @@ class RecipeScraperCLI {
       case SOURCES.ALLRECIPES:
         return new AllRecipesScraper();
       case SOURCES.BBC_GOOD_FOOD:
-        throw new Error('BBC Good Food scraper is disabled due to Terms of Service violation. See docs/BBC_GOOD_FOOD_LEGAL_ANALYSIS.md');
+        throw new Error(
+          'BBC Good Food scraper is disabled due to Terms of Service violation. See docs/BBC_GOOD_FOOD_LEGAL_ANALYSIS.md',
+        );
       case SOURCES.FOOD_NETWORK:
         return new FoodNetworkScraper();
       case SOURCES.EPICURIOUS:
@@ -120,7 +122,9 @@ class RecipeScraperCLI {
             const reason = result.recipe.rating
               ? `rating ${result.recipe.rating} below threshold`
               : 'no rating (unrated not allowed)';
-            scraperLogger.warn(`⚠️  Skipped (rating filter): ${result.recipe.recipe_name} - ${reason}`);
+            scraperLogger.warn(
+              `⚠️  Skipped (rating filter): ${result.recipe.recipe_name} - ${reason}`,
+            );
             continue;
           }
 

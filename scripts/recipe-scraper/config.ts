@@ -31,20 +31,25 @@ export type SourceType = (typeof SOURCES)[keyof typeof SOURCES];
 /**
  * Rating Filter Configuration
  * Controls which recipes are saved based on their rating
+ *
+ * Rating Threshold: 97.5% minimum
+ * - For star ratings (0-5 scale): 4.875/5.0 stars = 97.5%
+ * - For percentage ratings (0-100 scale): 97.5% = 97.5
  */
 export const RATING_CONFIG = {
-  DEFAULT_MIN_RATING: 4.75, // 95% threshold (4.75/5.0 stars)
+  DEFAULT_MIN_RATING: 4.875, // 97.5% threshold (4.875/5.0 stars)
+  DEFAULT_MIN_RATING_PERCENTAGE: 97.5, // 97.5% for percentage-based ratings (0-100 scale)
   DEFAULT_INCLUDE_UNRATED: true, // Include professional sites without ratings
 
   // Per-source configuration (optional overrides)
   SOURCE_CONFIG: {
-    'allrecipes': { minRating: 4.75, includeUnrated: false },
-    // 'bbc-good-food': { minRating: 4.75, includeUnrated: true }, // REMOVED - Terms of Service violation
-    'food-network': { minRating: 4.75, includeUnrated: false },
+    allrecipes: { minRating: 4.875, includeUnrated: false }, // 97.5% threshold
+    // 'bbc-good-food': { minRating: 4.875, includeUnrated: true }, // REMOVED - Terms of Service violation
+    'food-network': { minRating: 4.875, includeUnrated: false }, // 97.5% threshold
     'recipe-nlg': { minRating: 0, includeUnrated: true }, // Dataset source, include all
     // Future sources
-    'epicurious': { minRating: 4.75, includeUnrated: false },
+    epicurious: { minRating: 4.875, includeUnrated: false }, // 97.5% threshold
     'bon-appetit': { minRating: 0, includeUnrated: true }, // Professional site, no ratings
-    'tasty': { minRating: 4.75, includeUnrated: false },
+    tasty: { minRating: 4.875, includeUnrated: false }, // 97.5% threshold (handles percentage ratings)
   } as Record<SourceType | string, { minRating: number; includeUnrated: boolean }>,
 };

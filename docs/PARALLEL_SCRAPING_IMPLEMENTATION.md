@@ -24,7 +24,7 @@ for (const source of sources) {
 
 ```typescript
 // NEW: Process all sources simultaneously
-const sourcePromises = sources.map(async (source) => {
+const sourcePromises = sources.map(async source => {
   try {
     await this.processSource(source);
   } catch (error) {
@@ -41,10 +41,10 @@ await Promise.all(sourcePromises); // Wait for all to complete
 
 ### Time Savings
 
-| Processing Method | Estimated Time | Improvement |
-|------------------|----------------|-------------|
-| **Sequential** | ~1.7 days (41 hours) | Baseline |
-| **Parallel** | ~9.6 hours | **~75% faster** |
+| Processing Method | Estimated Time       | Improvement     |
+| ----------------- | -------------------- | --------------- |
+| **Sequential**    | ~1.7 days (41 hours) | Baseline        |
+| **Parallel**      | ~9.6 hours           | **~75% faster** |
 
 ### Why It's Faster
 
@@ -59,6 +59,7 @@ await Promise.all(sourcePromises); // Wait for all to complete
 ### Realistic Estimate
 
 Given current progress:
+
 - **AllRecipes:** 47,357 remaining → ~26 hours (if started fresh)
 - **Other sources:** Run in parallel, complete faster
 
@@ -71,7 +72,7 @@ Given current progress:
 Each source has its own try-catch block, so one source failing doesn't stop others:
 
 ```typescript
-const sourcePromises = sources.map(async (source) => {
+const sourcePromises = sources.map(async source => {
   try {
     await this.processSource(source);
   } catch (error) {
@@ -84,6 +85,7 @@ const sourcePromises = sources.map(async (source) => {
 ### 2. Independent Rate Limiting
 
 Each source has its own scraper instance with independent rate limiting:
+
 - AllRecipes: 1-2 second delays
 - Food Network: 1-2 second delays
 - Epicurious: 1-2 second delays
@@ -95,6 +97,7 @@ Each source has its own scraper instance with independent rate limiting:
 ### 3. Thread-Safe Progress Tracking
 
 Progress is tracked per-source in separate files:
+
 - `data/recipe-database/.progress/allrecipes.json`
 - `data/recipe-database/.progress/food-network.json`
 - `data/recipe-database/.progress/epicurious.json`
@@ -121,6 +124,7 @@ Progress is tracked per-source in separate files:
 ### Rate Limiting
 
 Each source respects its own rate limits:
+
 - ✅ No risk of hitting rate limits harder (each source has independent delays)
 - ✅ Different domains = different rate limits (no conflicts)
 
@@ -133,6 +137,7 @@ Each source respects its own rate limits:
 ### Monitoring
 
 Progress tracking works the same:
+
 - Each source has its own progress file
 - UI shows combined progress across all sources
 - Time estimation script accounts for parallel processing
@@ -140,6 +145,7 @@ Progress tracking works the same:
 ## Testing
 
 The parallel implementation has been tested and verified:
+
 - ✅ All sources process simultaneously
 - ✅ Error isolation works (one source failing doesn't stop others)
 - ✅ Progress tracking remains accurate
@@ -148,6 +154,7 @@ The parallel implementation has been tested and verified:
 ## Future Optimizations
 
 Potential further improvements:
+
 1. **Batch Parallelization:** Process multiple recipes from the same source in parallel (currently sequential within a source)
 2. **Dynamic Concurrency:** Adjust number of parallel sources based on system resources
 3. **Priority Queuing:** Process smaller sources first for faster initial completion

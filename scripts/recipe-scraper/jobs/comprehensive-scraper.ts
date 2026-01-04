@@ -103,7 +103,7 @@ export class ComprehensiveScraperJob {
     try {
       // Process all sources in parallel (best practice for speed)
       // Each source has its own rate limiting and progress tracking
-      const sourcePromises = sources.map(async (source) => {
+      const sourcePromises = sources.map(async source => {
         try {
           await this.processSource(source);
           scraperLogger.info(`✅ Completed scraping for ${source}`);
@@ -134,7 +134,7 @@ export class ComprehensiveScraperJob {
       // But only if not stopped
       if (this.isRunning && !this.checkStopFlag()) {
         scraperLogger.info('Retrying failed URLs for all sources in parallel...');
-        const retryPromises = Array.from(this.activeSources).map(async (source) => {
+        const retryPromises = Array.from(this.activeSources).map(async source => {
           // Check stop flag before each source retry
           if (!this.isRunning || this.checkStopFlag()) {
             return;
@@ -193,7 +193,7 @@ export class ComprehensiveScraperJob {
       ];
 
       // Process all sources in parallel (best practice for speed)
-      const resumePromises = sources.map(async (source) => {
+      const resumePromises = sources.map(async source => {
         try {
           const progress = this.progressTracker.loadProgress(source);
           if (progress && !this.progressTracker.isComplete(progress)) {
@@ -229,7 +229,7 @@ export class ComprehensiveScraperJob {
       // But only if not stopped
       if (this.isRunning && !this.checkStopFlag()) {
         scraperLogger.info('Retrying failed URLs for all sources in parallel...');
-        const retryPromises = Array.from(this.activeSources).map(async (source) => {
+        const retryPromises = Array.from(this.activeSources).map(async source => {
           // Check stop flag before each source retry
           if (!this.isRunning || this.checkStopFlag()) {
             return;
@@ -264,7 +264,12 @@ export class ComprehensiveScraperJob {
   private async processBatchWithConcurrency(
     batch: string[],
     source: SourceType,
-    scraper: AllRecipesScraper | FoodNetworkScraper | EpicuriousScraper | BonAppetitScraper | TastyScraper,
+    scraper:
+      | AllRecipesScraper
+      | FoodNetworkScraper
+      | EpicuriousScraper
+      | BonAppetitScraper
+      | TastyScraper,
   ): Promise<void> {
     // Process URLs with concurrency limit using a simple queue pattern
     const processUrl = async (url: string): Promise<void> => {
@@ -296,7 +301,9 @@ export class ComprehensiveScraperJob {
               ? `rating ${result.recipe.rating} below threshold`
               : 'no rating (unrated not allowed)';
             this.progressTracker.updateProgress(source, url, false, reason);
-            scraperLogger.debug(`⚠️  Skipped (rating filter): ${result.recipe.recipe_name} - ${reason}`);
+            scraperLogger.debug(
+              `⚠️  Skipped (rating filter): ${result.recipe.recipe_name} - ${reason}`,
+            );
             return;
           }
 
@@ -397,7 +404,9 @@ export class ComprehensiveScraperJob {
     } else {
       // Check stop flag before starting URL discovery
       if (!this.isRunning || this.checkStopFlag()) {
-        scraperLogger.info(`🛑 Stop flag detected before URL discovery for ${source}, stopping immediately`);
+        scraperLogger.info(
+          `🛑 Stop flag detected before URL discovery for ${source}, stopping immediately`,
+        );
         this.isRunning = false;
         return;
       }
@@ -410,7 +419,9 @@ export class ComprehensiveScraperJob {
       } catch (error) {
         // If it's a stop error, handle it gracefully
         if (error instanceof Error && error.message === 'Scraping stopped by user') {
-          scraperLogger.info(`🛑 Stop flag detected during URL discovery for ${source}, stopping immediately`);
+          scraperLogger.info(
+            `🛑 Stop flag detected during URL discovery for ${source}, stopping immediately`,
+          );
           this.isRunning = false;
           return;
         }
@@ -420,7 +431,9 @@ export class ComprehensiveScraperJob {
 
       // Check stop flag after URL discovery (in case it was stopped during discovery)
       if (!this.isRunning || this.checkStopFlag()) {
-        scraperLogger.info(`🛑 Stop flag detected after URL discovery for ${source}, stopping immediately`);
+        scraperLogger.info(
+          `🛑 Stop flag detected after URL discovery for ${source}, stopping immediately`,
+        );
         this.isRunning = false;
         return;
       }
@@ -520,7 +533,12 @@ export class ComprehensiveScraperJob {
    */
   private async retryFailedUrls(
     source: SourceType,
-    scraper: AllRecipesScraper | FoodNetworkScraper | EpicuriousScraper | BonAppetitScraper | TastyScraper,
+    scraper:
+      | AllRecipesScraper
+      | FoodNetworkScraper
+      | EpicuriousScraper
+      | BonAppetitScraper
+      | TastyScraper,
   ): Promise<void> {
     const queue = this.retryQueues.get(source);
     if (!queue || queue.length === 0) {
@@ -602,6 +620,27 @@ export class ComprehensiveScraperJob {
 
         const result = await scraper.scrapeRecipe(item.url);
         if (result.success && result.recipe) {
+          // Apply rating filter (same as main processing)
+          if (!shouldIncludeRecipe(result.recipe, source)) {
+            const reason = result.recipe.rating
+              ? `rating ${result.recipe.rating} below threshold`
+              : 'no rating (unrated not allowed)';
+            this.progressTracker.updateProgress(source, item.url, false, reason);
+            scraperLogger.debug(
+              `⚠️  Skipped (rating filter): ${result.recipe.recipe_name} - ${reason}`,
+            );
+
+            // Remove from retry queue since it won't pass filter
+            const queue = this.retryQueues.get(source);
+            if (queue) {
+              const index = queue.findIndex(q => q.url === item.url);
+              if (index !== -1) {
+                queue.splice(index, 1);
+              }
+            }
+            return;
+          }
+
           const saveResult = await this.storage.saveRecipe(result.recipe);
           if (saveResult.saved) {
             this.progressTracker.updateProgress(source, item.url, true);
@@ -663,7 +702,13 @@ export class ComprehensiveScraperJob {
    * Get current job status
    */
   getStatus(): JobStatus {
-    const sources: SourceType[] = [SOURCES.ALLRECIPES, SOURCES.FOOD_NETWORK, SOURCES.EPICURIOUS, SOURCES.BON_APPETIT, SOURCES.TASTY];
+    const sources: SourceType[] = [
+      SOURCES.ALLRECIPES,
+      SOURCES.FOOD_NETWORK,
+      SOURCES.EPICURIOUS,
+      SOURCES.BON_APPETIT,
+      SOURCES.TASTY,
+    ];
 
     // Check if scraper is actually running by checking for recent progress updates
     // If progress files were updated in the last 30 seconds, consider it running
@@ -774,12 +819,7 @@ export class ComprehensiveScraperJob {
    */
   private getScraper(
     source: SourceType,
-  ):
-    | AllRecipesScraper
-    | FoodNetworkScraper
-    | EpicuriousScraper
-    | BonAppetitScraper
-    | TastyScraper {
+  ): AllRecipesScraper | FoodNetworkScraper | EpicuriousScraper | BonAppetitScraper | TastyScraper {
     switch (source) {
       case SOURCES.ALLRECIPES:
         return new AllRecipesScraper();

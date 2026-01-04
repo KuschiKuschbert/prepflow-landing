@@ -18,6 +18,7 @@ The recipe scraper now includes an optional AI-enhanced extraction system that u
 - **Reliability:** Good with API key, limited without
 
 **Get Free API Key:**
+
 1. Sign up at https://huggingface.co (free)
 2. Go to https://huggingface.co/settings/tokens
 3. Create a token (free, no credit card needed)
@@ -41,6 +42,7 @@ The recipe scraper now includes an optional AI-enhanced extraction system that u
 ### When AI Extraction Runs
 
 AI extraction **only** runs when:
+
 - Traditional parsing (JSON-LD + HTML) both fail
 - AI extraction is enabled (`ENABLE_AI_EXTRACTION=true` or API key set)
 - Recipe has sufficient text content
@@ -52,6 +54,7 @@ AI extraction **only** runs when:
 ### Enable AI Extraction
 
 **Option 1: With Free API Key (Recommended)**
+
 ```bash
 # Get free API key from https://huggingface.co/settings/tokens
 export HUGGINGFACE_API_KEY=your_free_api_key_here
@@ -59,12 +62,14 @@ export HUGGINGFACE_API_KEY=your_free_api_key_here
 ```
 
 **Option 2: Explicit Enable**
+
 ```bash
 export ENABLE_AI_EXTRACTION=true
 # Works without API key but may have rate limits
 ```
 
 **Option 3: Disable**
+
 ```bash
 export ENABLE_AI_EXTRACTION=false
 # AI extraction disabled (traditional methods only)
@@ -75,12 +80,14 @@ export ENABLE_AI_EXTRACTION=false
 Default model: `microsoft/DialoGPT-medium` (free, text generation)
 
 To use a different model:
+
 ```typescript
 // In ai-extractor.ts
-model: 'your-preferred-model-id'
+model: 'your-preferred-model-id';
 ```
 
 **Recommended Models:**
+
 - `google/flan-t5-base` - Instruction following (may require API key)
 - `microsoft/DialoGPT-medium` - Text generation (free tier)
 - `mistralai/Mistral-7B-Instruct-v0.2` - Better quality (requires API key)
@@ -88,6 +95,7 @@ model: 'your-preferred-model-id'
 ## Legal Compliance
 
 ✅ **All Legal Safeguards Maintained:**
+
 - Robots.txt checking (before AI extraction)
 - Rate limiting (respects API limits)
 - User-Agent identification
@@ -115,11 +123,13 @@ model: 'your-preferred-model-id'
 ### Scenario: 10,000 Recipes
 
 **Traditional Methods Only:**
+
 - Cost: $0.00
 - Success Rate: ~95% (9,500 recipes)
 - Failed: ~500 recipes
 
 **With AI Fallback (Free API Key):**
+
 - Cost: $0.00 (free tier)
 - Success Rate: ~98% (9,800 recipes)
 - Failed: ~200 recipes
@@ -127,6 +137,7 @@ model: 'your-preferred-model-id'
 - Rate Limit: ~30 calls/minute (spread over time)
 
 **With AI Fallback (Paid Tier):**
+
 - Cost: ~$0.50-2.00 (if using paid tier)
 - Success Rate: ~98%+
 - AI Calls: ~500
@@ -161,6 +172,7 @@ if (!parsed) {
 ## Testing
 
 Run comparison test:
+
 ```bash
 npx tsx scripts/recipe-scraper/test-ai-extractor.ts
 ```

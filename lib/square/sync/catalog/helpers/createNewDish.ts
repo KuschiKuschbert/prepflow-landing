@@ -64,16 +64,17 @@ export async function createNewDish(
 
   // Dual-write to POS Table
   try {
-     await supabaseAdmin
-       .from('pos_menu_items')
-       .upsert({
-           name: dishData.dish_name,
-           category: dishData.category || 'Uncategorized',
-           price: dishData.selling_price || 0,
-           is_available: true,
-           square_id: squareItemId
-       }, { onConflict: 'square_id' });
+    await supabaseAdmin.from('pos_menu_items').upsert(
+      {
+        name: dishData.dish_name,
+        category: dishData.category || 'Uncategorized',
+        price: dishData.selling_price || 0,
+        is_available: true,
+        square_id: squareItemId,
+      },
+      { onConflict: 'square_id' },
+    );
   } catch (e) {
-      logger.warn('[Square Catalog Sync] Failed to sync to POS table:', e);
+    logger.warn('[Square Catalog Sync] Failed to sync to POS table:', e);
   }
 }

@@ -38,6 +38,7 @@
 #### Recommendation
 
 **HIGH PRIORITY** - Epicurious is an excellent candidate because:
+
 - Has structured JSON-LD data (easy to scrape)
 - Recipes are professionally curated and highly rated
 - Large recipe database
@@ -75,6 +76,7 @@
 #### Recommendation
 
 **HIGH PRIORITY** - Bon Appétit is an excellent candidate because:
+
 - Has structured JSON-LD data (easy to scrape)
 - Professional, tested recipes from renowned chefs
 - Large recipe database
@@ -112,6 +114,7 @@
 #### Recommendation
 
 **MEDIUM PRIORITY** - Tasty is a good candidate because:
+
 - Has structured JSON-LD data (easy to scrape)
 - Popular recipes with good ratings (80%+)
 - Large recipe database
