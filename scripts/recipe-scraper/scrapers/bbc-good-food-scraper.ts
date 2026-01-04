@@ -4,10 +4,10 @@
  */
 
 import * as cheerio from 'cheerio';
-import { BaseScraper } from './base-scraper';
-import { ScrapedRecipe, RecipeIngredient } from '../parsers/types';
+import { RecipeIngredient, ScrapedRecipe } from '../parsers/types';
 import { scraperLogger } from '../utils/logger';
 import { SitemapParser } from '../utils/sitemap-parser';
+import { BaseScraper } from './base-scraper';
 
 export class BBCGoodFoodScraper extends BaseScraper {
   constructor(config?: Partial<import('../parsers/types').ScraperConfig>) {
@@ -139,7 +139,7 @@ export class BBCGoodFoodScraper extends BaseScraper {
   /**
    * Parse instructions
    */
-  private parseInstructions(instructions: any): string[] {
+  protected parseInstructions(instructions: any): string[] {
     if (Array.isArray(instructions)) {
       return instructions.map(inst => {
         if (typeof inst === 'string') return inst;
