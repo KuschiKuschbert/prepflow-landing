@@ -4,10 +4,10 @@
  */
 
 import * as cheerio from 'cheerio';
-import { BaseScraper } from './base-scraper';
-import { ScrapedRecipe, RecipeIngredient } from '../parsers/types';
+import { RecipeIngredient, ScrapedRecipe } from '../parsers/types';
 import { scraperLogger } from '../utils/logger';
 import { SitemapParser } from '../utils/sitemap-parser';
+import { BaseScraper } from './base-scraper';
 
 export class SeriousEatsScraper extends BaseScraper {
   constructor(config?: Partial<import('../parsers/types').ScraperConfig>) {
@@ -205,6 +205,15 @@ export class SeriousEatsScraper extends BaseScraper {
    * Get ALL recipe URLs (comprehensive, no limit)
    * Uses sitemap parsing first, then falls back to pagination crawling
    */
+  /**
+   * Get recipe URLs to scrape (limited)
+   * Wrapper around getAllRecipeUrls for now
+   */
+  async getRecipeUrls(limit?: number): Promise<string[]> {
+    const urls = await this.getAllRecipeUrls();
+    return limit ? urls.slice(0, limit) : urls;
+  }
+
   async getAllRecipeUrls(): Promise<string[]> {
     const urls: string[] = [];
     const visited = new Set<string>();
