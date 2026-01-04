@@ -13,6 +13,12 @@ import { FoodNetworkScraper } from '../scrapers/food-network-scraper';
 import { EpicuriousScraper } from '../scrapers/epicurious-scraper';
 import { BonAppetitScraper } from '../scrapers/bon-appetit-scraper';
 import { TastyScraper } from '../scrapers/tasty-scraper';
+import { SeriousEatsScraper } from '../scrapers/serious-eats-scraper';
+import { Food52Scraper } from '../scrapers/food52-scraper';
+import { SimplyRecipesScraper } from '../scrapers/simply-recipes-scraper';
+import { SmittenKitchenScraper } from '../scrapers/smitten-kitchen-scraper';
+import { TheKitchnScraper } from '../scrapers/the-kitchn-scraper';
+import { DelishScraper } from '../scrapers/delish-scraper';
 import { JSONStorage } from '../storage/json-storage';
 import { getRetryDelay, isRetryableError, shouldSkipPermanently } from '../utils/error-categorizer';
 import { scraperLogger } from '../utils/logger';
@@ -82,6 +88,12 @@ export class ComprehensiveScraperJob {
       SOURCES.EPICURIOUS,
       SOURCES.BON_APPETIT,
       SOURCES.TASTY,
+      SOURCES.SERIOUS_EATS,
+      SOURCES.FOOD52,
+      SOURCES.SIMPLY_RECIPES,
+      SOURCES.SMITTEN_KITCHEN,
+      SOURCES.THE_KITCHN,
+      SOURCES.DELISH,
     ],
   ): Promise<void> {
     if (this.isRunning) {
@@ -226,6 +238,12 @@ export class ComprehensiveScraperJob {
         SOURCES.EPICURIOUS,
         SOURCES.BON_APPETIT,
         SOURCES.TASTY,
+        SOURCES.SERIOUS_EATS,
+        SOURCES.FOOD52,
+        SOURCES.SIMPLY_RECIPES,
+        SOURCES.SMITTEN_KITCHEN,
+        SOURCES.THE_KITCHN,
+        SOURCES.DELISH,
       ];
 
       // Process all sources in parallel (best practice for speed)
@@ -305,6 +323,13 @@ export class ComprehensiveScraperJob {
       | FoodNetworkScraper
       | EpicuriousScraper
       | BonAppetitScraper
+      | TastyScraper
+      | SeriousEatsScraper
+      | Food52Scraper
+      | SimplyRecipesScraper
+      | SmittenKitchenScraper
+      | TheKitchnScraper
+      | DelishScraper
       | TastyScraper,
   ): Promise<void> {
     // Process URLs with concurrency limit using a simple queue pattern
@@ -614,7 +639,13 @@ export class ComprehensiveScraperJob {
       | FoodNetworkScraper
       | EpicuriousScraper
       | BonAppetitScraper
-      | TastyScraper,
+      | TastyScraper
+      | SeriousEatsScraper
+      | Food52Scraper
+      | SimplyRecipesScraper
+      | SmittenKitchenScraper
+      | TheKitchnScraper
+      | DelishScraper,
   ): Promise<void> {
     const queue = this.retryQueues.get(source);
     if (!queue || queue.length === 0) {
@@ -784,6 +815,12 @@ export class ComprehensiveScraperJob {
       SOURCES.EPICURIOUS,
       SOURCES.BON_APPETIT,
       SOURCES.TASTY,
+      SOURCES.SERIOUS_EATS,
+      SOURCES.FOOD52,
+      SOURCES.SIMPLY_RECIPES,
+      SOURCES.SMITTEN_KITCHEN,
+      SOURCES.THE_KITCHN,
+      SOURCES.DELISH,
     ];
 
     // Check if scraper is actually running by checking for recent progress updates
@@ -895,7 +932,18 @@ export class ComprehensiveScraperJob {
    */
   private getScraper(
     source: SourceType,
-  ): AllRecipesScraper | FoodNetworkScraper | EpicuriousScraper | BonAppetitScraper | TastyScraper {
+  ):
+    | AllRecipesScraper
+    | FoodNetworkScraper
+    | EpicuriousScraper
+    | BonAppetitScraper
+    | TastyScraper
+    | SeriousEatsScraper
+    | Food52Scraper
+    | SimplyRecipesScraper
+    | SmittenKitchenScraper
+    | TheKitchnScraper
+    | DelishScraper {
     switch (source) {
       case SOURCES.ALLRECIPES:
         return new AllRecipesScraper();
@@ -911,6 +959,18 @@ export class ComprehensiveScraperJob {
         return new BonAppetitScraper();
       case SOURCES.TASTY:
         return new TastyScraper();
+      case SOURCES.SERIOUS_EATS:
+        return new SeriousEatsScraper();
+      case SOURCES.FOOD52:
+        return new Food52Scraper();
+      case SOURCES.SIMPLY_RECIPES:
+        return new SimplyRecipesScraper();
+      case SOURCES.SMITTEN_KITCHEN:
+        return new SmittenKitchenScraper();
+      case SOURCES.THE_KITCHN:
+        return new TheKitchnScraper();
+      case SOURCES.DELISH:
+        return new DelishScraper();
       default:
         throw new Error(`Unknown source: ${source}`);
     }

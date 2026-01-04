@@ -28,12 +28,70 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 31536000, // 1 year
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    // Allow images from Supabase Storage
+    // Allow images from Supabase Storage and recipe sources
     remotePatterns: [
       {
         protocol: 'https',
         hostname: '*.supabase.co',
         pathname: '/storage/v1/object/public/**',
+      },
+      // Recipe source domains
+      {
+        protocol: 'https',
+        hostname: 'www.allrecipes.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.foodnetwork.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.epicurious.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.bonappetit.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'tasty.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.seriouseats.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'food52.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.simplyrecipes.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'smittenkitchen.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.thekitchn.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.delish.com',
+      },
+      // CDN domains for recipe images (common image hosting)
+      {
+        protocol: 'https',
+        hostname: '*.cloudinary.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.imgix.net',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.amazonaws.com',
       },
     ],
   },

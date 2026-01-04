@@ -13,6 +13,12 @@ import { FoodNetworkScraper } from '../../../../scripts/recipe-scraper/scrapers/
 import { EpicuriousScraper } from '../../../../scripts/recipe-scraper/scrapers/epicurious-scraper';
 import { BonAppetitScraper } from '../../../../scripts/recipe-scraper/scrapers/bon-appetit-scraper';
 import { TastyScraper } from '../../../../scripts/recipe-scraper/scrapers/tasty-scraper';
+import { SeriousEatsScraper } from '../../../../scripts/recipe-scraper/scrapers/serious-eats-scraper';
+import { Food52Scraper } from '../../../../scripts/recipe-scraper/scrapers/food52-scraper';
+import { SimplyRecipesScraper } from '../../../../scripts/recipe-scraper/scrapers/simply-recipes-scraper';
+import { SmittenKitchenScraper } from '../../../../scripts/recipe-scraper/scrapers/smitten-kitchen-scraper';
+import { TheKitchnScraper } from '../../../../scripts/recipe-scraper/scrapers/the-kitchn-scraper';
+import { DelishScraper } from '../../../../scripts/recipe-scraper/scrapers/delish-scraper';
 import { SOURCES, SourceType } from '../../../../scripts/recipe-scraper/config';
 import { getComprehensiveScraperJob } from '../../../../scripts/recipe-scraper/jobs/comprehensive-scraper';
 import { JSONStorage } from '../../../../scripts/recipe-scraper/storage/json-storage';
@@ -99,7 +105,18 @@ export async function handleComprehensiveScrape(): Promise<NextResponse> {
  */
 export function createScraper(
   source: SourceType,
-): AllRecipesScraper | FoodNetworkScraper | EpicuriousScraper | BonAppetitScraper | TastyScraper {
+):
+  | AllRecipesScraper
+  | FoodNetworkScraper
+  | EpicuriousScraper
+  | BonAppetitScraper
+  | TastyScraper
+  | SeriousEatsScraper
+  | Food52Scraper
+  | SimplyRecipesScraper
+  | SmittenKitchenScraper
+  | TheKitchnScraper
+  | DelishScraper {
   switch (source) {
     case SOURCES.ALLRECIPES:
       return new AllRecipesScraper();
@@ -115,6 +132,18 @@ export function createScraper(
       return new BonAppetitScraper();
     case SOURCES.TASTY:
       return new TastyScraper();
+    case SOURCES.SERIOUS_EATS:
+      return new SeriousEatsScraper();
+    case SOURCES.FOOD52:
+      return new Food52Scraper();
+    case SOURCES.SIMPLY_RECIPES:
+      return new SimplyRecipesScraper();
+    case SOURCES.SMITTEN_KITCHEN:
+      return new SmittenKitchenScraper();
+    case SOURCES.THE_KITCHN:
+      return new TheKitchnScraper();
+    case SOURCES.DELISH:
+      return new DelishScraper();
     default:
       throw new Error(`Unknown source: ${source}`);
   }
@@ -129,7 +158,13 @@ export async function scrapeRecipes(
     | FoodNetworkScraper
     | EpicuriousScraper
     | BonAppetitScraper
-    | TastyScraper,
+    | TastyScraper
+    | SeriousEatsScraper
+    | Food52Scraper
+    | SimplyRecipesScraper
+    | SmittenKitchenScraper
+    | TheKitchnScraper
+    | DelishScraper,
   storage: JSONStorage,
   urls: string[],
 ): Promise<{

@@ -144,7 +144,8 @@ export default async function middleware(req: NextRequest) {
     pathname.startsWith('/api/debug') ||
     pathname.startsWith('/api/test') ||
     pathname.startsWith('/api/fix') ||
-    pathname.startsWith('/api/order/status')
+    pathname.startsWith('/api/order/status') ||
+    pathname.startsWith('/api/curbos/auth/exchange-token')
   ) {
     return NextResponse.next();
   }

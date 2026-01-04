@@ -49,6 +49,7 @@ export async function GET(request: NextRequest) {
 
     const searchParams = request.nextUrl.searchParams;
     const search = searchParams.get('search'); // Comma-separated ingredients
+    const sourceFilter = searchParams.get('source') || undefined; // Optional source filter
     // Pagination support: page (1-based) and pageSize
     const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
     const pageSize = Math.max(1, Math.min(100, parseInt(searchParams.get('pageSize') || '25', 10))); // Max 100 per page
@@ -107,18 +108,26 @@ export async function GET(request: NextRequest) {
           .split(',')
           .map(i => i.trim())
           .filter(Boolean);
-        const allMatchingRecipes = await searchRecipesByIngredients(ingredients, 10000); // Get all matches
+        const allMatchingRecipes = await searchRecipesByIngredients(
+          ingredients,
+          10000,
+          sourceFilter,
+        ); // Get all matches with optional source filter
         totalRecipes = allMatchingRecipes.length;
         recipes = allMatchingRecipes.slice(offset, offset + pageSize);
       } else {
         // Get all recipes with pagination
         try {
           const allRecipes = storage.getAllRecipes();
-          totalRecipes = allRecipes.length;
+          // Apply source filter if provided
+          const filteredRecipes = sourceFilter
+            ? allRecipes.filter(entry => entry.source === sourceFilter)
+            : allRecipes;
+          totalRecipes = filteredRecipes.length;
 
-          if (allRecipes.length > 0) {
+          if (filteredRecipes.length > 0) {
             // Apply pagination to file paths first (more efficient than loading all recipes)
-            const paginatedEntries = allRecipes.slice(offset, offset + pageSize);
+            const paginatedEntries = filteredRecipes.slice(offset, offset + pageSize);
             const recipePromises = paginatedEntries.map(entry =>
               storage.loadRecipe(entry.file_path),
             );

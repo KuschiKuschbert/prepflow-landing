@@ -33,6 +33,7 @@ export function RecipeScraper() {
   const [recipes, setRecipes] = useState<ScrapedRecipe[]>([]);
   const [loadingRecipes, setLoadingRecipes] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [sourceFilter, setSourceFilter] = useState<string>('');
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
   const [totalRecipes, setTotalRecipes] = useState(0);
@@ -47,6 +48,9 @@ export function RecipeScraper() {
       const params = new URLSearchParams();
       if (searchTerm) {
         params.set('search', searchTerm);
+      }
+      if (sourceFilter) {
+        params.set('source', sourceFilter);
       }
       params.set('page', pageNum.toString());
       params.set('pageSize', pageSizeNum.toString());
@@ -249,6 +253,8 @@ export function RecipeScraper() {
         loadingRecipes={loadingRecipes}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
+        sourceFilter={sourceFilter}
+        setSourceFilter={setSourceFilter}
         onFetchRecipes={() => {
           setPage(1); // Reset to first page when refreshing/searching
           fetchRecipes(1, pageSize);

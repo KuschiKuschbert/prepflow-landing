@@ -24,6 +24,12 @@ export const SOURCES = {
   EPICURIOUS: 'epicurious',
   BON_APPETIT: 'bon-appetit',
   TASTY: 'tasty',
+  SERIOUS_EATS: 'serious-eats',
+  FOOD52: 'food52',
+  SIMPLY_RECIPES: 'simply-recipes',
+  SMITTEN_KITCHEN: 'smitten-kitchen',
+  THE_KITCHN: 'the-kitchn',
+  DELISH: 'delish',
 } as const;
 
 export type SourceType = (typeof SOURCES)[keyof typeof SOURCES];
@@ -47,9 +53,14 @@ export const RATING_CONFIG = {
     // 'bbc-good-food': { minRating: 4.875, includeUnrated: true }, // REMOVED - Terms of Service violation
     'food-network': { minRating: 4.875, includeUnrated: false }, // 97.5% threshold
     'recipe-nlg': { minRating: 0, includeUnrated: true }, // Dataset source, include all
-    // Future sources
     epicurious: { minRating: 4.875, includeUnrated: false }, // 97.5% threshold
     'bon-appetit': { minRating: 0, includeUnrated: true }, // Professional site, no ratings
     tasty: { minRating: 4.875, includeUnrated: false }, // 97.5% threshold (handles percentage ratings)
+    'serious-eats': { minRating: 0, includeUnrated: true }, // Professional site, no ratings
+    food52: { minRating: 4.875, includeUnrated: false }, // 97.5% threshold
+    'simply-recipes': { minRating: 4.875, includeUnrated: false }, // 97.5% threshold
+    'smitten-kitchen': { minRating: 0, includeUnrated: true }, // Blog, no ratings
+    'the-kitchn': { minRating: 0, includeUnrated: true }, // Professional site, no ratings
+    delish: { minRating: 4.875, includeUnrated: false }, // 97.5% threshold
   } as Record<SourceType | string, { minRating: number; includeUnrated: boolean }>,
 };

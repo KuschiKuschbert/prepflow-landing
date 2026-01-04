@@ -96,11 +96,12 @@ async function loadRecipe(filePath: string): Promise<ScrapedRecipe | null> {
 }
 
 /**
- * Search recipes by ingredients
+ * Search recipes by ingredients with rating prioritization and source diversity
  */
 export async function searchRecipesByIngredients(
   ingredientNames: string[],
   limit: number = 5,
+  sourceFilter?: string,
 ): Promise<ScrapedRecipe[]> {
   try {
     // Check if database directory exists
@@ -115,11 +116,20 @@ export async function searchRecipesByIngredients(
       return [];
     }
 
-    const results: ScrapedRecipe[] = [];
+    const matches: Array<{
+      recipe: ScrapedRecipe;
+      matchingIngredientCount: number;
+      rating: number;
+      hasRating: boolean;
+    }> = [];
     const lowerIngredients = ingredientNames.map(ing => ing.toLowerCase());
 
+    // First pass: collect all matching recipes
     for (const entry of index.recipes) {
-      if (results.length >= limit) break;
+      // Apply source filter if provided
+      if (sourceFilter && entry.source !== sourceFilter) {
+        continue;
+      }
 
       try {
         const recipe = await loadRecipe(entry.file_path);
@@ -130,12 +140,18 @@ export async function searchRecipesByIngredients(
           (typeof ing === 'string' ? ing : ing.name || ing.original_text).toLowerCase(),
         );
 
-        const hasMatchingIngredient = lowerIngredients.some(searchIng =>
+        // Count matching ingredients
+        const matchingIngredientCount = lowerIngredients.filter(searchIng =>
           recipeIngredientNames.some(recipeIng => recipeIng.includes(searchIng)),
-        );
+        ).length;
 
-        if (hasMatchingIngredient) {
-          results.push(recipe);
+        if (matchingIngredientCount > 0) {
+          matches.push({
+            recipe,
+            matchingIngredientCount,
+            rating: recipe.rating || 0,
+            hasRating: !!recipe.rating,
+          });
         }
       } catch (error) {
         logger.error(`Error processing recipe entry ${entry.id}:`, error);
@@ -144,7 +160,58 @@ export async function searchRecipesByIngredients(
       }
     }
 
-    return results;
+    // Sort matches by:
+    // 1. Has rating (rated recipes first)
+    // 2. Rating (highest first)
+    // 3. Matching ingredient count (more matches first)
+    matches.sort((a, b) => {
+      // Rated recipes come before unrated
+      if (a.hasRating !== b.hasRating) {
+        return a.hasRating ? -1 : 1;
+      }
+      // If both have ratings, sort by rating (highest first)
+      if (a.hasRating && b.hasRating) {
+        if (a.rating !== b.rating) {
+          return b.rating - a.rating;
+        }
+      }
+      // Within same rating, prioritize more matching ingredients
+      return b.matchingIngredientCount - a.matchingIngredientCount;
+    });
+
+    // Second pass: ensure source diversity
+    const results: ScrapedRecipe[] = [];
+    const usedSources = new Set<string>();
+    const sourceGroups = new Map<string, ScrapedRecipe[]>();
+
+    // Group matches by source
+    for (const match of matches) {
+      const source = match.recipe.source;
+      if (!sourceGroups.has(source)) {
+        sourceGroups.set(source, []);
+      }
+      sourceGroups.get(source)!.push(match.recipe);
+    }
+
+    // First, add one recipe from each source (prioritizing highest rated)
+    for (const [source, recipes] of sourceGroups.entries()) {
+      if (results.length >= limit) break;
+      if (usedSources.has(source)) continue;
+
+      // Recipes are already sorted by rating, so take the first one
+      results.push(recipes[0]);
+      usedSources.add(source);
+    }
+
+    // Then, fill remaining slots with highest-rated recipes regardless of source
+    for (const match of matches) {
+      if (results.length >= limit) break;
+      if (results.some(r => r.id === match.recipe.id)) continue; // Skip if already added
+
+      results.push(match.recipe);
+    }
+
+    return results.slice(0, limit);
   } catch (error) {
     logger.error('Error searching recipes by ingredients:', error);
     return [];
@@ -152,26 +219,48 @@ export async function searchRecipesByIngredients(
 }
 
 /**
- * Format recipes for AI prompt context
+ * Format recipes for AI prompt context with ratings and source quality
  */
 export function formatRecipesForPrompt(recipes: ScrapedRecipe[]): string {
   if (recipes.length === 0) {
     return '';
   }
 
+  // Professional sources (high-quality, curated content)
+  const professionalSources = new Set([
+    'serious-eats',
+    'food-network',
+    'epicurious',
+    'bon-appetit',
+    'food52',
+    'simply-recipes',
+    'smitten-kitchen',
+    'the-kitchn',
+    'delish',
+  ]);
+
   const formatted = recipes.map((recipe, index) => {
     const ingredients = recipe.ingredients
       .map(ing => (typeof ing === 'string' ? ing : ing.original_text))
       .join(', ');
 
+    // Build source quality indicator
+    const sourceDisplay = recipe.source.replace(/-/g, ' ');
+    const isProfessional = professionalSources.has(recipe.source);
+    const sourceQuality = isProfessional ? 'Professional source' : 'User-rated source';
+    const ratingDisplay = recipe.rating
+      ? ` (${recipe.rating.toFixed(1)}★ ${sourceQuality})`
+      : ` (${sourceQuality})`;
+
     return `
-Recipe ${index + 1}: ${recipe.recipe_name}
-- Source: ${recipe.source}
+Recipe ${index + 1}: ${recipe.recipe_name}${ratingDisplay}
+- Source: ${sourceDisplay}
 - Ingredients: ${ingredients}
 - Instructions: ${recipe.instructions.slice(0, 3).join('; ')}${recipe.instructions.length > 3 ? '...' : ''}
 ${recipe.category ? `- Category: ${recipe.category}` : ''}
 ${recipe.cuisine ? `- Cuisine: ${recipe.cuisine}` : ''}
 ${recipe.dietary_tags && recipe.dietary_tags.length > 0 ? `- Dietary: ${recipe.dietary_tags.join(', ')}` : ''}
+${recipe.rating ? `- Rating: ${recipe.rating.toFixed(1)}/5.0` : ''}
 `;
   });
 
