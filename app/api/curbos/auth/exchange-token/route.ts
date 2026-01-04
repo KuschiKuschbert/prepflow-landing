@@ -53,9 +53,15 @@ export async function POST(req: NextRequest) {
       'https://dev-7myakdl4itf644km.us.auth0.com',
     ];
 
+    // Allow both Web and Android Client IDs
+    const acceptedAudiences = [
+      process.env.AUTH0_CLIENT_ID!, // Non-null assertion as it's required for app anyway
+      'xpHhovaF3i3aDBqFzn148dSZR3KhAa6t', // Android App Client ID
+    ];
+
     const { payload } = await jwtVerify(id_token, JWKS, {
       issuer: acceptedIssuers,
-      audience: process.env.AUTH0_CLIENT_ID,
+      audience: acceptedAudiences,
     });
 
     const email = payload.email as string;
