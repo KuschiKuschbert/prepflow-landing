@@ -4,10 +4,10 @@
  */
 
 import * as cheerio from 'cheerio';
-import { BaseScraper } from './base-scraper';
-import { ScrapedRecipe, RecipeIngredient } from '../parsers/types';
+import { RecipeIngredient, ScrapedRecipe } from '../parsers/types';
 import { scraperLogger } from '../utils/logger';
 import { SitemapParser } from '../utils/sitemap-parser';
+import { BaseScraper } from './base-scraper';
 
 export class AllRecipesScraper extends BaseScraper {
   constructor(config?: Partial<import('../parsers/types').ScraperConfig>) {
@@ -59,7 +59,7 @@ export class AllRecipesScraper extends BaseScraper {
       const temperatureData =
         recipeData.cookingMethod?.temperature ||
         recipeData.temperature ||
-        this.extractTemperatureFromInstructions(recipeData.recipeInstructions || []);
+        this._extractTemperatureString(recipeData.recipeInstructions || []);
 
       // Extract data from JSON-LD
       const recipe: Partial<ScrapedRecipe> = {
@@ -298,7 +298,7 @@ export class AllRecipesScraper extends BaseScraper {
    * Extract temperature from instructions text (fallback method)
    * Looks for temperature patterns in instruction text
    */
-  private extractTemperatureFromInstructions(instructions: any): string | undefined {
+  private _extractTemperatureString(instructions: any): string | undefined {
     if (!instructions) return undefined;
 
     const instructionTexts: string[] = [];
