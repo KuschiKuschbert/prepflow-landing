@@ -185,7 +185,10 @@ export default async function middleware(req: NextRequest) {
   if (pathname.startsWith('/webapp') || (isApi && !pathname.startsWith('/api/auth'))) {
     if (!session?.user) {
       if (isApi) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        return NextResponse.json(
+          { error: 'Unauthorized', debug_path: pathname },
+          { status: 401, headers: { 'x-debug-pathname': pathname } },
+        );
       }
       const callback = encodeURIComponent(pathname + (search || ''));
       return NextResponse.redirect(new URL(`/api/auth/login?returnTo=${callback}`, origin));
