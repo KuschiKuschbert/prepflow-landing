@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
 
 export default function TriangleGridBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -106,7 +105,7 @@ export default function TriangleGridBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none -z-20"
-      style={{ background: '#0a0a0a' }} // Dark background base
+      // Removed solid background color to allow stacking with other backgrounds if needed
     />
   )
 }

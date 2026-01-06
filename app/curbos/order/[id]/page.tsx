@@ -1,7 +1,8 @@
 'use client';
 
 import { logger } from '@/lib/logger';
-import { Check, ChefHat, Clock, Utensils } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+import { Check, ChefHat, Clock, Trophy, Utensils } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -9,6 +10,7 @@ interface OrderStatus {
   id: string;
   order_number: number | null;
   customer_name: string | null;
+  customer_id: string | null; // Added for Passport Link
   fulfillment_status: 'PENDING' | 'IN_PROGRESS' | 'READY' | 'COMPLETED';
   items_json: any;
 }
@@ -51,7 +53,7 @@ export default function PublicOrderStatusPage() {
       osc.start();
       osc.stop(ctx.currentTime + 0.5);
     } catch (e) {
-      console.error('Audio play failed', e);
+      logger.error('Audio play failed', e as Error);
     }
   };
 
@@ -93,12 +95,52 @@ export default function PublicOrderStatusPage() {
     // Initial fetch
     fetchStatus();
 
-    // Poll every 5 seconds
-    const interval = setInterval(() => {
-        setElapsedMillis(Date.now() - startTime);
-        fetchStatus();
-    }, 5000);
-    return () => clearInterval(interval);
+    // Realtime Subscription
+    const channel = supabase
+      .channel(`order-${id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'transactions',
+          filter: `id=eq.${id}`,
+        },
+        (payload: any) => {
+          const newData = payload.new as OrderStatus;
+
+          // Check for status change to READY
+          if (newData.fulfillment_status === 'READY' && prevStatusRef.current !== 'READY') {
+               // Play Sound
+               playNotificationSound();
+
+               // Vibrate
+               if (typeof navigator !== 'undefined' && navigator.vibrate) {
+                   navigator.vibrate([200, 100, 200]);
+               }
+
+               // System Notification
+               if (Notification.permission === 'granted') {
+                   new Notification('Order Ready!', {
+                       body: `Order #${newData.order_number} is ready for pickup!`,
+                       icon: '/favicon.ico' // Ensure this path is valid or remove
+                   });
+               }
+          }
+          prevStatusRef.current = newData.fulfillment_status;
+          setOrder(newData);
+        }
+      )
+      .subscribe();
+
+    // Request Notification Permission on mount
+    if (typeof Notification !== 'undefined' && Notification.permission !== 'granted') {
+        Notification.requestPermission();
+    }
+
+    return () => {
+        supabase.removeChannel(channel);
+    };
   }, [id, startTime]);
 
   // Graceful 404 handling during sync delay
@@ -108,7 +150,7 @@ export default function PublicOrderStatusPage() {
   if (loading || isSyncDelay) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center space-y-4">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-[#C0FF02]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-[#ccff00]"></div>
         {isSyncDelay && (
            <p className="text-neutral-500 text-sm animate-pulse">Syncing your order...</p>
         )}
@@ -154,9 +196,9 @@ export default function PublicOrderStatusPage() {
       statusMessage = 'Cooking Now...';
       StatusIcon = ChefHat;
   } else if (isReady) {
-      statusColor = 'text-[#C0FF02]';
-      statusBg = 'bg-[#C0FF02]/10';
-      statusBorder = 'border-[#C0FF02]/20';
+      statusColor = 'text-[#ccff00]';
+      statusBg = 'bg-[#ccff00]/10';
+      statusBorder = 'border-[#ccff00]/20';
       statusMessage = 'READY FOR PICKUP!';
       StatusIcon = Check;
   } else if (isCompleted) {
@@ -188,7 +230,7 @@ export default function PublicOrderStatusPage() {
             </h2>
 
             {isReady && (
-                <div className="mt-4 px-4 py-2 bg-[#C0FF02] text-black font-bold rounded-lg animate-bounce">
+                <div className="mt-4 px-4 py-2 bg-[#ccff00] text-black font-bold rounded-lg animate-bounce">
                     PLEASE COLLECT YOUR ORDER
                 </div>
             )}
@@ -198,6 +240,12 @@ export default function PublicOrderStatusPage() {
                 <p className="text-5xl font-black text-white">#{order.order_number}</p>
                  {order.customer_name && (
                     <p className="text-lg font-medium text-white mt-2">{order.customer_name}</p>
+                )}
+
+                {order.customer_id && (
+                     <a href={`/curbos/quests/${order.customer_id}`} className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-[#ccff00] text-sm font-bold rounded-lg transition-colors">
+                         <Trophy size={16} /> View My Passport
+                     </a>
                 )}
             </div>
         </div>
