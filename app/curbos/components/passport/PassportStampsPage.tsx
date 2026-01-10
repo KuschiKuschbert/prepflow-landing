@@ -28,8 +28,8 @@ export default function PassportStampsPage({ unlockedRegions, stampCards }: Pass
            }}>
       </div>
 
-      <div className="p-8 h-full flex flex-col">
-          <h3 className="text-[#ccff00] font-bold text-center uppercase tracking-[0.3em] mb-6 opacity-80 border-b border-[#ccff00]/30 pb-2">Visas & Endorsements</h3>
+      <div className="p-5 h-full flex flex-col">
+          <h3 className="text-neutral-900/80 font-bold text-center uppercase tracking-[0.3em] mb-6 border-b border-black/10 pb-2">Visas & Endorsements</h3>
 
           <div className="flex-1 grid grid-cols-3 gap-4 content-start">
              {/* Region Stamps */}
