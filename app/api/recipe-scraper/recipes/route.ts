@@ -8,6 +8,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { searchRecipesByIngredients, getRecipeDatabaseStats } from '@/lib/ai/recipe-database';
+import { isRecipeFormatted } from '@/lib/utils/recipe-format-detection';
 
 // Dynamic imports to handle potential import failures gracefully
 async function loadJSONStorage() {
@@ -50,6 +51,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const search = searchParams.get('search'); // Comma-separated ingredients
     const sourceFilter = searchParams.get('source') || undefined; // Optional source filter
+    const formatFilter = searchParams.get('format') || 'all'; // Format filter: all, formatted, unformatted
     // Pagination support: page (1-based) and pageSize
     const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
     const pageSize = Math.max(1, Math.min(100, parseInt(searchParams.get('pageSize') || '25', 10))); // Max 100 per page
@@ -103,7 +105,7 @@ export async function GET(request: NextRequest) {
     let totalRecipes = 0;
     try {
       if (search) {
-        // Search by ingredients - get all matching recipes first, then paginate
+        // Search by ingredients - get all matching recipes first, then filter and paginate
         const ingredients = search
           .split(',')
           .map(i => i.trim())
@@ -113,21 +115,53 @@ export async function GET(request: NextRequest) {
           10000,
           sourceFilter,
         ); // Get all matches with optional source filter
-        totalRecipes = allMatchingRecipes.length;
-        recipes = allMatchingRecipes.slice(offset, offset + pageSize);
+
+        // Apply format filter to loaded recipes (search already loads recipes from files)
+        let filteredRecipes = allMatchingRecipes;
+        if (formatFilter !== 'all') {
+          filteredRecipes = allMatchingRecipes.filter(recipe => {
+            const formatted = isRecipeFormatted(recipe);
+            return formatFilter === 'formatted' ? formatted : !formatted;
+          });
+        }
+
+        totalRecipes = filteredRecipes.length;
+        recipes = filteredRecipes.slice(offset, offset + pageSize);
       } else {
-        // Get all recipes with pagination
+        // Get all recipes with index-level filtering and pagination (FAST - no file loading for filtering)
         try {
           const allRecipes = storage.getAllRecipes();
-          // Apply source filter if provided
-          const filteredRecipes = sourceFilter
-            ? allRecipes.filter(entry => entry.source === sourceFilter)
-            : allRecipes;
+
+          // Filter at index level using updated_at (FAST - no file loading needed)
+          let filteredRecipes = allRecipes;
+          if (formatFilter !== 'all') {
+            filteredRecipes = allRecipes.filter(entry => {
+              if (!entry.updated_at || !entry.scraped_at || entry.updated_at === entry.scraped_at) {
+                return formatFilter === 'unformatted'; // No updated_at = unformatted
+              }
+              // ISO timestamps are sortable as strings, but use Date comparison for safety
+              try {
+                const isFormatted = new Date(entry.updated_at) > new Date(entry.scraped_at);
+                return formatFilter === 'formatted' ? isFormatted : !isFormatted;
+              } catch {
+                // Fallback: string comparison (ISO timestamps are sortable)
+                const isFormatted = entry.updated_at > entry.scraped_at;
+                return formatFilter === 'formatted' ? isFormatted : !isFormatted;
+              }
+            });
+          }
+
+          // Apply source filter on filtered recipes (if provided)
+          if (sourceFilter) {
+            filteredRecipes = filteredRecipes.filter(entry => entry.source === sourceFilter);
+          }
+
           totalRecipes = filteredRecipes.length;
 
           if (filteredRecipes.length > 0) {
-            // Apply pagination to file paths first (more efficient than loading all recipes)
+            // Paginate filtered entries (FAST - pagination on index, not loaded recipes)
             const paginatedEntries = filteredRecipes.slice(offset, offset + pageSize);
+            // Load only paginated recipe files (EFFICIENT - only load what's needed)
             const recipePromises = paginatedEntries.map(entry =>
               storage.loadRecipe(entry.file_path),
             );

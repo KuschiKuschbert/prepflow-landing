@@ -20,7 +20,7 @@ export default function PassportStampsPage({ unlockedRegions, stampCards }: Pass
   };
 
   return (
-    <div className="w-full aspect-[1.586/1] bg-[#fdfbf7] rounded-l-2xl shadow-2xl overflow-hidden relative border-r-4 border-black/10">
+    <div className="w-full h-full bg-[#fdfbf7] relative flex flex-col overflow-hidden">
        {/* Paper Texture Pattern */}
       <div className="absolute inset-0 opacity-5 pointer-events-none"
            style={{
@@ -28,10 +28,10 @@ export default function PassportStampsPage({ unlockedRegions, stampCards }: Pass
            }}>
       </div>
 
-      <div className="p-5 h-full flex flex-col">
-          <h3 className="text-neutral-900/80 font-bold text-center uppercase tracking-[0.3em] mb-6 border-b border-black/10 pb-2">Visas & Endorsements</h3>
+       <div className="p-5 flex flex-col h-full">
+          <h3 className="text-neutral-900/80 font-bold text-center uppercase tracking-[0.3em] mb-2 border-b border-black/10 pb-2 text-[10px] shrink-0">Visas & Endorsements</h3>
 
-          <div className="flex-1 grid grid-cols-3 gap-4 content-start">
+          <div className="flex-1 grid grid-cols-3 grid-rows-4 gap-4 p-4 justify-items-center items-center">
              {/* Region Stamps */}
              {unlockedRegions.map((region) => (
                  <motion.div
@@ -39,14 +39,14 @@ export default function PassportStampsPage({ unlockedRegions, stampCards }: Pass
                     initial={{ opacity: 0, scale: 1.5 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ type: "spring", bounce: 0.5 }}
-                    className="aspect-square border-4 border-double border-purple-800/60 rounded-full flex flex-col items-center justify-center p-2 transform mix-blend-multiply"
+                    className="w-full h-full max-w-[100px] max-h-[100px] aspect-square border-4 border-double border-purple-800/60 rounded-full flex flex-col items-center justify-center p-1 transform mix-blend-multiply"
                     style={{ rotate: `${getRotation(region)}deg` }}
                  >
-                    <MapPin className="text-purple-900/70 mb-1 w-6 h-6" />
-                    <span className="text-[8px] font-black text-purple-900 uppercase text-center leading-none tracking-tighter">
-                        ENTRY PERMITTED
+                    <MapPin className="text-purple-900/70 mb-1 w-[25%] h-[25%]" />
+                    <span className="text-[6px] sm:text-[8px] font-black text-purple-900 uppercase text-center leading-none tracking-tighter">
+                        PERMIT
                         <br/>
-                        <span className="text-xs text-purple-700">{region}</span>
+                        <span className="text-[7px] sm:text-[9px] text-purple-700">{region}</span>
                     </span>
                  </motion.div>
              ))}
@@ -55,27 +55,27 @@ export default function PassportStampsPage({ unlockedRegions, stampCards }: Pass
              {Object.entries(stampCards).map(([category, count]) => (
                 <div
                     key={category}
-                    className="aspect-square border-2 border-dashed border-orange-600/60 rounded-lg flex flex-col items-center justify-center p-2 transform mix-blend-multiply bg-orange-50/50"
+                    className="w-full h-full max-w-[100px] max-h-[100px] aspect-square border-2 border-dashed border-orange-600/60 rounded-lg flex flex-col items-center justify-center p-1 transform mix-blend-multiply bg-orange-50/50"
                     style={{ rotate: `${getRotation(category)}deg` }}
                  >
-                    <Coffee className="text-orange-900/70 mb-1 w-5 h-5" />
-                    <span className="text-[8px] font-bold text-orange-900 uppercase text-center leading-none">
+                    <Coffee className="text-orange-900/70 mb-1 w-[25%] h-[25%]" />
+                    <span className="text-[6px] sm:text-[8px] font-bold text-orange-900 uppercase text-center leading-none">
                         {category}
                         <br/>
-                        <span className="text-lg font-black">{count}/10</span>
+                        <span className="text-[8px] sm:text-[10px] font-black">{count}/10</span>
                     </span>
                  </div>
              ))}
 
              {/* Empty Placeholder Stamps */}
-             {[...Array(Math.max(0, 6 - unlockedRegions.length - Object.keys(stampCards).length))].map((_, i) => (
-                 <div key={`empty-${i}`} className="aspect-square border border-neutral-200 rounded-full opacity-30 flex items-center justify-center">
-                    <span className="text-[8px] font-mono text-neutral-300">VOID</span>
+             {[...Array(Math.max(0, 12 - unlockedRegions.length - Object.keys(stampCards).length))].map((_, i) => (
+                 <div key={`empty-${i}`} className="w-full h-full max-w-[100px] max-h-[100px] aspect-square border border-neutral-200 rounded-full opacity-30 flex items-center justify-center">
+                    <span className="text-[6px] sm:text-[8px] font-mono text-neutral-300">VOID</span>
                  </div>
              ))}
           </div>
 
-          <div className="text-center mt-auto pt-4">
+          <div className="text-center mt-auto pt-4 border-t border-black/5 shrink-0">
               <span className="font-mono text-[10px] text-black/40">PAGE 4</span>
           </div>
       </div>

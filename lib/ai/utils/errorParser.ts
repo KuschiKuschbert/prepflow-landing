@@ -39,15 +39,23 @@ export function parseAIError(error: Error): AIError {
   }
 
   // Check for quota/billing errors (Gemini-specific)
+  // Note: "limit: 0" indicates quota not configured or exhausted
+  // "exceeded your current quota" indicates quota exhausted
+  // "check your plan and billing" is part of the error message
   if (
     errorString.includes('quota') ||
     errorString.includes('billing') ||
     errorString.includes('payment required') ||
-    errorString.includes('402')
+    errorString.includes('402') ||
+    errorString.includes('limit: 0') ||
+    errorString.includes('exceeded your current quota') ||
+    errorString.includes('check your plan and billing') ||
+    errorString.includes('generativelanguage.googleapis.com/generate_requests_per_model_per_day')
   ) {
     return {
-      type: 'RATE_LIMITED',
-      message: 'AI service quota exceeded. Please check your billing.',
+      type: 'QUOTA_EXCEEDED',
+      message:
+        'Gemini API quota exceeded. Please check your plan and billing at https://ai.google.dev/gemini-api/docs/rate-limits. To monitor usage, visit https://ai.dev/usage?tab=rate-limit',
       details: error,
       retryable: false,
     };

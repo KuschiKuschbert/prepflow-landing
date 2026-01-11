@@ -57,7 +57,22 @@ function convertToAustralianUnit(
   });
 
   // Already Australian units - no conversion needed
-  const australianUnits = ['ml', 'l', 'gm', 'g', 'kg', 'pc', 'box', 'pack', 'bag', 'bottle', 'can', 'bunch', 'piece', 'pieces'];
+  const australianUnits = [
+    'ml',
+    'l',
+    'gm',
+    'g',
+    'kg',
+    'pc',
+    'box',
+    'pack',
+    'bag',
+    'bottle',
+    'can',
+    'bunch',
+    'piece',
+    'pieces',
+  ];
   if (australianUnits.includes(normalized)) {
     // Convert gm to g for consistency
     if (normalized === 'gm') {
@@ -69,8 +84,20 @@ function convertToAustralianUnit(
   // Volume conversions to ml
   if (category === 'volume') {
     // Check if it's a volume unit that needs conversion
-    const volumeUnitsToConvert = ['cup', 'cups', 'fl_oz', 'tsp', 'tbsp', 'teaspoon', 'teaspoons', 'tablespoon', 'tablespoons', 'fluid ounce', 'fluid ounces'];
-    
+    const volumeUnitsToConvert = [
+      'cup',
+      'cups',
+      'fl_oz',
+      'tsp',
+      'tbsp',
+      'teaspoon',
+      'teaspoons',
+      'tablespoon',
+      'tablespoons',
+      'fluid ounce',
+      'fluid ounces',
+    ];
+
     if (volumeUnitsToConvert.includes(normalized)) {
       try {
         const result = convertUnit(quantity, normalized, 'ml');
@@ -113,7 +140,7 @@ function convertToAustralianUnit(
   if (category === 'weight') {
     // Check if it's a weight unit that needs conversion
     const weightUnitsToConvert = ['oz', 'ounce', 'ounces', 'lb', 'pound', 'pounds'];
-    
+
     if (weightUnitsToConvert.includes(normalized)) {
       try {
         const result = convertUnit(quantity, normalized, 'g');
@@ -188,7 +215,9 @@ function convertRecipeIngredients(ingredients: RecipeIngredient[]): {
       } else {
         // Try alternative parsing: look for common patterns like "2 cups", "1/2 cup", etc.
         const text = ing.original_text.toLowerCase();
-        const fractionMatch = text.match(/^(\d+\/\d+|\d+\.\d+|\d+)\s*(cup|cups|tbsp|tablespoon|tablespoons|tsp|teaspoon|teaspoons|oz|ounce|ounces|lb|pound|pounds|g|gram|grams|kg|kilogram|kilograms|ml|milliliter|milliliters|l|liter|liters|litre|litres)\s*(.+)$/i);
+        const fractionMatch = text.match(
+          /^(\d+\/\d+|\d+\.\d+|\d+)\s*(cup|cups|tbsp|tablespoon|tablespoons|tsp|teaspoon|teaspoons|oz|ounce|ounces|lb|pound|pounds|g|gram|grams|kg|kilogram|kilograms|ml|milliliter|milliliters|l|liter|liters|litre|litres)\s*(.+)$/i,
+        );
         if (fractionMatch) {
           const qtyStr = fractionMatch[1];
           // Parse fraction
@@ -326,7 +355,7 @@ export async function POST(request: NextRequest) {
     // Process recipes in parallel batches for maximum speed
     // Use concurrency limit to balance speed and file system I/O
     const CONCURRENCY_LIMIT = 10; // Process 10 recipes concurrently
-    const batches: typeof allRecipes[] = [];
+    const batches: (typeof allRecipes)[] = [];
 
     // Split recipes into batches
     for (let i = 0; i < allRecipes.length; i += CONCURRENCY_LIMIT) {

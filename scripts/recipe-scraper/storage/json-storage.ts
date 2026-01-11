@@ -28,6 +28,7 @@ interface RecipeIndexEntry {
   source_url: string;
   file_path: string;
   scraped_at: string;
+  updated_at?: string; // For fast format filtering
 }
 
 export class JSONStorage {
@@ -190,51 +191,88 @@ export class JSONStorage {
 
   /**
    * Save a recipe to JSON file
+   * If recipe already exists (by source_url + source), updates the existing file
+   * Otherwise creates a new file
    */
   async saveRecipe(
     recipe: ScrapedRecipe,
-  ): Promise<{ saved: boolean; filePath?: string; reason?: string }> {
+  ): Promise<{ saved: boolean; filePath?: string; reason?: string; updated?: boolean }> {
     try {
       const index = this.loadIndex();
 
-      // Check for duplicates
-      if (this.isDuplicate(recipe, index)) {
-        scraperLogger.debug(`Recipe already exists: ${recipe.recipe_name} from ${recipe.source}`);
-        return { saved: false, reason: 'duplicate' };
+      // Check if recipe already exists (for updates)
+      const existingEntry = index.recipes.find(
+        entry => entry.source_url === recipe.source_url && entry.source === recipe.source,
+      );
+
+      let filePath: string;
+      let isUpdate = false;
+
+      if (existingEntry) {
+        // Recipe exists - update the existing file
+        isUpdate = true;
+        filePath = path.isAbsolute(existingEntry.file_path)
+          ? existingEntry.file_path
+          : path.join(this.storagePath, existingEntry.file_path);
+
+        // Ensure directory exists
+        const parentDir = path.dirname(filePath);
+        if (!fs.existsSync(parentDir)) {
+          fs.mkdirSync(parentDir, { recursive: true });
+        }
+
+        scraperLogger.debug(
+          `Updating existing recipe: ${recipe.recipe_name} from ${recipe.source}`,
+          { filePath: existingEntry.file_path },
+        );
+      } else {
+        // New recipe - create new file
+        // Get source directory (this ensures it exists)
+        const sourceDir = this.getSourceDir(recipe.source);
+
+        // Generate filename
+        const filename = this.generateFilename(recipe);
+        filePath = path.join(sourceDir, filename);
+
+        // Ensure parent directory exists (double-check)
+        const parentDir = path.dirname(filePath);
+        if (!fs.existsSync(parentDir)) {
+          fs.mkdirSync(parentDir, { recursive: true });
+        }
+
+        // Add to index
+        index.recipes.push({
+          id: recipe.id,
+          recipe_name: recipe.recipe_name,
+          source: recipe.source,
+          source_url: recipe.source_url,
+          file_path: path.relative(this.storagePath, filePath),
+          scraped_at: recipe.scraped_at,
+          updated_at: recipe.updated_at, // Include updated_at for fast format filtering
+        });
+
+        scraperLogger.debug(`Creating new recipe: ${recipe.recipe_name} from ${recipe.source}`);
       }
 
-      // Get source directory (this ensures it exists)
-      const sourceDir = this.getSourceDir(recipe.source);
-
-      // Generate filename
-      const filename = this.generateFilename(recipe);
-      const filePath = path.join(sourceDir, filename);
-
-      // Ensure parent directory exists (double-check)
-      const parentDir = path.dirname(filePath);
-      if (!fs.existsSync(parentDir)) {
-        fs.mkdirSync(parentDir, { recursive: true });
-      }
-
-      // Save recipe JSON with compression
+      // Save recipe JSON with compression (overwrites existing file if updating)
       const jsonString = JSON.stringify(recipe, null, 2);
       const compressed = await gzip(Buffer.from(jsonString, 'utf-8'));
       fs.writeFileSync(filePath, compressed);
 
-      // Update index
-      index.recipes.push({
-        id: recipe.id,
-        recipe_name: recipe.recipe_name,
-        source: recipe.source,
-        source_url: recipe.source_url,
-        file_path: path.relative(this.storagePath, filePath),
-        scraped_at: recipe.scraped_at,
-      });
+      // Update index entry if recipe name changed (for updates)
+      if (isUpdate && existingEntry) {
+        existingEntry.recipe_name = recipe.recipe_name;
+        existingEntry.id = recipe.id;
+        existingEntry.updated_at = recipe.updated_at; // Update updated_at in index for fast format filtering
+        // Keep original scraped_at in index, but recipe file has updated updated_at
+      }
 
       this.saveIndex(index);
 
-      scraperLogger.info(`Saved recipe: ${recipe.recipe_name} to ${filePath}`);
-      return { saved: true, filePath };
+      scraperLogger.info(
+        `${isUpdate ? 'Updated' : 'Saved'} recipe: ${recipe.recipe_name} to ${filePath}`,
+      );
+      return { saved: true, filePath, updated: isUpdate };
     } catch (error) {
       scraperLogger.error('Error saving recipe:', error);
       return { saved: false, reason: error instanceof Error ? error.message : String(error) };

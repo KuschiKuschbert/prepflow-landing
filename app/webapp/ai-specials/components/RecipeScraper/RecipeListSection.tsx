@@ -8,7 +8,9 @@
 import { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { TablePagination } from '@/components/ui/TablePagination';
+import { isRecipeFormatted } from '@/lib/utils/recipe-format-detection';
 import {
+  CheckCircle2,
   ChevronDown,
   ChevronUp,
   Clock,
@@ -42,6 +44,8 @@ interface ScrapedRecipe {
   image_url?: string;
   rating?: number; // 1-5 rating if available
   dietary_tags?: string[];
+  scraped_at?: string; // ISO timestamp when recipe was scraped
+  updated_at?: string; // ISO timestamp when recipe was last updated (formatted)
 }
 
 interface RecipeListSectionProps {
@@ -51,6 +55,8 @@ interface RecipeListSectionProps {
   setSearchTerm: (searchTerm: string) => void;
   sourceFilter: string;
   setSourceFilter: (sourceFilter: string) => void;
+  formatFilter: 'all' | 'formatted' | 'unformatted';
+  setFormatFilter: (formatFilter: 'all' | 'formatted' | 'unformatted') => void;
   onFetchRecipes: () => void;
   page: number;
   pageSize: number;
@@ -74,6 +80,12 @@ const SOURCES = [
   { value: 'the-kitchn', label: 'The Kitchn' },
   { value: 'delish', label: 'Delish' },
 ];
+
+const FORMAT_FILTERS = [
+  { value: 'all', label: 'All Recipes' },
+  { value: 'formatted', label: 'Formatted' },
+  { value: 'unformatted', label: 'Unformatted' },
+] as const;
 
 const getSourceColor = (source: string): string => {
   const colors: Record<string, string> = {
@@ -103,6 +115,23 @@ const formatSourceName = (source: string): string => {
   return source.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 };
 
+/**
+ * Convert external image URL to proxy URL to bypass CORS
+ * Only proxies external URLs (http/https), returns relative URLs as-is
+ */
+const getProxiedImageUrl = (imageUrl: string): string => {
+  try {
+    const url = new URL(imageUrl);
+    // Only proxy external HTTP/HTTPS URLs
+    if (url.protocol === 'http:' || url.protocol === 'https:') {
+      return `/api/image-proxy?url=${encodeURIComponent(imageUrl)}`;
+    }
+  } catch {
+    // If URL parsing fails, assume it's a relative URL and return as-is
+  }
+  return imageUrl;
+};
+
 export function RecipeListSection({
   recipes,
   loadingRecipes,
@@ -110,6 +139,8 @@ export function RecipeListSection({
   setSearchTerm,
   sourceFilter,
   setSourceFilter,
+  formatFilter,
+  setFormatFilter,
   onFetchRecipes,
   page,
   pageSize,
@@ -168,28 +199,55 @@ export function RecipeListSection({
             className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-2 text-[var(--foreground)] focus:ring-2 focus:ring-[#29E7CD]"
           />
         </div>
-        <div className="tablet:w-48">
-          <div className="relative">
-            <Icon
-              icon={Filter}
-              size="sm"
-              className="absolute top-1/2 left-3 -translate-y-1/2 text-[var(--foreground-muted)]"
-              aria-hidden={true}
-            />
-            <select
-              value={sourceFilter}
-              onChange={e => {
-                setSourceFilter(e.target.value);
-                onFetchRecipes();
-              }}
-              className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-2 pl-10 text-[var(--foreground)] focus:ring-2 focus:ring-[#29E7CD]"
-            >
-              {SOURCES.map(source => (
-                <option key={source.value} value={source.value}>
-                  {source.label}
-                </option>
-              ))}
-            </select>
+        <div className="tablet:flex-row flex flex-col gap-3">
+          <div className="tablet:w-48">
+            <div className="relative">
+              <Icon
+                icon={Filter}
+                size="sm"
+                className="absolute top-1/2 left-3 -translate-y-1/2 text-[var(--foreground-muted)]"
+                aria-hidden={true}
+              />
+              <select
+                value={sourceFilter}
+                onChange={e => {
+                  setSourceFilter(e.target.value);
+                  // Fetch will be triggered by useEffect in RecipeScraper when sourceFilter changes
+                }}
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-2 pl-10 text-[var(--foreground)] focus:ring-2 focus:ring-[#29E7CD]"
+              >
+                {SOURCES.map(source => (
+                  <option key={source.value} value={source.value}>
+                    {source.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="tablet:w-48">
+            <div className="relative">
+              <Icon
+                icon={Filter}
+                size="sm"
+                className="absolute top-1/2 left-3 -translate-y-1/2 text-[var(--foreground-muted)]"
+                aria-hidden={true}
+              />
+              <select
+                value={formatFilter}
+                onChange={e => {
+                  const newFilter = e.target.value as 'all' | 'formatted' | 'unformatted';
+                  setFormatFilter(newFilter);
+                  // Fetch will be triggered by useEffect in RecipeScraper when formatFilter changes
+                }}
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-2 pl-10 text-[var(--foreground)] focus:ring-2 focus:ring-[#29E7CD]"
+              >
+                {FORMAT_FILTERS.map(filter => (
+                  <option key={filter.value} value={filter.value}>
+                    {filter.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -198,7 +256,7 @@ export function RecipeListSection({
         <div className="py-8 text-center text-[var(--foreground-muted)]">Loading recipes...</div>
       ) : recipes.length === 0 ? (
         <div className="py-8 text-center text-[var(--foreground-muted)]">
-          {searchTerm || sourceFilter
+          {searchTerm || sourceFilter || formatFilter !== 'all'
             ? 'No recipes found matching your search. Try different ingredients or filters!'
             : 'No recipes found. Scrape some recipes to get started!'}
         </div>
@@ -218,21 +276,29 @@ export function RecipeListSection({
             {recipes.map(recipe => {
               const isExpanded = expandedCards.has(recipe.id);
               const hasImage = !!recipe.image_url;
+              // Determine if recipe is formatted using shared utility
+              const isFormatted = isRecipeFormatted(recipe);
 
               return (
                 <div
                   key={recipe.id}
-                  className="group flex flex-col rounded-2xl border border-[var(--border)] bg-[var(--background)] p-4 transition-all duration-200 hover:border-[#29E7CD]/50 hover:shadow-lg"
+                  className={`group flex flex-col rounded-2xl border p-4 transition-all duration-200 hover:shadow-lg ${
+                    isFormatted
+                      ? 'border-green-500/20 bg-green-500/5 hover:border-green-500/30'
+                      : 'border-[var(--border)] bg-[var(--background)] hover:border-[#29E7CD]/50'
+                  }`}
                 >
                   {/* Header with Image/Title */}
                   <div className="mb-3 flex gap-3">
                     {hasImage && (
                       <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src={recipe.image_url!}
+                          src={getProxiedImageUrl(recipe.image_url!)}
                           alt={recipe.recipe_name}
                           className="h-full w-full object-cover"
                           loading="lazy"
+                          referrerPolicy="no-referrer"
                           onError={e => {
                             // Hide image on error
                             const target = e.target as HTMLImageElement;
@@ -265,6 +331,22 @@ export function RecipeListSection({
                             />
                             <span>{recipe.rating.toFixed(1)}</span>
                           </div>
+                        )}
+                        {/* Formatted Badge */}
+                        {isFormatted && (
+                          <div className="flex items-center gap-1 rounded-full border border-green-500/20 bg-green-500/10 px-2 py-0.5">
+                            <Icon
+                              icon={CheckCircle2}
+                              size="xs"
+                              className="text-green-400"
+                              aria-hidden={true}
+                            />
+                            <span className="text-xs font-medium text-green-400">Formatted</span>
+                          </div>
+                        )}
+                        {/* Pending Status */}
+                        {!isFormatted && (
+                          <span className="text-xs text-[var(--foreground-muted)]">Pending</span>
                         )}
                       </div>
                     </div>

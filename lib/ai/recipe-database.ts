@@ -22,6 +22,7 @@ interface RecipeIndexEntry {
   source_url: string;
   file_path: string;
   scraped_at: string;
+  updated_at?: string; // For fast format filtering
 }
 
 interface RecipeIndex {

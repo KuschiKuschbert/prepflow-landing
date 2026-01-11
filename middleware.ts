@@ -55,7 +55,12 @@ export default async function middleware(req: NextRequest) {
     pathname.startsWith('/api/fix') ||
     pathname.startsWith('/api/curbos/auth');
 
-  if (isApi && !isPublicApi && !isAuthRoute) {
+  // Status polling endpoints - exempt from rate limiting (frequent polling for real-time updates)
+  const isStatusPollingApi =
+    pathname.startsWith('/api/recipe-scraper/process-recipes') ||
+    pathname.startsWith('/api/recipe-scraper/status');
+
+  if (isApi && !isPublicApi && !isAuthRoute && !isStatusPollingApi) {
     const rateLimitResult = checkRateLimitFromRequest(req);
     if (!rateLimitResult.allowed) {
       logger.warn('[Middleware] Rate limit exceeded:', {

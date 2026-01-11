@@ -64,6 +64,7 @@ export type AIErrorType =
   | 'API_KEY_MISSING'
   | 'API_ERROR'
   | 'RATE_LIMITED'
+  | 'QUOTA_EXCEEDED'
   | 'INVALID_REQUEST'
   | 'NETWORK_ERROR'
   | 'TIMEOUT'

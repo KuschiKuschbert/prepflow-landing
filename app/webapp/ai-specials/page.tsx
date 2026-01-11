@@ -7,8 +7,9 @@ import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
 import { useTranslation } from '@/lib/useTranslation';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Bot } from 'lucide-react';
+import { Bot, Shield } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { AISpecialCard } from './components/AISpecialCard';
 import { EmptyState } from './components/EmptyState';
 import { RecipeScraper } from './components/RecipeScraper';
@@ -29,6 +30,7 @@ export default function AISpecialsPage() {
   const { t } = useTranslation();
   const { showSuccess, showError } = useNotification();
   const { user, isLoading: userLoading } = useUser();
+  const { isAdmin, loading: adminLoading } = useIsAdmin();
 
   // Extract user email from Auth0 user object (handle nested structure)
   // Auth0 SDK can return user in different structures:
@@ -87,6 +89,7 @@ export default function AISpecialsPage() {
         });
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 
   const fetchAISpecials = async () => {
@@ -208,8 +211,8 @@ export default function AISpecialsPage() {
     }
   };
 
-  // Show loading state while checking authentication
-  if (userLoading || loading) {
+  // Show loading state while checking authentication or admin status
+  if (userLoading || adminLoading || loading) {
     return (
       <ResponsivePageContainer>
         <div className="tablet:py-6 min-h-screen bg-transparent py-4">
@@ -245,6 +248,44 @@ export default function AISpecialsPage() {
             <p className="text-[var(--color-error)]">
               Please log in to view and create AI specials.
             </p>
+          </div>
+        </div>
+      </ResponsivePageContainer>
+    );
+  }
+
+  // Show access denied if user is not admin (only after loading is complete)
+  if (!isAdmin) {
+    return (
+      <ResponsivePageContainer>
+        <div className="min-h-screen bg-transparent py-8 text-[var(--foreground)]">
+          <div className="mb-8">
+            <h1 className="mb-2 flex items-center gap-2 text-3xl font-bold text-[var(--foreground)]">
+              <Icon icon={Bot} size="lg" aria-hidden={true} />
+              {t('aiSpecials.title', 'AI Specials Generator')}
+            </h1>
+            <p className="text-[var(--foreground-muted)]">
+              {t('aiSpecials.subtitle', 'Generate specials from ingredient photos using AI')}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-[var(--color-error)]/20 bg-[var(--color-error)]/10 p-6">
+            <div className="flex items-start gap-3">
+              <Icon
+                icon={Shield}
+                size="lg"
+                className="mt-0.5 flex-shrink-0 text-[var(--color-error)]"
+                aria-hidden={true}
+              />
+              <div>
+                <h2 className="mb-2 text-lg font-semibold text-[var(--color-error)]">
+                  Admin Access Required
+                </h2>
+                <p className="text-[var(--color-error)]/80">
+                  This feature is only available to administrators. Please contact an administrator
+                  if you need access.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </ResponsivePageContainer>

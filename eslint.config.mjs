@@ -40,6 +40,13 @@ export default defineConfig([
     },
   },
   {
+    // Allow console in test/diagnostic files in root
+    files: ['test-*.js', '*-test.js', '*-diag.js'],
+    rules: {
+      'no-console': 'off',
+    },
+  },
+  {
     // Allow console in e2e tests (test debugging)
     files: ['e2e/**/*.ts', 'e2e/**/*.js'],
     rules: {

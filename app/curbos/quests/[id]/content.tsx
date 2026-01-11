@@ -20,6 +20,7 @@ interface Customer {
   stamp_cards: Record<string, number>;
   active_quests: any[];
   unlocked_regions: string[];
+  avatar_url?: string;
 }
 
 interface QuestPageContentProps {
@@ -50,7 +51,8 @@ export default function QuestPageContent({ id }: QuestPageContentProps) {
           streak_count: 5,
           stamp_cards: { 'Burritos': 8, 'Coffee': 3 },
           unlocked_regions: ['Baja', 'Oaxaca'],
-          active_quests: []
+          active_quests: [],
+          avatar_url: undefined // Default to no photo to show upload UI capable state
         });
         setAvailableQuests([
           { id: '1', title: 'Taco Sampler', description: 'Try 3 different taco varieties.', reward_miles: 500, quest_type: 'BUY_X_ITEMS', target: 3, current_value: 0 },
@@ -161,20 +163,33 @@ export default function QuestPageContent({ id }: QuestPageContentProps) {
 
       <div className="max-w-5xl mx-auto px-4 perspective-[2000px]">
 
-        {/* The Booklet (Desktop: Open Spread, Mobile: Stacked) */}
+        {/* The Booklet (Standard ID-3 Spread: 125mm x 88mm x 2 pages = 2.84 aspect ratio (Wait, ID-3 spread is 2x width))
+            ID-3 Page: 88mm wide x 125mm high (Portrait standard).
+            Spread: 176mm wide x 125mm high.
+            Aspect Ratio: 176/125 = 1.41.
+         */}
         <motion.div
             initial={{ rotateX: 20, opacity: 0, y: 50 }}
             animate={{ rotateX: 0, opacity: 1, y: 0 }}
             transition={{ duration: 0.8, type: "spring" }}
-            className="flex flex-col tablet:flex-row shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-2xl overflow-hidden mb-12 transform-gpu"
+            className="flex flex-row shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-2xl overflow-hidden mb-12 transform-gpu w-full max-w-[900px] mx-auto aspect-[1.408/1] bg-[#fdfbf7] relative"
         >
-            {/* Left Page (ID) */}
-            <div className="w-full tablet:w-1/2">
+            {/* Left Page (ID - Portrait) */}
+            <div className="flex-1 w-1/2 min-w-0 h-full relative z-10">
                 <PassportIdPage customer={customer} />
+                {/* Inner Shadow for Left Page Fold */}
+                <div className="absolute inset-y-0 right-0 w-6 bg-gradient-to-l from-black/10 to-transparent pointer-events-none"></div>
             </div>
 
-            {/* Right Page (Stamps) */}
-            <div className="w-full tablet:w-1/2 border-l border-black/5">
+            {/* Center Spine Binding Effect */}
+            <div className="absolute inset-y-0 left-1/2 w-[2px] -ml-[1px] bg-black/20 z-30"></div>
+            <div className="absolute inset-y-0 left-1/2 w-16 -ml-8 z-20 pointer-events-none bg-gradient-to-r from-transparent via-black/10 to-transparent mix-blend-multiply"></div>
+
+            {/* Right Page (Stamps - Portrait) */}
+            <div className="flex-1 w-1/2 min-w-0 h-full relative z-0">
+                {/* Inner Shadow for Right Page Fold */}
+                <div className="absolute inset-y-0 left-0 w-6 bg-gradient-to-r from-black/10 to-transparent pointer-events-none z-10"></div>
+
                 <PassportStampsPage
                     unlockedRegions={customer.unlocked_regions || []}
                     stampCards={customer.stamp_cards || {}}
