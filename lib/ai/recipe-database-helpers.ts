@@ -6,7 +6,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as zlib from 'zlib';
 import { promisify } from 'util';
-import { ScrapedRecipe } from '../../../scripts/recipe-scraper/parsers/types';
+import { ScrapedRecipe } from '../../scripts/recipe-scraper/parsers/types';
 import { logger } from '@/lib/logger';
 import { formatRecipesForPrompt } from './recipe-database-helpers/format-helpers';
 

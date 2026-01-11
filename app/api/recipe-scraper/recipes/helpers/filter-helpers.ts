@@ -5,9 +5,13 @@
 import { isRecipeFormatted } from '@/lib/utils/recipe-format-detection';
 
 interface RecipeEntry {
+  id?: string;
+  recipe_name?: string;
   updated_at?: string;
   scraped_at?: string;
   source?: string;
+  source_url?: string;
+  file_path?: string;
 }
 
 /**

@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
           if (filteredRecipes.length > 0) {
             const paginatedEntries = filteredRecipes.slice(offset, offset + pageSize);
             const recipePromises = paginatedEntries.map(entry =>
-              storage.loadRecipe(entry.file_path),
+              storage.loadRecipe(entry.file_path!),
             );
             const loadedRecipes = await Promise.all(recipePromises);
             recipes = loadedRecipes.filter(recipe => recipe !== null);

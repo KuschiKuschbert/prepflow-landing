@@ -15,17 +15,11 @@ function ensureSupabaseAdmin() {
   }
 }
 
-function buildBaseQuery(menuId: string) {
+export function buildFullQuery(menuId: string) {
   ensureSupabaseAdmin();
   return supabaseAdmin!
     .from('menu_items')
-    .eq('menu_id', menuId)
-    .order('category')
-    .order('position');
-}
-
-export function buildFullQuery(menuId: string) {
-  return buildBaseQuery(menuId).select(
+    .select(
     `
       id,
       dish_id,
@@ -58,11 +52,17 @@ export function buildFullQuery(menuId: string) {
         dietary_method
       )
     `,
-  );
+  )
+    .eq('menu_id', menuId)
+    .order('category')
+    .order('position');
 }
 
 export function buildQueryWithoutPricing(menuId: string) {
-  return buildBaseQuery(menuId).select(
+  ensureSupabaseAdmin();
+  return supabaseAdmin!
+    .from('menu_items')
+    .select(
     `
       id,
       dish_id,
@@ -93,11 +93,17 @@ export function buildQueryWithoutPricing(menuId: string) {
         dietary_method
       )
     `,
-  );
+  )
+    .eq('menu_id', menuId)
+    .order('category')
+    .order('position');
 }
 
 export function buildQueryWithoutDietary(menuId: string) {
-  return buildBaseQuery(menuId).select(
+  ensureSupabaseAdmin();
+  return supabaseAdmin!
+    .from('menu_items')
+    .select(
     `
       id,
       dish_id,
@@ -120,11 +126,17 @@ export function buildQueryWithoutDietary(menuId: string) {
         yield
       )
     `,
-  );
+  )
+    .eq('menu_id', menuId)
+    .order('category')
+    .order('position');
 }
 
 export function buildQueryWithoutDescription(menuId: string) {
-  return buildBaseQuery(menuId).select(
+  ensureSupabaseAdmin();
+  return supabaseAdmin!
+    .from('menu_items')
+    .select(
     `
       id,
       dish_id,
@@ -145,7 +157,10 @@ export function buildQueryWithoutDescription(menuId: string) {
         yield
       )
     `,
-  );
+  )
+    .eq('menu_id', menuId)
+    .order('category')
+    .order('position');
 }
 
 export function buildMinimalQuery(menuId: string) {
@@ -176,7 +191,13 @@ export function buildMinimalQuery(menuId: string) {
 }
 
 export function buildQueryWithoutRelations(menuId: string) {
-  return buildBaseQuery(menuId).select('id, dish_id, recipe_id, category, position, region');
+  ensureSupabaseAdmin();
+  return supabaseAdmin!
+    .from('menu_items')
+    .select('id, dish_id, recipe_id, category, position, region')
+    .eq('menu_id', menuId)
+    .order('category')
+    .order('position');
 }
 
 export function buildEssentialQuery(menuId: string) {

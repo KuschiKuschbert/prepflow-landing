@@ -40,7 +40,7 @@ export async function searchRecipesByIngredients(
         const recipe = await loadRecipe(entry.file_path);
         if (!recipe) continue;
 
-        const recipeIngredientNames = recipe.ingredients.map(ing =>
+        const recipeIngredientNames = recipe.ingredients.map((ing: any) =>
           (typeof ing === 'string' ? ing : ing.name || ing.original_text).toLowerCase(),
         );
 

@@ -2,7 +2,7 @@
  * Format helpers for recipe database
  */
 
-import { ScrapedRecipe } from '../../../../scripts/recipe-scraper/parsers/types';
+import { ScrapedRecipe } from '../../../scripts/recipe-scraper/parsers/types';
 
 const PROFESSIONAL_SOURCES = new Set([
   'serious-eats',
@@ -26,7 +26,7 @@ export function formatRecipesForPrompt(recipes: ScrapedRecipe[]): string {
 
   const formatted = recipes.map((recipe, index) => {
     const ingredients = recipe.ingredients
-      .map(ing => (typeof ing === 'string' ? ing : ing.original_text))
+      .map((ing: any) => (typeof ing === 'string' ? ing : ing.original_text))
       .join(', ');
 
     const sourceDisplay = recipe.source.replace(/-/g, ' ');
