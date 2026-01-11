@@ -40,7 +40,6 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
     setError: setDataError,
     fetchData,
   } = useCOGSDataFetching();
-
   const { convertIngredientQuantity } = useIngredientConversion();
   const { calculations, setCalculations, loadingIngredients } = useRecipeEditIngredientLoading({
     recipe,
@@ -208,11 +207,7 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
     setCalculations,
   ]);
   if (!recipe) return null;
-  const capitalizeRecipeName = (name: string) =>
-    name
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ');
+  const capitalizeRecipeName = (name: string) => name.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
   return (
     <EditDrawer
       isOpen={isOpen}
@@ -291,12 +286,12 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
           onConsumableQuantityChange={quantity => setNewConsumable(prev => ({ ...prev, quantity }))}
           onConsumableUnitChange={unit => setNewConsumable(prev => ({ ...prev, unit }))}
           onAddConsumable={handleAddConsumableWrapper}
-          onUpdateCalculation={(ingredientId, newQuantity) => {
-            updateCalculation(ingredientId, newQuantity, ingredients, setCalculations);
-          }}
-          onRemoveCalculation={ingredientId => {
-            setCalculations(prev => prev.filter(calc => calc.ingredientId !== ingredientId));
-          }}
+          onUpdateCalculation={(ingredientId, newQuantity) =>
+            updateCalculation(ingredientId, newQuantity, ingredients, setCalculations)
+          }
+          onRemoveCalculation={ingredientId =>
+            setCalculations(prev => prev.filter(calc => calc.ingredientId !== ingredientId))
+          }
           setCalculations={setCalculations}
         />
       </div>

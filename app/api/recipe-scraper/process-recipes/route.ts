@@ -7,11 +7,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { requireAuth } from '@/lib/auth0-api-helpers';
-import { isGroqEnabled, isGroqAvailable } from '@/lib/ai/groq-client';
 import { z } from 'zod';
-// PRIMARY: Groq API (fastest free option - sub-second responses)
-// FALLBACK: Ollama (completely free, local processing)
-// GEMINI REMOVED: Using only Groq/Ollama to prevent expensive API costs
+import { getDefaultStatus, enhanceProcessingStatus, getProviderInfo } from './helpers/status-handlers';
+import {
+  handlePauseAction,
+  handleResumeAction,
+  handleStopAction,
+  handleStartAction,
+} from './helpers/action-handlers';
 
 // Dynamic import to handle potential import failures gracefully
 async function getRecipeProcessor() {
@@ -26,12 +29,15 @@ async function getRecipeProcessor() {
   }
 }
 
+const processRecipesSchema = z.object({
+  action: z.enum(['start', 'pause', 'resume', 'stop']).optional(),
+  limit: z.number().int().positive().optional(),
+  model: z.string().optional(),
+});
+
 /**
  * GET /api/recipe-scraper/process-recipes
  * Get current processing/formatting status with diagnostics
- *
- * @param {NextRequest} request - Request object
- * @returns {Promise<NextResponse>} Processing status with diagnostics
  */
 export async function GET(request: NextRequest) {
   try {
@@ -55,75 +61,24 @@ export async function GET(request: NextRequest) {
     let status;
 
     try {
-      const processor = await getRecipeProcessor();
-      status = processor.getProcessingStatus();
-
-      // If not processing, calculate unformatted recipe count to show accurate numbers
-      if (!status.isProcessing) {
-        try {
-          const counts = await processor.countUnformattedRecipes();
-          status.totalRecipes = counts.unformatted;
-          status.skippedFormatted = counts.formatted;
-          logger.dev('[Process Recipes API] Calculated unformatted recipe counts', counts);
-        } catch (countErr) {
-          logger.warn('[Process Recipes API] Failed to count unformatted recipes:', {
-            error: countErr instanceof Error ? countErr.message : String(countErr),
-          });
-          // Continue with status.totalRecipes = 0 if counting fails
-        }
-      }
-
-      // Set default provider if not set (Groq primary, Ollama fallback)
-      if (!status.aiProvider) {
-        const groqEnabled = isGroqEnabled();
-        const groqAvailable = groqEnabled ? await isGroqAvailable() : false;
-
-        if (groqAvailable) {
-          status.aiProvider = 'Groq API';
-          status.aiProviderModel = 'llama-3.1-8b-instant';
-        } else {
-          status.aiProvider = 'Ollama';
-          status.aiProviderModel = 'llama3.2:3b';
-        }
-      }
+      const processorMod = await getRecipeProcessor();
+      const rawStatus = processorMod.getProcessingStatus();
+      status = await enhanceProcessingStatus(rawStatus, processorMod);
     } catch (statusErr) {
       logger.error('[Process Recipes API] Error getting processing status:', {
         error: statusErr instanceof Error ? statusErr.message : String(statusErr),
       });
-      // Return default status instead of failing
-      status = {
-        isProcessing: false,
-        isPaused: false,
-        queueLength: 0,
-        activeProcessing: 0,
-        totalProcessed: 0,
-        totalRecipes: 0,
-        progressPercent: 0,
-        isStuck: false,
-        healthStatus: 'healthy' as const,
-        aiProvider: 'Unknown',
-        aiProviderModel: 'Unknown',
-      };
+      status = getDefaultStatus();
     }
 
     // Add provider availability info
-    const groqEnabled = isGroqEnabled();
-    const groqAvailable = groqEnabled ? await isGroqAvailable() : false;
+    const providerInfo = await getProviderInfo();
 
     return NextResponse.json({
       success: true,
       data: {
         ...status,
-        providerInfo: {
-          groqEnabled,
-          groqAvailable,
-          ollamaRecommended: !groqAvailable,
-          note: groqAvailable
-            ? 'Using Groq API (fast, sub-second responses)'
-            : groqEnabled
-              ? 'Groq enabled but not available. Using Ollama fallback (free, local).'
-              : 'Using Ollama (free, local). Enable Groq by setting USE_GROQ=true and GROQ_API_KEY=your-key for faster processing.',
-        },
+        providerInfo,
       },
     });
   } catch (err) {
@@ -140,18 +95,9 @@ export async function GET(request: NextRequest) {
   }
 }
 
-const processRecipesSchema = z.object({
-  action: z.enum(['start', 'pause', 'resume', 'stop']).optional(),
-  limit: z.number().int().positive().optional(),
-  model: z.string().optional(),
-});
-
 /**
  * POST /api/recipe-scraper/process-recipes
  * Start, pause, or resume recipe processing
- *
- * @param {NextRequest} request - Request object
- * @returns {Promise<NextResponse>} Processing response
  */
 export async function POST(request: NextRequest) {
   try {
@@ -196,119 +142,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { action, limit, model } = validationResult.data; // Model can be specified, but provider selection is automatic (Groq primary, Ollama fallback)
+    const { action, limit, model } = validationResult.data;
+    const processorMod = await getRecipeProcessor();
 
-    const processor = await getRecipeProcessor();
-
-    // Handle pause action
+    // Handle different actions
     if (action === 'pause') {
-      processor.pauseProcessing();
-      const status = processor.getProcessingStatus();
-      return NextResponse.json({
-        success: true,
-        message: 'Processing paused',
-        data: status,
-      });
+      const result = handlePauseAction(processorMod);
+      return NextResponse.json(result);
     }
 
-    // Handle resume action
     if (action === 'resume') {
-      processor.resumeProcessing();
-      const status = processor.getProcessingStatus();
-      return NextResponse.json({
-        success: true,
-        message: 'Processing resumed',
-        data: status,
-      });
+      const result = handleResumeAction(processorMod);
+      return NextResponse.json(result);
     }
 
-    // Handle stop action
     if (action === 'stop') {
-      processor.stopProcessing();
-      const status = processor.getProcessingStatus();
-      return NextResponse.json({
-        success: true,
-        message: 'Processing stopped',
-        data: status,
-      });
+      const result = handleStopAction(processorMod);
+      return NextResponse.json(result);
     }
 
     // Handle start action (process all recipes)
     if (action === 'start' || !action) {
-      // Check if already processing
-      const currentStatus = processor.getProcessingStatus();
-      if (currentStatus.isProcessing && !currentStatus.isPaused) {
-        return NextResponse.json({
-          success: false,
-          message: 'Processing is already in progress',
-          data: currentStatus,
-        });
-      }
-
-      // Check provider availability (Groq primary, Ollama fallback)
-      const groqEnabled = isGroqEnabled();
-      const groqAvailable = groqEnabled ? await isGroqAvailable() : false;
-
-      // Select model based on provider
-      const selectedModel = model || (groqAvailable ? 'llama-3.1-8b-instant' : 'llama3.2:3b');
-      const provider = groqAvailable ? 'Groq API (fast, sub-second)' : 'Ollama (free, local)';
-
-      // Respond immediately - processing will start in background
-      const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(7)}`;
-      logger.info('[Process Recipes API] Processing request received, responding immediately', {
-        requestId,
-        limit,
-        provider,
-        model: selectedModel,
-        groqEnabled,
-        groqAvailable,
-      });
-
-      // Start background processing
-      setImmediate(async () => {
-        try {
-          logger.info('[Process Recipes API] Starting background processing', {
-            requestId,
-            limit,
-            model: selectedModel,
-            provider,
-            groqEnabled,
-            groqAvailable,
-          });
-
-          await processor.processRecipes({
-            limit,
-            model: selectedModel,
-          });
-
-          logger.info('[Process Recipes API] Background processing completed', { requestId });
-        } catch (err) {
-          logger.error('[Process Recipes API] Background processing failed:', {
-            requestId,
-            error: err instanceof Error ? err.message : String(err),
-            stack: err instanceof Error ? err.stack : undefined,
-          });
-        }
-      });
-
-      return NextResponse.json(
-        {
-          success: true,
-          message: `Processing started in background (using ${provider})`,
-          data: {
-            provider,
-            model: selectedModel,
-            groqEnabled,
-            groqAvailable,
-            note: groqAvailable
-              ? 'Using Groq API for fast processing (sub-second responses). Monitor usage at https://console.groq.com/'
-              : groqEnabled
-                ? 'Groq enabled but not available. Using Ollama fallback (free, local). Make sure Ollama is running: "ollama serve"'
-                : 'Using Ollama (free, local). Enable Groq by setting USE_GROQ=true and GROQ_API_KEY=your-key for faster processing. See: docs/GROQ_SETUP_GUIDE.md',
-          },
-        },
-        { status: 202 }, // 202 Accepted for background processing
-      );
+      const result = await handleStartAction(processorMod, limit, model);
+      return NextResponse.json(result, { status: result.status || 200 });
     }
 
     // Unknown action

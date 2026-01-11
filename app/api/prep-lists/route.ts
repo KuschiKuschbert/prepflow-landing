@@ -2,7 +2,6 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { z } from 'zod';
 import { createPrepList } from './helpers/createPrepList';
 import { deletePrepList } from './helpers/deletePrepList';
 import {
@@ -31,10 +30,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Step 1: Fetch prep lists
     const { prepLists, count, empty } = await fetchPrepListsData({ userId, page, pageSize });
 
-    // If empty or fallback case, return early
     if (empty) {
       const totalPages = Math.max(1, Math.ceil(count / pageSize));
       const mappedPrepLists = prepLists.map((list: any) => ({
@@ -49,34 +46,22 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Step 2: Fetch related data
     const { sectionsMap, itemsByPrepListId, prepListItems } = await fetchRelatedData(prepLists);
-
-    // Step 3: Fetch ingredients in batch
     const ingredientIds = Array.from(
       new Set(prepListItems.map((item: any) => item.ingredient_id).filter(Boolean)),
     );
     const ingredientsMap = await fetchIngredientsBatch(ingredientIds);
-
-    // Step 4: Combine all data
     const mappedData = combinePrepListData(
       prepLists,
       sectionsMap,
       itemsByPrepListId,
       ingredientsMap,
     );
-
     const totalPages = Math.max(1, Math.ceil(count / pageSize));
 
     return NextResponse.json({
       success: true,
-      data: {
-        items: mappedData,
-        total: count,
-        page,
-        pageSize,
-        totalPages,
-      },
+      data: { items: mappedData, total: count, page, pageSize, totalPages },
     });
   } catch (err) {
     logger.error('[Prep Lists API] Unexpected error:', {

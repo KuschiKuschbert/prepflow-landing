@@ -115,7 +115,6 @@ function getCategoryForWorkflow(href: string, workflow: WorkflowType): string {
 
   return categoryMap[workflow][href] || 'other';
 }
-
 /**
  * Hook to get navigation items organized by workflow.
  * Applies adaptive optimization when enabled.
@@ -129,12 +128,8 @@ export function useNavigationItems(
   const { t } = useTranslation();
   const { settings } = useAdaptiveNavSettings();
   const [optimizedItems, setOptimizedItems] = useState<NavigationItemConfig[] | null>(null);
-
-  // Check admin status and entitlements for CurbOS access
   const { isAdmin } = useIsAdmin();
   const { hasFeature } = useEntitlements();
-
-  // Check feature flags
   const kitchenStaffEnabled = useFeatureFlag('kitchen-staff');
   const rosterEnabled = useFeatureFlag('roster');
   const squarePOSEnabled = useFeatureFlag('square_pos_integration');
@@ -263,7 +258,6 @@ export function useNavigationItems(
       },
     ];
 
-    // Filter items based on feature flags and access control
     return allItems.filter(item => {
       if (item.href === '/webapp/employees' && !kitchenStaffEnabled) {
         return false;
@@ -274,15 +268,11 @@ export function useNavigationItems(
       if (item.href === '/webapp/square' && !squarePOSEnabled) {
         return false;
       }
-      // CurbOS: Show if admin or has Business tier (curbos feature)
-      if (item.href === '/curbos') {
-        return isAdmin || hasFeature('curbos');
-      }
+      if (item.href === '/curbos') return isAdmin || hasFeature('curbos');
       return true;
     });
   }, [t, kitchenStaffEnabled, rosterEnabled, squarePOSEnabled, isAdmin, hasFeature]);
 
-  // Assign categories based on workflow
   const itemsWithCategories = useMemo(
     () =>
       baseItems.map(item => ({
@@ -292,27 +282,16 @@ export function useNavigationItems(
     [workflow, baseItems],
   );
 
-  // Apply optimization if enabled (with debouncing)
   useEffect(() => {
     if (settings.enabled && settings.selectedSections && settings.selectedSections.length > 0) {
-      // Debounce optimization to avoid too frequent recalculations
       const timeoutId = setTimeout(() => {
-        optimizeNavigationItems(itemsWithCategories, settings.selectedSections)
-          .then(optimized => {
-            setOptimizedItems(optimized);
-          })
-          .catch(() => {
-            // Fallback to original ordering on error
-            setOptimizedItems(null);
-          });
-      }, 300); // 300ms debounce
+        optimizeNavigationItems(itemsWithCategories, settings.selectedSections).then(setOptimizedItems).catch(() => setOptimizedItems(null));
+      }, 300);
 
       return () => clearTimeout(timeoutId);
     } else {
       setOptimizedItems(null);
     }
   }, [settings.enabled, settings.selectedSections, itemsWithCategories]);
-
-  // Return optimized items if available, otherwise return original
   return optimizedItems || itemsWithCategories;
 }

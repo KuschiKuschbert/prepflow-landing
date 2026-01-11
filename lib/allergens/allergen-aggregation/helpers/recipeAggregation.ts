@@ -78,15 +78,12 @@ export async function aggregateRecipeAllergens(
       return [];
     }
 
-    // Collect, consolidate, and cache allergens
-    // Transform Supabase response format to match function signature
     const transformedIngredients = recipeIngredients.map(item => ({
       ingredients: Array.isArray(item.ingredients) ? item.ingredients[0] : item.ingredients,
     }));
     const allergenSet = collectAllergensFromIngredients(transformedIngredients);
     const allergens = consolidateAllergens(Array.from(allergenSet)).sort();
     await cacheRecipeAllergens(recipeId, allergens);
-
     return allergens;
   } catch (err) {
     logger.error('[Allergen Aggregation] Error aggregating recipe allergens:', {

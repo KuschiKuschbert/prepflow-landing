@@ -1,47 +1,17 @@
-import { isAdmin as checkUserAdminRole } from '@/lib/admin-utils';
-import { isEmailAllowed } from '@/lib/allowlist';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { getUserFromRequest } from '@/lib/auth0-api-helpers';
 import { getOrCreatePublicToken, regeneratePublicToken } from '@/lib/curbos/public-token';
 import { hasCurbOSAccess } from '@/lib/curbos/tier-access';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { getTargetEmail } from './helpers/auth-helpers';
 
 /**
  * GET /api/curbos/public-token/curbos
  * Get or create public token for CurbOS user (Supabase auth)
- * This endpoint works with CurbOS Supabase authentication, not PrepFlow Auth0
  */
 export async function GET(req: NextRequest) {
   try {
-    // Get user email from CurbOS auth cookie
-    const userEmailCookie = req.cookies.get('curbos_user_email')?.value;
-    let targetEmail = userEmailCookie;
-    let isAdminBypass = false;
-
-    if (!targetEmail) {
-      // Fallback: Check if user is a PrepFlow admin (Auth0 session) directly
-      try {
-        const user = await getUserFromRequest(req);
-        if (user?.email) {
-          const isEmailInAllowlist = isEmailAllowed(user.email);
-          const hasAdminRole = checkUserAdminRole(user);
-          if (isEmailInAllowlist || hasAdminRole) {
-            targetEmail = user.email;
-            isAdminBypass = true;
-            logger.dev(
-              '[API /curbos/public-token/curbos] Admin bypass granted via internal check:',
-              { email: targetEmail },
-            );
-          }
-        }
-      } catch (adminError) {
-        logger.warn(
-          '[API /curbos/public-token/curbos] Error checking admin status internally:',
-          adminError,
-        );
-      }
-    }
+    const { targetEmail, isAdminBypass } = await getTargetEmail(req);
 
     if (!targetEmail) {
       logger.warn('[API /curbos/public-token/curbos] No target email found (not authenticated)');
@@ -55,7 +25,6 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Check Business tier access (skip if admin bypass is active)
     if (!isAdminBypass) {
       const hasAccess = await hasCurbOSAccess(targetEmail, req);
       if (!hasAccess) {
@@ -73,7 +42,6 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    // Get or create token
     const token = await getOrCreatePublicToken(targetEmail);
     if (!token) {
       logger.error('[API /curbos/public-token/curbos] Failed to get or create token:', {
@@ -95,7 +63,6 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Return public URL
     const publicUrl = `${req.nextUrl.origin}/curbos/public/${token}`;
 
     return NextResponse.json({
@@ -122,34 +89,7 @@ export async function GET(req: NextRequest) {
  */
 export async function POST(req: NextRequest) {
   try {
-    // Get user email from CurbOS auth cookie
-    const userEmailCookie = req.cookies.get('curbos_user_email')?.value;
-    let targetEmail = userEmailCookie;
-    let isAdminBypass = false;
-
-    if (!targetEmail) {
-      // Fallback: Check if user is a PrepFlow admin (Auth0 session) directly
-      try {
-        const user = await getUserFromRequest(req);
-        if (user?.email) {
-          const isEmailInAllowlist = isEmailAllowed(user.email);
-          const hasAdminRole = checkUserAdminRole(user);
-          if (isEmailInAllowlist || hasAdminRole) {
-            targetEmail = user.email;
-            isAdminBypass = true;
-            logger.dev(
-              '[API /curbos/public-token/curbos] Admin bypass granted (POST) via internal check:',
-              { email: targetEmail },
-            );
-          }
-        }
-      } catch (adminError) {
-        logger.warn(
-          '[API /curbos/public-token/curbos] Error checking admin status internally (POST):',
-          adminError,
-        );
-      }
-    }
+    const { targetEmail, isAdminBypass } = await getTargetEmail(req);
 
     if (!targetEmail) {
       logger.warn(
@@ -165,7 +105,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Check Business tier access (skip if admin bypass is active)
     if (!isAdminBypass) {
       const hasAccess = await hasCurbOSAccess(targetEmail, req);
       if (!hasAccess) {
@@ -183,7 +122,6 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Regenerate token
     const newToken = await regeneratePublicToken(targetEmail);
     if (!newToken) {
       return NextResponse.json(
@@ -192,7 +130,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Return new public URL
     const publicUrl = `${req.nextUrl.origin}/curbos/public/${newToken}`;
 
     return NextResponse.json({

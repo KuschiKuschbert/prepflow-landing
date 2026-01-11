@@ -7,44 +7,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
-
-// Dynamic imports to handle potential import failures gracefully
-let helpers: {
-  handleAuth: (req: NextRequest) => Promise<NextResponse | null>;
-  handleComprehensiveScrape: () => Promise<NextResponse>;
-  createScraper: (src: any) => any;
-  scrapeRecipes: (scr: any, stor: any, urlList: string[]) => Promise<any>;
-} | null = null;
-
-let JSONStorageClass: any;
-
-// Lazy load helpers to catch import errors
-async function loadHelpers() {
-  if (helpers && JSONStorageClass) {
-    return { helpers, JSONStorageClass };
-  }
-
-  try {
-    const helpersMod = await import('./helpers');
-    const storageMod = await import('../../../../scripts/recipe-scraper/storage/json-storage');
-
-    helpers = {
-      handleAuth: helpersMod.handleAuth,
-      handleComprehensiveScrape: helpersMod.handleComprehensiveScrape,
-      createScraper: helpersMod.createScraper,
-      scrapeRecipes: helpersMod.scrapeRecipes,
-    };
-    JSONStorageClass = storageMod.JSONStorage;
-
-    return { helpers, JSONStorageClass };
-  } catch (importErr) {
-    logger.error('[Recipe Scraper API] Failed to load helpers:', {
-      error: importErr instanceof Error ? importErr.message : String(importErr),
-      stack: importErr instanceof Error ? importErr.stack : undefined,
-    });
-    throw new Error('Failed to load recipe scraper modules');
-  }
-}
+import { handleAuth, handleComprehensiveScrape, createScraper, scrapeRecipes } from './helpers';
+import { loadStorage, handleDiscovery, handleManualUrls } from './helpers/scrape-helpers';
 
 const scrapeSchema = z.object({
   source: z.enum(['allrecipes', 'bbc-good-food', 'food-network']).optional(),
@@ -60,21 +24,13 @@ const scrapeSchema = z.object({
  */
 export async function POST(request: NextRequest) {
   try {
-    // Load helpers dynamically to catch import errors
-    let loadedHelpers, loadedStorage;
+    let loadedStorage;
     try {
-      const loaded = await loadHelpers();
-      if (!loaded.helpers || !loaded.JSONStorageClass) {
-        throw new Error('Helpers or storage class not loaded');
-      }
-      loadedHelpers = loaded.helpers;
-      loadedStorage = loaded.JSONStorageClass;
+      loadedStorage = await loadStorage();
     } catch (loadErr) {
-      logger.error('[Recipe Scraper API] Failed to load helpers module:', {
+      logger.error('[Recipe Scraper API] Failed to load storage module:', {
         error: loadErr instanceof Error ? loadErr.message : String(loadErr),
-        stack: loadErr instanceof Error ? loadErr.stack : undefined,
       });
-      // Return JSON error instead of letting Next.js return HTML
       return NextResponse.json(
         ApiErrorHandler.createError(
           'Recipe scraper service unavailable',
@@ -85,8 +41,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Require authentication
-    const authResponse = await loadedHelpers!.handleAuth(request);
+    const authResponse = await handleAuth(request);
     if (authResponse) return authResponse;
 
     let body: unknown;
@@ -116,12 +71,10 @@ export async function POST(request: NextRequest) {
 
     const { source, urls, discovery, limit, comprehensive } = validationResult.data;
 
-    // Comprehensive mode - start background job for all sources
     if (comprehensive) {
-      return loadedHelpers!.handleComprehensiveScrape();
+      return handleComprehensiveScrape();
     }
 
-    // Regular scraping mode (existing logic)
     if (!source) {
       return NextResponse.json(
         ApiErrorHandler.createError(
@@ -133,10 +86,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get scraper instance
     let scraper;
     try {
-      scraper = loadedHelpers!.createScraper(source);
+      scraper = createScraper(source);
     } catch (scraperErr) {
       logger.error('[Recipe Scraper API] Error creating scraper:', {
         error: scraperErr instanceof Error ? scraperErr.message : String(scraperErr),
@@ -152,7 +104,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Initialize storage
     let storage;
     try {
       storage = new loadedStorage();
@@ -168,40 +119,10 @@ export async function POST(request: NextRequest) {
 
     let recipeUrls: string[] = [];
 
-    // Discovery mode - automatically find recipes
     if (discovery) {
-      try {
-        logger.info(`[Recipe Scraper API] Starting discovery mode for ${source} (limit: ${limit})`);
-        recipeUrls = await scraper.getRecipeUrls(limit);
-        logger.info(`[Recipe Scraper API] Discovered ${recipeUrls.length} recipe URLs`);
-      } catch (discoveryErr) {
-        logger.error('[Recipe Scraper API] Error in discovery mode:', {
-          error: discoveryErr instanceof Error ? discoveryErr.message : String(discoveryErr),
-          source,
-          limit,
-        });
-        return NextResponse.json(
-          ApiErrorHandler.createError(
-            `Failed to discover recipes from ${source}`,
-            'SERVER_ERROR',
-            500,
-          ),
-          { status: 500 },
-        );
-      }
+      recipeUrls = await handleDiscovery(scraper, source, limit);
     } else {
-      // Manual URLs provided
-      if (!urls || urls.length === 0) {
-        return NextResponse.json(
-          ApiErrorHandler.createError(
-            'URLs required when discovery is false',
-            'VALIDATION_ERROR',
-            400,
-          ),
-          { status: 400 },
-        );
-      }
-      recipeUrls = urls;
+      recipeUrls = handleManualUrls(urls);
     }
 
     if (recipeUrls.length === 0) {
@@ -210,17 +131,12 @@ export async function POST(request: NextRequest) {
         message: 'No recipe URLs found',
         data: {
           results: [],
-          summary: {
-            total: 0,
-            success: 0,
-            errors: 0,
-          },
+          summary: { total: 0, success: 0, errors: 0 },
         },
       });
     }
 
-    // Scrape recipes
-    const { results, summary } = await loadedHelpers!.scrapeRecipes(scraper, storage, recipeUrls);
+    const { results, summary } = await scrapeRecipes(scraper, storage, recipeUrls);
 
     return NextResponse.json({
       success: true,
@@ -228,19 +144,16 @@ export async function POST(request: NextRequest) {
       data: { results, summary },
     });
   } catch (err) {
-    // Catch any unexpected errors and ensure JSON response
     logger.error('[Recipe Scraper API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/recipe-scraper/scrape', operation: 'POST' },
     });
 
-    // requireAuth and other helpers may throw NextResponse
     if (err instanceof NextResponse) {
       return err;
     }
 
-    // Always return JSON, never let Next.js return HTML error page
     return NextResponse.json(
       ApiErrorHandler.createError('Failed to scrape recipes', 'INTERNAL_ERROR', 500),
       { status: 500 },

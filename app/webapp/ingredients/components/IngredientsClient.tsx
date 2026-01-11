@@ -24,7 +24,6 @@ import { IngredientsErrorBanner } from './IngredientsClient/components/Ingredien
 import { IngredientsHeader } from './IngredientsClient/components/IngredientsHeader';
 import { useAutoCategorization } from './IngredientsClient/helpers/useAutoCategorization';
 import { usePagination } from './IngredientsClient/helpers/usePagination';
-
 interface Ingredient {
   id: string;
   ingredient_name: string;
@@ -192,8 +191,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     if (isSelectionMode && selectedIngredients.size === 0) exitSelectionMode();
   }, [page, totalPages, isSelectionMode, selectedIngredients.size, exitSelectionMode]);
   if (loading || isLoading) return <PageSkeleton />;
-  return (
-    <>
+  return <>
       <IngredientsHeader hideHeader={hideHeader} />
       <IngredientsErrorBanner error={error} />
       <IngredientsBulkActions
@@ -280,10 +278,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
           try {
             await handleEditSave(editingIngredient.id, ingredientData);
           } catch (err) {
-            logger.error('[IngredientsClient] Error saving ingredient:', {
-              error: err instanceof Error ? err.message : String(err),
-              ingredientId: editingIngredient.id,
-            });
+            logger.error('[IngredientsClient] Error saving ingredient:', { error: err instanceof Error ? err.message : String(err), ingredientId: editingIngredient.id });
           }
         }}
         onClose={() => setEditingIngredient(null)}
@@ -300,6 +295,5 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
           loading={importing}
         />
       )}
-    </>
-  );
+    </>;
 }

@@ -32,7 +32,6 @@ import { useUnifiedBulkActions } from '../hooks/useUnifiedBulkActions';
 import { useBulkShare } from '../hooks/useBulkShare';
 import { useBulkAddToMenu } from '../hooks/useBulkAddToMenu';
 import { useRecipeStateSetters } from './RecipesClient/helpers/useRecipeStateSetters';
-
 export default function RecipesClient() {
   const router = useRouter();
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
@@ -143,10 +142,7 @@ export default function RecipesClient() {
     selectedRecipeIds,
     onSuccess: () => setSelectedRecipes(new Set()),
   });
-  const handleClearSelection = useCallback(
-    () => setSelectedRecipes(new Set()),
-    [setSelectedRecipes],
-  );
+  const handleClearSelection = useCallback(() => setSelectedRecipes(new Set()), [setSelectedRecipes]);
   const {
     handleBulkAddToMenu,
     handleSelectMenu,

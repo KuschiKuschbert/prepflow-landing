@@ -1,13 +1,10 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import crypto from 'crypto';
-
-/**
- * Generate a secure public token for CurbOS display
- */
-export function generatePublicToken(): string {
-  return crypto.randomBytes(32).toString('hex'); // 64-character hex string
-}
+import {
+  generatePublicToken,
+  handleTokenFetchError,
+  handleTokenInsertError,
+} from './public-token-helpers';
 
 /**
  * Get or create public token for a user
@@ -29,21 +26,7 @@ export async function getOrCreatePublicToken(userEmail: string): Promise<string 
       .maybeSingle();
 
     if (fetchError) {
-      logger.error('[CurbOS Public Token] Error fetching existing token:', {
-        error: fetchError.message,
-        code: fetchError.code,
-        details: fetchError.details,
-        hint: fetchError.hint,
-        userEmail,
-      });
-
-      // Check if table doesn't exist (common error code)
-      if (fetchError.code === '42P01' || fetchError.message?.includes('does not exist')) {
-        logger.error(
-          '[CurbOS Public Token] Table curbos_public_tokens does not exist. Please run migration: migrations/add-curbos-public-tokens.sql',
-        );
-      }
-
+      handleTokenFetchError(fetchError, userEmail);
       return null;
     }
 
@@ -62,25 +45,7 @@ export async function getOrCreatePublicToken(userEmail: string): Promise<string 
     });
 
     if (insertError) {
-      logger.error('[CurbOS Public Token] Error inserting new token:', {
-        error: insertError.message,
-        code: insertError.code,
-        details: insertError.details,
-        hint: insertError.hint,
-        userEmail,
-      });
-
-      // Check for common errors
-      if (insertError.code === '42P01' || insertError.message?.includes('does not exist')) {
-        logger.error(
-          '[CurbOS Public Token] Table curbos_public_tokens does not exist. Please run migration: migrations/add-curbos-public-tokens.sql',
-        );
-      } else if (insertError.code === '23505') {
-        logger.error(
-          '[CurbOS Public Token] Unique constraint violation. Token or email already exists.',
-        );
-      }
-
+      handleTokenInsertError(insertError, userEmail);
       return null;
     }
 

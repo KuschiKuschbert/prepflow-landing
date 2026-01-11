@@ -287,7 +287,6 @@ function UnifiedTableRowComponent({
 
 // Memoize component to prevent unnecessary re-renders when props don't change
 export const UnifiedTableRow = memo(UnifiedTableRowComponent, (prevProps, nextProps) => {
-  // Only re-render if relevant props actually changed
   return (
     prevProps.item.id === nextProps.item.id &&
     prevProps.item.itemType === nextProps.item.itemType &&

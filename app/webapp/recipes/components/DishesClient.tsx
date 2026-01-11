@@ -23,7 +23,6 @@ import { useDishesSidePanelsHandlers } from './hooks/useDishesSidePanelsHandlers
 import { useDishesClientBulkActions } from './DishesClient/hooks/useDishesClientBulkActions';
 import { useSelectionMode } from '@/app/webapp/ingredients/hooks/useSelectionMode';
 import { createRecipeImagesGeneratedHandler } from './DishesClient/helpers/handleRecipeImagesGenerated';
-
 export default function DishesClient() {
   const { viewMode, setViewMode } = useDishesClientViewMode();
   const { recipePrices, updateVisibleRecipePrices } = useRecipePricing();
@@ -213,8 +212,7 @@ export default function DishesClient() {
     onRecipeImagesGenerated: handleRecipeImagesGenerated,
   });
   if (loading) return <PageSkeleton />;
-  return (
-    <div>
+  return <div>
       <ErrorBanner error={error} />
       <DishesBulkActionsSection
         isSelectionMode={isSelectionMode}
@@ -247,10 +245,7 @@ export default function DishesClient() {
       <DishesViewModeToggle
         viewMode={viewMode}
         onViewModeChange={setViewMode}
-        onEditorClick={() => {
-          setViewMode('editor');
-          setEditingItem(null);
-        }}
+        onEditorClick={() => { setViewMode('editor'); setEditingItem(null); }}
       />
       <DishesEditorView
         viewMode={viewMode}
@@ -301,6 +296,5 @@ export default function DishesClient() {
           setViewMode={setViewMode}
         />
       )}
-    </div>
-  );
+    </div>;
 }

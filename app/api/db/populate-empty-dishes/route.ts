@@ -5,31 +5,15 @@ import { dishHasDirectIngredients } from '@/lib/populate-helpers/populate-empty-
 import { populateDishes } from './helpers/populateDishes';
 import { populateRecipes, type PopulateRecipesResult } from './helpers/populateRecipes';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { checkAuth } from './helpers/auth-helpers';
 
 /** GET: Diagnostic endpoint - returns dishes with no ingredients. POST: Populates empty dishes with default ingredients */
 export async function GET(request: NextRequest) {
-  if (process.env.NODE_ENV === 'production') {
-    return NextResponse.json(
-      ApiErrorHandler.createError('Not available in production', 'FORBIDDEN', 403),
-      { status: 403 },
-    );
-  }
-  const adminKey = request.headers.get('x-admin-key');
-  if (!adminKey || adminKey !== process.env.SEED_ADMIN_KEY) {
-    return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), {
-      status: 401,
-    });
-  }
-  if (!supabaseAdmin) {
-    return NextResponse.json(
-      ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500),
-      { status: 500 },
-    );
-  }
+  const authError = checkAuth(request);
+  if (authError) return authError;
 
   try {
-    // Get all dishes
-    const { data: dishes, error: dishesError } = await supabaseAdmin
+    const { data: dishes, error: dishesError } = await supabaseAdmin!
       .from('dishes')
       .select('id, dish_name')
       .order('dish_name');
@@ -52,7 +36,6 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Check each dish for DIRECT ingredients (UI only shows direct ingredients)
     const emptyDishes: Array<{ id: string; dish_name: string }> = [];
     const dishesWithIngredients: Array<{ id: string; dish_name: string }> = [];
 
@@ -85,28 +68,11 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  if (process.env.NODE_ENV === 'production') {
-    return NextResponse.json(
-      ApiErrorHandler.createError('Not available in production', 'FORBIDDEN', 403),
-      { status: 403 },
-    );
-  }
-  const adminKey = request.headers.get('x-admin-key');
-  if (!adminKey || adminKey !== process.env.SEED_ADMIN_KEY) {
-    return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), {
-      status: 401,
-    });
-  }
-  if (!supabaseAdmin) {
-    return NextResponse.json(
-      ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500),
-      { status: 500 },
-    );
-  }
+  const authError = checkAuth(request);
+  if (authError) return authError;
 
   try {
-    // Get all dishes
-    const { data: dishes, error: dishesError } = await supabaseAdmin
+    const { data: dishes, error: dishesError } = await supabaseAdmin!
       .from('dishes')
       .select('id, dish_name')
       .order('dish_name');
@@ -133,8 +99,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Get all available ingredients
-    const { data: ingredients, error: ingredientsError } = await supabaseAdmin
+    const { data: ingredients, error: ingredientsError } = await supabaseAdmin!
       .from('ingredients')
       .select('id, ingredient_name, unit')
       .order('ingredient_name');
@@ -156,11 +121,9 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Populate dishes
     const dishesResult = await populateDishes(dishes, ingredients);
 
-    // Also populate recipes without ingredients
-    const { data: recipes, error: recipesError } = await supabaseAdmin
+    const { data: recipes, error: recipesError } = await supabaseAdmin!
       .from('recipes')
       .select('id, name')
       .order('name');
