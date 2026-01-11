@@ -260,6 +260,7 @@ alwaysApply: true
 **Related:**
 - See `implementation.mdc` (API Response Standards) for complete guidelines
 - See `ERROR_HANDLING_STANDARDS.md` for error handling patterns
+- **Example:** `app/api/image-proxy/route.ts` - Demonstrates proper `ApiErrorHandler` usage with comprehensive error handling (validation errors, timeout errors, abort errors, fetch errors)
 
 ---
 
@@ -308,6 +309,7 @@ alwaysApply: true
 **Related:**
 - See `security.mdc` (Security Standards) for complete guidelines
 - See `security.mdc` (API Security) for API security patterns
+- **Example:** `app/api/image-proxy/route.ts` - Demonstrates security best practices: domain whitelisting, URL validation, protocol validation (HTTP/HTTPS only), input sanitization
 
 ---
 
@@ -460,6 +462,31 @@ alwaysApply: true
 - See `ERROR_HANDLING_STANDARDS.md` for complete error handling guidelines
 - See `implementation.mdc` (Error Handling Standards) for API error handling
 - See `lib/api-error-handler.ts` for ApiErrorHandler utility
+
+---
+
+## 💬 **Voice Consistency Standards**
+
+**Source:** `.cursor/rules/dialogs.mdc` (PrepFlow Voice Guidelines), `development.mdc` (PrepFlow Voice Guidelines)
+
+**Status:** ✅ Fully Implemented
+
+**Standards:**
+- Use contractions ("can't", "won't", "you'll") for natural speech
+- Use kitchen/chef metaphors naturally ("start fresh", "all the trimmings")
+- Be clear about consequences ("All temperature logs go with it")
+- Keep messages concise but informative
+- Avoid technical jargon
+- Professional but friendly tone
+
+**Enforcement:**
+- Check: `scripts/cleanup.js` (voice-consistency check)
+- Fix: `npm run cleanup:fix` (auto-fixes some violations via voice-consistency fix module)
+
+**Related:**
+- See `.cursor/rules/dialogs.mdc` (PrepFlow Voice Guidelines) for complete voice guidelines
+- See `development.mdc` (PrepFlow Voice Guidelines) for voice standards
+- See `docs/VOICE_ENHANCEMENT_GUIDE.md` for comprehensive voice enhancement guide
 
 ---
 

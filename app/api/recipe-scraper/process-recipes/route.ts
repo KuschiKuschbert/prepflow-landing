@@ -8,6 +8,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { isGroqEnabled, isGroqAvailable } from '@/lib/ai/groq-client';
+import { z } from 'zod';
 // PRIMARY: Groq API (fastest free option - sub-second responses)
 // FALLBACK: Ollama (completely free, local processing)
 // GEMINI REMOVED: Using only Groq/Ollama to prevent expensive API costs
@@ -139,6 +140,12 @@ export async function GET(request: NextRequest) {
   }
 }
 
+const processRecipesSchema = z.object({
+  action: z.enum(['start', 'pause', 'resume', 'stop']).optional(),
+  limit: z.number().int().positive().optional(),
+  model: z.string().optional(),
+});
+
 /**
  * POST /api/recipe-scraper/process-recipes
  * Start, pause, or resume recipe processing
@@ -164,8 +171,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json().catch(() => ({}));
-    const { action, limit, model } = body; // Model can be specified, but provider selection is automatic (Groq primary, Ollama fallback)
+    let body: unknown = {};
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Process Recipes API] Failed to parse request body:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
+    const validationResult = processRecipesSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validationResult.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { action, limit, model } = validationResult.data; // Model can be specified, but provider selection is automatic (Groq primary, Ollama fallback)
 
     const processor = await getRecipeProcessor();
 

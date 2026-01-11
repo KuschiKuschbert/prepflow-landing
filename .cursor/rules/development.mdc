@@ -339,6 +339,7 @@ export function useMyHook(param: string) {
 **See Also:**
 - `docs/VOICE_ENHANCEMENT_GUIDE.md` - Comprehensive voice enhancement guide with examples for dialogs, dropdowns, and input fields (MANDATORY for all new code)
 - `.cursor/rules/dialogs.mdc` - Dialog usage standards and PrepFlow voice guidelines
+- `.cursor/rules/cleanup.mdc` (Voice Consistency Standards) - Automated voice consistency enforcement
 
 ### **Accessibility Requirements**
 

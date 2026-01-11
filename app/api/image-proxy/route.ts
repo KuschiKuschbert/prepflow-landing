@@ -164,10 +164,9 @@ export async function GET(request: NextRequest) {
 
     // Handle abort errors
     if (error instanceof Error && error.name === 'AbortError') {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Request aborted', 'ABORT_ERROR', 499),
-        { status: 499 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Request aborted', 'ABORT_ERROR', 499), {
+        status: 499,
+      });
     }
 
     return NextResponse.json(

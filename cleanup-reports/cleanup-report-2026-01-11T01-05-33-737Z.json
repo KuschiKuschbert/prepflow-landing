@@ -1,0 +1,1844 @@
+{
+  "timestamp": "2026-01-11T01:05:33.738Z",
+  "summary": {
+    "total": 66,
+    "bySeverity": {
+      "critical": 39,
+      "warning": 19,
+      "info": 8
+    },
+    "byStandard": 11,
+    "byFile": 45
+  },
+  "violations": [
+    {
+      "file": "app/api/curbos/public-token/curbos/route.ts",
+      "message": "File exceeds api limit: 215 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/db/populate-empty-dishes/route.ts",
+      "message": "File exceeds api limit: 211 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/menus/[id]/helpers/queryBuilders/menuItemQueries.ts",
+      "message": "File exceeds api limit: 209 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/prep-lists/route.ts",
+      "message": "File exceeds api limit: 202 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/recipe-scraper/convert-units/route.ts",
+      "message": "File exceeds api limit: 476 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/recipe-scraper/process-recipes/route.ts",
+      "message": "File exceeds api limit: 301 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/recipe-scraper/recipes/route.ts",
+      "message": "File exceeds api limit: 246 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/recipe-scraper/scrape/helpers.ts",
+      "message": "File exceeds api limit: 206 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/recipe-scraper/scrape/route.ts",
+      "message": "File exceeds api limit: 250 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/api/square/sync/route.ts",
+      "message": "File exceeds api limit: 203 lines (limit 200)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/curbos/settings/SettingsClient.tsx",
+      "message": "File exceeds component limit: 312 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx",
+      "message": "File exceeds component limit: 749 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/ai-specials/components/RecipeScraper/ProcessingStatus.tsx",
+      "message": "File exceeds component limit: 420 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/ai-specials/components/RecipeScraper/RecipeListSection.tsx",
+      "message": "File exceeds component limit: 492 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/ai-specials/components/RecipeScraper.tsx",
+      "message": "File exceeds component limit: 568 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/components/navigation/nav-items.tsx",
+      "message": "File exceeds component limit: 319 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/ingredients/components/IngredientActions.tsx",
+      "message": "File exceeds component limit: 301 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/ingredients/components/IngredientsClient.tsx",
+      "message": "File exceeds component limit: 306 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/DishesClient.tsx",
+      "message": "File exceeds component limit: 307 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/DishesListView.tsx",
+      "message": "File exceeds component limit: 302 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/RecipeEditDrawer.tsx",
+      "message": "File exceeds component limit: 306 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/RecipesClient.tsx",
+      "message": "File exceeds component limit: 305 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/webapp/recipes/components/UnifiedTableRow.tsx",
+      "message": "File exceeds component limit: 301 lines (limit 300)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/ai/groq-client.ts",
+      "message": "File exceeds util limit: 284 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/ai/recipe-database.ts",
+      "message": "File exceeds util limit: 321 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/allergens/allergen-aggregation/helpers/recipeAggregation.ts",
+      "message": "File exceeds util limit: 151 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/curbos/public-token.ts",
+      "message": "File exceeds util limit: 171 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "lib/large-screen-utils.ts",
+      "message": "File exceeds util limit: 181 lines (limit 150)",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#file-size-limits",
+      "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+    },
+    {
+      "file": "app/curbos/components/passport/PassportIdPage.tsx",
+      "message": "Rogue breakpoints found: lg: (DISABLED - will not work)",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "design.mdc#breakpoint-standards",
+      "reference": "See cleanup.mdc (Breakpoint Standards) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/curbos/components/passport/PassportStampsPage.tsx",
+      "message": "Rogue breakpoints found: sm: (DISABLED - will not work)",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "design.mdc#breakpoint-standards",
+      "reference": "See cleanup.mdc (Breakpoint Standards) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/curbos-import/admin/components/Background.tsx",
+      "message": "Rogue breakpoints found: md: (DISABLED - will not work)",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "design.mdc#breakpoint-standards",
+      "reference": "See cleanup.mdc (Breakpoint Standards) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "components/pricing/CurbOSPricing.tsx",
+      "message": "Rogue breakpoints found: sm, md: (DISABLED - will not work)",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "design.mdc#breakpoint-standards",
+      "reference": "See cleanup.mdc (Breakpoint Standards) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/api/ai-specials/helpers/safeLogger.ts",
+      "line": 16,
+      "column": 7,
+      "message": "console.error() should be migrated to logger.error()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/api/ai-specials/helpers/safeLogger.ts",
+      "line": 23,
+      "column": 7,
+      "message": "console.warn() should be migrated to logger.warn()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/api/ai-specials/helpers/safeLogger.ts",
+      "line": 30,
+      "column": 7,
+      "message": "console.info() should be migrated to logger.info()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/api/ai-specials/helpers/safeLogger.ts",
+      "line": 37,
+      "column": 7,
+      "message": "console.debug() should be migrated to logger.debug()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/curbos/components/LatestVersionBadge.tsx",
+      "line": 26,
+      "column": 9,
+      "message": "console.error() should be migrated to logger.error()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/curbos/components/passport/PassportIdPage.tsx",
+      "line": 56,
+      "column": 13,
+      "message": "console.error() should be migrated to logger.error()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/curbos-import/lib/check-subscription.ts",
+      "line": 20,
+      "column": 7,
+      "message": "console.error() should be migrated to logger.error()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "app/curbos-import/lib/check-subscription.ts",
+      "line": 28,
+      "column": 5,
+      "message": "console.error() should be migrated to logger.error()",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#console-log-migration",
+      "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+    },
+    {
+      "file": "/Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/ai-specials/components/RecipeScraper.tsx",
+      "line": 83,
+      "column": 9,
+      "message": "ESLint: The 'fetchRecipes' function makes the dependencies of useCallback Hook (at line 176) change on every render. To fix this, wrap the definition of 'fetchRecipes' in its own useCallback() Hook. (react-hooks/exhaustive-deps)",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#eslint-configuration",
+      "reference": "See cleanup.mdc (ESLint Standards) - use cleanup:fix to auto-fix"
+    },
+    {
+      "file": "/Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/test-supabase.js",
+      "line": 1,
+      "column": 1,
+      "message": "ESLint: Unused eslint-disable directive (no problems were reported from 'no-console'). (unknown)",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "development.mdc#eslint-configuration",
+      "reference": "See cleanup.mdc (ESLint Standards) - use cleanup:fix to auto-fix"
+    },
+    {
+      "file": "app/api/kds/update-status/route.ts",
+      "line": 11,
+      "message": "POST/PUT/PATCH routes should use Zod schemas for input validation",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "security.mdc#security-standards",
+      "reference": "See security.mdc (Input Validation)"
+    },
+    {
+      "file": "app/api/recipe-scraper/process-recipes/route.ts",
+      "line": 149,
+      "message": "POST/PUT/PATCH routes should use Zod schemas for input validation",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "security.mdc#security-standards",
+      "reference": "See security.mdc (Input Validation)"
+    },
+    {
+      "file": ".next/static",
+      "message": "JavaScript bundle size 7460.3KB exceeds budget of 7324KB",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "operations.mdc#performance-standards",
+      "reference": "See cleanup.mdc (Performance Standards). Consider dynamic imports, code splitting, and tree-shaking unused code."
+    },
+    {
+      "file": "app/curbos/customers/page.tsx",
+      "line": 49,
+      "message": "technical-jargon: \"Customer Database\" - Avoid technical terms",
+      "severity": "info",
+      "fixable": false,
+      "standard": "voice-consistency",
+      "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+    },
+    {
+      "file": "app/curbos/customers/page.tsx",
+      "line": 64,
+      "message": "technical-jargon: \"Run \"Push to Cloud\" from your POS to sync/clone the database.\" - Avoid technical terms",
+      "severity": "info",
+      "fixable": false,
+      "standard": "voice-consistency",
+      "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+    },
+    {
+      "file": "app/curbos/settings/SettingsClient.tsx",
+      "line": 139,
+      "message": "generic-message: \"Failed to restore default data. Please try again.\" - Add PrepFlow personality",
+      "severity": "info",
+      "fixable": false,
+      "standard": "voice-consistency",
+      "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+    },
+    {
+      "file": "app/curbos/settings/SettingsClient.tsx",
+      "line": 124,
+      "message": "missing-contraction: \"This will add default menu items and modifiers to your database. Only missing items will be added - existing data will not be deleted or modified. Continue?\" - Consider using \"won't\" instead",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "voice-consistency",
+      "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+    },
+    {
+      "file": "app/curbos/settings/SettingsClient.tsx",
+      "line": 124,
+      "message": "technical-jargon: \"This will add default menu items and modifiers to your database. Only missing items will be added - existing data will not be deleted or modified. Continue?\" - Avoid technical terms",
+      "severity": "info",
+      "fixable": false,
+      "standard": "voice-consistency",
+      "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+    },
+    {
+      "file": "app/curbos/settings/SettingsClient.tsx",
+      "line": 170,
+      "message": "missing-contraction: \"Share this link with your customers to show the order display. The link is read-only and\n          does not require authentication. Only Business tier subscribers can generate public links.\" - Consider using \"doesn't\" instead",
+      "severity": "warning",
+      "fixable": true,
+      "standard": "voice-consistency",
+      "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+    },
+    {
+      "file": "app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx",
+      "line": 227,
+      "message": "technical-jargon: \"Comprehensive Database Scraping\" - Avoid technical terms",
+      "severity": "info",
+      "fixable": false,
+      "standard": "voice-consistency",
+      "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+    },
+    {
+      "file": "app/webapp/ai-specials/components/RecipeScraper/RegularScraperSection.tsx",
+      "line": 59,
+      "message": "technical-jargon: \"Enter recipe URLs to scrape and add them to the database\" - Avoid technical terms",
+      "severity": "info",
+      "fixable": false,
+      "standard": "voice-consistency",
+      "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+    },
+    {
+      "file": "app/webapp/ai-specials/components/RecipeScraper.tsx",
+      "line": 481,
+      "message": "generic-message: \"Failed to start processing. Please try again.\" - Add PrepFlow personality",
+      "severity": "info",
+      "fixable": false,
+      "standard": "voice-consistency",
+      "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+    },
+    {
+      "file": "lib/ai/utils/errorParser.ts",
+      "line": 57,
+      "message": "technical-jargon: \"Gemini API quota exceeded. Please check your plan and billing at https://ai.google.dev/gemini-api/docs/rate-limits. To monitor usage, visit https://ai.dev/usage?tab=rate-limit\" - Avoid technical terms",
+      "severity": "info",
+      "fixable": false,
+      "standard": "voice-consistency",
+      "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+    },
+    {
+      "file": "app/api/kds/update-status/route.ts",
+      "line": 11,
+      "message": "POST/PUT/PATCH routes should use Zod schemas for input validation",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "implementation.mdc#api-response-standards",
+      "reference": "See security.mdc (Input Validation)"
+    },
+    {
+      "file": "app/api/recipe-scraper/process-recipes/route.ts",
+      "line": 149,
+      "message": "POST/PUT/PATCH routes should use Zod schemas for input validation",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "implementation.mdc#api-response-standards",
+      "reference": "See security.mdc (Input Validation)"
+    },
+    {
+      "file": "app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx",
+      "line": 196,
+      "message": "CRUD operations should use useNotification for user feedback",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#optimistic-updates-pattern",
+      "reference": "See cleanup.mdc (Optimistic Updates) and development.mdc (Optimistic Updates Pattern)"
+    },
+    {
+      "file": "app/webapp/ai-specials/components/RecipeScraper.tsx",
+      "line": 110,
+      "message": "CRUD operations should have rollback logic in catch blocks",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#optimistic-updates-pattern",
+      "reference": "See cleanup.mdc (Optimistic Updates) and development.mdc (Optimistic Updates Pattern)"
+    },
+    {
+      "file": "app/webapp/ai-specials/components/RecipeScraper.tsx",
+      "line": 47,
+      "message": "Mutations should not show loading states - use optimistic updates instead",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "development.mdc#optimistic-updates-pattern",
+      "reference": "See cleanup.mdc (Optimistic Updates) and development.mdc (Optimistic Updates Pattern)"
+    },
+    {
+      "file": "app/curbos/CurbOSLayoutClient.tsx",
+      "line": 44,
+      "message": "useEffect should have dependency array (empty [] if no dependencies)",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "development.mdc#code-quality-requirements",
+      "reference": "See cleanup.mdc (React Patterns) and development.mdc (Code Quality Requirements)"
+    },
+    {
+      "file": "app/curbos/quests/[id]/page.tsx",
+      "line": 9,
+      "message": "Async operations should have try-catch blocks",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "ERROR_HANDLING_STANDARDS.md",
+      "reference": "See cleanup.mdc (Error Handling Standards) and ERROR_HANDLING_STANDARDS.md"
+    },
+    {
+      "file": "app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx",
+      "line": 216,
+      "message": "Errors in catch blocks should be logged or re-thrown, not silently ignored",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "ERROR_HANDLING_STANDARDS.md",
+      "reference": "See cleanup.mdc (Error Handling Standards) and ERROR_HANDLING_STANDARDS.md"
+    },
+    {
+      "file": "app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx",
+      "line": 8,
+      "message": "File with async operations should import logger for error logging",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "ERROR_HANDLING_STANDARDS.md",
+      "reference": "See cleanup.mdc (Error Handling Standards) and ERROR_HANDLING_STANDARDS.md"
+    },
+    {
+      "file": "app/webapp/components/DashboardStatsClient.tsx",
+      "line": 26,
+      "message": "Async operations should have try-catch blocks",
+      "severity": "critical",
+      "fixable": false,
+      "standard": "ERROR_HANDLING_STANDARDS.md",
+      "reference": "See cleanup.mdc (Error Handling Standards) and ERROR_HANDLING_STANDARDS.md"
+    },
+    {
+      "file": "components/pricing/CurbOSPricing.tsx",
+      "line": 14,
+      "message": "Components with critical async operations should be wrapped in ErrorBoundary",
+      "severity": "warning",
+      "fixable": false,
+      "standard": "ERROR_HANDLING_STANDARDS.md",
+      "reference": "See cleanup.mdc (Error Handling Standards) and ERROR_HANDLING_STANDARDS.md"
+    }
+  ],
+  "groupedByFile": {
+    "app/api/curbos/public-token/curbos/route.ts": [
+      {
+        "file": "app/api/curbos/public-token/curbos/route.ts",
+        "message": "File exceeds api limit: 215 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/db/populate-empty-dishes/route.ts": [
+      {
+        "file": "app/api/db/populate-empty-dishes/route.ts",
+        "message": "File exceeds api limit: 211 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/menus/[id]/helpers/queryBuilders/menuItemQueries.ts": [
+      {
+        "file": "app/api/menus/[id]/helpers/queryBuilders/menuItemQueries.ts",
+        "message": "File exceeds api limit: 209 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/prep-lists/route.ts": [
+      {
+        "file": "app/api/prep-lists/route.ts",
+        "message": "File exceeds api limit: 202 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/recipe-scraper/convert-units/route.ts": [
+      {
+        "file": "app/api/recipe-scraper/convert-units/route.ts",
+        "message": "File exceeds api limit: 476 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/recipe-scraper/process-recipes/route.ts": [
+      {
+        "file": "app/api/recipe-scraper/process-recipes/route.ts",
+        "message": "File exceeds api limit: 301 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/recipe-scraper/process-recipes/route.ts",
+        "line": 149,
+        "message": "POST/PUT/PATCH routes should use Zod schemas for input validation",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "security.mdc#security-standards",
+        "reference": "See security.mdc (Input Validation)"
+      },
+      {
+        "file": "app/api/recipe-scraper/process-recipes/route.ts",
+        "line": 149,
+        "message": "POST/PUT/PATCH routes should use Zod schemas for input validation",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "implementation.mdc#api-response-standards",
+        "reference": "See security.mdc (Input Validation)"
+      }
+    ],
+    "app/api/recipe-scraper/recipes/route.ts": [
+      {
+        "file": "app/api/recipe-scraper/recipes/route.ts",
+        "message": "File exceeds api limit: 246 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/recipe-scraper/scrape/helpers.ts": [
+      {
+        "file": "app/api/recipe-scraper/scrape/helpers.ts",
+        "message": "File exceeds api limit: 206 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/recipe-scraper/scrape/route.ts": [
+      {
+        "file": "app/api/recipe-scraper/scrape/route.ts",
+        "message": "File exceeds api limit: 250 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/api/square/sync/route.ts": [
+      {
+        "file": "app/api/square/sync/route.ts",
+        "message": "File exceeds api limit: 203 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/curbos/settings/SettingsClient.tsx": [
+      {
+        "file": "app/curbos/settings/SettingsClient.tsx",
+        "message": "File exceeds component limit: 312 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/curbos/settings/SettingsClient.tsx",
+        "line": 139,
+        "message": "generic-message: \"Failed to restore default data. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      },
+      {
+        "file": "app/curbos/settings/SettingsClient.tsx",
+        "line": 124,
+        "message": "missing-contraction: \"This will add default menu items and modifiers to your database. Only missing items will be added - existing data will not be deleted or modified. Continue?\" - Consider using \"won't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      },
+      {
+        "file": "app/curbos/settings/SettingsClient.tsx",
+        "line": 124,
+        "message": "technical-jargon: \"This will add default menu items and modifiers to your database. Only missing items will be added - existing data will not be deleted or modified. Continue?\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      },
+      {
+        "file": "app/curbos/settings/SettingsClient.tsx",
+        "line": 170,
+        "message": "missing-contraction: \"Share this link with your customers to show the order display. The link is read-only and\n          does not require authentication. Only Business tier subscribers can generate public links.\" - Consider using \"doesn't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      }
+    ],
+    "app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx": [
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx",
+        "message": "File exceeds component limit: 749 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx",
+        "line": 227,
+        "message": "technical-jargon: \"Comprehensive Database Scraping\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx",
+        "line": 196,
+        "message": "CRUD operations should use useNotification for user feedback",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#optimistic-updates-pattern",
+        "reference": "See cleanup.mdc (Optimistic Updates) and development.mdc (Optimistic Updates Pattern)"
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx",
+        "line": 216,
+        "message": "Errors in catch blocks should be logged or re-thrown, not silently ignored",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "ERROR_HANDLING_STANDARDS.md",
+        "reference": "See cleanup.mdc (Error Handling Standards) and ERROR_HANDLING_STANDARDS.md"
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx",
+        "line": 8,
+        "message": "File with async operations should import logger for error logging",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "ERROR_HANDLING_STANDARDS.md",
+        "reference": "See cleanup.mdc (Error Handling Standards) and ERROR_HANDLING_STANDARDS.md"
+      }
+    ],
+    "app/webapp/ai-specials/components/RecipeScraper/ProcessingStatus.tsx": [
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper/ProcessingStatus.tsx",
+        "message": "File exceeds component limit: 420 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/ai-specials/components/RecipeScraper/RecipeListSection.tsx": [
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper/RecipeListSection.tsx",
+        "message": "File exceeds component limit: 492 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/ai-specials/components/RecipeScraper.tsx": [
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper.tsx",
+        "message": "File exceeds component limit: 568 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper.tsx",
+        "line": 481,
+        "message": "generic-message: \"Failed to start processing. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper.tsx",
+        "line": 110,
+        "message": "CRUD operations should have rollback logic in catch blocks",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#optimistic-updates-pattern",
+        "reference": "See cleanup.mdc (Optimistic Updates) and development.mdc (Optimistic Updates Pattern)"
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper.tsx",
+        "line": 47,
+        "message": "Mutations should not show loading states - use optimistic updates instead",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#optimistic-updates-pattern",
+        "reference": "See cleanup.mdc (Optimistic Updates) and development.mdc (Optimistic Updates Pattern)"
+      }
+    ],
+    "app/webapp/components/navigation/nav-items.tsx": [
+      {
+        "file": "app/webapp/components/navigation/nav-items.tsx",
+        "message": "File exceeds component limit: 319 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/ingredients/components/IngredientActions.tsx": [
+      {
+        "file": "app/webapp/ingredients/components/IngredientActions.tsx",
+        "message": "File exceeds component limit: 301 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/ingredients/components/IngredientsClient.tsx": [
+      {
+        "file": "app/webapp/ingredients/components/IngredientsClient.tsx",
+        "message": "File exceeds component limit: 306 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/DishesClient.tsx": [
+      {
+        "file": "app/webapp/recipes/components/DishesClient.tsx",
+        "message": "File exceeds component limit: 307 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/DishesListView.tsx": [
+      {
+        "file": "app/webapp/recipes/components/DishesListView.tsx",
+        "message": "File exceeds component limit: 302 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/RecipeEditDrawer.tsx": [
+      {
+        "file": "app/webapp/recipes/components/RecipeEditDrawer.tsx",
+        "message": "File exceeds component limit: 306 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/RecipesClient.tsx": [
+      {
+        "file": "app/webapp/recipes/components/RecipesClient.tsx",
+        "message": "File exceeds component limit: 305 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/webapp/recipes/components/UnifiedTableRow.tsx": [
+      {
+        "file": "app/webapp/recipes/components/UnifiedTableRow.tsx",
+        "message": "File exceeds component limit: 301 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/ai/groq-client.ts": [
+      {
+        "file": "lib/ai/groq-client.ts",
+        "message": "File exceeds util limit: 284 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/ai/recipe-database.ts": [
+      {
+        "file": "lib/ai/recipe-database.ts",
+        "message": "File exceeds util limit: 321 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/allergens/allergen-aggregation/helpers/recipeAggregation.ts": [
+      {
+        "file": "lib/allergens/allergen-aggregation/helpers/recipeAggregation.ts",
+        "message": "File exceeds util limit: 151 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/curbos/public-token.ts": [
+      {
+        "file": "lib/curbos/public-token.ts",
+        "message": "File exceeds util limit: 171 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "lib/large-screen-utils.ts": [
+      {
+        "file": "lib/large-screen-utils.ts",
+        "message": "File exceeds util limit: 181 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "app/curbos/components/passport/PassportIdPage.tsx": [
+      {
+        "file": "app/curbos/components/passport/PassportIdPage.tsx",
+        "message": "Rogue breakpoints found: lg: (DISABLED - will not work)",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "design.mdc#breakpoint-standards",
+        "reference": "See cleanup.mdc (Breakpoint Standards) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/curbos/components/passport/PassportIdPage.tsx",
+        "line": 56,
+        "column": 13,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      }
+    ],
+    "app/curbos/components/passport/PassportStampsPage.tsx": [
+      {
+        "file": "app/curbos/components/passport/PassportStampsPage.tsx",
+        "message": "Rogue breakpoints found: sm: (DISABLED - will not work)",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "design.mdc#breakpoint-standards",
+        "reference": "See cleanup.mdc (Breakpoint Standards) - use cleanup:fix to auto-migrate"
+      }
+    ],
+    "app/curbos-import/admin/components/Background.tsx": [
+      {
+        "file": "app/curbos-import/admin/components/Background.tsx",
+        "message": "Rogue breakpoints found: md: (DISABLED - will not work)",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "design.mdc#breakpoint-standards",
+        "reference": "See cleanup.mdc (Breakpoint Standards) - use cleanup:fix to auto-migrate"
+      }
+    ],
+    "components/pricing/CurbOSPricing.tsx": [
+      {
+        "file": "components/pricing/CurbOSPricing.tsx",
+        "message": "Rogue breakpoints found: sm, md: (DISABLED - will not work)",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "design.mdc#breakpoint-standards",
+        "reference": "See cleanup.mdc (Breakpoint Standards) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "components/pricing/CurbOSPricing.tsx",
+        "line": 14,
+        "message": "Components with critical async operations should be wrapped in ErrorBoundary",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "ERROR_HANDLING_STANDARDS.md",
+        "reference": "See cleanup.mdc (Error Handling Standards) and ERROR_HANDLING_STANDARDS.md"
+      }
+    ],
+    "app/api/ai-specials/helpers/safeLogger.ts": [
+      {
+        "file": "app/api/ai-specials/helpers/safeLogger.ts",
+        "line": 16,
+        "column": 7,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/api/ai-specials/helpers/safeLogger.ts",
+        "line": 23,
+        "column": 7,
+        "message": "console.warn() should be migrated to logger.warn()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/api/ai-specials/helpers/safeLogger.ts",
+        "line": 30,
+        "column": 7,
+        "message": "console.info() should be migrated to logger.info()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/api/ai-specials/helpers/safeLogger.ts",
+        "line": 37,
+        "column": 7,
+        "message": "console.debug() should be migrated to logger.debug()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      }
+    ],
+    "app/curbos/components/LatestVersionBadge.tsx": [
+      {
+        "file": "app/curbos/components/LatestVersionBadge.tsx",
+        "line": 26,
+        "column": 9,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      }
+    ],
+    "app/curbos-import/lib/check-subscription.ts": [
+      {
+        "file": "app/curbos-import/lib/check-subscription.ts",
+        "line": 20,
+        "column": 7,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/curbos-import/lib/check-subscription.ts",
+        "line": 28,
+        "column": 5,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      }
+    ],
+    "/Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/ai-specials/components/RecipeScraper.tsx": [
+      {
+        "file": "/Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/ai-specials/components/RecipeScraper.tsx",
+        "line": 83,
+        "column": 9,
+        "message": "ESLint: The 'fetchRecipes' function makes the dependencies of useCallback Hook (at line 176) change on every render. To fix this, wrap the definition of 'fetchRecipes' in its own useCallback() Hook. (react-hooks/exhaustive-deps)",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#eslint-configuration",
+        "reference": "See cleanup.mdc (ESLint Standards) - use cleanup:fix to auto-fix"
+      }
+    ],
+    "/Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/test-supabase.js": [
+      {
+        "file": "/Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/test-supabase.js",
+        "line": 1,
+        "column": 1,
+        "message": "ESLint: Unused eslint-disable directive (no problems were reported from 'no-console'). (unknown)",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#eslint-configuration",
+        "reference": "See cleanup.mdc (ESLint Standards) - use cleanup:fix to auto-fix"
+      }
+    ],
+    "app/api/kds/update-status/route.ts": [
+      {
+        "file": "app/api/kds/update-status/route.ts",
+        "line": 11,
+        "message": "POST/PUT/PATCH routes should use Zod schemas for input validation",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "security.mdc#security-standards",
+        "reference": "See security.mdc (Input Validation)"
+      },
+      {
+        "file": "app/api/kds/update-status/route.ts",
+        "line": 11,
+        "message": "POST/PUT/PATCH routes should use Zod schemas for input validation",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "implementation.mdc#api-response-standards",
+        "reference": "See security.mdc (Input Validation)"
+      }
+    ],
+    ".next/static": [
+      {
+        "file": ".next/static",
+        "message": "JavaScript bundle size 7460.3KB exceeds budget of 7324KB",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "operations.mdc#performance-standards",
+        "reference": "See cleanup.mdc (Performance Standards). Consider dynamic imports, code splitting, and tree-shaking unused code."
+      }
+    ],
+    "app/curbos/customers/page.tsx": [
+      {
+        "file": "app/curbos/customers/page.tsx",
+        "line": 49,
+        "message": "technical-jargon: \"Customer Database\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      },
+      {
+        "file": "app/curbos/customers/page.tsx",
+        "line": 64,
+        "message": "technical-jargon: \"Run \"Push to Cloud\" from your POS to sync/clone the database.\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      }
+    ],
+    "app/webapp/ai-specials/components/RecipeScraper/RegularScraperSection.tsx": [
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper/RegularScraperSection.tsx",
+        "line": 59,
+        "message": "technical-jargon: \"Enter recipe URLs to scrape and add them to the database\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      }
+    ],
+    "lib/ai/utils/errorParser.ts": [
+      {
+        "file": "lib/ai/utils/errorParser.ts",
+        "line": 57,
+        "message": "technical-jargon: \"Gemini API quota exceeded. Please check your plan and billing at https://ai.google.dev/gemini-api/docs/rate-limits. To monitor usage, visit https://ai.dev/usage?tab=rate-limit\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      }
+    ],
+    "app/curbos/CurbOSLayoutClient.tsx": [
+      {
+        "file": "app/curbos/CurbOSLayoutClient.tsx",
+        "line": 44,
+        "message": "useEffect should have dependency array (empty [] if no dependencies)",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#code-quality-requirements",
+        "reference": "See cleanup.mdc (React Patterns) and development.mdc (Code Quality Requirements)"
+      }
+    ],
+    "app/curbos/quests/[id]/page.tsx": [
+      {
+        "file": "app/curbos/quests/[id]/page.tsx",
+        "line": 9,
+        "message": "Async operations should have try-catch blocks",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "ERROR_HANDLING_STANDARDS.md",
+        "reference": "See cleanup.mdc (Error Handling Standards) and ERROR_HANDLING_STANDARDS.md"
+      }
+    ],
+    "app/webapp/components/DashboardStatsClient.tsx": [
+      {
+        "file": "app/webapp/components/DashboardStatsClient.tsx",
+        "line": 26,
+        "message": "Async operations should have try-catch blocks",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "ERROR_HANDLING_STANDARDS.md",
+        "reference": "See cleanup.mdc (Error Handling Standards) and ERROR_HANDLING_STANDARDS.md"
+      }
+    ]
+  },
+  "groupedByStandard": {
+    "development.mdc#file-size-limits": [
+      {
+        "file": "app/api/curbos/public-token/curbos/route.ts",
+        "message": "File exceeds api limit: 215 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/db/populate-empty-dishes/route.ts",
+        "message": "File exceeds api limit: 211 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/menus/[id]/helpers/queryBuilders/menuItemQueries.ts",
+        "message": "File exceeds api limit: 209 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/prep-lists/route.ts",
+        "message": "File exceeds api limit: 202 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/recipe-scraper/convert-units/route.ts",
+        "message": "File exceeds api limit: 476 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/recipe-scraper/process-recipes/route.ts",
+        "message": "File exceeds api limit: 301 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/recipe-scraper/recipes/route.ts",
+        "message": "File exceeds api limit: 246 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/recipe-scraper/scrape/helpers.ts",
+        "message": "File exceeds api limit: 206 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/recipe-scraper/scrape/route.ts",
+        "message": "File exceeds api limit: 250 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/api/square/sync/route.ts",
+        "message": "File exceeds api limit: 203 lines (limit 200)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/curbos/settings/SettingsClient.tsx",
+        "message": "File exceeds component limit: 312 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx",
+        "message": "File exceeds component limit: 749 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper/ProcessingStatus.tsx",
+        "message": "File exceeds component limit: 420 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper/RecipeListSection.tsx",
+        "message": "File exceeds component limit: 492 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper.tsx",
+        "message": "File exceeds component limit: 568 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/components/navigation/nav-items.tsx",
+        "message": "File exceeds component limit: 319 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/ingredients/components/IngredientActions.tsx",
+        "message": "File exceeds component limit: 301 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/ingredients/components/IngredientsClient.tsx",
+        "message": "File exceeds component limit: 306 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/DishesClient.tsx",
+        "message": "File exceeds component limit: 307 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/DishesListView.tsx",
+        "message": "File exceeds component limit: 302 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/RecipeEditDrawer.tsx",
+        "message": "File exceeds component limit: 306 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/RecipesClient.tsx",
+        "message": "File exceeds component limit: 305 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "app/webapp/recipes/components/UnifiedTableRow.tsx",
+        "message": "File exceeds component limit: 301 lines (limit 300)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/ai/groq-client.ts",
+        "message": "File exceeds util limit: 284 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/ai/recipe-database.ts",
+        "message": "File exceeds util limit: 321 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/allergens/allergen-aggregation/helpers/recipeAggregation.ts",
+        "message": "File exceeds util limit: 151 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/curbos/public-token.ts",
+        "message": "File exceeds util limit: 171 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      },
+      {
+        "file": "lib/large-screen-utils.ts",
+        "message": "File exceeds util limit: 181 lines (limit 150)",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#file-size-limits",
+        "reference": "See cleanup.mdc (File Size Limits) for refactoring guidelines"
+      }
+    ],
+    "design.mdc#breakpoint-standards": [
+      {
+        "file": "app/curbos/components/passport/PassportIdPage.tsx",
+        "message": "Rogue breakpoints found: lg: (DISABLED - will not work)",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "design.mdc#breakpoint-standards",
+        "reference": "See cleanup.mdc (Breakpoint Standards) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/curbos/components/passport/PassportStampsPage.tsx",
+        "message": "Rogue breakpoints found: sm: (DISABLED - will not work)",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "design.mdc#breakpoint-standards",
+        "reference": "See cleanup.mdc (Breakpoint Standards) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/curbos-import/admin/components/Background.tsx",
+        "message": "Rogue breakpoints found: md: (DISABLED - will not work)",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "design.mdc#breakpoint-standards",
+        "reference": "See cleanup.mdc (Breakpoint Standards) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "components/pricing/CurbOSPricing.tsx",
+        "message": "Rogue breakpoints found: sm, md: (DISABLED - will not work)",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "design.mdc#breakpoint-standards",
+        "reference": "See cleanup.mdc (Breakpoint Standards) - use cleanup:fix to auto-migrate"
+      }
+    ],
+    "development.mdc#console-log-migration": [
+      {
+        "file": "app/api/ai-specials/helpers/safeLogger.ts",
+        "line": 16,
+        "column": 7,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/api/ai-specials/helpers/safeLogger.ts",
+        "line": 23,
+        "column": 7,
+        "message": "console.warn() should be migrated to logger.warn()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/api/ai-specials/helpers/safeLogger.ts",
+        "line": 30,
+        "column": 7,
+        "message": "console.info() should be migrated to logger.info()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/api/ai-specials/helpers/safeLogger.ts",
+        "line": 37,
+        "column": 7,
+        "message": "console.debug() should be migrated to logger.debug()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/curbos/components/LatestVersionBadge.tsx",
+        "line": 26,
+        "column": 9,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/curbos/components/passport/PassportIdPage.tsx",
+        "line": 56,
+        "column": 13,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/curbos-import/lib/check-subscription.ts",
+        "line": 20,
+        "column": 7,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      },
+      {
+        "file": "app/curbos-import/lib/check-subscription.ts",
+        "line": 28,
+        "column": 5,
+        "message": "console.error() should be migrated to logger.error()",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#console-log-migration",
+        "reference": "See cleanup.mdc (Console.log Migration) - use cleanup:fix to auto-migrate"
+      }
+    ],
+    "development.mdc#eslint-configuration": [
+      {
+        "file": "/Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/ai-specials/components/RecipeScraper.tsx",
+        "line": 83,
+        "column": 9,
+        "message": "ESLint: The 'fetchRecipes' function makes the dependencies of useCallback Hook (at line 176) change on every render. To fix this, wrap the definition of 'fetchRecipes' in its own useCallback() Hook. (react-hooks/exhaustive-deps)",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#eslint-configuration",
+        "reference": "See cleanup.mdc (ESLint Standards) - use cleanup:fix to auto-fix"
+      },
+      {
+        "file": "/Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/test-supabase.js",
+        "line": 1,
+        "column": 1,
+        "message": "ESLint: Unused eslint-disable directive (no problems were reported from 'no-console'). (unknown)",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "development.mdc#eslint-configuration",
+        "reference": "See cleanup.mdc (ESLint Standards) - use cleanup:fix to auto-fix"
+      }
+    ],
+    "security.mdc#security-standards": [
+      {
+        "file": "app/api/kds/update-status/route.ts",
+        "line": 11,
+        "message": "POST/PUT/PATCH routes should use Zod schemas for input validation",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "security.mdc#security-standards",
+        "reference": "See security.mdc (Input Validation)"
+      },
+      {
+        "file": "app/api/recipe-scraper/process-recipes/route.ts",
+        "line": 149,
+        "message": "POST/PUT/PATCH routes should use Zod schemas for input validation",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "security.mdc#security-standards",
+        "reference": "See security.mdc (Input Validation)"
+      }
+    ],
+    "operations.mdc#performance-standards": [
+      {
+        "file": ".next/static",
+        "message": "JavaScript bundle size 7460.3KB exceeds budget of 7324KB",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "operations.mdc#performance-standards",
+        "reference": "See cleanup.mdc (Performance Standards). Consider dynamic imports, code splitting, and tree-shaking unused code."
+      }
+    ],
+    "voice-consistency": [
+      {
+        "file": "app/curbos/customers/page.tsx",
+        "line": 49,
+        "message": "technical-jargon: \"Customer Database\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      },
+      {
+        "file": "app/curbos/customers/page.tsx",
+        "line": 64,
+        "message": "technical-jargon: \"Run \"Push to Cloud\" from your POS to sync/clone the database.\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      },
+      {
+        "file": "app/curbos/settings/SettingsClient.tsx",
+        "line": 139,
+        "message": "generic-message: \"Failed to restore default data. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      },
+      {
+        "file": "app/curbos/settings/SettingsClient.tsx",
+        "line": 124,
+        "message": "missing-contraction: \"This will add default menu items and modifiers to your database. Only missing items will be added - existing data will not be deleted or modified. Continue?\" - Consider using \"won't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      },
+      {
+        "file": "app/curbos/settings/SettingsClient.tsx",
+        "line": 124,
+        "message": "technical-jargon: \"This will add default menu items and modifiers to your database. Only missing items will be added - existing data will not be deleted or modified. Continue?\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      },
+      {
+        "file": "app/curbos/settings/SettingsClient.tsx",
+        "line": 170,
+        "message": "missing-contraction: \"Share this link with your customers to show the order display. The link is read-only and\n          does not require authentication. Only Business tier subscribers can generate public links.\" - Consider using \"doesn't\" instead",
+        "severity": "warning",
+        "fixable": true,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx",
+        "line": 227,
+        "message": "technical-jargon: \"Comprehensive Database Scraping\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper/RegularScraperSection.tsx",
+        "line": 59,
+        "message": "technical-jargon: \"Enter recipe URLs to scrape and add them to the database\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper.tsx",
+        "line": 481,
+        "message": "generic-message: \"Failed to start processing. Please try again.\" - Add PrepFlow personality",
+        "severity": "info",
+        "fixable": false,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      },
+      {
+        "file": "lib/ai/utils/errorParser.ts",
+        "line": 57,
+        "message": "technical-jargon: \"Gemini API quota exceeded. Please check your plan and billing at https://ai.google.dev/gemini-api/docs/rate-limits. To monitor usage, visit https://ai.dev/usage?tab=rate-limit\" - Avoid technical terms",
+        "severity": "info",
+        "fixable": false,
+        "standard": "voice-consistency",
+        "reference": "See .cursor/rules/dialogs.mdc (PrepFlow Voice Guidelines) and development.mdc (PrepFlow Voice Guidelines). Use contractions, kitchen metaphors, and avoid technical jargon."
+      }
+    ],
+    "implementation.mdc#api-response-standards": [
+      {
+        "file": "app/api/kds/update-status/route.ts",
+        "line": 11,
+        "message": "POST/PUT/PATCH routes should use Zod schemas for input validation",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "implementation.mdc#api-response-standards",
+        "reference": "See security.mdc (Input Validation)"
+      },
+      {
+        "file": "app/api/recipe-scraper/process-recipes/route.ts",
+        "line": 149,
+        "message": "POST/PUT/PATCH routes should use Zod schemas for input validation",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "implementation.mdc#api-response-standards",
+        "reference": "See security.mdc (Input Validation)"
+      }
+    ],
+    "development.mdc#optimistic-updates-pattern": [
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx",
+        "line": 196,
+        "message": "CRUD operations should use useNotification for user feedback",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#optimistic-updates-pattern",
+        "reference": "See cleanup.mdc (Optimistic Updates) and development.mdc (Optimistic Updates Pattern)"
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper.tsx",
+        "line": 110,
+        "message": "CRUD operations should have rollback logic in catch blocks",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#optimistic-updates-pattern",
+        "reference": "See cleanup.mdc (Optimistic Updates) and development.mdc (Optimistic Updates Pattern)"
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper.tsx",
+        "line": 47,
+        "message": "Mutations should not show loading states - use optimistic updates instead",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "development.mdc#optimistic-updates-pattern",
+        "reference": "See cleanup.mdc (Optimistic Updates) and development.mdc (Optimistic Updates Pattern)"
+      }
+    ],
+    "development.mdc#code-quality-requirements": [
+      {
+        "file": "app/curbos/CurbOSLayoutClient.tsx",
+        "line": 44,
+        "message": "useEffect should have dependency array (empty [] if no dependencies)",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "development.mdc#code-quality-requirements",
+        "reference": "See cleanup.mdc (React Patterns) and development.mdc (Code Quality Requirements)"
+      }
+    ],
+    "ERROR_HANDLING_STANDARDS.md": [
+      {
+        "file": "app/curbos/quests/[id]/page.tsx",
+        "line": 9,
+        "message": "Async operations should have try-catch blocks",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "ERROR_HANDLING_STANDARDS.md",
+        "reference": "See cleanup.mdc (Error Handling Standards) and ERROR_HANDLING_STANDARDS.md"
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx",
+        "line": 216,
+        "message": "Errors in catch blocks should be logged or re-thrown, not silently ignored",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "ERROR_HANDLING_STANDARDS.md",
+        "reference": "See cleanup.mdc (Error Handling Standards) and ERROR_HANDLING_STANDARDS.md"
+      },
+      {
+        "file": "app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx",
+        "line": 8,
+        "message": "File with async operations should import logger for error logging",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "ERROR_HANDLING_STANDARDS.md",
+        "reference": "See cleanup.mdc (Error Handling Standards) and ERROR_HANDLING_STANDARDS.md"
+      },
+      {
+        "file": "app/webapp/components/DashboardStatsClient.tsx",
+        "line": 26,
+        "message": "Async operations should have try-catch blocks",
+        "severity": "critical",
+        "fixable": false,
+        "standard": "ERROR_HANDLING_STANDARDS.md",
+        "reference": "See cleanup.mdc (Error Handling Standards) and ERROR_HANDLING_STANDARDS.md"
+      },
+      {
+        "file": "components/pricing/CurbOSPricing.tsx",
+        "line": 14,
+        "message": "Components with critical async operations should be wrapped in ErrorBoundary",
+        "severity": "warning",
+        "fixable": false,
+        "standard": "ERROR_HANDLING_STANDARDS.md",
+        "reference": "See cleanup.mdc (Error Handling Standards) and ERROR_HANDLING_STANDARDS.md"
+      }
+    ]
+  }
+}

@@ -2,6 +2,12 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
+
+const updateStatusSchema = z.object({
+  id: z.union([z.string(), z.number()]).transform(val => String(val)),
+  status: z.string().min(1, 'Status is required'),
+});
 
 /**
  * Handles KDS order status updates securely.
@@ -10,12 +16,19 @@ import { NextResponse } from 'next/server';
  */
 export async function POST(request: Request) {
   try {
-    const { id, status } = await request.json();
+    const body = await request.json();
+    const validationResult = updateStatusSchema.safeParse(body);
 
-    if (!id || !status) {
-      const error = ApiErrorHandler.createError('Missing id or status', 'VALIDATION_ERROR', 400);
+    if (!validationResult.success) {
+      const error = ApiErrorHandler.createError(
+        validationResult.error.issues[0]?.message || 'Invalid request body',
+        'VALIDATION_ERROR',
+        400,
+      );
       return NextResponse.json(error, { status: 400 });
     }
+
+    const { id, status } = validationResult.data;
 
     if (!supabaseAdmin) {
       logger.error('SERVER ERROR: supabaseAdmin is not initialized');

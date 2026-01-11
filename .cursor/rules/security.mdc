@@ -430,6 +430,9 @@ if (!validateURL(userProvidedURL)) {
 }
 ```
 
+**Example Implementation:**
+- `app/api/image-proxy/route.ts` - Demonstrates comprehensive URL validation: URL format validation, protocol validation (HTTP/HTTPS only), domain whitelisting, URL decoding with error handling
+
 #### **File Upload Security**
 
 **MANDATORY:** Secure file upload handling:

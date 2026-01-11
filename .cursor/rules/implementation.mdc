@@ -57,6 +57,9 @@ CREATE TABLE table_name (
 }
 ```
 
+**Example Implementation:**
+- `app/api/image-proxy/route.ts` - Demonstrates comprehensive error handling using `ApiErrorHandler.createError()` for all error cases (validation errors, timeout errors, abort errors, fetch errors, server errors) with proper HTTP status codes
+
 #### **Optimistic Updates Implementation Pattern**
 
 **MANDATORY:** All CRUD operations must use optimistic updates to eliminate loading delays and improve perceived performance.

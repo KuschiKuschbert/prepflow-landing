@@ -435,3 +435,4 @@ return (
 - **Design System:** See `design.mdc` for Cyber Carrot Design System guidelines
 - **Development Standards:** See `development.mdc` for dialog usage standards
 - **Accessibility:** See `testing.mdc` for accessibility testing requirements
+- **Automated Enforcement:** See `cleanup.mdc` (Voice Consistency Standards) for automated voice consistency checks

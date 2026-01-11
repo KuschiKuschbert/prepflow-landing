@@ -1,0 +1,1063 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cleanup Report</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 20px;
+        background: #0a0a0a;
+        color: #fff;
+      }
+      .summary {
+        background: #1f1f1f;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .summary h2 {
+        margin-top: 0;
+      }
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
+      .summary-item {
+        background: #2a2a2a;
+        padding: 15px;
+        border-radius: 8px;
+      }
+      .summary-item .value {
+        font-size: 2em;
+        font-weight: bold;
+        color: #29e7cd;
+      }
+      .violations {
+        margin-top: 20px;
+      }
+      .file-group {
+        background: #1f1f1f;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+      }
+      .file-group h3 {
+        margin-top: 0;
+        color: #29e7cd;
+      }
+      .violation {
+        background: #2a2a2a;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 4px;
+        border-left: 4px solid;
+      }
+      .violation.critical {
+        border-color: #ef4444;
+      }
+      .violation.warning {
+        border-color: #f59e0b;
+      }
+      .violation.info {
+        border-color: #3b82f6;
+      }
+      .violation-meta {
+        font-size: 0.9em;
+        color: #9ca3af;
+        margin-top: 5px;
+      }
+      a {
+        color: #29e7cd;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🧹 Cleanup Report</h1>
+    <div class="summary">
+      <h2>Summary</h2>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="value">66</div>
+          <div>Total Violations</div>
+        </div>
+        <div class="summary-item">
+          <div class="value">39</div>
+          <div>Critical</div>
+        </div>
+        <div class="summary-item">
+          <div class="value">19</div>
+          <div>Warning</div>
+        </div>
+        <div class="summary-item">
+          <div class="value">8</div>
+          <div>Info</div>
+        </div>
+        <div class="summary-item">
+          <div class="value">45</div>
+          <div>Files Affected</div>
+        </div>
+        <div class="summary-item">
+          <div class="value">11</div>
+          <div>Standards Violated</div>
+        </div>
+      </div>
+    </div>
+    <div class="violations">
+      <h2>Violations by File</h2>
+      <div class="file-group">
+        <h3>app/api/curbos/public-token/curbos/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 215 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/db/populate-empty-dishes/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 211 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/menus/[id]/helpers/queryBuilders/menuItemQueries.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 209 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/prep-lists/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 202 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/recipe-scraper/convert-units/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 476 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/recipe-scraper/process-recipes/route.ts (3 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 301 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+        <div class="violation critical">
+          <strong>POST/PUT/PATCH routes should use Zod schemas for input validation</strong
+          ><span style="color: #9ca3af"> (line 149)</span>
+          <div class="violation-meta">
+            Standard: <a href="#security.mdc#security-standards">security.mdc#security-standards</a>
+          </div>
+        </div>
+        <div class="violation critical">
+          <strong>POST/PUT/PATCH routes should use Zod schemas for input validation</strong
+          ><span style="color: #9ca3af"> (line 149)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#implementation.mdc#api-response-standards"
+              >implementation.mdc#api-response-standards</a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/recipe-scraper/recipes/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 246 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/recipe-scraper/scrape/helpers.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 206 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/recipe-scraper/scrape/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 250 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/square/sync/route.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds api limit: 203 lines (limit 200)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/curbos/settings/SettingsClient.tsx (5 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 312 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+        <div class="violation info">
+          <strong
+            >generic-message: "Failed to restore default data. Please try again." - Add PrepFlow
+            personality</strong
+          ><span style="color: #9ca3af"> (line 139)</span>
+          <div class="violation-meta">
+            Standard: <a href="#voice-consistency">voice-consistency</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong
+            >missing-contraction: "This will add default menu items and modifiers to your database.
+            Only missing items will be added - existing data will not be deleted or modified.
+            Continue?" - Consider using "won't" instead</strong
+          ><span style="color: #9ca3af"> (line 124)</span>
+          <div class="violation-meta">
+            Standard: <a href="#voice-consistency">voice-consistency</a> |
+            <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation info">
+          <strong
+            >technical-jargon: "This will add default menu items and modifiers to your database.
+            Only missing items will be added - existing data will not be deleted or modified.
+            Continue?" - Avoid technical terms</strong
+          ><span style="color: #9ca3af"> (line 124)</span>
+          <div class="violation-meta">
+            Standard: <a href="#voice-consistency">voice-consistency</a>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong
+            >missing-contraction: "Share this link with your customers to show the order display.
+            The link is read-only and does not require authentication. Only Business tier
+            subscribers can generate public links." - Consider using "doesn't" instead</strong
+          ><span style="color: #9ca3af"> (line 170)</span>
+          <div class="violation-meta">
+            Standard: <a href="#voice-consistency">voice-consistency</a> |
+            <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>
+          app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx (5
+          violations)
+        </h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 749 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+        <div class="violation info">
+          <strong
+            >technical-jargon: "Comprehensive Database Scraping" - Avoid technical terms</strong
+          ><span style="color: #9ca3af"> (line 227)</span>
+          <div class="violation-meta">
+            Standard: <a href="#voice-consistency">voice-consistency</a>
+          </div>
+        </div>
+        <div class="violation critical">
+          <strong>CRUD operations should use useNotification for user feedback</strong
+          ><span style="color: #9ca3af"> (line 196)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#optimistic-updates-pattern"
+              >development.mdc#optimistic-updates-pattern</a
+            >
+          </div>
+        </div>
+        <div class="violation critical">
+          <strong>Errors in catch blocks should be logged or re-thrown, not silently ignored</strong
+          ><span style="color: #9ca3af"> (line 216)</span>
+          <div class="violation-meta">
+            Standard: <a href="#ERROR_HANDLING_STANDARDS.md">ERROR_HANDLING_STANDARDS.md</a>
+          </div>
+        </div>
+        <div class="violation critical">
+          <strong>File with async operations should import logger for error logging</strong
+          ><span style="color: #9ca3af"> (line 8)</span>
+          <div class="violation-meta">
+            Standard: <a href="#ERROR_HANDLING_STANDARDS.md">ERROR_HANDLING_STANDARDS.md</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/ai-specials/components/RecipeScraper/ProcessingStatus.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 420 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>
+          app/webapp/ai-specials/components/RecipeScraper/RecipeListSection.tsx (1 violations)
+        </h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 492 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/ai-specials/components/RecipeScraper.tsx (4 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 568 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+        <div class="violation info">
+          <strong
+            >generic-message: "Failed to start processing. Please try again." - Add PrepFlow
+            personality</strong
+          ><span style="color: #9ca3af"> (line 481)</span>
+          <div class="violation-meta">
+            Standard: <a href="#voice-consistency">voice-consistency</a>
+          </div>
+        </div>
+        <div class="violation critical">
+          <strong>CRUD operations should have rollback logic in catch blocks</strong
+          ><span style="color: #9ca3af"> (line 110)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#optimistic-updates-pattern"
+              >development.mdc#optimistic-updates-pattern</a
+            >
+          </div>
+        </div>
+        <div class="violation critical">
+          <strong>Mutations should not show loading states - use optimistic updates instead</strong
+          ><span style="color: #9ca3af"> (line 47)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#optimistic-updates-pattern"
+              >development.mdc#optimistic-updates-pattern</a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/components/navigation/nav-items.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 319 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/ingredients/components/IngredientActions.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 301 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/ingredients/components/IngredientsClient.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 306 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/components/DishesClient.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 307 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/components/DishesListView.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 302 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/components/RecipeEditDrawer.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 306 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/components/RecipesClient.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 305 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/recipes/components/UnifiedTableRow.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds component limit: 301 lines (limit 300)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/ai/groq-client.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 284 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/ai/recipe-database.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 321 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/allergens/allergen-aggregation/helpers/recipeAggregation.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 151 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/curbos/public-token.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 171 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/large-screen-utils.ts (1 violations)</h3>
+        <div class="violation critical">
+          <strong>File exceeds util limit: 181 lines (limit 150)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#file-size-limits">development.mdc#file-size-limits</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/curbos/components/passport/PassportIdPage.tsx (2 violations)</h3>
+        <div class="violation warning">
+          <strong>Rogue breakpoints found: lg: (DISABLED - will not work)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#design.mdc#breakpoint-standards">design.mdc#breakpoint-standards</a> |
+            <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.error() should be migrated to logger.error()</strong
+          ><span style="color: #9ca3af"> (line 56)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/curbos/components/passport/PassportStampsPage.tsx (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Rogue breakpoints found: sm: (DISABLED - will not work)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#design.mdc#breakpoint-standards">design.mdc#breakpoint-standards</a> |
+            <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/curbos-import/admin/components/Background.tsx (1 violations)</h3>
+        <div class="violation warning">
+          <strong>Rogue breakpoints found: md: (DISABLED - will not work)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#design.mdc#breakpoint-standards">design.mdc#breakpoint-standards</a> |
+            <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>components/pricing/CurbOSPricing.tsx (2 violations)</h3>
+        <div class="violation warning">
+          <strong>Rogue breakpoints found: sm, md: (DISABLED - will not work)</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#design.mdc#breakpoint-standards">design.mdc#breakpoint-standards</a> |
+            <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong
+            >Components with critical async operations should be wrapped in ErrorBoundary</strong
+          ><span style="color: #9ca3af"> (line 14)</span>
+          <div class="violation-meta">
+            Standard: <a href="#ERROR_HANDLING_STANDARDS.md">ERROR_HANDLING_STANDARDS.md</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/ai-specials/helpers/safeLogger.ts (4 violations)</h3>
+        <div class="violation warning">
+          <strong>console.error() should be migrated to logger.error()</strong
+          ><span style="color: #9ca3af"> (line 16)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.warn() should be migrated to logger.warn()</strong
+          ><span style="color: #9ca3af"> (line 23)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.info() should be migrated to logger.info()</strong
+          ><span style="color: #9ca3af"> (line 30)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.debug() should be migrated to logger.debug()</strong
+          ><span style="color: #9ca3af"> (line 37)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/curbos/components/LatestVersionBadge.tsx (1 violations)</h3>
+        <div class="violation warning">
+          <strong>console.error() should be migrated to logger.error()</strong
+          ><span style="color: #9ca3af"> (line 26)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/curbos-import/lib/check-subscription.ts (2 violations)</h3>
+        <div class="violation warning">
+          <strong>console.error() should be migrated to logger.error()</strong
+          ><span style="color: #9ca3af"> (line 20)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+        <div class="violation warning">
+          <strong>console.error() should be migrated to logger.error()</strong
+          ><span style="color: #9ca3af"> (line 28)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#console-log-migration"
+              >development.mdc#console-log-migration</a
+            >
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>
+          /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/ai-specials/components/RecipeScraper.tsx
+          (1 violations)
+        </h3>
+        <div class="violation warning">
+          <strong
+            >ESLint: The 'fetchRecipes' function makes the dependencies of useCallback Hook (at line
+            176) change on every render. To fix this, wrap the definition of 'fetchRecipes' in its
+            own useCallback() Hook. (react-hooks/exhaustive-deps)</strong
+          ><span style="color: #9ca3af"> (line 83)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#eslint-configuration">development.mdc#eslint-configuration</a>
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>
+          /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/test-supabase.js (1 violations)
+        </h3>
+        <div class="violation warning">
+          <strong
+            >ESLint: Unused eslint-disable directive (no problems were reported from 'no-console').
+            (unknown)</strong
+          ><span style="color: #9ca3af"> (line 1)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#eslint-configuration">development.mdc#eslint-configuration</a>
+            | <span style="color: #29e7cd">Fixable</span>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/api/kds/update-status/route.ts (2 violations)</h3>
+        <div class="violation critical">
+          <strong>POST/PUT/PATCH routes should use Zod schemas for input validation</strong
+          ><span style="color: #9ca3af"> (line 11)</span>
+          <div class="violation-meta">
+            Standard: <a href="#security.mdc#security-standards">security.mdc#security-standards</a>
+          </div>
+        </div>
+        <div class="violation critical">
+          <strong>POST/PUT/PATCH routes should use Zod schemas for input validation</strong
+          ><span style="color: #9ca3af"> (line 11)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#implementation.mdc#api-response-standards"
+              >implementation.mdc#api-response-standards</a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>.next/static (1 violations)</h3>
+        <div class="violation warning">
+          <strong>JavaScript bundle size 7460.3KB exceeds budget of 7324KB</strong>
+          <div class="violation-meta">
+            Standard:
+            <a href="#operations.mdc#performance-standards">operations.mdc#performance-standards</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/curbos/customers/page.tsx (2 violations)</h3>
+        <div class="violation info">
+          <strong>technical-jargon: "Customer Database" - Avoid technical terms</strong
+          ><span style="color: #9ca3af"> (line 49)</span>
+          <div class="violation-meta">
+            Standard: <a href="#voice-consistency">voice-consistency</a>
+          </div>
+        </div>
+        <div class="violation info">
+          <strong
+            >technical-jargon: "Run "Push to Cloud" from your POS to sync/clone the database." -
+            Avoid technical terms</strong
+          ><span style="color: #9ca3af"> (line 64)</span>
+          <div class="violation-meta">
+            Standard: <a href="#voice-consistency">voice-consistency</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>
+          app/webapp/ai-specials/components/RecipeScraper/RegularScraperSection.tsx (1 violations)
+        </h3>
+        <div class="violation info">
+          <strong
+            >technical-jargon: "Enter recipe URLs to scrape and add them to the database" - Avoid
+            technical terms</strong
+          ><span style="color: #9ca3af"> (line 59)</span>
+          <div class="violation-meta">
+            Standard: <a href="#voice-consistency">voice-consistency</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>lib/ai/utils/errorParser.ts (1 violations)</h3>
+        <div class="violation info">
+          <strong
+            >technical-jargon: "Gemini API quota exceeded. Please check your plan and billing at
+            https://ai.google.dev/gemini-api/docs/rate-limits. To monitor usage, visit
+            https://ai.dev/usage?tab=rate-limit" - Avoid technical terms</strong
+          ><span style="color: #9ca3af"> (line 57)</span>
+          <div class="violation-meta">
+            Standard: <a href="#voice-consistency">voice-consistency</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/curbos/CurbOSLayoutClient.tsx (1 violations)</h3>
+        <div class="violation warning">
+          <strong>useEffect should have dependency array (empty [] if no dependencies)</strong
+          ><span style="color: #9ca3af"> (line 44)</span>
+          <div class="violation-meta">
+            Standard:
+            <a href="#development.mdc#code-quality-requirements"
+              >development.mdc#code-quality-requirements</a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/curbos/quests/[id]/page.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>Async operations should have try-catch blocks</strong
+          ><span style="color: #9ca3af"> (line 9)</span>
+          <div class="violation-meta">
+            Standard: <a href="#ERROR_HANDLING_STANDARDS.md">ERROR_HANDLING_STANDARDS.md</a>
+          </div>
+        </div>
+      </div>
+      <div class="file-group">
+        <h3>app/webapp/components/DashboardStatsClient.tsx (1 violations)</h3>
+        <div class="violation critical">
+          <strong>Async operations should have try-catch blocks</strong
+          ><span style="color: #9ca3af"> (line 26)</span>
+          <div class="violation-meta">
+            Standard: <a href="#ERROR_HANDLING_STANDARDS.md">ERROR_HANDLING_STANDARDS.md</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="violations">
+      <h2>Violations by Standard</h2>
+      <div class="file-group" id="development.mdc#file-size-limits">
+        <h3>development.mdc#file-size-limits (28 violations)</h3>
+        <ul>
+          <li>
+            app/api/curbos/public-token/curbos/route.ts - File exceeds api limit: 215 lines (limit
+            200)
+          </li>
+          <li>
+            app/api/db/populate-empty-dishes/route.ts - File exceeds api limit: 211 lines (limit
+            200)
+          </li>
+          <li>
+            app/api/menus/[id]/helpers/queryBuilders/menuItemQueries.ts - File exceeds api limit:
+            209 lines (limit 200)
+          </li>
+          <li>app/api/prep-lists/route.ts - File exceeds api limit: 202 lines (limit 200)</li>
+          <li>
+            app/api/recipe-scraper/convert-units/route.ts - File exceeds api limit: 476 lines (limit
+            200)
+          </li>
+          <li>
+            app/api/recipe-scraper/process-recipes/route.ts - File exceeds api limit: 301 lines
+            (limit 200)
+          </li>
+          <li>
+            app/api/recipe-scraper/recipes/route.ts - File exceeds api limit: 246 lines (limit 200)
+          </li>
+          <li>
+            app/api/recipe-scraper/scrape/helpers.ts - File exceeds api limit: 206 lines (limit 200)
+          </li>
+          <li>
+            app/api/recipe-scraper/scrape/route.ts - File exceeds api limit: 250 lines (limit 200)
+          </li>
+          <li>app/api/square/sync/route.ts - File exceeds api limit: 203 lines (limit 200)</li>
+          <li>... and 18 more</li>
+        </ul>
+      </div>
+      <div class="file-group" id="design.mdc#breakpoint-standards">
+        <h3>design.mdc#breakpoint-standards (4 violations)</h3>
+        <ul>
+          <li>
+            app/curbos/components/passport/PassportIdPage.tsx - Rogue breakpoints found: lg:
+            (DISABLED - will not work)
+          </li>
+          <li>
+            app/curbos/components/passport/PassportStampsPage.tsx - Rogue breakpoints found: sm:
+            (DISABLED - will not work)
+          </li>
+          <li>
+            app/curbos-import/admin/components/Background.tsx - Rogue breakpoints found: md:
+            (DISABLED - will not work)
+          </li>
+          <li>
+            components/pricing/CurbOSPricing.tsx - Rogue breakpoints found: sm, md: (DISABLED - will
+            not work)
+          </li>
+        </ul>
+      </div>
+      <div class="file-group" id="development.mdc#console-log-migration">
+        <h3>development.mdc#console-log-migration (8 violations)</h3>
+        <ul>
+          <li>
+            app/api/ai-specials/helpers/safeLogger.ts:16 - console.error() should be migrated to
+            logger.error()
+          </li>
+          <li>
+            app/api/ai-specials/helpers/safeLogger.ts:23 - console.warn() should be migrated to
+            logger.warn()
+          </li>
+          <li>
+            app/api/ai-specials/helpers/safeLogger.ts:30 - console.info() should be migrated to
+            logger.info()
+          </li>
+          <li>
+            app/api/ai-specials/helpers/safeLogger.ts:37 - console.debug() should be migrated to
+            logger.debug()
+          </li>
+          <li>
+            app/curbos/components/LatestVersionBadge.tsx:26 - console.error() should be migrated to
+            logger.error()
+          </li>
+          <li>
+            app/curbos/components/passport/PassportIdPage.tsx:56 - console.error() should be
+            migrated to logger.error()
+          </li>
+          <li>
+            app/curbos-import/lib/check-subscription.ts:20 - console.error() should be migrated to
+            logger.error()
+          </li>
+          <li>
+            app/curbos-import/lib/check-subscription.ts:28 - console.error() should be migrated to
+            logger.error()
+          </li>
+        </ul>
+      </div>
+      <div class="file-group" id="development.mdc#eslint-configuration">
+        <h3>development.mdc#eslint-configuration (2 violations)</h3>
+        <ul>
+          <li>
+            /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/ai-specials/components/RecipeScraper.tsx:83
+            - ESLint: The 'fetchRecipes' function makes the dependencies of useCallback Hook (at
+            line 176) change on every render. To fix this, wrap the definition of 'fetchRecipes' in
+            its own useCallback() Hook. (react-hooks/exhaustive-deps)
+          </li>
+          <li>
+            /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/test-supabase.js:1 - ESLint:
+            Unused eslint-disable directive (no problems were reported from 'no-console'). (unknown)
+          </li>
+        </ul>
+      </div>
+      <div class="file-group" id="security.mdc#security-standards">
+        <h3>security.mdc#security-standards (2 violations)</h3>
+        <ul>
+          <li>
+            app/api/kds/update-status/route.ts:11 - POST/PUT/PATCH routes should use Zod schemas for
+            input validation
+          </li>
+          <li>
+            app/api/recipe-scraper/process-recipes/route.ts:149 - POST/PUT/PATCH routes should use
+            Zod schemas for input validation
+          </li>
+        </ul>
+      </div>
+      <div class="file-group" id="operations.mdc#performance-standards">
+        <h3>operations.mdc#performance-standards (1 violations)</h3>
+        <ul>
+          <li>.next/static - JavaScript bundle size 7460.3KB exceeds budget of 7324KB</li>
+        </ul>
+      </div>
+      <div class="file-group" id="voice-consistency">
+        <h3>voice-consistency (10 violations)</h3>
+        <ul>
+          <li>
+            app/curbos/customers/page.tsx:49 - technical-jargon: "Customer Database" - Avoid
+            technical terms
+          </li>
+          <li>
+            app/curbos/customers/page.tsx:64 - technical-jargon: "Run "Push to Cloud" from your POS
+            to sync/clone the database." - Avoid technical terms
+          </li>
+          <li>
+            app/curbos/settings/SettingsClient.tsx:139 - generic-message: "Failed to restore default
+            data. Please try again." - Add PrepFlow personality
+          </li>
+          <li>
+            app/curbos/settings/SettingsClient.tsx:124 - missing-contraction: "This will add default
+            menu items and modifiers to your database. Only missing items will be added - existing
+            data will not be deleted or modified. Continue?" - Consider using "won't" instead
+          </li>
+          <li>
+            app/curbos/settings/SettingsClient.tsx:124 - technical-jargon: "This will add default
+            menu items and modifiers to your database. Only missing items will be added - existing
+            data will not be deleted or modified. Continue?" - Avoid technical terms
+          </li>
+          <li>
+            app/curbos/settings/SettingsClient.tsx:170 - missing-contraction: "Share this link with
+            your customers to show the order display. The link is read-only and does not require
+            authentication. Only Business tier subscribers can generate public links." - Consider
+            using "doesn't" instead
+          </li>
+          <li>
+            app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx:227 -
+            technical-jargon: "Comprehensive Database Scraping" - Avoid technical terms
+          </li>
+          <li>
+            app/webapp/ai-specials/components/RecipeScraper/RegularScraperSection.tsx:59 -
+            technical-jargon: "Enter recipe URLs to scrape and add them to the database" - Avoid
+            technical terms
+          </li>
+          <li>
+            app/webapp/ai-specials/components/RecipeScraper.tsx:481 - generic-message: "Failed to
+            start processing. Please try again." - Add PrepFlow personality
+          </li>
+          <li>
+            lib/ai/utils/errorParser.ts:57 - technical-jargon: "Gemini API quota exceeded. Please
+            check your plan and billing at https://ai.google.dev/gemini-api/docs/rate-limits. To
+            monitor usage, visit https://ai.dev/usage?tab=rate-limit" - Avoid technical terms
+          </li>
+        </ul>
+      </div>
+      <div class="file-group" id="implementation.mdc#api-response-standards">
+        <h3>implementation.mdc#api-response-standards (2 violations)</h3>
+        <ul>
+          <li>
+            app/api/kds/update-status/route.ts:11 - POST/PUT/PATCH routes should use Zod schemas for
+            input validation
+          </li>
+          <li>
+            app/api/recipe-scraper/process-recipes/route.ts:149 - POST/PUT/PATCH routes should use
+            Zod schemas for input validation
+          </li>
+        </ul>
+      </div>
+      <div class="file-group" id="development.mdc#optimistic-updates-pattern">
+        <h3>development.mdc#optimistic-updates-pattern (3 violations)</h3>
+        <ul>
+          <li>
+            app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx:196 -
+            CRUD operations should use useNotification for user feedback
+          </li>
+          <li>
+            app/webapp/ai-specials/components/RecipeScraper.tsx:110 - CRUD operations should have
+            rollback logic in catch blocks
+          </li>
+          <li>
+            app/webapp/ai-specials/components/RecipeScraper.tsx:47 - Mutations should not show
+            loading states - use optimistic updates instead
+          </li>
+        </ul>
+      </div>
+      <div class="file-group" id="development.mdc#code-quality-requirements">
+        <h3>development.mdc#code-quality-requirements (1 violations)</h3>
+        <ul>
+          <li>
+            app/curbos/CurbOSLayoutClient.tsx:44 - useEffect should have dependency array (empty []
+            if no dependencies)
+          </li>
+        </ul>
+      </div>
+      <div class="file-group" id="ERROR_HANDLING_STANDARDS.md">
+        <h3>ERROR_HANDLING_STANDARDS.md (5 violations)</h3>
+        <ul>
+          <li>app/curbos/quests/[id]/page.tsx:9 - Async operations should have try-catch blocks</li>
+          <li>
+            app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx:216 -
+            Errors in catch blocks should be logged or re-thrown, not silently ignored
+          </li>
+          <li>
+            app/webapp/ai-specials/components/RecipeScraper/ComprehensiveScraperSection.tsx:8 - File
+            with async operations should import logger for error logging
+          </li>
+          <li>
+            app/webapp/components/DashboardStatsClient.tsx:26 - Async operations should have
+            try-catch blocks
+          </li>
+          <li>
+            components/pricing/CurbOSPricing.tsx:14 - Components with critical async operations
+            should be wrapped in ErrorBoundary
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      style="
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid #2a2a2a;
+        color: #9ca3af;
+        font-size: 0.9em;
+      "
+    >
+      Generated at 2026-01-11T01:05:33.739Z
+    </div>
+  </body>
+</html>
