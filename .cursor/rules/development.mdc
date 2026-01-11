@@ -536,6 +536,18 @@ When refactoring any file, ensure:
 - [ ] File size limits are respected
 - [ ] Code is tested after refactoring
 
+**📚 Comprehensive Refactoring Guide:**
+
+For detailed refactoring patterns, step-by-step instructions, decision trees, and real-world examples, see:
+- **`docs/FILE_SIZE_REFACTORING_GUIDE.md`** - Complete guide with 5 proven patterns:
+  1. Extract Helper Functions (Utilities & API Routes)
+  2. Extract Custom Hooks (React Components)
+  3. Extract Sub-Components (Large Components)
+  4. Extract API Route Helpers
+  5. Consolidate Code (Minor Overages)
+  
+  Includes checklists, common pitfalls, solutions, and statistics from January 2025 refactoring (16 files fixed, 40+ new files created).
+
 ### **Code Duplication Reduction**
 
 **MANDATORY:** Eliminate code duplication using these patterns:
@@ -1459,6 +1471,11 @@ export const PREFETCH_MAP: Record<string, string[]> = {
 - **Code reviews:** Mandatory review of refactored code
 - **Performance monitoring:** Track bundle size impact
 
+**📚 Refactoring Guide:**
+
+For comprehensive refactoring patterns, examples, and step-by-step instructions, see:
+- **`docs/FILE_SIZE_REFACTORING_GUIDE.md`** - Complete guide with 5 proven patterns, decision trees, checklists, and real-world examples from January 2025 refactoring (16 files fixed, 40+ new files created)
+
 **Recent Refactoring Examples:**
 
 #### **Ingredient Normalization Utilities Refactoring**
@@ -1497,6 +1514,15 @@ export const PREFETCH_MAP: Record<string, string[]> = {
 - ✅ **Reusability:** Extracted hooks and utilities can be reused across the app
 - ✅ **Bundle Size:** Smaller, more focused bundles improve loading performance
 - ✅ **Code Safety:** Git branching prevents code destruction during refactoring
+
+**📚 Learn from Real Refactoring:**
+
+See `docs/FILE_SIZE_REFACTORING_GUIDE.md` for:
+- Detailed examples from January 2025 refactoring (16 files, 40+ new files)
+- Proven patterns that reduced files by 30-60% through strategic extraction
+- Common pitfalls and solutions (TypeScript types, React hooks, circular dependencies)
+- Decision trees for choosing the right refactoring pattern
+- Statistics and insights from successful refactoring
 
 ### **Git Strategy**
 

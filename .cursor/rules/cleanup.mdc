@@ -42,6 +42,7 @@ alwaysApply: true
 **Related:**
 - See `development.mdc` (File Refactoring Standards) for refactoring guidelines
 - See `development.mdc` (Git Best Practices) for refactoring workflow
+- **📚 Comprehensive Guide:** See `docs/FILE_SIZE_REFACTORING_GUIDE.md` for detailed refactoring patterns, examples, decision trees, and best practices (includes 5 proven patterns with real-world examples from January 2025 refactoring)
 
 ---
 
