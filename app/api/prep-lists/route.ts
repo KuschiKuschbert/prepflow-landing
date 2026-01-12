@@ -1,20 +1,20 @@
-import { supabaseAdmin } from '@/lib/supabase';
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 import { createPrepList } from './helpers/createPrepList';
 import { deletePrepList } from './helpers/deletePrepList';
 import {
-  combinePrepListData,
-  fetchIngredientsBatch,
-  fetchPrepListsData,
-  fetchRelatedData,
+    combinePrepListData,
+    fetchIngredientsBatch,
+    fetchPrepListsData,
+    fetchRelatedData,
 } from './helpers/fetchPrepLists';
 import { handlePrepListError } from './helpers/handlePrepListError';
-import { updatePrepList } from './helpers/updatePrepList';
-import { createPrepListSchema } from './helpers/schemas';
 import { parseDeleteRequest } from './helpers/parseDeleteRequest';
+import { createPrepListSchema } from './helpers/schemas';
 import { transformItems } from './helpers/transformItems';
+import { updatePrepList } from './helpers/updatePrepList';
 
 export async function GET(request: NextRequest) {
   try {
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
 
     if (empty) {
       const totalPages = Math.max(1, Math.ceil(count / pageSize));
-      const mappedPrepLists = prepLists.map((list: any) => ({
+      const mappedPrepLists = prepLists.map((list) => ({
         ...list,
         kitchen_section_id: list.kitchen_section_id || list.section_id,
         kitchen_sections: null,
@@ -48,7 +48,11 @@ export async function GET(request: NextRequest) {
 
     const { sectionsMap, itemsByPrepListId, prepListItems } = await fetchRelatedData(prepLists);
     const ingredientIds = Array.from(
-      new Set(prepListItems.map((item: any) => item.ingredient_id).filter(Boolean)),
+      new Set(
+        prepListItems
+          .map((item) => item.ingredient_id)
+          .filter((id): id is string => Boolean(id))
+      ),
     );
     const ingredientsMap = await fetchIngredientsBatch(ingredientIds);
     const mappedData = combinePrepListData(
@@ -113,12 +117,13 @@ export async function POST(request: NextRequest) {
       message: 'Prep list created successfully',
       data: prepList,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Prep Lists API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/prep-lists', method: 'POST' },
     });
-    if (err.status) {
+    if (typeof err === 'object' && err !== null && 'status' in err) {
+       // @ts-ignore - Validated by runtime check
       return NextResponse.json(err, { status: err.status });
     }
     return handlePrepListError(err, 'POST');
@@ -144,12 +149,13 @@ export async function PUT(request: NextRequest) {
       message: 'Prep list updated successfully',
       data,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Prep Lists API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/prep-lists', method: 'PUT' },
     });
-    if (err.status) {
+     if (typeof err === 'object' && err !== null && 'status' in err) {
+       // @ts-ignore - Validated by runtime check
       return NextResponse.json(err, { status: err.status });
     }
     return handlePrepListError(err, 'PUT');
@@ -173,12 +179,13 @@ export async function DELETE(request: NextRequest) {
       success: true,
       message: 'Prep list deleted successfully',
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Prep Lists API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/prep-lists', method: 'DELETE' },
     });
-    if (err.status) {
+     if (typeof err === 'object' && err !== null && 'status' in err) {
+       // @ts-ignore - Validated by runtime check
       return NextResponse.json(err, { status: err.status });
     }
     return handlePrepListError(err, 'DELETE');

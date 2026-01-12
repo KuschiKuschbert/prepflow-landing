@@ -2,6 +2,8 @@
  * Helper for detecting changes in dish updates
  */
 
+import { Dish, UpdateDishInput } from '@/types/dish';
+
 export interface DishChange {
   type: string;
   details: any;
@@ -15,13 +17,13 @@ export interface ChangeDetectionResult {
 /**
  * Detects changes between current dish and update data
  *
- * @param {any} currentDish - Current dish data
- * @param {any} updateData - Update data
+ * @param {Dish | null} currentDish - Current dish data
+ * @param {UpdateDishInput} updateData - Update data
  * @returns {ChangeDetectionResult} Detected changes
  */
-export function detectDishChanges(currentDish: any, updateData: any): ChangeDetectionResult {
+export function detectDishChanges(currentDish: Dish | null, updateData: UpdateDishInput): ChangeDetectionResult {
   const changes: string[] = [];
-  const changeDetails: any = {};
+  const changeDetails: Record<string, any> = {};
 
   if (!currentDish) {
     return { changes, changeDetails };

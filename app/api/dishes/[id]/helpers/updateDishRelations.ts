@@ -1,29 +1,26 @@
-/**
- * Helper for updating dish recipes and ingredients with change tracking
- */
-
 import { logger } from '@/lib/logger';
-import { updateDishRecipes } from './updateDishRecipes';
-import { updateDishIngredients } from './updateDishIngredients';
+import { CreateDishInput } from '@/types/dish';
 import { invalidateAllergenCache, invalidateMenuPricingCache } from './invalidateDishCaches';
+import { updateDishIngredients } from './updateDishIngredients';
+import { updateDishRecipes } from './updateDishRecipes';
 
 export interface UpdateRelationsResult {
   changes: string[];
-  changeDetails: Record<string, any>;
+  changeDetails: Record<string, any>; // changeDetails structure is dynamic
 }
 
 /**
  * Updates dish recipes and tracks changes
  *
  * @param {string} dishId - Dish ID
- * @param {any[]} recipes - Recipes to set
+ * @param {CreateDishInput['recipes']} recipes - Recipes to set
  * @param {string[]} changes - Array to append changes to
  * @param {Record<string, any>} changeDetails - Object to add change details to
  * @returns {Promise<void>}
  */
 export async function updateRecipesWithTracking(
   dishId: string,
-  recipes: any[],
+  recipes: NonNullable<CreateDishInput['recipes']>,
   changes: string[],
   changeDetails: Record<string, any>,
 ): Promise<void> {
@@ -49,7 +46,7 @@ export async function updateRecipesWithTracking(
 export async function updateIngredientsWithTracking(
   dishId: string,
   dishName: string,
-  ingredients: any[],
+  ingredients: NonNullable<CreateDishInput['ingredients']>,
   changes: string[],
   changeDetails: Record<string, any>,
   userEmail: string | null,

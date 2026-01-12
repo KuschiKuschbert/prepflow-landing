@@ -1,0 +1,53 @@
+export interface QualificationType {
+  id: string;
+  name: string;
+  description: string | null;
+  is_required: boolean;
+  default_expiry_days: number | null;
+}
+
+export interface EmployeeQualification {
+  id: string;
+  employee_id: string;
+  qualification_type_id: string;
+  expiry_date: string | null;
+  status: 'valid' | 'expired' | 'pending';
+  document_url: string | null;
+  qualification_types?: QualificationType;
+}
+
+export interface Employee {
+  id: string;
+  employee_id: string | null;
+  full_name: string;
+  role: string | null;
+  employment_start_date: string;
+  employment_end_date: string | null;
+  status: 'active' | 'inactive' | 'terminated';
+  phone: string | null;
+  email: string | null;
+  emergency_contact: string | null;
+  photo_url: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+  employee_qualifications?: EmployeeQualification[];
+}
+
+export interface CreateEmployeeInput {
+  employee_id?: string | null;
+  full_name: string;
+  role?: string | null;
+  employment_start_date: string;
+  employment_end_date?: string | null;
+  status?: 'active' | 'inactive' | 'terminated';
+  phone?: string | null;
+  email?: string | null;
+  emergency_contact?: string | null;
+  photo_url?: string | null;
+  notes?: string | null;
+}
+
+export interface UpdateEmployeeInput extends Partial<CreateEmployeeInput> {
+  id?: string;
+}

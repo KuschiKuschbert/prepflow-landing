@@ -1,54 +1,31 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { buildSectionsMap, buildItemsByPrepListIdMap } from './buildMaps';
-import { fetchIngredientsBatch } from './fetchIngredientsBatch';
+import { PostgrestError } from '@supabase/supabase-js';
+import {
+    FetchPrepListsParams,
+    KitchenSection,
+    PrepList,
+    PrepListItem,
+} from '../types';
+import { buildItemsByPrepListIdMap, buildSectionsMap } from './buildMaps';
 import { combinePrepListData } from './combinePrepListData';
+import { fetchIngredientsBatch } from './fetchIngredientsBatch';
 
 // Re-export for use in route.ts
-export { fetchIngredientsBatch, combinePrepListData };
+export { combinePrepListData, fetchIngredientsBatch };
 
-interface FetchPrepListsParams {
-  userId: string | null;
-  page: number;
-  pageSize: number;
-}
-interface PrepListData {
-  id: string;
-  kitchen_section_id?: string;
-  section_id?: string;
-  name: string;
-  notes?: string;
-  status: string;
-  created_at: string;
-  updated_at: string;
+interface PagedPrepListResult {
+  prepLists: PrepList[];
+  count: number;
+  empty: boolean;
 }
 
-interface KitchenSection {
-  id: string;
-  name?: string;
-  section_name?: string;
-  color?: string;
-  color_code?: string;
-}
-interface PrepListItem {
-  id: string;
-  prep_list_id: string;
-  ingredient_id: string;
-  quantity?: number;
-  quantity_needed?: number;
-  unit: string;
-  notes?: string;
-}
-
-interface Ingredient {
-  id: string;
-  ingredient_name?: string;
-  name?: string;
-  unit: string;
-  category?: string;
-}
-export async function fetchPrepListsData({ userId, page, pageSize }: FetchPrepListsParams) {
+export async function fetchPrepListsData({
+  userId,
+  page,
+  pageSize,
+}: FetchPrepListsParams): Promise<PagedPrepListResult> {
   if (!supabaseAdmin) {
     logger.error('[Prep Lists API] Database connection not available for fetchPrepListsData');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
@@ -76,27 +53,29 @@ export async function fetchPrepListsData({ userId, page, pageSize }: FetchPrepLi
     const fallbackResult = await fallbackQuery;
 
     if (fallbackResult.error) {
+      const pgFallbackError = fallbackResult.error as PostgrestError;
       logger.error('[Prep Lists API] Error fetching prep lists (fallback):', {
-        error: fallbackResult.error.message,
-        code: (fallbackResult.error as any).code,
+        error: pgFallbackError.message,
+        code: pgFallbackError.code,
         context: { endpoint: '/api/prep-lists', operation: 'GET', table: 'prep_lists' },
       });
-      throw ApiErrorHandler.fromSupabaseError(fallbackResult.error, 500);
+      throw ApiErrorHandler.fromSupabaseError(pgFallbackError, 500);
     }
 
     return {
-      prepLists: (fallbackResult.data || []) as PrepListData[],
+      prepLists: (fallbackResult.data || []) as PrepList[],
       count: fallbackResult.count || 0,
       empty: true,
     };
   }
   if (prepListsError) {
+    const pgError = prepListsError as PostgrestError;
     logger.error('[Prep Lists API] Error fetching prep lists:', {
-      error: prepListsError.message,
-      code: (prepListsError as any).code,
+      error: pgError.message,
+      code: pgError.code,
       context: { endpoint: '/api/prep-lists', operation: 'GET', table: 'prep_lists' },
     });
-    throw ApiErrorHandler.fromSupabaseError(prepListsError, 500);
+    throw ApiErrorHandler.fromSupabaseError(pgError, 500);
   }
 
   if (!prepLists || prepLists.length === 0) {
@@ -108,22 +87,23 @@ export async function fetchPrepListsData({ userId, page, pageSize }: FetchPrepLi
   }
 
   return {
-    prepLists: prepLists as PrepListData[],
+    prepLists: prepLists as PrepList[],
     count: count || 0,
     empty: false,
   };
 }
 
-export async function fetchRelatedData(prepLists: PrepListData[]) {
+export async function fetchRelatedData(prepLists: PrepList[]) {
   if (!supabaseAdmin) {
     logger.error('[Prep Lists API] Database connection not available for fetchRelatedData');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
-  const prepListIds = prepLists.map((list: any) => list.id);
+  const prepListIds = prepLists.map((list) => list.id);
   const sectionIds = prepLists
-    .map((list: any) => list.kitchen_section_id || list.section_id)
-    .filter(Boolean);
+    .map((list) => list.kitchen_section_id || list.section_id)
+    .filter((id): id is string => Boolean(id));
+
   // Step 2: Fetch all related data in parallel
   const [kitchenSectionsResult, prepListItemsResult] = await Promise.all([
     // Fetch kitchen sections
@@ -144,17 +124,19 @@ export async function fetchRelatedData(prepLists: PrepListData[]) {
 
   // Check for errors in results
   if (kitchenSectionsResult.error) {
+    const pgSectionError = kitchenSectionsResult.error as PostgrestError;
     logger.warn('[Prep Lists API] Error fetching kitchen sections (non-fatal):', {
-      error: kitchenSectionsResult.error.message,
-      code: (kitchenSectionsResult.error as any).code,
+      error: pgSectionError.message,
+      code: pgSectionError.code,
       sectionIds,
     });
   }
 
   if (prepListItemsResult.error) {
+    const pgItemsError = prepListItemsResult.error as PostgrestError;
     logger.warn('[Prep Lists API] Error fetching prep list items (non-fatal):', {
-      error: prepListItemsResult.error.message,
-      code: (prepListItemsResult.error as any).code,
+      error: pgItemsError.message,
+      code: pgItemsError.code,
       prepListIds,
     });
   }

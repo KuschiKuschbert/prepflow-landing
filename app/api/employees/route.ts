@@ -1,13 +1,14 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { createEmployee } from './helpers/createEmployee';
-import { handleEmployeeError } from './helpers/handleEmployeeError';
-import { updateEmployee } from './helpers/updateEmployee';
-import { createEmployeeSchema, updateEmployeeSchema, EMPLOYEE_SELECT } from './helpers/schemas';
 import { handleDeleteEmployee } from './helpers/deleteEmployeeHandler';
+import { handleEmployeeError } from './helpers/handleEmployeeError';
+import { createEmployeeSchema, EMPLOYEE_SELECT, updateEmployeeSchema } from './helpers/schemas';
+import { updateEmployee } from './helpers/updateEmployee';
+
 
 /**
  * GET /api/employees
@@ -38,9 +39,10 @@ export async function GET(request: NextRequest) {
     const { data, error } = await query;
 
     if (error) {
+      const pgError = error as PostgrestError;
       logger.error('[Employees API] Database error fetching employees:', {
-        error: error.message,
-        code: (error as any).code,
+        error: pgError.message,
+        code: pgError.code,
         context: {
           endpoint: '/api/employees',
           operation: 'GET',
@@ -129,7 +131,7 @@ export async function POST(request: NextRequest) {
       message: 'Employee created successfully',
       data,
     });
-  } catch (err: any) {
+  } catch (err) {
     logger.error('[Employees API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/employees', method: 'POST' },
@@ -178,7 +180,7 @@ export async function PUT(request: NextRequest) {
       message: 'Employee updated successfully',
       data,
     });
-  } catch (err: any) {
+  } catch (err) {
     logger.error('[Employees API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/employees', method: 'PUT' },

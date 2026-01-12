@@ -1,25 +1,4 @@
-interface RecipeGroupedItem {
-  recipeId: string;
-  recipeName: string;
-  ingredients: Array<{
-    ingredientId: string;
-    name: string;
-    quantity: number;
-    unit: string;
-  }>;
-}
-
-interface AggregatedIngredient {
-  ingredientId: string;
-  name: string;
-  totalQuantity: number;
-  unit: string;
-  sources: Array<{
-    type: 'recipe';
-    id: string;
-    name: string;
-  }>;
-}
+import { AggregatedIngredient, RecipeGroupedItem } from '../types';
 
 export function aggregateIngredientsFromRecipes(
   recipes: RecipeGroupedItem[],

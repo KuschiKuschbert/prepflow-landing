@@ -1,20 +1,8 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-
-interface UpdatePrepListParams {
-  id: string;
-  kitchenSectionId?: string;
-  name?: string;
-  notes?: string;
-  status?: string;
-  items?: Array<{
-    ingredientId: string;
-    quantity: string;
-    unit: string;
-    notes?: string;
-  }>;
-}
+import { supabaseAdmin } from '@/lib/supabase';
+import { PostgrestError } from '@supabase/supabase-js';
+import { PrepList, UpdatePrepListParams } from '../types';
 
 export async function updatePrepList(params: UpdatePrepListParams) {
   if (!supabaseAdmin) {
@@ -23,7 +11,7 @@ export async function updatePrepList(params: UpdatePrepListParams) {
 
   const { id, kitchenSectionId, name, notes, status, items } = params;
 
-  const updateData: any = {
+  const updateData: Partial<PrepList> = {
     updated_at: new Date().toISOString(),
   };
 
@@ -40,12 +28,13 @@ export async function updatePrepList(params: UpdatePrepListParams) {
     .single();
 
   if (error) {
+    const pgError = error as PostgrestError;
     logger.error('[Prep Lists API] Database error updating prep list:', {
-      error: error.message,
-      code: (error as any).code,
+      error: pgError.message,
+      code: pgError.code,
       prepListId: id,
     });
-    throw ApiErrorHandler.fromSupabaseError(error, 500);
+    throw ApiErrorHandler.fromSupabaseError(pgError, 500);
   }
 
   // Update items if provided
@@ -57,16 +46,17 @@ export async function updatePrepList(params: UpdatePrepListParams) {
       .eq('prep_list_id', id);
 
     if (deleteItemsError) {
+      const pgDeleteError = deleteItemsError as PostgrestError;
       logger.warn('[Prep Lists API] Warning: Could not delete existing prep list items:', {
-        error: deleteItemsError.message,
-        code: (deleteItemsError as any).code,
+        error: pgDeleteError.message,
+        code: pgDeleteError.code,
         prepListId: id,
       });
     }
 
     // Add new items
     if (items.length > 0) {
-      const prepItems = items.map((item: any) => ({
+      const prepItems = items.map((item) => ({
         prep_list_id: id,
         ingredient_id: item.ingredientId,
         quantity: item.quantity,
@@ -79,15 +69,16 @@ export async function updatePrepList(params: UpdatePrepListParams) {
         .insert(prepItems);
 
       if (insertItemsError) {
+        const pgInsertError = insertItemsError as PostgrestError;
         logger.error('[Prep Lists API] Error inserting prep list items:', {
-          error: insertItemsError.message,
-          code: (insertItemsError as any).code,
+          error: pgInsertError.message,
+          code: pgInsertError.code,
           prepListId: id,
         });
-        throw ApiErrorHandler.fromSupabaseError(insertItemsError, 500);
+        throw ApiErrorHandler.fromSupabaseError(pgInsertError, 500);
       }
     }
   }
 
-  return data;
+  return data as PrepList;
 }

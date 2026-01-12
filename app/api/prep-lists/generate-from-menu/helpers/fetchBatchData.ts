@@ -1,14 +1,21 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import {
+    DBDishIngredient,
+    DBDishRecipe,
+    DBDishSection,
+    DBRecipeIngredient,
+    DishSectionData,
+} from '../types';
 
 /**
  * Batch fetch recipe ingredients.
  *
  * @param {Set<string>} recipeIds - Set of recipe IDs
- * @returns {Promise<Map<string, any[]>>} Map of recipe ID to ingredients array
+ * @returns {Promise<Map<string, DBRecipeIngredient[]>>} Map of recipe ID to ingredients array
  */
-export async function fetchRecipeIngredients(recipeIds: Set<string>) {
-  const recipeIngredientsMap = new Map<string, any[]>();
+export async function fetchRecipeIngredients(recipeIds: Set<string>): Promise<Map<string, DBRecipeIngredient[]>> {
+  const recipeIngredientsMap = new Map<string, DBRecipeIngredient[]>();
 
   if (!supabaseAdmin || recipeIds.size === 0) {
     return recipeIngredientsMap;
@@ -16,7 +23,7 @@ export async function fetchRecipeIngredients(recipeIds: Set<string>) {
 
   const { data: allRecipeIngredients, error: recipeIngredientsError } = await supabaseAdmin
     .from('recipe_ingredients')
-    .select('recipe_id, ingredient_id, quantity, unit, ingredients(id, ingredient_name)')
+    .select('recipe_id, ingredient_id, quantity, unit, ingredients(id, ingredient_name, name)')
     .in('recipe_id', Array.from(recipeIds));
 
   if (recipeIngredientsError) {
@@ -29,11 +36,13 @@ export async function fetchRecipeIngredients(recipeIds: Set<string>) {
 
   if (allRecipeIngredients) {
     for (const ri of allRecipeIngredients) {
-      const recipeId = (ri as any).recipe_id;
+      // Cast to DBRecipeIngredient as supabase types might assume nulls differently
+      const recipeIngredient = ri as unknown as DBRecipeIngredient;
+      const recipeId = recipeIngredient.recipe_id;
       if (!recipeIngredientsMap.has(recipeId)) {
         recipeIngredientsMap.set(recipeId, []);
       }
-      recipeIngredientsMap.get(recipeId)!.push(ri);
+      recipeIngredientsMap.get(recipeId)!.push(recipeIngredient);
     }
   }
 
@@ -46,19 +55,16 @@ export async function fetchRecipeIngredients(recipeIds: Set<string>) {
  * @param {Set<string>} dishIds - Set of dish IDs
  * @param {Set<string>} recipeIds - Set of recipe IDs (will be updated with dish recipes)
  * @param {Map<string, string | null>} recipeInstructionsMap - Map of recipe ID to instructions (will be updated)
- * @returns {Promise<{dishSectionsMap: Map<string, {sectionId: string | null, sectionName: string}>, dishRecipesMap: Map<string, Array<{recipe_id: string, quantity: number, recipe: any}>>, dishIngredientsMap: Map<string, any[]>}>} Dish data maps
+ * @returns {Promise<{dishSectionsMap: Map<string, DishSectionData>, dishRecipesMap: Map<string, DBDishRecipe[]>, dishIngredientsMap: Map<string, DBDishIngredient[]>}>} Dish data maps
  */
 export async function fetchDishData(
   dishIds: Set<string>,
   recipeIds: Set<string>,
   recipeInstructionsMap: Map<string, string | null>,
 ) {
-  const dishSectionsMap = new Map<string, { sectionId: string | null; sectionName: string }>();
-  const dishRecipesMap = new Map<
-    string,
-    Array<{ recipe_id: string; quantity: number; recipe: any }>
-  >();
-  const dishIngredientsMap = new Map<string, any[]>();
+  const dishSectionsMap = new Map<string, DishSectionData>();
+  const dishRecipesMap = new Map<string, DBDishRecipe[]>();
+  const dishIngredientsMap = new Map<string, DBDishIngredient[]>();
 
   if (!supabaseAdmin || dishIds.size === 0) {
     return { dishSectionsMap, dishRecipesMap, dishIngredientsMap };
@@ -82,9 +88,10 @@ export async function fetchDishData(
 
   if (allDishSections) {
     for (const ds of allDishSections) {
-      const dishId = (ds as any).dish_id;
-      const sectionId = (ds as any).section_id;
-      const section = (ds as any).kitchen_sections;
+      const dishSection = ds as unknown as DBDishSection;
+      const dishId = dishSection.dish_id;
+      const sectionId = dishSection.section_id;
+      const section = dishSection.kitchen_sections;
       dishSectionsMap.set(dishId, {
         sectionId,
         sectionName: section?.name || 'Uncategorized',
@@ -108,19 +115,16 @@ export async function fetchDishData(
 
   if (allDishRecipes) {
     for (const dr of allDishRecipes) {
-      const dishId = (dr as any).dish_id;
+      const dishRecipe = dr as unknown as DBDishRecipe;
+      const dishId = dishRecipe.dish_id;
       if (!dishRecipesMap.has(dishId)) {
         dishRecipesMap.set(dishId, []);
       }
-      dishRecipesMap.get(dishId)!.push({
-        recipe_id: (dr as any).recipe_id,
-        quantity: (dr as any).quantity || 1,
-        recipe: (dr as any).recipes,
-      });
+      dishRecipesMap.get(dishId)!.push(dishRecipe);
       // Also add recipe ID to recipeIds set for ingredient fetching
-      if ((dr as any).recipes?.id) {
-        recipeIds.add((dr as any).recipes.id);
-        recipeInstructionsMap.set((dr as any).recipes.id, (dr as any).recipes.instructions || null);
+      if (dishRecipe.recipes?.id) {
+        recipeIds.add(dishRecipe.recipes.id);
+        recipeInstructionsMap.set(dishRecipe.recipes.id, dishRecipe.recipes.instructions || null);
       }
     }
   }
@@ -128,7 +132,7 @@ export async function fetchDishData(
   // Batch fetch dish ingredients
   const { data: allDishIngredients, error: dishIngredientsError } = await supabaseAdmin
     .from('dish_ingredients')
-    .select('dish_id, ingredient_id, quantity, unit, ingredients(id, ingredient_name)')
+    .select('dish_id, ingredient_id, quantity, unit, ingredients(id, ingredient_name, name)')
     .in('dish_id', dishIdsArray);
 
   if (dishIngredientsError) {
@@ -141,11 +145,12 @@ export async function fetchDishData(
 
   if (allDishIngredients) {
     for (const di of allDishIngredients) {
-      const dishId = (di as any).dish_id;
+      const dishIngredient = di as unknown as DBDishIngredient;
+      const dishId = dishIngredient.dish_id;
       if (!dishIngredientsMap.has(dishId)) {
         dishIngredientsMap.set(dishId, []);
       }
-      dishIngredientsMap.get(dishId)!.push(di);
+      dishIngredientsMap.get(dishId)!.push(dishIngredient);
     }
   }
 

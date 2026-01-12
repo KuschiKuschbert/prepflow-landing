@@ -2,7 +2,7 @@
  * Helper to transform menu items to display data.
  */
 
-import type { MenuItem } from '@/app/webapp/menu-builder/types';
+import { EnrichedMenuItem } from '../../../types';
 
 export interface MenuDisplayItem {
   name: string;
@@ -14,8 +14,8 @@ export interface MenuDisplayItem {
 /**
  * Transform menu items to display data.
  */
-export function transformMenuData(items: MenuItem[]): MenuDisplayItem[] {
-  return items.map((item: MenuItem) => {
+export function transformMenuData(items: EnrichedMenuItem[]): MenuDisplayItem[] {
+  return items.map((item: EnrichedMenuItem) => {
     const isDish = !!item.dish_id;
     const itemName = isDish
       ? item.dishes?.dish_name || 'Unknown Dish'

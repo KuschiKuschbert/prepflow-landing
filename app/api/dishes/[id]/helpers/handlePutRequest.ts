@@ -5,21 +5,23 @@
  * after dish update operations. See `docs/SQUARE_API_REFERENCE.md` (Automatic Sync section) for details.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { triggerCostSync, triggerDishSync } from '@/lib/square/sync/hooks';
 import { supabaseAdmin } from '@/lib/supabase';
+import { Dish } from '@/types/dish';
+import { PostgrestError } from '@supabase/supabase-js';
+import { NextRequest, NextResponse } from 'next/server';
 import { buildDishUpdateData } from './buildDishUpdateData';
-import { fetchDishWithRelations } from './fetchDishWithRelations';
 import { detectDishChanges } from './detectDishChanges';
-import { updateRecipesWithTracking, updateIngredientsWithTracking } from './updateDishRelations';
-import {
-  invalidateAllergenCache,
-  invalidateMenuPricingCache,
-  trackChangeForLockedMenus,
-} from './invalidateDishCaches';
+import { fetchDishWithRelations } from './fetchDishWithRelations';
 import { getUserEmail } from './getUserEmail';
-import { triggerDishSync, triggerCostSync } from '@/lib/square/sync/hooks';
+import {
+    invalidateAllergenCache,
+    invalidateMenuPricingCache,
+    trackChangeForLockedMenus,
+} from './invalidateDishCaches';
+import { updateIngredientsWithTracking, updateRecipesWithTracking } from './updateDishRelations';
 
 /**
  * Handles PUT request for updating a dish
@@ -46,10 +48,10 @@ export async function handlePutRequest(
   const userEmail = await getUserEmail(request);
 
   // Fetch current dish to detect changes
-  let currentDish: any = null;
+  let currentDish: Dish | null = null;
   try {
     const dish = await fetchDishWithRelations(dishId);
-    currentDish = dish;
+    currentDish = dish as Dish;
   } catch (err) {
     logger.warn('[Dishes API] Could not fetch current dish for change detection:', err);
   }
@@ -69,9 +71,10 @@ export async function handlePutRequest(
     .single();
 
   if (updateError) {
+    const pgError = updateError as PostgrestError;
     logger.error('[Dishes API] Database error updating dish:', {
-      error: updateError.message,
-      code: (updateError as any).code,
+      error: pgError.message,
+      code: pgError.code,
       context: { endpoint: '/api/dishes/[id]', operation: 'PUT', dishId },
     });
 
@@ -112,14 +115,22 @@ export async function handlePutRequest(
           });
         }
       })();
-    } catch (recipesError: any) {
-      logger.error('[Dishes API] Database error updating dish recipes:', {
-        error: recipesError.message,
-        code: recipesError.code,
-        context: { endpoint: '/api/dishes/[id]', operation: 'PUT', dishId },
-      });
-      const apiError = ApiErrorHandler.fromSupabaseError(recipesError, 500);
-      return NextResponse.json(apiError, { status: apiError.status || 500 });
+    } catch (recipesError) {
+      if (recipesError instanceof Error && 'code' in recipesError) {
+        const pgError = recipesError as PostgrestError;
+        logger.error('[Dishes API] Database error updating dish recipes:', {
+           error: pgError.message,
+           code: pgError.code,
+           context: { endpoint: '/api/dishes/[id]', operation: 'PUT', dishId },
+         });
+         const apiError = ApiErrorHandler.fromSupabaseError(pgError, 500);
+         return NextResponse.json(apiError, { status: apiError.status || 500 });
+      }
+      logger.error('[Dishes API] Unexpected error updating dish recipes:', recipesError);
+       return NextResponse.json(
+         ApiErrorHandler.createError('Failed to update recipes', 'UPDATE_ERROR', 500),
+         { status: 500 }
+       );
     }
   }
 
@@ -134,14 +145,22 @@ export async function handlePutRequest(
         changeDetails,
         userEmail,
       );
-    } catch (ingredientsError: any) {
-      logger.error('[Dishes API] Database error updating dish ingredients:', {
-        error: ingredientsError.message,
-        code: ingredientsError.code,
-        context: { endpoint: '/api/dishes/[id]', operation: 'PUT', dishId },
-      });
-      const apiError = ApiErrorHandler.fromSupabaseError(ingredientsError, 500);
-      return NextResponse.json(apiError, { status: apiError.status || 500 });
+    } catch (ingredientsError) {
+       if (ingredientsError instanceof Error && 'code' in ingredientsError) {
+          const pgError = ingredientsError as PostgrestError;
+          logger.error('[Dishes API] Database error updating dish ingredients:', {
+           error: pgError.message,
+           code: pgError.code,
+           context: { endpoint: '/api/dishes/[id]', operation: 'PUT', dishId },
+         });
+         const apiError = ApiErrorHandler.fromSupabaseError(pgError, 500);
+         return NextResponse.json(apiError, { status: apiError.status || 500 });
+       }
+       logger.error('[Dishes API] Unexpected error updating dish ingredients:', ingredientsError);
+       return NextResponse.json(
+         ApiErrorHandler.createError('Failed to update ingredients', 'UPDATE_ERROR', 500),
+         { status: 500 }
+       );
     }
   }
 

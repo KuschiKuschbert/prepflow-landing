@@ -1,8 +1,8 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { populateStaff } from '@/lib/populate-helpers';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { logger } from '@/lib/logger';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { populateStaff } from '@/lib/populate-helpers';
 
 /**
  * POST /api/employees/populate
@@ -37,12 +37,12 @@ export async function POST(request: NextRequest) {
         staff: staffData,
       },
     });
-  } catch (err: any) {
+  } catch (err) {
     logger.error('Error populating employees:', err);
     return NextResponse.json(
       {
         success: false,
-        error: err.message || 'Failed to populate employees',
+        error: err instanceof Error ? err.message : String(err),
       },
       { status: 500 },
     );

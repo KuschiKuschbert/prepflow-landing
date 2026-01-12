@@ -146,6 +146,12 @@ const STANDARDS_CONFIG = {
     severity: 'critical',
     fixable: false,
   },
+  'learned-patterns': {
+    name: 'Learned Patterns Prevention',
+    source: '.cursor/rules/error-patterns.mdc',
+    severity: 'warning',
+    fixable: false,
+  },
 };
 
 /**

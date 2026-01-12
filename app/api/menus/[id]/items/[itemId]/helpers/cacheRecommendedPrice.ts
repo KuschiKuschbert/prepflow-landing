@@ -1,5 +1,6 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { RawMenuItem } from '../../../../types';
 import { calculateDishSellingPrice } from '../../../statistics/helpers/calculateDishSellingPrice';
 import { calculateRecipeSellingPrice } from '../../../statistics/helpers/calculateRecipeSellingPrice';
 
@@ -9,13 +10,13 @@ import { calculateRecipeSellingPrice } from '../../../statistics/helpers/calcula
  *
  * @param {string} menuId - Menu ID
  * @param {string} menuItemId - Menu item ID
- * @param {any} menuItem - Menu item with dish_id or recipe_id
+ * @param {RawMenuItem} menuItem - Menu item with dish_id or recipe_id
  * @returns {Promise<number | null>} Cached recommended price or null if calculation failed
  */
 export async function cacheRecommendedPrice(
   menuId: string,
   menuItemId: string,
-  menuItem: { dish_id?: string; recipe_id?: string; recipes?: { yield?: number } },
+  menuItem: RawMenuItem,
 ): Promise<number | null> {
   if (!supabaseAdmin) {
     logger.error('[Cache Recommended Price] Supabase not available');
@@ -120,7 +121,7 @@ export async function refreshMenuRecommendedPrices(menuId: string): Promise<{
         ...item,
         recipes: recipeYield ? { yield: recipeYield } : undefined,
       };
-      const price = await cacheRecommendedPrice(menuId, item.id, menuItemForCache);
+      const price = await cacheRecommendedPrice(menuId, item.id, menuItemForCache as unknown as RawMenuItem);
       if (price != null) {
         updated++;
       } else {

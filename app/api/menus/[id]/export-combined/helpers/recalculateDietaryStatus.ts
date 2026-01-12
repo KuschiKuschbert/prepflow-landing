@@ -2,18 +2,18 @@
  * Helper to recalculate dietary status for all menu items.
  */
 
-import type { MenuItem } from '@/app/webapp/menu-builder/types';
 import {
-  aggregateDishDietaryStatus,
-  aggregateRecipeDietaryStatus,
+    aggregateDishDietaryStatus,
+    aggregateRecipeDietaryStatus,
 } from '@/lib/dietary/dietary-aggregation';
 import { logger } from '@/lib/logger';
+import { EnrichedMenuItem } from '../../../types';
 
 /**
  * Recalculate dietary status for all recipes/dishes in menu items.
  */
-export async function recalculateDietaryStatus(items: MenuItem[]): Promise<void> {
-  const dietaryRecalculations = items.map(async (item: MenuItem) => {
+export async function recalculateDietaryStatus(items: EnrichedMenuItem[]): Promise<void> {
+  const dietaryRecalculations = items.map(async (item: EnrichedMenuItem) => {
     try {
       if (item.recipe_id) {
         await aggregateRecipeDietaryStatus(item.recipe_id, false, true);

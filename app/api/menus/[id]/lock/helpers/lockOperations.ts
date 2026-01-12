@@ -7,6 +7,8 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
+import { Menu } from '../../../types';
+
 /**
  * Checks if menu is locked
  *
@@ -45,12 +47,12 @@ export async function checkLockStatus(
  *
  * @param {string} menuId - Menu ID
  * @param {string} userEmail - User email
- * @returns {Promise<{ menu: any | null; error: NextResponse | null }>} Updated menu and error if any
+ * @returns {Promise<{ menu: Menu | null; error: NextResponse | null }>} Updated menu and error if any
  */
 export async function lockMenu(
   menuId: string,
   userEmail: string,
-): Promise<{ menu: any | null; error: NextResponse | null }> {
+): Promise<{ menu: Menu | null; error: NextResponse | null }> {
   if (!supabaseAdmin) {
     throw ApiErrorHandler.createError('Data connection not available', 'DATABASE_ERROR', 500);
   }
@@ -130,11 +132,11 @@ export async function lockMenu(
  * Unlocks a menu
  *
  * @param {string} menuId - Menu ID
- * @returns {Promise<{ menu: any | null; error: NextResponse | null }>} Updated menu and error if any
+ * @returns {Promise<{ menu: Menu | null; error: NextResponse | null }>} Updated menu and error if any
  */
 export async function unlockMenu(
   menuId: string,
-): Promise<{ menu: any | null; error: NextResponse | null }> {
+): Promise<{ menu: Menu | null; error: NextResponse | null }> {
   if (!supabaseAdmin) {
     throw ApiErrorHandler.createError('Data connection not available', 'DATABASE_ERROR', 500);
   }

@@ -30,6 +30,7 @@ const optimisticUpdatesCheck = require('./cleanup/checks/optimistic-updates');
 const reactPatternsCheck = require('./cleanup/checks/react-patterns');
 const databasePatternsCheck = require('./cleanup/checks/database-patterns');
 const errorHandlingCheck = require('./cleanup/checks/error-handling');
+const learnedPatternsCheck = require('./cleanup/checks/learned-patterns');
 
 // Import all fix modules
 const breakpointsFix = require('./cleanup/fixes/breakpoints');
@@ -68,6 +69,7 @@ const CHECK_MODULES = [
   reactPatternsCheck,
   databasePatternsCheck,
   errorHandlingCheck,
+  learnedPatternsCheck,
 ];
 
 // All fix modules (mapped by check name)

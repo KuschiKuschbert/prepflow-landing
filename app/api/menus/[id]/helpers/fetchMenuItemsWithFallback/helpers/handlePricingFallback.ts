@@ -2,28 +2,30 @@
  * Helper for handling pricing column fallback
  */
 
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { logDetailedError } from '../../fetchMenuWithItems.helpers';
+import { logger } from '@/lib/logger';
+import { PostgrestError } from '@supabase/supabase-js';
+import { MenuItem } from '../../../../types';
 import { detectMissingColumns } from '../../errorDetection/detectMissingColumns';
-import { buildQueryWithoutPricing, buildMinimalQuery } from '../../queryBuilders/menuItemQueries';
+import { logDetailedError } from '../../fetchMenuWithItems.helpers';
+import { buildMinimalQuery, buildQueryWithoutPricing } from '../../queryBuilders/menuItemQueries';
 import { handleUltimateFallback } from './handleUltimateFallback';
 
 /**
  * Handles fallback when pricing columns are missing
  *
- * @param {any} allColumnsError - Error from full query
+ * @param {PostgrestError} allColumnsError - Error from full query
  * @param {string} menuId - Menu ID
  * @returns {Promise<any>} Menu items or throws error
  */
 export async function handlePricingFallback(
-  allColumnsError: any,
+  allColumnsError: PostgrestError,
   menuId: string,
 ): Promise<{
-  items: any[];
-  pricingError: any;
-  dietaryError: any | null;
-  descriptionError: any | null;
+  items: Partial<MenuItem>[];
+  pricingError: PostgrestError | null;
+  dietaryError: PostgrestError | null;
+  descriptionError: PostgrestError | null;
 }> {
   const pricingError = allColumnsError;
   logger.warn('[Menus API] Pricing columns not found, trying without them:', {

@@ -2,15 +2,15 @@
  * API endpoint for exporting menu display in various formats
  */
 
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { checkFeatureAccess } from '@/lib/api-feature-gate';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
-import { checkFeatureAccess } from '@/lib/api-feature-gate';
+import { NextRequest, NextResponse } from 'next/server';
+import { EnrichedMenuItem } from '../../../types';
 import { fetchMenuWithItems } from '../../helpers/fetchMenuWithItems';
-import { generateHTML } from './helpers/generateHTML';
 import { generateCSV } from './helpers/generateCSV';
-import type { MenuItem } from '@/app/webapp/menu-builder/types';
+import { generateHTML } from './helpers/generateHTML';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -62,7 +62,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     }
 
     // Transform menu items to display data
-    const menuData = (menu.items || []).map((item: MenuItem) => {
+    const menuData = (menu.items || []).map((item: EnrichedMenuItem) => {
       const isDish = !!item.dish_id;
       const itemName = isDish
         ? item.dishes?.dish_name || 'Unknown Dish'

@@ -4,6 +4,7 @@ import { logger } from '@/lib/logger';
 import { Camera, Globe } from 'lucide-react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { useRef, useState } from 'react';
+import { toast } from 'sonner';
 
 interface PassportIdPageProps {
   customer: {
@@ -34,7 +35,7 @@ export default function PassportIdPage({ customer }: PassportIdPageProps) {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-        alert("File size too large (max 5MB)");
+        toast.error("File size too large (max 5MB)");
         return;
     }
 
@@ -52,13 +53,14 @@ export default function PassportIdPage({ customer }: PassportIdPageProps) {
 
         if (result.success) {
             setAvatarUrl(result.data.url);
+            toast.success("Passport photo updated successfully!");
         } else {
             console.error(result);
-            alert("Upload failed. Please try again.");
+            toast.error("Upload failed. Please try again.");
         }
     } catch (error) {
         logger.error("Upload error", error);
-        alert("An error occurred during upload.");
+        toast.error("An error occurred during upload.");
     } finally {
         setIsUploading(false);
     }

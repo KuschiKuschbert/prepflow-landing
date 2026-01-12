@@ -1,13 +1,15 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { PostgrestError } from '@supabase/supabase-js';
+import { Menu } from '../../types';
 
 /**
  * Update menu.
  *
  * @param {string} menuId - Menu ID
- * @param {Object} updateData - Update data
- * @returns {Promise<Object>} Updated menu
+ * @param {Partial<Menu>} updateData - Update data
+ * @returns {Promise<Menu>} Updated menu
  * @throws {Error} If update fails
  */
 export async function updateMenu(
@@ -16,7 +18,7 @@ export async function updateMenu(
     menu_name?: string;
     description?: string | null;
   },
-) {
+): Promise<Menu> {
   if (!supabaseAdmin) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
@@ -30,13 +32,14 @@ export async function updateMenu(
     .single();
 
   if (updateError) {
+    const pgError = updateError as PostgrestError;
     logger.error('[Menus API] Database error updating menu:', {
-      error: updateError.message,
-      code: (updateError as any).code,
+      error: pgError.message,
+      code: pgError.code,
       context: { endpoint: '/api/menus/[id]', operation: 'PUT', menuId },
     });
-    throw ApiErrorHandler.fromSupabaseError(updateError, 500);
+    throw ApiErrorHandler.fromSupabaseError(pgError, 500);
   }
 
-  return updatedMenu;
+  return updatedMenu as Menu;
 }

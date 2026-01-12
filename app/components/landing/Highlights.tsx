@@ -1,12 +1,12 @@
 'use client';
 
-import React from 'react';
-import Image from 'next/image';
-import { Leaf, DollarSign, Thermometer, BookOpen, BarChart3, LucideIcon } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
 import { GlowCard } from '@/components/ui/GlowCard';
-import { motion } from 'framer-motion';
+import { Icon } from '@/components/ui/Icon';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { motion } from 'framer-motion';
+import { BarChart3, BookOpen, DollarSign, Leaf, LucideIcon, Thermometer } from 'lucide-react';
+import Image from 'next/image';
+import React from 'react';
 
 interface Highlight {
   name: string;
@@ -98,8 +98,7 @@ const HighlightCard = React.memo(function HighlightCard({
 
         {/* Accent Color Indicator */}
         <motion.div
-          className="absolute bottom-0 left-0 h-1 w-full"
-          style={{ backgroundColor: highlight.color }}
+          className={`absolute bottom-0 left-0 h-1 w-full ${highlight.name.includes('Ingredients') || highlight.name.includes('Recipe') ? 'bg-[#29E7CD]' : highlight.name.includes('COGS') || highlight.name.includes('Menu') ? 'bg-[#D925C7]' : 'bg-[#3B82F6]'}`}
           whileHover={{ height: '8px' }}
           transition={{ duration: 0.3 }}
         />

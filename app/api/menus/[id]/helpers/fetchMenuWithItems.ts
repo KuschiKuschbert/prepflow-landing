@@ -1,15 +1,17 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { logDetailedError } from './fetchMenuWithItems.helpers';
-import { fetchMenuItemsWithFallback } from './fetchMenuItemsWithFallback';
+import { PostgrestError } from '@supabase/supabase-js';
+import { Menu } from '../../types';
 import { enrichMenuItems } from './enrichment/enrichMenuItems';
+import { fetchMenuItemsWithFallback } from './fetchMenuItemsWithFallback';
+import { logDetailedError } from './fetchMenuWithItems.helpers';
 
 /**
  * Fetch menu with items.
  *
  * @param {string} menuId - Menu ID
- * @returns {Promise<Object>} Menu with items
+ * @returns {Promise<Menu & { items: any[] }>} Menu with items
  * @throws {Error} If menu not found
  */
 export async function fetchMenuWithItems(menuId: string) {
@@ -26,7 +28,8 @@ export async function fetchMenuWithItems(menuId: string) {
     .single();
 
   if (menuError || !menu) {
-    logDetailedError(menuError, 'Menu not found', menuId);
+    const pgError = menuError as PostgrestError | null;
+    logDetailedError(pgError || { message: 'Menu not found', code: '404', details: '', hint: '' }, 'Menu not found', menuId);
     throw ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404, {
       message: "The requested menu couldn't be found",
     });
@@ -44,7 +47,7 @@ export async function fetchMenuWithItems(menuId: string) {
   );
 
   return {
-    ...menu,
+    ...(menu as Menu),
     items: itemsWithRecommendedPrices,
   };
 }
