@@ -1,12 +1,13 @@
 import { logger } from '@/lib/logger';
+import { PostgrestError } from '@supabase/supabase-js';
 
 /**
  * Extract column name from Supabase error message.
  *
- * @param {any} error - Supabase error object
+ * @param {PostgrestError | any} error - Supabase error object
  * @returns {string | null} Column name if found, null otherwise
  */
-export function extractColumnName(error: any): string | null {
+export function extractColumnName(error: PostgrestError | any): string | null {
   if (!error) return null;
   const errorMessage = error.message || '';
   const errorDetails = error.details || '';
@@ -24,11 +25,11 @@ export function extractColumnName(error: any): string | null {
 /**
  * Log detailed error information for debugging.
  *
- * @param {any} error - Supabase error object
+ * @param {PostgrestError | any} error - Supabase error object
  * @param {string} context - Context string for logging
  * @param {string} menuId - Menu ID
  */
-export function logDetailedError(error: any, context: string, menuId: string) {
+export function logDetailedError(error: PostgrestError | any, context: string, menuId: string) {
   const errorCode = error?.code;
   const errorMessage = error?.message || '';
   const errorDetails = error?.details || '';

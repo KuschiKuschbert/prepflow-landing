@@ -1,14 +1,15 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { RawMenuItem } from '../../../../types';
 
 /**
  * Sync actual selling price to dish or recipe table.
  *
- * @param {any} menuItem - Menu item with dish_id or recipe_id
+ * @param {RawMenuItem} menuItem - Menu item with dish_id or recipe_id
  * @param {number | null} actualSellingPrice - Price to sync (null to clear)
  * @returns {Promise<void>} Resolves when sync completes (errors are logged but don't throw)
  */
-export async function syncPrice(menuItem: any, actualSellingPrice: number | null) {
+export async function syncPrice(menuItem: RawMenuItem, actualSellingPrice: number | null) {
   const priceToSync = actualSellingPrice === null ? null : actualSellingPrice;
 
   if (menuItem.dish_id) {

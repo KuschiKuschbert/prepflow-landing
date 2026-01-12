@@ -1,25 +1,23 @@
-/**
- * Helper for fetching menu items with progressive fallback
- */
-
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { logDetailedError } from './fetchMenuWithItems.helpers';
+import { logger } from '@/lib/logger';
+import { PostgrestError } from '@supabase/supabase-js';
+import { MenuItem } from '../../types';
 import { detectMissingColumns } from './errorDetection/detectMissingColumns';
-import {
-  buildFullQuery,
-  buildQueryWithoutDietary,
-  buildQueryWithoutDescription,
-  buildMinimalQuery,
-} from './queryBuilders/menuItemQueries';
 import { handlePricingFallback } from './fetchMenuItemsWithFallback/helpers/handlePricingFallback';
 import { handleUltimateFallback } from './fetchMenuItemsWithFallback/helpers/handleUltimateFallback';
+import { logDetailedError } from './fetchMenuWithItems.helpers';
+import {
+    buildFullQuery,
+    buildMinimalQuery,
+    buildQueryWithoutDescription,
+    buildQueryWithoutDietary,
+} from './queryBuilders/menuItemQueries';
 
 export interface FetchResult {
-  items: any[];
-  pricingError: any | null;
-  dietaryError: any | null;
-  descriptionError: any | null;
+  items: Partial<MenuItem>[];
+  pricingError: PostgrestError | null;
+  dietaryError: PostgrestError | null;
+  descriptionError: PostgrestError | null;
 }
 
 /**
@@ -33,7 +31,12 @@ export async function fetchMenuItemsWithFallback(menuId: string): Promise<FetchR
   const { data: itemsWithAll, error: allColumnsError } = await buildFullQuery(menuId);
 
   if (!allColumnsError && itemsWithAll) {
-    return { items: itemsWithAll, pricingError: null, dietaryError: null, descriptionError: null };
+    return {
+      items: itemsWithAll as Partial<MenuItem>[],
+      pricingError: null,
+      dietaryError: null,
+      descriptionError: null,
+    };
   }
 
   // Analyze error to determine which columns are missing
@@ -42,12 +45,12 @@ export async function fetchMenuItemsWithFallback(menuId: string): Promise<FetchR
 
   // Try without pricing columns
   if (errorInfo.isMissingPricing) {
-    return handlePricingFallback(allColumnsError, menuId);
+    return handlePricingFallback(allColumnsError as PostgrestError, menuId);
   }
 
   // Try without dietary columns
   if (errorInfo.isMissingDietary) {
-    const dietaryError = allColumnsError;
+    const dietaryError = allColumnsError as PostgrestError;
     logger.warn('[Menus API] Dietary/allergen columns not found, trying without them:', {
       error: allColumnsError?.message,
       context: { endpoint: '/api/menus/[id]', operation: 'GET', menuId },
@@ -59,7 +62,7 @@ export async function fetchMenuItemsWithFallback(menuId: string): Promise<FetchR
     if (noDietaryError) {
       const dietaryFallbackInfo = detectMissingColumns(noDietaryError);
       if (dietaryFallbackInfo.isMissingDescription) {
-        const descriptionError = noDietaryError;
+        const descriptionError = noDietaryError as PostgrestError;
         logger.warn('[Menus API] Description column also not found, trying without it:', {
           error: noDietaryError.message,
           context: { endpoint: '/api/menus/[id]', operation: 'GET', menuId },
@@ -78,7 +81,7 @@ export async function fetchMenuItemsWithFallback(menuId: string): Promise<FetchR
         }
 
         return {
-          items: itemsWithoutDescription,
+          items: (itemsWithoutDescription || []) as Partial<MenuItem>[],
           pricingError: null,
           dietaryError,
           descriptionError,
@@ -93,7 +96,7 @@ export async function fetchMenuItemsWithFallback(menuId: string): Promise<FetchR
       }
     } else {
       return {
-        items: itemsWithoutDietary,
+        items: (itemsWithoutDietary || []) as Partial<MenuItem>[],
         pricingError: null,
         dietaryError,
         descriptionError: null,
@@ -111,10 +114,15 @@ export async function fetchMenuItemsWithFallback(menuId: string): Promise<FetchR
     const { data: itemsMinimal, error: minimalError } = await buildMinimalQuery(menuId);
 
     if (minimalError) {
-      return handleUltimateFallback(minimalError, menuId);
+      return handleUltimateFallback(minimalError as PostgrestError, menuId);
     }
 
-    return { items: itemsMinimal, pricingError: null, dietaryError: null, descriptionError: null };
+    return {
+      items: (itemsMinimal || []) as Partial<MenuItem>[],
+      pricingError: null,
+      dietaryError: null,
+      descriptionError: null,
+    };
   }
 
   // Unknown error - throw it

@@ -1,35 +1,35 @@
 ---
-description: Standard feature development workflow (Branch -> Code -> Verify -> Merge)
+description: Standard feature development workflow (Research -> Branch -> Code -> Document -> Verify)
 ---
 
-# Feature Development Workflow
+# Smart Feature Development Workflow
 
-Automatically follow this process for all coding tasks.
+Follow this process for all coding tasks to ensure safety and documentation.
 
-1.  **Check Main**: Ensure strict synchronization with `main` before starting.
+1.  **🧠 Research & Context**
+    - Read `docs/LIVING_RULES.md` to ensure compliance.
+    - Read `docs/DEV_LOG.md` to get context on recent changes.
 
+2.  **🌿 Branch Strategy**
+    - **NEVER** commit to `main`.
+    - Create a descriptive branch:
     ```bash
     git checkout main
     git pull origin main
+    git checkout -b feature/[name]
+    # OR fix/[name]
     ```
 
-2.  **Feature Branch**: ALWAYS create a new branch. Never push directly to `main`.
+3.  **💻 Implementation**
+    - Write code.
+    - **Rule**: If you encounter a new error, fix it AND add it to `docs/TROUBLESHOOTING_LOG.md`.
 
+4.  **📝 Documentation**
+    - Update `docs/DEV_LOG.md` with your progress.
+    - Ensure `LIVING_RULES.md` is updated if you learned a new pattern.
+
+5.  **✅ Verification & Merge**
+    - Run the safe merge script to automatically lint, build, test, and merge:
     ```bash
-    git checkout -b feature/[concise-name]
-    ```
-
-3.  **Development**: Implement changes.
-
-4.  **Verification**: MUST pass before merging.
-    - **Web**: `npm run lint && npm run build`
-    - **Android**: `export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home" && ./gradlew :app:assembleDebug`
-
-5.  **Merge**:
-    ```bash
-    git add .
-    git commit -m "[Description]"
-    git checkout main
-    git merge feature/[concise-name]
-    git branch -d feature/[concise-name]
+    ./scripts/safe-merge.sh
     ```

@@ -2,8 +2,8 @@
  * Helper for enriching menu items with prices, allergens, and dietary info
  */
 
-import { logger } from '@/lib/logger';
 import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
+import { EnrichedMenuItem, RawMenuItem } from '../../../types';
 import { calculateRecommendedPrice } from './calculateRecommendedPrices';
 import { enrichDishItem } from './enrichDishItem';
 import { enrichRecipeItem } from './enrichRecipeItem';
@@ -12,20 +12,20 @@ import { validateVeganStatus } from './validateDietaryStatus';
 /**
  * Enriches menu items with recommended prices, allergens, and dietary information
  *
- * @param {any[]} menuItems - Raw menu items from database
+ * @param {RawMenuItem[]} menuItems - Raw menu items from database
  * @param {string} menuId - Menu ID
  * @param {boolean} hasPricingColumns - Whether pricing columns exist
  * @param {boolean} hasDietaryColumns - Whether dietary columns exist
- * @returns {Promise<any[]>} Enriched menu items
+ * @returns {Promise<EnrichedMenuItem[]>} Enriched menu items
  */
 export async function enrichMenuItems(
-  menuItems: any[],
+  menuItems: RawMenuItem[],
   menuId: string,
   hasPricingColumns: boolean,
   hasDietaryColumns: boolean,
-): Promise<any[]> {
+): Promise<EnrichedMenuItem[]> {
   return Promise.all(
-    (menuItems || []).map(async (item: any) => {
+    (menuItems || []).map(async (item: RawMenuItem) => {
       // Calculate recommended price
       const recommendedPrice = await calculateRecommendedPrice(item, menuId, hasPricingColumns);
 
@@ -67,9 +67,12 @@ export async function enrichMenuItems(
       const itemId = item.dish_id ? item.dishes?.id : item.recipes?.id;
       const itemType = item.dish_id ? ('dish' as const) : ('recipe' as const);
 
-      let finalIsVegan = validateVeganStatus(isVegan, finalAllergens, itemType, itemId, itemName);
+      let finalIsVegan: boolean | null = isVegan;
+      if (itemId && itemName) {
+        finalIsVegan = validateVeganStatus(isVegan, finalAllergens, itemType, itemId, itemName);
+      }
 
-      const enrichedItem: any = {
+      const enrichedItem: EnrichedMenuItem = {
         ...item,
         allergens: finalAllergens,
         is_vegetarian: isVegetarian,

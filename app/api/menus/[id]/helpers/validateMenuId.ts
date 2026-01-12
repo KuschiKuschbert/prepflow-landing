@@ -1,3 +1,4 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { NextResponse } from 'next/server';
 
 /**
@@ -9,11 +10,7 @@ import { NextResponse } from 'next/server';
 export function validateMenuId(menuId: string | undefined): NextResponse | null {
   if (!menuId) {
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Missing menu id',
-        message: 'Menu id is required',
-      },
+      ApiErrorHandler.createError('Menu id is required', 'VALIDATION_ERROR', 400),
       { status: 400 },
     );
   }

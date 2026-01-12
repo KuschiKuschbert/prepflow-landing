@@ -1,24 +1,25 @@
+import {
+    DBDishIngredient,
+    DBDishRecipe,
+    DBRecipeIngredient,
+    RecipeGroupedItem,
+    SectionData
+} from '../types';
 import { processRecipe } from './processRecipe';
-
-interface SectionData {
-  sectionId: string | null;
-  sectionName: string;
-  aggregatedIngredients: any[];
-  recipeGrouped: any[];
-  prepInstructions: any[];
-}
 
 export function processDish(
   dishId: string,
   dishName: string,
+  category: string,
   sectionsData: Map<string | null, SectionData>,
-  unassignedItems: any[],
+  unassignedItems: RecipeGroupedItem[],
   sectionsMap: Map<string, { id: string; name: string }>,
   dishSection: { sectionId: string | null; sectionName: string },
-  dishRecipes: Array<{ recipe_id: string; quantity: number; recipe: any }>,
-  dishIngredients: any[],
-  recipeIngredientsMap: Map<string, any[]>,
+  dishRecipes: DBDishRecipe[],
+  dishIngredients: DBDishIngredient[],
+  recipeIngredientsMap: Map<string, DBRecipeIngredient[]>,
   recipeInstructionsMap: Map<string, string | null>,
+  recipeMultiplier: number = 1,
 ) {
   const sectionId = dishSection.sectionId;
   const sectionName = dishSection.sectionName;
@@ -26,7 +27,7 @@ export function processDish(
   // Process dish recipes using pre-fetched data
   if (dishRecipes && dishRecipes.length > 0) {
     for (const dr of dishRecipes) {
-      const recipe = dr.recipe;
+      const recipe = dr.recipes;
       if (recipe && recipe.id) {
         const recipeIngredients = recipeIngredientsMap.get(recipe.id) || [];
         const instructions = recipeInstructionsMap.get(recipe.id) || null;
@@ -39,7 +40,7 @@ export function processDish(
           sectionsData,
           unassignedItems,
           sectionsMap,
-          dr.quantity || 1,
+          (dr.quantity || 1) * recipeMultiplier,
           instructions,
           recipeIngredients,
           dishSection, // Pass dish section to recipe
@@ -64,33 +65,35 @@ export function processDish(
     const section = sectionsData.get(sectionKey)!;
 
     for (const di of dishIngredients) {
-      const ingredient = (di as any).ingredients;
+      const ingredient = di.ingredients;
       if (ingredient) {
-        const ingredientId = ingredient.id;
-        const ingredientName = ingredient.ingredient_name || ingredient.name;
+        const ingredientId = di.ingredient_id;
+        const ingredientName = ingredient.ingredient_name || ingredient.name || 'Unknown';
 
         const existing = section.aggregatedIngredients.find(
-          (agg: any) => agg.ingredientId === ingredientId && agg.unit === di.unit,
+          (agg) => agg.ingredientId === ingredientId && agg.unit === di.unit,
         );
 
         if (existing) {
-          existing.totalQuantity += Number(di.quantity);
+          existing.totalQuantity += Number(di.quantity) * recipeMultiplier;
           existing.sources.push({
             type: 'dish',
             id: dishId,
             name: dishName,
+            quantity: Number(di.quantity) * recipeMultiplier,
           });
         } else {
           section.aggregatedIngredients.push({
             ingredientId,
             name: ingredientName,
-            totalQuantity: Number(di.quantity),
+            totalQuantity: Number(di.quantity) * recipeMultiplier,
             unit: di.unit,
             sources: [
               {
                 type: 'dish',
                 id: dishId,
                 name: dishName,
+                quantity: Number(di.quantity) * recipeMultiplier,
               },
             ],
           });

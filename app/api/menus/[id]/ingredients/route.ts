@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { fetchMenuWithItems } from '../helpers/fetchMenuWithItems';
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
+import { fetchMenuWithItems } from '../helpers/fetchMenuWithItems';
 import { collectIngredientIds } from './helpers/collectIngredientIds';
 import { fetchIngredientsWithParLevels } from './helpers/fetchIngredientsWithParLevels';
 import { groupIngredients } from './helpers/groupIngredients';
@@ -84,14 +84,14 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       groupedIngredients,
       sortBy,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Menu Ingredients API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
     });
 
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
+    if (typeof err === 'object' && err !== null && 'status' in err) {
+      return NextResponse.json(err, { status: (err as any).status });
     }
 
     return NextResponse.json(

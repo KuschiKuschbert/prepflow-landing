@@ -2,6 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { z } from 'zod';
+import { MenuItem } from '../../../../types';
 import { fetchMenuItem } from './fetchMenuItem';
 import { updateMenuItemSchema } from './schemas';
 import { syncPrice } from './syncPrice';
@@ -10,12 +11,12 @@ export async function updateMenuItem(
   menuId: string,
   menuItemId: string,
   data: z.infer<typeof updateMenuItemSchema>,
-): Promise<{ success: boolean; item: any; message: string } | { error: any; status: number }> {
+): Promise<{ success: boolean; item: MenuItem; message: string } | { error: any; status: number }> {
   const { category, position, actual_selling_price, region } = data;
 
   // Fetch menu item first to get dish_id or recipe_id
   const { menuItem, error: fetchError } = await fetchMenuItem(menuId, menuItemId);
-  if (fetchError) {
+  if (fetchError || !menuItem) {
     return { error: fetchError, status: 500 };
   }
 
@@ -84,7 +85,8 @@ export async function updateMenuItem(
       recipe_id: menuItem?.recipe_id,
       actual_selling_price,
     });
-    await syncPrice(menuItem!, actual_selling_price);
+    // We already checked menuItem exists above
+    await syncPrice(menuItem, actual_selling_price);
     logger.dev('[Menu Item API] Price sync completed', {
       menuItemId,
     });
@@ -92,7 +94,7 @@ export async function updateMenuItem(
 
   return {
     success: true,
-    item: updatedItem,
+    item: updatedItem as MenuItem,
     message: 'Menu item updated successfully',
   };
 }

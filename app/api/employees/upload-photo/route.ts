@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
@@ -107,10 +107,11 @@ export async function POST(request: NextRequest) {
         path: filePath,
       },
     });
-  } catch (err: any) {
+  } catch (err) {
     logger.error('[Employees API] Photo upload error:', err);
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
+    if (err instanceof Error && 'status' in err) {
+      const statusError = err as { status: number; message: string };
+      return NextResponse.json(err, { status: statusError.status });
     }
     return NextResponse.json(
       ApiErrorHandler.createError('Failed to upload photo', 'UPLOAD_ERROR', 500),
@@ -160,10 +161,11 @@ export async function DELETE(request: NextRequest) {
       success: true,
       message: 'Photo deleted successfully',
     });
-  } catch (err: any) {
+  } catch (err) {
     logger.error('[Employees API] Photo delete error:', err);
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
+    if (err instanceof Error && 'status' in err) {
+       const statusError = err as { status: number; message: string };
+       return NextResponse.json(err, { status: statusError.status });
     }
     return NextResponse.json(
       ApiErrorHandler.createError('Failed to delete photo', 'DELETE_ERROR', 500),

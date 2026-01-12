@@ -4,34 +4,36 @@
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { PostgrestError } from '@supabase/supabase-js';
+import { MenuItem } from '../../../../types';
 import { detectMissingColumns } from '../../errorDetection/detectMissingColumns';
 import { logDetailedError } from '../../fetchMenuWithItems.helpers';
 import {
-  buildEssentialQuery,
-  buildQueryWithoutRelations,
+    buildEssentialQuery,
+    buildQueryWithoutRelations,
 } from '../../queryBuilders/menuItemQueries';
 
 /**
  * Handles ultimate fallback scenarios
  *
- * @param {any} error - Error from minimal query
+ * @param {PostgrestError} error - Error from minimal query
  * @param {string} menuId - Menu ID
- * @param {any} pricingError - Pricing error (if any)
- * @param {any} dietaryError - Dietary error (if any)
- * @param {any} descriptionError - Description error (if any)
+ * @param {PostgrestError | null} pricingError - Pricing error (if any)
+ * @param {PostgrestError | null} dietaryError - Dietary error (if any)
+ * @param {PostgrestError | null} descriptionError - Description error (if any)
  * @returns {Promise<any>} Menu items from ultimate fallback
  */
 export async function handleUltimateFallback(
-  error: any,
+  error: PostgrestError,
   menuId: string,
-  pricingError: any | null = null,
-  dietaryError: any | null = null,
-  descriptionError: any | null = null,
+  pricingError: PostgrestError | null = null,
+  dietaryError: PostgrestError | null = null,
+  descriptionError: PostgrestError | null = null,
 ): Promise<{
-  items: any[];
-  pricingError: any | null;
-  dietaryError: any | null;
-  descriptionError: any | null;
+  items: Partial<MenuItem>[];
+  pricingError: PostgrestError | null;
+  dietaryError: PostgrestError | null;
+  descriptionError: PostgrestError | null;
 }> {
   logDetailedError(
     error,

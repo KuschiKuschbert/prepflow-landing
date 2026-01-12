@@ -1,17 +1,16 @@
 'use client';
 
-import { useTranslation } from '../../../../lib/useTranslation';
 import { GlowCard } from '@/components/ui/GlowCard';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import {
-  LANDING_COLORS,
-  LANDING_TYPOGRAPHY,
-  LANDING_LAYOUT,
-  LANDING_GRIDS,
-  getSectionClasses,
-  getStaggerDelay,
-  getGlowColor,
+    LANDING_COLORS,
+    LANDING_LAYOUT,
+    LANDING_TYPOGRAPHY,
+    getGlowColor,
+    getSectionClasses,
+    getStaggerDelay
 } from '@/lib/landing-styles';
+import { useTranslation } from '../../../../lib/useTranslation';
 
 export function BenefitsSection() {
   const { t } = useTranslation();
@@ -62,8 +61,7 @@ export function BenefitsSection() {
             >
               <GlowCard glowColor={getGlowColor(benefit.color)} className="p-8">
                 <h4
-                  className={`${LANDING_TYPOGRAPHY.xl} mb-4 font-light`}
-                  style={{ color: benefit.color }}
+                  className={`${LANDING_TYPOGRAPHY.xl} mb-4 font-light ${benefit.color === LANDING_COLORS.primary ? 'text-[#29E7CD]' : benefit.color === LANDING_COLORS.secondary ? 'text-[#D925C7]' : 'text-[#3B82F6]'}`}
                 >
                   {benefit.title}
                 </h4>

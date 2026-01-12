@@ -1,13 +1,7 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-
-interface Ingredient {
-  id: string;
-  ingredient_name?: string;
-  name?: string;
-  unit: string;
-  category?: string;
-}
+import { PostgrestError } from '@supabase/supabase-js';
+import { Ingredient } from '../types';
 
 /**
  * Fetch ingredients in batches of 100
@@ -22,7 +16,7 @@ export async function fetchIngredientsBatch(
     return new Map();
   }
 
-  const ingredientsMap = new Map();
+  const ingredientsMap = new Map<string, Ingredient>();
   // Fetch in batches of 100
   for (let i = 0; i < ingredientIds.length; i += 100) {
     const batch = ingredientIds.slice(i, i + 100);
@@ -32,9 +26,10 @@ export async function fetchIngredientsBatch(
       .in('id', batch);
 
     if (ingredientsError) {
+      const pgError = ingredientsError as PostgrestError;
       logger.warn('[Prep Lists API] Error fetching ingredients batch (non-fatal):', {
-        error: ingredientsError.message,
-        code: (ingredientsError as any).code,
+        error: pgError.message,
+        code: pgError.code,
         batchIndex: i,
         batchSize: batch.length,
       });
@@ -42,7 +37,7 @@ export async function fetchIngredientsBatch(
     }
 
     if (ingredientsData) {
-      ingredientsData.forEach((ing: any) => {
+      ingredientsData.forEach((ing) => {
         ingredientsMap.set(ing.id, {
           id: ing.id,
           name: ing.ingredient_name || ing.name,

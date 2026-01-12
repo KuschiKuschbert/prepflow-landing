@@ -1,42 +1,20 @@
-interface IngredientSource {
-  type: 'dish' | 'recipe';
-  id: string;
-  name: string;
-  quantity?: number;
-}
+import {
+    DBDishRecipe,
+    DBRecipeIngredient,
+    SectionData
+} from '../types';
 
-interface AggregatedIngredient {
-  ingredientId: string;
-  name: string;
-  totalQuantity: number;
-  unit: string;
-  sources: IngredientSource[];
-}
-
-interface RecipeGroupedItem {
-  recipeId: string;
-  recipeName: string;
-  dishId?: string;
-  dishName?: string;
-  ingredients: Array<{
-    ingredientId: string;
-    name: string;
-    quantity: number;
-    unit: string;
-  }>;
-}
-
-interface SectionData {
-  sectionId: string | null;
-  sectionName: string;
-  aggregatedIngredients: AggregatedIngredient[];
-  recipeGrouped: RecipeGroupedItem[];
-}
+// Depending on where menuItems comes from (likely EnrichedMenuItem or RawMenuItem),
+// we might want to import that. For now, we'll keep it as any[] to avoid circular deps
+// or if it's a complex generic type, but verify usage.
+// Actually, looking at route.ts, menuItems comes from `fetchMenuItemsWithFallback`.
+// Let's use `any` for menuItems for now to focus on the internal logic types
+// or define a minimal interface if needed.
 
 export function aggregateIngredientsBySection(
   menuItems: any[],
-  dishRecipes: any[],
-  recipeIngredients: any[],
+  dishRecipes: DBDishRecipe[],
+  recipeIngredients: DBRecipeIngredient[],
 ): SectionData[] {
   const sectionMap = new Map<string, SectionData>();
 
@@ -52,6 +30,7 @@ export function aggregateIngredientsBySection(
         sectionName,
         aggregatedIngredients: [],
         recipeGrouped: [],
+        prepInstructions: [],
       });
     }
 
@@ -62,7 +41,7 @@ export function aggregateIngredientsBySection(
       const dishRecipesForDish = dishRecipes.filter(dr => dr.dish_id === item.dish_id);
 
       for (const dishRecipe of dishRecipesForDish) {
-        const recipe = menuItems.find(mi => mi.recipe_id === dishRecipe.recipe_id)?.recipes;
+        const recipe = menuItems.find((mi: any) => mi.recipe_id === dishRecipe.recipe_id)?.recipes;
         if (!recipe) continue;
 
         const recipeIngs = recipeIngredients.filter(ri => ri.recipe_id === dishRecipe.recipe_id);

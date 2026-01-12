@@ -1,10 +1,11 @@
-interface SectionData {
-  sectionId: string | null;
-  sectionName: string;
-  aggregatedIngredients: any[];
-  recipeGrouped: any[];
-  prepInstructions: any[];
-}
+import {
+    DBIngredient,
+    DBRecipeIngredient,
+    IngredientSimple,
+    PrepInstructionItem,
+    RecipeGroupedItem,
+    SectionData,
+} from '../types';
 
 export function processRecipe(
   recipeId: string,
@@ -12,11 +13,11 @@ export function processRecipe(
   dishId: string | null,
   dishName: string | null,
   sectionsData: Map<string | null, SectionData>,
-  unassignedItems: any[],
+  unassignedItems: RecipeGroupedItem[],
   sectionsMap: Map<string, { id: string; name: string }>,
   recipeMultiplier: number = 1,
   recipeInstructions?: string | null,
-  recipeIngredients?: any[],
+  recipeIngredients?: DBRecipeIngredient[],
   dishSection?: { sectionId: string | null; sectionName: string } | null,
 ) {
   // Use pre-fetched ingredients or return if none provided
@@ -36,17 +37,17 @@ export function processRecipe(
   const sectionKey = sectionId || null;
 
   // Prepare recipe grouped item
-  const recipeGroupedItem = {
+  const recipeGroupedItem: RecipeGroupedItem = {
     recipeId,
     recipeName,
     dishId: dishId || undefined,
     dishName: dishName || undefined,
     instructions: recipeInstructions || undefined,
-    ingredients: recipeIngredients.map((ri: any) => {
-      const ingredient = ri.ingredients || {};
+    ingredients: recipeIngredients.map((ri: DBRecipeIngredient): IngredientSimple => {
+      const ingredient = ri.ingredients || ({} as DBIngredient);
       return {
-        ingredientId: ingredient.id,
-        name: ingredient.ingredient_name || ingredient.name,
+        ingredientId: ingredient.id || ri.ingredient_id,
+        name: ingredient.ingredient_name || ingredient.name || 'Unknown',
         quantity: Number(ri.quantity) * recipeMultiplier,
         unit: ri.unit,
       };
@@ -69,7 +70,7 @@ export function processRecipe(
 
   // If recipe has instructions, add to prep instructions
   if (recipeInstructions && recipeInstructions.trim().length > 0) {
-    const prepInstructionItem = {
+    const prepInstructionItem: PrepInstructionItem = {
       recipeId,
       recipeName,
       instructions: recipeInstructions,
@@ -83,14 +84,16 @@ export function processRecipe(
 
   // Add to aggregated ingredients
   for (const ri of recipeIngredients) {
-    const ingredient = (ri as any).ingredients;
+    const ingredient = ri.ingredients || ({} as DBIngredient);
+    // Determine ingredient ID/Name. If join failed, ingredient might be null.
+    // ri.ingredient_id should exist on the join row itself.
     if (ingredient) {
-      const ingredientId = ingredient.id;
-      const ingredientName = ingredient.ingredient_name || ingredient.name;
+      const ingredientId = ri.ingredient_id;
+      const ingredientName = ingredient.ingredient_name || ingredient.name || 'Unknown';
       const quantity = Number(ri.quantity) * recipeMultiplier;
 
       const existing = section.aggregatedIngredients.find(
-        (agg: any) => agg.ingredientId === ingredientId && agg.unit === ri.unit,
+        (agg) => agg.ingredientId === ingredientId && agg.unit === ri.unit,
       );
 
       if (existing) {

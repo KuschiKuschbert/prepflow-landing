@@ -1,6 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { deleteEmployee } from '../helpers/deleteEmployee';
@@ -55,9 +56,10 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       .single();
 
     if (error) {
+      const pgError = error as PostgrestError;
       logger.error('[Employees API] Database error fetching employee:', {
-        error: error.message,
-        code: (error as any).code,
+        error: pgError.message,
+        code: pgError.code,
         context: {
           endpoint: '/api/employees/[id]',
           operation: 'GET',
@@ -129,14 +131,15 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       message: 'Employee updated successfully',
       data,
     });
-  } catch (err: any) {
-    if (err.status) {
+  } catch (err) {
+    if (err instanceof Error && 'status' in err) {
+      const statusError = err as { status: number; message: string };
       logger.error('[Employees API] Error with status:', {
-        error: err instanceof Error ? err.message : String(err),
-        status: err.status,
+        error: statusError.message,
+        status: statusError.status,
         context: { endpoint: '/api/employees/[id]', method: 'PUT' },
       });
-      return NextResponse.json(err, { status: err.status });
+      return NextResponse.json(err, { status: statusError.status });
     }
     return handleEmployeeError(err, 'PUT');
   }
@@ -155,14 +158,15 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
       success: true,
       message: 'Employee deactivated successfully',
     });
-  } catch (err: any) {
-    if (err.status) {
+  } catch (err) {
+    if (err instanceof Error && 'status' in err) {
+      const statusError = err as { status: number; message: string };
       logger.error('[Employees API] Error with status:', {
-        error: err instanceof Error ? err.message : String(err),
-        status: err.status,
+        error: statusError.message,
+        status: statusError.status,
         context: { endpoint: '/api/employees/[id]', method: 'DELETE' },
       });
-      return NextResponse.json(err, { status: err.status });
+      return NextResponse.json(err, { status: statusError.status });
     }
     return handleEmployeeError(err, 'DELETE');
   }

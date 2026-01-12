@@ -2,8 +2,8 @@
  * Helper for normalizing allergens from Supabase JSONB
  */
 
-import { logger } from '@/lib/logger';
 import { AUSTRALIAN_ALLERGENS, consolidateAllergens } from '@/lib/allergens/australian-allergens';
+import { logger } from '@/lib/logger';
 
 /**
  * Normalizes allergens from Supabase JSONB format
@@ -12,7 +12,7 @@ import { AUSTRALIAN_ALLERGENS, consolidateAllergens } from '@/lib/allergens/aust
  * @param {string} [itemName] - Item name for logging
  * @returns {string[]} Normalized allergen codes
  */
-export function normalizeAllergens(allergenData: any, itemName?: string): string[] {
+export function normalizeAllergens(allergenData: unknown, itemName?: string): string[] {
   if (!allergenData) return [];
   if (Array.isArray(allergenData)) {
     // Filter out invalid values and ensure strings

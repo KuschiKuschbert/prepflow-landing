@@ -34,7 +34,7 @@ export async function invalidateMenuPricingCache(
   dishId: string,
   dishName: string,
   changeType: ChangeType,
-  changeDetails: any,
+  changeDetails: Record<string, unknown>,
   userEmail: string | null,
 ): Promise<void> {
   try {
@@ -59,7 +59,7 @@ export async function trackChangeForLockedMenus(
   dishId: string,
   dishName: string,
   changeType: ChangeType,
-  changeDetails: any,
+  changeDetails: Record<string, unknown>,
   userEmail: string | null,
 ): Promise<void> {
   try {

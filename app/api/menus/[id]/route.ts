@@ -28,12 +28,13 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       success: true,
       menu,
     });
-  } catch (err: any) {
+  } catch (err) {
     logger.error('[Menus API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/menus/[id]', method: 'GET', menuId },
     });
-    if (err.status) {
+    if (typeof err === 'object' && err !== null && 'status' in err) {
+       // @ts-ignore - Validated by runtime check
       return formatErrorResponse(err);
     }
     return handleMenuError(err, 'GET');
@@ -80,12 +81,13 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       menu: updatedMenu,
       message: 'Menu updated successfully',
     });
-  } catch (err: any) {
+  } catch (err) {
     logger.error('[Menus API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/menus/[id]', method: 'PUT', menuId },
     });
-    if (err.status) {
+    if (typeof err === 'object' && err !== null && 'status' in err) {
+       // @ts-ignore - Validated by runtime check
       return formatErrorResponse(err);
     }
     return handleMenuError(err, 'PUT');
@@ -105,12 +107,13 @@ export async function DELETE(_req: NextRequest, context: { params: Promise<{ id:
       success: true,
       message: 'Menu deleted successfully',
     });
-  } catch (err: any) {
+  } catch (err) {
     logger.error('[Menus API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/menus/[id]', method: 'DELETE', menuId },
     });
-    if (err.status) {
+    if (typeof err === 'object' && err !== null && 'status' in err) {
+       // @ts-ignore - Validated by runtime check
       return formatErrorResponse(err);
     }
     return handleMenuError(err, 'DELETE');

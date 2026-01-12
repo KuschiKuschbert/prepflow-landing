@@ -8,13 +8,24 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { enrichDishWithAllergens } from './helpers/enrichDishWithAllergens';
 import { fetchDishWithRelations } from './helpers/fetchDishWithRelations';
 import { handleDishError } from './helpers/handleDishError';
 import { handlePutRequest } from './helpers/handlePutRequest';
-import { triggerDishSync } from '@/lib/square/sync/hooks';
-import { z } from 'zod';
+
+const recipeSchema = z.object({
+  recipe_id: z.string().min(1, 'Recipe ID is required'),
+  quantity: z.number().positive().optional().default(1),
+});
+
+const ingredientSchema = z.object({
+  ingredient_id: z.string().min(1, 'Ingredient ID is required'),
+  quantity: z.union([z.number(), z.string()]).transform((val) => Number(val)),
+  unit: z.string().min(1, 'Unit is required'),
+});
 
 const updateDishSchema = z.object({
   dish_name: z.string().min(1).optional(),
@@ -22,8 +33,8 @@ const updateDishSchema = z.object({
   selling_price: z
     .union([z.number().positive(), z.string().transform(val => parseFloat(val))])
     .optional(),
-  recipes: z.array(z.any()).optional(),
-  ingredients: z.array(z.any()).optional(),
+  recipes: z.array(recipeSchema).optional(),
+  ingredients: z.array(ingredientSchema).optional(),
   category: z.string().optional(),
 });
 
@@ -45,7 +56,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       success: true,
       dish: enrichedDish,
     });
-  } catch (err: any) {
+  } catch (err) {
     logger.error('[route.ts] Error in catch block:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
@@ -126,9 +137,10 @@ export async function DELETE(_req: NextRequest, context: { params: Promise<{ id:
     const { error } = await supabaseAdmin.from('dishes').delete().eq('id', dishId);
 
     if (error) {
+      const pgError = error as PostgrestError;
       logger.error('[Dishes API] Database error deleting dish:', {
-        error: error.message,
-        code: (error as any).code,
+        error: pgError.message,
+        code: pgError.code,
         context: { endpoint: '/api/dishes/[id]', operation: 'DELETE', dishId },
       });
 

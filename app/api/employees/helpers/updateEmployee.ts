@@ -1,6 +1,8 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { Employee, UpdateEmployeeInput } from '@/types/employee';
+import { PostgrestError } from '@supabase/supabase-js';
 
 const EMPLOYEE_SELECT = `
   *,
@@ -20,25 +22,13 @@ const EMPLOYEE_SELECT = `
  * Update an employee.
  *
  * @param {string} id - Employee ID
- * @param {Object} updates - Employee updates
- * @returns {Promise<Object>} Updated employee
+ * @param {UpdateEmployeeInput} updates - Employee updates
+ * @returns {Promise<Employee>} Updated employee
  * @throws {Error} If update fails
  */
 export async function updateEmployee(
   id: string,
-  updates: {
-    employee_id?: string | null;
-    full_name?: string;
-    role?: string | null;
-    employment_start_date?: string;
-    employment_end_date?: string | null;
-    status?: 'active' | 'inactive' | 'terminated';
-    phone?: string | null;
-    email?: string | null;
-    emergency_contact?: string | null;
-    photo_url?: string | null;
-    notes?: string | null;
-  },
+  updates: UpdateEmployeeInput,
 ) {
   if (!supabaseAdmin) {
     logger.error('[API] Database connection not available');
@@ -56,9 +46,10 @@ export async function updateEmployee(
     .single();
 
   if (error) {
+    const pgError = error as PostgrestError;
     logger.error('[Employees API] Database error updating employee:', {
-      error: error.message,
-      code: (error as any).code,
+      error: pgError.message,
+      code: pgError.code,
       context: {
         endpoint: '/api/employees',
         operation: 'PUT',
@@ -69,5 +60,5 @@ export async function updateEmployee(
     throw ApiErrorHandler.fromSupabaseError(error, 500);
   }
 
-  return data;
+  return data as Employee;
 }

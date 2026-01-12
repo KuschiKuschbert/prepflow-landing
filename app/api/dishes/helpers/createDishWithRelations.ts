@@ -1,13 +1,15 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { CreateDishInput } from '@/types/dish';
+import { PostgrestError } from '@supabase/supabase-js';
 
 /**
  * Create dish with recipes and ingredients.
  *
- * @param {Object} dishData - Dish data
- * @param {Array} recipes - Optional recipes array
- * @param {Array} ingredients - Optional ingredients array
+ * @param {Omit<CreateDishInput, 'recipes' | 'ingredients'>} dishData - Dish data
+ * @param {CreateDishInput['recipes']} recipes - Optional recipes array
+ * @param {CreateDishInput['ingredients']} ingredients - Optional ingredients array
  * @returns {Promise<Object>} Created dish
  * @throws {Error} If creation fails
  */
@@ -39,9 +41,10 @@ export async function createDishWithRelations(
     .single();
 
   if (createError) {
+    const pgError = createError as PostgrestError;
     logger.error('[Dishes API] Database error creating dish:', {
-      error: createError.message,
-      code: (createError as any).code,
+      error: pgError.message,
+      code: pgError.code,
       context: { endpoint: '/api/dishes', operation: 'POST', dishName: dishData.dish_name },
     });
     throw ApiErrorHandler.fromSupabaseError(createError, 500);
@@ -58,9 +61,10 @@ export async function createDishWithRelations(
     const { error: recipesError } = await supabaseAdmin.from('dish_recipes').insert(dishRecipes);
 
     if (recipesError) {
+      const pgError = recipesError as PostgrestError;
       logger.error('[Dishes API] Database error adding recipes to dish:', {
-        error: recipesError.message,
-        code: (recipesError as any).code,
+        error: pgError.message,
+        code: pgError.code,
         context: { endpoint: '/api/dishes', operation: 'POST', dishId: newDish.id },
       });
       // Rollback dish creation
@@ -92,9 +96,10 @@ export async function createDishWithRelations(
       .insert(dishIngredients);
 
     if (ingredientsError) {
+      const pgError = ingredientsError as PostgrestError;
       logger.error('[Dishes API] Database error adding ingredients to dish:', {
-        error: ingredientsError.message,
-        code: (ingredientsError as any).code,
+        error: pgError.message,
+        code: pgError.code,
         context: { endpoint: '/api/dishes', operation: 'POST', dishId: newDish.id },
       });
       // Rollback dish creation

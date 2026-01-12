@@ -1,6 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { PostgrestError } from '@supabase/supabase-js';
 
 /**
  * Delete menu.
@@ -18,11 +19,12 @@ export async function deleteMenu(menuId: string): Promise<void> {
   const { error } = await supabaseAdmin.from('menus').delete().eq('id', menuId);
 
   if (error) {
+    const pgError = error as PostgrestError;
     logger.error('[Menus API] Database error deleting menu:', {
-      error: error.message,
-      code: (error as any).code,
+      error: pgError.message,
+      code: pgError.code,
       context: { endpoint: '/api/menus/[id]', operation: 'DELETE', menuId },
     });
-    throw ApiErrorHandler.fromSupabaseError(error, 500);
+    throw ApiErrorHandler.fromSupabaseError(pgError, 500);
   }
 }

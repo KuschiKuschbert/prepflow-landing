@@ -2,8 +2,16 @@
  * Collect ingredient IDs from dishes and recipes
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+
+interface IngredientIdResult {
+  ingredient_id: string;
+}
+
+interface RecipeIdResult {
+  recipe_id: string;
+}
 
 export async function collectIngredientIds(
   dishIds: Set<string>,
@@ -30,7 +38,7 @@ export async function collectIngredientIds(
           context: { menuId },
         });
       } else if (dishIngredients) {
-        dishIngredients.forEach((di: any) => {
+        (dishIngredients as unknown as IngredientIdResult[]).forEach((di) => {
           if (di.ingredient_id) ingredientIds.add(di.ingredient_id);
         });
       }
@@ -47,7 +55,9 @@ export async function collectIngredientIds(
           context: { menuId },
         });
       } else if (dishRecipes) {
-        const dishRecipeIds = dishRecipes.map((dr: any) => dr.recipe_id).filter((id: any) => id);
+        const dishRecipeIds = (dishRecipes as unknown as RecipeIdResult[])
+          .map((dr) => dr.recipe_id)
+          .filter((id) => id);
 
         if (dishRecipeIds.length > 0) {
           const { data: recipeIngredients, error: recipeIngredientsError } = await supabaseAdmin
@@ -61,7 +71,7 @@ export async function collectIngredientIds(
               context: { menuId },
             });
           } else if (recipeIngredients) {
-            recipeIngredients.forEach((ri: any) => {
+            (recipeIngredients as unknown as IngredientIdResult[]).forEach((ri) => {
               if (ri.ingredient_id) ingredientIds.add(ri.ingredient_id);
             });
           }
@@ -89,7 +99,7 @@ export async function collectIngredientIds(
           context: { menuId },
         });
       } else if (recipeIngredients) {
-        recipeIngredients.forEach((ri: any) => {
+        (recipeIngredients as unknown as IngredientIdResult[]).forEach((ri) => {
           if (ri.ingredient_id) ingredientIds.add(ri.ingredient_id);
         });
       }

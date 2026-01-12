@@ -5,7 +5,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 export async function deleteMenuItem(
   menuId: string,
   menuItemId: string,
-): Promise<{ success: boolean; message: string } | { error: any; status: number }> {
+): Promise<{ success: boolean; message: string } | { error: unknown; status: number }> {
   if (!supabaseAdmin) {
     return {
       error: ApiErrorHandler.createError(

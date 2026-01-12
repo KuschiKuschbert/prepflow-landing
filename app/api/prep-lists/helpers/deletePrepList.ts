@@ -1,6 +1,7 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { PostgrestError } from '@supabase/supabase-js';
 
 export async function deletePrepList(id: string) {
   if (!supabaseAdmin) {
@@ -14,9 +15,10 @@ export async function deletePrepList(id: string) {
     .eq('prep_list_id', id);
 
   if (deleteItemsError) {
+    const pgItemsError = deleteItemsError as PostgrestError;
     logger.warn('[Prep Lists API] Warning: Could not delete prep list items:', {
-      error: deleteItemsError.message,
-      code: (deleteItemsError as any).code,
+      error: pgItemsError.message,
+      code: pgItemsError.code,
       prepListId: id,
     });
     // Continue with list deletion even if items deletion fails
@@ -26,11 +28,12 @@ export async function deletePrepList(id: string) {
   const { error } = await supabaseAdmin.from('prep_lists').delete().eq('id', id);
 
   if (error) {
+    const pgError = error as PostgrestError;
     logger.error('[Prep Lists API] Database error deleting prep list:', {
-      error: error.message,
-      code: (error as any).code,
+      error: pgError.message,
+      code: pgError.code,
       prepListId: id,
     });
-    throw ApiErrorHandler.fromSupabaseError(error, 500);
+    throw ApiErrorHandler.fromSupabaseError(pgError, 500);
   }
 }

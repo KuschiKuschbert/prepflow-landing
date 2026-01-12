@@ -4,16 +4,23 @@
  * @param {Set<string>} recipeIds - Set of recipe IDs
  * @param {Map<string, any[]>} recipeIngredientsMap - Main recipe ingredients map (will be updated)
  */
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { DBRecipeIngredient } from '../types';
+
+/**
+ * Merge dish recipe ingredients into main recipe ingredients map.
+ *
+ * @param {Set<string>} recipeIds - Set of recipe IDs
+ * @param {Map<string, DBRecipeIngredient[]>} recipeIngredientsMap - Main recipe ingredients map (will be updated)
+ */
 export async function mergeDishRecipeIngredients(
   recipeIds: Set<string>,
-  recipeIngredientsMap: Map<string, any[]>,
+  recipeIngredientsMap: Map<string, DBRecipeIngredient[]>,
 ) {
   if (recipeIds.size === 0) {
     return;
   }
-
-  const { supabaseAdmin } = await import('@/lib/supabase');
-  const { logger } = await import('@/lib/logger');
 
   if (!supabaseAdmin) {
     return;
@@ -21,7 +28,7 @@ export async function mergeDishRecipeIngredients(
 
   const { data: dishRecipeIngredients, error: ingredientsError } = await supabaseAdmin
     .from('recipe_ingredients')
-    .select('recipe_id, ingredient_id, quantity, unit, ingredients(id, ingredient_name)')
+    .select('recipe_id, ingredient_id, quantity, unit, ingredients(id, ingredient_name, name)')
     .in('recipe_id', Array.from(recipeIds));
 
   if (ingredientsError) {
@@ -37,16 +44,17 @@ export async function mergeDishRecipeIngredients(
 
   if (dishRecipeIngredients) {
     for (const ri of dishRecipeIngredients) {
-      const recipeId = (ri as any).recipe_id;
+      const recipeIngredient = ri as unknown as DBRecipeIngredient;
+      const recipeId = recipeIngredient.recipe_id;
       if (!recipeIngredientsMap.has(recipeId)) {
         recipeIngredientsMap.set(recipeId, []);
       }
       if (
         !recipeIngredientsMap
           .get(recipeId)!
-          .some(existing => existing.ingredient_id === (ri as any).ingredient_id)
+          .some((existing) => existing.ingredient_id === recipeIngredient.ingredient_id)
       ) {
-        recipeIngredientsMap.get(recipeId)!.push(ri);
+        recipeIngredientsMap.get(recipeId)!.push(recipeIngredient);
       }
     }
   }

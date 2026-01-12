@@ -4,15 +4,16 @@
 
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { Dish, EnrichedDish } from '@/types/dish';
 
 /**
  * Enriches dish with aggregated allergens and dietary status
  *
- * @param {any} dish - Dish data
+ * @param {Dish} dish - Dish data
  * @param {string} dishId - Dish ID
- * @returns {Promise<any>} Enriched dish
+ * @returns {Promise<EnrichedDish>} Enriched dish
  */
-export async function enrichDishWithAllergens(dish: any, dishId: string): Promise<any> {
+export async function enrichDishWithAllergens(dish: Dish, dishId: string): Promise<EnrichedDish> {
   // Always aggregate allergens and dietary status (even if cached)
   // This ensures we have the latest data from recipes/ingredients
   const { aggregateDishAllergens } = await import('@/lib/allergens/allergen-aggregation');
@@ -45,10 +46,12 @@ export async function enrichDishWithAllergens(dish: any, dishId: string): Promis
   }
 
   // Update dish cache with aggregated allergens if they differ
+  // Cast to any to access potentially existing allergens property not in basic Dish interface
+  const currentAllergens = (dish as any).allergens;
   if (
     allergens &&
     allergens.length > 0 &&
-    (!dish.allergens || JSON.stringify(dish.allergens) !== JSON.stringify(allergens))
+    (!currentAllergens || JSON.stringify(currentAllergens) !== JSON.stringify(allergens))
   ) {
     // Update cache in background (don't await)
     if (supabaseAdmin) {

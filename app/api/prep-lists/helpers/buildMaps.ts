@@ -1,30 +1,16 @@
-interface PrepListItem {
-  id: string;
-  prep_list_id: string;
-  ingredient_id: string;
-  quantity?: number;
-  quantity_needed?: number;
-  unit: string;
-  notes?: string;
-}
-
-interface KitchenSection {
-  id: string;
-  name?: string;
-  section_name?: string;
-  color?: string;
-  color_code?: string;
-}
+import { KitchenSection, PrepListItem } from '../types';
 
 /**
  * Build kitchen sections map from sections array
  *
  * @param {KitchenSection[]} kitchenSections - Kitchen sections data
- * @returns {Map<string, any>} Sections map by ID
+ * @returns {Map<string, KitchenSection>} Sections map by ID
  */
-export function buildSectionsMap(kitchenSections: KitchenSection[]): Map<string, any> {
-  const sectionsMap = new Map();
-  kitchenSections.forEach((section: any) => {
+export function buildSectionsMap(
+  kitchenSections: KitchenSection[],
+): Map<string, KitchenSection> {
+  const sectionsMap = new Map<string, KitchenSection>();
+  kitchenSections.forEach((section) => {
     sectionsMap.set(section.id, {
       id: section.id,
       name: section.name || section.section_name,
@@ -43,12 +29,12 @@ export function buildSectionsMap(kitchenSections: KitchenSection[]): Map<string,
 export function buildItemsByPrepListIdMap(
   prepListItems: PrepListItem[],
 ): Map<string, PrepListItem[]> {
-  const itemsByPrepListId = new Map();
-  prepListItems.forEach((item: any) => {
+  const itemsByPrepListId = new Map<string, PrepListItem[]>();
+  prepListItems.forEach((item) => {
     if (!itemsByPrepListId.has(item.prep_list_id)) {
       itemsByPrepListId.set(item.prep_list_id, []);
     }
-    itemsByPrepListId.get(item.prep_list_id).push(item);
+    itemsByPrepListId.get(item.prep_list_id)!.push(item);
   });
   return itemsByPrepListId;
 }

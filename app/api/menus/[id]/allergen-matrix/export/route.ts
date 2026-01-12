@@ -2,16 +2,15 @@
  * API endpoint for exporting allergen matrix in various formats
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { logger } from '@/lib/logger';
 import { AUSTRALIAN_ALLERGENS, consolidateAllergens } from '@/lib/allergens/australian-allergens';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { aggregateDishDietaryStatus, aggregateRecipeDietaryStatus } from '@/lib/dietary/dietary-aggregation';
+import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
+import Papa from 'papaparse';
+import type { EnrichedMenuItem } from '../../../types';
 import { fetchMenuWithItems } from '../../helpers/fetchMenuWithItems';
 import { generateHTML } from './helpers/generateHTML';
-import type { MenuItem } from '@/app/webapp/menu-builder/types';
-import { aggregateRecipeDietaryStatus } from '@/lib/dietary/dietary-aggregation';
-import { aggregateDishDietaryStatus } from '@/lib/dietary/dietary-aggregation';
-import Papa from 'papaparse';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -48,7 +47,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 
     // Ensure fresh dietary data by triggering recalculation for all recipes/dishes
     // This ensures the allergen matrix always shows accurate vegan/vegetarian status
-    const dietaryRecalculations = (menu.items || []).map(async (item: MenuItem) => {
+    const dietaryRecalculations = (menu.items || []).map(async (item: EnrichedMenuItem) => {
       try {
         if (item.recipe_id) {
           // Force recalculation for recipes to ensure fresh dietary status
@@ -79,7 +78,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       });
     }
 
-    const matrixData = (menuWithFreshData.items || []).map((item: MenuItem) => {
+    const matrixData = (menuWithFreshData.items || []).map((item: EnrichedMenuItem) => {
       let allergens: string[] = [];
       if (item.allergens && Array.isArray(item.allergens)) {
         allergens = item.allergens;

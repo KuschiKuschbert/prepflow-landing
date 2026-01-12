@@ -1,16 +1,16 @@
 'use client';
 
+import { useConfirm } from '@/hooks/useConfirm';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { useUserProfile } from '@/hooks/useUserProfile';
 import { ReleaseData } from '@/lib/github-release';
 import { logger } from '@/lib/logger';
 import { supabase } from '@/lib/supabase-pos';
-import { useConfirm } from '@/hooks/useConfirm';
-import { useNotification } from '@/contexts/NotificationContext';
-import { seedInitialData } from '../seed-actions';
-import { useRouter } from 'next/navigation';
 import { Copy, Download, ExternalLink, Info, RefreshCw, RotateCw } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import { seedInitialData } from '../seed-actions';
 
 interface SettingsClientProps {
   releaseData: ReleaseData | null;
@@ -26,7 +26,6 @@ export default function SettingsClient({ releaseData }: SettingsClientProps) {
   const [posUserEmail, setPosUserEmail] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
   const { showConfirm, ConfirmDialog } = useConfirm();
-  const { showSuccess, showError } = useNotification();
   const router = useRouter();
 
   // PrepFlow Admin Bypass
@@ -73,11 +72,11 @@ export default function SettingsClient({ releaseData }: SettingsClientProps) {
           data
         });
         const errorMsg = data.message || data.error || 'Failed to generate link. Make sure you have Business tier access.';
-        alert(errorMsg);
+        toast.error(errorMsg);
       }
     } catch (error) {
       logger.error('[CurbOS Settings] Error generating link:', error);
-      alert('Failed to generate link. Please try again.');
+      toast.error('Failed to generate link. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -94,18 +93,18 @@ export default function SettingsClient({ releaseData }: SettingsClientProps) {
       const data = await response.json();
       if (response.ok) {
         setPublicUrl(data.publicUrl);
-        alert('Link regenerated - old link is now invalid');
+        toast.success('Link regenerated - old link is now invalid');
       } else {
         logger.error('[CurbOS Settings] Failed to regenerate link:', {
           status: response.status,
           data
         });
         const errorMsg = data.message || data.error || 'Failed to regenerate link';
-        alert(errorMsg);
+        toast.error(errorMsg);
       }
     } catch (error) {
       logger.error('[CurbOS Settings] Error regenerating link:', error);
-      alert('Failed to regenerate link. Please try again.');
+      toast.error('Failed to regenerate link. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -114,7 +113,7 @@ export default function SettingsClient({ releaseData }: SettingsClientProps) {
   function copyToClipboard() {
     if (publicUrl) {
       navigator.clipboard.writeText(publicUrl);
-      alert('Link copied to clipboard!');
+      toast.success('Link copied to clipboard!');
     }
   }
 
@@ -132,11 +131,11 @@ export default function SettingsClient({ releaseData }: SettingsClientProps) {
     setSeeding(true);
     try {
       await seedInitialData();
-      showSuccess('Default data restored successfully!');
+      toast.success('Default data restored successfully!');
       router.refresh();
     } catch (error) {
       logger.error('[CurbOS Settings] Error restoring defaults:', error);
-      showError('Failed to restore default data. Please try again.');
+      toast.error('Failed to restore default data. Please try again.');
     } finally {
       setSeeding(false);
     }
@@ -259,7 +258,7 @@ export default function SettingsClient({ releaseData }: SettingsClientProps) {
                     onClick={(e) => {
                       if (!downloadUrl) {
                         e.preventDefault();
-                        alert('Download URL not available. Please check GitHub releases.');
+                        toast.error('Download URL not available. Please check GitHub releases.');
                       }
                     }}
                   >

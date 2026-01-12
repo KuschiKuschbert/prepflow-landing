@@ -3,20 +3,21 @@
  */
 
 import { logger } from '@/lib/logger';
-import { calculateRecipeSellingPrice } from '../../statistics/helpers/calculateRecipeSellingPrice';
-import { calculateDishSellingPrice } from '../../statistics/helpers/calculateDishSellingPrice';
+import { RawMenuItem } from '../../../types';
 import { cacheRecommendedPrice } from '../../items/[itemId]/helpers/cacheRecommendedPrice';
+import { calculateDishSellingPrice } from '../../statistics/helpers/calculateDishSellingPrice';
+import { calculateRecipeSellingPrice } from '../../statistics/helpers/calculateRecipeSellingPrice';
 
 /**
  * Calculates recommended price for a menu item
  *
- * @param {any} item - Menu item
+ * @param {RawMenuItem} item - Menu item
  * @param {string} menuId - Menu ID
  * @param {boolean} hasPricingColumns - Whether pricing columns exist
  * @returns {Promise<number | null>} Recommended price or null
  */
 export async function calculateRecommendedPrice(
-  item: any,
+  item: RawMenuItem,
   menuId: string,
   hasPricingColumns: boolean,
 ): Promise<number | null> {
@@ -30,10 +31,10 @@ export async function calculateRecommendedPrice(
     try {
       const recommendedPrice = await calculateDishSellingPrice(item.dishes.id);
       // Cache the calculated price (non-blocking)
-      if (recommendedPrice != null && recommendedPrice > 0) {
+      if (recommendedPrice != null && recommendedPrice > 0 && item.id) {
         (async () => {
           try {
-            await cacheRecommendedPrice(menuId, item.id, item);
+            await cacheRecommendedPrice(menuId, item.id!, item);
           } catch (err) {
             logger.error('[Menus API] Failed to cache dish recommended price:', {
               error: err instanceof Error ? err.message : String(err),
@@ -56,10 +57,10 @@ export async function calculateRecommendedPrice(
       // (since calculateRecipeCost(recipeId, 1) returns per-serving cost)
       const recommendedPrice = await calculateRecipeSellingPrice(item.recipe_id);
       // Cache the calculated price (non-blocking)
-      if (recommendedPrice != null && recommendedPrice > 0) {
+      if (recommendedPrice != null && recommendedPrice > 0 && item.id) {
         (async () => {
           try {
-            await cacheRecommendedPrice(menuId, item.id, item);
+            await cacheRecommendedPrice(menuId, item.id!, item);
           } catch (err) {
             logger.error('[Menus API] Failed to cache recipe recommended price:', {
               error: err instanceof Error ? err.message : String(err),

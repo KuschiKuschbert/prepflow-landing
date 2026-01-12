@@ -1,12 +1,12 @@
+import { createShareRecord } from '@/app/api/recipe-share/helpers/createShareRecord';
+import { fetchRecipeWithIngredients } from '@/app/api/recipe-share/helpers/fetchRecipeWithIngredients';
+import { generateRecipePDF } from '@/app/api/recipe-share/helpers/generateRecipePDF';
+import { normalizeRecipeForShare } from '@/app/api/recipe-share/helpers/normalizeRecipeForShare';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createShareRecord } from '@/app/api/recipe-share/helpers/createShareRecord';
-import { fetchRecipeWithIngredients } from '@/app/api/recipe-share/helpers/fetchRecipeWithIngredients';
-import { normalizeRecipeForShare } from '@/app/api/recipe-share/helpers/normalizeRecipeForShare';
-import { generateRecipePDF } from '@/app/api/recipe-share/helpers/generateRecipePDF';
 
 const bulkShareSchema = z.object({
   recipeIds: z
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     const results: Array<{
       recipeId: string;
       success: boolean;
-      shareRecord?: any;
+      shareRecord?: Record<string, unknown>; // Better than any
       pdfContent?: string;
       error?: string;
     }> = [];
@@ -82,29 +82,32 @@ export async function POST(request: NextRequest) {
         results.push({
           recipeId,
           success: true,
-          shareRecord,
+          shareRecord: shareRecord as Record<string, unknown>,
           pdfContent,
         });
-      } catch (error: any) {
+      } catch (error) {
+        const errObj = error instanceof Error ? error : new Error(String(error));
         logger.error(`[Bulk Share API] Error sharing recipe ${recipeId}:`, {
-          error: error.message || error,
+          error: errObj.message,
           recipeId,
         });
 
         results.push({
           recipeId,
           success: false,
-          error: error.message || 'Failed to share recipe',
+          error: errObj.message || 'Failed to share recipe',
         });
       }
     }
 
-    const successCount = results.filter(r => r.success).length;
-    const failureCount = results.filter(r => !r.success).length;
+    const successCount = results.filter((r) => r.success).length;
+    const failureCount = results.filter((r) => !r.success).length;
 
     return NextResponse.json({
       success: true,
-      message: `Shared ${successCount} recipe${successCount > 1 ? 's' : ''} successfully${failureCount > 0 ? `, ${failureCount} failed` : ''}`,
+      message: `Shared ${successCount} recipe${
+        successCount > 1 ? 's' : ''
+      } successfully${failureCount > 0 ? `, ${failureCount} failed` : ''}`,
       results,
       summary: {
         total: recipeIds.length,
@@ -112,28 +115,32 @@ export async function POST(request: NextRequest) {
         failed: failureCount,
       },
     });
-  } catch (error: any) {
+  } catch (error) {
+    const errObj = error instanceof Error ? error : new Error(String(error));
+
     logger.error('[Bulk Share API] Unexpected error:', {
-      error: error.message || error,
-      stack: error.stack,
+      error: errObj.message,
+      stack: errObj.stack,
       context: { endpoint: '/api/recipes/bulk-share', method: 'POST' },
     });
 
-    if (error.status) {
+    // Handle generic errors that might have a status property (like from an upstream service)
+    const errWithStatus = error as { status?: number; message?: string };
+    if (errWithStatus.status) {
       return NextResponse.json(
         ApiErrorHandler.createError(
-          error.message || 'Request failed',
+          errWithStatus.message || 'Request failed',
           'CLIENT_ERROR',
-          error.status,
+          errWithStatus.status,
         ),
-        { status: error.status },
+        { status: errWithStatus.status },
       );
     }
 
     return NextResponse.json(
       ApiErrorHandler.createError(
         process.env.NODE_ENV === 'development'
-          ? error.message || 'Unknown error'
+          ? errObj.message || 'Unknown error'
           : 'Internal server error',
         'SERVER_ERROR',
         500,

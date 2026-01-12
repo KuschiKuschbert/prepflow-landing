@@ -1,18 +1,8 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-interface CreatePrepListParams {
-  userId: string;
-  kitchenSectionId: string;
-  name: string;
-  notes?: string;
-  items?: Array<{
-    ingredientId: string;
-    quantity: string;
-    unit: string;
-    notes?: string;
-  }>;
-}
+import { supabaseAdmin } from '@/lib/supabase';
+import { PostgrestError } from '@supabase/supabase-js';
+import { CreatePrepListParams, PrepList } from '../types';
 
 export async function createPrepList(params: CreatePrepListParams) {
   if (!supabaseAdmin) {
@@ -37,18 +27,21 @@ export async function createPrepList(params: CreatePrepListParams) {
     .single();
 
   if (prepError) {
+    const pgError = prepError as PostgrestError;
     logger.error('[Prep Lists API] Database error creating prep list:', {
-      error: prepError.message,
-      code: (prepError as any).code,
+      error: pgError.message,
+      code: pgError.code,
       context: { endpoint: '/api/prep-lists', operation: 'POST', table: 'prep_lists' },
     });
-    throw ApiErrorHandler.fromSupabaseError(prepError, 500);
+    throw ApiErrorHandler.fromSupabaseError(pgError, 500);
   }
+
+  const createdList = prepList as PrepList;
 
   // Add items if provided
   if (items && items.length > 0) {
-    const prepItems = items.map((item: any) => ({
-      prep_list_id: prepList.id,
+    const prepItems = items.map((item) => ({
+      prep_list_id: createdList.id,
       ingredient_id: item.ingredientId,
       quantity: item.quantity,
       unit: item.unit,
@@ -58,14 +51,15 @@ export async function createPrepList(params: CreatePrepListParams) {
     const { error: itemsError } = await supabaseAdmin.from('prep_list_items').insert(prepItems);
 
     if (itemsError) {
+      const pgItemsError = itemsError as PostgrestError;
       logger.warn('[Prep Lists API] Warning: Could not create prep list items:', {
-        error: itemsError.message,
-        code: (itemsError as any).code,
-        prepListId: prepList.id,
+        error: pgItemsError.message,
+        code: pgItemsError.code,
+        prepListId: createdList.id,
       });
       // Don't fail the entire request, just log the error
     }
   }
 
-  return prepList;
+  return createdList;
 }

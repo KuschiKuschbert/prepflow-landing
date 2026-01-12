@@ -1,7 +1,7 @@
-import { z } from 'zod';
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 import { aggregateIngredientsFromRecipes } from './helpers/aggregateFromRecipes';
 import { collectRecipeAndDishIds } from './helpers/collectRecipeAndDishIds';
 import { fetchDishData, fetchRecipeIngredients } from './helpers/fetchBatchData';
@@ -10,15 +10,10 @@ import { fetchMenuData } from './helpers/fetchMenuData';
 import { mergeDishRecipeIngredients } from './helpers/mergeDishRecipeIngredients';
 import { processDish } from './helpers/processDish';
 import { processRecipe } from './helpers/processRecipe';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
-
-interface SectionData {
-  sectionId: string | null;
-  sectionName: string;
-  aggregatedIngredients: any[];
-  recipeGrouped: any[];
-  prepInstructions: any[];
-}
+import {
+    RecipeGroupedItem,
+    SectionData
+} from './types';
 
 export async function POST(request: NextRequest) {
   try {
@@ -77,7 +72,7 @@ export async function POST(request: NextRequest) {
 
     // Map to store section data
     const sectionsData = new Map<string | null, SectionData>();
-    const unassignedItems: any[] = [];
+    const unassignedItems: RecipeGroupedItem[] = [];
 
     // Process each menu item using pre-fetched data
     for (const menuItem of menuItems) {
@@ -98,6 +93,7 @@ export async function POST(request: NextRequest) {
               processDish(
                 dish.id,
                 dish.dish_name,
+                menuItem.category,
                 sectionsData,
                 unassignedItems,
                 sectionsMap,
@@ -117,13 +113,13 @@ export async function POST(request: NextRequest) {
           const recipes = (menuItem as any).recipes;
           if (recipes) {
             const recipe = Array.isArray(recipes) ? recipes[0] : recipes;
-            if (recipe && recipe.id && recipe.recipe_name) {
+            if (recipe && recipe.id && (recipe.recipe_name || recipe.name)) {
               const recipeIngredients = recipeIngredientsMap.get(recipe.id) || [];
               const instructions = recipeInstructionsMap.get(recipe.id) || null;
 
               processRecipe(
                 recipe.id,
-                recipe.recipe_name,
+                recipe.recipe_name || recipe.name,
                 null,
                 null,
                 sectionsData,
@@ -147,6 +143,7 @@ export async function POST(request: NextRequest) {
     let sections: SectionData[] = Array.from(sectionsData.values());
 
     // Add uncategorized section if there are unassigned items
+    // Note: unassignedItems are essentially RecipeGroupedItem[]
     if (unassignedItems.length > 0) {
       sections.push({
         sectionId: null,

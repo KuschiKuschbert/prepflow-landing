@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const createComplianceTypeSchema = z.object({
@@ -9,6 +9,16 @@ const createComplianceTypeSchema = z.object({
   description: z.string().optional(),
   renewal_frequency_days: z.number().int().positive().optional(),
 });
+
+interface ComplianceType {
+  id: string;
+  type_name: string;
+  description: string | null;
+  renewal_frequency_days: number | null;
+  created_at?: string;
+  updated_at?: string;
+  name?: string; // Optional for frontend compatibility mapping
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -28,7 +38,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Compliance Types API] Database error fetching types:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: { endpoint: '/api/compliance-types', operation: 'GET', table: 'compliance_types' },
       });
 
@@ -37,10 +47,13 @@ export async function GET(request: NextRequest) {
     }
 
     // Map 'type_name' to 'name' for frontend compatibility
-    const normalizedData = (data || []).map((item: any) => ({
-      ...item,
-      name: item.type_name || item.name,
-    }));
+    const normalizedData = (data || []).map((item) => {
+      const complianceItem = item as ComplianceType;
+      return {
+        ...complianceItem,
+        name: complianceItem.type_name || complianceItem.name || '',
+      };
+    });
 
     return NextResponse.json({
       success: true,
@@ -120,7 +133,7 @@ export async function POST(request: NextRequest) {
     if (error) {
       logger.error('[Compliance Types API] Database error creating type:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: {
           endpoint: '/api/compliance-types',
           operation: 'POST',
@@ -132,10 +145,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
+    const insertedData = data as ComplianceType;
+
     // Map 'type_name' to 'name' for frontend compatibility
     const normalizedData = {
-      ...data,
-      name: (data as any).type_name || (data as any).name,
+      ...insertedData,
+      name: insertedData.type_name || insertedData.name || '',
     };
 
     return NextResponse.json({

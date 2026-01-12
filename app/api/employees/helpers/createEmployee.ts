@@ -1,6 +1,8 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { CreateEmployeeInput, Employee } from '@/types/employee';
+import { PostgrestError } from '@supabase/supabase-js';
 
 const EMPLOYEE_SELECT = `
   *,
@@ -19,23 +21,11 @@ const EMPLOYEE_SELECT = `
 /**
  * Create a new employee.
  *
- * @param {Object} employeeData - Employee data
- * @returns {Promise<Object>} Created employee
+ * @param {CreateEmployeeInput} employeeData - Employee data
+ * @returns {Promise<Employee>} Created employee
  * @throws {Error} If creation fails
  */
-export async function createEmployee(employeeData: {
-  employee_id?: string | null;
-  full_name: string;
-  role?: string | null;
-  employment_start_date: string;
-  employment_end_date?: string | null;
-  status?: 'active' | 'inactive' | 'terminated';
-  phone?: string | null;
-  email?: string | null;
-  emergency_contact?: string | null;
-  photo_url?: string | null;
-  notes?: string | null;
-}) {
+export async function createEmployee(employeeData: CreateEmployeeInput) {
   if (!supabaseAdmin) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
@@ -60,9 +50,10 @@ export async function createEmployee(employeeData: {
     .single();
 
   if (error) {
+    const pgError = error as PostgrestError;
     logger.error('[Employees API] Database error creating employee:', {
-      error: error.message,
-      code: (error as any).code,
+      error: pgError.message,
+      code: pgError.code,
       context: {
         endpoint: '/api/employees',
         operation: 'POST',
@@ -72,5 +63,5 @@ export async function createEmployee(employeeData: {
     throw ApiErrorHandler.fromSupabaseError(error, 500);
   }
 
-  return data;
+  return data as Employee;
 }

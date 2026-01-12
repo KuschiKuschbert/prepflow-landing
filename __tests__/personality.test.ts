@@ -1,12 +1,12 @@
 // PrepFlow Personality System - Unit Tests
 
+import { getDefaultSettings, validateSettings, validateSpirit } from '../lib/personality/schema';
 import {
-  getShiftBucket,
-  checkSeasonalMatch,
-  isSilenced,
-  silenceFor24h,
+    checkSeasonalMatch,
+    getShiftBucket,
+    isSilenced,
+    silenceFor24h,
 } from '../lib/personality/utils';
-import { validateSettings, validateSpirit, getDefaultSettings } from '../lib/personality/schema';
 
 describe('Personality Utils', () => {
   describe('getShiftBucket', () => {
@@ -59,7 +59,7 @@ describe('Personality Utils', () => {
       expect(checkSeasonalMatch()).toBe('santaHat');
 
       jest.setSystemTime(new Date('2024-12-26T12:00:00'));
-      expect(checkSeasonalMatch()).toBe('santaHat');
+      expect(checkSeasonalMatch()).toBe('boxingDay');
     });
 
     it('should return null for non-seasonal dates', () => {

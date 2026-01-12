@@ -1,0 +1,36 @@
+# Project Rules & AI Behavior
+
+You are working on the PrepFlow/CurbOS ecosystem. To ensure continuous improvement and consistency, you must strictly adhere to the following rules.
+
+## 1. 🧠 Knowledge Base (MANDATORY READ)
+Before proposing code or fixing bugs, you MUST check the **Living Rule Book**:
+- Path: `docs/LIVING_RULES.md`
+- **Action**: Read this file to understand established project patterns (e.g., Next.js 15 params unwrapping, Supabase error handling).
+- **Enforcement**: If you violate a rule from this book, the user will reject your code.
+
+## 2. 🐛 Troubleshooting & Solution Bank
+If you encounter an error (build fail, runtime crash, lint error):
+1.  **Check**: Read `docs/TROUBLESHOOTING_LOG.md` to see if this has happened before.
+2.  **Fix**: Apply the known fix if it exists.
+3.  **Document**: If it is a NEW error, you must document it in `docs/TROUBLESHOOTING_LOG.md` after fixing it.
+    - Format: Symptom, Root Cause, Fix, Derived Rule.
+
+## 3. 📝 Session Logging
+- **Start**: Read `docs/DEV_LOG.md` to understand the recent context.
+- **End**: Update `docs/DEV_LOG.md` with a summary of your changes, goals achieved, and any blockers.
+
+## 4. 🚫 Prohibited Patterns
+- **Next.js 15**: Do NOT access `params` or `searchParams` directly. Always unwrap them using `React.use()` or `await`.
+- **Console**: Do NOT use `console.log` in production code. Use the project's `logger`.
+
+## 5. Technology Stack
+- Next.js 15 (App Router)
+- Supabase (PostgreSQL + Auth)
+- Tailwind CSS 4
+- TypeScript 5
+
+## 6. 🛡️ Strict Git Workflow
+- **Zero Tolerance**: You are FORBIDDEN from committing directly to `main`.
+- **Branching**: Always create a feature branch (`feature/xyz`, `fix/xyz`) before writing code.
+- **Merging**: You must use `scripts/safe-merge.sh` to merge. This script runs all verifications.
+- **Safety**: If you are unsure about a destructive action, ASK the user.

@@ -30,7 +30,7 @@ describe('PrepFlow Basic Tests', () => {
   test('should have valid package.json configuration', () => {
     const packageJson = require('../package.json');
 
-    expect(packageJson.name).toBe('prepflow-landing');
+    expect(packageJson.name).toBe('curbos');
     expect(packageJson.version).toBeDefined();
     expect(packageJson.scripts.build).toBe('next build');
     expect(packageJson.scripts.lint).toBe('eslint .');

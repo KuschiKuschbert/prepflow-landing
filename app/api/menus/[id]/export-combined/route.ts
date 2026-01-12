@@ -5,6 +5,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { EnrichedMenuItem } from '../../types';
 import { fetchMenuWithItems } from '../helpers/fetchMenuWithItems';
 import { fetchRecipeCards } from './helpers/fetchRecipeCards';
 import { generateCombinedCSV } from './helpers/generateCombinedCSV';
@@ -38,7 +39,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     }
 
     // Ensure fresh dietary data by triggering recalculation for all recipes/dishes
-    await recalculateDietaryStatus(menu.items || []);
+    await recalculateDietaryStatus(menu.items as EnrichedMenuItem[]);
 
     // Re-fetch menu with items to get updated dietary status
     const menuWithFreshData = await fetchMenuWithItems(menuId);
@@ -50,11 +51,13 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     }
 
     // Transform menu items to display data (only if needed)
-    const menuData = options.includeMenu ? transformMenuData(menuWithFreshData.items || []) : [];
+    const menuData = options.includeMenu
+      ? transformMenuData(menuWithFreshData.items as EnrichedMenuItem[])
+      : [];
 
     // Transform menu items to allergen matrix data (only if needed)
     const matrixData = options.includeMatrix
-      ? transformMatrixData(menuWithFreshData.items || [])
+      ? transformMatrixData(menuWithFreshData.items as EnrichedMenuItem[])
       : [];
 
     // Fetch recipe cards (only if needed)

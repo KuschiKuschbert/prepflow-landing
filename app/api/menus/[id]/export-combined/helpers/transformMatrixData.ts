@@ -2,8 +2,8 @@
  * Helper to transform menu items to allergen matrix data.
  */
 
-import type { MenuItem } from '@/app/webapp/menu-builder/types';
 import { AUSTRALIAN_ALLERGENS, consolidateAllergens } from '@/lib/allergens/australian-allergens';
+import { EnrichedMenuItem } from '../../../types';
 
 export interface AllergenMatrixItem {
   name: string;
@@ -17,8 +17,8 @@ export interface AllergenMatrixItem {
 /**
  * Transform menu items to allergen matrix data.
  */
-export function transformMatrixData(items: MenuItem[]): AllergenMatrixItem[] {
-  return items.map((item: MenuItem) => {
+export function transformMatrixData(items: EnrichedMenuItem[]): AllergenMatrixItem[] {
+  return items.map((item: EnrichedMenuItem) => {
     let allergens: string[] = [];
     if (item.allergens && Array.isArray(item.allergens)) {
       allergens = item.allergens;
