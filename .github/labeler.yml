@@ -1,9 +1,7 @@
 # Auto-label PRs based on file changes
 
 refactor:
-  - changed-files:
-      - any-glob-to-any-file: ['**/*.ts', '**/*.tsx']
-      - all-files-match: ['refactor/**', '**/refactor/**']
+      - any-glob-to-any-file: ['**/*.ts', '**/*.tsx', 'refactor/**', '**/refactor/**']
 
 bugfix:
   - changed-files:
@@ -11,13 +9,11 @@ bugfix:
 
 ui:
   - changed-files:
-      - any-glob-to-any-file: ['**/components/**', '**/*.tsx']
-      - all-files-match: ['**/ui/**', '**/components/**']
+      - any-glob-to-any-file: ['**/components/**', '**/*.tsx', '**/ui/**']
 
 breakpoints:
   - changed-files:
       - any-glob-to-any-file: ['tailwind.config.ts', '**/*.tsx', '**/*.ts']
-      - all-files-match: ['tablet:', 'desktop:', 'large-desktop:', 'xl:', '2xl:']
 
 documentation:
   - changed-files:
