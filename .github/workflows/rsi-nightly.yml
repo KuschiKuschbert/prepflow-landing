@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   rsi-cycle:
-    nam: Recursive Self-Improvement Cycle
+    name: Recursive Self-Improvement Cycle
     runs-on: ubuntu-latest
 
     steps:
