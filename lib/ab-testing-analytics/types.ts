@@ -6,6 +6,8 @@ export interface ABTestVariant {
   isControl: boolean;
 }
 
+export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+
 export interface ABTestEvent {
   testId: string;
   variantId: string;
@@ -14,7 +16,7 @@ export interface ABTestEvent {
   eventType: 'variant_assigned' | 'page_view' | 'conversion' | 'engagement';
   eventValue?: number;
   timestamp: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, JsonValue>;
 }
 
 export interface ABTestResult {

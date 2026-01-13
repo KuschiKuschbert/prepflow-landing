@@ -1,13 +1,13 @@
 import { getDefaultTests } from './ab-testing-analytics/defaultTests';
-import { assignVariant as assignVariantHelper } from './ab-testing-analytics/variantAssignment';
 import { sendABTestEvent } from './ab-testing-analytics/eventTracking';
-import { calculateTestResults } from './ab-testing-analytics/testResults';
 import { getSessionId } from './ab-testing-analytics/sessionManager';
+import { calculateTestResults } from './ab-testing-analytics/testResults';
+import type { ABTestEvent, ABTestResult, ABTestVariant, JsonValue } from './ab-testing-analytics/types';
+import { assignVariant as assignVariantHelper } from './ab-testing-analytics/variantAssignment';
 import {
-  getVariantInfo as getVariantInfoHelper,
-  getVariantAssignmentInfo as getVariantAssignmentInfoHelper,
+    getVariantAssignmentInfo as getVariantAssignmentInfoHelper,
+    getVariantInfo as getVariantInfoHelper,
 } from './ab-testing-analytics/variantInfo';
-import type { ABTestVariant, ABTestEvent, ABTestResult } from './ab-testing-analytics/types';
 
 class ABTestingAnalytics {
   private tests: Map<string, ABTestVariant[]> = new Map();
@@ -46,7 +46,7 @@ class ABTestingAnalytics {
     testId: string,
     userId: string,
     value?: number,
-    metadata?: Record<string, any>,
+    metadata?: Record<string, JsonValue>,
   ): void {
     const variantId = this.getCurrentVariant(testId, userId);
     this.trackEvent({
@@ -65,7 +65,7 @@ class ABTestingAnalytics {
     testId: string,
     userId: string,
     engagementType: string,
-    metadata?: Record<string, any>,
+    metadata?: Record<string, JsonValue>,
   ): void {
     const variantId = this.getCurrentVariant(testId, userId);
     this.trackEvent({
@@ -131,7 +131,7 @@ export const getActiveTests = abTestingAnalytics.getActiveTests.bind(abTestingAn
 export const getVariantInfo = abTestingAnalytics.getVariantInfo.bind(abTestingAnalytics);
 export const getVariantAssignmentInfo =
   abTestingAnalytics.getVariantAssignmentInfo.bind(abTestingAnalytics);
-export type { ABTestVariant, ABTestEvent, ABTestResult } from './ab-testing-analytics/types';
+export type { ABTestEvent, ABTestResult, ABTestVariant } from './ab-testing-analytics/types';
 
 // Explicitly do NOT re-export the helper functions to avoid conflicts
 // The helper functions (getVariantInfoHelper, getVariantAssignmentInfoHelper) are internal only
