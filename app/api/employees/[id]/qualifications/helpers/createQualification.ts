@@ -1,7 +1,7 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { QUALIFICATION_SELECT } from './schemas';
+import { supabaseAdmin } from '@/lib/supabase';
+import { QUALIFICATION_SELECT, Qualification } from './schemas';
 
 export async function createQualification(
   employeeId: string,
@@ -14,7 +14,7 @@ export async function createQualification(
     document_url?: string;
     notes?: string;
   },
-): Promise<{ success: boolean; message: string; data: any } | { error: any; status: number }> {
+): Promise<{ success: boolean; message: string; data: Qualification } | { error: any; status: number }> {
   if (!supabaseAdmin) {
     return {
       error: ApiErrorHandler.createError(
@@ -74,6 +74,6 @@ export async function createQualification(
   return {
     success: true,
     message: 'Qualification added successfully',
-    data,
+    data: data as Qualification,
   };
 }
