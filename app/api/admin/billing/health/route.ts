@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { getStripe } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * GET /api/admin/billing/health
@@ -85,8 +85,12 @@ export async function GET(req: NextRequest) {
             });
             healthReport.healthy = false;
           }
-        } catch (error: any) {
-          if (error.code === 'resource_missing') {
+        } catch (error) {
+          // Narrow error type safely
+          const code = error && typeof error === 'object' && 'code' in error ? (error as { code: string }).code : undefined;
+          const message = error instanceof Error ? error.message : 'Unknown error';
+
+          if (code === 'resource_missing') {
             // Subscription not found in Stripe - log as warning, not error
             logger.warn('[Billing Health] Subscription not found in Stripe:', {
               email: user.email,
@@ -96,7 +100,7 @@ export async function GET(req: NextRequest) {
             healthReport.healthy = false;
           } else {
             logger.error('[Billing Health] Error checking subscription:', {
-              error: error.message,
+              error: message,
               email: user.email,
               subscriptionId: user.stripe_subscription_id,
             });
@@ -126,7 +130,7 @@ export async function GET(req: NextRequest) {
       if (billingDataError && billingDataError.code !== 'PGRST116') {
         logger.warn('[Billing Health] Error fetching billing customer:', {
           error: billingDataError.message,
-          code: (billingDataError as any).code,
+          code: billingDataError.code,
           customerId,
         });
       }

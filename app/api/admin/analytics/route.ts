@@ -1,7 +1,7 @@
 import { requireAdmin } from '@/lib/admin-auth';
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     if (totalUsersError) {
       logger.warn('[Admin Analytics] Error fetching total users count:', {
         error: totalUsersError.message,
-        code: (totalUsersError as any).code,
+        code: totalUsersError.code,
       });
     }
 
@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
     if (activeUsersError) {
       logger.warn('[Admin Analytics] Error fetching active users count:', {
         error: activeUsersError.message,
-        code: (activeUsersError as any).code,
+        code: activeUsersError.code,
       });
     }
 
@@ -55,19 +55,19 @@ export async function GET(request: NextRequest) {
     if (ingredientsResult.error) {
       logger.warn('[Admin Analytics] Error fetching ingredients count:', {
         error: ingredientsResult.error.message,
-        code: (ingredientsResult.error as any).code,
+        code: ingredientsResult.error.code,
       });
     }
     if (recipesResult.error) {
       logger.warn('[Admin Analytics] Error fetching recipes count:', {
         error: recipesResult.error.message,
-        code: (recipesResult.error as any).code,
+        code: recipesResult.error.code,
       });
     }
     if (dishesResult.error) {
       logger.warn('[Admin Analytics] Error fetching dishes count:', {
         error: dishesResult.error.message,
-        code: (dishesResult.error as any).code,
+        code: dishesResult.error.code,
       });
     }
 
