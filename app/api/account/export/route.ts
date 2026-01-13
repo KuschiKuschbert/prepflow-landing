@@ -1,11 +1,10 @@
-import { NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { exportUserData } from '@/lib/backup/export';
 import { markDataExported } from '@/lib/data-retention/schedule-deletion';
 import { checkTransferRestriction } from '@/lib/data-transfer/restrictions';
 import { logger } from '@/lib/logger';
-import { NextRequest } from 'next/server';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * GET /api/account/export
@@ -61,15 +60,17 @@ export async function GET(req: NextRequest) {
         'Content-Disposition': `attachment; filename="${filename}"`,
       },
     });
-  } catch (error: any) {
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    const stack = error instanceof Error ? error.stack : undefined;
     logger.error('[Account Export API] Failed to export data:', {
-      error: error.message,
-      stack: error.stack,
+      error: message,
+      stack,
     });
 
     return NextResponse.json(
       ApiErrorHandler.createError('Failed to export data', 'EXPORT_FAILED', 500, {
-        details: error.message,
+        details: message,
       }),
       { status: 500 },
     );
