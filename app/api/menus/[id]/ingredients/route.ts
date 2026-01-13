@@ -19,8 +19,7 @@ import { groupIngredients } from './helpers/groupIngredients';
  */
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await context.params;
-    const menuId = id;
+    const { id: menuId } = await context.params;
 
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -90,12 +89,12 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       stack: err instanceof Error ? err.stack : undefined,
     });
 
-    if (typeof err === 'object' && err !== null && 'status' in err) {
-      return NextResponse.json(err, { status: (err as any).status });
-    }
-
     return NextResponse.json(
-      ApiErrorHandler.createError('Failed to fetch menu ingredients', 'INTERNAL_ERROR', 500),
+      ApiErrorHandler.createError(
+        err instanceof Error ? err.message : 'Failed to fetch menu ingredients',
+        'INTERNAL_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

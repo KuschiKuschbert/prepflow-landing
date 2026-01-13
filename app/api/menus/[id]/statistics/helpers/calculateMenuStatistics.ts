@@ -1,14 +1,17 @@
 import { logger } from '@/lib/logger';
+import { MenuItemWithRelations, MenuStatistics } from '../../../helpers/schemas';
 import { processDishItem } from './processDishItem';
 import { processRecipeItem } from './processRecipeItem';
 
 /**
  * Calculate menu statistics from menu items.
  *
- * @param {Array} menuItems - Menu items with dishes and recipes
- * @returns {Promise<Object>} Menu statistics
+ * @param {MenuItemWithRelations[]} menuItems - Menu items with dishes and recipes
+ * @returns {Promise<MenuStatistics>} Menu statistics
  */
-export async function calculateMenuStatistics(menuItems: any[]) {
+export async function calculateMenuStatistics(
+  menuItems: MenuItemWithRelations[],
+): Promise<MenuStatistics> {
   logger.dev('[calculateMenuStatistics] Starting calculation', { itemCount: menuItems.length });
   let totalCOGS = 0;
   let totalRevenue = 0;
@@ -18,8 +21,8 @@ export async function calculateMenuStatistics(menuItems: any[]) {
 
   for (const item of menuItems) {
     // Supabase may return dishes/recipes as arrays or single objects
-    const dish = Array.isArray(item.dishes) ? item.dishes[0] : (item.dishes as any);
-    const recipe = Array.isArray(item.recipes) ? item.recipes[0] : (item.recipes as any);
+    const dish = Array.isArray(item.dishes) ? item.dishes[0] : item.dishes;
+    const recipe = Array.isArray(item.recipes) ? item.recipes[0] : item.recipes;
 
     logger.dev('[calculateMenuStatistics] Processing item:', {
       dish_id: item.dish_id,
@@ -38,10 +41,10 @@ export async function calculateMenuStatistics(menuItems: any[]) {
           totalRevenue += revenue;
           profitMargins.push(margin);
         }
-      } catch (err) {
+      } catch (err: unknown) {
         logger.error('[calculateMenuStatistics] Unexpected error processing dish:', {
-          dish_id: dish.id,
-          error: err,
+          dish_id: (dish as any).id,
+          error: err instanceof Error ? err.message : String(err),
         });
       }
     }
@@ -56,10 +59,10 @@ export async function calculateMenuStatistics(menuItems: any[]) {
           totalRevenue += revenue;
           profitMargins.push(margin);
         }
-      } catch (err) {
+      } catch (err: unknown) {
         logger.error('[calculateMenuStatistics] Unexpected error processing recipe:', {
-          recipe_id: recipe.id,
-          error: err,
+          recipe_id: (recipe as any).id,
+          error: err instanceof Error ? err.message : String(err),
         });
       }
     }

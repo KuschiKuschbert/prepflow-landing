@@ -1,16 +1,15 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { CreateDishInput } from '@/types/dish';
-import { PostgrestError } from '@supabase/supabase-js';
+import { CreateDishInput, Dish, DishIngredientInput, DishRecipeInput } from './schemas';
 
 /**
  * Create dish with recipes and ingredients.
  *
  * @param {Omit<CreateDishInput, 'recipes' | 'ingredients'>} dishData - Dish data
- * @param {CreateDishInput['recipes']} recipes - Optional recipes array
- * @param {CreateDishInput['ingredients']} ingredients - Optional ingredients array
- * @returns {Promise<Object>} Created dish
+ * @param {DishRecipeInput[]} [recipes] - Optional recipes array
+ * @param {DishIngredientInput[]} [ingredients] - Optional ingredients array
+ * @returns {Promise<Dish>} Created dish
  * @throws {Error} If creation fails
  */
 export async function createDishWithRelations(
@@ -20,9 +19,9 @@ export async function createDishWithRelations(
     selling_price: number;
     category?: string;
   },
-  recipes?: Array<{ recipe_id: string; quantity?: number }>,
-  ingredients?: Array<{ ingredient_id: string; quantity: number; unit: string }>,
-) {
+  recipes?: DishRecipeInput[],
+  ingredients?: DishIngredientInput[],
+): Promise<Dish> {
   if (!supabaseAdmin) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
@@ -41,10 +40,9 @@ export async function createDishWithRelations(
     .single();
 
   if (createError) {
-    const pgError = createError as PostgrestError;
     logger.error('[Dishes API] Database error creating dish:', {
-      error: pgError.message,
-      code: pgError.code,
+      error: createError.message,
+      code: createError.code,
       context: { endpoint: '/api/dishes', operation: 'POST', dishName: dishData.dish_name },
     });
     throw ApiErrorHandler.fromSupabaseError(createError, 500);
@@ -61,10 +59,9 @@ export async function createDishWithRelations(
     const { error: recipesError } = await supabaseAdmin.from('dish_recipes').insert(dishRecipes);
 
     if (recipesError) {
-      const pgError = recipesError as PostgrestError;
       logger.error('[Dishes API] Database error adding recipes to dish:', {
-        error: pgError.message,
-        code: pgError.code,
+        error: recipesError.message,
+        code: recipesError.code,
         context: { endpoint: '/api/dishes', operation: 'POST', dishId: newDish.id },
       });
       // Rollback dish creation
@@ -87,7 +84,7 @@ export async function createDishWithRelations(
     const dishIngredients = ingredients.map(i => ({
       dish_id: newDish.id,
       ingredient_id: i.ingredient_id,
-      quantity: typeof i.quantity === 'string' ? parseFloat(i.quantity) : i.quantity,
+      quantity: i.quantity,
       unit: i.unit,
     }));
 
@@ -96,10 +93,9 @@ export async function createDishWithRelations(
       .insert(dishIngredients);
 
     if (ingredientsError) {
-      const pgError = ingredientsError as PostgrestError;
       logger.error('[Dishes API] Database error adding ingredients to dish:', {
-        error: pgError.message,
-        code: pgError.code,
+        error: ingredientsError.message,
+        code: ingredientsError.code,
         context: { endpoint: '/api/dishes', operation: 'POST', dishId: newDish.id },
       });
       // Rollback dish creation
@@ -117,5 +113,5 @@ export async function createDishWithRelations(
     }
   }
 
-  return newDish;
+  return newDish as Dish;
 }

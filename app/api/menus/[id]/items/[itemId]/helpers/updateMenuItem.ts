@@ -1,16 +1,14 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { z } from 'zod';
-import { MenuItem } from '../../../../types';
+import { MenuItem, UpdateMenuItemInput } from '../../../../helpers/schemas';
 import { fetchMenuItem } from './fetchMenuItem';
-import { updateMenuItemSchema } from './schemas';
 import { syncPrice } from './syncPrice';
 
 export async function updateMenuItem(
   menuId: string,
   menuItemId: string,
-  data: z.infer<typeof updateMenuItemSchema>,
+  data: UpdateMenuItemInput,
 ): Promise<{ success: boolean; item: MenuItem; message: string } | { error: any; status: number }> {
   const { category, position, actual_selling_price, region } = data;
 
@@ -20,12 +18,7 @@ export async function updateMenuItem(
     return { error: fetchError, status: 500 };
   }
 
-  const updateData: {
-    category?: string;
-    position?: number;
-    actual_selling_price?: number | null;
-    region?: string | null;
-  } = {};
+  const updateData: UpdateMenuItemInput = {};
 
   if (category !== undefined) updateData.category = category;
   if (position !== undefined) updateData.position = position;

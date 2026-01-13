@@ -1,25 +1,15 @@
-/**
- * Helper to update an existing recipe.
- */
-
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-
-export interface RecipeData {
-  yield: number;
-  yield_unit: string;
-  description: string | null;
-  instructions: string | null;
-}
+import { Recipe, UpdateRecipeInput } from './schemas';
 
 /**
  * Update an existing recipe.
  */
 export async function updateRecipe(
   recipeId: number,
-  recipeData: RecipeData,
-): Promise<{ recipe: any; error: any }> {
+  recipeData: UpdateRecipeInput,
+): Promise<{ recipe: Recipe | null; error: any }> {
   if (!supabaseAdmin) {
     return {
       recipe: null,
@@ -41,13 +31,13 @@ export async function updateRecipe(
   if (updateError) {
     logger.error('[Recipes API] Database error updating recipe:', {
       error: updateError.message,
-      code: (updateError as any).code,
+      code: updateError.code,
       context: { endpoint: '/api/recipes', operation: 'PUT', recipeId },
     });
   }
 
   return {
-    recipe: updatedRecipe,
+    recipe: updatedRecipe as Recipe | null,
     error: updateError,
   };
 }

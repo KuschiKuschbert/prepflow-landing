@@ -3,10 +3,10 @@
 You are working on the PrepFlow/CurbOS ecosystem. To ensure continuous improvement and consistency, you must strictly adhere to the following rules.
 
 ## 1. 🧠 Knowledge Base (MANDATORY READ)
-Before proposing code or fixing bugs, you MUST check the **Living Rule Book**:
-- Path: `docs/LIVING_RULES.md`
-- **Action**: Read this file to understand established project patterns (e.g., Next.js 15 params unwrapping, Supabase error handling).
-- **Enforcement**: If you violate a rule from this book, the user will reject your code.
+Before proposing code or fixing bugs, you MUST check the **Project Brain**:
+- Path: `docs/AI_RULES.md`
+- **Action**: Read this file to understand established project patterns (e.g., Next.js 15 params unwrapping, Supabase error handling, Ralph Loop methodology).
+- **Enforcement**: If you violate a rule from this brain, the user will reject your code.
 
 ## 2. 🐛 Troubleshooting & Solution Bank
 If you encounter an error (build fail, runtime crash, lint error):

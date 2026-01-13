@@ -2,6 +2,28 @@
 
 > **Instructions**: Read this file first. It contains the DNA of this project.
 
+## 0. 🗺️ Source of Truth (SSOT)
+
+This document is the central orchestrator for all AI behaviors.
+
+```mermaid
+graph TD
+    BRAIN["AI_RULES.md (The Brain)"]
+    ARCH["PROJECT_ARCHITECTURE.md"]
+    SCRIPTS["SCRIPTS.md"]
+    LOOP["RALPH_LOOP.md"]
+    PERSONA["docs/personas/"]
+
+    BRAIN --> ARCH
+    BRAIN --> SCRIPTS
+    BRAIN --> LOOP
+    BRAIN --> PERSONA
+```
+
+- **Architecture**: See [PROJECT_ARCHITECTURE.md](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/PROJECT_ARCHITECTURE.md)
+- **Automation**: See [SCRIPTS.md](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/SCRIPTS.md)
+- **Methodology**: See [RALPH_LOOP.md](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/methodology/RALPH_LOOP.md)
+
 ## 1. ⚡ Quick Commands
 
 | Action           | Command                         | Description                                        |
@@ -39,3 +61,16 @@
 - **[2026-01-11] Massive Avatars**: Gemini generated images were ~5MB. We used `sips` to resize them to ~250KB.
 - **[2026-01-11] Test Generation**: `import * as Module` is safer than named imports for smoke testing unknown files.
 - **[2026-01-11] Import Hoisting**: Jest hoists ES6 imports. Use `require()` inside `beforeAll` to meaningfully mock `process.env`.
+- **[2026-01-14] Ralph Loop**: For complex refactors and bugs, we use the **Ralph Wiggum Technique** (Iterate > Perfection). See [RALPH_LOOP.md](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/methodology/RALPH_LOOP.md).
+
+## 5. 🔄 The Ralph Loop (Methodology)
+
+For any task with high complexity or repeated failures, agents **MUST** follow the Ralph Loop:
+
+1.  **Iterate Immediately**: Don't over-plan; failure is informative data.
+2.  **State the Goal**: Define a clear "Completion Promise" (e.g., "DONE" or "TESTS PASSED").
+3.  **Self-Correct**: Use error logs to update `task.md` and retry immediately.
+4.  **Verify**: Never declare success without a terminal/browser check.
+
+> [!TIP]
+> Use the command **"Ralph this: [task]"** to trigger an autonomous improvement loop.

@@ -19,14 +19,25 @@ async function checkCircularDependencies() {
     });
 
     const circular = res.circular();
-    if (circular.length > 0) {
+    const MAX_ALLOWED_CIRCULAR = 24; // Baseline from DEBT.md (Iteration 8)
+
+    if (circular.length > MAX_ALLOWED_CIRCULAR) {
+      console.error(
+        `${RED}❌ Error: ${circular.length} Circular dependencies detected (Limit: ${MAX_ALLOWED_CIRCULAR}).${NC}`,
+      );
+      console.error(`${RED}   New circular dependencies are not allowed.${NC}`);
+      // Only show top 5 to avoid spam
+      console.error(circular.slice(0, 5));
+      console.error(`${RED}... and ${circular.length - 5} more.${NC}`);
+      return false;
+    } else if (circular.length > 0) {
       console.warn(
-        `${YELLOW}⚠️  Warning: ${circular.length} Circular dependencies detected (Non-blocking for now):${NC}`,
+        `${YELLOW}⚠️  Warning: ${circular.length} Circular dependencies detected (Baseline: ${MAX_ALLOWED_CIRCULAR}):${NC}`,
       );
       // Only show top 5 to avoid spam
       console.warn(circular.slice(0, 5));
       console.warn(`${YELLOW}... and ${circular.length - 5} more.${NC}`);
-      // return false; // TODO: Enforce this once cleanup is done
+      console.warn(`${YELLOW}   These are allowed as technical debt, but do not add more.${NC}`);
       return true;
     }
     console.log(`${GREEN}✅ No circular dependencies found.${NC}`);
@@ -88,6 +99,61 @@ function checkClientServerBoundaries(): boolean {
   return true;
 }
 
+function checkLibBoundaries(): boolean {
+  console.log(`\n${YELLOW}📚 Checking Lib vs Components Boundaries...${NC}`);
+
+  // Rules: lib/ should not import from components/ or app/
+  // Exception: lib/hooks might use context from components? (but ideally not UI components)
+  // We'll enforce a strict "no components in lib" rule.
+
+  const files = glob.sync('lib/**/*.{ts,tsx,js,jsx}', {
+    ignore: ['**/*.test.*', '**/*.spec.*'],
+  });
+
+  let violationCount = 0;
+  const violations: string[] = [];
+
+  for (const file of files) {
+    const content = fs.readFileSync(file, 'utf-8');
+
+    // Look for imports from @/components or ../components
+    // Regex explanation:
+    // Matches: 'import ... from "..."' or 'require("...")'
+    // Pattern matches strings starting with: @/components, ../components, or contains /components/ inside app path
+    const importRegex =
+      /from\s+['"](@\/components.*|\.\.\/components.*|@\/app\/.*\/components.*)['"]/g;
+
+    if (importRegex.test(content)) {
+      violationCount++;
+      violations.push(file);
+    }
+  }
+
+  const MAX_LIB_VIOLATIONS = 17; // Baseline based on grep (Iteration 9)
+
+  if (violationCount > MAX_LIB_VIOLATIONS) {
+    console.error(
+      `${RED}❌ Error: ${violationCount} Lib-to-Component violations detected (Limit: ${MAX_LIB_VIOLATIONS}).${NC}`,
+    );
+    console.error(
+      `${RED}   'lib/' should not depend on 'components/'. Please move shared logic to 'lib/' or 'utils/'.${NC}`,
+    );
+    // Show top 5
+    violations.slice(0, 5).forEach(v => console.error(`   - ${v}`));
+    if (violations.length > 5) console.error(`   ... and ${violations.length - 5} more.`);
+    return false;
+  } else if (violationCount > 0) {
+    console.warn(
+      `${YELLOW}⚠️  Warning: ${violationCount} Lib-to-Component violations detected (Baseline: ${MAX_LIB_VIOLATIONS}).${NC}`,
+    );
+    console.warn(`${YELLOW}   These are allowed as technical debt, but do not add more.${NC}`);
+    return true;
+  }
+
+  console.log(`${GREEN}✅ Lib boundaries respected.${NC}`);
+  return true;
+}
+
 async function main() {
   let success = true;
 
@@ -96,6 +162,10 @@ async function main() {
   }
 
   if (!checkClientServerBoundaries()) {
+    success = false;
+  }
+
+  if (!checkLibBoundaries()) {
     success = false;
   }
 

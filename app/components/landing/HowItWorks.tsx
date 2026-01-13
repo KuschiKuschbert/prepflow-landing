@@ -1,7 +1,5 @@
 'use client';
 
-import React from 'react';
-
 export default function HowItWorks() {
   const steps = [
     {
@@ -9,7 +7,7 @@ export default function HowItWorks() {
       title: 'Add ingredients',
       description: 'Add ingredients with costs and suppliers. Enter your current prices.',
       example: "Add 'Tomatoes' at $2.50/kg",
-      color: '#29E7CD',
+      color: 'var(--electric-lime)',
     },
     {
       number: 2,
@@ -17,7 +15,7 @@ export default function HowItWorks() {
       description:
         'Build recipes with portions and yields. PrepFlow calculates costs automatically.',
       example: "Create 'Margherita Pizza' recipe",
-      color: '#3B82F6',
+      color: 'var(--prepflow-blue)',
     },
     {
       number: 3,
@@ -25,7 +23,7 @@ export default function HowItWorks() {
       description:
         "View dish COGS and contribution margin instantly. Classify as Chef's Kiss, Hidden Gem, Bargain Bucket, or Burnt Toast.",
       example: 'See $4.20 COGS → Classify as "Chef\'s Kiss" → Price at $18.00',
-      color: '#D925C7',
+      color: 'var(--magenta-pulse)',
     },
   ];
 
@@ -45,7 +43,7 @@ export default function HowItWorks() {
           <div key={step.number} className="relative">
             {/* Connector arrow for desktop */}
             {index < steps.length - 1 && (
-              <div className="desktop:block absolute top-14 right-0 hidden h-0.5 w-full translate-x-1/2 bg-gradient-to-r from-transparent via-[#2a2a2a] to-transparent" />
+              <div className="desktop:block via-border absolute top-14 right-0 hidden h-0.5 w-full translate-x-1/2 bg-gradient-to-r from-transparent to-transparent" />
             )}
 
             <div className="text-center">
@@ -60,7 +58,7 @@ export default function HowItWorks() {
               </div>
               <h3 className="text-fluid-xl mb-2 font-semibold">{step.title}</h3>
               <p className="mb-3 text-gray-300">{step.description}</p>
-              <div className="rounded-lg border border-[#2a2a2a] bg-[#1f1f1f]/30 p-3">
+              <div className="border-border bg-surface/30 rounded-lg border p-3">
                 <p className="text-fluid-sm text-gray-400">{step.example}</p>
               </div>
             </div>
@@ -70,7 +68,7 @@ export default function HowItWorks() {
 
       {/* Workflow summary */}
       <div className="mt-12 text-center">
-        <div className="mx-auto max-w-2xl rounded-2xl border border-[#2a2a2a] bg-gradient-to-br from-[#29E7CD]/10 to-[#D925C7]/10 p-6">
+        <div className="border-border mx-auto max-w-2xl rounded-2xl border bg-gradient-to-br from-[var(--electric-lime)]/10 to-[var(--magenta-pulse)]/10 p-6">
           <p className="text-fluid-lg font-medium text-white">
             Add ingredients → Create recipes → See COGS & performance
           </p>

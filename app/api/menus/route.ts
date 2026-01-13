@@ -1,15 +1,8 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-import { Menu } from './types';
-
-const createMenuSchema = z.object({
-  menu_name: z.string().min(1, 'Menu name is required'),
-  description: z.string().optional(),
-});
+import { Menu, createMenuSchema } from './helpers/schemas';
 
 export async function GET(request: NextRequest) {
   try {
@@ -30,14 +23,13 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false });
 
     if (error) {
-      const pgError = error as PostgrestError;
       logger.error('[Menus API] Database error fetching menus:', {
-        error: pgError.message,
-        code: pgError.code,
+        error: error.message,
+        code: error.code,
         context: { endpoint: '/api/menus', operation: 'GET', table: 'menus' },
       });
 
-      const apiError = ApiErrorHandler.fromSupabaseError(pgError, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
@@ -50,9 +42,8 @@ export async function GET(request: NextRequest) {
           .eq('menu_id', menu.id);
 
         if (itemsError) {
-          const pgItemsError = itemsError as PostgrestError;
           logger.warn('[Menus API] Error fetching menu items count:', {
-            error: pgItemsError.message,
+            error: itemsError.message,
             menuId: menu.id,
           });
         }
@@ -137,14 +128,13 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (createError) {
-      const pgError = createError as PostgrestError;
       logger.error('[Menus API] Database error creating menu:', {
-        error: pgError.message,
-        code: pgError.code,
+        error: createError.message,
+        code: createError.code,
         context: { endpoint: '/api/menus', operation: 'POST', table: 'menus' },
       });
 
-      const apiError = ApiErrorHandler.fromSupabaseError(pgError, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(createError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 

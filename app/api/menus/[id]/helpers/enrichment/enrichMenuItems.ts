@@ -1,9 +1,5 @@
-/**
- * Helper for enriching menu items with prices, allergens, and dietary info
- */
-
 import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
-import { EnrichedMenuItem, RawMenuItem } from '../../../types';
+import { EnrichedMenuItem, RawMenuItem } from '../../../helpers/schemas';
 import { calculateRecommendedPrice } from './calculateRecommendedPrices';
 import { enrichDishItem } from './enrichDishItem';
 import { enrichRecipeItem } from './enrichRecipeItem';
@@ -55,15 +51,15 @@ export async function enrichMenuItems(
       }
 
       // Map recipe name from 'name' to 'recipe_name' for frontend compatibility
-      if (item.recipes && item.recipes.name) {
-        item.recipes.recipe_name = item.recipes.name;
+      if (item.recipes && (item.recipes as any).name) {
+        (item.recipes as any).recipe_name = (item.recipes as any).name;
       }
 
       // Final safety check: validate vegan status against allergens one more time
       const finalAllergens = consolidateAllergens(allergens || []);
       const itemName = item.dish_id
         ? item.dishes?.dish_name
-        : item.recipes?.recipe_name || item.recipes?.name;
+        : item.recipes?.recipe_name || (item.recipes as any)?.name;
       const itemId = item.dish_id ? item.dishes?.id : item.recipes?.id;
       const itemType = item.dish_id ? ('dish' as const) : ('recipe' as const);
 

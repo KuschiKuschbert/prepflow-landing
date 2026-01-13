@@ -2,13 +2,7 @@
  * Helper to transform cards for response.
  */
 
-import type {
-  CardMapEntry,
-  GroupedSubRecipeCards,
-  ItemOrder,
-  RecipeCard,
-  SubRecipeCard,
-} from '../types';
+import type { CardMapEntry, ItemOrder, RecipeCard, SubRecipeCard } from '../types';
 
 /**
  * Transform cards for response, separating main cards from sub-recipe cards.
@@ -34,28 +28,28 @@ export function transformCards(
       menuItemName: firstMenuItemName, // Keep for backward compatibility
       menuItemNames, // New: all menu item names
       title: card.title || firstMenuItemName,
-      baseYield: card.base_yield || 1,
+      baseYield: card.baseYield || 1,
       ingredients: card.ingredients || [],
-      methodSteps: card.method_steps || [],
+      methodSteps: card.methodSteps || [],
       notes: card.notes
         ? typeof card.notes === 'string'
-          ? card.notes.split('\n').filter((n: string) => n.trim().length > 0)
+          ? (card.notes as string).split('\n').filter((n: string) => n.trim().length > 0)
           : Array.isArray(card.notes)
-            ? card.notes
+            ? (card.notes as string[])
             : []
         : [],
-      parsedAt: card.parsed_at,
-      recipeId: card.recipe_id || null,
-      dishId: card.dish_id || null,
-      recipeSignature: card.recipe_signature || null,
+      parsedAt: card.parsedAt,
+      recipeId: card.recipeId || null,
+      dishId: card.dishId || null,
+      recipeSignature: card.recipeSignature || null,
     };
 
     // Check if this is a sub-recipe card (recipe_id set, dish_id null)
-    const isSubRecipe = card.recipe_id && !card.dish_id;
+    const isSubRecipe = transformedCard.recipeId && !transformedCard.dishId;
 
     if (isSubRecipe) {
       // Extract sub-recipe metadata from card_content
-      const cardContent = card.card_content || {};
+      const cardContent = (card as any).card_content || {};
       const subRecipeType = cardContent.sub_recipe_type || 'other';
       const usedByMenuItems = cardContent.used_by_menu_items || [];
 

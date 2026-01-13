@@ -6,20 +6,15 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 
-export interface RecipeData {
-  yield: number;
-  yield_unit: string;
-  description: string | null;
-  instructions: string | null;
-}
+import { CreateRecipeInput, Recipe } from './schemas';
 
 /**
  * Create a new recipe.
  */
 export async function createRecipe(
   name: string,
-  recipeData: RecipeData,
-): Promise<{ recipe: any; error: any }> {
+  recipeData: CreateRecipeInput,
+): Promise<{ recipe: Recipe | null; error: any }> {
   if (!supabaseAdmin) {
     return {
       recipe: null,
@@ -34,14 +29,14 @@ export async function createRecipe(
   try {
     const { data, error } = await supabaseAdmin
       .from('recipes')
-      .insert({ name: name.trim(), ...recipeData })
+      .insert({ ...recipeData }) // Fixed: Removed duplicate 'name' field
       .select()
       .single();
 
     if (error) {
       logger.error('[Recipes API] Database error creating recipe:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
       });
     }
 

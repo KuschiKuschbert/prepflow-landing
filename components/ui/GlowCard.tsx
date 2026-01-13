@@ -17,8 +17,8 @@ interface GlowCardProps {
  * Converts hex color to rgba, or returns rgba string as-is
  */
 function normalizeGlowColor(color: string): string {
-  // If it's already rgba, return as-is
-  if (color.startsWith('rgba')) {
+  // If it's already rgba or a CSS variable, return as-is
+  if (color.startsWith('rgba') || color.startsWith('var')) {
     return color;
   }
 

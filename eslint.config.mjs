@@ -32,8 +32,8 @@ export default defineConfig([
     // Specific block for TypeScript files to handle 'any' rule
     files: ['**/*.ts', '**/*.tsx'],
     rules: {
-         // Warns on usage of 'any' to encourage fixing, but prevents build breakage
-        '@typescript-eslint/no-explicit-any': 'warn',
+      // Warns on usage of 'any' to encourage fixing, but prevents build breakage
+      '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
   {

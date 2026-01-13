@@ -1,11 +1,11 @@
 'use client';
 
-import { useUser } from '@auth0/nextjs-auth0/client';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { MagneticButton } from '@/components/ui/MagneticButton';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { logger } from '@/lib/logger';
+import { useUser } from '@auth0/nextjs-auth0/client';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 interface HeroProps {
   onTourClick?: () => void;
@@ -118,7 +118,7 @@ export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
         >
           <div className="w-full max-w-6xl">
             <motion.div
-              className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#1f1f1f]/30 shadow-2xl backdrop-blur-sm"
+              className="bg-surface/30 relative overflow-hidden rounded-3xl border border-white/10 shadow-2xl backdrop-blur-sm"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >

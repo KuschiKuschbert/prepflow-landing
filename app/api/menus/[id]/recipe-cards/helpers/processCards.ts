@@ -23,9 +23,9 @@ export function processCardsOldMethod(
       cardMap.set(cardId, {
         card: {
           ...card,
-          recipe_id: null,
-          dish_id: null,
-          recipe_signature: null,
+          recipeId: null,
+          dishId: null,
+          recipeSignature: null,
         },
         menuItemIds: [],
         menuItemNames: [],

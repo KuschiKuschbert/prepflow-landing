@@ -1,7 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
+import { updateMenuSchema } from '../helpers/schemas';
 import { buildMenuUpdateData } from './helpers/buildMenuUpdateData';
 import { deleteMenu } from './helpers/deleteMenu';
 import { fetchMenuWithItems } from './helpers/fetchMenuWithItems';
@@ -10,14 +10,8 @@ import { handleMenuError } from './helpers/handleMenuError';
 import { updateMenu } from './helpers/updateMenu';
 import { validateMenuId } from './helpers/validateMenuId';
 
-const updateMenuSchema = z.object({
-  menu_name: z.string().min(1).optional(),
-  description: z.string().optional(),
-});
-
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const { id } = await context.params;
-  const menuId = id;
+  const { id: menuId } = await context.params;
   try {
     const validationError = validateMenuId(menuId);
     if (validationError) return validationError;
@@ -28,13 +22,12 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       success: true,
       menu,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('[Menus API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/menus/[id]', method: 'GET', menuId },
     });
-    if (typeof err === 'object' && err !== null && 'status' in err) {
-      // @ts-ignore - Validated by runtime check
+    if (err && typeof err === 'object' && 'status' in err) {
       return formatErrorResponse(err);
     }
     return handleMenuError(err, 'GET');
@@ -42,8 +35,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
 }
 
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const { id } = await context.params;
-  const menuId = id;
+  const { id: menuId } = await context.params;
   try {
     const validationError = validateMenuId(menuId);
     if (validationError) return validationError;
@@ -81,13 +73,12 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       menu: updatedMenu,
       message: 'Menu updated successfully',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('[Menus API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/menus/[id]', method: 'PUT', menuId },
     });
-    if (typeof err === 'object' && err !== null && 'status' in err) {
-      // @ts-ignore - Validated by runtime check
+    if (err && typeof err === 'object' && 'status' in err) {
       return formatErrorResponse(err);
     }
     return handleMenuError(err, 'PUT');
@@ -95,8 +86,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 }
 
 export async function DELETE(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const { id } = await context.params;
-  const menuId = id;
+  const { id: menuId } = await context.params;
   try {
     const validationError = validateMenuId(menuId);
     if (validationError) return validationError;
@@ -107,13 +97,12 @@ export async function DELETE(_req: NextRequest, context: { params: Promise<{ id:
       success: true,
       message: 'Menu deleted successfully',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('[Menus API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/menus/[id]', method: 'DELETE', menuId },
     });
-    if (typeof err === 'object' && err !== null && 'status' in err) {
-      // @ts-ignore - Validated by runtime check
+    if (err && typeof err === 'object' && 'status' in err) {
       return formatErrorResponse(err);
     }
     return handleMenuError(err, 'DELETE');

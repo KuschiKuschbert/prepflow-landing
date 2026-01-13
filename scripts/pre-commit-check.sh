@@ -13,7 +13,7 @@ echo "🦁 The Brain (Pre-Commit Guard)..."
 
 # 1. Security Check (Auditor)
 echo -n "   - Security (Auditor)... "
-if npm run check:security > /dev/null 2>&1; then
+if npm run check:security; then
     echo -e "${GREEN}Pass${NC}"
 else
     echo -e "${RED}FAIL (Secrets or Assets Detected)${NC}"
@@ -23,7 +23,7 @@ fi
 
 # 2. Health Check (Sentinel)
 echo -n "   - Health (Sentinel)... "
-if npm run check:health > /dev/null 2>&1; then
+if npm run check:health; then
     echo -e "${GREEN}Pass${NC}"
 else
     echo -e "${RED}FAIL (Code Debt Ceiling Breached)${NC}"
@@ -33,7 +33,7 @@ fi
 
 # 3. Architecture Check (Architect)
 echo -n "   - Architecture (Architect)... "
-if npm run check:architecture > /dev/null 2>&1; then
+if npm run check:architecture; then
     echo -e "${GREEN}Pass${NC}"
 else
     echo -e "${RED}FAIL (Architectural Violation)${NC}"

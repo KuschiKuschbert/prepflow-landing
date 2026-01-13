@@ -1,11 +1,10 @@
 'use client';
 
-import React from 'react';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { useEffect, useState } from 'react';
 import { GlowCard } from '@/components/ui/GlowCard';
-import { motion } from 'framer-motion';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
 
 interface Metric {
   label: string;
@@ -21,28 +20,28 @@ const metrics: Metric[] = [
     value: 80,
     suffix: '%',
     description: 'From hours of Excel to seconds of accurate calculations',
-    color: '#29E7CD',
+    color: 'var(--electric-lime)',
   },
   {
     label: 'More Accurate',
     value: 3,
     suffix: 'x',
     description: 'No more formula errors. No more guesswork. Just accurate costs.',
-    color: '#D925C7',
+    color: 'var(--magenta-pulse)',
   },
   {
     label: 'Manual Logging',
     value: 24,
     suffix: '/7',
     description: 'Log temperatures anytime with dashboard alerts for violations',
-    color: '#3B82F6',
+    color: 'var(--prepflow-blue)',
   },
   {
     label: 'QLD Compliant',
     value: 100,
     suffix: '%',
     description: 'QLD standards applied automatically. No manual configuration needed.',
-    color: '#29E7CD',
+    color: 'var(--electric-lime)',
   },
 ];
 
@@ -104,8 +103,8 @@ const AnimatedCounter = React.memo(function AnimatedCounter({
 
 function Performance() {
   const getGlowColor = (color: string): 'cyan' | 'magenta' | 'blue' => {
-    if (color === '#29E7CD') return 'cyan';
-    if (color === '#D925C7') return 'magenta';
+    if (color.includes('lime') || color === '#29E7CD') return 'cyan';
+    if (color.includes('magenta') || color === '#D925C7') return 'magenta';
     return 'blue';
   };
 
@@ -173,11 +172,11 @@ function Performance() {
               </motion.div>
 
               <motion.div
-                className="rounded-xl border border-[#29E7CD]/20 bg-[#29E7CD]/10 p-8"
+                className="border-primary/20 bg-primary/10 rounded-xl border p-8"
                 whileHover={{ scale: 1.01 }}
                 transition={{ duration: 0.3 }}
               >
-                <h4 className="text-fluid-xl mb-6 font-light text-[#29E7CD]">With PrepFlow</h4>
+                <h4 className="text-fluid-xl text-primary mb-6 font-light">With PrepFlow</h4>
                 <ul className="space-y-3 text-gray-400">
                   <li>• Calculations happen automatically</li>
                   <li>• See costs and margins instantly</li>
