@@ -11,7 +11,7 @@ const updatePreferencesSchema = z.object({
 /**
  * Update user's error reporting preferences
  */
-export async function updatePreferences(userEmail: string, body: any): Promise<NextResponse> {
+export async function updatePreferences(userEmail: string, body: unknown): Promise<NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

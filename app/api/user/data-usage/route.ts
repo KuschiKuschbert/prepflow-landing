@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
         .from(tableName)
         .select('*', { count: 'exact', head: true });
       if (error) {
-        const errorCode = (error as any).code;
+        const errorCode = error.code;
         // Handle missing table gracefully (PostgreSQL error code 42P01)
         if (errorCode === '42P01') {
           logger.dev(`[Data Usage API] Table '${tableName}' does not exist, using 0`);

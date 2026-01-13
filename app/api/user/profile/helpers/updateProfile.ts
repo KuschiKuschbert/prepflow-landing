@@ -2,20 +2,14 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
-import { z } from 'zod';
 import { createUser } from './createUser';
 import { formatProfileResponse } from './formatProfileResponse';
-
-const profileUpdateSchema = z.object({
-  first_name: z.string().max(100).optional(),
-  last_name: z.string().max(100).optional(),
-  business_name: z.string().max(255).optional(),
-});
+import { profileUpdateSchema } from './types';
 
 /**
  * Update user profile
  */
-export async function updateProfile(userEmail: string, body: any): Promise<NextResponse> {
+export async function updateProfile(userEmail: string, body: unknown): Promise<NextResponse> {
   // Validate request body
   const validationResult = profileUpdateSchema.safeParse(body);
   if (!validationResult.success) {

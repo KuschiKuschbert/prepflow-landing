@@ -3,11 +3,12 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 import { mergePreferences } from './mergePreferences';
+import type { NotificationPreferences } from './types';
 
 /**
  * Update user notification preferences
  */
-export async function updatePreferences(userEmail: string, updates: any): Promise<NextResponse> {
+export async function updatePreferences(userEmail: string, updates: NotificationPreferences): Promise<NextResponse> {
   if (!supabaseAdmin) {
     logger.warn('[Notifications API] Supabase not available');
     return NextResponse.json(
