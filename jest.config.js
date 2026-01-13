@@ -13,6 +13,7 @@ const customJestConfig = {
   },
   testMatch: ['**/?(*.)+(test|spec).[tj]s?(x)'],
   testPathIgnorePatterns: ['<rootDir>/e2e/'],
+  transformIgnorePatterns: ['/node_modules/(?!(@auth0/nextjs-auth0)/)'],
 };
 
 module.exports = createJestConfig(customJestConfig);
