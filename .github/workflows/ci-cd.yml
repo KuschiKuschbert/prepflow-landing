@@ -105,9 +105,19 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
 
+      - name: Check Vercel Secrets
+        id: check_secrets
+        run: |
+          if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
+            echo "Secrets missing. Skipping deploy."
+            echo "deploy=false" >> $GITHUB_OUTPUT
+          else
+            echo "deploy=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: 🚀 Deploy to Vercel
         id: deploy
-        if: secrets.VERCEL_TOKEN != ''
+        if: steps.check_secrets.outputs.deploy == 'true'
         uses: amondnet/vercel-action@v25
         # actionlint: disable=expr
         with:
