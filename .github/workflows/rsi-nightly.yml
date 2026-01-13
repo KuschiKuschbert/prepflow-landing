@@ -1,5 +1,5 @@
 name: RSI Nightly Improvement
-
+# Note: Requires "Read and write permissions" and "Allow GitHub Actions to create and approve pull requests" in Repo Settings > Actions > General
 on:
   schedule:
     # Run at 03:00 UTC every day
