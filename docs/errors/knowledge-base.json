@@ -1,7 +1,67 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2025-01-01T00:00:00.000Z",
-  "errors": [],
-  "patterns": [],
-  "rules": []
+  "lastUpdated": "2026-01-13T02:00:00.000Z",
+  "errors": [
+    {
+      "id": "ERR-AUTH0-STARTUP",
+      "errorType": "ConfigurationError",
+      "category": "Runtime",
+      "severity": "High",
+      "pattern": "Auth0 SDK.*Configuration validation failed",
+      "context": {
+        "file": "server.js",
+        "environment": "CI"
+      },
+      "fixes": [
+        {
+          "id": "FIX-AUTH0-SECRETS",
+          "solution": "Add AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET, AUTH0_BASE_URL, AUTH0_ISSUER_BASE_URL, and AUTH0_SECRET to the environment variables of the running process.",
+          "prevention": "Ensure all required Auth0 secrets are propagated to CI/CD steps running the application.",
+          "documentedAt": "2026-01-13T02:00:00.000Z",
+          "documentedBy": "system"
+        }
+      ],
+      "similarErrors": [],
+      "preventionRules": ["RULE-ENV-CHECK"]
+    },
+    {
+      "id": "ERR-WORKFLOW-SYNTAX",
+      "errorType": "SyntaxError",
+      "category": "CI",
+      "severity": "Medium",
+      "pattern": "\\bnam:\\s",
+      "context": {
+        "file": ".github/workflows/*.yml"
+      },
+      "fixes": [
+        {
+          "id": "FIX-YAML-TYPO",
+          "solution": "Correct typo 'nam:' to 'name:' in YAML key.",
+          "prevention": "Run YAML header check or linter.",
+          "documentedAt": "2026-01-13T02:00:00.000Z",
+          "documentedBy": "system"
+        }
+      ],
+      "similarErrors": [],
+      "preventionRules": []
+    }
+  ],
+  "patterns": [
+    {
+      "id": "PAT-AUTH0-CONFIG",
+      "name": "Auth0 Configuration Failure",
+      "description": "Next.js application fails to start because Auth0 SDK requirements are not met.",
+      "detection": "Configuration validation failed: missing",
+      "fix": "Supply missing environment variables",
+      "prevention": "Audit .env.local and CI secrets"
+    }
+  ],
+  "rules": [
+    {
+      "id": "RULE-ENV-CHECK",
+      "name": "Environment Variable Completeness",
+      "source": "Audit Logs",
+      "enforcement": "manual"
+    }
+  ]
 }
