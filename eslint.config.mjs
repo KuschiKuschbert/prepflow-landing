@@ -1,5 +1,5 @@
-import { defineConfig } from 'eslint/config';
 import nextConfig from 'eslint-config-next/core-web-vitals';
+import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
   {
@@ -33,8 +33,22 @@ export default defineConfig([
     },
   },
   {
+    // Allow console in error-learning (CLI-based tooling)
+    files: ['lib/error-learning/**/*.ts'],
+    rules: {
+      'no-console': 'off',
+    },
+  },
+  {
     // Allow console in scripts (scripts are CLI tools)
     files: ['scripts/**/*.js', 'scripts/**/*.ts'],
+    rules: {
+      'no-console': 'off',
+    },
+  },
+  {
+    // Allow console in RSI library (RSI is a CLI-based system that outputs progress)
+    files: ['lib/rsi/**/*.ts'],
     rules: {
       'no-console': 'off',
     },
