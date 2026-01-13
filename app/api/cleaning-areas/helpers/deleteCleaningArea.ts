@@ -18,7 +18,7 @@ export async function deleteCleaningArea(id: string): Promise<void> {
   if (error) {
     logger.error('[Cleaning Areas API] Database error deleting area:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: { endpoint: '/api/cleaning-areas', operation: 'DELETE', areaId: id },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

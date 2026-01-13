@@ -1,11 +1,31 @@
+import type { PostgrestError, SupabaseClient } from '@supabase/supabase-js';
+import type { Employee } from './schemas';
+
+interface EmployeeQueryParams {
+  role?: string | null;
+  employment_type?: string | null;
+  search?: string | null;
+  page?: number;
+  pageSize?: number;
+}
+
+interface QueryResult {
+  data: Employee[] | null;
+  error: PostgrestError | null;
+  count: number | null;
+}
+
 /**
  * Builds Supabase query for employees with filters and pagination.
  *
- * @param {any} supabase - Supabase client
- * @param {any} params - Query parameters
- * @returns {Promise<{ data: any; error: any; count: number | null }>} Query result
+ * @param {SupabaseClient} supabase - Supabase client
+ * @param {EmployeeQueryParams} params - Query parameters
+ * @returns {Promise<QueryResult>} Query result
  */
-export async function buildEmployeeQuery(supabase: any, params: any) {
+export async function buildEmployeeQuery(
+  supabase: SupabaseClient,
+  params: EmployeeQueryParams,
+): Promise<QueryResult> {
   let query = supabase.from('employees').select('*', { count: 'exact' });
 
   // Filter by role
@@ -38,5 +58,5 @@ export async function buildEmployeeQuery(supabase: any, params: any) {
 
   const { data, error, count } = await query;
 
-  return { data, error, count };
+  return { data: data as Employee[] | null, error, count };
 }

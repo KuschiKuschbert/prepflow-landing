@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
-import { validateEmployeeRequest } from './validateEmployeeRequest';
 import { triggerEmployeeSync } from '@/lib/square/sync/hooks';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 import { handleStaffEmployeeError } from './handleError';
 import { createEmployeeSchema } from './schemas';
+import { validateEmployeeRequest } from './validateEmployeeRequest';
 
 export async function handleCreateEmployee(request: NextRequest) {
   try {
@@ -84,7 +84,7 @@ export async function handleCreateEmployee(request: NextRequest) {
     if (insertError) {
       logger.error('[Staff Employees API] Database error creating employee:', {
         error: insertError.message,
-        code: (insertError as any).code,
+        code: insertError.code,
         context: { endpoint: '/api/staff/employees', operation: 'POST', email: employeeData.email },
       });
 

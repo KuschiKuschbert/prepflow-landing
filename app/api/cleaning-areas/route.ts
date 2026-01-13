@@ -1,14 +1,13 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { getAppError } from '@/lib/utils/error';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-import { createCleaningArea } from './helpers/createCleaningArea';
-import { handleCleaningAreaError } from './helpers/handleCleaningAreaError';
-import { updateCleaningArea } from './helpers/updateCleaningArea';
-import { createCleaningAreaSchema, updateCleaningAreaSchema } from './helpers/schemas';
-import { handleDeleteCleaningArea } from './helpers/deleteCleaningAreaHandler';
 import { handleCreateCleaningArea } from './helpers/createCleaningAreaHandler';
+import { handleDeleteCleaningArea } from './helpers/deleteCleaningAreaHandler';
+import { handleCleaningAreaError } from './helpers/handleCleaningAreaError';
+import { updateCleaningAreaSchema } from './helpers/schemas';
+import { updateCleaningArea } from './helpers/updateCleaningArea';
 
 /**
  * GET /api/cleaning-areas
@@ -36,7 +35,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Cleaning Areas API] Database error fetching areas:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: { endpoint: '/api/cleaning-areas', operation: 'GET', table: 'cleaning_areas' },
       });
 
@@ -115,7 +114,7 @@ export async function PUT(request: NextRequest) {
 
     const { id, area_name, description, cleaning_frequency, is_active } = validationResult.data;
 
-    const updateData: any = {};
+    const updateData: Record<string, unknown> = {};
     if (area_name !== undefined) updateData.area_name = area_name;
     if (description !== undefined) updateData.description = description;
     if (cleaning_frequency !== undefined) updateData.cleaning_frequency = cleaning_frequency;
@@ -128,14 +127,18 @@ export async function PUT(request: NextRequest) {
       message: 'Cleaning area updated successfully',
       data,
     });
-  } catch (err: any) {
-    if (err.status) {
+  } catch (err: unknown) {
+    const appError = getAppError(err);
+    if (appError.status && appError.status !== 500) {
       logger.error('[Cleaning Areas API] Error with status:', {
-        error: err instanceof Error ? err.message : String(err),
-        status: err.status,
+        error: appError.message,
+        status: appError.status,
         context: { endpoint: '/api/cleaning-areas', method: 'PUT' },
       });
-      return NextResponse.json(err, { status: err.status });
+      return NextResponse.json(
+        { error: appError.message, code: appError.code },
+        { status: appError.status },
+      );
     }
     return handleCleaningAreaError(err, 'PUT');
   }

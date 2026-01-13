@@ -3,13 +3,14 @@
  * Restore from backup (full, selective, or merge).
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth0-api-helpers';
-import { logger } from '@/lib/logger';
-import { decryptBackup, getPrepFlowServerKey } from '@/lib/backup/encryption';
-import { restoreFull, restoreSelective, restoreMerge } from '@/lib/backup/restore';
-import type { MergeOptions } from '@/lib/backup/types';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { requireAuth } from '@/lib/auth0-api-helpers';
+import { decryptBackup, getPrepFlowServerKey } from '@/lib/backup/encryption';
+import { restoreFull, restoreMerge, restoreSelective } from '@/lib/backup/restore';
+import type { MergeOptions } from '@/lib/backup/types';
+import { logger } from '@/lib/logger';
+import { getAppError } from '@/lib/utils/error';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const restoreBackupSchema = z.object({
@@ -163,10 +164,16 @@ export async function POST(request: NextRequest) {
         : 'Restore completed with errors',
       result: restoreResult,
     });
-  } catch (error: any) {
-    logger.error('[Backup Restore] Error:', error);
+  } catch (error: unknown) {
+    const appError = getAppError(error);
+    logger.error('[Backup Restore] Error:', {
+      error: appError.message,
+      code: appError.code,
+      status: appError.status,
+      originalError: appError.originalError,
+    });
     return NextResponse.json(
-      { error: 'Failed to restore backup', message: error.message },
+      { error: 'Failed to restore backup', message: appError.message },
       { status: 500 },
     );
   }

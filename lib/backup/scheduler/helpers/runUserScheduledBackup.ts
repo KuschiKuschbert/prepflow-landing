@@ -1,9 +1,11 @@
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
-import { exportUserData } from '../../export';
+import { createSupabaseAdmin } from '@/lib/supabase';
 import { encryptBackup } from '../../encryption';
+import { exportUserData } from '../../export';
 import { authenticateGoogleDrive, uploadBackupToDrive } from '../../google-drive';
 import type { BackupSchedule } from '../../types';
+
+import { getAppError } from '@/lib/utils/error';
 
 /**
  * Run scheduled backup for a single user
@@ -27,10 +29,11 @@ export async function runUserScheduledBackup(schedule: BackupSchedule): Promise<
         const client = await authenticateGoogleDrive(userId);
         googleDriveFileId = await uploadBackupToDrive(client, encrypted, userId);
         logger.info(`[Backup Scheduler] Uploaded backup to Google Drive for user ${userId}`);
-      } catch (error: any) {
+      } catch (error: unknown) {
+        const appError = getAppError(error);
         logger.warn(
           `[Backup Scheduler] Failed to upload to Google Drive for user ${userId}:`,
-          error,
+          appError,
         );
       }
     }
@@ -49,7 +52,7 @@ export async function runUserScheduledBackup(schedule: BackupSchedule): Promise<
     if (metadataError) {
       logger.error('[Backup Scheduler] Error storing backup metadata:', {
         error: metadataError.message,
-        code: (metadataError as any).code,
+        code: metadataError.code,
         userId,
       });
     }
@@ -68,7 +71,7 @@ export async function runUserScheduledBackup(schedule: BackupSchedule): Promise<
     if (scheduleError) {
       logger.error('[Backup Scheduler] Error updating backup schedule:', {
         error: scheduleError.message,
-        code: (scheduleError as any).code,
+        code: scheduleError.code,
         userId,
       });
     }
@@ -76,8 +79,9 @@ export async function runUserScheduledBackup(schedule: BackupSchedule): Promise<
     logger.info(
       `[Backup Scheduler] Scheduled backup completed for user ${userId}, next backup: ${nextBackupAt.toISOString()}`,
     );
-  } catch (error: any) {
-    logger.error(`[Backup Scheduler] Error running backup for user ${userId}:`, error);
+  } catch (error: unknown) {
+    const appError = getAppError(error);
+    logger.error(`[Backup Scheduler] Error running backup for user ${userId}:`, appError);
     throw error;
   }
 }

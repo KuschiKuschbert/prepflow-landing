@@ -1,41 +1,49 @@
+import type { CreateEmployeeInput } from './schemas';
+
+type ValidationResult =
+  | { isValid: true; data: CreateEmployeeInput }
+  | { isValid: false; error: string };
+
 /**
  * Validates employee request data.
  *
- * @param {any} body - Request body
- * @returns {{ isValid: boolean; error?: string; data?: any }} Validation result
+ * @param {unknown} body - Request body
+ * @returns {ValidationResult} Validation result
  */
-export function validateEmployeeRequest(body: any): {
-  isValid: boolean;
-  error?: string;
-  data?: any;
-} {
-  if (!body.first_name) {
+export function validateEmployeeRequest(body: unknown): ValidationResult {
+  if (typeof body !== 'object' || body === null) {
+    return { isValid: false, error: 'Invalid request body' };
+  }
+
+  const b = body as Record<string, unknown>;
+
+  if (!b.first_name || typeof b.first_name !== 'string') {
     return { isValid: false, error: 'First name is required' };
   }
 
-  if (!body.last_name) {
+  if (!b.last_name || typeof b.last_name !== 'string') {
     return { isValid: false, error: 'Last name is required' };
   }
 
-  if (!body.email) {
+  if (!b.email || typeof b.email !== 'string') {
     return { isValid: false, error: 'Email is required' };
   }
 
   // Validate email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(body.email)) {
+  if (!emailRegex.test(b.email)) {
     return { isValid: false, error: 'Invalid email format' };
   }
 
   // Validate role
-  const validRoles = ['admin', 'manager', 'staff'];
-  if (body.role && !validRoles.includes(body.role)) {
+  const validRoles = ['admin', 'manager', 'staff'] as const;
+  if (b.role && !validRoles.includes(b.role as typeof validRoles[number])) {
     return { isValid: false, error: `Invalid role. Must be one of: ${validRoles.join(', ')}` };
   }
 
   // Validate employment type
-  const validEmploymentTypes = ['full-time', 'part-time', 'casual'];
-  if (body.employment_type && !validEmploymentTypes.includes(body.employment_type)) {
+  const validEmploymentTypes = ['full-time', 'part-time', 'casual'] as const;
+  if (b.employment_type && !validEmploymentTypes.includes(b.employment_type as typeof validEmploymentTypes[number])) {
     return {
       isValid: false,
       error: `Invalid employment type. Must be one of: ${validEmploymentTypes.join(', ')}`,
@@ -43,8 +51,8 @@ export function validateEmployeeRequest(body: any): {
   }
 
   // Validate hourly rate
-  if (body.hourly_rate !== undefined) {
-    const rate = parseFloat(body.hourly_rate);
+  if (b.hourly_rate !== undefined) {
+    const rate = parseFloat(String(b.hourly_rate));
     if (isNaN(rate) || rate < 0) {
       return { isValid: false, error: 'Hourly rate must be a positive number' };
     }
@@ -53,22 +61,22 @@ export function validateEmployeeRequest(body: any): {
   return {
     isValid: true,
     data: {
-      user_id: body.user_id || null,
-      first_name: body.first_name,
-      last_name: body.last_name,
-      email: body.email,
-      phone: body.phone || null,
-      role: body.role || 'staff',
-      employment_type: body.employment_type || 'casual',
-      hourly_rate: body.hourly_rate !== undefined ? parseFloat(body.hourly_rate) : 0,
-      saturday_rate: body.saturday_rate !== undefined ? parseFloat(body.saturday_rate) : null,
-      sunday_rate: body.sunday_rate !== undefined ? parseFloat(body.sunday_rate) : null,
-      skills: body.skills || null,
-      bank_account_bsb: body.bank_account_bsb || null,
-      bank_account_number: body.bank_account_number || null,
-      tax_file_number: body.tax_file_number || null,
-      emergency_contact_name: body.emergency_contact_name || null,
-      emergency_contact_phone: body.emergency_contact_phone || null,
+      user_id: typeof b.user_id === 'string' ? b.user_id : undefined,
+      first_name: b.first_name,
+      last_name: b.last_name as string,
+      email: b.email,
+      phone: typeof b.phone === 'string' ? b.phone : undefined,
+      role: (b.role as typeof validRoles[number]) || 'staff',
+      employment_type: (b.employment_type as typeof validEmploymentTypes[number]) || 'casual',
+      hourly_rate: b.hourly_rate !== undefined ? parseFloat(String(b.hourly_rate)) : 0,
+      saturday_rate: b.saturday_rate !== undefined ? parseFloat(String(b.saturday_rate)) : undefined,
+      sunday_rate: b.sunday_rate !== undefined ? parseFloat(String(b.sunday_rate)) : undefined,
+      skills: Array.isArray(b.skills) ? b.skills as string[] : undefined,
+      bank_account_bsb: typeof b.bank_account_bsb === 'string' ? b.bank_account_bsb : undefined,
+      bank_account_number: typeof b.bank_account_number === 'string' ? b.bank_account_number : undefined,
+      tax_file_number: typeof b.tax_file_number === 'string' ? b.tax_file_number : undefined,
+      emergency_contact_name: typeof b.emergency_contact_name === 'string' ? b.emergency_contact_name : undefined,
+      emergency_contact_phone: typeof b.emergency_contact_phone === 'string' ? b.emergency_contact_phone : undefined,
     },
   };
 }

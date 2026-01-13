@@ -15,7 +15,7 @@ export function mapRecipeIngredients(rows: any[]): any[] {
       unit: row.unit,
       ingredients: {
         id: ing.id,
-        ingredient_name: ing.ingredient_name || 'Unknown',
+        ingredient_name: ing.ingredient_name || ing.name || 'Unknown',
         cost_per_unit: ing.cost_per_unit,
         cost_per_unit_incl_trim: ing.cost_per_unit_incl_trim,
         unit: ing.unit || row.unit || null,

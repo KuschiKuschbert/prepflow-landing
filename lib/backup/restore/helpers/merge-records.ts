@@ -2,12 +2,13 @@
  * Merge conflict resolution helpers for restore operations.
  */
 import { logger } from '@/lib/logger';
+import { getAppError } from '@/lib/utils/error';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { MergeOptions } from '../../types';
+import type { DatabaseRecord, MergeOptions } from '../../types';
 import {
-  BATCH_SIZE,
-  processInsertBatch,
-  processUpdateBatch,
+    BATCH_SIZE,
+    processInsertBatch,
+    processUpdateBatch,
 } from './merge-records/helpers/processBatches';
 
 /**
@@ -16,8 +17,8 @@ import {
 export async function mergeRecords(
   supabase: SupabaseClient,
   tableName: string,
-  records: any[],
-  existingRecords: any[],
+  records: DatabaseRecord[],
+  existingRecords: DatabaseRecord[],
   userId: string,
   options: MergeOptions,
 ): Promise<{ insertedCount: number; conflictCount: number; error?: string }> {
@@ -30,15 +31,16 @@ export async function mergeRecords(
 
   try {
     // Create lookup map for existing records (by ID)
-    const existingMap = new Map(existingRecords.map(r => [r.id, r]));
+    const existingMap = new Map(existingRecords.map(r => [r.id as string, r]));
 
     // Process records in batches
-    const batchToInsert: any[] = [];
-    const batchToUpdate: any[] = [];
+    const batchToInsert: DatabaseRecord[] = [];
+    const batchToUpdate: DatabaseRecord[] = [];
 
     for (const record of records) {
       const recordWithUserId = { ...record, user_id: userId };
-      const existingRecord = existingMap.get(record.id);
+      const recordId = record.id as string;
+      const existingRecord = existingMap.get(recordId);
 
       if (existingRecord) {
         // Conflict detected
@@ -48,8 +50,8 @@ export async function mergeRecords(
           batchToUpdate.push(recordWithUserId);
         } else if (options.createNewIds) {
           // Create new ID
-          delete recordWithUserId.id;
-          batchToInsert.push(recordWithUserId);
+          const { id, ...recordWithoutId } = recordWithUserId as DatabaseRecord;
+          batchToInsert.push(recordWithoutId);
         }
         // else skip (default behavior)
       } else {
@@ -81,15 +83,16 @@ export async function mergeRecords(
     }
 
     return { insertedCount, conflictCount };
-  } catch (error: any) {
-    if (error.message?.includes('does not exist')) {
-      logger.dev(`[Restore] Skipping table ${tableName}: ${error.message}`);
+  } catch (error: unknown) {
+    const appError = getAppError(error);
+    if (appError.message?.includes('does not exist')) {
+      logger.dev(`[Restore] Skipping table ${tableName}: ${appError.message}`);
       return { insertedCount, conflictCount, error: `Table ${tableName} does not exist` };
     }
     return {
       insertedCount,
       conflictCount,
-      error: `Failed to merge ${tableName}: ${error.message}`,
+      error: `Failed to merge ${tableName}: ${appError.message}`,
     };
   }
 }
@@ -99,7 +102,7 @@ export async function getExistingRecords(
   supabase: SupabaseClient,
   tableName: string,
   userId: string,
-): Promise<any[]> {
+): Promise<DatabaseRecord[]> {
   // For child tables, we'll handle conflicts differently
   if (tableName === 'order_list_items' || tableName === 'prep_list_items') {
     return [];
@@ -110,9 +113,9 @@ export async function getExistingRecords(
   if (error) {
     logger.warn('[Restore] Error fetching existing records:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: { tableName, userId, operation: 'getExistingRecords' },
     });
   }
-  return data || [];
+  return (data as DatabaseRecord[]) || [];
 }

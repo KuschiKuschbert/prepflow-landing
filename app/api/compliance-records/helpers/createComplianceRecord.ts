@@ -13,24 +13,18 @@ const COMPLIANCE_TYPES_SELECT = `
   )
 `;
 
+import type { ComplianceRecord, CreateComplianceRecordInput } from './schemas';
+
 /**
  * Create a compliance record.
  *
- * @param {Object} recordData - Compliance record data
- * @returns {Promise<Object>} Created compliance record
+ * @param {CreateComplianceRecordInput} recordData - Compliance record data
+ * @returns {Promise<ComplianceRecord>} Created compliance record
  * @throws {Error} If creation fails
  */
-export async function createComplianceRecord(recordData: {
-  compliance_type_id: string;
-  document_name: string;
-  issue_date?: string | null;
-  expiry_date?: string | null;
-  document_url?: string | null;
-  photo_url?: string | null;
-  notes?: string | null;
-  reminder_enabled?: boolean;
-  reminder_days_before?: number;
-}) {
+export async function createComplianceRecord(
+  recordData: CreateComplianceRecordInput,
+): Promise<ComplianceRecord> {
   if (!supabaseAdmin) {
     logger.error('[Compliance Records] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
@@ -62,7 +56,7 @@ export async function createComplianceRecord(recordData: {
   if (error) {
     logger.error('[Compliance Records API] Database error creating record:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: {
         endpoint: '/api/compliance-records',
         operation: 'POST',
@@ -72,5 +66,5 @@ export async function createComplianceRecord(recordData: {
     throw ApiErrorHandler.fromSupabaseError(error, 500);
   }
 
-  return data;
+  return data as unknown as ComplianceRecord;
 }

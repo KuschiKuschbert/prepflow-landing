@@ -1,6 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
 import { deleteComplianceRecord } from './deleteComplianceRecord';
 import { handleComplianceError } from './handleComplianceError';
 
@@ -18,11 +17,7 @@ export async function handleDeleteComplianceRecord(request: NextRequest) {
 
     await deleteComplianceRecord(id);
     return NextResponse.json({ success: true, message: 'Compliance record deleted successfully' });
-  } catch (err: any) {
-    logger.error('[Compliance Records API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      context: { endpoint: '/api/compliance-records', method: 'DELETE' },
-    });
+  } catch (err: unknown) {
     return handleComplianceError(err, 'DELETE');
   }
 }

@@ -5,7 +5,6 @@
  * @module api/staff/availability
  */
 
-import { z } from 'zod';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
@@ -45,7 +44,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Availability API] Database error fetching availability:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: { endpoint: '/api/staff/availability', operation: 'GET', table: 'availability' },
       });
 
@@ -159,7 +158,7 @@ export async function POST(request: NextRequest) {
     if (upsertError) {
       logger.error('[Availability API] Database error upserting availability:', {
         error: upsertError.message,
-        code: (upsertError as any).code,
+        code: upsertError.code,
         context: {
           endpoint: '/api/staff/availability',
           operation: 'POST',

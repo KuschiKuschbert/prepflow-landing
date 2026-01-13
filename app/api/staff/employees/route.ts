@@ -13,8 +13,8 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { buildEmployeeQuery } from './helpers/buildEmployeeQuery';
-import { handleStaffEmployeeError } from './helpers/handleError';
 import { handleCreateEmployee } from './helpers/createEmployeeHandler';
+import { handleStaffEmployeeError } from './helpers/handleError';
 
 /**
  * GET /api/staff/employees
@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Staff Employees API] Database error fetching employees:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: { endpoint: '/api/staff/employees', operation: 'GET', table: 'employees' },
       });
 

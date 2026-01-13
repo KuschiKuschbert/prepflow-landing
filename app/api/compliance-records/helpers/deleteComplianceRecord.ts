@@ -22,7 +22,7 @@ export async function deleteComplianceRecord(id: string): Promise<void> {
   if (error) {
     logger.error('[Compliance Records API] Database error deleting record:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: { endpoint: '/api/compliance-records', operation: 'DELETE', recordId: id },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

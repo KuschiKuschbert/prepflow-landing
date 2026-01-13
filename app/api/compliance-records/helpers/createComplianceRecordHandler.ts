@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
 import { createComplianceRecord } from './createComplianceRecord';
 import { handleComplianceError } from './handleComplianceError';
 import { createComplianceRecordSchema } from './schemas';
@@ -39,11 +39,7 @@ export async function handleCreateComplianceRecord(request: NextRequest) {
       message: 'Compliance record created successfully',
       data,
     });
-  } catch (err: any) {
-    logger.error('[Compliance Records API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      context: { endpoint: '/api/compliance-records', method: 'POST' },
-    });
+  } catch (err: unknown) {
     return handleComplianceError(err, 'POST');
   }
 }

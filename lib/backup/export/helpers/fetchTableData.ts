@@ -1,15 +1,17 @@
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
+
+import type { DatabaseRecord } from '@/lib/backup/types';
 
 /**
  * Get user-specific data from a table.
  *
  * @param {string} userId - User ID (email)
  * @param {string} tableName - Table name
- * @returns {Promise<any[]>} Array of records
+ * @returns {Promise<DatabaseRecord[]>} Array of records
  */
-export async function getUserTableData(userId: string, tableName: string): Promise<any[]> {
+export async function getUserTableData(userId: string, tableName: string): Promise<DatabaseRecord[]> {
   const supabase = createSupabaseAdmin();
 
   const { data, error } = await supabase.from(tableName).select('*').eq('user_id', userId);
@@ -27,7 +29,7 @@ export async function getUserTableData(userId: string, tableName: string): Promi
     throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
   }
 
-  return data || [];
+  return (data as DatabaseRecord[]) || [];
 }
 
 /**
@@ -35,14 +37,14 @@ export async function getUserTableData(userId: string, tableName: string): Promi
  *
  * @param {string} tableName - Child table name
  * @param {string} fkColumn - Foreign key column name
- * @param {any[]} parentIds - Array of parent IDs
- * @returns {Promise<any[]>} Array of child records
+ * @param {unknown[]} parentIds - Array of parent IDs
+ * @returns {Promise<DatabaseRecord[]>} Array of child records
  */
 export async function getChildTableData(
   tableName: string,
   fkColumn: string,
-  parentIds: any[],
-): Promise<any[]> {
+  parentIds: unknown[],
+): Promise<DatabaseRecord[]> {
   if (parentIds.length === 0) {
     return [];
   }
@@ -60,5 +62,5 @@ export async function getChildTableData(
     throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);
   }
 
-  return data || [];
+  return (data as DatabaseRecord[]) || [];
 }

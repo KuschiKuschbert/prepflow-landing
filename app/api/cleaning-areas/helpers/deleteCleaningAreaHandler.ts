@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { getAppError } from '@/lib/utils/error';
+import { NextRequest, NextResponse } from 'next/server';
 import { deleteCleaningArea } from './deleteCleaningArea';
 import { handleCleaningAreaError } from './handleCleaningAreaError';
 
@@ -22,14 +23,18 @@ export async function handleDeleteCleaningArea(request: NextRequest) {
       success: true,
       message: 'Cleaning area deleted successfully',
     });
-  } catch (err: any) {
-    if (err.status) {
+  } catch (err: unknown) {
+    const appError = getAppError(err);
+    if (appError.status && appError.status !== 500) {
       logger.error('[Cleaning Areas API] Error with status:', {
-        error: err instanceof Error ? err.message : String(err),
-        status: err.status,
+        error: appError.message,
+        status: appError.status,
         context: { endpoint: '/api/cleaning-areas', method: 'DELETE' },
       });
-      return NextResponse.json(err, { status: err.status });
+      return NextResponse.json(
+        { error: appError.message, code: appError.code },
+        { status: appError.status },
+      );
     }
     return handleCleaningAreaError(err, 'DELETE');
   }

@@ -3,15 +3,15 @@
  * Create a manual backup of user data.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth0-api-helpers';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { exportUserData, convertToSQL } from '@/lib/backup/export';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { encryptBackup } from '@/lib/backup/encryption';
-import type { BackupFormat, EncryptionMode } from '@/lib/backup/types';
-import { storeBackupMetadata } from './helpers/storeMetadata';
+import { convertToSQL, exportUserData } from '@/lib/backup/export';
+import { logger } from '@/lib/logger';
+import { getAppError } from '@/lib/utils/error';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { storeBackupMetadata } from './helpers/storeMetadata';
 
 const createBackupSchema = z.object({
   format: z.enum(['json', 'sql', 'encrypted']).optional().default('json'),
@@ -159,18 +159,20 @@ export async function POST(request: NextRequest) {
         },
       });
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const appError = getAppError(error);
     logger.error('[Backup Create] Error creating backup:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
+      error: appError.message,
+      code: appError.code,
       context: { endpoint: '/api/backup/create', method: 'POST' },
+      originalError: appError.originalError,
     });
     return NextResponse.json(
       ApiErrorHandler.createError(
         'Failed to create backup',
         'SERVER_ERROR',
         500,
-        error instanceof Error ? error.message : String(error),
+        appError.message,
       ),
       { status: 500 },
     );

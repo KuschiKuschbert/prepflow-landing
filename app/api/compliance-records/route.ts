@@ -2,12 +2,11 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-import { handleComplianceError } from './helpers/handleComplianceError';
-import { updateComplianceRecord } from './helpers/updateComplianceRecord';
-import { updateComplianceRecordSchema, COMPLIANCE_TYPES_SELECT } from './helpers/schemas';
-import { handleDeleteComplianceRecord } from './helpers/deleteComplianceRecordHandler';
 import { handleCreateComplianceRecord } from './helpers/createComplianceRecordHandler';
+import { handleDeleteComplianceRecord } from './helpers/deleteComplianceRecordHandler';
+import { handleComplianceError } from './helpers/handleComplianceError';
+import { COMPLIANCE_TYPES_SELECT, updateComplianceRecordSchema } from './helpers/schemas';
+import { updateComplianceRecord } from './helpers/updateComplianceRecord';
 
 export async function GET(request: NextRequest) {
   try {
@@ -37,7 +36,7 @@ export async function GET(request: NextRequest) {
     const { data, error } = await query;
 
     if (error) {
-      const errorCode = (error as any).code;
+      const errorCode = error.code;
 
       // Handle missing table gracefully
       if (errorCode === '42P01') {
@@ -66,11 +65,7 @@ export async function GET(request: NextRequest) {
       success: true,
       data: data || [],
     });
-  } catch (err: any) {
-    logger.error('[Compliance Records API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      context: { endpoint: '/api/compliance-records', method: 'GET' },
-    });
+  } catch (err: unknown) {
     return handleComplianceError(err, 'GET');
   }
 }
@@ -134,11 +129,7 @@ export async function PUT(request: NextRequest) {
       message: 'Compliance record updated successfully',
       data,
     });
-  } catch (err: any) {
-    logger.error('[Compliance Records API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      context: { endpoint: '/api/compliance-records', method: 'PUT' },
-    });
+  } catch (err: unknown) {
     return handleComplianceError(err, 'PUT');
   }
 }
