@@ -6,7 +6,9 @@ import { GeneratedRule } from './rule-generator';
  */
 
 export class RuleEvaluator {
-  static async evaluate(rule: GeneratedRule): Promise<{ isValid: boolean; matches: number; falsePositives: number }> {
+  static async evaluate(
+    rule: GeneratedRule,
+  ): Promise<{ isValid: boolean; matches: number; falsePositives: number }> {
     // Mock evaluation logic
     // In reality, this would run grep or AST query against the codebase.
 

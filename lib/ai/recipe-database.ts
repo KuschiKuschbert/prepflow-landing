@@ -5,7 +5,12 @@
 
 import { logger } from '@/lib/logger';
 import { ScrapedRecipe } from '../../scripts/recipe-scraper/parsers/types';
-import { loadIndex, loadRecipe, formatRecipesForPrompt, getRecipeDatabaseStats } from './recipe-database-helpers';
+import {
+  loadIndex,
+  loadRecipe,
+  formatRecipesForPrompt,
+  getRecipeDatabaseStats,
+} from './recipe-database-helpers';
 
 /**
  * Search recipes by ingredients with rating prioritization and source diversity

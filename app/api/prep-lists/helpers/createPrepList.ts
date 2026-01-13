@@ -40,7 +40,7 @@ export async function createPrepList(params: CreatePrepListParams) {
 
   // Add items if provided
   if (items && items.length > 0) {
-    const prepItems = items.map((item) => ({
+    const prepItems = items.map(item => ({
       prep_list_id: createdList.id,
       ingredient_id: item.ingredientId,
       quantity: item.quantity,

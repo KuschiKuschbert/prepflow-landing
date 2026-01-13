@@ -24,7 +24,7 @@ async function main() {
   const historyPath = path.join(process.cwd(), 'docs/rsi/improvements.json');
   let history = [];
   if (fs.existsSync(historyPath)) {
-      history = JSON.parse(fs.readFileSync(historyPath, 'utf-8') || '[]');
+    history = JSON.parse(fs.readFileSync(historyPath, 'utf-8') || '[]');
   }
 
   // 1. Run Learning Strategies
@@ -39,28 +39,28 @@ async function main() {
 
   console.log(`\n📚 Synthesized ${rules.length} new rule candidates.`);
   rules.forEach(r => {
-      console.log(`   - ${r.description}`);
+    console.log(`   - ${r.description}`);
   });
 
   // 3. Save to Learning History (if not dry run)
   if (!dryRun) {
-      const learningPath = path.join(process.cwd(), 'docs/rsi/learning-history.json');
-      let learningLog = [];
-      if (fs.existsSync(learningPath)) {
-          learningLog = JSON.parse(fs.readFileSync(learningPath, 'utf-8') || '[]');
-      }
+    const learningPath = path.join(process.cwd(), 'docs/rsi/learning-history.json');
+    let learningLog = [];
+    if (fs.existsSync(learningPath)) {
+      learningLog = JSON.parse(fs.readFileSync(learningPath, 'utf-8') || '[]');
+    }
 
-      const sessionLog = {
-          timestamp: new Date().toISOString(),
-          insights,
-          rulesGenerated: rules
-      };
+    const sessionLog = {
+      timestamp: new Date().toISOString(),
+      insights,
+      rulesGenerated: rules,
+    };
 
-      learningLog.push(sessionLog);
-      fs.writeFileSync(learningPath, JSON.stringify(learningLog, null, 2));
-      console.log('\n✅ Learning session saved to history.');
+    learningLog.push(sessionLog);
+    fs.writeFileSync(learningPath, JSON.stringify(learningLog, null, 2));
+    console.log('\n✅ Learning session saved to history.');
   } else {
-      console.log('\n[DRY RUN] Learning session not saved.');
+    console.log('\n[DRY RUN] Learning session not saved.');
   }
 }
 

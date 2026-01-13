@@ -6,11 +6,9 @@ import { KitchenSection, PrepListItem } from '../types';
  * @param {KitchenSection[]} kitchenSections - Kitchen sections data
  * @returns {Map<string, KitchenSection>} Sections map by ID
  */
-export function buildSectionsMap(
-  kitchenSections: KitchenSection[],
-): Map<string, KitchenSection> {
+export function buildSectionsMap(kitchenSections: KitchenSection[]): Map<string, KitchenSection> {
   const sectionsMap = new Map<string, KitchenSection>();
-  kitchenSections.forEach((section) => {
+  kitchenSections.forEach(section => {
     sectionsMap.set(section.id, {
       id: section.id,
       name: section.name || section.section_name,
@@ -30,7 +28,7 @@ export function buildItemsByPrepListIdMap(
   prepListItems: PrepListItem[],
 ): Map<string, PrepListItem[]> {
   const itemsByPrepListId = new Map<string, PrepListItem[]>();
-  prepListItems.forEach((item) => {
+  prepListItems.forEach(item => {
     if (!itemsByPrepListId.has(item.prep_list_id)) {
       itemsByPrepListId.set(item.prep_list_id, []);
     }

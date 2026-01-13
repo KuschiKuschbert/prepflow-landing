@@ -23,11 +23,13 @@ export class ImprovementMetrics {
           totalChanges: 0,
           successRate: 0,
           rollbackRate: 0,
-          activePeriodDays: 0
+          activePeriodDays: 0,
         };
       }
 
-      const rolledBack = changes.filter(c => c.status === 'rolled_back' || c.status === 'failed').length;
+      const rolledBack = changes.filter(
+        c => c.status === 'rolled_back' || c.status === 'failed',
+      ).length;
 
       // Calculate success based on non-rolled back changes
       // In a real system, we'd cross-reference with negative feedback
@@ -35,13 +37,16 @@ export class ImprovementMetrics {
 
       const firstChange = new Date(changes[0].timestamp).getTime();
       const lastChange = new Date(changes[changes.length - 1].timestamp).getTime();
-      const activePeriodDays = Math.max(1, Math.ceil((lastChange - firstChange) / (1000 * 60 * 60 * 24)));
+      const activePeriodDays = Math.max(
+        1,
+        Math.ceil((lastChange - firstChange) / (1000 * 60 * 60 * 24)),
+      );
 
       return {
         totalChanges,
         successRate: (successful / totalChanges) * 100,
         rollbackRate: (rolledBack / totalChanges) * 100,
-        activePeriodDays
+        activePeriodDays,
       };
     } catch (error) {
       console.error('Failed to calculate metrics:', error);
@@ -49,7 +54,7 @@ export class ImprovementMetrics {
         totalChanges: 0,
         successRate: 0,
         rollbackRate: 0,
-        activePeriodDays: 0
+        activePeriodDays: 0,
       };
     }
   }

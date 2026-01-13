@@ -212,7 +212,8 @@ export default function DishesClient() {
     onRecipeImagesGenerated: handleRecipeImagesGenerated,
   });
   if (loading) return <PageSkeleton />;
-  return <div>
+  return (
+    <div>
       <ErrorBanner error={error} />
       <DishesBulkActionsSection
         isSelectionMode={isSelectionMode}
@@ -245,7 +246,10 @@ export default function DishesClient() {
       <DishesViewModeToggle
         viewMode={viewMode}
         onViewModeChange={setViewMode}
-        onEditorClick={() => { setViewMode('editor'); setEditingItem(null); }}
+        onEditorClick={() => {
+          setViewMode('editor');
+          setEditingItem(null);
+        }}
       />
       <DishesEditorView
         viewMode={viewMode}
@@ -296,5 +300,6 @@ export default function DishesClient() {
           setViewMode={setViewMode}
         />
       )}
-    </div>;
+    </div>
+  );
 }

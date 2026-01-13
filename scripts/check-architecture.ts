@@ -15,12 +15,14 @@ async function checkCircularDependencies() {
   try {
     const res = await madge(path.join(process.cwd(), 'app'), {
       fileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-      excludeRegExp: [/\.test\./, /\.spec\./]
+      excludeRegExp: [/\.test\./, /\.spec\./],
     });
 
     const circular = res.circular();
     if (circular.length > 0) {
-      console.warn(`${YELLOW}⚠️  Warning: ${circular.length} Circular dependencies detected (Non-blocking for now):${NC}`);
+      console.warn(
+        `${YELLOW}⚠️  Warning: ${circular.length} Circular dependencies detected (Non-blocking for now):${NC}`,
+      );
       // Only show top 5 to avoid spam
       console.warn(circular.slice(0, 5));
       console.warn(`${YELLOW}... and ${circular.length - 5} more.${NC}`);
@@ -42,14 +44,16 @@ function checkClientServerBoundaries(): boolean {
   // Define forbidden imports for Client Components
   const FORBIDDEN_CLIENT_IMPORTS = [
     'lib/server', // Example: server-only utils
-    'lib/db',     // Example: direct db access
-    'scripts/',   // Scripts shouldn't be imported in app code generally, especially client
-    'cheerio',    // Node-only libs usually
-    'puppeteer'
+    'lib/db', // Example: direct db access
+    'scripts/', // Scripts shouldn't be imported in app code generally, especially client
+    'cheerio', // Node-only libs usually
+    'puppeteer',
   ];
 
   // Find all files in app/ and components/
-  const files = glob.sync('{app,components}/**/*.{ts,tsx}', { ignore: ['**/*.test.*', '**/*.spec.*'] });
+  const files = glob.sync('{app,components}/**/*.{ts,tsx}', {
+    ignore: ['**/*.test.*', '**/*.spec.*'],
+  });
   console.log(`Scanning ${files.length} files for boundaries...`);
 
   for (const file of files) {
@@ -57,16 +61,20 @@ function checkClientServerBoundaries(): boolean {
 
     // Check if it's a Client Component
     if (content.includes("'use client'") || content.includes('"use client"')) {
-
       for (const forbidden of FORBIDDEN_CLIENT_IMPORTS) {
         // Simple regex check for imports
         // Looks for: import ... from '...forbidden...'
         // or: require('...forbidden...')
-        const importRegex = new RegExp(`(import\\s+.*from\\s+['"].*${forbidden}.*['"]|require\\(['"].*${forbidden}.*['"])`, 'g');
+        const importRegex = new RegExp(
+          `(import\\s+.*from\\s+['"].*${forbidden}.*['"]|require\\(['"].*${forbidden}.*['"])`,
+          'g',
+        );
 
         if (importRegex.test(content)) {
           console.error(`${RED}❌ Violation in ${file}:${NC}`);
-          console.error(`   Client Component imports forbidden server module: matching '${forbidden}'`);
+          console.error(
+            `   Client Component imports forbidden server module: matching '${forbidden}'`,
+          );
           hasErrors = true;
         }
       }
@@ -83,7 +91,7 @@ function checkClientServerBoundaries(): boolean {
 async function main() {
   let success = true;
 
-  if (!await checkCircularDependencies()) {
+  if (!(await checkCircularDependencies())) {
     success = false;
   }
 

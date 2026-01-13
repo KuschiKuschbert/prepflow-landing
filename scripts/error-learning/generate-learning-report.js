@@ -19,7 +19,7 @@ function loadCapturedErrors() {
   if (!fs.existsSync(CAPTURED_ERRORS_FILE)) {
     return [];
   }
-  
+
   try {
     const content = fs.readFileSync(CAPTURED_ERRORS_FILE, 'utf8');
     return JSON.parse(content);
@@ -35,7 +35,7 @@ function loadFixes() {
   if (!fs.existsSync(FIXES_FILE)) {
     return [];
   }
-  
+
   try {
     const content = fs.readFileSync(FIXES_FILE, 'utf8');
     return JSON.parse(content);
@@ -51,7 +51,7 @@ function loadKnowledgeBase() {
   if (!fs.existsSync(KNOWLEDGE_BASE_FILE)) {
     return { errors: [], patterns: [], rules: [] };
   }
-  
+
   try {
     const content = fs.readFileSync(KNOWLEDGE_BASE_FILE, 'utf8');
     return JSON.parse(content);
@@ -65,39 +65,39 @@ function loadKnowledgeBase() {
  */
 function generateLearningReport(days = 7) {
   const cutoffDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
-  
+
   const errors = loadCapturedErrors();
   const fixes = loadFixes();
   const kb = loadKnowledgeBase();
-  
+
   // Filter by date
   const recentErrors = errors.filter(err => new Date(err.capturedAt) >= cutoffDate);
   const recentFixes = fixes.filter(fix => new Date(fix.documentedAt) >= cutoffDate);
-  
+
   // Group errors by source
   const errorsBySource = {};
   for (const error of recentErrors) {
     errorsBySource[error.source] = (errorsBySource[error.source] || 0) + 1;
   }
-  
+
   // Group errors by type
   const errorsByType = {};
   for (const error of recentErrors) {
     errorsByType[error.errorType] = (errorsByType[error.errorType] || 0) + 1;
   }
-  
+
   // Group errors by category
   const errorsByCategory = {};
   for (const error of recentErrors) {
     errorsByCategory[error.category] = (errorsByCategory[error.category] || 0) + 1;
   }
-  
+
   // Group fixes by documentedBy
   const fixesBySource = {};
   for (const fix of recentFixes) {
     fixesBySource[fix.documentedBy] = (fixesBySource[fix.documentedBy] || 0) + 1;
   }
-  
+
   // Generate report
   const report = {
     period: {
@@ -110,7 +110,10 @@ function generateLearningReport(days = 7) {
       totalFixes: recentFixes.length,
       totalPatterns: kb.patterns.length,
       totalRules: kb.rules.length,
-      fixRate: recentErrors.length > 0 ? (recentFixes.length / recentErrors.length * 100).toFixed(1) + '%' : '0%',
+      fixRate:
+        recentErrors.length > 0
+          ? ((recentFixes.length / recentErrors.length) * 100).toFixed(1) + '%'
+          : '0%',
     },
     errors: {
       bySource: errorsBySource,
@@ -156,7 +159,7 @@ function generateLearningReport(days = 7) {
       })),
     },
   };
-  
+
   return report;
 }
 
@@ -180,15 +183,21 @@ function formatReportAsMarkdown(report) {
 
 ### By Source
 
-${Object.entries(report.errors.bySource).map(([source, count]) => `- **${source}**: ${count}`).join('\n')}
+${Object.entries(report.errors.bySource)
+  .map(([source, count]) => `- **${source}**: ${count}`)
+  .join('\n')}
 
 ### By Type
 
-${Object.entries(report.errors.byType).map(([type, count]) => `- **${type}**: ${count}`).join('\n')}
+${Object.entries(report.errors.byType)
+  .map(([type, count]) => `- **${type}**: ${count}`)
+  .join('\n')}
 
 ### By Category
 
-${Object.entries(report.errors.byCategory).map(([category, count]) => `- **${category}**: ${count}`).join('\n')}
+${Object.entries(report.errors.byCategory)
+  .map(([category, count]) => `- **${category}**: ${count}`)
+  .join('\n')}
 
 ### Recent Errors
 
@@ -198,7 +207,9 @@ ${report.errors.recent.map(err => `- **${err.id}**: ${err.message} (${err.source
 
 ### By Source
 
-${Object.entries(report.fixes.bySource).map(([source, count]) => `- **${source}**: ${count}`).join('\n')}
+${Object.entries(report.fixes.bySource)
+  .map(([source, count]) => `- **${source}**: ${count}`)
+  .join('\n')}
 
 ### Recent Fixes
 
@@ -226,18 +237,18 @@ function saveReport(report, format = 'markdown') {
   if (!fs.existsSync(reportsDir)) {
     fs.mkdirSync(reportsDir, { recursive: true });
   }
-  
+
   const timestamp = new Date().toISOString().split('T')[0];
   const fileName = `learning-report-${timestamp}.${format === 'json' ? 'json' : 'md'}`;
   const filePath = path.join(reportsDir, fileName);
-  
+
   if (format === 'json') {
     fs.writeFileSync(filePath, JSON.stringify(report, null, 2));
   } else {
     const markdown = formatReportAsMarkdown(report);
     fs.writeFileSync(filePath, markdown);
   }
-  
+
   return filePath;
 }
 
@@ -248,14 +259,14 @@ function main() {
   const args = process.argv.slice(2);
   const days = parseInt(args[0]) || 7;
   const format = args[1] || 'markdown';
-  
+
   console.log(`Generating learning report for last ${days} days...`);
-  
+
   const report = generateLearningReport(days);
-  
+
   // Print summary to console
   console.log('\n' + formatReportAsMarkdown(report));
-  
+
   // Save report to file
   const filePath = saveReport(report, format);
   console.log(`\n✅ Report saved to: ${filePath}`);

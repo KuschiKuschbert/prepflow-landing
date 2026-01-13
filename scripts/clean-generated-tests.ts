@@ -10,12 +10,12 @@ console.log(`Scanning ${files.length} test files for cleanup...`);
 let deleted = 0;
 
 for (const file of files) {
-    const content = fs.readFileSync(file, 'utf-8');
-    if (content.includes("smoke test") || content.includes("needs implementation")) {
-        fs.unlinkSync(file);
-        console.log(`Deleted generated test: ${file}`);
-        deleted++;
-    }
+  const content = fs.readFileSync(file, 'utf-8');
+  if (content.includes('smoke test') || content.includes('needs implementation')) {
+    fs.unlinkSync(file);
+    console.log(`Deleted generated test: ${file}`);
+    deleted++;
+  }
 }
 
 console.log(`\nDeleted ${deleted} generated test files.`);

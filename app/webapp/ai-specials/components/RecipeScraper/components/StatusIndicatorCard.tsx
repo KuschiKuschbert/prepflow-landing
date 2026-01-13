@@ -90,12 +90,7 @@ export function StatusIndicatorCard({
               >
                 {isResuming ? (
                   <>
-                    <Icon
-                      icon={Loader2}
-                      size="sm"
-                      className="animate-spin"
-                      aria-hidden={true}
-                    />
+                    <Icon icon={Loader2} size="sm" className="animate-spin" aria-hidden={true} />
                     <span className="tablet:inline hidden">Resuming...</span>
                   </>
                 ) : (
@@ -143,9 +138,7 @@ export function StatusIndicatorCard({
             </div>
           </div>
           <div className="rounded-xl bg-[var(--background)] p-4">
-            <div className="mb-1 text-xs font-medium text-[var(--foreground-muted)]">
-              Remaining
-            </div>
+            <div className="mb-1 text-xs font-medium text-[var(--foreground-muted)]">Remaining</div>
             <div className="text-2xl font-bold text-[var(--foreground)]">
               {comprehensiveStatus.overall.totalRemaining.toLocaleString()}
             </div>

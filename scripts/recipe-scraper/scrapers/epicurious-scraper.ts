@@ -426,13 +426,16 @@ export class EpicuriousScraper extends BaseScraper {
         let currentPage = 1;
         let hasMorePages = true;
 
-        while (hasMorePages && currentPage <= 15) { // Limit pages for speed
+        while (hasMorePages && currentPage <= 15) {
+          // Limit pages for speed
           const pageUrl = currentPage === 1 ? categoryUrl : `${categoryUrl}?page=${currentPage}`;
           const html = await this.fetchPage(pageUrl);
           const $ = cheerio.load(html);
 
           // Find recipe cards with ratings
-          const cards = $('a[href*="/recipes/food/views/"]').closest('[class*="card"], article, .recipe-card, .summary-item');
+          const cards = $('a[href*="/recipes/food/views/"]').closest(
+            '[class*="card"], article, .recipe-card, .summary-item',
+          );
 
           if (cards.length === 0) {
             hasMorePages = false;
@@ -441,8 +444,9 @@ export class EpicuriousScraper extends BaseScraper {
 
           cards.each((_, card) => {
             const $card = $(card);
-            const link = $card.find('a[href*="/recipes/food/views/"]').first().attr('href') ||
-                         $card.attr('href');
+            const link =
+              $card.find('a[href*="/recipes/food/views/"]').first().attr('href') ||
+              $card.attr('href');
 
             if (!link) return;
 
@@ -453,7 +457,8 @@ export class EpicuriousScraper extends BaseScraper {
             }
             normalizedUrl = normalizedUrl.split('?')[0].split('#')[0];
 
-            if (!normalizedUrl.includes('/recipes/food/views/') || visited.has(normalizedUrl)) return;
+            if (!normalizedUrl.includes('/recipes/food/views/') || visited.has(normalizedUrl))
+              return;
 
             // Extract rating from card
             let rating: number | undefined;
@@ -491,7 +496,9 @@ export class EpicuriousScraper extends BaseScraper {
             });
           });
 
-          scraperLogger.debug(`[Epicurious] Page ${currentPage}: found ${urlsWithRatings.length} URLs with ratings`);
+          scraperLogger.debug(
+            `[Epicurious] Page ${currentPage}: found ${urlsWithRatings.length} URLs with ratings`,
+          );
           currentPage++;
         }
       } catch (error) {
@@ -500,7 +507,9 @@ export class EpicuriousScraper extends BaseScraper {
     }
 
     const withRatings = urlsWithRatings.filter(u => u.rating !== undefined).length;
-    scraperLogger.info(`[Epicurious] Discovered ${urlsWithRatings.length} URLs (${withRatings} with ratings)`);
+    scraperLogger.info(
+      `[Epicurious] Discovered ${urlsWithRatings.length} URLs (${withRatings} with ratings)`,
+    );
 
     return urlsWithRatings;
   }

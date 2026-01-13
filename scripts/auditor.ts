@@ -15,8 +15,11 @@ const CONFIG = {
     { name: 'Stripe Secret Key', regex: /sk_live_[0-9a-zA-Z]{24}/ },
     { name: 'GitHub Token', regex: /ghp_[0-9a-zA-Z]{36}/ },
     { name: 'Google API Key', regex: /AIza[0-9A-Za-z-_]{35}/ },
-    { name: 'Generic API Key', regex: /(api_key|apiKey|secret|token)\s*[:=]\s*['"`][a-zA-Z0-9_\-]{20,}['"`]/i },
-    { name: 'Private Key Block', regex: /-----BEGIN PRIVATE KEY-----/ }
+    {
+      name: 'Generic API Key',
+      regex: /(api_key|apiKey|secret|token)\s*[:=]\s*['"`][a-zA-Z0-9_\-]{20,}['"`]/i,
+    },
+    { name: 'Private Key Block', regex: /-----BEGIN PRIVATE KEY-----/ },
   ],
   // Asset Limits (Bytes)
   assetWarning: 500 * 1024, // 500KB
@@ -29,16 +32,19 @@ const CONFIG = {
     '**/.next/**',
     'scripts/auditor.ts', // Don't flag myself
     '**/package-lock.json',
-    '**/yarn.lock'
-  ]
+    '**/yarn.lock',
+  ],
 };
 
 function scanSecrets(): boolean {
   console.log(`\n${YELLOW}🕵️  Scanning for Secrets...${NC}`);
 
-  const files = glob.sync('{app,components,lib,utils,hooks,pages,scripts}/**/*.{ts,tsx,js,jsx,json,env,env.local}', {
-    ignore: CONFIG.ignorePatterns
-  });
+  const files = glob.sync(
+    '{app,components,lib,utils,hooks,pages,scripts}/**/*.{ts,tsx,js,jsx,json,env,env.local}',
+    {
+      ignore: CONFIG.ignorePatterns,
+    },
+  );
 
   let issuesFound = 0;
 
@@ -69,8 +75,8 @@ function scanAssets(): boolean {
   // Find all files in public
   const publicDir = 'public';
   if (!fs.existsSync(publicDir)) {
-      console.log(`${YELLOW}Skipping asset check (no public/ dir found).${NC}`);
-      return true;
+    console.log(`${YELLOW}Skipping asset check (no public/ dir found).${NC}`);
+    return true;
   }
 
   const files = glob.sync('public/**/*.*');
@@ -91,8 +97,8 @@ function scanAssets(): boolean {
   }
 
   if (hasErrors) {
-      console.error(`${RED}💥 Asset weight limit exceeded. Build blocked.${NC}`);
-      return false;
+    console.error(`${RED}💥 Asset weight limit exceeded. Build blocked.${NC}`);
+    return false;
   }
 
   console.log(`${GREEN}✅ Assets within limits.${NC}`);

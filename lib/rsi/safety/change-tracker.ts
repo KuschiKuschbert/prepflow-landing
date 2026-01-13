@@ -27,7 +27,7 @@ export class ChangeTracker {
     const newRecord: ChangeRecord = {
       id,
       timestamp,
-      ...record
+      ...record,
     };
 
     try {

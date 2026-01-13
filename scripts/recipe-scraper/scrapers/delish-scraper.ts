@@ -333,7 +333,9 @@ export class DelishScraper extends BaseScraper {
           const html = await this.fetchPage(pageUrl);
           const $ = cheerio.load(html);
 
-          const cards = $('a[href*="/cooking/recipe-ideas/"]').closest('[class*="card"], article, .listicle-item');
+          const cards = $('a[href*="/cooking/recipe-ideas/"]').closest(
+            '[class*="card"], article, .listicle-item',
+          );
 
           if (cards.length === 0) {
             hasMorePages = false;
@@ -342,8 +344,9 @@ export class DelishScraper extends BaseScraper {
 
           cards.each((_, card) => {
             const $card = $(card);
-            const link = $card.find('a[href*="/cooking/recipe-ideas/"]').first().attr('href') ||
-                         $card.attr('href');
+            const link =
+              $card.find('a[href*="/cooking/recipe-ideas/"]').first().attr('href') ||
+              $card.attr('href');
 
             if (!link) return;
 
@@ -389,7 +392,9 @@ export class DelishScraper extends BaseScraper {
     }
 
     const withRatings = urlsWithRatings.filter(u => u.rating !== undefined).length;
-    scraperLogger.info(`[Delish] Discovered ${urlsWithRatings.length} URLs (${withRatings} with ratings)`);
+    scraperLogger.info(
+      `[Delish] Discovered ${urlsWithRatings.length} URLs (${withRatings} with ratings)`,
+    );
 
     return urlsWithRatings;
   }

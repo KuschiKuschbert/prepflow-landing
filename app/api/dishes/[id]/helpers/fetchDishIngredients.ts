@@ -108,15 +108,9 @@ export async function fetchDishIngredients(dishId: string): Promise<DishIngredie
     }
   }
 
-
-
   // If category column doesn't exist, retry without it
   const retryError = ingredientsError as PostgrestError | null;
-  if (
-    retryError &&
-    retryError.code === '42703' &&
-    retryError.message?.includes('category')
-  ) {
+  if (retryError && retryError.code === '42703' && retryError.message?.includes('category')) {
     logger.warn('[Dishes API] Category column not found, retrying without category', {
       context: { endpoint: '/api/dishes/[id]', operation: 'GET', dishId },
     });
@@ -152,7 +146,9 @@ export async function fetchDishIngredients(dishId: string): Promise<DishIngredie
       ...item,
       ingredients: Array.isArray(item.ingredients)
         ? item.ingredients.map((ing: any) => ({ ...ing, category: null }))
-        : item.ingredients ? { ...item.ingredients, category: null } : null,
+        : item.ingredients
+          ? { ...item.ingredients, category: null }
+          : null,
     })) as any;
     ingredientsError = retryResult.error;
   }

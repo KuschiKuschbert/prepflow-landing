@@ -164,8 +164,8 @@ export async function DELETE(request: NextRequest) {
   } catch (err) {
     logger.error('[Employees API] Photo delete error:', err);
     if (err instanceof Error && 'status' in err) {
-       const statusError = err as { status: number; message: string };
-       return NextResponse.json(err, { status: statusError.status });
+      const statusError = err as { status: number; message: string };
+      return NextResponse.json(err, { status: statusError.status });
     }
     return NextResponse.json(
       ApiErrorHandler.createError('Failed to delete photo', 'DELETE_ERROR', 500),

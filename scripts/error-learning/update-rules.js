@@ -5,7 +5,10 @@
  * Updates error-patterns.mdc based on knowledge base
  */
 
-const { generateRulesFromKnowledgeBase, generateRulesFromRecentFixes } = require('../../lib/error-learning/rule-generator');
+const {
+  generateRulesFromKnowledgeBase,
+  generateRulesFromRecentFixes,
+} = require('../../lib/error-learning/rule-generator');
 
 /**
  * Main CLI interface
@@ -13,22 +16,26 @@ const { generateRulesFromKnowledgeBase, generateRulesFromRecentFixes } = require
 async function main() {
   const args = process.argv.slice(2);
   const command = args[0] || 'all';
-  
+
   try {
     switch (command) {
       case 'all':
         console.log('Generating rules from all fixes...');
         const allResults = await generateRulesFromKnowledgeBase();
-        console.log(`✅ Generated ${allResults.patterns.length} pattern(s) and ${allResults.rules.length} rule(s)`);
+        console.log(
+          `✅ Generated ${allResults.patterns.length} pattern(s) and ${allResults.rules.length} rule(s)`,
+        );
         break;
-        
+
       case 'recent':
         const days = parseInt(args[1] || '7', 10);
         console.log(`Generating rules from fixes in last ${days} days...`);
         const recentResults = await generateRulesFromRecentFixes(days);
-        console.log(`✅ Generated ${recentResults.patterns.length} pattern(s) and ${recentResults.rules.length} rule(s)`);
+        console.log(
+          `✅ Generated ${recentResults.patterns.length} pattern(s) and ${recentResults.rules.length} rule(s)`,
+        );
         break;
-        
+
       default:
         console.log(`
 Update Rules Script

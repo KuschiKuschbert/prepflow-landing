@@ -38,7 +38,7 @@ export async function collectIngredientIds(
           context: { menuId },
         });
       } else if (dishIngredients) {
-        (dishIngredients as unknown as IngredientIdResult[]).forEach((di) => {
+        (dishIngredients as unknown as IngredientIdResult[]).forEach(di => {
           if (di.ingredient_id) ingredientIds.add(di.ingredient_id);
         });
       }
@@ -56,8 +56,8 @@ export async function collectIngredientIds(
         });
       } else if (dishRecipes) {
         const dishRecipeIds = (dishRecipes as unknown as RecipeIdResult[])
-          .map((dr) => dr.recipe_id)
-          .filter((id) => id);
+          .map(dr => dr.recipe_id)
+          .filter(id => id);
 
         if (dishRecipeIds.length > 0) {
           const { data: recipeIngredients, error: recipeIngredientsError } = await supabaseAdmin
@@ -71,7 +71,7 @@ export async function collectIngredientIds(
               context: { menuId },
             });
           } else if (recipeIngredients) {
-            (recipeIngredients as unknown as IngredientIdResult[]).forEach((ri) => {
+            (recipeIngredients as unknown as IngredientIdResult[]).forEach(ri => {
               if (ri.ingredient_id) ingredientIds.add(ri.ingredient_id);
             });
           }
@@ -99,7 +99,7 @@ export async function collectIngredientIds(
           context: { menuId },
         });
       } else if (recipeIngredients) {
-        (recipeIngredients as unknown as IngredientIdResult[]).forEach((ri) => {
+        (recipeIngredients as unknown as IngredientIdResult[]).forEach(ri => {
           if (ri.ingredient_id) ingredientIds.add(ri.ingredient_id);
         });
       }

@@ -100,8 +100,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const successCount = results.filter((r) => r.success).length;
-    const failureCount = results.filter((r) => !r.success).length;
+    const successCount = results.filter(r => r.success).length;
+    const failureCount = results.filter(r => !r.success).length;
 
     return NextResponse.json({
       success: true,

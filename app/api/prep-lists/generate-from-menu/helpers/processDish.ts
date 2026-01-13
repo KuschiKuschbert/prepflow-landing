@@ -1,9 +1,9 @@
 import {
-    DBDishIngredient,
-    DBDishRecipe,
-    DBRecipeIngredient,
-    RecipeGroupedItem,
-    SectionData
+  DBDishIngredient,
+  DBDishRecipe,
+  DBRecipeIngredient,
+  RecipeGroupedItem,
+  SectionData,
 } from '../types';
 import { processRecipe } from './processRecipe';
 
@@ -71,7 +71,7 @@ export function processDish(
         const ingredientName = ingredient.ingredient_name || ingredient.name || 'Unknown';
 
         const existing = section.aggregatedIngredients.find(
-          (agg) => agg.ingredientId === ingredientId && agg.unit === di.unit,
+          agg => agg.ingredientId === ingredientId && agg.unit === di.unit,
         );
 
         if (existing) {

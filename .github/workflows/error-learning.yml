@@ -27,13 +27,13 @@ jobs:
           if [ -s /tmp/ts-errors.txt ]; then
             node scripts/error-capture/capture-error.js build /tmp/ts-errors.txt || true
           fi
-          
+
           # Capture ESLint errors
           npm run lint 2>&1 | tee /tmp/lint-errors.txt || true
           if [ -s /tmp/lint-errors.txt ]; then
             node scripts/error-capture/capture-error.js build /tmp/lint-errors.txt || true
           fi
-          
+
           # Capture build errors
           npm run build 2>&1 | tee /tmp/build-errors.txt || true
           if [ -s /tmp/build-errors.txt ]; then

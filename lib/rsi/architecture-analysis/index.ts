@@ -97,7 +97,10 @@ export function detectDesignPatterns(content: string, filePath: string): DesignP
   }
 
   // Observer pattern
-  if (/\.subscribe\(|\.on\(|addEventListener\(/.test(content) && /\.notify\(|\.emit\(|dispatchEvent\(/.test(content)) {
+  if (
+    /\.subscribe\(|\.on\(|addEventListener\(/.test(content) &&
+    /\.notify\(|\.emit\(|dispatchEvent\(/.test(content)
+  ) {
     patterns.push({
       name: 'Observer',
       type: 'behavioral',

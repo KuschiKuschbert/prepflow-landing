@@ -18,10 +18,7 @@ interface ConversionResult {
  * - Weight: oz, lb → g (or kg if >= 1000g)
  * - Keep: ml, l, g, kg, pc, box, pack, etc.
  */
-export function convertToAustralianUnit(
-  quantity: number,
-  unit: string,
-): ConversionResult {
+export function convertToAustralianUnit(quantity: number, unit: string): ConversionResult {
   if (!unit) {
     return { quantity, unit: '', converted: false, reason: 'no unit' };
   }

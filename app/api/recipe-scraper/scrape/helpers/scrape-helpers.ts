@@ -18,7 +18,11 @@ export async function loadStorage() {
   }
 }
 
-export async function handleDiscovery(scraper: any, source: string, limit: number): Promise<string[]> {
+export async function handleDiscovery(
+  scraper: any,
+  source: string,
+  limit: number,
+): Promise<string[]> {
   try {
     logger.info(`[Recipe Scraper API] Starting discovery mode for ${source} (limit: ${limit})`);
     const recipeUrls = await scraper.getRecipeUrls(limit);
@@ -31,11 +35,7 @@ export async function handleDiscovery(scraper: any, source: string, limit: numbe
       limit,
     });
     throw NextResponse.json(
-      ApiErrorHandler.createError(
-        `Failed to discover recipes from ${source}`,
-        'SERVER_ERROR',
-        500,
-      ),
+      ApiErrorHandler.createError(`Failed to discover recipes from ${source}`, 'SERVER_ERROR', 500),
       { status: 500 },
     );
   }
@@ -44,11 +44,7 @@ export async function handleDiscovery(scraper: any, source: string, limit: numbe
 export function handleManualUrls(urls: string[] | undefined): string[] {
   if (!urls || urls.length === 0) {
     throw NextResponse.json(
-      ApiErrorHandler.createError(
-        'URLs required when discovery is false',
-        'VALIDATION_ERROR',
-        400,
-      ),
+      ApiErrorHandler.createError('URLs required when discovery is false', 'VALIDATION_ERROR', 400),
       { status: 400 },
     );
   }

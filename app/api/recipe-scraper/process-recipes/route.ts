@@ -8,7 +8,11 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { z } from 'zod';
-import { getDefaultStatus, enhanceProcessingStatus, getProviderInfo } from './helpers/status-handlers';
+import {
+  getDefaultStatus,
+  enhanceProcessingStatus,
+  getProviderInfo,
+} from './helpers/status-handlers';
 import {
   handlePauseAction,
   handleResumeAction,

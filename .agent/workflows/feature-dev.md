@@ -13,6 +13,7 @@ Follow this process for all coding tasks to ensure safety and documentation.
 2.  **🌿 Branch Strategy**
     - **NEVER** commit to `main`.
     - Create a descriptive branch:
+
     ```bash
     git checkout main
     git pull origin main

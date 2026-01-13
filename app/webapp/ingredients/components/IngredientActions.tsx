@@ -289,7 +289,9 @@ export default function IngredientActions({
             <span>Selected:</span>
             <span className="font-medium text-[var(--primary)]">{selectedCount}</span>
             <span>of</span>
-            <span className="font-medium text-[var(--foreground)]">{filteredIngredients.length}</span>
+            <span className="font-medium text-[var(--foreground)]">
+              {filteredIngredients.length}
+            </span>
           </div>
         )}
       </div>

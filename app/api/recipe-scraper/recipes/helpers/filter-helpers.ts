@@ -17,10 +17,7 @@ interface RecipeEntry {
 /**
  * Filter recipes by format status at index level (FAST - no file loading)
  */
-export function filterByFormatAtIndex(
-  entries: RecipeEntry[],
-  formatFilter: string,
-): RecipeEntry[] {
+export function filterByFormatAtIndex(entries: RecipeEntry[], formatFilter: string): RecipeEntry[] {
   if (formatFilter === 'all') {
     return entries;
   }

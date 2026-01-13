@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Map 'type_name' to 'name' for frontend compatibility
-    const normalizedData = (data || []).map((item) => {
+    const normalizedData = (data || []).map(item => {
       const complianceItem = item as ComplianceType;
       return {
         ...complianceItem,

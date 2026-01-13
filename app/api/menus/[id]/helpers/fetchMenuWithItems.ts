@@ -29,7 +29,11 @@ export async function fetchMenuWithItems(menuId: string) {
 
   if (menuError || !menu) {
     const pgError = menuError as PostgrestError | null;
-    logDetailedError(pgError || { message: 'Menu not found', code: '404', details: '', hint: '' }, 'Menu not found', menuId);
+    logDetailedError(
+      pgError || { message: 'Menu not found', code: '404', details: '', hint: '' },
+      'Menu not found',
+      menuId,
+    );
     throw ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404, {
       message: "The requested menu couldn't be found",
     });

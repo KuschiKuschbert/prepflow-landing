@@ -34,7 +34,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       context: { endpoint: '/api/menus/[id]', method: 'GET', menuId },
     });
     if (typeof err === 'object' && err !== null && 'status' in err) {
-       // @ts-ignore - Validated by runtime check
+      // @ts-ignore - Validated by runtime check
       return formatErrorResponse(err);
     }
     return handleMenuError(err, 'GET');
@@ -87,7 +87,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       context: { endpoint: '/api/menus/[id]', method: 'PUT', menuId },
     });
     if (typeof err === 'object' && err !== null && 'status' in err) {
-       // @ts-ignore - Validated by runtime check
+      // @ts-ignore - Validated by runtime check
       return formatErrorResponse(err);
     }
     return handleMenuError(err, 'PUT');
@@ -113,7 +113,7 @@ export async function DELETE(_req: NextRequest, context: { params: Promise<{ id:
       context: { endpoint: '/api/menus/[id]', method: 'DELETE', menuId },
     });
     if (typeof err === 'object' && err !== null && 'status' in err) {
-       // @ts-ignore - Validated by runtime check
+      // @ts-ignore - Validated by runtime check
       return formatErrorResponse(err);
     }
     return handleMenuError(err, 'DELETE');

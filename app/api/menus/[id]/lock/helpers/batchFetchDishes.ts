@@ -95,7 +95,7 @@ export async function batchFetchDishes(
   for (const dish of dishes || []) {
     // Extract direct ingredients
     const directIngredients =
-      dish.dish_ingredients?.map((di) => ({
+      dish.dish_ingredients?.map(di => ({
         name: di.ingredients?.ingredient_name || 'Unknown Ingredient',
         quantity: Number(di.quantity) || 0,
         unit: di.unit || '',
@@ -120,7 +120,7 @@ export async function batchFetchDishes(
         // Handle both recipe_name and name columns
         const recipeName = recipe.recipe_name || recipe.name || 'Unknown Recipe';
 
-        const recipeIngredients = recipe.recipe_ingredients.map((ri) => ({
+        const recipeIngredients = recipe.recipe_ingredients.map(ri => ({
           name: ri.ingredients?.ingredient_name || 'Unknown Ingredient',
           quantity: Number(ri.quantity) || 0,
           unit: ri.unit || '',

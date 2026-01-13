@@ -559,7 +559,8 @@ export class AllRecipesScraper extends BaseScraper {
         let currentPage = 1;
         let hasMorePages = true;
 
-        while (hasMorePages && currentPage <= 20) { // Limit pages per category for speed
+        while (hasMorePages && currentPage <= 20) {
+          // Limit pages per category for speed
           const pageUrl = currentPage === 1 ? categoryUrl : `${categoryUrl}?page=${currentPage}`;
           const html = await this.fetchPage(pageUrl);
           const $ = cheerio.load(html);
@@ -574,8 +575,8 @@ export class AllRecipesScraper extends BaseScraper {
 
           cards.each((_, card) => {
             const $card = $(card);
-            const link = $card.find('a[href*="/recipe/"]').first().attr('href') ||
-                         $card.attr('href');
+            const link =
+              $card.find('a[href*="/recipe/"]').first().attr('href') || $card.attr('href');
 
             if (!link || visited.has(link)) return;
 
@@ -613,7 +614,9 @@ export class AllRecipesScraper extends BaseScraper {
             }
 
             // Try to get rating count
-            const countEl = $card.find('.mntl-recipe-card-meta__rating-count-number, [class*="count"]').first();
+            const countEl = $card
+              .find('.mntl-recipe-card-meta__rating-count-number, [class*="count"]')
+              .first();
             if (countEl.length) {
               const countText = countEl.text().replace(/[,\s]/g, '');
               const countMatch = countText.match(/(\d+)/);
@@ -639,7 +642,9 @@ export class AllRecipesScraper extends BaseScraper {
             }
           });
 
-          scraperLogger.debug(`[AllRecipes] Page ${currentPage} of ${categoryUrl}: found ${urlsWithRatings.length} URLs with ratings`);
+          scraperLogger.debug(
+            `[AllRecipes] Page ${currentPage} of ${categoryUrl}: found ${urlsWithRatings.length} URLs with ratings`,
+          );
           currentPage++;
         }
       } catch (error) {
@@ -649,7 +654,9 @@ export class AllRecipesScraper extends BaseScraper {
 
     // Log summary
     const withRatings = urlsWithRatings.filter(u => u.rating !== undefined).length;
-    scraperLogger.info(`[AllRecipes] Discovered ${urlsWithRatings.length} URLs (${withRatings} with ratings)`);
+    scraperLogger.info(
+      `[AllRecipes] Discovered ${urlsWithRatings.length} URLs (${withRatings} with ratings)`,
+    );
 
     return urlsWithRatings;
   }

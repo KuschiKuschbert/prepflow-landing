@@ -17,9 +17,9 @@ import { detectDishChanges } from './detectDishChanges';
 import { fetchDishWithRelations } from './fetchDishWithRelations';
 import { getUserEmail } from './getUserEmail';
 import {
-    invalidateAllergenCache,
-    invalidateMenuPricingCache,
-    trackChangeForLockedMenus,
+  invalidateAllergenCache,
+  invalidateMenuPricingCache,
+  trackChangeForLockedMenus,
 } from './invalidateDishCaches';
 import { updateIngredientsWithTracking, updateRecipesWithTracking } from './updateDishRelations';
 
@@ -119,18 +119,18 @@ export async function handlePutRequest(
       if (recipesError instanceof Error && 'code' in recipesError) {
         const pgError = recipesError as PostgrestError;
         logger.error('[Dishes API] Database error updating dish recipes:', {
-           error: pgError.message,
-           code: pgError.code,
-           context: { endpoint: '/api/dishes/[id]', operation: 'PUT', dishId },
-         });
-         const apiError = ApiErrorHandler.fromSupabaseError(pgError, 500);
-         return NextResponse.json(apiError, { status: apiError.status || 500 });
+          error: pgError.message,
+          code: pgError.code,
+          context: { endpoint: '/api/dishes/[id]', operation: 'PUT', dishId },
+        });
+        const apiError = ApiErrorHandler.fromSupabaseError(pgError, 500);
+        return NextResponse.json(apiError, { status: apiError.status || 500 });
       }
       logger.error('[Dishes API] Unexpected error updating dish recipes:', recipesError);
-       return NextResponse.json(
-         ApiErrorHandler.createError('Failed to update recipes', 'UPDATE_ERROR', 500),
-         { status: 500 }
-       );
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to update recipes', 'UPDATE_ERROR', 500),
+        { status: 500 },
+      );
     }
   }
 
@@ -146,21 +146,21 @@ export async function handlePutRequest(
         userEmail,
       );
     } catch (ingredientsError) {
-       if (ingredientsError instanceof Error && 'code' in ingredientsError) {
-          const pgError = ingredientsError as PostgrestError;
-          logger.error('[Dishes API] Database error updating dish ingredients:', {
-           error: pgError.message,
-           code: pgError.code,
-           context: { endpoint: '/api/dishes/[id]', operation: 'PUT', dishId },
-         });
-         const apiError = ApiErrorHandler.fromSupabaseError(pgError, 500);
-         return NextResponse.json(apiError, { status: apiError.status || 500 });
-       }
-       logger.error('[Dishes API] Unexpected error updating dish ingredients:', ingredientsError);
-       return NextResponse.json(
-         ApiErrorHandler.createError('Failed to update ingredients', 'UPDATE_ERROR', 500),
-         { status: 500 }
-       );
+      if (ingredientsError instanceof Error && 'code' in ingredientsError) {
+        const pgError = ingredientsError as PostgrestError;
+        logger.error('[Dishes API] Database error updating dish ingredients:', {
+          error: pgError.message,
+          code: pgError.code,
+          context: { endpoint: '/api/dishes/[id]', operation: 'PUT', dishId },
+        });
+        const apiError = ApiErrorHandler.fromSupabaseError(pgError, 500);
+        return NextResponse.json(apiError, { status: apiError.status || 500 });
+      }
+      logger.error('[Dishes API] Unexpected error updating dish ingredients:', ingredientsError);
+      return NextResponse.json(
+        ApiErrorHandler.createError('Failed to update ingredients', 'UPDATE_ERROR', 500),
+        { status: 500 },
+      );
     }
   }
 

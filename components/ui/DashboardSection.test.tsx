@@ -1,4 +1,3 @@
-
 // Mock env vars for smoke test
 process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://mock.supabase.co';
 process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'mock-key';
@@ -16,14 +15,16 @@ describe('DashboardSection', () => {
     expect(Module).toBeDefined();
 
     // Try to find a component to render using heuristics
-    const Component = (Module as any).default || Object.values(Module).find((exp: any) => typeof exp === 'function');
+    const Component =
+      (Module as any).default ||
+      Object.values(Module).find((exp: any) => typeof exp === 'function');
 
     if (Component) {
-        try {
-            render(<Component />);
-        } catch (e) {
-             // console.warn('Render failed for DashboardSection, but module loaded');
-        }
+      try {
+        render(<Component />);
+      } catch (e) {
+        // console.warn('Render failed for DashboardSection, but module loaded');
+      }
     }
   });
 });

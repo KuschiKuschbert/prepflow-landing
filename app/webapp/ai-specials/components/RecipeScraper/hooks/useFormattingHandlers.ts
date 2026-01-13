@@ -110,7 +110,14 @@ export function useFormattingHandlers({
     } finally {
       setIsProcessingStarting(false);
     }
-  }, [processing, setIsProcessingStarting, setProcessingPolling, fetchProcessingStatus, showSuccess, showError]);
+  }, [
+    processing,
+    setIsProcessingStarting,
+    setProcessingPolling,
+    fetchProcessingStatus,
+    showSuccess,
+    showError,
+  ]);
 
   return { handleResumeFormatting, handlePauseFormatting, handleProcessAllRecipes };
 }

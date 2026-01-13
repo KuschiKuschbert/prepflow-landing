@@ -9,7 +9,6 @@ import { handleEmployeeError } from './helpers/handleEmployeeError';
 import { createEmployeeSchema, EMPLOYEE_SELECT, updateEmployeeSchema } from './helpers/schemas';
 import { updateEmployee } from './helpers/updateEmployee';
 
-
 /**
  * GET /api/employees
  * List all employees with optional filters

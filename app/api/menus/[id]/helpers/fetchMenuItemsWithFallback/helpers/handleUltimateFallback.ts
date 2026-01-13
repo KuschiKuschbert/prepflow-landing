@@ -9,8 +9,8 @@ import { MenuItem } from '../../../../types';
 import { detectMissingColumns } from '../../errorDetection/detectMissingColumns';
 import { logDetailedError } from '../../fetchMenuWithItems.helpers';
 import {
-    buildEssentialQuery,
-    buildQueryWithoutRelations,
+  buildEssentialQuery,
+  buildQueryWithoutRelations,
 } from '../../queryBuilders/menuItemQueries';
 
 /**

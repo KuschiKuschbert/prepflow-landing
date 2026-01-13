@@ -83,7 +83,7 @@ export async function loadKnowledgeBase(): Promise<KnowledgeBase> {
 export async function saveKnowledgeBase(kb: KnowledgeBase): Promise<void> {
   const dir = path.dirname(KNOWLEDGE_BASE_FILE);
   await fs.mkdir(dir, { recursive: true });
-  
+
   kb.lastUpdated = new Date().toISOString();
   await fs.writeFile(KNOWLEDGE_BASE_FILE, JSON.stringify(kb, null, 2), 'utf8');
 }
@@ -91,16 +91,18 @@ export async function saveKnowledgeBase(kb: KnowledgeBase): Promise<void> {
 /**
  * Add error to knowledge base
  */
-export async function addErrorToKnowledgeBase(error: Omit<KnowledgeBaseError, 'fixes' | 'similarErrors' | 'preventionRules'>): Promise<void> {
+export async function addErrorToKnowledgeBase(
+  error: Omit<KnowledgeBaseError, 'fixes' | 'similarErrors' | 'preventionRules'>,
+): Promise<void> {
   const kb = await loadKnowledgeBase();
-  
+
   const kbError: KnowledgeBaseError = {
     ...error,
     fixes: [],
     similarErrors: [],
     preventionRules: [],
   };
-  
+
   kb.errors.push(kbError);
   await saveKnowledgeBase(kb);
 }
@@ -111,7 +113,7 @@ export async function addErrorToKnowledgeBase(error: Omit<KnowledgeBaseError, 'f
 export async function addFixToError(errorId: string, fix: KnowledgeBaseFix): Promise<void> {
   const kb = await loadKnowledgeBase();
   const error = kb.errors.find(err => err.id === errorId);
-  
+
   if (error) {
     error.fixes.push(fix);
     await saveKnowledgeBase(kb);
@@ -143,7 +145,7 @@ export async function linkSimilarErrors(errorId1: string, errorId2: string): Pro
   const kb = await loadKnowledgeBase();
   const error1 = kb.errors.find(err => err.id === errorId1);
   const error2 = kb.errors.find(err => err.id === errorId2);
-  
+
   if (error1 && error2) {
     if (!error1.similarErrors.includes(errorId2)) {
       error1.similarErrors.push(errorId2);
@@ -161,7 +163,7 @@ export async function linkSimilarErrors(errorId1: string, errorId2: string): Pro
 export async function linkPreventionRule(errorId: string, ruleId: string): Promise<void> {
   const kb = await loadKnowledgeBase();
   const error = kb.errors.find(err => err.id === errorId);
-  
+
   if (error && !error.preventionRules.includes(ruleId)) {
     error.preventionRules.push(ruleId);
     await saveKnowledgeBase(kb);
@@ -171,7 +173,9 @@ export async function linkPreventionRule(errorId: string, ruleId: string): Promi
 /**
  * Get error from knowledge base
  */
-export async function getErrorFromKnowledgeBase(errorId: string): Promise<KnowledgeBaseError | null> {
+export async function getErrorFromKnowledgeBase(
+  errorId: string,
+): Promise<KnowledgeBaseError | null> {
   const kb = await loadKnowledgeBase();
   return kb.errors.find(err => err.id === errorId) || null;
 }
@@ -182,11 +186,11 @@ export async function getErrorFromKnowledgeBase(errorId: string): Promise<Knowle
 export async function getSimilarErrors(errorId: string): Promise<KnowledgeBaseError[]> {
   const kb = await loadKnowledgeBase();
   const error = kb.errors.find(err => err.id === errorId);
-  
+
   if (!error) {
     return [];
   }
-  
+
   return kb.errors.filter(err => error.similarErrors.includes(err.id));
 }
 
@@ -200,23 +204,26 @@ export async function searchKnowledgeBase(query: string): Promise<{
 }> {
   const kb = await loadKnowledgeBase();
   const queryLower = query.toLowerCase();
-  
-  const errors = kb.errors.filter(err =>
-    err.pattern.toLowerCase().includes(queryLower) ||
-    err.errorType.toLowerCase().includes(queryLower) ||
-    err.category.toLowerCase().includes(queryLower),
+
+  const errors = kb.errors.filter(
+    err =>
+      err.pattern.toLowerCase().includes(queryLower) ||
+      err.errorType.toLowerCase().includes(queryLower) ||
+      err.category.toLowerCase().includes(queryLower),
   );
-  
-  const patterns = kb.patterns.filter(pattern =>
-    pattern.name.toLowerCase().includes(queryLower) ||
-    pattern.description.toLowerCase().includes(queryLower) ||
-    pattern.detection.toLowerCase().includes(queryLower),
+
+  const patterns = kb.patterns.filter(
+    pattern =>
+      pattern.name.toLowerCase().includes(queryLower) ||
+      pattern.description.toLowerCase().includes(queryLower) ||
+      pattern.detection.toLowerCase().includes(queryLower),
   );
-  
-  const rules = kb.rules.filter(rule =>
-    rule.name.toLowerCase().includes(queryLower) ||
-    rule.source.toLowerCase().includes(queryLower),
+
+  const rules = kb.rules.filter(
+    rule =>
+      rule.name.toLowerCase().includes(queryLower) ||
+      rule.source.toLowerCase().includes(queryLower),
   );
-  
+
   return { errors, patterns, rules };
 }

@@ -26,17 +26,17 @@ async function main() {
   // For the immediate "Foundation" step of Phase 2 logic, we'll assume a 'DemoProvider'
 
   const DemoProvider = {
-      name: 'Demo Cleanup Provider',
-      scan: async () => {
-          // This would realistically call cleanup.js logic
-          return [];
-      }
+    name: 'Demo Cleanup Provider',
+    scan: async () => {
+      // This would realistically call cleanup.js logic
+      return [];
+    },
   };
 
   orchestrator.registerProvider(DemoProvider);
 
   await orchestrator.run({
-    dryRun
+    dryRun,
   });
 }
 

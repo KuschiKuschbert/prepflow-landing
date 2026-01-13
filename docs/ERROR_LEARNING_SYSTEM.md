@@ -139,6 +139,7 @@ The learned-patterns check runs as part of cleanup checks, warning about high-ri
 ### CI/CD Pipeline
 
 The error-learning workflow:
+
 - Captures build errors when CI fails
 - Detects fixes when CI succeeds
 - Generates learning reports weekly
@@ -158,6 +159,7 @@ The `.cursor/rules/error-patterns.mdc` file is automatically updated with learne
 ## Files Created
 
 ### Scripts
+
 - `scripts/error-capture/capture-error.js`
 - `scripts/error-capture/capture-build-errors.js`
 - `scripts/error-capture/pre-commit-error-capture.sh`
@@ -168,6 +170,7 @@ The `.cursor/rules/error-patterns.mdc` file is automatically updated with learne
 - `scripts/cleanup/checks/learned-patterns.js`
 
 ### Libraries
+
 - `lib/error-learning/document-fix.ts`
 - `lib/error-learning/knowledge-base.ts`
 - `lib/error-learning/pattern-matcher.ts`
@@ -176,12 +179,14 @@ The `.cursor/rules/error-patterns.mdc` file is automatically updated with learne
 - `lib/error-learning/suggest-fix.ts`
 
 ### Documentation
+
 - `docs/errors/knowledge-base.json`
 - `docs/errors/fixes/typescript-type-errors.md`
 - `docs/errors/fixes/missing-error-handling.md`
 - `.cursor/rules/error-patterns.mdc`
 
 ### CI/CD
+
 - `.github/workflows/error-learning.yml`
 
 ## Next Steps

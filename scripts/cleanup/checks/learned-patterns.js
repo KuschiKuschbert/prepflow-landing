@@ -20,7 +20,7 @@ function loadKnowledgeBase() {
   if (!fs.existsSync(KNOWLEDGE_BASE_FILE)) {
     return { errors: [], patterns: [], rules: [] };
   }
-  
+
   try {
     const content = fs.readFileSync(KNOWLEDGE_BASE_FILE, 'utf8');
     return JSON.parse(content);
@@ -36,7 +36,7 @@ function loadFixes() {
   if (!fs.existsSync(FIXES_FILE)) {
     return [];
   }
-  
+
   try {
     const content = fs.readFileSync(FIXES_FILE, 'utf8');
     return JSON.parse(content);
@@ -52,18 +52,20 @@ function checkForHighRiskPatterns(content, filePath) {
   const violations = [];
   const kb = loadKnowledgeBase();
   const fixes = loadFixes();
-  
+
   // Get patterns that have been fixed multiple times (high risk)
   const highRiskPatterns = kb.patterns.filter(pattern => {
     // Count how many times this pattern has been fixed
     const fixCount = fixes.filter(fix => {
-      return fix.solution.toLowerCase().includes(pattern.name.toLowerCase()) ||
-             fix.prevention.toLowerCase().includes(pattern.prevention.toLowerCase());
+      return (
+        fix.solution.toLowerCase().includes(pattern.name.toLowerCase()) ||
+        fix.prevention.toLowerCase().includes(pattern.prevention.toLowerCase())
+      );
     }).length;
-    
+
     return fixCount >= 3; // High risk if fixed 3+ times
   });
-  
+
   // Check for patterns in code
   for (const pattern of highRiskPatterns) {
     // Simple pattern matching (can be enhanced)
@@ -72,7 +74,7 @@ function checkForHighRiskPatterns(content, filePath) {
       if (keyword.length < 3) return false;
       return content.toLowerCase().includes(keyword);
     });
-    
+
     if (hasPattern) {
       // Check if fix is already applied
       const fixKeywords = pattern.fix.toLowerCase().split(/\s+/);
@@ -80,7 +82,7 @@ function checkForHighRiskPatterns(content, filePath) {
         if (keyword.length < 3) return false;
         return content.toLowerCase().includes(keyword);
       });
-      
+
       if (!hasFix) {
         violations.push({
           type: 'high-risk-pattern',
@@ -91,7 +93,7 @@ function checkForHighRiskPatterns(content, filePath) {
       }
     }
   }
-  
+
   return violations;
 }
 
@@ -101,11 +103,11 @@ function checkForHighRiskPatterns(content, filePath) {
 async function checkLearnedPatterns(files = null) {
   const violations = [];
   const standardConfig = getStandardConfig('learned-patterns');
-  
+
   // For now, we'll check all TypeScript/JavaScript files
   // In the future, this could be more targeted
   const filesToCheck = files || [];
-  
+
   // If no files specified, skip (this check is expensive)
   if (filesToCheck.length === 0) {
     return {
@@ -114,16 +116,16 @@ async function checkLearnedPatterns(files = null) {
       summary: '✅ Learned patterns check skipped (no files specified)',
     };
   }
-  
+
   for (const file of filesToCheck) {
     if (!fs.existsSync(file)) continue;
-    
+
     // Only check TypeScript/JavaScript files
     if (!/\.(ts|tsx|js|jsx)$/.test(file)) continue;
-    
+
     const content = fs.readFileSync(file, 'utf8');
     const found = checkForHighRiskPatterns(content, file);
-    
+
     for (const violation of found) {
       violations.push(
         createViolation({
@@ -138,7 +140,7 @@ async function checkLearnedPatterns(files = null) {
       );
     }
   }
-  
+
   return {
     passed: violations.length === 0,
     violations,

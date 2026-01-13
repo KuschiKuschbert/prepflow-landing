@@ -7,12 +7,14 @@ The Autonomous Developer System is a comprehensive senior-level development inte
 ## Quick Start
 
 ### Comprehensive Analysis
+
 ```bash
 # Analyze a file with all intelligence modules
 npm run dev:analyze app/api/route.ts
 ```
 
 ### Individual Modules
+
 ```bash
 # Code review
 npm run dev:code-review app/api/route.ts
@@ -75,6 +77,7 @@ All learnings are stored in structured knowledge bases:
 ## Integration
 
 The system integrates with:
+
 - Pre-commit hooks (predictive bug detection)
 - Build process (performance metrics recording)
 - CI/CD pipeline (error learning workflow)
@@ -83,6 +86,7 @@ The system integrates with:
 ## Continuous Learning
 
 The system continuously learns from:
+
 - Error fixes and patterns
 - User behavior (accepted/rejected suggestions)
 - Code review feedback

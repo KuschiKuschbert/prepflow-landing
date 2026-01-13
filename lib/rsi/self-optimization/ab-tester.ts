@@ -40,7 +40,12 @@ export class ABTester {
     return Math.abs(hash) % 2 === 0 ? 'A' : 'B';
   }
 
-  static async recordResult(experimentId: string, variant: 'A' | 'B', success: boolean, scoreDelta: number = 0) {
+  static async recordResult(
+    experimentId: string,
+    variant: 'A' | 'B',
+    success: boolean,
+    scoreDelta: number = 0,
+  ) {
     try {
       if (!fs.existsSync(EXPERIMENTS_FILE_PATH)) return;
 
@@ -56,16 +61,15 @@ export class ABTester {
       exp.metrics[variant].score += scoreDelta;
 
       fs.writeFileSync(EXPERIMENTS_FILE_PATH, JSON.stringify(experiments, null, 2));
-
     } catch (error) {
       console.error(`Failed to record A/B result for ${experimentId}:`, error);
     }
   }
 
   static async createExperiment(name: string, description: string): Promise<string> {
-      // Stub for creating new experiments
-      const id = name.toLowerCase().replace(/\s+/g, '-');
-      // Logic to save new experiment...
-      return id;
+    // Stub for creating new experiments
+    const id = name.toLowerCase().replace(/\s+/g, '-');
+    // Logic to save new experiment...
+    return id;
   }
 }

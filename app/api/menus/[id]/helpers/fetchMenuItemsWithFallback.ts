@@ -7,10 +7,10 @@ import { handlePricingFallback } from './fetchMenuItemsWithFallback/helpers/hand
 import { handleUltimateFallback } from './fetchMenuItemsWithFallback/helpers/handleUltimateFallback';
 import { logDetailedError } from './fetchMenuWithItems.helpers';
 import {
-    buildFullQuery,
-    buildMinimalQuery,
-    buildQueryWithoutDescription,
-    buildQueryWithoutDietary,
+  buildFullQuery,
+  buildMinimalQuery,
+  buildQueryWithoutDescription,
+  buildQueryWithoutDietary,
 } from './queryBuilders/menuItemQueries';
 
 export interface FetchResult {

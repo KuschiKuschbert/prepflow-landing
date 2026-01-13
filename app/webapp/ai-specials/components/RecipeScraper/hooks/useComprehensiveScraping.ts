@@ -40,7 +40,12 @@ export function useComprehensiveScraping({
         error: error instanceof Error ? error.message : String(error),
       });
     }
-  }, [setComprehensiveScraping, setComprehensiveStatus, setStatusPolling, fetchComprehensiveStatus]);
+  }, [
+    setComprehensiveScraping,
+    setComprehensiveStatus,
+    setStatusPolling,
+    fetchComprehensiveStatus,
+  ]);
 
   const stopComprehensive = useCallback(async () => {
     try {

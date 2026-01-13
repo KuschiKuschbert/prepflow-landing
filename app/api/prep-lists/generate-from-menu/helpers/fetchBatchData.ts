@@ -1,11 +1,11 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import {
-    DBDishIngredient,
-    DBDishRecipe,
-    DBDishSection,
-    DBRecipeIngredient,
-    DishSectionData,
+  DBDishIngredient,
+  DBDishRecipe,
+  DBDishSection,
+  DBRecipeIngredient,
+  DishSectionData,
 } from '../types';
 
 /**
@@ -14,7 +14,9 @@ import {
  * @param {Set<string>} recipeIds - Set of recipe IDs
  * @returns {Promise<Map<string, DBRecipeIngredient[]>>} Map of recipe ID to ingredients array
  */
-export async function fetchRecipeIngredients(recipeIds: Set<string>): Promise<Map<string, DBRecipeIngredient[]>> {
+export async function fetchRecipeIngredients(
+  recipeIds: Set<string>,
+): Promise<Map<string, DBRecipeIngredient[]>> {
   const recipeIngredientsMap = new Map<string, DBRecipeIngredient[]>();
 
   if (!supabaseAdmin || recipeIds.size === 0) {

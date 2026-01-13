@@ -108,7 +108,7 @@ export async function fetchIngredientsWithParLevels(
     { par_level?: number; reorder_point?: number; unit?: string }
   >();
   if (parLevels) {
-    parLevels.forEach((pl) => {
+    parLevels.forEach(pl => {
       parLevelsMap.set(pl.ingredient_id, {
         par_level: pl.par_level,
         reorder_point: pl.reorder_point,

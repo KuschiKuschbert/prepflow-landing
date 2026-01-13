@@ -9,7 +9,11 @@ const execAsync = util.promisify(exec);
  */
 
 export class CodemodRunner {
-  static async run(codemodPath: string, targetFiles: string[], dryRun: boolean = false): Promise<{ success: boolean; output: string }> {
+  static async run(
+    codemodPath: string,
+    targetFiles: string[],
+    dryRun: boolean = false,
+  ): Promise<{ success: boolean; output: string }> {
     const filesStr = targetFiles.join(' ');
     const dryRunFlag = dryRun ? '--dry' : ''; // jscodeshift dry run
     const command = `npx jscodeshift -t ${codemodPath} ${filesStr} --parser=tsx ${dryRunFlag} --print`;

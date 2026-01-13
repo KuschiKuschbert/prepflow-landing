@@ -39,10 +39,11 @@ async function main() {
       } else {
         // In a real system, we would apply these config changes to a config file.
         // For Phase 3, we just log them.
-        console.log('   ℹ️  Auto-application not yet implemented for config. Please update manually.\n');
+        console.log(
+          '   ℹ️  Auto-application not yet implemented for config. Please update manually.\n',
+        );
       }
     }
-
   } catch (error) {
     console.error('Self-optimization cycle failed:', error);
     process.exit(1);

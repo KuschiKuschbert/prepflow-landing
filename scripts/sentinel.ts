@@ -11,7 +11,7 @@ const CONFIG = {
   maxTodos: 50,
   maxLines: 500,
   maxIndentDepth: 6, // 6 levels of indentation suggests complexity
-  ignorePatterns: ['**/*.test.*', '**/*.spec.*', '**/dist/**', '**/node_modules/**', '**/.next/**']
+  ignorePatterns: ['**/*.test.*', '**/*.spec.*', '**/dist/**', '**/node_modules/**', '**/.next/**'],
 };
 
 console.log(`${YELLOW}🛡️  The Sentinel: Starting Health Scan...${NC}`);
@@ -49,13 +49,13 @@ function scanFile(filePath: string): FileStats {
     path: filePath,
     lines: lines.length,
     todos,
-    maxIndent
+    maxIndent,
   };
 }
 
 async function main() {
   const files = glob.sync('{app,components,lib,utils,hooks}/**/*.{ts,tsx,js,jsx}', {
-    ignore: CONFIG.ignorePatterns
+    ignore: CONFIG.ignorePatterns,
   });
 
   console.log(`Scanning ${files.length} files...`);
@@ -74,7 +74,9 @@ async function main() {
 
     // Check Complexity
     if (stats.maxIndent > CONFIG.maxIndentDepth) {
-      console.warn(`${YELLOW}⚠️  Complexity Warning:${NC} ${file} (Indent depth: ${stats.maxIndent})`);
+      console.warn(
+        `${YELLOW}⚠️  Complexity Warning:${NC} ${file} (Indent depth: ${stats.maxIndent})`,
+      );
     }
   }
 

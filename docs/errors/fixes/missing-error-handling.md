@@ -13,6 +13,7 @@ Common patterns of missing error handling and how to fix them based on learned p
 **Solution:** Wrap async operations in try-catch blocks.
 
 **Example:**
+
 ```typescript
 // Before
 async function fetchData() {
@@ -41,6 +42,7 @@ async function fetchData() {
 **Solution:** Use ApiErrorHandler for consistent error responses.
 
 **Example:**
+
 ```typescript
 // Before
 export async function GET(request: NextRequest) {
@@ -71,6 +73,7 @@ export async function GET(request: NextRequest) {
 **Solution:** Log errors and either re-throw or return appropriate error responses.
 
 **Example:**
+
 ```typescript
 // Before
 try {

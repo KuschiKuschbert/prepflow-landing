@@ -20,7 +20,7 @@ export class PatternRefiner {
         originalPattern: pattern,
         refinedPattern: `${pattern} && !isTestFile`,
         reason: 'High negative feedback in test files. Adding exclusion.',
-        confidence: 0.9
+        confidence: 0.9,
       };
     }
 

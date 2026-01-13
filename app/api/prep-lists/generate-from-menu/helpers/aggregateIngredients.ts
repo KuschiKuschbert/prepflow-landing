@@ -1,8 +1,4 @@
-import {
-    DBDishRecipe,
-    DBRecipeIngredient,
-    SectionData
-} from '../types';
+import { DBDishRecipe, DBRecipeIngredient, SectionData } from '../types';
 
 // Depending on where menuItems comes from (likely EnrichedMenuItem or RawMenuItem),
 // we might want to import that. For now, we'll keep it as any[] to avoid circular deps

@@ -69,21 +69,21 @@ function captureAllBuildErrors() {
     eslint: [],
     nextjs: [],
   };
-  
+
   // Capture TypeScript errors
   try {
     errors.typescript = captureTypeScriptErrors();
   } catch (err) {
     console.error('[Build Error Capture] Failed to capture TypeScript errors:', err);
   }
-  
+
   // Capture ESLint errors
   try {
     errors.eslint = captureESLintErrors();
   } catch (err) {
     console.error('[Build Error Capture] Failed to capture ESLint errors:', err);
   }
-  
+
   // Capture Next.js build errors (only if TypeScript/ESLint passed)
   if (errors.typescript.length === 0 && errors.eslint.length === 0) {
     try {
@@ -92,7 +92,7 @@ function captureAllBuildErrors() {
       console.error('[Build Error Capture] Failed to capture Next.js errors:', err);
     }
   }
-  
+
   // Save error output for later analysis
   const totalErrors = errors.typescript.length + errors.eslint.length + errors.nextjs.length;
   if (totalErrors > 0) {
@@ -106,14 +106,14 @@ function captureAllBuildErrors() {
       ...errors.eslint.map(id => `  ESLint: ${id}`),
       ...errors.nextjs.map(id => `  Next.js: ${id}`),
     ].join('\n');
-    
+
     fs.writeFileSync(BUILD_ERROR_OUTPUT, errorOutput);
     console.log(`\n✅ Captured ${totalErrors} build error(s)`);
     console.log(`   Error details saved to: ${BUILD_ERROR_OUTPUT}`);
   } else {
     console.log('\n✅ No build errors found');
   }
-  
+
   return errors;
 }
 
@@ -123,26 +123,26 @@ function captureAllBuildErrors() {
 function main() {
   const args = process.argv.slice(2);
   const command = args[0] || 'all';
-  
+
   switch (command) {
     case 'typescript':
     case 'ts':
       captureTypeScriptErrors();
       break;
-      
+
     case 'eslint':
       captureESLintErrors();
       break;
-      
+
     case 'nextjs':
     case 'next':
       captureNextJSErrors();
       break;
-      
+
     case 'all':
       captureAllBuildErrors();
       break;
-      
+
     default:
       console.log(`
 Build Error Capture Script

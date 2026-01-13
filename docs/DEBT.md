@@ -4,6 +4,7 @@
 > **Process**: The "Improver" persona should review this file and submit PRs to clear debt.
 
 ## High Priority
+
 - [ ] **[WEB]** Eradicate `any` types (Found 1600+ instances). Start with `app/api/`.
 - [x] **[ANDROID]** Extract all hardcoded strings to `strings.xml` (Found 100+ instances of `Text("..")`).
 - [x] **[WEB]** Replace `alert()` usage in `PassportIdPage` and `SettingsClient` with Toast notifications.
@@ -12,6 +13,7 @@
 - [x] **[WEB]** Refactor `app/api/menus` (105 `any` types) - **DONE**.
 
 ## Medium Priority
+
 - [x] **[ANDROID]** Remove `Log.d` from `SupabaseManager.kt` (Security Leak).
 - [ ] **[WEB]** Convert inline styles in Landing Page components to Tailwind classes.
 - [x] **[WEB]** Optimize 15 large images in `public/` (>500KB).
@@ -19,4 +21,5 @@
 - [ ] Verify `check:architecture` rules are strict enough for `lib` vs `components`.
 
 ## Low Priority
+
 - [ ] Add more "Personas" for different coding styles (e.g. "Security Expert").

@@ -121,7 +121,11 @@ export async function refreshMenuRecommendedPrices(menuId: string): Promise<{
         ...item,
         recipes: recipeYield ? { yield: recipeYield } : undefined,
       };
-      const price = await cacheRecommendedPrice(menuId, item.id, menuItemForCache as unknown as RawMenuItem);
+      const price = await cacheRecommendedPrice(
+        menuId,
+        item.id,
+        menuItemForCache as unknown as RawMenuItem,
+      );
       if (price != null) {
         updated++;
       } else {
