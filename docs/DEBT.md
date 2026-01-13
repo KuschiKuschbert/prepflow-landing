@@ -5,7 +5,7 @@
 
 ## High Priority
 
-- [ ] **[WEB]** Eradicate `any` types (Found 1600+ instances). Start with `app/api/`.
+- [ ] **[WEB]** Eradicate `any` types (Found 2125 warnings). Enforced via "Zero New Any" policy (Warn). Start with `app/api/`.
 - [x] **[ANDROID]** Extract all hardcoded strings to `strings.xml` (Found 100+ instances of `Text("..")`).
 - [x] **[WEB]** Replace `alert()` usage in `PassportIdPage` and `SettingsClient` with Toast notifications.
 - [x] **[WEB]** Refactor `KitchenOnFire.tsx` and `DashboardSection.tsx` (Reduce complexity).
