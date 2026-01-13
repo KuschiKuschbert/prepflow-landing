@@ -304,4 +304,93 @@ export class DelishScraper extends BaseScraper {
     scraperLogger.info(`Total Delish URLs discovered: ${urls.length}`);
     return urls;
   }
+
+  /**
+   * Get ALL recipe URLs with ratings from listing pages (optimized pre-filtering)
+   * Delish shows star ratings on recipe cards on category pages.
+   */
+  async getAllRecipeUrlsWithRatings(): Promise<import('../parsers/types').RecipeUrlWithRating[]> {
+    const urlsWithRatings: import('../parsers/types').RecipeUrlWithRating[] = [];
+    const visited = new Set<string>();
+
+    scraperLogger.info('[Delish] Starting optimized URL discovery with rating extraction...');
+
+    // Crawl category pages
+    const categoryUrls = [
+      'https://www.delish.com/cooking/recipe-ideas/',
+      'https://www.delish.com/cooking/recipe-ideas/g3166/quick-easy-recipes/',
+      'https://www.delish.com/cooking/recipe-ideas/g2763/easy-dinner-recipes/',
+      'https://www.delish.com/cooking/recipe-ideas/g3593/chicken-dinners/',
+    ];
+
+    for (const categoryUrl of categoryUrls) {
+      try {
+        let currentPage = 1;
+        let hasMorePages = true;
+
+        while (hasMorePages && currentPage <= 15) {
+          const pageUrl = currentPage === 1 ? categoryUrl : `${categoryUrl}?page=${currentPage}`;
+          const html = await this.fetchPage(pageUrl);
+          const $ = cheerio.load(html);
+
+          const cards = $('a[href*="/cooking/recipe-ideas/"]').closest('[class*="card"], article, .listicle-item');
+
+          if (cards.length === 0) {
+            hasMorePages = false;
+            continue;
+          }
+
+          cards.each((_, card) => {
+            const $card = $(card);
+            const link = $card.find('a[href*="/cooking/recipe-ideas/"]').first().attr('href') ||
+                         $card.attr('href');
+
+            if (!link) return;
+
+            let normalizedUrl = link;
+            if (!link.startsWith('http')) {
+              normalizedUrl = `https://www.delish.com${link.startsWith('/') ? '' : '/'}${link}`;
+            }
+            normalizedUrl = normalizedUrl.split('?')[0].split('#')[0];
+
+            // Must be an actual recipe page (not a gallery)
+            if (!normalizedUrl.match(/\/a\d+\//) || visited.has(normalizedUrl)) return;
+
+            // Extract rating
+            let rating: number | undefined;
+
+            const ratingEl = $card.find('[class*="rating"], [data-rating], .star-rating').first();
+            if (ratingEl.length) {
+              const dataRating = ratingEl.attr('data-rating');
+              if (dataRating) {
+                rating = parseFloat(dataRating);
+              } else {
+                const ratingText = ratingEl.text().trim();
+                const ratingMatch = ratingText.match(/(\d+\.?\d*)/);
+                if (ratingMatch) {
+                  rating = parseFloat(ratingMatch[1]);
+                }
+              }
+            }
+
+            visited.add(normalizedUrl);
+            urlsWithRatings.push({
+              url: normalizedUrl,
+              rating,
+            });
+          });
+
+          scraperLogger.debug(`[Delish] Page ${currentPage}: found ${urlsWithRatings.length} URLs`);
+          currentPage++;
+        }
+      } catch (error) {
+        scraperLogger.warn(`[Delish] Failed to fetch category ${categoryUrl}:`, error);
+      }
+    }
+
+    const withRatings = urlsWithRatings.filter(u => u.rating !== undefined).length;
+    scraperLogger.info(`[Delish] Discovered ${urlsWithRatings.length} URLs (${withRatings} with ratings)`);
+
+    return urlsWithRatings;
+  }
 }

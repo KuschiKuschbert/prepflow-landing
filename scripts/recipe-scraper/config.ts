@@ -30,6 +30,7 @@ export const SOURCES = {
   SMITTEN_KITCHEN: 'smitten-kitchen',
   THE_KITCHN: 'the-kitchn',
   DELISH: 'delish',
+  FOOD_AND_WINE: 'foodandwine',
 } as const;
 
 export type SourceType = (typeof SOURCES)[keyof typeof SOURCES];
@@ -62,5 +63,6 @@ export const RATING_CONFIG = {
     'smitten-kitchen': { minRating: 0, includeUnrated: true }, // Blog, no ratings
     'the-kitchn': { minRating: 0, includeUnrated: true }, // Professional site, no ratings
     delish: { minRating: 4.875, includeUnrated: false }, // 97.5% threshold
+    foodandwine: { minRating: 4.875, includeUnrated: false }, // 97.5% threshold
   } as Record<SourceType | string, { minRating: number; includeUnrated: boolean }>,
 };

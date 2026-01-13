@@ -54,3 +54,14 @@ export interface ScrapeResult {
   source: string;
   url: string;
 }
+
+/**
+ * Recipe URL with optional rating from listing page
+ * Used for pre-filtering optimization - extract ratings from listing pages
+ * to skip low-rated recipes before downloading full pages
+ */
+export interface RecipeUrlWithRating {
+  url: string;
+  rating?: number; // Rating from listing page (may be undefined if not shown)
+  ratingCount?: number; // Number of ratings (optional)
+}

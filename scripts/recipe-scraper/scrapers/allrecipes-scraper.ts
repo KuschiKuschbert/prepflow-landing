@@ -532,4 +532,125 @@ export class AllRecipesScraper extends BaseScraper {
       return urls;
     }
   }
+
+  /**
+   * Get ALL recipe URLs with ratings from listing pages (optimized pre-filtering)
+   * Extracts ratings from recipe cards on listing pages to filter before full scrape.
+   * This can reduce scraping time by ~90% for sites with many low-rated recipes.
+   */
+  async getAllRecipeUrlsWithRatings(): Promise<import('../parsers/types').RecipeUrlWithRating[]> {
+    const urlsWithRatings: import('../parsers/types').RecipeUrlWithRating[] = [];
+    const visited = new Set<string>();
+
+    scraperLogger.info('[AllRecipes] Starting optimized URL discovery with rating extraction...');
+
+    // Crawl popular category pages that show ratings on cards
+    const categoryUrls = [
+      'https://www.allrecipes.com/recipes/',
+      'https://www.allrecipes.com/recipes/76/appetizers-and-snacks/',
+      'https://www.allrecipes.com/recipes/156/bread/',
+      'https://www.allrecipes.com/recipes/78/breakfast-and-brunch/',
+      'https://www.allrecipes.com/recipes/79/desserts/',
+      'https://www.allrecipes.com/recipes/17562/dinner/',
+    ];
+
+    for (const categoryUrl of categoryUrls) {
+      try {
+        let currentPage = 1;
+        let hasMorePages = true;
+
+        while (hasMorePages && currentPage <= 20) { // Limit pages per category for speed
+          const pageUrl = currentPage === 1 ? categoryUrl : `${categoryUrl}?page=${currentPage}`;
+          const html = await this.fetchPage(pageUrl);
+          const $ = cheerio.load(html);
+
+          // Find recipe cards - AllRecipes uses various card structures
+          const cards = $('a[href*="/recipe/"]').closest('.card, .mntl-card, [class*="card"]');
+
+          if (cards.length === 0) {
+            hasMorePages = false;
+            continue;
+          }
+
+          cards.each((_, card) => {
+            const $card = $(card);
+            const link = $card.find('a[href*="/recipe/"]').first().attr('href') ||
+                         $card.attr('href');
+
+            if (!link || visited.has(link)) return;
+
+            // Extract rating from card (AllRecipes shows stars/rating on cards)
+            let rating: number | undefined;
+            let ratingCount: number | undefined;
+
+            // Try multiple selectors for rating
+            const ratingSelectors = [
+              '.mntl-recipe-card-meta__rating-count-number',
+              '.rating-star-text',
+              '[class*="rating"]',
+              '[data-rating]',
+              '.star-rating',
+            ];
+
+            for (const selector of ratingSelectors) {
+              const ratingEl = $card.find(selector).first();
+              if (ratingEl.length) {
+                // Try data-rating attribute first
+                const dataRating = ratingEl.attr('data-rating');
+                if (dataRating) {
+                  rating = parseFloat(dataRating);
+                  break;
+                }
+
+                // Try text content
+                const ratingText = ratingEl.text().trim();
+                const ratingMatch = ratingText.match(/(\d+\.?\d*)/);
+                if (ratingMatch) {
+                  rating = parseFloat(ratingMatch[1]);
+                  break;
+                }
+              }
+            }
+
+            // Try to get rating count
+            const countEl = $card.find('.mntl-recipe-card-meta__rating-count-number, [class*="count"]').first();
+            if (countEl.length) {
+              const countText = countEl.text().replace(/[,\s]/g, '');
+              const countMatch = countText.match(/(\d+)/);
+              if (countMatch) {
+                ratingCount = parseInt(countMatch[1], 10);
+              }
+            }
+
+            // Normalize URL
+            let normalizedUrl = link;
+            if (!link.startsWith('http')) {
+              normalizedUrl = `https://www.allrecipes.com${link.startsWith('/') ? '' : '/'}${link}`;
+            }
+            normalizedUrl = normalizedUrl.split('?')[0].split('#')[0];
+
+            if (normalizedUrl.includes('/recipe/') && !visited.has(normalizedUrl)) {
+              visited.add(normalizedUrl);
+              urlsWithRatings.push({
+                url: normalizedUrl,
+                rating,
+                ratingCount,
+              });
+            }
+          });
+
+          scraperLogger.debug(`[AllRecipes] Page ${currentPage} of ${categoryUrl}: found ${urlsWithRatings.length} URLs with ratings`);
+          currentPage++;
+        }
+      } catch (error) {
+        scraperLogger.warn(`[AllRecipes] Failed to fetch category ${categoryUrl}:`, error);
+      }
+    }
+
+    // Log summary
+    const withRatings = urlsWithRatings.filter(u => u.rating !== undefined).length;
+    scraperLogger.info(`[AllRecipes] Discovered ${urlsWithRatings.length} URLs (${withRatings} with ratings)`);
+
+    return urlsWithRatings;
+  }
 }

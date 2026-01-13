@@ -7,10 +7,17 @@
 
 import { AllRecipesScraper } from './scrapers/allrecipes-scraper';
 // import { BBCGoodFoodScraper } from './scrapers/bbc-good-food-scraper'; // REMOVED - Terms of Service violation
-import { FoodNetworkScraper } from './scrapers/food-network-scraper';
-import { EpicuriousScraper } from './scrapers/epicurious-scraper';
 import { BonAppetitScraper } from './scrapers/bon-appetit-scraper';
+import { DelishScraper } from './scrapers/delish-scraper';
+import { EpicuriousScraper } from './scrapers/epicurious-scraper';
+import { FoodAndWineScraper } from './scrapers/food-and-wine-scraper';
+import { FoodNetworkScraper } from './scrapers/food-network-scraper';
+import { Food52Scraper } from './scrapers/food52-scraper';
+import { SeriousEatsScraper } from './scrapers/serious-eats-scraper';
+import { SimplyRecipesScraper } from './scrapers/simply-recipes-scraper';
+import { SmittenKitchenScraper } from './scrapers/smitten-kitchen-scraper';
 import { TastyScraper } from './scrapers/tasty-scraper';
+import { TheKitchnScraper } from './scrapers/the-kitchn-scraper';
 import { scraperLogger } from './utils/logger';
 
 interface TestCase {
@@ -51,6 +58,48 @@ const testCases: TestCase[] = [
     scraper: new TastyScraper(),
     url: 'https://tasty.co/recipe/champagne-jell-o-shots',
     expectedFields: ['recipe_name', 'ingredients', 'instructions', 'rating'],
+  },
+  {
+    name: 'Food & Wine',
+    scraper: new FoodAndWineScraper(),
+    url: 'https://www.foodandwine.com/recipes/classic-beef-chili',
+    expectedFields: ['recipe_name', 'ingredients', 'instructions', 'rating'],
+  },
+  {
+    name: 'Serious Eats',
+    scraper: new SeriousEatsScraper(),
+    url: 'https://www.seriouseats.com/shakshuka-north-african-breakfast-recipe',
+    expectedFields: ['recipe_name', 'ingredients', 'instructions'],
+  },
+  {
+    name: 'Food52',
+    scraper: new Food52Scraper(),
+    url: 'https://food52.com/recipes/77622-marcella-hazan-bolognese-sauce-recipe',
+    expectedFields: ['recipe_name', 'ingredients', 'instructions'],
+  },
+  {
+    name: 'Simply Recipes',
+    scraper: new SimplyRecipesScraper(),
+    url: 'https://www.simplyrecipes.com/recipes/banana_bread/',
+    expectedFields: ['recipe_name', 'ingredients', 'instructions'],
+  },
+  {
+    name: 'Smitten Kitchen',
+    scraper: new SmittenKitchenScraper(),
+    url: 'https://smittenkitchen.com/2019/05/perfect-blueberry-muffins/',
+    expectedFields: ['recipe_name', 'ingredients', 'instructions'],
+  },
+  {
+    name: 'The Kitchn',
+    scraper: new TheKitchnScraper(),
+    url: 'https://www.thekitchn.com/how-to-make-chicken-stir-fry-251878',
+    expectedFields: ['recipe_name', 'ingredients', 'instructions'],
+  },
+  {
+    name: 'Delish',
+    scraper: new DelishScraper(),
+    url: 'https://www.delish.com/cooking/recipe-ideas/a25238315/chicken-parmesan-recipe/',
+    expectedFields: ['recipe_name', 'ingredients', 'instructions'],
   },
 ];
 

@@ -1,5 +1,7 @@
 import { exec } from 'child_process';
 import util from 'util';
+import { runArchitectureAnalysis } from './architecture-analysis';
+import { runPredictiveAnalysis } from './predictive-analysis';
 import { SafetyChecker } from './safety/safety-checker';
 import { PerformanceTracker } from './self-optimization/performance-tracker';
 
@@ -13,6 +15,8 @@ export interface OrchestratorConfig {
     metaLearning: boolean;
     ruleEvolution: boolean;
     autoRefactor: boolean;
+    predictiveAnalysis: boolean;
+    architectureAnalysis: boolean;
   };
 }
 
@@ -60,6 +64,18 @@ export class RSIOrchestrator {
         if (config.modules.autoRefactor) {
             console.log('\n--- Module: Auto-Refactoring ---');
             await this.runScript('rsi:refactor', config.dryRun);
+        }
+
+        // 7. Predictive Analysis (merged from autonomous-developer)
+        if (config.modules.predictiveAnalysis) {
+            console.log('\n--- Module: Predictive Analysis ---');
+            await runPredictiveAnalysis(config.dryRun);
+        }
+
+        // 8. Architecture Analysis (merged from autonomous-developer)
+        if (config.modules.architectureAnalysis) {
+            console.log('\n--- Module: Architecture Analysis ---');
+            await runArchitectureAnalysis(config.dryRun);
         }
 
     } catch (error) {

@@ -4,10 +4,10 @@
  */
 
 import * as cheerio from 'cheerio';
-import { BaseScraper } from './base-scraper';
-import { ScrapedRecipe, RecipeIngredient } from '../parsers/types';
+import { RecipeIngredient, ScrapedRecipe } from '../parsers/types';
 import { scraperLogger } from '../utils/logger';
 import { SitemapParser } from '../utils/sitemap-parser';
+import { BaseScraper } from './base-scraper';
 
 export class TastyScraper extends BaseScraper {
   constructor(config?: Partial<import('../parsers/types').ScraperConfig>) {
@@ -395,5 +395,91 @@ export class TastyScraper extends BaseScraper {
       scraperLogger.error('Error in pagination crawling for Tasty:', error);
       return urls;
     }
+  }
+
+  /**
+   * Get ALL recipe URLs with ratings from listing pages (optimized pre-filtering)
+   * Tasty uses percentage ratings (0-100) displayed on recipe cards.
+   */
+  async getAllRecipeUrlsWithRatings(): Promise<import('../parsers/types').RecipeUrlWithRating[]> {
+    const urlsWithRatings: import('../parsers/types').RecipeUrlWithRating[] = [];
+    const visited = new Set<string>();
+
+    scraperLogger.info('[Tasty] Starting optimized URL discovery with rating extraction...');
+
+    // Crawl category pages
+    const categoryUrls = [
+      'https://tasty.co/recipes',
+      'https://tasty.co/topic/quick-and-easy',
+      'https://tasty.co/topic/dinner',
+      'https://tasty.co/topic/healthy',
+      'https://tasty.co/topic/desserts',
+    ];
+
+    for (const categoryUrl of categoryUrls) {
+      try {
+        let currentPage = 1;
+        let hasMorePages = true;
+
+        while (hasMorePages && currentPage <= 10) {
+          const pageUrl = currentPage === 1 ? categoryUrl : `${categoryUrl}?page=${currentPage}`;
+          const html = await this.fetchPage(pageUrl);
+          const $ = cheerio.load(html);
+
+          const cards = $('a[href*="/recipe/"]').closest('[class*="feed-item"], [class*="card"], article');
+
+          if (cards.length === 0) {
+            hasMorePages = false;
+            continue;
+          }
+
+          cards.each((_, card) => {
+            const $card = $(card);
+            const link = $card.find('a[href*="/recipe/"]').first().attr('href') ||
+                         $card.attr('href');
+
+            if (!link) return;
+
+            let normalizedUrl = link;
+            if (!link.startsWith('http')) {
+              normalizedUrl = `https://tasty.co${link.startsWith('/') ? '' : '/'}${link}`;
+            }
+            normalizedUrl = normalizedUrl.split('?')[0].split('#')[0];
+
+            if (!normalizedUrl.includes('/recipe/') || visited.has(normalizedUrl)) return;
+
+            // Extract percentage rating (Tasty shows "86%" format)
+            let rating: number | undefined;
+
+            const ratingEl = $card.find('[class*="rating"], [class*="score"], [class*="percent"]').first();
+            if (ratingEl.length) {
+              const ratingText = ratingEl.text().trim();
+              const percentMatch = ratingText.match(/(\d+)%/);
+              if (percentMatch) {
+                // Convert percentage (0-100) to star rating (0-5) for consistency
+                const percent = parseInt(percentMatch[1], 10);
+                rating = (percent / 100) * 5; // 97.5% → 4.875
+              }
+            }
+
+            visited.add(normalizedUrl);
+            urlsWithRatings.push({
+              url: normalizedUrl,
+              rating,
+            });
+          });
+
+          scraperLogger.debug(`[Tasty] Page ${currentPage}: found ${urlsWithRatings.length} URLs`);
+          currentPage++;
+        }
+      } catch (error) {
+        scraperLogger.warn(`[Tasty] Failed to fetch category ${categoryUrl}:`, error);
+      }
+    }
+
+    const withRatings = urlsWithRatings.filter(u => u.rating !== undefined).length;
+    scraperLogger.info(`[Tasty] Discovered ${urlsWithRatings.length} URLs (${withRatings} with ratings)`);
+
+    return urlsWithRatings;
   }
 }

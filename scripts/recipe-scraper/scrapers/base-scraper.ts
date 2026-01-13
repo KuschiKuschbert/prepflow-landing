@@ -3,21 +3,20 @@
  * Abstract base class for all recipe scrapers
  */
 
-import axios, { AxiosInstance, AxiosError } from 'axios';
-import { ScrapedRecipe, ScrapeResult, ScraperConfig } from '../parsers/types';
-import { RateLimiter } from '../utils/rate-limiter';
-import { isUrlAllowed, getCrawlDelay } from '../utils/robots-checker';
-import { scraperLogger } from '../utils/logger';
+import axios, { AxiosInstance } from 'axios';
 import { DEFAULT_CONFIG } from '../config';
-import { validateRecipe } from '../parsers/schema-validator';
 import { normalizeRecipe } from '../parsers/recipe-normalizer';
+import { validateRecipe } from '../parsers/schema-validator';
+import { ScrapedRecipe, ScraperConfig, ScrapeResult } from '../parsers/types';
 import {
-  categorizeError,
-  getRetryDelay,
-  getMaxRetries,
-  shouldSkipPermanently,
-  logErrorCategory,
+    categorizeError,
+    getRetryDelay,
+    logErrorCategory,
+    shouldSkipPermanently
 } from '../utils/error-categorizer';
+import { scraperLogger } from '../utils/logger';
+import { RateLimiter } from '../utils/rate-limiter';
+import { getCrawlDelay, isUrlAllowed } from '../utils/robots-checker';
 
 export abstract class BaseScraper {
   protected config: ScraperConfig;
@@ -301,6 +300,20 @@ export abstract class BaseScraper {
    * Should use sitemap parsing first, then fallback to pagination
    */
   abstract getAllRecipeUrls(): Promise<string[]>;
+
+  /**
+   * Get ALL recipe URLs with ratings from listing pages (for pre-filtering optimization)
+   * Default implementation calls getAllRecipeUrls() and returns without ratings.
+   * Scrapers can override this to extract ratings from listing/card elements,
+   * which allows filtering out low-rated recipes BEFORE downloading full pages.
+   *
+   * Expected ~90% efficiency gain for user-rated sites when implemented.
+   */
+  async getAllRecipeUrlsWithRatings(): Promise<RecipeUrlWithRating[]> {
+    // Default: just return URLs without ratings (no optimization)
+    const urls = await this.getAllRecipeUrls();
+    return urls.map(url => ({ url }));
+  }
 
   /**
    * Parse ingredient name from ingredient text

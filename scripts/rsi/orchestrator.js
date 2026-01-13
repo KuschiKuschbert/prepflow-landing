@@ -21,7 +21,9 @@ async function main() {
           selfOptimize: true,
           metaLearning: true, // Typically runs nightly
           ruleEvolution: true, // Typically runs nightly
-          autoRefactor: false // Expensive, defaulted to false
+          autoRefactor: false, // Expensive, defaulted to false
+          predictiveAnalysis: true, // Merged from autonomous-developer
+          architectureAnalysis: true, // Merged from autonomous-developer
       }
   };
 
