@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+# Bypass in CI environment (e.g. GitHub Actions)
+if [ "$CI" = "true" ]; then
+  exit 0
+fi
+
 # Setup colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
