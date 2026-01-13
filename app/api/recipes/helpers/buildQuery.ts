@@ -1,8 +1,5 @@
-/**
- * Helper to build Supabase query with filters.
- */
-
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { Recipe } from './schemas';
 import { RecipeQueryParams } from './validateRequest';
 
 /**
@@ -11,7 +8,7 @@ import { RecipeQueryParams } from './validateRequest';
 export async function buildQuery(
   supabase: SupabaseClient,
   params: RecipeQueryParams,
-): Promise<{ data: any[] | null; error: any; count: number | null }> {
+): Promise<{ data: Recipe[] | null; error: any; count: number | null }> {
   const { category, excludeAllergens, vegetarian, vegan } = params;
   const start = (params.page - 1) * params.pageSize;
   const end = start + params.pageSize - 1;
@@ -29,5 +26,11 @@ export async function buildQuery(
   if (vegetarian) query = query.eq('is_vegetarian', true);
   if (vegan) query = query.eq('is_vegan', true);
 
-  return await query.order('name').range(start, end);
+  const { data, error, count } = await query.order('name').range(start, end);
+
+  return {
+    data: data as Recipe[] | null,
+    error,
+    count,
+  };
 }

@@ -1,17 +1,18 @@
 import { logger } from '@/lib/logger';
-import { PostgrestError } from '@supabase/supabase-js';
 
 /**
  * Extract column name from Supabase error message.
  *
- * @param {PostgrestError | any} error - Supabase error object
+ * @param {unknown} error - Supabase error object
  * @returns {string | null} Column name if found, null otherwise
  */
-export function extractColumnName(error: PostgrestError | any): string | null {
-  if (!error) return null;
-  const errorMessage = error.message || '';
-  const errorDetails = error.details || '';
-  const errorHint = error.hint || '';
+export function extractColumnName(error: unknown): string | null {
+  if (!error || typeof error !== 'object') return null;
+
+  const err = error as Record<string, any>;
+  const errorMessage = err.message || '';
+  const errorDetails = err.details || '';
+  const errorHint = err.hint || '';
   const fullErrorText = `${errorMessage} ${errorDetails} ${errorHint}`;
   const columnMatch = fullErrorText.match(
     /column\s+["']?([\w.]+)["']?\s+(?:does\s+not\s+exist|not\s+found)/i,
@@ -25,15 +26,21 @@ export function extractColumnName(error: PostgrestError | any): string | null {
 /**
  * Log detailed error information for debugging.
  *
- * @param {PostgrestError | any} error - Supabase error object
+ * @param {unknown} error - Supabase error object
  * @param {string} context - Context string for logging
  * @param {string} menuId - Menu ID
  */
-export function logDetailedError(error: PostgrestError | any, context: string, menuId: string) {
-  const errorCode = error?.code;
-  const errorMessage = error?.message || '';
-  const errorDetails = error?.details || '';
-  const errorHint = error?.hint || '';
+export function logDetailedError(error: unknown, context: string, menuId: string) {
+  if (!error || typeof error !== 'object') {
+    logger.error(`[Menus API] ${context}: Unknown error`, { error, menuId });
+    return;
+  }
+
+  const err = error as Record<string, any>;
+  const errorCode = err.code;
+  const errorMessage = err.message || '';
+  const errorDetails = err.details || '';
+  const errorHint = err.hint || '';
   const columnName = extractColumnName(error);
   logger.error(`[Menus API] ${context}:`, {
     error: errorMessage,

@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
-
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { CreateMenuItemInput } from '../../helpers/schemas';
 
 const addMenuItemSchema = z
   .object({
@@ -20,10 +20,10 @@ const addMenuItemSchema = z
     message: 'Cannot specify both dish_id and recipe_id',
     path: ['dish_id'],
   });
+
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await context.params;
-    const menuId = id;
+    const { id: menuId } = await context.params;
 
     if (!menuId) {
       return NextResponse.json(
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     let body: unknown;
     try {
       body = await request.json();
-    } catch (err) {
+    } catch (err: unknown) {
       logger.warn('[Menu Items API] Failed to parse request body:', {
         error: err instanceof Error ? err.message : String(err),
       });
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       );
     }
 
-    const { dish_id, recipe_id, category, position } = validationResult.data;
+    const { dish_id, recipe_id, category, position } = validationResult.data as CreateMenuItemInput;
 
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -123,11 +123,9 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     if (createError) {
       logger.error('Error adding item to menu:', createError);
       return NextResponse.json(
-        {
-          success: false,
-          error: createError.message,
+        ApiErrorHandler.createError(createError.message, 'DATABASE_ERROR', 500, {
           message: dish_id ? 'Failed to add dish to menu' : 'Failed to add recipe to menu',
-        },
+        }),
         { status: 500 },
       );
     }
@@ -172,17 +170,17 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
 
     return NextResponse.json({
       success: true,
-      item: newItem,
+      item: newItem ?? insertedItem,
       message: dish_id ? 'Dish added to menu successfully' : 'Recipe added to menu successfully',
     });
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('Unexpected error:', err);
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Internal server error',
-        message: err instanceof Error ? err.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError(
+        err instanceof Error ? err.message : 'Unknown error',
+        'INTERNAL_SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

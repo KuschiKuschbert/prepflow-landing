@@ -11,9 +11,18 @@ import {
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import Papa from 'papaparse';
-import type { EnrichedMenuItem } from '../../../types';
+import { EnrichedMenuItem } from '../../../helpers/schemas';
 import { fetchMenuWithItems } from '../../helpers/fetchMenuWithItems';
 import { generateHTML } from './helpers/generateHTML';
+
+interface MatrixItem {
+  name: string;
+  type: 'Dish' | 'Recipe';
+  allergens: string[];
+  isVegetarian: boolean;
+  isVegan: boolean;
+  category: string | undefined;
+}
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -59,7 +68,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
           // Force recalculation for dishes to ensure fresh dietary status
           await aggregateDishDietaryStatus(item.dish_id, false, true);
         }
-      } catch (err) {
+      } catch (err: unknown) {
         // Log but don't fail the export if recalculation fails
         logger.warn('[Allergen Matrix Export] Failed to recalculate dietary status:', {
           itemId: item.recipe_id || item.dish_id,
@@ -81,50 +90,52 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       });
     }
 
-    const matrixData = (menuWithFreshData.items || []).map((item: EnrichedMenuItem) => {
-      let allergens: string[] = [];
-      if (item.allergens && Array.isArray(item.allergens)) {
-        allergens = item.allergens;
-      } else if (item.dish_id && item.dishes?.allergens && Array.isArray(item.dishes.allergens)) {
-        allergens = item.dishes.allergens;
-      } else if (
-        item.recipe_id &&
-        item.recipes?.allergens &&
-        Array.isArray(item.recipes.allergens)
-      ) {
-        allergens = item.recipes.allergens;
-      }
-      const validAllergenCodes = AUSTRALIAN_ALLERGENS.map(a => a.code);
-      allergens = consolidateAllergens(allergens).filter(code => validAllergenCodes.includes(code));
-      const isVegetarian =
-        item.is_vegetarian ??
-        (item.dish_id ? item.dishes?.is_vegetarian : item.recipes?.is_vegetarian);
-      const isVegan =
-        item.is_vegan ?? (item.dish_id ? item.dishes?.is_vegan : item.recipes?.is_vegan);
-      return {
-        name: item.dish_id ? item.dishes?.dish_name : item.recipes?.recipe_name || 'Unknown',
-        type: item.dish_id ? 'Dish' : 'Recipe',
-        allergens,
-        isVegetarian: isVegetarian === true,
-        isVegan: isVegan === true,
-        category: item.category,
-      };
-    });
+    const matrixData: MatrixItem[] = (menuWithFreshData.items || []).map(
+      (item: EnrichedMenuItem) => {
+        let allergens: string[] = [];
+        if (item.allergens && Array.isArray(item.allergens)) {
+          allergens = item.allergens;
+        } else if (item.dish_id && item.dishes?.allergens && Array.isArray(item.dishes.allergens)) {
+          allergens = item.dishes.allergens as string[];
+        } else if (
+          item.recipe_id &&
+          item.recipes?.allergens &&
+          Array.isArray(item.recipes.allergens)
+        ) {
+          allergens = item.recipes.allergens as string[];
+        }
+        const validAllergenCodes = AUSTRALIAN_ALLERGENS.map(a => a.code);
+        allergens = consolidateAllergens(allergens).filter(code =>
+          validAllergenCodes.includes(code),
+        );
+        const isVegetarian =
+          item.is_vegetarian ??
+          (item.dish_id ? item.dishes?.is_vegetarian : item.recipes?.is_vegetarian);
+        const isVegan =
+          item.is_vegan ?? (item.dish_id ? item.dishes?.is_vegan : item.recipes?.is_vegan);
+        return {
+          name: item.dish_id
+            ? item.dishes?.dish_name || 'Unknown'
+            : item.recipes?.recipe_name || (item.recipes as any)?.name || 'Unknown',
+          type: item.dish_id ? 'Dish' : 'Recipe',
+          allergens,
+          isVegetarian: isVegetarian === true,
+          isVegan: isVegan === true,
+          category: item.category,
+        };
+      },
+    );
     if (format === 'csv') return generateCSV(menuWithFreshData.menu_name, matrixData);
     if (format === 'pdf') return generateHTML(menuWithFreshData.menu_name, matrixData, true);
     return generateHTML(menuWithFreshData.menu_name, matrixData, false);
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('[Allergen Matrix Export API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
     });
     return NextResponse.json(
       ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? err instanceof Error
-            ? err.message
-            : 'Unknown error'
-          : 'Internal server error',
+        err instanceof Error ? err.message : 'Internal server error',
         'SERVER_ERROR',
         500,
       ),
@@ -133,7 +144,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
   }
 }
 
-function generateCSV(menuName: string, matrixData: any[]): NextResponse {
+function generateCSV(menuName: string, matrixData: MatrixItem[]): NextResponse {
   const headers = [
     'Item Name',
     'Type',

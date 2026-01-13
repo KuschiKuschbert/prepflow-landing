@@ -7,8 +7,7 @@ import { calculateRecommendedPrice } from '../../helpers/calculateRecommendedPri
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await context.params;
-    const dishId = id;
+    const { id: dishId } = await context.params;
 
     if (!dishId) {
       return NextResponse.json(
@@ -34,7 +33,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     if (dishError) {
       logger.error('[Dishes API] Database error fetching dish for cost calculation:', {
         error: dishError.message,
-        code: (dishError as any).code,
+        code: dishError.code,
         context: { endpoint: '/api/dishes/[id]/cost', operation: 'GET', dishId },
       });
 
@@ -51,19 +50,10 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
 
     let totalCost = 0;
 
-    // Calculate cost from recipes (using helper function that applies waste/yield)
+    // Calculate cost from recipes
     const { data: dishRecipes, error: dishRecipesError } = await supabaseAdmin
       .from('dish_recipes')
-      .select(
-        `
-        recipe_id,
-        quantity,
-        recipes (
-          id,
-          name
-        )
-      `,
-      )
+      .select('recipe_id, quantity')
       .eq('dish_id', dishId);
 
     if (dishRecipesError) {
@@ -71,28 +61,25 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         dishId,
         error: dishRecipesError,
       });
-      // Continue with calculation, just log the error
     }
 
     if (dishRecipes && dishRecipes.length > 0) {
       for (const dishRecipe of dishRecipes) {
         try {
-          // Use calculateRecipeCost helper which applies waste/yield adjustments
-          const recipeQuantity = parseFloat(dishRecipe.quantity) || 1;
+          const recipeQuantity = parseFloat(dishRecipe.quantity as string) || 1;
           const recipeCost = await calculateRecipeCost(dishRecipe.recipe_id, recipeQuantity);
           totalCost += recipeCost;
         } catch (err) {
           logger.error('[Dishes API] Error calculating recipe cost:', {
             dishId,
             recipeId: dishRecipe.recipe_id,
-            error: err,
+            error: err instanceof Error ? err.message : String(err),
           });
-          // Continue with other recipes instead of failing completely
         }
       }
     }
 
-    // Calculate cost from standalone ingredients (apply waste/yield adjustments)
+    // Calculate cost from standalone ingredients
     const { data: dishIngredients, error: dishIngredientsError } = await supabaseAdmin
       .from('dish_ingredients')
       .select(
@@ -115,26 +102,26 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         dishId,
         error: dishIngredientsError,
       });
-      // Continue with calculation, just log the error
     }
 
     if (dishIngredients) {
       for (const di of dishIngredients) {
-        const ingredient = di.ingredients as any;
+        const ingredient = di.ingredients as any; // Still using any here as Supabase relation typing is notoriously difficult without generated types
         if (ingredient) {
-          const costPerUnit = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
-          const quantity = parseFloat(di.quantity) || 0;
+          const costPerUnit =
+            (ingredient.cost_per_unit_incl_trim as number) ||
+            (ingredient.cost_per_unit as number) ||
+            0;
+          const quantity = parseFloat(di.quantity as string) || 0;
           const isConsumable = ingredient.category === 'Consumables';
 
-          // For consumables: simple calculation (no waste/yield)
           if (isConsumable) {
             totalCost += quantity * costPerUnit;
             continue;
           }
 
-          // For regular ingredients: apply waste/yield adjustments
-          const wastePercent = ingredient.trim_peel_waste_percentage || 0;
-          const yieldPercent = ingredient.yield_percentage || 100;
+          const wastePercent = (ingredient.trim_peel_waste_percentage as number) || 0;
+          const yieldPercent = (ingredient.yield_percentage as number) || 100;
 
           let adjustedCost = quantity * costPerUnit;
           if (!ingredient.cost_per_unit_incl_trim && wastePercent > 0) {
@@ -147,19 +134,17 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       }
     }
 
-    const sellingPrice = parseFloat(dish.selling_price) || 0;
+    const sellingPrice = parseFloat(dish.selling_price as string) || 0;
     const grossProfit = sellingPrice - totalCost;
     const grossProfitMargin = sellingPrice > 0 ? (grossProfit / sellingPrice) * 100 : 0;
     const foodCostPercent = sellingPrice > 0 ? (totalCost / sellingPrice) * 100 : 0;
 
-    // Calculate contributing margin (Revenue excl GST - Food Cost)
-    const gstRate = 0.1; // 10% GST for Australia
+    const gstRate = 0.1;
     const sellingPriceExclGST = sellingPrice / (1 + gstRate);
     const contributingMargin = sellingPriceExclGST - totalCost;
     const contributingMarginPercent =
       sellingPriceExclGST > 0 ? (contributingMargin / sellingPriceExclGST) * 100 : 0;
 
-    // Calculate recommended price using same formula as recipes
     const recommendedPrice = calculateRecommendedPrice(totalCost);
 
     return NextResponse.json({

@@ -6,17 +6,16 @@
  */
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { getUserEmail } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
-import { z } from 'zod';
+import { triggerIngredientSync } from '@/lib/square/sync/hooks';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { getUserEmail } from '@/lib/auth0-api-helpers';
 import { createIngredient } from './helpers/createIngredient';
-import { handleIngredientError } from './helpers/handleIngredientError';
-import { updateIngredient } from './helpers/updateIngredient';
-import { triggerIngredientSync } from '@/lib/square/sync/hooks';
-import { createIngredientSchema, updateIngredientSchema } from './helpers/schemas';
 import { handleDeleteIngredient } from './helpers/deleteIngredientHandler';
+import { handleIngredientError } from './helpers/handleIngredientError';
+import { createIngredientSchema, updateIngredientSchema } from './helpers/schemas';
+import { updateIngredient } from './helpers/updateIngredient';
 
 export async function GET(request: NextRequest) {
   try {
@@ -38,7 +37,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Ingredients API] Database error fetching ingredients:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: { endpoint: '/api/ingredients', operation: 'GET', table: 'ingredients' },
       });
 
@@ -110,12 +109,12 @@ export async function POST(request: NextRequest) {
       success: true,
       data,
     });
-  } catch (err: any) {
+  } catch (err) {
     logger.error('[Ingredients API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/ingredients', method: 'POST' },
     });
-    if (err.status) {
+    if (err && typeof err === 'object' && 'status' in err && typeof err.status === 'number') {
       return NextResponse.json(err, { status: err.status });
     }
     return handleIngredientError(err, 'POST');
@@ -178,12 +177,12 @@ export async function PUT(request: NextRequest) {
       success: true,
       data,
     });
-  } catch (err: any) {
+  } catch (err) {
     logger.error('[Ingredients API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/ingredients', method: 'PUT' },
     });
-    if (err.status) {
+    if (err && typeof err === 'object' && 'status' in err && typeof err.status === 'number') {
       return NextResponse.json(err, { status: err.status });
     }
     return handleIngredientError(err, 'PUT');

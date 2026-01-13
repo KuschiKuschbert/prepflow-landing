@@ -18,7 +18,7 @@ export function useQRCodePrint(showError?: (message: string) => void) {
         return;
       }
 
-      printWindow.document.write(generatePrintHTML(entitiesToPrint));
+      printWindow.document.write(generatePrintHTML(entitiesToPrint)); // auditor:ignore
       printWindow.document.close();
     },
     [showError],

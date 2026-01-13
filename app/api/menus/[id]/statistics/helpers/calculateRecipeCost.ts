@@ -1,15 +1,7 @@
-import { supabaseAdmin } from '@/lib/supabase';
-
-/**
- * Calculate recipe cost based on ingredients.
- *
- * @param {string} recipeId - Recipe ID
- * @param {number} quantity - Recipe quantity multiplier
- * @returns {Promise<number>} Recipe cost
- */
-import { logger } from '@/lib/logger';
-
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { RecipeIngredientJoinData } from '../../../helpers/schemas';
 
 export async function calculateRecipeCost(recipeId: string, quantity: number = 1): Promise<number> {
   if (!supabaseAdmin) {
@@ -42,6 +34,8 @@ export async function calculateRecipeCost(recipeId: string, quantity: number = 1
         quantity,
         unit,
         ingredients (
+          id,
+          ingredient_name,
           cost_per_unit,
           cost_per_unit_incl_trim,
           trim_peel_waste_percentage,
@@ -70,12 +64,16 @@ export async function calculateRecipeCost(recipeId: string, quantity: number = 1
     let ingredientCount = 0;
     let missingCostCount = 0;
 
-    for (const ri of recipeIngredients) {
-      const ingredient = ri.ingredients as any;
+    for (const ri of recipeIngredients as unknown as RecipeIngredientJoinData[]) {
+      const ingredient = ri.ingredients;
       if (ingredient) {
         ingredientCount++;
-        const costPerUnit = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
-        const ingredientQuantity = parseFloat(ri.quantity) || 0;
+        const costPerUnit =
+          ingredient.cost_per_unit_incl_trim !== null && ingredient.cost_per_unit_incl_trim !== 0
+            ? ingredient.cost_per_unit_incl_trim
+            : ingredient.cost_per_unit || 0;
+        const ingredientQuantity =
+          typeof ri.quantity === 'string' ? parseFloat(ri.quantity) : ri.quantity || 0;
 
         if (costPerUnit === 0) {
           missingCostCount++;
@@ -135,7 +133,7 @@ export async function calculateRecipeCost(recipeId: string, quantity: number = 1
     }
 
     // Divide by recipe yield to get cost per serving
-    const costPerServing = recipeCost / recipeYield;
+    const costPerServing = recipeYield > 0 ? recipeCost / recipeYield : recipeCost;
 
     // Multiply by quantity (how many servings the dish needs)
     const finalCost = costPerServing * quantity;
@@ -150,10 +148,10 @@ export async function calculateRecipeCost(recipeId: string, quantity: number = 1
     });
 
     return finalCost;
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('[calculateRecipeCost] Unexpected error:', {
       recipeId,
-      error: err,
+      error: err instanceof Error ? err.message : String(err),
     });
     throw err; // Re-throw to let caller handle
   }

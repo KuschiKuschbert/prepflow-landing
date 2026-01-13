@@ -1,9 +1,5 @@
-/**
- * Helper for enriching recipe items with allergens and dietary info
- */
-
 import { logger } from '@/lib/logger';
-import { EnrichedRecipeData, RawMenuItem } from '../../../types';
+import { EnrichedRecipeData, RawMenuItem } from '../../../helpers/schemas';
 import { normalizeAllergens } from './normalizeAllergens';
 import { validateVeganStatus } from './validateDietaryStatus';
 
@@ -30,7 +26,7 @@ export async function enrichRecipeItem(item: RawMenuItem): Promise<EnrichedRecip
 
   if (hasCachedAllergens) {
     // Use cached allergens (faster) but normalize them
-    allergens = normalizeAllergens(item.recipes!.allergens, recipeName);
+    allergens = normalizeAllergens(item.recipes!.allergens as string[], recipeName);
     logger.dev('[Menus API] Using cached recipe allergens:', {
       recipeName,
       allergens,
@@ -41,14 +37,14 @@ export async function enrichRecipeItem(item: RawMenuItem): Promise<EnrichedRecip
     try {
       const { aggregateRecipeAllergens } = await import('@/lib/allergens/allergen-aggregation');
       if (item.recipes?.id) {
-        allergens = await aggregateRecipeAllergens(item.recipes.id, false); // Don't force
+        allergens = (await aggregateRecipeAllergens(item.recipes.id, false)) as string[];
         logger.dev('[Menus API] Aggregated recipe allergens:', {
           recipeName,
           aggregated: allergens,
           recipeId: item.recipes.id,
         });
       }
-    } catch (err) {
+    } catch (err: unknown) {
       logger.warn('[Menus API] Error aggregating recipe allergens:', {
         error: err instanceof Error ? err.message : String(err),
         stack: err instanceof Error ? err.stack : undefined,
@@ -89,20 +85,20 @@ export async function enrichRecipeItem(item: RawMenuItem): Promise<EnrichedRecip
       } else {
         // Fallback to cached values if recalculation fails
         const cachedIsVegan = validateVeganStatus(
-          item.recipes.is_vegan ?? null,
+          (item.recipes as any).is_vegan ?? null,
           allergens,
           'recipe',
           item.recipes.id,
           recipeName,
         );
 
-        isVegetarian = item.recipes.is_vegetarian ?? null;
+        isVegetarian = (item.recipes as any).is_vegetarian ?? null;
         isVegan = cachedIsVegan;
-        dietaryConfidence = item.recipes.dietary_confidence ?? null;
-        dietaryMethod = item.recipes.dietary_method ?? null;
+        dietaryConfidence = (item.recipes as any).dietary_confidence ?? null;
+        dietaryMethod = (item.recipes as any).dietary_method ?? null;
       }
     }
-  } catch (err) {
+  } catch (err: unknown) {
     logger.warn('[Menus API] Error recalculating recipe dietary status, using cached values:', {
       recipeId: item.recipes?.id,
       error: err instanceof Error ? err.message : String(err),
@@ -111,17 +107,17 @@ export async function enrichRecipeItem(item: RawMenuItem): Promise<EnrichedRecip
     if (item.recipes?.id) {
       // Fallback to cached values, but validate against allergens
       const cachedIsVegan = validateVeganStatus(
-        item.recipes.is_vegan ?? null,
+        (item.recipes as any).is_vegan ?? null,
         allergens,
         'recipe',
         item.recipes.id,
         recipeName,
       );
 
-      isVegetarian = item.recipes.is_vegetarian ?? null;
+      isVegetarian = (item.recipes as any).is_vegetarian ?? null;
       isVegan = cachedIsVegan;
-      dietaryConfidence = item.recipes.dietary_confidence ?? null;
-      dietaryMethod = item.recipes.dietary_method ?? null;
+      dietaryConfidence = (item.recipes as any).dietary_confidence ?? null;
+      dietaryMethod = (item.recipes as any).dietary_method ?? null;
     }
   }
 

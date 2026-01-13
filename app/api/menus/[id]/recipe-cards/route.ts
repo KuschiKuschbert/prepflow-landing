@@ -61,7 +61,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       cards: sortedMainCards,
       subRecipeCards: groupedSubRecipeCards,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('[Recipe Cards API] Error:', err);
     return NextResponse.json(
       ApiErrorHandler.createError(

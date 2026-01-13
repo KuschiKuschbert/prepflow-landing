@@ -1,6 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { DishWithRelations } from '../../helpers/schemas';
 import { fetchDishIngredients } from './fetchDishIngredients';
 import { fetchDishRecipes } from './fetchDishRecipes';
 
@@ -8,10 +9,10 @@ import { fetchDishRecipes } from './fetchDishRecipes';
  * Fetch dish with recipes and ingredients.
  *
  * @param {string} dishId - Dish ID
- * @returns {Promise<Object>} Dish with recipes and ingredients
+ * @returns {Promise<DishWithRelations>} Dish with recipes and ingredients
  * @throws {Error} If dish not found or database error
  */
-export async function fetchDishWithRelations(dishId: string) {
+export async function fetchDishWithRelations(dishId: string): Promise<DishWithRelations> {
   if (!supabaseAdmin) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
@@ -27,7 +28,7 @@ export async function fetchDishWithRelations(dishId: string) {
   if (dishError) {
     logger.error('[Dishes API] Database error fetching dish:', {
       error: dishError.message,
-      code: (dishError as any).code,
+      code: dishError.code,
       context: { endpoint: '/api/dishes/[id]', operation: 'GET', dishId },
     });
     throw ApiErrorHandler.fromSupabaseError(dishError, 404);
@@ -37,30 +38,15 @@ export async function fetchDishWithRelations(dishId: string) {
     throw ApiErrorHandler.createError('Dish not found', 'NOT_FOUND', 404, { dishId });
   }
 
-  // Fetch dish recipes
-  const validDishRecipes = await fetchDishRecipes(dishId);
-
-  logger.dev('[fetchDishWithRelations] After fetchDishRecipes:', {
-    dishId,
-    validDishRecipesCount: validDishRecipes.length,
-    validDishRecipes: JSON.stringify(validDishRecipes),
-  });
-
-  // Fetch dish ingredients
-  const validDishIngredients = await fetchDishIngredients(dishId);
-
-  // Log additional debug info for ingredients
-  logger.dev('[Dishes API] Final dish data:', {
-    dishId,
-    dishName: dish.dish_name,
-    recipeCount: validDishRecipes.length,
-    ingredientCount: validDishIngredients.length,
-    recipes: validDishRecipes,
-  });
+  // Fetch dish recipes and ingredients in parallel
+  const [validDishRecipes, validDishIngredients] = await Promise.all([
+    fetchDishRecipes(dishId),
+    fetchDishIngredients(dishId),
+  ]);
 
   return {
     ...dish,
     recipes: validDishRecipes,
     ingredients: validDishIngredients,
-  };
+  } as DishWithRelations;
 }

@@ -4,13 +4,13 @@
  * Returns which recipes/ingredients contribute which allergens to a dish
  */
 
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { processRecipeAllergens } from './helpers/processRecipeAllergens';
+import { NextRequest, NextResponse } from 'next/server';
 import { processIngredientAllergens } from './helpers/processIngredientAllergens';
 import type { AllergenSource } from './helpers/processRecipeAllergens';
+import { processRecipeAllergens } from './helpers/processRecipeAllergens';
 
 /**
  * Gets allergen sources for a dish (which recipes/ingredients contribute which allergens).
@@ -21,8 +21,7 @@ import type { AllergenSource } from './helpers/processRecipeAllergens';
  */
 export async function GET(_request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await context.params;
-    const dishId = id;
+    const { id: dishId } = await context.params;
 
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -46,7 +45,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
       .single();
 
     if (dishError || !dish) {
-      const errorCode = (dishError as any).code;
+      const errorCode = dishError?.code;
       if (errorCode === '42P01') {
         return NextResponse.json(
           ApiErrorHandler.createError('Dishes table not found', 'NOT_FOUND', 404),
@@ -85,14 +84,17 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
         total_allergens: Array.from(allAllergens).sort(),
       },
     });
-  } catch (err) {
-    logger.error('[Dish Allergen Sources API] Unexpected error:', err);
+  } catch (err: unknown) {
+    logger.error('[Dish Allergen Sources API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/dishes/[id]/allergen-sources', method: 'GET' },
+    });
     return NextResponse.json(
       ApiErrorHandler.createError(
         'Failed to fetch allergen sources',
         'SERVER_ERROR',
         500,
-        err instanceof Error ? err.message : String(err),
+        err instanceof Error ? err.message : undefined,
       ),
       { status: 500 },
     );

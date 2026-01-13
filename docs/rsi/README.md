@@ -1,6 +1,6 @@
 # Recursive Self-Improvement (RSI) System
 
-The RSI system ensures the codebase improves automatically over time through a continuous loop of analysis, fixing, learning, and evolution.
+The RSI system ensures the codebase improves automatically over time through a continuous loop of analysis, fixing, learning, and evolution. This process is orchestrated via high-level **[Ralph Loops](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/methodology/RALPH_LOOP.md)**.
 
 ## Modules
 

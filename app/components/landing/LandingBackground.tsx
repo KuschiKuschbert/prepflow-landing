@@ -5,9 +5,9 @@
 
 'use client';
 
-import React from 'react';
-import { backgroundTheme } from '@/lib/theme';
 import { LogoWatermark } from '@/components/ui/LogoWatermark';
+import { backgroundTheme } from '@/lib/theme';
+import React from 'react';
 
 const LandingBackground = React.memo(function LandingBackground() {
   const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
@@ -24,19 +24,18 @@ const LandingBackground = React.memo(function LandingBackground() {
   return (
     <>
       {/* Base gradient */}
-      <div
-        className="fixed inset-0 -z-20"
-        style={{
-          background: 'linear-gradient(180deg, rgba(10,10,10,1) 0%, rgba(8,8,10,1) 100%)',
-        }}
-      />
+      <div className="fixed inset-0 -z-20 bg-gradient-to-b from-[#0a0a0a] to-[#08080a]" />
 
       {/* Simple CSS spotlight that follows mouse */}
       <div
         className="pointer-events-none fixed inset-0 -z-10 transition-opacity duration-300"
-        style={{
-          background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(41, 231, 205, 0.06), transparent 40%)`,
-        }}
+        style={
+          {
+            '--mouse-x': `${mousePosition.x}px`,
+            '--mouse-y': `${mousePosition.y}px`,
+            background: `radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(41, 231, 205, 0.06), transparent 40%)`,
+          } as React.CSSProperties
+        }
       />
 
       {/* Logo watermark */}
@@ -45,46 +44,41 @@ const LandingBackground = React.memo(function LandingBackground() {
       {/* Tron-like neon grid */}
       <div
         className="pointer-events-none fixed inset-0 -z-10"
-        style={{
-          backgroundImage: `linear-gradient(rgba(41,231,205,${backgroundTheme.gridCyanOpacity}) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,${backgroundTheme.gridBlueOpacity}) 1px, transparent 1px)`,
-          backgroundSize: `${backgroundTheme.gridSizePx}px ${backgroundTheme.gridSizePx}px`,
-          backgroundPosition: '0px 0px, 0px 0px',
-          maskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)',
-        }}
+        style={
+          {
+            '--grid-cyan-opacity': backgroundTheme.gridCyanOpacity,
+            '--grid-blue-opacity': backgroundTheme.gridBlueOpacity,
+            '--grid-size': `${backgroundTheme.gridSizePx}px`,
+            backgroundImage: `linear-gradient(rgba(41,231,205,var(--grid-cyan-opacity)) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,var(--grid-blue-opacity)) 1px, transparent 1px)`,
+            backgroundSize: 'var(--grid-size) var(--grid-size)',
+            maskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)',
+          } as React.CSSProperties
+        }
       />
 
       {/* Corner glows */}
       <div
-        className="pointer-events-none fixed -z-10"
-        style={{
-          left: 0,
-          top: 0,
-          width: 420,
-          height: 420,
-          background: `radial-gradient(closest-side, rgba(41,231,205,${backgroundTheme.cornerCyanOpacity}), transparent 70%)`,
-        }}
+        className="pointer-events-none fixed top-0 left-0 -z-10 h-[420px] w-[420px]"
+        style={
+          {
+            '--cyan-opacity': backgroundTheme.cornerCyanOpacity,
+            background: `radial-gradient(closest-side, rgba(41,231,205,var(--cyan-opacity)), transparent 70%)`,
+          } as React.CSSProperties
+        }
       />
       <div
-        className="pointer-events-none fixed -z-10"
-        style={{
-          right: 0,
-          top: 120,
-          width: 400,
-          height: 400,
-          background: `radial-gradient(closest-side, rgba(217,37,199,${backgroundTheme.cornerMagentaOpacity}), transparent 70%)`,
-        }}
+        className="pointer-events-none fixed top-[120px] right-0 -z-10 h-[400px] w-[400px]"
+        style={
+          {
+            '--magenta-opacity': backgroundTheme.cornerMagentaOpacity,
+            background: `radial-gradient(closest-side, rgba(217,37,199,var(--magenta-opacity)), transparent 70%)`,
+          } as React.CSSProperties
+        }
       />
 
       {/* Fine noise */}
-      <div
-        className="pointer-events-none fixed inset-0 -z-10 opacity-[0.02]"
-        style={{
-          backgroundImage:
-            'url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter><rect width="64" height="64" filter="url(%23n)" opacity="0.5"/></svg>\')',
-          backgroundSize: '256px 256px',
-        }}
-      />
+      <div className="pointer-events-none fixed inset-0 -z-10 animate-pulse bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgdmlld0JveD0iMCAwIDY0IDY0Ij48ZmlsdGVyIGlkPSJuIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iMC44IiBudW1PY3RhdmVzPSIyIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWx0ZXI9InVybCgjbikiIG9wYWNpdHk9IjAuNSIvPjwvc3ZnPg==')] bg-[length:256px_256px] opacity-[0.02]" />
     </>
   );
 });

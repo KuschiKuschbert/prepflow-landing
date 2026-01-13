@@ -1,17 +1,19 @@
+import { enrichIngredientWithAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { normalizeIngredientData } from '@/lib/ingredients/normalizeIngredientDataMain';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
-import { enrichIngredientWithAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
+
+import { CreateIngredientInput } from './schemas';
 
 /**
  * Create an ingredient with normalized data.
  *
- * @param {Object} ingredientData - Raw ingredient data
+ * @param {CreateIngredientInput} ingredientData - Raw ingredient data
  * @returns {Promise<Object>} Created ingredient
  * @throws {Error} If creation fails
  */
-export async function createIngredient(ingredientData: any) {
+export async function createIngredient(ingredientData: CreateIngredientInput) {
   const supabaseAdmin = createSupabaseAdmin();
 
   // Normalize ingredient data
@@ -86,7 +88,7 @@ export async function createIngredient(ingredientData: any) {
   if (error) {
     logger.error('[Ingredients API] Database error inserting ingredient:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: { endpoint: '/api/ingredients', operation: 'POST', table: 'ingredients' },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

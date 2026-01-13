@@ -18,13 +18,13 @@ import { formatImageResponse } from './helpers/formatResponse';
 import { generateFoodImages } from './helpers/generateImages';
 import { determinePlatingMethods, parsePlatingMethods } from './helpers/parsePlatingMethods';
 import { checkRateLimit } from './helpers/rateLimit';
+import { uploadAndSaveImages } from './helpers/uploadAndSaveImages';
 import {
   authenticateRequest,
   validateAIService,
   validateDatabase,
   validateDishId,
 } from './helpers/validateRequest';
-import { uploadAndSaveImages } from './helpers/uploadAndSaveImages';
 
 export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -112,7 +112,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
       const result = await uploadAndSaveImages(dishId, imageResults);
       generatedImages = result.generatedImages;
       updateData = result.updateData;
-    } catch (uploadError) {
+    } catch (uploadError: unknown) {
       logger.error('[Dish Image Generation] Failed to upload/save images:', {
         error: uploadError instanceof Error ? uploadError.message : String(uploadError),
         dishId,

@@ -9,35 +9,35 @@ export default function ProductFeatures() {
       description: 'See your kitchen at a glance',
       screenshot: '/images/dashboard-screenshot.png',
       alt: 'PrepFlow Dashboard showing kitchen overview',
-      color: '#29E7CD',
+      color: 'var(--electric-lime)',
     },
     {
       name: 'Recipes',
       description: 'Build recipes with live cost calculations',
       screenshot: '/images/cogs-calculator-screenshot.png',
       alt: 'PrepFlow Recipe management with ingredient costs',
-      color: '#3B82F6',
+      color: 'var(--prepflow-blue)',
     },
     {
       name: 'Performance Analysis',
       description: "Chef's Kiss, Hidden Gem, Bargain Bucket, Burnt Toast",
       screenshot: '/images/performance-analysis-screenshot.png',
       alt: 'PrepFlow Performance Analysis Dashboard showing KPIs, categorization tables, popularity charts, scatter plot analysis, and profit margin bar charts',
-      color: '#D925C7',
+      color: 'var(--magenta-pulse)',
     },
     {
       name: 'Temperature Monitoring',
       description: 'QLD-compliant monitoring with smart thresholds',
       screenshot: '/images/temperature-monitoring-screenshot.png',
       alt: 'PrepFlow Temperature Monitoring showing equipment status dashboard with color-coded cards',
-      color: '#29E7CD',
+      color: 'var(--electric-lime)',
     },
     {
       name: 'Ingredients & Stock',
       description: 'Track costs, suppliers, and par levels',
       screenshot: '/images/ingredients-management-screenshot.png',
       alt: 'PrepFlow Ingredients and stock management',
-      color: '#3B82F6',
+      color: 'var(--prepflow-blue)',
     },
   ];
 
@@ -63,7 +63,7 @@ export default function ProductFeatures() {
           >
             {/* Screenshot */}
             <div className={index % 2 === 1 ? 'desktop:order-2' : ''}>
-              <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f]/50 p-2 shadow-xl">
+              <div className="border-border bg-surface/50 rounded-2xl border p-2 shadow-xl">
                 <Image
                   src={feature.screenshot}
                   alt={feature.alt}

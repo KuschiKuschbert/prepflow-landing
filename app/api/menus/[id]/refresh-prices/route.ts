@@ -3,11 +3,11 @@
  * POST /api/menus/[id]/refresh-prices - Recalculate recommended prices for all menu items
  */
 
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { getUserEmail } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { getUserEmail } from '@/lib/auth0-api-helpers';
+import { NextRequest, NextResponse } from 'next/server';
 import { refreshMenuRecommendedPrices } from '../items/[itemId]/helpers/cacheRecommendedPrice';
 
 /**
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
           { status: 401 },
         );
       }
-    } catch (authError) {
+    } catch (authError: unknown) {
       logger.error('[route.ts] Error in catch block:', {
         error: authError instanceof Error ? authError.message : String(authError),
         stack: authError instanceof Error ? authError.stack : undefined,
@@ -81,14 +81,13 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       failed,
       message: `Refreshed prices for ${updated} menu item${updated !== 1 ? 's' : ''}`,
     });
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('[Menu Refresh Prices API] Error refreshing prices:', err);
     return NextResponse.json(
       ApiErrorHandler.createError(
-        'Failed to refresh prices',
+        err instanceof Error ? err.message : 'Failed to refresh prices',
         'SERVER_ERROR',
         500,
-        err instanceof Error ? err.message : String(err),
       ),
       { status: 500 },
     );

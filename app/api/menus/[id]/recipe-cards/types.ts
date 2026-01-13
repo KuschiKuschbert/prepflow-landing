@@ -2,6 +2,18 @@
  * Types for recipe cards API.
  */
 
+export interface IngredientRow {
+  name: string;
+  quantity: number;
+  unit: string;
+  notes?: string;
+}
+
+export interface MethodStepRow {
+  stepNumber: number;
+  instruction: string;
+}
+
 export interface RecipeCard {
   id: string;
   menuItemId: string; // Backward compatibility
@@ -10,8 +22,8 @@ export interface RecipeCard {
   menuItemNames: string[]; // All menu item names
   title: string;
   baseYield: number;
-  ingredients: any[];
-  methodSteps: any[];
+  ingredients: IngredientRow[];
+  methodSteps: MethodStepRow[];
   notes: string[];
   parsedAt: string | null;
   recipeId: string | null;

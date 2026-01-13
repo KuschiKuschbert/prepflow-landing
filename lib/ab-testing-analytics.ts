@@ -2,11 +2,16 @@ import { getDefaultTests } from './ab-testing-analytics/defaultTests';
 import { sendABTestEvent } from './ab-testing-analytics/eventTracking';
 import { getSessionId } from './ab-testing-analytics/sessionManager';
 import { calculateTestResults } from './ab-testing-analytics/testResults';
-import type { ABTestEvent, ABTestResult, ABTestVariant, JsonValue } from './ab-testing-analytics/types';
+import type {
+  ABTestEvent,
+  ABTestResult,
+  ABTestVariant,
+  JsonValue,
+} from './ab-testing-analytics/types';
 import { assignVariant as assignVariantHelper } from './ab-testing-analytics/variantAssignment';
 import {
-    getVariantAssignmentInfo as getVariantAssignmentInfoHelper,
-    getVariantInfo as getVariantInfoHelper,
+  getVariantAssignmentInfo as getVariantAssignmentInfoHelper,
+  getVariantInfo as getVariantInfoHelper,
 } from './ab-testing-analytics/variantInfo';
 
 class ABTestingAnalytics {

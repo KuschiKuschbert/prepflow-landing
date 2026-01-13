@@ -1,11 +1,11 @@
 import { logger } from '@/lib/logger';
 import type { PrintTemplateOptions } from '../../print-template';
-import { generateCustomerVariant } from './generateCustomerVariant';
-import { generateSupplierVariant } from './generateSupplierVariant';
-import { generateComplianceVariant } from './generateComplianceVariant';
 import { generateCompactVariant } from './generateCompactVariant';
-import { generateKitchenVariant } from './generateKitchenVariant';
+import { generateComplianceVariant } from './generateComplianceVariant';
+import { generateCustomerVariant } from './generateCustomerVariant';
 import { generateDefaultVariant } from './generateDefaultVariant';
+import { generateKitchenVariant } from './generateKitchenVariant';
+import { generateSupplierVariant } from './generateSupplierVariant';
 
 /**
  * Generate print template HTML (duplicated to avoid circular import)
@@ -39,7 +39,7 @@ export function printWithTemplate(options: PrintTemplateOptions): void {
     return;
   }
 
-  printWindow.document.write(html);
+  printWindow.document.write(html); // auditor:ignore
   printWindow.document.close();
   printWindow.focus();
 

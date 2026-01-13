@@ -1,8 +1,4 @@
-/**
- * Helper to filter recipes by allergens and enrich with allergen data.
- */
-
-import type { Recipe } from '@/app/webapp/recipes/types';
+import { Recipe } from './schemas';
 
 /**
  * Filter recipes by include allergens and enrich with allergen data.
@@ -28,19 +24,16 @@ export async function filterRecipes(
 
   if (recipesNeedingAllergens.length > 0) {
     const { batchAggregateRecipeAllergens } = await import('@/lib/allergens/allergen-aggregation');
-    const recipeIds = recipesNeedingAllergens.map(r => r.id);
+    const recipeIds = recipesNeedingAllergens.map(r => r.id.toString());
     const allergensByRecipe = await batchAggregateRecipeAllergens(recipeIds);
     filteredRecipes = filteredRecipes.map(recipe => {
-      if (allergensByRecipe[recipe.id]) {
-        return { ...recipe, allergens: allergensByRecipe[recipe.id] };
+      const recipeIdStr = recipe.id.toString();
+      if (allergensByRecipe[recipeIdStr]) {
+        return { ...recipe, allergens: allergensByRecipe[recipeIdStr] };
       }
       return recipe;
     });
   }
 
-  // Map recipes to ensure recipe_name field exists
-  return filteredRecipes.map(recipe => ({
-    ...recipe,
-    recipe_name: (recipe as any).name || (recipe as any).recipe_name,
-  }));
+  return filteredRecipes;
 }

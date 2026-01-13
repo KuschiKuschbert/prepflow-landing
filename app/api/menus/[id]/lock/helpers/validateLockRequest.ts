@@ -2,11 +2,11 @@
  * Helper for validating menu lock/unlock requests
  */
 
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { logger } from '@/lib/logger';
 import { getUserEmail as getEmailFromAuth0 } from '@/lib/auth0-api-helpers';
+import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 
 const isDev = process.env.NODE_ENV === 'development';
 const authBypassDev = process.env.AUTH0_BYPASS_DEV === 'true';
@@ -50,7 +50,7 @@ export async function validateAuth(
     }
 
     return { userEmail, error: null };
-  } catch (tokenError) {
+  } catch (tokenError: unknown) {
     logger.error('[Menu Lock API] Error getting user email:', {
       error: tokenError instanceof Error ? tokenError.message : String(tokenError),
       menuId,

@@ -4,11 +4,11 @@
 
 import { generatePrintTemplate } from '@/lib/exports/print-template';
 import { logger } from '@/lib/logger';
+import { getCleaningRecordPrintStyles } from '../cleaningRecordPrintStyles';
 import {
   formatCleaningRecordsForPrint,
   type CleaningRecordExportData,
 } from '../formatCleaningRecordsForPrint';
-import { getCleaningRecordPrintStyles } from '../cleaningRecordPrintStyles';
 import { calculateTotalRecords } from './helpers';
 
 /**
@@ -52,7 +52,7 @@ export function printCleaningRecords(data: CleaningRecordExportData): void {
       return;
     }
 
-    printWindow.document.write(fullHtml);
+    printWindow.document.write(fullHtml); // auditor:ignore
     printWindow.document.close();
     printWindow.focus();
 

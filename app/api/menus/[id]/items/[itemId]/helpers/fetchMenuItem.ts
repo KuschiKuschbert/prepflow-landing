@@ -1,8 +1,8 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
-
-import { RawMenuItem } from '../../../../types';
+import { RawMenuItem } from '../../../../helpers/schemas';
 
 /**
  * Fetch menu item by ID.
@@ -11,8 +11,24 @@ import { RawMenuItem } from '../../../../types';
  * @param {string} menuItemId - Menu item ID
  * @returns {Promise<{menuItem: RawMenuItem | null, error: NextResponse | null}>} Menu item data and error if any
  */
-export async function fetchMenuItem(menuId: string, menuItemId: string) {
-  const { data: menuItem, error: fetchError } = await supabaseAdmin!
+export async function fetchMenuItem(
+  menuId: string,
+  menuItemId: string,
+): Promise<{
+  menuItem: RawMenuItem | null;
+  error: NextResponse | null;
+}> {
+  if (!supabaseAdmin) {
+    return {
+      menuItem: null,
+      error: NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      ),
+    };
+  }
+
+  const { data: menuItem, error: fetchError } = await supabaseAdmin
     .from('menu_items')
     .select('dish_id, recipe_id')
     .eq('id', menuItemId)
@@ -24,15 +40,16 @@ export async function fetchMenuItem(menuId: string, menuItemId: string) {
     return {
       menuItem: null,
       error: NextResponse.json(
-        {
-          success: false,
-          error: fetchError?.message || 'Menu item not found',
-          message: 'Failed to fetch menu item',
-        },
+        ApiErrorHandler.createError(
+          fetchError?.message || 'Menu item not found',
+          'NOT_FOUND',
+          404,
+          { message: 'Failed to fetch menu item' },
+        ),
         { status: 404 },
       ),
     };
   }
 
-  return { menuItem, error: null };
+  return { menuItem: menuItem as RawMenuItem, error: null };
 }

@@ -10,6 +10,8 @@ The self-improving error system automatically captures errors, documents fixes, 
 Error Capture → Fix Documentation → Pattern Learning → Rule Generation → Prevention
 ```
 
+The system leverages the **[Ralph Loop Technique](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/methodology/RALPH_LOOP.md)** for fix generation: failures in fix attempts are treated as informative data for the next iteration.
+
 ## Components
 
 ### 1. Error Capture (`scripts/error-capture/`)

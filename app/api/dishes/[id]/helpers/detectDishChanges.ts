@@ -1,32 +1,23 @@
-/**
- * Helper for detecting changes in dish updates
- */
-
-import { Dish, UpdateDishInput } from '@/types/dish';
-
-export interface DishChange {
-  type: string;
-  details: any;
-}
+import { Dish } from '../../helpers/schemas';
 
 export interface ChangeDetectionResult {
   changes: string[];
-  changeDetails: Record<string, any>;
+  changeDetails: Record<string, unknown>;
 }
 
 /**
  * Detects changes between current dish and update data
  *
  * @param {Dish | null} currentDish - Current dish data
- * @param {UpdateDishInput} updateData - Update data
+ * @param {Partial<Dish>} updateData - Update data
  * @returns {ChangeDetectionResult} Detected changes
  */
 export function detectDishChanges(
   currentDish: Dish | null,
-  updateData: UpdateDishInput,
+  updateData: Partial<Dish>,
 ): ChangeDetectionResult {
   const changes: string[] = [];
-  const changeDetails: Record<string, any> = {};
+  const changeDetails: Record<string, unknown> = {};
 
   if (!currentDish) {
     return { changes, changeDetails };

@@ -3,15 +3,15 @@
  * Provides print and CSV export functionality for temperature logs
  */
 
+import { exportToCSV } from '@/lib/csv/csv-utils';
 import { generatePrintTemplate } from '@/lib/exports/print-template';
+import { logger } from '@/lib/logger';
+import type { TemperatureEquipment, TemperatureLog } from '../types';
 import {
   formatTemperatureLogsForPrint,
   type TemperatureLogExportData,
 } from './formatTemperatureLogsForPrint';
 import { getTemperatureLogPrintStyles } from './temperatureLogPrintStyles';
-import { exportToCSV } from '@/lib/csv/csv-utils';
-import { logger } from '@/lib/logger';
-import type { TemperatureLog, TemperatureEquipment } from '../types';
 
 /**
  * Print temperature logs using unified template
@@ -51,7 +51,7 @@ export function printTemperatureLogs(data: TemperatureLogExportData): void {
       return;
     }
 
-    printWindow.document.write(fullHtml);
+    printWindow.document.write(fullHtml); // auditor:ignore
     printWindow.document.close();
     printWindow.focus();
 

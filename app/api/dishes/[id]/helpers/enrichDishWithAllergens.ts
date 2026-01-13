@@ -1,19 +1,18 @@
-/**
- * Helper for enriching dish with allergens and dietary information
- */
-
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { Dish, EnrichedDish } from '@/types/dish';
+import { DishWithRelations } from '../../helpers/schemas';
 
 /**
  * Enriches dish with aggregated allergens and dietary status
  *
- * @param {Dish} dish - Dish data
+ * @param {DishWithRelations} dish - Dish data
  * @param {string} dishId - Dish ID
- * @returns {Promise<EnrichedDish>} Enriched dish
+ * @returns {Promise<DishWithRelations>} Enriched dish
  */
-export async function enrichDishWithAllergens(dish: Dish, dishId: string): Promise<EnrichedDish> {
+export async function enrichDishWithAllergens(
+  dish: DishWithRelations,
+  dishId: string,
+): Promise<DishWithRelations> {
   // Always aggregate allergens and dietary status (even if cached)
   // This ensures we have the latest data from recipes/ingredients
   const { aggregateDishAllergens } = await import('@/lib/allergens/allergen-aggregation');
@@ -46,8 +45,7 @@ export async function enrichDishWithAllergens(dish: Dish, dishId: string): Promi
   }
 
   // Update dish cache with aggregated allergens if they differ
-  // Cast to any to access potentially existing allergens property not in basic Dish interface
-  const currentAllergens = (dish as any).allergens;
+  const currentAllergens = dish.allergens;
   if (
     allergens &&
     allergens.length > 0 &&
