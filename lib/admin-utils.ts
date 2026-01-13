@@ -4,14 +4,24 @@ import { logger } from '@/lib/logger';
  * Extracted from admin-auth.ts to avoid importing authOptions in middleware
  */
 
+export interface AuthUser {
+  roles?: string[];
+  role?: string;
+  app_metadata?: { roles?: string[] };
+  user_metadata?: { roles?: string[] };
+  'https://prepflow.org/roles'?: string[];
+  'https://prepflow.org/custom'?: { roles?: string[] };
+  [key: string]: unknown;
+}
+
 /**
  * Check if a user has admin role from Auth0.
  * Auth0 roles are typically stored in the token's roles array or in user metadata.
  *
- * @param {any} user - User object from session or token
+ * @param {AuthUser | null | undefined} user - User object from session or token
  * @returns {boolean} True if user has admin or super_admin role
  */
-export function isAdmin(user: any): boolean {
+export function isAdmin(user: AuthUser | null | undefined): boolean {
   if (!user) return false;
 
   try {
