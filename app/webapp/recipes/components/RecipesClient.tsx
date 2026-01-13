@@ -142,7 +142,10 @@ export default function RecipesClient() {
     selectedRecipeIds,
     onSuccess: () => setSelectedRecipes(new Set()),
   });
-  const handleClearSelection = useCallback(() => setSelectedRecipes(new Set()), [setSelectedRecipes]);
+  const handleClearSelection = useCallback(
+    () => setSelectedRecipes(new Set()),
+    [setSelectedRecipes],
+  );
   const {
     handleBulkAddToMenu,
     handleSelectMenu,

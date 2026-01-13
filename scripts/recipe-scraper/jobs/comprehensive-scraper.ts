@@ -122,7 +122,9 @@ export class ComprehensiveScraperJob {
           // OPTIMIZATION: Check for existing progress to avoid re-discovering URLs
           const existingProgress = this.progressTracker.loadProgress(source);
           if (existingProgress && !this.progressTracker.isComplete(existingProgress)) {
-            scraperLogger.info(`Found existing progress for ${source}, resuming instead of re-discovering`);
+            scraperLogger.info(
+              `Found existing progress for ${source}, resuming instead of re-discovering`,
+            );
             await this.processSource(source, existingProgress);
           } else {
             await this.processSource(source);
@@ -483,16 +485,20 @@ export class ComprehensiveScraperJob {
       }
 
       // Discover all URLs WITH RATINGS (optimized pre-filtering)
-      scraperLogger.info(`Discovering all recipe URLs for ${source} (with ratings for pre-filtering)...`);
+      scraperLogger.info(
+        `Discovering all recipe URLs for ${source} (with ratings for pre-filtering)...`,
+      );
       let discoveredUrls: string[];
       try {
         // Use optimized method that extracts ratings from listing pages
         const urlsWithRatings = await scraper.getAllRecipeUrlsWithRatings();
 
         // Pre-filter by rating BEFORE downloading full pages (huge efficiency gain)
-        const sourceConfig = RATING_CONFIG.SOURCE_CONFIG[source as keyof typeof RATING_CONFIG.SOURCE_CONFIG];
+        const sourceConfig =
+          RATING_CONFIG.SOURCE_CONFIG[source as keyof typeof RATING_CONFIG.SOURCE_CONFIG];
         const minRating = sourceConfig?.minRating ?? RATING_CONFIG.DEFAULT_MIN_RATING;
-        const includeUnrated = sourceConfig?.includeUnrated ?? RATING_CONFIG.DEFAULT_INCLUDE_UNRATED;
+        const includeUnrated =
+          sourceConfig?.includeUnrated ?? RATING_CONFIG.DEFAULT_INCLUDE_UNRATED;
 
         let filteredCount = 0;
         discoveredUrls = urlsWithRatings
@@ -512,7 +518,7 @@ export class ComprehensiveScraperJob {
 
         if (filteredCount > 0) {
           scraperLogger.info(
-            `🎯 Pre-filtered ${filteredCount} low-rated URLs for ${source} (${urlsWithRatings.length} total → ${discoveredUrls.length} after filter)`
+            `🎯 Pre-filtered ${filteredCount} low-rated URLs for ${source} (${urlsWithRatings.length} total → ${discoveredUrls.length} after filter)`,
           );
         }
       } catch (error) {

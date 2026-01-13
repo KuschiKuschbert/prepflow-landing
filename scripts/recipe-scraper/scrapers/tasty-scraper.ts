@@ -426,7 +426,9 @@ export class TastyScraper extends BaseScraper {
           const html = await this.fetchPage(pageUrl);
           const $ = cheerio.load(html);
 
-          const cards = $('a[href*="/recipe/"]').closest('[class*="feed-item"], [class*="card"], article');
+          const cards = $('a[href*="/recipe/"]').closest(
+            '[class*="feed-item"], [class*="card"], article',
+          );
 
           if (cards.length === 0) {
             hasMorePages = false;
@@ -435,8 +437,8 @@ export class TastyScraper extends BaseScraper {
 
           cards.each((_, card) => {
             const $card = $(card);
-            const link = $card.find('a[href*="/recipe/"]').first().attr('href') ||
-                         $card.attr('href');
+            const link =
+              $card.find('a[href*="/recipe/"]').first().attr('href') || $card.attr('href');
 
             if (!link) return;
 
@@ -451,7 +453,9 @@ export class TastyScraper extends BaseScraper {
             // Extract percentage rating (Tasty shows "86%" format)
             let rating: number | undefined;
 
-            const ratingEl = $card.find('[class*="rating"], [class*="score"], [class*="percent"]').first();
+            const ratingEl = $card
+              .find('[class*="rating"], [class*="score"], [class*="percent"]')
+              .first();
             if (ratingEl.length) {
               const ratingText = ratingEl.text().trim();
               const percentMatch = ratingText.match(/(\d+)%/);
@@ -478,7 +482,9 @@ export class TastyScraper extends BaseScraper {
     }
 
     const withRatings = urlsWithRatings.filter(u => u.rating !== undefined).length;
-    scraperLogger.info(`[Tasty] Discovered ${urlsWithRatings.length} URLs (${withRatings} with ratings)`);
+    scraperLogger.info(
+      `[Tasty] Discovered ${urlsWithRatings.length} URLs (${withRatings} with ratings)`,
+    );
 
     return urlsWithRatings;
   }

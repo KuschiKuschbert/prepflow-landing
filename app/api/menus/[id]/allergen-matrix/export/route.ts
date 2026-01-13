@@ -4,7 +4,10 @@
 
 import { AUSTRALIAN_ALLERGENS, consolidateAllergens } from '@/lib/allergens/australian-allergens';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { aggregateDishDietaryStatus, aggregateRecipeDietaryStatus } from '@/lib/dietary/dietary-aggregation';
+import {
+  aggregateDishDietaryStatus,
+  aggregateRecipeDietaryStatus,
+} from '@/lib/dietary/dietary-aggregation';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import Papa from 'papaparse';

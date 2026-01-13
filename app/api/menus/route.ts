@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
 
     // Fetch menu items count for each menu
     const menusWithCounts: Menu[] = await Promise.all(
-      (menus || []).map(async (menu) => {
+      (menus || []).map(async menu => {
         const { count: itemsCount, error: itemsError } = await supabaseAdmin!
           .from('menu_items')
           .select('*', { count: 'exact', head: true })

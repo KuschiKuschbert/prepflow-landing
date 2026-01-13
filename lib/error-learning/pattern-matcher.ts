@@ -71,7 +71,7 @@ function matchErrorMessage(errorMessage: string, knownPattern: string): number {
 function matchErrorContext(
   errorContext: { file?: string; line?: number; [key: string]: unknown },
   knownContext: { file?: string; line?: number; [key: string]: unknown },
-): { score: number; matches: number; } {
+): { score: number; matches: number } {
   let score = 0;
   let matches = 0;
 
@@ -191,12 +191,14 @@ export async function getFixSuggestions(
     severity?: string;
     [key: string]: unknown;
   },
-): Promise<Array<{
-  error: KnowledgeBaseError;
-  fix: KnowledgeBaseError['fixes'][0];
-  score: number;
-  reason: string;
-}>> {
+): Promise<
+  Array<{
+    error: KnowledgeBaseError;
+    fix: KnowledgeBaseError['fixes'][0];
+    score: number;
+    reason: string;
+  }>
+> {
   const similarErrors = await findSimilarErrors(errorMessage, errorContext, 3);
   const suggestions: Array<{
     error: KnowledgeBaseError;
@@ -207,7 +209,8 @@ export async function getFixSuggestions(
 
   for (const match of similarErrors) {
     // Get the most recent fix (or best fix if multiple)
-    const fix = match.error.fixes.length > 0 ? match.error.fixes[match.error.fixes.length - 1] : null;
+    const fix =
+      match.error.fixes.length > 0 ? match.error.fixes[match.error.fixes.length - 1] : null;
 
     if (fix) {
       suggestions.push({

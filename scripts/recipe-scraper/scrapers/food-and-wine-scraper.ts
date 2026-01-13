@@ -131,10 +131,7 @@ export class FoodAndWineScraper extends BaseScraper {
 
       // Ingredients
       let ingredients: RecipeIngredient[] = [];
-      const ingredientSelectors = [
-        '.mntl-structured-ingredients__list-item',
-        '.ingredients-item',
-      ];
+      const ingredientSelectors = ['.mntl-structured-ingredients__list-item', '.ingredients-item'];
 
       for (const selector of ingredientSelectors) {
         const found = $(selector)
@@ -166,14 +163,16 @@ export class FoodAndWineScraper extends BaseScraper {
         image_url: $('meta[property="og:image"]').attr('content') || undefined,
       };
 
-       // Parse yield
-       const yieldText = $('.mntl-recipe-details__item:contains("Servings:") .mntl-recipe-details__value').text().trim() ||
-                        $('.recipe-meta-item:contains("Yield:") .recipe-meta-item-body').text().trim();
-       const yieldMatch = yieldText.match(/(\d+)/);
-       if (yieldMatch) {
-         recipe.yield = parseInt(yieldMatch[1], 10);
-         recipe.yield_unit = 'servings';
-       }
+      // Parse yield
+      const yieldText =
+        $('.mntl-recipe-details__item:contains("Servings:") .mntl-recipe-details__value')
+          .text()
+          .trim() || $('.recipe-meta-item:contains("Yield:") .recipe-meta-item-body').text().trim();
+      const yieldMatch = yieldText.match(/(\d+)/);
+      if (yieldMatch) {
+        recipe.yield = parseInt(yieldMatch[1], 10);
+        recipe.yield_unit = 'servings';
+      }
 
       return recipe;
     } catch (error) {
@@ -251,10 +250,7 @@ export class FoodAndWineScraper extends BaseScraper {
       });
     }
     const combinedText = instructionTexts.join(' ');
-    const tempPatterns = [
-      /(\d+)\s*°?\s*F\b/i,
-      /(\d+)\s*°?\s*C\b/i,
-    ];
+    const tempPatterns = [/(\d+)\s*°?\s*F\b/i, /(\d+)\s*°?\s*C\b/i];
     for (const pattern of tempPatterns) {
       const match = combinedText.match(pattern);
       if (match) {
@@ -292,14 +288,14 @@ export class FoodAndWineScraper extends BaseScraper {
             return (url.includes('/recipes/') || url.includes('/recipe/')) && !visited.has(url);
           });
         for (const url of recipeLinks) {
-            let fullUrl = url;
-             if (url.startsWith('/')) {
-                fullUrl = `https://www.foodandwine.com${url}`;
-            }
-            if (!visited.has(fullUrl)) {
-                 visited.add(fullUrl);
-                urls.push(fullUrl);
-            }
+          let fullUrl = url;
+          if (url.startsWith('/')) {
+            fullUrl = `https://www.foodandwine.com${url}`;
+          }
+          if (!visited.has(fullUrl)) {
+            visited.add(fullUrl);
+            urls.push(fullUrl);
+          }
           if (urls.length >= limit) break;
         }
       } catch (error) {
@@ -324,6 +320,6 @@ export class FoodAndWineScraper extends BaseScraper {
     }
 
     // Fallback: Use getRecipeUrls with a higher limit if sitemap fails
-     return this.getRecipeUrls(500);
+    return this.getRecipeUrls(500);
   }
 }

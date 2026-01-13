@@ -31,11 +31,13 @@ async function main() {
       console.log('   No changes recorded yet.');
     } else {
       recent.forEach(change => {
-        const icon = change.status === 'applied' ? '✅' : (change.status === 'rolled_back' ? '↩️ ' : '❌');
-        console.log(`   ${icon} [${change.timestamp.substring(0, 10)}] ${change.type}: ${change.description} (Conf: ${change.confidenceScore})`);
+        const icon =
+          change.status === 'applied' ? '✅' : change.status === 'rolled_back' ? '↩️ ' : '❌';
+        console.log(
+          `   ${icon} [${change.timestamp.substring(0, 10)}] ${change.type}: ${change.description} (Conf: ${change.confidenceScore})`,
+        );
       });
     }
-
   } catch (error) {
     console.error('Failed to retrieve status:', error);
   }

@@ -15,15 +15,16 @@ export function combinePrepListData(
   itemsByPrepListId: Map<string, PrepListItem[]>,
   ingredientsMap: Map<string, Ingredient>,
 ) {
-  return prepLists.map((list) => {
+  return prepLists.map(list => {
     const sectionId = list.kitchen_section_id || list.section_id;
     const items = itemsByPrepListId.get(list.id) || [];
 
     return {
       ...list,
       kitchen_section_id: sectionId,
-      kitchen_sections: sectionId && sectionsMap.has(sectionId) ? sectionsMap.get(sectionId)! : null,
-      prep_list_items: items.map((item) => ({
+      kitchen_sections:
+        sectionId && sectionsMap.has(sectionId) ? sectionsMap.get(sectionId)! : null,
+      prep_list_items: items.map(item => ({
         ...item,
         quantity: item.quantity || item.quantity_needed,
         ingredients:

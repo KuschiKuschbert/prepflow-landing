@@ -10,10 +10,7 @@ import { fetchMenuData } from './helpers/fetchMenuData';
 import { mergeDishRecipeIngredients } from './helpers/mergeDishRecipeIngredients';
 import { processDish } from './helpers/processDish';
 import { processRecipe } from './helpers/processRecipe';
-import {
-    RecipeGroupedItem,
-    SectionData
-} from './types';
+import { RecipeGroupedItem, SectionData } from './types';
 
 export async function POST(request: NextRequest) {
   try {

@@ -73,7 +73,7 @@ export function RecipeCard({ recipe, isExpanded, onToggle }: RecipeCardProps) {
             />
           </div>
         )}
-        <div className="flex-1 min-w-0">
+        <div className="min-w-0 flex-1">
           <h3 className="mb-1 truncate text-base font-semibold text-[var(--foreground)]">
             {recipe.recipe_name}
           </h3>
@@ -85,7 +85,12 @@ export function RecipeCard({ recipe, isExpanded, onToggle }: RecipeCardProps) {
             </span>
             {recipe.rating && (
               <div className="flex items-center gap-1">
-                <Icon icon={Star} size="xs" className={getRatingColor(recipe.rating)} aria-hidden={true} />
+                <Icon
+                  icon={Star}
+                  size="xs"
+                  className={getRatingColor(recipe.rating)}
+                  aria-hidden={true}
+                />
                 <span className={`text-xs ${getRatingColor(recipe.rating)}`}>
                   {recipe.rating.toFixed(1)}
                 </span>

@@ -63,23 +63,27 @@ async function optimizeImage(inputPath) {
     // Optimize ORIGINAL (Overwrite)
     // We only overwrite if we can save > 30% to avoid quality loss for diminishing returns
     if (format === 'png') {
-       const optimizedBuffer = await sharp(inputBuffer).png({ quality: 80, compressionLevel: 9, effort: 10 }).toBuffer();
-       if (optimizedBuffer.length < inputSize * 0.7) {
-          fs.writeFileSync(inputPath, optimizedBuffer);
-           console.log(
-            `   ✅ Overwrote Original (PNG): ${(optimizedBuffer.length / 1024).toFixed(1)}KB - ${(((inputSize - optimizedBuffer.length) / inputSize) * 100).toFixed(1)}% smaller`,
-          );
-       } else {
-         console.log(`   ⏭️ Skipped overwriting original: Insufficient savings`);
-       }
+      const optimizedBuffer = await sharp(inputBuffer)
+        .png({ quality: 80, compressionLevel: 9, effort: 10 })
+        .toBuffer();
+      if (optimizedBuffer.length < inputSize * 0.7) {
+        fs.writeFileSync(inputPath, optimizedBuffer);
+        console.log(
+          `   ✅ Overwrote Original (PNG): ${(optimizedBuffer.length / 1024).toFixed(1)}KB - ${(((inputSize - optimizedBuffer.length) / inputSize) * 100).toFixed(1)}% smaller`,
+        );
+      } else {
+        console.log(`   ⏭️ Skipped overwriting original: Insufficient savings`);
+      }
     } else if (format === 'jpeg' || format === 'jpg') {
-       const optimizedBuffer = await sharp(inputBuffer).jpeg({ quality: 85, mozjpeg: true }).toBuffer();
-       if (optimizedBuffer.length < inputSize * 0.7) {
-          fs.writeFileSync(inputPath, optimizedBuffer);
-          console.log(
-            `   ✅ Overwrote Original (JPEG): ${(optimizedBuffer.length / 1024).toFixed(1)}KB - ${(((inputSize - optimizedBuffer.length) / inputSize) * 100).toFixed(1)}% smaller`,
-          );
-       }
+      const optimizedBuffer = await sharp(inputBuffer)
+        .jpeg({ quality: 85, mozjpeg: true })
+        .toBuffer();
+      if (optimizedBuffer.length < inputSize * 0.7) {
+        fs.writeFileSync(inputPath, optimizedBuffer);
+        console.log(
+          `   ✅ Overwrote Original (JPEG): ${(optimizedBuffer.length / 1024).toFixed(1)}KB - ${(((inputSize - optimizedBuffer.length) / inputSize) * 100).toFixed(1)}% smaller`,
+        );
+      }
     }
 
     return {

@@ -106,12 +106,7 @@ export function DiagnosticsPanel({ diagnostics }: DiagnosticsPanelProps) {
           {/* Last Scraped Recipe */}
           {diagnostics.lastScrapedRecipe && (
             <div className="flex items-center gap-3 rounded-xl bg-[var(--surface)] p-3">
-              <Icon
-                icon={CheckCircle2}
-                size="sm"
-                className="text-green-400"
-                aria-hidden={true}
-              />
+              <Icon icon={CheckCircle2} size="sm" className="text-green-400" aria-hidden={true} />
               <div className="flex-1">
                 <div className="text-xs font-medium text-[var(--foreground-muted)]">
                   Last Scraped
@@ -127,12 +122,7 @@ export function DiagnosticsPanel({ diagnostics }: DiagnosticsPanelProps) {
           {diagnostics.lastError && (
             <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-3">
               <div className="flex items-start gap-2">
-                <Icon
-                  icon={AlertCircle}
-                  size="sm"
-                  className="text-red-400"
-                  aria-hidden={true}
-                />
+                <Icon icon={AlertCircle} size="sm" className="text-red-400" aria-hidden={true} />
                 <div className="flex-1">
                   <div className="text-sm font-semibold text-red-400">Last Error</div>
                   <div className="mt-1 text-xs text-red-300">{diagnostics.lastError}</div>

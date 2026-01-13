@@ -2,10 +2,10 @@
 
 import { getDefaultSettings, validateSettings, validateSpirit } from '../lib/personality/schema';
 import {
-    checkSeasonalMatch,
-    getShiftBucket,
-    isSilenced,
-    silenceFor24h,
+  checkSeasonalMatch,
+  getShiftBucket,
+  isSilenced,
+  silenceFor24h,
 } from '../lib/personality/utils';
 
 describe('Personality Utils', () => {

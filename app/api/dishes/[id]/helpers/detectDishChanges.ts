@@ -21,7 +21,10 @@ export interface ChangeDetectionResult {
  * @param {UpdateDishInput} updateData - Update data
  * @returns {ChangeDetectionResult} Detected changes
  */
-export function detectDishChanges(currentDish: Dish | null, updateData: UpdateDishInput): ChangeDetectionResult {
+export function detectDishChanges(
+  currentDish: Dish | null,
+  updateData: UpdateDishInput,
+): ChangeDetectionResult {
   const changes: string[] = [];
   const changeDetails: Record<string, any> = {};
 

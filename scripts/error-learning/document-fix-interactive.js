@@ -20,7 +20,7 @@ function loadCapturedErrors() {
   if (!fs.existsSync(CAPTURED_ERRORS_FILE)) {
     return [];
   }
-  
+
   try {
     const content = fs.readFileSync(CAPTURED_ERRORS_FILE, 'utf8');
     return JSON.parse(content);
@@ -53,19 +53,21 @@ function question(rl, query) {
  */
 async function selectError(rl) {
   const errors = loadCapturedErrors().filter(err => err.status !== 'documented');
-  
+
   if (errors.length === 0) {
     console.log('No unresolved errors found.');
     return null;
   }
-  
+
   console.log('\nUnresolved errors:');
   errors.slice(-10).forEach((err, index) => {
-    console.log(`  ${index + 1}. ${err.id}: ${err.message.substring(0, 60)}... (${err.source}/${err.errorType})`);
+    console.log(
+      `  ${index + 1}. ${err.id}: ${err.message.substring(0, 60)}... (${err.source}/${err.errorType})`,
+    );
   });
-  
+
   const choice = await question(rl, '\nSelect error number (or enter error ID): ');
-  
+
   if (/^\d+$/.test(choice)) {
     const index = parseInt(choice, 10) - 1;
     if (index >= 0 && index < errors.length) {
@@ -74,7 +76,7 @@ async function selectError(rl) {
   } else if (choice) {
     return errors.find(err => err.id === choice);
   }
-  
+
   return null;
 }
 
@@ -83,14 +85,14 @@ async function selectError(rl) {
  */
 async function documentFixInteractive(errorId) {
   const rl = createInterface();
-  
+
   try {
     let error = null;
-    
+
     if (errorId) {
       const errors = loadCapturedErrors();
       error = errors.find(err => err.id === errorId);
-      
+
       if (!error) {
         console.log(`Error ${errorId} not found.`);
         rl.close();
@@ -98,67 +100,73 @@ async function documentFixInteractive(errorId) {
       }
     } else {
       error = await selectError(rl);
-      
+
       if (!error) {
         rl.close();
         return;
       }
     }
-    
+
     console.log(`\n📝 Documenting fix for error: ${error.id}`);
     console.log(`   Message: ${error.message}`);
     console.log(`   Source: ${error.source}/${error.errorType}`);
     console.log(`   Category: ${error.category}`);
-    
+
     // Prompt for root cause
     console.log('\n📋 Root Cause Analysis');
     const rootCause = await question(rl, 'What was the root cause of this error? ');
-    
+
     // Prompt for solution
     console.log('\n✅ Solution');
     const solution = await question(rl, 'How was this error fixed? ');
-    
+
     // Prompt for code changes (optional)
     console.log('\n📝 Code Changes (optional)');
     const codeChangesChoice = await question(rl, 'Do you want to include code changes? (y/n): ');
     let codeChanges = null;
-    
+
     if (codeChangesChoice.toLowerCase() === 'y') {
       const gitDiffChoice = await question(rl, 'Paste git diff or description: ');
       if (gitDiffChoice.trim()) {
         codeChanges = gitDiffChoice.trim();
       }
     }
-    
+
     // Prompt for prevention strategies
     console.log('\n🛡️ Prevention Strategies');
     const strategies = [];
     let addMore = true;
-    
+
     while (addMore) {
-      const strategy = await question(rl, `Prevention strategy ${strategies.length + 1} (or 'done' to finish): `);
+      const strategy = await question(
+        rl,
+        `Prevention strategy ${strategies.length + 1} (or 'done' to finish): `,
+      );
       if (strategy.toLowerCase() === 'done' || !strategy.trim()) {
         addMore = false;
       } else {
         strategies.push(strategy.trim());
       }
     }
-    
+
     if (strategies.length === 0) {
       strategies.push('Review error patterns and add prevention rules');
     }
-    
+
     // Prompt for related errors (optional)
     console.log('\n🔗 Related Errors (optional)');
-    const relatedErrorsInput = await question(rl, 'Enter related error IDs (comma-separated, or press enter to skip): ');
+    const relatedErrorsInput = await question(
+      rl,
+      'Enter related error IDs (comma-separated, or press enter to skip): ',
+    );
     const relatedErrors = relatedErrorsInput
       .split(',')
       .map(id => id.trim())
       .filter(Boolean);
-    
+
     // Document the fix
     console.log('\n💾 Documenting fix...');
-    
+
     const fixId = await documentFix(error.id, {
       rootCause,
       solution,
@@ -167,7 +175,7 @@ async function documentFixInteractive(errorId) {
       relatedErrors,
       documentedBy: 'user',
     });
-    
+
     // Save markdown documentation
     const fix = {
       errorId: error.id,
@@ -180,13 +188,13 @@ async function documentFixInteractive(errorId) {
       documentedAt: new Date().toISOString(),
       documentedBy: 'user',
     };
-    
+
     const markdownPath = await saveFixMarkdown(fix);
-    
+
     console.log(`\n✅ Fix documented successfully!`);
     console.log(`   Fix ID: ${fixId}`);
     console.log(`   Markdown: ${markdownPath}`);
-    
+
     // Update error status
     const errors = loadCapturedErrors();
     const errorIndex = errors.findIndex(err => err.id === error.id);
@@ -195,7 +203,6 @@ async function documentFixInteractive(errorId) {
       errors[errorIndex].fixId = fixId;
       fs.writeFileSync(CAPTURED_ERRORS_FILE, JSON.stringify(errors, null, 2));
     }
-    
   } catch (err) {
     console.error('\n❌ Error documenting fix:', err);
   } finally {
@@ -209,7 +216,7 @@ async function documentFixInteractive(errorId) {
 async function main() {
   const args = process.argv.slice(2);
   const errorId = args[0];
-  
+
   await documentFixInteractive(errorId);
 }
 

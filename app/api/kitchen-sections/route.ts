@@ -3,13 +3,7 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { PostgrestError } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
-import {
-    Dish,
-    DishSection,
-    KitchenSection,
-    NormalizedDish,
-    SectionWithDishes,
-} from './types';
+import { Dish, DishSection, KitchenSection, NormalizedDish, SectionWithDishes } from './types';
 
 const TABLE_NOT_FOUND_RESPONSE = {
   success: true,

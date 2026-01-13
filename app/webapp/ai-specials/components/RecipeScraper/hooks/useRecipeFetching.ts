@@ -69,7 +69,17 @@ export function useRecipeFetching({
         setLoadingRecipes(false);
       }
     },
-    [page, pageSize, searchTerm, sourceFilter, formatFilter, setLoadingRecipes, setRecipes, setTotalRecipes, setTotalPages],
+    [
+      page,
+      pageSize,
+      searchTerm,
+      sourceFilter,
+      formatFilter,
+      setLoadingRecipes,
+      setRecipes,
+      setTotalRecipes,
+      setTotalPages,
+    ],
   );
 
   return { fetchRecipes };

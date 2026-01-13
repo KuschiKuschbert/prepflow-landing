@@ -68,17 +68,10 @@ export function DiagnosticsPanel({
       {isStuck && (
         <div className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-3">
           <div className="flex items-start gap-2">
-            <Icon
-              icon={AlertTriangle}
-              size="sm"
-              className="text-yellow-400"
-              aria-hidden={true}
-            />
+            <Icon icon={AlertTriangle} size="sm" className="text-yellow-400" aria-hidden={true} />
             <div className="flex-1">
               <div className="text-sm font-semibold text-yellow-400">Processing Stuck</div>
-              {stuckReason && (
-                <div className="mt-1 text-xs text-yellow-300">{stuckReason}</div>
-              )}
+              {stuckReason && <div className="mt-1 text-xs text-yellow-300">{stuckReason}</div>}
             </div>
           </div>
         </div>
@@ -88,9 +81,7 @@ export function DiagnosticsPanel({
         <div className="flex items-center gap-3">
           <Icon icon={CheckCircle2} size="sm" className="text-green-400" aria-hidden={true} />
           <div className="flex-1">
-            <div className="text-xs font-medium text-[var(--foreground-muted)]">
-              Last Processed
-            </div>
+            <div className="text-xs font-medium text-[var(--foreground-muted)]">Last Processed</div>
             <div className="text-sm font-semibold text-[var(--foreground)]">
               {lastProcessedRecipe}
             </div>

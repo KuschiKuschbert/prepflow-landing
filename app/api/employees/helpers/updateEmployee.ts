@@ -26,10 +26,7 @@ const EMPLOYEE_SELECT = `
  * @returns {Promise<Employee>} Updated employee
  * @throws {Error} If update fails
  */
-export async function updateEmployee(
-  id: string,
-  updates: UpdateEmployeeInput,
-) {
+export async function updateEmployee(id: string, updates: UpdateEmployeeInput) {
   if (!supabaseAdmin) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);

@@ -25,7 +25,7 @@ function getGitContext() {
     const branch = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim();
     const commit = execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
     const isDirty = execSync('git status --porcelain', { encoding: 'utf8' }).trim().length > 0;
-    
+
     return {
       branch,
       commit,
@@ -61,7 +61,7 @@ function loadCapturedErrors() {
   if (!fs.existsSync(CAPTURED_ERRORS_FILE)) {
     return [];
   }
-  
+
   try {
     const content = fs.readFileSync(CAPTURED_ERRORS_FILE, 'utf8');
     return JSON.parse(content);
@@ -87,7 +87,7 @@ function saveCapturedErrors(errors) {
  */
 function captureError(errorData) {
   const errors = loadCapturedErrors();
-  
+
   const capturedError = {
     id: `error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     source: errorData.source, // 'runtime' | 'build' | 'pre-commit' | 'ci-cd'
@@ -108,10 +108,10 @@ function captureError(errorData) {
     status: 'new', // 'new' | 'resolved' | 'documented'
     fixId: null,
   };
-  
+
   errors.push(capturedError);
   saveCapturedErrors(errors);
-  
+
   return capturedError.id;
 }
 
@@ -122,18 +122,18 @@ async function captureRuntimeError(errorId) {
   try {
     // Import Supabase dynamically to avoid issues if not available
     const { supabaseAdmin } = await import('../../lib/supabase');
-    
+
     const { data, error } = await supabaseAdmin
       .from('admin_error_logs')
       .select('*')
       .eq('id', errorId)
       .single();
-    
+
     if (error || !data) {
       console.error('[Error Capture] Failed to fetch runtime error:', error);
       return null;
     }
-    
+
     return captureError({
       source: 'runtime',
       errorType: 'Runtime',
@@ -160,9 +160,9 @@ function captureBuildError(errorOutput, errorType = 'Build') {
   // Parse error output to extract structured information
   const lines = errorOutput.split('\n');
   const errors = [];
-  
+
   let currentError = null;
-  
+
   for (const line of lines) {
     // TypeScript error pattern: file.ts(line,col): error TS####: message
     const tsMatch = line.match(/^(.+?)\((\d+),(\d+)\):\s+error\s+(TS\d+):\s+(.+)$/);
@@ -186,7 +186,7 @@ function captureBuildError(errorOutput, errorType = 'Build') {
       };
       continue;
     }
-    
+
     // ESLint error pattern: file.ts:line:col error message (rule)
     const eslintMatch = line.match(/^(.+?):(\d+):(\d+)\s+error\s+(.+?)\s+\((.+?)\)$/);
     if (eslintMatch) {
@@ -209,7 +209,7 @@ function captureBuildError(errorOutput, errorType = 'Build') {
       };
       continue;
     }
-    
+
     // Next.js build error pattern
     const nextjsMatch = line.match(/Error:\s+(.+)$/);
     if (nextjsMatch && !currentError) {
@@ -222,17 +222,17 @@ function captureBuildError(errorOutput, errorType = 'Build') {
         stackTrace: line,
       };
     }
-    
+
     // Append to current error's stack trace
     if (currentError && line.trim()) {
       currentError.stackTrace += '\n' + line;
     }
   }
-  
+
   if (currentError) {
     errors.push(currentError);
   }
-  
+
   // Capture all errors
   const capturedIds = errors.map(err => captureError(err));
   return capturedIds;
@@ -261,7 +261,7 @@ function capturePreCommitError(checkName, errorOutput) {
 function main() {
   const args = process.argv.slice(2);
   const command = args[0];
-  
+
   switch (command) {
     case 'runtime':
       if (args[1]) {
@@ -275,7 +275,7 @@ function main() {
         process.exit(1);
       }
       break;
-      
+
     case 'build':
       if (args[1]) {
         const errorOutput = fs.readFileSync(args[1], 'utf8');
@@ -294,7 +294,7 @@ function main() {
         });
       }
       break;
-      
+
     case 'pre-commit':
       if (args[1] && args[2]) {
         const id = capturePreCommitError(args[1], args[2]);
@@ -304,15 +304,17 @@ function main() {
         process.exit(1);
       }
       break;
-      
+
     case 'list':
       const errors = loadCapturedErrors();
       console.log(`Found ${errors.length} captured errors:`);
       errors.slice(-10).forEach(err => {
-        console.log(`  - ${err.id}: ${err.source}/${err.errorType} - ${err.message.substring(0, 60)}...`);
+        console.log(
+          `  - ${err.id}: ${err.source}/${err.errorType} - ${err.message.substring(0, 60)}...`,
+        );
       });
       break;
-      
+
     default:
       console.log(`
 Error Capture Script

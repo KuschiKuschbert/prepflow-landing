@@ -37,7 +37,7 @@ export async function fetchIngredientsBatch(
     }
 
     if (ingredientsData) {
-      ingredientsData.forEach((ing) => {
+      ingredientsData.forEach(ing => {
         ingredientsMap.set(ing.id, {
           id: ing.id,
           name: ing.ingredient_name || ing.name,

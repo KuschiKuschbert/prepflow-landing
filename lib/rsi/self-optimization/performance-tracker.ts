@@ -37,7 +37,7 @@ export class PerformanceTracker {
     const timestamp = new Date().toISOString();
     const newRecord: PerformanceRecord = {
       timestamp,
-      ...record
+      ...record,
     };
 
     try {
@@ -55,9 +55,9 @@ export class PerformanceTracker {
       if (fs.existsSync(perfLogPath)) {
         const content = fs.readFileSync(perfLogPath, 'utf-8');
         try {
-            logs = JSON.parse(content || '[]');
+          logs = JSON.parse(content || '[]');
         } catch {
-            logs = [];
+          logs = [];
         }
       }
 
@@ -65,7 +65,6 @@ export class PerformanceTracker {
 
       // Keep log size manageable? For now, unlimited.
       fs.writeFileSync(perfLogPath, JSON.stringify(logs, null, 2));
-
     } catch (error) {
       console.error('Failed to log RSI performance:', error);
     }

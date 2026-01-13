@@ -20,7 +20,7 @@ export function buildFullQuery(menuId: string) {
   return supabaseAdmin!
     .from('menu_items')
     .select(
-    `
+      `
       id,
       dish_id,
       recipe_id,
@@ -52,7 +52,7 @@ export function buildFullQuery(menuId: string) {
         dietary_method
       )
     `,
-  )
+    )
     .eq('menu_id', menuId)
     .order('category')
     .order('position');
@@ -63,7 +63,7 @@ export function buildQueryWithoutPricing(menuId: string) {
   return supabaseAdmin!
     .from('menu_items')
     .select(
-    `
+      `
       id,
       dish_id,
       recipe_id,
@@ -93,7 +93,7 @@ export function buildQueryWithoutPricing(menuId: string) {
         dietary_method
       )
     `,
-  )
+    )
     .eq('menu_id', menuId)
     .order('category')
     .order('position');
@@ -104,7 +104,7 @@ export function buildQueryWithoutDietary(menuId: string) {
   return supabaseAdmin!
     .from('menu_items')
     .select(
-    `
+      `
       id,
       dish_id,
       recipe_id,
@@ -126,7 +126,7 @@ export function buildQueryWithoutDietary(menuId: string) {
         yield
       )
     `,
-  )
+    )
     .eq('menu_id', menuId)
     .order('category')
     .order('position');
@@ -137,7 +137,7 @@ export function buildQueryWithoutDescription(menuId: string) {
   return supabaseAdmin!
     .from('menu_items')
     .select(
-    `
+      `
       id,
       dish_id,
       recipe_id,
@@ -157,7 +157,7 @@ export function buildQueryWithoutDescription(menuId: string) {
         yield
       )
     `,
-  )
+    )
     .eq('menu_id', menuId)
     .order('category')
     .order('position');

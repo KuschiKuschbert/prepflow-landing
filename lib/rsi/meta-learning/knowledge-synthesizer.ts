@@ -22,7 +22,7 @@ export class KnowledgeSynthesizer {
           id: `rule-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
           description: `Auto-generated rule from insight: ${insight.insight}`,
           ruleLogic: `apply fix when pattern matches '${insight.patternId}'`,
-          derivedFrom: [insight.patternId]
+          derivedFrom: [insight.patternId],
         });
       }
     }

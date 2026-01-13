@@ -21,7 +21,7 @@ function getBuildState() {
     const currentCommit = execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
     const hasErrors = fs.existsSync(BUILD_ERROR_OUTPUT);
     const errors = hasErrors ? fs.readFileSync(BUILD_ERROR_OUTPUT, 'utf8') : '';
-    
+
     return {
       commit: currentCommit,
       hasErrors,
@@ -45,7 +45,7 @@ function loadLastBuildState() {
   if (!fs.existsSync(LAST_BUILD_STATE)) {
     return null;
   }
-  
+
   try {
     const content = fs.readFileSync(LAST_BUILD_STATE, 'utf8');
     return JSON.parse(content);
@@ -62,7 +62,7 @@ function saveBuildState(state) {
   if (!fs.existsSync(stateDir)) {
     fs.mkdirSync(stateDir, { recursive: true });
   }
-  
+
   fs.writeFileSync(LAST_BUILD_STATE, JSON.stringify(state, null, 2));
 }
 
@@ -72,15 +72,15 @@ function saveBuildState(state) {
 async function autoDocumentFixes() {
   const currentState = getBuildState();
   const lastState = loadLastBuildState();
-  
+
   // If last build had errors and current build is successful, errors were fixed
   if (lastState && lastState.hasErrors && !currentState.hasErrors) {
     console.log('[Auto Document Fix] Errors were resolved, detecting fixes...');
-    
+
     try {
       // Detect fixes from git history
       const fixes = await detectFixes();
-      
+
       if (fixes && fixes.length > 0) {
         console.log(`✅ Auto-detected ${fixes.length} fix(es)`);
         console.log('   Fixes documented in knowledge base');
@@ -97,7 +97,7 @@ async function autoDocumentFixes() {
   } else {
     console.log('[Auto Document Fix] No errors in previous build, skipping auto-documentation');
   }
-  
+
   // Save current state
   saveBuildState(currentState);
 }
@@ -108,18 +108,18 @@ async function autoDocumentFixes() {
 async function main() {
   const args = process.argv.slice(2);
   const command = args[0] || 'check';
-  
+
   switch (command) {
     case 'check':
       await autoDocumentFixes();
       break;
-      
+
     case 'state':
       const state = getBuildState();
       console.log('Current build state:');
       console.log(JSON.stringify(state, null, 2));
       break;
-      
+
     default:
       console.log(`
 Automatic Fix Documentation Script

@@ -40,10 +40,7 @@ export interface CodeHealthMetrics {
 /**
  * Predict bugs in code based on learned patterns
  */
-export async function predictBugs(
-  filePath: string,
-  content: string,
-): Promise<BugPrediction[]> {
+export async function predictBugs(filePath: string, content: string): Promise<BugPrediction[]> {
   const predictions: BugPrediction[] = [];
   const lines = content.split('\n');
 
@@ -72,14 +69,25 @@ export async function predictBugs(
         });
 
         if (!hasFix) {
-          const similarErrors = await findSimilarErrors(pattern.detection, {
-            file: filePath,
-            line: lineNum,
-            errorType: 'Predicted',
-          }, 3);
+          const similarErrors = await findSimilarErrors(
+            pattern.detection,
+            {
+              file: filePath,
+              line: lineNum,
+              errorType: 'Predicted',
+            },
+            3,
+          );
 
           const probability = calculateBugProbability(pattern, similarErrors.length);
-          const risk = probability > 0.7 ? 'critical' : probability > 0.5 ? 'high' : probability > 0.3 ? 'medium' : 'low';
+          const risk =
+            probability > 0.7
+              ? 'critical'
+              : probability > 0.5
+                ? 'high'
+                : probability > 0.3
+                  ? 'medium'
+                  : 'low';
 
           predictions.push({
             file: filePath,
@@ -120,10 +128,7 @@ function calculateBugProbability(
 /**
  * Assess overall risk for file
  */
-export async function assessFileRisk(
-  filePath: string,
-  content: string,
-): Promise<RiskAssessment> {
+export async function assessFileRisk(filePath: string, content: string): Promise<RiskAssessment> {
   const predictions = await predictBugs(filePath, content);
 
   if (predictions.length === 0) {
@@ -143,7 +148,13 @@ export async function assessFileRisk(
 
   const avgRiskScore = riskScores.reduce((a, b) => a + b, 0) / riskScores.length;
   const overallRisk: RiskAssessment['overallRisk'] =
-    avgRiskScore > 80 ? 'critical' : avgRiskScore > 60 ? 'high' : avgRiskScore > 40 ? 'medium' : 'low';
+    avgRiskScore > 80
+      ? 'critical'
+      : avgRiskScore > 60
+        ? 'high'
+        : avgRiskScore > 40
+          ? 'medium'
+          : 'low';
 
   const recommendations = generateRecommendations(predictions);
 
@@ -158,12 +169,15 @@ export async function assessFileRisk(
 
 function generateRecommendations(predictions: BugPrediction[]): string[] {
   const recommendations: string[] = [];
-  const byType = predictions.reduce((acc, p) => {
-    const type = p.predictedError.split(':')[0];
-    if (!acc[type]) acc[type] = [];
-    acc[type].push(p);
-    return acc;
-  }, {} as Record<string, BugPrediction[]>);
+  const byType = predictions.reduce(
+    (acc, p) => {
+      const type = p.predictedError.split(':')[0];
+      if (!acc[type]) acc[type] = [];
+      acc[type].push(p);
+      return acc;
+    },
+    {} as Record<string, BugPrediction[]>,
+  );
 
   for (const [type, preds] of Object.entries(byType)) {
     if (preds.length > 0) {
@@ -196,7 +210,14 @@ export async function calculateCodeHealth(
   const performanceScore = 80;
   const maintainabilityScore = (errorRisk + complexityScore + documentationScore) / 3;
 
-  const overallScore = (errorRisk + complexityScore + testCoverage + documentationScore + performanceScore + maintainabilityScore) / 6;
+  const overallScore =
+    (errorRisk +
+      complexityScore +
+      testCoverage +
+      documentationScore +
+      performanceScore +
+      maintainabilityScore) /
+    6;
 
   return {
     overallScore,
@@ -210,7 +231,8 @@ export async function calculateCodeHealth(
 }
 
 function calculateComplexity(content: string): number {
-  const decisionPoints = (content.match(/\b(if|else|for|while|switch|case|catch|&&|\|\|)\b/g) || []).length;
+  const decisionPoints = (content.match(/\b(if|else|for|while|switch|case|catch|&&|\|\|)\b/g) || [])
+    .length;
   const functions = (content.match(/function\s+\w+|const\s+\w+\s*=\s*(async\s+)?\(/g) || []).length;
   return decisionPoints / Math.max(functions, 1);
 }

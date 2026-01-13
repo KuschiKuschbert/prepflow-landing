@@ -1,10 +1,10 @@
 import {
-    DBIngredient,
-    DBRecipeIngredient,
-    IngredientSimple,
-    PrepInstructionItem,
-    RecipeGroupedItem,
-    SectionData,
+  DBIngredient,
+  DBRecipeIngredient,
+  IngredientSimple,
+  PrepInstructionItem,
+  RecipeGroupedItem,
+  SectionData,
 } from '../types';
 
 export function processRecipe(
@@ -93,7 +93,7 @@ export function processRecipe(
       const quantity = Number(ri.quantity) * recipeMultiplier;
 
       const existing = section.aggregatedIngredients.find(
-        (agg) => agg.ingredientId === ingredientId && agg.unit === ri.unit,
+        agg => agg.ingredientId === ingredientId && agg.unit === ri.unit,
       );
 
       if (existing) {

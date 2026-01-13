@@ -38,9 +38,7 @@ export function OverallProgressCard({ comprehensiveStatus }: OverallProgressCard
       {/* Stats Grid */}
       <div className="tablet:grid-cols-4 mb-4 grid grid-cols-2 gap-4">
         <div className="rounded-xl bg-[var(--surface)] p-4">
-          <div className="mb-1 text-xs font-medium text-[var(--foreground-muted)]">
-            Discovered
-          </div>
+          <div className="mb-1 text-xs font-medium text-[var(--foreground-muted)]">Discovered</div>
           <div className="text-2xl font-bold text-[var(--foreground)]">
             {comprehensiveStatus.overall?.totalDiscovered.toLocaleString() || 0}
           </div>

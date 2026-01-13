@@ -34,11 +34,11 @@ export class Optimizer {
           parameter: 'confidenceThreshold.medium',
           currentValue: 0.7,
           proposedValue: 0.65,
-          reason: 'Zero rollbacks observed. We can be slightly more aggressive to increase velocity.',
-          confidence: 0.8
+          reason:
+            'Zero rollbacks observed. We can be slightly more aggressive to increase velocity.',
+          confidence: 0.8,
         });
       }
-
     } catch (error) {
       console.error('Optimizer analysis failed:', error);
     }

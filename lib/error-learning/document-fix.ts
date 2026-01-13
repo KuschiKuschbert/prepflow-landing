@@ -80,11 +80,11 @@ export async function documentFix(
           .from('admin_error_logs')
           .update({
             status: 'documented',
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', errorId);
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', errorId);
 
-      if (updateError) {
+        if (updateError) {
           // Error might not be in database (could be from build/pre-commit)
           // This is okay, just log it
           console.warn('[Fix Documentation] Error not found in database:', errorId);
@@ -173,21 +173,29 @@ ${fix.rootCause}
 
 ${fix.solution}
 
-${fix.codeChanges ? `## Code Changes
+${
+  fix.codeChanges
+    ? `## Code Changes
 
 \`\`\`diff
 ${fix.codeChanges}
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Prevention Strategies
 
 ${fix.preventionStrategies.map((strategy, index) => `${index + 1}. ${strategy}`).join('\n')}
 
-${fix.relatedErrors && fix.relatedErrors.length > 0 ? `## Related Errors
+${
+  fix.relatedErrors && fix.relatedErrors.length > 0
+    ? `## Related Errors
 
 ${fix.relatedErrors.map(errId => `- ${errId}`).join('\n')}
-` : ''}
+`
+    : ''
+}
 `;
 }
 

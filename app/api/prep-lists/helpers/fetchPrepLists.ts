@@ -2,12 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { PostgrestError } from '@supabase/supabase-js';
-import {
-    FetchPrepListsParams,
-    KitchenSection,
-    PrepList,
-    PrepListItem,
-} from '../types';
+import { FetchPrepListsParams, KitchenSection, PrepList, PrepListItem } from '../types';
 import { buildItemsByPrepListIdMap, buildSectionsMap } from './buildMaps';
 import { combinePrepListData } from './combinePrepListData';
 import { fetchIngredientsBatch } from './fetchIngredientsBatch';
@@ -99,9 +94,9 @@ export async function fetchRelatedData(prepLists: PrepList[]) {
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
-  const prepListIds = prepLists.map((list) => list.id);
+  const prepListIds = prepLists.map(list => list.id);
   const sectionIds = prepLists
-    .map((list) => list.kitchen_section_id || list.section_id)
+    .map(list => list.kitchen_section_id || list.section_id)
     .filter((id): id is string => Boolean(id));
 
   // Step 2: Fetch all related data in parallel

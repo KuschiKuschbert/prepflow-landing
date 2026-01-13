@@ -22,7 +22,7 @@ const recipeSchema = z.object({
 
 const ingredientSchema = z.object({
   ingredient_id: z.string().min(1, 'Ingredient ID is required'),
-  quantity: z.union([z.number(), z.string()]).transform((val) => Number(val)),
+  quantity: z.union([z.number(), z.string()]).transform(val => Number(val)),
   unit: z.string().min(1, 'Unit is required'),
 });
 

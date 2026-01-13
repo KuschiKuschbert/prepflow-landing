@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 interface Dish {
   id: string;
   dish_name?: string; // from 'dishes' table
-  name?: string;      // from 'menu_dishes' table
+  name?: string; // from 'menu_dishes' table
   description: string | null;
   selling_price: number;
   category: string | null;
@@ -102,7 +102,7 @@ export async function GET(request: NextRequest) {
 
     // Fetch dish_sections junction table to map dishes to sections
     // This table might not exist, so handle errors gracefully
-    const dishIds = (dishes || []).map((d) => d.id);
+    const dishIds = (dishes || []).map(d => d.id);
     let dishSections: DishSection[] = [];
     if (dishIds.length > 0) {
       try {
@@ -131,14 +131,14 @@ export async function GET(request: NextRequest) {
 
     // Create a map of dish_id -> section_id
     const dishSectionMap = new Map<string, string>();
-    dishSections.forEach((ds) => {
+    dishSections.forEach(ds => {
       dishSectionMap.set(ds.dish_id, ds.section_id);
     });
 
     // Map dishes with their section IDs
-    const dishesWithSections: OutputDish[] = (dishes || []).map((dish) => ({
+    const dishesWithSections: OutputDish[] = (dishes || []).map(dish => ({
       id: dish.id,
-      name: (dish.dish_name || dish.name) || 'Unknown Dish',
+      name: dish.dish_name || dish.name || 'Unknown Dish',
       description: dish.description,
       selling_price: dish.selling_price,
       category: dish.category || 'Uncategorized',

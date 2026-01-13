@@ -219,7 +219,12 @@ export function DishesListView({
               sortDirection={filters.sortDirection}
               isSelectionMode={isSelectionMode}
               capitalizeRecipeName={capitalizeRecipeName}
-              capitalizeDishName={(name: string) => name.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')}
+              capitalizeDishName={(name: string) =>
+                name
+                  .split(' ')
+                  .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                  .join(' ')
+              }
               onSelectAll={onSelectAll}
               onSelectItem={onSelectItem}
               onPreviewDish={onPreviewDish}

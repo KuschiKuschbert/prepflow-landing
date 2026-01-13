@@ -32,8 +32,8 @@ export class FrequencyAnalysisStrategy implements LearningStrategy {
         type: 'frequency',
         confidence: 0.85,
         insight: 'Replacing "any" with specific interfaces has 100% success rate in API routes.',
-        sourceFiles: []
-      }
+        sourceFiles: [],
+      },
     ];
   }
 }

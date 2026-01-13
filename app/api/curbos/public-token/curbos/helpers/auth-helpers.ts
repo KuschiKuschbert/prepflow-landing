@@ -30,10 +30,9 @@ export async function getTargetEmail(req: NextRequest): Promise<AuthResult> {
         if (isEmailInAllowlist || hasAdminRole) {
           targetEmail = user.email;
           isAdminBypass = true;
-          logger.dev(
-            '[API /curbos/public-token/curbos] Admin bypass granted via internal check:',
-            { email: targetEmail },
-          );
+          logger.dev('[API /curbos/public-token/curbos] Admin bypass granted via internal check:', {
+            email: targetEmail,
+          });
         }
       }
     } catch (adminError) {

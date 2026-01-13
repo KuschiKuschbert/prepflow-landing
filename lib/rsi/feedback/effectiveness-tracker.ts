@@ -25,7 +25,7 @@ export class EffectivenessTracker {
     const timestamp = new Date().toISOString();
     const newRecord: FeedbackRecord = {
       timestamp,
-      ...record
+      ...record,
     };
 
     try {

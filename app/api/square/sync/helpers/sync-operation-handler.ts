@@ -43,11 +43,7 @@ export async function handleSyncOperation(
           options?.locationId,
         );
       } else {
-        return await syncRecentOrdersFromSquare(
-          userId,
-          options?.days || 30,
-          options?.locationId,
-        );
+        return await syncRecentOrdersFromSquare(userId, options?.days || 30, options?.locationId);
       }
 
     case 'staff':

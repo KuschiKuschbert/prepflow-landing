@@ -207,7 +207,11 @@ export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeE
     setCalculations,
   ]);
   if (!recipe) return null;
-  const capitalizeRecipeName = (name: string) => name.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+  const capitalizeRecipeName = (name: string) =>
+    name
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
   return (
     <EditDrawer
       isOpen={isOpen}

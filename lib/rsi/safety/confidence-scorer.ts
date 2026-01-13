@@ -4,9 +4,9 @@
  */
 
 export enum ConfidenceLevel {
-  HIGH = 'HIGH',     // > 90%: Auto-apply
+  HIGH = 'HIGH', // > 90%: Auto-apply
   MEDIUM = 'MEDIUM', // 70-90%: Auto-apply with validation
-  LOW = 'LOW',       // < 70%: Create PR
+  LOW = 'LOW', // < 70%: Create PR
 }
 
 export interface ConfidenceScore {
@@ -27,7 +27,7 @@ export class ConfidenceScorer {
     changeType: string,
     complexity: number,
     coverage: number,
-    riskFactors: string[] = []
+    riskFactors: string[] = [],
   ): ConfidenceScore {
     let score = 1.0;
     const reasons: string[] = [];
@@ -48,11 +48,11 @@ export class ConfidenceScorer {
         reasons.push('Logic changes require validation');
         break;
       case 'optimization':
-        score = 0.70;
+        score = 0.7;
         reasons.push('Optimization carries regression risk');
         break;
       default:
-        score = 0.60;
+        score = 0.6;
         reasons.push('Unknown change type');
     }
 
@@ -70,7 +70,7 @@ export class ConfidenceScorer {
       score += 0.05;
       reasons.push('High test coverage bonus');
     } else if (coverage < 0.5) {
-      score -= 0.10;
+      score -= 0.1;
       reasons.push('Low test coverage penalty');
     }
 

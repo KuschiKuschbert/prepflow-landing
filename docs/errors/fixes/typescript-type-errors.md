@@ -13,6 +13,7 @@ Common TypeScript type errors and their fixes based on learned patterns from the
 **Solution:** Add proper type annotations or type assertions.
 
 **Example:**
+
 ```typescript
 // Before
 const value: string = someFunction(); // Error if someFunction returns number
@@ -32,6 +33,7 @@ const value: string = someFunction() as string; // Type assertion (use carefully
 **Solution:** Add property to type definition or use optional chaining.
 
 **Example:**
+
 ```typescript
 // Before
 interface User {
@@ -58,6 +60,7 @@ console.log(user.email?.toLowerCase()); // Optional chaining
 **Solution:** Import the missing dependency or define the variable.
 
 **Example:**
+
 ```typescript
 // Before
 const result = someFunction(); // Error: Cannot find name 'someFunction'

@@ -285,7 +285,9 @@ export function useNavigationItems(
   useEffect(() => {
     if (settings.enabled && settings.selectedSections && settings.selectedSections.length > 0) {
       const timeoutId = setTimeout(() => {
-        optimizeNavigationItems(itemsWithCategories, settings.selectedSections).then(setOptimizedItems).catch(() => setOptimizedItems(null));
+        optimizeNavigationItems(itemsWithCategories, settings.selectedSections)
+          .then(setOptimizedItems)
+          .catch(() => setOptimizedItems(null));
       }, 300);
 
       return () => clearTimeout(timeoutId);

@@ -5,7 +5,11 @@
 
 import fs from 'fs/promises';
 import path from 'path';
-import { loadKnowledgeBase, addPatternToKnowledgeBase, addRuleToKnowledgeBase } from './knowledge-base';
+import {
+  loadKnowledgeBase,
+  addPatternToKnowledgeBase,
+  addRuleToKnowledgeBase,
+} from './knowledge-base';
 import type { KnowledgeBasePattern, KnowledgeBaseRule } from './knowledge-base';
 
 const ERROR_PATTERNS_FILE = path.join(process.cwd(), '.cursor/rules/error-patterns.mdc');
@@ -24,24 +28,24 @@ function extractPattern(fixes: Array<{ solution: string; prevention: string }>):
   if (fixes.length < MIN_FIX_COUNT_FOR_RULE) {
     return null; // Not enough fixes to generate pattern
   }
-  
+
   // Extract common solution pattern
   const solutions = fixes.map(f => f.solution);
   const commonSolution = findCommonPattern(solutions);
-  
+
   // Extract common prevention pattern
   const preventions = fixes.map(f => f.prevention);
   const commonPrevention = findCommonPattern(preventions);
-  
+
   if (!commonSolution && !commonPrevention) {
     return null; // No clear pattern
   }
-  
+
   // Generate pattern name from solution
   const patternName = commonSolution
     ? commonSolution.substring(0, 60).replace(/[^a-zA-Z0-9\s]/g, '')
     : 'Unknown Pattern';
-  
+
   return {
     name: patternName,
     description: `Pattern learned from ${fixes.length} fixes`,
@@ -58,29 +62,29 @@ function findCommonPattern(strings: string[]): string | null {
   if (strings.length === 0) {
     return null;
   }
-  
+
   // Simple approach: find common words/phrases
   const allWords = strings
     .join(' ')
     .toLowerCase()
     .split(/\s+/)
     .filter(word => word.length > 3);
-  
+
   const wordCounts: Record<string, number> = {};
   for (const word of allWords) {
     wordCounts[word] = (wordCounts[word] || 0) + 1;
   }
-  
+
   // Find words that appear in at least 50% of strings
   const threshold = strings.length * 0.5;
   const commonWords = Object.entries(wordCounts)
     .filter(([_, count]) => count >= threshold)
     .map(([word]) => word);
-  
+
   if (commonWords.length === 0) {
     return null;
   }
-  
+
   // Return first common phrase (can be enhanced)
   return commonWords[0];
 }
@@ -100,10 +104,13 @@ function generateRule(pattern: KnowledgeBasePattern): KnowledgeBaseRule {
 /**
  * Update error-patterns.mdc with new pattern
  */
-async function updateErrorPatternsFile(pattern: KnowledgeBasePattern, rule: KnowledgeBaseRule): Promise<void> {
+async function updateErrorPatternsFile(
+  pattern: KnowledgeBasePattern,
+  rule: KnowledgeBaseRule,
+): Promise<void> {
   const patternsDir = path.dirname(ERROR_PATTERNS_FILE);
   await fs.mkdir(patternsDir, { recursive: true });
-  
+
   // Check if file exists
   let content = '';
   try {
@@ -142,7 +149,7 @@ ${pattern.prevention}
 
 `;
   }
-  
+
   // Add new pattern before the last section (before "## Updating This File")
   const updateSection = `## ${pattern.name}
 
@@ -163,7 +170,7 @@ ${pattern.fix}
 ${pattern.prevention}
 
 `;
-  
+
   // Insert before "## Updating This File" section
   const updateMarker = '## Updating This File';
   if (content.includes(updateMarker)) {
@@ -172,7 +179,7 @@ ${pattern.prevention}
     // Append to end
     content += '\n' + updateSection;
   }
-  
+
   await fs.writeFile(ERROR_PATTERNS_FILE, content, 'utf8');
 }
 
@@ -186,10 +193,10 @@ export async function generateRulesFromKnowledgeBase(): Promise<{
   const kb = await loadKnowledgeBase();
   const newPatterns: KnowledgeBasePattern[] = [];
   const newRules: KnowledgeBaseRule[] = [];
-  
+
   // Group errors by pattern
   const errorGroups: Record<string, typeof kb.errors> = {};
-  
+
   for (const error of kb.errors) {
     const patternKey = `${error.errorType}-${error.category}`;
     if (!errorGroups[patternKey]) {
@@ -197,45 +204,47 @@ export async function generateRulesFromKnowledgeBase(): Promise<{
     }
     errorGroups[patternKey].push(error);
   }
-  
+
   // Generate patterns from error groups with multiple fixes
   for (const [patternKey, errors] of Object.entries(errorGroups)) {
     // Collect all fixes for this pattern
-    const allFixes = errors.flatMap(err => err.fixes.map(fix => ({
-      solution: fix.solution,
-      prevention: fix.prevention,
-    })));
-    
+    const allFixes = errors.flatMap(err =>
+      err.fixes.map(fix => ({
+        solution: fix.solution,
+        prevention: fix.prevention,
+      })),
+    );
+
     if (allFixes.length >= MIN_FIX_COUNT_FOR_RULE) {
       // Check if pattern already exists
       const existingPattern = kb.patterns.find(p => p.id === patternKey);
-      
+
       if (!existingPattern) {
         // Extract pattern
         const patternData = extractPattern(allFixes);
-        
+
         if (patternData) {
           const pattern: KnowledgeBasePattern = {
             id: patternKey,
             ...patternData,
           };
-          
+
           // Add to knowledge base
           await addPatternToKnowledgeBase(pattern);
           newPatterns.push(pattern);
-          
+
           // Generate rule
           const rule = generateRule(pattern);
           await addRuleToKnowledgeBase(rule);
           newRules.push(rule);
-          
+
           // Update error-patterns.mdc
           await updateErrorPatternsFile(pattern, rule);
         }
       }
     }
   }
-  
+
   return { patterns: newPatterns, rules: newRules };
 }
 
@@ -248,7 +257,7 @@ export async function generateRulesFromRecentFixes(days = 7): Promise<{
 }> {
   const kb = await loadKnowledgeBase();
   const cutoffDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
-  
+
   // Get recent fixes
   const recentFixes = kb.errors.flatMap(err =>
     err.fixes
@@ -260,10 +269,10 @@ export async function generateRulesFromRecentFixes(days = 7): Promise<{
         prevention: fix.prevention,
       })),
   );
-  
+
   // Group by error type and category
   const fixGroups: Record<string, typeof recentFixes> = {};
-  
+
   for (const fix of recentFixes) {
     const key = `${fix.errorType}-${fix.category}`;
     if (!fixGroups[key]) {
@@ -271,32 +280,34 @@ export async function generateRulesFromRecentFixes(days = 7): Promise<{
     }
     fixGroups[key].push(fix);
   }
-  
+
   const newPatterns: KnowledgeBasePattern[] = [];
   const newRules: KnowledgeBaseRule[] = [];
-  
+
   // Generate patterns for groups with enough fixes
   for (const [key, fixes] of Object.entries(fixGroups)) {
     if (fixes.length >= MIN_FIX_COUNT_FOR_RULE) {
-      const patternData = extractPattern(fixes.map(f => ({ solution: f.solution, prevention: f.prevention })));
-      
+      const patternData = extractPattern(
+        fixes.map(f => ({ solution: f.solution, prevention: f.prevention })),
+      );
+
       if (patternData) {
         const pattern: KnowledgeBasePattern = {
           id: key,
           ...patternData,
         };
-        
+
         await addPatternToKnowledgeBase(pattern);
         newPatterns.push(pattern);
-        
+
         const rule = generateRule(pattern);
         await addRuleToKnowledgeBase(rule);
         newRules.push(rule);
-        
+
         await updateErrorPatternsFile(pattern, rule);
       }
     }
   }
-  
+
   return { patterns: newPatterns, rules: newRules };
 }

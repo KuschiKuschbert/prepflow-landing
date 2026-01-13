@@ -11,8 +11,12 @@ interface StopHandlerParams {
   showError: (message: string) => void;
 }
 
-export function createStopHandler({ setComprehensiveStatus, setStatusPolling, showSuccess, showError }: StopHandlerParams) {
-
+export function createStopHandler({
+  setComprehensiveStatus,
+  setStatusPolling,
+  showSuccess,
+  showError,
+}: StopHandlerParams) {
   return async () => {
     try {
       showSuccess('Pausing scraper... (progress will be saved)');

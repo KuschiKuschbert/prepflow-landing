@@ -31,7 +31,7 @@ export async function suggestFixes(
   },
 ): Promise<FixSuggestion[]> {
   const suggestions = await getFixSuggestions(errorMessage, errorContext);
-  
+
   return suggestions.map(suggestion => ({
     error: suggestion.error,
     fix: suggestion.fix,
@@ -60,9 +60,13 @@ Reason: ${suggestion.reason}
 Solution:
 ${suggestion.fix.solution}
 
-${suggestion.codeExample ? `Code Example:
+${
+  suggestion.codeExample
+    ? `Code Example:
 ${suggestion.codeExample}
-` : ''}
+`
+    : ''
+}
 
 Prevention Strategies:
 ${suggestion.preventionStrategies.map((strategy, index) => `${index + 1}. ${strategy}`).join('\n')}

@@ -105,7 +105,7 @@ export interface DishSectionData {
 }
 
 export interface DishRecipeData {
-    recipe_id: string;
-    quantity: number;
-    recipe: DBRecipe | null;
+  recipe_id: string;
+  quantity: number;
+  recipe: DBRecipe | null;
 }

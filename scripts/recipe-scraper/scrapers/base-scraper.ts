@@ -9,10 +9,10 @@ import { normalizeRecipe } from '../parsers/recipe-normalizer';
 import { validateRecipe } from '../parsers/schema-validator';
 import { ScrapedRecipe, ScraperConfig, ScrapeResult } from '../parsers/types';
 import {
-    categorizeError,
-    getRetryDelay,
-    logErrorCategory,
-    shouldSkipPermanently
+  categorizeError,
+  getRetryDelay,
+  logErrorCategory,
+  shouldSkipPermanently,
 } from '../utils/error-categorizer';
 import { scraperLogger } from '../utils/logger';
 import { RateLimiter } from '../utils/rate-limiter';

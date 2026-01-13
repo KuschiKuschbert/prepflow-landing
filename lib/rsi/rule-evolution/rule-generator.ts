@@ -20,15 +20,15 @@ export class RuleGenerator {
     // Rule: Warn on 'any' usage in that context.
 
     if (insight.insight.includes('Replacing "any"')) {
-        return {
-            id: `rule-no-any-${Date.now()}`,
-            name: 'No Explicit Any in API',
-            description: 'Avoid using "any" type in API routes; use specific interfaces.',
-            type: 'regex',
-            definition: ': \\s*any\\b', // Simple regex to find ': any'
-            severity: 'warning',
-            generatedFrom: insight.patternId
-        };
+      return {
+        id: `rule-no-any-${Date.now()}`,
+        name: 'No Explicit Any in API',
+        description: 'Avoid using "any" type in API routes; use specific interfaces.',
+        type: 'regex',
+        definition: ': \\s*any\\b', // Simple regex to find ': any'
+        severity: 'warning',
+        generatedFrom: insight.patternId,
+      };
     }
 
     return null;

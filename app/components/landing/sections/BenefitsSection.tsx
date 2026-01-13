@@ -3,12 +3,12 @@
 import { GlowCard } from '@/components/ui/GlowCard';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import {
-    LANDING_COLORS,
-    LANDING_LAYOUT,
-    LANDING_TYPOGRAPHY,
-    getGlowColor,
-    getSectionClasses,
-    getStaggerDelay
+  LANDING_COLORS,
+  LANDING_LAYOUT,
+  LANDING_TYPOGRAPHY,
+  getGlowColor,
+  getSectionClasses,
+  getStaggerDelay,
 } from '@/lib/landing-styles';
 import { useTranslation } from '../../../../lib/useTranslation';
 

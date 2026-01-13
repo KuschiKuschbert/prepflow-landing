@@ -52,7 +52,7 @@ export async function mergeDishRecipeIngredients(
       if (
         !recipeIngredientsMap
           .get(recipeId)!
-          .some((existing) => existing.ingredient_id === recipeIngredient.ingredient_id)
+          .some(existing => existing.ingredient_id === recipeIngredient.ingredient_id)
       ) {
         recipeIngredientsMap.get(recipeId)!.push(recipeIngredient);
       }

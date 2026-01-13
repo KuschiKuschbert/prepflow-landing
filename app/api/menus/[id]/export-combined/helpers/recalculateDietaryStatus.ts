@@ -3,8 +3,8 @@
  */
 
 import {
-    aggregateDishDietaryStatus,
-    aggregateRecipeDietaryStatus,
+  aggregateDishDietaryStatus,
+  aggregateRecipeDietaryStatus,
 } from '@/lib/dietary/dietary-aggregation';
 import { logger } from '@/lib/logger';
 import { EnrichedMenuItem } from '../../../types';
