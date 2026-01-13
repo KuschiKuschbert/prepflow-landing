@@ -3,10 +3,9 @@
  * Handles admin role checking and authorization for admin panel access.
  */
 
-import { auth0 } from './auth0';
-import { isAdmin } from './admin-utils';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { AuthUser, isAdmin } from './admin-utils';
 
 export type AdminRole = 'admin' | 'super_admin';
 
@@ -16,16 +15,17 @@ export interface AdminUser {
   role: AdminRole;
 }
 
-// Re-export isAdmin for backward compatibility
+// Re-export isAdmin and AuthUser for backward compatibility
 export { isAdmin };
+export type { AuthUser };
 
 /**
  * Get admin role level from user object.
  *
- * @param {any} user - User object from session or token
+ * @param {AuthUser} user - User object from session or token
  * @returns {AdminRole | null} Admin role level or null if not admin
  */
-export function getAdminRole(user: any): AdminRole | null {
+export function getAdminRole(user: AuthUser): AdminRole | null {
   if (!isAdmin(user)) return null;
 
   const roles = user.roles || user['https://prepflow.org/roles'] || [];
