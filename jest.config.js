@@ -12,6 +12,7 @@ const customJestConfig = {
     '^@/(.*)$': '<rootDir>/$1',
   },
   testMatch: ['**/?(*.)+(test|spec).[tj]s?(x)'],
+  testPathIgnorePatterns: ['<rootDir>/e2e/'],
 };
 
 module.exports = createJestConfig(customJestConfig);
