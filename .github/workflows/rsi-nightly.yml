@@ -3,7 +3,7 @@ name: RSI Nightly Improvement
 on:
   schedule:
     # Run at 03:00 UTC every day
-    - cron: '0 3 * * *'
+    - cron: '0 15 * * *'
   # Allow manual trigger from GitHub UI
   workflow_dispatch:
 
