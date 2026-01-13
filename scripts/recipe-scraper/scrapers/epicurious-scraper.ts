@@ -4,10 +4,10 @@
  */
 
 import * as cheerio from 'cheerio';
-import { BaseScraper } from './base-scraper';
-import { ScrapedRecipe, RecipeIngredient } from '../parsers/types';
+import { RecipeIngredient, ScrapedRecipe } from '../parsers/types';
 import { scraperLogger } from '../utils/logger';
 import { SitemapParser } from '../utils/sitemap-parser';
+import { BaseScraper } from './base-scraper';
 
 export class EpicuriousScraper extends BaseScraper {
   constructor(config?: Partial<import('../parsers/types').ScraperConfig>) {
@@ -400,5 +400,108 @@ export class EpicuriousScraper extends BaseScraper {
       scraperLogger.error('Error in pagination crawling for Epicurious:', error);
       return urls;
     }
+  }
+
+  /**
+   * Get ALL recipe URLs with ratings from listing pages (optimized pre-filtering)
+   * Epicurious shows star ratings on recipe cards on category/search pages.
+   */
+  async getAllRecipeUrlsWithRatings(): Promise<import('../parsers/types').RecipeUrlWithRating[]> {
+    const urlsWithRatings: import('../parsers/types').RecipeUrlWithRating[] = [];
+    const visited = new Set<string>();
+
+    scraperLogger.info('[Epicurious] Starting optimized URL discovery with rating extraction...');
+
+    // Crawl category pages that show ratings on cards
+    const categoryUrls = [
+      'https://www.epicurious.com/recipes-menus',
+      'https://www.epicurious.com/recipes-menus/quick-and-easy-recipes-gallery',
+      'https://www.epicurious.com/recipes-menus/most-popular-gallery',
+      'https://www.epicurious.com/recipes-menus/dinner-recipes-gallery',
+      'https://www.epicurious.com/recipes-menus/easy-dinner-ideas-gallery',
+    ];
+
+    for (const categoryUrl of categoryUrls) {
+      try {
+        let currentPage = 1;
+        let hasMorePages = true;
+
+        while (hasMorePages && currentPage <= 15) { // Limit pages for speed
+          const pageUrl = currentPage === 1 ? categoryUrl : `${categoryUrl}?page=${currentPage}`;
+          const html = await this.fetchPage(pageUrl);
+          const $ = cheerio.load(html);
+
+          // Find recipe cards with ratings
+          const cards = $('a[href*="/recipes/food/views/"]').closest('[class*="card"], article, .recipe-card, .summary-item');
+
+          if (cards.length === 0) {
+            hasMorePages = false;
+            continue;
+          }
+
+          cards.each((_, card) => {
+            const $card = $(card);
+            const link = $card.find('a[href*="/recipes/food/views/"]').first().attr('href') ||
+                         $card.attr('href');
+
+            if (!link) return;
+
+            // Normalize URL
+            let normalizedUrl = link;
+            if (!link.startsWith('http')) {
+              normalizedUrl = `https://www.epicurious.com${link.startsWith('/') ? '' : '/'}${link}`;
+            }
+            normalizedUrl = normalizedUrl.split('?')[0].split('#')[0];
+
+            if (!normalizedUrl.includes('/recipes/food/views/') || visited.has(normalizedUrl)) return;
+
+            // Extract rating from card
+            let rating: number | undefined;
+
+            // Epicurious uses various rating display formats
+            const ratingSelectors = [
+              '[class*="rating"] span',
+              '.rating',
+              '[data-rating]',
+              '.review-rating',
+            ];
+
+            for (const selector of ratingSelectors) {
+              const ratingEl = $card.find(selector).first();
+              if (ratingEl.length) {
+                const dataRating = ratingEl.attr('data-rating');
+                if (dataRating) {
+                  rating = parseFloat(dataRating);
+                  break;
+                }
+
+                const ratingText = ratingEl.text().trim();
+                const ratingMatch = ratingText.match(/(\d+\.?\d*)/);
+                if (ratingMatch) {
+                  rating = parseFloat(ratingMatch[1]);
+                  break;
+                }
+              }
+            }
+
+            visited.add(normalizedUrl);
+            urlsWithRatings.push({
+              url: normalizedUrl,
+              rating,
+            });
+          });
+
+          scraperLogger.debug(`[Epicurious] Page ${currentPage}: found ${urlsWithRatings.length} URLs with ratings`);
+          currentPage++;
+        }
+      } catch (error) {
+        scraperLogger.warn(`[Epicurious] Failed to fetch category ${categoryUrl}:`, error);
+      }
+    }
+
+    const withRatings = urlsWithRatings.filter(u => u.rating !== undefined).length;
+    scraperLogger.info(`[Epicurious] Discovered ${urlsWithRatings.length} URLs (${withRatings} with ratings)`);
+
+    return urlsWithRatings;
   }
 }

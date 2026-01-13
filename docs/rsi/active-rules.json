@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "rule-no-any-1768264370324",
+    "name": "No Explicit Any in API",
+    "description": "Avoid using \"any\" type in API routes; use specific interfaces.",
+    "type": "regex",
+    "definition": ": \\s*any\\b",
+    "severity": "warning",
+    "generatedFrom": "fix-any-types"
+  }
+]

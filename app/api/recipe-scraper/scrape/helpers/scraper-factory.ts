@@ -2,18 +2,19 @@
  * Scraper factory for creating scraper instances
  */
 
+import { SOURCES, SourceType } from '../../../../../scripts/recipe-scraper/config';
 import { AllRecipesScraper } from '../../../../../scripts/recipe-scraper/scrapers/allrecipes-scraper';
-import { FoodNetworkScraper } from '../../../../../scripts/recipe-scraper/scrapers/food-network-scraper';
-import { EpicuriousScraper } from '../../../../../scripts/recipe-scraper/scrapers/epicurious-scraper';
 import { BonAppetitScraper } from '../../../../../scripts/recipe-scraper/scrapers/bon-appetit-scraper';
-import { TastyScraper } from '../../../../../scripts/recipe-scraper/scrapers/tasty-scraper';
-import { SeriousEatsScraper } from '../../../../../scripts/recipe-scraper/scrapers/serious-eats-scraper';
+import { DelishScraper } from '../../../../../scripts/recipe-scraper/scrapers/delish-scraper';
+import { EpicuriousScraper } from '../../../../../scripts/recipe-scraper/scrapers/epicurious-scraper';
+import { FoodAndWineScraper } from '../../../../../scripts/recipe-scraper/scrapers/food-and-wine-scraper';
+import { FoodNetworkScraper } from '../../../../../scripts/recipe-scraper/scrapers/food-network-scraper';
 import { Food52Scraper } from '../../../../../scripts/recipe-scraper/scrapers/food52-scraper';
+import { SeriousEatsScraper } from '../../../../../scripts/recipe-scraper/scrapers/serious-eats-scraper';
 import { SimplyRecipesScraper } from '../../../../../scripts/recipe-scraper/scrapers/simply-recipes-scraper';
 import { SmittenKitchenScraper } from '../../../../../scripts/recipe-scraper/scrapers/smitten-kitchen-scraper';
+import { TastyScraper } from '../../../../../scripts/recipe-scraper/scrapers/tasty-scraper';
 import { TheKitchnScraper } from '../../../../../scripts/recipe-scraper/scrapers/the-kitchn-scraper';
-import { DelishScraper } from '../../../../../scripts/recipe-scraper/scrapers/delish-scraper';
-import { SOURCES, SourceType } from '../../../../../scripts/recipe-scraper/config';
 
 export type ScraperInstance =
   | AllRecipesScraper
@@ -26,7 +27,8 @@ export type ScraperInstance =
   | SimplyRecipesScraper
   | SmittenKitchenScraper
   | TheKitchnScraper
-  | DelishScraper;
+  | DelishScraper
+  | FoodAndWineScraper;
 
 /**
  * Create scraper instance for source
@@ -59,6 +61,8 @@ export function createScraper(source: SourceType): ScraperInstance {
       return new TheKitchnScraper();
     case SOURCES.DELISH:
       return new DelishScraper();
+    case SOURCES.FOOD_AND_WINE:
+      return new FoodAndWineScraper();
     default:
       throw new Error(`Unknown source: ${source}`);
   }

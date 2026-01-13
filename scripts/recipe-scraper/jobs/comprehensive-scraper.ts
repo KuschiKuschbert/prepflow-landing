@@ -6,19 +6,20 @@
 import { logger } from '@/lib/logger';
 import * as fs from 'fs';
 import * as path from 'path';
-import { SOURCES, SourceType, STORAGE_PATH } from '../config';
+import { RATING_CONFIG, SOURCES, SourceType, STORAGE_PATH } from '../config';
 import { AllRecipesScraper } from '../scrapers/allrecipes-scraper';
 // import { BBCGoodFoodScraper } from '../scrapers/bbc-good-food-scraper'; // REMOVED - Terms of Service violation
-import { FoodNetworkScraper } from '../scrapers/food-network-scraper';
-import { EpicuriousScraper } from '../scrapers/epicurious-scraper';
 import { BonAppetitScraper } from '../scrapers/bon-appetit-scraper';
-import { TastyScraper } from '../scrapers/tasty-scraper';
-import { SeriousEatsScraper } from '../scrapers/serious-eats-scraper';
+import { DelishScraper } from '../scrapers/delish-scraper';
+import { EpicuriousScraper } from '../scrapers/epicurious-scraper';
+import { FoodAndWineScraper } from '../scrapers/food-and-wine-scraper';
+import { FoodNetworkScraper } from '../scrapers/food-network-scraper';
 import { Food52Scraper } from '../scrapers/food52-scraper';
+import { SeriousEatsScraper } from '../scrapers/serious-eats-scraper';
 import { SimplyRecipesScraper } from '../scrapers/simply-recipes-scraper';
 import { SmittenKitchenScraper } from '../scrapers/smitten-kitchen-scraper';
+import { TastyScraper } from '../scrapers/tasty-scraper';
 import { TheKitchnScraper } from '../scrapers/the-kitchn-scraper';
-import { DelishScraper } from '../scrapers/delish-scraper';
 import { JSONStorage } from '../storage/json-storage';
 import { getRetryDelay, isRetryableError, shouldSkipPermanently } from '../utils/error-categorizer';
 import { scraperLogger } from '../utils/logger';
@@ -89,11 +90,12 @@ export class ComprehensiveScraperJob {
       SOURCES.BON_APPETIT,
       SOURCES.TASTY,
       SOURCES.SERIOUS_EATS,
-      SOURCES.FOOD52,
+      // SOURCES.FOOD52, // DISABLED - Aggressive rate limiting (429 errors)
       SOURCES.SIMPLY_RECIPES,
       SOURCES.SMITTEN_KITCHEN,
-      SOURCES.THE_KITCHN,
+      // SOURCES.THE_KITCHN, // DISABLED - CDN blocks automated requests (403 errors)
       SOURCES.DELISH,
+      SOURCES.FOOD_AND_WINE,
     ],
   ): Promise<void> {
     if (this.isRunning) {
@@ -117,7 +119,14 @@ export class ComprehensiveScraperJob {
       // Each source has its own rate limiting and progress tracking
       const sourcePromises = sources.map(async source => {
         try {
-          await this.processSource(source);
+          // OPTIMIZATION: Check for existing progress to avoid re-discovering URLs
+          const existingProgress = this.progressTracker.loadProgress(source);
+          if (existingProgress && !this.progressTracker.isComplete(existingProgress)) {
+            scraperLogger.info(`Found existing progress for ${source}, resuming instead of re-discovering`);
+            await this.processSource(source, existingProgress);
+          } else {
+            await this.processSource(source);
+          }
           scraperLogger.info(`✅ Completed scraping for ${source}`);
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : String(error);
@@ -239,11 +248,12 @@ export class ComprehensiveScraperJob {
         SOURCES.BON_APPETIT,
         SOURCES.TASTY,
         SOURCES.SERIOUS_EATS,
-        SOURCES.FOOD52,
+        // SOURCES.FOOD52, // DISABLED - Aggressive rate limiting (429 errors)
         SOURCES.SIMPLY_RECIPES,
         SOURCES.SMITTEN_KITCHEN,
-        SOURCES.THE_KITCHN,
+        // SOURCES.THE_KITCHN, // DISABLED - CDN blocks automated requests (403 errors)
         SOURCES.DELISH,
+        SOURCES.FOOD_AND_WINE,
       ];
 
       // Process all sources in parallel (best practice for speed)
@@ -330,7 +340,7 @@ export class ComprehensiveScraperJob {
       | SmittenKitchenScraper
       | TheKitchnScraper
       | DelishScraper
-      | TastyScraper,
+      | FoodAndWineScraper,
   ): Promise<void> {
     // Process URLs with concurrency limit using a simple queue pattern
     const processUrl = async (url: string): Promise<void> => {
@@ -472,11 +482,39 @@ export class ComprehensiveScraperJob {
         return;
       }
 
-      // Discover all URLs
-      scraperLogger.info(`Discovering all recipe URLs for ${source}...`);
+      // Discover all URLs WITH RATINGS (optimized pre-filtering)
+      scraperLogger.info(`Discovering all recipe URLs for ${source} (with ratings for pre-filtering)...`);
       let discoveredUrls: string[];
       try {
-        discoveredUrls = await scraper.getAllRecipeUrls();
+        // Use optimized method that extracts ratings from listing pages
+        const urlsWithRatings = await scraper.getAllRecipeUrlsWithRatings();
+
+        // Pre-filter by rating BEFORE downloading full pages (huge efficiency gain)
+        const sourceConfig = RATING_CONFIG.SOURCE_CONFIG[source as keyof typeof RATING_CONFIG.SOURCE_CONFIG];
+        const minRating = sourceConfig?.minRating ?? RATING_CONFIG.DEFAULT_MIN_RATING;
+        const includeUnrated = sourceConfig?.includeUnrated ?? RATING_CONFIG.DEFAULT_INCLUDE_UNRATED;
+
+        let filteredCount = 0;
+        discoveredUrls = urlsWithRatings
+          .filter(item => {
+            // If we have a rating from listing page, pre-filter
+            if (item.rating !== undefined) {
+              if (item.rating < minRating) {
+                filteredCount++;
+                return false; // Skip low-rated
+              }
+              return true;
+            }
+            // No rating from listing page - include if unrated allowed
+            return includeUnrated;
+          })
+          .map(item => item.url);
+
+        if (filteredCount > 0) {
+          scraperLogger.info(
+            `🎯 Pre-filtered ${filteredCount} low-rated URLs for ${source} (${urlsWithRatings.length} total → ${discoveredUrls.length} after filter)`
+          );
+        }
       } catch (error) {
         // If it's a stop error, handle it gracefully
         if (error instanceof Error && error.message === 'Scraping stopped by user') {
@@ -645,7 +683,8 @@ export class ComprehensiveScraperJob {
       | SimplyRecipesScraper
       | SmittenKitchenScraper
       | TheKitchnScraper
-      | DelishScraper,
+      | DelishScraper
+      | FoodAndWineScraper,
   ): Promise<void> {
     const queue = this.retryQueues.get(source);
     if (!queue || queue.length === 0) {
@@ -816,11 +855,12 @@ export class ComprehensiveScraperJob {
       SOURCES.BON_APPETIT,
       SOURCES.TASTY,
       SOURCES.SERIOUS_EATS,
-      SOURCES.FOOD52,
+      // SOURCES.FOOD52, // DISABLED - Aggressive rate limiting (429 errors)
       SOURCES.SIMPLY_RECIPES,
       SOURCES.SMITTEN_KITCHEN,
-      SOURCES.THE_KITCHN,
+      // SOURCES.THE_KITCHN, // DISABLED - CDN blocks automated requests (403 errors)
       SOURCES.DELISH,
+      SOURCES.FOOD_AND_WINE,
     ];
 
     // Check if scraper is actually running by checking for recent progress updates
@@ -943,7 +983,8 @@ export class ComprehensiveScraperJob {
     | SimplyRecipesScraper
     | SmittenKitchenScraper
     | TheKitchnScraper
-    | DelishScraper {
+    | DelishScraper
+    | FoodAndWineScraper {
     switch (source) {
       case SOURCES.ALLRECIPES:
         return new AllRecipesScraper();
@@ -971,6 +1012,8 @@ export class ComprehensiveScraperJob {
         return new TheKitchnScraper();
       case SOURCES.DELISH:
         return new DelishScraper();
+      case SOURCES.FOOD_AND_WINE:
+        return new FoodAndWineScraper();
       default:
         throw new Error(`Unknown source: ${source}`);
     }

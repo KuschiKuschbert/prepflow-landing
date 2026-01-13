@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "timestamp": "2026-01-13T00:32:50.112Z",
+    "insights": [
+      {
+        "patternId": "fix-any-types",
+        "type": "frequency",
+        "confidence": 0.85,
+        "insight": "Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
+        "sourceFiles": []
+      }
+    ],
+    "rulesGenerated": [
+      {
+        "id": "rule-1768264370112-124",
+        "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
+        "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
+        "derivedFrom": [
+          "fix-any-types"
+        ]
+      }
+    ]
+  }
+]
