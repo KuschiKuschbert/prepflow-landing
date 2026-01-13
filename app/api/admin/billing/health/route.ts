@@ -87,7 +87,10 @@ export async function GET(req: NextRequest) {
           }
         } catch (error) {
           // Narrow error type safely
-          const code = error && typeof error === 'object' && 'code' in error ? (error as { code: string }).code : undefined;
+          const code =
+            error && typeof error === 'object' && 'code' in error
+              ? (error as { code: string }).code
+              : undefined;
           const message = error instanceof Error ? error.message : 'Unknown error';
 
           if (code === 'resource_missing') {
