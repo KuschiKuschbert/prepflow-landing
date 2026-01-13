@@ -8,7 +8,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { enrichDishWithAllergens } from './helpers/enrichDishWithAllergens';
@@ -137,10 +136,9 @@ export async function DELETE(_req: NextRequest, context: { params: Promise<{ id:
     const { error } = await supabaseAdmin.from('dishes').delete().eq('id', dishId);
 
     if (error) {
-      const pgError = error as PostgrestError;
       logger.error('[Dishes API] Database error deleting dish:', {
-        error: pgError.message,
-        code: pgError.code,
+        error: error.message,
+        code: error.code,
         context: { endpoint: '/api/dishes/[id]', operation: 'DELETE', dishId },
       });
 

@@ -6,12 +6,12 @@ import { Dish, UpdateDishInput } from '@/types/dish';
 
 export interface DishChange {
   type: string;
-  details: any;
+  details: unknown;
 }
 
 export interface ChangeDetectionResult {
   changes: string[];
-  changeDetails: Record<string, any>;
+  changeDetails: Record<string, unknown>;
 }
 
 /**

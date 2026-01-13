@@ -83,15 +83,15 @@ export async function fetchDishIngredients(dishId: string): Promise<DishIngredie
           const ingredientsMap = new Map(ingredientsData.map(ing => [ing.id, ing]));
 
           // Manually join the data
-          dishIngredients = rawDishIngredients.map(di => {
-            const ingredient = ingredientsMap.get(di.ingredient_id);
+          dishIngredients = rawDishIngredients.map((di: Record<string, any>) => {
+            const ingredient = ingredientsMap.get(di.ingredient_id) as Record<string, any> | undefined;
             return {
               ...di,
               ingredients: ingredient
                 ? [
                     {
                       ...ingredient,
-                      supplier_name: ingredient.supplier || (ingredient as any).supplier_name,
+                      supplier_name: ingredient.supplier || (ingredient as Record<string, any>).supplier_name,
                     },
                   ]
                 : [],
@@ -101,7 +101,9 @@ export async function fetchDishIngredients(dishId: string): Promise<DishIngredie
           logger.dev('[Dishes API] Manually joined dish ingredients', {
             dishId,
             count: dishIngredients?.length || 0,
-            joinedCount: dishIngredients?.filter((di: any) => di.ingredients !== null).length || 0,
+            joinedCount: Array.isArray(dishIngredients)
+              ? dishIngredients.filter((di: any) => di.ingredients !== null).length
+              : 0,
           });
         }
       }
@@ -142,14 +144,15 @@ export async function fetchDishIngredients(dishId: string): Promise<DishIngredie
       .eq('dish_id', dishId);
 
     // Normalize the retry result to include category as null/undefined for type compatibility
-    dishIngredients = retryResult.data?.map((item: any) => ({
+    const retryData = (retryResult.data || []) as unknown as Record<string, any>[];
+    dishIngredients = retryData.map((item) => ({
       ...item,
       ingredients: Array.isArray(item.ingredients)
-        ? item.ingredients.map((ing: any) => ({ ...ing, category: null }))
+        ? item.ingredients.map((ing: Record<string, any>) => ({ ...ing, category: null }))
         : item.ingredients
           ? { ...item.ingredients, category: null }
           : null,
-    })) as any;
+    })) as unknown as typeof dishIngredients;
     ingredientsError = retryResult.error;
   }
 
@@ -165,17 +168,21 @@ export async function fetchDishIngredients(dishId: string): Promise<DishIngredie
 
   // Filter out dish_ingredients entries where the ingredients relation is null (deleted ingredients)
   // Also map 'supplier' to 'supplier_name' to match frontend types
-  const validDishIngredients = (dishIngredients || [])
+  const rawIngredients = (dishIngredients || []) as unknown as Record<string, any>[];
+  const validDishIngredients = rawIngredients
     .filter(di => di.ingredients !== null && di.ingredients !== undefined)
-    .map((di: any) => ({
-      ...di,
-      ingredients: di.ingredients
-        ? {
-            ...di.ingredients,
-            supplier_name: di.ingredients.supplier || di.ingredients.supplier_name,
-          }
-        : undefined,
-    })) as DishIngredient[];
+    .map((di) => {
+      const ingredient = Array.isArray(di.ingredients) ? di.ingredients[0] : di.ingredients;
+      return {
+        ...di,
+        ingredients: ingredient
+          ? {
+              ...ingredient,
+              supplier_name: ingredient.supplier || ingredient.supplier_name,
+            }
+          : undefined,
+      };
+    }) as unknown as DishIngredient[];
 
   // Log debug info
   const rawCount = dishIngredients?.length || 0;

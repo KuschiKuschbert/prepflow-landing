@@ -25,7 +25,7 @@ export async function updateDishIngredients(
   if (deleteError) {
     logger.error('[Dishes API] Database error deleting dish ingredients:', {
       error: deleteError.message,
-      code: (deleteError as any).code,
+      code: deleteError.code,
       context: { dishId, operation: 'updateDishIngredients' },
     });
     throw ApiErrorHandler.fromSupabaseError(deleteError, 500);
@@ -44,7 +44,7 @@ export async function updateDishIngredients(
     if (insertError) {
       logger.error('[Dishes API] Database error inserting dish ingredients:', {
         error: insertError.message,
-        code: (insertError as any).code,
+        code: insertError.code,
         context: { dishId, operation: 'updateDishIngredients' },
       });
       throw ApiErrorHandler.fromSupabaseError(insertError, 500);

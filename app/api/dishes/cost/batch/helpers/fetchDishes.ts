@@ -2,9 +2,9 @@
  * Helper to fetch dishes for batch cost calculation.
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
 /**
@@ -30,7 +30,7 @@ export async function fetchDishes(
   if (dishesError) {
     logger.error('[Dishes API] Database error fetching dishes for batch cost calculation:', {
       error: dishesError.message,
-      code: (dishesError as any).code,
+      code: dishesError.code,
       context: { endpoint: '/api/dishes/cost/batch', operation: 'POST' },
     });
 

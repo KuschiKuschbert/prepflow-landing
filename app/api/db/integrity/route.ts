@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     if (recipesError) {
       logger.error('[DB Integrity API] Database error fetching recipes:', {
         error: recipesError.message,
-        code: (recipesError as any).code,
+        code: recipesError.code,
         context: { endpoint: '/api/db/integrity', operation: 'GET' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(recipesError, 500), {
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
       if (countErr) {
         logger.error('[DB Integrity API] Database error fetching recipe ingredients:', {
           error: countErr.message,
-          code: (countErr as any).code,
+          code: countErr.code,
           context: { endpoint: '/api/db/integrity', operation: 'GET' },
         });
         return NextResponse.json(ApiErrorHandler.fromSupabaseError(countErr, 500), { status: 500 });
@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
     if (riErr) {
       logger.error('[DB Integrity API] Database error fetching recipe ingredient rows:', {
         error: riErr.message,
-        code: (riErr as any).code,
+        code: riErr.code,
         context: { endpoint: '/api/db/integrity', operation: 'GET' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(riErr, 500), { status: 500 });
@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
       if (ingErr) {
         logger.error('[DB Integrity API] Database error fetching ingredients:', {
           error: ingErr.message,
-          code: (ingErr as any).code,
+          code: ingErr.code,
           context: { endpoint: '/api/db/integrity', operation: 'GET' },
         });
         return NextResponse.json(ApiErrorHandler.fromSupabaseError(ingErr, 500), { status: 500 });

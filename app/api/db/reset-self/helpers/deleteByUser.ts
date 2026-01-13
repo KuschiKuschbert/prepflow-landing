@@ -1,5 +1,5 @@
-import { SupabaseClient } from '@supabase/supabase-js';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { isMissingTableError } from './isMissingTableError';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
@@ -39,7 +39,7 @@ export async function deleteByUser(
     if (error) {
       logger.error('[Reset Self API] Error counting rows for delete by user:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         table,
         userId,
       });
@@ -60,7 +60,7 @@ export async function deleteByUser(
   if (error) {
     logger.error('[Reset Self API] Error deleting rows by user:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       table,
       userId,
     });

@@ -5,8 +5,6 @@ import { supabaseAdmin } from '@/lib/supabase';
 /**
  * Update dish recipes by deleting existing and inserting new ones.
  *
- * @param {string} dishId - Dish ID
- * @param {Array} recipes - Array of recipe objects with recipe_id and optional quantity
  * @throws {Error} If database connection is not available or update fails
  */
 export async function updateDishRecipes(
@@ -23,7 +21,7 @@ export async function updateDishRecipes(
   if (deleteError) {
     logger.error('[Dishes API] Database error deleting dish recipes:', {
       error: deleteError.message,
-      code: (deleteError as any).code,
+      code: deleteError.code,
       context: { dishId, operation: 'updateDishRecipes' },
     });
     throw ApiErrorHandler.fromSupabaseError(deleteError, 500);
@@ -39,7 +37,7 @@ export async function updateDishRecipes(
     if (insertError) {
       logger.error('[Dishes API] Database error inserting dish recipes:', {
         error: insertError.message,
-        code: (insertError as any).code,
+        code: insertError.code,
         context: { dishId, operation: 'updateDishRecipes' },
       });
       throw ApiErrorHandler.fromSupabaseError(insertError, 500);

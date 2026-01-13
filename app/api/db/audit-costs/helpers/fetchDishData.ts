@@ -91,8 +91,9 @@ export async function fetchDishData(dishId: string): Promise<DishData | null> {
           recipeIds,
         });
       } else {
-        (recipesData || []).forEach((r: any) => {
-          recipeNamesMap[r.id] = r.recipe_name || 'Unknown';
+        (recipesData || []).forEach((r) => {
+          const recipe = r as Record<string, unknown>;
+          recipeNamesMap[recipe.id as string] = (recipe.recipe_name as string) || 'Unknown';
         });
       }
     }
@@ -121,7 +122,7 @@ export async function fetchDishData(dishId: string): Promise<DishData | null> {
       id: dishId,
       dish_name: dishData?.dish_name || 'Unknown',
       dish_recipes: dishRecipesWithNames,
-      dish_ingredients: (dishIngredientsData || []) as any,
+      dish_ingredients: (dishIngredientsData || []) as unknown as DishData['dish_ingredients'],
     };
   } catch (err) {
     logger.error('[Audit Costs] Error fetching dish data:', err);

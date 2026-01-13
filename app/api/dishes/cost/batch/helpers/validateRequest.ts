@@ -8,8 +8,8 @@ import { NextResponse } from 'next/server';
 /**
  * Validate request body contains dishIds array.
  */
-export function validateRequest(body: any): { dishIds: string[] } | { error: NextResponse } {
-  const { dishIds } = body;
+export function validateRequest(body: unknown): { dishIds: string[] } | { error: NextResponse } {
+  const { dishIds } = body as { dishIds: string[] };
 
   if (!Array.isArray(dishIds) || dishIds.length === 0) {
     return {

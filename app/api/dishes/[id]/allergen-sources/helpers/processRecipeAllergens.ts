@@ -2,10 +2,11 @@
  * Helper for processing recipe allergens for a dish
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
 import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
+import { supabaseAdmin } from '@/lib/supabase';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { RecipeRecord } from '../../../types';
 
 export interface AllergenSource {
   source_type: 'recipe' | 'ingredient';
@@ -58,7 +59,7 @@ export async function processRecipeAllergens(
     const { logger } = await import('@/lib/logger');
     logger.warn('[Process Recipe Allergens] Error fetching dish recipes:', {
       error: recipesError.message,
-      code: (recipesError as any).code,
+      code: recipesError.code,
       context: { dishId, operation: 'fetchDishRecipes' },
     });
     return;
@@ -69,12 +70,7 @@ export async function processRecipeAllergens(
   }
 
   dishRecipes.forEach(dr => {
-    const recipe = dr.recipes as unknown as {
-      id: string;
-      name?: string;
-      recipe_name?: string;
-      allergens?: string[];
-    } | null;
+    const recipe = dr.recipes as unknown as RecipeRecord | null;
 
     if (!recipe) return;
 

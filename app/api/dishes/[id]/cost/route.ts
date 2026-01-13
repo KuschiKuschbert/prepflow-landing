@@ -4,6 +4,7 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { calculateRecommendedPrice } from '../../helpers/calculateRecommendedPrice';
+import { IngredientRecord } from '../../types';
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -34,7 +35,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     if (dishError) {
       logger.error('[Dishes API] Database error fetching dish for cost calculation:', {
         error: dishError.message,
-        code: (dishError as any).code,
+        code: dishError.code,
         context: { endpoint: '/api/dishes/[id]/cost', operation: 'GET', dishId },
       });
 
@@ -60,7 +61,8 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         quantity,
         recipes (
           id,
-          name
+          name,
+          recipe_name
         )
       `,
       )
@@ -69,7 +71,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     if (dishRecipesError) {
       logger.error('[Dishes API] Error fetching dish recipes:', {
         dishId,
-        error: dishRecipesError,
+        error: dishRecipesError.message,
       });
       // Continue with calculation, just log the error
     }
@@ -78,7 +80,10 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       for (const dishRecipe of dishRecipes) {
         try {
           // Use calculateRecipeCost helper which applies waste/yield adjustments
-          const recipeQuantity = parseFloat(dishRecipe.quantity) || 1;
+          const recipeQuantity =
+            typeof dishRecipe.quantity === 'string'
+              ? parseFloat(dishRecipe.quantity)
+              : dishRecipe.quantity || 1;
           const recipeCost = await calculateRecipeCost(dishRecipe.recipe_id, recipeQuantity);
           totalCost += recipeCost;
         } catch (err) {
@@ -100,6 +105,8 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         quantity,
         unit,
         ingredients (
+          id,
+          ingredient_name,
           cost_per_unit,
           cost_per_unit_incl_trim,
           trim_peel_waste_percentage,
@@ -113,17 +120,19 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     if (dishIngredientsError) {
       logger.error('[Dishes API] Error fetching dish ingredients:', {
         dishId,
-        error: dishIngredientsError,
+        error: dishIngredientsError.message,
       });
       // Continue with calculation, just log the error
     }
 
     if (dishIngredients) {
       for (const di of dishIngredients) {
-        const ingredient = di.ingredients as any;
+        const ingredient = di.ingredients as unknown as IngredientRecord | null;
         if (ingredient) {
-          const costPerUnit = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
-          const quantity = parseFloat(di.quantity) || 0;
+          const costPerUnit =
+            ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
+          const quantity =
+            typeof di.quantity === 'string' ? parseFloat(di.quantity) : (di.quantity as number) || 0;
           const isConsumable = ingredient.category === 'Consumables';
 
           // For consumables: simple calculation (no waste/yield)
@@ -147,7 +156,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       }
     }
 
-    const sellingPrice = parseFloat(dish.selling_price) || 0;
+    const sellingPrice = (dish.selling_price as number) || 0;
     const grossProfit = sellingPrice - totalCost;
     const grossProfitMargin = sellingPrice > 0 ? (grossProfit / sellingPrice) * 100 : 0;
     const foodCostPercent = sellingPrice > 0 ? (totalCost / sellingPrice) * 100 : 0;

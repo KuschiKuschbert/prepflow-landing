@@ -2,52 +2,35 @@
  * Helper for populating empty dishes with ingredients
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
 import {
-  dishHasDirectIngredients,
-  getDefaultIngredientsForDish,
-  getIngredientsFromRecipes,
-  getIngredientName,
+    dishHasDirectIngredients,
+    getDefaultIngredientsForDish,
+    getIngredientName,
+    getIngredientsFromRecipes,
 } from '@/lib/populate-helpers/populate-empty-dishes-helpers';
+import { supabaseAdmin } from '@/lib/supabase';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-
-export interface PopulatedDish {
-  dish_id: string;
-  dish_name: string;
-  ingredients_added: number;
-  ingredient_names: string[];
-}
-
-export interface SkippedDish {
-  dish_id: string;
-  dish_name: string;
-  reason: string;
-}
-
-export interface DishError {
-  dish_id: string;
-  dish_name: string;
-  error: string;
-}
-
-export interface PopulateDishesResult {
-  populated: PopulatedDish[];
-  skipped: SkippedDish[];
-  errors: DishError[];
-}
+import type {
+    DishError,
+    DishRecord,
+    IngredientRecord,
+    PopulateDishesResult,
+    PopulatedDish,
+    SkippedDish,
+} from '../types';
 
 /**
  * Populates empty dishes with default ingredients
  *
- * @param {any[]} dishes - Array of dish objects
- * @param {any[]} ingredients - Array of available ingredients
+ * @param {DishRecord[]} dishes - Array of dish objects
+ * @param {IngredientRecord[]} ingredients - Array of available ingredients
  * @returns {Promise<PopulateDishesResult>} Result of population operation
  */
 export async function populateDishes(
-  dishes: any[],
-  ingredients: any[],
+  dishes: DishRecord[],
+  ingredients: IngredientRecord[],
 ): Promise<PopulateDishesResult> {
   const populated: PopulatedDish[] = [];
   const skipped: SkippedDish[] = [];

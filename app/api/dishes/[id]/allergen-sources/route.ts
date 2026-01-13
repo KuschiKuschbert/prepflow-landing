@@ -4,13 +4,13 @@
  * Returns which recipes/ingredients contribute which allergens to a dish
  */
 
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { processRecipeAllergens } from './helpers/processRecipeAllergens';
+import { NextRequest, NextResponse } from 'next/server';
 import { processIngredientAllergens } from './helpers/processIngredientAllergens';
 import type { AllergenSource } from './helpers/processRecipeAllergens';
+import { processRecipeAllergens } from './helpers/processRecipeAllergens';
 
 /**
  * Gets allergen sources for a dish (which recipes/ingredients contribute which allergens).
@@ -46,7 +46,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
       .single();
 
     if (dishError || !dish) {
-      const errorCode = (dishError as any).code;
+      const errorCode = dishError?.code;
       if (errorCode === '42P01') {
         return NextResponse.json(
           ApiErrorHandler.createError('Dishes table not found', 'NOT_FOUND', 404),

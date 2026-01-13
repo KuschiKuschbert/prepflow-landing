@@ -17,9 +17,9 @@ import { detectDishChanges } from './detectDishChanges';
 import { fetchDishWithRelations } from './fetchDishWithRelations';
 import { getUserEmail } from './getUserEmail';
 import {
-  invalidateAllergenCache,
-  invalidateMenuPricingCache,
-  trackChangeForLockedMenus,
+    invalidateAllergenCache,
+    invalidateMenuPricingCache,
+    trackChangeForLockedMenus,
 } from './invalidateDishCaches';
 import { updateIngredientsWithTracking, updateRecipesWithTracking } from './updateDishRelations';
 
@@ -105,7 +105,7 @@ export async function handlePutRequest(
             dishId,
             dishName,
             'recipes_changed',
-            changeDetails.recipes,
+            changeDetails.recipes as Record<string, unknown>,
             userEmail,
           );
         } catch (err) {
@@ -172,7 +172,7 @@ export async function handlePutRequest(
           dishId,
           dishName,
           'price_changed',
-          changeDetails.price,
+          changeDetails.price as Record<string, unknown>,
           userEmail,
         );
       } catch (err) {

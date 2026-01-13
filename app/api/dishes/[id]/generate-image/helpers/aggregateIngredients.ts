@@ -5,6 +5,7 @@
 
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { DishIngredient, DishRecipe } from '@/types/dish';
 import { fetchDishIngredients } from '../../helpers/fetchDishIngredients';
 import { fetchDishRecipes } from '../../helpers/fetchDishRecipes';
 
@@ -19,14 +20,14 @@ export async function aggregateDishIngredients(dishId: string): Promise<{
   recipeInstructions: string[];
 }> {
   // Fetch dish ingredients using helper function
-  let dishIngredients: any[] = [];
+  let dishIngredients: DishIngredient[] = [];
   try {
     dishIngredients = await fetchDishIngredients(dishId);
     logger.dev('[Dish Image Generation] Fetched dish ingredients:', {
       dishId,
       count: dishIngredients.length,
       ingredients: dishIngredients.map(di => ({
-        ingredientName: di.ingredients?.ingredient_name || di.ingredients?.name,
+        ingredientName: di.ingredient?.ingredient_name,
         quantity: di.quantity,
         unit: di.unit,
       })),
@@ -39,19 +40,19 @@ export async function aggregateDishIngredients(dishId: string): Promise<{
   }
 
   // Fetch dish recipes using helper function
-  let dishRecipes: any[] = [];
+  let dishRecipes: DishRecipe[] = [];
   let recipeInstructions: string[] = [];
   try {
     dishRecipes = await fetchDishRecipes(dishId);
     logger.dev('[Dish Image Generation] Fetched dish recipes:', {
       dishId,
       count: dishRecipes.length,
-      recipeIds: dishRecipes.map(dr => dr.recipe_id || dr.id),
+      recipeIds: dishRecipes.map(dr => dr.recipe_id),
     });
 
     // Collect instructions from all recipes
     dishRecipes.forEach(dr => {
-      const recipe = dr.recipes || dr;
+      const recipe = dr.recipe;
       if (recipe?.instructions && recipe.instructions.trim().length > 0) {
         recipeInstructions.push(recipe.instructions.trim());
       }
@@ -125,9 +126,9 @@ export async function aggregateDishIngredients(dishId: string): Promise<{
 
   // Add direct dish ingredients
   dishIngredients.forEach(di => {
-    const ingredient = di.ingredients;
-    if (ingredient && typeof ingredient === 'object' && ingredient !== null) {
-      const name = (ingredient as any).ingredient_name || (ingredient as any).name;
+    const ingredient = di.ingredient as Record<string, any> | undefined;
+    if (ingredient) {
+      const name = ingredient.ingredient_name || ingredient.name;
       if (name && typeof name === 'string') {
         ingredientNamesSet.add(name);
       }

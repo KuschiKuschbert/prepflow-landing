@@ -46,8 +46,8 @@ export async function enrichDishWithAllergens(dish: Dish, dishId: string): Promi
   }
 
   // Update dish cache with aggregated allergens if they differ
-  // Cast to any to access potentially existing allergens property not in basic Dish interface
-  const currentAllergens = (dish as any).allergens;
+  // Check for allergens safely
+  const currentAllergens = 'allergens' in dish ? (dish as EnrichedDish).allergens : undefined;
   if (
     allergens &&
     allergens.length > 0 &&

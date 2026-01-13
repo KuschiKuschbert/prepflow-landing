@@ -1,5 +1,5 @@
-import { SupabaseClient } from '@supabase/supabase-js';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { isMissingTableError } from './isMissingTableError';
 
 /**
@@ -31,12 +31,13 @@ export async function getUserTableIds(
   if (error) {
     logger.warn('[Reset Self API] Error fetching user table IDs (non-fatal):', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       table,
       idColumn,
       userId,
     });
     return [];
   }
-  return (data || []).map((r: any) => r[idColumn]) as string[];
+  const rows = (data ?? []) as unknown as Record<string, unknown>[];
+  return rows.map((r) => r[idColumn]) as string[];
 }

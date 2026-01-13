@@ -8,6 +8,7 @@ import { handleGlobalWipe } from './helpers/handleGlobalWipe';
 import { performDeleteIn } from './helpers/performDeleteIn';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { getAppError } from '@/lib/utils/error';
 import { z } from 'zod';
 
 const resetSelfSchema = z.object({
@@ -82,13 +83,14 @@ export async function POST(request: NextRequest) {
     try {
       const payload = await handleGlobalWipe(supabase);
       return NextResponse.json({ success: true, ...payload });
-    } catch (e: any) {
+    } catch (e: unknown) {
+      const appError = getAppError(e);
       logger.error('❌ Global reset failed:', {
-        error: e?.message || 'Unknown error',
-        stack: e?.stack,
+        error: appError.message,
+        stack: appError.originalError instanceof Error ? appError.originalError.stack : undefined,
       });
       return NextResponse.json(
-        { error: 'Global reset failed', message: e?.message || 'Unknown error' },
+        { error: 'Global reset failed', message: appError.message },
         { status: 500 },
       );
     }

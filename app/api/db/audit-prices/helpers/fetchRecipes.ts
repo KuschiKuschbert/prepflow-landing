@@ -2,11 +2,12 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
+import type { RecipeRecord } from '../types';
 
 /**
  * Fetch all recipes
  */
-export async function fetchRecipes(): Promise<{ recipes: any[] } | NextResponse> {
+export async function fetchRecipes(): Promise<{ recipes: RecipeRecord[] } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
