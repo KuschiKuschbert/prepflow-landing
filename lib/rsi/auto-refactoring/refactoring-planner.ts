@@ -91,7 +91,7 @@ export class RefactoringPlanner {
         impactScore: impactScore - 1, // Slightly lower impact than types
         riskScore: 1,
         status: 'pending',
-        codemodPath: 'scripts/codemods/remove-console.js',
+        codemodPath: 'scripts/codemods/console-migration.js',
         targetFiles: this.extractPath(itemText) || ['app/**/*.{ts,tsx}'],
         sourceDebtItem: itemText,
       };
