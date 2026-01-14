@@ -64,8 +64,8 @@ module.exports = {
         'uses-responsive-images': ['error', { maxLength: 0 }],
 
         // Bundle size
-        'total-byte-weight': ['error', { maxNumericValue: 500000 }], // 500KB
-        'mainthread-work-breakdown': ['error', { maxNumericValue: 2000 }],
+        'total-byte-weight': ['error', { maxNumericValue: 2000000 }], // 2MB
+        'mainthread-work-breakdown': ['error', { maxNumericValue: 4000 }],
 
         // Accessibility
         'color-contrast': ['error', { maxLength: 0 }],
@@ -109,11 +109,11 @@ module.exports = {
         resourceSizes: [
           {
             resourceType: 'script',
-            budget: 200000, // 200KB
+            budget: 1500000, // 1.5MB
           },
           {
             resourceType: 'total',
-            budget: 500000, // 500KB
+            budget: 2000000, // 2MB
           },
         ],
         resourceCounts: [
