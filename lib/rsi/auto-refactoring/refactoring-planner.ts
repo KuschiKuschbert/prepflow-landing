@@ -125,7 +125,9 @@ export class RefactoringPlanner {
     const pathRegex = /(app\/[a-zA-Z0-9\/\-_]+|components\/[a-zA-Z0-9\/\-_]+|lib\/[a-zA-Z0-9\/\-_]+)/g;
     const matches = text.match(pathRegex);
     if (matches && matches.length > 0) {
-      return matches.map(m => (m.endsWith('/') ? `${m}**/*.{ts,tsx}` : `${m}/**/*.{ts,tsx}`));
+      // Return directory paths directly. jscodeshift walks directories recursively by default.
+      // This is safer than globbing which depends on shell expansion.
+      return matches.map(m => (m.endsWith('/') ? m.slice(0, -1) : m));
     }
 
     return undefined;
