@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useMemo, useCallback } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { CheckCircle2, AlertTriangle, Circle } from 'lucide-react';
-import { getTaskStatusForDate } from '@/lib/cleaning/completion-logic';
 import type { TaskWithCompletions } from '@/lib/cleaning/completion-logic';
+import { getTaskStatusForDate } from '@/lib/cleaning/completion-logic';
+import { AlertTriangle, CheckCircle2, Circle } from 'lucide-react';
+import React, { useCallback, useMemo } from 'react';
 
 /**
  * Format frequency type for display
@@ -147,11 +147,11 @@ function TaskRow({ task, dates, onToggleCompletion }: TaskRowProps) {
   const taskMetadata = useMemo(() => {
     return {
       areaName: task.cleaning_areas
-        ? (task.cleaning_areas as any)?.area_name || (task.cleaning_areas as any)?.name || 'Area'
+        ? task.cleaning_areas.area_name || 'Area'
         : null,
       hasEquipment: !!(task.equipment_id && task.temperature_equipment),
       hasSection: !!(task.section_id && task.kitchen_sections),
-      taskName: task.task_name || (task.cleaning_areas as any)?.area_name || 'Unnamed Task',
+      taskName: task.task_name || task.cleaning_areas?.area_name || 'Unnamed Task',
       frequencyType: task.frequency_type ? formatFrequencyType(task.frequency_type) : null,
     };
   }, [task]);

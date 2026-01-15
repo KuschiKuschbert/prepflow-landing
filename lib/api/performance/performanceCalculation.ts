@@ -3,6 +3,7 @@
  */
 
 import { AggregatedSalesData } from './salesAggregation';
+import { PerformanceDish } from './types';
 
 export interface PerformanceMetrics {
   profitCategory: 'High' | 'Low';
@@ -71,7 +72,7 @@ export function calculateMenuItemClass(
  * Calculate all performance metrics for a dish
  */
 export function calculatePerformanceMetrics(
-  dish: any,
+  dish: PerformanceDish,
   aggregatedSales: AggregatedSalesData,
   profitThreshold: number,
   popularityThreshold: number,

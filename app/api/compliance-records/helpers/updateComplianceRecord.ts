@@ -37,7 +37,7 @@ export async function updateComplianceRecord(
   if (!supabaseAdmin)
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
 
-  const finalUpdateData: any = {};
+  const finalUpdateData: Record<string, unknown> = {};
   if (updateData.document_name !== undefined)
     finalUpdateData.document_name = updateData.document_name;
   if (updateData.issue_date !== undefined) finalUpdateData.issue_date = updateData.issue_date;
@@ -66,7 +66,7 @@ export async function updateComplianceRecord(
   if (error) {
     logger.error('[Compliance Records API] Database error updating record:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: { endpoint: '/api/compliance-records', operation: 'PUT', recordId: id },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

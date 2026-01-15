@@ -14,7 +14,7 @@ import { CreateRecipeInput, Recipe } from './schemas';
 export async function createRecipe(
   name: string,
   recipeData: CreateRecipeInput,
-): Promise<{ recipe: Recipe | null; error: any }> {
+): Promise<{ recipe: Recipe | null; error: unknown }> {
   if (!supabaseAdmin) {
     return {
       recipe: null,

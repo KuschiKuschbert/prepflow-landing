@@ -25,6 +25,7 @@ export const createIngredientSchema = z
         method: z.string().optional(),
       })
       .optional(),
+    product_code: z.string().optional(),
     notes: z.string().optional(),
   })
   .refine(data => data.ingredient_name || data.name, {
@@ -59,6 +60,7 @@ export const updateIngredientSchema = z.object({
       method: z.string().optional(),
     })
     .optional(),
+  product_code: z.string().optional(),
   notes: z.string().optional(),
 });
 

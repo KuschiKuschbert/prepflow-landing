@@ -2,16 +2,17 @@
  * Helper for populating empty dishes with ingredients
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
 import {
-  dishHasDirectIngredients,
-  getDefaultIngredientsForDish,
-  getIngredientsFromRecipes,
-  getIngredientName,
+    dishHasDirectIngredients,
+    getDefaultIngredientsForDish,
+    getIngredientName,
+    getIngredientsFromRecipes,
 } from '@/lib/populate-helpers/populate-empty-dishes-helpers';
+import { supabaseAdmin } from '@/lib/supabase';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { PopulateDishItem, PopulateIngredientItem } from '../types';
 
 export interface PopulatedDish {
   dish_id: string;
@@ -46,8 +47,8 @@ export interface PopulateDishesResult {
  * @returns {Promise<PopulateDishesResult>} Result of population operation
  */
 export async function populateDishes(
-  dishes: any[],
-  ingredients: any[],
+  dishes: PopulateDishItem[],
+  ingredients: PopulateIngredientItem[],
 ): Promise<PopulateDishesResult> {
   const populated: PopulatedDish[] = [];
   const skipped: SkippedDish[] = [];

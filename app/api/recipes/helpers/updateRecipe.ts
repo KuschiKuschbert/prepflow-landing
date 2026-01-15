@@ -9,7 +9,7 @@ import { Recipe, UpdateRecipeInput } from './schemas';
 export async function updateRecipe(
   recipeId: number,
   recipeData: UpdateRecipeInput,
-): Promise<{ recipe: Recipe | null; error: any }> {
+): Promise<{ recipe: Recipe | null; error: unknown }> {
   if (!supabaseAdmin) {
     return {
       recipe: null,

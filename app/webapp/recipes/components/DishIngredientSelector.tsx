@@ -1,10 +1,12 @@
 'use client';
 
-import { Plus, Trash2 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { Plus, Trash2 } from 'lucide-react';
 import DishIngredientCombobox from './DishIngredientCombobox';
 
 import { logger } from '@/lib/logger';
+import { useState } from 'react';
+import { Ingredient } from '../../cogs/types';
 interface SelectedIngredient {
   ingredient_id: string;
   quantity: number;
@@ -13,7 +15,7 @@ interface SelectedIngredient {
 }
 
 interface DishIngredientSelectorProps {
-  ingredients: any[];
+  ingredients: Ingredient[];
   selectedIngredients: SelectedIngredient[];
   onIngredientsChange: (ingredients: SelectedIngredient[]) => void;
 }
@@ -23,6 +25,12 @@ export default function DishIngredientSelector({
   selectedIngredients,
   onIngredientsChange,
 }: DishIngredientSelectorProps) {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredIngredients = ingredients.filter(ingredient =>
+    ingredient.ingredient_name.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
   const handleAddIngredient = () => {
     if (ingredients.length > 0) {
       const firstIngredient = ingredients[0];
@@ -32,7 +40,7 @@ export default function DishIngredientSelector({
           ingredient_id: firstIngredient.id,
           quantity: 0,
           unit: firstIngredient.unit || 'kg',
-          ingredient_name: firstIngredient.ingredient_name || firstIngredient.name || 'Unknown',
+          ingredient_name: firstIngredient.ingredient_name || 'Unknown',
         },
       ]);
     } else {
@@ -52,7 +60,7 @@ export default function DishIngredientSelector({
               ingredient_id: ingredient.id,
               quantity: i.quantity,
               unit: ingredient.unit || i.unit,
-              ingredient_name: ingredient.ingredient_name || ingredient.name,
+              ingredient_name: ingredient.ingredient_name,
             }
           : i,
       ),

@@ -5,7 +5,7 @@
 
 ## High Priority
 
-- [ ] **[WEB]** Eradicate `any` types (Found 2125 warnings). Enforced via "Zero New Any" policy (Warn). Start with `app/api/`.
+- [x] **[WEB]** Eradicate `any` types (Completed for targeted scope). Revisited & Fixed: `scripts/recipe-scraper`, `lib/cache`, `lib/feature-gate`, `lib/auth0-api-helpers`, `lib/populate-helpers`.
 - [x] **[WEB]** Refactor `app/api/ingredients`- [x] Iteration 3: Dishes API (Type Safety) - **DONE**.
 - [x] **[ANDROID]** Extract all hardcoded strings to `strings.xml` (Found 100+ instances of `Text("..")`).
 - [x] **[WEB]** Replace `alert()` usage in `PassportIdPage` and `SettingsClient` with Toast notifications.

@@ -1,8 +1,8 @@
 /**
  * Build change details object for cache invalidation
  */
-export function buildChangeDetails(formattedUpdates: any): any {
-  const changeDetails: any = {};
+export function buildChangeDetails(formattedUpdates: Record<string, unknown>): Record<string, unknown> {
+  const changeDetails: Record<string, unknown> = {};
   const costFields = [
     { key: 'cost_per_unit', message: 'cost per unit updated' },
     { key: 'cost_per_unit_as_purchased', message: 'cost per unit as purchased updated' },

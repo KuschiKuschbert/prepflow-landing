@@ -5,16 +5,14 @@
 import { escapeHtml } from '@/lib/exports/pdf-template';
 import { recipeCardStyles } from './recipe-card-styles';
 
+import { IngredientRow, MethodStepRow } from '../../recipe-cards/types';
+
 export interface RecipeCardData {
   id: string;
   title: string;
   baseYield: number;
-  ingredients: Array<{
-    name: string;
-    quantity: number;
-    unit: string;
-  }>;
-  methodSteps: string[];
+  ingredients: IngredientRow[];
+  methodSteps: MethodStepRow[];
   notes: string[];
   category: string;
 }
@@ -76,7 +74,7 @@ export function generateRecipeCardsHTML(cards: RecipeCardData[]): string {
 
       card.ingredients.forEach(ingredient => {
         cardsContent += `
-              <li>${escapeHtml(ingredient.name)}: ${ingredient.quantity} ${escapeHtml(ingredient.unit)}</li>
+              <li>${escapeHtml(ingredient.name)}: ${ingredient.quantity ?? ''} ${escapeHtml(ingredient.unit ?? '')}${ingredient.notes ? ` (${escapeHtml(ingredient.notes)})` : ''}</li>
         `;
       });
 
@@ -94,7 +92,7 @@ export function generateRecipeCardsHTML(cards: RecipeCardData[]): string {
 
         card.methodSteps.forEach(step => {
           cardsContent += `
-              <li>${escapeHtml(step)}</li>
+              <li>${escapeHtml(step.instruction)}</li>
           `;
         });
 

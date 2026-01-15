@@ -1,8 +1,10 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
-export async function fetchMenuData(menuId: string) {
+import { MenuItemData } from '../types';
+
+export async function fetchMenuData(menuId: string): Promise<{ menu: any, menuItems: MenuItemData[] }> {
   if (!supabaseAdmin) {
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
@@ -37,7 +39,8 @@ export async function fetchMenuData(menuId: string) {
       dishes (
         id,
         dish_name,
-        description
+        description,
+        kitchen_section_id
       ),
       recipes (
         id,

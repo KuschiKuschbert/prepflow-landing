@@ -3,13 +3,14 @@
  */
 
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { MenuItemData } from './fetchMenuItemData';
 
 /**
  * Fetch existing recipe cards with their data hashes
  */
 export async function fetchExistingCards(
-  supabase: any,
+  supabase: SupabaseClient,
   menuItemIds: string[],
 ): Promise<Map<string, { dataHash: string | null; parsedAt: string | null }>> {
   if (menuItemIds.length === 0) {
@@ -40,7 +41,7 @@ export async function fetchExistingCards(
 /**
  * Delete specific recipe cards by menu item IDs
  */
-export async function deleteCardsForItems(supabase: any, menuItemIds: string[]): Promise<void> {
+export async function deleteCardsForItems(supabase: SupabaseClient, menuItemIds: string[]): Promise<void> {
   if (menuItemIds.length === 0) {
     return;
   }
@@ -103,7 +104,7 @@ export { findExistingCardBySignature } from './cardManagement/findBySignature';
  * @param cardId - Recipe card ID
  */
 export async function linkMenuItemToCard(
-  supabase: any,
+  supabase: SupabaseClient,
   menuItemId: string,
   cardId: string,
 ): Promise<void> {

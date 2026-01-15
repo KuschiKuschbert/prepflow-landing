@@ -2,18 +2,18 @@
  * Helper for handling recipe updates
  */
 
-import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
-import { getUserEmail } from '@/lib/auth0-api-helpers';
+import {
+    invalidateDishesWithRecipe,
+    invalidateRecipeAllergenCache,
+} from '@/lib/allergens/cache-invalidation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { getUserEmail } from '@/lib/auth0-api-helpers';
+import { logger } from '@/lib/logger';
+import { invalidateMenuItemsWithRecipe } from '@/lib/menu-pricing/cache-invalidation';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest } from 'next/server';
 import { buildUpdateData } from './buildUpdateData';
 import { detectRecipeChanges } from './detectRecipeChanges';
-import {
-  invalidateRecipeAllergenCache,
-  invalidateDishesWithRecipe,
-} from '@/lib/allergens/cache-invalidation';
-import { invalidateMenuItemsWithRecipe } from '@/lib/menu-pricing/cache-invalidation';
 
 /**
  * Handles recipe update logic
@@ -71,7 +71,7 @@ export async function handleRecipeUpdate(
   if (updateError) {
     logger.error('[Recipes API] Database error updating recipe:', {
       error: updateError.message,
-      code: (updateError as any).code,
+      code: updateError.code,
       context: { endpoint: '/api/recipes/[id]', operation: 'PUT', recipeId },
     });
     throw ApiErrorHandler.fromSupabaseError(updateError, 500);

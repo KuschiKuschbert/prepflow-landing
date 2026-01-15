@@ -29,6 +29,10 @@ export interface MenuItem {
     is_vegan?: boolean;
     dietary_confidence?: string;
     dietary_method?: string;
+    image_url?: string | null;
+    image_url_alternative?: string | null;
+    image_url_modern?: string | null;
+    image_url_minimalist?: string | null;
   };
   recipes?: {
     id: string;
@@ -41,6 +45,10 @@ export interface MenuItem {
     is_vegan?: boolean;
     dietary_confidence?: string;
     dietary_method?: string;
+    image_url?: string | null;
+    image_url_alternative?: string | null;
+    image_url_modern?: string | null;
+    image_url_minimalist?: string | null;
   };
   allergens?: string[];
   is_vegetarian?: boolean;

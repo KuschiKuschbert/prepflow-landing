@@ -1,11 +1,10 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
+import { clearTierCache } from '@/lib/feature-gate';
+import { logger } from '@/lib/logger';
 import { getStripe } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
-import { clearTierCache } from '@/lib/feature-gate';
-import type { TierSlug } from '@/lib/tier-config';
 import type Stripe from 'stripe';
 
 /**
@@ -53,7 +52,7 @@ export async function POST(req: NextRequest) {
       logger.warn('[Billing API] User has no subscription:', {
         userEmail,
         error: userError?.message,
-        code: (userError as any)?.code,
+        code: userError?.code,
       });
       return NextResponse.json(
         ApiErrorHandler.createError('No subscription found', 'SUBSCRIPTION_NOT_FOUND', 404),
@@ -106,12 +105,17 @@ export async function POST(req: NextRequest) {
 
     // If subscription is already active, just update the flag
     if (subscription.status === 'active') {
-      const expiresAt = (subscription as any).current_period_end
-        ? new Date((subscription as any).current_period_end * 1000)
+      const activeSubscription = subscription as Stripe.Subscription & {
+        current_period_end: number;
+        current_period_start: number;
+      };
+
+      const expiresAt = activeSubscription.current_period_end
+        ? new Date(activeSubscription.current_period_end * 1000)
         : null;
 
-      const currentPeriodStart = (subscription as any).current_period_start
-        ? new Date((subscription as any).current_period_start * 1000)
+      const currentPeriodStart = activeSubscription.current_period_start
+        ? new Date(activeSubscription.current_period_start * 1000)
         : null;
 
       // Update database
@@ -129,7 +133,7 @@ export async function POST(req: NextRequest) {
       if (updateError) {
         logger.error('[Billing API] Failed to update subscription in database:', {
           error: updateError.message,
-          code: (updateError as any).code,
+          code: updateError.code,
           userEmail,
         });
       }
@@ -148,7 +152,8 @@ export async function POST(req: NextRequest) {
           id: subscription.id,
           status: subscription.status,
           cancel_at_period_end: subscription.cancel_at_period_end,
-          current_period_end: (subscription as any).current_period_end,
+          current_period_end: (subscription as Stripe.Subscription & { current_period_end: number })
+            .current_period_end,
           expires_at: expiresAt?.toISOString(),
         },
       });

@@ -3,15 +3,15 @@
  * Upload backup file to Google Drive.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth0-api-helpers';
-import { authenticateGoogleDrive, uploadBackupToDrive } from '@/lib/backup/google-drive';
-import { exportUserData } from '@/lib/backup/export';
-import { encryptBackup } from '@/lib/backup/encryption';
-import { createSupabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { requireAuth } from '@/lib/auth0-api-helpers';
+import { encryptBackup } from '@/lib/backup/encryption';
+import { exportUserData } from '@/lib/backup/export';
+import { authenticateGoogleDrive, uploadBackupToDrive } from '@/lib/backup/google-drive';
 import type { EncryptionMode } from '@/lib/backup/types';
+import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const uploadToDriveSchema = z
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
     if (metadataError) {
       logger.warn('[Google Drive Upload] Error storing backup metadata:', {
         error: metadataError.message,
-        code: (metadataError as any).code,
+        code: metadataError.code,
         userId,
       });
       // Don't fail the upload if metadata storage fails
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
       fileId,
       filename: encrypted.filename,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Google Drive Upload] Error:', {
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,

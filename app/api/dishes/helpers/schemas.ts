@@ -94,7 +94,7 @@ export interface DishRelationIngredient {
     category?: string | null;
     brand?: string | null;
     allergens?: string[];
-    allergen_source?: any;
+    allergen_source?: Record<string, unknown> | null;
   };
 }
 

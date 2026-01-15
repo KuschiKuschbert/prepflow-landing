@@ -9,7 +9,9 @@ export async function updateMenuItem(
   menuId: string,
   menuItemId: string,
   data: UpdateMenuItemInput,
-): Promise<{ success: boolean; item: MenuItem; message: string } | { error: any; status: number }> {
+): Promise<
+  { success: boolean; item: MenuItem; message: string } | { error: unknown; status: number }
+> {
   const { category, position, actual_selling_price, region } = data;
 
   // Fetch menu item first to get dish_id or recipe_id

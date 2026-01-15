@@ -1,6 +1,6 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { enrichIngredientWithAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 /**
  * Process a batch of ingredients for allergen detection
@@ -10,8 +10,8 @@ export async function processIngredientBatch(
     id: string;
     ingredient_name: string;
     brand?: string | null;
-    allergens?: any;
-    allergen_source?: any;
+    allergens?: string[] | null;
+    allergen_source?: { manual?: boolean; ai?: boolean } | null;
   }>,
   forceAI: boolean,
 ) {
@@ -57,17 +57,18 @@ export async function processIngredientBatch(
         method: enriched.method || (enriched.allergen_source?.ai ? 'ai' : 'lookup'),
       });
       successful++;
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       logger.warn('[Populate All Allergens] Failed to process ingredient:', {
         ingredient_id: ingredient.id,
         ingredient_name: ingredient.ingredient_name,
-        error: error.message || String(error),
+        error: errorMessage,
       });
       results.push({
         ingredient_id: ingredient.id,
         ingredient_name: ingredient.ingredient_name,
         status: 'failed',
-        error: error.message || String(error),
+        error: errorMessage,
       });
       failed++;
     }

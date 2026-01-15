@@ -1,10 +1,10 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { calculateItemCOGS } from './helpers/calculateItemCOGS';
 import { calculateRecommendedPrice } from './helpers/calculateRecommendedPrice';
-import { calculateStatistics } from './helpers/calculateStatistics';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { calculateStatistics, StatisticsMenuItem } from './helpers/calculateStatistics';
 
 /**
  * GET /api/menus/[id]/items/[itemId]/statistics
@@ -99,13 +99,13 @@ export async function GET(
     }
 
     // Calculate COGS
-    const { cogs, error: cogsError } = await calculateItemCOGS(menuItem);
+    const { cogs, error: cogsError } = await calculateItemCOGS(menuItem as unknown as StatisticsMenuItem);
 
     // Calculate recommended price
-    const recommendedPrice = await calculateRecommendedPrice(menuItem, menuId);
+    const recommendedPrice = await calculateRecommendedPrice(menuItem as unknown as StatisticsMenuItem, menuId);
 
     // Calculate statistics
-    const statistics = calculateStatistics(menuItem, cogs, recommendedPrice);
+    const statistics = calculateStatistics(menuItem as unknown as StatisticsMenuItem, cogs, recommendedPrice);
 
     return NextResponse.json({
       success: true,

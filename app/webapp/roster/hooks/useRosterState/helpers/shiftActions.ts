@@ -1,20 +1,22 @@
 /**
  * Shift action helpers for roster state.
  */
-import type { Shift, ShiftStatus } from '../../../types';
+import type { Shift } from '../../../types';
 
-export function createShiftActions(set: any, get: any) {
+import type { RosterState, RosterStoreGet, RosterStoreSet } from '../types';
+
+export function createShiftActions(set: RosterStoreSet, get: RosterStoreGet) {
   return {
     setShifts: (shifts: Shift[]) => set({ shifts }),
-    addShift: (shift: Shift) => set((state: any) => ({ shifts: [...state.shifts, shift] })),
+    addShift: (shift: Shift) => set((state: RosterState) => ({ shifts: [...state.shifts, shift] })),
     updateShift: (shiftId: string, updates: Partial<Shift>) =>
-      set((state: any) => ({
+      set((state: RosterState) => ({
         shifts: state.shifts.map((shift: Shift) =>
           shift.id === shiftId ? { ...shift, ...updates } : shift,
         ),
       })),
     removeShift: (shiftId: string) =>
-      set((state: any) => ({
+      set((state: RosterState) => ({
         shifts: state.shifts.filter((shift: Shift) => shift.id !== shiftId),
         publishedShifts: new Set([...state.publishedShifts].filter((id: string) => id !== shiftId)),
       })),

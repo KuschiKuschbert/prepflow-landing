@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
       try {
         // Handle dish - dishes relation might be an array or single object
         if (menuItem.dish_id) {
-          const dishes = (menuItem as any).dishes;
+          const dishes = menuItem.dishes;
           if (dishes) {
             const dish = Array.isArray(dishes) ? dishes[0] : dishes;
             if (dish && dish.id && dish.dish_name) {
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
               processDish(
                 dish.id,
                 dish.dish_name,
-                menuItem.category,
+                menuItem.category || 'Uncategorized',
                 sectionsData,
                 unassignedItems,
                 sectionsMap,
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
 
         // Handle recipe directly in menu - recipes relation might be an array or single object
         if (menuItem.recipe_id) {
-          const recipes = (menuItem as any).recipes;
+          const recipes = menuItem.recipes;
           if (recipes) {
             const recipe = Array.isArray(recipes) ? recipes[0] : recipes;
             if (recipe && recipe.id && (recipe.recipe_name || recipe.name)) {

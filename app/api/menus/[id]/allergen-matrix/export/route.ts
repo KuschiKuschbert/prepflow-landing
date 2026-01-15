@@ -5,8 +5,8 @@
 import { AUSTRALIAN_ALLERGENS, consolidateAllergens } from '@/lib/allergens/australian-allergens';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import {
-  aggregateDishDietaryStatus,
-  aggregateRecipeDietaryStatus,
+    aggregateDishDietaryStatus,
+    aggregateRecipeDietaryStatus,
 } from '@/lib/dietary/dietary-aggregation';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
@@ -15,7 +15,7 @@ import { EnrichedMenuItem } from '../../../helpers/schemas';
 import { fetchMenuWithItems } from '../../helpers/fetchMenuWithItems';
 import { generateHTML } from './helpers/generateHTML';
 
-interface MatrixItem {
+export interface MatrixItem {
   name: string;
   type: 'Dish' | 'Recipe';
   allergens: string[];
@@ -116,7 +116,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
         return {
           name: item.dish_id
             ? item.dishes?.dish_name || 'Unknown'
-            : item.recipes?.recipe_name || (item.recipes as any)?.name || 'Unknown',
+            : item.recipes?.recipe_name || (item.recipes as { name?: string })?.name || 'Unknown',
           type: item.dish_id ? 'Dish' : 'Recipe',
           allergens,
           isVegetarian: isVegetarian === true,

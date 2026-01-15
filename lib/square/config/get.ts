@@ -1,9 +1,8 @@
 /**
  * Get Square configuration for a user.
  */
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
-import { decryptSquareToken } from '../token-encryption';
+import { supabaseAdmin } from '@/lib/supabase';
 import type { SquareConfig } from './types';
 
 /**
@@ -30,7 +29,7 @@ export async function getSquareConfig(userId: string): Promise<SquareConfig | nu
 
       logger.error('[Square Config] Error fetching configuration:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         userId,
       });
 

@@ -6,6 +6,15 @@ import { logger } from '@/lib/logger';
  */
 import type { NextRequest } from 'next/server';
 
+interface Auth0SessionUser {
+  email?: string | null;
+  name?: string | null;
+  picture?: string | null;
+  sub?: string | null;
+  'https://prepflow.org/roles'?: string[];
+  email_verified?: boolean;
+}
+
 export async function extractUserFromSession(req: NextRequest | { headers: Headers }): Promise<{
   email: string;
   name?: string;
@@ -21,13 +30,14 @@ export async function extractUserFromSession(req: NextRequest | { headers: Heade
       return null;
     }
 
+    const user = session.user as Auth0SessionUser;
     return {
-      email: session.user.email || '',
-      name: session.user.name,
-      picture: session.user.picture,
-      sub: session.user.sub || '',
-      roles: (session.user as any)['https://prepflow.org/roles'] || [],
-      email_verified: (session.user as any).email_verified || false,
+      email: user.email || '',
+      name: user.name || undefined,
+      picture: user.picture || undefined,
+      sub: user.sub || '',
+      roles: user['https://prepflow.org/roles'] || [],
+      email_verified: user.email_verified || false,
     };
   } catch (error) {
     logger.error('[Auth0 API Helpers] Failed to get user from request:', {

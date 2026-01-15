@@ -1,10 +1,24 @@
 import { logger } from '@/lib/logger';
 import { getManagementClient } from '../../auth0-management';
 
+interface Auth0UserProfile {
+  sub?: string;
+  user_id?: string;
+  email?: string;
+  email_verified?: boolean;
+  name?: string;
+  nickname?: string;
+  picture?: string;
+  given_name?: string;
+  family_name?: string;
+}
+
 /**
  * Get user profile from Auth0 Management API
  */
-export async function getUserProfileFromManagementAPI(auth0UserId: string): Promise<any | null> {
+export async function getUserProfileFromManagementAPI(
+  auth0UserId: string,
+): Promise<Auth0UserProfile | null> {
   const client = getManagementClient();
 
   if (!client) {
@@ -12,7 +26,7 @@ export async function getUserProfileFromManagementAPI(auth0UserId: string): Prom
   }
   try {
     const userResponse = await client.users.get({ id: auth0UserId });
-    const user = (userResponse as any)?.data || userResponse;
+    const user = (userResponse as { data: Auth0UserProfile }).data || (userResponse as Auth0UserProfile); // Handle potential Axios wrap
     if (!user) {
       return null;
     }

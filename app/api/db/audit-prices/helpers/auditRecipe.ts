@@ -1,21 +1,12 @@
-import { logger } from '@/lib/logger';
 import { calculateRecipeSellingPrice } from '@/app/api/menus/[id]/statistics/helpers/calculateRecipeSellingPrice';
+import { logger } from '@/lib/logger';
 
-interface PriceAuditResult {
-  itemId: string;
-  itemName: string;
-  itemType: 'dish' | 'recipe';
-  menuBuilderPrice: number | null;
-  recipeDishBuilderPrice: number | null;
-  discrepancy: number;
-  discrepancyPercent: number;
-  issues: string[];
-}
+import { AuditRecipeItem, PriceAuditResult } from '../types';
 
 /**
  * Audit a single recipe
  */
-export async function auditRecipe(recipe: any): Promise<PriceAuditResult> {
+export async function auditRecipe(recipe: AuditRecipeItem): Promise<PriceAuditResult> {
   const result: PriceAuditResult = {
     itemId: recipe.id,
     itemName: recipe.name || 'Unknown Recipe',

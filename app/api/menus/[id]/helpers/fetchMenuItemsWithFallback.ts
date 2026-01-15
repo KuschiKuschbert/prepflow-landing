@@ -7,10 +7,10 @@ import { handlePricingFallback } from './fetchMenuItemsWithFallback/helpers/hand
 import { handleUltimateFallback } from './fetchMenuItemsWithFallback/helpers/handleUltimateFallback';
 import { logDetailedError } from './fetchMenuWithItems.helpers';
 import {
-  buildFullQuery,
-  buildMinimalQuery,
-  buildQueryWithoutDescription,
-  buildQueryWithoutDietary,
+    buildFullQuery,
+    buildMinimalQuery,
+    buildQueryWithoutDescription,
+    buildQueryWithoutDietary,
 } from './queryBuilders/menuItemQueries';
 
 export interface FetchResult {
@@ -52,7 +52,7 @@ export async function fetchMenuItemsWithFallback(menuId: string): Promise<FetchR
   if (errorInfo.isMissingDietary) {
     const dietaryError = allColumnsError as PostgrestError;
     logger.warn('[Menus API] Dietary/allergen columns not found, trying without them:', {
-      error: (allColumnsError as PostgrestError)?.message,
+      error: allColumnsError?.message,
       context: { endpoint: '/api/menus/[id]', operation: 'GET', menuId },
     });
 
@@ -107,7 +107,7 @@ export async function fetchMenuItemsWithFallback(menuId: string): Promise<FetchR
   // Try minimal query as last resort
   if (errorInfo.isColumnNotFound) {
     logger.warn('[Menus API] Unknown column not found, trying minimal query:', {
-      error: (allColumnsError as PostgrestError)?.message,
+      error: allColumnsError?.message,
       context: { endpoint: '/api/menus/[id]', operation: 'GET', menuId },
     });
 

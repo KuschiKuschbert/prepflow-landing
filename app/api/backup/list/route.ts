@@ -3,12 +3,12 @@
  * List user's backups.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth0-api-helpers';
-import { createSupabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import type { BackupFile } from '@/lib/backup/types';
+import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 /**
  * Lists user's backups.
  *
@@ -55,10 +55,10 @@ export async function GET(request: NextRequest) {
       backups: backupFiles,
       count: backupFiles.length,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Backup List] Error:', error);
     return NextResponse.json(
-      ApiErrorHandler.createError(error?.message || 'Failed to list backups', 'SERVER_ERROR', 500),
+      ApiErrorHandler.createError(error instanceof Error ? error.message : String(error) || 'Failed to list backups', 'SERVER_ERROR', 500),
       { status: 500 },
     );
   }

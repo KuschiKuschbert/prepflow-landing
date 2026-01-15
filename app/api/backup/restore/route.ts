@@ -3,13 +3,13 @@
  * Restore from backup (full, selective, or merge).
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth0-api-helpers';
-import { logger } from '@/lib/logger';
-import { decryptBackup, getPrepFlowServerKey } from '@/lib/backup/encryption';
-import { restoreFull, restoreSelective, restoreMerge } from '@/lib/backup/restore';
-import type { MergeOptions } from '@/lib/backup/types';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { requireAuth } from '@/lib/auth0-api-helpers';
+import { decryptBackup, getPrepFlowServerKey } from '@/lib/backup/encryption';
+import { restoreFull, restoreMerge, restoreSelective } from '@/lib/backup/restore';
+import type { MergeOptions } from '@/lib/backup/types';
+import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const restoreBackupSchema = z.object({
@@ -163,10 +163,10 @@ export async function POST(request: NextRequest) {
         : 'Restore completed with errors',
       result: restoreResult,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Backup Restore] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to restore backup', message: error.message },
+      { error: 'Failed to restore backup', message: error instanceof Error ? error.message : String(error) },
       { status: 500 },
     );
   }

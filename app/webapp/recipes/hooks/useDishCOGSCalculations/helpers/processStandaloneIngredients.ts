@@ -2,9 +2,9 @@
  * Helper to process standalone ingredients for COGS calculations.
  */
 
-import { logger } from '@/lib/logger';
 import { COGSCalculation } from '@/app/webapp/cogs/types';
 import { DishWithDetails } from '@/app/webapp/recipes/types';
+import { logger } from '@/lib/logger';
 
 /**
  * Process standalone ingredients (not from recipes).
@@ -30,17 +30,17 @@ export function processStandaloneIngredients(
         ? dishIngredient.quantity
         : parseFloat(String(dishIngredient.quantity)) || 0;
     const costPerUnit =
-      (ingredient as any).cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
+      ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
     const totalCost = quantity * costPerUnit;
-    const wastePercent = (ingredient as any).trim_peel_waste_percentage || 0;
-    const yieldPercent = (ingredient as any).yield_percentage || 100;
+    const wastePercent = ingredient.trim_peel_waste_percentage || 0;
+    const yieldPercent = ingredient.yield_percentage || 100;
 
     let wasteAdjustedCost = totalCost;
-    if (!(ingredient as any).cost_per_unit_incl_trim && wastePercent > 0) {
+    if (!ingredient.cost_per_unit_incl_trim && wastePercent > 0) {
       wasteAdjustedCost = totalCost / (1 - wastePercent / 100);
     }
 
-    const isConsumable = (ingredient as any).category === 'Consumables';
+    const isConsumable = ingredient.category === 'Consumables';
     const wasteAdjustedCostFinal = isConsumable ? totalCost : wasteAdjustedCost;
     const yieldAdjustedCostFinal = isConsumable
       ? totalCost
@@ -75,8 +75,8 @@ export function processStandaloneIngredients(
       ingredient_name: ingredient.ingredient_name || 'Unknown',
       cost_per_unit: costPerUnit,
       total_cost: totalCost,
-      supplier_name: (ingredient as any).supplier_name,
-      category: (ingredient as any).category,
+      supplier_name: ingredient.supplier_name,
+      category: ingredient.category,
     });
   }
 

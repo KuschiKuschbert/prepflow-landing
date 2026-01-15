@@ -1,6 +1,6 @@
+import { logger } from '@/lib/logger';
 import { getStripe } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { syncUserSubscription } from './syncUserSubscription';
 
 /**
@@ -51,7 +51,7 @@ export async function syncAllSubscriptions(limit: number = 100): Promise<{
         if (!billingData?.user_email) {
           // Try to get email from Stripe customer
           const customer = await stripe.customers.retrieve(customerId);
-          const email = (customer as any).email;
+          const email = 'deleted' in customer ? null : customer.email;
 
           if (email) {
             // Create billing_customers entry

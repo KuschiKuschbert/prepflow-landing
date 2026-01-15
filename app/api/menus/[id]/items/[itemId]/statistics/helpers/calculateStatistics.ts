@@ -1,7 +1,12 @@
 /**
  * Helper for calculating menu item statistics
  */
+import { RawMenuItem } from '../../../../../helpers/schemas';
 
+export type StatisticsMenuItem = RawMenuItem & {
+  dishes?: RawMenuItem['dishes'] | RawMenuItem['dishes'][];
+  recipes?: RawMenuItem['recipes'] | RawMenuItem['recipes'][];
+};
 export interface MenuItemStatistics {
   cogs: number;
   recommended_selling_price: number | null;
@@ -21,7 +26,7 @@ export interface MenuItemStatistics {
  * @returns {MenuItemStatistics} Calculated statistics
  */
 export function calculateStatistics(
-  menuItem: any,
+  menuItem: StatisticsMenuItem,
   cogs: number,
   recommendedPrice: number | null,
 ): MenuItemStatistics {
@@ -39,7 +44,9 @@ export function calculateStatistics(
     sellingPrice = actualPrice;
   } else if (menuItem.dish_id && dish?.selling_price != null) {
     // For dishes, use dish.selling_price if available
-    sellingPrice = parseFloat(dish.selling_price);
+    sellingPrice = typeof dish.selling_price === 'string'
+      ? parseFloat(dish.selling_price)
+      : dish.selling_price ?? 0;
   } else {
     // For recipes or when no dish price: fallback to recommended price or 0
     // Recipes don't have selling_price column, so they always use recommended price
@@ -54,7 +61,7 @@ export function calculateStatistics(
   return {
     cogs,
     recommended_selling_price: recommendedPrice,
-    actual_selling_price: menuItem.actual_selling_price,
+    actual_selling_price: menuItem.actual_selling_price ?? null,
     selling_price: sellingPrice,
     gross_profit: grossProfit,
     gross_profit_margin: grossProfitMargin,

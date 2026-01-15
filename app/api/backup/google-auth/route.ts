@@ -5,11 +5,11 @@
  * Disconnect Google Drive.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth0-api-helpers';
-import { getGoogleDriveAuthUrl, disconnectGoogleDrive } from '@/lib/backup/google-drive';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { requireAuth } from '@/lib/auth0-api-helpers';
+import { disconnectGoogleDrive, getGoogleDriveAuthUrl } from '@/lib/backup/google-drive';
+import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Handles Google Drive authentication and disconnection.
@@ -46,10 +46,10 @@ export async function POST(request: NextRequest) {
       success: true,
       authUrl,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Google Auth] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to initiate Google auth', message: error.message },
+      { error: 'Failed to initiate Google auth', message: error instanceof Error ? error.message : String(error) },
       { status: 500 },
     );
   }
@@ -78,10 +78,10 @@ export async function DELETE(request: NextRequest) {
       success: true,
       message: 'Google Drive disconnected successfully',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Google Auth] Error disconnecting:', error);
     return NextResponse.json(
-      { error: 'Failed to disconnect Google Drive', message: error.message },
+      { error: 'Failed to disconnect Google Drive', message: error instanceof Error ? error.message : String(error) },
       { status: 500 },
     );
   }

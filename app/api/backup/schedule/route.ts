@@ -3,11 +3,11 @@
  * DELETE /api/backup/schedule - Cancel scheduled backups
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth0-api-helpers';
-import { createSupabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { requireAuth } from '@/lib/auth0-api-helpers';
+import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const scheduleBackupSchema = z.object({
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
     if (error) {
       logger.error('[Backup Schedule] Database error configuring schedule:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         userId,
       });
       throw ApiErrorHandler.fromSupabaseError(error, 500);
@@ -97,10 +97,10 @@ export async function POST(request: NextRequest) {
       message: 'Scheduled backup configured successfully',
       nextBackupAt: enabled ? nextBackupAt.toISOString() : null,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Backup Schedule] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to configure scheduled backup', message: error.message },
+      { error: 'Failed to configure scheduled backup', message: error instanceof Error ? error.message : String(error) },
       { status: 500 },
     );
   }
@@ -136,10 +136,10 @@ export async function DELETE(request: NextRequest) {
       success: true,
       message: 'Scheduled backup cancelled successfully',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Backup Schedule] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to cancel scheduled backup', message: error.message },
+      { error: 'Failed to cancel scheduled backup', message: error instanceof Error ? error.message : String(error) },
       { status: 500 },
     );
   }

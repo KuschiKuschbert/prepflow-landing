@@ -2,9 +2,9 @@
  * Helper for processing individual ingredients for allergen detection
  */
 
+import { enrichIngredientWithAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { enrichIngredientWithAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 
@@ -16,14 +16,25 @@ export interface ProcessResult {
   error?: string;
 }
 
+interface IngredientInput {
+  id: string;
+  ingredient_name: string;
+  brand?: string | null;
+  allergens?: string[] | null;
+  allergen_source?: { manual?: boolean; ai?: boolean } | null;
+}
+
 /**
  * Processes a single ingredient for allergen detection
  *
- * @param {any} ingredient - Ingredient data
+ * @param {IngredientInput} ingredient - Ingredient data
  * @param {boolean} force - Whether to force re-detection
  * @returns {Promise<ProcessResult>} Processing result
  */
-export async function processIngredient(ingredient: any, force: boolean): Promise<ProcessResult> {
+export async function processIngredient(
+  ingredient: IngredientInput,
+  force: boolean,
+): Promise<ProcessResult> {
   // Skip if manually set allergens (unless forcing)
   if (!force) {
     const hasManualAllergens =

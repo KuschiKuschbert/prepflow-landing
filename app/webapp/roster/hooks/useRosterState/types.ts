@@ -1,13 +1,17 @@
 /**
  * Types for roster state.
  */
+import { StoreApi } from 'zustand';
 import type {
-  Shift,
-  ShiftStatus,
-  RosterTemplate,
-  Employee,
-  ShiftValidationWarning,
+    Employee,
+    RosterTemplate,
+    Shift,
+    ShiftStatus,
+    ShiftValidationWarning,
 } from '../../types';
+
+export type RosterStoreSet = StoreApi<RosterState>['setState'];
+export type RosterStoreGet = StoreApi<RosterState>['getState'];
 
 export interface RosterState {
   currentWeekStart: Date;

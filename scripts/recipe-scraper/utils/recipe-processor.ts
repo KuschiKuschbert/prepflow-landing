@@ -6,12 +6,12 @@
  * GEMINI REMOVED: Using only Groq/Ollama to prevent expensive API costs
  */
 
+import { generateTextWithGroq, isGroqAvailable, isGroqEnabled } from '@/lib/ai/groq-client';
+import { parseAIError } from '@/lib/ai/utils/errorParser';
+import { isRecipeFormatted } from '@/lib/utils/recipe-format-detection';
 import { ScrapedRecipe } from '../parsers/types';
 import { JSONStorage } from '../storage/json-storage';
 import { scraperLogger } from './logger';
-import { parseAIError } from '@/lib/ai/utils/errorParser';
-import { isRecipeFormatted } from '@/lib/utils/recipe-format-detection';
-import { isGroqEnabled, isGroqAvailable, generateTextWithGroq } from '@/lib/ai/groq-client';
 
 // Processing status (shared across all processing operations)
 interface ProcessingStatus {
@@ -479,7 +479,7 @@ export async function processSingleRecipe(
   }
 
   // Parse JSON response (common for both Groq and Ollama)
-  let formattedRecipe: any;
+  let formattedRecipe: Partial<ScrapedRecipe>;
   try {
     // Try to extract JSON from response (handle markdown code blocks)
     let jsonText = processedText.trim();

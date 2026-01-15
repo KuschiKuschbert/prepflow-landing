@@ -1,13 +1,15 @@
+import { CreateEmployeeInput } from './schemas';
+
 /**
  * Validates employee request data.
  *
- * @param {any} body - Request body
- * @returns {{ isValid: boolean; error?: string; data?: any }} Validation result
+ * @param {Record<string, any>} body - Request body
+ * @returns {{ isValid: boolean; error?: string; data?: CreateEmployeeInput }} Validation result
  */
-export function validateEmployeeRequest(body: any): {
+export function validateEmployeeRequest(body: Record<string, any>): {
   isValid: boolean;
   error?: string;
-  data?: any;
+  data?: CreateEmployeeInput;
 } {
   if (!body.first_name) {
     return { isValid: false, error: 'First name is required' };

@@ -32,7 +32,7 @@ export async function updateCleaningArea(
   if (error) {
     logger.error('[Cleaning Areas API] Database error updating area:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: { endpoint: '/api/cleaning-areas', operation: 'PUT', areaId: id },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

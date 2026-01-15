@@ -19,7 +19,7 @@ export function handleDishError(err: unknown, method: string, dishId?: string): 
 
   // If error has status (from ApiErrorHandler), return it directly
   if (err && typeof err === 'object' && 'status' in err) {
-    return NextResponse.json(err, { status: (err as any).status });
+    return NextResponse.json(err, { status: (err as { status: number }).status });
   }
 
   return NextResponse.json(

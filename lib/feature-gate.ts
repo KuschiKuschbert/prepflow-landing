@@ -1,9 +1,10 @@
+import type { NextRequest } from 'next/server';
 import { getEntitlementsForTier, hasFeature } from './entitlements';
-import { logger } from './logger';
-import type { TierSlug } from './tier-config';
-import { clearTierCache } from './feature-gate/helpers/tierCache';
 import { checkHiddenFeature } from './feature-gate/helpers/checkHiddenFeature';
 import { evaluateTierGate } from './feature-gate/helpers/evaluateTierGate';
+import { clearTierCache } from './feature-gate/helpers/tierCache';
+import { logger } from './logger';
+import type { TierSlug } from './tier-config';
 
 export interface GateResult {
   allowed: boolean;
@@ -37,7 +38,7 @@ export async function evaluateGateAsync(
   if (!email && req) {
     try {
       const { auth0 } = await import('@/lib/auth0');
-      const session = await auth0.getSession(req as any);
+      const session = await auth0.getSession(req as unknown as NextRequest);
       email = session?.user?.email || undefined;
     } catch {
       // Ignore errors getting session

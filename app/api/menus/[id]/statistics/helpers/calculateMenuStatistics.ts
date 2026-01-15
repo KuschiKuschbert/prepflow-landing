@@ -43,7 +43,7 @@ export async function calculateMenuStatistics(
         }
       } catch (err: unknown) {
         logger.error('[calculateMenuStatistics] Unexpected error processing dish:', {
-          dish_id: (dish as any).id,
+          dish_id: dish.id,
           error: err instanceof Error ? err.message : String(err),
         });
       }
@@ -61,7 +61,7 @@ export async function calculateMenuStatistics(
         }
       } catch (err: unknown) {
         logger.error('[calculateMenuStatistics] Unexpected error processing recipe:', {
-          recipe_id: (recipe as any).id,
+          recipe_id: recipe.id,
           error: err instanceof Error ? err.message : String(err),
         });
       }

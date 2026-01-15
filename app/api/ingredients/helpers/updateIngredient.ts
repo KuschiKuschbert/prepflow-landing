@@ -1,6 +1,6 @@
 import {
-  invalidateDishesWithIngredient,
-  invalidateRecipesWithIngredient,
+    invalidateDishesWithIngredient,
+    invalidateRecipesWithIngredient,
 } from '@/lib/allergens/cache-invalidation';
 import { enrichIngredientWithAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
@@ -51,7 +51,7 @@ export async function updateIngredient(
     if (fetchError && fetchError.code !== 'PGRST116') {
       logger.warn('[Ingredients API] Error fetching current ingredient for allergen check:', {
         error: fetchError.message,
-        code: (fetchError as any).code,
+        code: fetchError.code,
         ingredientId: id,
       });
       // Continue without current ingredient - allergen detection will be skipped

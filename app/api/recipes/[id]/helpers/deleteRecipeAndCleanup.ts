@@ -19,7 +19,7 @@ export async function deleteRecipeAndCleanup(recipeId: string) {
   if (ingredientsError) {
     logger.error('[RecipeDelete] Database error deleting recipe ingredients:', {
       error: ingredientsError.message,
-      code: (ingredientsError as any).code,
+      code: ingredientsError.code,
       context: { endpoint: '/api/recipes/[id]', operation: 'DELETE', recipeId },
     });
     throw ApiErrorHandler.fromSupabaseError(ingredientsError, 500);
@@ -40,7 +40,7 @@ export async function deleteRecipeAndCleanup(recipeId: string) {
   if (recipeError) {
     logger.error('[RecipeDelete] Database error deleting recipe:', {
       error: recipeError.message,
-      code: (recipeError as any).code,
+      code: recipeError.code,
       context: { endpoint: '/api/recipes/[id]', operation: 'DELETE', recipeId },
     });
     throw ApiErrorHandler.fromSupabaseError(recipeError, 500);

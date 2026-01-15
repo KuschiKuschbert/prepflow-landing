@@ -18,3 +18,13 @@ export const createEmployeeSchema = z.object({
   emergency_contact_phone: z.string().optional().nullable(),
   user_id: z.string().uuid().optional().nullable(),
 });
+
+export type CreateEmployeeInput = z.infer<typeof createEmployeeSchema>;
+export type UpdateEmployeeInput = Partial<CreateEmployeeInput>;
+
+export interface Employee extends CreateEmployeeInput {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  // Add other DB fields if necessary
+}

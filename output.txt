@@ -1,0 +1,67 @@
+
+> curbos@0.6.7 type-check
+> tsc --noEmit
+
+app/api/recipe-scraper/scrape/helpers/scraping-operations.ts(26,36): error TS2339: Property 'scrapeRecipe' does not exist on type 'ScraperInstance'.
+  Property 'scrapeRecipe' does not exist on type 'AllRecipesScraper'.
+scripts/recipe-scraper/index.ts(118,38): error TS2339: Property 'scrapeRecipe' does not exist on type 'AllRecipesScraper | BonAppetitScraper | EpicuriousScraper | FoodNetworkScraper | TastyScraper'.
+  Property 'scrapeRecipe' does not exist on type 'AllRecipesScraper'.
+scripts/recipe-scraper/jobs/comprehensive-scraper.ts(362,38): error TS2339: Property 'scrapeRecipe' does not exist on type 'AllRecipesScraper | BonAppetitScraper | DelishScraper | EpicuriousScraper | FoodAndWineScraper | ... 6 more ... | TheKitchnScraper'.
+  Property 'scrapeRecipe' does not exist on type 'AllRecipesScraper'.
+scripts/recipe-scraper/jobs/comprehensive-scraper.ts(494,47): error TS2339: Property 'getAllRecipeUrlsWithRatings' does not exist on type 'AllRecipesScraper | BonAppetitScraper | DelishScraper | EpicuriousScraper | FoodAndWineScraper | ... 6 more ... | TheKitchnScraper'.
+  Property 'getAllRecipeUrlsWithRatings' does not exist on type 'BonAppetitScraper'.
+scripts/recipe-scraper/jobs/comprehensive-scraper.ts(505,19): error TS7006: Parameter 'item' implicitly has an 'any' type.
+scripts/recipe-scraper/jobs/comprehensive-scraper.ts(517,16): error TS7006: Parameter 'item' implicitly has an 'any' type.
+scripts/recipe-scraper/jobs/comprehensive-scraper.ts(773,38): error TS2339: Property 'scrapeRecipe' does not exist on type 'AllRecipesScraper | BonAppetitScraper | DelishScraper | EpicuriousScraper | FoodAndWineScraper | ... 6 more ... | TheKitchnScraper'.
+  Property 'scrapeRecipe' does not exist on type 'AllRecipesScraper'.
+scripts/recipe-scraper/scrapers/allrecipes-scraper.ts(163,33): error TS2551: Property 'parseIngredientName' does not exist on type 'AllRecipesScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/allrecipes-scraper.ts(366,35): error TS2339: Property 'fetchPage' does not exist on type 'AllRecipesScraper'.
+scripts/recipe-scraper/scrapers/allrecipes-scraper.ts(480,37): error TS2339: Property 'fetchPage' does not exist on type 'AllRecipesScraper'.
+scripts/recipe-scraper/scrapers/allrecipes-scraper.ts(565,35): error TS2339: Property 'fetchPage' does not exist on type 'AllRecipesScraper'.
+scripts/recipe-scraper/scrapers/bbc-good-food-scraper.ts(109,26): error TS2551: Property 'parseIngredientName' does not exist on type 'BBCGoodFoodScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/bbc-good-food-scraper.ts(160,18): error TS2551: Property 'parseIngredientName' does not exist on type 'BBCGoodFoodScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/bbc-good-food-scraper.ts(240,35): error TS2339: Property 'fetchPage' does not exist on type 'BBCGoodFoodScraper'.
+scripts/recipe-scraper/scrapers/bbc-good-food-scraper.ts(330,37): error TS2339: Property 'fetchPage' does not exist on type 'BBCGoodFoodScraper'.
+scripts/recipe-scraper/scrapers/bon-appetit-scraper.ts(135,31): error TS2551: Property 'parseIngredientName' does not exist on type 'BonAppetitScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/bon-appetit-scraper.ts(163,25): error TS2551: Property 'parseIngredientName' does not exist on type 'BonAppetitScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/bon-appetit-scraper.ts(275,33): error TS2339: Property 'fetchPage' does not exist on type 'BonAppetitScraper'.
+scripts/recipe-scraper/scrapers/delish-scraper.ts(128,31): error TS2551: Property 'parseIngredientName' does not exist on type 'DelishScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/delish-scraper.ts(154,25): error TS2551: Property 'parseIngredientName' does not exist on type 'DelishScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/delish-scraper.ts(248,33): error TS2339: Property 'fetchPage' does not exist on type 'DelishScraper'.
+scripts/recipe-scraper/scrapers/delish-scraper.ts(333,35): error TS2339: Property 'fetchPage' does not exist on type 'DelishScraper'.
+scripts/recipe-scraper/scrapers/epicurious-scraper.ts(173,33): error TS2551: Property 'parseIngredientName' does not exist on type 'EpicuriousScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/epicurious-scraper.ts(215,25): error TS2551: Property 'parseIngredientName' does not exist on type 'EpicuriousScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/epicurious-scraper.ts(329,33): error TS2339: Property 'fetchPage' does not exist on type 'EpicuriousScraper'.
+scripts/recipe-scraper/scrapers/epicurious-scraper.ts(432,35): error TS2339: Property 'fetchPage' does not exist on type 'EpicuriousScraper'.
+scripts/recipe-scraper/scrapers/food-and-wine-scraper.ts(141,33): error TS2551: Property 'parseIngredientName' does not exist on type 'FoodAndWineScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/food-and-wine-scraper.ts(191,25): error TS2551: Property 'parseIngredientName' does not exist on type 'FoodAndWineScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/food-and-wine-scraper.ts(281,33): error TS2339: Property 'fetchPage' does not exist on type 'FoodAndWineScraper'.
+scripts/recipe-scraper/scrapers/food-network-scraper.ts(29,19): error TS2339: Property 'fetchPage' does not exist on type 'FoodNetworkScraper'.
+scripts/recipe-scraper/scrapers/food-network-scraper.ts(69,19): error TS2339: Property 'fetchPage' does not exist on type 'FoodNetworkScraper'.
+scripts/recipe-scraper/scrapers/food-network-scraper.ts(137,22): error TS2339: Property 'fetchPage' does not exist on type 'FoodNetworkScraper'.
+scripts/recipe-scraper/scrapers/food-network-scraper.ts(156,27): error TS2339: Property 'validateAndNormalize' does not exist on type 'FoodNetworkScraper'.
+scripts/recipe-scraper/scrapers/food-network-scraper.ts(261,26): error TS2551: Property 'parseIngredientName' does not exist on type 'FoodNetworkScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/food-network-scraper.ts(296,18): error TS2551: Property 'parseIngredientName' does not exist on type 'FoodNetworkScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/food-network-scraper.ts(368,26): error TS2339: Property 'fetchPage' does not exist on type 'FoodNetworkScraper'.
+scripts/recipe-scraper/scrapers/food-network-scraper.ts(557,28): error TS2339: Property 'fetchPage' does not exist on type 'FoodNetworkScraper'.
+scripts/recipe-scraper/scrapers/food52-scraper.ts(128,31): error TS2551: Property 'parseIngredientName' does not exist on type 'Food52Scraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/food52-scraper.ts(154,25): error TS2551: Property 'parseIngredientName' does not exist on type 'Food52Scraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/food52-scraper.ts(248,33): error TS2339: Property 'fetchPage' does not exist on type 'Food52Scraper'.
+scripts/recipe-scraper/scrapers/serious-eats-scraper.ts(131,31): error TS2551: Property 'parseIngredientName' does not exist on type 'SeriousEatsScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/serious-eats-scraper.ts(156,25): error TS2551: Property 'parseIngredientName' does not exist on type 'SeriousEatsScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/serious-eats-scraper.ts(250,33): error TS2339: Property 'fetchPage' does not exist on type 'SeriousEatsScraper'.
+scripts/recipe-scraper/scrapers/simply-recipes-scraper.ts(128,31): error TS2551: Property 'parseIngredientName' does not exist on type 'SimplyRecipesScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/simply-recipes-scraper.ts(154,25): error TS2551: Property 'parseIngredientName' does not exist on type 'SimplyRecipesScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/simply-recipes-scraper.ts(248,33): error TS2339: Property 'fetchPage' does not exist on type 'SimplyRecipesScraper'.
+scripts/recipe-scraper/scrapers/smitten-kitchen-scraper.ts(136,31): error TS2551: Property 'parseIngredientName' does not exist on type 'SmittenKitchenScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/smitten-kitchen-scraper.ts(164,25): error TS2551: Property 'parseIngredientName' does not exist on type 'SmittenKitchenScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/smitten-kitchen-scraper.ts(258,33): error TS2339: Property 'fetchPage' does not exist on type 'SmittenKitchenScraper'.
+scripts/recipe-scraper/scrapers/tasty-scraper.ts(158,33): error TS2551: Property 'parseIngredientName' does not exist on type 'TastyScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/tasty-scraper.ts(200,20): error TS2551: Property 'parseIngredientName' does not exist on type 'TastyScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/tasty-scraper.ts(318,37): error TS2339: Property 'fetchPage' does not exist on type 'TastyScraper'.
+scripts/recipe-scraper/scrapers/tasty-scraper.ts(426,35): error TS2339: Property 'fetchPage' does not exist on type 'TastyScraper'.
+scripts/recipe-scraper/scrapers/the-kitchn-scraper.ts(129,31): error TS2551: Property 'parseIngredientName' does not exist on type 'TheKitchnScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/the-kitchn-scraper.ts(154,25): error TS2551: Property 'parseIngredientName' does not exist on type 'TheKitchnScraper'. Did you mean 'parseIngredients'?
+scripts/recipe-scraper/scrapers/the-kitchn-scraper.ts(248,33): error TS2339: Property 'fetchPage' does not exist on type 'TheKitchnScraper'.
+scripts/recipe-scraper/test-ai-extractor.ts(115,30): error TS7053: Element implicitly has an 'any' type because expression of type '"fetchPage"' can't be used to index type 'AllRecipesScraper | EpicuriousScraper'.
+  Property 'fetchPage' does not exist on type 'AllRecipesScraper | EpicuriousScraper'.

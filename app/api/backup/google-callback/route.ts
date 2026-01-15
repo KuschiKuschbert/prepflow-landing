@@ -49,11 +49,11 @@ export async function GET(request: NextRequest) {
 
     // Redirect to backup settings page with success message
     return NextResponse.redirect(`${baseUrl}/webapp/settings/backup?success=google_connected`);
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Google Callback] Error:', error);
     const baseUrl = getDetectedBaseUrl();
     return NextResponse.redirect(
-      `${baseUrl}/webapp/settings/backup?error=${encodeURIComponent(error.message)}`,
+      `${baseUrl}/webapp/settings/backup?error=${encodeURIComponent(error instanceof Error ? error.message : String(error))}`,
     );
   }
 }

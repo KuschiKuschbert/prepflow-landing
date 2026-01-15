@@ -5,9 +5,9 @@ import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { MergeOptions } from '../../types';
 import {
-  BATCH_SIZE,
-  processInsertBatch,
-  processUpdateBatch,
+    BATCH_SIZE,
+    processInsertBatch,
+    processUpdateBatch,
 } from './merge-records/helpers/processBatches';
 
 /**
@@ -110,7 +110,7 @@ export async function getExistingRecords(
   if (error) {
     logger.warn('[Restore] Error fetching existing records:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: { tableName, userId, operation: 'getExistingRecords' },
     });
   }

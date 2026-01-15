@@ -1,5 +1,6 @@
 'use client';
 
+import { FoodImageGenerator } from '@/components/ui/FoodImageGenerator';
 import { logger } from '@/lib/logger';
 import { useEffect, useState } from 'react';
 import { COGSTable } from '../../cogs/components/COGSTable';
@@ -12,7 +13,6 @@ import { DishPreviewModalCostInfo } from './DishPreviewModalCostInfo';
 import { DishPreviewModalHeader } from './DishPreviewModalHeader';
 import { DishPreviewModalIngredientsList } from './DishPreviewModalIngredientsList';
 import { DishPreviewModalRecipesList } from './DishPreviewModalRecipesList';
-import { FoodImageGenerator } from '@/components/ui/FoodImageGenerator';
 
 interface DishPreviewModalProps {
   dish: Dish;
@@ -145,17 +145,17 @@ export default function DishPreviewModal({
                   entityType="dish"
                   entityId={dish.id}
                   entityName={dish.dish_name}
-                  imageUrl={(dishDetails as any)?.image_url || (dish as any)?.image_url}
+                  imageUrl={dishDetails?.image_url || dish.image_url}
                   imageUrlAlternative={
-                    (dishDetails as any)?.image_url_alternative ||
-                    (dish as any)?.image_url_alternative
+                    dishDetails?.image_url_alternative ||
+                    dish.image_url_alternative
                   }
                   imageUrlModern={
-                    (dishDetails as any)?.image_url_modern || (dish as any)?.image_url_modern
+                    dishDetails?.image_url_modern || dish.image_url_modern
                   }
                   imageUrlMinimalist={
-                    (dishDetails as any)?.image_url_minimalist ||
-                    (dish as any)?.image_url_minimalist
+                    dishDetails?.image_url_minimalist ||
+                    dish.image_url_minimalist
                   }
                   className="mb-6"
                   compact={false}

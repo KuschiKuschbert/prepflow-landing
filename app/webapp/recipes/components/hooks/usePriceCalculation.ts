@@ -1,5 +1,5 @@
 import { useCallback, useRef } from 'react';
-import { Recipe } from '../../types';
+import { Recipe, RecipeIngredientWithDetails } from '../../types';
 
 import { logger } from '@/lib/logger';
 /**
@@ -18,11 +18,11 @@ export function usePriceCalculation({
   recipePrices: Record<string, any>;
   updateVisibleRecipePrices: (
     recipes: Recipe[],
-    fetchRecipeIngredients: (recipeId: string) => Promise<any[]>,
-    fetchBatchRecipeIngredients?: (recipeIds: string[]) => Promise<Record<string, any[]>>,
+    fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>,
+    fetchBatchRecipeIngredients?: (recipeIds: string[]) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
   ) => Promise<void>;
-  fetchRecipeIngredients: (recipeId: string) => Promise<any[]>;
-  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<Record<string, any[]>>;
+  fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>;
+  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<Record<string, RecipeIngredientWithDetails[]>>;
 }): void {
   const calculatingPricesRef = useRef<Set<string>>(new Set());
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);

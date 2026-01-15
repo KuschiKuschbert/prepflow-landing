@@ -49,17 +49,24 @@ export const invalidateQueries = {
 };
 
 export const optimisticUpdates = {
-  updateIngredient: (id: string, updates: any) =>
-    queryClient.setQueryData(queryKeys.ingredient(id), (old: any) => ({ ...old, ...updates })),
-  updateRecipe: (id: string, updates: any) =>
-    queryClient.setQueryData(queryKeys.recipe(id), (old: any) => ({ ...old, ...updates })),
-  addIngredient: (newIngredient: any) =>
-    queryClient.setQueryData(queryKeys.ingredients, (old: any[]) => [
+  updateIngredient: <T>(id: string, updates: Partial<T>) =>
+    queryClient.setQueryData(queryKeys.ingredient(id), (old: T | undefined) =>
+      old ? { ...old, ...updates } : undefined,
+    ),
+  updateRecipe: <T>(id: string, updates: Partial<T>) =>
+    queryClient.setQueryData(queryKeys.recipe(id), (old: T | undefined) =>
+      old ? { ...old, ...updates } : undefined,
+    ),
+  addIngredient: <T>(newIngredient: T) =>
+    queryClient.setQueryData(queryKeys.ingredients, (old: T[] | undefined) => [
       ...(old || []),
       newIngredient,
     ]),
-  addRecipe: (newRecipe: any) =>
-    queryClient.setQueryData(queryKeys.recipes, (old: any[]) => [...(old || []), newRecipe]),
+  addRecipe: <T>(newRecipe: T) =>
+    queryClient.setQueryData(queryKeys.recipes, (old: T[] | undefined) => [
+      ...(old || []),
+      newRecipe,
+    ]),
 };
 
 export const prefetchQueries = {
@@ -110,7 +117,7 @@ export const backgroundSync = {
     queryClient.invalidateQueries({ queryKey: ['temperature'], refetchType: 'active' }),
 };
 
-export const handleQueryError = (error: any, queryKey: string[]) => {
+export const handleQueryError = (error: unknown, queryKey: string[]) => {
   logger.error(`Query error for ${queryKey.join('.')}:`, error);
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'query_error', {
@@ -119,10 +126,13 @@ export const handleQueryError = (error: any, queryKey: string[]) => {
       value: 1,
     });
   }
-  if (error.message?.includes('Failed to fetch'))
+
+  const errorMessage = error instanceof Error ? error.message : String(error);
+
+  if (errorMessage.includes('Failed to fetch'))
     return 'Network error. Please check your connection and try again.';
-  if (error.message?.includes('404')) return 'Data not found. Please refresh the page.';
-  if (error.message?.includes('500')) return 'Server error. Please try again later.';
+  if (errorMessage.includes('404')) return 'Data not found. Please refresh the page.';
+  if (errorMessage.includes('500')) return 'Server error. Please try again later.';
   return 'An unexpected error occurred. Please try again.';
 };
 
@@ -130,6 +140,6 @@ export const cacheUtils = {
   clearAll: () => queryClient.clear(),
   clearByKey: (queryKey: string[]) => queryClient.removeQueries({ queryKey }),
   getCacheSize: () => queryClient.getQueryCache().getAll().length,
-  getCacheData: (queryKey: string[]) => queryClient.getQueryData(queryKey),
-  setCacheData: (queryKey: string[], data: any) => queryClient.setQueryData(queryKey, data),
+  getCacheData: <T>(queryKey: string[]) => queryClient.getQueryData<T>(queryKey),
+  setCacheData: <T>(queryKey: string[], data: T) => queryClient.setQueryData(queryKey, data),
 };

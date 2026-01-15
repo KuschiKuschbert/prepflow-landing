@@ -4,12 +4,12 @@
  * Returns AI-suggested plating methods for a recipe based on dish name and ingredients
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getUserFromRequest } from '@/lib/auth0-api-helpers';
-import { supabaseAdmin } from '@/lib/supabase';
 import { detectSuitablePlatingMethods } from '@/lib/ai/plating-method-detection';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { getUserFromRequest } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -110,8 +110,8 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     }
 
     // Get recipe name and description
-    const recipeName = (recipe as any).name || 'Recipe';
-    const recipeDescription = (recipe as any).description || undefined;
+    const recipeName = recipe.name || 'Recipe';
+    const recipeDescription = recipe.description || undefined;
 
     // Use AI to detect suitable plating methods
     logger.dev('[Plating Method Suggestion] Detecting suitable plating methods', {

@@ -1,7 +1,8 @@
+import { NormalizedIngredientData } from '@/lib/ingredients/normalizeIngredientData';
 import { createOptimisticIngredient, replaceTempIngredient } from './optimisticIngredientAdd';
 
 interface OptimisticUpdateProps<T> {
-  normalized: any;
+  normalized: NormalizedIngredientData;
   originalIngredients: T[];
   setIngredients: React.Dispatch<React.SetStateAction<T[]>>;
   setShowAddForm?: (show: boolean) => void;

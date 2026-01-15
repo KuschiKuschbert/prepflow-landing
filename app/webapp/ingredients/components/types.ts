@@ -1,4 +1,23 @@
 // Ingredient Wizard Types
+
+export interface Supplier {
+  id: string;
+  name?: string;
+  supplier_name?: string;
+  contact_person?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  address?: string | null;
+  website?: string | null;
+  payment_terms?: string | null;
+  delivery_schedule?: string | null;
+  minimum_order_amount?: number | null;
+  is_active?: boolean;
+  notes?: string | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface Ingredient {
   id?: string;
   ingredient_name: string;
@@ -29,26 +48,26 @@ export interface Ingredient {
 
 export interface WizardStepProps {
   formData: Partial<Ingredient>;
-  suppliers?: any[];
+  suppliers?: Supplier[];
   availableUnits: string[];
   errors: Record<string, string>;
   onInputChange: (
     field: keyof Ingredient,
-    value: string | number | string[] | Record<string, any>,
+    value: string | number | string[] | Ingredient['allergen_source'],
   ) => void;
   onInputBlur?: (field: keyof Ingredient, value: string | number) => void;
   formatCost: (value: number) => string;
   onWastagePercentageChange?: (wastage: number) => void;
   onYieldPercentageChange?: (yieldPercent: number) => void;
-  onAddSupplier?: (supplier: any) => void;
+  onAddSupplier?: (supplier: Supplier | string) => void;
   detectingAllergens?: boolean;
 }
 
 export interface IngredientWizardProps {
-  suppliers?: any[];
+  suppliers?: Supplier[];
   availableUnits?: string[];
   onSave: (ingredient: Ingredient) => void;
   onCancel: () => void;
-  onAddSupplier?: (supplier: any) => void;
+  onAddSupplier?: (supplier: Supplier | string) => void;
   loading?: boolean;
 }

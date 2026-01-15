@@ -19,7 +19,7 @@ export function DishPreviewModalRecipesList({ dishDetails }: DishPreviewModalRec
             className="rounded-lg bg-[var(--muted)]/30 p-3 text-sm text-[var(--foreground-secondary)]"
           >
             <span className="font-medium text-[var(--foreground)]">
-              {dr.recipes?.recipe_name || (dr.recipes as any)?.name || 'Unknown Recipe'}
+              {dr.recipes?.recipe_name || 'Unknown Recipe'}
             </span>
             <span className="ml-2 text-[var(--foreground-muted)]">× {dr.quantity}</span>
           </div>

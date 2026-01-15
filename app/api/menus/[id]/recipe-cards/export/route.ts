@@ -3,14 +3,14 @@
  * GET /api/menus/[id]/recipe-cards/export - Export recipe cards in various formats
  */
 
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { checkFeatureAccess } from '@/lib/api-feature-gate';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
-import { checkFeatureAccess } from '@/lib/api-feature-gate';
-import { generateHTML } from './helpers/generateHTML';
+import { NextRequest, NextResponse } from 'next/server';
 import { generateCSV } from './helpers/generateCSV';
+import { generateHTML } from './helpers/generateHTML';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -107,7 +107,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     // Create a map for ordering
     const itemOrderMap = new Map<string, { category: string; position: number }>();
     if (menuItems) {
-      menuItems.forEach((item: any) => {
+      menuItems.forEach(item => {
         itemOrderMap.set(item.id, {
           category: item.category || '',
           position: item.position || 0,
@@ -124,9 +124,23 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 
     const menuName = menu?.menu_name || 'Menu';
 
+    interface ExportCard {
+      id: string;
+      menu_item_id: string;
+      title: string;
+      base_yield: number;
+      ingredients: any[];
+      method_steps: any[];
+      notes: string | string[] | null;
+      menu_items: {
+        recipes: { name?: string; recipe_name?: string } | null;
+        dishes: { dish_name?: string } | null;
+      } | null;
+    }
+
     // Transform data for export
-    const transformedCards = (cards || [])
-      .map((card: any) => {
+    const transformedCards = ((cards || []) as unknown as ExportCard[])
+      .map(card => {
         const menuItem = card.menu_items;
         const recipeName = menuItem?.recipes?.recipe_name || menuItem?.recipes?.name || null;
         const menuItemName = menuItem?.dishes?.dish_name || recipeName || 'Unknown Item';

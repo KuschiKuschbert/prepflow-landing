@@ -23,6 +23,7 @@ export interface Recipe {
   // Additional plating method images stored as JSON
   // Keys: landscape, futuristic, hide_and_seek, super_bowl, bathing, deconstructed, stacking, brush_stroke, free_form
   plating_methods_images?: Record<string, string | null>;
+  notes?: string;
 }
 
 export interface RecipeIngredient {
@@ -36,6 +37,7 @@ export interface RecipeIngredient {
   total_cost: number;
   supplier_name?: string;
   category?: string;
+  notes?: string;
 }
 
 export interface RecipeIngredientWithDetails extends RecipeIngredient {
@@ -145,7 +147,12 @@ export interface DishIngredient {
     id: string;
     ingredient_name: string;
     cost_per_unit: number;
+    cost_per_unit_incl_trim?: number;
     unit: string;
+    trim_peel_waste_percentage?: number;
+    yield_percentage?: number;
+    supplier_name?: string;
+    category?: string;
   };
 }
 

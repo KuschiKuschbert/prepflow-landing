@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server';
  * @param {string} method - HTTP method
  * @returns {NextResponse} Error response
  */
-export function handleIngredientError(err: Error | any, method: string): NextResponse {
+export function handleIngredientError(err: unknown, method: string): NextResponse {
   logger.error('[Ingredients API] Unexpected error:', {
     error: err instanceof Error ? err.message : String(err),
     stack: err instanceof Error ? err.stack : undefined,

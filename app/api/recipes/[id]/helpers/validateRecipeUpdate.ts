@@ -61,7 +61,7 @@ export async function validateRecipeUpdate(
     if (conflictError) {
       logger.error('[Recipes API] Error checking for name conflicts:', {
         error: conflictError.message,
-        code: (conflictError as any).code,
+        code: conflictError.code,
         context: { endpoint: '/api/recipes/[id]', operation: 'PUT', recipeId },
       });
 

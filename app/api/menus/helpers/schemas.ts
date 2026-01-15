@@ -12,6 +12,9 @@ export const menuSchema = z.object({
   created_at: z.string(),
   updated_at: z.string(),
   items_count: z.number().optional(),
+  is_locked: z.boolean().optional(),
+  locked_at: z.string().nullable().optional(),
+  locked_by: z.string().nullable().optional(),
 });
 
 export const menuItemSchema = z.object({
@@ -72,33 +75,25 @@ export interface MenuStatistics {
   food_cost_percent: number;
 }
 
+export interface MenuDishRelation {
+  id: string;
+  dish_name: string;
+  selling_price: number | null;
+}
+
+export interface MenuRecipeRelation {
+  id: string;
+  name: string;
+  yield: number | null;
+}
+
 export interface MenuItemWithRelations {
   dish_id: string | null;
   recipe_id: string | null;
   actual_selling_price: number | null;
   recommended_selling_price: number | null;
-  dishes?:
-    | {
-        id: string;
-        dish_name: string;
-        selling_price: number | null;
-      }
-    | {
-        id: string;
-        dish_name: string;
-        selling_price: number | null;
-      }[];
-  recipes?:
-    | {
-        id: string;
-        name: string;
-        yield: number | null;
-      }
-    | {
-        id: string;
-        name: string;
-        yield: number | null;
-      }[];
+  dishes?: MenuDishRelation | MenuDishRelation[];
+  recipes?: MenuRecipeRelation | MenuRecipeRelation[];
 }
 
 // --- Join Types for Statistics ---

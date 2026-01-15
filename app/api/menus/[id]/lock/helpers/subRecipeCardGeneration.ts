@@ -3,20 +3,19 @@
  */
 
 import { logger } from '@/lib/logger';
-import { createSupabaseAdmin } from '@/lib/supabase';
-import { batchFetchAllMenuItemData, lookupMenuItemDataFromCache } from './batchFetchMenuItemData';
-import { MenuItemData } from './fetchMenuItemData';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { buildRecipeCardFromInstructions, generateDataHash } from './cardBuilding';
-import { consolidateInstructions, NormalizedIngredient } from './normalizeIngredients';
+import { MenuItemData } from './fetchMenuItemData';
+import { NormalizedIngredient } from './normalizeIngredients';
 import { CollectedSubRecipe } from './recipe-card-types';
-import { collectUniqueSubRecipes } from './subRecipeUtils';
 import { saveSubRecipeCard } from './subRecipeCardGeneration/saveSubRecipeCard';
+import { collectUniqueSubRecipes } from './subRecipeUtils';
 
 /**
  * Generate recipe card for a single sub-recipe
  */
 export async function generateSubRecipeCard(
-  supabase: any,
+  supabase: SupabaseClient,
   collectedSubRecipe: CollectedSubRecipe,
   crossReferencingEnabled: boolean,
 ): Promise<{ success: boolean; error?: string; cardId?: string }> {
@@ -79,7 +78,7 @@ export async function generateSubRecipeCard(
       })),
     };
 
-    const cardData: any = {
+    const cardData: Record<string, unknown> = {
       card_content: cardContent,
       title: parsedCard.title,
       base_yield: subRecipe.yield, // Use sub-recipe's actual yield
@@ -122,7 +121,7 @@ export async function generateSubRecipeCard(
  * Generate recipe cards for all sub-recipes used in menu items
  */
 export async function generateSubRecipeCards(
-  supabase: any,
+  supabase: SupabaseClient,
   menuId: string,
   menuItems: Array<{ id: string; dish_id?: string | null; recipe_id?: string | null }>,
   menuItemDataCache: Map<string, MenuItemData>,

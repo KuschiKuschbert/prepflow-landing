@@ -10,7 +10,9 @@
  * @param {any[]} menuItems - Menu items array
  * @returns {{recipeIds: Set<string>, dishIds: Set<string>, recipeInstructionsMap: Map<string, string | null>}} Collected IDs and instructions
  */
-export function collectRecipeAndDishIds(menuItems: any[]) {
+import { MenuItemData } from '../types';
+
+export function collectRecipeAndDishIds(menuItems: MenuItemData[]) {
   const recipeIds = new Set<string>();
   const dishIds = new Set<string>();
   const recipeInstructionsMap = new Map<string, string | null>();

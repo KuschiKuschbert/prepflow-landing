@@ -26,6 +26,7 @@ export interface ComplianceRecord {
 }
 
 export interface ComplianceRecordFormData {
+  id?: string;
   compliance_type_id: string;
   document_name: string;
   issue_date: string;

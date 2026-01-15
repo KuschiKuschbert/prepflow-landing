@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
 import { createCleaningArea } from '../helpers/createCleaningArea';
 import { handleCleaningAreaError } from './handleCleaningAreaError';
 import { createCleaningAreaSchema } from './schemas';
@@ -45,14 +45,20 @@ export async function handleCreateCleaningArea(request: NextRequest) {
       message: 'Cleaning area created successfully',
       data,
     });
-  } catch (err: any) {
-    if (err.status) {
+  } catch (err: unknown) {
+    if (
+      typeof err === 'object' &&
+      err !== null &&
+      'status' in err &&
+      typeof (err as { status: unknown }).status === 'number'
+    ) {
+      const errorWithStatus = err as { status: number; message: string };
       logger.error('[Cleaning Areas API] Error with status:', {
-        error: err instanceof Error ? err.message : String(err),
-        status: err.status,
+        error: errorWithStatus.message || String(err),
+        status: errorWithStatus.status,
         context: { endpoint: '/api/cleaning-areas', method: 'POST' },
       });
-      return NextResponse.json(err, { status: err.status });
+      return NextResponse.json(err, { status: errorWithStatus.status });
     }
     return handleCleaningAreaError(err, 'POST');
   }

@@ -48,8 +48,23 @@ export interface GroupedSubRecipeCards {
   other: SubRecipeCard[];
 }
 
+export interface RecipeCardDB {
+  id: string;
+  menu_item_id?: string;
+  recipe_id: string | null;
+  dish_id: string | null;
+  recipe_signature: string | null;
+  title: string;
+  base_yield: number;
+  ingredients: IngredientRow[];
+  method_steps: MethodStepRow[];
+  notes: string[] | string | null;
+  card_content: Record<string, unknown> | null; // JSONB column
+  parsed_at: string | null;
+}
+
 export interface CardMapEntry {
-  card: any;
+  card: RecipeCardDB;
   menuItemIds: string[];
   menuItemNames: string[];
 }

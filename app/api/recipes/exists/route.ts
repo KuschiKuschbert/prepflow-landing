@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     if (error) {
       logger.error('[Recipes API] Database error checking recipe existence:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: { endpoint: '/api/recipes/exists', operation: 'GET', name },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(error, 500), { status: 500 });

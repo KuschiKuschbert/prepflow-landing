@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { getAllDrafts, DraftMetadata, clearDraft } from '@/lib/autosave-storage';
-import { syncAllDrafts } from '@/lib/autosave-sync';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { DraftMetadata, clearDraft, getAllDrafts } from '@/lib/autosave-storage';
+import { syncAllDrafts } from '@/lib/autosave-sync';
 import { useUser } from '@auth0/nextjs-auth0/client';
+import { useEffect, useState } from 'react';
 
 import { logger } from '@/lib/logger';
 export function DraftRecovery() {
@@ -40,10 +40,10 @@ export function DraftRecovery() {
         const data = draft.data as Record<string, unknown> | null;
         if (!data || Object.keys(data).length === 0) return false;
         if (draft.entityType === 'ingredients') {
-          return Boolean((data as any).ingredient_name);
+          return 'ingredient_name' in data && Boolean(data.ingredient_name);
         }
         if (draft.entityType === 'recipes') {
-          return Boolean((data as any).name);
+          return 'name' in data && Boolean(data.name);
         }
         return true;
       });

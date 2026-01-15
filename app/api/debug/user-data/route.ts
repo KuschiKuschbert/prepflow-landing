@@ -1,6 +1,6 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getUserFromRequest } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -20,7 +20,18 @@ export async function GET(req: NextRequest) {
     }
 
     // Get database user data
-    let dbUser: any = null;
+    interface DbUser {
+      id: string;
+      email: string;
+      first_name: string | null;
+      last_name: string | null;
+      email_verified: boolean | null;
+      last_login: string | null;
+      created_at: string;
+      updated_at: string;
+    }
+
+    let dbUser: DbUser | null = null;
     if (supabaseAdmin) {
       const { data, error } = await supabaseAdmin
         .from('users')

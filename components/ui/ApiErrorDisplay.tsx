@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import { ApiError } from '@/lib/api-error-handler';
+import React from 'react';
 
 interface ApiErrorDisplayProps {
   error: ApiError;
@@ -115,7 +115,7 @@ export const ApiErrorDisplay: React.FC<ApiErrorDisplayProps> = ({
         </div>
       )}
 
-      {process.env.NODE_ENV === 'development' && error.details && (
+      {process.env.NODE_ENV === 'development' && !!error.details && (
         <details className="mt-4 rounded-xl bg-[var(--muted)] p-3">
           <summary className="cursor-pointer text-[var(--foreground-muted)]">Error Details</summary>
           <pre className="text-fluid-xs mt-2 overflow-auto text-[var(--color-error)]">

@@ -4,7 +4,13 @@
 
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { MenuItemData, MenuItemIngredient, MenuItemSubRecipe } from '../fetchMenuItemData';
+import {
+    MenuItemData,
+    MenuItemIngredient,
+    MenuItemSubRecipe,
+    RawDishResult,
+    RawRecipeResult,
+} from '../fetchMenuItemData';
 
 /**
  * Fetch dish data with all nested ingredients
@@ -56,8 +62,11 @@ export async function fetchDishData(
   }
 
   // Extract direct ingredients
+  const rawDish = dish as unknown as RawDishResult;
+
+  // Extract direct ingredients
   const directIngredients: MenuItemIngredient[] =
-    dish.dish_ingredients?.map((di: any) => ({
+    rawDish.dish_ingredients?.map((di) => ({
       name: di.ingredients?.ingredient_name || 'Unknown Ingredient',
       quantity: Number(di.quantity) || 0,
       unit: di.unit || '',
@@ -66,16 +75,16 @@ export async function fetchDishData(
 
   // Extract sub-recipes with their ingredients
   const subRecipes: MenuItemSubRecipe[] = [];
-  if (dish.dish_recipes) {
-    for (const dr of dish.dish_recipes) {
-      const recipe = dr.recipes as any;
+  if (rawDish.dish_recipes) {
+    for (const dr of rawDish.dish_recipes) {
+      const recipe = dr.recipes as unknown as RawRecipeResult;
       if (!recipe || Array.isArray(recipe)) continue;
 
       // Handle both recipe_name and name columns
       const recipeName = recipe.recipe_name || recipe.name || 'Unknown Recipe';
 
       const recipeIngredients: MenuItemIngredient[] =
-        (recipe.recipe_ingredients as any[])?.map((ri: any) => ({
+        recipe.recipe_ingredients?.map((ri) => ({
           name: ri.ingredients?.ingredient_name || 'Unknown Ingredient',
           quantity: Number(ri.quantity) || 0,
           unit: ri.unit || '',

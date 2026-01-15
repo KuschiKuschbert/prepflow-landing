@@ -2,16 +2,21 @@
  * Helper functions for dish data population (extracted to keep dishes-data.ts under 150 lines)
  */
 
-import { logger } from '@/lib/logger';
+import { Dish, Recipe } from '@/app/webapp/recipes/types';
 import { cleanSampleDishes } from '@/lib/sample-dishes-clean';
+
+export interface IngredientData {
+  id: string;
+  ingredient_name: string;
+}
 
 /**
  * Create lookup maps for recipes and ingredients
  */
-export function createLookupMaps(recipesData: any[], ingredientsData: any[]) {
+export function createLookupMaps(recipesData: Recipe[], ingredientsData: IngredientData[]) {
   const recipeMap = new Map<string, string>();
   recipesData.forEach(r => {
-    const name = r.recipe_name || r.name;
+    const name = r.recipe_name;
     if (name) {
       recipeMap.set(name.toLowerCase().trim(), r.id);
       recipeMap.set(name, r.id);
@@ -35,7 +40,7 @@ export function createLookupMaps(recipesData: any[], ingredientsData: any[]) {
 /**
  * Create dish map from dishes data
  */
-export function createDishMap(dishesData: any[]): Map<string, string> {
+export function createDishMap(dishesData: Dish[]): Map<string, string> {
   const dishMap = new Map<string, string>();
   dishesData.forEach(d => {
     const name = d.dish_name;

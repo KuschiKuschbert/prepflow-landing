@@ -16,7 +16,15 @@ interface UpdateDatabaseParams {
 export async function updateSubscriptionInDatabase(params: UpdateDatabaseParams): Promise<void> {
   const { userEmail, immediate, cancelAtPeriodEnd, expiresAt } = params;
 
-  const updateData: any = {
+  interface UserUpdateData {
+    subscription_cancel_at_period_end: boolean;
+    updated_at: string;
+    subscription_status?: string | null;
+    subscription_expires?: string | null;
+    subscription_tier?: string;
+  }
+
+  const updateData: UserUpdateData = {
     subscription_cancel_at_period_end: cancelAtPeriodEnd,
     updated_at: new Date().toISOString(),
   };
@@ -38,7 +46,7 @@ export async function updateSubscriptionInDatabase(params: UpdateDatabaseParams)
   if (updateError) {
     logger.error('[Billing API] Failed to update subscription in database:', {
       error: updateError.message,
-      code: (updateError as any).code,
+      code: (updateError as { code?: string }).code,
       userEmail,
     });
     // Don't fail the request, subscription was cancelled in Stripe

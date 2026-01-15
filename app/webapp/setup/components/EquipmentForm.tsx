@@ -1,11 +1,11 @@
 'use client';
 
+import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
+import { useAutosave } from '@/hooks/useAutosave';
 import React from 'react';
 import { NewEquipment } from '../types';
 import { equipmentTypes } from './equipment-config';
 import { getDefaultTemps, getEquipmentLabel } from './equipment-utils';
-import { useAutosave } from '@/hooks/useAutosave';
-import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 
 interface EquipmentFormProps {
   equipment: NewEquipment;
@@ -27,7 +27,7 @@ export function EquipmentForm({
   result,
 }: EquipmentFormProps) {
   // Autosave integration
-  const entityId = (equipment as any).id || 'new';
+  const entityId = String(equipment.id || 'new');
   const canAutosave = entityId !== 'new' || Boolean(equipment.name);
 
   const {

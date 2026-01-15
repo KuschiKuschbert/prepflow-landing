@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { groupBy } from '@/lib/api/batch-utils';
 import { logger } from '@/lib/logger';
@@ -31,6 +30,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ items: [] });
     }
 
+    interface BatchIngredientData {
+      id: string;
+      ingredient_name: string;
+      unit?: string;
+      cost_per_unit?: number;
+      trim_peel_waste_percentage?: number;
+      yield_percentage?: number;
+    }
+
+    interface BatchRecipeIngredientRow {
+      id: string;
+      recipe_id: string;
+      ingredient_id: string;
+      quantity: number;
+      unit: string;
+      ingredients?: BatchIngredientData; // Can be undefined if join fails
+    }
+
     // Fetch all recipe ingredients in a single query
     const { data, error } = await supabaseAdmin
       .from('recipe_ingredients')
@@ -56,7 +73,7 @@ export async function POST(request: NextRequest) {
     if (error) {
       logger.error('[Recipes API] Database error fetching batch recipe ingredients:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: {
           endpoint: '/api/recipes/ingredients/batch',
           operation: 'POST',

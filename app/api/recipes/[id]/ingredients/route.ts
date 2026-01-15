@@ -1,6 +1,4 @@
-import { z } from 'zod';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { getUserEmail } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
@@ -58,7 +56,8 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       .eq('recipe_id', normalizedId);
 
     // If category column doesn't exist, retry without it
-    if (error && (error as any).code === '42703' && (error as any).message?.includes('category')) {
+    // If category column doesn't exist, retry without it
+    if (error && error.code === '42703' && error.message.includes('category')) {
       logger.warn('[Recipes API] Category column not found, retrying without category', {
         context: { endpoint: '/api/recipes/[id]/ingredients', recipeId: normalizedId },
       });
@@ -102,7 +101,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     if (error) {
       logger.error('[Recipes API] Database error fetching recipe ingredients:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: {
           endpoint: '/api/recipes/[id]/ingredients',
           operation: 'GET',

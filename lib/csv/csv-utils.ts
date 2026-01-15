@@ -3,8 +3,8 @@
  * Handles all edge cases: quotes, commas, newlines, special characters
  */
 
-export type { ParseCSVOptions, ParseCSVResult } from './csv-utils/types';
 export { parseCSV } from './csv-utils/helpers/parseCSV';
+export type { ParseCSVOptions, ParseCSVResult } from './csv-utils/types';
 
 /**
  * Format a value for CSV export (properly escape quotes and commas)
@@ -18,7 +18,7 @@ export { parseCSV } from './csv-utils/helpers/parseCSV';
  * formatCSVValue('He said "hello"') // Returns: "He said ""hello"""
  * ```
  */
-export function formatCSVValue(value: any): string {
+export function formatCSVValue(value: unknown): string {
   if (value === null || value === undefined) {
     return '';
   }

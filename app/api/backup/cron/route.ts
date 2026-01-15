@@ -4,10 +4,10 @@
  * Should be called by Vercel Cron or external cron service.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { runScheduledBackups } from '@/lib/backup/scheduler';
 import { logger } from '@/lib/logger';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Cron job endpoint for running scheduled backups.
@@ -35,10 +35,10 @@ export async function GET(request: NextRequest) {
       message: 'Scheduled backups completed',
       timestamp: new Date().toISOString(),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Backup Cron] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to run scheduled backups', message: error.message },
+      { error: 'Failed to run scheduled backups', message: error instanceof Error ? error.message : String(error) },
       { status: 500 },
     );
   }

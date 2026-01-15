@@ -1,6 +1,6 @@
-import { createSupabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import type { BackupFormat, EncryptionMode } from '@/lib/backup/types';
+import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
 
 interface BackupMetadata {
   recordCounts: Record<string, number>;
@@ -35,7 +35,7 @@ export async function storeBackupMetadata(
   if (metadataError) {
     logger.warn('[Backup Create] Error storing backup metadata:', {
       error: metadataError.message,
-      code: (metadataError as any).code,
+      code: metadataError.code,
       userId,
     });
     // Don't fail the backup if metadata storage fails

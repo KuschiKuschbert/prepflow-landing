@@ -1,16 +1,16 @@
-import { supabase } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabase } from '@/lib/supabase';
 
-interface HandleBulkAutoCategorizeParams {
-  ingredients: any[];
-  setIngredients: React.Dispatch<React.SetStateAction<any[]>>;
+interface HandleBulkAutoCategorizeParams<T> {
+  ingredients: T[];
+  setIngredients: React.Dispatch<React.SetStateAction<T[]>>;
   setSelectedIngredients: React.Dispatch<React.SetStateAction<Set<string>>>;
   exitSelectionMode: () => void;
   showSuccess: (message: string) => void;
   showError: (message: string) => void;
 }
 
-export async function handleBulkAutoCategorize(
+export async function handleBulkAutoCategorize<T extends { id: string; category?: string }>(
   ids: string[],
   useAI: boolean,
   {
@@ -20,7 +20,7 @@ export async function handleBulkAutoCategorize(
     exitSelectionMode,
     showSuccess,
     showError,
-  }: HandleBulkAutoCategorizeParams,
+  }: HandleBulkAutoCategorizeParams<T>,
 ) {
   const originalIngredients = [...ingredients];
   try {

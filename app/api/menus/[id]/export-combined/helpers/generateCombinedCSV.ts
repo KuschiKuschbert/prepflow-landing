@@ -3,9 +3,9 @@
  * Uses PapaParse for consistent CSV formatting
  */
 
+import { AUSTRALIAN_ALLERGENS } from '@/lib/allergens/australian-allergens';
 import { NextResponse } from 'next/server';
 import Papa from 'papaparse';
-import { AUSTRALIAN_ALLERGENS } from '@/lib/allergens/australian-allergens';
 
 interface MenuDisplayData {
   name: string;
@@ -23,16 +23,14 @@ interface AllergenMatrixData {
   isVegan: boolean;
 }
 
+import { IngredientRow, MethodStepRow } from '../../recipe-cards/types';
+
 interface RecipeCardData {
   id: string;
   title: string;
   baseYield: number;
-  ingredients: Array<{
-    name: string;
-    quantity: number;
-    unit: string;
-  }>;
-  methodSteps: string[];
+  ingredients: IngredientRow[];
+  methodSteps: MethodStepRow[];
   notes: string[];
   category: string;
 }
@@ -132,9 +130,12 @@ export function generateCombinedCSV(
     ];
     const recipeDataForCSV = recipeCardsData.map(card => {
       const ingredients = card.ingredients
-        .map(ing => `${ing.name}: ${ing.quantity} ${ing.unit}`)
+        .map(
+          ing =>
+            `${ing.name}: ${ing.quantity ?? ''} ${ing.unit ?? ''}${ing.notes ? ` (${ing.notes})` : ''}`,
+        )
         .join('; ');
-      const methodSteps = card.methodSteps.join('; ');
+      const methodSteps = card.methodSteps.map(step => step.instruction).join('; ');
       const notes = card.notes.join('; ');
 
       return {

@@ -12,6 +12,13 @@ export async function fetchMenuItemNames(
   supabase: SupabaseClient,
   menuItemIds: string[],
 ): Promise<Map<string, string>> {
+  interface MenuItemNameResult {
+    id: string;
+    dish_id: string | null;
+    recipe_id: string | null;
+    dishes: { dish_name: string } | null;
+    recipes: { name: string; recipe_name?: string } | null;
+  }
   const { data: menuItemsWithNames, error: menuItemsError } = await supabase
     .from('menu_items')
     .select(
@@ -40,7 +47,7 @@ export async function fetchMenuItemNames(
 
   const menuItemNameMap = new Map<string, string>();
   if (menuItemsWithNames) {
-    menuItemsWithNames.forEach((item: any) => {
+    (menuItemsWithNames as unknown as MenuItemNameResult[]).forEach(item => {
       const recipeRow = item.recipes as { name?: string; recipe_name?: string } | null;
       const dishRow = item.dishes as { dish_name?: string } | null;
       const recipeName = recipeRow?.recipe_name || recipeRow?.name || null;

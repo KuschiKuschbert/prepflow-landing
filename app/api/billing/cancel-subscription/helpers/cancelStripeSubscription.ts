@@ -38,8 +38,8 @@ export async function cancelStripeSubscription(
       cancel_at_period_end: true,
     });
     cancelAtPeriodEnd = true;
-    expiresAt = (subscription as any).current_period_end
-      ? new Date((subscription as any).current_period_end * 1000)
+    expiresAt = (subscription as Stripe.Subscription & { current_period_end: number }).current_period_end
+      ? new Date((subscription as Stripe.Subscription & { current_period_end: number }).current_period_end * 1000)
       : null;
   }
 

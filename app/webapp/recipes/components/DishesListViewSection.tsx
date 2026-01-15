@@ -1,11 +1,27 @@
 'use client';
+import { UnifiedFilters, UnifiedSortField } from '@/app/webapp/recipes/components/hooks/useDishesClientPagination/helpers/useFilterState';
 import { useCallback } from 'react';
+import { Dish, DishCostData, Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../types';
 import { DishesListView } from './DishesListView';
-import { DishesSidePanels } from './DishesSidePanels';
-import { Dish, Recipe, DishCostData, RecipePriceData } from '../types';
-import { DishSortField } from '../hooks/useDishFiltering';
+import { DishesSidePanels, DishesSidePanelsProps } from './DishesSidePanels';
+
 
 type UnifiedItem = (Dish & { itemType: 'dish' }) | (Recipe & { itemType: 'recipe' });
+
+type DishesSidePanelsHandlers = Omit<
+  DishesSidePanelsProps,
+  | 'showDishPanel'
+  | 'selectedDishForPreview'
+  | 'showRecipePanel'
+  | 'selectedRecipeForPreview'
+  | 'recipeIngredients'
+  | 'previewYield'
+  | 'showDeleteConfirm'
+  | 'itemToDelete'
+  | 'showDishEditDrawer'
+  | 'editingDish'
+  | 'capitalizeRecipeName'
+>;
 
 interface DishesListViewSectionProps {
   allItems: UnifiedItem[];
@@ -17,27 +33,21 @@ interface DishesListViewSectionProps {
   selectedItems: Set<string>;
   highlightingRowId: string | null;
   highlightingRowType: 'recipe' | 'dish' | null;
-  filters: {
-    searchTerm?: string;
-    currentPage: number;
-    itemsPerPage: number;
-    sortField: string;
-    sortDirection: 'asc' | 'desc';
-  };
+  filters: UnifiedFilters;
   isSelectionMode: boolean;
   capitalizeRecipeName: (name: string) => string;
   showDishPanel: boolean;
   selectedDishForPreview: Dish | null;
   showRecipePanel: boolean;
   selectedRecipeForPreview: Recipe | null;
-  recipeIngredients: any[];
+  recipeIngredients: RecipeIngredientWithDetails[];
   previewYield: number;
   showDeleteConfirm: boolean;
-  itemToDelete: any;
+  itemToDelete: UnifiedItem | null;
   showDishEditDrawer: boolean;
   editingDish: Dish | null;
-  sidePanelsHandlers: any;
-  updateFilters: (filters: any) => void;
+  sidePanelsHandlers: DishesSidePanelsHandlers;
+  updateFilters: (filters: Partial<UnifiedFilters>) => void;
   handleSelectAll: () => void;
   handleSelectItem: (itemId: string) => void;
   handlePreviewDish: (dish: Dish) => void;
@@ -115,7 +125,7 @@ export function DishesListViewSection({
   const handleSortChange = useCallback(
     (field: string, direction: 'asc' | 'desc') => {
       // Accept both dish and recipe sort fields
-      updateFilters({ sortField: field, sortDirection: direction });
+      updateFilters({ sortField: field as UnifiedSortField, sortDirection: direction });
     },
     [updateFilters],
   );

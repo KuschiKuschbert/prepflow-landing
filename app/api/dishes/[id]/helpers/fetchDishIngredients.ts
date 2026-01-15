@@ -3,6 +3,29 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { DishRelationIngredient } from '../../helpers/schemas';
 
+interface RawDishIngredient {
+  id: string;
+  dish_id: string;
+  ingredient_id: string;
+  quantity: number;
+  unit: string;
+  ingredients: {
+    id: string;
+    ingredient_name: string;
+    cost_per_unit: number;
+    cost_per_unit_incl_trim: number;
+    trim_peel_waste_percentage: number;
+    yield_percentage: number;
+    unit: string;
+    supplier: string | null;
+    supplier_name?: string; // Sometimes aliased or joined
+    category: string | null;
+    brand: string | null;
+    allergens: string[] | null;
+    allergen_source: Record<string, unknown> | null;
+  } | null;
+}
+
 /** Fetches ingredients for a dish with fallback logic */
 export async function fetchDishIngredients(dishId: string): Promise<DishRelationIngredient[]> {
   if (!supabaseAdmin) {
@@ -47,9 +70,9 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
   }
 
   // Normalize and clean ingredients data
-  const validDishIngredients: DishRelationIngredient[] = (dishIngredients || [])
-    .filter((di: any) => di.ingredients !== null && di.ingredients !== undefined)
-    .map((di: any) => {
+  const validDishIngredients: DishRelationIngredient[] = ((dishIngredients as unknown as RawDishIngredient[]) || [])
+    .filter(di => di.ingredients !== null && di.ingredients !== undefined)
+    .map(di => {
       const ing = Array.isArray(di.ingredients) ? di.ingredients[0] : di.ingredients;
       if (!ing) return null;
 

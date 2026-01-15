@@ -1,9 +1,8 @@
-import { z } from 'zod';
-import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 interface PrepListToCreate {
   sectionId: string | null;
   name: string;
@@ -72,12 +71,14 @@ export async function POST(request: NextRequest) {
           .select()
           .single();
 
-        if (prepError) {
-          logger.error('[Prep Lists API] Database error creating prep list:', {
-            error: prepError.message,
-            code: (prepError as any).code,
-            prepListName: prepListData.name,
-          });
+          if (prepError) {
+            // It is safe to assume PostgrestError has a code, but better to check or use unknown
+            const code = (prepError as { code?: string }).code;
+            logger.error('[Prep Lists API] Database error creating prep list:', {
+              error: prepError.message,
+              code,
+              prepListName: prepListData.name,
+            });
           errors.push({
             prepListName: prepListData.name,
             error: prepError.message,
@@ -100,9 +101,10 @@ export async function POST(request: NextRequest) {
             .insert(prepItems);
 
           if (itemsError) {
+            const code = (itemsError as { code?: string }).code;
             logger.error('[Prep Lists API] Error creating prep list items:', {
               error: itemsError.message,
-              code: (itemsError as any).code,
+              code,
               prepListId: prepList.id,
             });
             // Delete the prep list if items failed

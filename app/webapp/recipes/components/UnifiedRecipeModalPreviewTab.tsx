@@ -1,10 +1,10 @@
 'use client';
 
+import { FoodImageGenerator } from '@/components/ui/FoodImageGenerator';
 import { Icon } from '@/components/ui/Icon';
-import { Loader2, ChefHat, FileText } from 'lucide-react';
+import { ChefHat, FileText, Loader2 } from 'lucide-react';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 import { RecipeIngredientsList } from './RecipeIngredientsList';
-import { FoodImageGenerator } from '@/components/ui/FoodImageGenerator';
 
 interface UnifiedRecipeModalPreviewTabProps {
   recipe: Recipe;
@@ -37,10 +37,10 @@ export function UnifiedRecipeModalPreviewTab({
         entityType="recipe"
         entityId={recipe.id}
         entityName={recipe.recipe_name}
-        imageUrl={(recipe as any)?.image_url}
-        imageUrlAlternative={(recipe as any)?.image_url_alternative}
-        imageUrlModern={(recipe as any)?.image_url_modern}
-        imageUrlMinimalist={(recipe as any)?.image_url_minimalist}
+        imageUrl={recipe.image_url}
+        imageUrlAlternative={recipe.image_url_alternative}
+        imageUrlModern={recipe.image_url_modern}
+        imageUrlMinimalist={recipe.image_url_minimalist}
         className="mb-6"
         compact={false}
       />

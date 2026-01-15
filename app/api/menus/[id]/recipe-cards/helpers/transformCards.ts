@@ -7,6 +7,12 @@ import type { CardMapEntry, ItemOrder, RecipeCard, SubRecipeCard } from '../type
 /**
  * Transform cards for response, separating main cards from sub-recipe cards.
  */
+interface SubRecipeUsage {
+  menu_item_id: string;
+  menu_item_name?: string;
+  quantity?: number;
+}
+
 export function transformCards(
   cardMap: Map<string, CardMapEntry>,
   itemOrderMap: Map<string, ItemOrder>,
@@ -28,20 +34,20 @@ export function transformCards(
       menuItemName: firstMenuItemName, // Keep for backward compatibility
       menuItemNames, // New: all menu item names
       title: card.title || firstMenuItemName,
-      baseYield: card.baseYield || 1,
+      baseYield: card.base_yield || 1,
       ingredients: card.ingredients || [],
-      methodSteps: card.methodSteps || [],
+      methodSteps: card.method_steps || [],
       notes: card.notes
         ? typeof card.notes === 'string'
           ? (card.notes as string).split('\n').filter((n: string) => n.trim().length > 0)
           : Array.isArray(card.notes)
-            ? (card.notes as string[])
-            : []
+          ? (card.notes as string[])
+          : []
         : [],
-      parsedAt: card.parsedAt,
-      recipeId: card.recipeId || null,
-      dishId: card.dishId || null,
-      recipeSignature: card.recipeSignature || null,
+      parsedAt: card.parsed_at,
+      recipeId: card.recipe_id || null,
+      dishId: card.dish_id || null,
+      recipeSignature: card.recipe_signature || null,
     };
 
     // Check if this is a sub-recipe card (recipe_id set, dish_id null)
@@ -49,14 +55,14 @@ export function transformCards(
 
     if (isSubRecipe) {
       // Extract sub-recipe metadata from card_content
-      const cardContent = (card as any).card_content || {};
-      const subRecipeType = cardContent.sub_recipe_type || 'other';
-      const usedByMenuItems = cardContent.used_by_menu_items || [];
+      const cardContent = (card.card_content || {}) as Record<string, unknown>;
+      const subRecipeType = (cardContent.sub_recipe_type as string) || 'other';
+      const usedByMenuItems = (cardContent.used_by_menu_items as SubRecipeUsage[]) || [];
 
       subRecipeCards.push({
         ...transformedCard,
         subRecipeType,
-        usedByMenuItems: usedByMenuItems.map((mi: any) => ({
+        usedByMenuItems: usedByMenuItems.map((mi) => ({
           menuItemId: mi.menu_item_id,
           menuItemName: mi.menu_item_name || menuItemNameMap.get(mi.menu_item_id) || 'Unknown Item',
           quantity: mi.quantity || 1,

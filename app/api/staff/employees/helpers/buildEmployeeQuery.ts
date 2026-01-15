@@ -1,11 +1,21 @@
+import { SupabaseClient } from '@supabase/supabase-js';
+
+interface EmployeeQueryParams {
+  role?: string;
+  employment_type?: string;
+  search?: string;
+  page?: number;
+  pageSize?: number;
+}
+
 /**
  * Builds Supabase query for employees with filters and pagination.
  *
- * @param {any} supabase - Supabase client
- * @param {any} params - Query parameters
+ * @param {SupabaseClient} supabase - Supabase client
+ * @param {EmployeeQueryParams} params - Query parameters
  * @returns {Promise<{ data: any; error: any; count: number | null }>} Query result
  */
-export async function buildEmployeeQuery(supabase: any, params: any) {
+export async function buildEmployeeQuery(supabase: SupabaseClient, params: EmployeeQueryParams) {
   let query = supabase.from('employees').select('*', { count: 'exact' });
 
   // Filter by role

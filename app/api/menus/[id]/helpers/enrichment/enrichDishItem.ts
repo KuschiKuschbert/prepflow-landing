@@ -85,17 +85,17 @@ export async function enrichDishItem(item: RawMenuItem): Promise<EnrichedDishDat
       } else {
         // Fallback to cached values if recalculation fails
         const cachedIsVegan = validateVeganStatus(
-          (item.dishes as any).is_vegan ?? null,
+          item.dishes.is_vegan ?? null,
           allergens,
           'dish',
           item.dishes.id,
           dishName,
         );
 
-        isVegetarian = (item.dishes as any).is_vegetarian ?? null;
+        isVegetarian = item.dishes.is_vegetarian ?? null;
         isVegan = cachedIsVegan;
-        dietaryConfidence = (item.dishes as any).dietary_confidence ?? null;
-        dietaryMethod = (item.dishes as any).dietary_method ?? null;
+        dietaryConfidence = item.dishes.dietary_confidence ?? null;
+        dietaryMethod = item.dishes.dietary_method ?? null;
       }
     }
   } catch (err: unknown) {
@@ -107,17 +107,17 @@ export async function enrichDishItem(item: RawMenuItem): Promise<EnrichedDishDat
     if (item.dishes?.id) {
       // Fallback to cached values, but validate against allergens
       const cachedIsVegan = validateVeganStatus(
-        (item.dishes as any).is_vegan ?? null,
+        item.dishes.is_vegan ?? null,
         allergens,
         'dish',
         item.dishes.id,
         dishName,
       );
 
-      isVegetarian = (item.dishes as any).is_vegetarian ?? null;
+      isVegetarian = item.dishes.is_vegetarian ?? null;
       isVegan = cachedIsVegan;
-      dietaryConfidence = (item.dishes as any).dietary_confidence ?? null;
-      dietaryMethod = (item.dishes as any).dietary_method ?? null;
+      dietaryConfidence = item.dishes.dietary_confidence ?? null;
+      dietaryMethod = item.dishes.dietary_method ?? null;
     }
   }
 

@@ -2,17 +2,23 @@
  * Helper to fetch dishes for batch cost calculation.
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
 /**
  * Fetch dishes by IDs and create a map for quick lookup.
  */
+export interface BatchDishBasic {
+  id: string;
+  dish_name: string;
+  selling_price: number | null;
+}
+
 export async function fetchDishes(
   dishIds: string[],
-): Promise<{ dishesMap: Map<string, any> } | { error: NextResponse }> {
+): Promise<{ dishesMap: Map<string, BatchDishBasic> } | { error: NextResponse }> {
   if (!supabaseAdmin) {
     return {
       error: NextResponse.json(
@@ -30,7 +36,7 @@ export async function fetchDishes(
   if (dishesError) {
     logger.error('[Dishes API] Database error fetching dishes for batch cost calculation:', {
       error: dishesError.message,
-      code: (dishesError as any).code,
+      code: dishesError.code,
       context: { endpoint: '/api/dishes/cost/batch', operation: 'POST' },
     });
 
@@ -40,7 +46,7 @@ export async function fetchDishes(
     };
   }
 
-  const dishesMap = new Map(dishes?.map(d => [d.id, d]) || []);
+  const dishesMap = new Map<string, BatchDishBasic>(dishes?.map(d => [d.id, d]) || []);
 
   return { dishesMap };
 }

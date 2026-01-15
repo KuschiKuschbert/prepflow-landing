@@ -30,7 +30,7 @@ export async function createCleaningArea(areaData: {
   if (error) {
     logger.error('[Cleaning Areas API] Database error creating area:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: { endpoint: '/api/cleaning-areas', operation: 'POST', table: 'cleaning_areas' },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

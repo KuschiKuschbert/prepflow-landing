@@ -42,7 +42,7 @@ export async function createClockIn(
   if (insertError) {
     logger.error('[Time Attendance API] Database error creating clock-in:', {
       error: insertError.message,
-      code: (insertError as any).code,
+      code: (insertError as { code?: string }).code,
       context: {
         endpoint: '/api/time-attendance/clock-in',
         operation: 'POST',

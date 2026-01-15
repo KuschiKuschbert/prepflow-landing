@@ -30,6 +30,7 @@ export interface SupplierPriceList {
 }
 
 export interface SupplierFormData {
+  id?: string | number;
   name: string;
   contact_person: string;
   email: string;
@@ -43,6 +44,7 @@ export interface SupplierFormData {
 }
 
 export interface PriceListFormData {
+  id?: string | number;
   supplier_id: string;
   document_name: string;
   document_url: string;

@@ -13,18 +13,22 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
-/**
- * Global singleton pattern for standard Supabase client
- * This client is used for data only - PrepFlow Auth uses Auth0.
- * We disable Auth to avoid conflicts with other Supabase clients (like POS).
- */
+// Declare global types for singleton storage
+declare global {
+  // eslint-disable-next-line no-var
+  var __PREPFLOW_SUPABASE_CLIENT__: SupabaseClient | undefined;
+  interface Window {
+    __PREPFLOW_SUPABASE_CLIENT__: SupabaseClient | undefined;
+  }
+}
+
 // Client-side Supabase client singleton
 const getSupabaseClient = (): SupabaseClient => {
   const globalKey = '__PREPFLOW_SUPABASE_CLIENT__';
 
   if (typeof window !== 'undefined') {
-    if (!(window as any)[globalKey]) {
-      (window as any)[globalKey] = createClient(supabaseUrl, supabaseAnonKey, {
+    if (!window[globalKey]) {
+      window[globalKey] = createClient(supabaseUrl, supabaseAnonKey, {
         auth: {
           persistSession: false,
           autoRefreshToken: false,
@@ -39,11 +43,11 @@ const getSupabaseClient = (): SupabaseClient => {
         },
       });
     }
-    return (window as any)[globalKey];
+    return window[globalKey]!;
   }
 
-  if (!(globalThis as any)[globalKey]) {
-    (globalThis as any)[globalKey] = createClient(supabaseUrl, supabaseAnonKey, {
+  if (!globalThis[globalKey]) {
+    globalThis[globalKey] = createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         persistSession: false,
         autoRefreshToken: false,
@@ -57,7 +61,7 @@ const getSupabaseClient = (): SupabaseClient => {
       },
     });
   }
-  return (globalThis as any)[globalKey];
+  return globalThis[globalKey]!;
 };
 
 /**
@@ -97,7 +101,7 @@ export function createSupabaseAdmin() {
     );
   }
 
-  return createClient(supabaseUrl as string, serviceRoleKey, {
+  return createClient(supabaseUrl!, serviceRoleKey, {
     auth: {
       persistSession: false,
       autoRefreshToken: false,

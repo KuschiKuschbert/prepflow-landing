@@ -1,13 +1,14 @@
 import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { lookupMenuItemDataFromCache } from '../batchFetchMenuItemData';
+import { generateDataHash } from '../cardBuilding';
+import { findExistingCardBySignature, getRecipeSignature } from '../cardManagement';
 import { MenuItemData } from '../fetchMenuItemData';
 import { normalizeToSingleServing } from '../normalizeIngredients';
-import { findExistingCardBySignature, getRecipeSignature } from '../cardManagement';
-import { generateDataHash } from '../cardBuilding';
-import { lookupMenuItemDataFromCache } from '../batchFetchMenuItemData';
+import { MenuItem } from './fetchMenuItems';
 
 interface ItemToGenerate {
-  menuItem: any;
+  menuItem: MenuItem;
   menuItemData: MenuItemData;
   signature: string;
   existingCardId?: string;
@@ -24,14 +25,14 @@ interface CheckResult {
  * Checks for existing cards and determines which items need generation vs can reuse existing cards.
  *
  * @param {SupabaseClient} supabase - Supabase client instance.
- * @param {any[]} menuItems - Array of menu items to check.
+ * @param {MenuItem[]} menuItems - Array of menu items to check.
  * @param {Map<string, MenuItemData>} menuItemDataCache - Cache of menu item data.
  * @param {boolean} crossReferencingEnabled - Whether cross-referencing is enabled.
  * @returns {Promise<CheckResult>} Result containing items to generate, items to link, and counts.
  */
 export async function checkExistingCards(
   supabase: SupabaseClient,
-  menuItems: any[],
+  menuItems: MenuItem[],
   menuItemDataCache: Map<string, MenuItemData>,
   crossReferencingEnabled: boolean,
 ): Promise<CheckResult> {

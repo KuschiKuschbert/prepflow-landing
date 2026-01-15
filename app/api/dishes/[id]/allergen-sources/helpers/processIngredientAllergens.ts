@@ -2,11 +2,22 @@
  * Helper for processing ingredient allergens for a dish
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
 import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
+import { supabaseAdmin } from '@/lib/supabase';
 import type { AllergenSource } from './processRecipeAllergens';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+
+interface RawIngredientJoin {
+  id: string;
+  ingredient_name: string;
+  brand?: string;
+  allergens?: string[];
+  allergen_source?: {
+    manual?: boolean;
+    ai?: boolean;
+  };
+}
 
 /**
  * Processes ingredient allergens for a dish
@@ -48,7 +59,7 @@ export async function processIngredientAllergens(
     const { logger } = await import('@/lib/logger');
     logger.warn('[Process Ingredient Allergens] Error fetching dish ingredients:', {
       error: ingredientsError.message,
-      code: (ingredientsError as any).code,
+      code: ingredientsError.code,
       context: { dishId, operation: 'fetchDishIngredients' },
     });
     return;
@@ -59,16 +70,7 @@ export async function processIngredientAllergens(
   }
 
   dishIngredients.forEach(di => {
-    const ingredient = di.ingredients as unknown as {
-      id: string;
-      ingredient_name: string;
-      brand?: string;
-      allergens?: string[];
-      allergen_source?: {
-        manual?: boolean;
-        ai?: boolean;
-      };
-    } | null;
+    const ingredient = di.ingredients as unknown as RawIngredientJoin | null;
 
     if (!ingredient) return;
 

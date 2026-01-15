@@ -1,18 +1,18 @@
-import { supabase } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabase } from '@/lib/supabase';
 
-interface HandleBulkUpdateParams {
-  ingredients: any[];
-  setIngredients: React.Dispatch<React.SetStateAction<any[]>>;
+interface HandleBulkUpdateParams<T> {
+  ingredients: T[];
+  setIngredients: React.Dispatch<React.SetStateAction<T[]>>;
   setSelectedIngredients: React.Dispatch<React.SetStateAction<Set<string>>>;
   exitSelectionMode: () => void;
   showSuccess: (message: string) => void;
   showError: (message: string) => void;
 }
 
-export async function handleBulkUpdate(
+export async function handleBulkUpdate<T extends { id: string }>(
   ids: string[],
-  updates: Partial<any>,
+  updates: Partial<T>,
   {
     ingredients,
     setIngredients,
@@ -20,7 +20,7 @@ export async function handleBulkUpdate(
     exitSelectionMode,
     showSuccess,
     showError,
-  }: HandleBulkUpdateParams,
+  }: HandleBulkUpdateParams<T>,
 ) {
   const originalIngredients = [...ingredients];
   setIngredients(prevIngredients =>

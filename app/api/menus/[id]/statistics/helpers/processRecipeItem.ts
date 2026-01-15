@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { MenuItemWithRelations } from '../../../helpers/schemas';
+import { MenuItemWithRelations, MenuRecipeRelation } from '../../../helpers/schemas';
 import { calculateRecipeCost } from './calculateRecipeCost';
 import { calculateRecipeSellingPrice } from './calculateRecipeSellingPrice';
 
@@ -7,12 +7,12 @@ import { calculateRecipeSellingPrice } from './calculateRecipeSellingPrice';
  * Processes a recipe item for statistics calculation
  *
  * @param {MenuItemWithRelations} item - Menu item with recipe
- * @param {any} recipe - Recipe data
+ * @param {MenuRecipeRelation} recipe - Recipe data
  * @returns {Promise<{ cogs: number; revenue: number; margin: number | null }>} Statistics for recipe
  */
 export async function processRecipeItem(
   item: MenuItemWithRelations,
-  recipe: any,
+  recipe: MenuRecipeRelation,
 ): Promise<{
   cogs: number;
   revenue: number;
@@ -30,9 +30,8 @@ export async function processRecipeItem(
   }
 
   // Price priority: menu_items.actual_selling_price > recipe.selling_price (per serving) > calculated recommended (per serving)
-  let sellingPrice =
-    item.actual_selling_price ??
-    (recipe.selling_price ? parseFloat(String(recipe.selling_price)) : null);
+  // Price priority: menu_items.actual_selling_price > calculated recommended (per serving)
+  let sellingPrice = item.actual_selling_price;
 
   // Calculate recommended price if needed
   if (sellingPrice == null) {

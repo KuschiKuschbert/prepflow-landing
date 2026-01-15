@@ -3,11 +3,11 @@
  * List backup files from Google Drive.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { authenticateGoogleDrive, listBackupsFromDrive } from '@/lib/backup/google-drive';
 import { logger } from '@/lib/logger';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Lists backup files from Google Drive.
@@ -47,11 +47,12 @@ export async function GET(request: NextRequest) {
       backups,
       count: backups.length,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
     // Handle "not connected" errors gracefully
     if (
-      error.message?.includes('not connected') ||
-      error.message?.includes('Google Drive not connected')
+      errorMessage.includes('not connected') ||
+      errorMessage.includes('Google Drive not connected')
     ) {
       return NextResponse.json({
         success: true,
@@ -63,7 +64,7 @@ export async function GET(request: NextRequest) {
 
     logger.error('[Google Drive List] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to list backups from Google Drive', message: error.message },
+      { error: 'Failed to list backups from Google Drive', message: errorMessage },
       { status: 500 },
     );
   }

@@ -1,18 +1,15 @@
+import { PostgrestError } from '@supabase/supabase-js';
 import { ApiError, SUPABASE_ERROR_CODES } from './supabaseErrorParser';
 
-interface PostgrestError {
-  message: string;
-  details?: string;
-  hint?: string;
-  code?: string;
-}
-
-export function isNetworkError(error: any): boolean {
+export function isNetworkError(error: unknown): boolean {
+  if (typeof error !== 'object' || error === null) return false;
+  const err = error as { code?: string; message?: string };
   return (
-    error.code === 'NETWORK_ERROR' ||
-    error.message?.includes('fetch') ||
-    error.message?.includes('network') ||
-    error.message?.includes('Failed to fetch')
+    err.code === 'NETWORK_ERROR' ||
+    err.message?.includes('fetch') ||
+    err.message?.includes('network') ||
+    err.message?.includes('Failed to fetch') ||
+    false
   );
 }
 

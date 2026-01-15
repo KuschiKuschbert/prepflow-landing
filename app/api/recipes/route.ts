@@ -146,9 +146,10 @@ export async function POST(request: NextRequest) {
     );
 
     if (createError) {
+      const safeError = createError as { message: string; code?: string };
       logger.error('[Recipes API] Database error creating recipe:', {
-        error: createError.message,
-        code: createError.code,
+        error: safeError.message || String(createError),
+        code: safeError.code,
         context: { endpoint: '/api/recipes', operation: 'POST', recipeName: recipeData.name },
       });
       const apiError = ApiErrorHandler.fromSupabaseError(createError, 500);

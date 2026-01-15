@@ -2,17 +2,18 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
+import { Employee } from '../../helpers/schemas';
 import { validateEmployeeRequest } from '../../helpers/validateEmployeeRequest';
-import { checkEmailUniqueness } from './checkEmailUniqueness';
 import { buildUpdateData } from './buildUpdateData';
+import { checkEmailUniqueness } from './checkEmailUniqueness';
 
 /**
  * Update employee by ID
  */
 export async function updateEmployee(
   employeeId: string,
-  body: any,
-  existingEmployee: any,
+  body: Record<string, any>,
+  existingEmployee: Employee,
 ): Promise<NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
@@ -58,7 +59,7 @@ export async function updateEmployee(
   if (updateError) {
     logger.error('[Staff Employees API] Database error updating employee:', {
       error: updateError.message,
-      code: (updateError as any).code,
+      code: updateError.code,
       context: { endpoint: '/api/staff/employees/[id]', operation: 'PUT', employeeId },
     });
 

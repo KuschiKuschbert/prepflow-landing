@@ -1,8 +1,10 @@
+import { UpdateEmployeeInput } from '../../helpers/schemas';
+
 /**
  * Build update data object from request body
  */
-export function buildUpdateData(body: any): any {
-  const updateData: any = {
+export function buildUpdateData(body: Record<string, any>): UpdateEmployeeInput & { updated_at: string } {
+  const updateData: UpdateEmployeeInput & { updated_at: string } = {
     updated_at: new Date().toISOString(),
   };
 

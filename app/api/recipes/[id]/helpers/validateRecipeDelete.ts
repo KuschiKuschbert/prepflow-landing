@@ -24,7 +24,7 @@ export async function validateRecipeDelete(recipeId: string): Promise<NextRespon
   if (menuDishesResult.error) {
     logger.error('[Recipes API] Error checking menu dishes usage:', {
       error: menuDishesResult.error.message,
-      code: (menuDishesResult.error as any).code,
+      code: menuDishesResult.error.code,
       context: { endpoint: '/api/recipes/[id]', operation: 'DELETE', recipeId },
     });
 
@@ -37,7 +37,7 @@ export async function validateRecipeDelete(recipeId: string): Promise<NextRespon
     if (!dishRecipesResult.error.message.includes('does not exist')) {
       logger.error('[Recipes API] Error checking dish_recipes usage:', {
         error: dishRecipesResult.error.message,
-        code: (dishRecipesResult.error as any).code,
+        code: dishRecipesResult.error.code,
         context: { endpoint: '/api/recipes/[id]', operation: 'DELETE', recipeId },
       });
 

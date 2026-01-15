@@ -1,11 +1,11 @@
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { ApiErrorHandler, type ApiError } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 
 export async function deleteQualification(
   employeeId: string,
   qualificationId: string,
-): Promise<{ success: boolean; message: string } | { error: any; status: number }> {
+): Promise<{ success: boolean; message: string } | { error: ApiError; status: number }> {
   if (!supabaseAdmin) {
     return {
       error: ApiErrorHandler.createError(
@@ -40,7 +40,7 @@ export async function deleteQualification(
   if (error) {
     logger.error('[Employee Qualifications API] Database error deleting qualification:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: {
         endpoint: '/api/employees/[id]/qualifications/[qual_id]',
         operation: 'DELETE',

@@ -62,7 +62,7 @@ export async function createComplianceRecord(recordData: {
   if (error) {
     logger.error('[Compliance Records API] Database error creating record:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: {
         endpoint: '/api/compliance-records',
         operation: 'POST',

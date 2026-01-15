@@ -1,14 +1,14 @@
 'use client';
-import Script from 'next/script';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, useRef, Suspense } from 'react';
+import Script from 'next/script';
+import { Suspense, useEffect, useRef } from 'react';
 
 import { logger } from '@/lib/logger';
 
 declare global {
   interface Window {
-    dataLayer: any[];
-    gtag: (...args: any[]) => void;
+    dataLayer: Record<string, unknown>[];
+    gtag: (command: string, ...args: unknown[]) => void;
   }
 }
 
@@ -89,8 +89,8 @@ function GoogleTagManagerInner({ gtmId, ga4MeasurementId }: GoogleTagManagerProp
 
           // Initialize gtag function for backward compatibility
           if (typeof window !== 'undefined' && !window.gtag) {
-            window.gtag = function () {
-              window.dataLayer.push(arguments);
+            window.gtag = function (...args: unknown[]) {
+              window.dataLayer.push(arguments as unknown as Record<string, unknown>);
             };
             logger.dev('🔧 gtag function initialized for GTM compatibility');
           }
@@ -112,7 +112,7 @@ export default function GoogleTagManager({ gtmId, ga4MeasurementId }: GoogleTagM
 }
 
 // Helper function to push events to GTM data layer
-export function pushToDataLayer(data: any) {
+export function pushToDataLayer(data: Record<string, unknown>) {
   if (typeof window !== 'undefined' && window.dataLayer) {
     window.dataLayer.push(data);
     logger.dev('📤 Data pushed to GTM:', data);
@@ -120,7 +120,7 @@ export function pushToDataLayer(data: any) {
 }
 
 // Helper function to track custom events
-export function trackGTMEvent(eventName: string, parameters: Record<string, any> = {}) {
+export function trackGTMEvent(eventName: string, parameters: Record<string, unknown> = {}) {
   pushToDataLayer({
     event: eventName,
     ...parameters,
@@ -132,7 +132,7 @@ export function trackGTMEvent(eventName: string, parameters: Record<string, any>
 export function trackGTMConversion(
   conversionType: string,
   value?: number,
-  parameters: Record<string, any> = {},
+  parameters: Record<string, unknown> = {},
 ) {
   pushToDataLayer({
     event: 'conversion',
@@ -144,7 +144,10 @@ export function trackGTMConversion(
 }
 
 // Helper function to track user engagement
-export function trackGTMEngagement(engagementType: string, parameters: Record<string, any> = {}) {
+export function trackGTMEngagement(
+  engagementType: string,
+  parameters: Record<string, unknown> = {},
+) {
   pushToDataLayer({
     event: 'engagement',
     engagement_type: engagementType,

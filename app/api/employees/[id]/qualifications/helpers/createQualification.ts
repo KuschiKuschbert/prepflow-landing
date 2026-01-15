@@ -1,6 +1,6 @@
-import { supabaseAdmin } from '@/lib/supabase';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { ApiErrorHandler, type ApiError } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { QUALIFICATION_SELECT } from './schemas';
 
 export async function createQualification(
@@ -14,7 +14,7 @@ export async function createQualification(
     document_url?: string;
     notes?: string;
   },
-): Promise<{ success: boolean; message: string; data: any } | { error: any; status: number }> {
+): Promise<{ success: boolean; message: string; data: any } | { error: ApiError; status: number }> {
   if (!supabaseAdmin) {
     return {
       error: ApiErrorHandler.createError(
@@ -58,7 +58,7 @@ export async function createQualification(
   if (error) {
     logger.error('[Employee Qualifications API] Database error creating qualification:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: {
         endpoint: '/api/employees/[id]/qualifications',
         operation: 'POST',

@@ -1,11 +1,11 @@
 'use client';
 
-import React from 'react';
+import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
+import { useAutosave } from '@/hooks/useAutosave';
 import { useTranslation } from '@/lib/useTranslation';
+import React from 'react';
 import { ComplianceRecordFormData, ComplianceType } from '../types';
 import { getTypeIconEmoji } from '../utils';
-import { useAutosave } from '@/hooks/useAutosave';
-import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 
 interface ComplianceRecordFormProps {
   formData: ComplianceRecordFormData;
@@ -25,7 +25,7 @@ export function ComplianceRecordForm({
   const { t } = useTranslation();
 
   // Autosave integration
-  const entityId = (formData as any).id || 'new';
+  const entityId = formData.id || 'new';
   const canAutosave =
     entityId !== 'new' || Boolean(formData.compliance_type_id && formData.document_name);
 

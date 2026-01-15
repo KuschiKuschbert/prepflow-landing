@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { MenuItemWithRelations } from '../../../helpers/schemas';
+import { MenuDishRelation, MenuItemWithRelations } from '../../../helpers/schemas';
 import { calculateDishCost } from './calculateDishCost';
 import { calculateDishSellingPrice } from './calculateDishSellingPrice';
 
@@ -7,12 +7,12 @@ import { calculateDishSellingPrice } from './calculateDishSellingPrice';
  * Processes a dish item for statistics calculation
  *
  * @param {MenuItemWithRelations} item - Menu item with dish
- * @param {any} dish - Dish data
+ * @param {MenuDishRelation} dish - Dish data
  * @returns {Promise<{ cogs: number; revenue: number; margin: number | null }>} Statistics for dish
  */
 export async function processDishItem(
   item: MenuItemWithRelations,
-  dish: any,
+  dish: MenuDishRelation,
 ): Promise<{
   cogs: number;
   revenue: number;

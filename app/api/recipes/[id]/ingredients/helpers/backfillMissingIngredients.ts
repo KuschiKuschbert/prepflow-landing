@@ -33,10 +33,11 @@ export async function backfillMissingIngredients(rows: any[], recipeId: string):
     .in('id', uniqueIds);
 
   // If category column doesn't exist, retry without it
+  // If category column doesn't exist, retry without it
   if (
     ingError &&
-    (ingError as any).code === '42703' &&
-    (ingError as any).message?.includes('category')
+    ingError.code === '42703' &&
+    ingError.message.includes('category')
   ) {
     logger.warn('[Recipes API] Category column not found in backfill, retrying without category', {
       context: { endpoint: '/api/recipes/[id]/ingredients', recipeId },

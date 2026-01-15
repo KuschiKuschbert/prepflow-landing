@@ -33,7 +33,7 @@ export async function checkLockStatus(
     return { isLocked: false, error: NextResponse.json(migrationError, { status: 503 }) };
   }
 
-  const isLocked = (menuWithLock as any)?.is_locked || false;
+  const isLocked = menuWithLock?.is_locked || false;
   return { isLocked, error: null };
 }
 
@@ -120,7 +120,7 @@ export async function lockMenu(
     };
   }
 
-  return { menu: updatedMenu as unknown as Menu, error: null };
+  return { menu: updatedMenu as Menu, error: null };
 }
 
 /**
@@ -161,5 +161,5 @@ export async function unlockMenu(
     };
   }
 
-  return { menu: updatedMenu as unknown as Menu, error: null };
+  return { menu: updatedMenu as Menu, error: null };
 }

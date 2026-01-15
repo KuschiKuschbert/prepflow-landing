@@ -119,7 +119,9 @@ export async function DELETE(
 
     const result = await deleteMenuItem(menuId, menuItemId);
     if ('error' in result) {
-      return NextResponse.json(result.error, { status: (result as any).status });
+      return NextResponse.json(result.error, {
+        status: (result as { status: number }).status,
+      });
     }
 
     return NextResponse.json(result);

@@ -1,6 +1,6 @@
+import { logger } from '@/lib/logger';
 import { getStripe } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import type { TierSlug } from '@/lib/tier-config';
 import { extractTierFromStripe } from '@/lib/webhook-helpers';
 import type Stripe from 'stripe';
@@ -44,7 +44,10 @@ export async function syncUserSubscription(userEmail: string): Promise<boolean> 
       return false;
     }
 
-    const subscription = subscriptions.data[0] as unknown as Stripe.Subscription;
+    const subscription = subscriptions.data[0] as Stripe.Subscription & {
+      current_period_end: number;
+      current_period_start: number;
+    };
 
     // Extract tier
     const tier =
@@ -60,12 +63,12 @@ export async function syncUserSubscription(userEmail: string): Promise<boolean> 
     else if (subscription.status === 'incomplete') status = 'trial';
     else if (subscription.status === 'incomplete_expired') status = 'cancelled';
 
-    const expiresAt = (subscription as any).current_period_end
-      ? new Date((subscription as any).current_period_end * 1000)
+    const expiresAt = subscription.current_period_end
+      ? new Date(subscription.current_period_end * 1000)
       : null;
 
-    const currentPeriodStart = (subscription as any).current_period_start
-      ? new Date((subscription as any).current_period_start * 1000)
+    const currentPeriodStart = subscription.current_period_start
+      ? new Date(subscription.current_period_start * 1000)
       : null;
 
     // Update user subscription

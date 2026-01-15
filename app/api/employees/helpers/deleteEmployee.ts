@@ -25,7 +25,7 @@ export async function deleteEmployee(id: string) {
   if (error) {
     logger.error('[Employees API] Database error deleting employee:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: {
         endpoint: '/api/employees',
         operation: 'DELETE',

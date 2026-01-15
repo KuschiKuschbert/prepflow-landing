@@ -1,5 +1,5 @@
-import { SupabaseClient } from '@supabase/supabase-js';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { isMissingTableError } from './isMissingTableError';
 
 /**
@@ -38,5 +38,5 @@ export async function getUserTableIds(
     });
     return [];
   }
-  return (data || []).map((r: any) => r[idColumn]) as string[];
+  return ((data as any[]) || []).map((r: Record<string, unknown>) => r[idColumn]) as string[];
 }

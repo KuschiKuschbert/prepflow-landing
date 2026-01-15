@@ -3,12 +3,12 @@
  * PUT /api/backup/settings - Update backup settings
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth0-api-helpers';
-import { createSupabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import type { BackupSettings } from '@/lib/backup/types';
+import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const updateBackupSettingsSchema = z.object({
@@ -58,10 +58,10 @@ export async function GET(request: NextRequest) {
       success: true,
       settings,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Backup Settings] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to get backup settings', message: error.message },
+      { error: 'Failed to get backup settings', message: error instanceof Error ? error.message : String(error) },
       { status: 500 },
     );
   }
@@ -135,7 +135,7 @@ export async function PUT(request: NextRequest) {
     if (error) {
       logger.error('[Backup Settings] Database error updating schedule:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         userId,
       });
       throw ApiErrorHandler.fromSupabaseError(error, 500);
@@ -148,10 +148,10 @@ export async function PUT(request: NextRequest) {
       success: true,
       message: 'Backup settings updated successfully',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Backup Settings] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to update backup settings', message: error.message },
+      { error: 'Failed to update backup settings', message: error instanceof Error ? error.message : String(error) },
       { status: 500 },
     );
   }

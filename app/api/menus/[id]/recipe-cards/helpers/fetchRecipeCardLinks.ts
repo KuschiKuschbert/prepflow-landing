@@ -7,10 +7,12 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 
+import { IngredientRow, MethodStepRow, RecipeCardDB } from '../types';
+
 export interface RecipeCardLink {
   menu_item_id: string;
   recipe_card_id: string;
-  menu_recipe_cards?: any;
+  menu_recipe_cards?: RecipeCardDB;
 }
 
 export interface RecipeCardOld {
@@ -18,10 +20,10 @@ export interface RecipeCardOld {
   menu_item_id: string;
   title: string;
   base_yield: number;
-  ingredients: any[];
-  method_steps: any[];
+  ingredients: IngredientRow[];
+  method_steps: MethodStepRow[];
   notes: string[];
-  card_content: any;
+  card_content: Record<string, unknown> | null;
   parsed_at: string | null;
 }
 
@@ -95,5 +97,5 @@ export async function fetchRecipeCardLinks(
     }
   }
 
-  return { links: (linksData || []) as RecipeCardLink[], cards: null, useOldMethod: false };
+  return { links: (linksData || []) as unknown as RecipeCardLink[], cards: null, useOldMethod: false };
 }

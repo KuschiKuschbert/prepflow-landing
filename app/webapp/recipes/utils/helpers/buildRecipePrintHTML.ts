@@ -33,11 +33,10 @@ function buildIngredientsTable(data: RecipePrintData): string {
   `;
 
   ingredients.forEach(ing => {
-    const ingredientName =
-      (ing.ingredients as any)?.ingredient_name || (ing.ingredients as any)?.name || 'Unknown';
+    const ingredientName = ing.ingredients?.ingredient_name || 'Unknown';
     const quantity = ing.quantity || 0;
     const unit = ing.unit || '';
-    const notes = (ing as any).notes ? ` (${escapeHtml((ing as any).notes)})` : '';
+    const notes = ing.notes ? ` (${escapeHtml(ing.notes)})` : '';
 
     html += `
       <tr>
@@ -116,12 +115,12 @@ export function buildRecipePrintHTML(data: RecipePrintData): string {
       </div>
     `;
   }
-  if ((recipe as any).notes) {
+  if (recipe.notes) {
     html += `
       <div class="recipe-section">
         <h2 class="recipe-section-title">Notes</h2>
         <div class="recipe-notes">
-          ${escapeHtml((recipe as any).notes).replace(/\n/g, '<br>')}
+          ${escapeHtml(recipe.notes).replace(/\n/g, '<br>')}
         </div>
       </div>
     `;

@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { createSupabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { z } from 'zod';
 
 const bulkUpdateIngredientsSchema = z.object({
@@ -135,7 +135,7 @@ export async function PUT(request: NextRequest) {
         ids: normalizedIds,
       },
     });
-  } catch (e: any) {
+  } catch (e: unknown) {
     logger.error('[bulk-update] Unexpected error:', e);
     return NextResponse.json(
       {

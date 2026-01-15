@@ -1,5 +1,6 @@
 'use client';
 
+import { FoodImageGenerator } from '@/components/ui/FoodImageGenerator';
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { UtensilsCrossed } from 'lucide-react';
@@ -8,7 +9,6 @@ import { COGSTableGrouped } from '../../cogs/components/COGSTableGrouped';
 import { COGSCalculation } from '../../cogs/types';
 import { DishCostData, DishWithDetails } from '../types';
 import { DishSidePanelCostInfo } from './DishSidePanelCostInfo';
-import { FoodImageGenerator } from '@/components/ui/FoodImageGenerator';
 
 interface DishSidePanelContentProps {
   loading: boolean;
@@ -62,10 +62,10 @@ export function DishSidePanelContent({
           entityType="dish"
           entityId={dishId}
           entityName={dishName}
-          imageUrl={(dishDetails as any)?.image_url}
-          imageUrlAlternative={(dishDetails as any)?.image_url_alternative}
-          imageUrlModern={(dishDetails as any)?.image_url_modern}
-          imageUrlMinimalist={(dishDetails as any)?.image_url_minimalist}
+          imageUrl={dishDetails?.image_url}
+          imageUrlAlternative={dishDetails?.image_url_alternative}
+          imageUrlModern={dishDetails?.image_url_modern}
+          imageUrlMinimalist={dishDetails?.image_url_minimalist}
           className="mb-6"
           compact={false}
         />
@@ -86,7 +86,7 @@ export function DishSidePanelContent({
                   className="rounded-lg bg-[var(--muted)]/30 p-3 text-sm text-[var(--foreground-secondary)]"
                 >
                   <span className="font-medium text-[var(--foreground)]">
-                    {dr.recipes?.recipe_name || (dr.recipes as any)?.name || 'Unknown Recipe'}
+                    {dr.recipes?.recipe_name || 'Unknown Recipe'}
                   </span>
                   <span className="ml-2 text-[var(--foreground-muted)]">× {dr.quantity}</span>
                   <span className="ml-2 text-xs text-[var(--foreground-subtle)]">

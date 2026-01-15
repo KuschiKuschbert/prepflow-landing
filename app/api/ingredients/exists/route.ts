@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   try {
@@ -33,12 +33,18 @@ export async function GET(req: NextRequest) {
 
     if (error) throw ApiErrorHandler.fromSupabaseError(error, 500);
     return NextResponse.json({ exists: (data || []).length > 0 });
-  } catch (e: any) {
+  } catch (e: unknown) {
     logger.error('[route.ts] Error in catch block:', {
       error: e instanceof Error ? e.message : String(e),
       stack: e instanceof Error ? e.stack : undefined,
     });
-    if (e && typeof e === 'object' && 'status' in e && 'json' in e) {
+    if (
+      e &&
+      typeof e === 'object' &&
+      'status' in e &&
+      'json' in e &&
+      typeof (e as any).json === 'function'
+    ) {
       return e as NextResponse;
     }
     return NextResponse.json(
