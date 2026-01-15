@@ -111,18 +111,23 @@ export class RefactoringPlanner {
   }
 
   private static extractPath(text: string): string[] | undefined {
-    // Look for paths like `app/api/` or `components/` in the text
-    const match = text.match(/`([^`]+)`/);
-    if (
-      match &&
-      (match[1].includes('/') || match[1].endsWith('.ts') || match[1].endsWith('.tsx'))
-    ) {
-      // If it looks like a path
-      let cleanPath = match[1];
-      // Wildcard output for robustness
-      if (cleanPath.endsWith('/')) return [`${cleanPath}**/*.{ts,tsx}`];
-      return [cleanPath];
+    // 1. Look for backticked paths: `app/api/`
+    const backtickMatch = text.match(/`([^`]+)`/);
+    if (backtickMatch) {
+      let pathStr = backtickMatch[1];
+      if (pathStr.includes('/') || pathStr.endsWith('.ts') || pathStr.endsWith('.tsx')) {
+        if (pathStr.endsWith('/')) return [`${pathStr}**/*.{ts,tsx}`];
+        return [pathStr];
+      }
     }
+
+    // 2. Look for common path patterns without backticks: app/webapp or app/api/ingredients
+    const pathRegex = /(app\/[a-zA-Z0-9\/\-_]+|components\/[a-zA-Z0-9\/\-_]+|lib\/[a-zA-Z0-9\/\-_]+)/g;
+    const matches = text.match(pathRegex);
+    if (matches && matches.length > 0) {
+      return matches.map(m => (m.endsWith('/') ? `${m}**/*.{ts,tsx}` : `${m}/**/*.{ts,tsx}`));
+    }
+
     return undefined;
   }
 }
