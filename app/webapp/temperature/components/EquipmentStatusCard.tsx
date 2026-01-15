@@ -1,14 +1,13 @@
 'use client';
 
-import { TemperatureEquipment } from '../types';
-import { AlertTriangle, Settings } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, AlertTriangle, Settings } from 'lucide-react';
+import { TemperatureEquipment, TemperatureLog } from '../types';
 
 interface EquipmentStatusCardProps {
   equipment: TemperatureEquipment;
   status: { status: string; color: string; temperature?: number };
-  logs: any[];
+  logs: TemperatureLog[];
   timeFilter: string;
   isSelected: boolean;
   isCompact: boolean;

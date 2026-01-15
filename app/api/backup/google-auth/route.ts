@@ -49,7 +49,10 @@ export async function POST(request: NextRequest) {
   } catch (error: unknown) {
     logger.error('[Google Auth] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to initiate Google auth', message: error instanceof Error ? error.message : String(error) },
+      {
+        error: 'Failed to initiate Google auth',
+        message: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }
@@ -81,7 +84,10 @@ export async function DELETE(request: NextRequest) {
   } catch (error: unknown) {
     logger.error('[Google Auth] Error disconnecting:', error);
     return NextResponse.json(
-      { error: 'Failed to disconnect Google Drive', message: error instanceof Error ? error.message : String(error) },
+      {
+        error: 'Failed to disconnect Google Drive',
+        message: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }

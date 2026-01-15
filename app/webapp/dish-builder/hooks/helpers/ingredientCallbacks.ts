@@ -1,17 +1,17 @@
-import { Ingredient } from '../../../cogs/types';
-import { handleIngredientAdded, editCalculation } from '../utils/ingredientManagement';
+import { COGSCalculation, Ingredient } from '../../../cogs/types';
+import { editCalculation, handleIngredientAdded } from '../utils/ingredientManagement';
 import { createSimpleCallbacks } from './simpleCallbacks';
 
 interface IngredientCallbacksProps {
-  calculations: any[];
-  calculationsRef: React.MutableRefObject<any[]>;
+  calculations: COGSCalculation[];
+  calculationsRef: React.MutableRefObject<COGSCalculation[]>;
   ingredients: Ingredient[];
-  setCalculations: React.Dispatch<React.SetStateAction<any[]>>;
+  setCalculations: React.Dispatch<React.SetStateAction<COGSCalculation[]>>;
   updateCalculation: (
     ingredientId: string,
     quantity: number,
     ingredients: Ingredient[],
-    setCalculations: React.Dispatch<React.SetStateAction<any[]>>,
+    setCalculations: React.Dispatch<React.SetStateAction<COGSCalculation[]>>,
   ) => void;
   convertIngredientQuantity: (
     quantity: number,

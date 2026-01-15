@@ -3,11 +3,11 @@
  */
 import { StoreApi } from 'zustand';
 import type {
-    Employee,
-    RosterTemplate,
-    Shift,
-    ShiftStatus,
-    ShiftValidationWarning,
+  Employee,
+  RosterTemplate,
+  Shift,
+  ShiftStatus,
+  ShiftValidationWarning,
 } from '../../types';
 
 export type RosterStoreSet = StoreApi<RosterState>['setState'];

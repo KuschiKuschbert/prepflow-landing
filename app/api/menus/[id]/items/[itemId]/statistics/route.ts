@@ -99,13 +99,22 @@ export async function GET(
     }
 
     // Calculate COGS
-    const { cogs, error: cogsError } = await calculateItemCOGS(menuItem as unknown as StatisticsMenuItem);
+    const { cogs, error: cogsError } = await calculateItemCOGS(
+      menuItem as unknown as StatisticsMenuItem,
+    );
 
     // Calculate recommended price
-    const recommendedPrice = await calculateRecommendedPrice(menuItem as unknown as StatisticsMenuItem, menuId);
+    const recommendedPrice = await calculateRecommendedPrice(
+      menuItem as unknown as StatisticsMenuItem,
+      menuId,
+    );
 
     // Calculate statistics
-    const statistics = calculateStatistics(menuItem as unknown as StatisticsMenuItem, cogs, recommendedPrice);
+    const statistics = calculateStatistics(
+      menuItem as unknown as StatisticsMenuItem,
+      cogs,
+      recommendedPrice,
+    );
 
     return NextResponse.json({
       success: true,

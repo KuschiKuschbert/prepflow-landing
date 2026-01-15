@@ -2,10 +2,14 @@
  * Handle batch prep list creation with optimistic updates.
  */
 import { logger } from '@/lib/logger';
-import type { PrepList, GeneratedPrepListData } from '../../types';
+import type { GeneratedPrepListData, PrepList, PrepListCreationItem } from '../../types';
 
 interface HandleSaveBatchPrepListsParams {
-  prepListsToCreate: Array<{ sectionId: string | null; name: string; items: any[] }>;
+  prepListsToCreate: Array<{
+    sectionId: string | null;
+    name: string;
+    items: PrepListCreationItem[];
+  }>;
   userId: string;
   currentPrepLists: PrepList[];
   setPrepLists: React.Dispatch<React.SetStateAction<PrepList[]>>;

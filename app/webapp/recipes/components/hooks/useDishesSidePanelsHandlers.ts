@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
-import { Dish, Recipe } from '../../types';
+import { Dish, Recipe, RecipeIngredientWithDetails } from '../../types';
 
 interface UseDishesSidePanelsHandlersProps {
   setShowDishPanel: (show: boolean) => void;
   setSelectedDishForPreview: (dish: Dish | null) => void;
   setShowRecipePanel: (show: boolean) => void;
   setSelectedRecipeForPreview: (recipe: Recipe | null) => void;
-  setRecipeIngredients: (ingredients: any[]) => void;
+  setRecipeIngredients: (ingredients: RecipeIngredientWithDetails[]) => void;
   setShowDishEditDrawer: (show: boolean) => void;
   setEditingDish: (dish: Dish | null) => void;
   handleEditDish: (dish: Dish) => void;

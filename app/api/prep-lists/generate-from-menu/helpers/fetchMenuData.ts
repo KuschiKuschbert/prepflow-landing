@@ -4,7 +4,9 @@ import { supabaseAdmin } from '@/lib/supabase';
 
 import { MenuItemData } from '../types';
 
-export async function fetchMenuData(menuId: string): Promise<{ menu: any, menuItems: MenuItemData[] }> {
+export async function fetchMenuData(
+  menuId: string,
+): Promise<{ menu: any; menuItems: MenuItemData[] }> {
   if (!supabaseAdmin) {
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }

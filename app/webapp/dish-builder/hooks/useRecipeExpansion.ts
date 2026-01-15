@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback } from 'react';
+import { Ingredient, RecipeIngredient } from '../../cogs/types';
 import { ExpandedRecipeIngredient } from '../types';
-import { Ingredient } from '../../cogs/types';
 
 import { logger } from '@/lib/logger';
 interface UseRecipeExpansionProps {
@@ -29,7 +29,7 @@ export function useRecipeExpansion({
         }
 
         const result = await response.json();
-        const recipeIngredients = result.items || [];
+        const recipeIngredients: RecipeIngredient[] = result.items || [];
 
         if (recipeIngredients.length === 0) {
           setError('Recipe has no ingredients');
@@ -38,16 +38,18 @@ export function useRecipeExpansion({
 
         // Expand recipe ingredients to individual dish ingredients
         // Map recipe ingredients to expanded format
-        const expandedIngredients: ExpandedRecipeIngredient[] = recipeIngredients.map((ri: any) => {
-          // Find the ingredient data to get the name
-          const ingredientData = ingredients.find(ing => ing.id === ri.ingredient_id);
-          return {
-            ingredient_id: ri.ingredient_id,
-            ingredient_name: ingredientData?.ingredient_name || ri.ingredient_name || 'Unknown',
-            quantity: ri.quantity,
-            unit: ri.unit,
-          };
-        });
+        const expandedIngredients: ExpandedRecipeIngredient[] = recipeIngredients.map(
+          (ri: RecipeIngredient) => {
+            // Find the ingredient data to get the name
+            const ingredientData = ingredients.find(ing => ing.id === ri.ingredient_id);
+            return {
+              ingredient_id: ri.ingredient_id,
+              ingredient_name: ingredientData?.ingredient_name || ri.ingredient_name || 'Unknown',
+              quantity: ri.quantity,
+              unit: ri.unit,
+            };
+          },
+        );
 
         onIngredientsExpanded(expandedIngredients);
       } catch (err) {

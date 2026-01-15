@@ -9,11 +9,21 @@ interface Ingredient {
   yield_percentage?: number;
 }
 
+interface InputDialogConfig {
+  title: string;
+  message: string;
+  placeholder: string;
+  type: 'text' | 'number';
+  min?: number;
+  max?: number;
+  onConfirm: (value: string) => Promise<void>;
+}
+
 interface CreateBulkUpdateHandlerParams {
   selectedCount: number;
   onBulkUpdate?: (ids: string[], updates: Partial<Ingredient>) => Promise<void>;
   selectedIngredients: Set<string>;
-  setInputDialogConfig: (config: any) => void;
+  setInputDialogConfig: (config: InputDialogConfig | null) => void;
   setShowInputDialog: (show: boolean) => void;
   setBulkActionLoading: (loading: boolean) => void;
 }

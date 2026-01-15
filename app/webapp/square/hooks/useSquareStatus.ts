@@ -6,9 +6,19 @@
  * configuration, setup, testing, and troubleshooting guide.
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
-import { getCachedData, cacheData } from '@/lib/cache/data-cache';
+import { useCallback, useEffect, useState } from 'react';
+
+export interface SyncLog {
+  id: string;
+  operation_type: string;
+  direction: 'square_to_prepflow' | 'prepflow_to_square' | 'unknown';
+  entity_type?: string;
+  status: 'success' | 'error' | 'pending' | 'unknown';
+  error_message?: string;
+  created_at: string;
+}
 
 interface SquareStatus {
   configured: boolean;
@@ -25,8 +35,8 @@ interface SquareStatus {
     webhook_enabled?: boolean;
     webhook_url?: string;
   } | null;
-  recentSyncs: any[];
-  recentErrors: any[];
+  recentSyncs: SyncLog[];
+  recentErrors: SyncLog[];
   errorCount: number;
 }
 

@@ -70,7 +70,9 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
   }
 
   // Normalize and clean ingredients data
-  const validDishIngredients: DishRelationIngredient[] = ((dishIngredients as unknown as RawDishIngredient[]) || [])
+  const validDishIngredients: DishRelationIngredient[] = (
+    (dishIngredients as unknown as RawDishIngredient[]) || []
+  )
     .filter(di => di.ingredients !== null && di.ingredients !== undefined)
     .map(di => {
       const ing = Array.isArray(di.ingredients) ? di.ingredients[0] : di.ingredients;

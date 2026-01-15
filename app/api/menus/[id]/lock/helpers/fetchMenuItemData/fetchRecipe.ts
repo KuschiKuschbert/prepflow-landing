@@ -43,7 +43,7 @@ export async function fetchRecipeData(
   const rawRecipe = recipe as unknown as RawRecipeResult;
 
   const ingredients: MenuItemIngredient[] =
-    rawRecipe.recipe_ingredients?.map((ri) => ({
+    rawRecipe.recipe_ingredients?.map(ri => ({
       name: ri.ingredients?.ingredient_name || 'Unknown Ingredient',
       quantity: Number(ri.quantity) || 0,
       unit: ri.unit || '',

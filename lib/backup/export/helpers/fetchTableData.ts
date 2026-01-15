@@ -9,7 +9,10 @@ import { createSupabaseAdmin } from '@/lib/supabase';
  * @param {string} tableName - Table name
  * @returns {Promise<any[]>} Array of records
  */
-export async function getUserTableData(userId: string, tableName: string): Promise<Record<string, unknown>[]> {
+export async function getUserTableData(
+  userId: string,
+  tableName: string,
+): Promise<Record<string, unknown>[]> {
   const supabase = createSupabaseAdmin();
 
   const { data, error } = await supabase.from(tableName).select('*').eq('user_id', userId);

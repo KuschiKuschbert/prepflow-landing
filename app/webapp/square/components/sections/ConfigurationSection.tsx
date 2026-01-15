@@ -1,20 +1,18 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { useUser } from '@auth0/nextjs-auth0/client';
-import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { Save, Trash2, AlertCircle, CheckCircle2, ExternalLink } from 'lucide-react';
-import { logger } from '@/lib/logger';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useConfirm } from '@/hooks/useConfirm';
-import { ConnectionWorkflow } from './ConnectionWorkflow';
+import { logger } from '@/lib/logger';
+import { useUser } from '@auth0/nextjs-auth0/client';
+import { useEffect, useState } from 'react';
 import { useSquareStatus } from '../../hooks/useSquareStatus';
-import type { SquareConfig } from './ConfigurationSection/types';
+import { ConfigurationForm } from './ConfigurationSection/components/ConfigurationForm';
+import { ConnectionWorkflowForm } from './ConfigurationSection/components/ConnectionWorkflowForm';
+import { deleteSquareConfig } from './ConfigurationSection/helpers/deleteConfig';
 import { fetchSquareConfig } from './ConfigurationSection/helpers/fetchConfig';
 import { saveSquareConfig } from './ConfigurationSection/helpers/saveConfig';
-import { deleteSquareConfig } from './ConfigurationSection/helpers/deleteConfig';
-import { ConnectionWorkflowForm } from './ConfigurationSection/components/ConnectionWorkflowForm';
-import { ConfigurationForm } from './ConfigurationSection/components/ConfigurationForm';
+import type { SquareConfig } from './ConfigurationSection/types';
+import { ConnectionWorkflow } from './ConnectionWorkflow';
 
 export function ConfigurationSection() {
   const { user } = useUser();
@@ -94,8 +92,10 @@ export function ConfigurationSection() {
       setSaving(true);
       const environment = config.square_environment || 'sandbox';
       window.location.href = `/api/square/oauth?environment=${environment}`;
-    } catch (error: any) {
-      logger.error('[Square Config] OAuth redirect error:', { error: error.message });
+    } catch (error: unknown) {
+      logger.error('[Square Config] OAuth redirect error:', {
+        error: error instanceof Error ? error.message : String(error),
+      });
       showError('Failed to start Square connection. Give it another go, chef.');
       setSaving(false);
     }

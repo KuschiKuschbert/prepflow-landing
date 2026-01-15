@@ -3,12 +3,13 @@
  */
 
 import { logger } from '@/lib/logger';
+import { QueryClient } from '@tanstack/react-query';
 import type { TemperatureEquipment } from '../../types';
 
 interface RefreshLogsProps {
   fetchAllLogs: (limit?: number, forceRefresh?: boolean) => Promise<void>;
   fetchEquipment: () => Promise<void>;
-  queryClient: any;
+  queryClient: QueryClient;
   equipment: TemperatureEquipment[];
 }
 

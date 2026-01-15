@@ -4,7 +4,11 @@
 import { useEffect, useState } from 'react';
 
 import { logger } from '@/lib/logger';
-export function useIngredientMigration(loading: boolean, isLoading: boolean, ingredientsData: any) {
+export function useIngredientMigration(
+  loading: boolean,
+  isLoading: boolean,
+  ingredientsData: unknown,
+) {
   const [migrationChecked, setMigrationChecked] = useState(false);
 
   useEffect(() => {

@@ -25,9 +25,9 @@ import { useCleaningModals } from './hooks/useCleaningModals';
 import { useCleaningPageData } from './hooks/useCleaningPageData';
 import { useStatsDates } from './hooks/useStatsDates';
 import {
-    exportCleaningScheduleToCSV,
-    exportCleaningScheduleToHTML,
-    exportCleaningScheduleToPDF,
+  exportCleaningScheduleToCSV,
+  exportCleaningScheduleToHTML,
+  exportCleaningScheduleToPDF,
 } from './utils/exportCleaningSchedules';
 import { printCleaningSchedule, type CleaningTask } from './utils/printCleaningSchedule';
 
@@ -153,17 +153,11 @@ export default function CleaningRosterPage() {
     onSetActiveTab: setActiveTab,
   });
 
-
-
   const prepareTasksForExport = (tasksToExport: TaskWithCompletions[]): CleaningTask[] => {
     const flatTasks: CleaningTask[] = [];
 
     tasksToExport.forEach(task => {
-      const dates = getTaskDatesWithStatus(
-        task,
-        startDate.toISOString(),
-        endDate.toISOString()
-      );
+      const dates = getTaskDatesWithStatus(task, startDate.toISOString(), endDate.toISOString());
 
       dates.forEach(d => {
         if (!d.shouldAppear) return;

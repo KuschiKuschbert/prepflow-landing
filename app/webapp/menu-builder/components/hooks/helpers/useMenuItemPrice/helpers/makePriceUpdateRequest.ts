@@ -3,6 +3,7 @@
  */
 
 import { logger } from '@/lib/logger';
+import { MenuItem } from '../../../../../types';
 
 /**
  * Make API request to update menu item price.
@@ -11,7 +12,7 @@ export async function makePriceUpdateRequest(
   menuId: string,
   itemId: string,
   price: number | null,
-): Promise<{ ok: boolean; status: number; item?: any; error?: any }> {
+): Promise<{ ok: boolean; status: number; item?: MenuItem; error?: string }> {
   logger.dev('[useMenuItemPrice] Making API call', {
     itemId,
     price,

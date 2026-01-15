@@ -10,7 +10,11 @@ export function aggregateIngredientsBySection(
   // Process each menu item
   for (const item of menuItems) {
     const category = item.category || 'Uncategorized';
-    const itemDish = item.dishes ? (Array.isArray(item.dishes) ? item.dishes[0] : item.dishes) : null;
+    const itemDish = item.dishes
+      ? Array.isArray(item.dishes)
+        ? item.dishes[0]
+        : item.dishes
+      : null;
     const sectionId = itemDish?.kitchen_section_id || null;
     const sectionName = category;
 
@@ -43,7 +47,11 @@ export function aggregateIngredientsBySection(
 
         const foundItem = menuItems.find(mi => mi.recipe_id === dishRecipe.recipe_id);
         const foundItemRec = foundItem?.recipes;
-        const recipe = foundItemRec ? (Array.isArray(foundItemRec) ? foundItemRec[0] : foundItemRec) : null;
+        const recipe = foundItemRec
+          ? Array.isArray(foundItemRec)
+            ? foundItemRec[0]
+            : foundItemRec
+          : null;
 
         if (!recipe) continue;
 

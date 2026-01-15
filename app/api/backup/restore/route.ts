@@ -166,7 +166,10 @@ export async function POST(request: NextRequest) {
   } catch (error: unknown) {
     logger.error('[Backup Restore] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to restore backup', message: error instanceof Error ? error.message : String(error) },
+      {
+        error: 'Failed to restore backup',
+        message: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }

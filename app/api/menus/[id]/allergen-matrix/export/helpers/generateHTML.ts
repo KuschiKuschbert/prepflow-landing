@@ -4,7 +4,11 @@ import { NextResponse } from 'next/server';
 import { MatrixItem } from '../route';
 import { allergenMatrixStyles } from './allergenMatrixStyles';
 
-export function generateHTML(menuName: string, matrixData: MatrixItem[], forPDF: boolean): NextResponse {
+export function generateHTML(
+  menuName: string,
+  matrixData: MatrixItem[],
+  forPDF: boolean,
+): NextResponse {
   // Generate table content
   const tableContent = `
     <style>

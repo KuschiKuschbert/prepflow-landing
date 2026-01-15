@@ -20,8 +20,8 @@ export function useCOGSSorting(calculations: COGSCalculation[]): UseCOGSSortingR
   const sortedCalculations = useMemo(() => {
     const sorted = [...calculations];
     sorted.sort((a, b) => {
-      let aValue: any;
-      let bValue: any;
+      let aValue: string | number;
+      let bValue: string | number;
 
       switch (sortField) {
         case 'ingredient_name':

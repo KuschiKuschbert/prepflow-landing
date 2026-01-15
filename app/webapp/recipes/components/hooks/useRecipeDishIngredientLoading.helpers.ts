@@ -1,9 +1,10 @@
-import { COGSCalculation } from '../../../cogs/types';
-import { createCalculation } from '../../../cogs/hooks/utils/createCalculation';
 import { logger } from '@/lib/logger';
+import { createCalculation } from '../../../cogs/hooks/utils/createCalculation';
+import { COGSCalculation } from '../../../cogs/types';
+import { RecipeIngredientWithDetails } from '../../types';
 import {
-  LoadRecipeIngredientsParams,
   LoadDishIngredientsParams,
+  LoadRecipeIngredientsParams,
 } from './useRecipeDishIngredientLoading.helpers.types';
 
 export async function loadRecipeIngredients({
@@ -15,11 +16,11 @@ export async function loadRecipeIngredients({
   const response = await fetch(`/api/recipes/${recipeId}/ingredients`, { cache: 'no-store' });
   if (!response.ok) throw new Error(`Failed to fetch recipe ingredients: ${response.statusText}`);
   const data = await response.json();
-  const recipeIngredients = data.items || [];
+  const recipeIngredients: RecipeIngredientWithDetails[] = data.items || [];
   const recipe = allRecipes.find(r => r.id === recipeId);
   const recipeYield = recipe?.yield || 1;
   return recipeIngredients
-    .map((ri: any) => {
+    .map(ri => {
       const ingredientData = ingredients.find(ing => ing.id === ri.ingredient_id);
       if (!ingredientData) return null;
       const { convertedQuantity, convertedUnit, conversionNote } = convertIngredientQuantity(

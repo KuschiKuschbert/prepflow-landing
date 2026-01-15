@@ -1,10 +1,8 @@
-/**
- * Handle account deletion.
- */
+import { ConfirmOptions } from '@/hooks/useConfirm';
 import { logger } from '@/lib/logger';
 
 export async function handleDeleteHelper(
-  showConfirm: (options: any) => Promise<boolean>,
+  showConfirm: (options: ConfirmOptions) => Promise<boolean>,
   setDeletionRequested: (requested: boolean) => void,
   showSuccess: (message: string) => void,
   showError: (message: string) => void,

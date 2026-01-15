@@ -19,10 +19,14 @@ export function usePriceCalculation({
   updateVisibleRecipePrices: (
     recipes: Recipe[],
     fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>,
-    fetchBatchRecipeIngredients?: (recipeIds: string[]) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
+    fetchBatchRecipeIngredients?: (
+      recipeIds: string[],
+    ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
   ) => Promise<void>;
   fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>;
-  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<Record<string, RecipeIngredientWithDetails[]>>;
+  fetchBatchRecipeIngredients: (
+    recipeIds: string[],
+  ) => Promise<Record<string, RecipeIngredientWithDetails[]>>;
 }): void {
   const calculatingPricesRef = useRef<Set<string>>(new Set());
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);

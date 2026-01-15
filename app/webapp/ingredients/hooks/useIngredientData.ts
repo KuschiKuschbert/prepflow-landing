@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
 import { useSmartLoading } from '@/hooks/useSmartLoading';
+import { supabase } from '@/lib/supabase';
+import { useEffect, useState } from 'react';
 
 import { logger } from '@/lib/logger';
 interface Ingredient {
   id: string;
   ingredient_name: string;
-  [key: string]: any;
 }
 
 interface Supplier {
@@ -47,9 +46,10 @@ export function useIngredientData() {
       } else {
         setSuppliers(data || []);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('Error fetching suppliers:', error);
-      setError(error?.message || 'Failed to load suppliers');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to load suppliers';
+      setError(errorMessage);
       setSuppliers([]); // Set empty array on error to prevent crashes
     } finally {
       setSmartLoading(false);

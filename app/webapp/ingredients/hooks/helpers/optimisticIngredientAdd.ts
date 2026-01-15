@@ -4,7 +4,7 @@
  * @param {any} normalized - Normalized ingredient data
  * @returns {any} Temporary ingredient with temp ID
  */
-export function createOptimisticIngredient<T extends { id: string }>(normalized: any): T {
+export function createOptimisticIngredient<T extends { id: string }>(normalized: Partial<T>): T {
   const tempId = `temp-${Date.now()}`;
   return { ...normalized, id: tempId } as unknown as T;
 }

@@ -1,28 +1,29 @@
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
+import { TemperatureEquipment, TemperatureLog } from '../../../temperature/types';
 import { calculateOutOfRange } from './fetchTemperatureData/calculateOutOfRange';
-import { fetchSupabaseTemperatureData } from './fetchTemperatureData/fetchSupabaseData';
-import { fetchDashboardStats } from './fetchTemperatureData/fetchStats';
 import { extractLastCheckTime } from './fetchTemperatureData/extractLastCheckTime';
+import { fetchDashboardStats } from './fetchTemperatureData/fetchStats';
+import { fetchSupabaseTemperatureData } from './fetchTemperatureData/fetchSupabaseData';
 
 export { calculateOutOfRange, extractLastCheckTime };
 
 /**
  * Fetch temperature status data from cache or API
  *
- * @returns {Promise<{stats: any, logs: any[], equipment: any[]}>} Temperature data
+ * @returns {Promise<{stats: Record<string, unknown> | null, logs: TemperatureLog[], equipment: TemperatureEquipment[]}>} Temperature data
  */
 export async function fetchTemperatureStatusData() {
   const today = new Date().toISOString().split('T')[0];
-  const cachedStats = getCachedData<any>('dashboard_stats');
-  const cachedLogs = getCachedData<any[]>('dashboard_temperature_logs');
-  const cachedEquipment = getCachedData<any[]>('dashboard_temperature_equipment');
+  const cachedStats = getCachedData<Record<string, unknown>>('dashboard_stats');
+  const cachedLogs = getCachedData<TemperatureLog[]>('dashboard_temperature_logs');
+  const cachedEquipment = getCachedData<TemperatureEquipment[]>('dashboard_temperature_equipment');
 
   // Return cached data if available
   if (cachedStats && cachedLogs && cachedEquipment) {
     return {
       stats: cachedStats,
-      logs: cachedLogs.filter((log: any) => log.log_date === today),
+      logs: cachedLogs.filter(log => log.log_date === today),
       equipment: cachedEquipment,
     };
   }
@@ -42,7 +43,7 @@ export async function fetchTemperatureStatusData() {
 
     return {
       stats: stats || cachedStats || null,
-      logs: logs.filter((log: any) => log.log_date === today),
+      logs: logs.filter(log => log.log_date === today),
       equipment: equipment.length > 0 ? equipment : cachedEquipment || [],
     };
   } catch (err) {
@@ -50,7 +51,7 @@ export async function fetchTemperatureStatusData() {
     // Return cached data if available, otherwise empty
     return {
       stats: cachedStats || null,
-      logs: cachedLogs?.filter((log: any) => log.log_date === today) || [],
+      logs: cachedLogs?.filter(log => log.log_date === today) || [],
       equipment: cachedEquipment || [],
     };
   }

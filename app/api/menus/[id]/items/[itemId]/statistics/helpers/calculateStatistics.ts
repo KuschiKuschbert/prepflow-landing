@@ -44,9 +44,10 @@ export function calculateStatistics(
     sellingPrice = actualPrice;
   } else if (menuItem.dish_id && dish?.selling_price != null) {
     // For dishes, use dish.selling_price if available
-    sellingPrice = typeof dish.selling_price === 'string'
-      ? parseFloat(dish.selling_price)
-      : dish.selling_price ?? 0;
+    sellingPrice =
+      typeof dish.selling_price === 'string'
+        ? parseFloat(dish.selling_price)
+        : (dish.selling_price ?? 0);
   } else {
     // For recipes or when no dish price: fallback to recommended price or 0
     // Recipes don't have selling_price column, so they always use recommended price

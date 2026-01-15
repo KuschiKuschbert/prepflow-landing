@@ -53,15 +53,15 @@ export async function fetchDishRecipes(dishId: string): Promise<DishRelationReci
     });
   }
 
-interface FetchRecipeResult {
-  id: string;
-  name: string;
-  recipe_name?: string; // Potential legacy field
-  description: string | null;
-  yield: number | null;
-  yield_unit: string | null;
-  instructions: string | null;
-}
+  interface FetchRecipeResult {
+    id: string;
+    name: string;
+    recipe_name?: string; // Potential legacy field
+    description: string | null;
+    yield: number | null;
+    yield_unit: string | null;
+    instructions: string | null;
+  }
 
   const recipesMap = new Map();
   ((recipesData as unknown as FetchRecipeResult[]) || []).forEach(r => {

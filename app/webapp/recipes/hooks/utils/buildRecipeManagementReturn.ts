@@ -1,5 +1,5 @@
-import { Recipe } from '../../types';
-import { RecipePriceData } from '../../types';
+import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../../types';
+import { RecipeError } from '../../types/errors';
 
 /**
  * Build return object for useRecipeManagement hook.
@@ -30,33 +30,46 @@ export function buildRecipeManagementReturn({
   recipes: Recipe[];
   loading: boolean;
   error: string | null;
-  recipeError: any;
+  recipeError: RecipeError | null;
   recipePrices: Record<string, RecipePriceData>;
   capitalizeRecipeName: (name: string) => string;
   fetchRecipes: () => Promise<void>;
-  fetchRecipeIngredients: (recipeId: string) => Promise<any[]>;
-  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<Record<string, any[]>>;
+  fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>;
+  fetchBatchRecipeIngredients: (
+    recipeIds: string[],
+  ) => Promise<Record<string, RecipeIngredientWithDetails[]>>;
   handleEditRecipe: (recipe: Recipe) => Promise<void>;
-  calculateRecommendedPrice: (recipe: Recipe, ingredients: any[]) => any;
+  calculateRecommendedPrice: (
+    recipe: Recipe,
+    ingredients: RecipeIngredientWithDetails[],
+  ) => RecipePriceData | null;
   calculateAllRecipePrices: (
     recipes: Recipe[],
-    fetchRecipeIngredients: any,
-    fetchBatchRecipeIngredients?: any,
+    fetchRecipeIngredients: (id: string) => Promise<RecipeIngredientWithDetails[]>,
+    fetchBatchRecipeIngredients?: (
+      ids: string[],
+    ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
   ) => Promise<void>;
   calculateVisibleRecipePrices: (
     recipes: Recipe[],
-    fetchRecipeIngredients: any,
-    fetchBatchRecipeIngredients?: any,
-  ) => Promise<Record<string, any>>;
+    fetchRecipeIngredients: (id: string) => Promise<RecipeIngredientWithDetails[]>,
+    fetchBatchRecipeIngredients?: (
+      ids: string[],
+    ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
+  ) => Promise<Record<string, RecipePriceData>>;
   updateVisibleRecipePrices: (
     recipes: Recipe[],
-    fetchRecipeIngredients: any,
-    fetchBatchRecipeIngredients?: any,
+    fetchRecipeIngredients: (id: string) => Promise<RecipeIngredientWithDetails[]>,
+    fetchBatchRecipeIngredients?: (
+      ids: string[],
+    ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
   ) => Promise<void>;
   refreshRecipePrices: (
     recipes: Recipe[],
-    fetchRecipeIngredients: any,
-    fetchBatchRecipeIngredients?: any,
+    fetchRecipeIngredients: (id: string) => Promise<RecipeIngredientWithDetails[]>,
+    fetchBatchRecipeIngredients?: (
+      ids: string[],
+    ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
   ) => Promise<void>;
   optimisticallyUpdateRecipes: (updater: (recipes: Recipe[]) => Recipe[]) => void;
   rollbackRecipes: () => void;

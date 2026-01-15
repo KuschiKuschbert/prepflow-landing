@@ -41,8 +41,8 @@ export function transformCards(
         ? typeof card.notes === 'string'
           ? (card.notes as string).split('\n').filter((n: string) => n.trim().length > 0)
           : Array.isArray(card.notes)
-          ? (card.notes as string[])
-          : []
+            ? (card.notes as string[])
+            : []
         : [],
       parsedAt: card.parsed_at,
       recipeId: card.recipe_id || null,
@@ -62,7 +62,7 @@ export function transformCards(
       subRecipeCards.push({
         ...transformedCard,
         subRecipeType,
-        usedByMenuItems: usedByMenuItems.map((mi) => ({
+        usedByMenuItems: usedByMenuItems.map(mi => ({
           menuItemId: mi.menu_item_id,
           menuItemName: mi.menu_item_name || menuItemNameMap.get(mi.menu_item_id) || 'Unknown Item',
           quantity: mi.quantity || 1,

@@ -1,12 +1,13 @@
+import { QueryClient } from '@tanstack/react-query';
 import { TemperatureEquipment } from '../types';
-import { useTemperatureLogHandlers } from './useTemperatureLogHandlers';
 import { useTemperatureEquipmentHandlers } from './useTemperatureEquipmentHandlers';
+import { useTemperatureLogHandlers } from './useTemperatureLogHandlers';
 
 interface UseTemperaturePageHandlersProps {
   activeTab: 'logs' | 'equipment' | 'analytics';
   fetchAllLogs: (limit?: number, forceRefresh?: boolean) => Promise<void>;
   fetchEquipment: () => Promise<void>;
-  queryClient: any;
+  queryClient: QueryClient;
   equipment: TemperatureEquipment[];
   setEquipment: React.Dispatch<React.SetStateAction<TemperatureEquipment[]>>;
 }

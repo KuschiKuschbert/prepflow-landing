@@ -147,15 +147,11 @@ export default function DishPreviewModal({
                   entityName={dish.dish_name}
                   imageUrl={dishDetails?.image_url || dish.image_url}
                   imageUrlAlternative={
-                    dishDetails?.image_url_alternative ||
-                    dish.image_url_alternative
+                    dishDetails?.image_url_alternative || dish.image_url_alternative
                   }
-                  imageUrlModern={
-                    dishDetails?.image_url_modern || dish.image_url_modern
-                  }
+                  imageUrlModern={dishDetails?.image_url_modern || dish.image_url_modern}
                   imageUrlMinimalist={
-                    dishDetails?.image_url_minimalist ||
-                    dish.image_url_minimalist
+                    dishDetails?.image_url_minimalist || dish.image_url_minimalist
                   }
                   className="mb-6"
                   compact={false}

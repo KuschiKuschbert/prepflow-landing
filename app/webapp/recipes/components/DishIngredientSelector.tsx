@@ -52,7 +52,10 @@ export default function DishIngredientSelector({
     onIngredientsChange(selectedIngredients.filter((_, i) => i !== index));
   };
 
-  const handleIngredientSelect = (index: number, ingredient: any) => {
+  const handleIngredientSelect = (
+    index: number,
+    ingredient: { id: string; ingredient_name?: string; unit?: string },
+  ) => {
     onIngredientsChange(
       selectedIngredients.map((i, idx) =>
         idx === index

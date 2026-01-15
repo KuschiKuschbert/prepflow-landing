@@ -2,19 +2,19 @@
 
 import { logger } from '@/lib/logger';
 import {
-    formatBrandName,
-    formatIngredientName,
-    formatStorageLocation,
-    formatSupplierName,
-    formatTextInput,
+  formatBrandName,
+  formatIngredientName,
+  formatStorageLocation,
+  formatSupplierName,
+  formatTextInput,
 } from '@/lib/text-utils';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-    calculateCostPerUnit,
-    calculateWastagePercentage,
-    checkValidation as checkValidationHelper,
-    formatCost,
-    getValidationErrors,
+  calculateCostPerUnit,
+  calculateWastagePercentage,
+  checkValidation as checkValidationHelper,
+  formatCost,
+  getValidationErrors,
 } from '../utils/wizard-helpers';
 import IngredientWizardNavigation from './IngredientWizardNavigation';
 import IngredientWizardStep1 from './IngredientWizardStep1';
@@ -190,16 +190,18 @@ export default function IngredientWizard({
 
       await onSave(capitalizedIngredient);
       resetWizard();
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('[IngredientWizard.tsx] Error in catch block:', {
         error: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,
       });
 
+      const errorObj = error as { message?: string; details?: string };
+
       setErrors({
         submit:
-          error?.message ||
-          error?.details ||
+          errorObj?.message ||
+          errorObj?.details ||
           'Failed to save ingredient. Give it another go, chef.',
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });

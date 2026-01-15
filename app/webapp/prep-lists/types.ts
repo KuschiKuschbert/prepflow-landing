@@ -32,16 +32,18 @@ export interface PrepList {
   prep_list_items: PrepListItem[];
 }
 
+export interface PrepListCreationItem {
+  ingredientId: string;
+  quantity: string;
+  unit: string;
+  notes: string;
+}
+
 export interface PrepListFormData {
   kitchenSectionId: string;
   name: string;
   notes: string;
-  items: Array<{
-    ingredientId: string;
-    quantity: string;
-    unit: string;
-    notes: string;
-  }>;
+  items: PrepListCreationItem[];
 }
 
 // Menu-based prep list generation types

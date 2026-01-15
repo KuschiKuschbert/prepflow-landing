@@ -97,5 +97,9 @@ export async function fetchRecipeCardLinks(
     }
   }
 
-  return { links: (linksData || []) as unknown as RecipeCardLink[], cards: null, useOldMethod: false };
+  return {
+    links: (linksData || []) as unknown as RecipeCardLink[],
+    cards: null,
+    useOldMethod: false,
+  };
 }

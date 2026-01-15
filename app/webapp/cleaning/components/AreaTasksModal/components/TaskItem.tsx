@@ -100,9 +100,7 @@ export function TaskItem({
           {task.equipment_id && task.temperature_equipment && (
             <div className="mt-2 flex items-center gap-2 text-xs text-[var(--foreground-subtle)]">
               <span>Equipment:</span>
-              <span className="text-[var(--color-info)]">
-                {task.temperature_equipment.name}
-              </span>
+              <span className="text-[var(--color-info)]">{task.temperature_equipment.name}</span>
             </div>
           )}
           {task.section_id && task.kitchen_sections && (

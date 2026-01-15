@@ -34,7 +34,12 @@ export function createDraftActions(set: RosterStoreSet) {
           publishedShifts: newPublished,
           shifts: state.shifts.map((shift: Shift) =>
             shiftIds.includes(shift.id)
-              ? { ...shift, status: 'draft' as ShiftStatus, published_at: null, is_published: false }
+              ? {
+                  ...shift,
+                  status: 'draft' as ShiftStatus,
+                  published_at: null,
+                  is_published: false,
+                }
               : shift,
           ),
         };

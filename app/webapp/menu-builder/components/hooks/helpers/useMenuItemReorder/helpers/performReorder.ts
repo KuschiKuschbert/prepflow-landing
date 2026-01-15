@@ -2,11 +2,12 @@
  * Perform reorder operation for menu items.
  */
 import { logger } from '@/lib/logger';
+import { MenuItem } from '../../../../../types';
 
 interface PerformReorderParams {
   menuId: string;
-  menuItems: any[];
-  setMenuItems: React.Dispatch<React.SetStateAction<any[]>>;
+  menuItems: MenuItem[];
+  setMenuItems: React.Dispatch<React.SetStateAction<MenuItem[]>>;
   refreshStatistics: () => Promise<void>;
   showError: (message: string) => void;
   activeId: string;

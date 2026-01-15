@@ -67,9 +67,9 @@ export async function saveIngredients(
 
     logger.dev('[saveRecipe] Ingredients saved successfully');
     return { success: true as const };
-  } catch (fetchErr: any) {
+  } catch (fetchErr: unknown) {
     clearTimeout(timeoutId);
-    if (fetchErr.name === 'AbortError') {
+    if (fetchErr instanceof Error && fetchErr.name === 'AbortError') {
       logger.error('[saveRecipe] Ingredients save timed out after 30 seconds');
       return {
         success: false,

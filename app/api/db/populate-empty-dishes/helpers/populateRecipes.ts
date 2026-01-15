@@ -4,9 +4,9 @@
 
 import { logger } from '@/lib/logger';
 import {
-    getDefaultIngredientsForRecipe,
-    getIngredientName,
-    recipeHasIngredients,
+  getDefaultIngredientsForRecipe,
+  getIngredientName,
+  recipeHasIngredients,
 } from '@/lib/populate-helpers/populate-empty-dishes-helpers';
 import { supabaseAdmin } from '@/lib/supabase';
 

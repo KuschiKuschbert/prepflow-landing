@@ -5,9 +5,9 @@ import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { MergeOptions } from '../../types';
 import {
-    BATCH_SIZE,
-    processInsertBatch,
-    processUpdateBatch,
+  BATCH_SIZE,
+  processInsertBatch,
+  processUpdateBatch,
 } from './merge-records/helpers/processBatches';
 
 /**

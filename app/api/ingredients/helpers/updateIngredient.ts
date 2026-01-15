@@ -1,6 +1,6 @@
 import {
-    invalidateDishesWithIngredient,
-    invalidateRecipesWithIngredient,
+  invalidateDishesWithIngredient,
+  invalidateRecipesWithIngredient,
 } from '@/lib/allergens/cache-invalidation';
 import { enrichIngredientWithAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
 import { ApiErrorHandler } from '@/lib/api-error-handler';

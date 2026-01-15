@@ -46,7 +46,10 @@ export async function GET(request: NextRequest, context: { params: Promise<{ fil
   } catch (error: unknown) {
     logger.error('[Google Drive Download] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to download backup from Google Drive', message: error instanceof Error ? error.message : String(error) },
+      {
+        error: 'Failed to download backup from Google Drive',
+        message: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }

@@ -2,11 +2,38 @@ import { logger } from '@/lib/logger';
 import { IngredientData, RecipeSource } from '../../useIngredientData';
 import { fetchRecipeIngredients } from './fetchRecipeIngredients';
 
+interface DishApiResponse {
+  success: boolean;
+  dish?: {
+    recipes?: Array<{
+      recipe_id: string;
+      quantity?: number;
+      unit?: string;
+      recipes?: {
+        recipe_name: string;
+      };
+    }>;
+    ingredients?: Array<{
+      ingredient_id: string;
+      quantity?: number;
+      unit?: string;
+      ingredients?: {
+        id: string;
+        ingredient_name: string;
+        brand?: string;
+        allergens?: string[];
+        allergen_source?: { manual?: boolean; ai?: boolean };
+      };
+    }>;
+  };
+  error?: string;
+}
+
 export async function fetchDishIngredients(
   dishId: string,
 ): Promise<{ ingredients: IngredientData[]; recipeSources: RecipeSource[] }> {
   const dishResponse = await fetch(`/api/dishes/${dishId}`);
-  const dishData = await dishResponse.json();
+  const dishData: DishApiResponse = await dishResponse.json();
 
   if (!dishResponse.ok) {
     throw new Error(dishData.error || 'Failed to fetch dish');
@@ -21,7 +48,7 @@ export async function fetchDishIngredients(
   const recipes: RecipeSource[] = [];
 
   if (dish.recipes && Array.isArray(dish.recipes)) {
-    dish.recipes.forEach((dr: any) => {
+    dish.recipes.forEach(dr => {
       if (dr.recipe_id && dr.recipes) {
         recipes.push({
           source_type: 'recipe',
@@ -35,7 +62,7 @@ export async function fetchDishIngredients(
   }
 
   if (dish.ingredients && Array.isArray(dish.ingredients)) {
-    dish.ingredients.forEach((di: any) => {
+    dish.ingredients.forEach(di => {
       const ingredient = di.ingredients;
       if (ingredient) {
         const ingredientData: IngredientData = {

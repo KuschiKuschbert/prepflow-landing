@@ -112,7 +112,9 @@ export async function POST(request: NextRequest) {
       logger.error('Error inserting consumables:', insertError);
       const apiError = ApiErrorHandler.fromSupabaseError(insertError, 500);
       apiError.details = {
-        ...(typeof apiError.details === 'object' && apiError.details !== null ? apiError.details : {}),
+        ...(typeof apiError.details === 'object' && apiError.details !== null
+          ? apiError.details
+          : {}),
         message: 'Failed to add consumables',
         note: 'Some consumables may have been added before the error occurred',
       };

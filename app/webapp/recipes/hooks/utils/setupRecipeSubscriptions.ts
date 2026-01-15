@@ -1,5 +1,4 @@
-import { Recipe } from '../../types';
-import { RecipePriceData } from '../../types';
+import { Recipe, RecipeIngredientWithDetails } from '../../types';
 import { useRecipeSubscriptions } from '../useRecipeSubscriptions';
 
 /**
@@ -18,11 +17,15 @@ export function useSetupRecipeSubscriptions({
   recipes: Recipe[];
   refreshRecipePrices: (
     recipes: Recipe[],
-    fetchRecipeIngredients: any,
-    fetchBatchRecipeIngredients?: any,
+    fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>,
+    fetchBatchRecipeIngredients?: (
+      recipeIds: string[],
+    ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
   ) => Promise<void>;
-  fetchRecipeIngredients: (recipeId: string) => Promise<any[]>;
-  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<Record<string, any[]>>;
+  fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>;
+  fetchBatchRecipeIngredients: (
+    recipeIds: string[],
+  ) => Promise<Record<string, RecipeIngredientWithDetails[]>>;
   onIngredientsChange?: (recipeId: string) => void;
   fetchRecipes: () => Promise<void>;
 }): void {

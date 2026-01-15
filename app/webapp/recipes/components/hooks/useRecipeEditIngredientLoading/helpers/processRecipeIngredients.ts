@@ -3,10 +3,10 @@
  */
 import { createCalculation } from '../../../../../cogs/hooks/utils/createCalculation';
 import type { COGSCalculation, Ingredient } from '../../../../../cogs/types';
-import type { Recipe } from '../../../../types';
+import type { Recipe, RecipeIngredientWithDetails } from '../../../../types';
 
 export function processRecipeIngredients(
-  recipeIngredients: any[],
+  recipeIngredients: RecipeIngredientWithDetails[],
   recipe: Recipe,
   ingredients: Ingredient[],
   convertIngredientQuantity: (
@@ -17,7 +17,7 @@ export function processRecipeIngredients(
 ): COGSCalculation[] {
   const recipeYield = recipe.yield || 1;
   return recipeIngredients
-    .map((ri: any) => {
+    .map(ri => {
       const ingredientData = ingredients.find(ing => ing.id === ri.ingredient_id);
       if (!ingredientData) return null;
       const { convertedQuantity, convertedUnit, conversionNote } = convertIngredientQuantity(

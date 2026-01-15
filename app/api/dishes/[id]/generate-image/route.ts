@@ -20,10 +20,10 @@ import { determinePlatingMethods, parsePlatingMethods } from './helpers/parsePla
 import { checkRateLimit } from './helpers/rateLimit';
 import { uploadAndSaveImages } from './helpers/uploadAndSaveImages';
 import {
-    authenticateRequest,
-    validateAIService,
-    validateDatabase,
-    validateDishId,
+  authenticateRequest,
+  validateAIService,
+  validateDatabase,
+  validateDishId,
 } from './helpers/validateRequest';
 
 export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
@@ -59,11 +59,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     // Validate database
     if (!supabaseAdmin) {
       return NextResponse.json(
-        ApiErrorHandler.createError(
-          'Database connection error',
-          'DATABASE_ERROR',
-          500,
-        ),
+        ApiErrorHandler.createError('Database connection error', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }

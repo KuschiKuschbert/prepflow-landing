@@ -1,19 +1,21 @@
 'use client';
 
-import React, { useState } from 'react';
 import { logger } from '@/lib/logger';
-import type { GeneratedPrepListData, KitchenSection } from '../types';
+import { useState } from 'react';
+import type { GeneratedPrepListData, KitchenSection, PrepListCreationItem } from '../types';
 import { usePrepListPreview } from './hooks/usePrepListPreview';
-import { PrepListPreviewHeader } from './PrepListPreviewHeader';
-import { PrepListPreviewFooter } from './PrepListPreviewFooter';
-import { PrepListPreviewSection } from './PrepListPreviewSection';
 import { PrepListExport } from './PrepListExport';
+import { PrepListPreviewFooter } from './PrepListPreviewFooter';
+import { PrepListPreviewHeader } from './PrepListPreviewHeader';
+import { PrepListPreviewSection } from './PrepListPreviewSection';
 interface PrepListPreviewProps {
   data: GeneratedPrepListData;
   kitchenSections: KitchenSection[];
   ingredients: Array<{ id: string; name?: string; ingredient_name?: string; unit: string }>;
   onClose: () => void;
-  onSave: (prepLists: Array<{ sectionId: string | null; name: string; items: any[] }>) => void;
+  onSave: (
+    prepLists: Array<{ sectionId: string | null; name: string; items: PrepListCreationItem[] }>,
+  ) => void;
 }
 
 type ViewMode = 'aggregated' | 'recipe-grouped';

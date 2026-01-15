@@ -41,7 +41,10 @@ export async function fetchExistingCards(
 /**
  * Delete specific recipe cards by menu item IDs
  */
-export async function deleteCardsForItems(supabase: SupabaseClient, menuItemIds: string[]): Promise<void> {
+export async function deleteCardsForItems(
+  supabase: SupabaseClient,
+  menuItemIds: string[],
+): Promise<void> {
   if (menuItemIds.length === 0) {
     return;
   }

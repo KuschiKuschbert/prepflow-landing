@@ -38,7 +38,10 @@ export async function GET(request: NextRequest) {
   } catch (error: unknown) {
     logger.error('[Backup Cron] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to run scheduled backups', message: error instanceof Error ? error.message : String(error) },
+      {
+        error: 'Failed to run scheduled backups',
+        message: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }

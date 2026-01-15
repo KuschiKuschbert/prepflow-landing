@@ -4,10 +4,10 @@
 
 import { logger } from '@/lib/logger';
 import {
-    dishHasDirectIngredients,
-    getDefaultIngredientsForDish,
-    getIngredientName,
-    getIngredientsFromRecipes,
+  dishHasDirectIngredients,
+  getDefaultIngredientsForDish,
+  getIngredientName,
+  getIngredientsFromRecipes,
 } from '@/lib/populate-helpers/populate-empty-dishes-helpers';
 import { supabaseAdmin } from '@/lib/supabase';
 

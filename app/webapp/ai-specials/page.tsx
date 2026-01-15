@@ -3,13 +3,13 @@ import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { useNotification } from '@/contexts/NotificationContext';
+import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
 import { useTranslation } from '@/lib/useTranslation';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Bot, Shield } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { AISpecialCard } from './components/AISpecialCard';
 import { EmptyState } from './components/EmptyState';
 import { RecipeScraper } from './components/RecipeScraper';
@@ -21,7 +21,11 @@ interface AISpecial {
   id: string;
   image_data: string;
   prompt?: string;
-  ai_response: any;
+  ai_response: {
+    ingredients?: string[];
+    suggestions?: string[];
+    confidence?: number;
+  } | null;
   status: 'pending' | 'processing' | 'completed' | 'failed';
   created_at: string;
 }

@@ -38,9 +38,10 @@ export async function handlePhotoUpload({
     onPhotoUrlChange(url);
     setPhotoError(null);
     showSuccess('Photo uploaded successfully');
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('Error uploading photo:', error);
-    const errorMessage = error.message || 'Failed to upload photo. Give it another go, chef.';
+    const errorMessage =
+      error instanceof Error ? error.message : 'Failed to upload photo. Give it another go, chef.';
     setPhotoError(errorMessage);
     setPhotoPreview(null);
     showError(errorMessage);

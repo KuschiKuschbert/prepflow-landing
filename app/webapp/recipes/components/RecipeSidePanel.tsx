@@ -12,9 +12,9 @@ import { convertToPerPortion } from '../hooks/utils/convertToPerPortion';
 import { calculateRecipePrice } from '../hooks/utils/pricingHelpers';
 import { convertToCOGSCalculations } from '../hooks/utils/recipeCalculationHelpers';
 import {
-    Recipe,
-    COGSCalculation as RecipeCOGSCalculation,
-    RecipeIngredientWithDetails,
+  Recipe,
+  COGSCalculation as RecipeCOGSCalculation,
+  RecipeIngredientWithDetails,
 } from '../types';
 import { RecipeIngredientsList } from './RecipeIngredientsList';
 import { RecipeSidePanelActions } from './RecipeSidePanelActions';

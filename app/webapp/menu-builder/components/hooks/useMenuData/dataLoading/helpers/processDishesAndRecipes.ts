@@ -3,14 +3,29 @@
  */
 import { cacheData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
+import { Dish, Recipe } from '../../../../../types';
+
+interface DishesApiResponse {
+  success: boolean;
+  dishes?: Dish[];
+  message?: string;
+  error?: string;
+}
+
+interface RecipesApiResponse {
+  success: boolean;
+  recipes?: Recipe[];
+  message?: string;
+  error?: string;
+}
 
 interface ProcessDishesAndRecipesParams {
-  dishesData: any;
-  recipesData: any;
+  dishesData: DishesApiResponse;
+  recipesData: RecipesApiResponse;
   dishesCacheKey: string;
   recipesCacheKey: string;
-  setDishes: React.Dispatch<React.SetStateAction<any[]>>;
-  setRecipes: React.Dispatch<React.SetStateAction<any[]>>;
+  setDishes: React.Dispatch<React.SetStateAction<Dish[]>>;
+  setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>;
 }
 
 export function processDishesAndRecipes({

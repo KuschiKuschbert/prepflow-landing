@@ -9,13 +9,32 @@ import { useTranslation } from '@/lib/useTranslation';
 import { Lightbulb } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
+export interface TemperatureEquipmentOption {
+  id?: string | number;
+  name: string;
+  equipment_type: string;
+  is_active: boolean;
+}
+
+export interface TemperatureLogFormState {
+  id?: string;
+  log_date: string;
+  log_time: string;
+  temperature_type: string;
+  temperature_celsius: string;
+  location: string;
+  notes: string;
+  logged_by: string;
+  equipment_id?: string;
+}
+
 export interface AddTemperatureLogFormProps {
   show: boolean;
   setShow: (v: boolean) => void;
-  newLog: any;
-  setNewLog: (v: any) => void;
+  newLog: TemperatureLogFormState;
+  setNewLog: (v: TemperatureLogFormState) => void;
   onAddLog: (e: React.FormEvent) => void;
-  equipment: Array<{ id?: number; name: string; equipment_type: string; is_active: boolean }>;
+  equipment: TemperatureEquipmentOption[];
   temperatureTypes: Array<{ value: string; label: string; icon: string }>;
 }
 
@@ -73,10 +92,8 @@ export function AddTemperatureLogForm({
     temperatureTypes.find(tt => tt.value === type)?.label || type;
 
   // Autosave integration
-  const entityId = (newLog as any).id || 'new';
-  const canAutosave =
-    entityId !== 'new' ||
-    Boolean(newLog.equipment_id && newLog.log_date && newLog.temperature_celsius);
+  const entityId = newLog.id || 'new';
+  const canAutosave = entityId !== 'new' || Boolean(newLog.log_date && newLog.temperature_celsius);
 
   const {
     status,
@@ -113,7 +130,7 @@ export function AddTemperatureLogForm({
           <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)]/50 px-4 py-3">
             <p className="text-sm text-[var(--foreground-muted)]">
               <span className="font-medium text-[var(--foreground-secondary)]">Date & Time:</span>{' '}
-              {formatDate(newLog.log_date)} at {formatTime(newLog.log_time)}
+              {formatDate(newLog.log_date || '')} at {formatTime(newLog.log_time || '')}
             </p>
           </div>
         </div>
@@ -167,8 +184,13 @@ export function AddTemperatureLogForm({
           <input
             type="number"
             step="0.1"
-            value={newLog.temperature_celsius}
-            onChange={e => setNewLog({ ...newLog, temperature_celsius: e.target.value })}
+            value={newLog.temperature_celsius ?? ''}
+            onChange={e =>
+              setNewLog({
+                ...newLog,
+                temperature_celsius: e.target.value,
+              })
+            }
             className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             placeholder="e.g., 3.5"
             required
@@ -184,18 +206,18 @@ export function AddTemperatureLogForm({
           </label>
           <input
             type="text"
-            value={newLog.location}
+            value={newLog.location || ''}
             onChange={e => setNewLog({ ...newLog, location: e.target.value })}
             className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
             placeholder={
               ['food_cooking', 'food_hot_holding', 'food_cold_holding'].includes(
-                newLog.temperature_type,
+                newLog.temperature_type || '',
               )
                 ? 'e.g., Chicken Curry, Soup Station 1, Salad Bar'
                 : 'e.g., Main Fridge, Freezer 1'
             }
             required={['food_cooking', 'food_hot_holding', 'food_cold_holding'].includes(
-              newLog.temperature_type,
+              newLog.temperature_type || '',
             )}
           />
         </div>
@@ -238,7 +260,7 @@ export function AddTemperatureLogForm({
           </label>
           {showNotes && (
             <textarea
-              value={newLog.notes}
+              value={newLog.notes || ''}
               onChange={e => setNewLog({ ...newLog, notes: e.target.value })}
               className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
               placeholder="Additional notes or observations"

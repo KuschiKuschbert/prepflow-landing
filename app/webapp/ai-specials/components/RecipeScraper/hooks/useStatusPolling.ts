@@ -2,12 +2,13 @@
  * Hook for status polling operations
  */
 
-import { useEffect, useCallback } from 'react';
 import { logger } from '@/lib/logger';
+import { useEffect } from 'react';
+import { ScrapingJobStatus } from './useComprehensiveScraping';
 
 interface UseStatusPollingParams {
   statusPolling: boolean;
-  setComprehensiveStatus: (status: any) => void;
+  setComprehensiveStatus: (status: ScrapingJobStatus | null) => void;
   setStatusPolling: (polling: boolean) => void;
   fetchRecipes: (page: number, pageSize: number) => void;
   page: number;

@@ -1,13 +1,18 @@
 /**
  * Handle statistics response and update state.
  */
-import { logger } from '@/lib/logger';
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
+import { logger } from '@/lib/logger';
 import type { MenuItem, MenuStatistics } from '../../../../../types';
 
 interface HandleStatisticsParams {
   statsResponse: Response;
-  statsData: any;
+  statsData: {
+    success: boolean;
+    statistics: MenuStatistics;
+    error?: string;
+    message?: string;
+  };
   menuId: string;
   menuCacheKey: string;
   setStatistics: React.Dispatch<React.SetStateAction<MenuStatistics | null>>;

@@ -1,16 +1,12 @@
-/**
- * Hook for loading recipe data when editing a recipe.
- */
-
-import { useEffect } from 'react';
 import { logger } from '@/lib/logger';
-import type { Recipe } from '../../../cogs/types';
-import type { Ingredient } from '../../../cogs/types';
+import { useEffect } from 'react';
+import type { Ingredient, Recipe, RecipeIngredient } from '../../../cogs/types';
+import type { DishBuilderState } from '../../types';
 
 interface UseRecipeLoadingProps {
   editingRecipe: Recipe | null | undefined;
   ingredients: Ingredient[];
-  setDishState: (state: any) => void;
+  setDishState: (state: DishBuilderState) => void;
   clearCalculations: () => void;
   handleIngredientAdded: (ingredient: Ingredient, quantity: number, unit: string) => void;
   setError: (error: string) => void;
@@ -43,13 +39,13 @@ export function useRecipeLoading({
       })
         .then(r => r.json())
         .then(data => {
-          const recipeIngredients = data.items || [];
+          const recipeIngredients: RecipeIngredient[] = data.items || [];
           if (recipeIngredients.length > 0) {
             const recipeYield = editingRecipe.yield || 1;
             // Clear existing calculations first
             clearCalculations();
             // Add all ingredients from recipe
-            recipeIngredients.forEach((ri: any) => {
+            recipeIngredients.forEach((ri: RecipeIngredient) => {
               const ingredientData = ingredients.find(ing => ing.id === ri.ingredient_id);
               if (ingredientData) {
                 // Calculate single serve quantity

@@ -146,9 +146,7 @@ function TaskRow({ task, dates, onToggleCompletion }: TaskRowProps) {
   // Memoize task metadata to prevent unnecessary recalculations
   const taskMetadata = useMemo(() => {
     return {
-      areaName: task.cleaning_areas
-        ? task.cleaning_areas.area_name || 'Area'
-        : null,
+      areaName: task.cleaning_areas ? task.cleaning_areas.area_name || 'Area' : null,
       hasEquipment: !!(task.equipment_id && task.temperature_equipment),
       hasSection: !!(task.section_id && task.kitchen_sections),
       taskName: task.task_name || task.cleaning_areas?.area_name || 'Unnamed Task',

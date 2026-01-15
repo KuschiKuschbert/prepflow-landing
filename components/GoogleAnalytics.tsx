@@ -124,6 +124,3 @@ export default function GoogleAnalytics({ measurementId }: GoogleAnalyticsProps)
     </Suspense>
   );
 }
-
-// Default export with your correct measurement ID
-export { default as GoogleAnalyticsDefault } from './GoogleAnalytics';

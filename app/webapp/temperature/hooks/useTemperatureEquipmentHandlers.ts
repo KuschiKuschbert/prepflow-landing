@@ -1,15 +1,15 @@
-import { useState } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
+import { useOnTemperatureLogged } from '@/lib/personality/hooks';
+import { QueryClient } from '@tanstack/react-query';
+import type { TemperatureEquipment } from '../types';
+import { createEquipmentHandlers } from './useTemperatureEquipmentHandlers/helpers/createHandlers';
 import { handleQuickTempLog as handleQuickTempLogHelper } from './useTemperatureEquipmentHandlers/quickTempLog';
 import { handleRefreshLogs as handleRefreshLogsHelper } from './useTemperatureEquipmentHandlers/refreshLogs';
-import { useOnTemperatureLogged } from '@/lib/personality/hooks';
-import { createEquipmentHandlers } from './useTemperatureEquipmentHandlers/helpers/createHandlers';
-import type { TemperatureEquipment } from '../types';
 interface UseTemperatureEquipmentHandlersProps {
   activeTab: 'logs' | 'equipment' | 'analytics';
   fetchAllLogs: (limit?: number, forceRefresh?: boolean) => Promise<void>;
   fetchEquipment: () => Promise<void>;
-  queryClient: any;
+  queryClient: QueryClient;
   equipment: TemperatureEquipment[];
   setEquipment: React.Dispatch<React.SetStateAction<TemperatureEquipment[]>>;
 }

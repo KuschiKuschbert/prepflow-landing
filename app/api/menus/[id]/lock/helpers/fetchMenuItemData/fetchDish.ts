@@ -5,11 +5,11 @@
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
 import {
-    MenuItemData,
-    MenuItemIngredient,
-    MenuItemSubRecipe,
-    RawDishResult,
-    RawRecipeResult,
+  MenuItemData,
+  MenuItemIngredient,
+  MenuItemSubRecipe,
+  RawDishResult,
+  RawRecipeResult,
 } from '../fetchMenuItemData';
 
 /**
@@ -66,7 +66,7 @@ export async function fetchDishData(
 
   // Extract direct ingredients
   const directIngredients: MenuItemIngredient[] =
-    rawDish.dish_ingredients?.map((di) => ({
+    rawDish.dish_ingredients?.map(di => ({
       name: di.ingredients?.ingredient_name || 'Unknown Ingredient',
       quantity: Number(di.quantity) || 0,
       unit: di.unit || '',
@@ -84,7 +84,7 @@ export async function fetchDishData(
       const recipeName = recipe.recipe_name || recipe.name || 'Unknown Recipe';
 
       const recipeIngredients: MenuItemIngredient[] =
-        recipe.recipe_ingredients?.map((ri) => ({
+        recipe.recipe_ingredients?.map(ri => ({
           name: ri.ingredients?.ingredient_name || 'Unknown Ingredient',
           quantity: Number(ri.quantity) || 0,
           unit: ri.unit || '',

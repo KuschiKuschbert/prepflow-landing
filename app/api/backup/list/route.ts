@@ -58,7 +58,11 @@ export async function GET(request: NextRequest) {
   } catch (error: unknown) {
     logger.error('[Backup List] Error:', error);
     return NextResponse.json(
-      ApiErrorHandler.createError(error instanceof Error ? error.message : String(error) || 'Failed to list backups', 'SERVER_ERROR', 500),
+      ApiErrorHandler.createError(
+        error instanceof Error ? error.message : String(error) || 'Failed to list backups',
+        'SERVER_ERROR',
+        500,
+      ),
       { status: 500 },
     );
   }

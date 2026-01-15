@@ -31,7 +31,8 @@ export function useDishPreviewModalData(dish: Dish) {
                   recipeId: dishRecipe.recipe_id,
                   ingredientCount: data.items.length,
                   ingredientNames: data.items.map(
-                    (ri: any) => ri.ingredients?.ingredient_name || 'Unknown',
+                    (ri: RecipeIngredientWithDetails) =>
+                      ri.ingredients?.ingredient_name || 'Unknown',
                   ),
                 });
               } else {

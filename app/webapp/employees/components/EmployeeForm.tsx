@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Employee, EmployeeFormData, QualificationType } from '../types';
-import { Award } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-import { EmployeePhotoUpload } from './EmployeePhotoUpload';
+import { Award } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Employee, EmployeeFormData, QualificationType } from '../types';
 import { EmployeeFormFields } from './EmployeeFormFields';
+import { EmployeePhotoUpload } from './EmployeePhotoUpload';
 import { useEmployeePhoto } from './hooks/useEmployeePhoto';
 
 interface EmployeeFormProps {
@@ -63,7 +63,7 @@ export function EmployeeForm({
     }
   }, [externalFormData]);
 
-  const handleChange = (field: keyof EmployeeFormData, value: any) => {
+  const handleChange = (field: keyof EmployeeFormData, value: string | number) => {
     const updated = { ...formData, [field]: value };
     setFormData(updated);
     if (onChange) {

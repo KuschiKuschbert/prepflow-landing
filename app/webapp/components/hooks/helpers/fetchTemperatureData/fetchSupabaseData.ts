@@ -2,15 +2,19 @@
  * Fetch temperature data from Supabase
  */
 
-import { supabase } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabase } from '@/lib/supabase';
+import { TemperatureEquipment, TemperatureLog } from '../../../../temperature/types';
 
 /**
  * Fetch temperature logs and equipment from Supabase
  *
- * @returns {Promise<{logs: any[], equipment: any[]}>} Temperature data
+ * @returns {Promise<{logs: TemperatureLog[], equipment: TemperatureEquipment[]}>} Temperature data
  */
-export async function fetchSupabaseTemperatureData() {
+export async function fetchSupabaseTemperatureData(): Promise<{
+  logs: TemperatureLog[];
+  equipment: TemperatureEquipment[];
+}> {
   try {
     const [logsResult, equipmentResult] = await Promise.all([
       supabase
@@ -25,8 +29,8 @@ export async function fetchSupabaseTemperatureData() {
         .eq('is_active', true),
     ]);
 
-    const logs = logsResult.data || [];
-    const equipment = equipmentResult.data || [];
+    const logs = (logsResult.data || []) as unknown as TemperatureLog[];
+    const equipment = (equipmentResult.data || []) as unknown as TemperatureEquipment[];
 
     // Log Supabase errors but don't fail completely
     if (logsResult.error) {

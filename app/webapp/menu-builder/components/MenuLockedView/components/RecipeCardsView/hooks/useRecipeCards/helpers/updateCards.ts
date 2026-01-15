@@ -1,11 +1,16 @@
 /**
  * Update cards state based on fetch result.
  */
-import { SubRecipeCards } from '../../../types';
+import { RecipeCardData, SubRecipeCards } from '../../../types';
 
 interface UpdateCardsParams {
-  result: { success: boolean; cards?: any[]; subRecipeCards?: SubRecipeCards; error?: string };
-  setCards: React.Dispatch<React.SetStateAction<any[]>>;
+  result: {
+    success: boolean;
+    cards?: RecipeCardData[];
+    subRecipeCards?: SubRecipeCards;
+    error?: string;
+  };
+  setCards: React.Dispatch<React.SetStateAction<RecipeCardData[]>>;
   setSubRecipeCards: React.Dispatch<React.SetStateAction<SubRecipeCards>>;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;

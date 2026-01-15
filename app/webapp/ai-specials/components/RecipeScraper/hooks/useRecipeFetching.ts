@@ -2,8 +2,9 @@
  * Hook for fetching recipes
  */
 
-import { useCallback } from 'react';
 import { logger } from '@/lib/logger';
+import { useCallback } from 'react';
+import { ScrapedRecipe } from '../types';
 
 interface FetchRecipesParams {
   page: number;
@@ -12,7 +13,7 @@ interface FetchRecipesParams {
   sourceFilter: string;
   formatFilter: 'all' | 'formatted' | 'unformatted';
   setLoadingRecipes: (loading: boolean) => void;
-  setRecipes: (recipes: any[]) => void;
+  setRecipes: (recipes: ScrapedRecipe[]) => void;
   setTotalRecipes: (total: number) => void;
   setTotalPages: (pages: number) => void;
 }

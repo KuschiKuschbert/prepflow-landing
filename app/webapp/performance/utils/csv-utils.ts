@@ -3,12 +3,13 @@
  */
 import { exportToCSV, parseCSV } from '@/lib/csv/csv-utils';
 import {
-  validateCSVData,
-  transformCSVData,
   getPerformanceValidationSchema,
+  transformCSVData,
+  validateCSVData,
 } from '@/lib/csv/validation';
 import { logger } from '@/lib/logger';
-import { mapCSVRowToSalesData } from './csv-utils/helpers/mapCSVRowToSalesData';
+import { PerformanceItem } from '../types';
+import { mapCSVRowToSalesData, SalesData } from './csv-utils/helpers/mapCSVRowToSalesData';
 import { mapPerformanceItemToCSVRow } from './csv-utils/helpers/mapPerformanceItemToCSVRow';
 
 const CSV_HEADERS = [
@@ -29,7 +30,7 @@ const CSV_HEADERS = [
  *
  * @param {any[]} performanceItems - Performance items to export
  */
-export function exportPerformanceDataToCSV(performanceItems: any[]): void {
+export function exportPerformanceDataToCSV(performanceItems: PerformanceItem[]): void {
   if (!performanceItems || performanceItems.length === 0) {
     logger.warn('[Performance CSV Export] No data to export');
     return;
@@ -47,13 +48,13 @@ export function exportPerformanceDataToCSV(performanceItems: any[]): void {
  * @returns {any[]} Parsed sales data
  * @throws {Error} If CSV parsing fails or validation fails
  */
-export function parseCSVSalesData(csvData: string): any[] {
+export function parseCSVSalesData(csvData: string): SalesData[] {
   if (!csvData || csvData.trim().length === 0) {
     throw new Error('CSV data is empty');
   }
 
   // Parse CSV using PapaParse
-  const result = parseCSV<Record<string, any>>(csvData, {
+  const result = parseCSV<Record<string, unknown>>(csvData, {
     header: true,
     skipEmptyLines: true,
     transformHeader: (header: string) => header.trim(),

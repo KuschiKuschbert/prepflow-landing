@@ -5,12 +5,12 @@
 
 'use client';
 
-import React, { useState } from 'react';
-import { useNotification } from '@/contexts/NotificationContext';
 import { Icon } from '@/components/ui/Icon';
-import { Download, CloudUpload, Lock, FileText } from 'lucide-react';
+import { useNotification } from '@/contexts/NotificationContext';
 import type { BackupFormat, EncryptionMode } from '@/lib/backup/types';
 import { logger } from '@/lib/logger';
+import { CloudUpload, Download, FileText, Lock } from 'lucide-react';
+import { useState } from 'react';
 
 interface ManualBackupControlsProps {
   onBackupCreated?: () => void;
@@ -61,7 +61,7 @@ export function ManualBackupControls({ onBackupCreated }: ManualBackupControlsPr
         const data = await res.json();
         showError(data.error || 'Failed to create backup');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('[ManualBackupControls.tsx] Error in catch block:', {
         error: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,
@@ -97,7 +97,7 @@ export function ManualBackupControls({ onBackupCreated }: ManualBackupControlsPr
       } else {
         showError(data.error || 'Failed to upload backup to Google Drive');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('[ManualBackupControls.tsx] Error in catch block:', {
         error: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,

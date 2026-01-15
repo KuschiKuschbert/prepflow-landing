@@ -46,7 +46,8 @@ export function useDishSidePanelData(isOpen: boolean, dish: Dish | null) {
                   recipeId: dishRecipe.recipe_id,
                   ingredientCount: data.items.length,
                   ingredientNames: data.items.map(
-                    (ri: any) => ri.ingredients?.ingredient_name || 'Unknown',
+                    (ri: RecipeIngredientWithDetails) =>
+                      ri.ingredients?.ingredient_name || 'Unknown',
                   ),
                 });
               } else {

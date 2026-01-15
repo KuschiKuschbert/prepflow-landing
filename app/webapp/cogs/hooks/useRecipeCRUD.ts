@@ -3,9 +3,16 @@
 
 'use client';
 
-import { useCallback } from 'react';
-import { formatDishName } from '@/lib/text-utils';
 import { logger } from '@/lib/logger';
+import { formatDishName } from '@/lib/text-utils';
+import { useCallback } from 'react';
+
+interface RecipeIngredientInsert {
+  recipe_id: string;
+  ingredient_id: string;
+  quantity: number;
+  unit: string;
+}
 
 interface UseRecipeCRUDProps {
   setError: (error: string) => void;
@@ -50,7 +57,11 @@ export function useRecipeCRUD({ setError }: UseRecipeCRUDProps) {
   );
 
   const saveRecipeIngredients = useCallback(
-    async (recipeId: string, recipeIngredientInserts: any[], isUpdate: boolean) => {
+    async (
+      recipeId: string,
+      recipeIngredientInserts: RecipeIngredientInsert[],
+      isUpdate: boolean,
+    ) => {
       try {
         const response = await fetch(`/api/recipes/${recipeId}/ingredients`, {
           method: 'POST',

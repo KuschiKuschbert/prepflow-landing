@@ -61,7 +61,10 @@ export async function GET(request: NextRequest) {
   } catch (error: unknown) {
     logger.error('[Backup Settings] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to get backup settings', message: error instanceof Error ? error.message : String(error) },
+      {
+        error: 'Failed to get backup settings',
+        message: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }
@@ -151,7 +154,10 @@ export async function PUT(request: NextRequest) {
   } catch (error: unknown) {
     logger.error('[Backup Settings] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to update backup settings', message: error instanceof Error ? error.message : String(error) },
+      {
+        error: 'Failed to update backup settings',
+        message: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }

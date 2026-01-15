@@ -1,10 +1,12 @@
 'use client';
-import { UnifiedFilters, UnifiedSortField } from '@/app/webapp/recipes/components/hooks/useDishesClientPagination/helpers/useFilterState';
+import {
+  UnifiedFilters,
+  UnifiedSortField,
+} from '@/app/webapp/recipes/components/hooks/useDishesClientPagination/helpers/useFilterState';
 import { useCallback } from 'react';
 import { Dish, DishCostData, Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../types';
 import { DishesListView } from './DishesListView';
 import { DishesSidePanels, DishesSidePanelsProps } from './DishesSidePanels';
-
 
 type UnifiedItem = (Dish & { itemType: 'dish' }) | (Recipe & { itemType: 'recipe' });
 

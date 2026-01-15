@@ -100,7 +100,10 @@ export async function POST(request: NextRequest) {
   } catch (error: unknown) {
     logger.error('[Backup Schedule] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to configure scheduled backup', message: error instanceof Error ? error.message : String(error) },
+      {
+        error: 'Failed to configure scheduled backup',
+        message: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }
@@ -139,7 +142,10 @@ export async function DELETE(request: NextRequest) {
   } catch (error: unknown) {
     logger.error('[Backup Schedule] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to cancel scheduled backup', message: error instanceof Error ? error.message : String(error) },
+      {
+        error: 'Failed to cancel scheduled backup',
+        message: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }

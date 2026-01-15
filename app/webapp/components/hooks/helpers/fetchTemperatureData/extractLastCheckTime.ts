@@ -4,7 +4,9 @@
  * @param {any[]} logs - Temperature logs
  * @returns {string | undefined} Last check time string
  */
-export function extractLastCheckTime(logs: any[]): string | undefined {
+import { TemperatureLog } from '../../../../temperature/types';
+
+export function extractLastCheckTime(logs: TemperatureLog[]): string | undefined {
   if (logs.length === 0) return undefined;
   const lastLog = logs[0];
   return lastLog.log_date && lastLog.log_time

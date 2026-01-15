@@ -29,8 +29,7 @@ export function processStandaloneIngredients(
       typeof dishIngredient.quantity === 'number'
         ? dishIngredient.quantity
         : parseFloat(String(dishIngredient.quantity)) || 0;
-    const costPerUnit =
-      ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
+    const costPerUnit = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
     const totalCost = quantity * costPerUnit;
     const wastePercent = ingredient.trim_peel_waste_percentage || 0;
     const yieldPercent = ingredient.yield_percentage || 100;

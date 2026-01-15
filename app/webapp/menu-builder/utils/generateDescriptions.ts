@@ -7,6 +7,15 @@
 import { logger } from '@/lib/logger';
 import type { MenuItem } from '../types';
 
+interface RecipeIngredient {
+  quantity?: number;
+  unit?: string;
+  ingredients?: {
+    id: string;
+    ingredient_name: string;
+  };
+}
+
 /**
  * Generate descriptions for menu items that don't have descriptions.
  *
@@ -40,7 +49,7 @@ export async function generateMenuDescriptions(
   const descriptionPromises = itemsNeedingDescriptions.map(async item => {
     try {
       const isRecipe = !!item.recipe_id;
-      let ingredients: any[] | undefined;
+      let ingredients: RecipeIngredient[] | undefined;
 
       // For recipes, try to fetch ingredients if available
       if (isRecipe && item.recipe_id) {

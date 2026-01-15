@@ -16,22 +16,25 @@ export function initializeRecipes(
 
   const cached = getCachedRecipes();
   if (cached && cached.length > 0) {
-    const recipes: Recipe[] = cached.map(scraped => ({
-      id: scraped.id,
-      recipe_name: scraped.recipe_name,
-      description: scraped.description,
-      instructions: Array.isArray(scraped.instructions)
-        ? scraped.instructions.join('\n')
-        : scraped.instructions || '',
-      yield: scraped.yield || 1,
-      yield_unit: scraped.yield_unit || 'servings',
-      category: scraped.category,
-      created_at: scraped.scraped_at,
-      updated_at: scraped.updated_at || scraped.scraped_at,
-      image_url: scraped.image_url,
-      // Default values for required Recipe fields not present in ScrapedRecipe
-      selling_price: 0,
-    } as unknown as Recipe)); // Cast needed due to some differing optional/required fields potentially
+    const recipes: Recipe[] = cached.map(
+      scraped =>
+        ({
+          id: scraped.id,
+          recipe_name: scraped.recipe_name,
+          description: scraped.description,
+          instructions: Array.isArray(scraped.instructions)
+            ? scraped.instructions.join('\n')
+            : scraped.instructions || '',
+          yield: scraped.yield || 1,
+          yield_unit: scraped.yield_unit || 'servings',
+          category: scraped.category,
+          created_at: scraped.scraped_at,
+          updated_at: scraped.updated_at || scraped.scraped_at,
+          image_url: scraped.image_url,
+          // Default values for required Recipe fields not present in ScrapedRecipe
+          selling_price: 0,
+        }) as unknown as Recipe,
+    ); // Cast needed due to some differing optional/required fields potentially
 
     setRecipes(recipes);
     setIsHydrated(true);

@@ -71,14 +71,14 @@ export async function POST(request: NextRequest) {
           .select()
           .single();
 
-          if (prepError) {
-            // It is safe to assume PostgrestError has a code, but better to check or use unknown
-            const code = (prepError as { code?: string }).code;
-            logger.error('[Prep Lists API] Database error creating prep list:', {
-              error: prepError.message,
-              code,
-              prepListName: prepListData.name,
-            });
+        if (prepError) {
+          // It is safe to assume PostgrestError has a code, but better to check or use unknown
+          const code = (prepError as { code?: string }).code;
+          logger.error('[Prep Lists API] Database error creating prep list:', {
+            error: prepError.message,
+            code,
+            prepListName: prepListData.name,
+          });
           errors.push({
             prepListName: prepListData.name,
             error: prepError.message,

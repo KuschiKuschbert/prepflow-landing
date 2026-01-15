@@ -4,6 +4,7 @@
 
 import type { DateRange } from '../types';
 import { calculatePerformanceScore } from './calculatePerformanceScore';
+import type { SalesData } from './csv-utils/helpers/mapCSVRowToSalesData';
 
 import { logger } from '@/lib/logger';
 export async function fetchPerformanceData(dateRange?: DateRange, lockedMenuOnly = false) {
@@ -60,7 +61,7 @@ export async function fetchPerformanceData(dateRange?: DateRange, lockedMenuOnly
   return result;
 }
 
-export async function importPerformanceData(salesData: any[]) {
+export async function importPerformanceData(salesData: SalesData[]) {
   const response = await fetch('/api/performance', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

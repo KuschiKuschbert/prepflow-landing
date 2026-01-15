@@ -54,7 +54,7 @@ export async function batchFetchRecipes(
     const recipeName = recipe.recipe_name || recipe.name || 'Unknown Recipe';
 
     const ingredients =
-      recipe.recipe_ingredients?.map((ri) => ({
+      recipe.recipe_ingredients?.map(ri => ({
         name: ri.ingredients?.ingredient_name || 'Unknown Ingredient',
         quantity: Number(ri.quantity) || 0,
         unit: ri.unit || '',

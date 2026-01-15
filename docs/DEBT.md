@@ -12,6 +12,7 @@
 - [x] **[WEB]** Refactor `KitchenOnFire.tsx` and `DashboardSection.tsx` (Reduce complexity).
 - [x] **[WEB]** Refactor `app/api/prep-lists` (Main CRUD) to use strict types (Phase 18).
 - [x] **[WEB]** Refactor `app/api/menus` (105 `any` types) - **DONE**.
+- [ ] **[WEB]** Eradicate `any` types in `app/webapp` (Partially done: fixed top ~197 offenders. ~29 remaining).
 
 ## Medium Priority
 
@@ -20,7 +21,6 @@
 - [x] **[WEB]** Optimize 15 large images in `public/` (>500KB).
 - [ ] Review `scripts/pre-commit-check.sh` and ensure it handles edge cases (e.g. merge conflicts).
 - [x] Verify `check:architecture` rules are strict enough for `lib` vs `components`.
-- [x] Add more "Personas" for different coding styles (e.g. "Security Expert").
 
 ## Low Priority
 

@@ -26,7 +26,7 @@ export function performOptimisticUpdate<T extends { id: string }>({
   setNewIngredient,
   DEFAULT_INGREDIENT,
 }: OptimisticUpdateProps<T>): string {
-  const tempIngredient = createOptimisticIngredient<T>(normalized);
+  const tempIngredient = createOptimisticIngredient<T>(normalized as unknown as Partial<T>);
   const tempId = tempIngredient.id;
 
   setIngredients(prev => {

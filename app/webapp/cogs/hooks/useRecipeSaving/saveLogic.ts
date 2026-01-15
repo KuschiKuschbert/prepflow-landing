@@ -81,10 +81,12 @@ export async function saveRecipeWithIngredients({
     );
     if (isNew) onRecipeCreated();
     return recipe;
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('Recipe save error:', err);
+    const errorObj = err as { message?: string; code?: string };
     const errorMessage =
-      err?.message || (err?.code ? `Database error (${err.code})` : 'Failed to save recipe');
+      errorObj?.message ||
+      (errorObj?.code ? `Database error (${errorObj.code})` : 'Failed to save recipe');
     setError(`Failed to save recipe: ${errorMessage}`);
     return null;
   }

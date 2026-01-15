@@ -1,5 +1,5 @@
+import { Dish } from '../../../menu-builder/types';
 import { DishBuilderState } from '../../types';
-import { COGSCalculation } from '../../../cogs/types';
 
 interface SaveDishItemProps {
   dishState: DishBuilderState;
@@ -10,9 +10,12 @@ interface SaveDishItemProps {
  * Save dish via API.
  *
  * @param {SaveDishItemProps} props - Dish save props
- * @returns {Promise<{success: boolean, dish?: any}>} Save result
+ * @returns {Promise<{success: boolean, dish?: Dish, error?: string}>} Save result
  */
-export async function saveDishItem({ dishState, itemIngredients }: SaveDishItemProps) {
+export async function saveDishItem(
+  props: SaveDishItemProps,
+): Promise<{ success: boolean; dish?: Dish; error?: string }> {
+  const { dishState, itemIngredients } = props;
   const response = await fetch('/api/dishes', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

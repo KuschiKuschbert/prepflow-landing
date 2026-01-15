@@ -9,7 +9,7 @@ import { logger } from '@/lib/logger';
 import { useEffect, useState } from 'react';
 import { Ingredient } from '../../cogs/types'; // Import Ingredient from cogs types or move it to shared types
 import { useDishCostCalculation } from '../hooks/useDishCostCalculation';
-import { Dish, Recipe } from '../types';
+import { Dish, DishWithDetails, Recipe } from '../types';
 import DishFormPricing from './DishFormPricing';
 import DishIngredientSelector from './DishIngredientSelector';
 import DishRecipeSelector from './DishRecipeSelector';
@@ -102,7 +102,9 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
     setLoading(true);
     Promise.all([
       fetch('/api/recipes').then(r => r.json() as Promise<APIResponse<Recipe[]>>),
-      fetch('/api/ingredients?pageSize=1000').then(r => r.json() as Promise<APIResponse<{ items: Ingredient[] }>>),
+      fetch('/api/ingredients?pageSize=1000').then(
+        r => r.json() as Promise<APIResponse<{ items: Ingredient[] }>>,
+      ),
     ])
       .then(([recipesData, ingredientsData]) => {
         if (recipesData.success) setRecipes(recipesData.recipes || []);
@@ -123,20 +125,29 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
           }
           return r.json();
         })
-        .then((data: { success: boolean, dish?: any }) => { // Using any for data.dish as it's complex, but typing inner maps
+        .then((data: { success: boolean; dish?: DishWithDetails }) => {
           logger.dev('Dish data loaded:', data); // Debug log
           if (data.success && data.dish) {
-            const recipes = (data.dish.recipes || []).map((r: { recipe_id: string; quantity: number; recipes?: { recipe_name: string } }) => ({
-              recipe_id: r.recipe_id,
-              quantity: r.quantity || 1,
-              recipe_name: r.recipes?.recipe_name,
-            }));
-            const ingredients = (data.dish.ingredients || []).map((i: { ingredient_id: string; quantity: number; unit?: string; ingredients?: { ingredient_name: string } }) => ({
-              ingredient_id: i.ingredient_id,
-              quantity: i.quantity || 0,
-              unit: i.unit || 'kg',
-              ingredient_name: i.ingredients?.ingredient_name,
-            }));
+            const recipes = (data.dish.recipes || []).map(
+              (r: { recipe_id: string; quantity: number; recipes?: { recipe_name: string } }) => ({
+                recipe_id: r.recipe_id,
+                quantity: r.quantity || 1,
+                recipe_name: r.recipes?.recipe_name,
+              }),
+            );
+            const ingredients = (data.dish.ingredients || []).map(
+              (i: {
+                ingredient_id: string;
+                quantity: number;
+                unit?: string;
+                ingredients?: { ingredient_name: string };
+              }) => ({
+                ingredient_id: i.ingredient_id,
+                quantity: i.quantity || 0,
+                unit: i.unit || 'kg',
+                ingredient_name: i.ingredients?.ingredient_name,
+              }),
+            );
             setSelectedRecipes(recipes);
             setSelectedIngredients(ingredients);
             setLoading(false);

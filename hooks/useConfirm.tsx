@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useCallback } from 'react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { useCallback, useState } from 'react';
 import { createConfirmHandlers } from './useConfirm/helpers/handlers';
 
-interface ConfirmOptions {
+export interface ConfirmOptions {
   title: string;
   message: string;
   variant?: 'danger' | 'warning' | 'info';

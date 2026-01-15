@@ -1,13 +1,13 @@
-import { useEffect, useRef } from 'react';
 import { logger } from '@/lib/logger';
-import { COGSCalculation, RecipeIngredient } from '../../types';
+import { useEffect, useRef } from 'react';
+import { COGSCalculation, Ingredient, RecipeIngredient } from '../../types';
 
 interface CalculationEffectsProps {
   selectedRecipe: string;
   fetchRecipeIngredients: (recipeId: string) => void;
   recipeIngredients: RecipeIngredient[];
   calculations: COGSCalculation[];
-  ingredients: any[];
+  ingredients: Ingredient[];
   calculateCOGS: (recipeIngredients: RecipeIngredient[]) => void;
   isLoadingFromApiRef: React.MutableRefObject<boolean>;
   hasManualIngredientsRef: React.MutableRefObject<boolean>;

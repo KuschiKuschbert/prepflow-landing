@@ -105,9 +105,7 @@ export function MenuDisplayView({ menu, menuItems }: MenuDisplayViewProps) {
                 (isDish ? item.dishes?.dietary_confidence : item.recipes?.dietary_confidence);
 
               // Get image URLs from dish or recipe (all plating methods)
-              const imageUrl = isDish
-                ? item.dishes?.image_url
-                : item.recipes?.image_url;
+              const imageUrl = isDish ? item.dishes?.image_url : item.recipes?.image_url;
               const imageUrlAlternative = isDish
                 ? item.dishes?.image_url_alternative
                 : item.recipes?.image_url_alternative;

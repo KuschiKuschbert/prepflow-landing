@@ -1,4 +1,4 @@
-import { Recipe } from '../../types';
+import { Recipe, RecipeIngredientWithDetails } from '../../types';
 import { useRecipePricing } from '../useRecipePricing';
 import { useSetupRecipeSubscriptions } from './setupRecipeSubscriptions';
 import { useRecipeInitialization } from './useRecipeInitialization';
@@ -28,16 +28,22 @@ export function useSetupRecipeHooks({
   pricesCalculatedRef: React.MutableRefObject<Set<string>>;
   updateVisibleRecipePrices: (
     recipes: Recipe[],
-    fetchRecipeIngredients: (recipeId: string) => Promise<any[]>,
-    fetchBatchRecipeIngredients?: (recipeIds: string[]) => Promise<Record<string, any[]>>,
+    fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>,
+    fetchBatchRecipeIngredients?: (
+      recipeIds: string[],
+    ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
   ) => Promise<void>;
-  fetchRecipeIngredients: (recipeId: string) => Promise<any[]>;
-  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<Record<string, any[]>>;
+  fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>;
+  fetchBatchRecipeIngredients: (
+    recipeIds: string[],
+  ) => Promise<Record<string, RecipeIngredientWithDetails[]>>;
   recipes: Recipe[];
   refreshRecipePrices: (
     recipes: Recipe[],
-    fetchRecipeIngredients: any,
-    fetchBatchRecipeIngredients?: any,
+    fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>,
+    fetchBatchRecipeIngredients?: (
+      recipeIds: string[],
+    ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
   ) => Promise<void>;
   onIngredientsChange?: (recipeId: string) => void;
   fetchRecipes: () => Promise<void>;

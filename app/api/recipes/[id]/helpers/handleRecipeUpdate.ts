@@ -3,8 +3,8 @@
  */
 
 import {
-    invalidateDishesWithRecipe,
-    invalidateRecipeAllergenCache,
+  invalidateDishesWithRecipe,
+  invalidateRecipeAllergenCache,
 } from '@/lib/allergens/cache-invalidation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getUserEmail } from '@/lib/auth0-api-helpers';
