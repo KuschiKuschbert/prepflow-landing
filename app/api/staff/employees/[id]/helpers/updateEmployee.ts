@@ -2,7 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
-import { Employee } from '../../helpers/schemas';
+import type { Employee } from '../../helpers/schemas';
 import { validateEmployeeRequest } from '../../helpers/validateEmployeeRequest';
 import { buildUpdateData } from './buildUpdateData';
 import { checkEmailUniqueness } from './checkEmailUniqueness';
@@ -12,7 +12,7 @@ import { checkEmailUniqueness } from './checkEmailUniqueness';
  */
 export async function updateEmployee(
   employeeId: string,
-  body: Record<string, any>,
+  body: Record<string, unknown>,
   existingEmployee: Employee,
 ): Promise<NextResponse> {
   if (!supabaseAdmin) {
@@ -38,7 +38,7 @@ export async function updateEmployee(
   }
 
   // Check email uniqueness if email is being changed
-  if (body.email && body.email !== existingEmployee.email) {
+  if (typeof body.email === 'string' && body.email !== existingEmployee.email) {
     const emailCheckResult = await checkEmailUniqueness(body.email);
     if (emailCheckResult instanceof NextResponse) {
       return emailCheckResult;

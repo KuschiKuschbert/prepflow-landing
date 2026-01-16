@@ -7,6 +7,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 import type { AllergenSource } from './processRecipeAllergens';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { IngredientRecord } from '../../../types';
 
 interface RawIngredientJoin {
   id: string;
@@ -70,7 +71,11 @@ export async function processIngredientAllergens(
   }
 
   dishIngredients.forEach(di => {
+<<<<<<< HEAD
+    const ingredient = di.ingredients as unknown as IngredientRecord | null;
+=======
     const ingredient = di.ingredients as unknown as RawIngredientJoin | null;
+>>>>>>> main
 
     if (!ingredient) return;
 

@@ -8,6 +8,10 @@ import { requireAuth } from '@/lib/auth0-api-helpers';
 import { encryptBackup } from '@/lib/backup/encryption';
 import { convertToSQL, exportUserData } from '@/lib/backup/export';
 import { logger } from '@/lib/logger';
+<<<<<<< HEAD
+import { getAppError } from '@/lib/utils/error';
+=======
+>>>>>>> main
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { storeBackupMetadata } from './helpers/storeMetadata';
@@ -159,17 +163,22 @@ export async function POST(request: NextRequest) {
       });
     }
   } catch (error: unknown) {
+<<<<<<< HEAD
+    const appError = getAppError(error);
+=======
+>>>>>>> main
     logger.error('[Backup Create] Error creating backup:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
+      error: appError.message,
+      code: appError.code,
       context: { endpoint: '/api/backup/create', method: 'POST' },
+      originalError: appError.originalError,
     });
     return NextResponse.json(
       ApiErrorHandler.createError(
         'Failed to create backup',
         'SERVER_ERROR',
         500,
-        error instanceof Error ? error.message : String(error),
+        appError.message,
       ),
       { status: 500 },
     );

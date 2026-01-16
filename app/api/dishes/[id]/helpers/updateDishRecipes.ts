@@ -6,8 +6,11 @@ import { DishRecipeInput } from '../../helpers/schemas';
 /**
  * Update dish recipes by deleting existing and inserting new ones.
  *
+<<<<<<< HEAD
+=======
  * @param {string} dishId - Dish ID
  * @param {DishRecipeInput[]} recipes - Array of recipe objects
+>>>>>>> main
  * @throws {Error} If database connection is not available or update fails
  */
 export async function updateDishRecipes(dishId: string, recipes: DishRecipeInput[]) {

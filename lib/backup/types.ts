@@ -8,12 +8,15 @@ export type RestoreMode = 'full' | 'selective' | 'merge';
 export type BackupType = 'manual' | 'scheduled';
 export type ConflictResolution = 'skip' | 'update' | 'create-new';
 
+// Use strict record type instead of any
+export type DatabaseRecord = Record<string, unknown>;
+
 export interface BackupData {
   version: string; // "1.0.0"
   timestamp: string; // ISO 8601
   userId: string;
   tables: {
-    [tableName: string]: any[];
+    [tableName: string]: DatabaseRecord[];
   };
   metadata: {
     recordCounts: Record<string, number>;
@@ -80,7 +83,7 @@ export interface BackupSettings {
 
 export interface TableData {
   tableName: string;
-  records: any[];
+  records: DatabaseRecord[];
   recordCount: number;
 }
 

@@ -5,6 +5,7 @@
 
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import type { IngredientData } from '../types';
 import type { DishData } from './fetchDishData';
 
 /**
@@ -55,7 +56,7 @@ export async function calculateUICost(dishData: DishData): Promise<number> {
 
     // Calculate UI cost for recipe ingredients (matching convertToCOGSCalculations logic)
     for (const ri of recipeIngredients) {
-      const ingredient = ri.ingredients as any;
+      const ingredient = ri.ingredients as unknown as IngredientData | null | undefined;
       if (!ingredient) continue;
 
       const baseCostPerUnit = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
@@ -85,7 +86,7 @@ export async function calculateUICost(dishData: DishData): Promise<number> {
   // Calculate standalone ingredient costs for UI (same as API)
   const dishIngredients = dishData.dish_ingredients || [];
   for (const di of dishIngredients) {
-    const ingredient = di.ingredients as any;
+    const ingredient = di.ingredients as IngredientData | null | undefined;
     if (!ingredient) continue;
 
     const costPerUnit = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;

@@ -5,8 +5,8 @@ process.env.SUPABASE_SERVICE_ROLE_KEY = 'mock-service-key';
 process.env.NEXT_PUBLIC_AUTH0_DOMAIN = 'mock-domain.auth0.com';
 process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID = 'mock-client-id';
 
-import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { render } from '@testing-library/react';
 import * as Module from './QRCodeDisplay';
 
 describe('QRCodeDisplay', () => {
@@ -21,7 +21,7 @@ describe('QRCodeDisplay', () => {
 
     if (Component) {
       try {
-        render(<Component />);
+        render(<Component value="https://example.com" />);
       } catch (e) {
         // console.warn('Render failed for QRCodeDisplay, but module loaded');
       }

@@ -5,6 +5,18 @@
 import { calculateRecommendedPrice } from '@/app/api/dishes/helpers/calculateRecommendedPrice';
 import { calculateRecipeCost } from '@/app/api/menus/[id]/statistics/helpers/calculateRecipeCost';
 import { logger } from '@/lib/logger';
+import { DishIngredientRecord, DishRecipeRecord, DishRecord } from '../../../types';
+
+export interface BatchCostResult {
+  total_cost: number;
+  selling_price: number;
+  gross_profit: number;
+  gross_profit_margin: number;
+  food_cost_percent: number;
+  contributingMargin: number;
+  contributingMarginPercent: number;
+  recommendedPrice: number;
+}
 
 /**
  * Calculate cost and recommended price for a single dish.
@@ -48,10 +60,17 @@ export interface DishCostResult {
  */
 export async function calculateDishCost(
   dishId: string,
+<<<<<<< HEAD
+  dish: DishRecord | null,
+  dishRecipes: DishRecipeRecord[],
+  dishIngredients: DishIngredientRecord[],
+): Promise<{ dishId: string; cost: BatchCostResult } | { dishId: string; cost: null }> {
+=======
   dish: BatchDishInput | undefined,
   dishRecipes: BatchDishRecipeInput[],
   dishIngredients: BatchDishIngredientInput[],
 ): Promise<{ dishId: string; cost: DishCostResult } | { dishId: string; cost: null }> {
+>>>>>>> main
   if (!dish) {
     logger.warn(`[Dishes API] Dish ${dishId} not found in batch`);
     return { dishId, cost: null };
@@ -62,7 +81,14 @@ export async function calculateDishCost(
   // Calculate cost from recipes
   for (const dishRecipe of dishRecipes) {
     try {
+<<<<<<< HEAD
+      const recipeQuantity =
+        typeof dishRecipe.quantity === 'string'
+          ? parseFloat(dishRecipe.quantity)
+          : dishRecipe.quantity || 1;
+=======
       const recipeQuantity = parseFloat(String(dishRecipe.quantity)) || 1;
+>>>>>>> main
       const recipeCost = await calculateRecipeCost(dishRecipe.recipe_id, recipeQuantity);
       totalCost += recipeCost;
     } catch (err) {
@@ -77,10 +103,20 @@ export async function calculateDishCost(
 
   // Calculate cost from standalone ingredients
   for (const di of dishIngredients) {
+<<<<<<< HEAD
+    const ingredient = di.ingredients as Record<string, any> | undefined;
+    if (ingredient) {
+      const costPerUnit =
+        (ingredient.cost_per_unit_incl_trim as number) ||
+        (ingredient.cost_per_unit as number) ||
+        0;
+      const quantity = typeof di.quantity === 'string' ? parseFloat(di.quantity) : di.quantity || 0;
+=======
     const ingredient = di.ingredients;
     if (ingredient) {
       const costPerUnit = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
       const quantity = parseFloat(String(di.quantity)) || 0;
+>>>>>>> main
       const isConsumable = ingredient.category === 'Consumables';
 
       // For consumables: simple calculation (no waste/yield)
@@ -103,7 +139,11 @@ export async function calculateDishCost(
     }
   }
 
+<<<<<<< HEAD
+  const sellingPrice = (dish.selling_price as number) || 0;
+=======
   const sellingPrice = parseFloat(String(dish.selling_price)) || 0;
+>>>>>>> main
   const grossProfit = sellingPrice - totalCost;
   const grossProfitMargin = sellingPrice > 0 ? (grossProfit / sellingPrice) * 100 : 0;
   const foodCostPercent = sellingPrice > 0 ? (totalCost / sellingPrice) * 100 : 0;

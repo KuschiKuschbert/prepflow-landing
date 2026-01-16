@@ -8,6 +8,10 @@ import { requireAuth } from '@/lib/auth0-api-helpers';
 import type { BackupSettings } from '@/lib/backup/types';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
+<<<<<<< HEAD
+import { getAppError } from '@/lib/utils/error';
+=======
+>>>>>>> main
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -59,12 +63,23 @@ export async function GET(request: NextRequest) {
       settings,
     });
   } catch (error: unknown) {
+<<<<<<< HEAD
+    const appError = getAppError(error);
+    logger.error('[Backup Settings] Error:', {
+      error: appError.message,
+      code: appError.code,
+      originalError: appError.originalError,
+    });
+    return NextResponse.json(
+      { error: 'Failed to get backup settings', message: appError.message },
+=======
     logger.error('[Backup Settings] Error:', error);
     return NextResponse.json(
       {
         error: 'Failed to get backup settings',
         message: error instanceof Error ? error.message : String(error),
       },
+>>>>>>> main
       { status: 500 },
     );
   }
@@ -152,12 +167,23 @@ export async function PUT(request: NextRequest) {
       message: 'Backup settings updated successfully',
     });
   } catch (error: unknown) {
+<<<<<<< HEAD
+    const appError = getAppError(error);
+    logger.error('[Backup Settings] Error:', {
+      error: appError.message,
+      code: appError.code,
+      originalError: appError.originalError,
+    });
+    return NextResponse.json(
+      { error: 'Failed to update backup settings', message: appError.message },
+=======
     logger.error('[Backup Settings] Error:', error);
     return NextResponse.json(
       {
         error: 'Failed to update backup settings',
         message: error instanceof Error ? error.message : String(error),
       },
+>>>>>>> main
       { status: 500 },
     );
   }

@@ -5,6 +5,34 @@ process.env.SUPABASE_SERVICE_ROLE_KEY = 'mock-service-key';
 process.env.NEXT_PUBLIC_AUTH0_DOMAIN = 'mock-domain.auth0.com';
 process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID = 'mock-client-id';
 
+// Polyfill PerformanceObserver
+if (typeof PerformanceObserver === 'undefined') {
+  (global as any).PerformanceObserver = class PerformanceObserver {
+    observe() {}
+    disconnect() {}
+    takeRecords() { return []; }
+  };
+}
+
+// Polyfill PerformanceObserver
+if (typeof PerformanceObserver === 'undefined') {
+  (global as any).PerformanceObserver = class PerformanceObserver {
+    observe() {}
+    disconnect() {}
+    takeRecords() { return []; }
+  };
+}
+
+// Mock web-vitals
+jest.mock('web-vitals', () => ({
+  onCLS: jest.fn(),
+  onFID: jest.fn(),
+  onLCP: jest.fn(),
+  onFCP: jest.fn(),
+  onTTFB: jest.fn(),
+  onINP: jest.fn(),
+}));
+
 import * as Module from './performance-monitor';
 
 describe('performance-monitor', () => {

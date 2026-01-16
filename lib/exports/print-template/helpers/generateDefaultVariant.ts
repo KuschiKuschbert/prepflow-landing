@@ -1,10 +1,10 @@
 import { getAllTemplateStyles } from '../../template-styles';
 import {
-  formatDateAustralian,
-  getLogoUrl,
-  formatMetaInfo,
-  getFooterHtml,
-  escapeHtml,
+    escapeHtml,
+    formatDateAustralian,
+    formatMetaInfo,
+    getFooterHtml,
+    getLogoUrl,
 } from '../../template-utils';
 
 export function generateDefaultVariant(
@@ -32,7 +32,7 @@ export function generateDefaultVariant(
     ${styles}
   </style>
 </head>
-<body>
+<body class="variant-default">
   <div class="background-grid"></div>
   <div class="corner-glow-cyan"></div>
   <div class="corner-glow-magenta"></div>

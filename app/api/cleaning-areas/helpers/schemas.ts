@@ -1,5 +1,19 @@
 import { z } from 'zod';
 
+export type CreateCleaningAreaInput = z.infer<typeof createCleaningAreaSchema>;
+export type UpdateCleaningAreaInput = z.infer<typeof updateCleaningAreaSchema>;
+
+export interface CleaningArea {
+  id: string;
+  user_id: string;
+  area_name: string;
+  description?: string | null;
+  cleaning_frequency?: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export const createCleaningAreaSchema = z.object({
   area_name: z.string().min(1, 'Area name is required'),
   description: z.string().optional(),

@@ -6,6 +6,7 @@ import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
 import { supabaseAdmin } from '@/lib/supabase';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { RecipeRecord } from '../../../types';
 
 interface RawRecipeJoin {
   id: string;
@@ -76,7 +77,11 @@ export async function processRecipeAllergens(
   }
 
   dishRecipes.forEach(dr => {
+<<<<<<< HEAD
+    const recipe = dr.recipes as unknown as RecipeRecord | null;
+=======
     const recipe = dr.recipes as unknown as RawRecipeJoin | null;
+>>>>>>> main
 
     if (!recipe) return;
 

@@ -5,9 +5,9 @@
 
 import { generatePrintTemplate, type PrintTemplateOptions } from '@/lib/exports/print-template';
 import {
-  validateExportHTML,
-  validateVariant,
-  testTemplateVariants,
+    testTemplateVariants,
+    validateExportHTML,
+    validateVariant,
 } from '@/lib/exports/test-helpers';
 
 describe('Template Generation', () => {
@@ -44,14 +44,14 @@ describe('Template Generation', () => {
     it('should apply default variant correctly', () => {
       const html = generatePrintTemplate(baseOptions);
       expect(html).toContain('PrepFlow');
-      expect(html).toContain('background-grid');
+      expect(html).toContain('class="background-grid"');
     });
 
     it('should apply kitchen variant correctly', () => {
       const html = generatePrintTemplate({ ...baseOptions, variant: 'kitchen' });
       const variantApplied = validateVariant(html, 'kitchen');
       expect(variantApplied).toBe(true);
-      expect(html).not.toContain('background-grid');
+      expect(html).not.toContain('class="background-grid"');
     });
 
     it('should apply customer variant correctly', () => {

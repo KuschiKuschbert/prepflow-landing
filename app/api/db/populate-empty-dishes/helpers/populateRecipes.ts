@@ -4,13 +4,23 @@
 
 import { logger } from '@/lib/logger';
 import {
-  getDefaultIngredientsForRecipe,
-  getIngredientName,
-  recipeHasIngredients,
+    getDefaultIngredientsForRecipe,
+    getIngredientName,
+    recipeHasIngredients,
 } from '@/lib/populate-helpers/populate-empty-dishes-helpers';
 import { supabaseAdmin } from '@/lib/supabase';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+<<<<<<< HEAD
+import type {
+    IngredientRecord,
+    PopulateRecipesResult,
+    PopulatedRecipe,
+    RecipeError,
+    RecipeRecord,
+    SkippedRecipe,
+} from '../types';
+=======
 import { PopulateIngredientItem, PopulateRecipeItem } from '../types';
 
 export interface PopulatedRecipe {
@@ -37,17 +47,23 @@ export interface PopulateRecipesResult {
   skipped: SkippedRecipe[];
   errors: RecipeError[];
 }
+>>>>>>> main
 
 /**
  * Populates empty recipes with default ingredients
  *
- * @param {any[]} recipes - Array of recipe objects
- * @param {any[]} ingredients - Array of available ingredients
+ * @param {RecipeRecord[]} recipes - Array of recipe objects
+ * @param {IngredientRecord[]} ingredients - Array of available ingredients
  * @returns {Promise<PopulateRecipesResult>} Result of population operation
  */
 export async function populateRecipes(
+<<<<<<< HEAD
+  recipes: RecipeRecord[],
+  ingredients: IngredientRecord[],
+=======
   recipes: PopulateRecipeItem[],
   ingredients: PopulateIngredientItem[],
+>>>>>>> main
 ): Promise<PopulateRecipesResult> {
   const populated: PopulatedRecipe[] = [];
   const skipped: SkippedRecipe[] = [];

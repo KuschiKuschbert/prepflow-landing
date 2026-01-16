@@ -1,4 +1,17 @@
+<<<<<<< HEAD
+/**
+ * Helper for detecting changes in dish updates
+ */
+
+import { Dish, UpdateDishInput } from '@/types/dish';
+
+export interface DishChange {
+  type: string;
+  details: unknown;
+}
+=======
 import { Dish } from '../../helpers/schemas';
+>>>>>>> main
 
 export interface ChangeDetectionResult {
   changes: string[];

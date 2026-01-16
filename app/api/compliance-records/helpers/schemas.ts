@@ -1,5 +1,30 @@
 import { z } from 'zod';
 
+export type CreateComplianceRecordInput = z.infer<typeof createComplianceRecordSchema>;
+export type UpdateComplianceRecordInput = z.infer<typeof updateComplianceRecordSchema>;
+
+export interface ComplianceRecord {
+  id: string;
+  user_id: string;
+  compliance_type_id: string;
+  document_name: string;
+  issue_date?: string | null;
+  expiry_date?: string | null;
+  document_url?: string | null;
+  photo_url?: string | null;
+  notes?: string | null;
+  reminder_enabled?: boolean;
+  reminder_days_before?: number;
+  status: 'valid' | 'expired' | 'expiring_soon' | 'missing'; // Derived or stored? Assuming stored or calculated.
+  created_at: string;
+  updated_at: string;
+  compliance_types?: {
+    id: string;
+    type_name: string;
+    description?: string | null;
+  };
+}
+
 export const createComplianceRecordSchema = z.object({
   compliance_type_id: z.string().min(1, 'compliance_type_id is required'),
   document_name: z.string().min(1, 'document_name is required'),

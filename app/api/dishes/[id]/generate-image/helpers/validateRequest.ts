@@ -62,13 +62,19 @@ export async function validateAIService(): Promise<NextResponse | null> {
   return null;
 }
 
+import { SupabaseClient } from '@supabase/supabase-js';
+
 /**
  * Validate database connection
  *
- * @param {any} supabaseAdmin - Supabase admin client
+ * @param {SupabaseClient | null} supabaseAdmin - Supabase admin client
  * @returns {NextResponse | null} Error response if unavailable, null if available
  */
+<<<<<<< HEAD
+export function validateDatabase(supabaseAdmin: SupabaseClient | null): NextResponse | null {
+=======
 export function validateDatabase(supabaseAdmin: SupabaseClient): NextResponse | null {
+>>>>>>> main
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

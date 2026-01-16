@@ -1,12 +1,12 @@
 import { describe, expect, it } from '@jest/globals';
 import {
-  formatDateString,
-  formatTime,
-  getFoodSafetyStatus,
-  getStatusColor,
-  getTemperatureStatus,
-  getTimePeriod,
-  groupLogsByTimePeriod,
+    formatDateString,
+    formatTime,
+    getFoodSafetyStatus,
+    getStatusColor,
+    getTemperatureStatus,
+    getTimePeriod,
+    groupLogsByTimePeriod,
 } from './utils';
 
 describe('temperature utils', () => {
@@ -86,9 +86,9 @@ describe('temperature utils', () => {
   });
 
   it('getStatusColor returns class tokens', () => {
-    expect(getStatusColor('high')).toContain('red');
-    expect(getStatusColor('low')).toContain('blue');
-    expect(getStatusColor('normal')).toContain('green');
+    expect(getStatusColor('high')).toContain('error');
+    expect(getStatusColor('low')).toContain('info');
+    expect(getStatusColor('normal')).toContain('success');
   });
 
   it('getTimePeriod buckets hours', () => {

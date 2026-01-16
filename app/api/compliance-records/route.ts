@@ -66,10 +66,13 @@ export async function GET(request: NextRequest) {
       data: data || [],
     });
   } catch (err: unknown) {
+<<<<<<< HEAD
+=======
     logger.error('[Compliance Records API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/compliance-records', method: 'GET' },
     });
+>>>>>>> main
     return handleComplianceError(err, 'GET');
   }
 }
@@ -133,11 +136,7 @@ export async function PUT(request: NextRequest) {
       message: 'Compliance record updated successfully',
       data,
     });
-  } catch (err: any) {
-    logger.error('[Compliance Records API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      context: { endpoint: '/api/compliance-records', method: 'PUT' },
-    });
+  } catch (err: unknown) {
     return handleComplianceError(err, 'PUT');
   }
 }

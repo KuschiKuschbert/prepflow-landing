@@ -1,12 +1,12 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
-import { calculateDishCost } from './helpers/calculateDishCost';
+import { z } from 'zod';
+import { BatchCostResult, calculateDishCost } from './helpers/calculateDishCost';
 import { fetchDishes } from './helpers/fetchDishes';
 import { fetchDishIngredients } from './helpers/fetchDishIngredients';
 import { fetchDishRecipes } from './helpers/fetchDishRecipes';
 import { validateRequest } from './helpers/validateRequest';
-import { z } from 'zod';
 
 const batchCostSchema = z.object({
   dishIds: z
@@ -77,10 +77,10 @@ export async function POST(request: NextRequest) {
     const results = await Promise.all(costPromises);
 
     // Build response object with dish IDs as keys
-    const costs: Record<string, any> = {};
-    results.forEach(({ dishId, cost }) => {
-      if (cost) {
-        costs[dishId] = cost;
+    const costs: Record<string, BatchCostResult> = {};
+    results.forEach(result => {
+      if (result.cost) {
+        costs[result.dishId] = result.cost;
       }
     });
 

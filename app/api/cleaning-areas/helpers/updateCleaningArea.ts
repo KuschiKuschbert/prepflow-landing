@@ -1,24 +1,20 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import type { CleaningArea, UpdateCleaningAreaInput } from './schemas';
 
 /**
  * Update a cleaning area.
  *
  * @param {string} id - Cleaning area ID
- * @param {Object} updateData - Update data
- * @returns {Promise<Object>} Updated cleaning area
+ * @param {Omit<UpdateCleaningAreaInput, 'id'>} updateData - Update data
+ * @returns {Promise<CleaningArea>} Updated cleaning area
  * @throws {Error} If update fails
  */
 export async function updateCleaningArea(
   id: string,
-  updateData: {
-    area_name?: string;
-    description?: string;
-    cleaning_frequency?: string;
-    is_active?: boolean;
-  },
-) {
+  updateData: Omit<UpdateCleaningAreaInput, 'id'>,
+): Promise<CleaningArea> {
   if (!supabaseAdmin)
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
 
@@ -38,5 +34,5 @@ export async function updateCleaningArea(
     throw ApiErrorHandler.fromSupabaseError(error, 500);
   }
 
-  return data;
+  return data as unknown as CleaningArea;
 }

@@ -1,7 +1,7 @@
-import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { NextRequest, NextResponse } from 'next/server';
 import QRCode from 'qrcode';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { handleComplianceError } from '../../helpers/handleComplianceError';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -42,11 +42,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         'Cache-Control': 'public, max-age=31536000, immutable',
       },
     });
-  } catch (error) {
-    logger.error('Error generating compliance record QR code:', error);
-    return NextResponse.json(
-      ApiErrorHandler.createError('Failed to generate QR code', 'OPERATION_FAILED', 500),
-      { status: 500 },
-    );
+  } catch (error: unknown) {
+    return handleComplianceError(error, 'GET');
   }
 }

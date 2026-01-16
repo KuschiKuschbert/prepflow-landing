@@ -31,12 +31,17 @@ export async function getUserTableIds(
   if (error) {
     logger.warn('[Reset Self API] Error fetching user table IDs (non-fatal):', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       table,
       idColumn,
       userId,
     });
     return [];
   }
+<<<<<<< HEAD
+  const rows = (data ?? []) as unknown as Record<string, unknown>[];
+  return rows.map((r) => r[idColumn]) as string[];
+=======
   return ((data as any[]) || []).map((r: Record<string, unknown>) => r[idColumn]) as string[];
+>>>>>>> main
 }

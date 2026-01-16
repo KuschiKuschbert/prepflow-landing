@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
       if (error) {
         logger.error('[DB Reset API] Error deleting table:', {
           error: error.message,
-          code: (error as any).code,
+          code: error.code,
           table,
           context: { endpoint: '/api/db/reset', operation: 'POST' },
         });

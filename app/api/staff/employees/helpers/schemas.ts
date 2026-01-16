@@ -1,5 +1,30 @@
 import { z } from 'zod';
 
+export type CreateEmployeeInput = z.infer<typeof createEmployeeSchema>;
+
+export interface Employee {
+  id: string;
+  user_id?: string | null;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone?: string | null;
+  role: 'admin' | 'manager' | 'staff';
+  employment_type: 'full-time' | 'part-time' | 'casual';
+  hourly_rate: number;
+  saturday_rate?: number | null;
+  sunday_rate?: number | null;
+  skills?: string[] | null;
+  bank_account_bsb?: string | null;
+  bank_account_number?: string | null;
+  tax_file_number?: string | null;
+  emergency_contact_name?: string | null;
+  emergency_contact_phone?: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export const createEmployeeSchema = z.object({
   first_name: z.string().min(1, 'First name is required'),
   last_name: z.string().min(1, 'Last name is required'),

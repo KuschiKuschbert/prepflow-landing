@@ -1,19 +1,18 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import type { CleaningArea, CreateCleaningAreaInput } from './schemas';
 
 /**
  * Create a cleaning area.
  *
- * @param {Object} areaData - Cleaning area data
- * @returns {Promise<Object>} Created cleaning area
+ * @param {CreateCleaningAreaInput} areaData - Cleaning area data
+ * @returns {Promise<CleaningArea>} Created cleaning area
  * @throws {Error} If creation fails
  */
-export async function createCleaningArea(areaData: {
-  area_name: string;
-  description?: string | null;
-  cleaning_frequency?: string;
-}) {
+export async function createCleaningArea(
+  areaData: CreateCleaningAreaInput,
+): Promise<CleaningArea> {
   if (!supabaseAdmin)
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
 
@@ -36,5 +35,5 @@ export async function createCleaningArea(areaData: {
     throw ApiErrorHandler.fromSupabaseError(error, 500);
   }
 
-  return data;
+  return data as unknown as CleaningArea;
 }

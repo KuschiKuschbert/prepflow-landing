@@ -4,6 +4,7 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { calculateRecommendedPrice } from '../../helpers/calculateRecommendedPrice';
+import { IngredientRecord } from '../../types';
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -53,20 +54,42 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     // Calculate cost from recipes
     const { data: dishRecipes, error: dishRecipesError } = await supabaseAdmin
       .from('dish_recipes')
+<<<<<<< HEAD
+      .select(
+        `
+        recipe_id,
+        quantity,
+        recipes (
+          id,
+          name,
+          recipe_name
+        )
+      `,
+      )
+=======
       .select('recipe_id, quantity')
+>>>>>>> main
       .eq('dish_id', dishId);
 
     if (dishRecipesError) {
       logger.error('[Dishes API] Error fetching dish recipes:', {
         dishId,
-        error: dishRecipesError,
+        error: dishRecipesError.message,
       });
     }
 
     if (dishRecipes && dishRecipes.length > 0) {
       for (const dishRecipe of dishRecipes) {
         try {
+<<<<<<< HEAD
+          // Use calculateRecipeCost helper which applies waste/yield adjustments
+          const recipeQuantity =
+            typeof dishRecipe.quantity === 'string'
+              ? parseFloat(dishRecipe.quantity)
+              : dishRecipe.quantity || 1;
+=======
           const recipeQuantity = parseFloat(dishRecipe.quantity as string) || 1;
+>>>>>>> main
           const recipeCost = await calculateRecipeCost(dishRecipe.recipe_id, recipeQuantity);
           totalCost += recipeCost;
         } catch (err) {
@@ -87,6 +110,8 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         quantity,
         unit,
         ingredients (
+          id,
+          ingredient_name,
           cost_per_unit,
           cost_per_unit_incl_trim,
           trim_peel_waste_percentage,
@@ -100,12 +125,20 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     if (dishIngredientsError) {
       logger.error('[Dishes API] Error fetching dish ingredients:', {
         dishId,
-        error: dishIngredientsError,
+        error: dishIngredientsError.message,
       });
     }
 
     if (dishIngredients) {
       for (const di of dishIngredients) {
+<<<<<<< HEAD
+        const ingredient = di.ingredients as unknown as IngredientRecord | null;
+        if (ingredient) {
+          const costPerUnit =
+            ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
+          const quantity =
+            typeof di.quantity === 'string' ? parseFloat(di.quantity) : (di.quantity as number) || 0;
+=======
         const ingredient = di.ingredients as any; // Still using any here as Supabase relation typing is notoriously difficult without generated types
         if (ingredient) {
           const costPerUnit =
@@ -113,6 +146,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
             (ingredient.cost_per_unit as number) ||
             0;
           const quantity = parseFloat(di.quantity as string) || 0;
+>>>>>>> main
           const isConsumable = ingredient.category === 'Consumables';
 
           if (isConsumable) {
@@ -134,7 +168,11 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       }
     }
 
+<<<<<<< HEAD
+    const sellingPrice = (dish.selling_price as number) || 0;
+=======
     const sellingPrice = parseFloat(dish.selling_price as string) || 0;
+>>>>>>> main
     const grossProfit = sellingPrice - totalCost;
     const grossProfitMargin = sellingPrice > 0 ? (grossProfit / sellingPrice) * 100 : 0;
     const foodCostPercent = sellingPrice > 0 ? (totalCost / sellingPrice) * 100 : 0;

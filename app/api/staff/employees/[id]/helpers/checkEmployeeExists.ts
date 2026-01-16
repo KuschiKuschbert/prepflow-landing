@@ -2,7 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
-import { Employee } from '../../helpers/schemas';
+import type { Employee } from '../../helpers/schemas';
 
 /**
  * Check if employee exists and return it
@@ -34,5 +34,5 @@ export async function checkEmployeeExists(
     });
   }
 
-  return { employee: existingEmployee };
+  return { employee: existingEmployee as Employee };
 }

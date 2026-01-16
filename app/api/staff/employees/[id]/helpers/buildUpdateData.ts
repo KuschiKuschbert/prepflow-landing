@@ -1,12 +1,8 @@
-import { UpdateEmployeeInput } from '../../helpers/schemas';
-
 /**
  * Build update data object from request body
  */
-export function buildUpdateData(
-  body: Record<string, any>,
-): UpdateEmployeeInput & { updated_at: string } {
-  const updateData: UpdateEmployeeInput & { updated_at: string } = {
+export function buildUpdateData(body: Record<string, unknown>): Record<string, unknown> {
+  const updateData: Record<string, unknown> = {
     updated_at: new Date().toISOString(),
   };
 
@@ -16,11 +12,11 @@ export function buildUpdateData(
   if (body.phone !== undefined) updateData.phone = body.phone;
   if (body.role !== undefined) updateData.role = body.role;
   if (body.employment_type !== undefined) updateData.employment_type = body.employment_type;
-  if (body.hourly_rate !== undefined) updateData.hourly_rate = parseFloat(body.hourly_rate);
+  if (body.hourly_rate !== undefined) updateData.hourly_rate = parseFloat(String(body.hourly_rate));
   if (body.saturday_rate !== undefined)
-    updateData.saturday_rate = body.saturday_rate ? parseFloat(body.saturday_rate) : null;
+    updateData.saturday_rate = body.saturday_rate ? parseFloat(String(body.saturday_rate)) : null;
   if (body.sunday_rate !== undefined)
-    updateData.sunday_rate = body.sunday_rate ? parseFloat(body.sunday_rate) : null;
+    updateData.sunday_rate = body.sunday_rate ? parseFloat(String(body.sunday_rate)) : null;
   if (body.skills !== undefined) updateData.skills = body.skills;
   if (body.bank_account_bsb !== undefined) updateData.bank_account_bsb = body.bank_account_bsb;
   if (body.bank_account_number !== undefined)

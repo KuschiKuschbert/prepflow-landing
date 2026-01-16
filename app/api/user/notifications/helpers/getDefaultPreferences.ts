@@ -1,7 +1,9 @@
+import type { NotificationPreferences } from './types';
+
 /**
  * Get default notification preferences
  */
-export function getDefaultPreferences() {
+export function getDefaultPreferences(): Required<NotificationPreferences> {
   return {
     email: {
       weeklyReports: true,

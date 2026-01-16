@@ -1,13 +1,4 @@
-interface PriceAuditResult {
-  itemId: string;
-  itemName: string;
-  itemType: 'dish' | 'recipe';
-  menuBuilderPrice: number | null;
-  recipeDishBuilderPrice: number | null;
-  discrepancy: number;
-  discrepancyPercent: number;
-  issues: string[];
-}
+import type { PriceAuditResult } from '../types';
 
 /**
  * Calculate summary statistics for audit results

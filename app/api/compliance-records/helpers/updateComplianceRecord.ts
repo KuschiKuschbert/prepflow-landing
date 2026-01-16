@@ -13,27 +13,20 @@ const COMPLIANCE_TYPES_SELECT = `
   )
 `;
 
+import type { ComplianceRecord, UpdateComplianceRecordInput } from './schemas';
+
 /**
  * Update a compliance record.
  *
  * @param {string} id - Compliance record ID
- * @param {Object} updateData - Update data
- * @returns {Promise<Object>} Updated compliance record
+ * @param {UpdateComplianceRecordInput} updateData - Update data
+ * @returns {Promise<ComplianceRecord>} Updated compliance record
  * @throws {Error} If update fails
  */
 export async function updateComplianceRecord(
   id: string,
-  updateData: {
-    document_name?: string;
-    issue_date?: string | null;
-    expiry_date?: string | null;
-    document_url?: string | null;
-    photo_url?: string | null;
-    notes?: string | null;
-    reminder_enabled?: boolean;
-    reminder_days_before?: number;
-  },
-) {
+  updateData: Omit<UpdateComplianceRecordInput, 'id'>,
+): Promise<ComplianceRecord> {
   if (!supabaseAdmin)
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
 
@@ -72,5 +65,5 @@ export async function updateComplianceRecord(
     throw ApiErrorHandler.fromSupabaseError(error, 500);
   }
 
-  return data;
+  return data as unknown as ComplianceRecord;
 }

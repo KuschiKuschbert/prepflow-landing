@@ -45,7 +45,12 @@ export async function enrichDishWithAllergens(
   }
 
   // Update dish cache with aggregated allergens if they differ
+<<<<<<< HEAD
+  // Check for allergens safely
+  const currentAllergens = 'allergens' in dish ? (dish as EnrichedDish).allergens : undefined;
+=======
   const currentAllergens = dish.allergens;
+>>>>>>> main
   if (
     allergens &&
     allergens.length > 0 &&

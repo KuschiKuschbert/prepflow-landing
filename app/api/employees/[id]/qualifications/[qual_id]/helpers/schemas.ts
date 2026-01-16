@@ -1,4 +1,5 @@
 import { z } from 'zod';
+export type { Qualification } from '../../helpers/schemas';
 
 export const updateQualificationSchema = z.object({
   certificate_number: z.string().optional(),

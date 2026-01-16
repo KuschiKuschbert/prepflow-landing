@@ -22,6 +22,9 @@ export interface DishRecipe {
   recipe?: {
     id: string;
     recipe_name: string;
+    instructions?: string;
+    yield?: number;
+    yield_unit?: string;
   };
 }
 
@@ -35,6 +38,8 @@ export interface DishIngredient {
   ingredient?: {
     id: string;
     ingredient_name: string;
+    cost_per_unit?: number;
+    cost_per_unit_incl_trim?: number;
   };
 }
 

@@ -11,6 +11,10 @@ import { authenticateGoogleDrive, uploadBackupToDrive } from '@/lib/backup/googl
 import type { EncryptionMode } from '@/lib/backup/types';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
+<<<<<<< HEAD
+import { getAppError } from '@/lib/utils/error';
+=======
+>>>>>>> main
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -121,9 +125,15 @@ export async function POST(request: NextRequest) {
       filename: encrypted.filename,
     });
   } catch (error: unknown) {
+<<<<<<< HEAD
+    const appError = getAppError(error);
+=======
+>>>>>>> main
     logger.error('[Google Drive Upload] Error:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
+      error: appError.message,
+      code: appError.code,
+      status: appError.status,
+      originalError: appError.originalError,
       context: { endpoint: '/api/backup/upload-to-drive', method: 'POST' },
     });
     return NextResponse.json(
@@ -131,7 +141,7 @@ export async function POST(request: NextRequest) {
         'Failed to upload backup to Google Drive',
         'SERVER_ERROR',
         500,
-        error instanceof Error ? error.message : String(error),
+        appError.message,
       ),
       { status: 500 },
     );

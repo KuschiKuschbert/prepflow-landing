@@ -3,9 +3,9 @@
  * Uses the same logic as /api/dishes/[id]/cost endpoint.
  */
 
-import { logger } from '@/lib/logger';
 import { calculateRecipeCost } from '@/app/api/menus/[id]/statistics/helpers/calculateRecipeCost';
-import type { AuditResult } from '../types';
+import { logger } from '@/lib/logger';
+import type { AuditResult, IngredientData, RecipeData } from '../types';
 import type { DishData } from './fetchDishData';
 
 /**
@@ -19,7 +19,7 @@ export async function calculateAPICost(dishData: DishData, result: AuditResult):
   for (const dishRecipe of dishRecipes) {
     const recipeId = dishRecipe.recipe_id;
     const recipeQuantity = parseFloat(String(dishRecipe.quantity)) || 1;
-    const recipe = dishRecipe.recipes as any;
+    const recipe = dishRecipe.recipes as RecipeData | undefined;
 
     try {
       const recipeCost = await calculateRecipeCost(recipeId, recipeQuantity);
@@ -46,7 +46,7 @@ export async function calculateAPICost(dishData: DishData, result: AuditResult):
   // Calculate cost from standalone ingredients
   const dishIngredients = dishData.dish_ingredients || [];
   for (const di of dishIngredients) {
-    const ingredient = di.ingredients as any;
+    const ingredient = di.ingredients as IngredientData | null | undefined;
     if (!ingredient) continue;
 
     const costPerUnit = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;

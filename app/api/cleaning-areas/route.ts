@@ -1,6 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { getAppError } from '@/lib/utils/error';
 import { NextRequest, NextResponse } from 'next/server';
 import { handleCreateCleaningArea } from './helpers/createCleaningAreaHandler';
 import { handleDeleteCleaningArea } from './helpers/deleteCleaningAreaHandler';
@@ -127,6 +128,19 @@ export async function PUT(request: NextRequest) {
       data,
     });
   } catch (err: unknown) {
+<<<<<<< HEAD
+    const appError = getAppError(err);
+    if (appError.status && appError.status !== 500) {
+      logger.error('[Cleaning Areas API] Error with status:', {
+        error: appError.message,
+        status: appError.status,
+        context: { endpoint: '/api/cleaning-areas', method: 'PUT' },
+      });
+      return NextResponse.json(
+        { error: appError.message, code: appError.code },
+        { status: appError.status },
+      );
+=======
     if (
       typeof err === 'object' &&
       err !== null &&
@@ -140,6 +154,7 @@ export async function PUT(request: NextRequest) {
         context: { endpoint: '/api/cleaning-areas', method: 'PUT' },
       });
       return NextResponse.json(err, { status: errorWithStatus.status });
+>>>>>>> main
     }
     return handleCleaningAreaError(err, 'PUT');
   }

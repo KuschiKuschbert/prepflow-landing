@@ -1,11 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { dishHasDirectIngredients } from '@/lib/populate-helpers/populate-empty-dishes-helpers';
-import { populateDishes } from './helpers/populateDishes';
-import { populateRecipes, type PopulateRecipesResult } from './helpers/populateRecipes';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 import { checkAuth } from './helpers/auth-helpers';
+import { populateDishes } from './helpers/populateDishes';
+import { populateRecipes } from './helpers/populateRecipes';
+import type { PopulateRecipesResult } from './types';
 
 /** GET: Diagnostic endpoint - returns dishes with no ingredients. POST: Populates empty dishes with default ingredients */
 export async function GET(request: NextRequest) {

@@ -10,9 +10,9 @@ import { detectDishChanges } from './detectDishChanges';
 import { fetchDishWithRelations } from './fetchDishWithRelations';
 import { getUserEmail } from './getUserEmail';
 import {
-  invalidateAllergenCache,
-  invalidateMenuPricingCache,
-  trackChangeForLockedMenus,
+    invalidateAllergenCache,
+    invalidateMenuPricingCache,
+    trackChangeForLockedMenus,
 } from './invalidateDishCaches';
 import { updateIngredientsWithTracking, updateRecipesWithTracking } from './updateDishRelations';
 
