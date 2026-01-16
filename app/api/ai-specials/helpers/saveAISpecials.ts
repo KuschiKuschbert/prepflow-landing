@@ -100,7 +100,8 @@ export async function saveAISpecials(
       .from('ai_specials')
       .insert({
         user_id: userId,
-        name: (aiResponse as { suggestions?: string[] })?.suggestions?.[0] || 'AI Generated Special',
+        name:
+          (aiResponse as { suggestions?: string[] })?.suggestions?.[0] || 'AI Generated Special',
         description: JSON.stringify(aiResponse), // Store full AI response as JSON
         image_url: imageData, // Store base64 image data URL
         ai_prompt: prompt || '',

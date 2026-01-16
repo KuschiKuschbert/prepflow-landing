@@ -3,7 +3,10 @@ import type { UserProfile } from './types';
 /**
  * Format profile response data
  */
-export function formatProfileResponse(data: Record<string, unknown>, userEmail: string): UserProfile {
+export function formatProfileResponse(
+  data: Record<string, unknown>,
+  userEmail: string,
+): UserProfile {
   return {
     email: (data.email as string) || userEmail,
     first_name: data.first_name as string | null | undefined,

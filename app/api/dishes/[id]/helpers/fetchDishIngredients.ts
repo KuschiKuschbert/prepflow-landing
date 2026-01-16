@@ -104,14 +104,17 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
 
           // Manually join the data
           dishIngredients = rawDishIngredients.map((di: Record<string, any>) => {
-            const ingredient = ingredientsMap.get(di.ingredient_id) as Record<string, any> | undefined;
+            const ingredient = ingredientsMap.get(di.ingredient_id) as
+              | Record<string, any>
+              | undefined;
             return {
               ...di,
               ingredients: ingredient
                 ? [
                     {
                       ...ingredient,
-                      supplier_name: ingredient.supplier || (ingredient as Record<string, any>).supplier_name,
+                      supplier_name:
+                        ingredient.supplier || (ingredient as Record<string, any>).supplier_name,
                     },
                   ]
                 : [],
@@ -165,7 +168,7 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
 
     // Normalize the retry result to include category as null/undefined for type compatibility
     const retryData = (retryResult.data || []) as unknown as Record<string, any>[];
-    dishIngredients = retryData.map((item) => ({
+    dishIngredients = retryData.map(item => ({
       ...item,
       ingredients: Array.isArray(item.ingredients)
         ? item.ingredients.map((ing: Record<string, any>) => ({ ...ing, category: null }))
@@ -192,7 +195,7 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
 
   const validDishIngredients = rawIngredients
     .filter(di => di.ingredients !== null && di.ingredients !== undefined)
-    .map((di) => {
+    .map(di => {
       const ing = Array.isArray(di.ingredients) ? di.ingredients[0] : di.ingredients;
 
       if (!ing) return null;

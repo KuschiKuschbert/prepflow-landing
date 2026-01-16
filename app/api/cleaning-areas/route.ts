@@ -139,7 +139,6 @@ export async function PUT(request: NextRequest) {
         { error: appError.message, code: appError.code },
         { status: appError.status },
       );
-
     }
     return handleCleaningAreaError(err, 'PUT');
   }

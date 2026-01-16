@@ -79,7 +79,8 @@ export async function GET(request: NextRequest) {
           monthlyRecurringRevenue += amount;
           // Calculate revenue based on subscription period
           // Stripe Subscription type has current_period_start and current_period_end as numbers (Unix timestamps)
-          const periodStart = (sub as unknown as { current_period_start: number }).current_period_start;
+          const periodStart = (sub as unknown as { current_period_start: number })
+            .current_period_start;
           const periodEnd = (sub as unknown as { current_period_end: number }).current_period_end;
           if (
             periodStart &&

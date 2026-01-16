@@ -122,7 +122,8 @@ export class RefactoringPlanner {
     }
 
     // 2. Look for common path patterns without backticks: app/webapp or app/api/ingredients
-    const pathRegex = /(app\/[a-zA-Z0-9\/\-_]+|components\/[a-zA-Z0-9\/\-_]+|lib\/[a-zA-Z0-9\/\-_]+)/g;
+    const pathRegex =
+      /(app\/[a-zA-Z0-9\/\-_]+|components\/[a-zA-Z0-9\/\-_]+|lib\/[a-zA-Z0-9\/\-_]+)/g;
     const matches = text.match(pathRegex);
     if (matches && matches.length > 0) {
       // Return directory paths directly. jscodeshift walks directories recursively by default.

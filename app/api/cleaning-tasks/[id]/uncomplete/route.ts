@@ -97,7 +97,12 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     });
   } catch (err: unknown) {
     logger.error('[Cleaning Tasks API] Error in uncomplete endpoint:', err);
-    if (err && typeof err === 'object' && 'status' in err && typeof (err as { status: unknown }).status === 'number') {
+    if (
+      err &&
+      typeof err === 'object' &&
+      'status' in err &&
+      typeof (err as { status: unknown }).status === 'number'
+    ) {
       return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
     }
     return NextResponse.json(

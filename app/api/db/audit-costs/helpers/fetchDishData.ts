@@ -91,7 +91,7 @@ export async function fetchDishData(dishId: string): Promise<DishData | null> {
           recipeIds,
         });
       } else {
-        (recipesData || []).forEach((r) => {
+        (recipesData || []).forEach(r => {
           const recipe = r as Record<string, unknown>;
           recipeNamesMap[recipe.id as string] = (recipe.recipe_name as string) || 'Unknown';
         });

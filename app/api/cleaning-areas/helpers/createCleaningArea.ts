@@ -10,9 +10,7 @@ import type { CleaningArea, CreateCleaningAreaInput } from './schemas';
  * @returns {Promise<CleaningArea>} Created cleaning area
  * @throws {Error} If creation fails
  */
-export async function createCleaningArea(
-  areaData: CreateCleaningAreaInput,
-): Promise<CleaningArea> {
+export async function createCleaningArea(areaData: CreateCleaningAreaInput): Promise<CleaningArea> {
   if (!supabaseAdmin)
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
 

@@ -28,7 +28,9 @@ export async function performPrepListStatusChange({
     return;
   }
   setPrepLists(prevLists =>
-    prevLists.map(list => (list.id === id ? { ...list, status: status as PrepList['status'] } : list)),
+    prevLists.map(list =>
+      list.id === id ? { ...list, status: status as PrepList['status'] } : list,
+    ),
   );
 
   try {

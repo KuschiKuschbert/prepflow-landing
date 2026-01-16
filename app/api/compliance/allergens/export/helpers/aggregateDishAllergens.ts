@@ -3,9 +3,9 @@
  */
 
 import {
-    aggregateDishAllergens,
-    extractAllergenSources,
-    mergeAllergenSources,
+  aggregateDishAllergens,
+  extractAllergenSources,
+  mergeAllergenSources,
 } from '@/lib/allergens/allergen-aggregation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
@@ -85,7 +85,7 @@ export async function aggregateDishAllergensForExport(
           .eq('dish_id', dish.id);
 
         if (!dishIngredientsError && dishIngredients) {
-          const dishIngredientList = (dishIngredients as DishIngredient[]).map((di) => ({
+          const dishIngredientList = (dishIngredients as DishIngredient[]).map(di => ({
             ingredient_name: di.ingredients?.ingredient_name || '',
             allergens: di.ingredients?.allergens,
           }));
@@ -116,7 +116,7 @@ export async function aggregateDishAllergensForExport(
 
         if (!dishRecipesError && dishRecipes) {
           const recipeSources: Record<string, string[]>[] = [];
-          (dishRecipes as DishRecipe[]).forEach((dr) => {
+          (dishRecipes as DishRecipe[]).forEach(dr => {
             const recipeId = dr.recipe_id;
             if (recipeId && recipeIngredientSources[recipeId]) {
               recipeSources.push(recipeIngredientSources[recipeId]);

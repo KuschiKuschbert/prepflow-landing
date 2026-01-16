@@ -74,7 +74,9 @@ export async function GET(request: NextRequest) {
               email: session.user?.email,
               name: session.user?.name,
               sub: session.user?.sub,
-              roles: (session.user as Record<string, any>)['https://prepflow.org/roles'] as any[] || [],
+              roles:
+                ((session.user as Record<string, any>)['https://prepflow.org/roles'] as any[]) ||
+                [],
               picture: session.user?.picture,
             },
             expiresAt: session.expiresAt,
@@ -86,7 +88,8 @@ export async function GET(request: NextRequest) {
             name: session.user.name,
             sub: session.user.sub,
             auth0UserId: auth0UserId,
-            roles: (session.user as Record<string, any>)['https://prepflow.org/roles'] as any[] || [],
+            roles:
+              ((session.user as Record<string, any>)['https://prepflow.org/roles'] as any[]) || [],
             // Include all user properties for debugging
             allProperties: Object.keys(session.user),
             // Custom claims found in user object
@@ -124,11 +127,14 @@ export async function GET(request: NextRequest) {
       },
       troubleshooting: {
         rolesFound: session?.user
-          ? ((session.user as Record<string, any>)['https://prepflow.org/roles'] as any[] || []).length > 0
+          ? (((session.user as Record<string, any>)['https://prepflow.org/roles'] as any[]) || [])
+              .length > 0
           : false,
         auth0UserId: auth0UserId,
         recommendation:
-          !session?.user || ((session.user as Record<string, any>)['https://prepflow.org/roles'] as any[] || []).length === 0
+          !session?.user ||
+          (((session.user as Record<string, any>)['https://prepflow.org/roles'] as any[]) || [])
+            .length === 0
             ? 'Roles not found in session. Check: 1) Auth0 Actions configured to include roles, 2) Management API fallback is working, 3) User has roles assigned in Auth0'
             : 'Roles found in session',
       },

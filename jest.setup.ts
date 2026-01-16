@@ -11,8 +11,7 @@ process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'test-anon-key';
 process.env.SUPABASE_SERVICE_ROLE_KEY =
   process.env.SUPABASE_SERVICE_ROLE_KEY || 'test-service-role-key';
-process.env.AUTH0_SECRET =
-  process.env.AUTH0_SECRET || 'test-auth0-secret-32-characters-minimum!!';
+process.env.AUTH0_SECRET = process.env.AUTH0_SECRET || 'test-auth0-secret-32-characters-minimum!!';
 process.env.AUTH0_BASE_URL = process.env.AUTH0_BASE_URL || 'http://localhost:3000';
 process.env.AUTH0_ISSUER_BASE_URL =
   process.env.AUTH0_ISSUER_BASE_URL || 'https://example.auth0.com';
@@ -103,25 +102,37 @@ jest.mock('@auth0/nextjs-auth0/client', () => mockAuth0, { virtual: true });
 jest.mock('@auth0/nextjs-auth0/server', () => mockAuth0, { virtual: true });
 
 // Mock auth0 (SDK)
-jest.mock('auth0', () => ({
-  ManagementClient: jest.fn().mockImplementation(() => ({
-    getUsers: jest.fn().mockResolvedValue([]),
-    updateUser: jest.fn().mockResolvedValue({}),
-  })),
-  Auth0Client: jest.fn().mockImplementation(() => ({
-    // Add common methods if needed
-  })),
-}), { virtual: true });
+jest.mock(
+  'auth0',
+  () => ({
+    ManagementClient: jest.fn().mockImplementation(() => ({
+      getUsers: jest.fn().mockResolvedValue([]),
+      updateUser: jest.fn().mockResolvedValue({}),
+    })),
+    Auth0Client: jest.fn().mockImplementation(() => ({
+      // Add common methods if needed
+    })),
+  }),
+  { virtual: true },
+);
 
 // Mock next-auth if used in tests
-jest.mock('next-auth', () => ({
-  useSession: () => ({ data: null, status: 'unauthenticated' }),
-  signIn: jest.fn(),
-  signOut: jest.fn(),
-  getServerSession: jest.fn(),
-}), { virtual: true });
+jest.mock(
+  'next-auth',
+  () => ({
+    useSession: () => ({ data: null, status: 'unauthenticated' }),
+    signIn: jest.fn(),
+    signOut: jest.fn(),
+    getServerSession: jest.fn(),
+  }),
+  { virtual: true },
+);
 
 // Mock @/lib/auth-options which might be missing but used in some tests
-jest.mock('./lib/auth-options.mock.ts', () => ({
-  authOptions: {},
-}), { virtual: true });
+jest.mock(
+  './lib/auth-options.mock.ts',
+  () => ({
+    authOptions: {},
+  }),
+  { virtual: true },
+);

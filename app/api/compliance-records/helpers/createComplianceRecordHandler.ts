@@ -40,7 +40,6 @@ export async function handleCreateComplianceRecord(request: NextRequest) {
       data,
     });
   } catch (err: unknown) {
-
     return handleComplianceError(err, 'POST');
   }
 }

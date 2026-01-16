@@ -2,12 +2,10 @@ import { calculateRecipeSellingPrice } from '@/app/api/menus/[id]/statistics/hel
 import { logger } from '@/lib/logger';
 import type { PriceAuditResult, RecipeRecord } from '../types';
 
-
 /**
  * Audit a single recipe
  */
 export async function auditRecipe(recipe: RecipeRecord): Promise<PriceAuditResult> {
-
   const result: PriceAuditResult = {
     itemId: recipe.id,
     itemName: recipe.name || 'Unknown Recipe',

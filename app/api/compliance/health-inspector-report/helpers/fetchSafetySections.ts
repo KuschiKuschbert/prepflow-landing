@@ -79,9 +79,12 @@ export async function fetchHACCP(startDate: string, endDate: string) {
     records: records,
     total_records: records.length,
     out_of_limit: records.filter(r => !r.is_within_limit),
-    by_step: records.reduce((acc: Record<string, number>, r) => {
-      acc[r.haccp_step as string] = (acc[r.haccp_step as string] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>),
+    by_step: records.reduce(
+      (acc: Record<string, number>, r) => {
+        acc[r.haccp_step as string] = (acc[r.haccp_step as string] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    ),
   };
 }

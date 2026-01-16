@@ -39,6 +39,5 @@ export async function getUserTableIds(
     return [];
   }
   const rows = (data ?? []) as unknown as Record<string, unknown>[];
-  return rows.map((r) => r[idColumn]) as string[];
-
+  return rows.map(r => r[idColumn]) as string[];
 }

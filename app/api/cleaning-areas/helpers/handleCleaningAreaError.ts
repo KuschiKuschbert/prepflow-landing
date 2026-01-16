@@ -13,7 +13,6 @@ import { NextResponse } from 'next/server';
 export function handleCleaningAreaError(err: unknown, method: string): NextResponse {
   const appError = getAppError(err);
 
-
   logger.error('[Cleaning Areas API] Unexpected error:', {
     error: appError.message,
     code: appError.code,
@@ -25,9 +24,7 @@ export function handleCleaningAreaError(err: unknown, method: string): NextRespo
   // Map to ApiErrorHandler structure
   return NextResponse.json(
     ApiErrorHandler.createError(
-      process.env.NODE_ENV === 'development'
-        ? appError.message
-        : 'Internal server error',
+      process.env.NODE_ENV === 'development' ? appError.message : 'Internal server error',
       'SERVER_ERROR',
       500,
     ),

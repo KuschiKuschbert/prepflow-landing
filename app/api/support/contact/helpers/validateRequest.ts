@@ -12,7 +12,11 @@ const supportRequestSchema = z.object({
 /**
  * Validate support request body
  */
-export function validateRequest(body: unknown): { isValid: boolean; data?: unknown; error?: NextResponse } {
+export function validateRequest(body: unknown): {
+  isValid: boolean;
+  data?: unknown;
+  error?: NextResponse;
+} {
   const validationResult = supportRequestSchema.safeParse(body);
   if (!validationResult.success) {
     return {
