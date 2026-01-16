@@ -9,15 +9,16 @@ import { NextResponse } from 'next/server';
  * @returns {NextResponse} Formatted error response
  */
 export function formatErrorResponse(err: PostgrestError | unknown): NextResponse {
-  const status = (err as any).status || 500;
-  const errorCode = (err as any).code || 'SERVER_ERROR';
-  const message = (err as any).message || 'An error occurred';
+  const error = err as Record<string, unknown>;
+  const status = (error.status as number) || 500;
+  const errorCode = (error.code as string) || 'SERVER_ERROR';
+  const message = (error.message as string) || 'An error occurred';
 
   return NextResponse.json(
     ApiErrorHandler.createError(message, errorCode, status, {
       ...(process.env.NODE_ENV === 'development' && {
-        details: (err as any).details,
-        timestamp: (err as any).timestamp,
+        details: error.details,
+        timestamp: error.timestamp,
       }),
     }),
     { status },

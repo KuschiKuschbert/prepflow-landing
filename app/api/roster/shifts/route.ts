@@ -9,7 +9,6 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { validateShiftRequest } from './helpers/validateShiftRequest';
 import { buildShiftQuery } from './helpers/buildShiftQuery';
 import { handleCreateShift } from './helpers/createShiftHandler';
 
@@ -37,11 +36,11 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const params = {
-      employee_id: searchParams.get('employee_id'),
+      employee_id: searchParams.get('employee_id') || undefined,
       status: searchParams.get('status') || 'all',
-      start_date: searchParams.get('start_date'),
-      end_date: searchParams.get('end_date'),
-      shift_date: searchParams.get('shift_date'),
+      start_date: searchParams.get('start_date') || undefined,
+      end_date: searchParams.get('end_date') || undefined,
+      shift_date: searchParams.get('shift_date') || undefined,
       page: parseInt(searchParams.get('page') || '1', 10),
       pageSize: parseInt(searchParams.get('pageSize') || '100', 10),
     };

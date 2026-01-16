@@ -1,8 +1,8 @@
 /**
  * Get all mappings for a user and entity type.
  */
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import type { SquareMapping } from './types';
 
 /**
@@ -32,7 +32,7 @@ export async function getUserMappings(
     if (error) {
       logger.error('[Square Mappings] Error fetching user mappings:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         userId,
         entityType,
         context: { endpoint: 'getUserMappings', operation: 'select' },
@@ -41,9 +41,9 @@ export async function getUserMappings(
     }
 
     return (data || []) as SquareMapping[];
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Mappings] Unexpected error fetching user mappings:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
       entityType,
       context: { endpoint: 'getUserMappings', operation: 'select' },

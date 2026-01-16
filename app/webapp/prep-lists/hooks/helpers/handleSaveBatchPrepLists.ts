@@ -71,15 +71,16 @@ export async function handleSaveBatchPrepLists({
       body: JSON.stringify({ prepLists: prepListsToCreate, userId }),
     });
 
-    const result = await response.json();
+    const result = (await response.json()) as { success?: boolean; prepLists?: PrepList[]; message?: string };
 
     if (result.success && result.prepLists) {
       // Replace temp prep lists with real ones from server
       setPrepLists(prev =>
         prev.map(list => {
           const tempIndex = tempPrepLists.findIndex(temp => temp.id === list.id);
-          return tempIndex !== -1 && result.prepLists[tempIndex]
-            ? result.prepLists[tempIndex]
+          const realLists = result.prepLists;
+          return tempIndex !== -1 && realLists && realLists[tempIndex]
+            ? realLists[tempIndex]!
             : list;
         }),
       );
@@ -95,12 +96,14 @@ export async function handleSaveBatchPrepLists({
       setError(errorMsg);
       showError(errorMsg);
     }
-  } catch (err) {
+  } catch (err: unknown) {
     // Rollback on error
     setPrepLists(originalPrepLists);
     setShowPreview(true);
     setGeneratedData(generatedData);
-    logger.error('Error saving batch prep lists:', err);
+    logger.error('Error saving batch prep lists:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
     const errorMsg = 'Failed to save prep lists. Please check your connection and try again.';
     setError(errorMsg);
     showError(errorMsg);

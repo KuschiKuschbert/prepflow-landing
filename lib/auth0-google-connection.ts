@@ -2,9 +2,9 @@
  * Auth0 Google Connection Management Utilities
  * Handles enabling and verifying Google social connection for the application
  */
-import { verifyGoogleConnection } from './auth0-google-connection/helpers/verifyGoogleConnection';
 import { configureGoogleOAuthCredentials } from './auth0-google-connection/helpers/configureGoogleOAuth';
 import { enableGoogleConnectionForApp } from './auth0-google-connection/helpers/enableGoogleConnection';
+import { verifyGoogleConnection } from './auth0-google-connection/helpers/verifyGoogleConnection';
 
 export interface Connection {
   id: string;
@@ -12,14 +12,14 @@ export interface Connection {
   strategy: string;
   enabled_clients?: string[];
   is_domain_connection?: boolean;
-  options?: Record<string, any>;
+  options?: Record<string, unknown>;
 }
 
 /** Verify if Google connection is enabled and configured correctly */
 export { verifyGoogleConnection };
 
 /** Configure Google OAuth credentials for the connection */
-export { configureGoogleOAuthCredentials };
+    export { configureGoogleOAuthCredentials };
 
 /** Configure Google OAuth credentials and enable connection for the application */
 export async function configureAndEnableGoogleConnection(

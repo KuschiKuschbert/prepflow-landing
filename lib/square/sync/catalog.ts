@@ -14,7 +14,27 @@ export interface SyncResult {
   updated: number;
   errors: number;
   errorMessages?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
+}
+
+export interface SquareCatalogObject {
+  id: string;
+  type: string;
+  itemData?: {
+    name?: string;
+    description?: string;
+    variations?: Array<{
+      itemVariationData?: {
+        name?: string;
+        pricingType?: string;
+        priceMoney?: {
+          amount: bigint | number;
+          currency: string;
+        };
+      };
+    }>;
+    categories?: string[];
+  };
 }
 
 export interface Dish {
@@ -28,6 +48,6 @@ export interface Dish {
 }
 
 // Re-export sync functions
+export { syncCatalogBidirectional } from './catalog/syncBidirectional';
 export { syncCatalogFromSquare } from './catalog/syncFromSquare';
 export { syncCatalogToSquare } from './catalog/syncToSquare';
-export { syncCatalogBidirectional } from './catalog/syncBidirectional';

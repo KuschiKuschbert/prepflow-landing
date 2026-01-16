@@ -1,7 +1,7 @@
+import { createNewUser } from './auth-user-sync/helpers/createNewUser';
+import { updateExistingUser } from './auth-user-sync/helpers/updateExistingUser';
 import { logger } from './logger';
 import { supabaseAdmin } from './supabase';
-import { updateExistingUser } from './auth-user-sync/helpers/updateExistingUser';
-import { createNewUser } from './auth-user-sync/helpers/createNewUser';
 
 /**
  * Sync user from Auth0 to database on first login
@@ -32,7 +32,7 @@ export async function syncUserFromAuth0(
     if (existingUserError) {
       logger.warn('[Auth0 Sync] Error checking existing user:', {
         error: existingUserError.message,
-        code: (existingUserError as any).code,
+        code: existingUserError.code,
         context: { email, operation: 'checkExistingUser' },
       });
     }

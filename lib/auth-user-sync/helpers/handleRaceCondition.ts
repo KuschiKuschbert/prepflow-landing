@@ -32,7 +32,7 @@ export async function handleRaceCondition(email: string, name?: string | null): 
     if (existingUserError) {
       logger.warn('[Auth0 Sync] Error fetching existing user for name update:', {
         error: existingUserError.message,
-        code: (existingUserError as any).code,
+        code: existingUserError.code,
         context: { email, operation: 'fetchExistingUserForNameUpdate' },
       });
     }
@@ -54,7 +54,7 @@ export async function handleRaceCondition(email: string, name?: string | null): 
   if (updateError) {
     logger.error('[Auth0 Sync] Error updating user after race condition:', {
       error: updateError.message,
-      code: (updateError as any).code,
+      code: updateError.code,
       context: { email, operation: 'updateUserAfterRaceCondition' },
     });
   } else {

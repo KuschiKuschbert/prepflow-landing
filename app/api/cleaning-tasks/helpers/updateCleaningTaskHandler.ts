@@ -44,14 +44,14 @@ export async function handleUpdateCleaningTask(request: NextRequest) {
       data,
     });
   } catch (err: unknown) {
-    const errorWithStatus = err as { status?: number; message?: string };
-    if (errorWithStatus.status) {
+    if (err && typeof err === 'object' && 'status' in err && typeof (err as { status: unknown }).status === 'number') {
+      const status = (err as { status: number }).status;
       logger.error('[Cleaning Tasks API] Error with status:', {
         error: err instanceof Error ? err.message : String(err),
-        status: errorWithStatus.status,
+        status,
         context: { endpoint: '/api/cleaning-tasks', method: 'PUT' },
       });
-      return NextResponse.json(err, { status: errorWithStatus.status });
+      return NextResponse.json(err, { status });
     }
     return handleCleaningTaskError(err, 'PUT');
   }

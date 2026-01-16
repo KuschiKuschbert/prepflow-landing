@@ -1,9 +1,9 @@
 /**
  * Create a new Square mapping.
  */
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import type { SquareMapping, SquareMappingInput } from './types';
 
 /**
@@ -35,7 +35,7 @@ export async function createMapping(mapping: SquareMappingInput): Promise<Square
     if (error) {
       logger.error('[Square Mappings] Error creating mapping:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         mapping,
         context: { endpoint: 'createMapping', operation: 'insert' },
       });
@@ -44,13 +44,13 @@ export async function createMapping(mapping: SquareMappingInput): Promise<Square
     }
 
     return data as SquareMapping;
-  } catch (error: any) {
-    if (error.status) {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'status' in error) {
       throw error;
     }
 
     logger.error('[Square Mappings] Unexpected error creating mapping:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       mapping,
       context: { endpoint: 'createMapping', operation: 'insert' },
     });

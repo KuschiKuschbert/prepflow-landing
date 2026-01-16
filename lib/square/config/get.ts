@@ -37,9 +37,9 @@ export async function getSquareConfig(userId: string): Promise<SquareConfig | nu
     }
 
     return data as SquareConfig;
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Config] Unexpected error fetching configuration:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
     });
     return null;

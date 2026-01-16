@@ -43,11 +43,11 @@ export async function fetchDishIngredients(
 
   // Group dish_ingredients by dish_id
   const dishIngredientsMap = new Map<string, DishIngredientRecord[]>();
-  ((allDishIngredients as any[]) || []).forEach(di => {
+  (allDishIngredients || []).forEach(di => {
     if (!dishIngredientsMap.has(di.dish_id)) {
       dishIngredientsMap.set(di.dish_id, []);
     }
-    dishIngredientsMap.get(di.dish_id)!.push(di as DishIngredientRecord);
+    dishIngredientsMap.get(di.dish_id)!.push(di as unknown as DishIngredientRecord);
   });
 
   return dishIngredientsMap;

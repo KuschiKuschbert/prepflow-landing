@@ -9,10 +9,10 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { checkShiftExists } from './helpers/checkShiftExists';
+import { deleteShift } from './helpers/deleteShift';
 import { getShift } from './helpers/getShift';
 import { updateShift } from './helpers/updateShift';
-import { deleteShift } from './helpers/deleteShift';
-import { checkShiftExists } from './helpers/checkShiftExists';
 
 const updateShiftSchema = z
   .object({
@@ -115,7 +115,8 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       );
     }
 
-    return await updateShift(shiftId, zodValidation.data, existsResult.shift);
+    const { Shift, CreateShiftInput } = await import('./helpers/types' as any);
+    return await updateShift(shiftId, zodValidation.data as any, existsResult.shift as any);
   } catch (err) {
     logger.error('[Shifts API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

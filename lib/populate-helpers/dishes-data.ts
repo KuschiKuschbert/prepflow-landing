@@ -2,17 +2,24 @@
  * Helper functions for populating dishes (new dishes system for Menu Builder & Dish Builder)
  */
 
-import { Recipe } from '@/app/webapp/recipes/types';
 import { logger } from '@/lib/logger';
 import { cleanSampleDishes } from '@/lib/sample-dishes-clean';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import {
-  buildDishIngredientsData,
-  buildDishRecipesData,
-  createDishMap,
-  createLookupMaps,
-  IngredientData,
+    buildDishIngredientsData,
+    buildDishRecipesData,
+    createDishMap,
+    createLookupMaps,
+    IngredientData,
 } from './dishes-data-helpers';
+
+// Minimal recipe interface - accepts both Recipe and RecipeRecord types
+interface MinimalRecipe {
+  id: string;
+  name?: string;
+  recipe_name?: string;
+  [key: string]: unknown;
+}
 
 interface PopulateResults {
   cleaned: number;
@@ -26,7 +33,7 @@ interface PopulateResults {
 export async function populateDishes(
   supabaseAdmin: ReturnType<typeof createSupabaseAdmin>,
   results: PopulateResults,
-  recipesData: Recipe[],
+  recipesData: MinimalRecipe[],
   ingredientsData: IngredientData[],
 ) {
   if (!recipesData || recipesData.length === 0) {

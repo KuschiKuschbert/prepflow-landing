@@ -5,6 +5,15 @@ export interface AppError {
   originalError: unknown;
 }
 
+// Interface for extracting properties from unknown error objects
+interface ErrorLike {
+  message?: unknown;
+  details?: unknown;
+  code?: unknown;
+  status?: unknown;
+  statusCode?: unknown;
+}
+
 /**
  * Safely extracts error information from an unknown error object.
  * Handles generic Errors, Supabase errors (PostgrestError), and simple strings.
@@ -12,8 +21,9 @@ export interface AppError {
 export function getAppError(error: unknown): AppError {
   if (error instanceof Error) {
     // Check for common properties like 'code' or 'status' that might be on extended Error objects
-    const code = (error as any).code;
-    const status = (error as any).status || (error as any).statusCode;
+    const errorObj = error as Error & ErrorLike;
+    const code = errorObj.code;
+    const status = errorObj.status || errorObj.statusCode;
 
     return {
       message: error.message,
@@ -25,9 +35,10 @@ export function getAppError(error: unknown): AppError {
 
   if (typeof error === 'object' && error !== null) {
     // Handle Supabase/Postgrest style errors
-    const message = (error as any).message || (error as any).details || 'Unknown error occurred';
-    const code = (error as any).code;
-    const status = (error as any).status;
+    const errorObj = error as ErrorLike;
+    const message = errorObj.message || errorObj.details || 'Unknown error occurred';
+    const code = errorObj.code;
+    const status = errorObj.status;
 
     return {
       message: typeof message === 'string' ? message : JSON.stringify(message),

@@ -1,5 +1,5 @@
 import { type AchievementId } from '../../achievements';
-import { loadStats, saveStats, loadAchievements } from './storage';
+import { loadAchievements, loadStats, saveStats } from './storage';
 import { updateStreak } from './streak';
 import { unlockAchievement } from './unlockAchievement';
 
@@ -13,7 +13,7 @@ export function trackCOGSCalculated(): AchievementId | null {
   updateStreak();
 
   const achievements = loadAchievements();
-  const unlockedIds = new Set(achievements.map((a: any) => a.id));
+  const unlockedIds = new Set(achievements.map(a => a.id));
 
   if (!unlockedIds.has('COGS_MASTER')) {
     unlockAchievement('COGS_MASTER');
@@ -33,7 +33,7 @@ export function trackPerformanceAnalyzed(): AchievementId | null {
   updateStreak();
 
   const achievements = loadAchievements();
-  const unlockedIds = new Set(achievements.map((a: any) => a.id));
+  const unlockedIds = new Set(achievements.map(a => a.id));
 
   if (!unlockedIds.has('PERFORMANCE_GURU')) {
     unlockAchievement('PERFORMANCE_GURU');
@@ -53,7 +53,7 @@ export function trackTemperatureLogged(): AchievementId | null {
   updateStreak();
 
   const achievements = loadAchievements();
-  const unlockedIds = new Set(achievements.map((a: any) => a.id));
+  const unlockedIds = new Set(achievements.map(a => a.id));
 
   if (!unlockedIds.has('TEMPERATURE_PRO')) {
     unlockAchievement('TEMPERATURE_PRO');
@@ -73,7 +73,7 @@ export function trackRecipeShared(): AchievementId | null {
   updateStreak();
 
   const achievements = loadAchievements();
-  const unlockedIds = new Set(achievements.map((a: any) => a.id));
+  const unlockedIds = new Set(achievements.map(a => a.id));
 
   if (!unlockedIds.has('RECIPE_SHARER')) {
     unlockAchievement('RECIPE_SHARER');
@@ -93,7 +93,7 @@ export function trackMenuBuilt(): AchievementId | null {
   updateStreak();
 
   const achievements = loadAchievements();
-  const unlockedIds = new Set(achievements.map((a: any) => a.id));
+  const unlockedIds = new Set(achievements.map(a => a.id));
 
   if (!unlockedIds.has('MENU_BUILDER')) {
     unlockAchievement('MENU_BUILDER');

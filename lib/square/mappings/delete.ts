@@ -1,9 +1,9 @@
 /**
  * Delete a mapping.
  */
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 /**
  * Delete a mapping.
@@ -19,20 +19,20 @@ export async function deleteMapping(mappingId: string): Promise<void> {
     if (error) {
       logger.error('[Square Mappings] Error deleting mapping:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         mappingId,
         context: { endpoint: 'deleteMapping', operation: 'delete' },
       });
 
       throw ApiErrorHandler.fromSupabaseError(error, 500);
     }
-  } catch (error: any) {
-    if (error.status) {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'status' in error) {
       throw error;
     }
 
     logger.error('[Square Mappings] Unexpected error deleting mapping:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       mappingId,
       context: { endpoint: 'deleteMapping', operation: 'delete' },
     });

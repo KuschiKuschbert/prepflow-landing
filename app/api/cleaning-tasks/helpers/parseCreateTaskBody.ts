@@ -2,26 +2,26 @@
  * Helper for parsing create task request body
  */
 
-import type { CreateTaskBody } from './validateCleaningTaskRequest';
+import { CreateCleaningTaskInput } from './types';
 
 /**
  * Parses and extracts create task data from request body
  *
- * @param {any} body - Raw request body
- * @returns {CreateTaskBody} Parsed task data
+ * @param {unknown} body - Raw request body
+ * @returns {CreateCleaningTaskInput} Parsed task data
  */
-export function parseCreateTaskBody(body: unknown): CreateTaskBody {
+export function parseCreateTaskBody(body: unknown): CreateCleaningTaskInput {
   const data = body as Record<string, unknown>;
   return {
-    task_name: data.task_name as string,
-    frequency_type: data.frequency_type as string,
-    area_id: data.area_id as string | undefined,
-    assigned_date: data.assigned_date as string | undefined,
-    equipment_id: data.equipment_id as string | undefined,
-    section_id: data.section_id as string | undefined,
-    is_standard_task: data.is_standard_task as boolean | undefined,
-    standard_task_type: data.standard_task_type as string | undefined,
-    description: data.description as string | undefined,
-    notes: data.notes as string | undefined,
+    task_name: typeof data.task_name === 'string' ? data.task_name : undefined,
+    frequency_type: typeof data.frequency_type === 'string' ? data.frequency_type : undefined,
+    area_id: typeof data.area_id === 'string' ? data.area_id : undefined,
+    assigned_date: typeof data.assigned_date === 'string' ? data.assigned_date : undefined,
+    equipment_id: typeof data.equipment_id === 'string' ? data.equipment_id : undefined,
+    section_id: typeof data.section_id === 'string' ? data.section_id : undefined,
+    is_standard_task: typeof data.is_standard_task === 'boolean' ? data.is_standard_task : undefined,
+    standard_task_type: typeof data.standard_task_type === 'string' ? data.standard_task_type : undefined,
+    description: typeof data.description === 'string' ? data.description : undefined,
+    notes: typeof data.notes === 'string' ? data.notes : undefined,
   };
 }

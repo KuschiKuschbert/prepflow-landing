@@ -1,5 +1,17 @@
 import { MenuChangeTracking } from '@/lib/menu-lock/change-tracking';
 
+// Helper interface for price/yield change details
+interface ChangeSubDetails {
+  before?: number;
+  after?: number;
+  change?: string;
+}
+
+// Type guard to check if value is ChangeSubDetails
+function isChangeSubDetails(value: unknown): value is ChangeSubDetails {
+  return typeof value === 'object' && value !== null;
+}
+
 /**
  * Format change details for display
  */
@@ -12,7 +24,7 @@ export function formatChangeDetails(change: MenuChangeTracking): string {
   const parts: string[] = [];
 
   // Price changes
-  if (details.price) {
+  if (details.price && isChangeSubDetails(details.price)) {
     const { before, after, change: changeType } = details.price;
     if (before !== undefined && after !== undefined) {
       parts.push(`Price ${changeType} from $${before.toFixed(2)} to $${after.toFixed(2)}`);
@@ -22,7 +34,7 @@ export function formatChangeDetails(change: MenuChangeTracking): string {
   }
 
   // Yield changes
-  if (details.yield) {
+  if (details.yield && isChangeSubDetails(details.yield)) {
     const { before, after, change: changeType } = details.yield;
     if (before !== undefined && after !== undefined) {
       parts.push(`Yield ${changeType} from ${before} to ${after}`);

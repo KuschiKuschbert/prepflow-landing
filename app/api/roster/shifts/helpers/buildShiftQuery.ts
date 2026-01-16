@@ -1,11 +1,10 @@
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { ShiftQueryParams } from './types';
+
 /**
  * Builds Supabase query for shifts with filters and pagination.
- *
- * @param {any} supabase - Supabase client
- * @param {any} params - Query parameters
- * @returns {Promise<{ data: any; error: any; count: number | null }>} Query result
  */
-export async function buildShiftQuery(supabase: any, params: any) {
+export async function buildShiftQuery(supabase: SupabaseClient, params: ShiftQueryParams) {
   let query = supabase.from('shifts').select('*', { count: 'exact' });
 
   // Filter by employee

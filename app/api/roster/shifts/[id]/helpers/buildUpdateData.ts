@@ -1,8 +1,10 @@
+import type { CreateShiftInput, Shift } from '../../helpers/types';
+
 /**
  * Build update data object from request body
  */
-export function buildUpdateData(body: any, existingShift: any): unknown {
-  const updateData: any = {
+export function buildUpdateData(body: Partial<CreateShiftInput>, existingShift: Shift): Record<string, unknown> {
+  const updateData: Record<string, unknown> = {
     updated_at: new Date().toISOString(),
   };
 

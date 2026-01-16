@@ -2,7 +2,7 @@
  * Helper functions for dish data population (extracted to keep dishes-data.ts under 150 lines)
  */
 
-import { Dish, Recipe } from '@/app/webapp/recipes/types';
+import { Dish } from '@/app/webapp/recipes/types';
 import { cleanSampleDishes } from '@/lib/sample-dishes-clean';
 
 export interface IngredientData {
@@ -10,13 +10,21 @@ export interface IngredientData {
   ingredient_name: string;
 }
 
+// Minimal recipe interface - accepts both Recipe and RecipeRecord types
+interface MinimalRecipe {
+  id: string;
+  name?: string;
+  recipe_name?: string;
+  [key: string]: unknown;
+}
+
 /**
  * Create lookup maps for recipes and ingredients
  */
-export function createLookupMaps(recipesData: Recipe[], ingredientsData: IngredientData[]) {
+export function createLookupMaps(recipesData: MinimalRecipe[], ingredientsData: IngredientData[]) {
   const recipeMap = new Map<string, string>();
   recipesData.forEach(r => {
-    const name = r.recipe_name;
+    const name = r.recipe_name || r.name;
     if (name) {
       recipeMap.set(name.toLowerCase().trim(), r.id);
       recipeMap.set(name, r.id);

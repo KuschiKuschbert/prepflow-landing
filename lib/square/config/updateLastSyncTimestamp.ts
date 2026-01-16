@@ -1,9 +1,9 @@
 /**
  * Update last sync timestamp for a sync type.
  */
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 /**
  * Update last sync timestamp for a sync type.
@@ -18,7 +18,7 @@ export async function updateLastSyncTimestamp(
 
   try {
     const timestamp = new Date().toISOString();
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       updated_at: timestamp,
     };
 
@@ -45,7 +45,7 @@ export async function updateLastSyncTimestamp(
     if (error) {
       logger.error('[Square Config] Error updating sync timestamp:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         userId,
         syncType,
         context: { endpoint: 'updateLastSyncTimestamp', operation: 'update' },
@@ -53,13 +53,13 @@ export async function updateLastSyncTimestamp(
 
       throw ApiErrorHandler.fromSupabaseError(error, 500);
     }
-  } catch (error: any) {
-    if (error.status) {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'status' in error) {
       throw error;
     }
 
     logger.error('[Square Config] Unexpected error updating sync timestamp:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
       syncType,
       context: { endpoint: 'updateLastSyncTimestamp', operation: 'update' },

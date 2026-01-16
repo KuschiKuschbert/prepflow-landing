@@ -1,18 +1,19 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { PostgrestError } from '@supabase/supabase-js';
 
 /**
  * Handle insert error with detailed error messages.
  *
- * @param {any} insertError - Supabase insert error
- * @param {any} dataToInsert - Data that was being inserted
+ * @param {PostgrestError} insertError - Supabase insert error
+ * @param {unknown} dataToInsert - Data that was being inserted
  * @throws {Error} Formatted error with instructions
  */
-export function handleInsertError(insertError: any, dataToInsert: unknown) {
+export function handleInsertError(insertError: PostgrestError, dataToInsert: unknown) {
   const errorMessage = insertError.message || '';
-  const errorCode = (insertError as any).code;
-  const errorDetails = (insertError as any).details || '';
-  const errorHint = (insertError as any).hint || '';
+  const errorCode = insertError.code;
+  const errorDetails = insertError.details || '';
+  const errorHint = insertError.hint || '';
 
   logger.error('[Par Levels API] Database error creating par level:', {
     error: errorMessage,
@@ -37,9 +38,12 @@ export function handleInsertError(insertError: any, dataToInsert: unknown) {
     const columnName = columnMatch ? columnMatch[1] : 'unknown';
 
     // Check which field is null in our data
-    const nullFields = Object.entries(dataToInsert as Record<string, any>)
-      .filter(([_, value]) => value === null || value === undefined)
-      .map(([key]) => key);
+    const nullFields =
+      dataToInsert && typeof dataToInsert === 'object'
+        ? Object.entries(dataToInsert as Record<string, unknown>)
+            .filter(([_, value]) => value === null || value === undefined)
+            .map(([key]) => key)
+        : [];
 
     // Special handling for par_quantity column (legacy column that should be nullable)
     const isParQuantityIssue =

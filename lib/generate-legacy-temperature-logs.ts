@@ -1,8 +1,9 @@
 import {
-  generateRealisticTemperature,
-  generateFoodTemperature,
-  getTemperatureStatusText,
-  getFoodSafetyStatusText,
+    generateFoodTemperature,
+    generateRealisticTemperature,
+    getFoodSafetyStatusText,
+    getTemperatureStatusText,
+    type EquipmentConfig,
 } from './temperature-log-helpers';
 
 export interface TemperatureLogEntry {
@@ -38,7 +39,7 @@ const STAFF_MEMBERS = [
  * Generate temperature logs for a date range
  */
 export function generateLegacyTemperatureLogs(
-  equipment: any[],
+  equipment: EquipmentConfig[],
   startDate: Date,
   endDate: Date,
 ): TemperatureLogEntry[] {

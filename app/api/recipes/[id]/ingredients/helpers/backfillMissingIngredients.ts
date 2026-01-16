@@ -1,17 +1,14 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import type { IngredientRow, RecipeIngredientRow } from './types';
 
 /**
  * Backfill missing nested ingredients by fetching from ingredients table.
- *
- * @param {Array} rows - Recipe ingredient rows with potentially missing nested ingredients
- * @param {string} recipeId - Recipe ID for logging
- * @returns {Promise<Array>} Rows with backfilled ingredients
  */
 export async function backfillMissingIngredients(
-  rows: any[],
+  rows: RecipeIngredientRow[],
   recipeId: string,
-): Promise<unknown[]> {
+): Promise<RecipeIngredientRow[]> {
   const missingNested = rows.some(r => !r.ingredients);
   if (!missingNested) return rows;
 
@@ -20,7 +17,7 @@ export async function backfillMissingIngredients(
   });
 
   const uniqueIds = Array.from(
-    new Set(rows.map(r => r.ingredient_id).filter((v: unknown) => Boolean(v))),
+    new Set(rows.map(r => r.ingredient_id).filter((v): v is string => Boolean(v))),
   );
 
   if (uniqueIds.length === 0) return rows;
@@ -36,7 +33,6 @@ export async function backfillMissingIngredients(
     .in('id', uniqueIds);
 
   // If category column doesn't exist, retry without it
-  // If category column doesn't exist, retry without it
   if (ingError && ingError.code === '42703' && ingError.message.includes('category')) {
     logger.warn('[Recipes API] Category column not found in backfill, retrying without category', {
       context: { endpoint: '/api/recipes/[id]/ingredients', recipeId },
@@ -50,16 +46,16 @@ export async function backfillMissingIngredients(
       .in('id', uniqueIds);
 
     // Normalize the retry result to include category as null for type compatibility
-    ingRows = retryData?.map((ing: any) => ({
+    ingRows = (retryData?.map((ing) => ({
       ...ing,
-      category: ing.category ?? null,
-    })) as typeof ingRows;
+      category: (ing as { category?: string | null }).category ?? null, // Safe access or just null if not present in select
+    })) || []) as IngredientRow[];
     ingError = retryError;
   }
 
   if (ingError || !ingRows) return rows;
 
-  const byId: Record<string, unknown> = {};
+  const byId: Record<string, IngredientRow> = {};
   ingRows.forEach(ir => {
     byId[ir.id] = ir;
   });

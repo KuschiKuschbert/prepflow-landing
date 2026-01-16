@@ -40,11 +40,12 @@ export async function fetchDishRecipes(
 
   // Group dish_recipes by dish_id
   const dishRecipesMap = new Map<string, DishRecipeRecord[]>();
-  ((allDishRecipes as any[]) || []).forEach(dr => {
+  (allDishRecipes || []).forEach(dr => {
     if (!dishRecipesMap.has(dr.dish_id)) {
       dishRecipesMap.set(dr.dish_id, []);
     }
-    dishRecipesMap.get(dr.dish_id)!.push(dr as DishRecipeRecord);
+    // Supabase query should return correct shape, or we cast to unknown first
+    dishRecipesMap.get(dr.dish_id)!.push(dr as unknown as DishRecipeRecord);
   });
 
   return dishRecipesMap;

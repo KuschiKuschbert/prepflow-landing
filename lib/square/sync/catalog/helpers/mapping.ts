@@ -1,13 +1,21 @@
 /**
  * Catalog mapping helpers for Square ↔ PrepFlow conversion.
  */
-import type { Dish } from '../../catalog';
+import type { Dish, SquareCatalogObject } from '../../catalog';
 
 /**
  * Map Square catalog item to PrepFlow dish
  */
-export function mapSquareItemToDish(squareItem: any, locationId: string): Dish {
+export function mapSquareItemToDish(squareItem: SquareCatalogObject, locationId: string): Dish {
   const itemData = squareItem.itemData;
+  if (!itemData) {
+    return {
+      id: '',
+      dish_name: 'Unnamed Dish',
+      selling_price: 0,
+    };
+  }
+
   const dishName = itemData.name || 'Unnamed Dish';
   const description = itemData.description || null;
 
@@ -29,7 +37,7 @@ export function mapSquareItemToDish(squareItem: any, locationId: string): Dish {
   return {
     id: '', // Will be set when creating dish
     dish_name: dishName,
-    description,
+    description: description || undefined,
     selling_price: sellingPrice,
     category,
   };
@@ -38,7 +46,7 @@ export function mapSquareItemToDish(squareItem: any, locationId: string): Dish {
 /**
  * Map PrepFlow dish to Square catalog item
  */
-export function mapDishToSquareItem(dish: Dish): any {
+export function mapDishToSquareItem(dish: Dish): Record<string, unknown> {
   return {
     type: 'ITEM',
     id: `#${dish.id}`,

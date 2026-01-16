@@ -25,7 +25,7 @@ export function useIngredientMigration(
           });
 
           if (response.ok) {
-            const result = await response.json();
+            const result = (await response.json()) as { success?: boolean };
             if (result.success) {
               localStorage.setItem(migrationKey, 'true');
               if (ingredientsData) {
@@ -34,7 +34,7 @@ export function useIngredientMigration(
             }
           }
         }
-      } catch (err) {
+      } catch (err: unknown) {
         logger.warn('Migration check failed:', {
           error: err instanceof Error ? err.message : String(err),
         });

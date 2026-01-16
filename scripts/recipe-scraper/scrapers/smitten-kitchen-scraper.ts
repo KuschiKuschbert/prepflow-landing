@@ -4,7 +4,13 @@
  */
 
 import * as cheerio from 'cheerio';
-import { RecipeIngredient, ScrapedRecipe } from '../parsers/types';
+import {
+    isJSONLDRecipe,
+    JSONLDImageObject,
+    JSONLDRecipe,
+    RecipeIngredient,
+    ScrapedRecipe
+} from '../parsers/types';
 import { scraperLogger } from '../utils/logger';
 import { SitemapParser } from '../utils/sitemap-parser';
 import { BaseScraper } from './base-scraper';
@@ -23,24 +29,15 @@ export class SmittenKitchenScraper extends BaseScraper {
 
       // Try to find JSON-LD structured data (blog may or may not have it)
       const jsonLdScripts = $('script[type="application/ld+json"]');
-      let recipeData: any = null;
+      let recipeData: JSONLDRecipe | null = null;
 
       for (let i = 0; i < jsonLdScripts.length; i++) {
         try {
           const content = $(jsonLdScripts[i]).html();
           if (content) {
-            const parsed = JSON.parse(content);
+            const parsed = JSON.parse(content) as unknown;
             const items = Array.isArray(parsed) ? parsed : [parsed];
-            recipeData = items.find((item: any) => {
-              const type = item['@type'];
-              if (typeof type === 'string') {
-                return type === 'Recipe';
-              }
-              if (Array.isArray(type)) {
-                return type.includes('Recipe');
-              }
-              return false;
-            });
+            recipeData = items.find((item: unknown) => isJSONLDRecipe(item)) as JSONLDRecipe | undefined ?? null;
             if (recipeData) break;
           }
         } catch (e) {
@@ -50,8 +47,9 @@ export class SmittenKitchenScraper extends BaseScraper {
 
       if (recipeData) {
         // Extract temperature from JSON-LD or instructions
+        const cookingMethod = recipeData.cookingMethod;
         const temperatureFromJSONLD =
-          recipeData.cookingMethod?.temperature || recipeData.temperature;
+          (typeof cookingMethod === 'object' && cookingMethod?.temperature) || recipeData.temperature;
         const temperatureFromInstructions = this.extractTemperatureFromInstructions(
           recipeData.recipeInstructions || [],
         );
@@ -157,7 +155,7 @@ export class SmittenKitchenScraper extends BaseScraper {
   /**
    * Parse ingredients from JSON-LD
    */
-  private parseIngredients(ingredients: any[]): RecipeIngredient[] {
+  private parseIngredients(ingredients: string[] | undefined): RecipeIngredient[] {
     if (!Array.isArray(ingredients)) return [];
     return ingredients.map(ing => {
       const originalText = typeof ing === 'string' ? ing : String(ing);
@@ -172,11 +170,16 @@ export class SmittenKitchenScraper extends BaseScraper {
   /**
    * Parse yield from JSON-LD
    */
-  private parseYield(yieldData: any): number | undefined {
+  private parseYield(yieldData: string | number | string[] | undefined): number | undefined {
     if (!yieldData) return undefined;
     if (typeof yieldData === 'number') return yieldData;
     if (typeof yieldData === 'string') {
       const match = yieldData.match(/(\d+)/);
+      if (match) return parseInt(match[1], 10);
+    }
+    if (Array.isArray(yieldData) && yieldData.length > 0) {
+      const first = yieldData[0];
+      const match = first.match(/(\d+)/);
       if (match) return parseInt(match[1], 10);
     }
     return undefined;
@@ -199,13 +202,14 @@ export class SmittenKitchenScraper extends BaseScraper {
   /**
    * Parse image URL
    */
-  private parseImage(image: any): string | undefined {
+  private parseImage(image: string | string[] | JSONLDImageObject | JSONLDImageObject[] | undefined): string | undefined {
     if (!image) return undefined;
     if (typeof image === 'string') return image;
     if (Array.isArray(image) && image.length > 0) {
-      return typeof image[0] === 'string' ? image[0] : image[0].url;
+      const first = image[0];
+      return typeof first === 'string' ? first : first.url || first.contentUrl;
     }
-    if (image.url) return image.url;
+    if (typeof image === 'object' && 'url' in image) return image.url;
     return undefined;
   }
 

@@ -27,7 +27,7 @@ export const isTouchDevice = (): boolean => {
 
     // Multiple detection methods for better Android/iOS coverage
     const hasTouchPoints = navigator.maxTouchPoints > 0;
-    const hasTouchStart = typeof (window as any).ontouchstart !== 'undefined';
+    const hasTouchStart = typeof window !== 'undefined' && 'ontouchstart' in window;
 
     // User agent detection as fallback (Android, iOS, iPad, etc.)
     const userAgent = navigator.userAgent || '';

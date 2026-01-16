@@ -2,31 +2,18 @@
  * Validation helpers for cleaning task requests
  */
 
-import { NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { NextResponse } from 'next/server';
 
-export interface CreateTaskBody {
-  task_name?: string;
-  frequency_type?: string;
-  area_id?: string;
-  assigned_date?: string;
-  equipment_id?: string;
-  section_id?: string;
-  is_standard_task?: boolean;
-  standard_task_type?: string;
-  description?: string;
-  notes?: string;
-  assigned_to_employee_id?: string;
-  assigned_by_employee_id?: string;
-}
+import { CreateCleaningTaskInput } from './types';
 
 /**
  * Validates create cleaning task request body
  *
- * @param {CreateTaskBody} body - Request body
+ * @param {CreateCleaningTaskInput} body - Request body
  * @returns {NextResponse | null} Error response if validation fails, null if valid
  */
-export function validateCreateTaskRequest(body: CreateTaskBody): NextResponse | null {
+export function validateCreateTaskRequest(body: CreateCleaningTaskInput): NextResponse | null {
   // Area is always required
   if (!body.area_id) {
     return NextResponse.json(

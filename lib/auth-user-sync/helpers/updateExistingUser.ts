@@ -25,7 +25,7 @@ export async function updateExistingUser(
   if (userWithNameError) {
     logger.warn('[Auth0 Sync] Error fetching user name fields:', {
       error: userWithNameError.message,
-      code: (userWithNameError as any).code,
+      code: userWithNameError.code,
       context: { email, operation: 'fetchUserNameFields' },
     });
   }
@@ -59,7 +59,7 @@ export async function updateExistingUser(
   if (updateError) {
     logger.error('[Auth0 Sync] Error updating user:', {
       error: updateError.message,
-      code: (updateError as any).code,
+      code: updateError.code,
       context: { email, operation: 'updateUser' },
     });
   } else {

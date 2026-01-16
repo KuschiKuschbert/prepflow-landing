@@ -3,8 +3,9 @@
  */
 
 import { logger } from '@/lib/logger';
-import { findMenuItemsWithRecipe } from './helpers/find-menu-items';
+import type { ChangeDetails, ChangeType } from '@/lib/menu-lock/change-tracking/types';
 import { checkMenuLocks } from './helpers/check-menu-locks';
+import { findMenuItemsWithRecipe } from './helpers/find-menu-items';
 import { invalidateMenuItemPrices } from './helpers/invalidate-prices';
 import { trackLockedMenuChanges } from './helpers/track-changes';
 
@@ -15,16 +16,16 @@ import { trackLockedMenuChanges } from './helpers/track-changes';
  *
  * @param {string} recipeId - Recipe ID
  * @param {string} recipeName - Recipe name (for change tracking)
- * @param {string} changeType - Type of change (for tracking)
- * @param {any} changeDetails - Change details (for tracking)
+ * @param {ChangeType} changeType - Type of change (for tracking)
+ * @param {ChangeDetails} changeDetails - Change details (for tracking)
  * @param {string} changedBy - User email (for tracking)
  * @returns {Promise<void>} Resolves when invalidation completes
  */
 export async function invalidateMenuItemsWithRecipe(
   recipeId: string,
   recipeName?: string,
-  changeType: string = 'ingredients_changed',
-  changeDetails: any = {},
+  changeType: ChangeType = 'ingredients_changed',
+  changeDetails: ChangeDetails = {},
   changedBy: string | null = null,
 ): Promise<void> {
   try {

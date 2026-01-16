@@ -4,7 +4,14 @@
  */
 
 import * as cheerio from 'cheerio';
-import { RecipeIngredient, ScrapedRecipe } from '../parsers/types';
+import {
+    isJSONLDRecipe,
+    JSONLDHowToStep,
+    JSONLDImageObject,
+    JSONLDRecipe,
+    RecipeIngredient,
+    ScrapedRecipe
+} from '../parsers/types';
 import { scraperLogger } from '../utils/logger';
 import { SitemapParser } from '../utils/sitemap-parser';
 import { BaseScraper } from './base-scraper';
@@ -23,18 +30,15 @@ export class BBCGoodFoodScraper extends BaseScraper {
 
       // Try JSON-LD first
       const jsonLdScripts = $('script[type="application/ld+json"]');
-      let recipeData: any = null;
+      let recipeData: JSONLDRecipe | null = null;
 
       for (let i = 0; i < jsonLdScripts.length; i++) {
         try {
           const content = $(jsonLdScripts[i]).html();
           if (content) {
-            const parsed = JSON.parse(content);
+            const parsed = JSON.parse(content) as unknown;
             const items = Array.isArray(parsed) ? parsed : [parsed];
-            recipeData = items.find((item: any) => {
-              const itemTypes = Array.isArray(item['@type']) ? item['@type'] : [item['@type']];
-              return itemTypes.includes('Recipe');
-            });
+            recipeData = items.find((item: unknown) => isJSONLDRecipe(item)) as JSONLDRecipe | undefined ?? null;
             if (recipeData) break;
           }
         } catch (e) {
@@ -57,7 +61,7 @@ export class BBCGoodFoodScraper extends BaseScraper {
   /**
    * Parse from JSON-LD structured data
    */
-  private parseFromJSONLD(recipeData: any, url: string): Partial<ScrapedRecipe> {
+  private parseFromJSONLD(recipeData: JSONLDRecipe, url: string): Partial<ScrapedRecipe> {
     const recipe: Partial<ScrapedRecipe> = {
       id: recipeData.url || url,
       recipe_name: recipeData.name || '',
@@ -139,22 +143,24 @@ export class BBCGoodFoodScraper extends BaseScraper {
   /**
    * Parse instructions
    */
-  protected parseInstructions(instructions: any): string[] {
+  protected parseInstructions(instructions: string | string[] | JSONLDHowToStep | JSONLDHowToStep[] | undefined): string[] {
+    if (!instructions) return [];
+    if (typeof instructions === 'string') return [instructions];
     if (Array.isArray(instructions)) {
       return instructions.map(inst => {
         if (typeof inst === 'string') return inst;
-        if (inst.text) return inst.text;
-        if (inst['@type'] === 'HowToStep' && inst.text) return inst.text;
+        if (typeof inst === 'object' && inst !== null && 'text' in inst) return inst.text || '';
         return String(inst);
-      });
+      }).filter(Boolean);
     }
+    if (typeof instructions === 'object' && 'text' in instructions) return [instructions.text || ''];
     return [];
   }
 
   /**
    * Parse ingredients
    */
-  private parseIngredients(ingredients: any[]): RecipeIngredient[] {
+  private parseIngredients(ingredients: string[] | undefined): RecipeIngredient[] {
     if (!Array.isArray(ingredients)) return [];
     return ingredients.map(ing => ({
       name: this.parseIngredientName(typeof ing === 'string' ? ing : String(ing)),
@@ -165,11 +171,16 @@ export class BBCGoodFoodScraper extends BaseScraper {
   /**
    * Parse yield
    */
-  private parseYield(yieldData: any): number | undefined {
+  private parseYield(yieldData: string | number | string[] | undefined): number | undefined {
     if (!yieldData) return undefined;
     if (typeof yieldData === 'number') return yieldData;
     if (typeof yieldData === 'string') {
       const match = yieldData.match(/(\d+)/);
+      if (match) return parseInt(match[1], 10);
+    }
+    if (Array.isArray(yieldData) && yieldData.length > 0) {
+      const first = yieldData[0];
+      const match = first.match(/(\d+)/);
       if (match) return parseInt(match[1], 10);
     }
     return undefined;
@@ -204,13 +215,14 @@ export class BBCGoodFoodScraper extends BaseScraper {
   /**
    * Parse image URL
    */
-  private parseImage(image: any): string | undefined {
+  private parseImage(image: string | string[] | JSONLDImageObject | JSONLDImageObject[] | undefined): string | undefined {
     if (!image) return undefined;
     if (typeof image === 'string') return image;
     if (Array.isArray(image) && image.length > 0) {
-      return typeof image[0] === 'string' ? image[0] : image[0].url;
+      const first = image[0];
+      return typeof first === 'string' ? first : first.url || first.contentUrl;
     }
-    if (image.url) return image.url;
+    if (typeof image === 'object' && 'url' in image) return image.url;
     return undefined;
   }
 

@@ -1,8 +1,8 @@
 'use client';
 
+import { useNotification } from '@/contexts/NotificationContext';
 import { supabase } from '@/lib/supabase';
 import { useCallback } from 'react';
-import { useNotification } from '@/contexts/NotificationContext';
 
 import { logger } from '@/lib/logger';
 interface UseIngredientDeleteProps<T extends { id: string }> {
@@ -39,7 +39,7 @@ export function useIngredientDelete<T extends { id: string }>({
               method: 'DELETE',
             });
 
-            const result = await response.json();
+            const result = (await response.json()) as { success?: boolean; details?: string; error?: string };
             if (!response.ok || !result.success) {
               // Revert optimistic update on error
               setIngredients(originalIngredients);

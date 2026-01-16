@@ -1,13 +1,13 @@
 /**
  * Validate CSV data against a schema
  *
- * @param {any[]} data - Data to validate
- * @param {Record<string, (value: any) => boolean | string>} schema - Validation schema
- * @returns {{ valid: boolean; errors: Array<{ row: number; field: string; error: string }> }} Validation result
+ * @param data - Data to validate (array of row objects)
+ * @param schema - Validation schema mapping field names to validator functions
+ * @returns Validation result with errors
  */
 export function validateCSVData(
-  data: any[],
-  schema: Record<string, (value: any) => boolean | string>,
+  data: Record<string, unknown>[],
+  schema: Record<string, (value: unknown) => boolean | string>,
 ): { valid: boolean; errors: Array<{ row: number; field: string; error: string }> } {
   const errors: Array<{ row: number; field: string; error: string }> = [];
 

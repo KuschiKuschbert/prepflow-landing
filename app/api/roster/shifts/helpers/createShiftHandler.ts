@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { validateShiftRequest } from './validateShiftRequest';
+import { NextRequest, NextResponse } from 'next/server';
 import { createShiftSchema } from './schemas';
+import { validateShiftRequest } from './validateShiftRequest';
 
 export async function handleCreateShift(request: NextRequest) {
   try {
@@ -41,7 +41,7 @@ export async function handleCreateShift(request: NextRequest) {
 
     const validation = validateShiftRequest(zodValidation.data);
 
-    if (!validation.isValid) {
+    if (!validation.isValid || !validation.data) {
       return NextResponse.json(
         ApiErrorHandler.createError(
           validation.error || 'Invalid request data',
@@ -52,7 +52,7 @@ export async function handleCreateShift(request: NextRequest) {
       );
     }
 
-    const shiftData = validation.data!;
+    const shiftData = validation.data;
 
     // Check if employee exists
     const { data: employee, error: employeeError } = await supabaseAdmin

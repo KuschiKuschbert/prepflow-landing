@@ -23,11 +23,14 @@ export async function checkHiddenFeature(
     }
 
     return { enabled: false, exists: false };
-  } catch (err: any) {
-    if (err?.message?.includes('relation') || err?.message?.includes('does not exist')) {
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    if (errorMessage.includes('relation') || errorMessage.includes('does not exist')) {
       return { enabled: false, exists: false };
     }
-    logger.warn('[Feature Gate] Error checking hidden feature flag:', err);
+    logger.warn('[Feature Gate] Error checking hidden feature flag:', {
+      error: errorMessage,
+    });
     return { enabled: false, exists: false };
   }
 }

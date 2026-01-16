@@ -2,11 +2,18 @@
  * Helper functions for temperature log generation (legacy endpoint)
  */
 
+export interface EquipmentConfig {
+  name: string;
+  equipment_type: string;
+  min_temp_celsius: number;
+  max_temp_celsius: number;
+}
+
 /**
  * Generate realistic temperature based on equipment type and time of day
  */
 export function generateRealisticTemperature(
-  equipment: any,
+  equipment: EquipmentConfig,
   timeOfDay: 'morning' | 'evening',
 ): number {
   const { equipment_type, min_temp_celsius, max_temp_celsius } = equipment;
@@ -69,7 +76,7 @@ export function generateFoodTemperature(type: 'hot_holding' | 'cold_holding' | '
 /**
  * Get temperature status text
  */
-export function getTemperatureStatusText(temp: number, equipment: any): string {
+export function getTemperatureStatusText(temp: number, equipment: EquipmentConfig): string {
   if (equipment.min_temp_celsius && equipment.max_temp_celsius) {
     if (temp < equipment.min_temp_celsius) {
       return 'Below minimum range';

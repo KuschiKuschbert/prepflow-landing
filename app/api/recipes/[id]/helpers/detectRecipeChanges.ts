@@ -19,18 +19,18 @@ export interface RecipeChangeDetails {
   };
 }
 
+export interface RecipeRecord {
+  recipe_name?: string | null;
+  yield?: number | null;
+  instructions?: string | null;
+}
+
 /**
  * Detects changes in recipe data
- *
- * @param {any} currentRecipe - Current recipe data
- * @param {any} updateData - Update data
- * @param {boolean} ingredientsChanged - Whether ingredients changed
- * @param {boolean} yieldChanged - Whether yield changed
- * @returns {Object} Change type and details
  */
 export function detectRecipeChanges(
-  currentRecipe: any,
-  updateData: any,
+  currentRecipe: RecipeRecord | null,
+  updateData: RecipeRecord,
   ingredientsChanged: boolean,
   yieldChanged: boolean,
 ): { changeType: string; changeDetails: RecipeChangeDetails } {
@@ -41,6 +41,7 @@ export function detectRecipeChanges(
     if (
       yieldChanged &&
       updateData.yield !== undefined &&
+      updateData.yield !== null &&
       updateData.yield !== currentRecipe.yield
     ) {
       changeType = 'yield_changed';
@@ -48,7 +49,7 @@ export function detectRecipeChanges(
         field: 'yield',
         before: currentRecipe.yield,
         after: updateData.yield,
-        change: updateData.yield > currentRecipe.yield ? 'increased' : 'decreased',
+        change: (updateData.yield as number) > (currentRecipe.yield as number) ? 'increased' : 'decreased',
       };
     }
 

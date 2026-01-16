@@ -6,13 +6,20 @@ import { Check, ChefHat, Clock, Trophy, Utensils } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
+interface OrderItem {
+  id?: string;
+  name: string;
+  quantity: number;
+  modifiers?: string[];
+}
+
 interface OrderStatus {
   id: string;
   order_number: number | null;
   customer_name: string | null;
   customer_id: string | null; // Added for Passport Link
   fulfillment_status: 'PENDING' | 'IN_PROGRESS' | 'READY' | 'COMPLETED';
-  items_json: any;
+  items_json: string | OrderItem[] | null;
 }
 
 /**
@@ -32,10 +39,10 @@ export default function PublicOrderStatusPage() {
   // Sound Effect Helper (Web Audio API)
   const playNotificationSound = () => {
     try {
-      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-      if (!AudioContext) return;
+      const AudioContextClass = (window.AudioContext || (window as any).webkitAudioContext) as typeof AudioContext;
+      if (!AudioContextClass) return;
 
-      const ctx = new AudioContext();
+      const ctx = new AudioContextClass();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
@@ -106,8 +113,8 @@ export default function PublicOrderStatusPage() {
           table: 'transactions',
           filter: `id=eq.${id}`,
         },
-        (payload: any) => {
-          const newData = payload.new as OrderStatus;
+        (payload: { new: OrderStatus }) => {
+          const newData = payload.new;
 
           // Check for status change to READY
           if (newData.fulfillment_status === 'READY' && prevStatusRef.current !== 'READY') {
@@ -171,11 +178,11 @@ export default function PublicOrderStatusPage() {
   }
 
   // Parse items safely
-  let items: any[] = [];
+  let items: OrderItem[] = [];
   try {
       items = typeof order.items_json === 'string'
-        ? JSON.parse(order.items_json)
-        : order.items_json || [];
+        ? (JSON.parse(order.items_json) as OrderItem[])
+        : (order.items_json as OrderItem[]) || [];
   } catch (e) {}
 
   // Determine UI State based on status
@@ -254,7 +261,7 @@ export default function PublicOrderStatusPage() {
         <div className="bg-neutral-900 rounded-xl p-6 border border-neutral-800">
             <h3 className="text-sm font-bold text-neutral-400 uppercase tracking-widest mb-4">Your Items</h3>
             <div className="space-y-3">
-                {items.map((item, idx) => (
+                {items.map((item: OrderItem, idx: number) => (
                     <div key={idx} className="flex justify-between items-start">
                         <div className="flex gap-3">
                             <span className="bg-neutral-800 w-6 h-6 rounded flex items-center justify-center text-xs font-bold text-neutral-300">

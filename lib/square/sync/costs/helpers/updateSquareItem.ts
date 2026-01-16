@@ -57,6 +57,7 @@ export async function updateSquareItemCosts(
 
     // Update catalog object with custom attributes
     // Note: Square API requires updating the entire object, so we need to fetch first
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const getResponse = await (catalogApi as any).retrieveCatalogObject(squareItemId, true);
 
     if (!getResponse.result?.object) {
@@ -73,6 +74,7 @@ export async function updateSquareItemCosts(
     }
 
     // Update with custom attributes
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updateResponse = await (catalogApi as any).upsertCatalogObject({
       idempotencyKey: `${squareItemId}-cost-${Date.now()}`,
       object: {
@@ -89,7 +91,7 @@ export async function updateSquareItemCosts(
               };
               return acc;
             },
-            {} as Record<string, any>,
+            {} as Record<string, unknown>,
           ),
         },
       },
@@ -106,11 +108,11 @@ export async function updateSquareItemCosts(
       logger.error('[Square Cost Sync] Failed to update Square item costs:', { squareItemId });
       return false;
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Cost Sync] Error updating Square item costs:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       squareItemId,
-      stack: error.stack,
+      stack: error instanceof Error ? error.stack : undefined,
     });
     return false;
   }

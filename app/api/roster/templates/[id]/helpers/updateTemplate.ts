@@ -2,8 +2,8 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
-import { checkTemplateExists } from './checkTemplateExists';
 import { buildUpdateData } from './buildUpdateData';
+import { checkTemplateExists } from './checkTemplateExists';
 
 /**
  * Update template by ID
@@ -23,7 +23,7 @@ export async function updateTemplate(templateId: string, body: unknown): Promise
   }
 
   // Build update data
-  const updateData = buildUpdateData(body);
+  const updateData = buildUpdateData(body as Record<string, unknown>);
 
   // Update template
   const { data: template, error: updateError } = await supabaseAdmin

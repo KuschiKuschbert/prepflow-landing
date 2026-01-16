@@ -27,7 +27,7 @@ export async function isFeatureEnabled(
   flagKey: string,
   userId?: string,
   userEmail?: string,
-  user?: any,
+  user?: unknown,
 ): Promise<boolean> {
   if (checkAdminAccess(userId, userEmail, user)) {
     return true;
@@ -44,7 +44,7 @@ export async function isFeatureEnabled(
 }
 
 export {
-  deleteFeatureFlagHelper as deleteFeatureFlag,
-  getFeatureFlagsHelper as getFeatureFlags,
-  setFeatureFlagHelper as setFeatureFlag,
+    deleteFeatureFlagHelper as deleteFeatureFlag,
+    getFeatureFlagsHelper as getFeatureFlags,
+    setFeatureFlagHelper as setFeatureFlag
 };

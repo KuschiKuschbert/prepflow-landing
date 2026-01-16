@@ -15,10 +15,10 @@ export async function handleGenerateSampleData(
   setIsGenerating(true);
   try {
     const response = await fetch('/api/temperature-logs/generate-sample', { method: 'POST' });
-    const data = await response.json();
+    const data = (await response.json()) as { success: boolean; data?: { totalLogs: number }; error?: string };
     if (data.success) {
       showSuccess(
-        `Successfully generated ${data.data.totalLogs} temperature log entries (5 per equipment, spread across last 2 weeks)`,
+        `Successfully generated ${data.data?.totalLogs || 0} temperature log entries (5 per equipment, spread across last 2 weeks)`,
       );
       if (onRefreshLogs) {
         await new Promise(resolve => setTimeout(resolve, 500));
@@ -32,8 +32,10 @@ export async function handleGenerateSampleData(
     } else {
       showError(data.error || 'Failed to generate sample data');
     }
-  } catch (error) {
-    logger.error('Error generating sample data:', error);
+  } catch (error: unknown) {
+    logger.error('Error generating sample data:', {
+      error: error instanceof Error ? error.message : String(error),
+    });
     showError(
       "Couldn't whip up that sample data. Give it another shot - sometimes the kitchen needs a moment.",
     );

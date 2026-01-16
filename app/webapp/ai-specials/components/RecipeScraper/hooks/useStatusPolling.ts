@@ -4,11 +4,11 @@
 
 import { logger } from '@/lib/logger';
 import { useEffect } from 'react';
-import { ScrapingJobStatus } from './useComprehensiveScraping';
+import { ComprehensiveJobStatus } from '../types';
 
 interface UseStatusPollingParams {
   statusPolling: boolean;
-  setComprehensiveStatus: (status: ScrapingJobStatus | null) => void;
+  setComprehensiveStatus: (status: ComprehensiveJobStatus | null) => void;
   setStatusPolling: (polling: boolean) => void;
   fetchRecipes: (page: number, pageSize: number) => void;
   page: number;

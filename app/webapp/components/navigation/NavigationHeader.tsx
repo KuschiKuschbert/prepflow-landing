@@ -68,10 +68,10 @@ function NavigationHeaderBase({
   const [isMounted, setIsMounted] = useState(false);
   const { user, error: userError, isLoading: userLoading } = useUser();
   // Handle nested user structure: user.user.email (Auth0 SDK sometimes returns nested structure)
-  // We use any cast for safety where the type definition might miss custom or nested props
-  const userAny = user as any;
-  const userEmail = user?.email || userAny?.user?.email;
-  const auth0UserName = user?.name || userAny?.user?.name;
+  const authUser = user as unknown as Record<string, unknown> | undefined;
+  const nestedUser = authUser?.user as Record<string, unknown> | undefined;
+  const userEmail = user?.email || (nestedUser?.email as string) || '';
+  const auth0UserName = user?.name || (nestedUser?.name as string) || '';
 
   // Prevent hydration mismatch by only computing user-dependent values after mount
   useEffect(() => {

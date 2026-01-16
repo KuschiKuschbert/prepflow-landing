@@ -4,10 +4,16 @@
  */
 
 import * as cheerio from 'cheerio';
-import { BaseScraper } from './base-scraper';
-import { ScrapedRecipe, RecipeIngredient } from '../parsers/types';
+import {
+    isJSONLDRecipe,
+    JSONLDImageObject,
+    JSONLDRecipe,
+    RecipeIngredient,
+    ScrapedRecipe
+} from '../parsers/types';
 import { scraperLogger } from '../utils/logger';
 import { SitemapParser } from '../utils/sitemap-parser';
+import { BaseScraper } from './base-scraper';
 
 export class BonAppetitScraper extends BaseScraper {
   constructor(config?: Partial<import('../parsers/types').ScraperConfig>) {
@@ -23,26 +29,16 @@ export class BonAppetitScraper extends BaseScraper {
 
       // Try to find JSON-LD structured data
       const jsonLdScripts = $('script[type="application/ld+json"]');
-      let recipeData: any = null;
+      let recipeData: JSONLDRecipe | null = null;
 
       for (let i = 0; i < jsonLdScripts.length; i++) {
         try {
           const content = $(jsonLdScripts[i]).html();
           if (content) {
-            const parsed = JSON.parse(content);
+            const parsed = JSON.parse(content) as unknown;
             // Handle both single objects and arrays
             const items = Array.isArray(parsed) ? parsed : [parsed];
-            recipeData = items.find((item: any) => {
-              // Handle @type as both string and array (e.g., ["Recipe", "NewsArticle"])
-              const type = item['@type'];
-              if (typeof type === 'string') {
-                return type === 'Recipe';
-              }
-              if (Array.isArray(type)) {
-                return type.includes('Recipe');
-              }
-              return false;
-            });
+            recipeData = items.find((item: unknown) => isJSONLDRecipe(item)) as JSONLDRecipe | undefined ?? null;
             if (recipeData) break;
           }
         } catch (e) {
@@ -57,7 +53,8 @@ export class BonAppetitScraper extends BaseScraper {
 
       // Extract temperature from JSON-LD (check multiple possible locations)
       // First try JSON-LD temperature fields
-      const temperatureFromJSONLD = recipeData.cookingMethod?.temperature || recipeData.temperature;
+      const cookingMethod = recipeData.cookingMethod;
+      const temperatureFromJSONLD = (typeof cookingMethod === 'object' && cookingMethod?.temperature) || recipeData.temperature;
 
       // If not found in JSON-LD, extract from instructions using BaseScraper method
       const temperatureFromInstructions = this.extractTemperatureFromInstructions(
@@ -155,7 +152,7 @@ export class BonAppetitScraper extends BaseScraper {
   /**
    * Parse ingredients from JSON-LD
    */
-  private parseIngredients(ingredients: any[]): RecipeIngredient[] {
+  private parseIngredients(ingredients: string[] | undefined): RecipeIngredient[] {
     if (!Array.isArray(ingredients)) return [];
     return ingredients.map(ing => {
       const originalText = typeof ing === 'string' ? ing : String(ing);
@@ -171,11 +168,16 @@ export class BonAppetitScraper extends BaseScraper {
   /**
    * Parse yield from JSON-LD
    */
-  private parseYield(yieldData: any): number | undefined {
+  private parseYield(yieldData: string | number | string[] | undefined): number | undefined {
     if (!yieldData) return undefined;
     if (typeof yieldData === 'number') return yieldData;
     if (typeof yieldData === 'string') {
       const match = yieldData.match(/(\d+)/);
+      if (match) return parseInt(match[1], 10);
+    }
+    if (Array.isArray(yieldData) && yieldData.length > 0) {
+      const first = yieldData[0];
+      const match = first.match(/(\d+)/);
       if (match) return parseInt(match[1], 10);
     }
     return undefined;
@@ -199,13 +201,14 @@ export class BonAppetitScraper extends BaseScraper {
   /**
    * Parse image URL
    */
-  private parseImage(image: any): string | undefined {
+  private parseImage(image: string | string[] | JSONLDImageObject | JSONLDImageObject[] | undefined): string | undefined {
     if (!image) return undefined;
     if (typeof image === 'string') return image;
     if (Array.isArray(image) && image.length > 0) {
-      return typeof image[0] === 'string' ? image[0] : image[0].url;
+      const first = image[0];
+      return typeof first === 'string' ? first : first.url || first.contentUrl;
     }
-    if (image.url) return image.url;
+    if (typeof image === 'object' && 'url' in image) return image.url;
     return undefined;
   }
 

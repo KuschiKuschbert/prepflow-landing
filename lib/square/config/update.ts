@@ -1,9 +1,9 @@
 /**
  * Update Square configuration for a user.
  */
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { encryptSquareToken } from '../token-encryption';
 import type { SquareConfig, SquareConfigInput } from './types';
 
@@ -20,7 +20,7 @@ export async function updateSquareConfig(
   }
 
   try {
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       updated_at: new Date().toISOString(),
     };
 
@@ -102,7 +102,7 @@ export async function updateSquareConfig(
     if (error) {
       logger.error('[Square Config] Error updating configuration:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         userId,
         context: { endpoint: 'updateSquareConfig', operation: 'update' },
       });
@@ -111,13 +111,13 @@ export async function updateSquareConfig(
     }
 
     return data as SquareConfig;
-  } catch (error: any) {
-    if (error.status) {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'status' in error) {
       throw error;
     }
 
     logger.error('[Square Config] Unexpected error updating configuration:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
       context: { endpoint: 'updateSquareConfig', operation: 'update' },
     });

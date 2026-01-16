@@ -1,5 +1,5 @@
-import { logger } from '@/lib/logger';
 import { getManagementClient } from '@/lib/auth0-management';
+import { logger } from '@/lib/logger';
 import { getGoogleConnection } from './getGoogleConnection';
 
 /**
@@ -30,7 +30,7 @@ export async function configureGoogleOAuthCredentials(
     const connectionsResponse = await client.connections.getAll();
     const connections = Array.isArray(connectionsResponse)
       ? connectionsResponse
-      : (connectionsResponse as any)?.data || [];
+      : (connectionsResponse as unknown as { data: unknown[] })?.data || [];
 
     if (!connections || !Array.isArray(connections)) {
       return {
@@ -49,6 +49,14 @@ export async function configureGoogleOAuthCredentials(
       };
     }
 
+    if (!googleConnection || !googleConnection.id) {
+      return {
+        success: false,
+        message:
+          "Google connection ID is missing. Please check your Auth0 configuration.",
+      };
+    }
+
     await client.connections.update({ id: googleConnection.id }, {
       options: {
         ...googleConnection.options,
@@ -56,7 +64,7 @@ export async function configureGoogleOAuthCredentials(
         client_secret: googleClientSecret,
         scope: ['email', 'profile'],
       },
-    } as any);
+    } as unknown as any); // Use any cast for library compatibility if needed, or specific type
 
     logger.info('[Auth0 Google Connection] Configured Google OAuth credentials', {
       connectionId: googleConnection.id,

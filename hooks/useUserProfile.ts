@@ -28,7 +28,9 @@ const CACHE_KEY = 'user_profile_data';
  */
 export function useUserProfile(): UseUserProfileReturn {
   const { user, isLoading: userLoading } = useUser();
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const userEmail = user?.email || (user as any)?.user?.email;
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const userName = user?.name || (user as any)?.user?.name;
 
   // Get initial state (cached in localStorage or derived from session)

@@ -6,6 +6,7 @@ import { backfillMissingIngredients } from './helpers/backfillMissingIngredients
 import { handleRecipeIngredientsError } from './helpers/handleRecipeIngredientsError';
 import { mapRecipeIngredients } from './helpers/mapRecipeIngredients';
 import { saveRecipeIngredients } from './helpers/saveRecipeIngredients';
+import type { RecipeIngredientRow, SaveRecipeIngredientInput } from './helpers/types';
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   let normalizedId: string | undefined;
@@ -88,13 +89,20 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         .eq('recipe_id', normalizedId);
 
       // Normalize the retry result to include category as null for type compatibility
-      data = retryData?.map((item: any) => ({
-        ...item,
-        ingredients: item.ingredients?.map((ing: any) => ({
-          ...ing,
-          category: ing.category ?? null,
-        })),
-      })) as typeof data;
+      data =
+        (retryData?.map(item => {
+          const rawIngs = item.ingredients as unknown as Record<string, unknown> | Record<string, unknown>[];
+          const rawIng = Array.isArray(rawIngs) ? rawIngs[0] : rawIngs;
+          return {
+            ...item,
+            ingredients: rawIng
+              ? {
+                  ...rawIng,
+                  category: rawIng.category ?? null,
+                }
+              : null,
+          };
+        }) as unknown as typeof data) || null;
       error = retryError;
     }
 
@@ -121,7 +129,10 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     }
 
     // Backfill missing nested ingredients and map to normalized format
-    const rows = await backfillMissingIngredients(data, normalizedId);
+    const rows = await backfillMissingIngredients(
+      (data as unknown as RecipeIngredientRow[]) || [],
+      normalizedId,
+    );
     const items = mapRecipeIngredients(rows);
 
     return NextResponse.json({ items });
@@ -144,7 +155,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     const { id } = await context.params;
     recipeId = id;
     const body = await request.json();
-    const { ingredients, isUpdate } = body;
+    const { ingredients, isUpdate } = body as { ingredients: SaveRecipeIngredientInput[]; isUpdate?: boolean };
 
     if (!ingredients || !Array.isArray(ingredients)) {
       return NextResponse.json(
@@ -166,7 +177,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     const data = await saveRecipeIngredients(
       recipeId,
       ingredients,
-      isUpdate,
+      !!isUpdate,
       recipeName,
       userEmail,
     );

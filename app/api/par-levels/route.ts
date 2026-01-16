@@ -95,8 +95,8 @@ export async function POST(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/par-levels', method: 'POST' },
     });
-    if ((err as any).status) {
-      return NextResponse.json(err, { status: (err as any).status });
+    if (err && typeof err === 'object' && 'status' in err && typeof err.status === 'number') {
+      return NextResponse.json(err, { status: err.status });
     }
     return handleParLevelError(err, 'POST');
   }
@@ -147,8 +147,8 @@ export async function PUT(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/par-levels', method: 'PUT' },
     });
-    if ((err as any).status) {
-      return NextResponse.json(err, { status: (err as any).status });
+    if (err && typeof err === 'object' && 'status' in err && typeof err.status === 'number') {
+      return NextResponse.json(err, { status: err.status });
     }
     return handleParLevelError(err, 'PUT');
   }
@@ -182,8 +182,8 @@ export async function DELETE(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/par-levels', method: 'DELETE' },
     });
-    if ((err as any).status) {
-      return NextResponse.json(err, { status: (err as any).status });
+    if (err && typeof err === 'object' && 'status' in err && typeof err.status === 'number') {
+      return NextResponse.json(err, { status: err.status });
     }
     return handleParLevelError(err, 'DELETE');
   }

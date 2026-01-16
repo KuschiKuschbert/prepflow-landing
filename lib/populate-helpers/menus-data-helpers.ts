@@ -2,7 +2,7 @@
  * Helper functions for menu data population (extracted to keep menus-data.ts under 150 lines)
  */
 
-import { Dish, Recipe } from '@/app/webapp/recipes/types';
+import { Dish } from '@/app/webapp/recipes/types';
 import { cleanSampleMenus } from '@/lib/sample-menus-clean';
 
 export interface MenuData {
@@ -10,12 +10,19 @@ export interface MenuData {
   menu_name: string;
 }
 
+// Minimal recipe interface - accepts both Recipe and RecipeRecord types
+interface MinimalRecipe {
+  id: string;
+  name?: string;
+  recipe_name?: string;
+}
+
 /**
  * Create lookup maps for dishes and recipes
  */
 export function createMenuLookupMaps(
   dishesData: Pick<Dish, 'id' | 'dish_name'>[],
-  recipesData: Pick<Recipe, 'id' | 'recipe_name'>[],
+  recipesData: MinimalRecipe[],
 ) {
   const dishMap = new Map<string, string>();
   if (dishesData) {
@@ -31,7 +38,7 @@ export function createMenuLookupMaps(
   const recipeMap = new Map<string, string>();
   if (recipesData) {
     recipesData.forEach(r => {
-      const name = r.recipe_name;
+      const name = r.recipe_name || r.name;
       if (name) {
         recipeMap.set(name.toLowerCase().trim(), r.id);
         recipeMap.set(name, r.id);

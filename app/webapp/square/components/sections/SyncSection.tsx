@@ -1,20 +1,29 @@
 'use client';
 
-import { useState, useCallback } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { RefreshCw, Loader2, CheckCircle2, XCircle } from 'lucide-react';
-import { logger } from '@/lib/logger';
 import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
+import { CheckCircle2, Loader2, RefreshCw, XCircle } from 'lucide-react';
+import { useCallback, useState } from 'react';
 import { useSquareStatus } from '../../hooks/useSquareStatus';
 
 type SyncOperation = 'catalog' | 'orders' | 'staff' | 'costs' | 'initial_sync';
 type SyncDirection = 'from_square' | 'to_square' | 'bidirectional';
 
+interface SyncResult {
+  success: boolean;
+  message: string;
+  details?: {
+    syncedCount?: number;
+    errors?: string[];
+  };
+}
+
 export function SyncSection() {
   const { showSuccess, showError } = useNotification();
   const { refresh: refreshStatus } = useSquareStatus();
   const [syncing, setSyncing] = useState<Set<SyncOperation>>(new Set());
-  const [lastResults, setLastResults] = useState<Record<string, any>>({});
+  const [lastResults, setLastResults] = useState<Record<string, SyncResult>>({});
 
   const handleSync = useCallback(
     async (operation: SyncOperation, direction?: SyncDirection) => {
@@ -30,7 +39,7 @@ export function SyncSection() {
           }),
         });
 
-        const data = await response.json();
+        const data = (await response.json()) as SyncResult & { error?: string };
 
         if (!response.ok) {
           throw new Error(data.error || 'Sync failed');

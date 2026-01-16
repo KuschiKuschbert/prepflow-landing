@@ -9,6 +9,27 @@ import { createSupabaseAdmin } from '@/lib/supabase';
 
 import { logger } from '@/lib/logger';
 
+// Local interfaces for database records
+interface SupplierRecord {
+  id: string;
+  supplier_name: string;
+  [key: string]: unknown;
+}
+
+interface IngredientRecord {
+  id: string;
+  ingredient_name: string;
+  category?: string;
+  [key: string]: unknown;
+}
+
+interface RecipeRecord {
+  id: string;
+  name?: string;
+  recipe_name?: string;
+  [key: string]: unknown;
+}
+
 interface PopulateResults {
   cleaned: number;
   populated: Array<{ table: string; count: number }>;
@@ -21,7 +42,11 @@ interface PopulateResults {
 export async function populateBasicData(
   supabaseAdmin: ReturnType<typeof createSupabaseAdmin>,
   results: PopulateResults,
-): Promise<{ suppliersData?: any[]; ingredientsData?: any[]; recipesData?: any[] }> {
+): Promise<{
+  suppliersData?: SupplierRecord[];
+  ingredientsData?: IngredientRecord[];
+  recipesData?: RecipeRecord[];
+}> {
   // Suppliers - check for existing ones first
   const { data: existingSuppliers, error: suppliersCheckError } = await supabaseAdmin
     .from('suppliers')
@@ -39,7 +64,7 @@ export async function populateBasicData(
     s => !existingSupplierNames.has(s.supplier_name?.toLowerCase().trim()),
   );
 
-  let suppliersData: any[] | undefined;
+  let suppliersData: SupplierRecord[] | undefined;
   if (suppliersToInsert.length > 0) {
     const { data, error: suppliersError } = await supabaseAdmin
       .from('suppliers')
@@ -89,11 +114,12 @@ export async function populateBasicData(
 
   // Count consumables for logging
   const consumablesCount = ingredientsToInsert.reduce(
-    (count, i) => ((i as any).category === 'Consumables' ? count + 1 : count),
+    (count, i) =>
+      (i as unknown as IngredientRecord).category === 'Consumables' ? count + 1 : count,
     0,
   );
 
-  let ingredientsData: any[] | undefined;
+  let ingredientsData: IngredientRecord[] | undefined;
   if (ingredientsToInsert.length > 0) {
     const { data, error: ingredientsError } = await supabaseAdmin
       .from('ingredients')
@@ -169,7 +195,7 @@ export async function populateBasicData(
     .map(r => {
       // Use 'name' column and match API schema (yield and yield_unit)
       // The API uses yield and yield_unit (see app/api/recipes/route.ts line 140-141)
-      const recipeData: any = {
+      const recipeData: { name: string; yield: number; yield_unit: string; instructions: string | null } = {
         name: r.name, // Primary column name
         yield: r.yield || 1, // Default to 1 if not provided
         yield_unit: r.yield_unit || 'servings', // Default to 'servings'
@@ -179,7 +205,7 @@ export async function populateBasicData(
       return recipeData;
     });
 
-  let recipesData: any[] | undefined;
+  let recipesData: RecipeRecord[] | undefined;
   if (recipesToInsert.length > 0) {
     const { data, error: recipesError } = await supabaseAdmin
       .from('recipes')

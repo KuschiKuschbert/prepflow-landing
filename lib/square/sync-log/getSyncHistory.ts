@@ -1,8 +1,8 @@
 /**
  * Get sync history for a user.
  */
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import type { SyncLog } from './types';
 
 /**
@@ -39,7 +39,7 @@ export async function getSyncHistory(
     if (error) {
       logger.error('[Square Sync Log] Error fetching sync history:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         userId,
         limit,
         operationType,
@@ -50,9 +50,9 @@ export async function getSyncHistory(
     }
 
     return (data || []) as SyncLog[];
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Sync Log] Unexpected error fetching sync history:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
       limit,
       operationType,

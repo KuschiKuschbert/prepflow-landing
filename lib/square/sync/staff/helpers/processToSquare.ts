@@ -3,10 +3,10 @@
  */
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { getMappingByPrepFlowId, createAutoMapping } from '../../../mappings';
-import { mapEmployeeToSquareTeamMember } from './mapping';
-import { logStaffSyncOperation } from './common';
+import { createAutoMapping, getMappingByPrepFlowId } from '../../../mappings';
 import type { Employee, SyncResult } from '../../staff';
+import { logStaffSyncOperation } from './common';
+import { mapEmployeeToSquareTeamMember } from './mapping';
 
 /**
  * Process a single PrepFlow employee for sync to Square
@@ -14,7 +14,7 @@ import type { Employee, SyncResult } from '../../staff';
 export async function processPrepFlowEmployee(
   employee: Employee,
   userId: string,
-  teamApi: any,
+  teamApi: any, // Keeping any for SDK api as it varies, but removing others
   result: SyncResult,
 ): Promise<void> {
   if (!supabaseAdmin) {
@@ -31,7 +31,7 @@ export async function processPrepFlowEmployee(
 
     if (mapping) {
       // Update existing Square team member
-      const updateResponse = await (teamApi as any).updateTeamMember(mapping.square_id, {
+      const updateResponse = await teamApi.updateTeamMember(mapping.square_id, {
         teamMember: teamMemberData,
       });
 
@@ -76,7 +76,7 @@ export async function processPrepFlowEmployee(
       }
     } else {
       // Create new Square team member
-      const createResponse = await (teamApi as any).createTeamMember({
+      const createResponse = await teamApi.createTeamMember({
         idempotencyKey: `${employee.id}-${Date.now()}`,
         teamMember: teamMemberData,
       });
@@ -123,14 +123,17 @@ export async function processPrepFlowEmployee(
         );
       }
     }
-  } catch (employeeError: any) {
+  } catch (employeeError: unknown) {
+    const errorMessage = employeeError instanceof Error ? employeeError.message : String(employeeError);
+    const stack = employeeError instanceof Error ? employeeError.stack : undefined;
+
     logger.error('[Square Staff Sync] Error processing employee:', {
-      error: employeeError.message,
+      error: errorMessage,
       employeeId: employee.id,
     });
     result.errors++;
     result.errorMessages?.push(
-      `Failed to process employee ${employee.id}: ${employeeError.message}`,
+      `Failed to process employee ${employee.id}: ${errorMessage}`,
     );
 
     await logStaffSyncOperation({
@@ -138,8 +141,8 @@ export async function processPrepFlowEmployee(
       direction: 'prepflow_to_square',
       entityId: employee.id,
       status: 'error',
-      errorMessage: employeeError.message,
-      errorDetails: { stack: employeeError.stack },
+      errorMessage: errorMessage,
+      errorDetails: { stack },
     });
   }
 }

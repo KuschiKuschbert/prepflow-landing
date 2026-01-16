@@ -7,6 +7,12 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import type { IngredientMatch } from './types';
 
+// Local types for query results
+interface DishRecipeRecord {
+  recipe_id: string;
+  recipe_quantity: number;
+}
+
 /**
  * Get ingredients from recipes for a dish
  * Returns ingredients that can be added as direct dish_ingredients
@@ -38,9 +44,9 @@ export async function getIngredientsFromRecipes(
     return [];
   }
 
-  const recipeIds = dishRecipes
-    .map((dr: any) => dr.recipe_id)
-    .filter((id: any): id is string => Boolean(id));
+  const recipeIds = (dishRecipes as unknown as DishRecipeRecord[])
+    .map((dr: DishRecipeRecord) => dr.recipe_id)
+    .filter((id: string | undefined): id is string => Boolean(id));
   if (recipeIds.length === 0) {
     return [];
   }
@@ -79,7 +85,7 @@ export async function getIngredientsFromRecipes(
     }
 
     const recipeQuantity =
-      (dishRecipes.find((dr: any) => dr.recipe_id === ri.recipe_id) as any)?.recipe_quantity || 1;
+      ((dishRecipes as unknown as DishRecipeRecord[]).find((dr: DishRecipeRecord) => dr.recipe_id === ri.recipe_id))?.recipe_quantity || 1;
     const totalQuantity = (ri.quantity || 0) * recipeQuantity;
 
     if (aggregatedIngredients.has(ri.ingredient_id)) {

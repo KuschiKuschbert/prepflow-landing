@@ -1,4 +1,23 @@
 import type { ExecutiveSummary } from './ExecutiveSummary';
+import type {
+    ReportAllergenRecord,
+    ReportCleaningTask,
+    ReportComplianceGap,
+    ReportComplianceRecord,
+    ReportEmployee,
+    ReportEquipmentMaintenance,
+    ReportHACCPRecord,
+    ReportIncident,
+    ReportLicense,
+    ReportProcedure,
+    ReportQualification,
+    ReportSanitizerLog,
+    ReportStaffHealthDeclaration,
+    ReportSupplierVerification,
+    ReportTemperatureLog,
+    ReportTemperatureViolation,
+    ReportWasteLog,
+} from './report-item-types';
 
 export interface ReportData {
   generated_at: string;
@@ -7,23 +26,23 @@ export interface ReportData {
     end_date: string;
   };
   business_info?: {
-    active_licenses: any[];
+    active_licenses: ReportLicense[];
     total_compliance_records: number;
   };
-  employees?: any[];
+  employees?: ReportEmployee[];
   qualifications?: {
-    all_qualifications: any[];
-    expiring_soon: any[];
-    expired: any[];
+    all_qualifications: ReportQualification[];
+    expiring_soon: ReportQualification[];
+    expired: ReportQualification[];
   };
   compliance_records?: {
-    all_records: any[];
-    active: any[];
-    expiring_soon: any[];
-    expired: any[];
+    all_records: ReportComplianceRecord[];
+    active: ReportComplianceRecord[];
+    expiring_soon: ReportComplianceRecord[];
+    expired: ReportComplianceRecord[];
   };
   temperature_logs?: {
-    logs: any[];
+    logs: ReportTemperatureLog[];
     total_logs: number;
     date_range: {
       start: string;
@@ -32,8 +51,8 @@ export interface ReportData {
   };
   temperature_violations?: {
     total_violations: number;
-    out_of_range: any[];
-    danger_zone: any[];
+    out_of_range: ReportTemperatureViolation[];
+    danger_zone: ReportTemperatureViolation[];
     violation_summary: {
       below_minimum: number;
       above_maximum: number;
@@ -41,10 +60,10 @@ export interface ReportData {
     };
   };
   cleaning_records?: {
-    tasks: any[];
-    completed: any[];
-    pending: any[];
-    overdue: any[];
+    tasks: ReportCleaningTask[];
+    completed: ReportCleaningTask[];
+    pending: ReportCleaningTask[];
+    overdue: ReportCleaningTask[];
     total_tasks: number;
     date_range: {
       start: string;
@@ -52,16 +71,16 @@ export interface ReportData {
     };
   };
   sanitizer_logs?: {
-    logs: any[];
+    logs: ReportSanitizerLog[];
     total_logs: number;
-    out_of_range: any[];
+    out_of_range: ReportSanitizerLog[];
     date_range: {
       start: string;
       end: string;
     };
   };
   staff_health?: {
-    declarations: any[];
+    declarations: ReportStaffHealthDeclaration[];
     total_declarations: number;
     unhealthy_count: number;
     excluded_count: number;
@@ -71,7 +90,7 @@ export interface ReportData {
     };
   };
   incidents?: {
-    incidents: any[];
+    incidents: ReportIncident[];
     total_incidents: number;
     by_severity: {
       critical: number;
@@ -85,45 +104,45 @@ export interface ReportData {
       resolved: number;
       closed: number;
     };
-    unresolved: any[];
+    unresolved: ReportIncident[];
   };
   haccp?: {
-    records: any[];
+    records: ReportHACCPRecord[];
     total_records: number;
-    out_of_limit: any[];
+    out_of_limit: ReportHACCPRecord[];
     by_step: Record<string, number>;
   };
   allergens?: {
-    records: any[];
+    records: ReportAllergenRecord[];
     total_records: number;
-    inaccurate_declarations: any[];
-    high_risk_items: any[];
+    inaccurate_declarations: ReportAllergenRecord[];
+    high_risk_items: ReportAllergenRecord[];
   };
   equipment_maintenance?: {
-    records: any[];
+    records: ReportEquipmentMaintenance[];
     total_records: number;
-    critical_equipment: any[];
-    overdue_maintenance: any[];
+    critical_equipment: ReportEquipmentMaintenance[];
+    overdue_maintenance: ReportEquipmentMaintenance[];
   };
   waste_management?: {
-    logs: any[];
+    logs: ReportWasteLog[];
     total_logs: number;
     by_type: Record<string, number>;
   };
   procedures?: {
-    procedures: any[];
+    procedures: ReportProcedure[];
     total_procedures: number;
-    overdue_reviews: any[];
+    overdue_reviews: ReportProcedure[];
     by_type: Record<string, number>;
   };
   supplier_verification?: {
-    verifications: any[];
+    verifications: ReportSupplierVerification[];
     total_verifications: number;
-    invalid_certificates: any[];
-    expired_certificates: any[];
+    invalid_certificates: ReportSupplierVerification[];
+    expired_certificates: ReportSupplierVerification[];
   };
   compliance_gaps?: {
-    gaps: any[];
+    gaps: ReportComplianceGap[];
     total_gaps: number;
     critical: number;
     high: number;

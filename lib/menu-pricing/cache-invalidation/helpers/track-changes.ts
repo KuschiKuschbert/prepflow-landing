@@ -3,6 +3,7 @@
  */
 
 import { trackChangeForLockedMenus } from '@/lib/menu-lock/change-tracking';
+import type { ChangeDetails, ChangeType } from '@/lib/menu-lock/change-tracking/types';
 
 /**
  * Track changes for locked menus.
@@ -12,8 +13,8 @@ export async function trackLockedMenuChanges(
   entityType: 'recipe' | 'dish' | 'ingredient',
   entityId: string,
   entityName: string | undefined,
-  changeType: string,
-  changeDetails: any,
+  changeType: ChangeType,
+  changeDetails: ChangeDetails,
   changedBy: string | null,
 ): Promise<void> {
   if (lockedMenuIds.size > 0 && entityName) {
@@ -21,7 +22,7 @@ export async function trackLockedMenuChanges(
       entityType,
       entityId,
       entityName,
-      changeType as any,
+      changeType,
       changeDetails,
       changedBy,
     );

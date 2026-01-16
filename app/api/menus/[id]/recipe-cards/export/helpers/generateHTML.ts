@@ -1,25 +1,11 @@
 /**
  * Generate HTML export for recipe cards
  */
+import { generateExportTemplate } from '@/lib/exports/pdf-template';
 import { NextResponse } from 'next/server';
-import { generateExportTemplate, escapeHtml } from '@/lib/exports/pdf-template';
 import { buildCategoryHTML } from './generateHTML/buildCategoryHTML';
 
-interface RecipeCardData {
-  id: string;
-  menuItemId: string;
-  menuItemName: string;
-  title: string;
-  baseYield: number;
-  ingredients: Array<{
-    name: string;
-    quantity: number;
-    unit: string;
-  }>;
-  methodSteps: string[];
-  notes: string[];
-  category: string;
-}
+import { RecipeCardData } from './generateCSV';
 
 const recipeCardStyles = `
   .recipe-cards {

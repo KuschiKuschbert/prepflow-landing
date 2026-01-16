@@ -64,7 +64,7 @@ export async function encryptSquareToken(token: string): Promise<string> {
 
     // Convert to base64 for storage
     return Buffer.from(combined).toString('base64');
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Token Encryption] Failed to encrypt token:', error);
     throw new Error('Failed to encrypt Square access token');
   }
@@ -87,7 +87,7 @@ export async function decryptSquareToken(encryptedToken: string): Promise<string
     const decoder = new TextDecoder();
 
     return decoder.decode(decrypted);
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Token Decryption] Failed to decrypt token:', error);
     throw new Error(
       'Failed to decrypt Square access token. Token may be corrupted or encryption key may have changed.',

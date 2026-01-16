@@ -4,14 +4,20 @@
  */
 
 import {
-  formatAustralianDate,
-  getDaysUntilExpiry,
-  getExpiryStatus,
-  formatAUD,
+    formatAustralianDate,
+    getDaysUntilExpiry
 } from '../australian-standards';
-import type { ReportData, StatusColors, StatusLabels } from '../report-types';
+import type { ReportEmployee } from '../report-types/report-item-types';
 
-export function generateEmployeeRoster(employees: any[]): string {
+// Type for qualification with expiry info
+interface EmployeeQualification {
+  id?: string;
+  qualification_name?: string;
+  expiry_date?: string | null;
+  [key: string]: unknown;
+}
+
+export function generateEmployeeRoster(employees: ReportEmployee[]): string {
   if (!employees || employees.length === 0) {
     return `
       <div class="section">
@@ -38,12 +44,12 @@ export function generateEmployeeRoster(employees: any[]): string {
           ${employees
             .map(emp => {
               const qualifications = emp.employee_qualifications || [];
-              const expiringQuals = qualifications.filter((q: any) => {
-                const days = getDaysUntilExpiry(q.expiry_date);
+              const expiringQuals = qualifications.filter((q: EmployeeQualification) => {
+                const days = getDaysUntilExpiry(q.expiry_date ?? null);
                 return days !== null && days > 0 && days <= 90;
               });
-              const expiredQuals = qualifications.filter((q: any) => {
-                const days = getDaysUntilExpiry(q.expiry_date);
+              const expiredQuals = qualifications.filter((q: EmployeeQualification) => {
+                const days = getDaysUntilExpiry(q.expiry_date ?? null);
                 return days !== null && days < 0;
               });
 

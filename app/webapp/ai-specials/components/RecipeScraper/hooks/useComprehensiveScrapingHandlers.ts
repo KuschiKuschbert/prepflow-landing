@@ -2,14 +2,15 @@
  * Hook for comprehensive scraping handlers
  */
 
-import { useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
+import { useCallback } from 'react';
+import { ComprehensiveJobStatus } from '../types';
 import { createStopHandler } from './useComprehensiveScrapingHandlers/stop-handler';
 
 interface UseComprehensiveScrapingHandlersParams {
   setComprehensiveScraping: (value: boolean) => void;
-  setComprehensiveStatus: (status: unknown) => void;
+  setComprehensiveStatus: (status: ComprehensiveJobStatus | null) => void;
   setStatusPolling: (polling: boolean) => void;
   fetchComprehensiveStatus: () => Promise<void>;
 }

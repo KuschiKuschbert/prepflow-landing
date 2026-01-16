@@ -1,13 +1,7 @@
 /**
  * Collect recipe IDs and dish IDs from menu items.
  *
- * @param {any[]} menuItems - Menu items array
- * @returns {{recipeIds: Set<string>, dishIds: Set<string>, recipeInstructionsMap: Map<string, string | null>}} Collected IDs and instructions
- */
-/**
- * Collect recipe IDs and dish IDs from menu items.
- *
- * @param {any[]} menuItems - Menu items array
+ * @param {MenuItemData[]} menuItems - Menu items array
  * @returns {{recipeIds: Set<string>, dishIds: Set<string>, recipeInstructionsMap: Map<string, string | null>}} Collected IDs and instructions
  */
 import { MenuItemData } from '../types';

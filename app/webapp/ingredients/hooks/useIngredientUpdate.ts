@@ -1,9 +1,9 @@
 'use client';
 
-import { supabase } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
-import { useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
+import { supabase } from '@/lib/supabase';
+import { useCallback } from 'react';
 import { formatIngredientUpdates } from './helpers/formatIngredientUpdates';
 
 interface UseIngredientUpdateProps<
@@ -50,7 +50,7 @@ export function useIngredientUpdate<
               body: JSON.stringify({ id, ...updates }),
             });
 
-            const result = await response.json();
+            const result = (await response.json()) as { success?: boolean; data?: T };
             if (!response.ok || !result.success) {
               // Revert optimistic update on error
               setIngredients(originalIngredients);
@@ -59,8 +59,15 @@ export function useIngredientUpdate<
               return;
             }
 
+            const serverData = result.data;
+            if (!serverData) {
+              setIngredients(originalIngredients);
+              setError('Failed to receive updated data from server');
+              return;
+            }
+
             // Replace optimistic update with server response
-            setIngredients(prev => prev.map(ing => (ing.id === id ? result.data : ing)));
+            setIngredients(prev => prev.map(ing => (ing.id === id ? serverData : ing)));
             if (setEditingIngredient) setEditingIngredient(null);
             showSuccess('Ingredient updated successfully');
             return;

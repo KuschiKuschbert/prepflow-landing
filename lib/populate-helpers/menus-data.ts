@@ -2,11 +2,18 @@
  * Helper functions for populating menus and menu_items
  */
 
-import { Dish, Recipe } from '@/app/webapp/recipes/types';
+import { Dish } from '@/app/webapp/recipes/types';
 import { logger } from '@/lib/logger';
 import { cleanSampleMenus } from '@/lib/sample-menus-clean';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { buildMenuItemsData, createMenuLookupMaps, createMenuMap } from './menus-data-helpers';
+
+// Minimal recipe interface - accepts both Recipe and RecipeRecord types
+interface MinimalRecipe {
+  id: string;
+  name?: string;
+  recipe_name?: string;
+}
 
 interface PopulateResults {
   cleaned: number;
@@ -21,7 +28,7 @@ export async function populateMenus(
   supabaseAdmin: ReturnType<typeof createSupabaseAdmin>,
   results: PopulateResults,
   dishesData: Pick<Dish, 'id' | 'dish_name'>[],
-  recipesData: Pick<Recipe, 'id' | 'recipe_name'>[],
+  recipesData: MinimalRecipe[],
 ) {
   if (!dishesData || dishesData.length === 0) {
     logger.dev('No dishes available for menu creation');

@@ -2,8 +2,18 @@
  * Helpers to find menu items by recipe, dish, or ingredient.
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+
+// Local types for query results
+interface MenuItemRecord {
+  id: string;
+  menu_id: string;
+}
+
+interface DishIngredientRecord {
+  dish_id: string;
+}
 
 /**
  * Find menu items using a specific recipe.
@@ -91,11 +101,11 @@ export async function findMenuItemsWithIngredient(
       .eq('ingredient_id', ingredientId);
 
     // Wrap in Promise.resolve to handle PromiseLike
-    let dishIngredients: any = null;
-    let dishError: any = null;
+    let dishIngredients: DishIngredientRecord[] | null = null;
+    let dishError: { message: string; code?: string } | null = null;
     try {
       const result = await Promise.resolve(dishIngredientsQuery);
-      dishIngredients = result.data;
+      dishIngredients = result.data as DishIngredientRecord[] | null;
       dishError = result.error;
     } catch {
       dishIngredients = null;
@@ -114,11 +124,11 @@ export async function findMenuItemsWithIngredient(
       ? [...new Set(recipeIngredients.map(ri => ri.recipe_id))]
       : [];
     const dishIds = dishIngredients
-      ? [...new Set(dishIngredients.map((di: any) => di.dish_id))]
+      ? [...new Set(dishIngredients.map((di: DishIngredientRecord) => di.dish_id))]
       : [];
 
     // Find menu items using these recipes or dishes
-    const menuItemQueries: Promise<any>[] = [];
+    const menuItemQueries: Promise<MenuItemRecord[]>[] = [];
 
     if (recipeIds.length > 0) {
       menuItemQueries.push(

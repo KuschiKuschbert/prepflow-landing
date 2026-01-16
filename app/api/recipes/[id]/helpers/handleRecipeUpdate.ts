@@ -3,16 +3,18 @@
  */
 
 import {
-  invalidateDishesWithRecipe,
-  invalidateRecipeAllergenCache,
+    invalidateDishesWithRecipe,
+    invalidateRecipeAllergenCache,
 } from '@/lib/allergens/cache-invalidation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getUserEmail } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
+import type { ChangeDetails, ChangeType } from '@/lib/menu-lock/change-tracking/types';
 import { invalidateMenuItemsWithRecipe } from '@/lib/menu-pricing/cache-invalidation';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest } from 'next/server';
 import { buildUpdateData } from './buildUpdateData';
+import type { RecipeRecord } from './detectRecipeChanges';
 import { detectRecipeChanges } from './detectRecipeChanges';
 
 /**
@@ -37,14 +39,14 @@ export async function handleRecipeUpdate(
   }
 
   // Fetch current recipe to detect changes
-  let currentRecipe: unknown = null;
+  let currentRecipe: RecipeRecord | null = null;
   try {
     const { data } = await supabaseAdmin!
       .from('recipes')
       .select('recipe_name, yield, instructions')
       .eq('id', recipeId)
       .single();
-    currentRecipe = data;
+    currentRecipe = data as RecipeRecord | null;
   } catch (err) {
     logger.warn('[Recipes API] Could not fetch current recipe for change detection:', err);
   }
@@ -78,7 +80,7 @@ export async function handleRecipeUpdate(
   }
 
   const recipeName =
-    (updatedRecipe as any).recipe_name || (currentRecipe as any)?.recipe_name || 'Unknown Recipe';
+    ((updatedRecipe as Record<string, unknown>).recipe_name as string) || (currentRecipe as RecipeRecord)?.recipe_name as string || 'Unknown Recipe';
 
   // Invalidate caches if needed
   if (ingredientsChanged) {
@@ -104,8 +106,8 @@ export async function handleRecipeUpdate(
         await invalidateMenuItemsWithRecipe(
           recipeId,
           recipeName,
-          changeType,
-          changeDetails,
+          changeType as ChangeType,
+          changeDetails as unknown as ChangeDetails,
           userEmail,
         );
       } catch (err) {

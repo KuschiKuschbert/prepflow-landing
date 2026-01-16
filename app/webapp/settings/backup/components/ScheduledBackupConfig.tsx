@@ -44,13 +44,13 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
         }),
       });
 
-      const data = await res.json();
+      const result = (await res.json()) as { error?: string };
 
       if (res.ok) {
         showSuccess('Scheduled backup settings saved');
         onSettingsChange?.();
       } else {
-        showError(data.error || 'Failed to save settings');
+        showError(result.error || 'Failed to save settings');
       }
     } catch (error: unknown) {
       logger.error('[ScheduledBackupConfig.tsx] Error in catch block:', {
@@ -93,7 +93,7 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
       } else {
         // Rollback on error
         setEnabled(originalEnabled);
-        const data = await res.json();
+        const data = (await res.json()) as { error?: string };
         showError(data.error || 'Failed to disable scheduled backups');
       }
     } catch (error: unknown) {

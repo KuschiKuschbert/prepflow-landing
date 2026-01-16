@@ -1,5 +1,5 @@
 import { type NavigationItemConfig } from '@/app/webapp/components/navigation/nav-items';
-import { type OptimizationResult, type NavigationPattern } from '../../schema';
+import { type NavigationPattern, type OptimizationResult } from '../../schema';
 
 /**
  * Create optimization result from patterns.
@@ -23,13 +23,13 @@ export function createOptimizationResult(
   });
 
   // Group items by category
-  const itemsByCategory = new Map<string, NavigationItemConfig[]>();
+  const itemsByCategory = new Map<string, Array<NavigationItemConfig & { originalIndex: number }>>();
   items.forEach((item, index) => {
     const category = item.category || 'other';
     if (!itemsByCategory.has(category)) {
       itemsByCategory.set(category, []);
     }
-    itemsByCategory.get(category)!.push({ ...item, originalIndex: index } as any);
+    itemsByCategory.get(category)!.push({ ...item, originalIndex: index });
   });
 
   // Optimize items within selected sections
@@ -52,7 +52,7 @@ export function createOptimizationResult(
       });
 
       sortedItems.forEach((item, sortedIndex) => {
-        const originalIndex = (item as any).originalIndex;
+        const originalIndex = item.originalIndex;
         const score = patternMap.get(item.href) || 0;
         optimizedItems.push({
           href: item.href,
@@ -66,7 +66,7 @@ export function createOptimizationResult(
     } else {
       // Keep original order for non-selected sections
       categoryItems.forEach((item, categoryIndex) => {
-        const originalIndex = (item as any).originalIndex;
+        const originalIndex = item.originalIndex;
         optimizedItems.push({
           href: item.href,
           originalIndex,

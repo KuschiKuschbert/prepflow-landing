@@ -6,8 +6,8 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { getSquareClient } from '../../client';
 import { getSquareConfig } from '../../config';
 import { logSyncOperation } from '../../sync-log';
-import { processDishCostSync } from './helpers/processDish';
 import type { SyncResult } from '../costs';
+import { processDishCostSync } from './helpers/processDish';
 
 /**
  * Sync food costs from PrepFlow to Square
@@ -82,7 +82,7 @@ export async function syncCostsToSquare(userId: string, dishIds?: string[]): Pro
 
     // Process each dish
     for (const dishData of dishesWithMappings) {
-      await processDishCostSync(dishData as any, client, userId, result);
+      await processDishCostSync(dishData, client, userId, result);
     }
 
     result.success = result.errors === 0;
@@ -92,22 +92,22 @@ export async function syncCostsToSquare(userId: string, dishIds?: string[]): Pro
     };
 
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Cost Sync] Fatal error:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
-      stack: error.stack,
+      stack: error instanceof Error ? error.stack : undefined,
     });
 
-    result.errorMessages?.push(`Fatal error: ${error.message}`);
+    result.errorMessages?.push(`Fatal error: ${error instanceof Error ? error.message : String(error)}`);
 
     await logSyncOperation({
       user_id: userId,
       operation_type: 'sync_costs',
       direction: 'prepflow_to_square',
       status: 'error',
-      error_message: error.message,
-      error_details: { stack: error.stack },
+      error_message: error instanceof Error ? error.message : String(error),
+      error_details: { stack: error instanceof Error ? error.stack : undefined },
     });
 
     return result;

@@ -1,8 +1,8 @@
 /**
  * Get sync errors for a user.
  */
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import type { SyncLog } from './types';
 
 /**
@@ -28,7 +28,7 @@ export async function getSyncErrors(userId: string, days: number = 7): Promise<S
     if (error) {
       logger.error('[Square Sync Log] Error fetching sync errors:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         userId,
         days,
         context: { endpoint: 'getSyncErrors', operation: 'select' },
@@ -37,9 +37,9 @@ export async function getSyncErrors(userId: string, days: number = 7): Promise<S
     }
 
     return (data || []) as SyncLog[];
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Sync Log] Unexpected error fetching sync errors:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
       days,
       context: { endpoint: 'getSyncErrors', operation: 'select' },

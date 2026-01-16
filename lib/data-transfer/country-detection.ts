@@ -103,11 +103,11 @@ export async function getUserCountry(userEmail: string, request?: Request): Prom
       .single();
 
     if (error) {
-      if ((error as any).code !== 'PGRST116') {
+      if ((error as { code?: string }).code !== 'PGRST116') {
         // PGRST116 is "not found" - that's okay, user not in database yet
         logger.warn('[Country Detection] Error fetching user country:', {
           error: error.message,
-          code: (error as any).code,
+          code: (error as { code?: string }).code,
           userEmail,
         });
       }
@@ -177,7 +177,7 @@ export async function storeUserCountry(userEmail: string, countryCode: string): 
     if (error) {
       logger.error('[Country Detection] Failed to store user country:', {
         error: error.message,
-        code: (error as any).code,
+        code: (error as { code?: string }).code,
         userEmail,
         countryCode,
       });

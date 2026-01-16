@@ -4,17 +4,17 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { getMappingBySquareId } from '../../../mappings';
-import { mapSquareTeamMemberToEmployee } from './mapping';
-import { logStaffSyncOperation } from './common';
-import { updateExistingEmployee } from './updateExistingEmployee';
-import { createNewEmployee } from './createNewEmployee';
 import type { SyncResult } from '../../staff';
+import { logStaffSyncOperation } from './common';
+import { createNewEmployee } from './createNewEmployee';
+import { mapSquareTeamMemberToEmployee } from './mapping';
+import { updateExistingEmployee } from './updateExistingEmployee';
 
 /**
  * Process a single Square team member for sync to PrepFlow
  */
 export async function processSquareTeamMember(
-  teamMember: any,
+  teamMember: { id?: string }, // Minimal type for what we access
   userId: string,
   result: SyncResult,
 ): Promise<void> {
@@ -37,14 +37,14 @@ export async function processSquareTeamMember(
     } else {
       await createNewEmployee(employeeData, squareTeamMemberId, userId, result);
     }
-  } catch (memberError: any) {
+  } catch (memberError: unknown) {
     logger.error('[Square Staff Sync] Error processing Square team member:', {
-      error: memberError.message,
+      error: memberError instanceof Error ? memberError.message : String(memberError),
       squareTeamMemberId: teamMember.id,
     });
     result.errors++;
     result.errorMessages?.push(
-      `Failed to process Square team member ${teamMember.id}: ${memberError.message}`,
+      `Failed to process Square team member ${teamMember.id}: ${memberError instanceof Error ? memberError.message : String(memberError)}`,
     );
 
     await logStaffSyncOperation({
@@ -52,8 +52,8 @@ export async function processSquareTeamMember(
       direction: 'square_to_prepflow',
       squareId: teamMember.id,
       status: 'error',
-      errorMessage: memberError.message,
-      errorDetails: { stack: memberError.stack },
+      errorMessage: memberError instanceof Error ? memberError.message : String(memberError),
+      errorDetails: { stack: memberError instanceof Error ? memberError.stack : undefined },
     });
   }
 }

@@ -2,6 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { buildParLevelData } from './buildParLevelData';
+import { ParLevelInput } from './types';
 
 /**
  * Update a par level.
@@ -25,7 +26,7 @@ export async function updateParLevel(id: string, updates: unknown) {
     throw ApiErrorHandler.createError('Par level not found', 'NOT_FOUND', 404);
   }
 
-  const updateData = buildParLevelData(updates);
+  const updateData = buildParLevelData(updates as ParLevelInput);
 
   // Remove null/undefined values
   Object.keys(updateData).forEach(key => {
@@ -57,7 +58,7 @@ export async function updateParLevel(id: string, updates: unknown) {
   if (error) {
     logger.error('[Par Levels API] Database error updating par level:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: { endpoint: '/api/par-levels', operation: 'PUT', parLevelId: id },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

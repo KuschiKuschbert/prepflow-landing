@@ -3,12 +3,12 @@
  * Fetches user roles from Auth0 Management API when not included in token
  */
 import { ManagementClient } from 'auth0';
-import { logger } from './logger';
-import { getUserRoles } from './auth0-management/helpers/getUserRoles';
-import { getSocialConnections } from './auth0-management/helpers/getSocialConnections';
-import { verifyCallbackUrls } from './auth0-management/helpers/verifyCallbackUrls';
-import { getUserProfileFromManagementAPI } from './auth0-management/helpers/getUserProfile';
 import { fetchProfileWithRetry } from './auth0-management/helpers/fetchProfileWithRetry';
+import { getSocialConnections } from './auth0-management/helpers/getSocialConnections';
+import { getUserProfileFromManagementAPI } from './auth0-management/helpers/getUserProfile';
+import { getUserRoles } from './auth0-management/helpers/getUserRoles';
+import { verifyCallbackUrls } from './auth0-management/helpers/verifyCallbackUrls';
+import { logger } from './logger';
 
 let managementClient: ManagementClient | null = null;
 
@@ -67,12 +67,12 @@ export function extractAuth0UserId(sub: string | undefined): string | null {
  * Connection type from Auth0 Management API
  */
 export interface Connection {
-  id: string;
-  name: string;
-  strategy: string;
+  id?: string;
+  name?: string;
+  strategy?: string;
   enabled_clients?: string[];
   is_domain_connection?: boolean;
-  options?: Record<string, any>;
+  options?: Record<string, unknown>;
 }
 
 /**
@@ -91,13 +91,13 @@ export { getSocialConnections };
 
 // Google connection functions moved to lib/auth0-google-connection.ts
 // Re-export for backward compatibility
-export { verifyGoogleConnection, enableGoogleConnectionForApp } from './auth0-google-connection';
+    export { enableGoogleConnectionForApp, verifyGoogleConnection } from './auth0-google-connection';
 
 /** Verify callback URLs match Auth0 configuration */
 export { verifyCallbackUrls };
 
 /** Get user profile from Auth0 Management API */
-export { getUserProfileFromManagementAPI };
+    export { getUserProfileFromManagementAPI };
 
 /** Fetch user profile with timeout and retry logic */
-export { fetchProfileWithRetry };
+    export { fetchProfileWithRetry };

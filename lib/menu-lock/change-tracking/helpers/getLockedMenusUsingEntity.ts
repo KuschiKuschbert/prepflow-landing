@@ -1,5 +1,5 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import type { EntityType } from '../types';
 import { getLockedMenusByMenuItems } from './getLockedMenusUsingEntity/helpers/getLockedMenusByMenuItems';
 
@@ -62,7 +62,7 @@ export async function getLockedMenusUsingEntity(
       }
 
       const recipeIds = recipeIngredients
-        ? [...new Set(recipeIngredients.map((ri: any) => ri.recipe_id))]
+        ? [...new Set(recipeIngredients.map((ri: { recipe_id: string }) => ri.recipe_id))]
         : [];
       const dishIds = dishIngredients ? [...new Set(dishIngredients.map(di => di.dish_id))] : [];
 
@@ -107,7 +107,7 @@ export async function getLockedMenusUsingEntity(
       }
 
       const menuItemResults = await Promise.all(menuItemQueries);
-      const allMenuIds = [...new Set(menuItemResults.flat().map((item: any) => item.menu_id))];
+      const allMenuIds = [...new Set(menuItemResults.flat().map((item: { menu_id: string }) => item.menu_id))];
 
       if (allMenuIds.length > 0) {
         const locked = await getLockedMenusByMenuItems(allMenuIds);

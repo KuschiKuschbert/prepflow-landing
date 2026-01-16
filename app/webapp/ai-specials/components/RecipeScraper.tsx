@@ -5,18 +5,18 @@
 
 'use client';
 
-import { useEffect } from 'react';
 import { logger } from '@/lib/logger';
+import { useEffect } from 'react';
+import { AISpecialsTabs } from './RecipeScraper/AISpecialsTabs';
 import { ComprehensiveScraperSection } from './RecipeScraper/ComprehensiveScraperSection';
 import { FormattingDashboard } from './RecipeScraper/FormattingDashboard';
-import { RecipeListSection } from './RecipeScraper/RecipeListSection';
-import { AISpecialsTabs } from './RecipeScraper/AISpecialsTabs';
-import { useRecipeScraperState } from './RecipeScraper/hooks/useRecipeScraperState';
-import { useRecipeFetching } from './RecipeScraper/hooks/useRecipeFetching';
-import { useProcessingStatus } from './RecipeScraper/hooks/useProcessingStatus';
-import { useStatusPolling } from './RecipeScraper/hooks/useStatusPolling';
 import { useComprehensiveScrapingHandlers } from './RecipeScraper/hooks/useComprehensiveScrapingHandlers';
 import { useFormattingHandlers } from './RecipeScraper/hooks/useFormattingHandlers';
+import { useProcessingStatus } from './RecipeScraper/hooks/useProcessingStatus';
+import { useRecipeFetching } from './RecipeScraper/hooks/useRecipeFetching';
+import { useRecipeScraperState } from './RecipeScraper/hooks/useRecipeScraperState';
+import { useStatusPolling } from './RecipeScraper/hooks/useStatusPolling';
+import { RecipeListSection } from './RecipeScraper/RecipeListSection';
 
 export function RecipeScraper() {
   const state = useRecipeScraperState();

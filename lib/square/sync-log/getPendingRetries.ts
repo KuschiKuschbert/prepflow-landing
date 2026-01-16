@@ -1,8 +1,8 @@
 /**
  * Get pending retry operations.
  */
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import type { SyncLog } from './types';
 
 /**
@@ -29,7 +29,7 @@ export async function getPendingRetries(userId: string): Promise<SyncLog[]> {
       .order('next_retry_at', { ascending: true });
 
     // Filter to only include items where retry_count < max_retries
-    const filteredData = (data || []).filter((log: any) => {
+    const filteredData = (data || []).filter((log: SyncLog) => {
       const retryCount = log.retry_count || 0;
       const maxRetries = log.max_retries || 5;
       return retryCount < maxRetries;
@@ -38,7 +38,7 @@ export async function getPendingRetries(userId: string): Promise<SyncLog[]> {
     if (error) {
       logger.error('[Square Sync Log] Error fetching pending retries:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         userId,
         context: { endpoint: 'getPendingRetries', operation: 'select' },
       });
@@ -46,9 +46,9 @@ export async function getPendingRetries(userId: string): Promise<SyncLog[]> {
     }
 
     return filteredData as SyncLog[];
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Sync Log] Unexpected error fetching pending retries:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
       context: { endpoint: 'getPendingRetries', operation: 'select' },
     });

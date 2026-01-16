@@ -6,9 +6,9 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { getSquareClient } from '../../client';
 import { getSquareConfig } from '../../config';
 import { logSyncOperation } from '../../sync-log';
-import { processSquareTeamMember } from './helpers/processFromSquare';
-import { updateLastStaffSyncTimestamp } from './helpers/common';
 import type { SyncResult } from '../staff';
+import { updateLastStaffSyncTimestamp } from './helpers/common';
+import { processSquareTeamMember } from './helpers/processFromSquare';
 
 /**
  * Sync team members from Square to PrepFlow
@@ -42,6 +42,8 @@ export async function syncStaffFromSquare(userId: string): Promise<SyncResult> {
 
     // Fetch Square team members
     const teamApi = client.team;
+    // Type assertion for Square SDK method until stricter types are available
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const listResponse = await (teamApi as any).searchTeamMembers({
       query: {
         filter: {
@@ -72,22 +74,22 @@ export async function syncStaffFromSquare(userId: string): Promise<SyncResult> {
 
     result.success = result.errors === 0;
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Staff Sync] Fatal error:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
-      stack: error.stack,
+      stack: error instanceof Error ? error.stack : undefined,
     });
 
-    result.errorMessages?.push(`Fatal error: ${error.message}`);
+    result.errorMessages?.push(`Fatal error: ${error instanceof Error ? error.message : String(error)}`);
 
     await logSyncOperation({
       user_id: userId,
       operation_type: 'sync_staff',
       direction: 'square_to_prepflow',
       status: 'error',
-      error_message: error.message,
-      error_details: { stack: error.stack },
+      error_message: error instanceof Error ? error.message : String(error),
+      error_details: { stack: error instanceof Error ? error.stack : undefined },
     });
 
     return result;

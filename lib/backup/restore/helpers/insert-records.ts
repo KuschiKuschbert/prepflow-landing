@@ -13,7 +13,7 @@ const BATCH_SIZE = 100;
 export async function insertRecords(
   supabase: SupabaseClient,
   tableName: string,
-  records: any[],
+  records: Record<string, unknown>[],
   userId: string,
 ): Promise<{ insertedCount: number; error?: string }> {
   if (records.length === 0) {
@@ -48,15 +48,16 @@ export async function insertRecords(
 
     logger.dev(`[Restore] Restored ${insertedCount} records to ${tableName}`);
     return { insertedCount };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     logger.error('[insert-records.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
+      error: message,
       stack: error instanceof Error ? error.stack : undefined,
     });
 
     return {
       insertedCount,
-      error: `Failed to restore ${tableName}: ${error.message}`,
+      error: `Failed to restore ${tableName}: ${message}`,
     };
   }
 }

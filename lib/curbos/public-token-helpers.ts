@@ -3,7 +3,7 @@
  */
 
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import type { PostgrestError } from '@supabase/supabase-js';
 import crypto from 'crypto';
 
 /**
@@ -16,7 +16,7 @@ export function generatePublicToken(): string {
 /**
  * Handle token fetch errors
  */
-export function handleTokenFetchError(error: any, userEmail: string): void {
+export function handleTokenFetchError(error: PostgrestError, userEmail: string): void {
   logger.error('[CurbOS Public Token] Error fetching existing token:', {
     error: error.message,
     code: error.code,
@@ -36,7 +36,7 @@ export function handleTokenFetchError(error: any, userEmail: string): void {
 /**
  * Handle token insert errors
  */
-export function handleTokenInsertError(error: any, userEmail: string): void {
+export function handleTokenInsertError(error: PostgrestError, userEmail: string): void {
   logger.error('[CurbOS Public Token] Error inserting new token:', {
     error: error.message,
     code: error.code,

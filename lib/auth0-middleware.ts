@@ -1,8 +1,7 @@
-import { auth0, isAuthRequired } from './auth0';
+import { logger } from '@/lib/logger';
 import type { NextRequest } from 'next/server';
 import { isEmailAllowed } from './allowlist';
-import { isAdmin } from './admin-utils';
-import { logger } from '@/lib/logger';
+import { auth0, isAuthRequired } from './auth0';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -30,6 +29,11 @@ export async function getUserEmailFromSession(req: NextRequest): Promise<string 
   }
 }
 
+interface Auth0UserClaims {
+  [key: string]: unknown;
+  'https://prepflow.org/roles'?: string[];
+}
+
 /**
  * Extract user roles from Auth0 session for middleware
  * Returns empty array if not authenticated or in development (bypass mode)
@@ -46,7 +50,8 @@ export async function getUserRolesFromSession(req: NextRequest): Promise<string[
       return [];
     }
 
-    const roles = (session.user as any)['https://prepflow.org/roles'] || [];
+    const claims = session.user as Auth0UserClaims;
+    const roles = claims['https://prepflow.org/roles'] || [];
     return Array.isArray(roles) ? roles : [];
   } catch (error) {
     logger.error('[auth0-middleware.ts] Error in catch block:', {
@@ -116,7 +121,8 @@ export async function getUserFromSession(req: NextRequest): Promise<{
       return null;
     }
 
-    const roles = (session.user as any)['https://prepflow.org/roles'] || [];
+    const claims = session.user as Auth0UserClaims;
+    const roles = claims['https://prepflow.org/roles'] || [];
 
     return {
       email: session.user.email || '',

@@ -1,11 +1,44 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import Link from 'next/link';
 import { Icon } from '@/components/ui/Icon';
-import { ArrowLeft, Package, BookOpen, Utensils, Thermometer, Sparkles } from 'lucide-react';
 import { logger } from '@/lib/logger';
+import { ArrowLeft, BookOpen, Package, Sparkles, Thermometer, Utensils } from 'lucide-react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+interface IngredientData {
+  id: string;
+  name?: string;
+  ingredient_name?: string;
+  created_at?: string;
+}
+
+interface RecipeData {
+  id: string;
+  name?: string;
+  recipe_name?: string;
+  created_at?: string;
+}
+
+interface DishData {
+  id: string;
+  name?: string;
+  dish_name?: string;
+  created_at?: string;
+}
+
+interface TemperatureLogData {
+  id: string;
+  name?: string;
+  created_at?: string;
+}
+
+interface CleaningTaskData {
+  id: string;
+  name?: string;
+  created_at?: string;
+}
 
 interface UserData {
   ingredients: number;
@@ -14,11 +47,11 @@ interface UserData {
   temperatureLogs: number;
   cleaningTasks: number;
   data: {
-    ingredients: any[];
-    recipes: any[];
-    dishes: any[];
-    temperatureLogs: any[];
-    cleaningTasks: any[];
+    ingredients: IngredientData[];
+    recipes: RecipeData[];
+    dishes: DishData[];
+    temperatureLogs: TemperatureLogData[];
+    cleaningTasks: CleaningTaskData[];
   };
 }
 
@@ -113,7 +146,7 @@ export default function UserDataPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
-            {data.map((item: any, index: number) => (
+            {data.map((item: { id?: string; name?: string; ingredient_name?: string; recipe_name?: string; dish_name?: string; created_at?: string }, index: number) => (
               <tr key={item.id || index} className="transition-colors hover:bg-[#2a2a2a]/20">
                 <td className="px-6 py-4 text-sm text-white">
                   {item.name || item.ingredient_name || item.recipe_name || item.dish_name || 'N/A'}

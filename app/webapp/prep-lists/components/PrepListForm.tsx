@@ -5,22 +5,14 @@ import { useAutosave } from '@/hooks/useAutosave';
 import { useTranslation } from '@/lib/useTranslation';
 import React from 'react';
 
-interface KitchenSection {
-  id: string;
-  name: string;
-}
-interface Ingredient {
-  id: string;
-  name: string;
-  unit: string;
-}
+import {
+    PrepListFormData as BasePrepListFormData,
+    Ingredient,
+    KitchenSection
+} from '../types';
 
-interface PrepListFormData {
+interface PrepListFormData extends BasePrepListFormData {
   id?: string;
-  kitchenSectionId: string;
-  name: string;
-  notes: string;
-  items: Array<{ ingredientId: string; quantity: string; unit: string; notes: string }>;
 }
 
 interface PrepListFormProps {
