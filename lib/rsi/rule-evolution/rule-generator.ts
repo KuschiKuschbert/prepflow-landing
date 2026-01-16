@@ -104,7 +104,3 @@ export class RuleGenerator {
     return null;
   }
 }
-
-    return null;
-  }
-}
