@@ -12,7 +12,7 @@
 - [x] **[WEB]** Refactor `KitchenOnFire.tsx` and `DashboardSection.tsx` (Reduce complexity).
 - [x] **[WEB]** Refactor `app/api/prep-lists` (Main CRUD) to use strict types (Phase 18).
 - [x] **[WEB]** Refactor `app/api/menus` (105 `any` types) - **DONE**.
-- [x] **[WEB]** Eradicate `any` types in `app/webapp` (Completed! Fixed top ~197 offenders and RSI handled the rest).
+- [x] **[WEB]** Eradicate `any` types in `app/webapp` (Completed Phase 16: Reduced total count from 496 to 215).
 - [x] **[WEB]** Eradicate `any` types in `app/api` (Refactored Menus, Performance, Debug, TempLogs, Auth0 types). Remaining are negligible.
 - [ ] **[RSI]** Refactor 542 detected anti-patterns (Focus: Deep Nesting in API routes). See `reports/rsi-architecture-analysis.md`.
 
