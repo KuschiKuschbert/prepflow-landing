@@ -17,6 +17,8 @@ export interface ParsedRecipeCard {
   notes: string[];
 }
 
+type Section = 'title' | 'yield' | 'ingredients' | 'method' | 'notes';
+
 /**
  * Parse AI-generated recipe card text into structured format
  */
@@ -29,138 +31,59 @@ export function parseRecipeCardResponse(aiResponse: string): ParsedRecipeCard | 
 
     let title = '';
     let baseYield = 1;
-    const ingredients: Array<{ name: string; quantity: number; unit: string }> = [];
+    const ingredients: ParsedRecipeCard['ingredients'] = [];
     const methodSteps: string[] = [];
     const notes: string[] = [];
+    let currentSection: Section | null = null;
 
-    let currentSection: 'title' | 'yield' | 'ingredients' | 'method' | 'notes' | null = null;
+    for (const line of lines) {
+      const detected = detectSection(line);
+      if (detected) {
+        currentSection = detected;
 
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-
-      // Detect section headers
-      if (line.match(/^title:\s*(.+)$/i)) {
-        title = line.replace(/^title:\s*/i, '').trim();
-        currentSection = 'title';
-        continue;
-      }
-
-      if (line.match(/^yield\/portions?:\s*(.+)$/i)) {
-        const yieldMatch = line.match(/^yield\/portions?:\s*(.+)$/i);
-        if (yieldMatch) {
-          const yieldStr = yieldMatch[1].trim();
-          const yieldNum = parseInt(yieldStr, 10);
-          if (!isNaN(yieldNum)) {
-            baseYield = yieldNum;
-          }
+        // Handle inline values for title and yield headers
+        if (detected === 'title') {
+          title = parseTitleFromHeader(line);
+        } else if (detected === 'yield') {
+          baseYield = parseYieldFromHeader(line) || baseYield;
         }
-        currentSection = 'yield';
         continue;
       }
 
-      if (line.match(/^ingredients?:$/i)) {
-        currentSection = 'ingredients';
-        continue;
-      }
-
-      // More flexible method section detection
-      if (line.match(/^method:?$/i) || line.match(/^method\s*:/i)) {
-        currentSection = 'method';
-        continue;
-      }
-
-      if (line.match(/^notes?:$/i)) {
-        currentSection = 'notes';
-        continue;
-      }
-
-      // Parse content based on current section
-      if (currentSection === 'ingredients' && line.startsWith('-')) {
-        // Format: - [Name] | [Quantity] | [Unit]
-        const match = line.match(/^-\s*(.+?)\s*\|\s*([\d.]+)\s*\|\s*(.+)$/);
-        if (match) {
-          const [, name, quantityStr, unit] = match;
-          const quantity = parseFloat(quantityStr);
-          if (!isNaN(quantity) && quantity > 0) {
-            ingredients.push({
-              name: name.trim(),
-              quantity,
-              unit: unit.trim(),
-            });
+      // Process content based on current section
+      switch (currentSection) {
+        case 'ingredients':
+          const ing = parseIngredient(line);
+          if (ing) ingredients.push(ing);
+          break;
+        case 'method':
+          const step = parseMethodStep(line);
+          if (step) methodSteps.push(step);
+          break;
+        case 'notes':
+          const note = parseNote(line);
+          if (note) notes.push(note);
+          break;
+        default:
+          // Fallback: try to find title if not set
+          if (!title && isValidTitleCandidate(line)) {
+            title = line;
           }
-        } else {
-          // Fallback: try to parse without pipes (format: - Name: Quantity Unit)
-          const fallbackMatch = line.match(/^-\s*(.+?):\s*([\d.]+)\s+(.+)$/);
-          if (fallbackMatch) {
-            const [, name, quantityStr, unit] = fallbackMatch;
-            const quantity = parseFloat(quantityStr);
-            if (!isNaN(quantity) && quantity > 0) {
-              ingredients.push({
-                name: name.trim(),
-                quantity,
-                unit: unit.trim(),
-              });
-            }
-          } else {
-            // Last resort: try to extract any number and unit
-            const lastResortMatch = line.match(/^-\s*(.+?)\s+([\d.]+)\s+(.+)$/);
-            if (lastResortMatch) {
-              const [, name, quantityStr, unit] = lastResortMatch;
-              const quantity = parseFloat(quantityStr);
-              if (!isNaN(quantity) && quantity > 0) {
-                ingredients.push({
-                  name: name.trim(),
-                  quantity,
-                  unit: unit.trim(),
-                });
-              }
-            }
-          }
-        }
-      } else if (currentSection === 'method') {
-        // Method steps: numbered (1. or 1) or bulleted
-        const stepMatch = line.match(/^\d+[\.\)]\s*(.+)$/);
-        if (stepMatch) {
-          methodSteps.push(stepMatch[1].trim());
-        } else if (line.startsWith('-') || line.startsWith('•') || line.startsWith('*')) {
-          methodSteps.push(line.replace(/^[-•*]\s*/, '').trim());
-        } else if (
-          line.length > 0 &&
-          !line.match(/^[A-Z][^:]+:$/i) &&
-          !line.match(/^ingredients?:$/i) &&
-          !line.match(/^notes?:$/i)
-        ) {
-          // Not a header, treat as step (but skip empty lines and section headers)
-          const trimmed = line.trim();
-          if (trimmed.length > 0) {
-            methodSteps.push(trimmed);
-          }
-        }
-      } else if (currentSection === 'notes') {
-        if (line.startsWith('-') || line.startsWith('•')) {
-          notes.push(line.replace(/^[-•]\s*/, '').trim());
-        } else if (line.length > 0) {
-          notes.push(line);
-        }
-      } else if (!title && line.length > 0 && !line.match(/^[A-Z][^:]+:$/)) {
-        // If no title found yet and this doesn't look like a header, use as title
-        title = line;
+          break;
       }
     }
 
-    // If title is still empty, try to extract from first line
+    // Final fallback for title
     if (!title && lines.length > 0) {
-      title = lines[0].replace(/^title:\s*/i, '').trim();
+      title = parseTitleFromHeader(lines[0]);
     }
 
-    // Validate we have at least a title
     if (!title) {
       logger.warn('Failed to parse recipe card: no title found');
       logger.dev('AI Response preview:', aiResponse.substring(0, 500));
       return null;
     }
 
-    // Log parsing results for debugging
     logger.dev(
       `Parsed recipe card: "${title}" - ${ingredients.length} ingredients, ${methodSteps.length} method steps, ${notes.length} notes`,
     );
@@ -176,4 +99,102 @@ export function parseRecipeCardResponse(aiResponse: string): ParsedRecipeCard | 
     logger.error('Error parsing recipe card response:', error);
     return null;
   }
+}
+
+// --- Helper Functions ---
+
+function detectSection(line: string): Section | null {
+  if (line.match(/^title:\s*(.+)$/i)) return 'title';
+  if (line.match(/^yield\/portions?:\s*(.+)$/i)) return 'yield';
+  if (line.match(/^ingredients?:$/i)) return 'ingredients';
+  if (line.match(/^method:?$/i) || line.match(/^method\s*:/i)) return 'method';
+  if (line.match(/^notes?:$/i)) return 'notes';
+  return null;
+}
+
+function parseTitleFromHeader(line: string): string {
+  return line.replace(/^title:\s*/i, '').trim();
+}
+
+function parseYieldFromHeader(line: string): number | null {
+  const match = line.match(/^yield\/portions?:\s*(.+)$/i);
+  if (match) {
+    const num = parseInt(match[1].trim(), 10);
+    return isNaN(num) ? null : num;
+  }
+  return null;
+}
+
+function parseIngredient(line: string) {
+  if (!line.startsWith('-')) return null;
+
+  // Format: - [Name] | [Quantity] | [Unit]
+  const pipeMatch = line.match(/^-\s*(.+?)\s*\|\s*([\d.]+)\s*\|\s*(.+)$/);
+  if (pipeMatch) {
+    const [, name, qty, unit] = pipeMatch;
+    return createIngredient(name, qty, unit);
+  }
+
+  // Format: - Name: Quantity Unit
+  const colonMatch = line.match(/^-\s*(.+?):\s*([\d.]+)\s+(.+)$/);
+  if (colonMatch) {
+    const [, name, qty, unit] = colonMatch;
+    return createIngredient(name, qty, unit);
+  }
+
+  // Format: - Name Quantity Unit (last resort)
+  const spaceMatch = line.match(/^-\s*(.+?)\s+([\d.]+)\s+(.+)$/);
+  if (spaceMatch) {
+    const [, name, qty, unit] = spaceMatch;
+    return createIngredient(name, qty, unit);
+  }
+
+  return null;
+}
+
+function createIngredient(name: string, quantityStr: string, unit: string) {
+  const quantity = parseFloat(quantityStr);
+  if (!isNaN(quantity) && quantity > 0) {
+    return {
+      name: name.trim(),
+      quantity,
+      unit: unit.trim(),
+    };
+  }
+  return null;
+}
+
+function parseMethodStep(line: string): string | null {
+  // 1. Step or 1) Step
+  const numberedMatch = line.match(/^\d+[\.\)]\s*(.+)$/);
+  if (numberedMatch) return numberedMatch[1].trim();
+
+  // - Step or * Step or • Step
+  if (line.match(/^[-•*]\s/)) {
+    return line.replace(/^[-•*]\s*/, '').trim();
+  }
+
+  // Plain text step, but ignore headers if they somehow slipped here (unlikely provided detection logic)
+  // and ignore weird labels
+  if (
+    line.length > 0 &&
+    !line.match(/^[A-Z][^:]+:$/i) && // Skip likely headers
+    !detectSection(line) // Double check against headers
+  ) {
+    return line.trim();
+  }
+
+  return null;
+}
+
+function parseNote(line: string): string | null {
+  if (line.match(/^[-•]\s/)) {
+    return line.replace(/^[-•]\s*/, '').trim();
+  }
+  if (line.length > 0) return line;
+  return null;
+}
+
+function isValidTitleCandidate(line: string): boolean {
+  return line.length > 0 && !line.match(/^[A-Z][^:]+:$/);
 }

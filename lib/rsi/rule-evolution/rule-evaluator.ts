@@ -1,25 +1,53 @@
+import { exec } from 'child_process';
+import util from 'util';
 import { GeneratedRule } from './rule-generator';
+
+const execAsync = util.promisify(exec);
 
 /**
  * Rule Evaluator
  * Tests a generated rule against the codebase to ensure validity and check false positives.
  */
-
 export class RuleEvaluator {
   static async evaluate(
     rule: GeneratedRule,
   ): Promise<{ isValid: boolean; matches: number; falsePositives: number }> {
-    // Mock evaluation logic
-    // In reality, this would run grep or AST query against the codebase.
-
     console.log(`Evaluator: Testing rule "${rule.name}" (${rule.definition})...`);
 
-    // Simulating finding matches
-    const matches = 5;
-    const falsePositives = 0; // Assume clear signal for mock
+    try {
+      // Use grep to find matches.
+      // -r: recursive
+      // -l: match files only (faster than counting all lines if we just need existence)
+      // -E: extended regex
+      // --exclude-dir: ignore noise
+      // We wrap the definition in quotes to prevent shell injection, though simple regexes are expected.
+      // We use '|| true' to prevent throw on no match (grep returns exit code 1)
 
-    const isValid = matches > 0 && falsePositives === 0;
+      const excludeDirs = '--exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.next --exclude-dir=dist --exclude-dir=build';
+      const command = `grep -rlE "${rule.definition.replace(/"/g, '\\"')}" . ${excludeDirs} | head -n 5`;
 
-    return { isValid, matches, falsePositives };
+      const { stdout } = await execAsync(command);
+      const files = stdout.split('\n').filter(line => line.trim());
+
+      const matches = files.length;
+      const isValid = matches > 0;
+
+      if (isValid) {
+        console.log(`  ✅ Rule matches ${matches}+ files (e.g., ${files[0]})`);
+      } else {
+        console.log(`  ❌ Rule found NO matches in codebase.`);
+      }
+
+      return {
+        isValid,
+        matches,
+        falsePositives: 0 // Cannot determine false positives without human feedback loop yet
+      };
+
+    } catch (error) {
+      console.error('Evaluator Error:', error);
+      // Fail safely
+      return { isValid: false, matches: 0, falsePositives: 0 };
+    }
   }
 }

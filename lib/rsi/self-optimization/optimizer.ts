@@ -20,24 +20,25 @@ export class Optimizer {
     const suggestions: OptimizationSuggestion[] = [];
 
     try {
-      // Read metrics
-      // (Mock logic for Phase 3 demonstration)
-      // Real logic would calculate trends from metrics.json
+      const fs = require('fs');
+      if (fs.existsSync(METRICS_FILE_PATH)) {
+        const metrics = JSON.parse(fs.readFileSync(METRICS_FILE_PATH, 'utf-8'));
+        const successRates: number[] = metrics.fixSuccessRate || [];
 
-      // Example: If rollback rate is 0%, maybe we are too conservative?
-      // Suggest lowering confidence threshold.
+        if (successRates.length > 0) {
+          const avgSuccess = successRates.reduce((a, b) => a + b, 0) / successRates.length;
 
-      const mockRollbackRate = 0; // Assume perfection for now
-
-      if (mockRollbackRate === 0) {
-        suggestions.push({
-          parameter: 'confidenceThreshold.medium',
-          currentValue: 0.7,
-          proposedValue: 0.65,
-          reason:
-            'Zero rollbacks observed. We can be slightly more aggressive to increase velocity.',
-          confidence: 0.8,
-        });
+          // If we are very successful, we can be more aggressive
+          if (avgSuccess > 0.9) {
+             suggestions.push({
+              parameter: 'confidenceThreshold.medium',
+              currentValue: 0.7, // In a real system, we'd read this from config
+              proposedValue: 0.65,
+              reason: `High fix success rate (${(avgSuccess * 100).toFixed(1)}%). We can significantly increase velocity by lowering the confidence threshold.`,
+              confidence: 0.9,
+            });
+          }
+        }
       }
     } catch (error) {
       console.error('Optimizer analysis failed:', error);

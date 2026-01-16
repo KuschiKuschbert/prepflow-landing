@@ -31,6 +31,7 @@ PrepFlow is a unified restaurant profitability optimization platform that helps 
 - **[Implementation Patterns](.cursor/rules/implementation.mdc)** - API patterns, database patterns, optimistic updates
 - **[Technical Patterns](.cursor/rules/technical.mdc)** - Autosave, Next.js patterns, data standards
 - **[Cleanup Standards](.cursor/rules/cleanup.mdc)** - Automated enforcement, code quality checks
+- **[RSI Standards](docs/AI_RULES.md#6-recursive-self-improvement-rsi)** - Autonomous repair and evolution rules
 - **[Dialog Standards](.cursor/rules/dialogs.mdc)** - Dialog usage, PrepFlow voice guidelines
 
 ### Implementation Guides
@@ -88,6 +89,7 @@ npm run cleanup:check     # All standards
 
 # Auto-fix available issues
 npm run cleanup:fix
+npm run rsi:fix           # Autonomous RSI repair
 
 # Breakpoint detection
 npm run detect-breakpoints

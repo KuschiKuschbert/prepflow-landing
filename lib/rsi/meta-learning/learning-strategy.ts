@@ -20,20 +20,45 @@ export class FrequencyAnalysisStrategy implements LearningStrategy {
   name = 'Frequency Analysis';
 
   async analyze(history: any[]): Promise<LearningInsight[]> {
-    // Mock implementation for Phase 4
-    // In reality, this would group successful fixes by type/pattern
-    // and identify high-frequency successful patterns.
+    const insights: LearningInsight[] = [];
 
-    // Example: "We fixed 10 'any' types in api routes successfully."
+    // Group by type
+    const stats: Record<string, { total: number; successful: number; files: string[] }> = {};
 
-    return [
-      {
-        patternId: 'fix-any-types',
-        type: 'frequency',
-        confidence: 0.85,
-        insight: 'Replacing "any" with specific interfaces has 100% success rate in API routes.',
-        sourceFiles: [],
-      },
-    ];
+    for (const record of history) {
+      const type = record.type;
+      if (!stats[type]) {
+        stats[type] = { total: 0, successful: 0, files: [] };
+      }
+
+      stats[type].total++;
+      if (record.status === 'applied') {
+        stats[type].successful++;
+        if (record.files && record.files.length > 0) {
+          stats[type].files.push(...record.files);
+        }
+      }
+    }
+
+    // Generate insights
+    for (const [type, data] of Object.entries(stats)) {
+      if (data.total === 0) continue;
+
+      const successRate = data.successful / data.total;
+
+      // Only generate insight if we have enough data points and high success rate
+      // Lowering threshold slightly for demo purposes, but realistically should be higher
+        if (data.total >= 1 && successRate >= 0.8) {
+        insights.push({
+          patternId: type,
+          type: 'frequency',
+          confidence: successRate,
+          insight: `Fixes of type '${type}' have a ${(successRate * 100).toFixed(1)}% success rate across ${data.total} attempts.`,
+          sourceFiles: [...new Set(data.files)].slice(0, 5), // Limit file list
+        });
+      }
+    }
+
+    return insights;
   }
 }

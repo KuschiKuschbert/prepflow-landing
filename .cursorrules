@@ -7,11 +7,13 @@ Before proposing code or fixing bugs, you MUST check the **Project Brain**:
 - Path: `docs/AI_RULES.md`
 - **Action**: Read this file to understand established project patterns (e.g., Next.js 15 params unwrapping, Supabase error handling, Ralph Loop methodology).
 - **Enforcement**: If you violate a rule from this brain, the user will reject your code.
+- **RSI**: Check `npm run rsi:status` for active autonomous rules.
 
 ## 2. 🐛 Troubleshooting & Solution Bank
 If you encounter an error (build fail, runtime crash, lint error):
 1.  **Check**: Read `docs/TROUBLESHOOTING_LOG.md` to see if this has happened before.
-2.  **Fix**: Apply the known fix if it exists.
+2.  **Auto-Fix**: Run `npm run rsi:fix` to try and resolve common patterns automatically.
+3.  **Fix**: Apply the known fix if it exists.
 3.  **Document**: If it is a NEW error, you must document it in `docs/TROUBLESHOOTING_LOG.md` after fixing it.
     - Format: Symptom, Root Cause, Fix, Derived Rule.
 

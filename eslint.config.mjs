@@ -1,5 +1,6 @@
 import nextConfig from 'eslint-config-next/core-web-vitals';
 import { defineConfig } from 'eslint/config';
+import rsiConfig from './rsi.eslint.config.mjs';
 
 // 1. Manually define the TS plugin since it's not exported by nextConfig in a way flat config sees easily for new blocks
 // We rely on the fact that nextConfig brings in the parser/plugin under the hood, but to be safe we target TS files explicitly.
@@ -16,6 +17,7 @@ export default defineConfig([
     ],
   },
   ...nextConfig,
+  ...rsiConfig, // Integrate RSI managed rules
   {
     rules: {
       'react-hooks/preserve-manual-memoization': 'off',

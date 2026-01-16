@@ -613,6 +613,60 @@ npm run audit:deps
 
 ---
 
+---
+
+## Recursive Self-Improvement (RSI)
+
+### RSI Status Check
+
+**Script:** `scripts/rsi/status.js`
+**Command:** `npm run rsi:status`
+**Referenced in:** `AI_RULES.md`, `.cursorrules`
+
+Checks the current health and active rules of the RSI system.
+
+**Usage:**
+
+```bash
+npm run rsi:status
+```
+
+**Output:** Lists active learned rules, pending improvements, and system health.
+
+---
+
+### RSI Auto-Fix
+
+**Script:** `scripts/rsi/auto-fix.js`
+**Command:** `npm run rsi:fix`
+**Referenced in:** `AI_RULES.md`, `.cursorrules`
+
+Automatically applies learned fixes to the codebase. This is your "first aid" kit for lint errors.
+
+**Usage:**
+
+```bash
+npm run rsi:fix
+```
+
+---
+
+### RSI Nightly Loop
+
+**Script:** `scripts/rsi/orchestrator.js`
+**Command:** `npm run rsi:run`
+**Referenced in:** `AI_RULES.md`
+
+Accepts the current codebase state and attempts to improve it autonomously. Runs nightly via GitHub Actions.
+
+**Usage:**
+
+```bash
+npm run rsi:run
+```
+
+---
+
 ## Future Scripts
 
 The following scripts are planned but not yet implemented:
