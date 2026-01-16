@@ -11,6 +11,17 @@ NC='\033[0m'
 
 echo "🦁 The Brain (Pre-Commit Guard)..."
 
+# 0. Merge Conflict Check
+echo -n "   - Merge Conflicts... "
+if grep -rE "^<<<<<<<|^=======$|^>>>>>>>" --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.next . > /dev/null; then
+    echo -e "${RED}FAIL (Merge Conflicts Detected)${NC}"
+    echo "     Please resolve merge conflicts before committing."
+    grep -rE "^<<<<<<<|^=======$|^>>>>>>>" --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.next .
+    exit 1
+else
+    echo -e "${GREEN}Pass${NC}"
+fi
+
 # 1. Security Check (Auditor)
 echo -n "   - Security (Auditor)... "
 if npm run check:security; then
