@@ -86,6 +86,11 @@ jobs:
             const fs = require('fs');
             const path = require('path');
 
+            if (!fs.existsSync('.lighthouseci/results.json')) {
+              console.log('No Lighthouse results found. Skipping PR comment.');
+              return;
+            }
+
             // Read performance results
             const lighthouseResults = fs.readFileSync('.lighthouseci/results.json', 'utf8');
             const results = JSON.parse(lighthouseResults);
