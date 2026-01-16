@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react';
-import { Recipe, RecipePriceData } from '../../types';
+import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../../types';
 
 import { logger } from '@/lib/logger';
 interface UseDishesClientRecipePricingProps {
@@ -7,11 +7,15 @@ interface UseDishesClientRecipePricingProps {
   recipePrices: Record<string, RecipePriceData>;
   updateVisibleRecipePrices: (
     recipes: Recipe[],
-    fetchRecipeIngredients: (recipeId: string) => Promise<unknown>,
-    fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<unknown>,
+    fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>,
+    fetchBatchRecipeIngredients: (
+      recipeIds: string[],
+    ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
   ) => Promise<void>;
-  fetchRecipeIngredients: (recipeId: string) => Promise<unknown>;
-  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<unknown>;
+  fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>;
+  fetchBatchRecipeIngredients: (
+    recipeIds: string[],
+  ) => Promise<Record<string, RecipeIngredientWithDetails[]>>;
 }
 
 export function useDishesClientRecipePricing({

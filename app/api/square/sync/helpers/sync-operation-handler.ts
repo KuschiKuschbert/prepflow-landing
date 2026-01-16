@@ -2,26 +2,26 @@
  * Sync operation handler for Square sync API
  */
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import {
-  syncCatalogFromSquare,
-  syncCatalogToSquare,
-  syncCatalogBidirectional,
+    syncCatalogBidirectional,
+    syncCatalogFromSquare,
+    syncCatalogToSquare,
 } from '@/lib/square/sync/catalog';
-import { syncOrdersFromSquare, syncRecentOrdersFromSquare } from '@/lib/square/sync/orders';
-import {
-  syncStaffFromSquare,
-  syncStaffToSquare,
-  syncStaffBidirectional,
-} from '@/lib/square/sync/staff';
 import { syncCostsToSquare } from '@/lib/square/sync/costs';
 import { performInitialSync } from '@/lib/square/sync/initial-sync';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { syncOrdersFromSquare, syncRecentOrdersFromSquare } from '@/lib/square/sync/orders';
+import {
+    syncStaffBidirectional,
+    syncStaffFromSquare,
+    syncStaffToSquare,
+} from '@/lib/square/sync/staff';
 import { NextResponse } from 'next/server';
 
 export async function handleSyncOperation(
   operation: 'catalog' | 'orders' | 'staff' | 'costs' | 'initial_sync',
   direction: 'from_square' | 'to_square' | 'bidirectional' | undefined,
-  options: unknown,
+  options: any,
   userId: string,
 ) {
   switch (operation) {

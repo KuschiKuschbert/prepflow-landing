@@ -2,8 +2,26 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchWithTimeout } from './helpers/fetchWithTimeout';
 import { checkQueryErrors } from './helpers/checkQueryErrors';
+import { fetchWithTimeout } from './helpers/fetchWithTimeout';
+
+interface DishPrice {
+  selling_price: number | null;
+}
+
+interface Recipe {
+  id: string;
+}
+
+interface Ingredient {
+  id: string;
+  current_stock: number | null;
+  min_stock_level: number | null;
+}
+
+interface RecipeIngredient {
+  recipe_id: string | null;
+}
 
 export async function GET(_req: NextRequest) {
   try {
@@ -88,7 +106,7 @@ export async function GET(_req: NextRequest) {
     // Handle case where dishes table doesn't exist gracefully
     let averageDishPrice = 0;
     if (dishesPricesResult.error) {
-      const errorCode = (dishesPricesResult.error as unknown).code;
+      const errorCode = dishesPricesResult.error.code;
       if (
         errorCode === 'PGRST116' ||
         dishesPricesResult.error.message?.includes('does not exist')
@@ -104,8 +122,8 @@ export async function GET(_req: NextRequest) {
         });
       }
     } else {
-      const valid = (dishesPricesResult.data || [])
-        .map((d: unknown) => Number(d.selling_price || 0))
+      const valid = ((dishesPricesResult.data as DishPrice[]) || [])
+        .map((d) => Number(d.selling_price || 0))
         .filter((v: number) => v > 0);
       averageDishPrice =
         valid.length > 0 ? valid.reduce((a: number, b: number) => a + b, 0) / valid.length : 0;
@@ -125,8 +143,8 @@ export async function GET(_req: NextRequest) {
     }
 
     // Count ingredients per recipe to ensure recipes actually have ingredients
-    const recipeIngredientCounts = (recipeIngredientsData || []).reduce(
-      (acc: Record<string, number>, ri: unknown) => {
+    const recipeIngredientCounts = (recipeIngredientsData as RecipeIngredient[] || []).reduce(
+      (acc: Record<string, number>, ri) => {
         if (ri.recipe_id) {
           acc[ri.recipe_id] = (acc[ri.recipe_id] || 0) + 1;
         }
@@ -136,8 +154,8 @@ export async function GET(_req: NextRequest) {
     );
 
     // Only count recipes that have at least one ingredient
-    const recipesReady = (allRecipes || []).filter(
-      (r: unknown) => recipeIngredientCounts[r.id] > 0,
+    const recipesReady = (allRecipes as Recipe[] || []).filter(
+      (r) => recipeIngredientCounts[r.id] > 0,
     ).length;
 
     // Count recipes without cost data (recipes don't have selling_price, dishes do)
@@ -145,7 +163,7 @@ export async function GET(_req: NextRequest) {
     const recipesWithoutCost = 0;
 
     // Count ingredients needing restock (current_stock <= min_stock_level)
-    const ingredientsLowStock = (allIngredients || []).filter((ing: unknown) => {
+    const ingredientsLowStock = (allIngredients as Ingredient[] || []).filter((ing) => {
       const currentStock = Number(ing.current_stock || 0);
       const minStock = Number(ing.min_stock_level || 0);
       return minStock > 0 && currentStock <= minStock;

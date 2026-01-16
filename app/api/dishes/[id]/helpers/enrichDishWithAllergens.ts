@@ -1,18 +1,18 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { DishWithRelations } from '../../helpers/schemas';
+import { EnrichedDish } from '@/types/dish';
 
 /**
  * Enriches dish with aggregated allergens and dietary status
  *
- * @param {DishWithRelations} dish - Dish data
+ * @param {EnrichedDish} dish - Dish data
  * @param {string} dishId - Dish ID
- * @returns {Promise<DishWithRelations>} Enriched dish
+ * @returns {Promise<EnrichedDish>} Enriched dish
  */
 export async function enrichDishWithAllergens(
-  dish: DishWithRelations,
+  dish: EnrichedDish,
   dishId: string,
-): Promise<DishWithRelations> {
+): Promise<EnrichedDish> {
   // Always aggregate allergens and dietary status (even if cached)
   // This ensures we have the latest data from recipes/ingredients
   const { aggregateDishAllergens } = await import('@/lib/allergens/allergen-aggregation');

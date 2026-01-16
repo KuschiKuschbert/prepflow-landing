@@ -14,15 +14,16 @@ export function handleParLevelsError({
   result,
   showError,
 }: HandleParLevelsErrorParams): void {
+  const res = result as any;
   const errorMessage =
-    result.message || result.error || `Failed to fetch par levels (${response.status})`;
-  const instructions = result.details?.instructions || [];
+    res.message || res.error || `Failed to fetch par levels (${response.status})`;
+  const instructions = res.details?.instructions || [];
   logger.error('[Par Levels] API Error:', {
     status: response.status,
     error: errorMessage,
-    details: result.details,
-    code: result.code,
-    fullResponse: result,
+    details: res.details,
+    code: res.code,
+    fullResponse: res,
   });
   showError(
     instructions.length > 0 ? `${errorMessage}\n\n${instructions.join('\n')}` : errorMessage,

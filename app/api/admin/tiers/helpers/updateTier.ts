@@ -37,7 +37,7 @@ export async function updateTier(
   if (currentDataError && currentDataError.code !== 'PGRST116') {
     logger.warn('[Admin Tiers] Error fetching current tier config:', {
       error: currentDataError.message,
-      code: (currentDataError as unknown).code,
+      code: currentDataError.code,
       tierSlug,
     });
   }

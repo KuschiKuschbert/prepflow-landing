@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
 import { deleteSupplier } from '../helpers/deleteSupplier';
 import { handleSupplierError } from './handleSupplierError';
 
@@ -27,8 +27,8 @@ export async function handleDeleteSupplier(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/suppliers', method: 'DELETE' },
     });
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as any).status });
     }
     return handleSupplierError(err, 'DELETE');
   }

@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Supplier Price Lists API] Database error:', {
         error: error.message,
-        code: (error as unknown).code,
+        code: error.code,
         context: { endpoint: '/api/supplier-price-lists', operation: 'GET' },
       });
       const apiError = ApiErrorHandler.fromSupabaseError(error, 500);

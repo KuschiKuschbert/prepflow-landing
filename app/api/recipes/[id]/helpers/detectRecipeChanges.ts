@@ -29,8 +29,8 @@ export interface RecipeChangeDetails {
  * @returns {Object} Change type and details
  */
 export function detectRecipeChanges(
-  currentRecipe: unknown,
-  updateData: unknown,
+  currentRecipe: any,
+  updateData: any,
   ingredientsChanged: boolean,
   yieldChanged: boolean,
 ): { changeType: string; changeDetails: RecipeChangeDetails } {

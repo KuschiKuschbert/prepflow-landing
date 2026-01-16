@@ -1,21 +1,21 @@
 import type {
-  Availability,
-  ComplianceValidationResult,
-  Employee,
-  Shift,
+    Availability,
+    ComplianceValidationResult,
+    Employee,
+    Shift,
 } from '@/app/webapp/roster/types';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import {
-  createValidationWarnings,
-  validateShift,
-  validateShiftAvailability,
-  validateShiftSkills,
+    createValidationWarnings,
+    validateShift,
+    validateShiftAvailability,
+    validateShiftSkills,
 } from '@/lib/services/compliance/validator';
 import { supabaseAdmin } from '@/lib/supabase';
 
 export async function performComplianceValidation(data: {
-  shift: unknown;
+  shift: Shift;
   employee_id?: string;
   check_availability: boolean;
   check_skills: boolean;
@@ -62,7 +62,7 @@ export async function performComplianceValidation(data: {
       '[Compliance API] Database error fetching employee shifts (continuing with empty array):',
       {
         error: shiftsError.message,
-        code: (shiftsError as unknown).code,
+        code: shiftsError.code,
         context: {
           endpoint: '/api/compliance/validate',
           operation: 'POST',

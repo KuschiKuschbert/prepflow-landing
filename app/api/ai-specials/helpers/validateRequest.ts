@@ -14,7 +14,12 @@ export function validateAISpecialsRequest(body: unknown):
       countryCode?: string;
     }
   | NextResponse {
-  const { userId, imageData, prompt, countryCode } = body;
+  const { userId, imageData, prompt, countryCode } = body as {
+    userId?: string;
+    imageData?: string;
+    prompt?: string;
+    countryCode?: string;
+  };
 
   if (!userId || !imageData) {
     return NextResponse.json(

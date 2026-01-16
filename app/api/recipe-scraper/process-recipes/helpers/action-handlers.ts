@@ -2,11 +2,11 @@
  * Action handlers for recipe processing
  */
 
+import { isGroqAvailable, isGroqEnabled } from '@/lib/ai/groq-client';
 import { logger } from '@/lib/logger';
-import { isGroqEnabled, isGroqAvailable } from '@/lib/ai/groq-client';
 
 // Processor module exports functions directly (not as an object)
-type Processor = unknown;
+type Processor = any;
 
 /**
  * Handle pause action

@@ -5,7 +5,7 @@
 import { calculateRecommendedPrice } from '@/app/api/dishes/helpers/calculateRecommendedPrice';
 import { calculateRecipeCost } from '@/app/api/menus/[id]/statistics/helpers/calculateRecipeCost';
 import { logger } from '@/lib/logger';
-import { DishIngredientRecord, DishRecipeRecord, DishRecord } from '../../../types';
+import { DishIngredientRecord, DishRecipeRecord } from '../../../types';
 
 export interface BatchCostResult {
   total_cost: number;
@@ -60,7 +60,7 @@ export interface DishCostResult {
  */
 export async function calculateDishCost(
   dishId: string,
-  dish: DishRecord | null,
+  dish: { selling_price: number | string | null } | null,
   dishRecipes: DishRecipeRecord[],
   dishIngredients: DishIngredientRecord[],
 ): Promise<{ dishId: string; cost: BatchCostResult } | { dishId: string; cost: null }> {

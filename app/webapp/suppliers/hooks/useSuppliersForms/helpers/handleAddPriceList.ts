@@ -18,9 +18,9 @@ export async function handleAddPriceListHelper(
   const originalPriceLists = [...priceLists];
 
   // Create temporary price list for optimistic update
-  const tempId = `temp-${Date.now()}`;
+  const tempId = -Date.now();
   const tempPriceList: SupplierPriceList = {
-    id: tempId as unknown, // Temporary ID, will be replaced by server
+    id: tempId, // Temporary ID, will be replaced by server
     supplier_id: parseInt(newPriceList.supplier_id),
     document_name: newPriceList.document_name,
     document_url: newPriceList.document_url || '',
@@ -30,7 +30,22 @@ export async function handleAddPriceListHelper(
     notes: newPriceList.notes || null,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    suppliers: null as unknown, // Will be populated from server response
+    suppliers: {
+      id: parseInt(newPriceList.supplier_id),
+      name: '',
+      contact_person: null,
+      email: null,
+      phone: null,
+      address: null,
+      website: null,
+      payment_terms: null,
+      delivery_schedule: null,
+      minimum_order_amount: null,
+      is_active: true,
+      notes: null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    },
   };
 
   // Optimistically add to UI immediately
@@ -51,7 +66,7 @@ export async function handleAddPriceListHelper(
     if (data.success && data.data) {
       // Replace temp price list with real price list from server
       setPriceLists(prevPriceLists =>
-        prevPriceLists.map(pl => (String(pl.id) === tempId ? data.data : pl)),
+        prevPriceLists.map(pl => (pl.id === tempId ? data.data : pl)),
       );
       if (selectedSupplier === 'all') {
         cacheData('supplier_price_lists', [data.data, ...originalPriceLists]);

@@ -2,8 +2,16 @@
  * Fetch temperature logs and violations
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+
+interface TemperatureViolation {
+  violation_type: string;
+  threshold?: number;
+  deviation?: string;
+  time_in_zone?: string;
+  [key: string]: unknown;
+}
 
 export async function fetchTemperatureData(startDate: string, endDate: string) {
   if (!supabaseAdmin) return { logs: null, violations: null };
@@ -17,7 +25,7 @@ export async function fetchTemperatureData(startDate: string, endDate: string) {
   if (equipmentError) {
     logger.warn('[Health Inspector Report] Error fetching temperature equipment:', {
       error: equipmentError.message,
-      code: (equipmentError as unknown).code,
+      code: equipmentError.code,
     });
   }
 
@@ -42,7 +50,7 @@ export async function fetchTemperatureData(startDate: string, endDate: string) {
   if (tempError) {
     logger.warn('[Health Inspector Report] Error fetching temperature logs:', {
       error: tempError.message,
-      code: (tempError as unknown).code,
+      code: tempError.code,
     });
     return { logs: null, violations: null };
   }
@@ -50,8 +58,8 @@ export async function fetchTemperatureData(startDate: string, endDate: string) {
   const logs = temperatureLogs || [];
 
   // Analyze violations
-  const violations: unknown[] = [];
-  const dangerZoneViolations: unknown[] = [];
+  const violations: TemperatureViolation[] = [];
+  const dangerZoneViolations: TemperatureViolation[] = [];
 
   logs.forEach(log => {
     const temp = parseFloat(log.temperature_celsius);

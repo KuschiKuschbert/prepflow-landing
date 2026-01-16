@@ -30,7 +30,7 @@ export function useRecipeGrouping({ calculations, dishDetails }: UseRecipeGroupi
       dishDetails.recipes.forEach(dr => {
         if (dr.recipe_id) {
           const recipeName =
-            dr.recipes?.recipe_name || (dr.recipes as unknown)?.name || 'Unknown Recipe';
+            dr.recipes?.recipe_name || (dr.recipes as any)?.name || 'Unknown Recipe';
           const recipeYield = dr.recipes?.yield || 1;
           const recipeYieldUnit = dr.recipes?.yield_unit || 'servings';
           recipeInfoMap.set(String(dr.recipe_id), {

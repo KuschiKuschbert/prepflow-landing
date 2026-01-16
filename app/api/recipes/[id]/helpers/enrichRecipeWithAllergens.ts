@@ -2,11 +2,11 @@
  * Helper for enriching recipe with allergen and dietary data
  */
 
+import { aggregateRecipeAllergens } from '@/lib/allergens/allergen-aggregation';
+import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
+import { aggregateRecipeDietaryStatus } from '@/lib/dietary/dietary-aggregation';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { aggregateRecipeAllergens } from '@/lib/allergens/allergen-aggregation';
-import { aggregateRecipeDietaryStatus } from '@/lib/dietary/dietary-aggregation';
-import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
 
 /**
  * Enriches recipe with aggregated allergens and dietary status
@@ -15,7 +15,7 @@ import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
  * @param {any} recipe - Recipe data
  * @returns {Promise<any>} Enriched recipe
  */
-export async function enrichRecipeWithAllergens(recipeId: string, recipe: unknown) {
+export async function enrichRecipeWithAllergens(recipeId: string, recipe: any) {
   // Always aggregate allergens and dietary status (even if cached)
   const [allergens, dietaryStatus] = await Promise.all([
     aggregateRecipeAllergens(recipeId),

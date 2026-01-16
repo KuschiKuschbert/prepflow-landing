@@ -11,16 +11,17 @@ import type { CreateTaskBody } from './validateCleaningTaskRequest';
  * @returns {CreateTaskBody} Parsed task data
  */
 export function parseCreateTaskBody(body: unknown): CreateTaskBody {
+  const data = body as Record<string, unknown>;
   return {
-    task_name: body.task_name,
-    frequency_type: body.frequency_type,
-    area_id: body.area_id,
-    assigned_date: body.assigned_date,
-    equipment_id: body.equipment_id,
-    section_id: body.section_id,
-    is_standard_task: body.is_standard_task,
-    standard_task_type: body.standard_task_type,
-    description: body.description,
-    notes: body.notes,
+    task_name: data.task_name as string,
+    frequency_type: data.frequency_type as string,
+    area_id: data.area_id as string | undefined,
+    assigned_date: data.assigned_date as string | undefined,
+    equipment_id: data.equipment_id as string | undefined,
+    section_id: data.section_id as string | undefined,
+    is_standard_task: data.is_standard_task as boolean | undefined,
+    standard_task_type: data.standard_task_type as string | undefined,
+    description: data.description as string | undefined,
+    notes: data.notes as string | undefined,
   };
 }

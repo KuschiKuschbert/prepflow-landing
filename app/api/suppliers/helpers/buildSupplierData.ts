@@ -4,7 +4,7 @@
  * @param {Object} body - Request body
  * @returns {Object} Supplier data object
  */
-export function buildSupplierData(body: unknown) {
+export function buildSupplierData(body: any) {
   return {
     supplier_name: body.supplier_name,
     contact_person: body.contact_person || null,

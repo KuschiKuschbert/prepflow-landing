@@ -1,12 +1,12 @@
+import { logAdminApiAction } from '@/lib/admin-audit';
 import { requireAdmin } from '@/lib/admin-auth';
-import { supabaseAdmin } from '@/lib/supabase';
+import { checkAdminRateLimit } from '@/lib/admin-rate-limit';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { logAdminApiAction } from '@/lib/admin-audit';
-import { checkAdminRateLimit } from '@/lib/admin-rate-limit';
+import { supabaseAdmin } from '@/lib/supabase';
+import crypto from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import crypto from 'crypto';
 
 const resetPasswordSchema = z.object({
   userId: z.string().min(1),
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     if (userError || !user) {
       logger.warn('[Admin Reset Password] User not found:', {
         error: userError?.message,
-        code: (userError as unknown)?.code,
+        code: userError?.code,
         userId,
       });
       return NextResponse.json(ApiErrorHandler.createError('User not found', 'NOT_FOUND', 404), {

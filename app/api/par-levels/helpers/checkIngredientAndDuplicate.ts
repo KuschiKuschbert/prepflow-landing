@@ -23,7 +23,7 @@ export async function checkIngredientAndDuplicate(ingredientId: string) {
     if (ingredientError) {
       logger.error('[Par Levels API] Error checking ingredient:', {
         error: ingredientError.message,
-        code: (ingredientError as unknown).code,
+        code: (ingredientError as any).code,
         ingredientId,
       });
     }
@@ -41,7 +41,7 @@ export async function checkIngredientAndDuplicate(ingredientId: string) {
     // PGRST116 is "not found" - that's okay, no duplicate exists
     logger.error('[Par Levels API] Error checking for duplicate par level:', {
       error: duplicateError.message,
-      code: (duplicateError as unknown).code,
+      code: (duplicateError as any).code,
       ingredientId,
     });
     throw ApiErrorHandler.createError(

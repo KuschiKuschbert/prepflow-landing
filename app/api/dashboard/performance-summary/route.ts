@@ -1,18 +1,18 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { filterSalesDataByDateRange } from '@/lib/api/performance/dateFiltering';
 import { deduplicateDishes, filterDishesWithSales } from '@/lib/api/performance/dishDeduplication';
 import { calculatePerformanceMetrics } from '@/lib/api/performance/performanceCalculation';
 import { aggregateSalesData } from '@/lib/api/performance/salesAggregation';
-import { logger } from '@/lib/logger';
 import {
-  calculateAveragePopularity,
-  calculateAverageProfitMargin,
-  calculateThresholds,
+    calculateAveragePopularity,
+    calculateAverageProfitMargin,
+    calculateThresholds,
 } from '@/lib/api/performance/thresholdCalculation';
+import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { fetchPerformanceDishes, type PerformanceDish } from './helpers/fetchPerformanceDishes';
 import { findTargetMenuId } from './helpers/findTargetMenuId';
-import { fetchPerformanceDishes } from './helpers/fetchPerformanceDishes';
 import { generatePerformanceSummary } from './helpers/generatePerformanceSummary';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 export async function GET(request: NextRequest) {
   try {
@@ -58,19 +58,19 @@ export async function GET(request: NextRequest) {
     }
 
     // Filter sales_data by date range (last 7 days)
-    const filteredDishes = dishes?.map((dish: unknown) => {
+    const filteredDishes = dishes?.map((dish: PerformanceDish) => {
       if (!dish.sales_data || dish.sales_data.length === 0) return dish;
       return {
         ...dish,
         sales_data: filterSalesDataByDateRange(dish.sales_data, dateRange),
       };
-    });
+    }) as PerformanceDish[];
 
     // Remove duplicates
-    const uniqueDishes = deduplicateDishes(filteredDishes || []);
+    const uniqueDishes = deduplicateDishes(filteredDishes || []) as PerformanceDish[];
 
     // Filter dishes with sales data
-    const dishesWithSales = filterDishesWithSales(filteredDishes || []);
+    const dishesWithSales = filterDishesWithSales(filteredDishes || []) as PerformanceDish[];
 
     // Calculate thresholds
     const averageProfitMargin = calculateAverageProfitMargin(uniqueDishes);
@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
 
     // Calculate performance data
     const performanceData = uniqueDishes.map(dish => {
-      const aggregatedSales = aggregateSalesData(dish.sales_data, dateRange);
+      const aggregatedSales = aggregateSalesData(dish.sales_data || null, dateRange);
       const metrics = calculatePerformanceMetrics(
         dish,
         aggregatedSales,
@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
 
       return {
         id: dish.id,
-        name: dish.name,
+        name: dish.name as string,
         selling_price: dish.selling_price,
         number_sold: aggregatedSales.numberSold,
         popularity_percentage: aggregatedSales.popularityPercentage,

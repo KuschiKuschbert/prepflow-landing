@@ -4,6 +4,21 @@ import '@testing-library/jest-dom';
 const projectDir = process.cwd();
 loadEnvConfig(projectDir);
 
+// Ensure required env vars are present for tests
+process.env.NEXT_PUBLIC_SUPABASE_URL =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://test.supabase.co';
+process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'test-anon-key';
+process.env.SUPABASE_SERVICE_ROLE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY || 'test-service-role-key';
+process.env.AUTH0_SECRET =
+  process.env.AUTH0_SECRET || 'test-auth0-secret-32-characters-minimum!!';
+process.env.AUTH0_BASE_URL = process.env.AUTH0_BASE_URL || 'http://localhost:3000';
+process.env.AUTH0_ISSUER_BASE_URL =
+  process.env.AUTH0_ISSUER_BASE_URL || 'https://example.auth0.com';
+process.env.AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID || 'test-client-id';
+process.env.AUTH0_CLIENT_SECRET = process.env.AUTH0_CLIENT_SECRET || 'test-client-secret';
+
 // Polyfill Web APIs missing in JSDOM
 // Node 18+ has these globally, but JSDOM environment might hide them
 const polyfillWebAPIs = () => {

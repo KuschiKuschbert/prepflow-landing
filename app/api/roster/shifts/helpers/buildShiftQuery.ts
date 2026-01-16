@@ -5,7 +5,7 @@
  * @param {any} params - Query parameters
  * @returns {Promise<{ data: any; error: any; count: number | null }>} Query result
  */
-export async function buildShiftQuery(supabase: unknown, params: unknown) {
+export async function buildShiftQuery(supabase: any, params: any) {
   let query = supabase.from('shifts').select('*', { count: 'exact' });
 
   // Filter by employee

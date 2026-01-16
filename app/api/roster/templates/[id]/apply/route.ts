@@ -93,7 +93,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     if (shiftsError) {
       logger.error('[Templates API] Database error fetching template shifts:', {
         error: shiftsError.message,
-        code: (shiftsError as unknown).code,
+        code: shiftsError.code,
         context: { endpoint: '/api/roster/templates/[id]/apply', operation: 'POST', templateId },
       });
 
@@ -127,7 +127,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     if (existingShiftsError) {
       logger.error('[Templates API] Database error fetching existing shifts:', {
         error: existingShiftsError.message,
-        code: (existingShiftsError as unknown).code,
+        code: existingShiftsError.code,
         context: { endpoint: '/api/roster/templates/[id]/apply', operation: 'POST', templateId },
       });
     }

@@ -22,7 +22,7 @@ export async function loadJSONStorage() {
 /**
  * Initialize storage with error handling
  */
-export function initializeStorage(JSONStorageClass: unknown) {
+export function initializeStorage(JSONStorageClass: any) {
   try {
     return new JSONStorageClass();
   } catch (storageErr) {

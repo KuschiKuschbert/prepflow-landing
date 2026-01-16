@@ -43,7 +43,7 @@ export function ExportOptions({ handleExport, exportLoading }: ExportOptionsProp
     logger.dev('[ExportOptions] CACHE BUST - Version 2.0.0-dropdown is running!');
     // Also log to window for easy debugging
     if (typeof window !== 'undefined') {
-      (window as unknown).__EXPORT_OPTIONS_VERSION__ = EXPORT_OPTIONS_VERSION;
+      (window as any).__EXPORT_OPTIONS_VERSION__ = EXPORT_OPTIONS_VERSION;
     }
   }, []);
 

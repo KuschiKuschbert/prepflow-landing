@@ -34,7 +34,7 @@ export async function findTargetMenuId(
     if (lockedMenuError) {
       logger.warn('[Performance Summary API] Error fetching locked menu:', {
         error: lockedMenuError.message,
-        code: (lockedMenuError as unknown).code,
+        code: lockedMenuError.code,
       });
     } else if (lockedMenu) {
       targetMenuId = lockedMenu.id;

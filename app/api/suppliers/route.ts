@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Suppliers API] Database error fetching suppliers:', {
         error: error.message,
-        code: (error as unknown).code,
+        code: error.code,
         context: { endpoint: '/api/suppliers', operation: 'GET', table: 'suppliers' },
       });
 

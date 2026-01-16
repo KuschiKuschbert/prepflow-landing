@@ -10,12 +10,12 @@ import { syncStaffFromSquare } from '@/lib/square/sync/staff';
  * @param {string} userId - User ID
  */
 export async function routeWebhookEvent(event: unknown, userId: string): Promise<void> {
-  const eventType = event.type;
+  const eventType = (event as { type: string }).type;
 
   logger.dev('[Square Webhook] Routing event:', {
     eventType,
     userId,
-    eventId: event.event_id,
+    eventId: (event as { event_id?: string }).event_id,
   });
 
   switch (eventType) {

@@ -27,7 +27,7 @@ export function verifyWebhookSignature(
     return crypto.timingSafeEqual(Buffer.from(calculatedSignature), Buffer.from(receivedSignature));
   } catch (error: unknown) {
     logger.error('[Square Webhook] Error verifying signature:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
     });
     return false;
   }

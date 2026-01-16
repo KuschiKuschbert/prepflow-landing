@@ -1,13 +1,13 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import {
-  enableGoogleConnectionForApp,
-  verifyGoogleConnection,
+    enableGoogleConnectionForApp,
+    verifyGoogleConnection,
 } from '@/lib/auth0-google-connection';
 import { getSocialConnections, verifyCallbackUrls } from '@/lib/auth0-management';
 import { logger } from '@/lib/logger';
 import { ManagementClient } from 'auth0';
 import { NextResponse } from 'next/server';
 import { buildRequiredUrls } from './helpers/buildRequiredUrls';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Fix Auth0 Callback URLs via Management API
@@ -103,7 +103,7 @@ export async function POST() {
         callbacks: updatedCallbacks,
         allowed_logout_urls: updatedLogoutUrls,
         web_origins: updatedWebOrigins,
-      } as unknown, // Auth0 SDK types may be incomplete
+      } as any, // Auth0 SDK types may be incomplete
     );
 
     logger.info('[Auth0 Fix] Updated Auth0 application configuration', {

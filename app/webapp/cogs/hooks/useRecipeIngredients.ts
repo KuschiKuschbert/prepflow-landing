@@ -3,15 +3,15 @@
 
 'use client';
 
-import { useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
-import { RecipeIngredient } from '../types';
+import { useCallback } from 'react';
+import { COGSCalculation, RecipeIngredient } from '../types';
 import { useRecipeIngredientLoading } from './useRecipeIngredientLoading';
 
 import { logger } from '@/lib/logger';
 interface UseRecipeIngredientsProps {
   setRecipeIngredients: React.Dispatch<React.SetStateAction<RecipeIngredient[]>>;
-  setCalculations: React.Dispatch<React.SetStateAction<unknown[]>>;
+  setCalculations: React.Dispatch<React.SetStateAction<COGSCalculation[]>>;
   calculateCOGS: (recipeIngredients: RecipeIngredient[]) => void;
   setError: (error: string) => void;
   setIsLoadingFromApi?: (loading: boolean) => void;

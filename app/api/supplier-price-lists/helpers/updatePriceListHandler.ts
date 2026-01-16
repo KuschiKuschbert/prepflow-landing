@@ -47,7 +47,7 @@ export async function handleUpdatePriceList(request: NextRequest) {
       message: 'Supplier price list updated successfully',
       data,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     if (error.message) {
       logger.error('[Supplier Price Lists API] Database error updating:', {
         error: error.message,

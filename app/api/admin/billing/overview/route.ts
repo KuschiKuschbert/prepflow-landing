@@ -1,8 +1,9 @@
 import { requireAdmin } from '@/lib/admin-auth';
-import { supabaseAdmin } from '@/lib/supabase';
-import { getStripe } from '@/lib/stripe';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { getStripe } from '@/lib/stripe';
+import { supabaseAdmin } from '@/lib/supabase';
+import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -29,7 +30,7 @@ export async function GET(request: NextRequest) {
     if (activeSubscriptionsError) {
       logger.warn('[Admin Billing Overview] Error fetching active subscriptions count:', {
         error: activeSubscriptionsError.message,
-        code: (activeSubscriptionsError as unknown).code,
+        code: (activeSubscriptionsError as PostgrestError).code,
       });
     }
 
@@ -41,7 +42,7 @@ export async function GET(request: NextRequest) {
     if (trialSubscriptionsError) {
       logger.warn('[Admin Billing Overview] Error fetching trial subscriptions count:', {
         error: trialSubscriptionsError.message,
-        code: (trialSubscriptionsError as unknown).code,
+        code: (trialSubscriptionsError as PostgrestError).code,
       });
     }
 
@@ -54,7 +55,7 @@ export async function GET(request: NextRequest) {
     if (cancelledSubscriptionsError) {
       logger.warn('[Admin Billing Overview] Error fetching cancelled subscriptions count:', {
         error: cancelledSubscriptionsError.message,
-        code: (cancelledSubscriptionsError as unknown).code,
+        code: (cancelledSubscriptionsError as PostgrestError).code,
       });
     }
 
@@ -78,8 +79,8 @@ export async function GET(request: NextRequest) {
           monthlyRecurringRevenue += amount;
           // Calculate revenue based on subscription period
           // Stripe Subscription type has current_period_start and current_period_end as numbers (Unix timestamps)
-          const periodStart = (sub as unknown).current_period_start;
-          const periodEnd = (sub as unknown).current_period_end;
+          const periodStart = (sub as unknown as { current_period_start: number }).current_period_start;
+          const periodEnd = (sub as unknown as { current_period_end: number }).current_period_end;
           if (
             periodStart &&
             periodEnd &&

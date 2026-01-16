@@ -11,6 +11,8 @@ interface ChartDataPoint {
   xIndex: number;
 }
 
+type TooltipPayload = Array<{ payload?: ChartDataPoint }>;
+
 export function useChartFormatters(
   chartData: ChartDataPoint[],
   timeFilter: '24h' | '7d' | '30d' | 'all',
@@ -66,7 +68,7 @@ export function useChartFormatters(
     }
   };
 
-  const formatTooltipLabel = (label: number | string, payload?: unknown) => {
+  const formatTooltipLabel = (label: number | string, payload?: TooltipPayload) => {
     try {
       let index: number;
       if (typeof label === 'number') {
@@ -75,7 +77,7 @@ export function useChartFormatters(
         index = parseInt(label as string, 10);
       }
 
-      if (payload && payload.length > 0 && payload[0].payload) {
+      if (payload && payload.length > 0 && payload[0]?.payload) {
         const dataPoint = payload[0].payload;
         if (dataPoint.timeValue) {
           const date = new Date(dataPoint.timeValue);

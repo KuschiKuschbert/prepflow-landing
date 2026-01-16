@@ -58,7 +58,7 @@ export async function createCleaningTask(taskData: {
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
 
   // Build insert data
-  const insertData: unknown = {
+  const insertData: Record<string, unknown> = {
     status: 'pending',
   };
 
@@ -95,9 +95,9 @@ export async function createCleaningTask(taskData: {
   if (insertError) {
     logger.error('[Cleaning Tasks API] Database error inserting task:', {
       error: insertError.message,
-      code: (insertError as unknown).code,
-      details: (insertError as unknown).details,
-      hint: (insertError as unknown).hint,
+      code: insertError.code,
+      details: insertError.details,
+      hint: insertError.hint,
       insertData,
       context: { endpoint: '/api/cleaning-tasks', operation: 'POST', table: 'cleaning_tasks' },
     });
@@ -114,9 +114,9 @@ export async function createCleaningTask(taskData: {
   if (error) {
     logger.error('[Cleaning Tasks API] Database error fetching created task:', {
       error: error.message,
-      code: (error as unknown).code,
-      details: (error as unknown).details,
-      hint: (error as unknown).hint,
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
       taskId: insertResult.id,
       context: { endpoint: '/api/cleaning-tasks', operation: 'POST', table: 'cleaning_tasks' },
     });

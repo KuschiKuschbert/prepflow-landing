@@ -22,7 +22,7 @@ export async function fetchAllergens(startDate: string, endDate: string) {
   if (allergenError) {
     logger.warn('[Health Inspector Report] Error fetching allergen records:', {
       error: allergenError.message,
-      code: (allergenError as unknown).code,
+      code: allergenError.code,
     });
   }
 
@@ -56,7 +56,7 @@ export async function fetchEquipmentMaintenance(startDate: string, endDate: stri
   if (maintenanceError) {
     logger.warn('[Health Inspector Report] Error fetching equipment maintenance:', {
       error: maintenanceError.message,
-      code: (maintenanceError as unknown).code,
+      code: maintenanceError.code,
     });
   }
 

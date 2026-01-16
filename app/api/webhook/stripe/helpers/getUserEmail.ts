@@ -16,7 +16,7 @@ export async function getUserEmailFromCustomerId(
   if (!supabaseAdmin) return null;
 
   // Handle both customer ID string and customer object
-  const id = typeof customerId === 'string' ? customerId : (customerId as unknown)?.id || null;
+  const id = typeof customerId === 'string' ? customerId : (customerId as { id: string })?.id || null;
   if (!id) return null;
 
   // Fallback 1: Try database lookup first
@@ -35,7 +35,7 @@ export async function getUserEmailFromCustomerId(
     try {
       const customer = await stripe.customers.retrieve(id);
       if (customer && !customer.deleted && typeof customer === 'object') {
-        const email = (customer as unknown).email;
+        const email = (customer as Stripe.Customer).email;
         if (email) {
           // Auto-populate billing_customers table for future lookups
           await supabaseAdmin

@@ -4,8 +4,8 @@
  * @param {Array} rows - Recipe ingredient rows with ingredients
  * @returns {Array} Normalized items
  */
-export function mapRecipeIngredients(rows: unknown[]): unknown[] {
-  return rows.map((row: unknown) => {
+export function mapRecipeIngredients(rows: any[]): unknown[] {
+  return rows.map((row: any) => {
     const ing = row.ingredients || {};
     return {
       id: row.id,

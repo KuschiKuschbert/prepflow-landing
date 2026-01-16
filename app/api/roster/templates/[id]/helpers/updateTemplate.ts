@@ -36,7 +36,7 @@ export async function updateTemplate(templateId: string, body: unknown): Promise
   if (updateError) {
     logger.error('[Templates API] Database error updating template:', {
       error: updateError.message,
-      code: (updateError as unknown).code,
+      code: updateError.code,
       context: { endpoint: '/api/roster/templates/[id]', operation: 'PUT', templateId },
     });
 

@@ -31,18 +31,18 @@ export async function fetchPaginatedTasks(
     .from('cleaning_tasks')
     .select('*', { count: 'exact', head: true });
 
-  if (countError && (countError as unknown).code !== '42P01') {
+  if (countError && countError.code !== '42P01') {
     logger.error('[Cleaning Tasks API] Database error fetching count:', {
       error: countError.message,
-      code: (countError as unknown).code,
+      code: countError.code,
     });
   }
 
-  query = query.range(from, to);
-  const { data, error } = await query;
+  query = (query as any).range(from, to);
+  const { data, error } = await (query as any);
 
   if (error) {
-    const errorCode = (error as unknown).code;
+    const errorCode = error.code;
 
     if (errorCode === '42P01') {
       logger.dev('[Cleaning Tasks API] Table does not exist, returning empty array');

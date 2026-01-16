@@ -5,8 +5,9 @@
  * @returns {boolean} True if table is missing
  */
 export function isTableNotFound(error: unknown): boolean {
-  const errorCode = error?.code;
-  const errorMessage = error?.message || '';
+  const err = error as { code?: string; message?: string };
+  const errorCode = err?.code;
+  const errorMessage = err?.message || '';
   return (
     errorCode === '42P01' ||
     errorMessage.includes('does not exist') ||

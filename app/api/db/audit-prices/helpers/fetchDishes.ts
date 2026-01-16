@@ -4,7 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 import type { DishRecord } from '../types';
 
-import { AuditDishItem } from '../types';
+
 
 /**
  * Fetch all dishes

@@ -4,9 +4,9 @@
  */
 
 import { AUSTRALIAN_ALLERGENS, consolidateAllergens } from '@/lib/allergens/australian-allergens';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { aggregateDishAllergensForExport } from './aggregateDishAllergens';
 import { aggregateRecipeAllergens } from './aggregateRecipeAllergens';
 import { fetchMenuItemsMap } from './fetchMenuItems';
@@ -25,6 +25,21 @@ export interface AllergenExportData {
   items: AllergenExportItem[];
 }
 
+interface RecipeRow {
+  id: string;
+  name?: string;
+  recipe_name?: string;
+  description?: string;
+  allergens?: string[];
+}
+
+interface DishRow {
+  id: string;
+  dish_name: string;
+  description?: string;
+  allergens?: string[];
+}
+
 /**
  * Fetches all data needed for allergen export
  *
@@ -40,13 +55,13 @@ export async function fetchAllergenExportData(
   }
 
   // Fetch all recipes
-  let recipes: unknown[] = [];
+  let recipes: RecipeRow[] = [];
   const { data: recipesData, error: recipesError } = await supabaseAdmin
     .from('recipes')
     .select('*');
 
   if (recipesError) {
-    const errorCode = (recipesError as unknown).code;
+    const errorCode = recipesError.code;
     if (errorCode === '42P01') {
       logger.dev('[Allergen Export] Recipes table not found, returning empty data');
       recipes = [];
@@ -57,24 +72,24 @@ export async function fetchAllergenExportData(
       });
       logger.error('[Allergen Export] Error fetching recipes:', {
         error: recipesError.message,
-        code: (recipesError as unknown).code,
+        code: recipesError.code,
       });
       throw ApiErrorHandler.fromSupabaseError(recipesError, 500);
     }
   } else {
-    recipes = recipesData || [];
+    recipes = (recipesData || []) as RecipeRow[];
   }
 
   // Fetch all dishes
-  let dishes: unknown[] = [];
+  let dishes: DishRow[] = [];
   const { data: dishesData, error: dishesError } = await supabaseAdmin
     .from('dishes')
     .select('id, dish_name, description, allergens');
 
-  if (dishesError && (dishesError as unknown).code !== '42P01') {
+  if (dishesError && dishesError.code !== '42P01') {
     logger.warn('[Allergen Export] Error fetching dishes:', dishesError);
   } else if (dishesData) {
-    dishes = dishesData;
+    dishes = dishesData as DishRow[];
   }
 
   // Aggregate allergens for recipes
@@ -92,7 +107,7 @@ export async function fetchAllergenExportData(
   // Combine recipes and dishes with allergen sources
   const recipesWithNormalizedNames = recipes.map(r => ({
     ...r,
-    recipe_name: (r as unknown).recipe_name || (r as unknown).name || '',
+    recipe_name: r.recipe_name || r.name || '',
   }));
 
   const allItems: AllergenExportItem[] = [

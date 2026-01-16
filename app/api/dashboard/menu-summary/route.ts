@@ -1,7 +1,22 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { logger } from '@/lib/logger';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+
+interface Dish {
+  id: string;
+  name?: string;
+  recipe_id?: string | null;
+  selling_price?: number | null;
+}
+
+interface MenuItem {
+  id: string;
+  menu_id: string;
+  dish_id: string;
+  category?: string;
+}
+
 export async function GET(_req: NextRequest) {
   try {
     if (!supabaseAdmin) {
@@ -20,7 +35,7 @@ export async function GET(_req: NextRequest) {
     if (menusError) {
       logger.error('[Dashboard Menu Summary] Error fetching menus:', {
         error: menusError.message,
-        code: (menusError as unknown).code,
+        code: menusError.code,
         context: { endpoint: '/api/dashboard/menu-summary', operation: 'GET' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(menusError, 500), { status: 500 });
@@ -34,7 +49,7 @@ export async function GET(_req: NextRequest) {
     if (menuItemsError) {
       logger.error('[Dashboard Menu Summary] Error fetching menu items:', {
         error: menuItemsError.message,
-        code: (menuItemsError as unknown).code,
+        code: menuItemsError.code,
         context: { endpoint: '/api/dashboard/menu-summary', operation: 'GET' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(menuItemsError, 500), {
@@ -50,7 +65,7 @@ export async function GET(_req: NextRequest) {
     if (dishesError) {
       logger.error('[Dashboard Menu Summary] Error fetching dishes:', {
         error: dishesError.message,
-        code: (dishesError as unknown).code,
+        code: dishesError.code,
         context: { endpoint: '/api/dashboard/menu-summary', operation: 'GET' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(dishesError, 500), {
@@ -59,23 +74,23 @@ export async function GET(_req: NextRequest) {
     }
 
     // Create dish lookup map
-    const dishMap = new Map((dishes || []).map((dish: unknown) => [dish.id, dish]));
+    const dishMap = new Map((dishes as Dish[] || []).map((dish) => [dish.id, dish]));
 
     // Count active menus (menus with items)
-    const menusWithItems = new Set((menuItems || []).map((item: unknown) => item.menu_id));
+    const menusWithItems = new Set((menuItems as MenuItem[] || []).map((item) => item.menu_id));
     const activeMenus = menusWithItems.size;
 
     // Count total dishes across all menus
     const totalDishes = menuItems?.length || 0;
 
     // Count dishes without recipes
-    const dishesWithoutRecipes = (menuItems || []).filter((item: unknown) => {
+    const dishesWithoutRecipes = (menuItems as MenuItem[] || []).filter((item) => {
       const dish = dishMap.get(item.dish_id);
       return dish && (!dish.recipe_id || dish.recipe_id === null);
     }).length;
 
     // Count dishes without costs
-    const dishesWithoutCosts = (menuItems || []).filter((item: unknown) => {
+    const dishesWithoutCosts = (menuItems as MenuItem[] || []).filter((item) => {
       const dish = dishMap.get(item.dish_id);
       return (
         dish && (!dish.selling_price || dish.selling_price === null || dish.selling_price === 0)

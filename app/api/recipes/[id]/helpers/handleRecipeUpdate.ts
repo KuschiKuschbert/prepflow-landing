@@ -3,8 +3,8 @@
  */
 
 import {
-  invalidateDishesWithRecipe,
-  invalidateRecipeAllergenCache,
+    invalidateDishesWithRecipe,
+    invalidateRecipeAllergenCache,
 } from '@/lib/allergens/cache-invalidation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getUserEmail } from '@/lib/auth0-api-helpers';
@@ -25,7 +25,7 @@ import { detectRecipeChanges } from './detectRecipeChanges';
  */
 export async function handleRecipeUpdate(
   recipeId: string,
-  body: unknown,
+  body: any,
   request: NextRequest,
 ): Promise<unknown> {
   // Get user email for change tracking
@@ -77,7 +77,7 @@ export async function handleRecipeUpdate(
     throw ApiErrorHandler.fromSupabaseError(updateError, 500);
   }
 
-  const recipeName = updatedRecipe.recipe_name || currentRecipe?.recipe_name || 'Unknown Recipe';
+  const recipeName = (updatedRecipe as any).recipe_name || (currentRecipe as any)?.recipe_name || 'Unknown Recipe';
 
   // Invalidate caches if needed
   if (ingredientsChanged) {

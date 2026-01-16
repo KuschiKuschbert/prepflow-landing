@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
 import { updateCleaningTask } from '../helpers/updateCleaningTask';
-import { handleCleaningTaskError } from './handleCleaningTaskError';
 import { buildUpdateData } from './buildUpdateData';
+import { handleCleaningTaskError } from './handleCleaningTaskError';
 import { updateCleaningTaskSchema } from './schemas';
 
 export async function handleUpdateCleaningTask(request: NextRequest) {
@@ -44,13 +44,14 @@ export async function handleUpdateCleaningTask(request: NextRequest) {
       data,
     });
   } catch (err: unknown) {
-    if (err.status) {
+    const errorWithStatus = err as { status?: number; message?: string };
+    if (errorWithStatus.status) {
       logger.error('[Cleaning Tasks API] Error with status:', {
         error: err instanceof Error ? err.message : String(err),
-        status: err.status,
+        status: errorWithStatus.status,
         context: { endpoint: '/api/cleaning-tasks', method: 'PUT' },
       });
-      return NextResponse.json(err, { status: err.status });
+      return NextResponse.json(err, { status: errorWithStatus.status });
     }
     return handleCleaningTaskError(err, 'PUT');
   }

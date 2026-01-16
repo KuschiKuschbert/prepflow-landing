@@ -40,11 +40,11 @@ export function useParLevelsData({ showError }: UseParLevelsDataProps): UseParLe
 
       const result = await parseParLevelsResponse({ response, showError });
       if (!result) return;
-      if (response.ok && result.success) {
-        setParLevels(result.data || []);
-        cacheData('par_levels', result.data || []);
+      if (response.ok && (result as any).success) {
+        setParLevels((result as any).data || []);
+        cacheData('par_levels', (result as any).data || []);
       } else {
-        handleParLevelsError({ response, result, showError });
+        handleParLevelsError({ response, result: result as any, showError });
       }
     } catch (err) {
       logger.error('Failed to fetch par levels:', err);

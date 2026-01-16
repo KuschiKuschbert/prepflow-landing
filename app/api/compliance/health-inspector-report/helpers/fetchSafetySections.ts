@@ -1,5 +1,5 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 /**
  * Fetch incident reports.
@@ -23,7 +23,7 @@ export async function fetchIncidents(startDate: string, endDate: string) {
   if (incidentsError) {
     logger.warn('[Health Inspector Report] Error fetching incident reports:', {
       error: incidentsError.message,
-      code: (incidentsError as unknown).code,
+      code: incidentsError.code,
     });
     return null;
   }
@@ -69,7 +69,7 @@ export async function fetchHACCP(startDate: string, endDate: string) {
   if (haccpError) {
     logger.warn('[Health Inspector Report] Error fetching HACCP records:', {
       error: haccpError.message,
-      code: (haccpError as unknown).code,
+      code: haccpError.code,
     });
     return null;
   }
@@ -79,9 +79,9 @@ export async function fetchHACCP(startDate: string, endDate: string) {
     records: records,
     total_records: records.length,
     out_of_limit: records.filter(r => !r.is_within_limit),
-    by_step: records.reduce((acc: unknown, r) => {
-      acc[r.haccp_step] = (acc[r.haccp_step] || 0) + 1;
+    by_step: records.reduce((acc: Record<string, number>, r) => {
+      acc[r.haccp_step as string] = (acc[r.haccp_step as string] || 0) + 1;
       return acc;
-    }, {}),
+    }, {} as Record<string, number>),
   };
 }

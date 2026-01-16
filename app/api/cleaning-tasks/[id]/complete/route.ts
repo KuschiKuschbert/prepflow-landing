@@ -72,7 +72,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       if (taskError && taskError.code !== 'PGRST116') {
         logger.warn('[Cleaning Tasks API] Error checking if task exists:', {
           error: taskError.message,
-          code: (taskError as unknown).code,
+          code: taskError.code,
           taskId: id,
         });
       }
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     if (error) {
       logger.error('[Cleaning Tasks API] Database error creating completion:', {
         error: error.message,
-        code: (error as unknown).code,
+        code: error.code,
         taskId: id,
         context: {
           endpoint: '/api/cleaning-tasks/[id]/complete',
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       });
 
       // Handle missing table gracefully
-      if ((error as unknown).code === '42P01') {
+      if (error.code === '42P01') {
         return NextResponse.json(
           ApiErrorHandler.createError(
             'Completion table does not exist. Please run database migration.',
@@ -139,8 +139,8 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/cleaning-tasks/[id]/complete', method: 'POST' },
     });
-    if (err && typeof err === 'object' && 'status' in err) {
-      return NextResponse.json(err, { status: err.status || 500 });
+    if (err && typeof err === 'object' && 'status' in err && typeof (err as { status: unknown }).status === 'number') {
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
     }
     return NextResponse.json(
       ApiErrorHandler.createError(

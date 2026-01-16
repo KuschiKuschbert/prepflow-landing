@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 import { handleTemperatureEquipmentError } from './handleTemperatureEquipmentError';
 
 export async function handleDeleteTemperatureEquipment(request: NextRequest) {
@@ -28,7 +28,7 @@ export async function handleDeleteTemperatureEquipment(request: NextRequest) {
     if (error) {
       logger.error('[Temperature Equipment API] Database error deleting equipment:', {
         error: error.message,
-        code: (error as unknown).code,
+        code: error.code,
         context: { endpoint: '/api/temperature-equipment', operation: 'DELETE', equipmentId: id },
       });
 

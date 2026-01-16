@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 import { buildUsageMap } from './helpers/buildUsageMap';
 import { processIngredientDeduplication } from './helpers/processIngredients';
 import { processRecipeDeduplication } from './helpers/processRecipes';
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     if (ingErr) {
       logger.error('[Dedupe Execute API] Error fetching ingredients:', {
         error: ingErr.message,
-        code: (ingErr as unknown).code,
+        code: ingErr.code,
         context: { endpoint: '/api/dedupe/execute', operation: 'POST' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(ingErr, 500), { status: 500 });
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     if (riErr) {
       logger.error('[Dedupe Execute API] Error fetching recipe ingredients:', {
         error: riErr.message,
-        code: (riErr as unknown).code,
+        code: riErr.code,
         context: { endpoint: '/api/dedupe/execute', operation: 'POST' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(riErr, 500), { status: 500 });
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     if (recErr) {
       logger.error('[Dedupe Execute API] Error fetching recipes:', {
         error: recErr.message,
-        code: (recErr as unknown).code,
+        code: recErr.code,
         context: { endpoint: '/api/dedupe/execute', operation: 'POST' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(recErr, 500), { status: 500 });
@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
     if (riRecErr) {
       logger.error('[Dedupe Execute API] Error fetching recipe ingredients by recipe:', {
         error: riRecErr.message,
-        code: (riRecErr as unknown).code,
+        code: riRecErr.code,
         context: { endpoint: '/api/dedupe/execute', operation: 'POST' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(riRecErr, 500), { status: 500 });
@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
         'Failed to execute deduplication',
         'SERVER_ERROR',
         500,
-        e?.message || String(e),
+        e instanceof Error ? e.message : String(e),
       ),
       { status: 500 },
     );

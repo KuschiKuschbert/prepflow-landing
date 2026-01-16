@@ -30,7 +30,7 @@ export async function deleteTemplate(templateId: string): Promise<NextResponse> 
   if (deleteError) {
     logger.error('[Templates API] Database error deleting template:', {
       error: deleteError.message,
-      code: (deleteError as unknown).code,
+      code: deleteError.code,
       context: { endpoint: '/api/roster/templates/[id]', operation: 'DELETE', templateId },
     });
 

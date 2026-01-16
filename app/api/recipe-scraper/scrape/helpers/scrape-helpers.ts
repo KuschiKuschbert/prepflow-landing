@@ -2,8 +2,8 @@
  * Scrape operation helpers
  */
 
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { NextResponse } from 'next/server';
 
 export async function loadStorage() {
@@ -19,7 +19,7 @@ export async function loadStorage() {
 }
 
 export async function handleDiscovery(
-  scraper: unknown,
+  scraper: any,
   source: string,
   limit: number,
 ): Promise<string[]> {

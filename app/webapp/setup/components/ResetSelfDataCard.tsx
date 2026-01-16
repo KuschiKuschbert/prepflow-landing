@@ -9,7 +9,7 @@ interface Props {
 }
 
 interface DataLayerWindow extends Window {
-  dataLayer: unknown[];
+  dataLayer: Record<string, unknown>[];
 }
 
 export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
@@ -75,7 +75,7 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
         stack: e instanceof Error ? e.stack : undefined,
       });
 
-      setResult((e as unknown)?.message || 'Error');
+      setResult(errorMessage || 'Error');
       if (typeof window !== 'undefined') {
         const win = window as unknown as DataLayerWindow;
         win.dataLayer.push({ event: 'reset_self_error' });

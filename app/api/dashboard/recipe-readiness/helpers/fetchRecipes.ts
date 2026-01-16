@@ -1,7 +1,13 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { isTableNotFound } from './checkTableExists';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+
+interface Recipe {
+  id: string;
+  recipe_name?: string;
+  name?: string;
+}
 
 /**
  * Fetch recipes with error handling for missing tables.
@@ -9,7 +15,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
  * @returns {Promise<Array>} Recipe list
  * @throws {Error} If fetch fails (non-table-not-found errors)
  */
-export async function fetchRecipes(): Promise<unknown[]> {
+export async function fetchRecipes(): Promise<Recipe[]> {
   if (!supabaseAdmin) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
@@ -21,7 +27,7 @@ export async function fetchRecipes(): Promise<unknown[]> {
     if (testError) {
       logger.error('Database connection test failed:', {
         error: testError.message,
-        code: (testError as unknown).code,
+        code: testError.code,
       });
     }
   } catch (testErr) {
@@ -33,7 +39,7 @@ export async function fetchRecipes(): Promise<unknown[]> {
   // Fetch all recipes
   const { data: recipes, error: recipesError } = await supabaseAdmin
     .from('recipes')
-    .select('id, recipe_name');
+    .select('id, name:recipe_name');
 
   if (recipesError) {
     if (isTableNotFound(recipesError)) {
@@ -41,9 +47,9 @@ export async function fetchRecipes(): Promise<unknown[]> {
       return [];
     }
 
-    const errorCode = (recipesError as unknown).code;
+    const errorCode = recipesError.code;
     const errorMessage = recipesError.message || 'Unknown database error';
-    const errorHint = (recipesError as unknown).hint;
+    const errorHint = (recipesError as { hint?: string }).hint;
 
     logger.error('Error fetching recipes:', {
       error: errorMessage,

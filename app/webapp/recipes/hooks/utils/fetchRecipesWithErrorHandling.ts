@@ -1,6 +1,6 @@
 import { cacheRecipes } from '@/lib/cache/recipe-cache';
 import { categorizeError, retryWithBackoff, RecipeError } from '../../types/errors';
-import { Recipe } from '../../types';
+import { Recipe, RecipeIngredientWithDetails } from '../../types';
 import { precalculatePrices } from './precalculatePrices';
 import { logger } from '@/lib/logger';
 
@@ -26,11 +26,15 @@ export async function fetchRecipesWithErrorHandling(
   setIsHydrated: (hydrated: boolean) => void,
   updateVisibleRecipePrices: (
     recipes: Recipe[],
-    fetchRecipeIngredients: (recipeId: string) => Promise<unknown[]>,
-    fetchBatchRecipeIngredients?: (recipeIds: string[]) => Promise<Record<string, unknown[]>>,
+    fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>,
+    fetchBatchRecipeIngredients?: (
+      recipeIds: string[],
+    ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
   ) => Promise<void>,
-  fetchRecipeIngredients: (recipeId: string) => Promise<unknown[]>,
-  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<Record<string, unknown[]>>,
+  fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>,
+  fetchBatchRecipeIngredients: (
+    recipeIds: string[],
+  ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
   pricesCalculatedRef: React.MutableRefObject<Set<string>>,
 ): Promise<void> {
   setLoading(true);

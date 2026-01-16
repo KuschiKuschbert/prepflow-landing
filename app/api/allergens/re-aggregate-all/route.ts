@@ -4,14 +4,14 @@
  * Forces re-aggregation of allergens for all recipes and dishes
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import {
+    aggregateDishAllergens,
+    batchAggregateRecipeAllergens,
+} from '@/lib/allergens/allergen-aggregation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger, type ErrorContext } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import {
-  batchAggregateRecipeAllergens,
-  aggregateDishAllergens,
-} from '@/lib/allergens/allergen-aggregation';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Forces re-aggregation of allergens for all recipes and dishes.
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     if (recipesError) {
       logger.error('[Re-aggregate All Allergens API] Error fetching recipes:', {
         error: recipesError.message,
-        code: (recipesError as unknown).code,
+        code: recipesError.code,
         context: { endpoint: '/api/allergens/re-aggregate-all', operation: 'POST' },
       });
       return NextResponse.json(
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     // Fetch all dish IDs
     const { data: dishes, error: dishesError } = await supabaseAdmin.from('dishes').select('id');
 
-    if (dishesError && (dishesError as unknown).code !== '42P01') {
+    if (dishesError && dishesError.code !== '42P01') {
       // Ignore table doesn't exist error
       logger.warn(
         '[Re-aggregate All Allergens API] Error fetching dishes:',

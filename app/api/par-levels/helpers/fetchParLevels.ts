@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server';
  * @param {any} supabaseAdmin - Supabase admin client
  * @returns {Promise<{data: any[] | null, error: NextResponse | null}>} Par levels data and error if any
  */
-export async function fetchParLevels(supabaseAdmin: unknown) {
+export async function fetchParLevels(supabaseAdmin: any) {
   // Try to fetch par levels with ingredient join
   // If join fails, fall back to fetching ingredients separately
   let { data, error } = await supabaseAdmin.from('par_levels').select(
@@ -25,7 +25,7 @@ export async function fetchParLevels(supabaseAdmin: unknown) {
 
   // If join fails, try without join first to see if table exists
   if (error) {
-    const errorCode = (error as unknown).code;
+    const errorCode = (error as any).code;
     const errorMessage = error.message || '';
 
     // If it's a relationship/join error, try fetching without join
@@ -70,7 +70,7 @@ export async function fetchParLevels(supabaseAdmin: unknown) {
 
       // If we got data without join, fetch ingredients separately
       if (simpleData && simpleData.length > 0) {
-        const ingredientIds = simpleData.map((pl: unknown) => pl.ingredient_id).filter((id: unknown) => id);
+        const ingredientIds = simpleData.map((pl: any) => pl.ingredient_id).filter((id: any) => id);
 
         if (ingredientIds.length > 0) {
           const { data: ingredientsData, error: ingredientsError } = await supabaseAdmin
@@ -81,25 +81,25 @@ export async function fetchParLevels(supabaseAdmin: unknown) {
           if (ingredientsError) {
             logger.warn('[Par Levels API] Error fetching ingredients for par levels:', {
               error: ingredientsError.message,
-              code: (ingredientsError as unknown).code,
+              code: (ingredientsError as any).code,
               ingredientIds,
             });
             // Continue without ingredients - par levels will have null ingredients
-            data = simpleData.map((pl: unknown) => ({ ...pl, ingredients: null }));
+            data = simpleData.map((pl: any) => ({ ...pl, ingredients: null }));
             error = null;
           } else {
             // Merge ingredients into par levels
             const ingredientsMap = new Map(
-              (ingredientsData || []).map((ing: unknown) => [ing.id, ing]),
+              (ingredientsData || []).map((ing: any) => [ing.id, ing]),
             );
-            data = simpleData.map((pl: unknown) => ({
+            data = simpleData.map((pl: any) => ({
               ...pl,
               ingredients: ingredientsMap.get(pl.ingredient_id) || null,
             }));
             error = null;
           }
         } else {
-          data = simpleData.map((pl: unknown) => ({ ...pl, ingredients: null }));
+          data = simpleData.map((pl: any) => ({ ...pl, ingredients: null }));
           error = null;
         }
       } else {
@@ -110,7 +110,7 @@ export async function fetchParLevels(supabaseAdmin: unknown) {
   } else {
     // Success with join, order the results
     if (data) {
-      data = data.sort((a: unknown, b: unknown) => {
+      data = data.sort((a: any, b: any) => {
         const aTime = new Date(a.created_at || 0).getTime();
         const bTime = new Date(b.created_at || 0).getTime();
         return bTime - aTime;
@@ -121,7 +121,7 @@ export async function fetchParLevels(supabaseAdmin: unknown) {
   if (error) {
     logger.error('[Par Levels API] Database error fetching par levels:', {
       error: error.message,
-      code: (error as unknown).code,
+      code: (error as any).code,
       details: error,
       context: { endpoint: '/api/par-levels', operation: 'GET', table: 'par_levels' },
     });

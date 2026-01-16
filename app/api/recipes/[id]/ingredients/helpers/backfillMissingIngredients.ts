@@ -8,7 +8,7 @@ import { supabaseAdmin } from '@/lib/supabase';
  * @param {string} recipeId - Recipe ID for logging
  * @returns {Promise<Array>} Rows with backfilled ingredients
  */
-export async function backfillMissingIngredients(rows: unknown[], recipeId: string): Promise<unknown[]> {
+export async function backfillMissingIngredients(rows: any[], recipeId: string): Promise<unknown[]> {
   const missingNested = rows.some(r => !r.ingredients);
   if (!missingNested) return rows;
 
@@ -47,7 +47,7 @@ export async function backfillMissingIngredients(rows: unknown[], recipeId: stri
       .in('id', uniqueIds);
 
     // Normalize the retry result to include category as null for type compatibility
-    ingRows = retryData?.map((ing: unknown) => ({
+    ingRows = retryData?.map((ing: any) => ({
       ...ing,
       category: ing.category ?? null,
     })) as typeof ingRows;

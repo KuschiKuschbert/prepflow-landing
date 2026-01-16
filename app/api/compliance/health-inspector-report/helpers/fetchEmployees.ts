@@ -2,8 +2,8 @@
  * Fetch employee roster with qualifications
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 const EMPLOYEE_SELECT = `
   *,
@@ -18,6 +18,22 @@ const EMPLOYEE_SELECT = `
     )
   )
 `;
+
+interface EmployeeQualification {
+  id: string;
+  employee_id: string;
+  qualification_type_id: string;
+  issue_date?: string;
+  expiry_date?: string;
+  notes?: string;
+  qualification_types?: {
+    id: string;
+    name?: string;
+    description?: string;
+    is_required?: boolean;
+    default_expiry_days?: number;
+  };
+}
 
 /**
  * Fetches active employees with their qualifications.
@@ -36,19 +52,19 @@ export async function fetchEmployees() {
   if (employeesError) {
     logger.warn('[Health Inspector Report] Error fetching employees:', {
       error: employeesError.message,
-      code: (employeesError as unknown).code,
+      code: employeesError.code,
     });
     return { employees: null, qualifications: null };
   }
 
   // Qualification Summary
-  const allQualifications: unknown[] = [];
+  const allQualifications: Array<{ employee_name: string; employee_role: string; expiry_date?: string } & Record<string, unknown>> = [];
   employees?.forEach(emp => {
     if (emp.employee_qualifications) {
-      emp.employee_qualifications.forEach((qual: unknown) => {
+      (emp.employee_qualifications as EmployeeQualification[]).forEach((qual) => {
         allQualifications.push({
-          employee_name: emp.full_name,
-          employee_role: emp.role,
+          employee_name: emp.full_name as string,
+          employee_role: emp.role as string,
           ...qual,
         });
       });

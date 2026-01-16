@@ -3,25 +3,39 @@
  */
 
 import {
-  batchAggregateRecipeAllergens,
-  extractAllergenSources,
+    batchAggregateRecipeAllergens,
+    extractAllergenSources,
 } from '@/lib/allergens/allergen-aggregation';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 export interface RecipeAllergenData {
   allergensByRecipe: Record<string, string[]>;
   recipeIngredientSources: Record<string, Record<string, string[]>>;
 }
 
+interface InputRecipe {
+  id: string;
+  name?: string;
+}
+
+interface RecipeIngredientRow {
+  recipe_id: string;
+  ingredients?: {
+    id?: string;
+    ingredient_name?: string;
+    allergens?: string[];
+  };
+}
+
 /**
  * Aggregates allergens for recipes
  *
- * @param {any[]} recipes - Array of recipe objects
+ * @param {InputRecipe[]} recipes - Array of recipe objects
  * @returns {Promise<RecipeAllergenData>} Aggregated allergen data
  */
-export async function aggregateRecipeAllergens(recipes: unknown[]): Promise<RecipeAllergenData> {
+export async function aggregateRecipeAllergens(recipes: InputRecipe[]): Promise<RecipeAllergenData> {
   // Batch aggregate allergens for recipes
   let allergensByRecipe: Record<string, string[]> = {};
   try {
@@ -57,7 +71,7 @@ export async function aggregateRecipeAllergens(recipes: unknown[]): Promise<Reci
         string,
         Array<{ ingredient_name: string; allergens?: string[] }>
       > = {};
-      recipeIngredients.forEach((ri: unknown) => {
+      (recipeIngredients as RecipeIngredientRow[]).forEach((ri) => {
         const recipeId = ri.recipe_id;
         const ingredient = ri.ingredients;
         if (recipeId && ingredient) {
@@ -65,7 +79,7 @@ export async function aggregateRecipeAllergens(recipes: unknown[]): Promise<Reci
             ingredientsByRecipe[recipeId] = [];
           }
           ingredientsByRecipe[recipeId].push({
-            ingredient_name: ingredient.ingredient_name,
+            ingredient_name: ingredient.ingredient_name || '',
             allergens: ingredient.allergens,
           });
         }

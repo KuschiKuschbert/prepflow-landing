@@ -25,7 +25,7 @@ export async function createSupplier(supplierData: unknown) {
   if (error) {
     logger.error('[Suppliers API] Database error creating supplier:', {
       error: error.message,
-      code: (error as unknown).code,
+      code: error.code,
       context: { endpoint: '/api/suppliers', operation: 'POST', table: 'suppliers' },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

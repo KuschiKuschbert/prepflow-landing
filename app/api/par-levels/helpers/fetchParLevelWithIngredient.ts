@@ -1,5 +1,5 @@
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
 
 /**
  * Fetch par level with ingredient join, with fallback to separate fetch.
@@ -36,7 +36,7 @@ export async function fetchParLevelWithIngredient(parLevelId: string, ingredient
 
   if (error) {
     const errorMessage = error.message || '';
-    const errorCode = (error as unknown).code;
+    const errorCode = (error as any).code;
 
     logger.warn('[Par Levels API] Join failed, fetching ingredient separately:', {
       error: errorMessage,

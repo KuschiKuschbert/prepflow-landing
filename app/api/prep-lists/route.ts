@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
     });
     if (typeof err === 'object' && err !== null && 'status' in err) {
       // @ts-ignore - Validated by runtime check
-      return NextResponse.json(err, { status: err.status });
+      return NextResponse.json(err, { status: (err as { status: number }).status });
     }
     return handlePrepListError(err, 'POST');
   }
@@ -154,7 +154,7 @@ export async function PUT(request: NextRequest) {
     });
     if (typeof err === 'object' && err !== null && 'status' in err) {
       // @ts-ignore - Validated by runtime check
-      return NextResponse.json(err, { status: err.status });
+      return NextResponse.json(err, { status: (err as { status: number }).status });
     }
     return handlePrepListError(err, 'PUT');
   }
@@ -184,7 +184,7 @@ export async function DELETE(request: NextRequest) {
     });
     if (typeof err === 'object' && err !== null && 'status' in err) {
       // @ts-ignore - Validated by runtime check
-      return NextResponse.json(err, { status: err.status });
+      return NextResponse.json(err, { status: (err as { status: number }).status });
     }
     return handlePrepListError(err, 'DELETE');
   }

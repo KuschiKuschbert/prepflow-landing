@@ -24,7 +24,7 @@ export async function deleteOrderList(
   if (deleteItemsError) {
     logger.warn('[Order Lists API] Warning: Could not delete order list items:', {
       error: deleteItemsError.message,
-      code: (deleteItemsError as unknown).code,
+      code: (deleteItemsError as any).code,
       orderListId: id,
     });
     // Continue with list deletion even if items deletion fails
@@ -35,7 +35,7 @@ export async function deleteOrderList(
   if (error) {
     logger.error('[Order Lists API] Error deleting order list:', {
       error: error.message,
-      code: (error as unknown).code,
+      code: (error as any).code,
       orderListId: id,
     });
     return {

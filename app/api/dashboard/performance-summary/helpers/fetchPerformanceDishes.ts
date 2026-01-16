@@ -2,9 +2,17 @@
  * Helper for fetching dishes for performance analysis
  */
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+
+export interface PerformanceDish {
+  id: string;
+  name: string;
+  selling_price: number;
+  profit_margin: number | null | undefined;
+  sales_data: any[] | null | undefined;
+}
 
 /**
  * Fetches dishes for performance analysis with optional menu filtering
@@ -13,7 +21,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
  * @returns {Promise<{ dishes: any[] | null; isEmpty: boolean }>} Dishes data and empty flag
  */
 export async function fetchPerformanceDishes(targetMenuId: string | null): Promise<{
-  dishes: unknown[] | null;
+  dishes: PerformanceDish[] | null;
   isEmpty: boolean;
 }> {
   if (!supabaseAdmin) {
@@ -70,10 +78,10 @@ export async function fetchPerformanceDishes(targetMenuId: string | null): Promi
   if (dishesError) {
     logger.error('[Performance Summary API] Error fetching dishes:', {
       error: dishesError.message,
-      code: (dishesError as unknown).code,
+      code: dishesError.code,
     });
     throw ApiErrorHandler.fromSupabaseError(dishesError, 500);
   }
 
-  return { dishes: dishes || [], isEmpty: false };
+  return { dishes: (dishes as unknown as PerformanceDish[]) || [], isEmpty: false };
 }

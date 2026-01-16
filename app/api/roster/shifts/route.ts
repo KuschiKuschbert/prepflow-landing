@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Shifts API] Database error fetching shifts:', {
         error: error.message,
-        code: (error as unknown).code,
+        code: error.code,
         context: { endpoint: '/api/roster/shifts', operation: 'GET', table: 'shifts' },
       });
 

@@ -4,11 +4,11 @@
  * Returns all dishes containing a specific allergen
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { aggregateDishAllergens } from '@/lib/allergens/allergen-aggregation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { aggregateDishAllergens } from '@/lib/allergens/allergen-aggregation';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Gets all dishes containing a specific allergen.
@@ -42,7 +42,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ co
       .order('dish_name');
 
     if (fetchError) {
-      const errorCode = (fetchError as unknown).code;
+      const errorCode = fetchError.code;
       if (errorCode === '42P01') {
         // Table doesn't exist - return empty data
         logger.dev('[Allergen Cross-Reference API] Dishes table not found, returning empty data');

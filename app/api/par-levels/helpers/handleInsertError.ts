@@ -8,11 +8,11 @@ import { logger } from '@/lib/logger';
  * @param {any} dataToInsert - Data that was being inserted
  * @throws {Error} Formatted error with instructions
  */
-export function handleInsertError(insertError: unknown, dataToInsert: unknown) {
+export function handleInsertError(insertError: any, dataToInsert: unknown) {
   const errorMessage = insertError.message || '';
-  const errorCode = (insertError as unknown).code;
-  const errorDetails = (insertError as unknown).details || '';
-  const errorHint = (insertError as unknown).hint || '';
+  const errorCode = (insertError as any).code;
+  const errorDetails = (insertError as any).details || '';
+  const errorHint = (insertError as any).hint || '';
 
   logger.error('[Par Levels API] Database error creating par level:', {
     error: errorMessage,
@@ -37,7 +37,7 @@ export function handleInsertError(insertError: unknown, dataToInsert: unknown) {
     const columnName = columnMatch ? columnMatch[1] : 'unknown';
 
     // Check which field is null in our data
-    const nullFields = Object.entries(dataToInsert)
+    const nullFields = Object.entries(dataToInsert as Record<string, any>)
       .filter(([_, value]) => value === null || value === undefined)
       .map(([key]) => key);
 

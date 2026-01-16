@@ -62,7 +62,6 @@ export async function validateAIService(): Promise<NextResponse | null> {
   return null;
 }
 
-import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Validate database connection

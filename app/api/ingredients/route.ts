@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
       context: { endpoint: '/api/ingredients', method: 'POST' },
     });
     if (err && typeof err === 'object' && 'status' in err && typeof err.status === 'number') {
-      return NextResponse.json(err, { status: err.status });
+      return NextResponse.json(err, { status: (err as { status: number }).status });
     }
     return handleIngredientError(err, 'POST');
   }
@@ -183,7 +183,7 @@ export async function PUT(request: NextRequest) {
       context: { endpoint: '/api/ingredients', method: 'PUT' },
     });
     if (err && typeof err === 'object' && 'status' in err && typeof err.status === 'number') {
-      return NextResponse.json(err, { status: err.status });
+      return NextResponse.json(err, { status: (err as { status: number }).status });
     }
     return handleIngredientError(err, 'PUT');
   }

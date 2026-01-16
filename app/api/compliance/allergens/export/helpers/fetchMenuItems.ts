@@ -2,13 +2,20 @@
  * Menu items fetching helper for allergen export
  */
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 export interface MenuItem {
   menu_id: string;
   menu_name: string;
+}
+
+interface MenuItemRow {
+  menu_id: string;
+  dish_id?: string;
+  recipe_id?: string;
+  menus?: { id: string; menu_name?: string }[];
 }
 
 /**
@@ -29,19 +36,21 @@ export async function fetchMenuItemsMap(): Promise<Record<string, MenuItem[]>> {
       .select('menu_id, dish_id, recipe_id, menus(id, menu_name)');
 
     if (!menuItemsError && menuItems) {
-      menuItems.forEach((item: unknown) => {
+      (menuItems as MenuItemRow[]).forEach((item) => {
         const itemId = item.dish_id || item.recipe_id;
-        const menu = item.menus;
-        if (itemId && menu) {
+        const menus = item.menus || [];
+        if (itemId && menus.length > 0) {
           if (!menuItemsMap[itemId]) {
             menuItemsMap[itemId] = [];
           }
-          if (!menuItemsMap[itemId].some(m => m.menu_id === menu.id)) {
-            menuItemsMap[itemId].push({
-              menu_id: menu.id,
-              menu_name: menu.menu_name || 'Unknown Menu',
-            });
-          }
+          menus.forEach((menu) => {
+            if (!menuItemsMap[itemId].some(m => m.menu_id === menu.id)) {
+              menuItemsMap[itemId].push({
+                menu_id: menu.id,
+                menu_name: menu.menu_name || 'Unknown Menu',
+              });
+            }
+          });
         }
       });
     }

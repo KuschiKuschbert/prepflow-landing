@@ -2,14 +2,14 @@
  * Dish allergen aggregation helper
  */
 
+import {
+    aggregateDishAllergens,
+    extractAllergenSources,
+    mergeAllergenSources,
+} from '@/lib/allergens/allergen-aggregation';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
-import {
-  aggregateDishAllergens,
-  extractAllergenSources,
-  mergeAllergenSources,
-} from '@/lib/allergens/allergen-aggregation';
 
 export interface DishWithAllergens {
   id: string;
@@ -19,15 +19,35 @@ export interface DishWithAllergens {
   allergenSources: Record<string, string[]>;
 }
 
+interface InputDish {
+  id: string;
+  dish_name: string;
+  description?: string;
+  allergens?: string[];
+}
+
+interface DishIngredient {
+  ingredients?: {
+    id?: string;
+    ingredient_name?: string;
+    allergens?: string[];
+  };
+}
+
+interface DishRecipe {
+  recipe_id: string;
+  recipes?: { id: string }[];
+}
+
 /**
  * Aggregates allergens for dishes
  *
- * @param {any[]} dishes - Array of dish objects
+ * @param {InputDish[]} dishes - Array of dish objects
  * @param {Record<string, Record<string, string[]>>} recipeIngredientSources - Recipe allergen sources
  * @returns {Promise<DishWithAllergens[]>} Dishes with aggregated allergens
  */
 export async function aggregateDishAllergensForExport(
-  dishes: unknown[],
+  dishes: InputDish[],
   recipeIngredientSources: Record<string, Record<string, string[]>>,
 ): Promise<DishWithAllergens[]> {
   return Promise.all(
@@ -65,7 +85,7 @@ export async function aggregateDishAllergensForExport(
           .eq('dish_id', dish.id);
 
         if (!dishIngredientsError && dishIngredients) {
-          const dishIngredientList = dishIngredients.map((di: unknown) => ({
+          const dishIngredientList = (dishIngredients as DishIngredient[]).map((di) => ({
             ingredient_name: di.ingredients?.ingredient_name || '',
             allergens: di.ingredients?.allergens,
           }));
@@ -96,7 +116,7 @@ export async function aggregateDishAllergensForExport(
 
         if (!dishRecipesError && dishRecipes) {
           const recipeSources: Record<string, string[]>[] = [];
-          dishRecipes.forEach((dr: unknown) => {
+          (dishRecipes as DishRecipe[]).forEach((dr) => {
             const recipeId = dr.recipe_id;
             if (recipeId && recipeIngredientSources[recipeId]) {
               recipeSources.push(recipeIngredientSources[recipeId]);

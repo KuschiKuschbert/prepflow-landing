@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
       const dishRecipes = dishRecipesMap.get(dishId) || [];
       const dishIngredients = dishIngredientsMap.get(dishId) || [];
 
-      return calculateDishCost(dishId, dish, dishRecipes, dishIngredients);
+      return calculateDishCost(dishId, dish || null, dishRecipes, dishIngredients);
     });
 
     const results = await Promise.all(costPromises);

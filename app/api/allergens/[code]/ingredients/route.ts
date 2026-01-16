@@ -4,10 +4,10 @@
  * Returns all ingredients containing a specific allergen
  */
 
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Gets all ingredients containing a specific allergen.
@@ -45,7 +45,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ co
       logger.error('[Allergen Cross-Reference API] Error fetching ingredients:', {
         allergenCode: code,
         error: error.message,
-        code: (error as unknown).code,
+        code: error.code,
       });
       return NextResponse.json(
         ApiErrorHandler.createError('Failed to fetch ingredients', 'DATABASE_ERROR', 500),

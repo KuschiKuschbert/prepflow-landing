@@ -2,12 +2,12 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { createShareRecord } from './helpers/createShareRecord';
 import { fetchRecipeWithIngredients } from './helpers/fetchRecipeWithIngredients';
 import { generateRecipePDF } from './helpers/generateRecipePDF';
 import { handleRecipeShareError } from './helpers/handleRecipeShareError';
 import { normalizeRecipeForShare } from './helpers/normalizeRecipeForShare';
-import { z } from 'zod';
 
 const shareRecipeSchema = z.object({
   recipeId: z.string().min(1, 'Recipe ID is required'),
@@ -75,8 +75,8 @@ export async function POST(request: NextRequest) {
       stack: error instanceof Error ? error.stack : undefined,
     });
 
-    if (error.status) {
-      return NextResponse.json(error, { status: error.status });
+    if ((error as any).status) {
+      return NextResponse.json(error, { status: (error as any).status });
     }
     return handleRecipeShareError(error, 'POST');
   }
@@ -119,7 +119,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Recipe Share API] Database error fetching shares:', {
         error: error.message,
-        code: (error as unknown).code,
+        code: (error as any).code,
         context: { endpoint: '/api/recipe-share', operation: 'GET', userId },
       });
       const apiError = ApiErrorHandler.fromSupabaseError(error, 500);

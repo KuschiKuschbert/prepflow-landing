@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react';
-import { Recipe } from '../../types';
+import { Recipe, RecipeIngredientWithDetails } from '../../types';
 
 import { logger } from '@/lib/logger';
 /**
@@ -18,11 +18,15 @@ export function usePriceCalculationEffect({
   recipePrices: Record<string, unknown>;
   updateVisibleRecipePrices: (
     recipes: Recipe[],
-    fetchRecipeIngredients: (recipeId: string) => Promise<unknown[]>,
-    fetchBatchRecipeIngredients?: (recipeIds: string[]) => Promise<Record<string, unknown[]>>,
+    fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>,
+    fetchBatchRecipeIngredients?: (
+      recipeIds: string[],
+    ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
   ) => Promise<void>;
-  fetchRecipeIngredients: (recipeId: string) => Promise<unknown[]>;
-  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<Record<string, unknown[]>>;
+  fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>;
+  fetchBatchRecipeIngredients: (
+    recipeIds: string[],
+  ) => Promise<Record<string, RecipeIngredientWithDetails[]>>;
 }): void {
   const calculatingPricesRef = useRef<Set<string>>(new Set());
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);

@@ -4,7 +4,7 @@ import { Icon } from '@/components/ui/Icon';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import { useTranslation } from '@/lib/useTranslation';
 import { Sparkles, Plus } from 'lucide-react';
-import { TemperatureEquipment } from '../types';
+import { TemperatureEquipment, TemperatureLog } from '../types';
 import { CreateEquipmentForm } from './CreateEquipmentForm';
 import { EquipmentDetailDrawer } from './EquipmentDetailDrawer';
 import { EquipmentItem } from './EquipmentItem';
@@ -19,7 +19,7 @@ import { temperatureTypesForSelect } from '../utils/temperatureUtils';
 
 interface TemperatureEquipmentTabProps {
   equipment: TemperatureEquipment[];
-  allLogs?: unknown[]; // Optional logs for last log date calculation
+  allLogs?: TemperatureLog[]; // Optional logs for last log date calculation
   onUpdateEquipment: (equipmentId: string, updates: Partial<TemperatureEquipment>) => Promise<void>;
   onCreateEquipment: (
     name: string,
@@ -181,7 +181,7 @@ export default function TemperatureEquipmentTab({
             {equipment.slice(startIndex, endIndex).map(item => (
               <EquipmentItem
                 key={item.id}
-                item={item as unknown}
+                item={item}
                 editingId={editingEquipment}
                 setEditingId={setEditingEquipment}
                 temperatureTypes={temperatureTypesForSelect}

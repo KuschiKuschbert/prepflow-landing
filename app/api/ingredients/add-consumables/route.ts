@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     if (suppliersError && suppliersError.code !== 'PGRST116') {
       logger.warn('[Add Consumables] Error checking for existing supplier:', {
         error: suppliersError.message,
-        code: (suppliersError as unknown).code,
+        code: suppliersError.code,
       });
     }
 
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
     if (ingredientsError) {
       logger.warn('[Add Consumables] Error fetching existing ingredients:', {
         error: ingredientsError.message,
-        code: (ingredientsError as unknown).code,
+        code: ingredientsError.code,
       });
       // Continue with empty array if fetch fails
     }

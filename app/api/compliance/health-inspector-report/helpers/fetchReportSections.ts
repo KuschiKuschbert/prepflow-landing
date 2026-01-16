@@ -1,16 +1,16 @@
 import { fetchBusinessInfo } from './fetchBusinessInfo';
-import { fetchEmployees } from './fetchEmployees';
-import { fetchComplianceRecords } from './fetchComplianceRecords';
-import { fetchTemperatureData } from './fetchTemperatureData';
 import { fetchCleaningRecords } from './fetchCleaningRecords';
-import { fetchSanitizerLogs, fetchStaffHealth } from './fetchHygieneSections';
-import { fetchIncidents, fetchHACCP } from './fetchSafetySections';
+import { fetchComplianceRecords } from './fetchComplianceRecords';
 import { fetchAllergens, fetchEquipmentMaintenance } from './fetchComplianceSections';
+import { fetchEmployees } from './fetchEmployees';
+import { fetchSanitizerLogs, fetchStaffHealth } from './fetchHygieneSections';
 import {
-  fetchWasteManagement,
-  fetchProcedures,
-  fetchSupplierVerification,
+    fetchProcedures,
+    fetchSupplierVerification,
+    fetchWasteManagement,
 } from './fetchOperationsSections';
+import { fetchHACCP, fetchIncidents } from './fetchSafetySections';
+import { fetchTemperatureData } from './fetchTemperatureData';
 
 /**
  * Fetch all report sections based on includeSections parameter.
@@ -27,8 +27,8 @@ export async function fetchReportSections(
   tempCleaningStartDate: string,
   endDate: string,
 ) {
-  const reportData: unknown = {};
-  const fetchPromises: Promise<unknown>[] = [];
+  const reportData: Record<string, unknown> = {};
+  const fetchPromises: Promise<void>[] = [];
 
   // 1. Business Information
   if (includeSections.includes('business') || includeSections.includes('compliance')) {

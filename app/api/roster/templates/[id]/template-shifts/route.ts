@@ -37,7 +37,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     if (error) {
       logger.error('[Template Shifts API] Database error fetching template shifts:', {
         error: error.message,
-        code: (error as unknown).code,
+        code: error.code,
         context: {
           endpoint: '/api/roster/templates/[id]/template-shifts',
           operation: 'GET',
@@ -156,7 +156,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     if (insertError) {
       logger.error('[Template Shifts API] Database error creating template shift:', {
         error: insertError.message,
-        code: (insertError as unknown).code,
+        code: insertError.code,
         context: {
           endpoint: '/api/roster/templates/[id]/template-shifts',
           operation: 'POST',

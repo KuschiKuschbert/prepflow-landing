@@ -1,6 +1,6 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextResponse } from 'next/server';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Fetches AI specials history for a user.
@@ -95,7 +95,7 @@ export async function fetchAISpecialsHistory(
       hasError: !!error,
       dataCount: data?.length || 0,
       errorMessage: error?.message,
-      errorCode: (error as unknown)?.code,
+      errorCode: error?.code,
       errorDetails: error ? (error as unknown) : undefined,
     });
 
@@ -104,7 +104,7 @@ export async function fetchAISpecialsHistory(
         userId,
         requestId,
         error: error.message,
-        code: (error as unknown).code,
+        code: error.code,
         details: error as unknown,
         context: { endpoint: '/api/ai-specials', operation: 'GET', userId },
       });

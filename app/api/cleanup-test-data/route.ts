@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
         if (countError) {
           logger.warn(`[Cleanup Test Data] Error counting records in ${table}:`, {
             error: countError.message,
-            code: (countError as unknown).code,
+            code: countError.code,
           });
         }
 
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
         if (error) {
           logger.error(`[Cleanup Test Data] Error deleting from ${table}:`, {
             error: error.message,
-            code: (error as unknown).code,
+            code: error.code,
           });
           results.errors.push({ table, error: error.message });
         } else {

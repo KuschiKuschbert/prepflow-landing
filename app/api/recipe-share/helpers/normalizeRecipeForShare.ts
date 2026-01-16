@@ -4,10 +4,10 @@
  * @param {Object} recipe - Raw recipe data from database
  * @returns {Object} Normalized recipe data
  */
-export function normalizeRecipeForShare(recipe: unknown) {
+export function normalizeRecipeForShare(recipe: any) {
   return {
     ...recipe,
-    recipe_ingredients: (recipe.recipe_ingredients || []).map((ri: unknown) => ({
+    recipe_ingredients: (recipe.recipe_ingredients || []).map((ri: any) => ({
       ...ri,
       ingredients: {
         ...ri.ingredients,

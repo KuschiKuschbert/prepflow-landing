@@ -5,7 +5,7 @@ import { logger } from '@/lib/logger';
 import { useQuery } from '@tanstack/react-query';
 import { TemperatureLog } from '../types';
 
-interface TemperatureLogsResponse {
+export interface TemperatureLogsResponse {
   items: TemperatureLog[];
   total: number;
   page: number;

@@ -88,9 +88,9 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         .eq('recipe_id', normalizedId);
 
       // Normalize the retry result to include category as null for type compatibility
-      data = retryData?.map((item: unknown) => ({
+      data = retryData?.map((item: any) => ({
         ...item,
-        ingredients: item.ingredients?.map((ing: unknown) => ({
+        ingredients: item.ingredients?.map((ing: any) => ({
           ...ing,
           category: ing.category ?? null,
         })),

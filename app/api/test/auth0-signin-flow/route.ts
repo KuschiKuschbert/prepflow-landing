@@ -4,15 +4,15 @@
  *
  * @returns {Promise<NextResponse>} JSON response with diagnostic information
  */
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import {
-  extractAuth0UserId,
-  fetchProfileWithRetry,
-  getUserProfileFromManagementAPI,
+    extractAuth0UserId,
+    fetchProfileWithRetry,
+    getUserProfileFromManagementAPI,
 } from '@/lib/auth0-management';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { createDiagnosticStructure } from './diagnostic-helpers';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Test the complete sign-in flow and identify failure points.
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
   try {
     const { auth0 } = await import('@/lib/auth0');
     const session = await auth0.getSession(req);
-    const diagnostic: unknown = {
+    const diagnostic: any = {
       timestamp: new Date().toISOString(),
       sessionStatus: session ? 'active' : 'inactive',
       session: session
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
               email: session.user?.email,
               name: session.user?.name,
               image: session.user?.picture,
-              roles: (session.user as unknown)?.roles || [],
+              roles: (session.user as any)?.roles || [],
             },
             expiresAt: session.expiresAt,
           }

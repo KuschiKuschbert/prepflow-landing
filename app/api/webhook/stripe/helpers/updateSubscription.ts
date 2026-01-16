@@ -1,6 +1,6 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 import type { TierSlug } from '@/lib/tier-config';
 
 /**
@@ -20,7 +20,7 @@ export async function updateUserSubscription(
     return;
   }
 
-  const updateData: unknown = {
+  const updateData: Record<string, unknown> = {
     subscription_tier: tier,
     subscription_status: status,
     subscription_expires: expiresAt?.toISOString() || null,

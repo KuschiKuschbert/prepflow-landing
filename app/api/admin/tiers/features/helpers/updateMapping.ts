@@ -1,8 +1,8 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { NextRequest, NextResponse } from 'next/server';
 import type { TierSlug } from '@/lib/tier-config';
+import { NextRequest, NextResponse } from 'next/server';
 
 interface UpdateMappingParams {
   feature_key: string;
@@ -31,7 +31,7 @@ export async function updateFeatureMapping(params: UpdateMappingParams): Promise
   if (currentDataError && currentDataError.code !== 'PGRST116') {
     logger.warn('[Admin Tiers Features] Error fetching current mapping:', {
       error: currentDataError.message,
-      code: (currentDataError as unknown).code,
+      code: currentDataError.code,
       feature_key,
     });
   }

@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { detectTemperatureThresholds } from '../../helpers/detectTemperatureThresholds';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
+import { detectTemperatureThresholds } from '../../helpers/detectTemperatureThresholds';
 import { updateTemperatureEquipmentSchema } from '../../helpers/schemas';
 
 export async function handleUpdateTemperatureEquipment(request: NextRequest, id: string) {
@@ -89,7 +89,7 @@ export async function handleUpdateTemperatureEquipment(request: NextRequest, id:
       });
     }
 
-    const updateData: unknown = {
+    const updateData: Record<string, any> = {
       updated_at: new Date().toISOString(),
     };
 
@@ -111,7 +111,7 @@ export async function handleUpdateTemperatureEquipment(request: NextRequest, id:
     if (error) {
       logger.error('[Temperature Equipment API] Database error updating equipment:', {
         error: error.message,
-        code: (error as unknown).code,
+        code: error.code,
         context: {
           endpoint: `/api/temperature-equipment/${id}`,
           operation: 'PUT',
@@ -130,8 +130,8 @@ export async function handleUpdateTemperatureEquipment(request: NextRequest, id:
       stack: err instanceof Error ? err.stack : undefined,
     });
 
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as any).status });
     }
 
     return NextResponse.json(

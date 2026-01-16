@@ -5,14 +5,14 @@
  * @param {Object} recipe - Recipe object with ingredients and instructions
  * @returns {string} HTML content for PDF generation
  */
-export function generateRecipePDF(recipe: unknown): string {
+export function generateRecipePDF(recipe: any): string {
   // Import formatting utilities
   const { formatRecipeForPrint } = require('@/app/webapp/recipes/utils/formatRecipeForPrint');
   const { getRecipePrintStyles } = require('@/app/webapp/recipes/utils/recipePrintStyles');
   const { generateExportTemplate } = require('@/lib/exports/pdf-template');
 
   // Format ingredients for the print function
-  const ingredients = (recipe.recipe_ingredients || []).map((ri: unknown) => ({
+  const ingredients = (recipe.recipe_ingredients || []).map((ri: any) => ({
     ...ri,
     ingredients: ri.ingredients || {},
   }));

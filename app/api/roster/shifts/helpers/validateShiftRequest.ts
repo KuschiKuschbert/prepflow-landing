@@ -4,7 +4,7 @@
  * @param {any} body - Request body
  * @returns {{ isValid: boolean; error?: string; data?: any }} Validation result
  */
-export function validateShiftRequest(body: unknown): { isValid: boolean; error?: string; data?: unknown } {
+export function validateShiftRequest(body: any): { isValid: boolean; error?: string; data?: any } {
   if (!body.employee_id) {
     return { isValid: false, error: 'Employee ID is required' };
   }

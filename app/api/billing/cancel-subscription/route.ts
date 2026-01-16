@@ -1,16 +1,16 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
-import { getStripe } from '@/lib/stripe';
-import { logger } from '@/lib/logger';
-import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { clearTierCache } from '@/lib/feature-gate';
+import { logger } from '@/lib/logger';
+import { getStripe } from '@/lib/stripe';
+import { NextRequest, NextResponse } from 'next/server';
 import type Stripe from 'stripe';
-import { getUserSubscription } from './helpers/getUserSubscription';
+import { z } from 'zod';
 import { cancelStripeSubscription } from './helpers/cancelStripeSubscription';
-import { updateSubscriptionInDatabase } from './helpers/updateDatabase';
-import { scheduleAccountDeletionIfNeeded } from './helpers/scheduleDeletion';
 import { getCancellationMessage } from './helpers/getCancellationMessage';
+import { getUserSubscription } from './helpers/getUserSubscription';
+import { scheduleAccountDeletionIfNeeded } from './helpers/scheduleDeletion';
+import { updateSubscriptionInDatabase } from './helpers/updateDatabase';
 
 const cancelSubscriptionSchema = z.object({
   immediate: z.boolean().optional().default(false),
@@ -148,7 +148,7 @@ export async function POST(req: NextRequest) {
         id: updatedSubscription.id,
         status: updatedSubscription.status,
         cancel_at_period_end: updatedSubscription.cancel_at_period_end,
-        current_period_end: (updatedSubscription as unknown).current_period_end,
+        current_period_end: (updatedSubscription as unknown as { current_period_end: number }).current_period_end,
         expires_at: expiresAt?.toISOString(),
       },
     });

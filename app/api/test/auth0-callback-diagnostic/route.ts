@@ -4,11 +4,10 @@
  *
  * @returns {Promise<NextResponse>} JSON response with callback flow diagnostic information
  */
-import { NextResponse } from 'next/server';
-import { NextRequest } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { auth0 } from '@/lib/auth0';
 import { logger } from '@/lib/logger';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Test endpoint to diagnose callback flow issues.
@@ -32,7 +31,7 @@ export async function GET(req: NextRequest) {
               email: session.user?.email,
               name: session.user?.name,
               image: session.user?.picture,
-              roles: (session.user as unknown)?.roles || [],
+              roles: (session.user as any)?.roles || [],
             },
             expires: session.tokenSet?.expiresAt
               ? new Date(session.tokenSet.expiresAt * 1000).toISOString()

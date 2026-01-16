@@ -1,15 +1,14 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { authenticateAndSetup } from './helpers/authenticateAndSetup';
 import { checkTableExists } from './helpers/checkTableExists';
 import { createParLevel } from './helpers/createParLevel';
 import { deleteParLevel } from './helpers/deleteParLevel';
 import { fetchParLevels } from './helpers/fetchParLevels';
 import { handleParLevelError } from './helpers/handleParLevelError';
-import { updateParLevel } from './helpers/updateParLevel';
 import { createParLevelSchema, updateParLevelSchema } from './helpers/schemas';
+import { updateParLevel } from './helpers/updateParLevel';
 
 export async function GET(request: NextRequest) {
   try {
@@ -96,8 +95,8 @@ export async function POST(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/par-levels', method: 'POST' },
     });
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
+    if ((err as any).status) {
+      return NextResponse.json(err, { status: (err as any).status });
     }
     return handleParLevelError(err, 'POST');
   }
@@ -148,8 +147,8 @@ export async function PUT(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/par-levels', method: 'PUT' },
     });
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
+    if ((err as any).status) {
+      return NextResponse.json(err, { status: (err as any).status });
     }
     return handleParLevelError(err, 'PUT');
   }
@@ -183,8 +182,8 @@ export async function DELETE(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/par-levels', method: 'DELETE' },
     });
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
+    if ((err as any).status) {
+      return NextResponse.json(err, { status: (err as any).status });
     }
     return handleParLevelError(err, 'DELETE');
   }

@@ -17,7 +17,7 @@ import { supabaseAdmin } from '@/lib/supabase';
  */
 export async function saveRecipeIngredients(
   recipeId: string,
-  ingredients: unknown[],
+  ingredients: any[],
   isUpdate: boolean,
   recipeName?: string | null,
   userEmail?: string | null,

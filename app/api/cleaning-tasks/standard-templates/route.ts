@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
-import { logger } from '@/lib/logger';
-import { getStandardTaskTemplates } from '@/lib/cleaning/standard-tasks';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { getStandardTaskTemplates } from '@/lib/cleaning/standard-tasks';
+import { logger } from '@/lib/logger';
+import { NextResponse } from 'next/server';
 
 /**
  * GET /api/cleaning-tasks/standard-templates
@@ -25,7 +25,7 @@ export async function GET() {
     });
     return NextResponse.json(
       ApiErrorHandler.createError(
-        err?.message || 'Failed to fetch standard task templates',
+        err instanceof Error ? err.message : 'Failed to fetch standard task templates',
         'SERVER_ERROR',
         500,
       ),

@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Equipment Maintenance API] Database error:', {
         error: error.message,
-        code: (error as unknown).code,
+        code: error.code,
       });
       return NextResponse.json(
         ApiErrorHandler.createError(
@@ -157,7 +157,7 @@ export async function POST(request: NextRequest) {
     if (error) {
       logger.error('[Equipment Maintenance API] Database error creating record:', {
         error: error.message,
-        code: (error as unknown).code,
+        code: error.code,
       });
       const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });

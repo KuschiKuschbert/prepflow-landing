@@ -1,8 +1,8 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { NextRequest, NextResponse } from 'next/server';
 import type { TierSlug } from '@/lib/tier-config';
+import { NextRequest, NextResponse } from 'next/server';
 
 interface BulkUpdateParams {
   mappings: Array<{ feature_key: string; required_tier: TierSlug }>;
@@ -29,7 +29,7 @@ export async function bulkUpdateFeatureMappings(params: BulkUpdateParams): Promi
   if (currentMappingsError) {
     logger.warn('[Admin Tiers Features] Error fetching current mappings:', {
       error: currentMappingsError.message,
-      code: (currentMappingsError as unknown).code,
+      code: currentMappingsError.code,
       featureKeys,
     });
   }

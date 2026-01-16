@@ -7,7 +7,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
  * @returns {{ingredientId: string, parLevel: number, reorderPoint: number, unit: string}} Validated data
  * @throws {Error} If validation fails
  */
-export function validateParLevelData(parLevelData: unknown) {
+export function validateParLevelData(parLevelData: any) {
   const ingredientId = parLevelData.ingredient_id || parLevelData.ingredientId;
   const parLevel = parLevelData.par_level ?? parLevelData.parLevel;
   const reorderPoint = parLevelData.reorder_point ?? parLevelData.reorderPoint;

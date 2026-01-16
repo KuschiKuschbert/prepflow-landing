@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
     const tempCleaningStartDate =
       startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]; // 30 days ago
 
-    const reportData: unknown = {
+    const reportData: Record<string, unknown> = {
       generated_at: new Date().toISOString(),
       report_period: {
         start_date: complianceStartDate,

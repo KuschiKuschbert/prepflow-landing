@@ -10,7 +10,6 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import type { TimeAttendance } from '@/app/webapp/roster/types';
 
 const ClockOutSchema = z.object({
   employee_id: z.string().uuid(),
@@ -123,7 +122,7 @@ export async function POST(request: NextRequest) {
     if (updateError) {
       logger.error('[Clock-out API] Database error updating time attendance record:', {
         error: updateError.message,
-        code: (updateError as unknown).code,
+        code: updateError.code,
         context: {
           endpoint: '/api/time-attendance/clock-out',
           operation: 'PUT',

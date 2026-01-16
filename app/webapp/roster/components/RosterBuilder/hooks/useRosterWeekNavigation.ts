@@ -1,12 +1,13 @@
 import { useCallback, useEffect } from 'react';
 import { startOfWeek, addDays, format } from 'date-fns';
 import { logger } from '@/lib/logger';
+import type { Shift } from '../../../types';
 
 interface UseRosterWeekNavigationProps {
   weekStartDate?: Date;
   currentWeekStart: Date;
   setCurrentWeekStart: (date: Date) => void;
-  setShifts: (shifts: unknown[]) => void;
+  setShifts: (shifts: Shift[]) => void;
 }
 
 /**

@@ -2,9 +2,10 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { triggerCostSync, triggerDishSync } from '@/lib/square/sync/hooks';
 import { supabaseAdmin } from '@/lib/supabase';
+import { Dish } from '@/types/dish';
 import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
-import { Dish, DishIngredientInput, DishRecipeInput } from '../../helpers/schemas';
+import { DishIngredientInput, DishRecipeInput } from '../../helpers/schemas';
 import { buildDishUpdateData } from './buildDishUpdateData';
 import { detectDishChanges } from './detectDishChanges';
 import { fetchDishWithRelations } from './fetchDishWithRelations';
@@ -50,10 +51,11 @@ export async function handlePutRequest(
   // Get user email for change tracking
   const userEmail = await getUserEmail(request);
 
-  // Fetch current dish to detect changes
+// Fetch current dish to detect changes
   let currentDish: Dish | null = null;
   try {
-    currentDish = await fetchDishWithRelations(dishId);
+    const enrichedDish = await fetchDishWithRelations(dishId);
+    currentDish = enrichedDish as unknown as Dish;
   } catch (err) {
     logger.warn('[Dishes API] Could not fetch current dish for change detection:', err);
   }

@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server';
  * @returns {NextResponse | null} Error response if validation fails, null if valid
  */
 export function validatePriceListCreate(body: unknown): NextResponse | null {
-  const { supplier_id, document_name, document_url } = body;
+  const { supplier_id, document_name, document_url } = body as any;
 
   if (!supplier_id || !document_name || !document_url) {
     return NextResponse.json(

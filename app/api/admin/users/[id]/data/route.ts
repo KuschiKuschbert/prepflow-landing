@@ -1,7 +1,7 @@
 import { requireAdmin } from '@/lib/admin-auth';
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -47,7 +47,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     if (ingredientsResult.error) {
       logger.error('[Admin User Data API] Error fetching ingredients:', {
         error: ingredientsResult.error.message,
-        code: (ingredientsResult.error as unknown).code,
+        code: ingredientsResult.error.code,
         context: { endpoint: '/api/admin/users/[id]/data', operation: 'GET' },
       });
       errors.push(`Ingredients: ${ingredientsResult.error.message}`);
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     if (recipesResult.error) {
       logger.error('[Admin User Data API] Error fetching recipes:', {
         error: recipesResult.error.message,
-        code: (recipesResult.error as unknown).code,
+        code: recipesResult.error.code,
         context: { endpoint: '/api/admin/users/[id]/data', operation: 'GET' },
       });
       errors.push(`Recipes: ${recipesResult.error.message}`);
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     if (dishesResult.error) {
       logger.error('[Admin User Data API] Error fetching dishes:', {
         error: dishesResult.error.message,
-        code: (dishesResult.error as unknown).code,
+        code: dishesResult.error.code,
         context: { endpoint: '/api/admin/users/[id]/data', operation: 'GET' },
       });
       errors.push(`Dishes: ${dishesResult.error.message}`);
@@ -71,7 +71,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     if (temperatureResult.error) {
       logger.error('[Admin User Data API] Error fetching temperature logs:', {
         error: temperatureResult.error.message,
-        code: (temperatureResult.error as unknown).code,
+        code: temperatureResult.error.code,
         context: { endpoint: '/api/admin/users/[id]/data', operation: 'GET' },
       });
       errors.push(`Temperature logs: ${temperatureResult.error.message}`);
@@ -79,7 +79,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     if (cleaningResult.error) {
       logger.error('[Admin User Data API] Error fetching cleaning tasks:', {
         error: cleaningResult.error.message,
-        code: (cleaningResult.error as unknown).code,
+        code: cleaningResult.error.code,
         context: { endpoint: '/api/admin/users/[id]/data', operation: 'GET' },
       });
       errors.push(`Cleaning tasks: ${cleaningResult.error.message}`);

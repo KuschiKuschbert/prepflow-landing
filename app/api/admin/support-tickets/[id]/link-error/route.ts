@@ -54,7 +54,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       if (errorCheck && errorCheck.code !== 'PGRST116') {
         logger.warn('[Admin Support Tickets API] Error checking error log:', {
           error: errorCheck.message,
-          code: (errorCheck as unknown).code,
+          code: errorCheck.code,
           error_id,
         });
       }

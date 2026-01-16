@@ -37,7 +37,7 @@ export async function updateCleaningTask(
   if (!supabaseAdmin)
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
 
-  const finalUpdateData: unknown = { ...updateData };
+  const finalUpdateData: Record<string, unknown> = { ...updateData };
   if (updateData.status === 'completed' && !updateData.completed_date) {
     finalUpdateData.completed_date = new Date().toISOString();
   }
@@ -52,7 +52,7 @@ export async function updateCleaningTask(
   if (error) {
     logger.error('[Cleaning Tasks API] Database error updating task:', {
       error: error.message,
-      code: (error as unknown).code,
+      code: error.code,
       context: { endpoint: '/api/cleaning-tasks', operation: 'PUT', taskId: id },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

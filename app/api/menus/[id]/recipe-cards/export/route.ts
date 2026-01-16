@@ -172,12 +172,12 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 
     // Generate export based on format
     if (format === 'csv') {
-      return generateCSV(menuName, transformedCards);
+      return generateCSV(menuName, transformedCards as any);
     }
     if (format === 'pdf') {
-      return generateHTML(menuName, transformedCards, true);
+      return generateHTML(menuName, transformedCards as any, true);
     }
-    return generateHTML(menuName, transformedCards, false);
+    return generateHTML(menuName, transformedCards as any, false);
   } catch (err) {
     logger.error('[Recipe Cards Export API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

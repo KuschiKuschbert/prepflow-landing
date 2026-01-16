@@ -36,7 +36,7 @@ export async function fetchCleaningRecords(startDate: string, endDate: string) {
   if (cleaningError) {
     logger.warn('[Health Inspector Report] Error fetching cleaning records:', {
       error: cleaningError.message,
-      code: (cleaningError as unknown).code,
+      code: cleaningError.code,
     });
     return null;
   }

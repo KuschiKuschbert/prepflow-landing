@@ -17,7 +17,7 @@ export function checkQueryErrors(results: QueryResult[], names: string[]): void 
     if (result.error) {
       logger.error(`[Dashboard Stats API] Error fetching ${names[index]}:`, {
         error: result.error.message,
-        code: (result.error as unknown).code,
+        code: result.error.code,
         context: { endpoint: '/api/dashboard/stats', operation: 'GET' },
       });
     }

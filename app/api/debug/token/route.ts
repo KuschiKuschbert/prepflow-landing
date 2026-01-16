@@ -3,11 +3,11 @@
  * Debug endpoint to inspect current session token (development only)
  */
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { auth0 } from '@/lib/auth0';
+import { extractAuth0UserId } from '@/lib/auth0-management';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
-import { extractAuth0UserId } from '@/lib/auth0-management';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Decode JWT payload without verification
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
     // Extract custom claims from session user
     const customClaims: Record<string, unknown> = {};
     if (session?.user) {
-      const userAny = session.user as unknown;
+      const userAny = session.user as Record<string, unknown>;
       // Check for common custom claim namespaces
       Object.keys(userAny).forEach(key => {
         if (key.startsWith('https://') || key.includes('custom') || key.includes('roles')) {
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
               email: session.user?.email,
               name: session.user?.name,
               sub: session.user?.sub,
-              roles: (session.user as unknown)['https://prepflow.org/roles'] || [],
+              roles: (session.user as Record<string, any>)['https://prepflow.org/roles'] as any[] || [],
               picture: session.user?.picture,
             },
             expiresAt: session.expiresAt,
@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
             name: session.user.name,
             sub: session.user.sub,
             auth0UserId: auth0UserId,
-            roles: (session.user as unknown)['https://prepflow.org/roles'] || [],
+            roles: (session.user as Record<string, any>)['https://prepflow.org/roles'] as any[] || [],
             // Include all user properties for debugging
             allProperties: Object.keys(session.user),
             // Custom claims found in user object
@@ -124,11 +124,11 @@ export async function GET(request: NextRequest) {
       },
       troubleshooting: {
         rolesFound: session?.user
-          ? ((session.user as unknown)['https://prepflow.org/roles'] || []).length > 0
+          ? ((session.user as Record<string, any>)['https://prepflow.org/roles'] as any[] || []).length > 0
           : false,
         auth0UserId: auth0UserId,
         recommendation:
-          !session?.user || ((session.user as unknown)['https://prepflow.org/roles'] || []).length === 0
+          !session?.user || ((session.user as Record<string, any>)['https://prepflow.org/roles'] as any[] || []).length === 0
             ? 'Roles not found in session. Check: 1) Auth0 Actions configured to include roles, 2) Management API fallback is working, 3) User has roles assigned in Auth0'
             : 'Roles found in session',
       },

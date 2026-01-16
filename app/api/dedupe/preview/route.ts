@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     if (ingErr) {
       logger.error('[Dedupe Preview API] Error fetching ingredients:', {
         error: ingErr.message,
-        code: (ingErr as unknown).code,
+        code: ingErr.code,
         context: { endpoint: '/api/dedupe/preview', operation: 'POST' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(ingErr, 500), { status: 500 });
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     if (recErr) {
       logger.error('[Dedupe Preview API] Error fetching recipes:', {
         error: recErr.message,
-        code: (recErr as unknown).code,
+        code: recErr.code,
         context: { endpoint: '/api/dedupe/preview', operation: 'POST' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(recErr, 500), { status: 500 });

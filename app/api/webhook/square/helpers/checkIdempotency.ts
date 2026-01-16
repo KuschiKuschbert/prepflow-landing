@@ -39,7 +39,7 @@ export async function isWebhookEventProcessed(eventId: string, userId: string): 
     return !!data;
   } catch (error: unknown) {
     logger.error('[Square Webhook] Unexpected error checking idempotency:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       eventId,
       userId,
     });

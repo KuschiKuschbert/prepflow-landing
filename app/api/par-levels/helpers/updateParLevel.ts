@@ -57,7 +57,7 @@ export async function updateParLevel(id: string, updates: unknown) {
   if (error) {
     logger.error('[Par Levels API] Database error updating par level:', {
       error: error.message,
-      code: (error as unknown).code,
+      code: (error as any).code,
       context: { endpoint: '/api/par-levels', operation: 'PUT', parLevelId: id },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

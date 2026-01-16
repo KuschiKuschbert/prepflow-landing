@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
     try {
       subscription = await stripe.subscriptions.retrieve(subscriptionId);
     } catch (error: unknown) {
-      if (error.code === 'resource_missing') {
+      if ((error as { code?: string }).code === 'resource_missing') {
         logger.warn('[Billing API] Subscription not found in Stripe:', {
           subscriptionId,
           userEmail,

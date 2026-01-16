@@ -4,7 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 import type { RecipeRecord } from '../types';
 
-import { AuditRecipeItem } from '../types';
+
 
 /**
  * Fetch all recipes

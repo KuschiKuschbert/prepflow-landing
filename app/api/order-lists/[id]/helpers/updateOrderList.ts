@@ -21,7 +21,7 @@ export async function updateOrderList(
 
   const { supplierId, name, notes, status, items } = body;
 
-  const updateData: unknown = { updated_at: new Date().toISOString() };
+  const updateData: any = { updated_at: new Date().toISOString() };
   if (supplierId !== undefined) updateData.supplier_id = supplierId;
   if (name !== undefined) updateData.name = name;
   if (notes !== undefined) updateData.notes = notes;
@@ -37,7 +37,7 @@ export async function updateOrderList(
   if (error) {
     logger.error('[Order Lists API] Database error updating order list:', {
       error: error.message,
-      code: (error as unknown).code,
+      code: (error as any).code,
       orderListId: id,
     });
     const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
@@ -53,13 +53,13 @@ export async function updateOrderList(
     if (deleteItemsError) {
       logger.warn('[Order Lists API] Warning: Could not delete existing order list items:', {
         error: deleteItemsError.message,
-        code: (deleteItemsError as unknown).code,
+        code: (deleteItemsError as any).code,
         orderListId: id,
       });
     }
 
     if (items.length > 0) {
-      const orderItems = items.map((item: unknown) => ({
+      const orderItems = items.map((item: any) => ({
         order_list_id: id,
         ingredient_id: item.ingredientId,
         quantity: item.quantity,
@@ -74,7 +74,7 @@ export async function updateOrderList(
       if (insertItemsError) {
         logger.error('[Order Lists API] Error inserting order list items:', {
           error: insertItemsError.message,
-          code: (insertItemsError as unknown).code,
+          code: (insertItemsError as any).code,
           orderListId: id,
         });
         return {

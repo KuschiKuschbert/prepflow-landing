@@ -3,7 +3,6 @@ import { evaluateGate } from '@/lib/feature-gate';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { handlePerformanceError } from './helpers/handlePerformanceError';
 import { processPerformanceData } from './helpers/processPerformanceData';
 import { upsertSalesData } from './helpers/upsertSalesData';
@@ -42,7 +41,7 @@ export async function GET(request: NextRequest) {
       if (lockedMenuError) {
         logger.error('[Performance API] Error fetching locked menu:', {
           error: lockedMenuError.message,
-          code: (lockedMenuError as unknown).code,
+          code: (lockedMenuError as any).code,
           context: { endpoint: '/api/performance', operation: 'GET' },
         });
       } else if (lockedMenu) {
@@ -78,7 +77,7 @@ export async function GET(request: NextRequest) {
       if (menuItemsError) {
         logger.error('[Performance API] Error fetching menu items:', {
           error: menuItemsError.message,
-          code: (menuItemsError as unknown).code,
+          code: (menuItemsError as any).code,
           context: { endpoint: '/api/performance', operation: 'GET', menuId: targetMenuId },
         });
         // Continue without filtering if there's an error
@@ -111,7 +110,7 @@ export async function GET(request: NextRequest) {
     if (dishesError) {
       logger.error('[Performance API] Database error fetching dishes:', {
         error: dishesError.message,
-        code: (dishesError as unknown).code,
+        code: (dishesError as any).code,
         context: { endpoint: '/api/performance', operation: 'GET', table: 'menu_dishes' },
       });
 
@@ -180,8 +179,8 @@ export async function POST(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/performance', method: 'POST' },
     });
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
+    if ((err as any).status) {
+      return NextResponse.json(err, { status: (err as any).status });
     }
     return handlePerformanceError(err, 'POST');
   }

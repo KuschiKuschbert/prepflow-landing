@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
       context: { endpoint: '/api/cleaning-tasks', method: 'GET' },
     });
     if (err && typeof err === 'object' && 'status' in err) {
-      return NextResponse.json(err, { status: err.status || 500 });
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
     }
     return handleCleaningTaskError(err, 'GET');
   }
