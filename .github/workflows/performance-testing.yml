@@ -155,6 +155,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Check performance artifact exists
+        id: artifact_check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data } = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId,
+            });
+
+            const hasArtifact = data.artifacts.some(artifact => artifact.name === 'performance-results');
+            core.setOutput('has_artifact', hasArtifact ? 'true' : 'false');
+            if (!hasArtifact) {
+              core.notice('No performance-results artifact found. Skipping regression check.');
+            }
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -166,16 +183,18 @@ jobs:
 
       - name: Download performance results
         uses: actions/download-artifact@v4
+        if: steps.artifact_check.outputs.has_artifact == 'true'
         with:
           name: performance-results
           path: ./
 
       - name: Check for performance regressions
+        if: steps.artifact_check.outputs.has_artifact == 'true'
         run: node scripts/check-performance-regression.js
         continue-on-error: true
 
       - name: Send performance regression alert
-        if: failure()
+        if: failure() && steps.artifact_check.outputs.has_artifact == 'true'
         uses: actions/github-script@v7
         with:
           script: |
