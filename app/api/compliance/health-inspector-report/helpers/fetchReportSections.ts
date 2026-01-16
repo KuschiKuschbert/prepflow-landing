@@ -5,9 +5,9 @@ import { fetchAllergens, fetchEquipmentMaintenance } from './fetchComplianceSect
 import { fetchEmployees } from './fetchEmployees';
 import { fetchSanitizerLogs, fetchStaffHealth } from './fetchHygieneSections';
 import {
-    fetchProcedures,
-    fetchSupplierVerification,
-    fetchWasteManagement,
+  fetchProcedures,
+  fetchSupplierVerification,
+  fetchWasteManagement,
 } from './fetchOperationsSections';
 import { fetchHACCP, fetchIncidents } from './fetchSafetySections';
 import { fetchTemperatureData } from './fetchTemperatureData';

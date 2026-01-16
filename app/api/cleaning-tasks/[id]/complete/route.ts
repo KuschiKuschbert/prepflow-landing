@@ -139,7 +139,12 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/cleaning-tasks/[id]/complete', method: 'POST' },
     });
-    if (err && typeof err === 'object' && 'status' in err && typeof (err as { status: unknown }).status === 'number') {
+    if (
+      err &&
+      typeof err === 'object' &&
+      'status' in err &&
+      typeof (err as { status: unknown }).status === 'number'
+    ) {
       return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
     }
     return NextResponse.json(

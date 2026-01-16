@@ -59,7 +59,6 @@ export async function handleCreateCleaningArea(request: NextRequest) {
         { error: appError.message, code: appError.code },
         { status: appError.status },
       );
-
     }
     return handleCleaningAreaError(err, 'POST');
   }

@@ -47,7 +47,10 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    eventId = (event as { event_id?: string; id?: string }).event_id || (event as { event_id?: string; id?: string }).id || `square-${Date.now()}`;
+    eventId =
+      (event as { event_id?: string; id?: string }).event_id ||
+      (event as { event_id?: string; id?: string }).id ||
+      `square-${Date.now()}`;
 
     // Extract user ID from event
     userId = await getUserIdFromEvent(event);
@@ -100,7 +103,11 @@ export async function POST(req: NextRequest) {
         type: (event as { type: string }).type,
         userId,
       });
-      return NextResponse.json({ received: true, type: (event as { type: string }).type, skipped: true });
+      return NextResponse.json({
+        received: true,
+        type: (event as { type: string }).type,
+        skipped: true,
+      });
     }
 
     // Route event to appropriate handler

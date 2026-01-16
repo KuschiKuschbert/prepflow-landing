@@ -7,10 +7,10 @@
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import dynamic from 'next/dynamic';
 import type {
-    ComplianceRecord,
-    ComplianceRecordFormData,
-    ComplianceType,
-    ComplianceTypeFormData,
+  ComplianceRecord,
+  ComplianceRecordFormData,
+  ComplianceType,
+  ComplianceTypeFormData,
 } from '../types';
 import type { EquipmentMaintenanceFormData } from './EquipmentMaintenanceForm';
 import type { EquipmentMaintenanceRecord } from './EquipmentMaintenanceList';

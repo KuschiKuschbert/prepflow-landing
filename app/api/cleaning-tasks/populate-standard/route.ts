@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
 
     const existingTaskKeys = new Set<string>();
     if (existingTasksData) {
-      (existingTasksData as ExistingTask[]).forEach((task) => {
+      (existingTasksData as ExistingTask[]).forEach(task => {
         const key = `${task.task_name}_${task.standard_task_type}_${task.equipment_id || ''}_${task.section_id || ''}`;
         existingTaskKeys.add(key);
       });

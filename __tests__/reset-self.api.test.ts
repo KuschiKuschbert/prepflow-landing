@@ -13,9 +13,13 @@ jest.mock('next-auth', () => {
   };
 });
 
-jest.mock('@/lib/auth-options', () => ({
-  authOptions: {},
-}), { virtual: true });
+jest.mock(
+  '@/lib/auth-options',
+  () => ({
+    authOptions: {},
+  }),
+  { virtual: true },
+);
 
 jest.mock('@/lib/supabase', () => ({
   createSupabaseAdmin: jest.fn(),

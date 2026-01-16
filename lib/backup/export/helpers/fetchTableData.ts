@@ -11,7 +11,10 @@ import type { DatabaseRecord } from '@/lib/backup/types';
  * @param {string} tableName - Table name
  * @returns {Promise<DatabaseRecord[]>} Array of records
  */
-export async function getUserTableData(userId: string, tableName: string): Promise<DatabaseRecord[]> {
+export async function getUserTableData(
+  userId: string,
+  tableName: string,
+): Promise<DatabaseRecord[]> {
   const supabase = createSupabaseAdmin();
 
   const { data, error } = await supabase.from(tableName).select('*').eq('user_id', userId);

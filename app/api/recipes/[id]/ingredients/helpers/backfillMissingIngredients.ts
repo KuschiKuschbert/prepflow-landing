@@ -8,7 +8,10 @@ import { supabaseAdmin } from '@/lib/supabase';
  * @param {string} recipeId - Recipe ID for logging
  * @returns {Promise<Array>} Rows with backfilled ingredients
  */
-export async function backfillMissingIngredients(rows: any[], recipeId: string): Promise<unknown[]> {
+export async function backfillMissingIngredients(
+  rows: any[],
+  recipeId: string,
+): Promise<unknown[]> {
   const missingNested = rows.some(r => !r.ingredients);
   if (!missingNested) return rows;
 

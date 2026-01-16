@@ -10,7 +10,9 @@ if (typeof PerformanceObserver === 'undefined') {
   (global as any).PerformanceObserver = class PerformanceObserver {
     observe() {}
     disconnect() {}
-    takeRecords() { return []; }
+    takeRecords() {
+      return [];
+    }
   };
 }
 
@@ -19,7 +21,9 @@ if (typeof PerformanceObserver === 'undefined') {
   (global as any).PerformanceObserver = class PerformanceObserver {
     observe() {}
     disconnect() {}
-    takeRecords() { return []; }
+    takeRecords() {
+      return [];
+    }
   };
 }
 

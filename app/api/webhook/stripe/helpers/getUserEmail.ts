@@ -16,7 +16,8 @@ export async function getUserEmailFromCustomerId(
   if (!supabaseAdmin) return null;
 
   // Handle both customer ID string and customer object
-  const id = typeof customerId === 'string' ? customerId : (customerId as { id: string })?.id || null;
+  const id =
+    typeof customerId === 'string' ? customerId : (customerId as { id: string })?.id || null;
   if (!id) return null;
 
   // Fallback 1: Try database lookup first

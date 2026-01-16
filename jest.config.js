@@ -22,9 +22,7 @@ const customJestConfig = {
     '<rootDir>/__tests__/exports/template-generation.test.ts',
     '<rootDir>/__tests__/reset-self.api.test.ts',
   ],
-  transformIgnorePatterns: [
-    '/node_modules/(?!(@auth0/nextjs-auth0|auth0|uuid)/)',
-  ],
+  transformIgnorePatterns: ['/node_modules/(?!(@auth0/nextjs-auth0|auth0|uuid)/)'],
 };
 
 module.exports = createJestConfig(customJestConfig);

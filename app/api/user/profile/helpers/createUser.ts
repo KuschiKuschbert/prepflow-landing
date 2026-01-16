@@ -8,7 +8,10 @@ import type { ProfileUpdateInput } from './types';
 /**
  * Create new user profile
  */
-export async function createUser(userEmail: string, updates: ProfileUpdateInput): Promise<NextResponse> {
+export async function createUser(
+  userEmail: string,
+  updates: ProfileUpdateInput,
+): Promise<NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database not available', 'SERVICE_UNAVAILABLE', 503),

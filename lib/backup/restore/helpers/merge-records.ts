@@ -6,9 +6,9 @@ import { getAppError } from '@/lib/utils/error';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DatabaseRecord, MergeOptions } from '../../types';
 import {
-    BATCH_SIZE,
-    processInsertBatch,
-    processUpdateBatch,
+  BATCH_SIZE,
+  processInsertBatch,
+  processUpdateBatch,
 } from './merge-records/helpers/processBatches';
 
 /**

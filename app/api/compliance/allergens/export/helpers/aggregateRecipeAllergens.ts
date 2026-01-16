@@ -3,8 +3,8 @@
  */
 
 import {
-    batchAggregateRecipeAllergens,
-    extractAllergenSources,
+  batchAggregateRecipeAllergens,
+  extractAllergenSources,
 } from '@/lib/allergens/allergen-aggregation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
@@ -35,7 +35,9 @@ interface RecipeIngredientRow {
  * @param {InputRecipe[]} recipes - Array of recipe objects
  * @returns {Promise<RecipeAllergenData>} Aggregated allergen data
  */
-export async function aggregateRecipeAllergens(recipes: InputRecipe[]): Promise<RecipeAllergenData> {
+export async function aggregateRecipeAllergens(
+  recipes: InputRecipe[],
+): Promise<RecipeAllergenData> {
   // Batch aggregate allergens for recipes
   let allergensByRecipe: Record<string, string[]> = {};
   try {
@@ -71,7 +73,7 @@ export async function aggregateRecipeAllergens(recipes: InputRecipe[]): Promise<
         string,
         Array<{ ingredient_name: string; allergens?: string[] }>
       > = {};
-      (recipeIngredients as RecipeIngredientRow[]).forEach((ri) => {
+      (recipeIngredients as RecipeIngredientRow[]).forEach(ri => {
         const recipeId = ri.recipe_id;
         const ingredient = ri.ingredients;
         if (recipeId && ingredient) {

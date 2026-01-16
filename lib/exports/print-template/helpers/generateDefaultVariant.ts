@@ -1,10 +1,10 @@
 import { getAllTemplateStyles } from '../../template-styles';
 import {
-    escapeHtml,
-    formatDateAustralian,
-    formatMetaInfo,
-    getFooterHtml,
-    getLogoUrl,
+  escapeHtml,
+  formatDateAustralian,
+  formatMetaInfo,
+  getFooterHtml,
+  getLogoUrl,
 } from '../../template-utils';
 
 export function generateDefaultVariant(

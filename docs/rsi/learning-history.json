@@ -15,9 +15,7 @@
         "id": "rule-1768264370112-124",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": [
-          "fix-any-types"
-        ]
+        "derivedFrom": ["fix-any-types"]
       }
     ]
   },
@@ -37,9 +35,7 @@
         "id": "rule-1768264482863-107",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": [
-          "fix-any-types"
-        ]
+        "derivedFrom": ["fix-any-types"]
       }
     ]
   },
@@ -59,9 +55,7 @@
         "id": "rule-1768343859571-304",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": [
-          "fix-any-types"
-        ]
+        "derivedFrom": ["fix-any-types"]
       }
     ]
   },
@@ -81,9 +75,7 @@
         "id": "rule-1768404471676-745",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": [
-          "fix-any-types"
-        ]
+        "derivedFrom": ["fix-any-types"]
       }
     ]
   },
@@ -103,9 +95,7 @@
         "id": "rule-1768521485980-442",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": [
-          "fix-any-types"
-        ]
+        "derivedFrom": ["fix-any-types"]
       }
     ]
   }

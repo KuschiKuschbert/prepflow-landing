@@ -62,7 +62,6 @@ export async function validateAIService(): Promise<NextResponse | null> {
   return null;
 }
 
-
 /**
  * Validate database connection
  *
@@ -70,7 +69,6 @@ export async function validateAIService(): Promise<NextResponse | null> {
  * @returns {NextResponse | null} Error response if unavailable, null if available
  */
 export function validateDatabase(supabaseAdmin: SupabaseClient | null): NextResponse | null {
-
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

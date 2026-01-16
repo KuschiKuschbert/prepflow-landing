@@ -170,12 +170,7 @@ export async function POST(request: NextRequest) {
       originalError: appError.originalError,
     });
     return NextResponse.json(
-      ApiErrorHandler.createError(
-        'Failed to create backup',
-        'SERVER_ERROR',
-        500,
-        appError.message,
-      ),
+      ApiErrorHandler.createError('Failed to create backup', 'SERVER_ERROR', 500, appError.message),
       { status: 500 },
     );
   }

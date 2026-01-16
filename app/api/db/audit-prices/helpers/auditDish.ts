@@ -2,12 +2,10 @@ import { calculateDishSellingPrice } from '@/app/api/menus/[id]/statistics/helpe
 import { logger } from '@/lib/logger';
 import type { DishRecord, PriceAuditResult } from '../types';
 
-
 /**
  * Audit a single dish
  */
 export async function auditDish(dish: DishRecord): Promise<PriceAuditResult> {
-
   const result: PriceAuditResult = {
     itemId: dish.id,
     itemName: dish.dish_name || 'Unknown Dish',

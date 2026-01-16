@@ -73,9 +73,7 @@ export async function handleAddSupplierHelper(
         name: data.data.supplier_name || data.data.name,
       };
       // Replace temp supplier with real supplier from server
-      setSuppliers(prevSuppliers =>
-        prevSuppliers.map(s => (s.id === tempId ? serverSupplier : s)),
-      );
+      setSuppliers(prevSuppliers => prevSuppliers.map(s => (s.id === tempId ? serverSupplier : s)));
       cacheData('suppliers', [...originalSuppliers, serverSupplier]);
     } else {
       // Error - revert optimistic update

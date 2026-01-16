@@ -8,7 +8,10 @@ import type { NotificationPreferences } from './types';
 /**
  * Update user notification preferences
  */
-export async function updatePreferences(userEmail: string, updates: NotificationPreferences): Promise<NextResponse> {
+export async function updatePreferences(
+  userEmail: string,
+  updates: NotificationPreferences,
+): Promise<NextResponse> {
   if (!supabaseAdmin) {
     logger.warn('[Notifications API] Supabase not available');
     return NextResponse.json(

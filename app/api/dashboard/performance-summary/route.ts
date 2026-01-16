@@ -4,9 +4,9 @@ import { deduplicateDishes, filterDishesWithSales } from '@/lib/api/performance/
 import { calculatePerformanceMetrics } from '@/lib/api/performance/performanceCalculation';
 import { aggregateSalesData } from '@/lib/api/performance/salesAggregation';
 import {
-    calculateAveragePopularity,
-    calculateAverageProfitMargin,
-    calculateThresholds,
+  calculateAveragePopularity,
+  calculateAverageProfitMargin,
+  calculateThresholds,
 } from '@/lib/api/performance/thresholdCalculation';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';

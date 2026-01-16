@@ -9,7 +9,10 @@ import { NextResponse } from 'next/server';
  * @param {string} method - HTTP method
  * @returns {NextResponse} Error response
  */
-export function handleTemperatureEquipmentError(err: Error | unknown, method: string): NextResponse {
+export function handleTemperatureEquipmentError(
+  err: Error | unknown,
+  method: string,
+): NextResponse {
   logger.error('[Temperature Equipment API] Unexpected error:', {
     error: err instanceof Error ? err.message : String(err),
     stack: err instanceof Error ? err.stack : undefined,

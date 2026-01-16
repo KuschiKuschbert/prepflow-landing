@@ -114,7 +114,10 @@ export async function POST(request: NextRequest) {
           ingRows.forEach(ir => {
             byId[ir.id] = ir;
           });
-          rows = rows.map((r: any) => ({ ...r, ingredients: r.ingredients || byId[r.ingredient_id] }));
+          rows = rows.map((r: any) => ({
+            ...r,
+            ingredients: r.ingredients || byId[r.ingredient_id],
+          }));
         }
       }
     }

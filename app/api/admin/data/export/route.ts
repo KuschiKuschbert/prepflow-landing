@@ -51,7 +51,12 @@ export async function GET(request: NextRequest) {
 
         const { data } = await searchQuery;
         if (data) {
-          allData.push(...data.map((item: unknown) => ({ ...(item as Record<string, unknown>), _table: tableName })));
+          allData.push(
+            ...data.map((item: unknown) => ({
+              ...(item as Record<string, unknown>),
+              _table: tableName,
+            })),
+          );
         }
       } catch (error) {
         logger.warn(`[Admin Data Export] Error exporting ${tableName}:`, error);

@@ -13,7 +13,6 @@ export interface RecipeRecord {
   recipe_name?: string;
 }
 
-
 export interface PriceAuditResult {
   itemId: string;
   itemName: string;
@@ -24,4 +23,3 @@ export interface PriceAuditResult {
   discrepancyPercent: number;
   issues: string[];
 }
-

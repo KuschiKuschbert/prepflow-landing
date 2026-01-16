@@ -30,10 +30,13 @@ export async function fetchWasteManagement(startDate: string, endDate: string) {
   return {
     logs: logs,
     total_logs: logs.length,
-    by_type: logs.reduce((acc: Record<string, number>, l) => {
-      acc[l.waste_type as string] = (acc[l.waste_type as string] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>),
+    by_type: logs.reduce(
+      (acc: Record<string, number>, l) => {
+        acc[l.waste_type as string] = (acc[l.waste_type as string] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    ),
   };
 }
 
@@ -63,10 +66,13 @@ export async function fetchProcedures() {
       if (!p.next_review_date) return false;
       return new Date(p.next_review_date) < new Date();
     }),
-    by_type: procedureList.reduce((acc: Record<string, number>, p) => {
-      acc[p.procedure_type as string] = (acc[p.procedure_type as string] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>),
+    by_type: procedureList.reduce(
+      (acc: Record<string, number>, p) => {
+        acc[p.procedure_type as string] = (acc[p.procedure_type as string] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    ),
   };
 }
 

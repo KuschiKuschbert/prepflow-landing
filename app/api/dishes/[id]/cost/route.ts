@@ -127,10 +127,11 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       for (const di of dishIngredients) {
         const ingredient = di.ingredients as unknown as IngredientRecord | null;
         if (ingredient) {
-          const costPerUnit =
-            ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
+          const costPerUnit = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
           const quantity =
-            typeof di.quantity === 'string' ? parseFloat(di.quantity) : (di.quantity as number) || 0;
+            typeof di.quantity === 'string'
+              ? parseFloat(di.quantity)
+              : (di.quantity as number) || 0;
 
           const isConsumable = ingredient.category === 'Consumables';
 

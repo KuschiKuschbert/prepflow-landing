@@ -59,19 +59,19 @@ export async function calculateRecipeReadiness(recipes: Recipe[]) {
 
   // Create set of recipe IDs that have ingredients
   const recipesWithIngredients = new Set(
-    (recipeIngredients as RecipeIngredient[] || [])
-      .map((ri) => ri.recipe_id)
-      .filter((id) => id != null)
-      .map((id) => String(id).trim()),
+    ((recipeIngredients as RecipeIngredient[]) || [])
+      .map(ri => ri.recipe_id)
+      .filter(id => id != null)
+      .map(id => String(id).trim()),
   );
 
   // Count complete/incomplete recipes
   const completeRecipes = (recipes || []).filter(
-    (r) => r.id != null && recipesWithIngredients.has(String(r.id).trim()),
+    r => r.id != null && recipesWithIngredients.has(String(r.id).trim()),
   ).length;
 
   const incompleteRecipes = (recipes || []).filter(
-    (r) => r.id == null || !recipesWithIngredients.has(String(r.id).trim()),
+    r => r.id == null || !recipesWithIngredients.has(String(r.id).trim()),
   ).length;
 
   // Fetch menu dishes for cost calculation
@@ -89,18 +89,18 @@ export async function calculateRecipeReadiness(recipes: Recipe[]) {
 
   // Count recipes without costs
   const recipesWithCosts = new Set(
-    (menuDishes as MenuDish[] || [])
-      .filter((dish) => dish.recipe_id && dish.selling_price && dish.selling_price > 0)
-      .map((dish) => String(dish.recipe_id).trim()),
+    ((menuDishes as MenuDish[]) || [])
+      .filter(dish => dish.recipe_id && dish.selling_price && dish.selling_price > 0)
+      .map(dish => String(dish.recipe_id).trim()),
   );
 
   const recipesWithoutCost = (recipes || []).filter(
-    (r) => r.id == null || !recipesWithCosts.has(String(r.id).trim()),
+    r => r.id == null || !recipesWithCosts.has(String(r.id).trim()),
   ).length;
 
   // Get most used recipes
   const recipeUsageCount = new Map<string, number>();
-  (menuDishes as MenuDish[]).forEach((dish) => {
+  (menuDishes as MenuDish[]).forEach(dish => {
     if (dish && dish.recipe_id) {
       const normalizedId = String(dish.recipe_id).trim();
       recipeUsageCount.set(normalizedId, (recipeUsageCount.get(normalizedId) || 0) + 1);
@@ -111,9 +111,7 @@ export async function calculateRecipeReadiness(recipes: Recipe[]) {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3)
     .map(([recipeId, count]) => {
-      const recipe = (recipes || []).find(
-        (r) => r.id != null && String(r.id).trim() === recipeId,
-      );
+      const recipe = (recipes || []).find(r => r.id != null && String(r.id).trim() === recipeId);
       return {
         id: recipeId,
         name: recipe?.name || 'Unknown',

@@ -64,7 +64,6 @@ export async function calculateDishCost(
   dishRecipes: DishRecipeRecord[],
   dishIngredients: DishIngredientRecord[],
 ): Promise<{ dishId: string; cost: BatchCostResult } | { dishId: string; cost: null }> {
-
   if (!dish) {
     logger.warn(`[Dishes API] Dish ${dishId} not found in batch`);
     return { dishId, cost: null };
@@ -97,9 +96,7 @@ export async function calculateDishCost(
     const ingredient = di.ingredients as Record<string, any> | undefined;
     if (ingredient) {
       const costPerUnit =
-        (ingredient.cost_per_unit_incl_trim as number) ||
-        (ingredient.cost_per_unit as number) ||
-        0;
+        (ingredient.cost_per_unit_incl_trim as number) || (ingredient.cost_per_unit as number) || 0;
       const quantity = typeof di.quantity === 'string' ? parseFloat(di.quantity) : di.quantity || 0;
 
       const isConsumable = ingredient.category === 'Consumables';

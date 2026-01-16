@@ -14,7 +14,9 @@ export async function updateQualification(
     document_url?: string;
     notes?: string;
   },
-): Promise<{ success: boolean; message: string; data: Qualification } | { error: ApiError; status: number }> {
+): Promise<
+  { success: boolean; message: string; data: Qualification } | { error: ApiError; status: number }
+> {
   if (!supabaseAdmin) {
     return {
       error: ApiErrorHandler.createError(
