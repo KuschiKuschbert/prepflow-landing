@@ -6,7 +6,7 @@ import type { Shift } from '../../../types';
 export function createInlineEntrySaveHandler(
   shifts: Shift[],
   handleCreateShift: (shiftData: Partial<Shift>) => Promise<void>,
-  setActiveInlineEntry: (entry: any) => void,
+  setActiveInlineEntry: (entry: unknown) => void,
   showError: (message: string) => void,
 ) {
   return async (shiftData: Partial<Shift>) => {

@@ -21,7 +21,7 @@ export const CSV_HEADERS = [
  * @param {ComplianceRecord} record - Compliance record to map
  * @returns {Record<string, any>} CSV row object
  */
-export function mapComplianceRecordToCSVRow(record: ComplianceRecord): Record<string, any> {
+export function mapComplianceRecordToCSVRow(record: ComplianceRecord): Record<string, unknown> {
   return {
     'Document Name': record.document_name || '',
     'Compliance Type': record.compliance_types.name || '',

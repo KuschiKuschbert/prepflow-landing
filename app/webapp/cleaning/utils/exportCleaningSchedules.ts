@@ -24,7 +24,7 @@ const CSV_HEADERS = [
  * @param {CleaningTask} task - Cleaning task to map
  * @returns {Record<string, any>} CSV row object
  */
-function mapCleaningTaskToCSVRow(task: CleaningTask): Record<string, any> {
+function mapCleaningTaskToCSVRow(task: CleaningTask): Record<string, unknown> {
   return {
     Area: task.cleaning_areas.name || '',
     'Assigned Date': task.assigned_date

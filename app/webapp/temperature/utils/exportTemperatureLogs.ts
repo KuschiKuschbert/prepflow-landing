@@ -29,7 +29,7 @@ const CSV_HEADERS = [
 function mapTemperatureLogToCSVRow(
   log: TemperatureLog,
   equipment: TemperatureEquipment[],
-): Record<string, any> {
+): Record<string, unknown> {
   const eq = equipment.find(e => e.name === log.location || e.id === log.location);
 
   return {

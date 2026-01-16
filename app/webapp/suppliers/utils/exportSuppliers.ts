@@ -28,7 +28,7 @@ const CSV_HEADERS = [
  * @param {Supplier} supplier - Supplier to map
  * @returns {Record<string, any>} CSV row object
  */
-function mapSupplierToCSVRow(supplier: Supplier): Record<string, any> {
+function mapSupplierToCSVRow(supplier: Supplier): Record<string, unknown> {
   return {
     Name: supplier.name || '',
     'Contact Person': supplier.contact_person || '',

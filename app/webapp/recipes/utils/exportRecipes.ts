@@ -29,7 +29,7 @@ const CSV_HEADERS = [
  * @param {Recipe} recipe - Recipe to map
  * @returns {Record<string, any>} CSV row object
  */
-function mapRecipeToCSVRow(recipe: Recipe): Record<string, any> {
+function mapRecipeToCSVRow(recipe: Recipe): Record<string, unknown> {
   return {
     'Recipe Name': recipe.recipe_name || '',
     Description: recipe.description || '',

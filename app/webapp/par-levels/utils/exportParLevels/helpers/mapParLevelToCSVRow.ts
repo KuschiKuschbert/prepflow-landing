@@ -3,7 +3,7 @@
  */
 import type { ParLevel } from '../../../types';
 
-export function mapParLevelToCSVRow(parLevel: ParLevel): Record<string, any> {
+export function mapParLevelToCSVRow(parLevel: ParLevel): Record<string, unknown> {
   return {
     Ingredient: parLevel.ingredients.ingredient_name || '',
     Category: parLevel.ingredients.category || '',

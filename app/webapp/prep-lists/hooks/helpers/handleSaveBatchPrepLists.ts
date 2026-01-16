@@ -39,7 +39,7 @@ export async function handleSaveBatchPrepLists({
   // Create temporary prep lists for optimistic update
   const tempPrepLists: PrepList[] = prepListsToCreate.map(
     (prepList, index) =>
-      ({
+      (({
         id: `temp-${Date.now()}-${index}`,
         name: prepList.name,
         kitchen_section_id: prepList.sectionId || '',
@@ -47,13 +47,15 @@ export async function handleSaveBatchPrepLists({
         status: 'draft' as const,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
+
         kitchen_sections: {
           id: prepList.sectionId || '',
           name: '',
           color: '',
         },
-        prep_list_items: [],
-      }) as PrepList,
+
+        prep_list_items: []
+      }) as PrepList),
   );
 
   // Optimistically add to UI immediately

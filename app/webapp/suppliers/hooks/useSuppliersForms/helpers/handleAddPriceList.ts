@@ -20,7 +20,7 @@ export async function handleAddPriceListHelper(
   // Create temporary price list for optimistic update
   const tempId = `temp-${Date.now()}`;
   const tempPriceList: SupplierPriceList = {
-    id: tempId as any, // Temporary ID, will be replaced by server
+    id: tempId as unknown, // Temporary ID, will be replaced by server
     supplier_id: parseInt(newPriceList.supplier_id),
     document_name: newPriceList.document_name,
     document_url: newPriceList.document_url || '',
@@ -30,7 +30,7 @@ export async function handleAddPriceListHelper(
     notes: newPriceList.notes || null,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    suppliers: null as any, // Will be populated from server response
+    suppliers: null as unknown, // Will be populated from server response
   };
 
   // Optimistically add to UI immediately

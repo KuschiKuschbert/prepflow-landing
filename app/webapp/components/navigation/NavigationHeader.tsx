@@ -69,7 +69,7 @@ function NavigationHeaderBase({
   const { user, error: userError, isLoading: userLoading } = useUser();
   // Handle nested user structure: user.user.email (Auth0 SDK sometimes returns nested structure)
   // We use unknown cast for safety where the type definition might miss custom or nested props
-  const userAny = user as unknown as Record<string, any>;
+  const userAny = user as unknown as Record<string, unknown>;
   const userEmail = user?.email || userAny?.user?.email;
   const auth0UserName = user?.name || userAny?.user?.name;
 

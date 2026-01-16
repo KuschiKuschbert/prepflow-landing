@@ -5,7 +5,7 @@ import { logger } from '@/lib/logger';
 interface UseIngredientBulkActionsDialogProps {
   selectedIngredients: Set<string>;
   onBulkDelete?: (ids: string[]) => Promise<void>;
-  onBulkUpdate?: (ids: string[], updates: Partial<any>) => Promise<void>;
+  onBulkUpdate?: (ids: string[], updates: Partial<unknown>) => Promise<void>;
   onBulkAutoCategorize?: (ids: string[], useAI?: boolean) => Promise<void>;
 }
 

@@ -40,7 +40,7 @@ export default function AISpecialsPage() {
   // Auth0 SDK can return user in different structures:
   // - Flat: user.email
   // - Nested: user.user.email
-  const userEmail = user?.email || (user as any)?.user?.email || null;
+  const userEmail = user?.email || (user as unknown)?.user?.email || null;
   const hasUser = !!user || !!userEmail;
 
   // Check if user is actually authenticated (not just loading)
@@ -58,8 +58,8 @@ export default function AISpecialsPage() {
         isAuthenticated,
         userKeys: user ? Object.keys(user) : [],
         userSub: user?.sub,
-        nestedUserSub: (user as any)?.user?.sub,
-        nestedUser: (user as any)?.user,
+        nestedUserSub: (user as unknown)?.user?.sub,
+        nestedUser: (user as unknown)?.user,
       });
     }
   }, [user, userLoading, userEmail, isAuthenticated]);

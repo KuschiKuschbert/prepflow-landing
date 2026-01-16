@@ -11,6 +11,9 @@ register();
 const { RefactoringPlanner } = require('../../lib/rsi/auto-refactoring/refactoring-planner');
 const { CodemodRunner } = require('../../lib/rsi/auto-refactoring/codemod-runner');
 const { ValidationSuite } = require('../../lib/rsi/auto-refactoring/validation-suite');
+const { exec } = require('child_process');
+const util = require('util');
+const execAsync = util.promisify(exec);
 
 async function main() {
   const args = process.argv.slice(2);
@@ -66,8 +69,8 @@ async function main() {
       if (isValid) {
         console.log('✅ Validation passed. Ready to commit.');
       } else {
-        console.error('❌ Validation failed. Reverting...');
-        // Revert logic here
+        console.error('❌ Validation failed or no changes detected. Reverting...');
+        await execAsync('git checkout -- .');
       }
     } else {
       console.error('❌ Refactoring execution failed.');

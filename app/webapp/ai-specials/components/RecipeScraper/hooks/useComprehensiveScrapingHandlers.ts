@@ -9,7 +9,7 @@ import { createStopHandler } from './useComprehensiveScrapingHandlers/stop-handl
 
 interface UseComprehensiveScrapingHandlersParams {
   setComprehensiveScraping: (value: boolean) => void;
-  setComprehensiveStatus: (status: any) => void;
+  setComprehensiveStatus: (status: unknown) => void;
   setStatusPolling: (polling: boolean) => void;
   fetchComprehensiveStatus: () => Promise<void>;
 }

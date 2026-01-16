@@ -15,7 +15,7 @@ export function usePriceCalculation({
   fetchBatchRecipeIngredients,
 }: {
   paginatedRecipes: Recipe[];
-  recipePrices: Record<string, any>;
+  recipePrices: Record<string, unknown>;
   updateVisibleRecipePrices: (
     recipes: Recipe[],
     fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>,

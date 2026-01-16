@@ -7,7 +7,7 @@ import { TemperatureEquipment } from '../types';
 interface EquipmentTableMobileCardsProps {
   equipment: TemperatureEquipment[];
   equipmentStatuses: Map<string, { status: string; color: string; temperature?: number }>;
-  equipmentLogs: Map<string, any[]>;
+  equipmentLogs: Map<string, unknown[]>;
   selectedEquipmentId: string | null;
   onSelect: (equipment: TemperatureEquipment) => void;
   startIndex: number;

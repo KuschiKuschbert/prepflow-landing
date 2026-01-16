@@ -53,7 +53,7 @@ export function useRecipeModalHandlers({
   const handleDuplicateRecipeWrapper = useCallback(
     async (
       selectedRecipe: Recipe | null,
-      handlePreviewRecipe: (recipe: Recipe) => Promise<any>,
+      handlePreviewRecipe: (recipe: Recipe) => Promise<unknown>,
     ) => {
       if (!selectedRecipe) return;
       const duplicated = await handleDuplicateRecipe(selectedRecipe);

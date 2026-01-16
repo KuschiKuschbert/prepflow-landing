@@ -37,7 +37,7 @@ const CSV_HEADERS = [
  * @param {Ingredient} ingredient - Ingredient to map
  * @returns {Record<string, any>} CSV row object
  */
-function mapIngredientToCSVRow(ingredient: Ingredient): Record<string, any> {
+function mapIngredientToCSVRow(ingredient: Ingredient): Record<string, unknown> {
   return {
     'Ingredient Name': ingredient.ingredient_name || '',
     Brand: ingredient.brand || '',

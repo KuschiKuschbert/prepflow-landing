@@ -7,11 +7,11 @@ interface UseDishesClientRecipePricingProps {
   recipePrices: Record<string, RecipePriceData>;
   updateVisibleRecipePrices: (
     recipes: Recipe[],
-    fetchRecipeIngredients: (recipeId: string) => Promise<any>,
-    fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<any>,
+    fetchRecipeIngredients: (recipeId: string) => Promise<unknown>,
+    fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<unknown>,
   ) => Promise<void>;
-  fetchRecipeIngredients: (recipeId: string) => Promise<any>;
-  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<any>;
+  fetchRecipeIngredients: (recipeId: string) => Promise<unknown>;
+  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<unknown>;
 }
 
 export function useDishesClientRecipePricing({

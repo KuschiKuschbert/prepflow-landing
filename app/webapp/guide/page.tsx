@@ -188,7 +188,7 @@ export default function GuidePage() {
       <div className="desktop:px-8 large-desktop:max-w-[1400px] mx-auto max-w-[1400px] px-4 py-8 xl:max-w-[1400px] 2xl:max-w-[1600px]">
         {!currentGuide ? (
           // Guide selection view
-          <div className="space-y-8">
+          (<div className="space-y-8">
             <div className="space-y-2">
               <h1 className="text-fluid-3xl font-bold text-[var(--foreground)]">PrepFlow Guides</h1>
               <p className="text-fluid-base text-[var(--foreground-muted)]">
@@ -197,10 +197,10 @@ export default function GuidePage() {
               </p>
             </div>
             <GuideNavigation onSelectGuide={handleSelectGuide} />
-          </div>
+          </div>)
         ) : (
           // Guide viewer
-          <div className="space-y-6">
+          (<div className="space-y-6">
             {/* Header with back button */}
             <div className="flex items-center justify-between">
               <div>
@@ -222,7 +222,6 @@ export default function GuidePage() {
                 Step {currentStepIndex + 1} of {currentGuide.steps.length}
               </div>
             </div>
-
             {/* Step indicator dots */}
             <div className="flex gap-2">
               {currentGuide.steps.map((step, index) => (
@@ -239,7 +238,6 @@ export default function GuidePage() {
                 />
               ))}
             </div>
-
             {/* Guide viewer */}
             {currentStep && (
               <GuideViewer
@@ -252,7 +250,7 @@ export default function GuidePage() {
                 progress={progress}
               />
             )}
-          </div>
+          </div>)
         )}
       </div>
     </div>
