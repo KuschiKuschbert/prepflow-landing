@@ -19,7 +19,7 @@ export async function loadStorage() {
 }
 
 export async function handleDiscovery(
-  scraper: any,
+  scraper: unknown,
   source: string,
   limit: number,
 ): Promise<string[]> {

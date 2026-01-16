@@ -45,7 +45,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ co
       logger.error('[Allergen Cross-Reference API] Error fetching ingredients:', {
         allergenCode: code,
         error: error.message,
-        code: (error as any).code,
+        code: (error as unknown).code,
       });
       return NextResponse.json(
         ApiErrorHandler.createError('Failed to fetch ingredients', 'DATABASE_ERROR', 500),

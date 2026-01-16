@@ -4,7 +4,7 @@
  * @param {any} error - Database error
  * @returns {boolean} True if table is missing
  */
-export function isTableNotFound(error: any): boolean {
+export function isTableNotFound(error: unknown): boolean {
   const errorCode = error?.code;
   const errorMessage = error?.message || '';
   return (

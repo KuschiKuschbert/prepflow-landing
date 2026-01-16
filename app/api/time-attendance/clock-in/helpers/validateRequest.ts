@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 /**
  * Validate clock-in request body
  */
-export function validateRequest(body: any): { isValid: boolean; error?: NextResponse } {
+export function validateRequest(body: unknown): { isValid: boolean; error?: NextResponse } {
   const { employee_id, latitude, longitude } = body;
 
   if (!employee_id) {

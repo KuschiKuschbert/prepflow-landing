@@ -10,7 +10,7 @@ export function buildUsageMap(
   idField: 'ingredient_id' | 'recipe_id',
 ): Record<string, number> {
   const usageMap: Record<string, number> = {};
-  rows.forEach((r: any) => {
+  rows.forEach((r: unknown) => {
     const id = r[idField];
     if (!id) return;
     usageMap[id] = (usageMap[id] || 0) + 1;

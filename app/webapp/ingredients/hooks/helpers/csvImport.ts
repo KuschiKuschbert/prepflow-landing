@@ -1,8 +1,8 @@
 import { parseCSV } from '@/lib/csv/csv-utils';
 import {
-  getIngredientsValidationSchema,
-  transformCSVData,
-  validateCSVData,
+    getIngredientsValidationSchema,
+    transformCSVData,
+    validateCSVData,
 } from '@/lib/csv/validation';
 import { logger } from '@/lib/logger';
 import { supabase } from '@/lib/supabase';
@@ -73,7 +73,7 @@ export function parseIngredientsCSV(csvText: string): {
 /**
  * Import ingredients from CSV data.
  * @param {Partial<Ingredient>[]} parsedIngredients - Parsed ingredients from CSV
- * @returns {Promise<{success: boolean, data?: Ingredient[], error?: any}>} Import result
+ * @returns {Promise<{success: boolean, data?: Ingredient[], error?: unknown}>} Import result
  */
 export async function importIngredientsFromCSV(
   parsedIngredients: Partial<Ingredient>[],

@@ -40,7 +40,7 @@ export async function createTemperatureLog(logData: {
     if (equipmentError) {
       logger.warn('[Temperature Logs API] Error fetching equipment details (non-fatal):', {
         error: equipmentError.message,
-        code: (equipmentError as any).code,
+        code: (equipmentError as unknown).code,
         equipmentId: logData.equipment_id,
       });
       // Continue without equipment details - use provided values or defaults
@@ -72,7 +72,7 @@ export async function createTemperatureLog(logData: {
   if (error) {
     logger.error('[Temperature Logs API] Database error creating log:', {
       error: error.message,
-      code: (error as any).code,
+      code: (error as unknown).code,
       context: {
         endpoint: '/api/temperature-logs',
         operation: 'POST',

@@ -17,14 +17,14 @@ import {
  * @returns {Object} Processed performance data with metadata
  */
 export function processPerformanceData(
-  dishes: any[],
+  dishes: unknown[],
   startDateParam: string | null,
   endDateParam: string | null,
 ) {
   const dateRange = parseDateRange(startDateParam, endDateParam);
 
   // Filter sales_data by date range if provided
-  const filteredDishes = dishes?.map((dish: any) => {
+  const filteredDishes = dishes?.map((dish: unknown) => {
     if (!dish.sales_data || dish.sales_data.length === 0) return dish;
     return {
       ...dish,

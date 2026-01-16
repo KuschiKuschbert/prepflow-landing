@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
 
     // Redirect to Square configuration page with success message
     return NextResponse.redirect(`${baseUrl}/webapp/square#configuration?success=square_connected`);
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Callback] Error:', {
       error: error.message,
       context: { endpoint: '/api/square/callback', method: 'GET' },

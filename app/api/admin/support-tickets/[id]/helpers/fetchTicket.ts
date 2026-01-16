@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server';
  * @param {string} ticketId - The ID of the ticket to fetch.
  * @returns {Promise<{ ticket: any } | NextResponse>} Ticket data or error response.
  */
-export async function fetchTicket(ticketId: string): Promise<{ ticket: any } | NextResponse> {
+export async function fetchTicket(ticketId: string): Promise<{ ticket: unknown } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

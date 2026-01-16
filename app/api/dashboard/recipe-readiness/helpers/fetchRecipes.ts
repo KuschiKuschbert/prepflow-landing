@@ -9,7 +9,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
  * @returns {Promise<Array>} Recipe list
  * @throws {Error} If fetch fails (non-table-not-found errors)
  */
-export async function fetchRecipes(): Promise<any[]> {
+export async function fetchRecipes(): Promise<unknown[]> {
   if (!supabaseAdmin) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
@@ -21,7 +21,7 @@ export async function fetchRecipes(): Promise<any[]> {
     if (testError) {
       logger.error('Database connection test failed:', {
         error: testError.message,
-        code: (testError as any).code,
+        code: (testError as unknown).code,
       });
     }
   } catch (testErr) {
@@ -41,9 +41,9 @@ export async function fetchRecipes(): Promise<any[]> {
       return [];
     }
 
-    const errorCode = (recipesError as any).code;
+    const errorCode = (recipesError as unknown).code;
     const errorMessage = recipesError.message || 'Unknown database error';
-    const errorHint = (recipesError as any).hint;
+    const errorHint = (recipesError as unknown).hint;
 
     logger.error('Error fetching recipes:', {
       error: errorMessage,

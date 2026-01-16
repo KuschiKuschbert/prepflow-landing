@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Time Attendance API] Database error fetching records:', {
         error: error.message,
-        code: (error as any).code,
+        code: (error as unknown).code,
         context: {
           endpoint: '/api/time-attendance/records',
           operation: 'GET',

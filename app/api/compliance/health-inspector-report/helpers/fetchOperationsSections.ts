@@ -22,7 +22,7 @@ export async function fetchWasteManagement(startDate: string, endDate: string) {
   if (wasteError) {
     logger.warn('[Health Inspector Report] Error fetching waste management logs:', {
       error: wasteError.message,
-      code: (wasteError as any).code,
+      code: (wasteError as unknown).code,
     });
   }
 
@@ -30,7 +30,7 @@ export async function fetchWasteManagement(startDate: string, endDate: string) {
   return {
     logs: logs,
     total_logs: logs.length,
-    by_type: logs.reduce((acc: any, l) => {
+    by_type: logs.reduce((acc: unknown, l) => {
       acc[l.waste_type] = (acc[l.waste_type] || 0) + 1;
       return acc;
     }, {}),
@@ -63,7 +63,7 @@ export async function fetchProcedures() {
       if (!p.next_review_date) return false;
       return new Date(p.next_review_date) < new Date();
     }),
-    by_type: procedureList.reduce((acc: any, p) => {
+    by_type: procedureList.reduce((acc: unknown, p) => {
       acc[p.procedure_type] = (acc[p.procedure_type] || 0) + 1;
       return acc;
     }, {}),

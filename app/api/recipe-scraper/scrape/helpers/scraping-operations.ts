@@ -14,7 +14,7 @@ export async function scrapeRecipes(
   storage: JSONStorage,
   urls: string[],
 ): Promise<{
-  results: Array<{ success: boolean; recipe?: any; error?: string; url: string }>;
+  results: Array<{ success: boolean; recipe?: unknown; error?: string; url: string }>;
   summary: { total: number; success: number; errors: number };
 }> {
   const results = [];

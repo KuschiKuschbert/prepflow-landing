@@ -6,7 +6,7 @@ import { logger } from '@/lib/logger';
 /**
  * Check if employee exists
  */
-export async function checkEmployee(employeeId: string): Promise<{ employee: any } | NextResponse> {
+export async function checkEmployee(employeeId: string): Promise<{ employee: unknown } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

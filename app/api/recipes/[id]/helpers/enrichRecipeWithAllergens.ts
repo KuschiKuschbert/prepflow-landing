@@ -15,7 +15,7 @@ import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
  * @param {any} recipe - Recipe data
  * @returns {Promise<any>} Enriched recipe
  */
-export async function enrichRecipeWithAllergens(recipeId: string, recipe: any) {
+export async function enrichRecipeWithAllergens(recipeId: string, recipe: unknown) {
   // Always aggregate allergens and dietary status (even if cached)
   const [allergens, dietaryStatus] = await Promise.all([
     aggregateRecipeAllergens(recipeId),

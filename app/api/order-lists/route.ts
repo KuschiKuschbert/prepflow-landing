@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Order Lists API] Database error fetching lists:', {
         error: error.message,
-        code: (error as any).code,
+        code: (error as unknown).code,
         context: { endpoint: '/api/order-lists', operation: 'GET', table: 'order_lists' },
       });
 
@@ -181,7 +181,7 @@ export async function POST(request: NextRequest) {
       message: 'Order list created successfully',
       data: orderList,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Order Lists API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/order-lists', method: 'POST' },

@@ -20,7 +20,7 @@ export async function updateUserSubscription(
     return;
   }
 
-  const updateData: any = {
+  const updateData: unknown = {
     subscription_tier: tier,
     subscription_status: status,
     subscription_expires: expiresAt?.toISOString() || null,

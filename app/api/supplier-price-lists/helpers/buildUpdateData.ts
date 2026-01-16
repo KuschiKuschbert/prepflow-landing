@@ -14,7 +14,7 @@ export function buildPriceListUpdateData(body: {
 }) {
   const { document_name, document_url, effective_date, expiry_date, notes, is_current } = body;
 
-  const updateData: any = {};
+  const updateData: unknown = {};
   if (document_name !== undefined) updateData.document_name = document_name;
   if (document_url !== undefined) updateData.document_url = document_url;
   if (effective_date !== undefined) updateData.effective_date = effective_date;

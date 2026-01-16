@@ -8,9 +8,9 @@
  * @param {any} body - Request body
  * @returns {any} Update data object
  */
-export function buildUpdateData(body: any): any {
+export function buildUpdateData(body: unknown): unknown {
   const { status, completed_date, notes, photo_url } = body;
-  const updateData: any = {};
+  const updateData: unknown = {};
 
   if (status !== undefined) updateData.status = status;
   if (completed_date !== undefined) updateData.completed_date = completed_date;

@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
 
     if (listLogsError) throw listLogsError;
 
-    let user: any = users.find(u => u.email === email);
+    let user: unknown = users.find(u => u.email === email);
 
     if (!user) {
       // Create user if they don't exist

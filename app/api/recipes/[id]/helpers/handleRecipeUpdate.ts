@@ -25,9 +25,9 @@ import { detectRecipeChanges } from './detectRecipeChanges';
  */
 export async function handleRecipeUpdate(
   recipeId: string,
-  body: any,
+  body: unknown,
   request: NextRequest,
-): Promise<any> {
+): Promise<unknown> {
   // Get user email for change tracking
   let userEmail: string | null = null;
   try {
@@ -37,7 +37,7 @@ export async function handleRecipeUpdate(
   }
 
   // Fetch current recipe to detect changes
-  let currentRecipe: any = null;
+  let currentRecipe: unknown = null;
   try {
     const { data } = await supabaseAdmin!
       .from('recipes')

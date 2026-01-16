@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
     if (updateError) {
       logger.error('[Clock-out API] Database error updating time attendance record:', {
         error: updateError.message,
-        code: (updateError as any).code,
+        code: (updateError as unknown).code,
         context: {
           endpoint: '/api/time-attendance/clock-out',
           operation: 'PUT',

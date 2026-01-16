@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
       if (lockedMenuError) {
         logger.error('[Performance API] Error fetching locked menu:', {
           error: lockedMenuError.message,
-          code: (lockedMenuError as any).code,
+          code: (lockedMenuError as unknown).code,
           context: { endpoint: '/api/performance', operation: 'GET' },
         });
       } else if (lockedMenu) {
@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
       if (menuItemsError) {
         logger.error('[Performance API] Error fetching menu items:', {
           error: menuItemsError.message,
-          code: (menuItemsError as any).code,
+          code: (menuItemsError as unknown).code,
           context: { endpoint: '/api/performance', operation: 'GET', menuId: targetMenuId },
         });
         // Continue without filtering if there's an error
@@ -111,7 +111,7 @@ export async function GET(request: NextRequest) {
     if (dishesError) {
       logger.error('[Performance API] Database error fetching dishes:', {
         error: dishesError.message,
-        code: (dishesError as any).code,
+        code: (dishesError as unknown).code,
         context: { endpoint: '/api/performance', operation: 'GET', table: 'menu_dishes' },
       });
 
@@ -175,7 +175,7 @@ export async function POST(request: NextRequest) {
       data,
       message: 'Sales data updated successfully',
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Performance API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/performance', method: 'POST' },

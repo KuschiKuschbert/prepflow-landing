@@ -35,13 +35,13 @@ export async function POST(req: NextRequest) {
     if (ingErr) {
       logger.error('[Dedupe Preview API] Error fetching ingredients:', {
         error: ingErr.message,
-        code: (ingErr as any).code,
+        code: (ingErr as unknown).code,
         context: { endpoint: '/api/dedupe/preview', operation: 'POST' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(ingErr, 500), { status: 500 });
     }
 
-    const ingredientGroups: Record<string, { key: string; ids: string[]; sample: any }> = {};
+    const ingredientGroups: Record<string, { key: string; ids: string[]; sample: unknown }> = {};
     (ingredients || []).forEach(row => {
       const key = [
         String(row.ingredient_name || '')
@@ -66,13 +66,13 @@ export async function POST(req: NextRequest) {
     if (recErr) {
       logger.error('[Dedupe Preview API] Error fetching recipes:', {
         error: recErr.message,
-        code: (recErr as any).code,
+        code: (recErr as unknown).code,
         context: { endpoint: '/api/dedupe/preview', operation: 'POST' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(recErr, 500), { status: 500 });
     }
 
-    const recipeGroups: Record<string, { key: string; ids: string[]; sample: any }> = {};
+    const recipeGroups: Record<string, { key: string; ids: string[]; sample: unknown }> = {};
     (recipes || []).forEach(row => {
       const key = String(row.recipe_name || '')
         .toLowerCase()
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
       ingredients: { duplicates: ingredientDuplicates, total: ingredients?.length || 0 },
       recipes: { duplicates: recipeDuplicates, total: recipes?.length || 0 },
     });
-  } catch (e: any) {
+  } catch (e: unknown) {
     logger.error('[route.ts] Error in catch block:', {
       error: e instanceof Error ? e.message : String(e),
       stack: e instanceof Error ? e.stack : undefined,

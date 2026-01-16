@@ -31,7 +31,7 @@ export async function getUserIdFromRequest(request: NextRequest): Promise<string
     if (userDataError && userDataError.code !== 'PGRST116') {
       logger.warn('[Client Error API] Error fetching user_id:', {
         error: userDataError.message,
-        code: (userDataError as any).code,
+        code: (userDataError as unknown).code,
         email: user.email,
       });
     }

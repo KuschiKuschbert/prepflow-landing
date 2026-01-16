@@ -78,7 +78,7 @@ export async function handleCreatePriceList(request: NextRequest) {
       message: 'Supplier price list created successfully',
       data,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (error.message) {
       logger.error('[Supplier Price Lists API] Database error creating:', {
         error: error.message,

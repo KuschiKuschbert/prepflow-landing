@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server';
  * @param {string} method - HTTP method
  * @returns {NextResponse} Error response
  */
-export function handleCleaningTaskError(err: Error | any, method: string): NextResponse {
+export function handleCleaningTaskError(err: Error | unknown, method: string): NextResponse {
   logger.error('[Cleaning Tasks API] Unexpected error:', {
     error: err instanceof Error ? err.message : String(err),
     stack: err instanceof Error ? err.stack : undefined,

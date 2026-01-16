@@ -40,13 +40,13 @@ export async function fetchAllergenExportData(
   }
 
   // Fetch all recipes
-  let recipes: any[] = [];
+  let recipes: unknown[] = [];
   const { data: recipesData, error: recipesError } = await supabaseAdmin
     .from('recipes')
     .select('*');
 
   if (recipesError) {
-    const errorCode = (recipesError as any).code;
+    const errorCode = (recipesError as unknown).code;
     if (errorCode === '42P01') {
       logger.dev('[Allergen Export] Recipes table not found, returning empty data');
       recipes = [];
@@ -57,7 +57,7 @@ export async function fetchAllergenExportData(
       });
       logger.error('[Allergen Export] Error fetching recipes:', {
         error: recipesError.message,
-        code: (recipesError as any).code,
+        code: (recipesError as unknown).code,
       });
       throw ApiErrorHandler.fromSupabaseError(recipesError, 500);
     }
@@ -66,12 +66,12 @@ export async function fetchAllergenExportData(
   }
 
   // Fetch all dishes
-  let dishes: any[] = [];
+  let dishes: unknown[] = [];
   const { data: dishesData, error: dishesError } = await supabaseAdmin
     .from('dishes')
     .select('id, dish_name, description, allergens');
 
-  if (dishesError && (dishesError as any).code !== '42P01') {
+  if (dishesError && (dishesError as unknown).code !== '42P01') {
     logger.warn('[Allergen Export] Error fetching dishes:', dishesError);
   } else if (dishesData) {
     dishes = dishesData;
@@ -92,7 +92,7 @@ export async function fetchAllergenExportData(
   // Combine recipes and dishes with allergen sources
   const recipesWithNormalizedNames = recipes.map(r => ({
     ...r,
-    recipe_name: (r as any).recipe_name || (r as any).name || '',
+    recipe_name: (r as unknown).recipe_name || (r as unknown).name || '',
   }));
 
   const allItems: AllergenExportItem[] = [

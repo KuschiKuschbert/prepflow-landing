@@ -35,10 +35,10 @@ export async function POST(req: NextRequest) {
     }
 
     // Parse event to get event_id and location_id
-    let event: any;
+    let event: unknown;
     try {
       event = JSON.parse(rawBody);
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('[Square Webhook] Invalid JSON payload:', {
         error: error.message,
       });
@@ -121,7 +121,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ received: true, type: event.type });
-  } catch (error: any) {
+  } catch (error: unknown) {
     const processingTime = Date.now() - startTime;
     const errorMessage = error instanceof Error ? error.message : String(error);
 

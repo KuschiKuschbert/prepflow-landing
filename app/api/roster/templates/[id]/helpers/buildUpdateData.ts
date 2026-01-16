@@ -1,8 +1,8 @@
 /**
  * Build update data object from request body
  */
-export function buildUpdateData(body: any): any {
-  const updateData: any = {
+export function buildUpdateData(body: unknown): unknown {
+  const updateData: unknown = {
     updated_at: new Date().toISOString(),
   };
 

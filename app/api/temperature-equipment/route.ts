@@ -24,7 +24,7 @@ export async function GET() {
     if (error) {
       logger.error('[Temperature Equipment API] Database error fetching equipment:', {
         error: error.message,
-        code: (error as any).code,
+        code: (error as unknown).code,
         context: {
           endpoint: '/api/temperature-equipment',
           operation: 'GET',

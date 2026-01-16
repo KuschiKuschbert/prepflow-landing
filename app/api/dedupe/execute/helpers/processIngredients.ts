@@ -82,7 +82,7 @@ export async function processIngredientDeduplication(
         if (updateError) {
           logger.error('[Dedupe Execute API] Error updating recipe ingredients:', {
             error: updateError.message,
-            code: (updateError as any).code,
+            code: (updateError as unknown).code,
             merge: m,
             context: { endpoint: '/api/dedupe/execute', operation: 'updateRecipeIngredients' },
           });
@@ -97,7 +97,7 @@ export async function processIngredientDeduplication(
         if (deleteError) {
           logger.error('[Dedupe Execute API] Error deleting duplicate ingredients:', {
             error: deleteError.message,
-            code: (deleteError as any).code,
+            code: (deleteError as unknown).code,
             merge: m,
             context: { endpoint: '/api/dedupe/execute', operation: 'deleteIngredients' },
           });

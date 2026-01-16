@@ -36,7 +36,7 @@ export async function fetchParLevelWithIngredient(parLevelId: string, ingredient
 
   if (error) {
     const errorMessage = error.message || '';
-    const errorCode = (error as any).code;
+    const errorCode = (error as unknown).code;
 
     logger.warn('[Par Levels API] Join failed, fetching ingredient separately:', {
       error: errorMessage,

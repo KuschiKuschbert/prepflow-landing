@@ -11,7 +11,7 @@ import { buildSupplierData } from './buildSupplierData';
  * @returns {Promise<Object>} Updated supplier
  * @throws {Error} If update fails
  */
-export async function updateSupplier(id: string, updates: any) {
+export async function updateSupplier(id: string, updates: unknown) {
   if (!supabaseAdmin) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
@@ -32,7 +32,7 @@ export async function updateSupplier(id: string, updates: any) {
   if (error) {
     logger.error('[Suppliers API] Database error updating supplier:', {
       error: error.message,
-      code: (error as any).code,
+      code: (error as unknown).code,
       context: { endpoint: '/api/suppliers', operation: 'PUT', supplierId: id },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

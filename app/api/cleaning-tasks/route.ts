@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
       page: parseInt(searchParams.get('page') || '1', 10),
       pageSize: parseInt(searchParams.get('pageSize') || '100', 10),
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Cleaning Tasks API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/cleaning-tasks', method: 'GET' },

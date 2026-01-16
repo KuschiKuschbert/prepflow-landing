@@ -11,7 +11,7 @@ export interface DishRecord {
   cost?: number;
   margin?: number;
   allergens?: string[];
-  dietary_info?: Record<string, any>;
+  dietary_info?: Record<string, unknown>;
   image_url?: string;
   created_at?: string;
   updated_at?: string;

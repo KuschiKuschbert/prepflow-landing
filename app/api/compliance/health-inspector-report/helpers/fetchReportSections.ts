@@ -27,8 +27,8 @@ export async function fetchReportSections(
   tempCleaningStartDate: string,
   endDate: string,
 ) {
-  const reportData: any = {};
-  const fetchPromises: Promise<any>[] = [];
+  const reportData: unknown = {};
+  const fetchPromises: Promise<unknown>[] = [];
 
   // 1. Business Information
   if (includeSections.includes('business') || includeSections.includes('compliance')) {

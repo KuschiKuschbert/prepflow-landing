@@ -6,7 +6,7 @@ import { logger } from '@/lib/logger';
 /**
  * Check if shift exists and return it
  */
-export async function checkShiftExists(shiftId: string): Promise<{ shift: any } | NextResponse> {
+export async function checkShiftExists(shiftId: string): Promise<{ shift: unknown } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

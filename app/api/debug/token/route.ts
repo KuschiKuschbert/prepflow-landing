@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
     // Extract custom claims from session user
     const customClaims: Record<string, unknown> = {};
     if (session?.user) {
-      const userAny = session.user as any;
+      const userAny = session.user as unknown;
       // Check for common custom claim namespaces
       Object.keys(userAny).forEach(key => {
         if (key.startsWith('https://') || key.includes('custom') || key.includes('roles')) {
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
               email: session.user?.email,
               name: session.user?.name,
               sub: session.user?.sub,
-              roles: (session.user as any)['https://prepflow.org/roles'] || [],
+              roles: (session.user as unknown)['https://prepflow.org/roles'] || [],
               picture: session.user?.picture,
             },
             expiresAt: session.expiresAt,
@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
             name: session.user.name,
             sub: session.user.sub,
             auth0UserId: auth0UserId,
-            roles: (session.user as any)['https://prepflow.org/roles'] || [],
+            roles: (session.user as unknown)['https://prepflow.org/roles'] || [],
             // Include all user properties for debugging
             allProperties: Object.keys(session.user),
             // Custom claims found in user object
@@ -124,11 +124,11 @@ export async function GET(request: NextRequest) {
       },
       troubleshooting: {
         rolesFound: session?.user
-          ? ((session.user as any)['https://prepflow.org/roles'] || []).length > 0
+          ? ((session.user as unknown)['https://prepflow.org/roles'] || []).length > 0
           : false,
         auth0UserId: auth0UserId,
         recommendation:
-          !session?.user || ((session.user as any)['https://prepflow.org/roles'] || []).length === 0
+          !session?.user || ((session.user as unknown)['https://prepflow.org/roles'] || []).length === 0
             ? 'Roles not found in session. Check: 1) Auth0 Actions configured to include roles, 2) Management API fallback is working, 3) User has roles assigned in Auth0'
             : 'Roles found in session',
       },

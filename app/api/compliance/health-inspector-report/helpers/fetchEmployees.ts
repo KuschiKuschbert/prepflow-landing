@@ -36,16 +36,16 @@ export async function fetchEmployees() {
   if (employeesError) {
     logger.warn('[Health Inspector Report] Error fetching employees:', {
       error: employeesError.message,
-      code: (employeesError as any).code,
+      code: (employeesError as unknown).code,
     });
     return { employees: null, qualifications: null };
   }
 
   // Qualification Summary
-  const allQualifications: any[] = [];
+  const allQualifications: unknown[] = [];
   employees?.forEach(emp => {
     if (emp.employee_qualifications) {
-      emp.employee_qualifications.forEach((qual: any) => {
+      emp.employee_qualifications.forEach((qual: unknown) => {
         allQualifications.push({
           employee_name: emp.full_name,
           employee_role: emp.role,

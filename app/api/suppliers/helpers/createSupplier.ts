@@ -10,7 +10,7 @@ import { buildSupplierData } from './buildSupplierData';
  * @returns {Promise<Object>} Created supplier
  * @throws {Error} If creation fails
  */
-export async function createSupplier(supplierData: any) {
+export async function createSupplier(supplierData: unknown) {
   if (!supabaseAdmin) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
@@ -25,7 +25,7 @@ export async function createSupplier(supplierData: any) {
   if (error) {
     logger.error('[Suppliers API] Database error creating supplier:', {
       error: error.message,
-      code: (error as any).code,
+      code: (error as unknown).code,
       context: { endpoint: '/api/suppliers', operation: 'POST', table: 'suppliers' },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

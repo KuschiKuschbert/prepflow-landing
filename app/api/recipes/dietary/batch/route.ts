@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     );
 
     // Build result object
-    const result: Record<string, any> = {};
+    const result: Record<string, unknown> = {};
     results.forEach(({ recipeId, status }) => {
       result[recipeId] = status || {
         isVegetarian: null,

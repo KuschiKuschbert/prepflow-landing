@@ -9,7 +9,7 @@ import { logger } from '@/lib/logger';
  * @param {Object} updateData - Update data
  * @returns {Promise<Object>} Updated price list with supplier relation
  */
-export async function updatePriceList(id: number, updateData: any) {
+export async function updatePriceList(id: number, updateData: unknown) {
   const { data: updated, error } = await supabaseAdmin!
     .from('supplier_price_lists')
     .update(updateData)

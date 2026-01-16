@@ -8,7 +8,7 @@ export function buildConfigInput(validationResult: {
     sync_direction?: 'from_square' | 'to_square' | 'bidirectional';
     auto_sync_interval?: number;
   };
-}): any {
+}): unknown {
   return {
     ...(validationResult.data.square_location_id && {
       default_location_id: validationResult.data.square_location_id,

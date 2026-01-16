@@ -2,7 +2,7 @@
  * Generate executive summary from report data
  */
 
-export function generateExecutiveSummary(reportData: any) {
+export function generateExecutiveSummary(reportData: unknown) {
   const expiringQualifications = reportData.qualifications?.expiring_soon?.length || 0;
   const expiredQualifications = reportData.qualifications?.expired?.length || 0;
   const expiringCompliance = reportData.compliance_records?.expiring_soon?.length || 0;

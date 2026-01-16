@@ -42,7 +42,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ co
       .order('dish_name');
 
     if (fetchError) {
-      const errorCode = (fetchError as any).code;
+      const errorCode = (fetchError as unknown).code;
       if (errorCode === '42P01') {
         // Table doesn't exist - return empty data
         logger.dev('[Allergen Cross-Reference API] Dishes table not found, returning empty data');

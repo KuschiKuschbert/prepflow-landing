@@ -19,7 +19,7 @@ export async function handleDeleteRecipe(recipeId: string) {
 
     try {
       await deleteRecipeAndCleanup(recipeId);
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('[RecipeDelete] Error deleting recipe:', {
         error: error.message,
         code: error.code,

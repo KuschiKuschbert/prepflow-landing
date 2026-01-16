@@ -79,7 +79,7 @@ export async function POST() {
 
     // Get current application configuration
     const appResponse = await managementClient.clients.get({ client_id: applicationClientId });
-    const app = appResponse.data || (appResponse as any);
+    const app = appResponse.data || (appResponse as unknown);
 
     // Build required URLs (Auth0 SDK uses /api/auth/callback, not /api/auth/callback/auth0)
     const { requiredCallbacks, requiredLogoutUrls, requiredWebOrigins } =
@@ -103,7 +103,7 @@ export async function POST() {
         callbacks: updatedCallbacks,
         allowed_logout_urls: updatedLogoutUrls,
         web_origins: updatedWebOrigins,
-      } as any, // Auth0 SDK types may be incomplete
+      } as unknown, // Auth0 SDK types may be incomplete
     );
 
     logger.info('[Auth0 Fix] Updated Auth0 application configuration', {

@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
 
     // If no data, return empty grouped results
     if (!data || data.length === 0) {
-      const grouped: Record<string, any[]> = {};
+      const grouped: Record<string, unknown[]> = {};
       normalizedIds.forEach(id => {
         grouped[id] = [];
       });
@@ -96,11 +96,11 @@ export async function POST(request: NextRequest) {
 
     // Server-side fallback: if nested ingredients join is missing/null for some rows,
     // do a bulk lookup from ingredients and merge to ensure uniform shape
-    let rows: any[] = data;
+    let rows: unknown[] = data;
     const missingNested = rows.some(r => !r.ingredients);
     if (missingNested) {
       const uniqueIds = Array.from(
-        new Set(rows.map(r => r.ingredient_id).filter((v: any) => Boolean(v))),
+        new Set(rows.map(r => r.ingredient_id).filter((v: unknown) => Boolean(v))),
       );
       if (uniqueIds.length > 0) {
         const { data: ingRows, error: ingError } = await supabaseAdmin
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
           )
           .in('id', uniqueIds);
         if (!ingError && ingRows) {
-          const byId: Record<string, any> = {};
+          const byId: Record<string, unknown> = {};
           ingRows.forEach(ir => {
             byId[ir.id] = ir;
           });
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Normalize and format items
-    const items = rows.map((row: any) => {
+    const items = rows.map((row: unknown) => {
       const ing = row.ingredients || {};
       return {
         id: row.id,

@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     if (userError || !user) {
       logger.warn('[Admin Reset Password] User not found:', {
         error: userError?.message,
-        code: (userError as any)?.code,
+        code: (userError as unknown)?.code,
         userId,
       });
       return NextResponse.json(ApiErrorHandler.createError('User not found', 'NOT_FOUND', 404), {

@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     if (ingErr) {
       logger.error('[Dedupe Execute API] Error fetching ingredients:', {
         error: ingErr.message,
-        code: (ingErr as any).code,
+        code: (ingErr as unknown).code,
         context: { endpoint: '/api/dedupe/execute', operation: 'POST' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(ingErr, 500), { status: 500 });
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     if (riErr) {
       logger.error('[Dedupe Execute API] Error fetching recipe ingredients:', {
         error: riErr.message,
-        code: (riErr as any).code,
+        code: (riErr as unknown).code,
         context: { endpoint: '/api/dedupe/execute', operation: 'POST' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(riErr, 500), { status: 500 });
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     if (recErr) {
       logger.error('[Dedupe Execute API] Error fetching recipes:', {
         error: recErr.message,
-        code: (recErr as any).code,
+        code: (recErr as unknown).code,
         context: { endpoint: '/api/dedupe/execute', operation: 'POST' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(recErr, 500), { status: 500 });
@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
     if (riRecErr) {
       logger.error('[Dedupe Execute API] Error fetching recipe ingredients by recipe:', {
         error: riRecErr.message,
-        code: (riRecErr as any).code,
+        code: (riRecErr as unknown).code,
         context: { endpoint: '/api/dedupe/execute', operation: 'POST' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(riRecErr, 500), { status: 500 });
@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
       ingredients: { merges: ingMerges },
       recipes: { merges: recipeMerges },
     });
-  } catch (e: any) {
+  } catch (e: unknown) {
     logger.error('[Dedupe Execute API] Unexpected error:', {
       error: e instanceof Error ? e.message : String(e),
       stack: e instanceof Error ? e.stack : undefined,

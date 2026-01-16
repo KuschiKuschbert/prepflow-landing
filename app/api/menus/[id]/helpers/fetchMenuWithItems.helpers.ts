@@ -9,7 +9,7 @@ import { logger } from '@/lib/logger';
 export function extractColumnName(error: unknown): string | null {
   if (!error || typeof error !== 'object') return null;
 
-  const err = error as Record<string, any>;
+  const err = error as Record<string, unknown>;
   const errorMessage = err.message || '';
   const errorDetails = err.details || '';
   const errorHint = err.hint || '';
@@ -36,7 +36,7 @@ export function logDetailedError(error: unknown, context: string, menuId: string
     return;
   }
 
-  const err = error as Record<string, any>;
+  const err = error as Record<string, unknown>;
   const errorCode = err.code;
   const errorMessage = err.message || '';
   const errorDetails = err.details || '';

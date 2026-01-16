@@ -31,7 +31,7 @@ export async function updateFeatureMapping(params: UpdateMappingParams): Promise
   if (currentDataError && currentDataError.code !== 'PGRST116') {
     logger.warn('[Admin Tiers Features] Error fetching current mapping:', {
       error: currentDataError.message,
-      code: (currentDataError as any).code,
+      code: (currentDataError as unknown).code,
       feature_key,
     });
   }

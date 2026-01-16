@@ -67,7 +67,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     if (error) {
       logger.error('[Cleaning Tasks API] Database error removing completion:', {
         error: error.message,
-        code: (error as any).code,
+        code: (error as unknown).code,
         context: {
           endpoint: '/api/cleaning-tasks/[id]/uncomplete',
           operation: 'POST',
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       });
 
       // Handle missing table gracefully
-      if ((error as any).code === '42P01') {
+      if ((error as unknown).code === '42P01') {
         return NextResponse.json(
           ApiErrorHandler.createError(
             'Completion table does not exist. Please run database migration.',
@@ -95,7 +95,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       success: true,
       message: 'Task completion removed',
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Cleaning Tasks API] Error in uncomplete endpoint:', err);
     if (err && typeof err === 'object' && 'status' in err) {
       return NextResponse.json(err, { status: err.status || 500 });

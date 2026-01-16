@@ -19,7 +19,7 @@ const updateHiddenFlagSchema = z.object({
  */
 export async function updateHiddenFlag(
   validated: z.infer<typeof updateHiddenFlagSchema>,
-): Promise<{ flag: any } | NextResponse> {
+): Promise<{ flag: unknown } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

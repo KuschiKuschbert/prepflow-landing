@@ -10,7 +10,7 @@ import type { CreateTaskBody } from './validateCleaningTaskRequest';
  * @param {any} body - Raw request body
  * @returns {CreateTaskBody} Parsed task data
  */
-export function parseCreateTaskBody(body: any): CreateTaskBody {
+export function parseCreateTaskBody(body: unknown): CreateTaskBody {
   return {
     task_name: body.task_name,
     frequency_type: body.frequency_type,

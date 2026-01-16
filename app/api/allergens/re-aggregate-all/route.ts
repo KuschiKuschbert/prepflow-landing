@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     if (recipesError) {
       logger.error('[Re-aggregate All Allergens API] Error fetching recipes:', {
         error: recipesError.message,
-        code: (recipesError as any).code,
+        code: (recipesError as unknown).code,
         context: { endpoint: '/api/allergens/re-aggregate-all', operation: 'POST' },
       });
       return NextResponse.json(
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     // Fetch all dish IDs
     const { data: dishes, error: dishesError } = await supabaseAdmin.from('dishes').select('id');
 
-    if (dishesError && (dishesError as any).code !== '42P01') {
+    if (dishesError && (dishesError as unknown).code !== '42P01') {
       // Ignore table doesn't exist error
       logger.warn(
         '[Re-aggregate All Allergens API] Error fetching dishes:',

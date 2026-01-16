@@ -28,7 +28,7 @@ export async function deleteParLevel(id: string): Promise<void> {
   if (error) {
     logger.error('[Par Levels API] Database error deleting par level:', {
       error: error.message,
-      code: (error as any).code,
+      code: (error as unknown).code,
       context: { endpoint: '/api/par-levels', operation: 'DELETE', parLevelId: id },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

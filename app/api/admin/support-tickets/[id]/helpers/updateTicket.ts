@@ -24,7 +24,7 @@ export async function updateTicket(
   ticketId: string,
   updates: z.infer<typeof updateTicketSchema>,
   adminUser: AdminUser,
-): Promise<{ ticket: any } | NextResponse> {
+): Promise<{ ticket: unknown } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
@@ -49,7 +49,7 @@ export async function updateTicket(
         if (adminDataError && adminDataError.code !== 'PGRST116') {
           logger.warn('[Admin Support Tickets] Error fetching admin user:', {
             error: adminDataError.message,
-            code: (adminDataError as any).code,
+            code: (adminDataError as unknown).code,
             adminEmail: adminUser.email,
           });
         }

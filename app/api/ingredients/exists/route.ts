@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
       typeof e === 'object' &&
       'status' in e &&
       'json' in e &&
-      typeof (e as any).json === 'function'
+      typeof (e as unknown).json === 'function'
     ) {
       return e as NextResponse;
     }

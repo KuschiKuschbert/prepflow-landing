@@ -5,8 +5,8 @@
 export interface RecipeChangeDetails {
   yield?: {
     field: string;
-    before: any;
-    after: any;
+    before: unknown;
+    after: unknown;
     change: string;
   };
   instructions?: {
@@ -29,8 +29,8 @@ export interface RecipeChangeDetails {
  * @returns {Object} Change type and details
  */
 export function detectRecipeChanges(
-  currentRecipe: any,
-  updateData: any,
+  currentRecipe: unknown,
+  updateData: unknown,
   ingredientsChanged: boolean,
   yieldChanged: boolean,
 ): { changeType: string; changeDetails: RecipeChangeDetails } {

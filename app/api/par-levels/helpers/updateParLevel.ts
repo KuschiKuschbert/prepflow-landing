@@ -11,7 +11,7 @@ import { buildParLevelData } from './buildParLevelData';
  * @returns {Promise<Object>} Updated par level with ingredient data
  * @throws {Error} If update fails
  */
-export async function updateParLevel(id: string, updates: any) {
+export async function updateParLevel(id: string, updates: unknown) {
   const supabaseAdmin = createSupabaseAdmin();
 
   // Check if par level exists
@@ -57,7 +57,7 @@ export async function updateParLevel(id: string, updates: any) {
   if (error) {
     logger.error('[Par Levels API] Database error updating par level:', {
       error: error.message,
-      code: (error as any).code,
+      code: (error as unknown).code,
       context: { endpoint: '/api/par-levels', operation: 'PUT', parLevelId: id },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

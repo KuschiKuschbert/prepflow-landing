@@ -8,7 +8,7 @@ import { RecipeQueryParams } from './validateRequest';
 export async function buildQuery(
   supabase: SupabaseClient,
   params: RecipeQueryParams,
-): Promise<{ data: Recipe[] | null; error: any; count: number | null }> {
+): Promise<{ data: Recipe[] | null; error: unknown; count: number | null }> {
   const { category, excludeAllergens, vegetarian, vegan } = params;
   const start = (params.page - 1) * params.pageSize;
   const end = start + params.pageSize - 1;

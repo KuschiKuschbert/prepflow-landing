@@ -37,7 +37,7 @@ export async function authenticateAndSetup(req: NextRequest) {
   let supabaseAdmin;
   try {
     supabaseAdmin = createSupabaseAdmin();
-  } catch (supabaseError: any) {
+  } catch (supabaseError: unknown) {
     logger.error('[Par Levels API] Failed to create Supabase admin client:', {
       error: supabaseError instanceof Error ? supabaseError.message : String(supabaseError),
       stack: supabaseError instanceof Error ? supabaseError.stack : undefined,

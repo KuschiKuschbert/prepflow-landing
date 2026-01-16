@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
     if (errorsQueryError) {
       logger.warn('[Admin System Health API] Error fetching recent errors count:', {
         error: errorsQueryError.message,
-        code: (errorsQueryError as any).code,
+        code: (errorsQueryError as unknown).code,
       });
     }
 

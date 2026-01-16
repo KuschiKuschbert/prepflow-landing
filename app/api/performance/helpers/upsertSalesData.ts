@@ -38,7 +38,7 @@ export async function upsertSalesData(salesData: {
   if (error) {
     logger.error('[Performance API] Database error inserting sales data:', {
       error: error.message,
-      code: (error as any).code,
+      code: (error as unknown).code,
       context: { endpoint: '/api/performance', operation: 'POST', table: 'sales_data' },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

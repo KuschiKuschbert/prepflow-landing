@@ -15,12 +15,12 @@ import {
 import { supabaseAdmin } from '@/lib/supabase';
 
 export async function performComplianceValidation(data: {
-  shift: any;
+  shift: unknown;
   employee_id?: string;
   check_availability: boolean;
   check_skills: boolean;
 }): Promise<
-  { success: boolean; validation: any; warnings: any[] } | { error: any; status: number }
+  { success: boolean; validation: unknown; warnings: unknown[] } | { error: unknown; status: number }
 > {
   if (!supabaseAdmin) {
     return {
@@ -62,7 +62,7 @@ export async function performComplianceValidation(data: {
       '[Compliance API] Database error fetching employee shifts (continuing with empty array):',
       {
         error: shiftsError.message,
-        code: (shiftsError as any).code,
+        code: (shiftsError as unknown).code,
         context: {
           endpoint: '/api/compliance/validate',
           operation: 'POST',

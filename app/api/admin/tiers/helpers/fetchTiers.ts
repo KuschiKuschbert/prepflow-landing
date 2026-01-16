@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server';
  *
  * @returns {Promise<{ tiers: any[] } | NextResponse>} Tiers data or error response.
  */
-export async function fetchTiers(): Promise<{ tiers: any[] } | NextResponse> {
+export async function fetchTiers(): Promise<{ tiers: unknown[] } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503),

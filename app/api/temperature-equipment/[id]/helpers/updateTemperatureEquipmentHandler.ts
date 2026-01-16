@@ -89,7 +89,7 @@ export async function handleUpdateTemperatureEquipment(request: NextRequest, id:
       });
     }
 
-    const updateData: any = {
+    const updateData: unknown = {
       updated_at: new Date().toISOString(),
     };
 
@@ -111,7 +111,7 @@ export async function handleUpdateTemperatureEquipment(request: NextRequest, id:
     if (error) {
       logger.error('[Temperature Equipment API] Database error updating equipment:', {
         error: error.message,
-        code: (error as any).code,
+        code: (error as unknown).code,
         context: {
           endpoint: `/api/temperature-equipment/${id}`,
           operation: 'PUT',
@@ -124,7 +124,7 @@ export async function handleUpdateTemperatureEquipment(request: NextRequest, id:
     }
 
     return NextResponse.json({ success: true, data });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Temperature Equipment API] Unexpected error updating equipment:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,

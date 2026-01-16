@@ -129,8 +129,8 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       menu_item_id: string;
       title: string;
       base_yield: number;
-      ingredients: any[];
-      method_steps: any[];
+      ingredients: unknown[];
+      method_steps: unknown[];
       notes: string | string[] | null;
       menu_items: {
         recipes: { name?: string; recipe_name?: string } | null;

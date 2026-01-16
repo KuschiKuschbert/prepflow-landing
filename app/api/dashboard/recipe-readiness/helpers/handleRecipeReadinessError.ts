@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server';
  * @param {Error | any} error - Error object
  * @returns {NextResponse} Error response
  */
-export function handleRecipeReadinessError(error: Error | any): NextResponse {
+export function handleRecipeReadinessError(error: Error | unknown): NextResponse {
   logger.error('[Recipe Readiness API] Unexpected error:', {
     error: error instanceof Error ? error.message : String(error),
     stack: error instanceof Error ? error.stack : undefined,

@@ -30,7 +30,7 @@ export async function handleDeletePriceList(request: NextRequest) {
     if (error) {
       logger.error('[Supplier Price Lists API] Database error deleting:', {
         error: error.message,
-        code: (error as any).code,
+        code: (error as unknown).code,
         context: { endpoint: '/api/supplier-price-lists', operation: 'DELETE', id },
       });
       const apiError = ApiErrorHandler.fromSupabaseError(error, 500);

@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server';
  * @param {PostgrestError | any} err - Error object with status, error, and message
  * @returns {NextResponse} Formatted error response
  */
-export function formatErrorResponse(err: PostgrestError | any): NextResponse {
+export function formatErrorResponse(err: PostgrestError | unknown): NextResponse {
   const status = err.status || 500;
   const errorCode = err.code || 'SERVER_ERROR';
   const message = err.message || 'An error occurred';

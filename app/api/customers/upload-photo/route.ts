@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
         path: filePath,
       },
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Customers API] Photo upload error:', err);
     if (err.status) {
       return NextResponse.json(err, { status: err.status });

@@ -40,7 +40,7 @@ export async function fetchRecipeWithIngredients(recipeId: string) {
   if (recipeError || !recipe) {
     logger.error('[Recipe Share API] Error fetching recipe:', {
       error: recipeError?.message,
-      code: (recipeError as any)?.code,
+      code: (recipeError as unknown)?.code,
       context: { endpoint: '/api/recipe-share', operation: 'POST', recipeId },
     });
     throw ApiErrorHandler.createError('Recipe not found', 'NOT_FOUND', 404, {

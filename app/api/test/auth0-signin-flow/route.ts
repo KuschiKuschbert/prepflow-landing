@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
   try {
     const { auth0 } = await import('@/lib/auth0');
     const session = await auth0.getSession(req);
-    const diagnostic: any = {
+    const diagnostic: unknown = {
       timestamp: new Date().toISOString(),
       sessionStatus: session ? 'active' : 'inactive',
       session: session
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
               email: session.user?.email,
               name: session.user?.name,
               image: session.user?.picture,
-              roles: (session.user as any)?.roles || [],
+              roles: (session.user as unknown)?.roles || [],
             },
             expiresAt: session.expiresAt,
           }

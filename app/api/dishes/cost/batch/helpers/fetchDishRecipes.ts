@@ -8,7 +8,7 @@ import { logger } from '@/lib/logger';
 /**
  * Fetch dish_recipes and group by dish_id.
  */
-export async function fetchDishRecipes(dishIds: string[]): Promise<Map<string, any[]>> {
+export async function fetchDishRecipes(dishIds: string[]): Promise<Map<string, unknown[]>> {
   if (!supabaseAdmin) {
     return new Map();
   }

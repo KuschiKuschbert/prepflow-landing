@@ -16,9 +16,9 @@ export async function saveAISpecials(
   userId: string,
   imageData: string,
   prompt: string | undefined,
-  aiResponse: any,
+  aiResponse: unknown,
   requestId?: string,
-): Promise<{ aiRecord: any } | NextResponse> {
+): Promise<{ aiRecord: unknown } | NextResponse> {
   const startTime = Date.now();
   logger.info('[saveAISpecials] Function called', {
     userId,
@@ -122,8 +122,8 @@ export async function saveAISpecials(
       hasRecord: !!aiRecord,
       recordId: aiRecord?.id,
       errorMessage: aiError?.message,
-      errorCode: (aiError as any)?.code,
-      errorDetails: aiError ? (aiError as any) : undefined,
+      errorCode: (aiError as unknown)?.code,
+      errorDetails: aiError ? (aiError as unknown) : undefined,
     });
 
     if (aiError) {
@@ -131,8 +131,8 @@ export async function saveAISpecials(
         userId,
         requestId,
         error: aiError.message,
-        code: (aiError as any).code,
-        details: aiError as any,
+        code: (aiError as unknown).code,
+        details: aiError as unknown,
         context: { endpoint: '/api/ai-specials', operation: 'POST', userId },
       });
       return NextResponse.json(

@@ -9,7 +9,7 @@ import { isTableNotFound } from './checkTableExists';
  * @param {Array} recipes - Recipe list
  * @returns {Promise<Object>} Recipe readiness statistics
  */
-export async function calculateRecipeReadiness(recipes: any[]) {
+export async function calculateRecipeReadiness(recipes: unknown[]) {
   if (!recipes || recipes.length === 0) {
     return {
       completeRecipes: 0,
@@ -37,7 +37,7 @@ export async function calculateRecipeReadiness(recipes: any[]) {
     } else {
       logger.error('[Dashboard Recipe Readiness] Error fetching recipe ingredients:', {
         error: recipeIngredientsError.message,
-        code: (recipeIngredientsError as any).code,
+        code: (recipeIngredientsError as unknown).code,
       });
       throw ApiErrorHandler.fromSupabaseError(recipeIngredientsError, 500);
     }
@@ -46,22 +46,22 @@ export async function calculateRecipeReadiness(recipes: any[]) {
   // Create set of recipe IDs that have ingredients
   const recipesWithIngredients = new Set(
     (recipeIngredients || [])
-      .map((ri: any) => ri.recipe_id)
-      .filter((id: any) => id != null)
-      .map((id: any) => String(id).trim()),
+      .map((ri: unknown) => ri.recipe_id)
+      .filter((id: unknown) => id != null)
+      .map((id: unknown) => String(id).trim()),
   );
 
   // Count complete/incomplete recipes
   const completeRecipes = (recipes || []).filter(
-    (r: any) => r.id != null && recipesWithIngredients.has(String(r.id).trim()),
+    (r: unknown) => r.id != null && recipesWithIngredients.has(String(r.id).trim()),
   ).length;
 
   const incompleteRecipes = (recipes || []).filter(
-    (r: any) => r.id == null || !recipesWithIngredients.has(String(r.id).trim()),
+    (r: unknown) => r.id == null || !recipesWithIngredients.has(String(r.id).trim()),
   ).length;
 
   // Fetch menu dishes for cost calculation
-  let menuDishes: any[] = [];
+  let menuDishes: unknown[] = [];
   const { data: menuDishesData, error: menuDishesError } = await supabaseAdmin
     .from('menu_dishes')
     .select('recipe_id, selling_price')
@@ -76,17 +76,17 @@ export async function calculateRecipeReadiness(recipes: any[]) {
   // Count recipes without costs
   const recipesWithCosts = new Set(
     (menuDishes || [])
-      .filter((dish: any) => dish.recipe_id && dish.selling_price && dish.selling_price > 0)
-      .map((dish: any) => String(dish.recipe_id).trim()),
+      .filter((dish: unknown) => dish.recipe_id && dish.selling_price && dish.selling_price > 0)
+      .map((dish: unknown) => String(dish.recipe_id).trim()),
   );
 
   const recipesWithoutCost = (recipes || []).filter(
-    (r: any) => r.id == null || !recipesWithCosts.has(String(r.id).trim()),
+    (r: unknown) => r.id == null || !recipesWithCosts.has(String(r.id).trim()),
   ).length;
 
   // Get most used recipes
   const recipeUsageCount = new Map<string, number>();
-  menuDishes.forEach((dish: any) => {
+  menuDishes.forEach((dish: unknown) => {
     if (dish && dish.recipe_id) {
       const normalizedId = String(dish.recipe_id).trim();
       recipeUsageCount.set(normalizedId, (recipeUsageCount.get(normalizedId) || 0) + 1);
@@ -98,7 +98,7 @@ export async function calculateRecipeReadiness(recipes: any[]) {
     .slice(0, 3)
     .map(([recipeId, count]) => {
       const recipe = (recipes || []).find(
-        (r: any) => r.id != null && String(r.id).trim() === recipeId,
+        (r: unknown) => r.id != null && String(r.id).trim() === recipeId,
       );
       return {
         id: recipeId,

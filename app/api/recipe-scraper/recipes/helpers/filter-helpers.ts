@@ -40,7 +40,7 @@ export function filterByFormatAtIndex(entries: RecipeEntry[], formatFilter: stri
 /**
  * Filter recipes by format status after loading (SLOW - requires file loading)
  */
-export function filterByFormatAfterLoad(recipes: any[], formatFilter: string): any[] {
+export function filterByFormatAfterLoad(recipes: unknown[], formatFilter: string): unknown[] {
   if (formatFilter === 'all') {
     return recipes;
   }

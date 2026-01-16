@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
       message: 'Par level created successfully',
       data,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Par Levels API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/par-levels', method: 'POST' },
@@ -143,7 +143,7 @@ export async function PUT(request: NextRequest) {
       message: 'Par level updated successfully',
       data,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Par Levels API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/par-levels', method: 'PUT' },
@@ -178,7 +178,7 @@ export async function DELETE(request: NextRequest) {
       success: true,
       message: 'Par level deleted successfully',
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Par Levels API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/par-levels', method: 'DELETE' },

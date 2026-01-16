@@ -16,10 +16,10 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
  * @returns {Promise<{ data: any[]; total: number }>} Paginated tasks and total count
  */
 export async function fetchPaginatedTasks(
-  query: any,
+  query: unknown,
   page: number,
   pageSize: number,
-): Promise<{ data: any[]; total: number }> {
+): Promise<{ data: unknown[]; total: number }> {
   if (!supabaseAdmin) {
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
@@ -31,10 +31,10 @@ export async function fetchPaginatedTasks(
     .from('cleaning_tasks')
     .select('*', { count: 'exact', head: true });
 
-  if (countError && (countError as any).code !== '42P01') {
+  if (countError && (countError as unknown).code !== '42P01') {
     logger.error('[Cleaning Tasks API] Database error fetching count:', {
       error: countError.message,
-      code: (countError as any).code,
+      code: (countError as unknown).code,
     });
   }
 
@@ -42,7 +42,7 @@ export async function fetchPaginatedTasks(
   const { data, error } = await query;
 
   if (error) {
-    const errorCode = (error as any).code;
+    const errorCode = (error as unknown).code;
 
     if (errorCode === '42P01') {
       logger.dev('[Cleaning Tasks API] Table does not exist, returning empty array');

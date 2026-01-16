@@ -9,7 +9,7 @@ import { syncStaffFromSquare } from '@/lib/square/sync/staff';
  * @param {any} event - Webhook event data
  * @param {string} userId - User ID
  */
-export async function routeWebhookEvent(event: any, userId: string): Promise<void> {
+export async function routeWebhookEvent(event: unknown, userId: string): Promise<void> {
   const eventType = event.type;
 
   logger.dev('[Square Webhook] Routing event:', {

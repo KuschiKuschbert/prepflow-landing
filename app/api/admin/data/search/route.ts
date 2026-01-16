@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const results: any[] = [];
+    const results: unknown[] = [];
     const tablesToSearch =
       table === 'all'
         ? ['ingredients', 'recipes', 'dishes', 'users', 'temperature_logs', 'cleaning_tasks']
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
 
         if (data) {
           results.push(
-            ...data.map((item: any) => ({
+            ...data.map((item: unknown) => ({
               table: tableName,
               id: item.id,
               data: item,

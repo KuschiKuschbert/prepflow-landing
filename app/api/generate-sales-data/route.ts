@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
           `⚠️ Unique constraint missing, using insert with ignoreDuplicates for batch ${batchNumber}`,
         );
         // Insert one by one, skipping duplicates
-        const inserted: any[] = [];
+        const inserted: unknown[] = [];
         for (const record of batch) {
           const { data: singleData, error: singleError } = await supabaseAdmin
             .from('sales_data')

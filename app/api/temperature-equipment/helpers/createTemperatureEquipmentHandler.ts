@@ -92,7 +92,7 @@ export async function handleCreateTemperatureEquipment(request: NextRequest) {
     if (error) {
       logger.error('[Temperature Equipment API] Database error creating equipment:', {
         error: error.message,
-        code: (error as any).code,
+        code: (error as unknown).code,
         context: {
           endpoint: '/api/temperature-equipment',
           operation: 'POST',
@@ -105,7 +105,7 @@ export async function handleCreateTemperatureEquipment(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true, data });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Temperature Equipment API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/temperature-equipment', method: 'POST' },

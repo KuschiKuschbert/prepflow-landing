@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
     if (userDataError && userDataError.code !== 'PGRST116') {
       logger.warn('[Admin Features Enable All] Error fetching user:', {
         error: userDataError.message,
-        code: (userDataError as any).code,
+        code: (userDataError as unknown).code,
         email: validated.email,
       });
     }

@@ -20,7 +20,7 @@ export async function GET(_req: NextRequest) {
     if (menusError) {
       logger.error('[Dashboard Menu Summary] Error fetching menus:', {
         error: menusError.message,
-        code: (menusError as any).code,
+        code: (menusError as unknown).code,
         context: { endpoint: '/api/dashboard/menu-summary', operation: 'GET' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(menusError, 500), { status: 500 });
@@ -34,7 +34,7 @@ export async function GET(_req: NextRequest) {
     if (menuItemsError) {
       logger.error('[Dashboard Menu Summary] Error fetching menu items:', {
         error: menuItemsError.message,
-        code: (menuItemsError as any).code,
+        code: (menuItemsError as unknown).code,
         context: { endpoint: '/api/dashboard/menu-summary', operation: 'GET' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(menuItemsError, 500), {
@@ -50,7 +50,7 @@ export async function GET(_req: NextRequest) {
     if (dishesError) {
       logger.error('[Dashboard Menu Summary] Error fetching dishes:', {
         error: dishesError.message,
-        code: (dishesError as any).code,
+        code: (dishesError as unknown).code,
         context: { endpoint: '/api/dashboard/menu-summary', operation: 'GET' },
       });
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(dishesError, 500), {
@@ -59,23 +59,23 @@ export async function GET(_req: NextRequest) {
     }
 
     // Create dish lookup map
-    const dishMap = new Map((dishes || []).map((dish: any) => [dish.id, dish]));
+    const dishMap = new Map((dishes || []).map((dish: unknown) => [dish.id, dish]));
 
     // Count active menus (menus with items)
-    const menusWithItems = new Set((menuItems || []).map((item: any) => item.menu_id));
+    const menusWithItems = new Set((menuItems || []).map((item: unknown) => item.menu_id));
     const activeMenus = menusWithItems.size;
 
     // Count total dishes across all menus
     const totalDishes = menuItems?.length || 0;
 
     // Count dishes without recipes
-    const dishesWithoutRecipes = (menuItems || []).filter((item: any) => {
+    const dishesWithoutRecipes = (menuItems || []).filter((item: unknown) => {
       const dish = dishMap.get(item.dish_id);
       return dish && (!dish.recipe_id || dish.recipe_id === null);
     }).length;
 
     // Count dishes without costs
-    const dishesWithoutCosts = (menuItems || []).filter((item: any) => {
+    const dishesWithoutCosts = (menuItems || []).filter((item: unknown) => {
       const dish = dishMap.get(item.dish_id);
       return (
         dish && (!dish.selling_price || dish.selling_price === null || dish.selling_price === 0)

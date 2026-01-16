@@ -2,15 +2,15 @@
  * Generate compliance gaps analysis
  */
 
-export function generateComplianceGaps(reportData: any) {
-  const gaps: any[] = [];
+export function generateComplianceGaps(reportData: unknown) {
+  const gaps: unknown[] = [];
 
   // Check for missing required qualifications
   if (reportData.employees) {
     const requiredQuals = ['Food Safety Supervisor', 'Food Handler'];
-    reportData.employees.forEach((emp: any) => {
+    reportData.employees.forEach((emp: unknown) => {
       const empQuals = (emp.employee_qualifications || []).map(
-        (q: any) => q.qualification_types?.name?.toLowerCase() || '',
+        (q: unknown) => q.qualification_types?.name?.toLowerCase() || '',
       );
 
       requiredQuals.forEach(reqQual => {
@@ -33,7 +33,7 @@ export function generateComplianceGaps(reportData: any) {
   // Check for missing critical compliance records
   if (reportData.compliance_records) {
     const criticalTypes = ['Food License', 'Council Registration', 'Pest Control'];
-    const activeTypes = (reportData.compliance_records.active || []).map((r: any) =>
+    const activeTypes = (reportData.compliance_records.active || []).map((r: unknown) =>
       (r.compliance_types?.type_name || r.compliance_types?.name || '').toLowerCase(),
     );
 

@@ -8,7 +8,7 @@ import { logger } from '@/lib/logger';
  */
 export async function checkTemplateExists(
   templateId: string,
-): Promise<{ template: any } | NextResponse> {
+): Promise<{ template: unknown } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

@@ -83,11 +83,11 @@ export async function PUT(request: NextRequest) {
       'current_stock',
     ];
 
-    const updateData: Record<string, any> = {};
+    const updateData: Record<string, unknown> = {};
     for (const field of validFields) {
       if (field in updates) {
         // Type assertion needed because TypeScript can't narrow the type when using string index
-        updateData[field] = (updates as Record<string, any>)[field];
+        updateData[field] = (updates as Record<string, unknown>)[field];
       }
     }
 

@@ -10,7 +10,7 @@ import { addTest, type TestResults } from '../test-utils';
  */
 export function testCallbackURLs(
   results: TestResults,
-  app: any,
+  app: unknown,
   auth0BaseUrl: string | undefined,
 ): void {
   const callbacks = (app.callbacks || []) as string[];

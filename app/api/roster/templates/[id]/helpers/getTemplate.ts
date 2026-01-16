@@ -38,7 +38,7 @@ export async function getTemplate(templateId: string): Promise<NextResponse> {
   if (shiftsError) {
     logger.error('[Templates API] Database error fetching template shifts:', {
       error: shiftsError.message,
-      code: (shiftsError as any).code,
+      code: (shiftsError as unknown).code,
       context: { endpoint: '/api/roster/templates/[id]', operation: 'GET', templateId },
     });
   }

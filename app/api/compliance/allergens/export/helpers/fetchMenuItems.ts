@@ -29,7 +29,7 @@ export async function fetchMenuItemsMap(): Promise<Record<string, MenuItem[]>> {
       .select('menu_id, dish_id, recipe_id, menus(id, menu_name)');
 
     if (!menuItemsError && menuItems) {
-      menuItems.forEach((item: any) => {
+      menuItems.forEach((item: unknown) => {
         const itemId = item.dish_id || item.recipe_id;
         const menu = item.menus;
         if (itemId && menu) {

@@ -18,12 +18,12 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 export async function fetchTasksWithCompletions(
   startDate: string,
   endDate: string,
-  query: any,
-): Promise<any[]> {
+  query: unknown,
+): Promise<unknown[]> {
   const { data: tasks, error: tasksError } = await query;
 
   if (tasksError) {
-    const errorCode = (tasksError as any).code;
+    const errorCode = (tasksError as unknown).code;
 
     if (errorCode === '42P01') {
       logger.dev('[Cleaning Tasks API] Table does not exist, returning empty array');
@@ -44,7 +44,7 @@ export async function fetchTasksWithCompletions(
   }
 
   // Fetch completions for date range
-  const taskIds = (tasks || []).map((t: any) => t.id);
+  const taskIds = (tasks || []).map((t: unknown) => t.id);
   let completionsQuery = supabaseAdmin
     .from('cleaning_task_completions')
     .select('*')
@@ -57,16 +57,16 @@ export async function fetchTasksWithCompletions(
 
   const { data: completions, error: completionsError } = await completionsQuery;
 
-  if (completionsError && (completionsError as any).code !== '42P01') {
+  if (completionsError && (completionsError as unknown).code !== '42P01') {
     logger.error('[Cleaning Tasks API] Database error fetching completions:', {
       error: completionsError.message,
-      code: (completionsError as any).code,
+      code: (completionsError as unknown).code,
     });
   }
 
   // Group completions by task_id
   const completionsByTask = new Map<string, any[]>();
-  (completions || []).forEach((c: any) => {
+  (completions || []).forEach((c: unknown) => {
     if (!completionsByTask.has(c.task_id)) {
       completionsByTask.set(c.task_id, []);
     }
@@ -74,7 +74,7 @@ export async function fetchTasksWithCompletions(
   });
 
   // Attach completions to tasks
-  const tasksWithCompletions = (tasks || []).map((task: any) => ({
+  const tasksWithCompletions = (tasks || []).map((task: unknown) => ({
     ...task,
     completions: completionsByTask.get(task.id) || [],
   }));

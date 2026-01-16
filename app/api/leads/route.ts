@@ -66,7 +66,7 @@ export async function POST(req: Request) {
     if (upsertError) {
       logger.error('[Leads API] Database error saving lead:', {
         error: upsertError.message,
-        code: (upsertError as any).code,
+        code: (upsertError as unknown).code,
         context: { endpoint: '/api/leads', operation: 'POST', email },
       });
 

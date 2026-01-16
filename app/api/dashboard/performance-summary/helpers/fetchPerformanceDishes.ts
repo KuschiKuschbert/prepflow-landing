@@ -13,7 +13,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
  * @returns {Promise<{ dishes: any[] | null; isEmpty: boolean }>} Dishes data and empty flag
  */
 export async function fetchPerformanceDishes(targetMenuId: string | null): Promise<{
-  dishes: any[] | null;
+  dishes: unknown[] | null;
   isEmpty: boolean;
 }> {
   if (!supabaseAdmin) {
@@ -70,7 +70,7 @@ export async function fetchPerformanceDishes(targetMenuId: string | null): Promi
   if (dishesError) {
     logger.error('[Performance Summary API] Error fetching dishes:', {
       error: dishesError.message,
-      code: (dishesError as any).code,
+      code: (dishesError as unknown).code,
     });
     throw ApiErrorHandler.fromSupabaseError(dishesError, 500);
   }

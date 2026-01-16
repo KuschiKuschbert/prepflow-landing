@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     const tablesToSearch =
       table === 'all' ? ['ingredients', 'recipes', 'dishes', 'users'] : [table];
 
-    const allData: any[] = [];
+    const allData: unknown[] = [];
 
     for (const tableName of tablesToSearch) {
       try {
@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
 
         const { data } = await searchQuery;
         if (data) {
-          allData.push(...data.map((item: any) => ({ ...item, _table: tableName })));
+          allData.push(...data.map((item: unknown) => ({ ...item, _table: tableName })));
         }
       } catch (error) {
         logger.warn(`[Admin Data Export] Error exporting ${tableName}:`, error);
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
 
       // Normalize data for CSV export (handle objects and nulls)
       const normalizedData = allData.map(row => {
-        const normalized: Record<string, any> = {};
+        const normalized: Record<string, unknown> = {};
         Object.keys(row).forEach(key => {
           const value = row[key];
           if (value === null || value === undefined) {

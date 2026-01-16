@@ -11,8 +11,8 @@ import { buildUpdateData } from './buildUpdateData';
  */
 export async function updateShift(
   shiftId: string,
-  body: any,
-  existingShift: any,
+  body: unknown,
+  existingShift: unknown,
 ): Promise<NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
@@ -50,7 +50,7 @@ export async function updateShift(
   if (updateError) {
     logger.error('[Shifts API] Database error updating shift:', {
       error: updateError.message,
-      code: (updateError as any).code,
+      code: (updateError as unknown).code,
       context: { endpoint: '/api/roster/shifts/[id]', operation: 'PUT', shiftId },
     });
 

@@ -84,7 +84,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
         success: true,
         data: {
           recipe_id: recipeId,
-          recipe_name: (recipe as any).recipe_name || (recipe as any).name,
+          recipe_name: (recipe as unknown).recipe_name || (recipe as unknown).name,
           allergen_sources: [],
           total_allergens: [],
         },
@@ -111,7 +111,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
 
     interface RawRecipeIngredientJoin {
       ingredient_id: string;
-      quantity: any; // quantity can be number or string from DB depending on driver, simplified here or needs stricter check
+      quantity: unknown; // quantity can be number or string from DB depending on driver, simplified here or needs stricter check
       unit: string;
       ingredients: {
         id: string;

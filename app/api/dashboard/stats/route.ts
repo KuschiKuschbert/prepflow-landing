@@ -88,7 +88,7 @@ export async function GET(_req: NextRequest) {
     // Handle case where dishes table doesn't exist gracefully
     let averageDishPrice = 0;
     if (dishesPricesResult.error) {
-      const errorCode = (dishesPricesResult.error as any).code;
+      const errorCode = (dishesPricesResult.error as unknown).code;
       if (
         errorCode === 'PGRST116' ||
         dishesPricesResult.error.message?.includes('does not exist')
@@ -105,7 +105,7 @@ export async function GET(_req: NextRequest) {
       }
     } else {
       const valid = (dishesPricesResult.data || [])
-        .map((d: any) => Number(d.selling_price || 0))
+        .map((d: unknown) => Number(d.selling_price || 0))
         .filter((v: number) => v > 0);
       averageDishPrice =
         valid.length > 0 ? valid.reduce((a: number, b: number) => a + b, 0) / valid.length : 0;
@@ -126,7 +126,7 @@ export async function GET(_req: NextRequest) {
 
     // Count ingredients per recipe to ensure recipes actually have ingredients
     const recipeIngredientCounts = (recipeIngredientsData || []).reduce(
-      (acc: Record<string, number>, ri: any) => {
+      (acc: Record<string, number>, ri: unknown) => {
         if (ri.recipe_id) {
           acc[ri.recipe_id] = (acc[ri.recipe_id] || 0) + 1;
         }
@@ -137,7 +137,7 @@ export async function GET(_req: NextRequest) {
 
     // Only count recipes that have at least one ingredient
     const recipesReady = (allRecipes || []).filter(
-      (r: any) => recipeIngredientCounts[r.id] > 0,
+      (r: unknown) => recipeIngredientCounts[r.id] > 0,
     ).length;
 
     // Count recipes without cost data (recipes don't have selling_price, dishes do)
@@ -145,7 +145,7 @@ export async function GET(_req: NextRequest) {
     const recipesWithoutCost = 0;
 
     // Count ingredients needing restock (current_stock <= min_stock_level)
-    const ingredientsLowStock = (allIngredients || []).filter((ing: any) => {
+    const ingredientsLowStock = (allIngredients || []).filter((ing: unknown) => {
       const currentStock = Number(ing.current_stock || 0);
       const minStock = Number(ing.min_stock_level || 0);
       return minStock > 0 && currentStock <= minStock;

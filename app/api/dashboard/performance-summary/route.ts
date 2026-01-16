@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Filter sales_data by date range (last 7 days)
-    const filteredDishes = dishes?.map((dish: any) => {
+    const filteredDishes = dishes?.map((dish: unknown) => {
       if (!dish.sales_data || dish.sales_data.length === 0) return dish;
       return {
         ...dish,

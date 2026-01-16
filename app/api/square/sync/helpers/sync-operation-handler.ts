@@ -21,7 +21,7 @@ import { NextResponse } from 'next/server';
 export async function handleSyncOperation(
   operation: 'catalog' | 'orders' | 'staff' | 'costs' | 'initial_sync',
   direction: 'from_square' | 'to_square' | 'bidirectional' | undefined,
-  options: any,
+  options: unknown,
   userId: string,
 ) {
   switch (operation) {

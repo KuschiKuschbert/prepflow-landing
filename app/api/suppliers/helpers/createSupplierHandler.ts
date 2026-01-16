@@ -47,7 +47,7 @@ export async function handleCreateSupplier(request: NextRequest) {
       message: 'Supplier created successfully',
       data,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Suppliers API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/suppliers', method: 'POST' },

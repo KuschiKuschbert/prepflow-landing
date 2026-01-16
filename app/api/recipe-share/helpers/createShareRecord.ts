@@ -37,7 +37,7 @@ export async function createShareRecord(shareData: {
   if (shareError) {
     logger.error('[Recipe Share API] Error creating share record:', {
       error: shareError.message,
-      code: (shareError as any).code,
+      code: (shareError as unknown).code,
       context: { endpoint: '/api/recipe-share', operation: 'POST', recipeId: shareData.recipe_id },
     });
     throw ApiErrorHandler.fromSupabaseError(shareError, 500);

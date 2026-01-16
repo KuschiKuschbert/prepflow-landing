@@ -34,7 +34,7 @@ export async function createTier(
   validated: z.infer<typeof tierConfigSchema>,
   adminUser: AdminUser,
   request: NextRequest,
-): Promise<{ tier: any } | NextResponse> {
+): Promise<{ tier: unknown } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503),

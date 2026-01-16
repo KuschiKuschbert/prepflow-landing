@@ -55,15 +55,15 @@ export async function POST(request: NextRequest) {
       .select('id, name, equipment_type, location')
       .eq('is_active', true);
 
-    if (equipmentError && (equipmentError as any).code !== '42P01') {
+    if (equipmentError && (equipmentError as unknown).code !== '42P01') {
       logger.error('[Cleaning Tasks API] Error fetching equipment:', {
         error: equipmentError.message,
-        code: (equipmentError as any).code,
+        code: (equipmentError as unknown).code,
       });
     }
 
     // Fetch sections
-    let sections: any[] = [];
+    let sections: unknown[] = [];
     try {
       const { data: sectionsData, error: sectionsError } = await supabaseAdmin
         .from('kitchen_sections')
@@ -71,10 +71,10 @@ export async function POST(request: NextRequest) {
 
       if (!sectionsError && sectionsData) {
         sections = sectionsData;
-      } else if ((sectionsError as any).code !== '42P01') {
+      } else if ((sectionsError as unknown).code !== '42P01') {
         logger.error('[Cleaning Tasks API] Error fetching sections:', {
           error: sectionsError.message,
-          code: (sectionsError as any).code,
+          code: (sectionsError as unknown).code,
         });
       }
     } catch (err) {
@@ -103,14 +103,14 @@ export async function POST(request: NextRequest) {
     if (existingTasksError) {
       logger.warn('[Cleaning Tasks API] Error fetching existing tasks:', {
         error: existingTasksError.message,
-        code: (existingTasksError as any).code,
+        code: (existingTasksError as unknown).code,
       });
       // Continue with empty set if fetch fails
     }
 
     const existingTaskKeys = new Set<string>();
     if (existingTasksData) {
-      existingTasksData.forEach((task: any) => {
+      existingTasksData.forEach((task: unknown) => {
         const key = `${task.task_name}_${task.standard_task_type}_${task.equipment_id || ''}_${task.section_id || ''}`;
         existingTaskKeys.add(key);
       });
@@ -139,7 +139,7 @@ export async function POST(request: NextRequest) {
     if (insertError) {
       logger.error('[Cleaning Tasks API] Error creating standard tasks:', {
         error: insertError.message,
-        code: (insertError as any).code,
+        code: (insertError as unknown).code,
         context: { endpoint: '/api/cleaning-tasks/populate-standard', operation: 'POST' },
       });
       const apiError = ApiErrorHandler.fromSupabaseError(insertError, 500);
@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
         tasks: insertedTasks,
       },
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Cleaning Tasks API] Error in populate-standard endpoint:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,

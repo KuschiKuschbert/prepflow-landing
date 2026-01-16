@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     if (error) {
       logger.error('[Setup Database API] Database error inserting ingredients:', {
         error: error.message,
-        code: (error as any).code,
+        code: (error as unknown).code,
         context: { endpoint: '/api/setup-database', operation: 'POST', table: 'ingredients' },
       });
       const apiError = ApiErrorHandler.fromSupabaseError(error, 500);

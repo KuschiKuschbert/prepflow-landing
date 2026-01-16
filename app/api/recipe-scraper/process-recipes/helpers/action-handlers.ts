@@ -6,7 +6,7 @@ import { logger } from '@/lib/logger';
 import { isGroqEnabled, isGroqAvailable } from '@/lib/ai/groq-client';
 
 // Processor module exports functions directly (not as an object)
-type Processor = any;
+type Processor = unknown;
 
 /**
  * Handle pause action
@@ -54,7 +54,7 @@ export async function handleStartAction(
   processor: Processor,
   limit?: number,
   model?: string,
-): Promise<{ success: boolean; message: string; data: any; status?: number }> {
+): Promise<{ success: boolean; message: string; data: unknown; status?: number }> {
   // Check if already processing
   const currentStatus = processor.getProcessingStatus();
   if (currentStatus.isProcessing && !currentStatus.isPaused) {

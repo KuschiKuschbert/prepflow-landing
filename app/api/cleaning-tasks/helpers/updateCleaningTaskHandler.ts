@@ -43,7 +43,7 @@ export async function handleUpdateCleaningTask(request: NextRequest) {
       message: 'Cleaning task updated successfully',
       data,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     if (err.status) {
       logger.error('[Cleaning Tasks API] Error with status:', {
         error: err instanceof Error ? err.message : String(err),

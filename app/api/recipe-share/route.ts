@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
         recipe: recipe,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[route.ts] Error in catch block:', {
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,
@@ -119,7 +119,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Recipe Share API] Database error fetching shares:', {
         error: error.message,
-        code: (error as any).code,
+        code: (error as unknown).code,
         context: { endpoint: '/api/recipe-share', operation: 'GET', userId },
       });
       const apiError = ApiErrorHandler.fromSupabaseError(error, 500);

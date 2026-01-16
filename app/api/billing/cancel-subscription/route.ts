@@ -148,7 +148,7 @@ export async function POST(req: NextRequest) {
         id: updatedSubscription.id,
         status: updatedSubscription.status,
         cancel_at_period_end: updatedSubscription.cancel_at_period_end,
-        current_period_end: (updatedSubscription as any).current_period_end,
+        current_period_end: (updatedSubscription as unknown).current_period_end,
         expires_at: expiresAt?.toISOString(),
       },
     });

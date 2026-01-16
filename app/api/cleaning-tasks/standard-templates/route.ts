@@ -17,7 +17,7 @@ export async function GET() {
       success: true,
       data: templates,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Cleaning Tasks API] Error fetching standard templates:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,

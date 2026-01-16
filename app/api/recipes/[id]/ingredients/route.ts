@@ -88,9 +88,9 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         .eq('recipe_id', normalizedId);
 
       // Normalize the retry result to include category as null for type compatibility
-      data = retryData?.map((item: any) => ({
+      data = retryData?.map((item: unknown) => ({
         ...item,
-        ingredients: item.ingredients?.map((ing: any) => ({
+        ingredients: item.ingredients?.map((ing: unknown) => ({
           ...ing,
           category: ing.category ?? null,
         })),
@@ -176,7 +176,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       message: 'Recipe ingredients saved successfully',
       data,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Recipes API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: {

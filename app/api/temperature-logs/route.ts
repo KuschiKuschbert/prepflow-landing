@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Temperature Logs API] Database error fetching logs:', {
         error: error.message,
-        code: (error as any).code,
+        code: (error as unknown).code,
         context: { endpoint: '/api/temperature-logs', operation: 'GET', table: 'temperature_logs' },
       });
 
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
         totalPages,
       },
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Temperature Logs API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/temperature-logs', method: 'GET' },
@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
     const data = await createTemperatureLog(validatedBody);
 
     return NextResponse.json({ success: true, data });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Temperature Logs API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/temperature-logs', method: 'POST' },

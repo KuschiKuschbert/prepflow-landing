@@ -22,7 +22,7 @@ export async function updateError(
   errorId: string,
   updates: z.infer<typeof updateErrorSchema>,
   adminUser: AdminUser,
-): Promise<{ errorLog: any } | NextResponse> {
+): Promise<{ errorLog: unknown } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
@@ -47,7 +47,7 @@ export async function updateError(
         if (adminDataError && adminDataError.code !== 'PGRST116') {
           logger.warn('[Admin Errors] Error fetching admin user:', {
             error: adminDataError.message,
-            code: (adminDataError as any).code,
+            code: (adminDataError as unknown).code,
             adminEmail: adminUser.email,
           });
         }

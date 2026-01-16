@@ -8,7 +8,7 @@ import { supabaseAdmin } from '@/lib/supabase';
  * @param {any} event - Webhook event data
  * @returns {Promise<string | null>} User ID or null if not found
  */
-export async function getUserIdFromEvent(event: any): Promise<string | null> {
+export async function getUserIdFromEvent(event: unknown): Promise<string | null> {
   try {
     // Square webhooks include location_id in the event
     const locationId = event.data?.object?.location_id || event.location_id;
@@ -39,7 +39,7 @@ export async function getUserIdFromEvent(event: any): Promise<string | null> {
     }
 
     return data.user_id;
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Webhook] Error extracting user ID:', {
       error: error.message,
     });

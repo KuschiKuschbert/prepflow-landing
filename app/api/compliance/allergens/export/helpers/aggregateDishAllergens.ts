@@ -27,7 +27,7 @@ export interface DishWithAllergens {
  * @returns {Promise<DishWithAllergens[]>} Dishes with aggregated allergens
  */
 export async function aggregateDishAllergensForExport(
-  dishes: any[],
+  dishes: unknown[],
   recipeIngredientSources: Record<string, Record<string, string[]>>,
 ): Promise<DishWithAllergens[]> {
   return Promise.all(
@@ -65,7 +65,7 @@ export async function aggregateDishAllergensForExport(
           .eq('dish_id', dish.id);
 
         if (!dishIngredientsError && dishIngredients) {
-          const dishIngredientList = dishIngredients.map((di: any) => ({
+          const dishIngredientList = dishIngredients.map((di: unknown) => ({
             ingredient_name: di.ingredients?.ingredient_name || '',
             allergens: di.ingredients?.allergens,
           }));
@@ -96,7 +96,7 @@ export async function aggregateDishAllergensForExport(
 
         if (!dishRecipesError && dishRecipes) {
           const recipeSources: Record<string, string[]>[] = [];
-          dishRecipes.forEach((dr: any) => {
+          dishRecipes.forEach((dr: unknown) => {
             const recipeId = dr.recipe_id;
             if (recipeId && recipeIngredientSources[recipeId]) {
               recipeSources.push(recipeIngredientSources[recipeId]);

@@ -1,8 +1,8 @@
 /**
  * Build update data object from request body
  */
-export function buildUpdateData(body: any, existingShift: any): any {
-  const updateData: any = {
+export function buildUpdateData(body: unknown, existingShift: unknown): unknown {
+  const updateData: unknown = {
     updated_at: new Date().toISOString(),
   };
 

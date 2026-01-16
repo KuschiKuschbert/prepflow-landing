@@ -6,8 +6,8 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 
 export interface ExistingRecipeResult {
-  recipe: any | null;
-  error: any | null;
+  recipe: unknown | null;
+  error: unknown | null;
 }
 
 /**

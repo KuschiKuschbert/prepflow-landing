@@ -12,7 +12,8 @@
 - [x] **[WEB]** Refactor `KitchenOnFire.tsx` and `DashboardSection.tsx` (Reduce complexity).
 - [x] **[WEB]** Refactor `app/api/prep-lists` (Main CRUD) to use strict types (Phase 18).
 - [x] **[WEB]** Refactor `app/api/menus` (105 `any` types) - **DONE**.
-- [ ] **[WEB]** Eradicate `any` types in `app/webapp` (Partially done: fixed top ~197 offenders. ~29 remaining).
+- [x] **[WEB]** Eradicate `any` types in `app/webapp` (Completed! Fixed top ~197 offenders and RSI handled the rest).
+- [ ] **[WEB]** Eradicate `any` types in `app/api` (Found ~473 instances). Target for RSI Phase 2.
 
 ## Medium Priority
 

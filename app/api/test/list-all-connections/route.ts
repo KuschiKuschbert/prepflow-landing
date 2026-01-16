@@ -49,7 +49,7 @@ export async function GET() {
     const connectionsResponse = await client.connections.getAll();
     const connections = Array.isArray(connectionsResponse)
       ? connectionsResponse
-      : (connectionsResponse as any)?.data || [];
+      : (connectionsResponse as unknown)?.data || [];
 
     if (!connections || !Array.isArray(connections)) {
       return NextResponse.json({
@@ -62,7 +62,7 @@ export async function GET() {
 
     const applicationClientId = process.env.AUTH0_CLIENT_ID;
 
-    const allConnections = connections.map((conn: any) => ({
+    const allConnections = connections.map((conn: unknown) => ({
       id: conn.id,
       name: conn.name,
       strategy: conn.strategy,
@@ -75,10 +75,10 @@ export async function GET() {
     // Filter for Apple and Microsoft specifically
     // Check both strategy and name (connection parameter might use name, not strategy)
     const appleConnections = allConnections.filter(
-      (conn: any) => conn.strategy === 'apple' || conn.name?.toLowerCase().includes('apple'),
+      (conn: unknown) => conn.strategy === 'apple' || conn.name?.toLowerCase().includes('apple'),
     );
     const microsoftConnections = allConnections.filter(
-      (conn: any) =>
+      (conn: unknown) =>
         conn.strategy === 'windowslive' ||
         conn.strategy === 'waad' ||
         conn.strategy === 'microsoft-account' ||
@@ -99,7 +99,7 @@ export async function GET() {
         found: microsoftConnections.length,
         connections: microsoftConnections,
       },
-      allConnections: allConnections.map((conn: any) => ({
+      allConnections: allConnections.map((conn: unknown) => ({
         id: conn.id,
         name: conn.name,
         strategy: conn.strategy,

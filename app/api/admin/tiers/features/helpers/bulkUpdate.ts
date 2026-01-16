@@ -29,7 +29,7 @@ export async function bulkUpdateFeatureMappings(params: BulkUpdateParams): Promi
   if (currentMappingsError) {
     logger.warn('[Admin Tiers Features] Error fetching current mappings:', {
       error: currentMappingsError.message,
-      code: (currentMappingsError as any).code,
+      code: (currentMappingsError as unknown).code,
       featureKeys,
     });
   }

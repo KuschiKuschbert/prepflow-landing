@@ -8,11 +8,11 @@ import { NextResponse } from 'next/server';
  * @param {any} supabaseAdmin - Supabase admin client
  * @returns {Promise<{exists: boolean, error: NextResponse | null}>} Table existence status and error if any
  */
-export async function checkTableExists(supabaseAdmin: any) {
+export async function checkTableExists(supabaseAdmin: unknown) {
   const { error: tableCheckError } = await supabaseAdmin.from('par_levels').select('id').limit(1);
 
   if (tableCheckError) {
-    const errorCode = (tableCheckError as any).code;
+    const errorCode = (tableCheckError as unknown).code;
     const errorMessage = tableCheckError.message || '';
 
     logger.error('[Par Levels API] Table check failed:', {

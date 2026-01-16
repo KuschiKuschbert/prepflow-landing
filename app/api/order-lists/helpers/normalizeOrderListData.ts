@@ -4,13 +4,13 @@
  * @param {Array} data - Raw order list data from database
  * @returns {Array} Normalized order list data
  */
-export function normalizeOrderListData(data: any[]) {
-  return (data || []).map((ol: any) => ({
+export function normalizeOrderListData(data: unknown[]) {
+  return (data || []).map((ol: unknown) => ({
     ...ol,
     suppliers: ol.suppliers
       ? { ...ol.suppliers, supplier_name: ol.suppliers.supplier_name || ol.suppliers.name }
       : null,
-    order_list_items: (ol.order_list_items || []).map((it: any) => ({
+    order_list_items: (ol.order_list_items || []).map((it: unknown) => ({
       ...it,
       ingredients: it.ingredients
         ? {

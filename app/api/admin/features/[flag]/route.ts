@@ -127,7 +127,7 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
         error: err instanceof Error ? err.message : String(err),
       });
     }
-    const userId = (body as any).user_id || null;
+    const userId = (body as unknown).user_id || null;
 
     let query = supabaseAdmin.from('feature_flags').delete().eq('flag_key', flag);
 

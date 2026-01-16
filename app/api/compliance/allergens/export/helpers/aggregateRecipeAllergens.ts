@@ -21,7 +21,7 @@ export interface RecipeAllergenData {
  * @param {any[]} recipes - Array of recipe objects
  * @returns {Promise<RecipeAllergenData>} Aggregated allergen data
  */
-export async function aggregateRecipeAllergens(recipes: any[]): Promise<RecipeAllergenData> {
+export async function aggregateRecipeAllergens(recipes: unknown[]): Promise<RecipeAllergenData> {
   // Batch aggregate allergens for recipes
   let allergensByRecipe: Record<string, string[]> = {};
   try {
@@ -57,7 +57,7 @@ export async function aggregateRecipeAllergens(recipes: any[]): Promise<RecipeAl
         string,
         Array<{ ingredient_name: string; allergens?: string[] }>
       > = {};
-      recipeIngredients.forEach((ri: any) => {
+      recipeIngredients.forEach((ri: unknown) => {
         const recipeId = ri.recipe_id;
         const ingredient = ri.ingredients;
         if (recipeId && ingredient) {

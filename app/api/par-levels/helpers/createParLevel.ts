@@ -15,7 +15,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
  * @returns {Promise<Object>} Created par level with ingredient data
  * @throws {Error} If creation fails
  */
-export async function createParLevel(parLevelData: any) {
+export async function createParLevel(parLevelData: unknown) {
   const supabaseAdmin = createSupabaseAdmin();
 
   // Validate required fields

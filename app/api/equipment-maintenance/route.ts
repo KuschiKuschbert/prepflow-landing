@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Equipment Maintenance API] Database error:', {
         error: error.message,
-        code: (error as any).code,
+        code: (error as unknown).code,
       });
       return NextResponse.json(
         ApiErrorHandler.createError(
@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
       success: true,
       data: data || [],
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Equipment Maintenance API] Unexpected error:', err);
     return NextResponse.json(
       ApiErrorHandler.createError('Internal server error', 'INTERNAL_ERROR', 500),
@@ -157,7 +157,7 @@ export async function POST(request: NextRequest) {
     if (error) {
       logger.error('[Equipment Maintenance API] Database error creating record:', {
         error: error.message,
-        code: (error as any).code,
+        code: (error as unknown).code,
       });
       const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
@@ -168,7 +168,7 @@ export async function POST(request: NextRequest) {
       message: 'Equipment maintenance record created successfully',
       data,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Equipment Maintenance API] Unexpected error:', err);
     return NextResponse.json(
       ApiErrorHandler.createError('Internal server error', 'INTERNAL_ERROR', 500),

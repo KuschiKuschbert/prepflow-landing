@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server';
  * @param {string} userId - The ID of the user to fetch.
  * @returns {Promise<{ user: any } | NextResponse>} User data or error response.
  */
-export async function fetchUser(userId: string): Promise<{ user: any } | NextResponse> {
+export async function fetchUser(userId: string): Promise<{ user: unknown } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
