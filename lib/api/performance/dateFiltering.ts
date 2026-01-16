@@ -20,10 +20,10 @@ export function parseDateRange(
   return { startDate, endDate };
 }
 
-export function filterSalesDataByDateRange(
-  salesData: Array<{ date: string }>,
+export function filterSalesDataByDateRange<T extends { date: string }>(
+  salesData: T[],
   dateRange: DateRange,
-): Array<{ date: string }> {
+): T[] {
   if (!dateRange.startDate && !dateRange.endDate) {
     return salesData;
   }

@@ -3,11 +3,11 @@ import type { ValidationSchema } from '../types';
 /**
  * Transform CSV data according to schema rules
  *
- * @param {any[]} data - Data to transform
+ * @param {T[]} data - Data to transform
  * @param {ValidationSchema} schema - Schema with transform functions
- * @returns {any[]} Transformed data
+ * @returns {T[]} Transformed data
  */
-export function transformCSVData(data: any[], schema: ValidationSchema): any[] {
+export function transformCSVData<T extends object>(data: T[], schema: ValidationSchema): T[] {
   return data.map(row => {
     const transformedRow: any = { ...row };
 
@@ -17,6 +17,6 @@ export function transformCSVData(data: any[], schema: ValidationSchema): any[] {
       }
     });
 
-    return transformedRow;
+    return transformedRow as T;
   });
 }

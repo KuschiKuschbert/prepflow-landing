@@ -1,14 +1,13 @@
 'use client';
 
-import { useTranslation } from '../../../../lib/useTranslation';
 import { GlowCard } from '@/components/ui/GlowCard';
-import { motion } from 'framer-motion';
 import {
-  LANDING_COLORS,
-  LANDING_TYPOGRAPHY,
-  LANDING_LAYOUT,
-  getSectionClasses,
+    LANDING_LAYOUT,
+    LANDING_TYPOGRAPHY,
+    getSectionClasses
 } from '@/lib/landing-styles';
+import { motion } from 'framer-motion';
+import { useTranslation } from '../../../../lib/useTranslation';
 
 export function FeaturesSection() {
   const { t } = useTranslation();
@@ -44,11 +43,11 @@ export function FeaturesSection() {
   const getColorClass = (color: 'cyan' | 'blue' | 'magenta') => {
     switch (color) {
       case 'cyan':
-        return 'text-[#29E7CD]'; // LANDING_COLORS.primary
+        return 'text-landing-primary';
       case 'blue':
-        return 'text-[#3B82F6]'; // LANDING_COLORS.secondary
+        return 'text-landing-secondary';
       case 'magenta':
-        return 'text-[#D925C7]'; // LANDING_COLORS.accent
+        return 'text-landing-accent';
     }
   };
 

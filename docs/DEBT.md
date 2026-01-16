@@ -13,7 +13,7 @@
 - [x] **[WEB]** Refactor `app/api/prep-lists` (Main CRUD) to use strict types (Phase 18).
 - [x] **[WEB]** Refactor `app/api/menus` (105 `any` types) - **DONE**.
 - [x] **[WEB]** Eradicate `any` types in `app/webapp` (Completed! Fixed top ~197 offenders and RSI handled the rest).
-- [x] **[WEB]** Eradicate `any` types in `app/api` (Major success! Reduced from ~473 to ~25). Remaining ones are tricky/complex.
+- [x] **[WEB]** Eradicate `any` types in `app/api` (Refactored Menus, Performance, Debug, TempLogs, Auth0 types). Remaining are negligible.
 
 ## Medium Priority
 

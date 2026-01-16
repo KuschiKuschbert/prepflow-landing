@@ -1,12 +1,11 @@
 'use client';
 
-import { useTranslation } from '../../../../lib/useTranslation';
 import {
-  LANDING_COLORS,
-  LANDING_TYPOGRAPHY,
-  LANDING_LAYOUT,
-  getSectionClasses,
+    LANDING_LAYOUT,
+    LANDING_TYPOGRAPHY,
+    getSectionClasses
 } from '@/lib/landing-styles';
+import { useTranslation } from '../../../../lib/useTranslation';
 
 export function ContributingMarginSection() {
   const { t } = useTranslation();
@@ -28,9 +27,8 @@ export function ContributingMarginSection() {
             )}
           </p>
           <div className="desktop:grid-cols-3 mt-8 grid gap-6">
-            <div className={`rounded-2xl bg-[${LANDING_COLORS.muted}]/50 p-6`}>
-              <h3 className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold text-[#29E7CD]`}>
-                {/* LANDING_COLORS.primary */}
+            <div className="rounded-2xl bg-surface/30 p-6">
+              <h3 className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold text-landing-primary`}>
                 {t('contributingMargin.benefit1.title', 'Real Costs')}
               </h3>
               <p className="text-gray-300">
@@ -40,9 +38,8 @@ export function ContributingMarginSection() {
                 )}
               </p>
             </div>
-            <div className={`rounded-2xl bg-[${LANDING_COLORS.muted}]/50 p-6`}>
-              <h3 className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold text-[#29E7CD]`}>
-                {/* LANDING_COLORS.primary */}
+            <div className="rounded-2xl bg-surface/30 p-6">
+              <h3 className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold text-landing-primary`}>
                 {t('contributingMargin.benefit2.title', 'Profit Impact')}
               </h3>
               <p className="text-gray-300">
@@ -52,9 +49,8 @@ export function ContributingMarginSection() {
                 )}
               </p>
             </div>
-            <div className={`rounded-2xl bg-[${LANDING_COLORS.muted}]/50 p-6`}>
-              <h3 className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold text-[#29E7CD]`}>
-                {/* LANDING_COLORS.primary */}
+            <div className="rounded-2xl bg-surface/30 p-6">
+              <h3 className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold text-landing-primary`}>
                 {t('contributingMargin.benefit3.title', 'Smart Decisions')}
               </h3>
               <p className="text-gray-300">

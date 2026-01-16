@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
       if (lockedMenuError) {
         logger.error('[Performance API] Error fetching locked menu:', {
           error: lockedMenuError.message,
-          code: (lockedMenuError as any).code,
+          code: lockedMenuError.code,
           context: { endpoint: '/api/performance', operation: 'GET' },
         });
       } else if (lockedMenu) {
@@ -77,7 +77,7 @@ export async function GET(request: NextRequest) {
       if (menuItemsError) {
         logger.error('[Performance API] Error fetching menu items:', {
           error: menuItemsError.message,
-          code: (menuItemsError as any).code,
+          code: menuItemsError.code,
           context: { endpoint: '/api/performance', operation: 'GET', menuId: targetMenuId },
         });
         // Continue without filtering if there's an error
@@ -110,7 +110,7 @@ export async function GET(request: NextRequest) {
     if (dishesError) {
       logger.error('[Performance API] Database error fetching dishes:', {
         error: dishesError.message,
-        code: (dishesError as any).code,
+        code: dishesError.code,
         context: { endpoint: '/api/performance', operation: 'GET', table: 'menu_dishes' },
       });
 
@@ -179,8 +179,13 @@ export async function POST(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/performance', method: 'POST' },
     });
-    if ((err as any).status) {
-      return NextResponse.json(err, { status: (err as any).status });
+
+    // Type guard for ApiError-like objects
+    const hasStatus = (e: unknown): e is { status: number } =>
+      typeof e === 'object' && e !== null && 'status' in e && typeof (e as any).status === 'number';
+
+    if (hasStatus(err)) {
+      return NextResponse.json(err, { status: err.status });
     }
     return handlePerformanceError(err, 'POST');
   }

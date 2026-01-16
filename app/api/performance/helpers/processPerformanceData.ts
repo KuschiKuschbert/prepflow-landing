@@ -3,10 +3,11 @@ import { deduplicateDishes, filterDishesWithSales } from '@/lib/api/performance/
 import { calculatePerformanceMetrics } from '@/lib/api/performance/performanceCalculation';
 import { aggregateSalesData } from '@/lib/api/performance/salesAggregation';
 import {
-  calculateAveragePopularity,
-  calculateAverageProfitMargin,
-  calculateThresholds,
+    calculateAveragePopularity,
+    calculateAverageProfitMargin,
+    calculateThresholds,
 } from '@/lib/api/performance/thresholdCalculation';
+import { PerformanceDish } from '@/lib/api/performance/types';
 
 /**
  * Process performance data for all dishes.
@@ -17,14 +18,14 @@ import {
  * @returns {Object} Processed performance data with metadata
  */
 export function processPerformanceData(
-  dishes: any[],
+  dishes: PerformanceDish[],
   startDateParam: string | null,
   endDateParam: string | null,
 ) {
   const dateRange = parseDateRange(startDateParam, endDateParam);
 
   // Filter sales_data by date range if provided
-  const filteredDishes = dishes?.map((dish: any) => {
+  const filteredDishes = dishes?.map((dish) => {
     if (!dish.sales_data || dish.sales_data.length === 0) return dish;
     return {
       ...dish,

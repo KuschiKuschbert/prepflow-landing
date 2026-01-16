@@ -1,9 +1,9 @@
 'use client';
 
-import { useTranslation } from '../../../../lib/useTranslation';
 import { GlowCard } from '@/components/ui/GlowCard';
+import { LANDING_LAYOUT, LANDING_TYPOGRAPHY, getSectionClasses } from '@/lib/landing-styles';
 import { motion } from 'framer-motion';
-import { LANDING_TYPOGRAPHY, LANDING_LAYOUT, getSectionClasses } from '@/lib/landing-styles';
+import { useTranslation } from '../../../../lib/useTranslation';
 
 export function HowItWorksSection() {
   const { t } = useTranslation();
@@ -42,11 +42,11 @@ export function HowItWorksSection() {
   const getColorClasses = (color: 'cyan' | 'blue' | 'magenta') => {
     switch (color) {
       case 'cyan':
-        return 'bg-[#29E7CD]/10 text-[#29E7CD] border border-[#29E7CD]/20'; // LANDING_COLORS.primary
+        return 'bg-landing-primary/10 text-landing-primary border border-landing-primary/20';
       case 'blue':
-        return 'bg-[#3B82F6]/10 text-[#3B82F6] border border-[#3B82F6]/20'; // LANDING_COLORS.secondary
+        return 'bg-landing-secondary/10 text-landing-secondary border border-landing-secondary/20';
       case 'magenta':
-        return 'bg-[#D925C7]/10 text-[#D925C7] border border-[#D925C7]/20'; // LANDING_COLORS.accent
+        return 'bg-landing-accent/10 text-landing-accent border border-landing-accent/20';
     }
   };
 

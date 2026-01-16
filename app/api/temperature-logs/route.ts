@@ -74,8 +74,9 @@ export async function GET(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/temperature-logs', method: 'GET' },
     });
+    // Type guard for ApiError-like objects
     if (err && typeof err === 'object' && 'status' in err) {
-      return NextResponse.json(err, { status: (err as any).status });
+      return NextResponse.json(err, { status: (err as { status: number }).status });
     }
     return handleTemperatureLogError(err, 'GET');
   }
@@ -133,8 +134,9 @@ export async function POST(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/temperature-logs', method: 'POST' },
     });
+    // Type guard for ApiError-like objects
     if (err && typeof err === 'object' && 'status' in err) {
-      return NextResponse.json(err, { status: (err as any).status });
+      return NextResponse.json(err, { status: (err as { status: number }).status });
     }
     return handleTemperatureLogError(err, 'POST');
   }

@@ -6,7 +6,13 @@
  * Calculate average profit margin from all dishes
  * Includes ALL dishes (even without sales) because profit margin exists regardless of sales volume
  */
-export function calculateAverageProfitMargin(dishes: any[]): number {
+import { CalculationDish, DishWithSalesData } from './types';
+
+/**
+ * Calculate average profit margin from all dishes
+ * Includes ALL dishes (even without sales) because profit margin exists regardless of sales volume
+ */
+export function calculateAverageProfitMargin(dishes: CalculationDish[]): number {
   if (dishes.length === 0) {
     return 70.0; // Default fallback average for empty menus
   }
@@ -25,7 +31,7 @@ export function calculateAverageProfitMargin(dishes: any[]): number {
  * Includes ONLY dishes with sales data because can't calculate popularity without sales
  */
 export function calculateAveragePopularity(
-  dishesWithSales: any[],
+  dishesWithSales: DishWithSalesData[],
   dateRange: { startDate: Date | null; endDate: Date | null } | null,
 ): number {
   if (dishesWithSales.length === 0) {

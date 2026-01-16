@@ -1,11 +1,11 @@
 'use client';
 
-import React from 'react';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { LucideIcon } from 'lucide-react';
+import React from 'react';
 import { FeatureButton } from './components/FeatureButton';
 import { FeatureImageContainer } from './components/FeatureImageContainer';
 import { useAppleStyleAnimations } from './hooks/useAppleStyleAnimations';
-import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 // Spotlight component removed - using simpler background effects in LandingBackground
 
@@ -16,7 +16,7 @@ interface Feature {
   screenshot: string;
   screenshotAlt: string;
   details: string[];
-  color: string;
+  colorClass: string;
   cta?: {
     text: string;
     href: string;

@@ -3,12 +3,10 @@
 import { GlowCard } from '@/components/ui/GlowCard';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import {
-  LANDING_COLORS,
-  LANDING_LAYOUT,
-  LANDING_TYPOGRAPHY,
-  getGlowColor,
-  getSectionClasses,
-  getStaggerDelay,
+    LANDING_LAYOUT,
+    LANDING_TYPOGRAPHY,
+    getSectionClasses,
+    getStaggerDelay
 } from '@/lib/landing-styles';
 import { useTranslation } from '../../../../lib/useTranslation';
 
@@ -22,7 +20,7 @@ export function BenefitsSection() {
         'benefits.profit.description',
         "Find the dishes bleeding profit and fix them. Or remove them. Your call—but now you'll know.",
       ),
-      color: LANDING_COLORS.primary,
+      color: 'primary',
     },
     {
       title: t('benefits.time.title', 'No More 2 AM Excel'),
@@ -30,7 +28,7 @@ export function BenefitsSection() {
         'benefits.time.description',
         'Calculations happen automatically. No formulas to break. No spreadsheets to maintain. Just accurate costs, instantly.',
       ),
-      color: LANDING_COLORS.secondary,
+      color: 'secondary',
     },
     {
       title: t('benefits.confidence.title', 'Price Without Guessing'),
@@ -38,9 +36,22 @@ export function BenefitsSection() {
         'benefits.confidence.description',
         'Set your target margin. Get the price. No math, no stress, no "is this right?" moments.',
       ),
-      color: LANDING_COLORS.accent,
+      color: 'accent',
     },
   ];
+
+  /*
+   * Helper to map our semantic color names to the specific glow colors expected by GlowCard
+   * and Tailwind text classes.
+   */
+  const getColors = (color: string) => {
+    switch(color) {
+      case 'primary': return { glow: 'cyan', text: 'text-landing-primary' };
+      case 'secondary': return { glow: 'blue', text: 'text-landing-secondary' };
+      case 'accent': return { glow: 'magenta', text: 'text-landing-accent' };
+      default: return { glow: 'blue', text: 'text-landing-secondary' };
+    }
+  };
 
   return (
     <section id="benefits" className={getSectionClasses({ padding: 'large' })}>
@@ -53,15 +64,17 @@ export function BenefitsSection() {
           </h3>
         </ScrollReveal>
         <div className="tablet:gap-10 desktop:gap-12 large-desktop:gap-14 tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] desktop:[grid-template-columns:repeat(auto-fit,minmax(320px,1fr))] grid [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] gap-12 xl:gap-16">
-          {benefits.map((benefit, index) => (
+          {benefits.map((benefit, index) => {
+            const colors = getColors(benefit.color);
+            return (
             <ScrollReveal
               key={`benefit-${index}-${benefit.title}`}
               variant="fade-up"
               delay={getStaggerDelay(index)}
             >
-              <GlowCard glowColor={getGlowColor(benefit.color)} className="p-8">
+              <GlowCard glowColor={colors.glow as any} className="p-8">
                 <h4
-                  className={`${LANDING_TYPOGRAPHY.xl} mb-4 font-light ${benefit.color === LANDING_COLORS.primary ? 'text-[#29E7CD]' : benefit.color === LANDING_COLORS.secondary ? 'text-[#D925C7]' : 'text-[#3B82F6]'}`}
+                  className={`${LANDING_TYPOGRAPHY.xl} mb-4 font-light ${colors.text}`}
                 >
                   {benefit.title}
                 </h4>
@@ -70,7 +83,8 @@ export function BenefitsSection() {
                 </p>
               </GlowCard>
             </ScrollReveal>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

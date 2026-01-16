@@ -1,15 +1,14 @@
 'use client';
 
-import { useUser } from '@auth0/nextjs-auth0/client';
 import { MagneticButton } from '@/components/ui/MagneticButton';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import {
-  LANDING_COLORS,
-  LANDING_TYPOGRAPHY,
-  LANDING_LAYOUT,
-  getSectionClasses,
+    LANDING_LAYOUT,
+    LANDING_TYPOGRAPHY,
+    getSectionClasses
 } from '@/lib/landing-styles';
 import { logger } from '@/lib/logger';
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 interface FinalCTAProps {
   trackEngagement?: (event: string) => void;
@@ -65,8 +64,8 @@ export default function FinalCTA({ trackEngagement }: FinalCTAProps) {
       {/* Background Glow */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
         <div
-          className={`h-[500px] w-[500px] rounded-full bg-[${LANDING_COLORS.primary}]/10 blur-[120px]`}
-        />
+           className="h-[500px] w-[500px] rounded-full bg-landing-primary/10 blur-[120px]"
+         />
       </div>
 
       <div className={`relative ${LANDING_LAYOUT.containerNarrow} text-center`}>

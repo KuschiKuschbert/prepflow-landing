@@ -1,13 +1,13 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '@/components/ui/Icon';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
 
 interface Feature {
   title: string;
   description: string;
-  color?: string;
+  colorClass?: string;
   cta?: {
     text: string;
     href: string;
@@ -28,6 +28,19 @@ interface FeatureButtonProps {
   buttonRef: (el: HTMLButtonElement | null) => void;
   contentRef: (el: HTMLSpanElement | null) => void;
 }
+
+const getShadowStyle = (colorClass?: string) => {
+  if (colorClass?.includes('text-landing-primary')) {
+    return '0 0 20px rgba(41, 231, 205, 0.25), 0 0 40px rgba(41, 231, 205, 0.1)';
+  }
+  if (colorClass?.includes('text-landing-secondary')) {
+     return '0 0 20px rgba(59, 130, 246, 0.25), 0 0 40px rgba(59, 130, 246, 0.1)';
+  }
+  if (colorClass?.includes('text-landing-accent')) {
+     return '0 0 20px rgba(217, 37, 199, 0.25), 0 0 40px rgba(217, 37, 199, 0.1)';
+  }
+  return '0 0 20px rgba(41, 231, 205, 0.25), 0 0 40px rgba(41, 231, 205, 0.1)';
+};
 
 export function FeatureButton({
   feature,
@@ -101,11 +114,7 @@ export function FeatureButton({
         overflow: 'hidden',
         maxHeight: isExpanded ? '1000px' : buttonHeight ? `${buttonHeight}px` : '200px',
         minHeight: buttonHeight ? `${buttonHeight}px` : undefined,
-        boxShadow: isExpanded
-          ? feature.color
-            ? `0 0 20px ${feature.color}40, 0 0 40px ${feature.color}20`
-            : '0 0 20px rgba(41, 231, 205, 0.25), 0 0 40px rgba(41, 231, 205, 0.1)'
-          : 'none',
+        boxShadow: isExpanded ? getShadowStyle(feature.colorClass) : 'none',
       }}
       aria-expanded={isExpanded}
       aria-controls={`feature-content-${index}`}

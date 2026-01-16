@@ -1,16 +1,14 @@
 'use client';
 
-import OptimizedImage from '../../../../components/OptimizedImage';
-import { useTranslation } from '../../../../lib/useTranslation';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { TextContainer } from '@/components/ui/TextContainer';
 import {
-  LANDING_COLORS,
-  LANDING_TYPOGRAPHY,
-  LANDING_LAYOUT,
-  getSectionClasses,
-  getStaggerDelay,
+    LANDING_LAYOUT,
+    LANDING_TYPOGRAPHY,
+    getSectionClasses,
 } from '@/lib/landing-styles';
+import OptimizedImage from '../../../../components/OptimizedImage';
+import { useTranslation } from '../../../../lib/useTranslation';
 
 export function MyStorySection() {
   const { t } = useTranslation();
@@ -34,10 +32,7 @@ export function MyStorySection() {
           <TextContainer variant="prose" className="space-y-6">
             <ScrollReveal variant="fade-up" delay={0.1}>
               <div className="rounded-2xl bg-[#1f1f1f]/50 p-6">
-                <h3
-                  className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold`}
-                  style={{ color: LANDING_COLORS.primary }}
-                >
+                <h3 className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold text-landing-primary`}>
                   {t('story.frustration.title', 'The Frustration')}
                 </h3>
                 <p className="text-gray-300">
@@ -50,10 +45,7 @@ export function MyStorySection() {
             </ScrollReveal>
             <ScrollReveal variant="fade-up" delay={0.2}>
               <div className="rounded-2xl bg-[#1f1f1f]/50 p-6">
-                <h3
-                  className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold`}
-                  style={{ color: LANDING_COLORS.accent }}
-                >
+                <h3 className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold text-landing-accent`}>
                   {t('story.solution.title', 'The Solution')}
                 </h3>
                 <p className="text-gray-300">

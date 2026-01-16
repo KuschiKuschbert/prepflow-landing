@@ -1,14 +1,13 @@
 'use client';
 
-import { useTranslation } from '../../../../lib/useTranslation';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import {
-  LANDING_COLORS,
-  LANDING_TYPOGRAPHY,
-  LANDING_LAYOUT,
-  getSectionClasses,
-  getStaggerDelay,
+    LANDING_LAYOUT,
+    LANDING_TYPOGRAPHY,
+    getSectionClasses,
+    getStaggerDelay
 } from '@/lib/landing-styles';
+import { useTranslation } from '../../../../lib/useTranslation';
 
 export function PracticeSection() {
   const { t } = useTranslation();
@@ -33,10 +32,7 @@ export function PracticeSection() {
             <div className="desktop:grid-cols-2 mt-8 grid gap-6">
               <ScrollReveal variant="fade-up" delay={getStaggerDelay(0, 0.2)}>
                 <div className="rounded-2xl bg-[#2a2a2a]/50 p-6">
-                  <h3
-                    className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold`}
-                    style={{ color: LANDING_COLORS.primary }}
-                  >
+                  <h3 className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold text-landing-primary`}>
                     {t('practice.before.title', 'Before PrepFlow')}
                   </h3>
                   <ul className="space-y-2 text-gray-300">
@@ -49,10 +45,7 @@ export function PracticeSection() {
               </ScrollReveal>
               <ScrollReveal variant="fade-up" delay={getStaggerDelay(1, 0.2)}>
                 <div className="rounded-2xl bg-[#2a2a2a]/50 p-6">
-                  <h3
-                    className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold`}
-                    style={{ color: LANDING_COLORS.accent }}
-                  >
+                  <h3 className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold text-landing-accent`}>
                     {t('practice.after.title', 'After PrepFlow')}
                   </h3>
                   <ul className="space-y-2 text-gray-300">

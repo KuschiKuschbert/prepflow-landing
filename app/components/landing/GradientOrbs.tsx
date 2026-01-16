@@ -12,7 +12,7 @@ export default function GradientOrbs({ className = '' }: GradientOrbsProps) {
     >
       {/* Primary Cyan Orb - Top Left */}
       <div
-        className="absolute -top-1/4 -left-1/4 h-[800px] w-[800px] rounded-full bg-[#29E7CD] opacity-10 blur-3xl"
+        className="absolute -top-1/4 -left-1/4 h-[800px] w-[800px] rounded-full bg-landing-primary opacity-10 blur-3xl"
         style={
           {
             '--orb-animation': 'float-medium 20s ease-in-out infinite',
@@ -24,7 +24,7 @@ export default function GradientOrbs({ className = '' }: GradientOrbsProps) {
 
       {/* Secondary Magenta Orb - Bottom Right */}
       <div
-        className="absolute -right-1/4 -bottom-1/4 h-[1000px] w-[1000px] rounded-full bg-[#D925C7] opacity-8 blur-3xl"
+        className="absolute -right-1/4 -bottom-1/4 h-[1000px] w-[1000px] rounded-full bg-landing-accent opacity-8 blur-3xl"
         style={
           {
             '--orb-animation': 'float-medium 25s ease-in-out infinite reverse',
@@ -38,7 +38,7 @@ export default function GradientOrbs({ className = '' }: GradientOrbsProps) {
 
       {/* Blue Accent Orb - Center */}
       <div
-        className="absolute top-1/2 left-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#3B82F6] opacity-6 blur-3xl"
+        className="absolute top-1/2 left-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-landing-secondary opacity-6 blur-3xl"
         style={
           {
             '--orb-animation': 'float-medium 18s ease-in-out infinite',
@@ -52,7 +52,7 @@ export default function GradientOrbs({ className = '' }: GradientOrbsProps) {
 
       {/* Additional smaller orbs for depth */}
       <div
-        className="absolute top-1/3 right-1/4 h-[400px] w-[400px] rounded-full bg-[#29E7CD] opacity-5 blur-2xl"
+        className="absolute top-1/3 right-1/4 h-[400px] w-[400px] rounded-full bg-landing-primary opacity-5 blur-2xl"
         style={
           {
             '--orb-animation': 'float-medium 15s ease-in-out infinite',
@@ -65,7 +65,7 @@ export default function GradientOrbs({ className = '' }: GradientOrbsProps) {
       />
 
       <div
-        className="absolute bottom-1/3 left-1/3 h-[500px] w-[500px] rounded-full bg-[#D925C7] opacity-5 blur-2xl"
+        className="absolute bottom-1/3 left-1/3 h-[500px] w-[500px] rounded-full bg-landing-accent opacity-5 blur-2xl"
         style={
           {
             '--orb-animation': 'float-medium 22s ease-in-out infinite reverse',
