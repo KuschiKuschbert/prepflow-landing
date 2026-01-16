@@ -14,6 +14,17 @@ import {
   YAxis,
 } from 'recharts';
 
+interface TooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    payload: {
+      fullName: string;
+    };
+  }>;
+  label?: string;
+  value?: number;
+}
+
 interface PerformanceSummary {
   topSellers: Array<{
     id: string;
@@ -112,9 +123,9 @@ export default function KitchenChartsLazy({
                     color: 'var(--foreground)',
                     borderRadius: '8px',
                   }}
-                  formatter={(value: number, name: string, props: any) => [
+                  formatter={(value: number, _name: string, props: TooltipProps) => [
                     `${value} sold`,
-                    props.payload.fullName,
+                    props.payload?.[0]?.payload?.fullName || 'Unknown',
                   ]}
                 />
                 <Bar dataKey="value" radius={[8, 8, 0, 0]}>

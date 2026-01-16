@@ -109,3 +109,28 @@ export interface DishRecipeData {
   quantity: number;
   recipe: DBRecipe | null;
 }
+
+export interface MenuItemDish {
+  id: string;
+  dish_name: string;
+  description: string | null;
+  kitchen_section_id?: string; // Optional as it might be joined or not
+}
+
+export interface MenuItemRecipe {
+  id: string;
+  name: string;
+  description: string | null;
+  yield: number | null;
+  instructions: string | null;
+  recipe_name?: string; // Alias for name
+}
+
+export interface MenuItemData {
+  id: string;
+  dish_id: string | null;
+  recipe_id: string | null;
+  category: string | null;
+  dishes: MenuItemDish | MenuItemDish[] | null;
+  recipes: MenuItemRecipe | MenuItemRecipe[] | null;
+}

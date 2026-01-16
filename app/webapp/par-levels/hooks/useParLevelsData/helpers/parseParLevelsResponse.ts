@@ -11,7 +11,7 @@ interface ParseParLevelsResponseParams {
 export async function parseParLevelsResponse({
   response,
   showError,
-}: ParseParLevelsResponseParams): Promise<any> {
+}: ParseParLevelsResponseParams): Promise<unknown> {
   let result;
   try {
     const responseText = await response.text();

@@ -4,11 +4,12 @@
  * @param {any} error - Error object
  * @returns {string} Formatted error message
  */
-export function formatIngredientErrorMessage(error: any): string {
+export function formatIngredientErrorMessage(error: unknown): string {
+  const err = error as { message?: string; code?: string; details?: string; hint?: string };
   return (
-    error?.message ||
-    (error?.code
-      ? `Database error (${error.code})${error?.details ? `: ${error.details}` : ''}${error?.hint ? ` Hint: ${error.hint}` : ''}`
-      : error?.details || 'Failed to add ingredient')
+    err?.message ||
+    (err?.code
+      ? `Database error (${err.code})${err?.details ? `: ${err.details}` : ''}${err?.hint ? ` Hint: ${err.hint}` : ''}`
+      : err?.details || 'Failed to add ingredient')
   );
 }

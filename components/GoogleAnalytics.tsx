@@ -1,14 +1,14 @@
 'use client';
-import Script from 'next/script';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, Suspense, useRef } from 'react';
+import Script from 'next/script';
+import { Suspense, useCallback, useEffect, useRef } from 'react';
 
 import { logger } from '@/lib/logger';
 
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
-    dataLayer: any[];
+    gtag: (command: string, ...args: unknown[]) => void;
+    dataLayer: Record<string, unknown>[];
   }
 }
 
@@ -25,8 +25,8 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
   const initializeGtag = useCallback(() => {
     if (typeof window !== 'undefined' && !window.gtag) {
       window.dataLayer = window.dataLayer || [];
-      window.gtag = function () {
-        window.dataLayer.push(arguments);
+      window.gtag = function (...args: unknown[]) {
+        window.dataLayer.push(arguments as unknown as Record<string, unknown>);
       };
 
       // Initialize with current date
@@ -124,6 +124,3 @@ export default function GoogleAnalytics({ measurementId }: GoogleAnalyticsProps)
     </Suspense>
   );
 }
-
-// Default export with your correct measurement ID
-export { default as GoogleAnalyticsDefault } from './GoogleAnalytics';

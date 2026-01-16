@@ -8,8 +8,8 @@ import { printWithTemplate } from '@/lib/exports/print-template';
 import { formatCleaningScheduleForPrint } from './formatCleaningScheduleForPrint';
 
 export interface CleaningTask {
-  id: number;
-  area_id: number;
+  id: string | number;
+  area_id: string | number;
   assigned_date: string;
   completed_date: string | null;
   status: 'pending' | 'completed' | 'overdue';
@@ -18,7 +18,7 @@ export interface CleaningTask {
   created_at: string;
   updated_at: string;
   cleaning_areas: {
-    id: number;
+    id: string | number;
     name: string;
     description: string;
     frequency_days: number;
@@ -29,7 +29,7 @@ export interface CleaningTask {
 }
 
 export interface CleaningArea {
-  id: number;
+  id: string | number;
   name: string;
   description: string;
   frequency_days: number;

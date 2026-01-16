@@ -25,6 +25,7 @@ export interface TemperatureEquipment {
 }
 
 export interface NewEquipment {
+  id?: string | number;
   name: string;
   equipment_type: string;
   location: string;

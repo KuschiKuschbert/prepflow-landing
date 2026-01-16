@@ -77,7 +77,7 @@ export function parseIngredientsCSV(csvText: string): {
  */
 export async function importIngredientsFromCSV(
   parsedIngredients: Partial<Ingredient>[],
-): Promise<{ success: boolean; data?: Ingredient[]; error?: any }> {
+): Promise<{ success: boolean; data?: Ingredient[]; error?: unknown }> {
   try {
     if (!parsedIngredients || parsedIngredients.length === 0) {
       return { success: false, error: 'No ingredients to import' };

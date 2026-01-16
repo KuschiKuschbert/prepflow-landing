@@ -26,7 +26,8 @@ export async function fetchFromClientJoin(
     return [];
   }
 
-  let rows: any[] = ingredientsData || [];
+  let rows: RecipeIngredientWithDetails[] = (ingredientsData ||
+    []) as unknown as RecipeIngredientWithDetails[];
   if (rows.some(r => !r.ingredients) && rows.length > 0) {
     const uniqueIds = Array.from(new Set(rows.map(r => r.ingredient_id).filter(Boolean)));
     if (uniqueIds.length > 0) {
@@ -36,12 +37,12 @@ export async function fetchFromClientJoin(
           'id, ingredient_name, cost_per_unit, unit, trim_peel_waste_percentage, yield_percentage',
         )
         .in('id', uniqueIds);
-      const byId: Record<string, any> = {};
+      const byId: Record<string, RecipeIngredientWithDetails['ingredients']> = {};
       (ingRows || []).forEach(ir => {
-        byId[ir.id] = ir;
+        byId[ir.id] = ir as RecipeIngredientWithDetails['ingredients'];
       });
       rows = rows.map(r => ({ ...r, ingredients: byId[r.ingredient_id] || r.ingredients }));
     }
   }
-  return rows as unknown as RecipeIngredientWithDetails[];
+  return rows;
 }

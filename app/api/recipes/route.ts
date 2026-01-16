@@ -7,25 +7,16 @@
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { triggerRecipeSync } from '@/lib/square/sync/hooks';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { buildQuery } from './helpers/buildQuery';
 import { checkExistingRecipe } from './helpers/checkExistingRecipe';
 import { createRecipe } from './helpers/createRecipe';
 import { filterRecipes } from './helpers/filterRecipes';
+import { createRecipeSchema, RecipeResponse } from './helpers/schemas';
 import { updateRecipe } from './helpers/updateRecipe';
 import { validateRequest } from './helpers/validateRequest';
-import { triggerRecipeSync } from '@/lib/square/sync/hooks';
-import { z } from 'zod';
-
-const createRecipeSchema = z.object({
-  name: z.string().min(1, 'Recipe name is required'),
-  yield: z.number().positive().optional(),
-  yield_unit: z.string().optional(),
-  category: z.string().optional(),
-  description: z.string().optional(),
-  instructions: z.string().optional(),
-});
 
 export async function GET(request: NextRequest) {
   try {
@@ -43,7 +34,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Recipes API] Database error fetching recipes:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: { endpoint: '/api/recipes', operation: 'GET', table: 'recipes' },
       });
 
@@ -59,7 +50,7 @@ export async function GET(request: NextRequest) {
       count: count || 0,
       page: params.page,
       pageSize: params.pageSize,
-    });
+    } satisfies RecipeResponse);
   } catch (err) {
     logger.error('[Recipes API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
@@ -108,24 +99,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const {
-      name,
-      yield: dishPortions,
-      yield_unit,
-      category,
-      description,
-      instructions,
-    } = validationResult.data;
-
-    const recipeData = {
-      yield: dishPortions || 1,
-      yield_unit: yield_unit || 'servings',
-      description: description || null,
-      instructions: instructions || null,
-    };
+    const recipeData = validationResult.data;
 
     // Check if recipe already exists
-    const { recipe: existingRecipe, error: checkError } = await checkExistingRecipe(name);
+    const { recipe: existingRecipe, error: checkError } = await checkExistingRecipe(
+      recipeData.name,
+    );
 
     if (existingRecipe && !checkError) {
       // Update existing recipe
@@ -142,7 +121,9 @@ export async function POST(request: NextRequest) {
       // Trigger Square sync hook (non-blocking)
       (async () => {
         try {
-          await triggerRecipeSync(request, existingRecipe.id, 'update');
+          if (updatedRecipe) {
+            await triggerRecipeSync(request, updatedRecipe.id.toString(), 'update');
+          }
         } catch (err) {
           logger.error('[Recipes API] Error triggering Square sync:', {
             error: err instanceof Error ? err.message : String(err),
@@ -151,17 +132,25 @@ export async function POST(request: NextRequest) {
         }
       })();
 
-      return NextResponse.json({ success: true, recipe: updatedRecipe, isNew: false });
+      return NextResponse.json({
+        success: true,
+        recipe: updatedRecipe,
+        isNew: false,
+      } satisfies RecipeResponse);
     }
 
     // Create new recipe
-    const { recipe: newRecipe, error: createError } = await createRecipe(name, recipeData);
+    const { recipe: newRecipe, error: createError } = await createRecipe(
+      recipeData.name,
+      recipeData,
+    );
 
     if (createError) {
+      const safeError = createError as { message: string; code?: string };
       logger.error('[Recipes API] Database error creating recipe:', {
-        error: createError.message,
-        code: (createError as any).code,
-        context: { endpoint: '/api/recipes', operation: 'POST', recipeName: name },
+        error: safeError.message || String(createError),
+        code: safeError.code,
+        context: { endpoint: '/api/recipes', operation: 'POST', recipeName: recipeData.name },
       });
       const apiError = ApiErrorHandler.fromSupabaseError(createError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
@@ -170,16 +159,22 @@ export async function POST(request: NextRequest) {
     // Trigger Square sync hook (non-blocking)
     (async () => {
       try {
-        await triggerRecipeSync(request, newRecipe.id, 'create');
+        if (newRecipe) {
+          await triggerRecipeSync(request, newRecipe.id.toString(), 'create');
+        }
       } catch (err) {
         logger.error('[Recipes API] Error triggering Square sync:', {
           error: err instanceof Error ? err.message : String(err),
-          recipeId: newRecipe.id,
+          recipeId: newRecipe?.id,
         });
       }
     })();
 
-    return NextResponse.json({ success: true, recipe: newRecipe, isNew: true });
+    return NextResponse.json({
+      success: true,
+      recipe: newRecipe,
+      isNew: true,
+    } satisfies RecipeResponse);
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : String(err);
     logger.error('[Recipes API] Unexpected error:', {

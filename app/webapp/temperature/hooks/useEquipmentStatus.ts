@@ -8,7 +8,7 @@ interface EquipmentStatus {
 }
 
 interface UseEquipmentStatusProps {
-  getFilteredLogs: (equipment: TemperatureEquipment) => any[];
+  getFilteredLogs: (equipment: TemperatureEquipment) => unknown[];
 }
 
 export function useEquipmentStatus({ getFilteredLogs }: UseEquipmentStatusProps) {

@@ -5,13 +5,13 @@
 
 'use client';
 
-import React, { useState } from 'react';
-import { useNotification } from '@/contexts/NotificationContext';
 import { Icon } from '@/components/ui/Icon';
-import { History, Download, RotateCcw, RefreshCw, Trash2 } from 'lucide-react';
+import { useNotification } from '@/contexts/NotificationContext';
 import type { BackupFile } from '@/lib/backup/types';
-import { formatDistanceToNow } from 'date-fns';
 import { logger } from '@/lib/logger';
+import { formatDistanceToNow } from 'date-fns';
+import { Download, History, RefreshCw, RotateCcw } from 'lucide-react';
+import { useState } from 'react';
 
 interface BackupListProps {
   backups: BackupFile[];
@@ -62,7 +62,7 @@ export function BackupList({ backups, onRestore, onRefresh }: BackupListProps) {
         // TODO: Download from local storage by ID
         showError('Download from local storage not yet implemented');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('[BackupList.tsx] Error in catch block:', {
         error: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,

@@ -1,12 +1,24 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { useNotification } from '@/contexts/NotificationContext';
-import { useTranslation } from '@/lib/useTranslation';
+import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
+import { useTranslation } from '@/lib/useTranslation';
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+import { PrepListsEmptyState } from './components/PrepListsEmptyState';
+import { PrepListsHeader } from './components/PrepListsHeader';
+import { PrepListsPagination } from './components/PrepListsPagination';
+import { usePrepListsCRUD } from './hooks/usePrepListsCRUD';
+import { usePrepListsData } from './hooks/usePrepListsData';
+import { usePrepListsForm } from './hooks/usePrepListsForm';
+import { usePrepListsModals } from './hooks/usePrepListsModals';
+import { usePrepListsPagination } from './hooks/usePrepListsPagination';
+import { usePrepListsQuery } from './hooks/usePrepListsQuery';
+import type { PrepList, PrepListCreationItem } from './types';
 
 // Lazy load prep list components to reduce initial bundle size
 const PrepListForm = dynamic(
@@ -43,18 +55,6 @@ const PrepListPreview = dynamic(
     loading: () => <PageSkeleton />,
   },
 );
-import { usePrepListsQuery } from './hooks/usePrepListsQuery';
-import { usePrepListsData } from './hooks/usePrepListsData';
-import { usePrepListsForm } from './hooks/usePrepListsForm';
-import { usePrepListsCRUD } from './hooks/usePrepListsCRUD';
-import { usePrepListsModals } from './hooks/usePrepListsModals';
-import { usePrepListsPagination } from './hooks/usePrepListsPagination';
-import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
-import { cacheData, getCachedData } from '@/lib/cache/data-cache';
-import type { PrepList } from './types';
-import { PrepListsHeader } from './components/PrepListsHeader';
-import { PrepListsEmptyState } from './components/PrepListsEmptyState';
-import { PrepListsPagination } from './components/PrepListsPagination';
 
 export default function PrepListsPage() {
   const { t } = useTranslation();
@@ -164,7 +164,11 @@ export default function PrepListsPage() {
   };
 
   const handleSaveBatch = async (
-    prepListsToCreate: Array<{ sectionId: string | null; name: string; items: any[] }>,
+    prepListsToCreate: Array<{
+      sectionId: string | null;
+      name: string;
+      items: PrepListCreationItem[];
+    }>,
   ) => {
     try {
       await handleSaveBatchPrepLists(prepListsToCreate, userId, prepLists, setPrepLists, setError);
@@ -223,8 +227,8 @@ export default function PrepListsPage() {
             <PrepListForm
               sections={kitchenSections}
               ingredients={ingredients}
-              formData={formData as any}
-              setFormData={setFormData as any}
+              formData={formData as unknown}
+              setFormData={setFormData as unknown}
               onSubmit={handleSubmit}
               onClose={handleFormClose}
               isEditing={!!editingPrepList}

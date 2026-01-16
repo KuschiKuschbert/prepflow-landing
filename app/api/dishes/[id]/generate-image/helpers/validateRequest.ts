@@ -4,6 +4,7 @@
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getUserFromRequest } from '@/lib/auth0-api-helpers';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -69,7 +70,11 @@ import { SupabaseClient } from '@supabase/supabase-js';
  * @param {SupabaseClient | null} supabaseAdmin - Supabase admin client
  * @returns {NextResponse | null} Error response if unavailable, null if available
  */
+<<<<<<< HEAD
 export function validateDatabase(supabaseAdmin: SupabaseClient | null): NextResponse | null {
+=======
+export function validateDatabase(supabaseAdmin: SupabaseClient): NextResponse | null {
+>>>>>>> main
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

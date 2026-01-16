@@ -1,28 +1,25 @@
 import {
+  isClientError,
+  isNetworkError,
+  isRowNotFoundError,
+  isServerError,
+  isTableNotFoundError,
+} from './api-error-handler/errorChecks';
+import {
   parseSupabaseError,
   SUPABASE_ERROR_CODES,
   type ApiError,
 } from './api-error-handler/supabaseErrorParser';
-import {
-  isNetworkError,
-  isServerError,
-  isClientError,
-  isTableNotFoundError,
-  isRowNotFoundError,
-} from './api-error-handler/errorChecks';
 
-interface PostgrestError {
-  message: string;
-  details?: string;
-  hint?: string;
-  code?: string;
-}
+import { PostgrestError } from '@supabase/supabase-js';
+
+// ... imports
 
 export { SUPABASE_ERROR_CODES };
 export type { ApiError };
 
 export class ApiErrorHandler {
-  static createError(message: string, code?: string, status?: number, details?: any): ApiError {
+  static createError(message: string, code?: string, status?: number, details?: unknown): ApiError {
     return { message, code, status, details, timestamp: new Date() };
   }
   static fromResponse(response: Response, data?: any): ApiError {
@@ -45,7 +42,7 @@ export class ApiErrorHandler {
   static fromSupabaseError(error: PostgrestError | unknown, defaultStatus: number = 500): ApiError {
     return parseSupabaseError(error, defaultStatus);
   }
-  static isNetworkError(error: any): boolean {
+  static isNetworkError(error: unknown): boolean {
     return isNetworkError(error);
   }
   static isServerError(error: ApiError): boolean {

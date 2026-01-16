@@ -3,8 +3,36 @@
  */
 import type { Dish, MenuItem, Recipe } from '../types';
 
+interface ServerMenuItem {
+  id: string;
+  dish_id?: string;
+  recipe_id?: string;
+  category?: string;
+  position?: number;
+  actual_selling_price?: number;
+  recommended_selling_price?: number;
+  dishes?:
+    | { id: string; dish_name: string; description?: string; selling_price: number }
+    | { id: string; dish_name: string; description?: string; selling_price: number }[];
+  recipes?:
+    | {
+        id: string;
+        recipe_name: string;
+        description?: string;
+        yield?: number;
+        selling_price?: number;
+      }
+    | {
+        id: string;
+        recipe_name: string;
+        description?: string;
+        yield?: number;
+        selling_price?: number;
+      }[];
+}
+
 interface NormalizeMenuItemParams {
-  serverItem: any;
+  serverItem: ServerMenuItem;
   menuId: string;
   optimisticItem: MenuItem;
   dishes: Dish[];
@@ -15,7 +43,7 @@ interface NormalizeMenuItemParams {
  * Get dish data from server item or local array.
  */
 function getDishData(
-  serverItem: any,
+  serverItem: ServerMenuItem,
   dishes: Dish[],
 ): { id: string; dish_name: string; description?: string; selling_price: number } | null {
   if (!serverItem.dish_id) return null;
@@ -51,7 +79,7 @@ function getDishData(
  * Get recipe data from server item or local array.
  */
 function getRecipeData(
-  serverItem: any,
+  serverItem: ServerMenuItem,
   recipes: Recipe[],
 ): {
   id: string;

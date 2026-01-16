@@ -1,47 +1,112 @@
+import { loadEnvConfig } from '@next/env';
 import '@testing-library/jest-dom';
 
-// Mock environment variables
-process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co';
-process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key';
-process.env.AUTH0_SECRET = 'a_very_long_random_string_for_testing_purposes_at_least_32_chars';
-process.env.AUTH0_BASE_URL = 'http://localhost:3000';
-process.env.AUTH0_ISSUER_BASE_URL = 'https://test.auth0.com';
-process.env.AUTH0_CLIENT_ID = 'test-client-id';
-process.env.AUTH0_CLIENT_SECRET = 'test-client-secret';
+const projectDir = process.cwd();
+loadEnvConfig(projectDir);
 
-// Mock PerformanceObserver
-// Mock PerformanceObserver
-const MockPerformanceObserver = class PerformanceObserver {
-  observe() {}
-  disconnect() {}
-  takeRecords() { return []; }
-} as any;
+// Polyfill Web APIs missing in JSDOM
+// Node 18+ has these globally, but JSDOM environment might hide them
+const polyfillWebAPIs = () => {
+  const MockRequest = class {
+    constructor() {}
+    static json = jest.fn();
+  };
+  (MockRequest.prototype as any).json = jest.fn();
 
-global.PerformanceObserver = MockPerformanceObserver;
-if (typeof window !== 'undefined') {
-  window.PerformanceObserver = MockPerformanceObserver;
-}
-globalThis.PerformanceObserver = MockPerformanceObserver;
+  const MockResponse = class {
+    constructor() {}
+    static json = jest.fn();
+  };
+  (MockResponse.prototype as any).json = jest.fn();
 
-// Polyfill Request/Response for Next.js App Router
+  const MockHeaders = class {
+    constructor() {}
+  };
 
-// Polyfill Request/Response for Next.js App Router
-if (typeof global.Request === 'undefined') {
-  global.Request = class Request {
-    constructor(input: any, init: any) {
-      (this as any).url = input;
-      (this as any).method = init?.method || 'GET';
-      (this as any).headers = new Headers(init?.headers);
+  const MockPerformanceObserver = class {
+    constructor(callback: any) {}
+    observe() {}
+    disconnect() {}
+    takeRecords() {
+      return [];
     }
-  } as any;
-}
+  };
 
-if (typeof global.Response === 'undefined') {
-  global.Response = class Response {
-    json() { return Promise.resolve({}); }
-  } as any;
-}
+  const apis = {
+    Request: MockRequest,
+    Response: MockResponse,
+    Headers: MockHeaders,
+    fetch: jest.fn(),
+    PerformanceObserver: MockPerformanceObserver,
+  };
 
-if (typeof global.Headers === 'undefined') {
-  global.Headers = class Headers extends Map {} as any;
-}
+  Object.entries(apis).forEach(([key, value]) => {
+    if (typeof (global as any)[key] === 'undefined') {
+      (global as any)[key] = value;
+    }
+    if (typeof (globalThis as any)[key] === 'undefined') {
+      (globalThis as any)[key] = value;
+    }
+    if (typeof window !== 'undefined') {
+      if (typeof (window as any)[key] === 'undefined') {
+        (window as any)[key] = value;
+      }
+    }
+  });
+
+  // Polyfill URL.createObjectURL if missing
+  if (typeof window !== 'undefined') {
+    if (!window.URL.createObjectURL) {
+      Object.defineProperty(window.URL, 'createObjectURL', { value: jest.fn(() => 'blob:mock') });
+      Object.defineProperty(window.URL, 'revokeObjectURL', { value: jest.fn() });
+    }
+  }
+};
+
+polyfillWebAPIs();
+
+// Mock Auth0 which has ESM issues in Jest
+const mockAuth0 = {
+  useUser: () => ({ user: null, error: null, isLoading: false }),
+  withPageAuthRequired: (comp: any) => comp,
+  getSession: () => null,
+  getAccessToken: () => ({ accessToken: 'test-token' }),
+  UserProvider: ({ children }: any) => children,
+  Auth0Client: class {
+    constructor() {
+      return {
+        getSession: jest.fn(),
+        getAccessToken: jest.fn(),
+        updateSession: jest.fn(),
+      } as any;
+    }
+  },
+};
+
+jest.mock('@auth0/nextjs-auth0', () => mockAuth0, { virtual: true });
+jest.mock('@auth0/nextjs-auth0/client', () => mockAuth0, { virtual: true });
+jest.mock('@auth0/nextjs-auth0/server', () => mockAuth0, { virtual: true });
+
+// Mock auth0 (SDK)
+jest.mock('auth0', () => ({
+  ManagementClient: jest.fn().mockImplementation(() => ({
+    getUsers: jest.fn().mockResolvedValue([]),
+    updateUser: jest.fn().mockResolvedValue({}),
+  })),
+  Auth0Client: jest.fn().mockImplementation(() => ({
+    // Add common methods if needed
+  })),
+}), { virtual: true });
+
+// Mock next-auth if used in tests
+jest.mock('next-auth', () => ({
+  useSession: () => ({ data: null, status: 'unauthenticated' }),
+  signIn: jest.fn(),
+  signOut: jest.fn(),
+  getServerSession: jest.fn(),
+}), { virtual: true });
+
+// Mock @/lib/auth-options which might be missing but used in some tests
+jest.mock('./lib/auth-options.mock.ts', () => ({
+  authOptions: {},
+}), { virtual: true });

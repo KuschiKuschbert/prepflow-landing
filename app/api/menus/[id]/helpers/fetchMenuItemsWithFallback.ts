@@ -1,7 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { PostgrestError } from '@supabase/supabase-js';
-import { MenuItem } from '../../types';
+import { MenuItem } from '../../helpers/schemas';
 import { detectMissingColumns } from './errorDetection/detectMissingColumns';
 import { handlePricingFallback } from './fetchMenuItemsWithFallback/helpers/handlePricingFallback';
 import { handleUltimateFallback } from './fetchMenuItemsWithFallback/helpers/handleUltimateFallback';
@@ -40,7 +40,7 @@ export async function fetchMenuItemsWithFallback(menuId: string): Promise<FetchR
   }
 
   // Analyze error to determine which columns are missing
-  const errorInfo = detectMissingColumns(allColumnsError);
+  const errorInfo = detectMissingColumns(allColumnsError as PostgrestError);
   logDetailedError(allColumnsError, 'Error fetching menu items, attempting fallback', menuId);
 
   // Try without pricing columns
@@ -127,5 +127,5 @@ export async function fetchMenuItemsWithFallback(menuId: string): Promise<FetchR
 
   // Unknown error - throw it
   logDetailedError(allColumnsError, 'Database error fetching menu items (unknown error)', menuId);
-  throw ApiErrorHandler.fromSupabaseError(allColumnsError, 500);
+  throw ApiErrorHandler.fromSupabaseError(allColumnsError as PostgrestError, 500);
 }

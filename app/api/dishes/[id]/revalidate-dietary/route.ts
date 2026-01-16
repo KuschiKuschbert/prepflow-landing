@@ -4,15 +4,14 @@
  */
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { aggregateDishDietaryStatus } from '@/lib/dietary/dietary-aggregation';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { aggregateDishDietaryStatus } from '@/lib/dietary/dietary-aggregation';
 
 export async function POST(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await context.params;
-    const dishId = id;
+    const { id: dishId } = await context.params;
 
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -63,7 +62,7 @@ export async function POST(_req: NextRequest, context: { params: Promise<{ id: s
         reason: dietaryStatus.reason,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('[Revalidate Dietary] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,

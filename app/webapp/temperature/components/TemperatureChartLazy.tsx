@@ -1,5 +1,9 @@
 'use client';
 
+import { ReferenceAreas } from '@/app/webapp/temperature/components/TemperatureChartLazy/components/ReferenceAreas';
+import { calculateYAxisBounds } from '@/app/webapp/temperature/components/TemperatureChartLazy/utils/calculateYAxisBounds';
+import { prepareChartData } from '@/app/webapp/temperature/components/TemperatureChartLazy/utils/prepareChartData';
+import { logger } from '@/lib/logger';
 import {
   Area,
   CartesianGrid,
@@ -11,11 +15,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { logger } from '@/lib/logger';
 import { TemperatureEquipment } from '../types';
-import { ReferenceAreas } from '@/app/webapp/temperature/components/TemperatureChartLazy/components/ReferenceAreas';
-import { calculateYAxisBounds } from '@/app/webapp/temperature/components/TemperatureChartLazy/utils/calculateYAxisBounds';
-import { prepareChartData } from '@/app/webapp/temperature/components/TemperatureChartLazy/utils/prepareChartData';
 
 interface ChartDataPoint {
   timestamp: string;
@@ -137,7 +137,10 @@ export default function TemperatureChartLazy({
         />
         <Tooltip
           labelFormatter={formatTooltipLabel}
-          formatter={(value: any) => [formatTooltipValue(value as number), 'Temp']}
+          formatter={(value: number | string | Array<number | string>) => [
+            formatTooltipValue(Number(value)),
+            'Temp',
+          ]}
           contentStyle={{
             backgroundColor: 'var(--surface)',
             border: '1px solid var(--border)',

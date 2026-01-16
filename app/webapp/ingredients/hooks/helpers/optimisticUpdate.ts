@@ -1,7 +1,8 @@
+import { NormalizedIngredientData } from '@/lib/ingredients/normalizeIngredientData';
 import { createOptimisticIngredient, replaceTempIngredient } from './optimisticIngredientAdd';
 
 interface OptimisticUpdateProps<T> {
-  normalized: any;
+  normalized: NormalizedIngredientData;
   originalIngredients: T[];
   setIngredients: React.Dispatch<React.SetStateAction<T[]>>;
   setShowAddForm?: (show: boolean) => void;
@@ -25,7 +26,7 @@ export function performOptimisticUpdate<T extends { id: string }>({
   setNewIngredient,
   DEFAULT_INGREDIENT,
 }: OptimisticUpdateProps<T>): string {
-  const tempIngredient = createOptimisticIngredient<T>(normalized);
+  const tempIngredient = createOptimisticIngredient<T>(normalized as unknown as Partial<T>);
   const tempId = tempIngredient.id;
 
   setIngredients(prev => {

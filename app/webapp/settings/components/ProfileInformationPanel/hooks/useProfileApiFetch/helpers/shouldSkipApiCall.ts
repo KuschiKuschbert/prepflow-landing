@@ -1,11 +1,13 @@
 /**
  * Determine if API call should be skipped.
  */
+import { ProfileData } from '../../useProfileForm/types';
+
 export function shouldSkipApiCall(
   userHasModifiedRef: React.MutableRefObject<boolean>,
   USER_MODIFIED_KEY: string,
   isLoadingRef: React.MutableRefObject<boolean>,
-  cachedProfile: any,
+  cachedProfile: ProfileData | null,
   initialDataLoadedRef: React.MutableRefObject<boolean>,
   setLoading: (loading: boolean) => void,
 ): { skip: boolean; reason?: string } {

@@ -1,17 +1,19 @@
-import { supabase } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabase } from '@/lib/supabase';
 
-interface HandleCategorizeAllParams {
-  ingredients: any[];
-  setIngredients: React.Dispatch<React.SetStateAction<any[]>>;
+interface HandleCategorizeAllParams<T> {
+  ingredients: T[];
+  setIngredients: React.Dispatch<React.SetStateAction<T[]>>;
   showSuccess: (message: string) => void;
   showError: (message: string) => void;
 }
 
-export async function handleCategorizeAllUncategorized(
+export async function handleCategorizeAllUncategorized<
+  T extends { id: string; category?: string; is_active?: boolean },
+>(
   useAI: boolean,
   onRefresh: (() => void) | undefined,
-  { ingredients, setIngredients, showSuccess, showError }: HandleCategorizeAllParams,
+  { ingredients, setIngredients, showSuccess, showError }: HandleCategorizeAllParams<T>,
 ) {
   // Store original state for rollback
   const originalIngredientsState = [...ingredients];

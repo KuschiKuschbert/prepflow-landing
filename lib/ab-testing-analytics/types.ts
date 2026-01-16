@@ -6,7 +6,13 @@ export interface ABTestVariant {
   isControl: boolean;
 }
 
-export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+export type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonValue[]
+  | { [key: string]: JsonValue };
 
 export interface ABTestEvent {
   testId: string;

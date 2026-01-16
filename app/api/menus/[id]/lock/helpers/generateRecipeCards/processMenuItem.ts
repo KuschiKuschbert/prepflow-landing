@@ -1,9 +1,10 @@
 import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { MenuItemData } from '../fetchMenuItemData';
 import { buildRecipeCardFromInstructions, generateDataHash } from '../cardBuilding';
+import { MenuItemData } from '../fetchMenuItemData';
 import { consolidateInstructions, normalizeToSingleServing } from '../normalizeIngredients';
-import { saveCard, finalizeCardSave } from './processMenuItem/saveCard';
+import { MenuItem } from './fetchMenuItems';
+import { finalizeCardSave, saveCard } from './processMenuItem/saveCard';
 
 interface ProcessResult {
   success: boolean;
@@ -14,7 +15,7 @@ interface ProcessResult {
  * Processes a single menu item to generate or update its recipe card.
  *
  * @param {SupabaseClient} supabase - Supabase client instance.
- * @param {any} menuItem - The menu item to process.
+ * @param {MenuItem} menuItem - The menu item to process.
  * @param {MenuItemData} menuItemData - The menu item data.
  * @param {string} signature - Recipe signature for cross-referencing.
  * @param {string} [existingCardId] - Existing card ID if updating.
@@ -23,7 +24,7 @@ interface ProcessResult {
  */
 export async function processMenuItem(
   supabase: SupabaseClient,
-  menuItem: any,
+  menuItem: MenuItem,
   menuItemData: MenuItemData,
   signature: string,
   existingCardId: string | undefined,
@@ -99,7 +100,7 @@ export async function processMenuItem(
     };
 
     // Prepare card data
-    const cardData: any = {
+    const cardData: Record<string, unknown> = {
       card_content: cardContent,
       title: parsedCard.title,
       base_yield: parsedCard.baseYield || 1,

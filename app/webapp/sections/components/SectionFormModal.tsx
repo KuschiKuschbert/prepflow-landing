@@ -1,8 +1,9 @@
 'use client';
 
-import { useTranslation } from '@/lib/useTranslation';
-import { useAutosave } from '@/hooks/useAutosave';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
+import { useAutosave } from '@/hooks/useAutosave';
+import { useTranslation } from '@/lib/useTranslation';
+import type { MenuDish } from '../types';
 
 interface KitchenSection {
   id: string;
@@ -11,7 +12,7 @@ interface KitchenSection {
   color: string;
   created_at: string;
   updated_at: string;
-  menu_dishes: any[];
+  menu_dishes: MenuDish[];
 }
 
 interface FormData {

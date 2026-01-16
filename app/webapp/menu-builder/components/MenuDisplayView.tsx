@@ -5,10 +5,10 @@
 
 'use client';
 
-import { useMemo } from 'react';
-import { Menu, MenuItem } from '../types';
 import { DietaryBadge } from '@/components/ui/DietaryBadge';
 import { FoodImageDisplay } from '@/components/ui/FoodImageDisplay';
+import { useMemo } from 'react';
+import { Menu, MenuItem } from '../types';
 
 interface MenuDisplayViewProps {
   menu: Menu;
@@ -105,18 +105,16 @@ export function MenuDisplayView({ menu, menuItems }: MenuDisplayViewProps) {
                 (isDish ? item.dishes?.dietary_confidence : item.recipes?.dietary_confidence);
 
               // Get image URLs from dish or recipe (all plating methods)
-              const imageUrl = isDish
-                ? (item.dishes as any)?.image_url
-                : (item.recipes as any)?.image_url;
+              const imageUrl = isDish ? item.dishes?.image_url : item.recipes?.image_url;
               const imageUrlAlternative = isDish
-                ? (item.dishes as any)?.image_url_alternative
-                : (item.recipes as any)?.image_url_alternative;
+                ? item.dishes?.image_url_alternative
+                : item.recipes?.image_url_alternative;
               const imageUrlModern = isDish
-                ? (item.dishes as any)?.image_url_modern
-                : (item.recipes as any)?.image_url_modern;
+                ? item.dishes?.image_url_modern
+                : item.recipes?.image_url_modern;
               const imageUrlMinimalist = isDish
-                ? (item.dishes as any)?.image_url_minimalist
-                : (item.recipes as any)?.image_url_minimalist;
+                ? item.dishes?.image_url_minimalist
+                : item.recipes?.image_url_minimalist;
               const entityId = isDish ? item.dish_id : item.recipe_id;
 
               return (

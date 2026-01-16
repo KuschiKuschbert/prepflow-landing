@@ -3,7 +3,9 @@
  */
 import type { Employee } from '../../../types';
 
-export function createEmployeeActions(set: any) {
+import type { RosterStoreSet } from '../types';
+
+export function createEmployeeActions(set: RosterStoreSet) {
   return {
     setEmployees: (employees: Employee[]) => set({ employees }),
     setSelectedEmployeeId: (employeeId: string | null) => set({ selectedEmployeeId: employeeId }),

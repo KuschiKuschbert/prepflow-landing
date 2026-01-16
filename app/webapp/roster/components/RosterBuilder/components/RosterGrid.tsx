@@ -1,12 +1,21 @@
 'use client';
 
-import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverEvent,
+  DragOverlay,
+  DragStartEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import { snapCenterToCursor } from '@dnd-kit/modifiers';
-import { format, addDays } from 'date-fns';
+import { format } from 'date-fns';
+import type { Employee, Shift, ShiftValidationWarning } from '../../../types';
 import { ShiftCard } from '../../ShiftCard';
-import { RosterRow } from './RosterRow';
 import { getCurrentWeekShifts } from '../utils/rosterHelpers';
-import type { Shift, Employee, ShiftValidationWarning } from '../../../types';
+import { RosterRow } from './RosterRow';
 
 interface RosterGridProps {
   shifts: Shift[];
@@ -16,9 +25,9 @@ interface RosterGridProps {
   weekDays: Date[];
   validationWarnings: ShiftValidationWarning[];
   activeShiftId: string | null;
-  onDragStart: (event: any) => void;
-  onDragEnd: (event: any) => void;
-  onDragOver: (event: any) => void;
+  onDragStart: (event: DragStartEvent) => void;
+  onDragEnd: (event: DragEndEvent) => void;
+  onDragOver: (event: DragOverEvent) => void;
   getShiftsForEmployeeAndDay: (employeeId: string, date: Date) => Shift[];
   onAddShift?: (employeeId: string, date: Date, cellPosition?: DOMRect) => void;
   activeInlineEntry?: { employeeId: string; date: Date; cellPosition?: DOMRect } | null;

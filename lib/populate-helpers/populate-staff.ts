@@ -2,8 +2,9 @@
  * Helper function for populating staff/employee test data
  */
 
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
+import { CreateEmployeeInput, Employee } from '@/types/employee';
 
 interface PopulateResults {
   cleaned: number;
@@ -17,7 +18,7 @@ interface PopulateResults {
 export async function populateStaff(
   supabaseAdmin: ReturnType<typeof createSupabaseAdmin>,
   results: PopulateResults,
-): Promise<any[]> {
+): Promise<Employee[]> {
   try {
     // Check if employees table exists
     const { error: tableCheckError } = await supabaseAdmin.from('employees').select('id').limit(1);
@@ -38,7 +39,7 @@ export async function populateStaff(
     );
 
     // Define 5 test staff members
-    const staffMembers = [
+    const staffMembers: CreateEmployeeInput[] = [
       {
         full_name: 'Sarah Chen',
         role: 'Head Chef',

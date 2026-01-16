@@ -6,8 +6,8 @@ export function sortPerformanceItems(
   sortOrder: 'asc' | 'desc',
 ): PerformanceItem[] {
   return [...items].sort((a, b) => {
-    let aValue: any;
-    let bValue: any;
+    let aValue: string | number;
+    let bValue: string | number;
 
     switch (sortBy) {
       case 'name':

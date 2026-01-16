@@ -3,7 +3,6 @@
  */
 import type { TemperatureEquipment } from '../../../types';
 import { handleGenerateSampleData } from '../../utils/generateSampleDataHandler';
-import { logger } from '@/lib/logger';
 
 export function createEquipmentHandlersHelper(
   equipment: TemperatureEquipment[],
@@ -17,7 +16,13 @@ export function createEquipmentHandlersHelper(
     minTemp: number | null;
     maxTemp: number | null;
   },
-  setNewEquipment: (equipment: any) => void,
+  setNewEquipment: (equipment: {
+    name: string;
+    equipmentType: string;
+    location: string;
+    minTemp: number | null;
+    maxTemp: number | null;
+  }) => void,
   setShowCreateForm: (show: boolean) => void,
   setEditingEquipment: (id: string | null) => void,
   onUpdateEquipment: (equipmentId: string, updates: Partial<TemperatureEquipment>) => Promise<void>,

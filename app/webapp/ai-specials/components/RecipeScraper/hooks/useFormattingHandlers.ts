@@ -7,7 +7,7 @@ import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 
 interface UseFormattingHandlersParams {
-  processing: any;
+  processing: unknown;
   setIsResuming: (resuming: boolean) => void;
   setIsProcessingStarting: (starting: boolean) => void;
   setProcessingPolling: (polling: boolean) => void;

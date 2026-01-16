@@ -2,12 +2,17 @@
 
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Icon } from '@/components/ui/Icon';
-import { logger } from '@/lib/logger';
 import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
 import { User } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
-import { Employee, QualificationType } from '../types';
+import {
+  Employee,
+  EmployeeQualification,
+  QualificationFormData,
+  QualificationType,
+} from '../types';
 import { EmployeeDetailModal } from './EmployeeDetailModal';
 
 interface EmployeeCardProps {
@@ -31,20 +36,23 @@ export function EmployeeCard({
   const [qualToDelete, setQualToDelete] = useState<string | null>(null);
   const [qualifications, setQualifications] = useState(employee.employee_qualifications || []);
 
-  const handleAddQualification = async (qualificationData: any) => {
+  const handleAddQualification = async (qualificationData: QualificationFormData) => {
     // Store original state for rollback
     const originalQualifications = [...qualifications];
 
     // Create temporary qualification for optimistic update
     const tempId = `temp-${Date.now()}`;
-    const tempQualification = {
+    const tempQualification: EmployeeQualification = {
       id: tempId,
+      employee_id: employee.id,
       ...qualificationData,
       certificate_number: qualificationData.certificate_number || null,
       expiry_date: qualificationData.expiry_date || null,
       issuing_authority: qualificationData.issuing_authority || null,
       document_url: qualificationData.document_url || null,
       notes: qualificationData.notes || null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
 
     // Optimistically add to UI immediately

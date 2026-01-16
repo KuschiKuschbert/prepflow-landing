@@ -107,10 +107,10 @@ export async function shareViaWebAPI(options: ShareOptions): Promise<boolean> {
 
     await navigator.share(shareData);
     return true;
-  } catch (err: any) {
+  } catch (err: unknown) {
     // User cancelled or error occurred
-    if (err.name !== 'AbortError') {
-      logger.error('[Share Utils] Web Share API failed:', err);
+    if (err instanceof Error && err.name !== 'AbortError') {
+      logger.error('[Share Utils] Web Share API failed:', err.message);
     }
     return false;
   }

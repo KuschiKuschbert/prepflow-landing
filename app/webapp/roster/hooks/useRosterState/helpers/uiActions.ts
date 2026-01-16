@@ -3,7 +3,9 @@
  */
 import type { ShiftStatus } from '../../../types';
 
-export function createUIActions(set: any) {
+import type { RosterStoreSet } from '../types';
+
+export function createUIActions(set: RosterStoreSet) {
   return {
     setShowTemplateManager: (show: boolean) => set({ showTemplateManager: show }),
     setShowShiftForm: (show: boolean) => set({ showShiftForm: show }),

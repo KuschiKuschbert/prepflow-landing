@@ -1,12 +1,12 @@
 'use client';
 
-import { useMemo } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { CheckCircle2, XCircle, AlertCircle, RefreshCw, Settings, Link2 } from 'lucide-react';
 import { useNotification } from '@/contexts/NotificationContext';
+import { AlertCircle, CheckCircle2, Link2, RefreshCw, Settings, XCircle } from 'lucide-react';
+import { useMemo } from 'react';
+import { useSquareStatus, type SyncLog } from '../../hooks/useSquareStatus';
 import { ConnectionWorkflow } from './ConnectionWorkflow';
-import { useSquareStatus } from '../../hooks/useSquareStatus';
 
 // Memoized StatusCard component to prevent re-creation on every render
 const StatusCard = ({
@@ -175,7 +175,7 @@ export function OverviewSection() {
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
           <h3 className="mb-4 text-lg font-semibold text-[var(--foreground)]">Recent Activity</h3>
           <div className="space-y-2">
-            {status.recentSyncs.slice(0, 5).map((sync: any) => (
+            {status.recentSyncs.slice(0, 5).map((sync: SyncLog) => (
               <div
                 key={sync.id}
                 className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--background)] p-3"

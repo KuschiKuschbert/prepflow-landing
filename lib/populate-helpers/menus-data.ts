@@ -2,6 +2,7 @@
  * Helper functions for populating menus and menu_items
  */
 
+import { Dish, Recipe } from '@/app/webapp/recipes/types';
 import { logger } from '@/lib/logger';
 import { cleanSampleMenus } from '@/lib/sample-menus-clean';
 import { createSupabaseAdmin } from '@/lib/supabase';
@@ -19,8 +20,8 @@ interface PopulateResults {
 export async function populateMenus(
   supabaseAdmin: ReturnType<typeof createSupabaseAdmin>,
   results: PopulateResults,
-  dishesData: any[],
-  recipesData: any[],
+  dishesData: Pick<Dish, 'id' | 'dish_name'>[],
+  recipesData: Pick<Recipe, 'id' | 'recipe_name'>[],
 ) {
   if (!dishesData || dishesData.length === 0) {
     logger.dev('No dishes available for menu creation');

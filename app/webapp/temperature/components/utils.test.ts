@@ -29,7 +29,7 @@ describe('temperature utils', () => {
         min_temp_celsius: 0,
         max_temp_celsius: 5,
         is_active: true,
-      } as any,
+      } as unknown,
     ];
     expect(getTemperatureStatus(3, 'Fridge A', equipment)).toBe('normal');
     expect(getTemperatureStatus(-1, 'Fridge A', equipment)).toBe('low');
@@ -99,9 +99,9 @@ describe('temperature utils', () => {
 
   it('groupLogsByTimePeriod groups and sorts', () => {
     const logs = [
-      { id: '1', log_time: '06:30', log_date: '2025-01-01' } as any,
-      { id: '2', log_time: '06:05', log_date: '2025-01-01' } as any,
-      { id: '3', log_time: '13:10', log_date: '2025-01-01' } as any,
+      { id: '1', log_time: '06:30', log_date: '2025-01-01' } as unknown,
+      { id: '2', log_time: '06:05', log_date: '2025-01-01' } as unknown,
+      { id: '3', log_time: '13:10', log_date: '2025-01-01' } as unknown,
     ];
     const grouped = groupLogsByTimePeriod(logs);
     expect(grouped[0].period).toBe('morning');

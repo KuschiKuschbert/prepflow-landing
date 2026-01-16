@@ -2,8 +2,8 @@
  * Helper to fetch menu item names.
  */
 
-import { SupabaseClient } from '@supabase/supabase-js';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Fetch menu item names and create a map.
@@ -12,6 +12,13 @@ export async function fetchMenuItemNames(
   supabase: SupabaseClient,
   menuItemIds: string[],
 ): Promise<Map<string, string>> {
+  interface MenuItemNameResult {
+    id: string;
+    dish_id: string | null;
+    recipe_id: string | null;
+    dishes: { dish_name: string } | null;
+    recipes: { name: string; recipe_name?: string } | null;
+  }
   const { data: menuItemsWithNames, error: menuItemsError } = await supabase
     .from('menu_items')
     .select(
@@ -40,9 +47,11 @@ export async function fetchMenuItemNames(
 
   const menuItemNameMap = new Map<string, string>();
   if (menuItemsWithNames) {
-    menuItemsWithNames.forEach((item: any) => {
-      const recipeName = item.recipes?.recipe_name || item.recipes?.name || null;
-      const name = item.dishes?.dish_name || recipeName || 'Unknown Item';
+    (menuItemsWithNames as unknown as MenuItemNameResult[]).forEach(item => {
+      const recipeRow = item.recipes as { name?: string; recipe_name?: string } | null;
+      const dishRow = item.dishes as { dish_name?: string } | null;
+      const recipeName = recipeRow?.recipe_name || recipeRow?.name || null;
+      const name = dishRow?.dish_name || recipeName || 'Unknown Item';
       menuItemNameMap.set(item.id, name);
     });
   }

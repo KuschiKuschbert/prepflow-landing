@@ -1,4 +1,4 @@
-import type { MenuItem, Dish, Recipe } from '../../../types';
+import type { Dish, MenuItem, Recipe } from '../../../types';
 
 /**
  * Creates an optimistic menu item for a dish or recipe.
@@ -63,7 +63,7 @@ export function handleMenuItemSuccess(
   optimisticItem: MenuItem,
   setMenuItems: React.Dispatch<React.SetStateAction<MenuItem[]>>,
   refreshStatistics: () => Promise<void>,
-  logger: any,
+  logger: { error: (msg: string, ...args: unknown[]) => void },
 ) {
   if (result.success && result.item) {
     setMenuItems(prevItems =>
@@ -77,11 +77,11 @@ export function handleMenuItemSuccess(
  * Handles menu item creation error.
  */
 export function handleMenuItemError(
-  error: any,
+  error: unknown,
   optimisticItem: MenuItem,
   setMenuItems: React.Dispatch<React.SetStateAction<MenuItem[]>>,
   showError: (message: string) => void,
-  logger: any,
+  logger: { error: (msg: string, ...args: unknown[]) => void },
   result?: { error?: string; message?: string },
   status?: number,
 ) {
@@ -89,7 +89,14 @@ export function handleMenuItemError(
     result?.error ||
     result?.message ||
     (status ? `Failed to add item (${status})` : 'Failed to add item');
-  logger.error('[Menu Editor] Error:', { status, error: errorMessage, result });
+
+  const errorObj = error instanceof Error ? error : new Error(String(error));
+  logger.error('[Menu Editor] Error:', {
+    status,
+    error: errorMessage,
+    result,
+    originalError: errorObj,
+  });
   setMenuItems(prevItems => prevItems.filter(item => item.id !== optimisticItem.id));
   showError(errorMessage);
 }

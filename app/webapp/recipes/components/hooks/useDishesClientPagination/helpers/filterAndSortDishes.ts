@@ -3,7 +3,7 @@
  */
 
 import type { Dish, DishCostData } from '@/app/webapp/recipes/types';
-import type { UnifiedFilters, UnifiedSortField } from './useFilterState';
+import type { UnifiedFilters } from './useFilterState';
 
 /**
  * Filter and sort dishes based on filters.
@@ -18,8 +18,8 @@ export function filterAndSortDishes(
   );
 
   filtered.sort((a, b) => {
-    let aValue: any;
-    let bValue: any;
+    let aValue: string | number;
+    let bValue: string | number;
 
     switch (filters.sortField) {
       case 'name':

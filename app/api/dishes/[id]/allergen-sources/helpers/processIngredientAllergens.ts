@@ -9,6 +9,17 @@ import type { AllergenSource } from './processRecipeAllergens';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { IngredientRecord } from '../../../types';
 
+interface RawIngredientJoin {
+  id: string;
+  ingredient_name: string;
+  brand?: string;
+  allergens?: string[];
+  allergen_source?: {
+    manual?: boolean;
+    ai?: boolean;
+  };
+}
+
 /**
  * Processes ingredient allergens for a dish
  *
@@ -60,7 +71,11 @@ export async function processIngredientAllergens(
   }
 
   dishIngredients.forEach(di => {
+<<<<<<< HEAD
     const ingredient = di.ingredients as unknown as IngredientRecord | null;
+=======
+    const ingredient = di.ingredients as unknown as RawIngredientJoin | null;
+>>>>>>> main
 
     if (!ingredient) return;
 

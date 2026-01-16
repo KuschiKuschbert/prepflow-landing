@@ -1,6 +1,7 @@
 import { getCachedData } from '@/lib/cache/data-cache';
-import { useEffect, useState } from 'react';
 import { logger } from '@/lib/logger';
+import { useEffect, useState } from 'react';
+import type { TemperatureEquipment, TemperatureLog } from '../../temperature/types';
 import { fetchKitchenAlertsStats } from './useKitchenAlertsData/fetchStats';
 import { fetchTemperatureAlerts } from './useKitchenAlertsData/fetchTemperature';
 import { calculateTemperatureAlerts } from './useKitchenAlertsHelpers';
@@ -29,9 +30,11 @@ export function useKitchenAlertsData() {
   useEffect(() => {
     const fetchData = async () => {
       const today = new Date().toISOString().split('T')[0];
-      const cachedStats = getCachedData<any>('dashboard_stats');
-      const cachedLogs = getCachedData<any[]>('dashboard_temperature_logs');
-      const cachedEquipment = getCachedData<any[]>('dashboard_temperature_equipment');
+      const cachedStats = getCachedData<Record<string, any>>('dashboard_stats');
+      const cachedLogs = getCachedData<TemperatureLog[]>('dashboard_temperature_logs');
+      const cachedEquipment = getCachedData<TemperatureEquipment[]>(
+        'dashboard_temperature_equipment',
+      );
 
       if (cachedStats) {
         setStats({
@@ -43,7 +46,9 @@ export function useKitchenAlertsData() {
       }
 
       if (cachedLogs && cachedEquipment) {
-        const todayLogs = (cachedLogs || []).filter((log: any) => log.log_date === today);
+        const todayLogs = (cachedLogs || []).filter(
+          (log: TemperatureLog) => log.log_date === today,
+        );
         setTemperatureAlerts(calculateTemperatureAlerts(todayLogs, cachedEquipment));
         setLoading(false);
       }

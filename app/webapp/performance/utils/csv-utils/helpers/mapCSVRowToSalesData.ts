@@ -1,8 +1,14 @@
 /**
  * Map CSV row to sales data object.
  */
-export function mapCSVRowToSalesData(row: Record<string, any>): any {
-  const normalizedRow: Record<string, any> = {};
+export interface SalesData {
+  dish_name: string;
+  number_sold: number;
+  popularity_percentage: number;
+}
+
+export function mapCSVRowToSalesData(row: Record<string, unknown>): SalesData {
+  const normalizedRow: Record<string, unknown> = {};
   Object.keys(row).forEach(key => {
     normalizedRow[key.toLowerCase().trim()] = row[key];
   });

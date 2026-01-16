@@ -5,6 +5,7 @@
 import { logger } from '@/lib/logger';
 import { calculateDishCost } from '../../../../statistics/helpers/calculateDishCost';
 import { calculateRecipeCost } from '../../../../statistics/helpers/calculateRecipeCost';
+import { StatisticsMenuItem } from './calculateStatistics';
 
 export interface COGSCalculationResult {
   cogs: number;
@@ -14,10 +15,12 @@ export interface COGSCalculationResult {
 /**
  * Calculates COGS for a menu item
  *
- * @param {any} menuItem - Menu item data
+ * @param {StatisticsMenuItem} menuItem - Menu item data
  * @returns {Promise<COGSCalculationResult>} COGS and error if any
  */
-export async function calculateItemCOGS(menuItem: any): Promise<COGSCalculationResult> {
+export async function calculateItemCOGS(
+  menuItem: StatisticsMenuItem,
+): Promise<COGSCalculationResult> {
   let cogs = 0;
   let cogsError: string | null = null;
   const dish = Array.isArray(menuItem.dishes) ? menuItem.dishes[0] : menuItem.dishes;

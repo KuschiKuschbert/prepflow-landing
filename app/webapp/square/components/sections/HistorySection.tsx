@@ -1,12 +1,13 @@
 'use client';
 
-import { useMemo } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { History, AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
-import { useSquareStatus } from '../../hooks/useSquareStatus';
+import { AlertCircle, CheckCircle2, History, XCircle } from 'lucide-react';
+import { useMemo } from 'react';
+import { useSquareStatus, type SyncLog } from '../../hooks/useSquareStatus';
 
-interface SyncLog {
+// Local interface kept for clarity or updated to match hook one
+interface HistorySyncLog {
   id: string;
   operation_type: string;
   direction: string;
@@ -22,7 +23,7 @@ export function HistorySection() {
   // Memoize logs to prevent unnecessary re-renders
   const logs = useMemo(() => {
     if (!status?.recentSyncs) return [];
-    return status.recentSyncs.map((log: any) => ({
+    return status.recentSyncs.map((log: SyncLog) => ({
       id: log.id || String(Date.now()),
       operation_type: log.operation_type || 'unknown',
       direction: log.direction || 'unknown',
@@ -30,7 +31,7 @@ export function HistorySection() {
       status: log.status || 'unknown',
       error_message: log.error_message || undefined,
       created_at: log.created_at || new Date().toISOString(),
-    })) as SyncLog[];
+    })) as HistorySyncLog[];
   }, [status]);
 
   if (loading) {
@@ -98,7 +99,7 @@ export function HistorySection() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--border)] bg-[var(--surface)]">
-              {logs.map(log => (
+              {logs.map((log: HistorySyncLog) => (
                 <tr key={log.id} className="transition-colors hover:bg-[var(--border)]/20">
                   <td className="px-6 py-4 text-sm text-[var(--foreground)] capitalize">
                     {log.operation_type.replace('_', ' ')}

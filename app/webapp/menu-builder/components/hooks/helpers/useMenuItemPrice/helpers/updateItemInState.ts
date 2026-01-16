@@ -3,15 +3,16 @@
  */
 
 import { logger } from '@/lib/logger';
+import type { MenuItem } from '../../../../../types';
 
 /**
  * Update menu item in state from API response.
  */
 export function updateItemInState(
-  menuItems: any[],
+  menuItems: MenuItem[],
   itemId: string,
-  updatedItemFromApi: any,
-): any[] {
+  updatedItemFromApi: Partial<MenuItem>,
+): MenuItem[] {
   // Log current state before update
   const currentItem = menuItems.find(i => i.id === itemId);
   logger.dev('[useMenuItemPrice] Current state before update', {

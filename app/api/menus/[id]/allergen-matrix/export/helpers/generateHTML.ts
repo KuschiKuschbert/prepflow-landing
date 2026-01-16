@@ -1,9 +1,14 @@
-import { NextResponse } from 'next/server';
 import { AUSTRALIAN_ALLERGENS } from '@/lib/allergens/australian-allergens';
-import { generateExportTemplate, escapeHtml } from '@/lib/exports/pdf-template';
+import { escapeHtml, generateExportTemplate } from '@/lib/exports/pdf-template';
+import { NextResponse } from 'next/server';
+import { MatrixItem } from '../route';
 import { allergenMatrixStyles } from './allergenMatrixStyles';
 
-export function generateHTML(menuName: string, matrixData: any[], forPDF: boolean): NextResponse {
+export function generateHTML(
+  menuName: string,
+  matrixData: MatrixItem[],
+  forPDF: boolean,
+): NextResponse {
   // Generate table content
   const tableContent = `
     <style>

@@ -128,6 +128,7 @@ export async function PUT(request: NextRequest) {
       data,
     });
   } catch (err: unknown) {
+<<<<<<< HEAD
     const appError = getAppError(err);
     if (appError.status && appError.status !== 500) {
       logger.error('[Cleaning Areas API] Error with status:', {
@@ -139,6 +140,21 @@ export async function PUT(request: NextRequest) {
         { error: appError.message, code: appError.code },
         { status: appError.status },
       );
+=======
+    if (
+      typeof err === 'object' &&
+      err !== null &&
+      'status' in err &&
+      typeof (err as { status: unknown }).status === 'number'
+    ) {
+      const errorWithStatus = err as { status: number; message: string };
+      logger.error('[Cleaning Areas API] Error with status:', {
+        error: errorWithStatus.message || String(err),
+        status: errorWithStatus.status,
+        context: { endpoint: '/api/cleaning-areas', method: 'PUT' },
+      });
+      return NextResponse.json(err, { status: errorWithStatus.status });
+>>>>>>> main
     }
     return handleCleaningAreaError(err, 'PUT');
   }

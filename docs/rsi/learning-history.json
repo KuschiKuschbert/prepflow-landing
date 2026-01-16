@@ -15,7 +15,9 @@
         "id": "rule-1768264370112-124",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -35,7 +37,75 @@
         "id": "rule-1768264482863-107",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-01-13T22:37:39.571Z",
+    "insights": [
+      {
+        "patternId": "fix-any-types",
+        "type": "frequency",
+        "confidence": 0.85,
+        "insight": "Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
+        "sourceFiles": []
+      }
+    ],
+    "rulesGenerated": [
+      {
+        "id": "rule-1768343859571-304",
+        "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
+        "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
+        "derivedFrom": [
+          "fix-any-types"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-01-14T15:27:51.676Z",
+    "insights": [
+      {
+        "patternId": "fix-any-types",
+        "type": "frequency",
+        "confidence": 0.85,
+        "insight": "Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
+        "sourceFiles": []
+      }
+    ],
+    "rulesGenerated": [
+      {
+        "id": "rule-1768404471676-745",
+        "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
+        "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
+        "derivedFrom": [
+          "fix-any-types"
+        ]
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-01-15T23:58:05.980Z",
+    "insights": [
+      {
+        "patternId": "fix-any-types",
+        "type": "frequency",
+        "confidence": 0.85,
+        "insight": "Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
+        "sourceFiles": []
+      }
+    ],
+    "rulesGenerated": [
+      {
+        "id": "rule-1768521485980-442",
+        "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
+        "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   }

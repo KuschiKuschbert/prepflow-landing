@@ -1,14 +1,33 @@
-/**
- * Helper for fetching dish ingredients with fallback logic
- */
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { DishIngredient } from '@/types/dish';
-import { PostgrestError } from '@supabase/supabase-js';
+import { DishRelationIngredient } from '../../helpers/schemas';
+
+interface RawDishIngredient {
+  id: string;
+  dish_id: string;
+  ingredient_id: string;
+  quantity: number;
+  unit: string;
+  ingredients: {
+    id: string;
+    ingredient_name: string;
+    cost_per_unit: number;
+    cost_per_unit_incl_trim: number;
+    trim_peel_waste_percentage: number;
+    yield_percentage: number;
+    unit: string;
+    supplier: string | null;
+    supplier_name?: string; // Sometimes aliased or joined
+    category: string | null;
+    brand: string | null;
+    allergens: string[] | null;
+    allergen_source: Record<string, unknown> | null;
+  } | null;
+}
 
 /** Fetches ingredients for a dish with fallback logic */
-export async function fetchDishIngredients(dishId: string): Promise<DishIngredient[]> {
+export async function fetchDishIngredients(dishId: string): Promise<DishRelationIngredient[]> {
   if (!supabaseAdmin) {
     logger.error('[Dishes API] Database connection not available for fetchDishIngredients');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
@@ -42,6 +61,7 @@ export async function fetchDishIngredients(dishId: string): Promise<DishIngredie
     )
     .eq('dish_id', dishId);
 
+<<<<<<< HEAD
   // If join fails or returns empty but we know rows exist, fetch without join and manually join
   const pgError = ingredientsError as PostgrestError | null;
   if (
@@ -157,15 +177,17 @@ export async function fetchDishIngredients(dishId: string): Promise<DishIngredie
   }
 
   // Log error if still present (but don't fail the whole request)
+=======
+>>>>>>> main
   if (ingredientsError) {
-    const finalError = ingredientsError as PostgrestError;
     logger.warn('[Dishes API] Error fetching dish ingredients (non-fatal):', {
-      error: finalError.message,
-      code: finalError.code,
+      error: ingredientsError.message,
+      code: ingredientsError.code,
       context: { endpoint: '/api/dishes/[id]', operation: 'GET', dishId },
     });
   }
 
+<<<<<<< HEAD
   // Filter out dish_ingredients entries where the ingredients relation is null (deleted ingredients)
   // Also map 'supplier' to 'supplier_name' to match frontend types
   const rawIngredients = (dishIngredients || []) as unknown as Record<string, any>[];
@@ -183,26 +205,30 @@ export async function fetchDishIngredients(dishId: string): Promise<DishIngredie
           : undefined,
       };
     }) as unknown as DishIngredient[];
+=======
+  // Normalize and clean ingredients data
+  const validDishIngredients: DishRelationIngredient[] = (
+    (dishIngredients as unknown as RawDishIngredient[]) || []
+  )
+    .filter(di => di.ingredients !== null && di.ingredients !== undefined)
+    .map(di => {
+      const ing = Array.isArray(di.ingredients) ? di.ingredients[0] : di.ingredients;
+      if (!ing) return null;
+>>>>>>> main
 
-  // Log debug info
-  const rawCount = dishIngredients?.length || 0;
-  const validCount = validDishIngredients.length;
-  logger.dev('[Dishes API] Fetched dish ingredients:', {
-    dishId,
-    rawCount,
-    validCount,
-    filteredCount: rawCount - validCount,
-    hasError: !!ingredientsError,
-    sample: validCount > 0 ? validDishIngredients[0] : null,
-  });
+      return {
+        id: di.id,
+        dish_id: di.dish_id,
+        ingredient_id: di.ingredient_id,
+        quantity: di.quantity,
+        unit: di.unit,
+        ingredients: {
+          ...ing,
+          supplier_name: ing.supplier || ing.supplier_name || 'Unknown',
+        },
+      } as DishRelationIngredient;
+    })
+    .filter((di): di is DishRelationIngredient => di !== null);
 
-  // If all ingredient relations are null, log a warning
-  if (rawCount > 0 && validCount === 0) {
-    logger.warn('[Dishes API] All dish_ingredients have null ingredient relations:', {
-      dishId,
-      totalRows: rawCount,
-      message: 'This suggests ingredient_id foreign keys are broken or ingredients were deleted',
-    });
-  }
   return validDishIngredients;
 }

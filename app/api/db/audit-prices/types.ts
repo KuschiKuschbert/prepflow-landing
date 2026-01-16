@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * Types for price audit functionality.
  */
@@ -13,6 +14,8 @@ export interface RecipeRecord {
   recipe_name?: string;
 }
 
+=======
+>>>>>>> main
 export interface PriceAuditResult {
   itemId: string;
   itemName: string;
@@ -23,3 +26,16 @@ export interface PriceAuditResult {
   discrepancyPercent: number;
   issues: string[];
 }
+<<<<<<< HEAD
+=======
+
+export interface AuditDishItem {
+  id: string;
+  dish_name: string;
+}
+
+export interface AuditRecipeItem {
+  id: string;
+  name: string;
+}
+>>>>>>> main

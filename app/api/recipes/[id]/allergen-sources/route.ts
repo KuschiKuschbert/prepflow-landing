@@ -4,11 +4,11 @@
  * Returns which ingredients contribute which allergens to a recipe
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Gets allergen sources for a recipe (which ingredients contribute which allergens).
@@ -109,8 +109,11 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
 
     const allAllergens = new Set<string>();
 
-    recipeIngredients.forEach(ri => {
-      const ingredient = ri.ingredients as unknown as {
+    interface RawRecipeIngredientJoin {
+      ingredient_id: string;
+      quantity: any; // quantity can be number or string from DB depending on driver, simplified here or needs stricter check
+      unit: string;
+      ingredients: {
         id: string;
         ingredient_name: string;
         brand?: string;
@@ -120,10 +123,14 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
           ai?: boolean;
         };
       } | null;
+    }
+
+    recipeIngredients.forEach(ri => {
+      const ingredient = (ri as unknown as RawRecipeIngredientJoin).ingredients;
 
       if (!ingredient) return;
 
-      const allergens = (ingredient.allergens as string[]) || [];
+      const allergens = (ingredient.allergens as string[]) || []; // DB array type can be null, default to empty
       // Consolidate allergens to handle old codes
       const consolidatedAllergens = consolidateAllergens(allergens);
 
@@ -160,7 +167,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
       success: true,
       data: {
         recipe_id: recipeId,
-        recipe_name: (recipe as any).recipe_name || (recipe as any).name,
+        recipe_name: recipe.recipe_name || recipe.name,
         allergen_sources: allergenSourcesArray,
         total_allergens: Array.from(allAllergens).sort(),
       },

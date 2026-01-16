@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { RawMenuItem } from '../../../../types';
+import { RawMenuItem } from '../../../../helpers/schemas';
 import { calculateDishSellingPrice } from '../../../statistics/helpers/calculateDishSellingPrice';
 import { calculateRecipeSellingPrice } from '../../../statistics/helpers/calculateRecipeSellingPrice';
 
@@ -60,7 +60,7 @@ export async function cacheRecommendedPrice(
     }
 
     return recommendedPrice;
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('[Cache Recommended Price] Error calculating/caching price:', err);
     return null;
   }
@@ -112,20 +112,21 @@ export async function refreshMenuRecommendedPrices(menuId: string): Promise<{
 
     // Cache recommended prices for all items
     for (const item of menuItems) {
-      // Extract recipe yield from array if present
-      const recipeYield =
-        Array.isArray(item.recipes) && item.recipes.length > 0
-          ? (item.recipes[0] as any)?.yield
-          : undefined;
-      const menuItemForCache = {
-        ...item,
-        recipes: recipeYield ? { yield: recipeYield } : undefined,
+      const recipesArr = item.recipes as
+        | { id: string; yield: number }[]
+        | { id: string; yield: number }
+        | null;
+      const recipeData = Array.isArray(recipesArr) ? recipesArr[0] : recipesArr;
+      const recipeYield = recipeData?.yield;
+
+      const menuItemForCache: RawMenuItem = {
+        dish_id: item.dish_id,
+        recipe_id: item.recipe_id,
+        // We cast to RawMenuItem to match cacheRecommendedPrice expectations
+        // The helper mainly needs dish_id or recipe_id
       };
-      const price = await cacheRecommendedPrice(
-        menuId,
-        item.id,
-        menuItemForCache as unknown as RawMenuItem,
-      );
+
+      const price = await cacheRecommendedPrice(menuId, item.id, menuItemForCache);
       if (price != null) {
         updated++;
       } else {
@@ -141,7 +142,7 @@ export async function refreshMenuRecommendedPrices(menuId: string): Promise<{
     });
 
     return { updated, failed };
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('[Refresh Menu Prices] Error refreshing prices:', err);
     return { updated: 0, failed: 0 };
   }

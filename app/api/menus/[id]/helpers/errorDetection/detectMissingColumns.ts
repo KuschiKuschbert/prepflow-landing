@@ -2,7 +2,6 @@
  * Error detection helpers for missing columns
  */
 
-import { PostgrestError } from '@supabase/supabase-js';
 import { extractColumnName } from '../fetchMenuWithItems.helpers';
 
 export interface ColumnErrorInfo {
@@ -16,14 +15,25 @@ export interface ColumnErrorInfo {
 /**
  * Detects which columns are missing from an error
  *
- * @param {PostgrestError | any} error - Supabase error
+ * @param {unknown} error - Supabase error
  * @returns {ColumnErrorInfo} Information about missing columns
  */
-export function detectMissingColumns(error: PostgrestError | any): ColumnErrorInfo {
-  const errorCode = error?.code;
-  const errorMessage = error?.message || '';
-  const errorDetails = error?.details || '';
-  const errorHint = error?.hint || '';
+export function detectMissingColumns(error: unknown): ColumnErrorInfo {
+  if (!error || typeof error !== 'object') {
+    return {
+      isMissingPricing: false,
+      isMissingDietary: false,
+      isMissingDescription: false,
+      isColumnNotFound: false,
+      columnName: null,
+    };
+  }
+
+  const err = error as Record<string, any>;
+  const errorCode = err.code;
+  const errorMessage = err.message || '';
+  const errorDetails = err.details || '';
+  const errorHint = err.hint || '';
   const fullErrorText = `${errorMessage} ${errorDetails} ${errorHint}`.toLowerCase();
 
   const isColumnNotFound = errorCode === '42703' || errorCode === 'COLUMN_NOT_FOUND';

@@ -1,28 +1,20 @@
-import { useState, useMemo, useRef, useCallback } from 'react';
-import type { ProfileFormData } from './useProfileForm/types';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { createHandleFieldChange } from './useProfileForm/helpers/handleFieldChange';
-import { createResetForm } from './useProfileForm/helpers/resetForm';
 import { checkHasChanges } from './useProfileForm/helpers/hasChanges';
+import { createInitialFormData } from './useProfileForm/helpers/initialFormData';
+import { createResetForm } from './useProfileForm/helpers/resetForm';
 import { useTrackFormDataChanges } from './useProfileForm/helpers/trackFormDataChanges';
 import { useUpdateFormFromProfile } from './useProfileForm/helpers/updateFormFromProfile';
-import { createInitialFormData } from './useProfileForm/helpers/initialFormData';
+import type { ProfileData, ProfileFormData } from './useProfileForm/types';
 
 interface UseProfileFormProps {
-  cachedProfile: {
-    first_name: string | null;
-    last_name: string | null;
-    business_name: string | null;
-  } | null;
-  profile: {
-    first_name: string | null;
-    last_name: string | null;
-    business_name: string | null;
-  } | null;
+  cachedProfile: ProfileData | null;
+  profile: ProfileData | null;
   mountIdRef: React.RefObject<string | null>;
   userHasModifiedRef: React.MutableRefObject<boolean>;
   initialDataLoadedRef: React.MutableRefObject<boolean>;
   USER_MODIFIED_KEY: string;
-  onProfileUpdate: (profileData: any) => void;
+  onProfileUpdate: (profileData: ProfileData) => void;
 }
 
 /**

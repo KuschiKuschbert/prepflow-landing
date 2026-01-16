@@ -17,6 +17,7 @@ import { SuppliersContent } from './components/SuppliersContent';
 import { SuppliersTabs } from './components/SuppliersTabs';
 import { useSuppliersData } from './hooks/useSuppliersData';
 import { useSuppliersForms } from './hooks/useSuppliersForms';
+import type { Supplier } from './types';
 import {
   exportSuppliersToCSV,
   exportSuppliersToHTML,
@@ -126,8 +127,8 @@ export default function SuppliersPage() {
         isComplete: false,
       });
 
-      const importedSuppliers: any[] = [];
-      const tempSuppliers: Array<{ tempId: string; supplier: any }> = [];
+      const importedSuppliers: Supplier[] = [];
+      const tempSuppliers: Array<{ tempId: number; supplier: Supplier }> = [];
       let successCount = 0;
       let failCount = 0;
       const errors: Array<{ row: number; error: string }> = [];
@@ -135,13 +136,13 @@ export default function SuppliersPage() {
       try {
         for (let i = 0; i < importRows.length; i++) {
           const row = importRows[i];
-          const tempId = `temp-${Date.now()}-${i}`;
+          // Use negative number for temp ID to match Supplier.id type (number)
+          const tempId = -Date.now() - i;
 
           // Create temporary supplier for optimistic update
-          const tempSupplier: any = {
+          const tempSupplier: Supplier = {
             id: tempId,
             name: row.name,
-            supplier_name: row.name, // API format
             contact_person: row.contact_person || null,
             email: row.email || null,
             phone: row.phone || null,
@@ -196,21 +197,21 @@ export default function SuppliersPage() {
 
             if (response.ok && result.success) {
               // Transform API response (supplier_name -> name) to match Supplier interface
-              const serverSupplier: any = {
+              const serverSupplier: Supplier = {
                 ...result.data,
                 name: result.data.supplier_name || result.data.name,
               };
 
               // Replace temp supplier with real supplier from server
               setSuppliers(prevSuppliers =>
-                prevSuppliers.map(s => (String(s.id) === tempId ? serverSupplier : s)),
+                prevSuppliers.map(s => (s.id === tempId ? serverSupplier : s)),
               );
 
               importedSuppliers.push(serverSupplier);
               successCount++;
             } else {
               // Error - remove temp supplier
-              setSuppliers(prevSuppliers => prevSuppliers.filter(s => String(s.id) !== tempId));
+              setSuppliers(prevSuppliers => prevSuppliers.filter(s => s.id !== tempId));
               failCount++;
               errors.push({
                 row: i + 1,
@@ -219,7 +220,7 @@ export default function SuppliersPage() {
             }
           } catch (err) {
             // Error - remove temp supplier
-            setSuppliers(prevSuppliers => prevSuppliers.filter(s => String(s.id) !== tempId));
+            setSuppliers(prevSuppliers => prevSuppliers.filter(s => s.id !== tempId));
             const errorMessage = err instanceof Error ? err.message : 'Failed to import supplier';
             logger.error(`[Suppliers Import] Failed to import row ${i + 1}:`, {
               error: errorMessage,
@@ -237,7 +238,7 @@ export default function SuppliersPage() {
         if (importedSuppliers.length > 0) {
           setSuppliers(prevSuppliers => {
             const finalList = prevSuppliers.filter(
-              s => !tempSuppliers.some(t => t.tempId === String(s.id)),
+              s => !tempSuppliers.some(t => t.tempId === s.id),
             );
             const updatedList = [...finalList, ...importedSuppliers];
             cacheData('suppliers', updatedList);
@@ -343,7 +344,7 @@ export default function SuppliersPage() {
                 className="rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
               >
                 <option value="all">{t('suppliers.allSuppliers', 'All Suppliers')}</option>
-                {suppliers.map(supplier => (
+                {suppliers.map((supplier: Supplier) => (
                   <option key={supplier.id} value={supplier.id.toString()}>
                     {supplier.name}
                   </option>

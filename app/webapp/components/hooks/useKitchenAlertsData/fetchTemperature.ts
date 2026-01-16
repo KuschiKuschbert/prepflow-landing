@@ -2,8 +2,9 @@
  * Fetch temperature data for kitchen alerts
  */
 
-import { supabase } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabase } from '@/lib/supabase';
+import { TemperatureEquipment, TemperatureLog } from '../../../temperature/types';
 import { calculateTemperatureAlerts } from '../useKitchenAlertsHelpers';
 
 /**
@@ -16,8 +17,11 @@ import { calculateTemperatureAlerts } from '../useKitchenAlertsHelpers';
  */
 export async function fetchTemperatureAlerts(
   today: string,
-  cachedLogs?: any[],
-  cachedEquipment?: any[],
+  cachedLogs?: Pick<TemperatureLog, 'id' | 'location' | 'temperature_celsius' | 'log_date'>[],
+  cachedEquipment?: Pick<
+    TemperatureEquipment,
+    'id' | 'location' | 'min_temp_celsius' | 'max_temp_celsius' | 'name'
+  >[],
 ) {
   try {
     const [logsResult, equipmentResult] = await Promise.all([
@@ -45,7 +49,7 @@ export async function fetchTemperatureAlerts(
       return calculateTemperatureAlerts(logsResult.data || [], equipmentResult.data || []);
     } else if (cachedLogs && cachedEquipment) {
       // Fallback to cached data if fresh fetch failed
-      const todayLogs = (cachedLogs || []).filter((log: any) => log.log_date === today);
+      const todayLogs = (cachedLogs || []).filter(log => log.log_date === today);
       return calculateTemperatureAlerts(todayLogs, cachedEquipment);
     }
 
@@ -57,7 +61,7 @@ export async function fetchTemperatureAlerts(
     });
     // Fallback to cached data if available
     if (cachedLogs && cachedEquipment) {
-      const todayLogs = (cachedLogs || []).filter((log: any) => log.log_date === today);
+      const todayLogs = (cachedLogs || []).filter(log => log.log_date === today);
       return calculateTemperatureAlerts(todayLogs, cachedEquipment);
     }
     return [];

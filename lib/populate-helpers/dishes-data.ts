@@ -2,6 +2,7 @@
  * Helper functions for populating dishes (new dishes system for Menu Builder & Dish Builder)
  */
 
+import { Recipe } from '@/app/webapp/recipes/types';
 import { logger } from '@/lib/logger';
 import { cleanSampleDishes } from '@/lib/sample-dishes-clean';
 import { createSupabaseAdmin } from '@/lib/supabase';
@@ -10,6 +11,7 @@ import {
   buildDishRecipesData,
   createDishMap,
   createLookupMaps,
+  IngredientData,
 } from './dishes-data-helpers';
 
 interface PopulateResults {
@@ -24,8 +26,8 @@ interface PopulateResults {
 export async function populateDishes(
   supabaseAdmin: ReturnType<typeof createSupabaseAdmin>,
   results: PopulateResults,
-  recipesData: any[],
-  ingredientsData: any[],
+  recipesData: Recipe[],
+  ingredientsData: IngredientData[],
 ) {
   if (!recipesData || recipesData.length === 0) {
     logger.dev('No recipes available for dish creation');
@@ -119,8 +121,8 @@ export async function populateDishes(
         results.errors.push({ table: 'dish_ingredients', error: diError.message });
         logger.error('[populateDishes] Error inserting dish_ingredients:', {
           error: diError.message,
-          code: (diError as any).code,
-          details: (diError as any).details,
+          code: diError.code,
+          details: diError.details,
           sampleData: dishIngredientsData.slice(0, 2),
         });
       } else {

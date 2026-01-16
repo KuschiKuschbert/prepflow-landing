@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
-import { useTranslation } from '@/lib/useTranslation';
-import { useAutosave } from '@/hooks/useAutosave';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
+import { useAutosave } from '@/hooks/useAutosave';
+import { useTranslation } from '@/lib/useTranslation';
+import React from 'react';
 
 interface KitchenSection {
   id: string;
@@ -16,6 +16,7 @@ interface Ingredient {
 }
 
 interface PrepListFormData {
+  id?: string;
   kitchenSectionId: string;
   name: string;
   notes: string;
@@ -44,7 +45,7 @@ export function PrepListForm({
   const { t } = useTranslation();
 
   // Autosave integration
-  const entityId = (formData as any).id || 'new';
+  const entityId = formData.id || 'new';
   const canAutosave = entityId !== 'new' || Boolean(formData.kitchenSectionId && formData.name);
 
   const {
@@ -67,7 +68,7 @@ export function PrepListForm({
     setFormData({ ...formData, items: formData.items.filter((_, i) => i !== index) });
   const updateItem = (index: number, field: string, value: string) => {
     const newItems = [...formData.items];
-    newItems[index] = { ...newItems[index], [field]: value } as any;
+    newItems[index] = { ...newItems[index], [field]: value };
     setFormData({ ...formData, items: newItems });
   };
 

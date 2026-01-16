@@ -1,8 +1,8 @@
-import { createSupabaseAdmin } from '@/lib/supabase';
-import { NextRequest, NextResponse } from 'next/server';
-import { logger } from '@/lib/logger';
 import { cleanSampleConsumablesIngredients } from '@/data/sample-ingredients-consumables';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * POST /api/ingredients/add-consumables
@@ -112,7 +112,9 @@ export async function POST(request: NextRequest) {
       logger.error('Error inserting consumables:', insertError);
       const apiError = ApiErrorHandler.fromSupabaseError(insertError, 500);
       apiError.details = {
-        ...apiError.details,
+        ...(typeof apiError.details === 'object' && apiError.details !== null
+          ? apiError.details
+          : {}),
         message: 'Failed to add consumables',
         note: 'Some consumables may have been added before the error occurred',
       };

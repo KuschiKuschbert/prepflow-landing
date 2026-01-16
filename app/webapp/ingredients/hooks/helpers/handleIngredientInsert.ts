@@ -1,5 +1,5 @@
-import { supabase } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabase } from '@/lib/supabase';
 import { PostgrestError } from '@supabase/supabase-js';
 
 interface ApiError {
@@ -9,17 +9,19 @@ interface ApiError {
 
 type InsertError = PostgrestError | ApiError;
 
+import { NormalizedIngredientData } from '@/lib/ingredients/normalizeIngredientData';
+
 /**
  * Insert ingredient via Supabase with fallback to API route.
  *
- * @param {any} normalized - Normalized ingredient data
- * @param {any} originalIngredientData - Original ingredient data for API fallback
- * @returns {Promise<{data: any, error: InsertError | null}>} Insert result
+ * @param {NormalizedIngredientData} normalized - Normalized ingredient data
+ * @param {unknown} originalIngredientData - Original ingredient data for API fallback
+ * @returns {Promise<{data: unknown; error: InsertError | null}>} Insert result
  */
 export async function handleIngredientInsert(
-  normalized: any,
-  originalIngredientData: any,
-): Promise<{ data: any; error: InsertError | null }> {
+  normalized: NormalizedIngredientData,
+  originalIngredientData: unknown,
+): Promise<{ data: unknown; error: InsertError | null }> {
   // Automatically detect allergens if not manually set (same logic as createIngredient)
   const isManuallySet =
     normalized.allergen_source &&

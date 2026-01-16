@@ -9,7 +9,10 @@ import { decryptBackup, getPrepFlowServerKey } from '@/lib/backup/encryption';
 import { restoreFull, restoreMerge, restoreSelective } from '@/lib/backup/restore';
 import type { MergeOptions } from '@/lib/backup/types';
 import { logger } from '@/lib/logger';
+<<<<<<< HEAD
 import { getAppError } from '@/lib/utils/error';
+=======
+>>>>>>> main
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -165,6 +168,7 @@ export async function POST(request: NextRequest) {
       result: restoreResult,
     });
   } catch (error: unknown) {
+<<<<<<< HEAD
     const appError = getAppError(error);
     logger.error('[Backup Restore] Error:', {
       error: appError.message,
@@ -174,6 +178,14 @@ export async function POST(request: NextRequest) {
     });
     return NextResponse.json(
       { error: 'Failed to restore backup', message: appError.message },
+=======
+    logger.error('[Backup Restore] Error:', error);
+    return NextResponse.json(
+      {
+        error: 'Failed to restore backup',
+        message: error instanceof Error ? error.message : String(error),
+      },
+>>>>>>> main
       { status: 500 },
     );
   }

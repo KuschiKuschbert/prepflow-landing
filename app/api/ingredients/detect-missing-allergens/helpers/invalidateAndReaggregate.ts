@@ -10,10 +10,10 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 /**
  * Invalidates and re-aggregates allergen caches for affected recipes and dishes
  *
- * @param {any[]} ingredients - Processed ingredients
+ * @param {Array<{ id: string }>} ingredients - Processed ingredients
  * @returns {Promise<void>}
  */
-export async function invalidateAndReaggregate(ingredients: any[]): Promise<void> {
+export async function invalidateAndReaggregate(ingredients: { id: string }[]): Promise<void> {
   if (!supabaseAdmin) {
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }

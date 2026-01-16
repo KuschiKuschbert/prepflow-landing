@@ -26,7 +26,7 @@ export function processCardsOldMethod(
           recipe_id: null,
           dish_id: null,
           recipe_signature: null,
-        },
+        } as unknown as import('../types').RecipeCardDB, // Old cards map to DB type with nulls
         menuItemIds: [],
         menuItemNames: [],
       });

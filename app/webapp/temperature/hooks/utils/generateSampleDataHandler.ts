@@ -1,8 +1,8 @@
 import { logger } from '@/lib/logger';
-import { useNotification } from '@/contexts/NotificationContext';
+import { TemperatureEquipment } from '../../types';
 
 export async function handleGenerateSampleData(
-  equipment: any[],
+  equipment: TemperatureEquipment[],
   showError: (msg: string) => void,
   showSuccess: (msg: string) => void,
   setIsGenerating: (val: boolean) => void,

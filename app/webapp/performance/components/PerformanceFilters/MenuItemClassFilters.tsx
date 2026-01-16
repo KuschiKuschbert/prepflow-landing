@@ -3,15 +3,14 @@
  */
 'use client';
 
-import { PerformanceFilters as PerformanceFiltersType } from '../../types';
-import { PerformanceItem } from '../../types';
+import { PerformanceFilters as PerformanceFiltersType, PerformanceItem } from '../../types';
 
 const MENU_ITEM_CLASSES = ["Chef's Kiss", 'Hidden Gem', 'Bargain Bucket', 'Burnt Toast'] as const;
 
 interface MenuItemClassFiltersProps {
   filters: PerformanceFiltersType;
   performanceItems: PerformanceItem[];
-  onFilterChange: (key: keyof PerformanceFiltersType, value: any) => void;
+  onFilterChange: (key: keyof PerformanceFiltersType, value: string | string[]) => void;
 }
 
 export function MenuItemClassFilters({

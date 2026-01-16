@@ -59,7 +59,7 @@ export function useRecipeActions({
     [recipes, optimisticallyUpdateRecipes, onRecipeCreated, showErrorNotification, showSuccess],
   );
   const handleEditFromPreview = useCallback(
-    async (selectedRecipe: Recipe, recipeIngredients: any[]) => {
+    async (selectedRecipe: Recipe, recipeIngredients: RecipeIngredientWithDetails[]) => {
       try {
         handleEditFromPreviewHelper(
           selectedRecipe,

@@ -1,9 +1,5 @@
-/**
- * Helper for enriching dish items with allergens and dietary info
- */
-
 import { logger } from '@/lib/logger';
-import { EnrichedDishData, RawMenuItem } from '../../../types';
+import { EnrichedDishData, RawMenuItem } from '../../../helpers/schemas';
 import { normalizeAllergens } from './normalizeAllergens';
 import { validateVeganStatus } from './validateDietaryStatus';
 
@@ -30,7 +26,7 @@ export async function enrichDishItem(item: RawMenuItem): Promise<EnrichedDishDat
 
   if (hasCachedAllergens) {
     // Use cached allergens (faster) but normalize them
-    allergens = normalizeAllergens(item.dishes!.allergens, dishName);
+    allergens = normalizeAllergens(item.dishes!.allergens as string[], dishName);
     logger.dev('[Menus API] Using cached dish allergens:', {
       dishName,
       allergens,
@@ -41,14 +37,14 @@ export async function enrichDishItem(item: RawMenuItem): Promise<EnrichedDishDat
     try {
       const { aggregateDishAllergens } = await import('@/lib/allergens/allergen-aggregation');
       if (item.dishes?.id) {
-        allergens = await aggregateDishAllergens(item.dishes.id, false); // Don't force
+        allergens = (await aggregateDishAllergens(item.dishes.id, false)) as string[];
         logger.dev('[Menus API] Aggregated dish allergens:', {
           dishName,
           aggregated: allergens,
           dishId: item.dishes.id,
         });
       }
-    } catch (err) {
+    } catch (err: unknown) {
       logger.warn('[Menus API] Error aggregating dish allergens:', {
         error: err instanceof Error ? err.message : String(err),
         stack: err instanceof Error ? err.stack : undefined,
@@ -102,7 +98,7 @@ export async function enrichDishItem(item: RawMenuItem): Promise<EnrichedDishDat
         dietaryMethod = item.dishes.dietary_method ?? null;
       }
     }
-  } catch (err) {
+  } catch (err: unknown) {
     logger.warn('[Menus API] Error recalculating dish dietary status, using cached values:', {
       dishId: item.dishes?.id,
       error: err instanceof Error ? err.message : String(err),

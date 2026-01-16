@@ -2,7 +2,7 @@ import { cacheData } from '@/lib/cache/data-cache';
 import type { ParLevel } from '../../../../types';
 
 interface HandleSuccessParams {
-  result: any;
+  result: unknown;
   tempId: string;
   tempParLevel: ParLevel;
   setParLevels: React.Dispatch<React.SetStateAction<ParLevel[]>>;

@@ -1,11 +1,15 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { getOrCreateUserId } from '@/lib/user-utils';
 import { logger } from '@/lib/logger';
+import { getOrCreateUserId } from '@/lib/user-utils';
+import { useMemo, useState } from 'react';
 
 interface Props {
   defaultReseed?: boolean;
+}
+
+interface DataLayerWindow extends Window {
+  dataLayer: unknown[];
 }
 
 export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
@@ -19,8 +23,9 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
 
   const handleOpen = () => {
     if (typeof window !== 'undefined') {
-      (window as any).dataLayer = (window as any).dataLayer || [];
-      (window as any).dataLayer.push({ event: 'reset_self_open' });
+      const win = window as unknown as DataLayerWindow;
+      win.dataLayer = win.dataLayer || [];
+      win.dataLayer.push({ event: 'reset_self_open' });
     }
     setOpen(true);
   };
@@ -37,8 +42,9 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
     setResult(null);
 
     if (typeof window !== 'undefined') {
-      (window as any).dataLayer = (window as any).dataLayer || [];
-      (window as any).dataLayer.push({ event: 'reset_self_confirm' });
+      const win = window as unknown as DataLayerWindow;
+      win.dataLayer = win.dataLayer || [];
+      win.dataLayer.push({ event: 'reset_self_confirm' });
     }
 
     try {
@@ -53,7 +59,8 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
       }
       setResult('Success');
       if (typeof window !== 'undefined') {
-        (window as any).dataLayer.push({ event: 'reset_self_success' });
+        const win = window as unknown as DataLayerWindow;
+        win.dataLayer.push({ event: 'reset_self_success' });
       }
       // Auto-close after short delay to confirm success visually
       setTimeout(() => {
@@ -61,15 +68,17 @@ export default function ResetSelfDataCard({ defaultReseed = true }: Props) {
         setConfirmText('');
         setResult(null);
       }, 1200);
-    } catch (e: any) {
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : String(e);
       logger.error('[ResetSelfDataCard.tsx] Error in catch block:', {
-        error: e instanceof Error ? e.message : String(e),
+        error: errorMessage,
         stack: e instanceof Error ? e.stack : undefined,
       });
 
-      setResult(e?.message || 'Error');
+      setResult((e as unknown)?.message || 'Error');
       if (typeof window !== 'undefined') {
-        (window as any).dataLayer.push({ event: 'reset_self_error' });
+        const win = window as unknown as DataLayerWindow;
+        win.dataLayer.push({ event: 'reset_self_error' });
       }
     } finally {
       setLoading(false);

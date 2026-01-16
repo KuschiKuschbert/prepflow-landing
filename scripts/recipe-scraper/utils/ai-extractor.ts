@@ -259,7 +259,7 @@ export class AIExtractor {
       const recipeData = this.parseAIResponse(generatedText, recipeName, description, url);
 
       return recipeData;
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Handle common free-tier errors gracefully
       if (axios.isAxiosError(error)) {
         const status = error.response?.status;
@@ -272,10 +272,13 @@ export class AIExtractor {
         } else {
           scraperLogger.debug(`[AI Extractor] API error: ${status || error.message}`);
         }
-      } else if (error?.message?.includes('loading')) {
+      } else if (error instanceof Error && error.message.includes('loading')) {
         scraperLogger.debug('[AI Extractor] Model still loading');
       } else {
-        scraperLogger.warn('[AI Extractor] Error:', error?.message || String(error));
+        scraperLogger.warn(
+          '[AI Extractor] Error:',
+          error instanceof Error ? error.message : String(error),
+        );
       }
       return null;
     }
@@ -341,7 +344,7 @@ JSON:`;
       // Validate and extract ingredients
       const ingredients: RecipeIngredient[] = [];
       if (Array.isArray(parsed.ingredients)) {
-        parsed.ingredients.forEach((ing: any) => {
+        parsed.ingredients.forEach((ing: unknown) => {
           if (typeof ing === 'string' && ing.trim().length > 0) {
             const originalText = ing.trim();
             const name = this.extractIngredientName(originalText);
@@ -356,7 +359,7 @@ JSON:`;
       // Validate and extract instructions
       const instructions: string[] = [];
       if (Array.isArray(parsed.instructions)) {
-        parsed.instructions.forEach((inst: any) => {
+        parsed.instructions.forEach((inst: unknown) => {
           if (typeof inst === 'string' && inst.trim().length > 0) {
             instructions.push(inst.trim());
           }

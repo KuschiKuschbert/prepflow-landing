@@ -1,11 +1,15 @@
+import { UpdateIngredientData } from './schemas';
+
 /**
  * Format ingredient update fields using text utilities.
  *
- * @param {Object} updates - Raw update data
- * @returns {Promise<Object>} Formatted update data
+ * @param {UpdateIngredientData} updates - Raw update data
+ * @returns {Promise<UpdateIngredientData & { updated_at: string }>} Formatted update data
  */
-export async function formatIngredientUpdates(updates: any): Promise<any> {
-  const formattedUpdates: any = {
+export async function formatIngredientUpdates(
+  updates: UpdateIngredientData,
+): Promise<UpdateIngredientData & { updated_at: string; [key: string]: unknown }> {
+  const formattedUpdates: UpdateIngredientData & { updated_at: string; [key: string]: unknown } = {
     ...updates,
     updated_at: new Date().toISOString(),
   };

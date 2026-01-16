@@ -1,11 +1,10 @@
 'use client';
 
-import React from 'react';
 import { EmployeeFormData } from '../types';
 
 interface EmployeeFormFieldsProps {
   formData: EmployeeFormData;
-  onChange: (field: keyof EmployeeFormData, value: any) => void;
+  onChange: (field: keyof EmployeeFormData, value: string | number) => void;
 }
 
 /**

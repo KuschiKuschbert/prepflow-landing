@@ -8,7 +8,10 @@ import { requireAuth } from '@/lib/auth0-api-helpers';
 import { encryptBackup } from '@/lib/backup/encryption';
 import { convertToSQL, exportUserData } from '@/lib/backup/export';
 import { logger } from '@/lib/logger';
+<<<<<<< HEAD
 import { getAppError } from '@/lib/utils/error';
+=======
+>>>>>>> main
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { storeBackupMetadata } from './helpers/storeMetadata';
@@ -160,7 +163,10 @@ export async function POST(request: NextRequest) {
       });
     }
   } catch (error: unknown) {
+<<<<<<< HEAD
     const appError = getAppError(error);
+=======
+>>>>>>> main
     logger.error('[Backup Create] Error creating backup:', {
       error: appError.message,
       code: appError.code,

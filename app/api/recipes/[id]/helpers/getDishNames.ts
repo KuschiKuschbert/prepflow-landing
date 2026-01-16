@@ -22,7 +22,7 @@ export async function getDishNames(dishIds: string[]): Promise<string[]> {
   if (error) {
     logger.error('[Recipes API] Database error fetching dish names:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: { operation: 'getDishNames', dishIds },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

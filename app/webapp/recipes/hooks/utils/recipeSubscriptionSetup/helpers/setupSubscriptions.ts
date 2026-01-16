@@ -1,12 +1,13 @@
 /**
  * Setup Supabase subscriptions.
  */
-import { supabase } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabase } from '@/lib/supabase';
+import type { Recipe } from '../../../../types';
 import type { SubscriptionRefs } from '../types';
 import { createDebouncedRefreshHandler } from './handleDebouncedRefresh';
 
-export function setupSubscriptionsHelper(refs: SubscriptionRefs, recipes: any[]) {
+export function setupSubscriptionsHelper(refs: SubscriptionRefs, recipes: Recipe[]) {
   if (typeof window === 'undefined' || recipes.length === 0 || !supabase) return null;
   const handleDebouncedRefresh = createDebouncedRefreshHandler(refs);
   return supabase

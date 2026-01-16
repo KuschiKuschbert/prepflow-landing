@@ -13,8 +13,18 @@ export function handleMenuError(err: unknown, method: string): NextResponse {
   const isDevelopment = process.env.NODE_ENV === 'development';
   const errorMessage = err instanceof Error ? err.message : String(err);
   const errorStack = err instanceof Error ? err.stack : undefined;
-  const errorCode = (err as any).code || 'SERVER_ERROR';
-  const errorDetails = (err as any).details;
+  interface ErrorWithCode {
+    code?: string;
+    details?: unknown;
+  }
+  const errorCode =
+    typeof err === 'object' && err !== null && 'code' in err
+      ? (err as ErrorWithCode).code
+      : 'SERVER_ERROR';
+  const errorDetails =
+    typeof err === 'object' && err !== null && 'details' in err
+      ? (err as ErrorWithCode).details
+      : undefined;
 
   logger.error('[Menus API] Unexpected error:', {
     error: errorMessage,

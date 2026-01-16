@@ -5,13 +5,13 @@
 
 'use client';
 
-import React, { useState } from 'react';
-import { useNotification } from '@/contexts/NotificationContext';
-import type { BackupSettings } from '@/lib/backup/types';
 import { Icon } from '@/components/ui/Icon';
-import { Clock, Save } from 'lucide-react';
+import { useNotification } from '@/contexts/NotificationContext';
 import { useConfirm } from '@/hooks/useConfirm';
+import type { BackupSettings } from '@/lib/backup/types';
 import { logger } from '@/lib/logger';
+import { Clock, Save } from 'lucide-react';
+import { useState } from 'react';
 
 interface ScheduledBackupConfigProps {
   settings: BackupSettings | null;
@@ -52,7 +52,7 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
       } else {
         showError(data.error || 'Failed to save settings');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('[ScheduledBackupConfig.tsx] Error in catch block:', {
         error: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,
@@ -96,7 +96,7 @@ export function ScheduledBackupConfig({ settings, onSettingsChange }: ScheduledB
         const data = await res.json();
         showError(data.error || 'Failed to disable scheduled backups');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Rollback on error
       setEnabled(originalEnabled);
       logger.error('[ScheduledBackupConfig.tsx] Error in catch block:', {

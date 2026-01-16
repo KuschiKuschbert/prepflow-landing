@@ -5,18 +5,19 @@
 
 import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { findExistingCardBySignature } from '../../cardManagement';
-import { linkMenuItemToCard } from '../../cardManagement';
+import { findExistingCardBySignature, linkMenuItemToCard } from '../../cardManagement';
+import { MenuItemData } from '../../fetchMenuItemData';
+import { MenuItem } from '../fetchMenuItems';
 
 /**
  * Save card using cross-referencing method (update existing or insert new)
  */
 async function saveWithCrossReferencing(
   supabase: SupabaseClient,
-  cardData: any,
+  cardData: Record<string, unknown>,
   signature: string,
-  menuItem: any,
-  menuItemData: any,
+  menuItem: MenuItem,
+  menuItemData: MenuItemData,
   existingCardId?: string,
 ): Promise<{ success: boolean; cardId?: string; error?: string }> {
   if (existingCardId) {
@@ -84,9 +85,9 @@ async function saveWithCrossReferencing(
  */
 async function saveWithOldMethod(
   supabase: SupabaseClient,
-  cardData: any,
-  menuItemData: any,
-  menuItem: any,
+  cardData: Record<string, unknown>,
+  menuItemData: MenuItemData,
+  menuItem: MenuItem,
 ): Promise<{ success: boolean; cardId?: string; error?: string }> {
   const { data: savedCard, error: saveError } = await supabase
     .from('menu_recipe_cards')
@@ -125,10 +126,10 @@ async function saveWithOldMethod(
  */
 export async function saveCard(
   supabase: SupabaseClient,
-  cardData: any,
+  cardData: Record<string, unknown>,
   signature: string,
-  menuItem: any,
-  menuItemData: any,
+  menuItem: MenuItem,
+  menuItemData: MenuItemData,
   crossReferencingEnabled: boolean,
   existingCardId?: string,
 ): Promise<{ success: boolean; cardId?: string; error?: string }> {
@@ -153,7 +154,7 @@ export async function finalizeCardSave(
   supabase: SupabaseClient,
   menuItemId: string,
   cardId: string,
-  menuItemData: any,
+  menuItemData: MenuItemData,
   crossReferencingEnabled: boolean,
 ): Promise<{ success: boolean }> {
   // Link menu item to card (only if cross-referencing is enabled)

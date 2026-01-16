@@ -5,7 +5,7 @@
 
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { MenuItemData } from './fetchMenuItemData';
+import { MenuItemData, RawRecipeResult } from './fetchMenuItemData';
 
 /**
  * Batch fetch all recipes with nested ingredients
@@ -46,12 +46,15 @@ export async function batchFetchRecipes(
 
   const recipeMap = new Map<string, MenuItemData>();
 
-  for (const recipe of recipes || []) {
+  // Cast the result to our defined type since Supabase types are generic
+  const rawRecipes = (recipes || []) as unknown as RawRecipeResult[];
+
+  for (const recipe of rawRecipes) {
     // Handle both recipe_name and name columns
-    const recipeName = (recipe as any).recipe_name || recipe.name || 'Unknown Recipe';
+    const recipeName = recipe.recipe_name || recipe.name || 'Unknown Recipe';
 
     const ingredients =
-      recipe.recipe_ingredients?.map((ri: any) => ({
+      recipe.recipe_ingredients?.map(ri => ({
         name: ri.ingredients?.ingredient_name || 'Unknown Ingredient',
         quantity: Number(ri.quantity) || 0,
         unit: ri.unit || '',

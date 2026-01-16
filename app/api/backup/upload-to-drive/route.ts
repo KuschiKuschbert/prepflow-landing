@@ -11,7 +11,10 @@ import { authenticateGoogleDrive, uploadBackupToDrive } from '@/lib/backup/googl
 import type { EncryptionMode } from '@/lib/backup/types';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
+<<<<<<< HEAD
 import { getAppError } from '@/lib/utils/error';
+=======
+>>>>>>> main
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -122,7 +125,10 @@ export async function POST(request: NextRequest) {
       filename: encrypted.filename,
     });
   } catch (error: unknown) {
+<<<<<<< HEAD
     const appError = getAppError(error);
+=======
+>>>>>>> main
     logger.error('[Google Drive Upload] Error:', {
       error: appError.message,
       code: appError.code,

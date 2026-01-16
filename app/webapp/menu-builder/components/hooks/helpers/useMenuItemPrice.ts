@@ -4,14 +4,15 @@
 
 import { logger } from '@/lib/logger';
 import { useCallback } from 'react';
+import type { MenuItem } from '../../../types';
 import { applyOptimisticUpdate } from './useMenuItemPrice/helpers/applyOptimisticUpdate';
 import { makePriceUpdateRequest } from './useMenuItemPrice/helpers/makePriceUpdateRequest';
 import { updateItemInState } from './useMenuItemPrice/helpers/updateItemInState';
 
 interface UseMenuItemPriceProps {
   menuId: string;
-  menuItems: any[];
-  setMenuItems: React.Dispatch<React.SetStateAction<any[]>>;
+  menuItems: MenuItem[];
+  setMenuItems: React.Dispatch<React.SetStateAction<MenuItem[]>>;
   loadMenuData: () => Promise<void>;
   refreshStatistics: () => Promise<void>;
   showError: (message: string) => void;

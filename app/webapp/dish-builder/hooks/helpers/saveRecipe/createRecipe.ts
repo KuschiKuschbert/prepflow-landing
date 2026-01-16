@@ -3,7 +3,7 @@
  */
 
 import { logger } from '@/lib/logger';
-import type { DishBuilderState } from '../../../types';
+import type { DishBuilderState, Recipe } from '../../../types';
 
 const TIMEOUT_MS = 30000; // 30 seconds
 
@@ -11,11 +11,11 @@ const TIMEOUT_MS = 30000; // 30 seconds
  * Create recipe via API
  *
  * @param {DishBuilderState} dishState - Dish builder state
- * @returns {Promise<{success: true, recipe: any} | {success: false, error: string}>} Create result
+ * @returns {Promise<{success: true, recipe: Recipe} | {success: false, error: string}>} Create result
  */
 export async function createRecipe(
   dishState: DishBuilderState,
-): Promise<{ success: true; recipe: any } | { success: false; error: string }> {
+): Promise<{ success: true; recipe: Recipe } | { success: false; error: string }> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
@@ -59,9 +59,9 @@ export async function createRecipe(
 
     logger.dev('[saveRecipe] Recipe created successfully:', { recipeId });
     return { success: true, recipe: recipeResult.recipe };
-  } catch (fetchErr: any) {
+  } catch (fetchErr: unknown) {
     clearTimeout(timeoutId);
-    if (fetchErr.name === 'AbortError') {
+    if (fetchErr instanceof Error && fetchErr.name === 'AbortError') {
       logger.error('[saveRecipe] Recipe creation timed out after 30 seconds');
       return { success: false, error: 'Recipe creation timed out. Please try again.' };
     }

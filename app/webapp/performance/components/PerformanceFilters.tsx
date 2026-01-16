@@ -1,15 +1,19 @@
 'use client';
 
-import { useState } from 'react';
-import { PerformanceFilters as PerformanceFiltersType } from '../types';
-import { PerformanceItem, DateRange, PerformanceMetadata } from '../types';
-import { PrintButton } from '@/components/ui/PrintButton';
 import { ExportButton, type ExportFormat } from '@/components/ui/ExportButton';
+import { PrintButton } from '@/components/ui/PrintButton';
 import { useNotification } from '@/contexts/NotificationContext';
+import { useState } from 'react';
+import {
+  DateRange,
+  PerformanceFilters as PerformanceFiltersType,
+  PerformanceItem,
+  PerformanceMetadata,
+} from '../types';
 import { ImportButton } from './PerformanceFilters/ImportButton';
 import { MenuItemClassFilters } from './PerformanceFilters/MenuItemClassFilters';
-import { handlePrintHelper } from './PerformanceFilters/helpers/handlePrint';
 import { handleExportHelper } from './PerformanceFilters/helpers/handleExport';
+import { handlePrintHelper } from './PerformanceFilters/helpers/handlePrint';
 
 interface PerformanceFiltersProps {
   filters: PerformanceFiltersType;
@@ -63,7 +67,7 @@ export default function PerformanceFilters({
       setExportLoading,
     );
 
-  const handleFilterChange = (key: keyof PerformanceFiltersType, value: any) => {
+  const handleFilterChange = (key: keyof PerformanceFiltersType, value: string | string[]) => {
     onFiltersChange({ ...filters, [key]: value });
   };
 

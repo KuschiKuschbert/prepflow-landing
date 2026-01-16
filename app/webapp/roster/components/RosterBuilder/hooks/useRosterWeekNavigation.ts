@@ -6,7 +6,7 @@ interface UseRosterWeekNavigationProps {
   weekStartDate?: Date;
   currentWeekStart: Date;
   setCurrentWeekStart: (date: Date) => void;
-  setShifts: (shifts: any[]) => void;
+  setShifts: (shifts: unknown[]) => void;
 }
 
 /**

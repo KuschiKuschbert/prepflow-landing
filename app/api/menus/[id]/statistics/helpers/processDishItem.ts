@@ -1,21 +1,18 @@
-/**
- * Helper for processing dish items in menu statistics
- */
-
 import { logger } from '@/lib/logger';
+import { MenuDishRelation, MenuItemWithRelations } from '../../../helpers/schemas';
 import { calculateDishCost } from './calculateDishCost';
 import { calculateDishSellingPrice } from './calculateDishSellingPrice';
 
 /**
  * Processes a dish item for statistics calculation
  *
- * @param {any} item - Menu item with dish
- * @param {any} dish - Dish data
+ * @param {MenuItemWithRelations} item - Menu item with dish
+ * @param {MenuDishRelation} dish - Dish data
  * @returns {Promise<{ cogs: number; revenue: number; margin: number | null }>} Statistics for dish
  */
 export async function processDishItem(
-  item: any,
-  dish: any,
+  item: MenuItemWithRelations,
+  dish: MenuDishRelation,
 ): Promise<{
   cogs: number;
   revenue: number;
@@ -23,16 +20,17 @@ export async function processDishItem(
 }> {
   // Price priority: menu_items.actual_selling_price > dish.selling_price > calculated recommended
   let sellingPrice =
-    item.actual_selling_price ?? (dish.selling_price ? parseFloat(dish.selling_price) : null);
+    item.actual_selling_price ??
+    (dish.selling_price ? parseFloat(String(dish.selling_price)) : null);
 
   // Calculate recommended price if needed
   if (sellingPrice == null) {
     try {
       sellingPrice = await calculateDishSellingPrice(dish.id);
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error('[calculateMenuStatistics] Error calculating dish selling price:', {
         dish_id: dish.id,
-        error: err,
+        error: err instanceof Error ? err.message : String(err),
       });
     }
   }
@@ -41,10 +39,10 @@ export async function processDishItem(
   let dishCost = 0;
   try {
     dishCost = await calculateDishCost(dish.id);
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('[calculateMenuStatistics] Error calculating dish cost:', {
       dish_id: dish.id,
-      error: err,
+      error: err instanceof Error ? err.message : String(err),
     });
   }
 

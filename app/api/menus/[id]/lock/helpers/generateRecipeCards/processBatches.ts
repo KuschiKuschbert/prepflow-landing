@@ -5,12 +5,13 @@
 import { chunkArray } from '@/lib/api/batch-utils';
 import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { MenuItemData } from '../fetchMenuItemData';
 import type { MenuItem } from './fetchMenuItems';
 import { processMenuItem } from './processMenuItem';
 
 interface ItemToGenerate {
   menuItem: MenuItem;
-  menuItemData: any;
+  menuItemData: MenuItemData;
   signature: string;
   existingCardId?: string;
 }

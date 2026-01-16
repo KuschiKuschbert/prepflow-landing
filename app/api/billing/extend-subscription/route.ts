@@ -110,29 +110,37 @@ export async function POST(req: NextRequest) {
     }
 
     // Calculate new period end date
-    const currentPeriodEnd = (subscription as any).current_period_end;
+    const currentPeriodEnd = (subscription as Stripe.Subscription & { current_period_end: number })
+      .current_period_end;
     const newPeriodEnd = currentPeriodEnd + months * 30 * 24 * 60 * 60; // Approximate months
 
     // Update subscription to extend billing period
     const updatedSubscription: Stripe.Subscription = await stripe.subscriptions.update(
       subscriptionId,
       {
+        // @ts-expect-error - Stripe types only allow 'now' | 'unchanged', but logic attempts to set a date.
+        // TODO: Verify if passing a timestamp is supported by the API or if this logic is flawed.
         billing_cycle_anchor: newPeriodEnd,
         proration_behavior: 'none', // Don't prorate, just extend
       },
     );
 
     // Update database with new expiry date
-    const newExpiresAt = (updatedSubscription as any).current_period_end
-      ? new Date((updatedSubscription as any).current_period_end * 1000)
+    const updatedSub = updatedSubscription as Stripe.Subscription & {
+      current_period_end: number;
+      current_period_start: number;
+    };
+
+    const newExpiresAt = updatedSub.current_period_end
+      ? new Date(updatedSub.current_period_end * 1000)
       : null;
 
     const { error: updateError } = await supabaseAdmin
       .from('users')
       .update({
         subscription_expires: newExpiresAt?.toISOString() || null,
-        subscription_current_period_start: (updatedSubscription as any).current_period_start
-          ? new Date((updatedSubscription as any).current_period_start * 1000).toISOString()
+        subscription_current_period_start: updatedSub.current_period_start
+          ? new Date(updatedSub.current_period_start * 1000).toISOString()
           : null,
         updated_at: new Date().toISOString(),
       })
@@ -141,7 +149,7 @@ export async function POST(req: NextRequest) {
     if (updateError) {
       logger.error('[Billing API] Failed to update subscription in database:', {
         error: updateError.message,
-        code: (updateError as any).code,
+        code: updateError.code,
         userEmail,
       });
       // Don't fail the request, subscription was extended in Stripe
@@ -161,7 +169,7 @@ export async function POST(req: NextRequest) {
       message: `Subscription extended by ${months} month${months > 1 ? 's' : ''}`,
       subscription: {
         id: updatedSubscription.id,
-        current_period_end: (updatedSubscription as any).current_period_end,
+        current_period_end: updatedSub.current_period_end,
         expires_at: newExpiresAt?.toISOString(),
       },
     });

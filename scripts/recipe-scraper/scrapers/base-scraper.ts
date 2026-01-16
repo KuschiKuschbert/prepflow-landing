@@ -561,7 +561,7 @@ export abstract class BaseScraper {
   /**
    * Parse rating from various formats
    */
-  protected parseRating(rating: any): number | undefined {
+  protected parseRating(rating: unknown): number | undefined {
     if (typeof rating === 'number') return rating;
     if (typeof rating === 'string') {
       const parsed = parseFloat(rating);
@@ -573,14 +573,28 @@ export abstract class BaseScraper {
   /**
    * Parse author from various formats
    */
-  protected parseAuthor(author: any): string | undefined {
+  protected parseAuthor(author: unknown): string | undefined {
     if (!author) return undefined;
     if (typeof author === 'string') return author;
+
+    // Handle array
     if (Array.isArray(author) && author.length > 0) {
       const firstAuthor = author[0];
-      return typeof firstAuthor === 'string' ? firstAuthor : firstAuthor.name;
+      if (typeof firstAuthor === 'string') {
+        return firstAuthor;
+      }
+      // Check if it's an object with name
+      if (firstAuthor && typeof firstAuthor === 'object' && 'name' in firstAuthor) {
+        return (firstAuthor as Record<string, unknown>).name as string;
+      }
+      return undefined;
     }
-    if (author.name) return author.name;
+
+    // Handle single object
+    if (typeof author === 'object' && author !== null && 'name' in author) {
+      return (author as Record<string, unknown>).name as string;
+    }
+
     return undefined;
   }
 
@@ -588,7 +602,7 @@ export abstract class BaseScraper {
    * Parse cooking temperature from JSON-LD or text
    * Extracts temperature from various formats: "350°F", "180°C", "350 F", etc.
    */
-  protected parseTemperature(temperatureData: any): {
+  protected parseTemperature(temperatureData: unknown): {
     temperature_celsius?: number;
     temperature_fahrenheit?: number;
     temperature_unit?: 'celsius' | 'fahrenheit';
@@ -625,9 +639,10 @@ export abstract class BaseScraper {
     }
 
     // Handle object format from JSON-LD (e.g., { "@type": "Temperature", "value": 350, "unit": "F" })
-    if (typeof temperatureData === 'object') {
-      const value = temperatureData.value || temperatureData.temperature;
-      const unit = (temperatureData.unit || temperatureData.unitText || '').toLowerCase();
+    if (typeof temperatureData === 'object' && temperatureData !== null) {
+      const data = temperatureData as Record<string, unknown>;
+      const value = data.value || data.temperature;
+      const unit = String(data.unit || data.unitText || '').toLowerCase();
 
       if (typeof value === 'number') {
         if (unit.includes('f') || unit.includes('fahrenheit')) {
@@ -671,7 +686,7 @@ export abstract class BaseScraper {
    *
    * Returns deduplicated array of instruction strings
    */
-  protected parseInstructions(instructions: any): string[] {
+  protected parseInstructions(instructions: unknown): string[] {
     if (!instructions) return [];
 
     const result: string[] = [];
@@ -710,7 +725,7 @@ export abstract class BaseScraper {
    * Handles HowToStep, HowToSection, and nested structures
    * Returns array of instruction strings (may contain duplicates - deduplication happens in parseInstructions)
    */
-  private extractInstructionText(inst: any): string[] {
+  private extractInstructionText(inst: unknown): string[] {
     if (!inst) return [];
 
     // Simple string
@@ -719,30 +734,34 @@ export abstract class BaseScraper {
     }
 
     // HowToStep or instruction object
-    if (inst && typeof inst === 'object') {
+    if (typeof inst === 'object' && inst !== null) {
+      const instObj = inst as Record<string, unknown>;
       const texts: string[] = [];
 
       // Priority 1: Direct text property
-      if (inst.text && typeof inst.text === 'string' && inst.text.trim().length > 0) {
-        texts.push(inst.text.trim());
+      if (instObj.text && typeof instObj.text === 'string' && instObj.text.trim().length > 0) {
+        texts.push(instObj.text.trim());
       }
 
       // Priority 2: howToDirection (common in structured data)
       if (
-        inst.howToDirection &&
-        typeof inst.howToDirection === 'string' &&
-        inst.howToDirection.trim().length > 0
+        instObj.howToDirection &&
+        typeof instObj.howToDirection === 'string' &&
+        instObj.howToDirection.trim().length > 0
       ) {
         // Only add if different from text (avoid duplicates)
-        if (!inst.text || inst.howToDirection.trim() !== inst.text.trim()) {
-          texts.push(inst.howToDirection.trim());
+        if (
+          !instObj.text ||
+          String(instObj.howToDirection).trim() !== String(instObj.text).trim()
+        ) {
+          texts.push(instObj.howToDirection.trim());
         }
       }
 
       // Priority 3: itemListElement (nested steps within a step)
       // Extract these separately as they might be sub-steps
-      if (inst.itemListElement && Array.isArray(inst.itemListElement)) {
-        for (const item of inst.itemListElement) {
+      if (instObj.itemListElement && Array.isArray(instObj.itemListElement)) {
+        for (const item of instObj.itemListElement) {
           const nested = this.extractInstructionText(item);
           texts.push(...nested);
         }
@@ -752,23 +771,23 @@ export abstract class BaseScraper {
       // Only use if we don't already have text from other sources
       if (
         texts.length === 0 &&
-        inst.name &&
-        typeof inst.name === 'string' &&
-        inst.name.trim().length > 0
+        instObj.name &&
+        typeof instObj.name === 'string' &&
+        instObj.name.trim().length > 0
       ) {
-        texts.push(inst.name.trim());
+        texts.push(instObj.name.trim());
       }
 
       // Priority 5: Check for nested HowToStep or HowToSection
       // Only process if we haven't already extracted from text/howToDirection
       if (
-        (inst['@type'] === 'HowToStep' || inst['@type'] === 'HowToSection') &&
+        (instObj['@type'] === 'HowToStep' || instObj['@type'] === 'HowToSection') &&
         texts.length === 0
       ) {
         // If we already have text, don't re-extract from nested structure
         // This prevents duplication when both text and nested structure exist
-        if (inst.itemListElement && Array.isArray(inst.itemListElement)) {
-          for (const item of inst.itemListElement) {
+        if (instObj.itemListElement && Array.isArray(instObj.itemListElement)) {
+          for (const item of instObj.itemListElement) {
             const nested = this.extractInstructionText(item);
             texts.push(...nested);
           }
@@ -789,7 +808,7 @@ export abstract class BaseScraper {
    * Searches through instructions for temperature patterns like "350°F", "180C", etc.
    * Returns structured temperature data (same format as parseTemperature)
    */
-  protected extractTemperatureFromInstructions(instructions: any): {
+  protected extractTemperatureFromInstructions(instructions: unknown): {
     temperature_celsius?: number;
     temperature_fahrenheit?: number;
     temperature_unit?: 'celsius' | 'fahrenheit';

@@ -5,7 +5,7 @@
 import { logger } from '@/lib/logger';
 
 interface StopHandlerParams {
-  setComprehensiveStatus: (status: any) => void;
+  setComprehensiveStatus: (status: unknown) => void;
   setStatusPolling: (polling: boolean) => void;
   showSuccess: (message: string) => void;
   showError: (message: string) => void;

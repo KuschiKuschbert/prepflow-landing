@@ -2,10 +2,9 @@
  * Hook for managing prep list modal and preview state.
  */
 
-import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
-import type { GeneratedPrepListData } from '../types';
-import type { PrepList } from '../types';
+import { useCallback, useState } from 'react';
+import type { GeneratedPrepListData, PrepList, PrepListCreationItem } from '../types';
 import { handleSaveBatchPrepLists as handleSaveBatchPrepListsHelper } from './helpers/handleSaveBatchPrepLists';
 
 /**
@@ -49,7 +48,11 @@ export function usePrepListsModals() {
 
   const handleSaveBatchPrepLists = useCallback(
     async (
-      prepListsToCreate: Array<{ sectionId: string | null; name: string; items: any[] }>,
+      prepListsToCreate: Array<{
+        sectionId: string | null;
+        name: string;
+        items: PrepListCreationItem[];
+      }>,
       userId: string,
       currentPrepLists: PrepList[],
       setPrepLists: React.Dispatch<React.SetStateAction<PrepList[]>>,

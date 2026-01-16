@@ -2,27 +2,13 @@
  * Group ingredients by sort option
  */
 
-interface IngredientWithParLevel {
-  id: string;
-  ingredient_name: string;
-  brand?: string;
-  pack_size?: string;
-  pack_size_unit?: string;
-  pack_price?: number;
-  cost_per_unit: number;
-  unit?: string;
-  storage?: string;
-  category?: string;
-  par_level?: number;
-  reorder_point?: number;
-  par_unit?: string;
-}
+import { IngredientWithParLevel } from '../../../helpers/schemas';
 
 export function groupIngredients(
   ingredients: IngredientWithParLevel[],
   sortBy: string,
 ): Record<string, IngredientWithParLevel[]> {
-  let groupedIngredients: Record<string, IngredientWithParLevel[]> = {};
+  const groupedIngredients: Record<string, IngredientWithParLevel[]> = {};
 
   if (sortBy === 'storage') {
     // Group by storage

@@ -19,7 +19,7 @@ import { temperatureTypesForSelect } from '../utils/temperatureUtils';
 
 interface TemperatureEquipmentTabProps {
   equipment: TemperatureEquipment[];
-  allLogs?: any[]; // Optional logs for last log date calculation
+  allLogs?: unknown[]; // Optional logs for last log date calculation
   onUpdateEquipment: (equipmentId: string, updates: Partial<TemperatureEquipment>) => Promise<void>;
   onCreateEquipment: (
     name: string,
@@ -136,7 +136,6 @@ export default function TemperatureEquipmentTab({
           </button>
         </div>
       </div>
-
       {/* Create New Equipment Form */}
       <CreateEquipmentForm
         show={showCreateForm}
@@ -146,7 +145,6 @@ export default function TemperatureEquipmentTab({
         onSubmit={handleCreateEquipment}
         onCancel={() => setShowCreateForm(false)}
       />
-
       {equipment.length === 0 ? (
         <EquipmentEmptyState onAddEquipment={() => setShowCreateForm(true)} />
       ) : viewMode === 'table' ? (
@@ -183,7 +181,7 @@ export default function TemperatureEquipmentTab({
             {equipment.slice(startIndex, endIndex).map(item => (
               <EquipmentItem
                 key={item.id}
-                item={item as any}
+                item={item as unknown}
                 editingId={editingEquipment}
                 setEditingId={setEditingEquipment}
                 temperatureTypes={temperatureTypesForSelect}
@@ -200,14 +198,12 @@ export default function TemperatureEquipmentTab({
           </div>
         </div>
       )}
-
       {/* Equipment Detail Drawer */}
       <EquipmentDetailDrawer
         equipment={selectedEquipment!}
         isOpen={isDrawerOpen}
         onClose={handleCloseDrawer}
       />
-
       {/* QR Code Modal */}
       {qrCodeEquipment && (
         <EquipmentQRCodeModal
@@ -217,7 +213,6 @@ export default function TemperatureEquipmentTab({
           temperatureTypes={temperatureTypesForSelect}
         />
       )}
-
       {/* Confirm Dialog */}
       <ConfirmDialog />
     </div>

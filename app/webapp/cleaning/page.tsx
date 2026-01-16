@@ -6,6 +6,7 @@ import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { PrintButton } from '@/components/ui/PrintButton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { useNotification } from '@/contexts/NotificationContext';
+import { getTaskDatesWithStatus, type TaskWithCompletions } from '@/lib/cleaning/completion-logic';
 import { logger } from '@/lib/logger';
 import { ClipboardCheck, MapPin, Plus } from 'lucide-react';
 import dynamic from 'next/dynamic';
@@ -28,7 +29,7 @@ import {
   exportCleaningScheduleToHTML,
   exportCleaningScheduleToPDF,
 } from './utils/exportCleaningSchedules';
-import { printCleaningSchedule } from './utils/printCleaningSchedule';
+import { printCleaningSchedule, type CleaningTask } from './utils/printCleaningSchedule';
 
 // Lazy load modals - only load when needed
 const CreateTaskForm = dynamic(
@@ -152,6 +153,44 @@ export default function CleaningRosterPage() {
     onSetActiveTab: setActiveTab,
   });
 
+  const prepareTasksForExport = (tasksToExport: TaskWithCompletions[]): CleaningTask[] => {
+    const flatTasks: CleaningTask[] = [];
+
+    tasksToExport.forEach(task => {
+      const dates = getTaskDatesWithStatus(task, startDate.toISOString(), endDate.toISOString());
+
+      dates.forEach(d => {
+        if (!d.shouldAppear) return;
+
+        // Completion details if completed
+        const completion = task.completions.find(c => c.completion_date === d.date);
+
+        flatTasks.push({
+          id: task.id,
+          area_id: task.area_id || '',
+          assigned_date: d.date,
+          completed_date: completion?.completed_at || null,
+          status: d.isCompleted ? 'completed' : d.isOverdue ? 'overdue' : 'pending',
+          notes: completion?.notes || null,
+          photo_url: completion?.photo_url || null,
+          created_at: task.created_at,
+          updated_at: task.created_at,
+          cleaning_areas: {
+            id: task.cleaning_areas?.id || '',
+            name: task.cleaning_areas?.area_name || 'Unknown Area',
+            description: task.cleaning_areas?.description || '',
+            frequency_days: task.cleaning_areas?.frequency_days || 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+        });
+      });
+    });
+
+    return flatTasks;
+  };
+
   const handlePrint = () => {
     if (tasks.length === 0) {
       showError('No cleaning tasks to print');
@@ -159,7 +198,8 @@ export default function CleaningRosterPage() {
     }
 
     try {
-      printCleaningSchedule(tasks as any, startDate, endDate);
+      const exportTasks = prepareTasksForExport(tasks);
+      printCleaningSchedule(exportTasks, startDate, endDate);
       showSuccess('Cleaning schedule opened for printing');
     } catch (err) {
       logger.error('[Cleaning Schedule] Print error:', err);
@@ -175,17 +215,18 @@ export default function CleaningRosterPage() {
 
     setExportLoading(format);
     try {
+      const exportTasks = prepareTasksForExport(tasks);
       switch (format) {
         case 'csv':
-          exportCleaningScheduleToCSV(tasks as any);
+          exportCleaningScheduleToCSV(exportTasks);
           showSuccess('Cleaning schedule exported to CSV');
           break;
         case 'html':
-          exportCleaningScheduleToHTML(tasks as any, startDate, endDate);
+          exportCleaningScheduleToHTML(exportTasks, startDate, endDate);
           showSuccess('Cleaning schedule exported to HTML');
           break;
         case 'pdf':
-          await exportCleaningScheduleToPDF(tasks as any, startDate, endDate);
+          await exportCleaningScheduleToPDF(exportTasks, startDate, endDate);
           showSuccess('Cleaning schedule exported to PDF');
           break;
       }

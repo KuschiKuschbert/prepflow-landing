@@ -7,6 +7,11 @@
   --secondary: #3b82f6;
   --accent: #d925c7; /* Bright magenta for dark theme */
   --tertiary: #ff6b00;
+
+  /* Landing Page Brand Colors */
+  --electric-lime: #29e7cd;
+  --magenta-pulse: #d925c7;
+  --prepflow-blue: #3b82f6;
   --muted: #2a2a2a; /* Lighter grey for cards/containers - improved readability */
   --border: #3a3a3a; /* Lighter border for better contrast */
   --surface: #3a3a3a; /* Lighter grey for elevated surfaces/cards - pale-light-dark grey */

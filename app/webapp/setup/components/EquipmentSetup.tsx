@@ -90,7 +90,7 @@ export default function EquipmentSetup({ setupProgress, onProgressUpdate }: Equi
     };
 
     // Optimistically add to UI immediately (use any to bypass type check for temp equipment)
-    setEquipment([tempEquipment as any, ...equipment]);
+    setEquipment([tempEquipment as unknown, ...equipment]);
     setNewEquipment({
       name: '',
       equipment_type: 'fridge',

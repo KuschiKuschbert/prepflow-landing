@@ -5,12 +5,12 @@ import { NextResponse } from 'next/server';
 /**
  * Handle dish API errors consistently.
  *
- * @param {Error | any} err - Error object
+ * @param {unknown} err - Error object
  * @param {string} method - HTTP method
  * @param {string} dishId - Optional dish ID
  * @returns {NextResponse} Error response
  */
-export function handleDishError(err: Error | any, method: string, dishId?: string): NextResponse {
+export function handleDishError(err: unknown, method: string, dishId?: string): NextResponse {
   logger.error('[Dishes API] Unexpected error:', {
     error: err instanceof Error ? err.message : String(err),
     stack: err instanceof Error ? err.stack : undefined,
@@ -18,8 +18,8 @@ export function handleDishError(err: Error | any, method: string, dishId?: strin
   });
 
   // If error has status (from ApiErrorHandler), return it directly
-  if (err.status) {
-    return NextResponse.json(err, { status: err.status });
+  if (err && typeof err === 'object' && 'status' in err) {
+    return NextResponse.json(err, { status: (err as { status: number }).status });
   }
 
   return NextResponse.json(

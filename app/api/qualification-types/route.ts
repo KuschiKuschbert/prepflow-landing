@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 /**
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Qualification Types API] Database error fetching types:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: {
           endpoint: '/api/qualification-types',
           operation: 'GET',
@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
     if (error) {
       logger.error('[Qualification Types API] Database error creating type:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: {
           endpoint: '/api/qualification-types',
           operation: 'POST',

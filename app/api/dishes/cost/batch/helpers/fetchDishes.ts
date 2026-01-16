@@ -10,9 +10,15 @@ import { NextResponse } from 'next/server';
 /**
  * Fetch dishes by IDs and create a map for quick lookup.
  */
+export interface BatchDishBasic {
+  id: string;
+  dish_name: string;
+  selling_price: number | null;
+}
+
 export async function fetchDishes(
   dishIds: string[],
-): Promise<{ dishesMap: Map<string, any> } | { error: NextResponse }> {
+): Promise<{ dishesMap: Map<string, BatchDishBasic> } | { error: NextResponse }> {
   if (!supabaseAdmin) {
     return {
       error: NextResponse.json(
@@ -40,7 +46,7 @@ export async function fetchDishes(
     };
   }
 
-  const dishesMap = new Map(dishes?.map(d => [d.id, d]) || []);
+  const dishesMap = new Map<string, BatchDishBasic>(dishes?.map(d => [d.id, d]) || []);
 
   return { dishesMap };
 }

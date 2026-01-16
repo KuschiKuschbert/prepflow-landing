@@ -4,12 +4,13 @@
  */
 
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Search for card by recipe_id
  */
 async function searchByRecipeId(
-  supabase: any,
+  supabase: SupabaseClient,
   recipeId: string,
 ): Promise<{ id: string; data_hash: string | null } | null> {
   logger.dev(`[findExistingCardBySignature] Searching by recipe_id: ${recipeId}`);
@@ -47,7 +48,7 @@ async function searchByRecipeId(
  * Search for card by dish_id and recipe_signature
  */
 async function searchByDishId(
-  supabase: any,
+  supabase: SupabaseClient,
   dishId: string,
   signature: string,
 ): Promise<{ id: string; data_hash: string | null } | null> {
@@ -100,7 +101,7 @@ async function searchByDishId(
  * @returns Existing card if found, null otherwise
  */
 export async function findExistingCardBySignature(
-  supabase: any,
+  supabase: SupabaseClient,
   signature: string,
   menuItem: { dish_id?: string | null; recipe_id?: string | null },
 ): Promise<{ id: string; data_hash: string | null } | null> {

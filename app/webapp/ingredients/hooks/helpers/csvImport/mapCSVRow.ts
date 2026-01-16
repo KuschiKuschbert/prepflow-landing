@@ -32,11 +32,11 @@ interface Ingredient {
  * @param {Record<string, any>} row - CSV row data
  * @returns {Partial<Ingredient>} Ingredient object
  */
-export function mapCSVRowToIngredient(row: Record<string, any>): Partial<Ingredient> {
+export function mapCSVRowToIngredient(row: Record<string, unknown>): Partial<Ingredient> {
   const ingredient: Partial<Ingredient> = {};
 
   // Normalize keys to lowercase for matching
-  const normalizedRow: Record<string, any> = {};
+  const normalizedRow: Record<string, unknown> = {};
   Object.keys(row).forEach(key => {
     normalizedRow[key.toLowerCase().trim()] = row[key];
   });

@@ -1,19 +1,25 @@
-import { useCallback } from 'react';
-import { DragStartEvent, DragEndEvent } from '@dnd-kit/core';
-import type { Shift, Employee } from '../../../types';
-import { validateShift, createValidationWarnings } from '@/lib/services/compliance/validator';
 import { useNotification } from '@/contexts/NotificationContext';
+import { createValidationWarnings, validateShift } from '@/lib/services/compliance/validator';
+import { DragEndEvent, DragOverEvent, DragStartEvent } from '@dnd-kit/core';
+import { useCallback } from 'react';
+import type { Employee, Shift, ShiftValidationWarning } from '../../../types';
 import { buildUpdatedShift } from './useRosterDragAndDrop/helpers/buildUpdatedShift';
+
+interface RosterCellData {
+  type: 'roster-cell';
+  employeeId: string;
+  date: Date;
+}
 
 interface UseRosterDragAndDropProps {
   shifts: Shift[];
   employees: Employee[];
   draggedShift: Shift | null;
   setDraggedShift: (shift: Shift | null) => void;
-  setDropTarget: (target: any) => void;
+  setDropTarget: (target: RosterCellData | null) => void;
   setActiveShiftId: (id: string | null) => void;
   updateShift: (id: string, shift: Partial<Shift>) => void;
-  addValidationWarning: (warning: any) => void;
+  addValidationWarning: (warning: ShiftValidationWarning) => void;
 }
 
 /**
@@ -82,10 +88,10 @@ export function useRosterDragAndDrop({
   );
 
   const handleDragOver = useCallback(
-    (event: any) => {
+    (event: DragOverEvent) => {
       const { over } = event;
       if (over && over.data.current?.type === 'roster-cell') {
-        setDropTarget(over.data.current);
+        setDropTarget(over.data.current as RosterCellData);
       }
     },
     [setDropTarget],

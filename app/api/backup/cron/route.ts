@@ -7,7 +7,10 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { runScheduledBackups } from '@/lib/backup/scheduler';
 import { logger } from '@/lib/logger';
+<<<<<<< HEAD
 import { getAppError } from '@/lib/utils/error';
+=======
+>>>>>>> main
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -37,6 +40,7 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString(),
     });
   } catch (error: unknown) {
+<<<<<<< HEAD
     const appError = getAppError(error);
     logger.error('[Backup Cron] Error:', {
       error: appError.message,
@@ -45,6 +49,14 @@ export async function GET(request: NextRequest) {
     });
     return NextResponse.json(
       { error: 'Failed to run scheduled backups', message: appError.message },
+=======
+    logger.error('[Backup Cron] Error:', error);
+    return NextResponse.json(
+      {
+        error: 'Failed to run scheduled backups',
+        message: error instanceof Error ? error.message : String(error),
+      },
+>>>>>>> main
       { status: 500 },
     );
   }

@@ -1,11 +1,12 @@
 'use client';
+import { Menu } from '@/app/webapp/menu-builder/types';
+import { Dish, Recipe } from '../types';
 import { BulkAddToMenuDialog } from './BulkAddToMenuDialog';
 import { UnifiedBulkDeleteConfirmationModal } from './UnifiedBulkDeleteConfirmationModal';
-import { Dish, Recipe } from '../types';
 
 interface DishesModalsSectionProps {
   showMenuDialog: boolean;
-  menus: any[];
+  menus: Menu[];
   loadingMenus: boolean;
   showBulkDeleteConfirm: boolean;
   selectedItems: Set<string>;

@@ -3,14 +3,28 @@
  */
 import { cacheData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
-import type { MenuItem } from '../../../../../types';
+import type { Menu, MenuItem, MenuStatistics } from '../../../../../types';
+
+interface MenuApiResponse {
+  success: boolean;
+  menu: Menu & { items: MenuItem[] };
+  message?: string;
+  error?: string;
+}
+
+interface StatsApiResponse {
+  success: boolean;
+  statistics: MenuStatistics;
+  message?: string;
+  error?: string;
+}
 
 interface ProcessMenuResponseParams {
   menuResponse: Response;
-  menuData: any;
+  menuData: MenuApiResponse;
   menuId: string;
   menuCacheKey: string;
-  statsData: any;
+  statsData: StatsApiResponse;
   setMenuItems: React.Dispatch<React.SetStateAction<MenuItem[]>>;
   setCategories: React.Dispatch<React.SetStateAction<string[]>>;
   onError?: (message: string) => void;

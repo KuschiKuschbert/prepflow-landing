@@ -2,16 +2,16 @@
  * Helper to process recipe ingredients for COGS calculations.
  */
 
-import { logger } from '@/lib/logger';
 import { COGSCalculation } from '@/app/webapp/cogs/types';
-import { RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
+import { DishRecipe, RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
+import { logger } from '@/lib/logger';
 import { convertToCOGSCalculations } from '../../utils/recipeCalculationHelpers';
 
 /**
  * Process recipe ingredients and scale by recipe yield and quantity.
  */
 export function processRecipeIngredients(
-  dishRecipe: any,
+  dishRecipe: DishRecipe,
   recipeIngredients: RecipeIngredientWithDetails[],
   dishId: string,
 ): COGSCalculation[] {
@@ -20,7 +20,7 @@ export function processRecipeIngredients(
     typeof dishRecipe.quantity === 'number'
       ? dishRecipe.quantity
       : parseFloat(String(dishRecipe.quantity)) || 1;
-  const recipeYield = (dishRecipe.recipes as any)?.yield || 1;
+  const recipeYield = dishRecipe.recipes?.yield || 1;
 
   logger.dev('[useDishCOGSCalculations] Processing recipe', {
     recipeId,

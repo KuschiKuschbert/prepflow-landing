@@ -1,9 +1,10 @@
 import { logger } from '@/lib/logger';
+import type { COGSCalculation, Recipe } from '../../../cogs/types';
+import type { Dish } from '../../../menu-builder/types';
 import type { DishBuilderState } from '../../types';
-import type { COGSCalculation } from '../../../cogs/types';
-import { validateDishState } from '../helpers/validateDish';
-import { saveRecipe } from '../helpers/saveRecipe';
 import { saveDishItem } from '../helpers/saveDishItem';
+import { saveRecipe } from '../helpers/saveRecipe';
+import { validateDishState } from '../helpers/validateDish';
 
 interface DishSaveProps {
   dishState: DishBuilderState;
@@ -43,7 +44,7 @@ export async function saveDish({
   setError,
   setDishState,
   setCalculations,
-}: DishSaveProps): Promise<{ success: boolean; recipe?: any; dish?: any }> {
+}: DishSaveProps): Promise<{ success: boolean; recipe?: Recipe; dish?: Dish }> {
   // Validate dish state
   const validationError = validateDishState(dishState, calculations);
   if (validationError) {

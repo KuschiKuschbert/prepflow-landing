@@ -18,7 +18,7 @@ export async function deleteIngredient(id: string): Promise<void> {
   if (error) {
     logger.error('[Ingredients API] Database error deleting ingredient:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: { endpoint: '/api/ingredients', operation: 'DELETE', ingredientId: id },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

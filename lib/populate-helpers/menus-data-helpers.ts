@@ -2,12 +2,21 @@
  * Helper functions for menu data population (extracted to keep menus-data.ts under 150 lines)
  */
 
+import { Dish, Recipe } from '@/app/webapp/recipes/types';
 import { cleanSampleMenus } from '@/lib/sample-menus-clean';
+
+export interface MenuData {
+  id: string;
+  menu_name: string;
+}
 
 /**
  * Create lookup maps for dishes and recipes
  */
-export function createMenuLookupMaps(dishesData: any[], recipesData: any[]) {
+export function createMenuLookupMaps(
+  dishesData: Pick<Dish, 'id' | 'dish_name'>[],
+  recipesData: Pick<Recipe, 'id' | 'recipe_name'>[],
+) {
   const dishMap = new Map<string, string>();
   if (dishesData) {
     dishesData.forEach(d => {
@@ -22,7 +31,7 @@ export function createMenuLookupMaps(dishesData: any[], recipesData: any[]) {
   const recipeMap = new Map<string, string>();
   if (recipesData) {
     recipesData.forEach(r => {
-      const name = r.recipe_name || r.name;
+      const name = r.recipe_name;
       if (name) {
         recipeMap.set(name.toLowerCase().trim(), r.id);
         recipeMap.set(name, r.id);
@@ -36,7 +45,7 @@ export function createMenuLookupMaps(dishesData: any[], recipesData: any[]) {
 /**
  * Create menu map from menus data
  */
-export function createMenuMap(menusData: any[]): Map<string, string> {
+export function createMenuMap(menusData: MenuData[]): Map<string, string> {
   const menuMap = new Map<string, string>();
   menusData.forEach(m => {
     const name = m.menu_name;

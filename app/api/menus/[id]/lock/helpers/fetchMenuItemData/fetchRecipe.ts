@@ -4,7 +4,7 @@
 
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { MenuItemData, MenuItemIngredient } from '../fetchMenuItemData';
+import { MenuItemData, MenuItemIngredient, RawRecipeResult } from '../fetchMenuItemData';
 
 /**
  * Fetch recipe data with all nested ingredients
@@ -40,8 +40,10 @@ export async function fetchRecipeData(
     return null;
   }
 
+  const rawRecipe = recipe as unknown as RawRecipeResult;
+
   const ingredients: MenuItemIngredient[] =
-    recipe.recipe_ingredients?.map((ri: any) => ({
+    rawRecipe.recipe_ingredients?.map(ri => ({
       name: ri.ingredients?.ingredient_name || 'Unknown Ingredient',
       quantity: Number(ri.quantity) || 0,
       unit: ri.unit || '',
@@ -49,7 +51,7 @@ export async function fetchRecipeData(
     })) || [];
 
   // Handle both recipe_name and name columns
-  const recipeName = (recipe as any).recipe_name || (recipe as any).name || 'Unknown Recipe';
+  const recipeName = rawRecipe.recipe_name || rawRecipe.name || 'Unknown Recipe';
 
   return {
     id: recipe.id,

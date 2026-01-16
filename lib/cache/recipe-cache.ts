@@ -4,6 +4,7 @@
 import { cacheData, clearCache, getCachedData, prefetchApi } from './data-cache';
 
 import { logger } from '@/lib/logger';
+import { ScrapedRecipe } from '@/types/scraped-recipe';
 
 const RECIPES_CACHE_KEY = 'recipes';
 const RECIPE_PRICES_CACHE_KEY = 'recipe_prices';
@@ -19,7 +20,7 @@ interface RecipeCacheMetadata {
 /**
  * Cache recipes in sessionStorage with versioning
  */
-export function cacheRecipes(recipes: any[]): void {
+export function cacheRecipes(recipes: ScrapedRecipe[]): void {
   cacheData(RECIPES_CACHE_KEY, recipes);
 
   // Update cache metadata
@@ -46,7 +47,7 @@ export function cacheRecipes(recipes: any[]): void {
 /**
  * Get cached recipes if valid
  */
-export function getCachedRecipes(): any[] | null {
+export function getCachedRecipes(): ScrapedRecipe[] | null {
   // Check cache version
   try {
     const metadataStr = sessionStorage.getItem(RECIPE_CACHE_VERSION_KEY);
@@ -64,7 +65,7 @@ export function getCachedRecipes(): any[] | null {
     });
   }
 
-  return getCachedData<any[]>(RECIPES_CACHE_KEY);
+  return getCachedData<ScrapedRecipe[]>(RECIPES_CACHE_KEY);
 }
 
 /**

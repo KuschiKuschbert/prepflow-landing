@@ -1,12 +1,13 @@
 'use client';
 
-import React from 'react';
-import { useAutosave } from '@/hooks/useAutosave';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 import { useNotification } from '@/contexts/NotificationContext';
+import { useAutosave } from '@/hooks/useAutosave';
 import { useStaff } from '@/hooks/useStaff';
+import React from 'react';
 
 export interface EquipmentMaintenanceFormData {
+  id?: string;
   equipment_name: string;
   equipment_type: string;
   maintenance_date: string;
@@ -58,7 +59,7 @@ export function EquipmentMaintenanceForm({
   const { staff, loading: staffLoading } = useStaff();
 
   // Autosave integration
-  const entityId = (formData as any).id || 'new';
+  const entityId = formData.id || 'new';
   const canAutosave =
     entityId !== 'new' ||
     Boolean(

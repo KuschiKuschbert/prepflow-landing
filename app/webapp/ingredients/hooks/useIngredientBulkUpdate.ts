@@ -1,26 +1,28 @@
-import { useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
-import { handleBulkUpdate as updateBulk } from './useIngredientBulkUpdate/helpers/handleBulkUpdate';
+import { useCallback } from 'react';
 import { handleBulkAutoCategorize as categorizeBulk } from './useIngredientBulkUpdate/helpers/handleBulkAutoCategorize';
+import { handleBulkUpdate as updateBulk } from './useIngredientBulkUpdate/helpers/handleBulkUpdate';
 import { handleCategorizeAllUncategorized as categorizeAll } from './useIngredientBulkUpdate/helpers/handleCategorizeAll';
 
-interface UseIngredientBulkUpdateProps {
-  ingredients: any[];
-  setIngredients: React.Dispatch<React.SetStateAction<any[]>>;
+interface UseIngredientBulkUpdateProps<T> {
+  ingredients: T[];
+  setIngredients: React.Dispatch<React.SetStateAction<T[]>>;
   setSelectedIngredients: React.Dispatch<React.SetStateAction<Set<string>>>;
   exitSelectionMode: () => void;
 }
 
-export function useIngredientBulkUpdate({
+export function useIngredientBulkUpdate<
+  T extends { id: string; category?: string; is_active?: boolean },
+>({
   ingredients,
   setIngredients,
   setSelectedIngredients,
   exitSelectionMode,
-}: UseIngredientBulkUpdateProps) {
+}: UseIngredientBulkUpdateProps<T>) {
   const { showSuccess, showError } = useNotification();
 
   const handleBulkUpdate = useCallback(
-    async (ids: string[], updates: Partial<any>) => {
+    async (ids: string[], updates: Partial<T>) => {
       await updateBulk(ids, updates, {
         ingredients,
         setIngredients,

@@ -1,8 +1,8 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
-import { invalidateMenuItemsWithRecipe } from '@/lib/menu-pricing/cache-invalidation';
 import { aggregateRecipeDietaryStatus } from '@/lib/dietary/dietary-aggregation';
+import { logger } from '@/lib/logger';
+import { invalidateMenuItemsWithRecipe } from '@/lib/menu-pricing/cache-invalidation';
+import { supabaseAdmin } from '@/lib/supabase';
 
 /**
  * Save recipe ingredients (with optional update mode).
@@ -37,7 +37,7 @@ export async function saveRecipeIngredients(
     if (deleteError) {
       logger.error('[Recipes API] Database error deleting existing ingredients:', {
         error: deleteError.message,
-        code: (deleteError as any).code,
+        code: deleteError.code,
         context: { endpoint: '/api/recipes/[id]/ingredients', operation: 'POST', recipeId },
       });
       throw ApiErrorHandler.fromSupabaseError(deleteError, 500);
@@ -60,7 +60,7 @@ export async function saveRecipeIngredients(
   if (ingredientsError) {
     logger.error('[Recipes API] Database error saving recipe ingredients:', {
       error: ingredientsError.message,
-      code: (ingredientsError as any).code,
+      code: ingredientsError.code,
       context: { endpoint: '/api/recipes/[id]/ingredients', operation: 'POST', recipeId },
     });
     throw ApiErrorHandler.fromSupabaseError(ingredientsError, 500);

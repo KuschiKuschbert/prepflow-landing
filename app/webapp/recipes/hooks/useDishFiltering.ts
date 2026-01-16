@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Dish, DishCostData } from '../types';
 
 export type DishSortField = 'name' | 'selling_price' | 'cost' | 'profit_margin' | 'created';
@@ -28,8 +28,8 @@ export function useDishFiltering(dishes: Dish[], dishCosts: Map<string, DishCost
     );
 
     filtered.sort((a, b) => {
-      let aValue: any;
-      let bValue: any;
+      let aValue: string | number;
+      let bValue: string | number;
 
       switch (filters.sortField) {
         case 'name':

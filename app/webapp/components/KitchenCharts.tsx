@@ -1,10 +1,10 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
-import { supabase } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
-import { useEffect, useState, ErrorInfo, Component, ReactNode } from 'react';
+import { supabase } from '@/lib/supabase';
+import dynamic from 'next/dynamic';
+import { Component, ErrorInfo, ReactNode, useEffect, useState } from 'react';
 
 interface PerformanceSummary {
   topSellers: Array<{
@@ -113,7 +113,7 @@ export default function KitchenCharts() {
         } else if (logsResult.data) {
           const logs = logsResult.data || [];
           const dateCounts = new Map<string, number>();
-          logs.forEach((log: any) => {
+          logs.forEach((log: { log_date: string }) => {
             const date = log.log_date;
             dateCounts.set(date, (dateCounts.get(date) || 0) + 1);
           });

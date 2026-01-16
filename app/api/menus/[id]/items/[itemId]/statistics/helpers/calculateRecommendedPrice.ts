@@ -3,7 +3,9 @@
  */
 
 import { logger } from '@/lib/logger';
+import { RawMenuItem } from '../../../../../helpers/schemas';
 import { cacheRecommendedPrice } from '../../helpers/cacheRecommendedPrice';
+import { StatisticsMenuItem } from './calculateStatistics';
 
 /**
  * Calculates recommended selling price for a menu item
@@ -13,7 +15,7 @@ import { cacheRecommendedPrice } from '../../helpers/cacheRecommendedPrice';
  * @returns {Promise<number | null>} Recommended price or null
  */
 export async function calculateRecommendedPrice(
-  menuItem: any,
+  menuItem: StatisticsMenuItem,
   menuId: string,
 ): Promise<number | null> {
   // Always recalculate to ensure we use the fixed calculation logic
@@ -38,18 +40,16 @@ export async function calculateRecommendedPrice(
 
   // Cache the calculated price for future use (non-blocking)
   if (recommendedPrice != null && recommendedPrice > 0) {
-    // Extract recipe yield from array if present
-    const recipeYield =
-      Array.isArray(menuItem.recipes) && menuItem.recipes.length > 0
-        ? (menuItem.recipes[0] as any)?.yield
-        : recipe?.yield;
+    // We only need dish_id and recipe_id for cacheRecommendedPrice
     const menuItemForCache = {
-      ...menuItem,
-      recipes: recipeYield ? { yield: recipeYield } : undefined,
-    };
+      dish_id: menuItem.dish_id,
+      recipe_id: menuItem.recipe_id,
+    } as RawMenuItem;
     (async () => {
       try {
-        await cacheRecommendedPrice(menuId, menuItem.id, menuItemForCache);
+        if (menuItem.id) {
+          await cacheRecommendedPrice(menuId, menuItem.id, menuItemForCache);
+        }
       } catch (err) {
         logger.error('[Menu Item Statistics API] Failed to cache recommended price:', {
           error: err instanceof Error ? err.message : String(err),

@@ -1,7 +1,9 @@
+import { PerformanceItem } from '../../../types';
+
 /**
  * Map performance item to CSV row format.
  */
-export function mapPerformanceItemToCSVRow(item: any): Record<string, any> {
+export function mapPerformanceItemToCSVRow(item: PerformanceItem): Record<string, string | number> {
   return {
     Dish: item.name || '',
     'Number Sold': item.number_sold || 0,

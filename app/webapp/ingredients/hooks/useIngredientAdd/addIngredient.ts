@@ -3,10 +3,10 @@
  */
 
 import { normalizeIngredientData } from '@/lib/ingredients/normalizeIngredientDataMain';
-import { handleIngredientInsert } from '../helpers/handleIngredientInsert';
-import { handleIngredientInsertError, formatIngredientInsertError } from '../helpers/errorHandling';
-import { performOptimisticUpdate, replaceWithServerIngredient } from '../helpers/optimisticUpdate';
+import { formatIngredientInsertError, handleIngredientInsertError } from '../helpers/errorHandling';
 import { formatIngredientErrorMessage } from '../helpers/errorMessageFormatting';
+import { handleIngredientInsert } from '../helpers/handleIngredientInsert';
+import { performOptimisticUpdate, replaceWithServerIngredient } from '../helpers/optimisticUpdate';
 
 interface AddIngredientParams<T> {
   ingredientData: Partial<T>;
@@ -80,7 +80,7 @@ export function rollbackIngredientAdd<T>(
   originalIngredients: T[],
   setIngredients: React.Dispatch<React.SetStateAction<T[]>>,
   setShowAddForm?: (show: boolean) => void,
-  error?: any,
+  error?: unknown,
   setError?: (error: string) => void,
 ): void {
   if (originalIngredients.length > 0) {

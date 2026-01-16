@@ -1,3 +1,5 @@
+import { PostgrestError } from '@supabase/supabase-js';
+
 export const SUPABASE_ERROR_CODES = {
   TABLE_NOT_FOUND: '42P01',
   COLUMN_NOT_FOUND: '42703',
@@ -12,15 +14,8 @@ export interface ApiError {
   message: string;
   code?: string;
   status?: number;
-  details?: any;
+  details?: unknown;
   timestamp?: Date;
-}
-
-interface PostgrestError {
-  message: string;
-  details?: string;
-  hint?: string;
-  code?: string;
 }
 
 export function parseSupabaseError(

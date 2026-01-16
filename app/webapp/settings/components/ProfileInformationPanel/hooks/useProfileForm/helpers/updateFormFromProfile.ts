@@ -1,15 +1,13 @@
 /**
  * Update formData from profile when profile updates.
  */
-import { useEffect } from 'react';
 import { logger } from '@/lib/logger';
+import { useEffect } from 'react';
+
+import { ProfileData } from '../types';
 
 export function useUpdateFormFromProfile(
-  profile: {
-    first_name: string | null;
-    last_name: string | null;
-    business_name: string | null;
-  } | null,
+  profile: ProfileData | null,
   initialDataLoadedRef: React.MutableRefObject<boolean>,
   userHasModifiedRef: React.MutableRefObject<boolean>,
   USER_MODIFIED_KEY: string,
@@ -17,7 +15,7 @@ export function useUpdateFormFromProfile(
   setFormData: React.Dispatch<
     React.SetStateAction<{ first_name: string; last_name: string; business_name: string }>
   >,
-  onProfileUpdate: (profileData: any) => void,
+  onProfileUpdate: (profileData: ProfileData) => void,
 ) {
   useEffect(() => {
     if (!profile || initialDataLoadedRef.current) return;

@@ -1,28 +1,28 @@
 import { logger } from '@/lib/logger';
-import { CreateDishInput } from '@/types/dish';
+import { DishIngredientInput, DishRecipeInput } from '../../helpers/schemas';
 import { invalidateAllergenCache, invalidateMenuPricingCache } from './invalidateDishCaches';
 import { updateDishIngredients } from './updateDishIngredients';
 import { updateDishRecipes } from './updateDishRecipes';
 
 export interface UpdateRelationsResult {
   changes: string[];
-  changeDetails: Record<string, any>; // changeDetails structure is dynamic
+  changeDetails: Record<string, unknown>;
 }
 
 /**
  * Updates dish recipes and tracks changes
  *
  * @param {string} dishId - Dish ID
- * @param {CreateDishInput['recipes']} recipes - Recipes to set
+ * @param {DishRecipeInput[]} recipes - Recipes to set
  * @param {string[]} changes - Array to append changes to
- * @param {Record<string, any>} changeDetails - Object to add change details to
+ * @param {Record<string, unknown>} changeDetails - Object to add change details to
  * @returns {Promise<void>}
  */
 export async function updateRecipesWithTracking(
   dishId: string,
-  recipes: NonNullable<CreateDishInput['recipes']>,
+  recipes: DishRecipeInput[],
   changes: string[],
-  changeDetails: Record<string, any>,
+  changeDetails: Record<string, unknown>,
 ): Promise<void> {
   await updateDishRecipes(dishId, recipes);
   changes.push('recipes_changed');
@@ -37,18 +37,18 @@ export async function updateRecipesWithTracking(
  *
  * @param {string} dishId - Dish ID
  * @param {string} dishName - Dish name
- * @param {any[]} ingredients - Ingredients to set
+ * @param {DishIngredientInput[]} ingredients - Ingredients to set
  * @param {string[]} changes - Array to append changes to
- * @param {Record<string, any>} changeDetails - Object to add change details to
+ * @param {Record<string, unknown>} changeDetails - Object to add change details to
  * @param {string | null} userEmail - User email for change tracking
  * @returns {Promise<void>}
  */
 export async function updateIngredientsWithTracking(
   dishId: string,
   dishName: string,
-  ingredients: NonNullable<CreateDishInput['ingredients']>,
+  ingredients: DishIngredientInput[],
   changes: string[],
-  changeDetails: Record<string, any>,
+  changeDetails: Record<string, unknown>,
   userEmail: string | null,
 ): Promise<void> {
   await updateDishIngredients(dishId, ingredients);
@@ -75,7 +75,7 @@ export async function updateIngredientsWithTracking(
         dishId,
         dishName,
         'ingredients_changed',
-        changeDetails.ingredients,
+        changeDetails.ingredients as Record<string, unknown>,
         userEmail,
       );
     } catch (err) {

@@ -2,17 +2,17 @@
  * Helper to transform cards for response.
  */
 
-import type {
-  CardMapEntry,
-  GroupedSubRecipeCards,
-  ItemOrder,
-  RecipeCard,
-  SubRecipeCard,
-} from '../types';
+import type { CardMapEntry, ItemOrder, RecipeCard, SubRecipeCard } from '../types';
 
 /**
  * Transform cards for response, separating main cards from sub-recipe cards.
  */
+interface SubRecipeUsage {
+  menu_item_id: string;
+  menu_item_name?: string;
+  quantity?: number;
+}
+
 export function transformCards(
   cardMap: Map<string, CardMapEntry>,
   itemOrderMap: Map<string, ItemOrder>,
@@ -39,9 +39,9 @@ export function transformCards(
       methodSteps: card.method_steps || [],
       notes: card.notes
         ? typeof card.notes === 'string'
-          ? card.notes.split('\n').filter((n: string) => n.trim().length > 0)
+          ? (card.notes as string).split('\n').filter((n: string) => n.trim().length > 0)
           : Array.isArray(card.notes)
-            ? card.notes
+            ? (card.notes as string[])
             : []
         : [],
       parsedAt: card.parsed_at,
@@ -51,18 +51,18 @@ export function transformCards(
     };
 
     // Check if this is a sub-recipe card (recipe_id set, dish_id null)
-    const isSubRecipe = card.recipe_id && !card.dish_id;
+    const isSubRecipe = transformedCard.recipeId && !transformedCard.dishId;
 
     if (isSubRecipe) {
       // Extract sub-recipe metadata from card_content
-      const cardContent = card.card_content || {};
-      const subRecipeType = cardContent.sub_recipe_type || 'other';
-      const usedByMenuItems = cardContent.used_by_menu_items || [];
+      const cardContent = (card.card_content || {}) as Record<string, unknown>;
+      const subRecipeType = (cardContent.sub_recipe_type as string) || 'other';
+      const usedByMenuItems = (cardContent.used_by_menu_items as SubRecipeUsage[]) || [];
 
       subRecipeCards.push({
         ...transformedCard,
         subRecipeType,
-        usedByMenuItems: usedByMenuItems.map((mi: any) => ({
+        usedByMenuItems: usedByMenuItems.map(mi => ({
           menuItemId: mi.menu_item_id,
           menuItemName: mi.menu_item_name || menuItemNameMap.get(mi.menu_item_id) || 'Unknown Item',
           quantity: mi.quantity || 1,

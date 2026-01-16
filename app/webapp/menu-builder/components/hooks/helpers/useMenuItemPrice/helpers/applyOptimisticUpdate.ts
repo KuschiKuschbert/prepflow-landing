@@ -3,15 +3,16 @@
  */
 
 import { logger } from '@/lib/logger';
+import { MenuItem } from '../../../../../types';
 
 /**
  * Apply optimistic update to menu items state.
  */
 export function applyOptimisticUpdate(
-  menuItems: any[],
+  menuItems: MenuItem[],
   itemId: string,
   price: number | null,
-): any[] {
+): MenuItem[] {
   logger.dev('[useMenuItemPrice] Applying optimistic update', {
     itemId,
     oldPrice: menuItems.find(i => i.id === itemId)?.actual_selling_price,

@@ -2,12 +2,25 @@
  * Hook for comprehensive scraping operations
  */
 
-import { useCallback } from 'react';
 import { logger } from '@/lib/logger';
+import { useCallback } from 'react';
+
+export interface ScrapingJobStatus {
+  id: string;
+  status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
+  progress: number;
+  totalUrls: number;
+  processedUrls: number;
+  failedUrls: number;
+  startTime?: string;
+  endTime?: string;
+  error?: string;
+  isRunning: boolean;
+}
 
 interface UseComprehensiveScrapingParams {
   setComprehensiveScraping: (value: boolean) => void;
-  setComprehensiveStatus: (status: any) => void;
+  setComprehensiveStatus: (status: ScrapingJobStatus | null) => void;
   setStatusPolling: (polling: boolean) => void;
   fetchComprehensiveStatus: () => Promise<void>;
 }

@@ -2,15 +2,17 @@
  * Helper to fetch recipe cards for export.
  */
 
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
+
+import { IngredientRow, MethodStepRow } from '../../recipe-cards/types';
 
 export interface RecipeCardData {
   id: string;
   title: string;
   baseYield: number;
-  ingredients: any[];
-  methodSteps: any[];
+  ingredients: IngredientRow[];
+  methodSteps: MethodStepRow[];
   notes: string[];
   category: string;
   position: number;
@@ -68,9 +70,15 @@ export async function fetchRecipeCards(menuId: string): Promise<RecipeCardData[]
     });
   }
 
+  interface MenuItemOrderResult {
+    id: string;
+    category: string | null;
+    position: number | null;
+  }
+
   const itemOrderMap = new Map<string, { category: string; position: number }>();
   if (menuItems) {
-    menuItems.forEach((item: any) => {
+    (menuItems as unknown as MenuItemOrderResult[]).forEach(item => {
       itemOrderMap.set(item.id, {
         category: item.category || '',
         position: item.position || 0,
@@ -78,8 +86,18 @@ export async function fetchRecipeCards(menuId: string): Promise<RecipeCardData[]
     });
   }
 
-  return cards
-    .map((card: any) => ({
+  interface RawRecipeCard {
+    id: string;
+    title: string;
+    base_yield: number;
+    ingredients: IngredientRow[];
+    method_steps: MethodStepRow[];
+    notes: string[] | string | null;
+    menu_item_id: string;
+  }
+
+  return (cards as unknown as RawRecipeCard[])
+    .map(card => ({
       id: card.id,
       title: card.title || 'Unknown Recipe',
       baseYield: card.base_yield || 1,
@@ -89,7 +107,7 @@ export async function fetchRecipeCards(menuId: string): Promise<RecipeCardData[]
         card.notes && typeof card.notes === 'string'
           ? card.notes.split('\n').filter((n: string) => n.trim().length > 0)
           : Array.isArray(card.notes)
-            ? card.notes
+            ? (card.notes as string[])
             : [],
       category: itemOrderMap.get(card.menu_item_id)?.category || 'Uncategorized',
       position: itemOrderMap.get(card.menu_item_id)?.position || 999,

@@ -11,8 +11,11 @@ import { NextResponse } from 'next/server';
  * @returns {NextResponse} Error response
  */
 export function handleCleaningAreaError(err: unknown, method: string): NextResponse {
+<<<<<<< HEAD
   const appError = getAppError(err);
 
+=======
+>>>>>>> main
   logger.error('[Cleaning Areas API] Unexpected error:', {
     error: appError.message,
     code: appError.code,

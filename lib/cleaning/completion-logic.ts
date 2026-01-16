@@ -41,6 +41,7 @@ export interface TaskWithCompletions {
   kitchen_sections?: {
     id: string;
     name: string;
+    section_name?: string;
     description?: string;
   } | null;
 }

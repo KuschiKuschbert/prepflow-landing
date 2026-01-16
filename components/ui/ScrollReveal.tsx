@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useRef } from 'react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
+import React, { useRef } from 'react';
 
 interface ScrollRevealProps {
   children: React.ReactNode;
@@ -30,7 +30,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
     margin: '0px 0px -100px 0px',
   });
 
-  const variants = {
+  const variants: Record<string, any> = {
     'fade-up': {
       hidden: { opacity: 0, y: 40 },
       visible: { opacity: 1, y: 0 },
@@ -54,7 +54,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   };
 
   // Simplified variants for reduced motion
-  const reducedVariants = {
+  const reducedVariants: Record<string, any> = {
     'fade-up': {
       hidden: { opacity: 0 },
       visible: { opacity: 1 },
@@ -84,7 +84,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
       ref={ref}
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
-      variants={activeVariants[variant] as any}
+      variants={activeVariants[variant]}
       transition={{
         duration: reducedMotion ? 0.2 : duration,
         delay: reducedMotion ? 0 : delay,

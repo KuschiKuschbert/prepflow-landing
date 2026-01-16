@@ -91,7 +91,7 @@ interface ComplianceContentProps {
   newRecord: ComplianceRecordFormData;
   newType: ComplianceTypeFormData;
   newEquipment: EquipmentMaintenanceFormData;
-  equipmentRecords: any[];
+  equipmentRecords: unknown[];
   onRecordFormChange: (data: ComplianceRecordFormData) => void;
   onTypeFormChange: (data: ComplianceTypeFormData) => void;
   onEquipmentFormChange: (data: EquipmentMaintenanceFormData) => void;

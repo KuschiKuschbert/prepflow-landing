@@ -1,8 +1,8 @@
 /**
  * Hook for moving menu items between categories.
  */
-import { useCallback } from 'react';
 import { logger } from '@/lib/logger';
+import { useCallback } from 'react';
 import type { MenuItem } from '../../../types';
 
 interface UseMenuItemCategoryProps {
@@ -25,7 +25,7 @@ export function useMenuItemCategory({
   loadMenuData,
   showError,
 }: UseMenuItemCategoryProps) {
-  const handleRefreshError = (err: any) => logger.error('Failed to refresh statistics:', err);
+  const handleRefreshError = (err: unknown) => logger.error('Failed to refresh statistics:', err);
   const performMoveToCategory = useCallback(
     async (itemId: string, targetCategory: string, item: MenuItem) => {
       const originalMenuItems = [...menuItems];

@@ -4,10 +4,16 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 import type { DishRecord } from '../types';
 
+import { AuditDishItem } from '../types';
+
 /**
  * Fetch all dishes
  */
+<<<<<<< HEAD
 export async function fetchDishes(): Promise<{ dishes: DishRecord[] } | NextResponse> {
+=======
+export async function fetchDishes(): Promise<{ dishes: AuditDishItem[] } | NextResponse> {
+>>>>>>> main
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

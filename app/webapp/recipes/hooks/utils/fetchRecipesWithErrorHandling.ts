@@ -26,11 +26,11 @@ export async function fetchRecipesWithErrorHandling(
   setIsHydrated: (hydrated: boolean) => void,
   updateVisibleRecipePrices: (
     recipes: Recipe[],
-    fetchRecipeIngredients: (recipeId: string) => Promise<any[]>,
-    fetchBatchRecipeIngredients?: (recipeIds: string[]) => Promise<Record<string, any[]>>,
+    fetchRecipeIngredients: (recipeId: string) => Promise<unknown[]>,
+    fetchBatchRecipeIngredients?: (recipeIds: string[]) => Promise<Record<string, unknown[]>>,
   ) => Promise<void>,
-  fetchRecipeIngredients: (recipeId: string) => Promise<any[]>,
-  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<Record<string, any[]>>,
+  fetchRecipeIngredients: (recipeId: string) => Promise<unknown[]>,
+  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<Record<string, unknown[]>>,
   pricesCalculatedRef: React.MutableRefObject<Set<string>>,
 ): Promise<void> {
   setLoading(true);

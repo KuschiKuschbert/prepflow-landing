@@ -1,4 +1,5 @@
 import { logger } from '@/lib/logger';
+import type { Recipe } from '../../../cogs/types';
 import type { DishBuilderState } from '../../types';
 import { createRecipe } from './saveRecipe/createRecipe';
 import { saveIngredients } from './saveRecipe/saveIngredients';
@@ -12,12 +13,14 @@ interface SaveRecipeProps {
  * Save recipe via API
  *
  * @param {SaveRecipeProps} props - Recipe save props
- * @returns {Promise<{success: true, recipe: any} | {success: false, error: string}>} Save result
+ * @returns {Promise<{success: true, recipe: Recipe} | {success: false, error: string}>} Save result
  */
 export async function saveRecipe({
   dishState,
   itemIngredients,
-}: SaveRecipeProps): Promise<{ success: true; recipe: any } | { success: false; error: string }> {
+}: SaveRecipeProps): Promise<
+  { success: true; recipe: Recipe } | { success: false; error: string }
+> {
   try {
     logger.dev('[saveRecipe] Starting recipe creation:', {
       dishName: dishState.dishName,

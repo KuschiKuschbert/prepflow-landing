@@ -1,13 +1,8 @@
-/**
- * Helper for menu lock/unlock operations
- */
-
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
-
-import { Menu } from '../../../types';
+import { Menu } from '../../../helpers/schemas';
 
 /**
  * Checks if menu is locked
@@ -125,7 +120,7 @@ export async function lockMenu(
     };
   }
 
-  return { menu: updatedMenu, error: null };
+  return { menu: updatedMenu as Menu, error: null };
 }
 
 /**
@@ -166,5 +161,5 @@ export async function unlockMenu(
     };
   }
 
-  return { menu: updatedMenu, error: null };
+  return { menu: updatedMenu as Menu, error: null };
 }

@@ -3,12 +3,14 @@
  */
 import type { ShiftValidationWarning } from '../../../types';
 
-export function createValidationActions(set: any) {
+import type { RosterState, RosterStoreSet } from '../types';
+
+export function createValidationActions(set: RosterStoreSet) {
   return {
     setValidationWarnings: (warnings: ShiftValidationWarning[]) =>
       set({ validationWarnings: warnings }),
     addValidationWarning: (warning: ShiftValidationWarning) =>
-      set((state: any) => ({
+      set((state: RosterState) => ({
         validationWarnings: [
           ...state.validationWarnings.filter(
             (w: ShiftValidationWarning) => w.shiftId !== warning.shiftId,
@@ -17,7 +19,7 @@ export function createValidationActions(set: any) {
         ],
       })),
     removeValidationWarning: (shiftId: string) =>
-      set((state: any) => ({
+      set((state: RosterState) => ({
         validationWarnings: state.validationWarnings.filter(
           (w: ShiftValidationWarning) => w.shiftId !== shiftId,
         ),

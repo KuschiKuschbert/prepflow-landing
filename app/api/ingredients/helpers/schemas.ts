@@ -18,13 +18,22 @@ export const createIngredientSchema = z
     min_stock_level: z.number().optional(),
     current_stock: z.number().optional(),
     allergens: z.array(z.string()).optional(),
-    allergen_source: z.any().optional(),
+    allergen_source: z
+      .object({
+        manual: z.boolean().optional(),
+        ai: z.boolean().optional(),
+        method: z.string().optional(),
+      })
+      .optional(),
+    product_code: z.string().optional(),
     notes: z.string().optional(),
   })
   .refine(data => data.ingredient_name || data.name, {
     message: 'ingredient_name or name is required',
     path: ['ingredient_name'],
   });
+
+export type CreateIngredientInput = z.infer<typeof createIngredientSchema>;
 
 export const updateIngredientSchema = z.object({
   id: z.string().min(1, 'Ingredient ID is required'),
@@ -44,6 +53,18 @@ export const updateIngredientSchema = z.object({
   min_stock_level: z.number().optional(),
   current_stock: z.number().optional(),
   allergens: z.array(z.string()).optional(),
-  allergen_source: z.any().optional(),
+  allergen_source: z
+    .object({
+      manual: z.boolean().optional(),
+      ai: z.boolean().optional(),
+      method: z.string().optional(),
+    })
+    .optional(),
+  product_code: z.string().optional(),
   notes: z.string().optional(),
 });
+
+export type UpdateIngredientInput = z.infer<typeof updateIngredientSchema>;
+
+export const updateIngredientDataSchema = updateIngredientSchema.omit({ id: true });
+export type UpdateIngredientData = z.infer<typeof updateIngredientDataSchema>;

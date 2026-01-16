@@ -3,11 +3,11 @@
  * Download backup file from Google Drive.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { authenticateGoogleDrive, downloadBackupFromDrive } from '@/lib/backup/google-drive';
 import { logger } from '@/lib/logger';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Downloads backup file from Google Drive.
@@ -43,10 +43,13 @@ export async function GET(request: NextRequest, context: { params: Promise<{ fil
       backupFile: base64Data,
       size: backupData.length,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Google Drive Download] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to download backup from Google Drive', message: error.message },
+      {
+        error: 'Failed to download backup from Google Drive',
+        message: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }

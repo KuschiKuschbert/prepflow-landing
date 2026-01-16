@@ -5,13 +5,13 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { useNotification } from '@/contexts/NotificationContext';
-import { Icon } from '@/components/ui/Icon';
-import { RotateCcw, X, AlertTriangle } from 'lucide-react';
-import type { BackupFile, RestoreMode, MergeOptions } from '@/lib/backup/types';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Icon } from '@/components/ui/Icon';
+import { useNotification } from '@/contexts/NotificationContext';
+import type { BackupFile, MergeOptions, RestoreMode } from '@/lib/backup/types';
 import { logger } from '@/lib/logger';
+import { AlertTriangle, RotateCcw, X } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface RestoreDialogProps {
   backup: BackupFile;
@@ -108,7 +108,7 @@ export function RestoreDialog({ backup, open, onClose, onRestoreComplete }: Rest
       } else {
         showError(data.error || 'Failed to restore backup');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('[RestoreDialog.tsx] Error in catch block:', {
         error: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,

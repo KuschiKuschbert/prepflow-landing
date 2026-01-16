@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
-import { useTranslation } from '@/lib/useTranslation';
-import { SupplierFormData } from '../types';
-import { useAutosave } from '@/hooks/useAutosave';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
+import { useAutosave } from '@/hooks/useAutosave';
+import { useTranslation } from '@/lib/useTranslation';
+import React from 'react';
+import { SupplierFormData } from '../types';
 
 interface SupplierFormProps {
   formData: SupplierFormData;
@@ -17,7 +17,7 @@ export function SupplierForm({ formData, onChange, onSubmit, onCancel }: Supplie
   const { t } = useTranslation();
 
   // Autosave integration
-  const entityId = (formData as any).id || 'new';
+  const entityId = String(formData.id || 'new');
   const canAutosave = entityId !== 'new' || Boolean(formData.name);
 
   const {

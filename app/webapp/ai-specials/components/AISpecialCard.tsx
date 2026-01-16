@@ -1,13 +1,17 @@
 'use client';
-import { useTranslation } from '@/lib/useTranslation';
 import { Icon } from '@/components/ui/Icon';
+import { useTranslation } from '@/lib/useTranslation';
 import { Bot } from 'lucide-react';
 
 interface AISpecial {
   id: string;
   image_data: string;
   prompt?: string;
-  ai_response: any;
+  ai_response: {
+    ingredients?: string[];
+    suggestions?: string[];
+    confidence?: number;
+  } | null;
   status: 'pending' | 'processing' | 'completed' | 'failed';
   created_at: string;
 }

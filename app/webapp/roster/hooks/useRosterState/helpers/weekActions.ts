@@ -1,7 +1,9 @@
 /**
  * Week navigation action helpers for roster state.
  */
-export function createWeekActions(set: any) {
+import type { RosterStoreSet } from '../types';
+
+export function createWeekActions(set: RosterStoreSet) {
   return {
     setCurrentWeekStart: (date: Date) => set({ currentWeekStart: date }),
   };

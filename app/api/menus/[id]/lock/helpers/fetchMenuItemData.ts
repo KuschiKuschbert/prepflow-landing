@@ -35,6 +35,46 @@ export interface MenuItemData {
   instructions?: string;
 }
 
+export interface RawIngredientJoin {
+  ingredient_name: string;
+}
+
+export interface RawRecipeIngredientJoin {
+  quantity: number | string | null;
+  unit: string | null;
+  ingredients: RawIngredientJoin | null;
+}
+
+export interface RawRecipeResult {
+  id: string;
+  name: string;
+  recipe_name?: string;
+  description: string | null;
+  yield: number | null;
+  yield_unit: string | null;
+  instructions: string | null;
+  recipe_ingredients: RawRecipeIngredientJoin[];
+}
+
+export interface RawDishIngredientJoin {
+  quantity: number | string | null;
+  unit: string | null;
+  ingredients: RawIngredientJoin | null;
+}
+
+export interface RawDishRecipeJoin {
+  quantity: number | string | null;
+  recipes: RawRecipeResult | null;
+}
+
+export interface RawDishResult {
+  id: string;
+  dish_name: string;
+  description: string | null;
+  dish_ingredients: RawDishIngredientJoin[];
+  dish_recipes: RawDishRecipeJoin[];
+}
+
 import { fetchDishData } from './fetchMenuItemData/fetchDish';
 import { fetchRecipeData } from './fetchMenuItemData/fetchRecipe';
 

@@ -5,8 +5,8 @@
  */
 
 import { Icon } from '@/components/ui/Icon';
-import { Edit2, Trash2 } from 'lucide-react';
 import type { TaskWithCompletions } from '@/lib/cleaning/completion-logic';
+import { Edit2, Trash2 } from 'lucide-react';
 
 interface TaskItemProps {
   task: TaskWithCompletions;
@@ -100,16 +100,14 @@ export function TaskItem({
           {task.equipment_id && task.temperature_equipment && (
             <div className="mt-2 flex items-center gap-2 text-xs text-[var(--foreground-subtle)]">
               <span>Equipment:</span>
-              <span className="text-[var(--color-info)]">
-                {(task.temperature_equipment as any)?.name}
-              </span>
+              <span className="text-[var(--color-info)]">{task.temperature_equipment.name}</span>
             </div>
           )}
           {task.section_id && task.kitchen_sections && (
             <div className="mt-1 flex items-center gap-2 text-xs text-[var(--foreground-subtle)]">
               <span>Section:</span>
               <span className="text-[var(--accent)]">
-                {(task.kitchen_sections as any)?.section_name}
+                {task.kitchen_sections.section_name || task.kitchen_sections.name}
               </span>
             </div>
           )}

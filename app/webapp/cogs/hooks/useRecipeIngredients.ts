@@ -11,7 +11,7 @@ import { useRecipeIngredientLoading } from './useRecipeIngredientLoading';
 import { logger } from '@/lib/logger';
 interface UseRecipeIngredientsProps {
   setRecipeIngredients: React.Dispatch<React.SetStateAction<RecipeIngredient[]>>;
-  setCalculations: React.Dispatch<React.SetStateAction<any[]>>;
+  setCalculations: React.Dispatch<React.SetStateAction<unknown[]>>;
   calculateCOGS: (recipeIngredients: RecipeIngredient[]) => void;
   setError: (error: string) => void;
   setIsLoadingFromApi?: (loading: boolean) => void;

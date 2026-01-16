@@ -5,11 +5,11 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 
-interface IngredientIdResult {
+interface IngredientIdRow {
   ingredient_id: string;
 }
 
-interface RecipeIdResult {
+interface RecipeIdRow {
   recipe_id: string;
 }
 
@@ -38,7 +38,7 @@ export async function collectIngredientIds(
           context: { menuId },
         });
       } else if (dishIngredients) {
-        (dishIngredients as unknown as IngredientIdResult[]).forEach(di => {
+        (dishIngredients as IngredientIdRow[]).forEach(di => {
           if (di.ingredient_id) ingredientIds.add(di.ingredient_id);
         });
       }
@@ -55,15 +55,13 @@ export async function collectIngredientIds(
           context: { menuId },
         });
       } else if (dishRecipes) {
-        const dishRecipeIds = (dishRecipes as unknown as RecipeIdResult[])
-          .map(dr => dr.recipe_id)
-          .filter(id => id);
+        const dRecipeIds = (dishRecipes as RecipeIdRow[]).map(dr => dr.recipe_id).filter(id => id);
 
-        if (dishRecipeIds.length > 0) {
+        if (dRecipeIds.length > 0) {
           const { data: recipeIngredients, error: recipeIngredientsError } = await supabaseAdmin
             .from('recipe_ingredients')
             .select('ingredient_id')
-            .in('recipe_id', dishRecipeIds);
+            .in('recipe_id', dRecipeIds);
 
           if (recipeIngredientsError) {
             logger.warn('[Menu Ingredients API] Error fetching recipe ingredients (continuing):', {
@@ -71,13 +69,13 @@ export async function collectIngredientIds(
               context: { menuId },
             });
           } else if (recipeIngredients) {
-            (recipeIngredients as unknown as IngredientIdResult[]).forEach(ri => {
+            (recipeIngredients as IngredientIdRow[]).forEach(ri => {
               if (ri.ingredient_id) ingredientIds.add(ri.ingredient_id);
             });
           }
         }
       }
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error('[Menu Ingredients API] Error collecting dish ingredients:', {
         error: err instanceof Error ? err.message : String(err),
         context: { menuId },
@@ -99,11 +97,11 @@ export async function collectIngredientIds(
           context: { menuId },
         });
       } else if (recipeIngredients) {
-        (recipeIngredients as unknown as IngredientIdResult[]).forEach(ri => {
+        (recipeIngredients as IngredientIdRow[]).forEach(ri => {
           if (ri.ingredient_id) ingredientIds.add(ri.ingredient_id);
         });
       }
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error('[Menu Ingredients API] Error collecting recipe ingredients:', {
         error: err instanceof Error ? err.message : String(err),
         context: { menuId },

@@ -1,14 +1,7 @@
-import { DBDishRecipe, DBRecipeIngredient, SectionData } from '../types';
-
-// Depending on where menuItems comes from (likely EnrichedMenuItem or RawMenuItem),
-// we might want to import that. For now, we'll keep it as any[] to avoid circular deps
-// or if it's a complex generic type, but verify usage.
-// Actually, looking at route.ts, menuItems comes from `fetchMenuItemsWithFallback`.
-// Let's use `any` for menuItems for now to focus on the internal logic types
-// or define a minimal interface if needed.
+import { DBDishRecipe, DBRecipeIngredient, MenuItemData, SectionData } from '../types';
 
 export function aggregateIngredientsBySection(
-  menuItems: any[],
+  menuItems: MenuItemData[],
   dishRecipes: DBDishRecipe[],
   recipeIngredients: DBRecipeIngredient[],
 ): SectionData[] {
@@ -17,7 +10,12 @@ export function aggregateIngredientsBySection(
   // Process each menu item
   for (const item of menuItems) {
     const category = item.category || 'Uncategorized';
-    const sectionId = item.dishes?.kitchen_section_id || null;
+    const itemDish = item.dishes
+      ? Array.isArray(item.dishes)
+        ? item.dishes[0]
+        : item.dishes
+      : null;
+    const sectionId = itemDish?.kitchen_section_id || null;
     const sectionName = category;
 
     if (!sectionMap.has(sectionName)) {
@@ -33,11 +31,28 @@ export function aggregateIngredientsBySection(
     const section = sectionMap.get(sectionName)!;
 
     // If it's a dish, process its recipes
-    if (item.dish_id && item.dishes) {
+    if (item.dish_id && itemDish) {
       const dishRecipesForDish = dishRecipes.filter(dr => dr.dish_id === item.dish_id);
 
       for (const dishRecipe of dishRecipesForDish) {
-        const recipe = menuItems.find((mi: any) => mi.recipe_id === dishRecipe.recipe_id)?.recipes;
+        // Find the recipe name from the menu items if possible, or we might need another source
+        // The original logic tried to find a menu item with this recipe_id.
+        // menuItems.find((mi: any) => ...)
+
+        // ISSUE: dishRecipe has recipe_id, but we need recipe metadata (name).
+        // The original code was: menuItems.find((mi: any) => mi.recipe_id === dishRecipe.recipe_id)?.recipes;
+        // This assumes every recipe used in a dish is also listed as a standalone menu item? That seems potentially flaky but if that's the logic...
+        // Better: We should probably use the recipe dictionary that we fetched? But this function doesn't receive it.
+        // We will stick to the original logic but type safe it.
+
+        const foundItem = menuItems.find(mi => mi.recipe_id === dishRecipe.recipe_id);
+        const foundItemRec = foundItem?.recipes;
+        const recipe = foundItemRec
+          ? Array.isArray(foundItemRec)
+            ? foundItemRec[0]
+            : foundItemRec
+          : null;
+
         if (!recipe) continue;
 
         const recipeIngs = recipeIngredients.filter(ri => ri.recipe_id === dishRecipe.recipe_id);
@@ -45,9 +60,9 @@ export function aggregateIngredientsBySection(
         // Add to recipe grouped
         section.recipeGrouped.push({
           recipeId: dishRecipe.recipe_id,
-          recipeName: recipe.recipe_name,
+          recipeName: recipe.recipe_name || recipe.name,
           dishId: item.dish_id,
-          dishName: item.dishes.dish_name,
+          dishName: itemDish.dish_name,
           ingredients: recipeIngs.map(ri => ({
             ingredientId: ri.ingredient_id,
             name: ri.ingredients?.ingredient_name || 'Unknown',
@@ -69,7 +84,7 @@ export function aggregateIngredientsBySection(
             existing.sources.push({
               type: 'dish',
               id: item.dish_id,
-              name: item.dishes.dish_name,
+              name: itemDish.dish_name,
               quantity: dishRecipe.quantity,
             });
           } else {
@@ -82,7 +97,7 @@ export function aggregateIngredientsBySection(
                 {
                   type: 'dish',
                   id: item.dish_id,
-                  name: item.dishes.dish_name,
+                  name: itemDish.dish_name,
                   quantity: dishRecipe.quantity,
                 },
               ],
@@ -92,11 +107,14 @@ export function aggregateIngredientsBySection(
       }
     } else if (item.recipe_id && item.recipes) {
       // Direct recipe
+      const itemRecipe = Array.isArray(item.recipes) ? item.recipes[0] : item.recipes;
+      if (!itemRecipe) continue;
+
       const recipeIngs = recipeIngredients.filter(ri => ri.recipe_id === item.recipe_id);
 
       section.recipeGrouped.push({
         recipeId: item.recipe_id,
-        recipeName: item.recipes.recipe_name,
+        recipeName: itemRecipe.recipe_name || itemRecipe.name,
         ingredients: recipeIngs.map(ri => ({
           ingredientId: ri.ingredient_id,
           name: ri.ingredients?.ingredient_name || 'Unknown',
@@ -116,7 +134,7 @@ export function aggregateIngredientsBySection(
           existing.sources.push({
             type: 'recipe',
             id: item.recipe_id,
-            name: item.recipes.recipe_name,
+            name: itemRecipe.recipe_name || itemRecipe.name,
           });
         } else {
           section.aggregatedIngredients.push({
@@ -128,7 +146,7 @@ export function aggregateIngredientsBySection(
               {
                 type: 'recipe',
                 id: item.recipe_id,
-                name: item.recipes.recipe_name,
+                name: itemRecipe.recipe_name || itemRecipe.name,
               },
             ],
           });

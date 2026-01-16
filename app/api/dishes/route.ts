@@ -1,51 +1,11 @@
-/**
- * Dishes API Routes
- *
- * 📚 Square Integration: This route automatically triggers Square sync hooks after dish
- * create operations. See `docs/SQUARE_API_REFERENCE.md` (Automatic Sync section) for details.
- */
-
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { triggerDishSync } from '@/lib/square/sync/hooks';
 import { supabaseAdmin } from '@/lib/supabase';
-import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { createDishWithRelations } from './helpers/createDishWithRelations';
 import { handleDishListError } from './helpers/handleDishListError';
-
-const recipeSchema = z.object({
-  recipe_id: z.string().min(1, 'Recipe ID is required'),
-  quantity: z.number().positive().optional().default(1),
-});
-
-const ingredientSchema = z.object({
-  ingredient_id: z.string().min(1, 'Ingredient ID is required'),
-  quantity: z.union([z.number(), z.string()]).transform(val => Number(val)),
-  unit: z.string().min(1, 'Unit is required'),
-});
-
-const createDishSchema = z
-  .object({
-    dish_name: z.string().min(1, 'Dish name is required'),
-    selling_price: z.number().positive('Selling price must be positive'),
-    description: z.string().optional(),
-    recipes: z.array(recipeSchema).optional(),
-    ingredients: z.array(ingredientSchema).optional(),
-    category: z.string().optional(),
-  })
-  .refine(
-    data => {
-      const hasRecipes = data.recipes && data.recipes.length > 0;
-      const hasIngredients = data.ingredients && data.ingredients.length > 0;
-      return hasRecipes || hasIngredients;
-    },
-    {
-      message: 'Dish must contain at least one recipe or ingredient',
-      path: ['recipes'],
-    },
-  );
+import { createDishSchema, DishResponse } from './helpers/schemas';
 
 export async function GET(request: NextRequest) {
   try {
@@ -73,10 +33,9 @@ export async function GET(request: NextRequest) {
     const { data: dishes, error, count } = await query.order('dish_name').range(start, end);
 
     if (error) {
-      const pgError = error as PostgrestError;
       logger.error('[Dishes API] Database error fetching dishes:', {
-        error: pgError.message,
-        code: pgError.code,
+        error: error.message,
+        code: error.code,
         context: { endpoint: '/api/dishes', operation: 'GET', table: 'dishes' },
       });
 
@@ -90,7 +49,7 @@ export async function GET(request: NextRequest) {
       count: count || 0,
       page,
       pageSize,
-    });
+    } satisfies DishResponse);
   } catch (err) {
     logger.error('[Dishes API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
@@ -141,7 +100,7 @@ export async function POST(request: NextRequest) {
       {
         dish_name,
         description,
-        selling_price, // Already validated as number by Zod schema
+        selling_price,
         category,
       },
       recipes,
@@ -163,7 +122,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       dish: newDish,
-    });
+    } satisfies DishResponse);
   } catch (err) {
     logger.error('[Dishes API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

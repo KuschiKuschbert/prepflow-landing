@@ -1,4 +1,4 @@
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { ApiErrorHandler, type ApiError } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { QUALIFICATION_SELECT, Qualification } from './schemas';
@@ -14,7 +14,7 @@ export async function updateQualification(
     document_url?: string;
     notes?: string;
   },
-): Promise<{ success: boolean; message: string; data: Qualification } | { error: any; status: number }> {
+): Promise<{ success: boolean; message: string; data: Qualification } | { error: ApiError; status: number }> {
   if (!supabaseAdmin) {
     return {
       error: ApiErrorHandler.createError(
@@ -41,7 +41,7 @@ export async function updateQualification(
     };
   }
 
-  const updateData: any = {
+  const updateData: Record<string, unknown> = {
     updated_at: new Date().toISOString(),
   };
 
@@ -64,7 +64,7 @@ export async function updateQualification(
   if (error) {
     logger.error('[Employee Qualifications API] Database error updating qualification:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: {
         endpoint: '/api/employees/[id]/qualifications/[qual_id]',
         operation: 'PUT',

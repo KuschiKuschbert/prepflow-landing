@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
-import { onCLS, onINP, onFCP, onLCP, onTTFB } from 'web-vitals';
 import { trackEvent } from '@/lib/analytics';
+import { useEffect } from 'react';
+import { Metric, onCLS, onFCP, onINP, onLCP, onTTFB } from 'web-vitals';
 
 interface WebVitalsTrackerProps {
   enabled?: boolean;
-  onMetric?: (metric: any) => void;
+  onMetric?: (metric: Metric) => void;
 }
 
 export default function WebVitalsTracker({ enabled = true, onMetric }: WebVitalsTrackerProps) {
@@ -14,7 +14,7 @@ export default function WebVitalsTracker({ enabled = true, onMetric }: WebVitals
     if (!enabled) return;
 
     // Track Core Web Vitals
-    const trackWebVital = (metric: any) => {
+    const trackWebVital = (metric: Metric) => {
       // Send to analytics
       trackEvent(metric.name, 'web-vitals', metric.id, Math.round(metric.value));
 

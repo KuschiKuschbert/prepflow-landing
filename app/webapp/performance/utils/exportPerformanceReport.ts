@@ -30,7 +30,7 @@ const CSV_HEADERS = [
  * @param {PerformanceItem} item - Performance item to map
  * @returns {Record<string, any>} CSV row object
  */
-function mapPerformanceItemToCSVRow(item: PerformanceItem): Record<string, any> {
+function mapPerformanceItemToCSVRow(item: PerformanceItem): Record<string, unknown> {
   return {
     'Item Name': item.name || '',
     'Selling Price': item.selling_price || 0,

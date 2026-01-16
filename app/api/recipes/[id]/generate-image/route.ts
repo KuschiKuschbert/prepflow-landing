@@ -11,12 +11,12 @@ import type { PlatingMethod } from '@/lib/ai/ai-service/image-generation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
-import { checkRateLimit } from './helpers/rateLimit';
-import { validateRequest } from './helpers/validateRequest';
 import { fetchRecipeWithIngredients } from './helpers/fetchRecipe';
-import { generateRecipeImages } from './helpers/generateImages';
-import { saveRecipeImages } from './helpers/saveImages';
 import { formatImageResponse } from './helpers/formatResponse';
+import { generateRecipeImages } from './helpers/generateImages';
+import { checkRateLimit } from './helpers/rateLimit';
+import { saveRecipeImages } from './helpers/saveImages';
+import { validateRequest } from './helpers/validateRequest';
 
 export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     if (recipeResult instanceof NextResponse) return recipeResult;
     const { recipe, ingredientNames } = recipeResult;
 
-    const recipeName = (recipe as any).name || 'Recipe';
+    const recipeName = recipe.name || 'Recipe';
 
     // Determine which plating methods to generate
     const defaultMethod: PlatingMethod[] = ['classic'];

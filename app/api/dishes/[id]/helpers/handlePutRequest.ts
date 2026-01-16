@@ -1,17 +1,10 @@
-/**
- * Helper for handling PUT requests to update dishes
- *
- * 📚 Square Integration: This helper automatically triggers Square sync hooks (dish sync and cost sync)
- * after dish update operations. See `docs/SQUARE_API_REFERENCE.md` (Automatic Sync section) for details.
- */
-
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { triggerCostSync, triggerDishSync } from '@/lib/square/sync/hooks';
 import { supabaseAdmin } from '@/lib/supabase';
-import { Dish } from '@/types/dish';
 import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import { Dish, DishIngredientInput, DishRecipeInput } from '../../helpers/schemas';
 import { buildDishUpdateData } from './buildDishUpdateData';
 import { detectDishChanges } from './detectDishChanges';
 import { fetchDishWithRelations } from './fetchDishWithRelations';
@@ -22,6 +15,16 @@ import {
     trackChangeForLockedMenus,
 } from './invalidateDishCaches';
 import { updateIngredientsWithTracking, updateRecipesWithTracking } from './updateDishRelations';
+
+interface UpdateDishBody {
+  dish_name?: string;
+  description?: string;
+  selling_price?: number | string;
+  category?: string;
+  recipes?: DishRecipeInput[];
+  ingredients?: DishIngredientInput[];
+  [key: string]: unknown;
+}
 
 /**
  * Handles PUT request for updating a dish
@@ -34,7 +37,7 @@ export async function handlePutRequest(
   request: NextRequest,
   dishId: string,
 ): Promise<NextResponse> {
-  const body = await request.json();
+  const body = (await request.json()) as UpdateDishBody;
   const { recipes, ingredients } = body;
 
   if (!supabaseAdmin) {
@@ -50,8 +53,7 @@ export async function handlePutRequest(
   // Fetch current dish to detect changes
   let currentDish: Dish | null = null;
   try {
-    const dish = await fetchDishWithRelations(dishId);
-    currentDish = dish as Dish;
+    currentDish = await fetchDishWithRelations(dishId);
   } catch (err) {
     logger.warn('[Dishes API] Could not fetch current dish for change detection:', err);
   }
@@ -71,10 +73,9 @@ export async function handlePutRequest(
     .single();
 
   if (updateError) {
-    const pgError = updateError as PostgrestError;
     logger.error('[Dishes API] Database error updating dish:', {
-      error: pgError.message,
-      code: pgError.code,
+      error: updateError.message,
+      code: updateError.code,
       context: { endpoint: '/api/dishes/[id]', operation: 'PUT', dishId },
     });
 
@@ -116,7 +117,12 @@ export async function handlePutRequest(
         }
       })();
     } catch (recipesError) {
-      if (recipesError instanceof Error && 'code' in recipesError) {
+      if (
+        recipesError &&
+        typeof recipesError === 'object' &&
+        'code' in recipesError &&
+        'message' in recipesError
+      ) {
         const pgError = recipesError as PostgrestError;
         logger.error('[Dishes API] Database error updating dish recipes:', {
           error: pgError.message,
@@ -146,7 +152,12 @@ export async function handlePutRequest(
         userEmail,
       );
     } catch (ingredientsError) {
-      if (ingredientsError instanceof Error && 'code' in ingredientsError) {
+      if (
+        ingredientsError &&
+        typeof ingredientsError === 'object' &&
+        'code' in ingredientsError &&
+        'message' in ingredientsError
+      ) {
         const pgError = ingredientsError as PostgrestError;
         logger.error('[Dishes API] Database error updating dish ingredients:', {
           error: pgError.message,

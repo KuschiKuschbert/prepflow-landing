@@ -13,49 +13,68 @@ export default function GradientOrbs({ className = '' }: GradientOrbsProps) {
       {/* Primary Cyan Orb - Top Left */}
       <div
         className="absolute -top-1/4 -left-1/4 h-[800px] w-[800px] rounded-full bg-[#29E7CD] opacity-10 blur-3xl"
-        style={{
-          animation: 'float 20s ease-in-out infinite',
-          willChange: 'transform',
-        }}
+        style={
+          {
+            '--orb-animation': 'float-medium 20s ease-in-out infinite',
+            animation: 'var(--orb-animation)',
+            willChange: 'transform',
+          } as React.CSSProperties
+        }
       />
 
       {/* Secondary Magenta Orb - Bottom Right */}
       <div
         className="absolute -right-1/4 -bottom-1/4 h-[1000px] w-[1000px] rounded-full bg-[#D925C7] opacity-8 blur-3xl"
-        style={{
-          animation: 'float 25s ease-in-out infinite reverse',
-          animationDelay: '2s',
-          willChange: 'transform',
-        }}
+        style={
+          {
+            '--orb-animation': 'float-medium 25s ease-in-out infinite reverse',
+            '--orb-delay': '2s',
+            animation: 'var(--orb-animation)',
+            animationDelay: 'var(--orb-delay)',
+            willChange: 'transform',
+          } as React.CSSProperties
+        }
       />
 
       {/* Blue Accent Orb - Center */}
       <div
         className="absolute top-1/2 left-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#3B82F6] opacity-6 blur-3xl"
-        style={{
-          animation: 'float 18s ease-in-out infinite',
-          animationDelay: '1s',
-          willChange: 'transform',
-        }}
+        style={
+          {
+            '--orb-animation': 'float-medium 18s ease-in-out infinite',
+            '--orb-delay': '1s',
+            animation: 'var(--orb-animation)',
+            animationDelay: 'var(--orb-delay)',
+            willChange: 'transform',
+          } as React.CSSProperties
+        }
       />
 
       {/* Additional smaller orbs for depth */}
       <div
         className="absolute top-1/3 right-1/4 h-[400px] w-[400px] rounded-full bg-[#29E7CD] opacity-5 blur-2xl"
-        style={{
-          animation: 'float 15s ease-in-out infinite',
-          animationDelay: '3s',
-          willChange: 'transform',
-        }}
+        style={
+          {
+            '--orb-animation': 'float-medium 15s ease-in-out infinite',
+            '--orb-delay': '3s',
+            animation: 'var(--orb-animation)',
+            animationDelay: 'var(--orb-delay)',
+            willChange: 'transform',
+          } as React.CSSProperties
+        }
       />
 
       <div
         className="absolute bottom-1/3 left-1/3 h-[500px] w-[500px] rounded-full bg-[#D925C7] opacity-5 blur-2xl"
-        style={{
-          animation: 'float 22s ease-in-out infinite reverse',
-          animationDelay: '4s',
-          willChange: 'transform',
-        }}
+        style={
+          {
+            '--orb-animation': 'float-medium 22s ease-in-out infinite reverse',
+            '--orb-delay': '4s',
+            animation: 'var(--orb-animation)',
+            animationDelay: 'var(--orb-delay)',
+            willChange: 'transform',
+          } as React.CSSProperties
+        }
       />
     </div>
   );

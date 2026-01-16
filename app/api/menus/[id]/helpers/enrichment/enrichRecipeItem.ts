@@ -1,9 +1,5 @@
-/**
- * Helper for enriching recipe items with allergens and dietary info
- */
-
 import { logger } from '@/lib/logger';
-import { EnrichedRecipeData, RawMenuItem } from '../../../types';
+import { EnrichedRecipeData, RawMenuItem } from '../../../helpers/schemas';
 import { normalizeAllergens } from './normalizeAllergens';
 import { validateVeganStatus } from './validateDietaryStatus';
 
@@ -30,7 +26,7 @@ export async function enrichRecipeItem(item: RawMenuItem): Promise<EnrichedRecip
 
   if (hasCachedAllergens) {
     // Use cached allergens (faster) but normalize them
-    allergens = normalizeAllergens(item.recipes!.allergens, recipeName);
+    allergens = normalizeAllergens(item.recipes!.allergens as string[], recipeName);
     logger.dev('[Menus API] Using cached recipe allergens:', {
       recipeName,
       allergens,
@@ -41,14 +37,14 @@ export async function enrichRecipeItem(item: RawMenuItem): Promise<EnrichedRecip
     try {
       const { aggregateRecipeAllergens } = await import('@/lib/allergens/allergen-aggregation');
       if (item.recipes?.id) {
-        allergens = await aggregateRecipeAllergens(item.recipes.id, false); // Don't force
+        allergens = (await aggregateRecipeAllergens(item.recipes.id, false)) as string[];
         logger.dev('[Menus API] Aggregated recipe allergens:', {
           recipeName,
           aggregated: allergens,
           recipeId: item.recipes.id,
         });
       }
-    } catch (err) {
+    } catch (err: unknown) {
       logger.warn('[Menus API] Error aggregating recipe allergens:', {
         error: err instanceof Error ? err.message : String(err),
         stack: err instanceof Error ? err.stack : undefined,
@@ -102,7 +98,7 @@ export async function enrichRecipeItem(item: RawMenuItem): Promise<EnrichedRecip
         dietaryMethod = item.recipes.dietary_method ?? null;
       }
     }
-  } catch (err) {
+  } catch (err: unknown) {
     logger.warn('[Menus API] Error recalculating recipe dietary status, using cached values:', {
       recipeId: item.recipes?.id,
       error: err instanceof Error ? err.message : String(err),

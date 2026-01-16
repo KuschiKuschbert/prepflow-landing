@@ -1,13 +1,13 @@
-import { RecipeSidePanel } from './RecipeSidePanel';
-import { DishSidePanel } from './DishSidePanel';
-import { DishEditDrawer } from './DishEditDrawer';
-import { DeleteConfirmationModal } from './DeleteConfirmationModal';
 import { Dish, Recipe, RecipeIngredientWithDetails } from '../types';
 import { formatQuantity as formatQuantityUtil } from '../utils/formatQuantity';
+import { DeleteConfirmationModal } from './DeleteConfirmationModal';
+import { DishEditDrawer } from './DishEditDrawer';
+import { DishSidePanel } from './DishSidePanel';
+import { RecipeSidePanel } from './RecipeSidePanel';
 
 type UnifiedItem = (Dish & { itemType: 'dish' }) | (Recipe & { itemType: 'recipe' });
 
-interface DishesSidePanelsProps {
+export interface DishesSidePanelsProps {
   showDishPanel: boolean;
   selectedDishForPreview: Dish | null;
   showRecipePanel: boolean;

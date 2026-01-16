@@ -2,9 +2,8 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-import { createQualificationSchema, QUALIFICATION_SELECT } from './helpers/schemas';
 import { createQualification } from './helpers/createQualification';
+import { createQualificationSchema, QUALIFICATION_SELECT } from './helpers/schemas';
 
 /**
  * GET /api/employees/[id]/qualifications
@@ -30,7 +29,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     if (error) {
       logger.error('[Employee Qualifications API] Database error fetching qualifications:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: {
           endpoint: '/api/employees/[id]/qualifications',
           operation: 'GET',

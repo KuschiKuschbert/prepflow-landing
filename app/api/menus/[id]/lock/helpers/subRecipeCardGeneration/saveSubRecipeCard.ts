@@ -12,7 +12,7 @@ import { CollectedSubRecipe } from '../recipe-card-types';
  */
 async function saveWithCrossReferencing(
   supabase: SupabaseClient,
-  cardData: any,
+  cardData: Record<string, unknown>,
   recipeId: string,
   dataHash: string,
   subRecipeName: string,
@@ -83,7 +83,7 @@ async function saveWithCrossReferencing(
  */
 async function saveWithOldMethod(
   supabase: SupabaseClient,
-  cardData: any,
+  cardData: Record<string, unknown>,
   subRecipeName: string,
 ): Promise<{ success: boolean; cardId?: string; error?: string }> {
   const { data: insertedCard, error: insertError } = await supabase
@@ -109,7 +109,7 @@ async function saveWithOldMethod(
  */
 export async function saveSubRecipeCard(
   supabase: SupabaseClient,
-  cardData: any,
+  cardData: Record<string, unknown>,
   recipeId: string,
   dataHash: string,
   subRecipeName: string,

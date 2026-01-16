@@ -1,6 +1,6 @@
 'use client';
-import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { useErrorMessageSelector } from '@/components/ErrorGame/useErrorMessageSelector';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 import { logger } from '@/lib/logger';
 
@@ -103,12 +103,12 @@ export class ErrorBoundary extends Component<Props, State> {
 
 // Hook for functional components to handle errors
 export const useErrorHandler = () => {
-  const handleError = React.useCallback((error: Error, errorInfo?: any) => {
-    logger.error('Error caught by useErrorHandler:', error, errorInfo);
+  const handleError = React.useCallback((error: Error, errorInfo?: ErrorInfo) => {
+    logger.error('Error caught by useErrorHandler:', { error, errorInfo });
 
     // Log to analytics if available
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'exception', {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'exception', {
         description: error.message,
         fatal: false,
       });

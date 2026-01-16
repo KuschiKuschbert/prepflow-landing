@@ -3,7 +3,7 @@
  */
 import type { OrderList } from '../../printOrderList';
 
-export function mapOrderListToCSVRows(orderList: OrderList): Record<string, any>[] {
+export function mapOrderListToCSVRows(orderList: OrderList): Record<string, unknown>[] {
   if (!orderList.order_list_items || orderList.order_list_items.length === 0) {
     return [
       {

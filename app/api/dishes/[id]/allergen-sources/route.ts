@@ -21,8 +21,7 @@ import { processRecipeAllergens } from './helpers/processRecipeAllergens';
  */
 export async function GET(_request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await context.params;
-    const dishId = id;
+    const { id: dishId } = await context.params;
 
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -85,14 +84,17 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
         total_allergens: Array.from(allAllergens).sort(),
       },
     });
-  } catch (err) {
-    logger.error('[Dish Allergen Sources API] Unexpected error:', err);
+  } catch (err: unknown) {
+    logger.error('[Dish Allergen Sources API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      context: { endpoint: '/api/dishes/[id]/allergen-sources', method: 'GET' },
+    });
     return NextResponse.json(
       ApiErrorHandler.createError(
         'Failed to fetch allergen sources',
         'SERVER_ERROR',
         500,
-        err instanceof Error ? err.message : String(err),
+        err instanceof Error ? err.message : undefined,
       ),
       { status: 500 },
     );

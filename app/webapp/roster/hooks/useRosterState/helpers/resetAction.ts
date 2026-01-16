@@ -1,6 +1,8 @@
 /**
  * Reset action helper for roster state.
  */
-export function createResetAction(initialState: any, set: any) {
-  return () => set(initialState);
+import type { RosterState, RosterStoreSet } from '../types';
+
+export function createResetAction(initialState: Partial<RosterState>, set: RosterStoreSet) {
+  return () => set(initialState as RosterState);
 }

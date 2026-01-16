@@ -3,7 +3,9 @@
  */
 import type { RosterTemplate } from '../../../types';
 
-export function createTemplateActions(set: any) {
+import type { RosterStoreSet } from '../types';
+
+export function createTemplateActions(set: RosterStoreSet) {
   return {
     setTemplates: (templates: RosterTemplate[]) => set({ templates }),
     setSelectedTemplateId: (templateId: string | null) => set({ selectedTemplateId: templateId }),

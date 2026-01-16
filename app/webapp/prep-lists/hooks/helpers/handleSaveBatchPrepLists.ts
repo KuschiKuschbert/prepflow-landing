@@ -2,10 +2,14 @@
  * Handle batch prep list creation with optimistic updates.
  */
 import { logger } from '@/lib/logger';
-import type { PrepList, GeneratedPrepListData } from '../../types';
+import type { GeneratedPrepListData, PrepList, PrepListCreationItem } from '../../types';
 
 interface HandleSaveBatchPrepListsParams {
-  prepListsToCreate: Array<{ sectionId: string | null; name: string; items: any[] }>;
+  prepListsToCreate: Array<{
+    sectionId: string | null;
+    name: string;
+    items: PrepListCreationItem[];
+  }>;
   userId: string;
   currentPrepLists: PrepList[];
   setPrepLists: React.Dispatch<React.SetStateAction<PrepList[]>>;
@@ -35,7 +39,7 @@ export async function handleSaveBatchPrepLists({
   // Create temporary prep lists for optimistic update
   const tempPrepLists: PrepList[] = prepListsToCreate.map(
     (prepList, index) =>
-      ({
+      (({
         id: `temp-${Date.now()}-${index}`,
         name: prepList.name,
         kitchen_section_id: prepList.sectionId || '',
@@ -43,13 +47,15 @@ export async function handleSaveBatchPrepLists({
         status: 'draft' as const,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
+
         kitchen_sections: {
           id: prepList.sectionId || '',
           name: '',
           color: '',
         },
-        prep_list_items: [],
-      }) as PrepList,
+
+        prep_list_items: []
+      }) as PrepList),
   );
 
   // Optimistically add to UI immediately

@@ -8,7 +8,7 @@ import { removeCalculation, clearCalculations } from '../utils/ingredientManagem
  * @returns {Object} Simple callbacks
  */
 export function createSimpleCallbacks(
-  setCalculations: React.Dispatch<React.SetStateAction<any[]>>,
+  setCalculations: React.Dispatch<React.SetStateAction<unknown[]>>,
 ) {
   const removeCalculationCallback = (ingredientId: string) =>
     removeCalculation(setCalculations, ingredientId);

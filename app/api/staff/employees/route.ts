@@ -38,9 +38,9 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const params = {
-      role: searchParams.get('role'),
-      employment_type: searchParams.get('employment_type'),
-      search: searchParams.get('search'),
+      role: searchParams.get('role') || undefined,
+      employment_type: searchParams.get('employment_type') || undefined,
+      search: searchParams.get('search') || undefined,
       page: parseInt(searchParams.get('page') || '1', 10),
       pageSize: parseInt(searchParams.get('pageSize') || '100', 10),
     };

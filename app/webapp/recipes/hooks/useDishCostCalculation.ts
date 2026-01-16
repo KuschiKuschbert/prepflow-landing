@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Recipe } from '../types';
 import { logger } from '@/lib/logger';
+import { useEffect, useMemo, useState } from 'react';
+import { Ingredient } from '../../cogs/types';
+import { Recipe, RecipeIngredient } from '../types';
 import {
   calculateRecipeCost,
   calculateRecommendedPrice,
@@ -32,10 +33,10 @@ export function useDishCostCalculation(
   selectedRecipes: SelectedRecipe[],
   selectedIngredients: SelectedIngredient[],
   recipes: Recipe[],
-  ingredients: any[],
+  ingredients: Ingredient[],
 ) {
   const [recipeIngredients, setRecipeIngredients] = useState<
-    Record<string, Array<{ quantity: number; unit: string; ingredients: any }>>
+    Record<string, Array<{ quantity: number; unit: string; ingredients: RecipeIngredient }>>
   >({});
   const [loading, setLoading] = useState(false);
 

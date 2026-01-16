@@ -2,11 +2,21 @@
  * Hook for processing operations
  */
 
-import { useCallback } from 'react';
 import { logger } from '@/lib/logger';
+import { useCallback } from 'react';
+
+// Define minimal interface for processing state if not already available
+export interface ProcessingState {
+  status: 'idle' | 'processing' | 'paused' | 'completed' | 'error';
+  progress: number;
+  total: number;
+  current: number;
+  error?: string;
+  processedCount?: number;
+}
 
 interface UseProcessingOperationsParams {
-  setProcessing: (processing: any) => void;
+  setProcessing: (processing: ProcessingState | null) => void;
   setIsResuming: (resuming: boolean) => void;
   setIsProcessingStarting: (starting: boolean) => void;
   setProcessingPolling: (polling: boolean) => void;

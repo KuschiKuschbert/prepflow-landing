@@ -1,6 +1,8 @@
 /**
  * Create menu item operations from specialized hook results.
  */
+import type { MenuItem } from '../../../../types';
+
 interface CreateOperationsParams {
   additionResult: {
     handleCategorySelect: (
@@ -19,7 +21,11 @@ interface CreateOperationsParams {
   };
   categoryResult: {
     handleMoveToCategory: (itemId: string, targetCategory: string) => Promise<void>;
-    performMoveToCategory: (itemId: string, targetCategory: string, item: any) => Promise<void>;
+    performMoveToCategory: (
+      itemId: string,
+      targetCategory: string,
+      item: MenuItem,
+    ) => Promise<void>;
   };
   priceResult: { handleUpdateActualPrice: (itemId: string, price: number | null) => Promise<void> };
   regionResult: { handleUpdateRegion: (itemId: string, region: string | null) => Promise<void> };

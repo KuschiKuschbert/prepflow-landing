@@ -3,13 +3,13 @@ import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { useNotification } from '@/contexts/NotificationContext';
+import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { cacheData, getCachedData, prefetchApi } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
 import { useTranslation } from '@/lib/useTranslation';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Bot, Shield } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { AISpecialCard } from './components/AISpecialCard';
 import { EmptyState } from './components/EmptyState';
 import { RecipeScraper } from './components/RecipeScraper';
@@ -21,7 +21,11 @@ interface AISpecial {
   id: string;
   image_data: string;
   prompt?: string;
-  ai_response: any;
+  ai_response: {
+    ingredients?: string[];
+    suggestions?: string[];
+    confidence?: number;
+  } | null;
   status: 'pending' | 'processing' | 'completed' | 'failed';
   created_at: string;
 }
@@ -36,7 +40,7 @@ export default function AISpecialsPage() {
   // Auth0 SDK can return user in different structures:
   // - Flat: user.email
   // - Nested: user.user.email
-  const userEmail = user?.email || (user as any)?.user?.email || null;
+  const userEmail = user?.email || (user as unknown)?.user?.email || null;
   const hasUser = !!user || !!userEmail;
 
   // Check if user is actually authenticated (not just loading)
@@ -54,8 +58,8 @@ export default function AISpecialsPage() {
         isAuthenticated,
         userKeys: user ? Object.keys(user) : [],
         userSub: user?.sub,
-        nestedUserSub: (user as any)?.user?.sub,
-        nestedUser: (user as any)?.user,
+        nestedUserSub: (user as unknown)?.user?.sub,
+        nestedUser: (user as unknown)?.user,
       });
     }
   }, [user, userLoading, userEmail, isAuthenticated]);

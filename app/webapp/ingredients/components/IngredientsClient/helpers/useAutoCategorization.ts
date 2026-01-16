@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
 import { logger } from '@/lib/logger';
+import { useEffect, useState } from 'react';
 
 interface Ingredient {
   category?: string;
-  [key: string]: any;
 }
 
 interface UseAutoCategorizationProps {

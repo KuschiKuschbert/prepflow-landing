@@ -155,10 +155,10 @@ export function RecipeSidePanel({
                 entityType="recipe"
                 entityId={recipe.id}
                 entityName={recipe.recipe_name}
-                imageUrl={(recipe as any)?.image_url}
-                imageUrlAlternative={(recipe as any)?.image_url_alternative}
-                imageUrlModern={(recipe as any)?.image_url_modern}
-                imageUrlMinimalist={(recipe as any)?.image_url_minimalist}
+                imageUrl={recipe.image_url}
+                imageUrlAlternative={recipe.image_url_alternative}
+                imageUrlModern={recipe.image_url_modern}
+                imageUrlMinimalist={recipe.image_url_minimalist}
                 onImagesGenerated={images => {
                   onImagesGenerated?.(recipe.id, images);
                 }}

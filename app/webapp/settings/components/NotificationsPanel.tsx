@@ -1,12 +1,12 @@
 'use client';
 
+import { Icon } from '@/components/ui/Icon';
+import { Toggle } from '@/components/ui/Toggle';
 import { useNotification } from '@/contexts/NotificationContext';
+import { useIsVisible } from '@/hooks/useIsVisible';
 import { logger } from '@/lib/logger';
 import { Bell, Mail, Volume2, VolumeX } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Icon } from '@/components/ui/Icon';
-import { Toggle } from '@/components/ui/Toggle';
-import { useIsVisible } from '@/hooks/useIsVisible';
 
 interface NotificationPreferences {
   email: {
@@ -74,7 +74,7 @@ export function NotificationsPanel() {
 
   const updatePreference = async (path: string, value: boolean | string) => {
     const [category, key] = path.split('.');
-    const updates: any = {
+    const updates: Record<string, Record<string, boolean | string>> = {
       [category]: {
         [key]: value,
       },

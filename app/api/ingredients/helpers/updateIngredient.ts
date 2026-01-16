@@ -1,25 +1,31 @@
+import {
+  invalidateDishesWithIngredient,
+  invalidateRecipesWithIngredient,
+} from '@/lib/allergens/cache-invalidation';
+import { enrichIngredientWithAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { createSupabaseAdmin } from '@/lib/supabase';
-import { formatIngredientUpdates } from './formatIngredientUpdates';
-import {
-  invalidateRecipesWithIngredient,
-  invalidateDishesWithIngredient,
-} from '@/lib/allergens/cache-invalidation';
 import { invalidateMenuItemsWithIngredient } from '@/lib/menu-pricing/cache-invalidation';
-import { enrichIngredientWithAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
+import { createSupabaseAdmin } from '@/lib/supabase';
 import { buildChangeDetails } from './buildChangeDetails';
+import { formatIngredientUpdates } from './formatIngredientUpdates';
+
+import { UpdateIngredientData } from './schemas';
 
 /**
  * Update an ingredient.
  *
  * @param {string} id - Ingredient ID
- * @param {Object} updates - Update data
+ * @param {UpdateIngredientData} updates - Update data
  * @param {string} userEmail - User email (for change tracking)
  * @returns {Promise<Object>} Updated ingredient
  * @throws {Error} If update fails
  */
-export async function updateIngredient(id: string, updates: any, userEmail?: string | null) {
+export async function updateIngredient(
+  id: string,
+  updates: UpdateIngredientData,
+  userEmail?: string | null,
+) {
   const supabaseAdmin = createSupabaseAdmin();
 
   // Check if allergens are being updated (explicitly or auto-detected)
@@ -29,7 +35,12 @@ export async function updateIngredient(id: string, updates: any, userEmail?: str
   const nameOrBrandChanged = updates.ingredient_name !== undefined || updates.brand !== undefined;
 
   // Fetch current ingredient to check if allergens are manually set
-  let currentIngredient: any = null;
+  let currentIngredient: {
+    ingredient_name: string;
+    brand: string | null;
+    allergens: string[];
+    allergen_source: { manual?: boolean; ai?: boolean; method?: string } | null;
+  } | null = null;
   if (nameOrBrandChanged && !allergensChanged) {
     const { data: current, error: fetchError } = await supabaseAdmin
       .from('ingredients')
@@ -40,7 +51,7 @@ export async function updateIngredient(id: string, updates: any, userEmail?: str
     if (fetchError && fetchError.code !== 'PGRST116') {
       logger.warn('[Ingredients API] Error fetching current ingredient for allergen check:', {
         error: fetchError.message,
-        code: (fetchError as any).code,
+        code: fetchError.code,
         ingredientId: id,
       });
       // Continue without current ingredient - allergen detection will be skipped
@@ -112,7 +123,7 @@ export async function updateIngredient(id: string, updates: any, userEmail?: str
   if (error) {
     logger.error('[Ingredients API] Database error updating ingredient:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: { endpoint: '/api/ingredients', operation: 'PUT', ingredientId: id },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

@@ -8,7 +8,7 @@ export async function fetchPerformanceTips(
   performanceScore: number,
   performanceItems: PerformanceItem[],
   selectedCountry: string,
-  generateTips: (score: number, items: PerformanceItem[], country: string) => Promise<any[]>,
+  generateTips: (score: number, items: PerformanceItem[], country: string) => Promise<unknown[]>,
 ): Promise<ReturnType<typeof generatePerformanceTips>> {
   try {
     const aiTips = await generateTips(performanceScore, performanceItems, selectedCountry);

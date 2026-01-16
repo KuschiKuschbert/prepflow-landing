@@ -66,7 +66,7 @@ export function useChartFormatters(
     }
   };
 
-  const formatTooltipLabel = (label: number | string, payload?: any) => {
+  const formatTooltipLabel = (label: number | string, payload?: unknown) => {
     try {
       let index: number;
       if (typeof label === 'number') {
