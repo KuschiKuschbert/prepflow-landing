@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 /**
  * Handle par level API errors consistently.
  *
- * @param {Error | any} err - Error object
+ * @param {Error | unknown} err - Error object
  * @param {string} method - HTTP method
  * @returns {NextResponse} Error response
  */
