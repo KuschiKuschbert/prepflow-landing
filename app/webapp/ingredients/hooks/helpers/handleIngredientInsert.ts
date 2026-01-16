@@ -65,7 +65,7 @@ export async function handleIngredientInsert(
         body: JSON.stringify(originalIngredientData),
       });
 
-      const result = await response.json();
+      const result = (await response.json()) as { success?: boolean; details?: string; error?: string; data?: unknown };
       if (!response.ok || !result.success) {
         return {
           data: null,

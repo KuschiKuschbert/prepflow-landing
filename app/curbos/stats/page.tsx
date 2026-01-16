@@ -1,13 +1,21 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase-pos'
-import { ArrowLeft, TrendingUp, DollarSign, Calendar } from 'lucide-react'
-import Link from 'next/link'
 import { logger } from '@/lib/logger'
+import { supabase } from '@/lib/supabase-pos'
+import { ArrowLeft, Calendar, DollarSign, TrendingUp } from 'lucide-react'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+
+interface Transaction {
+  id: string;
+  total_amount: number;
+  timestamp: string;
+  items_json: string;
+  payment_method: string;
+}
 
 export default function StatsPage() {
-  const [transactions, setTransactions] = useState<any[]>([])
+  const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(true)
 
   async function fetchTransactions() {
@@ -129,7 +137,15 @@ export default function StatsPage() {
   )
 }
 
-function MetricCard({ title, value, icon, highlight = false, delay }: any) {
+interface MetricCardProps {
+  title: string;
+  value: string;
+  icon: React.ReactNode;
+  highlight?: boolean;
+  delay: number;
+}
+
+function MetricCard({ title, value, icon, highlight = false, delay }: MetricCardProps) {
     return (
         <div
             className="bg-neutral-800 p-6 rounded-2xl border border-neutral-700 hover:border-[#C0FF02] transition-all transform hover:-translate-y-1 animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-backwards"

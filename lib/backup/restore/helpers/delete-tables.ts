@@ -4,6 +4,14 @@
 import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
+// Type-safe interface for Supabase/Postgrest errors
+interface PostgrestErrorLike {
+  message: string;
+  code?: string;
+  details?: string;
+  hint?: string;
+}
+
 /** Delete records from a table by user_id. */
 async function deleteByUserId(
   supabase: SupabaseClient,
@@ -14,7 +22,7 @@ async function deleteByUserId(
   if (error) {
     logger.warn('[Restore] Error deleting records by user_id:', {
       error: error.message,
-      code: (error as any).code,
+      code: (error as PostgrestErrorLike).code,
       context: { tableName, userId, operation: 'deleteByUserId' },
     });
   }
@@ -30,7 +38,7 @@ async function deleteOrderListItems(supabase: SupabaseClient, userId: string): P
   if (fetchError) {
     logger.warn('[Restore] Error fetching order lists:', {
       error: fetchError.message,
-      code: (fetchError as any).code,
+      code: fetchError.code,
       context: { userId, operation: 'deleteOrderListItems' },
     });
   }
@@ -44,7 +52,7 @@ async function deleteOrderListItems(supabase: SupabaseClient, userId: string): P
     if (deleteError) {
       logger.warn('[Restore] Error deleting order list items:', {
         error: deleteError.message,
-        code: (deleteError as any).code,
+        code: deleteError.code,
         context: { orderListIds, operation: 'deleteOrderListItems' },
       });
     }
@@ -61,7 +69,7 @@ async function deletePrepListItems(supabase: SupabaseClient, userId: string): Pr
   if (fetchError) {
     logger.warn('[Restore] Error fetching prep lists:', {
       error: fetchError.message,
-      code: (fetchError as any).code,
+      code: fetchError.code,
       context: { userId, operation: 'deletePrepListItems' },
     });
   }
@@ -75,7 +83,7 @@ async function deletePrepListItems(supabase: SupabaseClient, userId: string): Pr
     if (deleteError) {
       logger.warn('[Restore] Error deleting prep list items:', {
         error: deleteError.message,
-        code: (deleteError as any).code,
+        code: deleteError.code,
         context: { prepListIds, operation: 'deletePrepListItems' },
       });
     }
@@ -97,7 +105,7 @@ export async function deleteTableRecords(
   if (fetchError) {
     logger.warn('[Restore] Error fetching existing records:', {
       error: fetchError.message,
-      code: (fetchError as any).code,
+      code: fetchError.code,
       context: { tableName, userId, operation: 'deleteTableRecords' },
     });
   }
@@ -128,13 +136,14 @@ export async function deleteTables(
   for (const tableName of tableNames) {
     try {
       await deleteTableRecords(supabase, tableName, userId);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       // Skip tables that don't exist
-      if (error.message?.includes('does not exist')) {
-        logger.dev(`[Restore] Skipping table ${tableName}: ${error.message}`);
+      if (message?.includes('does not exist')) {
+        logger.dev(`[Restore] Skipping table ${tableName}: ${message}`);
         continue;
       }
-      errors.push(`Failed to delete ${tableName}: ${error.message}`);
+      errors.push(`Failed to delete ${tableName}: ${message}`);
     }
   }
 

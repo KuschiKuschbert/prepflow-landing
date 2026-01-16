@@ -1,13 +1,14 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { ParLevelInput } from './types';
 
 /**
  * Validate par level data.
  *
- * @param {any} parLevelData - Par level data to validate
+ * @param {ParLevelInput} parLevelData - Par level data to validate
  * @returns {{ingredientId: string, parLevel: number, reorderPoint: number, unit: string}} Validated data
  * @throws {Error} If validation fails
  */
-export function validateParLevelData(parLevelData: any) {
+export function validateParLevelData(parLevelData: ParLevelInput) {
   const ingredientId = parLevelData.ingredient_id || parLevelData.ingredientId;
   const parLevel = parLevelData.par_level ?? parLevelData.parLevel;
   const reorderPoint = parLevelData.reorder_point ?? parLevelData.reorderPoint;

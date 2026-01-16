@@ -5,8 +5,8 @@ process.env.SUPABASE_SERVICE_ROLE_KEY = 'mock-service-key';
 process.env.NEXT_PUBLIC_AUTH0_DOMAIN = 'mock-domain.auth0.com';
 process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID = 'mock-client-id';
 
-import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { render } from '@testing-library/react';
 import * as Module from './AnimatedComponents';
 
 describe('AnimatedComponents', () => {
@@ -15,9 +15,10 @@ describe('AnimatedComponents', () => {
     expect(Module).toBeDefined();
 
     // Try to find a component to render using heuristics
+    const defaultExport = (Module as { default?: unknown }).default;
     const Component =
-      (Module as any).default ||
-      Object.values(Module).find((exp: any) => typeof exp === 'function');
+      (typeof defaultExport === 'function' ? (defaultExport as React.ElementType) : undefined) ||
+      (Object.values(Module).find((exp) => typeof exp === 'function') as React.ElementType);
 
     if (Component) {
       try {

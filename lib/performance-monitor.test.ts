@@ -7,24 +7,16 @@ process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID = 'mock-client-id';
 
 // Polyfill PerformanceObserver
 if (typeof PerformanceObserver === 'undefined') {
-  (global as any).PerformanceObserver = class PerformanceObserver {
-    observe() {}
-    disconnect() {}
-    takeRecords() {
-      return [];
-    }
-  };
-}
-
-// Polyfill PerformanceObserver
-if (typeof PerformanceObserver === 'undefined') {
-  (global as any).PerformanceObserver = class PerformanceObserver {
-    observe() {}
-    disconnect() {}
-    takeRecords() {
-      return [];
-    }
-  };
+  Object.defineProperty(global, 'PerformanceObserver', {
+    writable: true,
+    value: class PerformanceObserver {
+      observe() {}
+      disconnect() {}
+      takeRecords() {
+        return [];
+      }
+    },
+  });
 }
 
 // Mock web-vitals

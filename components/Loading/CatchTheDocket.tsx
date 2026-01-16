@@ -7,9 +7,9 @@
 
 'use client';
 
-import React, { useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import WebAppBackground from '@/components/Arcade/WebAppBackground';
+import { motion } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
 import { useCatchTheDocket } from './useCatchTheDocket';
 
 interface CatchTheDocketProps {
@@ -39,7 +39,7 @@ const CatchTheDocket: React.FC<CatchTheDocketProps> = ({ isLoading, onLoadComple
       <WebAppBackground
         compact={
           typeof window !== 'undefined' &&
-          (navigator.maxTouchPoints > 0 || (window as any).ontouchstart !== undefined)
+          (navigator.maxTouchPoints > 0 || 'ontouchstart' in window)
         }
       />
       <motion.div

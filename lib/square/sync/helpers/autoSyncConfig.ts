@@ -32,9 +32,9 @@ export async function shouldAutoSync(userId: string): Promise<boolean> {
     }
 
     return config.auto_sync_enabled === true;
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Auto-Sync] Error checking auto-sync status:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
     });
     return false;
@@ -59,9 +59,9 @@ export async function getAutoSyncConfig(userId: string): Promise<AutoSyncConfig 
       syncCosts: config.auto_sync_costs === true,
       debounceMs: config.sync_debounce_ms || 5000,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Auto-Sync] Error getting auto-sync config:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
     });
     return null;

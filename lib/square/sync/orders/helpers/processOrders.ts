@@ -10,7 +10,14 @@ import type { SalesData, SyncResult } from '../types';
  * Process orders and aggregate sales data.
  */
 export async function processOrders(
-  orders: any[],
+  orders: {
+    id: string;
+    createdAt?: string;
+    lineItems?: {
+      catalogObjectId?: string;
+      quantity?: string;
+    }[];
+  }[],
   userId: string,
   locationId: string,
   result: SyncResult,
@@ -70,13 +77,13 @@ export async function processOrders(
           });
         }
       }
-    } catch (orderError: any) {
+    } catch (orderError: unknown) {
       logger.error('[Square Orders Sync] Error processing order:', {
-        error: orderError.message,
+        error: orderError instanceof Error ? orderError.message : String(orderError),
         orderId: order.id,
       });
       result.errors++;
-      result.errorMessages?.push(`Failed to process order ${order.id}: ${orderError.message}`);
+      result.errorMessages?.push(`Failed to process order ${order.id}: ${orderError instanceof Error ? orderError.message : String(orderError)}`);
 
       await logSyncOperation({
         user_id: userId,
@@ -85,8 +92,8 @@ export async function processOrders(
         entity_type: 'order',
         square_id: order.id,
         status: 'error',
-        error_message: orderError.message,
-        error_details: { stack: orderError.stack },
+        error_message: orderError instanceof Error ? orderError.message : String(orderError),
+        error_details: { stack: orderError instanceof Error ? orderError.stack : undefined },
       });
     }
   }

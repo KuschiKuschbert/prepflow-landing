@@ -92,7 +92,7 @@ function AppleStyleFeatures({
           }}
         >
           <div
-            ref={parentContainerRef as any}
+            ref={parentContainerRef}
             className="desktop:max-w-[45%] desktop:w-auto desktop:self-center flex w-full min-w-0 flex-shrink-0 flex-col xl:max-w-[42%]"
             style={{
               contain: 'layout',

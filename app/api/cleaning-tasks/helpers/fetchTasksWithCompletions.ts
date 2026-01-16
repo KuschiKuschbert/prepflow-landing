@@ -2,25 +2,31 @@
  * Helper for fetching cleaning tasks with completions for a date range
  */
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { PostgrestError } from '@supabase/supabase-js';
+import { CleaningTaskWithCompletions, DBCleaningTask, DBCleaningTaskCompletion } from './types';
 
 /**
- * Fetches cleaning tasks with completions for a date range
+ * Fetches cleaning tasks with their completions within a date range
  *
  * @param {string} startDate - Start date (ISO date string)
  * @param {string} endDate - End date (ISO date string)
- * @param {any} query - Pre-built Supabase query
- * @returns {Promise<any[]>} Tasks with completions attached
+ * @param {any} query - Pre-built Supabase query for cleaning tasks
+ * @returns {Promise<CleaningTaskWithCompletions[]>} Tasks with completions attached
  */
 export async function fetchTasksWithCompletions(
   startDate: string,
   endDate: string,
-  query: unknown,
-): Promise<unknown[]> {
-  const { data: tasks, error: tasksError } = await (query as any);
+  query: PromiseLike<{ data: DBCleaningTask[] | null; error: PostgrestError | null }>,
+): Promise<CleaningTaskWithCompletions[]> {
+  if (!supabaseAdmin) {
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  }
+
+  // First fetch the tasks using the provided query
+  const { data: tasks, error: tasksError } = await query;
 
   if (tasksError) {
     const errorCode = tasksError.code;
@@ -39,34 +45,31 @@ export async function fetchTasksWithCompletions(
     throw ApiErrorHandler.fromSupabaseError(tasksError, 500);
   }
 
-  if (!supabaseAdmin) {
-    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
+  if (!tasks || tasks.length === 0) {
+    return [];
   }
 
-  // Fetch completions for date range
-  const taskIds = (tasks || []).map((t: any) => t.id);
-  let completionsQuery = supabaseAdmin
+  // Fetch completions for these tasks in the date range
+  const taskIds = tasks.map(t => (t as { id: string }).id);
+
+  const { data: completions, error: completionsError } = await supabaseAdmin
     .from('cleaning_task_completions')
     .select('*')
+    .in('task_id', taskIds)
     .gte('completion_date', startDate)
     .lte('completion_date', endDate);
 
-  if (taskIds.length > 0) {
-    completionsQuery = completionsQuery.in('task_id', taskIds);
-  }
-
-  const { data: completions, error: completionsError } = await completionsQuery;
-
-  if (completionsError && completionsError.code !== '42P01') {
+  if (completionsError) {
     logger.error('[Cleaning Tasks API] Database error fetching completions:', {
       error: completionsError.message,
       code: completionsError.code,
     });
+    // We still return tasks but without completions if it fails
   }
 
   // Group completions by task_id
-  const completionsByTask = new Map<string, any[]>();
-  (completions || []).forEach((c: any) => {
+  const completionsByTask = new Map<string, DBCleaningTaskCompletion[]>();
+  (completions || []).forEach((c: DBCleaningTaskCompletion) => {
     if (!completionsByTask.has(c.task_id)) {
       completionsByTask.set(c.task_id, []);
     }
@@ -74,10 +77,8 @@ export async function fetchTasksWithCompletions(
   });
 
   // Attach completions to tasks
-  const tasksWithCompletions = (tasks || []).map((task: any) => ({
+  return (tasks || []).map((task: DBCleaningTask) => ({
     ...task,
     completions: completionsByTask.get(task.id) || [],
-  }));
-
-  return tasksWithCompletions;
+  })) as CleaningTaskWithCompletions[];
 }

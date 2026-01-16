@@ -1,3 +1,5 @@
+import type { Achievement } from '../../achievements';
+
 const STORAGE_KEY = 'prepflow-achievements';
 const STORAGE_STATS_KEY = 'prepflow-achievement-stats';
 
@@ -56,13 +58,13 @@ export function saveStats(stats: AchievementStats): void {
   }
 }
 
-export function loadAchievements(): any[] {
+export function loadAchievements(): Achievement[] {
   if (typeof window === 'undefined') return [];
 
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-      return JSON.parse(stored);
+      return JSON.parse(stored) as Achievement[];
     }
   } catch {
     // Ignore errors
@@ -71,7 +73,7 @@ export function loadAchievements(): any[] {
   return [];
 }
 
-export function saveAchievements(achievements: any[]): void {
+export function saveAchievements(achievements: Achievement[]): void {
   if (typeof window === 'undefined') return;
 
   try {

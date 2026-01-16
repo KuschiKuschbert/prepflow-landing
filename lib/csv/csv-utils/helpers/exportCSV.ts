@@ -1,5 +1,5 @@
-import Papa from 'papaparse';
 import { logger } from '@/lib/logger';
+import Papa from 'papaparse';
 
 /**
  * Export data to CSV file with proper formatting
@@ -10,7 +10,7 @@ import { logger } from '@/lib/logger';
  * @param {boolean} includeHeaders - Whether to include headers row (default: true)
  */
 export function exportToCSV(
-  data: any[],
+  data: Record<string, unknown>[],
   headers: string[],
   filename: string,
   includeHeaders = true,
@@ -48,7 +48,11 @@ export function exportToCSV(
  * @param {boolean} includeHeaders - Whether to include headers row (default: true)
  * @returns {string} CSV string
  */
-export function exportToCSVString(data: any[], headers: string[], includeHeaders = true): string {
+export function exportToCSVString(
+  data: Record<string, unknown>[],
+  headers: string[],
+  includeHeaders = true,
+): string {
   if (!data || data.length === 0) {
     return '';
   }

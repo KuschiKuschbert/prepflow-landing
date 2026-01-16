@@ -5,8 +5,8 @@ process.env.SUPABASE_SERVICE_ROLE_KEY = 'mock-service-key';
 process.env.NEXT_PUBLIC_AUTH0_DOMAIN = 'mock-domain.auth0.com';
 process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID = 'mock-client-id';
 
-import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { render } from '@testing-library/react';
 import * as Module from './QRCodeModal';
 
 describe('QRCodeModal', () => {
@@ -16,8 +16,8 @@ describe('QRCodeModal', () => {
 
     // Try to find a component to render using heuristics
     const Component =
-      (Module as any).default ||
-      Object.values(Module).find((exp: any) => typeof exp === 'function');
+      (Module as { default?: React.ElementType }).default ||
+      (Object.values(Module).find((exp) => typeof exp === 'function') as React.ElementType);
 
     if (Component) {
       try {

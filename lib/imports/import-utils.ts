@@ -3,8 +3,6 @@
  * Common parsing and validation helpers
  */
 
-import { parseCSV, type ParseCSVResult } from '@/lib/csv/csv-utils';
-import { logger } from '@/lib/logger';
 
 /**
  * Normalize column names for flexible matching
@@ -28,10 +26,10 @@ export function normalizeColumnName(header: string): string {
  * Map CSV row to entity with flexible column matching
  */
 export function mapCSVRowToEntity<T>(
-  row: Record<string, any>,
+  row: Record<string, unknown>,
   columnMap: Record<string, string | string[]>,
 ): Partial<T> {
-  const entity: any = {};
+  const entity: Record<string, unknown> = {};
 
   Object.entries(columnMap).forEach(([entityField, csvColumns]) => {
     const columns = Array.isArray(csvColumns) ? csvColumns : [csvColumns];
@@ -68,7 +66,7 @@ export function parseDate(dateString: string | null | undefined): string | null 
 /**
  * Parse number with fallback
  */
-export function parseNumber(value: any, defaultValue: number = 0): number {
+export function parseNumber(value: unknown, defaultValue: number = 0): number {
   if (value === null || value === undefined || value === '') return defaultValue;
   const num =
     typeof value === 'string' ? parseFloat(value.replace(/[^0-9.-]/g, '')) : Number(value);
@@ -78,7 +76,7 @@ export function parseNumber(value: any, defaultValue: number = 0): number {
 /**
  * Parse boolean
  */
-export function parseBoolean(value: any): boolean {
+export function parseBoolean(value: unknown): boolean {
   if (typeof value === 'boolean') return value;
   if (typeof value === 'string') {
     const lower = value.toLowerCase().trim();
@@ -90,10 +88,13 @@ export function parseBoolean(value: any): boolean {
 /**
  * Format entity for preview display
  */
-export function formatEntityPreview(entity: any, fields: string[]): string {
+export function formatEntityPreview<T extends object>(
+  entity: T,
+  fields: (keyof T & string)[],
+): string {
   return fields
     .map(field => {
-      const value = entity[field];
+      const value = (entity as Record<string, unknown>)[field];
       if (value === null || value === undefined || value === '') return null;
       return `${field}: ${value}`;
     })

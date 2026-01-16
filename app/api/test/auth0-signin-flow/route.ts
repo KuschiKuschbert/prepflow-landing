@@ -6,13 +6,50 @@
  */
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import {
-  extractAuth0UserId,
-  fetchProfileWithRetry,
-  getUserProfileFromManagementAPI,
+    extractAuth0UserId,
+    fetchProfileWithRetry,
+    getUserProfileFromManagementAPI,
 } from '@/lib/auth0-management';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { createDiagnosticStructure } from './diagnostic-helpers';
+
+interface Diagnostic {
+  timestamp: string;
+  sessionStatus: string;
+  session: {
+    user: {
+      email?: string | null;
+      name?: string | null;
+      image?: string | null;
+      roles: string[];
+    };
+    expiresAt?: string;
+  } | null;
+  managementApiTests: {
+    actualUser?: {
+      description: string;
+      status: string;
+      userId: string;
+      profile?: {
+        email?: string | null;
+        name?: string | null;
+        email_verified?: boolean;
+      };
+      message?: string;
+      error?: string;
+    };
+    retryWithFallback?: {
+      description?: string;
+      status: string;
+      email?: string;
+      fallbackUsed?: boolean;
+      error?: string;
+    };
+  };
+  recommendations: string[];
+  [key: string]: unknown;
+}
 
 /**
  * Test the complete sign-in flow and identify failure points.
@@ -23,7 +60,7 @@ export async function GET(req: NextRequest) {
   try {
     const { auth0 } = await import('@/lib/auth0');
     const session = await auth0.getSession(req);
-    const diagnostic: any = {
+    const diagnostic: Diagnostic = {
       timestamp: new Date().toISOString(),
       sessionStatus: session ? 'active' : 'inactive',
       session: session
@@ -32,13 +69,13 @@ export async function GET(req: NextRequest) {
               email: session.user?.email,
               name: session.user?.name,
               image: session.user?.picture,
-              roles: (session.user as any)?.roles || [],
+              roles: (session.user as Record<string, unknown>)?.roles as string[] || [],
             },
             expiresAt: session.expiresAt,
           }
         : null,
       ...createDiagnosticStructure(),
-    };
+    } as any;
 
     // If session exists, test Management API with actual user ID
     if (session?.user?.email) {

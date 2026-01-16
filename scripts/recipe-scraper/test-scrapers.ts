@@ -6,6 +6,7 @@
  */
 
 import { AllRecipesScraper } from './scrapers/allrecipes-scraper';
+import { BaseScraper } from './scrapers/base-scraper';
 // import { BBCGoodFoodScraper } from './scrapers/bbc-good-food-scraper'; // REMOVED - Terms of Service violation
 import { BonAppetitScraper } from './scrapers/bon-appetit-scraper';
 import { DelishScraper } from './scrapers/delish-scraper';
@@ -22,7 +23,7 @@ import { scraperLogger } from './utils/logger';
 
 interface TestCase {
   name: string;
-  scraper: any;
+  scraper: BaseScraper;
   url: string;
   expectedFields: string[];
 }

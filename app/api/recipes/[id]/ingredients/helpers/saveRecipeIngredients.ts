@@ -4,24 +4,18 @@ import { logger } from '@/lib/logger';
 import { invalidateMenuItemsWithRecipe } from '@/lib/menu-pricing/cache-invalidation';
 import { supabaseAdmin } from '@/lib/supabase';
 
+import type { RecipeIngredientRow, SaveRecipeIngredientInput } from './types';
+
 /**
  * Save recipe ingredients (with optional update mode).
- *
- * @param {string} recipeId - Recipe ID
- * @param {Array} ingredients - Ingredients array
- * @param {boolean} isUpdate - If true, delete existing ingredients first
- * @param {string} recipeName - Recipe name (for change tracking)
- * @param {string} userEmail - User email (for change tracking)
- * @returns {Promise<Array>} Saved recipe ingredients
- * @throws {Error} If save fails
  */
 export async function saveRecipeIngredients(
   recipeId: string,
-  ingredients: any[],
+  ingredients: SaveRecipeIngredientInput[],
   isUpdate: boolean,
   recipeName?: string | null,
   userEmail?: string | null,
-): Promise<unknown[]> {
+): Promise<RecipeIngredientRow[]> {
   if (!supabaseAdmin) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);

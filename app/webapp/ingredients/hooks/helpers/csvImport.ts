@@ -1,8 +1,8 @@
 import { parseCSV } from '@/lib/csv/csv-utils';
 import {
-  getIngredientsValidationSchema,
-  transformCSVData,
-  validateCSVData,
+    getIngredientsValidationSchema,
+    transformCSVData,
+    validateCSVData,
 } from '@/lib/csv/validation';
 import { logger } from '@/lib/logger';
 import { supabase } from '@/lib/supabase';
@@ -41,7 +41,7 @@ export function parseIngredientsCSV(csvText: string): {
   const errors: string[] = [];
 
   // Parse CSV using PapaParse
-  const result = parseCSV<Record<string, any>>(csvText, {
+  const result = parseCSV<Record<string, unknown>>(csvText, {
     header: true,
     skipEmptyLines: true,
     transformHeader: (header: string) => header.trim(),

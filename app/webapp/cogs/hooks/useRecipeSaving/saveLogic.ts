@@ -83,10 +83,19 @@ export async function saveRecipeWithIngredients({
     return recipe;
   } catch (err: unknown) {
     logger.error('Recipe save error:', err);
-    const errorObj = err as { message?: string; code?: string };
-    const errorMessage =
-      errorObj?.message ||
-      (errorObj?.code ? `Database error (${errorObj.code})` : 'Failed to save recipe');
+
+    let errorMessage = 'Failed to save recipe';
+    if (err instanceof Error) {
+      errorMessage = err.message;
+    } else if (typeof err === 'object' && err !== null) {
+      const errorObj = err as Record<string, unknown>;
+      if (typeof errorObj.message === 'string') {
+        errorMessage = errorObj.message;
+      } else if (typeof errorObj.code === 'string') {
+        errorMessage = `Database error (${errorObj.code})`;
+      }
+    }
+
     setError(`Failed to save recipe: ${errorMessage}`);
     return null;
   }

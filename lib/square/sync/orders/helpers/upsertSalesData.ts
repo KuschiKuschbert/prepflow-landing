@@ -1,8 +1,8 @@
 /**
  * Upsert sales data to database.
  */
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import type { SalesData, SyncResult } from '../types';
 
 /**
@@ -58,14 +58,16 @@ export async function upsertSalesData(
         }
         result.synced++;
       }
-    } catch (upsertError: any) {
+    } catch (upsertError: unknown) {
+      const errorMessage = upsertError instanceof Error ? upsertError.message : String(upsertError);
+
       logger.error('[Square Orders Sync] Error upserting sales data:', {
-        error: upsertError.message,
+        error: errorMessage,
         dishId: salesData.dish_id,
       });
       result.errors++;
       result.errorMessages?.push(
-        `Failed to upsert sales data for dish ${salesData.dish_id}: ${upsertError.message}`,
+        `Failed to upsert sales data for dish ${salesData.dish_id}: ${errorMessage}`,
       );
     }
   }

@@ -2,14 +2,15 @@
  * Hook for comprehensive scraping handlers
  */
 
-import { useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
+import { useCallback } from 'react';
+import { ComprehensiveJobStatus } from '../types';
 import { createStopHandler } from './useComprehensiveScrapingHandlers/stop-handler';
 
 interface UseComprehensiveScrapingHandlersParams {
   setComprehensiveScraping: (value: boolean) => void;
-  setComprehensiveStatus: (status: unknown) => void;
+  setComprehensiveStatus: (status: ComprehensiveJobStatus | null) => void;
   setStatusPolling: (polling: boolean) => void;
   fetchComprehensiveStatus: () => Promise<void>;
 }
@@ -30,7 +31,7 @@ export function useComprehensiveScrapingHandlers({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ comprehensive: true }),
       });
-      const result = await response.json();
+      const result = (await response.json()) as { success: boolean; data: { jobStatus: ComprehensiveJobStatus }; message?: string };
 
       if (result.success) {
         setComprehensiveStatus(result.data.jobStatus);
@@ -66,11 +67,11 @@ export function useComprehensiveScrapingHandlers({
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        const errorData = (await response.json().catch(() => ({ error: 'Unknown error' }))) as { error?: string };
         throw new Error(errorData.error || `HTTP ${response.status}`);
       }
 
-      const result = await response.json();
+      const result = (await response.json()) as { success: boolean; data: { status: ComprehensiveJobStatus }; message?: string };
 
       if (result.success) {
         setComprehensiveStatus(result.data.status);
@@ -92,7 +93,7 @@ export function useComprehensiveScrapingHandlers({
   const handleRefreshStatus = useCallback(async () => {
     try {
       const response = await fetch('/api/recipe-scraper/status');
-      const result = await response.json();
+      const result = (await response.json()) as { success: boolean; data: ComprehensiveJobStatus };
       if (result.success) {
         setComprehensiveStatus(result.data);
         if (result.data.isRunning) {

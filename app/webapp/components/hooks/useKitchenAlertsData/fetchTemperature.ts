@@ -11,8 +11,8 @@ import { calculateTemperatureAlerts } from '../useKitchenAlertsHelpers';
  * Fetch temperature alerts data
  *
  * @param {string} today - Today's date string
- * @param {any[]} cachedLogs - Cached temperature logs
- * @param {any[]} cachedEquipment - Cached temperature equipment
+ * @param {TemperatureLog[]} cachedLogs - Cached temperature logs
+ * @param {TemperatureEquipment[]} cachedEquipment - Cached temperature equipment
  * @returns {Promise<Array<{id: string, message: string, severity: 'critical' | 'warning'}>>} Temperature alerts
  */
 export async function fetchTemperatureAlerts(

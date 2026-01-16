@@ -1,12 +1,12 @@
+import type { NormalizedRecipeIngredient, RecipeIngredientRow } from './types';
+
 /**
  * Map recipe ingredient rows to normalized items format.
- *
- * @param {Array} rows - Recipe ingredient rows with ingredients
- * @returns {Array} Normalized items
  */
-export function mapRecipeIngredients(rows: any[]): unknown[] {
-  return rows.map((row: any) => {
-    const ing = row.ingredients || {};
+export function mapRecipeIngredients(rows: RecipeIngredientRow[]): NormalizedRecipeIngredient[] {
+  return rows.map((row) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ing = row.ingredients || ({} as any);
     return {
       id: row.id,
       recipe_id: row.recipe_id,
@@ -21,7 +21,7 @@ export function mapRecipeIngredients(rows: any[]): unknown[] {
         unit: ing.unit || row.unit || null,
         trim_peel_waste_percentage: ing.trim_peel_waste_percentage,
         yield_percentage: ing.yield_percentage,
-        category: ing.category || null, // Handle missing category column gracefully
+        category: ing.category || null,
       },
     };
   });

@@ -1,8 +1,8 @@
 /**
  * Create optimistic ingredient update for UI.
  *
- * @param {any} normalized - Normalized ingredient data
- * @returns {any} Temporary ingredient with temp ID
+ * @param {Partial<T>} normalized - Normalized ingredient data
+ * @returns {T} Temporary ingredient with temp ID
  */
 export function createOptimisticIngredient<T extends { id: string }>(normalized: Partial<T>): T {
   const tempId = `temp-${Date.now()}`;

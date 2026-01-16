@@ -1,9 +1,9 @@
 /**
  * Update initial sync status.
  */
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 /**
  * Update initial sync status.
@@ -20,7 +20,7 @@ export async function updateInitialSyncStatus(
   }
 
   try {
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       initial_sync_status: statusUpdate.status,
       updated_at: new Date().toISOString(),
     };
@@ -47,20 +47,20 @@ export async function updateInitialSyncStatus(
     if (error) {
       logger.error('[Square Config] Error updating initial sync status:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         userId,
         context: { endpoint: 'updateInitialSyncStatus', operation: 'update' },
       });
 
       throw ApiErrorHandler.fromSupabaseError(error, 500);
     }
-  } catch (error: any) {
-    if (error.status) {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'status' in error) {
       throw error;
     }
 
     logger.error('[Square Config] Unexpected error updating initial sync status:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
       context: { endpoint: 'updateInitialSyncStatus', operation: 'update' },
     });

@@ -6,9 +6,9 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { getSquareClient } from '../../client';
 import { getSquareConfig } from '../../config';
 import { logSyncOperation } from '../../sync-log';
-import { processPrepFlowEmployee } from './helpers/processToSquare';
-import { updateLastStaffSyncTimestamp } from './helpers/common';
 import type { SyncResult } from '../staff';
+import { updateLastStaffSyncTimestamp } from './helpers/common';
+import { processPrepFlowEmployee, TeamApi } from './helpers/processToSquare';
 
 /**
  * Sync employees from PrepFlow to Square
@@ -80,7 +80,7 @@ export async function syncStaffToSquare(
 
     // Process each employee
     for (const employee of employees) {
-      await processPrepFlowEmployee(employee, userId, teamApi, result);
+      await processPrepFlowEmployee(employee, userId, teamApi as unknown as TeamApi, result);
     }
 
     // Update last sync timestamp
@@ -88,22 +88,25 @@ export async function syncStaffToSquare(
 
     result.success = result.errors === 0;
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorStack = error instanceof Error ? error.stack : undefined;
+
     logger.error('[Square Staff Sync] Fatal error:', {
-      error: error.message,
+      error: errorMessage,
       userId,
-      stack: error.stack,
+      stack: errorStack,
     });
 
-    result.errorMessages?.push(`Fatal error: ${error.message}`);
+    result.errorMessages?.push(`Fatal error: ${errorMessage}`);
 
     await logSyncOperation({
       user_id: userId,
       operation_type: 'sync_staff',
       direction: 'prepflow_to_square',
       status: 'error',
-      error_message: error.message,
-      error_details: { stack: error.stack },
+      error_message: errorMessage,
+      error_details: { stack: errorStack },
     });
 
     return result;

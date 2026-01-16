@@ -1,10 +1,10 @@
 /**
  * Log a sync operation.
  */
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import type { SyncOperation, SyncLog } from './types';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import type { SyncLog, SyncOperation } from './types';
 
 /**
  * Log a sync operation.
@@ -41,7 +41,7 @@ export async function logSyncOperation(operation: SyncOperation): Promise<SyncLo
     if (error) {
       logger.error('[Square Sync Log] Error logging sync operation:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         operation,
         context: { endpoint: 'logSyncOperation', operation: 'insert' },
       });
@@ -50,13 +50,13 @@ export async function logSyncOperation(operation: SyncOperation): Promise<SyncLo
     }
 
     return data as SyncLog;
-  } catch (error: any) {
-    if (error.status) {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'status' in error) {
       throw error;
     }
 
     logger.error('[Square Sync Log] Unexpected error logging sync operation:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       operation,
       context: { endpoint: 'logSyncOperation', operation: 'insert' },
     });

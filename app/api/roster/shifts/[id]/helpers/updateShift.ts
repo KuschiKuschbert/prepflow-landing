@@ -5,13 +5,15 @@ import { NextResponse } from 'next/server';
 import { validateShiftRequest } from '../../helpers/validateShiftRequest';
 import { buildUpdateData } from './buildUpdateData';
 
+import type { CreateShiftInput, Shift } from '../../helpers/types';
+
 /**
  * Update shift by ID
  */
 export async function updateShift(
   shiftId: string,
-  body: any,
-  existingShift: any,
+  body: Partial<CreateShiftInput>,
+  existingShift: Shift,
 ): Promise<NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(

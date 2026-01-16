@@ -47,7 +47,7 @@ export function useIngredientsQuery(page: number, pageSize: number) {
         cache: 'no-store',
       });
       if (!res.ok) throw new Error('Failed to fetch ingredients');
-      const json = await res.json();
+      const json = (await res.json()) as { data: IngredientsResponse };
       const data = json.data;
       // Cache first page for instant display
       if (page === 1 && data?.items) {
@@ -60,7 +60,7 @@ export function useIngredientsQuery(page: number, pageSize: number) {
     initialData:
       page === 1
         ? (() => {
-            const cached = getCachedData<any[]>('ingredients_page_1');
+            const cached = getCachedData<Ingredient[]>('ingredients_page_1');
             if (cached) {
               return {
                 items: cached,

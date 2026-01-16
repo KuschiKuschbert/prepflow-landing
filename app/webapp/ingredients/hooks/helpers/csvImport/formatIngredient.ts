@@ -1,9 +1,9 @@
 import {
-  formatIngredientName,
-  formatBrandName,
-  formatSupplierName,
-  formatStorageLocation,
-  formatTextInput,
+    formatBrandName,
+    formatIngredientName,
+    formatStorageLocation,
+    formatSupplierName,
+    formatTextInput,
 } from '@/lib/text-utils';
 
 interface Ingredient {
@@ -30,7 +30,7 @@ interface Ingredient {
  * Format ingredient data for database insert.
  *
  * @param {Partial<Ingredient>} ingredient - Ingredient to format
- * @returns {any} Formatted ingredient data
+ * @returns {Partial<Ingredient>} Formatted ingredient data
  */
 export function formatIngredientForInsert(ingredient: Partial<Ingredient>) {
   return {

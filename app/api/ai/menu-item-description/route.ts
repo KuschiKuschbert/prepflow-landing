@@ -4,18 +4,18 @@
  * Generates AI-powered menu descriptions for dishes and recipes
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import type { MenuItem } from '@/app/webapp/menu-builder/types';
 import { generateAIResponse } from '@/lib/ai/ai-service';
 import { buildMenuItemDescriptionPrompt } from '@/lib/ai/prompts/menu-item-description';
-import type { MenuItem } from '@/app/webapp/menu-builder/types';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const menuItemDescriptionSchema = z
   .object({
-    menuItem: z.any(), // MenuItem is complex, validate structure if needed
-    ingredients: z.array(z.any()).optional(),
+    menuItem: z.unknown(), // MenuItem is complex, type check in logic
+    ingredients: z.array(z.unknown()).optional(),
     countryCode: z.string().optional(),
   })
   .refine(data => data.menuItem !== undefined && data.menuItem !== null, {

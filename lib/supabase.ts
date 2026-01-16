@@ -82,10 +82,10 @@ export const supabase = new Proxy({} as SupabaseClient, {
       prop === 'toString' ||
       typeof prop === 'symbol'
     ) {
-      return (target as any)[prop];
+      return target[prop as keyof typeof target];
     }
     const client = getSupabaseClient();
-    return (client as any)[prop];
+    return client[prop as keyof SupabaseClient];
   },
 });
 

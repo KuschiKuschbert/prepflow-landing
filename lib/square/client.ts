@@ -6,9 +6,8 @@
  * @module lib/square/client
  */
 
-import { SquareClient, SquareEnvironment } from 'square';
 import { logger } from '@/lib/logger';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { SquareClient, SquareEnvironment } from 'square';
 import { getSquareConfig } from './config';
 import { decryptSquareToken } from './token-encryption';
 
@@ -40,9 +39,10 @@ export async function getSquareClient(userId: string): Promise<SquareClient | nu
     let accessToken: string;
     try {
       accessToken = await decryptSquareToken(config.square_access_token_encrypted);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       logger.error('[Square Client] Failed to decrypt access token:', {
-        error: error.message,
+        error: message,
         userId,
         context: { endpoint: 'getSquareClient', operation: 'decrypt_token' },
       });
@@ -58,6 +58,7 @@ export async function getSquareClient(userId: string): Promise<SquareClient | nu
     // Create Square client
     // Note: Square SDK constructor signature may vary by version
     // Using type assertion to handle potential type mismatches
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const client = new SquareClient({
       accessToken: accessToken,
       environment: environment,
@@ -71,9 +72,10 @@ export async function getSquareClient(userId: string): Promise<SquareClient | nu
     });
 
     return client;
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     logger.error('[Square Client] Failed to create client:', {
-      error: error.message,
+      error: message,
       userId,
       context: { endpoint: 'getSquareClient', operation: 'create_client' },
     });
@@ -90,9 +92,10 @@ export async function isSquareConfigured(userId: string): Promise<boolean> {
   try {
     const config = await getSquareConfig(userId);
     return config !== null;
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     logger.error('[Square Client] Failed to check configuration:', {
-      error: error.message,
+      error: message,
       userId,
       context: { endpoint: 'isSquareConfigured', operation: 'check_config' },
     });
@@ -122,9 +125,10 @@ export async function validateSquareCredentials(userId: string): Promise<boolean
     }
 
     return false;
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     logger.error('[Square Client] Failed to validate credentials:', {
-      error: error.message,
+      error: message,
       userId,
       context: { endpoint: 'validateSquareCredentials', operation: 'validate' },
     });

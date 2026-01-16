@@ -41,7 +41,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
       .from('recipes')
       .select('id, name, recipe_name')
       .eq('id', recipeId)
-      .single();
+      .single<{ id: string; name: string; recipe_name: string | null }>();
 
     if (recipeError || !recipe) {
       return NextResponse.json(ApiErrorHandler.createError('Recipe not found', 'NOT_FOUND', 404), {
@@ -84,7 +84,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
         success: true,
         data: {
           recipe_id: recipeId,
-          recipe_name: (recipe as any).recipe_name || (recipe as any).name,
+          recipe_name: recipe.recipe_name || recipe.name,
           allergen_sources: [],
           total_allergens: [],
         },
@@ -146,8 +146,8 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
             ingredient_id: ingredient.id,
             ingredient_name: ingredient.ingredient_name,
             brand: ingredient.brand || undefined,
-            quantity: (ri as any).quantity || undefined,
-            unit: (ri as any).unit || undefined,
+            quantity: (ri as { quantity?: number }).quantity || undefined,
+            unit: (ri as { unit?: string }).unit || undefined,
             allergen_source: ingredient.allergen_source || undefined,
           });
         }
@@ -167,7 +167,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
       success: true,
       data: {
         recipe_id: recipeId,
-        recipe_name: (recipe as any).recipe_name || (recipe as any).name,
+        recipe_name: recipe.recipe_name || recipe.name,
         allergen_sources: allergenSourcesArray,
         total_allergens: Array.from(allAllergens).sort(),
       },

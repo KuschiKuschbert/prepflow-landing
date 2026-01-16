@@ -1,14 +1,14 @@
 import {
-  isClientError,
-  isNetworkError,
-  isRowNotFoundError,
-  isServerError,
-  isTableNotFoundError,
+    isClientError,
+    isNetworkError,
+    isRowNotFoundError,
+    isServerError,
+    isTableNotFoundError,
 } from './api-error-handler/errorChecks';
 import {
-  parseSupabaseError,
-  SUPABASE_ERROR_CODES,
-  type ApiError,
+    parseSupabaseError,
+    SUPABASE_ERROR_CODES,
+    type ApiError,
 } from './api-error-handler/supabaseErrorParser';
 
 import { PostgrestError } from '@supabase/supabase-js';
@@ -22,10 +22,11 @@ export class ApiErrorHandler {
   static createError(message: string, code?: string, status?: number, details?: unknown): ApiError {
     return { message, code, status, details, timestamp: new Date() };
   }
-  static fromResponse(response: Response, data?: any): ApiError {
+  static fromResponse(response: Response, data?: unknown): ApiError {
+    const errorData = data as Record<string, unknown> | undefined;
     return {
-      message: data?.message || data?.error || 'An error occurred',
-      code: data?.code || response.status.toString(),
+      message: String(errorData?.message || errorData?.error || 'An error occurred'),
+      code: String(errorData?.code || response.status.toString()),
       status: response.status,
       details: data,
       timestamp: new Date(),

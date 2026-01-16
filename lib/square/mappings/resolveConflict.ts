@@ -1,9 +1,9 @@
 /**
  * Resolve a mapping conflict.
  */
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 /**
  * Resolve a mapping conflict.
@@ -17,7 +17,7 @@ export async function resolveConflict(
   }
 
   try {
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       updated_at: new Date().toISOString(),
     };
 
@@ -44,7 +44,7 @@ export async function resolveConflict(
     if (error) {
       logger.error('[Square Mappings] Error resolving conflict:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         mappingId,
         resolution,
         context: { endpoint: 'resolveConflict', operation: 'update' },
@@ -52,13 +52,13 @@ export async function resolveConflict(
 
       throw ApiErrorHandler.fromSupabaseError(error, 500);
     }
-  } catch (error: any) {
-    if (error.status) {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'status' in error) {
       throw error;
     }
 
     logger.error('[Square Mappings] Unexpected error resolving conflict:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       mappingId,
       resolution,
       context: { endpoint: 'resolveConflict', operation: 'update' },

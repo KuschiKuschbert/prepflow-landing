@@ -3,15 +3,15 @@
  * Provides print and export functionality for comprehensive compliance reports
  */
 
-import { printWithTemplate } from '@/lib/exports/print-template';
-import {
-  formatComplianceReportForPrint,
-  type ComplianceReportData,
-} from './formatComplianceReportForPrint';
-import { getComplianceReportPrintStyles } from './complianceReportPrintStyles';
-import { exportToCSV } from '@/lib/csv/csv-utils';
-import { logger } from '@/lib/logger';
 import type { ExportFormat } from '@/components/ui/ExportButton';
+import { exportToCSV } from '@/lib/csv/csv-utils';
+import { printWithTemplate } from '@/lib/exports/print-template';
+import { logger } from '@/lib/logger';
+import { getComplianceReportPrintStyles } from './complianceReportPrintStyles';
+import {
+    formatComplianceReportForPrint,
+    type ComplianceReportData,
+} from './formatComplianceReportForPrint';
 
 /**
  * Print compliance report using unified template
@@ -60,7 +60,7 @@ export function printComplianceReport(data: ComplianceReportData): void {
 export function exportComplianceReport(data: ComplianceReportData, format: ExportFormat): void {
   if (format === 'csv') {
     // Flatten all data into CSV format
-    const csvRows: unknown[] = [];
+    const csvRows: Record<string, unknown>[] = [];
 
     // Compliance Records
     if (data.complianceRecords) {

@@ -1,8 +1,8 @@
 /**
  * Get mapping by PrepFlow ID.
  */
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import type { SquareMapping } from './types';
 
 /**
@@ -30,7 +30,7 @@ export async function getMappingByPrepFlowId(
     if (error && error.code !== 'PGRST116') {
       logger.error('[Square Mappings] Error fetching mapping by PrepFlow ID:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         prepflowId,
         entityType,
         userId,
@@ -40,9 +40,9 @@ export async function getMappingByPrepFlowId(
     }
 
     return data as SquareMapping | null;
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Mappings] Unexpected error fetching mapping by PrepFlow ID:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       prepflowId,
       entityType,
       userId,

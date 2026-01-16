@@ -23,7 +23,7 @@ export async function updateOrderList(
 
   const { supplierId, name, notes, status, items } = body;
 
-  const updateData: any = { updated_at: new Date().toISOString() };
+  const updateData: Record<string, unknown> = { updated_at: new Date().toISOString() };
   if (supplierId !== undefined) updateData.supplier_id = supplierId;
   if (name !== undefined) updateData.name = name;
   if (notes !== undefined) updateData.notes = notes;
@@ -39,7 +39,7 @@ export async function updateOrderList(
   if (error) {
     logger.error('[Order Lists API] Database error updating order list:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       orderListId: id,
     });
     const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
@@ -61,7 +61,7 @@ export async function updateOrderList(
     }
 
     if (items.length > 0) {
-      const orderItems = items.map((item: any) => ({
+      const orderItems = items.map(item => ({
         order_list_id: id,
         ingredient_id: item.ingredientId,
         quantity: item.quantity,
@@ -76,7 +76,7 @@ export async function updateOrderList(
       if (insertItemsError) {
         logger.error('[Order Lists API] Error inserting order list items:', {
           error: insertItemsError.message,
-          code: (insertItemsError as any).code,
+          code: insertItemsError.code,
           orderListId: id,
         });
         return {

@@ -3,10 +3,23 @@
  */
 
 import { logger } from '@/lib/logger';
-import { findMenuItemsWithIngredient } from './helpers/find-menu-items';
 import { checkMenuLocks } from './helpers/check-menu-locks';
+import { findMenuItemsWithIngredient } from './helpers/find-menu-items';
 import { invalidateMenuItemPrices } from './helpers/invalidate-prices';
 import { trackLockedMenuChanges } from './helpers/track-changes';
+
+// Type for menu item records returned from queries
+interface MenuItemRecord {
+  id: string;
+  menu_id: string;
+}
+
+// Type for change details passed to tracking
+interface IngredientChangeDetails {
+  old_cost?: number;
+  new_cost?: number;
+  [key: string]: unknown;
+}
 
 /**
  * Invalidate cached recommended prices for all menu items using recipes/dishes that contain a specific ingredient.
@@ -22,7 +35,7 @@ import { trackLockedMenuChanges } from './helpers/track-changes';
 export async function invalidateMenuItemsWithIngredient(
   ingredientId: string,
   ingredientName?: string,
-  changeDetails: any = {},
+  changeDetails: IngredientChangeDetails = {},
   changedBy: string | null = null,
 ): Promise<void> {
   try {
@@ -34,7 +47,7 @@ export async function invalidateMenuItemsWithIngredient(
     }
 
     // Group menu items by menu_id and check which menus are locked
-    const menuIds = [...new Set(menuItems.map((item: any) => item.menu_id))];
+    const menuIds = [...new Set(menuItems.map((item: MenuItemRecord) => item.menu_id))];
     const { lockedMenuIds, unlockedMenuIds } = await checkMenuLocks(menuIds);
 
     // Track changes for locked menus
@@ -50,8 +63,8 @@ export async function invalidateMenuItemsWithIngredient(
 
     // Only invalidate prices for unlocked menus
     const unlockedMenuItemIds = menuItems
-      .filter((item: any) => unlockedMenuIds.has(item.menu_id))
-      .map((item: any) => item.id);
+      .filter((item: MenuItemRecord) => unlockedMenuIds.has(item.menu_id))
+      .map((item: MenuItemRecord) => item.id);
 
     if (unlockedMenuItemIds.length > 0) {
       await invalidateMenuItemPrices(unlockedMenuItemIds, {

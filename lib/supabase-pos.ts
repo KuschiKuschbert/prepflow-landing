@@ -3,14 +3,21 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
+// Typed cache to store the Supabase client singleton
+interface SupabaseCache {
+  client?: SupabaseClient;
+}
+
+// Use a typed object for caching instead of augmenting Window/globalThis
+const windowCache: SupabaseCache = {};
+const serverCache: SupabaseCache = {};
+
 // Global singleton pattern - use window object to persist across HMR
 // This ensures only one instance exists even with hot module reloading
 const getGlobalSupabase = (): SupabaseClient => {
-  const globalKey = '__CURBOS_SUPABASE_CLIENT__';
-
   if (typeof window !== 'undefined') {
-    if (!(window as any)[globalKey]) {
-      (window as any)[globalKey] = createClient(supabaseUrl, supabaseKey, {
+    if (!windowCache.client) {
+      windowCache.client = createClient(supabaseUrl, supabaseKey, {
         auth: {
           persistSession: true,
           autoRefreshToken: true,
@@ -19,11 +26,11 @@ const getGlobalSupabase = (): SupabaseClient => {
         },
       });
     }
-    return (window as any)[globalKey];
+    return windowCache.client;
   }
 
-  if (!(globalThis as any)[globalKey]) {
-    (globalThis as any)[globalKey] = createClient(supabaseUrl, supabaseKey, {
+  if (!serverCache.client) {
+    serverCache.client = createClient(supabaseUrl, supabaseKey, {
       auth: {
         persistSession: false,
         autoRefreshToken: false,
@@ -32,7 +39,7 @@ const getGlobalSupabase = (): SupabaseClient => {
       },
     });
   }
-  return (globalThis as any)[globalKey];
+  return serverCache.client;
 };
 
 /**
@@ -41,7 +48,7 @@ const getGlobalSupabase = (): SupabaseClient => {
  * GoTrueClient instances and subsequent warnings during module evaluation.
  */
 export const supabase = new Proxy({} as SupabaseClient, {
-  get: (target, prop) => {
+  get: (_target, prop) => {
     // Prevent initialization on HMR/DevTools/React-Refresh property inspection
     if (
       prop === '$$typeof' ||
@@ -53,9 +60,9 @@ export const supabase = new Proxy({} as SupabaseClient, {
       prop === 'toString' ||
       typeof prop === 'symbol'
     ) {
-      return (target as any)[prop];
+      return undefined;
     }
     const client = getGlobalSupabase();
-    return (client as any)[prop];
+    return client[prop as keyof SupabaseClient];
   },
 });

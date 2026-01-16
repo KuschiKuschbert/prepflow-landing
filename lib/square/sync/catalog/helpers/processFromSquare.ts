@@ -4,17 +4,17 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { getMappingBySquareId } from '../../../mappings';
-import { mapSquareItemToDish } from './mapping';
-import { logCatalogSyncOperation } from './common';
-import { updateExistingDish } from './updateExistingDish';
-import { createNewDish } from './createNewDish';
 import type { SyncResult } from '../../catalog';
+import { logCatalogSyncOperation } from './common';
+import { createNewDish } from './createNewDish';
+import { mapSquareItemToDish } from './mapping';
+import { updateExistingDish } from './updateExistingDish';
 
 /**
  * Process a single Square catalog item for sync to PrepFlow
  */
 export async function processSquareCatalogItem(
-  squareItem: any,
+  squareItem: any, // Keeping any for now to match SDK type issues, but removing others
   userId: string,
   locationId: string,
   result: SyncResult,
@@ -38,14 +38,17 @@ export async function processSquareCatalogItem(
     } else {
       await createNewDish(dishData, squareItemId, userId, locationId, result);
     }
-  } catch (itemError: any) {
+  } catch (itemError: unknown) {
+    const errorMessage = itemError instanceof Error ? itemError.message : String(itemError);
+    const stack = itemError instanceof Error ? itemError.stack : undefined;
+
     logger.error('[Square Catalog Sync] Error processing Square item:', {
-      error: itemError.message,
+      error: errorMessage,
       squareItemId: squareItem.id,
     });
     result.errors++;
     result.errorMessages?.push(
-      `Failed to process Square item ${squareItem.id}: ${itemError.message}`,
+      `Failed to process Square item ${squareItem.id}: ${errorMessage}`,
     );
 
     await logCatalogSyncOperation({
@@ -53,8 +56,8 @@ export async function processSquareCatalogItem(
       direction: 'square_to_prepflow',
       squareId: squareItem.id,
       status: 'error',
-      errorMessage: itemError.message,
-      errorDetails: { stack: itemError.stack },
+      errorMessage: errorMessage,
+      errorDetails: { stack },
     });
   }
 }

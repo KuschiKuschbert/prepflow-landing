@@ -1,14 +1,16 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
-import { logger } from '@/lib/logger';
+
+import { Shift } from '../../helpers/types';
 
 /**
  * Check if shift exists and return it
  */
 export async function checkShiftExists(
   shiftId: string,
-): Promise<{ shift: unknown } | NextResponse> {
+): Promise<{ shift: Shift } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
@@ -35,5 +37,5 @@ export async function checkShiftExists(
     });
   }
 
-  return { shift: existingShift };
+  return { shift: existingShift as unknown as Shift };
 }

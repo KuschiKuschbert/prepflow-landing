@@ -1,9 +1,9 @@
 /**
  * Delete Square configuration for a user.
  */
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 /**
  * Delete Square configuration for a user.
@@ -22,7 +22,7 @@ export async function deleteSquareConfig(userId: string): Promise<void> {
     if (error) {
       logger.error('[Square Config] Error deleting configuration:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         userId,
         context: { endpoint: 'deleteSquareConfig', operation: 'delete' },
       });
@@ -33,13 +33,13 @@ export async function deleteSquareConfig(userId: string): Promise<void> {
     // Clear cached client instance
     const { clearSquareClientCache } = await import('../client');
     clearSquareClientCache(userId);
-  } catch (error: any) {
-    if (error.status) {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'status' in error) {
       throw error;
     }
 
     logger.error('[Square Config] Unexpected error deleting configuration:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
       context: { endpoint: 'deleteSquareConfig', operation: 'delete' },
     });

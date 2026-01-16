@@ -4,11 +4,11 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { createAutoMapping } from '../../../mappings';
+import type { Employee, SyncResult } from '../../staff';
 import { logStaffSyncOperation } from './common';
-import type { SyncResult } from '../../staff';
 
 export async function createNewEmployee(
-  employeeData: any,
+  employeeData: Omit<Employee, 'id' | 'created_at' | 'updated_at'>,
   squareTeamMemberId: string,
   userId: string,
   result: SyncResult,

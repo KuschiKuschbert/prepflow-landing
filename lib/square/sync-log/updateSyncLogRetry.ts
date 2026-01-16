@@ -1,9 +1,9 @@
 /**
  * Update sync log retry information.
  */
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 /**
  * Update sync log retry information.
@@ -21,7 +21,7 @@ export async function updateSyncLogRetry(
   }
 
   try {
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       retry_count: retryInfo.retry_count,
       next_retry_at: retryInfo.next_retry_at,
     };
@@ -38,7 +38,7 @@ export async function updateSyncLogRetry(
     if (error) {
       logger.error('[Square Sync Log] Error updating retry info:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         logId,
         retryInfo,
         context: { endpoint: 'updateSyncLogRetry', operation: 'update' },
@@ -46,13 +46,13 @@ export async function updateSyncLogRetry(
 
       throw ApiErrorHandler.fromSupabaseError(error, 500);
     }
-  } catch (error: any) {
-    if (error.status) {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'status' in error) {
       throw error;
     }
 
     logger.error('[Square Sync Log] Unexpected error updating retry info:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       logId,
       retryInfo,
       context: { endpoint: 'updateSyncLogRetry', operation: 'update' },

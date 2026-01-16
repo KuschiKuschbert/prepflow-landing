@@ -21,9 +21,9 @@ const SQUARE_POS_FLAG_KEY = 'square_pos_integration';
 export async function isSquarePOSEnabled(userId?: string, userEmail?: string): Promise<boolean> {
   try {
     return await isFeatureEnabled(SQUARE_POS_FLAG_KEY, userId, userEmail);
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Feature Flags] Error checking Square POS flag:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
       userEmail,
       context: { endpoint: 'isSquarePOSEnabled', operation: 'check_flag' },
@@ -56,9 +56,9 @@ export async function checkSquareFeatureAccess(userId: string, feature: string):
     }
 
     return enabled;
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Feature Flags] Error checking feature access:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
       feature,
       context: { endpoint: 'checkSquareFeatureAccess', operation: 'check_access' },

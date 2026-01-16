@@ -2,8 +2,8 @@
 import { logger } from '@/lib/logger';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  availableLanguages,
-  getBrowserLanguage,
+    availableLanguages,
+    getBrowserLanguage,
 } from './useTranslation/helpers/getBrowserLanguage';
 import { getNestedValue } from './useTranslation/helpers/getNestedValue';
 import { getCachedTranslations, loadTranslations } from './useTranslation/helpers/loadTranslations';
@@ -59,11 +59,11 @@ export function useTranslation() {
 
   // Get translation function
   const t = useCallback(
-    (key: string, fallback?: string | any[]): string | any[] => {
+    (key: string, fallback?: string): string => {
       const translations = getCachedTranslations();
       const currentTranslations = translations[currentLanguage] || translations['en-AU'];
       const translation = getNestedValue(currentTranslations, key);
-      if (translation !== undefined) return translation;
+      if (typeof translation === 'string') return translation;
       return fallback || key;
     },
     [currentLanguage],

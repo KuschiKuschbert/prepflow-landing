@@ -2,6 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 
+
 export async function deleteOrderList(
   id: string,
 ): Promise<{ success: boolean; message: string } | { error: unknown; status: number }> {
@@ -24,7 +25,7 @@ export async function deleteOrderList(
   if (deleteItemsError) {
     logger.warn('[Order Lists API] Warning: Could not delete order list items:', {
       error: deleteItemsError.message,
-      code: (deleteItemsError as any).code,
+      code: deleteItemsError.code,
       orderListId: id,
     });
     // Continue with list deletion even if items deletion fails
@@ -35,7 +36,7 @@ export async function deleteOrderList(
   if (error) {
     logger.error('[Order Lists API] Error deleting order list:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       orderListId: id,
     });
     return {

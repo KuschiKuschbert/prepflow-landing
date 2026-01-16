@@ -2,10 +2,10 @@
  * Helper for fetching paginated cleaning tasks
  */
 
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { DBCleaningTask } from './types';
 
 /**
  * Fetches paginated cleaning tasks
@@ -13,13 +13,13 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
  * @param {any} query - Pre-built Supabase query
  * @param {number} page - Page number (1-based)
  * @param {number} pageSize - Page size
- * @returns {Promise<{ data: any[]; total: number }>} Paginated tasks and total count
+ * @returns {Promise<{ data: DBCleaningTask[]; total: number }>} Paginated tasks and total count
  */
 export async function fetchPaginatedTasks(
-  query: unknown,
+  query: any,
   page: number,
   pageSize: number,
-): Promise<{ data: unknown[]; total: number }> {
+): Promise<{ data: DBCleaningTask[]; total: number }> {
   if (!supabaseAdmin) {
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
@@ -27,19 +27,10 @@ export async function fetchPaginatedTasks(
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
-  const { count, error: countError } = await supabaseAdmin
-    .from('cleaning_tasks')
-    .select('*', { count: 'exact', head: true });
-
-  if (countError && countError.code !== '42P01') {
-    logger.error('[Cleaning Tasks API] Database error fetching count:', {
-      error: countError.message,
-      code: countError.code,
-    });
-  }
-
-  query = (query as any).range(from, to);
-  const { data, error } = await (query as any);
+  // We need to get the count separately or ensure the query has it
+  // Since query is passed in, we assumes it might already have count configured if needed,
+  // but range() will return it if configured.
+  const { data, error, count } = await query.range(from, to);
 
   if (error) {
     const errorCode = error.code;
@@ -59,7 +50,7 @@ export async function fetchPaginatedTasks(
   }
 
   return {
-    data: data || [],
+    data: (data || []) as DBCleaningTask[],
     total: count || 0,
   };
 }

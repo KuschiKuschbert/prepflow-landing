@@ -4,11 +4,11 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { createAutoMapping } from '../../../mappings';
-import type { SyncResult } from '../../catalog';
+import type { Dish, SyncResult } from '../../catalog';
 import { logCatalogSyncOperation } from './common';
 
 export async function createNewDish(
-  dishData: any,
+  dishData: Dish,
   squareItemId: string,
   userId: string,
   locationId: string,
@@ -74,7 +74,7 @@ export async function createNewDish(
       },
       { onConflict: 'square_id' },
     );
-  } catch (e) {
-    logger.warn('[Square Catalog Sync] Failed to sync to POS table:', e);
+  } catch (error: unknown) {
+    logger.warn('[Square Catalog Sync] Failed to sync to POS table:', error instanceof Error ? error.message : String(error));
   }
 }

@@ -1,9 +1,9 @@
 import {
-  formatBrandName,
-  formatIngredientName,
-  formatStorageLocation,
-  formatSupplierName,
-  formatTextInput,
+    formatBrandName,
+    formatIngredientName,
+    formatStorageLocation,
+    formatSupplierName,
+    formatTextInput,
 } from '@/lib/text-utils';
 
 interface Ingredient {
@@ -29,7 +29,7 @@ interface Ingredient {
 /**
  * Map CSV row to ingredient object using flexible column matching.
  *
- * @param {Record<string, any>} row - CSV row data
+ * @param {Record<string, unknown>} row - CSV row data
  * @returns {Partial<Ingredient>} Ingredient object
  */
 export function mapCSVRowToIngredient(row: Record<string, unknown>): Partial<Ingredient> {

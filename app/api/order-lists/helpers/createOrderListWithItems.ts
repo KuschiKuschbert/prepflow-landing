@@ -42,7 +42,7 @@ export async function createOrderListWithItems(
   if (orderError) {
     logger.error('[Order Lists API] Database error creating list:', {
       error: orderError.message,
-      code: (orderError as any).code,
+      code: orderError.code,
       context: { endpoint: '/api/order-lists', operation: 'POST', table: 'order_lists' },
     });
     throw ApiErrorHandler.fromSupabaseError(orderError, 500);
@@ -63,7 +63,7 @@ export async function createOrderListWithItems(
     if (itemsError) {
       logger.warn('[Order Lists API] Warning: Could not create order list items:', {
         error: itemsError.message,
-        code: (itemsError as any).code,
+        code: itemsError.code,
         context: { endpoint: '/api/order-lists', operation: 'POST', orderListId: orderList.id },
       });
     }

@@ -4,8 +4,8 @@ export interface ValidationRule {
   min?: number;
   max?: number;
   pattern?: RegExp;
-  custom?: (value: any) => boolean | string;
-  transform?: (value: any) => any;
+  custom?: (value: unknown) => boolean | string;
+  transform?: (value: unknown) => unknown;
 }
 
 export interface ValidationSchema {
@@ -15,7 +15,7 @@ export interface ValidationSchema {
 export interface ValidationError {
   row: number;
   field: string;
-  value: any;
+  value: unknown;
   error: string;
 }
 

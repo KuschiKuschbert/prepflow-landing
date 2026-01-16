@@ -5,7 +5,7 @@
 import { NextResponse } from 'next/server';
 import Papa from 'papaparse';
 
-interface RecipeCardData {
+export interface RecipeCardData {
   id: string;
   menuItemId: string;
   menuItemName: string;

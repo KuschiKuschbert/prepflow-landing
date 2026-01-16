@@ -8,9 +8,8 @@
 
 import { logger } from '@/lib/logger';
 import { getSquareConfig, updateSquareConfig } from './config';
-import { decryptSquareToken } from './token-encryption';
 import { refreshAccessToken } from './oauth-flow';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { decryptSquareToken } from './token-encryption';
 
 /**
  * Refresh Square access token if expired or about to expire.
@@ -50,9 +49,9 @@ export async function refreshSquareTokenIfNeeded(userId: string): Promise<string
 
     logger.dev('[Square Token Refresh] Successfully refreshed access token');
     return tokenData.access_token;
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Token Refresh] Failed to refresh token:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
       context: { operation: 'refresh_token' },
     });
@@ -86,9 +85,9 @@ export async function getValidSquareToken(userId: string): Promise<string | null
 
     // Fallback to existing access token (manual mode or refresh failed)
     return decryptSquareToken(config.square_access_token_encrypted);
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Token] Failed to get valid token:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
       context: { operation: 'get_valid_token' },
     });

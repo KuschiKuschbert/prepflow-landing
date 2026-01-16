@@ -3,12 +3,13 @@
  */
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import type { SyncResult } from '../../catalog';
+import { SquareMapping } from '../../../mappings/types';
+import type { Dish, SyncResult } from '../../catalog';
 import { logCatalogSyncOperation } from './common';
 
 export async function updateExistingDish(
-  mapping: any,
-  dishData: any,
+  mapping: SquareMapping,
+  dishData: Dish,
   squareItemId: string,
   userId: string,
   result: SyncResult,
@@ -80,7 +81,7 @@ export async function updateExistingDish(
       },
       { onConflict: 'square_id' },
     );
-  } catch (e) {
-    logger.warn('[Square Catalog Sync] Failed to sync to POS table:', e);
+  } catch (error: unknown) {
+    logger.warn('[Square Catalog Sync] Failed to sync to POS table:', error instanceof Error ? error.message : String(error));
   }
 }

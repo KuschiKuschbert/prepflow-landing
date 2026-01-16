@@ -5,9 +5,11 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 
+import { PostgrestError } from '@supabase/supabase-js';
+
 export interface ExistingRecipeResult {
-  recipe: unknown | null;
-  error: unknown | null;
+  recipe: { id: string | number; recipe_name?: string; name?: string } | null;
+  error: PostgrestError | Error | null;
 }
 
 /**

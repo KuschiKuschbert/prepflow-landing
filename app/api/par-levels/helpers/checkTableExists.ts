@@ -1,18 +1,19 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
 /**
  * Check if par_levels table exists.
  *
- * @param {any} supabaseAdmin - Supabase admin client
+ * @param {SupabaseClient} supabaseAdmin - Supabase admin client
  * @returns {Promise<{exists: boolean, error: NextResponse | null}>} Table existence status and error if any
  */
-export async function checkTableExists(supabaseAdmin: any) {
+export async function checkTableExists(supabaseAdmin: SupabaseClient) {
   const { error: tableCheckError } = await supabaseAdmin.from('par_levels').select('id').limit(1);
 
   if (tableCheckError) {
-    const errorCode = (tableCheckError as any).code;
+    const errorCode = tableCheckError.code;
     const errorMessage = tableCheckError.message || '';
 
     logger.error('[Par Levels API] Table check failed:', {

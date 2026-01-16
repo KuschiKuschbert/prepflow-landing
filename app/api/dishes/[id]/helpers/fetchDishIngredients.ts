@@ -128,7 +128,7 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
             dishId,
             count: dishIngredients?.length || 0,
             joinedCount: Array.isArray(dishIngredients)
-              ? dishIngredients.filter((di: any) => di.ingredients !== null).length
+              ? dishIngredients.filter((di: any) => di.ingredients !== null).length // Keep any for quick filter or use unknown
               : 0,
           });
         }
@@ -170,13 +170,13 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
       .eq('dish_id', dishId);
 
     // Normalize the retry result to include category as null/undefined for type compatibility
-    const retryData = (retryResult.data || []) as unknown as any[];
+    const retryData = (retryResult.data || []) as unknown as Record<string, unknown>[];
     dishIngredients = retryData.map(item => ({
       ...item,
       ingredients: Array.isArray(item.ingredients)
-        ? item.ingredients.map((ing: any) => ({ ...ing, category: null }))
+        ? item.ingredients.map((ing: Record<string, unknown>) => ({ ...ing, category: null }))
         : item.ingredients
-          ? { ...item.ingredients, category: null }
+          ? { ...(item.ingredients as Record<string, unknown>), category: null }
           : null,
     })) as unknown as typeof dishIngredients;
     ingredientsError = retryResult.error;
@@ -194,24 +194,25 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
 
   // Filter out dish_ingredients entries where the ingredients relation is null (deleted ingredients)
   // Also map 'supplier' to 'supplier_name' to match frontend types
-  const rawIngredients = (dishIngredients || []) as unknown as Record<string, any>[];
+  const rawIngredients = (dishIngredients || []) as unknown as Record<string, unknown>[];
 
   const validDishIngredients = rawIngredients
     .filter(di => di.ingredients !== null && di.ingredients !== undefined)
     .map(di => {
-      const ing = Array.isArray(di.ingredients) ? di.ingredients[0] : di.ingredients;
+      const ingredients = di.ingredients;
+      const ing = Array.isArray(ingredients) ? (ingredients[0] as Record<string, unknown>) : (ingredients as Record<string, unknown>);
 
       if (!ing) return null;
 
       return {
-        id: di.id,
-        dish_id: di.dish_id,
-        ingredient_id: di.ingredient_id,
-        quantity: di.quantity,
-        unit: di.unit,
+        id: di.id as string,
+        dish_id: di.dish_id as string,
+        ingredient_id: di.ingredient_id as string | null,
+        quantity: di.quantity as number,
+        unit: di.unit as string,
         ingredients: {
           ...ing,
-          supplier_name: ing.supplier || ing.supplier_name || 'Unknown',
+          supplier_name: (ing.supplier as string) || (ing.supplier_name as string) || 'Unknown',
         },
       } as DishRelationIngredient;
     })

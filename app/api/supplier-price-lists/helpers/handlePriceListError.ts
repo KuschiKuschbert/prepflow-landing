@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 /**
  * Handle supplier price list API errors consistently.
  *
- * @param {Error | any} error - Error object
+ * @param {Error | unknown} error - Error object
  * @param {string} operation - Operation name (GET, POST, PUT, DELETE)
  * @returns {NextResponse} Error response
  */

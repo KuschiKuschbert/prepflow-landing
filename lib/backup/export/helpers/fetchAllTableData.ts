@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
-import { getUserTableData, getChildTableData } from './fetchTableData';
-import { USER_TABLES, CHILD_TABLES } from './tableConfig';
+import { getChildTableData, getUserTableData } from './fetchTableData';
+import { CHILD_TABLES, USER_TABLES } from './tableConfig';
 
 /**
  * Fetch all table data for a user (parent and child tables).
@@ -10,8 +10,11 @@ import { USER_TABLES, CHILD_TABLES } from './tableConfig';
  */
 export async function fetchAllTableData(
   userId: string,
-): Promise<{ tables: Record<string, any[]>; recordCounts: Record<string, number> }> {
-  const tables: Record<string, any[]> = {};
+): Promise<{
+  tables: Record<string, Record<string, unknown>[]>;
+  recordCounts: Record<string, number>;
+}> {
+  const tables: Record<string, Record<string, unknown>[]> = {};
   const recordCounts: Record<string, number> = {};
 
   // Export parent tables with user_id
@@ -38,7 +41,7 @@ export async function fetchAllTableData(
       // Get parent IDs from the parent table data
       const parentData = tables[childTable.parentTable] || [];
       const parentIds = parentData
-        .map((row: any) => row[childTable.parentIdColumn])
+        .map((row: Record<string, unknown>) => row[childTable.parentIdColumn])
         .filter(Boolean);
 
       if (parentIds.length > 0) {

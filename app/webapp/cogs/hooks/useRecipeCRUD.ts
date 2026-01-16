@@ -6,6 +6,7 @@
 import { logger } from '@/lib/logger';
 import { formatDishName } from '@/lib/text-utils';
 import { useCallback } from 'react';
+import type { Recipe } from '../types';
 
 interface RecipeIngredientInsert {
   recipe_id: string;
@@ -34,22 +35,30 @@ export function useRecipeCRUD({ setError }: UseRecipeCRUDProps) {
           }),
         });
 
-        const result = await response.json();
+        interface RecipeApiResponse {
+          success: boolean;
+          recipe?: Recipe;
+          isNew?: boolean;
+          message?: string;
+          error?: string;
+        }
+
+        const result = (await response.json()) as RecipeApiResponse;
 
         if (!response.ok) {
           setError(result.message || result.error || 'Failed to save recipe');
           return null;
         }
 
-        return { recipe: result.recipe, isNew: result.isNew };
-      } catch (err) {
+        return { recipe: result.recipe as Recipe, isNew: !!result.isNew };
+      } catch (err: unknown) {
+        const error = err instanceof Error ? err : new Error(String(err));
         logger.error('[useRecipeCRUD.ts] Error in catch block:', {
-          error: err instanceof Error ? err.message : String(err),
-          stack: err instanceof Error ? err.stack : undefined,
+          error: error.message,
+          stack: error.stack,
         });
 
-        const errorMessage = err instanceof Error ? err.message : 'Failed to save recipe';
-        setError(errorMessage);
+        setError(error.message || 'Failed to save recipe');
         return null;
       }
     },
@@ -72,22 +81,27 @@ export function useRecipeCRUD({ setError }: UseRecipeCRUDProps) {
           }),
         });
 
-        const result = await response.json();
+        interface IngredientsApiResponse {
+          success: boolean;
+          message?: string;
+          error?: string;
+        }
+
+        const result = (await response.json()) as IngredientsApiResponse;
 
         if (!response.ok) {
           return { error: result.message || result.error || 'Failed to save recipe ingredients' };
         }
 
         return { success: true };
-      } catch (err) {
+      } catch (err: unknown) {
+        const error = err instanceof Error ? err : new Error(String(err));
         logger.error('[useRecipeCRUD.ts] Error in catch block:', {
-          error: err instanceof Error ? err.message : String(err),
-          stack: err instanceof Error ? err.stack : undefined,
+          error: error.message,
+          stack: error.stack,
         });
 
-        const errorMessage =
-          err instanceof Error ? err.message : 'Failed to save recipe ingredients';
-        return { error: errorMessage };
+        return { error: error.message || 'Failed to save recipe ingredients' };
       }
     },
     [],

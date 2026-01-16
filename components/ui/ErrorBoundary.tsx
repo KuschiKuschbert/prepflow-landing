@@ -44,8 +44,12 @@ export class ErrorBoundary extends Component<Props, State> {
     }
 
     // Log to analytics if available
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'exception', {
+    // Log to analytics if available
+    const win = window as unknown as {
+      gtag?: (command: string, action: string, params: Record<string, unknown>) => void;
+    };
+    if (typeof window !== 'undefined' && win.gtag) {
+      win.gtag('event', 'exception', {
         description: error.message,
         fatal: false,
       });
@@ -69,7 +73,9 @@ export class ErrorBoundary extends Component<Props, State> {
           // Auto-disable on mobile/touch devices
           if (typeof navigator !== 'undefined') {
             const hasTouch =
-              navigator.maxTouchPoints > 0 || (window as any).ontouchstart !== undefined;
+              navigator.maxTouchPoints > 0 ||
+              'ontouchstart' in window ||
+              (window as unknown as { DocumentTouch: unknown }).DocumentTouch !== undefined;
             const forceEnable = localStorage.getItem('PF_ENABLE_ARCADE_MOBILE') === '1';
             if (hasTouch && !forceEnable) return true;
           }

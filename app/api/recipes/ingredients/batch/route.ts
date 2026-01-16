@@ -96,11 +96,11 @@ export async function POST(request: NextRequest) {
 
     // Server-side fallback: if nested ingredients join is missing/null for some rows,
     // do a bulk lookup from ingredients and merge to ensure uniform shape
-    let rows: any[] = data;
-    const missingNested = rows.some((r: any) => !r.ingredients);
+    let rows: BatchRecipeIngredientRow[] = (data as unknown) as BatchRecipeIngredientRow[];
+    const missingNested = rows.some((r: BatchRecipeIngredientRow) => !r.ingredients);
     if (missingNested) {
       const uniqueIds = Array.from(
-        new Set(rows.map((r: any) => r.ingredient_id).filter((v: unknown) => Boolean(v))),
+        new Set(rows.map((r: BatchRecipeIngredientRow) => r.ingredient_id).filter((v: string | undefined) => Boolean(v))),
       );
       if (uniqueIds.length > 0) {
         const { data: ingRows, error: ingError } = await supabaseAdmin
@@ -114,17 +114,17 @@ export async function POST(request: NextRequest) {
           ingRows.forEach(ir => {
             byId[ir.id] = ir;
           });
-          rows = rows.map((r: any) => ({
+          rows = rows.map((r: BatchRecipeIngredientRow) => ({
             ...r,
-            ingredients: r.ingredients || byId[r.ingredient_id],
+            ingredients: r.ingredients || (byId[r.ingredient_id] as BatchIngredientData | undefined),
           }));
         }
       }
     }
 
     // Normalize and format items
-    const items = rows.map((row: any) => {
-      const ing: any = row.ingredients || {};
+    const items = rows.map((row: BatchRecipeIngredientRow) => {
+      const ing: BatchIngredientData = row.ingredients || ({} as BatchIngredientData);
       return {
         id: row.id,
         recipe_id: row.recipe_id,

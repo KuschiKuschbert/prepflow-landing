@@ -11,10 +11,10 @@ export type ChangeType =
 
 export interface ChangeDetails {
   field?: string;
-  before?: any;
-  after?: any;
+  before?: unknown;
+  after?: unknown;
   change?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface MenuChangeTracking {

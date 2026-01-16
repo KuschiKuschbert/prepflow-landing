@@ -1,12 +1,12 @@
+import {
+    checkAchievementMilestone,
+    checkUsageMilestone,
+    dispatchMilestoneReached,
+} from '@/lib/gamification/milestones';
 import { type AchievementId } from '../../achievements';
-import { loadStats, saveStats, loadAchievements } from './storage';
+import { loadAchievements, loadStats, saveStats } from './storage';
 import { updateStreak } from './streak';
 import { unlockAchievement } from './unlockAchievement';
-import {
-  checkUsageMilestone,
-  checkAchievementMilestone,
-  dispatchMilestoneReached,
-} from '@/lib/gamification/milestones';
 
 export function trackSave(): AchievementId | null {
   const stats = loadStats();
@@ -16,7 +16,7 @@ export function trackSave(): AchievementId | null {
   const streakDays = updateStreak();
 
   const achievements = loadAchievements();
-  const unlockedIds = new Set(achievements.map((a: any) => a.id));
+  const unlockedIds = new Set(achievements.map(a => a.id));
 
   if (stats.saveCount >= 100 && !unlockedIds.has('HUNDRED_SAVES')) {
     unlockAchievement('HUNDRED_SAVES');
@@ -44,7 +44,7 @@ export function trackRecipeCreated(): AchievementId | null {
   updateStreak();
 
   const achievements = loadAchievements();
-  const unlockedIds = new Set(achievements.map((a: any) => a.id));
+  const unlockedIds = new Set(achievements.map(a => a.id));
 
   if (stats.recipeCount === 1 && !unlockedIds.has('FIRST_RECIPE')) {
     unlockAchievement('FIRST_RECIPE');
@@ -72,7 +72,7 @@ export function trackIngredientAdded(): AchievementId | null {
   updateStreak();
 
   const achievements = loadAchievements();
-  const unlockedIds = new Set(achievements.map((a: any) => a.id));
+  const unlockedIds = new Set(achievements.map(a => a.id));
 
   if (stats.ingredientCount >= 10 && !unlockedIds.has('TEN_INGREDIENTS')) {
     unlockAchievement('TEN_INGREDIENTS');
@@ -95,7 +95,7 @@ export function trackDishCreated(): AchievementId | null {
   updateStreak();
 
   const achievements = loadAchievements();
-  const unlockedIds = new Set(achievements.map((a: any) => a.id));
+  const unlockedIds = new Set(achievements.map(a => a.id));
 
   if (stats.dishCount === 1 && !unlockedIds.has('FIRST_DISH')) {
     unlockAchievement('FIRST_DISH');

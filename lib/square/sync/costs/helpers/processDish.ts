@@ -3,16 +3,16 @@
  */
 import { logger } from '@/lib/logger';
 import { SquareClient } from 'square';
-import { calculateDishFoodCost } from './calculateCost';
-import { updateSquareItemCosts } from './updateSquareItem';
-import { logCostSyncOperation } from './common';
 import type { SyncResult } from '../../costs';
+import { calculateDishFoodCost } from './calculateCost';
+import { logCostSyncOperation } from './common';
+import { updateSquareItemCosts } from './updateSquareItem';
 
 /**
  * Process a single dish for cost sync
  */
 export async function processDishCostSync(
-  dish: any,
+  dish: { id: string; square_mappings?: { square_id?: string }[] },
   client: SquareClient,
   userId: string,
   result: SyncResult,
@@ -66,20 +66,20 @@ export async function processDishCostSync(
 
     result.updated++;
     result.synced++;
-  } catch (dishError: any) {
+  } catch (dishError: unknown) {
     logger.error('[Square Cost Sync] Error processing dish:', {
-      error: dishError.message,
+      error: dishError instanceof Error ? dishError.message : String(dishError),
       dishId: dish.id,
     });
     result.errors++;
-    result.errorMessages?.push(`Failed to process dish ${dish.id}: ${dishError.message}`);
+    result.errorMessages?.push(`Failed to process dish ${dish.id}: ${dishError instanceof Error ? dishError.message : String(dishError)}`);
 
     await logCostSyncOperation({
       userId,
       entityId: dish.id,
       status: 'error',
-      errorMessage: dishError.message,
-      errorDetails: { stack: dishError.stack },
+      errorMessage: dishError instanceof Error ? dishError.message : String(dishError),
+      errorDetails: { stack: dishError instanceof Error ? dishError.stack : undefined },
     });
   }
 }

@@ -16,7 +16,7 @@ export function updateLogsFromQueryHelper(
       count: items.length,
       hasData: !!logsData,
       logsDataType: typeof logsData,
-      logsDataKeys: logsData ? Object.keys(logsData) : [],
+      logsDataKeys: logsData ? Object.keys(logsData as object) : [],
     });
   } else {
     logger.dev('[TemperaturePageData] logsData is undefined');

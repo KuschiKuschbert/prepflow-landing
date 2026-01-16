@@ -1,6 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { CleaningTaskJoinResult, UpdateCleaningTaskInput } from './types';
 
 const CLEANING_AREAS_SELECT = `
   *,
@@ -21,19 +22,14 @@ const CLEANING_AREAS_SELECT = `
  * Update a cleaning task.
  *
  * @param {string} id - Cleaning task ID
- * @param {Object} updateData - Update data
- * @returns {Promise<Object>} Updated cleaning task
+ * @param {UpdateCleaningTaskInput} updateData - Update data
+ * @returns {Promise<CleaningTaskJoinResult>} Updated cleaning task
  * @throws {Error} If update fails
  */
 export async function updateCleaningTask(
   id: string,
-  updateData: {
-    status?: string;
-    completed_date?: string | null;
-    notes?: string | null;
-    photo_url?: string | null;
-  },
-) {
+  updateData: UpdateCleaningTaskInput,
+): Promise<CleaningTaskJoinResult> {
   if (!supabaseAdmin)
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
 
@@ -58,5 +54,5 @@ export async function updateCleaningTask(
     throw ApiErrorHandler.fromSupabaseError(error, 500);
   }
 
-  return data;
+  return data as CleaningTaskJoinResult;
 }

@@ -66,8 +66,9 @@ export function useRosterDragAndDrop({
       setDraggedShift(null);
       setDropTarget(null);
       if (!over || !draggedShift) return;
-      const dropData = over.data.current;
+      const dropData = over.data.current as RosterCellData | undefined;
       if (!dropData || dropData.type !== 'roster-cell') return;
+
       const { employeeId, date } = dropData;
       const updatedShift = buildUpdatedShift(draggedShift, employeeId, date);
       const employee = employees.find(e => e.id === employeeId);

@@ -9,7 +9,7 @@ import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { generateCSV } from './helpers/generateCSV';
+import { generateCSV, type RecipeCardData } from './helpers/generateCSV';
 import { generateHTML } from './helpers/generateHTML';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
@@ -172,12 +172,12 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 
     // Generate export based on format
     if (format === 'csv') {
-      return generateCSV(menuName, transformedCards as any);
+      return generateCSV(menuName, transformedCards as unknown as RecipeCardData[]);
     }
     if (format === 'pdf') {
-      return generateHTML(menuName, transformedCards as any, true);
+      return generateHTML(menuName, transformedCards as unknown as RecipeCardData[], true);
     }
-    return generateHTML(menuName, transformedCards as any, false);
+    return generateHTML(menuName, transformedCards as unknown as RecipeCardData[], false);
   } catch (err) {
     logger.error('[Recipe Cards Export API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

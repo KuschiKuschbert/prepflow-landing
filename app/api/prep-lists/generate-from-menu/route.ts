@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     if (!menuItems || menuItems.length === 0) {
       return NextResponse.json({
         success: true,
-        menuName: (menu as any).menu_name,
+        menuName: menu?.menu_name || 'Unknown Menu',
         sections: [],
         unassignedItems: [],
       });
@@ -155,8 +155,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      menuName: (menu as any).menu_name,
-      menuId: (menu as any).id,
+      menuName: menu?.menu_name || 'Unknown Menu',
+      menuId: menu?.id || menuId,
       sections,
       unassignedItems: unassignedItems.length > 0 ? unassignedItems : undefined,
     });

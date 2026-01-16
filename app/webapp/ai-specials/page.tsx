@@ -40,7 +40,7 @@ export default function AISpecialsPage() {
   // Auth0 SDK can return user in different structures:
   // - Flat: user.email
   // - Nested: user.user.email
-  const userEmail = user?.email || (user as any)?.user?.email || null;
+  const userEmail = user?.email || null;
   const hasUser = !!user || !!userEmail;
 
   // Check if user is actually authenticated (not just loading)
@@ -58,8 +58,6 @@ export default function AISpecialsPage() {
         isAuthenticated,
         userKeys: user ? Object.keys(user) : [],
         userSub: user?.sub,
-        nestedUserSub: (user as any)?.user?.sub,
-        nestedUser: (user as any)?.user,
       });
     }
   }, [user, userLoading, userEmail, isAuthenticated]);
@@ -106,7 +104,7 @@ export default function AISpecialsPage() {
     try {
       // No userId needed - API extracts from authenticated session
       const response = await fetch('/api/ai-specials');
-      const result = await response.json();
+      const result = (await response.json()) as { success: boolean; data: AISpecial[]; message?: string };
       if (result.success) {
         setAiSpecials(result.data);
         cacheData('ai_specials', result.data);
@@ -176,11 +174,12 @@ export default function AISpecialsPage() {
               prompt: promptToSubmit || undefined,
             }),
           });
-          const result = await response.json();
+          const result = (await response.json()) as { success: boolean; data?: AISpecial; message?: string };
           if (result.success && result.data) {
             // Replace temp special with real one from server
+            const serverData = result.data;
             setAiSpecials(prev =>
-              prev.map(special => (special.id === tempId ? result.data : special)),
+              prev.map(special => (special.id === tempId ? serverData : special)),
             );
             showSuccess('Image submitted successfully! Processing your AI special...');
           } else {

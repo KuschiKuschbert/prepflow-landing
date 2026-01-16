@@ -5,14 +5,14 @@ import { NextResponse } from 'next/server';
 /**
  * Handle par level API errors consistently.
  *
- * @param {Error | any} err - Error object
+ * @param {Error | unknown} err - Error object
  * @param {string} method - HTTP method
  * @returns {NextResponse} Error response
  */
 export function handleParLevelError(err: Error | unknown, method: string): NextResponse {
   const errorMessage = err instanceof Error ? err.message : String(err);
   const errorStack = err instanceof Error ? err.stack : undefined;
-  const errorCode = (err as any)?.code;
+  const errorCode = err && typeof err === 'object' && 'code' in err ? (err as Record<string, unknown>).code : undefined;
   const errorDetails = err instanceof Error ? err : { raw: err };
 
   logger.error('[Par Levels API] Unexpected error:', {

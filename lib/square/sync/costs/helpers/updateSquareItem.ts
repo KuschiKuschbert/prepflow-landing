@@ -57,7 +57,22 @@ export async function updateSquareItemCosts(
 
     // Update catalog object with custom attributes
     // Note: Square API requires updating the entire object, so we need to fetch first
-    const getResponse = await (catalogApi as any).retrieveCatalogObject(squareItemId, true);
+    interface ExtendedCatalogApi {
+      retrieveCatalogObject(
+        objectId: string,
+        includeRelatedObjects?: boolean,
+      ): Promise<{ result: { object?: { itemData?: { customAttributeValues?: Record<string, unknown> } } } }>;
+      upsertCatalogObject(req: {
+        idempotencyKey: string;
+        object: {
+          type: string;
+          id: string;
+          itemData: Record<string, unknown>;
+        };
+      }): Promise<{ result: { catalogObject?: unknown } }>;
+    }
+    const extendedApi = catalogApi as unknown as ExtendedCatalogApi;
+    const getResponse = await extendedApi.retrieveCatalogObject(squareItemId, true);
 
     if (!getResponse.result?.object) {
       logger.error('[Square Cost Sync] Square catalog item not found:', { squareItemId });
@@ -73,7 +88,7 @@ export async function updateSquareItemCosts(
     }
 
     // Update with custom attributes
-    const updateResponse = await (catalogApi as any).upsertCatalogObject({
+    const updateResponse = await extendedApi.upsertCatalogObject({
       idempotencyKey: `${squareItemId}-cost-${Date.now()}`,
       object: {
         type: 'ITEM',
@@ -89,7 +104,7 @@ export async function updateSquareItemCosts(
               };
               return acc;
             },
-            {} as Record<string, any>,
+            {} as Record<string, unknown>,
           ),
         },
       },
@@ -106,11 +121,11 @@ export async function updateSquareItemCosts(
       logger.error('[Square Cost Sync] Failed to update Square item costs:', { squareItemId });
       return false;
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Cost Sync] Error updating Square item costs:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       squareItemId,
-      stack: error.stack,
+      stack: error instanceof Error ? error.stack : undefined,
     });
     return false;
   }

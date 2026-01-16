@@ -14,7 +14,7 @@ export interface SyncResult {
   updated: number;
   errors: number;
   errorMessages?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface Employee {
@@ -35,6 +35,6 @@ export interface Employee {
 }
 
 // Re-export sync functions
+export { syncStaffBidirectional } from './staff/syncBidirectional';
 export { syncStaffFromSquare } from './staff/syncFromSquare';
 export { syncStaffToSquare } from './staff/syncToSquare';
-export { syncStaffBidirectional } from './staff/syncBidirectional';

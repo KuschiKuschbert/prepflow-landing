@@ -1,28 +1,22 @@
-/**
- * Helper for building update data for cleaning tasks
- */
-
-interface CleaningTaskUpdateData {
-  status?: string;
-  completed_date?: string | null;
-  notes?: string | null;
-  photo_url?: string | null;
-}
+import { UpdateCleaningTaskInput } from './types';
 
 /**
  * Builds update data object from request body
  *
  * @param {unknown} body - Request body
- * @returns {CleaningTaskUpdateData} Update data object
+ * @returns {UpdateCleaningTaskInput} Update data object
  */
-export function buildUpdateData(body: unknown): CleaningTaskUpdateData {
-  const { status, completed_date, notes, photo_url } = body as Record<string, unknown>;
-  const updateData: CleaningTaskUpdateData = {};
+export function buildUpdateData(body: unknown): UpdateCleaningTaskInput {
+  const data = body as Record<string, unknown>;
+  const updateData: UpdateCleaningTaskInput = {};
 
-  if (status !== undefined) updateData.status = status as string;
-  if (completed_date !== undefined) updateData.completed_date = completed_date as string | null;
-  if (notes !== undefined) updateData.notes = notes as string | null;
-  if (photo_url !== undefined) updateData.photo_url = photo_url as string | null;
+  if (typeof data.status === 'string') updateData.status = data.status;
+  if (typeof data.completed_date === 'string' || data.completed_date === null)
+    updateData.completed_date = data.completed_date;
+  if (typeof data.notes === 'string' || data.notes === null)
+    updateData.notes = data.notes;
+  if (typeof data.photo_url === 'string' || data.photo_url === null)
+    updateData.photo_url = data.photo_url;
 
   return updateData;
 }

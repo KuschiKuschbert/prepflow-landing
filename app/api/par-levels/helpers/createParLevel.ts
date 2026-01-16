@@ -7,15 +7,16 @@ import { handleInsertError } from './handleInsertError';
 import { validateParLevelData } from './validateParLevelData';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { ParLevelInput } from './types';
 
 /**
  * Create a par level.
  *
- * @param {Object} parLevelData - Par level data
+ * @param {ParLevelInput} parLevelData - Par level data
  * @returns {Promise<Object>} Created par level with ingredient data
  * @throws {Error} If creation fails
  */
-export async function createParLevel(parLevelData: unknown) {
+export async function createParLevel(parLevelData: ParLevelInput) {
   const supabaseAdmin = createSupabaseAdmin();
 
   // Validate required fields

@@ -23,10 +23,10 @@ export async function checkUserConsent(
     .single();
 
   if (error) {
-    if ((error as any).code !== 'PGRST116') {
+    if (error.code !== 'PGRST116') {
       logger.warn('[Data Transfer Restrictions] Error checking consent:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         userEmail,
         countryCode,
       });

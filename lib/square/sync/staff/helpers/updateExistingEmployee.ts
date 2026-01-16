@@ -3,12 +3,13 @@
  */
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { SquareMapping } from '../../../mappings/types';
+import type { Employee, SyncResult } from '../../staff';
 import { logStaffSyncOperation } from './common';
-import type { SyncResult } from '../../staff';
 
 export async function updateExistingEmployee(
-  mapping: any,
-  employeeData: any,
+  mapping: SquareMapping,
+  employeeData: Employee,
   squareTeamMemberId: string,
   userId: string,
   result: SyncResult,

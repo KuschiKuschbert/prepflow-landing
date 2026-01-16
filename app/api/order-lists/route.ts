@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { createOrderListWithItems } from './helpers/createOrderListWithItems';
 import { handleOrderListError } from './helpers/handleOrderListError';
 import { normalizeOrderListData } from './helpers/normalizeOrderListData';
+import { OrderListRecord } from './helpers/types';
 
 const createOrderListSchema = z.object({
   userId: z.string().min(1, 'User ID is required'),
@@ -83,7 +84,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Order Lists API] Database error fetching lists:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: { endpoint: '/api/order-lists', operation: 'GET', table: 'order_lists' },
       });
 
@@ -92,7 +93,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Normalize nested ingredient_name
-    const items = normalizeOrderListData(data || []);
+    const items = normalizeOrderListData((data || []) as unknown as OrderListRecord[]);
 
     return NextResponse.json({
       success: true,
@@ -186,8 +187,8 @@ export async function POST(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/order-lists', method: 'POST' },
     });
-    if ((err as any).status) {
-      return NextResponse.json(err, { status: (err as any).status });
+    if (err && typeof err === 'object' && 'status' in err && typeof err.status === 'number') {
+      return NextResponse.json(err, { status: err.status });
     }
     return handleOrderListError(err, 'POST');
   }

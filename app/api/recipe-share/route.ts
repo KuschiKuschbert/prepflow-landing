@@ -75,8 +75,9 @@ export async function POST(request: NextRequest) {
       stack: error instanceof Error ? error.stack : undefined,
     });
 
-    if ((error as any).status) {
-      return NextResponse.json(error, { status: (error as any).status });
+    if (error && typeof error === 'object' && 'status' in error) {
+      const status = (error as { status: number }).status;
+      return NextResponse.json(error, { status });
     }
     return handleRecipeShareError(error, 'POST');
   }
@@ -119,7 +120,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Recipe Share API] Database error fetching shares:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: { endpoint: '/api/recipe-share', operation: 'GET', userId },
       });
       const apiError = ApiErrorHandler.fromSupabaseError(error, 500);

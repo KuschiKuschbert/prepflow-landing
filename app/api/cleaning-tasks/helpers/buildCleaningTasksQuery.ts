@@ -40,7 +40,6 @@ export interface CleaningTasksQueryParams {
  * Builds a Supabase query for cleaning tasks with filters
  *
  * @param {CleaningTasksQueryParams} params - Query parameters
- * @returns {any} Supabase query builder
  */
 export function buildCleaningTasksQuery(params: CleaningTasksQueryParams) {
   if (!supabaseAdmin) {

@@ -1,9 +1,9 @@
 /**
  * Save Square configuration for a user.
  */
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { encryptSquareToken } from '../token-encryption';
 import type { SquareConfig, SquareConfigInput } from './types';
 
@@ -36,7 +36,7 @@ export async function saveSquareConfig(
     }
 
     // Prepare configuration data
-    const configData: any = {
+    const configData: Record<string, unknown> = {
       user_id: userId,
       square_application_id: configInput.square_application_id,
       square_access_token_encrypted: encryptedToken,
@@ -86,7 +86,7 @@ export async function saveSquareConfig(
     if (error) {
       logger.error('[Square Config] Error saving configuration:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         userId,
         context: { endpoint: 'saveSquareConfig', operation: 'upsert' },
       });
@@ -95,13 +95,13 @@ export async function saveSquareConfig(
     }
 
     return data as SquareConfig;
-  } catch (error: any) {
-    if (error.status) {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'status' in error) {
       throw error;
     }
 
     logger.error('[Square Config] Unexpected error saving configuration:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
       context: { endpoint: 'saveSquareConfig', operation: 'upsert' },
     });

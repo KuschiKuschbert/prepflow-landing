@@ -1,4 +1,4 @@
-import { Page, BrowserContext } from '@playwright/test';
+import { Page } from '@playwright/test';
 
 /**
  * Extend Window interface for error collection
@@ -6,7 +6,7 @@ import { Page, BrowserContext } from '@playwright/test';
 declare global {
   interface Window {
     __playwrightErrors?: Array<{
-      type: string;
+      type: 'console.error' | 'console.warn' | 'uncaught' | 'network';
       message: string;
       timestamp: string;
       url: string;
@@ -45,38 +45,38 @@ export async function setupGlobalErrorListener(page: Page): Promise<void> {
 
   // Inject console.error listener
   await page.addInitScript(() => {
-    if (!(window as any).__playwrightErrors) {
-      (window as any).__playwrightErrors = [];
+    if (!window.__playwrightErrors) {
+      window.__playwrightErrors = [];
     }
     const originalError = console.error;
-    console.error = (...args: any[]) => {
-      const errors = (window as any).__playwrightErrors || [];
+    console.error = (...args: unknown[]) => {
+      const errors = window.__playwrightErrors || [];
       errors.push({
         type: 'console.error',
         message: args.map(arg => (typeof arg === 'string' ? arg : JSON.stringify(arg))).join(' '),
         timestamp: new Date().toISOString(),
         url: window.location.href,
       });
-      (window as any).__playwrightErrors = errors;
+      window.__playwrightErrors = errors;
       originalError.apply(console, args);
     };
   });
 
   // Inject console.warn listener
   await page.addInitScript(() => {
-    if (!(window as any).__playwrightErrors) {
-      (window as any).__playwrightErrors = [];
+    if (!window.__playwrightErrors) {
+      window.__playwrightErrors = [];
     }
     const originalWarn = console.warn;
-    console.warn = (...args: any[]) => {
-      const errors = (window as any).__playwrightErrors || [];
+    console.warn = (...args: unknown[]) => {
+      const errors = window.__playwrightErrors || [];
       errors.push({
         type: 'console.warn',
         message: args.map(arg => (typeof arg === 'string' ? arg : JSON.stringify(arg))).join(' '),
         timestamp: new Date().toISOString(),
         url: window.location.href,
       });
-      (window as any).__playwrightErrors = errors;
+      window.__playwrightErrors = errors;
       originalWarn.apply(console, args);
     };
   });
@@ -109,7 +109,7 @@ export async function setupGlobalErrorListener(page: Page): Promise<void> {
   // Periodically collect errors from page context
   await page.evaluate(() => {
     setInterval(() => {
-      if ((window as any).__playwrightErrors && (window as any).__playwrightErrors.length > 0) {
+      if (window.__playwrightErrors && window.__playwrightErrors.length > 0) {
         // Errors are collected via the listeners above
         // This interval ensures we don't miss any
       }
@@ -123,14 +123,14 @@ export async function setupGlobalErrorListener(page: Page): Promise<void> {
 export async function collectPageErrors(page: Page): Promise<void> {
   try {
     const pageErrors = await page.evaluate(() => {
-      const errors = (window as any).__playwrightErrors || [];
-      (window as any).__playwrightErrors = []; // Clear after collection
+      const errors = window.__playwrightErrors || [];
+      window.__playwrightErrors = []; // Clear after collection
       return errors;
     });
 
-    pageErrors.forEach((error: any) => {
+    pageErrors.forEach((error) => {
       errorCollection.push({
-        type: error.type,
+        type: error.type as 'console.error' | 'console.warn' | 'uncaught' | 'network',
         url: error.url || page.url(),
         message: error.message,
         stack: error.stack,

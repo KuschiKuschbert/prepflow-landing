@@ -34,8 +34,10 @@ export function useAutoCategorization({
       ingredients.some(ing => !ing.category || ing.category.trim() === '')
     ) {
       setHasAutoCategorized(true);
-      handleCategorizeAllUncategorized(true, refetchIngredients).catch(err => {
-        logger.error('Auto-categorization failed:', err);
+      handleCategorizeAllUncategorized(true, refetchIngredients).catch((err: unknown) => {
+        logger.error('Auto-categorization failed:', {
+          error: err instanceof Error ? err.message : String(err),
+        });
       });
     }
   }, [

@@ -33,8 +33,8 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       logger.error('[Recipes API] Database error fetching recipes:', {
-        error: (error as any).message,
-        code: (error as any).code,
+        error: error.message,
+        code: error.code,
         context: { endpoint: '/api/recipes', operation: 'GET', table: 'recipes' },
       });
 
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
     if (existingRecipe && !checkError) {
       // Update existing recipe
       const { recipe: updatedRecipe, error: updateError } = await updateRecipe(
-        (existingRecipe as any).id,
+        existingRecipe.id,
         recipeData,
       );
 
@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
         } catch (err) {
           logger.error('[Recipes API] Error triggering Square sync:', {
             error: err instanceof Error ? err.message : String(err),
-            recipeId: (existingRecipe as any).id,
+            recipeId: existingRecipe.id,
           });
         }
       })();

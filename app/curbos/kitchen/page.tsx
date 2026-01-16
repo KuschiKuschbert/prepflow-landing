@@ -6,13 +6,24 @@ import { Check, ChefHat, ChevronRight, Clock } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 // types based on Android model
+interface OrderModifier {
+  name: string;
+}
+
+interface OrderItem {
+  id: string;
+  name: string;
+  quantity: number;
+  modifiers: (string | OrderModifier)[];
+}
+
 interface Transaction {
     id: string
     timestamp: number
     order_number: number | null
     customer_name: string | null
     fulfillment_status: string
-    items_json: any // Can be string or JSON object depending on how Postgrest returns JSONB
+    items_json: string | OrderItem[] | null // Can be string or JSON object depending on how Postgrest returns JSONB
 }
 
 /**
@@ -118,12 +129,13 @@ export default function KitchenKDS() {
         return 'border-red-500/30'
     }
 
-    function parseItems(itemsJson: any) {
+    function parseItems(itemsJson: string | OrderItem[] | null): OrderItem[] {
         if (!itemsJson) return []
         try {
             // it can be already parsed by supabase-js if it's a JSONB column
-            const items = typeof itemsJson === 'string' ? JSON.parse(itemsJson) : itemsJson
-            return items.map((item: any) => ({
+            const items = typeof itemsJson === 'string' ? (JSON.parse(itemsJson) as OrderItem[]) : itemsJson
+            return items.map((item: OrderItem) => ({
+                id: item.id,
                 name: item.name,
                 quantity: item.quantity || 1,
                 modifiers: item.modifiers || [] // These are now a list of strings in the new model
@@ -191,7 +203,7 @@ export default function KitchenKDS() {
                                     )}
 
                                     <div className="space-y-4 mb-8">
-                                        {items.map((item: any, idx: number) => (
+                                        {items.map((item: OrderItem, idx: number) => (
                                             <div key={idx} className="border-b border-neutral-800 pb-2">
                                                 <div className="flex items-center gap-3">
                                                     <span className="bg-neutral-800 text-white w-8 h-8 rounded flex items-center justify-center font-bold">
@@ -199,11 +211,11 @@ export default function KitchenKDS() {
                                                     </span>
                                                     <span className="text-white text-base tablet:text-lg font-medium">{item.name}</span>
                                                 </div>
-                                                {item.modifiers?.length > 0 && (
+                                                {item.modifiers && item.modifiers.length > 0 && (
                                                      <div className="ml-11 mt-2 flex flex-col gap-1.5">
-                                                         {item.modifiers.map((mod: any, midx: number) => (
+                                                         {item.modifiers.map((mod: string | OrderModifier, midx: number) => (
                                                              <div key={midx} className="text-[#C0FF02] text-sm font-bold uppercase bg-[#C0FF02]/10 border-l-2 border-[#C0FF02] pl-2 py-1">
-                                                                 + {typeof mod === 'string' ? mod : mod.name || mod}
+                                                                 + {typeof mod === 'string' ? mod : mod.name || (mod as any).name || mod}
                                                              </div>
                                                          ))}
                                                      </div>

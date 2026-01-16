@@ -3,27 +3,41 @@
  */
 import type { Menu } from '../../../../types';
 
+interface TitleEditingHandler {
+  handleStartEditTitle?: (menu: Menu, e: React.MouseEvent) => void;
+  handleCancelEdit: () => void;
+  handleSaveTitle: (menu: Menu) => void;
+  handleTitleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>, menu: Menu) => void;
+}
+
+interface DescriptionEditingHandler {
+  handleStartEditDescription?: (menu: Menu, e: React.MouseEvent) => void;
+  handleCancelEdit: () => void;
+  handleSaveDescription: (menu: Menu) => void;
+  handleDescriptionKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
+}
+
 interface EditingRefs {
-  titleEditingRef: React.MutableRefObject<any>;
-  descriptionEditingRef: React.MutableRefObject<any>;
+  titleEditingRef: React.MutableRefObject<TitleEditingHandler>;
+  descriptionEditingRef: React.MutableRefObject<DescriptionEditingHandler>;
 }
 
 export function createHandlers(refs: EditingRefs) {
   const handleStartEditTitle = (menu: Menu, e: React.MouseEvent) =>
-    refs.titleEditingRef.current.handleStartEditTitle(menu, e);
+    refs.titleEditingRef.current?.handleStartEditTitle?.(menu, e);
   const handleStartEditDescription = (menu: Menu, e: React.MouseEvent) =>
-    refs.descriptionEditingRef.current.handleStartEditDescription(menu, e);
+    refs.descriptionEditingRef.current?.handleStartEditDescription?.(menu, e);
   const handleCancelEdit = () => {
-    refs.titleEditingRef.current.handleCancelEdit();
-    refs.descriptionEditingRef.current.handleCancelEdit();
+    refs.titleEditingRef.current?.handleCancelEdit();
+    refs.descriptionEditingRef.current?.handleCancelEdit();
   };
-  const handleSaveTitle = (menu: Menu) => refs.titleEditingRef.current.handleSaveTitle(menu);
+  const handleSaveTitle = (menu: Menu) => refs.titleEditingRef.current?.handleSaveTitle(menu);
   const handleSaveDescription = (menu: Menu) =>
-    refs.descriptionEditingRef.current.handleSaveDescription(menu);
+    refs.descriptionEditingRef.current?.handleSaveDescription(menu);
   const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, menu: Menu) =>
-    refs.titleEditingRef.current.handleTitleKeyDown(e, menu);
+    refs.titleEditingRef.current?.handleTitleKeyDown?.(e, menu);
   const handleDescriptionKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) =>
-    refs.descriptionEditingRef.current.handleDescriptionKeyDown(e);
+    refs.descriptionEditingRef.current?.handleDescriptionKeyDown?.(e);
 
   return {
     handleStartEditTitle,

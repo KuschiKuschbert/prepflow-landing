@@ -1,6 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { CleaningTaskJoinResult, CreateCleaningTaskInput, DBCleaningTask } from './types';
 
 const CLEANING_TASKS_SELECT = `
   *,
@@ -36,24 +37,11 @@ const CLEANING_TASKS_SELECT = `
 /**
  * Create a cleaning task.
  *
- * @param {Object} taskData - Cleaning task data
- * @returns {Promise<Object>} Created cleaning task
+ * @param {CreateCleaningTaskInput} taskData - Cleaning task data
+ * @returns {Promise<CleaningTaskJoinResult | DBCleaningTask>} Created cleaning task
  * @throws {Error} If creation fails
  */
-export async function createCleaningTask(taskData: {
-  task_name?: string;
-  frequency_type?: string;
-  area_id?: string;
-  assigned_date?: string;
-  equipment_id?: string | null;
-  section_id?: string | null;
-  is_standard_task?: boolean;
-  standard_task_type?: string | null;
-  description?: string | null;
-  notes?: string | null;
-  assigned_to_employee_id?: string | null;
-  assigned_by_employee_id?: string | null;
-}) {
+export async function createCleaningTask(taskData: CreateCleaningTaskInput): Promise<CleaningTaskJoinResult | DBCleaningTask> {
   if (!supabaseAdmin)
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
 
@@ -121,8 +109,8 @@ export async function createCleaningTask(taskData: {
       context: { endpoint: '/api/cleaning-tasks', operation: 'POST', table: 'cleaning_tasks' },
     });
     // Return the basic data if SELECT fails (at least the insert worked)
-    return insertResult;
+    return insertResult as DBCleaningTask;
   }
 
-  return data;
+  return data as CleaningTaskJoinResult;
 }

@@ -3,10 +3,10 @@
  */
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { getMappingByPrepFlowId, createAutoMapping } from '../../../mappings';
-import { mapDishToSquareItem } from './mapping';
-import { logCatalogSyncOperation } from './common';
+import { createAutoMapping, getMappingByPrepFlowId } from '../../../mappings';
 import type { Dish, SyncResult } from '../../catalog';
+import { logCatalogSyncOperation } from './common';
+import { mapDishToSquareItem } from './mapping';
 
 /**
  * Process a single PrepFlow dish for sync to Square
@@ -15,6 +15,7 @@ export async function processPrepFlowDish(
   dish: Dish,
   userId: string,
   locationId: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   catalogApi: any,
   result: SyncResult,
 ): Promise<void> {
@@ -120,21 +121,21 @@ export async function processPrepFlowDish(
         throw new Error('Failed to create Square item');
       }
     }
-  } catch (dishError: any) {
+  } catch (dishError: unknown) {
     logger.error('[Square Catalog Sync] Error processing dish:', {
-      error: dishError.message,
+      error: dishError instanceof Error ? dishError.message : String(dishError),
       dishId: dish.id,
     });
     result.errors++;
-    result.errorMessages?.push(`Failed to process dish ${dish.id}: ${dishError.message}`);
+    result.errorMessages?.push(`Failed to process dish ${dish.id}: ${dishError instanceof Error ? dishError.message : String(dishError)}`);
 
     await logCatalogSyncOperation({
       userId,
       direction: 'prepflow_to_square',
       entityId: dish.id,
       status: 'error',
-      errorMessage: dishError.message,
-      errorDetails: { stack: dishError.stack },
+      errorMessage: dishError instanceof Error ? dishError.message : String(dishError),
+      errorDetails: { stack: dishError instanceof Error ? dishError.stack : undefined },
     });
   }
 }

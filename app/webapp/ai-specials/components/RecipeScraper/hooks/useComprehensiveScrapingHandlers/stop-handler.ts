@@ -3,9 +3,10 @@
  */
 
 import { logger } from '@/lib/logger';
+import { ComprehensiveJobStatus } from '../../types';
 
 interface StopHandlerParams {
-  setComprehensiveStatus: (status: unknown) => void;
+  setComprehensiveStatus: (status: ComprehensiveJobStatus | null) => void;
   setStatusPolling: (polling: boolean) => void;
   showSuccess: (message: string) => void;
   showError: (message: string) => void;

@@ -5,9 +5,10 @@
  * Compare AI extraction vs. traditional parsing methods
  */
 
-import { getAIExtractor } from './utils/ai-extractor';
 import { AllRecipesScraper } from './scrapers/allrecipes-scraper';
+import { BaseScraper } from './scrapers/base-scraper';
 import { EpicuriousScraper } from './scrapers/epicurious-scraper';
+import { getAIExtractor } from './utils/ai-extractor';
 import { scraperLogger } from './utils/logger';
 
 interface TestResult {
@@ -41,7 +42,7 @@ const testUrls = [
   },
 ];
 
-async function testTraditionalScraper(scraper: any, url: string) {
+async function testTraditionalScraper(scraper: BaseScraper, url: string) {
   try {
     const result = await scraper.scrapeRecipe(url);
     if (result.success && result.recipe) {
@@ -112,7 +113,8 @@ async function runComparison() {
     // Fetch HTML for AI extractor
     let html = '';
     try {
-      const response = await testCase.scraper['fetchPage'](testCase.url);
+      // Access protected fetchPage method for testing
+      const response = await (testCase.scraper as unknown as { fetchPage: (url: string) => Promise<string> }).fetchPage(testCase.url);
       html = response;
     } catch (error) {
       scraperLogger.error(`   Failed to fetch HTML: ${error}`);

@@ -5,9 +5,16 @@
 
 import React from 'react';
 
-export const AnimatedDiv = ({ children, ...props }: any) =>
+interface AnimatedDivProps extends React.HTMLAttributes<HTMLDivElement> {
+  children?: React.ReactNode;
+  animation?: string;
+  delay?: number;
+  intensity?: number;
+}
+
+export const AnimatedDiv = ({ children, animation, delay, ...props }: AnimatedDivProps) =>
   React.createElement('div', props, children);
-export const FloatingElement = ({ children, ...props }: any) =>
+export const FloatingElement = ({ children, intensity, ...props }: AnimatedDivProps) =>
   React.createElement('div', props, children);
-export const StaggeredContainer = ({ children, ...props }: any) =>
+export const StaggeredContainer = ({ children, ...props }: AnimatedDivProps) =>
   React.createElement('div', props, children);

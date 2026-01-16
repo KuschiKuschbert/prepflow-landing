@@ -6,7 +6,7 @@ import { MenuItemData } from '../types';
 
 export async function fetchMenuData(
   menuId: string,
-): Promise<{ menu: unknown; menuItems: MenuItemData[] }> {
+): Promise<{ menu: { id: string; menu_name: string } | null; menuItems: MenuItemData[] }> {
   if (!supabaseAdmin) {
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }

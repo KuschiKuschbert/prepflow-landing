@@ -30,7 +30,12 @@ export function useKitchenAlertsData() {
   useEffect(() => {
     const fetchData = async () => {
       const today = new Date().toISOString().split('T')[0];
-      const cachedStats = getCachedData<Record<string, any>>('dashboard_stats');
+      const cachedStats = getCachedData<{
+        ingredientsLowStock?: number;
+        recipesWithoutCost?: number;
+        temperatureChecksToday?: number;
+        cleaningTasksPending?: number;
+      }>('dashboard_stats');
       const cachedLogs = getCachedData<TemperatureLog[]>('dashboard_temperature_logs');
       const cachedEquipment = getCachedData<TemperatureEquipment[]>(
         'dashboard_temperature_equipment',

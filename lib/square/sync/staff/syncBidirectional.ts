@@ -3,9 +3,9 @@
  */
 import { logger } from '@/lib/logger';
 import { getSquareConfig } from '../../config';
+import type { SyncResult } from '../staff';
 import { syncStaffFromSquare } from './syncFromSquare';
 import { syncStaffToSquare } from './syncToSquare';
-import type { SyncResult } from '../staff';
 
 /**
  * Bidirectional staff sync
@@ -50,9 +50,9 @@ export async function syncStaffBidirectional(userId: string): Promise<SyncResult
       // Default: prepflow_to_square (only direction supported in auto_sync_direction enum)
       return await syncStaffToSquare(userId);
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Staff Sync] Bidirectional sync error:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
     });
 
@@ -62,7 +62,7 @@ export async function syncStaffBidirectional(userId: string): Promise<SyncResult
       created: 0,
       updated: 0,
       errors: 1,
-      errorMessages: [error.message],
+      errorMessages: [error instanceof Error ? error.message : String(error)],
     };
   }
 }

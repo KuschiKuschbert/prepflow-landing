@@ -1,5 +1,5 @@
-import { logger } from '@/lib/logger';
 import { getManagementClient } from '@/lib/auth0-management';
+import { logger } from '@/lib/logger';
 import { getGoogleConnection } from './getGoogleConnection';
 
 /**
@@ -52,6 +52,13 @@ export async function enableGoogleConnectionForApp(): Promise<{
         enabled: true,
       };
     }
+    if (!googleConnection.id) {
+      return {
+        success: false,
+        message: "Google connection ID is missing",
+      };
+    }
+
     await client.connections.update({ id: googleConnection.id }, {
       enabled_clients: [...new Set([...enabledClients, auth0ClientId])],
     } as any);

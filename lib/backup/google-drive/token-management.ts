@@ -4,7 +4,7 @@
 
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
-import { encryptToken, decryptToken } from '../token-encryption';
+import { decryptToken, encryptToken } from '../token-encryption';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 
@@ -24,11 +24,11 @@ export async function getEncryptedRefreshToken(userId: string): Promise<string |
     .single();
 
   if (error) {
-    if ((error as any).code !== 'PGRST116') {
+    if (error.code !== 'PGRST116') {
       // PGRST116 is "not found" - that's okay, user hasn't connected Google Drive
       logger.warn('[Google Drive] Error fetching refresh token:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         userId,
       });
     }
@@ -43,8 +43,9 @@ export async function getEncryptedRefreshToken(userId: string): Promise<string |
     // Decrypt the token
     const decryptedToken = await decryptToken(data.encrypted_refresh_token);
     return decryptedToken;
-  } catch (error: any) {
-    logger.error(`[Google Drive] Failed to decrypt token for user ${userId}:`, error);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    logger.error(`[Google Drive] Failed to decrypt token for user ${userId}:`, message);
     // If decryption fails, token is invalid - return null to trigger re-auth
     return null;
   }
@@ -79,7 +80,7 @@ export async function storeEncryptedRefreshToken(
   if (error) {
     logger.error('[Google Drive] Error storing refresh token:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       userId,
     });
     throw ApiErrorHandler.createError('Database error', 'DATABASE_ERROR', 500);

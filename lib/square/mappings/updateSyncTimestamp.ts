@@ -1,9 +1,9 @@
 /**
  * Update mapping sync timestamp.
  */
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 /**
  * Update mapping sync timestamp.
@@ -18,7 +18,7 @@ export async function updateMappingSyncTimestamp(
 
   try {
     const timestamp = new Date().toISOString();
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       last_synced_at: timestamp,
       updated_at: timestamp,
     };
@@ -39,7 +39,7 @@ export async function updateMappingSyncTimestamp(
     if (error) {
       logger.error('[Square Mappings] Error updating sync timestamp:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         mappingId,
         direction,
         context: { endpoint: 'updateMappingSyncTimestamp', operation: 'update' },
@@ -47,13 +47,13 @@ export async function updateMappingSyncTimestamp(
 
       throw ApiErrorHandler.fromSupabaseError(error, 500);
     }
-  } catch (error: any) {
-    if (error.status) {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'status' in error) {
       throw error;
     }
 
     logger.error('[Square Mappings] Unexpected error updating sync timestamp:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       mappingId,
       direction,
       context: { endpoint: 'updateMappingSyncTimestamp', operation: 'update' },

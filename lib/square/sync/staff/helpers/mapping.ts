@@ -3,10 +3,29 @@
  */
 import type { Employee } from '../../staff';
 
+// Square Team Member structure (from Square API)
+interface SquareTeamMember {
+  id?: string;
+  givenName?: string;
+  familyName?: string;
+  emailAddress?: {
+    emailAddress?: string;
+  };
+  phoneNumber?: {
+    phoneNumber?: string;
+  };
+  status?: 'ACTIVE' | 'INACTIVE' | 'TERMINATED';
+  createdAt?: string;
+  assignedLocations?: {
+    assignmentType?: 'MANAGER' | 'EMPLOYEE' | string;
+    locationIds?: string[];
+  };
+}
+
 /**
  * Map Square team member to PrepFlow employee
  */
-export function mapSquareTeamMemberToEmployee(teamMember: any): Employee {
+export function mapSquareTeamMemberToEmployee(teamMember: SquareTeamMember): Employee {
   // Extract name
   const givenName = teamMember.givenName || '';
   const familyName = teamMember.familyName || '';
@@ -63,7 +82,7 @@ export function mapSquareTeamMemberToEmployee(teamMember: any): Employee {
 /**
  * Map PrepFlow employee to Square team member
  */
-export function mapEmployeeToSquareTeamMember(employee: Employee): any {
+export function mapEmployeeToSquareTeamMember(employee: Employee): SquareTeamMember {
   // Split full name into given and family name
   const nameParts = employee.full_name.split(' ');
   const givenName = nameParts[0] || '';
@@ -76,7 +95,7 @@ export function mapEmployeeToSquareTeamMember(employee: Employee): any {
   }
 
   // Build team member data
-  const teamMemberData: any = {
+  const teamMemberData: SquareTeamMember = {
     givenName,
     familyName,
     emailAddress: employee.email

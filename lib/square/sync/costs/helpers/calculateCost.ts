@@ -3,8 +3,8 @@
  */
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { calculateFinancialMetrics } from './calculateFinancialMetrics';
 import type { CostData } from '../../costs';
+import { calculateFinancialMetrics } from './calculateFinancialMetrics';
 
 /**
  * Calculate food cost for a dish
@@ -69,6 +69,7 @@ export async function calculateDishFoodCost(dishId: string): Promise<CostData | 
     // Calculate cost from recipes
     if (dishRecipes) {
       for (const dr of dishRecipes) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const recipe = Array.isArray(dr.recipes) ? dr.recipes[0] : (dr.recipes as any);
         if (!recipe || !recipe.recipe_ingredients) continue;
 
@@ -136,11 +137,11 @@ export async function calculateDishFoodCost(dishId: string): Promise<CostData | 
       ...metrics,
       last_updated: new Date().toISOString(),
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Cost Sync] Error calculating dish cost:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       dishId,
-      stack: error.stack,
+      stack: error instanceof Error ? error.stack : undefined,
     });
     return null;
   }
