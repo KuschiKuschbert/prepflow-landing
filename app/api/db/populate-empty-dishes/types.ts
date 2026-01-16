@@ -3,7 +3,6 @@
  */
 
 export interface DishRecord {
-
   id: string;
   dish_name: string;
 }
@@ -15,7 +14,6 @@ export interface RecipeRecord {
 }
 
 export interface IngredientRecord {
-
   id: string;
   ingredient_name: string;
   unit: string;
@@ -69,4 +67,3 @@ export interface PopulateRecipesResult {
   skipped: SkippedRecipe[];
   errors: RecipeError[];
 }
-

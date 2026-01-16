@@ -4,22 +4,21 @@
 
 import { logger } from '@/lib/logger';
 import {
-    getDefaultIngredientsForRecipe,
-    getIngredientName,
-    recipeHasIngredients,
+  getDefaultIngredientsForRecipe,
+  getIngredientName,
+  recipeHasIngredients,
 } from '@/lib/populate-helpers/populate-empty-dishes-helpers';
 import { supabaseAdmin } from '@/lib/supabase';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import type {
-    IngredientRecord,
-    PopulateRecipesResult,
-    PopulatedRecipe,
-    RecipeError,
-    RecipeRecord,
-    SkippedRecipe,
+  IngredientRecord,
+  PopulateRecipesResult,
+  PopulatedRecipe,
+  RecipeError,
+  RecipeRecord,
+  SkippedRecipe,
 } from '../types';
-
 
 /**
  * Populates empty recipes with default ingredients
@@ -31,7 +30,6 @@ import type {
 export async function populateRecipes(
   recipes: RecipeRecord[],
   ingredients: IngredientRecord[],
-
 ): Promise<PopulateRecipesResult> {
   const populated: PopulatedRecipe[] = [];
   const skipped: SkippedRecipe[] = [];

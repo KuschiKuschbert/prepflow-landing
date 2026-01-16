@@ -73,7 +73,6 @@ export async function processIngredientAllergens(
   dishIngredients.forEach(di => {
     const ingredient = di.ingredients as unknown as IngredientRecord | null;
 
-
     if (!ingredient) return;
 
     const allergens = (ingredient.allergens as string[]) || [];

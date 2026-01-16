@@ -5,8 +5,8 @@
  */
 
 import {
-    aggregateDishAllergens,
-    batchAggregateRecipeAllergens,
+  aggregateDishAllergens,
+  batchAggregateRecipeAllergens,
 } from '@/lib/allergens/allergen-aggregation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger, type ErrorContext } from '@/lib/logger';

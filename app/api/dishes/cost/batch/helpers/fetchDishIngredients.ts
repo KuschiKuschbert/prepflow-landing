@@ -9,7 +9,9 @@ import { DishIngredientRecord } from '../../../types';
 /**
  * Fetch dish_ingredients and group by dish_id.
  */
-export async function fetchDishIngredients(dishIds: string[]): Promise<Map<string, DishIngredientRecord[]>> {
+export async function fetchDishIngredients(
+  dishIds: string[],
+): Promise<Map<string, DishIngredientRecord[]>> {
   if (!supabaseAdmin) {
     return new Map();
   }
@@ -41,7 +43,7 @@ export async function fetchDishIngredients(dishIds: string[]): Promise<Map<strin
 
   // Group dish_ingredients by dish_id
   const dishIngredientsMap = new Map<string, DishIngredientRecord[]>();
-  (allDishIngredients as any[] || []).forEach(di => {
+  ((allDishIngredients as any[]) || []).forEach(di => {
     if (!dishIngredientsMap.has(di.dish_id)) {
       dishIngredientsMap.set(di.dish_id, []);
     }

@@ -26,7 +26,8 @@ export async function handleInvoicePaymentSucceeded(
   }
 
   // Ensure subscription remains active
-  const subscriptionId = (invoice as unknown as { subscription: string | { id: string } }).subscription;
+  const subscriptionId = (invoice as unknown as { subscription: string | { id: string } })
+    .subscription;
   if (subscriptionId) {
     const subscriptionIdStr =
       typeof subscriptionId === 'string' ? subscriptionId : subscriptionId.id;

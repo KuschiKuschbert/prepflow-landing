@@ -11,7 +11,9 @@ import { supabaseAdmin } from '@/lib/supabase';
 export async function getUserIdFromEvent(event: unknown): Promise<string | null> {
   try {
     // Square webhooks include location_id in the event
-    const locationId = (event as { data?: { object?: { location_id?: string } } }).data?.object?.location_id || (event as { location_id?: string }).location_id;
+    const locationId =
+      (event as { data?: { object?: { location_id?: string } } }).data?.object?.location_id ||
+      (event as { location_id?: string }).location_id;
 
     if (!locationId) {
       logger.warn('[Square Webhook] No location_id in event');

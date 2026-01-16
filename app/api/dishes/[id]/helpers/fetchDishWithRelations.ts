@@ -15,7 +15,6 @@ import { fetchDishRecipes } from './fetchDishRecipes';
  * @throws {Error} If dish not found or database error
  */
 export async function fetchDishWithRelations(dishId: string): Promise<EnrichedDish> {
-
   if (!supabaseAdmin) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
@@ -63,11 +62,9 @@ export async function fetchDishWithRelations(dishId: string): Promise<EnrichedDi
     recipes: validDishRecipes,
   });
 
-
   return {
     ...dish,
     recipes: validDishRecipes,
     ingredients: validDishIngredients,
   } as EnrichedDish;
-
 }

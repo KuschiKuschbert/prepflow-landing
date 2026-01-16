@@ -36,14 +36,14 @@ export async function fetchMenuItemsMap(): Promise<Record<string, MenuItem[]>> {
       .select('menu_id, dish_id, recipe_id, menus(id, menu_name)');
 
     if (!menuItemsError && menuItems) {
-      (menuItems as MenuItemRow[]).forEach((item) => {
+      (menuItems as MenuItemRow[]).forEach(item => {
         const itemId = item.dish_id || item.recipe_id;
         const menus = item.menus || [];
         if (itemId && menus.length > 0) {
           if (!menuItemsMap[itemId]) {
             menuItemsMap[itemId] = [];
           }
-          menus.forEach((menu) => {
+          menus.forEach(menu => {
             if (!menuItemsMap[itemId].some(m => m.menu_id === menu.id)) {
               menuItemsMap[itemId].push({
                 menu_id: menu.id,

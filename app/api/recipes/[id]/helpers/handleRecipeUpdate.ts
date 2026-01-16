@@ -3,8 +3,8 @@
  */
 
 import {
-    invalidateDishesWithRecipe,
-    invalidateRecipeAllergenCache,
+  invalidateDishesWithRecipe,
+  invalidateRecipeAllergenCache,
 } from '@/lib/allergens/cache-invalidation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getUserEmail } from '@/lib/auth0-api-helpers';
@@ -77,7 +77,8 @@ export async function handleRecipeUpdate(
     throw ApiErrorHandler.fromSupabaseError(updateError, 500);
   }
 
-  const recipeName = (updatedRecipe as any).recipe_name || (currentRecipe as any)?.recipe_name || 'Unknown Recipe';
+  const recipeName =
+    (updatedRecipe as any).recipe_name || (currentRecipe as any)?.recipe_name || 'Unknown Recipe';
 
   // Invalidate caches if needed
   if (ingredientsChanged) {

@@ -211,7 +211,7 @@ export default function TemperatureAnalyticsTab({
           })
         ) : (
           // Loading skeleton for equipment cards
-          (<LoadingSkeleton variant="card" count={6} height="80px" />)
+          <LoadingSkeleton variant="card" count={6} height="80px" />
         )}
       </div>
       {/* Empty State - No Data */}

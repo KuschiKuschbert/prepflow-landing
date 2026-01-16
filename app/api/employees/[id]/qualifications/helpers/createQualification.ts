@@ -15,7 +15,9 @@ export async function createQualification(
     notes?: string;
   },
   // Merged return type: strict Data (Qualification) + strict Error (ApiError)
-): Promise<{ success: boolean; message: string; data: Qualification } | { error: ApiError; status: number }> {
+): Promise<
+  { success: boolean; message: string; data: Qualification } | { error: ApiError; status: number }
+> {
   if (!supabaseAdmin) {
     return {
       error: ApiErrorHandler.createError(

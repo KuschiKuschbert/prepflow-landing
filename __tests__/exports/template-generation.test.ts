@@ -5,9 +5,9 @@
 
 import { generatePrintTemplate, type PrintTemplateOptions } from '@/lib/exports/print-template';
 import {
-    testTemplateVariants,
-    validateExportHTML,
-    validateVariant,
+  testTemplateVariants,
+  validateExportHTML,
+  validateVariant,
 } from '@/lib/exports/test-helpers';
 
 describe('Template Generation', () => {

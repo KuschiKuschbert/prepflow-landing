@@ -54,13 +54,13 @@ export function generateComplianceGaps(reportData: ReportData) {
   // Check for missing required qualifications
   if (reportData.employees) {
     const requiredQuals = ['Food Safety Supervisor', 'Food Handler'];
-    reportData.employees.forEach((emp) => {
+    reportData.employees.forEach(emp => {
       const empQuals = (emp.employee_qualifications || []).map(
-        (q) => q.qualification_types?.name?.toLowerCase() || '',
+        q => q.qualification_types?.name?.toLowerCase() || '',
       );
 
       requiredQuals.forEach(reqQual => {
-        const hasQual = empQuals.some((q) => q.includes(reqQual.toLowerCase()));
+        const hasQual = empQuals.some(q => q.includes(reqQual.toLowerCase()));
 
         if (!hasQual) {
           gaps.push({
@@ -79,12 +79,12 @@ export function generateComplianceGaps(reportData: ReportData) {
   // Check for missing critical compliance records
   if (reportData.compliance_records) {
     const criticalTypes = ['Food License', 'Council Registration', 'Pest Control'];
-    const activeTypes = (reportData.compliance_records.active || []).map((r) =>
+    const activeTypes = (reportData.compliance_records.active || []).map(r =>
       (r.compliance_types?.type_name || r.compliance_types?.name || '').toLowerCase(),
     );
 
     criticalTypes.forEach(criticalType => {
-      const hasType = activeTypes.some((t) => t.includes(criticalType.toLowerCase()));
+      const hasType = activeTypes.some(t => t.includes(criticalType.toLowerCase()));
 
       if (!hasType) {
         gaps.push({
@@ -98,7 +98,10 @@ export function generateComplianceGaps(reportData: ReportData) {
   }
 
   // Check for temperature violations
-  if (reportData.temperature_violations?.total_violations && reportData.temperature_violations.total_violations > 0) {
+  if (
+    reportData.temperature_violations?.total_violations &&
+    reportData.temperature_violations.total_violations > 0
+  ) {
     gaps.push({
       type: 'temperature_violations',
       severity: 'high',

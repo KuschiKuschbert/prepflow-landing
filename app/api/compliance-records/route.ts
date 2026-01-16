@@ -66,7 +66,6 @@ export async function GET(request: NextRequest) {
       data: data || [],
     });
   } catch (err: unknown) {
-
     return handleComplianceError(err, 'GET');
   }
 }

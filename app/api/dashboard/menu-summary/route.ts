@@ -74,23 +74,23 @@ export async function GET(_req: NextRequest) {
     }
 
     // Create dish lookup map
-    const dishMap = new Map((dishes as Dish[] || []).map((dish) => [dish.id, dish]));
+    const dishMap = new Map(((dishes as Dish[]) || []).map(dish => [dish.id, dish]));
 
     // Count active menus (menus with items)
-    const menusWithItems = new Set((menuItems as MenuItem[] || []).map((item) => item.menu_id));
+    const menusWithItems = new Set(((menuItems as MenuItem[]) || []).map(item => item.menu_id));
     const activeMenus = menusWithItems.size;
 
     // Count total dishes across all menus
     const totalDishes = menuItems?.length || 0;
 
     // Count dishes without recipes
-    const dishesWithoutRecipes = (menuItems as MenuItem[] || []).filter((item) => {
+    const dishesWithoutRecipes = ((menuItems as MenuItem[]) || []).filter(item => {
       const dish = dishMap.get(item.dish_id);
       return dish && (!dish.recipe_id || dish.recipe_id === null);
     }).length;
 
     // Count dishes without costs
-    const dishesWithoutCosts = (menuItems as MenuItem[] || []).filter((item) => {
+    const dishesWithoutCosts = ((menuItems as MenuItem[]) || []).filter(item => {
       const dish = dishMap.get(item.dish_id);
       return (
         dish && (!dish.selling_price || dish.selling_price === null || dish.selling_price === 0)

@@ -53,7 +53,7 @@ export async function handleUpdateSupplier(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/suppliers', method: 'PUT' },
     });
-    if (err && typeof err === "object" && "status" in err) {
+    if (err && typeof err === 'object' && 'status' in err) {
       return NextResponse.json(err, { status: (err as any).status });
     }
     return handleSupplierError(err, 'PUT');

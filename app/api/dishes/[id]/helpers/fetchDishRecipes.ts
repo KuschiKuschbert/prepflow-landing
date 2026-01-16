@@ -4,7 +4,6 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { DishRecipe } from '@/types/dish';
 import { RecipeRecord } from '../../types';
 
-
 /**
  * Fetches recipes for a dish
  *
@@ -12,7 +11,6 @@ import { RecipeRecord } from '../../types';
  * @returns {Promise<DishRecipe[]>} Valid dish recipes
  */
 export async function fetchDishRecipes(dishId: string): Promise<DishRecipe[]> {
-
   if (!supabaseAdmin) {
     logger.error('[Dishes API] Database connection not available for fetchDishRecipes');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
@@ -107,5 +105,4 @@ export async function fetchDishRecipes(dishId: string): Promise<DishRecipe[]> {
     });
 
   return validDishRecipes as unknown as DishRecipe[];
-
 }

@@ -9,7 +9,6 @@ export interface DishChange {
   details: unknown;
 }
 
-
 export interface ChangeDetectionResult {
   changes: string[];
   changeDetails: Record<string, unknown>;

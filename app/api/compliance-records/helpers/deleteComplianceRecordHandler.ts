@@ -19,7 +19,6 @@ export async function handleDeleteComplianceRecord(request: NextRequest) {
     await deleteComplianceRecord(id);
     return NextResponse.json({ success: true, message: 'Compliance record deleted successfully' });
   } catch (err: unknown) {
-
     return handleComplianceError(err, 'DELETE');
   }
 }

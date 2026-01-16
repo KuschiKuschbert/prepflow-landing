@@ -11,9 +11,9 @@ import { detectDishChanges } from './detectDishChanges';
 import { fetchDishWithRelations } from './fetchDishWithRelations';
 import { getUserEmail } from './getUserEmail';
 import {
-    invalidateAllergenCache,
-    invalidateMenuPricingCache,
-    trackChangeForLockedMenus,
+  invalidateAllergenCache,
+  invalidateMenuPricingCache,
+  trackChangeForLockedMenus,
 } from './invalidateDishCaches';
 import { updateIngredientsWithTracking, updateRecipesWithTracking } from './updateDishRelations';
 
@@ -51,7 +51,7 @@ export async function handlePutRequest(
   // Get user email for change tracking
   const userEmail = await getUserEmail(request);
 
-// Fetch current dish to detect changes
+  // Fetch current dish to detect changes
   let currentDish: Dish | null = null;
   try {
     const enrichedDish = await fetchDishWithRelations(dishId);

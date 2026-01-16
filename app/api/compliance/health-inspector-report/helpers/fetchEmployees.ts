@@ -58,10 +58,12 @@ export async function fetchEmployees() {
   }
 
   // Qualification Summary
-  const allQualifications: Array<{ employee_name: string; employee_role: string; expiry_date?: string } & Record<string, unknown>> = [];
+  const allQualifications: Array<
+    { employee_name: string; employee_role: string; expiry_date?: string } & Record<string, unknown>
+  > = [];
   employees?.forEach(emp => {
     if (emp.employee_qualifications) {
-      (emp.employee_qualifications as EmployeeQualification[]).forEach((qual) => {
+      (emp.employee_qualifications as EmployeeQualification[]).forEach(qual => {
         allQualifications.push({
           employee_name: emp.full_name as string,
           employee_role: emp.role as string,

@@ -4,24 +4,22 @@
 
 import { logger } from '@/lib/logger';
 import {
-    dishHasDirectIngredients,
-    getDefaultIngredientsForDish,
-    getIngredientName,
-    getIngredientsFromRecipes,
-
+  dishHasDirectIngredients,
+  getDefaultIngredientsForDish,
+  getIngredientName,
+  getIngredientsFromRecipes,
 } from '@/lib/populate-helpers/populate-empty-dishes-helpers';
 import { supabaseAdmin } from '@/lib/supabase';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import type {
-    DishError,
-    DishRecord,
-    IngredientRecord,
-    PopulateDishesResult,
-    PopulatedDish,
-    SkippedDish,
+  DishError,
+  DishRecord,
+  IngredientRecord,
+  PopulateDishesResult,
+  PopulatedDish,
+  SkippedDish,
 } from '../types';
-
 
 /**
  * Populates empty dishes with default ingredients
@@ -33,7 +31,6 @@ import type {
 export async function populateDishes(
   dishes: DishRecord[],
   ingredients: IngredientRecord[],
-
 ): Promise<PopulateDishesResult> {
   const populated: PopulatedDish[] = [];
   const skipped: SkippedDish[] = [];

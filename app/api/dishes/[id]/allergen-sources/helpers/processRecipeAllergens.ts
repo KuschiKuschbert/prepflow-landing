@@ -79,7 +79,6 @@ export async function processRecipeAllergens(
   dishRecipes.forEach(dr => {
     const recipe = dr.recipes as unknown as RecipeRecord | null;
 
-
     if (!recipe) return;
 
     const recipeName = recipe.recipe_name || recipe.name || 'Unknown Recipe';
