@@ -35,7 +35,7 @@ export function useEquipmentMaintenance() {
       };
 
       // Optimistically add to UI immediately
-      const updatedRecords = [tempRecord as any, ...records];
+      const updatedRecords = [tempRecord as unknown, ...records];
       setRecords(updatedRecords);
       resetForm();
 

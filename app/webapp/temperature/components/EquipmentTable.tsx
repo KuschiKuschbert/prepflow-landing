@@ -15,7 +15,7 @@ import {
 interface EquipmentTableProps {
   equipment: TemperatureEquipment[];
   equipmentStatuses: Map<string, { status: string; color: string; temperature?: number }>;
-  equipmentLogs: Map<string, any[]>;
+  equipmentLogs: Map<string, unknown[]>;
   timeFilter: string;
   selectedEquipmentId: string | null;
   onSelect: (equipment: TemperatureEquipment) => void;

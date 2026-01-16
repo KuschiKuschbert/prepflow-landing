@@ -21,7 +21,7 @@ const CSV_HEADERS = [
  * @param {COGSCalculation} calc - COGS calculation to map
  * @returns {Record<string, any>} CSV row object
  */
-function mapCOGSCalculationToCSVRow(calc: COGSCalculation): Record<string, any> {
+function mapCOGSCalculationToCSVRow(calc: COGSCalculation): Record<string, unknown> {
   return {
     Ingredient: calc.ingredientName || '',
     Quantity: calc.quantity || 0,

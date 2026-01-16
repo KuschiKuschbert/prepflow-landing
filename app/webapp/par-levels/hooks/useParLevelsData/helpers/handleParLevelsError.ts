@@ -5,7 +5,7 @@ import { logger } from '@/lib/logger';
 
 interface HandleParLevelsErrorParams {
   response: Response;
-  result: any;
+  result: unknown;
   showError: (message: string) => void;
 }
 

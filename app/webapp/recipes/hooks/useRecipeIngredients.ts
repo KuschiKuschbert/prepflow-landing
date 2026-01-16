@@ -77,7 +77,7 @@ export function useRecipeIngredients(setError: (error: string) => void) {
             );
         });
       }
-      const handleQueueError = (err: any) =>
+      const handleQueueError = (err: unknown) =>
         logger.error('[RecipeIngredients] Queue processing error:', err);
       const batchPromise = performBatchFetch(recipeIds)
         .then(result => {

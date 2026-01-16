@@ -15,14 +15,14 @@ export function usePriceCalculationEffect({
   fetchBatchRecipeIngredients,
 }: {
   paginatedRecipes: Recipe[];
-  recipePrices: Record<string, any>;
+  recipePrices: Record<string, unknown>;
   updateVisibleRecipePrices: (
     recipes: Recipe[],
-    fetchRecipeIngredients: (recipeId: string) => Promise<any[]>,
-    fetchBatchRecipeIngredients?: (recipeIds: string[]) => Promise<Record<string, any[]>>,
+    fetchRecipeIngredients: (recipeId: string) => Promise<unknown[]>,
+    fetchBatchRecipeIngredients?: (recipeIds: string[]) => Promise<Record<string, unknown[]>>,
   ) => Promise<void>;
-  fetchRecipeIngredients: (recipeId: string) => Promise<any[]>;
-  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<Record<string, any[]>>;
+  fetchRecipeIngredients: (recipeId: string) => Promise<unknown[]>;
+  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<Record<string, unknown[]>>;
 }): void {
   const calculatingPricesRef = useRef<Set<string>>(new Set());
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);

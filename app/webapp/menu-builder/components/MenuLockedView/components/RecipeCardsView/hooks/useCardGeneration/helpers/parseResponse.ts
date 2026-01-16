@@ -3,7 +3,7 @@
  */
 import { logger } from '@/lib/logger';
 
-export async function parseResponse(response: Response): Promise<any> {
+export async function parseResponse(response: Response): Promise<unknown> {
   logger.dev('[useCardGeneration] Generation API response:', {
     status: response.status,
     ok: response.ok,

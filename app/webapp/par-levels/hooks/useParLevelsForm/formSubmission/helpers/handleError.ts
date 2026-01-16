@@ -2,7 +2,7 @@ import { logger } from '@/lib/logger';
 
 interface HandleErrorParams {
   response: Response;
-  result: any;
+  result: unknown;
   formData: {
     ingredientId: string;
     parLevel: string;
@@ -11,8 +11,8 @@ interface HandleErrorParams {
   };
   parLevelValue: number;
   reorderPointValue: number;
-  setParLevels: React.Dispatch<React.SetStateAction<any[]>>;
-  originalParLevels: any[];
+  setParLevels: React.Dispatch<React.SetStateAction<unknown[]>>;
+  originalParLevels: unknown[];
   showError: (message: string) => void;
 }
 

@@ -60,7 +60,7 @@ export function printComplianceReport(data: ComplianceReportData): void {
 export function exportComplianceReport(data: ComplianceReportData, format: ExportFormat): void {
   if (format === 'csv') {
     // Flatten all data into CSV format
-    const csvRows: any[] = [];
+    const csvRows: unknown[] = [];
 
     // Compliance Records
     if (data.complianceRecords) {

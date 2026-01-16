@@ -227,8 +227,8 @@ export default function PrepListsPage() {
             <PrepListForm
               sections={kitchenSections}
               ingredients={ingredients}
-              formData={formData as any}
-              setFormData={setFormData as any}
+              formData={formData as unknown}
+              setFormData={setFormData as unknown}
               onSubmit={handleSubmit}
               onClose={handleFormClose}
               isEditing={!!editingPrepList}

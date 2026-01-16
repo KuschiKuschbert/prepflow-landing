@@ -32,7 +32,7 @@ export function ScreenshotGuide({ content, className = '' }: ScreenshotGuideProp
           )}
           {imageError ? (
             // Placeholder when image fails to load
-            <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-[#1f1f1f] to-[var(--muted)] p-8">
+            (<div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-[#1f1f1f] to-[var(--muted)] p-8">
               <Icon
                 icon={ImageIcon}
                 size="xl"
@@ -43,7 +43,7 @@ export function ScreenshotGuide({ content, className = '' }: ScreenshotGuideProp
               <p className="mt-2 text-xs text-[var(--foreground-subtle)]">
                 This guide step will include a visual walkthrough
               </p>
-            </div>
+            </div>)
           ) : (
             <Image
               src={content.image}

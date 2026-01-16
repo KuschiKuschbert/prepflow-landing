@@ -19,7 +19,7 @@ export async function handleAddSupplierHelper(
   // Create temporary supplier for optimistic update
   const tempId = `temp-${Date.now()}`;
   const tempSupplier: Supplier = {
-    id: tempId as any, // Temporary ID, will be replaced by server
+    id: tempId as unknown, // Temporary ID, will be replaced by server
     name: newSupplier.name,
     contact_person: newSupplier.contact_person || null,
     email: newSupplier.email || null,

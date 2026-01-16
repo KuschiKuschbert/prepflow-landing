@@ -11,7 +11,7 @@ interface BuildPrintHTMLParams {
  */
 function buildSummarySection(
   logs: TemperatureLog[],
-  logsByEquipment: Record<string, any>,
+  logsByEquipment: Record<string, unknown>,
   dateRange?: { start: string; end: string },
 ): string {
   return `

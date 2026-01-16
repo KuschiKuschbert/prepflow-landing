@@ -7,7 +7,7 @@ interface UseMenuHandlersProps {
   setMenus: React.Dispatch<React.SetStateAction<Menu[]>>;
   selectedMenu: Menu | null;
   setSelectedMenu: (menu: Menu | null) => void;
-  fetchMenus: (updateSelected?: boolean, showLoading?: boolean) => Promise<any>;
+  fetchMenus: (updateSelected?: boolean, showLoading?: boolean) => Promise<unknown>;
 }
 
 /**

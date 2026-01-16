@@ -16,7 +16,7 @@ interface IngredientTableHeaderProps {
   onImportCSV?: () => void;
   onExportCSV?: () => void;
   onBulkDelete?: (ids: string[]) => Promise<void>;
-  onBulkUpdate?: (ids: string[], updates: Partial<any>) => Promise<void>;
+  onBulkUpdate?: (ids: string[], updates: Partial<unknown>) => Promise<void>;
   isSelectionMode: boolean;
   bulkActionLoading: boolean;
   showBulkMenu: boolean;

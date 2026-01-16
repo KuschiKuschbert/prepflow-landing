@@ -11,7 +11,7 @@ interface RecipesContentProps {
   recipes: Recipe[];
   filteredAndSortedRecipes: Recipe[];
   paginatedRecipes: Recipe[];
-  recipePrices: Record<string, any>;
+  recipePrices: Record<string, unknown>;
   selectedRecipes: Set<string>;
   filters: RecipeFilters;
   totalPages: number;

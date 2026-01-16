@@ -174,7 +174,6 @@ export default function TemperatureAnalyticsTab({
         isLoaded={isLoaded}
         onTimeFilterChange={handleTimeFilterChange}
       />
-
       {/* Equipment Status Overview - Smart Responsive Grid */}
       <div
         className={`grid gap-3 ${
@@ -212,10 +211,9 @@ export default function TemperatureAnalyticsTab({
           })
         ) : (
           // Loading skeleton for equipment cards
-          <LoadingSkeleton variant="card" count={6} height="80px" />
+          (<LoadingSkeleton variant="card" count={6} height="80px" />)
         )}
       </div>
-
       {/* Empty State - No Data */}
       {isLoaded && equipment.length > 0 && allLogs.length === 0 && (
         <TemperatureAnalyticsEmptyState
@@ -223,7 +221,6 @@ export default function TemperatureAnalyticsTab({
           onGenerateSampleData={handleGenerateSampleData}
         />
       )}
-
       {/* Generate Sample Data Button - Always visible when equipment exists */}
       {isLoaded && equipment.length > 0 && allLogs.length > 0 && (
         <GenerateSampleDataButton
@@ -232,7 +229,6 @@ export default function TemperatureAnalyticsTab({
           variant="secondary"
         />
       )}
-
       {/* Equipment Detail Drawer */}
       <EquipmentDetailDrawer
         equipment={drawerEquipment!}
