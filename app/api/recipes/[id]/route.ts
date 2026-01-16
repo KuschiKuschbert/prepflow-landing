@@ -121,7 +121,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       success: true,
       recipe: updatedRecipe,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Recipes API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,

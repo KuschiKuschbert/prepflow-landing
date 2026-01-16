@@ -17,9 +17,9 @@ export async function handleAddSupplierHelper(
   const originalSuppliers = [...suppliers];
 
   // Create temporary supplier for optimistic update
-  const tempId = `temp-${Date.now()}`;
+  const tempId = -Date.now();
   const tempSupplier: Supplier = {
-    id: tempId as unknown, // Temporary ID, will be replaced by server
+    id: tempId, // Temporary ID, will be replaced by server
     name: newSupplier.name,
     contact_person: newSupplier.contact_person || null,
     email: newSupplier.email || null,
@@ -74,7 +74,7 @@ export async function handleAddSupplierHelper(
       };
       // Replace temp supplier with real supplier from server
       setSuppliers(prevSuppliers =>
-        prevSuppliers.map(s => (String(s.id) === tempId ? serverSupplier : s)),
+        prevSuppliers.map(s => (s.id === tempId ? serverSupplier : s)),
       );
       cacheData('suppliers', [...originalSuppliers, serverSupplier]);
     } else {

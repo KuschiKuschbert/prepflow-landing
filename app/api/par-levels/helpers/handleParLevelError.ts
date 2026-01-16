@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server';
  * @param {string} method - HTTP method
  * @returns {NextResponse} Error response
  */
-export function handleParLevelError(err: Error | any, method: string): NextResponse {
+export function handleParLevelError(err: Error | unknown, method: string): NextResponse {
   const errorMessage = err instanceof Error ? err.message : String(err);
   const errorStack = err instanceof Error ? err.stack : undefined;
   const errorCode = (err as any)?.code;

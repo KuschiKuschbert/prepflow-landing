@@ -29,7 +29,7 @@ export function detectMissingColumns(error: unknown): ColumnErrorInfo {
     };
   }
 
-  const err = error as Record<string, any>;
+  const err = error as any;
   const errorCode = err.code;
   const errorMessage = err.message || '';
   const errorDetails = err.details || '';

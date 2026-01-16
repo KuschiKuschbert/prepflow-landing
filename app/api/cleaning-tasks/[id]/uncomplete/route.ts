@@ -67,7 +67,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     if (error) {
       logger.error('[Cleaning Tasks API] Database error removing completion:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: {
           endpoint: '/api/cleaning-tasks/[id]/uncomplete',
           operation: 'POST',
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       });
 
       // Handle missing table gracefully
-      if ((error as any).code === '42P01') {
+      if (error.code === '42P01') {
         return NextResponse.json(
           ApiErrorHandler.createError(
             'Completion table does not exist. Please run database migration.',
@@ -95,10 +95,10 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       success: true,
       message: 'Task completion removed',
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Cleaning Tasks API] Error in uncomplete endpoint:', err);
-    if (err && typeof err === 'object' && 'status' in err) {
-      return NextResponse.json(err, { status: err.status || 500 });
+    if (err && typeof err === 'object' && 'status' in err && typeof (err as { status: unknown }).status === 'number') {
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
     }
     return NextResponse.json(
       ApiErrorHandler.createError('Internal server error', 'INTERNAL_ERROR', 500),

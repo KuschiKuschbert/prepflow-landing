@@ -111,7 +111,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
 
     interface RawRecipeIngredientJoin {
       ingredient_id: string;
-      quantity: any; // quantity can be number or string from DB depending on driver, simplified here or needs stricter check
+      quantity: number; // quantity can be number or string from DB depending on driver, simplified here or needs stricter check
       unit: string;
       ingredients: {
         id: string;
@@ -146,8 +146,8 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
             ingredient_id: ingredient.id,
             ingredient_name: ingredient.ingredient_name,
             brand: ingredient.brand || undefined,
-            quantity: ri.quantity || undefined,
-            unit: ri.unit || undefined,
+            quantity: (ri as any).quantity || undefined,
+            unit: (ri as any).unit || undefined,
             allergen_source: ingredient.allergen_source || undefined,
           });
         }
@@ -167,7 +167,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
       success: true,
       data: {
         recipe_id: recipeId,
-        recipe_name: recipe.recipe_name || recipe.name,
+        recipe_name: (recipe as any).recipe_name || (recipe as any).name,
         allergen_sources: allergenSourcesArray,
         total_allergens: Array.from(allAllergens).sort(),
       },

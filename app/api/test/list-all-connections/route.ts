@@ -3,10 +3,10 @@
  * Diagnostic endpoint to list ALL connections (not just social)
  * Helps identify what connections actually exist in Auth0
  */
-import { NextResponse } from 'next/server';
-import { ManagementClient } from 'auth0';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { ManagementClient } from 'auth0';
+import { NextResponse } from 'next/server';
 
 function getManagementClient(): ManagementClient | null {
   const issuerBaseUrl = process.env.AUTH0_ISSUER_BASE_URL;
@@ -49,7 +49,7 @@ export async function GET() {
     const connectionsResponse = await client.connections.getAll();
     const connections = Array.isArray(connectionsResponse)
       ? connectionsResponse
-      : (connectionsResponse as any)?.data || [];
+      : (connectionsResponse as { data?: unknown[] })?.data || [];
 
     if (!connections || !Array.isArray(connections)) {
       return NextResponse.json({
@@ -62,28 +62,39 @@ export async function GET() {
 
     const applicationClientId = process.env.AUTH0_CLIENT_ID;
 
-    const allConnections = connections.map((conn: any) => ({
-      id: conn.id,
-      name: conn.name,
-      strategy: conn.strategy,
-      enabled: conn.enabled_clients?.includes(applicationClientId) || false,
-      enabledClients: conn.enabled_clients || [],
-      isDomainConnection: conn.is_domain_connection || false,
-      options: conn.options ? Object.keys(conn.options) : [],
-    }));
+    const allConnections = connections.map((c: unknown) => {
+      const conn = c as {
+        id: string;
+        name: string;
+        strategy: string;
+        enabled_clients?: string[];
+        is_domain_connection?: boolean;
+        options?: Record<string, unknown>;
+      };
+      return {
+        id: conn.id,
+        name: conn.name,
+        strategy: conn.strategy,
+        enabled: conn.enabled_clients?.includes(applicationClientId || '') || false,
+        enabledClients: conn.enabled_clients || [],
+        isDomainConnection: conn.is_domain_connection || false,
+        options: conn.options ? Object.keys(conn.options) : [],
+      };
+    });
 
     // Filter for Apple and Microsoft specifically
     // Check both strategy and name (connection parameter might use name, not strategy)
     const appleConnections = allConnections.filter(
-      (conn: any) => conn.strategy === 'apple' || conn.name?.toLowerCase().includes('apple'),
+      (conn: { strategy: string; name?: string }) =>
+        conn.strategy === 'apple' || (conn.name || '').toLowerCase().includes('apple'),
     );
     const microsoftConnections = allConnections.filter(
-      (conn: any) =>
+      (conn: { strategy: string; name?: string }) =>
         conn.strategy === 'windowslive' ||
         conn.strategy === 'waad' ||
         conn.strategy === 'microsoft-account' ||
-        conn.name?.toLowerCase().includes('microsoft') ||
-        conn.name?.toLowerCase().includes('windows'),
+        (conn.name || '').toLowerCase().includes('microsoft') ||
+        (conn.name || '').toLowerCase().includes('windows'),
     );
 
     return NextResponse.json({
@@ -99,12 +110,15 @@ export async function GET() {
         found: microsoftConnections.length,
         connections: microsoftConnections,
       },
-      allConnections: allConnections.map((conn: any) => ({
-        id: conn.id,
-        name: conn.name,
-        strategy: conn.strategy,
-        enabled: conn.enabled,
-      })),
+      allConnections: allConnections.map((c: unknown) => {
+        const conn = c as { id: string; name: string; strategy: string; enabled: boolean };
+        return {
+          id: conn.id,
+          name: conn.name,
+          strategy: conn.strategy,
+          enabled: conn.enabled,
+        };
+      }),
     });
   } catch (error) {
     logger.error('[Auth0 Connections] Failed to list connections:', error);

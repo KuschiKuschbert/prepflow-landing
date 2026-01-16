@@ -4,11 +4,11 @@
  * Returns all recipes containing a specific allergen
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { batchAggregateRecipeAllergens } from '@/lib/allergens/allergen-aggregation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { batchAggregateRecipeAllergens } from '@/lib/allergens/allergen-aggregation';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Gets all recipes containing a specific allergen.
@@ -45,7 +45,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ co
       logger.error('[Allergen Cross-Reference API] Error fetching recipes:', {
         allergenCode: code,
         error: fetchError.message,
-        code: (fetchError as any).code,
+        code: fetchError.code,
       });
       return NextResponse.json(
         ApiErrorHandler.createError('Failed to fetch recipes', 'DATABASE_ERROR', 500),
@@ -71,7 +71,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ co
     // Filter recipes that contain the allergen
     const recipesWithAllergen = recipes
       .map(recipe => {
-        const recipeName = (recipe as any).recipe_name || (recipe as any).name;
+        const recipeName = recipe.recipe_name || recipe.name;
         const cachedAllergens = recipe.allergens as string[] | null | undefined;
         const aggregatedAllergens = allergensByRecipe[recipe.id] || [];
 

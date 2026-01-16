@@ -17,7 +17,7 @@ export async function deleteTier(
   tierSlug: string,
   adminUser: AdminUser,
   request: NextRequest,
-): Promise<{ tier: any } | NextResponse> {
+): Promise<{ tier: unknown } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503),

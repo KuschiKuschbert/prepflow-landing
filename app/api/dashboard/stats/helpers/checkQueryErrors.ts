@@ -2,7 +2,7 @@ import { logger } from '@/lib/logger';
 
 interface QueryResult {
   error?: { message: string; code?: string } | null;
-  data?: any;
+  data?: unknown;
   count?: number | null;
 }
 
@@ -17,7 +17,7 @@ export function checkQueryErrors(results: QueryResult[], names: string[]): void 
     if (result.error) {
       logger.error(`[Dashboard Stats API] Error fetching ${names[index]}:`, {
         error: result.error.message,
-        code: (result.error as any).code,
+        code: result.error.code,
         context: { endpoint: '/api/dashboard/stats', operation: 'GET' },
       });
     }

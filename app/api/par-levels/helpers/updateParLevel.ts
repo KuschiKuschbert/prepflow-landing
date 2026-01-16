@@ -11,7 +11,7 @@ import { buildParLevelData } from './buildParLevelData';
  * @returns {Promise<Object>} Updated par level with ingredient data
  * @throws {Error} If update fails
  */
-export async function updateParLevel(id: string, updates: any) {
+export async function updateParLevel(id: string, updates: unknown) {
   const supabaseAdmin = createSupabaseAdmin();
 
   // Check if par level exists

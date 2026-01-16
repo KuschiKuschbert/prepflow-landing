@@ -5,8 +5,8 @@
 export interface RecipeChangeDetails {
   yield?: {
     field: string;
-    before: any;
-    after: any;
+    before: unknown;
+    after: unknown;
     change: string;
   };
   instructions?: {

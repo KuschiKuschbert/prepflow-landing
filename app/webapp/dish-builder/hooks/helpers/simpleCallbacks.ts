@@ -1,4 +1,5 @@
-import { removeCalculation, clearCalculations } from '../utils/ingredientManagement';
+import { COGSCalculation } from '../../../cogs/types';
+import { clearCalculations, removeCalculation } from '../utils/ingredientManagement';
 
 /**
  * Create simple calculation callbacks.
@@ -8,7 +9,7 @@ import { removeCalculation, clearCalculations } from '../utils/ingredientManagem
  * @returns {Object} Simple callbacks
  */
 export function createSimpleCallbacks(
-  setCalculations: React.Dispatch<React.SetStateAction<unknown[]>>,
+  setCalculations: React.Dispatch<React.SetStateAction<COGSCalculation[]>>,
 ) {
   const removeCalculationCallback = (ingredientId: string) =>
     removeCalculation(setCalculations, ingredientId);

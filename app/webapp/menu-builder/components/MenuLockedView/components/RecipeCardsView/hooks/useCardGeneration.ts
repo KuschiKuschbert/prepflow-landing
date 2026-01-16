@@ -40,7 +40,9 @@ export function useCardGeneration({ menuId, onSuccess }: UseCardGenerationOption
           data,
         });
         const errorMsg =
-          data.message || data.error || `Failed to generate recipe cards (${response.status})`;
+          (data as any).message ||
+          (data as any).error ||
+          `Failed to generate recipe cards (${response.status})`;
         throw new Error(errorMsg);
       }
 

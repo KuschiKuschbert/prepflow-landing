@@ -9,7 +9,7 @@ import { logger } from '@/lib/logger';
 export async function checkShift(
   shiftId: string,
   employeeId: string,
-): Promise<{ shift: any } | NextResponse> {
+): Promise<{ shift: unknown } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

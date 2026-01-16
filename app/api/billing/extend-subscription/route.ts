@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
       logger.warn('[Billing API] User has no active subscription:', {
         userEmail,
         error: userError?.message,
-        code: (userError as any)?.code,
+        code: userError?.code,
       });
       return NextResponse.json(
         ApiErrorHandler.createError('No active subscription found', 'SUBSCRIPTION_NOT_FOUND', 404),

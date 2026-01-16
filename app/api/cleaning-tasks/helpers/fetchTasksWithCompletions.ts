@@ -18,12 +18,12 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 export async function fetchTasksWithCompletions(
   startDate: string,
   endDate: string,
-  query: any,
-): Promise<any[]> {
-  const { data: tasks, error: tasksError } = await query;
+  query: unknown,
+): Promise<unknown[]> {
+  const { data: tasks, error: tasksError } = await (query as any);
 
   if (tasksError) {
-    const errorCode = (tasksError as any).code;
+    const errorCode = tasksError.code;
 
     if (errorCode === '42P01') {
       logger.dev('[Cleaning Tasks API] Table does not exist, returning empty array');
@@ -57,10 +57,10 @@ export async function fetchTasksWithCompletions(
 
   const { data: completions, error: completionsError } = await completionsQuery;
 
-  if (completionsError && (completionsError as any).code !== '42P01') {
+  if (completionsError && completionsError.code !== '42P01') {
     logger.error('[Cleaning Tasks API] Database error fetching completions:', {
       error: completionsError.message,
-      code: (completionsError as any).code,
+      code: completionsError.code,
     });
   }
 

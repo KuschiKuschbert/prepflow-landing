@@ -53,7 +53,7 @@ export async function handleGetRequest(params: GetRequestParams): Promise<NextRe
         data: tasksWithCompletions,
         total: tasksWithCompletions.length,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('[handleGetRequest.ts] Error in catch block:', {
         error: err instanceof Error ? err.message : String(err),
         stack: err instanceof Error ? err.stack : undefined,
@@ -73,7 +73,7 @@ export async function handleGetRequest(params: GetRequestParams): Promise<NextRe
       data,
       total,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[handleGetRequest.ts] Error in catch block:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,

@@ -4,8 +4,8 @@
 import type { Menu } from '../../../../types';
 
 interface EditingRefs {
-  titleEditingRef: React.MutableRefObject<unknown>;
-  descriptionEditingRef: React.MutableRefObject<unknown>;
+  titleEditingRef: React.MutableRefObject<any>;
+  descriptionEditingRef: React.MutableRefObject<any>;
 }
 
 export function createHandlers(refs: EditingRefs) {

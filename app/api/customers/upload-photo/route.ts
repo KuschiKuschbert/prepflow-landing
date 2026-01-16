@@ -128,10 +128,10 @@ export async function POST(request: NextRequest) {
         path: filePath,
       },
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Customers API] Photo upload error:', err);
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as { status: number }).status });
     }
     return NextResponse.json(
       ApiErrorHandler.createError('Failed to upload photo', 'UPLOAD_ERROR', 500),

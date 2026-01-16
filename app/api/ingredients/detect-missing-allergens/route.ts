@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     if (fetchError) {
       logger.error('[Detect Missing Allergens API] Error fetching ingredients:', {
         error: fetchError.message,
-        code: (fetchError as any).code,
+        code: fetchError.code,
       });
       return NextResponse.json(
         ApiErrorHandler.createError('Failed to fetch ingredients', 'DATABASE_ERROR', 500),

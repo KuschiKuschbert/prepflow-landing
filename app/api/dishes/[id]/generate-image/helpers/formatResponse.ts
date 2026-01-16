@@ -12,7 +12,7 @@
 export function formatImageResponse(
   generatedImages: Record<string, string | null>,
   updateData: Record<string, string>,
-): Record<string, any> {
+): Record<string, unknown> {
   return {
     success: true,
     // Return all generated methods dynamically

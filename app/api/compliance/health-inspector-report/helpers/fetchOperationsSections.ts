@@ -1,5 +1,5 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 /**
  * Fetch waste management logs.
@@ -22,7 +22,7 @@ export async function fetchWasteManagement(startDate: string, endDate: string) {
   if (wasteError) {
     logger.warn('[Health Inspector Report] Error fetching waste management logs:', {
       error: wasteError.message,
-      code: (wasteError as any).code,
+      code: wasteError.code,
     });
   }
 
@@ -30,10 +30,10 @@ export async function fetchWasteManagement(startDate: string, endDate: string) {
   return {
     logs: logs,
     total_logs: logs.length,
-    by_type: logs.reduce((acc: any, l) => {
-      acc[l.waste_type] = (acc[l.waste_type] || 0) + 1;
+    by_type: logs.reduce((acc: Record<string, number>, l) => {
+      acc[l.waste_type as string] = (acc[l.waste_type as string] || 0) + 1;
       return acc;
-    }, {}),
+    }, {} as Record<string, number>),
   };
 }
 
@@ -63,10 +63,10 @@ export async function fetchProcedures() {
       if (!p.next_review_date) return false;
       return new Date(p.next_review_date) < new Date();
     }),
-    by_type: procedureList.reduce((acc: any, p) => {
-      acc[p.procedure_type] = (acc[p.procedure_type] || 0) + 1;
+    by_type: procedureList.reduce((acc: Record<string, number>, p) => {
+      acc[p.procedure_type as string] = (acc[p.procedure_type as string] || 0) + 1;
       return acc;
-    }, {}),
+    }, {} as Record<string, number>),
   };
 }
 

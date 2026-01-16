@@ -5,11 +5,8 @@
 
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-<<<<<<< HEAD
 import { DishIngredient, DishRecipe } from '@/types/dish';
-=======
-import { DishRelationIngredient, DishRelationRecipe } from '../../../helpers/schemas';
->>>>>>> main
+
 import { fetchDishIngredients } from '../../helpers/fetchDishIngredients';
 import { fetchDishRecipes } from '../../helpers/fetchDishRecipes';
 
@@ -29,22 +26,16 @@ export async function aggregateDishIngredients(dishId: string): Promise<{
   recipeInstructions: string[];
 }> {
   // Fetch dish ingredients using helper function
-<<<<<<< HEAD
   let dishIngredients: DishIngredient[] = [];
-=======
-  let dishIngredients: DishRelationIngredient[] = [];
->>>>>>> main
+
   try {
     dishIngredients = await fetchDishIngredients(dishId);
     logger.dev('[Dish Image Generation] Fetched dish ingredients:', {
       dishId,
       count: dishIngredients.length,
       ingredients: dishIngredients.map(di => ({
-<<<<<<< HEAD
         ingredientName: di.ingredient?.ingredient_name,
-=======
-        ingredientName: di.ingredients?.ingredient_name,
->>>>>>> main
+
         quantity: di.quantity,
         unit: di.unit,
       })),
@@ -57,11 +48,8 @@ export async function aggregateDishIngredients(dishId: string): Promise<{
   }
 
   // Fetch dish recipes using helper function
-<<<<<<< HEAD
   let dishRecipes: DishRecipe[] = [];
-=======
-  let dishRecipes: DishRelationRecipe[] = [];
->>>>>>> main
+
   let recipeInstructions: string[] = [];
   try {
     dishRecipes = await fetchDishRecipes(dishId);
@@ -73,11 +61,8 @@ export async function aggregateDishIngredients(dishId: string): Promise<{
 
     // Collect instructions from all recipes
     dishRecipes.forEach(dr => {
-<<<<<<< HEAD
       const recipe = dr.recipe;
-=======
-      const recipe = dr.recipes;
->>>>>>> main
+
       if (recipe?.instructions && recipe.instructions.trim().length > 0) {
         recipeInstructions.push(recipe.instructions.trim());
       }
@@ -152,15 +137,10 @@ export async function aggregateDishIngredients(dishId: string): Promise<{
 
   // Add direct dish ingredients
   dishIngredients.forEach(di => {
-<<<<<<< HEAD
     const ingredient = di.ingredient as Record<string, any> | undefined;
     if (ingredient) {
       const name = ingredient.ingredient_name || ingredient.name;
-=======
-    const ingredient = di.ingredients;
-    if (ingredient && typeof ingredient === 'object' && ingredient !== null) {
-      const name = ingredient.ingredient_name;
->>>>>>> main
+
       if (name && typeof name === 'string') {
         ingredientNamesSet.add(name);
       }

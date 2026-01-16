@@ -3,7 +3,7 @@
  */
 
 export function deduplicateDishes<
-  T extends { name?: string; created_at?: string; sales_data?: any[] },
+  T extends { name?: string; created_at?: string; sales_data?: any[] | null },
 >(dishes: T[]): T[] {
   return dishes.reduce((acc: T[], dish: T) => {
     // If name is missing, keep it (safer default)
@@ -24,6 +24,6 @@ export function deduplicateDishes<
   }, [] as T[]);
 }
 
-export function filterDishesWithSales<T extends { sales_data?: any[] }>(dishes: T[]): T[] {
+export function filterDishesWithSales<T extends { sales_data?: any[] | null }>(dishes: T[]): T[] {
   return dishes.filter(dish => dish.sales_data && dish.sales_data.length > 0);
 }

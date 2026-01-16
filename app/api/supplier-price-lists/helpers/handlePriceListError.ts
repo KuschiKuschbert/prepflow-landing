@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server';
  * @param {string} operation - Operation name (GET, POST, PUT, DELETE)
  * @returns {NextResponse} Error response
  */
-export function handlePriceListError(error: Error | any, operation: string): NextResponse {
+export function handlePriceListError(error: Error | unknown, operation: string): NextResponse {
   logger.error(`[Supplier Price Lists API] ${operation} error:`, {
     error: error instanceof Error ? error.message : String(error),
     stack: error instanceof Error ? error.stack : undefined,

@@ -66,13 +66,7 @@ export async function GET(request: NextRequest) {
       data: data || [],
     });
   } catch (err: unknown) {
-<<<<<<< HEAD
-=======
-    logger.error('[Compliance Records API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      context: { endpoint: '/api/compliance-records', method: 'GET' },
-    });
->>>>>>> main
+
     return handleComplianceError(err, 'GET');
   }
 }

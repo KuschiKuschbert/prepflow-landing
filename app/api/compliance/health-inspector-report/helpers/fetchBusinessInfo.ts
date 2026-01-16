@@ -33,7 +33,7 @@ export async function fetchBusinessInfo() {
   if (complianceError) {
     logger.warn('[Health Inspector Report] Error fetching compliance records:', {
       error: complianceError.message,
-      code: (complianceError as any).code,
+      code: complianceError.code,
     });
     return null;
   }

@@ -100,7 +100,7 @@ export async function testManagementAPI(results: TestResults): Promise<void> {
     });
 
     const appResponse = await managementClient.clients.get({ client_id: auth0ClientId });
-    const app = appResponse.data || (appResponse as any);
+    const app = appResponse.data || (appResponse as unknown);
     addTest(
       results,
       'Auth0 Management API',

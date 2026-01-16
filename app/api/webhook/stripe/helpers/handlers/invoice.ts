@@ -1,10 +1,10 @@
 import { clearTierCache } from '@/lib/feature-gate';
 import { logger } from '@/lib/logger';
-import { extractTierFromStripe } from '@/lib/webhook-helpers';
 import { subscriptionNotifications } from '@/lib/subscription-notifications';
-import type { TierSlug } from '@/lib/tier-config';
-import type Stripe from 'stripe';
 import { supabaseAdmin } from '@/lib/supabase';
+import type { TierSlug } from '@/lib/tier-config';
+import { extractTierFromStripe } from '@/lib/webhook-helpers';
+import type Stripe from 'stripe';
 import { getUserEmailFromInvoice } from '../getUserEmail';
 import { updateUserSubscription } from '../updateSubscription';
 
@@ -26,7 +26,7 @@ export async function handleInvoicePaymentSucceeded(
   }
 
   // Ensure subscription remains active
-  const subscriptionId = (invoice as any).subscription;
+  const subscriptionId = (invoice as unknown as { subscription: string | { id: string } }).subscription;
   if (subscriptionId) {
     const subscriptionIdStr =
       typeof subscriptionId === 'string' ? subscriptionId : subscriptionId.id;

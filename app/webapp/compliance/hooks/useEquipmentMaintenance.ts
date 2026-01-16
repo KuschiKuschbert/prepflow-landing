@@ -1,9 +1,10 @@
 'use client';
 
-import { useCallback } from 'react';
-import { logger } from '@/lib/logger';
 import { useNotification } from '@/contexts/NotificationContext';
 import { cacheData } from '@/lib/cache/data-cache';
+import { logger } from '@/lib/logger';
+import { useCallback } from 'react';
+import type { EquipmentMaintenanceRecord } from '../components/EquipmentMaintenanceList';
 import { useEquipmentFetch } from './useEquipmentMaintenance/useEquipmentFetch';
 import { useEquipmentForm } from './useEquipmentMaintenance/useEquipmentForm';
 
@@ -35,7 +36,7 @@ export function useEquipmentMaintenance() {
       };
 
       // Optimistically add to UI immediately
-      const updatedRecords = [tempRecord as unknown, ...records];
+      const updatedRecords = [tempRecord as unknown as EquipmentMaintenanceRecord, ...records];
       setRecords(updatedRecords);
       resetForm();
 

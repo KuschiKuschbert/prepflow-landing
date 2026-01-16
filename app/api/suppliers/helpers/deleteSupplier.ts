@@ -20,7 +20,7 @@ export async function deleteSupplier(id: string): Promise<void> {
   if (error) {
     logger.error('[Suppliers API] Database error deleting supplier:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: { endpoint: '/api/suppliers', operation: 'DELETE', supplierId: id },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

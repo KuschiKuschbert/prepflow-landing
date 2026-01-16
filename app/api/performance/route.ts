@@ -3,7 +3,6 @@ import { evaluateGate } from '@/lib/feature-gate';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { handlePerformanceError } from './helpers/handlePerformanceError';
 import { processPerformanceData } from './helpers/processPerformanceData';
 import { upsertSalesData } from './helpers/upsertSalesData';
@@ -175,13 +174,13 @@ export async function POST(request: NextRequest) {
       data,
       message: 'Sales data updated successfully',
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Performance API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/performance', method: 'POST' },
     });
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
+    if ((err as any).status) {
+      return NextResponse.json(err, { status: (err as any).status });
     }
     return handlePerformanceError(err, 'POST');
   }

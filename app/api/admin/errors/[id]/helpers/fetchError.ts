@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server';
  * @param {string} errorId - The ID of the error log to fetch.
  * @returns {Promise<{ errorLog: any } | NextResponse>} Error log data or error response.
  */
-export async function fetchError(errorId: string): Promise<{ errorLog: any } | NextResponse> {
+export async function fetchError(errorId: string): Promise<{ errorLog: unknown } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

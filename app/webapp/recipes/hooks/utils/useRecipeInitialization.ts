@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Recipe } from '../../types';
+import { Recipe, RecipeIngredientWithDetails } from '../../types';
 import { initializeRecipes } from './initializeRecipes';
 import { precalculatePrices } from './precalculatePrices';
 
@@ -22,11 +22,15 @@ export function useRecipeInitialization({
   pricesCalculatedRef: React.MutableRefObject<Set<string>>;
   updateVisibleRecipePrices: (
     recipes: Recipe[],
-    fetchRecipeIngredients: (recipeId: string) => Promise<unknown[]>,
-    fetchBatchRecipeIngredients?: (recipeIds: string[]) => Promise<Record<string, unknown[]>>,
+    fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>,
+    fetchBatchRecipeIngredients?: (
+      recipeIds: string[],
+    ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
   ) => Promise<void>;
-  fetchRecipeIngredients: (recipeId: string) => Promise<unknown[]>;
-  fetchBatchRecipeIngredients: (recipeIds: string[]) => Promise<Record<string, unknown[]>>;
+  fetchRecipeIngredients: (recipeId: string) => Promise<RecipeIngredientWithDetails[]>;
+  fetchBatchRecipeIngredients: (
+    recipeIds: string[],
+  ) => Promise<Record<string, RecipeIngredientWithDetails[]>>;
   fetchRecipes: () => Promise<void>;
 }): void {
   const initializedRef = useRef(false);

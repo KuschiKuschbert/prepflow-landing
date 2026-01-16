@@ -1,5 +1,5 @@
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
 
 /**
  * Fetch par level with ingredient join, with fallback to separate fetch.

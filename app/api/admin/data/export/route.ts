@@ -1,7 +1,7 @@
 import { requireAdmin } from '@/lib/admin-auth';
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import Papa from 'papaparse';
 
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     const tablesToSearch =
       table === 'all' ? ['ingredients', 'recipes', 'dishes', 'users'] : [table];
 
-    const allData: any[] = [];
+    const allData: unknown[] = [];
 
     for (const tableName of tablesToSearch) {
       try {
@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
 
         const { data } = await searchQuery;
         if (data) {
-          allData.push(...data.map((item: any) => ({ ...item, _table: tableName })));
+          allData.push(...data.map((item: unknown) => ({ ...(item as Record<string, unknown>), _table: tableName })));
         }
       } catch (error) {
         logger.warn(`[Admin Data Export] Error exporting ${tableName}:`, error);
@@ -65,8 +65,9 @@ export async function GET(request: NextRequest) {
       }
 
       // Normalize data for CSV export (handle objects and nulls)
-      const normalizedData = allData.map(row => {
-        const normalized: Record<string, any> = {};
+      const normalizedData = allData.map(rowUnknown => {
+        const row = rowUnknown as Record<string, unknown>;
+        const normalized: Record<string, unknown> = {};
         Object.keys(row).forEach(key => {
           const value = row[key];
           if (value === null || value === undefined) {

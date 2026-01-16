@@ -38,14 +38,8 @@ export async function GET(req: NextRequest) {
       error: e instanceof Error ? e.message : String(e),
       stack: e instanceof Error ? e.stack : undefined,
     });
-    if (
-      e &&
-      typeof e === 'object' &&
-      'status' in e &&
-      'json' in e &&
-      typeof (e as any).json === 'function'
-    ) {
-      return e as NextResponse;
+    if (e instanceof NextResponse) {
+      return e;
     }
     return NextResponse.json(
       ApiErrorHandler.createError('Failed to check ingredient existence', 'SERVER_ERROR', 500),

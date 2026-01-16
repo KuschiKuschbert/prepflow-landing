@@ -48,13 +48,13 @@ export async function handleUpdateSupplier(request: NextRequest) {
       message: 'Supplier updated successfully',
       data,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Suppliers API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/suppliers', method: 'PUT' },
     });
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
+    if (err && typeof err === "object" && "status" in err) {
+      return NextResponse.json(err, { status: (err as any).status });
     }
     return handleSupplierError(err, 'PUT');
   }

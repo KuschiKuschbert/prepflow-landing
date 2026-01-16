@@ -18,7 +18,7 @@ export interface MenuItem {
   description: string | null;
   price: number;
   currency: string;
-  dietary_info: Record<string, any> | null;
+  dietary_info: Record<string, unknown> | null;
   is_available: boolean;
   sort_order: number;
   image_url: string | null;

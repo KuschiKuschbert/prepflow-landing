@@ -1,7 +1,7 @@
 import { requireAdmin } from '@/lib/admin-auth';
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
     if (errorsQueryError) {
       logger.warn('[Admin System Health API] Error fetching recent errors count:', {
         error: errorsQueryError.message,
-        code: (errorsQueryError as any).code,
+        code: errorsQueryError.code,
       });
     }
 

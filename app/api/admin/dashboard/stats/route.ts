@@ -2,6 +2,7 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -28,7 +29,7 @@ export async function GET(request: NextRequest) {
     if (usersError) {
       logger.warn('[Admin Dashboard Stats] Error fetching total users count:', {
         error: usersError.message,
-        code: (usersError as any).code,
+        code: (usersError as PostgrestError).code,
       });
     }
 
@@ -41,7 +42,7 @@ export async function GET(request: NextRequest) {
     if (subscriptionsError) {
       logger.warn('[Admin Dashboard Stats] Error fetching active subscriptions count:', {
         error: subscriptionsError.message,
-        code: (subscriptionsError as any).code,
+        code: (subscriptionsError as PostgrestError).code,
       });
     }
 
@@ -55,7 +56,7 @@ export async function GET(request: NextRequest) {
     if (criticalErrorsQueryError) {
       logger.warn('[Admin Dashboard Stats] Error fetching critical errors count:', {
         error: criticalErrorsQueryError.message,
-        code: (criticalErrorsQueryError as any).code,
+        code: (criticalErrorsQueryError as PostgrestError).code,
       });
     }
 
@@ -68,7 +69,7 @@ export async function GET(request: NextRequest) {
     if (ticketsError) {
       logger.warn('[Admin Dashboard Stats] Error fetching unresolved tickets count:', {
         error: ticketsError.message,
-        code: (ticketsError as any).code,
+        code: (ticketsError as PostgrestError).code,
       });
     }
 
@@ -84,7 +85,7 @@ export async function GET(request: NextRequest) {
     if (safetyErrorsError) {
       logger.warn('[Admin Dashboard Stats] Error fetching recent safety errors:', {
         error: safetyErrorsError.message,
-        code: (safetyErrorsError as any).code,
+        code: (safetyErrorsError as PostgrestError).code,
       });
     }
 
@@ -99,7 +100,7 @@ export async function GET(request: NextRequest) {
     if (recentErrorsQueryError) {
       logger.warn('[Admin Dashboard Stats] Error fetching recent errors count:', {
         error: recentErrorsQueryError.message,
-        code: (recentErrorsQueryError as any).code,
+        code: (recentErrorsQueryError as PostgrestError).code,
       });
     }
 
@@ -115,7 +116,7 @@ export async function GET(request: NextRequest) {
         if (tableError) {
           logger.warn(`[Admin Dashboard Stats] Error counting records in ${table}:`, {
             error: tableError.message,
-            code: (tableError as any).code,
+            code: (tableError as PostgrestError).code,
           });
         } else {
           totalDataRecords += count || 0;

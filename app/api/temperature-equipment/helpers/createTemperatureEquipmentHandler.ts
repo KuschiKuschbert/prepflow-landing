@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 import { detectTemperatureThresholds } from './detectTemperatureThresholds';
 import { handleTemperatureEquipmentError } from './handleTemperatureEquipmentError';
 import { createTemperatureEquipmentSchema } from './schemas';
@@ -92,7 +92,7 @@ export async function handleCreateTemperatureEquipment(request: NextRequest) {
     if (error) {
       logger.error('[Temperature Equipment API] Database error creating equipment:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: {
           endpoint: '/api/temperature-equipment',
           operation: 'POST',
@@ -105,13 +105,13 @@ export async function handleCreateTemperatureEquipment(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true, data });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Temperature Equipment API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/temperature-equipment', method: 'POST' },
     });
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as any).status });
     }
     return handleTemperatureEquipmentError(err, 'POST');
   }

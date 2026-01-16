@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { prefetchApis } from '@/lib/cache/data-cache';
 import { TemperatureEquipment, TemperatureLog } from '../types';
 import { useTemperatureLogsQuery } from './useTemperatureLogsQuery';
+import type { TemperatureLogsResponse } from './useTemperatureLogsQuery';
 import { logger } from '@/lib/logger';
 import { fetchAllLogsHelper } from './useTemperaturePageData/helpers/fetchAllLogs';
 import { fetchEquipmentHelper } from './useTemperaturePageData/helpers/fetchEquipment';
@@ -60,6 +61,8 @@ export function useTemperaturePageData(activeTab: 'logs' | 'equipment' | 'analyt
       if (allLogs.length === 0 || isStale) fetchAllLogs(1000, isStale).catch(() => {});
     }
   }, [activeTab, allLogs.length, lastAnalyticsFetch, analyticsLoading, fetchAllLogs]);
+  const typedLogsData = logsData as TemperatureLogsResponse | undefined;
+
   return {
     logs,
     allLogs,
@@ -74,8 +77,8 @@ export function useTemperaturePageData(activeTab: 'logs' | 'equipment' | 'analyt
     setSelectedType,
     page,
     setPage,
-    total: (logsData as unknown)?.total || 0,
-    totalPages: Math.max(1, Math.ceil(((logsData as unknown)?.total || 0) / pageSize)),
+    total: typedLogsData?.total || 0,
+    totalPages: Math.max(1, Math.ceil((typedLogsData?.total || 0) / pageSize)),
     pageSize,
     fetchAllLogs,
     fetchEquipment,

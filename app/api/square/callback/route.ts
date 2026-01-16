@@ -6,14 +6,13 @@
  * comprehensive OAuth setup and usage guide.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getUserFromRequest } from '@/lib/auth0-api-helpers';
-import { handleSquareCallback } from '@/lib/square/oauth-flow';
-import { isSquarePOSEnabled } from '@/lib/square/feature-flags';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { logger } from '@/lib/logger';
 import { getDetectedBaseUrl } from '@/lib/auth0';
+import { getUserFromRequest } from '@/lib/auth0-api-helpers';
+import { logger } from '@/lib/logger';
+import { isSquarePOSEnabled } from '@/lib/square/feature-flags';
+import { handleSquareCallback } from '@/lib/square/oauth-flow';
 import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 
 async function getUserIdFromEmail(email: string): Promise<string | null> {
   if (!supabaseAdmin) return null;

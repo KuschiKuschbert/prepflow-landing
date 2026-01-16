@@ -19,7 +19,7 @@ export async function updateTier(
   updates: Record<string, unknown>,
   adminUser: AdminUser,
   request: NextRequest,
-): Promise<{ tier: any } | NextResponse> {
+): Promise<{ tier: unknown } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503),
@@ -37,7 +37,7 @@ export async function updateTier(
   if (currentDataError && currentDataError.code !== 'PGRST116') {
     logger.warn('[Admin Tiers] Error fetching current tier config:', {
       error: currentDataError.message,
-      code: (currentDataError as any).code,
+      code: currentDataError.code,
       tierSlug,
     });
   }

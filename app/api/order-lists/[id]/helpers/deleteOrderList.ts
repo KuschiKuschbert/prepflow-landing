@@ -4,7 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 
 export async function deleteOrderList(
   id: string,
-): Promise<{ success: boolean; message: string } | { error: any; status: number }> {
+): Promise<{ success: boolean; message: string } | { error: unknown; status: number }> {
   if (!supabaseAdmin) {
     return {
       error: ApiErrorHandler.createError(

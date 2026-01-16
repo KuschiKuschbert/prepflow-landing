@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Templates API] Database error fetching templates:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: { endpoint: '/api/roster/templates', operation: 'GET', table: 'roster_templates' },
       });
 
@@ -143,7 +143,7 @@ export async function POST(request: NextRequest) {
     if (insertError) {
       logger.error('[Templates API] Database error creating template:', {
         error: insertError.message,
-        code: (insertError as any).code,
+        code: insertError.code,
         context: { endpoint: '/api/roster/templates', operation: 'POST', templateName: name },
       });
 

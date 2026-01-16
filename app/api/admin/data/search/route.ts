@@ -1,7 +1,7 @@
 import { requireAdmin } from '@/lib/admin-auth';
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const results: any[] = [];
+    const results: unknown[] = [];
     const tablesToSearch =
       table === 'all'
         ? ['ingredients', 'recipes', 'dishes', 'users', 'temperature_logs', 'cleaning_tasks']
@@ -68,12 +68,15 @@ export async function GET(request: NextRequest) {
 
         if (data) {
           results.push(
-            ...data.map((item: any) => ({
-              table: tableName,
-              id: item.id,
-              data: item,
-              created_at: item.created_at,
-            })),
+            ...data.map((itemUnknown: unknown) => {
+              const item = itemUnknown as Record<string, unknown>;
+              return {
+                table: tableName,
+                id: item.id,
+                data: item,
+                created_at: item.created_at,
+              };
+            }),
           );
         }
       } catch (error) {

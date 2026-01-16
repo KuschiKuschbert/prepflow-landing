@@ -8,7 +8,7 @@ import { buildUpdateData } from './buildUpdateData';
 /**
  * Update template by ID
  */
-export async function updateTemplate(templateId: string, body: any): Promise<NextResponse> {
+export async function updateTemplate(templateId: string, body: unknown): Promise<NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
@@ -36,7 +36,7 @@ export async function updateTemplate(templateId: string, body: any): Promise<Nex
   if (updateError) {
     logger.error('[Templates API] Database error updating template:', {
       error: updateError.message,
-      code: (updateError as any).code,
+      code: updateError.code,
       context: { endpoint: '/api/roster/templates/[id]', operation: 'PUT', templateId },
     });
 

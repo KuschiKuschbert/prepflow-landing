@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(ApiErrorHandler.fromSupabaseError(error, 500), { status: 500 });
     }
     return NextResponse.json({ success: true, exists: (data || []).length > 0 });
-  } catch (e: any) {
+  } catch (e: unknown) {
     logger.error('[Recipes API] Unexpected error checking recipe existence:', {
       error: e instanceof Error ? e.message : String(e),
       stack: e instanceof Error ? e.stack : undefined,

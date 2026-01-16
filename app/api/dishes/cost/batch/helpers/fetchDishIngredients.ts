@@ -2,13 +2,14 @@
  * Helper to fetch and group dish_ingredients for batch cost calculation.
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { DishIngredientRecord } from '../../../types';
 
 /**
  * Fetch dish_ingredients and group by dish_id.
  */
-export async function fetchDishIngredients(dishIds: string[]): Promise<Map<string, any[]>> {
+export async function fetchDishIngredients(dishIds: string[]): Promise<Map<string, DishIngredientRecord[]>> {
   if (!supabaseAdmin) {
     return new Map();
   }
@@ -39,12 +40,12 @@ export async function fetchDishIngredients(dishIds: string[]): Promise<Map<strin
   }
 
   // Group dish_ingredients by dish_id
-  const dishIngredientsMap = new Map<string, any[]>();
-  (allDishIngredients || []).forEach(di => {
+  const dishIngredientsMap = new Map<string, DishIngredientRecord[]>();
+  (allDishIngredients as any[] || []).forEach(di => {
     if (!dishIngredientsMap.has(di.dish_id)) {
       dishIngredientsMap.set(di.dish_id, []);
     }
-    dishIngredientsMap.get(di.dish_id)!.push(di);
+    dishIngredientsMap.get(di.dish_id)!.push(di as DishIngredientRecord);
   });
 
   return dishIngredientsMap;

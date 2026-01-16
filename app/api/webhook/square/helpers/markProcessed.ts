@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { logSyncOperation } from '@/lib/square/sync-log';
+import { supabaseAdmin } from '@/lib/supabase';
 
 interface MarkProcessedParams {
   eventId: string;
@@ -9,7 +9,7 @@ interface MarkProcessedParams {
   success: boolean;
   processingTimeMs: number;
   errorMessage?: string;
-  eventData?: any;
+  eventData?: unknown;
 }
 
 /**
@@ -40,9 +40,9 @@ export async function markWebhookEventProcessed(params: MarkProcessedParams): Pr
         event_data: eventData,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Webhook] Error marking event processed:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       eventId,
       userId,
     });

@@ -5,15 +5,15 @@
  * comprehensive API documentation, request/response formats, and usage examples.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getUserFromRequest } from '@/lib/auth0-api-helpers';
-import { getSquareConfig, saveSquareConfig, deleteSquareConfig } from '@/lib/square/config';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { getUserFromRequest } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
+import { deleteSquareConfig, getSquareConfig, saveSquareConfig } from '@/lib/square/config';
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { checkSquareFeatureFlag } from './helpers/checkFeatureFlag';
 import { getUserIdFromEmail } from './helpers/getUserId';
 import { handleSquareConfigError } from './helpers/handleError';
-import { checkSquareFeatureFlag } from './helpers/checkFeatureFlag';
-import { z } from 'zod';
 
 /**
  * GET /api/square/config
@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
       ...(validationResult.data.square_application_secret && {
         square_application_secret: validationResult.data.square_application_secret,
       }),
-      ...buildConfigInput(validationResult),
+      ...(buildConfigInput(validationResult) as any),
     };
     const config = await saveSquareConfig(userId, configInput);
 

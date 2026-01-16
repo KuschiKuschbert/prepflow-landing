@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
 
     if (listLogsError) throw listLogsError;
 
-    let user: any = users.find(u => u.email === email);
+    let user = users.find(u => u.email === email);
 
     if (!user) {
       // Create user if they don't exist
@@ -105,7 +105,7 @@ export async function POST(req: NextRequest) {
       });
 
       if (createError) throw createError;
-      user = newUser;
+      if (newUser) user = newUser;
     }
 
     // 3. Generate a magic link for established session

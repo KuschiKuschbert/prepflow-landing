@@ -3,15 +3,14 @@
  */
 import { logger } from '@/lib/logger';
 import type { TemperatureLog } from '../../../types';
+import type { TemperatureLogsResponse } from '../../useTemperatureLogsQuery';
 
 export function updateLogsFromQueryHelper(
-  logsData: unknown,
+  logsData: TemperatureLogsResponse | TemperatureLog[] | undefined,
   setLogs: (logs: TemperatureLog[]) => void,
 ): void {
   if (logsData) {
-    const items = Array.isArray(logsData)
-      ? (logsData as TemperatureLog[])
-      : (logsData as { items: TemperatureLog[] })?.items || [];
+    const items = Array.isArray(logsData) ? logsData : logsData?.items || [];
     setLogs(items);
     logger.dev('[TemperaturePageData] Updated logs:', {
       count: items.length,

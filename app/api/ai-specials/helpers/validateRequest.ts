@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server';
  * @param {any} body - The request body.
  * @returns {{ userId: string; imageData: string; prompt?: string; countryCode?: string } | NextResponse} Validated data or error response.
  */
-export function validateAISpecialsRequest(body: any):
+export function validateAISpecialsRequest(body: unknown):
   | {
       userId: string;
       imageData: string;
@@ -14,7 +14,12 @@ export function validateAISpecialsRequest(body: any):
       countryCode?: string;
     }
   | NextResponse {
-  const { userId, imageData, prompt, countryCode } = body;
+  const { userId, imageData, prompt, countryCode } = body as {
+    userId?: string;
+    imageData?: string;
+    prompt?: string;
+    countryCode?: string;
+  };
 
   if (!userId || !imageData) {
     return NextResponse.json(

@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
@@ -60,7 +59,7 @@ export async function POST(req: NextRequest) {
       return validation.error!;
     }
 
-    const { subject, message, type, related_error_id } = validation.data!;
+    const { subject, message, type, related_error_id } = validation.data as any;
 
     // Try to find user_id from email
     const userId = await getUserId(userEmail);

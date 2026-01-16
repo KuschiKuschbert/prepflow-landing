@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     logger.dev(`📊 Found ${equipment.length} active equipment items`);
 
     // Generate 5 entries per equipment, randomly spread across the last 2 weeks (14 days)
-    const logs: any[] = [];
+    const logs: unknown[] = [];
     const today = new Date();
 
     equipment.forEach(eq => {

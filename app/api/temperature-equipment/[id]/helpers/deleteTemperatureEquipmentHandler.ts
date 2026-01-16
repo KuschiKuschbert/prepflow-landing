@@ -24,7 +24,7 @@ export async function handleDeleteTemperatureEquipment(id: string) {
     if (error) {
       logger.error('[Temperature Equipment API] Database error deleting equipment:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: {
           endpoint: `/api/temperature-equipment/${id}`,
           operation: 'DELETE',

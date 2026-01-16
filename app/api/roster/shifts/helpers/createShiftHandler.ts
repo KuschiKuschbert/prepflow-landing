@@ -78,7 +78,7 @@ export async function handleCreateShift(request: NextRequest) {
     if (insertError) {
       logger.error('[Shifts API] Database error creating shift:', {
         error: insertError.message,
-        code: (insertError as any).code,
+        code: insertError.code,
         context: { endpoint: '/api/roster/shifts', operation: 'POST', table: 'shifts' },
       });
 

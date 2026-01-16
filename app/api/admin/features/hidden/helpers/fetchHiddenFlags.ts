@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server';
  *
  * @returns {Promise<{ flags: any[] } | NextResponse>} Flags data or error response.
  */
-export async function fetchHiddenFlags(): Promise<{ flags: any[] } | NextResponse> {
+export async function fetchHiddenFlags(): Promise<{ flags: unknown[] } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       {

@@ -6,15 +6,15 @@
  * comprehensive webhook setup, signature verification, and event handling documentation.
  */
 
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyWebhookSignature } from './helpers/verifySignature';
 import { isWebhookEventProcessed } from './helpers/checkIdempotency';
-import { markWebhookEventProcessed } from './helpers/markProcessed';
-import { getWebhookSecret } from './helpers/getWebhookSecret';
 import { getUserIdFromEvent } from './helpers/getUserId';
+import { getWebhookSecret } from './helpers/getWebhookSecret';
+import { markWebhookEventProcessed } from './helpers/markProcessed';
 import { routeWebhookEvent } from './helpers/routeEvent';
+import { verifyWebhookSignature } from './helpers/verifySignature';
 
 export async function POST(req: NextRequest) {
   const startTime = Date.now();
@@ -35,19 +35,19 @@ export async function POST(req: NextRequest) {
     }
 
     // Parse event to get event_id and location_id
-    let event: any;
+    let event: unknown;
     try {
       event = JSON.parse(rawBody);
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('[Square Webhook] Invalid JSON payload:', {
-        error: error.message,
+        error: (error as Error).message || String(error),
       });
       return NextResponse.json(ApiErrorHandler.createError('Invalid JSON', 'SERVER_ERROR', 400), {
         status: 400,
       });
     }
 
-    eventId = event.event_id || event.id || `square-${Date.now()}`;
+    eventId = (event as { event_id?: string; id?: string }).event_id || (event as { event_id?: string; id?: string }).id || `square-${Date.now()}`;
 
     // Extract user ID from event
     userId = await getUserIdFromEvent(event);
@@ -97,10 +97,10 @@ export async function POST(req: NextRequest) {
     if (alreadyProcessed) {
       logger.dev('[Square Webhook] Event already processed, skipping:', {
         eventId,
-        type: event.type,
+        type: (event as { type: string }).type,
         userId,
       });
-      return NextResponse.json({ received: true, type: event.type, skipped: true });
+      return NextResponse.json({ received: true, type: (event as { type: string }).type, skipped: true });
     }
 
     // Route event to appropriate handler
@@ -112,16 +112,16 @@ export async function POST(req: NextRequest) {
     if (eventId && userId) {
       await markWebhookEventProcessed({
         eventId,
-        eventType: event.type || 'unknown',
+        eventType: (event as { type?: string }).type || 'unknown',
         userId,
         success: true,
         processingTimeMs: processingTime,
-        eventData: event.data,
+        eventData: (event as { data?: unknown }).data,
       });
     }
 
-    return NextResponse.json({ received: true, type: event.type });
-  } catch (error: any) {
+    return NextResponse.json({ received: true, type: (event as { type: string }).type });
+  } catch (error: unknown) {
     const processingTime = Date.now() - startTime;
     const errorMessage = error instanceof Error ? error.message : String(error);
 
@@ -130,7 +130,7 @@ export async function POST(req: NextRequest) {
       eventId,
       userId,
       processingTimeMs: processingTime,
-      stack: error.stack,
+      stack: error instanceof Error ? error.stack : undefined,
     });
 
     // Mark event as processed with error (prevents infinite retries for non-retryable errors)

@@ -7,7 +7,7 @@ export interface TestResult {
   name: string;
   status: 'pass' | 'fail' | 'warning';
   message: string;
-  details?: any;
+  details?: unknown;
 }
 
 export interface TestSummary {
@@ -44,7 +44,7 @@ export function addTest(
   name: string,
   status: 'pass' | 'fail' | 'warning',
   message: string,
-  details?: any,
+  details?: unknown,
 ): void {
   results.tests.push({ name, status, message, details });
   results.summary.total++;

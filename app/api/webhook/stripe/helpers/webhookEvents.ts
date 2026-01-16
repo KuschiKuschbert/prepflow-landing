@@ -33,7 +33,7 @@ export async function markWebhookEventProcessed(
   success: boolean,
   processingTimeMs: number,
   errorMessage?: string,
-  eventData?: any,
+  eventData?: unknown,
 ): Promise<void> {
   if (!supabaseAdmin) return;
 

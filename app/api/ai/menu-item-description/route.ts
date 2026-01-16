@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
 
     const { menuItem, ingredients, countryCode } = validationResult.data as {
       menuItem: MenuItem;
-      ingredients?: any[];
+      ingredients?: unknown[];
       countryCode?: string;
     };
 

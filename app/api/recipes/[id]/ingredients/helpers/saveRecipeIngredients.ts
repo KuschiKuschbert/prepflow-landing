@@ -21,7 +21,7 @@ export async function saveRecipeIngredients(
   isUpdate: boolean,
   recipeName?: string | null,
   userEmail?: string | null,
-): Promise<any[]> {
+): Promise<unknown[]> {
   if (!supabaseAdmin) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);

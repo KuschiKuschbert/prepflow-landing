@@ -1,9 +1,9 @@
-import { supabaseAdmin } from '@/lib/supabase';
+import type { AdminUser } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import type { AdminUser } from '@/lib/admin-auth';
 
 const updateErrorSchema = z.object({
   status: z.enum(['new', 'investigating', 'resolved', 'ignored']).optional(),
@@ -22,7 +22,7 @@ export async function updateError(
   errorId: string,
   updates: z.infer<typeof updateErrorSchema>,
   adminUser: AdminUser,
-): Promise<{ errorLog: any } | NextResponse> {
+): Promise<{ errorLog: unknown } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
@@ -47,7 +47,7 @@ export async function updateError(
         if (adminDataError && adminDataError.code !== 'PGRST116') {
           logger.warn('[Admin Errors] Error fetching admin user:', {
             error: adminDataError.message,
-            code: (adminDataError as any).code,
+            code: adminDataError.code,
             adminEmail: adminUser.email,
           });
         }

@@ -21,8 +21,8 @@ const updateUserSchema = z.object({
  */
 export async function updateUser(
   userId: string,
-  body: any,
-): Promise<{ user: any; validated: z.infer<typeof updateUserSchema> } | NextResponse> {
+  body: unknown,
+): Promise<{ user: unknown; validated: z.infer<typeof updateUserSchema> } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

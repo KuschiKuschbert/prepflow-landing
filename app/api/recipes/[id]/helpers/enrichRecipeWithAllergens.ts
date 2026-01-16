@@ -2,11 +2,11 @@
  * Helper for enriching recipe with allergen and dietary data
  */
 
+import { aggregateRecipeAllergens } from '@/lib/allergens/allergen-aggregation';
+import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
+import { aggregateRecipeDietaryStatus } from '@/lib/dietary/dietary-aggregation';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { aggregateRecipeAllergens } from '@/lib/allergens/allergen-aggregation';
-import { aggregateRecipeDietaryStatus } from '@/lib/dietary/dietary-aggregation';
-import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
 
 /**
  * Enriches recipe with aggregated allergens and dietary status

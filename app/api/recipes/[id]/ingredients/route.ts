@@ -176,7 +176,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       message: 'Recipe ingredients saved successfully',
       data,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Recipes API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: {

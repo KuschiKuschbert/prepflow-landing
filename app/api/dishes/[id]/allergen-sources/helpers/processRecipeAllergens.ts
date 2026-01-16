@@ -77,11 +77,8 @@ export async function processRecipeAllergens(
   }
 
   dishRecipes.forEach(dr => {
-<<<<<<< HEAD
     const recipe = dr.recipes as unknown as RecipeRecord | null;
-=======
-    const recipe = dr.recipes as unknown as RawRecipeJoin | null;
->>>>>>> main
+
 
     if (!recipe) return;
 

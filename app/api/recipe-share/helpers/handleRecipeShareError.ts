@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server';
  * @param {string} operation - Operation name (GET, POST)
  * @returns {NextResponse} Error response
  */
-export function handleRecipeShareError(error: Error | any, operation: string): NextResponse {
+export function handleRecipeShareError(error: Error | unknown, operation: string): NextResponse {
   logger.error(`[Recipe Share API] ${operation} error:`, {
     error: error instanceof Error ? error.message : String(error),
     stack: error instanceof Error ? error.stack : undefined,

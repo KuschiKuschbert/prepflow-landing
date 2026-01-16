@@ -1,17 +1,13 @@
-<<<<<<< HEAD
 /**
  * Types for populate empty dishes functionality.
  */
 
 export interface DishRecord {
-=======
-export interface PopulateDishItem {
->>>>>>> main
+
   id: string;
   dish_name: string;
 }
 
-<<<<<<< HEAD
 export interface RecipeRecord {
   id: string;
   name?: string;
@@ -19,20 +15,11 @@ export interface RecipeRecord {
 }
 
 export interface IngredientRecord {
-=======
-export interface PopulateRecipeItem {
-  id: string;
-  name: string;
-}
 
-export interface PopulateIngredientItem {
->>>>>>> main
   id: string;
   ingredient_name: string;
   unit: string;
 }
-<<<<<<< HEAD
-
 export interface PopulatedDish {
   dish_id: string;
   dish_name: string;
@@ -82,5 +69,4 @@ export interface PopulateRecipesResult {
   skipped: SkippedRecipe[];
   errors: RecipeError[];
 }
-=======
->>>>>>> main
+

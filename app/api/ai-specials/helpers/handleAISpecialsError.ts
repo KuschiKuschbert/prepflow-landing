@@ -10,7 +10,7 @@ import { NextResponse } from 'next/server';
  * @returns {NextResponse} Error response
  */
 export function handleAISpecialsError(
-  error: Error | any,
+  error: Error | unknown,
   operation: string,
   context?: { requestId?: string; userId?: string; url?: string },
 ): NextResponse {

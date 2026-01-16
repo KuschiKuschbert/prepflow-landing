@@ -3,7 +3,6 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 import { validateShiftRequest } from '../../helpers/validateShiftRequest';
-import { checkShiftExists } from './checkShiftExists';
 import { buildUpdateData } from './buildUpdateData';
 
 /**
@@ -50,7 +49,7 @@ export async function updateShift(
   if (updateError) {
     logger.error('[Shifts API] Database error updating shift:', {
       error: updateError.message,
-      code: (updateError as any).code,
+      code: updateError.code,
       context: { endpoint: '/api/roster/shifts/[id]', operation: 'PUT', shiftId },
     });
 

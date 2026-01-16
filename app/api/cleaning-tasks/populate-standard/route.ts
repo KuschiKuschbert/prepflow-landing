@@ -1,8 +1,15 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { generateAllStandardTasks, KitchenSection } from '@/lib/cleaning/standard-tasks';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { generateAllStandardTasks } from '@/lib/cleaning/standard-tasks';
+
+interface ExistingTask {
+  task_name: string;
+  standard_task_type: string | null;
+  equipment_id: string | null;
+  section_id: string | null;
+}
 
 /**
  * POST /api/cleaning-tasks/populate-standard
@@ -55,26 +62,26 @@ export async function POST(request: NextRequest) {
       .select('id, name, equipment_type, location')
       .eq('is_active', true);
 
-    if (equipmentError && (equipmentError as any).code !== '42P01') {
+    if (equipmentError && equipmentError.code !== '42P01') {
       logger.error('[Cleaning Tasks API] Error fetching equipment:', {
         error: equipmentError.message,
-        code: (equipmentError as any).code,
+        code: equipmentError.code,
       });
     }
 
     // Fetch sections
-    let sections: any[] = [];
+    let sections: KitchenSection[] = [];
     try {
       const { data: sectionsData, error: sectionsError } = await supabaseAdmin
         .from('kitchen_sections')
         .select('id, name, description');
 
       if (!sectionsError && sectionsData) {
-        sections = sectionsData;
-      } else if ((sectionsError as any).code !== '42P01') {
+        sections = sectionsData as KitchenSection[];
+      } else if (sectionsError.code !== '42P01') {
         logger.error('[Cleaning Tasks API] Error fetching sections:', {
           error: sectionsError.message,
-          code: (sectionsError as any).code,
+          code: sectionsError.code,
         });
       }
     } catch (err) {
@@ -103,14 +110,14 @@ export async function POST(request: NextRequest) {
     if (existingTasksError) {
       logger.warn('[Cleaning Tasks API] Error fetching existing tasks:', {
         error: existingTasksError.message,
-        code: (existingTasksError as any).code,
+        code: existingTasksError.code,
       });
       // Continue with empty set if fetch fails
     }
 
     const existingTaskKeys = new Set<string>();
     if (existingTasksData) {
-      existingTasksData.forEach((task: any) => {
+      (existingTasksData as ExistingTask[]).forEach((task) => {
         const key = `${task.task_name}_${task.standard_task_type}_${task.equipment_id || ''}_${task.section_id || ''}`;
         existingTaskKeys.add(key);
       });
@@ -139,7 +146,7 @@ export async function POST(request: NextRequest) {
     if (insertError) {
       logger.error('[Cleaning Tasks API] Error creating standard tasks:', {
         error: insertError.message,
-        code: (insertError as any).code,
+        code: insertError.code,
         context: { endpoint: '/api/cleaning-tasks/populate-standard', operation: 'POST' },
       });
       const apiError = ApiErrorHandler.fromSupabaseError(insertError, 500);
@@ -154,14 +161,15 @@ export async function POST(request: NextRequest) {
         tasks: insertedTasks,
       },
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Cleaning Tasks API] Error in populate-standard endpoint:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/cleaning-tasks/populate-standard', method: 'POST' },
     });
     if (err && typeof err === 'object' && 'status' in err) {
-      return NextResponse.json(err, { status: err.status || 500 });
+      const errorStatus = (err as { status: number }).status;
+      return NextResponse.json(err, { status: errorStatus || 500 });
     }
     return NextResponse.json(
       ApiErrorHandler.createError(

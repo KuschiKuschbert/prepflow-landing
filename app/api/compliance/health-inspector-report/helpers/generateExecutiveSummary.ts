@@ -2,7 +2,66 @@
  * Generate executive summary from report data
  */
 
-export function generateExecutiveSummary(reportData: any) {
+interface Qualifications {
+  expiring_soon?: unknown[];
+  expired?: unknown[];
+  all_qualifications?: unknown[];
+}
+
+interface ComplianceRecords {
+  expiring_soon?: unknown[];
+  expired?: unknown[];
+  all_records?: unknown[];
+}
+
+interface TemperatureViolations {
+  total_violations?: number;
+}
+
+interface TemperatureLogs {
+  total_logs?: number;
+}
+
+interface CleaningRecords {
+  total_tasks?: number;
+}
+
+interface SanitizerLogs {
+  total_logs?: number;
+}
+
+interface StaffHealth {
+  total_declarations?: number;
+}
+
+interface Incidents {
+  unresolved?: unknown[];
+  total_incidents?: number;
+}
+
+interface Haccp {
+  total_records?: number;
+}
+
+interface ComplianceGaps {
+  total_gaps?: number;
+}
+
+interface ReportData {
+  employees?: unknown[];
+  qualifications?: Qualifications;
+  compliance_records?: ComplianceRecords;
+  temperature_violations?: TemperatureViolations;
+  temperature_logs?: TemperatureLogs;
+  cleaning_records?: CleaningRecords;
+  sanitizer_logs?: SanitizerLogs;
+  staff_health?: StaffHealth;
+  incidents?: Incidents;
+  haccp?: Haccp;
+  compliance_gaps?: ComplianceGaps;
+}
+
+export function generateExecutiveSummary(reportData: ReportData) {
   const expiringQualifications = reportData.qualifications?.expiring_soon?.length || 0;
   const expiredQualifications = reportData.qualifications?.expired?.length || 0;
   const expiringCompliance = reportData.compliance_records?.expiring_soon?.length || 0;

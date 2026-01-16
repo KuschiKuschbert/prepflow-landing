@@ -7,7 +7,7 @@ import { updateOrderListSchema } from './schemas';
 export async function updateOrderList(
   id: string,
   body: z.infer<typeof updateOrderListSchema>,
-): Promise<{ success: boolean; message: string; data: any } | { error: any; status: number }> {
+): Promise<{ success: boolean; message: string; data: unknown } | { error: unknown; status: number }> {
   if (!supabaseAdmin) {
     return {
       error: ApiErrorHandler.createError(

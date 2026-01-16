@@ -1,5 +1,5 @@
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { NextResponse } from 'next/server';
 
 /**
@@ -16,9 +16,9 @@ export async function saveAISpecials(
   userId: string,
   imageData: string,
   prompt: string | undefined,
-  aiResponse: any,
+  aiResponse: unknown,
   requestId?: string,
-): Promise<{ aiRecord: any } | NextResponse> {
+): Promise<{ aiRecord: unknown } | NextResponse> {
   const startTime = Date.now();
   logger.info('[saveAISpecials] Function called', {
     userId,
@@ -100,7 +100,7 @@ export async function saveAISpecials(
       .from('ai_specials')
       .insert({
         user_id: userId,
-        name: aiResponse?.suggestions?.[0] || 'AI Generated Special',
+        name: (aiResponse as { suggestions?: string[] })?.suggestions?.[0] || 'AI Generated Special',
         description: JSON.stringify(aiResponse), // Store full AI response as JSON
         image_url: imageData, // Store base64 image data URL
         ai_prompt: prompt || '',
@@ -122,8 +122,8 @@ export async function saveAISpecials(
       hasRecord: !!aiRecord,
       recordId: aiRecord?.id,
       errorMessage: aiError?.message,
-      errorCode: (aiError as any)?.code,
-      errorDetails: aiError ? (aiError as any) : undefined,
+      errorCode: aiError?.code,
+      errorDetails: aiError || undefined,
     });
 
     if (aiError) {
@@ -131,8 +131,8 @@ export async function saveAISpecials(
         userId,
         requestId,
         error: aiError.message,
-        code: (aiError as any).code,
-        details: aiError as any,
+        code: aiError.code,
+        details: aiError,
         context: { endpoint: '/api/ai-specials', operation: 'POST', userId },
       });
       return NextResponse.json(

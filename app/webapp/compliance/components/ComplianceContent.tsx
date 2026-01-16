@@ -4,15 +4,16 @@
  * Content rendering component for compliance page based on active tab.
  */
 
-import dynamic from 'next/dynamic';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import dynamic from 'next/dynamic';
 import type {
-  ComplianceRecord,
-  ComplianceRecordFormData,
-  ComplianceType,
-  ComplianceTypeFormData,
+    ComplianceRecord,
+    ComplianceRecordFormData,
+    ComplianceType,
+    ComplianceTypeFormData,
 } from '../types';
 import type { EquipmentMaintenanceFormData } from './EquipmentMaintenanceForm';
+import type { EquipmentMaintenanceRecord } from './EquipmentMaintenanceList';
 
 // Lazy load compliance components to reduce initial bundle size
 const ComplianceRecordForm = dynamic(
@@ -91,7 +92,7 @@ interface ComplianceContentProps {
   newRecord: ComplianceRecordFormData;
   newType: ComplianceTypeFormData;
   newEquipment: EquipmentMaintenanceFormData;
-  equipmentRecords: unknown[];
+  equipmentRecords: EquipmentMaintenanceRecord[];
   onRecordFormChange: (data: ComplianceRecordFormData) => void;
   onTypeFormChange: (data: ComplianceTypeFormData) => void;
   onEquipmentFormChange: (data: EquipmentMaintenanceFormData) => void;

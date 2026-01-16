@@ -119,7 +119,10 @@ export async function handlePostRequest(request: NextRequest): Promise<NextRespo
 
     // Generate AI specials
     logger.debug('[AI Specials API] Calling generateAISpecials', { requestId, userId });
-    const aiResponse = await generateAISpecials(imageData, prompt, countryCode);
+    const aiResponse = (await generateAISpecials(imageData, prompt, countryCode)) as {
+      suggestions?: string[];
+      ingredients?: unknown[];
+    };
     logger.info('[AI Specials API] AI specials generated successfully', {
       requestId,
       userId,
@@ -142,7 +145,7 @@ export async function handlePostRequest(request: NextRequest): Promise<NextRespo
     logger.info('[AI Specials API] POST request completed successfully', {
       requestId,
       userId,
-      recordId: saveResult.aiRecord?.id,
+      recordId: (saveResult.aiRecord as { id: string })?.id,
     });
 
     return NextResponse.json({

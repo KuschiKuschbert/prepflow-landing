@@ -3,10 +3,16 @@
  */
 import type { Shift } from '../../../types';
 
+interface InlineEntryState {
+  employeeId: string;
+  date: Date;
+  cellPosition?: DOMRect;
+}
+
 export function createInlineEntrySaveHandler(
   shifts: Shift[],
   handleCreateShift: (shiftData: Partial<Shift>) => Promise<void>,
-  setActiveInlineEntry: (entry: unknown) => void,
+  setActiveInlineEntry: (entry: InlineEntryState | null) => void,
   showError: (message: string) => void,
 ) {
   return async (shiftData: Partial<Shift>) => {

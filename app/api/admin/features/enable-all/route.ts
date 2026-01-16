@@ -1,8 +1,8 @@
+import { logAdminApiAction } from '@/lib/admin-audit';
 import { requireAdmin } from '@/lib/admin-auth';
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { logAdminApiAction } from '@/lib/admin-audit';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
     if (userDataError && userDataError.code !== 'PGRST116') {
       logger.warn('[Admin Features Enable All] Error fetching user:', {
         error: userDataError.message,
-        code: (userDataError as any).code,
+        code: userDataError.code,
         email: validated.email,
       });
     }

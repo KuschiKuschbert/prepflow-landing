@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { TemperatureEquipment } from '../types';
+import { TemperatureEquipment, TemperatureLog } from '../types';
 
 interface EquipmentStatus {
   status: 'no-data' | 'no-thresholds' | 'in-range' | 'out-of-range';
@@ -8,7 +8,7 @@ interface EquipmentStatus {
 }
 
 interface UseEquipmentStatusProps {
-  getFilteredLogs: (equipment: TemperatureEquipment) => unknown[];
+  getFilteredLogs: (equipment: TemperatureEquipment) => TemperatureLog[];
 }
 
 export function useEquipmentStatus({ getFilteredLogs }: UseEquipmentStatusProps) {

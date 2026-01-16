@@ -16,9 +16,9 @@ export async function getWebhookSecret(userId: string): Promise<string | null> {
 
     // Fallback to environment variable (for global webhook secret)
     return process.env.SQUARE_WEBHOOK_SECRET || null;
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Webhook] Error getting webhook secret:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
     });
     return null;

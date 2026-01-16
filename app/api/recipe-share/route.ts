@@ -2,12 +2,12 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { createShareRecord } from './helpers/createShareRecord';
 import { fetchRecipeWithIngredients } from './helpers/fetchRecipeWithIngredients';
 import { generateRecipePDF } from './helpers/generateRecipePDF';
 import { handleRecipeShareError } from './helpers/handleRecipeShareError';
 import { normalizeRecipeForShare } from './helpers/normalizeRecipeForShare';
-import { z } from 'zod';
 
 const shareRecipeSchema = z.object({
   recipeId: z.string().min(1, 'Recipe ID is required'),
@@ -69,14 +69,14 @@ export async function POST(request: NextRequest) {
         recipe: recipe,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[route.ts] Error in catch block:', {
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,
     });
 
-    if (error.status) {
-      return NextResponse.json(error, { status: error.status });
+    if ((error as any).status) {
+      return NextResponse.json(error, { status: (error as any).status });
     }
     return handleRecipeShareError(error, 'POST');
   }

@@ -3,9 +3,9 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { applyQueenslandStandards } from './helpers/applyQueenslandStandards';
-import { handleTemperatureEquipmentError } from './helpers/handleTemperatureEquipmentError';
 import { handleCreateTemperatureEquipment } from './helpers/createTemperatureEquipmentHandler';
 import { handleDeleteTemperatureEquipment } from './helpers/deleteTemperatureEquipmentHandler';
+import { handleTemperatureEquipmentError } from './helpers/handleTemperatureEquipmentError';
 
 export async function GET() {
   try {
@@ -24,7 +24,7 @@ export async function GET() {
     if (error) {
       logger.error('[Temperature Equipment API] Database error fetching equipment:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: {
           endpoint: '/api/temperature-equipment',
           operation: 'GET',

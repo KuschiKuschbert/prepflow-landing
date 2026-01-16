@@ -2,10 +2,10 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { buildTemperatureLogQuery } from './helpers/buildTemperatureLogQuery';
 import { createTemperatureLog } from './helpers/createTemperatureLog';
 import { handleTemperatureLogError } from './helpers/handleTemperatureLogError';
-import { z } from 'zod';
 
 const createTemperatureLogSchema = z
   .object({
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('[Temperature Logs API] Database error fetching logs:', {
         error: error.message,
-        code: (error as any).code,
+        code: error.code,
         context: { endpoint: '/api/temperature-logs', operation: 'GET', table: 'temperature_logs' },
       });
 
@@ -69,13 +69,13 @@ export async function GET(request: NextRequest) {
         totalPages,
       },
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Temperature Logs API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/temperature-logs', method: 'GET' },
     });
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
+    if (err && typeof err === "object" && "status" in err) {
+      return NextResponse.json(err, { status: (err as any).status });
     }
     return handleTemperatureLogError(err, 'GET');
   }
@@ -128,13 +128,13 @@ export async function POST(request: NextRequest) {
     const data = await createTemperatureLog(validatedBody);
 
     return NextResponse.json({ success: true, data });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Temperature Logs API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/temperature-logs', method: 'POST' },
     });
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
+    if (err && typeof err === "object" && "status" in err) {
+      return NextResponse.json(err, { status: (err as any).status });
     }
     return handleTemperatureLogError(err, 'POST');
   }

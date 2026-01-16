@@ -27,7 +27,7 @@ export async function deleteShift(shiftId: string): Promise<NextResponse> {
   if (deleteError) {
     logger.error('[Shifts API] Database error deleting shift:', {
       error: deleteError.message,
-      code: (deleteError as any).code,
+      code: deleteError.code,
       context: { endpoint: '/api/roster/shifts/[id]', operation: 'DELETE', shiftId },
     });
 

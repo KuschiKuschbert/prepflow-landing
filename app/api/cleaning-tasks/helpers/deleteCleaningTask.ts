@@ -20,7 +20,7 @@ export async function deleteCleaningTask(id: string): Promise<void> {
   if (error) {
     logger.error('[Cleaning Tasks API] Database error deleting task:', {
       error: error.message,
-      code: (error as any).code,
+      code: error.code,
       context: { endpoint: '/api/cleaning-tasks', operation: 'DELETE', taskId: id },
     });
     throw ApiErrorHandler.fromSupabaseError(error, 500);

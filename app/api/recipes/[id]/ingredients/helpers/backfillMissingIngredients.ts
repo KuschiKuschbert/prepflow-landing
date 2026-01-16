@@ -8,7 +8,7 @@ import { supabaseAdmin } from '@/lib/supabase';
  * @param {string} recipeId - Recipe ID for logging
  * @returns {Promise<Array>} Rows with backfilled ingredients
  */
-export async function backfillMissingIngredients(rows: any[], recipeId: string): Promise<any[]> {
+export async function backfillMissingIngredients(rows: any[], recipeId: string): Promise<unknown[]> {
   const missingNested = rows.some(r => !r.ingredients);
   if (!missingNested) return rows;
 
@@ -17,7 +17,7 @@ export async function backfillMissingIngredients(rows: any[], recipeId: string):
   });
 
   const uniqueIds = Array.from(
-    new Set(rows.map(r => r.ingredient_id).filter((v: any) => Boolean(v))),
+    new Set(rows.map(r => r.ingredient_id).filter((v: unknown) => Boolean(v))),
   );
 
   if (uniqueIds.length === 0) return rows;
@@ -56,7 +56,7 @@ export async function backfillMissingIngredients(rows: any[], recipeId: string):
 
   if (ingError || !ingRows) return rows;
 
-  const byId: Record<string, any> = {};
+  const byId: Record<string, unknown> = {};
   ingRows.forEach(ir => {
     byId[ir.id] = ir;
   });

@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    let recipes: any[] = [];
+    let recipes: unknown[] = [];
     let totalRecipes = 0;
 
     try {

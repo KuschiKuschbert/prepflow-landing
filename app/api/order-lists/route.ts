@@ -2,10 +2,10 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { createOrderListWithItems } from './helpers/createOrderListWithItems';
 import { handleOrderListError } from './helpers/handleOrderListError';
 import { normalizeOrderListData } from './helpers/normalizeOrderListData';
-import { z } from 'zod';
 
 const createOrderListSchema = z.object({
   userId: z.string().min(1, 'User ID is required'),
@@ -181,13 +181,13 @@ export async function POST(request: NextRequest) {
       message: 'Order list created successfully',
       data: orderList,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error('[Order Lists API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/order-lists', method: 'POST' },
     });
-    if (err.status) {
-      return NextResponse.json(err, { status: err.status });
+    if ((err as any).status) {
+      return NextResponse.json(err, { status: (err as any).status });
     }
     return handleOrderListError(err, 'POST');
   }

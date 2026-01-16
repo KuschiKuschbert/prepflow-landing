@@ -2,12 +2,17 @@
  * Hook for formatting handlers
  */
 
-import { useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
+import { useCallback } from 'react';
+
+interface ProcessingState {
+  isProcessing?: boolean;
+  isPaused?: boolean;
+}
 
 interface UseFormattingHandlersParams {
-  processing: unknown;
+  processing: ProcessingState | null | undefined;
   setIsResuming: (resuming: boolean) => void;
   setIsProcessingStarting: (starting: boolean) => void;
   setProcessingPolling: (polling: boolean) => void;
