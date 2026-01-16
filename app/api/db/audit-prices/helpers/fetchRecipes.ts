@@ -9,11 +9,8 @@ import { AuditRecipeItem } from '../types';
 /**
  * Fetch all recipes
  */
-<<<<<<< HEAD
 export async function fetchRecipes(): Promise<{ recipes: RecipeRecord[] } | NextResponse> {
-=======
-export async function fetchRecipes(): Promise<{ recipes: AuditRecipeItem[] } | NextResponse> {
->>>>>>> main
+
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

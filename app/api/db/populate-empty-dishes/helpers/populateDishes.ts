@@ -4,22 +4,15 @@
 
 import { logger } from '@/lib/logger';
 import {
-<<<<<<< HEAD
     dishHasDirectIngredients,
     getDefaultIngredientsForDish,
     getIngredientName,
     getIngredientsFromRecipes,
-=======
-  dishHasDirectIngredients,
-  getDefaultIngredientsForDish,
-  getIngredientName,
-  getIngredientsFromRecipes,
->>>>>>> main
+
 } from '@/lib/populate-helpers/populate-empty-dishes-helpers';
 import { supabaseAdmin } from '@/lib/supabase';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-<<<<<<< HEAD
 import type {
     DishError,
     DishRecord,
@@ -28,34 +21,7 @@ import type {
     PopulatedDish,
     SkippedDish,
 } from '../types';
-=======
-import { PopulateDishItem, PopulateIngredientItem } from '../types';
 
-export interface PopulatedDish {
-  dish_id: string;
-  dish_name: string;
-  ingredients_added: number;
-  ingredient_names: string[];
-}
-
-export interface SkippedDish {
-  dish_id: string;
-  dish_name: string;
-  reason: string;
-}
-
-export interface DishError {
-  dish_id: string;
-  dish_name: string;
-  error: string;
-}
-
-export interface PopulateDishesResult {
-  populated: PopulatedDish[];
-  skipped: SkippedDish[];
-  errors: DishError[];
-}
->>>>>>> main
 
 /**
  * Populates empty dishes with default ingredients
@@ -65,13 +31,9 @@ export interface PopulateDishesResult {
  * @returns {Promise<PopulateDishesResult>} Result of population operation
  */
 export async function populateDishes(
-<<<<<<< HEAD
   dishes: DishRecord[],
   ingredients: IngredientRecord[],
-=======
-  dishes: PopulateDishItem[],
-  ingredients: PopulateIngredientItem[],
->>>>>>> main
+
 ): Promise<PopulateDishesResult> {
   const populated: PopulatedDish[] = [];
   const skipped: SkippedDish[] = [];

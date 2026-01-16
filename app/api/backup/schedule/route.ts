@@ -7,10 +7,8 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
-<<<<<<< HEAD
 import { getAppError } from '@/lib/utils/error';
-=======
->>>>>>> main
+
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -102,7 +100,6 @@ export async function POST(request: NextRequest) {
       nextBackupAt: enabled ? nextBackupAt.toISOString() : null,
     });
   } catch (error: unknown) {
-<<<<<<< HEAD
     const appError = getAppError(error);
     logger.error('[Backup Schedule] Error:', {
       error: appError.message,
@@ -111,14 +108,7 @@ export async function POST(request: NextRequest) {
     });
     return NextResponse.json(
       { error: 'Failed to configure scheduled backup', message: appError.message },
-=======
-    logger.error('[Backup Schedule] Error:', error);
-    return NextResponse.json(
-      {
-        error: 'Failed to configure scheduled backup',
-        message: error instanceof Error ? error.message : String(error),
-      },
->>>>>>> main
+
       { status: 500 },
     );
   }
@@ -155,7 +145,6 @@ export async function DELETE(request: NextRequest) {
       message: 'Scheduled backup cancelled successfully',
     });
   } catch (error: unknown) {
-<<<<<<< HEAD
     const appError = getAppError(error);
     logger.error('[Backup Schedule] Error:', {
       error: appError.message,
@@ -164,14 +153,7 @@ export async function DELETE(request: NextRequest) {
     });
     return NextResponse.json(
       { error: 'Failed to cancel scheduled backup', message: appError.message },
-=======
-    logger.error('[Backup Schedule] Error:', error);
-    return NextResponse.json(
-      {
-        error: 'Failed to cancel scheduled backup',
-        message: error instanceof Error ? error.message : String(error),
-      },
->>>>>>> main
+
       { status: 500 },
     );
   }

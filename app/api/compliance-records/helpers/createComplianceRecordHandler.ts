@@ -40,13 +40,7 @@ export async function handleCreateComplianceRecord(request: NextRequest) {
       data,
     });
   } catch (err: unknown) {
-<<<<<<< HEAD
-=======
-    logger.error('[Compliance Records API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
-      context: { endpoint: '/api/compliance-records', method: 'POST' },
-    });
->>>>>>> main
+
     return handleComplianceError(err, 'POST');
   }
 }

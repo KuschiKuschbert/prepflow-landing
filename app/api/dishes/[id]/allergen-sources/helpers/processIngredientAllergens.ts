@@ -71,11 +71,8 @@ export async function processIngredientAllergens(
   }
 
   dishIngredients.forEach(di => {
-<<<<<<< HEAD
     const ingredient = di.ingredients as unknown as IngredientRecord | null;
-=======
-    const ingredient = di.ingredients as unknown as RawIngredientJoin | null;
->>>>>>> main
+
 
     if (!ingredient) return;
 

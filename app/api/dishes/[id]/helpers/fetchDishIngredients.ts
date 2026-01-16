@@ -1,6 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import type { PostgrestError } from '@supabase/supabase-js';
 import { DishRelationIngredient } from '../../helpers/schemas';
 
 interface RawDishIngredient {
@@ -61,7 +62,6 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
     )
     .eq('dish_id', dishId);
 
-<<<<<<< HEAD
   // If join fails or returns empty but we know rows exist, fetch without join and manually join
   const pgError = ingredientsError as PostgrestError | null;
   if (
@@ -177,8 +177,7 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
   }
 
   // Log error if still present (but don't fail the whole request)
-=======
->>>>>>> main
+
   if (ingredientsError) {
     logger.warn('[Dishes API] Error fetching dish ingredients (non-fatal):', {
       error: ingredientsError.message,
@@ -187,34 +186,16 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
     });
   }
 
-<<<<<<< HEAD
   // Filter out dish_ingredients entries where the ingredients relation is null (deleted ingredients)
   // Also map 'supplier' to 'supplier_name' to match frontend types
   const rawIngredients = (dishIngredients || []) as unknown as Record<string, any>[];
+
   const validDishIngredients = rawIngredients
     .filter(di => di.ingredients !== null && di.ingredients !== undefined)
     .map((di) => {
-      const ingredient = Array.isArray(di.ingredients) ? di.ingredients[0] : di.ingredients;
-      return {
-        ...di,
-        ingredients: ingredient
-          ? {
-              ...ingredient,
-              supplier_name: ingredient.supplier || ingredient.supplier_name,
-            }
-          : undefined,
-      };
-    }) as unknown as DishIngredient[];
-=======
-  // Normalize and clean ingredients data
-  const validDishIngredients: DishRelationIngredient[] = (
-    (dishIngredients as unknown as RawDishIngredient[]) || []
-  )
-    .filter(di => di.ingredients !== null && di.ingredients !== undefined)
-    .map(di => {
       const ing = Array.isArray(di.ingredients) ? di.ingredients[0] : di.ingredients;
+
       if (!ing) return null;
->>>>>>> main
 
       return {
         id: di.id,

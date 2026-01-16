@@ -11,11 +11,9 @@ import { NextResponse } from 'next/server';
  * @returns {NextResponse} Error response
  */
 export function handleComplianceError(err: unknown, method: string): NextResponse {
-<<<<<<< HEAD
   const appError = getAppError(err);
 
-=======
->>>>>>> main
+
   logger.error('[Compliance Records API] Unexpected error:', {
     error: appError.message,
     code: appError.code,
