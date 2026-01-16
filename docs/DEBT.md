@@ -18,7 +18,7 @@
 ## Medium Priority
 
 - [x] **[ANDROID]** Remove `Log.d` from `SupabaseManager.kt` (Security Leak).
-- [ ] **[WEB]** Convert inline styles in Landing Page components to Tailwind classes (LandingBackground & GradientOrbs DONE).
+- [x] **[WEB]** Convert inline styles in Landing Page components to Tailwind classes (LandingBackground & GradientOrbs DONE).
 - [x] **[WEB]** Optimize 15 large images in `public/` (>500KB).
 - [ ] Review `scripts/pre-commit-check.sh` and ensure it handles edge cases (e.g. merge conflicts).
 - [x] Verify `check:architecture` rules are strict enough for `lib` vs `components`.
