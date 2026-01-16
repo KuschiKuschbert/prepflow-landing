@@ -29,6 +29,19 @@ function decodeJWTPayload(token: string): Record<string, unknown> | null {
   }
 }
 
+interface Auth0User {
+  email?: string | null;
+  name?: string | null;
+  sub?: string | null;
+  picture?: string | null;
+  [key: string]: unknown;
+}
+
+interface Auth0Session {
+  user?: Auth0User;
+  expiresAt?: number;
+}
+
 export async function GET(request: NextRequest) {
   // Only allow in development
   if (process.env.NODE_ENV !== 'development') {
@@ -39,16 +52,15 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const session = await auth0.getSession(request);
+    const session = (await auth0.getSession(request)) as Auth0Session | null;
 
     // Extract custom claims from session user
     const customClaims: Record<string, unknown> = {};
     if (session?.user) {
-      const userAny = session.user as Record<string, unknown>;
       // Check for common custom claim namespaces
-      Object.keys(userAny).forEach(key => {
+      Object.keys(session.user).forEach(key => {
         if (key.startsWith('https://') || key.includes('custom') || key.includes('roles')) {
-          customClaims[key] = userAny[key];
+          customClaims[key] = session.user![key];
         }
       });
     }
@@ -67,6 +79,9 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    const userRoles =
+      (session?.user?.['https://prepflow.org/roles'] as string[] | undefined) || [];
+
     return NextResponse.json({
       session: session
         ? {
@@ -74,9 +89,7 @@ export async function GET(request: NextRequest) {
               email: session.user?.email,
               name: session.user?.name,
               sub: session.user?.sub,
-              roles:
-                ((session.user as Record<string, any>)['https://prepflow.org/roles'] as any[]) ||
-                [],
+              roles: userRoles,
               picture: session.user?.picture,
             },
             expiresAt: session.expiresAt,
@@ -88,8 +101,7 @@ export async function GET(request: NextRequest) {
             name: session.user.name,
             sub: session.user.sub,
             auth0UserId: auth0UserId,
-            roles:
-              ((session.user as Record<string, any>)['https://prepflow.org/roles'] as any[]) || [],
+            roles: userRoles,
             // Include all user properties for debugging
             allProperties: Object.keys(session.user),
             // Custom claims found in user object
@@ -117,8 +129,8 @@ export async function GET(request: NextRequest) {
         NODE_ENV: process.env.NODE_ENV,
         AUTH0_CONFIGURED: Boolean(
           process.env.AUTH0_ISSUER_BASE_URL &&
-          process.env.AUTH0_CLIENT_ID &&
-          process.env.AUTH0_CLIENT_SECRET,
+            process.env.AUTH0_CLIENT_ID &&
+            process.env.AUTH0_CLIENT_SECRET,
         ),
         AUTH0_DOMAIN: process.env.AUTH0_ISSUER_BASE_URL
           ? process.env.AUTH0_ISSUER_BASE_URL.replace(/^https?:\/\//, '').replace(/\/$/, '')
@@ -126,15 +138,10 @@ export async function GET(request: NextRequest) {
         ADMIN_BYPASS: process.env.ADMIN_BYPASS === 'true',
       },
       troubleshooting: {
-        rolesFound: session?.user
-          ? (((session.user as Record<string, any>)['https://prepflow.org/roles'] as any[]) || [])
-              .length > 0
-          : false,
+        rolesFound: userRoles.length > 0,
         auth0UserId: auth0UserId,
         recommendation:
-          !session?.user ||
-          (((session.user as Record<string, any>)['https://prepflow.org/roles'] as any[]) || [])
-            .length === 0
+          !session?.user || userRoles.length === 0
             ? 'Roles not found in session. Check: 1) Auth0 Actions configured to include roles, 2) Management API fallback is working, 3) User has roles assigned in Auth0'
             : 'Roles found in session',
       },

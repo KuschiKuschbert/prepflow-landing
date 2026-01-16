@@ -11,7 +11,7 @@ interface Metric {
   value: number;
   suffix: string;
   description: string;
-  color: string;
+  colorClass: string;
 }
 
 const metrics: Metric[] = [
@@ -20,39 +20,39 @@ const metrics: Metric[] = [
     value: 80,
     suffix: '%',
     description: 'From hours of Excel to seconds of accurate calculations',
-    color: 'var(--electric-lime)',
+    colorClass: 'text-landing-primary',
   },
   {
     label: 'More Accurate',
     value: 3,
     suffix: 'x',
     description: 'No more formula errors. No more guesswork. Just accurate costs.',
-    color: 'var(--magenta-pulse)',
+    colorClass: 'text-landing-accent',
   },
   {
     label: 'Manual Logging',
     value: 24,
     suffix: '/7',
     description: 'Log temperatures anytime with dashboard alerts for violations',
-    color: 'var(--prepflow-blue)',
+    colorClass: 'text-landing-secondary',
   },
   {
     label: 'QLD Compliant',
     value: 100,
     suffix: '%',
     description: 'QLD standards applied automatically. No manual configuration needed.',
-    color: 'var(--electric-lime)',
+    colorClass: 'text-landing-primary',
   },
 ];
 
 const AnimatedCounter = React.memo(function AnimatedCounter({
   value,
   suffix,
-  color,
+  colorClass,
 }: {
   value: number;
   suffix: string;
-  color: string;
+  colorClass: string;
 }) {
   const [count, setCount] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
@@ -91,8 +91,7 @@ const AnimatedCounter = React.memo(function AnimatedCounter({
   return (
     <div ref={ref} className="text-center">
       <div
-        className="text-fluid-4xl tablet:text-fluid-4xl desktop:text-fluid-4xl font-bold"
-        style={{ color }}
+        className={`text-fluid-4xl tablet:text-fluid-4xl desktop:text-fluid-4xl font-bold ${colorClass}`}
       >
         {isMounted ? count : 0}
         {suffix}
@@ -102,9 +101,9 @@ const AnimatedCounter = React.memo(function AnimatedCounter({
 });
 
 function Performance() {
-  const getGlowColor = (color: string): 'cyan' | 'magenta' | 'blue' => {
-    if (color.includes('lime') || color === '#29E7CD') return 'cyan';
-    if (color.includes('magenta') || color === '#D925C7') return 'magenta';
+  const getGlowColor = (colorClass: string): 'cyan' | 'magenta' | 'blue' => {
+    if (colorClass.includes('primary')) return 'cyan';
+    if (colorClass.includes('accent')) return 'magenta';
     return 'blue';
   };
 
@@ -125,9 +124,14 @@ function Performance() {
         <div className="tablet:grid-cols-3 desktop:grid-cols-4 grid gap-12">
           {metrics.map((metric, index) => (
             <ScrollReveal key={metric.label} variant="fade-up" delay={index * 0.1}>
-              <GlowCard glowColor={getGlowColor(metric.color)} className="p-10 text-center">
+              <GlowCard glowColor={getGlowColor(metric.colorClass)} className="p-10 text-center">
                 {/* Animated Counter */}
-                <AnimatedCounter value={metric.value} suffix={metric.suffix} color={metric.color} />
+                <AnimatedCounter
+                  value={metric.value}
+                  suffix={metric.suffix}
+                  colorClass={metric.colorClass}
+                />
+
 
                 {/* Label */}
                 <h3 className="text-fluid-2xl mt-6 font-light text-white">{metric.label}</h3>

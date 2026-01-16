@@ -41,6 +41,18 @@ const config: Config = {
       // Standard Tailwind breakpoints (sm, md, lg) are DISABLED
       // They will not work - use custom breakpoints above instead
     },
+    extend: {
+      colors: {
+        landing: {
+          primary: '#29E7CD', // Electric Cyan
+          secondary: '#3B82F6', // Blue
+          accent: '#D925C7', // Vibrant Magenta
+          tertiary: '#FF6B00', // Cyber Orange
+          muted: '#1f1f1f',
+          border: '#2a2a2a',
+        },
+      },
+    },
   },
   plugins: [],
 };

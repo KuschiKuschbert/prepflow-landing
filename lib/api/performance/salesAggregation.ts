@@ -12,7 +12,7 @@ export interface AggregatedSalesData {
  * Aggregate sales data for a dish over a date range or use most recent entry
  */
 export function aggregateSalesData(
-  salesData: Array<{ number_sold: number; popularity_percentage: number; date: string }> | null,
+  salesData: Array<{ number_sold: number; popularity_percentage: number; date: string }> | null | undefined,
   dateRange: { startDate: Date | null; endDate: Date | null } | null,
 ): AggregatedSalesData {
   const sortedSalesData = salesData

@@ -4,27 +4,29 @@ import { supabaseAdmin } from '@/lib/supabase';
 import type { PostgrestError } from '@supabase/supabase-js';
 import { DishRelationIngredient } from '../../helpers/schemas';
 
-interface RawDishIngredient {
+// Define types for raw database rows
+interface RawDishIngredientRow {
   id: string;
   dish_id: string;
-  ingredient_id: string;
+  ingredient_id: string | null;
   quantity: number;
   unit: string;
-  ingredients: {
-    id: string;
-    ingredient_name: string;
-    cost_per_unit: number;
-    cost_per_unit_incl_trim: number;
-    trim_peel_waste_percentage: number;
-    yield_percentage: number;
-    unit: string;
-    supplier: string | null;
-    supplier_name?: string; // Sometimes aliased or joined
-    category: string | null;
-    brand: string | null;
-    allergens: string[] | null;
-    allergen_source: Record<string, unknown> | null;
-  } | null;
+}
+
+interface RawIngredientRow {
+  id: string;
+  ingredient_name: string;
+  cost_per_unit: number;
+  cost_per_unit_incl_trim: number | null;
+  trim_peel_waste_percentage: number | null;
+  yield_percentage: number | null;
+  unit: string;
+  supplier: string | null;
+  supplier_name?: string; // Sometimes aliased or joined
+  category: string | null;
+  brand: string | null;
+  allergens: string[] | null;
+  allergen_source: Record<string, unknown> | null;
 }
 
 /** Fetches ingredients for a dish with fallback logic */
@@ -85,7 +87,9 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
       });
     } else if (rawDishIngredients && rawDishIngredients.length > 0) {
       // Manually fetch ingredients and join
-      const ingredientIds = rawDishIngredients.map(di => di.ingredient_id).filter(Boolean);
+      const ingredientIds = rawDishIngredients
+        .map(di => di.ingredient_id)
+        .filter((id): id is string => Boolean(id));
       if (ingredientIds.length > 0) {
         const { data: ingredientsData, error: ingFetchError } = await supabaseAdmin
           .from('ingredients')
@@ -100,21 +104,20 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
           });
         } else if (ingredientsData) {
           // Create a map for quick lookup
-          const ingredientsMap = new Map(ingredientsData.map(ing => [ing.id, ing]));
+          const ingredientsMap = new Map<string, RawIngredientRow>(
+            (ingredientsData as RawIngredientRow[]).map(ing => [ing.id, ing]),
+          );
 
           // Manually join the data
-          dishIngredients = rawDishIngredients.map((di: Record<string, any>) => {
-            const ingredient = ingredientsMap.get(di.ingredient_id) as
-              | Record<string, any>
-              | undefined;
+          dishIngredients = rawDishIngredients.map(di => {
+            const ingredient = di.ingredient_id ? ingredientsMap.get(di.ingredient_id) : undefined;
             return {
               ...di,
               ingredients: ingredient
                 ? [
                     {
                       ...ingredient,
-                      supplier_name:
-                        ingredient.supplier || (ingredient as Record<string, any>).supplier_name,
+                      supplier_name: ingredient.supplier || ingredient.supplier_name,
                     },
                   ]
                 : [],
@@ -167,11 +170,11 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
       .eq('dish_id', dishId);
 
     // Normalize the retry result to include category as null/undefined for type compatibility
-    const retryData = (retryResult.data || []) as unknown as Record<string, any>[];
+    const retryData = (retryResult.data || []) as unknown as any[];
     dishIngredients = retryData.map(item => ({
       ...item,
       ingredients: Array.isArray(item.ingredients)
-        ? item.ingredients.map((ing: Record<string, any>) => ({ ...ing, category: null }))
+        ? item.ingredients.map((ing: any) => ({ ...ing, category: null }))
         : item.ingredients
           ? { ...item.ingredients, category: null }
           : null,

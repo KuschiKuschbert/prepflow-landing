@@ -118,22 +118,6 @@ export default function LandingPageClient() {
       />
       <main
         className="desktop:pb-0 relative min-h-screen scroll-smooth bg-transparent pb-20 text-white"
-        style={
-          {
-            '--primary-color': '#29E7CD',
-            '--secondary-color': '#3B82F6',
-            '--accent-color': '#D925C7',
-            '--tertiary-color': '#FF6B00',
-            '--bg-color': '#0a0a0a',
-            '--text-color': '#ffffff',
-            '--gray-300': '#d1d5db',
-            '--gray-400': '#9ca3af',
-            '--gray-500': '#6b7280',
-            '--gray-600': '#4b5563',
-            '--gray-700': '#374151',
-            '--gray-800': '#1f2937',
-          } as React.CSSProperties
-        }
       >
         {/* Base background color */}
         <div className="fixed inset-0 -z-20 bg-[#0a0a0a]" aria-hidden={true} />

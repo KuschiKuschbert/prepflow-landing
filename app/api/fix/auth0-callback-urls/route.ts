@@ -1,7 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import {
-  enableGoogleConnectionForApp,
-  verifyGoogleConnection,
+    enableGoogleConnectionForApp,
+    verifyGoogleConnection,
 } from '@/lib/auth0-google-connection';
 import { getSocialConnections, verifyCallbackUrls } from '@/lib/auth0-management';
 import { logger } from '@/lib/logger';
@@ -77,19 +77,27 @@ export async function POST() {
       clientSecret: managementClientSecret,
     });
 
+    interface Auth0ClientData {
+      callbacks?: string[];
+      allowed_logout_urls?: string[];
+      logout_urls?: string[];
+      web_origins?: string[];
+    }
+
     // Get current application configuration
     const appResponse = await managementClient.clients.get({ client_id: applicationClientId });
-    const app = appResponse.data || (appResponse as unknown);
+    // Handle both potential response structures (axios-like with data or direct)
+    const app = (('data' in appResponse ? appResponse.data : appResponse) as unknown) as Auth0ClientData;
 
     // Build required URLs (Auth0 SDK uses /api/auth/callback, not /api/auth/callback/auth0)
     const { requiredCallbacks, requiredLogoutUrls, requiredWebOrigins } =
       buildRequiredUrls(baseUrl);
 
     // Merge with existing URLs (avoid duplicates)
-    const currentCallbacks = (app.callbacks || []) as string[];
+    const currentCallbacks = app.callbacks || [];
     // Auth0 Management API uses 'allowed_logout_urls' (with underscores, not 'logout_urls')
-    const currentLogoutUrls = (app.allowed_logout_urls || app.logout_urls || []) as string[];
-    const currentWebOrigins = (app.web_origins || []) as string[];
+    const currentLogoutUrls = app.allowed_logout_urls || app.logout_urls || [];
+    const currentWebOrigins = app.web_origins || [];
 
     const updatedCallbacks = [...new Set([...currentCallbacks, ...requiredCallbacks])];
     const updatedLogoutUrls = [...new Set([...currentLogoutUrls, ...requiredLogoutUrls])];
@@ -97,13 +105,15 @@ export async function POST() {
 
     // Update application
     // Auth0 Management API expects 'allowed_logout_urls' (not 'logout_urls')
+    const updateData: Record<string, unknown> = {
+      callbacks: updatedCallbacks,
+      allowed_logout_urls: updatedLogoutUrls,
+      web_origins: updatedWebOrigins,
+    };
+
     await managementClient.clients.update(
       { client_id: applicationClientId },
-      {
-        callbacks: updatedCallbacks,
-        allowed_logout_urls: updatedLogoutUrls,
-        web_origins: updatedWebOrigins,
-      } as any, // Auth0 SDK types may be incomplete
+      updateData as any, // Cast required due to strict SDK types not matching exact update payload sometimes
     );
 
     logger.info('[Auth0 Fix] Updated Auth0 application configuration', {

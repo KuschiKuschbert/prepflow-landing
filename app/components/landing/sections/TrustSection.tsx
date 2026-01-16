@@ -1,7 +1,7 @@
 'use client';
 
+import { LANDING_LAYOUT, LANDING_TYPOGRAPHY, getSectionClasses } from '@/lib/landing-styles';
 import { useTranslation } from '../../../../lib/useTranslation';
-import { LANDING_TYPOGRAPHY, LANDING_LAYOUT, getSectionClasses } from '@/lib/landing-styles';
 
 export function TrustSection() {
   const { t } = useTranslation();
@@ -21,22 +21,19 @@ export function TrustSection() {
       </div>
       <div className={`${LANDING_LAYOUT.container} desktop:grid-cols-3 grid gap-8`}>
         <div className="text-center">
-          <div className={`${LANDING_TYPOGRAPHY['3xl']} mb-2 font-bold text-[#29E7CD]`}>
-            {/* LANDING_COLORS.primary */}
+          <div className={`${LANDING_TYPOGRAPHY['3xl']} mb-2 font-bold text-landing-primary`}>
             100%
           </div>
           <div className="text-gray-400">{t('trust.compliant', 'QLD Compliant')}</div>
         </div>
         <div className="text-center">
-          <div className={`${LANDING_TYPOGRAPHY['3xl']} mb-2 font-bold text-[#3B82F6]`}>
-            {/* LANDING_COLORS.secondary */}
+          <div className={`${LANDING_TYPOGRAPHY['3xl']} mb-2 font-bold text-landing-secondary`}>
             Manual
           </div>
           <div className="text-gray-400">{t('trust.monitoring', 'Temperature Logging')}</div>
         </div>
         <div className="text-center">
-          <div className={`${LANDING_TYPOGRAPHY['3xl']} mb-2 font-bold text-[#D925C7]`}>
-            {/* LANDING_COLORS.accent */}
+          <div className={`${LANDING_TYPOGRAPHY['3xl']} mb-2 font-bold text-landing-accent`}>
             Real-time
           </div>
           <div className="text-gray-400">{t('trust.calculations', 'COGS Calculations')}</div>

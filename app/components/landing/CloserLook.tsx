@@ -1,17 +1,16 @@
 'use client';
 
-import AppleStyleFeatures from './AppleStyleFeatures';
 import {
-  Leaf,
-  DollarSign,
-  BarChart3,
-  Sparkles,
-  Thermometer,
-  Settings,
-  BookOpen,
-  LucideIcon,
+    BarChart3,
+    BookOpen,
+    DollarSign,
+    Leaf,
+    LucideIcon,
+    Settings,
+    Sparkles,
+    Thermometer,
 } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
+import AppleStyleFeatures from './AppleStyleFeatures';
 
 interface Feature {
   title: string;
@@ -20,7 +19,7 @@ interface Feature {
   screenshot: string;
   screenshotAlt: string;
   details: string[];
-  color: string;
+  colorClass: string;
   cta?: {
     text: string;
     href: string;
@@ -43,7 +42,7 @@ const features: Feature[] = [
       'CSV import/export for easy data management',
       'Automatic unit conversion and normalization',
     ],
-    color: '#29E7CD',
+    colorClass: 'text-landing-primary',
     cta: {
       text: 'Manage Ingredients',
       href: '/webapp/ingredients',
@@ -62,7 +61,7 @@ const features: Feature[] = [
       'Optimal pricing recommendations',
       'Gross profit margin analysis',
     ],
-    color: '#D925C7',
+    colorClass: 'text-landing-accent',
     cta: {
       text: 'Calculate COGS',
       href: '/webapp/cogs',
@@ -82,7 +81,7 @@ const features: Feature[] = [
       'Contributing margin calculations',
       'Easy recipe editing and management',
     ],
-    color: '#29E7CD',
+    colorClass: 'text-landing-primary',
     cta: {
       text: 'View Recipes',
       href: '/webapp/recipes',
@@ -104,7 +103,7 @@ const features: Feature[] = [
       'Burnt Toast: Low profit + Low popularity—consider removing',
       'Visual analytics with charts and scatter plots',
     ],
-    color: '#3B82F6',
+    colorClass: 'text-landing-secondary',
     cta: {
       text: 'Analyze Performance',
       href: '/webapp/performance',
@@ -123,7 +122,7 @@ const features: Feature[] = [
       'Complete audit trail for health inspections',
       'Standard task templates for quick setup',
     ],
-    color: '#29E7CD',
+    colorClass: 'text-landing-primary',
     cta: {
       text: 'Manage Cleaning',
       href: '/webapp/cleaning',
@@ -144,7 +143,7 @@ const features: Feature[] = [
       'Compliance reporting and audit trails',
       'Equipment status dashboard with visual indicators',
     ],
-    color: '#D925C7',
+    colorClass: 'text-landing-accent',
     cta: {
       text: 'Monitor Temperature',
       href: '/webapp/temperature',
@@ -163,7 +162,7 @@ const features: Feature[] = [
       'Account settings and preferences',
       'Data export and account deletion options',
     ],
-    color: '#3B82F6',
+    colorClass: 'text-landing-secondary',
     cta: {
       text: 'Open Settings',
       href: '/webapp/settings',
