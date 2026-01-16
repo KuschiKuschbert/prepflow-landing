@@ -3,13 +3,13 @@
  */
 import { logger } from '@/lib/logger';
 import { logSyncOperation } from '../../sync-log';
-import { validateAndSetup } from './helpers/validateAndSetup';
+import { calculatePopularityPercentages } from './helpers/calculatePopularityPercentages';
 import { fetchOrdersFromSquare } from './helpers/fetchOrders';
 import { processOrders } from './helpers/processOrders';
-import { calculatePopularityPercentages } from './helpers/calculatePopularityPercentages';
-import { upsertSalesData } from './helpers/upsertSalesData';
 import { updateSyncTimestampAndLog } from './helpers/updateSyncTimestamp';
-import type { SyncResult, SalesData } from './types';
+import { upsertSalesData } from './helpers/upsertSalesData';
+import { validateAndSetup } from './helpers/validateAndSetup';
+import type { SyncResult } from './types';
 
 /**
  * Sync orders from Square to PrepFlow
@@ -72,22 +72,25 @@ export async function syncOrdersFromSquare(
     };
 
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorStack = error instanceof Error ? error.stack : undefined;
+
     logger.error('[Square Orders Sync] Fatal error:', {
-      error: error.message,
+      error: errorMessage,
       userId,
-      stack: error.stack,
+      stack: errorStack,
     });
 
-    result.errorMessages?.push(`Fatal error: ${error.message}`);
+    result.errorMessages?.push(`Fatal error: ${errorMessage}`);
 
     await logSyncOperation({
       user_id: userId,
       operation_type: 'sync_orders',
       direction: 'square_to_prepflow',
       status: 'error',
-      error_message: error.message,
-      error_details: { stack: error.stack },
+      error_message: errorMessage,
+      error_details: { stack: errorStack },
     });
 
     return result;

@@ -96,7 +96,7 @@ export async function createCleaningTask(taskData: CreateCleaningTaskInput): Pro
   const { data, error } = await supabaseAdmin
     .from('cleaning_tasks')
     .select(CLEANING_TASKS_SELECT)
-    .eq('id', (insertResult as any).id)
+    .eq('id', insertResult.id)
     .single();
 
   if (error) {
@@ -105,7 +105,7 @@ export async function createCleaningTask(taskData: CreateCleaningTaskInput): Pro
       code: error.code,
       details: error.details,
       hint: error.hint,
-      taskId: (insertResult as any).id,
+      taskId: insertResult.id,
       context: { endpoint: '/api/cleaning-tasks', operation: 'POST', table: 'cleaning_tasks' },
     });
     // Return the basic data if SELECT fails (at least the insert worked)

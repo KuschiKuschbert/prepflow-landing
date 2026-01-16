@@ -16,8 +16,8 @@ describe('PrintButton', () => {
 
     // Try to find a component to render using heuristics
     const Component =
-      (Module as any).default ||
-      Object.values(Module).find((exp: any) => typeof exp === 'function');
+      (Module as { default?: React.ElementType }).default ||
+      (Object.values(Module).find((exp) => typeof exp === 'function') as React.ElementType);
 
     if (Component) {
       try {

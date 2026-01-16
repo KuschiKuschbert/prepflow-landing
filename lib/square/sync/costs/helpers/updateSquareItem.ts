@@ -57,7 +57,7 @@ export async function updateSquareItemCosts(
 
     // Update catalog object with custom attributes
     // Note: Square API requires updating the entire object, so we need to fetch first
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const getResponse = await (catalogApi as any).retrieveCatalogObject(squareItemId, true);
 
     if (!getResponse.result?.object) {
@@ -74,7 +74,7 @@ export async function updateSquareItemCosts(
     }
 
     // Update with custom attributes
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const updateResponse = await (catalogApi as any).upsertCatalogObject({
       idempotencyKey: `${squareItemId}-cost-${Date.now()}`,
       object: {

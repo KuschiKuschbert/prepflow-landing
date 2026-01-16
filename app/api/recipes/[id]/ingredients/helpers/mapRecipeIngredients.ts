@@ -5,6 +5,7 @@ import type { NormalizedRecipeIngredient, RecipeIngredientRow } from './types';
  */
 export function mapRecipeIngredients(rows: RecipeIngredientRow[]): NormalizedRecipeIngredient[] {
   return rows.map((row) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const ing = row.ingredients || ({} as any);
     return {
       id: row.id,

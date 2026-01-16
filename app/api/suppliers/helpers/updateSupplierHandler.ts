@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 import { updateSupplier } from '../helpers/updateSupplier';
 import { handleSupplierError } from './handleSupplierError';
 import { updateSupplierSchema } from './schemas';
@@ -54,7 +54,7 @@ export async function handleUpdateSupplier(request: NextRequest) {
       context: { endpoint: '/api/suppliers', method: 'PUT' },
     });
     if (err && typeof err === 'object' && 'status' in err) {
-      return NextResponse.json(err, { status: (err as any).status });
+      return NextResponse.json(err, { status: (err as { status: number }).status });
     }
     return handleSupplierError(err, 'PUT');
   }
