@@ -243,3 +243,16 @@ const result = await enableGoogleConnectionForApp();
 - ⏳ Complete login flow: Awaiting deployment
 
 **Next Action:** Wait for Vercel deployment, then test all endpoints and login flow.
+
+## Phase 16: Eradicate Any Type (Batch 1-3)
+
+**Date:** January 17, 2026
+**Status:** ✅ **Complete**
+
+**Achievements:**
+- **Total `any` Reduction:** 57% (496 -> 215)
+- **Scope:** 
+  - `lib/rsi`, `lib/square`, `scripts`
+  - `app/webapp` (menu-builder, ingredients, components)
+  - `components` (AppleStyleFeatures, CatchTheDocket, *.test.tsx)
+- **Verification:** Clean build (lint + type-check passed).
