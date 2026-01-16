@@ -52,7 +52,7 @@ export async function fetchMenuItemsWithFallback(menuId: string): Promise<FetchR
   if (errorInfo.isMissingDietary) {
     const dietaryError = allColumnsError as PostgrestError;
     logger.warn('[Menus API] Dietary/allergen columns not found, trying without them:', {
-      error: allColumnsError?.message,
+      error: (allColumnsError as PostgrestError)?.message,
       context: { endpoint: '/api/menus/[id]', operation: 'GET', menuId },
     });
 
@@ -107,7 +107,7 @@ export async function fetchMenuItemsWithFallback(menuId: string): Promise<FetchR
   // Try minimal query as last resort
   if (errorInfo.isColumnNotFound) {
     logger.warn('[Menus API] Unknown column not found, trying minimal query:', {
-      error: allColumnsError?.message,
+      error: (allColumnsError as PostgrestError)?.message,
       context: { endpoint: '/api/menus/[id]', operation: 'GET', menuId },
     });
 
