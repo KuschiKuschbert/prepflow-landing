@@ -7,8 +7,8 @@ import path from 'path';
 
 export interface OptimizationSuggestion {
   parameter: string;
-  currentValue: any;
-  proposedValue: any;
+  currentValue: unknown;
+  proposedValue: unknown;
   reason: string;
   confidence: number;
 }

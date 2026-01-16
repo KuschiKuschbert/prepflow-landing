@@ -3,8 +3,8 @@ import { TemperatureEquipment, TemperatureLog } from '../../../../temperature/ty
 /**
  * Calculate out of range temperature logs
  *
- * @param {any[]} todayLogs - Today's temperature logs
- * @param {any[]} equipment - Temperature equipment list
+ * @param {TemperatureLog[]} todayLogs - Today's temperature logs
+ * @param {TemperatureEquipment[]} equipment - Temperature equipment list
  * @returns {number} Count of out of range logs
  */
 export function calculateOutOfRange(

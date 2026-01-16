@@ -11,15 +11,22 @@ export interface LearningInsight {
   sourceFiles: string[];
 }
 
+export interface LearningHistoryRecord {
+  type: string;
+  status: string;
+  files?: string[];
+  [key: string]: unknown;
+}
+
 export interface LearningStrategy {
   name: string;
-  analyze(history: any[]): Promise<LearningInsight[]>;
+  analyze(history: LearningHistoryRecord[]): Promise<LearningInsight[]>;
 }
 
 export class FrequencyAnalysisStrategy implements LearningStrategy {
   name = 'Frequency Analysis';
 
-  async analyze(history: any[]): Promise<LearningInsight[]> {
+  async analyze(history: LearningHistoryRecord[]): Promise<LearningInsight[]> {
     const insights: LearningInsight[] = [];
 
     // Group by type

@@ -21,7 +21,7 @@ export class RuleGenerator {
     return this.hf;
   }
 
-  static async generateFromInsight(insight: any): Promise<GeneratedRule | null> {
+  static async generateFromInsight(insight: { insight: string; patternId: string }): Promise<GeneratedRule | null> {
     // 1. Hardcoded / Native Logic (Fast Path)
     if (insight.insight.includes('Replacing "any"') || insight.patternId === 'fix-any-type') {
       return {
@@ -40,7 +40,7 @@ export class RuleGenerator {
     return await this.generateDynamicRuleFromLLM(insight);
   }
 
-  private static async generateDynamicRuleFromLLM(insight: any): Promise<GeneratedRule | null> {
+  private static async generateDynamicRuleFromLLM(insight: { insight: string; patternId: string }): Promise<GeneratedRule | null> {
     const hf = this.getHFClient();
     if (!hf) {
       console.log('Skipping dynamic rule generation (No HF Key)');

@@ -8,7 +8,7 @@ import { getSquareConfig } from '../../config';
 import { logSyncOperation } from '../../sync-log';
 import type { SyncResult } from '../staff';
 import { updateLastStaffSyncTimestamp } from './helpers/common';
-import { processPrepFlowEmployee } from './helpers/processToSquare';
+import { processPrepFlowEmployee, TeamApi } from './helpers/processToSquare';
 
 /**
  * Sync employees from PrepFlow to Square
@@ -80,7 +80,7 @@ export async function syncStaffToSquare(
 
     // Process each employee
     for (const employee of employees) {
-      await processPrepFlowEmployee(employee, userId, teamApi, result);
+      await processPrepFlowEmployee(employee, userId, teamApi as unknown as TeamApi, result);
     }
 
     // Update last sync timestamp

@@ -81,7 +81,9 @@ describe('${componentName}', () => {
     expect(Module).toBeDefined();
 
     // Try to find a component to render using heuristics
-    const Component = (Module as unknown as any).default || Object.values(Module).find((exp: unknown) => typeof exp === 'function');
+    const defaultExport = (Module as { default?: unknown }).default;
+    const Component = (typeof defaultExport === 'function' ? (defaultExport as React.ElementType) : undefined) ||
+      (Object.values(Module).find((exp) => typeof exp === 'function') as React.ElementType);
 
     if (Component) {
         try {

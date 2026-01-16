@@ -22,7 +22,7 @@ export function ComplianceTypeForm({
   const { t } = useTranslation();
 
   // Autosave integration
-  const entityId = (formData as any).id || 'new';
+  const entityId = (formData as { id?: string }).id || 'new';
   const canAutosave = entityId !== 'new' || Boolean(formData.name);
 
   const {

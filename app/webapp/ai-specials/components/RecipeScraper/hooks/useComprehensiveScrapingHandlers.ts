@@ -31,7 +31,7 @@ export function useComprehensiveScrapingHandlers({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ comprehensive: true }),
       });
-      const result = await response.json();
+      const result = (await response.json()) as { success: boolean; data: { jobStatus: ComprehensiveJobStatus }; message?: string };
 
       if (result.success) {
         setComprehensiveStatus(result.data.jobStatus);
@@ -67,11 +67,11 @@ export function useComprehensiveScrapingHandlers({
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        const errorData = (await response.json().catch(() => ({ error: 'Unknown error' }))) as { error?: string };
         throw new Error(errorData.error || `HTTP ${response.status}`);
       }
 
-      const result = await response.json();
+      const result = (await response.json()) as { success: boolean; data: { status: ComprehensiveJobStatus }; message?: string };
 
       if (result.success) {
         setComprehensiveStatus(result.data.status);
@@ -93,7 +93,7 @@ export function useComprehensiveScrapingHandlers({
   const handleRefreshStatus = useCallback(async () => {
     try {
       const response = await fetch('/api/recipe-scraper/status');
-      const result = await response.json();
+      const result = (await response.json()) as { success: boolean; data: ComprehensiveJobStatus };
       if (result.success) {
         setComprehensiveStatus(result.data);
         if (result.data.isRunning) {

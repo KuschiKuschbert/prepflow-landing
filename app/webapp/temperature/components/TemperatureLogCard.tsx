@@ -1,19 +1,26 @@
 'use client';
 
-import { Icon } from '@/components/ui/Icon';
 import OptimizedImage from '@/components/OptimizedImage';
+import { Icon } from '@/components/ui/Icon';
 import { useTranslation } from '@/lib/useTranslation';
+import {
+    AlertTriangle,
+    Camera,
+    CheckCircle2,
+    LucideIcon,
+    MapPin,
+    Pencil,
+    User,
+} from 'lucide-react';
 import { TemperatureEquipment, TemperatureLog } from '../types';
 import { getStatusColor } from './utils';
-import {
-  LucideIcon,
-  MapPin,
-  CheckCircle2,
-  AlertTriangle,
-  User,
-  Camera,
-  Pencil,
-} from 'lucide-react';
+
+interface FoodSafetyStatus {
+  status: 'safe' | 'warning' | 'danger';
+  message: string;
+  icon: LucideIcon;
+  color: string;
+}
 
 interface TemperatureLogCardProps {
   log: TemperatureLog;
@@ -21,7 +28,7 @@ interface TemperatureLogCardProps {
   temperatureTypes: Array<{ value: string; label: string; icon: string }>;
   formatDateString: (dateString: string) => string;
   getTemperatureStatus: (temp: number, location: string) => string;
-  getFoodSafetyStatus: (temp: number, logTime: string, logDate: string, type: string) => any;
+  getFoodSafetyStatus: (temp: number, logTime: string, logDate: string, type: string) => FoodSafetyStatus | null;
   getTypeIcon: (type: string) => LucideIcon;
   getTypeLabel: (type: string) => string;
   onLogClick: (log: TemperatureLog) => void;

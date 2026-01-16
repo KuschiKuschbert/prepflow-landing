@@ -11,10 +11,15 @@ import { mapEmployeeToSquareTeamMember } from './mapping';
 /**
  * Process a single PrepFlow employee for sync to Square
  */
+export interface TeamApi {
+  updateTeamMember(id: string, body: { teamMember: unknown }): Promise<{ result: { teamMember?: unknown } }>;
+  createTeamMember(body: { idempotencyKey: string; teamMember: unknown }): Promise<{ result: { teamMember?: { id: string } } }>;
+}
+
 export async function processPrepFlowEmployee(
   employee: Employee,
   userId: string,
-  teamApi: any, // Keeping any for SDK api as it varies, but removing others
+  teamApi: TeamApi,
   result: SyncResult,
 ): Promise<void> {
   if (!supabaseAdmin) {
