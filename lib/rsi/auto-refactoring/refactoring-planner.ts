@@ -200,7 +200,7 @@ export class RefactoringPlanner {
         riskScore: 1,
         status: 'pending',
         codemodPath: 'lib/rsi/auto-refactoring/codemods/log-sanitization.ts',
-        targetFiles: this.extractPath(itemText) || ['app/**/*.{ts,tsx}', 'lib/**/*.ts'],
+        targetFiles: this.extractPath(itemText) || ['app/**/*.{ts,tsx}', 'lib/**/*.ts', '!lib/rsi/**/*'],
         sourceDebtItem: itemText,
       };
     }
