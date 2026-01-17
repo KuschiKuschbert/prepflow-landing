@@ -86,7 +86,7 @@ await runArchitectureAnalysis(config.dryRun);
       } catch (dashError) {
         console.error('Failed to generate dashboard:', dashError);
       }
-.toFixed(2)}s)`);
+      console.log(`\n✅ RSI Cycle Complete (${(duration / 1000).toFixed(2)}s)`);
     }
   }
 
