@@ -39,8 +39,7 @@ export class ESLintFixProvider implements FixProvider {
       );
 
       if (!stdout.trim()) {
-        console.log('   No ESLint issues found.');
-        return [];
+return [];
       }
 
       const results: ESLintResult[] = JSON.parse(stdout);
@@ -51,13 +50,9 @@ export class ESLintFixProvider implements FixProvider {
       );
 
       if (fixableFiles.length === 0) {
-        console.log('   No auto-fixable ESLint issues found.');
-        return [];
+return [];
       }
-
-      console.log(`   Found ${fixableFiles.length} files with fixable ESLint issues.`);
-
-      // Create a single batch fix suggestion for all fixable files
+// Create a single batch fix suggestion for all fixable files
       const filePaths = fixableFiles.map(f => f.filePath);
       const totalFixable = fixableFiles.reduce(
         (sum, f) => sum + f.fixableErrorCount + f.fixableWarningCount,

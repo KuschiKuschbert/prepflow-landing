@@ -25,13 +25,12 @@ export class RuleManager {
       }
 
       if (rules.some(r => r.name === rule.name)) {
-        console.log(`Rule "${rule.name}" already active.`);
-        return false;
+return false;
       }
 
       rules.push(rule);
       fs.writeFileSync(ACTIVE_RULES_PATH, JSON.stringify(rules, null, 2));
-      console.log(`Rule "${rule.name}" activated (Custom Pattern).`);
+.`);
       return true;
     } catch (error) {
       console.error('Failed to activate rule:', error);
@@ -57,8 +56,7 @@ export class RuleManager {
 
       // Check if rule already exists
       if (content.includes(`'${rule.definition}':`)) {
-        console.log(`ESLint Rule "${rule.definition}" already active.`);
-        return false;
+return false;
       }
 
       // Injection logic: Find "rules: {" and insert after it
@@ -68,8 +66,7 @@ export class RuleManager {
       if (content.includes(insertionPoint)) {
         content = content.replace(insertionPoint, `${insertionPoint}\n      ${ruleEntry}`);
         fs.writeFileSync(RSI_ESLINT_CONFIG_PATH, content);
-        console.log(`ESLint Rule "${rule.definition}" activated in rsi.eslint.config.mjs.`);
-        return true;
+return true;
       } else {
         console.error('Could not find rules block in RSI config.');
         return false;

@@ -41,8 +41,7 @@ export class ConsoleCleanupProvider implements FixProvider {
       );
 
       if (!stdout.trim()) {
-        console.log('   No console.log statements found in production code.');
-        return [];
+return [];
       }
 
       const filesWithConsole = stdout.trim().split('\n').filter(Boolean);
@@ -63,13 +62,9 @@ export class ConsoleCleanupProvider implements FixProvider {
       }
 
       if (productionFiles.length === 0) {
-        console.log('   No console.log statements in production code.');
-        return [];
+return [];
       }
-
-      console.log(`   Found ${productionFiles.length} production files with console.log.`);
-
-      // Create individual suggestions for each file (safer, more granular)
+// Create individual suggestions for each file (safer, more granular)
       for (const filePath of productionFiles) {
         const content = await fs.readFile(filePath, 'utf8');
         const consoleCount = (content.match(/console\.log\(/g) || []).length;

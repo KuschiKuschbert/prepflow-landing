@@ -58,7 +58,7 @@ export async function getSquareClient(userId: string): Promise<SquareClient | nu
     // Create Square client
     // Note: Square SDK constructor signature may vary by version
     // Using type assertion to handle potential type mismatches
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     const client = new SquareClient({
       accessToken: accessToken,
       environment: environment,

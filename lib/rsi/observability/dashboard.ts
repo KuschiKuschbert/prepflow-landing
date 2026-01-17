@@ -55,8 +55,7 @@ export class RSIDashboard {
     md += `\n---\n*This report is generated automatically by the RSI Orchestrator.*`;
 
     fs.writeFileSync(reportPath, md);
-    console.log(`✅ RSI Dashboard updated at: ${reportPath}`);
-  }
+}
 
   private static formatStatus(status: string): string {
     switch (status) {

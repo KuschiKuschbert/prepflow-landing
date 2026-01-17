@@ -277,9 +277,7 @@ export async function loadDesignPatterns(): Promise<DesignPattern[]> {
  * Main entry point for RSI orchestrator
  */
 export async function runArchitectureAnalysis(dryRun = false): Promise<void> {
-  console.log('🏗️ Running Architecture Analysis...');
-
-  const rootDir = process.cwd();
+const rootDir = process.cwd();
   const reportsDir = path.join(rootDir, 'reports');
   await fs.mkdir(reportsDir, { recursive: true });
 
@@ -314,12 +312,10 @@ export async function runArchitectureAnalysis(dryRun = false): Promise<void> {
   }
 
   if (dryRun) {
-    console.log('  [DRY RUN] Would analyze architecture of: ' + dirsToScan.join(', '));
+);
     return;
   }
-
-  console.log('  Scanning architecture...');
-  for (const dir of dirsToScan) {
+for (const dir of dirsToScan) {
     const fullDir = path.join(rootDir, dir);
     try {
       await scanDir(fullDir);
@@ -361,7 +357,6 @@ export async function runArchitectureAnalysis(dryRun = false): Promise<void> {
   }
 
   await fs.writeFile(reportPath, markdown, 'utf8');
-  console.log(
-    `  ✅ Architecture analysis complete. Report saved to ${path.relative(rootDir, reportPath)}`,
+}`,
   );
 }

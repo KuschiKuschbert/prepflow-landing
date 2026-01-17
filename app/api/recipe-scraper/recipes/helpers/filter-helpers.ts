@@ -46,7 +46,7 @@ export function filterByFormatAfterLoad(recipes: unknown[], formatFilter: string
   }
 
   return recipes.filter(recipe => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     const formatted = isRecipeFormatted(recipe as RecipeEntry);
     return formatFilter === 'formatted' ? formatted : !formatted;
   });

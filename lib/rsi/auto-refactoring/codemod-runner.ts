@@ -19,8 +19,7 @@ export class CodemodRunner {
     const command = `npx jscodeshift -t ${codemodPath} ${filesStr} --parser=tsx ${dryRunFlag}`;
 
     try {
-      console.log(`Executing codemod: ${command}`);
-      const { stdout, stderr } = await execAsync(command);
+const { stdout, stderr } = await execAsync(command);
       if (stdout) console.log(stdout);
       if (stderr) console.error(stderr);
       return { success: true, output: stdout };

@@ -12,23 +12,16 @@ const execAsync = util.promisify(exec);
 export class ValidationSuite {
   static async validate(affectedFiles: string[]): Promise<boolean> {
     try {
-      console.log(`Validating ${affectedFiles.length} files...`);
-
-      // 1. Check if git sees any changes
+// 1. Check if git sees any changes
       const { stdout: diffStdout } = await execAsync('git diff --name-only');
       if (!diffStdout.trim()) {
         console.warn('⚠️ No changes detected after refactoring execution.');
         return false;
       }
-
-      console.log('✅ Changes detected on disk.');
-
-      // 2. Perform basic type check
-      console.log('Running type check...');
-      try {
+// 2. Perform basic type check
+try {
         await execAsync('npx tsc --noEmit');
-        console.log('✅ Type check passed.');
-        return true;
+return true;
       } catch (err: unknown) {
         console.error('❌ Type check failed. Analyzing errors...');
         const errorObj = err as Error & { stdout?: string };
@@ -49,14 +42,11 @@ export class ValidationSuite {
         }
 
         if (failedFiles.size > 0) {
-          console.log(`⚠️ Identifying ${failedFiles.size} broken files. Reverting them...`);
-          const failedFilesArray = Array.from(failedFiles);
+const failedFilesArray = Array.from(failedFiles);
           for (const file of failedFilesArray) {
-            console.log(`   Reverting ${file}...`);
-            await execAsync(`git checkout "${file}"`);
+await execAsync(`git checkout "${file}"`);
           }
-          console.log('✅ Partial rollback complete. Valid changes preserved.');
-          return true; // Return true because we fixed the broken state by reverting
+return true; // Return true because we fixed the broken state by reverting
         } else {
           console.error('❌ Could not identify specific broken files. Reverting all...');
           return false; // Trigger full revert in caller

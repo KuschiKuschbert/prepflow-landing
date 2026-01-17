@@ -51,7 +51,7 @@ export async function handleRecipeUpdate(
     logger.warn('[Recipes API] Could not fetch current recipe for change detection:', err);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   const updateData = buildUpdateData(body as Record<string, unknown>);
   const safeBody = body as Record<string, unknown>;
   const ingredientsChanged = safeBody.ingredients !== undefined;
