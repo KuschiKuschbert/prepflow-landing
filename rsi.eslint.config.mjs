@@ -13,6 +13,7 @@ const rsiConfig = [
     // These rules have been synthesized from historical success patterns.
     files: ['**/*.ts', '**/*.tsx'],
     rules: {
+      '@typescript-eslint/no-explicit-any': 'error', // No Explicit Any (Native)
       // Validated Rules will be injected here by RSI
     },
   },

@@ -1,9 +1,9 @@
 # 🏗️ RSI Architecture Analysis Report
 
-**Date:** 1/16/2026, 7:07:11 PM
+**Date:** 1/16/2026, 3:26:09 PM
 
 **Detected Design Patterns:** 7
-**Detected Anti-Patterns:** 542
+**Detected Anti-Patterns:** 547
 
 ## ⚠️ Anti-Patterns Detected
 
@@ -603,11 +603,6 @@
 **Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
-**File:** `app/api/menus/[id]/helpers/enrichment/calculateRecommendedPrices.ts`
-**Description:** Code has 8 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
-
-### Spaghetti Code (HIGH)
 **File:** `app/api/menus/[id]/helpers/fetchMenuItemsWithFallback.ts`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
@@ -656,11 +651,6 @@
 **File:** `app/api/menus/[id]/lock/helpers/lockOperations.ts`
 **Description:** Found 16 magic numbers
 **Suggestion:** Extract magic numbers to named constants
-
-### Spaghetti Code (HIGH)
-**File:** `app/api/menus/[id]/lock/helpers/parseRecipeCard.ts`
-**Description:** Code has 9 levels of nesting
-**Suggestion:** Extract nested logic into separate functions
 
 ### Spaghetti Code (HIGH)
 **File:** `app/api/menus/[id]/lock/helpers/subRecipeUtils.ts`
@@ -768,8 +758,13 @@
 **Suggestion:** Extract nested logic into separate functions
 
 ### Spaghetti Code (HIGH)
-**File:** `app/api/prep-lists/batch-create/route.ts`
-**Description:** Code has 8 levels of nesting
+**File:** `app/api/prep-lists/batch-create/helpers/processBatch.test.ts`
+**Description:** Code has 7 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+**File:** `app/api/prep-lists/batch-create/helpers/processBatch.ts`
+**Description:** Code has 7 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
 ### Spaghetti Code (HIGH)
@@ -854,7 +849,7 @@
 
 ### Spaghetti Code (HIGH)
 **File:** `app/api/recipes/[id]/allergen-sources/route.ts`
-**Description:** Code has 6 levels of nesting
+**Description:** Code has 7 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
 ### Magic Numbers (MEDIUM)
@@ -879,6 +874,11 @@
 
 ### Spaghetti Code (HIGH)
 **File:** `app/api/recipes/[id]/ingredients/helpers/fetchRecipeMetadata.ts`
+**Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+**File:** `app/api/recipes/[id]/ingredients/route.ts`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
@@ -2328,6 +2328,11 @@
 **Suggestion:** Extract nested logic into separate functions
 
 ### Spaghetti Code (HIGH)
+**File:** `lib/data-transfer/country-detection.ts`
+**Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
 **File:** `lib/dietary/dietary-aggregation/dish-aggregation/helpers/fetchDishIngredients.ts`
 **Description:** Code has 7 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
@@ -2484,12 +2489,32 @@
 
 ### Spaghetti Code (HIGH)
 **File:** `lib/rsi/meta-learning/knowledge-synthesizer.ts`
+**Description:** Code has 7 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+**File:** `lib/rsi/meta-learning/learning-strategy.ts`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
 ### Spaghetti Code (HIGH)
 **File:** `lib/rsi/predictive-analysis/index.ts`
 **Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+**File:** `lib/rsi/rule-evolution/rule-generator.ts`
+**Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+**File:** `lib/rsi/rule-evolution/rule-manager.ts`
+**Description:** Code has 7 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+**File:** `lib/rsi/self-optimization/optimizer.ts`
+**Description:** Code has 8 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
 ### Magic Numbers (MEDIUM)
@@ -2649,7 +2674,7 @@
 
 ### Spaghetti Code (HIGH)
 **File:** `components/ui/ErrorBoundary.tsx`
-**Description:** Code has 6 levels of nesting
+**Description:** Code has 7 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
 ### Spaghetti Code (HIGH)
