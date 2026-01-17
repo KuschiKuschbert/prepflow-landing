@@ -30,7 +30,7 @@ return false;
 
       rules.push(rule);
       fs.writeFileSync(ACTIVE_RULES_PATH, JSON.stringify(rules, null, 2));
-.`);
+      console.log(`✅ Activated RSI rule: ${rule.name}`);
       return true;
     } catch (error) {
       console.error('Failed to activate rule:', error);
