@@ -3,8 +3,8 @@
  */
 
 import {
-    invalidateDishesWithRecipe,
-    invalidateRecipeAllergenCache,
+  invalidateDishesWithRecipe,
+  invalidateRecipeAllergenCache,
 } from '@/lib/allergens/cache-invalidation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getUserEmail } from '@/lib/auth0-api-helpers';
@@ -82,7 +82,9 @@ export async function handleRecipeUpdate(
   }
 
   const recipeName =
-    ((updatedRecipe as Record<string, unknown>).recipe_name as string) || (currentRecipe as RecipeRecord)?.recipe_name as string || 'Unknown Recipe';
+    ((updatedRecipe as Record<string, unknown>).recipe_name as string) ||
+    ((currentRecipe as RecipeRecord)?.recipe_name as string) ||
+    'Unknown Recipe';
 
   // Invalidate caches if needed
   if (ingredientsChanged) {

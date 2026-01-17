@@ -11,7 +11,9 @@ register();
 
 const { FixOrchestrator } = require('../../lib/rsi/auto-fix/fix-orchestrator');
 const { ESLintFixProvider } = require('../../lib/rsi/auto-fix/providers/eslint-fix-provider');
-const { ConsoleCleanupProvider } = require('../../lib/rsi/auto-fix/providers/console-cleanup-provider');
+const {
+  ConsoleCleanupProvider,
+} = require('../../lib/rsi/auto-fix/providers/console-cleanup-provider');
 
 async function main() {
   const args = process.argv.slice(2);

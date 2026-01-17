@@ -4,17 +4,17 @@
 
 import type { BackupData } from '../types';
 import {
-    AUTH_TAG_LENGTH,
-    BACKUP_HEADER,
-    BACKUP_VERSION,
-    ENCRYPTION_MODE_PREPFLOW_ONLY,
-    ENCRYPTION_MODE_USER_PASSWORD,
-    IV_LENGTH,
+  AUTH_TAG_LENGTH,
+  BACKUP_HEADER,
+  BACKUP_VERSION,
+  ENCRYPTION_MODE_PREPFLOW_ONLY,
+  ENCRYPTION_MODE_USER_PASSWORD,
+  IV_LENGTH,
 } from './constants';
 import {
-    deriveKeyFromPassword,
-    deriveKeyFromServerKey,
-    getPrepFlowEncryptionKey,
+  deriveKeyFromPassword,
+  deriveKeyFromServerKey,
+  getPrepFlowEncryptionKey,
 } from './key-management';
 
 /**

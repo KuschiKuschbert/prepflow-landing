@@ -195,7 +195,12 @@ export async function populateBasicData(
     .map(r => {
       // Use 'name' column and match API schema (yield and yield_unit)
       // The API uses yield and yield_unit (see app/api/recipes/route.ts line 140-141)
-      const recipeData: { name: string; yield: number; yield_unit: string; instructions: string | null } = {
+      const recipeData: {
+        name: string;
+        yield: number;
+        yield_unit: string;
+        instructions: string | null;
+      } = {
         name: r.name, // Primary column name
         yield: r.yield || 1, // Default to 1 if not provided
         yield_unit: r.yield_unit || 'servings', // Default to 'servings'

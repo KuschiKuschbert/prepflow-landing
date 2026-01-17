@@ -18,15 +18,15 @@ const transform: Transform = (file: FileInfo, api: API, options: Options) => {
       const name = specifier.local?.name;
       if (!name) return true;
 
-      const usages = root
-        .find(j.Identifier, { name })
-        .filter(idPath => {
-          const parent = idPath.parent.node;
-          // Ignore the definition in the import itself
-          return !j.ImportSpecifier.check(parent) &&
-                 !j.ImportDefaultSpecifier.check(parent) &&
-                 !j.ImportNamespaceSpecifier.check(parent);
-        });
+      const usages = root.find(j.Identifier, { name }).filter(idPath => {
+        const parent = idPath.parent.node;
+        // Ignore the definition in the import itself
+        return (
+          !j.ImportSpecifier.check(parent) &&
+          !j.ImportDefaultSpecifier.check(parent) &&
+          !j.ImportNamespaceSpecifier.check(parent)
+        );
+      });
 
       return usages.length > 0;
     });

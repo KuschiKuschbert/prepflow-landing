@@ -1,4 +1,3 @@
-
 import { RawMenuItem } from '../../../types';
 import { calculateDishSellingPrice } from '../../statistics/helpers/calculateDishSellingPrice';
 import { calculateRecipeSellingPrice } from '../../statistics/helpers/calculateRecipeSellingPrice';
@@ -33,25 +32,25 @@ describe('calculateRecommendedPrice', () => {
   };
 
   it('should return existing recommended price if present and columns exist', async () => {
-    const item = { ...mockItemBase, recommended_selling_price: 15.00 } as RawMenuItem;
+    const item = { ...mockItemBase, recommended_selling_price: 15.0 } as RawMenuItem;
     const result = await calculateRecommendedPrice(item, 'menu-1', true);
-    expect(result).toBe(15.00);
+    expect(result).toBe(15.0);
     expect(calculateDishSellingPrice).not.toHaveBeenCalled();
     expect(calculateRecipeSellingPrice).not.toHaveBeenCalled();
   });
 
   it('should calculate dish price if no existing price', async () => {
     const item = {
-        ...mockItemBase,
-        dish_id: 'dish-1',
-        dishes: { id: 'dish-1' },
-        recommended_selling_price: null
+      ...mockItemBase,
+      dish_id: 'dish-1',
+      dishes: { id: 'dish-1' },
+      recommended_selling_price: null,
     } as unknown as RawMenuItem;
 
-    (calculateDishSellingPrice as jest.Mock).mockResolvedValue(20.00);
+    (calculateDishSellingPrice as jest.Mock).mockResolvedValue(20.0);
 
     const result = await calculateRecommendedPrice(item, 'menu-1', true);
-    expect(result).toBe(20.00);
+    expect(result).toBe(20.0);
     expect(calculateDishSellingPrice).toHaveBeenCalledWith('dish-1');
     // Check background caching was triggered (difficult to await, but jest mocks capture it)
     // We can simulate waiting for promise queue if needed, but for now just checks duplication logic
@@ -59,15 +58,15 @@ describe('calculateRecommendedPrice', () => {
 
   it('should calculate recipe price if no existing price and no dish', async () => {
     const item = {
-        ...mockItemBase,
-        recipe_id: 'recipe-1',
-        recommended_selling_price: null
+      ...mockItemBase,
+      recipe_id: 'recipe-1',
+      recommended_selling_price: null,
     } as RawMenuItem;
 
-    (calculateRecipeSellingPrice as jest.Mock).mockResolvedValue(12.50);
+    (calculateRecipeSellingPrice as jest.Mock).mockResolvedValue(12.5);
 
     const result = await calculateRecommendedPrice(item, 'menu-1', true);
-    expect(result).toBe(12.50);
+    expect(result).toBe(12.5);
     expect(calculateRecipeSellingPrice).toHaveBeenCalledWith('recipe-1');
   });
 

@@ -75,6 +75,9 @@ export async function createNewDish(
       { onConflict: 'square_id' },
     );
   } catch (error: unknown) {
-    logger.warn('[Square Catalog Sync] Failed to sync to POS table:', error instanceof Error ? error.message : String(error));
+    logger.warn(
+      '[Square Catalog Sync] Failed to sync to POS table:',
+      error instanceof Error ? error.message : String(error),
+    );
   }
 }

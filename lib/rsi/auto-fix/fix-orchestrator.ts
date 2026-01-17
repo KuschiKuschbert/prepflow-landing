@@ -73,7 +73,9 @@ export class FixOrchestrator {
 
     // Dry Run
     if (options.dryRun) {
-      console.log(`[DRY RUN] Would apply: ${suggestion.description} (${score.level}, ${score.score.toFixed(2)})`);
+      console.log(
+        `[DRY RUN] Would apply: ${suggestion.description} (${score.level}, ${score.score.toFixed(2)})`,
+      );
       return;
     }
 

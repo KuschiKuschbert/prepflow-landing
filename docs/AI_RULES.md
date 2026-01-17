@@ -79,13 +79,15 @@ For any task with high complexity or repeated failures, agents **MUST** follow t
 The RSI system matches the **Ralph Loop** methodology with autonomous tooling. It learns from your fixes and prevents regressions.
 
 ### Core RSI Commands
-| Command | Description |
-| :--- | :--- |
-| `npm run rsi:status` | **ALWAYS CHECK THIS** before major refactors. Shows active rules. |
-| `npm run rsi:fix` | Automatically applies learned fixes (linting, patterns, safety). |
-| `npm run rsi:run` | Triggers the nightly self-improvement loop (Analysis -> Fix -> Evolve). |
+
+| Command              | Description                                                             |
+| :------------------- | :---------------------------------------------------------------------- |
+| `npm run rsi:status` | **ALWAYS CHECK THIS** before major refactors. Shows active rules.       |
+| `npm run rsi:fix`    | Automatically applies learned fixes (linting, patterns, safety).        |
+| `npm run rsi:run`    | Triggers the nightly self-improvement loop (Analysis -> Fix -> Evolve). |
 
 ### RSI Rules
+
 1.  **Check Status**: Before starting a complex task, run `npm run rsi:status` to see if the RSI has warnings or advice for the current codebase state.
 2.  **Prefer Auto-Fix**: If you see a lint error that looks common, try `npm run rsi:fix` first.
 3.  **Respect the Config**: Rules in `rsi.eslint.config.mjs` are generated from successful valid patterns. Do not disable them manually; instead, fix the code to comply.

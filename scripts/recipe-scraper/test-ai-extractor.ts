@@ -114,7 +114,9 @@ async function runComparison() {
     let html = '';
     try {
       // Access protected fetchPage method for testing
-      const response = await (testCase.scraper as unknown as { fetchPage: (url: string) => Promise<string> }).fetchPage(testCase.url);
+      const response = await (
+        testCase.scraper as unknown as { fetchPage: (url: string) => Promise<string> }
+      ).fetchPage(testCase.url);
       html = response;
     } catch (error) {
       scraperLogger.error(`   Failed to fetch HTML: ${error}`);

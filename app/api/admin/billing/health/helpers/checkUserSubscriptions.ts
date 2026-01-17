@@ -13,7 +13,7 @@ interface UserWithSubscription {
  */
 export async function checkUserSubscriptions(
   users: UserWithSubscription[],
-  stripe: Stripe
+  stripe: Stripe,
 ): Promise<UserSubscriptionCheckResult> {
   const result: UserSubscriptionCheckResult = {
     mismatchedStatuses: [],

@@ -71,7 +71,7 @@ async function manualFetchAndJoinIngredients(dishId: string) {
   const { data: ingredientsData, error: ingFetchError } = await supabaseAdmin
     .from('ingredients')
     .select(
-      'id, ingredient_name, cost_per_unit, cost_per_unit_incl_trim, trim_peel_waste_percentage, yield_percentage, unit, supplier, category, brand, allergens, allergen_source'
+      'id, ingredient_name, cost_per_unit, cost_per_unit_incl_trim, trim_peel_waste_percentage, yield_percentage, unit, supplier, category, brand, allergens, allergen_source',
     )
     .in('id', ingredientIds);
 
@@ -86,7 +86,7 @@ async function manualFetchAndJoinIngredients(dishId: string) {
 
   // Create a map for quick lookup
   const ingredientsMap = new Map<string, RawIngredientRow>(
-    (ingredientsData as RawIngredientRow[]).map(ing => [ing.id, ing])
+    (ingredientsData as RawIngredientRow[]).map(ing => [ing.id, ing]),
   );
 
   // Manually join the data
@@ -148,7 +148,7 @@ async function retryFetchWithoutCategory(dishId: string) {
         allergens,
         allergen_source
       )
-    `
+    `,
     )
     .eq('dish_id', dishId);
 
@@ -159,8 +159,8 @@ async function retryFetchWithoutCategory(dishId: string) {
     ingredients: Array.isArray(item.ingredients)
       ? item.ingredients.map((ing: Record<string, unknown>) => ({ ...ing, category: null }))
       : item.ingredients
-      ? { ...(item.ingredients as Record<string, unknown>), category: null }
-      : null,
+        ? { ...(item.ingredients as Record<string, unknown>), category: null }
+        : null,
   }));
 
   return { data: normalizedData, error: retryResult.error };
@@ -197,7 +197,7 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
         allergens,
         allergen_source
       )
-    `
+    `,
     )
     .eq('dish_id', dishId);
 
@@ -209,8 +209,8 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
   ) {
     const manualResult = await manualFetchAndJoinIngredients(dishId);
     if (manualResult) {
-       // @ts-ignore - manualResult structure matches what we expect even if types are tricky
-       dishIngredients = manualResult;
+      // @ts-ignore - manualResult structure matches what we expect even if types are tricky
+      dishIngredients = manualResult;
     }
   }
 
@@ -240,7 +240,9 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
     .filter(di => di.ingredients !== null && di.ingredients !== undefined)
     .map(di => {
       const ingredients = di.ingredients;
-      const ing = Array.isArray(ingredients) ? (ingredients[0] as Record<string, unknown>) : (ingredients as Record<string, unknown>);
+      const ing = Array.isArray(ingredients)
+        ? (ingredients[0] as Record<string, unknown>)
+        : (ingredients as Record<string, unknown>);
 
       if (!ing) return null;
 

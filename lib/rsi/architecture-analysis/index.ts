@@ -302,12 +302,12 @@ export async function runArchitectureAnalysis(dryRun = false): Promise<void> {
 
         const patterns = detectDesignPatterns(content, relativePath);
         if (patterns.length > 0) {
-            allPatterns[relativePath] = patterns;
+          allPatterns[relativePath] = patterns;
         }
 
         const antiPatterns = detectAntiPatterns(content, relativePath);
         if (antiPatterns.length > 0) {
-            allAntiPatterns.push(...antiPatterns);
+          allAntiPatterns.push(...antiPatterns);
         }
       }
     }
@@ -322,9 +322,9 @@ export async function runArchitectureAnalysis(dryRun = false): Promise<void> {
   for (const dir of dirsToScan) {
     const fullDir = path.join(rootDir, dir);
     try {
-        await scanDir(fullDir);
+      await scanDir(fullDir);
     } catch (e) {
-         console.warn(`  Could not scan ${dir}, skipping...`);
+      console.warn(`  Could not scan ${dir}, skipping...`);
     }
   }
 
@@ -337,29 +337,31 @@ export async function runArchitectureAnalysis(dryRun = false): Promise<void> {
 
   markdown += '## ⚠️ Anti-Patterns Detected\n\n';
   if (allAntiPatterns.length === 0) {
-      markdown += "✅ No anti-patterns detected.\n\n";
+    markdown += '✅ No anti-patterns detected.\n\n';
   } else {
-      for (const ap of allAntiPatterns) {
-          markdown += `### ${ap.name} (${ap.severity.toUpperCase()})\n`;
-          markdown += `**File:** \`${ap.file}\`\n`;
-          markdown += `**Description:** ${ap.description}\n`;
-          markdown += `**Suggestion:** ${ap.suggestion}\n\n`;
-      }
+    for (const ap of allAntiPatterns) {
+      markdown += `### ${ap.name} (${ap.severity.toUpperCase()})\n`;
+      markdown += `**File:** \`${ap.file}\`\n`;
+      markdown += `**Description:** ${ap.description}\n`;
+      markdown += `**Suggestion:** ${ap.suggestion}\n\n`;
+    }
   }
 
   markdown += '## 🧩 Design Patterns Usage\n\n';
   if (Object.keys(allPatterns).length === 0) {
-      markdown += "No specific design patterns detected.\n";
+    markdown += 'No specific design patterns detected.\n';
   } else {
-      for (const [file, patterns] of Object.entries(allPatterns)) {
-          markdown += `**${file}**\n`;
-          for (const p of patterns) {
-              markdown += `- **${p.name}** (${p.type}): ${p.description}\n`;
-          }
-          markdown += '\n';
+    for (const [file, patterns] of Object.entries(allPatterns)) {
+      markdown += `**${file}**\n`;
+      for (const p of patterns) {
+        markdown += `- **${p.name}** (${p.type}): ${p.description}\n`;
       }
+      markdown += '\n';
+    }
   }
 
   await fs.writeFile(reportPath, markdown, 'utf8');
-  console.log(`  ✅ Architecture analysis complete. Report saved to ${path.relative(rootDir, reportPath)}`);
+  console.log(
+    `  ✅ Architecture analysis complete. Report saved to ${path.relative(rootDir, reportPath)}`,
+  );
 }

@@ -24,6 +24,8 @@ export function deduplicateDishes<
   }, [] as T[]);
 }
 
-export function filterDishesWithSales<T extends { sales_data?: unknown[] | null }>(dishes: T[]): T[] {
+export function filterDishesWithSales<T extends { sales_data?: unknown[] | null }>(
+  dishes: T[],
+): T[] {
   return dishes.filter(dish => dish.sales_data && dish.sales_data.length > 0);
 }

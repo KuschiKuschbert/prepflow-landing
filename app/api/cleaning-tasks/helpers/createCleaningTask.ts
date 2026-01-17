@@ -41,7 +41,9 @@ const CLEANING_TASKS_SELECT = `
  * @returns {Promise<CleaningTaskJoinResult | DBCleaningTask>} Created cleaning task
  * @throws {Error} If creation fails
  */
-export async function createCleaningTask(taskData: CreateCleaningTaskInput): Promise<CleaningTaskJoinResult | DBCleaningTask> {
+export async function createCleaningTask(
+  taskData: CreateCleaningTaskInput,
+): Promise<CleaningTaskJoinResult | DBCleaningTask> {
   if (!supabaseAdmin)
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
 

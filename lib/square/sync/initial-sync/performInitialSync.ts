@@ -11,9 +11,9 @@ import { syncAllDishesToSquare } from './helpers/syncAllDishesToSquare';
 import { syncAllStaffToSquare } from './helpers/syncAllStaffToSquare';
 import { syncRecentOrdersFromSquareForInitialSync } from './helpers/syncRecentOrders';
 import {
-    markInitialSyncCompleted,
-    markInitialSyncFailed,
-    markInitialSyncStarted,
+  markInitialSyncCompleted,
+  markInitialSyncFailed,
+  markInitialSyncStarted,
 } from './helpers/updateSyncStatus';
 import type { InitialSyncResult } from './types';
 

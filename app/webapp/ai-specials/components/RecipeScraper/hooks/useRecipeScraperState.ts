@@ -38,7 +38,9 @@ export function useRecipeScraperState() {
   const [totalRecipes, setTotalRecipes] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [comprehensiveScraping, setComprehensiveScraping] = useState(false);
-  const [comprehensiveStatus, setComprehensiveStatus] = useState<ComprehensiveJobStatus | null>(null);
+  const [comprehensiveStatus, setComprehensiveStatus] = useState<ComprehensiveJobStatus | null>(
+    null,
+  );
   const [statusPolling, setStatusPolling] = useState(false);
   const [processing, setProcessing] = useState<ProcessingState | null>(null);
   const [isResuming, setIsResuming] = useState(false);

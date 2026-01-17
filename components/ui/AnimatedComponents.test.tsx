@@ -18,7 +18,7 @@ describe('AnimatedComponents', () => {
     const defaultExport = (Module as { default?: unknown }).default;
     const Component =
       (typeof defaultExport === 'function' ? (defaultExport as React.ElementType) : undefined) ||
-      (Object.values(Module).find((exp) => typeof exp === 'function') as React.ElementType);
+      (Object.values(Module).find(exp => typeof exp === 'function') as React.ElementType);
 
     if (Component) {
       try {

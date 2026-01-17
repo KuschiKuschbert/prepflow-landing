@@ -23,7 +23,10 @@ export function createOptimizationResult(
   });
 
   // Group items by category
-  const itemsByCategory = new Map<string, Array<NavigationItemConfig & { originalIndex: number }>>();
+  const itemsByCategory = new Map<
+    string,
+    Array<NavigationItemConfig & { originalIndex: number }>
+  >();
   items.forEach((item, index) => {
     const category = item.category || 'other';
     if (!itemsByCategory.has(category)) {

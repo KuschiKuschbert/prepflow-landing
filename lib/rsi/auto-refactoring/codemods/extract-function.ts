@@ -24,11 +24,7 @@ const transform: Transform = (file: FileInfo, api: API, options: Options) => {
           const funcName = `handle${methodName.charAt(0).toUpperCase() + methodName.slice(1)}In${fileNameBasename.charAt(0).toUpperCase() + fileNameBasename.slice(1)}_${Math.random().toString(36).substring(7)}`;
 
           // Create a new top-level function
-          const newFunc = j.functionDeclaration(
-            j.identifier(funcName),
-            path.node.params,
-            body
-          );
+          const newFunc = j.functionDeclaration(j.identifier(funcName), path.node.params, body);
           newFunctions.push(newFunc);
 
           // Replace the arrow function with the new function identifier

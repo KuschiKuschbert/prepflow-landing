@@ -26,10 +26,7 @@ interface MenuItemRow {
 /**
  * Helper to process a single menu item row
  */
-function processMenuItemRow(
-  item: MenuItemRow,
-  menuItemsMap: Record<string, MenuItem[]>
-): void {
+function processMenuItemRow(item: MenuItemRow, menuItemsMap: Record<string, MenuItem[]>): void {
   const itemId = item.dish_id || item.recipe_id;
   const menus = item.menus || [];
 

@@ -21,19 +21,19 @@ export function TrustSection() {
       </div>
       <div className={`${LANDING_LAYOUT.container} desktop:grid-cols-3 grid gap-8`}>
         <div className="text-center">
-          <div className={`${LANDING_TYPOGRAPHY['3xl']} mb-2 font-bold text-landing-primary`}>
+          <div className={`${LANDING_TYPOGRAPHY['3xl']} text-landing-primary mb-2 font-bold`}>
             100%
           </div>
           <div className="text-gray-400">{t('trust.compliant', 'QLD Compliant')}</div>
         </div>
         <div className="text-center">
-          <div className={`${LANDING_TYPOGRAPHY['3xl']} mb-2 font-bold text-landing-secondary`}>
+          <div className={`${LANDING_TYPOGRAPHY['3xl']} text-landing-secondary mb-2 font-bold`}>
             Manual
           </div>
           <div className="text-gray-400">{t('trust.monitoring', 'Temperature Logging')}</div>
         </div>
         <div className="text-center">
-          <div className={`${LANDING_TYPOGRAPHY['3xl']} mb-2 font-bold text-landing-accent`}>
+          <div className={`${LANDING_TYPOGRAPHY['3xl']} text-landing-accent mb-2 font-bold`}>
             Real-time
           </div>
           <div className="text-gray-400">{t('trust.calculations', 'COGS Calculations')}</div>

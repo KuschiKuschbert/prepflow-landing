@@ -97,7 +97,6 @@ export async function enrichDishItem(item: RawMenuItem): Promise<EnrichedDishDat
         dietaryConfidence = item.dishes?.dietary_confidence ?? null;
         dietaryMethod = item.dishes?.dietary_method ?? null;
       }
-
     }
   } catch (err: unknown) {
     logger.warn('[Menus API] Error recalculating dish dietary status, using cached values:', {
@@ -120,7 +119,6 @@ export async function enrichDishItem(item: RawMenuItem): Promise<EnrichedDishDat
       dietaryConfidence = item.dishes.dietary_confidence ?? null;
       dietaryMethod = item.dishes.dietary_method ?? null;
     }
-
   }
 
   return {

@@ -72,7 +72,9 @@ export async function processDishCostSync(
       dishId: dish.id,
     });
     result.errors++;
-    result.errorMessages?.push(`Failed to process dish ${dish.id}: ${dishError instanceof Error ? dishError.message : String(dishError)}`);
+    result.errorMessages?.push(
+      `Failed to process dish ${dish.id}: ${dishError instanceof Error ? dishError.message : String(dishError)}`,
+    );
 
     await logCostSyncOperation({
       userId,

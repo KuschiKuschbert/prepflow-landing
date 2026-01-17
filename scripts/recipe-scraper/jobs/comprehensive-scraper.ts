@@ -1030,9 +1030,7 @@ export class ComprehensiveScraperJob {
    */
   private getStopFlagPath(): string {
     const storage = this.storage as unknown as { getStoragePath?: () => string };
-    const storagePath = storage.getStoragePath
-      ? storage.getStoragePath()
-      : STORAGE_PATH;
+    const storagePath = storage.getStoragePath ? storage.getStoragePath() : STORAGE_PATH;
     return path.join(storagePath, '.stop-flag');
   }
 

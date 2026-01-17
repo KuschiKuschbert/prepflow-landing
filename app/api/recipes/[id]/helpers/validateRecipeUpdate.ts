@@ -51,7 +51,10 @@ export async function validateRecipeUpdate(
 
   // Check if new name conflicts with another recipe (case-insensitive)
   // Note: recipe_name is a legacy field or alias, checking strictly data.name first
-  const existingName = existingRecipe.name || (existingRecipe as unknown as { recipe_name?: string }).recipe_name || '';
+  const existingName =
+    existingRecipe.name ||
+    (existingRecipe as unknown as { recipe_name?: string }).recipe_name ||
+    '';
 
   if (name.trim().toLowerCase() !== existingName.toLowerCase()) {
     const { data: conflictingRecipes, error: conflictError } = await supabaseAdmin

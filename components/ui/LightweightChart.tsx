@@ -5,7 +5,6 @@
 
 'use client';
 
-
 interface ChartData {
   name: string;
   value: number;

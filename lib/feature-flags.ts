@@ -44,7 +44,7 @@ export async function isFeatureEnabled(
 }
 
 export {
-    deleteFeatureFlagHelper as deleteFeatureFlag,
-    getFeatureFlagsHelper as getFeatureFlags,
-    setFeatureFlagHelper as setFeatureFlag
+  deleteFeatureFlagHelper as deleteFeatureFlag,
+  getFeatureFlagsHelper as getFeatureFlags,
+  setFeatureFlagHelper as setFeatureFlag,
 };

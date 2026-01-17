@@ -104,7 +104,11 @@ export default function AISpecialsPage() {
     try {
       // No userId needed - API extracts from authenticated session
       const response = await fetch('/api/ai-specials');
-      const result = (await response.json()) as { success: boolean; data: AISpecial[]; message?: string };
+      const result = (await response.json()) as {
+        success: boolean;
+        data: AISpecial[];
+        message?: string;
+      };
       if (result.success) {
         setAiSpecials(result.data);
         cacheData('ai_specials', result.data);
@@ -174,7 +178,11 @@ export default function AISpecialsPage() {
               prompt: promptToSubmit || undefined,
             }),
           });
-          const result = (await response.json()) as { success: boolean; data?: AISpecial; message?: string };
+          const result = (await response.json()) as {
+            success: boolean;
+            data?: AISpecial;
+            message?: string;
+          };
           if (result.success && result.data) {
             // Replace temp special with real one from server
             const serverData = result.data;

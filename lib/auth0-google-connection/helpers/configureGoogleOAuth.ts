@@ -52,8 +52,7 @@ export async function configureGoogleOAuthCredentials(
     if (!googleConnection || !googleConnection.id) {
       return {
         success: false,
-        message:
-          "Google connection ID is missing. Please check your Auth0 configuration.",
+        message: 'Google connection ID is missing. Please check your Auth0 configuration.',
       };
     }
 
@@ -64,7 +63,7 @@ export async function configureGoogleOAuthCredentials(
         client_secret: googleClientSecret,
         scope: ['email', 'profile'],
       },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as unknown as any); // Use any cast for library compatibility if needed, or specific type
 
     logger.info('[Auth0 Google Connection] Configured Google OAuth credentials', {

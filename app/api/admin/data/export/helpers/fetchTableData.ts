@@ -14,9 +14,7 @@ export async function fetchTableData(tableName: string, query: string): Promise<
 
     if (query) {
       if (tableName === 'ingredients') {
-        searchQuery = searchQuery.or(
-          `ingredient_name.ilike.%${query}%,supplier.ilike.%${query}%`,
-        );
+        searchQuery = searchQuery.or(`ingredient_name.ilike.%${query}%,supplier.ilike.%${query}%`);
       } else if (tableName === 'recipes') {
         searchQuery = searchQuery.or(`recipe_name.ilike.%${query}%,name.ilike.%${query}%`);
       } else if (tableName === 'dishes') {

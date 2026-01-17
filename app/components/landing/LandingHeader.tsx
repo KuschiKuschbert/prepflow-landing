@@ -46,21 +46,21 @@ const LandingHeader = React.memo(function LandingHeader({
           <nav className="desktop:flex hidden items-center space-x-8">
             <a
               href="#features"
-              className="rounded text-gray-300 transition-colors hover:text-landing-primary focus:ring-2 focus:ring-landing-primary focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
+              className="hover:text-landing-primary focus:ring-landing-primary rounded text-gray-300 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
               aria-label="View PrepFlow features"
             >
               Features
             </a>
             <a
               href="#how-it-works"
-              className="rounded text-gray-300 transition-colors hover:text-landing-primary focus:ring-2 focus:ring-landing-primary focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
+              className="hover:text-landing-primary focus:ring-landing-primary rounded text-gray-300 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
               aria-label="Learn how PrepFlow works"
             >
               How it works
             </a>
             <Link
               href="/webapp/guide"
-              className="rounded text-gray-300 transition-colors hover:text-landing-primary focus:ring-2 focus:ring-landing-primary focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
+              className="hover:text-landing-primary focus:ring-landing-primary rounded text-gray-300 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
               aria-label="View PrepFlow guides"
             >
               Guide
@@ -141,7 +141,7 @@ const LandingHeader = React.memo(function LandingHeader({
           <div className="desktop:hidden flex flex-1 items-center justify-end gap-2">
             {!isLoading && (
               <MagneticButton
-                className="text-fluid-xs flex min-h-[40px] items-center justify-center rounded-xl bg-gradient-to-r from-landing-primary to-landing-secondary px-4 py-2 font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-landing-primary/25 focus:ring-2 focus:ring-landing-primary focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
+                className="text-fluid-xs from-landing-primary to-landing-secondary hover:shadow-landing-primary/25 focus:ring-landing-primary flex min-h-[40px] items-center justify-center rounded-xl bg-gradient-to-r px-4 py-2 font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none"
                 onClick={() => {
                   if (isAuthenticated) {
                     trackEngagement('mobile_header_go_to_dashboard_click');

@@ -49,7 +49,10 @@ export function detectRecipeChanges(
         field: 'yield',
         before: currentRecipe.yield,
         after: updateData.yield,
-        change: (updateData.yield as number) > (currentRecipe.yield as number) ? 'increased' : 'decreased',
+        change:
+          (updateData.yield as number) > (currentRecipe.yield as number)
+            ? 'increased'
+            : 'decreased',
       };
     }
 

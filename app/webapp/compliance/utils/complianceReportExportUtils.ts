@@ -9,8 +9,8 @@ import { printWithTemplate } from '@/lib/exports/print-template';
 import { logger } from '@/lib/logger';
 import { getComplianceReportPrintStyles } from './complianceReportPrintStyles';
 import {
-    formatComplianceReportForPrint,
-    type ComplianceReportData,
+  formatComplianceReportForPrint,
+  type ComplianceReportData,
 } from './formatComplianceReportForPrint';
 
 /**

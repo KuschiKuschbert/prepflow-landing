@@ -132,7 +132,6 @@ function Performance() {
                   colorClass={metric.colorClass}
                 />
 
-
                 {/* Label */}
                 <h3 className="text-fluid-2xl mt-6 font-light text-white">{metric.label}</h3>
 

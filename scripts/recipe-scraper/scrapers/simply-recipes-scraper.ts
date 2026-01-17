@@ -5,11 +5,11 @@
 
 import * as cheerio from 'cheerio';
 import {
-    isJSONLDRecipe,
-    JSONLDImageObject,
-    JSONLDRecipe,
-    RecipeIngredient,
-    ScrapedRecipe
+  isJSONLDRecipe,
+  JSONLDImageObject,
+  JSONLDRecipe,
+  RecipeIngredient,
+  ScrapedRecipe,
 } from '../parsers/types';
 import { scraperLogger } from '../utils/logger';
 import { SitemapParser } from '../utils/sitemap-parser';
@@ -37,7 +37,9 @@ export class SimplyRecipesScraper extends BaseScraper {
           if (content) {
             const parsed = JSON.parse(content) as unknown;
             const items = Array.isArray(parsed) ? parsed : [parsed];
-            recipeData = items.find((item: unknown) => isJSONLDRecipe(item)) as JSONLDRecipe | undefined ?? null;
+            recipeData =
+              (items.find((item: unknown) => isJSONLDRecipe(item)) as JSONLDRecipe | undefined) ??
+              null;
             if (recipeData) break;
           }
         } catch (e) {
@@ -52,7 +54,8 @@ export class SimplyRecipesScraper extends BaseScraper {
 
       // Extract temperature from JSON-LD or instructions
       const cookingMethod = recipeData.cookingMethod;
-      const temperatureFromJSONLD = (typeof cookingMethod === 'object' && cookingMethod?.temperature) || recipeData.temperature;
+      const temperatureFromJSONLD =
+        (typeof cookingMethod === 'object' && cookingMethod?.temperature) || recipeData.temperature;
       const temperatureFromInstructions = this.extractTemperatureFromInstructions(
         recipeData.recipeInstructions || [],
       );
@@ -192,7 +195,9 @@ export class SimplyRecipesScraper extends BaseScraper {
   /**
    * Parse image URL
    */
-  private parseImage(image: string | string[] | JSONLDImageObject | JSONLDImageObject[] | undefined): string | undefined {
+  private parseImage(
+    image: string | string[] | JSONLDImageObject | JSONLDImageObject[] | undefined,
+  ): string | undefined {
     if (!image) return undefined;
     if (typeof image === 'string') return image;
     if (Array.isArray(image) && image.length > 0) {

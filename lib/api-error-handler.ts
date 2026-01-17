@@ -1,14 +1,14 @@
 import {
-    isClientError,
-    isNetworkError,
-    isRowNotFoundError,
-    isServerError,
-    isTableNotFoundError,
+  isClientError,
+  isNetworkError,
+  isRowNotFoundError,
+  isServerError,
+  isTableNotFoundError,
 } from './api-error-handler/errorChecks';
 import {
-    parseSupabaseError,
-    SUPABASE_ERROR_CODES,
-    type ApiError,
+  parseSupabaseError,
+  SUPABASE_ERROR_CODES,
+  type ApiError,
 } from './api-error-handler/supabaseErrorParser';
 
 import { PostgrestError } from '@supabase/supabase-js';

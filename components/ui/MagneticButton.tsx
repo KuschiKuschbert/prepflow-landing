@@ -1,12 +1,12 @@
 'use client';
 
 import {
-    motion,
-    TargetAndTransition,
-    useMotionValue,
-    useSpring,
-    useTransform,
-    VariantLabels,
+  motion,
+  TargetAndTransition,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  VariantLabels,
 } from 'framer-motion';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 

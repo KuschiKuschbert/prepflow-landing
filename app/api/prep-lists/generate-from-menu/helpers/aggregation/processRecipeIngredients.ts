@@ -1,8 +1,8 @@
 import type {
-    AggregatedIngredient,
-    DBRecipeIngredient,
-    MenuItemData,
-    SectionData,
+  AggregatedIngredient,
+  DBRecipeIngredient,
+  MenuItemData,
+  SectionData,
 } from '../../types';
 
 interface ProcessRecipeParams {
@@ -33,12 +33,11 @@ export function processRecipeIngredients({
   });
 
   for (const ri of recipeIngs) {
-    addToAggregation(
-      section.aggregatedIngredients,
-      ri,
-      ri.quantity || 0,
-      { type: 'recipe', id: item.recipe_id!, name: itemRecipe.recipe_name || itemRecipe.name },
-    );
+    addToAggregation(section.aggregatedIngredients, ri, ri.quantity || 0, {
+      type: 'recipe',
+      id: item.recipe_id!,
+      name: itemRecipe.recipe_name || itemRecipe.name,
+    });
   }
 }
 

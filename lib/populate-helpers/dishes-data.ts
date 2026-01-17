@@ -6,11 +6,11 @@ import { logger } from '@/lib/logger';
 import { cleanSampleDishes } from '@/lib/sample-dishes-clean';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import {
-    buildDishIngredientsData,
-    buildDishRecipesData,
-    createDishMap,
-    createLookupMaps,
-    IngredientData,
+  buildDishIngredientsData,
+  buildDishRecipesData,
+  createDishMap,
+  createLookupMaps,
+  IngredientData,
 } from './dishes-data-helpers';
 
 // Minimal recipe interface - accepts both Recipe and RecipeRecord types

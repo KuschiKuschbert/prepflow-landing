@@ -34,14 +34,14 @@ export class KnowledgeSynthesizer {
             derivedFrom: [insight.patternId],
           });
         } else {
-            // Fallback for continuity / safety
-            const safePatternId = insight.patternId.replace(/[^a-zA-Z0-9-]/g, '-').toLowerCase();
-            rules.push({
-              id: `rule-${safePatternId}-${Date.now()}`,
-              description: `Auto-generated rule: Prioritize '${insight.patternId}' fixes (${(insight.confidence * 100).toFixed(0)}% success).`,
-              ruleLogic: `if (issue.type === '${insight.patternId}') { prioritize(); }`,
-              derivedFrom: [insight.patternId],
-            });
+          // Fallback for continuity / safety
+          const safePatternId = insight.patternId.replace(/[^a-zA-Z0-9-]/g, '-').toLowerCase();
+          rules.push({
+            id: `rule-${safePatternId}-${Date.now()}`,
+            description: `Auto-generated rule: Prioritize '${insight.patternId}' fixes (${(insight.confidence * 100).toFixed(0)}% success).`,
+            ruleLogic: `if (issue.type === '${insight.patternId}') { prioritize(); }`,
+            derivedFrom: [insight.patternId],
+          });
         }
       }
     }

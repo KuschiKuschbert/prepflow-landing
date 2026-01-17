@@ -91,13 +91,13 @@ export { getSocialConnections };
 
 // Google connection functions moved to lib/auth0-google-connection.ts
 // Re-export for backward compatibility
-    export { enableGoogleConnectionForApp, verifyGoogleConnection } from './auth0-google-connection';
+export { enableGoogleConnectionForApp, verifyGoogleConnection } from './auth0-google-connection';
 
 /** Verify callback URLs match Auth0 configuration */
 export { verifyCallbackUrls };
 
 /** Get user profile from Auth0 Management API */
-    export { getUserProfileFromManagementAPI };
+export { getUserProfileFromManagementAPI };
 
 /** Fetch user profile with timeout and retry logic */
-    export { fetchProfileWithRetry };
+export { fetchProfileWithRetry };

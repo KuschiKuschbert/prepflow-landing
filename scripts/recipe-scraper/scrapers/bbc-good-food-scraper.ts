@@ -5,12 +5,12 @@
 
 import * as cheerio from 'cheerio';
 import {
-    isJSONLDRecipe,
-    JSONLDHowToStep,
-    JSONLDImageObject,
-    JSONLDRecipe,
-    RecipeIngredient,
-    ScrapedRecipe
+  isJSONLDRecipe,
+  JSONLDHowToStep,
+  JSONLDImageObject,
+  JSONLDRecipe,
+  RecipeIngredient,
+  ScrapedRecipe,
 } from '../parsers/types';
 import { scraperLogger } from '../utils/logger';
 import { SitemapParser } from '../utils/sitemap-parser';
@@ -38,7 +38,9 @@ export class BBCGoodFoodScraper extends BaseScraper {
           if (content) {
             const parsed = JSON.parse(content) as unknown;
             const items = Array.isArray(parsed) ? parsed : [parsed];
-            recipeData = items.find((item: unknown) => isJSONLDRecipe(item)) as JSONLDRecipe | undefined ?? null;
+            recipeData =
+              (items.find((item: unknown) => isJSONLDRecipe(item)) as JSONLDRecipe | undefined) ??
+              null;
             if (recipeData) break;
           }
         } catch (e) {
@@ -143,17 +145,22 @@ export class BBCGoodFoodScraper extends BaseScraper {
   /**
    * Parse instructions
    */
-  protected parseInstructions(instructions: string | string[] | JSONLDHowToStep | JSONLDHowToStep[] | undefined): string[] {
+  protected parseInstructions(
+    instructions: string | string[] | JSONLDHowToStep | JSONLDHowToStep[] | undefined,
+  ): string[] {
     if (!instructions) return [];
     if (typeof instructions === 'string') return [instructions];
     if (Array.isArray(instructions)) {
-      return instructions.map(inst => {
-        if (typeof inst === 'string') return inst;
-        if (typeof inst === 'object' && inst !== null && 'text' in inst) return inst.text || '';
-        return String(inst);
-      }).filter(Boolean);
+      return instructions
+        .map(inst => {
+          if (typeof inst === 'string') return inst;
+          if (typeof inst === 'object' && inst !== null && 'text' in inst) return inst.text || '';
+          return String(inst);
+        })
+        .filter(Boolean);
     }
-    if (typeof instructions === 'object' && 'text' in instructions) return [instructions.text || ''];
+    if (typeof instructions === 'object' && 'text' in instructions)
+      return [instructions.text || ''];
     return [];
   }
 
@@ -215,7 +222,9 @@ export class BBCGoodFoodScraper extends BaseScraper {
   /**
    * Parse image URL
    */
-  private parseImage(image: string | string[] | JSONLDImageObject | JSONLDImageObject[] | undefined): string | undefined {
+  private parseImage(
+    image: string | string[] | JSONLDImageObject | JSONLDImageObject[] | undefined,
+  ): string | undefined {
     if (!image) return undefined;
     if (typeof image === 'string') return image;
     if (Array.isArray(image) && image.length > 0) {

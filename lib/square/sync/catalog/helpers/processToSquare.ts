@@ -37,13 +37,17 @@ export async function processPrepFlowDish(
       // Update existing Square item
       const updateResponse = await catalogApi.batchUpsert({
         idempotencyKey: `${dish.id}-${Date.now()}`,
-        batches: [{
-          objects: [{
-            type: 'ITEM',
-            id: mapping.square_id,
-            itemData: squareItemData.itemData,
-          }],
-        }],
+        batches: [
+          {
+            objects: [
+              {
+                type: 'ITEM',
+                id: mapping.square_id,
+                itemData: squareItemData.itemData,
+              },
+            ],
+          },
+        ],
       });
 
       if (updateResponse.objects?.[0]) {
@@ -82,13 +86,17 @@ export async function processPrepFlowDish(
       // Create new Square item
       const createResponse = await catalogApi.batchUpsert({
         idempotencyKey: `${dish.id}-${Date.now()}`,
-        batches: [{
-          objects: [{
-            type: 'ITEM',
-            id: squareItemData.id,
-            itemData: squareItemData.itemData,
-          }],
-        }],
+        batches: [
+          {
+            objects: [
+              {
+                type: 'ITEM',
+                id: squareItemData.id,
+                itemData: squareItemData.itemData,
+              },
+            ],
+          },
+        ],
       });
 
       if (createResponse.objects?.[0]?.id) {

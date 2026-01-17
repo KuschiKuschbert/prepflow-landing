@@ -81,7 +81,9 @@ export async function syncStaffFromSquare(userId: string): Promise<SyncResult> {
       stack: error instanceof Error ? error.stack : undefined,
     });
 
-    result.errorMessages?.push(`Fatal error: ${error instanceof Error ? error.message : String(error)}`);
+    result.errorMessages?.push(
+      `Fatal error: ${error instanceof Error ? error.message : String(error)}`,
+    );
 
     await logSyncOperation({
       user_id: userId,

@@ -47,9 +47,7 @@ export async function aggregateDishIngredients(dishId: string): Promise<{
   const recipeInstructions = extractInstructions(dishRecipes);
 
   // Collect recipe IDs
-  const recipeIds = dishRecipes
-    .map(dr => dr.recipe_id || dr.id)
-    .filter((id): id is string => !!id);
+  const recipeIds = dishRecipes.map(dr => dr.recipe_id || dr.id).filter((id): id is string => !!id);
 
   // Batch fetch recipe ingredients
   const recipeIngredientNamesSet = await batchFetchRecipeIngredients(recipeIds);

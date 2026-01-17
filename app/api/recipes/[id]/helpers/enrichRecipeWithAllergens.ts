@@ -15,10 +15,7 @@ import { supabaseAdmin } from '@/lib/supabase';
  * @param {any} recipe - Recipe data
  * @returns {Promise<any>} Enriched recipe
  */
-export async function enrichRecipeWithAllergens(
-  recipeId: string,
-  recipe: Record<string, unknown>,
-) {
+export async function enrichRecipeWithAllergens(recipeId: string, recipe: Record<string, unknown>) {
   // Always aggregate allergens and dietary status (even if cached)
   const [allergens, dietaryStatus] = await Promise.all([
     aggregateRecipeAllergens(recipeId),

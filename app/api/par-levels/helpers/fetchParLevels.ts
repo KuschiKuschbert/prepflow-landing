@@ -28,7 +28,7 @@ export async function fetchParLevels(supabaseAdmin: SupabaseClient) {
       errorMessage.includes('foreign key') ||
       errorMessage.includes('does not exist')
     ) {
-       return await fetchFallback(supabaseAdmin, error);
+      return await fetchFallback(supabaseAdmin, error);
     }
   } else {
     // Success with join, order the results

@@ -35,7 +35,7 @@ export function generateRecipePDF(recipe: RecipeForPDF): string {
   const { generateExportTemplate } = require('@/lib/exports/pdf-template');
 
   // Format ingredients for the print function
-  const ingredients = (recipe.recipe_ingredients || []).map((ri) => ({
+  const ingredients = (recipe.recipe_ingredients || []).map(ri => ({
     ...ri,
     ingredients: ri.ingredients || {},
   }));

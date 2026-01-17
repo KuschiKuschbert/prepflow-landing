@@ -146,16 +146,32 @@ export default function UserDataPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-[#2a2a2a] bg-[#1f1f1f]">
-            {data.map((item: { id?: string; name?: string; ingredient_name?: string; recipe_name?: string; dish_name?: string; created_at?: string }, index: number) => (
-              <tr key={item.id || index} className="transition-colors hover:bg-[#2a2a2a]/20">
-                <td className="px-6 py-4 text-sm text-white">
-                  {item.name || item.ingredient_name || item.recipe_name || item.dish_name || 'N/A'}
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-300">
-                  {item.created_at ? new Date(item.created_at).toLocaleDateString() : '-'}
-                </td>
-              </tr>
-            ))}
+            {data.map(
+              (
+                item: {
+                  id?: string;
+                  name?: string;
+                  ingredient_name?: string;
+                  recipe_name?: string;
+                  dish_name?: string;
+                  created_at?: string;
+                },
+                index: number,
+              ) => (
+                <tr key={item.id || index} className="transition-colors hover:bg-[#2a2a2a]/20">
+                  <td className="px-6 py-4 text-sm text-white">
+                    {item.name ||
+                      item.ingredient_name ||
+                      item.recipe_name ||
+                      item.dish_name ||
+                      'N/A'}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-300">
+                    {item.created_at ? new Date(item.created_at).toLocaleDateString() : '-'}
+                  </td>
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
       </div>

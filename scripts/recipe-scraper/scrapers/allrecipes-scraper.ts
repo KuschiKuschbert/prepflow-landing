@@ -5,12 +5,12 @@
 
 import * as cheerio from 'cheerio';
 import {
-    isJSONLDRecipe,
-    JSONLDHowToStep,
-    JSONLDImageObject,
-    JSONLDRecipe,
-    RecipeIngredient,
-    ScrapedRecipe,
+  isJSONLDRecipe,
+  JSONLDHowToStep,
+  JSONLDImageObject,
+  JSONLDRecipe,
+  RecipeIngredient,
+  ScrapedRecipe,
 } from '../parsers/types';
 import { scraperLogger } from '../utils/logger';
 import { SitemapParser } from '../utils/sitemap-parser';
@@ -39,7 +39,9 @@ export class AllRecipesScraper extends BaseScraper {
             const parsed = JSON.parse(content) as unknown;
             // Handle both single objects and arrays
             const items = Array.isArray(parsed) ? parsed : [parsed];
-            recipeData = items.find((item: unknown) => isJSONLDRecipe(item)) as JSONLDRecipe | undefined ?? null;
+            recipeData =
+              (items.find((item: unknown) => isJSONLDRecipe(item)) as JSONLDRecipe | undefined) ??
+              null;
             if (recipeData) break;
           }
         } catch (e) {
@@ -287,7 +289,9 @@ export class AllRecipesScraper extends BaseScraper {
   /**
    * Parse image URL
    */
-  private parseImage(image: string | string[] | JSONLDImageObject | JSONLDImageObject[] | undefined): string | undefined {
+  private parseImage(
+    image: string | string[] | JSONLDImageObject | JSONLDImageObject[] | undefined,
+  ): string | undefined {
     if (!image) return undefined;
     if (typeof image === 'string') return image;
     if (Array.isArray(image) && image.length > 0) {
@@ -302,7 +306,9 @@ export class AllRecipesScraper extends BaseScraper {
    * Extract temperature from instructions text (fallback method)
    * Looks for temperature patterns in instruction text
    */
-  private _extractTemperatureString(instructions: string | string[] | JSONLDHowToStep | JSONLDHowToStep[] | undefined): string | undefined {
+  private _extractTemperatureString(
+    instructions: string | string[] | JSONLDHowToStep | JSONLDHowToStep[] | undefined,
+  ): string | undefined {
     if (!instructions) return undefined;
 
     const instructionTexts: string[] = [];

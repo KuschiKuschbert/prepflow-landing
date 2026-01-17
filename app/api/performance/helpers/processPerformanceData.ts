@@ -3,9 +3,9 @@ import { deduplicateDishes, filterDishesWithSales } from '@/lib/api/performance/
 import { calculatePerformanceMetrics } from '@/lib/api/performance/performanceCalculation';
 import { aggregateSalesData } from '@/lib/api/performance/salesAggregation';
 import {
-    calculateAveragePopularity,
-    calculateAverageProfitMargin,
-    calculateThresholds,
+  calculateAveragePopularity,
+  calculateAverageProfitMargin,
+  calculateThresholds,
 } from '@/lib/api/performance/thresholdCalculation';
 import { PerformanceDish } from '@/lib/api/performance/types';
 
@@ -25,7 +25,7 @@ export function processPerformanceData(
   const dateRange = parseDateRange(startDateParam, endDateParam);
 
   // Filter sales_data by date range if provided
-  const filteredDishes = dishes?.map((dish) => {
+  const filteredDishes = dishes?.map(dish => {
     if (!dish.sales_data || dish.sales_data.length === 0) return dish;
     return {
       ...dish,

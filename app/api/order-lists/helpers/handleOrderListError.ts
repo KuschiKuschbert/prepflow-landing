@@ -11,8 +11,14 @@ import { NextResponse } from 'next/server';
  */
 export function handleOrderListError(err: Error | unknown, method: string): NextResponse {
   const errorMessage = err instanceof Error ? err.message : String(err);
-  const errorCode = err && typeof err === 'object' && 'code' in err ? (err as Record<string, unknown>).code : undefined;
-  const errorStatus = err && typeof err === 'object' && 'status' in err ? (err as Record<string, unknown>).status : undefined;
+  const errorCode =
+    err && typeof err === 'object' && 'code' in err
+      ? (err as Record<string, unknown>).code
+      : undefined;
+  const errorStatus =
+    err && typeof err === 'object' && 'status' in err
+      ? (err as Record<string, unknown>).status
+      : undefined;
 
   logger.error('[Order Lists API] Unexpected error:', {
     error: errorMessage,

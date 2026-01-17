@@ -24,10 +24,7 @@ export async function executeRecipeMerge(m: RecipeMerge): Promise<void> {
   }
 
   // Delete removed recipes
-  const { error: deleteError } = await supabaseAdmin
-    .from('recipes')
-    .delete()
-    .in('id', m.removed);
+  const { error: deleteError } = await supabaseAdmin.from('recipes').delete().in('id', m.removed);
 
   if (deleteError) {
     logger.error('[Dedupe Execute API] Error deleting duplicate recipes:', {

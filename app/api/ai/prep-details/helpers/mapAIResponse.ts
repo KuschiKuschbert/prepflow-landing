@@ -5,10 +5,7 @@ import { parsePrepDetailsResponse } from '@/lib/ai/prompts/prep-details';
 /**
  * Maps the AI response content to the RecipePrepDetails structure.
  */
-export function mapAIResponseToPrepDetails(
-  content: string,
-  recipe: Recipe
-): RecipePrepDetails {
+export function mapAIResponseToPrepDetails(content: string, recipe: Recipe): RecipePrepDetails {
   const parsed = parsePrepDetailsResponse(content);
 
   return {

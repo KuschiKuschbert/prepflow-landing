@@ -10,12 +10,9 @@ export async function rollbackPrepList(prepListId: string) {
     .eq('id', prepListId);
 
   if (rollbackError) {
-    logger.warn(
-      '[Prep Lists API] Warning: Failed to rollback prep list after items error:',
-      {
-        error: rollbackError.message,
-        prepListId,
-      },
-    );
+    logger.warn('[Prep Lists API] Warning: Failed to rollback prep list after items error:', {
+      error: rollbackError.message,
+      prepListId,
+    });
   }
 }

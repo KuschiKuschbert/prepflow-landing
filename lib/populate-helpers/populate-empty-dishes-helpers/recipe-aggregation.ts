@@ -85,7 +85,9 @@ export async function getIngredientsFromRecipes(
     }
 
     const recipeQuantity =
-      ((dishRecipes as unknown as DishRecipeRecord[]).find((dr: DishRecipeRecord) => dr.recipe_id === ri.recipe_id))?.recipe_quantity || 1;
+      (dishRecipes as unknown as DishRecipeRecord[]).find(
+        (dr: DishRecipeRecord) => dr.recipe_id === ri.recipe_id,
+      )?.recipe_quantity || 1;
     const totalQuantity = (ri.quantity || 0) * recipeQuantity;
 
     if (aggregatedIngredients.has(ri.ingredient_id)) {

@@ -1,4 +1,3 @@
-
 import { parseRecipeCardResponse } from './parseRecipeCard';
 
 // Mock logger to avoid console spam during tests

@@ -1,9 +1,9 @@
 import {
-    formatBrandName,
-    formatIngredientName,
-    formatStorageLocation,
-    formatSupplierName,
-    formatTextInput,
+  formatBrandName,
+  formatIngredientName,
+  formatStorageLocation,
+  formatSupplierName,
+  formatTextInput,
 } from '@/lib/text-utils';
 
 interface Ingredient {

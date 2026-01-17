@@ -8,9 +8,7 @@ import { Shift } from '../../helpers/types';
 /**
  * Check if shift exists and return it
  */
-export async function checkShiftExists(
-  shiftId: string,
-): Promise<{ shift: Shift } | NextResponse> {
+export async function checkShiftExists(shiftId: string): Promise<{ shift: Shift } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

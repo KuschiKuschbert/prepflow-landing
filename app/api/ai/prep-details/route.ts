@@ -28,9 +28,9 @@ export async function POST(request: NextRequest) {
         ApiErrorHandler.createError(
           validation.error || 'Invalid request',
           'VALIDATION_ERROR',
-          validation.statusCode || 400
+          validation.statusCode || 400,
         ),
-        { status: validation.statusCode || 400 }
+        { status: validation.statusCode || 400 },
       );
     }
 

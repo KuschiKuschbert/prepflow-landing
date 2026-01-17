@@ -8,7 +8,10 @@ interface SearchResult {
   created_at: string;
 }
 
-export async function performTableSearch(tableName: string, query: string): Promise<SearchResult[]> {
+export async function performTableSearch(
+  tableName: string,
+  query: string,
+): Promise<SearchResult[]> {
   if (!supabaseAdmin) return [];
 
   try {
@@ -17,9 +20,7 @@ export async function performTableSearch(tableName: string, query: string): Prom
 
     // Apply search filter based on table
     if (tableName === 'ingredients') {
-      searchQuery = searchQuery.or(
-        `ingredient_name.ilike.%${query}%,supplier.ilike.%${query}%`,
-      );
+      searchQuery = searchQuery.or(`ingredient_name.ilike.%${query}%,supplier.ilike.%${query}%`);
     } else if (tableName === 'recipes') {
       searchQuery = searchQuery.or(`recipe_name.ilike.%${query}%,name.ilike.%${query}%`);
     } else if (tableName === 'dishes') {

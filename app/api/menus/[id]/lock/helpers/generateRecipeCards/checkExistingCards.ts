@@ -58,7 +58,7 @@ export async function checkExistingCards(
 
       handledBySignature = result.handled;
       if (result.signature) {
-          signature = result.signature;
+        signature = result.signature;
       }
 
       if (result.handled) {

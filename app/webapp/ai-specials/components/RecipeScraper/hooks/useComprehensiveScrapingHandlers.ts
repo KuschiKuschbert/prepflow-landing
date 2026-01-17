@@ -31,7 +31,11 @@ export function useComprehensiveScrapingHandlers({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ comprehensive: true }),
       });
-      const result = (await response.json()) as { success: boolean; data: { jobStatus: ComprehensiveJobStatus }; message?: string };
+      const result = (await response.json()) as {
+        success: boolean;
+        data: { jobStatus: ComprehensiveJobStatus };
+        message?: string;
+      };
 
       if (result.success) {
         setComprehensiveStatus(result.data.jobStatus);
@@ -67,11 +71,17 @@ export function useComprehensiveScrapingHandlers({
       });
 
       if (!response.ok) {
-        const errorData = (await response.json().catch(() => ({ error: 'Unknown error' }))) as { error?: string };
+        const errorData = (await response.json().catch(() => ({ error: 'Unknown error' }))) as {
+          error?: string;
+        };
         throw new Error(errorData.error || `HTTP ${response.status}`);
       }
 
-      const result = (await response.json()) as { success: boolean; data: { status: ComprehensiveJobStatus }; message?: string };
+      const result = (await response.json()) as {
+        success: boolean;
+        data: { status: ComprehensiveJobStatus };
+        message?: string;
+      };
 
       if (result.success) {
         setComprehensiveStatus(result.data.status);

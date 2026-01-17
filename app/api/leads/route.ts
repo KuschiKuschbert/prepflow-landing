@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { sendLeadEmail } from './helpers/sendLeadEmail';
 
 const leadRequestSchema = z.object({
-// ... (rest of file)
+  // ... (rest of file)
   name: z.string().min(1, 'Name is required').trim(),
   email: z.string().email('Please provide a valid email address').trim().toLowerCase(),
   source: z.string().trim().default('unknown'),
@@ -89,7 +89,7 @@ export async function POST(req: Request) {
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/leads', method: 'POST' },
     });
-// ...
+    // ...
 
     return NextResponse.json(
       ApiErrorHandler.createError(

@@ -53,7 +53,8 @@ export async function getLatestRelease(): Promise<ReleaseData | null> {
     const data = (await response.json()) as GitHubReleaseResponse;
 
     // Find the APK asset
-    const apkAsset = data.assets?.find((a: GitHubAsset) => a.name.endsWith('.apk')) || data.assets?.[0];
+    const apkAsset =
+      data.assets?.find((a: GitHubAsset) => a.name.endsWith('.apk')) || data.assets?.[0];
 
     return {
       tag_name: data.tag_name,

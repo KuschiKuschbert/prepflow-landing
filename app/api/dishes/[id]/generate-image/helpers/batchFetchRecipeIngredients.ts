@@ -13,11 +13,13 @@ export async function batchFetchRecipeIngredients(recipeIds: string[]): Promise<
   try {
     const { data: recipeIngredients, error } = await supabaseAdmin
       .from('recipe_ingredients')
-      .select(`
+      .select(
+        `
         ingredients (
           ingredient_name
         )
-      `)
+      `,
+      )
       .in('recipe_id', recipeIds);
 
     if (error) {

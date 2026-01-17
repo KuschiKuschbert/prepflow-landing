@@ -8,9 +8,7 @@ export function buildRecipesToAnalyze(
   return recipes
     .filter(recipe => {
       const ingredients = recipeIngredientsMap.get(recipe.id) || [];
-      return (
-        ingredients.length > 0 && recipe.instructions && recipe.instructions.trim().length > 0
-      );
+      return ingredients.length > 0 && recipe.instructions && recipe.instructions.trim().length > 0;
     })
     .map(recipe => ({
       recipe: {

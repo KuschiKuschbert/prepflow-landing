@@ -2,7 +2,6 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 
-
 export async function deleteOrderList(
   id: string,
 ): Promise<{ success: boolean; message: string } | { error: unknown; status: number }> {

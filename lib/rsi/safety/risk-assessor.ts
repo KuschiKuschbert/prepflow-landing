@@ -1,13 +1,12 @@
-
 /**
  * Risk Assessor
  * Evaluates the risk of a proposed change based on affected paths and change type.
  */
 export enum RiskLevel {
-  LOW = 'LOW',       // Safe to auto-apply and auto-merge
+  LOW = 'LOW', // Safe to auto-apply and auto-merge
   MEDIUM = 'MEDIUM', // Safe to auto-apply, needs human review for merge
-  HIGH = 'HIGH',     // Needs human approval before apply
-  CRITICAL = 'CRITICAL' // Blocked
+  HIGH = 'HIGH', // Needs human approval before apply
+  CRITICAL = 'CRITICAL', // Blocked
 }
 
 export interface RiskAssessment {
@@ -23,7 +22,7 @@ export class RiskAssessor {
     'app/api/billing/',
     'lib/auth/',
     'app/api/auth/',
-    'app/api/security/'
+    'app/api/security/',
   ];
 
   // Paths considered "safe" for auto-merge
@@ -32,7 +31,7 @@ export class RiskAssessor {
     'reports/',
     'rsi.eslint.config',
     'lib/rsi/',
-    'scripts/rsi/'
+    'scripts/rsi/',
   ];
 
   static assess(type: string, files: string[]): RiskAssessment {
@@ -83,7 +82,7 @@ export class RiskAssessor {
       level,
       score,
       reasons,
-      requiresApproval: level === RiskLevel.HIGH
+      requiresApproval: level === RiskLevel.HIGH,
     };
   }
 }

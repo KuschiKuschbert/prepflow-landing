@@ -112,9 +112,9 @@ export default function ExpandableFeature({
             <div className="space-y-3">
               {details.map((detail, index) => (
                 <div key={index} className="flex items-start gap-3">
-                   <div
-                     className={`mt-1 h-2 w-2 rounded-full ${colorClass?.replace('text-', 'bg-') || 'bg-landing-primary'}`}
-                   />
+                  <div
+                    className={`mt-1 h-2 w-2 rounded-full ${colorClass?.replace('text-', 'bg-') || 'bg-landing-primary'}`}
+                  />
                   <p className="text-gray-300">{detail}</p>
                 </div>
               ))}

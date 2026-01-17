@@ -1,9 +1,4 @@
-import {
-    DBDishRecipe,
-    DBRecipeIngredient,
-    RecipeGroupedItem,
-    SectionData,
-} from '../../types';
+import { DBDishRecipe, DBRecipeIngredient, RecipeGroupedItem, SectionData } from '../../types';
 import { processRecipe } from '../processRecipe';
 
 export function processDishRecipes(

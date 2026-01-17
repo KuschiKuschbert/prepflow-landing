@@ -2,11 +2,7 @@
 
 import { MagneticButton } from '@/components/ui/MagneticButton';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
-import {
-    LANDING_LAYOUT,
-    LANDING_TYPOGRAPHY,
-    getSectionClasses
-} from '@/lib/landing-styles';
+import { LANDING_LAYOUT, LANDING_TYPOGRAPHY, getSectionClasses } from '@/lib/landing-styles';
 import { logger } from '@/lib/logger';
 import { useUser } from '@auth0/nextjs-auth0/client';
 
@@ -63,9 +59,7 @@ export default function FinalCTA({ trackEngagement }: FinalCTAProps) {
     <section className={`${getSectionClasses({ padding: 'large' })} relative overflow-hidden`}>
       {/* Background Glow */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div
-           className="h-[500px] w-[500px] rounded-full bg-landing-primary/10 blur-[120px]"
-         />
+        <div className="bg-landing-primary/10 h-[500px] w-[500px] rounded-full blur-[120px]" />
       </div>
 
       <div className={`relative ${LANDING_LAYOUT.containerNarrow} text-center`}>

@@ -8,7 +8,7 @@ import { OrphanedSubscriptionCheckResult } from '../types';
  */
 export async function checkOrphanedSubscriptions(
   subscriptions: Stripe.Subscription[],
-  supabaseAdmin: SupabaseClient
+  supabaseAdmin: SupabaseClient,
 ): Promise<OrphanedSubscriptionCheckResult> {
   const result: OrphanedSubscriptionCheckResult = {
     subscriptionsWithMissingUsers: [],

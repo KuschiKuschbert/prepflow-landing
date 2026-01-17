@@ -39,7 +39,11 @@ export function useIngredientDelete<T extends { id: string }>({
               method: 'DELETE',
             });
 
-            const result = (await response.json()) as { success?: boolean; details?: string; error?: string };
+            const result = (await response.json()) as {
+              success?: boolean;
+              details?: string;
+              error?: string;
+            };
             if (!response.ok || !result.success) {
               // Revert optimistic update on error
               setIngredients(originalIngredients);

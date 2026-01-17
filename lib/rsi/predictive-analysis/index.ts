@@ -273,7 +273,7 @@ export async function runPredictiveAnalysis(dryRun = false): Promise<void> {
         const content = await fs.readFile(fullPath, 'utf8');
         const assessment = await assessFileRisk(fullPath, content);
         if (assessment.overallRisk !== 'low' || assessment.predictions.length > 0) {
-            results.push(assessment);
+          results.push(assessment);
         }
       }
     }
@@ -288,9 +288,9 @@ export async function runPredictiveAnalysis(dryRun = false): Promise<void> {
   for (const dir of dirsToScan) {
     const fullDir = path.join(rootDir, dir);
     try {
-        await scanDir(fullDir);
+      await scanDir(fullDir);
     } catch (e) {
-        console.warn(`  Could not scan ${dir}, skipping...`);
+      console.warn(`  Could not scan ${dir}, skipping...`);
     }
   }
 
@@ -302,33 +302,35 @@ export async function runPredictiveAnalysis(dryRun = false): Promise<void> {
   markdown += `**Total Issues Predicted:** ${results.reduce((acc, r) => acc + r.predictions.length, 0)}\n\n`;
 
   if (results.length === 0) {
-      markdown += "✅ No significant risks detected.\n";
+    markdown += '✅ No significant risks detected.\n';
   } else {
-      // Sort by risk score descending
-      results.sort((a, b) => b.riskScore - a.riskScore);
+    // Sort by risk score descending
+    results.sort((a, b) => b.riskScore - a.riskScore);
 
-      for (const result of results) {
-          markdown += `## ${path.relative(rootDir, result.file)} (Risk: ${result.overallRisk.toUpperCase()})\n`;
-          markdown += `**Score:** ${result.riskScore.toFixed(0)}\n\n`;
+    for (const result of results) {
+      markdown += `## ${path.relative(rootDir, result.file)} (Risk: ${result.overallRisk.toUpperCase()})\n`;
+      markdown += `**Score:** ${result.riskScore.toFixed(0)}\n\n`;
 
-          if (result.recommendations.length > 0) {
-              markdown += `### Recommendations\n`;
-              for (const rec of result.recommendations) {
-                  markdown += `- ${rec}\n`;
-              }
-              markdown += '\n';
-          }
-
-          markdown += `### Details\n`;
-          markdown += `| Line | Risk | Probability | Predicted Error |\n`;
-          markdown += `|------|------|-------------|-----------------|\n`;
-          for (const p of result.predictions) {
-              markdown += `| ${p.line} | ${p.risk} | ${(p.probability * 100).toFixed(0)}% | ${p.predictedError} |\n`;
-          }
-          markdown += '\n---\n\n';
+      if (result.recommendations.length > 0) {
+        markdown += `### Recommendations\n`;
+        for (const rec of result.recommendations) {
+          markdown += `- ${rec}\n`;
+        }
+        markdown += '\n';
       }
+
+      markdown += `### Details\n`;
+      markdown += `| Line | Risk | Probability | Predicted Error |\n`;
+      markdown += `|------|------|-------------|-----------------|\n`;
+      for (const p of result.predictions) {
+        markdown += `| ${p.line} | ${p.risk} | ${(p.probability * 100).toFixed(0)}% | ${p.predictedError} |\n`;
+      }
+      markdown += '\n---\n\n';
+    }
   }
 
   await fs.writeFile(reportPath, markdown, 'utf8');
-  console.log(`  ✅ Predictive analysis complete. Report saved to ${path.relative(rootDir, reportPath)}`);
+  console.log(
+    `  ✅ Predictive analysis complete. Report saved to ${path.relative(rootDir, reportPath)}`,
+  );
 }

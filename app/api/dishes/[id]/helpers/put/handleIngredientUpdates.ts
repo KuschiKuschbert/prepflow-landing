@@ -25,20 +25,20 @@ export async function handleIngredientUpdates(
     );
   } catch (ingredientsError) {
     if (
-        ingredientsError &&
-        typeof ingredientsError === 'object' &&
-        'code' in ingredientsError &&
-        'message' in ingredientsError
-      ) {
-        const pgError = ingredientsError as PostgrestError;
-        logger.error('[Dishes API] Database error updating dish ingredients:', {
-          error: pgError.message,
-          code: pgError.code,
-          context: { endpoint: '/api/dishes/[id]', operation: 'PUT', dishId },
-        });
-        throw ApiErrorHandler.fromSupabaseError(pgError, 500);
-      }
-      logger.error('[Dishes API] Unexpected error updating dish ingredients:', ingredientsError);
-      throw ApiErrorHandler.createError('Failed to update ingredients', 'UPDATE_ERROR', 500);
+      ingredientsError &&
+      typeof ingredientsError === 'object' &&
+      'code' in ingredientsError &&
+      'message' in ingredientsError
+    ) {
+      const pgError = ingredientsError as PostgrestError;
+      logger.error('[Dishes API] Database error updating dish ingredients:', {
+        error: pgError.message,
+        code: pgError.code,
+        context: { endpoint: '/api/dishes/[id]', operation: 'PUT', dishId },
+      });
+      throw ApiErrorHandler.fromSupabaseError(pgError, 500);
+    }
+    logger.error('[Dishes API] Unexpected error updating dish ingredients:', ingredientsError);
+    throw ApiErrorHandler.createError('Failed to update ingredients', 'UPDATE_ERROR', 500);
   }
 }

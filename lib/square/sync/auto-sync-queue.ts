@@ -11,11 +11,11 @@ import { processSyncOperation as processSyncOperationHelper } from './helpers/pr
 import { BATCH_SIZE, RATE_LIMIT_DELAY_MS } from './helpers/syncQueueConstants';
 import { handleMaxRetriesReached, handleRetry } from './helpers/syncQueueHandlers';
 import {
-    isProcessing,
-    lastBatchProcessedAt,
-    setIsProcessing,
-    setLastBatchProcessedAt,
-    syncQueue,
+  isProcessing,
+  lastBatchProcessedAt,
+  setIsProcessing,
+  setLastBatchProcessedAt,
+  syncQueue,
 } from './helpers/syncQueueState';
 import type { QueuedSyncOperation } from './types';
 

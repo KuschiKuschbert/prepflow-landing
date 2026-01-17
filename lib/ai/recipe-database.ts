@@ -6,10 +6,10 @@
 import { logger } from '@/lib/logger';
 import { ScrapedRecipe } from '../../scripts/recipe-scraper/parsers/types';
 import {
-    formatRecipesForPrompt,
-    getRecipeDatabaseStats,
-    loadIndex,
-    loadRecipe,
+  formatRecipesForPrompt,
+  getRecipeDatabaseStats,
+  loadIndex,
+  loadRecipe,
 } from './recipe-database-helpers';
 
 /**

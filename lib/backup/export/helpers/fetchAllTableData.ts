@@ -8,9 +8,7 @@ import { CHILD_TABLES, USER_TABLES } from './tableConfig';
  * @param {string} userId - User ID (email)
  * @returns {Promise<{ tables: Record<string, any[]>, recordCounts: Record<string, number> }>} Tables data and counts
  */
-export async function fetchAllTableData(
-  userId: string,
-): Promise<{
+export async function fetchAllTableData(userId: string): Promise<{
   tables: Record<string, Record<string, unknown>[]>;
   recordCounts: Record<string, number>;
 }> {

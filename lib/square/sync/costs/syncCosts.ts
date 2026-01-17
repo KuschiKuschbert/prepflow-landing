@@ -99,7 +99,9 @@ export async function syncCostsToSquare(userId: string, dishIds?: string[]): Pro
       stack: error instanceof Error ? error.stack : undefined,
     });
 
-    result.errorMessages?.push(`Fatal error: ${error instanceof Error ? error.message : String(error)}`);
+    result.errorMessages?.push(
+      `Fatal error: ${error instanceof Error ? error.message : String(error)}`,
+    );
 
     await logSyncOperation({
       user_id: userId,

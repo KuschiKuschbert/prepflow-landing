@@ -19,8 +19,10 @@ export function parseCreateTaskBody(body: unknown): CreateCleaningTaskInput {
     assigned_date: typeof data.assigned_date === 'string' ? data.assigned_date : undefined,
     equipment_id: typeof data.equipment_id === 'string' ? data.equipment_id : undefined,
     section_id: typeof data.section_id === 'string' ? data.section_id : undefined,
-    is_standard_task: typeof data.is_standard_task === 'boolean' ? data.is_standard_task : undefined,
-    standard_task_type: typeof data.standard_task_type === 'string' ? data.standard_task_type : undefined,
+    is_standard_task:
+      typeof data.is_standard_task === 'boolean' ? data.is_standard_task : undefined,
+    standard_task_type:
+      typeof data.standard_task_type === 'string' ? data.standard_task_type : undefined,
     description: typeof data.description === 'string' ? data.description : undefined,
     notes: typeof data.notes === 'string' ? data.notes : undefined,
   };

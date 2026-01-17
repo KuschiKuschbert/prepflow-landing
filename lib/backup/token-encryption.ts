@@ -63,7 +63,10 @@ export async function encryptToken(token: string): Promise<string> {
     // Convert to base64 for storage
     return Buffer.from(combined).toString('base64');
   } catch (error: unknown) {
-    logger.error('[Token Encryption] Failed to encrypt token:', error instanceof Error ? error.message : String(error));
+    logger.error(
+      '[Token Encryption] Failed to encrypt token:',
+      error instanceof Error ? error.message : String(error),
+    );
     throw new Error('Failed to encrypt token');
   }
 }
@@ -86,7 +89,10 @@ export async function decryptToken(encryptedToken: string): Promise<string> {
 
     return decoder.decode(decrypted);
   } catch (error: unknown) {
-    logger.error('[Token Decryption] Failed to decrypt token:', error instanceof Error ? error.message : String(error));
+    logger.error(
+      '[Token Decryption] Failed to decrypt token:',
+      error instanceof Error ? error.message : String(error),
+    );
     throw new Error(
       'Failed to decrypt token. Token may be corrupted or encryption key may have changed.',
     );

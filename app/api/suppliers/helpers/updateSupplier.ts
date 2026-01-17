@@ -20,8 +20,7 @@ export async function updateSupplier(id: string, updates: unknown) {
   const updateData = buildSupplierData({
     ...(updates as Record<string, unknown>),
     supplier_name:
-      (updates as { name?: string }).name ||
-      (updates as { supplier_name?: string }).supplier_name,
+      (updates as { name?: string }).name || (updates as { supplier_name?: string }).supplier_name,
   });
 
   const { data, error } = await supabaseAdmin

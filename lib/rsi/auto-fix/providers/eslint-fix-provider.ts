@@ -35,7 +35,7 @@ export class ESLintFixProvider implements FixProvider {
       const target = files?.join(' ') || 'app lib scripts';
       const { stdout } = await execAsync(
         `npx eslint ${target} --ext .ts,.tsx,.js,.jsx --format json --max-warnings 0 2>/dev/null || true`,
-        { maxBuffer: 10 * 1024 * 1024 } // 10MB buffer for large codebases
+        { maxBuffer: 10 * 1024 * 1024 }, // 10MB buffer for large codebases
       );
 
       if (!stdout.trim()) {
@@ -47,7 +47,7 @@ export class ESLintFixProvider implements FixProvider {
 
       // Find files with fixable issues
       const fixableFiles = results.filter(
-        (r) => r.fixableErrorCount > 0 || r.fixableWarningCount > 0
+        r => r.fixableErrorCount > 0 || r.fixableWarningCount > 0,
       );
 
       if (fixableFiles.length === 0) {
@@ -58,10 +58,10 @@ export class ESLintFixProvider implements FixProvider {
       console.log(`   Found ${fixableFiles.length} files with fixable ESLint issues.`);
 
       // Create a single batch fix suggestion for all fixable files
-      const filePaths = fixableFiles.map((f) => f.filePath);
+      const filePaths = fixableFiles.map(f => f.filePath);
       const totalFixable = fixableFiles.reduce(
         (sum, f) => sum + f.fixableErrorCount + f.fixableWarningCount,
-        0
+        0,
       );
 
       suggestions.push({

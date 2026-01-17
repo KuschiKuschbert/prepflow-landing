@@ -6,10 +6,7 @@ import { logger } from '@/lib/logger';
 import { cleanSampleComplianceTypes } from '@/lib/sample-compliance-clean';
 import { cleanSampleKitchenSections } from '@/lib/sample-sections-clean';
 import { createSupabaseAdmin } from '@/lib/supabase';
-import {
-    generateSalesDataForMonth,
-    type Recipe,
-} from './generate-sales-data';
+import { generateSalesDataForMonth, type Recipe } from './generate-sales-data';
 
 interface PopulateResults {
   cleaned: number;

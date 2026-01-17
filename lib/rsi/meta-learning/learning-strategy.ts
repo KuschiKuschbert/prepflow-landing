@@ -55,7 +55,7 @@ export class FrequencyAnalysisStrategy implements LearningStrategy {
 
       // Only generate insight if we have enough data points and high success rate
       // Lowering threshold slightly for demo purposes, but realistically should be higher
-        if (data.total >= 1 && successRate >= 0.8) {
+      if (data.total >= 1 && successRate >= 0.8) {
         insights.push({
           patternId: type,
           type: 'frequency',

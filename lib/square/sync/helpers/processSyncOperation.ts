@@ -76,7 +76,10 @@ export async function processSyncOperation(
       operation.retry_count++;
       onRetry(operation);
     } else {
-      await onMaxRetriesReached(operation, error instanceof Error ? error : new Error(String(error)));
+      await onMaxRetriesReached(
+        operation,
+        error instanceof Error ? error : new Error(String(error)),
+      );
     }
   }
 }

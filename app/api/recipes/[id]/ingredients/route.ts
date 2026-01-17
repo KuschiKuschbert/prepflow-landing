@@ -91,7 +91,9 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
       // Normalize the retry result to include category as null for type compatibility
       data =
         (retryData?.map(item => {
-          const rawIngs = item.ingredients as unknown as Record<string, unknown> | Record<string, unknown>[];
+          const rawIngs = item.ingredients as unknown as
+            | Record<string, unknown>
+            | Record<string, unknown>[];
           const rawIng = Array.isArray(rawIngs) ? rawIngs[0] : rawIngs;
           return {
             ...item,
@@ -155,7 +157,10 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     const { id } = await context.params;
     recipeId = id;
     const body = await request.json();
-    const { ingredients, isUpdate } = body as { ingredients: SaveRecipeIngredientInput[]; isUpdate?: boolean };
+    const { ingredients, isUpdate } = body as {
+      ingredients: SaveRecipeIngredientInput[];
+      isUpdate?: boolean;
+    };
 
     if (!ingredients || !Array.isArray(ingredients)) {
       return NextResponse.json(

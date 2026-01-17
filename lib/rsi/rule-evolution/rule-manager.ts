@@ -40,44 +40,44 @@ export class RuleManager {
   }
 
   private static async activateESLintRule(rule: GeneratedRule): Promise<boolean> {
-     try {
-       // Ideally we would parse the AST, but for stability we will read the current file
-       // and inject the rule into the rules object regex-style or reconstruct the file.
-       // Since the file structure is controlled by us, reconstruction is safe.
+    try {
+      // Ideally we would parse the AST, but for stability we will read the current file
+      // and inject the rule into the rules object regex-style or reconstruct the file.
+      // Since the file structure is controlled by us, reconstruction is safe.
 
-       // Getting existing rules is hard without executing the JS.
-       // Strategy: Parse the file content, find the rules object, and insert.
+      // Getting existing rules is hard without executing the JS.
+      // Strategy: Parse the file content, find the rules object, and insert.
 
-       if (!fs.existsSync(RSI_ESLINT_CONFIG_PATH)) {
-         console.error('RSI ESLint Config file missing.');
-         return false;
-       }
+      if (!fs.existsSync(RSI_ESLINT_CONFIG_PATH)) {
+        console.error('RSI ESLint Config file missing.');
+        return false;
+      }
 
-       let content = fs.readFileSync(RSI_ESLINT_CONFIG_PATH, 'utf-8');
+      let content = fs.readFileSync(RSI_ESLINT_CONFIG_PATH, 'utf-8');
 
-       // Check if rule already exists
-       if (content.includes(`'${rule.definition}':`)) {
-         console.log(`ESLint Rule "${rule.definition}" already active.`);
-         return false;
-       }
+      // Check if rule already exists
+      if (content.includes(`'${rule.definition}':`)) {
+        console.log(`ESLint Rule "${rule.definition}" already active.`);
+        return false;
+      }
 
-       // Injection logic: Find "rules: {" and insert after it
-       const ruleEntry = `'${rule.definition}': '${rule.severity}', // ${rule.name}`;
-       const insertionPoint = 'rules: {';
+      // Injection logic: Find "rules: {" and insert after it
+      const ruleEntry = `'${rule.definition}': '${rule.severity}', // ${rule.name}`;
+      const insertionPoint = 'rules: {';
 
-       if (content.includes(insertionPoint)) {
-         content = content.replace(insertionPoint, `${insertionPoint}\n      ${ruleEntry}`);
-         fs.writeFileSync(RSI_ESLINT_CONFIG_PATH, content);
-         console.log(`ESLint Rule "${rule.definition}" activated in rsi.eslint.config.mjs.`);
-         return true;
-       } else {
-         console.error('Could not find rules block in RSI config.');
-         return false;
-       }
-     } catch (err) {
-       console.error('Failed to update ESLint config:', err);
-       return false;
-     }
+      if (content.includes(insertionPoint)) {
+        content = content.replace(insertionPoint, `${insertionPoint}\n      ${ruleEntry}`);
+        fs.writeFileSync(RSI_ESLINT_CONFIG_PATH, content);
+        console.log(`ESLint Rule "${rule.definition}" activated in rsi.eslint.config.mjs.`);
+        return true;
+      } else {
+        console.error('Could not find rules block in RSI config.');
+        return false;
+      }
+    } catch (err) {
+      console.error('Failed to update ESLint config:', err);
+      return false;
+    }
   }
 
   static async getActiveRules(): Promise<GeneratedRule[]> {

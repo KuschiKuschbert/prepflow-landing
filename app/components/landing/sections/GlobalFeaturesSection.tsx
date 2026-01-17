@@ -3,10 +3,10 @@
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { TextContainer } from '@/components/ui/TextContainer';
 import {
-    LANDING_LAYOUT,
-    LANDING_TYPOGRAPHY,
-    getSectionClasses,
-    getStaggerDelay
+  LANDING_LAYOUT,
+  LANDING_TYPOGRAPHY,
+  getSectionClasses,
+  getStaggerDelay,
 } from '@/lib/landing-styles';
 import { useTranslation } from '../../../../lib/useTranslation';
 
@@ -38,7 +38,9 @@ export function GlobalFeaturesSection() {
             <div className="tablet:gap-8 desktop:gap-10 large-desktop:gap-12 tablet:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] mt-8 grid [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] gap-6 xl:gap-14">
               <ScrollReveal variant="fade-up" delay={getStaggerDelay(0, 0.2)}>
                 <div className="rounded-2xl bg-[#1f1f1f]/50 p-6">
-                  <h3 className={`${LANDING_TYPOGRAPHY.lg} mb-3 font-semibold text-landing-secondary`}>
+                  <h3
+                    className={`${LANDING_TYPOGRAPHY.lg} text-landing-secondary mb-3 font-semibold`}
+                  >
                     {t('globalFeatures.units.title', 'Unit Systems')}
                   </h3>
                   <p className={`${LANDING_TYPOGRAPHY.sm} text-gray-300`}>
@@ -51,7 +53,7 @@ export function GlobalFeaturesSection() {
               </ScrollReveal>
               <ScrollReveal variant="fade-up" delay={getStaggerDelay(1, 0.2)}>
                 <div className="rounded-2xl bg-[#1f1f1f]/50 p-6">
-                  <h3 className={`${LANDING_TYPOGRAPHY.lg} mb-3 font-semibold text-landing-accent`}>
+                  <h3 className={`${LANDING_TYPOGRAPHY.lg} text-landing-accent mb-3 font-semibold`}>
                     {t('globalFeatures.localization.title', 'Localization')}
                   </h3>
                   <p className={`${LANDING_TYPOGRAPHY.sm} text-gray-300`}>

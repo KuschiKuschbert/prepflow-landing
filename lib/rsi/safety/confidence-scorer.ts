@@ -104,7 +104,9 @@ export class ConfidenceScorer {
    */
   static scoreFromValue(value: number, reason?: string): ConfidenceScore {
     const score = Math.max(0, Math.min(1, value));
-    const reasons: string[] = reason ? [reason] : [`Provider confidence: ${(score * 100).toFixed(0)}%`];
+    const reasons: string[] = reason
+      ? [reason]
+      : [`Provider confidence: ${(score * 100).toFixed(0)}%`];
 
     let level = ConfidenceLevel.LOW;
     if (score >= 0.9) {

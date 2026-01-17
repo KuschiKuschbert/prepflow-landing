@@ -55,13 +55,13 @@ export async function enableGoogleConnectionForApp(): Promise<{
     if (!googleConnection.id) {
       return {
         success: false,
-        message: "Google connection ID is missing",
+        message: 'Google connection ID is missing',
       };
     }
 
     await client.connections.update({ id: googleConnection.id }, {
       enabled_clients: [...new Set([...enabledClients, auth0ClientId])],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
     logger.info('[Auth0 Google Connection] Enabled Google connection for application', {
       connectionId: googleConnection.id,

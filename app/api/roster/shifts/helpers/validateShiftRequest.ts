@@ -3,7 +3,11 @@ import type { CreateShiftInput } from './types';
 /**
  * Validates shift request data.
  */
-export function validateShiftRequest(body: Record<string, any>): { isValid: boolean; error?: string; data?: Partial<CreateShiftInput> } {
+export function validateShiftRequest(body: Record<string, any>): {
+  isValid: boolean;
+  error?: string;
+  data?: Partial<CreateShiftInput>;
+} {
   if (!body.employee_id) {
     return { isValid: false, error: 'Employee ID is required' };
   }

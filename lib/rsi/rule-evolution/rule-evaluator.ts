@@ -23,7 +23,8 @@ export class RuleEvaluator {
       // We wrap the definition in quotes to prevent shell injection, though simple regexes are expected.
       // We use '|| true' to prevent throw on no match (grep returns exit code 1)
 
-      const excludeDirs = '--exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.next --exclude-dir=dist --exclude-dir=build';
+      const excludeDirs =
+        '--exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.next --exclude-dir=dist --exclude-dir=build';
       const command = `grep -rlE "${rule.definition.replace(/"/g, '\\"')}" . ${excludeDirs} | head -n 5`;
 
       const { stdout } = await execAsync(command);
@@ -41,9 +42,8 @@ export class RuleEvaluator {
       return {
         isValid,
         matches,
-        falsePositives: 0 // Cannot determine false positives without human feedback loop yet
+        falsePositives: 0, // Cannot determine false positives without human feedback loop yet
       };
-
     } catch (error) {
       console.error('Evaluator Error:', error);
       // Fail safely

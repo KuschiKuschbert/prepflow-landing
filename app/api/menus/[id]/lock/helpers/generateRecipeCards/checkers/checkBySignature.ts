@@ -41,9 +41,7 @@ export async function checkBySignature(
     return { handled: false, signature };
   }
 
-  logger.dev(
-    `[Card Reuse] ✅ Found existing card ${existingCard.id} for signature ${signature}`,
-  );
+  logger.dev(`[Card Reuse] ✅ Found existing card ${existingCard.id} for signature ${signature}`);
   const currentHash = generateDataHash(menuItemData, normalizedIngredients);
   logger.dev(
     `[Card Reuse] Comparing hashes - existing: ${existingCard.data_hash?.substring(0, 8) || 'none'}..., current: ${currentHash.substring(0, 8)}...`,

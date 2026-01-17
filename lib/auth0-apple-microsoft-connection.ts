@@ -4,8 +4,8 @@
  */
 import { enableConnectionForApp } from './auth0-apple-microsoft-connection/helpers/enableConnection';
 import {
-    findAppleConnection,
-    findMicrosoftConnection,
+  findAppleConnection,
+  findMicrosoftConnection,
 } from './auth0-apple-microsoft-connection/helpers/findConnection';
 import { verifyConnectionEnabled } from './auth0-apple-microsoft-connection/helpers/verifyConnection';
 

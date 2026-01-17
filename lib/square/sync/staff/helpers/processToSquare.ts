@@ -12,8 +12,14 @@ import { mapEmployeeToSquareTeamMember } from './mapping';
  * Process a single PrepFlow employee for sync to Square
  */
 export interface TeamApi {
-  updateTeamMember(id: string, body: { teamMember: unknown }): Promise<{ result: { teamMember?: unknown } }>;
-  createTeamMember(body: { idempotencyKey: string; teamMember: unknown }): Promise<{ result: { teamMember?: { id: string } } }>;
+  updateTeamMember(
+    id: string,
+    body: { teamMember: unknown },
+  ): Promise<{ result: { teamMember?: unknown } }>;
+  createTeamMember(body: {
+    idempotencyKey: string;
+    teamMember: unknown;
+  }): Promise<{ result: { teamMember?: { id: string } } }>;
 }
 
 export async function processPrepFlowEmployee(
@@ -129,7 +135,8 @@ export async function processPrepFlowEmployee(
       }
     }
   } catch (employeeError: unknown) {
-    const errorMessage = employeeError instanceof Error ? employeeError.message : String(employeeError);
+    const errorMessage =
+      employeeError instanceof Error ? employeeError.message : String(employeeError);
     const stack = employeeError instanceof Error ? employeeError.stack : undefined;
 
     logger.error('[Square Staff Sync] Error processing employee:', {
@@ -137,9 +144,7 @@ export async function processPrepFlowEmployee(
       employeeId: employee.id,
     });
     result.errors++;
-    result.errorMessages?.push(
-      `Failed to process employee ${employee.id}: ${errorMessage}`,
-    );
+    result.errorMessages?.push(`Failed to process employee ${employee.id}: ${errorMessage}`);
 
     await logStaffSyncOperation({
       userId,

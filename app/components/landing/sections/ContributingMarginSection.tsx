@@ -1,10 +1,6 @@
 'use client';
 
-import {
-    LANDING_LAYOUT,
-    LANDING_TYPOGRAPHY,
-    getSectionClasses
-} from '@/lib/landing-styles';
+import { LANDING_LAYOUT, LANDING_TYPOGRAPHY, getSectionClasses } from '@/lib/landing-styles';
 import { useTranslation } from '../../../../lib/useTranslation';
 
 export function ContributingMarginSection() {
@@ -27,8 +23,8 @@ export function ContributingMarginSection() {
             )}
           </p>
           <div className="desktop:grid-cols-3 mt-8 grid gap-6">
-            <div className="rounded-2xl bg-surface/30 p-6">
-              <h3 className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold text-landing-primary`}>
+            <div className="bg-surface/30 rounded-2xl p-6">
+              <h3 className={`${LANDING_TYPOGRAPHY.xl} text-landing-primary mb-3 font-semibold`}>
                 {t('contributingMargin.benefit1.title', 'Real Costs')}
               </h3>
               <p className="text-gray-300">
@@ -38,8 +34,8 @@ export function ContributingMarginSection() {
                 )}
               </p>
             </div>
-            <div className="rounded-2xl bg-surface/30 p-6">
-              <h3 className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold text-landing-primary`}>
+            <div className="bg-surface/30 rounded-2xl p-6">
+              <h3 className={`${LANDING_TYPOGRAPHY.xl} text-landing-primary mb-3 font-semibold`}>
                 {t('contributingMargin.benefit2.title', 'Profit Impact')}
               </h3>
               <p className="text-gray-300">
@@ -49,8 +45,8 @@ export function ContributingMarginSection() {
                 )}
               </p>
             </div>
-            <div className="rounded-2xl bg-surface/30 p-6">
-              <h3 className={`${LANDING_TYPOGRAPHY.xl} mb-3 font-semibold text-landing-primary`}>
+            <div className="bg-surface/30 rounded-2xl p-6">
+              <h3 className={`${LANDING_TYPOGRAPHY.xl} text-landing-primary mb-3 font-semibold`}>
                 {t('contributingMargin.benefit3.title', 'Smart Decisions')}
               </h3>
               <p className="text-gray-300">

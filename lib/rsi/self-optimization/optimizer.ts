@@ -30,7 +30,7 @@ export class Optimizer {
 
           // If we are very successful, we can be more aggressive
           if (avgSuccess > 0.9) {
-             suggestions.push({
+            suggestions.push({
               parameter: 'confidenceThreshold.medium',
               currentValue: 0.7, // In a real system, we'd read this from config
               proposedValue: 0.65,

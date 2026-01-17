@@ -83,7 +83,9 @@ export async function processOrders(
         orderId: order.id,
       });
       result.errors++;
-      result.errorMessages?.push(`Failed to process order ${order.id}: ${orderError instanceof Error ? orderError.message : String(orderError)}`);
+      result.errorMessages?.push(
+        `Failed to process order ${order.id}: ${orderError instanceof Error ? orderError.message : String(orderError)}`,
+      );
 
       await logSyncOperation({
         user_id: userId,

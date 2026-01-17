@@ -4,7 +4,7 @@ import type { NormalizedRecipeIngredient, RecipeIngredientRow } from './types';
  * Map recipe ingredient rows to normalized items format.
  */
 export function mapRecipeIngredients(rows: RecipeIngredientRow[]): NormalizedRecipeIngredient[] {
-  return rows.map((row) => {
+  return rows.map(row => {
     const ing = (row.ingredients || {}) as {
       id: string;
       ingredient_name?: string;

@@ -96,11 +96,15 @@ export async function POST(request: NextRequest) {
 
     // Server-side fallback: if nested ingredients join is missing/null for some rows,
     // do a bulk lookup from ingredients and merge to ensure uniform shape
-    let rows: BatchRecipeIngredientRow[] = (data as unknown) as BatchRecipeIngredientRow[];
+    let rows: BatchRecipeIngredientRow[] = data as unknown as BatchRecipeIngredientRow[];
     const missingNested = rows.some((r: BatchRecipeIngredientRow) => !r.ingredients);
     if (missingNested) {
       const uniqueIds = Array.from(
-        new Set(rows.map((r: BatchRecipeIngredientRow) => r.ingredient_id).filter((v: string | undefined) => Boolean(v))),
+        new Set(
+          rows
+            .map((r: BatchRecipeIngredientRow) => r.ingredient_id)
+            .filter((v: string | undefined) => Boolean(v)),
+        ),
       );
       if (uniqueIds.length > 0) {
         const { data: ingRows, error: ingError } = await supabaseAdmin
@@ -116,7 +120,8 @@ export async function POST(request: NextRequest) {
           });
           rows = rows.map((r: BatchRecipeIngredientRow) => ({
             ...r,
-            ingredients: r.ingredients || (byId[r.ingredient_id] as BatchIngredientData | undefined),
+            ingredients:
+              r.ingredients || (byId[r.ingredient_id] as BatchIngredientData | undefined),
           }));
         }
       }

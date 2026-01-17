@@ -3,7 +3,12 @@ import type { ParLevel } from '../../../../types';
 
 interface HandleErrorParams {
   response: Response;
-  result: { message?: string; error?: string; code?: string; details?: { instructions?: string[] } };
+  result: {
+    message?: string;
+    error?: string;
+    code?: string;
+    details?: { instructions?: string[] };
+  };
   formData: {
     ingredientId: string;
     parLevel: string;

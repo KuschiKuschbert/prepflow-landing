@@ -7,8 +7,8 @@
 import type { Ingredient } from '@/app/webapp/ingredients/components/types';
 import { logger } from '@/lib/logger';
 import {
-    buildPlatingMethodDetectionPrompt,
-    type PlatingMethodSuggestion,
+  buildPlatingMethodDetectionPrompt,
+  type PlatingMethodSuggestion,
 } from './prompts/plating-method-detection';
 
 export interface PlatingMethodDetectionResult {

@@ -68,13 +68,34 @@ export async function handlePutRequest(
   const dishName = (updatedDish.dish_name || currentDish?.dish_name || 'Unknown Dish') as string;
 
   // Update recipes if provided
-  await handleRecipeUpdates(dishId, dishName, recipes, changes, changeDetails, userEmail || 'unknown');
+  await handleRecipeUpdates(
+    dishId,
+    dishName,
+    recipes,
+    changes,
+    changeDetails,
+    userEmail || 'unknown',
+  );
 
   // Update ingredients if provided
-  await handleIngredientUpdates(dishId, dishName, ingredients, changes, changeDetails, userEmail || 'unknown');
+  await handleIngredientUpdates(
+    dishId,
+    dishName,
+    ingredients,
+    changes,
+    changeDetails,
+    userEmail || 'unknown',
+  );
 
   // Trigger side effects
-  await triggerSideEffects(request, dishId, dishName, changes, changeDetails, userEmail || 'unknown');
+  await triggerSideEffects(
+    request,
+    dishId,
+    dishName,
+    changes,
+    changeDetails,
+    userEmail || 'unknown',
+  );
 
   return NextResponse.json({
     success: true,

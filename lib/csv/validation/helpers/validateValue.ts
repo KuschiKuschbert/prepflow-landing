@@ -8,7 +8,11 @@ import type { ValidationRule } from '../types';
  * @param {string} fieldName - Field name for error messages
  * @returns {string | null} Error message or null if valid
  */
-export function validateValue(value: unknown, rule: ValidationRule, fieldName: string): string | null {
+export function validateValue(
+  value: unknown,
+  rule: ValidationRule,
+  fieldName: string,
+): string | null {
   if (rule.required && (value === null || value === undefined || value === '')) {
     return `${fieldName} is required`;
   }

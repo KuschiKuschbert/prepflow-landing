@@ -1,9 +1,9 @@
 import {
-    generateFoodTemperature,
-    generateRealisticTemperature,
-    getFoodSafetyStatusText,
-    getTemperatureStatusText,
-    type EquipmentConfig,
+  generateFoodTemperature,
+  generateRealisticTemperature,
+  getFoodSafetyStatusText,
+  getTemperatureStatusText,
+  type EquipmentConfig,
 } from './temperature-log-helpers';
 
 export interface TemperatureLogEntry {

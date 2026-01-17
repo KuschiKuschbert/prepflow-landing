@@ -107,7 +107,9 @@ export async function getLockedMenusUsingEntity(
       }
 
       const menuItemResults = await Promise.all(menuItemQueries);
-      const allMenuIds = [...new Set(menuItemResults.flat().map((item: { menu_id: string }) => item.menu_id))];
+      const allMenuIds = [
+        ...new Set(menuItemResults.flat().map((item: { menu_id: string }) => item.menu_id)),
+      ];
 
       if (allMenuIds.length > 0) {
         const locked = await getLockedMenusByMenuItems(allMenuIds);

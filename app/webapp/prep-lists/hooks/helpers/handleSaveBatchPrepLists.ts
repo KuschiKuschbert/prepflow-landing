@@ -71,7 +71,11 @@ export async function handleSaveBatchPrepLists({
       body: JSON.stringify({ prepLists: prepListsToCreate, userId }),
     });
 
-    const result = (await response.json()) as { success?: boolean; prepLists?: PrepList[]; message?: string };
+    const result = (await response.json()) as {
+      success?: boolean;
+      prepLists?: PrepList[];
+      message?: string;
+    };
 
     if (result.success && result.prepLists) {
       // Replace temp prep lists with real ones from server

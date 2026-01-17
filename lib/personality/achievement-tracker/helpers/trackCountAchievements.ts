@@ -1,7 +1,7 @@
 import {
-    checkAchievementMilestone,
-    checkUsageMilestone,
-    dispatchMilestoneReached,
+  checkAchievementMilestone,
+  checkUsageMilestone,
+  dispatchMilestoneReached,
 } from '@/lib/gamification/milestones';
 import { type AchievementId } from '../../achievements';
 import { loadAchievements, loadStats, saveStats } from './storage';

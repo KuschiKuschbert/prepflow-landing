@@ -1,9 +1,9 @@
 import {
-    DBDishIngredient,
-    DBDishRecipe,
-    DBRecipeIngredient,
-    RecipeGroupedItem,
-    SectionData,
+  DBDishIngredient,
+  DBDishRecipe,
+  DBRecipeIngredient,
+  RecipeGroupedItem,
+  SectionData,
 } from '../types';
 import { processDishIngredients } from './processDish/processDishIngredients';
 import { processDishRecipes } from './processDish/processDishRecipes';

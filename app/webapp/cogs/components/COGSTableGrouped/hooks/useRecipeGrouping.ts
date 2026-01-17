@@ -31,9 +31,13 @@ export function useRecipeGrouping({ calculations, dishDetails }: UseRecipeGroupi
         if (dr.recipe_id) {
           // TODO: Fix type definition in recipes/types.ts to include name in nested recipe object
           // Use type guard or optional chaining with unknown for safety
-          const nestedRecipe = dr.recipes as unknown as { name?: string; recipe_name?: string; yield?: number; yield_unit?: string } | null;
-          const recipeName =
-            dr.recipes?.recipe_name || nestedRecipe?.name || 'Unknown Recipe';
+          const nestedRecipe = dr.recipes as unknown as {
+            name?: string;
+            recipe_name?: string;
+            yield?: number;
+            yield_unit?: string;
+          } | null;
+          const recipeName = dr.recipes?.recipe_name || nestedRecipe?.name || 'Unknown Recipe';
           const recipeYield = dr.recipes?.yield || 1;
           const recipeYieldUnit = dr.recipes?.yield_unit || 'servings';
           recipeInfoMap.set(String(dr.recipe_id), {

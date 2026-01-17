@@ -26,8 +26,7 @@ export function processDishIngredients(
       const ingredient = di.ingredients;
       if (ingredient) {
         const ingredientId = di.ingredient_id;
-        const ingredientName =
-          ingredient.ingredient_name || ingredient.name || 'Unknown';
+        const ingredientName = ingredient.ingredient_name || ingredient.name || 'Unknown';
 
         const existing = section.aggregatedIngredients.find(
           agg => agg.ingredientId === ingredientId && agg.unit === di.unit,

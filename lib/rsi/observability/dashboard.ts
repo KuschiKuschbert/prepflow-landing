@@ -16,7 +16,9 @@ export class RSIDashboard {
     const changes = await ChangeTracker.getRecentChanges();
 
     const appliedCount = changes.filter((c: ChangeRecord) => c.status === 'applied').length;
-    const failedCount = changes.filter((c: ChangeRecord) => c.status === 'failed' || c.status === 'rolled_back').length;
+    const failedCount = changes.filter(
+      (c: ChangeRecord) => c.status === 'failed' || c.status === 'rolled_back',
+    ).length;
 
     // 2. Build Markdown
     let md = `# 📊 RSI Autonomous Developer Dashboard\n\n`;
@@ -27,17 +29,23 @@ export class RSIDashboard {
     md += `| Cycle Stage | Duration | Success Rate |\n`;
     md += `|---|---|---|\n`;
 
-    performance.slice(-5).reverse().forEach((m: PerformanceRecord) => {
-      md += `| ${m.taskType} | ${(m.durationMs / 1000).toFixed(2)}s | ${m.success ? '✅' : '❌'} |\n`;
-    });
+    performance
+      .slice(-5)
+      .reverse()
+      .forEach((m: PerformanceRecord) => {
+        md += `| ${m.taskType} | ${(m.durationMs / 1000).toFixed(2)}s | ${m.success ? '✅' : '❌'} |\n`;
+      });
 
     md += `\n## 🛠️ Recent Automated Improvements\n`;
     md += `| Type | Description | Files | Confidence | Status |\n`;
     md += `|---|---|---|---|---|\n`;
 
-    changes.slice(-10).reverse().forEach((c: ChangeRecord) => {
-      md += `| ${c.type} | ${c.description} | ${c.files.join(', ')} | ${(c.confidenceScore * 100).toFixed(0)}% | ${this.formatStatus(c.status)} |\n`;
-    });
+    changes
+      .slice(-10)
+      .reverse()
+      .forEach((c: ChangeRecord) => {
+        md += `| ${c.type} | ${c.description} | ${c.files.join(', ')} | ${(c.confidenceScore * 100).toFixed(0)}% | ${this.formatStatus(c.status)} |\n`;
+      });
 
     md += `\n## 🛡️ Safety & Reliability\n`;
     md += `- **Rollback Automation:** ✅ Enabled\n`;
@@ -52,10 +60,14 @@ export class RSIDashboard {
 
   private static formatStatus(status: string): string {
     switch (status) {
-      case 'applied': return '✅ Applied';
-      case 'rolled_back': return '⚠️ Rolled Back';
-      case 'failed': return '❌ Failed';
-      default: return status;
+      case 'applied':
+        return '✅ Applied';
+      case 'rolled_back':
+        return '⚠️ Rolled Back';
+      case 'failed':
+        return '❌ Failed';
+      default:
+        return status;
     }
   }
 }

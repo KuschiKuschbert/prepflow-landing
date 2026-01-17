@@ -33,11 +33,11 @@ export class ConsoleCleanupProvider implements FixProvider {
 
     try {
       // Find files with console.log (excluding tests and scripts)
-      const excludeArgs = EXCLUDE_PATTERNS.map((p) => `--exclude='${p}'`).join(' ');
+      const excludeArgs = EXCLUDE_PATTERNS.map(p => `--exclude='${p}'`).join(' ');
       const searchDirs = files?.join(' ') || SCAN_DIRS.join(' ');
 
       const { stdout } = await execAsync(
-        `grep -rl "console\\.log" ${searchDirs} ${excludeArgs} 2>/dev/null || true`
+        `grep -rl "console\\.log" ${searchDirs} ${excludeArgs} 2>/dev/null || true`,
       );
 
       if (!stdout.trim()) {
@@ -88,16 +88,10 @@ export class ConsoleCleanupProvider implements FixProvider {
 
               // Remove console.log statements
               // Match: console.log(...); including multiline
-              fileContent = fileContent.replace(
-                /^\s*console\.log\([^)]*\);\s*\n?/gm,
-                ''
-              );
+              fileContent = fileContent.replace(/^\s*console\.log\([^)]*\);\s*\n?/gm, '');
 
               // Also handle console.log without semicolon
-              fileContent = fileContent.replace(
-                /^\s*console\.log\([^)]*\)\s*\n?/gm,
-                ''
-              );
+              fileContent = fileContent.replace(/^\s*console\.log\([^)]*\)\s*\n?/gm, '');
 
               await fs.writeFile(filePath, fileContent, 'utf8');
               return true;
@@ -114,7 +108,7 @@ export class ConsoleCleanupProvider implements FixProvider {
               // TypeScript errors may exist unrelated to our change
               // Check if our file change is the cause by checking for syntax errors
               const { stdout: checkOutput } = await execAsync(
-                `npx tsc --noEmit ${filePath} 2>&1 || true`
+                `npx tsc --noEmit ${filePath} 2>&1 || true`,
               );
               // If it's just type errors (not syntax), we're okay
               return !checkOutput.includes('Unexpected token');

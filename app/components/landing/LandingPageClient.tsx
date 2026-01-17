@@ -116,9 +116,7 @@ export default function LandingPageClient() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <main
-        className="desktop:pb-0 relative min-h-screen scroll-smooth bg-transparent pb-20 text-white"
-      >
+      <main className="desktop:pb-0 relative min-h-screen scroll-smooth bg-transparent pb-20 text-white">
         {/* Base background color */}
         <div className="fixed inset-0 -z-20 bg-[#0a0a0a]" aria-hidden={true} />
 

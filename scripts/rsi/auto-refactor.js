@@ -31,16 +31,23 @@ async function main() {
   // Filter plans by risk and impact
   const allPlans = plans.map(plan => ({
     ...plan,
-    risk: RiskAssessor.assess(plan.type || 'refactor', plan.targetFiles || [])
+    risk: RiskAssessor.assess(plan.type || 'refactor', plan.targetFiles || []),
   }));
 
   const selectedPlan = allPlans[0];
   console.log(`\n📋 Selected Plan: ${selectedPlan.title}`);
   console.log(`   Description: ${selectedPlan.description}`);
-  console.log(`   Impact: ${selectedPlan.impactScore} | Risk Level: ${selectedPlan.risk.level} (${selectedPlan.risk.score})`);
+  console.log(
+    `   Impact: ${selectedPlan.impactScore} | Risk Level: ${selectedPlan.risk.level} (${selectedPlan.risk.score})`,
+  );
 
-  if (selectedPlan.risk.level === RiskLevel.HIGH || selectedPlan.risk.level === RiskLevel.CRITICAL) {
-    console.log(`\n⚠️  This plan is too risky for autonomous execution: ${selectedPlan.risk.reasons.join(', ')}`);
+  if (
+    selectedPlan.risk.level === RiskLevel.HIGH ||
+    selectedPlan.risk.level === RiskLevel.CRITICAL
+  ) {
+    console.log(
+      `\n⚠️  This plan is too risky for autonomous execution: ${selectedPlan.risk.reasons.join(', ')}`,
+    );
     console.log(`   Human approval required. Skipping automatic apply.`);
     return;
   }

@@ -19,7 +19,7 @@ export interface Connection {
 export { verifyGoogleConnection };
 
 /** Configure Google OAuth credentials for the connection */
-    export { configureGoogleOAuthCredentials };
+export { configureGoogleOAuthCredentials };
 
 /** Configure Google OAuth credentials and enable connection for the application */
 export async function configureAndEnableGoogleConnection(

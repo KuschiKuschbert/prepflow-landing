@@ -59,7 +59,11 @@ export class RefactoringPlanner {
         if (fileLine && descLine) {
           const fileName = fileLine.replace('**File:**', '').trim().replace(/`/g, '');
           const description = descLine.replace('**Description:**', '').trim();
-          const priority = header.includes('(HIGH)') ? 'high' : header.includes('(MEDIUM)') ? 'medium' : 'low';
+          const priority = header.includes('(HIGH)')
+            ? 'high'
+            : header.includes('(MEDIUM)')
+              ? 'medium'
+              : 'low';
 
           const plan = this.analyzeArchitectureIssue(header, fileName, description, priority);
           if (plan) plans.push(plan);
@@ -71,7 +75,12 @@ export class RefactoringPlanner {
     return plans.sort((a, b) => b.impactScore - a.impactScore);
   }
 
-  private static analyzeArchitectureIssue(type: string, file: string, description: string, priority: string): RefactoringPlan | null {
+  private static analyzeArchitectureIssue(
+    type: string,
+    file: string,
+    description: string,
+    priority: string,
+  ): RefactoringPlan | null {
     let impactScore = 5;
     if (priority === 'high') impactScore = 8;
     if (priority === 'medium') impactScore = 5;

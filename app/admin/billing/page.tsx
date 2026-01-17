@@ -153,7 +153,9 @@ export default function BillingPage() {
       <div className="space-y-6">
         <div className="animate-pulse">
           <div className={`mb-4 h-8 w-64 rounded bg-[${COLORS.BORDER_DARK}]`}></div>
-          <div className={`h-96 rounded-2xl border border-[${COLORS.BORDER_DARK}] bg-[${COLORS.BG_DARK}]`}></div>
+          <div
+            className={`h-96 rounded-2xl border border-[${COLORS.BORDER_DARK}] bg-[${COLORS.BG_DARK}]`}
+          ></div>
         </div>
       </div>
     );

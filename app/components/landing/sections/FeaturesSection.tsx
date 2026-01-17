@@ -1,11 +1,7 @@
 'use client';
 
 import { GlowCard } from '@/components/ui/GlowCard';
-import {
-    LANDING_LAYOUT,
-    LANDING_TYPOGRAPHY,
-    getSectionClasses
-} from '@/lib/landing-styles';
+import { LANDING_LAYOUT, LANDING_TYPOGRAPHY, getSectionClasses } from '@/lib/landing-styles';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../../../../lib/useTranslation';
 

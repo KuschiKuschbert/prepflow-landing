@@ -2,10 +2,7 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { PrepListToCreate } from '../types';
 
-export async function createPrepListItems(
-  prepListId: string,
-  items: PrepListToCreate['items'],
-) {
+export async function createPrepListItems(prepListId: string, items: PrepListToCreate['items']) {
   if (!supabaseAdmin) throw new Error('Database connection could not be established');
 
   const prepItems = items.map(item => ({
@@ -18,9 +15,7 @@ export async function createPrepListItems(
 
   if (prepItems.length === 0) return { error: null };
 
-  const { error: itemsError } = await supabaseAdmin
-    .from('prep_list_items')
-    .insert(prepItems);
+  const { error: itemsError } = await supabaseAdmin.from('prep_list_items').insert(prepItems);
 
   if (itemsError) {
     logger.error('[Prep Lists API] Error creating prep list items:', {

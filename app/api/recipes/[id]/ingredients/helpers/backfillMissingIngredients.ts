@@ -46,7 +46,7 @@ export async function backfillMissingIngredients(
       .in('id', uniqueIds);
 
     // Normalize the retry result to include category as null for type compatibility
-    ingRows = (retryData?.map((ing) => ({
+    ingRows = (retryData?.map(ing => ({
       ...ing,
       category: (ing as { category?: string | null }).category ?? null, // Safe access or just null if not present in select
     })) || []) as IngredientRow[];

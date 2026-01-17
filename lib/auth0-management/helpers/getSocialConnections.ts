@@ -21,19 +21,18 @@ export async function getSocialConnections(): Promise<Connection[]> {
     }
     return connections.filter(
       (conn: Connection) =>
-        conn.strategy && (
-          [
-            'google-oauth2',
-            'facebook',
-            'github',
-            'twitter',
-            'linkedin',
-            'apple',
-            'windowslive',
-            'waad',
-          ].includes(conn.strategy) ||
-          (conn.strategy === 'oauth2' && !conn.is_domain_connection)
-        ),
+        conn.strategy &&
+        ([
+          'google-oauth2',
+          'facebook',
+          'github',
+          'twitter',
+          'linkedin',
+          'apple',
+          'windowslive',
+          'waad',
+        ].includes(conn.strategy) ||
+          (conn.strategy === 'oauth2' && !conn.is_domain_connection)),
     );
   } catch (error) {
     logger.error('[Auth0 Management] Failed to fetch social connections:', error);

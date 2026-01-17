@@ -1,14 +1,14 @@
 'use client';
 
 import {
-    BarChart3,
-    BookOpen,
-    DollarSign,
-    Leaf,
-    LucideIcon,
-    Settings,
-    Sparkles,
-    Thermometer,
+  BarChart3,
+  BookOpen,
+  DollarSign,
+  Leaf,
+  LucideIcon,
+  Settings,
+  Sparkles,
+  Thermometer,
 } from 'lucide-react';
 import AppleStyleFeatures from './AppleStyleFeatures';
 

@@ -3,10 +3,10 @@
 import { GlowCard } from '@/components/ui/GlowCard';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import {
-    LANDING_LAYOUT,
-    LANDING_TYPOGRAPHY,
-    getSectionClasses,
-    getStaggerDelay
+  LANDING_LAYOUT,
+  LANDING_TYPOGRAPHY,
+  getSectionClasses,
+  getStaggerDelay,
 } from '@/lib/landing-styles';
 import { useTranslation } from '../../../../lib/useTranslation';
 
@@ -45,11 +45,15 @@ export function BenefitsSection() {
    * and Tailwind text classes.
    */
   const getColors = (color: string) => {
-    switch(color) {
-      case 'primary': return { glow: 'cyan', text: 'text-landing-primary' };
-      case 'secondary': return { glow: 'blue', text: 'text-landing-secondary' };
-      case 'accent': return { glow: 'magenta', text: 'text-landing-accent' };
-      default: return { glow: 'blue', text: 'text-landing-secondary' };
+    switch (color) {
+      case 'primary':
+        return { glow: 'cyan', text: 'text-landing-primary' };
+      case 'secondary':
+        return { glow: 'blue', text: 'text-landing-secondary' };
+      case 'accent':
+        return { glow: 'magenta', text: 'text-landing-accent' };
+      default:
+        return { glow: 'blue', text: 'text-landing-secondary' };
     }
   };
 
@@ -67,22 +71,20 @@ export function BenefitsSection() {
           {benefits.map((benefit, index) => {
             const colors = getColors(benefit.color);
             return (
-            <ScrollReveal
-              key={`benefit-${index}-${benefit.title}`}
-              variant="fade-up"
-              delay={getStaggerDelay(index)}
-            >
-              <GlowCard glowColor={colors.glow as string} className="p-8">
-                <h4
-                  className={`${LANDING_TYPOGRAPHY.xl} mb-4 font-light ${colors.text}`}
-                >
-                  {benefit.title}
-                </h4>
-                <p className={`${LANDING_TYPOGRAPHY.base} leading-relaxed text-gray-400`}>
-                  {benefit.description}
-                </p>
-              </GlowCard>
-            </ScrollReveal>
+              <ScrollReveal
+                key={`benefit-${index}-${benefit.title}`}
+                variant="fade-up"
+                delay={getStaggerDelay(index)}
+              >
+                <GlowCard glowColor={colors.glow as string} className="p-8">
+                  <h4 className={`${LANDING_TYPOGRAPHY.xl} mb-4 font-light ${colors.text}`}>
+                    {benefit.title}
+                  </h4>
+                  <p className={`${LANDING_TYPOGRAPHY.base} leading-relaxed text-gray-400`}>
+                    {benefit.description}
+                  </p>
+                </GlowCard>
+              </ScrollReveal>
             );
           })}
         </div>

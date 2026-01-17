@@ -52,9 +52,7 @@ export async function processSquareCatalogItem(
       squareItemId: squareItem.id,
     });
     result.errors++;
-    result.errorMessages?.push(
-      `Failed to process Square item ${squareItem.id}: ${errorMessage}`,
-    );
+    result.errorMessages?.push(`Failed to process Square item ${squareItem.id}: ${errorMessage}`);
 
     await logCatalogSyncOperation({
       userId,

@@ -79,8 +79,7 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const userRoles =
-      (session?.user?.['https://prepflow.org/roles'] as string[] | undefined) || [];
+    const userRoles = (session?.user?.['https://prepflow.org/roles'] as string[] | undefined) || [];
 
     return NextResponse.json({
       session: session
@@ -129,8 +128,8 @@ export async function GET(request: NextRequest) {
         NODE_ENV: process.env.NODE_ENV,
         AUTH0_CONFIGURED: Boolean(
           process.env.AUTH0_ISSUER_BASE_URL &&
-            process.env.AUTH0_CLIENT_ID &&
-            process.env.AUTH0_CLIENT_SECRET,
+          process.env.AUTH0_CLIENT_ID &&
+          process.env.AUTH0_CLIENT_SECRET,
         ),
         AUTH0_DOMAIN: process.env.AUTH0_ISSUER_BASE_URL
           ? process.env.AUTH0_ISSUER_BASE_URL.replace(/^https?:\/\//, '').replace(/\/$/, '')

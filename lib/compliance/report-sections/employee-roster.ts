@@ -3,10 +3,7 @@
  * Extracted from report-generator.ts
  */
 
-import {
-    formatAustralianDate,
-    getDaysUntilExpiry
-} from '../australian-standards';
+import { formatAustralianDate, getDaysUntilExpiry } from '../australian-standards';
 import type { ReportEmployee } from '../report-types/report-item-types';
 
 // Type for qualification with expiry info

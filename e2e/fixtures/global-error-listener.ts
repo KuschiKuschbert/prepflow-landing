@@ -128,7 +128,7 @@ export async function collectPageErrors(page: Page): Promise<void> {
       return errors;
     });
 
-    pageErrors.forEach((error) => {
+    pageErrors.forEach(error => {
       errorCollection.push({
         type: error.type as 'console.error' | 'console.warn' | 'uncaught' | 'network',
         url: error.url || page.url(),

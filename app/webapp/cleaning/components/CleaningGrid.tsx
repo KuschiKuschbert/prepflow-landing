@@ -59,8 +59,6 @@ export function CleaningGrid({
     return dates.map(date => new Date(date));
   }, [dates]);
 
-
-
   // Merge tasks with optimistic completions
   const optimisticTasks = useMemo(() => {
     return tasks.map(task => {

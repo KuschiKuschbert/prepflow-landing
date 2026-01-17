@@ -34,10 +34,10 @@ const getShadowStyle = (colorClass?: string) => {
     return '0 0 20px rgba(41, 231, 205, 0.25), 0 0 40px rgba(41, 231, 205, 0.1)';
   }
   if (colorClass?.includes('text-landing-secondary')) {
-     return '0 0 20px rgba(59, 130, 246, 0.25), 0 0 40px rgba(59, 130, 246, 0.1)';
+    return '0 0 20px rgba(59, 130, 246, 0.25), 0 0 40px rgba(59, 130, 246, 0.1)';
   }
   if (colorClass?.includes('text-landing-accent')) {
-     return '0 0 20px rgba(217, 37, 199, 0.25), 0 0 40px rgba(217, 37, 199, 0.1)';
+    return '0 0 20px rgba(217, 37, 199, 0.25), 0 0 40px rgba(217, 37, 199, 0.1)';
   }
   return '0 0 20px rgba(41, 231, 205, 0.25), 0 0 40px rgba(41, 231, 205, 0.1)';
 };

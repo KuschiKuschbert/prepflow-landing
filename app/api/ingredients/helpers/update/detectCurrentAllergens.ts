@@ -20,8 +20,8 @@ export async function detectCurrentAllergens(
 
   if (nameOrBrandChanged && !allergensChanged) {
     if (!supabaseAdmin) {
-       logger.error('[Ingredients API] Supabase admin not available for allergen check');
-       return allergensChanged;
+      logger.error('[Ingredients API] Supabase admin not available for allergen check');
+      return allergensChanged;
     }
     const { data: current, error: fetchError } = await supabaseAdmin
       .from('ingredients')

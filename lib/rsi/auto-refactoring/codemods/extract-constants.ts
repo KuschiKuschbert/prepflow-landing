@@ -38,8 +38,8 @@ const transform: Transform = (file: FileInfo, api: API, options: Options) => {
   // 2. Add the constants at the top of the file (after imports)
   const constantDeclarations = constants.map(c =>
     j.variableDeclaration('const', [
-      j.variableDeclarator(j.identifier(c.name), j.numericLiteral(c.value))
-    ])
+      j.variableDeclarator(j.identifier(c.name), j.numericLiteral(c.value)),
+    ]),
   );
 
   const firstNode = root.find(j.Program).get('body', 0);

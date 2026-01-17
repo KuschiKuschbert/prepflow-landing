@@ -1,9 +1,9 @@
 import type {
-    AggregatedIngredient,
-    DBDishRecipe,
-    DBRecipeIngredient,
-    MenuItemData,
-    SectionData
+  AggregatedIngredient,
+  DBDishRecipe,
+  DBRecipeIngredient,
+  MenuItemData,
+  SectionData,
 } from '../../types';
 
 interface ProcessDishParams {
@@ -21,11 +21,7 @@ export function processDishIngredients({
   menuItems,
   section,
 }: ProcessDishParams): void {
-  const itemDish = item.dishes
-    ? Array.isArray(item.dishes)
-      ? item.dishes[0]
-      : item.dishes
-    : null;
+  const itemDish = item.dishes ? (Array.isArray(item.dishes) ? item.dishes[0] : item.dishes) : null;
 
   if (!itemDish) return;
 
@@ -64,7 +60,12 @@ export function processDishIngredients({
         section.aggregatedIngredients,
         ri,
         (dishRecipe.quantity || 1) * (ri.quantity || 0),
-        { type: 'dish', id: item.dish_id!, name: itemDish.dish_name, quantity: dishRecipe.quantity },
+        {
+          type: 'dish',
+          id: item.dish_id!,
+          name: itemDish.dish_name,
+          quantity: dishRecipe.quantity,
+        },
       );
     }
   }

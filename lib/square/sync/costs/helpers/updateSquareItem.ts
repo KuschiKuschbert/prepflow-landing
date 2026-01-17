@@ -61,7 +61,9 @@ export async function updateSquareItemCosts(
       retrieveCatalogObject(
         objectId: string,
         includeRelatedObjects?: boolean,
-      ): Promise<{ result: { object?: { itemData?: { customAttributeValues?: Record<string, unknown> } } } }>;
+      ): Promise<{
+        result: { object?: { itemData?: { customAttributeValues?: Record<string, unknown> } } };
+      }>;
       upsertCatalogObject(req: {
         idempotencyKey: string;
         object: {

@@ -4,12 +4,14 @@ export interface CalculationDish {
 }
 
 export interface DishWithSalesData extends CalculationDish {
-  sales_data?: {
-    id: string;
-    number_sold: number;
-    popularity_percentage: number;
-    date: string;
-  }[] | null;
+  sales_data?:
+    | {
+        id: string;
+        number_sold: number;
+        popularity_percentage: number;
+        date: string;
+      }[]
+    | null;
 }
 
 export interface PerformanceDish extends DishWithSalesData {

@@ -60,7 +60,7 @@ export async function syncCatalogFromSquare(
     }
 
     const squareItems = (listResponse.result.objects as SquareCatalogObject[]).filter(
-      (obj) => obj.type === 'ITEM' && obj.itemData,
+      obj => obj.type === 'ITEM' && obj.itemData,
     );
 
     logger.dev('[Square Catalog Sync] Found Square items:', {

@@ -2,8 +2,8 @@
 import { logger } from '@/lib/logger';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-    availableLanguages,
-    getBrowserLanguage,
+  availableLanguages,
+  getBrowserLanguage,
 } from './useTranslation/helpers/getBrowserLanguage';
 import { getNestedValue } from './useTranslation/helpers/getNestedValue';
 import { getCachedTranslations, loadTranslations } from './useTranslation/helpers/loadTranslations';
