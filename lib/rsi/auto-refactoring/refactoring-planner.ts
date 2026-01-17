@@ -1,6 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+import { logger } from '@/lib/logger';
+
 export interface RefactoringPlan {
   id: string;
   title: string;
@@ -264,13 +266,13 @@ export class RefactoringPlanner {
       if (index !== -1) {
         lines[index] = lines[index].replace('- [ ]', '- [x]');
         fs.writeFileSync(debtPath, lines.join('\n'), 'utf-8');
-        console.log(`✅ Marked debt item as resolved in DEBT.md: ${sourceItem}`);
+        logger.dev(`✅ Marked debt item as resolved in DEBT.md: ${sourceItem}`);
         return true;
       }
 
       return false;
     } catch (error) {
-      console.error('Failed to update DEBT.md:', error);
+      logger.error('Failed to update DEBT.md:', error);
       return false;
     }
   }
