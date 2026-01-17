@@ -88,6 +88,28 @@
     ]
   },
   {
+    "timestamp": "2026-01-15T15:27:43.417Z",
+    "insights": [
+      {
+        "patternId": "fix-any-types",
+        "type": "frequency",
+        "confidence": 0.85,
+        "insight": "Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
+        "sourceFiles": []
+      }
+    ],
+    "rulesGenerated": [
+      {
+        "id": "rule-1768490863417-270",
+        "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
+        "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
+        "derivedFrom": [
+          "fix-any-types"
+        ]
+      }
+    ]
+  },
+  {
     "timestamp": "2026-01-15T23:58:05.980Z",
     "insights": [
       {
