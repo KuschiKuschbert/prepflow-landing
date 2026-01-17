@@ -31,13 +31,18 @@ return true;
         // Example: app/webapp/temperature/components/TemperatureLogCard.tsx(24,87): error TS1005...
         const failedFiles = new Set<string>();
         const lines = output.split('\n');
-        const pathRegex = /^([^\s(]+)\(/;
+        console.error(`❌ TSC Failure Output (first 5 lines):\n${lines.slice(0, 5).join('\n')}`);
+
+        // Improved regex to catch lib/foo.ts(10,5) or lib/foo.ts:10:5
+        const pathRegex = /^([^\s(:]+)[(: ]/;
 
         for (const line of lines) {
           const match = line.match(pathRegex);
-          if (match && match[1] && affectedFiles.some(f => match[1].includes(path.basename(f)))) {
-            // Basic match check - can be improved to be exact match if passing full paths
-            failedFiles.add(match[1]);
+          if (match && match[1]) {
+            const foundPath = match[1];
+            if (affectedFiles.some(f => foundPath.includes(path.basename(f)))) {
+              failedFiles.add(foundPath);
+            }
           }
         }
 
