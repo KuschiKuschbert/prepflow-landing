@@ -4,6 +4,8 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import Papa from 'papaparse';
+import { fetchTableData } from './helpers/fetchTableData';
+import { normalizeForCSV } from './helpers/normalizeForCSV';
 
 /**
  * GET /api/admin/data/export
@@ -32,35 +34,8 @@ export async function GET(request: NextRequest) {
     const allData: unknown[] = [];
 
     for (const tableName of tablesToSearch) {
-      try {
-        let searchQuery = supabaseAdmin.from(tableName).select('*').limit(1000);
-
-        if (query) {
-          if (tableName === 'ingredients') {
-            searchQuery = searchQuery.or(
-              `ingredient_name.ilike.%${query}%,supplier.ilike.%${query}%`,
-            );
-          } else if (tableName === 'recipes') {
-            searchQuery = searchQuery.or(`recipe_name.ilike.%${query}%,name.ilike.%${query}%`);
-          } else if (tableName === 'dishes') {
-            searchQuery = searchQuery.or(`dish_name.ilike.%${query}%,name.ilike.%${query}%`);
-          } else if (tableName === 'users') {
-            searchQuery = searchQuery.or(`email.ilike.%${query}%`);
-          }
-        }
-
-        const { data } = await searchQuery;
-        if (data) {
-          allData.push(
-            ...data.map((item: unknown) => ({
-              ...(item as Record<string, unknown>),
-              _table: tableName,
-            })),
-          );
-        }
-      } catch (error) {
-        logger.warn(`[Admin Data Export] Error exporting ${tableName}:`, error);
-      }
+      const data = await fetchTableData(tableName, query);
+      allData.push(...data);
     }
 
     if (format === 'csv') {
@@ -70,21 +45,8 @@ export async function GET(request: NextRequest) {
       }
 
       // Normalize data for CSV export (handle objects and nulls)
-      const normalizedData = allData.map(rowUnknown => {
-        const row = rowUnknown as Record<string, unknown>;
-        const normalized: Record<string, unknown> = {};
-        Object.keys(row).forEach(key => {
-          const value = row[key];
-          if (value === null || value === undefined) {
-            normalized[key] = '';
-          } else if (typeof value === 'object') {
-            normalized[key] = JSON.stringify(value);
-          } else {
-            normalized[key] = String(value);
-          }
-        });
-        return normalized;
-      });
+      const dataToNormalize = allData as Record<string, unknown>[];
+      const normalizedData = normalizeForCSV(dataToNormalize);
 
       const headers = Object.keys(normalizedData[0]);
       const csv = Papa.unparse(normalizedData, {

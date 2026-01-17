@@ -1,25 +1,15 @@
 import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { lookupMenuItemDataFromCache } from '../batchFetchMenuItemData';
-import { generateDataHash } from '../cardBuilding';
-import { findExistingCardBySignature, getRecipeSignature } from '../cardManagement';
 import { MenuItemData } from '../fetchMenuItemData';
 import { normalizeToSingleServing } from '../normalizeIngredients';
+import { checkByOldMethod } from './checkers/checkByOldMethod';
+import { checkBySignature } from './checkers/checkBySignature';
 import { MenuItem } from './fetchMenuItems';
+import { CheckResult, ItemToGenerate } from './types';
 
-interface ItemToGenerate {
-  menuItem: MenuItem;
-  menuItemData: MenuItemData;
-  signature: string;
-  existingCardId?: string;
-}
-
-interface CheckResult {
-  itemsToGenerate: ItemToGenerate[];
-  itemsToLink: Array<{ menuItemId: string; cardId: string }>;
-  reusedCount: number;
-  linkedCount: number;
-}
+// Re-export for backward compatibility
+export type { CheckResult, ItemToGenerate } from './types';
 
 /**
  * Checks for existing cards and determines which items need generation vs can reuse existing cards.
@@ -56,99 +46,45 @@ export async function checkExistingCards(
     }
 
     let signature = '';
+    let handledBySignature = false;
 
     if (crossReferencingEnabled) {
-      signature = getRecipeSignature(menuItemData, menuItem) || '';
-      if (signature) {
-        logger.dev(
-          `[Card Reuse] Menu item ${menuItem.id} signature: ${signature} (dish_id: ${menuItem.dish_id}, recipe_id: ${menuItem.recipe_id})`,
-        );
+      const result = await checkBySignature(
+        supabase,
+        menuItem,
+        menuItemData,
+        normalizedIngredients,
+      );
 
-        const existingCard = await findExistingCardBySignature(supabase, signature, menuItem);
-        if (existingCard) {
-          logger.dev(
-            `[Card Reuse] ✅ Found existing card ${existingCard.id} for signature ${signature}`,
-          );
-          const currentHash = generateDataHash(menuItemData, normalizedIngredients);
-          logger.dev(
-            `[Card Reuse] Comparing hashes - existing: ${existingCard.data_hash?.substring(0, 8) || 'none'}..., current: ${currentHash.substring(0, 8)}...`,
-          );
-          if (existingCard.data_hash === currentHash) {
-            itemsToLink.push({ menuItemId: menuItem.id, cardId: existingCard.id });
-            linkedCount++;
-            logger.dev(
-              `[Card Reuse] ✅ Linking menu item ${menuItem.id} to existing card ${existingCard.id} (signature: ${signature}, hash matches)`,
-            );
-            continue;
-          } else {
-            logger.dev(
-              `[Card Reuse] ⚠️ Card exists but data changed for menu item ${menuItem.id} (hash mismatch), will regenerate and update existing card...`,
-            );
-            itemsToGenerate.push({
-              menuItem,
-              menuItemData,
-              signature,
-              existingCardId: existingCard.id,
-            });
-            continue;
-          }
-        } else {
-          logger.dev(
-            `[Card Reuse] ❌ No existing card found for signature ${signature} (dish_id: ${menuItem.dish_id}, recipe_id: ${menuItem.recipe_id}), falling back to old method check`,
-          );
+      handledBySignature = result.handled;
+      if (result.signature) {
+          signature = result.signature;
+      }
+
+      if (result.handled) {
+        if (result.action === 'link' && result.cardId) {
+          itemsToLink.push({ menuItemId: menuItem.id, cardId: result.cardId });
+          linkedCount++;
+        } else if (result.action === 'generate' && result.itemToGenerate) {
+          itemsToGenerate.push(result.itemToGenerate);
         }
-      } else {
-        logger.dev(
-          `[Card Reuse] Could not determine signature for menu item ${menuItem.id}, falling back to old method`,
-        );
+        continue;
       }
     }
 
     // Old method: check existing card by menu_item_id
-    const currentHash = generateDataHash(menuItemData, normalizedIngredients);
-    logger.dev(
-      `[Card Reuse] Checking old method for menu item ${menuItem.id} (hash: ${currentHash.substring(0, 8)}...)`,
+    const result = await checkByOldMethod(
+      supabase,
+      menuItem,
+      menuItemData,
+      normalizedIngredients,
+      signature,
     );
-    const { data: existingCardOld, error: cardError } = await supabase
-      .from('menu_recipe_cards')
-      .select('id, data_hash')
-      .eq('menu_item_id', menuItem.id)
-      .single();
 
-    if (!cardError && existingCardOld) {
-      logger.dev(
-        `[Card Reuse] Found existing card ${existingCardOld.id} for menu_item_id ${menuItem.id}`,
-      );
-      logger.dev(
-        `[Card Reuse] Comparing hashes - existing: ${existingCardOld.data_hash?.substring(0, 8) || 'none'}..., current: ${currentHash.substring(0, 8)}...`,
-      );
-      if (existingCardOld.data_hash === currentHash) {
-        reusedCount++;
-        logger.dev(
-          `[Card Reuse] ✅ Reusing existing card ${existingCardOld.id} for menu item ${menuItem.id} (hash matches)`,
-        );
-      } else {
-        logger.dev(
-          `[Card Reuse] ⚠️ Card exists for menu item ${menuItem.id} but hash changed (old: ${existingCardOld.data_hash?.substring(0, 8) || 'none'}..., new: ${currentHash.substring(0, 8)}...), will regenerate`,
-        );
-        itemsToGenerate.push({ menuItem, menuItemData, signature });
-      }
-    } else {
-      if (cardError && cardError.code === 'PGRST116') {
-        logger.dev(
-          `[Card Reuse] ❌ No existing card found for menu item ${menuItem.id} (PGRST116 - no rows), will generate new card`,
-        );
-      } else if (cardError) {
-        logger.warn(
-          `[Card Reuse] Error checking for existing card for menu item ${menuItem.id}:`,
-          cardError,
-        );
-      } else {
-        logger.dev(
-          `[Card Reuse] ❌ No existing card found for menu item ${menuItem.id}, will generate new card`,
-        );
-      }
-      itemsToGenerate.push({ menuItem, menuItemData, signature });
+    if (result.reused) {
+      reusedCount++;
+    } else if (result.itemToGenerate) {
+      itemsToGenerate.push(result.itemToGenerate);
     }
   }
 

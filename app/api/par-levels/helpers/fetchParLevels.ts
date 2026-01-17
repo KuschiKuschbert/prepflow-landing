@@ -2,7 +2,9 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
-import { IngredientRecord, ParLevelRecord } from './types';
+import { fetchFallback } from './fetch/fetchFallback';
+import { fetchWithJoin } from './fetch/fetchWithJoin';
+import { ParLevelRecord } from './types';
 
 /**
  * Fetch par levels with ingredient join, with fallback to separate queries.
@@ -13,17 +15,7 @@ import { IngredientRecord, ParLevelRecord } from './types';
 export async function fetchParLevels(supabaseAdmin: SupabaseClient) {
   // Try to fetch par levels with ingredient join
   // If join fails, fall back to fetching ingredients separately
-  let { data, error } = await supabaseAdmin.from('par_levels').select(
-    `
-      *,
-      ingredients (
-        id,
-        ingredient_name,
-        unit,
-        category
-      )
-    `,
-  );
+  let { data, error } = await fetchWithJoin(supabaseAdmin);
 
   // If join fails, try without join first to see if table exists
   if (error) {
@@ -36,81 +28,7 @@ export async function fetchParLevels(supabaseAdmin: SupabaseClient) {
       errorMessage.includes('foreign key') ||
       errorMessage.includes('does not exist')
     ) {
-      logger.warn('[Par Levels API] Join failed, trying without join:', {
-        error: error.message,
-        code: errorCode,
-      });
-
-      // Try simple select first
-      const { data: simpleData, error: simpleError } = await supabaseAdmin
-        .from('par_levels')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (simpleError) {
-        // Table or columns don't exist
-        return {
-          data: null,
-          error: NextResponse.json(
-            ApiErrorHandler.createError(
-              `Database error: ${simpleError.message}. Please ensure the par_levels table exists and has the required columns.`,
-              'DATABASE_ERROR',
-              500,
-              {
-                error: simpleError.message,
-                code: errorCode,
-                instructions: [
-                  'Please run the migration script: migrations/add-par-levels-columns.sql',
-                  'Ensure the par_levels table exists with columns: id, ingredient_id, par_level, reorder_point, unit, created_at, updated_at',
-                ],
-              },
-            ),
-            { status: 500 },
-          ),
-        };
-      }
-
-      // If we got data without join, fetch ingredients separately
-      if (simpleData && simpleData.length > 0) {
-        const ingredientIds = simpleData
-          .map((pl: ParLevelRecord) => pl.ingredient_id)
-          .filter((id: string | undefined) => id);
-
-        if (ingredientIds.length > 0) {
-          const { data: ingredientsData, error: ingredientsError } = await supabaseAdmin
-            .from('ingredients')
-            .select('id, ingredient_name, unit, category')
-            .in('id', ingredientIds);
-
-          if (ingredientsError) {
-            logger.warn('[Par Levels API] Error fetching ingredients for par levels:', {
-              error: ingredientsError.message,
-              code: ingredientsError.code,
-              ingredientIds,
-            });
-            // Continue without ingredients - par levels will have null ingredients
-            data = simpleData.map((pl: ParLevelRecord) => ({ ...pl, ingredients: null }));
-            error = null;
-          } else {
-            // Merge ingredients into par levels
-            const ingredientsArray = (ingredientsData || []) as IngredientRecord[];
-            const ingredientsMap = new Map(
-              ingredientsArray.map(ing => [ing.id, ing]),
-            );
-            data = simpleData.map((pl: ParLevelRecord) => ({
-              ...pl,
-              ingredients: ingredientsMap.get(pl.ingredient_id) || null,
-            }));
-            error = null;
-          }
-        } else {
-          data = simpleData.map((pl: ParLevelRecord) => ({ ...pl, ingredients: null }));
-          error = null;
-        }
-      } else {
-        data = simpleData;
-        error = null;
-      }
+       return await fetchFallback(supabaseAdmin, error);
     }
   } else {
     // Success with join, order the results

@@ -6,13 +6,15 @@
  */
 
 import type { RecipePrepDetails } from '@/app/webapp/prep-lists/types';
-import type { RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { batchAnalyzePrepDetails } from '../generate-from-menu/helpers/analyzePrepDetails';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { buildRecipesToAnalyze } from './helpers/buildAnalysisData';
+import { fetchAndMapRecipeIngredients } from './helpers/fetchIngredients';
+import { fetchRecipesWithInstructions } from './helpers/fetchRecipes';
 
 /**
  * POST /api/prep-lists/analyze-prep-details
@@ -51,19 +53,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch recipes with instructions
-    const { data: recipes, error: recipesError } = await supabaseAdmin
-      .from('recipes')
-      .select('id, recipe_name, description, yield, yield_unit, instructions')
-      .in('id', recipeIds)
-      .not('instructions', 'is', null);
+    const { recipes, error: recipesError } = await fetchRecipesWithInstructions(recipeIds);
 
     if (recipesError) {
-      logger.warn('[Prep Details Analysis] Error fetching recipes:', {
-        error: recipesError.message,
-        code: recipesError.code,
-        recipeIds,
-      });
-      // Continue with empty array if fetch fails
+      // Continue with empty array if fetch fails logic was present, but fetch helper handles logging.
+      // If we want to return empty immediately if fetch failed seriously:
+      // But preserving original behavior which continued with potentially partial data?
+      // Actually original behavior was: "Continue with empty array".
     }
 
     if (!recipes || recipes.length === 0) {
@@ -75,91 +71,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Batch fetch all recipe ingredients
-    const recipeIngredientsMap = new Map<string, RecipeIngredientWithDetails[]>();
-
-    // Define the expected shape of the joined query response
-    interface RawRecipeIngredient {
-      id: string;
-      recipe_id: string;
-      ingredient_id: string;
-      quantity: number | null;
-      unit: string | null;
-      ingredients: {
-        id: string;
-        ingredient_name: string;
-        cost_per_unit: number | null;
-        unit: string | null;
-      } | null;
-    }
-
-    const { data: rawIngredients, error: ingredientsError } = await supabaseAdmin
-      .from('recipe_ingredients')
-      .select(
-        'id, recipe_id, ingredient_id, quantity, unit, ingredients(id, ingredient_name, cost_per_unit, unit)',
-      )
-      .in('recipe_id', recipeIds);
-
-    const allRecipeIngredients = rawIngredients as unknown as RawRecipeIngredient[] | null;
-
-    if (ingredientsError) {
-      logger.warn('[Prep Details Analysis] Error fetching recipe ingredients:', {
-        error: ingredientsError.message,
-        code: ingredientsError.code,
-        recipeIds,
-      });
-      // Continue with empty map if fetch fails
-    }
-
-    if (allRecipeIngredients) {
-      for (const ri of allRecipeIngredients) {
-        const recipeId = ri.recipe_id;
-        if (!recipeIngredientsMap.has(recipeId)) {
-          recipeIngredientsMap.set(recipeId, []);
-        }
-
-        const details: RecipeIngredientWithDetails = {
-          id: ri.id,
-          recipe_id: recipeId,
-          ingredient_id: ri.ingredient_id,
-          ingredient_name: ri.ingredients?.ingredient_name || '',
-          quantity: Number(ri.quantity) || 0,
-          unit: ri.unit || '',
-          cost_per_unit: ri.ingredients?.cost_per_unit || 0,
-          total_cost: (Number(ri.quantity) || 0) * (ri.ingredients?.cost_per_unit || 0),
-          ingredients: {
-            id: ri.ingredients?.id || '',
-            ingredient_name: ri.ingredients?.ingredient_name || '',
-            cost_per_unit: ri.ingredients?.cost_per_unit || 0,
-            unit: ri.ingredients?.unit || ri.unit || '',
-          },
-        };
-
-        recipeIngredientsMap.get(recipeId)!.push(details);
-      }
-    }
+    const recipeIngredientsMap = await fetchAndMapRecipeIngredients(recipeIds);
 
     // Build recipes to analyze
-    const recipesToAnalyze = recipes
-      .filter(recipe => {
-        const ingredients = recipeIngredientsMap.get(recipe.id) || [];
-        return (
-          ingredients.length > 0 && recipe.instructions && recipe.instructions.trim().length > 0
-        );
-      })
-      .map(recipe => ({
-        recipe: {
-          id: recipe.id,
-          recipe_name: recipe.recipe_name,
-          description: recipe.description || '',
-          yield: recipe.yield,
-          yield_unit: recipe.yield_unit,
-          instructions: recipe.instructions || '',
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        },
-        ingredients: recipeIngredientsMap.get(recipe.id) || [],
-        instructions: recipe.instructions || null,
-      }));
+    const recipesToAnalyze = buildRecipesToAnalyze(recipes, recipeIngredientsMap);
 
     // Analyze prep details
     const prepDetailsMap = await batchAnalyzePrepDetails(recipesToAnalyze, countryCode);

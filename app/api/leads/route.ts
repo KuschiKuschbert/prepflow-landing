@@ -3,8 +3,10 @@ import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { sendLeadEmail } from './helpers/sendLeadEmail';
 
 const leadRequestSchema = z.object({
+// ... (rest of file)
   name: z.string().min(1, 'Name is required').trim(),
   email: z.string().email('Please provide a valid email address').trim().toLowerCase(),
   source: z.string().trim().default('unknown'),
@@ -74,55 +76,20 @@ export async function POST(req: Request) {
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
+    const resendKey = process.env.RESEND_API_KEY; // Keep this just in case logic depends on it, but email is sent via helper now. Actually helper handles env var.
+
     // Optional: send email via Resend if configured (no SDK required)
-    const resendKey = process.env.RESEND_API_KEY;
-    const fromEmail = process.env.FROM_EMAIL || 'hello@prepflow.org';
-    const fromName = process.env.FROM_NAME || 'PrepFlow Team';
-
-    if (resendKey) {
-      try {
-        const subject = `Your PrepFlow Sample Dashboard is Ready, ${name}!`;
-        const html = `
-          <div style="font-family:Inter,Arial,sans-serif;background:#0a0a0a;color:#fff;padding:24px">
-            <h1 style="color:#29E7CD;margin:0 0 12px">PrepFlow Sample Dashboard</h1>
-            <p style="margin:0 0 16px">Hi ${name},</p>
-            <p style="margin:0 0 16px">Thanks for your interest in PrepFlow. Your sample dashboard is attached below and ready to explore.</p>
-            <p style="margin:0 0 16px">Want the full experience? Start your 7-day free trial and see how much margin you can unlock.</p>
-            <p style="margin:0 0 24px"><a href="https://www.prepflow.org" style="background:#29E7CD;color:#0a0a0a;padding:10px 16px;border-radius:12px;text-decoration:none;font-weight:600">Get PrepFlow Now</a></p>
-            <hr style="border:none;border-top:1px solid #2a2a2a;margin:24px 0"/>
-            <p style="font-size:12px;color:#aaa">Sent by PrepFlow • Brisbane, Australia</p>
-          </div>
-        `;
-
-        await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${resendKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            from: `${fromName} <${fromEmail}>`,
-            to: [email],
-            subject,
-            html,
-          }),
-        });
-      } catch (emailError) {
-        // Ignore email failures to not block lead capture
-        logger.warn('[Leads API] Failed to send email notification:', {
-          error: emailError instanceof Error ? emailError.message : String(emailError),
-          context: { endpoint: '/api/leads', operation: 'POST', email },
-        });
-      }
-    }
+    await sendLeadEmail(name, email);
 
     return NextResponse.json({ success: true, message: 'Lead captured successfully' });
   } catch (err) {
+    // ... (error handling)
     logger.error('[Leads API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/leads', method: 'POST' },
     });
+// ...
 
     return NextResponse.json(
       ApiErrorHandler.createError(

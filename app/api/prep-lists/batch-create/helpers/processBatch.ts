@@ -1,23 +1,12 @@
-
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { createPrepList } from './process/createPrepList';
+import { createPrepListItems } from './process/createPrepListItems';
+import { rollbackPrepList } from './process/rollbackPrepList';
+import { BatchCreateResult, PrepListToCreate } from './types';
 
-export interface PrepListToCreate {
-  sectionId: string | null;
-  name: string;
-  notes?: string;
-  items: Array<{
-    ingredientId: string;
-    quantity: string;
-    unit: string;
-    notes: string;
-  }>;
-}
-
-export interface BatchCreateResult {
-  createdIds: string[];
-  errors: Array<{ prepListName: string; error: string }>;
-}
+// Re-export for backward compatibility
+export type { BatchCreateResult, PrepListToCreate } from './types';
 
 export async function processBatchCreation(
   userId: string,
@@ -39,76 +28,28 @@ export async function processBatchCreation(
       }
 
       // Create the prep list
-      const { data: prepList, error: prepError } = await supabaseAdmin
-        .from('prep_lists')
-        .insert({
-          user_id: userId,
-          kitchen_section_id: prepListData.sectionId,
-          name: prepListData.name,
-          notes: prepListData.notes || null,
-          status: 'draft',
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        })
-        .select()
-        .single();
+      const { prepList, error: prepError } = await createPrepList(userId, prepListData);
 
-      if (prepError) {
-        const code = (prepError as { code?: string }).code;
-        logger.error('[Prep Lists API] Database error creating prep list:', {
-          error: prepError.message,
-          code,
-          prepListName: prepListData.name,
-        });
+      if (prepError || !prepList) {
         errors.push({
           prepListName: prepListData.name,
-          error: prepError.message,
+          error: prepError?.message || 'Failed to create prep list',
         });
         continue;
       }
 
       // Create prep list items
-      const prepItems = prepListData.items.map(item => ({
-        prep_list_id: prepList.id,
-        ingredient_id: item.ingredientId,
-        quantity: parseFloat(item.quantity) || 0,
-        unit: item.unit,
-        notes: item.notes || null,
-      }));
+      const { error: itemsError } = await createPrepListItems(prepList.id, prepListData.items);
 
-      if (prepItems.length > 0) {
-        const { error: itemsError } = await supabaseAdmin
-          .from('prep_list_items')
-          .insert(prepItems);
+      if (itemsError) {
+        // Rollback
+        await rollbackPrepList(prepList.id);
 
-        if (itemsError) {
-          const code = (itemsError as { code?: string }).code;
-          logger.error('[Prep Lists API] Error creating prep list items:', {
-            error: itemsError.message,
-            code,
-            prepListId: prepList.id,
-          });
-          // Delete the prep list if items failed
-          const { error: rollbackError } = await supabaseAdmin
-            .from('prep_lists')
-            .delete()
-            .eq('id', prepList.id);
-
-          if (rollbackError) {
-            logger.warn(
-              '[Prep Lists API] Warning: Failed to rollback prep list after items error:',
-              {
-                error: rollbackError.message,
-                prepListId: prepList.id,
-              },
-            );
-          }
-          errors.push({
-            prepListName: prepListData.name,
-            error: itemsError.message,
-          });
-          continue;
-        }
+        errors.push({
+          prepListName: prepListData.name,
+          error: itemsError.message,
+        });
+        continue;
       }
 
       createdPrepLists.push(prepList.id);

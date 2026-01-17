@@ -4,16 +4,12 @@
  */
 
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { DishIngredient, DishRecipe } from '@/types/dish';
 
 import { fetchDishIngredients } from '../../helpers/fetchDishIngredients';
 import { fetchDishRecipes } from '../../helpers/fetchDishRecipes';
-
-interface RawAggregatedIngredient {
-  ingredient_name?: string;
-  name?: string;
-}
+import { batchFetchRecipeIngredients } from './batchFetchRecipeIngredients';
+import { extractInstructions } from './extractInstructions';
 
 /**
  * Aggregate all ingredient names from dish and recipes
@@ -25,21 +21,10 @@ export async function aggregateDishIngredients(dishId: string): Promise<{
   ingredientNames: string[];
   recipeInstructions: string[];
 }> {
-  // Fetch dish ingredients using helper function
+  // Fetch dish ingredients
   let dishIngredients: DishIngredient[] = [];
-
   try {
     dishIngredients = await fetchDishIngredients(dishId);
-    logger.dev('[Dish Image Generation] Fetched dish ingredients:', {
-      dishId,
-      count: dishIngredients.length,
-      ingredients: dishIngredients.map(di => ({
-        ingredientName: di.ingredient?.ingredient_name,
-
-        quantity: di.quantity,
-        unit: di.unit,
-      })),
-    });
   } catch (error) {
     logger.error('[Dish Image Generation] Failed to fetch dish ingredients:', {
       error: error instanceof Error ? error.message : String(error),
@@ -47,32 +32,10 @@ export async function aggregateDishIngredients(dishId: string): Promise<{
     });
   }
 
-  // Fetch dish recipes using helper function
+  // Fetch dish recipes
   let dishRecipes: DishRecipe[] = [];
-
-  let recipeInstructions: string[] = [];
   try {
     dishRecipes = await fetchDishRecipes(dishId);
-    logger.dev('[Dish Image Generation] Fetched dish recipes:', {
-      dishId,
-      count: dishRecipes.length,
-      recipeIds: dishRecipes.map(dr => dr.recipe_id),
-    });
-
-    // Collect instructions from all recipes
-    dishRecipes.forEach(dr => {
-      const recipe = dr.recipe;
-
-      if (recipe?.instructions && recipe.instructions.trim().length > 0) {
-        recipeInstructions.push(recipe.instructions.trim());
-      }
-    });
-
-    logger.dev('[Dish Image Generation] Collected recipe instructions:', {
-      dishId,
-      instructionCount: recipeInstructions.length,
-      hasInstructions: recipeInstructions.length > 0,
-    });
   } catch (error) {
     logger.error('[Dish Image Generation] Failed to fetch dish recipes:', {
       error: error instanceof Error ? error.message : String(error),
@@ -80,57 +43,16 @@ export async function aggregateDishIngredients(dishId: string): Promise<{
     });
   }
 
-  // Fetch recipe ingredients for each recipe
-  const recipeIngredientNamesSet = new Set<string>();
-  for (const dishRecipe of dishRecipes) {
-    const recipeId = dishRecipe.recipe_id || dishRecipe.id;
-    if (!recipeId) continue;
+  // Extract instructions
+  const recipeInstructions = extractInstructions(dishRecipes);
 
-    try {
-      if (!supabaseAdmin) {
-        logger.error('[Dish Image Generation] Supabase admin not available');
-        continue;
-      }
-      const { data: recipeIngredients, error: recipeIngredientsError } = await supabaseAdmin
-        .from('recipe_ingredients')
-        .select(
-          `
-            ingredients (
-              ingredient_name
-            )
-          `,
-        )
-        .eq('recipe_id', recipeId);
+  // Collect recipe IDs
+  const recipeIds = dishRecipes
+    .map(dr => dr.recipe_id || dr.id)
+    .filter((id): id is string => !!id);
 
-      if (recipeIngredientsError) {
-        logger.error('[Dish Image Generation] Failed to fetch recipe ingredients:', {
-          error: recipeIngredientsError.message,
-          recipeId,
-          dishId,
-        });
-        continue;
-      }
-
-      if (recipeIngredients && Array.isArray(recipeIngredients)) {
-        recipeIngredients.forEach(ri => {
-          const ingredient = ri.ingredients;
-          if (ingredient && typeof ingredient === 'object' && ingredient !== null) {
-            const rawIng = ingredient as unknown as RawAggregatedIngredient;
-            const name = rawIng.ingredient_name || rawIng.name;
-            if (name && typeof name === 'string') {
-              recipeIngredientNamesSet.add(name);
-            }
-          }
-        });
-      }
-    } catch (error) {
-      logger.error('[Dish Image Generation] Error fetching recipe ingredients:', {
-        error: error instanceof Error ? error.message : String(error),
-        recipeId,
-        dishId,
-      });
-    }
-  }
+  // Batch fetch recipe ingredients
+  const recipeIngredientNamesSet = await batchFetchRecipeIngredients(recipeIds);
 
   // Aggregate all ingredient names
   const ingredientNamesSet = new Set<string>();
@@ -140,7 +62,6 @@ export async function aggregateDishIngredients(dishId: string): Promise<{
     const ingredient = di.ingredient as Record<string, any> | undefined;
     if (ingredient) {
       const name = ingredient.ingredient_name || ingredient.name;
-
       if (name && typeof name === 'string') {
         ingredientNamesSet.add(name);
       }
@@ -154,13 +75,11 @@ export async function aggregateDishIngredients(dishId: string): Promise<{
 
   const ingredientNames = Array.from(ingredientNamesSet);
 
-  logger.dev('[Dish Image Generation] Aggregated ingredient names:', {
+  logger.dev('[Dish Image Generation] Aggregated ingredients:', {
     dishId,
     directIngredientsCount: dishIngredients.length,
     recipesCount: dishRecipes.length,
-    recipeIngredientsCount: recipeIngredientNamesSet.size,
     totalUniqueIngredients: ingredientNames.length,
-    ingredientNames,
   });
 
   return {

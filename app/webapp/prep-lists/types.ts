@@ -1,7 +1,15 @@
+import { Recipe, RecipeIngredientWithDetails } from '../recipes/types';
+
 export interface KitchenSection {
   id: string;
   name: string;
   color: string;
+}
+
+export interface RecipeAnalysisData {
+  recipe: Recipe;
+  ingredients: RecipeIngredientWithDetails[];
+  instructions?: string | null;
 }
 
 export interface Ingredient {

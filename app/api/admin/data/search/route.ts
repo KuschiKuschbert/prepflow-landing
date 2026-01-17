@@ -3,6 +3,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { performTableSearch } from './helpers/performTableSearch';
 
 /**
  * GET /api/admin/data/search
@@ -37,52 +38,8 @@ export async function GET(request: NextRequest) {
         : [table];
 
     for (const tableName of tablesToSearch) {
-      try {
-        // Build search query based on table structure
-        let searchQuery = supabaseAdmin.from(tableName).select('*').limit(100);
-
-        // Apply search filter based on table
-        if (tableName === 'ingredients') {
-          searchQuery = searchQuery.or(
-            `ingredient_name.ilike.%${query}%,supplier.ilike.%${query}%`,
-          );
-        } else if (tableName === 'recipes') {
-          searchQuery = searchQuery.or(`recipe_name.ilike.%${query}%,name.ilike.%${query}%`);
-        } else if (tableName === 'dishes') {
-          searchQuery = searchQuery.or(`dish_name.ilike.%${query}%,name.ilike.%${query}%`);
-        } else if (tableName === 'users') {
-          searchQuery = searchQuery.or(
-            `email.ilike.%${query}%,first_name.ilike.%${query}%,last_name.ilike.%${query}%`,
-          );
-        } else {
-          // Generic search for other tables
-          searchQuery = searchQuery.or(`name.ilike.%${query}%`);
-        }
-
-        const { data, error } = await searchQuery;
-
-        if (error) {
-          logger.warn(`[Admin Data Search] Error searching ${tableName}:`, error);
-          continue;
-        }
-
-        if (data) {
-          results.push(
-            ...data.map((itemUnknown: unknown) => {
-              const item = itemUnknown as Record<string, unknown>;
-              return {
-                table: tableName,
-                id: item.id,
-                data: item,
-                created_at: item.created_at,
-              };
-            }),
-          );
-        }
-      } catch (error) {
-        logger.warn(`[Admin Data Search] Error searching ${tableName}:`, error);
-        continue;
-      }
+      const tableResults = await performTableSearch(tableName, query);
+      results.push(...tableResults);
     }
 
     return NextResponse.json({
