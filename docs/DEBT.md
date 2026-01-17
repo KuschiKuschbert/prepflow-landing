@@ -25,7 +25,6 @@
 - [x] **[WEB]** Optimize 15 large images in `public/` (>500KB).
 - [ ] **[RSI]** Standardize Zod validation in `app/api/prep-lists`
 - [ ] **[RSI]** Remove unused imports in all components
-- [ ] **[RSI]** Sanitize logs in `app/webapp` and `lib`
 - [ ] Review `scripts/pre-commit-check.sh` and ensure it handles edge cases (e.g. merge conflicts).
 - [x] Verify `check:architecture` rules are strict enough for `lib` vs `components`.
 
