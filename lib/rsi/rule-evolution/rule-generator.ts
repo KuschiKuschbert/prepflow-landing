@@ -49,7 +49,7 @@ export class RuleGenerator {
   }): Promise<GeneratedRule | null> {
     const hf = this.getHFClient();
     if (!hf) {
-');
+      console.warn('Hugging Face API Key not found. Skipping dynamic rule generation.');
       return null;
     }
 const prompt = `

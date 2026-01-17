@@ -90,13 +90,18 @@ async function main() {
 
       if (isValid) {
         console.log('✅ Validation passed. Ready for review.');
+
+        // 4. Close the loop: Mark DEBT.md item as resolved if it came from there
+        if (selectedPlan.sourceDebtItem && !selectedPlan.sourceDebtItem.includes('Architecture Report')) {
+          await RefactoringPlanner.resolveDebtItem(selectedPlan.sourceDebtItem);
+        }
       } else {
         console.error('❌ Validation failed or no changes detected. Reverting...');
-        await RollbackManager.rollbackAll();
+        await RollbackManager.discardChanges();
       }
     } else {
       console.error('❌ Refactoring execution failed. Cleaning up...');
-      await RollbackManager.rollbackAll();
+      await RollbackManager.discardChanges();
     }
   }
 }
