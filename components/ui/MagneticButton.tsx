@@ -1,7 +1,14 @@
 'use client';
 
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { ReactNode, useRef, useState, useEffect } from 'react';
+import {
+    motion,
+    TargetAndTransition,
+    useMotionValue,
+    useSpring,
+    useTransform,
+    VariantLabels,
+} from 'framer-motion';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 
 interface MagneticButtonProps {
   children: ReactNode;
@@ -35,8 +42,8 @@ interface MagneticButtonProps {
   /**
    * Additional motion props
    */
-  whileHover?: any;
-  whileTap?: any;
+  whileHover?: VariantLabels | TargetAndTransition;
+  whileTap?: VariantLabels | TargetAndTransition;
 }
 
 /**
@@ -141,7 +148,7 @@ export function MagneticButton({
         scaleOnHover && !disabled
           ? {
               scale: hoverScale,
-              ...whileHover,
+              ...(typeof whileHover === 'object' ? whileHover : {}),
             }
           : whileHover
       }

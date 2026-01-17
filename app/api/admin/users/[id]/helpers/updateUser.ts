@@ -1,6 +1,6 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -16,13 +16,15 @@ const updateUserSchema = z.object({
  * Validates and updates a user in the database.
  *
  * @param {string} userId - The ID of the user to update.
- * @param {any} body - The request body containing update data.
- * @returns {Promise<{ user: any } | NextResponse>} Updated user data or error response.
+ * @param {unknown} body - The request body containing update data.
+ * @returns {Promise<{ user: Record<string, unknown> } | NextResponse>} Updated user data or error response.
  */
 export async function updateUser(
   userId: string,
   body: unknown,
-): Promise<{ user: unknown; validated: z.infer<typeof updateUserSchema> } | NextResponse> {
+): Promise<
+  { user: Record<string, unknown>; validated: z.infer<typeof updateUserSchema> } | NextResponse
+> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

@@ -1,15 +1,17 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
 /**
  * Fetches a user by ID from the database.
  *
  * @param {string} userId - The ID of the user to fetch.
- * @returns {Promise<{ user: any } | NextResponse>} User data or error response.
+ * @returns {Promise<{ user: Record<string, unknown> } | NextResponse>} User data or error response.
  */
-export async function fetchUser(userId: string): Promise<{ user: unknown } | NextResponse> {
+export async function fetchUser(
+  userId: string,
+): Promise<{ user: Record<string, unknown> } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

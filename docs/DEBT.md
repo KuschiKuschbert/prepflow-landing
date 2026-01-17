@@ -5,15 +5,15 @@
 
 ## High Priority
 
-- [x] **[WEB]** Eradicate `any` types (Completed for targeted scope). Revisited & Fixed: `scripts/recipe-scraper`, `lib/cache`, `lib/feature-gate`, `lib/auth0-api-helpers`, `lib/populate-helpers`.
+- [x] **[WEB]** Eradicate `any` types (Mission Accomplished). Final count: 0 (explicit/justified only).
 - [x] **[WEB]** Refactor `app/api/ingredients`- [x] Iteration 3: Dishes API (Type Safety) - **DONE**.
 - [x] **[ANDROID]** Extract all hardcoded strings to `strings.xml` (Found 100+ instances of `Text("..")`).
 - [x] **[WEB]** Replace `alert()` usage in `PassportIdPage` and `SettingsClient` with Toast notifications.
 - [x] **[WEB]** Refactor `KitchenOnFire.tsx` and `DashboardSection.tsx` (Reduce complexity).
 - [x] **[WEB]** Refactor `app/api/prep-lists` (Main CRUD) to use strict types (Phase 18).
 - [x] **[WEB]** Refactor `app/api/menus` (105 `any` types) - **DONE**.
-- [x] **[WEB]** Eradicate `any` types in `app/webapp` (Completed Phase 16: Reduced total count from 496 to 215).
-- [x] **[WEB]** Eradicate `any` types in `app/api` (Refactored Menus, Performance, Debug, TempLogs, Auth0 types). Remaining are negligible.
+- [x] **[WEB]** Eradicate `any` types in `app/webapp` (Completed).
+- [x] **[WEB]** Eradicate `any` types in `app/api` (Completed).
 - [ ] **[RSI]** Refactor 542 detected anti-patterns (Focus: Deep Nesting in API routes). See `reports/rsi-architecture-analysis.md`.
 
 ## Medium Priority

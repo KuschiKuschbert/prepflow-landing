@@ -5,8 +5,8 @@ process.env.SUPABASE_SERVICE_ROLE_KEY = 'mock-service-key';
 process.env.NEXT_PUBLIC_AUTH0_DOMAIN = 'mock-domain.auth0.com';
 process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID = 'mock-client-id';
 
-import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { render } from '@testing-library/react';
 import * as Module from './animation-stubs';
 
 describe('animation-stubs', () => {
@@ -16,12 +16,13 @@ describe('animation-stubs', () => {
 
     // Try to find a component to render using heuristics
     const Component =
-      (Module as any).default ||
-      Object.values(Module).find((exp: any) => typeof exp === 'function');
+      (Module as Record<string, unknown>).default ||
+      Object.values(Module).find((exp: unknown) => typeof exp === 'function');
 
     if (Component) {
       try {
-        render(<Component />);
+        const C = Component as React.ComponentType;
+        render(<C />);
       } catch (e) {
         // console.warn('Render failed for animation-stubs, but module loaded');
       }

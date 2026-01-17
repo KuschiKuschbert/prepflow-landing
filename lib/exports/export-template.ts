@@ -4,8 +4,7 @@
  * Supports CSV, PDF, HTML exports with Cyber Carrot branding
  */
 
-import { generateExportTemplate, escapeHtml as escapeHtmlServer } from './pdf-template';
-import { formatDateAustralian, formatMetaInfo } from './template-utils';
+import { escapeHtml as escapeHtmlServer, generateExportTemplate } from './pdf-template';
 
 export interface ExportTemplateOptions {
   title: string;
@@ -49,7 +48,11 @@ export function generateServerExportTemplate({
  * Note: CSV exports should use exportToCSVString from lib/csv/csv-utils.ts directly
  * This function is a placeholder for consistency - actual CSV generation is handled by csv-utils
  */
-export function generateCSVExport(data: any[], headers: string[], filename: string): string {
+export function generateCSVExport(
+  data: Record<string, unknown>[],
+  headers: string[],
+  filename: string,
+): string {
   // CSV exports should use exportToCSVString from lib/csv/csv-utils.ts directly
   // This is kept for API consistency but delegates to csv-utils
   throw new Error('Use exportToCSVString from lib/csv/csv-utils.ts for CSV exports');

@@ -46,7 +46,7 @@ describe('calculateRecommendedPrice', () => {
         dish_id: 'dish-1',
         dishes: { id: 'dish-1' },
         recommended_selling_price: null
-    } as any as RawMenuItem;
+    } as unknown as RawMenuItem;
 
     (calculateDishSellingPrice as jest.Mock).mockResolvedValue(20.00);
 

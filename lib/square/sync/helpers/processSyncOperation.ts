@@ -64,10 +64,10 @@ export async function processSyncOperation(
       entityType: operation.entity_type,
       entityId: operation.entity_id,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Sync Queue] Error processing operation:', {
       id: operation.id,
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       retryCount: operation.retry_count,
     });
 
@@ -76,7 +76,7 @@ export async function processSyncOperation(
       operation.retry_count++;
       onRetry(operation);
     } else {
-      await onMaxRetriesReached(operation, error);
+      await onMaxRetriesReached(operation, error instanceof Error ? error : new Error(String(error)));
     }
   }
 }

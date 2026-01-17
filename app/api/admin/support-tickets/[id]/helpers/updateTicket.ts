@@ -18,13 +18,13 @@ const updateTicketSchema = z.object({
  * @param {string} ticketId - The ID of the ticket to update.
  * @param {z.infer<typeof updateTicketSchema>} updates - Validated update data.
  * @param {AdminUser} adminUser - The admin user making the update.
- * @returns {Promise<{ ticket: any } | NextResponse>} Updated ticket data or error response.
+ * @returns {Promise<{ ticket: Record<string, unknown> } | NextResponse>} Updated ticket data or error response.
  */
 export async function updateTicket(
   ticketId: string,
   updates: z.infer<typeof updateTicketSchema>,
   adminUser: AdminUser,
-): Promise<{ ticket: unknown } | NextResponse> {
+): Promise<{ ticket: Record<string, unknown> } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

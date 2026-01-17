@@ -4,7 +4,7 @@ import { logger } from '@/lib/logger';
  * Verify connection is enabled for application
  */
 export function verifyConnectionEnabled(
-  connection: any,
+  connection: Record<string, unknown> | undefined,
   applicationClientId: string,
   connectionType: 'apple' | 'microsoft',
 ): boolean {
@@ -13,7 +13,11 @@ export function verifyConnectionEnabled(
     return false;
   }
 
-  const isEnabled = connection.enabled_clients?.includes(applicationClientId) || false;
+  const enabledClients =
+    Array.isArray(connection.enabled_clients) && connection.enabled_clients
+      ? (connection.enabled_clients as string[])
+      : [];
+  const isEnabled = enabledClients.includes(applicationClientId);
 
   logger.dev(`[Auth0 ${connectionType}] Connection status:`, {
     id: connection.id,

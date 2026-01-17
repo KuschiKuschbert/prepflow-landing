@@ -1,15 +1,17 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
 /**
  * Fetches an error log by ID from the database.
  *
  * @param {string} errorId - The ID of the error log to fetch.
- * @returns {Promise<{ errorLog: any } | NextResponse>} Error log data or error response.
+ * @returns {Promise<{ errorLog: Record<string, unknown> } | NextResponse>} Error log data or error response.
  */
-export async function fetchError(errorId: string): Promise<{ errorLog: unknown } | NextResponse> {
+export async function fetchError(
+  errorId: string,
+): Promise<{ errorLog: Record<string, unknown> } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

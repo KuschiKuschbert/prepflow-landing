@@ -4,6 +4,9 @@ import { logger } from '@/lib/logger';
 import { getStripe } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { checkOrphanedSubscriptions } from './helpers/checkOrphanedSubscriptions';
+import { checkUserSubscriptions } from './helpers/checkUserSubscriptions';
+import { HealthReport } from './types';
 
 /**
  * GET /api/admin/billing/health
@@ -32,14 +35,8 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const healthReport: {
-      usersWithMissingSubscriptions: string[];
-      subscriptionsWithMissingUsers: string[];
-      mismatchedStatuses: Array<{ email: string; dbStatus: string; stripeStatus: string }>;
-      totalUsers: number;
-      totalSubscriptions: number;
-      healthy: boolean;
-    } = {
+    // Initialize report
+    const healthReport: HealthReport = {
       usersWithMissingSubscriptions: [],
       subscriptionsWithMissingUsers: [],
       mismatchedStatuses: [],
@@ -48,7 +45,7 @@ export async function GET(req: NextRequest) {
       healthy: true,
     };
 
-    // Get all users with subscriptions
+    // 1. Get all users with subscriptions
     const { data: users, error: usersError } = await supabaseAdmin
       .from('users')
       .select('email, subscription_status, stripe_subscription_id')
@@ -59,60 +56,14 @@ export async function GET(req: NextRequest) {
     } else {
       healthReport.totalUsers = users?.length || 0;
 
-      // Check each user's subscription in Stripe
-      for (const user of users || []) {
-        if (!user.stripe_subscription_id) continue;
-
-        try {
-          const subscription = await stripe.subscriptions.retrieve(user.stripe_subscription_id);
-
-          // Check status mismatch
-          let dbStatus = user.subscription_status || 'trial';
-          const stripeStatusRaw = subscription.status;
-
-          // Normalize statuses for comparison
-          let normalizedStripeStatus: string = stripeStatusRaw;
-          if (stripeStatusRaw === 'canceled') normalizedStripeStatus = 'cancelled';
-          else if (stripeStatusRaw === 'trialing') normalizedStripeStatus = 'trial';
-          else if (stripeStatusRaw === 'incomplete') normalizedStripeStatus = 'trial';
-          else if (stripeStatusRaw === 'incomplete_expired') normalizedStripeStatus = 'cancelled';
-
-          if (dbStatus !== normalizedStripeStatus) {
-            healthReport.mismatchedStatuses.push({
-              email: user.email,
-              dbStatus,
-              stripeStatus: normalizedStripeStatus,
-            });
-            healthReport.healthy = false;
-          }
-        } catch (error) {
-          // Narrow error type safely
-          const code =
-            error && typeof error === 'object' && 'code' in error
-              ? (error as { code: string }).code
-              : undefined;
-          const message = error instanceof Error ? error.message : 'Unknown error';
-
-          if (code === 'resource_missing') {
-            // Subscription not found in Stripe - log as warning, not error
-            logger.warn('[Billing Health] Subscription not found in Stripe:', {
-              email: user.email,
-              subscriptionId: user.stripe_subscription_id,
-            });
-            healthReport.usersWithMissingSubscriptions.push(user.email);
-            healthReport.healthy = false;
-          } else {
-            logger.error('[Billing Health] Error checking subscription:', {
-              error: message,
-              email: user.email,
-              subscriptionId: user.stripe_subscription_id,
-            });
-          }
-        }
-      }
+      // Check users against Stripe
+      const usersCheck = await checkUserSubscriptions(users || [], stripe);
+      healthReport.mismatchedStatuses = usersCheck.mismatchedStatuses;
+      healthReport.usersWithMissingSubscriptions = usersCheck.usersWithMissingSubscriptions;
+      if (!usersCheck.healthy) healthReport.healthy = false;
     }
 
-    // Get all active subscriptions from Stripe
+    // 2. Get all active subscriptions from Stripe
     const subscriptions = await stripe.subscriptions.list({
       status: 'all',
       limit: 100,
@@ -120,29 +71,10 @@ export async function GET(req: NextRequest) {
 
     healthReport.totalSubscriptions = subscriptions.data.length;
 
-    // Check for subscriptions without users
-    for (const subscription of subscriptions.data) {
-      const customerId = subscription.customer as string;
-
-      const { data: billingData, error: billingDataError } = await supabaseAdmin
-        .from('billing_customers')
-        .select('user_email')
-        .eq('stripe_customer_id', customerId)
-        .maybeSingle();
-
-      if (billingDataError && billingDataError.code !== 'PGRST116') {
-        logger.warn('[Billing Health] Error fetching billing customer:', {
-          error: billingDataError.message,
-          code: billingDataError.code,
-          customerId,
-        });
-      }
-
-      if (!billingData) {
-        healthReport.subscriptionsWithMissingUsers.push(subscription.id);
-        healthReport.healthy = false;
-      }
-    }
+    // Check for orphaned subscriptions
+    const orphansCheck = await checkOrphanedSubscriptions(subscriptions.data, supabaseAdmin);
+    healthReport.subscriptionsWithMissingUsers = orphansCheck.subscriptionsWithMissingUsers;
+    if (!orphansCheck.healthy) healthReport.healthy = false;
 
     return NextResponse.json({
       success: true,

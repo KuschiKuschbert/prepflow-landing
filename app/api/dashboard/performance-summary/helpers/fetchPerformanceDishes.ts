@@ -6,19 +6,26 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 
+export interface SalesData {
+  id: string;
+  number_sold: number;
+  popularity_percentage: number;
+  date: string;
+}
+
 export interface PerformanceDish {
   id: string;
   name: string;
   selling_price: number;
   profit_margin: number | null | undefined;
-  sales_data: any[] | null | undefined;
+  sales_data: SalesData[] | null | undefined;
 }
 
 /**
  * Fetches dishes for performance analysis with optional menu filtering
  *
  * @param {string | null} targetMenuId - Optional menu ID to filter by
- * @returns {Promise<{ dishes: any[] | null; isEmpty: boolean }>} Dishes data and empty flag
+ * @returns {Promise<{ dishes: PerformanceDish[] | null; isEmpty: boolean }>} Dishes data and empty flag
  */
 export async function fetchPerformanceDishes(targetMenuId: string | null): Promise<{
   dishes: PerformanceDish[] | null;
@@ -83,5 +90,5 @@ export async function fetchPerformanceDishes(targetMenuId: string | null): Promi
     throw ApiErrorHandler.fromSupabaseError(dishesError, 500);
   }
 
-  return { dishes: (dishes as unknown as PerformanceDish[]) || [], isEmpty: false };
+  return { dishes: (dishes as PerformanceDish[]) || [], isEmpty: false };
 }

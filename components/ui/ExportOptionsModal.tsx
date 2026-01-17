@@ -1,12 +1,12 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
-import { Icon } from './Icon';
-import { logger } from '@/lib/logger';
-import { X, Download, FileText, FileSpreadsheet, FileCode, Check } from 'lucide-react';
 import type { TemplateVariant } from '@/lib/exports/template-utils';
-import { getVariantDisplayName, getVariantDescription } from '@/lib/exports/template-utils';
+import { getVariantDescription, getVariantDisplayName } from '@/lib/exports/template-utils';
+import { logger } from '@/lib/logger';
+import { Check, Download, FileCode, FileSpreadsheet, FileText, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import type { ExportFormat } from './ExportButton';
 import { setupFocusTrap } from './ExportOptionsModal/helpers/focusTrap';
+import { Icon } from './Icon';
 
 export interface ExportFilter {
   id: string;
@@ -22,7 +22,7 @@ export interface ExportOptionsModalProps {
   onExport: (options: {
     format: ExportFormat;
     variant?: TemplateVariant;
-    filters?: Record<string, any>;
+    filters?: Record<string, unknown>;
   }) => void | Promise<void>;
   loading?: boolean;
   title?: string;
@@ -47,12 +47,12 @@ export function ExportOptionsModal({
 }: ExportOptionsModalProps) {
   const [selectedFormat, setSelectedFormat] = useState<ExportFormat>(defaultFormat);
   const [selectedVariant, setSelectedVariant] = useState<TemplateVariant>(defaultVariant);
-  const [filterValues, setFilterValues] = useState<Record<string, any>>({});
+  const [filterValues, setFilterValues] = useState<Record<string, unknown>>({});
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen) {
-      const initialFilters: Record<string, any> = {};
+      const initialFilters: Record<string, unknown> = {};
       filters.forEach(filter => {
         initialFilters[filter.id] = filter.value;
       });
@@ -103,7 +103,7 @@ export function ExportOptionsModal({
     }
   };
 
-  const handleFilterChange = (filterId: string, value: any) => {
+  const handleFilterChange = (filterId: string, value: unknown) => {
     setFilterValues(prev => ({
       ...prev,
       [filterId]: value,

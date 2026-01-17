@@ -26,7 +26,13 @@ export function formatRecipesForPrompt(recipes: ScrapedRecipe[]): string {
 
   const formatted = recipes.map((recipe, index) => {
     const ingredients = recipe.ingredients
-      .map((ing: any) => (typeof ing === 'string' ? ing : ing.original_text))
+      .map(ing => {
+        if (typeof ing === 'string') return ing;
+        if (ing && typeof ing === 'object' && 'original_text' in ing) {
+          return (ing as { original_text: string }).original_text;
+        }
+        return JSON.stringify(ing);
+      })
       .join(', ');
 
     const sourceDisplay = recipe.source.replace(/-/g, ' ');

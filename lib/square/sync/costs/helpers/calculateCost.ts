@@ -69,8 +69,21 @@ export async function calculateDishFoodCost(dishId: string): Promise<CostData | 
     // Calculate cost from recipes
     if (dishRecipes) {
       for (const dr of dishRecipes) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const recipe = Array.isArray(dr.recipes) ? dr.recipes[0] : (dr.recipes as any);
+        const recipes = dr.recipes as Array<{
+          recipe_ingredients: Array<{
+            quantity: number;
+            ingredients:
+              | {
+                  cost_per_unit_incl_trim?: number;
+                  cost_per_unit?: number;
+                }
+              | Array<{
+                  cost_per_unit_incl_trim?: number;
+                  cost_per_unit?: number;
+                }>;
+          }>;
+        }>;
+        const recipe = Array.isArray(recipes) && recipes.length > 0 ? recipes[0] : null;
         if (!recipe || !recipe.recipe_ingredients) continue;
 
         const recipeQuantity = Number(dr.quantity) || 1;

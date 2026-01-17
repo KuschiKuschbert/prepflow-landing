@@ -27,8 +27,13 @@ export async function handleDeleteSupplier(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/suppliers', method: 'DELETE' },
     });
-    if (err && typeof err === 'object' && 'status' in err) {
-      return NextResponse.json(err, { status: (err as any).status });
+    if (
+      typeof err === 'object' &&
+      err !== null &&
+      'status' in err &&
+      typeof (err as { status: number }).status === 'number'
+    ) {
+      return NextResponse.json(err, { status: (err as { status: number }).status });
     }
     return handleSupplierError(err, 'DELETE');
   }

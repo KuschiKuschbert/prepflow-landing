@@ -4,17 +4,17 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import type { SquareConfig } from '../../config';
-import { syncAllStaffToSquare } from './helpers/syncAllStaffToSquare';
-import { syncAllDishesToSquare } from './helpers/syncAllDishesToSquare';
-import { syncRecentOrdersFromSquareForInitialSync } from './helpers/syncRecentOrders';
-import { syncAllCostsToSquare } from './helpers/syncAllCostsToSquare';
-import {
-  markInitialSyncStarted,
-  markInitialSyncCompleted,
-  markInitialSyncFailed,
-} from './helpers/updateSyncStatus';
-import { logInitialSyncCompletion } from './helpers/logSyncCompletion';
 import { logSyncOperation } from '../../sync-log';
+import { logInitialSyncCompletion } from './helpers/logSyncCompletion';
+import { syncAllCostsToSquare } from './helpers/syncAllCostsToSquare';
+import { syncAllDishesToSquare } from './helpers/syncAllDishesToSquare';
+import { syncAllStaffToSquare } from './helpers/syncAllStaffToSquare';
+import { syncRecentOrdersFromSquareForInitialSync } from './helpers/syncRecentOrders';
+import {
+    markInitialSyncCompleted,
+    markInitialSyncFailed,
+    markInitialSyncStarted,
+} from './helpers/updateSyncStatus';
 import type { InitialSyncResult } from './types';
 
 /**
@@ -112,20 +112,23 @@ export async function performInitialSync(
     });
 
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorStack = error instanceof Error ? error.stack : undefined;
+
     const completedAt = new Date().toISOString();
     result.completedAt = completedAt;
     result.errors++;
-    result.errorMessages?.push(`Fatal error: ${error.message}`);
+    result.errorMessages?.push(`Fatal error: ${errorMessage}`);
 
     logger.error('[Square Initial Sync] Fatal error during initial sync:', {
-      error: error.message,
+      error: errorMessage,
       userId,
-      stack: error.stack,
+      stack: errorStack,
     });
 
     // Mark initial sync as failed
-    await markInitialSyncFailed(userId, error.message, completedAt);
+    await markInitialSyncFailed(userId, errorMessage, completedAt);
 
     // Log fatal error
     await logSyncOperation({
@@ -133,8 +136,8 @@ export async function performInitialSync(
       operation_type: 'initial_sync',
       direction: 'bidirectional',
       status: 'error',
-      error_message: error.message,
-      error_details: { stack: error.stack },
+      error_message: errorMessage,
+      error_details: { stack: errorStack },
     });
 
     return result;

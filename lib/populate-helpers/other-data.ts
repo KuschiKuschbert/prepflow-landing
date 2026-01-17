@@ -6,7 +6,10 @@ import { logger } from '@/lib/logger';
 import { cleanSampleComplianceTypes } from '@/lib/sample-compliance-clean';
 import { cleanSampleKitchenSections } from '@/lib/sample-sections-clean';
 import { createSupabaseAdmin } from '@/lib/supabase';
-import { generateSalesDataForMonth } from './generate-sales-data';
+import {
+    generateSalesDataForMonth,
+    type Recipe,
+} from './generate-sales-data';
 
 interface PopulateResults {
   cleaned: number;
@@ -60,7 +63,7 @@ export async function populateKitchenSections(
 export async function populateSalesData(
   supabaseAdmin: ReturnType<typeof createSupabaseAdmin>,
   results: PopulateResults,
-  recipesData: any[],
+  recipesData: Recipe[],
 ) {
   if (!recipesData || recipesData.length === 0) {
     logger.dev('No recipes available for sales data generation');

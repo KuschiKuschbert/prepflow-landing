@@ -4,24 +4,24 @@
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import {
-  syncCatalogBidirectional,
-  syncCatalogFromSquare,
-  syncCatalogToSquare,
+    syncCatalogBidirectional,
+    syncCatalogFromSquare,
+    syncCatalogToSquare,
 } from '@/lib/square/sync/catalog';
 import { syncCostsToSquare } from '@/lib/square/sync/costs';
 import { performInitialSync } from '@/lib/square/sync/initial-sync';
 import { syncOrdersFromSquare, syncRecentOrdersFromSquare } from '@/lib/square/sync/orders';
 import {
-  syncStaffBidirectional,
-  syncStaffFromSquare,
-  syncStaffToSquare,
+    syncStaffBidirectional,
+    syncStaffFromSquare,
+    syncStaffToSquare,
 } from '@/lib/square/sync/staff';
 import { NextResponse } from 'next/server';
 
 export async function handleSyncOperation(
   operation: 'catalog' | 'orders' | 'staff' | 'costs' | 'initial_sync',
   direction: 'from_square' | 'to_square' | 'bidirectional' | undefined,
-  options: any,
+  options: Record<string, any> | undefined,
   userId: string,
 ) {
   switch (operation) {

@@ -8,7 +8,7 @@ export interface ErrorLog {
   endpoint: string | null;
   error_message: string;
   stack_trace: string | null;
-  context: any;
+  context: Record<string, unknown>;
   created_at: string;
   severity: 'safety' | 'critical' | 'high' | 'medium' | 'low';
   status: 'new' | 'investigating' | 'resolved' | 'ignored';

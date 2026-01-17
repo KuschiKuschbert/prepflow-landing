@@ -1,10 +1,10 @@
+import { checkAchievementMilestone, dispatchMilestoneReached } from '@/lib/gamification/milestones';
 import { type Achievement, type AchievementId, ACHIEVEMENTS } from '../../achievements';
 import { loadAchievements, saveAchievements } from './storage';
-import { checkAchievementMilestone, dispatchMilestoneReached } from '@/lib/gamification/milestones';
 
 export function unlockAchievement(id: AchievementId): void {
   const achievements = loadAchievements();
-  const unlockedIds = new Set(achievements.map((a: any) => a.id));
+  const unlockedIds = new Set(achievements.map((a: Achievement) => a.id));
 
   if (unlockedIds.has(id)) return; // Already unlocked
 

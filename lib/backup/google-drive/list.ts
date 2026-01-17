@@ -2,8 +2,8 @@
  * List backup files from Google Drive.
  */
 
-import { google, type Auth } from 'googleapis';
 import { logger } from '@/lib/logger';
+import { google, type Auth } from 'googleapis';
 import type { BackupFile } from '../types';
 
 /**
@@ -45,8 +45,11 @@ export async function listBackupsFromDrive(
         userFolderId = userFolderSearch.data.files[0].id!;
       }
     }
-  } catch (error: any) {
-    logger.warn(`[Google Drive] Failed to find user folder for ${userId}:`, error);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.warn(`[Google Drive] Failed to find user folder for ${userId}:`, {
+      error: errorMessage,
+    });
     // Continue with root search as fallback
   }
 

@@ -1,11 +1,11 @@
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { invalidateTierCache } from '@/lib/tier-config-db';
 import { logTierConfigChange } from '@/lib/admin-audit';
+import type { AdminUser } from '@/lib/admin-auth';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { invalidateTierCache } from '@/lib/tier-config-db';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import type { AdminUser } from '@/lib/admin-auth';
 const tierConfigSchema = z.object({
   tier_slug: z.enum(['starter', 'pro', 'business']),
   name: z.string().optional(),
@@ -28,13 +28,13 @@ const tierConfigSchema = z.object({
  * @param {z.infer<typeof tierConfigSchema>} validated - Validated tier configuration data.
  * @param {AdminUser} adminUser - The admin user creating the tier.
  * @param {NextRequest} request - The request object for audit logging.
- * @returns {Promise<{ tier: any } | NextResponse>} Created tier data or error response.
+ * @returns {Promise<{ tier: Record<string, unknown> } | NextResponse>} Created tier data or error response.
  */
 export async function createTier(
   validated: z.infer<typeof tierConfigSchema>,
   adminUser: AdminUser,
   request: NextRequest,
-): Promise<{ tier: unknown } | NextResponse> {
+): Promise<{ tier: Record<string, unknown> } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503),

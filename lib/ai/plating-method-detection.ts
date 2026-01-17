@@ -4,11 +4,11 @@
  * Uses AI to analyze dishes and suggest suitable plating methods
  */
 
-import { logger } from '@/lib/logger';
 import type { Ingredient } from '@/app/webapp/ingredients/components/types';
+import { logger } from '@/lib/logger';
 import {
-  buildPlatingMethodDetectionPrompt,
-  type PlatingMethodSuggestion,
+    buildPlatingMethodDetectionPrompt,
+    type PlatingMethodSuggestion,
 } from './prompts/plating-method-detection';
 
 export interface PlatingMethodDetectionResult {
@@ -84,10 +84,10 @@ export async function detectSuitablePlatingMethods(
 
     // Validate and normalize the response
     const suggestions: PlatingMethodSuggestion[] = Array.isArray(parsed.suggestions)
-      ? parsed.suggestions.map((s: any) => ({
-          method: s.method || '',
-          confidence: s.confidence || 'medium',
-          reasoning: s.reasoning || '',
+      ? parsed.suggestions.map((s: Record<string, unknown>) => ({
+          method: (s.method as string) || '',
+          confidence: (s.confidence as 'high' | 'medium' | 'low') || 'medium',
+          reasoning: (s.reasoning as string) || '',
         }))
       : [];
 

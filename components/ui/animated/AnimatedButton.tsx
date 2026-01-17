@@ -6,15 +6,14 @@
 
 import React from 'react';
 
-interface AnimatedButtonProps {
+import type { ButtonHTMLAttributes } from 'react';
+
+interface AnimatedButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   className?: string;
-  onClick?: () => void;
-  disabled?: boolean;
   loading?: boolean;
-  [key: string]: any;
 }
 
 export function AnimatedButton({

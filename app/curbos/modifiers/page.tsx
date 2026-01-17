@@ -1,11 +1,11 @@
 'use client'
 
+import { useConfirm } from '@/hooks/useConfirm'
 import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase-pos'
 import { ArrowLeft, CheckCircle, Plus, XCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { useConfirm } from '@/hooks/useConfirm'
 import ModifierCard from '../components/ModifierCard'
 
 interface ModifierOption {
@@ -18,10 +18,10 @@ interface ModifierOption {
 }
 
 export default function ModifiersPage() {
-  const [modifiers, setModifiers] = useState<any[]>([])
+  const [modifiers, setModifiers] = useState<ModifierOption[]>([])
   const [loading, setLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingItem, setEditingItem] = useState<any>(null)
+  const [editingItem, setEditingItem] = useState<ModifierOption | null>(null)
   const { showConfirm, ConfirmDialog } = useConfirm()
 
   // Form
@@ -83,7 +83,7 @@ export default function ModifiersPage() {
     }
   }
 
-  function openModal(item?: any) {
+  function openModal(item?: ModifierOption) {
     if (item) {
       setEditingItem(item)
       setName(item.name)

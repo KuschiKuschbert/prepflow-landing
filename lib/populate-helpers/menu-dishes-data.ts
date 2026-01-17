@@ -6,6 +6,8 @@ import { createSupabaseAdmin } from '@/lib/supabase';
 
 import { logger } from '@/lib/logger';
 
+import { type Recipe } from './generate-sales-data';
+
 interface PopulateResults {
   cleaned: number;
   populated: Array<{ table: string; count: number }>;
@@ -18,7 +20,7 @@ interface PopulateResults {
 export async function populateMenuDishes(
   supabaseAdmin: ReturnType<typeof createSupabaseAdmin>,
   results: PopulateResults,
-  recipesData: any[],
+  recipesData: Recipe[],
 ) {
   if (!recipesData || recipesData.length === 0) return;
 

@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
       ...(validationResult.data.square_application_secret && {
         square_application_secret: validationResult.data.square_application_secret,
       }),
-      ...(buildConfigInput(validationResult) as any),
+      ...(buildConfigInput(validationResult) as Record<string, unknown>),
     };
     const config = await saveSquareConfig(userId, configInput);
 

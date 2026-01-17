@@ -69,7 +69,10 @@ export async function POST(request: NextRequest) {
 
     // Try AI first
     try {
-      const prompt = buildMenuItemDescriptionPrompt(menuItem, ingredients);
+      const prompt = buildMenuItemDescriptionPrompt(
+        menuItem,
+        ingredients as Record<string, unknown>[],
+      );
       const aiResponse = await generateAIResponse(
         [
           {

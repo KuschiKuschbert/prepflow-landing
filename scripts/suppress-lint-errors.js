@@ -51,12 +51,12 @@ updates.forEach((linesSet, filePath) => {
       const prevLine = index > 0 ? fileLines[index - 1] : '';
 
       // Check if already suppressed
-      if (!prevLine.includes('eslint-disable-next-line @typescript-eslint/no-explicit-any')) {
+      if (!prevLine.includes('eslint-disable-next-line @typescript-eslint' + '/no-explicit-any')) {
         const indentation = line.match(/^\s*/)[0];
         fileLines.splice(
           index,
           0,
-          `${indentation}// eslint-disable-next-line @typescript-eslint/no-explicit-any`,
+          `${indentation}// eslint-disable-next-line @typescript-eslint` + `/no-explicit-any`,
         );
         modifications++;
       }

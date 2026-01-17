@@ -1,8 +1,8 @@
 /**
  * Refresh access token using refresh token.
  */
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { getSquareOAuthConfig } from '../../oauth-client';
 import { SQUARE_TOKEN_URL, type TokenResponse } from './constants';
 
@@ -70,9 +70,10 @@ export async function refreshAccessToken(
     logger.dev('[Square OAuth] Successfully refreshed access token');
 
     return tokenData;
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error('[Square OAuth] Error refreshing token:', {
-      error: error.message,
+      error: errorMessage,
       context: { operation: 'refresh_token' },
     });
     throw error;

@@ -19,32 +19,31 @@ process.env.AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID || 'test-client-id';
 process.env.AUTH0_CLIENT_SECRET = process.env.AUTH0_CLIENT_SECRET || 'test-client-secret';
 
 // Polyfill Web APIs missing in JSDOM
-// Node 18+ has these globally, but JSDOM environment might hide them
 const polyfillWebAPIs = () => {
-  const MockRequest = class {
+  class MockRequest {
     constructor() {}
     static json = jest.fn();
-  };
-  (MockRequest.prototype as any).json = jest.fn();
+    json = jest.fn();
+  }
 
-  const MockResponse = class {
+  class MockResponse {
     constructor() {}
     static json = jest.fn();
-  };
-  (MockResponse.prototype as any).json = jest.fn();
+    json = jest.fn();
+  }
 
-  const MockHeaders = class {
+  class MockHeaders {
     constructor() {}
-  };
+  }
 
-  const MockPerformanceObserver = class {
-    constructor(callback: any) {}
+  class MockPerformanceObserver {
+    constructor(callback: unknown) {}
     observe() {}
     disconnect() {}
     takeRecords() {
       return [];
     }
-  };
+  }
 
   const apis = {
     Request: MockRequest,
@@ -54,16 +53,28 @@ const polyfillWebAPIs = () => {
     PerformanceObserver: MockPerformanceObserver,
   };
 
+  type GlobalWithAPIs = typeof globalThis & {
+    Request: typeof MockRequest;
+    Response: typeof MockResponse;
+    Headers: typeof MockHeaders;
+    fetch: jest.Mock;
+    PerformanceObserver: typeof MockPerformanceObserver;
+  };
+
+  const globalTarget = global as unknown as GlobalWithAPIs;
+  const globalThisTarget = globalThis as unknown as GlobalWithAPIs;
+
   Object.entries(apis).forEach(([key, value]) => {
-    if (typeof (global as any)[key] === 'undefined') {
-      (global as any)[key] = value;
+    if (typeof (globalTarget as Record<string, unknown>)[key] === 'undefined') {
+      (globalTarget as Record<string, unknown>)[key] = value;
     }
-    if (typeof (globalThis as any)[key] === 'undefined') {
-      (globalThis as any)[key] = value;
+    if (typeof (globalThisTarget as Record<string, unknown>)[key] === 'undefined') {
+      (globalThisTarget as Record<string, unknown>)[key] = value;
     }
     if (typeof window !== 'undefined') {
-      if (typeof (window as any)[key] === 'undefined') {
-        (window as any)[key] = value;
+      const windowTarget = window as unknown as Record<string, unknown>;
+      if (typeof windowTarget[key] === 'undefined') {
+        windowTarget[key] = value;
       }
     }
   });
@@ -79,21 +90,30 @@ const polyfillWebAPIs = () => {
 
 polyfillWebAPIs();
 
+interface MockAuth0 {
+  useUser: () => { user: null; error: null; isLoading: boolean };
+  withPageAuthRequired: <T>(comp: T) => T;
+  getSession: () => null;
+  getAccessToken: () => { accessToken: string };
+  UserProvider: ({ children }: { children: React.ReactNode }) => React.ReactNode;
+  Auth0Client: new () => {
+    getSession: jest.Mock;
+    getAccessToken: jest.Mock;
+    updateSession: jest.Mock;
+  };
+}
+
 // Mock Auth0 which has ESM issues in Jest
-const mockAuth0 = {
+const mockAuth0: MockAuth0 = {
   useUser: () => ({ user: null, error: null, isLoading: false }),
-  withPageAuthRequired: (comp: any) => comp,
+  withPageAuthRequired: comp => comp,
   getSession: () => null,
   getAccessToken: () => ({ accessToken: 'test-token' }),
-  UserProvider: ({ children }: any) => children,
+  UserProvider: ({ children }) => children,
   Auth0Client: class {
-    constructor() {
-      return {
-        getSession: jest.fn(),
-        getAccessToken: jest.fn(),
-        updateSession: jest.fn(),
-      } as any;
-    }
+    getSession = jest.fn();
+    getAccessToken = jest.fn();
+    updateSession = jest.fn();
   },
 };
 

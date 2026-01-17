@@ -3,10 +3,13 @@
  */
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { SquareClient } from 'square';
 import { createAutoMapping, getMappingByPrepFlowId } from '../../../mappings';
 import type { Dish, SyncResult } from '../../catalog';
 import { logCatalogSyncOperation } from './common';
 import { mapDishToSquareItem } from './mapping';
+
+type CatalogApi = SquareClient['catalog'];
 
 /**
  * Process a single PrepFlow dish for sync to Square
@@ -15,8 +18,7 @@ export async function processPrepFlowDish(
   dish: Dish,
   userId: string,
   locationId: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  catalogApi: any,
+  catalogApi: CatalogApi,
   result: SyncResult,
 ): Promise<void> {
   if (!supabaseAdmin) {
@@ -33,16 +35,18 @@ export async function processPrepFlowDish(
 
     if (mapping) {
       // Update existing Square item
-      const updateResponse = await catalogApi.upsertCatalogObject({
+      const updateResponse = await catalogApi.batchUpsert({
         idempotencyKey: `${dish.id}-${Date.now()}`,
-        object: {
-          type: 'ITEM',
-          id: mapping.square_id,
-          itemData: squareItemData.itemData,
-        },
+        batches: [{
+          objects: [{
+            type: 'ITEM',
+            id: mapping.square_id,
+            itemData: squareItemData.itemData,
+          }],
+        }],
       });
 
-      if (updateResponse.result?.catalogObject) {
+      if (updateResponse.objects?.[0]) {
         // Update mapping sync timestamp
         const { error: mappingUpdateError } = await supabaseAdmin
           .from('square_mappings')
@@ -76,16 +80,19 @@ export async function processPrepFlowDish(
       }
     } else {
       // Create new Square item
-      const createResponse = await catalogApi.upsertCatalogObject({
+      const createResponse = await catalogApi.batchUpsert({
         idempotencyKey: `${dish.id}-${Date.now()}`,
-        object: {
-          type: 'ITEM',
-          itemData: squareItemData.itemData,
-        },
+        batches: [{
+          objects: [{
+            type: 'ITEM',
+            id: squareItemData.id,
+            itemData: squareItemData.itemData,
+          }],
+        }],
       });
 
-      if (createResponse.result?.catalogObject && createResponse.result.catalogObject.id) {
-        const squareItemId = createResponse.result.catalogObject.id;
+      if (createResponse.objects?.[0]?.id) {
+        const squareItemId = createResponse.objects[0].id;
 
         // Create mapping
         const newMapping = await createAutoMapping(
@@ -122,20 +129,22 @@ export async function processPrepFlowDish(
       }
     }
   } catch (dishError: unknown) {
+    const dishErrorMessage = dishError instanceof Error ? dishError.message : String(dishError);
+    const dishErrorStack = dishError instanceof Error ? dishError.stack : undefined;
     logger.error('[Square Catalog Sync] Error processing dish:', {
-      error: dishError instanceof Error ? dishError.message : String(dishError),
+      error: dishErrorMessage,
       dishId: dish.id,
     });
     result.errors++;
-    result.errorMessages?.push(`Failed to process dish ${dish.id}: ${dishError instanceof Error ? dishError.message : String(dishError)}`);
+    result.errorMessages?.push(`Failed to process dish ${dish.id}: ${dishErrorMessage}`);
 
     await logCatalogSyncOperation({
       userId,
       direction: 'prepflow_to_square',
       entityId: dish.id,
       status: 'error',
-      errorMessage: dishError instanceof Error ? dishError.message : String(dishError),
-      errorDetails: { stack: dishError instanceof Error ? dishError.stack : undefined },
+      errorMessage: dishErrorMessage,
+      errorDetails: { stack: dishErrorStack },
     });
   }
 }

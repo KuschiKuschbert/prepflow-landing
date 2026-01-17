@@ -13,7 +13,7 @@ import { MagneticButton } from '../../../components/ui/MagneticButton';
 import { BUTTON_STYLES } from '../../../lib/tailwind-utils';
 import { useTranslation } from '../../../lib/useTranslation';
 interface LandingHeaderProps {
-  trackEngagement?: (..._args: any[]) => void;
+  trackEngagement?: (event: string) => void;
 }
 
 const LandingHeader = React.memo(function LandingHeader({

@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page } from '@playwright/test';
 import { captureErrorScreenshot } from '../fixtures/global-error-listener';
 
 /**
@@ -62,7 +62,8 @@ export async function findAllInteractiveElements(page: Page): Promise<Interactiv
           if (el.getAttribute('data-testid'))
             return `[data-testid="${el.getAttribute('data-testid')}"]`;
           if (el.id) return `#${el.id}`;
-          if (el.name) return `input[name="${el.name}"]`;
+          const inputEl = el as HTMLInputElement;
+          if (inputEl.name) return `input[name="${inputEl.name}"]`;
           return 'input';
         }),
         type: 'input',
@@ -82,7 +83,8 @@ export async function findAllInteractiveElements(page: Page): Promise<Interactiv
           if (el.getAttribute('data-testid'))
             return `[data-testid="${el.getAttribute('data-testid')}"]`;
           if (el.id) return `#${el.id}`;
-          if (el.name) return `textarea[name="${el.name}"]`;
+          const textareaEl = el as HTMLTextAreaElement;
+          if (textareaEl.name) return `textarea[name="${textareaEl.name}"]`;
           return 'textarea';
         }),
         type: 'textarea',
@@ -102,7 +104,8 @@ export async function findAllInteractiveElements(page: Page): Promise<Interactiv
           if (el.getAttribute('data-testid'))
             return `[data-testid="${el.getAttribute('data-testid')}"]`;
           if (el.id) return `#${el.id}`;
-          if (el.name) return `select[name="${el.name}"]`;
+          const selectEl = el as HTMLSelectElement;
+          if (selectEl.name) return `select[name="${selectEl.name}"]`;
           return 'select';
         }),
         type: 'select',
@@ -209,10 +212,11 @@ export async function interactWithElement(
     await page.waitForTimeout(300);
 
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as Error;
     return {
       success: false,
-      error: error.message || String(error),
+      error: err.message || String(error),
     };
   }
 }
@@ -275,10 +279,11 @@ export async function runMonkeyTest(
       // Small delay between interactions
       await page.waitForTimeout(100);
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as Error;
     result.errors.push({
       element: 'page',
-      error: error.message || String(error),
+      error: err.message || String(error),
     });
   }
 

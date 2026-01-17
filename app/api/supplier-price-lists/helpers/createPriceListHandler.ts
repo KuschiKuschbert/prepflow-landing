@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { validatePriceListCreate } from './validatePriceListCreate';
-import { setCurrentPriceList } from './setCurrentPriceList';
+import { NextRequest, NextResponse } from 'next/server';
 import { createPriceList } from './createPriceList';
 import { handlePriceListError } from './handlePriceListError';
 import { createPriceListSchema } from './schemas';
+import { setCurrentPriceList } from './setCurrentPriceList';
+import { validatePriceListCreate } from './validatePriceListCreate';
 
 export async function handleCreatePriceList(request: NextRequest) {
   try {
@@ -78,11 +78,12 @@ export async function handleCreatePriceList(request: NextRequest) {
       message: 'Supplier price list created successfully',
       data,
     });
-  } catch (error: any) {
-    if (error.message) {
+  } catch (error: unknown) {
+    const err = error as { message?: string; code?: string };
+    if (err.message) {
       logger.error('[Supplier Price Lists API] Database error creating:', {
-        error: error.message,
-        code: error.code,
+        error: err.message,
+        code: err.code,
         context: { endpoint: '/api/supplier-price-lists', operation: 'POST' },
       });
       const apiError = ApiErrorHandler.fromSupabaseError(error, 500);

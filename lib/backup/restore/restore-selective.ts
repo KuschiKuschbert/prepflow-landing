@@ -2,12 +2,12 @@
  * Selective restore operation - restores only specified tables.
  */
 
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
 import type { BackupData, RestoreResult } from '../types';
-import { validateBackupUser, validateTablesExist } from './helpers/validate-restore';
 import { deleteTableRecords } from './helpers/delete-tables';
 import { insertRecords } from './helpers/insert-records';
+import { validateBackupUser, validateTablesExist } from './helpers/validate-restore';
 
 /**
  * Restore selected tables only (selective restore).
@@ -38,12 +38,13 @@ export async function restoreSelective(
   for (const tableName of tables) {
     try {
       await deleteTableRecords(supabase, tableName, userId);
-    } catch (error: any) {
-      if (error.message?.includes('does not exist')) {
-        logger.dev(`[Restore] Skipping table ${tableName}: ${error.message}`);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (errorMessage.includes('does not exist')) {
+        logger.dev(`[Restore] Skipping table ${tableName}: ${errorMessage}`);
         continue;
       }
-      errors.push(`Failed to delete ${tableName}: ${error.message}`);
+      errors.push(`Failed to delete ${tableName}: ${errorMessage}`);
     }
   }
 

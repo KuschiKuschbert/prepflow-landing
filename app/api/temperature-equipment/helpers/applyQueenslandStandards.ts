@@ -4,7 +4,7 @@
  * @param {Array} equipment - Equipment data array
  * @returns {Array} Equipment data with Queensland-compliant thresholds
  */
-export function applyQueenslandStandards(equipment: any[]): any[] {
+export function applyQueenslandStandards(equipment: Record<string, any>[]): Record<string, any>[] {
   return equipment.map(eq => {
     const name = eq.name.toLowerCase();
 

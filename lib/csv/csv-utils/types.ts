@@ -4,7 +4,7 @@ export interface ParseCSVOptions {
   header?: boolean;
   skipEmptyLines?: boolean;
   transformHeader?: (header: string) => string;
-  transform?: (value: any, field: string) => any;
+  transform?: (value: unknown, field: string) => unknown;
 }
 
 export interface ParseCSVResult<T = any> {

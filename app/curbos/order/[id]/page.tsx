@@ -39,7 +39,7 @@ export default function PublicOrderStatusPage() {
   // Sound Effect Helper (Web Audio API)
   const playNotificationSound = () => {
     try {
-      const AudioContextClass = (window.AudioContext || (window as any).webkitAudioContext) as typeof AudioContext;
+      const AudioContextClass = (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext) as typeof AudioContext;
       if (!AudioContextClass) return;
 
       const ctx = new AudioContextClass();

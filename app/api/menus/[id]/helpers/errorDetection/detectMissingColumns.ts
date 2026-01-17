@@ -29,10 +29,11 @@ export function detectMissingColumns(error: unknown): ColumnErrorInfo {
     };
   }
 
-  const err = error as any;
-  const errorCode = err.code;
+  const err = error as { code?: string; message?: string; details?: string; hint?: string };
+  const errorCode = err.code || '';
   const errorMessage = err.message || '';
   const errorDetails = err.details || '';
+  /* Removed duplicate declarations */
   const errorHint = err.hint || '';
   const fullErrorText = `${errorMessage} ${errorDetails} ${errorHint}`.toLowerCase();
 

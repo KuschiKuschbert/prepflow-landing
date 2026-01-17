@@ -5,7 +5,6 @@
 
 'use client';
 
-import React from 'react';
 
 interface ChartData {
   name: string;
@@ -106,7 +105,7 @@ function PieChart({ data, size = 200, showLabels = true, className = '' }: PieCh
         },
       ];
     },
-    [] as Array<{ percentage: number; cumulativePercentage: number; [key: string]: any }>,
+    [] as Array<{ percentage: number; cumulativePercentage: number; [key: string]: unknown }>,
   );
 
   return (
@@ -121,11 +120,11 @@ function PieChart({ data, size = 200, showLabels = true, className = '' }: PieCh
               const strokeDasharray = `${(segment.percentage / 100) * circumference} ${circumference}`;
               const strokeDashoffset = -((segment.cumulativePercentage / 100) * circumference);
 
-              const color = segment.color || colors[index % colors.length];
+              const color = (segment.color as string) || colors[index % colors.length];
 
               return (
                 <circle
-                  key={segment.name}
+                  key={segment.name as string}
                   cx={size / 2}
                   cy={size / 2}
                   r={size / 2 - 10}
@@ -256,4 +255,4 @@ function LineChart({
 }
 
 // Export all components
-export { BarChart, PieChart, LineChart };
+export { BarChart, LineChart, PieChart };

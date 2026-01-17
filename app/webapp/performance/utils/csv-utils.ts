@@ -3,9 +3,9 @@
  */
 import { exportToCSV, parseCSV } from '@/lib/csv/csv-utils';
 import {
-  getPerformanceValidationSchema,
-  transformCSVData,
-  validateCSVData,
+    getPerformanceValidationSchema,
+    transformCSVData,
+    validateCSVData,
 } from '@/lib/csv/validation';
 import { logger } from '@/lib/logger';
 import { PerformanceItem } from '../types';
@@ -82,7 +82,7 @@ export function parseCSVSalesData(csvData: string): SalesData[] {
   // Validate and transform data
   const schema = getPerformanceValidationSchema();
   const transformed = transformCSVData(salesData, schema);
-  const validation = validateCSVData(transformed, schema);
+  const validation = validateCSVData(transformed as unknown as Record<string, unknown>[], schema);
 
   if (!validation.valid) {
     const errorMessages = validation.errors

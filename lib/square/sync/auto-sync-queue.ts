@@ -8,15 +8,15 @@
 
 import { logger } from '@/lib/logger';
 import { processSyncOperation as processSyncOperationHelper } from './helpers/processSyncOperation';
-import {
-  syncQueue,
-  isProcessing,
-  lastBatchProcessedAt,
-  setIsProcessing,
-  setLastBatchProcessedAt,
-} from './helpers/syncQueueState';
 import { BATCH_SIZE, RATE_LIMIT_DELAY_MS } from './helpers/syncQueueConstants';
-import { handleRetry, handleMaxRetriesReached } from './helpers/syncQueueHandlers';
+import { handleMaxRetriesReached, handleRetry } from './helpers/syncQueueHandlers';
+import {
+    isProcessing,
+    lastBatchProcessedAt,
+    setIsProcessing,
+    setLastBatchProcessedAt,
+    syncQueue,
+} from './helpers/syncQueueState';
 import type { QueuedSyncOperation } from './types';
 
 export type { QueuedSyncOperation } from './types';
@@ -93,10 +93,12 @@ export async function processSyncQueue(): Promise<void> {
       );
       await Promise.allSettled(batchPromises);
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const stack = error instanceof Error ? error.stack : undefined;
     logger.error('[Square Sync Queue] Error processing queue:', {
-      error: error.message,
-      stack: error.stack,
+      error: errorMessage,
+      stack,
     });
   } finally {
     setIsProcessing(false);

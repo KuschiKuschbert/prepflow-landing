@@ -9,6 +9,25 @@ import { motion } from 'framer-motion';
 import { Share2, Trophy } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
+interface Quest {
+  id: string;
+  title: string;
+  description: string;
+  reward_miles: number;
+  quest_type: string;
+  target: number;
+  current_value: number;
+}
+
+interface Transaction {
+  id: string;
+  order_number: number;
+  total_amount: number;
+  fulfillment_status: string;
+  created_at: string;
+  items_json: string;
+}
+
 interface Customer {
   id: string;
   member_number?: number;
@@ -18,13 +37,13 @@ interface Customer {
   redeemable_miles: number;
   streak_count: number;
   stamp_cards: Record<string, number>;
-  active_quests: any[];
+  active_quests: Quest[];
   unlocked_regions: string[];
   avatar_url?: string;
 }
 
 interface QuestPageContentProps {
-    id: string;
+  id: string;
 }
 
 /**
@@ -33,8 +52,8 @@ interface QuestPageContentProps {
  */
 export default function QuestPageContent({ id }: QuestPageContentProps) {
   const [customer, setCustomer] = useState<Customer | null>(null);
-  const [availableQuests, setAvailableQuests] = useState<any[]>([]);
-  const [recentOrders, setRecentOrders] = useState<any[]>([]);
+  const [availableQuests, setAvailableQuests] = useState<Quest[]>([]);
+  const [recentOrders, setRecentOrders] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

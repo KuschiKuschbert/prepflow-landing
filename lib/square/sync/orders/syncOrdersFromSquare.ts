@@ -2,6 +2,7 @@
  * Sync orders from Square to PrepFlow.
  */
 import { logger } from '@/lib/logger';
+import { Order } from 'square';
 import { logSyncOperation } from '../../sync-log';
 import { calculatePopularityPercentages } from './helpers/calculatePopularityPercentages';
 import { fetchOrdersFromSquare } from './helpers/fetchOrders';
@@ -38,6 +39,11 @@ export async function syncOrdersFromSquare(
     }
 
     // Fetch orders from Square
+    if (!setup.client) {
+      result.errorMessages?.push('Square client not initialized');
+      return result;
+    }
+
     const orders = await fetchOrdersFromSquare(
       setup.client,
       setup.locationId,
@@ -51,7 +57,18 @@ export async function syncOrdersFromSquare(
     }
 
     // Process orders and aggregate sales data
-    const salesDataMap = await processOrders(orders, userId, setup.locationId, result);
+    // Filter out orders without IDs to satisfy strict typing
+    const validOrders = orders
+      .filter((o): o is Order & { id: string } => !!o.id)
+      .map(o => ({
+        ...o,
+        lineItems: o.lineItems?.map(li => ({
+          ...li,
+          catalogObjectId: li.catalogObjectId ?? undefined,
+          quantity: li.quantity ?? undefined,
+        })),
+      }));
+    const salesDataMap = await processOrders(validOrders, userId, setup.locationId, result);
 
     // Calculate popularity percentages
     const salesDataArray = Array.from(salesDataMap.values());

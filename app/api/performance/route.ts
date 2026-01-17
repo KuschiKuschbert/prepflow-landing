@@ -175,18 +175,21 @@ export async function POST(request: NextRequest) {
       message: 'Sales data updated successfully',
     });
   } catch (err: unknown) {
+    const e = err;
     logger.error('[Performance API] Unexpected error:', {
-      error: err instanceof Error ? err.message : String(err),
+      error: e instanceof Error ? e.message : String(e),
       context: { endpoint: '/api/performance', method: 'POST' },
     });
 
-    // Type guard for ApiError-like objects
-    const hasStatus = (e: unknown): e is { status: number } =>
-      typeof e === 'object' && e !== null && 'status' in e && typeof (e as any).status === 'number';
-
-    if (hasStatus(err)) {
-      return NextResponse.json(err, { status: err.status });
+    // Check if it's an API error response-like object
+    if (
+      typeof e === 'object' &&
+      e !== null &&
+      'status' in e &&
+      typeof (e as { status: number }).status === 'number'
+    ) {
+      return NextResponse.json(e, { status: (e as { status: number }).status });
     }
-    return handlePerformanceError(err, 'POST');
+    return handlePerformanceError(e, 'POST');
   }
 }

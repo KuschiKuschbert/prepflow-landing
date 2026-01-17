@@ -16,9 +16,9 @@ export async function syncAllStaffToSquare(
       synced: result.synced,
       errors: result.errors,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Initial Sync] Error syncing staff:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
     });
     return { synced: 0, errors: 1 };

@@ -1,20 +1,12 @@
+import { logAdminApiAction } from '@/lib/admin-audit';
 import { requireAdmin } from '@/lib/admin-auth';
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { logAdminApiAction } from '@/lib/admin-audit';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-
-const autoCreateSchema = z.object({
-  flags: z.array(
-    z.object({
-      flag_key: z.string().min(1).max(100),
-      type: z.enum(['regular', 'hidden']),
-      description: z.string().optional().nullable(),
-    }),
-  ),
-});
+import { processHiddenFlags } from './helpers/processHiddenFlags';
+import { processRegularFlags } from './helpers/processRegularFlags';
+import { autoCreateSchema } from './types';
 
 /**
  * POST /api/admin/features/auto-create
@@ -35,133 +27,21 @@ export async function POST(request: NextRequest) {
     const validated = autoCreateSchema.parse(body);
     const { flags } = validated;
 
-    let createdCount = 0;
-    let skippedCount = 0;
-    const createdFlags: string[] = [];
-    const skippedFlags: string[] = [];
-
     // Separate regular and hidden flags
     const regularFlags = flags.filter(f => f.type === 'regular');
     const hiddenFlags = flags.filter(f => f.type === 'hidden');
 
-    // Create regular feature flags
-    if (regularFlags.length > 0) {
-      for (const flag of regularFlags) {
-        try {
-          // Check if flag already exists
-          const { data: existing, error: checkError } = await supabaseAdmin
-            .from('feature_flags')
-            .select('flag_key')
-            .eq('flag_key', flag.flag_key)
-            .is('user_id', null)
-            .single();
+    // Process regular flags
+    const regularResult = await processRegularFlags(regularFlags);
 
-          if (checkError && checkError.code !== 'PGRST116') {
-            // PGRST116 is "not found" - that's okay, we'll create the flag
-            logger.warn('[Admin Auto-Create] Error checking if regular flag exists:', {
-              error: checkError.message,
-              flag_key: flag.flag_key,
-            });
-          }
+    // Process hidden flags
+    const hiddenResult = await processHiddenFlags(hiddenFlags);
 
-          if (existing) {
-            skippedCount++;
-            skippedFlags.push(flag.flag_key);
-            continue;
-          }
-
-          // Create new flag
-          const { error } = await supabaseAdmin.from('feature_flags').insert({
-            flag_key: flag.flag_key,
-            enabled: false,
-            user_id: null,
-            description: flag.description || null,
-          });
-
-          if (error) {
-            // If it's a unique constraint violation, skip it
-            if (error.code === '23505') {
-              skippedCount++;
-              skippedFlags.push(flag.flag_key);
-            } else {
-              logger.error('[Admin Auto-Create] Error creating regular flag:', {
-                error: error.message,
-                flag_key: flag.flag_key,
-              });
-              skippedFlags.push(flag.flag_key);
-            }
-          } else {
-            createdCount++;
-            createdFlags.push(flag.flag_key);
-          }
-        } catch (err) {
-          logger.error('[Admin Auto-Create] Unexpected error creating regular flag:', {
-            error: err instanceof Error ? err.message : String(err),
-            flag_key: flag.flag_key,
-          });
-          skippedFlags.push(flag.flag_key);
-        }
-      }
-    }
-
-    // Create hidden feature flags
-    if (hiddenFlags.length > 0) {
-      for (const flag of hiddenFlags) {
-        try {
-          // Check if flag already exists
-          const { data: existing, error: checkError2 } = await supabaseAdmin
-            .from('hidden_feature_flags')
-            .select('feature_key')
-            .eq('feature_key', flag.flag_key)
-            .single();
-
-          if (checkError2 && checkError2.code !== 'PGRST116') {
-            // PGRST116 is "not found" - that's okay, we'll create the flag
-            logger.warn('[Admin Auto-Create] Error checking if hidden flag exists:', {
-              error: checkError2.message,
-              feature_key: flag.flag_key,
-            });
-          }
-
-          if (existing) {
-            skippedCount++;
-            skippedFlags.push(flag.flag_key);
-            continue;
-          }
-
-          // Create new hidden flag
-          const { error } = await supabaseAdmin.from('hidden_feature_flags').insert({
-            feature_key: flag.flag_key,
-            description: flag.description || `Feature: ${flag.flag_key}`,
-            is_unlocked: false,
-            is_enabled: false,
-          });
-
-          if (error) {
-            // If it's a unique constraint violation, skip it
-            if (error.code === '23505') {
-              skippedCount++;
-              skippedFlags.push(flag.flag_key);
-            } else {
-              logger.error('[Admin Auto-Create] Error creating hidden flag:', {
-                error: error.message,
-                feature_key: flag.flag_key,
-              });
-              skippedFlags.push(flag.flag_key);
-            }
-          } else {
-            createdCount++;
-            createdFlags.push(flag.flag_key);
-          }
-        } catch (err) {
-          logger.error('[Admin Auto-Create] Unexpected error creating hidden flag:', {
-            error: err instanceof Error ? err.message : String(err),
-            feature_key: flag.flag_key,
-          });
-          skippedFlags.push(flag.flag_key);
-        }
-      }
-    }
+    // Aggregate results
+    const createdCount = regularResult.created + hiddenResult.created;
+    const skippedCount = regularResult.skipped + hiddenResult.skipped;
+    const createdFlags = [...regularResult.createdFlags, ...hiddenResult.createdFlags];
+    const skippedFlags = [...regularResult.skippedFlags, ...hiddenResult.skippedFlags];
 
     await logAdminApiAction(adminUser, 'auto_create_feature_flags', request, {
       details: {

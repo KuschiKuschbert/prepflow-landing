@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { setCurrentPriceList } from './setCurrentPriceList';
+import { NextRequest, NextResponse } from 'next/server';
 import { buildPriceListUpdateData } from './buildUpdateData';
-import { updatePriceList } from './updatePriceList';
 import { handlePriceListError } from './handlePriceListError';
+import { setCurrentPriceList } from './setCurrentPriceList';
+import { updatePriceList } from './updatePriceList';
 
 export async function handleUpdatePriceList(request: NextRequest) {
   const body = await request.json();
@@ -47,11 +47,12 @@ export async function handleUpdatePriceList(request: NextRequest) {
       message: 'Supplier price list updated successfully',
       data,
     });
-  } catch (error: any) {
-    if (error.message) {
+  } catch (error: unknown) {
+    const err = error as { message?: string; code?: string };
+    if (err.message) {
       logger.error('[Supplier Price Lists API] Database error updating:', {
-        error: error.message,
-        code: error.code,
+        error: err.message,
+        code: err.code,
         context: { endpoint: '/api/supplier-price-lists', operation: 'PUT', id },
       });
       const apiError = ApiErrorHandler.fromSupabaseError(error, 500);

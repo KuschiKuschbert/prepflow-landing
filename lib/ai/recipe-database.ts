@@ -6,10 +6,10 @@
 import { logger } from '@/lib/logger';
 import { ScrapedRecipe } from '../../scripts/recipe-scraper/parsers/types';
 import {
-  loadIndex,
-  loadRecipe,
-  formatRecipesForPrompt,
-  getRecipeDatabaseStats,
+    formatRecipesForPrompt,
+    getRecipeDatabaseStats,
+    loadIndex,
+    loadRecipe,
 } from './recipe-database-helpers';
 
 /**
@@ -45,9 +45,16 @@ export async function searchRecipesByIngredients(
         const recipe = await loadRecipe(entry.file_path);
         if (!recipe) continue;
 
-        const recipeIngredientNames = recipe.ingredients.map((ing: any) =>
-          (typeof ing === 'string' ? ing : ing.name || ing.original_text).toLowerCase(),
-        );
+        const recipeIngredientNames = recipe.ingredients.map(ing => {
+          if (typeof ing === 'string') return (ing as string).toLowerCase();
+          if (ing && typeof ing === 'object' && 'name' in ing) {
+            return (ing as { name: string }).name.toLowerCase();
+          }
+          if (ing && typeof ing === 'object' && 'original_text' in ing) {
+            return (ing as { original_text: string }).original_text.toLowerCase();
+          }
+          return '';
+        });
 
         const matchingIngredientCount = lowerIngredients.filter(searchIng =>
           recipeIngredientNames.some(recipeIng => recipeIng.includes(searchIng)),

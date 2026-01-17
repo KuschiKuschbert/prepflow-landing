@@ -19,18 +19,19 @@ export async function handleDeleteRecipe(recipeId: string) {
 
     try {
       await deleteRecipeAndCleanup(recipeId);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as { message?: string; code?: string };
       logger.error('[RecipeDelete] Error deleting recipe:', {
-        error: error.message,
-        code: error.code,
+        error: err.message,
+        code: err.code,
         context: { endpoint: '/api/recipes/[id]', operation: 'DELETE', recipeId },
       });
 
       if (
-        error.message?.includes('foreign key constraint') ||
-        error.message?.includes('menu_dishes') ||
-        error.message?.includes('dish_recipes') ||
-        error.code === '23503'
+        err.message?.includes('foreign key constraint') ||
+        err.message?.includes('menu_dishes') ||
+        err.message?.includes('dish_recipes') ||
+        err.code === '23503'
       ) {
         return NextResponse.json(
           ApiErrorHandler.createError(

@@ -30,6 +30,143 @@ interface RawIngredientRow {
 }
 
 /** Fetches ingredients for a dish with fallback logic */
+/**
+ * Helper to manually fetch ingredients and join them with dish_ingredients
+ */
+async function manualFetchAndJoinIngredients(dishId: string) {
+  logger.dev('[Dishes API] Join returned empty, fetching dish_ingredients without join', {
+    dishId,
+  });
+
+  if (!supabaseAdmin) {
+    logger.error('[Dishes API] Database connection not available for manual fetch');
+    return null;
+  }
+
+  const { data: rawDishIngredients, error: rawError } = await supabaseAdmin
+    .from('dish_ingredients')
+    .select('id, ingredient_id, quantity, unit')
+    .eq('dish_id', dishId);
+
+  if (rawError) {
+    const rawPgError = rawError as PostgrestError;
+    logger.warn('[Dishes API] Error fetching raw dish_ingredients:', {
+      error: rawPgError.message,
+      code: rawPgError.code,
+    });
+    return null;
+  }
+
+  if (!rawDishIngredients || rawDishIngredients.length === 0) {
+    return [];
+  }
+
+  // Manually fetch ingredients and join
+  const ingredientIds = rawDishIngredients
+    .map(di => di.ingredient_id)
+    .filter((id): id is string => Boolean(id));
+
+  if (ingredientIds.length === 0) return [];
+
+  const { data: ingredientsData, error: ingFetchError } = await supabaseAdmin
+    .from('ingredients')
+    .select(
+      'id, ingredient_name, cost_per_unit, cost_per_unit_incl_trim, trim_peel_waste_percentage, yield_percentage, unit, supplier, category, brand, allergens, allergen_source'
+    )
+    .in('id', ingredientIds);
+
+  if (ingFetchError) {
+    logger.warn('[Dishes API] Error fetching ingredients for manual join:', {
+      error: ingFetchError.message,
+    });
+    return null;
+  }
+
+  if (!ingredientsData) return null;
+
+  // Create a map for quick lookup
+  const ingredientsMap = new Map<string, RawIngredientRow>(
+    (ingredientsData as RawIngredientRow[]).map(ing => [ing.id, ing])
+  );
+
+  // Manually join the data
+  const joinedData = rawDishIngredients.map(di => {
+    const ingredient = di.ingredient_id ? ingredientsMap.get(di.ingredient_id) : undefined;
+    return {
+      ...di,
+      ingredients: ingredient
+        ? [
+            {
+              ...ingredient,
+              supplier_name: ingredient.supplier || ingredient.supplier_name,
+            },
+          ]
+        : [],
+    };
+  });
+
+  logger.dev('[Dishes API] Manually joined dish ingredients', {
+    dishId,
+    count: joinedData.length,
+    joinedCount: joinedData.filter(di => di.ingredients.length > 0).length,
+  });
+
+  return joinedData;
+}
+
+/**
+ * Helper to retry fetching without the category column (schema drift coverage)
+ */
+async function retryFetchWithoutCategory(dishId: string) {
+  if (!supabaseAdmin) {
+    return { data: [], error: { message: 'DB not available' } as PostgrestError };
+  }
+
+  logger.warn('[Dishes API] Category column not found, retrying without category', {
+    context: { endpoint: '/api/dishes/[id]', operation: 'GET', dishId },
+  });
+
+  const retryResult = await supabaseAdmin
+    .from('dish_ingredients')
+    .select(
+      `
+      id,
+      dish_id,
+      ingredient_id,
+      quantity,
+      unit,
+      ingredients (
+        id,
+        ingredient_name,
+        cost_per_unit,
+        cost_per_unit_incl_trim,
+        trim_peel_waste_percentage,
+        yield_percentage,
+        unit,
+        supplier,
+        brand,
+        allergens,
+        allergen_source
+      )
+    `
+    )
+    .eq('dish_id', dishId);
+
+  // Normalize the retry result to include category as null/undefined for type compatibility
+  const retryData = (retryResult.data || []) as unknown as Record<string, unknown>[];
+  const normalizedData = retryData.map(item => ({
+    ...item,
+    ingredients: Array.isArray(item.ingredients)
+      ? item.ingredients.map((ing: Record<string, unknown>) => ({ ...ing, category: null }))
+      : item.ingredients
+      ? { ...(item.ingredients as Record<string, unknown>), category: null }
+      : null,
+  }));
+
+  return { data: normalizedData, error: retryResult.error };
+}
+
+/** Fetches ingredients for a dish with fallback logic */
 export async function fetchDishIngredients(dishId: string): Promise<DishRelationIngredient[]> {
   if (!supabaseAdmin) {
     logger.error('[Dishes API] Database connection not available for fetchDishIngredients');
@@ -60,7 +197,7 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
         allergens,
         allergen_source
       )
-    `,
+    `
     )
     .eq('dish_id', dishId);
 
@@ -70,120 +207,23 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
     (!dishIngredients || dishIngredients.length === 0) &&
     (!pgError || pgError.code !== '42703')
   ) {
-    logger.dev('[Dishes API] Join returned empty, fetching dish_ingredients without join', {
-      dishId,
-    });
-
-    const { data: rawDishIngredients, error: rawError } = await supabaseAdmin
-      .from('dish_ingredients')
-      .select('id, ingredient_id, quantity, unit')
-      .eq('dish_id', dishId);
-
-    if (rawError) {
-      const rawPgError = rawError as PostgrestError;
-      logger.warn('[Dishes API] Error fetching raw dish_ingredients:', {
-        error: rawPgError.message,
-        code: rawPgError.code,
-      });
-    } else if (rawDishIngredients && rawDishIngredients.length > 0) {
-      // Manually fetch ingredients and join
-      const ingredientIds = rawDishIngredients
-        .map(di => di.ingredient_id)
-        .filter((id): id is string => Boolean(id));
-      if (ingredientIds.length > 0) {
-        const { data: ingredientsData, error: ingFetchError } = await supabaseAdmin
-          .from('ingredients')
-          .select(
-            'id, ingredient_name, cost_per_unit, cost_per_unit_incl_trim, trim_peel_waste_percentage, yield_percentage, unit, supplier, category, brand, allergens, allergen_source',
-          )
-          .in('id', ingredientIds);
-
-        if (ingFetchError) {
-          logger.warn('[Dishes API] Error fetching ingredients for manual join:', {
-            error: ingFetchError.message,
-          });
-        } else if (ingredientsData) {
-          // Create a map for quick lookup
-          const ingredientsMap = new Map<string, RawIngredientRow>(
-            (ingredientsData as RawIngredientRow[]).map(ing => [ing.id, ing]),
-          );
-
-          // Manually join the data
-          dishIngredients = rawDishIngredients.map(di => {
-            const ingredient = di.ingredient_id ? ingredientsMap.get(di.ingredient_id) : undefined;
-            return {
-              ...di,
-              ingredients: ingredient
-                ? [
-                    {
-                      ...ingredient,
-                      supplier_name: ingredient.supplier || ingredient.supplier_name,
-                    },
-                  ]
-                : [],
-            };
-          }) as unknown as typeof dishIngredients;
-
-          logger.dev('[Dishes API] Manually joined dish ingredients', {
-            dishId,
-            count: dishIngredients?.length || 0,
-            joinedCount: Array.isArray(dishIngredients)
-              ? dishIngredients.filter((di: any) => di.ingredients !== null).length // Keep any for quick filter or use unknown
-              : 0,
-          });
-        }
-      }
+    const manualResult = await manualFetchAndJoinIngredients(dishId);
+    if (manualResult) {
+       // @ts-ignore - manualResult structure matches what we expect even if types are tricky
+       dishIngredients = manualResult;
     }
   }
 
   // If category column doesn't exist, retry without it
   const retryError = ingredientsError as PostgrestError | null;
   if (retryError && retryError.code === '42703' && retryError.message?.includes('category')) {
-    logger.warn('[Dishes API] Category column not found, retrying without category', {
-      context: { endpoint: '/api/dishes/[id]', operation: 'GET', dishId },
-    });
-
-    const retryResult = await supabaseAdmin
-      .from('dish_ingredients')
-      .select(
-        `
-        id,
-        dish_id,
-        ingredient_id,
-        quantity,
-        unit,
-        ingredients (
-          id,
-          ingredient_name,
-          cost_per_unit,
-          cost_per_unit_incl_trim,
-          trim_peel_waste_percentage,
-          yield_percentage,
-          unit,
-          supplier,
-          brand,
-          allergens,
-          allergen_source
-        )
-      `,
-      )
-      .eq('dish_id', dishId);
-
-    // Normalize the retry result to include category as null/undefined for type compatibility
-    const retryData = (retryResult.data || []) as unknown as Record<string, unknown>[];
-    dishIngredients = retryData.map(item => ({
-      ...item,
-      ingredients: Array.isArray(item.ingredients)
-        ? item.ingredients.map((ing: Record<string, unknown>) => ({ ...ing, category: null }))
-        : item.ingredients
-          ? { ...(item.ingredients as Record<string, unknown>), category: null }
-          : null,
-    })) as unknown as typeof dishIngredients;
-    ingredientsError = retryResult.error;
+    const { data, error } = await retryFetchWithoutCategory(dishId);
+    // @ts-ignore
+    dishIngredients = data;
+    ingredientsError = error;
   }
 
   // Log error if still present (but don't fail the whole request)
-
   if (ingredientsError) {
     logger.warn('[Dishes API] Error fetching dish ingredients (non-fatal):', {
       error: ingredientsError.message,

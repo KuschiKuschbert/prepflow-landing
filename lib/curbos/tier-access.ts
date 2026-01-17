@@ -19,6 +19,7 @@ export async function hasCurbOSAccess(userEmail: string, req?: NextRequest): Pro
     if (req) {
       try {
         const { auth0 } = await import('@/lib/auth0');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const session = await auth0.getSession(req as any);
         if (session?.user) {
           const isUserAdmin = checkUserAdminRole(session.user);

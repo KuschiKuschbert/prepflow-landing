@@ -1,8 +1,8 @@
 /**
  * Exchange authorization code for access token and refresh token.
  */
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { getSquareOAuthConfig } from '../../oauth-client';
 import { SQUARE_TOKEN_URL, type TokenResponse } from './constants';
 
@@ -71,9 +71,10 @@ export async function exchangeCodeForTokens(
     logger.dev('[Square OAuth] Successfully exchanged code for tokens');
 
     return tokenData;
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error('[Square OAuth] Error exchanging code:', {
-      error: error.message,
+      error: errorMessage,
       context: { operation: 'exchange_code' },
     });
     throw error;

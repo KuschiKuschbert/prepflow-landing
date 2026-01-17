@@ -1,11 +1,11 @@
 /**
  * Scheduled backup system - runs automatic backups at configured intervals.
  */
-import { createSupabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
-import type { BackupSchedule } from './types';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
 import { runUserScheduledBackup } from './scheduler/helpers/runUserScheduledBackup';
+import type { BackupSchedule } from './types';
 
 /** Run scheduled backups for all users with enabled schedules. */
 export async function runScheduledBackups(): Promise<void> {
@@ -43,8 +43,11 @@ export async function runScheduledBackups(): Promise<void> {
         autoUploadToDrive: schedule.auto_upload_to_drive,
       };
       await runUserScheduledBackup(mappedSchedule);
-    } catch (error: any) {
-      logger.error(`[Backup Scheduler] Failed to run backup for user ${schedule.user_id}:`, error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      logger.error(`[Backup Scheduler] Failed to run backup for user ${schedule.user_id}:`, {
+        error: errorMessage,
+      });
     }
   }
 }

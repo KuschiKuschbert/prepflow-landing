@@ -19,21 +19,22 @@ export interface SyncResult {
 
 export interface SquareCatalogObject {
   id: string;
-  type: string;
+  type: 'ITEM';
   itemData?: {
-    name?: string;
-    description?: string;
+    name?: string | null;
+    description?: string | null;
     variations?: Array<{
+      type: 'ITEM_VARIATION';
+      id: string;
       itemVariationData?: {
         name?: string;
-        pricingType?: string;
+        pricingType?: 'FIXED_PRICING' | 'VARIABLE_PRICING';
         priceMoney?: {
-          amount: bigint | number;
-          currency: string;
+          amount: bigint;
+          currency: 'AUD';
         };
       };
     }>;
-    categories?: string[];
   };
 }
 

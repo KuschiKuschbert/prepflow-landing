@@ -1,17 +1,19 @@
 /**
  * Update sync timestamp and log operation.
  */
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { logSyncOperation } from '../../../sync-log';
 import type { SyncResult } from '../types';
+
+import { Order } from 'square';
 
 /**
  * Update sync timestamp and log operation.
  */
 export async function updateSyncTimestampAndLog(
   userId: string,
-  orders: any[],
+  orders: Order[],
   result: SyncResult,
   startDate: string,
   endDate: string,

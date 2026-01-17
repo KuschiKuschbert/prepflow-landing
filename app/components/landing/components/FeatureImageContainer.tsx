@@ -1,8 +1,8 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
-import { RefObject, useState, useEffect } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 
 interface Feature {
   screenshot: string;
@@ -74,7 +74,7 @@ export function FeatureImageContainer({
   return (
     <div className="desktop:sticky desktop:top-24 desktop:flex-1 desktop:min-w-[55%] desktop:max-w-[60%] desktop:z-10 flex w-full items-stretch xl:max-w-[65%] xl:min-w-[58%]">
       <motion.div
-        ref={imageContainerRef as any}
+        ref={imageContainerRef}
         layout
         className="relative w-full flex-1 overflow-hidden rounded-3xl border border-white/8 bg-[#1f1f1f]/40 shadow-xl shadow-black/20"
         initial={{ opacity: 0, x: 10 }}

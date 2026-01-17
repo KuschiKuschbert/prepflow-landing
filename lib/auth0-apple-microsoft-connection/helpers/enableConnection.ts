@@ -11,7 +11,7 @@ interface EnableConnectionResult {
  * Enable connection for application
  */
 export async function enableConnectionForApp(
-  connection: any,
+  connection: Record<string, unknown> | undefined,
   applicationClientId: string,
   connectionType: 'apple' | 'microsoft',
   connectionName: string,
@@ -33,7 +33,12 @@ export async function enableConnectionForApp(
     };
   }
 
-  if (connection.enabled_clients?.includes(applicationClientId)) {
+  const currentEnabledClients =
+    Array.isArray(connection.enabled_clients) && connection.enabled_clients
+      ? (connection.enabled_clients as string[])
+      : [];
+
+  if (currentEnabledClients.includes(applicationClientId)) {
     return {
       success: true,
       enabled: true,
@@ -42,8 +47,11 @@ export async function enableConnectionForApp(
   }
 
   try {
-    const enabledClients = [...(connection.enabled_clients || []), applicationClientId];
-    await client.connections.update({ id: connection.id }, { enabled_clients: enabledClients });
+    const enabledClients = [...currentEnabledClients, applicationClientId];
+    await client.connections.update(
+      { id: connection.id as string },
+      { enabled_clients: enabledClients },
+    );
 
     logger.info(`[Auth0 ${connectionType}] Enabled ${connectionName} connection for application`, {
       connectionId: connection.id,

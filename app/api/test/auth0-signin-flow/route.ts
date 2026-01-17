@@ -69,13 +69,13 @@ export async function GET(req: NextRequest) {
               email: session.user?.email,
               name: session.user?.name,
               image: session.user?.picture,
-              roles: (session.user as Record<string, unknown>)?.roles as string[] || [],
+              roles: (session.user as { roles?: string[] })?.roles || [],
             },
             expiresAt: session.expiresAt,
           }
         : null,
       ...createDiagnosticStructure(),
-    } as any;
+    } as unknown as Diagnostic;
 
     // If session exists, test Management API with actual user ID
     if (session?.user?.email) {

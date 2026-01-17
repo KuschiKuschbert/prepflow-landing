@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
               email: session.user?.email,
               name: session.user?.name,
               image: session.user?.picture,
-              roles: (session.user as any)?.roles || [],
+              roles: (session.user as { roles?: string[] })?.roles || [],
             },
             expires: session.tokenSet?.expiresAt
               ? new Date(session.tokenSet.expiresAt * 1000).toISOString()

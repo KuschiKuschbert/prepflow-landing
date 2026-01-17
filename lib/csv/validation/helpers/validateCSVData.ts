@@ -1,4 +1,4 @@
-import type { ValidationSchema, ValidationResult, ValidationError } from '../types';
+import type { ValidationError, ValidationResult, ValidationSchema } from '../types';
 import { validateValue } from './validateValue';
 
 /**
@@ -10,7 +10,7 @@ import { validateValue } from './validateValue';
  * @returns {ValidationResult} Validation result with errors and warnings
  */
 export function validateCSVData(
-  data: any[],
+  data: Record<string, unknown>[],
   schema: ValidationSchema,
   stopOnFirstError = false,
 ): ValidationResult {

@@ -2,8 +2,8 @@
  * Google Drive folder management for backups.
  */
 
-import { google, type Auth } from 'googleapis';
 import { logger } from '@/lib/logger';
+import { google, type Auth } from 'googleapis';
 
 /**
  * Ensure user-specific folder exists in Google Drive.
@@ -42,8 +42,9 @@ export async function ensureUserBackupFolder(
       });
       parentFolderId = parentCreate.data.id || null;
     }
-  } catch (error: any) {
-    logger.error('[Google Drive] Failed to create/find parent folder:', error);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error('[Google Drive] Failed to create/find parent folder:', { error: errorMessage });
     throw new Error('Failed to create backup folder structure');
   }
 

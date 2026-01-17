@@ -14,7 +14,10 @@ import { getAllergenDisplayName } from '@/lib/allergens/australian-allergens';
  * @param {any[]} [ingredients] - Optional ingredients list for recipes
  * @returns {string} AI prompt for description generation
  */
-export function buildMenuItemDescriptionPrompt(menuItem: MenuItem, ingredients?: any[]): string {
+export function buildMenuItemDescriptionPrompt(
+  menuItem: MenuItem,
+  ingredients?: Record<string, unknown>[],
+): string {
   const isDish = !!menuItem.dish_id;
   const isRecipe = !!menuItem.recipe_id;
 
@@ -38,7 +41,12 @@ export function buildMenuItemDescriptionPrompt(menuItem: MenuItem, ingredients?:
   let ingredientText = '';
   if (ingredients && ingredients.length > 0) {
     const ingredientNames = ingredients
-      .map(ing => ing.ingredients?.ingredient_name || ing.ingredient_name || '')
+      .map(
+        ing =>
+          ((ing.ingredients as Record<string, unknown>)?.ingredient_name as string) ||
+          (ing.ingredient_name as string) ||
+          '',
+      )
       .filter(Boolean)
       .slice(0, 10); // Limit to first 10 ingredients
     ingredientText = `\n**Key Ingredients:**\n${ingredientNames.map(name => `- ${name}`).join('\n')}`;

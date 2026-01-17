@@ -59,7 +59,12 @@ export async function POST(req: NextRequest) {
       return validation.error!;
     }
 
-    const { subject, message, type, related_error_id } = validation.data as any;
+    const { subject, message, type, related_error_id } = validation.data as {
+      subject: string;
+      message: string;
+      type: string;
+      related_error_id?: string;
+    };
 
     // Try to find user_id from email
     const userId = await getUserId(userEmail);

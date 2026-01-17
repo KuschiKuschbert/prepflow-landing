@@ -1,10 +1,10 @@
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { invalidateTierCache } from '@/lib/tier-config-db';
 import { logTierConfigChange } from '@/lib/admin-audit';
-import { NextRequest, NextResponse } from 'next/server';
 import type { AdminUser } from '@/lib/admin-auth';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
+import { invalidateTierCache } from '@/lib/tier-config-db';
+import { NextRequest, NextResponse } from 'next/server';
 /**
  * Updates a tier configuration in the database.
  *
@@ -12,14 +12,14 @@ import type { AdminUser } from '@/lib/admin-auth';
  * @param {Record<string, unknown>} updates - Update data.
  * @param {AdminUser} adminUser - The admin user updating the tier.
  * @param {NextRequest} request - The request object for audit logging.
- * @returns {Promise<{ tier: any } | NextResponse>} Updated tier data or error response.
+ * @returns {Promise<{ tier: Record<string, unknown> } | NextResponse>} Updated tier data or error response.
  */
 export async function updateTier(
   tierSlug: string,
   updates: Record<string, unknown>,
   adminUser: AdminUser,
   request: NextRequest,
-): Promise<{ tier: unknown } | NextResponse> {
+): Promise<{ tier: Record<string, unknown> } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503),

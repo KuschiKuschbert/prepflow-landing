@@ -53,9 +53,10 @@ export async function updateOrderList(
       .eq('order_list_id', id);
 
     if (deleteItemsError) {
-      logger.warn('[Order Lists API] Warning: Could not delete existing order list items:', {
-        error: deleteItemsError.message,
-        code: (deleteItemsError as any).code,
+      const err = deleteItemsError as { code?: string; message?: string };
+      logger.error('Error deleting old order list items', {
+        error: err.message,
+        code: err.code,
         orderListId: id,
       });
     }

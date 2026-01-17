@@ -16,13 +16,13 @@ const updateErrorSchema = z.object({
  * @param {string} errorId - The ID of the error log to update.
  * @param {z.infer<typeof updateErrorSchema>} updates - Validated update data.
  * @param {AdminUser} adminUser - The admin user making the update.
- * @returns {Promise<{ errorLog: any } | NextResponse>} Updated error log data or error response.
+ * @returns {Promise<{ errorLog: Record<string, unknown> } | NextResponse>} Updated error log data or error response.
  */
 export async function updateError(
   errorId: string,
   updates: z.infer<typeof updateErrorSchema>,
   adminUser: AdminUser,
-): Promise<{ errorLog: unknown } | NextResponse> {
+): Promise<{ errorLog: Record<string, unknown> } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

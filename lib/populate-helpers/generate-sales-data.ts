@@ -6,9 +6,9 @@ import { createSupabaseAdmin } from '@/lib/supabase';
 
 import { logger } from '@/lib/logger';
 
-interface Recipe {
+export interface Recipe {
   id: string;
-  recipe_name: string;
+  recipe_name?: string;
   name?: string; // For backward compatibility
 }
 

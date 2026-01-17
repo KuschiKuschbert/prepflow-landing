@@ -27,7 +27,7 @@ import { detectRecipeChanges } from './detectRecipeChanges';
  */
 export async function handleRecipeUpdate(
   recipeId: string,
-  body: any,
+  body: unknown,
   request: NextRequest,
 ): Promise<unknown> {
   // Get user email for change tracking
@@ -51,9 +51,11 @@ export async function handleRecipeUpdate(
     logger.warn('[Recipes API] Could not fetch current recipe for change detection:', err);
   }
 
-  const updateData = buildUpdateData(body);
-  const ingredientsChanged = body.ingredients !== undefined;
-  const yieldChanged = body.yield !== undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateData = buildUpdateData(body as Record<string, unknown>);
+  const safeBody = body as Record<string, unknown>;
+  const ingredientsChanged = safeBody.ingredients !== undefined;
+  const yieldChanged = safeBody.yield !== undefined;
 
   // Detect changes
   const { changeType, changeDetails } = detectRecipeChanges(

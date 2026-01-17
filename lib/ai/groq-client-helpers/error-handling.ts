@@ -9,14 +9,15 @@ import { parseAIError } from '../utils/errorParser';
  * Handle Groq API error responses
  */
 export function handleGroqError(response: Response, errorText: string): Error {
-  let errorJson: any = null;
+  let errorJson: unknown = null;
   try {
     errorJson = JSON.parse(errorText);
   } catch {
     // Not JSON, use as text
   }
 
-  const errorMessage = errorJson?.error?.message || errorText || `HTTP ${response.status}`;
+  const errorObj = errorJson as { error?: { message?: string } } | null;
+  const errorMessage = errorObj?.error?.message || errorText || `HTTP ${response.status}`;
   const error = new Error(`Groq API error: ${errorMessage}`);
   const parsedError = parseAIError(error);
 

@@ -1,13 +1,13 @@
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 /**
  * Fetches all tier configurations from the database.
  *
- * @returns {Promise<{ tiers: any[] } | NextResponse>} Tiers data or error response.
+ * @returns {Promise<{ tiers: Record<string, unknown>[] } | NextResponse>} Tiers data or error response.
  */
-export async function fetchTiers(): Promise<{ tiers: unknown[] } | NextResponse> {
+export async function fetchTiers(): Promise<{ tiers: Record<string, unknown>[] } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 503),

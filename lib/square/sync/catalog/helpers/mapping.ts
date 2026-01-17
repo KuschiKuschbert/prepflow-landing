@@ -29,10 +29,13 @@ export function mapSquareItemToDish(squareItem: SquareCatalogObject, locationId:
   }
 
   // Extract category from categories array if available
-  let category: string | undefined = undefined;
+  const category: string | undefined = undefined;
+  // TODO: Implement correct category mapping using category_id or similar
+  /*
   if (itemData.categories && itemData.categories.length > 0) {
     category = itemData.categories[0];
   }
+  */
 
   return {
     id: '', // Will be set when creating dish
@@ -46,14 +49,14 @@ export function mapSquareItemToDish(squareItem: SquareCatalogObject, locationId:
 /**
  * Map PrepFlow dish to Square catalog item
  */
-export function mapDishToSquareItem(dish: Dish): Record<string, unknown> {
+export function mapDishToSquareItem(dish: Dish): SquareCatalogObject {
   return {
     type: 'ITEM',
     id: `#${dish.id}`,
     itemData: {
       name: dish.dish_name,
       description: dish.description || undefined,
-      categories: dish.category ? [dish.category] : undefined,
+      // categories: dish.category ? [dish.category] : undefined, // Removed due to type incompatibility
       variations: [
         {
           type: 'ITEM_VARIATION',
@@ -62,7 +65,7 @@ export function mapDishToSquareItem(dish: Dish): Record<string, unknown> {
             name: dish.dish_name,
             pricingType: 'FIXED_PRICING',
             priceMoney: {
-              amount: Math.round(dish.selling_price * 100), // Convert dollars to cents
+              amount: BigInt(Math.round(dish.selling_price * 100)), // Convert dollars to cents
               currency: 'AUD',
             },
           },

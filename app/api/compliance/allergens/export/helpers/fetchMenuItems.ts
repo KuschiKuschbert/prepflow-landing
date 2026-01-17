@@ -23,6 +23,40 @@ interface MenuItemRow {
  *
  * @returns {Promise<Record<string, MenuItem[]>>} Map of item ID to menu items
  */
+/**
+ * Helper to process a single menu item row
+ */
+function processMenuItemRow(
+  item: MenuItemRow,
+  menuItemsMap: Record<string, MenuItem[]>
+): void {
+  const itemId = item.dish_id || item.recipe_id;
+  const menus = item.menus || [];
+
+  if (!itemId || menus.length === 0) return;
+
+  if (!menuItemsMap[itemId]) {
+    menuItemsMap[itemId] = [];
+  }
+
+  const existingMenuIds = new Set(menuItemsMap[itemId].map(m => m.menu_id));
+
+  menus.forEach(menu => {
+    if (!existingMenuIds.has(menu.id)) {
+      menuItemsMap[itemId].push({
+        menu_id: menu.id,
+        menu_name: menu.menu_name || 'Unknown Menu',
+      });
+      existingMenuIds.add(menu.id);
+    }
+  });
+}
+
+/**
+ * Fetches menu items mapping for dishes and recipes
+ *
+ * @returns {Promise<Record<string, MenuItem[]>>} Map of item ID to menu items
+ */
 export async function fetchMenuItemsMap(): Promise<Record<string, MenuItem[]>> {
   if (!supabaseAdmin) {
     logger.error('[Allergen Export] Database connection not available for fetchMenuItemsMap');
@@ -37,21 +71,7 @@ export async function fetchMenuItemsMap(): Promise<Record<string, MenuItem[]>> {
 
     if (!menuItemsError && menuItems) {
       (menuItems as MenuItemRow[]).forEach(item => {
-        const itemId = item.dish_id || item.recipe_id;
-        const menus = item.menus || [];
-        if (itemId && menus.length > 0) {
-          if (!menuItemsMap[itemId]) {
-            menuItemsMap[itemId] = [];
-          }
-          menus.forEach(menu => {
-            if (!menuItemsMap[itemId].some(m => m.menu_id === menu.id)) {
-              menuItemsMap[itemId].push({
-                menu_id: menu.id,
-                menu_name: menu.menu_name || 'Unknown Menu',
-              });
-            }
-          });
-        }
+        processMenuItemRow(item, menuItemsMap);
       });
     }
   } catch (err) {

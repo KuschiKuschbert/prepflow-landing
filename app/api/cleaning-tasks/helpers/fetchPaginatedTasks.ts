@@ -16,6 +16,7 @@ import { DBCleaningTask } from './types';
  * @returns {Promise<{ data: DBCleaningTask[]; total: number }>} Paginated tasks and total count
  */
 export async function fetchPaginatedTasks(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   query: any,
   page: number,
   pageSize: number,
@@ -33,7 +34,8 @@ export async function fetchPaginatedTasks(
   const { data, error, count } = await query.range(from, to);
 
   if (error) {
-    const errorCode = error.code;
+    const pgError = error as { code: string; message: string };
+    const errorCode = pgError.code;
 
     if (errorCode === '42P01') {
       logger.dev('[Cleaning Tasks API] Table does not exist, returning empty array');
@@ -41,7 +43,7 @@ export async function fetchPaginatedTasks(
     }
 
     logger.error('[Cleaning Tasks API] Database error fetching tasks:', {
-      error: error.message,
+      error: pgError.message,
       code: errorCode,
       context: { endpoint: '/api/cleaning-tasks', operation: 'GET', table: 'cleaning_tasks' },
     });

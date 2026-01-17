@@ -18,7 +18,6 @@ const customJestConfig = {
     '<rootDir>/lib/performance-monitor.test.ts',
     '<rootDir>/lib/qr-codes/QRCodeDisplay.test.tsx',
     '<rootDir>/app/webapp/temperature/components/utils.test.ts',
-    '<rootDir>/__tests__/ingredients.api.test.ts',
     '<rootDir>/__tests__/exports/template-generation.test.ts',
     '<rootDir>/__tests__/reset-self.api.test.ts',
   ],

@@ -4,7 +4,7 @@
  */
 import { logger } from '@/lib/logger';
 import { queueSyncOperation } from '../auto-sync-queue';
-import { shouldAutoSync, getAutoSyncConfig } from './autoSyncConfig';
+import { getAutoSyncConfig, shouldAutoSync } from './autoSyncConfig';
 
 export async function queueEntitySync(
   userId: string,
@@ -70,13 +70,13 @@ export async function queueEntitySync(
       direction,
       priority,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Auto-Sync] Error queueing sync:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
       entityType,
       entityId,
-      stack: error.stack,
+      stack: error instanceof Error ? error.stack : undefined,
     });
     // Don't throw - auto-sync failures shouldn't break main operations
   }

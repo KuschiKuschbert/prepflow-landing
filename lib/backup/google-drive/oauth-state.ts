@@ -42,8 +42,9 @@ export function verifySecureState(stateToken: string, maxAgeMs: number = 10 * 60
     }
 
     return stateData.userId;
-  } catch (error: any) {
-    logger.error('[Google Drive] Failed to verify state token:', error);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error('[Google Drive] Failed to verify state token:', { error: errorMessage });
     throw new Error('Invalid OAuth state token');
   }
 }

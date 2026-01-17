@@ -105,9 +105,10 @@ export class RSIOrchestrator {
       const { stdout, stderr } = await execAsync(command);
       console.log(stdout);
       if (stderr) console.error(stderr);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(`Script ${scriptName} failed:`);
-      console.error(error.message);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(errorMessage);
       // Don't throw, allow valid modules to finish?
       // For now, let's keep going.
     }

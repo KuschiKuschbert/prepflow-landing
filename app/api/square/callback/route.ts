@@ -85,14 +85,15 @@ export async function GET(request: NextRequest) {
 
     // Redirect to Square configuration page with success message
     return NextResponse.redirect(`${baseUrl}/webapp/square#configuration?success=square_connected`);
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as Error;
     logger.error('[Square Callback] Error:', {
-      error: error.message,
+      error: err.message,
       context: { endpoint: '/api/square/callback', method: 'GET' },
     });
 
     return NextResponse.redirect(
-      `${baseUrl}/webapp/square?error=${encodeURIComponent(error.message || 'oauth_failed')}`,
+      `${baseUrl}/webapp/square?error=${encodeURIComponent(err.message || 'oauth_failed')}`,
     );
   }
 }

@@ -19,7 +19,15 @@ export async function getUserRoles(auth0UserId: string): Promise<string[]> {
       return [];
     }
 
-    const roleNames = roles.map((role: any) => role.name || role).filter(Boolean);
+    const roleNames = roles
+      .map((role: unknown) => {
+        if (typeof role === 'string') return role;
+        if (typeof role === 'object' && role !== null && 'name' in role) {
+          return (role as { name: string }).name;
+        }
+        return null;
+      })
+      .filter((name): name is string => Boolean(name));
 
     if (roleNames.length > 0) {
       logger.dev(

@@ -4,7 +4,7 @@
 
 import { isRecipeFormatted } from '@/lib/utils/recipe-format-detection';
 
-interface RecipeEntry {
+export interface RecipeEntry {
   id?: string;
   recipe_name?: string;
   updated_at?: string;
@@ -40,13 +40,14 @@ export function filterByFormatAtIndex(entries: RecipeEntry[], formatFilter: stri
 /**
  * Filter recipes by format status after loading (SLOW - requires file loading)
  */
-export function filterByFormatAfterLoad(recipes: any[], formatFilter: string): unknown[] {
+export function filterByFormatAfterLoad(recipes: unknown[], formatFilter: string): unknown[] {
   if (formatFilter === 'all') {
     return recipes;
   }
 
   return recipes.filter(recipe => {
-    const formatted = isRecipeFormatted(recipe);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const formatted = isRecipeFormatted(recipe as RecipeEntry);
     return formatFilter === 'formatted' ? formatted : !formatted;
   });
 }

@@ -11,7 +11,10 @@ export interface RefinementSuggestion {
 }
 
 export class PatternRefiner {
-  static async refine(pattern: string, feedback: any[]): Promise<RefinementSuggestion | null> {
+  static async refine(
+    pattern: string,
+    feedback: Record<string, unknown>[],
+  ): Promise<RefinementSuggestion | null> {
     // Mock logic
     // If a pattern has high false positive rate (from feedback), suggest adding constraints.
 

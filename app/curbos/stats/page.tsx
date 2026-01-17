@@ -61,7 +61,7 @@ export default function StatsPage() {
   transactions.forEach(t => {
     try {
         const items = JSON.parse(t.items_json)
-        items.forEach((i: any) => {
+        items.forEach((i: { name: string; quantity?: number }) => {
             itemCounts[i.name] = (itemCounts[i.name] || 0) + (i.quantity || 1)
         })
     } catch (e) {}

@@ -9,5 +9,5 @@ export interface WebhookEventLog {
   processing_time_ms?: number;
   success?: boolean;
   error_message?: string;
-  event_data?: any;
+  event_data?: Record<string, unknown> | null;
 }

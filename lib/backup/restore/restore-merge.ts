@@ -2,11 +2,11 @@
  * Merge restore operation - merges backup data with existing data.
  */
 
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
-import type { BackupData, RestoreResult, MergeOptions } from '../types';
-import { validateBackupUser } from './helpers/validate-restore';
+import { createSupabaseAdmin } from '@/lib/supabase';
+import type { BackupData, MergeOptions, RestoreResult } from '../types';
 import { getExistingRecords, mergeRecords } from './helpers/merge-records';
+import { validateBackupUser } from './helpers/validate-restore';
 
 /**
  * Default merge options.
@@ -76,13 +76,14 @@ export async function restoreMerge(
           conflicts[tableName] = conflictCount;
         }
       }
-    } catch (error: any) {
-      if (error.message?.includes('does not exist')) {
-        logger.dev(`[Restore] Skipping table ${tableName}: ${error.message}`);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (errorMessage.includes('does not exist')) {
+        logger.dev(`[Restore] Skipping table ${tableName}: ${errorMessage}`);
         continue;
       }
-      errors.push(`Failed to merge ${tableName}: ${error.message}`);
-      logger.error(`[Restore] Failed to merge ${tableName}:`, error);
+      errors.push(`Failed to merge ${tableName}: ${errorMessage}`);
+      logger.error(`[Restore] Failed to merge ${tableName}:`, { error: errorMessage });
     }
   }
 

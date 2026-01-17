@@ -29,9 +29,10 @@ export class ValidationSuite {
         await execAsync('npx tsc --noEmit');
         console.log('✅ Type check passed.');
         return true;
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('❌ Type check failed. Analyzing errors...');
-        const output = err.stdout || err.message;
+        const errorObj = err as Error & { stdout?: string };
+        const output = errorObj.stdout || errorObj.message;
 
         // Extract file paths from TSC output
         // Example: app/webapp/temperature/components/TemperatureLogCard.tsx(24,87): error TS1005...

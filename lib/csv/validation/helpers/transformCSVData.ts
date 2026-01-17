@@ -9,7 +9,7 @@ import type { ValidationSchema } from '../types';
  */
 export function transformCSVData<T extends object>(data: T[], schema: ValidationSchema): T[] {
   return data.map(row => {
-    const transformedRow: any = { ...row };
+    const transformedRow: Record<string, unknown> = { ...(row as Record<string, unknown>) };
 
     Object.entries(schema).forEach(([field, rule]) => {
       if (rule.transform && transformedRow[field] !== undefined) {

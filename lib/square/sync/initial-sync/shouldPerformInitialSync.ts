@@ -1,8 +1,8 @@
 /**
  * Check if initial sync should be performed.
  */
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 
 /**
  * Check if initial sync should be performed
@@ -33,9 +33,9 @@ export async function shouldPerformInitialSync(userId: string): Promise<boolean>
 
     // If no mappings exist, initial sync should be performed
     return !data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('[Square Initial Sync] Unexpected error checking initial sync status:', {
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       userId,
     });
     return false;

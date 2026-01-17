@@ -36,13 +36,7 @@ export function aggregateIngredientsBySection(
 
       for (const dishRecipe of dishRecipesForDish) {
         // Find the recipe name from the menu items if possible, or we might need another source
-        // The original logic tried to find a menu item with this recipe_id.
-        // menuItems.find((mi: any) => ...)
-
         // ISSUE: dishRecipe has recipe_id, but we need recipe metadata (name).
-        // The original code was: menuItems.find((mi: any) => mi.recipe_id === dishRecipe.recipe_id)?.recipes;
-        // This assumes every recipe used in a dish is also listed as a standalone menu item? That seems potentially flaky but if that's the logic...
-        // Better: We should probably use the recipe dictionary that we fetched? But this function doesn't receive it.
         // We will stick to the original logic but type safe it.
 
         const foundItem = menuItems.find(mi => mi.recipe_id === dishRecipe.recipe_id);

@@ -72,7 +72,7 @@ export function BenefitsSection() {
               variant="fade-up"
               delay={getStaggerDelay(index)}
             >
-              <GlowCard glowColor={colors.glow as any} className="p-8">
+              <GlowCard glowColor={colors.glow as string} className="p-8">
                 <h4
                   className={`${LANDING_TYPOGRAPHY.xl} mb-4 font-light ${colors.text}`}
                 >

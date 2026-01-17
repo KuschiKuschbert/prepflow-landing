@@ -1,10 +1,10 @@
 'use client'
 
+import { useConfirm } from '@/hooks/useConfirm'
 import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase-pos'
 import { Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { useConfirm } from '@/hooks/useConfirm'
 import MenuItemCard from './components/MenuItemCard'
 
 // Define types locally for simplicity
@@ -19,10 +19,10 @@ interface MenuItem {
 }
 
 export default function CurbOSAdmin() {
-  const [items, setItems] = useState<any[]>([])
+  const [items, setItems] = useState<MenuItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingItem, setEditingItem] = useState<any>(null)
+  const [editingItem, setEditingItem] = useState<MenuItem | null>(null)
   const { showConfirm, ConfirmDialog } = useConfirm()
 
   // Form State
@@ -99,7 +99,7 @@ export default function CurbOSAdmin() {
     if (!error) fetchItems()
   }
 
-  function openModal(item?: any) {
+  function openModal(item?: MenuItem) {
     if (item) {
       setEditingItem(item)
       setName(item.name)

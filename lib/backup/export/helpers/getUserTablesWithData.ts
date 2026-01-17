@@ -1,8 +1,8 @@
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
 import type { TableData } from '../../types';
-import { getUserTableData, getChildTableData } from './fetchTableData';
-import { USER_TABLES, CHILD_TABLES } from './tableConfig';
+import { getChildTableData, getUserTableData } from './fetchTableData';
+import { CHILD_TABLES, USER_TABLES } from './tableConfig';
 
 /**
  * Get list of tables with data for a user.
@@ -46,8 +46,9 @@ export async function getUserTablesWithData(userId: string): Promise<TableData[]
       }
 
       const parentIds = (parentData || [])
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .map((row: any) => row[childTable.parentIdColumn])
-        .filter(Boolean);
+        .filter(Boolean) as string[];
 
       if (parentIds.length > 0) {
         const childData = await getChildTableData(childTable.name, childTable.fk, parentIds);

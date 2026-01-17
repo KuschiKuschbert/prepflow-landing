@@ -8,7 +8,7 @@ import type { ValidationRule } from '../types';
  * @param {string} fieldName - Field name for error messages
  * @returns {string | null} Error message or null if valid
  */
-export function validateValue(value: any, rule: ValidationRule, fieldName: string): string | null {
+export function validateValue(value: unknown, rule: ValidationRule, fieldName: string): string | null {
   if (rule.required && (value === null || value === undefined || value === '')) {
     return `${fieldName} is required`;
   }
@@ -25,7 +25,7 @@ export function validateValue(value: any, rule: ValidationRule, fieldName: strin
         }
         break;
       case 'number':
-        const numValue = typeof value === 'string' ? parseFloat(value) : value;
+        const numValue = typeof value === 'string' ? parseFloat(value) : Number(value);
         if (isNaN(numValue)) {
           return `${fieldName} must be a number`;
         }
@@ -48,7 +48,7 @@ export function validateValue(value: any, rule: ValidationRule, fieldName: strin
         }
         break;
       case 'date':
-        const dateValue = new Date(value);
+        const dateValue = new Date(value as string | number | Date);
         if (isNaN(dateValue.getTime())) {
           return `${fieldName} must be a valid date`;
         }

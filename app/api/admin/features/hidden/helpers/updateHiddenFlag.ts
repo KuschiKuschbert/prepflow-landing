@@ -1,6 +1,6 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -15,11 +15,11 @@ const updateHiddenFlagSchema = z.object({
  * Updates a hidden feature flag in the database.
  *
  * @param {z.infer<typeof updateHiddenFlagSchema>} validated - Validated update data.
- * @returns {Promise<{ flag: any } | NextResponse>} Updated flag data or error response.
+ * @returns {Promise<{ flag: Record<string, unknown> } | NextResponse>} Updated flag data or error response.
  */
 export async function updateHiddenFlag(
   validated: z.infer<typeof updateHiddenFlagSchema>,
-): Promise<{ flag: unknown } | NextResponse> {
+): Promise<{ flag: Record<string, unknown> } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

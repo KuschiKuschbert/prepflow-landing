@@ -5,8 +5,16 @@ import { ResponsiveCardActionsMenu } from '@/components/ui/ResponsiveCardActions
 import { ResponsiveCardActionsOverlay } from '@/components/ui/ResponsiveCardActionsOverlay'
 import { Edit, Flame, GlassWater, IceCream2, Shirt, Trash2, UtensilsCrossed } from 'lucide-react'
 
+interface MenuItem {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  imageUrl?: string;
+}
+
 interface MenuItemCardProps {
-  item: any
+  item: MenuItem
   onEdit: () => void
   onDelete: () => void
 }

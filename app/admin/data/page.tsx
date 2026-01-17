@@ -1,14 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { Database, Search, Download, Filter } from 'lucide-react';
 import { logger } from '@/lib/logger';
+import { Database, Download, Search } from 'lucide-react';
+import { useState } from 'react';
 
 interface SearchResult {
   table: string;
   id: string;
-  data: any;
+  data: unknown;
   created_at?: string;
 }
 

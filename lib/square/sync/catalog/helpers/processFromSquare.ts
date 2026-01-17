@@ -3,18 +3,23 @@
  */
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { SquareClient } from 'square';
 import { getMappingBySquareId } from '../../../mappings';
 import type { SyncResult } from '../../catalog';
+import { SquareCatalogObject } from '../../catalog';
 import { logCatalogSyncOperation } from './common';
 import { createNewDish } from './createNewDish';
 import { mapSquareItemToDish } from './mapping';
 import { updateExistingDish } from './updateExistingDish';
 
+type CatalogApi = SquareClient['catalog'];
+type CatalogObject = NonNullable<Awaited<ReturnType<CatalogApi['batchGet']>>['objects']>[number];
+
 /**
  * Process a single Square catalog item for sync to PrepFlow
  */
 export async function processSquareCatalogItem(
-  squareItem: any, // Keeping any for now to match SDK type issues, but removing others
+  squareItem: CatalogObject,
   userId: string,
   locationId: string,
   result: SyncResult,
@@ -25,13 +30,13 @@ export async function processSquareCatalogItem(
   }
 
   try {
-    if (!squareItem.id || !squareItem.itemData) {
+    if (!squareItem.id || squareItem.type !== 'ITEM' || !squareItem.itemData) {
       return;
     }
 
     const squareItemId = squareItem.id;
     const mapping = await getMappingBySquareId(squareItemId, 'dish', userId, locationId);
-    const dishData = mapSquareItemToDish(squareItem, locationId);
+    const dishData = mapSquareItemToDish(squareItem as unknown as SquareCatalogObject, locationId);
 
     if (mapping) {
       await updateExistingDish(mapping, dishData, squareItemId, userId, result);

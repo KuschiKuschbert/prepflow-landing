@@ -215,7 +215,7 @@ export default function KitchenKDS() {
                                                      <div className="ml-11 mt-2 flex flex-col gap-1.5">
                                                          {item.modifiers.map((mod: string | OrderModifier, midx: number) => (
                                                              <div key={midx} className="text-[#C0FF02] text-sm font-bold uppercase bg-[#C0FF02]/10 border-l-2 border-[#C0FF02] pl-2 py-1">
-                                                                 + {typeof mod === 'string' ? mod : mod.name || (mod as any).name || mod}
+                                                                 + {typeof mod === 'string' ? mod : mod.name || (mod as { name?: string }).name || String(mod)}
                                                              </div>
                                                          ))}
                                                      </div>

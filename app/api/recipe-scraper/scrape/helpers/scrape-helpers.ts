@@ -18,8 +18,10 @@ export async function loadStorage() {
   }
 }
 
+import type { BaseScraper } from '../../../../../scripts/recipe-scraper/scrapers/base-scraper';
+
 export async function handleDiscovery(
-  scraper: any,
+  scraper: BaseScraper,
   source: string,
   limit: number,
 ): Promise<string[]> {

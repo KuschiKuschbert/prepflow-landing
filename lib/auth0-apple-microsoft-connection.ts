@@ -2,12 +2,12 @@
  * Auth0 Apple and Microsoft Connection Utilities
  * Functions to verify and enable Apple and Microsoft social connections
  */
+import { enableConnectionForApp } from './auth0-apple-microsoft-connection/helpers/enableConnection';
 import {
-  findAppleConnection,
-  findMicrosoftConnection,
+    findAppleConnection,
+    findMicrosoftConnection,
 } from './auth0-apple-microsoft-connection/helpers/findConnection';
 import { verifyConnectionEnabled } from './auth0-apple-microsoft-connection/helpers/verifyConnection';
-import { enableConnectionForApp } from './auth0-apple-microsoft-connection/helpers/enableConnection';
 
 function getApplicationClientId(): string | null {
   return process.env.AUTH0_CLIENT_ID || null;
@@ -25,7 +25,11 @@ export async function verifyAppleConnection(): Promise<boolean> {
   }
 
   const appleConnection = await findAppleConnection();
-  return verifyConnectionEnabled(appleConnection, applicationClientId, 'apple');
+  return verifyConnectionEnabled(
+    (appleConnection as Record<string, unknown>) || undefined,
+    applicationClientId,
+    'apple',
+  );
 }
 
 /**
@@ -40,7 +44,11 @@ export async function verifyMicrosoftConnection(): Promise<boolean> {
   }
 
   const microsoftConnection = await findMicrosoftConnection();
-  return verifyConnectionEnabled(microsoftConnection, applicationClientId, 'microsoft');
+  return verifyConnectionEnabled(
+    (microsoftConnection as Record<string, unknown>) || undefined,
+    applicationClientId,
+    'microsoft',
+  );
 }
 
 /**
@@ -63,7 +71,12 @@ export async function enableAppleConnectionForApp(): Promise<{
   }
 
   const appleConnection = await findAppleConnection();
-  return enableConnectionForApp(appleConnection, applicationClientId, 'apple', 'Apple');
+  return enableConnectionForApp(
+    (appleConnection as Record<string, unknown>) || undefined,
+    applicationClientId,
+    'apple',
+    'Apple',
+  );
 }
 
 /**
@@ -86,5 +99,10 @@ export async function enableMicrosoftConnectionForApp(): Promise<{
   }
 
   const microsoftConnection = await findMicrosoftConnection();
-  return enableConnectionForApp(microsoftConnection, applicationClientId, 'microsoft', 'Microsoft');
+  return enableConnectionForApp(
+    (microsoftConnection as Record<string, unknown>) || undefined,
+    applicationClientId,
+    'microsoft',
+    'Microsoft',
+  );
 }

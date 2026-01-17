@@ -4,7 +4,7 @@
 
 import { logger } from '@/lib/logger';
 
-export function parseGroqResponse(result: any): string {
+export function parseGroqResponse(result: Record<string, any>): string {
   let content = '';
   if (result.choices && Array.isArray(result.choices) && result.choices.length > 0) {
     content = result.choices[0].message?.content || '';

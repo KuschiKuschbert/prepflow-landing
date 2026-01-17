@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import type { AIChatMessage } from '../../types';
-import { getHuggingFaceTextModel } from './getModels';
 import { HUGGINGFACE_ROUTER_BASE } from '../constants';
+import { getHuggingFaceTextModel } from './getModels';
 
 /**
  * Get Hugging Face API key (required for router API)
@@ -69,7 +69,7 @@ export async function generateTextWithHuggingFace(
 
     if (!response.ok) {
       const errorText = await response.text();
-      let errorJson: any = null;
+      let errorJson: unknown = null;
       try {
         errorJson = JSON.parse(errorText);
       } catch {

@@ -8,9 +8,9 @@ import { NextResponse } from 'next/server';
  * @param {string} userId - The user ID.
  * @param {string} imageData - The image data.
  * @param {string} [prompt] - Optional prompt.
- * @param {any} aiResponse - The AI response data.
+ * @param {unknown} aiResponse - The AI response data.
  * @param {string} [requestId] - Optional request ID for tracing.
- * @returns {Promise<{ aiRecord: any } | NextResponse>} Saved record or error response.
+ * @returns {Promise<{ aiRecord: Record<string, unknown> } | NextResponse>} Saved record or error response.
  */
 export async function saveAISpecials(
   userId: string,
@@ -18,7 +18,7 @@ export async function saveAISpecials(
   prompt: string | undefined,
   aiResponse: unknown,
   requestId?: string,
-): Promise<{ aiRecord: unknown } | NextResponse> {
+): Promise<{ aiRecord: Record<string, unknown> } | NextResponse> {
   const startTime = Date.now();
   logger.info('[saveAISpecials] Function called', {
     userId,

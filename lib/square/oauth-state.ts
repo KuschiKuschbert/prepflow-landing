@@ -64,9 +64,10 @@ export function verifySecureState(
       userId: stateData.userId,
       environment: stateData.environment || 'sandbox', // Default to sandbox if not in state
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
     logger.error('[Square OAuth] Failed to verify state token:', {
-      error: error.message,
+      error: errorMessage,
       context: { operation: 'verify_state' },
     });
     throw new Error('Invalid OAuth state token');

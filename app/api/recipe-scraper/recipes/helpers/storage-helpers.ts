@@ -19,12 +19,19 @@ export async function loadJSONStorage() {
   }
 }
 
+import { RecipeEntry } from './filter-helpers';
+
+interface RecipeStorage {
+  getAllRecipes(): RecipeEntry[];
+  loadRecipe(path: string): Promise<unknown>;
+}
+
 /**
  * Initialize storage with error handling
  */
-export function initializeStorage(JSONStorageClass: any) {
+export function initializeStorage(JSONStorageClass: new () => unknown): RecipeStorage | null {
   try {
-    return new JSONStorageClass();
+    return new JSONStorageClass() as RecipeStorage;
   } catch (storageErr) {
     logger.error('[Recipe Scraper API] Error initializing storage:', {
       error: storageErr instanceof Error ? storageErr.message : String(storageErr),

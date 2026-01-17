@@ -4,18 +4,19 @@
  * @param {Object} body - Request body
  * @returns {Object} Supplier data object
  */
-export function buildSupplierData(body: any) {
+export function buildSupplierData(body: unknown) {
+  const data = body as Record<string, any>;
   return {
-    supplier_name: body.supplier_name,
-    contact_person: body.contact_person || null,
-    email: body.email || null,
-    phone: body.phone || null,
-    address: body.address || null,
-    website: body.website || null,
-    payment_terms: body.payment_terms || null,
-    delivery_schedule: body.delivery_schedule || null,
-    minimum_order_amount: body.minimum_order_amount ? parseFloat(body.minimum_order_amount) : null,
-    notes: body.notes || null,
-    is_active: body.is_active !== undefined ? body.is_active : true,
+    supplier_name: data.supplier_name,
+    contact_person: data.contact_person || null,
+    email: data.email || null,
+    phone: data.phone || null,
+    address: data.address || null,
+    website: data.website || null,
+    payment_terms: data.payment_terms || null,
+    delivery_schedule: data.delivery_schedule || null,
+    minimum_order_amount: data.minimum_order_amount ? parseFloat(data.minimum_order_amount) : null,
+    notes: data.notes || null,
+    is_active: data.is_active !== undefined ? data.is_active : true,
   };
 }

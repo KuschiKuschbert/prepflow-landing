@@ -7,12 +7,12 @@ import { NextResponse } from 'next/server';
  *
  * @param {string} userId - The user ID.
  * @param {string} [requestId] - Optional request ID for tracing.
- * @returns {Promise<{ data: any[] } | NextResponse>} History data or error response.
+ * @returns {Promise<{ data: Record<string, unknown>[] } | NextResponse>} History data or error response.
  */
 export async function fetchAISpecialsHistory(
   userId: string,
   requestId?: string,
-): Promise<{ data: unknown[] } | NextResponse> {
+): Promise<{ data: Record<string, unknown>[] } | NextResponse> {
   const startTime = Date.now();
   logger.info('[fetchAISpecialsHistory] Function called', { userId, requestId });
 

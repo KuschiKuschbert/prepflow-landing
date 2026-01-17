@@ -1,15 +1,17 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
 /**
  * Fetches a support ticket by ID from the database.
  *
  * @param {string} ticketId - The ID of the ticket to fetch.
- * @returns {Promise<{ ticket: any } | NextResponse>} Ticket data or error response.
+ * @returns {Promise<{ ticket: Record<string, unknown> } | NextResponse>} Ticket data or error response.
  */
-export async function fetchTicket(ticketId: string): Promise<{ ticket: unknown } | NextResponse> {
+export async function fetchTicket(
+  ticketId: string,
+): Promise<{ ticket: Record<string, unknown> } | NextResponse> {
   if (!supabaseAdmin) {
     return NextResponse.json(
       ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),

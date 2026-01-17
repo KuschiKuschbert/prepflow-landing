@@ -3,6 +3,7 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { detectTemperatureThresholds } from '../../helpers/detectTemperatureThresholds';
+import { handleTemperatureEquipmentError } from '../../helpers/handleTemperatureEquipmentError';
 import { updateTemperatureEquipmentSchema } from '../../helpers/schemas';
 
 export async function handleUpdateTemperatureEquipment(request: NextRequest, id: string) {
@@ -130,21 +131,6 @@ export async function handleUpdateTemperatureEquipment(request: NextRequest, id:
       stack: err instanceof Error ? err.stack : undefined,
     });
 
-    if (err && typeof err === 'object' && 'status' in err) {
-      return NextResponse.json(err, { status: (err as any).status });
-    }
-
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? err instanceof Error
-            ? err.message
-            : 'Unknown error'
-          : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
+    return handleTemperatureEquipmentError(err, 'PUT');
   }
 }
