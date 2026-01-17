@@ -45,7 +45,7 @@ export function useIngredientFiltering({
   sortBy,
 }: UseIngredientFilteringProps) {
   const filteredIngredients = useMemo(() => {
-    let filtered = ingredients.filter(ingredient => {
+    const filtered = ingredients.filter(ingredient => {
       const matchesSearch =
         !searchTerm ||
         ingredient.ingredient_name.toLowerCase().includes(searchTerm.toLowerCase()) ||

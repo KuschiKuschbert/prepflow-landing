@@ -30,7 +30,7 @@ export function filterAndSortRecipes(
   filters: UnifiedFilters,
 ): Recipe[] {
   // Filter by search term first
-  let filtered = recipes.filter(recipe =>
+  const filtered = recipes.filter(recipe =>
     recipe.recipe_name.toLowerCase().includes(filters.searchTerm.toLowerCase()),
   );
 

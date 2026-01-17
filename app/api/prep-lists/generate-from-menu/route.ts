@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Convert sections map to array
-    let sections: SectionData[] = Array.from(sectionsData.values());
+    const sections: SectionData[] = Array.from(sectionsData.values());
 
     // Add uncategorized section if there are unassigned items
     // Note: unassignedItems are essentially RecipeGroupedItem[]

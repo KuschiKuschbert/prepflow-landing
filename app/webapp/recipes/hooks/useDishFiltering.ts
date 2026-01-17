@@ -23,7 +23,7 @@ export function useDishFiltering(dishes: Dish[], dishCosts: Map<string, DishCost
   });
 
   const filteredAndSortedDishes = useMemo(() => {
-    let filtered = dishes.filter(dish =>
+    const filtered = dishes.filter(dish =>
       dish.dish_name.toLowerCase().includes(filters.searchTerm.toLowerCase()),
     );
 

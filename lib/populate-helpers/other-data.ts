@@ -105,7 +105,7 @@ export async function populateSalesData(
       const batch = salesData.slice(i, i + BATCH_SIZE);
 
       // Try upsert first, fallback to insert if constraint doesn't exist
-      let { data, error } = await supabaseAdmin
+      const { data, error } = await supabaseAdmin
         .from('sales_data')
         .upsert(batch, {
           onConflict: 'dish_id,date',

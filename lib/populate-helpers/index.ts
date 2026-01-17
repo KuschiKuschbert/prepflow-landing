@@ -62,7 +62,7 @@ export async function cleanExistingData(
       // Strategy: Try multiple filters to ensure we match all rows regardless of ID type
 
       // First try: UUID filter (matches all real UUIDs)
-      let { error } = await supabaseAdmin
+      const { error } = await supabaseAdmin
         .from(table)
         .delete()
         .neq('id', '00000000-0000-0000-0000-000000000000');

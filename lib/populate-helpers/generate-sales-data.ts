@@ -257,7 +257,7 @@ export async function generateSalesDataForMonth(
       if (!dishId) continue;
 
       // Base sales = total dishes × popularity percentage
-      let baseSold = Math.round(totalDishesSold * rp.popularity.percentage);
+      const baseSold = Math.round(totalDishesSold * rp.popularity.percentage);
 
       // Add random variation (±10-20%)
       const variation = 0.1 + Math.random() * 0.1; // 0.1 to 0.2

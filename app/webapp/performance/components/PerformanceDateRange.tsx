@@ -32,7 +32,7 @@ export default function PerformanceDateRange({
     today.setHours(23, 59, 59, 999);
 
     let startDate: Date | null = null;
-    let endDate: Date = today;
+    const endDate: Date = today;
 
     switch (preset) {
       case '7d':

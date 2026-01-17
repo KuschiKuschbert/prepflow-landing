@@ -28,7 +28,7 @@ export async function processPrepFlowDish(
 
   try {
     // Check if mapping exists
-    let mapping = await getMappingByPrepFlowId(dish.id, 'dish', userId);
+    const mapping = await getMappingByPrepFlowId(dish.id, 'dish', userId);
 
     // Map PrepFlow dish to Square catalog item
     const squareItemData = mapDishToSquareItem(dish);

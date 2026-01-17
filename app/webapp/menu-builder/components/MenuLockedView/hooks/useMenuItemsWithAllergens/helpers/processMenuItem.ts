@@ -35,7 +35,7 @@ export function processMenuItem(item: MenuItem): MenuItemWithAllergens {
   allergens = consolidateAllergens(allergens).filter(code => VALID_ALLERGEN_CODES.includes(code));
   const finalAllergens = Array.isArray(allergens) ? allergens : [];
 
-  let isVegetarian =
+  const isVegetarian =
     item.is_vegetarian ?? (item.dish_id ? item.dishes?.is_vegetarian : item.recipes?.is_vegetarian);
   let isVegan = item.is_vegan ?? (item.dish_id ? item.dishes?.is_vegan : item.recipes?.is_vegan);
 

@@ -225,7 +225,7 @@ export class RefactoringPlanner {
     // 1. Look for backticked paths: `app/api/`
     const backtickMatch = text.match(/`([^`]+)`/);
     if (backtickMatch) {
-      let pathStr = backtickMatch[1];
+      const pathStr = backtickMatch[1];
       if (pathStr.includes('/') || pathStr.endsWith('.ts') || pathStr.endsWith('.tsx')) {
         if (pathStr.endsWith('/')) return [`${pathStr}**/*.{ts,tsx}`];
         return [pathStr];
@@ -254,7 +254,7 @@ export class RefactoringPlanner {
       const debtPath = path.join(process.cwd(), 'docs/DEBT.md');
       if (!fs.existsSync(debtPath)) return false;
 
-      let content = fs.readFileSync(debtPath, 'utf-8');
+      const content = fs.readFileSync(debtPath, 'utf-8');
 
       // Look for the specific line and mark it as checked
       // We search for the pattern "- [ ] ... sourceItem"

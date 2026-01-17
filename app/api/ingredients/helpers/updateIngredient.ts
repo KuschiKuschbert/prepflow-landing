@@ -28,7 +28,7 @@ export async function updateIngredient(
   const formattedUpdates = await formatIngredientUpdates(updates);
 
   // Check/Detect allergens
-  let allergensChanged = await detectCurrentAllergens(id, updates, formattedUpdates);
+  const allergensChanged = await detectCurrentAllergens(id, updates, formattedUpdates);
 
   // Update using admin client (bypasses RLS)
   const { data, error } = await supabaseAdmin

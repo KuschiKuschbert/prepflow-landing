@@ -35,7 +35,7 @@ export async function processPrepFlowEmployee(
 
   try {
     // Check if mapping exists
-    let mapping = await getMappingByPrepFlowId(employee.id, 'employee', userId);
+    const mapping = await getMappingByPrepFlowId(employee.id, 'employee', userId);
 
     // Map PrepFlow employee to Square team member
     const teamMemberData = mapEmployeeToSquareTeamMember(employee);

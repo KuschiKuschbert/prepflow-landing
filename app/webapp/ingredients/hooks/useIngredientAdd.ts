@@ -44,7 +44,7 @@ export function useIngredientAdd<
 
   const handleAddIngredient = useCallback(
     async (ingredientData: Partial<T>) => {
-      let originalIngredients: T[] = [];
+      const originalIngredients: T[] = [];
       try {
         const result = await addIngredient({
           ingredientData,

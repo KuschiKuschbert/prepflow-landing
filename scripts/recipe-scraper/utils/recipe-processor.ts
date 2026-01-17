@@ -49,7 +49,7 @@ let globalProcessingStatus: ProcessingStatus = {
 
 // Processing queue and state
 let processingQueue: ScrapedRecipe[] = [];
-let currentlyProcessing: Set<string> = new Set();
+const currentlyProcessing: Set<string> = new Set();
 let processingStartTime: Date | null = null;
 let lastProgressTime: Date | null = null;
 let consecutiveErrors = 0;

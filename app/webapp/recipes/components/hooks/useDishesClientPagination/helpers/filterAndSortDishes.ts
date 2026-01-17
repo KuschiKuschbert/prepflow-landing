@@ -13,7 +13,7 @@ export function filterAndSortDishes(
   dishCosts: Map<string, DishCostData>,
   filters: UnifiedFilters,
 ): Dish[] {
-  let filtered = dishes.filter(dish =>
+  const filtered = dishes.filter(dish =>
     dish.dish_name.toLowerCase().includes(filters.searchTerm.toLowerCase()),
   );
 
