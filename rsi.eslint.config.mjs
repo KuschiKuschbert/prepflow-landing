@@ -1,4 +1,5 @@
 // @ts-check
+import tseslint from 'typescript-eslint';
 
 /**
  * RSI Managed Configuration
@@ -6,17 +7,18 @@
  * DO NOT EDIT MANUALLY - Changes will be overwritten.
  */
 
-/** @type {import('eslint').Linter.Config[]} */
-const rsiConfig = [
+export default tseslint.config(
   {
-    // RSI Evolution Rules
-    // These rules have been synthesized from historical success patterns.
+    ignores: ['**/.next/**', '**/node_modules/**'],
+  },
+  {
     files: ['**/*.ts', '**/*.tsx'],
+    extends: [
+      ...tseslint.configs.recommended,
+    ],
     rules: {
       '@typescript-eslint/no-explicit-any': 'error', // No Explicit Any (Native)
       // Validated Rules will be injected here by RSI
     },
-  },
-];
-
-export default rsiConfig;
+  }
+);

@@ -15,7 +15,9 @@
         "id": "rule-1768264370112-124",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -35,7 +37,9 @@
         "id": "rule-1768264482863-107",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -55,7 +59,9 @@
         "id": "rule-1768343859571-304",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -75,7 +81,9 @@
         "id": "rule-1768404471676-745",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -95,7 +103,9 @@
         "id": "rule-1768490863417-270",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -115,7 +125,9 @@
         "id": "rule-1768521485980-442",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -135,7 +147,9 @@
         "id": "rule-1768553824742-444",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -155,7 +169,9 @@
         "id": "rule-1768554430890-218",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -167,7 +183,10 @@
         "type": "frequency",
         "confidence": 1,
         "insight": "Fixes of type 'fix-any-type' have a 100.0% success rate across 2 attempts.",
-        "sourceFiles": ["app/api/route.ts", "lib/utils.ts"]
+        "sourceFiles": [
+          "app/api/route.ts",
+          "lib/utils.ts"
+        ]
       }
     ],
     "rulesGenerated": [
@@ -175,7 +194,9 @@
         "id": "rule-fix-any-type-1768555936910",
         "description": "Auto-generated rule: Prioritize 'fix-any-type' fixes (100% success).",
         "ruleLogic": "if (issue.type === 'fix-any-type') { prioritize(); }",
-        "derivedFrom": ["fix-any-type"]
+        "derivedFrom": [
+          "fix-any-type"
+        ]
       }
     ]
   },
@@ -187,7 +208,10 @@
         "type": "frequency",
         "confidence": 1,
         "insight": "Fixes of type 'remove-console-log' have a 100.0% success rate across 2 attempts.",
-        "sourceFiles": ["app/page.tsx", "lib/utils.ts"]
+        "sourceFiles": [
+          "app/page.tsx",
+          "lib/utils.ts"
+        ]
       }
     ],
     "rulesGenerated": [
@@ -195,7 +219,9 @@
         "id": "rule-remove-console-log-1768556188848",
         "description": "Auto-generated rule: Prioritize 'remove-console-log' fixes (100% success).",
         "ruleLogic": "if (issue.type === 'remove-console-log') { prioritize(); }",
-        "derivedFrom": ["remove-console-log"]
+        "derivedFrom": [
+          "remove-console-log"
+        ]
       }
     ]
   },
@@ -207,7 +233,10 @@
         "type": "frequency",
         "confidence": 1,
         "insight": "Fixes of type 'remove-console-log' have a 100.0% success rate across 2 attempts.",
-        "sourceFiles": ["app/page.tsx", "lib/utils.ts"]
+        "sourceFiles": [
+          "app/page.tsx",
+          "lib/utils.ts"
+        ]
       }
     ],
     "rulesGenerated": [
@@ -215,12 +244,19 @@
         "id": "rule-remove-console-log-1768556212185",
         "description": "Auto-generated rule: Prioritize 'remove-console-log' fixes (100% success).",
         "ruleLogic": "if (issue.type === 'remove-console-log') { prioritize(); }",
-        "derivedFrom": ["remove-console-log"]
+        "derivedFrom": [
+          "remove-console-log"
+        ]
       }
     ]
   },
   {
     "timestamp": "2026-01-16T15:26:06.286Z",
+    "insights": [],
+    "rulesGenerated": []
+  },
+  {
+    "timestamp": "2026-01-17T23:07:38.608Z",
     "insights": [],
     "rulesGenerated": []
   }

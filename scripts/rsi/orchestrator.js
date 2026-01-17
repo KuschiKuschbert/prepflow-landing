@@ -17,7 +17,7 @@ async function main() {
   const config = {
     dryRun,
     modules: {
-      autoFix: false,
+      autoFix: true,
       selfOptimize: true,
       metaLearning: true, // Typically runs nightly
       ruleEvolution: true, // Typically runs nightly

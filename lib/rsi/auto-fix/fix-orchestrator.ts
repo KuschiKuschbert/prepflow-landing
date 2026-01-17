@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { exec } from 'child_process';
 import util from 'util';
 import { EffectivenessTracker } from '../feedback/effectiveness-tracker';
@@ -22,7 +23,7 @@ export class FixOrchestrator {
   }
 
   async run(options: AutoFixOptions = {}) {
-    console.log('🤖 RSI Auto-Fixer Starting...');
+    logger.info('🤖 RSI Auto-Fixer Starting...');
 
     // 1. Safety Check
     if (!options.dryRun) {
@@ -36,7 +37,7 @@ export class FixOrchestrator {
     // 2. Scan for Fixes
     const allSuggestions: FixSuggestion[] = [];
     for (const provider of this.providers) {
-      console.log(`Scanning with ${provider.name}...`);
+      logger.info(`Scanning with ${provider.name}...`);
       try {
         const suggestions = await provider.scan(options.files);
         allSuggestions.push(...suggestions);
@@ -46,11 +47,11 @@ export class FixOrchestrator {
     }
 
     if (allSuggestions.length === 0) {
-      console.log('✅ No issues found.');
+      logger.info('✅ No issues found.');
       return;
     }
 
-    console.log(`Found ${allSuggestions.length} potential fixes.`);
+    logger.info(`Found ${allSuggestions.length} potential fixes.`);
 
     // 3. Process Suggestions
     for (const suggestion of allSuggestions) {
@@ -65,22 +66,22 @@ export class FixOrchestrator {
     // Check Threshold (default: accept MEDIUM and HIGH confidence)
     const minConfidence = options.minConfidence ?? ConfidenceLevel.MEDIUM;
     if (score.level === ConfidenceLevel.LOW && minConfidence !== ConfidenceLevel.LOW) {
-      console.log(
-        `⚠️ Skipping Low Confidence fix: ${suggestion.description} (${score.score.toFixed(2)})`,
+      logger.info(
+        `⚠️ Skipping Low Confidence fix: ${suggestion.description} (${score.score.toFixed(2)})`
       );
       return;
     }
 
     // Dry Run
     if (options.dryRun) {
-      console.log(
-        `[DRY RUN] Would apply: ${suggestion.description} (${score.level}, ${score.score.toFixed(2)})`,
+      logger.info(
+        `[DRY RUN] Would apply: ${suggestion.description} (${score.level}, ${score.score.toFixed(2)})`
       );
       return;
     }
 
     // Apply Fix
-    console.log(`Applying fix: ${suggestion.description}...`);
+    logger.info(`Applying fix: ${suggestion.description}...`);
     try {
       const success = await suggestion.apply();
 
@@ -112,7 +113,7 @@ export class FixOrchestrator {
             details: 'Auto-fix applied successfully',
           });
 
-          console.log(`✅ Fixed & Committed: ${suggestion.description}`);
+          logger.info(`✅ Fixed & Committed: ${suggestion.description}`);
         } else {
           console.error(
             `❌ Verification failed for: ${suggestion.description}. Rolling back file.`,

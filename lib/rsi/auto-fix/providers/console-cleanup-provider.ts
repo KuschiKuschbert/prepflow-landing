@@ -79,18 +79,13 @@ return [];
           confidenceScore: 0.85, // High confidence but not 1.0 (some console.log may be intentional)
           apply: async () => {
             try {
-              let fileContent = await fs.readFile(filePath, 'utf8');
-
-              // Remove console.log statements
-              // Match: console.log(...); including multiline
-              fileContent = fileContent.replace(/^\s*console\.log\([^)]*\);\s*\n?/gm, '');
-
-              // Also handle console.log without semicolon
-              fileContent = fileContent.replace(/^\s*console\.log\([^)]*\)\s*\n?/gm, '');
-
-              await fs.writeFile(filePath, fileContent, 'utf8');
+              // Use jscodeshift for safe AST-based transformation
+              const codemodPath = path.resolve(process.cwd(), 'scripts/codemods/console-migration.js');
+              // Run jscodeshift on the single file
+              await execAsync(`npx jscodeshift -t ${codemodPath} ${filePath} --parser tsx`);
               return true;
-            } catch {
+            } catch (error) {
+              console.error(`Failed to apply console cleanup to ${filePath}:`, error);
               return false;
             }
           },
