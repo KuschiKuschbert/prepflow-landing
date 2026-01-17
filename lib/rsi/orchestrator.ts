@@ -6,6 +6,8 @@ import { runPredictiveAnalysis } from './predictive-analysis';
 import { SafetyChecker } from './safety/safety-checker';
 import { PerformanceTracker } from './self-optimization/performance-tracker';
 
+import { logger } from '@/lib/logger';
+
 const execAsync = util.promisify(exec);
 
 export interface OrchestratorConfig {
@@ -27,7 +29,7 @@ export class RSIOrchestrator {
     if (!config.dryRun) {
       const isClean = await SafetyChecker.isGitClean();
       if (!isClean) {
-        console.error('❌ Git working directory is not clean. Aborting RSI run.');
+        logger.error('❌ Git working directory is not clean. Aborting RSI run.');
         return;
       }
     }
@@ -70,7 +72,7 @@ await runPredictiveAnalysis(config.dryRun);
 await runArchitectureAnalysis(config.dryRun);
       }
     } catch (error) {
-      console.error('RSI Run failed:', error);
+      logger.error('RSI Run failed:', error);
     } finally {
       const duration = PerformanceTracker.stopTimer();
       await PerformanceTracker.logPerformance({
@@ -84,9 +86,9 @@ await runArchitectureAnalysis(config.dryRun);
       try {
         await RSIDashboard.generateReport();
       } catch (dashError) {
-        console.error('Failed to generate dashboard:', dashError);
+        logger.error('Failed to generate dashboard:', dashError);
       }
-      console.log(`\n✅ RSI Cycle Complete (${(duration / 1000).toFixed(2)}s)`);
+      logger.dev(`\n✅ RSI Cycle Complete (${(duration / 1000).toFixed(2)}s)`);
     }
   }
 
@@ -100,11 +102,11 @@ await runArchitectureAnalysis(config.dryRun);
     const command = `npm run ${scriptName} ${dryRunFlag} ${argsStr}`;
 try {
       const { stdout, stderr } = await execAsync(command);
-if (stderr) console.error(stderr);
+if (stderr) logger.error(stderr);
     } catch (error: unknown) {
-      console.error(`Script ${scriptName} failed:`);
+      logger.error(`Script ${scriptName} failed:`);
       const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error(errorMessage);
+      logger.error(errorMessage);
       // Don't throw, allow valid modules to finish?
       // For now, let's keep going.
     }
