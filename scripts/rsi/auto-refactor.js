@@ -34,23 +34,26 @@ async function main() {
     risk: RiskAssessor.assess(plan.type || 'refactor', plan.targetFiles || []),
   }));
 
-  const selectedPlan = allPlans[0];
+  const safePlan = allPlans.find(p =>
+    p.risk.level !== RiskLevel.HIGH &&
+    p.risk.level !== RiskLevel.CRITICAL
+  );
+
+  if (!safePlan) {
+    console.log('⚠️  No safe refactoring plans found for autonomous execution.');
+    // List risky plans for visibility in logs
+    allPlans.forEach(p => {
+      console.log(`   [RISKY] ${p.title} (${p.risk.level}): ${p.risk.reasons.join(', ')}`);
+    });
+    return;
+  }
+
+  const selectedPlan = safePlan;
   console.log(`\n📋 Selected Plan: ${selectedPlan.title}`);
   console.log(`   Description: ${selectedPlan.description}`);
   console.log(
     `   Impact: ${selectedPlan.impactScore} | Risk Level: ${selectedPlan.risk.level} (${selectedPlan.risk.score})`,
   );
-
-  if (
-    selectedPlan.risk.level === RiskLevel.HIGH ||
-    selectedPlan.risk.level === RiskLevel.CRITICAL
-  ) {
-    console.log(
-      `\n⚠️  This plan is too risky for autonomous execution: ${selectedPlan.risk.reasons.join(', ')}`,
-    );
-    console.log(`   Human approval required. Skipping automatic apply.`);
-    return;
-  }
 
   // 2. Execute (or Dry Run)
   if (!selectedPlan.targetFiles || !selectedPlan.codemodPath) {

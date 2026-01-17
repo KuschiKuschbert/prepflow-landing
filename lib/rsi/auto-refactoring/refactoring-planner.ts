@@ -71,8 +71,14 @@ export class RefactoringPlanner {
       }
     }
 
-    // Sort by impact (High priority first)
-    return plans.sort((a, b) => b.impactScore - a.impactScore);
+    // Sort by impact and type (Spaghetti Code first, then impact score)
+    return plans.sort((a, b) => {
+      const aIsSpaghetti = a.title.includes('Spaghetti');
+      const bIsSpaghetti = b.title.includes('Spaghetti');
+      if (aIsSpaghetti && !bIsSpaghetti) return -1;
+      if (!aIsSpaghetti && bIsSpaghetti) return 1;
+      return b.impactScore - a.impactScore;
+    });
   }
 
   private static analyzeArchitectureIssue(
@@ -134,26 +140,59 @@ export class RefactoringPlanner {
         impactScore,
         riskScore: 2,
         status: 'pending',
-        codemodPath: 'scripts/codemods/no-any.js', // Hypothetical codemod
+        codemodPath: 'scripts/codemods/no-any.js', // Original placeholder
         targetFiles: this.extractPath(itemText) || ['app/**/*.ts'],
         sourceDebtItem: itemText,
       };
     }
 
-    // 2. "console.log" or "logging"
+    // 2. Zod Validation
+    if (itemText.toLowerCase().includes('zod')) {
+      return {
+        id: `zod-std-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        title: `Standardize Zod: ${title}`,
+        description: itemText,
+        impactScore,
+        riskScore: 2,
+        status: 'pending',
+        codemodPath: 'lib/rsi/auto-refactoring/codemods/zod-standardization.ts',
+        targetFiles: this.extractPath(itemText) || ['app/api/**/*.ts'],
+        sourceDebtItem: itemText,
+      };
+    }
+
+    // 3. Dead Code
     if (
-      itemText.toLowerCase().includes('console.log') ||
-      itemText.toLowerCase().includes('log.d')
+      itemText.toLowerCase().includes('dead code') ||
+      itemText.toLowerCase().includes('unused import')
     ) {
       return {
-        id: `remove-logs-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-        title: `Remove Logs: ${title}`,
+        id: `dead-code-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        title: `Remove Dead Code: ${title}`,
         description: itemText,
-        impactScore: impactScore - 1, // Slightly lower impact than types
+        impactScore: impactScore - 1,
+        riskScore: 3,
+        status: 'pending',
+        codemodPath: 'lib/rsi/auto-refactoring/codemods/remove-dead-code.ts',
+        targetFiles: this.extractPath(itemText) || ['app/**/*.{ts,tsx}', 'lib/**/*.ts'],
+        sourceDebtItem: itemText,
+      };
+    }
+
+    // 4. "console.log" or "logging"
+    if (
+      itemText.toLowerCase().includes('log') ||
+      itemText.toLowerCase().includes('logger')
+    ) {
+      return {
+        id: `sanitize-logs-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        title: `Sanitize Logs: ${title}`,
+        description: itemText,
+        impactScore: impactScore - 2,
         riskScore: 1,
         status: 'pending',
-        codemodPath: 'scripts/codemods/console-migration.js',
-        targetFiles: this.extractPath(itemText) || ['app/**/*.{ts,tsx}'],
+        codemodPath: 'lib/rsi/auto-refactoring/codemods/log-sanitization.ts',
+        targetFiles: this.extractPath(itemText) || ['app/**/*.{ts,tsx}', 'lib/**/*.ts'],
         sourceDebtItem: itemText,
       };
     }

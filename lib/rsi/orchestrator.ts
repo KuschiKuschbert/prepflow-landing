@@ -1,6 +1,7 @@
 import { exec } from 'child_process';
 import util from 'util';
 import { runArchitectureAnalysis } from './architecture-analysis';
+import { RSIDashboard } from './observability/dashboard';
 import { runPredictiveAnalysis } from './predictive-analysis';
 import { SafetyChecker } from './safety/safety-checker';
 import { PerformanceTracker } from './self-optimization/performance-tracker';
@@ -90,7 +91,6 @@ export class RSIOrchestrator {
 
       // 9. Generate Dashboard Report
       try {
-        const { RSIDashboard } = await import('./observability/dashboard');
         await RSIDashboard.generateReport();
       } catch (dashError) {
         console.error('Failed to generate dashboard:', dashError);
