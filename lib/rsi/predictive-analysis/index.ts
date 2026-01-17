@@ -8,6 +8,8 @@
 import { loadKnowledgeBase } from '../../error-learning/knowledge-base';
 import { findSimilarErrors } from '../../error-learning/pattern-matcher';
 
+import { logger } from '@/lib/logger';
+
 export interface BugPrediction {
   file: string;
   line: number;
@@ -279,7 +281,7 @@ const fs = require('fs/promises');
   }
 
   if (dryRun) {
-    console.log('  [DRY RUN] Would scan directories:', dirsToScan.join(', '));
+    logger.dev('  [DRY RUN] Would scan directories:', dirsToScan.join(', '));
     return;
   }
 for (const dir of dirsToScan) {
@@ -287,7 +289,7 @@ for (const dir of dirsToScan) {
     try {
       await scanDir(fullDir);
     } catch (e) {
-      console.warn(`  Could not scan ${dir}, skipping...`);
+      logger.warn(`  Could not scan ${dir}, skipping...`);
     }
   }
 
