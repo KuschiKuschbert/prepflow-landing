@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { GeneratedRule } from './rule-generator';
 
+import { logger } from '@/lib/logger';
+
 /**
  * Rule Manager
  * Manages the lifecycle of RSI rules.
@@ -30,10 +32,10 @@ return false;
 
       rules.push(rule);
       fs.writeFileSync(ACTIVE_RULES_PATH, JSON.stringify(rules, null, 2));
-      console.log(`✅ Activated RSI rule: ${rule.name}`);
+      logger.dev(`✅ Activated RSI rule: ${rule.name}`);
       return true;
     } catch (error) {
-      console.error('Failed to activate rule:', error);
+      logger.error('Failed to activate rule:', error);
       return false;
     }
   }
@@ -48,7 +50,7 @@ return false;
       // Strategy: Parse the file content, find the rules object, and insert.
 
       if (!fs.existsSync(RSI_ESLINT_CONFIG_PATH)) {
-        console.error('RSI ESLint Config file missing.');
+        logger.error('RSI ESLint Config file missing.');
         return false;
       }
 
@@ -68,11 +70,11 @@ return false;
         fs.writeFileSync(RSI_ESLINT_CONFIG_PATH, content);
 return true;
       } else {
-        console.error('Could not find rules block in RSI config.');
+        logger.error('Could not find rules block in RSI config.');
         return false;
       }
     } catch (err) {
-      console.error('Failed to update ESLint config:', err);
+      logger.error('Failed to update ESLint config:', err);
       return false;
     }
   }
