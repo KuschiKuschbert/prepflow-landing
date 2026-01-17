@@ -279,7 +279,7 @@ const fs = require('fs/promises');
   }
 
   if (dryRun) {
-);
+    console.log('  [DRY RUN] Would scan directories:', dirsToScan.join(', '));
     return;
   }
 for (const dir of dirsToScan) {
@@ -327,6 +327,4 @@ for (const dir of dirsToScan) {
   }
 
   await fs.writeFile(reportPath, markdown, 'utf8');
-}`,
-  );
 }
