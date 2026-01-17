@@ -99,6 +99,9 @@ export class RefactoringPlanner {
     if (priority === 'high') impactScore = 8;
     if (priority === 'medium') impactScore = 5;
 
+    // Safety: Do not auto-refactor RSI core files or build artifacts
+    if (file.includes('lib/rsi') || file.includes('.next')) return null;
+
     if (type.includes('Spaghetti Code')) {
       return {
         id: `spaghetti-${Date.now()}-${file.replace(/\//g, '-')}`,
