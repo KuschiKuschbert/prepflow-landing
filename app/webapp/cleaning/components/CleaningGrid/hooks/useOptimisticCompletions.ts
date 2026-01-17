@@ -1,0 +1,104 @@
+'use client';
+
+import type { TaskWithCompletions } from '@/lib/cleaning/completion-logic';
+import { logger } from '@/lib/logger';
+import { useCallback, useEffect, useState } from 'react';
+
+interface OptimisticCompletion {
+  completed: boolean;
+  tempId?: string;
+}
+
+interface UseOptimisticCompletionsParams {
+  tasks: TaskWithCompletions[];
+  dates: string[];
+  showSuccess: (msg: string) => void;
+  showError: (msg: string) => void;
+  onTaskUpdate?: () => void;
+}
+
+export function useOptimisticCompletions({
+  tasks,
+  dates,
+  showSuccess,
+  showError,
+  onTaskUpdate,
+}: UseOptimisticCompletionsParams) {
+  const [optimisticCompletions, setOptimisticCompletions] = useState<
+    Map<string, OptimisticCompletion>
+  >(new Map());
+
+  // Sync optimistic completions with tasks when they update
+  useEffect(() => {
+    setOptimisticCompletions(prev => {
+      const updated = new Map(prev);
+      tasks.forEach(task => {
+        task.completions.forEach(completion => {
+          const key = `${task.id}_${completion.completion_date}`;
+          if (updated.has(key)) {
+            updated.delete(key);
+          }
+        });
+      });
+      return updated;
+    });
+  }, [tasks]);
+
+  const handleToggleCompletion = useCallback(
+    async (taskId: string, date: string, isCompleted: boolean) => {
+      const key = `${taskId}_${date}`;
+      const newCompleted = !isCompleted;
+
+      const existingOptimistic = optimisticCompletions.get(key);
+
+      // Optimistically update UI
+      setOptimisticCompletions(prev => {
+        const updated = new Map(prev);
+        if (newCompleted) {
+          updated.set(key, { completed: true, tempId: `temp-${Date.now()}` });
+        } else {
+          updated.set(key, { completed: false });
+        }
+        return updated;
+      });
+
+      try {
+        const endpoint = newCompleted
+          ? `/api/cleaning-tasks/${taskId}/complete`
+          : `/api/cleaning-tasks/${taskId}/uncomplete`;
+
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ completion_date: date }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || data.message || 'Failed to update task');
+        }
+
+        showSuccess(newCompleted ? 'Task marked as complete' : 'Task marked as incomplete');
+        onTaskUpdate?.();
+      } catch (error) {
+        // Error - revert optimistic update
+        setOptimisticCompletions(prev => {
+          const updated = new Map(prev);
+          updated.delete(key);
+          if (existingOptimistic) {
+            updated.set(key, existingOptimistic);
+          }
+          return updated;
+        });
+        logger.error('Error toggling task completion:', error);
+        showError(
+          newCompleted ? 'Failed to mark task as complete' : 'Failed to mark task as incomplete',
+        );
+      }
+    },
+    [showSuccess, showError, onTaskUpdate, optimisticCompletions],
+  );
+
+  return { optimisticCompletions, handleToggleCompletion };
+}
