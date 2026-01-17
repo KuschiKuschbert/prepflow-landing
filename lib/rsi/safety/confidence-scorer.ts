@@ -97,4 +97,22 @@ export class ConfidenceScorer {
       reasons,
     };
   }
+
+  /**
+   * Create a ConfidenceScore from a raw value (0-1)
+   * Used when providers already know their confidence level
+   */
+  static scoreFromValue(value: number, reason?: string): ConfidenceScore {
+    const score = Math.max(0, Math.min(1, value));
+    const reasons: string[] = reason ? [reason] : [`Provider confidence: ${(score * 100).toFixed(0)}%`];
+
+    let level = ConfidenceLevel.LOW;
+    if (score >= 0.9) {
+      level = ConfidenceLevel.HIGH;
+    } else if (score >= 0.7) {
+      level = ConfidenceLevel.MEDIUM;
+    }
+
+    return { score, level, reasons };
+  }
 }

@@ -59,11 +59,12 @@ export class FixOrchestrator {
   }
 
   private async processSuggestion(suggestion: FixSuggestion, options: AutoFixOptions) {
-    // Score Confidence
-    const score = ConfidenceScorer.score(suggestion.type, 0.5, 0.8); // Simplified scoring for now
+    // Use the confidence score from the provider (they know their fix quality best)
+    const score = ConfidenceScorer.scoreFromValue(suggestion.confidenceScore);
 
-    // Check Threshold
-    if (score.level === ConfidenceLevel.LOW) {
+    // Check Threshold (default: accept MEDIUM and HIGH confidence)
+    const minConfidence = options.minConfidence ?? ConfidenceLevel.MEDIUM;
+    if (score.level === ConfidenceLevel.LOW && minConfidence !== ConfidenceLevel.LOW) {
       console.log(
         `⚠️ Skipping Low Confidence fix: ${suggestion.description} (${score.score.toFixed(2)})`,
       );
@@ -72,7 +73,7 @@ export class FixOrchestrator {
 
     // Dry Run
     if (options.dryRun) {
-      console.log(`[DRY RUN] Would apply: ${suggestion.description} (${score.level})`);
+      console.log(`[DRY RUN] Would apply: ${suggestion.description} (${score.level}, ${score.score.toFixed(2)})`);
       return;
     }
 
