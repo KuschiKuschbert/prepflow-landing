@@ -2,6 +2,8 @@ import { exec } from 'child_process';
 import util from 'util';
 import { GeneratedRule } from './rule-generator';
 
+import { logger } from '@/lib/logger';
+
 const execAsync = util.promisify(exec);
 
 /**
@@ -12,7 +14,7 @@ export class RuleEvaluator {
   static async evaluate(
     rule: GeneratedRule,
   ): Promise<{ isValid: boolean; matches: number; falsePositives: number }> {
-    console.log(`Evaluator: Testing rule "${rule.name}" (${rule.definition})...`);
+    logger.dev(`Evaluator: Testing rule "${rule.name}" (${rule.definition})...`);
 
     try {
       // Use grep to find matches.
@@ -34,9 +36,9 @@ export class RuleEvaluator {
       const isValid = matches > 0;
 
       if (isValid) {
-        console.log(`  ✅ Rule matches ${matches}+ files (e.g., ${files[0]})`);
+        logger.dev(`  ✅ Rule matches ${matches}+ files (e.g., ${files[0]})`);
       } else {
-        console.log(`  ❌ Rule found NO matches in codebase.`);
+        logger.dev(`  ❌ Rule found NO matches in codebase.`);
       }
 
       return {
@@ -45,7 +47,7 @@ export class RuleEvaluator {
         falsePositives: 0, // Cannot determine false positives without human feedback loop yet
       };
     } catch (error) {
-      console.error('Evaluator Error:', error);
+      logger.error('Evaluator Error:', error);
       // Fail safely
       return { isValid: false, matches: 0, falsePositives: 0 };
     }
