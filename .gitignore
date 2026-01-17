@@ -23,6 +23,10 @@ yarn-error.log*
 lerna-debug.log*
 logs/
 *.log
+lint_results.json
+OPTIMISTIC_VIOLATIONS_REPORT.json
+performance-report.json
+cleanup-reports/
 
 # Runtime data
 pids
