@@ -4,6 +4,9 @@
 > **Process**: The "Improver" persona should review this file and submit PRs to clear debt.
 
 ## High Priority
+- [ ] Handle 'any' types in `app/api/fix/auth0-callback-urls/route.ts` <!-- id: 103 -->
+- [ ] Sanitize logs in `app/webapp/cleaning/page.tsx` <!-- id: 101 -->
+- [ ] Implement Zod validation for `app/api/auth/error/route.ts` <!-- id: 102 -->
 
 - [x] **[WEB]** Eradicate `any` types (Mission Accomplished). Final count: 0 (explicit/justified only).
 - [x] **[WEB]** Refactor `app/api/ingredients`- [x] Iteration 3: Dishes API (Type Safety) - **DONE**.
