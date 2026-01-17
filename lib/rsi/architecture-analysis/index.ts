@@ -312,13 +312,21 @@ const rootDir = process.cwd();
   }
 
   if (dryRun) {
-);
+    console.log('  [DRY RUN] Would scan directories:', dirsToScan.join(', '));
     return;
   }
-for (const dir of dirsToScan) {
+
+  for (const dir of dirsToScan) {
     const fullDir = path.join(rootDir, dir);
     try {
-      await scanDir(fullDir);
+      if (
+        await fs
+          .stat(fullDir)
+          .then(s => s.isDirectory())
+          .catch(() => false)
+      ) {
+        await scanDir(fullDir);
+      }
     } catch (e) {
       console.warn(`  Could not scan ${dir}, skipping...`);
     }
@@ -357,6 +365,4 @@ for (const dir of dirsToScan) {
   }
 
   await fs.writeFile(reportPath, markdown, 'utf8');
-}`,
-  );
 }
