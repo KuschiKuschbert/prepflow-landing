@@ -78,8 +78,10 @@ jobs:
             "reports/"
             ".eslint"
             "rsi.eslint.config"
+            # RSI infrastructure (Phase 1 complete)
+            "lib/rsi/"
+            "scripts/rsi/"
             # Future: add more paths here as RSI proves trustworthy
-            # "scripts/rsi/"
             # "lib/utils/" (for formatting-only changes)
           )
 
