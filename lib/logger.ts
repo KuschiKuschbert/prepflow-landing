@@ -6,6 +6,8 @@ import { detectCategory } from './error-detection/category-detector';
 import { detectSeverity } from './error-detection/severity-detector';
 import { createLogEntry, formatLogEntry, type ErrorContext } from './logger/logEntry';
 
+import { logger } from '@/lib/logger';
+
 const isDev = process.env.NODE_ENV === 'development';
 const enableProdLogs = process.env.NEXT_PUBLIC_ENABLE_PROD_LOGS === 'true';
 
@@ -73,12 +75,12 @@ async function storeErrorInDatabase(
       if (insertError) {
         // Silently fail - don't let error logging break the app
         // Use console.error directly to avoid circular dependency (logger.error would cause infinite loop)
-        console.error('[Logger] Failed to store error in database:', insertError);
+        logger.error('[Logger] Failed to store error in database:', insertError);
       }
     } catch (err) {
       // Silently fail - don't let error logging break the app
       // Use console.error directly to avoid circular dependency (logger.error would cause infinite loop)
-      console.error('[Logger] Failed to store error in database:', err);
+      logger.error('[Logger] Failed to store error in database:', err);
     }
   }, 0);
 }
@@ -88,7 +90,7 @@ export const logger = {
     if (isDev || enableProdLogs) {
       const entry = createLogEntry('dev', message, data);
       const formatted = formatLogEntry(entry);
-      console.log(`[DEV] ${formatted}`);
+      logger.dev(`[DEV] ${formatted}`);
     }
   },
 
@@ -110,7 +112,7 @@ export const logger = {
 
     const entry = createLogEntry('error', message, context, logError);
     const formatted = formatLogEntry(entry);
-    console.error(`[ERROR] ${formatted}`);
+    logger.error(`[ERROR] ${formatted}`);
 
     // Store error in database for admin viewing
     storeErrorInDatabase(message, context, logError);
@@ -119,14 +121,14 @@ export const logger = {
   warn: (message: string, context?: ErrorContext | unknown): void => {
     const entry = createLogEntry('warn', message, context);
     const formatted = formatLogEntry(entry);
-    console.warn(`[WARN] ${formatted}`);
+    logger.warn(`[WARN] ${formatted}`);
   },
 
   info: (message: string, context?: ErrorContext | unknown): void => {
     if (isDev || enableProdLogs) {
       const entry = createLogEntry('info', message, context);
       const formatted = formatLogEntry(entry);
-      console.info(`[INFO] ${formatted}`);
+      logger.info(`[INFO] ${formatted}`);
     }
   },
 
@@ -134,7 +136,7 @@ export const logger = {
     if (isDev || enableProdLogs) {
       const entry = createLogEntry('debug', message, data);
       const formatted = formatLogEntry(entry);
-      console.debug(`[DEBUG] ${formatted}`);
+      logger.debug(`[DEBUG] ${formatted}`);
     }
   },
 };
