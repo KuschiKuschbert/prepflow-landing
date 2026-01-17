@@ -8,6 +8,8 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
+import { logger } from '@/lib/logger';
+
 export interface DesignPattern {
   name: string;
   type: 'creational' | 'structural' | 'behavioral';
@@ -312,7 +314,7 @@ const rootDir = process.cwd();
   }
 
   if (dryRun) {
-    console.log('  [DRY RUN] Would scan directories:', dirsToScan.join(', '));
+    logger.dev('  [DRY RUN] Would scan directories:', dirsToScan.join(', '));
     return;
   }
 
@@ -328,7 +330,7 @@ const rootDir = process.cwd();
         await scanDir(fullDir);
       }
     } catch (e) {
-      console.warn(`  Could not scan ${dir}, skipping...`);
+      logger.warn(`  Could not scan ${dir}, skipping...`);
     }
   }
 
