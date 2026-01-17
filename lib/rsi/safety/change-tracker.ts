@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
 /**
  * Change Tracker for RSI
@@ -73,5 +73,8 @@ export class ChangeTracker {
       console.error('Failed to read RSI history:', error);
       return [];
     }
+  }
+  static async getRecentChanges(): Promise<ChangeRecord[]> {
+    return this.getHistory();
   }
 }

@@ -87,6 +87,15 @@ export class RSIOrchestrator {
         durationMs: duration,
         success: true,
       });
+
+      // 9. Generate Dashboard Report
+      try {
+        const { RSIDashboard } = await import('./observability/dashboard');
+        await RSIDashboard.generateReport();
+      } catch (dashError) {
+        console.error('Failed to generate dashboard:', dashError);
+      }
+
       console.log(`\n✅ RSI Cycle Complete (${(duration / 1000).toFixed(2)}s)`);
     }
   }

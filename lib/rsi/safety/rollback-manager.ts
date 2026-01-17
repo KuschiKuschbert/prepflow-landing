@@ -1,5 +1,5 @@
 import { exec } from 'child_process';
-import util from 'util';
+import * as util from 'util';
 import { ChangeTracker } from './change-tracker';
 
 const execAsync = util.promisify(exec);

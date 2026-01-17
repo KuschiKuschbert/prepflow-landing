@@ -11,9 +11,8 @@ register();
 const { RefactoringPlanner } = require('../../lib/rsi/auto-refactoring/refactoring-planner');
 const { CodemodRunner } = require('../../lib/rsi/auto-refactoring/codemod-runner');
 const { ValidationSuite } = require('../../lib/rsi/auto-refactoring/validation-suite');
-const { exec } = require('child_process');
-const util = require('util');
-const execAsync = util.promisify(exec);
+const { RiskAssessor, RiskLevel } = require('../../lib/rsi/safety/risk-assessor');
+const { RollbackManager } = require('../../lib/rsi/safety/rollback-manager');
 
 async function main() {
   const args = process.argv.slice(2);
@@ -29,10 +28,22 @@ async function main() {
     return;
   }
 
-  const selectedPlan = plans[0]; // Pick highest priority
+  // Filter plans by risk and impact
+  const allPlans = plans.map(plan => ({
+    ...plan,
+    risk: RiskAssessor.assess(plan.type || 'refactor', plan.targetFiles || [])
+  }));
+
+  const selectedPlan = allPlans[0];
   console.log(`\n📋 Selected Plan: ${selectedPlan.title}`);
   console.log(`   Description: ${selectedPlan.description}`);
-  console.log(`   Impact: ${selectedPlan.impactScore} | Risk: ${selectedPlan.riskScore}`);
+  console.log(`   Impact: ${selectedPlan.impactScore} | Risk Level: ${selectedPlan.risk.level} (${selectedPlan.risk.score})`);
+
+  if (selectedPlan.risk.level === RiskLevel.HIGH || selectedPlan.risk.level === RiskLevel.CRITICAL) {
+    console.log(`\n⚠️  This plan is too risky for autonomous execution: ${selectedPlan.risk.reasons.join(', ')}`);
+    console.log(`   Human approval required. Skipping automatic apply.`);
+    return;
+  }
 
   // 2. Execute (or Dry Run)
   if (!selectedPlan.targetFiles || !selectedPlan.codemodPath) {
@@ -46,13 +57,14 @@ async function main() {
       `\n[DRY RUN] Would execute codemod: ${selectedPlan.codemodPath} on ${selectedPlan.targetFiles.join(', ')}`,
     );
 
-    // Simulate codemod runner dry run output
-    // (Assuming CodemodRunner.run isn't actually called here to avoid needing the file to exist for this demo)
-    console.log('   (Simulating jscodeshift output...)');
-    console.log('   files: 5, changed: 2, errors: 0');
+    const result = await CodemodRunner.run(
+      selectedPlan.codemodPath,
+      selectedPlan.targetFiles,
+      true, // dryRun
+    );
+    console.log('   Dry run complete.');
   } else {
     console.log(`\n🚀 Executing refactor...`);
-    // We need to ensure codemod file exists before real execution, or catch error
     const result = await CodemodRunner.run(
       selectedPlan.codemodPath,
       selectedPlan.targetFiles,
@@ -67,14 +79,14 @@ async function main() {
       const isValid = await ValidationSuite.validate(selectedPlan.targetFiles);
 
       if (isValid) {
-        console.log('✅ Validation passed. Ready to commit.');
+        console.log('✅ Validation passed. Ready for review.');
       } else {
         console.error('❌ Validation failed or no changes detected. Reverting...');
-        await execAsync('git checkout -- .');
+        await RollbackManager.rollbackAll();
       }
     } else {
-      console.error('❌ Refactoring execution failed.');
-      console.error(result.output);
+      console.error('❌ Refactoring execution failed. Cleaning up...');
+      await RollbackManager.rollbackAll();
     }
   }
 }

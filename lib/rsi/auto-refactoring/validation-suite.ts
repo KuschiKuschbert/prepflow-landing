@@ -1,6 +1,6 @@
 import { exec } from 'child_process';
-import path from 'path';
-import util from 'util';
+import * as path from 'path';
+import * as util from 'util';
 
 const execAsync = util.promisify(exec);
 
@@ -50,7 +50,8 @@ export class ValidationSuite {
 
         if (failedFiles.size > 0) {
           console.log(`⚠️ Identifying ${failedFiles.size} broken files. Reverting them...`);
-          for (const file of failedFiles) {
+          const failedFilesArray = Array.from(failedFiles);
+          for (const file of failedFilesArray) {
             console.log(`   Reverting ${file}...`);
             await execAsync(`git checkout "${file}"`);
           }

@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
 /**
  * Performance Tracker for RSI
@@ -67,6 +67,18 @@ export class PerformanceTracker {
       fs.writeFileSync(perfLogPath, JSON.stringify(logs, null, 2));
     } catch (error) {
       console.error('Failed to log RSI performance:', error);
+    }
+  }
+
+  static async getRecentMetrics(): Promise<PerformanceRecord[]> {
+    const perfLogPath = path.join(process.cwd(), 'docs/rsi/performance-logs.json');
+    try {
+      if (!fs.existsSync(perfLogPath)) return [];
+      const content = fs.readFileSync(perfLogPath, 'utf-8');
+      return JSON.parse(content || '[]');
+    } catch (error) {
+      console.error('Failed to read RSI performance logs:', error);
+      return [];
     }
   }
 }

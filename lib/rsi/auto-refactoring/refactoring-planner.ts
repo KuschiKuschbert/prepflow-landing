@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export interface RefactoringPlan {
   id: string;
@@ -15,44 +15,96 @@ export interface RefactoringPlan {
 
 export class RefactoringPlanner {
   static async createPlan(): Promise<RefactoringPlan[]> {
-    const debtPath = path.join(process.cwd(), 'docs/DEBT.md');
-    if (!fs.existsSync(debtPath)) {
-      console.warn('⚠️ docs/DEBT.md not found. using fallback logic.');
-      return [];
-    }
-
-    const content = fs.readFileSync(debtPath, 'utf-8');
     const plans: RefactoringPlan[] = [];
 
-    // Parse DEBT.md
-    // Looks for: - [ ] **[WEB]** ...
-    const lines = content.split('\n');
-    let currentPriority = 'low';
+    // 1. Parse DEBT.md
+    const debtPath = path.join(process.cwd(), 'docs/DEBT.md');
+    if (fs.existsSync(debtPath)) {
+      const content = fs.readFileSync(debtPath, 'utf-8');
+      const lines = content.split('\n');
+      let currentPriority = 'low';
 
-    for (const line of lines) {
-      if (line.includes('## High Priority')) {
-        currentPriority = 'high';
-        continue;
-      } else if (line.includes('## Medium Priority')) {
-        currentPriority = 'medium';
-        continue;
-      } else if (line.includes('## Low Priority')) {
-        currentPriority = 'low';
-        continue;
+      for (const line of lines) {
+        if (line.includes('## High Priority')) {
+          currentPriority = 'high';
+          continue;
+        } else if (line.includes('## Medium Priority')) {
+          currentPriority = 'medium';
+          continue;
+        } else if (line.includes('## Low Priority')) {
+          currentPriority = 'low';
+          continue;
+        }
+
+        if (line.trim().startsWith('- [ ]')) {
+          const cleanLine = line.replace('- [ ]', '').trim();
+          const plan = this.analyzeItem(cleanLine, currentPriority);
+          if (plan) plans.push(plan);
+        }
       }
+    }
 
-      // Match unchecked items: - [ ]
-      if (line.trim().startsWith('- [ ]')) {
-        const cleanLine = line.replace('- [ ]', '').trim();
-        const plan = this.analyzeItem(cleanLine, currentPriority);
-        if (plan) {
-          plans.push(plan);
+    // 2. Parse Architecture Analysis Report
+    const archPath = path.join(process.cwd(), 'reports/rsi-architecture-analysis.md');
+    if (fs.existsSync(archPath)) {
+      const content = fs.readFileSync(archPath, 'utf-8');
+      const sections = content.split('### ').slice(1); // Split by anti-pattern entries
+
+      for (const section of sections) {
+        const lines = section.split('\n');
+        const header = lines[0]; // e.g., "Spaghetti Code (HIGH)"
+        const fileLine = lines.find(l => l.startsWith('**File:**'));
+        const descLine = lines.find(l => l.startsWith('**Description:**'));
+
+        if (fileLine && descLine) {
+          const fileName = fileLine.replace('**File:**', '').trim().replace(/`/g, '');
+          const description = descLine.replace('**Description:**', '').trim();
+          const priority = header.includes('(HIGH)') ? 'high' : header.includes('(MEDIUM)') ? 'medium' : 'low';
+
+          const plan = this.analyzeArchitectureIssue(header, fileName, description, priority);
+          if (plan) plans.push(plan);
         }
       }
     }
 
     // Sort by impact (High priority first)
     return plans.sort((a, b) => b.impactScore - a.impactScore);
+  }
+
+  private static analyzeArchitectureIssue(type: string, file: string, description: string, priority: string): RefactoringPlan | null {
+    let impactScore = 5;
+    if (priority === 'high') impactScore = 8;
+    if (priority === 'medium') impactScore = 5;
+
+    if (type.includes('Spaghetti Code')) {
+      return {
+        id: `spaghetti-${Date.now()}-${file.replace(/\//g, '-')}`,
+        title: `Fix Spaghetti Code in ${path.basename(file)}`,
+        description: `Deep nesting detected: ${description}`,
+        impactScore,
+        riskScore: 4,
+        status: 'pending',
+        codemodPath: 'lib/rsi/auto-refactoring/codemods/extract-function.ts',
+        targetFiles: [file],
+        sourceDebtItem: `Architecture Report: ${type} in ${file}`,
+      };
+    }
+
+    if (type.includes('Magic Numbers')) {
+      return {
+        id: `magic-numbers-${Date.now()}-${file.replace(/\//g, '-')}`,
+        title: `Extract Magic Numbers in ${path.basename(file)}`,
+        description: `Found magic numbers: ${description}`,
+        impactScore: impactScore - 1,
+        riskScore: 2,
+        status: 'pending',
+        codemodPath: 'lib/rsi/auto-refactoring/codemods/extract-constants.ts',
+        targetFiles: [file],
+        sourceDebtItem: `Architecture Report: ${type} in ${file}`,
+      };
+    }
+
+    return null;
   }
 
   private static analyzeItem(itemText: string, priority: string): RefactoringPlan | null {
