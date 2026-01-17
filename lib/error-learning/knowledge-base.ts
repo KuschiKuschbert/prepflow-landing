@@ -3,8 +3,8 @@
  * Manages structured knowledge base for errors, patterns, and rules
  */
 
-import fs from 'fs/promises';
-import path from 'path';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 
 export interface KnowledgeBaseError {
   id: string;

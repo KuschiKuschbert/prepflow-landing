@@ -5,8 +5,8 @@
  * Detects design patterns and anti-patterns, generates ADRs.
  */
 
-import fs from 'fs/promises';
-import path from 'path';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 
 export interface DesignPattern {
   name: string;
@@ -122,7 +122,7 @@ export function detectAntiPatterns(content: string, filePath: string): AntiPatte
 
   // God Object
   const classMatches = content.matchAll(/class\s+\w+[^{]*\{/g);
-  for (const match of classMatches) {
+  for (const match of Array.from(classMatches)) {
     const classContent = extractClassContent(content, match.index || 0);
     const methodCount = (classContent.match(/\w+\s*\([^)]*\)\s*\{/g) || []).length;
     const propertyCount = (classContent.match(/(public|private|protected)\s+\w+:/g) || []).length;
