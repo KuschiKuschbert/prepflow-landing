@@ -2,8 +2,15 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import {
+    checkSystemHealth,
+    fetchErrorCounts,
+    fetchRecentSafetyErrors,
+    fetchTicketCounts,
+    fetchTotalDataRecords,
+    fetchUserCounts,
+} from './helpers/fetchDashboardData';
 
 /**
  * GET /api/admin/dashboard/stats
@@ -21,129 +28,33 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get total users count
-    const { count: totalUsers, error: usersError } = await supabaseAdmin
-      .from('users')
-      .select('*', { count: 'exact', head: true });
-
-    if (usersError) {
-      logger.warn('[Admin Dashboard Stats] Error fetching total users count:', {
-        error: usersError.message,
-        code: (usersError as PostgrestError).code,
-      });
-    }
-
-    // Get active subscriptions count (users with active subscription_status)
-    const { count: activeSubscriptions, error: subscriptionsError } = await supabaseAdmin
-      .from('users')
-      .select('*', { count: 'exact', head: true })
-      .in('subscription_status', ['active', 'trialing']);
-
-    if (subscriptionsError) {
-      logger.warn('[Admin Dashboard Stats] Error fetching active subscriptions count:', {
-        error: subscriptionsError.message,
-        code: (subscriptionsError as PostgrestError).code,
-      });
-    }
-
-    // Get critical errors count (Safety + Critical, status = new or investigating)
-    const { count: criticalErrors, error: criticalErrorsQueryError } = await supabaseAdmin
-      .from('admin_error_logs')
-      .select('*', { count: 'exact', head: true })
-      .in('severity', ['safety', 'critical'])
-      .in('status', ['new', 'investigating']);
-
-    if (criticalErrorsQueryError) {
-      logger.warn('[Admin Dashboard Stats] Error fetching critical errors count:', {
-        error: criticalErrorsQueryError.message,
-        code: (criticalErrorsQueryError as PostgrestError).code,
-      });
-    }
-
-    // Get unresolved tickets count (open or investigating)
-    const { count: unresolvedTickets, error: ticketsError } = await supabaseAdmin
-      .from('support_tickets')
-      .select('*', { count: 'exact', head: true })
-      .in('status', ['open', 'investigating']);
-
-    if (ticketsError) {
-      logger.warn('[Admin Dashboard Stats] Error fetching unresolved tickets count:', {
-        error: ticketsError.message,
-        code: (ticketsError as PostgrestError).code,
-      });
-    }
-
-    // Get recent safety errors (last 5, status = new or investigating)
-    const { data: recentSafetyErrors, error: safetyErrorsError } = await supabaseAdmin
-      .from('admin_error_logs')
-      .select('id, error_message, severity, status, created_at')
-      .eq('severity', 'safety')
-      .in('status', ['new', 'investigating'])
-      .order('created_at', { ascending: false })
-      .limit(5);
-
-    if (safetyErrorsError) {
-      logger.warn('[Admin Dashboard Stats] Error fetching recent safety errors:', {
-        error: safetyErrorsError.message,
-        code: (safetyErrorsError as PostgrestError).code,
-      });
-    }
-
-    // Get recent errors count (last 24 hours)
-    const oneDayAgo = new Date();
-    oneDayAgo.setDate(oneDayAgo.getDate() - 1);
-    const { count: recentErrors, error: recentErrorsQueryError } = await supabaseAdmin
-      .from('admin_error_logs')
-      .select('*', { count: 'exact', head: true })
-      .gte('created_at', oneDayAgo.toISOString());
-
-    if (recentErrorsQueryError) {
-      logger.warn('[Admin Dashboard Stats] Error fetching recent errors count:', {
-        error: recentErrorsQueryError.message,
-        code: (recentErrorsQueryError as PostgrestError).code,
-      });
-    }
-
-    // Get total data records across all tables
-    const tables = ['ingredients', 'recipes', 'menu_dishes', 'temperature_logs', 'cleaning_tasks'];
-    let totalDataRecords = 0;
-
-    for (const table of tables) {
-      try {
-        const { count, error: tableError } = await supabaseAdmin
-          .from(table)
-          .select('*', { count: 'exact', head: true });
-        if (tableError) {
-          logger.warn(`[Admin Dashboard Stats] Error counting records in ${table}:`, {
-            error: tableError.message,
-            code: (tableError as PostgrestError).code,
-          });
-        } else {
-          totalDataRecords += count || 0;
-        }
-      } catch (error) {
-        // Table might not exist, skip it
-        logger.warn(`[Admin Dashboard Stats] Could not count records in ${table}:`, {
-          error: error instanceof Error ? error.message : String(error),
-        });
-      }
-    }
-
-    // System health check - simple database connectivity test
-    const { error: healthError } = await supabaseAdmin.from('users').select('id').limit(1);
-
-    const systemHealth = healthError ? 'down' : 'healthy';
+    // Parallelize all data fetching
+    const [
+      userCounts,
+      errorCounts,
+      ticketCounts,
+      recentSafetyErrors,
+      totalDataRecords,
+      systemHealth,
+    ] = await Promise.all([
+      fetchUserCounts(),
+      fetchErrorCounts(),
+      fetchTicketCounts(),
+      fetchRecentSafetyErrors(),
+      fetchTotalDataRecords(),
+      checkSystemHealth(),
+    ]);
 
     return NextResponse.json({
       success: true,
-      totalUsers: totalUsers || 0,
-      activeSubscriptions: activeSubscriptions || 0,
+      totalUsers: userCounts.totalUsers,
+      activeSubscriptions: userCounts.activeSubscriptions,
       systemHealth,
-      recentErrors: recentErrors || 0,
+      recentErrors: errorCounts.recentErrors,
       totalDataRecords,
-      criticalErrors: criticalErrors || 0,
-      unresolvedTickets: unresolvedTickets || 0,
-      recentSafetyErrors: recentSafetyErrors || [],
+      criticalErrors: errorCounts.criticalErrors,
+      unresolvedTickets: ticketCounts.unresolvedTickets,
+      recentSafetyErrors,
     });
   } catch (error) {
     if (error instanceof NextResponse) {
