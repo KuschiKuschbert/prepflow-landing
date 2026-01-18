@@ -48,7 +48,15 @@ export function convertToSQL(backupData: BackupData): string {
           if (value instanceof Date) {
             return `'${value.toISOString()}'`;
           }
-          return String(value);
+          if (typeof value === 'number') {
+            return String(value);
+          }
+          if (typeof value === 'object') {
+             const json = JSON.stringify(value);
+             return `'${json.replace(/'/g, "''")}'`;
+          }
+          // Safe fallback for anything else
+          return `'${String(value).replace(/'/g, "''")}'`;
         });
         return `(${rowValues.join(', ')})`;
       });
