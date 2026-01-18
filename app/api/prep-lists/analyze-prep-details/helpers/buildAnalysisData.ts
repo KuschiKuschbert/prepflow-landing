@@ -1,8 +1,17 @@
 import { RecipeAnalysisData } from '@/app/webapp/prep-lists/types';
 import { RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
 
+interface RawRecipe {
+  id: string;
+  recipe_name: string;
+  description?: string;
+  yield?: number;
+  yield_unit?: string;
+  instructions?: string;
+}
+
 export function buildRecipesToAnalyze(
-  recipes: any[],
+  recipes: RawRecipe[],
   recipeIngredientsMap: Map<string, RecipeIngredientWithDetails[]>,
 ): RecipeAnalysisData[] {
   return recipes
@@ -15,8 +24,8 @@ export function buildRecipesToAnalyze(
         id: recipe.id,
         recipe_name: recipe.recipe_name,
         description: recipe.description || '',
-        yield: recipe.yield,
-        yield_unit: recipe.yield_unit,
+        yield: recipe.yield || 1,
+        yield_unit: recipe.yield_unit || 'servings',
         instructions: recipe.instructions || '',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),

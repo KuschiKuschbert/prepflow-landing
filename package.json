@@ -111,7 +111,7 @@
     "error:auto-document": "node scripts/error-learning/auto-document-fix.js",
     "error:report": "node scripts/error-learning/generate-learning-report.js",
     "error:generate-rules": "node -e \"const { generateRulesFromKnowledgeBase } = require('./lib/error-learning/rule-generator.ts'); generateRulesFromKnowledgeBase().catch(console.error);\"",
-    "error:generate-rules": "node -e \"const { generateRulesFromKnowledgeBase } = require('./lib/error-learning/rule-generator.ts'); generateRulesFromKnowledgeBase().catch(console.error);\"",
+    "audit:any": "tsx scripts/audit-any.ts",
     "rsi:status": "node scripts/rsi/status.js",
     "rsi:rollback": "node scripts/rsi/rollback.js",
     "rsi:fix": "node scripts/rsi/auto-fix.js",

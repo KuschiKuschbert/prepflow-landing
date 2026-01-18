@@ -65,7 +65,7 @@ const CatchTheDocketOverlay: React.FC = () => {
             ? 'reduced_motion'
             : 'flag',
       } as const;
-      (window as any).dataLayer?.push(payload);
+      (window as any /* justified: global object access */).dataLayer?.push(payload);
       window.dispatchEvent(new CustomEvent('gtm:event', { detail: payload }));
     }
     return d;
@@ -89,7 +89,7 @@ const CatchTheDocketOverlay: React.FC = () => {
           threshold_ms: 800,
           is_touch_device: isTouchDevice(),
         } as const;
-        (window as any).dataLayer?.push(startPayload);
+        (window as any /* justified: global object access */).dataLayer?.push(startPayload);
         window.dispatchEvent(new CustomEvent('gtm:event', { detail: startPayload }));
       }
 
@@ -100,7 +100,7 @@ const CatchTheDocketOverlay: React.FC = () => {
           page_path: routePath(),
           is_touch_device: isTouchDevice(),
         } as const;
-        (window as any).dataLayer?.push(endPayload);
+        (window as any /* justified: global object access */).dataLayer?.push(endPayload);
         window.dispatchEvent(new CustomEvent('gtm:event', { detail: endPayload }));
       }
 

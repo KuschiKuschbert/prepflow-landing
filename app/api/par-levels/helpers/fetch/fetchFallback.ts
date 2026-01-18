@@ -4,7 +4,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { IngredientRecord, ParLevelRecord } from '../types';
 
-export async function fetchFallback(supabaseAdmin: SupabaseClient, originalError: any) {
+export async function fetchFallback(supabaseAdmin: SupabaseClient, originalError: any /* justified: raw database error */) {
   logger.warn('[Par Levels API] Join failed, trying without join:', {
     error: originalError.message,
     code: originalError.code,

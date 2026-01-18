@@ -93,6 +93,17 @@ async function main() {
     console.log(`${GREEN}✅ Tech Debt within acceptable limits.${NC}`);
   }
 
+  // Check for 'any' types (Eradicate Any Mission)
+  console.log(`\n${YELLOW}🔍 Eradicate Any Audit...${NC}`);
+  try {
+    const { execSync } = require('child_process');
+    execSync('npm run audit:any', { stdio: 'inherit' });
+    console.log(`${GREEN}✅ No unjustified 'any' types found.${NC}`);
+  } catch (error) {
+    console.warn(`${YELLOW}⚠️  Unjustified 'any' types detected!${NC}`);
+    console.warn(`   Run 'npm run audit:any' to see details.`);
+  }
+
   if (hasErrors) {
     console.error(`\n${RED}💥 Health checks failed.${NC}`);
     process.exit(1);

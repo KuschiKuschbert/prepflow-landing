@@ -1,16 +1,25 @@
 import { logger } from '@/lib/logger';
 import {
-  DBDishIngredient,
-  DBDishRecipe,
-  DBRecipeIngredient,
-  RecipeGroupedItem,
-  SectionData,
+    DBDishIngredient,
+    DBDishRecipe,
+    DBRecipeIngredient,
+    RecipeGroupedItem,
+    SectionData,
 } from '../types';
 import { processDish } from './processDish';
 import { processRecipe } from './processRecipe';
 
+interface RawMenuItem {
+  id: string;
+  category?: string;
+  dish_id?: string;
+  recipe_id?: string;
+  dishes?: unknown; // justified: raw Supabase response
+  recipes?: unknown; // justified: raw Supabase response
+}
+
 interface ProcessMenuItemParams {
-  menuItem: any; // Using any for the raw Supabase response type for now, matching existing pattern
+  menuItem: RawMenuItem; // justified: incoming raw data from Supabase
   sectionsData: Map<string | null, SectionData>;
   unassignedItems: RecipeGroupedItem[];
   sectionsMap: Map<string, { id: string; name: string }>;
