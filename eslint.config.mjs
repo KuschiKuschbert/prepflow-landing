@@ -36,8 +36,15 @@ export default defineConfig([
     rules: {
       // Warns on usage of 'any' to encourage fixing, but prevents build breakage
       '@typescript-eslint/no-explicit-any': 'warn',
-      // Warn on unused vars but don't block builds (technical debt to clean up incrementally)
-      '@typescript-eslint/no-unused-vars': 'warn',
+      // Warn on unused vars but allow underscore-prefixed params (intentional ignores)
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
     },
   },
   {
