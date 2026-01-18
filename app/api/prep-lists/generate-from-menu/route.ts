@@ -8,8 +8,7 @@ import { fetchDishData, fetchRecipeIngredients } from './helpers/fetchBatchData'
 import { fetchKitchenSections } from './helpers/fetchKitchenSections';
 import { fetchMenuData } from './helpers/fetchMenuData';
 import { mergeDishRecipeIngredients } from './helpers/mergeDishRecipeIngredients';
-import { processDish } from './helpers/processDish';
-import { processRecipe } from './helpers/processRecipe';
+import { processMenuItem } from './helpers/processMenuItem';
 import { RecipeGroupedItem, SectionData } from './types';
 
 export async function POST(request: NextRequest) {
@@ -72,68 +71,19 @@ export async function POST(request: NextRequest) {
     const unassignedItems: RecipeGroupedItem[] = [];
 
     // Process each menu item using pre-fetched data
+    // Process each menu item using pre-fetched data
     for (const menuItem of menuItems) {
-      try {
-        // Handle dish - dishes relation might be an array or single object
-        if (menuItem.dish_id) {
-          const dishes = menuItem.dishes;
-          if (dishes) {
-            const dish = Array.isArray(dishes) ? dishes[0] : dishes;
-            if (dish && dish.id && dish.dish_name) {
-              const dishSection = dishSectionsMap.get(dish.id) || {
-                sectionId: null,
-                sectionName: 'Uncategorized',
-              };
-              const dishRecipes = dishRecipesMap.get(dish.id) || [];
-              const dishIngredients = dishIngredientsMap.get(dish.id) || [];
-
-              processDish(
-                dish.id,
-                dish.dish_name,
-                menuItem.category || 'Uncategorized',
-                sectionsData,
-                unassignedItems,
-                sectionsMap,
-                dishSection,
-                dishRecipes,
-                dishIngredients,
-                recipeIngredientsMap,
-                recipeInstructionsMap,
-              );
-              continue; // Skip recipe processing if dish was processed
-            }
-          }
-        }
-
-        // Handle recipe directly in menu - recipes relation might be an array or single object
-        if (menuItem.recipe_id) {
-          const recipes = menuItem.recipes;
-          if (recipes) {
-            const recipe = Array.isArray(recipes) ? recipes[0] : recipes;
-            if (recipe && recipe.id && (recipe.recipe_name || recipe.name)) {
-              const recipeIngredients = recipeIngredientsMap.get(recipe.id) || [];
-              const instructions = recipeInstructionsMap.get(recipe.id) || null;
-
-              processRecipe(
-                recipe.id,
-                recipe.recipe_name || recipe.name,
-                null,
-                null,
-                sectionsData,
-                unassignedItems,
-                sectionsMap,
-                1,
-                instructions,
-                recipeIngredients,
-                null, // No dish section for standalone recipes
-              );
-            }
-          }
-        }
-      } catch (itemError) {
-        logger.error(`Error processing menu item ${menuItem.id}:`, itemError);
-        // Continue processing other items even if one fails
-      }
+      processMenuItem({
+        menuItem,
+        sectionsData,
+        unassignedItems,
+        sectionsMap,
+        dishSectionsMap,
+        dishRecipesMap,
+        dishIngredientsMap,
+        recipeIngredientsMap,
+        recipeInstructionsMap,
+      });
     }
 
     // Convert sections map to array

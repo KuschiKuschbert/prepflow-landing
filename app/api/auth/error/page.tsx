@@ -4,7 +4,7 @@ import { LANDING_FONT_WEIGHTS, LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
-import { errorMessages } from './error-messages';
+import { ErrorTypeSchema, errorMessages } from './error-messages';
 
 /**
  * Custom Auth0 Error Page
@@ -12,8 +12,10 @@ import { errorMessages } from './error-messages';
  */
 function AuthErrorContent() {
   const searchParams = useSearchParams();
-  const error = searchParams.get('error');
-  const errorInfo = errorMessages[error || 'Default'] || errorMessages.Default;
+  const rawError = searchParams.get('error');
+  // Validate error parameter with Zod, falling back to 'Default' if invalid/unknown
+  const error = ErrorTypeSchema.parse(rawError);
+  const errorInfo = errorMessages[error] || errorMessages.Default;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a] px-4 py-12">

@@ -3,13 +3,31 @@
  * Centralized error message definitions for authentication errors
  */
 
+import { z } from 'zod';
+
 export interface ErrorMessage {
   title: string;
   message: string;
   troubleshooting?: string[];
 }
 
-export const errorMessages: Record<string, ErrorMessage> = {
+export const ErrorTypeSchema = z.enum([
+  'Configuration',
+  'AccessDenied',
+  'Verification',
+  'Callback',
+  'autho',
+  'auth0',
+  'MissingEmail',
+  'MissingAccountOrUser',
+  'MissingToken',
+  'InvalidCallbackUrl',
+  'Default'
+]).catch('Default');
+
+export type AuthErrorType = z.infer<typeof ErrorTypeSchema>;
+
+export const errorMessages: Record<AuthErrorType, ErrorMessage> = {
   Configuration: {
     title: 'Configuration Error',
     message:
