@@ -26,20 +26,33 @@ import { fetchRecipesWithInstructions } from './helpers/fetchRecipes';
  * @param {string} [request.body.countryCode] - Country code (default: 'AU')
  * @returns {Promise<NextResponse>} Prep details analysis response
  */
+import { analyzePrepDetailsSchema } from '../helpers/schemas';
+
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { recipeIds, countryCode = 'AU' } = body as {
-      recipeIds: string[];
-      countryCode?: string;
-    };
-
-    if (!Array.isArray(recipeIds) || recipeIds.length === 0) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
       return NextResponse.json(
-        ApiErrorHandler.createError('recipeIds must be a non-empty array', 'INVALID_REQUEST', 400),
+        ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      )
+    }
+
+    const validation = analyzePrepDetailsSchema.safeParse(body);
+    if (!validation.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validation.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       );
     }
+
+    const { recipeIds, countryCode } = validation.data;
 
     if (!supabaseAdmin) {
       return NextResponse.json(

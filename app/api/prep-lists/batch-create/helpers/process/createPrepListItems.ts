@@ -8,7 +8,7 @@ export async function createPrepListItems(prepListId: string, items: PrepListToC
   const prepItems = items.map(item => ({
     prep_list_id: prepListId,
     ingredient_id: item.ingredientId,
-    quantity: parseFloat(item.quantity) || 0,
+    quantity: parseFloat(item.quantity || '0') || 0,
     unit: item.unit,
     notes: item.notes || null,
   }));

@@ -4,9 +4,9 @@ export interface PrepListToCreate {
   notes?: string;
   items: Array<{
     ingredientId: string;
-    quantity: string;
-    unit: string;
-    notes: string;
+    quantity?: string;
+    unit?: string;
+    notes?: string;
   }>;
 }
 

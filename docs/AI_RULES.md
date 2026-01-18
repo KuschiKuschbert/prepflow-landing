@@ -45,6 +45,10 @@ graph TD
   - `lib/`: Business logic, helpers, API clients.
   - `hooks/`: React state logic.
   - `scripts/`: Automation (The Brain).
+- **Complexity**:
+  - **No Spaghetti Code**: Deep nesting (> 4-5 levels) is forbidden.
+  - **Decomposition**: Extract logic into small, single-purpose helper functions and separate components.
+  - **Custom Hooks**: Extract complex `useEffect` or state logic into `hooks/`.
 
 ## 3. 🛡️ The Brain's Laws
 

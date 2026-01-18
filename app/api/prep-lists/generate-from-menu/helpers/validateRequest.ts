@@ -1,31 +1,30 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { NextResponse } from 'next/server';
+import { generateFromMenuSchema } from '../../helpers/schemas';
 
 /**
  * Validate request body for menu ID.
  *
- * @param {any} body - Request body
- * @returns {Promise<{menuId: string, userId?: string, error: NextResponse | null}>} Validated data and error if any
+ * @param {unknown} body - Request body
+ * @returns {Promise<{menuId: string | null, userId?: string, error: NextResponse | null}>} Validated data and error if any
  */
 export async function validateRequest(body: unknown) {
-  // Use a type guard or safe access
-  const safeBody = body as { menuId?: string; userId?: string } | null;
-  const menuId = safeBody?.menuId;
-  const userId = safeBody?.userId;
+  const validation = generateFromMenuSchema.safeParse(body);
 
-  if (!menuId) {
+  if (!validation.success) {
     return {
       menuId: null,
       userId: undefined,
       error: NextResponse.json(
-        {
-          success: false,
-          error: 'Missing required fields',
-          message: 'Menu ID is required',
-        },
+        ApiErrorHandler.createError(
+          validation.error.issues[0]?.message || 'Invalid request parameters',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       ),
     };
   }
 
-  return { menuId, userId, error: null };
+  return { ...validation.data, error: null };
 }

@@ -37,9 +37,9 @@ export interface Ingredient {
 }
 
 export interface CreatePrepListItemParams {
-  ingredientId: string;
-  quantity: string;
-  unit: string;
+  ingredient_id: string;
+  quantity?: number | string;
+  unit?: string;
   notes?: string;
 }
 

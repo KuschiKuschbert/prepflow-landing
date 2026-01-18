@@ -5,23 +5,39 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createPrepList } from './helpers/createPrepList';
 import { deletePrepList } from './helpers/deletePrepList';
 import {
-  combinePrepListData,
-  fetchIngredientsBatch,
-  fetchPrepListsData,
-  fetchRelatedData,
+    combinePrepListData,
+    fetchIngredientsBatch,
+    fetchPrepListsData,
+    fetchRelatedData,
 } from './helpers/fetchPrepLists';
 import { handlePrepListError } from './helpers/handlePrepListError';
 import { parseDeleteRequest } from './helpers/parseDeleteRequest';
-import { createPrepListSchema } from './helpers/schemas';
+import {
+    createPrepListSchema,
+    getPrepListsSchema,
+    updatePrepListSchema,
+} from './helpers/schemas';
 import { transformItems } from './helpers/transformItems';
 import { updatePrepList } from './helpers/updatePrepList';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-    const page = parseInt(searchParams.get('page') || '1');
-    const pageSize = parseInt(searchParams.get('pageSize') || '10');
+    const params = Object.fromEntries(searchParams.entries());
+
+    const validation = getPrepListsSchema.safeParse(params);
+    if (!validation.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validation.error.issues[0]?.message || 'Invalid query parameters',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const { userId, page, pageSize } = validation.data;
 
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -30,11 +46,15 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { prepLists, count, empty } = await fetchPrepListsData({ userId, page, pageSize });
+    const { prepLists, count, empty } = await fetchPrepListsData({
+      userId: userId || null,
+      page,
+      pageSize,
+    });
 
     if (empty) {
       const totalPages = Math.max(1, Math.ceil(count / pageSize));
-      const mappedPrepLists = prepLists.map(list => ({
+      const mappedPrepLists = prepLists.map((list) => ({
         ...list,
         kitchen_section_id: list.kitchen_section_id || list.section_id,
         kitchen_sections: null,
@@ -49,7 +69,7 @@ export async function GET(request: NextRequest) {
     const { sectionsMap, itemsByPrepListId, prepListItems } = await fetchRelatedData(prepLists);
     const ingredientIds = Array.from(
       new Set(
-        prepListItems.map(item => item.ingredient_id).filter((id): id is string => Boolean(id)),
+        prepListItems.map((item) => item.ingredient_id).filter((id): id is string => Boolean(id)),
       ),
     );
     const ingredientsMap = await fetchIngredientsBatch(ingredientIds);
@@ -80,20 +100,17 @@ export async function POST(request: NextRequest) {
     try {
       body = await request.json();
     } catch (err) {
-      logger.warn('[Prep Lists API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
       return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
-    const validationResult = createPrepListSchema.safeParse(body);
-    if (!validationResult.success) {
+    const validation = createPrepListSchema.safeParse(body);
+    if (!validation.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
+          validation.error.issues[0]?.message || 'Invalid request body',
           'VALIDATION_ERROR',
           400,
         ),
@@ -101,13 +118,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { userId, kitchenSectionId, name, notes, items } = validationResult.data;
+    const { userId, kitchenSectionId, name, notes, items } = validation.data;
     const prepList = await createPrepList({
       userId,
       kitchenSectionId,
       name,
       notes,
-      items: transformItems(items),
+      items: transformItems(items || []),
     });
 
     return NextResponse.json({
@@ -120,27 +137,35 @@ export async function POST(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/prep-lists', method: 'POST' },
     });
-    if (typeof err === 'object' && err !== null && 'status' in err) {
-      // @ts-ignore - Validated by runtime check
-      return NextResponse.json(err, { status: (err as { status: number }).status });
-    }
     return handlePrepListError(err, 'POST');
   }
 }
 
 export async function PUT(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { id, kitchenSectionId, name, notes, status, items } = body;
-
-    if (!id) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
       return NextResponse.json(
-        ApiErrorHandler.createError('Prep list ID is required', 'VALIDATION_ERROR', 400),
+        ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
-    const data = await updatePrepList({ id, kitchenSectionId, name, notes, status, items });
+    const validation = updatePrepListSchema.safeParse(body);
+    if (!validation.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          validation.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
+    }
+
+    const data = await updatePrepList(validation.data);
 
     return NextResponse.json({
       success: true,
@@ -152,10 +177,6 @@ export async function PUT(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/prep-lists', method: 'PUT' },
     });
-    if (typeof err === 'object' && err !== null && 'status' in err) {
-      // @ts-ignore - Validated by runtime check
-      return NextResponse.json(err, { status: (err as { status: number }).status });
-    }
     return handlePrepListError(err, 'PUT');
   }
 }
@@ -182,10 +203,6 @@ export async function DELETE(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/prep-lists', method: 'DELETE' },
     });
-    if (typeof err === 'object' && err !== null && 'status' in err) {
-      // @ts-ignore - Validated by runtime check
-      return NextResponse.json(err, { status: (err as { status: number }).status });
-    }
     return handlePrepListError(err, 'DELETE');
   }
 }

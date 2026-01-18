@@ -17,24 +17,25 @@ interface PrepListToCreate {
   }>;
 }
 
+import { batchCreateSchema } from '../helpers/schemas';
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { prepLists, userId } = body;
 
-    if (!prepLists || !Array.isArray(prepLists) || prepLists.length === 0) {
+    const validation = batchCreateSchema.safeParse(body);
+    if (!validation.success) {
       return NextResponse.json(
-        ApiErrorHandler.createError('Prep lists array is required', 'MISSING_REQUIRED_FIELD', 400),
+        ApiErrorHandler.createError(
+          validation.error.issues[0]?.message || 'Invalid request body',
+          'VALIDATION_ERROR',
+          400,
+        ),
         { status: 400 },
       );
     }
 
-    if (!userId) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('User ID is required', 'MISSING_REQUIRED_FIELD', 400),
-        { status: 400 },
-      );
-    }
+    const { prepLists, userId } = validation.data;
 
     if (!supabaseAdmin) {
       return NextResponse.json(
