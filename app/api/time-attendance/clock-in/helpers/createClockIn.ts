@@ -1,12 +1,13 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
 /**
  * Create clock-in record
  */
 export async function createClockIn(
+  supabase: SupabaseClient,
   employeeId: string,
   shiftId: string | null,
   latitude: number,
@@ -15,13 +16,6 @@ export async function createClockIn(
   notes: string | null,
   distance: number,
 ): Promise<NextResponse> {
-  if (!supabaseAdmin) {
-    return NextResponse.json(
-      ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-      { status: 500 },
-    );
-  }
-
   const clockInTime = new Date().toISOString();
   const attendanceData = {
     employee_id: employeeId,
@@ -33,7 +27,7 @@ export async function createClockIn(
     notes: notes || null,
   };
 
-  const { data: attendance, error: insertError } = await supabaseAdmin
+  const { data: attendance, error: insertError } = await supabase
     .from('time_attendance')
     .insert(attendanceData)
     .select()

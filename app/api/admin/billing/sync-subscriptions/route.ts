@@ -1,14 +1,26 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { requireAdmin } from '@/lib/admin-auth';
+import { logAdminApiAction } from '@/lib/admin-audit';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { syncAllSubscriptions } from '@/lib/billing-sync';
-import { logAdminApiAction } from '@/lib/admin-audit';
 import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const syncSubscriptionsSchema = z.object({
   limit: z.number().int().positive().optional().default(100),
 });
+
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Admin Billing Sync API] Failed to parse request body:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return {};
+  }
+}
 
 /**
  * POST /api/admin/billing/sync-subscriptions
@@ -22,21 +34,11 @@ const syncSubscriptionsSchema = z.object({
  */
 export async function POST(req: NextRequest) {
   try {
-    const adminUser = await requireAdmin(req);
+    const { adminUser, error } = await standardAdminChecks(req, true); // Sync can be resource intensive, marking as critical
+    if (error) return error;
+    if (!adminUser) throw new Error('Unexpected authentication state');
 
-    let body: unknown = {};
-    try {
-      body = await req.json();
-    } catch (err) {
-      logger.warn('[Admin Billing Sync API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
+    const body = await safeParseBody(req);
     const validationResult = syncSubscriptionsSchema.safeParse(body);
     if (!validationResult.success) {
       return NextResponse.json(

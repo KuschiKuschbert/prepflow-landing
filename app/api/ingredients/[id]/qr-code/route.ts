@@ -1,7 +1,7 @@
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import QRCode from 'qrcode';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {

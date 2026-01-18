@@ -1,8 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { CreateEmployeeInput, Employee } from '@/types/employee';
-import { PostgrestError } from '@supabase/supabase-js';
+import { PostgrestError, SupabaseClient } from '@supabase/supabase-js';
 
 const EMPLOYEE_SELECT = `
   *,
@@ -21,17 +20,13 @@ const EMPLOYEE_SELECT = `
 /**
  * Create a new employee.
  *
+ * @param {SupabaseClient} supabase - Logged-in Supabase client
  * @param {CreateEmployeeInput} employeeData - Employee data
  * @returns {Promise<Employee>} Created employee
  * @throws {Error} If creation fails
  */
-export async function createEmployee(employeeData: CreateEmployeeInput) {
-  if (!supabaseAdmin) {
-    logger.error('[API] Database connection not available');
-    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
-  }
-
-  const { data, error } = await supabaseAdmin
+export async function createEmployee(supabase: SupabaseClient, employeeData: CreateEmployeeInput) {
+  const { data, error } = await supabase
     .from('employees')
     .insert({
       employee_id: employeeData.employee_id || null,

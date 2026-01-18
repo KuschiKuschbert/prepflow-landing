@@ -1,22 +1,16 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { supabaseAdmin } from '@/lib/supabase';
-import { NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { NextResponse } from 'next/server';
 
 /**
  * Check if employee exists
  */
 export async function checkEmployee(
+  supabase: SupabaseClient,
   employeeId: string,
 ): Promise<{ employee: unknown } | NextResponse> {
-  if (!supabaseAdmin) {
-    return NextResponse.json(
-      ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-      { status: 500 },
-    );
-  }
-
-  const { data: employee, error: employeeError } = await supabaseAdmin
+  const { data: employee, error: employeeError } = await supabase
     .from('employees')
     .select('id')
     .eq('id', employeeId)

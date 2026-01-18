@@ -4,16 +4,16 @@
  * Generates AI-powered performance tips with fallback to rule-based logic
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { generateAIResponse } from '@/lib/ai/ai-service';
-import { logger } from '@/lib/logger';
-import {
-  buildPerformanceTipsPrompt,
-  parsePerformanceTipsResponse,
-} from '@/lib/ai/prompts/performance-tips';
-import { generatePerformanceTips } from '@/app/webapp/performance/utils/generatePerformanceTips';
 import type { PerformanceItem } from '@/app/webapp/performance/types';
+import { generatePerformanceTips } from '@/app/webapp/performance/utils/generatePerformanceTips';
+import { generateAIResponse } from '@/lib/ai/ai-service';
+import {
+    buildPerformanceTipsPrompt,
+    parsePerformanceTipsResponse,
+} from '@/lib/ai/prompts/performance-tips';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const performanceTipsSchema = z.object({
@@ -22,33 +22,27 @@ const performanceTipsSchema = z.object({
   countryCode: z.string().optional(),
 });
 
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[AI Performance Tips API] Failed to parse request body:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 /**
  * POST /api/ai/performance-tips
  * Generate AI-powered performance tips with fallback to rule-based logic
- *
- * @param {NextRequest} request - Request object
- * @param {Object} request.body - Request body
- * @param {number} request.body.performanceScore - Performance score
- * @param {PerformanceItem[]} request.body.performanceItems - Performance items
- * @param {string} [request.body.countryCode] - Country code (default: 'AU')
- * @returns {Promise<NextResponse>} Performance tips response
  */
 export async function POST(request: NextRequest) {
   try {
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[AI Performance Tips] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const body = await safeParseBody(request);
 
-    const validationResult = performanceTipsSchema.safeParse(body);
+    const validationResult = performanceTipsSchema.safeParse(body || {});
     if (!validationResult.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(
@@ -110,10 +104,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     logger.error('Performance tips error:', error);
     return NextResponse.json(
-      {
-        error: 'Failed to generate performance tips',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
+      ApiErrorHandler.createError('Failed to generate performance tips', 'INTERNAL_ERROR', 500),
       { status: 500 },
     );
   }

@@ -5,6 +5,7 @@
  * @module api/roster/shifts/[id]
  */
 
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
@@ -49,10 +50,14 @@ const updateShiftSchema = z
  * GET /api/roster/shifts/[id]
  * Get a single shift by ID.
  */
-export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
     const { id } = await context.params;
-    return await getShift(id);
+    return await getShift(supabase, id);
   } catch (err) {
     logger.error('[Shifts API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
@@ -82,11 +87,15 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
  */
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
     const { id } = await context.params;
     const shiftId = id;
 
     // Check if shift exists
-    const existsResult = await checkShiftExists(shiftId);
+    const existsResult = await checkShiftExists(supabase, shiftId);
     if (existsResult instanceof NextResponse) {
       return existsResult;
     }
@@ -117,7 +126,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     }
 
     const updatePayload = zodValidation.data as CreateShiftInput;
-    return await updateShift(shiftId, updatePayload, existsResult.shift);
+    return await updateShift(supabase, shiftId, updatePayload, existsResult.shift);
   } catch (err) {
     logger.error('[Shifts API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
@@ -143,10 +152,14 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
  * DELETE /api/roster/shifts/[id]
  * Delete a shift.
  */
-export async function DELETE(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
     const { id } = await context.params;
-    return await deleteShift(id);
+    return await deleteShift(supabase, id);
   } catch (err) {
     logger.error('[Shifts API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

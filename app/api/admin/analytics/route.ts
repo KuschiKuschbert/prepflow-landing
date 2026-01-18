@@ -1,7 +1,6 @@
-import { requireAdmin } from '@/lib/admin-auth';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -10,17 +9,12 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function GET(request: NextRequest) {
   try {
-    await requireAdmin(request);
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     // Get total users count
-    const { count: totalUsers, error: totalUsersError } = await supabaseAdmin
+    const { count: totalUsers, error: totalUsersError } = await supabase
       .from('users')
       .select('*', { count: 'exact', head: true });
 
@@ -33,7 +27,7 @@ export async function GET(request: NextRequest) {
 
     // Get active users (users who logged in within last 30 days)
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-    const { count: activeUsers, error: activeUsersError } = await supabaseAdmin
+    const { count: activeUsers, error: activeUsersError } = await supabase
       .from('users')
       .select('*', { count: 'exact', head: true })
       .gte('last_login', thirtyDaysAgo);
@@ -47,9 +41,9 @@ export async function GET(request: NextRequest) {
 
     // Get data counts
     const [ingredientsResult, recipesResult, dishesResult] = await Promise.all([
-      supabaseAdmin.from('ingredients').select('*', { count: 'exact', head: true }),
-      supabaseAdmin.from('recipes').select('*', { count: 'exact', head: true }),
-      supabaseAdmin.from('dishes').select('*', { count: 'exact', head: true }),
+      supabase.from('ingredients').select('*', { count: 'exact', head: true }),
+      supabase.from('recipes').select('*', { count: 'exact', head: true }),
+      supabase.from('dishes').select('*', { count: 'exact', head: true }),
     ]);
 
     if (ingredientsResult.error) {

@@ -19,7 +19,7 @@ export async function checkBySignature(
   supabase: SupabaseClient,
   menuItem: MenuItem,
   menuItemData: MenuItemData,
-  normalizedIngredients: any[],
+  normalizedIngredients: any[], // justified
 ): Promise<SignatureCheckResult> {
   const signature = getRecipeSignature(menuItemData, menuItem) || '';
   if (!signature) {

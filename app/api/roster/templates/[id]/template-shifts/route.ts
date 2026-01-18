@@ -1,35 +1,32 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * GET /api/roster/templates/[id]/template-shifts
  * List template shifts for a template.
  */
-export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
     const { id } = await context.params;
     const templateId = id;
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
-    const { data: templateShifts, error } = await supabaseAdmin
+    const { data: templateShifts, error: dbError } = await supabase
       .from('template_shifts')
       .select('*')
       .eq('template_id', templateId)
       .order('day_of_week', { ascending: true })
       .order('start_time', { ascending: true });
 
-    if (error) {
+    if (dbError) {
       logger.error('[Template Shifts API] Database error fetching template shifts:', {
-        error: error.message,
-        code: error.code,
+        error: dbError.message,
+        code: dbError.code,
         context: {
           endpoint: '/api/roster/templates/[id]/template-shifts',
           operation: 'GET',
@@ -37,7 +34,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
         },
       });
 
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(dbError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
@@ -79,18 +76,15 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
  */
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
     const { id } = await context.params;
     const templateId = id;
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
     // Verify template exists
-    const { data: template, error: templateError } = await supabaseAdmin
+    const { data: template, error: templateError } = await supabase
       .from('roster_templates')
       .select('id')
       .eq('id', templateId)
@@ -139,7 +133,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       min_employees: min_employees || 1,
     };
 
-    const { data: templateShift, error: insertError } = await supabaseAdmin
+    const { data: templateShift, error: insertError } = await supabase
       .from('template_shifts')
       .insert(templateShiftData)
       .select()

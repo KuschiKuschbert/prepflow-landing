@@ -11,6 +11,26 @@ const updateFlagSchema = z.object({
   user_id: z.string().uuid().optional().nullable(),
 });
 
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Admin Features API] Failed to parse request body:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return {};
+  }
+}
+
+// Helper to apply user filter to query
+function applyUserFilter(query: any, userId: string | null | undefined) { // justified: Supabase QueryBuilder type is complex
+  if (userId !== undefined && userId !== null) {
+    return query.eq('user_id', userId);
+  }
+  return query.is('user_id', null);
+}
+
 /**
  * PUT /api/admin/features/[flag]
  * Update a feature flag
@@ -38,11 +58,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ fla
       })
       .eq('flag_key', flag);
 
-    if (validated.user_id !== undefined) {
-      query = query.eq('user_id', validated.user_id);
-    } else {
-      query = query.is('user_id', null);
-    }
+    query = applyUserFilter(query, validated.user_id);
 
     const { data: flagData, error } = await query.select().single();
 
@@ -119,23 +135,11 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
       );
     }
 
-    let body = {};
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Admin Features API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-    }
+    const body = await safeParseBody(request);
     const userId = (body as { user_id?: string | null }).user_id || null;
 
     let query = supabaseAdmin.from('feature_flags').delete().eq('flag_key', flag);
-
-    if (userId) {
-      query = query.eq('user_id', userId);
-    } else {
-      query = query.is('user_id', null);
-    }
+    query = applyUserFilter(query, userId);
 
     const { error } = await query;
 

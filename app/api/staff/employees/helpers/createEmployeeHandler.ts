@@ -1,21 +1,14 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { triggerEmployeeSync } from '@/lib/square/sync/hooks';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { handleStaffEmployeeError } from './handleError';
 import { createEmployeeSchema } from './schemas';
 import { validateEmployeeRequest } from './validateEmployeeRequest';
 
-export async function handleCreateEmployee(request: NextRequest) {
+export async function handleCreateEmployee(request: NextRequest, supabase: SupabaseClient) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
     let body: unknown;
     try {
       body = await request.json();
@@ -57,7 +50,7 @@ export async function handleCreateEmployee(request: NextRequest) {
     const employeeData = validation.data!;
 
     // Check if email already exists
-    const { data: existingEmployee, error: checkError } = await supabaseAdmin
+    const { data: existingEmployee, error: checkError } = await supabase
       .from('employees')
       .select('id')
       .eq('email', employeeData.email)
@@ -75,7 +68,7 @@ export async function handleCreateEmployee(request: NextRequest) {
     }
 
     // Insert employee
-    const { data: employee, error: insertError } = await supabaseAdmin
+    const { data: employee, error: insertError } = await supabase
       .from('employees')
       .insert(employeeData)
       .select()

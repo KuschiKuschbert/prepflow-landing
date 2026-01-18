@@ -1,37 +1,35 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Create a temperature log entry.
  *
+ * @param {SupabaseClient} supabase - Supabase client
  * @param {Object} logData - Temperature log data
  * @returns {Promise<Object>} Created log entry
  * @throws {Error} If creation fails
  */
-export async function createTemperatureLog(logData: {
-  equipment_id?: string | null;
-  log_date?: string;
-  log_time?: string;
-  temperature_type?: string;
-  temperature_celsius: number;
-  location?: string | null;
-  notes?: string | null;
-  logged_by?: string;
-}) {
-  if (!supabaseAdmin) {
-    logger.error(
-      '[Temperature Logs API] Database connection not available for createTemperatureLog',
-    );
-    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
-  }
+export async function createTemperatureLog(
+  supabase: SupabaseClient,
+  logData: {
+    equipment_id?: string | null;
+    log_date?: string;
+    log_time?: string;
+    temperature_type?: string;
+    temperature_celsius: number;
+    location?: string | null;
+    notes?: string | null;
+    logged_by?: string;
+  },
+) {
 
   // If equipment_id is provided, fetch equipment details
   let temperatureType = logData.temperature_type;
   let equipmentLocation = logData.location;
 
   if (logData.equipment_id) {
-    const { data: equipment, error: equipmentError } = await supabaseAdmin
+    const { data: equipment, error: equipmentError } = await supabase
       .from('temperature_equipment')
       .select('equipment_type, location, name')
       .eq('id', logData.equipment_id)
@@ -50,7 +48,7 @@ export async function createTemperatureLog(logData: {
     }
   }
 
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await supabase
     .from('temperature_logs')
     .insert([
       {

@@ -6,18 +6,17 @@
  * comprehensive OAuth setup and usage guide.
  */
 
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { getDetectedBaseUrl } from '@/lib/auth0';
-import { getUserFromRequest } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { isSquarePOSEnabled } from '@/lib/square/feature-flags';
 import { handleSquareCallback } from '@/lib/square/oauth-flow';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
-async function getUserIdFromEmail(email: string): Promise<string | null> {
-  if (!supabaseAdmin) return null;
+async function getUserIdFromEmail(email: string, supabase: SupabaseClient): Promise<string | null> {
   try {
-    const { data } = await supabaseAdmin.from('users').select('id').eq('email', email).single();
+    const { data } = await supabase.from('users').select('id').eq('email', email).single();
     return data?.id || null;
   } catch {
     return null;
@@ -32,19 +31,19 @@ export async function GET(request: NextRequest) {
   const baseUrl = getDetectedBaseUrl();
 
   try {
-    const user = await getUserFromRequest(request);
-    if (!user?.email) {
-      logger.warn('[Square Callback] Unauthenticated access attempt');
-      return NextResponse.redirect(`${baseUrl}/webapp/square?error=unauthorized`);
+    const { supabase, adminUser, error: authError } = await standardAdminChecks(request);
+    if (authError) return authError;
+    if (!supabase || !adminUser?.email) {
+      return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
     }
 
     // Check feature flag
-    const enabled = await isSquarePOSEnabled(user.email, user.email);
+    const enabled = await isSquarePOSEnabled(adminUser.email, adminUser.email);
     if (!enabled) {
       return NextResponse.redirect(`${baseUrl}/webapp/square?error=feature_disabled`);
     }
 
-    const userId = await getUserIdFromEmail(user.email);
+    const userId = await getUserIdFromEmail(adminUser.email, supabase);
     if (!userId) {
       return NextResponse.redirect(`${baseUrl}/webapp/square?error=user_not_found`);
     }

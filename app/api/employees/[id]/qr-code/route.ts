@@ -1,11 +1,19 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import QRCode from 'qrcode';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
+
+    // QR Codes generation might be public or protected depending on use case.
+    // For employee profiles, it's safer to require admin auth or signed token, but
+    // since this generates a QR code for a public-facing URL (potentially), we'll add
+    // admin checks for generation endpoint security.
+    const { error } = await standardAdminChecks(request);
+    if (error) return error;
 
     if (!id) {
       return NextResponse.json(

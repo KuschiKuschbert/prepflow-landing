@@ -1,8 +1,8 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
+import { z, ZodSchema } from 'zod';
 import { createOrderListWithItems } from './helpers/createOrderListWithItems';
 import { handleOrderListError } from './helpers/handleOrderListError';
 import { normalizeOrderListData } from './helpers/normalizeOrderListData';
@@ -25,8 +25,30 @@ const createOrderListSchema = z.object({
     .optional(),
 });
 
+async function safeParseBody<T>(request: NextRequest, schema: ZodSchema<T>): Promise<T> {
+  try {
+    const body = await request.json();
+    const result = schema.safeParse(body);
+    if (!result.success) {
+      throw ApiErrorHandler.createError(
+        result.error.issues[0]?.message || 'Invalid request body',
+        'VALIDATION_ERROR',
+        400,
+      );
+    }
+    return result.data;
+  } catch (error) {
+    if (error instanceof Error && 'status' in error) throw error;
+    throw ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400);
+  }
+}
+
 export async function GET(request: NextRequest) {
   try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
+
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
     const page = parseInt(searchParams.get('page') || '1');
@@ -41,14 +63,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
-    const { data, error, count } = await supabaseAdmin
+    const { data, error: dbError, count } = await supabase
       .from('order_lists')
       .select(
         `
@@ -81,14 +96,14 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false })
       .range(start, end);
 
-    if (error) {
+    if (dbError) {
       logger.error('[Order Lists API] Database error fetching lists:', {
-        error: error.message,
-        code: error.code,
+        error: dbError.message,
+        code: dbError.code,
         context: { endpoint: '/api/order-lists', operation: 'GET', table: 'order_lists' },
       });
 
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(dbError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
@@ -103,6 +118,8 @@ export async function GET(request: NextRequest) {
       total: count || 0,
     });
   } catch (err) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Order Lists API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/order-lists', method: 'GET' },
@@ -113,39 +130,11 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Order Lists API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 }); // Handle missing supabase
 
-    const validationResult = createOrderListSchema.safeParse(body);
-    if (!validationResult.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const { userId, supplierId, name, notes, items } = validationResult.data;
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { userId, supplierId, name, notes, items } = await safeParseBody(request, createOrderListSchema);
 
     // Convert supplierId from string to number
     const supplierIdNum = parseInt(supplierId, 10);
@@ -168,6 +157,7 @@ export async function POST(request: NextRequest) {
         .filter(item => item.ingredientId) || undefined;
 
     const orderList = await createOrderListWithItems(
+      supabase,
       {
         user_id: userId,
         supplier_id: supplierIdNum,

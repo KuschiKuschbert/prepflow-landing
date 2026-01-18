@@ -3,21 +3,21 @@
 import { Icon } from '@/components/ui/Icon';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import {
-  Activity,
-  AlertTriangle,
-  BarChart3,
-  ChefHat,
-  CreditCard,
-  Database,
-  Flag,
-  LayoutDashboard,
-  LogOut,
-  Menu,
-  MessageSquare,
-  Package,
-  Users,
-  Wrench,
-  X,
+    Activity,
+    AlertTriangle,
+    BarChart3,
+    ChefHat,
+    CreditCard,
+    Database,
+    Flag,
+    LayoutDashboard,
+    LogOut,
+    Menu,
+    MessageSquare,
+    Package,
+    Users,
+    Wrench,
+    X,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -47,6 +47,38 @@ const navItems: NavItem[] = [
   { href: '/admin/support', label: 'Support Tools', icon: Wrench },
   { href: '/curbos', label: 'CurbOS', icon: ChefHat },
 ];
+
+interface AdminNavLinkProps {
+  item: NavItem & { badge?: number };
+  isActive: boolean;
+  onClick: () => void;
+}
+
+function AdminNavLink({ item, isActive, onClick }: AdminNavLinkProps) {
+  return (
+    <li>
+      <Link
+        href={item.href}
+        onClick={onClick}
+        className={`flex items-center justify-between rounded-lg px-4 py-3 text-sm transition-colors ${
+          isActive
+            ? 'border border-[#29E7CD]/20 bg-[#29E7CD]/10 text-[#29E7CD]'
+            : 'text-gray-300 hover:bg-[#2a2a2a] hover:text-white'
+        }`}
+      >
+        <div className="flex items-center gap-3">
+          <Icon icon={item.icon} size="sm" />
+          <span>{item.label}</span>
+        </div>
+        {item.badge !== undefined && item.badge > 0 && (
+          <span className="rounded-full bg-red-500 px-2 py-0.5 text-xs font-medium text-white">
+            {item.badge}
+          </span>
+        )}
+      </Link>
+    </li>
+  );
+}
 
 /**
  * Admin navigation component with sidebar and mobile menu.
@@ -105,34 +137,17 @@ export default function AdminNavigation() {
           {/* Navigation */}
           <nav className="flex-1 overflow-y-auto p-4">
             <ul className="space-y-2">
-              {navItemsWithBadge.map(item => {
-                const isActive =
-                  pathname === item.href ||
-                  (item.href !== '/admin' && pathname.startsWith(item.href));
-                return (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      onClick={() => setSidebarOpen(false)}
-                      className={`flex items-center justify-between rounded-lg px-4 py-3 text-sm transition-colors ${
-                        isActive
-                          ? 'border border-[#29E7CD]/20 bg-[#29E7CD]/10 text-[#29E7CD]'
-                          : 'text-gray-300 hover:bg-[#2a2a2a] hover:text-white'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <Icon icon={item.icon} size="sm" />
-                        <span>{item.label}</span>
-                      </div>
-                      {item.badge !== undefined && item.badge > 0 && (
-                        <span className="rounded-full bg-red-500 px-2 py-0.5 text-xs font-medium text-white">
-                          {item.badge}
-                        </span>
-                      )}
-                    </Link>
-                  </li>
-                );
-              })}
+              {navItemsWithBadge.map(item => (
+                <AdminNavLink
+                  key={item.href}
+                  item={item}
+                  isActive={
+                    pathname === item.href ||
+                    (item.href !== '/admin' && pathname.startsWith(item.href))
+                  }
+                  onClick={() => setSidebarOpen(false)}
+                />
+              ))}
             </ul>
           </nav>
 

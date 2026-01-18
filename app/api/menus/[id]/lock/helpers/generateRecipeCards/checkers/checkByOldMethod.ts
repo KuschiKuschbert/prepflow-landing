@@ -14,7 +14,7 @@ export async function checkByOldMethod(
   supabase: SupabaseClient,
   menuItem: MenuItem,
   menuItemData: MenuItemData,
-  normalizedIngredients: any[],
+  normalizedIngredients: any[], // justified
   signature: string,
 ): Promise<OldMethodCheckResult> {
   const currentHash = generateDataHash(menuItemData, normalizedIngredients);

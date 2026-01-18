@@ -1,28 +1,21 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { checkTemplateExists } from './checkTemplateExists';
 
 /**
  * Delete template by ID
  */
-export async function deleteTemplate(templateId: string): Promise<NextResponse> {
-  if (!supabaseAdmin) {
-    return NextResponse.json(
-      ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-      { status: 500 },
-    );
-  }
-
+export async function deleteTemplate(supabase: SupabaseClient, templateId: string): Promise<NextResponse> {
   // Check if template exists
-  const existsResult = await checkTemplateExists(templateId);
+  const existsResult = await checkTemplateExists(supabase, templateId);
   if (existsResult instanceof NextResponse) {
     return existsResult;
   }
 
   // Delete template (template_shifts will be deleted via CASCADE)
-  const { error: deleteError } = await supabaseAdmin
+  const { error: deleteError } = await supabase
     .from('roster_templates')
     .delete()
     .eq('id', templateId);

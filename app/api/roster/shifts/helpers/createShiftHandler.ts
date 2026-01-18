@@ -1,19 +1,12 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { createShiftSchema } from './schemas';
 import { validateShiftRequest } from './validateShiftRequest';
 
-export async function handleCreateShift(request: NextRequest) {
+export async function handleCreateShift(request: NextRequest, supabase: SupabaseClient) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
     let body: unknown;
     try {
       body = await request.json();
@@ -55,7 +48,7 @@ export async function handleCreateShift(request: NextRequest) {
     const shiftData = validation.data;
 
     // Check if employee exists
-    const { data: employee, error: employeeError } = await supabaseAdmin
+    const { data: employee, error: employeeError } = await supabase
       .from('employees')
       .select('id')
       .eq('id', shiftData.employee_id)
@@ -69,7 +62,7 @@ export async function handleCreateShift(request: NextRequest) {
     }
 
     // Insert shift
-    const { data: shift, error: insertError } = await supabaseAdmin
+    const { data: shift, error: insertError } = await supabase
       .from('shifts')
       .insert(shiftData)
       .select()

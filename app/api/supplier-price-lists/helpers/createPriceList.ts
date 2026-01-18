@@ -1,23 +1,27 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Create a new supplier price list.
  *
  * @param {Object} data - Price list data
+ * @param {SupabaseClient} supabase - Supabase client
  * @returns {Promise<Object>} Created price list with supplier relation
  */
-export async function createPriceList(data: {
-  supplier_id: number;
-  document_name: string;
-  document_url: string;
-  effective_date?: string | null;
-  expiry_date?: string | null;
-  is_current: boolean;
-  notes?: string | null;
-}) {
-  const { data: created, error } = await supabaseAdmin!
+export async function createPriceList(
+  data: {
+    supplier_id: number;
+    document_name: string;
+    document_url: string;
+    effective_date?: string | null;
+    expiry_date?: string | null;
+    is_current: boolean;
+    notes?: string | null;
+  },
+  supabase: SupabaseClient,
+) {
+  const { data: created, error } = await supabase
     .from('supplier_price_lists')
     .insert(data)
     .select(

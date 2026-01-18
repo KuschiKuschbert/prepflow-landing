@@ -1,7 +1,6 @@
-import { requireAdmin } from '@/lib/admin-auth';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -10,14 +9,9 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function GET(request: NextRequest) {
   try {
-    await requireAdmin(request);
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1', 10);
@@ -27,7 +21,7 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type');
     const search = searchParams.get('search') || '';
 
-    let query = supabaseAdmin
+    let query = supabase
       .from('support_tickets')
       .select('*', { count: 'exact' })
       .order('created_at', { ascending: false });
@@ -53,15 +47,15 @@ export async function GET(request: NextRequest) {
     const to = from + pageSize - 1;
     query = query.range(from, to);
 
-    const { data: tickets, error, count } = await query;
+    const { data: tickets, error: fetchError, count } = await query;
 
-    if (error) {
+    if (fetchError) {
       logger.error('[Admin Support Tickets API] Database error:', {
-        error: error.message,
+        error: fetchError.message,
         context: { endpoint: '/api/admin/support-tickets', method: 'GET' },
       });
 
-      return NextResponse.json(ApiErrorHandler.fromSupabaseError(error, 500), { status: 500 });
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(fetchError, 500), { status: 500 });
     }
 
     const totalPages = Math.ceil((count || 0) / pageSize);

@@ -1,9 +1,10 @@
 import { ApiErrorHandler, type ApiError } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { QUALIFICATION_SELECT, Qualification } from './schemas';
 
 export async function createQualification(
+  supabase: SupabaseClient,
   employeeId: string,
   qualificationData: {
     qualification_type_id: string;
@@ -18,19 +19,8 @@ export async function createQualification(
 ): Promise<
   { success: boolean; message: string; data: Qualification } | { error: ApiError; status: number }
 > {
-  if (!supabaseAdmin) {
-    return {
-      error: ApiErrorHandler.createError(
-        'Database connection not available',
-        'DATABASE_ERROR',
-        500,
-      ),
-      status: 500,
-    };
-  }
-
   // Verify employee exists
-  const { data: employee, error: employeeError } = await supabaseAdmin
+  const { data: employee, error: employeeError } = await supabase
     .from('employees')
     .select('id')
     .eq('id', employeeId)
@@ -43,7 +33,7 @@ export async function createQualification(
     };
   }
 
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await supabase
     .from('employee_qualifications')
     .insert({
       employee_id: employeeId,

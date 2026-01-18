@@ -4,7 +4,7 @@
 export function createConfirmHandlers(
   setIsOpen: (open: boolean) => void,
   setResolvePromise: (resolver: ((value: boolean) => void) | null) => void,
-  setOptions: (options: any) => void,
+  setOptions: (options: any) => void, // justified
   resolvePromise: ((value: boolean) => void) | null,
 ) {
   return {

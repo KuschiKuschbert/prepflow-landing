@@ -1,14 +1,14 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { createSupplier } from '../helpers/createSupplier';
 import { handleSupplierError } from './handleSupplierError';
 import { createSupplierSchema } from './schemas';
 
-export async function handleCreateSupplier(request: NextRequest) {
+export async function handleCreateSupplier(request: NextRequest, supabase: SupabaseClient) {
   try {
-    if (!supabaseAdmin) {
+    if (!supabase) {
       return NextResponse.json(
         ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
@@ -40,7 +40,7 @@ export async function handleCreateSupplier(request: NextRequest) {
       );
     }
 
-    const data = await createSupplier(validationResult.data);
+    const data = await createSupplier(validationResult.data, supabase);
 
     return NextResponse.json({
       success: true,

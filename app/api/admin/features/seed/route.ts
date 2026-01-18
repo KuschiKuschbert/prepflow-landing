@@ -1,6 +1,6 @@
 import { requireAdmin } from '@/lib/admin-auth';
-import { setFeatureFlag } from '@/lib/feature-flags';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { setFeatureFlag } from '@/lib/feature-flags';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -31,33 +31,7 @@ export async function POST(request: NextRequest) {
       },
     ];
 
-    const results = [];
-
-    for (const flag of initialFlags) {
-      try {
-        const result = await setFeatureFlag(
-          flag.flag_key,
-          flag.enabled,
-          undefined,
-          flag.description,
-        );
-        results.push({
-          flag_key: flag.flag_key,
-          success: !!result,
-          result,
-        });
-      } catch (error) {
-        logger.error('[Seed Features] Error seeding flag:', {
-          flag_key: flag.flag_key,
-          error: error instanceof Error ? error.message : String(error),
-        });
-        results.push({
-          flag_key: flag.flag_key,
-          success: false,
-          error: error instanceof Error ? error.message : String(error),
-        });
-      }
-    }
+    const results = await Promise.all(initialFlags.map(seedSingleFlag));
 
     return NextResponse.json({
       success: true,
@@ -86,5 +60,31 @@ export async function POST(request: NextRequest) {
       ),
       { status: 500 },
     );
+  }
+}
+
+async function seedSingleFlag(flag: { flag_key: string; enabled: boolean; description: string }) {
+  try {
+    const result = await setFeatureFlag(
+      flag.flag_key,
+      flag.enabled,
+      undefined,
+      flag.description,
+    );
+    return {
+      flag_key: flag.flag_key,
+      success: !!result,
+      result,
+    };
+  } catch (error) {
+    logger.error('[Seed Features] Error seeding flag:', {
+      flag_key: flag.flag_key,
+      error: error instanceof Error ? error.message : String(error),
+    });
+    return {
+      flag_key: flag.flag_key,
+      success: false,
+      error: error instanceof Error ? error.message : String(error),
+    };
   }
 }

@@ -8,6 +8,20 @@ export interface DishAggregationResult {
   results: Record<string, string[]>;
 }
 
+async function aggregateSingleDish(dishId: string): Promise<{ dishId: string; allergens: string[] }> {
+  try {
+    const allergens = await aggregateDishAllergens(dishId, true);
+    return { dishId, allergens };
+  } catch (err) {
+    logger.error('[Re-aggregate All Allergens API] Error aggregating dish allergens:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { dishId, operation: 'aggregateDishAllergens' },
+    });
+    return { dishId, allergens: [] };
+  }
+}
+
 /**
  * Fetches all dishes and forces allergen re-aggregation.
  */
@@ -34,36 +48,20 @@ export async function reAggregateDishes(): Promise<DishAggregationResult> {
     results: {},
   };
 
-  if (dishIds.length > 0) {
-    try {
-      const dishAllergens = await Promise.all(
-        dishIds.map(async dishId => {
-          try {
-            const allergens = await aggregateDishAllergens(dishId, true);
-            return { dishId, allergens };
-          } catch (err) {
-            logger.error('[Re-aggregate All Allergens API] Error aggregating dish allergens:', {
-              error: err instanceof Error ? err.message : String(err),
-              stack: err instanceof Error ? err.stack : undefined,
-              context: { dishId, operation: 'aggregateDishAllergens' },
-            });
-            return { dishId, allergens: [] };
-          }
-        }),
-      );
-
-      dishAllergens.forEach(({ dishId, allergens }) => {
-        result.results[dishId] = allergens;
-      });
-      result.aggregated = Object.keys(result.results).length;
-
-      logger.dev(
-        `[Re-aggregate All Allergens API] Successfully re-aggregated allergens for ${result.aggregated} dishes`,
-      );
-    } catch (err) {
-      logger.error('[Re-aggregate All Allergens API] Error aggregating dish allergens:', err);
-    }
+  if (dishIds.length === 0) {
+    return result;
   }
+
+  const dishAllergens = await Promise.all(dishIds.map(aggregateSingleDish));
+
+  dishAllergens.forEach(({ dishId, allergens }) => {
+    result.results[dishId] = allergens;
+  });
+  result.aggregated = Object.keys(result.results).length;
+
+  logger.dev(
+    `[Re-aggregate All Allergens API] Successfully re-aggregated allergens for ${result.aggregated} dishes`,
+  );
 
   return result;
 }

@@ -12,14 +12,23 @@ const extendSubscriptionSchema = z.object({
   months: z.number().int().positive().max(12).optional().default(1),
 });
 
+const AVG_SECONDS_IN_MONTH = 30 * 24 * 60 * 60;
+
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Billing API] Failed to parse request JSON:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 /**
  * POST /api/billing/extend-subscription
  * Extend current subscription by adding billing periods
- *
- * @param {NextRequest} req - Request object
- * @param {Object} req.body - Request body
- * @param {number} [req.body.months=1] - Number of months to extend (1-12)
- * @returns {Promise<NextResponse>} Success response with updated subscription details
  */
 export async function POST(req: NextRequest) {
   try {
@@ -39,24 +48,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let body;
-    try {
-      body = await req.json();
-    } catch (jsonError) {
-      logger.warn('[Billing API] Failed to parse request JSON:', {
-        error: jsonError instanceof Error ? jsonError.message : String(jsonError),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-    const validationResult = extendSubscriptionSchema.safeParse(body);
+    const userEmail = user.email as string;
+    const body = await safeParseBody(req);
+    const validationResult = extendSubscriptionSchema.safeParse(body || {});
 
     if (!validationResult.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
+          validationResult.error.issues[0]?.message || 'Invalid body',
           'VALIDATION_ERROR',
           400,
         ),
@@ -65,9 +64,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { months } = validationResult.data;
-    const userEmail = user.email as string;
 
-    // Get user's subscription ID from database
     if (!supabaseAdmin) {
       return NextResponse.json(
         ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 500),
@@ -77,16 +74,11 @@ export async function POST(req: NextRequest) {
 
     const { data: userData, error: userError } = await supabaseAdmin
       .from('users')
-      .select('stripe_subscription_id, subscription_tier')
+      .select('stripe_subscription_id')
       .eq('email', userEmail)
       .single();
 
     if (userError || !userData?.stripe_subscription_id) {
-      logger.warn('[Billing API] User has no active subscription:', {
-        userEmail,
-        error: userError?.message,
-        code: userError?.code,
-      });
       return NextResponse.json(
         ApiErrorHandler.createError('No active subscription found', 'SUBSCRIPTION_NOT_FOUND', 404),
         { status: 404 },
@@ -94,79 +86,48 @@ export async function POST(req: NextRequest) {
     }
 
     const subscriptionId = userData.stripe_subscription_id;
-
-    // Retrieve current subscription from Stripe
-    const subscription: Stripe.Subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
 
     if (!subscription || subscription.status === 'canceled') {
       return NextResponse.json(
-        ApiErrorHandler.createError(
-          'Subscription is cancelled or not found',
-          'SUBSCRIPTION_INVALID',
-          400,
-        ),
+        ApiErrorHandler.createError('Subscription invalid or cancelled', 'SUBSCRIPTION_INVALID', 400),
         { status: 400 },
       );
     }
 
-    // Calculate new period end date
-    const currentPeriodEnd = (subscription as Stripe.Subscription & { current_period_end: number })
-      .current_period_end;
-    const newPeriodEnd = currentPeriodEnd + months * 30 * 24 * 60 * 60; // Approximate months
+    const currentPeriodEnd = (subscription as unknown as Stripe.Subscription & {
+      current_period_end: number;
+    }).current_period_end;
+    const newPeriodEnd = currentPeriodEnd + months * AVG_SECONDS_IN_MONTH;
 
-    // Update subscription to extend billing period
-    const updatedSubscription: Stripe.Subscription = await stripe.subscriptions.update(
-      subscriptionId,
-      {
-        // @ts-expect-error - Stripe types only allow 'now' | 'unchanged', but logic attempts to set a date.
-        // TODO: Verify if passing a timestamp is supported by the API or if this logic is flawed.
-        billing_cycle_anchor: newPeriodEnd,
-        proration_behavior: 'none', // Don't prorate, just extend
-      },
-    );
+    const updatedSubscription = await stripe.subscriptions.update(subscriptionId, {
+      billing_cycle_anchor: newPeriodEnd as unknown as Stripe.SubscriptionUpdateParams.BillingCycleAnchor,
+      proration_behavior: 'none',
+    });
 
-    // Update database with new expiry date
-    const updatedSub = updatedSubscription as Stripe.Subscription & {
+    const updatedSub = updatedSubscription as unknown as Stripe.Subscription & {
       current_period_end: number;
       current_period_start: number;
     };
-
     const newExpiresAt = updatedSub.current_period_end
       ? new Date(updatedSub.current_period_end * 1000)
       : null;
 
-    const { error: updateError } = await supabaseAdmin
+    await supabaseAdmin
       .from('users')
       .update({
         subscription_expires: newExpiresAt?.toISOString() || null,
         subscription_current_period_start: updatedSub.current_period_start
           ? new Date(updatedSub.current_period_start * 1000).toISOString()
           : null,
-        updated_at: new Date().toISOString(),
       })
       .eq('email', userEmail);
 
-    if (updateError) {
-      logger.error('[Billing API] Failed to update subscription in database:', {
-        error: updateError.message,
-        code: updateError.code,
-        userEmail,
-      });
-      // Don't fail the request, subscription was extended in Stripe
-    }
-
     clearTierCache(userEmail);
-
-    logger.dev('[Billing API] Subscription extended:', {
-      userEmail,
-      subscriptionId,
-      months,
-      newExpiresAt: newExpiresAt?.toISOString(),
-    });
 
     return NextResponse.json({
       success: true,
-      message: `Subscription extended by ${months} month${months > 1 ? 's' : ''}`,
+      message: `Extended by ${months} month(s)`,
       subscription: {
         id: updatedSubscription.id,
         current_period_end: updatedSub.current_period_end,
@@ -174,22 +135,9 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
-    logger.error('[Billing API] Failed to extend subscription:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-      context: { endpoint: '/api/billing/extend-subscription' },
-    });
-
+    logger.error('[Billing API] Extension error:', error);
     return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? error instanceof Error
-            ? error.message
-            : 'Unknown error'
-          : 'Failed to extend subscription',
-        'STRIPE_ERROR',
-        500,
-      ),
+      ApiErrorHandler.createError('Failed to extend subscription', 'STRIPE_ERROR', 500),
       { status: 500 },
     );
   }

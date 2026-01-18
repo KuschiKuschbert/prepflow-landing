@@ -1,7 +1,6 @@
-import { requireAdmin } from '@/lib/admin-auth';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { performTableSearch } from './helpers/performTableSearch';
 
@@ -11,14 +10,9 @@ import { performTableSearch } from './helpers/performTableSearch';
  */
 export async function GET(request: NextRequest) {
   try {
-    await requireAdmin(request);
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('query') || '';

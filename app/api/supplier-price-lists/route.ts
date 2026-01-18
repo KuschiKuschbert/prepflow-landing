@@ -1,35 +1,33 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { buildPriceListQuery } from './helpers/buildPriceListQuery';
-import { handlePriceListError } from './helpers/handlePriceListError';
 import { handleCreatePriceList } from './helpers/createPriceListHandler';
-import { handleUpdatePriceList } from './helpers/updatePriceListHandler';
 import { handleDeletePriceList } from './helpers/deletePriceListHandler';
+import { handlePriceListError } from './helpers/handlePriceListError';
+import { handleUpdatePriceList } from './helpers/updatePriceListHandler';
+
 export async function GET(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
     const { searchParams } = new URL(request.url);
     const supplierId = searchParams.get('supplier_id');
     const current = searchParams.get('current');
 
-    const query = buildPriceListQuery(supplierId, current);
-    const { data, error } = await query;
+    const query = buildPriceListQuery(supabase, supplierId, current);
+    const { data, error: dbError } = await query;
 
-    if (error) {
+    if (dbError) {
       logger.error('[Supplier Price Lists API] Database error:', {
-        error: error.message,
-        code: error.code,
+        error: dbError.message,
+        code: dbError.code,
         context: { endpoint: '/api/supplier-price-lists', operation: 'GET' },
       });
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(dbError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
@@ -37,23 +35,34 @@ export async function GET(request: NextRequest) {
       success: true,
       data: data || [],
     });
-  } catch (error) {
+  } catch (err) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[route.ts] Error in catch block:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
     });
 
-    return handlePriceListError(error, 'GET');
+    return handlePriceListError(err, 'GET');
   }
 }
 export async function POST(request: NextRequest) {
-  return handleCreatePriceList(request);
+  const { supabase, error } = await standardAdminChecks(request);
+  if (error) return error;
+  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  return handleCreatePriceList(request, supabase);
 }
 
 export async function PUT(request: NextRequest) {
-  return handleUpdatePriceList(request);
+  const { supabase, error } = await standardAdminChecks(request);
+  if (error) return error;
+  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  return handleUpdatePriceList(request, supabase);
 }
 
 export async function DELETE(request: NextRequest) {
-  return handleDeletePriceList(request);
+  const { supabase, error } = await standardAdminChecks(request);
+  if (error) return error;
+  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  return handleDeletePriceList(request, supabase);
 }

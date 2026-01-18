@@ -1,9 +1,10 @@
 import { ApiErrorHandler, type ApiError } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { QUALIFICATION_SELECT, Qualification } from './schemas';
 
 export async function updateQualification(
+  supabase: SupabaseClient,
   employeeId: string,
   qualificationId: string,
   data: {
@@ -17,19 +18,9 @@ export async function updateQualification(
 ): Promise<
   { success: boolean; message: string; data: Qualification } | { error: ApiError; status: number }
 > {
-  if (!supabaseAdmin) {
-    return {
-      error: ApiErrorHandler.createError(
-        'Database connection not available',
-        'DATABASE_ERROR',
-        500,
-      ),
-      status: 500,
-    };
-  }
 
   // Verify qualification belongs to employee
-  const { data: qualification, error: checkError } = await supabaseAdmin
+  const { data: qualification, error: checkError } = await supabase
     .from('employee_qualifications')
     .select('id, employee_id')
     .eq('id', qualificationId)
@@ -56,7 +47,7 @@ export async function updateQualification(
   if (data.document_url !== undefined) updateData.document_url = data.document_url || null;
   if (data.notes !== undefined) updateData.notes = data.notes || null;
 
-  const { data: updatedQualification, error } = await supabaseAdmin
+  const { data: updatedQualification, error } = await supabase
     .from('employee_qualifications')
     .update(updateData)
     .eq('id', qualificationId)

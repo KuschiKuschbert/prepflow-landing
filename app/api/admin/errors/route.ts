@@ -1,7 +1,6 @@
-import { requireAdmin } from '@/lib/admin-auth';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -21,14 +20,9 @@ const SEVERITY_PRIORITY: Record<string, number> = {
  */
 export async function GET(request: NextRequest) {
   try {
-    await requireAdmin(request);
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1', 10);
@@ -38,7 +32,7 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status');
     const category = searchParams.get('category');
 
-    let query = supabaseAdmin.from('admin_error_logs').select('*', { count: 'exact' });
+    let query = supabase.from('admin_error_logs').select('*', { count: 'exact' });
 
     // Apply filters
     if (search) {
@@ -55,19 +49,19 @@ export async function GET(request: NextRequest) {
     }
 
     // Get all errors first (for sorting by severity priority)
-    const { data: allErrors, error, count } = await query;
+    const { data: allErrors, error: fetchError, count } = await query;
 
-    if (error) {
+    if (fetchError) {
       logger.error('[Admin Errors API] Database error:', {
-        error: error.message,
+        error: fetchError.message,
         context: { endpoint: '/api/admin/errors', method: 'GET' },
       });
 
-      return NextResponse.json(ApiErrorHandler.fromSupabaseError(error, 500), { status: 500 });
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(fetchError, 500), { status: 500 });
     }
 
     // Sort by severity priority (Safety first) then by date
-    const sortedErrors = (allErrors || []).sort((a, b) => {
+    const sortedErrors = (allErrors || []).sort((a: any, b: any) => { // Justified: Supabase record typing
       const aPriority = SEVERITY_PRIORITY[a.severity || 'medium'] || 4;
       const bPriority = SEVERITY_PRIORITY[b.severity || 'medium'] || 4;
       if (aPriority !== bPriority) {
@@ -85,10 +79,10 @@ export async function GET(request: NextRequest) {
     // Get counts by severity and status
     const severityCounts: Record<string, number> = {};
     const statusCounts: Record<string, number> = {};
-    (allErrors || []).forEach(error => {
-      const sev = error.severity || 'medium';
+    (allErrors || []).forEach((err: any) => { // Justified: Supabase record typing
+      const sev = err.severity || 'medium';
       severityCounts[sev] = (severityCounts[sev] || 0) + 1;
-      const stat = error.status || 'new';
+      const stat = err.status || 'new';
       statusCounts[stat] = (statusCounts[stat] || 0) + 1;
     });
 

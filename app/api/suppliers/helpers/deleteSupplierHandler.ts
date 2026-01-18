@@ -1,11 +1,19 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { deleteSupplier } from '../helpers/deleteSupplier';
 import { handleSupplierError } from './handleSupplierError';
 
-export async function handleDeleteSupplier(request: NextRequest) {
+export async function handleDeleteSupplier(request: NextRequest, supabase: SupabaseClient) {
   try {
+    if (!supabase) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+        { status: 500 },
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
 
@@ -16,7 +24,7 @@ export async function handleDeleteSupplier(request: NextRequest) {
       );
     }
 
-    await deleteSupplier(id);
+    await deleteSupplier(id, supabase);
 
     return NextResponse.json({
       success: true,

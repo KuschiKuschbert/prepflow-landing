@@ -11,10 +11,36 @@ import { processImageWithAI } from './processImageWithAI';
  * @param {string} [countryCode] - Country code (default: 'AU').
  * @returns {Promise<{ ingredients: string[]; suggestions: string[]; confidence: number; notes?: string; processing_time?: number }>} AI response.
  */
+async function detectIngredients(imageData: string, countryCode: string): Promise<string[]> {
+  try {
+    const prompt = `Analyze this image and list all visible ingredients. Return only a JSON array of ingredient names: ["ingredient1", "ingredient2", ...]`;
+    const response = await generateAIVisionResponse(imageData, prompt, countryCode, {
+      temperature: 0.3,
+      maxTokens: 200,
+      useCache: false,
+    });
+
+    if (!response.content || response.error) return [];
+
+    const jsonMatch = response.content.match(/\[[\s\S]*\]/);
+    if (!jsonMatch) return [];
+
+    return JSON.parse(jsonMatch[0]);
+  } catch (e) {
+    logger.debug('Failed to detect ingredients, continuing without recipe context', {
+      error: e instanceof Error ? e.message : String(e),
+    });
+    return [];
+  }
+}
+
+/**
+ * Generates AI specials suggestions from image analysis.
+ */
 export async function generateAISpecials(
   imageData: string,
   prompt?: string,
-  countryCode?: string,
+  countryCode: string = 'AU',
 ): Promise<{
   ingredients: string[];
   suggestions: string[];
@@ -23,75 +49,29 @@ export async function generateAISpecials(
   processing_time?: number;
 }> {
   try {
-    // First, do a quick ingredient detection pass to get recipe database context
-    let detectedIngredients: string[] = [];
-    try {
-      const ingredientDetectionPrompt = `Analyze this image and list all visible ingredients. Return only a JSON array of ingredient names: ["ingredient1", "ingredient2", ...]`;
-      const ingredientResponse = await generateAIVisionResponse(
-        imageData,
-        ingredientDetectionPrompt,
-        countryCode || 'AU',
-        {
-          temperature: 0.3,
-          maxTokens: 200,
-          useCache: false, // Don't cache ingredient detection
-        },
-      );
+    // Pass 1: Ingredient detection
+    const detectedIngredients = await detectIngredients(imageData, countryCode);
 
-      if (ingredientResponse.content && !ingredientResponse.error) {
-        try {
-          const jsonMatch = ingredientResponse.content.match(/\[[\s\S]*\]/);
-          if (jsonMatch) {
-            detectedIngredients = JSON.parse(jsonMatch[0]);
-          }
-        } catch (e) {
-          // Ignore parsing errors, continue without recipe context
-          logger.debug(
-            'Failed to parse ingredient detection response, continuing without recipe context',
-            {
-              error: e instanceof Error ? e.message : String(e),
-            },
-          );
-        }
-      }
-    } catch (error) {
-      // If ingredient detection fails, continue without recipe context
-      logger.debug(
-        'Ingredient detection failed, continuing without recipe database context:',
-        error,
-      );
-    }
-
-    // Build prompt with recipe database context
+    // Pass 2: Vision analysis with context
     const aiPrompt = await buildAISpecialsPrompt(prompt, detectedIngredients);
-    const visionResponse = await generateAIVisionResponse(
-      imageData,
-      aiPrompt,
-      countryCode || 'AU',
-      {
-        temperature: 0.7,
-        maxTokens: 1500,
-        useCache: true,
-        cacheTTL: 60 * 60 * 1000, // 1 hour cache
-      },
-    );
+    const visionResponse = await generateAIVisionResponse(imageData, aiPrompt, countryCode, {
+      temperature: 0.7,
+      maxTokens: 1500,
+      useCache: true,
+      cacheTTL: 60 * 60 * 1000,
+    });
 
     if (visionResponse.content && !visionResponse.error) {
       const parsed = parseAISpecialsResponse(visionResponse.content);
-      return {
-        ...parsed,
-        processing_time: 0, // Will be calculated if needed
-      };
-    } else {
-      // Fallback to mock
-      return await processImageWithAI(imageData, prompt);
+      return { ...parsed, processing_time: 0 };
     }
+
+    // Fallback if AI fails or returns empty
+    return await processImageWithAI(imageData, prompt);
   } catch (aiError) {
     logger.warn('[AI Specials API] AI Vision API failed, using fallback:', {
       error: aiError instanceof Error ? aiError.message : String(aiError),
-      context: { endpoint: '/api/ai-specials', operation: 'POST' },
     });
-    // Fallback to mock
     return await processImageWithAI(imageData, prompt);
   }
 }

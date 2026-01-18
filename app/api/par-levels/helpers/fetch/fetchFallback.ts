@@ -39,8 +39,8 @@ export async function fetchFallback(supabaseAdmin: SupabaseClient, originalError
     };
   }
 
-  let data: any = simpleData;
-  let error: any = null;
+  let data: any = simpleData; // justified: raw DB data
+  let error: any = null; // justified: raw DB error
 
   // If we got data without join, fetch ingredients separately
   if (simpleData && simpleData.length > 0) {

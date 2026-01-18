@@ -1,45 +1,57 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { getAppError } from '@/lib/utils/error';
 import { NextRequest, NextResponse } from 'next/server';
+import { ZodSchema } from 'zod';
 import { handleCreateCleaningArea } from './helpers/createCleaningAreaHandler';
 import { handleDeleteCleaningArea } from './helpers/deleteCleaningAreaHandler';
 import { handleCleaningAreaError } from './helpers/handleCleaningAreaError';
 import { updateCleaningAreaSchema } from './helpers/schemas';
 import { updateCleaningArea } from './helpers/updateCleaningArea';
 
+async function safeParseBody<T>(req: NextRequest, schema: ZodSchema<T>): Promise<T> {
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch (err) {
+    throw ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400);
+  }
+
+  const result = schema.safeParse(body);
+  if (!result.success) {
+    throw ApiErrorHandler.createError(
+      result.error.issues[0]?.message || 'Invalid request body',
+      'VALIDATION_ERROR',
+      400,
+    );
+  }
+  return result.data;
+}
+
 /**
  * GET /api/cleaning-areas
  * Get all cleaning areas
- *
- * @param {NextRequest} request - Request object
- * @returns {Promise<NextResponse>} List of cleaning areas
  */
 export async function GET(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        {
-          error: 'Database connection not available',
-        },
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
-    const { data, error } = await supabaseAdmin
+    const { data, error: dbError } = await supabase
       .from('cleaning_areas')
       .select('*')
       .order('area_name');
 
-    if (error) {
+    if (dbError) {
       logger.error('[Cleaning Areas API] Database error fetching areas:', {
-        error: error.message,
-        code: error.code,
+        error: dbError.message,
+        code: dbError.code,
         context: { endpoint: '/api/cleaning-areas', operation: 'GET', table: 'cleaning_areas' },
       });
 
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(dbError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
@@ -60,59 +72,26 @@ export async function GET(request: NextRequest) {
 /**
  * POST /api/cleaning-areas
  * Create a new cleaning area
- *
- * @param {NextRequest} request - Request object
- * @param {Object} request.body - Request body
- * @param {string} request.body.area_name - Area name (required)
- * @param {string} [request.body.description] - Area description
- * @param {string} [request.body.cleaning_frequency] - Cleaning frequency
- * @returns {Promise<NextResponse>} Created cleaning area
  */
 export async function POST(request: NextRequest) {
-  return handleCreateCleaningArea(request);
+  const { supabase, error } = await standardAdminChecks(request);
+  if (error) return error;
+  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  return handleCreateCleaningArea(supabase, request);
 }
 
 /**
  * PUT /api/cleaning-areas
  * Update an existing cleaning area
- *
- * @param {NextRequest} request - Request object
- * @param {Object} request.body - Request body
- * @param {string} request.body.id - Cleaning area ID (required)
- * @param {string} [request.body.area_name] - Area name
- * @param {string} [request.body.description] - Area description
- * @param {string} [request.body.cleaning_frequency] - Cleaning frequency
- * @param {boolean} [request.body.is_active] - Active status
- * @returns {Promise<NextResponse>} Updated cleaning area
  */
 export async function PUT(request: NextRequest) {
   try {
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Cleaning Areas API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
-    const validationResult = updateCleaningAreaSchema.safeParse(body);
-    if (!validationResult.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const { id, area_name, description, cleaning_frequency, is_active } = validationResult.data;
+    const body = await safeParseBody(request, updateCleaningAreaSchema);
+    const { id, area_name, description, cleaning_frequency, is_active } = body;
 
     const updateData: Record<string, unknown> = {};
     if (area_name !== undefined) updateData.area_name = area_name;
@@ -120,7 +99,7 @@ export async function PUT(request: NextRequest) {
     if (cleaning_frequency !== undefined) updateData.cleaning_frequency = cleaning_frequency;
     if (is_active !== undefined) updateData.is_active = is_active;
 
-    const data = await updateCleaningArea(id, updateData);
+    const data = await updateCleaningArea(supabase, id, updateData);
 
     return NextResponse.json({
       success: true,
@@ -128,6 +107,8 @@ export async function PUT(request: NextRequest) {
       data,
     });
   } catch (err: unknown) {
+    if (err instanceof NextResponse) return err;
+
     const appError = getAppError(err);
     if (appError.status && appError.status !== 500) {
       logger.error('[Cleaning Areas API] Error with status:', {
@@ -147,11 +128,10 @@ export async function PUT(request: NextRequest) {
 /**
  * DELETE /api/cleaning-areas
  * Delete a cleaning area
- *
- * @param {NextRequest} request - Request object
- * @param {string} request.url.searchParams.id - Cleaning area ID (required)
- * @returns {Promise<NextResponse>} Deletion response
  */
 export async function DELETE(request: NextRequest) {
-  return handleDeleteCleaningArea(request);
+  const { supabase, error } = await standardAdminChecks(request);
+  if (error) return error;
+  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  return handleDeleteCleaningArea(supabase, request);
 }

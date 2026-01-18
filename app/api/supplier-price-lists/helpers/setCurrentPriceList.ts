@@ -1,23 +1,25 @@
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Set a price list as current and unset all others for the same supplier.
  *
  * @param {number} supplierId - Supplier ID
  * @param {number | null} excludeId - Optional ID to exclude from update
+ * @param {SupabaseClient} supabase - Supabase client
  * @returns {Promise<void>}
  */
 export async function setCurrentPriceList(
   supplierId: number,
   excludeId: number | null = null,
+  supabase: SupabaseClient,
 ): Promise<void> {
-  if (!supabaseAdmin) {
+  if (!supabase) {
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
-  let query = supabaseAdmin
+  let query = supabase
     .from('supplier_price_lists')
     .update({ is_current: false })
     .eq('supplier_id', supplierId);

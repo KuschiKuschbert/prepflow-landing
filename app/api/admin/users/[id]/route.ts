@@ -1,14 +1,13 @@
-import { requireAdmin } from '@/lib/admin-auth';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logAdminApiAction } from '@/lib/admin-audit';
-import { checkAdminRateLimit } from '@/lib/admin-rate-limit';
-import { NextRequest, NextResponse } from 'next/server';
-import { fetchUser } from './helpers/fetchUser';
-import { updateUser } from './helpers/updateUser';
-import { deleteUser } from './helpers/deleteUser';
-import { handleUserApiError } from './helpers/handleError';
+import { standardAdminChecks } from '@/lib/admin-auth';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { deleteUser } from './helpers/deleteUser';
+import { fetchUser } from './helpers/fetchUser';
+import { handleUserApiError } from './helpers/handleError';
+import { updateUser } from './helpers/updateUser';
 
 const updateUserSchema = z.object({
   first_name: z.string().max(100).optional().nullable(),
@@ -18,13 +17,27 @@ const updateUserSchema = z.object({
   subscription_expires: z.string().datetime().optional().nullable(),
 });
 
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Admin Users API] Failed to parse request body:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 /**
  * GET /api/admin/users/[id]
  * Get user details
  */
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    await requireAdmin(request);
+    const { error } = await standardAdminChecks(request);
+    if (error) return error;
+
     const { id } = await context.params;
 
     const result = await fetchUser(id);
@@ -50,24 +63,14 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
  */
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const adminUser = await requireAdmin(request);
-
-    // Rate limiting
-    if (!checkAdminRateLimit(adminUser.id, false)) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Rate limit exceeded', 'RATE_LIMIT_EXCEEDED', 429),
-        { status: 429 },
-      );
-    }
+    const { adminUser, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!adminUser) throw new Error('Unexpected authentication state');
 
     const { id } = await context.params;
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Admin Users API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
+
+    const body = await safeParseBody(request);
+    if (!body) {
       return NextResponse.json(
         ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
@@ -116,15 +119,9 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
  */
 export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const adminUser = await requireAdmin(request);
-
-    // Stricter rate limiting for critical operations
-    if (!checkAdminRateLimit(adminUser.id, true)) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Rate limit exceeded', 'RATE_LIMIT_EXCEEDED', 429),
-        { status: 429 },
-      );
-    }
+    const { adminUser, error } = await standardAdminChecks(request, true); // Critical op
+    if (error) return error;
+    if (!adminUser) throw new Error('Unexpected authentication state');
 
     const { id } = await context.params;
 

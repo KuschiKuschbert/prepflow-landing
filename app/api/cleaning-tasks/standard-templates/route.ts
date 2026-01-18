@@ -1,7 +1,8 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getStandardTaskTemplates } from '@/lib/cleaning/standard-tasks';
 import { logger } from '@/lib/logger';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * GET /api/cleaning-tasks/standard-templates
@@ -9,8 +10,11 @@ import { NextResponse } from 'next/server';
  *
  * @returns {Promise<NextResponse>} List of standard task templates
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { error } = await standardAdminChecks(request);
+    if (error) return error;
+
     const templates = getStandardTaskTemplates();
 
     return NextResponse.json({

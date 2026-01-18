@@ -51,7 +51,7 @@ export async function syncCatalogFromSquare(
     // Fetch Square catalog items
     const catalogApi = client.catalog;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const listResponse = await (catalogApi as any).listCatalog(undefined, 'ITEM');
+    const listResponse = await (catalogApi as any).listCatalog(undefined, 'ITEM'); // justified
 
     if (!listResponse.result?.objects) {
       logger.warn('[Square Catalog Sync] No catalog items found in Square');

@@ -64,7 +64,7 @@ export async function configureGoogleOAuthCredentials(
         scope: ['email', 'profile'],
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as unknown as any); // Use any cast for library compatibility if needed, or specific type
+    } as unknown as any); // Use any cast for library compatibility if needed, or specific type // justified
 
     logger.info('[Auth0 Google Connection] Configured Google OAuth credentials', {
       connectionId: googleConnection.id,

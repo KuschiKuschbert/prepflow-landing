@@ -2,11 +2,15 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { getAppError } from '@/lib/utils/error';
 
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { deleteCleaningArea } from './deleteCleaningArea';
 import { handleCleaningAreaError } from './handleCleaningAreaError';
 
-export async function handleDeleteCleaningArea(request: NextRequest) {
+export async function handleDeleteCleaningArea(
+  supabase: SupabaseClient,
+  request: NextRequest,
+) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
@@ -18,7 +22,7 @@ export async function handleDeleteCleaningArea(request: NextRequest) {
       );
     }
 
-    await deleteCleaningArea(id);
+    await deleteCleaningArea(supabase, id);
 
     return NextResponse.json({
       success: true,

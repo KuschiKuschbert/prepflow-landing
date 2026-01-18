@@ -16,14 +16,21 @@ const cancelSubscriptionSchema = z.object({
   immediate: z.boolean().optional().default(false),
 });
 
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Billing API] Failed to parse request JSON:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 /**
  * POST /api/billing/cancel-subscription
  * Cancel subscription (immediate or at period end)
- *
- * @param {NextRequest} req - Request object
- * @param {Object} req.body - Request body
- * @param {boolean} [req.body.immediate=false] - If true, cancel immediately; if false, cancel at period end
- * @returns {Promise<NextResponse>} Success response with cancellation details
  */
 export async function POST(req: NextRequest) {
   try {
@@ -43,19 +50,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let body;
-    try {
-      body = await req.json();
-    } catch (jsonError) {
-      logger.warn('[Billing API] Failed to parse request JSON:', {
-        error: jsonError instanceof Error ? jsonError.message : String(jsonError),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-    const validationResult = cancelSubscriptionSchema.safeParse(body);
+    const body = await safeParseBody(req);
+    const validationResult = cancelSubscriptionSchema.safeParse(body || {});
 
     if (!validationResult.success) {
       return NextResponse.json(
@@ -110,16 +106,13 @@ export async function POST(req: NextRequest) {
 
     clearTierCache(userEmail);
 
-    // Check if user is EU customer and schedule deletion if needed
+    // Detect EU status (flattened)
     let isEU = false;
     try {
       const { getUserEUStatus } = await import('@/lib/geo/eu-detection');
       isEU = await getUserEUStatus(userEmail, req);
     } catch (err) {
-      logger.warn('[Billing API] Failed to detect EU status:', {
-        error: err instanceof Error ? err.message : String(err),
-        userEmail,
-      });
+      logger.warn('[Billing API] EU detect fail:', err instanceof Error ? err.message : String(err));
     }
 
     await scheduleAccountDeletionIfNeeded({
@@ -129,47 +122,24 @@ export async function POST(req: NextRequest) {
       request: req,
     });
 
-    logger.dev('[Billing API] Subscription cancelled:', {
-      userEmail,
-      subscriptionId,
-      immediate,
-      cancelAtPeriodEnd,
-      expiresAt: expiresAt?.toISOString(),
-      isEU,
-    });
-
-    const cancellationMessage = getCancellationMessage(isEU, immediate);
-
     return NextResponse.json({
       success: true,
-      message: cancellationMessage,
+      message: getCancellationMessage(isEU, immediate),
       isEU,
       subscription: {
         id: updatedSubscription.id,
         status: updatedSubscription.status,
         cancel_at_period_end: updatedSubscription.cancel_at_period_end,
-        current_period_end: (updatedSubscription as unknown as { current_period_end: number })
-          .current_period_end,
+        current_period_end: (
+          updatedSubscription as unknown as Stripe.Subscription & { current_period_end: number }
+        ).current_period_end,
         expires_at: expiresAt?.toISOString(),
       },
     });
   } catch (error) {
-    logger.error('[Billing API] Failed to cancel subscription:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-      context: { endpoint: '/api/billing/cancel-subscription' },
-    });
-
+    logger.error('[Billing API] Cancellation error:', error);
     return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? error instanceof Error
-            ? error.message
-            : 'Unknown error'
-          : 'Failed to cancel subscription',
-        'STRIPE_ERROR',
-        500,
-      ),
+      ApiErrorHandler.createError('Failed to cancel subscription', 'STRIPE_ERROR', 500),
       { status: 500 },
     );
   }

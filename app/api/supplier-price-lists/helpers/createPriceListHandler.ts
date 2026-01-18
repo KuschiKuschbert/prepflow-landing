@@ -1,6 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { createPriceList } from './createPriceList';
 import { handlePriceListError } from './handlePriceListError';
@@ -8,7 +8,7 @@ import { createPriceListSchema } from './schemas';
 import { setCurrentPriceList } from './setCurrentPriceList';
 import { validatePriceListCreate } from './validatePriceListCreate';
 
-export async function handleCreatePriceList(request: NextRequest) {
+export async function handleCreatePriceList(request: NextRequest, supabase: SupabaseClient) {
   try {
     let body: unknown;
     try {
@@ -43,7 +43,7 @@ export async function handleCreatePriceList(request: NextRequest) {
     const validationError = validatePriceListCreate(validatedBody);
     if (validationError) return validationError;
 
-    if (!supabaseAdmin) {
+    if (!supabase) {
       return NextResponse.json(
         ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
@@ -52,7 +52,7 @@ export async function handleCreatePriceList(request: NextRequest) {
 
     // If this is marked as current, set all other price lists for this supplier as not current
     if (validatedBody.is_current !== false) {
-      await setCurrentPriceList(supplier_id);
+      await setCurrentPriceList(supplier_id, null, supabase);
     }
 
     // document_url is required, so ensure it's not null/undefined
@@ -63,15 +63,18 @@ export async function handleCreatePriceList(request: NextRequest) {
       );
     }
 
-    const data = await createPriceList({
-      supplier_id,
-      document_name,
-      document_url,
-      effective_date: effective_date || null,
-      expiry_date: expiry_date || null,
-      is_current: validatedBody.is_current !== false,
-      notes: notes || null,
-    });
+    const data = await createPriceList(
+      {
+        supplier_id,
+        document_name,
+        document_url,
+        effective_date: effective_date || null,
+        expiry_date: expiry_date || null,
+        is_current: validatedBody.is_current !== false,
+        notes: notes || null,
+      },
+      supabase,
+    );
 
     return NextResponse.json({
       success: true,

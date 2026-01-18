@@ -8,6 +8,18 @@ import { fetchDishWithRelations } from './helpers/fetchDishWithRelations';
 import { handleDishError } from './helpers/handleDishError';
 import { handlePutRequest } from './helpers/handlePutRequest';
 
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Dishes API] Failed to parse request JSON:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
@@ -45,18 +57,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       );
     }
 
-    let body: unknown;
-    try {
-      body = await request.clone().json();
-    } catch (err) {
-      logger.warn('[Dishes API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const body = await safeParseBody(request);
 
     const validationResult = updateDishSchema.safeParse(body);
     if (!validationResult.success) {

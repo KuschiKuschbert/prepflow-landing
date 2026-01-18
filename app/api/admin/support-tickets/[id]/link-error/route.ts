@@ -1,7 +1,6 @@
-import { requireAdmin } from '@/lib/admin-auth';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -9,23 +8,37 @@ const linkErrorSchema = z.object({
   error_id: z.string().uuid(),
 });
 
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Admin Support Tickets API] Failed to parse request body:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 /**
  * POST /api/admin/support-tickets/[id]/link-error
  * Link ticket to an error log
  */
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    await requireAdmin(request);
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     const { id } = await context.params;
-    const body = await request.json();
+    const body = await safeParseBody(request);
+
+    if (!body) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
 
     // Validate request body
     const validationResult = linkErrorSchema.safeParse(body);
@@ -44,7 +57,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     const { error_id } = validationResult.data;
 
     // Verify error exists
-    const { data: errorLog, error: errorCheck } = await supabaseAdmin
+    const { data: errorLog, error: errorCheck } = await supabase
       .from('admin_error_logs')
       .select('id')
       .eq('id', error_id)
@@ -65,15 +78,15 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     }
 
     // Update ticket with related_error_id
-    const { data: ticket, error: updateError } = await supabaseAdmin
+    const { data: ticket, error: updateDbError } = await supabase
       .from('support_tickets')
       .update({ related_error_id: error_id })
       .eq('id', id)
       .select()
       .single();
 
-    if (updateError) {
-      if (updateError.code === 'PGRST116') {
+    if (updateDbError) {
+      if (updateDbError.code === 'PGRST116') {
         return NextResponse.json(
           ApiErrorHandler.createError('Ticket not found', 'NOT_FOUND', 404),
           { status: 404 },
@@ -81,11 +94,11 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       }
 
       logger.error('[Admin Support Tickets API] Database error:', {
-        error: updateError.message,
+        error: updateDbError.message,
         context: { endpoint: `/api/admin/support-tickets/${id}/link-error`, method: 'POST' },
       });
 
-      return NextResponse.json(ApiErrorHandler.fromSupabaseError(updateError, 500), {
+      return NextResponse.json(ApiErrorHandler.fromSupabaseError(updateDbError, 500), {
         status: 500,
       });
     }

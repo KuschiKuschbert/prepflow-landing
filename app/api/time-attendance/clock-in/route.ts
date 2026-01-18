@@ -5,16 +5,17 @@
  * @module api/time-attendance/clock-in
  */
 
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
-import { validateRequest } from './helpers/validateRequest';
-import { checkEmployee } from './helpers/checkEmployee';
-import { validateGeofence } from './helpers/validateGeofence';
-import { checkShift } from './helpers/checkShift';
-import { checkOpenClockIn } from './helpers/checkOpenClockIn';
-import { createClockIn } from './helpers/createClockIn';
 import { z } from 'zod';
+import { checkEmployee } from './helpers/checkEmployee';
+import { checkOpenClockIn } from './helpers/checkOpenClockIn';
+import { checkShift } from './helpers/checkShift';
+import { createClockIn } from './helpers/createClockIn';
+import { validateGeofence } from './helpers/validateGeofence';
+import { validateRequest } from './helpers/validateRequest';
 
 /**
  * POST /api/time-attendance/clock-in
@@ -37,6 +38,10 @@ const clockInSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
     let body: unknown;
     try {
       body = await request.json();
@@ -71,7 +76,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if employee exists
-    const employeeResult = await checkEmployee(employee_id);
+    const employeeResult = await checkEmployee(supabase, employee_id);
     if (employeeResult instanceof NextResponse) {
       return employeeResult;
     }
@@ -84,20 +89,21 @@ export async function POST(request: NextRequest) {
 
     // Check if shift exists (if provided)
     if (shift_id) {
-      const shiftResult = await checkShift(shift_id, employee_id);
+      const shiftResult = await checkShift(supabase, shift_id, employee_id);
       if (shiftResult instanceof NextResponse) {
         return shiftResult;
       }
     }
 
     // Check for existing open clock-in
-    const openClockInError = await checkOpenClockIn(employee_id);
+    const openClockInError = await checkOpenClockIn(supabase, employee_id);
     if (openClockInError) {
       return openClockInError;
     }
 
     // Create clock-in record
     return await createClockIn(
+      supabase,
       employee_id,
       shift_id || null,
       latitude,

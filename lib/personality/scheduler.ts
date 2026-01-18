@@ -3,13 +3,12 @@
 'use client';
 
 import { useEffect } from 'react';
-import { usePersonality } from './store';
-import { dispatchToast, dispatchVisual, dispatchSeasonal } from './ui';
-import { isSilenced, getTimeBasedAdjustments } from './utils';
-import { generateRealMetricsMessage } from './real-metrics';
-import { getAdaptiveSettings, adjustMessageProbability } from './adaptive-personality';
+import { adjustMessageProbability, getAdaptiveSettings } from './adaptive-personality';
 import { trackTimeOfDayUsage } from './behavior-tracker';
-import { getShiftBucket } from './utils';
+import { generateRealMetricsMessage } from './real-metrics';
+import { usePersonality } from './store';
+import { dispatchSeasonal, dispatchToast, dispatchVisual } from './ui';
+import { getShiftBucket, getTimeBasedAdjustments, isSilenced } from './utils';
 
 const chance = (p: number): boolean => Math.random() < p;
 
@@ -36,94 +35,49 @@ export function usePersonalityScheduler() {
     const idleTick = () => {
       if (!settings.enabled || isSilenced(settings)) return;
 
-      // Update adaptive settings periodically
       const currentAdaptive = getAdaptiveSettings(settings);
       const currentTimeAdjustments = getTimeBasedAdjustments();
 
-      // Mindful (rare - 3% chance per minute, adjusted)
-      if (settings.mindfulMoments) {
-        let probability = 0.03;
+      const triggerMoment = (type: 'mindful' | 'metrics' | 'meta' | 'chaos', baseProb: number) => {
+        let probability = baseProb;
         probability = adjustMessageProbability(probability, currentAdaptive);
         probability *= currentTimeAdjustments.toneMultiplier;
 
         if (chance(probability)) {
-          const msg = dispatchToast.pick('mindful');
-          if (msg) {
-            window.dispatchEvent(
-              new CustomEvent('personality:addToast', { detail: { message: msg } }),
-            );
-          }
-        }
-      }
+          let msg: string | null = null;
 
-      // Metrics (occasional - 6% chance per minute, adjusted)
-      if (settings.imaginaryMetrics) {
-        let probability = 0.06;
-        probability = adjustMessageProbability(probability, currentAdaptive);
-        probability *= currentTimeAdjustments.toneMultiplier;
-
-        if (chance(probability)) {
-          // Try real metrics first (30% chance), fallback to imaginary
-          if (chance(0.3)) {
-            const realMsg = generateRealMetricsMessage();
-            if (realMsg) {
-              window.dispatchEvent(
-                new CustomEvent('personality:addToast', { detail: { message: realMsg } }),
-              );
-            } else {
-              // Fallback to imaginary metrics
-              const msg = dispatchToast.pick('metrics');
-              if (msg) {
-                window.dispatchEvent(
-                  new CustomEvent('personality:addToast', { detail: { message: msg } }),
-                );
-              }
-            }
+          if (type === 'metrics') {
+            // Try real metrics first (30% chance), fallback to imaginary
+            msg = chance(0.3) ? generateRealMetricsMessage() : dispatchToast.pick('metrics');
+            if (!msg) msg = dispatchToast.pick('metrics'); // Final fallback
           } else {
-            // Imaginary metrics
-            const msg = dispatchToast.pick('metrics');
-            if (msg) {
-              window.dispatchEvent(
-                new CustomEvent('personality:addToast', { detail: { message: msg } }),
-              );
-            }
+            msg = dispatchToast.pick(type);
           }
-        }
-      }
 
-      // Meta (very rare - 2% chance per minute, adjusted)
-      if (settings.metaMoments) {
-        let probability = 0.02;
-        probability = adjustMessageProbability(probability, currentAdaptive);
-        probability *= currentTimeAdjustments.toneMultiplier;
-
-        if (chance(probability)) {
-          const msg = dispatchToast.pick('meta');
           if (msg) {
             window.dispatchEvent(
               new CustomEvent('personality:addToast', { detail: { message: msg } }),
             );
           }
         }
-      }
+      };
 
-      // Chaos report (once per shift ~ every 4h - 1% chance per minute, adjusted)
-      if (settings.chaosReports) {
-        let probability = 0.01;
-        probability = adjustMessageProbability(probability, currentAdaptive);
-        probability *= currentTimeAdjustments.toneMultiplier;
+      // Define moments and their config
+      const moments: Array<{
+        type: 'mindful' | 'metrics' | 'meta' | 'chaos';
+        prob: number;
+        enabled: boolean;
+      }> = [
+        { type: 'mindful', prob: 0.03, enabled: !!settings.mindfulMoments },
+        { type: 'metrics', prob: 0.06, enabled: !!settings.imaginaryMetrics },
+        { type: 'meta', prob: 0.02, enabled: !!settings.metaMoments },
+        { type: 'chaos', prob: 0.01, enabled: !!settings.chaosReports },
+      ];
 
-        if (chance(probability)) {
-          const msg = dispatchToast.pick('chaos');
-          if (msg) {
-            window.dispatchEvent(
-              new CustomEvent('personality:addToast', { detail: { message: msg } }),
-            );
-          }
-        }
-      }
+      // Run triggers
+      moments.filter(m => m.enabled).forEach(m => triggerMoment(m.type, m.prob));
 
-      // Visual delight (very rare - 2% chance per minute, adjusted)
+      // Visual delight (special case for now)
       if (settings.visualDelights) {
         let probability = 0.02;
         probability = adjustMessageProbability(probability, currentAdaptive);

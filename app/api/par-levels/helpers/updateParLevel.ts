@@ -1,22 +1,23 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { createSupabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { buildParLevelData } from './buildParLevelData';
 import { ParLevelInput } from './types';
 
 /**
  * Update a par level.
  *
+ * @param {SupabaseClient} supabase - Supabase client
  * @param {string} id - Par level ID
  * @param {Object} updates - Update data
  * @returns {Promise<Object>} Updated par level with ingredient data
  * @throws {Error} If update fails
  */
-export async function updateParLevel(id: string, updates: unknown) {
-  const supabaseAdmin = createSupabaseAdmin();
+export async function updateParLevel(supabase: SupabaseClient, id: string, updates: unknown) {
+
 
   // Check if par level exists
-  const { data: existing, error: checkError } = await supabaseAdmin
+  const { data: existing, error: checkError } = await supabase
     .from('par_levels')
     .select('id')
     .eq('id', id)
@@ -38,7 +39,7 @@ export async function updateParLevel(id: string, updates: unknown) {
     }
   });
 
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await supabase
     .from('par_levels')
     .update(updateData)
     .eq('id', id)

@@ -1,6 +1,6 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { createQualification } from './helpers/createQualification';
 import { createQualificationSchema, QUALIFICATION_SELECT } from './helpers/schemas';
@@ -13,23 +13,20 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
   try {
     const { id } = await context.params;
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
-    const { data, error } = await supabaseAdmin
+    const { data, error: fetchError } = await supabase
       .from('employee_qualifications')
       .select(QUALIFICATION_SELECT)
       .eq('employee_id', id)
       .order('expiry_date', { ascending: true, nullsFirst: false });
 
-    if (error) {
+    if (fetchError) {
       logger.error('[Employee Qualifications API] Database error fetching qualifications:', {
-        error: error.message,
-        code: error.code,
+        error: fetchError.message,
+        code: fetchError.code,
         context: {
           endpoint: '/api/employees/[id]/qualifications',
           operation: 'GET',
@@ -38,7 +35,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
         },
       });
 
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(fetchError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
@@ -100,14 +97,11 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       );
     }
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
-    const result = await createQualification(id, validationResult.data);
+    const result = await createQualification(supabase, id, validationResult.data);
     if ('error' in result) {
       return NextResponse.json(result.error, { status: result.status });
     }

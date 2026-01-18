@@ -1,6 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { CleaningTaskJoinResult, CreateCleaningTaskInput, DBCleaningTask } from './types';
 
 const CLEANING_TASKS_SELECT = `
@@ -37,15 +37,15 @@ const CLEANING_TASKS_SELECT = `
 /**
  * Create a cleaning task.
  *
+ * @param {SupabaseClient} supabase - Supabase client
  * @param {CreateCleaningTaskInput} taskData - Cleaning task data
  * @returns {Promise<CleaningTaskJoinResult | DBCleaningTask>} Created cleaning task
  * @throws {Error} If creation fails
  */
 export async function createCleaningTask(
+  supabase: SupabaseClient,
   taskData: CreateCleaningTaskInput,
 ): Promise<CleaningTaskJoinResult | DBCleaningTask> {
-  if (!supabaseAdmin)
-    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
 
   // Build insert data
   const insertData: Record<string, unknown> = {
@@ -76,7 +76,7 @@ export async function createCleaningTask(
     insertData.assigned_by_employee_id = taskData.assigned_by_employee_id;
 
   // First try insert without SELECT to see if insert itself works
-  const { data: insertResult, error: insertError } = await supabaseAdmin
+  const { data: insertResult, error: insertError } = await supabase
     .from('cleaning_tasks')
     .insert(insertData)
     .select('id, task_name, frequency_type, area_id, description, equipment_id, section_id')
@@ -95,7 +95,7 @@ export async function createCleaningTask(
   }
 
   // Now fetch with full joins
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await supabase
     .from('cleaning_tasks')
     .select(CLEANING_TASKS_SELECT)
     .eq('id', insertResult.id)

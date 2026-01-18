@@ -1,20 +1,17 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { handleSupplierError } from './helpers/handleSupplierError';
 import { handleCreateSupplier } from './helpers/createSupplierHandler';
-import { handleUpdateSupplier } from './helpers/updateSupplierHandler';
 import { handleDeleteSupplier } from './helpers/deleteSupplierHandler';
+import { handleSupplierError } from './helpers/handleSupplierError';
+import { handleUpdateSupplier } from './helpers/updateSupplierHandler';
 
 export async function GET(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     const { searchParams } = new URL(request.url);
     const active = searchParams.get('active');
@@ -24,7 +21,7 @@ export async function GET(request: NextRequest) {
     const end = start + pageSize - 1;
 
     // Build query with count option at the initial select to satisfy types
-    let query = supabaseAdmin
+    let query = supabase
       .from('suppliers')
       .select('*', { count: 'exact' })
       .order('supplier_name');
@@ -33,16 +30,16 @@ export async function GET(request: NextRequest) {
       query = query.eq('is_active', active === 'true');
     }
 
-    const { data, error, count } = await query.range(start, end);
+    const { data, error: dbError, count } = await query.range(start, end);
 
-    if (error) {
+    if (dbError) {
       logger.error('[Suppliers API] Database error fetching suppliers:', {
-        error: error.message,
-        code: error.code,
+        error: dbError.message,
+        code: dbError.code,
         context: { endpoint: '/api/suppliers', operation: 'GET', table: 'suppliers' },
       });
 
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(dbError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
@@ -54,6 +51,8 @@ export async function GET(request: NextRequest) {
       total: count || 0,
     });
   } catch (err) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Suppliers API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/suppliers', method: 'GET' },
@@ -63,13 +62,22 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  return handleCreateSupplier(request);
+  const { supabase, error } = await standardAdminChecks(request);
+  if (error) return error;
+  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  return handleCreateSupplier(request, supabase);
 }
 
 export async function PUT(request: NextRequest) {
-  return handleUpdateSupplier(request);
+  const { supabase, error } = await standardAdminChecks(request);
+  if (error) return error;
+  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  return handleUpdateSupplier(request, supabase);
 }
 
 export async function DELETE(request: NextRequest) {
-  return handleDeleteSupplier(request);
+  const { supabase, error } = await standardAdminChecks(request);
+  if (error) return error;
+  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  return handleDeleteSupplier(request, supabase);
 }

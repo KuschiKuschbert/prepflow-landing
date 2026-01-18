@@ -1,19 +1,17 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { detectTemperatureThresholds } from '../../helpers/detectTemperatureThresholds';
 import { handleTemperatureEquipmentError } from '../../helpers/handleTemperatureEquipmentError';
 import { updateTemperatureEquipmentSchema } from '../../helpers/schemas';
 
-export async function handleUpdateTemperatureEquipment(request: NextRequest, id: string) {
+export async function handleUpdateTemperatureEquipment(
+  supabase: SupabaseClient,
+  request: NextRequest,
+  id: string,
+) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
 
     if (!id) {
       return NextResponse.json(
@@ -50,7 +48,7 @@ export async function handleUpdateTemperatureEquipment(request: NextRequest, id:
     const validatedBody = validationResult.data;
 
     // Get current equipment to use name/type for threshold detection if needed
-    const { data: currentEquipment, error: fetchError } = await supabaseAdmin
+    const { data: currentEquipment, error: fetchError } = await supabase
       .from('temperature_equipment')
       .select('name, equipment_type')
       .eq('id', id)
@@ -102,7 +100,7 @@ export async function handleUpdateTemperatureEquipment(request: NextRequest, id:
     if (maxTemp !== undefined) updateData.max_temp_celsius = maxTemp;
     if (validatedBody.is_active !== undefined) updateData.is_active = validatedBody.is_active;
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from('temperature_equipment')
       .update(updateData)
       .eq('id', id)

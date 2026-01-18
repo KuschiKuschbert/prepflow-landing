@@ -3,10 +3,10 @@
  * Returns current scraping progress and statistics
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { requireAuth } from '@/lib/auth0-api-helpers';
+import { NextRequest, NextResponse } from 'next/server';
 
 // Dynamic import to handle potential import failures gracefully
 async function getComprehensiveScraperJob() {
@@ -31,22 +31,8 @@ async function getComprehensiveScraperJob() {
  */
 export async function GET(request: NextRequest) {
   try {
-    // Authentication check
-    try {
-      await requireAuth(request);
-    } catch (authErr) {
-      // requireAuth throws NextResponse for auth errors, return it
-      if (authErr instanceof NextResponse) {
-        return authErr;
-      }
-      logger.error('[Recipe Scraper Status API] Authentication error:', {
-        error: authErr instanceof Error ? authErr.message : String(authErr),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
-    }
+    const { error } = await standardAdminChecks(request);
+    if (error) return error;
 
     // Get job status with error handling
     let status;

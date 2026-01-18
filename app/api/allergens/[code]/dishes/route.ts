@@ -10,12 +10,25 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
+async function getDishAllergensWithFallback(dish: any /* justified: complex DB record */): Promise<string[]> {
+  const cachedAllergens = dish.allergens as string[] | null | undefined;
+  if (cachedAllergens && cachedAllergens.length > 0) {
+    return cachedAllergens;
+  }
+
+  try {
+    return await aggregateDishAllergens(dish.id);
+  } catch (err) {
+    logger.warn('[Allergen Cross-Reference API] Error aggregating dish allergens:', {
+      dishId: dish.id,
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return [];
+  }
+}
+
 /**
  * Gets all dishes containing a specific allergen.
- *
- * @param {NextRequest} request - Next.js request object
- * @param {Object} context - Route context with params
- * @returns {Promise<NextResponse>} Dishes with allergen
  */
 export async function GET(_request: NextRequest, context: { params: Promise<{ code: string }> }) {
   try {
@@ -41,25 +54,10 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ co
       .select('id, dish_name, allergens')
       .order('dish_name');
 
-    if (fetchError) {
-      const errorCode = fetchError.code;
-      if (errorCode === '42P01') {
-        // Table doesn't exist - return empty data
-        logger.dev('[Allergen Cross-Reference API] Dishes table not found, returning empty data');
-        return NextResponse.json({
-          success: true,
-          data: {
-            allergen_code: code,
-            dishes: [],
-            count: 0,
-          },
-        });
-      }
-
+    if (fetchError && fetchError.code !== '42P01') {
       logger.error('[Allergen Cross-Reference API] Error fetching dishes:', {
         allergenCode: code,
         error: fetchError.message,
-        code: errorCode,
       });
       return NextResponse.json(
         ApiErrorHandler.createError('Failed to fetch dishes', 'DATABASE_ERROR', 500),
@@ -70,54 +68,28 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ co
     if (!dishes || dishes.length === 0) {
       return NextResponse.json({
         success: true,
-        data: {
-          allergen_code: code,
-          dishes: [],
-          count: 0,
-        },
+        data: { allergen_code: code, dishes: [], count: 0 },
       });
     }
 
-    // Aggregate allergens for dishes that don't have cached allergens
+    // Aggregate allergens for all dishes
     const dishesWithAllergens = await Promise.all(
-      dishes.map(async dish => {
-        const cachedAllergens = dish.allergens as string[] | null | undefined;
-        let allergens: string[] = [];
-
-        if (cachedAllergens && cachedAllergens.length > 0) {
-          allergens = cachedAllergens;
-        } else {
-          try {
-            allergens = await aggregateDishAllergens(dish.id);
-          } catch (err) {
-            logger.warn('[Allergen Cross-Reference API] Error aggregating dish allergens:', {
-              dishId: dish.id,
-              error: err instanceof Error ? err.message : String(err),
-            });
-            allergens = [];
-          }
-        }
-
-        return {
-          id: dish.id,
-          dish_name: dish.dish_name,
-          allergens,
-          contains_allergen: allergens.includes(code),
-        };
-      }),
+      dishes.map(async dish => ({
+        id: dish.id,
+        dish_name: dish.dish_name,
+        allergens: await getDishAllergensWithFallback(dish),
+      })),
     );
 
-    // Filter dishes that contain the allergen
-    const dishesWithAllergen = dishesWithAllergens
-      .filter(dish => dish.contains_allergen)
-      .map(({ contains_allergen, ...dish }) => dish); // Remove contains_allergen flag
+    // Filter by the requested allergen code
+    const filteredDishes = dishesWithAllergens.filter(dish => dish.allergens.includes(code));
 
     return NextResponse.json({
       success: true,
       data: {
         allergen_code: code,
-        dishes: dishesWithAllergen,
-        count: dishesWithAllergen.length,
+        dishes: filteredDishes,
+        count: filteredDishes.length,
       },
     });
   } catch (err) {

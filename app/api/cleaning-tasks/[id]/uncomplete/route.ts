@@ -1,6 +1,6 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -11,24 +11,14 @@ const uncompleteTaskSchema = z.object({
 /**
  * POST /api/cleaning-tasks/[id]/uncomplete
  * Remove completion for a cleaning task on a specific date
- *
- * @param {NextRequest} request - Request object
- * @param {Object} context - Route context
- * @param {Promise<{id: string}>} context.params - Route parameters
- * @param {Object} request.body - Request body
- * @param {string} request.body.completion_date - Date to remove completion for (ISO date string, required)
- * @returns {Promise<NextResponse>} Success response
  */
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await context.params;
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { id } = await context.params;
 
     let body: unknown;
     try {
@@ -58,16 +48,16 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     const { completion_date } = validationResult.data;
 
     // Delete completion
-    const { error } = await supabaseAdmin
+    const { error: deleteError } = await supabase
       .from('cleaning_task_completions')
       .delete()
       .eq('task_id', id)
       .eq('completion_date', completion_date);
 
-    if (error) {
+    if (deleteError) {
       logger.error('[Cleaning Tasks API] Database error removing completion:', {
-        error: error.message,
-        code: error.code,
+        error: deleteError.message,
+        code: deleteError.code,
         context: {
           endpoint: '/api/cleaning-tasks/[id]/uncomplete',
           operation: 'POST',
@@ -76,7 +66,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       });
 
       // Handle missing table gracefully
-      if (error.code === '42P01') {
+      if (deleteError.code === '42P01') {
         return NextResponse.json(
           ApiErrorHandler.createError(
             'Completion table does not exist. Please run database migration.',
@@ -87,7 +77,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
         );
       }
 
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(deleteError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 

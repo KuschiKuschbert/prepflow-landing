@@ -1,8 +1,7 @@
-import { requireAdmin } from '@/lib/admin-auth';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { getStripe } from '@/lib/stripe';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { checkOrphanedSubscriptions } from './helpers/checkOrphanedSubscriptions';
 import { checkUserSubscriptions } from './helpers/checkUserSubscriptions';
@@ -18,20 +17,15 @@ import { HealthReport } from './types';
  */
 export async function GET(req: NextRequest) {
   try {
-    await requireAdmin(req);
+    const { supabase, error } = await standardAdminChecks(req);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     const stripe = getStripe();
     if (!stripe) {
       return NextResponse.json(
         ApiErrorHandler.createError('Stripe not configured', 'STRIPE_NOT_CONFIGURED', 501),
         { status: 501 },
-      );
-    }
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
       );
     }
 
@@ -46,7 +40,7 @@ export async function GET(req: NextRequest) {
     };
 
     // 1. Get all users with subscriptions
-    const { data: users, error: usersError } = await supabaseAdmin
+    const { data: users, error: usersError } = await supabase
       .from('users')
       .select('email, subscription_status, stripe_subscription_id')
       .not('stripe_subscription_id', 'is', null);
@@ -72,7 +66,7 @@ export async function GET(req: NextRequest) {
     healthReport.totalSubscriptions = subscriptions.data.length;
 
     // Check for orphaned subscriptions
-    const orphansCheck = await checkOrphanedSubscriptions(subscriptions.data, supabaseAdmin);
+    const orphansCheck = await checkOrphanedSubscriptions(subscriptions.data, supabase);
     healthReport.subscriptionsWithMissingUsers = orphansCheck.subscriptionsWithMissingUsers;
     if (!orphansCheck.healthy) healthReport.healthy = false;
 

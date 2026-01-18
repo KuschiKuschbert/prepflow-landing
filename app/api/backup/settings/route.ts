@@ -21,11 +21,22 @@ const updateBackupSettingsSchema = z.object({
   autoUploadToDrive: z.boolean().optional(),
 });
 
+const DEFAULT_SCHEDULE_INTERVAL = 24;
+
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Backup Settings API] Failed to parse request body:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 /**
  * Gets backup settings for the current user.
- *
- * @param {NextRequest} request - Next.js request object
- * @returns {Promise<NextResponse>} Backup settings response
  */
 export async function GET(request: NextRequest) {
   try {
@@ -39,37 +50,27 @@ export async function GET(request: NextRequest) {
     const userId = user.email;
     const supabase = createSupabaseAdmin();
 
-    // Get backup schedule (which contains settings)
     const { data: schedule } = await supabase
       .from('backup_schedules')
       .select('*')
       .eq('user_id', userId)
       .single();
 
-    // Default settings
     const settings: BackupSettings = {
       userId,
       defaultFormat: 'encrypted',
       defaultEncryptionMode: 'prepflow-only',
       scheduledBackupEnabled: schedule?.enabled || false,
-      scheduledBackupInterval: schedule?.interval_hours || 24,
+      scheduledBackupInterval: schedule?.interval_hours || DEFAULT_SCHEDULE_INTERVAL,
       autoUploadToDrive: schedule?.auto_upload_to_drive || false,
     };
 
-    return NextResponse.json({
-      success: true,
-      settings,
-    });
+    return NextResponse.json({ success: true, settings });
   } catch (error: unknown) {
     const appError = getAppError(error);
-    logger.error('[Backup Settings] Error:', {
-      error: appError.message,
-      code: appError.code,
-      originalError: appError.originalError,
-    });
+    logger.error('[Backup Settings] Error:', { error: appError.message });
     return NextResponse.json(
-      { error: 'Failed to get backup settings', message: appError.message },
-
+      ApiErrorHandler.createError(appError.message, 'INTERNAL_ERROR', 500),
       { status: 500 },
     );
   }
@@ -77,9 +78,6 @@ export async function GET(request: NextRequest) {
 
 /**
  * Updates backup settings for the current user.
- *
- * @param {NextRequest} request - Next.js request object
- * @returns {Promise<NextResponse>} Update response
  */
 export async function PUT(request: NextRequest) {
   try {
@@ -91,20 +89,9 @@ export async function PUT(request: NextRequest) {
     }
 
     const userId = user.email;
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Backup Settings] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const body = await safeParseBody(request);
 
-    const validationResult = updateBackupSettingsSchema.safeParse(body);
+    const validationResult = updateBackupSettingsSchema.safeParse(body || {});
     if (!validationResult.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(
@@ -117,55 +104,34 @@ export async function PUT(request: NextRequest) {
     }
 
     const {
-      defaultFormat,
-      defaultEncryptionMode,
       scheduledBackupEnabled,
       scheduledBackupInterval,
       autoUploadToDrive,
     } = validationResult.data;
 
     const supabase = createSupabaseAdmin();
-
-    // Update or create backup schedule
     const { error } = await supabase.from('backup_schedules').upsert(
       {
         user_id: userId,
         enabled: scheduledBackupEnabled !== undefined ? scheduledBackupEnabled : true,
-        interval_hours: scheduledBackupInterval || 24,
+        interval_hours: scheduledBackupInterval || DEFAULT_SCHEDULE_INTERVAL,
         auto_upload_to_drive: autoUploadToDrive !== undefined ? autoUploadToDrive : false,
         updated_at: new Date().toISOString(),
       },
-      {
-        onConflict: 'user_id',
-      },
+      { onConflict: 'user_id' },
     );
 
     if (error) {
-      logger.error('[Backup Settings] Database error updating schedule:', {
-        error: error.message,
-        code: error.code,
-        userId,
-      });
+      logger.error('[Backup Settings] Database error:', error.message);
       throw ApiErrorHandler.fromSupabaseError(error, 500);
     }
 
-    // Note: defaultFormat and defaultEncryptionMode are client-side preferences
-    // They can be stored in localStorage or a separate user_preferences table
-
-    return NextResponse.json({
-      success: true,
-      message: 'Backup settings updated successfully',
-    });
+    return NextResponse.json({ success: true, message: 'Settings updated' });
   } catch (error: unknown) {
     const appError = getAppError(error);
-    logger.error('[Backup Settings] Error:', {
-      error: appError.message,
-      code: appError.code,
-      originalError: appError.originalError,
-    });
+    logger.error('[Backup Settings] Error:', { error: appError.message });
     return NextResponse.json(
-      { error: 'Failed to update backup settings', message: appError.message },
-
+      ApiErrorHandler.createError(appError.message, 'INTERNAL_ERROR', 500),
       { status: 500 },
     );
   }

@@ -2,7 +2,7 @@ interface UserSubscriptionInfoProps {
   formData: {
     subscription_status: string;
   };
-  setFormData: (data: any) => void;
+  setFormData: (data: any) => void; // justified
   user: {
     created_at: string;
     subscription_expires: string | null;

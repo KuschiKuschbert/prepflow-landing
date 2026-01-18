@@ -5,32 +5,45 @@
  * @module api/roster/templates
  */
 
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
+import { ZodSchema, z } from 'zod';
+
+async function safeParseBody<T>(req: NextRequest, schema: ZodSchema<T>): Promise<T> {
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch (err) {
+    throw ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400);
+  }
+
+  const result = schema.safeParse(body);
+  if (!result.success) {
+    throw ApiErrorHandler.createError(
+      result.error.issues[0]?.message || 'Invalid request body',
+      'VALIDATION_ERROR',
+      400,
+    );
+  }
+  return result.data;
+}
 
 /**
  * GET /api/roster/templates
  * List roster templates with optional filters.
- *
- * Query parameters:
- * - is_active: Filter by active status (true/false)
  */
 export async function GET(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     const { searchParams } = new URL(request.url);
     const isActive = searchParams.get('is_active');
 
-    let query = supabaseAdmin.from('roster_templates').select('*', { count: 'exact' });
+    let query = supabase.from('roster_templates').select('*', { count: 'exact' });
 
     if (isActive !== null) {
       query = query.eq('is_active', isActive === 'true');
@@ -38,16 +51,16 @@ export async function GET(request: NextRequest) {
 
     query = query.order('created_at', { ascending: false });
 
-    const { data: templates, error, count } = await query;
+    const { data: templates, error: dbError, count } = await query;
 
-    if (error) {
+    if (dbError) {
       logger.error('[Templates API] Database error fetching templates:', {
-        error: error.message,
-        code: error.code,
+        error: dbError.message,
+        code: dbError.code,
         context: { endpoint: '/api/roster/templates', operation: 'GET', table: 'roster_templates' },
       });
 
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(dbError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
@@ -86,47 +99,15 @@ const createTemplateSchema = z.object({
 /**
  * POST /api/roster/templates
  * Create a new roster template.
- *
- * Request body:
- * - name: Template name (required)
- * - description: Template description (optional)
- * - is_active: Whether template is active (optional, default: true)
  */
 export async function POST(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Templates API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    const validationResult = createTemplateSchema.safeParse(body);
-    if (!validationResult.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const { name, description, is_active } = validationResult.data;
+    const body = await safeParseBody(request, createTemplateSchema);
+    const { name, description, is_active } = body;
 
     const templateData = {
       name,
@@ -134,7 +115,7 @@ export async function POST(request: NextRequest) {
       is_active: is_active !== undefined ? is_active : true,
     };
 
-    const { data: template, error: insertError } = await supabaseAdmin
+    const { data: template, error: insertError } = await supabase
       .from('roster_templates')
       .insert(templateData)
       .select()
@@ -157,6 +138,8 @@ export async function POST(request: NextRequest) {
       message: 'Template created successfully',
     });
   } catch (err) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Templates API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,

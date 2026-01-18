@@ -1,16 +1,17 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { updateOrderListSchema } from './schemas';
 
 export async function updateOrderList(
+  supabase: SupabaseClient,
   id: string,
   body: z.infer<typeof updateOrderListSchema>,
 ): Promise<
   { success: boolean; message: string; data: unknown } | { error: unknown; status: number }
 > {
-  if (!supabaseAdmin) {
+  if (!supabase) {
     return {
       error: ApiErrorHandler.createError(
         'Database connection not available',
@@ -29,7 +30,7 @@ export async function updateOrderList(
   if (notes !== undefined) updateData.notes = notes;
   if (status !== undefined) updateData.status = status;
 
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await supabase
     .from('order_lists')
     .update(updateData)
     .eq('id', id)
@@ -47,7 +48,7 @@ export async function updateOrderList(
   }
 
   if (items !== undefined) {
-    const { error: deleteItemsError } = await supabaseAdmin
+    const { error: deleteItemsError } = await supabase
       .from('order_list_items')
       .delete()
       .eq('order_list_id', id);
@@ -70,7 +71,7 @@ export async function updateOrderList(
         notes: item.notes,
       }));
 
-      const { error: insertItemsError } = await supabaseAdmin
+      const { error: insertItemsError } = await supabase
         .from('order_list_items')
         .insert(orderItems);
 

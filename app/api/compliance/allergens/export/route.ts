@@ -4,21 +4,18 @@
  * Exports allergen overview data in CSV, PDF, or HTML format
  */
 
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { checkFeatureAccess } from '@/lib/api-feature-gate';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { checkFeatureAccess } from '@/lib/api-feature-gate';
+import { NextRequest, NextResponse } from 'next/server';
 import { fetchAllergenExportData } from './helpers/fetchAllergenExportData';
 import { generateCSVExport } from './helpers/generateCSVExport';
 import { generateHTMLExport } from './helpers/generateHTMLExport';
 
 /**
  * Exports allergen overview data for compliance.
- *
- * @param {NextRequest} request - Next.js request object
- * @returns {Promise<NextResponse>} Export file response
  */
 export async function GET(request: NextRequest) {
   try {
@@ -37,57 +34,34 @@ export async function GET(request: NextRequest) {
 
     if (!['html', 'csv', 'pdf'].includes(format)) {
       return NextResponse.json(
-        ApiErrorHandler.createError(
-          'Invalid format. Must be html, csv, or pdf',
-          'VALIDATION_ERROR',
-          400,
-        ),
+        ApiErrorHandler.createError('Invalid format', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
-    // Check feature access for CSV/PDF exports (requires Pro tier)
-    // HTML export is available to all tiers
+    // Check feature access (flattened)
     if (format === 'csv' || format === 'pdf') {
-      try {
-        const user = await requireAuth(request);
-        const featureKey = format === 'csv' ? 'export_csv' : 'export_pdf';
-        await checkFeatureAccess(featureKey, user.email, request);
-      } catch (error) {
-        // requireAuth or checkFeatureAccess throws NextResponse, so return it
-        if (error instanceof NextResponse) {
-          return error;
-        }
-        throw error;
+      const user = await requireAuth(request);
+      if (!user?.email) {
+        return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
       }
+      const featureKey = format === 'csv' ? 'export_csv' : 'export_pdf';
+      const accessResult = await checkFeatureAccess(featureKey, user.email, request);
+      if (accessResult instanceof NextResponse) return accessResult;
     }
 
-    // Fetch all allergen export data
+    // Export logic
     const { items } = await fetchAllergenExportData(menuIds);
+    const filteredItems = excludeAllergen
+      ? items.filter(item => !item.allergens.includes(excludeAllergen))
+      : items;
 
-    // Apply allergen filter if provided
-    let filteredItems = items;
-    if (excludeAllergen) {
-      filteredItems = filteredItems.filter(item => !item.allergens.includes(excludeAllergen));
-    }
-
-    // Generate export based on format
-    if (format === 'csv') {
-      return generateCSVExport(filteredItems);
-    }
-    if (format === 'pdf') {
-      return generateHTMLExport(filteredItems, true);
-    }
-    return generateHTMLExport(filteredItems, false);
+    if (format === 'csv') return generateCSVExport(filteredItems);
+    return generateHTMLExport(filteredItems, format === 'pdf');
   } catch (err) {
     logger.error('[Compliance Allergen Export] Error:', err);
     return NextResponse.json(
-      ApiErrorHandler.createError(
-        'Failed to export allergen overview',
-        'SERVER_ERROR',
-        500,
-        err instanceof Error ? err.message : String(err),
-      ),
+      ApiErrorHandler.createError('Failed to export allergen overview', 'SERVER_ERROR', 500),
       { status: 500 },
     );
   }

@@ -1,15 +1,14 @@
-import { requireAdmin } from '@/lib/admin-auth';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import {
-  checkSystemHealth,
-  fetchErrorCounts,
-  fetchRecentSafetyErrors,
-  fetchTicketCounts,
-  fetchTotalDataRecords,
-  fetchUserCounts,
+    checkSystemHealth,
+    fetchErrorCounts,
+    fetchRecentSafetyErrors,
+    fetchTicketCounts,
+    fetchTotalDataRecords,
+    fetchUserCounts,
 } from './helpers/fetchDashboardData';
 
 /**
@@ -18,15 +17,9 @@ import {
  */
 export async function GET(request: NextRequest) {
   try {
-    // Require admin access
-    await requireAdmin(request);
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     // Parallelize all data fetching
     const [

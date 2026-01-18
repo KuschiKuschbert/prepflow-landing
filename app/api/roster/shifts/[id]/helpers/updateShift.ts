@@ -1,6 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { validateShiftRequest } from '../../helpers/validateShiftRequest';
 import { buildUpdateData } from './buildUpdateData';
@@ -11,17 +11,11 @@ import type { CreateShiftInput, Shift } from '../../helpers/types';
  * Update shift by ID
  */
 export async function updateShift(
+  supabase: SupabaseClient,
   shiftId: string,
   body: Partial<CreateShiftInput>,
   existingShift: Shift,
 ): Promise<NextResponse> {
-  if (!supabaseAdmin) {
-    return NextResponse.json(
-      ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-      { status: 500 },
-    );
-  }
-
   // Validate if required fields are present
   if (body.start_time || body.end_time || body.shift_date) {
     const validation = validateShiftRequest({ ...existingShift, ...body });
@@ -41,7 +35,7 @@ export async function updateShift(
   const updateData = buildUpdateData(body, existingShift);
 
   // Update shift
-  const { data: shift, error: updateError } = await supabaseAdmin
+  const { data: shift, error: updateError } = await supabase
     .from('shifts')
     .update(updateData)
     .eq('id', shiftId)

@@ -1,6 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { buildSupplierData } from './buildSupplierData';
 
 /**
@@ -8,11 +8,12 @@ import { buildSupplierData } from './buildSupplierData';
  *
  * @param {string} id - Supplier ID
  * @param {Object} updates - Update data
+ * @param {SupabaseClient} supabase - Supabase client
  * @returns {Promise<Object>} Updated supplier
  * @throws {Error} If update fails
  */
-export async function updateSupplier(id: string, updates: unknown) {
-  if (!supabaseAdmin) {
+export async function updateSupplier(id: string, updates: unknown, supabase: SupabaseClient) {
+  if (!supabase) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
@@ -23,7 +24,7 @@ export async function updateSupplier(id: string, updates: unknown) {
       (updates as { name?: string }).name || (updates as { supplier_name?: string }).supplier_name,
   });
 
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await supabase
     .from('suppliers')
     .update(updateData)
     .eq('id', id)

@@ -2,12 +2,16 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { getAppError } from '@/lib/utils/error';
 
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { createCleaningArea } from '../helpers/createCleaningArea';
 import { handleCleaningAreaError } from './handleCleaningAreaError';
 import { createCleaningAreaSchema } from './schemas';
 
-export async function handleCreateCleaningArea(request: NextRequest) {
+export async function handleCreateCleaningArea(
+  supabase: SupabaseClient,
+  request: NextRequest,
+) {
   try {
     let body: unknown;
     try {
@@ -36,7 +40,7 @@ export async function handleCreateCleaningArea(request: NextRequest) {
 
     const { area_name, description, cleaning_frequency } = validationResult.data;
 
-    const data = await createCleaningArea({
+    const data = await createCleaningArea(supabase, {
       area_name,
       description,
       cleaning_frequency,

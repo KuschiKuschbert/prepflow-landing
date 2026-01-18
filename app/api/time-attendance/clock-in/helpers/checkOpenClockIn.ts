@@ -1,20 +1,16 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
 /**
  * Check if employee has an existing open clock-in
  */
-export async function checkOpenClockIn(employeeId: string): Promise<NextResponse | null> {
-  if (!supabaseAdmin) {
-    return NextResponse.json(
-      ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-      { status: 500 },
-    );
-  }
-
-  const { data: existingAttendance, error: attendanceError } = await supabaseAdmin
+export async function checkOpenClockIn(
+  supabase: SupabaseClient,
+  employeeId: string,
+): Promise<NextResponse | null> {
+  const { data: existingAttendance, error: attendanceError } = await supabase
     .from('time_attendance')
     .select('id')
     .eq('employee_id', employeeId)

@@ -1,19 +1,17 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Delete (deactivate) an employee.
  *
+ * @param {SupabaseClient} supabase - Logged-in Supabase client
  * @param {string} id - Employee ID
  * @throws {Error} If deletion fails
  */
-export async function deleteEmployee(id: string) {
-  if (!supabaseAdmin)
-    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
-
+export async function deleteEmployee(supabase: SupabaseClient, id: string) {
   // Soft delete by setting status to 'terminated' instead of actually deleting
-  const { error } = await supabaseAdmin
+  const { error } = await supabase
     .from('employees')
     .update({
       status: 'terminated',

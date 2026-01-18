@@ -17,6 +17,18 @@ import { handleIngredientError } from './helpers/handleIngredientError';
 import { createIngredientSchema, updateIngredientSchema } from './helpers/schemas';
 import { updateIngredient } from './helpers/updateIngredient';
 
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Ingredients API] Failed to parse request JSON:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 export async function GET(request: NextRequest) {
   try {
     const supabaseAdmin = createSupabaseAdmin();

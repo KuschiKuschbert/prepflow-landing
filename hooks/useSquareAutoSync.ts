@@ -26,7 +26,7 @@ export interface UseSquareAutoSyncOptions {
 export function useSquareAutoSync(options: UseSquareAutoSyncOptions = {}) {
   const { user } = useUser();
   // Extract user ID from Auth0 user (user.sub or user.user_id)
-  const userId = user?.sub || (user as any)?.user_id;
+  const userId = user?.sub || (user as any)?.user_id; // justified
   const debounceTimersRef = useRef<Map<string, NodeJS.Timeout>>(new Map());
 
   useEffect(() => {

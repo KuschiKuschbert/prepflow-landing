@@ -21,7 +21,7 @@ export async function verifyCallbackUrls(expectedUrls: string[]): Promise<Callba
     const auth0ClientId = process.env.AUTH0_CLIENT_ID;
     const appResponse = await client.clients.get({ client_id: auth0ClientId });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const app = appResponse.data || (appResponse as any);
+    const app = appResponse.data || (appResponse as any); // justified
 
     const configuredUrls = (app.callbacks || []) as string[];
     const missingUrls = expectedUrls.filter(url => !configuredUrls.includes(url));

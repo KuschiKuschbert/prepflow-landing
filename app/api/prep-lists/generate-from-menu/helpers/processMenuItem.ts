@@ -11,9 +11,9 @@ import { processRecipe } from './processRecipe';
 
 interface RawMenuItem {
   id: string;
-  category?: string;
-  dish_id?: string;
-  recipe_id?: string;
+  category?: string | null;
+  dish_id?: string | null;
+  recipe_id?: string | null;
   dishes?: unknown; // justified: raw Supabase response
   recipes?: unknown; // justified: raw Supabase response
 }

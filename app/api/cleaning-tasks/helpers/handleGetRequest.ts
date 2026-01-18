@@ -2,12 +2,13 @@
  * Helper for handling GET requests for cleaning tasks
  */
 
-import { NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { buildCleaningTasksQuery } from './buildCleaningTasksQuery';
-import { fetchTasksWithCompletions } from './fetchTasksWithCompletions';
-import { fetchPaginatedTasks } from './fetchPaginatedTasks';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { NextResponse } from 'next/server';
+import { buildCleaningTasksQuery } from './buildCleaningTasksQuery';
+import { fetchPaginatedTasks } from './fetchPaginatedTasks';
+import { fetchTasksWithCompletions } from './fetchTasksWithCompletions';
 
 export interface GetRequestParams {
   startDate: string | null;
@@ -25,12 +26,16 @@ export interface GetRequestParams {
 /**
  * Handles GET request for cleaning tasks
  *
+ * @param {SupabaseClient} supabase - Supabase client
  * @param {GetRequestParams} params - Request parameters
  * @returns {Promise<NextResponse>} Response with tasks data
  */
-export async function handleGetRequest(params: GetRequestParams): Promise<NextResponse> {
+export async function handleGetRequest(
+  supabase: SupabaseClient,
+  params: GetRequestParams,
+): Promise<NextResponse> {
   // Build query with filters
-  const query = buildCleaningTasksQuery({
+  const query = buildCleaningTasksQuery(supabase, {
     areaId: params.areaId,
     equipmentId: params.equipmentId,
     sectionId: params.sectionId,
@@ -43,6 +48,7 @@ export async function handleGetRequest(params: GetRequestParams): Promise<NextRe
   if (params.startDate && params.endDate) {
     try {
       const tasksWithCompletions = await fetchTasksWithCompletions(
+        supabase,
         params.startDate,
         params.endDate,
         query,

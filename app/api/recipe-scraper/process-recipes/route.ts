@@ -3,22 +3,22 @@
  * Handles recipe formatting/processing requests and status
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { requireAuth } from '@/lib/auth0-api-helpers';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import {
-  getDefaultStatus,
-  enhanceProcessingStatus,
-  getProviderInfo,
-} from './helpers/status-handlers';
-import {
-  handlePauseAction,
-  handleResumeAction,
-  handleStopAction,
-  handleStartAction,
+    handlePauseAction,
+    handleResumeAction,
+    handleStartAction,
+    handleStopAction,
 } from './helpers/action-handlers';
+import {
+    enhanceProcessingStatus,
+    getDefaultStatus,
+    getProviderInfo,
+} from './helpers/status-handlers';
 
 // Dynamic import to handle potential import failures gracefully
 async function getRecipeProcessor() {
@@ -45,21 +45,8 @@ const processRecipesSchema = z.object({
  */
 export async function GET(request: NextRequest) {
   try {
-    // Authentication check
-    try {
-      await requireAuth(request);
-    } catch (authErr) {
-      if (authErr instanceof NextResponse) {
-        return authErr;
-      }
-      logger.error('[Process Recipes API] Authentication error:', {
-        error: authErr instanceof Error ? authErr.message : String(authErr),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
-    }
+    const { error } = await standardAdminChecks(request);
+    if (error) return error;
 
     // Get processing status from processor
     let status;
@@ -105,21 +92,8 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    // Authentication check
-    try {
-      await requireAuth(request);
-    } catch (authErr) {
-      if (authErr instanceof NextResponse) {
-        return authErr;
-      }
-      logger.error('[Process Recipes API] Authentication error:', {
-        error: authErr instanceof Error ? authErr.message : String(authErr),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
-    }
+    const { error } = await standardAdminChecks(request);
+    if (error) return error;
 
     let body: unknown = {};
     try {

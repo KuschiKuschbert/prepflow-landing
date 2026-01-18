@@ -8,6 +8,18 @@ import { mapRecipeIngredients } from './helpers/mapRecipeIngredients';
 import { saveRecipeIngredients } from './helpers/saveRecipeIngredients';
 import type { RecipeIngredientRow, SaveRecipeIngredientInput } from './helpers/types';
 
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Recipes API] Failed to parse request JSON:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   let normalizedId: string | undefined;
   try {
@@ -156,8 +168,8 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
   try {
     const { id } = await context.params;
     recipeId = id;
-    const body = await request.json();
-    const { ingredients, isUpdate } = body as {
+    const body = await safeParseBody(request);
+    const { ingredients, isUpdate } = (body || {}) as {
       ingredients: SaveRecipeIngredientInput[];
       isUpdate?: boolean;
     };

@@ -15,12 +15,20 @@ const checkoutSessionSchema = z
     message: 'Either priceId or tier must be provided',
   });
 
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Billing Checkout Session API] Failed to parse request body:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 /**
  * Handles the creation of a Stripe Checkout session.
- * Standardizes metadata, error handling, and success/cancel URLs.
- *
- * @param {NextRequest} req - The incoming request object.
- * @returns {Promise<NextResponse>} The response object containing the session URL or an error.
  */
 export async function POST(req: NextRequest) {
   try {
@@ -35,15 +43,8 @@ export async function POST(req: NextRequest) {
     const user = await requireAuth(req);
     const email = user.email;
 
-    let body = {};
-    try {
-      body = await req.json();
-    } catch (err) {
-      logger.warn('[Billing Checkout Session API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-    }
-    const validationResult = checkoutSessionSchema.safeParse(body);
+    const body = await safeParseBody(req);
+    const validationResult = checkoutSessionSchema.safeParse(body || {});
 
     if (!validationResult.success) {
       return NextResponse.json(
@@ -57,53 +58,32 @@ export async function POST(req: NextRequest) {
     }
 
     const { priceId: validatedPriceId, tier } = validationResult.data;
-
-    const priceId: string | null = validatedPriceId || resolvePriceIdFromTier(tier);
+    const priceId = validatedPriceId || resolvePriceIdFromTier(tier);
 
     if (!priceId) {
       return NextResponse.json(
-        ApiErrorHandler.createError(
-          'Missing priceId or tier configuration',
-          'VALIDATION_ERROR',
-          400,
-        ),
+        ApiErrorHandler.createError('Missing priceId or tier', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
-    // ... customer resolution ...
     // Resolve Stripe Customer
-    let customerId: string;
     const existingCustomers = await stripe.customers.list({ email: email, limit: 1 });
+    const customerId = existingCustomers.data.length > 0
+      ? existingCustomers.data[0].id
+      : (await stripe.customers.create({ email })).id;
 
-    if (existingCustomers.data.length > 0) {
-      customerId = existingCustomers.data[0].id;
-    } else {
-      const newCustomer = await stripe.customers.create({ email: email });
-      customerId = newCustomer.id;
-    }
-
-    // Determine tier from priceId or provided tier
-    // Map CurbOS/Bundle prices to 'business' tier for entitlements
+    // Determine tier (flattened mapping)
     const determinedTier = (() => {
-      // Explicit tier overrides
       if (tier === 'curbos' || tier === 'bundle') return 'business';
       if (tier) return tier;
-
-      // Price ID lookups
       if (priceId === process.env.STRIPE_PRICE_STARTER_MONTHLY) return 'starter';
       if (priceId === process.env.STRIPE_PRICE_PRO_MONTHLY) return 'pro';
-      if (priceId === process.env.STRIPE_PRICE_BUSINESS_MONTHLY) return 'business';
-      if (priceId === process.env.STRIPE_PRICE_CURBOS_MONTHLY) return 'business';
-      if (priceId === process.env.STRIPE_PRICE_BUNDLE_MONTHLY) return 'business';
-      return null;
+      return 'business'; // Default to business for other prices
     })();
 
-    const origin =
-      req.headers.get('origin') || process.env.AUTH0_BASE_URL || 'http://localhost:3000';
+    const origin = req.headers.get('origin') || process.env.AUTH0_BASE_URL || 'http://localhost:3000';
 
-    // Stripe best practice: Create checkout session with proper metadata
-    // Metadata is used by webhook handler to identify user and tier
     const checkout = await stripe.checkout.sessions.create({
       mode: 'subscription',
       customer: customerId,
@@ -112,43 +92,15 @@ export async function POST(req: NextRequest) {
       cancel_url: `${origin}/webapp/settings/billing?status=cancelled`,
       payment_method_collection: 'always',
       allow_promotion_codes: true,
-      // Stripe best practice: Include metadata for webhook processing
-      metadata: {
-        tier: determinedTier || 'starter',
-        user_email: email,
-        created_by: 'checkout_api',
-      },
-      subscription_data: {
-        // Stripe best practice: Include metadata in subscription for webhook events
-        metadata: {
-          tier: determinedTier || 'starter',
-          user_email: email,
-        },
-      },
-      // Stripe best practice: Enable automatic tax if configured
-      automatic_tax: {
-        enabled: false, // Set to true if Stripe Tax is configured
-      },
+      metadata: { tier: determinedTier, user_email: email, created_by: 'checkout_api' },
+      subscription_data: { metadata: { tier: determinedTier, user_email: email } },
     });
 
     return NextResponse.json({ url: checkout.url });
   } catch (error) {
-    logger.error('[Billing API] Failed to create checkout session:', {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-      context: { endpoint: '/api/billing/create-checkout-session' },
-    });
-
+    logger.error('[Billing API] Checkout session error:', error);
     return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? error instanceof Error
-            ? error.message
-            : 'Unknown error'
-          : 'Failed to create checkout session',
-        'STRIPE_ERROR',
-        500,
-      ),
+      ApiErrorHandler.createError('Failed to create checkout session', 'STRIPE_ERROR', 500),
       { status: 500 },
     );
   }

@@ -1,10 +1,11 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { deleteEmployee } from './deleteEmployee';
 import { handleEmployeeError } from './handleEmployeeError';
 
-export async function handleDeleteEmployee(request: NextRequest) {
+export async function handleDeleteEmployee(request: NextRequest, supabase: SupabaseClient) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
@@ -16,7 +17,7 @@ export async function handleDeleteEmployee(request: NextRequest) {
       );
     }
 
-    await deleteEmployee(id);
+    await deleteEmployee(supabase, id);
 
     return NextResponse.json({
       success: true,

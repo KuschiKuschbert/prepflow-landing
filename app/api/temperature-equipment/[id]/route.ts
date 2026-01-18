@@ -1,12 +1,18 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { handleDeleteTemperatureEquipment } from './helpers/deleteTemperatureEquipmentHandler';
 import { handleUpdateTemperatureEquipment } from './helpers/updateTemperatureEquipmentHandler';
+
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
     const { id } = await params;
-    return handleUpdateTemperatureEquipment(request, id);
+    return handleUpdateTemperatureEquipment(supabase, request, id);
   } catch (error) {
     logger.error('[PUT /api/temperature-equipment/[id]] Error:', {
       error: error instanceof Error ? error.message : String(error),
@@ -28,12 +34,16 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 }
 
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
     const { id } = await params;
-    return handleDeleteTemperatureEquipment(id);
+    return handleDeleteTemperatureEquipment(supabase, id);
   } catch (error) {
     logger.error('[DELETE /api/temperature-equipment/[id]] Error:', {
       error: error instanceof Error ? error.message : String(error),

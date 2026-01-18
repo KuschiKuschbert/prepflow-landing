@@ -1,19 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
+import { deleteOrderList } from './helpers/deleteOrderList';
 import { updateOrderListSchema } from './helpers/schemas';
 import { updateOrderList } from './helpers/updateOrderList';
-import { deleteOrderList } from './helpers/deleteOrderList';
 
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
     const { id } = await context.params;
     if (!id) {
@@ -48,7 +45,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       );
     }
 
-    const result = await updateOrderList(id, validationResult.data);
+    const result = await updateOrderList(supabase, id, validationResult.data);
     if ('error' in result) {
       return NextResponse.json(result.error, { status: result.status });
     }
@@ -65,14 +62,11 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
   }
 }
 
-export async function DELETE(_request: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'SERVER_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
     const { id } = await context.params;
     if (!id) {
@@ -82,7 +76,7 @@ export async function DELETE(_request: NextRequest, context: { params: Promise<{
       );
     }
 
-    const result = await deleteOrderList(id);
+    const result = await deleteOrderList(supabase, id);
     if ('error' in result) {
       return NextResponse.json(result.error, { status: result.status });
     }

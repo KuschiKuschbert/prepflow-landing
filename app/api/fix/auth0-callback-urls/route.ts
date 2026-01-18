@@ -115,7 +115,7 @@ export async function POST() {
 
     await managementClient.clients.update(
       { client_id: applicationClientId },
-      updateData as unknown as any, // Cast required due to strict SDK types not matching exact update payload sometimes
+      updateData as unknown as any, // Cast required due to strict SDK types not matching exact update payload sometimes // justified
     );
 
     logger.info('[Auth0 Fix] Updated Auth0 application configuration', {

@@ -1,8 +1,8 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
+import { ZodSchema, z } from 'zod';
 import { buildTemperatureLogQuery } from './helpers/buildTemperatureLogQuery';
 import { createTemperatureLog } from './helpers/createTemperatureLog';
 import { handleTemperatureLogError } from './helpers/handleTemperatureLogError';
@@ -21,6 +21,25 @@ const createTemperatureLogSchema = z
     path: ['equipment_id'],
   });
 
+async function safeParseBody<T>(req: NextRequest, schema: ZodSchema<T>): Promise<T> {
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch (err) {
+    throw ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400);
+  }
+
+  const result = schema.safeParse(body);
+  if (!result.success) {
+    throw ApiErrorHandler.createError(
+      result.error.issues[0]?.message || 'Invalid request body',
+      'VALIDATION_ERROR',
+      400,
+    );
+  }
+  return result.data;
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const date = searchParams.get('date');
@@ -32,27 +51,25 @@ export async function GET(request: NextRequest) {
   const pageSize = limit ? parseInt(limit, 10) : parseInt(searchParams.get('pageSize') || '20', 10);
 
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
-    const { data, error, count } = await buildTemperatureLogQuery(
+    const { data, error: dbError, count } = await buildTemperatureLogQuery(
+      supabase,
       { date, type, location, equipmentId },
       page,
       pageSize,
     );
 
-    if (error) {
+    if (dbError) {
       logger.error('[Temperature Logs API] Database error fetching logs:', {
-        error: error.message,
-        code: error.code,
+        error: dbError.message,
+        code: dbError.code,
         context: { endpoint: '/api/temperature-logs', operation: 'GET', table: 'temperature_logs' },
       });
 
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(dbError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
@@ -84,39 +101,11 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Temperature Logs API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    const validationResult = createTemperatureLogSchema.safeParse(body);
-    if (!validationResult.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const validatedBody = validationResult.data;
+    const validatedBody = await safeParseBody(request, createTemperatureLogSchema);
 
     // Validate temperature range (reasonable values)
     if (validatedBody.temperature_celsius < -50 || validatedBody.temperature_celsius > 200) {
@@ -126,10 +115,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const data = await createTemperatureLog(validatedBody);
+    const data = await createTemperatureLog(supabase, validatedBody);
 
     return NextResponse.json({ success: true, data });
   } catch (err: unknown) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Temperature Logs API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/temperature-logs', method: 'POST' },

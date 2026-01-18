@@ -4,6 +4,18 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Recipes API] Failed to parse request JSON:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
@@ -13,7 +25,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
+    const body = await safeParseBody(request);
     const { recipeIds } = body;
 
     if (!Array.isArray(recipeIds) || recipeIds.length === 0) {

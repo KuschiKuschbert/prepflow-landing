@@ -30,7 +30,7 @@ export function createDebounceSync({
             operation,
           }),
         });
-      } catch (error: any) {
+      } catch (error: any) { // justified
         logger.error('[Square Auto-Sync Hook] Error in debounced sync:', {
           error: error.message,
           key,

@@ -18,11 +18,23 @@ const scheduleBackupSchema = z.object({
   autoUploadToDrive: z.boolean().optional(),
 });
 
+const DEFAULT_INTERVAL_HOURS = 24;
+const MS_IN_HOUR = 60 * 60 * 1000;
+
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Backup Schedule API] Failed to parse request body:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 /**
  * Configures scheduled backups.
- *
- * @param {NextRequest} request - Next.js request object
- * @returns {Promise<NextResponse>} Schedule configuration response
  */
 export async function POST(request: NextRequest) {
   try {
@@ -34,20 +46,9 @@ export async function POST(request: NextRequest) {
     }
 
     const userId = user.email;
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Backup Schedule] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const body = await safeParseBody(request);
 
-    const validationResult = scheduleBackupSchema.safeParse(body);
+    const validationResult = scheduleBackupSchema.safeParse(body || {});
     if (!validationResult.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(
@@ -60,55 +61,38 @@ export async function POST(request: NextRequest) {
     }
 
     const { intervalHours, enabled, autoUploadToDrive } = validationResult.data;
-
     const supabase = createSupabaseAdmin();
 
-    // Calculate next backup time
-    const now = new Date();
-    const nextBackupAt = new Date(now.getTime() + (intervalHours || 24) * 60 * 60 * 1000);
+    const interval = intervalHours || DEFAULT_INTERVAL_HOURS;
+    const nextBackupAt = new Date(Date.now() + interval * MS_IN_HOUR);
 
     const { error } = await supabase.from('backup_schedules').upsert(
       {
         user_id: userId,
-        interval_hours: intervalHours || 24,
+        interval_hours: interval,
         enabled: enabled !== undefined ? enabled : true,
         auto_upload_to_drive: autoUploadToDrive !== undefined ? autoUploadToDrive : false,
         next_backup_at: enabled ? nextBackupAt.toISOString() : null,
         updated_at: new Date().toISOString(),
       },
-      {
-        onConflict: 'user_id',
-      },
+      { onConflict: 'user_id' },
     );
 
     if (error) {
-      logger.error('[Backup Schedule] Database error configuring schedule:', {
-        error: error.message,
-        code: error.code,
-        userId,
-      });
+      logger.error('[Backup Schedule] Database error:', error.message);
       throw ApiErrorHandler.fromSupabaseError(error, 500);
     }
 
-    logger.info(
-      `[Backup Schedule] Scheduled backup configured for user ${userId}: ${intervalHours || 24} hours`,
-    );
-
     return NextResponse.json({
       success: true,
-      message: 'Scheduled backup configured successfully',
+      message: 'Backup schedule updated',
       nextBackupAt: enabled ? nextBackupAt.toISOString() : null,
     });
   } catch (error: unknown) {
     const appError = getAppError(error);
-    logger.error('[Backup Schedule] Error:', {
-      error: appError.message,
-      code: appError.code,
-      originalError: appError.originalError,
-    });
+    logger.error('[Backup Schedule] Error:', { error: appError.message });
     return NextResponse.json(
-      { error: 'Failed to configure scheduled backup', message: appError.message },
-
+      ApiErrorHandler.createError(appError.message, 'INTERNAL_ERROR', 500),
       { status: 500 },
     );
   }
@@ -116,9 +100,6 @@ export async function POST(request: NextRequest) {
 
 /**
  * Cancels scheduled backups.
- *
- * @param {NextRequest} request - Next.js request object
- * @returns {Promise<NextResponse>} Cancellation response
  */
 export async function DELETE(request: NextRequest) {
   try {
@@ -133,27 +114,14 @@ export async function DELETE(request: NextRequest) {
     const supabase = createSupabaseAdmin();
 
     const { error } = await supabase.from('backup_schedules').delete().eq('user_id', userId);
+    if (error) throw ApiErrorHandler.fromSupabaseError(error, 500);
 
-    if (error) {
-      throw ApiErrorHandler.fromSupabaseError(error, 500);
-    }
-
-    logger.info(`[Backup Schedule] Scheduled backup cancelled for user ${userId}`);
-
-    return NextResponse.json({
-      success: true,
-      message: 'Scheduled backup cancelled successfully',
-    });
+    return NextResponse.json({ success: true, message: 'Backup schedule cancelled' });
   } catch (error: unknown) {
     const appError = getAppError(error);
-    logger.error('[Backup Schedule] Error:', {
-      error: appError.message,
-      code: appError.code,
-      originalError: appError.originalError,
-    });
+    logger.error('[Backup Schedule] Error:', { error: appError.message });
     return NextResponse.json(
-      { error: 'Failed to cancel scheduled backup', message: appError.message },
-
+      ApiErrorHandler.createError(appError.message, 'INTERNAL_ERROR', 500),
       { status: 500 },
     );
   }

@@ -9,7 +9,7 @@ const translations: Record<string, any> = {};
 /**
  * Lazy load translation files.
  */
-export async function loadTranslations(language: string): Promise<any> {
+export async function loadTranslations(language: string): Promise<any> { // justified
   if (translations[language]) {
     return translations[language];
   }

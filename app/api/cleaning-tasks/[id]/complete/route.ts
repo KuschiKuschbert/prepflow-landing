@@ -1,6 +1,6 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -13,26 +13,14 @@ const completeTaskSchema = z.object({
 /**
  * POST /api/cleaning-tasks/[id]/complete
  * Mark a cleaning task as complete for a specific date
- *
- * @param {NextRequest} request - Request object
- * @param {Object} context - Route context
- * @param {Promise<{id: string}>} context.params - Route parameters
- * @param {Object} request.body - Request body
- * @param {string} request.body.completion_date - Date task was completed (ISO date string, required)
- * @param {string} [request.body.notes] - Completion notes
- * @param {string} [request.body.photo_url] - Photo URL for verification
- * @returns {Promise<NextResponse>} Completion record
  */
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await context.params;
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { id } = await context.params;
 
     let body: unknown;
     try {
@@ -62,7 +50,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     const { completion_date, notes, photo_url } = validationResult.data;
 
     // Verify task exists
-    const { data: task, error: taskError } = await supabaseAdmin
+    const { data: task, error: taskError } = await supabase
       .from('cleaning_tasks')
       .select('id')
       .eq('id', id)
@@ -83,7 +71,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     }
 
     // Insert or update completion (upsert)
-    const { data, error } = await supabaseAdmin
+    const { data, error: upsertError } = await supabase
       .from('cleaning_task_completions')
       .upsert(
         {
@@ -100,10 +88,10 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       .select()
       .single();
 
-    if (error) {
+    if (upsertError) {
       logger.error('[Cleaning Tasks API] Database error creating completion:', {
-        error: error.message,
-        code: error.code,
+        error: upsertError.message,
+        code: upsertError.code,
         taskId: id,
         context: {
           endpoint: '/api/cleaning-tasks/[id]/complete',
@@ -113,7 +101,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       });
 
       // Handle missing table gracefully
-      if (error.code === '42P01') {
+      if (upsertError.code === '42P01') {
         return NextResponse.json(
           ApiErrorHandler.createError(
             'Completion table does not exist. Please run database migration.',
@@ -124,7 +112,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
         );
       }
 
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(upsertError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
@@ -134,6 +122,8 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       data,
     });
   } catch (err: unknown) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Cleaning Tasks API] Error in complete endpoint:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,

@@ -1,21 +1,14 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
 /**
  * Delete employee by ID
  */
-export async function deleteEmployee(employeeId: string): Promise<NextResponse> {
-  if (!supabaseAdmin) {
-    return NextResponse.json(
-      ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-      { status: 500 },
-    );
-  }
-
+export async function deleteEmployee(supabase: SupabaseClient, employeeId: string): Promise<NextResponse> {
   // Check if employee exists
-  const { data: existingEmployee, error: fetchError } = await supabaseAdmin
+  const { data: existingEmployee, error: fetchError } = await supabase
     .from('employees')
     .select('id')
     .eq('id', employeeId)
@@ -28,7 +21,7 @@ export async function deleteEmployee(employeeId: string): Promise<NextResponse> 
   }
 
   // Delete employee (shifts and related records will be deleted via CASCADE)
-  const { error: deleteError } = await supabaseAdmin
+  const { error: deleteError } = await supabase
     .from('employees')
     .delete()
     .eq('id', employeeId);

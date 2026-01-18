@@ -1,16 +1,10 @@
-import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { NextResponse } from 'next/server';
 
-export async function handleDeleteTemperatureEquipment(id: string) {
+export async function handleDeleteTemperatureEquipment(supabase: SupabaseClient, id: string) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
 
     if (!id) {
       return NextResponse.json(
@@ -19,7 +13,7 @@ export async function handleDeleteTemperatureEquipment(id: string) {
       );
     }
 
-    const { error } = await supabaseAdmin.from('temperature_equipment').delete().eq('id', id);
+    const { error } = await supabase.from('temperature_equipment').delete().eq('id', id);
 
     if (error) {
       logger.error('[Temperature Equipment API] Database error deleting equipment:', {

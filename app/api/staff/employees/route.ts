@@ -8,9 +8,9 @@
  * @module api/staff/employees
  */
 
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { buildEmployeeQuery } from './helpers/buildEmployeeQuery';
 import { handleCreateEmployee } from './helpers/createEmployeeHandler';
@@ -27,14 +27,15 @@ import { handleStaffEmployeeError } from './helpers/handleError';
  * - page: Page number (default: 1)
  * - pageSize: Page size (default: 100)
  */
+/**
+ * GET /api/staff/employees
+ * List employees with optional filters and pagination.
+ */
 export async function GET(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     const { searchParams } = new URL(request.url);
     const params = {
@@ -45,16 +46,16 @@ export async function GET(request: NextRequest) {
       pageSize: parseInt(searchParams.get('pageSize') || '100', 10),
     };
 
-    const { data: employees, error, count } = await buildEmployeeQuery(supabaseAdmin, params);
+    const { data: employees, error: dbError, count } = await buildEmployeeQuery(supabase, params);
 
-    if (error) {
+    if (dbError) {
       logger.error('[Staff Employees API] Database error fetching employees:', {
-        error: error.message,
-        code: error.code,
+        error: dbError.message,
+        code: dbError.code,
         context: { endpoint: '/api/staff/employees', operation: 'GET', table: 'employees' },
       });
 
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(dbError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
@@ -98,5 +99,18 @@ export async function GET(request: NextRequest) {
  * - user_id: Link to auth user (optional)
  */
 export async function POST(request: NextRequest) {
-  return handleCreateEmployee(request);
+  try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
+
+    return await handleCreateEmployee(request, supabase);
+  } catch (err) {
+    logger.error('[Staff Employees API] Unexpected error:', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/staff/employees', method: 'POST' },
+    });
+    return handleStaffEmployeeError(err);
+  }
 }

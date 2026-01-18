@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { createSupabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { buildParLevelData } from './buildParLevelData';
 import { checkIngredientAndDuplicate } from './checkIngredientAndDuplicate';
 import { fetchParLevelWithIngredient } from './fetchParLevelWithIngredient';
@@ -12,12 +12,13 @@ import { ParLevelInput } from './types';
 /**
  * Create a par level.
  *
+ * @param {SupabaseClient} supabase - Supabase client
  * @param {ParLevelInput} parLevelData - Par level data
  * @returns {Promise<Object>} Created par level with ingredient data
  * @throws {Error} If creation fails
  */
-export async function createParLevel(parLevelData: ParLevelInput) {
-  const supabaseAdmin = createSupabaseAdmin();
+export async function createParLevel(supabase: SupabaseClient, parLevelData: ParLevelInput) {
+
 
   // Validate required fields
   const { ingredientId } = validateParLevelData(parLevelData);
@@ -35,7 +36,7 @@ export async function createParLevel(parLevelData: ParLevelInput) {
   });
 
   // Insert the par level
-  const { data: insertedData, error: insertError } = await supabaseAdmin
+  const { data: insertedData, error: insertError } = await supabase
     .from('par_levels')
     .insert(dataToInsert)
     .select('id, ingredient_id, par_level, reorder_point, unit, created_at, updated_at')

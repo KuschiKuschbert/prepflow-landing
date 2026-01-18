@@ -1,6 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import type { Employee } from '../../helpers/schemas';
 import { validateEmployeeRequest } from '../../helpers/validateEmployeeRequest';
@@ -11,17 +11,11 @@ import { checkEmailUniqueness } from './checkEmailUniqueness';
  * Update employee by ID
  */
 export async function updateEmployee(
+  supabase: SupabaseClient,
   employeeId: string,
   body: Record<string, unknown>,
   existingEmployee: Employee,
 ): Promise<NextResponse> {
-  if (!supabaseAdmin) {
-    return NextResponse.json(
-      ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-      { status: 500 },
-    );
-  }
-
   // Validate if required fields are present
   if (body.first_name || body.last_name || body.email) {
     const validation = validateEmployeeRequest({ ...existingEmployee, ...body });
@@ -39,7 +33,7 @@ export async function updateEmployee(
 
   // Check email uniqueness if email is being changed
   if (typeof body.email === 'string' && body.email !== existingEmployee.email) {
-    const emailCheckResult = await checkEmailUniqueness(body.email);
+    const emailCheckResult = await checkEmailUniqueness(supabase, body.email);
     if (emailCheckResult instanceof NextResponse) {
       return emailCheckResult;
     }
@@ -49,7 +43,7 @@ export async function updateEmployee(
   const updateData = buildUpdateData(body);
 
   // Update employee
-  const { data: employee, error: updateError } = await supabaseAdmin
+  const { data: employee, error: updateError } = await supabase
     .from('employees')
     .update(updateData)
     .eq('id', employeeId)

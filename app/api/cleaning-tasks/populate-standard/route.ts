@@ -1,7 +1,7 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { generateAllStandardTasks, KitchenSection } from '@/lib/cleaning/standard-tasks';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 interface ExistingTask {
@@ -14,21 +14,15 @@ interface ExistingTask {
 /**
  * POST /api/cleaning-tasks/populate-standard
  * Pre-populate standard cleaning tasks based on equipment and sections
- *
- * @param {NextRequest} request - Request object
- * @returns {Promise<NextResponse>} Count of created tasks
  */
 export async function POST(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     // Fetch areas (required)
-    const { data: areas, error: areasError } = await supabaseAdmin
+    const { data: areas, error: areasError } = await supabase
       .from('cleaning_areas')
       .select('id, area_name, description')
       .eq('is_active', true);
@@ -57,7 +51,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch equipment
-    const { data: equipment, error: equipmentError } = await supabaseAdmin
+    const { data: equipment, error: equipmentError } = await supabase
       .from('temperature_equipment')
       .select('id, name, equipment_type, location')
       .eq('is_active', true);
@@ -72,7 +66,7 @@ export async function POST(request: NextRequest) {
     // Fetch sections
     let sections: KitchenSection[] = [];
     try {
-      const { data: sectionsData, error: sectionsError } = await supabaseAdmin
+      const { data: sectionsData, error: sectionsError } = await supabase
         .from('kitchen_sections')
         .select('id, name, description');
 
@@ -102,7 +96,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check which tasks already exist (by task_name and standard_task_type)
-    const { data: existingTasksData, error: existingTasksError } = await supabaseAdmin
+    const { data: existingTasksData, error: existingTasksError } = await supabase
       .from('cleaning_tasks')
       .select('task_name, standard_task_type, equipment_id, section_id')
       .eq('is_standard_task', true);
@@ -138,7 +132,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Insert new tasks
-    const { data: insertedTasks, error: insertError } = await supabaseAdmin
+    const { data: insertedTasks, error: insertError } = await supabase
       .from('cleaning_tasks')
       .insert(newTasks)
       .select();

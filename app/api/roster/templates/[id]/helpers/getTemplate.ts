@@ -1,21 +1,14 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
 /**
  * Get template by ID with template shifts
  */
-export async function getTemplate(templateId: string): Promise<NextResponse> {
-  if (!supabaseAdmin) {
-    return NextResponse.json(
-      ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-      { status: 500 },
-    );
-  }
-
+export async function getTemplate(supabase: SupabaseClient, templateId: string): Promise<NextResponse> {
   // Get template
-  const { data: template, error: templateError } = await supabaseAdmin
+  const { data: template, error: templateError } = await supabase
     .from('roster_templates')
     .select('*')
     .eq('id', templateId)
@@ -28,7 +21,7 @@ export async function getTemplate(templateId: string): Promise<NextResponse> {
   }
 
   // Get template shifts
-  const { data: templateShifts, error: shiftsError } = await supabaseAdmin
+  const { data: templateShifts, error: shiftsError } = await supabase
     .from('template_shifts')
     .select('*')
     .eq('template_id', templateId)

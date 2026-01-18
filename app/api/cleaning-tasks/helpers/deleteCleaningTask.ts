@@ -1,21 +1,20 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Delete a cleaning task.
  *
+ * @param {SupabaseClient} supabase - Supabase client
  * @param {string} id - Cleaning task ID
  * @returns {Promise<void>}
  * @throws {Error} If delete fails
  */
-export async function deleteCleaningTask(id: string): Promise<void> {
-  if (!supabaseAdmin) {
-    logger.error('[API] Database connection not available');
-    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
-  }
-
-  const { error } = await supabaseAdmin.from('cleaning_tasks').delete().eq('id', id);
+export async function deleteCleaningTask(
+  supabase: SupabaseClient,
+  id: string,
+): Promise<void> {
+  const { error } = await supabase.from('cleaning_tasks').delete().eq('id', id);
 
   if (error) {
     logger.error('[Cleaning Tasks API] Database error deleting task:', {

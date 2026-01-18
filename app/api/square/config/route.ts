@@ -5,8 +5,8 @@
  * comprehensive API documentation, request/response formats, and usage examples.
  */
 
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { getUserFromRequest } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { deleteSquareConfig, getSquareConfig, saveSquareConfig } from '@/lib/square/config';
 import { NextRequest, NextResponse } from 'next/server';
@@ -21,18 +21,16 @@ import { handleSquareConfigError } from './helpers/handleError';
  */
 export async function GET(request: NextRequest) {
   try {
-    const user = await getUserFromRequest(request);
-    if (!user?.email) {
-      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), {
-        status: 401,
-      });
-    }
+    const { supabase, adminUser, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase || !adminUser?.email)
+      return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
     // Check feature flag
-    const featureFlagError = await checkSquareFeatureFlag(user.email);
+    const featureFlagError = await checkSquareFeatureFlag(adminUser.email);
     if (featureFlagError) return featureFlagError;
 
-    const userId = await getUserIdFromEmail(user.email);
+    const userId = await getUserIdFromEmail(adminUser.email, supabase);
     if (!userId) {
       return NextResponse.json(
         ApiErrorHandler.createError('User not found in database', 'USER_NOT_FOUND', 404),
@@ -71,18 +69,16 @@ const squareConfigSchema = z
  */
 export async function POST(request: NextRequest) {
   try {
-    const user = await getUserFromRequest(request);
-    if (!user?.email) {
-      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), {
-        status: 401,
-      });
-    }
+    const { supabase, adminUser, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase || !adminUser?.email)
+      return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
     // Check feature flag
-    const featureFlagError = await checkSquareFeatureFlag(user.email);
+    const featureFlagError = await checkSquareFeatureFlag(adminUser.email);
     if (featureFlagError) return featureFlagError;
 
-    const userId = await getUserIdFromEmail(user.email);
+    const userId = await getUserIdFromEmail(adminUser.email, supabase);
     if (!userId) {
       return NextResponse.json(
         ApiErrorHandler.createError('User not found in database', 'USER_NOT_FOUND', 404),
@@ -162,18 +158,16 @@ export async function POST(request: NextRequest) {
  */
 export async function DELETE(request: NextRequest) {
   try {
-    const user = await getUserFromRequest(request);
-    if (!user?.email) {
-      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), {
-        status: 401,
-      });
-    }
+    const { supabase, adminUser, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase || !adminUser?.email)
+      return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
     // Check feature flag
-    const featureFlagError = await checkSquareFeatureFlag(user.email);
+    const featureFlagError = await checkSquareFeatureFlag(adminUser.email);
     if (featureFlagError) return featureFlagError;
 
-    const userId = await getUserIdFromEmail(user.email);
+    const userId = await getUserIdFromEmail(adminUser.email, supabase);
     if (!userId) {
       return NextResponse.json(
         ApiErrorHandler.createError('User not found in database', 'USER_NOT_FOUND', 404),

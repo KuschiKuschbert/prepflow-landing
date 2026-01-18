@@ -2,30 +2,17 @@
 
 import { NotificationProvider } from '@/contexts/NotificationContext'
 import { ReleaseData } from '@/lib/github-release'
-import { logger } from '@/lib/logger'
 import { supabase } from '@/lib/supabase-pos'
 import { ArrowLeft, BarChart3, Cog, LogOut, Monitor, Settings, User, UtensilsCrossed } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
 import { NavLink } from './components/NavLink'
 import PulsatingConcentricTriangles from './components/PulsatingConcentricTriangles'
 import RotatingTaco from './components/RotatingTaco'
 import SpotlightCursor from './components/SpotlightCursor'
 import TriangleGridBackground from './components/TriangleGridBackground'
+import { useCurbOSAuth } from './hooks/useCurbOSAuth'
 
-/**
- * Safely extract error message from unknown error type
- */
-function getErrorMessage(error: unknown): string {
-  if (error instanceof Error) {
-    return error.message
-  }
-  if (typeof error === 'string') {
-    return error
-  }
-  return 'Unknown error'
-}
 
 interface CurbOSLayoutClientProps {
   children: React.ReactNode;
@@ -39,173 +26,7 @@ interface CurbOSLayoutClientProps {
 export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayoutClientProps) {
   const router = useRouter()
   const pathname = usePathname()
-  const [isChecking, setIsChecking] = useState(true)
-
-  useEffect(() => {
-    // Check authentication on mount and when pathname changes
-    async function checkAuth() {
-      // Skip check on login, unauthorized, and public order pages
-      if (
-        pathname === '/curbos/login' ||
-        pathname === '/curbos/unauthorized' ||
-        pathname.startsWith('/curbos/order/') ||
-        pathname.startsWith('/curbos/quests/')
-      ) {
-        setIsChecking(false)
-        return
-      }
-
-      // TEMP: Bypass auth for debugging
-      setIsChecking(false)
-      return
-      try {
-        // Check for Supabase session
-        const { data: { session }, error } = await supabase.auth.getSession()
-
-        if (error || !session) {
-          // No Supabase session - check if user is PrepFlow admin (fallback for admins)
-          try {
-            const adminCheckResponse = await fetch('/api/admin/check')
-            if (adminCheckResponse.ok) {
-              const adminData = await adminCheckResponse.json()
-              if (adminData.isAdmin) {
-                logger.dev('CurbOS: Admin access granted via PrepFlow session (no Supabase session):', {
-                  email: adminData.email,
-                  pathname,
-                })
-                // Allow access - admin bypass
-                setIsChecking(false)
-                return
-              } else {
-                logger.warn('CurbOS: Not an admin and no Supabase session found', { email: adminData.email });
-              }
-            } else {
-              logger.warn('CurbOS: Admin check API failed with status:', adminCheckResponse.status);
-            }
-          } catch (adminError: unknown) {
-            logger.error('CurbOS: Error checking admin status:', {
-              error: getErrorMessage(adminError),
-            })
-          }
-
-          // No valid session and not admin, redirect to login
-          logger.warn('CurbOS: No valid session, redirecting to login', {
-            error: error?.message,
-            pathname,
-          })
-          router.push('/curbos/login')
-          return
-        }
-        // Valid session - check tier access (Business tier required)
-        // At this point, TypeScript knows session is not null due to the early return above
-        const userEmail = session!.user?.email
-        if (userEmail) {
-          // TypeScript should narrow userEmail to string here, but if not, use explicit assertion
-          const hasAccess = await checkCurbOSAccess(userEmail as string)
-          if (!hasAccess) {
-            // Check if user is PrepFlow admin (fallback for admins)
-            try {
-              const adminCheckResponse = await fetch('/api/admin/check')
-              if (adminCheckResponse.ok) {
-                const adminData = await adminCheckResponse.json()
-                if (adminData.isAdmin) {
-                  logger.dev('CurbOS: Admin access granted via PrepFlow session:', {
-                    email: adminData.email,
-                    pathname,
-                  })
-                  // Allow access - admin bypass
-                  setIsChecking(false)
-                  return
-                }
-              }
-            } catch (error: unknown) {
-              logger.warn('CurbOS: Error checking admin status:', {
-                error: getErrorMessage(error),
-              })
-            }
-
-            logger.warn('CurbOS: Access denied - Business tier required', {
-              userEmail,
-              pathname,
-            })
-            router.push('/curbos/unauthorized')
-            return
-          }
-        } else {
-          // No email in session - check if user is PrepFlow admin (fallback)
-          try {
-            const adminCheckResponse = await fetch('/api/admin/check')
-            if (adminCheckResponse.ok) {
-              const adminData = await adminCheckResponse.json()
-              if (adminData.isAdmin) {
-                logger.dev('CurbOS: Admin access granted via PrepFlow session (no CurbOS email):', {
-                  email: adminData.email,
-                  pathname,
-                })
-                // Allow access - admin bypass
-                setIsChecking(false)
-                return
-              }
-            }
-          } catch (error: unknown) {
-            logger.warn('CurbOS: Error checking admin status:', {
-              error: getErrorMessage(error),
-            })
-          }
-
-          // No email in session - deny access
-          logger.warn('CurbOS: No email found in session', {
-            pathname,
-          })
-            router.push('/curbos/unauthorized')
-            return
-        }
-        // Valid session and tier access, allow access
-        setIsChecking(false)
-      } catch (error: unknown) {
-        // Error checking session or tier, redirect to login
-        logger.error('CurbOS: Error checking session or tier', {
-          error: getErrorMessage(error),
-          pathname,
-        })
-        router.push('/curbos/login')
-      }
-    }
-
-    // Helper function to check CurbOS access via CurbOS-specific API endpoint
-    async function checkCurbOSAccess(userEmail: string): Promise<boolean> {
-      try {
-        // Normalize email for consistency
-        const normalizedEmail = userEmail.toLowerCase().trim();
-
-        // Use the CurbOS-specific API endpoint that accepts email parameter
-        const response = await fetch(`/api/curbos/check-access?email=${encodeURIComponent(normalizedEmail)}`)
-        if (response.ok) {
-          const data = await response.json()
-          logger.dev('CurbOS: Access check result:', {
-            userEmail: normalizedEmail,
-            allowed: data.allowed,
-            reason: data.reason,
-          })
-          return data.allowed || false
-        } else {
-          const errorData = await response.json().catch(() => ({}))
-          logger.warn('CurbOS: Access check failed:', {
-            userEmail: normalizedEmail,
-            status: response.status,
-            error: errorData.error || errorData.message,
-          })
-        }
-      } catch (error: unknown) {
-        logger.error('CurbOS: Error checking access:', {
-          error: getErrorMessage(error),
-          userEmail,
-        })
-      }
-      return false
-    }
-    checkAuth()
-  }, [pathname, router])
+  const { isChecking } = useCurbOSAuth()
 
   // Show loading state while checking authentication
   if (isChecking && pathname !== '/curbos/login') {

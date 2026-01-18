@@ -1,13 +1,13 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { buildPriceListUpdateData } from './buildUpdateData';
 import { handlePriceListError } from './handlePriceListError';
 import { setCurrentPriceList } from './setCurrentPriceList';
 import { updatePriceList } from './updatePriceList';
 
-export async function handleUpdatePriceList(request: NextRequest) {
+export async function handleUpdatePriceList(request: NextRequest, supabase: SupabaseClient) {
   const body = await request.json();
   const { id, is_current } = body;
   try {
@@ -20,7 +20,7 @@ export async function handleUpdatePriceList(request: NextRequest) {
       );
     }
 
-    if (!supabaseAdmin) {
+    if (!supabase) {
       return NextResponse.json(
         ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
@@ -29,18 +29,18 @@ export async function handleUpdatePriceList(request: NextRequest) {
 
     // If this is being set as current, set all other price lists for this supplier as not current
     if (is_current === true) {
-      const { data: currentRecord } = await supabaseAdmin!
+      const { data: currentRecord } = await supabase
         .from('supplier_price_lists')
         .select('supplier_id')
         .eq('id', id)
         .single();
-      if (currentRecord) await setCurrentPriceList(currentRecord.supplier_id, id);
+      if (currentRecord) await setCurrentPriceList(currentRecord.supplier_id, id, supabase);
     }
 
     // Build update data
     const updateData = buildPriceListUpdateData(body);
 
-    const data = await updatePriceList(id, updateData);
+    const data = await updatePriceList(id, updateData, supabase);
 
     return NextResponse.json({
       success: true,

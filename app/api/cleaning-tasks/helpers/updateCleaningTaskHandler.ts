@@ -1,12 +1,16 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { updateCleaningTask } from '../helpers/updateCleaningTask';
 import { buildUpdateData } from './buildUpdateData';
 import { handleCleaningTaskError } from './handleCleaningTaskError';
 import { updateCleaningTaskSchema } from './schemas';
 
-export async function handleUpdateCleaningTask(request: NextRequest) {
+export async function handleUpdateCleaningTask(
+  supabase: SupabaseClient,
+  request: NextRequest,
+) {
   try {
     let body: unknown;
     try {
@@ -36,7 +40,7 @@ export async function handleUpdateCleaningTask(request: NextRequest) {
     const { id } = validationResult.data;
 
     const updateData = buildUpdateData(body);
-    const data = await updateCleaningTask(id, updateData);
+    const data = await updateCleaningTask(supabase, id, updateData);
 
     return NextResponse.json({
       success: true,

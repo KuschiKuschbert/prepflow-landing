@@ -18,6 +18,18 @@ import { createRecipeSchema, RecipeResponse } from './helpers/schemas';
 import { updateRecipe } from './helpers/updateRecipe';
 import { validateRequest } from './helpers/validateRequest';
 
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Recipes API] Failed to parse request JSON:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {
@@ -74,18 +86,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Recipes API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const body = await safeParseBody(request);
 
     const validationResult = createRecipeSchema.safeParse(body);
     if (!validationResult.success) {

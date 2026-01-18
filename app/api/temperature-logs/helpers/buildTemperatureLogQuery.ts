@@ -1,10 +1,9 @@
-import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Build temperature logs query with filters and pagination.
  *
+ * @param {SupabaseClient} supabase - Supabase client
  * @param {Object} filters - Filter parameters
  * @param {string | null} filters.date - Date filter
  * @param {string | null} filters.type - Temperature type filter
@@ -15,6 +14,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
  * @returns {Promise<Object>} Query result with data, error, and count
  */
 export async function buildTemperatureLogQuery(
+  supabase: SupabaseClient,
   filters: {
     date?: string | null;
     type?: string | null;
@@ -24,12 +24,7 @@ export async function buildTemperatureLogQuery(
   page: number,
   pageSize: number,
 ) {
-  if (!supabaseAdmin) {
-    logger.error('[API] Database connection not available');
-    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
-  }
-
-  let query = supabaseAdmin
+  let query = supabase
     .from('temperature_logs')
     .select('*', { count: 'exact' })
     .order('log_date', { ascending: false })

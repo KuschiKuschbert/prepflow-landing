@@ -1,19 +1,20 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { createSupabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Delete a par level.
  *
+ * @param {SupabaseClient} supabase - Supabase client
  * @param {string} id - Par level ID
  * @returns {Promise<void>}
  * @throws {Error} If delete fails
  */
-export async function deleteParLevel(id: string): Promise<void> {
-  const supabaseAdmin = createSupabaseAdmin();
+export async function deleteParLevel(supabase: SupabaseClient, id: string): Promise<void> {
+
 
   // Check if par level exists
-  const { data: existing, error: checkError } = await supabaseAdmin
+  const { data: existing, error: checkError } = await supabase
     .from('par_levels')
     .select('id')
     .eq('id', id)
@@ -23,7 +24,7 @@ export async function deleteParLevel(id: string): Promise<void> {
     throw ApiErrorHandler.createError('Par level not found', 'NOT_FOUND', 404);
   }
 
-  const { error } = await supabaseAdmin.from('par_levels').delete().eq('id', id);
+  const { error } = await supabase.from('par_levels').delete().eq('id', id);
 
   if (error) {
     logger.error('[Par Levels API] Database error deleting par level:', {

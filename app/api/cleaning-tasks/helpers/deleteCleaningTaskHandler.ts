@@ -1,10 +1,14 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { deleteCleaningTask } from './deleteCleaningTask';
 import { handleCleaningTaskError } from './handleCleaningTaskError';
 
-export async function handleDeleteCleaningTask(request: NextRequest) {
+export async function handleDeleteCleaningTask(
+  supabase: SupabaseClient,
+  request: NextRequest,
+) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
@@ -16,7 +20,7 @@ export async function handleDeleteCleaningTask(request: NextRequest) {
       );
     }
 
-    await deleteCleaningTask(id);
+    await deleteCleaningTask(supabase, id);
     return NextResponse.json({ success: true, message: 'Cleaning task deleted successfully' });
   } catch (err: unknown) {
     if (err && typeof err === 'object' && 'status' in err) {

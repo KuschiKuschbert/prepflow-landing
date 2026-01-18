@@ -20,24 +20,87 @@ const createBackupSchema = z.object({
   password: z.string().optional(),
 });
 
+type BackupFormat = 'json' | 'sql' | 'encrypted';
+
+interface ProcessedBackup {
+  content: string | Uint8Array;
+  contentType: string;
+  filename: string;
+  fileSize: number;
+}
+
+async function prepareBackupContent(
+  userId: string,
+  format: BackupFormat,
+  backupData: any, // justified: complex dynamic export data
+  encryptionMode?: 'user-password' | 'prepflow-only',
+  password?: string,
+): Promise<ProcessedBackup> {
+  if (format === 'encrypted') {
+    const encrypted = await encryptBackup(backupData, {
+      mode: encryptionMode!,
+      password,
+    });
+
+    await storeBackupMetadata(userId, 'encrypted', encryptionMode, {
+      recordCounts: backupData.metadata.recordCounts,
+      fileSize: encrypted.size,
+    });
+
+    return {
+      content: encrypted.data,
+      contentType: 'application/octet-stream',
+      filename: encrypted.filename,
+      fileSize: encrypted.size,
+    };
+  }
+
+  if (format === 'sql') {
+    const sql = convertToSQL(backupData);
+    const size = new TextEncoder().encode(sql).length;
+
+    await storeBackupMetadata(userId, 'sql', undefined, {
+      recordCounts: backupData.metadata.recordCounts,
+      fileSize: size,
+    });
+
+    return {
+      content: sql,
+      contentType: 'text/sql',
+      filename: `prepflow-backup-${new Date().toISOString().split('T')[0]}.sql`,
+      fileSize: size,
+    };
+  }
+
+  // Default: JSON
+  const jsonContent = JSON.stringify(backupData, null, 2);
+  const size = new TextEncoder().encode(jsonContent).length;
+
+  await storeBackupMetadata(userId, 'json', undefined, {
+    recordCounts: backupData.metadata.recordCounts,
+    fileSize: size,
+  });
+
+  return {
+    content: jsonContent,
+    contentType: 'application/json',
+    filename: `prepflow-backup-${new Date().toISOString().split('T')[0]}.json`,
+    fileSize: size,
+  };
+}
+
 /**
  * Creates a manual backup of user data.
- *
- * @param {NextRequest} request - Next.js request object
- * @returns {Promise<NextResponse>} Backup file response
  */
 export async function POST(request: NextRequest) {
   try {
     const user = await requireAuth(request);
-
     const userId = user.email;
+
     let body: unknown;
     try {
       body = await request.json();
-    } catch (jsonError) {
-      logger.warn('[Backup Create] Failed to parse request JSON:', {
-        error: jsonError instanceof Error ? jsonError.message : String(jsonError),
-      });
+    } catch (err) {
       return NextResponse.json(
         ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400),
         { status: 400 },
@@ -59,114 +122,44 @@ export async function POST(request: NextRequest) {
     const { format, encryptionMode, password } = validationResult.data;
 
     // Validate encryption options
-    if (format === 'encrypted') {
-      if (!encryptionMode) {
-        return NextResponse.json(
-          ApiErrorHandler.createError(
-            'encryptionMode is required for encrypted backups',
-            'VALIDATION_ERROR',
-            400,
-          ),
-          { status: 400 },
-        );
-      }
-
-      if (encryptionMode === 'user-password' && !password) {
-        return NextResponse.json(
-          ApiErrorHandler.createError(
-            'password is required for user-password encryption mode',
-            'VALIDATION_ERROR',
-            400,
-          ),
-          { status: 400 },
-        );
-      }
+    if (format === 'encrypted' && (!encryptionMode || (encryptionMode === 'user-password' && !password))) {
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          'Missing encryption mode or password for encrypted backup',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
     }
 
-    // Export user data
     logger.info(`[Backup Create] Starting backup for user ${userId}, format: ${format}`);
     const backupData = await exportUserData(userId);
 
-    let backupContent: string | Uint8Array;
-    let contentType: string;
-    let filename: string;
-    let fileSize: number;
-
-    if (format === 'encrypted') {
-      // Encrypt backup
-      const encrypted = await encryptBackup(backupData, {
-        mode: encryptionMode!,
-        password,
-      });
-
-      backupContent = encrypted.data;
-      contentType = 'application/octet-stream';
-      filename = encrypted.filename;
-      fileSize = encrypted.size;
-
-      // Store metadata in database
-      await storeBackupMetadata(userId, 'encrypted', encryptionMode, {
-        recordCounts: backupData.metadata.recordCounts,
-        fileSize,
-      });
-    } else if (format === 'sql') {
-      // Convert to SQL
-      const sql = convertToSQL(backupData);
-      backupContent = sql;
-      contentType = 'text/sql';
-      filename = `prepflow-backup-${new Date().toISOString().split('T')[0]}.sql`;
-      fileSize = new TextEncoder().encode(sql).length;
-
-      // Store metadata
-      await storeBackupMetadata(userId, 'sql', undefined, {
-        recordCounts: backupData.metadata.recordCounts,
-        fileSize,
-      });
-    } else {
-      // JSON format
-      backupContent = JSON.stringify(backupData, null, 2);
-      contentType = 'application/json';
-      filename = `prepflow-backup-${new Date().toISOString().split('T')[0]}.json`;
-      fileSize = new TextEncoder().encode(backupContent as string).length;
-
-      // Store metadata
-      await storeBackupMetadata(userId, 'json', undefined, {
-        recordCounts: backupData.metadata.recordCounts,
-        fileSize,
-      });
-    }
-
-    logger.info(
-      `[Backup Create] Backup created successfully: ${filename}, size: ${fileSize} bytes`,
+    const { content, contentType, filename, fileSize } = await prepareBackupContent(
+      userId,
+      format as BackupFormat,
+      backupData,
+      encryptionMode,
+      password,
     );
 
-    // Return backup as download
-    if (format === 'encrypted') {
-      // Convert Uint8Array to Buffer for NextResponse
-      const buffer = Buffer.from(backupContent as Uint8Array);
-      return new NextResponse(buffer, {
-        headers: {
-          'Content-Type': contentType,
-          'Content-Disposition': `attachment; filename="${filename}"`,
-          'Content-Length': String(fileSize),
-        },
-      });
-    } else {
-      return new NextResponse(backupContent as string, {
-        headers: {
-          'Content-Type': contentType,
-          'Content-Disposition': `attachment; filename="${filename}"`,
-          'Content-Length': String(fileSize),
-        },
-      });
-    }
+    logger.info(`[Backup Create] Backup created successfully: ${filename}, size: ${fileSize} bytes`);
+
+    const responseContent = format === 'encrypted' ? Buffer.from(content as Uint8Array) : (content as string);
+
+    return new NextResponse(responseContent, {
+      headers: {
+        'Content-Type': contentType,
+        'Content-Disposition': `attachment; filename="${filename}"`,
+        'Content-Length': String(fileSize),
+      },
+    });
   } catch (error: unknown) {
     const appError = getAppError(error);
-
     logger.error('[Backup Create] Error creating backup:', {
       error: appError.message,
       code: appError.code,
-      context: { endpoint: '/api/backup/create', method: 'POST' },
       originalError: appError.originalError,
     });
     return NextResponse.json(

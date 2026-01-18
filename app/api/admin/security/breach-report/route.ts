@@ -1,12 +1,11 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { requireAdmin } from '@/lib/admin-auth';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { handleBreachReportError } from './helpers/handleError';
 import { logBreachToDatabase } from './helpers/logBreach';
 import { sendBreachNotifications } from './helpers/sendNotifications';
-import { handleBreachReportError } from './helpers/handleError';
 
 const breachReportSchema = z.object({
   breachType: z.enum([
@@ -21,6 +20,18 @@ const breachReportSchema = z.object({
   affectedUsers: z.array(z.string().email()).min(1),
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
+
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Admin Breach Report API] Failed to parse request body:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return {};
+  }
+}
 
 /**
  * POST /api/admin/security/breach-report
@@ -37,24 +48,11 @@ const breachReportSchema = z.object({
  */
 export async function POST(req: NextRequest) {
   try {
-    // Require admin authentication
-    await requireAdmin(req);
+    // Critical security operation - strict checks
+    const { error } = await standardAdminChecks(req, true);
+    if (error) return error;
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503),
-        { status: 503 },
-      );
-    }
-
-    let body = {};
-    try {
-      body = await req.json();
-    } catch (err) {
-      logger.warn('[Admin Breach Report API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-    }
+    const body = await safeParseBody(req);
     const validationResult = breachReportSchema.safeParse(body);
 
     if (!validationResult.success) {
@@ -132,21 +130,15 @@ export async function POST(req: NextRequest) {
  */
 export async function GET(req: NextRequest) {
   try {
-    // Require admin authentication
-    await requireAdmin(req);
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503),
-        { status: 503 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(req);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     const { searchParams } = new URL(req.url);
     const status = searchParams.get('status');
     const limit = parseInt(searchParams.get('limit') || '50', 10);
 
-    let query = supabaseAdmin
+    let query = supabase
       .from('security_breaches')
       .select('*')
       .order('detected_at', { ascending: false })
@@ -156,11 +148,11 @@ export async function GET(req: NextRequest) {
       query = query.eq('status', status);
     }
 
-    const { data: breaches, error } = await query;
+    const { data: breaches, error: fetchError } = await query;
 
-    if (error) {
+    if (fetchError) {
       logger.error('[Breach Report API] Failed to get breaches:', {
-        error: error.message,
+        error: fetchError.message,
         status,
         limit,
       });

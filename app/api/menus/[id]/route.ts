@@ -10,6 +10,18 @@ import { handleMenuError } from './helpers/handleMenuError';
 import { updateMenu } from './helpers/updateMenu';
 import { validateMenuId } from './helpers/validateMenuId';
 
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Menus API] Failed to parse request JSON:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const { id: menuId } = await context.params;
   try {
@@ -40,18 +52,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     const validationError = validateMenuId(menuId);
     if (validationError) return validationError;
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Menus API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const body = await safeParseBody(request);
 
     const validationResult = updateMenuSchema.safeParse(body);
     if (!validationResult.success) {

@@ -1,3 +1,4 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { NextRequest, NextResponse } from 'next/server';
 import QRCode from 'qrcode';
@@ -5,6 +6,9 @@ import { handleCleaningAreaError } from '../../helpers/handleCleaningAreaError';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { error } = await standardAdminChecks(request);
+    if (error) return error;
+
     const { id } = await params;
 
     if (!id) {

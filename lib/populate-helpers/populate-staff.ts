@@ -3,8 +3,8 @@
  */
 
 import { logger } from '@/lib/logger';
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { CreateEmployeeInput, Employee } from '@/types/employee';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 interface PopulateResults {
   cleaned: number;
@@ -16,7 +16,7 @@ interface PopulateResults {
  * Populate staff/employee test data
  */
 export async function populateStaff(
-  supabaseAdmin: ReturnType<typeof createSupabaseAdmin>,
+  supabaseAdmin: SupabaseClient,
   results: PopulateResults,
 ): Promise<Employee[]> {
   try {

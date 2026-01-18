@@ -8,15 +8,16 @@
  * @module api/staff/employees/[id]
  */
 
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { triggerEmployeeSync } from '@/lib/square/sync/hooks';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { checkEmployeeExists } from './helpers/checkEmployeeExists';
+import { deleteEmployee } from './helpers/deleteEmployee';
 import { getEmployee } from './helpers/getEmployee';
 import { updateEmployee } from './helpers/updateEmployee';
-import { deleteEmployee } from './helpers/deleteEmployee';
-import { checkEmployeeExists } from './helpers/checkEmployeeExists';
-import { triggerEmployeeSync } from '@/lib/square/sync/hooks';
 
 const updateEmployeeSchema = z.object({
   first_name: z.string().min(1, 'First name is required').optional(),
@@ -41,10 +42,14 @@ const updateEmployeeSchema = z.object({
  * GET /api/staff/employees/[id]
  * Get a single employee by ID.
  */
-export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
     const { id } = await context.params;
-    return await getEmployee(id);
+    return await getEmployee(supabase, id);
   } catch (err) {
     logger.error('[Staff Employees API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
@@ -74,11 +79,15 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
  */
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
     const { id } = await context.params;
     const employeeId = id;
 
     // Check if employee exists
-    const existsResult = await checkEmployeeExists(employeeId);
+    const existsResult = await checkEmployeeExists(supabase, employeeId);
     if (existsResult instanceof NextResponse) {
       return existsResult;
     }
@@ -108,7 +117,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       );
     }
 
-    const result = await updateEmployee(employeeId, zodValidation.data, existsResult.employee);
+    const result = await updateEmployee(supabase, employeeId, zodValidation.data, existsResult.employee);
 
     // Trigger Square sync hook after successful update (non-blocking)
     if (result.status === 200) {
@@ -150,10 +159,14 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
  * DELETE /api/staff/employees/[id]
  * Delete an employee.
  */
-export async function DELETE(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
     const { id } = await context.params;
-    return await deleteEmployee(id);
+    return await deleteEmployee(supabase, id);
   } catch (err) {
     logger.error('[Staff Employees API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

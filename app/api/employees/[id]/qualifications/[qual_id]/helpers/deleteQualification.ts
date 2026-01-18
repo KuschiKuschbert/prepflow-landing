@@ -1,24 +1,15 @@
 import { ApiErrorHandler, type ApiError } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 export async function deleteQualification(
+  supabase: SupabaseClient,
   employeeId: string,
   qualificationId: string,
 ): Promise<{ success: boolean; message: string } | { error: ApiError; status: number }> {
-  if (!supabaseAdmin) {
-    return {
-      error: ApiErrorHandler.createError(
-        'Database connection not available',
-        'DATABASE_ERROR',
-        500,
-      ),
-      status: 500,
-    };
-  }
 
   // Verify qualification belongs to employee
-  const { data: qualification, error: checkError } = await supabaseAdmin
+  const { data: qualification, error: checkError } = await supabase
     .from('employee_qualifications')
     .select('id, employee_id')
     .eq('id', qualificationId)
@@ -32,7 +23,7 @@ export async function deleteQualification(
     };
   }
 
-  const { error } = await supabaseAdmin
+  const { error } = await supabase
     .from('employee_qualifications')
     .delete()
     .eq('id', qualificationId);

@@ -1,5 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { createCleaningTask } from '../helpers/createCleaningTask';
 import { handleCleaningTaskError } from './handleCleaningTaskError';
@@ -7,7 +8,10 @@ import { parseCreateTaskBody } from './parseCreateTaskBody';
 import { createCleaningTaskSchema } from './schemas';
 import { validateCreateTaskRequest } from './validateCleaningTaskRequest';
 
-export async function handleCreateCleaningTask(request: NextRequest) {
+export async function handleCreateCleaningTask(
+  supabase: SupabaseClient,
+  request: NextRequest,
+) {
   try {
     let body: unknown;
     try {
@@ -42,7 +46,7 @@ export async function handleCreateCleaningTask(request: NextRequest) {
       return validationError;
     }
 
-    const data = await createCleaningTask({
+    const data = await createCleaningTask(supabase, {
       ...taskData,
       is_standard_task: taskData.is_standard_task || false,
     });

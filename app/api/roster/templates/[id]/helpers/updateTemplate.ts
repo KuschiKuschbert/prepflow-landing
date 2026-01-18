@@ -1,6 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { buildUpdateData } from './buildUpdateData';
 import { checkTemplateExists } from './checkTemplateExists';
@@ -8,16 +8,13 @@ import { checkTemplateExists } from './checkTemplateExists';
 /**
  * Update template by ID
  */
-export async function updateTemplate(templateId: string, body: unknown): Promise<NextResponse> {
-  if (!supabaseAdmin) {
-    return NextResponse.json(
-      ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-      { status: 500 },
-    );
-  }
-
+export async function updateTemplate(
+  supabase: SupabaseClient,
+  templateId: string,
+  body: unknown,
+): Promise<NextResponse> {
   // Check if template exists
-  const existsResult = await checkTemplateExists(templateId);
+  const existsResult = await checkTemplateExists(supabase, templateId);
   if (existsResult instanceof NextResponse) {
     return existsResult;
   }
@@ -26,7 +23,7 @@ export async function updateTemplate(templateId: string, body: unknown): Promise
   const updateData = buildUpdateData(body as Record<string, unknown>);
 
   // Update template
-  const { data: template, error: updateError } = await supabaseAdmin
+  const { data: template, error: updateError } = await supabase
     .from('roster_templates')
     .update(updateData)
     .eq('id', templateId)

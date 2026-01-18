@@ -194,7 +194,7 @@ export function FoodImageDisplay({
           onKeyDown={e => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
-              handleImageClick(e as any);
+              handleImageClick(e as any); // justified
             }
           }}
         >

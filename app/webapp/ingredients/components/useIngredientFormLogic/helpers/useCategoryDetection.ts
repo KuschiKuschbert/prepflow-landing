@@ -2,9 +2,9 @@
  * Hook for category auto-detection logic.
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { autoDetectCategory } from '@/lib/ingredients/category-detection';
 import { logger } from '@/lib/logger';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface FormData {
   ingredient_name?: string;
@@ -27,39 +27,56 @@ export function useCategoryDetection(formData: FormData) {
         clearTimeout(detectionTimeoutRef.current);
       }
 
-      // Only auto-detect if category is empty
+      // Early exit if condition not met
       const currentCategory = formData.category;
-      if (!currentCategory && ingredientName.trim().length > 2) {
-        const brand = formData.brand;
-        const storageLocation = formData.storage_location;
-
-        detectionTimeoutRef.current = setTimeout(async () => {
-          try {
-            const { category } = await autoDetectCategory(
-              ingredientName,
-              brand,
-              storageLocation,
-              true, // use AI
-            );
-
-            if (category) {
-              // Only update if category is still empty (user hasn't manually set it)
-              setFormData(prev => {
-                if (!prev.category) {
-                  setAutoDetectedCategory(category);
-                  return { ...prev, category };
-                }
-                return prev;
-              });
-            }
-          } catch (error) {
-            logger.error('Error auto-detecting category:', error);
-          }
-        }, 500); // 500ms debounce
+      if (currentCategory || ingredientName.trim().length <= 2) {
+        return;
       }
+
+      const { brand, storage_location } = formData;
+
+      detectionTimeoutRef.current = setTimeout(() => {
+        performCategoryDetection(
+          ingredientName,
+          brand,
+          storage_location,
+          setFormData,
+          setAutoDetectedCategory
+        );
+      }, 500); // 500ms debounce
     },
     [formData.category, formData.brand, formData.storage_location],
   );
+
+  async function performCategoryDetection(
+    name: string,
+    brand: string | undefined,
+    storage: string | undefined,
+    setFormData: React.Dispatch<React.SetStateAction<Partial<FormData>>>,
+    setCategoryState: (cat: string) => void
+  ) {
+    try {
+      const { category } = await autoDetectCategory(
+        name,
+        brand,
+        storage,
+        true, // use AI
+      );
+
+      if (!category) return;
+
+      // Only update if category is still empty (user hasn't manually set it)
+      setFormData(prev => {
+        if (!prev.category) {
+          setCategoryState(category);
+          return { ...prev, category };
+        }
+        return prev;
+      });
+    } catch (error) {
+      logger.error('Error auto-detecting category:', error);
+    }
+  }
 
   const clearAutoDetectedCategory = useCallback(() => {
     setAutoDetectedCategory(null);

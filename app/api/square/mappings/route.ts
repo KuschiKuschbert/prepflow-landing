@@ -6,18 +6,17 @@
  * detailed documentation and usage examples.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getUserFromRequest } from '@/lib/auth0-api-helpers';
-import { getUserMappings } from '@/lib/square/mappings';
-import { isSquarePOSEnabled } from '@/lib/square/feature-flags';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { isSquarePOSEnabled } from '@/lib/square/feature-flags';
+import { getUserMappings } from '@/lib/square/mappings';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { NextRequest, NextResponse } from 'next/server';
 
-async function getUserIdFromEmail(email: string): Promise<string | null> {
-  if (!supabaseAdmin) return null;
+async function getUserIdFromEmail(email: string, supabase: SupabaseClient): Promise<string | null> {
   try {
-    const { data } = await supabaseAdmin.from('users').select('id').eq('email', email).single();
+    const { data } = await supabase.from('users').select('id').eq('email', email).single();
     return data?.id || null;
   } catch {
     return null;
@@ -30,15 +29,13 @@ async function getUserIdFromEmail(email: string): Promise<string | null> {
  */
 export async function GET(request: NextRequest) {
   try {
-    const user = await getUserFromRequest(request);
-    if (!user?.email) {
-      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), {
-        status: 401,
-      });
-    }
+    const { supabase, adminUser, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase || !adminUser?.email)
+      return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
     // Check feature flag
-    const enabled = await isSquarePOSEnabled(user.email, user.email);
+    const enabled = await isSquarePOSEnabled(adminUser.email, adminUser.email);
     if (!enabled) {
       return NextResponse.json(
         ApiErrorHandler.createError(
@@ -50,7 +47,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const userId = await getUserIdFromEmail(user.email);
+    const userId = await getUserIdFromEmail(adminUser.email, supabase);
     if (!userId) {
       return NextResponse.json(
         ApiErrorHandler.createError('User not found in database', 'USER_NOT_FOUND', 404),

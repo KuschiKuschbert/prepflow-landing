@@ -21,7 +21,7 @@ export async function fetchOrdersFromSquare(
   // Square SDK v30+ uses explicit API accessors, but let's try strict property access
   // If strict types fail, we might need a type assertion for the SDK method
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const ordersApi = client.orders as any;
+  const ordersApi = client.orders as any; // justified
 
   // Convert dates to ISO format for Square API
   const startDateISO = new Date(startDate).toISOString();

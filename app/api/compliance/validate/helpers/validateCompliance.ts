@@ -1,44 +1,36 @@
 import type {
-  Availability,
-  ComplianceValidationResult,
-  Employee,
-  Shift,
+    Availability,
+    ComplianceValidationResult,
+    Employee,
+    Shift,
 } from '@/app/webapp/roster/types';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import {
-  createValidationWarnings,
-  validateShift,
-  validateShiftAvailability,
-  validateShiftSkills,
+    createValidationWarnings,
+    validateShift,
+    validateShiftAvailability,
+    validateShiftSkills,
 } from '@/lib/services/compliance/validator';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 
-export async function performComplianceValidation(data: {
-  shift: Shift;
-  employee_id?: string;
-  check_availability: boolean;
-  check_skills: boolean;
-}): Promise<
+export async function performComplianceValidation(
+  supabase: SupabaseClient,
+  data: {
+    shift: Shift;
+    employee_id?: string;
+    check_availability: boolean;
+    check_skills: boolean;
+  },
+): Promise<
   | { success: boolean; validation: unknown; warnings: unknown[] }
   | { error: unknown; status: number }
 > {
-  if (!supabaseAdmin) {
-    return {
-      error: ApiErrorHandler.createError(
-        'Database connection not available',
-        'DATABASE_ERROR',
-        500,
-      ),
-      status: 500,
-    };
-  }
-
   const { shift, employee_id, check_availability = true, check_skills = true } = data;
   const shiftEmployeeId = shift.employee_id || employee_id;
 
   // Get employee
-  const { data: employee, error: employeeError } = await supabaseAdmin
+  const { data: employee, error: employeeError } = await supabase
     .from('employees')
     .select('*')
     .eq('id', shiftEmployeeId)
@@ -52,7 +44,7 @@ export async function performComplianceValidation(data: {
   }
 
   // Get all shifts for this employee (for context)
-  const { data: employeeShifts, error: shiftsError } = await supabaseAdmin
+  const { data: employeeShifts, error: shiftsError } = await supabase
     .from('shifts')
     .select('*')
     .eq('employee_id', shiftEmployeeId)
@@ -89,7 +81,7 @@ export async function performComplianceValidation(data: {
     violations: [],
   };
   if (check_availability) {
-    const { data: availability, error: availabilityError } = await supabaseAdmin
+    const { data: availability, error: availabilityError } = await supabase
       .from('availability')
       .select('*')
       .eq('employee_id', shiftEmployeeId);

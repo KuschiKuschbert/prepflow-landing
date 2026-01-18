@@ -3,8 +3,8 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getUserIdFromRequest } from './helpers/getUserId';
 import { buildErrorContext } from './helpers/buildErrorContext';
+import { getUserIdFromRequest } from './helpers/getUserId';
 import { handleAutoReport } from './helpers/handleAutoReport';
 
 const clientErrorSchema = z.object({
@@ -26,6 +26,18 @@ const clientErrorSchema = z.object({
   timestamp: z.string(),
 });
 
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Admin Errors Client API] Failed to parse request body:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 /**
  * POST /api/admin/errors/client
  * Receive client-side errors and store in admin_error_logs table
@@ -39,10 +51,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
+    const body = await safeParseBody(request);
 
     // Validate request body
-    const validationResult = clientErrorSchema.safeParse(body);
+    const validationResult = clientErrorSchema.safeParse(body || {});
     if (!validationResult.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(

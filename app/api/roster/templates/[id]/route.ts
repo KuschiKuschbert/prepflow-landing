@@ -5,22 +5,27 @@
  * @module api/roster/templates/[id]
  */
 
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { deleteTemplate } from './helpers/deleteTemplate';
 import { getTemplate } from './helpers/getTemplate';
 import { updateTemplate } from './helpers/updateTemplate';
-import { deleteTemplate } from './helpers/deleteTemplate';
-import { z } from 'zod';
 
 /**
  * GET /api/roster/templates/[id]
  * Get a single template by ID with its template shifts.
  */
-export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
     const { id } = await context.params;
-    return await getTemplate(id);
+    return await getTemplate(supabase, id);
   } catch (err) {
     logger.error('[Templates API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
@@ -59,6 +64,10 @@ const updateTemplateSchema = z.object({
 
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
     const { id } = await context.params;
 
     let body: unknown;
@@ -86,7 +95,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       );
     }
 
-    return await updateTemplate(id, validationResult.data);
+    return await updateTemplate(supabase, id, validationResult.data);
   } catch (err) {
     logger.error('[Templates API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
@@ -112,10 +121,14 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
  * DELETE /api/roster/templates/[id]
  * Delete a template and its template shifts (cascade).
  */
-export async function DELETE(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
     const { id } = await context.params;
-    return await deleteTemplate(id);
+    return await deleteTemplate(supabase, id);
   } catch (err) {
     logger.error('[Templates API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),

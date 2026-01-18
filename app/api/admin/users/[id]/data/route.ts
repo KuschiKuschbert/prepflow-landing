@@ -1,7 +1,6 @@
-import { requireAdmin } from '@/lib/admin-auth';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -10,15 +9,9 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    await requireAdmin(request);
-    const { id } = await context.params;
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     // Note: Currently the app uses shared workspace, so we can't filter by user_id
     // This will need to be updated when user isolation is implemented
@@ -27,16 +20,16 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     // Get counts and data for each table
     const [ingredientsResult, recipesResult, dishesResult, temperatureResult, cleaningResult] =
       await Promise.all([
-        supabaseAdmin
+        supabase
           .from('ingredients')
           .select('id, ingredient_name, created_at', { count: 'exact' }),
-        supabaseAdmin.from('recipes').select('id, recipe_name, created_at', { count: 'exact' }),
-        supabaseAdmin.from('dishes').select('id, dish_name, created_at', { count: 'exact' }),
-        supabaseAdmin
+        supabase.from('recipes').select('id, recipe_name, created_at', { count: 'exact' }),
+        supabase.from('dishes').select('id, dish_name, created_at', { count: 'exact' }),
+        supabase
           .from('temperature_logs')
           .select('id, created_at', { count: 'exact' })
           .limit(100),
-        supabaseAdmin
+        supabase
           .from('cleaning_tasks')
           .select('id, task_name, created_at', { count: 'exact' })
           .limit(100),

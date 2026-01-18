@@ -1,4 +1,4 @@
-import type { AdminUser } from '@/lib/admin-auth';
+import { type AdminUser, resolveAdminUserId } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
@@ -40,28 +40,9 @@ export async function updateTicket(
     if (updates.status === 'resolved' || updates.status === 'closed') {
       updateData.resolved_at = new Date().toISOString();
       // Try to get admin user_id from email
-      try {
-        const { data: adminData, error: adminDataError } = await supabaseAdmin
-          .from('users')
-          .select('id')
-          .eq('email', adminUser.email)
-          .single();
-        if (adminDataError && adminDataError.code !== 'PGRST116') {
-          logger.warn('[Admin Support Tickets] Error fetching admin user:', {
-            error: adminDataError.message,
-            code: adminDataError.code,
-            adminEmail: adminUser.email,
-          });
-        }
-        if (adminData) {
-          updateData.resolved_by = adminData.id;
-        }
-      } catch (err) {
-        // Continue without resolved_by if admin not found
-        logger.warn('[Admin Support Tickets] Error fetching admin user:', {
-          error: err instanceof Error ? err.message : String(err),
-          adminEmail: adminUser.email,
-        });
+      const adminId = await resolveAdminUserId(adminUser.email, supabaseAdmin, logger);
+      if (adminId) {
+        updateData.resolved_by = adminId;
       }
     }
   }

@@ -5,9 +5,9 @@
  * @module api/roster/shifts
  */
 
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { buildShiftQuery } from './helpers/buildShiftQuery';
 import { handleCreateShift } from './helpers/createShiftHandler';
@@ -25,14 +25,15 @@ import { handleCreateShift } from './helpers/createShiftHandler';
  * - page: Page number (default: 1)
  * - pageSize: Page size (default: 100)
  */
+/**
+ * GET /api/roster/shifts
+ * List shifts with optional filters and pagination.
+ */
 export async function GET(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     const { searchParams } = new URL(request.url);
     const params = {
@@ -45,16 +46,16 @@ export async function GET(request: NextRequest) {
       pageSize: parseInt(searchParams.get('pageSize') || '100', 10),
     };
 
-    const { data: shifts, error, count } = await buildShiftQuery(supabaseAdmin, params);
+    const { data: shifts, error: dbError, count } = await buildShiftQuery(supabase, params);
 
-    if (error) {
+    if (dbError) {
       logger.error('[Shifts API] Database error fetching shifts:', {
-        error: error.message,
-        code: error.code,
+        error: dbError.message,
+        code: dbError.code,
         context: { endpoint: '/api/roster/shifts', operation: 'GET', table: 'shifts' },
       });
 
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(dbError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
@@ -102,5 +103,15 @@ export async function GET(request: NextRequest) {
  * - template_shift_id: Template shift ID if created from template (optional)
  */
 export async function POST(request: NextRequest) {
-  return handleCreateShift(request);
+  try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
+    return handleCreateShift(request, supabase);
+  } catch (err) {
+    if (err instanceof NextResponse) return err;
+    const apiError = ApiErrorHandler.createError('Internal server error', 'SERVER_ERROR', 500);
+    return NextResponse.json(apiError, { status: 500 });
+  }
 }

@@ -1,11 +1,10 @@
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { handleCreateCleaningTask } from './helpers/createCleaningTaskHandler';
+import { handleDeleteCleaningTask } from './helpers/deleteCleaningTaskHandler';
 import { handleCleaningTaskError } from './helpers/handleCleaningTaskError';
 import { handleGetRequest } from './helpers/handleGetRequest';
-import { handleDeleteCleaningTask } from './helpers/deleteCleaningTaskHandler';
-import { handleCreateCleaningTask } from './helpers/createCleaningTaskHandler';
 import { handleUpdateCleaningTask } from './helpers/updateCleaningTaskHandler';
 
 /**
@@ -27,16 +26,13 @@ import { handleUpdateCleaningTask } from './helpers/updateCleaningTaskHandler';
  */
 export async function GET(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
     const { searchParams } = new URL(request.url);
 
-    return handleGetRequest({
+    return handleGetRequest(supabase, {
       startDate: searchParams.get('start_date'),
       endDate: searchParams.get('end_date'),
       areaId: searchParams.get('area_id'),
@@ -49,6 +45,8 @@ export async function GET(request: NextRequest) {
       pageSize: parseInt(searchParams.get('pageSize') || '100', 10),
     });
   } catch (err: unknown) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Cleaning Tasks API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/cleaning-tasks', method: 'GET' },
@@ -63,50 +61,32 @@ export async function GET(request: NextRequest) {
 /**
  * POST /api/cleaning-tasks
  * Create a new cleaning task
- *
- * @param {NextRequest} request - Request object
- * @param {Object} request.body - Request body
- * @param {string} request.body.task_name - Task name (required)
- * @param {string} request.body.frequency_type - Frequency type: daily, bi-daily, weekly, monthly, 3-monthly (required)
- * @param {string} [request.body.area_id] - Area ID (legacy, optional)
- * @param {string} [request.body.assigned_date] - Assigned date (legacy, optional for auto-repeating tasks)
- * @param {string} [request.body.equipment_id] - Equipment ID (optional)
- * @param {string} [request.body.section_id] - Section ID (optional)
- * @param {boolean} [request.body.is_standard_task] - Whether this is a standard task
- * @param {string} [request.body.standard_task_type] - Standard task type
- * @param {string} [request.body.description] - Task description
- * @param {string} [request.body.notes] - Task notes
- * @returns {Promise<NextResponse>} Created cleaning task
  */
 export async function POST(request: NextRequest) {
-  return handleCreateCleaningTask(request);
+  const { supabase, error } = await standardAdminChecks(request);
+  if (error) return error;
+  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  return handleCreateCleaningTask(supabase, request);
 }
 
 /**
  * PUT /api/cleaning-tasks
  * Update an existing cleaning task
- *
- * @param {NextRequest} request - Request object
- * @param {Object} request.body - Request body
- * @param {string} request.body.id - Cleaning task ID (required)
- * @param {string} [request.body.status] - Task status
- * @param {string} [request.body.completed_date] - Completion date
- * @param {string} [request.body.notes] - Task notes
- * @param {string} [request.body.photo_url] - Photo URL
- * @returns {Promise<NextResponse>} Updated cleaning task
  */
 export async function PUT(request: NextRequest) {
-  return handleUpdateCleaningTask(request);
+  const { supabase, error } = await standardAdminChecks(request);
+  if (error) return error;
+  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  return handleUpdateCleaningTask(supabase, request);
 }
 
 /**
  * DELETE /api/cleaning-tasks
  * Delete a cleaning task
- *
- * @param {NextRequest} request - Request object
- * @param {string} request.url.searchParams.id - Cleaning task ID (required)
- * @returns {Promise<NextResponse>} Deletion response
  */
 export async function DELETE(request: NextRequest) {
-  return handleDeleteCleaningTask(request);
+  const { supabase, error } = await standardAdminChecks(request);
+  if (error) return error;
+  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  return handleDeleteCleaningTask(supabase, request);
 }

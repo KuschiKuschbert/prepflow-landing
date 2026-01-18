@@ -1,7 +1,7 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { populateStaff } from '@/lib/populate-helpers';
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -17,7 +17,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabaseAdmin = createSupabaseAdmin();
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
     const results = {
       cleaned: 0,
@@ -26,7 +28,7 @@ export async function POST(request: NextRequest) {
     };
 
     logger.dev('👥 Populating staff members...');
-    const staffData = await populateStaff(supabaseAdmin, results);
+    const staffData = await populateStaff(supabase, results);
 
     return NextResponse.json({
       success: true,

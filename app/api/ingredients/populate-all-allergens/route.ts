@@ -5,12 +5,12 @@
  * that don't have manual allergens set
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { requireAuth } from '@/lib/auth0-api-helpers';
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { checkRateLimit } from './helpers/rateLimit';
 
 const populateAllAllergensSchema = z.object({
@@ -18,6 +18,18 @@ const populateAllAllergensSchema = z.object({
   batch_size: z.number().int().positive().optional().default(50),
   force_ai: z.boolean().optional().default(false),
 });
+
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Populate All Allergens API] Failed to parse request JSON:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,26 +51,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let body: z.infer<typeof populateAllAllergensSchema> = {
-      dry_run: false,
-      batch_size: 50,
-      force_ai: false,
-    };
-    try {
-      const rawBody = await request.json();
-      body = populateAllAllergensSchema.parse(rawBody);
-    } catch (err) {
-      logger.warn('[Populate All Allergens API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      if (err instanceof z.ZodError) {
-        return NextResponse.json(
-          ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-          { status: 400 },
-        );
-      }
+    const body = await safeParseBody(request);
+    const validationResult = populateAllAllergensSchema.safeParse(body || {});
+
+    if (!validationResult.success) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
     }
-    const { dry_run = false, batch_size = 50, force_ai = false } = body;
+
+    const { dry_run = false, batch_size = 50, force_ai = false } = validationResult.data;
 
     if (!supabaseAdmin) {
       return NextResponse.json(

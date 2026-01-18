@@ -26,22 +26,23 @@ const bulkUpdateIngredientsSchema = z.object({
       message: 'updates must contain at least one field',
     }),
 });
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Ingredients Bulk Update API] Failed to parse request JSON:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 export async function PUT(request: NextRequest) {
   try {
     const supabaseAdmin = createSupabaseAdmin();
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Ingredients Bulk Update API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const body = await safeParseBody(request);
 
     const validationResult = bulkUpdateIngredientsSchema.safeParse(body);
     if (!validationResult.success) {

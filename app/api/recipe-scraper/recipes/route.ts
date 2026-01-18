@@ -3,17 +3,16 @@
  * Returns list of scraped recipes from the database
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { standardAdminChecks } from '@/lib/admin-auth';
+import { getRecipeDatabaseStats, searchRecipesByIngredients } from '@/lib/ai/recipe-database';
 import { logger } from '@/lib/logger';
-import { requireAuth } from '@/lib/auth0-api-helpers';
-import { searchRecipesByIngredients, getRecipeDatabaseStats } from '@/lib/ai/recipe-database';
-import { loadJSONStorage, initializeStorage } from './helpers/storage-helpers';
+import { NextRequest, NextResponse } from 'next/server';
 import {
-  filterByFormatAtIndex,
-  filterByFormatAfterLoad,
-  filterBySource,
+    filterByFormatAfterLoad,
+    filterByFormatAtIndex,
+    filterBySource,
 } from './helpers/filter-helpers';
+import { initializeStorage, loadJSONStorage } from './helpers/storage-helpers';
 
 /**
  * GET /api/recipe-scraper/recipes
@@ -21,20 +20,8 @@ import {
  */
 export async function GET(request: NextRequest) {
   try {
-    try {
-      await requireAuth(request);
-    } catch (authErr) {
-      if (authErr instanceof NextResponse) {
-        return authErr;
-      }
-      logger.error('[Recipe Scraper API] Authentication error:', {
-        error: authErr instanceof Error ? authErr.message : String(authErr),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
-    }
+    const { error } = await standardAdminChecks(request);
+    if (error) return error;
 
     const searchParams = request.nextUrl.searchParams;
     const search = searchParams.get('search');

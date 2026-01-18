@@ -1,9 +1,7 @@
 import { logAdminApiAction } from '@/lib/admin-audit';
-import { requireAdmin } from '@/lib/admin-auth';
-import { checkAdminRateLimit } from '@/lib/admin-rate-limit';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import crypto from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -18,28 +16,17 @@ const resetPasswordSchema = z.object({
  */
 export async function POST(request: NextRequest) {
   try {
-    const adminUser = await requireAdmin(request);
+    const { adminUser, supabase, error } = await standardAdminChecks(request, true);
+    if (error) return error;
 
-    // Stricter rate limiting for critical operations
-    if (!checkAdminRateLimit(adminUser.id, true)) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Rate limit exceeded', 'RATE_LIMIT_EXCEEDED', 429),
-        { status: 429 },
-      );
-    }
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    // Type guard for adminUser and supabase (since standardAdminChecks ensures they exist if no error)
+    if (!adminUser || !supabase) throw new Error('Unexpected authentication state');
 
     const body = await request.json();
     const { userId } = resetPasswordSchema.parse(body);
 
     // Find user by email or ID
-    const { data: user, error: userError } = await supabaseAdmin
+    const { data: user, error: userError } = await supabase
       .from('users')
       .select('id, email')
       .or(`id.eq.${userId},email.eq.${userId}`)
@@ -61,7 +48,7 @@ export async function POST(request: NextRequest) {
     const resetExpires = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(); // 24 hours
 
     // Update user with reset token
-    const { error: updateError } = await supabaseAdmin
+    const { error: updateError } = await supabase
       .from('users')
       .update({
         password_reset_token: resetToken,

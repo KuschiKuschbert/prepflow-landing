@@ -1,30 +1,27 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { applyQueenslandStandards } from './helpers/applyQueenslandStandards';
 import { handleCreateTemperatureEquipment } from './helpers/createTemperatureEquipmentHandler';
 import { handleDeleteTemperatureEquipment } from './helpers/deleteTemperatureEquipmentHandler';
 import { handleTemperatureEquipmentError } from './helpers/handleTemperatureEquipmentError';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
-    const { data, error } = await supabaseAdmin
+    const { data, error: dbError } = await supabase
       .from('temperature_equipment')
       .select('*')
       .order('name', { ascending: true });
 
-    if (error) {
+    if (dbError) {
       logger.error('[Temperature Equipment API] Database error fetching equipment:', {
-        error: error.message,
-        code: error.code,
+        error: dbError.message,
+        code: dbError.code,
         context: {
           endpoint: '/api/temperature-equipment',
           operation: 'GET',
@@ -32,7 +29,7 @@ export async function GET() {
         },
       });
 
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(dbError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
@@ -50,9 +47,15 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  return handleCreateTemperatureEquipment(request);
+  const { supabase, error } = await standardAdminChecks(request);
+  if (error) return error;
+  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  return handleCreateTemperatureEquipment(supabase, request);
 }
 
 export async function DELETE(request: NextRequest) {
-  return handleDeleteTemperatureEquipment(request);
+  const { supabase, error } = await standardAdminChecks(request);
+  if (error) return error;
+  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  return handleDeleteTemperatureEquipment(supabase, request);
 }

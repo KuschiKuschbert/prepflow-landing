@@ -1,16 +1,18 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Create order list with items.
  *
+ * @param {SupabaseClient} supabase - Supabase client
  * @param {Object} orderListData - Order list data
  * @param {Array} items - Optional items array
  * @returns {Promise<Object>} Created order list
  * @throws {Error} If creation fails
  */
 export async function createOrderListWithItems(
+  supabase: SupabaseClient,
   orderListData: {
     user_id: string;
     supplier_id: number;
@@ -19,13 +21,13 @@ export async function createOrderListWithItems(
   },
   items?: Array<{ ingredientId: string; quantity: number; unit: string; notes?: string }>,
 ) {
-  if (!supabaseAdmin) {
+  if (!supabase) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   // Create the order list
-  const { data: orderList, error: orderError } = await supabaseAdmin!
+  const { data: orderList, error: orderError } = await supabase
     .from('order_lists')
     .insert({
       user_id: orderListData.user_id,
@@ -58,7 +60,7 @@ export async function createOrderListWithItems(
       notes: item.notes,
     }));
 
-    const { error: itemsError } = await supabaseAdmin.from('order_list_items').insert(orderItems);
+    const { error: itemsError } = await supabase.from('order_list_items').insert(orderItems);
 
     if (itemsError) {
       logger.warn('[Order Lists API] Warning: Could not create order list items:', {

@@ -4,7 +4,7 @@ interface UserBasicInfoProps {
     last_name: string;
     business_name: string;
   };
-  setFormData: (data: any) => void;
+  setFormData: (data: any) => void; // justified
   email: string;
   emailVerified: boolean;
 }

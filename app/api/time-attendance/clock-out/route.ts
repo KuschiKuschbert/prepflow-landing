@@ -5,9 +5,9 @@
  * @module api/time-attendance/clock-out
  */
 
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -41,12 +41,9 @@ const haversineDistance = (lat1: number, lon1: number, lat2: number, lon2: numbe
 
 export async function POST(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
     const body = await request.json();
     const validatedData = ClockOutSchema.parse(body);
@@ -81,7 +78,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Find the most recent clock-in record for this employee/shift
-    const { data: clockInRecord, error: fetchError } = await supabaseAdmin
+    const { data: clockInRecord, error: fetchError } = await supabase
       .from('time_attendance')
       .select('*')
       .eq('employee_id', employee_id)
@@ -91,11 +88,13 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (fetchError || !clockInRecord) {
-      logger.error('[Clock-out API] No active clock-in record found:', {
-        employee_id,
-        shift_id,
-        error: fetchError?.message,
-      });
+      if (fetchError) {
+        logger.error('[Clock-out API] No active clock-in record found:', {
+          employee_id,
+          shift_id,
+          error: fetchError.message,
+        });
+      }
       return NextResponse.json(
         ApiErrorHandler.createError('No active clock-in record found', 'NOT_FOUND', 404),
         { status: 404 },
@@ -103,7 +102,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Update the clock-in record with clock-out information
-    const { data: updatedRecord, error: updateError } = await supabaseAdmin
+    const { data: updatedRecord, error: updateError } = await supabase
       .from('time_attendance')
       .update({
         clock_out_time,

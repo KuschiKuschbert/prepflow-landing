@@ -8,7 +8,7 @@ export async function triggerSideEffects(
   dishId: string,
   dishName: string,
   changes: string[],
-  changeDetails: any,
+  changeDetails: any, // justified
   userEmail: string,
 ) {
   // Track price changes for locked menus

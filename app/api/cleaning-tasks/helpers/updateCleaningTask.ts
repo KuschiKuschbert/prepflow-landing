@@ -1,6 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { CleaningTaskJoinResult, UpdateCleaningTaskInput } from './types';
 
 const CLEANING_AREAS_SELECT = `
@@ -21,24 +21,23 @@ const CLEANING_AREAS_SELECT = `
 /**
  * Update a cleaning task.
  *
+ * @param {SupabaseClient} supabase - Supabase client
  * @param {string} id - Cleaning task ID
  * @param {UpdateCleaningTaskInput} updateData - Update data
  * @returns {Promise<CleaningTaskJoinResult>} Updated cleaning task
  * @throws {Error} If update fails
  */
 export async function updateCleaningTask(
+  supabase: SupabaseClient,
   id: string,
   updateData: UpdateCleaningTaskInput,
 ): Promise<CleaningTaskJoinResult> {
-  if (!supabaseAdmin)
-    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
-
   const finalUpdateData: Record<string, unknown> = { ...updateData };
   if (updateData.status === 'completed' && !updateData.completed_date) {
     finalUpdateData.completed_date = new Date().toISOString();
   }
 
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await supabase
     .from('cleaning_tasks')
     .update(finalUpdateData)
     .eq('id', id)

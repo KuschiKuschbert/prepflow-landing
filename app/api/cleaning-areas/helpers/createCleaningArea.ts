@@ -1,20 +1,21 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import type { CleaningArea, CreateCleaningAreaInput } from './schemas';
 
 /**
  * Create a cleaning area.
  *
+ * @param {SupabaseClient} supabase - Supabase client
  * @param {CreateCleaningAreaInput} areaData - Cleaning area data
  * @returns {Promise<CleaningArea>} Created cleaning area
  * @throws {Error} If creation fails
  */
-export async function createCleaningArea(areaData: CreateCleaningAreaInput): Promise<CleaningArea> {
-  if (!supabaseAdmin)
-    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 503);
-
-  const { data, error } = await supabaseAdmin
+export async function createCleaningArea(
+  supabase: SupabaseClient,
+  areaData: CreateCleaningAreaInput,
+): Promise<CleaningArea> {
+  const { data, error } = await supabase
     .from('cleaning_areas')
     .insert({
       area_name: areaData.area_name,

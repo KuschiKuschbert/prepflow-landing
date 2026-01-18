@@ -1,8 +1,8 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { autoDetectCategory } from '@/lib/ingredients/category-detection';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { autoDetectCategory } from '@/lib/ingredients/category-detection';
 import { z } from 'zod';
 
 const autoCategorizeSchema = z
@@ -25,6 +25,18 @@ const autoCategorizeSchema = z
     },
   );
 
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Auto-Categorize API] Failed to parse request JSON:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 /**
  * Bulk auto-categorize ingredients.
  * POST /api/ingredients/auto-categorize
@@ -37,18 +49,7 @@ const autoCategorizeSchema = z
 export async function POST(request: NextRequest) {
   try {
     const supabaseAdmin = createSupabaseAdmin();
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Auto-Categorize API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const body = await safeParseBody(request);
 
     const validationResult = autoCategorizeSchema.safeParse(body);
     if (!validationResult.success) {

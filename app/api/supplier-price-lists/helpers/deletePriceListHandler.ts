@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { NextRequest, NextResponse } from 'next/server';
 import { handlePriceListError } from './handlePriceListError';
 
-export async function handleDeletePriceList(request: NextRequest) {
+export async function handleDeletePriceList(request: NextRequest, supabase: SupabaseClient) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
@@ -18,14 +18,14 @@ export async function handleDeletePriceList(request: NextRequest) {
       );
     }
 
-    if (!supabaseAdmin) {
+    if (!supabase) {
       return NextResponse.json(
         ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
         { status: 500 },
       );
     }
 
-    const { error } = await supabaseAdmin.from('supplier_price_lists').delete().eq('id', id);
+    const { error } = await supabase.from('supplier_price_lists').delete().eq('id', id);
 
     if (error) {
       logger.error('[Supplier Price Lists API] Database error deleting:', {

@@ -5,11 +5,31 @@
  * @module api/staff/availability
  */
 
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { ZodSchema } from 'zod';
 import { createAvailabilitySchema } from './helpers/schemas';
+
+async function safeParseBody<T>(req: NextRequest, schema: ZodSchema<T>): Promise<T> {
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch (err) {
+    throw ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400);
+  }
+
+  const result = schema.safeParse(body);
+  if (!result.success) {
+    throw ApiErrorHandler.createError(
+      result.error.issues[0]?.message || 'Invalid request body',
+      'VALIDATION_ERROR',
+      400,
+    );
+  }
+  return result.data;
+}
 
 /**
  * GET /api/staff/availability
@@ -20,17 +40,14 @@ import { createAvailabilitySchema } from './helpers/schemas';
  */
 export async function GET(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     const { searchParams } = new URL(request.url);
     const employeeId = searchParams.get('employee_id');
 
-    let query = supabaseAdmin
+    let query = supabase
       .from('availability')
       .select('*')
       .order('day_of_week', { ascending: true });
@@ -39,16 +56,16 @@ export async function GET(request: NextRequest) {
       query = query.eq('employee_id', employeeId);
     }
 
-    const { data: availability, error } = await query;
+    const { data: availability, error: dbError } = await query;
 
-    if (error) {
+    if (dbError) {
       logger.error('[Availability API] Database error fetching availability:', {
-        error: error.message,
-        code: error.code,
+        error: dbError.message,
+        code: dbError.code,
         context: { endpoint: '/api/staff/availability', operation: 'GET', table: 'availability' },
       });
 
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(dbError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
@@ -80,52 +97,18 @@ export async function GET(request: NextRequest) {
 /**
  * POST /api/staff/availability
  * Create or update availability record (upsert).
- *
- * Request body:
- * - employee_id: Employee ID (required)
- * - day_of_week: Day of week (0=Sunday, 1=Monday, ..., 6=Saturday) (required)
- * - start_time: Start time (HH:MM:SS) (optional)
- * - end_time: End time (HH:MM:SS) (optional)
- * - is_available: Whether employee is available (optional, default: true)
  */
 export async function POST(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Availability API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    const validationResult = createAvailabilitySchema.safeParse(body);
-    if (!validationResult.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const { employee_id, day_of_week, start_time, end_time, is_available } = validationResult.data;
+    const body = await safeParseBody(request, createAvailabilitySchema);
+    const { employee_id, day_of_week, start_time, end_time, is_available } = body;
 
     // Check if employee exists
-    const { data: employee, error: employeeError } = await supabaseAdmin
+    const { data: employee, error: employeeError } = await supabase
       .from('employees')
       .select('id')
       .eq('id', employee_id)
@@ -134,9 +117,7 @@ export async function POST(request: NextRequest) {
     if (employeeError || !employee) {
       return NextResponse.json(
         ApiErrorHandler.createError('Employee not found', 'NOT_FOUND', 404),
-        {
-          status: 404,
-        },
+        { status: 404 },
       );
     }
 
@@ -149,7 +130,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Upsert (insert or update) availability record
-    const { data: availability, error: upsertError } = await supabaseAdmin
+    const { data: availability, error: upsertError } = await supabase
       .from('availability')
       .upsert(availabilityData, { onConflict: 'employee_id,day_of_week' })
       .select()
@@ -176,6 +157,8 @@ export async function POST(request: NextRequest) {
       message: 'Availability saved successfully',
     });
   } catch (err) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Availability API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,

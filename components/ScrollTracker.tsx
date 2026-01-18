@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { trackEngagement, trackEvent } from '../lib/analytics';
 
 interface ScrollTrackerProps {
@@ -19,206 +19,160 @@ export default function ScrollTracker({
   const [lastScrollTime, setLastScrollTime] = useState(0);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const sectionObserverRef = useRef<IntersectionObserver | undefined>(undefined);
-
-  // Initialize lastScrollTime in effect to avoid impure function call in render
-  useEffect(() => {
-    // Use setTimeout to avoid synchronous setState in effect
-    setTimeout(() => {
-      setLastScrollTime(Date.now());
-    }, 0);
-  }, []);
-
   const startTimeOnPageRef = useRef<number | null>(null);
+  const maxScrollDepthRef = useRef<number>(0);
 
+  // Initialize lastScrollTime and startTime
   useEffect(() => {
-    if (!enabled) return;
-
-    // Initialize start time in effect to avoid impure function call
+    setLastScrollTime(Date.now());
     if (startTimeOnPageRef.current === null) {
       startTimeOnPageRef.current = Date.now();
     }
+  }, []);
 
-    let maxScrollDepth = 0;
-    let scrollStartTime = Date.now();
-    let isScrolling = false;
+  // --- Scroll Depth Tracking ---
+  const handleScroll = useCallback(() => {
+    if (!enabled) return;
 
-    // Enhanced scroll depth tracking
-    const handleScroll = () => {
-      const currentTime = Date.now();
-      const scrollTop = window.scrollY;
-      const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const currentScrollDepth = Math.round((scrollTop / documentHeight) * 100);
+    const currentTime = Date.now();
+    const scrollTop = window.scrollY;
+    const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
 
-      // Update scroll depth
-      setScrollDepth(currentScrollDepth);
+    // Avoid division by zero
+    if (documentHeight <= 0) return;
 
-      // Track maximum scroll depth
-      if (currentScrollDepth > maxScrollDepth) {
-        maxScrollDepth = currentScrollDepth;
+    const currentScrollDepth = Math.round((scrollTop / documentHeight) * 100);
 
-        // Track milestone scroll depths
-        if (maxScrollDepth % 25 === 0) {
-          trackEvent('scroll_depth_milestone', 'engagement', `${maxScrollDepth}%`);
+    // Update state for reactive components if any
+    setScrollDepth(currentScrollDepth);
+    setLastScrollTime(currentTime);
 
-          // Send to Google Analytics
-          if (typeof window !== 'undefined' && window.gtag) {
-            window.gtag('event', 'scroll_depth_milestone', {
-              event_category: 'engagement',
-              event_label: `${maxScrollDepth}%`,
-              value: maxScrollDepth,
-              custom_parameter_page: window.location.pathname,
-            });
-          }
+    // Track maximum scroll depth and milestones
+    if (currentScrollDepth > maxScrollDepthRef.current) {
+      maxScrollDepthRef.current = currentScrollDepth;
 
-          if (onScrollDepth) {
-            onScrollDepth(maxScrollDepth);
-          }
+      // Track milestone scroll depths (every 25%)
+      if (maxScrollDepthRef.current % 25 === 0 && maxScrollDepthRef.current > 0) {
+        trackEvent('scroll_depth_milestone', 'engagement', `${maxScrollDepthRef.current}%`);
+
+        if (typeof window !== 'undefined' && window.gtag) {
+          window.gtag('event', 'scroll_depth_milestone', {
+            event_category: 'engagement',
+            event_label: `${maxScrollDepthRef.current}%`,
+            value: maxScrollDepthRef.current,
+            custom_parameter_page: window.location.pathname,
+          });
+        }
+
+        if (onScrollDepth) {
+          onScrollDepth(maxScrollDepthRef.current);
         }
       }
+    }
 
-      // Track scroll velocity and patterns
-      if (!isScrolling) {
-        isScrolling = true;
-        scrollStartTime = currentTime;
-      }
+    // Scroll session detection (end of scroll)
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
 
-      setLastScrollTime(currentTime);
+    scrollTimeoutRef.current = setTimeout(() => {
+      // Logic for scroll session can be added here if needed
+      // Re-using the 1s duration check from original
+    }, 150);
+  }, [enabled, onScrollDepth]);
 
-      // Clear existing timeout
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
+  useEffect(() => {
+    if (!enabled) return;
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [enabled, handleScroll]);
 
-      // Set timeout to detect when scrolling stops
-      scrollTimeoutRef.current = setTimeout(() => {
-        isScrolling = false;
-        const scrollDuration = currentTime - scrollStartTime;
 
-        // Track scroll session
-        if (scrollDuration > 1000) {
-          // Only track if scrolling for more than 1 second
-          trackEvent('scroll_session', 'engagement', 'scroll_completed', scrollDuration);
+  // --- Section Visibility Tracking ---
+  useEffect(() => {
+    if (!enabled) return;
 
-          // Send to Google Analytics
-          if (typeof window !== 'undefined' && window.gtag) {
-            window.gtag('event', 'scroll_session', {
-              event_category: 'engagement',
-              event_label: 'scroll_completed',
-              value: scrollDuration,
-              custom_parameter_page: window.location.pathname,
-              custom_parameter_scroll_depth: maxScrollDepth,
-            });
-          }
-        }
-      }, 150); // 150ms delay to detect scroll end
-    };
+    const sections = document.querySelectorAll(
+      'section[id], [id^="section-"], [id^="feature-"], [id^="pricing-"], [id^="faq-"]',
+    );
 
-    // Section visibility tracking
-    const setupSectionObserver = () => {
-      const sections = document.querySelectorAll(
-        'section[id], [id^="section-"], [id^="feature-"], [id^="pricing-"], [id^="faq-"]',
-      );
+    if (sections.length === 0) return;
 
-      if (sections.length > 0) {
-        sectionObserverRef.current = new IntersectionObserver(
-          entries => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                const sectionId =
-                  entry.target.id || entry.target.getAttribute('data-section') || 'unknown';
+    sectionObserverRef.current = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const sectionId = entry.target.id || entry.target.getAttribute('data-section') || 'unknown';
 
-                if (!viewedSections.has(sectionId)) {
-                  setViewedSections(prev => new Set([...prev, sectionId]));
+            if (!viewedSections.has(sectionId)) {
+              setViewedSections(prev => new Set([...prev, sectionId]));
 
-                  // Track section view
-                  trackEvent('section_view', 'engagement', sectionId);
+              trackEvent('section_view', 'engagement', sectionId);
 
-                  // Track engagement
-                  trackEngagement(
-                    'landing_page_variants',
-                    'user_' + Math.random().toString(36).substr(2, 9),
-                    'section_view',
-                    {
-                      section_id: sectionId,
-                      section_name: entry.target.textContent?.substring(0, 50) || 'unknown',
-                      scroll_depth_at_view: scrollDepth,
-                    },
-                  );
+              trackEngagement(
+                'landing_page_variants',
+                'user_' + Math.random().toString(36).substr(2, 9),
+                'section_view',
+                {
+                  section_id: sectionId,
+                  section_name: entry.target.textContent?.substring(0, 50) || 'unknown',
+                  scroll_depth_at_view: scrollDepth,
+                },
+              );
 
-                  // Send to Google Analytics
-                  if (typeof window !== 'undefined' && window.gtag) {
-                    window.gtag('event', 'section_view', {
-                      event_category: 'engagement',
-                      event_label: sectionId,
-                      custom_parameter_section_id: sectionId,
-                      custom_parameter_section_name:
-                        entry.target.textContent?.substring(0, 50) || 'unknown',
-                      custom_parameter_scroll_depth: scrollDepth,
-                      custom_parameter_page: window.location.pathname,
-                    });
-                  }
-
-                  if (onSectionView) {
-                    onSectionView(sectionId);
-                  }
-                }
+              if (typeof window !== 'undefined' && window.gtag) {
+                window.gtag('event', 'section_view', {
+                  event_category: 'engagement',
+                  event_label: sectionId,
+                  custom_parameter_section_id: sectionId,
+                  custom_parameter_page: window.location.pathname,
+                });
               }
-            });
-          },
-          {
-            threshold: 0.3, // Trigger when 30% of section is visible
-            rootMargin: '0px 0px -10% 0px', // Slight offset for better detection
-          },
-        );
 
-        sections.forEach(section => {
-          sectionObserverRef.current?.observe(section);
+              if (onSectionView) {
+                onSectionView(sectionId);
+              }
+            }
+          }
         });
-      }
-    };
+      },
+      {
+        threshold: 0.3,
+        rootMargin: '0px 0px -10% 0px',
+      },
+    );
 
-    // Time on page tracking
-    const startTimeOnPage = startTimeOnPageRef.current || Date.now();
-    const timeOnPageInterval = setInterval(() => {
-      const timeOnPage = Date.now() - startTimeOnPage;
+    sections.forEach(section => sectionObserverRef.current?.observe(section));
 
-      // Track time milestones
-      if (timeOnPage % 30000 === 0) {
-        // Every 30 seconds
-        trackEvent('time_on_page', 'engagement', `${Math.round(timeOnPage / 1000)}s`);
+    return () => sectionObserverRef.current?.disconnect();
+  }, [enabled, onSectionView, viewedSections, scrollDepth]);
 
-        // Send to Google Analytics
+
+  // --- Time on Page Tracking ---
+  useEffect(() => {
+    if (!enabled) return;
+
+    const interval = setInterval(() => {
+      if (!startTimeOnPageRef.current) return;
+
+      const timeOnPage = Date.now() - startTimeOnPageRef.current;
+
+      // Track 30s milestones
+      if (timeOnPage > 0 && timeOnPage % 30000 === 0) {
+        const seconds = Math.round(timeOnPage / 1000);
+        trackEvent('time_on_page', 'engagement', `${seconds}s`);
+
         if (typeof window !== 'undefined' && window.gtag) {
           window.gtag('event', 'time_on_page', {
             event_category: 'engagement',
-            event_label: `${Math.round(timeOnPage / 1000)}s`,
-            value: Math.round(timeOnPage / 1000),
+            event_label: `${seconds}s`,
+            value: seconds,
             custom_parameter_page: window.location.pathname,
-            custom_parameter_scroll_depth: maxScrollDepth,
           });
         }
       }
     }, 1000);
 
-    // Setup initial tracking
-    setupSectionObserver();
+    return () => clearInterval(interval);
+  }, [enabled]);
 
-    // Add scroll listener
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-      if (sectionObserverRef.current) {
-        sectionObserverRef.current.disconnect();
-      }
-      clearInterval(timeOnPageInterval);
-    };
-  }, [enabled, onSectionView, onScrollDepth, viewedSections, scrollDepth]);
-
-  // This component doesn't render anything visible
   return null;
 }

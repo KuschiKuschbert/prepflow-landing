@@ -1,25 +1,22 @@
-import { supabaseAdmin } from '@/lib/supabase';
+import { standardAdminChecks } from '@/lib/admin-auth';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { logger } from '@/lib/logger';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 /**
  * Generate 5 sample temperature log entries for each active equipment
  * Spreads entries randomly across the last 2 weeks (14 days) for better analytics visualization
  */
 export async function POST(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     logger.dev('🌡️ Generating 5 sample temperature logs per equipment...');
 
     // Fetch all active equipment
-    const { data: equipment, error: equipmentError } = await supabaseAdmin
+    const { data: equipment, error: equipmentError } = await supabase
       .from('temperature_equipment')
       .select('*')
       .eq('is_active', true);
@@ -114,7 +111,7 @@ export async function POST(request: NextRequest) {
     logger.dev(`📝 Generated ${logs.length} temperature log entries`);
 
     // Insert logs in a single batch
-    const { error: insertError } = await supabaseAdmin.from('temperature_logs').insert(logs);
+    const { error: insertError } = await supabase.from('temperature_logs').insert(logs);
 
     if (insertError) {
       logger.error('Error inserting logs:', insertError);

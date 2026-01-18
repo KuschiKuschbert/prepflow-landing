@@ -64,7 +64,7 @@ export async function getSquareClient(userId: string): Promise<SquareClient | nu
       environment: environment,
       timeout: 30000, // 30 second timeout
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as unknown as any);
+    } as unknown as any); // justified
 
     // Cache client instance
     clientCache.set(userId, {

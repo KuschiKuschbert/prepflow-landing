@@ -1,12 +1,31 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
+import { ZodSchema, z } from 'zod';
 import { deleteEmployee } from '../helpers/deleteEmployee';
 import { handleEmployeeError } from '../helpers/handleEmployeeError';
 import { updateEmployee } from '../helpers/updateEmployee';
+
+async function safeParseBody<T>(req: NextRequest, schema: ZodSchema<T>): Promise<T> {
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch (err) {
+    throw ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400);
+  }
+
+  const result = schema.safeParse(body);
+  if (!result.success) {
+    throw ApiErrorHandler.createError(
+      result.error.issues[0]?.message || 'Invalid request body',
+      'VALIDATION_ERROR',
+      400,
+    );
+  }
+  return result.data;
+}
 
 const updateEmployeeByIdSchema = z.object({
   full_name: z.string().optional(),
@@ -42,21 +61,18 @@ const EMPLOYEE_SELECT = `
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
-    const { data, error } = await supabaseAdmin
+    const { data, error: dbError } = await supabase
       .from('employees')
       .select(EMPLOYEE_SELECT)
       .eq('id', id)
       .single();
 
-    if (error) {
-      const pgError = error as PostgrestError;
+    if (dbError) {
+      const pgError = dbError as PostgrestError;
       logger.error('[Employees API] Database error fetching employee:', {
         error: pgError.message,
         code: pgError.code,
@@ -68,7 +84,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
         },
       });
 
-      const apiError = ApiErrorHandler.fromSupabaseError(error, 500);
+      const apiError = ApiErrorHandler.fromSupabaseError(dbError, 500);
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
@@ -99,32 +115,13 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
   try {
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Employees API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
-    const validationResult = updateEmployeeByIdSchema.safeParse(body);
-    if (!validationResult.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
+    const body = await safeParseBody(request, updateEmployeeByIdSchema);
 
-    const data = await updateEmployee(id, validationResult.data);
+    const data = await updateEmployee(supabase, id, body);
 
     return NextResponse.json({
       success: true,
@@ -132,6 +129,8 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       data,
     });
   } catch (err) {
+    if (err instanceof NextResponse) return err;
+
     if (err instanceof Error && 'status' in err) {
       const statusError = err as { status: number; message: string };
       logger.error('[Employees API] Error with status:', {
@@ -152,13 +151,19 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
   try {
-    await deleteEmployee(id);
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
+    await deleteEmployee(supabase, id);
 
     return NextResponse.json({
       success: true,
       message: 'Employee deactivated successfully',
     });
   } catch (err) {
+    if (err instanceof NextResponse) return err;
+
     if (err instanceof Error && 'status' in err) {
       const statusError = err as { status: number; message: string };
       logger.error('[Employees API] Error with status:', {

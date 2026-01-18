@@ -1,16 +1,19 @@
-import { supabaseAdmin } from '@/lib/supabase';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Get user ID from email address
  *
  * @param {string} email - User email address
+ * @param {SupabaseClient} supabase - Supabase client
  * @returns {Promise<string | null>} User ID or null if not found
  */
-export async function getUserIdFromEmail(email: string): Promise<string | null> {
-  if (!supabaseAdmin) return null;
+export async function getUserIdFromEmail(
+  email: string,
+  supabase: SupabaseClient,
+): Promise<string | null> {
   try {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from('users')
       .select('id')
       .eq('email', email)

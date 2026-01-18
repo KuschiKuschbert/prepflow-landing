@@ -3,12 +3,12 @@
  * Converts all scraped recipes to Australian units (ml, l, gm, kg)
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { requireAuth } from '@/lib/auth0-api-helpers';
-import { STORAGE_PATH } from '../../../../scripts/recipe-scraper/config';
+import { NextRequest, NextResponse } from 'next/server';
 import * as path from 'path';
+import { STORAGE_PATH } from '../../../../scripts/recipe-scraper/config';
 import { processRecipeBatches } from './helpers/batch-processing';
 
 // Dynamic import to handle potential import failures gracefully
@@ -30,21 +30,8 @@ async function loadJSONStorage() {
  */
 export async function POST(request: NextRequest) {
   try {
-    // Require authentication
-    try {
-      await requireAuth(request);
-    } catch (authErr) {
-      if (authErr instanceof NextResponse) {
-        return authErr;
-      }
-      logger.error('[Recipe Unit Conversion API] Authentication error:', {
-        error: authErr instanceof Error ? authErr.message : String(authErr),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Authentication required', 'UNAUTHORIZED', 401),
-        { status: 401 },
-      );
-    }
+    const { error } = await standardAdminChecks(request);
+    if (error) return error;
 
     // Check for dry-run parameter
     const searchParams = request.nextUrl.searchParams;

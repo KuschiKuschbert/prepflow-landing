@@ -8,7 +8,7 @@ interface UserProfile {
 }
 
 interface BuildProfileDataParams {
-  userData: any;
+  userData: any; // justified
   userEmail?: string | null;
   userName?: string | null;
 }

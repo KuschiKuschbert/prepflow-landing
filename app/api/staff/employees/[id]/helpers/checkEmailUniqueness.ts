@@ -1,20 +1,16 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
-import { supabaseAdmin } from '@/lib/supabase';
-import { NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { NextResponse } from 'next/server';
 
 /**
  * Check if email is unique (not used by another employee)
  */
-export async function checkEmailUniqueness(email: string): Promise<NextResponse | null> {
-  if (!supabaseAdmin) {
-    return NextResponse.json(
-      ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-      { status: 500 },
-    );
-  }
-
-  const { data: emailCheck, error: emailCheckError } = await supabaseAdmin
+export async function checkEmailUniqueness(
+  supabase: SupabaseClient,
+  email: string,
+): Promise<NextResponse | null> {
+  const { data: emailCheck, error: emailCheckError } = await supabase
     .from('employees')
     .select('id')
     .eq('email', email)

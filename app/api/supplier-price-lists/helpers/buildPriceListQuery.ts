@@ -1,14 +1,19 @@
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Build query for fetching supplier price lists with optional filters.
  *
+ * @param {SupabaseClient} supabase - Supabase client
  * @param {string | null} supplierId - Optional supplier ID filter
  * @param {string | null} current - Optional current status filter ('true' or 'false')
  * @returns {Object} Supabase query builder
  */
-export function buildPriceListQuery(supplierId: string | null, current: string | null) {
-  let query = supabaseAdmin!
+export function buildPriceListQuery(
+  supabase: SupabaseClient,
+  supplierId: string | null,
+  current: string | null,
+) {
+  let query = supabase
     .from('supplier_price_lists')
     .select(
       `

@@ -2,9 +2,7 @@
  * Query builder helper for cleaning tasks
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
-
-import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 const CLEANING_TASKS_SELECT = `
   *,
@@ -39,18 +37,14 @@ export interface CleaningTasksQueryParams {
 /**
  * Builds a Supabase query for cleaning tasks with filters
  *
+ * @param {SupabaseClient} supabase - Supabase client
  * @param {CleaningTasksQueryParams} params - Query parameters
  */
-export function buildCleaningTasksQuery(params: CleaningTasksQueryParams) {
-  if (!supabaseAdmin) {
-    throw ApiErrorHandler.createError(
-      'Supabase admin client not initialized',
-      'DATABASE_ERROR',
-      500,
-    );
-  }
-
-  let query = supabaseAdmin.from('cleaning_tasks').select(CLEANING_TASKS_SELECT);
+export function buildCleaningTasksQuery(
+  supabase: SupabaseClient,
+  params: CleaningTasksQueryParams,
+) {
+  let query = supabase.from('cleaning_tasks').select(CLEANING_TASKS_SELECT);
 
   // Apply filters
   if (params.areaId) query = query.eq('area_id', params.areaId);

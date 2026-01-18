@@ -28,68 +28,21 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validated = enableAllSchema.parse(body);
 
-    // Get all existing feature flags
+    // Get user ID from email (if user exists)
+    const userId = await resolveUserId(validated.email);
+
+    // Get all global flags
     const { data: allFlags, error: fetchError } = await supabaseAdmin
       .from('feature_flags')
       .select('flag_key')
-      .is('user_id', null); // Only get global flags
+      .is('user_id', null);
 
     if (fetchError) {
-      logger.error('[Admin Features API] Error fetching flags:', {
-        error: fetchError.message,
-        context: { endpoint: '/api/admin/features/enable-all', method: 'POST' },
-      });
-
-      return NextResponse.json(ApiErrorHandler.fromSupabaseError(fetchError, 500), { status: 500 });
+      throw fetchError; // Will be caught by catch block
     }
 
-    // Get user ID from email (if user exists)
-    const { data: userData, error: userDataError } = await supabaseAdmin
-      .from('users')
-      .select('id')
-      .eq('email', validated.email)
-      .single();
-
-    if (userDataError && userDataError.code !== 'PGRST116') {
-      logger.warn('[Admin Features Enable All] Error fetching user:', {
-        error: userDataError.message,
-        code: userDataError.code,
-        email: validated.email,
-      });
-    }
-
-    const userId = userData?.id || null;
-
-    // Enable all flags for this user
     const flagsToEnable = allFlags || [];
-    const enabledFlags: Array<{ flag_key: string; enabled: boolean }> = [];
-
-    for (const flag of flagsToEnable) {
-      const { data: flagData, error: upsertError } = await supabaseAdmin
-        .from('feature_flags')
-        .upsert(
-          {
-            flag_key: flag.flag_key,
-            enabled: true,
-            user_id: userId,
-            updated_at: new Date().toISOString(),
-          },
-          {
-            onConflict: 'flag_key,user_id',
-          },
-        )
-        .select()
-        .single();
-
-      if (upsertError) {
-        logger.warn('[Admin Features API] Error enabling flag:', {
-          flag_key: flag.flag_key,
-          error: upsertError.message,
-        });
-      } else if (flagData) {
-        enabledFlags.push({ flag_key: flag.flag_key, enabled: true });
-      }
-    }
+    const enabledFlags = await enableFlagsForUser(userId, flagsToEnable);
 
     // Log admin action
     await logAdminApiAction(adminUser, 'enable_all_features', request, {
@@ -120,6 +73,7 @@ export async function POST(request: NextRequest) {
         { status: 400 },
       );
     }
+    // ... existing catch block logic continues (handled by partial replace)
 
     logger.error('[Admin Features API] Unexpected error:', {
       error: error instanceof Error ? error.message : String(error),
@@ -136,4 +90,54 @@ export async function POST(request: NextRequest) {
       { status: 500 },
     );
   }
+}
+
+async function resolveUserId(email: string): Promise<string | null> {
+  const { data: userData, error: userDataError } = await supabaseAdmin!
+    .from('users')
+    .select('id')
+    .eq('email', email)
+    .single();
+
+  if (userDataError && userDataError.code !== 'PGRST116') {
+    logger.warn('[Admin Features Enable All] Error fetching user:', {
+      error: userDataError.message,
+      code: userDataError.code,
+      email,
+    });
+  }
+
+  return userData?.id || null;
+}
+
+async function enableFlagsForUser(userId: string | null, flags: { flag_key: string }[]) {
+  const enabledFlags: Array<{ flag_key: string; enabled: boolean }> = [];
+
+  for (const flag of flags) {
+    const { data: flagData, error: upsertError } = await supabaseAdmin!
+      .from('feature_flags')
+      .upsert(
+        {
+          flag_key: flag.flag_key,
+          enabled: true,
+          user_id: userId,
+          updated_at: new Date().toISOString(),
+        },
+        {
+          onConflict: 'flag_key,user_id',
+        },
+      )
+      .select()
+      .single();
+
+    if (upsertError) {
+      logger.warn('[Admin Features API] Error enabling flag:', {
+        flag_key: flag.flag_key,
+        error: upsertError.message,
+      });
+    } else if (flagData) {
+      enabledFlags.push({ flag_key: flag.flag_key, enabled: true });
+    }
+  }
+  return enabledFlags;
 }

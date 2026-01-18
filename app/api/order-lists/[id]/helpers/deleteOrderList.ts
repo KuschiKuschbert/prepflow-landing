@@ -1,11 +1,12 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 export async function deleteOrderList(
+  supabase: SupabaseClient,
   id: string,
 ): Promise<{ success: boolean; message: string } | { error: unknown; status: number }> {
-  if (!supabaseAdmin) {
+  if (!supabase) {
     return {
       error: ApiErrorHandler.createError(
         'Database connection not available',
@@ -16,7 +17,7 @@ export async function deleteOrderList(
     };
   }
 
-  const { error: deleteItemsError } = await supabaseAdmin
+  const { error: deleteItemsError } = await supabase
     .from('order_list_items')
     .delete()
     .eq('order_list_id', id);
@@ -30,7 +31,7 @@ export async function deleteOrderList(
     // Continue with list deletion even if items deletion fails
   }
 
-  const { error } = await supabaseAdmin.from('order_lists').delete().eq('id', id);
+  const { error } = await supabase.from('order_lists').delete().eq('id', id);
 
   if (error) {
     logger.error('[Order Lists API] Error deleting order list:', {

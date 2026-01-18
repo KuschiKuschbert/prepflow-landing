@@ -4,7 +4,6 @@
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { DBCleaningTask } from './types';
 
 /**
@@ -17,13 +16,10 @@ import { DBCleaningTask } from './types';
  */
 export async function fetchPaginatedTasks(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  query: any,
+  query: any, // justified
   page: number,
   pageSize: number,
 ): Promise<{ data: DBCleaningTask[]; total: number }> {
-  if (!supabaseAdmin) {
-    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
-  }
 
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;

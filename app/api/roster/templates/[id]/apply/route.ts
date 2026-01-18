@@ -5,13 +5,13 @@
  * @module api/roster/templates/[id]/apply
  */
 
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
-import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { applyTemplate, validateTemplateApplication } from '@/lib/services/roster/templateService';
 import { parse } from 'date-fns';
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 
 const applyTemplateSchema = z.object({
   target_week_start_date: z
@@ -30,15 +30,12 @@ const applyTemplateSchema = z.object({
  */
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
     const { id } = await context.params;
     const templateId = id;
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
 
     let body: unknown;
     try {
@@ -68,7 +65,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     const { target_week_start_date, overwrite_existing } = zodValidation.data;
 
     // Get template
-    const { data: template, error: templateError } = await supabaseAdmin
+    const { data: template, error: templateError } = await supabase
       .from('roster_templates')
       .select('*')
       .eq('id', templateId)
@@ -84,7 +81,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     }
 
     // Get template shifts
-    const { data: templateShifts, error: shiftsError } = await supabaseAdmin
+    const { data: templateShifts, error: shiftsError } = await supabase
       .from('template_shifts')
       .select('*')
       .eq('template_id', templateId)
@@ -118,7 +115,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     const weekEnd = new Date(weekStart);
     weekEnd.setDate(weekEnd.getDate() + 7);
 
-    const { data: existingShifts, error: existingShiftsError } = await supabaseAdmin
+    const { data: existingShifts, error: existingShiftsError } = await supabase
       .from('shifts')
       .select('*')
       .gte('shift_date', weekStart.toISOString().split('T')[0])

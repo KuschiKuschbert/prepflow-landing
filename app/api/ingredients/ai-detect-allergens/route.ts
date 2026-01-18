@@ -4,10 +4,10 @@
  * Detects allergens from ingredient name and brand using AI
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { detectAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { detectAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const detectAllergensSchema = z.object({
@@ -16,20 +16,21 @@ const detectAllergensSchema = z.object({
   force_ai: z.boolean().optional(),
 });
 
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[AI Allergen Detection API] Failed to parse request JSON:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[AI Allergen Detection API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const body = await safeParseBody(request);
 
     const validationResult = detectAllergensSchema.safeParse(body);
     if (!validationResult.success) {

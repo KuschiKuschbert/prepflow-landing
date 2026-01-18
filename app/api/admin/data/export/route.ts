@@ -1,11 +1,37 @@
-import { requireAdmin } from '@/lib/admin-auth';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import Papa from 'papaparse';
 import { fetchTableData } from './helpers/fetchTableData';
 import { normalizeForCSV } from './helpers/normalizeForCSV';
+
+function createCsvResponse(allData: unknown[]): NextResponse {
+  if (allData.length === 0) {
+    return new NextResponse('No data to export', { status: 404 });
+  }
+
+  // Normalize data for CSV export (handle objects and nulls)
+  const dataToNormalize = allData as Record<string, unknown>[];
+  const normalizedData = normalizeForCSV(dataToNormalize);
+
+  const headers = Object.keys(normalizedData[0]);
+  const csv = Papa.unparse(normalizedData, {
+    columns: headers,
+    header: true,
+    delimiter: ',',
+    newline: '\n',
+    quoteChar: '"',
+    escapeChar: '"',
+  });
+
+  return new NextResponse(csv, {
+    headers: {
+      'Content-Type': 'text/csv;charset=utf-8',
+      'Content-Disposition': `attachment; filename="data-export-${new Date().toISOString()}.csv"`,
+    },
+  });
+}
 
 /**
  * GET /api/admin/data/export
@@ -13,14 +39,9 @@ import { normalizeForCSV } from './helpers/normalizeForCSV';
  */
 export async function GET(request: NextRequest) {
   try {
-    await requireAdmin(request);
-
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('query') || '';
@@ -28,8 +49,7 @@ export async function GET(request: NextRequest) {
     const format = searchParams.get('format') || 'json';
 
     // Get data (reuse search logic)
-    const tablesToSearch =
-      table === 'all' ? ['ingredients', 'recipes', 'dishes', 'users'] : [table];
+    const tablesToSearch = table === 'all' ? ['ingredients', 'recipes', 'dishes', 'users'] : [table];
 
     const allData: unknown[] = [];
 
@@ -39,31 +59,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (format === 'csv') {
-      // Convert to CSV using PapaParse for proper formatting
-      if (allData.length === 0) {
-        return new NextResponse('No data to export', { status: 404 });
-      }
-
-      // Normalize data for CSV export (handle objects and nulls)
-      const dataToNormalize = allData as Record<string, unknown>[];
-      const normalizedData = normalizeForCSV(dataToNormalize);
-
-      const headers = Object.keys(normalizedData[0]);
-      const csv = Papa.unparse(normalizedData, {
-        columns: headers,
-        header: true,
-        delimiter: ',',
-        newline: '\n',
-        quoteChar: '"',
-        escapeChar: '"',
-      });
-
-      return new NextResponse(csv, {
-        headers: {
-          'Content-Type': 'text/csv;charset=utf-8',
-          'Content-Disposition': `attachment; filename="data-export-${new Date().toISOString()}.csv"`,
-        },
-      });
+      return createCsvResponse(allData);
     }
 
     // JSON format

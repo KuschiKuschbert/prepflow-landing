@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin-auth';
-import { logger } from '@/lib/logger';
-import { fetchTiers } from './helpers/fetchTiers';
-import { createTier, tierConfigSchema } from './helpers/createTier';
-import { updateTier } from './helpers/updateTier';
-import { deleteTier } from './helpers/deleteTier';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
+import { createTier, tierConfigSchema } from './helpers/createTier';
+import { deleteTier } from './helpers/deleteTier';
+import { fetchTiers } from './helpers/fetchTiers';
+import { updateTier } from './helpers/updateTier';
 
 /**
  * GET /api/admin/tiers
@@ -33,18 +33,29 @@ export async function GET(request: NextRequest) {
  * POST /api/admin/tiers
  * Create new tier (future expansion)
  */
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Admin Tiers] Failed to parse request body:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
+/**
+ * POST /api/admin/tiers
+ * Create new tier (future expansion)
+ */
 export async function POST(request: NextRequest) {
   try {
     const adminUser = await requireAdmin(request);
     if (adminUser instanceof NextResponse) return adminUser;
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Admin Tiers] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
+    const body = await safeParseBody(request);
+    if (!body) {
       return NextResponse.json(
         ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
@@ -87,13 +98,8 @@ export async function PUT(request: NextRequest) {
     const adminUser = await requireAdmin(request);
     if (adminUser instanceof NextResponse) return adminUser;
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Admin Tiers] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
+    const body = await safeParseBody(request);
+    if (!body) {
       return NextResponse.json(
         ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },

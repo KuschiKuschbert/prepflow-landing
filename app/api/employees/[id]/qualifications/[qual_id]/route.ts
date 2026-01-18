@@ -1,10 +1,10 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { deleteQualification } from './helpers/deleteQualification';
 import { updateQualificationSchema } from './helpers/schemas';
 import { updateQualification } from './helpers/updateQualification';
-import { deleteQualification } from './helpers/deleteQualification';
 
 /**
  * PUT /api/employees/[id]/qualifications/[qual_id]
@@ -41,14 +41,11 @@ export async function PUT(
       );
     }
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
-    const result = await updateQualification(id, qual_id, validationResult.data);
+    const result = await updateQualification(supabase, id, qual_id, validationResult.data);
     if ('error' in result) {
       return NextResponse.json(result.error, { status: result.status });
     }
@@ -87,14 +84,11 @@ export async function DELETE(
   try {
     const { id, qual_id } = await context.params;
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
-    const result = await deleteQualification(id, qual_id);
+    const result = await deleteQualification(supabase, id, qual_id);
     if ('error' in result) {
       return NextResponse.json(result.error, { status: result.status });
     }

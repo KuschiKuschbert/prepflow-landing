@@ -7,14 +7,26 @@
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { triggerRecipeSync } from '@/lib/square/sync/hooks';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { validateRecipeUpdate } from './helpers/validateRecipeUpdate';
+import { handleDeleteRecipe } from './helpers/deleteRecipeHandler';
 import { enrichRecipeWithAllergens } from './helpers/enrichRecipeWithAllergens';
 import { handleRecipeUpdate } from './helpers/handleRecipeUpdate';
-import { triggerRecipeSync } from '@/lib/square/sync/hooks';
 import { updateRecipeSchema } from './helpers/schemas';
-import { handleDeleteRecipe } from './helpers/deleteRecipeHandler';
+import { validateRecipeUpdate } from './helpers/validateRecipeUpdate';
+
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Recipes API] Failed to parse request JSON:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
@@ -72,18 +84,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     const { id } = await context.params;
     const recipeId = id;
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Recipes API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const body = await safeParseBody(request);
 
     const validationResult = updateRecipeSchema.safeParse(body);
     if (!validationResult.success) {

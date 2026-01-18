@@ -3,12 +3,13 @@
  * Triggers recipe scraping from URLs
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { handleAuth, handleComprehensiveScrape, createScraper, scrapeRecipes } from './helpers';
-import { loadStorage, handleDiscovery, handleManualUrls } from './helpers/scrape-helpers';
+import { createScraper, handleComprehensiveScrape, scrapeRecipes } from './helpers';
+import { handleDiscovery, handleManualUrls, loadStorage } from './helpers/scrape-helpers';
 
 const scrapeSchema = z.object({
   source: z.enum(['allrecipes', 'bbc-good-food', 'food-network']).optional(),
@@ -41,8 +42,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const authResponse = await handleAuth(request);
-    if (authResponse) return authResponse;
+    const { error } = await standardAdminChecks(request);
+    if (error) return error;
 
     let body: unknown;
     try {

@@ -5,6 +5,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { CreateMenuItemInput } from '../../helpers/schemas';
 
+// Helper to safely parse request body
+async function safeParseBody(request: NextRequest) {
+  try {
+    return await request.json();
+  } catch (err) {
+    logger.warn('[Menu Items API] Failed to parse request JSON:', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
 const addMenuItemSchema = z
   .object({
     dish_id: z.string().optional(),
@@ -32,18 +44,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       );
     }
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err: unknown) {
-      logger.warn('[Menu Items API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
+    const body = await safeParseBody(request);
 
     const validationResult = addMenuItemSchema.safeParse(body);
     if (!validationResult.success) {

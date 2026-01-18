@@ -1,6 +1,6 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -13,7 +13,9 @@ const STORAGE_BUCKET = 'employee-photos';
  */
 export async function POST(request: NextRequest) {
   try {
-    const supabaseAdmin = createSupabaseAdmin();
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
     // Parse form data
     const formData = await request.formData();
@@ -61,7 +63,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(arrayBuffer);
 
     // Upload to Supabase Storage
-    const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
+    const { data: uploadData, error: uploadError } = await supabase.storage
       .from(STORAGE_BUCKET)
       .upload(filePath, buffer, {
         contentType: file.type,
@@ -97,7 +99,7 @@ export async function POST(request: NextRequest) {
     // Get public URL
     const {
       data: { publicUrl },
-    } = supabaseAdmin.storage.from(STORAGE_BUCKET).getPublicUrl(filePath);
+    } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(filePath);
 
     return NextResponse.json({
       success: true,
@@ -126,7 +128,10 @@ export async function POST(request: NextRequest) {
  */
 export async function DELETE(request: NextRequest) {
   try {
-    const supabaseAdmin = createSupabaseAdmin();
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
     const { searchParams } = new URL(request.url);
     const filePath = searchParams.get('path');
 
@@ -140,7 +145,7 @@ export async function DELETE(request: NextRequest) {
     // Extract filename from path (remove bucket prefix if present)
     const fileName = filePath.split('/').pop() || filePath;
 
-    const { error: deleteError } = await supabaseAdmin.storage
+    const { error: deleteError } = await supabase.storage
       .from(STORAGE_BUCKET)
       .remove([fileName]);
 

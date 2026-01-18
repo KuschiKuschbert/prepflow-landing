@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    let supplierId: string | null = null;
+    let supplierId: string | null = existingSuppliers?.id || null;
 
     if (!existingSuppliers) {
       // Supplier doesn't exist, add it

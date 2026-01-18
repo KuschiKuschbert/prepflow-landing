@@ -1,19 +1,16 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { detectTemperatureThresholds } from './detectTemperatureThresholds';
 import { handleTemperatureEquipmentError } from './handleTemperatureEquipmentError';
 import { createTemperatureEquipmentSchema } from './schemas';
 
-export async function handleCreateTemperatureEquipment(request: NextRequest) {
+export async function handleCreateTemperatureEquipment(
+  supabase: SupabaseClient,
+  request: NextRequest,
+) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
 
     let body: unknown;
     try {
@@ -72,7 +69,7 @@ export async function handleCreateTemperatureEquipment(request: NextRequest) {
       });
     }
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from('temperature_equipment')
       .insert([
         {

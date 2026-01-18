@@ -1,7 +1,8 @@
+import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
-import { authenticateAndSetup } from './helpers/authenticateAndSetup';
+import { ZodSchema } from 'zod';
 import { checkTableExists } from './helpers/checkTableExists';
 import { createParLevel } from './helpers/createParLevel';
 import { deleteParLevel } from './helpers/deleteParLevel';
@@ -10,22 +11,39 @@ import { handleParLevelError } from './helpers/handleParLevelError';
 import { createParLevelSchema, updateParLevelSchema } from './helpers/schemas';
 import { updateParLevel } from './helpers/updateParLevel';
 
+async function safeParseBody<T>(request: NextRequest, schema: ZodSchema<T>): Promise<T> {
+  try {
+    const body = await request.json();
+    const result = schema.safeParse(body);
+    if (!result.success) {
+      throw ApiErrorHandler.createError(
+        result.error.issues[0]?.message || 'Invalid request body',
+        'VALIDATION_ERROR',
+        400,
+      );
+    }
+    return result.data;
+  } catch (error) {
+    if (error instanceof Error && 'status' in error) throw error;
+    throw ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400);
+  }
+}
+
 export async function GET(request: NextRequest) {
   try {
     // Authenticate and setup Supabase
-    const { supabaseAdmin, error: authError } = await authenticateAndSetup(request);
-    if (authError) {
-      return authError;
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) throw new Error('Unexpected database state');
 
     // Check if table exists
-    const { exists, error: tableError } = await checkTableExists(supabaseAdmin!);
+    const { exists, error: tableError } = await checkTableExists(supabase);
     if (tableError) {
       return tableError;
     }
 
     // Fetch par levels
-    const { data, error: fetchError } = await fetchParLevels(supabaseAdmin!);
+    const { data, error: fetchError } = await fetchParLevels(supabase);
     if (fetchError) {
       return fetchError;
     }
@@ -35,6 +53,8 @@ export async function GET(request: NextRequest) {
       data: data || [],
     });
   } catch (err) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Par Levels API] Unexpected error in GET:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
@@ -53,37 +73,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { supabaseAdmin, error: authError } = await authenticateAndSetup(request);
-    if (authError) {
-      return authError;
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Par Levels API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    const validationResult = createParLevelSchema.safeParse(body);
-    if (!validationResult.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const data = await createParLevel(validationResult.data);
+    const body = await safeParseBody(request, createParLevelSchema);
+    const data = await createParLevel(supabase, body);
 
     return NextResponse.json({
       success: true,
@@ -91,12 +86,14 @@ export async function POST(request: NextRequest) {
       data,
     });
   } catch (err: unknown) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Par Levels API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/par-levels', method: 'POST' },
     });
-    if (err && typeof err === 'object' && 'status' in err && typeof err.status === 'number') {
-      return NextResponse.json(err, { status: err.status });
+    if (err && typeof err === 'object' && 'status' in err && typeof (err as { status: unknown }).status === 'number') {
+      return NextResponse.json(err, { status: (err as { status: number }).status });
     }
     return handleParLevelError(err, 'POST');
   }
@@ -104,38 +101,13 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const { supabaseAdmin, error: authError } = await authenticateAndSetup(request);
-    if (authError) {
-      return authError;
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Par Levels API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
-    }
-
-    const validationResult = updateParLevelSchema.safeParse(body);
-    if (!validationResult.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const { id, ...updates } = validationResult.data;
-    const data = await updateParLevel(id, updates);
+    const body = await safeParseBody(request, updateParLevelSchema);
+    const { id, ...updates } = body;
+    const data = await updateParLevel(supabase, id, updates);
 
     return NextResponse.json({
       success: true,
@@ -143,12 +115,14 @@ export async function PUT(request: NextRequest) {
       data,
     });
   } catch (err: unknown) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Par Levels API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/par-levels', method: 'PUT' },
     });
-    if (err && typeof err === 'object' && 'status' in err && typeof err.status === 'number') {
-      return NextResponse.json(err, { status: err.status });
+    if (err && typeof err === 'object' && 'status' in err && typeof (err as { status: unknown }).status === 'number') {
+      return NextResponse.json(err, { status: (err as { status: number }).status });
     }
     return handleParLevelError(err, 'PUT');
   }
@@ -156,10 +130,9 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const { supabaseAdmin, error: authError } = await authenticateAndSetup(request);
-    if (authError) {
-      return authError;
-    }
+    const { supabase, error } = await standardAdminChecks(request);
+    if (error) return error;
+    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
@@ -171,7 +144,8 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    await deleteParLevel(id);
+
+    await deleteParLevel(supabase, id);
 
     return NextResponse.json({
       success: true,
