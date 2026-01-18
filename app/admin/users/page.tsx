@@ -13,16 +13,8 @@ import { useUsers } from './hooks/useUsers';
  * @returns {JSX.Element} Users admin page
  */
 export default function UsersPage() {
-  const {
-    users,
-    loading,
-    searchQuery,
-    setSearchQuery,
-    page,
-    setPage,
-    totalPages,
-    total,
-  } = useUsers();
+  const { users, loading, searchQuery, setSearchQuery, page, setPage, totalPages, total } =
+    useUsers();
 
   return (
     <div className="space-y-6">

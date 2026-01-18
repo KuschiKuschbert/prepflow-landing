@@ -1,7 +1,5 @@
 'use client';
-
 import { Icon } from '@/components/ui/Icon';
-import { AlertTriangle } from 'lucide-react';
 import type { UserError } from '../types';
 import { SEVERITY_COLORS } from '../constants';
 import { formatRelativeTime } from '../utils/formatRelativeTime';

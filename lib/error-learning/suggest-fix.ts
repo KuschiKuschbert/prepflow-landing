@@ -4,7 +4,6 @@
  */
 
 import { getFixSuggestions } from './pattern-matcher';
-import { loadKnowledgeBase } from './knowledge-base';
 import type { KnowledgeBaseError } from './knowledge-base';
 
 export interface FixSuggestion {

@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
-import { COGSCalculation } from '../../../../cogs/types';
-import { Ingredient, RecipeIngredient } from '../../../../cogs/types';
+import { RecipeIngredient } from '../../../../cogs/types';
 
 interface UseRecipeEditHandlersProps {
   handleAddIngredient: (

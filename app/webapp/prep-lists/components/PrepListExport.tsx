@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { Icon } from '@/components/ui/Icon';
-import { X, Printer, FileText } from 'lucide-react';
+import { X, Printer } from 'lucide-react';
 import { usePrepListExport } from '../hooks/usePrepListExport';
 import type { PrepList, SectionData, KitchenSection } from '../types';
 

@@ -1,8 +1,6 @@
 'use client';
-
 import React from 'react';
 import { equipmentTypes } from './equipment-config';
-import { EquipmentType } from '../types';
 import { X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 

@@ -4,7 +4,7 @@
 
 import { logger } from '@/lib/logger';
 import { lookupMenuItemDataFromCache } from './batchFetchMenuItemData';
-import { MenuItemData, MenuItemSubRecipe } from './fetchMenuItemData';
+import { MenuItemData } from './fetchMenuItemData';
 import { CollectedSubRecipe, SubRecipeType } from './recipe-card-types';
 
 /**

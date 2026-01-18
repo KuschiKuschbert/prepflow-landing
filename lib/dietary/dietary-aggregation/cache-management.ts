@@ -1,9 +1,3 @@
-/**
- * Cache management utilities for dietary status.
- * Handles caching and invalidation of dietary status in the database.
- */
-
-import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import type { DietaryDetectionResult } from '../vegetarian-vegan-detection';

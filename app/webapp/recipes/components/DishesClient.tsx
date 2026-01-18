@@ -1,11 +1,10 @@
 'use client';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { formatRecipeName } from '@/lib/text-utils';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useAIInstructions } from '../hooks/useAIInstructions';
 import { useRecipeIngredients } from '../hooks/useRecipeIngredients';
 import { useRecipePricing } from '../hooks/useRecipePricing';
-import { Dish, Recipe } from '../types';
 import { DishesBulkActionsSection } from './DishesBulkActionsSection';
 import { DishesListViewSection } from './DishesListViewSection';
 import { DishesModalsSection } from './DishesModalsSection';

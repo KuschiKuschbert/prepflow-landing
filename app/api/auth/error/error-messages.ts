@@ -11,19 +11,21 @@ export interface ErrorMessage {
   troubleshooting?: string[];
 }
 
-export const ErrorTypeSchema = z.enum([
-  'Configuration',
-  'AccessDenied',
-  'Verification',
-  'Callback',
-  'autho',
-  'auth0',
-  'MissingEmail',
-  'MissingAccountOrUser',
-  'MissingToken',
-  'InvalidCallbackUrl',
-  'Default'
-]).catch('Default');
+export const ErrorTypeSchema = z
+  .enum([
+    'Configuration',
+    'AccessDenied',
+    'Verification',
+    'Callback',
+    'autho',
+    'auth0',
+    'MissingEmail',
+    'MissingAccountOrUser',
+    'MissingToken',
+    'InvalidCallbackUrl',
+    'Default',
+  ])
+  .catch('Default');
 
 export type AuthErrorType = z.infer<typeof ErrorTypeSchema>;
 

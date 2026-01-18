@@ -1,11 +1,9 @@
 'use client';
-
 import React from 'react';
 import { Recipe, RecipePriceData } from '../types';
-import { Edit, Trash2, Check, Eye } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { formatRecipeDate } from '../utils/formatDate';
 import { useRecipeTableSort } from '../hooks/useRecipeTableSort';
 import { RecipeTableRow } from './RecipeTableRow';
 

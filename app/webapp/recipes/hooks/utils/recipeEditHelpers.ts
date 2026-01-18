@@ -1,4 +1,4 @@
-import { Recipe, RecipeIngredientWithDetails } from '../../types';
+import { Recipe } from '../../types';
 
 /**
  * Store recipe data in sessionStorage for COGS editor

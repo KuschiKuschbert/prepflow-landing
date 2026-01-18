@@ -1,10 +1,8 @@
 'use client';
-
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import { useTranslation } from '@/lib/useTranslation';
 import { logger } from '@/lib/logger';
 import { useState, useEffect } from 'react';
-import { TemperatureEquipment, TemperatureLog } from '../types';
 import { AddTemperatureLogForm } from './AddTemperatureLogForm';
 import { EquipmentDetailDrawer } from './EquipmentDetailDrawer';
 import { TemperatureFilters } from './TemperatureFilters';

@@ -7,7 +7,7 @@ import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { isArcadeDisabled, isTouchDevice, prefersReducedMotion } from '@/lib/arcadeGuards';
 import { useTranslation } from '@/lib/useTranslation';
 import { usePathname } from 'next/navigation';
-import { memo, useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import { memo, useEffect, useRef, useState, useCallback } from 'react';
 import TomatoToss from '../../../components/EasterEggs/TomatoToss';
 import { BottomNavBar } from './navigation/BottomNavBar';
 import { MobileFAB } from './navigation/MobileFAB';

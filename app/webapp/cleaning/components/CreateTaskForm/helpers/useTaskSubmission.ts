@@ -5,7 +5,6 @@
 import { useNotification } from '@/contexts/NotificationContext';
 import type { FrequencyType } from '@/lib/cleaning/frequency-calculator';
 import { logger } from '@/lib/logger';
-import { useState } from 'react';
 
 interface FormData {
   task_name: string;

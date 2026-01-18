@@ -16,7 +16,7 @@ interface RecipeIdRow {
 async function collectDishIngredients(
   dishIds: Set<string>,
   menuId: string,
-  ingredientIds: Set<string>
+  ingredientIds: Set<string>,
 ): Promise<void> {
   if (dishIds.size === 0 || !supabaseAdmin) return;
 
@@ -81,7 +81,7 @@ async function collectDishIngredients(
 async function collectRecipeIngredients(
   recipeIds: Set<string>,
   menuId: string,
-  ingredientIds: Set<string>
+  ingredientIds: Set<string>,
 ): Promise<void> {
   if (recipeIds.size === 0 || !supabaseAdmin) return;
 
@@ -122,7 +122,7 @@ export async function collectIngredientIds(
 
   await Promise.all([
     collectDishIngredients(dishIds, menuId, ingredientIds),
-    collectRecipeIngredients(recipeIds, menuId, ingredientIds)
+    collectRecipeIngredients(recipeIds, menuId, ingredientIds),
   ]);
 
   return ingredientIds;

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Recipe } from '../../types';
 import { COGSCalculation } from '../../../cogs/types';
 import { logger } from '@/lib/logger';

@@ -3,13 +3,8 @@
  * Extracted from report-generator.ts
  */
 
-import {
-  formatAustralianDate,
-  getDaysUntilExpiry,
-  getExpiryStatus,
-  formatAUD,
-} from '../australian-standards';
-import type { ReportData, StatusColors, StatusLabels } from '../report-types';
+import { formatAustralianDate, getDaysUntilExpiry, getExpiryStatus } from '../australian-standards';
+import type { ReportData } from '../report-types';
 
 export function generateComplianceRecords(records: ReportData['compliance_records']): string {
   if (!records || records.all_records.length === 0) {

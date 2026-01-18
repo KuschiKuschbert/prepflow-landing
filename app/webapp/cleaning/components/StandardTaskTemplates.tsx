@@ -1,6 +1,4 @@
 'use client';
-
-import { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { Sparkles } from 'lucide-react';
 import { useNotification } from '@/contexts/NotificationContext';

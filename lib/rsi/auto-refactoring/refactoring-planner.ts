@@ -193,10 +193,7 @@ export class RefactoringPlanner {
     }
 
     // 4. "console.log" or "logging"
-    if (
-      itemText.toLowerCase().includes('log') ||
-      itemText.toLowerCase().includes('logger')
-    ) {
+    if (itemText.toLowerCase().includes('log') || itemText.toLowerCase().includes('logger')) {
       return {
         id: `sanitize-logs-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
         title: `Sanitize Logs: ${title}`,
@@ -205,7 +202,11 @@ export class RefactoringPlanner {
         riskScore: 1,
         status: 'pending',
         codemodPath: 'lib/rsi/auto-refactoring/codemods/log-sanitization.ts',
-        targetFiles: this.extractPath(itemText) || ['app/**/*.{ts,tsx}', 'lib/**/*.ts', '!lib/rsi/**/*'],
+        targetFiles: this.extractPath(itemText) || [
+          'app/**/*.{ts,tsx}',
+          'lib/**/*.ts',
+          '!lib/rsi/**/*',
+        ],
         sourceDebtItem: itemText,
       };
     }

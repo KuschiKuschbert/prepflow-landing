@@ -21,7 +21,7 @@ export class CodemodRunner {
     const command = `npx jscodeshift -t ${codemodPath} ${filesStr} --parser=tsx ${dryRunFlag}`;
 
     try {
-const { stdout, stderr } = await execAsync(command);
+      const { stdout, stderr } = await execAsync(command);
       if (stdout) logger.dev(stdout);
       if (stderr) logger.error(stderr);
       return { success: true, output: stdout };

@@ -3,11 +3,7 @@
  * Builds searchable index for fast error lookup
  */
 
-import {
-  loadKnowledgeBase,
-  type KnowledgeBaseError,
-  type KnowledgeBasePattern,
-} from './knowledge-base';
+import { loadKnowledgeBase } from './knowledge-base';
 import fs from 'fs/promises';
 import path from 'path';
 

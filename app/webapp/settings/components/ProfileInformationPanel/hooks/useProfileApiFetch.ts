@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { getCachedData, prefetchApi } from '@/lib/cache/data-cache';
+import { prefetchApi } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
 import { useNotification } from '@/contexts/NotificationContext';
 import type { ProfileData } from '../types';

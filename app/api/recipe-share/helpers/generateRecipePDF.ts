@@ -27,11 +27,11 @@ interface RecipeForPDF {
  */
 export function generateRecipePDF(recipe: RecipeForPDF): string {
   // Import formatting utilities
-   
+
   const { formatRecipeForPrint } = require('@/app/webapp/recipes/utils/formatRecipeForPrint');
-   
+
   const { getRecipePrintStyles } = require('@/app/webapp/recipes/utils/recipePrintStyles');
-   
+
   const { generateExportTemplate } = require('@/lib/exports/pdf-template');
 
   // Format ingredients for the print function

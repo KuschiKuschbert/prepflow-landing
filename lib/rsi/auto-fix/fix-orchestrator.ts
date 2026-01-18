@@ -1,4 +1,4 @@
-import { logger } from "@/lib/logger";
+import { logger } from '@/lib/logger';
 import { exec } from 'child_process';
 import util from 'util';
 import { EffectivenessTracker } from '../feedback/effectiveness-tracker';
@@ -67,7 +67,7 @@ export class FixOrchestrator {
     const minConfidence = options.minConfidence ?? ConfidenceLevel.MEDIUM;
     if (score.level === ConfidenceLevel.LOW && minConfidence !== ConfidenceLevel.LOW) {
       logger.info(
-        `⚠️ Skipping Low Confidence fix: ${suggestion.description} (${score.score.toFixed(2)})`
+        `⚠️ Skipping Low Confidence fix: ${suggestion.description} (${score.score.toFixed(2)})`,
       );
       return;
     }
@@ -75,7 +75,7 @@ export class FixOrchestrator {
     // Dry Run
     if (options.dryRun) {
       logger.info(
-        `[DRY RUN] Would apply: ${suggestion.description} (${score.level}, ${score.score.toFixed(2)})`
+        `[DRY RUN] Would apply: ${suggestion.description} (${score.level}, ${score.score.toFixed(2)})`,
       );
       return;
     }

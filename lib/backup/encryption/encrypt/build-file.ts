@@ -3,7 +3,7 @@
  */
 
 import type { EncryptedBackup } from '../../types';
-import { AUTH_TAG_LENGTH, BACKUP_HEADER, BACKUP_VERSION } from '../constants';
+import { BACKUP_HEADER, BACKUP_VERSION } from '../constants';
 
 interface BuildFileParams {
   ciphertext: Uint8Array;

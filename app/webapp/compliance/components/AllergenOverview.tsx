@@ -4,7 +4,6 @@
  */
 
 'use client';
-
 import { useState } from 'react';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { TablePagination } from '@/components/ui/TablePagination';
@@ -16,7 +15,6 @@ import { ExportDropdown } from './AllergenOverview/components/ExportDropdown';
 import { FilterBar } from './AllergenOverview/components/FilterBar';
 import { AllergenTable } from './AllergenOverview/components/AllergenTable';
 import { AllergenCards } from './AllergenOverview/components/AllergenCards';
-import type { AllergenItem } from './AllergenOverview/types';
 
 // Types moved to ./types.ts to avoid circular dependencies
 

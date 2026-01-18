@@ -5,18 +5,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createPrepList } from './helpers/createPrepList';
 import { deletePrepList } from './helpers/deletePrepList';
 import {
-    combinePrepListData,
-    fetchIngredientsBatch,
-    fetchPrepListsData,
-    fetchRelatedData,
+  combinePrepListData,
+  fetchIngredientsBatch,
+  fetchPrepListsData,
+  fetchRelatedData,
 } from './helpers/fetchPrepLists';
 import { handlePrepListError } from './helpers/handlePrepListError';
 import { parseDeleteRequest } from './helpers/parseDeleteRequest';
-import {
-    createPrepListSchema,
-    getPrepListsSchema,
-    updatePrepListSchema,
-} from './helpers/schemas';
+import { createPrepListSchema, getPrepListsSchema, updatePrepListSchema } from './helpers/schemas';
 import { transformItems } from './helpers/transformItems';
 import { updatePrepList } from './helpers/updatePrepList';
 
@@ -54,7 +50,7 @@ export async function GET(request: NextRequest) {
 
     if (empty) {
       const totalPages = Math.max(1, Math.ceil(count / pageSize));
-      const mappedPrepLists = prepLists.map((list) => ({
+      const mappedPrepLists = prepLists.map(list => ({
         ...list,
         kitchen_section_id: list.kitchen_section_id || list.section_id,
         kitchen_sections: null,
@@ -69,7 +65,7 @@ export async function GET(request: NextRequest) {
     const { sectionsMap, itemsByPrepListId, prepListItems } = await fetchRelatedData(prepLists);
     const ingredientIds = Array.from(
       new Set(
-        prepListItems.map((item) => item.ingredient_id).filter((id): id is string => Boolean(id)),
+        prepListItems.map(item => item.ingredient_id).filter((id): id is string => Boolean(id)),
       ),
     );
     const ingredientsMap = await fetchIngredientsBatch(ingredientIds);

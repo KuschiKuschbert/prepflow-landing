@@ -27,7 +27,7 @@ export class RuleManager {
       }
 
       if (rules.some(r => r.name === rule.name)) {
-return false;
+        return false;
       }
 
       rules.push(rule);
@@ -58,7 +58,7 @@ return false;
 
       // Check if rule already exists
       if (content.includes(`'${rule.definition}':`)) {
-return false;
+        return false;
       }
 
       // Injection logic: Find "rules: {" and insert after it
@@ -68,7 +68,7 @@ return false;
       if (content.includes(insertionPoint)) {
         content = content.replace(insertionPoint, `${insertionPoint}\n      ${ruleEntry}`);
         fs.writeFileSync(RSI_ESLINT_CONFIG_PATH, content);
-return true;
+        return true;
       } else {
         logger.error('Could not find rules block in RSI config.');
         return false;

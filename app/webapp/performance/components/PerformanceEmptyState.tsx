@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { BarChart3, Sparkles, TrendingUp, ArrowRight } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { Button } from '@/components/ui/Button';
-import { LANDING_COLORS, LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
+import { LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
 import Link from 'next/link';
 import { useNotification } from '@/contexts/NotificationContext';
 

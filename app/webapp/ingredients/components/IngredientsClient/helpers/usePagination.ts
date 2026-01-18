@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 interface UsePaginationProps {
   filteredTotal: number;
   itemsPerPage: number;

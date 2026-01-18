@@ -7,7 +7,6 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { enrichIngredientWithAllergensHybrid } from '@/lib/allergens/hybrid-allergen-detection';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';

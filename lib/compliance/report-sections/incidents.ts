@@ -3,13 +3,8 @@
  * Extracted from report-generator.ts
  */
 
-import {
-  formatAustralianDate,
-  getDaysUntilExpiry,
-  getExpiryStatus,
-  formatAUD,
-} from '../australian-standards';
-import type { ReportData, StatusColors, StatusLabels } from '../report-types';
+import { formatAustralianDate } from '../australian-standards';
+import type { ReportData } from '../report-types';
 
 export function generateIncidents(incidents: ReportData['incidents']): string {
   if (!incidents || incidents.total_incidents === 0) {

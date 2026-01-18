@@ -11,19 +11,6 @@ import { isSquarePOSEnabled } from '@/lib/square/feature-flags';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import {
-  syncCatalogFromSquare,
-  syncCatalogToSquare,
-  syncCatalogBidirectional,
-} from '@/lib/square/sync/catalog';
-import { syncOrdersFromSquare, syncRecentOrdersFromSquare } from '@/lib/square/sync/orders';
-import {
-  syncStaffFromSquare,
-  syncStaffToSquare,
-  syncStaffBidirectional,
-} from '@/lib/square/sync/staff';
-import { syncCostsToSquare } from '@/lib/square/sync/costs';
-import { performInitialSync } from '@/lib/square/sync/initial-sync';
 import { z } from 'zod';
 import { handleSyncOperation } from './helpers/sync-operation-handler';
 

@@ -1,5 +1,5 @@
 import { supabase } from '../supabase';
-import { getAllDrafts, DraftMetadata } from '../autosave-storage';
+import { getAllDrafts } from '../autosave-storage';
 import { type EntityType } from '../autosave-sync-utils';
 import { logger } from '@/lib/logger';
 

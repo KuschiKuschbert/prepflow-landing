@@ -1,16 +1,6 @@
 'use client';
 import { Icon } from '@/components/ui/Icon';
-import {
-  ArrowDown,
-  ArrowUp,
-  ArrowUpDown,
-  Edit,
-  Power,
-  PowerOff,
-  QrCode,
-  Trash2,
-  LucideIcon,
-} from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, LucideIcon } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { TemperatureEquipment } from '../types';
 import { EquipmentListTableFilters } from './EquipmentListTableFilters';

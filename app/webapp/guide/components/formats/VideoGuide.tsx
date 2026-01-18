@@ -4,11 +4,9 @@
  */
 
 'use client';
-
 import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
 import { Icon } from '@/components/ui/Icon';
-import { Play, Pause, Volume2, VolumeX, Maximize } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import type { VideoContent } from '../../data/guide-types';
 
 interface VideoGuideProps {

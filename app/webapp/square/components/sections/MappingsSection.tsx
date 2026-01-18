@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { Link2, AlertCircle } from 'lucide-react';
+import { Link2 } from 'lucide-react';
 import { logger } from '@/lib/logger';
 import { useNotification } from '@/contexts/NotificationContext';
 

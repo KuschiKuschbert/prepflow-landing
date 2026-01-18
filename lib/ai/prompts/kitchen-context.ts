@@ -9,7 +9,7 @@
  * Integrates with CountryContext and temperature standards
  */
 
-import { getCountryConfig, CountryConfig } from '@/lib/country-config';
+import { getCountryConfig } from '@/lib/country-config';
 import { getTemperatureStandards, TemperatureStandards } from '@/lib/temperature-standards';
 
 export interface KitchenContext {

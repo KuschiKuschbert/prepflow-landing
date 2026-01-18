@@ -1,6 +1,6 @@
 // PrepFlow Personality System - Adaptive Personality Logic
 
-import { getBehaviorProfile, type BehaviorProfile } from './behavior-tracker';
+import { getBehaviorProfile } from './behavior-tracker';
 import { type PersonalitySettings } from './schema';
 
 export interface AdaptiveSettings {

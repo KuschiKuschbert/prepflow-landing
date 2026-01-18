@@ -1,10 +1,8 @@
 'use client';
-
 import React from 'react';
 import { Dish, DishCostData } from '../types';
-import { Edit, Trash2, Check, Eye } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-import { formatRecipeDate } from '../utils/formatDate';
 import { useDishTableSort } from '../hooks/useDishTableSort';
 import { DishTableRow } from './DishTableRow';
 

@@ -1,9 +1,7 @@
 'use client';
-
 import React from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { Supplier } from '../types';
-import { getSupplierIcon } from '../utils';
 import { Icon } from '@/components/ui/Icon';
 import { User, Mail, Phone, Globe, Edit, FileText, Truck } from 'lucide-react';
 

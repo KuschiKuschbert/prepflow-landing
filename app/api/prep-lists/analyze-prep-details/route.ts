@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400),
         { status: 400 },
-      )
+      );
     }
 
     const validation = analyzePrepDetailsSchema.safeParse(body);

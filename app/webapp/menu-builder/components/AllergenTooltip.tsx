@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { getAllergen } from '@/lib/allergens/australian-allergens';
 
 interface AllergenTooltipProps {

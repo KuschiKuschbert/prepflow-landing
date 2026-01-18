@@ -2,14 +2,7 @@
  * Key management for backup encryption.
  */
 
-import {
-  AUTH_TAG_LENGTH,
-  BACKUP_VERSION,
-  ENCRYPTION_MODE_PREPFLOW_ONLY,
-  ENCRYPTION_MODE_USER_PASSWORD,
-  IV_LENGTH,
-  PBKDF2_ITERATIONS,
-} from './constants';
+import { PBKDF2_ITERATIONS } from './constants';
 
 /**
  * Get PrepFlow encryption key from environment variable.

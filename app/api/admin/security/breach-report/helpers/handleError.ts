@@ -1,6 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 /**
  * Handle errors in breach report API routes

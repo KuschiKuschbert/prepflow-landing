@@ -11,7 +11,7 @@ export function transformItems(
     notes?: string;
   }>,
 ): CreatePrepListItemParams[] | undefined {
-  return items?.map((item) => ({
+  return items?.map(item => ({
     ingredient_id: item.ingredient_id || '',
     quantity: item.quantity,
     unit: item.unit,

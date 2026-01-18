@@ -1,15 +1,4 @@
-/**
- * generate Compliance Gaps
- * Extracted from report-generator.ts
- */
-
-import {
-  formatAustralianDate,
-  getDaysUntilExpiry,
-  getExpiryStatus,
-  formatAUD,
-} from '../australian-standards';
-import type { ReportData, StatusColors, StatusLabels } from '../report-types';
+import type { ReportData } from '../report-types';
 
 export function generateComplianceGaps(gaps: ReportData['compliance_gaps']): string {
   if (!gaps || gaps.total_gaps === 0) {

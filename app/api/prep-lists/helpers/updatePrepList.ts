@@ -56,7 +56,7 @@ export async function updatePrepList(params: UpdatePrepListParams) {
 
     // Add new items
     if (items.length > 0) {
-      const prepItems = items.map((item) => ({
+      const prepItems = items.map(item => ({
         prep_list_id: id,
         ingredient_id: item.ingredient_id,
         quantity: item.quantity,

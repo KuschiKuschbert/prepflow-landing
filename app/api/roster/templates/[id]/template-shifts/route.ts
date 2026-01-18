@@ -1,11 +1,3 @@
-/**
- * Template Shifts API Route
- * Handles GET (list template shifts) and POST (create template shift) operations for a template.
- *
- * @module api/roster/templates/[id]/template-shifts
- */
-
-import { z } from 'zod';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';

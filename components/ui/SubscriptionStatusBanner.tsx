@@ -5,7 +5,7 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/navigation';
 import ErrorBoundary from './ErrorBoundary';
 import { Icon } from './Icon';
-import { AlertCircle, AlertTriangle, Info, X } from 'lucide-react';
+import { AlertTriangle, Info, X } from 'lucide-react';
 import { logger } from '@/lib/logger';
 
 interface SubscriptionStatusBannerProps {

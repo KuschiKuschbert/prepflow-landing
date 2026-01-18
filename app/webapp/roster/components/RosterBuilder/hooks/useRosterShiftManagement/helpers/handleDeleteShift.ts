@@ -1,4 +1,3 @@
-import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import type { Shift } from '../../../../../types';
 

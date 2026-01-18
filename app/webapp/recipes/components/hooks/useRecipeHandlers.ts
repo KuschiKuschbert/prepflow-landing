@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { Recipe, RecipeIngredientWithDetails } from '../../types';
+import { Recipe } from '../../types';
 import { handlePreviewRecipe as handlePreviewRecipeUtil } from './utils/handlePreviewRecipe';
 import { handleDuplicateRecipeWrapper as handleDuplicateRecipeWrapperUtil } from './utils/handleDuplicateRecipe';
 import { buildRecipeHandlers } from './utils/buildRecipeHandlers';

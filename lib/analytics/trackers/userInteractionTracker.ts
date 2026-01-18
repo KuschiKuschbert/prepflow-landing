@@ -1,4 +1,4 @@
-import type { AnalyticsEvent, ConversionEvent } from '../types';
+import type { ConversionEvent } from '../types';
 
 export function trackUserInteractions(
   sessionId: string,

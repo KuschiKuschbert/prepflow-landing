@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 import { RecipeIngredientsList } from './RecipeIngredientsList';
 import { Icon } from '@/components/ui/Icon';
-import { X, Edit, Share2, Printer, Loader2 } from 'lucide-react';
+import { X, Edit, Share2, Printer } from 'lucide-react';
 
 interface RecipePreviewModalProps {
   showPreview: boolean;

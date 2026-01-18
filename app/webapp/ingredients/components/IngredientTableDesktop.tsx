@@ -1,7 +1,5 @@
 'use client';
-
 import { Icon } from '@/components/ui/Icon';
-import { ChevronDown, ChevronUp } from 'lucide-react';
 import { IngredientTableRow } from './IngredientTableRow';
 import { type SortOption } from '../hooks/useIngredientFiltering';
 

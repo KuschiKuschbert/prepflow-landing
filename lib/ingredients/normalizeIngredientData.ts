@@ -1,21 +1,10 @@
 // PrepFlow - Ingredient Data Normalization Utilities (extracted from useIngredientCRUD.ts)
 import {
-  convertUnit,
   convertToStandardUnit,
-  isVolumeUnit,
-  isWeightUnit,
-  isPieceUnit,
   getUnitCategory,
   STANDARD_UNITS,
   normalizeUnit,
 } from '@/lib/unit-conversion';
-import {
-  formatIngredientName,
-  formatBrandName,
-  formatSupplierName,
-  formatStorageLocation,
-  formatTextInput,
-} from '@/lib/text-utils';
 
 export interface IngredientData {
   ingredient_name?: string;

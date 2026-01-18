@@ -4,6 +4,7 @@
 > **Process**: The "Improver" persona should review this file and submit PRs to clear debt.
 
 ## High Priority
+
 - [x] Sanitize logs in `lib/rsi/auto-fix/fix-orchestrator.ts` <!-- id: 105 -->
 - [ ] Implement Zod validation for `app/api/auth/error/route.ts` <!-- id: 102 -->
 

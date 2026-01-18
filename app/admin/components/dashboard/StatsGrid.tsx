@@ -1,12 +1,5 @@
 import { Icon } from '@/components/ui/Icon';
-import {
-    Activity,
-    AlertTriangle,
-    CreditCard,
-    Database,
-    MessageSquare,
-    Users
-} from 'lucide-react';
+import { Activity, AlertTriangle, CreditCard, Database, MessageSquare, Users } from 'lucide-react';
 import Link from 'next/link';
 
 interface DashboardStats {

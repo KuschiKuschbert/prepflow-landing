@@ -25,7 +25,7 @@ export interface OrchestratorConfig {
 
 export class RSIOrchestrator {
   static async run(config: OrchestratorConfig) {
-// 1. Safety Check (Global Gate)
+    // 1. Safety Check (Global Gate)
     if (!config.dryRun) {
       const isClean = await SafetyChecker.isGitClean();
       if (!isClean) {
@@ -39,37 +39,37 @@ export class RSIOrchestrator {
     try {
       // 2. Auto-Fixer
       if (config.modules.autoFix) {
-await this.runScript('rsi:fix', config.dryRun);
+        await this.runScript('rsi:fix', config.dryRun);
       }
 
       // 3. Self-Optimization
       if (config.modules.selfOptimize) {
-await this.runScript('rsi:optimize', config.dryRun);
+        await this.runScript('rsi:optimize', config.dryRun);
       }
 
       // 4. Meta-Learning
       if (config.modules.metaLearning) {
-await this.runScript('rsi:evolve', config.dryRun);
+        await this.runScript('rsi:evolve', config.dryRun);
       }
 
       // 5. Rule Evolution
       if (config.modules.ruleEvolution) {
-await this.runScript('rsi:rule', config.dryRun, ['generate']);
+        await this.runScript('rsi:rule', config.dryRun, ['generate']);
       }
 
       // 6. Auto-Refactoring (Expensive, usually separate)
       if (config.modules.autoRefactor) {
-await this.runScript('rsi:refactor', config.dryRun);
+        await this.runScript('rsi:refactor', config.dryRun);
       }
 
       // 7. Predictive Analysis (merged from autonomous-developer)
       if (config.modules.predictiveAnalysis) {
-await runPredictiveAnalysis(config.dryRun);
+        await runPredictiveAnalysis(config.dryRun);
       }
 
       // 8. Architecture Analysis (merged from autonomous-developer)
       if (config.modules.architectureAnalysis) {
-await runArchitectureAnalysis(config.dryRun);
+        await runArchitectureAnalysis(config.dryRun);
       }
     } catch (error) {
       logger.error('RSI Run failed:', error);
@@ -100,9 +100,9 @@ await runArchitectureAnalysis(config.dryRun);
     const dryRunFlag = dryRun ? '-- --dry-run' : '';
     const argsStr = args.join(' ');
     const command = `npm run ${scriptName} ${dryRunFlag} ${argsStr}`;
-try {
+    try {
       const { stdout, stderr } = await execAsync(command);
-if (stderr) logger.error(stderr);
+      if (stderr) logger.error(stderr);
     } catch (error: unknown) {
       logger.error(`Script ${scriptName} failed:`);
       const errorMessage = error instanceof Error ? error.message : String(error);

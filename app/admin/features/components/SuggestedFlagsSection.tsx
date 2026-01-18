@@ -3,7 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { Sparkles } from 'lucide-react';
 import { useMemo } from 'react';
-import type { DiscoveredFlag, FeatureFlag, HiddenFeatureFlag } from '../types';
+import type { DiscoveredFlag } from '../types';
 
 interface SuggestedFlagsSectionProps {
   discoveredFlags: { regular: DiscoveredFlag[]; hidden: DiscoveredFlag[] };

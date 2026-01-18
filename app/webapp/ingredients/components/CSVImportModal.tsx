@@ -5,7 +5,7 @@ import { useTranslation } from '@/lib/useTranslation';
 import { logger } from '@/lib/logger';
 import { parseIngredientsCSV } from '../hooks/helpers/csvImport';
 import { CSVImportPreview } from './CSVImportPreview';
-import { ImportProgress, type ImportProgressState } from '@/components/ui/ImportProgress';
+import { ImportProgress } from '@/components/ui/ImportProgress';
 
 interface Ingredient {
   id: string;

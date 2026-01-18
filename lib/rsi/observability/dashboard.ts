@@ -55,7 +55,7 @@ export class RSIDashboard {
     md += `\n---\n*This report is generated automatically by the RSI Orchestrator.*`;
 
     fs.writeFileSync(reportPath, md);
-}
+  }
 
   private static formatStatus(status: string): string {
     switch (status) {

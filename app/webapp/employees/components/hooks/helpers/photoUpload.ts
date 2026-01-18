@@ -1,5 +1,4 @@
 import { logger } from '@/lib/logger';
-import { useNotification } from '@/contexts/NotificationContext';
 
 /**
  * Upload photo to server.

@@ -5,7 +5,7 @@ import { useTranslation } from '@/lib/useTranslation';
 import { SupplierPriceList } from '../types';
 import { getSupplierIcon } from '../utils';
 import { Icon } from '@/components/ui/Icon';
-import { FileText, CheckCircle2, FileUp, Camera, Edit } from 'lucide-react';
+import { FileText, CheckCircle2, Camera, Edit } from 'lucide-react';
 
 interface PriceListsListProps {
   priceLists: SupplierPriceList[];

@@ -5,8 +5,7 @@
  */
 
 import type { Menu, MenuItem } from '../types';
-import { AUSTRALIAN_ALLERGENS, consolidateAllergens } from '@/lib/allergens/australian-allergens';
-import { getAllergenIconSVG } from './allergenIconUtils';
+import { AUSTRALIAN_ALLERGENS } from '@/lib/allergens/australian-allergens';
 import { formatCategorySection } from './formatMenuForPrint/helpers/formatCategorySection';
 import { generateAllergenMatrix } from './formatMenuForPrint/helpers/generateAllergenMatrix';
 

@@ -5,13 +5,7 @@ import { useTranslation } from '@/lib/useTranslation';
 import { ClipboardCheck } from 'lucide-react';
 import OptimizedImage from '@/components/OptimizedImage';
 import { ComplianceRecord } from '../types';
-import {
-  getTypeIcon,
-  getStatusColor,
-  getStatusIcon,
-  getStatusIconEmoji,
-  getDaysUntilExpiry,
-} from '../utils';
+import { getTypeIcon, getStatusColor, getStatusIcon, getDaysUntilExpiry } from '../utils';
 import { Icon } from '@/components/ui/Icon';
 
 interface ComplianceRecordsListProps {

@@ -1,7 +1,5 @@
 'use client';
-
 import { useDroppable } from '@dnd-kit/core';
-import { format } from 'date-fns';
 import { Icon } from '@/components/ui/Icon';
 import { Users, X } from 'lucide-react';
 import { logger } from '@/lib/logger';

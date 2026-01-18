@@ -12,7 +12,7 @@ import { TablePagination } from '@/components/ui/TablePagination';
 import PerformanceTable from '../components/PerformanceTable';
 import { usePerformanceData } from '../hooks/usePerformanceData';
 import { usePerformanceFilters } from '../hooks/usePerformanceFilters';
-import { DateRange, DateRangePreset } from '../types';
+import { DateRange } from '../types';
 import { useState } from 'react';
 
 export default function PerformanceClient() {

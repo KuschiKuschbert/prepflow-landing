@@ -15,25 +15,31 @@ const transform: Transform = (file: FileInfo, api: API, options: Options) => {
   root.find(j.ExportNamedDeclaration).forEach(path => {
     const decl = path.node.declaration;
     if (j.FunctionDeclaration.check(decl) && decl.id && ['POST', 'PUT'].includes(decl.id.name)) {
-
       // 2. Look for manual property checks on 'body'
       // Example: if (!body.id) return NextResponse.json(...)
-      const bodyChecks = j(path).find(j.IfStatement).filter(ifPath => {
-        const test = ifPath.node.test;
-        // Basic check for !body.prop
-        return j.UnaryExpression.check(test) &&
-               test.operator === '!' &&
-               j.MemberExpression.check(test.argument) &&
-               j.Identifier.check(test.argument.object) &&
-               test.argument.object.name === 'body';
-      });
+      const bodyChecks = j(path)
+        .find(j.IfStatement)
+        .filter(ifPath => {
+          const test = ifPath.node.test;
+          // Basic check for !body.prop
+          return (
+            j.UnaryExpression.check(test) &&
+            test.operator === '!' &&
+            j.MemberExpression.check(test.argument) &&
+            j.Identifier.check(test.argument.object) &&
+            test.argument.object.name === 'body'
+          );
+        });
 
       if (bodyChecks.length > 0) {
         // Here we would ideally insert zod schema logic
         // For this demo, we'll add a comment indicating the need for Zod
-        bodyChecks.at(0).get().insertBefore(
-          j.commentBlock(' TODO: Replace manual body validation with Zod safeParse ')
-        );
+        bodyChecks
+          .at(0)
+          .get()
+          .insertBefore(
+            j.commentBlock(' TODO: Replace manual body validation with Zod safeParse '),
+          );
         changed = true;
       }
     }

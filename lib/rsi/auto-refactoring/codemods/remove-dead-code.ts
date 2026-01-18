@@ -1,11 +1,11 @@
-import { API, FileInfo, Options, Transform } from 'jscodeshift';
+import { API, FileInfo, Transform } from 'jscodeshift';
 
 /**
  * Codemod: Remove Unused Imports
  * Note: This is a basic implementation. Real-world dead code detection is better handled
  * by ESLint --fix, but listing it here as a placeholder for more advanced dead-code logic.
  */
-const transform: Transform = (file: FileInfo, api: API, options: Options) => {
+const transform: Transform = (file: FileInfo, api: API) => {
   const j = api.jscodeshift;
   const root = j(file.source);
   let changed = false;
@@ -18,17 +18,29 @@ const transform: Transform = (file: FileInfo, api: API, options: Options) => {
       const name = specifier.local?.name;
       if (!name) return true;
 
-      const usages = root.find(j.Identifier, { name }).filter(idPath => {
-        const parent = idPath.parent.node;
-        // Ignore the definition in the import itself
+      // Special case: React might be implicitly used
+      if (name === 'React') return true;
+
+      // Look for ANY usage of the identifier name in AST
+      const hasAstUsage = root.find(j.Identifier, { name }).some(idPath => {
+        const p = idPath.parent.node;
         return (
-          !j.ImportSpecifier.check(parent) &&
-          !j.ImportDefaultSpecifier.check(parent) &&
-          !j.ImportNamespaceSpecifier.check(parent)
+          !j.ImportSpecifier.check(p) &&
+          !j.ImportDefaultSpecifier.check(p) &&
+          !j.ImportNamespaceSpecifier.check(p)
         );
       });
 
-      return usages.length > 0;
+      if (hasAstUsage) return true;
+
+      // Regex fallback: Search in source code (stripping single-line comments for better accuracy)
+      // This catches type references that some parsers might miss
+      const sourceWithoutComments = file.source.replace(/\/\/.*$/gm, '');
+      const nameRegex = new RegExp(`\\b${name}\\b`, 'g');
+      const matches = sourceWithoutComments.match(nameRegex) || [];
+
+      // If found more than once (one is the import itself), keep it
+      return matches.length > 1;
     });
 
     if (usedSpecifiers.length < specifiers.length) {

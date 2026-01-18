@@ -1,8 +1,6 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { useNotification } from '@/contexts/NotificationContext';
 import { useConfirm } from '@/hooks/useConfirm';
 import { useCleaningTasks } from '../hooks/useCleaningTasks';
 import { useAreaTasks } from './AreaTasksModal/hooks/useAreaTasks';

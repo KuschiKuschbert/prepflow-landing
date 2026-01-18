@@ -1,15 +1,4 @@
 'use client';
-
-/**
- * Responsive Card Actions Overlay Component
- *
- * Hover overlay for devices with hover capability (desktop/mouse).
- * Automatically hidden on touch devices via CSS media queries.
- *
- * @component
- */
-
-import { type LucideIcon } from 'lucide-react';
 import type { Action } from './ResponsiveCardActions';
 
 export interface ResponsiveCardActionsOverlayProps {

@@ -7,7 +7,6 @@ import {
   testURLConsistency,
 } from './test-helpers';
 import { addTest, createTestResults } from './test-utils';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Comprehensive Auth0 Test Endpoint

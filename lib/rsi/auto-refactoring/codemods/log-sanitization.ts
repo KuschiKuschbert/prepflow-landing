@@ -11,14 +11,14 @@ const transform: Transform = (file: FileInfo, api: API, options: Options) => {
 
   // 1. Check if logger is imported, if not, we'll need to add it if we use it
   const loggerImport = root.find(j.ImportDeclaration, {
-    source: { value: '@/lib/logger' }
+    source: { value: '@/lib/logger' },
   });
 
   const consoleLogs = root.find(j.CallExpression, {
     callee: {
       object: { name: 'console' },
-      property: { name: 'log' }
-    }
+      property: { name: 'log' },
+    },
   });
 
   if (consoleLogs.length > 0) {
@@ -28,8 +28,8 @@ const transform: Transform = (file: FileInfo, api: API, options: Options) => {
       j(path).replaceWith(
         j.callExpression(
           j.memberExpression(j.identifier('logger'), j.identifier('info')),
-          path.node.arguments
-        )
+          path.node.arguments,
+        ),
       );
       changed = true;
     });
@@ -38,7 +38,7 @@ const transform: Transform = (file: FileInfo, api: API, options: Options) => {
     if (changed && loggerImport.length === 0) {
       const importDecl = j.importDeclaration(
         [j.importSpecifier(j.identifier('logger'))],
-        j.literal('@/lib/logger')
+        j.literal('@/lib/logger'),
       );
 
       const body = root.find(j.Program).get('body');

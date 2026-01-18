@@ -10,7 +10,6 @@ import { requireAuth } from '@/lib/auth0-api-helpers';
 import { getComprehensiveScraperJob } from '../../../../scripts/recipe-scraper/jobs/comprehensive-scraper';
 import { createScraper } from './helpers/scraper-factory';
 import { scrapeRecipes } from './helpers/scraping-operations';
-import type { SourceType } from '../../../../scripts/recipe-scraper/config';
 
 /**
  * Handle authentication with proper error handling

@@ -2,14 +2,7 @@
 
 import { usePerformanceInsights } from '../hooks/usePerformanceInsights';
 import { PerformanceItem } from '../types';
-import {
-  Lightbulb,
-  TrendingUp,
-  TrendingDown,
-  AlertTriangle,
-  Award,
-  ArrowRight,
-} from 'lucide-react';
+import { Lightbulb, TrendingUp, AlertTriangle, Award } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import Link from 'next/link';
 

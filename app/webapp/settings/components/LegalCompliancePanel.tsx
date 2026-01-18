@@ -1,7 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { FileText, Shield, Cookie, Lock } from 'lucide-react';
+import { FileText, Shield, Lock } from 'lucide-react';
 import Link from 'next/link';
 
 /**

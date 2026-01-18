@@ -2,7 +2,7 @@
 
 import { EmptyState } from '@/components/ui/EmptyState';
 import { LANDING_COLORS } from '@/lib/landing-styles';
-import { Package, Plus, Upload, Download } from 'lucide-react';
+import { Package } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 interface IngredientEmptyStateProps {

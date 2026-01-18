@@ -15,7 +15,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 // Declare global types for singleton storage
 declare global {
-   
   var __PREPFLOW_SUPABASE_CLIENT__: SupabaseClient | undefined;
   interface Window {
     __PREPFLOW_SUPABASE_CLIENT__: SupabaseClient | undefined;

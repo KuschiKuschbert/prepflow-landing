@@ -1,6 +1,5 @@
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
-import { useState } from 'react';
 
 interface UseDialogActionsProps {
   menuId: string;

@@ -2,8 +2,11 @@ import { z } from 'zod';
 
 export const getPrepListsSchema = z.object({
   userId: z.string().optional(),
-  page: z.preprocess((val) => parseInt(val as string, 10), z.number().min(1).default(1)),
-  pageSize: z.preprocess((val) => parseInt(val as string, 10), z.number().min(1).max(100).default(10)),
+  page: z.preprocess(val => parseInt(val as string, 10), z.number().min(1).default(1)),
+  pageSize: z.preprocess(
+    val => parseInt(val as string, 10),
+    z.number().min(1).max(100).default(10),
+  ),
 });
 
 export const createPrepListSchema = z.object({
@@ -28,7 +31,9 @@ export const updatePrepListSchema = z.object({
   kitchenSectionId: z.string().optional(),
   name: z.string().optional(),
   notes: z.string().optional(),
-  status: z.enum(['pending', 'in_progress', 'completed', 'cancelled', 'draft', 'archived']).optional(),
+  status: z
+    .enum(['pending', 'in_progress', 'completed', 'cancelled', 'draft', 'archived'])
+    .optional(),
   items: z
     .array(
       z.object({

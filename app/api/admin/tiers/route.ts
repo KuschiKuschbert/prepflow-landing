@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin-auth';
 import { logger } from '@/lib/logger';
-import { z } from 'zod';
 import { fetchTiers } from './helpers/fetchTiers';
 import { createTier, tierConfigSchema } from './helpers/createTier';
 import { updateTier } from './helpers/updateTier';

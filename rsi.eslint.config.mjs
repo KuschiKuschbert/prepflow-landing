@@ -13,12 +13,10 @@ export default tseslint.config(
   },
   {
     files: ['**/*.ts', '**/*.tsx'],
-    extends: [
-      ...tseslint.configs.recommended,
-    ],
+    extends: [...tseslint.configs.recommended],
     rules: {
       '@typescript-eslint/no-explicit-any': 'error', // No Explicit Any (Native)
       // Validated Rules will be injected here by RSI
     },
-  }
+  },
 );

@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';

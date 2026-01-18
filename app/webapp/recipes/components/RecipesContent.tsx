@@ -1,7 +1,7 @@
 'use client';
 
 import { Recipe, RecipePriceData } from '../types';
-import { RecipeSortField, RecipeFilters } from '../hooks/useRecipeFiltering';
+import { RecipeFilters } from '../hooks/useRecipeFiltering';
 import { TablePagination } from '@/components/ui/TablePagination';
 import RecipeCard from './RecipeCard';
 import RecipeTable from './RecipeTable';

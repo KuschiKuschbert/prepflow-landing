@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { TemperatureEquipment } from '../types';
-import { getEquipmentIcon, getEquipmentLabel } from './equipment-utils';
+import { getEquipmentLabel } from './equipment-utils';
 import { Icon } from '@/components/ui/Icon';
 import { Thermometer, X, Trash2, Snowflake, Home, Flame, ChefHat, LucideIcon } from 'lucide-react';
 

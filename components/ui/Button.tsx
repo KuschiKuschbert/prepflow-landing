@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { MagneticButton } from './MagneticButton';
-import { LANDING_COLORS, LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
+import { LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
 
 interface ButtonProps {
   children: React.ReactNode;

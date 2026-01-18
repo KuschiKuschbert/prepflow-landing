@@ -1,4 +1,4 @@
-import { loadStats, saveStats, type AchievementStats } from './storage';
+import { loadStats, saveStats } from './storage';
 
 export function updateStreak(): number {
   const stats = loadStats();

@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
-import type { SupportTicket } from '../types';
 import { logger } from '@/lib/logger';
 
 /**

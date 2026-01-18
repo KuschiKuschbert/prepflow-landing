@@ -1,17 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import {
-  X,
-  Edit,
-  Copy,
-  Share2,
-  Printer,
-  Loader2,
-  FileText,
-  ChefHat,
-  Calculator,
-} from 'lucide-react';
+import { X, Edit, Copy, Share2, Printer, FileText, ChefHat, Calculator } from 'lucide-react';
 import { Recipe } from '../types';
 
 type ModalTab = 'preview' | 'ingredients' | 'cogs';

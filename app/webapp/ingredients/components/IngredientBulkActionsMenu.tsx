@@ -1,8 +1,6 @@
 'use client';
-
 import { Icon } from '@/components/ui/Icon';
 import { MapPin, Sparkles, Store, Target, Trash2, Zap } from 'lucide-react';
-import { useState } from 'react';
 
 interface IngredientBulkActionsMenuProps {
   selectedCount: number;

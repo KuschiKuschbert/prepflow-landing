@@ -1,7 +1,6 @@
 import {
   Snowflake,
   Flame,
-  ChefHat,
   Package,
   Thermometer,
   CheckCircle2,

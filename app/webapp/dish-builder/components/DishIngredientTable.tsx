@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { COGSCalculation } from '../../cogs/types';
-import { Edit, Trash2, Utensils } from 'lucide-react';
+import { Edit, Trash2 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 
 interface DishIngredientTableProps {

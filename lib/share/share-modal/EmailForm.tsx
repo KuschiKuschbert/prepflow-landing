@@ -1,7 +1,5 @@
 'use client';
-
 import { Icon } from '@/components/ui/Icon';
-import { X } from 'lucide-react';
 
 interface EmailFormProps {
   emailAddress: string;

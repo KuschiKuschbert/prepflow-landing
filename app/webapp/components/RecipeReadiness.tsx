@@ -1,7 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { BookOpen, AlertTriangle, CheckCircle, TrendingUp, ExternalLink } from 'lucide-react';
+import { AlertTriangle, CheckCircle, TrendingUp, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { useRecipeReadiness } from './hooks/useRecipeReadiness';
 

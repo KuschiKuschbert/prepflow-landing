@@ -2,7 +2,7 @@
  * Backup export engine - exports user-specific data from tables with user_id column.
  */
 
-import type { BackupData, TableData } from './types';
+import type { BackupData } from './types';
 import { fetchAllTableData } from './export/helpers/fetchAllTableData';
 import { buildBackupData } from './export/helpers/buildBackupData';
 import { convertToSQL } from './export/helpers/convertToSQL';

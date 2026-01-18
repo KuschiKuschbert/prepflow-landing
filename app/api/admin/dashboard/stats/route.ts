@@ -4,12 +4,12 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import {
-    checkSystemHealth,
-    fetchErrorCounts,
-    fetchRecentSafetyErrors,
-    fetchTicketCounts,
-    fetchTotalDataRecords,
-    fetchUserCounts,
+  checkSystemHealth,
+  fetchErrorCounts,
+  fetchRecentSafetyErrors,
+  fetchTicketCounts,
+  fetchTotalDataRecords,
+  fetchUserCounts,
 } from './helpers/fetchDashboardData';
 
 /**

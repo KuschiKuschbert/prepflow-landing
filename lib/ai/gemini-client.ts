@@ -14,7 +14,6 @@
  */
 
 import { logger } from '@/lib/logger';
-import { parseAIError } from './utils/errorParser';
 
 const DEFAULT_TIMEOUT = 60000; // 60 seconds (paid tier can handle longer requests)
 const DEFAULT_MAX_OUTPUT_TOKENS = 8192; // Increased for complex recipes with long descriptions (paid tier supports up to 8192)

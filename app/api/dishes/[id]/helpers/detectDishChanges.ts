@@ -2,7 +2,7 @@
  * Helper for detecting changes in dish updates
  */
 
-import { Dish, UpdateDishInput } from '@/types/dish';
+import { Dish } from '@/types/dish';
 
 export interface DishChange {
   type: string;

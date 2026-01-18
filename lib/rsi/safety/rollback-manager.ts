@@ -42,7 +42,7 @@ export class RollbackManager {
    */
   static async rollbackChange(changeId: string): Promise<boolean> {
     try {
-// In a real sophisticated system, we'd map changeId to a git commit hash.
+      // In a real sophisticated system, we'd map changeId to a git commit hash.
       // For Phase 1, we assume structured rollback via git if it was the last action,
       // or we manually restore files if we tracked content.
 
@@ -52,7 +52,7 @@ export class RollbackManager {
       await this.discardChanges();
 
       await ChangeTracker.updateStatus(changeId, 'rolled_back');
-return true;
+      return true;
     } catch (error) {
       console.error(`Rollback failed for ${changeId}:`, error);
       return false;

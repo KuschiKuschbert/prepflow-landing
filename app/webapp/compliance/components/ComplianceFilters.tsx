@@ -19,7 +19,7 @@ import {
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { Icon } from '@/components/ui/Icon';
-import { Plus, CheckCircle2, AlertTriangle, XCircle } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 interface ComplianceFiltersProps {
   types: ComplianceType[];

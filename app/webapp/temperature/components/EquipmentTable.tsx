@@ -6,11 +6,7 @@ import React from 'react';
 import { TemperatureEquipment } from '../types';
 import { EquipmentTablePagination } from './EquipmentTablePagination';
 import { EquipmentTableMobileCards } from './EquipmentTableMobileCards';
-import {
-  getTypeIconComponent,
-  getTypeLabel,
-  temperatureTypesForSelect,
-} from '../utils/temperatureUtils';
+import { getTypeIconComponent, getTypeLabel } from '../utils/temperatureUtils';
 
 interface EquipmentTableProps {
   equipment: TemperatureEquipment[];

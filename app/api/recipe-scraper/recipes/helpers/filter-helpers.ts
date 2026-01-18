@@ -46,7 +46,6 @@ export function filterByFormatAfterLoad(recipes: unknown[], formatFilter: string
   }
 
   return recipes.filter(recipe => {
-     
     const formatted = isRecipeFormatted(recipe as RecipeEntry);
     return formatFilter === 'formatted' ? formatted : !formatted;
   });

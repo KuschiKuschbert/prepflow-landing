@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { calculateRecipeReadiness } from './helpers/calculateRecipeReadiness';
 import { fetchRecipes } from './helpers/fetchRecipes';
 import { handleRecipeReadinessError } from './helpers/handleRecipeReadinessError';
-import { isTableNotFound } from './helpers/checkTableExists';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 export async function GET(_req: NextRequest) {

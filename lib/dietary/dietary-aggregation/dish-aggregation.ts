@@ -1,9 +1,3 @@
-/**
- * Dish dietary status aggregation.
- * Aggregates vegetarian/vegan status for dishes from recipes and ingredients.
- */
-
-import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { detectDietarySuitability } from '../vegetarian-vegan-detection';

@@ -6,18 +6,11 @@
  */
 
 'use client';
-
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getArcadeStats } from '@/lib/arcadeStats';
-import { throwConfetti } from '@/hooks/useConfetti';
 import WebAppBackground from '@/components/Arcade/WebAppBackground';
-import {
-  getAllAchievements,
-  getUnlockedAchievements,
-  getAchievementProgress,
-  getAchievementStats,
-} from '@/lib/gamification/achievements';
+import { getAllAchievements, getUnlockedAchievements } from '@/lib/gamification/achievements';
 import { AchievementCard } from '@/components/gamification/AchievementCard';
 import { ProgressBar } from '@/components/gamification/ProgressBar';
 import { useGamification } from '@/hooks/useGamification';

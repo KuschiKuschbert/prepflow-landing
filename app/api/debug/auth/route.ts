@@ -1,7 +1,5 @@
-import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * Diagnostic endpoint for Auth0 configuration

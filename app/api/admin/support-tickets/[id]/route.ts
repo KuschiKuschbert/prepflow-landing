@@ -1,7 +1,6 @@
 import { requireAdmin } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { fetchTicket } from './helpers/fetchTicket';
 import { handleTicketApiError } from './helpers/handleError';
 import { updateTicket, updateTicketSchema } from './helpers/updateTicket';

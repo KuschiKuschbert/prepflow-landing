@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PerformanceItem } from '../types';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 

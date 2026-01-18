@@ -1,10 +1,3 @@
-/**
- * GET /api/test/apple-microsoft-connections
- * Test endpoint to check Apple and Microsoft connection status
- *
- * @returns {Promise<NextResponse>} JSON response with connection status
- */
-import { z } from 'zod';
 import { NextResponse } from 'next/server';
 import {
   verifyAppleConnection,

@@ -41,7 +41,7 @@ export class ConsoleCleanupProvider implements FixProvider {
       );
 
       if (!stdout.trim()) {
-return [];
+        return [];
       }
 
       const filesWithConsole = stdout.trim().split('\n').filter(Boolean);
@@ -62,9 +62,9 @@ return [];
       }
 
       if (productionFiles.length === 0) {
-return [];
+        return [];
       }
-// Create individual suggestions for each file (safer, more granular)
+      // Create individual suggestions for each file (safer, more granular)
       for (const filePath of productionFiles) {
         const content = await fs.readFile(filePath, 'utf8');
         const consoleCount = (content.match(/console\.log\(/g) || []).length;
@@ -80,7 +80,10 @@ return [];
           apply: async () => {
             try {
               // Use jscodeshift for safe AST-based transformation
-              const codemodPath = path.resolve(process.cwd(), 'scripts/codemods/console-migration.js');
+              const codemodPath = path.resolve(
+                process.cwd(),
+                'scripts/codemods/console-migration.js',
+              );
               // Run jscodeshift on the single file
               await execAsync(`npx jscodeshift -t ${codemodPath} ${filePath} --parser tsx`);
               return true;

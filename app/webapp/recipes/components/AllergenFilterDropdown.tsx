@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { ChevronDown, X, AlertTriangle } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { AUSTRALIAN_ALLERGENS } from '@/lib/allergens/australian-allergens';

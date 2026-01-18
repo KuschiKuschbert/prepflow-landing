@@ -250,7 +250,7 @@ function calculateDocumentationScore(content: string): number {
  * Main entry point for RSI orchestrator
  */
 export async function runPredictiveAnalysis(dryRun = false): Promise<void> {
-const fs = require('fs/promises');
+  const fs = require('fs/promises');
   const path = require('path');
   const { APP_ROOT } = require('../../constants'); // Assuming this exists, or we use process.cwd()
 
@@ -284,7 +284,7 @@ const fs = require('fs/promises');
     logger.dev('  [DRY RUN] Would scan directories:', dirsToScan.join(', '));
     return;
   }
-for (const dir of dirsToScan) {
+  for (const dir of dirsToScan) {
     const fullDir = path.join(rootDir, dir);
     try {
       await scanDir(fullDir);

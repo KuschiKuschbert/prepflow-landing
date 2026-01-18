@@ -4,7 +4,7 @@
 import type { Shift, Employee, ComplianceValidationResult } from '@/app/webapp/roster/types';
 import { COMPLIANCE_RULES } from './constants';
 import { getConsecutiveDays } from './helpers/getConsecutiveDays';
-import { getWeekStart, getDayName, formatTime } from './helpers/dateUtils';
+import { getWeekStart } from './helpers/dateUtils';
 import { calculateWeeklyHours, getMaxWeeklyHours } from './helpers/calculateHours';
 
 /**

@@ -116,7 +116,9 @@ export async function fetchTotalDataRecords() {
   const tables = ['ingredients', 'recipes', 'menu_dishes', 'temperature_logs', 'cleaning_tasks'];
   const countPromises = tables.map(async table => {
     try {
-      const { count, error } = await supabaseAdmin!.from(table).select('*', { count: 'exact', head: true });
+      const { count, error } = await supabaseAdmin!
+        .from(table)
+        .select('*', { count: 'exact', head: true });
       if (error) {
         logger.warn(`[Admin Dashboard Stats] Error counting records in ${table}:`, {
           error: error.message,

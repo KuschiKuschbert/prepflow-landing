@@ -4,7 +4,6 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { handleCleaningTaskError } from './helpers/handleCleaningTaskError';
 import { handleGetRequest } from './helpers/handleGetRequest';
-import { createCleaningTaskSchema, updateCleaningTaskSchema } from './helpers/schemas';
 import { handleDeleteCleaningTask } from './helpers/deleteCleaningTaskHandler';
 import { handleCreateCleaningTask } from './helpers/createCleaningTaskHandler';
 import { handleUpdateCleaningTask } from './helpers/updateCleaningTaskHandler';

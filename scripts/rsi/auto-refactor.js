@@ -34,9 +34,8 @@ async function main() {
     risk: RiskAssessor.assess(plan.type || 'refactor', plan.targetFiles || []),
   }));
 
-  const safePlan = allPlans.find(p =>
-    p.risk.level !== RiskLevel.HIGH &&
-    p.risk.level !== RiskLevel.CRITICAL
+  const safePlan = allPlans.find(
+    p => p.risk.level !== RiskLevel.HIGH && p.risk.level !== RiskLevel.CRITICAL,
   );
 
   if (!safePlan) {
@@ -92,7 +91,10 @@ async function main() {
         console.log('✅ Validation passed. Ready for review.');
 
         // 4. Close the loop: Mark DEBT.md item as resolved if it came from there
-        if (selectedPlan.sourceDebtItem && !selectedPlan.sourceDebtItem.includes('Architecture Report')) {
+        if (
+          selectedPlan.sourceDebtItem &&
+          !selectedPlan.sourceDebtItem.includes('Architecture Report')
+        ) {
           await RefactoringPlanner.resolveDebtItem(selectedPlan.sourceDebtItem);
         }
       } else {

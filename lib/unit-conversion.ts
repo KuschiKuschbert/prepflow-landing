@@ -1,4 +1,4 @@
-import { UNIT_ALIASES, conversions, normalizeUnit } from './unit-conversion/unitMappings';
+import { conversions, normalizeUnit } from './unit-conversion/unitMappings';
 
 export interface ConversionResult {
   value: number;

@@ -4,7 +4,7 @@ import React, { ReactNode } from 'react';
 import { LucideIcon } from 'lucide-react';
 import { Icon } from './Icon';
 import { ScrollReveal } from './ScrollReveal';
-import { WEBAPP_LANDING_PRESETS, LANDING_TYPOGRAPHY, LANDING_COLORS } from '@/lib/landing-styles';
+import { WEBAPP_LANDING_PRESETS, LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
 
 export interface EmptyStateProps {
   /**

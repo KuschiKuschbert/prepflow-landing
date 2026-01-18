@@ -5,12 +5,7 @@
 
 import { parseCSV, type ParseCSVResult } from '@/lib/csv/csv-utils';
 import { CSVImportConfig } from '@/components/ui/CSVImportModal';
-import {
-  normalizeColumnName,
-  mapCSVRowToEntity,
-  parseNumber,
-  formatEntityPreview,
-} from './import-utils';
+import { normalizeColumnName, mapCSVRowToEntity, parseNumber } from './import-utils';
 
 export interface ParLevelImportRow {
   ingredient_id: string;

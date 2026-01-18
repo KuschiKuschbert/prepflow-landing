@@ -1,7 +1,7 @@
 /**
  * Fetch logs for equipment.
  */
-import { cacheData, getCachedData } from '@/lib/cache/data-cache';
+import { cacheData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
 import type { TemperatureLog } from '../../../types';
 

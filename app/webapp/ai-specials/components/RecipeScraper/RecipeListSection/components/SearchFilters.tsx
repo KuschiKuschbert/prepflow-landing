@@ -6,7 +6,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { Filter, Loader2 } from 'lucide-react';
+import { Filter } from 'lucide-react';
 import { SOURCES, FORMAT_FILTERS } from '../utils';
 
 interface SearchFiltersProps {

@@ -39,7 +39,7 @@ export class ESLintFixProvider implements FixProvider {
       );
 
       if (!stdout.trim()) {
-return [];
+        return [];
       }
 
       const results: ESLintResult[] = JSON.parse(stdout);
@@ -50,9 +50,9 @@ return [];
       );
 
       if (fixableFiles.length === 0) {
-return [];
+        return [];
       }
-// Create a single batch fix suggestion for all fixable files
+      // Create a single batch fix suggestion for all fixable files
       const filePaths = fixableFiles.map(f => f.filePath);
       const totalFixable = fixableFiles.reduce(
         (sum, f) => sum + f.fixableErrorCount + f.fixableWarningCount,

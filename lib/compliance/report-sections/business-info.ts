@@ -1,15 +1,4 @@
-/**
- * generate Business Info
- * Extracted from report-generator.ts
- */
-
-import {
-  formatAustralianDate,
-  getDaysUntilExpiry,
-  getExpiryStatus,
-  formatAUD,
-} from '../australian-standards';
-import type { ReportData, StatusColors, StatusLabels } from '../report-types';
+import type { ReportData } from '../report-types';
 
 export function generateBusinessInfo(businessInfo: ReportData['business_info']): string {
   if (!businessInfo) return '';

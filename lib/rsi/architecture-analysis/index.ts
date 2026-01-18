@@ -279,7 +279,7 @@ export async function loadDesignPatterns(): Promise<DesignPattern[]> {
  * Main entry point for RSI orchestrator
  */
 export async function runArchitectureAnalysis(dryRun = false): Promise<void> {
-const rootDir = process.cwd();
+  const rootDir = process.cwd();
   const reportsDir = path.join(rootDir, 'reports');
   await fs.mkdir(reportsDir, { recursive: true });
 

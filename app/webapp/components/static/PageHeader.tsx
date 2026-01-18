@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
-import { LANDING_COLORS, WEBAPP_LANDING_PRESETS } from '@/lib/landing-styles';
+import { WEBAPP_LANDING_PRESETS } from '@/lib/landing-styles';
 import { ArrowLeft, LucideIcon } from 'lucide-react';
 import Image from 'next/image';
 import { ReactNode } from 'react';

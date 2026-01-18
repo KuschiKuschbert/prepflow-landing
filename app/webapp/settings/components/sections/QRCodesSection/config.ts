@@ -1,12 +1,4 @@
-import {
-  ChefHat,
-  Sparkles,
-  Refrigerator,
-  User,
-  Truck,
-  QrCode,
-  type LucideIcon,
-} from 'lucide-react';
+import { ChefHat, Sparkles, Refrigerator, User, Truck, QrCode } from 'lucide-react';
 import type { TypeConfig } from './types';
 
 export const typeConfig: Record<string, TypeConfig> = {

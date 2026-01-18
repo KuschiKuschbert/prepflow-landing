@@ -12,7 +12,6 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-  Legend,
 } from 'recharts';
 import { PerformanceItem } from '../types';
 

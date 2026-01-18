@@ -9,7 +9,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Icon } from './Icon';
-import { MoreVertical, Printer, Download, Share2, Copy, Upload, X } from 'lucide-react';
+import { MoreVertical, Printer, Download, Share2, Copy, Upload } from 'lucide-react';
 import { logger } from '@/lib/logger';
 import { PrintButton } from './PrintButton';
 import { ExportButton, type ExportFormat } from './ExportButton';

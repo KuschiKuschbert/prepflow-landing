@@ -1,7 +1,5 @@
 'use client';
-
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { PricingCalculation } from '../types';
 
 export const usePricing = (costPerPortion: number) => {
   const [targetGrossProfit, setTargetGrossProfit] = useState<number>(70);

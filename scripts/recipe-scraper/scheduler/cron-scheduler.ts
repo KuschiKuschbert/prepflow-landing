@@ -7,7 +7,7 @@ import * as cron from 'node-cron';
 import { RecipeScraperCLI } from '../index';
 import { scraperLogger } from '../utils/logger';
 import { logger } from '../../../lib/logger';
-import { SourceType, SOURCES } from '../config';
+import { SourceType } from '../config';
 
 interface ScheduledJob {
   source: SourceType;
