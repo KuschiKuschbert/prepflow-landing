@@ -15,7 +15,7 @@ import type { SquareConfig } from './ConfigurationSection/types';
 import { ConnectionWorkflow } from './ConnectionWorkflow';
 
 export function ConfigurationSection() {
-  const { user } = useUser();
+  const { user: _user } = useUser();
   const { showSuccess, showError } = useNotification();
   const { showConfirm, ConfirmDialog } = useConfirm();
   const [loading, setLoading] = useState(true);

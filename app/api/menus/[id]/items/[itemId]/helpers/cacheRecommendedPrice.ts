@@ -117,7 +117,7 @@ export async function refreshMenuRecommendedPrices(menuId: string): Promise<{
         | { id: string; yield: number }
         | null;
       const recipeData = Array.isArray(recipesArr) ? recipesArr[0] : recipesArr;
-      const recipeYield = recipeData?.yield;
+      const _recipeYield = recipeData?.yield;
 
       const menuItemForCache: RawMenuItem = {
         dish_id: item.dish_id,

@@ -13,7 +13,7 @@ export interface SquareMapping {
   last_synced_at: string | null;
   last_synced_from_square: string | null;
   last_synced_to_square: string | null;
-  sync_metadata: Record<string, any> | null;
+  sync_metadata: Record<string, unknown> | null;
   created_at: string;
   updated_at: string;
 }
@@ -25,5 +25,5 @@ export interface SquareMappingInput {
   square_id: string;
   square_location_id?: string | null;
   sync_direction?: 'bidirectional' | 'square_to_prepflow' | 'prepflow_to_square';
-  sync_metadata?: Record<string, any>;
+  sync_metadata?: Record<string, unknown>;
 }

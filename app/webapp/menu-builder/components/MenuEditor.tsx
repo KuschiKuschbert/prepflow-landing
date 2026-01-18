@@ -138,8 +138,8 @@ function MenuEditorComponent({ menu, onMenuUpdated }: MenuEditorProps) {
     handleUnlockMenu,
     handleDismissChanges,
     handleCloseUnlockDialog,
-    setUnlockChanges,
-    setShowUnlockDialog,
+    setUnlockChanges: _setUnlockChanges,
+    setShowUnlockDialog: _setShowUnlockDialog,
   } = useMenuLockManagement(menu, onMenuUpdated);
 
   const { handleRecalculatePrices } = usePriceRecalculation(menu.id, onMenuUpdated);

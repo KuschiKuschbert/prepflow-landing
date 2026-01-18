@@ -11,7 +11,7 @@ interface TemperatureLogsTimePeriodHeaderProps {
 }
 
 export function TemperatureLogsTimePeriodHeader({
-  period,
+  period: _period,
   icon,
   label,
   logCount,

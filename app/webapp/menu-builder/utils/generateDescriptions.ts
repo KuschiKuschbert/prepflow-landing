@@ -30,7 +30,7 @@ export async function generateMenuDescriptions(
   // Find items that need descriptions
   const itemsNeedingDescriptions = menuItems.filter(item => {
     const isDish = !!item.dish_id;
-    const isRecipe = !!item.recipe_id;
+    const _isRecipe = !!item.recipe_id;
     const existingDescription = isDish ? item.dishes?.description : item.recipes?.description;
 
     return !existingDescription || existingDescription.trim() === '';

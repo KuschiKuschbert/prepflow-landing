@@ -35,7 +35,7 @@ export function CreateTaskForm({
   const {
     formData,
     setFormData,
-    frequencyManuallySet,
+    frequencyManuallySet: _frequencyManuallySet,
     setFrequencyManuallySet,
     taskNameInputRef,
     suggestedFrequency,

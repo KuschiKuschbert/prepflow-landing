@@ -40,7 +40,7 @@ export class LocalAIExtractor {
   /**
    * Extract recipe using local model
    */
-  async extractRecipe(html: string, url: string): Promise<Partial<ScrapedRecipe> | null> {
+  async extractRecipe(_html: string, _url: string): Promise<Partial<ScrapedRecipe> | null> {
     try {
       scraperLogger.info('[Local AI Extractor] Starting extraction...');
 

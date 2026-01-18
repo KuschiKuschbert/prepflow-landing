@@ -26,8 +26,8 @@ export function usePersonalityScheduler() {
     trackTimeOfDayUsage(bucket);
 
     // Get adaptive settings
-    const adaptiveSettings = getAdaptiveSettings(settings);
-    const timeAdjustments = getTimeBasedAdjustments();
+    const _adaptiveSettings = getAdaptiveSettings(settings);
+    const _timeAdjustments = getTimeBasedAdjustments();
 
     const timers: number[] = [];
 

@@ -99,7 +99,7 @@ export function ParLevelEditDrawer({
       unit: formData.unit,
     },
     enabled: canAutosave && isOpen,
-    onSave: async savedData => {
+    onSave: async _savedData => {
       // Autosave saves silently in the background
       // Don't call the parent's onSave prop here - that would close the drawer
     },

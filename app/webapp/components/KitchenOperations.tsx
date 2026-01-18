@@ -45,14 +45,14 @@ export default function KitchenOperations() {
 
         if (!response.ok) {
           const errorText = await response.text();
-          let errorMessage = 'Failed to fetch kitchen operations stats';
+          let _errorMessage = 'Failed to fetch kitchen operations stats';
 
           if (response.status === 0 || response.status >= 500) {
-            errorMessage = 'Server error: Unable to fetch stats. Give it another go later, chef.';
+            _errorMessage = 'Server error: Unable to fetch stats. Give it another go later, chef.';
           } else if (response.status === 404) {
-            errorMessage = 'Stats endpoint not found. Please check your connection.';
+            _errorMessage = 'Stats endpoint not found. Please check your connection.';
           } else if (response.status >= 400 && response.status < 500) {
-            errorMessage = 'Unable to fetch stats. Please check your permissions.';
+            _errorMessage = 'Unable to fetch stats. Please check your permissions.';
           }
 
           logger.error('Error fetching kitchen operations stats:', {
@@ -167,9 +167,8 @@ export default function KitchenOperations() {
           Current operational status and readiness
         </p>
       </div>
-
       <div className="tablet:grid-cols-2 tablet:gap-4 desktop:[grid-template-columns:repeat(auto-fit,minmax(240px,1fr))] grid grid-cols-1 gap-3">
-        {operations.map((op, index) => (
+        {operations.map((op, _index) => (
           <Link
             key={op.title}
             href={op.href}

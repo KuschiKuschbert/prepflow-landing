@@ -47,7 +47,7 @@ export function useSwipeGesture({
       setSwipeDistance(deltaY);
       const timeDelta = currentTime - lastTime.current;
       if (timeDelta > 0) {
-        const yDelta = Math.abs(currentY - lastY.current);
+        const _yDelta = Math.abs(currentY - lastY.current);
         lastY.current = currentY;
         lastTime.current = currentTime;
       }

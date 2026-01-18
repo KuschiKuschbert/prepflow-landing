@@ -65,7 +65,7 @@ export function WebappBackground({
   watermarks = false,
   particles = false,
   spotlightIntensity = 0.08,
-  className,
+  className: _className,
 }: WebappBackgroundProps) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { theme, isHydrated } = useTheme();

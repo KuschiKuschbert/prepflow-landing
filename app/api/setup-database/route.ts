@@ -3,7 +3,7 @@ import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     // cleaned: Added environment protection to prevent demo data in production
     if (process.env.NODE_ENV === 'production') {
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     const supabaseAdmin = createSupabaseAdmin();
 
     // Check if ingredients table exists by trying to query it
-    const { data: testData, error: testError } = await supabaseAdmin
+    const { data: _testData, error: testError } = await supabaseAdmin
       .from('ingredients')
       .select('id')
       .limit(1);

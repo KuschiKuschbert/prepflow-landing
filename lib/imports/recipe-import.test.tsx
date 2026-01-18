@@ -22,7 +22,7 @@ describe('recipe-import', () => {
     if (Component) {
       try {
         render(<Component />);
-      } catch (e) {
+      } catch (_e) {
         // console.warn('Render failed for recipe-import, but module loaded');
       }
     }

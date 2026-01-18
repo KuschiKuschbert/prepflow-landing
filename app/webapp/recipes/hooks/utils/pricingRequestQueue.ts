@@ -50,9 +50,9 @@ export async function processRequestQueue(
       mergedRequests.get(key)!.push(req);
     });
 
-    for (const [key, requests] of mergedRequests.entries()) {
+    for (const [_key, requests] of mergedRequests.entries()) {
       const recipeIds = requests[0].recipeIds;
-      const cacheKey = normalizeRecipeIds(recipeIds);
+      const _cacheKey = normalizeRecipeIds(recipeIds);
 
       try {
         const result = await fetchBatchRecipeIngredients(recipeIds);

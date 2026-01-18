@@ -48,7 +48,7 @@ export function calculateRecommendedPrice(totalCostPerServing: number): RecipePr
 
   // Recalculate GST-exclusive from final price (matching COGS method)
   const finalPriceExclGST = finalPriceInclGST / (1 + gstRate);
-  const finalGstAmount = finalPriceInclGST - finalPriceExclGST;
+  const _finalGstAmount = finalPriceInclGST - finalPriceExclGST;
 
   // Calculate contributing margin (Revenue excl GST - Food Cost)
   const contributingMargin = finalPriceExclGST - totalCostPerServing;

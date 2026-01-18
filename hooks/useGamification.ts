@@ -16,7 +16,6 @@ import {
   subscribeArcadeStats,
   subscribeSessionStats,
   subscribeAchievements,
-  subscribeMilestones,
 } from '@/lib/gamification/events';
 import type {
   GamificationStats,

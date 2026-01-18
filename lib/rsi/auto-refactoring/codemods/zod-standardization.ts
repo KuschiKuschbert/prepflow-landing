@@ -6,7 +6,7 @@ import { API, FileInfo, Options, Transform } from 'jscodeshift';
  * Note: Real-world structural migration is complex; this identifies the pattern
  * and prepares the structure.
  */
-const transform: Transform = (file: FileInfo, api: API, options: Options) => {
+const transform: Transform = (file: FileInfo, api: API, _options: Options) => {
   const j = api.jscodeshift;
   const root = j(file.source);
   let changed = false;

@@ -55,7 +55,7 @@ export function EquipmentMaintenanceForm({
   onCancel,
   loading = false,
 }: EquipmentMaintenanceFormProps) {
-  const { showError } = useNotification();
+  const { showError: _showError } = useNotification();
   const { staff, loading: staffLoading } = useStaff();
 
   // Autosave integration

@@ -45,7 +45,7 @@ export function ConsumablesListPanel({
   consumables,
   onConsumableClick,
   onBack,
-  capitalizeName,
+  capitalizeName: _capitalizeName,
 }: ConsumablesListPanelProps) {
   const [consumableSearch, setConsumableSearch] = useState('');
 

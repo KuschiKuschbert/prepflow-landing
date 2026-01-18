@@ -32,7 +32,7 @@ export function addIngredientToCalculations({
   convertedUnit,
   conversionNote,
   existingCalc,
-  currentCalculations,
+  currentCalculations: _currentCalculations,
   updateCalculation,
   ingredients,
   setCalculations,

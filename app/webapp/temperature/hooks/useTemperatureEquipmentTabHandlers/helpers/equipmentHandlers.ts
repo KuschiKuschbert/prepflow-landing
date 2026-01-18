@@ -66,13 +66,13 @@ export function createEquipmentHandlersHelper(
         });
         setShowCreateForm(false);
         setCurrentPage(Math.ceil((equipment.length + 1) / itemsPerPage));
-      } catch (error) {}
+      } catch (_error) {}
     },
     handleUpdateEquipment: async (equipmentId: string, updates: Partial<TemperatureEquipment>) => {
       try {
         await onUpdateEquipment(equipmentId, updates);
         setEditingEquipment(null);
-      } catch (error) {}
+      } catch (_error) {}
     },
     handleDeleteEquipment: async (equipmentId: string) => {
       const confirmed = await showConfirm({
@@ -87,12 +87,12 @@ export function createEquipmentHandlersHelper(
         await onDeleteEquipment(equipmentId);
         const newTotalPages = Math.ceil((equipment.length - 1) / itemsPerPage);
         if (currentPage > newTotalPages && newTotalPages > 0) setCurrentPage(newTotalPages);
-      } catch (error) {}
+      } catch (_error) {}
     },
     toggleEquipmentStatus: async (equipmentId: string, currentStatus: boolean) => {
       try {
         await onUpdateEquipment(equipmentId, { is_active: !currentStatus });
-      } catch (error) {}
+      } catch (_error) {}
     },
     handleGenerateSampleData: () =>
       handleGenerateSampleData(equipment, showError, showSuccess, setIsGenerating, onRefreshLogs),

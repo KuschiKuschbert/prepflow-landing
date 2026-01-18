@@ -9,7 +9,7 @@ import { BookOpen, DollarSign, Rocket, ThermometerSun, Utensils } from 'lucide-r
 import Link from 'next/link';
 
 export default function QuickActions() {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
 
   const actions = [
     {

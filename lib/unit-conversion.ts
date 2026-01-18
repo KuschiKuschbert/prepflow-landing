@@ -29,7 +29,7 @@ export function convertIngredientCost(
   cost: number,
   fromUnit: string,
   toUnit: string,
-  quantity: number = 1,
+  _quantity: number = 1,
 ): number {
   const conversion = convertUnit(1, fromUnit, toUnit);
   return cost / conversion.value;

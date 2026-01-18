@@ -2,7 +2,7 @@
  * Hook for tracking time spent on pages.
  */
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { updateTimeSpentForLastLog } from './timeTracking';
 import type { PendingLog } from './logStorage';
 

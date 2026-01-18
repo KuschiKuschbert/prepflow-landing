@@ -66,7 +66,7 @@ export function RecipesModals({
   capitalizeRecipeName,
   formatQuantity,
   onCloseModal,
-  onSetSelectedRecipe,
+  onSetSelectedRecipe: _onSetSelectedRecipe,
   onSetShowUnifiedModal,
   onSetPreviewYield,
   onSetShowRecipeEditDrawer,

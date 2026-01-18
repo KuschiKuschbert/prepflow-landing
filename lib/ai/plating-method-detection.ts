@@ -113,7 +113,7 @@ export async function detectSuitablePlatingMethods(
  */
 function getFallbackSuggestions(
   dishName: string,
-  ingredients: Ingredient[],
+  _ingredients: Ingredient[],
 ): PlatingMethodDetectionResult {
   const dishNameLower = dishName.toLowerCase();
 

@@ -5,7 +5,7 @@ import type { RecipeImportRow } from '../../recipe-import';
  */
 export function validateRecipe(
   row: RecipeImportRow,
-  index: number,
+  _index: number,
 ): { valid: boolean; error?: string } {
   if (!row.recipe_name || row.recipe_name.trim().length === 0) {
     return { valid: false, error: 'Recipe name is required' };

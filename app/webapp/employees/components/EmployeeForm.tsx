@@ -21,7 +21,7 @@ interface EmployeeFormProps {
 export function EmployeeForm({
   employee,
   formData: externalFormData,
-  qualificationTypes,
+  qualificationTypes: _qualificationTypes,
   onChange,
   onSubmit,
   onUpdate,

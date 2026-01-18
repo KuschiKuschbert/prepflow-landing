@@ -114,12 +114,12 @@ export function mapEmployeeToSquareTeamMember(employee: Employee): SquareTeamMem
   // Add assignment if role exists
   if (employee.role) {
     // Map PrepFlow role to Square assignment type
-    let assignmentType: 'EMPLOYEE' | 'MANAGER' = 'EMPLOYEE';
+    let _assignmentType: 'EMPLOYEE' | 'MANAGER' = 'EMPLOYEE';
     if (
       employee.role.toLowerCase().includes('manager') ||
       employee.role.toLowerCase().includes('admin')
     ) {
-      assignmentType = 'MANAGER';
+      _assignmentType = 'MANAGER';
     }
 
     // Note: Square requires location IDs for assignments

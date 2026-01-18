@@ -26,7 +26,7 @@ export async function getUserId(userEmail: string): Promise<string | null> {
     if (userData) {
       return userData.id;
     }
-  } catch (err) {
+  } catch (_err) {
     // If user not found, continue with null userId (we still have email)
     logger.dev('[Support API] User not found in database, continuing with email only:', {
       userEmail,

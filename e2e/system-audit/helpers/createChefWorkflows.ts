@@ -1,7 +1,7 @@
 /**
  * Chef workflow test helpers.
  */
-import { test, expect, Page } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 import { collectPageErrors } from '../../fixtures/global-error-listener';
 
 /**

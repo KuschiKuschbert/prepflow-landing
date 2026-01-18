@@ -32,7 +32,7 @@ export async function deleteItemBySearch(
     }
 
     // For each matching item, find and click its delete button
-    for (const item of items) {
+    for (const _item of items) {
       try {
         // Find the delete button near this item
         // The delete button is typically in the same row or card

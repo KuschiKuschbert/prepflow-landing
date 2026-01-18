@@ -44,7 +44,7 @@ export default function ParLevelsPage() {
   const [showForm, setShowForm] = useState(false);
 
   // Data fetching
-  const { parLevels, ingredients, loading, setParLevels, fetchParLevels } = useParLevelsData({
+  const { parLevels, ingredients, loading, setParLevels, fetchParLevels: _fetchParLevels } = useParLevelsData({
     showError,
   });
 
@@ -65,7 +65,7 @@ export default function ParLevelsPage() {
     handleUpdate,
     handleEdit,
     handleDelete,
-    handleDeleteClick,
+    handleDeleteClick: _handleDeleteClick,
     confirmDelete,
     cancelDelete,
     closeEditDrawer,

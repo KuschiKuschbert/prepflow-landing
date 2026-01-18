@@ -4,7 +4,6 @@
  * Section component for PrepListPreview.
  */
 
-import { Icon } from '@/components/ui/Icon';
 import { Loader2 } from 'lucide-react';
 import { PrepListAggregatedView } from './PrepListAggregatedView';
 import { PrepListRecipeGroupedView } from './PrepListRecipeGroupedView';
@@ -57,7 +56,7 @@ export function PrepListPreviewSection({
       section.prepTechniques.marinations.length > 0 ||
       section.prepTechniques.preCookingSteps.length > 0 ||
       section.prepTechniques.specialTechniques.length > 0);
-  const hasContent =
+  const _hasContent =
     section.aggregatedIngredients.length > 0 ||
     section.recipeGrouped.length > 0 ||
     hasPrepInstructions ||

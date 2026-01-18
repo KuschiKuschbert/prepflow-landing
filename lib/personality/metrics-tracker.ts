@@ -21,7 +21,7 @@ export interface RealMetrics {
 export function getRealMetrics(): RealMetrics {
   const stats = getStats();
   const today = new Date().toISOString().split('T')[0];
-  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  const _weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
   // For now, we use achievement stats
   // In the future, this could fetch from API endpoints

@@ -92,12 +92,12 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default function WebAppLayout({
   children,
-  params,
+  params: _params,
 }: Readonly<{
   children: React.ReactNode;
   params?: Promise<Record<string, string | string[]>>;
 }>) {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
   // Initialize theme system - applies data-theme attribute to document root
   useTheme();
   // Initialize as disabled - will be updated in useEffect after mount to prevent hydration mismatch

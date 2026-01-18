@@ -228,7 +228,7 @@ export function generateHTMLReport(data: ReportData): string {
 export async function generatePDFReport(data: ReportData): Promise<Blob> {
   // For now, return HTML as PDF would require additional library setup
   // In production, use @react-pdf/renderer or jspdf
-  const html = generateHTMLReport(data);
+  const _html = generateHTMLReport(data);
   // This is a placeholder - actual PDF generation would go here
   throw new Error('PDF generation not yet implemented. Use HTML export instead.');
 }

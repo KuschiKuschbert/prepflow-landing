@@ -12,7 +12,7 @@ import { type OptimizationResult } from '../../schema';
 export function applyOptimization(
   items: NavigationItemConfig[],
   result: OptimizationResult,
-  selectedSections: string[],
+  _selectedSections: string[],
 ): NavigationItemConfig[] {
   // Create a map of href to item
   const itemMap = new Map<string, NavigationItemConfig>();

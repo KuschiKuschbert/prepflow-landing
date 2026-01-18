@@ -19,7 +19,7 @@ interface UseOptimisticCompletionsParams {
 
 export function useOptimisticCompletions({
   tasks,
-  dates,
+  dates: _dates,
   showSuccess,
   showError,
   onTaskUpdate,

@@ -22,7 +22,7 @@ describe('AnimatedToast', () => {
     if (Component) {
       try {
         render(<Component />);
-      } catch (e) {
+      } catch (_e) {
         // console.warn('Render failed for AnimatedToast, but module loaded');
       }
     }

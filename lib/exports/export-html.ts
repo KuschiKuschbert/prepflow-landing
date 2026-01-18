@@ -70,7 +70,7 @@ export async function exportPDFReport({
   customMeta,
 }: ExportReportOptions): Promise<void> {
   try {
-    const html = generateExportTemplate({
+    const _html = generateExportTemplate({
       title,
       subtitle,
       content,

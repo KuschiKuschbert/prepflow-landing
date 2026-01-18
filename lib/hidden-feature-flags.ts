@@ -5,8 +5,8 @@
  */
 
 export async function isHiddenFeatureEnabled(
-  featureKey: string,
-  userEmail?: string,
+  _featureKey: string,
+  _userEmail?: string,
 ): Promise<boolean> {
   // TODO: Implement hidden feature flag checking
   // This should check the hidden_feature_flags table in Supabase

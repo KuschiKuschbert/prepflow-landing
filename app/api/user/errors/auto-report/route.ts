@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
       if (userData) {
         userId = userData.id;
       }
-    } catch (err) {
+    } catch (_err) {
       // User not found - continue with null userId
       logger.dev('[Auto-Report API] User not found in database:', {
         userEmail,

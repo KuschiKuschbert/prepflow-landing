@@ -46,7 +46,7 @@ export function FrequencyPreview({ frequencyType, startDate }: FrequencyPreviewP
         Next Occurrences
       </div>
       <div className="flex flex-wrap gap-2">
-        {previewDates.map((dateStr, index) => {
+        {previewDates.map((dateStr, _index) => {
           const date = new Date(dateStr);
           const isToday = date.toDateString() === new Date().toDateString();
           return (

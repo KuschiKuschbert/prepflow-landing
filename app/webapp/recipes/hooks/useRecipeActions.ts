@@ -24,7 +24,7 @@ export function useRecipeActions({
   recipes,
   fetchRecipes,
   fetchRecipeIngredients,
-  setError,
+  setError: _setError,
   capitalizeRecipeName,
   optimisticallyUpdateRecipes,
   rollbackRecipes,

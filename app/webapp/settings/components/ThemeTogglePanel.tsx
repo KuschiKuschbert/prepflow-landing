@@ -15,8 +15,8 @@ import React from 'react';
  * @returns {JSX.Element} Theme toggle panel
  */
 export function ThemeTogglePanel() {
-  const { theme, toggleTheme, isDark, isLight, isHydrated } = useTheme();
-  const [ref, isVisible] = useIsVisible<HTMLDivElement>({ threshold: 0.1 });
+  const { theme: _theme, toggleTheme, isDark, isLight, isHydrated } = useTheme();
+  const [ref, _isVisible] = useIsVisible<HTMLDivElement>({ threshold: 0.1 });
   const [isMounted, setIsMounted] = React.useState(false);
 
   // Prevent hydration mismatch by only rendering theme-dependent content after mount

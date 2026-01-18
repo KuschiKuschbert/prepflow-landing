@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
     if (!supabase) throw new Error('Unexpected database state');
 
     // Check if table exists
-    const { exists, error: tableError } = await checkTableExists(supabase);
+    const { exists: _exists, error: tableError } = await checkTableExists(supabase);
     if (tableError) {
       return tableError;
     }

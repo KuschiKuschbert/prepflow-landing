@@ -22,7 +22,7 @@ export function useBulkAddToMenu({
   const [loadingMenus, setLoadingMenus] = useState(false);
   const [showMenuDialog, setShowMenuDialog] = useState(false);
 
-  const fetchMenus = useCallback(async () => {
+  const _fetchMenus = useCallback(async () => {
     setLoadingMenus(true);
     try {
       const response = await fetch('/api/menus');

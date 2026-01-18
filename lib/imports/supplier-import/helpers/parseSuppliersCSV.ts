@@ -1,9 +1,9 @@
 import { parseCSV, type ParseCSVResult } from '@/lib/csv/csv-utils';
 import {
-  normalizeColumnName,
-  mapCSVRowToEntity,
-  parseNumber,
-  parseBoolean,
+    mapCSVRowToEntity,
+    normalizeColumnName,
+    parseBoolean,
+    parseNumber,
 } from '../../import-utils';
 import type { SupplierImportRow } from '../../supplier-import';
 
@@ -11,7 +11,7 @@ import type { SupplierImportRow } from '../../supplier-import';
  * Parse suppliers from CSV text
  */
 export function parseSuppliersCSV(csvText: string): ParseCSVResult<SupplierImportRow> {
-  const result = parseCSV<Record<string, any>>(csvText, {
+  const result = parseCSV<Record<string, unknown>>(csvText, {
     header: true,
     skipEmptyLines: true,
     transformHeader: header => normalizeColumnName(header),

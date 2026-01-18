@@ -24,7 +24,7 @@ interface EmployeeDetailModalProps {
 export function EmployeeDetailModal({
   isOpen,
   employee,
-  qualificationTypes,
+  qualificationTypes: _qualificationTypes,
   onClose,
   onEdit,
 }: EmployeeDetailModalProps) {

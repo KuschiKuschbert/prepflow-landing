@@ -13,7 +13,7 @@ import { convertToCOGSCalculations } from '../../utils/recipeCalculationHelpers'
 export function processRecipeIngredients(
   dishRecipe: DishRecipe,
   recipeIngredients: RecipeIngredientWithDetails[],
-  dishId: string,
+  _dishId: string,
 ): COGSCalculation[] {
   const recipeId = dishRecipe.recipe_id;
   const recipeQuantity =

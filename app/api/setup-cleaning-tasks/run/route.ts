@@ -15,7 +15,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
  *
  * @returns {Promise<NextResponse>} Migration execution result
  */
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     // Guard: dev-only
     if (process.env.NODE_ENV === 'production') {
@@ -64,12 +64,12 @@ export async function POST(request: NextRequest) {
 
     // Split SQL into individual statements (basic splitting by semicolon)
     // Note: This is a simple approach - complex SQL with semicolons in strings won't work
-    const statements = sqlMigration
+    const _statements = sqlMigration
       .split(';')
       .map(s => s.trim())
       .filter(s => s.length > 0 && !s.startsWith('--'));
 
-    const results: { statement: string; success: boolean; error?: string }[] = [];
+    const _results: { statement: string; success: boolean; error?: string }[] = [];
 
     // Execute each statement
     // Note: Supabase JS client doesn't support raw SQL execution directly

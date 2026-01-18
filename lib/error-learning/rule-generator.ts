@@ -106,7 +106,7 @@ function generateRule(pattern: KnowledgeBasePattern): KnowledgeBaseRule {
  */
 async function updateErrorPatternsFile(
   pattern: KnowledgeBasePattern,
-  rule: KnowledgeBaseRule,
+  _rule: KnowledgeBaseRule,
 ): Promise<void> {
   const patternsDir = path.dirname(ERROR_PATTERNS_FILE);
   await fs.mkdir(patternsDir, { recursive: true });

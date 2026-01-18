@@ -15,8 +15,8 @@ export class RSIDashboard {
     const performance = await PerformanceTracker.getRecentMetrics();
     const changes = await ChangeTracker.getRecentChanges();
 
-    const appliedCount = changes.filter((c: ChangeRecord) => c.status === 'applied').length;
-    const failedCount = changes.filter(
+    const _appliedCount = changes.filter((c: ChangeRecord) => c.status === 'applied').length;
+    const _failedCount = changes.filter(
       (c: ChangeRecord) => c.status === 'failed' || c.status === 'rolled_back',
     ).length;
 

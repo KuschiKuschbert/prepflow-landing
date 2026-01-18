@@ -17,7 +17,7 @@ import { reAggregateRecipes } from './helpers/reAggregateRecipes';
  * @param {NextRequest} request - Next.js request object
  * @returns {Promise<NextResponse>} Re-aggregation results
  */
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(

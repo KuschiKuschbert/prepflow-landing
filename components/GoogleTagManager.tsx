@@ -17,7 +17,7 @@ interface GoogleTagManagerProps {
   ga4MeasurementId?: string;
 }
 
-function GoogleTagManagerInner({ gtmId, ga4MeasurementId }: GoogleTagManagerProps) {
+function GoogleTagManagerInner({ gtmId, ga4MeasurementId: _ga4MeasurementId }: GoogleTagManagerProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const hasInitialized = useRef(false);
@@ -89,7 +89,7 @@ function GoogleTagManagerInner({ gtmId, ga4MeasurementId }: GoogleTagManagerProp
 
           // Initialize gtag function for backward compatibility
           if (typeof window !== 'undefined' && !window.gtag) {
-            window.gtag = function (...args: unknown[]) {
+            window.gtag = function (..._args: unknown[]) {
               window.dataLayer.push(arguments as unknown as Record<string, unknown>);
             };
             logger.dev('🔧 gtag function initialized for GTM compatibility');

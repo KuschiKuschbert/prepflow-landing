@@ -252,7 +252,7 @@ function calculateDocumentationScore(content: string): number {
 export async function runPredictiveAnalysis(dryRun = false): Promise<void> {
   const fs = require('fs/promises');
   const path = require('path');
-  const { APP_ROOT } = require('../../constants'); // Assuming this exists, or we use process.cwd()
+  const { APP_ROOT: _APP_ROOT } = require('../../constants'); // Assuming this exists, or we use process.cwd()
 
   const rootDir = process.cwd();
   const reportsDir = path.join(rootDir, 'reports');
@@ -288,7 +288,7 @@ export async function runPredictiveAnalysis(dryRun = false): Promise<void> {
     const fullDir = path.join(rootDir, dir);
     try {
       await scanDir(fullDir);
-    } catch (e) {
+    } catch (_e) {
       logger.warn(`  Could not scan ${dir}, skipping...`);
     }
   }

@@ -20,12 +20,12 @@ export async function checkBrokenImages(page: Page): Promise<string[]> {
         if (naturalWidth === 0 && src) {
           brokenImages.push(src);
         }
-      } catch (err) {
+      } catch (_err) {
         // Image might not be loaded yet, continue
         continue;
       }
     }
-  } catch (err) {
+  } catch (_err) {
     // No images on page, continue
   }
 

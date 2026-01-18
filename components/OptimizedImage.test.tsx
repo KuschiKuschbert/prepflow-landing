@@ -23,7 +23,7 @@ describe('OptimizedImage', () => {
     if (Component) {
       try {
         render(<Component />);
-      } catch (e) {
+      } catch (_e) {
         // console.warn('Render failed for OptimizedImage, but module loaded');
       }
     }

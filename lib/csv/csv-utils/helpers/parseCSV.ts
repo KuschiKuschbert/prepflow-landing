@@ -1,5 +1,5 @@
-import Papa from 'papaparse';
 import { logger } from '@/lib/logger';
+import Papa from 'papaparse';
 import type { ParseCSVOptions, ParseCSVResult } from '../types';
 
 /**
@@ -9,7 +9,7 @@ import type { ParseCSVOptions, ParseCSVResult } from '../types';
  * @param {ParseCSVOptions} options - Parsing options
  * @returns {ParseCSVResult} Parsed data with errors and metadata
  */
-export function parseCSV<T = any>(
+export function parseCSV<T = unknown>(
   csvText: string,
   options: ParseCSVOptions = {},
 ): ParseCSVResult<T> {

@@ -32,7 +32,7 @@ export function RosterCell({
   date,
   shifts,
   validationWarnings,
-  isOver,
+  isOver: _isOver,
   onAddShift,
   activeInlineEntry,
   onInlineEntrySave,
@@ -59,7 +59,7 @@ export function RosterCell({
     [setNodeRef],
   );
 
-  const cellWarnings = useMemo(
+  const _cellWarnings = useMemo(
     () => validationWarnings.filter(w => shifts.some(s => s.id === w.shiftId)),
     [validationWarnings, shifts],
   );
@@ -115,7 +115,7 @@ export function RosterCell({
         />
       ) : isEmpty ? (
         // Empty cell - show "Add shift" button
-        <div className="flex h-full items-center justify-center">
+        (<div className="flex h-full items-center justify-center">
           <button
             onClick={e => {
               e.stopPropagation();
@@ -129,7 +129,7 @@ export function RosterCell({
             <Icon icon={Plus} size="sm" aria-hidden={true} />
             <span>Add shift</span>
           </button>
-        </div>
+        </div>)
       ) : (
         <div className="space-y-2">
           {shifts.map(shift => {

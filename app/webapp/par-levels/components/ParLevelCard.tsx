@@ -29,7 +29,7 @@ export function ParLevelCard({
   onDelete,
   deletingId,
   isSelectionMode = false,
-  onStartLongPress,
+  onStartLongPress: _onStartLongPress,
   onCancelLongPress,
   onEnterSelectionMode,
 }: ParLevelCardProps) {

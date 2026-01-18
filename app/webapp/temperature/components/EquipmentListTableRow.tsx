@@ -37,7 +37,7 @@ function EquipmentListTableRowComponent({
   onToggleStatus,
   onDelete,
   onUpdate,
-  onEquipmentClick,
+  onEquipmentClick: _onEquipmentClick,
   onShowQRCode,
   getTypeIcon,
   getTypeLabel,

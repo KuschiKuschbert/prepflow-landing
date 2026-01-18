@@ -37,7 +37,7 @@ const polyfillWebAPIs = () => {
   }
 
   class MockPerformanceObserver {
-    constructor(callback: unknown) {}
+    constructor(_callback: unknown) {}
     observe() {}
     disconnect() {}
     takeRecords() {

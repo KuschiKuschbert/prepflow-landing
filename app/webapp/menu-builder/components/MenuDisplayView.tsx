@@ -66,7 +66,6 @@ export function MenuDisplayView({ menu, menuItems }: MenuDisplayViewProps) {
           <p className="mt-2 text-sm text-[var(--foreground-muted)]">{menu.description}</p>
         )}
       </div>
-
       {/* Menu Items by Category */}
       {itemsByCategory.map(({ category, items }) => (
         <div key={category} className="space-y-4">
@@ -115,7 +114,7 @@ export function MenuDisplayView({ menu, menuItems }: MenuDisplayViewProps) {
               const imageUrlMinimalist = isDish
                 ? item.dishes?.image_url_minimalist
                 : item.recipes?.image_url_minimalist;
-              const entityId = isDish ? item.dish_id : item.recipe_id;
+              const _entityId = isDish ? item.dish_id : item.recipe_id;
 
               return (
                 <div

@@ -71,7 +71,7 @@ export function CSVImportModal<T = any>({
   loading = false,
   progress,
 }: CSVImportModalProps<T>) {
-  const [csvData, setCsvData] = useState<string>('');
+  const [_csvData, setCsvData] = useState<string>('');
   const [parsedEntities, setParsedEntities] = useState<T[]>([]);
   const [selectedIndices, setSelectedIndices] = useState<Set<number>>(new Set());
   const [errors, setErrors] = useState<Array<{ row: number; error: string }>>([]);

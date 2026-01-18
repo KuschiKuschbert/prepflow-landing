@@ -66,7 +66,7 @@ export class ABTester {
     }
   }
 
-  static async createExperiment(name: string, description: string): Promise<string> {
+  static async createExperiment(name: string, _description: string): Promise<string> {
     // Stub for creating new experiments
     const id = name.toLowerCase().replace(/\s+/g, '-');
     // Logic to save new experiment...

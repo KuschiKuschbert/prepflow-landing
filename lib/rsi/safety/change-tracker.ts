@@ -14,7 +14,7 @@ export interface ChangeRecord {
   description: string;
   confidenceScore: number;
   status: 'applied' | 'failed' | 'rolled_back';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 const LOG_FILE_PATH = path.join(process.cwd(), 'docs/rsi/improvements.json');

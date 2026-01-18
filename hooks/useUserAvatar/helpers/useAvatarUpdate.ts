@@ -19,7 +19,7 @@ export function useAvatarUpdate({
   avatar,
   userEmail,
   setAvatarState,
-  setLoading,
+  setLoading: _setLoading,
   setError,
 }: UseAvatarUpdateProps) {
   const { showSuccess, showError } = useNotification();

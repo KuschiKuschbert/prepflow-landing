@@ -4,7 +4,6 @@
 import { writeFileSync } from 'fs';
 import { join } from 'path';
 import { ErrorRecord } from '../../fixtures/global-error-listener';
-import type { TestResultsSummary } from '../../helpers/report-generator';
 
 /**
  * Generate QA Audit Report.

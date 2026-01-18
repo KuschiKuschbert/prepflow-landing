@@ -13,7 +13,7 @@ export function useLongPressDetection({
   isSelectionMode,
   onStartLongPress,
   onCancelLongPress,
-  onEnterSelectionMode,
+  onEnterSelectionMode: _onEnterSelectionMode,
 }: UseLongPressDetectionProps) {
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
 

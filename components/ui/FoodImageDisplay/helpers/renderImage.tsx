@@ -2,7 +2,6 @@
  * Render image component (either img tag or Next.js Image).
  */
 import Image from 'next/image';
-import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 
 export function renderImageComponent(
   currentImageUrl: string | null,

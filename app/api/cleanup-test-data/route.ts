@@ -9,7 +9,7 @@ import { NextRequest, NextResponse } from 'next/server';
  * @param {NextRequest} request - Next.js request object
  * @returns {Promise<NextResponse>} Cleanup response
  */
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   // Prevent cleanup in production
   if (process.env.NODE_ENV === 'production') {
     return NextResponse.json(

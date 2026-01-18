@@ -10,19 +10,11 @@ import { useRecipeManagement } from '../hooks/useRecipeManagement';
 import { useRecipeFiltering } from '../hooks/useRecipeFiltering';
 import { useRecipeRefreshEffects } from '../hooks/useRecipeRefreshEffects';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
-import { TablePagination } from '@/components/ui/TablePagination';
 import { RecipesEmptyState } from './RecipesEmptyState';
 import { RecipesErrorDisplay } from './RecipesErrorDisplay';
 import { UnifiedBulkActionsMenu } from './UnifiedBulkActionsMenu';
 import { BulkAddToMenuDialog } from './BulkAddToMenuDialog';
-import { BulkDeleteConfirmationModal } from './BulkDeleteConfirmationModal';
-import { DeleteConfirmationModal } from './DeleteConfirmationModal';
-import RecipeCard from './RecipeCard';
-import { UnifiedRecipeModal } from './UnifiedRecipeModal';
-import RecipeTable from './RecipeTable';
 import { RecipesActionButtons } from './RecipesActionButtons';
-import { RecipeFilterBar } from './RecipeFilterBar';
-import { RecipeEditDrawer } from './RecipeEditDrawer';
 import { RecipesContent } from './RecipesContent';
 import { RecipesModals } from './RecipesModals';
 import { useIngredientsChangeEffect } from './hooks/useIngredientsChangeEffect';
@@ -33,7 +25,7 @@ import { useBulkShare } from '../hooks/useBulkShare';
 import { useBulkAddToMenu } from '../hooks/useBulkAddToMenu';
 import { useRecipeStateSetters } from './RecipesClient/helpers/useRecipeStateSetters';
 export default function RecipesClient() {
-  const router = useRouter();
+  const _router = useRouter();
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [recipeIngredients, setRecipeIngredients] = useState<RecipeIngredientWithDetails[]>([]);
   const [showUnifiedModal, setShowUnifiedModal] = useState(false);
@@ -58,7 +50,7 @@ export default function RecipesClient() {
     fetchRecipes,
     fetchRecipeIngredients,
     fetchBatchRecipeIngredients,
-    handleEditRecipe,
+    handleEditRecipe: _handleEditRecipe,
     updateVisibleRecipePrices,
     optimisticallyUpdateRecipes,
     rollbackRecipes,
@@ -90,14 +82,14 @@ export default function RecipesClient() {
   const {
     recipeToDelete,
     showDeleteConfirm,
-    setShowDeleteConfirm,
+    setShowDeleteConfirm: _setShowDeleteConfirm,
     selectedRecipes,
     setSelectedRecipes,
-    showShareModal,
-    setShowShareModal,
-    shareUrl,
-    handleAddRecipe: handleAddRecipeAction,
-    handleEditFromPreview,
+    showShareModal: _showShareModal,
+    setShowShareModal: _setShowShareModal,
+    shareUrl: _shareUrl,
+    handleAddRecipe: _handleAddRecipeAction,
+    handleEditFromPreview: _handleEditFromPreview,
     handleDuplicateRecipe,
     handleDeleteRecipe,
     confirmDeleteRecipe,
@@ -122,7 +114,7 @@ export default function RecipesClient() {
   const {
     bulkActionLoading,
     showBulkDeleteConfirm: showUnifiedBulkDeleteConfirm,
-    setShowBulkDeleteConfirm: setShowUnifiedBulkDeleteConfirm,
+    setShowBulkDeleteConfirm: _setShowUnifiedBulkDeleteConfirm,
     handleBulkDelete: handleUnifiedBulkDelete,
     confirmBulkDelete: confirmUnifiedBulkDelete,
     cancelBulkDelete: cancelUnifiedBulkDelete,

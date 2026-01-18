@@ -22,7 +22,7 @@ const performanceInsightsSchema = z.object({
 });
 
 interface InsightResult {
-  insights: any[]; // justified: dynamic AI response
+  insights: unknown[]; // justified: dynamic AI response
   source: 'ai' | 'fallback';
   cached?: boolean;
 }

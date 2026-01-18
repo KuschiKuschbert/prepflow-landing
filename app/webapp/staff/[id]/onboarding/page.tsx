@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { OnboardingWizard } from '../../components/OnboardingWizard';
 import { PageHeader } from '@/app/webapp/components/static/PageHeader';
-import { LoadingSkeleton, PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { UserPlus } from 'lucide-react';
 import { logger } from '@/lib/logger';
 import type { Employee } from '@/app/webapp/roster/types';

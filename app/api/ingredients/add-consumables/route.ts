@@ -11,7 +11,7 @@ import { NextRequest, NextResponse } from 'next/server';
  *
  * @returns {Promise<NextResponse>} Response with count of items added
  */
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const supabaseAdmin = createSupabaseAdmin();
 
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    let supplierId: string | null = existingSuppliers?.id || null;
+    let _supplierId: string | null = existingSuppliers?.id || null;
 
     if (!existingSuppliers) {
       // Supplier doesn't exist, add it
@@ -60,11 +60,11 @@ export async function POST(request: NextRequest) {
           error: supplierError.message,
         });
       } else {
-        supplierId = newSupplier?.id || null;
+        _supplierId = newSupplier?.id || null;
         logger.dev(`✅ Added supplier: ${supplierName}`);
       }
     } else {
-      supplierId = existingSuppliers.id;
+      _supplierId = existingSuppliers.id;
       logger.dev(`✅ Supplier already exists: ${supplierName}`);
     }
 

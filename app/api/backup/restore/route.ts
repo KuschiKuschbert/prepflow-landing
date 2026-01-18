@@ -31,7 +31,7 @@ const restoreBackupSchema = z.object({
 // Constants for backup format
 const BACKUP_HEADER = 'PREPFLOW_BACKUP';
 const HEADER_SIZE = 16;
-const VERSION_OFFSET = 16;
+const _VERSION_OFFSET = 16;
 const ENCRYPTION_MODE_OFFSET = 17;
 
 // Helper to safely parse request body

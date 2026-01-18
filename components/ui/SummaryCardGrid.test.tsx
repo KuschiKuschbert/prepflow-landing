@@ -22,7 +22,7 @@ describe('SummaryCardGrid', () => {
     if (Component) {
       try {
         render(<Component />);
-      } catch (e) {
+      } catch (_e) {
         // console.warn('Render failed for SummaryCardGrid, but module loaded');
       }
     }

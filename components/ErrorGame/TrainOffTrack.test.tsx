@@ -23,7 +23,7 @@ describe('TrainOffTrack', () => {
     if (Component) {
       try {
         render(<Component />);
-      } catch (e) {
+      } catch (_e) {
         // console.warn('Render failed for TrainOffTrack, but module loaded');
       }
     }

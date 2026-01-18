@@ -27,12 +27,12 @@ export interface ScaledIngredient extends Ingredient {
 export function scaleIngredients(
   ingredients: Ingredient[],
   prepQuantity: number,
-  baseYield: number = 1,
+  _baseYield: number = 1,
 ): ScaledIngredient[] {
   // Ingredients are already normalized to 1 serving, so we simply multiply by prepQuantity
   // baseYield is kept for reference but not used in calculation since ingredients are per-serving
   // IMPORTANT: Do NOT divide by baseYield - ingredients are already per-serving!
-  const scaleFactor = prepQuantity;
+  const _scaleFactor = prepQuantity;
 
   return ingredients.map(ingredient => {
     // Ensure we're working with numbers, not strings

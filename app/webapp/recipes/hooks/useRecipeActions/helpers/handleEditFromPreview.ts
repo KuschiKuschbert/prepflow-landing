@@ -19,7 +19,7 @@ export function handleEditFromPreview(
     const calculations = convertToCOGSCalculations(recipeIngredients, selectedRecipe.id);
     storeRecipeForEditing(selectedRecipe, calculations);
     router.push('/webapp/recipes#dishes');
-  } catch (err) {
+  } catch (_err) {
     throw new Error('Failed to load recipe for editing');
   }
 }

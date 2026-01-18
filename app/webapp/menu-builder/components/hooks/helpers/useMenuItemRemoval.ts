@@ -28,7 +28,7 @@ export function useMenuItemRemoval({
   showError,
   showSuccess,
 }: UseMenuItemRemovalProps) {
-  const revertItemRemoval = useCallback((itemToRemove: MenuItem, prevItems: MenuItem[]) => {
+  const _revertItemRemoval = useCallback((itemToRemove: MenuItem, prevItems: MenuItem[]) => {
     const otherItems = prevItems.filter(item => item.id !== itemToRemove.id);
     const insertIndex = otherItems.findIndex(
       item => item.category === itemToRemove.category && item.position > itemToRemove.position,
@@ -78,7 +78,7 @@ export function useMenuItemRemoval({
   const handleRemoveItem = useCallback(
     (itemId: string, onConfirm: () => void) => {
       const item = menuItems.find(i => i.id === itemId);
-      const itemName = item?.dishes?.dish_name || item?.recipes?.recipe_name || 'this item';
+      const _itemName = item?.dishes?.dish_name || item?.recipes?.recipe_name || 'this item';
       onConfirm();
     },
     [menuItems],

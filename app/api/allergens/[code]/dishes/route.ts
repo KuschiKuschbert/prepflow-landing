@@ -10,6 +10,7 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function getDishAllergensWithFallback(dish: any /* justified: complex DB record */): Promise<string[]> {
   const cachedAllergens = dish.allergens as string[] | null | undefined;
   if (cachedAllergens && cachedAllergens.length > 0) {

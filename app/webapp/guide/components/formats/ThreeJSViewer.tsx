@@ -16,7 +16,7 @@ interface ThreeJSViewerProps {
  * Three.js has been removed to reduce bundle size (~872KB savings).
  * To re-enable: reinstall three, @react-three/fiber, @react-three/drei
  */
-export default function ThreeJSViewer({ content }: ThreeJSViewerProps) {
+export default function ThreeJSViewer({ content: _content }: ThreeJSViewerProps) {
   return (
     <div className="flex h-96 items-center justify-center rounded-3xl border border-[var(--border)] bg-[var(--surface)]">
       <div className="text-center">

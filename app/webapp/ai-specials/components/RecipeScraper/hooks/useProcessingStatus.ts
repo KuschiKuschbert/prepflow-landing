@@ -48,7 +48,7 @@ export function useProcessingStatus({
   const fetchProcessingStatus = useCallback(async () => {
     try {
       const previousProcessing = processing?.isProcessing && !processing?.isPaused;
-      const previousQueueLength = processing?.queueLength || 0;
+      const _previousQueueLength = processing?.queueLength || 0;
 
       const response = await fetch('/api/recipe-scraper/process-recipes');
       const result = await response.json();

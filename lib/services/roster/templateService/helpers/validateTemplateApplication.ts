@@ -10,7 +10,7 @@ import type { RosterTemplate, TemplateShift } from '@/app/webapp/roster/types';
 export function validateTemplateApplication(
   template: RosterTemplate,
   templateShifts: TemplateShift[],
-  targetDate: Date,
+  _targetDate: Date,
 ): { isValid: boolean; errors: string[] } {
   const errors: string[] = [];
 

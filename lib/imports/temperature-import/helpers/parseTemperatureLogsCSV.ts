@@ -3,15 +3,15 @@
  */
 import { parseCSV, type ParseCSVResult } from '@/lib/csv/csv-utils';
 import {
-  normalizeColumnName,
-  mapCSVRowToEntity,
-  parseNumber,
-  parseDate,
+    mapCSVRowToEntity,
+    normalizeColumnName,
+    parseDate,
+    parseNumber,
 } from '@/lib/imports/import-utils';
 import type { TemperatureLogImportRow } from '../../temperature-import';
 
 export function parseTemperatureLogsCSV(csvText: string): ParseCSVResult<TemperatureLogImportRow> {
-  const result = parseCSV<Record<string, any>>(csvText, {
+  const result = parseCSV<Record<string, unknown>>(csvText, {
     header: true,
     skipEmptyLines: true,
     transformHeader: header => normalizeColumnName(header),

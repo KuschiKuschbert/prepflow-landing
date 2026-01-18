@@ -24,7 +24,7 @@ export default function BackupSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [restoreDialogOpen, setRestoreDialogOpen] = useState(false);
   const [selectedBackup, setSelectedBackup] = useState<BackupFile | null>(null);
-  const { showSuccess, showError } = useNotification();
+  const { showSuccess: _showSuccess, showError } = useNotification();
 
   const loadSettings = useCallback(async () => {
     try {

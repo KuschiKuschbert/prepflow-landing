@@ -45,8 +45,8 @@ export function useUnifiedBulkActions({
 
   const confirmBulkDelete = useCallback(async () => {
     if (selectedItems.size === 0) return;
-    const originalRecipes = [...recipes];
-    const originalDishes = [...dishes];
+    const _originalRecipes = [...recipes];
+    const _originalDishes = [...dishes];
     if (selectedRecipeIds.length > 0) {
       optimisticallyUpdateRecipes(prev => prev.filter(r => !selectedRecipeIds.includes(r.id)));
     }

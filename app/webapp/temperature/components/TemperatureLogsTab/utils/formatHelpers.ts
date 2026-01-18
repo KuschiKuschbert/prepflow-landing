@@ -21,7 +21,7 @@ export function createFormatHelpers(
     formatTime: (timeString: string) => formatTimeUtil(timeString),
     formatDateString: (dateString: string) => {
       // Convert string to Date for formatDate
-      const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
+      const _date = typeof dateString === 'string' ? new Date(dateString) : dateString;
       return formatDateStringUtil(dateString, (d: Date) => formatDate(d));
     },
     getTemperatureStatus: (temp: number, location: string) =>

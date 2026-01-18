@@ -13,7 +13,7 @@ interface COGSCalculatorModalProps {
 }
 
 export function COGSCalculatorModal({ isOpen, item, onClose }: COGSCalculatorModalProps) {
-  const [initialRecipeId, setInitialRecipeId] = useState<string>('');
+  const [_initialRecipeId, setInitialRecipeId] = useState<string>('');
 
   // Pre-select the recipe when modal opens
   useEffect(() => {

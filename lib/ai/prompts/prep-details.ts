@@ -112,7 +112,7 @@ export function parsePrepDetailsResponse(aiResponse: string): {
         specialTechniques: Array.isArray(parsed.specialTechniques) ? parsed.specialTechniques : [],
       };
     }
-  } catch (error) {
+  } catch (_error) {
     // Fallback: return empty structure
   }
 

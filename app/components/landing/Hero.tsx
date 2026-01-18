@@ -12,8 +12,8 @@ interface HeroProps {
   trackEngagement?: (event: string) => void;
 }
 
-export default function Hero({ onTourClick, trackEngagement }: HeroProps) {
-  const { user, isLoading } = useUser();
+export default function Hero({ onTourClick: _onTourClick, trackEngagement }: HeroProps) {
+  const { user, isLoading: _isLoading } = useUser();
   const isAuthenticated = !!user;
 
   const handleSignIn = () => {

@@ -37,7 +37,7 @@ export async function suggestFixes(
     score: suggestion.score,
     reason: suggestion.reason,
     codeExample: suggestion.fix.codeChanges?.substring(0, 500), // Limit size
-    preventionStrategies: suggestion.error.preventionRules.map(ruleId => {
+    preventionStrategies: suggestion.error.preventionRules.map(_ruleId => {
       // Get prevention strategies from fixes
       const allPreventions = suggestion.error.fixes.flatMap(f => f.prevention);
       return allPreventions[0] || 'Review error patterns and add prevention rules';

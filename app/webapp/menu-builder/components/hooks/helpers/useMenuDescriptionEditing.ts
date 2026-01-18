@@ -20,14 +20,14 @@ interface UseMenuDescriptionEditingProps {
  * @returns {Object} Description editing handlers and state
  */
 export function useMenuDescriptionEditing({
-  menus,
+  menus: _menus,
   setMenus,
   onMenuUpdated,
 }: UseMenuDescriptionEditingProps) {
   const { showError, showSuccess } = useNotification();
   const [editingMenuId, setEditingMenuId] = useState<string | null>(null);
   const [editDescription, setEditDescription] = useState('');
-  const [isSaving, setIsSaving] = useState(false);
+  const [isSaving, _setIsSaving] = useState(false);
   const descriptionInputRef = useRef<HTMLTextAreaElement>(null);
 
   // Focus input when editing starts

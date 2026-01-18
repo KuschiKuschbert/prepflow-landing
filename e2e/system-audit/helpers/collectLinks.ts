@@ -29,16 +29,16 @@ export async function collectLinks(page: Page): Promise<string[]> {
             if (absoluteUrl.includes(page.url().split('/').slice(0, 3).join('/'))) {
               links.push(absoluteUrl);
             }
-          } catch (urlErr) {
+          } catch (_urlErr) {
             // Invalid URL, skip
             continue;
           }
         }
-      } catch (err) {
+      } catch (_err) {
         continue;
       }
     }
-  } catch (err) {
+  } catch (_err) {
     // No links on page, continue
   }
 

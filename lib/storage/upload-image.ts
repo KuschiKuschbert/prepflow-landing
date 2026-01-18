@@ -63,7 +63,7 @@ export async function uploadImageToStorage(
     const filePath = uniqueFileName;
 
     // Upload to Supabase Storage
-    const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
+    const { data: _uploadData, error: uploadError } = await supabaseAdmin.storage
       .from(bucket)
       .upload(filePath, buffer, {
         contentType,

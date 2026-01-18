@@ -18,7 +18,7 @@ interface COGSTableRowProps {
 
 export function COGSTableRow({
   calc,
-  index,
+  index: _index,
   editingIngredient,
   editQuantity,
   onEditIngredient,

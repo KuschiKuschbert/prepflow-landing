@@ -9,7 +9,7 @@ import type { AllergenSource } from './processRecipeAllergens';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { IngredientRecord } from '../../../types';
 
-interface RawIngredientJoin {
+interface _RawIngredientJoin {
   id: string;
   ingredient_name: string;
   brand?: string;
@@ -70,7 +70,7 @@ export async function processIngredientAllergens(
     return;
   }
 
-  dishIngredients.forEach(di => {
+  dishIngredients.forEach((di: any) => {
     const ingredient = di.ingredients as unknown as IngredientRecord | null;
 
     if (!ingredient) return;

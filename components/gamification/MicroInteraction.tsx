@@ -9,7 +9,6 @@
 
 import { useEffect, useState } from 'react';
 import { Check } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
 
 interface MicroInteractionProps {
   /**

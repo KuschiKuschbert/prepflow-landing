@@ -150,7 +150,7 @@ export default function DishesClient() {
     showBulkMenu,
     setShowBulkMenu,
     showBulkDeleteConfirm,
-    setShowBulkDeleteConfirm,
+    setShowBulkDeleteConfirm: _setShowBulkDeleteConfirm,
     handleBulkDelete,
     confirmBulkDelete,
     cancelBulkDelete,
@@ -163,7 +163,7 @@ export default function DishesClient() {
     showMenuDialog,
     setShowMenuDialog,
     selectedRecipeIds,
-    selectedDishIds,
+    selectedDishIds: _selectedDishIds,
   } = useDishesClientBulkActions({
     dishes,
     recipes,

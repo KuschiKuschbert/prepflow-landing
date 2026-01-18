@@ -89,6 +89,6 @@ export async function migrateIngredientsToStandardUnits(): Promise<MigrationResu
  *
  * @param {ReturnType<typeof createSupabaseAdmin>} supabaseAdmin - Supabase admin client
  */
-async function ensureMigrationColumns(supabaseAdmin: ReturnType<typeof createSupabaseAdmin>) {
+async function ensureMigrationColumns(_supabaseAdmin: ReturnType<typeof createSupabaseAdmin>) {
   // Columns should be added via Supabase SQL Editor if they don't exist
 }

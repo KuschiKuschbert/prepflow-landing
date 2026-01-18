@@ -33,7 +33,7 @@ export function checkSeasonalMatch(): string | null {
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const day = String(now.getDate()).padStart(2, '0');
   const dateStr = `${month}-${day}`;
-  const country = getCountryCode();
+  const _country = getCountryCode();
 
   // Fixed date matches
   if (dateStr === '01-01') return 'newYear';

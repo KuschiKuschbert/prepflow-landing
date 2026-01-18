@@ -29,7 +29,7 @@ interface OutputDish {
   kitchen_section_id: string | null;
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(

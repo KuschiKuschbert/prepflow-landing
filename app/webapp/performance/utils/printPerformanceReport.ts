@@ -34,7 +34,7 @@ export function printPerformanceReport({
   metadata,
   performanceScore,
   dateRange,
-  filters,
+  filters: _filters,
 }: PrintPerformanceReportOptions): void {
   const itemsByClass = performanceItems.reduce(
     (acc, item) => {

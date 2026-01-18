@@ -17,43 +17,12 @@ export function useCategoryDetection(formData: FormData) {
   const [autoDetectedCategory, setAutoDetectedCategory] = useState<string | null>(null);
   const detectionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleCategoryDetection = useCallback(
-    (
-      ingredientName: string,
-      setFormData: React.Dispatch<React.SetStateAction<Partial<FormData>>>,
-    ) => {
-      // Clear existing timeout
-      if (detectionTimeoutRef.current) {
-        clearTimeout(detectionTimeoutRef.current);
-      }
-
-      // Early exit if condition not met
-      const currentCategory = formData.category;
-      if (currentCategory || ingredientName.trim().length <= 2) {
-        return;
-      }
-
-      const { brand, storage_location } = formData;
-
-      detectionTimeoutRef.current = setTimeout(() => {
-        performCategoryDetection(
-          ingredientName,
-          brand,
-          storage_location,
-          setFormData,
-          setAutoDetectedCategory
-        );
-      }, 500); // 500ms debounce
-    },
-    [formData.category, formData.brand, formData.storage_location],
-  );
-
   async function performCategoryDetection(
     name: string,
     brand: string | undefined,
     storage: string | undefined,
     setFormData: React.Dispatch<React.SetStateAction<Partial<FormData>>>,
-    setCategoryState: (cat: string) => void
+    setCategoryState: (cat: string) => void,
   ) {
     try {
       const { category } = await autoDetectCategory(
@@ -77,6 +46,34 @@ export function useCategoryDetection(formData: FormData) {
       logger.error('Error auto-detecting category:', error);
     }
   }
+
+  const handleCategoryDetection = useCallback(
+    (ingredientName: string, setFormData: React.Dispatch<React.SetStateAction<Partial<FormData>>>) => {
+      // Clear existing timeout
+      if (detectionTimeoutRef.current) {
+        clearTimeout(detectionTimeoutRef.current);
+      }
+
+      // Early exit if condition not met
+      const currentCategory = formData.category;
+      if (currentCategory || ingredientName.trim().length <= 2) {
+        return;
+      }
+
+      const { brand, storage_location } = formData;
+
+      detectionTimeoutRef.current = setTimeout(() => {
+        performCategoryDetection(
+          ingredientName,
+          brand,
+          storage_location,
+          setFormData,
+          setAutoDetectedCategory,
+        );
+      }, 500); // 500ms debounce
+    },
+    [formData.category, formData.brand, formData.storage_location],
+  );
 
   const clearAutoDetectedCategory = useCallback(() => {
     setAutoDetectedCategory(null);

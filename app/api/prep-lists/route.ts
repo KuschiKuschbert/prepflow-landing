@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
     let body: unknown;
     try {
       body = await request.json();
-    } catch (err) {
+    } catch (_err) {
       return NextResponse.json(
         ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400),
         { status: 400 },
@@ -142,7 +142,7 @@ export async function PUT(request: NextRequest) {
     let body: unknown;
     try {
       body = await request.json();
-    } catch (err) {
+    } catch (_err) {
       return NextResponse.json(
         ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400),
         { status: 400 },

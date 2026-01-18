@@ -1,5 +1,4 @@
 'use client';
-import { Icon } from '@/components/ui/Icon';
 import type { SquareConfig } from '../types';
 
 interface ConnectionWorkflowFormProps {

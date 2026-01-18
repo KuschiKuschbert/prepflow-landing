@@ -4,12 +4,12 @@
 import { logger } from '@/lib/logger';
 
 // Translation files mapping - lazy loaded
-const translations: Record<string, any> = {};
+const translations: Record<string, Record<string, unknown>> = {};
 
 /**
  * Lazy load translation files.
  */
-export async function loadTranslations(language: string): Promise<any> { // justified
+export async function loadTranslations(language: string): Promise<Record<string, unknown>> {
   if (translations[language]) {
     return translations[language];
   }
@@ -34,6 +34,6 @@ export async function loadTranslations(language: string): Promise<any> { // just
   return translations['en-AU'];
 }
 
-export function getCachedTranslations(): Record<string, any> {
+export function getCachedTranslations(): Record<string, Record<string, unknown>> {
   return translations;
 }

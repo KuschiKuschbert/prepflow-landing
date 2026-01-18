@@ -35,7 +35,7 @@ async function storeErrorInDatabase(
       let supabaseAdminModule;
       try {
         supabaseAdminModule = await import('./supabase');
-      } catch (importErr) {
+      } catch (_importErr) {
         return;
       }
 

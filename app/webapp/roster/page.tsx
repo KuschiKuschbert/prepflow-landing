@@ -10,7 +10,7 @@
 import { useEffect, useState } from 'react';
 import { RosterBuilder } from './components/RosterBuilder';
 import { PageHeader } from '@/app/webapp/components/static/PageHeader';
-import { LoadingSkeleton, PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { logger } from '@/lib/logger';
 import { Calendar } from 'lucide-react';
 import type { Shift, Employee } from './types';

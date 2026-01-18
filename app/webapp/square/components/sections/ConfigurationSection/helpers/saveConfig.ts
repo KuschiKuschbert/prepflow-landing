@@ -12,7 +12,7 @@ interface SaveConfigParams {
 
 export async function saveSquareConfig({
   config,
-  setSaving,
+  setSaving: _setSaving,
   setShowConnectionWorkflow,
   showSuccess,
   showError,

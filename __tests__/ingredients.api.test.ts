@@ -34,7 +34,7 @@ jest.mock('@/lib/supabase', () => {
   ];
   return {
     supabaseAdmin: {
-      from: (table: string) => ({
+      from: (_table: string) => ({
         select: () => ({
           eq: () => ({
             in: (_: string, __: string[]) => ({ data: ingredients, error: null }),
@@ -65,7 +65,7 @@ describe('GET /api/recipes/[id]/ingredients (no demo)', () => {
     const req = {} as NextRequest;
 
     // Mock first query to recipe_ingredients
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+     
     const supabase = require('@/lib/supabase');
     const fromSpy = jest.spyOn(supabase.supabaseAdmin, 'from');
 

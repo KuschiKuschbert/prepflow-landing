@@ -31,7 +31,7 @@ export async function verifyCachedCustomer(
     });
     await removeCachedCustomer(customerId);
     return null;
-  } catch (error) {
+  } catch (_error) {
     // Customer doesn't exist, remove from cache
     logger.dev('[Billing] Cached customer not found, creating new customer:', {
       email: userEmail,

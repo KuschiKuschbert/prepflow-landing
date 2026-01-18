@@ -16,7 +16,6 @@ import type {
 import { logger } from '@/lib/logger';
 import { createShiftFromTemplate } from './templateService/helpers/createShiftFromTemplate';
 import { findShiftConflict } from './templateService/helpers/findShiftConflict';
-import { validateTemplateApplication } from './templateService/helpers/validateTemplateApplication';
 
 /**
  * Applies a roster template to a target week, creating actual shifts from template shifts.

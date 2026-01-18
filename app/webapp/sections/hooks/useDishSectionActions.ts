@@ -36,7 +36,7 @@ export function useDishSectionActions({
   setShowForm,
   setEditingSection,
   fetchKitchenSections,
-  fetchMenuDishes,
+  fetchMenuDishes: _fetchMenuDishes,
 }: UseDishSectionActionsProps) {
   const { showSuccess, showError } = useNotification();
 

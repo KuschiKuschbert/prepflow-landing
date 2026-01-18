@@ -59,7 +59,7 @@ export function BillingSection() {
 
   const handleOpenPortal = async () => {
     // Store original subscription data for rollback (though this redirects, so not strictly necessary)
-    const originalData = subscriptionData;
+    const _originalData = subscriptionData;
 
     try {
       const response = await fetch('/api/billing/create-portal-session', {

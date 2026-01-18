@@ -3,7 +3,7 @@
 import React from 'react';
 
 export default function Resources() {
-  const [tourOpen, setTourOpen] = React.useState(false);
+  const [_tourOpen, _setTourOpen] = React.useState(false);
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-16">

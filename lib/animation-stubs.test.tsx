@@ -23,7 +23,7 @@ describe('animation-stubs', () => {
       try {
         const C = Component as React.ComponentType;
         render(<C />);
-      } catch (e) {
+      } catch (_e) {
         // console.warn('Render failed for animation-stubs, but module loaded');
       }
     }

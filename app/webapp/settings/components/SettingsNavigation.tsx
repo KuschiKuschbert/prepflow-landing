@@ -10,7 +10,7 @@ import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { useMemo } from 'react';
 
 export default function SettingsNavigation() {
-  const pathname = usePathname();
+  const _pathname = usePathname();
   const { isAdmin } = useIsAdmin();
 
   // Filter admin-only items if user is not admin

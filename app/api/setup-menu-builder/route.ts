@@ -78,7 +78,7 @@ export async function POST(_request: NextRequest) {
     }
 
     // Check if dishes table exists (primary table for menu builder)
-    const { data, error } = await supabaseAdmin.from('dishes').select('id').limit(1);
+    const { data: _data, error } = await supabaseAdmin.from('dishes').select('id').limit(1);
 
     if (error && error.code === '42P01') {
       // Table doesn't exist

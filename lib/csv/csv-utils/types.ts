@@ -7,7 +7,7 @@ export interface ParseCSVOptions {
   transform?: (value: unknown, field: string) => unknown;
 }
 
-export interface ParseCSVResult<T = any> {
+export interface ParseCSVResult<T = unknown> {
   data: T[];
   errors: Papa.ParseError[];
   meta: Papa.ParseMeta;

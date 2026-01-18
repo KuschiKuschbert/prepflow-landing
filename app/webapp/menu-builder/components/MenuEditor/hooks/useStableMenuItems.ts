@@ -11,7 +11,7 @@ export function useStableMenuItems(rawMenuItems: MenuItem[], menuId: string): Me
   const stableMenuItemsRef = useRef<MenuItem[]>(rawMenuItems);
 
   const menuItems = useMemo(() => {
-    const currentItemIds = rawMenuItems.map(i => i.id).join(',');
+    const _currentItemIds = rawMenuItems.map(i => i.id).join(',');
     const referenceChanged = prevRawMenuItemsRef.current !== rawMenuItems;
 
     const { contentChanged, itemReferencesChanged, changedItems } = detectItemChanges(
@@ -47,7 +47,7 @@ export function useStableMenuItems(rawMenuItems: MenuItem[], menuId: string): Me
   // Update refs after memo calculation to avoid mutating during render
   useEffect(() => {
     const currentItemIds = rawMenuItems.map(i => i.id).join(',');
-    const prevItemIds = prevItemIdsRef.current;
+    const _prevItemIds = prevItemIdsRef.current;
 
     const { contentChanged } = detectItemChanges(prevRawMenuItemsRef.current, rawMenuItems);
 

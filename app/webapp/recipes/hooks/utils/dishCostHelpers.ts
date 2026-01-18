@@ -25,7 +25,7 @@ interface Ingredient {
 
 export function calculateRecipeCost(
   recipeIngredients: RecipeIngredient[],
-  recipeQuantity: number,
+  _recipeQuantity: number,
 ): number {
   let cost = 0;
   recipeIngredients.forEach(ri => {

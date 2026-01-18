@@ -13,7 +13,7 @@ interface EquipmentItemHeaderProps {
 
 export function EquipmentItemHeader({
   name,
-  equipmentType,
+  equipmentType: _equipmentType,
   location,
   typeIcon,
   typeLabel,

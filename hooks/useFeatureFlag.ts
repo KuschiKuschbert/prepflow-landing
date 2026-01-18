@@ -26,7 +26,7 @@ export function useFeatureFlag(flagKey: string): boolean {
           return { enabled: false };
         }
         return await response.json();
-      } catch (error) {
+      } catch (_error) {
         return { enabled: false };
       }
     },

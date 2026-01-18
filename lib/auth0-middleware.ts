@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 import { isEmailAllowed } from './allowlist';
 import { auth0, isAuthRequired } from './auth0';
 
-const isDev = process.env.NODE_ENV === 'development';
+const _isDev = process.env.NODE_ENV === 'development';
 
 /**
  * Extract user email from Auth0 session for middleware

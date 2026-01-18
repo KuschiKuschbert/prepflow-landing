@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 // Test Supabase connection
 require('dotenv').config();
 

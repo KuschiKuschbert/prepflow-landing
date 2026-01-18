@@ -14,7 +14,7 @@ interface DayHeaderProps {
  */
 function DayHeader({ date, isToday = false }: DayHeaderProps) {
   // Use date.getTime() as dependency to properly detect date changes
-  const dateKey = useMemo(() => date.getTime(), [date]);
+  const _dateKey = useMemo(() => date.getTime(), [date]);
 
   const { dayName, dayNumber, monthName } = useMemo(() => {
     return {

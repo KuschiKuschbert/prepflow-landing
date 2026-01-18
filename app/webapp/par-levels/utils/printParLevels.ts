@@ -24,7 +24,7 @@ export function printParLevels({
 }: PrintParLevelsOptions): void {
   const filteredParLevels = includeLowStock
     ? parLevels
-    : parLevels.filter(pl => {
+    : parLevels.filter(_pl => {
         // Filter logic would go here if we had current stock levels
         return true;
       });

@@ -87,7 +87,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ co
         };
       })
       .filter(recipe => recipe.contains_allergen)
-      .map(({ contains_allergen, ...recipe }) => recipe); // Remove contains_allergen flag
+      .map(({ contains_allergen: _contains_allergen, ...recipe }) => recipe); // Remove contains_allergen flag
 
     return NextResponse.json({
       success: true,

@@ -24,14 +24,6 @@ interface FeatureImageContainerProps {
   ANIMATION_EASING: string;
 }
 
-function prefersReducedMotion(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia === 'undefined') return false;
-  try {
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  } catch {
-    return false;
-  }
-}
 
 export function FeatureImageContainer({
   currentImage,

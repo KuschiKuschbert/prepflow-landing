@@ -57,7 +57,7 @@ const PrepListPreview = dynamic(
 );
 
 export default function PrepListsPage() {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
   const { showSuccess, showError } = useNotification();
   const userId = 'user-123';
   const pageSize = 10;
@@ -82,7 +82,7 @@ export default function PrepListsPage() {
   } = usePrepListsModals();
 
   // Pagination
-  const { page, setPage, totalPages, goToPreviousPage, goToNextPage } = usePrepListsPagination({
+  const { page, setPage: _setPage, totalPages: _totalPages, goToPreviousPage, goToNextPage } = usePrepListsPagination({
     total: 0, // Will be updated from prepListsData
     pageSize,
   });
@@ -91,7 +91,7 @@ export default function PrepListsPage() {
   const {
     data: prepListsData,
     isLoading: listsLoading,
-    refetch: refetchPrepLists,
+    refetch: _refetchPrepLists,
   } = usePrepListsQuery(page, pageSize, userId);
 
   // Fetch kitchen sections and ingredients
@@ -110,9 +110,9 @@ export default function PrepListsPage() {
     error: formError,
     handleSubmit,
     resetForm,
-    addItem,
-    removeItem,
-    updateItem,
+    addItem: _addItem,
+    removeItem: _removeItem,
+    updateItem: _updateItem,
     handleEdit,
     setError,
   } = usePrepListsForm({

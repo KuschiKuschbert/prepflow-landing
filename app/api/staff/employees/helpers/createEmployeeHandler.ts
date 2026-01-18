@@ -50,7 +50,7 @@ export async function handleCreateEmployee(request: NextRequest, supabase: Supab
     const employeeData = validation.data!;
 
     // Check if email already exists
-    const { data: existingEmployee, error: checkError } = await supabase
+    const { data: existingEmployee, error: _checkError } = await supabase
       .from('employees')
       .select('id')
       .eq('email', employeeData.email)

@@ -25,7 +25,7 @@ interface UseCleaningHandlersProps {
 export function useCleaningHandlers({
   areas,
   tasks,
-  activeTab,
+  activeTab: _activeTab,
   onCreateTask,
 }: UseCleaningHandlersProps) {
   // Memoize area tasks lookup to avoid recalculating on every render

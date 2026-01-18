@@ -13,7 +13,7 @@ interface ChartDataPoint {
   xIndex: number;
 }
 
-export function useTemperatureChartData(logs: TemperatureLog[], equipment: TemperatureEquipment) {
+export function useTemperatureChartData(logs: TemperatureLog[], _equipment: TemperatureEquipment) {
   const chartData = useMemo(() => {
     return logs
       .map((log, index) => {

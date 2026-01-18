@@ -24,7 +24,8 @@ async function safeParseBody(request: NextRequest) {
 }
 
 // Helper to apply user filter to query
-function applyUserFilter(query: any, userId: string | null | undefined) { // justified: Supabase QueryBuilder type is complex
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function applyUserFilter(query: any, userId: string | null | undefined) {
   if (userId !== undefined && userId !== null) {
     return query.eq('user_id', userId);
   }

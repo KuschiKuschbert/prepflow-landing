@@ -25,9 +25,9 @@ export default function DishIngredientSelector({
   selectedIngredients,
   onIngredientsChange,
 }: DishIngredientSelectorProps) {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, _setSearchTerm] = useState('');
 
-  const filteredIngredients = ingredients.filter(ingredient =>
+  const _filteredIngredients = ingredients.filter(ingredient =>
     ingredient.ingredient_name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 

@@ -27,7 +27,7 @@ export function SearchFilters({
   setSourceFilter,
   formatFilter,
   setFormatFilter,
-  loadingRecipes,
+  loadingRecipes: _loadingRecipes,
   onFetchRecipes,
 }: SearchFiltersProps) {
   return (

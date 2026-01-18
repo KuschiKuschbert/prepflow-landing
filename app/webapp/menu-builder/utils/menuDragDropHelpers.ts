@@ -89,7 +89,7 @@ export async function reorderMenuItems(
   overId: string,
   setMenuItems: (items: MenuItem[]) => void,
   onStatisticsUpdate: () => void,
-  onMenuDataReload: () => Promise<void>,
+  _onMenuDataReload: () => Promise<void>,
 ) {
   const categoryItems = menuItems
     .filter(item => item.category === activeItem.category)

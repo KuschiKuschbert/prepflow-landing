@@ -3,8 +3,8 @@
  */
 
 import { escapeHtml } from '@/lib/exports/template-utils';
+import { calculateOrderTotals, formatPackSize, formatPrice } from './helpers';
 import type { OrderListData } from './types';
-import { formatPackSize, formatPrice, calculateOrderTotals } from './helpers';
 
 /**
  * Format order list as purchase order (supplier variant)
@@ -13,7 +13,7 @@ import { formatPackSize, formatPrice, calculateOrderTotals } from './helpers';
  * @returns {string} HTML content for purchase order
  */
 export function formatSupplierOrderList(data: OrderListData): string {
-  const { menuName, groupedIngredients, supplier, purchaseOrderNumber } = data;
+  const { menuName: _menuName, groupedIngredients, supplier, purchaseOrderNumber } = data;
   const groupKeys = Object.keys(groupedIngredients).sort();
   const poNumber =
     purchaseOrderNumber || `PO-${new Date().toISOString().split('T')[0].replace(/-/g, '')}`;
@@ -76,7 +76,7 @@ export function formatSupplierOrderList(data: OrderListData): string {
         <tbody>
   `;
 
-  let itemNumber = 1;
+  let _itemNumber = 1;
   groupKeys.forEach(groupKey => {
     const ingredients = groupedIngredients[groupKey];
     ingredients.forEach(ingredient => {
@@ -97,7 +97,7 @@ export function formatSupplierOrderList(data: OrderListData): string {
           <td class="col-total"><strong>${formatPrice(lineTotal)}</strong></td>
         </tr>
       `;
-      itemNumber++;
+      _itemNumber++;
     });
   });
 

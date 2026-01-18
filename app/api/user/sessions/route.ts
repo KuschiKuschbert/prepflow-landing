@@ -14,7 +14,7 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function GET(req: NextRequest) {
   try {
-    const user = await requireAuth(req);
+    const _user = await requireAuth(req);
     const session = await auth0.getSession(req);
 
     // Auth0 SDK with JWT strategy doesn't maintain a session store

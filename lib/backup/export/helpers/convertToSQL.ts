@@ -16,7 +16,7 @@ export function convertToSQL(backupData: BackupData): string {
 
   // Generate INSERT statements for each table
   for (const [tableName, records] of Object.entries(backupData.tables)) {
-    const typedRecords = records as Record<string, any>[];
+    const typedRecords = records as Record<string, unknown>[];
     if (typedRecords.length === 0) {
       continue;
     }

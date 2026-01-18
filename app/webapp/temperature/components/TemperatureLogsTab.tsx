@@ -40,7 +40,7 @@ export default function TemperatureLogsTab({
 }: TemperatureLogsTabProps) {
   const { t } = useTranslation();
   const { formatDate } = useCountryFormatting();
-  const { showSuccess, showError } = useNotification();
+  const { showSuccess: _showSuccess, showError: _showError } = useNotification();
   const [isMounted, setIsMounted] = useState(false);
 
   // Sample data generation for empty state

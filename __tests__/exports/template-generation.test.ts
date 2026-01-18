@@ -119,7 +119,7 @@ describe('Template Generation', () => {
           .filter(([_, result]) => !result.valid)
           .map(([variant, result]) => `${variant}: ${result.errors.join(', ')}`);
 
-        // eslint-disable-next-line no-console
+         
         console.error('Variant test failures:', failures);
       }
 

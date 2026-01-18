@@ -12,7 +12,7 @@ import { getCachedTranslations, loadTranslations } from './useTranslation/helper
 export function useTranslation() {
   const [currentLanguage, setCurrentLanguage] = useState<string>('en-AU');
   const [isLoading, setIsLoading] = useState(true);
-  const [isClient, setIsClient] = useState(false);
+  const [_isClient, setIsClient] = useState(false);
 
   // Initialize language on mount
   useEffect(() => {

@@ -16,7 +16,7 @@ export default function ScrollTracker({
 }: ScrollTrackerProps) {
   const [scrollDepth, setScrollDepth] = useState(0);
   const [viewedSections, setViewedSections] = useState<Set<string>>(new Set());
-  const [lastScrollTime, setLastScrollTime] = useState(0);
+  const [_lastScrollTime, setLastScrollTime] = useState(0);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const sectionObserverRef = useRef<IntersectionObserver | undefined>(undefined);
   const startTimeOnPageRef = useRef<number | null>(null);

@@ -4,7 +4,7 @@ import type { RecipeImportRow } from '../../recipe-import';
 /**
  * Format recipe for preview
  */
-export function formatRecipePreview(recipe: RecipeImportRow, index: number): React.ReactNode {
+export function formatRecipePreview(recipe: RecipeImportRow, _index: number): React.ReactNode {
   return (
     <div className="space-y-1">
       <div className="font-medium text-white">{recipe.recipe_name}</div>

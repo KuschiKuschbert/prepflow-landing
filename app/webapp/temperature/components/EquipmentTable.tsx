@@ -25,7 +25,7 @@ export function EquipmentTable({
   equipment,
   equipmentStatuses,
   equipmentLogs,
-  timeFilter,
+  timeFilter: _timeFilter,
   selectedEquipmentId,
   onSelect,
   currentPage,

@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Get total count
-    const { count, error: countError } = await supabaseAdmin
+    const { count, error: _countError } = await supabaseAdmin
       .from('account_activity')
       .select('*', { count: 'exact', head: true })
       .eq('user_id', userData.id);

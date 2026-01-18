@@ -8,21 +8,10 @@ import { dispatchToast, dispatchSuccessCelebration } from './ui';
 import { trackSave as trackAchievementSave } from './achievement-tracker';
 import { trackSave as trackBehaviorSave, trackFeatureUsage } from './behavior-tracker';
 import { getCurrentContext } from './utils';
-import {
-  useOnRecipeCreated,
-  useOnIngredientAdded,
-  useOnDishCreated,
-  useOnCOGSCalculated,
-  useOnPerformanceAnalyzed,
-  useOnTemperatureLogged,
-  useOnRecipeShared,
-  useOnMenuBuilt,
-} from './hooks/helpers/useAchievementHooks';
-import {
-  useContextualPersonality,
-  useOnSuccess,
-  useOnMoodShift,
-} from './hooks/helpers/useContextHooks';
+
+
+
+
 
 export function useOnSave() {
   const { settings } = usePersonality();

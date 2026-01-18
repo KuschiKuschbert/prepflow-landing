@@ -15,8 +15,8 @@
 
 import { logger } from '@/lib/logger';
 
-const DEFAULT_TIMEOUT = 60000; // 60 seconds (paid tier can handle longer requests)
-const DEFAULT_MAX_OUTPUT_TOKENS = 8192; // Increased for complex recipes with long descriptions (paid tier supports up to 8192)
+const _DEFAULT_TIMEOUT = 60000; // 60 seconds (paid tier can handle longer requests)
+const _DEFAULT_MAX_OUTPUT_TOKENS = 8192; // Increased for complex recipes with long descriptions (paid tier supports up to 8192)
 
 // Safety guard: Throw error if Gemini is used (prevents expensive costs)
 const GEMINI_DISABLED_ERROR = new Error(

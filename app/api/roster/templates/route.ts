@@ -15,7 +15,7 @@ async function safeParseBody<T>(req: NextRequest, schema: ZodSchema<T>): Promise
   let body: unknown;
   try {
     body = await req.json();
-  } catch (err) {
+  } catch (_err) {
     throw ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400);
   }
 

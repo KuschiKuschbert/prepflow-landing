@@ -1,6 +1,6 @@
 import { Auth0Client } from '@auth0/nextjs-auth0/server';
 
-const isBuild = process.env.NEXT_PHASE === 'phase-production-build';
+const _isBuild = process.env.NEXT_PHASE === 'phase-production-build';
 
 export const auth0 = new Auth0Client({
   appBaseUrl: process.env.AUTH0_BASE_URL || 'http://localhost:3000',

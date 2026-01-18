@@ -4,7 +4,7 @@ import { API, FileInfo, Options, Transform } from 'jscodeshift';
  * Codemod: Log Sanitization
  * Replaces console.log with standardized logger.info or removes them.
  */
-const transform: Transform = (file: FileInfo, api: API, options: Options) => {
+const transform: Transform = (file: FileInfo, api: API, _options: Options) => {
   const j = api.jscodeshift;
   const root = j(file.source);
   let changed = false;

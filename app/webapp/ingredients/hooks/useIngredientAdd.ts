@@ -46,7 +46,7 @@ export function useIngredientAdd<
     async (ingredientData: Partial<T>) => {
       const originalIngredients: T[] = [];
       try {
-        const result = await addIngredient({
+        const _result = await addIngredient({
           ingredientData,
           originalIngredients,
           setIngredients,

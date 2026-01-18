@@ -23,7 +23,7 @@ describe('CatchTheDocket', () => {
     if (Component) {
       try {
         render(<Component />);
-      } catch (e) {
+      } catch (_e) {
         // console.warn('Render failed for CatchTheDocket, but module loaded');
       }
     }

@@ -61,7 +61,7 @@ export function useRosterDragAndDrop({
 
   const handleDragEnd = useCallback(
     async (event: DragEndEvent) => {
-      const { active, over } = event;
+      const { active: _active, over } = event;
       setActiveShiftId(null);
       setDraggedShift(null);
       setDropTarget(null);

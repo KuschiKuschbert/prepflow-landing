@@ -54,7 +54,7 @@ export default function IngredientFilters({
   onSortChange,
   onDisplayUnitChange,
 }: IngredientFiltersProps) {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
 
   // Get unique suppliers and storage locations for filter options
   const uniqueSuppliers = useMemo(

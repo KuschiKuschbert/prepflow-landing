@@ -64,7 +64,7 @@ export default function DishBuilderClient({
   });
 
   // Recipe expansion handler
-  const { expandingRecipe, handleRecipeTap } = useRecipeExpansion({
+  const { expandingRecipe: _expandingRecipe, handleRecipeTap } = useRecipeExpansion({
     ingredients,
     handleIngredientAdded,
     setError,

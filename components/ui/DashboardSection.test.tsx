@@ -22,7 +22,7 @@ describe('DashboardSection', () => {
     if (Component) {
       try {
         render(<Component />);
-      } catch (e) {
+      } catch (_e) {
         // console.warn('Render failed for DashboardSection, but module loaded');
       }
     }

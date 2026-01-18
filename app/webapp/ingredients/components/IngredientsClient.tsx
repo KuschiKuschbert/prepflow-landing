@@ -128,7 +128,7 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   }, [searchParams, showAddForm, setShowAddForm, resetWizard, router]);
   const {
     handleAddIngredient,
-    handleUpdateIngredient,
+    handleUpdateIngredient: _handleUpdateIngredient,
     handleDeleteIngredient,
     handleBulkDelete,
     exportToCSV,

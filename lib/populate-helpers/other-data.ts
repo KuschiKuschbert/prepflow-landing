@@ -85,7 +85,7 @@ export async function populateSalesData(
       name: r.name || r.recipe_name,
     }));
 
-    const { salesData, dishesCreated, dishesUsed } = await generateSalesDataForMonth(
+    const { salesData, dishesCreated: _dishesCreated, dishesUsed: _dishesUsed } = await generateSalesDataForMonth(
       recipes,
       startDate,
       endDate,

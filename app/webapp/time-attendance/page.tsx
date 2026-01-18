@@ -10,7 +10,7 @@
 import { useEffect, useState } from 'react';
 import { ClockIn } from './components/ClockIn';
 import { PageHeader } from '@/app/webapp/components/static/PageHeader';
-import { LoadingSkeleton, PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { Clock } from 'lucide-react';
 import { logger } from '@/lib/logger';
 import type { Employee, Shift } from '@/app/webapp/roster/types';

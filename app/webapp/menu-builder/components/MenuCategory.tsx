@@ -43,7 +43,7 @@ function MenuCategoryComponent({
   const { showError } = useNotification();
   const { sortBy, setSortBy, sortedItems } = useCategorySort({ items, defaultSort: 'position' });
 
-  const [hoveredItem, setHoveredItem] = useState<MenuItem | null>(null);
+  const [_hoveredItem, setHoveredItem] = useState<MenuItem | null>(null);
   const [clickedItemForPrice, setClickedItemForPrice] = useState<MenuItem | null>(null);
   const categoryRef = useRef<HTMLDivElement | null>(null);
   const prevItemsRef = useRef<MenuItem[]>(items);

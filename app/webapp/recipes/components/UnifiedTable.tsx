@@ -56,7 +56,7 @@ export function UnifiedTable({
   onDeleteDish,
   onDeleteRecipe,
   onSortChange,
-  onStartLongPress,
+  onStartLongPress: _onStartLongPress,
   onCancelLongPress,
   onEnterSelectionMode,
 }: UnifiedTableProps) {

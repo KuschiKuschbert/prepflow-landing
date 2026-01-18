@@ -10,7 +10,7 @@ export function useRecipeBulkOperations(
   fetchRecipes: () => Promise<void>,
   capitalizeRecipeName: (name: string) => string,
   optimisticallyUpdateRecipes: (updater: (recipes: Recipe[]) => Recipe[]) => void,
-  rollbackRecipes: () => void,
+  _rollbackRecipes: () => void,
 ) {
   const { showSuccess, showError: showErrorNotification } = useNotification();
   const [selectedRecipes, setSelectedRecipes] = useState<Set<string>>(new Set());

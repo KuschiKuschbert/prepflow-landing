@@ -5,7 +5,7 @@ import type { TemperatureLogImportRow } from '../../temperature-import';
 
 export function validateTemperatureLog(
   row: TemperatureLogImportRow,
-  index: number,
+  _index: number,
 ): { valid: boolean; error?: string } {
   if (!row.log_date || row.log_date.trim().length === 0) {
     return { valid: false, error: 'Log date is required' };

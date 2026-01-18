@@ -1,7 +1,6 @@
 /**
  * Common helpers for cost sync operations.
  */
-import { logger } from '@/lib/logger';
 import { logSyncOperation } from '../../../sync-log';
 
 /**
@@ -14,7 +13,7 @@ export async function logCostSyncOperation(params: {
   status: 'success' | 'error';
   costData?: { total_cost: number; food_cost_percent: number };
   errorMessage?: string;
-  errorDetails?: Record<string, any>;
+  errorDetails?: Record<string, unknown>;
 }): Promise<void> {
   await logSyncOperation({
     user_id: params.userId,

@@ -98,7 +98,7 @@ function getAchievementTargetValue(achievementId: string): number | undefined {
 export function AchievementCard({
   achievement,
   unlocked,
-  progress,
+  progress: _progress,
   currentValue,
   targetValue,
 }: AchievementCardProps) {

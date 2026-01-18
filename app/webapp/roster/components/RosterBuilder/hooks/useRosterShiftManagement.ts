@@ -25,7 +25,7 @@ interface UseRosterShiftManagementProps {
  */
 export function useRosterShiftManagement({
   shifts,
-  currentWeekStart,
+  currentWeekStart: _currentWeekStart,
   addShift,
   updateShift,
   removeShift,

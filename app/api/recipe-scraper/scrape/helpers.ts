@@ -8,8 +8,6 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { getComprehensiveScraperJob } from '../../../../scripts/recipe-scraper/jobs/comprehensive-scraper';
-import { createScraper } from './helpers/scraper-factory';
-import { scrapeRecipes } from './helpers/scraping-operations';
 
 /**
  * Handle authentication with proper error handling

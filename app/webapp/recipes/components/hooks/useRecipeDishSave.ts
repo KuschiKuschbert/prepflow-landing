@@ -41,7 +41,7 @@ export function useRecipeDishSave({
     setSaving(true);
     try {
       if (selectedItem.type === 'recipe') {
-        const result = await saveRecipeIngredients(selectedItem, calculations, allRecipes);
+        const _result = await saveRecipeIngredients(selectedItem, calculations, allRecipes);
         showSuccess('Recipe ingredients saved successfully');
       } else {
         await saveDishIngredients(selectedItem, calculations, allDishes);

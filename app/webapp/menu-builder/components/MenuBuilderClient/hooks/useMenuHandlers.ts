@@ -14,7 +14,7 @@ interface UseMenuHandlersProps {
  * Hook for managing menu-related handlers (create, edit, select, save, update, delete)
  */
 export function useMenuHandlers({
-  menus,
+  menus: _menus,
   setMenus,
   selectedMenu,
   setSelectedMenu,

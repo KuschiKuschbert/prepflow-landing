@@ -6,7 +6,7 @@ import type { TemperatureLogImportRow } from '../../temperature-import';
 
 export function formatTemperatureLogPreview(
   log: TemperatureLogImportRow,
-  index: number,
+  _index: number,
 ): React.ReactNode {
   return (
     <div className="space-y-1">

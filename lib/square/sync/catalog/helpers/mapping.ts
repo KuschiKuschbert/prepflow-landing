@@ -6,7 +6,7 @@ import type { Dish, SquareCatalogObject } from '../../catalog';
 /**
  * Map Square catalog item to PrepFlow dish
  */
-export function mapSquareItemToDish(squareItem: SquareCatalogObject, locationId: string): Dish {
+export function mapSquareItemToDish(squareItem: SquareCatalogObject, _locationId: string): Dish {
   const itemData = squareItem.itemData;
   if (!itemData) {
     return {

@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
 import { generateLegacyTemperatureLogs } from '@/lib/generate-legacy-temperature-logs';
+import { supabaseAdmin } from '@/lib/supabase';
+import { NextRequest, NextResponse } from 'next/server';
 
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { logger } from '@/lib/logger';
 /**
  * @deprecated This endpoint is deprecated. Temperature logs are now automatically
  * generated as part of the populate-clean-test-data endpoint with regional standards.
  * Use /api/populate-clean-test-data?countryCode=XX instead.
  */
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -20,11 +20,13 @@ export async function POST(request: NextRequest) {
 
     logger.dev('🌡️ Starting temperature log generation...');
 
-    // First, check if equipment exists
-    let { data: equipment, error: equipmentError } = await supabaseAdmin
+    const result = await supabaseAdmin
       .from('temperature_equipment')
       .select('*')
       .eq('is_active', true);
+
+    let equipment = result.data;
+    const equipmentError = result.error;
 
     if (equipmentError) {
       logger.error('Error fetching equipment:', equipmentError);

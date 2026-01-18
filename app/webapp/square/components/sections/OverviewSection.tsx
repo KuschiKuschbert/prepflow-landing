@@ -33,7 +33,7 @@ const StatusCard = ({
 
 export function OverviewSection() {
   const { status, loading, error } = useSquareStatus();
-  const { showError } = useNotification();
+  const { showError: _showError } = useNotification();
 
   // Memoize status cards to prevent unnecessary re-renders
   const statusCards = useMemo(() => {

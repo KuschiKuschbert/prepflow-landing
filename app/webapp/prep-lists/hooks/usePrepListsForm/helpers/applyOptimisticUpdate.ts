@@ -15,7 +15,7 @@ export function applyOptimisticUpdate({
   editingPrepList,
   formData,
   tempPrepList,
-  prepLists,
+  prepLists: _prepLists,
   setPrepLists,
 }: ApplyOptimisticUpdateParams): void {
   if (editingPrepList) {

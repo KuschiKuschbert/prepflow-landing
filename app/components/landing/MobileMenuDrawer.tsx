@@ -26,7 +26,7 @@ export const MobileMenuDrawer = memo(function MobileMenuDrawer({
   trackEngagement,
 }: MobileMenuDrawerProps) {
   const { user } = useUser();
-  const pathname = usePathname();
+  const _pathname = usePathname();
   const router = useRouter();
   const isMobile = useMediaQuery('(max-width: 1024px)');
   const drawerRef = useRef<HTMLDivElement>(null);

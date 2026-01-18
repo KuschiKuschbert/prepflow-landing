@@ -72,7 +72,7 @@ export function clearCache(key: string): void {
     sessionStorage.removeItem(getCacheKey(key));
     sessionStorage.removeItem(getTimestampKey(key));
     sessionStorage.removeItem(`prepflow_cache_${key}_expiry`);
-  } catch (error) {
+  } catch (_error) {
     // Ignore errors
   }
 }
@@ -86,7 +86,7 @@ export function clearAllCaches(): void {
         sessionStorage.removeItem(key);
       }
     });
-  } catch (error) {
+  } catch (_error) {
     // Ignore errors
   }
 }
@@ -101,7 +101,7 @@ export function prefetchApi(endpoint: string): void {
     link.as = 'fetch';
     link.href = endpoint;
     document.head.appendChild(link);
-  } catch (error) {
+  } catch (_error) {
     // Ignore errors
   }
 }

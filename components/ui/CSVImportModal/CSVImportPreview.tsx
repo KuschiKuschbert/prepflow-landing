@@ -29,7 +29,7 @@ export function CSVImportPreview<T>({
   onSelectAll,
 }: CSVImportPreviewProps<T>) {
   const validCount = parsedEntities.length - validationErrors.size;
-  const selectedValidCount = Array.from(selectedIndices).filter(
+  const _selectedValidCount = Array.from(selectedIndices).filter(
     i => !validationErrors.has(i),
   ).length;
 

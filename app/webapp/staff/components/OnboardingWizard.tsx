@@ -36,7 +36,7 @@ export function OnboardingWizard({ employee, onComplete, onCancel }: OnboardingW
     loading,
     setLoading,
     idFile,
-    setIdFile,
+    setIdFile: _setIdFile,
     signatureData,
     setSignatureData,
     bankBSB,

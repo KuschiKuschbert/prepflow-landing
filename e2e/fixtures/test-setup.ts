@@ -2,7 +2,6 @@ import { test as base } from '@playwright/test';
 import {
   setupGlobalErrorListener,
   collectPageErrors,
-  clearCollectedErrors,
 } from './global-error-listener';
 import { ensureAuthenticated } from './auth-helper';
 

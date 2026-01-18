@@ -8,7 +8,7 @@ interface UseUserMenuProps {
 /**
  * Hook for managing user menu state and positioning
  */
-export function useUserMenu({ isDesktop, userButtonRef }: UseUserMenuProps) {
+export function useUserMenu({ isDesktop: _isDesktop, userButtonRef }: UseUserMenuProps) {
   const [isDesktopUserMenuOpen, setIsDesktopUserMenuOpen] = useState(false);
   const desktopMenuRef = useRef<HTMLDivElement>(null);
   const internalUserButtonRef = useRef<HTMLButtonElement>(null);

@@ -6,7 +6,7 @@
  * @param {string} [prompt] - Optional prompt
  * @returns {Promise<Object>} AI response with ingredients and suggestions
  */
-export async function processImageWithAI(imageData: string, prompt?: string) {
+export async function processImageWithAI(_imageData: string, _prompt?: string) {
   // Simulate AI processing delay
   await new Promise(resolve => setTimeout(resolve, 2000));
 

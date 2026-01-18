@@ -4,7 +4,7 @@ import type { QRCodeEntity } from '../types';
 /**
  * Hook for managing QR code selection state
  */
-export function useQRCodeSelection(entities: QRCodeEntity[]) {
+export function useQRCodeSelection(_entities: QRCodeEntity[]) {
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
 
   const toggleSelect = useCallback((id: string) => {

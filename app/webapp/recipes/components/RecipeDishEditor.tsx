@@ -54,7 +54,7 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
     handleKeyDown,
     resetForm,
     setNewIngredient,
-    setShowSuggestions,
+    setShowSuggestions: _setShowSuggestions,
   } = useIngredientSearch(ingredients);
 
   const { calculations, setCalculations, loadingIngredients } = useRecipeDishIngredientLoading({
@@ -65,7 +65,7 @@ export function RecipeDishEditor({ item, itemType, onClose, onSave }: RecipeDish
     convertIngredientQuantity,
     showError,
   });
-  const { calculateCOGS, updateCalculation } = useCOGSCalculationLogic({
+  const { calculateCOGS: _calculateCOGS, updateCalculation } = useCOGSCalculationLogic({
     ingredients,
     setCalculations,
   });

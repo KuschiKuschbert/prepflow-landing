@@ -1,5 +1,5 @@
 declare module 'react-signature-canvas' {
-  import { Component, RefObject } from 'react';
+  import { Component } from 'react';
 
   export interface SignatureCanvasProps {
     canvasProps?: React.CanvasHTMLAttributes<HTMLCanvasElement>;

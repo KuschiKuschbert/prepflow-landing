@@ -21,7 +21,7 @@ interface UseRecipeIngredientsProps {
 export function useRecipeIngredients({
   setRecipeIngredients,
   setCalculations,
-  calculateCOGS,
+  calculateCOGS: _calculateCOGS,
   setError,
   setIsLoadingFromApi,
   shouldPreserveManualIngredients,

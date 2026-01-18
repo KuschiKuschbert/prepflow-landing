@@ -30,7 +30,7 @@ export async function authenticateGoogleDrive(userId: string): Promise<Auth.OAut
       const { credentials } = await oauth2Client.refreshAccessToken();
       oauth2Client.setCredentials(credentials);
       return oauth2Client;
-    } catch (error) {
+    } catch (_error) {
       logger.warn(
         `[Google Drive] Failed to refresh token for user ${userId}, re-authentication required`,
       );

@@ -70,7 +70,7 @@ export function RosterGrid({
     }),
   );
 
-  const currentWeekShifts = getCurrentWeekShifts(shifts, currentWeekStart);
+  const _currentWeekShifts = getCurrentWeekShifts(shifts, currentWeekStart);
 
   return (
     <DndContext

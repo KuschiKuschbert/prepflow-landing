@@ -30,14 +30,14 @@ interface MenuListProps {
 export default function MenuList({
   menus,
   onSelectMenu,
-  onEditMenu,
+  onEditMenu: _onEditMenu,
   onDeleteMenu,
   onMenuUpdated,
   setMenus,
 }: MenuListProps) {
   const editing = useMenuEditing({ menus, setMenus, onMenuUpdated });
   const deletion = useMenuDeletion({ menus, setMenus, onDeleteMenu });
-  const { showError, showInfo } = useNotification();
+  const { showError, showInfo: _showInfo } = useNotification();
   const [printingMenuId, setPrintingMenuId] = useState<string | null>(null);
 
   // Debug logging for menu lock status

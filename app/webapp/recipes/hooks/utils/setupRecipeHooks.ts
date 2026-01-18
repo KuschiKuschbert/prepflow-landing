@@ -10,7 +10,7 @@ import { useRecipeInitialization } from './useRecipeInitialization';
  * @returns {Object} Hook return values
  */
 export function useSetupRecipeHooks({
-  setError,
+  setError: _setError,
   setRecipes,
   setIsHydrated,
   pricesCalculatedRef,

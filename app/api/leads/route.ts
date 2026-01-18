@@ -76,7 +76,7 @@ export async function POST(req: Request) {
       return NextResponse.json(apiError, { status: apiError.status || 500 });
     }
 
-    const resendKey = process.env.RESEND_API_KEY; // Keep this just in case logic depends on it, but email is sent via helper now. Actually helper handles env var.
+    const _resendKey = process.env.RESEND_API_KEY; // Keep this just in case logic depends on it, but email is sent via helper now. Actually helper handles env var.
 
     // Optional: send email via Resend if configured (no SDK required)
     await sendLeadEmail(name, email);

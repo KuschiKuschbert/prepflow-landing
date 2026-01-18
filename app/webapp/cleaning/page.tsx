@@ -25,9 +25,9 @@ import { useCleaningModals } from './hooks/useCleaningModals';
 import { useCleaningPageData } from './hooks/useCleaningPageData';
 import { useStatsDates } from './hooks/useStatsDates';
 import {
-  exportCleaningScheduleToCSV,
-  exportCleaningScheduleToHTML,
-  exportCleaningScheduleToPDF,
+    exportCleaningScheduleToCSV,
+    exportCleaningScheduleToHTML,
+    exportCleaningScheduleToPDF,
 } from './utils/exportCleaningSchedules';
 import { printCleaningSchedule, type CleaningTask } from './utils/printCleaningSchedule';
 
@@ -56,7 +56,7 @@ const AreaTasksModal = dynamic(
   },
 );
 
-interface CleaningArea {
+type _CleaningArea = {
   id: string;
   area_name: string;
   description?: string;

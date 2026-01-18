@@ -14,10 +14,10 @@ export interface PerformanceRecord {
   memoryUsageMb?: number;
   cpuUsagePercent?: number;
   success: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
-const METRICS_FILE_PATH = path.join(process.cwd(), 'docs/rsi/metrics.json');
+const _METRICS_FILE_PATH = path.join(process.cwd(), 'docs/rsi/metrics.json');
 
 export class PerformanceTracker {
   private static startTime: number | null = null;

@@ -26,7 +26,7 @@ interface RecipeCardCompactProps {
 }
 
 export function RecipeCardCompact({
-  id,
+  id: _id,
   title,
   isSubRecipe,
   usedByMenuItems,

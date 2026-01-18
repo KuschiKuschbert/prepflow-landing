@@ -3,7 +3,6 @@ import React from 'react';
 import { Recipe, RecipePriceData } from '../types';
 import { Check } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useRecipeTableSort } from '../hooks/useRecipeTableSort';
 import { RecipeTableRow } from './RecipeTableRow';
 
@@ -45,7 +44,7 @@ const RecipeTable = React.memo(function RecipeTable({
   sortDirection = 'asc',
   onSortChange,
   isSelectionMode = false,
-  onStartLongPress,
+  onStartLongPress: _onStartLongPress,
   onCancelLongPress,
   onEnterSelectionMode,
 }: RecipeTableProps) {

@@ -4,7 +4,7 @@ import { API, FileInfo, Options, Transform } from 'jscodeshift';
  * Codemod: Extract Magic Numbers to Constants
  * Looks for literal numbers (except 0, 1, -1, 100) and extracts them to top-level constants.
  */
-const transform: Transform = (file: FileInfo, api: API, options: Options) => {
+const transform: Transform = (file: FileInfo, api: API, _options: Options) => {
   const j = api.jscodeshift;
   const root = j(file.source);
 

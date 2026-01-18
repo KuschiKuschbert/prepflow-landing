@@ -48,12 +48,12 @@ export async function fuzzFormInputs(page: Page): Promise<void> {
         } else {
           await input.fill(randomData);
         }
-      } catch (err) {
+      } catch (_err) {
         // Input might not be fillable, continue
         continue;
       }
     }
-  } catch (err) {
+  } catch (_err) {
     // Page might not have forms, continue
   }
 }

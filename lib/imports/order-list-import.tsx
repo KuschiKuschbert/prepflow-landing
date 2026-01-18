@@ -3,9 +3,9 @@
  * Provides parsing, validation, and template generation for order list imports
  */
 
-import { parseCSV, type ParseCSVResult } from '@/lib/csv/csv-utils';
 import { CSVImportConfig } from '@/components/ui/CSVImportModal';
-import { normalizeColumnName, mapCSVRowToEntity, parseNumber } from './import-utils';
+import { parseCSV, type ParseCSVResult } from '@/lib/csv/csv-utils';
+import { mapCSVRowToEntity, normalizeColumnName, parseNumber } from './import-utils';
 
 export interface OrderListItemImportRow {
   supplier_id: string;
@@ -19,7 +19,7 @@ export interface OrderListItemImportRow {
  * Parse order list items from CSV text
  */
 export function parseOrderListItemsCSV(csvText: string): ParseCSVResult<OrderListItemImportRow> {
-  const result = parseCSV<Record<string, any>>(csvText, {
+  const result = parseCSV<Record<string, unknown>>(csvText, {
     header: true,
     skipEmptyLines: true,
     transformHeader: header => normalizeColumnName(header),
@@ -55,7 +55,7 @@ export function parseOrderListItemsCSV(csvText: string): ParseCSVResult<OrderLis
  */
 export function validateOrderListItem(
   row: OrderListItemImportRow,
-  index: number,
+  _index: number,
 ): { valid: boolean; error?: string } {
   if (!row.supplier_id || row.supplier_id.trim().length === 0) {
     return { valid: false, error: 'Supplier ID is required' };
@@ -81,7 +81,7 @@ export function validateOrderListItem(
  */
 export function formatOrderListItemPreview(
   item: OrderListItemImportRow,
-  index: number,
+  _index: number,
 ): React.ReactNode {
   return (
     <div className="space-y-1">

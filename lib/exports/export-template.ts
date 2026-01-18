@@ -49,9 +49,9 @@ export function generateServerExportTemplate({
  * This function is a placeholder for consistency - actual CSV generation is handled by csv-utils
  */
 export function generateCSVExport(
-  data: Record<string, unknown>[],
-  headers: string[],
-  filename: string,
+  _data: Record<string, unknown>[],
+  _headers: string[],
+  _filename: string,
 ): string {
   // CSV exports should use exportToCSVString from lib/csv/csv-utils.ts directly
   // This is kept for API consistency but delegates to csv-utils

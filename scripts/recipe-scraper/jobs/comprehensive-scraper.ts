@@ -444,7 +444,7 @@ export class ComprehensiveScraperJob {
       // Process all URLs in chunk concurrently
       // Use Promise.allSettled to ensure all promises complete even if one fails
       // This allows us to check stop flag after each chunk
-      const results = await Promise.allSettled(chunk.map(url => processUrl(url)));
+      const _results = await Promise.allSettled(chunk.map(url => processUrl(url)));
 
       // Check stop flag AFTER processing chunk (more responsive)
       // This ensures we stop as soon as possible after the chunk completes

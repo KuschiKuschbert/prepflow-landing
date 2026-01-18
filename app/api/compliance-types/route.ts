@@ -20,7 +20,7 @@ interface ComplianceType {
   name?: string; // Optional for frontend compatibility mapping
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(

@@ -28,7 +28,7 @@ export function generateBargainBucketInsight(
 ): PerformanceInsight | null {
   if (bargainBuckets.length === 0) return null;
 
-  const totalCurrentProfit = bargainBuckets.reduce(
+  const _totalCurrentProfit = bargainBuckets.reduce(
     (sum, item) => sum + item.gross_profit * item.number_sold,
     0,
   );

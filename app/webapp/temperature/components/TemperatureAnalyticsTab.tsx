@@ -28,7 +28,7 @@ export default function TemperatureAnalyticsTab({
   onRefreshLogs,
 }: TemperatureAnalyticsTabProps) {
   const [timeFilter, setTimeFilter] = useState<'24h' | '7d' | '30d' | 'all'>('24h');
-  const [dateOffset, setDateOffset] = useState(0);
+  const [dateOffset, _setDateOffset] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedEquipmentId, setSelectedEquipmentId] = useState<string | null>(null);
   const [drawerEquipment, setDrawerEquipment] = useState<TemperatureEquipment | null>(null);
@@ -211,7 +211,7 @@ export default function TemperatureAnalyticsTab({
           })
         ) : (
           // Loading skeleton for equipment cards
-          <LoadingSkeleton variant="card" count={6} height="80px" />
+          (<LoadingSkeleton variant="card" count={6} height="80px" />)
         )}
       </div>
       {/* Empty State - No Data */}

@@ -1,5 +1,4 @@
 'use client';
-import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 import { EditDrawer } from '@/components/ui/EditDrawer';
 import { useAutosave } from '@/hooks/useAutosave';
 import { deriveAutosaveId } from '@/lib/autosave-id';
@@ -26,7 +25,7 @@ interface RecipeEditDrawerProps {
   onRefresh?: () => Promise<void>;
 }
 
-export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh }: RecipeEditDrawerProps) {
+export function RecipeEditDrawer({ isOpen, recipe, onClose, onRefresh: _onRefresh }: RecipeEditDrawerProps) {
   const { showWarning, showError, showSuccess } = useNotification();
   const [editedName, setEditedName] = useState('');
   const [editedYield, setEditedYield] = useState(1);

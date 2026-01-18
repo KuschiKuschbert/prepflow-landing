@@ -3,9 +3,9 @@
  * Provides parsing, validation, and template generation for par level imports
  */
 
-import { parseCSV, type ParseCSVResult } from '@/lib/csv/csv-utils';
 import { CSVImportConfig } from '@/components/ui/CSVImportModal';
-import { normalizeColumnName, mapCSVRowToEntity, parseNumber } from './import-utils';
+import { parseCSV, type ParseCSVResult } from '@/lib/csv/csv-utils';
+import { mapCSVRowToEntity, normalizeColumnName, parseNumber } from './import-utils';
 
 export interface ParLevelImportRow {
   ingredient_id: string;
@@ -18,7 +18,7 @@ export interface ParLevelImportRow {
  * Parse par levels from CSV text
  */
 export function parseParLevelsCSV(csvText: string): ParseCSVResult<ParLevelImportRow> {
-  const result = parseCSV<Record<string, any>>(csvText, {
+  const result = parseCSV<Record<string, unknown>>(csvText, {
     header: true,
     skipEmptyLines: true,
     transformHeader: header => normalizeColumnName(header),
@@ -58,7 +58,7 @@ export function parseParLevelsCSV(csvText: string): ParseCSVResult<ParLevelImpor
  */
 export function validateParLevel(
   row: ParLevelImportRow,
-  index: number,
+  _index: number,
 ): { valid: boolean; error?: string } {
   if (!row.ingredient_id || row.ingredient_id.trim().length === 0) {
     return { valid: false, error: 'Ingredient ID is required' };
@@ -82,7 +82,7 @@ export function validateParLevel(
 /**
  * Format par level for preview
  */
-export function formatParLevelPreview(parLevel: ParLevelImportRow, index: number): React.ReactNode {
+export function formatParLevelPreview(parLevel: ParLevelImportRow, _index: number): React.ReactNode {
   return (
     <div className="space-y-1">
       <div className="font-medium text-white">Ingredient ID: {parLevel.ingredient_id}</div>

@@ -11,7 +11,7 @@ import type { TemplateShift, Shift } from '@/app/webapp/roster/types';
 export function createShiftFromTemplate(
   templateShift: TemplateShift,
   targetDate: Date,
-  templateId: string,
+  _templateId: string,
 ): Shift {
   const [startHour, startMin, startSec] = templateShift.start_time.split(':').map(Number);
   const [endHour, endMin, endSec] = templateShift.end_time.split(':').map(Number);

@@ -22,7 +22,7 @@ describe('Toggle', () => {
     if (Component) {
       try {
         render(<Component />);
-      } catch (e) {
+      } catch (_e) {
         // console.warn('Render failed for Toggle, but module loaded');
       }
     }

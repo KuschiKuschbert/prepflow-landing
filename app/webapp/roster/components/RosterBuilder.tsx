@@ -199,7 +199,7 @@ export function RosterBuilder({
     showSuccess,
   );
 
-  const currentWeekShifts = getCurrentWeekShifts(shifts, currentWeekStart);
+  const _currentWeekShifts = getCurrentWeekShifts(shifts, currentWeekStart);
 
   return (
     <div className="space-y-6">

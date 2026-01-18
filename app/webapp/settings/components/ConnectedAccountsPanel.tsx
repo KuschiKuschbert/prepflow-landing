@@ -23,7 +23,7 @@ interface ConnectedAccount {
  * @returns {JSX.Element} Connected accounts panel
  */
 export function ConnectedAccountsPanel() {
-  const { showSuccess, showError } = useNotification();
+  const { showSuccess: _showSuccess, showError } = useNotification();
   const { showConfirm, ConfirmDialog } = useConfirm();
   const [ref, isVisible] = useIsVisible<HTMLDivElement>({ threshold: 0.1 });
   const [loading, setLoading] = useState(true);

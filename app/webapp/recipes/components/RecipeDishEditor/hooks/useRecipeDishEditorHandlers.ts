@@ -17,7 +17,7 @@ interface UseRecipeDishEditorHandlersProps {
 export function useRecipeDishEditorHandlers({
   handleAddIngredient,
   newIngredient,
-  setNewIngredient,
+  setNewIngredient: _setNewIngredient,
 }: UseRecipeDishEditorHandlersProps) {
   const handleAddIngredientWrapper = useCallback(
     async (e: React.FormEvent) => {

@@ -12,7 +12,7 @@ interface EquipmentLastLogInfoProps {
 }
 
 export function EquipmentLastLogInfo({ lastLogInfo, formatDate }: EquipmentLastLogInfoProps) {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
 
   if (!lastLogInfo) {
     return null;

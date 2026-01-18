@@ -26,17 +26,17 @@ export function EmployeeCard({
   employee,
   qualificationTypes,
   onEdit,
-  onDelete,
+  onDelete: _onDelete,
 }: EmployeeCardProps) {
   const { showSuccess, showError } = useNotification();
   const [showDetailModal, setShowDetailModal] = useState(false);
-  const [showQualifications, setShowQualifications] = useState(false);
-  const [showAddQualification, setShowAddQualification] = useState(false);
+  const [_showQualifications, _setShowQualifications] = useState(false);
+  const [_showAddQualification, setShowAddQualification] = useState(false);
   const [showDeleteQualConfirm, setShowDeleteQualConfirm] = useState(false);
   const [qualToDelete, setQualToDelete] = useState<string | null>(null);
   const [qualifications, setQualifications] = useState(employee.employee_qualifications || []);
 
-  const handleAddQualification = async (qualificationData: QualificationFormData) => {
+  const _handleAddQualification = async (qualificationData: QualificationFormData) => {
     // Store original state for rollback
     const originalQualifications = [...qualifications];
 
@@ -92,7 +92,7 @@ export function EmployeeCard({
     }
   };
 
-  const handleDeleteQualification = (qualId: string) => {
+  const _handleDeleteQualification = (qualId: string) => {
     setQualToDelete(qualId);
     setShowDeleteQualConfirm(true);
   };
@@ -135,7 +135,7 @@ export function EmployeeCard({
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const _getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
         return 'bg-[var(--color-success)]/10 text-[var(--color-success)] border-[var(--color-success)]/20';

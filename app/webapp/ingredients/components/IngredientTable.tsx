@@ -50,7 +50,7 @@ export default function IngredientTable({
   onSelectAll,
   loading = false,
 }: IngredientTableProps) {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);

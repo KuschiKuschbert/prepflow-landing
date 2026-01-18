@@ -21,7 +21,7 @@ export function useAppleStyleAnimations(features: Feature[]) {
     setInitialWidths,
     isTransitioning,
     setIsTransitioning,
-    scaleXValues,
+    scaleXValues: _scaleXValues,
     setScaleXValues,
     buttonHeights,
     setButtonHeights,

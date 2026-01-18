@@ -14,10 +14,6 @@ import type {
 } from '@/app/webapp/roster/types';
 import { logger } from '@/lib/logger';
 import { getRateMultiplier } from './helpers/rateMultiplier';
-import { formatCurrency } from './helpers/formatting';
-import { formatHours } from './helpers/formatting';
-import { calculateTotalHours } from './helpers/shiftHours';
-import { calculateWeeklyCost } from './helpers/weeklyCost';
 
 /**
  * Calculates the cost of a single shift.

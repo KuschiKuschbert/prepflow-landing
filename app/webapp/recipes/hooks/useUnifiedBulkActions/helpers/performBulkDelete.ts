@@ -1,7 +1,6 @@
 /**
  * Perform bulk delete operation.
  */
-import { logger } from '@/lib/logger';
 
 export async function performBulkDelete(
   selectedRecipeIds: string[],

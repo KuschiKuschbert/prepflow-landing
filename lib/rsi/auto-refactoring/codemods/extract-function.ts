@@ -5,7 +5,7 @@ import { API, FileInfo, Options, Transform } from 'jscodeshift';
  * Looks for large arrow functions (e.g. in .map(), .filter()) and extracts them
  * to separate functions to reduce nesting levels.
  */
-const transform: Transform = (file: FileInfo, api: API, options: Options) => {
+const transform: Transform = (file: FileInfo, api: API, _options: Options) => {
   const j = api.jscodeshift;
   const root = j(file.source);
   let changed = false;
@@ -19,7 +19,7 @@ const transform: Transform = (file: FileInfo, api: API, options: Options) => {
       if (j.CallExpression.check(path.parent.node)) {
         const callee = path.parent.node.callee;
         if (j.MemberExpression.check(callee)) {
-          const methodName = (callee.property as any).name;
+          const methodName = (callee.property as { name: string }).name;
           const fileNameBasename = file.path.split('/').pop()?.split('.')[0] || 'logic';
           const funcName = `handle${methodName.charAt(0).toUpperCase() + methodName.slice(1)}In${fileNameBasename.charAt(0).toUpperCase() + fileNameBasename.slice(1)}_${Math.random().toString(36).substring(7)}`;
 

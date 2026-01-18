@@ -8,7 +8,6 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Clock, X, Save } from 'lucide-react';
 import type { Shift } from '../types';

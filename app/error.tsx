@@ -9,7 +9,7 @@ interface ErrorProps {
   reset: () => void;
 }
 
-export default function Error({ error, reset }: ErrorProps) {
+export default function Error({ error: _error, reset: _reset }: ErrorProps) {
   const pathname = usePathname();
   const ErrorComponent = useErrorMessageSelector();
 

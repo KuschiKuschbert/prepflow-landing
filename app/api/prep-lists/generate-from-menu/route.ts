@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       menuId,
-      userId,
+      userId: _userId,
       error: validationError,
     } = await import('./helpers/validateRequest').then(m => m.validateRequest(body));
 

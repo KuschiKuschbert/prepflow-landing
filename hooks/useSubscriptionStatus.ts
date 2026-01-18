@@ -23,7 +23,7 @@ interface SubscriptionStatus {
  */
 export function useSubscriptionStatus() {
   const { user } = useUser();
-  const { showSuccess, showWarning, showError } = useNotification();
+  const { showSuccess, showWarning, showError: _showError } = useNotification();
   const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [previousStatus, setPreviousStatus] = useState<string | null>(null);

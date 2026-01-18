@@ -12,7 +12,7 @@ interface HeroContentProps {
   children?: React.ReactNode;
 }
 
-export function HeroContent({ t, handleEngagement, variant, children }: HeroContentProps) {
+export function HeroContent({ t, handleEngagement: _handleEngagement, variant, children }: HeroContentProps) {
   const getTitle = () => {
     switch (variant) {
       case 'variantA':

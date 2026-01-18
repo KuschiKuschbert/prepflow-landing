@@ -47,7 +47,7 @@ interface IngredientFormProps {
 
 export default function IngredientForm({
   ingredient,
-  suppliers,
+  suppliers: _suppliers,
   availableUnits,
   onSave,
   onCancel,

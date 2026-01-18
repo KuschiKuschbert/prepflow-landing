@@ -23,7 +23,7 @@ export function useEntitlements() {
   const { data, isLoading, error } = useQuery({
     queryKey: ['entitlements'],
     queryFn: async () => {
-      let result: {
+      const result: {
         entitlements: UserEntitlements | null;
         subscription: SubscriptionData['subscription'] | null;
         usage: SubscriptionData['usage'] | null;

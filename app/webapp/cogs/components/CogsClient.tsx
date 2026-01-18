@@ -51,7 +51,7 @@ export default function CogsClient() {
     addCalculation,
     loadCalculations,
     loadExistingRecipeIngredients,
-    setError,
+    setError: _setError,
     hasManualIngredientsRef,
     lastManualChangeTimeRef,
   } = useCOGSCalculations();

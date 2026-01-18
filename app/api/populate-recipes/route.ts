@@ -8,7 +8,7 @@ import {
   sampleRecipeIngredientsForPopulate,
 } from '@/lib/populate-recipes-data';
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     // cleaned: Added environment protection to prevent demo data in production
     if (process.env.NODE_ENV === 'production') {

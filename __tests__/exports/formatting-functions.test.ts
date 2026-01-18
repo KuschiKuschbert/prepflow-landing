@@ -7,7 +7,6 @@ import {
   formatOrderListForPrint,
   type OrderListData,
 } from '@/app/webapp/order-lists/utils/formatOrderListForPrint';
-import { escapeHtml } from '@/lib/exports/template-utils';
 
 describe('Export Formatting Functions', () => {
   describe('formatOrderListForPrint', () => {

@@ -7,7 +7,7 @@ import { logger } from '@/lib/logger';
 
 const ENCRYPTION_KEY_ENV = 'GOOGLE_TOKEN_ENCRYPTION_KEY';
 const IV_LENGTH = 12; // GCM recommended IV length
-const AUTH_TAG_LENGTH = 16; // GCM auth tag length
+const _AUTH_TAG_LENGTH = 16; // GCM auth tag length
 
 /**
  * Get encryption key from environment variable.

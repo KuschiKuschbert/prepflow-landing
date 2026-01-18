@@ -45,7 +45,7 @@ export default function IngredientActions({
   onBulkUpdate,
   loading = false,
 }: IngredientActionsProps) {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
   const { showConfirm, ConfirmDialog } = useConfirm();
   const { showPrompt, InputDialog } = usePrompt();
   const { showAlert, AlertDialog } = useAlert();
@@ -53,7 +53,7 @@ export default function IngredientActions({
   const [showBulkMenu, setShowBulkMenu] = useState(false);
 
   const selectedCount = selectedIngredients.size;
-  const selectedIngredientsData = filteredIngredients.filter(ingredient =>
+  const _selectedIngredientsData = filteredIngredients.filter(ingredient =>
     selectedIngredients.has(ingredient.id),
   );
   const handleBulkDelete = async () => {

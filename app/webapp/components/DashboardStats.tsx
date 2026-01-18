@@ -18,7 +18,7 @@ interface DashboardStatsProps {
 }
 
 export default function DashboardStats({ stats }: DashboardStatsProps) {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
 
   return (
     <SummaryCardGrid className="tablet:mb-8 desktop:mb-10 mb-6">

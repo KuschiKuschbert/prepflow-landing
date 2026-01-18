@@ -1,5 +1,4 @@
 'use client';
-import { Icon } from '@/components/ui/Icon';
 import { IngredientTableRow } from './IngredientTableRow';
 import { type SortOption } from '../hooks/useIngredientFiltering';
 
@@ -54,7 +53,7 @@ export function IngredientTableDesktop({
   displayUnit,
   selectedIngredients,
   totalFiltered,
-  sortBy,
+  sortBy: _sortBy,
   onSelectIngredient,
   onSelectAll,
   onEdit,

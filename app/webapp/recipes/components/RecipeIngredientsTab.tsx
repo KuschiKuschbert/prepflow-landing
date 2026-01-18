@@ -86,7 +86,7 @@ export function RecipeIngredientsTab({
   onAddConsumable,
   onUpdateCalculation,
   onRemoveCalculation,
-  setCalculations,
+  setCalculations: _setCalculations,
 }: RecipeIngredientsTabProps) {
   const currentCalculations =
     activeTab === 'ingredients' ? ingredientCalculations : consumableCalculations;

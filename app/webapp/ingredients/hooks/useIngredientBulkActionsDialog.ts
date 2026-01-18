@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
 import { useIngredientBulkUpdateDialog } from './useIngredientBulkUpdateDialog';
-import { logger } from '@/lib/logger';
 
 interface UseIngredientBulkActionsDialogProps {
   selectedIngredients: Set<string>;
@@ -66,7 +65,7 @@ export function useIngredientBulkActionsDialog({
     setShowBulkMenu(false);
     try {
       await onBulkAutoCategorize(Array.from(selectedIngredients), true);
-    } catch (error) {
+    } catch (_error) {
       // Error handling is done in the handler
     }
   }, [selectedCount, onBulkAutoCategorize, selectedIngredients]);

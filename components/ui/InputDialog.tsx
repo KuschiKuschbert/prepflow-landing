@@ -79,7 +79,7 @@ export function InputDialog({
   const inputRef = useRef<HTMLInputElement>(null);
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
-  const triggerRef = useRef<HTMLElement | null>(null);
+  const _triggerRef = useRef<HTMLElement | null>(null);
 
   // Focus trap and keyboard handling
   useEffect(() => {

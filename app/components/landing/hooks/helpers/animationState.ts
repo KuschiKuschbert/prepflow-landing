@@ -13,7 +13,7 @@ interface Feature {
  * @param {Feature[]} features - Features array
  * @returns {Object} Animation state and refs
  */
-export function useAnimationState(features: Feature[]) {
+export function useAnimationState(_features: Feature[]) {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [containerWidths, setContainerWidths] = useState<number[]>([]);
   const [initialWidths, setInitialWidths] = useState<number[]>([]);

@@ -61,14 +61,21 @@ export async function GET(request: NextRequest) {
     }
 
     // Sort by severity priority (Safety first) then by date
-    const sortedErrors = (allErrors || []).sort((a: any, b: any) => { // Justified: Supabase record typing
-      const aPriority = SEVERITY_PRIORITY[a.severity || 'medium'] || 4;
-      const bPriority = SEVERITY_PRIORITY[b.severity || 'medium'] || 4;
+    interface ErrorRecord {
+      severity?: string;
+      created_at: string;
+      [key: string]: unknown;
+    }
+    const sortedErrors = (allErrors || []).sort((a: unknown, b: unknown) => {
+      const errA = a as ErrorRecord;
+      const errB = b as ErrorRecord;
+      const aPriority = SEVERITY_PRIORITY[errA.severity || 'medium'] || 4;
+      const bPriority = SEVERITY_PRIORITY[errB.severity || 'medium'] || 4;
       if (aPriority !== bPriority) {
         return aPriority - bPriority;
       }
       // If same severity, sort by date (newest first)
-      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      return new Date(errB.created_at).getTime() - new Date(errA.created_at).getTime();
     });
 
     // Apply pagination after sorting

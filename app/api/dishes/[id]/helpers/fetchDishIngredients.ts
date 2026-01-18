@@ -209,7 +209,7 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
   ) {
     const manualResult = await manualFetchAndJoinIngredients(dishId);
     if (manualResult) {
-      // @ts-ignore - manualResult structure matches what we expect even if types are tricky
+      // @ts-expect-error - Complex nested type mismatches during migration we expect even if types are tricky
       dishIngredients = manualResult;
     }
   }
@@ -218,7 +218,7 @@ export async function fetchDishIngredients(dishId: string): Promise<DishRelation
   const retryError = ingredientsError as PostgrestError | null;
   if (retryError && retryError.code === '42703' && retryError.message?.includes('category')) {
     const { data, error } = await retryFetchWithoutCategory(dishId);
-    // @ts-ignore
+    // @ts-expect-error - Recursive type mismatches in ingredient graph
     dishIngredients = data;
     ingredientsError = error;
   }

@@ -66,7 +66,7 @@ export function useIngredientEditSave<T extends { id: string }>({
             if (!response.ok || !result.success) {
               // Revert optimistic update on error
               setIngredients(originalIngredients);
-              const errorMsg = result.details || result.error || 'Failed to update ingredient';
+              const _errorMsg = result.details || result.error || 'Failed to update ingredient';
               setError(`Ingredient not found. It may have been deleted. Please refresh the page.`);
               setEditingIngredient(null);
               return;

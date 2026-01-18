@@ -7,11 +7,11 @@ import { logger } from '@/lib/logger';
 
 export default function IngredientWizardStep2({
   formData,
-  suppliers,
-  errors,
+  suppliers: _suppliers,
+  errors: _errors,
   onInputChange,
   onInputBlur,
-  onWastagePercentageChange,
+  onWastagePercentageChange: _onWastagePercentageChange,
   onYieldPercentageChange,
   onAddSupplier,
 }: WizardStepProps) {

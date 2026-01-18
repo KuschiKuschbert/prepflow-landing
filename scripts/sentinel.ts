@@ -99,7 +99,7 @@ async function main() {
     const { execSync } = require('child_process');
     execSync('npm run audit:any', { stdio: 'inherit' });
     console.log(`${GREEN}✅ No unjustified 'any' types found.${NC}`);
-  } catch (error) {
+  } catch (_error) {
     console.warn(`${YELLOW}⚠️  Unjustified 'any' types detected!${NC}`);
     console.warn(`   Run 'npm run audit:any' to see details.`);
   }

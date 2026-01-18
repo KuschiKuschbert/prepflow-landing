@@ -37,7 +37,7 @@ export function RosterRow({
   onEditShift,
   onDeleteEmployee,
 }: RosterRowProps) {
-  const { setNodeRef, isOver } = useDroppable({
+  const { setNodeRef: _setNodeRef, isOver } = useDroppable({
     id: `employee-${employee.id}`,
     data: {
       type: 'employee',

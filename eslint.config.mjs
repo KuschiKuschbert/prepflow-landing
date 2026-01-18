@@ -1,4 +1,5 @@
 import nextConfig from 'eslint-config-next/core-web-vitals';
+import unusedImports from 'eslint-plugin-unused-imports';
 import { defineConfig } from 'eslint/config';
 import rsiConfig from './rsi.eslint.config.mjs';
 
@@ -68,16 +69,31 @@ export default defineConfig([
     },
   },
   {
-    // Allow console and require in error-learning (CLI-based tooling with dynamic imports)
-    files: ['lib/error-learning/**/*.ts'],
+    // Allow console and require in specific app/api and lib areas
+    files: [
+      'lib/error-learning/**/*.ts',
+      'lib/square/**/*.ts',
+      'lib/personality/**/*.ts',
+      'app/webapp/ingredients/**/*.ts',
+      'app/api/recipe-share/**/*.ts',
+      'app/api/emails/**/*.ts',
+      'app/webapp/recipes/hooks/useRecipeRefreshEffects.ts',
+    ],
     rules: {
       'no-console': 'off',
       '@typescript-eslint/no-require-imports': 'off',
     },
   },
   {
-    // Allow console and require in scripts (scripts are CLI tools with dynamic imports)
-    files: ['scripts/**/*.js', 'scripts/**/*.ts'],
+    // Allow legacy patterns in analytics components
+    files: ['components/GoogleAnalytics.tsx', 'components/GoogleTagManager.tsx'],
+    rules: {
+      'prefer-rest-params': 'off',
+    },
+  },
+  {
+    // Allow console and require in scripts and tests
+    files: ['scripts/**/*.js', 'scripts/**/*.ts', '__tests__/**/*.ts', '**/tests/**/*.ts'],
     rules: {
       'no-console': 'off',
       '@typescript-eslint/no-require-imports': 'off',

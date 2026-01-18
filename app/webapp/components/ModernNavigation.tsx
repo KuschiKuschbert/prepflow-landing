@@ -18,7 +18,7 @@ import PersistentSidebar from './navigation/PersistentSidebar';
 import { SearchModal } from './navigation/SearchModal';
 
 // Utility function to ensure consistent class ordering
-const cn = (...classes: (string | undefined | null | false)[]): string => {
+const _cn = (...classes: (string | undefined | null | false)[]): string => {
   return classes.filter(Boolean).join(' ');
 };
 
@@ -35,12 +35,12 @@ interface ModernNavigationProps {
 }
 
 const ModernNavigation = memo(function ModernNavigation({ className = '' }: ModernNavigationProps) {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
   const pathname = usePathname();
   const [isMoreDrawerOpen, setIsMoreDrawerOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const menuButtonRef = useRef<HTMLButtonElement | null>(null);
+  const _menuButtonRef = useRef<HTMLButtonElement | null>(null);
 
   // Detect if we're on desktop (768px+) - only used for keyboard shortcuts, not layout
   const isDesktop = useMediaQuery('(min-width: 768px)');

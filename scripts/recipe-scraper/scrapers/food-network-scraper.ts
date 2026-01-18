@@ -67,7 +67,7 @@ export class FoodNetworkScraper extends BaseScraper {
       if (browser) {
         try {
           await browser.close();
-        } catch (closeError) {
+        } catch (_closeError) {
           // Ignore close errors
         }
       }
@@ -98,7 +98,7 @@ export class FoodNetworkScraper extends BaseScraper {
               null;
             if (recipeData) break;
           }
-        } catch (e) {
+        } catch (_e) {
           // Continue
         }
       }

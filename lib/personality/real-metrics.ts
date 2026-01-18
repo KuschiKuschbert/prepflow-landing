@@ -2,7 +2,6 @@
 
 import { getRealMetrics } from './metrics-tracker';
 import { type PersonalitySettings } from './schema';
-import { content } from './content';
 
 const pick = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 

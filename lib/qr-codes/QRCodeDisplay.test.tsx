@@ -22,7 +22,7 @@ describe('QRCodeDisplay', () => {
     if (Component) {
       try {
         render(<Component value="https://example.com" />);
-      } catch (e) {
+      } catch (_e) {
         // console.warn('Render failed for QRCodeDisplay, but module loaded');
       }
     }

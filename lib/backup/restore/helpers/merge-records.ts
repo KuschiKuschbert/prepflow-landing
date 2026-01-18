@@ -50,7 +50,7 @@ export async function mergeRecords(
           batchToUpdate.push(recordWithUserId);
         } else if (options.createNewIds) {
           // Create new ID
-          const { id, ...recordWithoutId } = recordWithUserId as DatabaseRecord;
+          const { id: _id, ...recordWithoutId } = recordWithUserId as DatabaseRecord;
           batchToInsert.push(recordWithoutId);
         }
         // else skip (default behavior)

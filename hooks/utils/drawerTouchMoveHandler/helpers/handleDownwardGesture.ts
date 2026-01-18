@@ -1,4 +1,4 @@
-import { handleDownwardGestureAtTop, calculateDragProgress } from '../../../useDrawerSwipe.utils';
+import { handleDownwardGestureAtTop } from '../../../useDrawerSwipe.utils';
 
 interface HandleDownwardGestureParams {
   e: React.TouchEvent;

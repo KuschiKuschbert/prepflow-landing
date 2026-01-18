@@ -40,7 +40,7 @@ export async function logStaffSyncOperation(params: {
   squareId?: string;
   status: 'success' | 'error';
   errorMessage?: string;
-  errorDetails?: Record<string, any>;
+  errorDetails?: Record<string, unknown>;
 }): Promise<void> {
   await logSyncOperation({
     user_id: params.userId,

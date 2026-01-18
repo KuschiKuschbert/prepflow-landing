@@ -5,7 +5,6 @@
  * Supports multiple plating methods: classic, modern, rustic, and minimalist.
  */
 
-import { logger } from '@/lib/logger';
 import type { AIResponse } from '../types';
 import type {
   PlatingMethod,

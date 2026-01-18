@@ -18,7 +18,7 @@ export function prepareChartData(
   yMin: number,
   yMax: number,
 ) {
-  return chartData.map((point, index) => ({
+  return chartData.map((point, _index) => ({
     ...point,
     redAreaBelow: equipment.min_temp_celsius !== null ? equipment.min_temp_celsius : yMin,
     redAreaAbove: yMax,

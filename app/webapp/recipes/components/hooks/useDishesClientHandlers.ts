@@ -29,7 +29,7 @@ export function useDishesClientHandlers({
   setRecipes,
   setViewMode,
   setEditingItem,
-  setEditingRecipe,
+  setEditingRecipe: _setEditingRecipe,
   setShowRecipePanel,
   setSelectedRecipeForPreview,
   setHighlightingRowId,

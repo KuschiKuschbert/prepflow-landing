@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
  * GET /api/admin/users/[id]/data
  * Get all data associated with a user
  */
-export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function GET(request: NextRequest, _context: { params: Promise<{ id: string }> }) {
   try {
     const { supabase, error } = await standardAdminChecks(request);
     if (error) return error;

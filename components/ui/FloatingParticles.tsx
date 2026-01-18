@@ -141,8 +141,8 @@ export function FloatingParticles({
         const initialYPx = (particle.y / 100) * viewportHeight;
 
         // Calculate target positions in pixels
-        const targetXPx = initialXPx + moveX;
-        const targetYPx = initialYPx + moveY;
+        const _targetXPx = initialXPx + moveX;
+        const _targetYPx = initialYPx + moveY;
 
         return (
           <motion.div

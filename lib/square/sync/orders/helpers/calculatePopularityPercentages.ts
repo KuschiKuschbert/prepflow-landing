@@ -19,7 +19,7 @@ export function calculatePopularityPercentages(salesData: SalesData[]): void {
   }
 
   // Calculate percentages for each date
-  for (const [date, dateSalesData] of salesByDate.entries()) {
+  for (const [_date, dateSalesData] of salesByDate.entries()) {
     const totalSold = dateSalesData.reduce((sum, data) => sum + data.number_sold, 0);
 
     if (totalSold === 0) {

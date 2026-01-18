@@ -47,7 +47,7 @@ export function EquipmentListTable({
   onShowQRCode,
   currentPage,
   itemsPerPage,
-  totalItems,
+  totalItems: _totalItems,
   onPageChange,
   getLastLogDate,
   getLastLogInfo,

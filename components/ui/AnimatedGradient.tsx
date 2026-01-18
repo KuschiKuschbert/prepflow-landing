@@ -58,7 +58,7 @@ export function AnimatedGradient({
   }, []);
 
   // Create gradient stops that will animate
-  const gradientStops = colors.map((color, index) => ({
+  const _gradientStops = colors.map((color, index) => ({
     color,
     position: (index / (colors.length - 1)) * 100,
   }));

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { glob } from 'glob';
 
-const pattern = 'glob:{components,lib,utils,hooks}/**/*.{test,spec}.{ts,tsx,js,jsx}';
+const _pattern = 'glob:{components,lib,utils,hooks}/**/*.{test,spec}.{ts,tsx,js,jsx}';
 // Use manual glob pattern since different versions behave differently
 const files = glob.sync('{components,lib,utils,hooks}/**/*.{test,spec}.{ts,tsx,js,jsx}');
 

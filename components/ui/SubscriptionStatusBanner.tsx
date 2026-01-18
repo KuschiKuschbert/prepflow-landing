@@ -75,7 +75,7 @@ function SubscriptionStatusBannerContent({ className = '' }: SubscriptionStatusB
 
   const isPastDue = subscriptionStatus === 'past_due';
   const isCancelled = subscriptionStatus === 'cancelled';
-  const isTrial = subscriptionStatus === 'trial';
+  const _isTrial = subscriptionStatus === 'trial';
 
   const bannerStyles = isPastDue
     ? 'border-[var(--color-warning)]/30 bg-[var(--color-warning)]/10'

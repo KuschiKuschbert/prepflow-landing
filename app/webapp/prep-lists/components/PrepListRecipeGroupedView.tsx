@@ -61,7 +61,7 @@ export function PrepListRecipeGroupedView({ section }: PrepListRecipeGroupedView
 
 function RecipeInstructions({
   instructions,
-  recipeName,
+  recipeName: _recipeName,
 }: {
   instructions: string;
   recipeName: string;

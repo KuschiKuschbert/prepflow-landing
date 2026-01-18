@@ -53,7 +53,7 @@ export function IngredientListPanel({
   ingredients,
   onIngredientClick,
   onBack,
-  capitalizeName,
+  capitalizeName: _capitalizeName,
 }: IngredientListPanelProps) {
   const [ingredientSearch, setIngredientSearch] = useState('');
 

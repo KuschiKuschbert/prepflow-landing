@@ -22,7 +22,7 @@ describe('share-modal', () => {
     if (Component) {
       try {
         render(<Component />);
-      } catch (e) {
+      } catch (_e) {
         // console.warn('Render failed for share-modal, but module loaded');
       }
     }

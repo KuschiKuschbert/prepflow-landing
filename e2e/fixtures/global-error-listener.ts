@@ -40,8 +40,8 @@ export const errorCollection: ErrorRecord[] = [];
  */
 export async function setupGlobalErrorListener(page: Page): Promise<void> {
   // Clear previous errors for this page
-  const currentUrl = page.url();
-  const initialErrorCount = errorCollection.length;
+  const _currentUrl = page.url();
+  const _initialErrorCount = errorCollection.length;
 
   // Inject console.error listener
   await page.addInitScript(() => {
@@ -137,7 +137,7 @@ export async function collectPageErrors(page: Page): Promise<void> {
         timestamp: error.timestamp || new Date().toISOString(),
       });
     });
-  } catch (error) {
+  } catch (_error) {
     // Page might be closed or navigated away
     // Silently fail to avoid breaking tests
   }

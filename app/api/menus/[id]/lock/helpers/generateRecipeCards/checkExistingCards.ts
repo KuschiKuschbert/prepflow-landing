@@ -46,7 +46,7 @@ export async function checkExistingCards(
     }
 
     let signature = '';
-    let handledBySignature = false;
+    let _handledBySignature = false;
 
     if (crossReferencingEnabled) {
       const result = await checkBySignature(
@@ -56,7 +56,7 @@ export async function checkExistingCards(
         normalizedIngredients,
       );
 
-      handledBySignature = result.handled;
+      _handledBySignature = result.handled;
       if (result.signature) {
         signature = result.signature;
       }

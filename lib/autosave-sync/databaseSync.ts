@@ -43,7 +43,7 @@ export async function syncToDatabase(
         .maybeSingle();
       if (error) {
         const errorMessage = extractSupabaseErrorMessage(error, 'Database update failed');
-        const errorCode = (error as { code?: string })?.code
+        const _errorCode = (error as { code?: string })?.code
           ? ` (Code: ${(error as { code: string }).code})`
           : '';
         logger.error(`[Autosave Sync] Supabase update error for ${entityType}/${entityId}:`, {
@@ -66,7 +66,7 @@ export async function syncToDatabase(
         .single();
       if (error) {
         const errorMessage = extractSupabaseErrorMessage(error, 'Database insert failed');
-        const errorCode = (error as { code?: string })?.code
+        const _errorCode = (error as { code?: string })?.code
           ? ` (Code: ${(error as { code: string }).code})`
           : '';
         logger.error(`[Autosave Sync] Supabase insert error for ${entityType}/${entityId}:`, {

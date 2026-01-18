@@ -329,7 +329,7 @@ export async function runArchitectureAnalysis(dryRun = false): Promise<void> {
       ) {
         await scanDir(fullDir);
       }
-    } catch (e) {
+    } catch (_e) {
       logger.warn(`  Could not scan ${dir}, skipping...`);
     }
   }

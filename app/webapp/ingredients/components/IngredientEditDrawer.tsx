@@ -51,7 +51,7 @@ interface IngredientEditDrawerProps {
 export default function IngredientEditDrawer({
   isOpen,
   ingredient,
-  suppliers,
+  suppliers: _suppliers,
   availableUnits,
   onSave,
   onClose,
@@ -81,7 +81,7 @@ export default function IngredientEditDrawer({
     entityId: entityId,
     data: formData,
     enabled: canAutosave,
-    onSave: async savedData => {
+    onSave: async _savedData => {
       // Autosave saves silently in the background
       // Don't call the parent's onSave prop here - that would close the drawer
     },

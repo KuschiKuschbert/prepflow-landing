@@ -1,12 +1,12 @@
 import { parseCSV, type ParseCSVResult } from '@/lib/csv/csv-utils';
-import {
-  normalizeColumnName,
-  mapCSVRowToEntity,
-  parseDate,
-  parseBoolean,
-  parseNumber,
-} from '../../import-utils';
 import type { ComplianceRecordImportRow } from '../../compliance-import';
+import {
+    mapCSVRowToEntity,
+    normalizeColumnName,
+    parseBoolean,
+    parseDate,
+    parseNumber,
+} from '../../import-utils';
 
 /**
  * Parse compliance records from CSV text
@@ -14,7 +14,7 @@ import type { ComplianceRecordImportRow } from '../../compliance-import';
 export function parseComplianceRecordsCSV(
   csvText: string,
 ): ParseCSVResult<ComplianceRecordImportRow> {
-  const result = parseCSV<Record<string, any>>(csvText, {
+  const result = parseCSV<Record<string, unknown>>(csvText, {
     header: true,
     skipEmptyLines: true,
     transformHeader: header => normalizeColumnName(header),

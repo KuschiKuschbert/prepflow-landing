@@ -5,7 +5,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { processBatchCreation } from './helpers/processBatch';
 
-interface PrepListToCreate {
+interface _PrepListToCreate {
   sectionId: string | null;
   name: string;
   notes?: string;

@@ -8,7 +8,7 @@ interface PricingProps {
   handleEngagement?: (event: string) => void;
 }
 
-export function VariantCPricing({ t, handleEngagement }: PricingProps) {
+export function VariantCPricing({ t: _t, handleEngagement: _handleEngagement }: PricingProps) {
   return (
     <section id="pricing" className="py-20">
       <div className="desktop:p-16 rounded-3xl border border-[var(--border)] bg-[var(--surface)]/80 p-10 shadow-2xl backdrop-blur-sm">

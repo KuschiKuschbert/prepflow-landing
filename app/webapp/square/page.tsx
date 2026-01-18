@@ -27,7 +27,7 @@ import { PageHeader } from '../components/static/PageHeader';
 type SquareSection = 'overview' | 'configuration' | 'sync' | 'mappings' | 'history' | 'webhooks';
 
 export default function SquarePage() {
-  const { user } = useUser();
+  const { user: _user } = useUser();
   const squareEnabled = useFeatureFlag('square_pos_integration');
   const [activeSection, setActiveSection] = useState<SquareSection>('overview');
   const [isMounted, setIsMounted] = useState(false);

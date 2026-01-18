@@ -30,7 +30,7 @@ export function ParLevelTableRow({
   onDelete,
   deletingId,
   isSelectionMode = false,
-  onStartLongPress,
+  onStartLongPress: _onStartLongPress,
   onCancelLongPress,
   onEnterSelectionMode,
 }: ParLevelTableRowProps) {

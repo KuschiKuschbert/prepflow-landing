@@ -129,7 +129,7 @@ function DashboardStatsClientContent() {
   // Use useState to prevent hydration mismatch from Date.now() differences
   const [today] = useState(() => new Date().toISOString().split('T')[0]);
   const todayLogs = allLogs.filter(log => log.log_date === today);
-  const outOfRangeAlerts = todayLogs.filter(log => {
+  const _outOfRangeAlerts = todayLogs.filter(log => {
     const eq = equipment.find(e => e.location === log.location);
     if (!eq || eq.min_temp_celsius === null || eq.max_temp_celsius === null) return false;
     return (
@@ -138,7 +138,7 @@ function DashboardStatsClientContent() {
   }).length;
 
   // Get last check time
-  const lastCheckTime =
+  const _lastCheckTime =
     allLogs.length > 0
       ? allLogs[0].log_date && allLogs[0].log_time
         ? `${allLogs[0].log_date}T${allLogs[0].log_time}`

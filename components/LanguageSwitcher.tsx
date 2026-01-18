@@ -19,7 +19,7 @@ export default function LanguageSwitcher({
   const { currentLanguage, changeLanguage, getCurrentLanguageInfo, getAvailableLanguages } =
     useTranslation();
 
-  const currentLangInfo = getCurrentLanguageInfo();
+  const _currentLangInfo = getCurrentLanguageInfo();
   const availableLangs = getAvailableLanguages();
 
   const sizeClasses = {

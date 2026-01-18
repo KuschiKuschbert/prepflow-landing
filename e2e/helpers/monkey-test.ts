@@ -56,7 +56,7 @@ export async function findAllInteractiveElements(page: Page): Promise<Interactiv
   for (const input of inputs) {
     const isVisible = await input.isVisible().catch(() => false);
     if (isVisible) {
-      const type = await input.getAttribute('type').catch(() => 'text');
+      const _type = await input.getAttribute('type').catch(() => 'text');
       elements.push({
         selector: await input.evaluate(el => {
           if (el.getAttribute('data-testid'))
@@ -265,7 +265,7 @@ export async function runMonkeyTest(
             message: `Monkey test interaction failed: ${interactionResult.error}`,
             timestamp: new Date().toISOString(),
           });
-        } catch (screenshotError) {
+        } catch (_screenshotError) {
           // Screenshot failed, continue without it
         }
 

@@ -15,7 +15,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { X, Loader2, AlertCircle } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 
 interface ImageLightboxProps {
   isOpen: boolean;

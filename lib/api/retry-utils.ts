@@ -1,4 +1,3 @@
-import { logger } from '@/lib/logger';
 /**
  * Retry utility functions for API calls with exponential backoff
  */

@@ -42,9 +42,9 @@ export default function CSVImportModal({
   onImport,
   loading = false,
 }: CSVImportModalProps) {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
 
-  const [csvData, setCsvData] = useState<string>('');
+  const [_csvData, setCsvData] = useState<string>('');
   const [parsedIngredients, setParsedIngredients] = useState<Partial<Ingredient>[]>([]);
   const [selectedIngredients, setSelectedIngredients] = useState<Set<string>>(new Set());
   const [error, setError] = useState<string | null>(null);

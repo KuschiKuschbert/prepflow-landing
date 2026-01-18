@@ -1,7 +1,6 @@
 /**
  * Utilities for handling drag start events.
  */
-import { logger } from '@/lib/logger';
 import { DragStartEvent } from '@dnd-kit/core';
 
 /**

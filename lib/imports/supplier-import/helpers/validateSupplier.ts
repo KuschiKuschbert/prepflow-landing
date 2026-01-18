@@ -5,7 +5,7 @@ import type { SupplierImportRow } from '../../supplier-import';
  */
 export function validateSupplier(
   row: SupplierImportRow,
-  index: number,
+  _index: number,
 ): { valid: boolean; error?: string } {
   if (!row.name || row.name.trim().length === 0) {
     return { valid: false, error: 'Supplier name is required' };

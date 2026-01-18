@@ -23,7 +23,7 @@ export async function calculateRecommendedPrice(
   let recommendedPrice: number | null = null;
 
   const dish = Array.isArray(menuItem.dishes) ? menuItem.dishes[0] : menuItem.dishes;
-  const recipe = Array.isArray(menuItem.recipes) ? menuItem.recipes[0] : menuItem.recipes;
+  const _recipe = Array.isArray(menuItem.recipes) ? menuItem.recipes[0] : menuItem.recipes;
 
   // Always calculate dynamically based on COGS and target margin
   if (menuItem.dish_id && dish) {

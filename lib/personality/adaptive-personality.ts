@@ -13,7 +13,7 @@ export interface AdaptiveSettings {
 /**
  * Generate adaptive settings based on user behavior
  */
-export function getAdaptiveSettings(settings: PersonalitySettings): AdaptiveSettings {
+export function getAdaptiveSettings(_settings: PersonalitySettings): AdaptiveSettings {
   const profile = getBehaviorProfile();
 
   let messageFrequencyMultiplier = 1.0;

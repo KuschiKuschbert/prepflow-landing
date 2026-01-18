@@ -42,7 +42,7 @@ interface TemperatureLogCardProps {
 export function TemperatureLogCard({
   log,
   equipment,
-  temperatureTypes,
+  temperatureTypes: _temperatureTypes,
   formatDateString,
   getTemperatureStatus,
   getFoodSafetyStatus,

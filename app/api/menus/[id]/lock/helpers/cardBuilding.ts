@@ -3,7 +3,6 @@
  */
 
 import { createHash } from 'crypto';
-import { logger } from '@/lib/logger';
 import { MenuItemData } from './fetchMenuItemData';
 import { NormalizedIngredient } from './normalizeIngredients';
 import { ParsedRecipeCard } from './parseRecipeCard';

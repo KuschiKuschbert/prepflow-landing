@@ -23,7 +23,7 @@ describe('BrandMark', () => {
     if (Component) {
       try {
         render(<Component />);
-      } catch (e) {
+      } catch (_e) {
         // console.warn('Render failed for BrandMark, but module loaded');
       }
     }

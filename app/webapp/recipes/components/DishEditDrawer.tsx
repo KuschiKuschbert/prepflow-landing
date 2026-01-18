@@ -52,7 +52,7 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [selectedRecipes, setSelectedRecipes] = useState<SelectedRecipe[]>([]);
   const [selectedIngredients, setSelectedIngredients] = useState<SelectedIngredient[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [_loading, setLoading] = useState(false);
   const [priceOverride, setPriceOverride] = useState(false);
 
   // Autosave integration
@@ -81,7 +81,7 @@ export function DishEditDrawer({ isOpen, dish, onClose, onSave }: DishEditDrawer
   const {
     totalCost,
     recommendedPrice,
-    foodCostPercent,
+    foodCostPercent: _foodCostPercent,
     loading: costLoading,
   } = useDishCostCalculation(selectedRecipes, selectedIngredients, recipes, ingredients);
 

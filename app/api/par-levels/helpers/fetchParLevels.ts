@@ -15,11 +15,13 @@ import { ParLevelRecord } from './types';
 export async function fetchParLevels(supabaseAdmin: SupabaseClient) {
   // Try to fetch par levels with ingredient join
   // If join fails, fall back to fetching ingredients separately
-  let { data, error } = await fetchWithJoin(supabaseAdmin);
+  const result = await fetchWithJoin(supabaseAdmin);
+  const error = result.error;
+  let data = result.data;
 
   // If join fails, try without join first to see if table exists
   if (error) {
-    const errorCode = error.code;
+    const _errorCode = error.code;
     const errorMessage = error.message || '';
 
     // If it's a relationship/join error, try fetching without join

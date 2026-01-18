@@ -9,7 +9,7 @@ import { AUSTRALIAN_ALLERGENS } from '@/lib/allergens/australian-allergens';
 import { formatCategorySection } from './formatMenuForPrint/helpers/formatCategorySection';
 import { generateAllergenMatrix } from './formatMenuForPrint/helpers/generateAllergenMatrix';
 
-const VALID_ALLERGEN_CODES = AUSTRALIAN_ALLERGENS.map(a => a.code);
+const _VALID_ALLERGEN_CODES = AUSTRALIAN_ALLERGENS.map(a => a.code);
 
 /**
  * Escape HTML special characters.

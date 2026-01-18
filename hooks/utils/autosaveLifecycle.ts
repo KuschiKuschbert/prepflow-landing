@@ -1,4 +1,4 @@
-import { saveDraft, clearDraft, getDraft } from '@/lib/autosave-storage';
+import { clearDraft } from '@/lib/autosave-storage';
 import { syncToDatabase, checkForConflicts, EntityType } from '@/lib/autosave-sync';
 import { extractErrorMessage, broadcastAutosaveStatus, logAutosaveError } from './autosaveHelpers';
 

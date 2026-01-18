@@ -6,7 +6,7 @@ import type { ComplianceRecordImportRow } from '../../compliance-import';
  */
 export function formatComplianceRecordPreview(
   record: ComplianceRecordImportRow,
-  index: number,
+  _index: number,
 ): React.ReactNode {
   return (
     <div className="space-y-1">

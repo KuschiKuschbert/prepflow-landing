@@ -28,12 +28,12 @@ export function MenuItemTooltip({
   menuId,
   isHovered,
   mousePosition,
-  tooltipRef,
+  tooltipRef: _tooltipRef,
   anchorElement,
-  setIsHovered,
-  setMousePosition,
-  onHoverItem,
-  onMouseMove,
+  setIsHovered: _setIsHovered,
+  setMousePosition: _setMousePosition,
+  onHoverItem: _onHoverItem,
+  onMouseMove: _onMouseMove,
 }: MenuItemTooltipProps) {
   // Tooltip is rendered in portal at document.body level, so we don't need a wrapper div
   // The tooltip component handles its own mouse events for keeping it visible

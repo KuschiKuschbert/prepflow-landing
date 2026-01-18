@@ -19,7 +19,7 @@ import { BillingActionsCard } from './components/BillingActionsCard';
 export default function BillingSettingsPage() {
   const { loading, subscriptionData, refreshSubscription } = useSubscriptionData();
 
-  const { showConfirm, ConfirmDialog } = useConfirm();
+  const { showConfirm: _showConfirm, ConfirmDialog } = useConfirm();
   const { openingPortal, handleOpenPortal } = useBillingPortal();
   const { handleUpgrade } = useBillingUpgrade();
   const { extending, handleExtend } = useBillingExtend({ refreshSubscription });

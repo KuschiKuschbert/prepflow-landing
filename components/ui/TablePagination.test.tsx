@@ -22,7 +22,7 @@ describe('TablePagination', () => {
     if (Component) {
       try {
         render(<Component />);
-      } catch (e) {
+      } catch (_e) {
         // console.warn('Render failed for TablePagination, but module loaded');
       }
     }

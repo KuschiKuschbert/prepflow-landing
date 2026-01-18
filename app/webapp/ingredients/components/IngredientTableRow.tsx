@@ -60,7 +60,7 @@ function IngredientTableRowComponent({
   onDelete,
   deletingId,
   isSelectionMode = false,
-  onStartLongPress,
+  onStartLongPress: _onStartLongPress,
   onCancelLongPress,
   onEnterSelectionMode,
 }: IngredientTableRowProps) {

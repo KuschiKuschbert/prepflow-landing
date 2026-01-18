@@ -4,17 +4,17 @@
 
 import type { BackupData } from '../types';
 import {
-  AUTH_TAG_LENGTH,
-  BACKUP_HEADER,
-  BACKUP_VERSION,
-  ENCRYPTION_MODE_PREPFLOW_ONLY,
-  ENCRYPTION_MODE_USER_PASSWORD,
-  IV_LENGTH,
+    AUTH_TAG_LENGTH,
+    BACKUP_HEADER,
+    BACKUP_VERSION,
+    ENCRYPTION_MODE_PREPFLOW_ONLY,
+    ENCRYPTION_MODE_USER_PASSWORD,
+    IV_LENGTH,
 } from './constants';
 import {
-  deriveKeyFromPassword,
-  deriveKeyFromServerKey,
-  getPrepFlowEncryptionKey,
+    deriveKeyFromPassword,
+    deriveKeyFromServerKey,
+    getPrepFlowEncryptionKey,
 } from './key-management';
 
 /**
@@ -100,7 +100,7 @@ export async function decryptBackup(
 
   // Decrypt metadata
   const metadataArray = new Uint8Array([...metadataCiphertext, ...metadataAuthTag]);
-  let decryptedMetadata: Record<string, unknown>;
+  let _decryptedMetadata: Record<string, unknown>;
 
   try {
     const decryptedMetadataBuffer = await crypto.subtle.decrypt(
@@ -113,8 +113,8 @@ export async function decryptBackup(
     );
 
     const metadataJson = new TextDecoder().decode(decryptedMetadataBuffer);
-    decryptedMetadata = JSON.parse(metadataJson);
-  } catch (error) {
+    _decryptedMetadata = JSON.parse(metadataJson);
+  } catch (_error) {
     throw new Error('Failed to decrypt backup metadata. Invalid password or key.');
   }
 
@@ -131,7 +131,7 @@ export async function decryptBackup(
       decryptionKey,
       dataArray,
     );
-  } catch (error) {
+  } catch (_error) {
     throw new Error('Failed to decrypt backup data. Invalid password or key.');
   }
 

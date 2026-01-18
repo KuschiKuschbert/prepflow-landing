@@ -42,7 +42,7 @@ export function getTypeIconComponent(type: string): LucideIcon {
 /**
  * @deprecated Use getTypeIconComponent instead. Kept for backward compatibility.
  */
-export function getTypeIcon(type: string): string {
+export function getTypeIcon(_type: string): string {
   // Return empty string - components should use getTypeIconComponent with Icon wrapper
   return '';
 }

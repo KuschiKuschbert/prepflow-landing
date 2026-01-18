@@ -45,7 +45,7 @@ function getStatusLabel(status: string): string {
  */
 export function printComplianceReport({
   records,
-  dateRange,
+  dateRange: _dateRange,
   statusFilter = 'all',
 }: PrintComplianceReportOptions): void {
   // Filter records by status if needed

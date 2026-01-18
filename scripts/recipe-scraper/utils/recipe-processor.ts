@@ -48,7 +48,7 @@ let globalProcessingStatus: ProcessingStatus = {
 };
 
 // Processing queue and state
-let processingQueue: ScrapedRecipe[] = [];
+const _processingQueue: ScrapedRecipe[] = [];
 const currentlyProcessing: Set<string> = new Set();
 let processingStartTime: Date | null = null;
 let lastProgressTime: Date | null = null;
@@ -862,7 +862,7 @@ export async function processRecipes(
       const { processed, failed } = await processBatchWithConcurrency(batch, {
         model: options.model,
         concurrency,
-        onProgress: (processedCount, total) => {
+        onProgress: (processedCount, _total) => {
           const progressPercent = (processedCount / recipesToProcess.length) * 100;
           updateStatus({
             progressPercent,
@@ -1082,7 +1082,7 @@ export function stopProcessing(): void {
     queueLength: 0,
     activeProcessing: 0,
   });
-  processingQueue = [];
+  _processingQueue.length = 0;
   currentlyProcessing.clear();
   processingStartTime = null;
   lastProgressTime = null;

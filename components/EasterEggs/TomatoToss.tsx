@@ -22,7 +22,7 @@ const TomatoToss: React.FC<TomatoTossProps> = ({ onClose }) => {
     throws,
     splatters,
     tomatoes,
-    playTime,
+    playTime: _playTime,
     alertShown,
     reducedMotion,
     handleThrow,

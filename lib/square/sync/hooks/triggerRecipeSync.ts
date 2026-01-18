@@ -14,7 +14,7 @@ import { triggerCostSync } from './triggerCostSync';
 export async function triggerRecipeSync(
   req: NextRequest,
   recipeId: string,
-  operation: 'create' | 'update',
+  _operation: 'create' | 'update',
 ): Promise<void> {
   try {
     const userId = await getUserIdFromRequest(req);

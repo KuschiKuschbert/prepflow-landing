@@ -83,7 +83,7 @@ export async function GET(req: NextRequest) {
       countQuery = countQuery.eq('operation_type', operationType);
     }
 
-    const { count, error: countError } = await countQuery;
+    const { count, error: _countError } = await countQuery;
 
     return NextResponse.json({
       history: history || [],

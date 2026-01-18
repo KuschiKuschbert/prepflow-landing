@@ -16,7 +16,7 @@ interface GetItemNameProps {
 }
 
 export function getItemName({
-  item,
+  item: _item,
   isDish,
   dish,
   recipe,

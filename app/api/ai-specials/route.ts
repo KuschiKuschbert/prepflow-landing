@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { handleGetRequest } from './helpers/handleGetRequest';
 import { handlePostRequest } from './helpers/handlePostRequest';
 import { handleAISpecialsError } from './helpers/handleAISpecialsError';
-import { logger } from '@/lib/logger';
 
 /**
  * GET /api/ai-specials

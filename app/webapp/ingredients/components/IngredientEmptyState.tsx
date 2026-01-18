@@ -3,7 +3,6 @@
 import { EmptyState } from '@/components/ui/EmptyState';
 import { LANDING_COLORS } from '@/lib/landing-styles';
 import { Package } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
 
 interface IngredientEmptyStateProps {
   searchTerm: string;

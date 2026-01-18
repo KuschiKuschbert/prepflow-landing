@@ -9,7 +9,7 @@ import { UnifiedItem } from '../types';
 import { COGSCalculatorModal } from './COGSCalculatorModal';
 
 export default function UnifiedRecipesDishes() {
-  const { items, loading, error, categories, fetchItems } = useUnifiedItems();
+  const { items, loading, error, categories, fetchItems: _fetchItems } = useUnifiedItems();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [showCOGSModal, setShowCOGSModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<UnifiedItem | null>(null);

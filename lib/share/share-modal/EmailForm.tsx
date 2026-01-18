@@ -1,5 +1,4 @@
 'use client';
-import { Icon } from '@/components/ui/Icon';
 
 interface EmailFormProps {
   emailAddress: string;

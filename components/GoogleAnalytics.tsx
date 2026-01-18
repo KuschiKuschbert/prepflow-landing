@@ -25,7 +25,7 @@ function GoogleAnalyticsInner({ measurementId }: GoogleAnalyticsProps) {
   const initializeGtag = useCallback(() => {
     if (typeof window !== 'undefined' && !window.gtag) {
       window.dataLayer = window.dataLayer || [];
-      window.gtag = function (...args: unknown[]) {
+      window.gtag = function (..._args: unknown[]) {
         window.dataLayer.push(arguments as unknown as Record<string, unknown>);
       };
 

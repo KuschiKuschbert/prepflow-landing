@@ -19,7 +19,7 @@ export function CleaningStats({ tasks, dates }: CleaningStatsProps) {
   const stats = useMemo(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const todayStr = today.toISOString().split('T')[0];
+    const _todayStr = today.toISOString().split('T')[0];
 
     let totalTasks = 0;
     let completedTasks = 0;

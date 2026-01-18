@@ -15,7 +15,7 @@ export function replaceWithServerResponse({
   editingPrepList,
   tempId,
   serverPrepList,
-  prepLists,
+  prepLists: _prepLists,
   setPrepLists,
 }: ReplaceWithServerResponseParams): void {
   if (editingPrepList) {

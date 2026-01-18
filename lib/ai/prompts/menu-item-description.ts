@@ -19,7 +19,7 @@ export function buildMenuItemDescriptionPrompt(
   ingredients?: Record<string, unknown>[],
 ): string {
   const isDish = !!menuItem.dish_id;
-  const isRecipe = !!menuItem.recipe_id;
+  const _isRecipe = !!menuItem.recipe_id;
 
   const itemName = isDish
     ? menuItem.dishes?.dish_name || 'Unknown Dish'

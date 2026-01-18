@@ -50,7 +50,7 @@ async function testTastySitemap() {
       scraperLogger.info('\n🔍 Checking URL pattern...');
       scraperLogger.info(`   Pattern: /tasty\\.co\\/recipe\\//i`);
       scraperLogger.info(`   Sample URLs that should match:`);
-      allUrls.slice(0, 20).forEach((url, i) => {
+      allUrls.slice(0, 20).forEach((url, _i) => {
         const matches = /tasty\.co\/recipe\//i.test(url);
         scraperLogger.info(`   ${matches ? '✅' : '❌'} ${url}`);
       });

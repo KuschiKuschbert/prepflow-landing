@@ -1,6 +1,6 @@
 'use client';
 
-import { Component, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 
 interface NavigationErrorBoundaryProps {

@@ -42,7 +42,7 @@ function AppleStyleFeatures({
     previousImageOpacity,
     currentImageOpacity,
     imageMounted,
-    imageDimensions,
+    imageDimensions: _imageDimensions,
     containerHeight,
     containerWidths,
     initialWidths,
@@ -59,7 +59,7 @@ function AppleStyleFeatures({
     setNewImageLoaded,
     ANIMATION_DURATION,
     ANIMATION_EASING,
-    BORDER_RADIUS_EASING,
+    BORDER_RADIUS_EASING: _BORDER_RADIUS_EASING,
   } = useAppleStyleAnimations(features);
 
   const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -101,7 +101,7 @@ function AppleStyleFeatures({
           >
             {features.map((feature, index) => {
               const isExpanded = expandedIndex === index;
-              const isCurrentlyTransitioning = isTransitioning === index;
+              const _isCurrentlyTransitioning = isTransitioning === index;
               const isVisible = buttonsVisible[index] !== false;
 
               return (

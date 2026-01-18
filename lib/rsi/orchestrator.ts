@@ -101,7 +101,7 @@ export class RSIOrchestrator {
     const argsStr = args.join(' ');
     const command = `npm run ${scriptName} ${dryRunFlag} ${argsStr}`;
     try {
-      const { stdout, stderr } = await execAsync(command);
+      const { stdout: _stdout, stderr } = await execAsync(command);
       if (stderr) logger.error(stderr);
     } catch (error: unknown) {
       logger.error(`Script ${scriptName} failed:`);

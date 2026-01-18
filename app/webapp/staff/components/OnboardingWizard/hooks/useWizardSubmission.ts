@@ -34,7 +34,7 @@ export function useWizardSubmission({
     setLoading(true);
     try {
       // Build documents array
-      const documents = buildDocuments({
+      const _documents = buildDocuments({
         idFile,
         signatureData,
         bankBSB,

@@ -33,7 +33,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({
   selectedIngredient,
   highlightedIndex,
   newIngredient,
-  onToggleAddIngredient,
+  onToggleAddIngredient: _onToggleAddIngredient,
   onSearchChange,
   onIngredientSelect,
   onKeyDown,

@@ -19,7 +19,7 @@ interface QuickTempLogProps {
  * @returns {Promise<boolean>} Success status
  */
 export async function handleQuickTempLog({
-  equipmentId,
+  equipmentId: _equipmentId,
   equipmentName,
   equipmentType,
   activeTab,

@@ -35,8 +35,8 @@ export function SortableMenuItem({
   onMoveUp,
   onMoveDown,
   onMoveToCategory,
-  onUpdateActualPrice,
-  onShowStatistics,
+  onUpdateActualPrice: _onUpdateActualPrice,
+  onShowStatistics: _onShowStatistics,
   onEditRegion,
   availableCategories = [],
   currentCategory,
@@ -47,7 +47,7 @@ export function SortableMenuItem({
   onMouseMove,
 }: SortableMenuItemProps) {
   const itemRef = useRef<HTMLDivElement>(null);
-  const priceInputRef = useRef<HTMLInputElement>(null);
+  const _priceInputRef = useRef<HTMLInputElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const reorderButtonRef = useRef<HTMLButtonElement>(null);
 

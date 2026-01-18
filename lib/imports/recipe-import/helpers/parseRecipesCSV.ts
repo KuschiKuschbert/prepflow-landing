@@ -1,12 +1,12 @@
 import { parseCSV, type ParseCSVResult } from '@/lib/csv/csv-utils';
-import { normalizeColumnName, mapCSVRowToEntity, parseNumber } from '../../import-utils';
+import { mapCSVRowToEntity, normalizeColumnName, parseNumber } from '../../import-utils';
 import type { RecipeImportRow } from '../../recipe-import';
 
 /**
  * Parse recipes from CSV text
  */
 export function parseRecipesCSV(csvText: string): ParseCSVResult<RecipeImportRow> {
-  const result = parseCSV<Record<string, any>>(csvText, {
+  const result = parseCSV<Record<string, unknown>>(csvText, {
     header: true,
     skipEmptyLines: true,
     transformHeader: header => normalizeColumnName(header),

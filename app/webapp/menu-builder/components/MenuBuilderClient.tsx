@@ -28,7 +28,7 @@ export default function MenuBuilderClient({
     timestamp: new Date().toISOString(),
   });
 
-  const { menus, setMenus, loading, error, setError, fetchMenus, cachedMenus } = useMenuData();
+  const { menus, setMenus, loading, error, setError: _setError, fetchMenus, cachedMenus } = useMenuData();
   const { checkingDb, dbError, setDbError, checkDatabaseTables, cachedDbCheck } =
     useDatabaseCheck();
   const [showMenuForm, setShowMenuForm] = useState(false);

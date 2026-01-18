@@ -50,9 +50,9 @@ export function UnifiedRecipeModal({
   onShareRecipe,
   onPrint,
   onDuplicateRecipe,
-  onDeleteRecipe,
-  onUpdatePreviewYield,
-  onRefreshIngredients,
+  onDeleteRecipe: _onDeleteRecipe,
+  onUpdatePreviewYield: _onUpdatePreviewYield,
+  onRefreshIngredients: _onRefreshIngredients,
   capitalizeRecipeName,
   formatQuantity,
 }: UnifiedRecipeModalProps) {

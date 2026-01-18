@@ -21,7 +21,7 @@ interface RecentActivity {
 }
 
 function RecentActivityContent() {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
   // Initialize with cached data for instant display
   const [activities, setActivities] = useState<RecentActivity[]>(
     () => getCachedData<RecentActivity[]>('dashboard_recent_activity') || [],

@@ -22,7 +22,7 @@ describe('par-level-import', () => {
     if (Component) {
       try {
         render(<Component />);
-      } catch (e) {
+      } catch (_e) {
         // console.warn('Render failed for par-level-import, but module loaded');
       }
     }

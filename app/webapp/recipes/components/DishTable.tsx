@@ -42,7 +42,7 @@ const DishTable = React.memo(function DishTable({
   sortDirection = 'asc',
   onSortChange,
   isSelectionMode = false,
-  onStartLongPress,
+  onStartLongPress: _onStartLongPress,
   onCancelLongPress,
   onEnterSelectionMode,
 }: DishTableProps) {

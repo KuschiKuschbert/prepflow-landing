@@ -23,7 +23,7 @@ import type { InitialSyncResult } from './types';
  */
 export async function performInitialSync(
   userId: string,
-  config: SquareConfig,
+  _config: SquareConfig,
 ): Promise<InitialSyncResult> {
   const startedAt = new Date().toISOString();
   const result: InitialSyncResult = {

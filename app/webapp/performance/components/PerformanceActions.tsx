@@ -11,7 +11,7 @@ interface PerformanceActionsProps {
 }
 
 export default function PerformanceActions({
-  showImportModal,
+  showImportModal: _showImportModal,
   showCharts,
   onImportClick,
   onExportCSV,

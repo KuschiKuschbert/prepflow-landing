@@ -24,7 +24,7 @@ export async function calculateItemCOGS(
   let cogs = 0;
   let cogsError: string | null = null;
   const dish = Array.isArray(menuItem.dishes) ? menuItem.dishes[0] : menuItem.dishes;
-  const recipe = Array.isArray(menuItem.recipes) ? menuItem.recipes[0] : menuItem.recipes;
+  const _recipe = Array.isArray(menuItem.recipes) ? menuItem.recipes[0] : menuItem.recipes;
 
   try {
     if (menuItem.dish_id && dish) {

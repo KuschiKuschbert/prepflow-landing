@@ -8,8 +8,6 @@ import type {
 } from '@playwright/test/reporter';
 import { generateQAReport, parseTestResults } from './helpers/report-generator';
 import { getCollectedErrors } from './fixtures/global-error-listener';
-import { writeFileSync } from 'fs';
-import { join } from 'path';
 
 class QAReporter implements Reporter {
   private testResults: Array<{

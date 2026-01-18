@@ -1,6 +1,5 @@
 import { useOnTemperatureLogged } from '@/lib/personality/hooks';
 import { useState } from 'react';
-import { logger } from '@/lib/logger';
 
 interface UseTemperatureLogHandlersProps {
   activeTab: 'logs' | 'equipment' | 'analytics';
@@ -60,7 +59,7 @@ export function useTemperatureLogHandlers({
           fetchAllLogs(1000).catch(() => {});
         }
       }
-    } catch (error) {
+    } catch (_error) {
       // Handle add log error gracefully
     }
   };
@@ -77,7 +76,7 @@ export function useTemperatureLogHandlers({
           fetchAllLogs(1000).catch(() => {});
         }
       }
-    } catch (error) {
+    } catch (_error) {
       // Handle delete error gracefully
     }
   };

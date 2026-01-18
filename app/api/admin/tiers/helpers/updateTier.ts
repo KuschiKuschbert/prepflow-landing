@@ -28,7 +28,7 @@ export async function updateTier(
   }
 
   // Get current config for audit log
-  const { data: currentData, error: currentDataError } = await supabaseAdmin
+  const { data: _currentData, error: currentDataError } = await supabaseAdmin
     .from('tier_configurations')
     .select('*')
     .eq('tier_slug', tierSlug)

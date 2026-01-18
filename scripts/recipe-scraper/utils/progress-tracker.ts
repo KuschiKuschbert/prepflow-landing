@@ -111,7 +111,7 @@ export class ProgressTracker {
         if (fs.existsSync(tempFilePath)) {
           fs.unlinkSync(tempFilePath);
         }
-      } catch (cleanupError) {
+      } catch (_cleanupError) {
         // Ignore cleanup errors
       }
 

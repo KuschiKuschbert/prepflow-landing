@@ -5,7 +5,7 @@ import type { ComplianceRecordImportRow } from '../../compliance-import';
  */
 export function validateComplianceRecord(
   row: ComplianceRecordImportRow,
-  index: number,
+  _index: number,
 ): { valid: boolean; error?: string } {
   if (!row.compliance_type_id || row.compliance_type_id <= 0 || isNaN(row.compliance_type_id)) {
     return { valid: false, error: 'Compliance type ID is required and must be a positive number' };

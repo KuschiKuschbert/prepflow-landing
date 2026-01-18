@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface UseIsVisibleOptions extends IntersectionObserverInit {}
 
 /**

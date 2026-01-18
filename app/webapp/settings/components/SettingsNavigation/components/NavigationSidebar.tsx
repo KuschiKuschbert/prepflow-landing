@@ -80,7 +80,6 @@ export function NavigationSidebar({
                       />
                     )}
                   </button>
-
                   {/* Category Items */}
                   {isExpanded && hasItems && (
                     <ul
@@ -91,7 +90,7 @@ export function NavigationSidebar({
                     >
                       {category.items.map((item, itemIndex) => {
                         const isActive = activeHash === item.hash;
-                        const isFocused =
+                        const _isFocused =
                           focusedIndex?.categoryId === category.id &&
                           focusedIndex?.itemIndex === itemIndex;
                         const itemKey = `${category.id}-${itemIndex}`;

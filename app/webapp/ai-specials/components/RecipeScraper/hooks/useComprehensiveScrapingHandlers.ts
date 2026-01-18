@@ -19,7 +19,7 @@ export function useComprehensiveScrapingHandlers({
   setComprehensiveScraping,
   setComprehensiveStatus,
   setStatusPolling,
-  fetchComprehensiveStatus,
+  fetchComprehensiveStatus: _fetchComprehensiveStatus,
 }: UseComprehensiveScrapingHandlersParams) {
   const { showSuccess, showError } = useNotification();
 

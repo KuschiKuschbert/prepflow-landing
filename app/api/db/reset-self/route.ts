@@ -23,7 +23,7 @@ type DeleteSummary = {
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await requireAuth(request);
+    const _user = await requireAuth(request);
   } catch (error) {
     logger.error('[route.ts] Error in catch block:', {
       error: error instanceof Error ? error.message : String(error),
@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
   // Parent tables with user_id
   const parentTables = ['order_lists', 'prep_lists', 'recipe_shares', 'ai_specials_ingredients'];
   // Child tables referencing parents (no user_id on child rows)
-  const childSpecs: Array<{
+  const _childSpecs: Array<{
     table: string;
     fk: string;
     parentTable: string;

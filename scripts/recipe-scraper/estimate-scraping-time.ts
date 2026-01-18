@@ -48,7 +48,7 @@ function loadProgress(source: string): ProgressData | null {
       filtered,
       lastUpdated: data.lastUpdated,
     };
-  } catch (error) {
+  } catch (_error) {
     return null;
   }
 }

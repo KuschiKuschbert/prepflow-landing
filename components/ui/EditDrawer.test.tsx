@@ -22,7 +22,7 @@ describe('EditDrawer', () => {
     if (Component) {
       try {
         render(<Component />);
-      } catch (e) {
+      } catch (_e) {
         // console.warn('Render failed for EditDrawer, but module loaded');
       }
     }

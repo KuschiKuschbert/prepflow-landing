@@ -20,7 +20,7 @@ export function useRecipeManagement(onIngredientsChange?: (recipeId: string) => 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [recipeError, setRecipeError] = useState<RecipeError | null>(null);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const [_isHydrated, setIsHydrated] = useState(false);
   const pricesCalculatedRef = useRef<Set<string>>(new Set());
 
   const capitalizeRecipeName = formatRecipeName;

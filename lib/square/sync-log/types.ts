@@ -19,8 +19,8 @@ export interface SyncLog {
   square_id: string | null;
   status: 'success' | 'error' | 'conflict' | 'skipped' | 'pending' | 'retrying';
   error_message: string | null;
-  error_details: Record<string, any> | null;
-  sync_metadata: Record<string, any> | null;
+  error_details: Record<string, unknown> | null;
+  sync_metadata: Record<string, unknown> | null;
   retry_count: number;
   max_retries: number;
   next_retry_at: string | null;
@@ -43,8 +43,8 @@ export interface SyncOperation {
   square_id?: string;
   status: 'success' | 'error' | 'conflict' | 'skipped' | 'pending' | 'retrying';
   error_message?: string;
-  error_details?: Record<string, any>;
-  sync_metadata?: Record<string, any>;
+  error_details?: Record<string, unknown>;
+  sync_metadata?: Record<string, unknown>;
   retry_count?: number;
   max_retries?: number;
   next_retry_at?: string | null;

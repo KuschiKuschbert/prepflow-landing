@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getStoredAvatar, isValidAvatar, storeAvatar } from '@/lib/user-avatar';
 import { logger } from '@/lib/logger';
 

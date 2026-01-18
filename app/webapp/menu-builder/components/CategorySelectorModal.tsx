@@ -17,7 +17,7 @@ interface CategorySelectorModalProps {
 export default function CategorySelectorModal({
   isOpen,
   categories,
-  itemName,
+  itemName: _itemName,
   anchorElement,
   onSelectCategory,
   onClose,

@@ -42,7 +42,7 @@ export class SimplyRecipesScraper extends BaseScraper {
               null;
             if (recipeData) break;
           }
-        } catch (e) {
+        } catch (_e) {
           // Continue to next script
         }
       }

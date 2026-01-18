@@ -37,7 +37,7 @@ export async function gremlinCrawler(
           allLinks.add(link);
         }
       });
-    } catch (err) {
+    } catch (_err) {
       continue;
     }
   }

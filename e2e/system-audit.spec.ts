@@ -8,29 +8,29 @@
  * 4. Generates comprehensive QA audit report
  */
 
-import { test, expect, Page } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 import { ensureAuthenticated } from './fixtures/auth-helper';
 import {
-  setupGlobalErrorListener,
-  getCollectedErrors,
-  collectPageErrors,
+    collectPageErrors,
+    getCollectedErrors,
+    setupGlobalErrorListener,
 } from './fixtures/global-error-listener';
 import type { TestResultsSummary } from './helpers/report-generator';
-import { chefWorkflowCreateIngredient } from './system-audit/helpers/createChefWorkflows';
-import { chefWorkflowCreateRecipe } from './system-audit/workflows/createRecipe';
-import { chefWorkflowCreateMenu } from './system-audit/workflows/createMenu';
-import { chefWorkflowCreateTemperatureLog } from './system-audit/workflows/createTemperatureLog';
-import { chefWorkflowCreateEquipmentMaintenance } from './system-audit/workflows/createEquipmentMaintenance';
-import { gremlinCrawler } from './system-audit/workflows/gremlinCrawler';
-import { generateQAReport } from './system-audit/helpers/generateReport';
 import { cleanupTestData } from './system-audit/helpers/cleanupTestData';
+import { chefWorkflowCreateIngredient } from './system-audit/helpers/createChefWorkflows';
+import { generateQAReport } from './system-audit/helpers/generateReport';
+import { chefWorkflowCreateEquipmentMaintenance } from './system-audit/workflows/createEquipmentMaintenance';
+import { chefWorkflowCreateMenu } from './system-audit/workflows/createMenu';
+import { chefWorkflowCreateRecipe } from './system-audit/workflows/createRecipe';
+import { chefWorkflowCreateTemperatureLog } from './system-audit/workflows/createTemperatureLog';
+import { gremlinCrawler } from './system-audit/workflows/gremlinCrawler';
 
 const TEST_PREFIX = `AUTO_TEST_${Date.now()}`;
 const visitedPages = new Set<string>();
 const screenshots: string[] = [];
 
 test.describe('System Audit', () => {
-  let testResults: TestResultsSummary = {
+  let _testResults: TestResultsSummary = {
     total: 0,
     passed: 0,
     failed: 0,
@@ -91,7 +91,7 @@ test.describe('System Audit', () => {
 
     const errors = getCollectedErrors();
 
-    testResults = {
+    _testResults = {
       total: visitedPages.size,
       passed: visitedPages.size,
       failed: 0,
@@ -107,7 +107,7 @@ test.describe('System Audit', () => {
 
       try {
         await cleanupPage.close();
-      } catch (err) {
+      } catch (_err) {
         // Page might already be closed
       }
     }

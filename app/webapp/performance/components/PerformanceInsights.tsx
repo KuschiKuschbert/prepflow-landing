@@ -15,7 +15,7 @@ export default function PerformanceInsights({
   performanceItems,
   performanceScore,
 }: PerformanceInsightsProps) {
-  const { insights, hasInsights, isLoadingAI } = usePerformanceInsights(
+  const { insights, hasInsights, isLoadingAI: _isLoadingAI } = usePerformanceInsights(
     performanceItems,
     performanceScore,
   );
