@@ -31,13 +31,19 @@ export default defineConfig([
     },
   },
   {
-    // Specific block for TypeScript files to handle 'any' rule
+    // Specific block for TypeScript files to handle 'any' rule and unused imports
     files: ['**/*.ts', '**/*.tsx'],
+    plugins: {
+      'unused-imports': unusedImports,
+    },
     rules: {
       // Warns on usage of 'any' to encourage fixing, but prevents build breakage
       '@typescript-eslint/no-explicit-any': 'warn',
-      // Warn on unused vars but allow underscore-prefixed params (intentional ignores)
-      '@typescript-eslint/no-unused-vars': [
+      // Disable base no-unused-vars in favor of unused-imports plugin
+      '@typescript-eslint/no-unused-vars': 'off',
+      // Auto-fixable unused imports and vars
+      'unused-imports/no-unused-imports': 'warn',
+      'unused-imports/no-unused-vars': [
         'warn',
         {
           argsIgnorePattern: '^_',
