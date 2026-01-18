@@ -20,7 +20,6 @@ export async function fetchPaginatedTasks(
   page: number,
   pageSize: number,
 ): Promise<{ data: DBCleaningTask[]; total: number }> {
-
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 

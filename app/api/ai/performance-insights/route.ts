@@ -7,8 +7,8 @@
 import type { PerformanceItem } from '@/app/webapp/performance/types';
 import { generateAIResponse } from '@/lib/ai/ai-service';
 import {
-    buildPerformanceInsightsPrompt,
-    parsePerformanceInsightsResponse,
+  buildPerformanceInsightsPrompt,
+  parsePerformanceInsightsResponse,
 } from '@/lib/ai/prompts/performance-insights';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';

@@ -48,7 +48,8 @@ export async function GET(request: NextRequest) {
     // Determine status
     let status: 'healthy' | 'degraded' | 'down' = 'healthy';
     if (!databaseConnected) status = 'down';
-    else if (dbResponseTime > DB_SLOW_THRESHOLD_MS || errorCount > HIGH_ERROR_THRESHOLD) status = 'degraded';
+    else if (dbResponseTime > DB_SLOW_THRESHOLD_MS || errorCount > HIGH_ERROR_THRESHOLD)
+      status = 'degraded';
 
     return NextResponse.json({
       success: true,

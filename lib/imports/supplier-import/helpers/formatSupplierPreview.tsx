@@ -4,7 +4,10 @@ import type { SupplierImportRow } from '../../supplier-import';
 /**
  * Format supplier for preview
  */
-export function formatSupplierPreview(supplier: SupplierImportRow, _index: number): React.ReactNode {
+export function formatSupplierPreview(
+  supplier: SupplierImportRow,
+  _index: number,
+): React.ReactNode {
   return (
     <div className="space-y-1">
       <div className="font-medium text-white">{supplier.name}</div>

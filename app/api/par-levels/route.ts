@@ -92,7 +92,12 @@ export async function POST(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/par-levels', method: 'POST' },
     });
-    if (err && typeof err === 'object' && 'status' in err && typeof (err as { status: unknown }).status === 'number') {
+    if (
+      err &&
+      typeof err === 'object' &&
+      'status' in err &&
+      typeof (err as { status: unknown }).status === 'number'
+    ) {
       return NextResponse.json(err, { status: (err as { status: number }).status });
     }
     return handleParLevelError(err, 'POST');
@@ -121,7 +126,12 @@ export async function PUT(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/par-levels', method: 'PUT' },
     });
-    if (err && typeof err === 'object' && 'status' in err && typeof (err as { status: unknown }).status === 'number') {
+    if (
+      err &&
+      typeof err === 'object' &&
+      'status' in err &&
+      typeof (err as { status: unknown }).status === 'number'
+    ) {
       return NextResponse.json(err, { status: (err as { status: number }).status });
     }
     return handleParLevelError(err, 'PUT');
@@ -143,7 +153,6 @@ export async function DELETE(request: NextRequest) {
         { status: 400 },
       );
     }
-
 
     await deleteParLevel(supabase, id);
 

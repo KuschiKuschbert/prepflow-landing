@@ -14,8 +14,6 @@ import { ParLevelInput } from './types';
  * @throws {Error} If update fails
  */
 export async function updateParLevel(supabase: SupabaseClient, id: string, updates: unknown) {
-
-
   // Check if par level exists
   const { data: existing, error: checkError } = await supabase
     .from('par_levels')

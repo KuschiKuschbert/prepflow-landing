@@ -20,15 +20,10 @@ export async function GET(request: NextRequest, _context: { params: Promise<{ id
     // Get counts and data for each table
     const [ingredientsResult, recipesResult, dishesResult, temperatureResult, cleaningResult] =
       await Promise.all([
-        supabase
-          .from('ingredients')
-          .select('id, ingredient_name, created_at', { count: 'exact' }),
+        supabase.from('ingredients').select('id, ingredient_name, created_at', { count: 'exact' }),
         supabase.from('recipes').select('id, recipe_name, created_at', { count: 'exact' }),
         supabase.from('dishes').select('id, dish_name, created_at', { count: 'exact' }),
-        supabase
-          .from('temperature_logs')
-          .select('id, created_at', { count: 'exact' })
-          .limit(100),
+        supabase.from('temperature_logs').select('id, created_at', { count: 'exact' }).limit(100),
         supabase
           .from('cleaning_tasks')
           .select('id, task_name, created_at', { count: 'exact' })

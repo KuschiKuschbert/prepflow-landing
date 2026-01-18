@@ -6,7 +6,10 @@ import { NextResponse } from 'next/server';
 /**
  * Delete employee by ID
  */
-export async function deleteEmployee(supabase: SupabaseClient, employeeId: string): Promise<NextResponse> {
+export async function deleteEmployee(
+  supabase: SupabaseClient,
+  employeeId: string,
+): Promise<NextResponse> {
   // Check if employee exists
   const { data: existingEmployee, error: fetchError } = await supabase
     .from('employees')
@@ -21,10 +24,7 @@ export async function deleteEmployee(supabase: SupabaseClient, employeeId: strin
   }
 
   // Delete employee (shifts and related records will be deleted via CASCADE)
-  const { error: deleteError } = await supabase
-    .from('employees')
-    .delete()
-    .eq('id', employeeId);
+  const { error: deleteError } = await supabase.from('employees').delete().eq('id', employeeId);
 
   if (deleteError) {
     logger.error('[Staff Employees API] Database error deleting employee:', {

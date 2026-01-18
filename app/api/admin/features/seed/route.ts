@@ -65,12 +65,7 @@ export async function POST(request: NextRequest) {
 
 async function seedSingleFlag(flag: { flag_key: string; enabled: boolean; description: string }) {
   try {
-    const result = await setFeatureFlag(
-      flag.flag_key,
-      flag.enabled,
-      undefined,
-      flag.description,
-    );
+    const result = await setFeatureFlag(flag.flag_key, flag.enabled, undefined, flag.description);
     return {
       flag_key: flag.flag_key,
       success: !!result,

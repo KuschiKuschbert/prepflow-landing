@@ -31,7 +31,8 @@ export async function batchFetchRecipeIngredients(recipeIds: string[]): Promise<
     }
 
     if (recipeIngredients) {
-      recipeIngredients.forEach((ri: any) => { // justified
+      recipeIngredients.forEach((ri: any) => {
+        // justified
         const ingredient = ri.ingredients;
         if (ingredient && typeof ingredient === 'object') {
           const rawIng = ingredient as unknown as RawAggregatedIngredient;

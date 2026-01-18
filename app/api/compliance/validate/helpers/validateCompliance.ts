@@ -1,16 +1,16 @@
 import type {
-    Availability,
-    ComplianceValidationResult,
-    Employee,
-    Shift,
+  Availability,
+  ComplianceValidationResult,
+  Employee,
+  Shift,
 } from '@/app/webapp/roster/types';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import {
-    createValidationWarnings,
-    validateShift,
-    validateShiftAvailability,
-    validateShiftSkills,
+  createValidationWarnings,
+  validateShift,
+  validateShiftAvailability,
+  validateShiftSkills,
 } from '@/lib/services/compliance/validator';
 import { SupabaseClient } from '@supabase/supabase-js';
 

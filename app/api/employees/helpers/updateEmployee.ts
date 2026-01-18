@@ -26,7 +26,11 @@ const EMPLOYEE_SELECT = `
  * @returns {Promise<Employee>} Updated employee
  * @throws {Error} If update fails
  */
-export async function updateEmployee(supabase: SupabaseClient, id: string, updates: UpdateEmployeeInput) {
+export async function updateEmployee(
+  supabase: SupabaseClient,
+  id: string,
+  updates: UpdateEmployeeInput,
+) {
   const { data, error } = await supabase
     .from('employees')
     .update({

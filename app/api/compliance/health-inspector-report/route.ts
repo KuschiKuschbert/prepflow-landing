@@ -25,14 +25,29 @@ export async function GET(request: NextRequest) {
     const startDate = searchParams.get('start_date');
     const endDate = searchParams.get('end_date') || new Date().toISOString().split('T')[0];
     const includeSections = searchParams.get('include_sections')?.split(',') || [
-      'business', 'employees', 'qualifications', 'compliance', 'temperature',
-      'temperature_violations', 'cleaning', 'sanitizer', 'staff_health',
-      'incidents', 'haccp', 'allergens', 'equipment', 'waste', 'procedures',
-      'suppliers', 'compliance_gaps', 'summary',
+      'business',
+      'employees',
+      'qualifications',
+      'compliance',
+      'temperature',
+      'temperature_violations',
+      'cleaning',
+      'sanitizer',
+      'staff_health',
+      'incidents',
+      'haccp',
+      'allergens',
+      'equipment',
+      'waste',
+      'procedures',
+      'suppliers',
+      'compliance_gaps',
+      'summary',
     ];
 
     // Calculate default start dates
-    const complianceStart = startDate || new Date(Date.now() - MS_IN_YEAR).toISOString().split('T')[0];
+    const complianceStart =
+      startDate || new Date(Date.now() - MS_IN_YEAR).toISOString().split('T')[0];
     const recentStart = startDate || new Date(Date.now() - MS_IN_MONTH).toISOString().split('T')[0];
 
     // Fetch report data
@@ -41,7 +56,12 @@ export async function GET(request: NextRequest) {
       report_period: { start_date: complianceStart, end_date: endDate },
     };
 
-    const sectionsData = await fetchReportSections(includeSections, complianceStart, recentStart, endDate);
+    const sectionsData = await fetchReportSections(
+      includeSections,
+      complianceStart,
+      recentStart,
+      endDate,
+    );
     Object.assign(reportData, sectionsData);
 
     if (includeSections.includes('compliance_gaps')) {

@@ -58,7 +58,11 @@ export async function POST(req: NextRequest) {
     } catch (error: unknown) {
       if ((error as { code?: string })?.code === 'resource_missing') {
         return NextResponse.json(
-          ApiErrorHandler.createError('Subscription missing in Stripe', 'SUBSCRIPTION_NOT_FOUND', 404),
+          ApiErrorHandler.createError(
+            'Subscription missing in Stripe',
+            'SUBSCRIPTION_NOT_FOUND',
+            404,
+          ),
           { status: 404 },
         );
       }
@@ -67,7 +71,11 @@ export async function POST(req: NextRequest) {
 
     if (subscription.status === 'canceled' && !subscription.cancel_at_period_end) {
       return NextResponse.json(
-        ApiErrorHandler.createError('Cannot reactivate permanently cancelled sub', 'BAD_REQUEST', 400),
+        ApiErrorHandler.createError(
+          'Cannot reactivate permanently cancelled sub',
+          'BAD_REQUEST',
+          400,
+        ),
         { status: 400 },
       );
     }
@@ -80,7 +88,11 @@ export async function POST(req: NextRequest) {
 
     if (subscription.status !== 'active') {
       return NextResponse.json(
-        ApiErrorHandler.createError(`Cannot reactivate sub in ${subscription.status} state`, 'BAD_REQUEST', 400),
+        ApiErrorHandler.createError(
+          `Cannot reactivate sub in ${subscription.status} state`,
+          'BAD_REQUEST',
+          400,
+        ),
         { status: 400 },
       );
     }
@@ -89,8 +101,12 @@ export async function POST(req: NextRequest) {
       current_period_end: number;
       current_period_start: number;
     };
-    const expiresAt = activeSub.current_period_end ? new Date(activeSub.current_period_end * 1000) : null;
-    const currentPeriodStart = activeSub.current_period_start ? new Date(activeSub.current_period_start * 1000) : null;
+    const expiresAt = activeSub.current_period_end
+      ? new Date(activeSub.current_period_end * 1000)
+      : null;
+    const currentPeriodStart = activeSub.current_period_start
+      ? new Date(activeSub.current_period_start * 1000)
+      : null;
 
     await supabaseAdmin
       .from('users')

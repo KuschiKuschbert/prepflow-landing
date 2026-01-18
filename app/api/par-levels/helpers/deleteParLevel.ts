@@ -11,8 +11,6 @@ import { SupabaseClient } from '@supabase/supabase-js';
  * @throws {Error} If delete fails
  */
 export async function deleteParLevel(supabase: SupabaseClient, id: string): Promise<void> {
-
-
   // Check if par level exists
   const { data: existing, error: checkError } = await supabase
     .from('par_levels')

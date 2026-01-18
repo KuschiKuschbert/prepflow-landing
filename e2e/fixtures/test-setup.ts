@@ -1,8 +1,5 @@
 import { test as base } from '@playwright/test';
-import {
-  setupGlobalErrorListener,
-  collectPageErrors,
-} from './global-error-listener';
+import { setupGlobalErrorListener, collectPageErrors } from './global-error-listener';
 import { ensureAuthenticated } from './auth-helper';
 
 /**

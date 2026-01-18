@@ -82,7 +82,13 @@ export default function PrepListsPage() {
   } = usePrepListsModals();
 
   // Pagination
-  const { page, setPage: _setPage, totalPages: _totalPages, goToPreviousPage, goToNextPage } = usePrepListsPagination({
+  const {
+    page,
+    setPage: _setPage,
+    totalPages: _totalPages,
+    goToPreviousPage,
+    goToNextPage,
+  } = usePrepListsPagination({
     total: 0, // Will be updated from prepListsData
     pageSize,
   });

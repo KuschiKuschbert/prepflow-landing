@@ -123,7 +123,10 @@ export async function POST(request: NextRequest) {
     const { format, encryptionMode, password } = validationResult.data;
 
     // Validate encryption options
-    if (format === 'encrypted' && (!encryptionMode || (encryptionMode === 'user-password' && !password))) {
+    if (
+      format === 'encrypted' &&
+      (!encryptionMode || (encryptionMode === 'user-password' && !password))
+    ) {
       return NextResponse.json(
         ApiErrorHandler.createError(
           'Missing encryption mode or password for encrypted backup',
@@ -145,9 +148,12 @@ export async function POST(request: NextRequest) {
       password,
     );
 
-    logger.info(`[Backup Create] Backup created successfully: ${filename}, size: ${fileSize} bytes`);
+    logger.info(
+      `[Backup Create] Backup created successfully: ${filename}, size: ${fileSize} bytes`,
+    );
 
-    const responseContent = format === 'encrypted' ? Buffer.from(content as Uint8Array) : (content as string);
+    const responseContent =
+      format === 'encrypted' ? Buffer.from(content as Uint8Array) : (content as string);
 
     return new NextResponse(responseContent, {
       headers: {

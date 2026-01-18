@@ -5,7 +5,6 @@ import { NextResponse } from 'next/server';
 
 export async function handleDeleteTemperatureEquipment(supabase: SupabaseClient, id: string) {
   try {
-
     if (!id) {
       return NextResponse.json(
         ApiErrorHandler.createError('Equipment ID is required', 'VALIDATION_ERROR', 400),

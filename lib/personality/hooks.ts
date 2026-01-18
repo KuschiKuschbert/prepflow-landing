@@ -9,10 +9,6 @@ import { trackSave as trackAchievementSave } from './achievement-tracker';
 import { trackSave as trackBehaviorSave, trackFeatureUsage } from './behavior-tracker';
 import { getCurrentContext } from './utils';
 
-
-
-
-
 export function useOnSave() {
   const { settings } = usePersonality();
 

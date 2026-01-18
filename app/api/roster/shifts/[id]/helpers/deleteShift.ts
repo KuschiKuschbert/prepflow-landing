@@ -7,7 +7,10 @@ import { checkShiftExists } from './checkShiftExists';
 /**
  * Delete shift by ID
  */
-export async function deleteShift(supabase: SupabaseClient, shiftId: string): Promise<NextResponse> {
+export async function deleteShift(
+  supabase: SupabaseClient,
+  shiftId: string,
+): Promise<NextResponse> {
   // Check if shift exists
   const existsResult = await checkShiftExists(supabase, shiftId);
   if (existsResult instanceof NextResponse) {

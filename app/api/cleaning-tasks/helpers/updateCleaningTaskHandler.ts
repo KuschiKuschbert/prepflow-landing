@@ -7,10 +7,7 @@ import { buildUpdateData } from './buildUpdateData';
 import { handleCleaningTaskError } from './handleCleaningTaskError';
 import { updateCleaningTaskSchema } from './schemas';
 
-export async function handleUpdateCleaningTask(
-  supabase: SupabaseClient,
-  request: NextRequest,
-) {
+export async function handleUpdateCleaningTask(supabase: SupabaseClient, request: NextRequest) {
   try {
     let body: unknown;
     try {

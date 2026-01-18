@@ -18,8 +18,6 @@ import { ParLevelInput } from './types';
  * @throws {Error} If creation fails
  */
 export async function createParLevel(supabase: SupabaseClient, parLevelData: ParLevelInput) {
-
-
   // Validate required fields
   const { ingredientId } = validateParLevelData(parLevelData);
 

@@ -3,10 +3,10 @@
  */
 import { parseCSV, type ParseCSVResult } from '@/lib/csv/csv-utils';
 import {
-    mapCSVRowToEntity,
-    normalizeColumnName,
-    parseDate,
-    parseNumber,
+  mapCSVRowToEntity,
+  normalizeColumnName,
+  parseDate,
+  parseNumber,
 } from '@/lib/imports/import-utils';
 import type { TemperatureLogImportRow } from '../../temperature-import';
 

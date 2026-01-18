@@ -43,7 +43,9 @@ export async function GET(request: NextRequest) {
     if (format === 'csv' || format === 'pdf') {
       const user = await requireAuth(request);
       if (!user?.email) {
-        return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), { status: 401 });
+        return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), {
+          status: 401,
+        });
       }
       const featureKey = format === 'csv' ? 'export_csv' : 'export_pdf';
       const accessResult = await checkFeatureAccess(featureKey, user.email, request);

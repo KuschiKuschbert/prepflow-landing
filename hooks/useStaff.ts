@@ -38,7 +38,8 @@ export function useStaff() {
 
       if (data.success && data.data) {
         // Format staff members for dropdowns: { id, full_name, role }
-        const formattedStaff: StaffMember[] = data.data.map((employee: any) => ({ // justified
+        const formattedStaff: StaffMember[] = data.data.map((employee: any) => ({
+          // justified
           id: employee.id,
           full_name: employee.full_name,
           role: employee.role || null,

@@ -85,12 +85,11 @@ export async function populateSalesData(
       name: r.name || r.recipe_name,
     }));
 
-    const { salesData, dishesCreated: _dishesCreated, dishesUsed: _dishesUsed } = await generateSalesDataForMonth(
-      recipes,
-      startDate,
-      endDate,
-      supabaseAdmin,
-    );
+    const {
+      salesData,
+      dishesCreated: _dishesCreated,
+      dishesUsed: _dishesUsed,
+    } = await generateSalesDataForMonth(recipes, startDate, endDate, supabaseAdmin);
 
     if (salesData.length === 0) {
       logger.warn('No sales data generated');

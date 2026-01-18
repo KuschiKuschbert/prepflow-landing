@@ -24,7 +24,6 @@ interface FeatureImageContainerProps {
   ANIMATION_EASING: string;
 }
 
-
 export function FeatureImageContainer({
   currentImage,
   previousImage,

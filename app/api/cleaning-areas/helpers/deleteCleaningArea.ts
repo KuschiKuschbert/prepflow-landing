@@ -10,10 +10,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
  * @returns {Promise<void>}
  * @throws {Error} If delete fails
  */
-export async function deleteCleaningArea(
-  supabase: SupabaseClient,
-  id: string,
-): Promise<void> {
+export async function deleteCleaningArea(supabase: SupabaseClient, id: string): Promise<void> {
   const { error } = await supabase.from('cleaning_areas').delete().eq('id', id);
 
   if (error) {

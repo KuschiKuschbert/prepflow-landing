@@ -15,10 +15,11 @@ export default function PerformanceInsights({
   performanceItems,
   performanceScore,
 }: PerformanceInsightsProps) {
-  const { insights, hasInsights, isLoadingAI: _isLoadingAI } = usePerformanceInsights(
-    performanceItems,
-    performanceScore,
-  );
+  const {
+    insights,
+    hasInsights,
+    isLoadingAI: _isLoadingAI,
+  } = usePerformanceInsights(performanceItems, performanceScore);
 
   if (!hasInsights) {
     return null;

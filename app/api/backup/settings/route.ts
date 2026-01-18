@@ -69,10 +69,9 @@ export async function GET(request: NextRequest) {
   } catch (error: unknown) {
     const appError = getAppError(error);
     logger.error('[Backup Settings] Error:', { error: appError.message });
-    return NextResponse.json(
-      ApiErrorHandler.createError(appError.message, 'INTERNAL_ERROR', 500),
-      { status: 500 },
-    );
+    return NextResponse.json(ApiErrorHandler.createError(appError.message, 'INTERNAL_ERROR', 500), {
+      status: 500,
+    });
   }
 }
 
@@ -103,11 +102,8 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const {
-      scheduledBackupEnabled,
-      scheduledBackupInterval,
-      autoUploadToDrive,
-    } = validationResult.data;
+    const { scheduledBackupEnabled, scheduledBackupInterval, autoUploadToDrive } =
+      validationResult.data;
 
     const supabase = createSupabaseAdmin();
     const { error } = await supabase.from('backup_schedules').upsert(
@@ -130,9 +126,8 @@ export async function PUT(request: NextRequest) {
   } catch (error: unknown) {
     const appError = getAppError(error);
     logger.error('[Backup Settings] Error:', { error: appError.message });
-    return NextResponse.json(
-      ApiErrorHandler.createError(appError.message, 'INTERNAL_ERROR', 500),
-      { status: 500 },
-    );
+    return NextResponse.json(ApiErrorHandler.createError(appError.message, 'INTERNAL_ERROR', 500), {
+      status: 500,
+    });
   }
 }

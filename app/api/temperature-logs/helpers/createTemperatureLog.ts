@@ -23,7 +23,6 @@ export async function createTemperatureLog(
     logged_by?: string;
   },
 ) {
-
   // If equipment_id is provided, fetch equipment details
   let temperatureType = logData.temperature_type;
   let equipmentLocation = logData.location;

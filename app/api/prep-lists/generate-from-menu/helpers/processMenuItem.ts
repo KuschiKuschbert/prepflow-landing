@@ -1,10 +1,10 @@
 import { logger } from '@/lib/logger';
 import {
-    DBDishIngredient,
-    DBDishRecipe,
-    DBRecipeIngredient,
-    RecipeGroupedItem,
-    SectionData,
+  DBDishIngredient,
+  DBDishRecipe,
+  DBRecipeIngredient,
+  RecipeGroupedItem,
+  SectionData,
 } from '../types';
 import { processDish } from './processDish';
 import { processRecipe } from './processRecipe';

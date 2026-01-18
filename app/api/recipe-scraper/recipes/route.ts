@@ -8,9 +8,9 @@ import { getRecipeDatabaseStats, searchRecipesByIngredients } from '@/lib/ai/rec
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import {
-    filterByFormatAfterLoad,
-    filterByFormatAtIndex,
-    filterBySource,
+  filterByFormatAfterLoad,
+  filterByFormatAtIndex,
+  filterBySource,
 } from './helpers/filter-helpers';
 import { initializeStorage, loadJSONStorage } from './helpers/storage-helpers';
 

@@ -82,7 +82,10 @@ export function validateParLevel(
 /**
  * Format par level for preview
  */
-export function formatParLevelPreview(parLevel: ParLevelImportRow, _index: number): React.ReactNode {
+export function formatParLevelPreview(
+  parLevel: ParLevelImportRow,
+  _index: number,
+): React.ReactNode {
   return (
     <div className="space-y-1">
       <div className="font-medium text-white">Ingredient ID: {parLevel.ingredient_id}</div>

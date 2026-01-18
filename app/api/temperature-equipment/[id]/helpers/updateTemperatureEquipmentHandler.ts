@@ -12,7 +12,6 @@ export async function handleUpdateTemperatureEquipment(
   id: string,
 ) {
   try {
-
     if (!id) {
       return NextResponse.json(
         ApiErrorHandler.createError('Equipment ID is required', 'VALIDATION_ERROR', 400),

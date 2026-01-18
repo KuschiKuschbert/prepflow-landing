@@ -17,6 +17,9 @@ interface DishDropZoneProps {
  * @param {boolean} props.hasIngredients - Whether dish has ingredients (currently unused but kept for potential future use)
  * @returns {JSX.Element} Rendered container
  */
-export default function DishDropZone({ children, hasIngredients: _hasIngredients }: DishDropZoneProps) {
+export default function DishDropZone({
+  children,
+  hasIngredients: _hasIngredients,
+}: DishDropZoneProps) {
   return <div className="space-y-6">{children}</div>;
 }

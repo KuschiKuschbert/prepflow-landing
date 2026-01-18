@@ -8,7 +8,9 @@ export interface DishAggregationResult {
   results: Record<string, string[]>;
 }
 
-async function aggregateSingleDish(dishId: string): Promise<{ dishId: string; allergens: string[] }> {
+async function aggregateSingleDish(
+  dishId: string,
+): Promise<{ dishId: string; allergens: string[] }> {
   try {
     const allergens = await aggregateDishAllergens(dishId, true);
     return { dishId, allergens };

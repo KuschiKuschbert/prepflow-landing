@@ -7,7 +7,10 @@ import { checkTemplateExists } from './checkTemplateExists';
 /**
  * Delete template by ID
  */
-export async function deleteTemplate(supabase: SupabaseClient, templateId: string): Promise<NextResponse> {
+export async function deleteTemplate(
+  supabase: SupabaseClient,
+  templateId: string,
+): Promise<NextResponse> {
   // Check if template exists
   const existsResult = await checkTemplateExists(supabase, templateId);
   if (existsResult instanceof NextResponse) {

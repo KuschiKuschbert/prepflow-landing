@@ -112,7 +112,10 @@ export async function POST(req: NextRequest) {
       const { getUserEUStatus } = await import('@/lib/geo/eu-detection');
       isEU = await getUserEUStatus(userEmail, req);
     } catch (err) {
-      logger.warn('[Billing API] EU detect fail:', err instanceof Error ? err.message : String(err));
+      logger.warn(
+        '[Billing API] EU detect fail:',
+        err instanceof Error ? err.message : String(err),
+      );
     }
 
     await scheduleAccountDeletionIfNeeded({

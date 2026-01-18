@@ -46,7 +46,9 @@ function TierEditForm({ editedTier, setEditedTier, onSave, onCancel }: TierEditF
           <input
             type="number"
             value={editedTier.display_order}
-            onChange={e => setEditedTier({ ...editedTier, display_order: parseInt(e.target.value) || 0 })}
+            onChange={e =>
+              setEditedTier({ ...editedTier, display_order: parseInt(e.target.value) || 0 })
+            }
             className="w-full rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-4 py-2 text-white focus:border-[#29E7CD] focus:outline-none"
           />
         </div>
@@ -54,7 +56,9 @@ function TierEditForm({ editedTier, setEditedTier, onSave, onCancel }: TierEditF
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-400">Monthly Price (AUD)</label>
+          <label className="mb-1 block text-sm font-medium text-gray-400">
+            Monthly Price (AUD)
+          </label>
           <input
             type="number"
             step="0.01"

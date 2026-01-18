@@ -45,7 +45,8 @@ async function main() {
       const anyMatch = cleanLine.match(/:\s*any\b|<\s*any\s*>|\bas\s+any\s*($|[;,\]})])/);
 
       if (anyMatch) {
-        const isJustified = line.toLowerCase().includes('justified') || line.includes('RSI safe-cast');
+        const isJustified =
+          line.toLowerCase().includes('justified') || line.includes('RSI safe-cast');
         results.push({
           file,
           line: index + 1,
@@ -58,18 +59,23 @@ async function main() {
   }
 
   // Group by file
-  const fileGroups = results.reduce((acc, curr) => {
-    if (!acc[curr.file]) acc[curr.file] = [];
-    acc[curr.file].push(curr);
-    return acc;
-  }, {} as Record<string, AuditResult[]>);
+  const fileGroups = results.reduce(
+    (acc, curr) => {
+      if (!acc[curr.file]) acc[curr.file] = [];
+      acc[curr.file].push(curr);
+      return acc;
+    },
+    {} as Record<string, AuditResult[]>,
+  );
 
   console.log(`${YELLOW}📊 Audit Summary:${NC}`);
   console.log(`   Files Scanned: ${files.length}`);
   console.log(`   Total 'any' instances found: ${totalAnyCount}`);
 
   const unjustified = results.filter(r => !r.justified);
-  console.log(`   Unjustified instances: ${unjustified.length > 0 ? RED : GREEN}${unjustified.length}${NC}`);
+  console.log(
+    `   Unjustified instances: ${unjustified.length > 0 ? RED : GREEN}${unjustified.length}${NC}`,
+  );
 
   if (unjustified.length > 0) {
     console.log(`\n${RED}⚠️  Unjustified 'any' usage detected:${NC}`);
@@ -84,7 +90,9 @@ async function main() {
     });
     process.exit(1);
   } else {
-    console.log(`\n${GREEN}✅ Mission Verified: All 'any' usages are justified or eradicated.${NC}`);
+    console.log(
+      `\n${GREEN}✅ Mission Verified: All 'any' usages are justified or eradicated.${NC}`,
+    );
     process.exit(0);
   }
 }

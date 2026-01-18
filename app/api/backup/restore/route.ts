@@ -77,7 +77,11 @@ export async function POST(request: NextRequest) {
 
     if (mode === 'selective' && (!tables || tables.length === 0)) {
       return NextResponse.json(
-        ApiErrorHandler.createError('tables array is required for selective restore', 'BAD_REQUEST', 400),
+        ApiErrorHandler.createError(
+          'tables array is required for selective restore',
+          'BAD_REQUEST',
+          400,
+        ),
         { status: 400 },
       );
     }
@@ -113,12 +117,20 @@ export async function POST(request: NextRequest) {
       backupData = await decryptBackup(encryptedData, decryptionKey);
     } else if (backupId) {
       return NextResponse.json(
-        ApiErrorHandler.createError('Loading backup by ID not yet implemented', 'NOT_IMPLEMENTED', 501),
+        ApiErrorHandler.createError(
+          'Loading backup by ID not yet implemented',
+          'NOT_IMPLEMENTED',
+          501,
+        ),
         { status: 501 },
       );
     } else {
       return NextResponse.json(
-        ApiErrorHandler.createError('Either backupId or backupFile is required', 'BAD_REQUEST', 400),
+        ApiErrorHandler.createError(
+          'Either backupId or backupFile is required',
+          'BAD_REQUEST',
+          400,
+        ),
         { status: 400 },
       );
     }
@@ -149,9 +161,8 @@ export async function POST(request: NextRequest) {
   } catch (error: unknown) {
     const appError = getAppError(error);
     logger.error('[Backup Restore] Error:', { error: appError.message });
-    return NextResponse.json(
-      ApiErrorHandler.createError(appError.message, 'INTERNAL_ERROR', 500),
-      { status: 500 },
-    );
+    return NextResponse.json(ApiErrorHandler.createError(appError.message, 'INTERNAL_ERROR', 500), {
+      status: 500,
+    });
   }
 }

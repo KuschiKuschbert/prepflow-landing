@@ -10,11 +10,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
  * @param {SupabaseClient} supabase - Supabase client
  * @returns {Promise<Object>} Updated price list with supplier relation
  */
-export async function updatePriceList(
-  id: number,
-  updateData: unknown,
-  supabase: SupabaseClient,
-) {
+export async function updatePriceList(id: number, updateData: unknown, supabase: SupabaseClient) {
   const { data: updated, error } = await supabase
     .from('supplier_price_lists')
     .update(updateData)

@@ -5,10 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { deleteCleaningTask } from './deleteCleaningTask';
 import { handleCleaningTaskError } from './handleCleaningTaskError';
 
-export async function handleDeleteCleaningTask(
-  supabase: SupabaseClient,
-  request: NextRequest,
-) {
+export async function handleDeleteCleaningTask(supabase: SupabaseClient, request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');

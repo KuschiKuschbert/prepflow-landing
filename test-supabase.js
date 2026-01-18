@@ -1,4 +1,3 @@
- 
 // Test Supabase connection
 require('dotenv').config();
 

@@ -8,10 +8,7 @@ import { createCleaningArea } from '../helpers/createCleaningArea';
 import { handleCleaningAreaError } from './handleCleaningAreaError';
 import { createCleaningAreaSchema } from './schemas';
 
-export async function handleCreateCleaningArea(
-  supabase: SupabaseClient,
-  request: NextRequest,
-) {
+export async function handleCreateCleaningArea(supabase: SupabaseClient, request: NextRequest) {
   try {
     let body: unknown;
     try {

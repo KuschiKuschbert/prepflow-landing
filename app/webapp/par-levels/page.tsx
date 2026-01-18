@@ -44,7 +44,13 @@ export default function ParLevelsPage() {
   const [showForm, setShowForm] = useState(false);
 
   // Data fetching
-  const { parLevels, ingredients, loading, setParLevels, fetchParLevels: _fetchParLevels } = useParLevelsData({
+  const {
+    parLevels,
+    ingredients,
+    loading,
+    setParLevels,
+    fetchParLevels: _fetchParLevels,
+  } = useParLevelsData({
     showError,
   });
 

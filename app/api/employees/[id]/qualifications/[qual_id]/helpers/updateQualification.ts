@@ -18,7 +18,6 @@ export async function updateQualification(
 ): Promise<
   { success: boolean; message: string; data: Qualification } | { error: ApiError; status: number }
 > {
-
   // Verify qualification belongs to employee
   const { data: qualification, error: checkError } = await supabase
     .from('employee_qualifications')

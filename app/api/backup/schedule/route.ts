@@ -91,10 +91,9 @@ export async function POST(request: NextRequest) {
   } catch (error: unknown) {
     const appError = getAppError(error);
     logger.error('[Backup Schedule] Error:', { error: appError.message });
-    return NextResponse.json(
-      ApiErrorHandler.createError(appError.message, 'INTERNAL_ERROR', 500),
-      { status: 500 },
-    );
+    return NextResponse.json(ApiErrorHandler.createError(appError.message, 'INTERNAL_ERROR', 500), {
+      status: 500,
+    });
   }
 }
 
@@ -120,9 +119,8 @@ export async function DELETE(request: NextRequest) {
   } catch (error: unknown) {
     const appError = getAppError(error);
     logger.error('[Backup Schedule] Error:', { error: appError.message });
-    return NextResponse.json(
-      ApiErrorHandler.createError(appError.message, 'INTERNAL_ERROR', 500),
-      { status: 500 },
-    );
+    return NextResponse.json(ApiErrorHandler.createError(appError.message, 'INTERNAL_ERROR', 500), {
+      status: 500,
+    });
   }
 }

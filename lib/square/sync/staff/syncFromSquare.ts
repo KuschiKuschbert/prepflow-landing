@@ -44,7 +44,8 @@ export async function syncStaffFromSquare(userId: string): Promise<SyncResult> {
     const teamApi = client.team;
     // Type assertion for Square SDK method until stricter types are available
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const listResponse = await (teamApi as any).searchTeamMembers({ // justified
+    const listResponse = await (teamApi as any).searchTeamMembers({
+      // justified
       query: {
         filter: {
           status: 'ACTIVE', // Only sync active team members

@@ -8,7 +8,10 @@ import { Shift } from '../../helpers/types';
 /**
  * Check if shift exists and return it
  */
-export async function checkShiftExists(supabase: SupabaseClient, shiftId: string): Promise<{ shift: Shift } | NextResponse> {
+export async function checkShiftExists(
+  supabase: SupabaseClient,
+  shiftId: string,
+): Promise<{ shift: Shift } | NextResponse> {
   const { data: existingShift, error: fetchError } = await supabase
     .from('shifts')
     .select('*')

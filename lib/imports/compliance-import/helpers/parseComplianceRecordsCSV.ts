@@ -1,11 +1,11 @@
 import { parseCSV, type ParseCSVResult } from '@/lib/csv/csv-utils';
 import type { ComplianceRecordImportRow } from '../../compliance-import';
 import {
-    mapCSVRowToEntity,
-    normalizeColumnName,
-    parseBoolean,
-    parseDate,
-    parseNumber,
+  mapCSVRowToEntity,
+  normalizeColumnName,
+  parseBoolean,
+  parseDate,
+  parseNumber,
 } from '../../import-utils';
 
 /**

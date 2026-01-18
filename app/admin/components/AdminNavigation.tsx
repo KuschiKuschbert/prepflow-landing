@@ -3,21 +3,21 @@
 import { Icon } from '@/components/ui/Icon';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import {
-    Activity,
-    AlertTriangle,
-    BarChart3,
-    ChefHat,
-    CreditCard,
-    Database,
-    Flag,
-    LayoutDashboard,
-    LogOut,
-    Menu,
-    MessageSquare,
-    Package,
-    Users,
-    Wrench,
-    X,
+  Activity,
+  AlertTriangle,
+  BarChart3,
+  ChefHat,
+  CreditCard,
+  Database,
+  Flag,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  MessageSquare,
+  Package,
+  Users,
+  Wrench,
+  X,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

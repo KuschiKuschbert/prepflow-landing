@@ -65,7 +65,7 @@ describe('GET /api/recipes/[id]/ingredients (no demo)', () => {
     const req = {} as NextRequest;
 
     // Mock first query to recipe_ingredients
-     
+
     const supabase = require('@/lib/supabase');
     const fromSpy = jest.spyOn(supabase.supabaseAdmin, 'from');
 

@@ -9,7 +9,6 @@ export async function handleDeleteTemperatureEquipment(
   request: NextRequest,
 ) {
   try {
-
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
 

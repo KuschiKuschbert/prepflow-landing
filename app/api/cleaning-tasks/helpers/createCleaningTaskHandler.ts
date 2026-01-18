@@ -8,10 +8,7 @@ import { parseCreateTaskBody } from './parseCreateTaskBody';
 import { createCleaningTaskSchema } from './schemas';
 import { validateCreateTaskRequest } from './validateCleaningTaskRequest';
 
-export async function handleCreateCleaningTask(
-  supabase: SupabaseClient,
-  request: NextRequest,
-) {
+export async function handleCreateCleaningTask(supabase: SupabaseClient, request: NextRequest) {
   try {
     let body: unknown;
     try {

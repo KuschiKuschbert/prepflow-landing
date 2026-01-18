@@ -7,7 +7,6 @@ export async function deleteQualification(
   employeeId: string,
   qualificationId: string,
 ): Promise<{ success: boolean; message: string } | { error: ApiError; status: number }> {
-
   // Verify qualification belongs to employee
   const { data: qualification, error: checkError } = await supabase
     .from('employee_qualifications')

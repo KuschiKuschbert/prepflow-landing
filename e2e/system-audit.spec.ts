@@ -11,9 +11,9 @@
 import { expect, Page, test } from '@playwright/test';
 import { ensureAuthenticated } from './fixtures/auth-helper';
 import {
-    collectPageErrors,
-    getCollectedErrors,
-    setupGlobalErrorListener,
+  collectPageErrors,
+  getCollectedErrors,
+  setupGlobalErrorListener,
 } from './fixtures/global-error-listener';
 import type { TestResultsSummary } from './helpers/report-generator';
 import { cleanupTestData } from './system-audit/helpers/cleanupTestData';

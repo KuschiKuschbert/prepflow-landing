@@ -11,7 +11,6 @@ export async function handleCreateTemperatureEquipment(
   request: NextRequest,
 ) {
   try {
-
     let body: unknown;
     try {
       body = await request.json();

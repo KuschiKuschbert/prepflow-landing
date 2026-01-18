@@ -1,4 +1,3 @@
-
 /**
  * Upload photo to server.
  *

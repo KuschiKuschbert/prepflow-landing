@@ -17,7 +17,10 @@ interface GoogleTagManagerProps {
   ga4MeasurementId?: string;
 }
 
-function GoogleTagManagerInner({ gtmId, ga4MeasurementId: _ga4MeasurementId }: GoogleTagManagerProps) {
+function GoogleTagManagerInner({
+  gtmId,
+  ga4MeasurementId: _ga4MeasurementId,
+}: GoogleTagManagerProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const hasInitialized = useRef(false);

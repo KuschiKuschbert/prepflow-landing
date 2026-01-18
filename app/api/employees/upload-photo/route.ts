@@ -145,9 +145,7 @@ export async function DELETE(request: NextRequest) {
     // Extract filename from path (remove bucket prefix if present)
     const fileName = filePath.split('/').pop() || filePath;
 
-    const { error: deleteError } = await supabase.storage
-      .from(STORAGE_BUCKET)
-      .remove([fileName]);
+    const { error: deleteError } = await supabase.storage.from(STORAGE_BUCKET).remove([fileName]);
 
     if (deleteError) {
       logger.error('[Employees API] Storage delete error:', {

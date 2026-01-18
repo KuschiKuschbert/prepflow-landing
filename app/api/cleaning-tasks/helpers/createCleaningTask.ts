@@ -46,7 +46,6 @@ export async function createCleaningTask(
   supabase: SupabaseClient,
   taskData: CreateCleaningTaskInput,
 ): Promise<CleaningTaskJoinResult | DBCleaningTask> {
-
   // Build insert data
   const insertData: Record<string, unknown> = {
     status: 'pending',

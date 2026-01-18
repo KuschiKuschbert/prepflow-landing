@@ -37,17 +37,19 @@ module.exports = function (fileInfo, api, options) {
         }
         // CASE: Array destructuring [_, name]
         else if (j.ArrayPattern.check(p.parent.value)) {
-            p.value.name = '_' + w.name;
-            dirty = true;
+          p.value.name = '_' + w.name;
+          dirty = true;
         }
         // CASE: Function parameter
-        else if (j.Function.check(p.parent.parent.value) && p.parent.parent.value.params.includes(p.parent.value)) {
-            p.value.name = '_' + w.name;
-            dirty = true;
-        }
-        else if (j.Function.check(p.parent.value) && p.parent.value.params.includes(p.value)) {
-            p.value.name = '_' + w.name;
-            dirty = true;
+        else if (
+          j.Function.check(p.parent.parent.value) &&
+          p.parent.parent.value.params.includes(p.parent.value)
+        ) {
+          p.value.name = '_' + w.name;
+          dirty = true;
+        } else if (j.Function.check(p.parent.value) && p.parent.value.params.includes(p.value)) {
+          p.value.name = '_' + w.name;
+          dirty = true;
         }
         // CASE: Variable declaration
         else if (j.VariableDeclarator.check(parent) && parent.id === p.value) {
@@ -56,8 +58,8 @@ module.exports = function (fileInfo, api, options) {
         }
         // CASE: Simple assignment (not recommended but sometimes suggested)
         else if (j.AssignmentExpression.check(parent) && parent.left === p.value) {
-            p.value.name = '_' + w.name;
-            dirty = true;
+          p.value.name = '_' + w.name;
+          dirty = true;
         }
       }
     });

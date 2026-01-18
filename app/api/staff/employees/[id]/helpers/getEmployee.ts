@@ -6,7 +6,10 @@ import { NextResponse } from 'next/server';
 /**
  * Get employee by ID
  */
-export async function getEmployee(supabase: SupabaseClient, employeeId: string): Promise<NextResponse> {
+export async function getEmployee(
+  supabase: SupabaseClient,
+  employeeId: string,
+): Promise<NextResponse> {
   const { data: employee, error: fetchError } = await supabase
     .from('employees')
     .select('*')

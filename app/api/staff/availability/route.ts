@@ -47,10 +47,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const employeeId = searchParams.get('employee_id');
 
-    let query = supabase
-      .from('availability')
-      .select('*')
-      .order('day_of_week', { ascending: true });
+    let query = supabase.from('availability').select('*').order('day_of_week', { ascending: true });
 
     if (employeeId) {
       query = query.eq('employee_id', employeeId);

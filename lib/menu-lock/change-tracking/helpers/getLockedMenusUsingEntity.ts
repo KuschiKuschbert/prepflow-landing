@@ -45,7 +45,10 @@ async function getMenuIdsByIngredient(entityId: string): Promise<string[]> {
   const recipeIds = recipesRes.data?.map(ri => ri.recipe_id) || [];
   const dishIds = dishesRes.data?.map(di => di.dish_id) || [];
 
-  const menuItemQueries: (Promise<{ menu_id: string }[] | null> | PromiseLike<{ menu_id: string }[] | null>)[] = [];
+  const menuItemQueries: (
+    | Promise<{ menu_id: string }[] | null>
+    | PromiseLike<{ menu_id: string }[] | null>
+  )[] = [];
 
   if (recipeIds.length > 0) {
     menuItemQueries.push(

@@ -69,9 +69,10 @@ export async function POST(req: NextRequest) {
 
     // Resolve Stripe Customer
     const existingCustomers = await stripe.customers.list({ email: email, limit: 1 });
-    const customerId = existingCustomers.data.length > 0
-      ? existingCustomers.data[0].id
-      : (await stripe.customers.create({ email })).id;
+    const customerId =
+      existingCustomers.data.length > 0
+        ? existingCustomers.data[0].id
+        : (await stripe.customers.create({ email })).id;
 
     // Determine tier (flattened mapping)
     const determinedTier = (() => {
@@ -82,7 +83,8 @@ export async function POST(req: NextRequest) {
       return 'business'; // Default to business for other prices
     })();
 
-    const origin = req.headers.get('origin') || process.env.AUTH0_BASE_URL || 'http://localhost:3000';
+    const origin =
+      req.headers.get('origin') || process.env.AUTH0_BASE_URL || 'http://localhost:3000';
 
     const checkout = await stripe.checkout.sessions.create({
       mode: 'subscription',

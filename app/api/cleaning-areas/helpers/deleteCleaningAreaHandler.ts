@@ -7,10 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { deleteCleaningArea } from './deleteCleaningArea';
 import { handleCleaningAreaError } from './handleCleaningAreaError';
 
-export async function handleDeleteCleaningArea(
-  supabase: SupabaseClient,
-  request: NextRequest,
-) {
+export async function handleDeleteCleaningArea(supabase: SupabaseClient, request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');

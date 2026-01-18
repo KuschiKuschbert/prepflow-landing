@@ -9,15 +9,15 @@ import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import {
-    handlePauseAction,
-    handleResumeAction,
-    handleStartAction,
-    handleStopAction,
+  handlePauseAction,
+  handleResumeAction,
+  handleStartAction,
+  handleStopAction,
 } from './helpers/action-handlers';
 import {
-    enhanceProcessingStatus,
-    getDefaultStatus,
-    getProviderInfo,
+  enhanceProcessingStatus,
+  getDefaultStatus,
+  getProviderInfo,
 } from './helpers/status-handlers';
 
 // Dynamic import to handle potential import failures gracefully

@@ -21,10 +21,7 @@ export async function GET(request: NextRequest) {
     const end = start + pageSize - 1;
 
     // Build query with count option at the initial select to satisfy types
-    let query = supabase
-      .from('suppliers')
-      .select('*', { count: 'exact' })
-      .order('supplier_name');
+    let query = supabase.from('suppliers').select('*', { count: 'exact' }).order('supplier_name');
 
     if (active !== null) {
       query = query.eq('is_active', active === 'true');

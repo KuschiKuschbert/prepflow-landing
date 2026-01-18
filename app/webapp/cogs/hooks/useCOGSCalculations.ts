@@ -9,8 +9,16 @@ import { useRecipeChangeEffect, useCOGSCalculationEffect } from './helpers/calcu
 import { createCalculationOperations } from './helpers/calculationOperations';
 
 export const useCOGSCalculations = () => {
-  const { ingredients, recipes, loading, error, setError, fetchData, setIngredients: _setIngredients, setRecipes } =
-    useCOGSDataFetching();
+  const {
+    ingredients,
+    recipes,
+    loading,
+    error,
+    setError,
+    fetchData,
+    setIngredients: _setIngredients,
+    setRecipes,
+  } = useCOGSDataFetching();
   const [selectedRecipe, setSelectedRecipe] = useState<string>('');
   const [recipeIngredients, setRecipeIngredients] = useState<RecipeIngredient[]>([]);
   const [calculations, setCalculations] = useState<COGSCalculation[]>([]);

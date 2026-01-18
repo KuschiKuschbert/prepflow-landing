@@ -48,7 +48,10 @@ export function useCategoryDetection(formData: FormData) {
   }
 
   const handleCategoryDetection = useCallback(
-    (ingredientName: string, setFormData: React.Dispatch<React.SetStateAction<Partial<FormData>>>) => {
+    (
+      ingredientName: string,
+      setFormData: React.Dispatch<React.SetStateAction<Partial<FormData>>>,
+    ) => {
       // Clear existing timeout
       if (detectionTimeoutRef.current) {
         clearTimeout(detectionTimeoutRef.current);

@@ -85,7 +85,6 @@ export default function ScrollTracker({
     return () => window.removeEventListener('scroll', handleScroll);
   }, [enabled, handleScroll]);
 
-
   // --- Section Visibility Tracking ---
   useEffect(() => {
     if (!enabled) return;
@@ -100,7 +99,8 @@ export default function ScrollTracker({
       entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            const sectionId = entry.target.id || entry.target.getAttribute('data-section') || 'unknown';
+            const sectionId =
+              entry.target.id || entry.target.getAttribute('data-section') || 'unknown';
 
             if (!viewedSections.has(sectionId)) {
               setViewedSections(prev => new Set([...prev, sectionId]));
@@ -144,7 +144,6 @@ export default function ScrollTracker({
 
     return () => sectionObserverRef.current?.disconnect();
   }, [enabled, onSectionView, viewedSections, scrollDepth]);
-
 
   // --- Time on Page Tracking ---
   useEffect(() => {

@@ -132,7 +132,7 @@ export async function checkIsAdmin(req?: NextRequest): Promise<boolean> {
 export async function resolveAdminUserId(
   email: string,
   supabaseAdminClient: SupabaseAdmin,
-  logger: { warn: (msg: string, meta?: unknown) => void }
+  logger: { warn: (msg: string, meta?: unknown) => void },
 ): Promise<string | undefined> {
   try {
     const { data: adminData, error: adminDataError } = await supabaseAdminClient

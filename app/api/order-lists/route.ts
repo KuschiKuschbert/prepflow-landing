@@ -63,7 +63,11 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { data, error: dbError, count } = await supabase
+    const {
+      data,
+      error: dbError,
+      count,
+    } = await supabase
       .from('order_lists')
       .select(
         `
@@ -134,7 +138,10 @@ export async function POST(request: NextRequest) {
     if (error) return error;
     if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 }); // Handle missing supabase
 
-    const { userId, supplierId, name, notes, items } = await safeParseBody(request, createOrderListSchema);
+    const { userId, supplierId, name, notes, items } = await safeParseBody(
+      request,
+      createOrderListSchema,
+    );
 
     // Convert supplierId from string to number
     const supplierIdNum = parseInt(supplierId, 10);

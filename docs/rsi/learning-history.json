@@ -7,7 +7,10 @@
         "type": "Type-Safety",
         "confidence": 0.96,
         "insight": "When external library types (like Stripe) have gaps or mismatches (e.g. missing properties in union returns), using intersection casts (e.g. `as unknown as Type & { missingProp: number }`) is a robust way to satisfy the compiler without reverting to `any`.",
-        "sourceFiles": ["app/api/billing/extend-subscription/route.ts", "app/api/billing/cancel-subscription/route.ts"]
+        "sourceFiles": [
+          "app/api/billing/extend-subscription/route.ts",
+          "app/api/billing/cancel-subscription/route.ts"
+        ]
       }
     ],
     "rulesGenerated": [
@@ -73,7 +76,10 @@
         "type": "Code-Structure",
         "confidence": 0.98,
         "insight": "API endpoints containing loops for batch processing (seed/enable-all) should extract the loop body into a helper function (e.g. `seedSingleItem`). This allows for `Promise.all` parallelization and cleaner main handlers.",
-        "sourceFiles": ["app/api/admin/features/seed/route.ts", "app/api/admin/features/enable-all/route.ts"]
+        "sourceFiles": [
+          "app/api/admin/features/seed/route.ts",
+          "app/api/admin/features/enable-all/route.ts"
+        ]
       }
     ],
     "rulesGenerated": [
@@ -93,7 +99,9 @@
         "type": "Code-Structure",
         "confidence": 0.95,
         "insight": "Complex callbacks in `useEffect` or `useCallback` (nested conditionals, timeouts, async calls) should be extracted into standalone helper functions. This separates the 'event' logic from the 'business' logic.",
-        "sourceFiles": ["app/webapp/ingredients/components/useIngredientFormLogic/helpers/useCategoryDetection.ts"]
+        "sourceFiles": [
+          "app/webapp/ingredients/components/useIngredientFormLogic/helpers/useCategoryDetection.ts"
+        ]
       }
     ],
     "rulesGenerated": [

@@ -1,9 +1,9 @@
 import { parseCSV, type ParseCSVResult } from '@/lib/csv/csv-utils';
 import {
-    mapCSVRowToEntity,
-    normalizeColumnName,
-    parseBoolean,
-    parseNumber,
+  mapCSVRowToEntity,
+  normalizeColumnName,
+  parseBoolean,
+  parseNumber,
 } from '../../import-utils';
 import type { SupplierImportRow } from '../../supplier-import';
 

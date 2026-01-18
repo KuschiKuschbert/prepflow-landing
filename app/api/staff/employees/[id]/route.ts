@@ -117,7 +117,12 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
       );
     }
 
-    const result = await updateEmployee(supabase, employeeId, zodValidation.data, existsResult.employee);
+    const result = await updateEmployee(
+      supabase,
+      employeeId,
+      zodValidation.data,
+      existsResult.employee,
+    );
 
     // Trigger Square sync hook after successful update (non-blocking)
     if (result.status === 200) {

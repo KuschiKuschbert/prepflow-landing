@@ -6,7 +6,10 @@ import { NextResponse } from 'next/server';
 /**
  * Get template by ID with template shifts
  */
-export async function getTemplate(supabase: SupabaseClient, templateId: string): Promise<NextResponse> {
+export async function getTemplate(
+  supabase: SupabaseClient,
+  templateId: string,
+): Promise<NextResponse> {
   // Get template
   const { data: template, error: templateError } = await supabase
     .from('roster_templates')

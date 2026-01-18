@@ -55,7 +55,11 @@ export async function GET(request: NextRequest) {
     if (error) return error;
     if (!supabase) throw new Error('Unexpected database state');
 
-    const { data, error: dbError, count } = await buildTemperatureLogQuery(
+    const {
+      data,
+      error: dbError,
+      count,
+    } = await buildTemperatureLogQuery(
       supabase,
       { date, type, location, equipmentId },
       page,

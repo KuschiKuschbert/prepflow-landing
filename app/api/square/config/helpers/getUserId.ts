@@ -13,11 +13,7 @@ export async function getUserIdFromEmail(
   supabase: SupabaseClient,
 ): Promise<string | null> {
   try {
-    const { data, error } = await supabase
-      .from('users')
-      .select('id')
-      .eq('email', email)
-      .single();
+    const { data, error } = await supabase.from('users').select('id').eq('email', email).single();
     if (error) {
       logger.error('[Square Config API] Error fetching user ID from email:', {
         error: error.message,

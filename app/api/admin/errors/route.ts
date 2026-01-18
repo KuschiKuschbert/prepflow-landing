@@ -86,7 +86,8 @@ export async function GET(request: NextRequest) {
     // Get counts by severity and status
     const severityCounts: Record<string, number> = {};
     const statusCounts: Record<string, number> = {};
-    (allErrors || []).forEach((err: any) => { // Justified: Supabase record typing
+    (allErrors || []).forEach((err: any) => {
+      // Justified: Supabase record typing
       const sev = err.severity || 'medium';
       severityCounts[sev] = (severityCounts[sev] || 0) + 1;
       const stat = err.status || 'new';

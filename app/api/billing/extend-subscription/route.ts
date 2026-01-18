@@ -90,18 +90,25 @@ export async function POST(req: NextRequest) {
 
     if (!subscription || subscription.status === 'canceled') {
       return NextResponse.json(
-        ApiErrorHandler.createError('Subscription invalid or cancelled', 'SUBSCRIPTION_INVALID', 400),
+        ApiErrorHandler.createError(
+          'Subscription invalid or cancelled',
+          'SUBSCRIPTION_INVALID',
+          400,
+        ),
         { status: 400 },
       );
     }
 
-    const currentPeriodEnd = (subscription as unknown as Stripe.Subscription & {
-      current_period_end: number;
-    }).current_period_end;
+    const currentPeriodEnd = (
+      subscription as unknown as Stripe.Subscription & {
+        current_period_end: number;
+      }
+    ).current_period_end;
     const newPeriodEnd = currentPeriodEnd + months * AVG_SECONDS_IN_MONTH;
 
     const updatedSubscription = await stripe.subscriptions.update(subscriptionId, {
-      billing_cycle_anchor: newPeriodEnd as unknown as Stripe.SubscriptionUpdateParams.BillingCycleAnchor,
+      billing_cycle_anchor:
+        newPeriodEnd as unknown as Stripe.SubscriptionUpdateParams.BillingCycleAnchor,
       proration_behavior: 'none',
     });
 
