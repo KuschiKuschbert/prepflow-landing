@@ -40,120 +40,10 @@ export function SupplierForm({ formData, onChange, onSubmit, onCancel }: Supplie
         <AutosaveStatus status={status} error={autosaveError} onRetry={saveNow} />
       </div>
       <form onSubmit={onSubmit} className="desktop:grid-cols-2 grid grid-cols-1 gap-4">
-        <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
-            {t('suppliers.name', 'Supplier Name')}
-          </label>
-          <input
-            type="text"
-            value={formData.name}
-            onChange={e => onChange({ ...formData, name: e.target.value })}
-            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
-            placeholder={String(t('suppliers.namePlaceholder', 'e.g., Fresh Produce Co.'))}
-            required
-          />
-        </div>
-        <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
-            {t('suppliers.contactPerson', 'Contact Person')}
-          </label>
-          <input
-            type="text"
-            value={formData.contact_person}
-            onChange={e => onChange({ ...formData, contact_person: e.target.value })}
-            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
-            placeholder={String(t('suppliers.contactPersonPlaceholder', 'e.g., John Smith'))}
-          />
-        </div>
-        <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
-            {t('suppliers.email', 'Email')}
-          </label>
-          <input
-            type="email"
-            value={formData.email}
-            onChange={e => onChange({ ...formData, email: e.target.value })}
-            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
-            placeholder={String(t('suppliers.emailPlaceholder', 'contact@supplier.com'))}
-          />
-        </div>
-        <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
-            {t('suppliers.phone', 'Phone')}
-          </label>
-          <input
-            type="tel"
-            value={formData.phone}
-            onChange={e => onChange({ ...formData, phone: e.target.value })}
-            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
-            placeholder={String(t('suppliers.phonePlaceholder', '+61 2 1234 5678'))}
-          />
-        </div>
-        <div className="desktop:col-span-2">
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
-            {t('suppliers.address', 'Address')}
-          </label>
-          <textarea
-            value={formData.address}
-            onChange={e => onChange({ ...formData, address: e.target.value })}
-            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
-            placeholder={String(t('suppliers.addressPlaceholder', 'Full business address'))}
-            rows={2}
-          />
-        </div>
-        <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
-            {t('suppliers.website', 'Website')}
-          </label>
-          <input
-            type="url"
-            value={formData.website}
-            onChange={e => onChange({ ...formData, website: e.target.value })}
-            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
-            placeholder={String(t('suppliers.websitePlaceholder', 'https://supplier.com'))}
-          />
-        </div>
-        <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
-            {t('suppliers.paymentTerms', 'Payment Terms')}
-          </label>
-          <input
-            type="text"
-            value={formData.payment_terms}
-            onChange={e => onChange({ ...formData, payment_terms: e.target.value })}
-            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
-            placeholder={String(
-              t('suppliers.paymentTermsPlaceholder', 'e.g., Net 30, Cash on Delivery'),
-            )}
-          />
-        </div>
-        <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
-            {t('suppliers.deliverySchedule', 'Delivery Schedule')}
-          </label>
-          <input
-            type="text"
-            value={formData.delivery_schedule}
-            onChange={e => onChange({ ...formData, delivery_schedule: e.target.value })}
-            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
-            placeholder={String(
-              t('suppliers.deliverySchedulePlaceholder', 'e.g., Monday, Wednesday, Friday'),
-            )}
-          />
-        </div>
-        <div>
-          <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
-            {t('suppliers.minimumOrder', 'Minimum Order Amount')}
-          </label>
-          <input
-            type="number"
-            step="0.01"
-            value={formData.minimum_order_amount}
-            onChange={e => onChange({ ...formData, minimum_order_amount: e.target.value })}
-            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
-            placeholder={String(t('suppliers.minimumOrderPlaceholder', 'e.g., 100.00'))}
-          />
-        </div>
+        <SupplierContactInfo formData={formData} onChange={onChange} />
+        <SupplierBusinessInfo formData={formData} onChange={onChange} />
+        <SupplierAdditionalInfo formData={formData} onChange={onChange} />
+
         <div className="desktop:col-span-2">
           <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
             {t('suppliers.notes', 'Notes')}
@@ -168,6 +58,7 @@ export function SupplierForm({ formData, onChange, onSubmit, onCancel }: Supplie
             rows={3}
           />
         </div>
+
         <div className="desktop:col-span-2 flex space-x-4">
           <button
             type="submit"
@@ -185,5 +76,161 @@ export function SupplierForm({ formData, onChange, onSubmit, onCancel }: Supplie
         </div>
       </form>
     </div>
+  );
+}
+
+function SupplierContactInfo({
+  formData,
+  onChange,
+}: {
+  formData: SupplierFormData;
+  onChange: (data: SupplierFormData) => void;
+}) {
+  const { t } = useTranslation();
+  return (
+    <>
+      <div>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          {t('suppliers.name', 'Supplier Name')}
+        </label>
+        <input
+          type="text"
+          value={formData.name}
+          onChange={e => onChange({ ...formData, name: e.target.value })}
+          className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
+          placeholder={String(t('suppliers.namePlaceholder', 'e.g., Fresh Produce Co.'))}
+          required
+        />
+      </div>
+      <div>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          {t('suppliers.contactPerson', 'Contact Person')}
+        </label>
+        <input
+          type="text"
+          value={formData.contact_person}
+          onChange={e => onChange({ ...formData, contact_person: e.target.value })}
+          className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
+          placeholder={String(t('suppliers.contactPersonPlaceholder', 'e.g., John Smith'))}
+        />
+      </div>
+      <div>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          {t('suppliers.email', 'Email')}
+        </label>
+        <input
+          type="email"
+          value={formData.email}
+          onChange={e => onChange({ ...formData, email: e.target.value })}
+          className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
+          placeholder={String(t('suppliers.emailPlaceholder', 'contact@supplier.com'))}
+        />
+      </div>
+      <div>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          {t('suppliers.phone', 'Phone')}
+        </label>
+        <input
+          type="tel"
+          value={formData.phone}
+          onChange={e => onChange({ ...formData, phone: e.target.value })}
+          className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
+          placeholder={String(t('suppliers.phonePlaceholder', '+61 2 1234 5678'))}
+        />
+      </div>
+    </>
+  );
+}
+
+function SupplierBusinessInfo({
+  formData,
+  onChange,
+}: {
+  formData: SupplierFormData;
+  onChange: (data: SupplierFormData) => void;
+}) {
+  const { t } = useTranslation();
+  return (
+    <>
+      <div className="desktop:col-span-2">
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          {t('suppliers.address', 'Address')}
+        </label>
+        <textarea
+          value={formData.address}
+          onChange={e => onChange({ ...formData, address: e.target.value })}
+          className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
+          placeholder={String(t('suppliers.addressPlaceholder', 'Full business address'))}
+          rows={2}
+        />
+      </div>
+      <div>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          {t('suppliers.website', 'Website')}
+        </label>
+        <input
+          type="url"
+          value={formData.website}
+          onChange={e => onChange({ ...formData, website: e.target.value })}
+          className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
+          placeholder={String(t('suppliers.websitePlaceholder', 'https://supplier.com'))}
+        />
+      </div>
+    </>
+  );
+}
+
+function SupplierAdditionalInfo({
+  formData,
+  onChange,
+}: {
+  formData: SupplierFormData;
+  onChange: (data: SupplierFormData) => void;
+}) {
+  const { t } = useTranslation();
+  return (
+    <>
+      <div>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          {t('suppliers.paymentTerms', 'Payment Terms')}
+        </label>
+        <input
+          type="text"
+          value={formData.payment_terms}
+          onChange={e => onChange({ ...formData, payment_terms: e.target.value })}
+          className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
+          placeholder={String(
+            t('suppliers.paymentTermsPlaceholder', 'e.g., Net 30, Cash on Delivery'),
+          )}
+        />
+      </div>
+      <div>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          {t('suppliers.deliverySchedule', 'Delivery Schedule')}
+        </label>
+        <input
+          type="text"
+          value={formData.delivery_schedule}
+          onChange={e => onChange({ ...formData, delivery_schedule: e.target.value })}
+          className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
+          placeholder={String(
+            t('suppliers.deliverySchedulePlaceholder', 'e.g., Monday, Wednesday, Friday'),
+          )}
+        />
+      </div>
+      <div>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
+          {t('suppliers.minimumOrder', 'Minimum Order Amount')}
+        </label>
+        <input
+          type="number"
+          step="0.01"
+          value={formData.minimum_order_amount}
+          onChange={e => onChange({ ...formData, minimum_order_amount: e.target.value })}
+          className="w-full rounded-2xl border border-[var(--border)] bg-[var(--muted)] px-4 py-3 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
+          placeholder={String(t('suppliers.minimumOrderPlaceholder', 'e.g., 100.00'))}
+        />
+      </div>
+    </>
   );
 }

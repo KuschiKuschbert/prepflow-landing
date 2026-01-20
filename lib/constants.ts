@@ -24,6 +24,11 @@ export const API_CONSTANTS = {
   REQUEST_TIMEOUT: 10000, // 10 seconds
 } as const;
 
+// Pagination constants
+export const PAGINATION_CONSTANTS = {
+  RECIPE_LIST_OPTIONS: [10, 20, 50, 100],
+} as const;
+
 // Storage keys
 export const STORAGE_KEYS = {
   USER_ID: 'prepflow_user_id',
@@ -32,5 +37,63 @@ export const STORAGE_KEYS = {
 } as const;
 
 // Environment checks
-export const isDevelopment = process.env.NODE_ENV === 'development';
 export const isProduction = process.env.NODE_ENV === 'production';
+
+// Auth constants
+export const AUTH_CONSTANTS = {
+  SESSION_MAX_AGE: 60 * 60 * 24 * 7, // 1 week in seconds
+} as const;
+
+// Cache constants
+export const CACHE_CONSTANTS = {
+  USER_PROFILE_TTL: 5 * 60 * 1000, // 5 minutes in milliseconds
+} as const;
+
+// Data Size constants
+export const DATA_SIZE_CONSTANTS = {
+  BYTES_PER_KB: 1024,
+  BYTES_PER_MB: 1024 * 1024,
+  BYTES_PER_GB: 1024 * 1024 * 1024,
+} as const;
+
+// Animation constants
+export const ANIMATION_CONSTANTS = {
+  TRIANGLE_GRID: {
+    COUNT: 50,
+    MIN_SIZE: 20,
+    MAX_SIZE: 40, // Base + Random * this
+    OPACITY_BASE: 0.15,
+    OPACITY_VARIANCE: 0.5,
+  },
+} as const;
+
+// App Configuration
+export const APP_BASE_URL = process.env.AUTH0_BASE_URL || (isProduction ? 'https://app.prepflow.io' : 'http://localhost:3000');
+
+// Business Logic
+export const BUSINESS_LOGIC = {
+  TARGET_GROSS_PROFIT_PERCENT: 70,
+  TARGET_FOOD_COST_PERCENT: 30, // 100 - 70
+  DEFAULT_WASTAGE_PERCENT: 0,
+} as const;
+
+// UI Dimensions (Pixels)
+export const UI_DIMENSIONS = {
+  CATEGORY_SELECTOR: {
+    WIDTH: 280,
+    ITEM_HEIGHT: 48,
+    HEADER_HEIGHT: 60,
+    MAX_HEIGHT: 320,
+  },
+  TOOLTIP: {
+    WIDTH: 256,
+    OFFSET: 12,
+  },
+  POPOVER: {
+    INGREDIENT_WIDTH: 400,
+    INGREDIENT_MAX_HEIGHT: 500,
+  },
+  SWIPE: {
+    MIN_DISTANCE: 100,
+  },
+} as const;

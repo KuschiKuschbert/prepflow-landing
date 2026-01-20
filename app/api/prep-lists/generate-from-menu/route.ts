@@ -3,11 +3,7 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { aggregateIngredientsFromRecipes } from './helpers/aggregateFromRecipes';
-import { collectRecipeAndDishIds } from './helpers/collectRecipeAndDishIds';
-import { fetchDishData, fetchRecipeIngredients } from './helpers/fetchBatchData';
-import { fetchKitchenSections } from './helpers/fetchKitchenSections';
-import { fetchMenuData } from './helpers/fetchMenuData';
-import { mergeDishRecipeIngredients } from './helpers/mergeDishRecipeIngredients';
+import { fetchAndMergeData } from './helpers/fetchAndMergeData';
 import { processMenuItem } from './helpers/processMenuItem';
 import { RecipeGroupedItem, SectionData } from './types';
 
@@ -35,8 +31,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Fetch menu data
-    const { menu, menuItems } = await fetchMenuData(menuId!);
+    // Fetch and merge all necessary data
+    const {
+      menu,
+      menuItems,
+      sectionsMap,
+      dishSectionsMap,
+      dishRecipesMap,
+      dishIngredientsMap,
+      recipeIngredientsMap,
+      recipeInstructionsMap,
+    } = await fetchAndMergeData(menuId!);
 
     if (!menuItems || menuItems.length === 0) {
       return NextResponse.json({
@@ -46,25 +51,6 @@ export async function POST(request: NextRequest) {
         unassignedItems: [],
       });
     }
-
-    // Fetch all kitchen sections
-    const sectionsMap = await fetchKitchenSections();
-
-    // Collect all recipe IDs and dish IDs for batch fetching
-    const { recipeIds, dishIds, recipeInstructionsMap } = collectRecipeAndDishIds(menuItems);
-
-    // Batch fetch all recipe ingredients upfront
-    const recipeIngredientsMap = await fetchRecipeIngredients(recipeIds);
-
-    // Batch fetch all dish data upfront
-    const { dishSectionsMap, dishRecipesMap, dishIngredientsMap } = await fetchDishData(
-      dishIds,
-      recipeIds,
-      recipeInstructionsMap,
-    );
-
-    // Merge dish recipe ingredients into main map
-    await mergeDishRecipeIngredients(recipeIds, recipeIngredientsMap);
 
     // Map to store section data
     const sectionsData = new Map<string | null, SectionData>();

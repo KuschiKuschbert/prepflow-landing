@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { getStripe } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
-import { syncUserSubscription } from './syncUserSubscription';
+import { processSingleSubscription } from './processSingleSubscription';
 
 /**
  * Sync all subscriptions from Stripe.
@@ -39,66 +39,18 @@ export async function syncAllSubscriptions(limit: number = 100): Promise<{
 
     for (const subscription of subscriptions.data) {
       try {
-        const customerId = subscription.customer as string;
-
-        // Get user email from billing_customers table
-        const { data: billingData } = await supabaseAdmin
-          .from('billing_customers')
-          .select('user_email')
-          .eq('stripe_customer_id', customerId)
-          .maybeSingle();
-
-        if (!billingData?.user_email) {
-          // Try to get email from Stripe customer
-          const customer = await stripe.customers.retrieve(customerId);
-          const email = 'deleted' in customer ? null : customer.email;
-
-          if (email) {
-            // Create billing_customers entry
-            await supabaseAdmin.from('billing_customers').upsert(
-              {
-                user_email: email,
-                stripe_customer_id: customerId,
-                stripe_subscription_id: subscription.id,
-                subscription_status: subscription.status,
-                last_synced_at: new Date().toISOString(),
-              },
-              { onConflict: 'stripe_customer_id' },
-            );
-
-            // Sync subscription
-            const success = await syncUserSubscription(email);
-            if (success) {
-              synced++;
-              report.push(`Synced subscription for ${email}`);
-            } else {
-              errors++;
-              report.push(`Failed to sync subscription for ${email}`);
-            }
-          } else {
-            errors++;
-            report.push(`No email found for customer ${customerId}`);
-          }
+        const result = await processSingleSubscription(subscription, stripe);
+        if (result.success) {
+          synced++;
         } else {
-          // Sync subscription
-          const success = await syncUserSubscription(billingData.user_email);
-          if (success) {
-            synced++;
-            report.push(`Synced subscription for ${billingData.user_email}`);
-          } else {
-            errors++;
-            report.push(`Failed to sync subscription for ${billingData.user_email}`);
-          }
+          errors++;
         }
+        report.push(result.message);
       } catch (error) {
         errors++;
         report.push(
           `Error syncing subscription ${subscription.id}: ${error instanceof Error ? error.message : String(error)}`,
         );
-        logger.error('[Billing Sync] Error syncing subscription:', {
-          error: error instanceof Error ? error.message : String(error),
-          subscriptionId: subscription.id,
-        });
       }
     }
 

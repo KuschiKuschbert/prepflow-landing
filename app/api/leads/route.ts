@@ -39,57 +39,32 @@ export async function POST(req: Request) {
 
     const supabase = createSupabaseAdmin();
 
-    // Ensure leads table exists; if not, return guidance instead of failing hard
-    const { error: tableCheckError } = await supabase.from('leads').select('id').limit(1);
-    if (tableCheckError) {
-      logger.error('[Leads API] Table check error:', {
-        error: tableCheckError.message,
-        context: { endpoint: '/api/leads', operation: 'POST' },
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          'Table leads does not exist. Please create tables first.',
-          'TABLE_NOT_FOUND',
-          400,
-          {
-            instructions:
-              'Visit /api/create-tables for SQL script and ensure a leads table with (id uuid default gen_random_uuid(), name text, email text unique, source text, created_at timestamptz default now()).',
-          },
-        ),
-        { status: 400 },
-      );
+    // Ensure leads table exists
+    const tableCheckResult = await checkLeadsTable(supabase);
+    if (!tableCheckResult.success) {
+      return tableCheckResult.response;
     }
 
-    // Upsert lead to avoid duplicates
-    const { error: upsertError } = await supabase
-      .from('leads')
-      .upsert({ name, email, source }, { onConflict: 'email' });
-
-    if (upsertError) {
-      logger.error('[Leads API] Database error saving lead:', {
-        error: upsertError.message,
-        code: upsertError.code,
-        context: { endpoint: '/api/leads', operation: 'POST', email },
-      });
-
-      const apiError = ApiErrorHandler.fromSupabaseError(upsertError, 500);
-      return NextResponse.json(apiError, { status: apiError.status || 500 });
+    // Upsert lead
+    const upsertResult = await upsertLead(supabase, { name, email, source });
+    if (!upsertResult.success) {
+      if (upsertResult.error && upsertResult.response) {
+         return upsertResult.response;
+      }
+      // fallback generic error if needed, but upsertLead returns response on error
+      return NextResponse.json({ error: 'Failed to save lead' }, { status: 500 });
     }
 
-    const _resendKey = process.env.RESEND_API_KEY; // Keep this just in case logic depends on it, but email is sent via helper now. Actually helper handles env var.
-
-    // Optional: send email via Resend if configured (no SDK required)
+    // Optional: send email via Resend
     await sendLeadEmail(name, email);
 
     return NextResponse.json({ success: true, message: 'Lead captured successfully' });
   } catch (err) {
-    // ... (error handling)
     logger.error('[Leads API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/leads', method: 'POST' },
     });
-    // ...
 
     return NextResponse.json(
       ApiErrorHandler.createError(
@@ -104,4 +79,53 @@ export async function POST(req: Request) {
       { status: 500 },
     );
   }
+}
+
+async function checkLeadsTable(supabase: any) {
+  const { error: tableCheckError } = await supabase.from('leads').select('id').limit(1);
+  if (tableCheckError) {
+    logger.error('[Leads API] Table check error:', {
+      error: tableCheckError.message,
+      context: { endpoint: '/api/leads', operation: 'POST' },
+    });
+    return {
+      success: false,
+      response: NextResponse.json(
+        ApiErrorHandler.createError(
+          'Table leads does not exist. Please create tables first.',
+          'TABLE_NOT_FOUND',
+          400,
+          {
+            instructions:
+              'Visit /api/create-tables for SQL script and ensure a leads table with (id uuid default gen_random_uuid(), name text, email text unique, source text, created_at timestamptz default now()).',
+          },
+        ),
+        { status: 400 },
+      ),
+    };
+  }
+  return { success: true };
+}
+
+async function upsertLead(supabase: any, data: { name: string; email: string; source: string }) {
+  const { name, email, source } = data;
+  const { error: upsertError } = await supabase
+    .from('leads')
+    .upsert({ name, email, source }, { onConflict: 'email' });
+
+  if (upsertError) {
+    logger.error('[Leads API] Database error saving lead:', {
+      error: upsertError.message,
+      code: upsertError.code,
+      context: { endpoint: '/api/leads', operation: 'POST', email },
+    });
+
+    const apiError = ApiErrorHandler.fromSupabaseError(upsertError, 500);
+    return {
+      success: false,
+      error: upsertError,
+      response: NextResponse.json(apiError, { status: apiError.status || 500 }),
+    };
+  }
+  return { success: true };
 }

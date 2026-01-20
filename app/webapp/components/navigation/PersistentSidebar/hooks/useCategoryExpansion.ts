@@ -2,7 +2,7 @@
  * Hook for managing category expansion state
  */
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { NavigationItemConfig } from '../../nav-items';
 
 /**
@@ -34,14 +34,18 @@ export function useCategoryExpansion(
     }
   }, [mounted, hasLoadedSavedCategory, groupedItems]);
 
+  const getActiveCategory = useCallback(() => {
+    return Object.entries(groupedItems).find(([category, items]) => {
+      if (category === 'primary') return false;
+      return items.some(item => isActive(item.href));
+    })?.[0];
+  }, [groupedItems, isActive]);
+
   // Auto-expand category if it contains active item
   useEffect(() => {
     if (!mounted || !hasLoadedSavedCategory) return;
 
-    const activeCategory = Object.entries(groupedItems).find(([category, items]) => {
-      if (category === 'primary') return false;
-      return items.some(item => isActive(item.href));
-    })?.[0];
+    const activeCategory = getActiveCategory();
 
     if (activeCategory) {
       const lastActive = lastActiveCategoryRef.current;
@@ -72,8 +76,7 @@ export function useCategoryExpansion(
   }, [
     mounted,
     hasLoadedSavedCategory,
-    groupedItems,
-    isActive,
+    getActiveCategory,
     expandedCategory,
     userManuallyToggled,
   ]);

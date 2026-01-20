@@ -1,8 +1,8 @@
 import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { lookupMenuItemDataFromCache } from '../batchFetchMenuItemData';
-import { MenuItemData } from '../fetchMenuItemData';
 import { normalizeToSingleServing } from '../normalizeIngredients';
+import { MenuItemData } from '../types';
 import { checkByOldMethod } from './checkers/checkByOldMethod';
 import { checkBySignature } from './checkers/checkBySignature';
 import { MenuItem } from './fetchMenuItems';

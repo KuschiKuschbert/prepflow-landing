@@ -10,6 +10,10 @@ import { logger } from '@/lib/logger';
 
 const ENCRYPTION_KEY_ENV = 'SQUARE_TOKEN_ENCRYPTION_KEY';
 const IV_LENGTH = 12; // GCM recommended IV length
+const KEY_LENGTH_HEX = 64; // 32 bytes * 2 hex chars
+const KEY_LENGTH_BYTES = 32;
+const ALGORITHM_NAME = 'AES-GCM';
+const ALGORITHM_LENGTH = 256;
 
 /**
  * Get encryption key from environment variable.
@@ -25,20 +29,25 @@ async function getEncryptionKey(): Promise<CryptoKey> {
   }
 
   // Validate key length (should be 64 hex characters = 32 bytes)
-  if (keyHex.length !== 64) {
-    throw new Error(`${ENCRYPTION_KEY_ENV} must be 64 hex characters (32 bytes)`);
+  if (keyHex.length !== KEY_LENGTH_HEX) {
+    throw new Error(
+      `${ENCRYPTION_KEY_ENV} must be ${KEY_LENGTH_HEX} hex characters (${KEY_LENGTH_BYTES} bytes)`,
+    );
   }
 
   // Convert hex string to bytes
-  const keyBytes = new Uint8Array(32);
-  for (let i = 0; i < 32; i++) {
+  const keyBytes = new Uint8Array(KEY_LENGTH_BYTES);
+  for (let i = 0; i < KEY_LENGTH_BYTES; i++) {
     keyBytes[i] = parseInt(keyHex.substr(i * 2, 2), 16);
   }
 
-  return crypto.subtle.importKey('raw', keyBytes, { name: 'AES-GCM', length: 256 }, false, [
-    'encrypt',
-    'decrypt',
-  ]);
+  return crypto.subtle.importKey(
+    'raw',
+    keyBytes,
+    { name: ALGORITHM_NAME, length: ALGORITHM_LENGTH },
+    false,
+    ['encrypt', 'decrypt'],
+  );
 }
 
 /**
@@ -54,7 +63,7 @@ export async function encryptSquareToken(token: string): Promise<string> {
     const encoder = new TextEncoder();
     const data = encoder.encode(token);
 
-    const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, data);
+    const encrypted = await crypto.subtle.encrypt({ name: ALGORITHM_NAME, iv }, key, data);
     const encryptedArray = new Uint8Array(encrypted);
 
     // Combine IV + encrypted data + auth tag
@@ -83,7 +92,11 @@ export async function decryptSquareToken(encryptedToken: string): Promise<string
     const iv = combined.slice(0, IV_LENGTH);
     const encryptedData = combined.slice(IV_LENGTH);
 
-    const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, encryptedData);
+    const decrypted = await crypto.subtle.decrypt(
+      { name: ALGORITHM_NAME, iv },
+      key,
+      encryptedData,
+    );
     const decoder = new TextDecoder();
 
     return decoder.decode(decrypted);

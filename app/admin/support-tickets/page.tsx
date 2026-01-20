@@ -1,13 +1,13 @@
 'use client';
 
 import { TablePagination } from '@/components/ui/TablePagination';
+import { logger } from '@/lib/logger';
 import { useState } from 'react';
 import { TicketDetailModal } from './components/TicketDetailModal';
 import { TicketFilters } from './components/TicketFilters';
 import { TicketsTable } from './components/TicketsTable';
 import { useSupportTickets } from './hooks/useSupportTickets';
 import type { SupportTicket } from './types';
-import { logger } from '@/lib/logger';
 
 /**
  * Support tickets page component for admin dashboard.
@@ -132,13 +132,7 @@ export default function SupportTicketsPage() {
 
       {/* Tickets Table */}
       {loading ? (
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-8">
-          <div className="animate-pulse space-y-4">
-            {[1, 2, 3, 4, 5].map(i => (
-              <div key={i} className="h-12 rounded bg-[#2a2a2a]"></div>
-            ))}
-          </div>
-        </div>
+        <SupportTicketsLoading />
       ) : (
         <>
           <TablePagination
@@ -172,6 +166,18 @@ export default function SupportTicketsPage() {
         onSaveNotes={handleSaveNotes}
         onLinkError={handleLinkError}
       />
+    </div>
+  );
+}
+
+function SupportTicketsLoading() {
+  return (
+    <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-8">
+      <div className="animate-pulse space-y-4">
+        {[1, 2, 3, 4, 5].map(i => (
+          <div key={i} className="h-12 rounded bg-[#2a2a2a]"></div>
+        ))}
+      </div>
     </div>
   );
 }

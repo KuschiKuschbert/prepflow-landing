@@ -1,12 +1,8 @@
-/**
- * Merge dish recipe ingredients into main recipe ingredients map.
- *
- * @param {Set<string>} recipeIds - Set of recipe IDs
- * @param {Map<string, any[]>} recipeIngredientsMap - Main recipe ingredients map (will be updated)
- */
+
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { DBRecipeIngredient } from '../types';
+import { mergeSingleIngredient } from './mergeSingleIngredient';
 
 /**
  * Merge dish recipe ingredients into main recipe ingredients map.
@@ -45,17 +41,7 @@ export async function mergeDishRecipeIngredients(
   if (dishRecipeIngredients) {
     for (const ri of dishRecipeIngredients) {
       const recipeIngredient = ri as unknown as DBRecipeIngredient;
-      const recipeId = recipeIngredient.recipe_id;
-      if (!recipeIngredientsMap.has(recipeId)) {
-        recipeIngredientsMap.set(recipeId, []);
-      }
-      if (
-        !recipeIngredientsMap
-          .get(recipeId)!
-          .some(existing => existing.ingredient_id === recipeIngredient.ingredient_id)
-      ) {
-        recipeIngredientsMap.get(recipeId)!.push(recipeIngredient);
-      }
+      mergeSingleIngredient(recipeIngredient.recipe_id, recipeIngredient, recipeIngredientsMap);
     }
   }
 }

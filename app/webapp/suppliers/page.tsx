@@ -1,27 +1,24 @@
 'use client';
 
 import { CSVImportModal } from '@/components/ui/CSVImportModal';
-import { ExportButton, type ExportFormat } from '@/components/ui/ExportButton';
-import { ImportButton } from '@/components/ui/ImportButton';
-import type { ImportProgressState } from '@/components/ui/ImportProgress';
+import { type ExportFormat } from '@/components/ui/ExportButton';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
-import { PrintButton } from '@/components/ui/PrintButton';
 import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { useNotification } from '@/contexts/NotificationContext';
-import { cacheData } from '@/lib/cache/data-cache';
-import { supplierImportConfig, type SupplierImportRow } from '@/lib/imports/supplier-import';
+import { supplierImportConfig } from '@/lib/imports/supplier-import';
 import { logger } from '@/lib/logger';
 import { useTranslation } from '@/lib/useTranslation';
 import { useCallback, useState } from 'react';
+import { SuppliersActionHeader } from './components/SuppliersActionHeader';
 import { SuppliersContent } from './components/SuppliersContent';
 import { SuppliersTabs } from './components/SuppliersTabs';
+import { useSupplierImport } from './hooks/useSupplierImport';
 import { useSuppliersData } from './hooks/useSuppliersData';
 import { useSuppliersForms } from './hooks/useSuppliersForms';
-import type { Supplier } from './types';
 import {
-  exportSuppliersToCSV,
-  exportSuppliersToHTML,
-  exportSuppliersToPDF,
+    exportSuppliersToCSV,
+    exportSuppliersToHTML,
+    exportSuppliersToPDF,
 } from './utils/exportSuppliers';
 import { printSuppliers } from './utils/printSuppliers';
 
@@ -56,7 +53,12 @@ export default function SuppliersPage() {
   const [exportLoading, setExportLoading] = useState<ExportFormat | null>(null);
   const [printLoading, setPrintLoading] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
-  const [importProgress, setImportProgress] = useState<ImportProgressState | undefined>(undefined);
+
+  const { importProgress, setImportProgress, handleImport } = useSupplierImport({
+    suppliers,
+    setSuppliers,
+    setShowImportModal,
+  });
 
   const handlePrint = useCallback(() => {
     if (suppliers.length === 0) {
@@ -109,180 +111,6 @@ export default function SuppliersPage() {
     [suppliers, showSuccess, showError],
   );
 
-  const handleImport = useCallback(
-    async (importRows: SupplierImportRow[]) => {
-      if (importRows.length === 0) {
-        showError('No suppliers to import');
-        return;
-      }
-
-      // Store original state for rollback
-      const originalSuppliers = [...suppliers];
-
-      setImportProgress({
-        total: importRows.length,
-        processed: 0,
-        successful: 0,
-        failed: 0,
-        isComplete: false,
-      });
-
-      const importedSuppliers: Supplier[] = [];
-      const tempSuppliers: Array<{ tempId: number; supplier: Supplier }> = [];
-      let successCount = 0;
-      let failCount = 0;
-      const errors: Array<{ row: number; error: string }> = [];
-
-      try {
-        for (let i = 0; i < importRows.length; i++) {
-          const row = importRows[i];
-          // Use negative number for temp ID to match Supplier.id type (number)
-          const tempId = -Date.now() - i;
-
-          // Create temporary supplier for optimistic update
-          const tempSupplier: Supplier = {
-            id: tempId,
-            name: row.name,
-            contact_person: row.contact_person || null,
-            email: row.email || null,
-            phone: row.phone || null,
-            address: row.address || null,
-            website: row.website || null,
-            payment_terms: row.payment_terms || null,
-            delivery_schedule: row.delivery_schedule || null,
-            minimum_order_amount: row.minimum_order_amount || null,
-            is_active: row.is_active !== undefined ? row.is_active : true,
-            notes: row.notes || null,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          };
-
-          // Optimistically add to UI immediately
-          setSuppliers(prevSuppliers => [...prevSuppliers, tempSupplier]);
-          tempSuppliers.push({ tempId, supplier: tempSupplier });
-
-          setImportProgress({
-            total: importRows.length,
-            processed: i + 1,
-            successful: successCount,
-            failed: failCount,
-            currentItem: row.name,
-            isComplete: false,
-            errors,
-          });
-
-          try {
-            // Map import row to API format
-            const supplierData = {
-              supplier_name: row.name,
-              contact_person: row.contact_person || null,
-              email: row.email || null,
-              phone: row.phone || null,
-              address: row.address || null,
-              website: row.website || null,
-              payment_terms: row.payment_terms || null,
-              delivery_schedule: row.delivery_schedule || null,
-              minimum_order_amount: row.minimum_order_amount || null,
-              is_active: row.is_active !== undefined ? row.is_active : true,
-              notes: row.notes || null,
-            };
-
-            const response = await fetch('/api/suppliers', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(supplierData),
-            });
-
-            const result = await response.json();
-
-            if (response.ok && result.success) {
-              // Transform API response (supplier_name -> name) to match Supplier interface
-              const serverSupplier: Supplier = {
-                ...result.data,
-                name: result.data.supplier_name || result.data.name,
-              };
-
-              // Replace temp supplier with real supplier from server
-              setSuppliers(prevSuppliers =>
-                prevSuppliers.map(s => (s.id === tempId ? serverSupplier : s)),
-              );
-
-              importedSuppliers.push(serverSupplier);
-              successCount++;
-            } else {
-              // Error - remove temp supplier
-              setSuppliers(prevSuppliers => prevSuppliers.filter(s => s.id !== tempId));
-              failCount++;
-              errors.push({
-                row: i + 1,
-                error: result.error || result.message || 'Failed to import supplier',
-              });
-            }
-          } catch (err) {
-            // Error - remove temp supplier
-            setSuppliers(prevSuppliers => prevSuppliers.filter(s => s.id !== tempId));
-            const errorMessage = err instanceof Error ? err.message : 'Failed to import supplier';
-            logger.error(`[Suppliers Import] Failed to import row ${i + 1}:`, {
-              error: errorMessage,
-              err,
-            });
-            failCount++;
-            errors.push({
-              row: i + 1,
-              error: errorMessage,
-            });
-          }
-        }
-
-        // Cache final suppliers list
-        if (importedSuppliers.length > 0) {
-          setSuppliers(prevSuppliers => {
-            const finalList = prevSuppliers.filter(
-              s => !tempSuppliers.some(t => t.tempId === s.id),
-            );
-            const updatedList = [...finalList, ...importedSuppliers];
-            cacheData('suppliers', updatedList);
-            return updatedList;
-          });
-        } else {
-          // No successful imports - revert all optimistic updates
-          setSuppliers(originalSuppliers);
-        }
-
-        setImportProgress({
-          total: importRows.length,
-          processed: importRows.length,
-          successful: successCount,
-          failed: failCount,
-          isComplete: true,
-          errors: errors.length > 0 ? errors : undefined,
-        });
-
-        if (successCount > 0) {
-          showSuccess(
-            `Successfully imported ${successCount} supplier${successCount !== 1 ? 's' : ''}`,
-          );
-        }
-        if (failCount > 0) {
-          showError(`Failed to import ${failCount} supplier${failCount !== 1 ? 's' : ''}`);
-        }
-
-        // Close modal after a short delay to show completion
-        setTimeout(() => {
-          setShowImportModal(false);
-          setImportProgress(undefined);
-        }, 2000);
-      } catch (err) {
-        // Error - revert all optimistic updates
-        setSuppliers(originalSuppliers);
-        logger.error('[Suppliers Import] Import error:', err);
-        showError('Failed to import suppliers. Give it another go, chef.');
-        setImportProgress(undefined);
-      }
-    },
-    [suppliers, setSuppliers, showSuccess, showError],
-  );
-
   if (loading) {
     return <PageSkeleton />;
   }
@@ -304,61 +132,19 @@ export default function SuppliersPage() {
 
         <SuppliersTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
-        {activeTab === 'suppliers' && (
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-            <h2 className="text-2xl font-semibold text-[var(--foreground)]">
-              {t('suppliers.manageSuppliers', 'Manage Suppliers')}
-            </h2>
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => setShowAddSupplier(true)}
-                className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
-              >
-                ➕ {t('suppliers.addSupplier', 'Add Supplier')}
-              </button>
-              <ImportButton onClick={() => setShowImportModal(true)} />
-              <PrintButton
-                onClick={handlePrint}
-                loading={printLoading}
-                disabled={suppliers.length === 0}
-              />
-              <ExportButton
-                onExport={handleExport}
-                loading={exportLoading}
-                disabled={suppliers.length === 0}
-                availableFormats={['csv', 'pdf', 'html']}
-              />
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'priceLists' && (
-          <div className="tablet:flex-row tablet:items-center mb-6 flex flex-col items-start justify-between gap-4">
-            <div>
-              <label className="mb-2 block text-sm font-medium text-[var(--foreground-secondary)]">
-                {t('suppliers.filterSupplier', 'Filter by Supplier')}
-              </label>
-              <select
-                value={selectedSupplier}
-                onChange={e => setSelectedSupplier(e.target.value)}
-                className="rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
-              >
-                <option value="all">{t('suppliers.allSuppliers', 'All Suppliers')}</option>
-                {suppliers.map((supplier: Supplier) => (
-                  <option key={supplier.id} value={supplier.id.toString()}>
-                    {supplier.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <button
-              onClick={() => setShowAddPriceList(true)}
-              className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
-            >
-              ➕ {t('suppliers.addPriceList', 'Add Price List')}
-            </button>
-          </div>
-        )}
+        <SuppliersActionHeader
+          activeTab={activeTab}
+          suppliers={suppliers}
+          selectedSupplier={selectedSupplier}
+          setSelectedSupplier={setSelectedSupplier}
+          setShowAddSupplier={setShowAddSupplier}
+          setShowAddPriceList={setShowAddPriceList}
+          setShowImportModal={setShowImportModal}
+          handlePrint={handlePrint}
+          handleExport={handleExport}
+          printLoading={printLoading}
+          exportLoading={exportLoading}
+        />
 
         <SuppliersContent
           activeTab={activeTab}

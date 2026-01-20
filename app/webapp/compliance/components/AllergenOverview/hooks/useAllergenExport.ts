@@ -2,9 +2,10 @@
  * Hook for handling allergen data export
  */
 
-import { useState } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
+import { useState } from 'react';
+import { handleFileDownload, handlePdfExport } from './helpers/exportHelpers';
 
 export function useAllergenExport(selectedAllergenFilter: string) {
   const { showSuccess, showError } = useNotification();
@@ -37,38 +38,14 @@ export function useAllergenExport(selectedAllergenFilter: string) {
       if (format === 'pdf') {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
-        const printWindow = window.open(url, '_blank');
-        if (printWindow) {
-          printWindow.onload = () => {
-            printWindow.print();
-          };
-          showSuccess(
-            "PDF export opened in new window. Use your browser's print dialog to save as PDF.",
-          );
-        } else {
-          // Fallback to download if popup blocked
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'allergen_overview.html';
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          showSuccess('HTML file downloaded. Open it and use Print > Save as PDF.');
-        }
+        await handlePdfExport(url, showSuccess);
         setTimeout(() => window.URL.revokeObjectURL(url), 1000);
       } else {
         // For CSV and HTML, download normally
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `allergen_overview.${format === 'csv' ? 'csv' : 'html'}`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        handleFileDownload(url, format, showSuccess);
         window.URL.revokeObjectURL(url);
-
-        showSuccess(`Allergen overview exported as ${format.toUpperCase()}`);
       }
     } catch (err) {
       logger.error('[Allergen Overview] Export error:', err);

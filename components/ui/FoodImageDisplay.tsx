@@ -3,11 +3,11 @@
 // Food image display component with multi-plating support
 // HMR fix: Using direct lucide-react imports instead of Icon wrapper to avoid Turbopack module resolution issues
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { ImageIcon, ChevronDown } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
-import { ImageLightbox } from './ImageLightbox';
-import { renderImageComponent } from './FoodImageDisplay/helpers/renderImage';
+import { ChevronDown, ImageIcon } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { buildImageMap } from './FoodImageDisplay/helpers/buildImageMap';
+import { renderImageComponent } from './FoodImageDisplay/helpers/renderImage';
+import { ImageLightbox } from './ImageLightbox';
 
 // All supported plating methods
 export type PlatingMethod =
@@ -139,7 +139,7 @@ export function FoodImageDisplay({
   };
 
   // Handle image click to open lightbox
-  const handleImageClick = (e: React.MouseEvent) => {
+  const handleImageClick = (e: React.SyntheticEvent) => {
     // Don't open lightbox if clicking on the dropdown selector
     if ((e.target as HTMLElement).closest('[data-plating-selector]')) {
       return;
@@ -194,7 +194,7 @@ export function FoodImageDisplay({
           onKeyDown={e => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
-              handleImageClick(e as any); // justified
+              handleImageClick(e);
             }
           }}
         >

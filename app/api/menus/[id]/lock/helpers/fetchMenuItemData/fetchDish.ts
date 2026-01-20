@@ -5,12 +5,12 @@
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
 import {
-  MenuItemData,
-  MenuItemIngredient,
-  MenuItemSubRecipe,
-  RawDishResult,
-  RawRecipeResult,
-} from '../fetchMenuItemData';
+    MenuItemData,
+    MenuItemIngredient,
+    MenuItemSubRecipe,
+    RawDishResult,
+    RawRecipeResult,
+} from '../types';
 
 /**
  * Fetch dish data with all nested ingredients

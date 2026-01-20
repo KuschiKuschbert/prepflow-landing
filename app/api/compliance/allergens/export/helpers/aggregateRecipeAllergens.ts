@@ -3,12 +3,12 @@
  */
 
 import {
-  batchAggregateRecipeAllergens,
-  extractAllergenSources,
+    batchAggregateRecipeAllergens
 } from '@/lib/allergens/allergen-aggregation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import { getRecipeIngredientSources } from './dataFetchers';
 
 export interface RecipeAllergenData {
   allergensByRecipe: Record<string, string[]>;
@@ -20,14 +20,7 @@ interface InputRecipe {
   name?: string;
 }
 
-interface RecipeIngredientRow {
-  recipe_id: string;
-  ingredients?: {
-    id?: string;
-    ingredient_name?: string;
-    allergens?: string[];
-  };
-}
+
 
 /**
  * Aggregates allergens for recipes
@@ -53,47 +46,9 @@ export async function aggregateRecipeAllergens(
   }
 
   // Fetch ingredient sources for recipes
-  const recipeIngredientSources: Record<string, Record<string, string[]>> = {};
-  try {
-    const { data: recipeIngredients, error: recipeIngredientsError } = await supabaseAdmin
-      .from('recipe_ingredients')
-      .select(
-        `
-        recipe_id,
-        ingredients (
-          id,
-          ingredient_name,
-          allergens
-        )
-      `,
-      );
-
-    if (!recipeIngredientsError && recipeIngredients) {
-      const ingredientsByRecipe: Record<
-        string,
-        Array<{ ingredient_name: string; allergens?: string[] }>
-      > = {};
-      (recipeIngredients as RecipeIngredientRow[]).forEach(ri => {
-        const recipeId = ri.recipe_id;
-        const ingredient = ri.ingredients;
-        if (recipeId && ingredient) {
-          if (!ingredientsByRecipe[recipeId]) {
-            ingredientsByRecipe[recipeId] = [];
-          }
-          ingredientsByRecipe[recipeId].push({
-            ingredient_name: ingredient.ingredient_name || '',
-            allergens: ingredient.allergens,
-          });
-        }
-      });
-
-      Object.entries(ingredientsByRecipe).forEach(([recipeId, ingredients]) => {
-        recipeIngredientSources[recipeId] = extractAllergenSources(ingredients);
-      });
-    }
-  } catch (err) {
-    logger.warn('[Allergen Export] Error fetching recipe ingredient sources:', err);
-  }
+  // Fetch ingredient sources for recipes
+  const recipeIds = (recipes || []).map(r => r.id);
+  const recipeIngredientSources = await getRecipeIngredientSources(recipeIds);
 
   return { allergensByRecipe, recipeIngredientSources };
 }

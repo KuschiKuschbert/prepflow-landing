@@ -1,23 +1,17 @@
 'use client';
+import { COGSCalculation } from '@/app/webapp/cogs/types';
+import { RecipeEditFooter } from '@/app/webapp/recipes/components/RecipeEditDrawer/components/RecipeEditFooter';
 import { EditDrawer } from '@/components/ui/EditDrawer';
+import { useNotification } from '@/contexts/NotificationContext';
 import { useAutosave } from '@/hooks/useAutosave';
 import { deriveAutosaveId } from '@/lib/autosave-id';
-import { useNotification } from '@/contexts/NotificationContext';
-import { Recipe } from '../types';
-import { useCallback, useEffect, useState, useMemo } from 'react';
 import { logger } from '@/lib/logger';
-import { useCOGSDataFetching } from '../../cogs/hooks/useCOGSDataFetching';
-import { useIngredientSearch } from '../../cogs/hooks/useIngredientSearch';
-import { useIngredientAddition } from '../../cogs/hooks/useIngredientAddition';
-import { useCOGSCalculationLogic } from '../../cogs/hooks/useCOGSCalculationLogic';
-import { useIngredientConversion } from '../../cogs/hooks/useIngredientConversion';
-import { COGSCalculation } from '../../cogs/types';
-import { useRecipeEditIngredientLoading } from './hooks/useRecipeEditIngredientLoading';
+import { useCallback, useEffect, useState } from 'react';
+import { Recipe } from '../types';
 import { useRecipeEditIngredientSave } from './hooks/useRecipeEditIngredientSave';
-import { RecipeMetadataForm } from './RecipeMetadataForm';
+import { useRecipeIngredientsState } from './RecipeEditDrawer/hooks/useRecipeIngredientsState';
 import { RecipeIngredientsTab } from './RecipeIngredientsTab';
-import { RecipeEditFooter } from '@/app/webapp/recipes/components/RecipeEditDrawer/components/RecipeEditFooter';
-import { useRecipeEditHandlers } from '@/app/webapp/recipes/components/RecipeEditDrawer/hooks/useRecipeEditHandlers';
+import { RecipeMetadataForm } from './RecipeMetadataForm';
 interface RecipeEditDrawerProps {
   isOpen: boolean;
   recipe: Recipe | null;
@@ -35,98 +29,40 @@ export function RecipeEditDrawer({
   const [editedName, setEditedName] = useState('');
   const [editedYield, setEditedYield] = useState(1);
   const [editedInstructions, setEditedInstructions] = useState('');
-  const [showAddIngredient, setShowAddIngredient] = useState(false);
-  const [activeTab, setActiveTab] = useState<'ingredients' | 'consumables'>('ingredients');
-  const {
-    ingredients,
-    loading: dataLoading,
-    error: dataError,
-    setError: setDataError,
-    fetchData,
-  } = useCOGSDataFetching();
-  const { convertIngredientQuantity } = useIngredientConversion();
-  const { calculations, setCalculations, loadingIngredients } = useRecipeEditIngredientLoading({
-    recipe,
-    ingredients,
-    convertIngredientQuantity,
-    showError,
-  });
-  const ingredientCalculations = useMemo(
-    () => calculations.filter(calc => !calc.isConsumable),
-    [calculations],
-  );
-  const consumableCalculations = useMemo(
-    () => calculations.filter(calc => calc.isConsumable),
-    [calculations],
-  );
-  const consumables = useMemo(
-    () => ingredients.filter(ing => ing.category === 'Consumables'),
-    [ingredients],
-  );
-  const {
-    ingredientSearch,
-    showSuggestions,
-    selectedIngredient,
-    newIngredient,
-    filteredIngredients,
-    highlightedIndex,
-    handleIngredientSelect,
-    handleSearchChange,
-    handleKeyDown,
-    resetForm,
-    setNewIngredient,
-  } = useIngredientSearch(ingredients);
-  const {
-    ingredientSearch: consumableSearch,
-    showSuggestions: showConsumableSuggestions,
-    selectedIngredient: selectedConsumable,
-    newIngredient: newConsumable,
-    filteredIngredients: filteredConsumables,
-    highlightedIndex: consumableHighlightedIndex,
-    handleIngredientSelect: handleConsumableSelect,
-    handleSearchChange: handleConsumableSearchChange,
-    handleKeyDown: handleConsumableKeyDown,
-    setNewIngredient: setNewConsumable,
-  } = useIngredientSearch(consumables);
-  const { updateCalculation } = useCOGSCalculationLogic({
-    ingredients,
-    setCalculations,
-  });
-  const updateCalculationWrapper = useCallback(
-    (ingredientId: string, quantity: number) =>
-      updateCalculation(ingredientId, quantity, ingredients, setCalculations),
-    [ingredients, updateCalculation, setCalculations],
-  );
-  const addCalculationWithRollback = useCallback(
-    (calc: COGSCalculation) => {
-      setCalculations(prev => [...prev, calc]);
-    },
-    [setCalculations],
-  );
 
-  const { handleAddIngredient } = useIngredientAddition({
-    calculations,
+  const {
+    activeTab,
+    setActiveTab,
+    showAddIngredient,
+    setShowAddIngredient,
     ingredients,
-    selectedRecipe: recipe?.id || null,
-    addCalculation: addCalculationWithRollback,
-    updateCalculation: updateCalculationWrapper,
-    resetForm,
-    setSaveError: setDataError,
-  });
-  const { handleAddIngredientWrapper, handleAddConsumableWrapper } = useRecipeEditHandlers({
-    handleAddIngredient,
-    newIngredient,
-    newConsumable,
-  });
+    consumables,
+    dataLoading,
+    loadingIngredients,
+    dataError,
+    fetchData,
+    calculations,
+    setCalculations,
+    ingredientCalculations,
+    consumableCalculations,
+    ingredientSearch,
+    consumableSearch,
+    handleAddIngredientWrapper,
+    handleAddConsumableWrapper,
+    updateCalculation,
+  } = useRecipeIngredientsState(recipe);
+
   const { handleSaveIngredients } = useRecipeEditIngredientSave({
     recipe,
     calculations,
     showError,
     showSuccess,
   });
+
   useEffect(() => {
     if (isOpen) fetchData();
   }, [isOpen, fetchData]);
+
   useEffect(() => {
     if (recipe) {
       setEditedName(recipe.recipe_name || '');
@@ -134,6 +70,7 @@ export function RecipeEditDrawer({
       setEditedInstructions(recipe.instructions || '');
     }
   }, [recipe]);
+
   const entityId = deriveAutosaveId('recipes', recipe?.id, [editedName]);
   const canAutosave = Boolean(editedName && recipe);
   const {
@@ -151,6 +88,7 @@ export function RecipeEditDrawer({
     },
     enabled: canAutosave && isOpen,
   });
+
   const handleSave = useCallback(async () => {
     if (!recipe || !editedName.trim()) return;
     if (calculations.length === 0) {
@@ -210,12 +148,15 @@ export function RecipeEditDrawer({
     handleSaveIngredients,
     setCalculations,
   ]);
+
   if (!recipe) return null;
+
   const capitalizeRecipeName = (name: string) =>
     name
       .split(' ')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
+
   return (
     <EditDrawer
       isOpen={isOpen}
@@ -259,46 +200,54 @@ export function RecipeEditDrawer({
           loadingIngredients={loadingIngredients}
           dataError={dataError}
           showAddIngredient={showAddIngredient}
-          ingredientSearch={ingredientSearch}
-          showSuggestions={showSuggestions}
-          filteredIngredients={filteredIngredients}
-          selectedIngredient={selectedIngredient}
-          highlightedIndex={highlightedIndex}
+          ingredientSearch={ingredientSearch.ingredientSearch}
+          showSuggestions={ingredientSearch.showSuggestions}
+          filteredIngredients={ingredientSearch.filteredIngredients}
+          selectedIngredient={ingredientSearch.selectedIngredient}
+          highlightedIndex={ingredientSearch.highlightedIndex}
           newIngredient={{
-            quantity: newIngredient.quantity || 0,
-            unit: newIngredient.unit || 'kg',
+            quantity: ingredientSearch.newIngredient.quantity || 0,
+            unit: ingredientSearch.newIngredient.unit || 'kg',
           }}
-          consumableSearch={consumableSearch}
-          showConsumableSuggestions={showConsumableSuggestions}
-          filteredConsumables={filteredConsumables}
-          selectedConsumable={selectedConsumable}
-          consumableHighlightedIndex={consumableHighlightedIndex}
+          consumableSearch={consumableSearch.ingredientSearch}
+          showConsumableSuggestions={consumableSearch.showSuggestions}
+          filteredConsumables={consumableSearch.filteredIngredients}
+          selectedConsumable={consumableSearch.selectedIngredient}
+          consumableHighlightedIndex={consumableSearch.highlightedIndex}
           newConsumable={{
-            quantity: newConsumable.quantity || 0,
-            unit: newConsumable.unit || 'kg',
+            quantity: consumableSearch.newIngredient.quantity || 0,
+            unit: consumableSearch.newIngredient.unit || 'kg',
           }}
           onToggleAddIngredient={() => setShowAddIngredient(!showAddIngredient)}
-          onSearchChange={handleSearchChange}
-          onIngredientSelect={handleIngredientSelect}
+          onSearchChange={ingredientSearch.handleSearchChange}
+          onIngredientSelect={ingredientSearch.handleIngredientSelect}
           onKeyDown={(e, filtered) =>
-            handleKeyDown(e as React.KeyboardEvent<HTMLInputElement>, filtered)
+            ingredientSearch.handleKeyDown(e as React.KeyboardEvent<HTMLInputElement>, filtered)
           }
-          onQuantityChange={quantity => setNewIngredient(prev => ({ ...prev, quantity }))}
-          onUnitChange={unit => setNewIngredient(prev => ({ ...prev, unit }))}
+          onQuantityChange={quantity =>
+            ingredientSearch.setNewIngredient((prev: any) => ({ ...prev, quantity }))
+          }
+          onUnitChange={unit =>
+            ingredientSearch.setNewIngredient((prev: any) => ({ ...prev, unit }))
+          }
           onAddIngredient={handleAddIngredientWrapper}
-          onConsumableSearchChange={handleConsumableSearchChange}
-          onConsumableSelect={handleConsumableSelect}
+          onConsumableSearchChange={consumableSearch.handleSearchChange}
+          onConsumableSelect={consumableSearch.handleIngredientSelect}
           onConsumableKeyDown={(e, filtered) =>
-            handleConsumableKeyDown(e as React.KeyboardEvent<HTMLInputElement>, filtered)
+            consumableSearch.handleKeyDown(e as React.KeyboardEvent<HTMLInputElement>, filtered)
           }
-          onConsumableQuantityChange={quantity => setNewConsumable(prev => ({ ...prev, quantity }))}
-          onConsumableUnitChange={unit => setNewConsumable(prev => ({ ...prev, unit }))}
+          onConsumableQuantityChange={quantity =>
+            consumableSearch.setNewIngredient((prev: any) => ({ ...prev, quantity }))
+          }
+          onConsumableUnitChange={unit =>
+            consumableSearch.setNewIngredient((prev: any) => ({ ...prev, unit }))
+          }
           onAddConsumable={handleAddConsumableWrapper}
           onUpdateCalculation={(ingredientId, newQuantity) =>
             updateCalculation(ingredientId, newQuantity, ingredients, setCalculations)
           }
           onRemoveCalculation={ingredientId =>
-            setCalculations(prev => prev.filter(calc => calc.ingredientId !== ingredientId))
+            setCalculations(prev => prev.filter((calc: COGSCalculation) => calc.ingredientId !== ingredientId))
           }
           setCalculations={setCalculations}
         />

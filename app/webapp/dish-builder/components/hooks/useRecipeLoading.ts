@@ -1,7 +1,7 @@
-import { logger } from '@/lib/logger';
 import { useEffect } from 'react';
-import type { Ingredient, Recipe, RecipeIngredient } from '../../../cogs/types';
+import type { Ingredient, Recipe } from '../../../cogs/types';
 import type { DishBuilderState } from '../../types';
+import { fetchRecipeIngredients } from './helpers/fetchRecipeIngredients';
 
 interface UseRecipeLoadingProps {
   editingRecipe: Recipe | null | undefined;
@@ -34,18 +34,14 @@ export function useRecipeLoading({
       });
 
       // Load recipe ingredients
-      fetch(`/api/recipes/${editingRecipe.id}/ingredients`, {
-        cache: 'no-store',
-      })
-        .then(r => r.json())
-        .then(data => {
-          const recipeIngredients: RecipeIngredient[] = data.items || [];
+      fetchRecipeIngredients(editingRecipe.id)
+        .then(recipeIngredients => {
           if (recipeIngredients.length > 0) {
             const recipeYield = editingRecipe.yield || 1;
             // Clear existing calculations first
             clearCalculations();
             // Add all ingredients from recipe
-            recipeIngredients.forEach((ri: RecipeIngredient) => {
+            recipeIngredients.forEach((ri) => {
               const ingredientData = ingredients.find(ing => ing.id === ri.ingredient_id);
               if (ingredientData) {
                 // Calculate single serve quantity
@@ -55,8 +51,7 @@ export function useRecipeLoading({
             });
           }
         })
-        .catch(err => {
-          logger.error('Failed to load recipe ingredients:', err);
+        .catch(() => {
           setError('Failed to load recipe ingredients');
         });
     }

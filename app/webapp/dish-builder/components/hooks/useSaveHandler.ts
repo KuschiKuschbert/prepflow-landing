@@ -1,6 +1,6 @@
-import { logger } from '@/lib/logger';
 import { useNotification } from '@/contexts/NotificationContext';
-import { useOnRecipeCreated, useOnDishCreated } from '@/lib/personality/hooks';
+import { logger } from '@/lib/logger';
+import { useOnDishCreated, useOnRecipeCreated } from '@/lib/personality/hooks';
 
 interface UseSaveHandlerProps {
   dishState: {
@@ -12,7 +12,7 @@ interface UseSaveHandlerProps {
   onSaveSuccess?: () => void;
 }
 
-export function useSaveHandler({
+export function useDishSave({
   dishState,
   saveDish,
   setError,

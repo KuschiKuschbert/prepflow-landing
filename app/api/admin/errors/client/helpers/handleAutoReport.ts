@@ -18,6 +18,10 @@ export async function handleAutoReport(
     return;
   }
 
+  await tryAutoReporting(userId, errorId);
+}
+
+async function tryAutoReporting(userId: string, errorId: string) {
   // Check preference and send report if enabled
   try {
     const shouldReport = await checkAutoReportPreference(userId);

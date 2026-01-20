@@ -7,17 +7,35 @@ export function generateExecutiveSummary(
 ): string {
   if (!summary) return '';
 
+  return `
+    <div class="section">
+      <div class="section-title">Executive Summary</div>
+      ${renderStatusBadge(summary, statusColors, statusLabels)}
+      ${renderSummaryGrid(summary)}
+      ${renderAlerts(summary.alerts)}
+    </div>
+  `;
+}
+
+function renderStatusBadge(
+  summary: NonNullable<ReportData['executive_summary']>,
+  statusColors: StatusColors,
+  statusLabels: StatusLabels,
+): string {
   const statusColor = statusColors[summary.overall_status] || '#6b7280';
   const statusLabel = statusLabels[summary.overall_status] || 'Unknown';
 
   return `
-    <div class="section">
-      <div class="section-title">Executive Summary</div>
       <div style="margin-bottom: 20px;">
         <span class="status-badge" style="background-color: ${statusColor}20; color: ${statusColor};">
           ${statusLabel}
         </span>
       </div>
+  `;
+}
+
+function renderSummaryGrid(summary: NonNullable<ReportData['executive_summary']>): string {
+  return `
       <div class="summary-grid">
         <div class="summary-card">
           <div class="label">Total Employees</div>
@@ -78,11 +96,15 @@ export function generateExecutiveSummary(
             : ''
         }
       </div>
-      ${
-        summary.alerts.length > 0
-          ? `
+  `;
+}
+
+function renderAlerts(alerts: string[]): string {
+  if (!alerts || alerts.length === 0) return '';
+
+  return `
         <div style="margin-top: 20px;">
-          ${summary.alerts
+          ${alerts
             .map(
               alert => `
             <div class="alert ${alert.includes('expired') ? 'alert-danger' : 'alert-warning'}">
@@ -92,9 +114,5 @@ export function generateExecutiveSummary(
             )
             .join('')}
         </div>
-      `
-          : ''
-      }
-    </div>
-  `;
+      `;
 }

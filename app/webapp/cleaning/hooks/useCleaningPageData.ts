@@ -2,21 +2,12 @@
  * Hook for managing cleaning page data fetching
  */
 
-import { useState, useEffect, useCallback } from 'react';
 import { prefetchApis } from '@/lib/cache/data-cache';
-import { logger } from '@/lib/logger';
 import type { TaskWithCompletions } from '@/lib/cleaning/completion-logic';
+import { logger } from '@/lib/logger';
+import { useCallback, useEffect, useState } from 'react';
+import type { CleaningArea } from './useCleaningAreas/types';
 import { fetchCleaningAreas, fetchCleaningTasks } from './useCleaningPageData/fetchFunctions';
-
-interface CleaningArea {
-  id: string;
-  area_name: string;
-  description?: string;
-  cleaning_frequency?: string;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
 
 export function useCleaningPageData(startDate: Date, endDate: Date, activeTab: 'grid' | 'areas') {
   const [areas, setAreas] = useState<CleaningArea[]>([]);

@@ -67,10 +67,7 @@ const HighlightCard = React.memo(function HighlightCard({
         glowColor={`rgba(${parseInt(highlight.color.slice(1, 3), 16)}, ${parseInt(highlight.color.slice(3, 5), 16)}, ${parseInt(highlight.color.slice(5, 7), 16)}, 0.1)`}
         className="group relative cursor-pointer overflow-hidden p-8"
       >
-        {/* Icon */}
-        <motion.div className="mb-6" whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
-          <Icon icon={highlight.icon} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
-        </motion.div>
+        <HighlightIcon icon={highlight.icon} />
 
         {/* Title */}
         <h3 className="text-fluid-xl mb-3 font-light text-white">{highlight.name}</h3>
@@ -78,34 +75,52 @@ const HighlightCard = React.memo(function HighlightCard({
         {/* Description */}
         <p className="text-fluid-base leading-relaxed text-gray-400">{highlight.description}</p>
 
-        {/* Hover Effect - Screenshot Preview */}
-        {highlight.screenshot && (
-          <motion.div
-            className="absolute inset-0 opacity-0"
-            whileHover={{ opacity: 0.1 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Image
-              src={highlight.screenshot}
-              alt={highlight.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
-              loading="lazy"
-            />
-          </motion.div>
-        )}
-
-        {/* Accent Color Indicator */}
-        <motion.div
-          className={`absolute bottom-0 left-0 h-1 w-full ${highlight.name.includes('Ingredients') || highlight.name.includes('Recipe') ? 'bg-[#29E7CD]' : highlight.name.includes('COGS') || highlight.name.includes('Menu') ? 'bg-[#D925C7]' : 'bg-[#3B82F6]'}`}
-          whileHover={{ height: '8px' }}
-          transition={{ duration: 0.3 }}
-        />
+        <HighlightImageOverlay highlight={highlight} />
+        <HighlightAccent highlight={highlight} />
       </GlowCard>
     </ScrollReveal>
   );
 });
+
+function HighlightIcon({ icon }: { icon: LucideIcon }) {
+  return (
+    <motion.div className="mb-6" whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
+      <Icon icon={icon} size="xl" className="text-[#29E7CD]" aria-hidden={true} />
+    </motion.div>
+  );
+}
+
+function HighlightImageOverlay({ highlight }: { highlight: Highlight }) {
+  if (!highlight.screenshot) return null;
+
+  return (
+    <motion.div
+      className="absolute inset-0 opacity-0"
+      whileHover={{ opacity: 0.1 }}
+      transition={{ duration: 0.3 }}
+    >
+      <Image
+        src={highlight.screenshot}
+        alt={highlight.name}
+        fill
+        className="object-cover"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
+        loading="lazy"
+      />
+    </motion.div>
+  );
+}
+
+function HighlightAccent({ highlight }: { highlight: Highlight }) {
+  return (
+    <motion.div
+      className={`absolute bottom-0 left-0 h-1 w-full ${highlight.name.includes('Ingredients') || highlight.name.includes('Recipe') ? 'bg-[#29E7CD]' : highlight.name.includes('COGS') || highlight.name.includes('Menu') ? 'bg-[#D925C7]' : 'bg-[#3B82F6]'}`}
+      whileHover={{ height: '8px' }}
+      transition={{ duration: 0.3 }}
+    />
+  );
+}
+
 
 function Highlights() {
   return (

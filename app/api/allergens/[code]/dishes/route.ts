@@ -10,7 +10,7 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
- 
+
 async function getDishAllergensWithFallback(
   dish: any /* justified: complex DB record */,
 ): Promise<string[]> {
@@ -52,21 +52,8 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ co
     }
 
     // Fetch all dishes
-    const { data: dishes, error: fetchError } = await supabaseAdmin
-      .from('dishes')
-      .select('id, dish_name, allergens')
-      .order('dish_name');
-
-    if (fetchError && fetchError.code !== '42P01') {
-      logger.error('[Allergen Cross-Reference API] Error fetching dishes:', {
-        allergenCode: code,
-        error: fetchError.message,
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Failed to fetch dishes', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const dishes = await fetchAllDishes(code);
+    if (dishes instanceof NextResponse) return dishes;
 
     if (!dishes || dishes.length === 0) {
       return NextResponse.json({
@@ -107,4 +94,27 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ co
       { status: 500 },
     );
   }
+}
+
+async function fetchAllDishes(code: string): Promise<any[] | NextResponse> {
+  // Check Supabase connection
+  if (!supabaseAdmin) {
+    return NextResponse.json(
+      ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
+      { status: 500 },
+    );
+  }
+
+  // Optimize: Select only necessary fields
+  const { data: dishes, error } = await supabaseAdmin
+    .from('dishes')
+    .select('id, dish_name, allergens')
+    .is('deleted_at', null);
+
+  if (error) {
+    logger.error('[Allergen Cross-Reference API] Database error:', error);
+    return NextResponse.json(ApiErrorHandler.fromSupabaseError(error, 500), { status: 500 });
+  }
+
+  return dishes || [];
 }

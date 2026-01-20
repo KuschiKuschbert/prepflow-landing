@@ -15,6 +15,10 @@ interface StateData {
   environment?: 'sandbox' | 'production';
 }
 
+const NONCE_LENGTH = 16;
+const DEFAULT_STATE_AGE_MS = 10 * 60 * 1000; // 10 minutes
+
+
 /**
  * Generate a secure state token for OAuth flow.
  * Includes user ID, environment, and a timestamp for validation.
@@ -30,7 +34,7 @@ export function generateSecureState(
   const stateData: StateData = {
     userId,
     timestamp: Date.now(),
-    nonce: crypto.getRandomValues(new Uint8Array(16)).toString(),
+    nonce: crypto.getRandomValues(new Uint8Array(NONCE_LENGTH)).toString(),
     environment,
   };
   return Buffer.from(JSON.stringify(stateData)).toString('base64');
@@ -46,7 +50,7 @@ export function generateSecureState(
  */
 export function verifySecureState(
   stateToken: string,
-  maxAgeMs: number = 10 * 60 * 1000,
+  maxAgeMs: number = DEFAULT_STATE_AGE_MS,
 ): { userId: string; environment: 'sandbox' | 'production' } {
   try {
     const stateData: StateData = JSON.parse(Buffer.from(stateToken, 'base64').toString());

@@ -4,6 +4,7 @@
 
 import { logger } from '@/lib/logger';
 import { ComprehensiveJobStatus } from '../../types';
+import { pollStatusAfterPause } from './helpers/pollStatusAfterPause';
 
 interface StopHandlerParams {
   setComprehensiveStatus: (status: ComprehensiveJobStatus | null) => void;
@@ -38,27 +39,11 @@ export function createStopHandler({
         setStatusPolling(true);
         showSuccess('Pause command sent! Scraper will pause at next checkpoint (progress saved).');
 
-        const refreshStatus = async () => {
-          try {
-            const statusResponse = await fetch('/api/recipe-scraper/status');
-            const statusData = await statusResponse.json();
-            if (statusData.success) {
-              setComprehensiveStatus(statusData.data);
-              if (statusData.data.isRunning) {
-                setTimeout(refreshStatus, 2000);
-              } else {
-                showSuccess('✅ Scraper has paused successfully!');
-                setStatusPolling(false);
-              }
-            }
-          } catch (err) {
-            logger.error('[RecipeScraper] Error fetching status after pause:', {
-              error: err instanceof Error ? err.message : String(err),
-            });
-          }
-        };
-
-        setTimeout(refreshStatus, 1000);
+        pollStatusAfterPause({
+          setComprehensiveStatus,
+          setStatusPolling,
+          showSuccess,
+        });
       } else {
         showError(result.message || 'Failed to pause scraping job');
       }

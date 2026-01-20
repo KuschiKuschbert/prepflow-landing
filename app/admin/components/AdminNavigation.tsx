@@ -3,21 +3,21 @@
 import { Icon } from '@/components/ui/Icon';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import {
-  Activity,
-  AlertTriangle,
-  BarChart3,
-  ChefHat,
-  CreditCard,
-  Database,
-  Flag,
-  LayoutDashboard,
-  LogOut,
-  Menu,
-  MessageSquare,
-  Package,
-  Users,
-  Wrench,
-  X,
+    Activity,
+    AlertTriangle,
+    BarChart3,
+    ChefHat,
+    CreditCard,
+    Database,
+    Flag,
+    LayoutDashboard,
+    LogOut,
+    Menu,
+    MessageSquare,
+    Package,
+    Users,
+    Wrench,
+    X,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -87,6 +87,18 @@ function AdminNavLink({ item, isActive, onClick }: AdminNavLinkProps) {
  * @component
  * @returns {JSX.Element} Admin navigation sidebar with mobile menu support
  */
+function getNavItemsWithBadges(items: NavItem[], ticketsCount: number, errorsCount: number): (NavItem & { badge?: number })[] {
+  return items.map(item => {
+    if (item.href === '/admin/support-tickets') {
+      return { ...item, badge: ticketsCount };
+    }
+    if (item.href === '/admin/errors') {
+      return { ...item, badge: errorsCount > 0 ? errorsCount : undefined };
+    }
+    return item;
+  });
+}
+
 export default function AdminNavigation() {
   const { user } = useUser();
   const pathname = usePathname();
@@ -100,26 +112,11 @@ export default function AdminNavigation() {
   };
 
   // Update nav items with badge count
-  const navItemsWithBadge = navItems.map(item => {
-    if (item.href === '/admin/support-tickets') {
-      return { ...item, badge: unresolvedTicketsCount };
-    }
-    if (item.href === '/admin/errors') {
-      return { ...item, badge: unresolvedErrorsCount > 0 ? unresolvedErrorsCount : undefined };
-    }
-    return item;
-  });
+  const navItemsWithBadge = getNavItemsWithBadges(navItems, unresolvedTicketsCount, unresolvedErrorsCount);
 
   return (
     <>
-      {/* Mobile menu button */}
-      <button
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="desktop:hidden fixed top-4 left-4 z-50 rounded-lg bg-[#1f1f1f] p-2 text-white"
-        aria-label="Toggle sidebar"
-      >
-        <Icon icon={sidebarOpen ? X : Menu} size="md" />
-      </button>
+      <MobileMenuToggleButton isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
 
       {/* Sidebar */}
       <aside
@@ -128,11 +125,7 @@ export default function AdminNavigation() {
         }`}
       >
         <div className="flex h-full flex-col">
-          {/* Header */}
-          <div className="border-b border-[#2a2a2a] p-6">
-            <h1 className="text-xl font-bold text-white">PrepFlow Admin</h1>
-            {user?.email && <p className="mt-1 text-sm text-gray-400">{user.email}</p>}
-          </div>
+          <SidebarHeader userEmail={user?.email || null} />
 
           {/* Navigation */}
           <nav className="flex-1 overflow-y-auto p-4">
@@ -151,26 +144,56 @@ export default function AdminNavigation() {
             </ul>
           </nav>
 
-          {/* Footer */}
-          <div className="border-t border-[#2a2a2a] p-4">
-            <button
-              onClick={handleSignOut}
-              className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] hover:text-white"
-            >
-              <Icon icon={LogOut} size="sm" />
-              <span>Sign Out</span>
-            </button>
-          </div>
+          <SidebarFooter onSignOut={handleSignOut} />
         </div>
       </aside>
 
-      {/* Backdrop for mobile */}
-      {sidebarOpen && (
-        <div
-          className="desktop:hidden fixed inset-0 z-30 bg-black/60"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+      <MobileOverlay isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
     </>
+  );
+}
+
+function MobileMenuToggleButton({ isOpen, onToggle }: { isOpen: boolean; onToggle: () => void }) {
+  return (
+    <button
+      onClick={onToggle}
+      className="desktop:hidden fixed top-4 left-4 z-50 rounded-lg bg-[#1f1f1f] p-2 text-white"
+      aria-label="Toggle sidebar"
+    >
+      <Icon icon={isOpen ? X : Menu} size="md" />
+    </button>
+  );
+}
+
+function SidebarHeader({ userEmail }: { userEmail: string | null }) {
+  return (
+    <div className="border-b border-[#2a2a2a] p-6">
+      <h1 className="text-xl font-bold text-white">PrepFlow Admin</h1>
+      {userEmail && <p className="mt-1 text-sm text-gray-400">{userEmail}</p>}
+    </div>
+  );
+}
+
+function SidebarFooter({ onSignOut }: { onSignOut: () => void }) {
+  return (
+    <div className="border-t border-[#2a2a2a] p-4">
+      <button
+        onClick={onSignOut}
+        className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm text-gray-300 transition-colors hover:bg-[#2a2a2a] hover:text-white"
+      >
+        <Icon icon={LogOut} size="sm" />
+        <span>Sign Out</span>
+      </button>
+    </div>
+  );
+}
+
+function MobileOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  if (!isOpen) return null;
+  return (
+    <div
+      className="desktop:hidden fixed inset-0 z-30 bg-black/60"
+      onClick={onClose}
+    />
   );
 }

@@ -1,8 +1,8 @@
 'use client';
 
 import type { TaskWithCompletions } from '@/lib/cleaning/completion-logic';
-import { logger } from '@/lib/logger';
 import { useCallback, useEffect, useState } from 'react';
+import { toggleTaskCompletion } from '../helpers/toggleTaskCompletion';
 
 interface OptimisticCompletion {
   completed: boolean;
@@ -63,21 +63,7 @@ export function useOptimisticCompletions({
       });
 
       try {
-        const endpoint = newCompleted
-          ? `/api/cleaning-tasks/${taskId}/complete`
-          : `/api/cleaning-tasks/${taskId}/uncomplete`;
-
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ completion_date: date }),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok || !data.success) {
-          throw new Error(data.error || data.message || 'Failed to update task');
-        }
+        await toggleTaskCompletion(taskId, date, newCompleted);
 
         showSuccess(newCompleted ? 'Task marked as complete' : 'Task marked as incomplete');
         onTaskUpdate?.();
@@ -91,7 +77,6 @@ export function useOptimisticCompletions({
           }
           return updated;
         });
-        logger.error('Error toggling task completion:', error);
         showError(
           newCompleted ? 'Failed to mark task as complete' : 'Failed to mark task as incomplete',
         );

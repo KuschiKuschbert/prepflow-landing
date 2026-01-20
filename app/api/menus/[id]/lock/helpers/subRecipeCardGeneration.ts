@@ -5,11 +5,11 @@
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { buildRecipeCardFromInstructions, generateDataHash } from './cardBuilding';
-import { MenuItemData } from './fetchMenuItemData';
 import { NormalizedIngredient } from './normalizeIngredients';
 import { CollectedSubRecipe } from './recipe-card-types';
 import { saveSubRecipeCard } from './subRecipeCardGeneration/saveSubRecipeCard';
 import { collectUniqueSubRecipes } from './subRecipeUtils';
+import { MenuItemData } from './types';
 
 /**
  * Generate recipe card for a single sub-recipe

@@ -1,5 +1,6 @@
 'use client'
 
+import { ANIMATION_CONSTANTS } from '@/lib/constants'
 import { useEffect, useRef } from 'react'
 
 export default function TriangleGridBackground() {
@@ -17,7 +18,7 @@ export default function TriangleGridBackground() {
     let height = window.innerHeight
 
     const triangles: Triangle[] = []
-    const numTriangles = 50
+    const numTriangles = ANIMATION_CONSTANTS.TRIANGLE_GRID.COUNT
 
     class Triangle {
       x: number
@@ -30,10 +31,10 @@ export default function TriangleGridBackground() {
       constructor() {
         this.x = Math.random() * width
         this.y = Math.random() * height
-        this.size = Math.random() * 40 + 20 // Different sizes: 20px to 60px
+        this.size = Math.random() * ANIMATION_CONSTANTS.TRIANGLE_GRID.MAX_SIZE + ANIMATION_CONSTANTS.TRIANGLE_GRID.MIN_SIZE
         this.rotation = Math.random() * Math.PI * 2
         this.speed = Math.random() * 0.5 + 0.1
-        this.opacity = Math.random() * 0.5 + 0.15 // More visible opacity
+        this.opacity = Math.random() * ANIMATION_CONSTANTS.TRIANGLE_GRID.OPACITY_VARIANCE + ANIMATION_CONSTANTS.TRIANGLE_GRID.OPACITY_BASE
       }
 
       update() {

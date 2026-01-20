@@ -11,6 +11,11 @@ import { Order, SquareClient } from 'square';
 /**
  * Fetch orders from Square.
  */
+const SQUARE_API_LIMIT = 1000;
+
+/**
+ * Fetch orders from Square.
+ */
 export async function fetchOrdersFromSquare(
   client: SquareClient,
   locationId: string,
@@ -50,7 +55,7 @@ export async function fetchOrdersFromSquare(
         },
       },
     },
-    limit: 1000, // Square API limit
+    limit: SQUARE_API_LIMIT,
   });
 
   if (!searchResponse.result?.orders) {

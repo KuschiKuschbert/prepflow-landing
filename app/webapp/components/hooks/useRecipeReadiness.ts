@@ -19,8 +19,34 @@ export function useRecipeReadiness() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const fetchReadinessData = async () => {
+    try {
+      const response = await fetch('/api/dashboard/recipe-readiness');
+
+      if (!response.ok) {
+        let errorMessage = 'Failed to fetch recipe readiness';
+        try {
+          const errorResult = await response.json();
+          errorMessage = errorResult.message || errorResult.error || errorMessage;
+        } catch {
+          errorMessage = response.statusText || `HTTP ${response.status}`;
+        }
+        throw new Error(errorMessage);
+      }
+
+      const result = await response.json();
+      if (result.success && result.data) {
+        return result.data;
+      } else {
+        throw new Error(result.message || 'Invalid response format');
+      }
+    } catch (err) {
+      throw err;
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
+    const init = async () => {
       // Check cache first
       const cached = getCachedData<RecipeReadinessData>('dashboard_recipe_readiness');
       if (cached) {
@@ -29,26 +55,9 @@ export function useRecipeReadiness() {
       }
 
       try {
-        const response = await fetch('/api/dashboard/recipe-readiness');
-
-        if (!response.ok) {
-          let errorMessage = 'Failed to fetch recipe readiness';
-          try {
-            const errorResult = await response.json();
-            errorMessage = errorResult.message || errorResult.error || errorMessage;
-          } catch {
-            errorMessage = response.statusText || `HTTP ${response.status}`;
-          }
-          throw new Error(errorMessage);
-        }
-
-        const result = await response.json();
-        if (result.success && result.data) {
-          setData(result.data);
-          cacheData('dashboard_recipe_readiness', result.data);
-        } else {
-          throw new Error(result.message || 'Invalid response format');
-        }
+        const result = await fetchReadinessData();
+        setData(result);
+        cacheData('dashboard_recipe_readiness', result);
       } catch (err) {
         logger.error('Error fetching recipe readiness:', err);
         setError(err instanceof Error ? err.message : 'Failed to fetch recipe readiness');
@@ -57,22 +66,16 @@ export function useRecipeReadiness() {
       }
     };
 
-    fetchData();
+    init();
   }, []);
 
   const refetch = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/dashboard/recipe-readiness');
-      if (!response.ok) {
-        throw new Error('Failed to fetch recipe readiness');
-      }
-      const result = await response.json();
-      if (result.success && result.data) {
-        setData(result.data);
-        cacheData('dashboard_recipe_readiness', result.data);
-      }
+      const result = await fetchReadinessData();
+      setData(result);
+      cacheData('dashboard_recipe_readiness', result);
     } catch (err) {
       logger.error('[useRecipeReadiness.ts] Error in catch block:', {
         error: err instanceof Error ? err.message : String(err),

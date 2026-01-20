@@ -3,22 +3,15 @@ import { logger } from '@/lib/logger';
 import { PostgrestError } from '@supabase/supabase-js';
 import { MenuItem } from '../../helpers/schemas';
 import { detectMissingColumns } from './errorDetection/detectMissingColumns';
+import { handleDietaryFallback } from './fetchMenuItemsWithFallback/helpers/handleDietaryFallback';
 import { handlePricingFallback } from './fetchMenuItemsWithFallback/helpers/handlePricingFallback';
 import { handleUltimateFallback } from './fetchMenuItemsWithFallback/helpers/handleUltimateFallback';
 import { logDetailedError } from './fetchMenuWithItems.helpers';
 import {
-  buildFullQuery,
-  buildMinimalQuery,
-  buildQueryWithoutDescription,
-  buildQueryWithoutDietary,
+    buildFullQuery,
+    buildMinimalQuery
 } from './queryBuilders/menuItemQueries';
-
-export interface FetchResult {
-  items: Partial<MenuItem>[];
-  pricingError: PostgrestError | null;
-  dietaryError: PostgrestError | null;
-  descriptionError: PostgrestError | null;
-}
+import { FetchResult } from './types';
 
 /**
  * Fetches menu items with progressive fallback for missing columns
@@ -50,58 +43,7 @@ export async function fetchMenuItemsWithFallback(menuId: string): Promise<FetchR
 
   // Try without dietary columns
   if (errorInfo.isMissingDietary) {
-    const dietaryError = allColumnsError as PostgrestError;
-    logger.warn('[Menus API] Dietary/allergen columns not found, trying without them:', {
-      error: (allColumnsError as PostgrestError)?.message,
-      context: { endpoint: '/api/menus/[id]', operation: 'GET', menuId },
-    });
-
-    const { data: itemsWithoutDietary, error: noDietaryError } =
-      await buildQueryWithoutDietary(menuId);
-
-    if (noDietaryError) {
-      const dietaryFallbackInfo = detectMissingColumns(noDietaryError);
-      if (dietaryFallbackInfo.isMissingDescription) {
-        const descriptionError = noDietaryError as PostgrestError;
-        logger.warn('[Menus API] Description column also not found, trying without it:', {
-          error: noDietaryError.message,
-          context: { endpoint: '/api/menus/[id]', operation: 'GET', menuId },
-        });
-
-        const { data: itemsWithoutDescription, error: noDescriptionError } =
-          await buildQueryWithoutDescription(menuId);
-
-        if (noDescriptionError) {
-          logDetailedError(
-            noDescriptionError,
-            'Database error fetching menu items (no description fallback failed)',
-            menuId,
-          );
-          throw ApiErrorHandler.fromSupabaseError(noDescriptionError, 500);
-        }
-
-        return {
-          items: (itemsWithoutDescription || []) as Partial<MenuItem>[],
-          pricingError: null,
-          dietaryError,
-          descriptionError,
-        };
-      } else {
-        logDetailedError(
-          noDietaryError,
-          'Database error fetching menu items (no dietary fallback failed)',
-          menuId,
-        );
-        throw ApiErrorHandler.fromSupabaseError(noDietaryError, 500);
-      }
-    } else {
-      return {
-        items: (itemsWithoutDietary || []) as Partial<MenuItem>[],
-        pricingError: null,
-        dietaryError,
-        descriptionError: null,
-      };
-    }
+    return handleDietaryFallback(allColumnsError as PostgrestError, menuId);
   }
 
   // Try minimal query as last resort

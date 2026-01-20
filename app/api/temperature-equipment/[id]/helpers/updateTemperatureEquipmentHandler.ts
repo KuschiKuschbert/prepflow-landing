@@ -87,7 +87,17 @@ export async function handleUpdateTemperatureEquipment(
       });
     }
 
-    const updateData: Record<string, any> = {
+    interface EquipmentUpdateData {
+      updated_at: string;
+      name?: string;
+      equipment_type?: string;
+      location?: string | null;
+      min_temp_celsius?: number | null;
+      max_temp_celsius?: number | null;
+      is_active?: boolean;
+    }
+
+    const updateData: EquipmentUpdateData = {
       updated_at: new Date().toISOString(),
     };
 

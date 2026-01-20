@@ -8,12 +8,7 @@ import type { ReportData } from '../report-types';
 
 export function generateWasteManagement(waste: ReportData['waste_management']): string {
   if (!waste || waste.total_logs === 0) {
-    return `
-      <div class="section">
-        <div class="section-title">Waste Management</div>
-        <p>No waste management logs found for the selected period.</p>
-      </div>
-    `;
+    return renderEmptyState();
   }
 
   return `
@@ -21,8 +16,25 @@ export function generateWasteManagement(waste: ReportData['waste_management']): 
       <div class="section-title">Waste Management Logs</div>
       <p><strong>Total Logs:</strong> ${waste.total_logs}</p>
       <p><strong>By Type:</strong></p>
-      <ul style="margin: 10px 0 0 20px;">
-        ${Object.entries(waste.by_type)
+      ${renderWasteByType(waste.by_type)}
+      ${renderWasteTable(waste.logs)}
+    </div>
+  `;
+}
+
+function renderEmptyState(): string {
+  return `
+      <div class="section">
+        <div class="section-title">Waste Management</div>
+        <p>No waste management logs found for the selected period.</p>
+      </div>
+    `;
+}
+
+function renderWasteByType(byType: Record<string, number>): string {
+  return `
+    <ul style="margin: 10px 0 0 20px;">
+        ${Object.entries(byType)
           .map(
             ([type, count]) => `
           <li>${type}: ${count}</li>
@@ -30,7 +42,14 @@ export function generateWasteManagement(waste: ReportData['waste_management']): 
           )
           .join('')}
       </ul>
-      <table>
+  `;
+}
+
+type WasteLog = NonNullable<ReportData['waste_management']>['logs'][number];
+
+function renderWasteTable(logs: WasteLog[]): string {
+  return `
+    <table>
         <thead>
           <tr>
             <th>Date</th>
@@ -43,7 +62,7 @@ export function generateWasteManagement(waste: ReportData['waste_management']): 
           </tr>
         </thead>
         <tbody>
-          ${waste.logs
+          ${logs
             .slice(0, 50)
             .map(
               log => `
@@ -61,6 +80,5 @@ export function generateWasteManagement(waste: ReportData['waste_management']): 
             .join('')}
         </tbody>
       </table>
-    </div>
   `;
 }

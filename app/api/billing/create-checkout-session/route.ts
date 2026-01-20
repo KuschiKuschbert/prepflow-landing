@@ -1,6 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { resolvePriceIdFromTier } from '@/lib/billing';
+import { APP_BASE_URL } from '@/lib/constants';
 import { logger } from '@/lib/logger';
 import { getStripe } from '@/lib/stripe';
 import { NextRequest, NextResponse } from 'next/server';
@@ -83,8 +84,7 @@ export async function POST(req: NextRequest) {
       return 'business'; // Default to business for other prices
     })();
 
-    const origin =
-      req.headers.get('origin') || process.env.AUTH0_BASE_URL || 'http://localhost:3000';
+    const origin = req.headers.get('origin') || APP_BASE_URL;
 
     const checkout = await stripe.checkout.sessions.create({
       mode: 'subscription',

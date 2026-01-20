@@ -2,11 +2,11 @@
  * Authentication helpers for CurbOS public token endpoint
  */
 
-import { NextRequest } from 'next/server';
-import { getUserFromRequest } from '@/lib/auth0-api-helpers';
-import { isEmailAllowed } from '@/lib/allowlist';
 import { isAdmin as checkUserAdminRole } from '@/lib/admin-utils';
+import { isEmailAllowed } from '@/lib/allowlist';
+import { getUserFromRequest } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
+import { NextRequest } from 'next/server';
 
 interface AuthResult {
   targetEmail: string | null;
@@ -22,26 +22,36 @@ export async function getTargetEmail(req: NextRequest): Promise<AuthResult> {
   let isAdminBypass = false;
 
   if (!targetEmail) {
-    try {
-      const user = await getUserFromRequest(req);
-      if (user?.email) {
-        const isEmailInAllowlist = isEmailAllowed(user.email);
-        const hasAdminRole = checkUserAdminRole(user);
-        if (isEmailInAllowlist || hasAdminRole) {
-          targetEmail = user.email;
-          isAdminBypass = true;
-          logger.dev('[API /curbos/public-token/curbos] Admin bypass granted via internal check:', {
-            email: targetEmail,
-          });
-        }
-      }
-    } catch (adminError) {
-      logger.warn(
-        '[API /curbos/public-token/curbos] Error checking admin status internally:',
-        adminError,
-      );
+    const internalEmail = await checkInternalAdminAccess(req);
+    if (internalEmail) {
+      targetEmail = internalEmail;
+      isAdminBypass = true;
     }
   }
 
   return { targetEmail, isAdminBypass };
+}
+
+async function checkInternalAdminAccess(req: NextRequest): Promise<string | null> {
+  try {
+    const user = await getUserFromRequest(req);
+    if (user?.email) {
+      const isEmailInAllowlist = isEmailAllowed(user.email);
+      const hasAdminRole = checkUserAdminRole(user);
+      if (isEmailInAllowlist || hasAdminRole) {
+        logger.dev('[API /curbos/public-token/curbos] Admin bypass granted via internal check:', {
+          email: user.email,
+        });
+        return user.email;
+      }
+    }
+    return null;
+  } catch (adminError) {
+    logger.warn(
+      '[API /curbos/public-token/curbos] Error checking admin status internally:',
+      adminError,
+    );
+    return null;
+  }
+
 }

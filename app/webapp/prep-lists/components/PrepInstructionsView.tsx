@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { ChevronDown, ChevronUp, ChefHat } from 'lucide-react';
+import { ChefHat, ChevronDown, ChevronUp } from 'lucide-react';
+import { useState } from 'react';
 import type { PrepInstructionItem } from '../types';
 
 interface PrepInstructionsViewProps {
@@ -23,11 +23,17 @@ export function PrepInstructionsView({ prepInstructions }: PrepInstructionsViewP
           {prepInstructions.length}
         </span>
       </div>
-      <div className="space-y-3">
-        {prepInstructions.map((instruction, index) => (
-          <PrepInstructionCard key={index} instruction={instruction} />
-        ))}
-      </div>
+      <PrepInstructionList instructions={prepInstructions} />
+    </div>
+  );
+}
+
+function PrepInstructionList({ instructions }: { instructions: PrepInstructionItem[] }) {
+  return (
+    <div className="space-y-3">
+      {instructions.map((instruction, index) => (
+        <PrepInstructionCard key={index} instruction={instruction} />
+      ))}
     </div>
   );
 }

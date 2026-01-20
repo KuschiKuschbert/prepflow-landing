@@ -1,15 +1,9 @@
-/**
- * Interactive demo component.
- * Overlays highlights and interactions on actual UI elements.
- * Supports element highlighting, click-through simulation, and action instructions.
- */
-
-'use client';
-
-import { useEffect, useRef, useState, useCallback } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { MousePointerClick, Keyboard, Move } from 'lucide-react';
+import { Keyboard, MousePointerClick, Move } from 'lucide-react';
+import { useState } from 'react';
 import type { InteractiveContent } from '../../data/guide-types';
+import { useActionSimulation } from './hooks/useActionSimulation';
+import { useOverlayPosition } from './hooks/useOverlayPosition';
 
 interface InteractiveDemoProps {
   content: InteractiveContent;
@@ -17,78 +11,9 @@ interface InteractiveDemoProps {
 }
 
 export function InteractiveDemo({ content, className = '' }: InteractiveDemoProps) {
-  const [highlighted, setHighlighted] = useState(false);
-  const [elementFound, setElementFound] = useState(false);
+  const { overlayRef, highlighted, elementFound } = useOverlayPosition(content.targetSelector);
+  const { simulateAction } = useActionSimulation(content);
   const [currentActionIndex, setCurrentActionIndex] = useState(0);
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const updatePositionRef = useRef<(() => void) | null>(null);
-
-  const updateOverlayPosition = useCallback(() => {
-    const element = document.querySelector(content.targetSelector);
-    const overlay = overlayRef.current;
-
-    if (!element || !overlay) {
-      setElementFound(false);
-      setHighlighted(false);
-      return;
-    }
-
-    const rect = element.getBoundingClientRect();
-    const scrollX = window.scrollX || window.pageXOffset;
-    const scrollY = window.scrollY || window.pageYOffset;
-
-    // Position overlay over the target element
-    overlay.style.position = 'absolute';
-    overlay.style.left = `${rect.left + scrollX}px`;
-    overlay.style.top = `${rect.top + scrollY}px`;
-    overlay.style.width = `${rect.width}px`;
-    overlay.style.height = `${rect.height}px`;
-    overlay.style.pointerEvents = 'none';
-    overlay.style.zIndex = '9999';
-
-    setElementFound(true);
-    setHighlighted(true);
-  }, [content.targetSelector]);
-
-  useEffect(() => {
-    updatePositionRef.current = updateOverlayPosition;
-    updateOverlayPosition();
-
-    // Update position on scroll and resize
-    const handleUpdate = () => {
-      updateOverlayPosition();
-    };
-
-    window.addEventListener('scroll', handleUpdate, true);
-    window.addEventListener('resize', handleUpdate);
-
-    // Use IntersectionObserver to detect when element is visible
-    const element = document.querySelector(content.targetSelector);
-    if (element) {
-      const observer = new IntersectionObserver(
-        entries => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              handleUpdate();
-            }
-          });
-        },
-        { threshold: 0.1 },
-      );
-      observer.observe(element);
-
-      return () => {
-        window.removeEventListener('scroll', handleUpdate, true);
-        window.removeEventListener('resize', handleUpdate);
-        observer.disconnect();
-      };
-    }
-
-    return () => {
-      window.removeEventListener('scroll', handleUpdate, true);
-      window.removeEventListener('resize', handleUpdate);
-    };
-  }, [content.targetSelector, updateOverlayPosition]);
 
   const getHighlightClass = () => {
     switch (content.highlightType) {
@@ -113,37 +38,6 @@ export function InteractiveDemo({ content, className = '' }: InteractiveDemoProp
         return Move;
     }
   };
-
-  const simulateAction = useCallback(
-    (actionIndex: number) => {
-      const action = content.actions?.[actionIndex];
-      if (!action) return;
-
-      const targetElement = document.querySelector(action.target);
-      if (!targetElement) return;
-
-      switch (action.type) {
-        case 'click':
-          (targetElement as HTMLElement).click();
-          break;
-        case 'type':
-          if (
-            targetElement instanceof HTMLInputElement ||
-            targetElement instanceof HTMLTextAreaElement
-          ) {
-            targetElement.focus();
-            targetElement.value = action.value || '';
-            targetElement.dispatchEvent(new Event('input', { bubbles: true }));
-            targetElement.dispatchEvent(new Event('change', { bubbles: true }));
-          }
-          break;
-        case 'scroll':
-          targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          break;
-      }
-    },
-    [content.actions],
-  );
 
   const handleActionClick = (actionIndex: number) => {
     simulateAction(actionIndex);

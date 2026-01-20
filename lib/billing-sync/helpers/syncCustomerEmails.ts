@@ -1,6 +1,7 @@
+import { logger } from '@/lib/logger';
 import { getStripe } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
+import type Stripe from 'stripe';
 
 /**
  * Sync Stripe customer emails with database.
@@ -33,42 +34,8 @@ export async function syncCustomerEmails(limit: number = 100): Promise<{
 
     for (const customer of customers.data) {
       try {
-        if (!customer.email) continue;
-
-        // Check if mapping exists
-        const { data: existing } = await supabaseAdmin
-          .from('billing_customers')
-          .select('user_email')
-          .eq('stripe_customer_id', customer.id)
-          .maybeSingle();
-
-        if (!existing) {
-          // Create mapping
-          await supabaseAdmin.from('billing_customers').upsert(
-            {
-              user_email: customer.email,
-              stripe_customer_id: customer.id,
-            },
-            { onConflict: 'stripe_customer_id' },
-          );
-          synced++;
-          logger.dev('[Billing Sync] Created customer mapping:', {
-            email: customer.email,
-            customerId: customer.id,
-          });
-        } else if (existing.user_email !== customer.email) {
-          // Update mapping if email changed
-          await supabaseAdmin
-            .from('billing_customers')
-            .update({ user_email: customer.email })
-            .eq('stripe_customer_id', customer.id);
-          synced++;
-          logger.dev('[Billing Sync] Updated customer mapping:', {
-            oldEmail: existing.user_email,
-            newEmail: customer.email,
-            customerId: customer.id,
-          });
-        }
+        const syncedCount = await syncSingleCustomer(customer);
+        synced += syncedCount;
       } catch (error) {
         errors++;
         logger.error('[Billing Sync] Error syncing customer:', {
@@ -86,4 +53,45 @@ export async function syncCustomerEmails(limit: number = 100): Promise<{
     });
     return { synced, errors: errors + 1 };
   }
+}
+
+async function syncSingleCustomer(customer: Stripe.Customer): Promise<number> {
+  if (!customer.email || customer.deleted) return 0;
+  if (!supabaseAdmin) throw new Error('Supabase not available');
+
+  // Check if mapping exists
+  const { data: existing } = await supabaseAdmin
+    .from('billing_customers')
+    .select('user_email')
+    .eq('stripe_customer_id', customer.id)
+    .maybeSingle();
+
+  if (!existing) {
+    // Create mapping
+    await supabaseAdmin.from('billing_customers').upsert(
+      {
+        user_email: customer.email,
+        stripe_customer_id: customer.id,
+      },
+      { onConflict: 'stripe_customer_id' },
+    );
+    logger.dev('[Billing Sync] Created customer mapping:', {
+      email: customer.email,
+      customerId: customer.id,
+    });
+    return 1;
+  } else if (existing.user_email !== customer.email) {
+    // Update mapping if email changed
+    await supabaseAdmin
+      .from('billing_customers')
+      .update({ user_email: customer.email })
+      .eq('stripe_customer_id', customer.id);
+    logger.dev('[Billing Sync] Updated customer mapping:', {
+      oldEmail: existing.user_email,
+      newEmail: customer.email,
+      customerId: customer.id,
+    });
+    return 1;
+  }
+  return 0;
 }

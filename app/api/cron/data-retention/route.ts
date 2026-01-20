@@ -1,8 +1,8 @@
-import { logger } from '@/lib/logger';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { processAccountDeletions } from '@/lib/data-retention/cleanup';
+import { logger } from '@/lib/logger';
 import { processPendingBreachNotifications } from '@/lib/security/breach-notification';
 import { NextRequest, NextResponse } from 'next/server';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 
 /**
  * GET /api/cron/data-retention
@@ -63,15 +63,17 @@ export async function GET(req: NextRequest) {
       context: { endpoint: '/api/cron/data-retention', method: 'GET' },
     });
 
+    const errorMessage =
+      process.env.NODE_ENV === 'development'
+        ? error instanceof Error
+          ? error.message
+          : 'Unknown error'
+        : 'Internal server error';
+
     return NextResponse.json(
       {
         success: false,
-        error:
-          process.env.NODE_ENV === 'development'
-            ? error instanceof Error
-              ? error.message
-              : 'Unknown error'
-            : 'Internal server error',
+        error: errorMessage,
       },
       { status: 500 },
     );

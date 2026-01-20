@@ -1,4 +1,5 @@
 import type { BackupData } from '../../types';
+import { formatSQLValue } from './formatSQLValue';
 
 /**
  * Convert backup data to SQL format.
@@ -36,27 +37,7 @@ export function convertToSQL(backupData: BackupData): string {
       const values = batch.map(record => {
         const rowValues = columns.map(col => {
           const value = record[col];
-          if (value === null || value === undefined) {
-            return 'NULL';
-          }
-          if (typeof value === 'string') {
-            return `'${value.replace(/'/g, "''")}'`; // Escape single quotes
-          }
-          if (typeof value === 'boolean') {
-            return value ? 'TRUE' : 'FALSE';
-          }
-          if (value instanceof Date) {
-            return `'${value.toISOString()}'`;
-          }
-          if (typeof value === 'number') {
-            return String(value);
-          }
-          if (typeof value === 'object') {
-             const json = JSON.stringify(value);
-             return `'${json.replace(/'/g, "''")}'`;
-          }
-          // Safe fallback for anything else
-          return `'${String(value).replace(/'/g, "''")}'`;
+          return formatSQLValue(value);
         });
         return `(${rowValues.join(', ')})`;
       });

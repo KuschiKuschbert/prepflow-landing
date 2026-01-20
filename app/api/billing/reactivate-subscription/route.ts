@@ -5,7 +5,11 @@ import { logger } from '@/lib/logger';
 import { getStripe } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import type Stripe from 'stripe';
+import {
+    getSubscriptionIdFromDb,
+    reactivateStripeSubscription,
+    updateUserSubscriptionInDb,
+} from './helpers';
 
 /**
  * POST /api/billing/reactivate-subscription
@@ -30,6 +34,14 @@ export async function POST(req: NextRequest) {
     }
 
     const userEmail = user.email as string;
+
+    if (!userEmail) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('User email required', 'UNAUTHORIZED', 401),
+        { status: 401 },
+      );
+    }
+
     if (!supabaseAdmin) {
       return NextResponse.json(
         ApiErrorHandler.createError('Database not available', 'DATABASE_ERROR', 500),
@@ -37,87 +49,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { data: userData, error: userError } = await supabaseAdmin
-      .from('users')
-      .select('stripe_subscription_id')
-      .eq('email', userEmail)
-      .single();
-
-    if (userError || !userData?.stripe_subscription_id) {
+    // 1. Get Subscription ID
+    const subscriptionId = await getSubscriptionIdFromDb(userEmail, supabaseAdmin);
+    if (!subscriptionId) {
       return NextResponse.json(
         ApiErrorHandler.createError('No subscription found', 'SUBSCRIPTION_NOT_FOUND', 404),
         { status: 404 },
       );
     }
 
-    const subscriptionId = userData.stripe_subscription_id;
-    let subscription: Stripe.Subscription;
+    // 2. Reactivate in Stripe
+    const subscription = await reactivateStripeSubscription(subscriptionId, stripe);
 
-    try {
-      subscription = await stripe.subscriptions.retrieve(subscriptionId);
-    } catch (error: unknown) {
-      if ((error as { code?: string })?.code === 'resource_missing') {
-        return NextResponse.json(
-          ApiErrorHandler.createError(
-            'Subscription missing in Stripe',
-            'SUBSCRIPTION_NOT_FOUND',
-            404,
-          ),
-          { status: 404 },
-        );
-      }
-      throw error;
-    }
+    // 3. Update DB
+    await updateUserSubscriptionInDb(userEmail, subscription, supabaseAdmin);
 
-    if (subscription.status === 'canceled' && !subscription.cancel_at_period_end) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          'Cannot reactivate permanently cancelled sub',
-          'BAD_REQUEST',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    if (subscription.cancel_at_period_end) {
-      subscription = await stripe.subscriptions.update(subscriptionId, {
-        cancel_at_period_end: false,
-      });
-    }
-
-    if (subscription.status !== 'active') {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          `Cannot reactivate sub in ${subscription.status} state`,
-          'BAD_REQUEST',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const activeSub = subscription as unknown as Stripe.Subscription & {
-      current_period_end: number;
-      current_period_start: number;
-    };
-    const expiresAt = activeSub.current_period_end
-      ? new Date(activeSub.current_period_end * 1000)
-      : null;
-    const currentPeriodStart = activeSub.current_period_start
-      ? new Date(activeSub.current_period_start * 1000)
-      : null;
-
-    await supabaseAdmin
-      .from('users')
-      .update({
-        subscription_status: 'active',
-        subscription_cancel_at_period_end: false,
-        subscription_expires: expiresAt?.toISOString() || null,
-        subscription_current_period_start: currentPeriodStart?.toISOString() || null,
-      })
-      .eq('email', userEmail);
-
+    // 4. Cache Clear
     clearTierCache(userEmail);
 
     return NextResponse.json({
@@ -126,10 +73,19 @@ export async function POST(req: NextRequest) {
       subscription: {
         id: subscription.id,
         status: subscription.status,
-        expires_at: expiresAt?.toISOString(),
+        expires_at: new Date((subscription as any).current_period_end * 1000).toISOString(),
       },
     });
   } catch (error) {
+    if (error instanceof NextResponse) return error;
+    // Handle custom errors thrown by helpers (if they return formatted objects, check structure)
+    // But helpers currently throw Error or ApiErrorHandler objects.
+    // Let's safe check:
+    const err = error as any;
+    if (err.statusCode && err.code) {
+      return NextResponse.json(err, { status: err.statusCode });
+    }
+
     logger.error('[Billing API] Reactivation error:', error);
     return NextResponse.json(
       ApiErrorHandler.createError('Failed to reactivate subscription', 'STRIPE_ERROR', 500),

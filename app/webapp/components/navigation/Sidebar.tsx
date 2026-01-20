@@ -1,11 +1,9 @@
 'use client';
 
 import LanguageSwitcher from '@/components/LanguageSwitcher';
-import { prefersReducedMotion } from '@/lib/arcadeGuards';
-import { prefetchRoute } from '@/lib/cache/prefetch-config';
-import Link from 'next/link';
 import React, { RefObject, useCallback } from 'react';
 import { LogoutButton } from '../LogoutButton';
+import { SidebarLink } from './SidebarLink';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -164,63 +162,18 @@ export function Sidebar({ isOpen, sidebarRef, grouped, isActive, onClose }: Side
                 {category === 'other' && 'Other'}
               </h3>
               <div className="space-y-1">
-                {items.map((item, index) => {
-                  const reducedMotion = prefersReducedMotion();
-                  return (
-                    <Link
-                      aria-current={isActive(item.href) ? 'page' : undefined}
-                      key={item.href}
-                      href={item.href}
-                      onClick={onClose}
-                      onMouseEnter={() => {
-                        // Prefetch API endpoints when hovering over any link
-                        prefetchRoute(item.href);
-                      }}
-                      className={cn(
-                        'group',
-                        'flex',
-                        'items-center',
-                        'space-x-4',
-                        'rounded-lg',
-                        'px-4',
-                        'py-3',
-                        'min-h-[44px]',
-                        'transition-all',
-                        'duration-200',
-                        isActive(item.href)
-                          ? 'border border-[var(--primary)]/30 bg-[var(--primary)]/10'
-                          : 'hover:scale-[1.02] hover:bg-[var(--muted)]/50',
-                      )}
-                      style={{
-                        transitionTimingFunction: 'var(--easing-standard)',
-                        animation: reducedMotion
-                          ? 'none'
-                          : `fadeInUp 0.3s var(--easing-standard) forwards`,
-                        animationDelay: reducedMotion ? '0ms' : `${index * 20}ms`,
-                        opacity: reducedMotion ? 1 : 0,
-                      }}
-                    >
-                      <span
-                        className={cn(
-                          isActive(item.href) ? item.color : `text-[var(--foreground-muted)]`,
-                        )}
-                      >
-                        {item.icon}
-                      </span>
-                      <span
-                        className={cn(
-                          'text-sm',
-                          'font-medium',
-                          isActive(item.href)
-                            ? 'text-[var(--foreground)]'
-                            : 'text-[var(--foreground)]/80 group-hover:text-[var(--foreground)]',
-                        )}
-                      >
-                        {item.label}
-                      </span>
-                    </Link>
-                  );
-                })}
+                {items.map((item, index) => (
+                  <SidebarLink
+                    key={item.href}
+                    href={item.href}
+                    label={item.label}
+                    icon={item.icon}
+                    color={item.color}
+                    isActive={isActive(item.href)}
+                    onClose={onClose}
+                    index={index}
+                  />
+                ))}
               </div>
             </div>
           ))}

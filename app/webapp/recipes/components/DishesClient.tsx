@@ -1,216 +1,82 @@
 'use client';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
-import { formatRecipeName } from '@/lib/text-utils';
-import { useCallback, useEffect, useMemo } from 'react';
-import { useAIInstructions } from '../hooks/useAIInstructions';
-import { useRecipeIngredients } from '../hooks/useRecipeIngredients';
-import { useRecipePricing } from '../hooks/useRecipePricing';
 import { DishesBulkActionsSection } from './DishesBulkActionsSection';
+import { ErrorBanner } from './DishesClient/components/ErrorBanner';
+import { DishesEditorView } from './DishesEditorView';
 import { DishesListViewSection } from './DishesListViewSection';
 import { DishesModalsSection } from './DishesModalsSection';
 import { DishesViewModeToggle } from './DishesViewModeToggle';
-import { DishesEditorView } from './DishesEditorView';
-import { ErrorBanner } from './DishesClient/components/ErrorBanner';
-import { useDishesClientData } from './hooks/useDishesClientData';
-import { useDishesClientViewMode } from './hooks/useDishesClientViewMode';
-import { useDishesClientPreview } from './hooks/useDishesClientPreview';
-import { useDishesClientHandlers } from './hooks/useDishesClientHandlers';
-import { useDishesClientSelection } from './hooks/useDishesClientSelection';
-import { useDishesClientPagination } from './hooks/useDishesClientPagination';
-import { useDishesClientRecipePricing } from './hooks/useDishesClientRecipePricing';
-import { useDishesSidePanelsHandlers } from './hooks/useDishesSidePanelsHandlers';
-import { useDishesClientBulkActions } from './DishesClient/hooks/useDishesClientBulkActions';
-import { useSelectionMode } from '@/app/webapp/ingredients/hooks/useSelectionMode';
-import { createRecipeImagesGeneratedHandler } from './DishesClient/helpers/handleRecipeImagesGenerated';
+import { useDishesClientController } from './hooks/useDishesClientController';
 export default function DishesClient() {
-  const { viewMode, setViewMode } = useDishesClientViewMode();
-  const { recipePrices, updateVisibleRecipePrices } = useRecipePricing();
   const {
-    dishes,
-    recipes,
     loading,
     error,
-    dishCosts,
-    setDishes,
-    setRecipes,
-    setError,
-    fetchItems,
-  } = useDishesClientData();
-  const { fetchRecipeIngredients, fetchBatchRecipeIngredients } = useRecipeIngredients(setError);
-  const capitalizeRecipeName = formatRecipeName;
-  const { generateAIInstructions } = useAIInstructions();
-  const previewState = useDishesClientPreview({
-    fetchRecipeIngredients,
-    generateAIInstructions,
-    setError,
-  });
-  const {
-    selectedRecipeForPreview,
-    setSelectedRecipeForPreview,
-    recipeIngredients,
-    setRecipeIngredients,
-    showRecipePanel,
-    setShowRecipePanel,
-    previewYield,
-    selectedDishForPreview,
-    setSelectedDishForPreview,
-    showDishPanel,
-    setShowDishPanel,
-    editingDish,
-    setEditingDish,
-    showDishEditDrawer,
-    setShowDishEditDrawer,
-    editingRecipe,
-    setEditingRecipe,
+    viewMode,
+    setViewMode,
+    isSelectionMode,
+    selectedItems,
+    selectedRecipeCount,
+    handleExitSelectionMode,
+    bulkActionLoading,
+    showBulkMenu,
+    setShowBulkMenu,
+    handleBulkDelete,
+    handleBulkShare,
+    handleBulkAddToMenu,
+    showBulkDeleteConfirm,
+    confirmBulkDelete,
+    cancelBulkDelete,
+    showMenuDialog,
+    setShowMenuDialog,
+    menus,
+    loadingMenus,
+    selectedItemTypes,
+    recipes,
+    dishes,
+    capitalizeRecipeName,
+    handleSelectMenu,
+    handleCreateNewMenu,
     editingItem,
     setEditingItem,
-    highlightingRowId,
-    setHighlightingRowId,
-    highlightingRowType,
-    setHighlightingRowType,
-    handlePreviewDish,
-    handlePreviewRecipe,
-  } = previewState;
-  const {
-    selectedItems,
-    isSelectionMode,
-    handleSelectItem,
-    handleSelectAll,
-    handleExitSelectionMode,
-  } = useDishesClientSelection(dishes, recipes);
-  const {
+    editingRecipe,
+    setEditingRecipe,
+    fetchItems,
     allItems,
     paginatedItems,
     paginatedDishesList,
     paginatedRecipesList,
+    dishCosts,
+    recipePrices,
+    highlightingRowId,
+    highlightingRowType,
     filters,
     updateFilters,
-  } = useDishesClientPagination({ dishes, recipes, dishCosts, recipePrices });
-  const {
+    showDishPanel,
+    selectedDishForPreview,
+    showRecipePanel,
+    selectedRecipeForPreview,
+    recipeIngredients,
+    previewYield,
     showDeleteConfirm,
     itemToDelete,
+    showDishEditDrawer,
+    editingDish,
+    sidePanelsHandlers,
+    handleSelectAll,
+    handleSelectItem,
+    handlePreviewDish,
+    handlePreviewRecipe,
     handleEditDish,
     handleEditRecipe,
     handleDeleteDish,
     handleDeleteRecipe,
-    confirmDeleteItem,
-    cancelDeleteItem,
-  } = useDishesClientHandlers({
-    dishes,
-    recipes,
-    viewMode,
-    editingItem,
-    setDishes,
-    setRecipes,
-    setViewMode,
-    setEditingItem,
-    setEditingRecipe,
-    setShowRecipePanel,
-    setSelectedRecipeForPreview,
-    setHighlightingRowId,
-    setHighlightingRowType,
-    setError,
-  });
-  const { startLongPress, cancelLongPress, enterSelectionMode } = useSelectionMode();
-  useEffect(() => {
-    if (viewMode === 'list') {
-      fetchItems();
-      setEditingRecipe(null);
-      setEditingItem(null);
-      setHighlightingRowId(null);
-      setHighlightingRowType(null);
-    }
-  }, [
-    viewMode,
-    fetchItems,
-    setEditingRecipe,
-    setEditingItem,
-    setHighlightingRowId,
-    setHighlightingRowType,
-  ]);
-  useDishesClientRecipePricing({
-    paginatedRecipesList,
-    recipePrices,
-    updateVisibleRecipePrices,
-    fetchRecipeIngredients,
-    fetchBatchRecipeIngredients,
-  });
-  const selectedItemTypes = useMemo(() => {
-    const types = new Map<string, 'recipe' | 'dish'>();
-    dishes.forEach(d => {
-      if (selectedItems.has(d.id)) types.set(d.id, 'dish');
-    });
-    recipes.forEach(r => {
-      if (selectedItems.has(r.id)) types.set(r.id, 'recipe');
-    });
-    return types;
-  }, [dishes, recipes, selectedItems]);
-  const {
-    bulkActionLoading,
-    showBulkMenu,
-    setShowBulkMenu,
-    showBulkDeleteConfirm,
-    setShowBulkDeleteConfirm: _setShowBulkDeleteConfirm,
-    handleBulkDelete,
-    confirmBulkDelete,
-    cancelBulkDelete,
-    handleBulkShare,
-    handleBulkAddToMenu,
-    handleSelectMenu,
-    handleCreateNewMenu,
-    menus,
-    loadingMenus,
-    showMenuDialog,
-    setShowMenuDialog,
-    selectedRecipeIds,
-    selectedDishIds: _selectedDishIds,
-  } = useDishesClientBulkActions({
-    dishes,
-    recipes,
-    selectedItems,
-    selectedItemTypes,
-    setDishes,
-    setRecipes,
-    onClearSelection: handleExitSelectionMode,
-  });
-  const selectedRecipeCount = selectedRecipeIds.length;
-  const handleRecipeImagesGenerated = useCallback(
-    (
-      recipeId: string,
-      images: {
-        classic: string | null;
-        modern: string | null;
-        rustic: string | null;
-        minimalist: string | null;
-      },
-    ) => {
-      const handler = createRecipeImagesGeneratedHandler(
-        setRecipes,
-        selectedRecipeForPreview,
-        setSelectedRecipeForPreview,
-      );
-      return handler(recipeId, images);
-    },
-    [setRecipes, selectedRecipeForPreview, setSelectedRecipeForPreview],
-  );
-  const sidePanelsHandlers = useDishesSidePanelsHandlers({
-    setShowDishPanel,
-    setSelectedDishForPreview,
-    setShowRecipePanel,
-    setSelectedRecipeForPreview,
-    setRecipeIngredients,
-    setShowDishEditDrawer,
-    setEditingDish,
-    handleEditDish,
-    handleDeleteDish,
-    handleEditRecipe,
-    handleDeleteRecipe,
-    confirmDeleteItem,
-    cancelDeleteItem,
-    fetchItems,
-    onRecipeImagesGenerated: handleRecipeImagesGenerated,
-  });
+    startLongPress,
+    cancelLongPress,
+    enterSelectionMode,
+  } = useDishesClientController();
+
   if (loading) return <PageSkeleton />;
+
   return (
     <div>
       <ErrorBanner error={error} />

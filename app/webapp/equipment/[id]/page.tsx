@@ -1,155 +1,34 @@
 'use client';
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { useNotification } from '@/contexts/NotificationContext';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import { ArrowLeft, Thermometer } from 'lucide-react';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { logger } from '@/lib/logger';
-import { useOnTemperatureLogged } from '@/lib/personality/hooks';
-interface TemperatureEquipment {
-  id: string;
-  name: string;
-  equipment_type: string;
-  location: string | null;
-  min_temp_celsius: number | null;
-  max_temp_celsius: number | null;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
+import { useParams } from 'next/navigation';
+import { useState } from 'react';
+import { useEquipmentData } from './hooks/useEquipmentData';
+import { useTemperatureLogSubmit } from './hooks/useTemperatureLogSubmit';
 
-interface TemperatureLog {
-  id: string;
-  equipment_id: string | null;
-  temperature_celsius: number;
-  log_date: string;
-  log_time: string;
-  logged_by: string | null;
-  notes: string | null;
-  created_at: string;
-}
 
 export default function EquipmentPage() {
   const params = useParams();
-  const router = useRouter();
   const { formatDate } = useCountryFormatting();
-  const { showSuccess, showError } = useNotification();
-  const onTemperatureLogged = useOnTemperatureLogged();
   const equipmentId = params.id as string;
 
-  const [equipment, setEquipment] = useState<TemperatureEquipment | null>(null);
-  const [recentLogs, setRecentLogs] = useState<TemperatureLog[]>([]);
-  const [loading, setLoading] = useState(true);
   const [temperature, setTemperature] = useState('');
   const [notes, setNotes] = useState('');
 
-  useEffect(() => {
-    if (!equipmentId) return;
+  const { equipment, recentLogs, setRecentLogs, loading } = useEquipmentData(equipmentId);
 
-    const fetchEquipment = async () => {
-      try {
-        setLoading(true);
-        const [equipmentRes, logsRes] = await Promise.all([
-          fetch('/api/temperature-equipment'),
-          fetch(`/api/temperature-logs?equipment_id=${equipmentId}&limit=5&pageSize=5`),
-        ]);
-
-        if (!equipmentRes.ok || !logsRes.ok) {
-          throw new Error('Failed to fetch equipment data');
-        }
-
-        const equipmentData = await equipmentRes.json();
-        const logsData = await logsRes.json();
-
-        const foundEquipment = equipmentData.data?.find(
-          (eq: TemperatureEquipment) => eq.id === equipmentId,
-        );
-        if (!foundEquipment) {
-          showError('Equipment not found');
-          router.push('/webapp/temperature');
-          return;
-        }
-
-        setEquipment(foundEquipment);
-        setRecentLogs(logsData.data?.items || logsData.data || []);
-      } catch (error) {
-        logger.error('Error fetching equipment:', error);
-        showError('Failed to load equipment details');
-        router.push('/webapp/temperature');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEquipment();
-  }, [equipmentId, router, showError]);
-
-  const handleSubmitTemperature = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!temperature || !equipment) return;
-
-    // Store original state for rollback
-    const originalLogs = [...recentLogs];
-    const tempTemperature = parseFloat(temperature);
-    const tempNotes = notes || null;
-    const tempEquipmentId = equipment.id;
-
-    // Create temporary log for optimistic update
-    const tempId = `temp-${Date.now()}`;
-    const tempLog: TemperatureLog = {
-      id: tempId,
-      equipment_id: tempEquipmentId,
-      temperature_celsius: tempTemperature,
-      log_date: new Date().toISOString().split('T')[0],
-      log_time: new Date().toTimeString().split(' ')[0].substring(0, 5),
-      logged_by: null,
-      notes: tempNotes,
-      created_at: new Date().toISOString(),
-    };
-
-    // Optimistically add to UI immediately (at the top of the list)
-    setRecentLogs(prev => [tempLog, ...prev.slice(0, 4)]); // Keep only top 5
-    setTemperature('');
-    setNotes('');
-
-    // Trigger personality hook for temperature logging
-    onTemperatureLogged();
-
-    try {
-      const response = await fetch('/api/temperature-logs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          equipment_id: tempEquipmentId,
-          temperature_celsius: tempTemperature,
-          notes: tempNotes,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to log temperature');
-      }
-
-      const data = await response.json();
-      if (data.success && data.data) {
-        // Replace temp log with real one from server
-        setRecentLogs(prev => prev.map(log => (log.id === tempId ? data.data : log)));
-        showSuccess('Temperature logged successfully');
-      } else {
-        // Error - revert optimistic update
-        setRecentLogs(originalLogs);
-        showError(data.message || data.error || 'Failed to log temperature');
-      }
-    } catch (error) {
-      // Error - revert optimistic update
-      setRecentLogs(originalLogs);
-      logger.error('Error logging temperature:', error);
-      showError("Couldn't log that temperature, chef. Give it another shot.");
-    }
-  };
+  const { handleSubmitTemperature } = useTemperatureLogSubmit({
+    equipment,
+    recentLogs,
+    setRecentLogs,
+    temperature,
+    setTemperature,
+    notes,
+    setNotes,
+  });
 
   const getTemperatureStatus = (temp: number): { color: string; label: string } => {
     if (!equipment) return { color: 'gray', label: 'Unknown' };

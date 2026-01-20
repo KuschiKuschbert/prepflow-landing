@@ -2,10 +2,10 @@
  * Admin audit logging utilities.
  * Logs all admin actions to admin_audit_logs table for security and compliance.
  */
-import { supabaseAdmin } from './supabase';
-import { logger } from './logger';
-import type { AdminUser } from './admin-auth';
 import { extractRequestMetadata } from './admin-audit/helpers/extractRequestMetadata';
+import type { AdminUser } from './admin-auth';
+import { logger } from './logger';
+import { supabaseAdmin } from './supabase';
 
 export interface AuditLogEntry {
   admin_user_id: string;
@@ -26,7 +26,9 @@ export interface AuditLogEntry {
  */
 export async function logAdminAction(entry: AuditLogEntry): Promise<void> {
   // Run asynchronously to avoid blocking
-  setImmediate(async () => {
+  // Run asynchronously to avoid blocking
+  // Use void operator to explicitly ignore the promise and allow execution in background
+  void (async () => {
     try {
       if (!supabaseAdmin) {
         logger.warn('[Admin Audit] Supabase not available, skipping audit log');
@@ -57,7 +59,7 @@ export async function logAdminAction(entry: AuditLogEntry): Promise<void> {
         action: entry.action,
       });
     }
-  });
+  })();
 }
 
 /**

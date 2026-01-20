@@ -1,18 +1,18 @@
 'use client';
 
-import { useEffect } from 'react';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
-import { useDishBuilder } from '../hooks/useDishBuilder';
-import DishBuilderDragDrop from './DishBuilderDragDrop';
-import DishForm from './DishForm';
-import DishDropZone from './DishDropZone';
-import CostAnalysisSection from './CostAnalysisSection';
-import { QuantityInputModal } from './QuantityInputModal';
-import { useRecipeLoading } from './hooks/useRecipeLoading';
-import { useRecipeExpansion } from './hooks/useRecipeExpansion';
-import { useIngredientHandlers } from './hooks/useIngredientHandlers';
-import { useSaveHandler } from './hooks/useSaveHandler';
+import { useEffect } from 'react';
 import type { Recipe } from '../../cogs/types';
+import { useDishBuilder } from '../hooks/useDishBuilder';
+import CostAnalysisSection from './CostAnalysisSection';
+import DishBuilderDragDrop from './DishBuilderDragDrop';
+import DishDropZone from './DishDropZone';
+import DishForm from './DishForm';
+import { QuantityInputModal } from './QuantityInputModal';
+import { useIngredientHandlers } from './hooks/useIngredientHandlers';
+import { useRecipeExpansion } from './hooks/useRecipeExpansion';
+import { useRecipeLoading } from './hooks/useRecipeLoading';
+import { useDishSave } from './hooks/useSaveHandler';
 
 interface DishBuilderClientProps {
   onSaveSuccess?: () => void;
@@ -92,7 +92,7 @@ export default function DishBuilderClient({
   });
 
   // Save handler
-  const { handleSave } = useSaveHandler({
+  const { handleSave } = useDishSave({
     dishState,
     saveDish,
     setError,

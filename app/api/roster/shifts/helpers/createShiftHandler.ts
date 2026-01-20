@@ -1,25 +1,23 @@
+
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import { validateCreateShiftRequest, validateShiftData } from './requestHelpers';
 import { createShiftSchema } from './schemas';
-import { validateShiftRequest } from './validateShiftRequest';
 
 export async function handleCreateShift(request: NextRequest, supabase: SupabaseClient) {
   try {
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Shifts API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
+    const body = await validateCreateShiftRequest(request);
+
+    if (!body) {
       return NextResponse.json(
         ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
+    // Zod validation first for types and basic constraints
     const zodValidation = createShiftSchema.safeParse(body);
     if (!zodValidation.success) {
       return NextResponse.json(
@@ -32,20 +30,20 @@ export async function handleCreateShift(request: NextRequest, supabase: Supabase
       );
     }
 
-    const validation = validateShiftRequest(zodValidation.data);
-
-    if (!validation.isValid || !validation.data) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validation.error || 'Invalid request data',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
+    // Additional semantic validation
+    const semanticValidation = validateShiftData(body);
+    if (!semanticValidation.isValid) {
+        return NextResponse.json(
+            ApiErrorHandler.createError(
+              semanticValidation.error || 'Invalid request data',
+              'VALIDATION_ERROR',
+              400,
+            ),
+            { status: 400 },
+          );
     }
 
-    const shiftData = validation.data;
+    const shiftData = zodValidation.data;
 
     // Check if employee exists
     const { data: employee, error: employeeError } = await supabase

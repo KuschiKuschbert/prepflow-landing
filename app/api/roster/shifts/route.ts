@@ -11,6 +11,7 @@ import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { buildShiftQuery } from './helpers/buildShiftQuery';
 import { handleCreateShift } from './helpers/createShiftHandler';
+import { parseShiftQueryParams } from './helpers/parseQueryParams';
 
 /**
  * GET /api/roster/shifts
@@ -35,16 +36,7 @@ export async function GET(request: NextRequest) {
     if (error) return error;
     if (!supabase) throw new Error('Unexpected database state');
 
-    const { searchParams } = new URL(request.url);
-    const params = {
-      employee_id: searchParams.get('employee_id') || undefined,
-      status: searchParams.get('status') || 'all',
-      start_date: searchParams.get('start_date') || undefined,
-      end_date: searchParams.get('end_date') || undefined,
-      shift_date: searchParams.get('shift_date') || undefined,
-      page: parseInt(searchParams.get('page') || '1', 10),
-      pageSize: parseInt(searchParams.get('pageSize') || '100', 10),
-    };
+    const params = parseShiftQueryParams(request);
 
     const { data: shifts, error: dbError, count } = await buildShiftQuery(supabase, params);
 

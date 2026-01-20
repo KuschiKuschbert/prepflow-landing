@@ -47,34 +47,10 @@ export async function fetchParLevelWithIngredient(parLevelId: string, ingredient
     });
 
     // If join fails, fetch ingredient separately as fallback
+  // If join fails, fetch ingredient separately as fallback
     if (ingredientId) {
-      try {
-        const { data: ingredientData, error: ingredientError } = await supabaseAdmin
-          .from('ingredients')
-          .select('id, ingredient_name, unit, category')
-          .eq('id', ingredientId)
-          .single();
-
-        if (!ingredientError && ingredientData) {
-          logger.dev('[Par Levels API] Successfully fetched ingredient separately:', {
-            ingredientId,
-            ingredientName: ingredientData.ingredient_name,
-          });
-          // Return the inserted data with manually joined ingredient
-          return {
-            id: parLevelId,
-            ingredient_id: ingredientId,
-            ingredients: ingredientData,
-          };
-        } else {
-          logger.warn('[Par Levels API] Failed to fetch ingredient separately:', {
-            error: ingredientError?.message,
-            ingredientId,
-          });
-        }
-      } catch (fetchError) {
-        logger.error('[Par Levels API] Exception fetching ingredient separately:', fetchError);
-      }
+      const fallbackResult = await fetchIngredientFallback(supabaseAdmin, parLevelId, ingredientId);
+      if (fallbackResult) return fallbackResult;
     }
 
     // If all else fails, return data without ingredient join
@@ -95,14 +71,8 @@ export async function fetchParLevelWithIngredient(parLevelId: string, ingredient
       ingredientId,
     });
 
-    try {
-      const { data: ingredientData, error: ingredientError } = await supabaseAdmin
-        .from('ingredients')
-        .select('id, ingredient_name, unit, category')
-        .eq('id', ingredientId)
-        .single();
-
-      if (!ingredientError && ingredientData) {
+    const ingredientData = await fetchIngredientData(supabaseAdmin, ingredientId);
+    if (ingredientData) {
         logger.dev(
           '[Par Levels API] Successfully fetched ingredient separately (null join case):',
           {
@@ -114,14 +84,49 @@ export async function fetchParLevelWithIngredient(parLevelId: string, ingredient
           ...data,
           ingredients: ingredientData,
         };
-      }
-    } catch (fetchError) {
-      logger.error(
-        '[Par Levels API] Exception fetching ingredient separately (null join case):',
-        fetchError,
-      );
     }
   }
 
   return data;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function fetchIngredientData(supabaseAdmin: any, ingredientId: string) {
+    try {
+        const { data: ingredientData, error: ingredientError } = await supabaseAdmin
+          .from('ingredients')
+          .select('id, ingredient_name, unit, category')
+          .eq('id', ingredientId)
+          .single();
+
+        if (!ingredientError && ingredientData) {
+            return ingredientData;
+        } else {
+             logger.warn('[Par Levels API] Failed to fetch ingredient:', {
+                error: ingredientError?.message,
+                ingredientId,
+            });
+        }
+    } catch (fetchError) {
+        logger.error('[Par Levels API] Exception fetching ingredient:', fetchError);
+    }
+    return null;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function fetchIngredientFallback(supabaseAdmin: any, parLevelId: string, ingredientId: string) {
+    const ingredientData = await fetchIngredientData(supabaseAdmin, ingredientId);
+    if (ingredientData) {
+          logger.dev('[Par Levels API] Successfully fetched ingredient separately:', {
+            ingredientId,
+            ingredientName: ingredientData.ingredient_name,
+          });
+          // Return the inserted data with manually joined ingredient
+          return {
+            id: parLevelId,
+            ingredient_id: ingredientId,
+            ingredients: ingredientData,
+          };
+    }
+    return null;
 }

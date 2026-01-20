@@ -5,13 +5,13 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { PostgrestError } from '@supabase/supabase-js';
-import { MenuItem } from '../../../../types';
 import { detectMissingColumns } from '../../errorDetection/detectMissingColumns';
 import { logDetailedError } from '../../fetchMenuWithItems.helpers';
 import {
-  buildEssentialQuery,
-  buildQueryWithoutRelations,
+    buildEssentialQuery,
+    buildQueryWithoutRelations,
 } from '../../queryBuilders/menuItemQueries';
+import { FetchResult } from '../../types';
 
 /**
  * Handles ultimate fallback scenarios
@@ -29,12 +29,7 @@ export async function handleUltimateFallback(
   pricingError: PostgrestError | null = null,
   dietaryError: PostgrestError | null = null,
   descriptionError: PostgrestError | null = null,
-): Promise<{
-  items: Partial<MenuItem>[];
-  pricingError: PostgrestError | null;
-  dietaryError: PostgrestError | null;
-  descriptionError: PostgrestError | null;
-}> {
+): Promise<FetchResult> {
   logDetailedError(
     error,
     'Database error fetching menu items (minimal query failed), trying without relationships',

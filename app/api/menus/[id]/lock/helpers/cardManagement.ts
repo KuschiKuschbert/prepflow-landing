@@ -4,7 +4,7 @@
 
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { MenuItemData } from './fetchMenuItemData';
+import { MenuItemData } from './types';
 
 /**
  * Fetch existing recipe cards with their data hashes

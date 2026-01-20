@@ -1,12 +1,12 @@
-import { supabase } from '../supabase';
-import {
-  extractSupabaseErrorMessage,
-  formatEntityData,
-  checkEntityExists,
-  type EntityType,
-} from '../autosave-sync-utils';
-import { clearDraft, saveDraft } from '../autosave-storage';
 import { logger } from '@/lib/logger';
+import { clearDraft, saveDraft } from '../autosave-storage';
+import {
+    checkEntityExists,
+    extractSupabaseErrorMessage,
+    formatEntityData,
+    type EntityType,
+} from '../autosave-sync-utils';
+import { supabase } from '../supabase';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 
@@ -24,9 +24,13 @@ export async function syncToDatabase(
 ): Promise<SyncResult> {
   try {
     const isUpdate = entityId !== 'new' && entityId !== null && entityId !== undefined;
+    const dataObj = (typeof data === 'object' && data !== null && !Array.isArray(data))
+      ? (data as Record<string, unknown>)
+      : {};
+
     const formattedData = formatEntityData(
       entityType,
-      (typeof data === 'object' && data !== null ? data : {}) as Record<string, unknown>,
+      dataObj,
     );
     let savedEntityId = entityId;
     if (isUpdate) {

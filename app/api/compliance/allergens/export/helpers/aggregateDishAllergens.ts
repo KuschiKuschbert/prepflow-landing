@@ -3,13 +3,10 @@
  */
 
 import {
-  aggregateDishAllergens,
-  extractAllergenSources,
-  mergeAllergenSources,
+    aggregateDishAllergens
 } from '@/lib/allergens/allergen-aggregation';
-import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { getDishIngredientSources, getDishRecipeSources } from './dataFetchers';
 
 export interface DishWithAllergens {
   id: string;
@@ -62,72 +59,12 @@ export async function aggregateDishAllergensForExport(
           allergens = await aggregateDishAllergens(dish.id);
         }
 
-        // Fetch dish ingredients to get allergen sources
-        if (!supabaseAdmin) {
-          logger.error('[Allergen Export] Supabase admin client not initialized');
-          throw ApiErrorHandler.createError(
-            'Database connection not available',
-            'DATABASE_ERROR',
-            500,
-          );
-        }
-        const { data: dishIngredients, error: dishIngredientsError } = await supabaseAdmin
-          .from('dish_ingredients')
-          .select(
-            `
-            ingredients (
-              id,
-              ingredient_name,
-              allergens
-            )
-          `,
-          )
-          .eq('dish_id', dish.id);
+        const ingredientSources = await getDishIngredientSources(dish.id);
+        Object.assign(allergenSources, ingredientSources);
 
-        if (!dishIngredientsError && dishIngredients) {
-          const dishIngredientList = (dishIngredients as DishIngredient[]).map(di => ({
-            ingredient_name: di.ingredients?.ingredient_name || '',
-            allergens: di.ingredients?.allergens,
-          }));
-          const dishIngredientSources = extractAllergenSources(dishIngredientList);
-          Object.assign(allergenSources, dishIngredientSources);
-        }
+        const recipeSources = await getDishRecipeSources(dish.id, recipeIngredientSources);
+        Object.assign(allergenSources, recipeSources);
 
-        // Also check dish recipes for allergens
-        if (!supabaseAdmin) {
-          logger.error('[Allergen Export] Supabase admin client not initialized');
-          throw ApiErrorHandler.createError(
-            'Database connection not available',
-            'DATABASE_ERROR',
-            500,
-          );
-        }
-        const { data: dishRecipes, error: dishRecipesError } = await supabaseAdmin
-          .from('dish_recipes')
-          .select(
-            `
-            recipe_id,
-            recipes (
-              id
-            )
-          `,
-          )
-          .eq('dish_id', dish.id);
-
-        if (!dishRecipesError && dishRecipes) {
-          const recipeSources: Record<string, string[]>[] = [];
-          (dishRecipes as DishRecipe[]).forEach(dr => {
-            const recipeId = dr.recipe_id;
-            if (recipeId && recipeIngredientSources[recipeId]) {
-              recipeSources.push(recipeIngredientSources[recipeId]);
-            }
-          });
-
-          if (recipeSources.length > 0) {
-            const mergedSources = mergeAllergenSources(allergenSources, ...recipeSources);
-            Object.assign(allergenSources, mergedSources);
-          }
-        }
       } catch (err) {
         logger.warn('[Allergen Export] Error aggregating dish allergens:', err);
       }

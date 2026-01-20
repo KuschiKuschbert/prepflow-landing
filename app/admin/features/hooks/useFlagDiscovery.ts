@@ -1,6 +1,6 @@
-import { useState, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
+import { useCallback, useState } from 'react';
 import type { DiscoveredFlag } from '../types';
 
 /**
@@ -33,43 +33,16 @@ export function useFlagDiscovery() {
       const response = await fetch('/api/admin/features/discover');
       const data = await response.json();
 
-      logger.dev('[Admin Features] Discovery response:', {
-        ok: response.ok,
-        success: data.success,
-        total: data.total,
-        regular: data.regular?.length || 0,
-        hidden: data.hidden?.length || 0,
-      });
+      logDiscoveryResponse(response, data);
 
-      if (response.ok && data.success !== false) {
-        setDiscoveredFlags({
-          regular: data.regular || [],
-          hidden: data.hidden || [],
-        });
-        const total = data.total || 0;
-        if (total > 0) {
-          showSuccess(
-            `Discovered ${total} feature flags in codebase (${data.regular?.length || 0} regular, ${data.hidden?.length || 0} hidden)`,
-          );
-        } else {
-          showError('No feature flags found in codebase. Check server logs for details.');
-        }
-      } else {
-        const errorMessage = data.message || data.error || 'Failed to discover feature flags';
-        setDiscoveryError(errorMessage);
-        logger.error('[Admin Features] Discovery API error:', {
-          status: response.status,
-          error: errorMessage,
-          data,
-        });
-        showError(errorMessage);
+      if (!response.ok || data.success === false) {
+        handleResponseError(response, data, setDiscoveryError, showError);
+        return;
       }
+
+      handleResponseSuccess(data, setDiscoveredFlags, showSuccess, showError);
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to discover feature flags';
-      setDiscoveryError(errorMessage);
-      logger.error('[Admin Features] Discovery fetch error:', error);
-      showError(errorMessage);
+      handleCatchError(error, setDiscoveryError, showError);
     } finally {
       setDiscovering(false);
     }
@@ -82,4 +55,64 @@ export function useFlagDiscovery() {
     discoverFlags,
     setDiscoveredFlags,
   };
+}
+
+// Helper functions extracted to reduce nesting
+
+function logDiscoveryResponse(response: Response, data: any) {
+  logger.dev('[Admin Features] Discovery response:', {
+    ok: response.ok,
+    success: data.success,
+    total: data.total,
+    regular: data.regular?.length || 0,
+    hidden: data.hidden?.length || 0,
+  });
+}
+
+function handleResponseError(
+  response: Response,
+  data: any,
+  setDiscoveryError: (err: string | null) => void,
+  showError: (msg: string) => void
+) {
+  const errorMessage = data.message || data.error || 'Failed to discover feature flags';
+  setDiscoveryError(errorMessage);
+  logger.error('[Admin Features] Discovery API error:', {
+    status: response.status,
+    error: errorMessage,
+    data,
+  });
+  showError(errorMessage);
+}
+
+function handleResponseSuccess(
+  data: any,
+  setDiscoveredFlags: (flags: any) => void,
+  showSuccess: (msg: string) => void,
+  showError: (msg: string) => void
+) {
+  setDiscoveredFlags({
+    regular: data.regular || [],
+    hidden: data.hidden || [],
+  });
+  const total = data.total || 0;
+  if (total > 0) {
+    showSuccess(
+      `Discovered ${total} feature flags in codebase (${data.regular?.length || 0} regular, ${data.hidden?.length || 0} hidden)`,
+    );
+  } else {
+    showError('No feature flags found in codebase. Check server logs for details.');
+  }
+}
+
+function handleCatchError(
+  error: unknown,
+  setDiscoveryError: (err: string | null) => void,
+  showError: (msg: string) => void
+) {
+  const errorMessage =
+    error instanceof Error ? error.message : 'Failed to discover feature flags';
+  setDiscoveryError(errorMessage);
+  logger.error('[Admin Features] Discovery fetch error:', error);
+  showError(errorMessage);
 }

@@ -5,10 +5,10 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { PostgrestError } from '@supabase/supabase-js';
-import { MenuItem } from '../../../../types';
 import { detectMissingColumns } from '../../errorDetection/detectMissingColumns';
 import { logDetailedError } from '../../fetchMenuWithItems.helpers';
 import { buildMinimalQuery, buildQueryWithoutPricing } from '../../queryBuilders/menuItemQueries';
+import { FetchResult } from '../../types';
 import { handleUltimateFallback } from './handleUltimateFallback';
 
 /**
@@ -21,12 +21,7 @@ import { handleUltimateFallback } from './handleUltimateFallback';
 export async function handlePricingFallback(
   allColumnsError: PostgrestError,
   menuId: string,
-): Promise<{
-  items: Partial<MenuItem>[];
-  pricingError: PostgrestError | null;
-  dietaryError: PostgrestError | null;
-  descriptionError: PostgrestError | null;
-}> {
+): Promise<FetchResult> {
   const pricingError = allColumnsError;
   logger.warn('[Menus API] Pricing columns not found, trying without them:', {
     error: allColumnsError?.message,

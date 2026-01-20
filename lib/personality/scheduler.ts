@@ -3,12 +3,11 @@
 'use client';
 
 import { useEffect } from 'react';
-import { adjustMessageProbability, getAdaptiveSettings } from './adaptive-personality';
 import { trackTimeOfDayUsage } from './behavior-tracker';
-import { generateRealMetricsMessage } from './real-metrics';
+import { triggerMoment, triggerVisualDelight } from './helpers/scheduler-events';
 import { usePersonality } from './store';
-import { dispatchSeasonal, dispatchToast, dispatchVisual } from './ui';
-import { getShiftBucket, getTimeBasedAdjustments, isSilenced } from './utils';
+import { dispatchSeasonal } from './ui';
+import { getShiftBucket, isSilenced } from './utils';
 
 const chance = (p: number): boolean => Math.random() < p;
 
@@ -25,42 +24,13 @@ export function usePersonalityScheduler() {
     const bucket = getShiftBucket();
     trackTimeOfDayUsage(bucket);
 
-    // Get adaptive settings
-    const _adaptiveSettings = getAdaptiveSettings(settings);
-    const _timeAdjustments = getTimeBasedAdjustments();
-
     const timers: number[] = [];
 
     // Idle / periodic triggers
     const idleTick = () => {
       if (!settings.enabled || isSilenced(settings)) return;
 
-      const currentAdaptive = getAdaptiveSettings(settings);
-      const currentTimeAdjustments = getTimeBasedAdjustments();
-
-      const triggerMoment = (type: 'mindful' | 'metrics' | 'meta' | 'chaos', baseProb: number) => {
-        let probability = baseProb;
-        probability = adjustMessageProbability(probability, currentAdaptive);
-        probability *= currentTimeAdjustments.toneMultiplier;
-
-        if (chance(probability)) {
-          let msg: string | null = null;
-
-          if (type === 'metrics') {
-            // Try real metrics first (30% chance), fallback to imaginary
-            msg = chance(0.3) ? generateRealMetricsMessage() : dispatchToast.pick('metrics');
-            if (!msg) msg = dispatchToast.pick('metrics'); // Final fallback
-          } else {
-            msg = dispatchToast.pick(type);
-          }
-
-          if (msg) {
-            window.dispatchEvent(
-              new CustomEvent('personality:addToast', { detail: { message: msg } }),
-            );
-          }
-        }
-      };
+      const context = { settings };
 
       // Define moments and their config
       const moments: Array<{
@@ -75,18 +45,10 @@ export function usePersonalityScheduler() {
       ];
 
       // Run triggers
-      moments.filter(m => m.enabled).forEach(m => triggerMoment(m.type, m.prob));
+      moments.filter(m => m.enabled).forEach(m => triggerMoment(m.type, m.prob, context));
 
-      // Visual delight (special case for now)
-      if (settings.visualDelights) {
-        let probability = 0.02;
-        probability = adjustMessageProbability(probability, currentAdaptive);
-        probability *= currentTimeAdjustments.toneMultiplier;
-
-        if (chance(probability)) {
-          dispatchVisual.random();
-        }
-      }
+      // Visual delight
+      triggerVisualDelight(context);
 
       // Schedule next tick (60-120 seconds)
       timers.push(window.setTimeout(idleTick, 60_000 + Math.random() * 60_000));

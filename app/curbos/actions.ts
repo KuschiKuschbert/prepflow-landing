@@ -1,5 +1,6 @@
 'use server'
 
+import { AUTH_CONSTANTS } from '@/lib/constants'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
@@ -11,7 +12,7 @@ export async function login(formData: FormData) {
         httpOnly: true,
         path: '/',
         secure: process.env.NODE_ENV === 'production',
-        maxAge: 60 * 60 * 24 * 7 // 1 week
+        maxAge: AUTH_CONSTANTS.SESSION_MAX_AGE
     })
     redirect('/curbos')
   }

@@ -2,20 +2,21 @@
 
 import { logger } from '@/lib/logger';
 import {
-  formatBrandName,
-  formatIngredientName,
-  formatStorageLocation,
-  formatSupplierName,
-  formatTextInput,
+    formatBrandName,
+    formatIngredientName,
+    formatStorageLocation,
+    formatSupplierName,
+    formatTextInput,
 } from '@/lib/text-utils';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
-  calculateCostPerUnit,
-  calculateWastagePercentage,
-  checkValidation as checkValidationHelper,
-  formatCost,
-  getValidationErrors,
+    calculateCostPerUnit,
+    calculateWastagePercentage,
+    checkValidation as checkValidationHelper,
+    formatCost,
+    getValidationErrors,
 } from '../utils/wizard-helpers';
+import { useAllergenDetection } from './hooks/useAllergenDetection';
 import IngredientWizardNavigation from './IngredientWizardNavigation';
 import IngredientWizardStep1 from './IngredientWizardStep1';
 import IngredientWizardStep2 from './IngredientWizardStep2';
@@ -58,8 +59,7 @@ export default function IngredientWizard({
   const [formData, setFormData] = useState<Partial<Ingredient>>(initialFormData);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [detectingAllergens, setDetectingAllergens] = useState(false);
-  const lastDetectedRef = useRef<{ ingredientName: string; brand?: string } | null>(null);
+  const { detectingAllergens } = useAllergenDetection(wizardStep, formData, setFormData);
 
   const updateCostPerUnit = () => {
     if (formData.pack_price && formData.pack_size && formData.pack_size_unit && formData.unit) {
@@ -170,8 +170,9 @@ export default function IngredientWizard({
     setWizardStep(1);
     setFormData(initialFormData);
     setErrors({});
-    lastDetectedRef.current = null;
-    setDetectingAllergens(false);
+    setErrors({});
+    // lastDetectedRef.current = null; // Handled within hook if needed, or we rely on remount
+    // setDetectingAllergens(false); // Can ignore this now as it's in hook
   };
 
   const handleSave = async () => {
@@ -210,86 +211,7 @@ export default function IngredientWizard({
 
   const skipStep2 = () => setWizardStep(3);
 
-  useEffect(() => {
-    const detectAllergens = async () => {
-      if (wizardStep !== 3) return;
 
-      const ingredientName = formData.ingredient_name?.trim();
-      if (!ingredientName || ingredientName.length < 2) return;
-
-      const currentAllergens = (formData.allergens as string[]) || [];
-      const allergenSource = (formData.allergen_source as { manual?: boolean; ai?: boolean }) || {
-        manual: false,
-        ai: false,
-      };
-
-      if (allergenSource.manual && currentAllergens.length > 0) {
-        logger.dev('[Wizard] Skipping allergen detection - manual allergens already set');
-        return;
-      }
-
-      const brand = formData.brand?.trim() || '';
-
-      if (
-        lastDetectedRef.current &&
-        lastDetectedRef.current.ingredientName === ingredientName &&
-        lastDetectedRef.current.brand === brand &&
-        currentAllergens.length > 0
-      ) {
-        logger.dev('[Wizard] Skipping allergen detection - already detected for this ingredient');
-        return;
-      }
-
-      setDetectingAllergens(true);
-
-      try {
-        const response = await fetch('/api/ingredients/ai-detect-allergens', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ingredient_name: ingredientName,
-            brand: formData.brand?.trim() || undefined,
-            force_ai: false,
-          }),
-        });
-
-        if (!response.ok) throw new Error('Failed to detect allergens');
-
-        const result = await response.json();
-
-        if (result.success && result.data?.allergens) {
-          const detectedAllergens = result.data.allergens as string[];
-          logger.dev(
-            `[Wizard] Detected ${detectedAllergens.length} allergens for ${ingredientName}: ${detectedAllergens.join(', ')}`,
-          );
-
-          if (detectedAllergens.length > 0) {
-            setFormData(prev => ({
-              ...prev,
-              allergens: detectedAllergens,
-              allergen_source: {
-                manual: false,
-                ai: result.data.method === 'ai' || result.data.method === 'hybrid',
-              },
-            }));
-            lastDetectedRef.current = { ingredientName, brand: brand || undefined };
-          }
-        }
-      } catch (error) {
-        logger.error('[Wizard] Error detecting allergens:', error);
-      } finally {
-        setDetectingAllergens(false);
-      }
-    };
-
-    detectAllergens();
-  }, [
-    wizardStep,
-    formData.ingredient_name,
-    formData.brand,
-    formData.allergen_source,
-    formData.allergens,
-  ]);
 
   const canProceed = useMemo(() => {
     if (wizardStep === 1 || wizardStep === 4) return checkValidationHelper(1, formData);

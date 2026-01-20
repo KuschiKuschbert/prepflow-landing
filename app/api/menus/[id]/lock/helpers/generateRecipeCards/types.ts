@@ -1,4 +1,4 @@
-import { MenuItemData } from '../fetchMenuItemData';
+import { MenuItemData } from '../types';
 import { MenuItem } from './fetchMenuItems';
 
 export interface ItemToGenerate {

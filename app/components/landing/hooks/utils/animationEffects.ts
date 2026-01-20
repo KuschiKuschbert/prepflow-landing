@@ -1,3 +1,4 @@
+import { getPrefersReducedMotion } from '@/lib/utils/motion';
 import { useEffect } from 'react';
 
 interface Feature {
@@ -7,14 +8,6 @@ interface Feature {
   screenshotAlt: string;
 }
 
-function prefersReducedMotion(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia === 'undefined') return false;
-  try {
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  } catch {
-    return false;
-  }
-}
 
 const STAGGER_DELAY = 30;
 
@@ -25,7 +18,7 @@ export function useImageEntranceAnimation(
   setImageMounted: (mounted: boolean) => void,
 ) {
   useEffect(() => {
-    if (!imageMounted && imageContainerRef.current && !prefersReducedMotion()) {
+    if (!imageMounted && imageContainerRef.current && !getPrefersReducedMotion()) {
       imageContainerRef.current.style.opacity = '0';
       imageContainerRef.current.style.transform = 'translateX(10px)';
       const timeoutId = setTimeout(() => {
@@ -50,7 +43,7 @@ export function useContainerOpacityAnimation(
   expandedFeature: Feature | null,
 ) {
   useEffect(() => {
-    if (imageMounted && imageContainerRef.current && !prefersReducedMotion()) {
+    if (imageMounted && imageContainerRef.current && !getPrefersReducedMotion()) {
       requestAnimationFrame(() => {
         if (imageContainerRef.current) {
           imageContainerRef.current.style.opacity = expandedFeature ? '1' : '0.8';
@@ -66,7 +59,7 @@ export function useStaggeredButtonAnimation(
   setButtonsVisible: React.Dispatch<React.SetStateAction<boolean[]>>,
 ) {
   useEffect(() => {
-    if (prefersReducedMotion()) {
+    if (getPrefersReducedMotion()) {
       setButtonsVisible(new Array(features.length).fill(true));
       return;
     }

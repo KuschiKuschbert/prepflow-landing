@@ -1,8 +1,8 @@
 import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { buildRecipeCardFromInstructions, generateDataHash } from '../cardBuilding';
-import { MenuItemData } from '../fetchMenuItemData';
 import { consolidateInstructions, normalizeToSingleServing } from '../normalizeIngredients';
+import { MenuItemData } from '../types';
 import { MenuItem } from './fetchMenuItems';
 import { finalizeCardSave, saveCard } from './processMenuItem/saveCard';
 

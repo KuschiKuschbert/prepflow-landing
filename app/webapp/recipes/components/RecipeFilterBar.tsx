@@ -1,13 +1,14 @@
 'use client';
-import { useState, useMemo, useEffect } from 'react';
+import { FilterDropdown } from '@/app/webapp/ingredients/components/FilterDropdown';
+import { Icon } from '@/components/ui/Icon';
+import { PAGINATION_CONSTANTS } from '@/lib/constants';
+import { Leaf, Tag, Vegan, X } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { RecipeSortField } from '../hooks/useRecipeFiltering';
+import { Recipe } from '../types';
+import { AllergenFilterDropdown } from './AllergenFilterDropdown';
 import { RecipeSearchBar } from './RecipeSearchBar';
 import { RecipeSortDropdown } from './RecipeSortDropdown';
-import { FilterDropdown } from '@/app/webapp/ingredients/components/FilterDropdown';
-import { AllergenFilterDropdown } from './AllergenFilterDropdown';
-import { Tag, X, Leaf, Vegan } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
-import { Recipe } from '../types';
 
 interface RecipeFilterBarProps {
   recipes: Recipe[];
@@ -190,10 +191,11 @@ export function RecipeFilterBar({
             onChange={e => onItemsPerPageChange(Number(e.target.value))}
             className="rounded-lg border border-[var(--border)] bg-[var(--background)]/80 px-3 py-2 text-sm text-[var(--foreground-secondary)] transition-all duration-200 hover:border-[var(--border)] hover:bg-[var(--surface)] focus:border-[var(--primary)]/50 focus:ring-2 focus:ring-[var(--primary)]/20 focus:outline-none"
           >
-            <option value={10}>10 per page</option>
-            <option value={20}>20 per page</option>
-            <option value={50}>50 per page</option>
-            <option value={100}>100 per page</option>
+            {PAGINATION_CONSTANTS.RECIPE_LIST_OPTIONS.map(option => (
+              <option key={option} value={option}>
+                {option} per page
+              </option>
+            ))}
           </select>
 
           {activeFilterCount > 0 && (

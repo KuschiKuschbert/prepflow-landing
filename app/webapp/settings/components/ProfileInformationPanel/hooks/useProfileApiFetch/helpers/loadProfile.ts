@@ -2,6 +2,7 @@
  * Load profile data from API.
  */
 import { cacheData } from '@/lib/cache/data-cache';
+import { CACHE_CONSTANTS } from '@/lib/constants';
 import { logger } from '@/lib/logger';
 import type { ProfileData } from '../../../types';
 
@@ -54,7 +55,7 @@ export async function loadProfileHelper(
     const profileData = data.profile || data;
     if (profileData) {
       setProfile(profileData);
-      cacheData('user_profile', profileData, 5 * 60 * 1000);
+      cacheData('user_profile', profileData, CACHE_CONSTANTS.USER_PROFILE_TTL);
     }
   } catch (error) {
     logger.error('[ProfileInformationPanel] Network or unexpected error:', {

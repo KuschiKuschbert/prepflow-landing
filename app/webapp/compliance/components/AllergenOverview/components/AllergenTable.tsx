@@ -4,10 +4,11 @@
  * Desktop table view for allergen overview
  */
 
+import { AllergenDisplay } from '@/components/ui/AllergenDisplay';
 import { Icon } from '@/components/ui/Icon';
 import { Search } from 'lucide-react';
-import { AllergenDisplay } from '@/components/ui/AllergenDisplay';
 import type { AllergenItem } from '../types';
+import { buildIngredientAllergenMap } from './helpers/tableHelpers';
 
 interface AllergenTableProps {
   items: AllergenItem[];
@@ -81,19 +82,7 @@ export function AllergenTable({
           <tbody className="divide-y divide-[var(--muted)] bg-[var(--surface)]">
             {items.map(item => {
               // Build map of ingredient name -> allergens it contributes to
-              const ingredientAllergenMap: Record<string, string[]> = {};
-              if (item.allergenSources) {
-                Object.entries(item.allergenSources).forEach(([allergen, ingredients]) => {
-                  (ingredients as string[]).forEach((ingredientName: string) => {
-                    if (!ingredientAllergenMap[ingredientName]) {
-                      ingredientAllergenMap[ingredientName] = [];
-                    }
-                    if (!ingredientAllergenMap[ingredientName].includes(allergen)) {
-                      ingredientAllergenMap[ingredientName].push(allergen);
-                    }
-                  });
-                });
-              }
+              const ingredientAllergenMap = buildIngredientAllergenMap(item);
 
               const allIngredientNames = Object.keys(ingredientAllergenMap);
 
