@@ -6,6 +6,15 @@ import Papa from 'papaparse';
 import { fetchTableData } from './helpers/fetchTableData';
 import { normalizeForCSV } from './helpers/normalizeForCSV';
 
+async function collectExportData(tables: string[], query: string): Promise<unknown[]> {
+  const allData: unknown[] = [];
+  for (const tableName of tables) {
+    const data = await fetchTableData(tableName, query);
+    allData.push(...data);
+  }
+  return allData;
+}
+
 function createCsvResponse(allData: unknown[]): NextResponse {
   if (allData.length === 0) {
     return new NextResponse('No data to export', { status: 404 });
@@ -39,57 +48,60 @@ function createCsvResponse(allData: unknown[]): NextResponse {
  */
 export async function GET(request: NextRequest) {
   try {
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) throw new Error('Unexpected database state');
-
-    const { searchParams } = new URL(request.url);
-    const query = searchParams.get('query') || '';
-    const table = searchParams.get('table') || 'all';
-    const format = searchParams.get('format') || 'json';
-
-    // Get data (reuse search logic)
-    const tablesToSearch =
-      table === 'all' ? ['ingredients', 'recipes', 'dishes', 'users'] : [table];
-
-    const allData: unknown[] = [];
-
-    for (const tableName of tablesToSearch) {
-      const data = await fetchTableData(tableName, query);
-      allData.push(...data);
-    }
-
-    if (format === 'csv') {
-      return createCsvResponse(allData);
-    }
-
-    // JSON format
-    return NextResponse.json({
-      success: true,
-      data: allData,
-      count: allData.length,
-    });
+    return await handleDataExportRequest(request);
   } catch (error) {
-    if (error instanceof NextResponse) {
-      return error;
-    }
-
-    logger.error('[Admin Data Export API] Unexpected error:', {
-      error: error instanceof Error ? error.message : String(error),
-      context: { endpoint: '/api/admin/data/export', method: 'GET' },
-    });
-
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development'
-          ? error instanceof Error
-            ? error.message
-            : 'Unknown error'
-          : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
+    return handleExportError(error);
   }
+}
+
+async function handleDataExportRequest(request: NextRequest) {
+  const { supabase, error } = await standardAdminChecks(request);
+  if (error) return error;
+  if (!supabase) throw new Error('Unexpected database state');
+
+  const { searchParams } = new URL(request.url);
+  const query = searchParams.get('query') || '';
+  const table = searchParams.get('table') || 'all';
+  const format = searchParams.get('format') || 'json';
+
+  // Get data (reuse search logic)
+  const tablesToSearch =
+    table === 'all' ? ['ingredients', 'recipes', 'dishes', 'users'] : [table];
+
+  const allData = await collectExportData(tablesToSearch, query);
+
+  if (format === 'csv') {
+    return createCsvResponse(allData);
+  }
+
+  // JSON format
+  return NextResponse.json({
+    success: true,
+    data: allData,
+    count: allData.length,
+  });
+}
+
+function handleExportError(error: unknown) {
+  if (error instanceof NextResponse) {
+    return error;
+  }
+
+  logger.error('[Admin Data Export API] Unexpected error:', {
+    error: error instanceof Error ? error.message : String(error),
+    context: { endpoint: '/api/admin/data/export', method: 'GET' },
+  });
+
+  return NextResponse.json(
+    ApiErrorHandler.createError(
+      process.env.NODE_ENV === 'development'
+        ? error instanceof Error
+          ? error.message
+          : 'Unknown error'
+        : 'Internal server error',
+      'SERVER_ERROR',
+      500,
+    ),
+    { status: 500 },
+  );
 }

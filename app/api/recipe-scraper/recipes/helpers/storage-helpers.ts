@@ -21,7 +21,7 @@ export async function loadJSONStorage() {
 
 import { RecipeEntry } from './filter-helpers';
 
-interface RecipeStorage {
+export interface StorageInterface {
   getAllRecipes(): RecipeEntry[];
   loadRecipe(path: string): Promise<unknown>;
 }
@@ -29,9 +29,9 @@ interface RecipeStorage {
 /**
  * Initialize storage with error handling
  */
-export function initializeStorage(JSONStorageClass: new () => unknown): RecipeStorage | null {
+export function initializeStorage(JSONStorageClass: new () => unknown): StorageInterface | null {
   try {
-    return new JSONStorageClass() as RecipeStorage;
+    return new JSONStorageClass() as StorageInterface;
   } catch (storageErr) {
     logger.error('[Recipe Scraper API] Error initializing storage:', {
       error: storageErr instanceof Error ? storageErr.message : String(storageErr),

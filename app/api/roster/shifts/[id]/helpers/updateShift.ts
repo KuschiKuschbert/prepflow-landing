@@ -2,7 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
-import { validateShiftRequest } from '../../helpers/validateShiftRequest';
+import { validateShiftData } from '../../helpers/requestHelpers';
 import { buildUpdateData } from './buildUpdateData';
 
 import type { CreateShiftInput, Shift } from '../../helpers/types';
@@ -18,7 +18,18 @@ export async function updateShift(
 ): Promise<NextResponse> {
   // Validate if required fields are present
   if (body.start_time || body.end_time || body.shift_date) {
-    const validation = validateShiftRequest({ ...existingShift, ...body });
+    // Construct a temporary full object for format validation if partial data is provided
+    // Note: This is tricky with partial updates.
+    // Ideally we should validate only the fields provided.
+    // The previous code merged with existingShift to do a full validation.
+    // Let's do the same.
+    const mergedShift: any = { ...existingShift, ...body };
+
+    // Convert to request format expected by validator
+    // CreateShiftRequest expects strings for dates/times, but existingShift might have them as whatever Shift type has.
+    // Assuming Shift type has string dates or compatible
+
+    const validation = validateShiftData(mergedShift);
     if (!validation.isValid) {
       return NextResponse.json(
         ApiErrorHandler.createError(

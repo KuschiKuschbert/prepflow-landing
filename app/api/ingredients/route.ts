@@ -14,20 +14,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createIngredient } from './helpers/createIngredient';
 import { handleDeleteIngredient } from './helpers/deleteIngredientHandler';
 import { handleIngredientError } from './helpers/handleIngredientError';
+import { parseAndValidateRequest } from './helpers/requestHelpers';
 import { createIngredientSchema, updateIngredientSchema } from './helpers/schemas';
 import { updateIngredient } from './helpers/updateIngredient';
 
-// Helper to safely parse request body
-async function safeParseBody(request: NextRequest) {
-  try {
-    return await request.json();
-  } catch (err) {
-    logger.warn('[Ingredients API] Failed to parse request JSON:', {
-      error: err instanceof Error ? err.message : String(err),
-    });
-    return null;
-  }
-}
+
 
 export async function GET(request: NextRequest) {
   try {
@@ -78,32 +69,15 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Ingredients API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
+    const dataOrResponse = await parseAndValidateRequest(
+      request,
+      createIngredientSchema,
+      'Ingredients API',
+    );
+    if (dataOrResponse instanceof NextResponse) {
+      return dataOrResponse;
     }
-
-    const validationResult = createIngredientSchema.safeParse(body);
-    if (!validationResult.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const data = await createIngredient(validationResult.data);
+    const data = await createIngredient(dataOrResponse);
 
     // Trigger Square sync hook (non-blocking)
     (async () => {
@@ -140,32 +114,15 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch (err) {
-      logger.warn('[Ingredients API] Failed to parse request body:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
-      return NextResponse.json(
-        ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
-        { status: 400 },
-      );
+    const dataOrResponse = await parseAndValidateRequest(
+      request,
+      updateIngredientSchema,
+      'Ingredients API',
+    );
+    if (dataOrResponse instanceof NextResponse) {
+      return dataOrResponse;
     }
-
-    const validationResult = updateIngredientSchema.safeParse(body);
-    if (!validationResult.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    const { id, ...updates } = validationResult.data;
+    const { id, ...updates } = dataOrResponse;
 
     // Get user email for change tracking
     let userEmail: string | null = null;

@@ -5,19 +5,10 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { createDishWithRelations } from './helpers/createDishWithRelations';
 import { handleDishListError } from './helpers/handleDishListError';
+import { parseAndValidateDishRequest } from './helpers/requestHelpers';
 import { createDishSchema, DishResponse } from './helpers/schemas';
 
-// Helper to safely parse request body
-async function safeParseBody(request: NextRequest) {
-  try {
-    return await request.json();
-  } catch (err) {
-    logger.warn('[Dishes API] Failed to parse request JSON:', {
-      error: err instanceof Error ? err.message : String(err),
-    });
-    return null;
-  }
-}
+
 
 export async function GET(request: NextRequest) {
   try {
@@ -73,22 +64,17 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await safeParseBody(request);
-
-    const validationResult = createDishSchema.safeParse(body);
-    if (!validationResult.success) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validationResult.error.issues[0]?.message || 'Invalid request body',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
+    const dataOrResponse = await parseAndValidateDishRequest(
+      request,
+      createDishSchema,
+      'Dishes API',
+    );
+    if (dataOrResponse instanceof NextResponse) {
+      return dataOrResponse;
     }
 
     const { dish_name, description, selling_price, recipes, ingredients, category } =
-      validationResult.data;
+      dataOrResponse;
 
     if (!supabaseAdmin) {
       return NextResponse.json(

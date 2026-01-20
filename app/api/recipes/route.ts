@@ -14,21 +14,12 @@ import { buildQuery } from './helpers/buildQuery';
 import { checkExistingRecipe } from './helpers/checkExistingRecipe';
 import { createRecipe } from './helpers/createRecipe';
 import { filterRecipes } from './helpers/filterRecipes';
+import { safeParseBody } from './helpers/parseBody';
 import { createRecipeSchema, RecipeResponse } from './helpers/schemas';
 import { updateRecipe } from './helpers/updateRecipe';
 import { validateRequest } from './helpers/validateRequest';
 
-// Helper to safely parse request body
-async function safeParseBody(request: NextRequest) {
-  try {
-    return await request.json();
-  } catch (err) {
-    logger.warn('[Recipes API] Failed to parse request JSON:', {
-      error: err instanceof Error ? err.message : String(err),
-    });
-    return null;
-  }
-}
+
 
 export async function GET(request: NextRequest) {
   try {
@@ -108,39 +99,54 @@ export async function POST(request: NextRequest) {
     );
 
     if (existingRecipe && !checkError) {
-      // Update existing recipe
-      const { recipe: updatedRecipe, error: updateError } = await updateRecipe(
-        existingRecipe.id,
-        recipeData,
-      );
-
-      if (updateError) {
-        const apiError = ApiErrorHandler.fromSupabaseError(updateError, 500);
-        return NextResponse.json(apiError, { status: apiError.status || 500 });
-      }
-
-      // Trigger Square sync hook (non-blocking)
-      (async () => {
-        try {
-          if (updatedRecipe) {
-            await triggerRecipeSync(request, updatedRecipe.id.toString(), 'update');
-          }
-        } catch (err) {
-          logger.error('[Recipes API] Error triggering Square sync:', {
-            error: err instanceof Error ? err.message : String(err),
-            recipeId: existingRecipe.id,
-          });
-        }
-      })();
-
-      return NextResponse.json({
-        success: true,
-        recipe: updatedRecipe,
-        isNew: false,
-      } satisfies RecipeResponse);
+      return await handleExistingRecipe(request, existingRecipe, recipeData);
     }
 
     // Create new recipe
+    return await handleNewRecipe(request, recipeData);
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    logger.error('[Recipes API] Unexpected error:', {
+      error: errorMessage,
+      stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/recipes', method: 'POST' },
+    });
+    return NextResponse.json(
+      ApiErrorHandler.createError(
+        process.env.NODE_ENV === 'development' ? errorMessage : 'Internal server error',
+        'SERVER_ERROR',
+        500,
+      ),
+      { status: 500 },
+    );
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function handleExistingRecipe(request: NextRequest, existingRecipe: any, recipeData: any) {
+    // Update existing recipe
+    const { recipe: updatedRecipe, error: updateError } = await updateRecipe(
+      existingRecipe.id,
+      recipeData,
+    );
+
+    if (updateError) {
+      const apiError = ApiErrorHandler.fromSupabaseError(updateError, 500);
+      return NextResponse.json(apiError, { status: apiError.status || 500 });
+    }
+
+    // Trigger Square sync hook (non-blocking)
+    triggerSyncHook(request, existingRecipe.id, 'update');
+
+    return NextResponse.json({
+      success: true,
+      recipe: updatedRecipe,
+      isNew: false,
+    } satisfies RecipeResponse);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function handleNewRecipe(request: NextRequest, recipeData: any) {
     const { recipe: newRecipe, error: createError } = await createRecipe(
       recipeData.name,
       recipeData,
@@ -158,38 +164,27 @@ export async function POST(request: NextRequest) {
     }
 
     // Trigger Square sync hook (non-blocking)
-    (async () => {
-      try {
-        if (newRecipe) {
-          await triggerRecipeSync(request, newRecipe.id.toString(), 'create');
-        }
-      } catch (err) {
-        logger.error('[Recipes API] Error triggering Square sync:', {
-          error: err instanceof Error ? err.message : String(err),
-          recipeId: newRecipe?.id,
-        });
-      }
-    })();
+    if (newRecipe) {
+        triggerSyncHook(request, newRecipe.id, 'create');
+    }
 
     return NextResponse.json({
       success: true,
       recipe: newRecipe,
       isNew: true,
     } satisfies RecipeResponse);
-  } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : String(err);
-    logger.error('[Recipes API] Unexpected error:', {
-      error: errorMessage,
-      stack: err instanceof Error ? err.stack : undefined,
-      context: { endpoint: '/api/recipes', method: 'POST' },
-    });
-    return NextResponse.json(
-      ApiErrorHandler.createError(
-        process.env.NODE_ENV === 'development' ? errorMessage : 'Internal server error',
-        'SERVER_ERROR',
-        500,
-      ),
-      { status: 500 },
-    );
-  }
+}
+
+ 
+function triggerSyncHook(request: NextRequest, recipeId: string | number, action: 'create' | 'update') {
+    (async () => {
+      try {
+          await triggerRecipeSync(request, recipeId.toString(), action);
+      } catch (err) {
+        logger.error('[Recipes API] Error triggering Square sync:', {
+          error: err instanceof Error ? err.message : String(err),
+          recipeId,
+        });
+      }
+    })();
 }

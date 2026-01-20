@@ -5,16 +5,16 @@
 
 'use client';
 
-import { useRef } from 'react';
-import { X } from 'lucide-react';
-import { createPortal } from 'react-dom';
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import { useIngredientData } from './IngredientPopover/hooks/useIngredientData';
-import { usePopoverPosition } from './IngredientPopover/hooks/usePopoverPosition';
-import { usePopoverCloseHandlers } from './IngredientPopover/hooks/usePopoverCloseHandlers';
+import { X } from 'lucide-react';
+import { useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { IngredientList } from './IngredientPopover/components/IngredientList';
 import { RecipeSourcesList } from './IngredientPopover/components/RecipeSourcesList';
+import { useIngredientData } from './IngredientPopover/hooks/useIngredientData';
+import { usePopoverCloseHandlers } from './IngredientPopover/hooks/usePopoverCloseHandlers';
+import { usePopoverPosition } from './IngredientPopover/hooks/usePopoverPosition';
 
 interface IngredientPopoverProps {
   isOpen: boolean;
@@ -58,47 +58,17 @@ export function IngredientPopover({
       aria-labelledby="popover-title"
     >
       <div className="flex max-h-[500px] w-full flex-col overflow-hidden rounded-2xl bg-[var(--surface)]/95">
-        <div className="flex items-center justify-between border-b border-[var(--border)] p-4">
-          <div className="min-w-0 flex-1">
-            <h3
-              id="popover-title"
-              className="truncate text-sm font-semibold text-[var(--foreground)]"
-            >
-              {menuItemName}
-            </h3>
-            <p className="mt-0.5 text-xs text-[var(--foreground-muted)]">
-              {menuItemType === 'dish' ? 'Dish' : 'Recipe'} ingredients
-            </p>
-          </div>
-          <button
-            onClick={onClose}
-            className="ml-2 flex-shrink-0 rounded-full p-1 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
-            aria-label="Close"
-          >
-            <Icon icon={X} size="sm" aria-hidden={true} />
-          </button>
-        </div>
-
-        <div className="flex-1 overflow-y-auto p-4">
-          {loading ? (
-            <div className="space-y-2">
-              <LoadingSkeleton variant="list" />
-            </div>
-          ) : error ? (
-            <div className="py-4 text-center">
-              <p className="text-sm text-[var(--color-error)]">{error}</p>
-            </div>
-          ) : ingredients.length === 0 && recipeSources.length === 0 ? (
-            <div className="py-4 text-center">
-              <p className="text-sm text-[var(--foreground-muted)]">No ingredients found</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <RecipeSourcesList recipeSources={recipeSources} />
-              <IngredientList ingredients={ingredients} />
-            </div>
-          )}
-        </div>
+        <PopoverHeader
+          menuItemName={menuItemName}
+          menuItemType={menuItemType}
+          onClose={onClose}
+        />
+        <PopoverContent
+          loading={loading}
+          error={error}
+          ingredients={ingredients}
+          recipeSources={recipeSources}
+        />
       </div>
     </div>
   );
@@ -107,4 +77,54 @@ export function IngredientPopover({
     return createPortal(popoverContent, document.body);
   }
   return null;
+}
+
+function PopoverHeader({ menuItemName, menuItemType, onClose }: any) {
+  return (
+    <div className="flex items-center justify-between border-b border-[var(--border)] p-4">
+      <div className="min-w-0 flex-1">
+        <h3
+          id="popover-title"
+          className="truncate text-sm font-semibold text-[var(--foreground)]"
+        >
+          {menuItemName}
+        </h3>
+        <p className="mt-0.5 text-xs text-[var(--foreground-muted)]">
+          {menuItemType === 'dish' ? 'Dish' : 'Recipe'} ingredients
+        </p>
+      </div>
+      <button
+        onClick={onClose}
+        className="ml-2 flex-shrink-0 rounded-full p-1 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] focus:outline-none"
+        aria-label="Close"
+      >
+        <Icon icon={X} size="sm" aria-hidden={true} />
+      </button>
+    </div>
+  );
+}
+
+function PopoverContent({ loading, error, ingredients, recipeSources }: any) {
+  return (
+    <div className="flex-1 overflow-y-auto p-4">
+      {loading ? (
+        <div className="space-y-2">
+          <LoadingSkeleton variant="list" />
+        </div>
+      ) : error ? (
+        <div className="py-4 text-center">
+          <p className="text-sm text-[var(--color-error)]">{error}</p>
+        </div>
+      ) : ingredients.length === 0 && recipeSources.length === 0 ? (
+        <div className="py-4 text-center">
+          <p className="text-sm text-[var(--foreground-muted)]">No ingredients found</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          <RecipeSourcesList recipeSources={recipeSources} />
+          <IngredientList ingredients={ingredients} />
+        </div>
+      )}
+    </div>
+  );
 }

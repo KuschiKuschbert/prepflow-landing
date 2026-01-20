@@ -1,7 +1,8 @@
-import { useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { cacheData } from '@/lib/cache/data-cache';
+import { CACHE_CONSTANTS } from '@/lib/constants';
 import { logger } from '@/lib/logger';
+import { useCallback } from 'react';
 import type { ProfileData } from '../types';
 
 interface ProfileFormData {
@@ -83,7 +84,7 @@ export function useProfileSave({
         if (typeof window !== 'undefined') {
           sessionStorage.removeItem(USER_MODIFIED_KEY);
         }
-        cacheData('user_profile', data.profile, 5 * 60 * 1000);
+        cacheData('user_profile', data.profile, CACHE_CONSTANTS.USER_PROFILE_TTL);
       }
 
       showSuccess('Profile updated successfully');

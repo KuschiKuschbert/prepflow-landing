@@ -1,11 +1,11 @@
 'use client';
 
+import { logger } from '@/lib/logger';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 import { BulkDeleteConfirmationModal } from './BulkDeleteConfirmationModal';
 import { DeleteConfirmationModal } from './DeleteConfirmationModal';
 import { RecipeEditDrawer } from './RecipeEditDrawer';
 import { UnifiedRecipeModal } from './UnifiedRecipeModal';
-import { logger } from '@/lib/logger';
 
 interface RecipesModalsProps {
   showUnifiedModal: boolean;
@@ -108,10 +108,9 @@ export function RecipesModals({
           try {
             await onRefreshIngredients();
           } catch (error) {
-            logger.error('[RecipesModals] Error refreshing ingredients:', {
+           logger.error('[RecipesModals] Error refreshing ingredients:', {
               error: error instanceof Error ? error.message : String(error),
             });
-            // Optionally show a toast or alert to the user
           }
         }}
         capitalizeRecipeName={capitalizeRecipeName}

@@ -20,10 +20,12 @@ interface DataUsageSectionProps {
   dataUsage: DataUsage;
 }
 
+import { DATA_SIZE_CONSTANTS } from '@/lib/constants';
+
 function formatFileSize(bytes: number) {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  if (bytes < DATA_SIZE_CONSTANTS.BYTES_PER_KB) return `${bytes} B`;
+  if (bytes < DATA_SIZE_CONSTANTS.BYTES_PER_MB) return `${(bytes / DATA_SIZE_CONSTANTS.BYTES_PER_KB).toFixed(1)} KB`;
+  return `${(bytes / DATA_SIZE_CONSTANTS.BYTES_PER_MB).toFixed(1)} MB`;
 }
 
 export function DataUsageSection({ dataUsage }: DataUsageSectionProps) {

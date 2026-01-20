@@ -1,98 +1,11 @@
 'use client';
 
-import { Icon } from '@/components/ui/Icon';
-import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { AlertTriangle, BookOpen, Sparkles, Thermometer, UtensilsCrossed } from 'lucide-react';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-
-import { logger } from '@/lib/logger';
-interface KitchenOperationsStats {
-  totalMenuDishes: number;
-  recipesReady: number;
-  ingredientsLowStock: number;
-  temperatureChecksToday: number;
-  cleaningTasksPending: number;
-}
+import { useKitchenStats } from './hooks/useKitchenStats';
+import { KitchenOperation, KitchenOperationCard } from './KitchenOperationCard';
 
 export default function KitchenOperations() {
-  const [stats, setStats] = useState<KitchenOperationsStats>({
-    totalMenuDishes: 0,
-    recipesReady: 0,
-    ingredientsLowStock: 0,
-    temperatureChecksToday: 0,
-    cleaningTasksPending: 0,
-  });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      // Initialize with cached data
-      const cachedStats = getCachedData<KitchenOperationsStats>('dashboard_stats');
-      if (cachedStats) {
-        setStats({
-          totalMenuDishes: cachedStats.totalMenuDishes || 0,
-          recipesReady: cachedStats.recipesReady || 0,
-          ingredientsLowStock: cachedStats.ingredientsLowStock || 0,
-          temperatureChecksToday: cachedStats.temperatureChecksToday || 0,
-          cleaningTasksPending: cachedStats.cleaningTasksPending || 0,
-        });
-        setLoading(false);
-      }
-
-      try {
-        const response = await fetch('/api/dashboard/stats', { cache: 'no-store' });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          let _errorMessage = 'Failed to fetch kitchen operations stats';
-
-          if (response.status === 0 || response.status >= 500) {
-            _errorMessage = 'Server error: Unable to fetch stats. Give it another go later, chef.';
-          } else if (response.status === 404) {
-            _errorMessage = 'Stats endpoint not found. Please check your connection.';
-          } else if (response.status >= 400 && response.status < 500) {
-            _errorMessage = 'Unable to fetch stats. Please check your permissions.';
-          }
-
-          logger.error('Error fetching kitchen operations stats:', {
-            status: response.status,
-            statusText: response.statusText,
-            error: errorText,
-          });
-          // Keep cached stats if available, don't clear them
-          return;
-        }
-
-        const result = await response.json();
-        if (result.success) {
-          const newStats: KitchenOperationsStats = {
-            totalMenuDishes: result.totalMenuDishes || 0,
-            recipesReady: result.recipesReady || 0,
-            ingredientsLowStock: result.ingredientsLowStock || 0,
-            temperatureChecksToday: result.temperatureChecksToday || 0,
-            cleaningTasksPending: result.cleaningTasksPending || 0,
-          };
-          setStats(newStats);
-          cacheData('dashboard_stats', result);
-        }
-      } catch (err) {
-        logger.error('Error fetching kitchen operations stats:', err);
-
-        // Check if it's a network error
-        if (err instanceof TypeError && err.message.includes('fetch')) {
-          logger.error(
-            'Network error: Unable to connect to server. Using cached data if available.',
-          );
-          // Keep cached stats if available, don't clear them
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { stats, loading } = useKitchenStats();
 
   if (loading) {
     return (
@@ -109,7 +22,7 @@ export default function KitchenOperations() {
     );
   }
 
-  const operations = [
+  const operations: KitchenOperation[] = [
     {
       title: 'Menu Items Ready',
       value: stats.totalMenuDishes,
@@ -168,75 +81,8 @@ export default function KitchenOperations() {
         </p>
       </div>
       <div className="tablet:grid-cols-2 tablet:gap-4 desktop:[grid-template-columns:repeat(auto-fit,minmax(240px,1fr))] grid grid-cols-1 gap-3">
-        {operations.map((op, _index) => (
-          <Link
-            key={op.title}
-            href={op.href}
-            className="group tablet:rounded-2xl tablet:p-5 rounded-xl border border-[var(--border)] bg-[var(--surface)]/30 p-4 transition-all duration-200 hover:border-[var(--primary)]/50 hover:shadow-[var(--primary)]/10 hover:shadow-lg active:scale-[0.98]"
-          >
-            <div className="flex items-center justify-between">
-              <div className="min-w-0 flex-1">
-                <div className="mb-1 flex flex-wrap items-center gap-2">
-                  <p className="text-fluid-xs tablet:text-fluid-sm min-w-0 flex-1 truncate font-medium text-[var(--foreground)]/60">
-                    {op.title}
-                  </p>
-                  {op.status === 'good' && (
-                    <span className="flex-shrink-0 rounded-full border border-[var(--color-success-border)] bg-[var(--color-success-bg)] px-1.5 py-0.5 text-xs font-semibold whitespace-nowrap text-[var(--color-success)]">
-                      Ready
-                    </span>
-                  )}
-                  {op.status === 'warning' && (
-                    <span className="flex-shrink-0 rounded-full border border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] px-1.5 py-0.5 text-xs font-semibold whitespace-nowrap text-[var(--color-warning)]">
-                      Needs Attention
-                    </span>
-                  )}
-                  {op.title === 'Low Stock Alerts' && op.value > 0 && (
-                    <span className="flex-shrink-0 rounded-full border border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] px-1.5 py-0.5 text-xs font-semibold whitespace-nowrap text-[var(--color-warning)]">
-                      Low Stock
-                    </span>
-                  )}
-                </div>
-                <p
-                  className={`text-fluid-2xl tablet:text-fluid-3xl font-bold ${
-                    op.status === 'good'
-                      ? 'text-[var(--primary)]'
-                      : op.status === 'warning'
-                        ? 'text-[var(--color-warning)]'
-                        : 'text-[var(--color-error)]'
-                  }`}
-                >
-                  {op.value}
-                </p>
-              </div>
-              <div
-                className={`tablet:h-12 tablet:w-12 tablet:rounded-2xl flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${
-                  op.status === 'good'
-                    ? 'from-[var(--primary)]/20 to-[var(--primary)]/10'
-                    : op.status === 'warning'
-                      ? 'from-[var(--color-warning)]/20 to-[var(--color-warning)]/10'
-                      : 'from-[var(--color-error)]/20 to-[var(--color-error)]/10'
-                }`}
-              >
-                <Icon
-                  icon={op.icon}
-                  size="md"
-                  className={
-                    op.status === 'good'
-                      ? 'text-[var(--primary)]'
-                      : op.status === 'warning'
-                        ? 'text-[var(--color-warning)]'
-                        : 'text-[var(--color-error)]'
-                  }
-                  aria-hidden={true}
-                />
-              </div>
-            </div>
-            <div className="tablet:mt-4 mt-3">
-              <p className="text-fluid-xs line-clamp-2 text-[var(--foreground)]/60">
-                {op.description}
-              </p>
-            </div>
-          </Link>
+        {operations.map((op) => (
+          <KitchenOperationCard key={op.title} operation={op} />
         ))}
       </div>
     </div>

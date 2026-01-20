@@ -1,13 +1,13 @@
 'use client';
 
 import { TablePagination } from '@/components/ui/TablePagination';
+import { logger } from '@/lib/logger';
 import { useState } from 'react';
 import { ErrorDetailModal } from './components/ErrorDetailModal';
 import { ErrorFilters } from './components/ErrorFilters';
 import { ErrorLogsTable } from './components/ErrorLogsTable';
 import { useErrorLogs } from './hooks/useErrorLogs';
 import type { ErrorLog } from './types';
-import { logger } from '@/lib/logger';
 
 /**
  * Error logs page component for admin dashboard.
@@ -118,13 +118,7 @@ export default function ErrorLogsPage() {
 
       {/* Errors Table */}
       {loading ? (
-        <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-8">
-          <div className="animate-pulse space-y-4">
-            {[1, 2, 3, 4, 5].map(i => (
-              <div key={i} className="h-12 rounded bg-[#2a2a2a]"></div>
-            ))}
-          </div>
-        </div>
+        <ErrorLogsLoading />
       ) : (
         <>
           <TablePagination
@@ -150,13 +144,24 @@ export default function ErrorLogsPage() {
         </>
       )}
 
-      {/* Error Detail Modal */}
       <ErrorDetailModal
         error={selectedError}
         updatingStatus={updatingStatus}
         onClose={() => setSelectedError(null)}
         onSaveNotes={handleSaveNotes}
       />
+    </div>
+  );
+}
+
+function ErrorLogsLoading() {
+  return (
+    <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-8">
+      <div className="animate-pulse space-y-4">
+        {[1, 2, 3, 4, 5].map(i => (
+          <div key={i} className="h-12 rounded bg-[#2a2a2a]"></div>
+        ))}
+      </div>
     </div>
   );
 }

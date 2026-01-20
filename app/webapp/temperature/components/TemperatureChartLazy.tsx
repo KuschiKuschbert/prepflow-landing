@@ -5,15 +5,15 @@ import { calculateYAxisBounds } from '@/app/webapp/temperature/components/Temper
 import { prepareChartData } from '@/app/webapp/temperature/components/TemperatureChartLazy/utils/prepareChartData';
 import { logger } from '@/lib/logger';
 import {
-  Area,
-  CartesianGrid,
-  ComposedChart,
-  Line,
-  ReferenceLine,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
+    Area,
+    CartesianGrid,
+    ComposedChart,
+    Line,
+    ReferenceLine,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
 } from 'recharts';
 import { TemperatureEquipment } from '../types';
 
@@ -114,27 +114,7 @@ export default function TemperatureChartLazy({
           yMin={yMin}
           yMax={yMax}
         />
-        <XAxis
-          dataKey="xIndex"
-          type="number"
-          domain={xAxisDomain}
-          ticks={xAxisTicks}
-          tickFormatter={formatXAxisLabel}
-          stroke="var(--foreground-muted)"
-          style={{ fontSize: '12px', fontWeight: '500' }}
-          tick={{ fill: 'var(--foreground-muted)' }}
-          scale="linear"
-        />
-        <YAxis
-          domain={[yAxisMin, yAxisMax]}
-          stroke="var(--foreground-muted)"
-          tickFormatter={(v: number | string) => {
-            const num = typeof v === 'number' ? v : parseFloat(String(v));
-            return isNaN(num) ? String(v) : `${num.toFixed(1)}°`;
-          }}
-          style={{ fontSize: '12px', fontWeight: '500' }}
-          tick={{ fill: 'var(--foreground-muted)' }}
-        />
+        {renderChartAxes(xAxisDomain, xAxisTicks, formatXAxisLabel, yAxisMin, yAxisMax)}
         <Tooltip
           labelFormatter={formatTooltipLabel}
           formatter={(value: number | string | Array<number | string>) => [
@@ -148,66 +128,8 @@ export default function TemperatureChartLazy({
             borderRadius: '8px',
           }}
         />
-        {equipment.min_temp_celsius !== null && (
-          <ReferenceLine
-            y={equipment.min_temp_celsius}
-            stroke="var(--primary)"
-            strokeWidth={3}
-            strokeDasharray="6 4"
-            strokeOpacity={0.9}
-            label={{
-              value: `Min: ${equipment.min_temp_celsius}°C`,
-              position: 'right',
-              fill: 'var(--primary)',
-              fontSize: 12,
-              fontWeight: 'bold',
-              offset: 10,
-            }}
-            ifOverflow="extendDomain"
-          />
-        )}
-        {equipment.max_temp_celsius !== null && (
-          <ReferenceLine
-            y={equipment.max_temp_celsius}
-            stroke="var(--primary)"
-            strokeWidth={3}
-            strokeDasharray="6 4"
-            strokeOpacity={0.9}
-            label={{
-              value: `Max: ${equipment.max_temp_celsius}°C`,
-              position: 'right',
-              fill: 'var(--primary)',
-              fontSize: 12,
-              fontWeight: 'bold',
-              offset: 10,
-            }}
-            ifOverflow="extendDomain"
-          />
-        )}
-        {/* Red area below minimum threshold - fills from yMin to min_temp_celsius */}
-        {equipment.min_temp_celsius !== null && (
-          <Area
-            type="monotone"
-            dataKey="redAreaBelow"
-            baseValue={yMin}
-            fill="var(--color-error)"
-            fillOpacity={0.25}
-            stroke="none"
-            isAnimationActive={false}
-          />
-        )}
-        {/* Red area above maximum threshold - fills from max_temp_celsius to yMax */}
-        {equipment.max_temp_celsius !== null && (
-          <Area
-            type="monotone"
-            dataKey="topBoundary"
-            baseValue={equipment.max_temp_celsius}
-            fill="var(--color-error)"
-            fillOpacity={0.25}
-            stroke="none"
-            isAnimationActive={false}
-          />
-        )}
+        {renderThresholdLines(equipment)}
+        {renderThresholdAreas(equipment, yMin)}
         <Line
           type="monotone"
           dataKey="temperature"
@@ -219,5 +141,111 @@ export default function TemperatureChartLazy({
         />
       </ComposedChart>
     </ResponsiveContainer>
+  );
+}
+
+function renderChartAxes(
+  xAxisDomain: [number, number],
+  xAxisTicks: number[],
+  formatXAxisLabel: (tickItem: number | string) => string,
+  yAxisMin: number | string,
+  yAxisMax: number | string,
+) {
+  return (
+    <>
+      <XAxis
+        dataKey="xIndex"
+        type="number"
+        domain={xAxisDomain}
+        ticks={xAxisTicks}
+        tickFormatter={formatXAxisLabel}
+        stroke="var(--foreground-muted)"
+        style={{ fontSize: '12px', fontWeight: '500' }}
+        tick={{ fill: 'var(--foreground-muted)' }}
+        scale="linear"
+      />
+      <YAxis
+        domain={[yAxisMin, yAxisMax]}
+        stroke="var(--foreground-muted)"
+        tickFormatter={(v: number | string) => {
+          const num = typeof v === 'number' ? v : parseFloat(String(v));
+          return isNaN(num) ? String(v) : `${num.toFixed(1)}°`;
+        }}
+        style={{ fontSize: '12px', fontWeight: '500' }}
+        tick={{ fill: 'var(--foreground-muted)' }}
+      />
+    </>
+  );
+}
+
+function renderThresholdLines(equipment: TemperatureEquipment) {
+  return (
+    <>
+      {equipment.min_temp_celsius !== null && (
+        <ReferenceLine
+          y={equipment.min_temp_celsius}
+          stroke="var(--primary)"
+          strokeWidth={3}
+          strokeDasharray="6 4"
+          strokeOpacity={0.9}
+          label={{
+            value: `Min: ${equipment.min_temp_celsius}°C`,
+            position: 'right',
+            fill: 'var(--primary)',
+            fontSize: 12,
+            fontWeight: 'bold',
+            offset: 10,
+          }}
+          ifOverflow="extendDomain"
+        />
+      )}
+      {equipment.max_temp_celsius !== null && (
+        <ReferenceLine
+          y={equipment.max_temp_celsius}
+          stroke="var(--primary)"
+          strokeWidth={3}
+          strokeDasharray="6 4"
+          strokeOpacity={0.9}
+          label={{
+            value: `Max: ${equipment.max_temp_celsius}°C`,
+            position: 'right',
+            fill: 'var(--primary)',
+            fontSize: 12,
+            fontWeight: 'bold',
+            offset: 10,
+          }}
+          ifOverflow="extendDomain"
+        />
+      )}
+    </>
+  );
+}
+
+function renderThresholdAreas(equipment: TemperatureEquipment, yMin: number) {
+  return (
+    <>
+      {equipment.min_temp_celsius !== null && (
+        <Area
+          type="monotone"
+          dataKey="redAreaBelow"
+          baseValue={yMin}
+          fill="var(--color-error)"
+          fillOpacity={0.25}
+          stroke="none"
+          isAnimationActive={false}
+        />
+      )}
+      {equipment.max_temp_celsius !== null && (
+        <Area
+          type="monotone"
+          dataKey="topBoundary"
+          baseValue={equipment.max_temp_celsius}
+          fill="var(--color-error)"
+          fillOpacity={0.25}
+          stroke="none"
+          isAnimationActive={false}
+        />
+      )}
+    </>
   );
 }

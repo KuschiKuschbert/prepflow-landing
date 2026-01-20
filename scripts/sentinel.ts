@@ -1,3 +1,4 @@
+import { execSync } from 'child_process';
 import fs from 'fs';
 import { glob } from 'glob';
 
@@ -96,7 +97,6 @@ async function main() {
   // Check for 'any' types (Eradicate Any Mission)
   console.log(`\n${YELLOW}🔍 Eradicate Any Audit...${NC}`);
   try {
-    const { execSync } = require('child_process');
     execSync('npm run audit:any', { stdio: 'inherit' });
     console.log(`${GREEN}✅ No unjustified 'any' types found.${NC}`);
   } catch (_error) {

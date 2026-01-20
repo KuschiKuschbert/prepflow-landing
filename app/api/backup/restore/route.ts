@@ -5,7 +5,6 @@
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
-import { decryptBackup, getPrepFlowServerKey } from '@/lib/backup/encryption';
 import { restoreFull, restoreMerge, restoreSelective } from '@/lib/backup/restore';
 import type { MergeOptions } from '@/lib/backup/types';
 import { logger } from '@/lib/logger';
@@ -13,6 +12,7 @@ import { getAppError } from '@/lib/utils/error';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { processRestoreRequest } from './helpers/processRestore';
 
 const restoreBackupSchema = z.object({
   backupId: z.string().optional(),
@@ -28,11 +28,7 @@ const restoreBackupSchema = z.object({
   password: z.string().optional(),
 });
 
-// Constants for backup format
-const BACKUP_HEADER = 'PREPFLOW_BACKUP';
-const HEADER_SIZE = 16;
-const _VERSION_OFFSET = 16;
-const ENCRYPTION_MODE_OFFSET = 17;
+
 
 // Helper to safely parse request body
 async function safeParseBody(request: NextRequest) {
@@ -89,32 +85,11 @@ export async function POST(request: NextRequest) {
     let backupData;
 
     if (backupFile) {
-      const encryptedData = Uint8Array.from(atob(backupFile), c => c.charCodeAt(0));
-      const header = new TextDecoder().decode(encryptedData.slice(0, HEADER_SIZE));
-
-      if (header !== BACKUP_HEADER) {
-        return NextResponse.json(
-          ApiErrorHandler.createError('Invalid backup file format', 'BAD_REQUEST', 400),
-          { status: 400 },
-        );
+      const result = await processRestoreRequest(request, backupFile, password);
+      if (!result.success) {
+        return result.response;
       }
-
-      const encryptionMode = encryptedData[ENCRYPTION_MODE_OFFSET];
-      let decryptionKey: string;
-
-      if (encryptionMode === 0x01) {
-        if (!password) {
-          return NextResponse.json(
-            ApiErrorHandler.createError('password is required for encryption', 'BAD_REQUEST', 400),
-            { status: 400 },
-          );
-        }
-        decryptionKey = password;
-      } else {
-        decryptionKey = await getPrepFlowServerKey();
-      }
-
-      backupData = await decryptBackup(encryptedData, decryptionKey);
+      backupData = result.data;
     } else if (backupId) {
       return NextResponse.json(
         ApiErrorHandler.createError(

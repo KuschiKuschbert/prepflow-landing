@@ -42,7 +42,18 @@ export async function POST(request: NextRequest) {
     logger.dev(`📊 Found ${equipment.length} active equipment items`);
 
     // Generate 5 entries per equipment, randomly spread across the last 2 weeks (14 days)
-    const logs: unknown[] = [];
+    type TemperatureLogEntry = {
+      log_date: string;
+      log_time: string;
+      temperature_type: string;
+      temperature_celsius: number;
+      location: string | null;
+      notes: string | null;
+      logged_by: string;
+      created_at: string;
+      updated_at: string;
+    };
+    const logs: TemperatureLogEntry[] = [];
     const today = new Date();
 
     equipment.forEach(eq => {

@@ -3,9 +3,9 @@
  */
 
 import { createHash } from 'crypto';
-import { MenuItemData } from './fetchMenuItemData';
 import { NormalizedIngredient } from './normalizeIngredients';
 import { ParsedRecipeCard } from './parseRecipeCard';
+import { MenuItemData } from './types';
 
 /**
  * Build recipe card manually from existing instructions (without AI)

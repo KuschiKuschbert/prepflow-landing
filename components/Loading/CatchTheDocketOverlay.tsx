@@ -1,9 +1,9 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import CatchTheDocket from '@/components/Loading/CatchTheDocket';
+import { isArcadeDisabled, isTouchDevice, prefersReducedMotion } from '@/lib/arcadeGuards';
 import { subscribeLoadingGate } from '@/lib/loading-gate';
-import { prefersReducedMotion, isArcadeDisabled, isTouchDevice } from '@/lib/arcadeGuards';
+import dynamic from 'next/dynamic';
 import React, { useEffect, useMemo, useState } from 'react';
 
 const routePath = () => {
@@ -14,6 +14,10 @@ const routePath = () => {
 const isAuthRoute = (path: string) => {
   return path.startsWith('/api/auth') || path.startsWith('/login') || path.startsWith('/auth');
 };
+
+interface WindowWithDataLayer {
+  dataLayer?: Record<string, unknown>[];
+}
 
 // Lazy load framer-motion to reduce initial bundle size
 const CatchTheDocketOverlayContent = dynamic(
@@ -65,8 +69,7 @@ const CatchTheDocketOverlay: React.FC = () => {
             ? 'reduced_motion'
             : 'flag',
       } as const;
-      (window as any) /* justified: global object access */.dataLayer
-        ?.push(payload);
+      (window as unknown as WindowWithDataLayer).dataLayer?.push(payload);
       window.dispatchEvent(new CustomEvent('gtm:event', { detail: payload }));
     }
     return d;
@@ -90,8 +93,7 @@ const CatchTheDocketOverlay: React.FC = () => {
           threshold_ms: 800,
           is_touch_device: isTouchDevice(),
         } as const;
-        (window as any) /* justified: global object access */.dataLayer
-          ?.push(startPayload);
+        (window as unknown as WindowWithDataLayer).dataLayer?.push(startPayload);
         window.dispatchEvent(new CustomEvent('gtm:event', { detail: startPayload }));
       }
 
@@ -102,8 +104,7 @@ const CatchTheDocketOverlay: React.FC = () => {
           page_path: routePath(),
           is_touch_device: isTouchDevice(),
         } as const;
-        (window as any) /* justified: global object access */.dataLayer
-          ?.push(endPayload);
+        (window as unknown as WindowWithDataLayer).dataLayer?.push(endPayload);
         window.dispatchEvent(new CustomEvent('gtm:event', { detail: endPayload }));
       }
 

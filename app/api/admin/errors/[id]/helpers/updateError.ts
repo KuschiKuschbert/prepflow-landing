@@ -31,22 +31,7 @@ export async function updateError(
   }
 
   // Build update object
-  const updateData: Record<string, unknown> = {};
-  if (updates.status) {
-    updateData.status = updates.status;
-    // Set resolved_at if status is resolved
-    if (updates.status === 'resolved') {
-      updateData.resolved_at = new Date().toISOString();
-      // Try to get admin user_id from email
-      const adminId = await resolveAdminUserId(adminUser.email, supabaseAdmin, logger);
-      if (adminId) {
-        updateData.resolved_by = adminId;
-      }
-    }
-  }
-  if (updates.notes !== undefined) {
-    updateData.notes = updates.notes;
-  }
+  const updateData = await buildErrorUpdateData(updates, adminUser);
 
   const { data: errorLog, error: dbError } = await supabaseAdmin
     .from('admin_error_logs')
@@ -74,6 +59,39 @@ export async function updateError(
   }
 
   return { errorLog };
+}
+
+async function buildErrorUpdateData(
+  updates: z.infer<typeof updateErrorSchema>,
+  adminUser: AdminUser,
+): Promise<Record<string, unknown>> {
+  const updateData: Record<string, unknown> = {};
+
+  if (updates.status) {
+    updateData.status = updates.status;
+    if (updates.status === 'resolved') {
+       Object.assign(updateData, await getResolutionUpdateData(adminUser));
+    }
+  }
+
+  if (updates.notes !== undefined) {
+    updateData.notes = updates.notes;
+  }
+
+  return updateData;
+}
+
+async function getResolutionUpdateData(adminUser: AdminUser) {
+    const data: Record<string, unknown> = {
+        resolved_at: new Date().toISOString()
+    };
+    if (supabaseAdmin) {
+        const adminId = await resolveAdminUserId(adminUser.email, supabaseAdmin, logger);
+        if (adminId) {
+          data.resolved_by = adminId;
+        }
+    }
+    return data;
 }
 
 export { updateErrorSchema };

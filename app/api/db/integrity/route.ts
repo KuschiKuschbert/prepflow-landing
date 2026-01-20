@@ -2,6 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { checkIngredientIntegrity, checkRecipeIntegrity } from './helpers/checkers';
 
 export async function GET(request: NextRequest) {
   try {
@@ -25,75 +26,20 @@ export async function GET(request: NextRequest) {
     }
 
     // Recipes without any recipe_ingredients
-    const { data: recipes, error: recipesError } = await supabaseAdmin.from('recipes').select('id');
-    if (recipesError) {
-      logger.error('[DB Integrity API] Database error fetching recipes:', {
-        error: recipesError.message,
-        code: recipesError.code,
-        context: { endpoint: '/api/db/integrity', operation: 'GET' },
-      });
-      return NextResponse.json(ApiErrorHandler.fromSupabaseError(recipesError, 500), {
-        status: 500,
-      });
-    }
-
-    const recipeIds = (recipes || []).map(r => r.id);
-    let recipesWithNoLines = 0;
-    if (recipeIds.length > 0) {
-      const { data: counts, error: countErr } = await supabaseAdmin
-        .from('recipe_ingredients')
-        .select('recipe_id');
-      if (countErr) {
-        logger.error('[DB Integrity API] Database error fetching recipe ingredients:', {
-          error: countErr.message,
-          code: countErr.code,
-          context: { endpoint: '/api/db/integrity', operation: 'GET' },
-        });
-        return NextResponse.json(ApiErrorHandler.fromSupabaseError(countErr, 500), { status: 500 });
-      }
-      const withLines = new Set((counts || []).map(r => r.recipe_id));
-      recipesWithNoLines = recipeIds.filter(id => !withLines.has(id)).length;
-    }
+    // Recipes without any recipe_ingredients
+    const { totalRecipes, recipesWithNoLines } = await checkRecipeIntegrity(supabaseAdmin);
 
     // Recipe ingredient rows with missing ingredient reference
-    const { data: riRows, error: riErr } = await supabaseAdmin
-      .from('recipe_ingredients')
-      .select('ingredient_id');
-    if (riErr) {
-      logger.error('[DB Integrity API] Database error fetching recipe ingredient rows:', {
-        error: riErr.message,
-        code: riErr.code,
-        context: { endpoint: '/api/db/integrity', operation: 'GET' },
-      });
-      return NextResponse.json(ApiErrorHandler.fromSupabaseError(riErr, 500), { status: 500 });
-    }
-    const uniqueIngIds = Array.from(
-      new Set((riRows || []).map(r => r.ingredient_id).filter(Boolean)),
+    const { uniqueIngredientIdsInLines, missingIngredientRefs } = await checkIngredientIntegrity(
+      supabaseAdmin,
     );
-    let missingIngredientRefs = 0;
-    if (uniqueIngIds.length > 0) {
-      const { data: ingRows, error: ingErr } = await supabaseAdmin
-        .from('ingredients')
-        .select('id')
-        .in('id', uniqueIngIds);
-      if (ingErr) {
-        logger.error('[DB Integrity API] Database error fetching ingredients:', {
-          error: ingErr.message,
-          code: ingErr.code,
-          context: { endpoint: '/api/db/integrity', operation: 'GET' },
-        });
-        return NextResponse.json(ApiErrorHandler.fromSupabaseError(ingErr, 500), { status: 500 });
-      }
-      const present = new Set((ingRows || []).map(r => r.id));
-      missingIngredientRefs = uniqueIngIds.filter(id => !present.has(id)).length;
-    }
 
     return NextResponse.json({
       success: true,
       stats: {
-        totalRecipes: recipeIds.length,
+        totalRecipes,
         recipesWithNoLines,
-        uniqueIngredientIdsInLines: uniqueIngIds.length,
+        uniqueIngredientIdsInLines,
         missingIngredientRefs,
       },
     });

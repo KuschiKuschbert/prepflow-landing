@@ -1,8 +1,8 @@
 import { AUSTRALIAN_ALLERGENS } from '@/lib/allergens/australian-allergens';
 import { escapeHtml, generateExportTemplate } from '@/lib/exports/pdf-template';
 import { NextResponse } from 'next/server';
-import { MatrixItem } from '../route';
 import { allergenMatrixStyles } from './allergenMatrixStyles';
+import { MatrixItem } from './processMatrixData';
 
 export function generateHTML(
   menuName: string,

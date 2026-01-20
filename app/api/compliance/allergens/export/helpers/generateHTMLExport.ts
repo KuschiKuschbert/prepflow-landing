@@ -2,11 +2,11 @@
  * HTML export generator for allergen overview
  */
 
-import { NextResponse } from 'next/server';
 import { getAllergenDisplayName } from '@/lib/allergens/australian-allergens';
-import { generateExportTemplate, escapeHtml } from '@/lib/exports/pdf-template';
-import { ALLERGEN_EXPORT_STYLES } from './htmlExportStyles';
+import { escapeHtml, generateExportTemplate } from '@/lib/exports/pdf-template';
+import { NextResponse } from 'next/server';
 import type { AllergenExportItem } from './fetchAllergenExportData';
+import { ALLERGEN_EXPORT_STYLES } from './htmlExportStyles';
 
 /**
  * Generates HTML export for allergen overview
@@ -17,24 +17,8 @@ import type { AllergenExportItem } from './fetchAllergenExportData';
  */
 export function generateHTMLExport(items: AllergenExportItem[], forPDF: boolean): NextResponse {
   // Build ingredient list for each item
-  const itemsWithIngredients = items.map(item => {
-    const ingredientAllergenMap: Record<string, string[]> = {};
-    if (item.allergenSources) {
-      Object.entries(item.allergenSources).forEach(([allergen, ingredients]) => {
-        const ingredientList = Array.isArray(ingredients) ? ingredients : [];
-        ingredientList.forEach((ingredientName: string) => {
-          if (!ingredientAllergenMap[ingredientName]) {
-            ingredientAllergenMap[ingredientName] = [];
-          }
-          if (!ingredientAllergenMap[ingredientName].includes(allergen)) {
-            ingredientAllergenMap[ingredientName].push(allergen);
-          }
-        });
-      });
-    }
-    const allIngredientNames = Object.keys(ingredientAllergenMap);
-    return { ...item, ingredientNames: allIngredientNames };
-  });
+  // Build ingredient list for each item
+  const itemsWithIngredients = enrichItemsWithIngredients(items);
 
   // Format allergens as display names
   const formatAllergens = (allergens: string[]) => {
@@ -98,5 +82,26 @@ export function generateHTMLExport(items: AllergenExportItem[], forPDF: boolean)
         ? 'inline; filename="allergen_overview.html"'
         : 'inline; filename="allergen_overview.html"',
     },
+  });
+}
+
+function enrichItemsWithIngredients(items: AllergenExportItem[]) {
+  return items.map(item => {
+    const ingredientAllergenMap: Record<string, string[]> = {};
+    if (item.allergenSources) {
+      Object.entries(item.allergenSources).forEach(([allergen, ingredients]) => {
+        const ingredientList = Array.isArray(ingredients) ? ingredients : [];
+        ingredientList.forEach((ingredientName: string) => {
+          if (!ingredientAllergenMap[ingredientName]) {
+            ingredientAllergenMap[ingredientName] = [];
+          }
+          if (!ingredientAllergenMap[ingredientName].includes(allergen)) {
+            ingredientAllergenMap[ingredientName].push(allergen);
+          }
+        });
+      });
+    }
+    const allIngredientNames = Object.keys(ingredientAllergenMap);
+    return { ...item, ingredientNames: allIngredientNames };
   });
 }

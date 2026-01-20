@@ -3,7 +3,7 @@
  * Consolidates nested recipes and normalizes all quantities to 1 serving
  */
 
-import { MenuItemData, MenuItemSubRecipe } from './fetchMenuItemData';
+import { MenuItemData, MenuItemSubRecipe } from './types';
 
 export interface NormalizedIngredient {
   name: string;

@@ -1,5 +1,6 @@
-import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { APP_BASE_URL } from '@/lib/constants';
+import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 interface QRCodeEntity {
@@ -65,9 +66,11 @@ export async function GET(request: NextRequest) {
     }
 
     const entities: QRCodeEntity[] = [];
-    const host = request.headers.get('host') || 'localhost:3000';
-    const protocol = host.includes('localhost') ? 'http' : 'https';
-    const baseUrl = `${protocol}://${host}`;
+    const baseUrl =
+      request.headers.get('origin') ||
+      (request.headers.get('host')
+        ? `${request.headers.get('host')?.includes('localhost') ? 'http' : 'https'}://${request.headers.get('host')}`
+        : APP_BASE_URL);
 
     // Fetch recipes
     const { data: recipes, error: recipesError } = await supabaseAdmin

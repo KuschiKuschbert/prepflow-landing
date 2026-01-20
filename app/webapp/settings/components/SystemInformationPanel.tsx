@@ -24,29 +24,8 @@ export function SystemInformationPanel() {
 
   useEffect(() => {
     // Get browser and OS info
-    const userAgent = navigator.userAgent;
-    let browser = 'Unknown';
-    let os = 'Unknown';
-
-    // Detect browser
-    if (userAgent.indexOf('Chrome') > -1) browser = 'Chrome';
-    else if (userAgent.indexOf('Firefox') > -1) browser = 'Firefox';
-    else if (userAgent.indexOf('Safari') > -1) browser = 'Safari';
-    else if (userAgent.indexOf('Edge') > -1) browser = 'Edge';
-
-    // Detect OS
-    if (userAgent.indexOf('Win') > -1) os = 'Windows';
-    else if (userAgent.indexOf('Mac') > -1) os = 'macOS';
-    else if (userAgent.indexOf('Linux') > -1) os = 'Linux';
-    else if (userAgent.indexOf('Android') > -1) os = 'Android';
-    else if (userAgent.indexOf('iOS') > -1) os = 'iOS';
-
-    setSystemInfo({
-      appVersion: '0.1.1', // From package.json
-      browser,
-      os,
-      userAgent,
-    });
+    const initialInfo = detectSystemInfo();
+    setSystemInfo(prev => ({ ...prev, ...initialInfo }));
 
     // Fetch latest Android version from Supabase
     const fetchAndroidVersion = async () => {
@@ -84,9 +63,8 @@ Environment: ${process.env.NODE_ENV || 'unknown'}`;
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
-      logger.error('[SystemInformationPanel.tsx] Error in catch block:', {
+      logger.error('[SystemInformationPanel.tsx] Clipboard error (using fallback):', {
         error: error instanceof Error ? error.message : String(error),
-        stack: error instanceof Error ? error.stack : undefined,
       });
 
       // Fallback for older browsers
@@ -111,35 +89,14 @@ Environment: ${process.env.NODE_ENV || 'unknown'}`;
       </div>
 
       <div className="space-y-3">
-        <div className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
-          <div>
-            <p className="text-xs text-[var(--foreground)]/60">App Version</p>
-            <p className="text-sm font-medium text-[var(--foreground)]">{systemInfo.appVersion}</p>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
-          <div>
-            <p className="text-xs text-[var(--foreground)]/60">Browser</p>
-            <p className="text-sm font-medium text-[var(--foreground)]">{systemInfo.browser}</p>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
-          <div>
-            <p className="text-xs text-[var(--foreground)]/60">Operating System</p>
-            <p className="text-sm font-medium text-[var(--foreground)]">{systemInfo.os}</p>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
-          <div>
-            <p className="text-xs text-[var(--foreground)]/60">Environment</p>
-            <p className="text-sm font-medium text-[var(--foreground)] capitalize">
-              {process.env.NODE_ENV || 'unknown'}
-            </p>
-          </div>
-        </div>
+        <InfoRow label="App Version" value={systemInfo.appVersion} />
+        <InfoRow label="Browser" value={systemInfo.browser} />
+        <InfoRow label="Operating System" value={systemInfo.os} />
+        <InfoRow
+          label="Environment"
+          value={process.env.NODE_ENV || 'unknown'}
+          valueClassName="capitalize"
+        />
       </div>
 
       <button
@@ -169,6 +126,49 @@ Environment: ${process.env.NODE_ENV || 'unknown'}`;
         <p className="text-xs text-[var(--foreground)]/60">
           Copy this information when contacting support to help us troubleshoot issues faster.
         </p>
+      </div>
+    </div>
+  );
+}
+
+function detectSystemInfo() {
+  if (typeof navigator === 'undefined') {
+    return { browser: 'Unknown', os: 'Unknown', userAgent: '' };
+  }
+  const userAgent = navigator.userAgent;
+  let browser = 'Unknown';
+  let os = 'Unknown';
+
+  // Detect browser
+  if (userAgent.indexOf('Chrome') > -1) browser = 'Chrome';
+  else if (userAgent.indexOf('Firefox') > -1) browser = 'Firefox';
+  else if (userAgent.indexOf('Safari') > -1) browser = 'Safari';
+  else if (userAgent.indexOf('Edge') > -1) browser = 'Edge';
+
+  // Detect OS
+  if (userAgent.indexOf('Win') > -1) os = 'Windows';
+  else if (userAgent.indexOf('Mac') > -1) os = 'macOS';
+  else if (userAgent.indexOf('Linux') > -1) os = 'Linux';
+  else if (userAgent.indexOf('Android') > -1) os = 'Android';
+  else if (userAgent.indexOf('iOS') > -1) os = 'iOS';
+
+  return { browser, os, userAgent };
+}
+
+function InfoRow({
+  label,
+  value,
+  valueClassName = '',
+}: {
+  label: string;
+  value: string;
+  valueClassName?: string;
+}) {
+  return (
+    <div className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface)]/20 p-4">
+      <div>
+        <p className="text-xs text-[var(--foreground)]/60">{label}</p>
+        <p className={`text-sm font-medium text-[var(--foreground)] ${valueClassName}`}>{value}</p>
       </div>
     </div>
   );

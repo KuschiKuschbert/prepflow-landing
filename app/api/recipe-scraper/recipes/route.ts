@@ -4,14 +4,10 @@
  */
 
 import { standardAdminChecks } from '@/lib/admin-auth';
-import { getRecipeDatabaseStats, searchRecipesByIngredients } from '@/lib/ai/recipe-database';
+import { getRecipeDatabaseStats } from '@/lib/ai/recipe-database';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  filterByFormatAfterLoad,
-  filterByFormatAtIndex,
-  filterBySource,
-} from './helpers/filter-helpers';
+import { processListRequest, processSearchRequest } from './helpers/request-processors';
 import { initializeStorage, loadJSONStorage } from './helpers/storage-helpers';
 
 /**
@@ -71,40 +67,25 @@ export async function GET(request: NextRequest) {
 
     try {
       if (search) {
-        const ingredients = search
-          .split(',')
-          .map(i => i.trim())
-          .filter(Boolean);
-        const allMatchingRecipes = await searchRecipesByIngredients(
-          ingredients,
-          10000,
+        const result = await processSearchRequest(
+          search,
           sourceFilter,
+          formatFilter,
+          offset,
+          pageSize
         );
-
-        const filteredRecipes = filterByFormatAfterLoad(allMatchingRecipes, formatFilter);
-        totalRecipes = filteredRecipes.length;
-        recipes = filteredRecipes.slice(offset, offset + pageSize);
+        recipes = result.recipes;
+        totalRecipes = result.totalRecipes;
       } else {
-        try {
-          const allRecipes = storage.getAllRecipes();
-          let filteredRecipes = filterByFormatAtIndex(allRecipes, formatFilter);
-          filteredRecipes = filterBySource(filteredRecipes, sourceFilter);
-          totalRecipes = filteredRecipes.length;
-
-          if (filteredRecipes.length > 0) {
-            const paginatedEntries = filteredRecipes.slice(offset, offset + pageSize);
-            const recipePromises = paginatedEntries.map(entry =>
-              storage.loadRecipe(entry.file_path!),
-            );
-            const loadedRecipes = await Promise.all(recipePromises);
-            recipes = loadedRecipes.filter(recipe => recipe !== null);
-          }
-        } catch (loadErr) {
-          logger.error('[Recipe Scraper API] Error loading recipes:', {
-            error: loadErr instanceof Error ? loadErr.message : String(loadErr),
-          });
-          recipes = [];
-        }
+        const result = await processListRequest(
+          storage,
+          sourceFilter,
+          formatFilter,
+          offset,
+          pageSize
+        );
+        recipes = result.recipes;
+        totalRecipes = result.totalRecipes;
       }
     } catch (recipeErr) {
       logger.error('[Recipe Scraper API] Error fetching recipes:', {

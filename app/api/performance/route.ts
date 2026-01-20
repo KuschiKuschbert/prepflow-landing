@@ -30,27 +30,8 @@ export async function GET(request: NextRequest) {
     const lockedMenuOnly = searchParams.get('lockedMenuOnly') === 'true';
 
     // If filtering by locked menu, find the locked menu first
-    let targetMenuId: string | null = menuIdParam || null;
-    if (lockedMenuOnly && !targetMenuId) {
-      const { data: lockedMenu, error: lockedMenuError } = await supabaseAdmin
-        .from('menus')
-        .select('id')
-        .eq('is_locked', true)
-        .single();
-
-      if (lockedMenuError) {
-        logger.error('[Performance API] Error fetching locked menu:', {
-          error: lockedMenuError.message,
-          code: lockedMenuError.code,
-          context: { endpoint: '/api/performance', operation: 'GET' },
-        });
-      } else if (lockedMenu) {
-        targetMenuId = lockedMenu.id;
-        logger.dev('[Performance API] Filtering by locked menu:', { menuId: targetMenuId });
-      } else {
-        logger.dev('[Performance API] No locked menu found, showing all dishes');
-      }
-    }
+    // If filtering by locked menu, find the locked menu first
+    const targetMenuId = await getFilterMenuId(supabaseAdmin, menuIdParam, lockedMenuOnly);
 
     // Build base query
     let dishesQuery = supabaseAdmin.from('menu_dishes').select(
@@ -67,22 +48,9 @@ export async function GET(request: NextRequest) {
 
     // Filter by menu if menuId is provided
     if (targetMenuId) {
-      // Get dish IDs from menu_items for this menu
-      const { data: menuItems, error: menuItemsError } = await supabaseAdmin
-        .from('menu_items')
-        .select('dish_id')
-        .eq('menu_id', targetMenuId)
-        .not('dish_id', 'is', null);
+      const dishIds = await getDishIdsForMenu(supabaseAdmin, targetMenuId);
 
-      if (menuItemsError) {
-        logger.error('[Performance API] Error fetching menu items:', {
-          error: menuItemsError.message,
-          code: menuItemsError.code,
-          context: { endpoint: '/api/performance', operation: 'GET', menuId: targetMenuId },
-        });
-        // Continue without filtering if there's an error
-      } else if (menuItems && menuItems.length > 0) {
-        const dishIds = menuItems.map(item => item.dish_id).filter(Boolean) as string[];
+      if (dishIds.length > 0) {
         dishesQuery = dishesQuery.in('id', dishIds);
         logger.dev('[Performance API] Filtering dishes by menu:', {
           menuId: targetMenuId,
@@ -192,4 +160,53 @@ export async function POST(request: NextRequest) {
     }
     return handlePerformanceError(e, 'POST');
   }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function getFilterMenuId(supabaseAdmin: any, menuIdParam: string | null, lockedMenuOnly: boolean): Promise<string | null> {
+    let targetMenuId: string | null = menuIdParam || null;
+    if (lockedMenuOnly && !targetMenuId) {
+      const { data: lockedMenu, error: lockedMenuError } = await supabaseAdmin
+        .from('menus')
+        .select('id')
+        .eq('is_locked', true)
+        .single();
+
+      if (lockedMenuError) {
+        logger.error('[Performance API] Error fetching locked menu:', {
+          error: lockedMenuError.message,
+          code: lockedMenuError.code,
+          context: { endpoint: '/api/performance', operation: 'GET' },
+        });
+      } else if (lockedMenu) {
+        targetMenuId = lockedMenu.id;
+        logger.dev('[Performance API] Filtering by locked menu:', { menuId: targetMenuId });
+      } else {
+        logger.dev('[Performance API] No locked menu found, showing all dishes');
+      }
+    }
+    return targetMenuId;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function getDishIdsForMenu(supabaseAdmin: any, menuId: string): Promise<string[]> {
+    const { data: menuItems, error: menuItemsError } = await supabaseAdmin
+        .from('menu_items')
+        .select('dish_id')
+        .eq('menu_id', menuId)
+        .not('dish_id', 'is', null);
+
+      if (menuItemsError) {
+        logger.error('[Performance API] Error fetching menu items:', {
+          error: menuItemsError.message,
+          code: menuItemsError.code,
+          context: { endpoint: '/api/performance', operation: 'GET', menuId },
+        });
+        return [];
+      }
+
+      if (menuItems && menuItems.length > 0) {
+        return menuItems.map((item: { dish_id: unknown; }) => item.dish_id).filter(Boolean) as string[];
+      }
+      return [];
 }

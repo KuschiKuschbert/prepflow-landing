@@ -16,6 +16,12 @@ interface SettingsClientProps {
   releaseData: ReleaseData | null;
 }
 
+interface PublicLinkResponse {
+  publicUrl?: string;
+  message?: string;
+  error?: string;
+}
+
 /**
  * CurbOS settings client component
  * Manages public display link generation and displays server-fetched release info
@@ -62,10 +68,10 @@ export default function SettingsClient({ releaseData }: SettingsClientProps) {
     setLoading(true);
     try {
       const response = await fetch('/api/curbos/public-token/curbos');
-      const data = await response.json();
+      const data = (await response.json()) as PublicLinkResponse;
 
       if (response.ok) {
-        setPublicUrl(data.publicUrl);
+        setPublicUrl(data.publicUrl || null);
       } else {
         logger.error('[CurbOS Settings] Failed to generate link:', {
           status: response.status,
@@ -90,9 +96,9 @@ export default function SettingsClient({ releaseData }: SettingsClientProps) {
     setLoading(true);
     try {
       const response = await fetch('/api/curbos/public-token/curbos', { method: 'POST' });
-      const data = await response.json();
+      const data = (await response.json()) as PublicLinkResponse;
       if (response.ok) {
-        setPublicUrl(data.publicUrl);
+        setPublicUrl(data.publicUrl || null);
         toast.success('Link regenerated - old link is now invalid');
       } else {
         logger.error('[CurbOS Settings] Failed to regenerate link:', {

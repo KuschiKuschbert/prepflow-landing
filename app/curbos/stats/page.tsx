@@ -14,6 +14,11 @@ interface Transaction {
   payment_method: string;
 }
 
+interface OrderItem {
+  name: string;
+  quantity?: number;
+}
+
 export default function StatsPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(true)
@@ -60,8 +65,8 @@ export default function StatsPage() {
   const itemCounts: Record<string, number> = {}
   transactions.forEach(t => {
     try {
-        const items = JSON.parse(t.items_json)
-        items.forEach((i: { name: string; quantity?: number }) => {
+        const items = JSON.parse(t.items_json) as OrderItem[];
+        items.forEach((i) => {
             itemCounts[i.name] = (itemCounts[i.name] || 0) + (i.quantity || 1)
         })
     } catch (e) {}

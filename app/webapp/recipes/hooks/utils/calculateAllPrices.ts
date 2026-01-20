@@ -1,6 +1,6 @@
 import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../../types';
+import { executeBatchCalculation, executeIndividualCalculation } from './price-calculation-strategies';
 
-import { logger } from '@/lib/logger';
 /**
  * Calculate prices for all recipes using batch fetch or fallback to parallel individual fetches.
  *
@@ -30,61 +30,28 @@ export async function calculateAllPrices({
     ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
   ) => Promise<Record<string, RecipeIngredientWithDetails[]>>;
 }): Promise<Record<string, RecipePriceData>> {
-  const prices: Record<string, RecipePriceData> = {};
-
   if (recipesData.length === 0) {
-    return prices;
+    return {};
   }
 
+  // Try batch strategy first if available
   if (fetchBatchRecipeIngredients) {
-    try {
-      const recipeIds = recipesData.map(r => r.id);
-      const batchIngredients = await fetchBatchWithDeduplication(
-        recipeIds,
-        fetchBatchRecipeIngredients,
-      );
-      if (Object.keys(batchIngredients).length > 0) {
-        for (const recipe of recipesData) {
-          try {
-            const ingredients = batchIngredients[recipe.id] || [];
-            const priceData = calculateRecommendedPrice(recipe, ingredients);
-            if (priceData) prices[recipe.id] = priceData;
-          } catch (err) {
-            logger.dev(`Failed to calculate price for recipe ${recipe.id}:`, {
-              error: err instanceof Error ? err.message : String(err),
-            });
-          }
-        }
-        return prices;
-      }
-    } catch (err) {
-      logger.dev('Batch fetch failed, falling back to parallel individual calls:', {
-        error: err instanceof Error ? err.message : String(err),
-      });
+    const batchPrices = await executeBatchCalculation({
+      recipesData,
+      fetchBatchRecipeIngredients,
+      calculateRecommendedPrice,
+      fetchBatchWithDeduplication,
+    });
+
+    if (batchPrices) {
+      return batchPrices;
     }
   }
 
-  try {
-    const results = await Promise.all(
-      recipesData.map(async recipe => {
-        try {
-          const ingredients = await fetchRecipeIngredients(recipe.id);
-          const priceData = calculateRecommendedPrice(recipe, ingredients);
-          return { recipeId: recipe.id, priceData };
-        } catch (err) {
-          logger.dev(`Failed to calculate price for recipe ${recipe.id}:`, {
-            error: err instanceof Error ? err.message : String(err),
-          });
-          return { recipeId: recipe.id, priceData: null };
-        }
-      }),
-    );
-    results.forEach(({ recipeId, priceData }) => {
-      if (priceData) prices[recipeId] = priceData;
-    });
-  } catch (err) {
-    logger.error('Failed to calculate recipe prices:', err);
-  }
-
-  return prices;
+  // Fallback or default to individual strategy
+  return executeIndividualCalculation({
+    recipesData,
+    fetchRecipeIngredients,
+    calculateRecommendedPrice,
+  });
 }

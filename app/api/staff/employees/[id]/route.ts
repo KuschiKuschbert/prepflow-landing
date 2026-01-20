@@ -125,17 +125,9 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     );
 
     // Trigger Square sync hook after successful update (non-blocking)
+    // Trigger Square sync hook after successful update (non-blocking)
     if (result.status === 200) {
-      (async () => {
-        try {
-          await triggerEmployeeSync(request, employeeId, 'update');
-        } catch (err) {
-          logger.error('[Staff Employees API] Error triggering Square sync:', {
-            error: err instanceof Error ? err.message : String(err),
-            employeeId,
-          });
-        }
-      })();
+      triggerEmployeeSyncHook(request, employeeId);
     }
 
     return result;
@@ -191,4 +183,18 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
       { status: 500 },
     );
   }
+
+}
+
+function triggerEmployeeSyncHook(request: NextRequest, employeeId: string) {
+    (async () => {
+        try {
+          await triggerEmployeeSync(request, employeeId, 'update');
+        } catch (err) {
+          logger.error('[Staff Employees API] Error triggering Square sync:', {
+            error: err instanceof Error ? err.message : String(err),
+            employeeId,
+          });
+        }
+    })();
 }

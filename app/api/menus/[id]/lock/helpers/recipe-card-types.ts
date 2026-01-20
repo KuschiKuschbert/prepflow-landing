@@ -2,7 +2,7 @@
  * Types and interfaces for recipe card generation.
  */
 
-import { MenuItemSubRecipe } from './fetchMenuItemData';
+import { MenuItemSubRecipe } from './types';
 
 /**
  * Sub-recipe type categories

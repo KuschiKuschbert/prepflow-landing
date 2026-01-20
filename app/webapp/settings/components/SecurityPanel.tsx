@@ -9,8 +9,8 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { ActiveSessionsSection } from './SecurityPanel/components/ActiveSessionsSection';
 import { LoginHistorySection } from './SecurityPanel/components/LoginHistorySection';
-import { loadSecurityDataHelper } from './SecurityPanel/helpers/loadSecurityData';
 import { handleRevokeSessionHelper } from './SecurityPanel/helpers/handleRevokeSession';
+import { loadSecurityDataHelper } from './SecurityPanel/helpers/loadSecurityData';
 
 interface Session {
   id: string;
@@ -88,34 +88,8 @@ export function SecurityPanel() {
           </p>
         </div>
 
-        {/* Password Management */}
-        <div className="space-y-3 border-t border-[var(--border)] pt-4">
-          <h3 className="text-lg font-medium">Password</h3>
-          <p className="text-sm text-[var(--foreground-muted)]">
-            Your password is managed by Auth0. To change your password, please visit your Auth0
-            dashboard or use the password reset feature.
-          </p>
-          <div className="flex gap-3">
-            <Link
-              href="/api/auth/signout"
-              className="rounded-2xl border border-[var(--border)] px-4 py-2 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/40"
-            >
-              Sign Out
-            </Link>
-          </div>
-        </div>
-
-        {/* Two-Factor Authentication */}
-        <div className="space-y-3 border-t border-[var(--border)] pt-4">
-          <h3 className="text-lg font-medium">Two-Factor Authentication</h3>
-          <p className="text-sm text-[var(--foreground-muted)]">
-            2FA is managed through Auth0. Enable it in your Auth0 dashboard for enhanced security.
-          </p>
-          <div className="flex items-center gap-2 text-sm text-[var(--foreground-subtle)]">
-            <Icon icon={Shield} size="sm" aria-hidden={true} />
-            <span>Configure in Auth0 dashboard</span>
-          </div>
-        </div>
+        <PasswordSection />
+        <TwoFactorSection />
 
         <ActiveSessionsSection
           sessions={sessions}
@@ -125,5 +99,40 @@ export function SecurityPanel() {
         <LoginHistorySection loginHistory={loginHistory} />
       </div>
     </>
+  );
+}
+
+function PasswordSection() {
+  return (
+    <div className="space-y-3 border-t border-[var(--border)] pt-4">
+      <h3 className="text-lg font-medium">Password</h3>
+      <p className="text-sm text-[var(--foreground-muted)]">
+        Your password is managed by Auth0. To change your password, please visit your Auth0
+        dashboard or use the password reset feature.
+      </p>
+      <div className="flex gap-3">
+        <Link
+          href="/api/auth/signout"
+          className="rounded-2xl border border-[var(--border)] px-4 py-2 text-sm text-[var(--foreground-secondary)] transition-colors hover:bg-[var(--muted)]/40"
+        >
+          Sign Out
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function TwoFactorSection() {
+  return (
+    <div className="space-y-3 border-t border-[var(--border)] pt-4">
+      <h3 className="text-lg font-medium">Two-Factor Authentication</h3>
+      <p className="text-sm text-[var(--foreground-muted)]">
+        2FA is managed through Auth0. Enable it in your Auth0 dashboard for enhanced security.
+      </p>
+      <div className="flex items-center gap-2 text-sm text-[var(--foreground-subtle)]">
+        <Icon icon={Shield} size="sm" aria-hidden={true} />
+        <span>Configure in Auth0 dashboard</span>
+      </div>
+    </div>
   );
 }

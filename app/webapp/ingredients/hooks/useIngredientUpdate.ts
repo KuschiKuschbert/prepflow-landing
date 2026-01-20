@@ -44,30 +44,20 @@ export function useIngredientUpdate<
         if (error) {
           if (error.code === '42501' || error.message?.includes('row-level security')) {
             logger.warn('RLS policy blocked direct update, falling back to API route');
-            const response = await fetch('/api/ingredients', {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ id, ...updates }),
-            });
 
-            const result = (await response.json()) as { success?: boolean; data?: T };
-            if (!response.ok || !result.success) {
-              // Revert optimistic update on error
+            // Lazy load the helper to avoid circular dependencies if any (though none here)
+            const { updateIngredientViaApi } = await import('./utils/api-fallback');
+            const result = await updateIngredientViaApi(id, updates);
+
+            if (!result.success || !result.data) {
               setIngredients(originalIngredients);
-              setError('Ingredient not found. It may have been deleted.');
+              setError(result.error || 'Ingredient not found or update failed.');
               if (setEditingIngredient) setEditingIngredient(null);
               return;
             }
 
-            const serverData = result.data;
-            if (!serverData) {
-              setIngredients(originalIngredients);
-              setError('Failed to receive updated data from server');
-              return;
-            }
-
             // Replace optimistic update with server response
-            setIngredients(prev => prev.map(ing => (ing.id === id ? serverData : ing)));
+            setIngredients(prev => prev.map(ing => (ing.id === id ? result.data! : ing)));
             if (setEditingIngredient) setEditingIngredient(null);
             showSuccess('Ingredient updated successfully');
             return;

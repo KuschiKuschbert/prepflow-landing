@@ -56,58 +56,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
 
     const { error_id } = validationResult.data;
 
-    // Verify error exists
-    const { data: errorLog, error: errorCheck } = await supabase
-      .from('admin_error_logs')
-      .select('id')
-      .eq('id', error_id)
-      .single();
-
-    if (errorCheck || !errorLog) {
-      if (errorCheck && errorCheck.code !== 'PGRST116') {
-        logger.warn('[Admin Support Tickets API] Error checking error log:', {
-          error: errorCheck.message,
-          code: errorCheck.code,
-          error_id,
-        });
-      }
-      return NextResponse.json(
-        ApiErrorHandler.createError('Error log not found', 'NOT_FOUND', 404),
-        { status: 404 },
-      );
-    }
-
-    // Update ticket with related_error_id
-    const { data: ticket, error: updateDbError } = await supabase
-      .from('support_tickets')
-      .update({ related_error_id: error_id })
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (updateDbError) {
-      if (updateDbError.code === 'PGRST116') {
-        return NextResponse.json(
-          ApiErrorHandler.createError('Ticket not found', 'NOT_FOUND', 404),
-          { status: 404 },
-        );
-      }
-
-      logger.error('[Admin Support Tickets API] Database error:', {
-        error: updateDbError.message,
-        context: { endpoint: `/api/admin/support-tickets/${id}/link-error`, method: 'POST' },
-      });
-
-      return NextResponse.json(ApiErrorHandler.fromSupabaseError(updateDbError, 500), {
-        status: 500,
-      });
-    }
-
-    return NextResponse.json({
-      success: true,
-      ticket,
-      message: 'Ticket linked to error log successfully',
-    });
+    return await verifyErrorAndLinkTicket(id, error_id, supabase);
   } catch (error) {
     if (error instanceof NextResponse) {
       return error;
@@ -131,4 +80,63 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       { status: 500 },
     );
   }
+}
+
+async function verifyErrorAndLinkTicket(
+  id: string,
+  error_id: string,
+  supabase: any,
+): Promise<NextResponse> {
+  // Verify error exists
+  const { data: errorLog, error: errorCheck } = await supabase
+    .from('admin_error_logs')
+    .select('id')
+    .eq('id', error_id)
+    .single();
+
+  if (errorCheck || !errorLog) {
+    if (errorCheck && errorCheck.code !== 'PGRST116') {
+      logger.warn('[Admin Support Tickets API] Error checking error log:', {
+        error: errorCheck.message,
+        code: errorCheck.code,
+        error_id,
+      });
+    }
+    return NextResponse.json(
+      ApiErrorHandler.createError('Error log not found', 'NOT_FOUND', 404),
+      { status: 404 },
+    );
+  }
+
+  // Update ticket with related_error_id
+  const { data: ticket, error: updateDbError } = await supabase
+    .from('support_tickets')
+    .update({ related_error_id: error_id })
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (updateDbError) {
+    if (updateDbError.code === 'PGRST116') {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Ticket not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
+    }
+
+    logger.error('[Admin Support Tickets API] Database error:', {
+      error: updateDbError.message,
+      context: { endpoint: `/api/admin/support-tickets/${id}/link-error`, method: 'POST' },
+    });
+
+    return NextResponse.json(ApiErrorHandler.fromSupabaseError(updateDbError, 500), {
+      status: 500,
+    });
+  }
+
+  return NextResponse.json({
+    success: true,
+    ticket,
+    message: 'Ticket linked to error log successfully',
+  });
 }

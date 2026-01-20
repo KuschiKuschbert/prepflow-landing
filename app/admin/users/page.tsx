@@ -18,39 +18,63 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-white">User Management</h1>
-          <p className="mt-2 text-gray-400">Manage user accounts and subscriptions</p>
-        </div>
-      </div>
+      <UsersPageHeader />
 
       {/* Search */}
       <UserSearch value={searchQuery} onChange={setSearchQuery} />
 
-      {/* Users Table */}
-      {!loading && (
-        <TablePagination
-          page={page}
-          totalPages={totalPages}
-          total={total}
-          onPageChange={setPage}
-          className="mb-4"
-        />
-      )}
+      <PaginationControl
+        loading={loading}
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        onPageChange={setPage}
+        className="mb-4"
+      />
 
       <UsersTable users={users} loading={loading} />
 
-      {!loading && (
-        <TablePagination
-          page={page}
-          totalPages={totalPages}
-          total={total}
-          onPageChange={setPage}
-          className="mt-4"
-        />
-      )}
+      <PaginationControl
+        loading={loading}
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        onPageChange={setPage}
+        className="mt-4"
+      />
     </div>
+  );
+}
+
+function UsersPageHeader() {
+  return (
+    <div className="flex items-center justify-between">
+      <div>
+        <h1 className="text-3xl font-bold text-white">User Management</h1>
+        <p className="mt-2 text-gray-400">Manage user accounts and subscriptions</p>
+      </div>
+    </div>
+  );
+}
+
+interface PaginationControlProps {
+  loading: boolean;
+  page: number;
+  totalPages: number;
+  total: number;
+  onPageChange: (page: number) => void;
+  className?: string;
+}
+
+function PaginationControl({ loading, page, totalPages, total, onPageChange, className }: PaginationControlProps) {
+  if (loading) return null;
+  return (
+    <TablePagination
+      page={page}
+      totalPages={totalPages}
+      total={total}
+      onPageChange={onPageChange}
+      className={className}
+    />
   );
 }

@@ -2,7 +2,7 @@ import { logger } from '@/lib/logger';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { generateDataHash } from '../../cardBuilding';
 import { findExistingCardBySignature, getRecipeSignature } from '../../cardManagement';
-import { MenuItemData } from '../../fetchMenuItemData';
+import { MenuItemData } from '../../types';
 import { MenuItem } from '../fetchMenuItems';
 import { ItemToGenerate } from '../types';
 

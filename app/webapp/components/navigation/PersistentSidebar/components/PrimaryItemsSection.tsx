@@ -25,10 +25,11 @@ export function PrimaryItemsSection({
   isExpanded,
   onTrack,
 }: PrimaryItemsSectionProps) {
+  const reducedMotion = prefersReducedMotion();
+
   return (
     <div className="mb-4 space-y-0.5">
       {items.map((item, index) => {
-        const reducedMotion = prefersReducedMotion();
         return (
           <div
             key={item.href}

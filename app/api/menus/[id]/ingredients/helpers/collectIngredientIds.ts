@@ -1,122 +1,58 @@
-/**
- * Collect ingredient IDs from dishes and recipes
- */
-
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import {
+    fetchDishIngredients,
+    fetchDishRecipes,
+    fetchRecipeIngredients
+} from './db-fetchers';
 
-interface IngredientIdRow {
-  ingredient_id: string;
-}
-
-interface RecipeIdRow {
-  recipe_id: string;
-}
-
-async function fetchRecipeIngredientsFromDishes(
+async function processDishIngredients(
   dishIds: Set<string>,
   menuId: string,
-  ingredientIds: Set<string>,
-): Promise<void> {
-  const { data: dishRecipes, error: dishRecipesError } = await supabaseAdmin!
-    .from('dish_recipes')
-    .select('recipe_id')
-    .in('dish_id', Array.from(dishIds));
-
-  if (dishRecipesError) {
-    logger.warn('[Menu Ingredients API] Error fetching dish recipes (continuing):', {
-      error: dishRecipesError.message,
-      context: { menuId },
-    });
-    return;
-  }
-
-  if (!dishRecipes) return;
-
-  const dRecipeIds = (dishRecipes as RecipeIdRow[]).map(dr => dr.recipe_id).filter(id => id);
-  if (dRecipeIds.length === 0) return;
-
-  const { data: recipeIngredients, error: recipeIngredientsError } = await supabaseAdmin!
-    .from('recipe_ingredients')
-    .select('ingredient_id')
-    .in('recipe_id', dRecipeIds);
-
-  if (recipeIngredientsError) {
-    logger.warn('[Menu Ingredients API] Error fetching recipe ingredients (continuing):', {
-      error: recipeIngredientsError.message,
-      context: { menuId },
-    });
-    return;
-  }
-
-  if (recipeIngredients) {
-    (recipeIngredients as IngredientIdRow[]).forEach(ri => {
-      if (ri.ingredient_id) ingredientIds.add(ri.ingredient_id);
-    });
-  }
-}
-
-async function collectDishIngredients(
-  dishIds: Set<string>,
-  menuId: string,
-  ingredientIds: Set<string>,
-): Promise<void> {
-  if (dishIds.size === 0 || !supabaseAdmin) return;
+  ingredientIds: Set<string>
+) {
+  const idsArray = Array.from(dishIds);
+  if (idsArray.length === 0) return;
 
   try {
-    // 1. Fetch direct dish ingredients
-    const { data: dishIngredients, error: dishIngredientsError } = await supabaseAdmin
-      .from('dish_ingredients')
-      .select('ingredient_id')
-      .in('dish_id', Array.from(dishIds));
+    const dishIngredients = await fetchDishIngredients(idsArray);
+    dishIngredients.forEach(row => {
+      if (row.ingredient_id) ingredientIds.add(row.ingredient_id);
+    });
 
-    if (dishIngredientsError) {
-      logger.warn('[Menu Ingredients API] Error fetching dish ingredients (continuing):', {
-        error: dishIngredientsError.message,
-        context: { menuId },
-      });
-    } else if (dishIngredients) {
-      (dishIngredients as IngredientIdRow[]).forEach(di => {
-        if (di.ingredient_id) ingredientIds.add(di.ingredient_id);
+    const dishRecipes = await fetchDishRecipes(idsArray);
+    const recipeIds = dishRecipes.map(r => r.recipe_id).filter(Boolean);
+
+    if (recipeIds.length > 0) {
+      const recipeIngredients = await fetchRecipeIngredients(recipeIds);
+      recipeIngredients.forEach(row => {
+        if (row.ingredient_id) ingredientIds.add(row.ingredient_id);
       });
     }
-
-    // 2. Fetch ingredients from dish recipes
-    await fetchRecipeIngredientsFromDishes(dishIds, menuId, ingredientIds);
-  } catch (err: unknown) {
-    logger.error('[Menu Ingredients API] Error collecting dish ingredients:', {
-      error: err instanceof Error ? err.message : String(err),
+  } catch (error) {
+    logger.warn('[Menu Ingredients API] Error processing dish ingredients:', {
+      error: error instanceof Error ? error.message : String(error),
       context: { menuId },
     });
   }
 }
 
-async function collectRecipeIngredients(
+async function processRecipeIngredients(
   recipeIds: Set<string>,
   menuId: string,
-  ingredientIds: Set<string>,
-): Promise<void> {
-  if (recipeIds.size === 0 || !supabaseAdmin) return;
+  ingredientIds: Set<string>
+) {
+  const idsArray = Array.from(recipeIds);
+  if (idsArray.length === 0) return;
 
   try {
-    const { data: recipeIngredients, error: recipeIngredientsError } = await supabaseAdmin
-      .from('recipe_ingredients')
-      .select('ingredient_id')
-      .in('recipe_id', Array.from(recipeIds));
-
-    if (recipeIngredientsError) {
-      logger.warn('[Menu Ingredients API] Error fetching recipe ingredients (continuing):', {
-        error: recipeIngredientsError.message,
-        context: { menuId },
-      });
-    } else if (recipeIngredients) {
-      (recipeIngredients as IngredientIdRow[]).forEach(ri => {
-        if (ri.ingredient_id) ingredientIds.add(ri.ingredient_id);
-      });
-    }
-  } catch (err: unknown) {
-    logger.error('[Menu Ingredients API] Error collecting recipe ingredients:', {
-      error: err instanceof Error ? err.message : String(err),
+    const ingredients = await fetchRecipeIngredients(idsArray);
+    ingredients.forEach(row => {
+      if (row.ingredient_id) ingredientIds.add(row.ingredient_id);
+    });
+  } catch (error) {
+    logger.warn('[Menu Ingredients API] Error processing recipe ingredients:', {
+      error: error instanceof Error ? error.message : String(error),
       context: { menuId },
     });
   }
@@ -134,8 +70,8 @@ export async function collectIngredientIds(
   const ingredientIds = new Set<string>();
 
   await Promise.all([
-    collectDishIngredients(dishIds, menuId, ingredientIds),
-    collectRecipeIngredients(recipeIds, menuId, ingredientIds),
+    processDishIngredients(dishIds, menuId, ingredientIds),
+    processRecipeIngredients(recipeIds, menuId, ingredientIds),
   ]);
 
   return ingredientIds;

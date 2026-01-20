@@ -5,7 +5,7 @@
 
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { MenuItemData, RawRecipeResult } from './fetchMenuItemData';
+import { MenuItemData, RawRecipeResult } from './types';
 
 /**
  * Batch fetch all recipes with nested ingredients

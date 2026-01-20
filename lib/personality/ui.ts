@@ -2,7 +2,7 @@
 
 import { content } from './content';
 import { type PersonalitySettings } from './schema';
-import { getShiftBucket, getCurrentContext } from './utils';
+import { checkSeasonalMatch, getCurrentContext, getShiftBucket } from './utils';
 
 const pick = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
@@ -136,7 +136,6 @@ export const dispatchSeasonal = {
     const settings = getSettings();
     if (!settings.enabled || !settings.seasonalLogoEvents) return;
 
-    const { checkSeasonalMatch } = require('./utils');
     const effect = checkSeasonalMatch();
     if (effect) {
       document.documentElement.setAttribute('data-seasonal', effect);

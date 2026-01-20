@@ -7,7 +7,7 @@ import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { batchFetchDishes } from './batchFetchDishes';
 import { batchFetchRecipes } from './batchFetchRecipes';
-import { MenuItemData } from './fetchMenuItemData';
+import { MenuItemData } from './types';
 
 /**
  * Batch fetch all menu item data (dishes and recipes) upfront

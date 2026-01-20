@@ -5,12 +5,11 @@
  */
 
 import React from 'react';
-import { Icon } from '@/components/ui/Icon';
-import { ChefHat, ChevronDown, ChevronUp } from 'lucide-react';
+import type { COGSCalculation } from '../../../types';
 import { COGSTableHeader } from '../../COGSTableHeader';
 import { COGSTableRow } from '../../COGSTableRow';
-import type { COGSCalculation } from '../../../types';
 import type { RecipeGroup } from '../types';
+import { COGSRecipeGroupRow } from './COGSRecipeGroupRow';
 
 interface COGSTableDesktopProps {
   recipeGroups: RecipeGroup[];
@@ -61,66 +60,22 @@ export function COGSTableDesktop({
           />
           <tbody className="divide-y divide-[var(--muted)] bg-[var(--surface)]">
             {/* Recipe Groups */}
-            {recipeGroups.map(group => {
-              const isExpanded = expandedRecipes.has(group.recipeId);
-              return (
-                <React.Fragment key={group.recipeId}>
-                  {/* Recipe Header Row */}
-                  <tr className="bg-[var(--primary)]/5 transition-colors hover:bg-[var(--primary)]/10">
-                    <td colSpan={4} className="px-6 py-3">
-                      <button
-                        onClick={() => onToggleRecipe(group.recipeId)}
-                        className="flex w-full items-center justify-between text-left"
-                      >
-                        <div className="flex flex-col gap-1">
-                          <div className="flex items-center gap-2">
-                            <Icon
-                              icon={ChefHat}
-                              size="sm"
-                              className="text-[var(--primary)]"
-                              aria-hidden={true}
-                            />
-                            <span className="font-semibold text-[var(--foreground)]">
-                              {group.recipeName} ({group.quantity}x)
-                            </span>
-                            <span className="text-sm text-[var(--foreground-muted)]">
-                              Total: ${(group.totalCost / dishPortions).toFixed(2)}
-                            </span>
-                          </div>
-                          <div className="ml-6 text-xs text-[var(--foreground-subtle)]">
-                            Recipe yield: {group.yield} {group.yieldUnit} (ingredients shown per
-                            portion)
-                          </div>
-                        </div>
-                        <Icon
-                          icon={isExpanded ? ChevronUp : ChevronDown}
-                          size="sm"
-                          className="text-[var(--primary)]"
-                          aria-hidden={true}
-                        />
-                      </button>
-                    </td>
-                  </tr>
-
-                  {/* Recipe Ingredients */}
-                  {isExpanded &&
-                    group.calculations.map((calc, index) => (
-                      <COGSTableRow
-                        key={`${calc.recipeId}-${calc.ingredientId || calc.id || index}`}
-                        calc={calc}
-                        index={index}
-                        editingIngredient={editingIngredient}
-                        editQuantity={editQuantity}
-                        onEditIngredient={onEditIngredient}
-                        onSaveEdit={onSaveEdit}
-                        onCancelEdit={onCancelEdit}
-                        onRemoveIngredient={onRemoveIngredient}
-                        onEditQuantityChange={onEditQuantityChange}
-                      />
-                    ))}
-                </React.Fragment>
-              );
-            })}
+            {recipeGroups.map(group => (
+              <COGSRecipeGroupRow
+                key={group.recipeId}
+                group={group}
+                isExpanded={expandedRecipes.has(group.recipeId)}
+                dishPortions={dishPortions}
+                editingIngredient={editingIngredient}
+                editQuantity={editQuantity}
+                onToggleRecipe={onToggleRecipe}
+                onEditIngredient={onEditIngredient}
+                onSaveEdit={onSaveEdit}
+                onCancelEdit={onCancelEdit}
+                onRemoveIngredient={onRemoveIngredient}
+                onEditQuantityChange={onEditQuantityChange}
+              />
+            ))}
 
             {/* Standalone Ingredients Header */}
             {standaloneCalculations.length > 0 && (

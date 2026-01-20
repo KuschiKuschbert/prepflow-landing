@@ -1,4 +1,5 @@
 import { DBDishIngredient, SectionData } from '../../types';
+import { updateAggregatedIngredient } from './helpers/updateAggregatedIngredient';
 
 export function processDishIngredients(
   dishId: string,
@@ -23,40 +24,7 @@ export function processDishIngredients(
     const section = sectionsData.get(sectionKey)!;
 
     for (const di of dishIngredients) {
-      const ingredient = di.ingredients;
-      if (ingredient) {
-        const ingredientId = di.ingredient_id;
-        const ingredientName = ingredient.ingredient_name || ingredient.name || 'Unknown';
-
-        const existing = section.aggregatedIngredients.find(
-          agg => agg.ingredientId === ingredientId && agg.unit === di.unit,
-        );
-
-        if (existing) {
-          existing.totalQuantity += Number(di.quantity) * recipeMultiplier;
-          existing.sources.push({
-            type: 'dish',
-            id: dishId,
-            name: dishName,
-            quantity: Number(di.quantity) * recipeMultiplier,
-          });
-        } else {
-          section.aggregatedIngredients.push({
-            ingredientId,
-            name: ingredientName,
-            totalQuantity: Number(di.quantity) * recipeMultiplier,
-            unit: di.unit,
-            sources: [
-              {
-                type: 'dish',
-                id: dishId,
-                name: dishName,
-                quantity: Number(di.quantity) * recipeMultiplier,
-              },
-            ],
-          });
-        }
-      }
+      updateAggregatedIngredient(section, di, dishId, dishName, recipeMultiplier);
     }
   }
 }

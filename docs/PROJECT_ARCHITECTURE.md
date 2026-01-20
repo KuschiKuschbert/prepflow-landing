@@ -149,7 +149,12 @@ lib/
 ├── auth-options.ts    # NextAuth configuration
 ├── stripe.ts           # Payment integration
 ├── analytics.ts        # Analytics service
-├── ab-testing-analytics.ts # A/B testing system
+├── constants.ts        # Centralized app constants (SSOT)
+├── rsi/                # Recursive Self-Improvement System
+│   ├── architecture-analysis/ # Anti-pattern detection
+│   ├── auto-refactoring/      # Automated code improvement
+│   ├── predictive-analysis/   # Future debt prediction
+│   └── error-learning/        # Runtime error learning
 ├── cache/              # Caching utilities
 │   ├── data-cache.ts   # Generic data cache
 │   ├── prefetch-config.ts # Prefetch configuration

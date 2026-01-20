@@ -1,7 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { X, LucideIcon } from 'lucide-react';
+import { LucideIcon, X } from 'lucide-react';
 import { TemperatureEquipment } from '../types';
 
 interface EquipmentDrawerHeaderProps {
@@ -34,39 +34,66 @@ export function EquipmentDrawerHeader({
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      {/* Swipe indicator for mobile */}
-      {isMobile && (
-        <div className="mx-auto mt-2 h-1 w-12 rounded-full bg-[var(--muted)]" aria-hidden={true} />
-      )}
+      {isMobile && <DrawerHandle />}
 
       <div className="flex items-center justify-between p-6">
-        <div className="flex items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
-            <Icon
-              icon={getTypeIcon(equipment.equipment_type)}
-              size="lg"
-              className="text-[var(--primary)]"
-              aria-hidden={true}
-            />
-          </div>
-          <div>
-            <h2 id="equipment-detail-title" className="text-xl font-bold text-[var(--foreground)]">
-              {equipment.name}
-            </h2>
-            <p className="text-sm text-[var(--foreground-muted)]">
-              {getTypeLabel(equipment.equipment_type)}
-            </p>
-          </div>
-        </div>
-        <button
-          onClick={onClose}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--muted)] text-[var(--foreground-muted)] transition-all duration-200 hover:scale-110 hover:bg-[var(--surface-variant)] hover:text-[var(--foreground)] active:scale-95"
-          aria-label="Close drawer"
-          title="Close"
-        >
-          <Icon icon={X} size="md" aria-hidden={true} />
-        </button>
+        <EquipmentInfo
+          equipment={equipment}
+          getTypeIcon={getTypeIcon}
+          getTypeLabel={getTypeLabel}
+        />
+        <CloseButton onClose={onClose} />
       </div>
     </div>
+  );
+}
+
+function DrawerHandle() {
+  return (
+    <div className="mx-auto mt-2 h-1 w-12 rounded-full bg-[var(--muted)]" aria-hidden={true} />
+  );
+}
+
+function EquipmentInfo({
+  equipment,
+  getTypeIcon,
+  getTypeLabel,
+}: {
+  equipment: TemperatureEquipment;
+  getTypeIcon: (type: string) => LucideIcon;
+  getTypeLabel: (type: string) => string;
+}) {
+  return (
+    <div className="flex items-center gap-4">
+      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
+        <Icon
+          icon={getTypeIcon(equipment.equipment_type)}
+          size="lg"
+          className="text-[var(--primary)]"
+          aria-hidden={true}
+        />
+      </div>
+      <div>
+        <h2 id="equipment-detail-title" className="text-xl font-bold text-[var(--foreground)]">
+          {equipment.name}
+        </h2>
+        <p className="text-sm text-[var(--foreground-muted)]">
+          {getTypeLabel(equipment.equipment_type)}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function CloseButton({ onClose }: { onClose: () => void }) {
+  return (
+    <button
+      onClick={onClose}
+      className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--muted)] text-[var(--foreground-muted)] transition-all duration-200 hover:scale-110 hover:bg-[var(--surface-variant)] hover:text-[var(--foreground)] active:scale-95"
+      aria-label="Close drawer"
+      title="Close"
+    >
+      <Icon icon={X} size="md" aria-hidden={true} />
+    </button>
   );
 }

@@ -3,8 +3,8 @@
  */
 
 import {
-  invalidateDishesWithRecipe,
-  invalidateRecipeAllergenCache,
+    invalidateDishesWithRecipe,
+    invalidateRecipeAllergenCache,
 } from '@/lib/allergens/cache-invalidation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getUserEmail } from '@/lib/auth0-api-helpers';
@@ -86,8 +86,31 @@ export async function handleRecipeUpdate(
     'Unknown Recipe';
 
   // Invalidate caches if needed
-  if (ingredientsChanged) {
-    (async () => {
+  if (ingredientsChanged || yieldChanged) {
+      void invalidateCaches(
+          recipeId,
+          recipeName,
+          changeType as ChangeType,
+          changeDetails,
+          userEmail,
+          ingredientsChanged,
+          yieldChanged
+      );
+  }
+
+  return updatedRecipe;
+}
+
+async function invalidateCaches(
+    recipeId: string,
+    recipeName: string,
+    changeType: ChangeType | null,
+    changeDetails: unknown,
+    userEmail: string | null,
+    ingredientsChanged: boolean,
+    yieldChanged: boolean
+) {
+    if (ingredientsChanged) {
       try {
         await Promise.all([
           invalidateRecipeAllergenCache(recipeId),
@@ -99,12 +122,9 @@ export async function handleRecipeUpdate(
           context: { recipeId, operation: 'invalidateAllergenCaches' },
         });
       }
-    })();
-  }
+    }
 
-  // Invalidate cached recommended prices if ingredients or yield changed
-  if (ingredientsChanged || yieldChanged) {
-    (async () => {
+    if (ingredientsChanged || yieldChanged) {
       try {
         await invalidateMenuItemsWithRecipe(
           recipeId,
@@ -119,8 +139,5 @@ export async function handleRecipeUpdate(
           context: { recipeId, recipeName, operation: 'invalidateMenuPricingCache' },
         });
       }
-    })();
-  }
-
-  return updatedRecipe;
+    }
 }

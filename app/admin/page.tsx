@@ -35,6 +35,39 @@ interface DashboardStats {
  */
 export default function AdminDashboard() {
   const { user } = useUser();
+  const { stats, loading } = useAdminStats();
+
+  return (
+    <div className="space-y-6">
+      <DashboardHeader userEmail={user?.email} />
+
+      {/* Stats Grid */}
+      <StatsGrid stats={stats} loading={loading} />
+
+      {/* Critical Alerts */}
+      {stats && (
+        <CriticalAlerts
+          criticalErrors={stats.criticalErrors}
+          recentSafetyErrors={stats.recentSafetyErrors}
+        />
+      )}
+
+      {/* Quick Actions */}
+      <QuickActions />
+    </div>
+  );
+}
+
+function DashboardHeader({ userEmail }: { userEmail?: string | null }) {
+  return (
+    <div>
+      <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
+      <p className="mt-2 text-gray-400">Welcome back, {userEmail || 'Admin'}</p>
+    </div>
+  );
+}
+
+function useAdminStats() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -56,27 +89,5 @@ export default function AdminDashboard() {
     fetchStats();
   }, []);
 
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
-        <p className="mt-2 text-gray-400">Welcome back, {user?.email || 'Admin'}</p>
-      </div>
-
-      {/* Stats Grid */}
-      <StatsGrid stats={stats} loading={loading} />
-
-      {/* Critical Alerts */}
-      {stats && (
-        <CriticalAlerts
-          criticalErrors={stats.criticalErrors}
-          recentSafetyErrors={stats.recentSafetyErrors}
-        />
-      )}
-
-      {/* Quick Actions */}
-      <QuickActions />
-    </div>
-  );
+  return { stats, loading };
 }

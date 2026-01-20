@@ -2,6 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { cleanupTable } from './helpers/cleanupTable';
 
 /**
  * Cleans up test data (dev-only).
@@ -55,39 +56,11 @@ export async function POST(_request: NextRequest) {
     ];
 
     for (const table of tablesToClean) {
-      try {
-        // Get count before deletion
-        const { count, error: countError } = await supabaseAdmin
-          .from(table)
-          .select('*', { count: 'exact', head: true });
-
-        if (countError) {
-          logger.warn(`[Cleanup Test Data] Error counting records in ${table}:`, {
-            error: countError.message,
-            code: countError.code,
-          });
-        }
-
-        // Delete all records
-        const { error } = await supabaseAdmin.from(table).delete().neq('id', '0'); // Delete all
-
-        if (error) {
-          logger.error(`[Cleanup Test Data] Error deleting from ${table}:`, {
-            error: error.message,
-            code: error.code,
-          });
-          results.errors.push({ table, error: error.message });
-        } else {
-          results.deleted.push({ table, count: count || 0 });
-        }
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        logger.error(`[Cleanup Test Data] Error processing table ${table}:`, {
-          error: err instanceof Error ? err.message : String(err),
-          stack: err instanceof Error ? err.stack : undefined,
-          table,
-        });
-        results.errors.push({ table, error: errorMessage });
+      const { deleted, error } = await cleanupTable(supabaseAdmin, table);
+      if (error) {
+        results.errors.push({ table, error });
+      } else {
+        results.deleted.push({ table, count: deleted });
       }
     }
 

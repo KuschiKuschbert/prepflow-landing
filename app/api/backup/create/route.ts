@@ -5,14 +5,16 @@
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
-import { encryptBackup } from '@/lib/backup/encryption';
-import { convertToSQL, exportUserData } from '@/lib/backup/export';
+import { exportUserData } from '@/lib/backup/export';
 import { logger } from '@/lib/logger';
 import { getAppError } from '@/lib/utils/error';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { storeBackupMetadata } from './helpers/storeMetadata';
+import {
+    BackupFormat,
+    prepareBackupContent,
+} from './helpers/prepareContent';
 
 const createBackupSchema = z.object({
   format: z.enum(['json', 'sql', 'encrypted']).optional().default('json'),
@@ -20,75 +22,7 @@ const createBackupSchema = z.object({
   password: z.string().optional(),
 });
 
-type BackupFormat = 'json' | 'sql' | 'encrypted';
 
-interface ProcessedBackup {
-  content: string | Uint8Array;
-  contentType: string;
-  filename: string;
-  fileSize: number;
-}
-
-async function prepareBackupContent(
-  userId: string,
-  format: BackupFormat,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  backupData: any, // justified: complex dynamic export data
-  encryptionMode?: 'user-password' | 'prepflow-only',
-  password?: string,
-): Promise<ProcessedBackup> {
-  if (format === 'encrypted') {
-    const encrypted = await encryptBackup(backupData, {
-      mode: encryptionMode!,
-      password,
-    });
-
-    await storeBackupMetadata(userId, 'encrypted', encryptionMode, {
-      recordCounts: backupData.metadata.recordCounts,
-      fileSize: encrypted.size,
-    });
-
-    return {
-      content: encrypted.data,
-      contentType: 'application/octet-stream',
-      filename: encrypted.filename,
-      fileSize: encrypted.size,
-    };
-  }
-
-  if (format === 'sql') {
-    const sql = convertToSQL(backupData);
-    const size = new TextEncoder().encode(sql).length;
-
-    await storeBackupMetadata(userId, 'sql', undefined, {
-      recordCounts: backupData.metadata.recordCounts,
-      fileSize: size,
-    });
-
-    return {
-      content: sql,
-      contentType: 'text/sql',
-      filename: `prepflow-backup-${new Date().toISOString().split('T')[0]}.sql`,
-      fileSize: size,
-    };
-  }
-
-  // Default: JSON
-  const jsonContent = JSON.stringify(backupData, null, 2);
-  const size = new TextEncoder().encode(jsonContent).length;
-
-  await storeBackupMetadata(userId, 'json', undefined, {
-    recordCounts: backupData.metadata.recordCounts,
-    fileSize: size,
-  });
-
-  return {
-    content: jsonContent,
-    contentType: 'application/json',
-    filename: `prepflow-backup-${new Date().toISOString().split('T')[0]}.json`,
-    fileSize: size,
-  };
-}
 
 /**
  * Creates a manual backup of user data.

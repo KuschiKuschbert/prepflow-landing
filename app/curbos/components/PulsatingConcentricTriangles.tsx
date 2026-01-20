@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { logger } from '@/lib/logger';
+import { getPrefersReducedMotion } from '@/lib/utils/motion';
 
 interface PulsatingConcentricTrianglesProps {
   className?: string;
@@ -74,17 +75,7 @@ export default function PulsatingConcentricTriangles({
     window.addEventListener('resize', handleResize);
 
     // Check for reduced motion preference
-    let prefersReducedMotion = false;
-    try {
-      prefersReducedMotion =
-        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    } catch (e) {
-      logger.error('[PulsatingConcentricTriangles.tsx] Error checking reduced motion:', {
-        error: e instanceof Error ? e.message : String(e),
-        stack: e instanceof Error ? e.stack : undefined,
-      });
-      prefersReducedMotion = false;
-    }
+    const prefersReducedMotion = getPrefersReducedMotion() && mounted;
 
     // Animation loop
     const animate = () => {

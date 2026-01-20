@@ -1,153 +1,20 @@
 'use client'
 
-import { logger } from '@/lib/logger'
-import { supabase } from '@/lib/supabase-pos'
-import { Check, ChefHat, ChevronRight, Clock } from 'lucide-react'
-import { useEffect, useState } from 'react'
-
-// types based on Android model
-interface OrderModifier {
-  name: string;
-}
-
-interface OrderItem {
-  id: string;
-  name: string;
-  quantity: number;
-  modifiers: (string | OrderModifier)[];
-}
-
-interface Transaction {
-    id: string
-    timestamp: number
-    order_number: number | null
-    customer_name: string | null
-    fulfillment_status: string
-    items_json: string | OrderItem[] | null // Can be string or JSON object depending on how Postgrest returns JSONB
-}
+import { ChefHat, Clock } from 'lucide-react'
+import Link from 'next/link'
+import { useState } from 'react'
+import QRCode from 'react-qr-code'
+import { KitchenOrderCard } from './components/KitchenOrderCard'
+import { useKitchenOrders } from './hooks/useKitchenOrders'
+import { Transaction } from './types'
 
 /**
  * Kitchen Display System (KDS) page.
  * Displays real-time orders and allows kitchen staff to update status.
  */
 export default function KitchenKDS() {
-    const [orders, setOrders] = useState<Transaction[]>([])
-    const [isLoading, setIsLoading] = useState(true)
+    const { orders, isLoading, updateStatus } = useKitchenOrders()
     const [selectedOrder, setSelectedOrder] = useState<Transaction | null>(null)
-
-    async function fetchOrders() {
-        // We need to fetch the results from the 'transactions' table
-        const { data, error } = await supabase
-            .from('transactions')
-            .select('*')
-            .neq('fulfillment_status', 'COMPLETED')
-            .order('timestamp', { ascending: true })
-
-        if (error) {
-            logger.error('Error fetching kitchen orders:', error)
-        } else {
-            setOrders(data || [])
-        }
-        setIsLoading(false)
-    }
-
-    useEffect(() => {
-        fetchOrders()
-
-        // Subscribe to changes
-        const channel = supabase.channel('table-db-changes')
-            .on(
-                'postgres_changes',
-                {
-                    event: '*',
-                    schema: 'public',
-                    table: 'transactions',
-                },
-                (payload) => {
-                    logger.dev('KDS: Change received!', payload)
-                    fetchOrders()
-                }
-            )
-            .subscribe((status) => {
-                if (status === 'SUBSCRIBED') {
-                    logger.dev('KDS: Realtime subscription active!')
-                } else if (status === 'CLOSED') {
-                    logger.dev('KDS: Realtime subscription closed')
-                } else if (status === 'CHANNEL_ERROR') {
-                    logger.error('KDS: Realtime subscription error')
-                }
-            })
-
-        return () => {
-            supabase.removeChannel(channel)
-        }
-    }, [])
-
-    async function updateStatus(id: string, status: string) {
-        try {
-            const response = await fetch('/api/kds/update-status', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id, status }),
-            })
-
-            if (!response.ok) {
-                const data = await response.json()
-                logger.error('Error updating status:', data.error || 'Unknown error')
-                // Revert optimistic update if we implemented one,
-                // but for now relying on realtime subscription to update UI
-                // is fine, though fetching again immediately might be safer if realtime is laggy.
-                // fetchOrders() // Optional: force refresh
-            }
-        } catch (e) {
-            logger.error('Network error updating status:', e)
-        }
-    }
-
-    async function bumpOrder(order: Transaction, e: React.MouseEvent) {
-        e.stopPropagation(); // Prevent opening modal
-        let nextStatus = 'IN_PROGRESS'
-        if (order.fulfillment_status === 'IN_PROGRESS') nextStatus = 'READY'
-        else if (order.fulfillment_status === 'READY') nextStatus = 'COMPLETED'
-
-        await updateStatus(order.id, nextStatus)
-    }
-
-    function getTimerColor(timestamp: number) {
-        const elapsedMinutes = (Date.now() - timestamp) / 60000
-        if (elapsedMinutes < 5) return 'text-[#C0FF02]'
-        if (elapsedMinutes < 10) return 'text-orange-400'
-        return 'text-red-500'
-    }
-
-    function getBorderColor(timestamp: number) {
-        const elapsedMinutes = (Date.now() - timestamp) / 60000
-        if (elapsedMinutes < 5) return 'border-[#C0FF02]/30'
-        if (elapsedMinutes < 10) return 'border-orange-400/30'
-        return 'border-red-500/30'
-    }
-
-    function parseItems(itemsJson: string | OrderItem[] | null): OrderItem[] {
-        if (!itemsJson) return []
-        try {
-            // it can be already parsed by supabase-js if it's a JSONB column
-            const items = typeof itemsJson === 'string' ? (JSON.parse(itemsJson) as OrderItem[]) : itemsJson
-            return items.map((item: OrderItem) => ({
-                id: item.id,
-                name: item.name,
-                quantity: item.quantity || 1,
-                modifiers: item.modifiers || [] // These are now a list of strings in the new model
-            }))
-        } catch (e) {
-            logger.error('Parse error:', {
-                error: e instanceof Error ? e.message : String(e),
-                stack: e instanceof Error ? e.stack : undefined,
-            });
-            return []
-        }
-    }
 
     if (isLoading) {
         return (
@@ -175,95 +42,14 @@ export default function KitchenKDS() {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5 gap-4 tablet:gap-6">
-                    {orders.map((order) => {
-                        const items = parseItems(order.items_json)
-                        const timerColor = getTimerColor(order.timestamp)
-                        const borderColor = getBorderColor(order.timestamp)
-
-                        return (
-                            <div
-                                key={order.id}
-                                onClick={() => setSelectedOrder(order)}
-                                className={`bg-neutral-900 border-l-4 ${borderColor} rounded-xl shadow-2xl p-4 tablet:p-6 flex flex-col justify-between hover:bg-neutral-800/80 transition-all cursor-pointer ring-offset-2 ring-offset-black hover:ring-2 hover:ring-[#C0FF02]/50`}
-                            >
-                                <div>
-                                    <div className="flex justify-between items-start mb-4">
-                                        <h2 className={`text-3xl tablet:text-4xl font-black ${timerColor}`}>
-                                            #{order.order_number || '??'}
-                                        </h2>
-                                        <div className={`flex items-center gap-1 font-mono font-bold text-sm tablet:text-base ${timerColor}`}>
-                                            <Timer timestamp={order.timestamp} />
-                                        </div>
-                                    </div>
-
-                                    {order.customer_name && (
-                                        <p className="text-white text-lg tablet:text-xl font-bold mb-4 uppercase tracking-wider">
-                                            {order.customer_name}
-                                        </p>
-                                    )}
-
-                                    <div className="space-y-4 mb-8">
-                                        {items.map((item: OrderItem, idx: number) => (
-                                            <div key={idx} className="border-b border-neutral-800 pb-2">
-                                                <div className="flex items-center gap-3">
-                                                    <span className="bg-neutral-800 text-white w-8 h-8 rounded flex items-center justify-center font-bold">
-                                                        {item.quantity}
-                                                    </span>
-                                                    <span className="text-white text-base tablet:text-lg font-medium">{item.name}</span>
-                                                </div>
-                                                {item.modifiers && item.modifiers.length > 0 && (
-                                                     <div className="ml-11 mt-2 flex flex-col gap-1.5">
-                                                         {item.modifiers.map((mod: string | OrderModifier, midx: number) => (
-                                                             <div key={midx} className="text-[#C0FF02] text-sm font-bold uppercase bg-[#C0FF02]/10 border-l-2 border-[#C0FF02] pl-2 py-1">
-                                                                 + {typeof mod === 'string' ? mod : mod.name || (mod as { name?: string }).name || String(mod)}
-                                                             </div>
-                                                         ))}
-                                                     </div>
-                                                 )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-col gap-2">
-                                    <button
-                                        onClick={(e) => bumpOrder(order, e)}
-                                        className={`w-full py-3 tablet:py-4 rounded-xl font-black text-base tablet:text-lg flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-[0_4px_20px_rgba(0,0,0,0.4)]
-                                            ${order.fulfillment_status === 'READY'
-                                                ? 'bg-red-500 text-white'
-                                                : order.fulfillment_status === 'IN_PROGRESS'
-                                                    ? 'bg-orange-500 text-white'
-                                                    : 'bg-[#C0FF02] text-black'
-                                            }`}
-                                    >
-                                        {order.fulfillment_status === 'READY' ? (
-                                            <>FINISH & DELIVER <Check size={20}/></>
-                                        ) : order.fulfillment_status === 'IN_PROGRESS' ? (
-                                            <>MARK AS READY <ChevronRight size={20}/></>
-                                        ) : (
-                                            <>START COOKING <ChevronRight size={20}/></>
-                                        )}
-                                    </button>
-
-                                    {order.fulfillment_status !== 'READY' && (
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                updateStatus(order.id, 'COMPLETED');
-                                            }}
-                                            className="w-full py-2 rounded-lg text-neutral-500 text-xs font-bold border border-neutral-800 hover:border-neutral-600 transition-colors uppercase"
-                                        >
-                                            Fast Complete ✅
-                                        </button>
-                                    )}
-                                </div>
-
-                                <div className="mt-4 text-[10px] text-neutral-600 font-bold uppercase tracking-widest text-center">
-                                    {order.fulfillment_status}
-                                </div>
-                            </div>
-                        )
-                    })}
+                    {orders.map((order) => (
+                        <KitchenOrderCard
+                            key={order.id}
+                            order={order}
+                            onSelect={setSelectedOrder}
+                            onUpdateStatus={updateStatus}
+                        />
+                    ))}
                 </div>
             )}
 
@@ -313,22 +99,3 @@ export default function KitchenKDS() {
         </div>
     )
 }
-
-import QRCode from 'react-qr-code'
-
-function Timer({ timestamp }: { timestamp: number }) {
-    const [elapsed, setElapsed] = useState(0)
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setElapsed(Math.floor((Date.now() - timestamp) / 60000))
-        }, 10000)
-
-        setElapsed(Math.floor((Date.now() - timestamp) / 60000))
-        return () => clearInterval(interval)
-    }, [timestamp])
-
-    return <span>{elapsed}M</span>
-}
-
-import Link from 'next/link'

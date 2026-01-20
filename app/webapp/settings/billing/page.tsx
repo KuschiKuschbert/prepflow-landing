@@ -1,20 +1,20 @@
 'use client';
 
-import { useSubscriptionData } from './hooks/useSubscriptionData';
-import { useBillingPortal } from './hooks/useBillingPortal';
-import { useBillingUpgrade } from './hooks/useBillingUpgrade';
-import { useBillingExtend } from './hooks/useBillingExtend';
-import { useBillingCancel } from './hooks/useBillingCancel';
-import { useBillingReactivate } from './hooks/useBillingReactivate';
 import { useConfirm } from '@/hooks/useConfirm';
-import { StatusBanner } from './components/StatusBanner';
-import { ScheduledCancellationBanner } from './components/ScheduledCancellationBanner';
-import { CurrentPlanCard } from './components/CurrentPlanCard';
-import { UsageMetricsCard } from './components/UsageMetricsCard';
-import { TierComparisonCard } from './components/TierComparisonCard';
-import { SubscriptionManagementCard } from './components/SubscriptionManagementCard';
-import { ReactivateCancelledCard } from './components/ReactivateCancelledCard';
 import { BillingActionsCard } from './components/BillingActionsCard';
+import { CurrentPlanCard } from './components/CurrentPlanCard';
+import { ReactivateCancelledCard } from './components/ReactivateCancelledCard';
+import { ScheduledCancellationBanner } from './components/ScheduledCancellationBanner';
+import { StatusBanner } from './components/StatusBanner';
+import { SubscriptionManagementCard } from './components/SubscriptionManagementCard';
+import { TierComparisonCard } from './components/TierComparisonCard';
+import { UsageMetricsCard } from './components/UsageMetricsCard';
+import { useBillingCancel } from './hooks/useBillingCancel';
+import { useBillingExtend } from './hooks/useBillingExtend';
+import { useBillingPortal } from './hooks/useBillingPortal';
+import { useBillingReactivate } from './hooks/useBillingReactivate';
+import { useBillingUpgrade } from './hooks/useBillingUpgrade';
+import { useSubscriptionData } from './hooks/useSubscriptionData';
 
 export default function BillingSettingsPage() {
   const { loading, subscriptionData, refreshSubscription } = useSubscriptionData();
@@ -59,35 +59,69 @@ export default function BillingSettingsPage() {
         />
 
         {subscriptionData && (
-          <>
-            <CurrentPlanCard subscriptionData={subscriptionData} />
-
-            <UsageMetricsCard subscriptionData={subscriptionData} />
-
-            <TierComparisonCard subscriptionData={subscriptionData} onUpgrade={handleUpgrade} />
-
-            <SubscriptionManagementCard
-              isActive={isActive}
-              cancelAtPeriodEnd={cancelAtPeriodEnd}
-              extending={extending}
-              cancelling={cancelling}
-              reactivating={reactivating}
-              onExtend={handleExtend}
-              onCancel={handleCancel}
-              onReactivate={handleReactivate}
-            />
-
-            <ReactivateCancelledCard
-              isCancelled={isCancelled}
-              cancelAtPeriodEnd={cancelAtPeriodEnd}
-              reactivating={reactivating}
-              onReactivate={handleReactivate}
-            />
-
-            <BillingActionsCard openingPortal={openingPortal} onOpenPortal={handleOpenPortal} />
-          </>
+          <SubscriptionDetails
+            subscriptionData={subscriptionData}
+            isActive={isActive}
+            isCancelled={isCancelled}
+            cancelAtPeriodEnd={cancelAtPeriodEnd}
+            extending={extending}
+            cancelling={cancelling}
+            reactivating={reactivating}
+            openingPortal={openingPortal}
+            onUpgrade={handleUpgrade}
+            onExtend={handleExtend}
+            onCancel={handleCancel}
+            onReactivate={handleReactivate}
+            onOpenPortal={handleOpenPortal}
+          />
         )}
       </div>
+    </>
+  );
+}
+
+function SubscriptionDetails({
+  subscriptionData,
+  isActive,
+  isCancelled,
+  cancelAtPeriodEnd,
+  extending,
+  cancelling,
+  reactivating,
+  openingPortal,
+  onUpgrade,
+  onExtend,
+  onCancel,
+  onReactivate,
+  onOpenPortal,
+}: any) {
+  return (
+    <>
+      <CurrentPlanCard subscriptionData={subscriptionData} />
+
+      <UsageMetricsCard subscriptionData={subscriptionData} />
+
+      <TierComparisonCard subscriptionData={subscriptionData} onUpgrade={onUpgrade} />
+
+      <SubscriptionManagementCard
+        isActive={isActive}
+        cancelAtPeriodEnd={cancelAtPeriodEnd}
+        extending={extending}
+        cancelling={cancelling}
+        reactivating={reactivating}
+        onExtend={onExtend}
+        onCancel={onCancel}
+        onReactivate={onReactivate}
+      />
+
+      <ReactivateCancelledCard
+        isCancelled={isCancelled}
+        cancelAtPeriodEnd={cancelAtPeriodEnd}
+        reactivating={reactivating}
+        onReactivate={onReactivate}
+      />
+
+      <BillingActionsCard openingPortal={openingPortal} onOpenPortal={onOpenPortal} />
     </>
   );
 }

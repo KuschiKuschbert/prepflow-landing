@@ -1,4 +1,4 @@
-import { type AdminUser, resolveAdminUserId } from '@/lib/admin-auth';
+import { resolveAdminUserId, type AdminUser } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
@@ -33,28 +33,7 @@ export async function updateTicket(
   }
 
   // Build update object
-  const updateData: Record<string, unknown> = {};
-  if (updates.status) {
-    updateData.status = updates.status;
-    // Set resolved_at if status is resolved or closed
-    if (updates.status === 'resolved' || updates.status === 'closed') {
-      updateData.resolved_at = new Date().toISOString();
-      // Try to get admin user_id from email
-      const adminId = await resolveAdminUserId(adminUser.email, supabaseAdmin, logger);
-      if (adminId) {
-        updateData.resolved_by = adminId;
-      }
-    }
-  }
-  if (updates.severity) {
-    updateData.severity = updates.severity;
-  }
-  if (updates.admin_notes !== undefined) {
-    updateData.admin_notes = updates.admin_notes;
-  }
-  if (updates.related_error_id !== undefined) {
-    updateData.related_error_id = updates.related_error_id;
-  }
+  const updateData = await buildTicketUpdateData(updates, adminUser);
 
   const { data: ticket, error } = await supabaseAdmin
     .from('support_tickets')
@@ -79,6 +58,37 @@ export async function updateTicket(
   }
 
   return { ticket };
+}
+
+async function buildTicketUpdateData(
+  updates: z.infer<typeof updateTicketSchema>,
+  adminUser: AdminUser,
+): Promise<Record<string, unknown>> {
+  const updateData: Record<string, unknown> = {};
+  if (updates.status) {
+    updateData.status = updates.status;
+    // Set resolved_at if status is resolved or closed
+    if (updates.status === 'resolved' || updates.status === 'closed') {
+      updateData.resolved_at = new Date().toISOString();
+      // Try to get admin user_id from email
+      if (supabaseAdmin) {
+        const adminId = await resolveAdminUserId(adminUser.email, supabaseAdmin, logger);
+        if (adminId) {
+          updateData.resolved_by = adminId;
+        }
+      }
+    }
+  }
+  if (updates.severity) {
+    updateData.severity = updates.severity;
+  }
+  if (updates.admin_notes !== undefined) {
+    updateData.admin_notes = updates.admin_notes;
+  }
+  if (updates.related_error_id !== undefined) {
+    updateData.related_error_id = updates.related_error_id;
+  }
+  return updateData;
 }
 
 export { updateTicketSchema };

@@ -3,17 +3,32 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { logger } from '@/lib/logger';
-import { useTheme } from '@/lib/theme/useTheme';
 
 interface AnimatedBackgroundProps {
   className?: string;
+  theme?: string;
 }
 
-export default function AnimatedBackground({ className = '' }: AnimatedBackgroundProps) {
+export default function AnimatedBackground({ className = '', theme = 'dark' }: AnimatedBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  useCanvasAnimation(canvasRef, theme);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className={`fixed inset-0 -z-10 h-full w-full ${className}`}
+      aria-hidden={true}
+      style={{ willChange: 'contents' }}
+    />
+  );
+}
+
+function useCanvasAnimation(
+  canvasRef: React.RefObject<HTMLCanvasElement | null>,
+  theme: string
+) {
   const animationFrameRef = useRef<number | undefined>(undefined);
   const waveRef = useRef({ phase: 0, speed: 0.02 });
-  const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -146,13 +161,4 @@ export default function AnimatedBackground({ className = '' }: AnimatedBackgroun
       }
     };
   }, [theme, mounted]);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className={`fixed inset-0 -z-10 h-full w-full ${className}`}
-      aria-hidden={true}
-      style={{ willChange: 'contents' }}
-    />
-  );
 }

@@ -6,16 +6,38 @@
 import { formatAustralianDate } from '../australian-standards';
 import type { ReportData } from '../report-types';
 
-export function generateTemperatureLogs(logs: ReportData['temperature_logs']): string {
-  if (!logs || logs.logs.length === 0) {
-    const dateRange = logs?.date_range || { start: '', end: '' };
-    return `
+function renderEmptyState(dateRange: { start: string; end: string }): string {
+  return `
       <div class="section">
         <div class="section-title">Temperature Monitoring</div>
         <p>No temperature logs found for the selected period.</p>
         <p><strong>Date Range:</strong> ${dateRange.start ? formatAustralianDate(dateRange.start) : 'N/A'} - ${dateRange.end ? formatAustralianDate(dateRange.end) : 'N/A'}</p>
       </div>
     `;
+}
+
+type TemperatureLog = NonNullable<ReportData['temperature_logs']>['logs'][number];
+
+function renderLogRows(logs: TemperatureLog[]): string {
+  return logs
+    .map(
+      log => `
+            <tr>
+              <td>${formatAustralianDate(log.log_date)}</td>
+              <td>${log.log_time || 'N/A'}</td>
+              <td>${log.location || log.temperature_type || 'N/A'}</td>
+              <td>${log.temperature_celsius}°C</td>
+              <td>${log.logged_by || 'N/A'}</td>
+            </tr>
+          `,
+    )
+    .join('');
+}
+
+export function generateTemperatureLogs(logs: ReportData['temperature_logs']): string {
+  if (!logs || !logs.logs || logs.logs.length === 0) {
+    const dateRange = logs?.date_range || { start: '', end: '' };
+    return renderEmptyState(dateRange);
   }
 
   // Show summary and recent logs
@@ -37,19 +59,7 @@ export function generateTemperatureLogs(logs: ReportData['temperature_logs']): s
           </tr>
         </thead>
         <tbody>
-          ${recentLogs
-            .map(
-              log => `
-            <tr>
-              <td>${formatAustralianDate(log.log_date)}</td>
-              <td>${log.log_time || 'N/A'}</td>
-              <td>${log.location || log.temperature_type || 'N/A'}</td>
-              <td>${log.temperature_celsius}°C</td>
-              <td>${log.logged_by || 'N/A'}</td>
-            </tr>
-          `,
-            )
-            .join('')}
+          ${renderLogRows(recentLogs)}
         </tbody>
       </table>
       ${logs.logs.length > 50 ? `<p style="margin-top: 10px; color: #6b7280; font-size: 12px;">Showing most recent 50 of ${logs.total_logs} logs</p>` : ''}

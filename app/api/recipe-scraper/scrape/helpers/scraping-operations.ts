@@ -22,30 +22,41 @@ export async function scrapeRecipes(
   let errorCount = 0;
 
   for (const url of urls) {
-    try {
-      const result = await scraper.scrapeRecipe(url);
-      if (result.success && result.recipe) {
-        const saveResult = await storage.saveRecipe(result.recipe);
-        if (saveResult.saved) {
-          successCount++;
-          results.push({ success: true, recipe: result.recipe, url });
-        } else {
-          results.push({ success: false, error: saveResult.reason || 'Failed to save', url });
-        }
-      } else {
-        errorCount++;
-        results.push({ success: false, error: result.error || 'Failed to scrape', url });
-      }
-    } catch (error) {
+    const result = await processSingleUrl(scraper, storage, url);
+    if (result.success) {
+      successCount++;
+    } else {
       errorCount++;
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      logger.error(`[Recipe Scraper API] Error scraping ${url}:`, { error: errorMessage });
-      results.push({ success: false, error: errorMessage, url });
     }
+    results.push(result);
   }
 
   return {
     results,
     summary: { total: urls.length, success: successCount, errors: errorCount },
   };
+}
+
+async function processSingleUrl(
+    scraper: ScraperInstance,
+    storage: JSONStorage,
+    url: string
+): Promise<{ success: boolean; recipe?: unknown; error?: string; url: string }> {
+    try {
+      const result = await scraper.scrapeRecipe(url);
+      if (result.success && result.recipe) {
+        const saveResult = await storage.saveRecipe(result.recipe);
+        if (saveResult.saved) {
+          return { success: true, recipe: result.recipe, url };
+        } else {
+          return { success: false, error: saveResult.reason || 'Failed to save', url };
+        }
+      } else {
+        return { success: false, error: result.error || 'Failed to scrape', url };
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      logger.error(`[Recipe Scraper API] Error scraping ${url}:`, { error: errorMessage });
+      return { success: false, error: errorMessage, url };
+    }
 }

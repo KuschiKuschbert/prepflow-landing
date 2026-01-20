@@ -1,16 +1,10 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { BookOpen, Package, Plus, Sparkles, Thermometer, Truck } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-
-interface NewItemOption {
-  href: string;
-  label: string;
-  icon: React.ReactNode;
-  category: string;
-}
+import { useDropdown } from '../hooks/useDropdown';
+import { getCreatableItems } from './config/creatableItems';
 
 const cn = (...classes: (string | undefined | null | false)[]): string => {
   return classes.filter(Boolean).join(' ');
@@ -32,79 +26,10 @@ interface NewButtonProps {
  */
 function NewButton({ isCollapsed = false }: NewButtonProps) {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const { isOpen, setIsOpen, dropdownRef, triggerRef } = useDropdown(false);
 
-  // Items that can be created - exclude dashboard, settings, setup
-  const creatableItems: NewItemOption[] = [
-    {
-      href: '/webapp/temperature?action=new',
-      label: 'Temp Log',
-      icon: <Icon icon={Thermometer} size="sm" className="text-current" aria-hidden={true} />,
-      category: 'Temperature',
-    },
-    {
-      href: '/webapp/recipes#ingredients',
-      label: 'Ingredient',
-      icon: <Icon icon={Package} size="sm" className="text-current" aria-hidden={true} />,
-      category: 'Ingredients',
-    },
-    {
-      href: '/webapp/recipes?action=new',
-      label: 'Recipe',
-      icon: <Icon icon={BookOpen} size="sm" className="text-current" aria-hidden={true} />,
-      category: 'Recipes',
-    },
-    {
-      href: '/webapp/cleaning?action=new',
-      label: 'Cleaning Task',
-      icon: <Icon icon={Sparkles} size="sm" className="text-current" aria-hidden={true} />,
-      category: 'Cleaning',
-    },
-    {
-      href: '/webapp/suppliers?action=new',
-      label: 'Supplier',
-      icon: <Icon icon={Truck} size="sm" className="text-current" aria-hidden={true} />,
-      category: 'Suppliers',
-    },
-  ];
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('touchstart', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
-    };
-  }, [isOpen]);
-
-  // Close dropdown on Escape key
-  useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isOpen) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen]);
+  // Items that can be created
+  const creatableItems = getCreatableItems();
 
   const handleItemClick = (href: string) => {
     setIsOpen(false);
@@ -114,7 +39,7 @@ function NewButton({ isCollapsed = false }: NewButtonProps) {
   return (
     <div className="relative w-full">
       <button
-        ref={buttonRef}
+        ref={triggerRef}
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           'flex',

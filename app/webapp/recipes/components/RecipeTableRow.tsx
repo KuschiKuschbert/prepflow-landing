@@ -76,22 +76,11 @@ function RecipeTableRowComponent({
       onTouchMove={isSelectionMode ? undefined : longPressHandlers.onTouchMove}
       onTouchEnd={isSelectionMode ? undefined : longPressHandlers.onTouchEnd}
     >
-      <td
-        className="px-6 py-4 text-sm font-medium whitespace-nowrap text-[var(--foreground)]"
-        onClick={e => e.stopPropagation()}
-      >
-        <button
-          onClick={() => onSelectRecipe(recipe.id)}
-          className="flex items-center justify-center transition-colors hover:text-[var(--primary)]"
-          aria-label={`${isSelected ? 'Deselect' : 'Select'} recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
-        >
-          {isSelected ? (
-            <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
-          ) : (
-            <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
-          )}
-        </button>
-      </td>
+      <SelectCell
+        isSelected={isSelected}
+        recipeName={capitalizeRecipeName(recipe.recipe_name)}
+        onSelect={() => onSelectRecipe(recipe.id)}
+      />
       <td
         className={`px-6 py-4 text-sm font-medium whitespace-nowrap text-[var(--foreground)] transition-all duration-300 ${
           !isSelectionMode ? 'cursor-pointer' : ''
@@ -104,84 +93,43 @@ function RecipeTableRowComponent({
       >
         {capitalizeRecipeName(recipe.recipe_name)}
       </td>
-      <td
-        className={`px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${!isSelectionMode ? 'cursor-pointer' : ''}`}
-        onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
-      >
-        {recipePrice ? (
-          `$${recipePrice.recommendedPrice.toFixed(2)}`
-        ) : (
-          <LoadingSkeleton variant="text" width="w-20" height="h-4" />
-        )}
-      </td>
-      <td
-        className={`desktop:table-cell hidden px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${!isSelectionMode ? 'cursor-pointer' : ''}`}
-        onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
-      >
-        {recipePrice ? (
-          <div className="flex flex-col">
-            <span className="font-semibold text-[var(--foreground)]">
-              {recipePrice.gross_profit_margin.toFixed(1)}%
-            </span>
-            <span className="text-xs text-[var(--foreground-muted)]">
-              ${recipePrice.gross_profit.toFixed(2)}/portion
-            </span>
-          </div>
-        ) : (
-          <span className="text-[var(--foreground-subtle)]">-</span>
-        )}
-      </td>
-      <td
-        className={`desktop:table-cell hidden px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${!isSelectionMode ? 'cursor-pointer' : ''}`}
-        onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
-      >
-        {recipePrice ? (
-          <div className="flex flex-col">
-            <span className="font-semibold text-[var(--accent)]">
-              ${recipePrice.contributingMargin.toFixed(2)}
-            </span>
-            <span className="text-xs text-[var(--foreground-muted)]">
-              {recipePrice.contributingMarginPercent.toFixed(1)}%/portion
-            </span>
-          </div>
-        ) : (
-          <span className="text-[var(--foreground-subtle)]">-</span>
-        )}
-      </td>
+      <PriceCell
+        price={recipePrice?.recommendedPrice}
+        isSelectionMode={isSelectionMode}
+        onClick={() => onPreviewRecipe(recipe)}
+      />
+      <MarginCell
+        value={recipePrice?.gross_profit_margin}
+        subValue={recipePrice?.gross_profit}
+        subValuePrefix="$"
+        subValueSuffix="/portion"
+        valueSuffix="%"
+        isSelectionMode={isSelectionMode}
+        onClick={() => onPreviewRecipe(recipe)}
+        className="hidden desktop:table-cell"
+      />
+      <MarginCell
+        value={recipePrice?.contributingMargin}
+        subValue={recipePrice?.contributingMarginPercent}
+        valuePrefix="$"
+        subValueSuffix="%/portion"
+        isSelectionMode={isSelectionMode}
+        onClick={() => onPreviewRecipe(recipe)}
+        className="hidden desktop:table-cell"
+        valueClassName="text-[var(--accent)]"
+      />
       <td
         className={`desktop:table-cell hidden px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${!isSelectionMode ? 'cursor-pointer' : ''}`}
         onClick={!isSelectionMode ? () => onPreviewRecipe(recipe) : undefined}
       >
         {formatRecipeDate(recipe.created_at)}
       </td>
-      <td className="px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)]">
-        <div className="flex gap-2" onClick={e => e.stopPropagation()}>
-          <button
-            onClick={() => onPreviewRecipe(recipe)}
-            className="text-[var(--foreground-muted)] transition-colors hover:text-[var(--primary)]"
-            aria-label={`Preview recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
-            title="Preview full details"
-          >
-            <Icon icon={Eye} size="sm" aria-hidden={true} />
-          </button>
-          <button
-            onClick={() => onEditRecipe(recipe)}
-            className="text-[var(--foreground-muted)] transition-colors hover:text-[var(--primary)]"
-            aria-label={`Edit recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
-            title="Edit recipe"
-          >
-            <Icon icon={Edit} size="sm" aria-hidden={true} />
-          </button>
-          <button
-            onClick={() => onDeleteRecipe(recipe)}
-            className="text-[var(--foreground-muted)] transition-colors hover:text-[var(--color-error)]"
-            aria-label={`Delete recipe ${capitalizeRecipeName(recipe.recipe_name)}`}
-            title="Delete recipe"
-          >
-            <Icon icon={Trash2} size="sm" aria-hidden={true} />
-          </button>
-        </div>
-      </td>
+      <ActionsCell
+        recipeName={capitalizeRecipeName(recipe.recipe_name)}
+        onPreview={() => onPreviewRecipe(recipe)}
+        onEdit={() => onEditRecipe(recipe)}
+        onDelete={() => onDeleteRecipe(recipe)}
+      />
     </tr>
   );
 }
@@ -197,3 +145,105 @@ export const RecipeTableRow = memo(RecipeTableRowComponent, (prevProps, nextProp
     prevProps.recipePrice === nextProps.recipePrice
   );
 });
+
+function SelectCell({ isSelected, recipeName, onSelect }: any) {
+  return (
+    <td
+      className="px-6 py-4 text-sm font-medium whitespace-nowrap text-[var(--foreground)]"
+      onClick={e => e.stopPropagation()}
+    >
+      <button
+        onClick={onSelect}
+        className="flex items-center justify-center transition-colors hover:text-[var(--primary)]"
+        aria-label={`${isSelected ? 'Deselect' : 'Select'} recipe ${recipeName}`}
+      >
+        {isSelected ? (
+          <Icon icon={Check} size="sm" className="text-[var(--primary)]" aria-hidden={true} />
+        ) : (
+          <div className="h-4 w-4 rounded border border-[var(--border)] bg-[var(--background)] transition-colors hover:border-[var(--primary)]/50" />
+        )}
+      </button>
+    </td>
+  );
+}
+
+function PriceCell({ price, isSelectionMode, onClick }: any) {
+  return (
+    <td
+      className={`px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${!isSelectionMode ? 'cursor-pointer' : ''}`}
+      onClick={!isSelectionMode ? onClick : undefined}
+    >
+      {price !== undefined ? (
+        `$${price.toFixed(2)}`
+      ) : (
+        <LoadingSkeleton variant="text" width="w-20" height="h-4" />
+      )}
+    </td>
+  );
+}
+
+function MarginCell({
+  value,
+  subValue,
+  valuePrefix = '',
+  valueSuffix = '',
+  subValuePrefix = '',
+  subValueSuffix = '',
+  isSelectionMode,
+  onClick,
+  className = '',
+  valueClassName = 'text-[var(--foreground)]',
+}: any) {
+  return (
+    <td
+      className={`px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)] ${!isSelectionMode ? 'cursor-pointer' : ''} ${className}`}
+      onClick={!isSelectionMode ? onClick : undefined}
+    >
+      {value !== undefined && subValue !== undefined ? (
+        <div className="flex flex-col">
+          <span className={`font-semibold ${valueClassName}`}>
+            {valuePrefix}{value.toFixed(1)}{valueSuffix}
+          </span>
+          <span className="text-xs text-[var(--foreground-muted)]">
+            {subValuePrefix}{subValue.toFixed(2)}{subValueSuffix}
+          </span>
+        </div>
+      ) : (
+        <span className="text-[var(--foreground-subtle)]">-</span>
+      )}
+    </td>
+  );
+}
+
+function ActionsCell({ recipeName, onPreview, onEdit, onDelete }: any) {
+  return (
+    <td className="px-6 py-4 text-sm whitespace-nowrap text-[var(--foreground-secondary)]">
+      <div className="flex gap-2" onClick={e => e.stopPropagation()}>
+        <button
+          onClick={onPreview}
+          className="text-[var(--foreground-muted)] transition-colors hover:text-[var(--primary)]"
+          aria-label={`Preview recipe ${recipeName}`}
+          title="Preview full details"
+        >
+          <Icon icon={Eye} size="sm" aria-hidden={true} />
+        </button>
+        <button
+          onClick={onEdit}
+          className="text-[var(--foreground-muted)] transition-colors hover:text-[var(--primary)]"
+          aria-label={`Edit recipe ${recipeName}`}
+          title="Edit recipe"
+        >
+          <Icon icon={Edit} size="sm" aria-hidden={true} />
+        </button>
+        <button
+          onClick={onDelete}
+          className="text-[var(--foreground-muted)] transition-colors hover:text-[var(--color-error)]"
+          aria-label={`Delete recipe ${recipeName}`}
+          title="Delete recipe"
+        >
+          <Icon icon={Trash2} size="sm" aria-hidden={true} />
+        </button>
+      </div>
+    </td>
+  );
+}

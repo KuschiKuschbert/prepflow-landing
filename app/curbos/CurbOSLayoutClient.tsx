@@ -2,7 +2,6 @@
 
 import { NotificationProvider } from '@/contexts/NotificationContext'
 import { ReleaseData } from '@/lib/github-release'
-import { supabase } from '@/lib/supabase-pos'
 import { ArrowLeft, BarChart3, Cog, LogOut, Monitor, Settings, User, UtensilsCrossed } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -12,6 +11,7 @@ import RotatingTaco from './components/RotatingTaco'
 import SpotlightCursor from './components/SpotlightCursor'
 import TriangleGridBackground from './components/TriangleGridBackground'
 import { useCurbOSAuth } from './hooks/useCurbOSAuth'
+import { useCurbOSNavigation } from './hooks/useCurbOSNavigation'
 
 
 interface CurbOSLayoutClientProps {
@@ -27,6 +27,7 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
   const router = useRouter()
   const pathname = usePathname()
   const { isChecking } = useCurbOSAuth()
+  const { handleLogout } = useCurbOSNavigation()
 
   // Show loading state while checking authentication
   if (isChecking && pathname !== '/curbos/login') {
@@ -88,13 +89,7 @@ export default function CurbOSLayoutClient({ children, releaseData }: CurbOSLayo
              <div className="h-6 w-px bg-white/10" />
 
              <button
-                onClick={async () => {
-                  await supabase.auth.signOut()
-                  // Clear the cookie as well
-                  document.cookie = "curbos_auth=; path=/; max-age=0"
-                  router.push('/curbos/login')
-                  router.refresh()
-                }}
+                 onClick={handleLogout}
                 className="flex items-center gap-1.5 text-neutral-400 hover:text-red-400 transition-colors group px-2 py-1.5 min-h-[44px] rounded-lg hover:bg-white/5"
               >
                 <LogOut size={18} className="group-hover:-translate-x-1 transition-transform" />

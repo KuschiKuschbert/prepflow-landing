@@ -2,12 +2,13 @@
  * Generate combined HTML export (menu display + allergen matrix + recipe cards)
  */
 
-import { NextResponse } from 'next/server';
 import { generateExportTemplate } from '@/lib/exports/pdf-template';
+import { NextResponse } from 'next/server';
 import { COMBINED_EXPORT_STYLES } from './combinedExportStyles';
-import { generateMenuDisplayHTML, type MenuDisplayData } from './generateMenuDisplayHTML';
 import { generateAllergenMatrixHTML, type AllergenMatrixData } from './generateAllergenMatrixHTML';
-import { generateRecipeCardsHTML, type RecipeCardData } from './generateRecipeCardsHTML';
+import { generateMenuDisplayHTML, type MenuDisplayData } from './generateMenuDisplayHTML';
+import { generateRecipeCardsHTML } from './generateRecipeCardsHTML';
+import { RecipeCardData } from './types';
 
 /**
  * Generate combined HTML export (menu display + allergen matrix + recipe cards)

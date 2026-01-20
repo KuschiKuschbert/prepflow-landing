@@ -56,6 +56,11 @@ graph TD
 2.  **No Bloat**: Images > 500KB are forbidden in `public/`.
 3.  **No Debt**: TODOs > 50 block the build.
 4.  **No Circular Deps**: The Architect is watching.
+5.  **No Magic Numbers**: Use `lib/constants.ts` for everything (Time, Size, ID limits).
+6.  **No Spaghetti Data**: Static data > 50 lines MUST live in `lib/data/` or a JSON file.
+7.  **No Hardcoded URLs**: Use `APP_BASE_URL` from constants. `localhost:3000` is FORBIDDEN.
+8.  **Component Size**: Components > 300 lines MUST be split. Extract sub-components (Header, List, Form).
+9.  **Business Logic**: "Profit Margins", "Timeouts", and "Limits" MUST be in `lib/constants.ts`.
 
 ## 4. 🧠 Memory Bank (Lessons Learned)
 
@@ -66,6 +71,7 @@ graph TD
 - **[2026-01-11] Test Generation**: `import * as Module` is safer than named imports for smoke testing unknown files.
 - **[2026-01-11] Import Hoisting**: Jest hoists ES6 imports. Use `require()` inside `beforeAll` to meaningfully mock `process.env`.
 - **[2026-01-14] Ralph Loop**: For complex refactors and bugs, we use the **Ralph Wiggum Technique** (Iterate > Perfection). See [RALPH_LOOP.md](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/methodology/RALPH_LOOP.md).
+- **[2026-01-21] Refactoring Strategy**: When refactoring massive type definitions (e.g., `report-item-types.ts`), extract domain-specific types into separate files *first*, then re-export them. This reduces risk and makes the main file readable.
 
 ## 5. 🔄 The Ralph Loop (Methodology)
 
