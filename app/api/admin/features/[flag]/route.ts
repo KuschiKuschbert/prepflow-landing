@@ -110,7 +110,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ fla
 async function updateFeatureFlag(
   flag: string,
   validated: z.infer<typeof updateFlagSchema>,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   _context: unknown,
 ): Promise<{ flagData: { id: string; [key: string]: unknown } } | NextResponse> {
   if (!supabaseAdmin) {

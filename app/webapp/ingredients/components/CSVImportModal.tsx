@@ -18,9 +18,9 @@ export default function CSVImportModal({
   onImport,
   loading = false,
 }: CSVImportModalProps) {
-  /* eslint-disable @typescript-eslint/no-unused-vars -- Used by translation hook */
+   
   const { t: _t } = useTranslation();
-  /* eslint-enable @typescript-eslint/no-unused-vars */
+   
 
   const {
     parsedIngredients,

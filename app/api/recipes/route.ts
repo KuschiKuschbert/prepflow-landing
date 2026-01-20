@@ -175,7 +175,7 @@ async function handleNewRecipe(request: NextRequest, recipeData: any) {
     } satisfies RecipeResponse);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 function triggerSyncHook(request: NextRequest, recipeId: string | number, action: 'create' | 'update') {
     (async () => {
       try {

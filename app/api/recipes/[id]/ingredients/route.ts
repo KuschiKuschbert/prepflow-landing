@@ -44,8 +44,8 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     // First try with category, fallback without if column doesn't exist
     const { data: fetchedData, error: fetchError } = await fetchIngredientsWithCategoryFallback(supabaseAdmin, normalizedId);
 
-    let data = fetchedData;
-    let error = fetchError;
+    const data = fetchedData;
+    const error = fetchError;
 
     if (error) {
       logger.error('[Recipes API] Database error fetching recipe ingredients:', {
