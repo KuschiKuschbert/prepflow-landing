@@ -1,7 +1,7 @@
 import { AUSTRALIAN_ALLERGENS, consolidateAllergens } from '@/lib/allergens/australian-allergens';
 import { NextResponse } from 'next/server';
 import Papa from 'papaparse';
-import { EnrichedMenuItem } from '../../../../helpers/schemas';
+import { EnrichedMenuItem } from '../../../../types';
 
 export interface MatrixItem {
   name: string;

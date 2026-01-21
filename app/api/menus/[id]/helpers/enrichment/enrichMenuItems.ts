@@ -1,5 +1,5 @@
 import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
-import { EnrichedMenuItem, RawMenuItem } from '../../../helpers/schemas';
+import { EnrichedMenuItem, RawMenuItem } from '../../../types';
 import { calculateRecommendedPrice } from './calculateRecommendedPrices';
 import { enrichDishItem } from './enrichDishItem';
 import { enrichRecipeItem } from './enrichRecipeItem';

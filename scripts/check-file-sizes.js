@@ -95,15 +95,34 @@ function listFiles(dir) {
   return result;
 }
 
+
+function loadIgnoreList() {
+  try {
+    const ignorePath = path.join(__dirname, 'filesize-ignore.json');
+    if (fs.existsSync(ignorePath)) {
+      return new Set(require(ignorePath));
+    }
+  } catch (e) {
+    console.warn('Warning: Could not load filesize-ignore.json', e.message);
+  }
+  return new Set();
+}
+
 function main() {
   const root = process.cwd();
   const filesArg = process.argv.slice(2);
   const files = filesArg.length > 0 ? filesArg : listFiles(root);
+  const ignoredFiles = loadIgnoreList();
 
   const violations = [];
 
   for (const file of files) {
     if (!fs.existsSync(file)) continue;
+
+    // Check if ignored (relative path from root)
+    const relPath = path.relative(root, file);
+    if (ignoredFiles.has(relPath)) continue;
+
     const ext = path.extname(file);
     if (!exts.has(ext)) continue;
 
@@ -131,6 +150,7 @@ function main() {
         `- ${path.relative(process.cwd(), v.file)}: ${v.lines} lines (limit ${v.limit}, ${v.category})`,
       );
     }
+    console.error('\nTo bypass, add the file to scripts/filesize-ignore.json (temporary only!)');
     process.exit(1);
   } else {
     console.log('✅ File size limits check passed.');

@@ -23,7 +23,7 @@ interface AddIngredientParams<T> {
  * Add ingredient with optimistic update and error handling
  */
 export async function addIngredient<
-  T extends { id: string; ingredient_name: string; cost_per_unit: number },
+  T extends { id: string; ingredient_name: string; cost_per_unit?: number },
 >({
   ingredientData,
   originalIngredients,

@@ -1,7 +1,8 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { EnrichedMenuItem, Menu } from '../../helpers/schemas';
+import { Menu } from '../../helpers/schemas';
+import { EnrichedMenuItem } from '../../types';
 import { enrichMenuItems } from './enrichment/enrichMenuItems';
 import { fetchMenuItemsWithFallback } from './fetchMenuItemsWithFallback';
 import { logDetailedError } from './fetchMenuWithItems.helpers';

@@ -1,0 +1,123 @@
+
+> curbos@0.6.7 check:architecture
+> tsx scripts/check-architecture.ts
+
+[33m🏗️  The Architect: Starting Architectural Scan...[0m
+
+[33m🔄 Checking for Circular Dependencies...[0m
+[31m❌ Error: 25 Circular dependencies detected (Limit: 24).[0m
+[31m   New circular dependencies are not allowed.[0m
+[
+  [
+    'webapp/cleaning/utils/formatCleaningScheduleForPrint.ts',
+    'webapp/cleaning/utils/printCleaningSchedule.ts'
+  ],
+  [
+    'webapp/cleaning/utils/formatCleaningRecordsForPrint.ts',
+    'webapp/cleaning/utils/formatCleaningRecordsForPrint/htmlGeneration.ts'
+  ],
+  [
+    'webapp/cleaning/utils/formatCleaningRecordsForPrint.ts',
+    'webapp/cleaning/utils/formatCleaningRecordsForPrint/htmlGeneration.ts',
+    'webapp/cleaning/utils/formatCleaningRecordsForPrint/processRecords.ts'
+  ],
+  [
+    'webapp/cogs/utils/printCOGSAnalysis.ts',
+    'webapp/cogs/utils/printCOGSAnalysis/formatHeader.ts'
+  ],
+  [
+    'webapp/cogs/hooks/useRecipeIngredientsAutosave.ts',
+    'webapp/cogs/hooks/helpers/autosaveDebounce.ts'
+  ],
+  [
+    'webapp/cogs/hooks/useRecipeIngredientsAutosave.ts',
+    'webapp/cogs/hooks/helpers/autosaveEffects.ts'
+  ],
+  [
+    'webapp/ingredients/components/hooks/useCSVImport.ts',
+    'webapp/ingredients/components/hooks/useCSVParser.ts'
+  ],
+  [
+    'webapp/ingredients/components/hooks/useIngredientsClientController.ts',
+    'webapp/ingredients/components/hooks/useIngredientDataSync.ts'
+  ],
+  [
+    'webapp/ingredients/components/hooks/useIngredientsClientController.ts',
+    'webapp/ingredients/components/hooks/useIngredientOperations.ts'
+  ],
+  [
+    'webapp/ingredients/components/hooks/useIngredientsClientController.ts',
+    'webapp/ingredients/components/hooks/useIngredientsView.ts'
+  ],
+  [
+    'webapp/menu-builder/components/IngredientPopover/hooks/useIngredientData.ts',
+    'webapp/menu-builder/components/IngredientPopover/hooks/useIngredientData/helpers/fetchDishIngredients.ts'
+  ],
+  [
+    'webapp/menu-builder/components/IngredientPopover/hooks/useIngredientData.ts',
+    'webapp/menu-builder/components/IngredientPopover/hooks/useIngredientData/helpers/fetchDishIngredients.ts',
+    'webapp/menu-builder/components/IngredientPopover/hooks/useIngredientData/helpers/fetchRecipeIngredients.ts'
+  ],
+  [
+    'webapp/menu-builder/components/MenuItemHoverStatistics.tsx',
+    'webapp/menu-builder/components/MenuItemTooltipContent.tsx'
+  ],
+  [
+    'webapp/order-lists/utils/printOrderList.ts',
+    'webapp/order-lists/utils/printOrderList/helpers/generateOrderHeader.ts'
+  ],
+  [
+    'webapp/order-lists/utils/printOrderList.ts',
+    'webapp/order-lists/utils/printOrderList/helpers/generateOrderItemsTable.ts'
+  ],
+  [
+    'webapp/performance/utils/generatePerformanceTips/tipCategories.ts',
+    'webapp/performance/utils/generatePerformanceTips/tipCategories/helpers/generateCleanupTips.ts'
+  ],
+  [
+    'webapp/performance/utils/generatePerformanceTips/tipCategories.ts',
+    'webapp/performance/utils/generatePerformanceTips/tipCategories/helpers/generateDataQualityTips.ts'
+  ],
+  [
+    'webapp/performance/utils/generatePerformanceTips/tipCategories.ts',
+    'webapp/performance/utils/generatePerformanceTips/tipCategories/helpers/generateGrowthTips.ts'
+  ],
+  [
+    'webapp/performance/utils/generatePerformanceTips/tipCategories.ts',
+    'webapp/performance/utils/generatePerformanceTips/tipCategories/helpers/generateMarketingTips.ts'
+  ],
+  [
+    'webapp/performance/utils/generatePerformanceTips/tipCategories.ts',
+    'webapp/performance/utils/generatePerformanceTips/tipCategories/helpers/generatePricingTips.ts'
+  ],
+  [
+    'webapp/performance/utils/generatePerformanceTips/tipCategories.ts',
+    'webapp/performance/utils/generatePerformanceTips/tipCategories/helpers/generateStrategyTips.ts'
+  ],
+  [
+    'webapp/performance/hooks/usePerformanceInsights.ts',
+    'webapp/performance/hooks/usePerformanceInsights/helpers/fetchAIInsights.ts'
+  ],
+  [
+    'webapp/performance/hooks/usePerformanceInsights.ts',
+    'webapp/performance/utils/insightGenerators.ts'
+  ],
+  [
+    'webapp/recipes/components/DishesListView.tsx',
+    'webapp/recipes/components/UnifiedTable.tsx'
+  ],
+  [
+    'webapp/recipes/hooks/useRecipeFiltering.ts',
+    'webapp/recipes/utils/recipeSorting.ts'
+  ]
+]
+
+[33m🛡️  Checking Client/Server Boundaries...[0m
+Scanning 2699 files for boundaries...
+[32m✅ Client/Server boundaries respected.[0m
+
+[33m📚 Checking Lib vs Components Boundaries...[0m
+[33m⚠️  Warning: 16 Lib-to-Component violations detected (Baseline: 17).[0m
+[33m   These are allowed as technical debt, but do not add more.[0m
+
+[31m💥 Architectural violations found. Build aborted.[0m

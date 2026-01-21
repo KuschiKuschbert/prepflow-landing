@@ -6,36 +6,20 @@
 import { formatRecipeDate } from '@/app/webapp/recipes/utils/formatDate';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Icon } from '@/components/ui/Icon';
+import { logger } from '@/lib/logger';
 import { Edit, Trash2 } from 'lucide-react';
 import { memo, useState } from 'react';
 import { useLongPress } from '../hooks/useLongPress';
-import { logger } from '@/lib/logger';
 import {
-  IngredientBrandCell,
-  IngredientCostCell,
-  IngredientNameCell,
-  IngredientPackSizeCell,
-  IngredientStockCell,
-  IngredientSupplierCell,
+    IngredientBrandCell,
+    IngredientCostCell,
+    IngredientNameCell,
+    IngredientPackSizeCell,
+    IngredientStockCell,
+    IngredientSupplierCell,
 } from './IngredientTableCell';
 
-interface Ingredient {
-  id: string;
-  ingredient_name: string;
-  brand?: string;
-  pack_size?: string;
-  pack_size_unit?: string;
-  unit?: string;
-  cost_per_unit: number;
-  supplier?: string;
-  product_code?: string;
-  storage_location?: string;
-  min_stock_level?: number;
-  current_stock?: number;
-  standard_unit?: string;
-  original_unit?: string;
-  created_at?: string;
-}
+import { ExistingIngredient as Ingredient } from './types';
 
 interface IngredientTableRowProps {
   ingredient: Ingredient;

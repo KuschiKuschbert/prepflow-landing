@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { RawMenuItem } from '../../../../helpers/schemas';
+import { RawMenuItem } from '../../../../types';
 
 /**
  * Sync actual selling price to dish or recipe table.

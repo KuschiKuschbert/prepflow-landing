@@ -3,7 +3,7 @@
  */
 
 import { logger } from '@/lib/logger';
-import { RawMenuItem } from '../../../../../helpers/schemas';
+import { RawMenuItem } from '../../../../../types';
 import { cacheRecommendedPrice } from '../../helpers/cacheRecommendedPrice';
 import { StatisticsMenuItem } from './calculateStatistics';
 

@@ -1,7 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { DishRecipeJoinData, IngredientJoinData } from '../../../helpers/schemas';
+import { DishRecipeJoinData, IngredientJoinData } from '../../../helpers/internal-types';
 import { calculateRecipeCost } from './calculateRecipeCost';
 
 export async function calculateDishCost(dishId: string): Promise<number> {

@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { EnrichedDishData, RawMenuItem } from '../../../helpers/schemas';
+import { EnrichedDishData, RawMenuItem } from '../../../types';
 import { normalizeAllergens } from './normalizeAllergens';
 import { validateVeganStatus } from './validateDietaryStatus';
 

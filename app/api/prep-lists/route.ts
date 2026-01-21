@@ -4,12 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { createPrepList } from './helpers/createPrepList';
 import { deletePrepList } from './helpers/deletePrepList';
-import {
-  combinePrepListData,
-  fetchIngredientsBatch,
-  fetchPrepListsData,
-  fetchRelatedData,
-} from './helpers/fetchPrepLists';
+import { fetchAllPrepListData } from './helpers/fetchPrepLists';
 import { handlePrepListError } from './helpers/handlePrepListError';
 import { parseDeleteRequest } from './helpers/parseDeleteRequest';
 import { createPrepListSchema, getPrepListsSchema, updatePrepListSchema } from './helpers/schemas';
@@ -42,44 +37,15 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { prepLists, count, empty } = await fetchPrepListsData({
+    const data = await fetchAllPrepListData({
       userId: userId || null,
       page,
       pageSize,
     });
 
-    if (empty) {
-      const totalPages = Math.max(1, Math.ceil(count / pageSize));
-      const mappedPrepLists = prepLists.map(list => ({
-        ...list,
-        kitchen_section_id: list.kitchen_section_id || list.section_id,
-        kitchen_sections: null,
-        prep_list_items: [],
-      }));
-      return NextResponse.json({
-        success: true,
-        data: { items: mappedPrepLists, total: count, page, pageSize, totalPages },
-      });
-    }
-
-    const { sectionsMap, itemsByPrepListId, prepListItems } = await fetchRelatedData(prepLists);
-    const ingredientIds = Array.from(
-      new Set(
-        prepListItems.map(item => item.ingredient_id).filter((id): id is string => Boolean(id)),
-      ),
-    );
-    const ingredientsMap = await fetchIngredientsBatch(ingredientIds);
-    const mappedData = combinePrepListData(
-      prepLists,
-      sectionsMap,
-      itemsByPrepListId,
-      ingredientsMap,
-    );
-    const totalPages = Math.max(1, Math.ceil(count / pageSize));
-
     return NextResponse.json({
       success: true,
-      data: { items: mappedData, total: count, page, pageSize, totalPages },
+      data,
     });
   } catch (err) {
     logger.error('[Prep Lists API] Unexpected error:', {

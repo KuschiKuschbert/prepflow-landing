@@ -11,32 +11,13 @@
 import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { triggerEmployeeSync } from '@/lib/square/sync/hooks';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { checkEmployeeExists } from './helpers/checkEmployeeExists';
 import { deleteEmployee } from './helpers/deleteEmployee';
 import { getEmployee } from './helpers/getEmployee';
+import { triggerEmployeeSyncHook } from './helpers/sync';
 import { updateEmployee } from './helpers/updateEmployee';
-
-const updateEmployeeSchema = z.object({
-  first_name: z.string().min(1, 'First name is required').optional(),
-  last_name: z.string().min(1, 'Last name is required').optional(),
-  email: z.string().email('Invalid email format').optional(),
-  phone: z.string().optional().nullable(),
-  role: z.enum(['admin', 'manager', 'staff']).optional(),
-  employment_type: z.enum(['full-time', 'part-time', 'casual']).optional(),
-  hourly_rate: z.number().nonnegative().optional(),
-  saturday_rate: z.number().nonnegative().optional().nullable(),
-  sunday_rate: z.number().nonnegative().optional().nullable(),
-  skills: z.array(z.string()).optional().nullable(),
-  bank_account_bsb: z.string().optional().nullable(),
-  bank_account_number: z.string().optional().nullable(),
-  tax_file_number: z.string().optional().nullable(),
-  emergency_contact_name: z.string().optional().nullable(),
-  emergency_contact_phone: z.string().optional().nullable(),
-  user_id: z.string().uuid().optional().nullable(),
-});
+import { updateEmployeeSchema } from './helpers/validation';
 
 /**
  * GET /api/staff/employees/[id]
@@ -125,7 +106,6 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
     );
 
     // Trigger Square sync hook after successful update (non-blocking)
-    // Trigger Square sync hook after successful update (non-blocking)
     if (result.status === 200) {
       triggerEmployeeSyncHook(request, employeeId);
     }
@@ -183,18 +163,4 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
       { status: 500 },
     );
   }
-
-}
-
-function triggerEmployeeSyncHook(request: NextRequest, employeeId: string) {
-    (async () => {
-        try {
-          await triggerEmployeeSync(request, employeeId, 'update');
-        } catch (err) {
-          logger.error('[Staff Employees API] Error triggering Square sync:', {
-            error: err instanceof Error ? err.message : String(err),
-            employeeId,
-          });
-        }
-    })();
 }

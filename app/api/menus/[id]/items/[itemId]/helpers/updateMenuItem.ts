@@ -1,7 +1,7 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { MenuItem, UpdateMenuItemInput } from '../../../../helpers/schemas';
+import { MenuItem, UpdateMenuItemInput } from '../../../../types';
 import { fetchMenuItem } from './fetchMenuItem';
 import { syncPrice } from './syncPrice';
 

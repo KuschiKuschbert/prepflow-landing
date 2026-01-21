@@ -3,7 +3,7 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { CreateMenuItemInput } from '../../helpers/schemas';
+import { CreateMenuItemInput } from '../../types';
 
 // Helper to safely parse request body
 async function safeParseBody(request: NextRequest) {

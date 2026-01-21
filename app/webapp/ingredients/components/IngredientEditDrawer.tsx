@@ -4,32 +4,12 @@ import { AutosaveStatus } from '@/components/ui/AutosaveStatus';
 import { EditDrawer } from '@/components/ui/EditDrawer';
 import { useAutosave } from '@/hooks/useAutosave';
 import { deriveAutosaveId } from '@/lib/autosave-id';
+import { logger } from '@/lib/logger';
 import { useOnSave } from '@/lib/personality/hooks';
 import { IngredientFormFields } from './IngredientFormFields';
 import { useIngredientFormLogic } from './useIngredientFormLogic';
-import { logger } from '@/lib/logger';
 
-interface Ingredient {
-  id: string;
-  ingredient_name: string;
-  brand?: string;
-  pack_size?: string;
-  pack_size_unit?: string;
-  pack_price?: number;
-  unit?: string;
-  cost_per_unit: number;
-  cost_per_unit_as_purchased?: number;
-  cost_per_unit_incl_trim?: number;
-  trim_peel_waste_percentage?: number;
-  yield_percentage?: number;
-  supplier?: string;
-  product_code?: string;
-  storage_location?: string;
-  min_stock_level?: number;
-  current_stock?: number;
-  created_at?: string;
-  updated_at?: string;
-}
+import { ExistingIngredient as Ingredient } from './types';
 
 interface Supplier {
   id: string;

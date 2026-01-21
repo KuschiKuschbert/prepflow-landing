@@ -2,29 +2,14 @@
 
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Icon } from '@/components/ui/Icon';
+import { logger } from '@/lib/logger';
 import { convertIngredientCost } from '@/lib/unit-conversion';
 import { Edit, MapPin, Store, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useCardTouchHandlers } from '../hooks/useCardTouchHandlers';
 import { getStandardUnit } from '../utils/getStandardUnit';
-import { logger } from '@/lib/logger';
 
-interface Ingredient {
-  id: string;
-  ingredient_name: string;
-  brand?: string;
-  pack_size?: string;
-  pack_size_unit?: string;
-  unit?: string;
-  cost_per_unit: number;
-  supplier?: string;
-  product_code?: string;
-  storage_location?: string;
-  min_stock_level?: number;
-  current_stock?: number;
-  standard_unit?: string;
-  original_unit?: string;
-}
+import { ExistingIngredient as Ingredient } from './types';
 
 interface IngredientCardProps {
   ingredient: Ingredient;
@@ -53,15 +38,15 @@ export function IngredientCard({
   onCancelLongPress,
   onEnterSelectionMode,
 }: IngredientCardProps) {
-  const standardUnit = getStandardUnit(ingredient.unit, ingredient.standard_unit);
+  const standardUnit = getStandardUnit(ingredient.unit, (ingredient as any).standard_unit);
   const convertedCost = convertIngredientCost(
-    ingredient.cost_per_unit,
+    ingredient.cost_per_unit || 0,
     standardUnit,
     displayUnit,
     1,
   );
   const packSizeUnit = ingredient.pack_size_unit || ingredient.unit || 'GM';
-  const originalUnit = ingredient.original_unit || packSizeUnit;
+  const originalUnit = (ingredient as any).original_unit || packSizeUnit;
   const showUnitTooltip = originalUnit && originalUnit !== standardUnit;
   const isLowStock =
     ingredient.min_stock_level &&

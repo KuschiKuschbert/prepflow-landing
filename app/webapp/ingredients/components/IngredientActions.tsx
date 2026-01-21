@@ -1,13 +1,10 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
-import { useAlert } from '@/hooks/useAlert';
-import { useConfirm } from '@/hooks/useConfirm';
-import { usePrompt } from '@/hooks/usePrompt';
-import { logger } from '@/lib/logger';
 import { useTranslation } from '@/lib/useTranslation';
 import { MapPin, Store, Target, Trash2, Zap } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useBulkActions } from './hooks/useBulkActions';
 interface Ingredient {
   id: string;
   ingredient_name: string;
@@ -45,145 +42,28 @@ export default function IngredientActions({
   onBulkUpdate,
   loading = false,
 }: IngredientActionsProps) {
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const { t: _t } = useTranslation();
-  const { showConfirm, ConfirmDialog } = useConfirm();
-  const { showPrompt, InputDialog } = usePrompt();
-  const { showAlert, AlertDialog } = useAlert();
-  const [bulkActionLoading, setBulkActionLoading] = useState(false);
+  /* eslint-enable @typescript-eslint/no-unused-vars */
+
   const [showBulkMenu, setShowBulkMenu] = useState(false);
-
   const selectedCount = selectedIngredients.size;
-  const _selectedIngredientsData = filteredIngredients.filter(ingredient =>
-    selectedIngredients.has(ingredient.id),
-  );
-  const handleBulkDelete = async () => {
-    if (selectedCount === 0) return;
 
-    const confirmed = await showConfirm({
-      title: `Delete ${selectedCount} Ingredient${selectedCount > 1 ? 's' : ''}?`,
-      message: `Delete ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}? This action can't be undone. Last chance to back out.`,
-      variant: 'danger',
-      confirmLabel: 'Delete',
-      cancelLabel: 'Cancel',
-    });
-
-    if (!confirmed) return;
-
-    setBulkActionLoading(true);
-    try {
-      await onBulkDelete(Array.from(selectedIngredients));
-    } catch (err) {
-      logger.error('[IngredientActions] Error in bulk delete:', {
-        error: err instanceof Error ? err.message : String(err),
-        selectedCount,
-      });
-    } finally {
-      setBulkActionLoading(false);
-      setShowBulkMenu(false);
-    }
-  };
-  const handleBulkUpdateSupplier = async () => {
-    if (selectedCount === 0) return;
-
-    const newSupplier = await showPrompt({
-      title: 'Update Supplier',
-      message: `What supplier should these ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''} use?`,
-      placeholder: 'Supplier name',
-      type: 'text',
-      validation: v => (v.trim().length > 0 ? null : 'Supplier name is required'),
-    });
-
-    if (!newSupplier?.trim()) return;
-
-    setBulkActionLoading(true);
-    try {
-      await onBulkUpdate(Array.from(selectedIngredients), { supplier: newSupplier.trim() });
-    } catch (err) {
-      logger.error('[IngredientActions] Error in bulk update supplier:', {
-        error: err instanceof Error ? err.message : String(err),
-        selectedCount,
-        supplier: newSupplier.trim(),
-      });
-    } finally {
-      setBulkActionLoading(false);
-      setShowBulkMenu(false);
-    }
-  };
-  const handleBulkUpdateStorage = async () => {
-    if (selectedCount === 0) return;
-
-    const newStorage = await showPrompt({
-      title: 'Update Storage Location',
-      message: `Where should these ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''} be stored?`,
-      placeholder: 'Storage location',
-      type: 'text',
-      validation: v => (v.trim().length > 0 ? null : 'Storage location is required'),
-    });
-
-    if (!newStorage?.trim()) return;
-
-    setBulkActionLoading(true);
-    try {
-      await onBulkUpdate(Array.from(selectedIngredients), { storage_location: newStorage.trim() });
-    } catch (err) {
-      logger.error('[IngredientActions] Error in bulk update storage:', {
-        error: err instanceof Error ? err.message : String(err),
-        selectedCount,
-        storage: newStorage.trim(),
-      });
-    } finally {
-      setBulkActionLoading(false);
-      setShowBulkMenu(false);
-    }
-  };
-  const handleBulkUpdateWastage = async () => {
-    if (selectedCount === 0) return;
-
-    const wastageInput = await showPrompt({
-      title: 'Update Wastage Percentage',
-      message: `What wastage percentage (0-100) for these ${selectedCount} ingredient${selectedCount > 1 ? 's' : ''}?`,
-      placeholder: '0-100',
-      type: 'number',
-      min: 0,
-      max: 100,
-      validation: v => {
-        const num = parseFloat(v);
-        if (isNaN(num) || num < 0 || num > 100) {
-          return 'Please enter a valid percentage between 0 and 100';
-        }
-        return null;
-      },
-    });
-
-    if (!wastageInput) return;
-
-    const wastage = parseFloat(wastageInput);
-    if (isNaN(wastage) || wastage < 0 || wastage > 100) {
-      await showAlert({
-        title: 'Invalid Percentage',
-        message: "That's not a valid percentage. Give me something between 0 and 100, chef.",
-        variant: 'warning',
-      });
-      return;
-    }
-
-    setBulkActionLoading(true);
-    try {
-      await onBulkUpdate(Array.from(selectedIngredients), {
-        trim_peel_waste_percentage: wastage,
-        yield_percentage: 100 - wastage,
-      });
-    } catch (err) {
-      logger.error('[IngredientActions] Error in bulk update wastage:', {
-        error: err instanceof Error ? err.message : String(err),
-        selectedCount,
-        wastage,
-      });
-    } finally {
-      setBulkActionLoading(false);
-      setShowBulkMenu(false);
-    }
-  };
+  const {
+    bulkActionLoading,
+    handleBulkDelete,
+    handleBulkUpdateSupplier,
+    handleBulkUpdateStorage,
+    handleBulkUpdateWastage,
+    ConfirmDialog,
+    InputDialog,
+    AlertDialog,
+  } = useBulkActions({
+    selectedIngredients,
+    onBulkDelete,
+    onBulkUpdate,
+    onComplete: () => setShowBulkMenu(false),
+  });
 
   // Close dropdown on Escape key
   useEffect(() => {

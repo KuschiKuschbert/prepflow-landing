@@ -1,7 +1,7 @@
 /**
  * Helper for calculating menu item statistics
  */
-import { RawMenuItem } from '../../../../../helpers/schemas';
+import { RawMenuItem } from '../../../../../types';
 
 export type StatisticsMenuItem = RawMenuItem & {
   dishes?: RawMenuItem['dishes'] | RawMenuItem['dishes'][];

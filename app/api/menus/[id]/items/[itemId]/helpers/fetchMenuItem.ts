@@ -2,7 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
-import { RawMenuItem } from '../../../../helpers/schemas';
+import { RawMenuItem } from '../../../../types';
 
 /**
  * Fetch menu item by ID.

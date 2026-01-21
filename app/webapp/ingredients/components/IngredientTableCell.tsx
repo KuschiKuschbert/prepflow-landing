@@ -5,22 +5,7 @@ import { convertIngredientCost } from '@/lib/unit-conversion';
 import { Info } from 'lucide-react';
 import { getStandardUnit } from '../utils/getStandardUnit';
 
-interface Ingredient {
-  id: string;
-  ingredient_name: string;
-  brand?: string;
-  pack_size?: string;
-  pack_size_unit?: string;
-  unit?: string;
-  cost_per_unit: number;
-  product_code?: string;
-  supplier?: string;
-  storage_location?: string;
-  min_stock_level?: number;
-  current_stock?: number;
-  standard_unit?: string;
-  original_unit?: string;
-}
+import { ExistingIngredient as Ingredient } from './types';
 
 interface IngredientTableCellProps {
   ingredient: Ingredient;
@@ -73,8 +58,8 @@ export function IngredientPackSizeCell({
   className?: string;
 }) {
   const packSizeUnit = ingredient.pack_size_unit || ingredient.unit || 'GM';
-  const originalUnit = ingredient.original_unit || packSizeUnit;
-  const standardUnit = getStandardUnit(ingredient.unit, ingredient.standard_unit);
+  const originalUnit = (ingredient as any).original_unit || packSizeUnit;
+  const standardUnit = getStandardUnit(ingredient.unit, (ingredient as any).standard_unit);
   const showUnitTooltip = originalUnit && originalUnit !== standardUnit;
 
   return (
@@ -104,15 +89,15 @@ export function IngredientPackSizeCell({
 }
 
 export function IngredientCostCell({ ingredient, displayUnit }: IngredientTableCellProps) {
-  const standardUnit = getStandardUnit(ingredient.unit, ingredient.standard_unit);
+  const standardUnit = getStandardUnit(ingredient.unit, (ingredient as any).standard_unit);
   const convertedCost = convertIngredientCost(
-    ingredient.cost_per_unit,
+    ingredient.cost_per_unit || 0,
     standardUnit,
     displayUnit,
     1,
   );
   const originalUnit =
-    ingredient.original_unit || ingredient.pack_size_unit || ingredient.unit || 'GM';
+    (ingredient as any).original_unit || ingredient.pack_size_unit || ingredient.unit || 'GM';
   const showUnitTooltip = originalUnit && originalUnit !== standardUnit;
 
   return (

@@ -1,8 +1,8 @@
 'use client';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
+import { logger } from '@/lib/logger';
 import { useEffect, useState } from 'react';
 import { useIngredientBulkActionsDialog } from '../hooks/useIngredientBulkActionsDialog';
-import { logger } from '@/lib/logger';
 import { type SortOption } from '../hooks/useIngredientFiltering';
 import { useIngredientTableSort } from '../hooks/useIngredientTableSort';
 import { IngredientCard } from './IngredientCard';
@@ -12,28 +12,7 @@ import { IngredientTableDialogs } from './IngredientTableDialogs';
 import { IngredientTableEmptyState } from './IngredientTableEmptyState';
 import { IngredientTableFilterBar } from './IngredientTableFilterBar';
 import { IngredientTableHeader } from './IngredientTableHeader';
-interface Ingredient {
-  id: string;
-  ingredient_name: string;
-  brand?: string;
-  pack_size?: string;
-  pack_size_unit?: string;
-  pack_price?: number;
-  unit?: string;
-  cost_per_unit: number;
-  cost_per_unit_as_purchased?: number;
-  cost_per_unit_incl_trim?: number;
-  trim_peel_waste_percentage?: number;
-  yield_percentage?: number;
-  supplier?: string;
-  product_code?: string;
-  storage_location?: string;
-  category?: string;
-  min_stock_level?: number;
-  current_stock?: number;
-  created_at?: string;
-  updated_at?: string;
-}
+import { ExistingIngredient as Ingredient } from './types';
 interface IngredientTableWithFiltersProps {
   ingredients: Ingredient[];
   displayUnit: string;

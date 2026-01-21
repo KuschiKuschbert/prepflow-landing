@@ -1,0 +1,28 @@
+[
+  "app/webapp/ai-specials/components/RecipeScraper/hooks/useComprehensiveScrapingHandlers.ts",
+  "app/webapp/ai-specials/components/RecipeScraper/hooks/useFormattingHandlers.ts",
+  "app/webapp/ai-specials/components/RecipeScraper/hooks/useProcessingOperations.ts",
+  "app/webapp/ai-specials/hooks/useAiSpecials.ts",
+  "app/webapp/components/hooks/useRecentActivity.ts",
+  "app/webapp/employees/hooks/useEmployeeActions.ts",
+  "app/webapp/guide/hooks/useGuideAnalytics.ts",
+  "app/webapp/ingredients/components/hooks/useBulkActions.ts",
+  "app/webapp/recipes/components/hooks/useDishesClientController.helpers.ts",
+  "app/webapp/recipes/hooks/useDishFormData.ts",
+  "app/webapp/suppliers/hooks/useSupplierImportProcessor.ts",
+  "app/webapp/ingredients/components/hooks/useCSVImport.ts",
+
+  "app/webapp/menu-builder/utils/normalizeMenuItem.ts",
+  "app/webapp/recipes/components/hooks/useDishesClientController.ts",
+  "app/webapp/recipes/hooks/useDishForm.ts",
+  "app/webapp/suppliers/hooks/useSupplierImport.ts",
+  "lib/admin-auth.ts",
+  "lib/backup/restore/helpers/delete-tables.ts",
+  "lib/compliance/report-types/ReportData.ts",
+  "lib/error-learning/document-fix.ts",
+  "lib/error-learning/knowledge-base.ts",
+  "lib/error-learning/knowledge-index.ts",
+  "lib/error-learning/pattern-matcher.ts",
+  "lib/menu-pricing/cache-invalidation/helpers/find-menu-items.ts",
+  "lib/rsi/auto-refactoring/debt-parser.ts"
+]

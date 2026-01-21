@@ -42,6 +42,7 @@ else
     exit 1
 fi
 
+
 # 3. Architecture Check (Architect)
 echo -n "   - Architecture (Architect)... "
 if npm run check:architecture; then
@@ -49,6 +50,16 @@ if npm run check:architecture; then
 else
     echo -e "${RED}FAIL (Architectural Violation)${NC}"
     echo "     Run 'npm run check:architecture' to see details."
+    exit 1
+fi
+
+# 4. File Size Check (Complexity)
+echo -n "   - File Size (Complexity)... "
+if npm run lint:filesize; then
+    echo -e "${GREEN}Pass${NC}"
+else
+    echo -e "${RED}FAIL (File Size Limit Exceeded)${NC}"
+    echo "     Run 'npm run lint:filesize' to see details."
     exit 1
 fi
 

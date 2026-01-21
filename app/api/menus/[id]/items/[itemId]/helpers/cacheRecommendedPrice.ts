@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import { RawMenuItem } from '../../../../helpers/schemas';
+import { RawMenuItem } from '../../../../types';
 import { calculateDishSellingPrice } from '../../../statistics/helpers/calculateDishSellingPrice';
 import { calculateRecipeSellingPrice } from '../../../statistics/helpers/calculateRecipeSellingPrice';
 

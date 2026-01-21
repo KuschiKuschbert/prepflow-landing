@@ -1,17 +1,6 @@
 import { useMemo } from 'react';
 
-interface Ingredient {
-  id: string;
-  ingredient_name: string;
-  brand?: string;
-  pack_size?: string;
-  pack_size_unit?: string;
-  supplier?: string;
-  storage_location?: string;
-  category?: string;
-  cost_per_unit: number;
-  current_stock?: number;
-}
+import { ExistingIngredient as Ingredient } from '../components/types';
 
 export type SortOption =
   | 'name_asc'

@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
-import { MenuItemWithRelations, MenuStatistics } from '../../../helpers/schemas';
+import { MenuItemWithRelations } from '../../../helpers/internal-types';
+import { MenuDetailStatistics } from '../../../types';
 import { processDishItem } from './processDishItem';
 import { processRecipeItem } from './processRecipeItem';
 
@@ -11,7 +12,7 @@ import { processRecipeItem } from './processRecipeItem';
  */
 export async function calculateMenuStatistics(
   menuItems: MenuItemWithRelations[],
-): Promise<MenuStatistics> {
+): Promise<MenuDetailStatistics> {
   logger.dev('[calculateMenuStatistics] Starting calculation', { itemCount: menuItems.length });
   let totalCOGS = 0;
   let totalRevenue = 0;

@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { MenuDishRelation, MenuItemWithRelations } from '../../../helpers/schemas';
+import { MenuDishRelation, MenuItemWithRelations } from '../../../helpers/internal-types';
 import { calculateDishCost } from './calculateDishCost';
 import { calculateDishSellingPrice } from './calculateDishSellingPrice';
 

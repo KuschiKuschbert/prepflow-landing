@@ -4,10 +4,8 @@ import { Icon } from '@/components/ui/Icon';
 import { Check, ChevronDown, ChevronUp } from 'lucide-react';
 import { useMemo } from 'react';
 import { Dish, DishCostData, Recipe, RecipePriceData } from '../types';
-import type { UnifiedSortField } from './DishesListView';
+import { UnifiedItem, UnifiedSortField } from './types';
 import { UnifiedTableRow } from './UnifiedTableRow';
-
-type UnifiedItem = (Dish & { itemType: 'dish' }) | (Recipe & { itemType: 'recipe' });
 
 interface UnifiedTableProps {
   items: UnifiedItem[];

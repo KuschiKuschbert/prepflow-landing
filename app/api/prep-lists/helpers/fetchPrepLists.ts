@@ -142,3 +142,36 @@ export async function fetchRelatedData(prepLists: PrepList[]) {
   const itemsByPrepListId = buildItemsByPrepListIdMap(prepListItems);
   return { sectionsMap, itemsByPrepListId, prepListItems };
 }
+
+export async function fetchAllPrepListData(params: FetchPrepListsParams) {
+  const { userId, page, pageSize } = params;
+  const { prepLists, count, empty } = await fetchPrepListsData({ userId, page, pageSize });
+
+  if (empty) {
+    const totalPages = Math.max(1, Math.ceil(count / pageSize));
+    const mappedPrepLists = prepLists.map(list => ({
+      ...list,
+      kitchen_section_id: list.kitchen_section_id || list.section_id,
+      kitchen_sections: null,
+      prep_list_items: [],
+    }));
+    return { items: mappedPrepLists, total: count, page, pageSize, totalPages };
+  }
+
+  const { sectionsMap, itemsByPrepListId, prepListItems } = await fetchRelatedData(prepLists);
+  const ingredientIds = Array.from(
+    new Set(
+      prepListItems.map(item => item.ingredient_id).filter((id): id is string => Boolean(id)),
+    ),
+  );
+  const ingredientsMap = await fetchIngredientsBatch(ingredientIds);
+  const mappedData = combinePrepListData(
+    prepLists,
+    sectionsMap,
+    itemsByPrepListId,
+    ingredientsMap,
+  );
+  const totalPages = Math.max(1, Math.ceil(count / pageSize));
+
+  return { items: mappedData, total: count, page, pageSize, totalPages };
+}

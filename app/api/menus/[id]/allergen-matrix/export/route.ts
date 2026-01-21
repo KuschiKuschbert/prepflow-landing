@@ -9,7 +9,7 @@ import {
 } from '@/lib/dietary/dietary-aggregation';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
-import { EnrichedMenuItem } from '../../../helpers/schemas';
+import { EnrichedMenuItem } from '../../../types';
 import { fetchMenuWithItems } from '../../helpers/fetchMenuWithItems';
 import { generateHTML } from './helpers/generateHTML';
 import { generateCSV, processMenuItemsToMatrix } from './helpers/processMatrixData';

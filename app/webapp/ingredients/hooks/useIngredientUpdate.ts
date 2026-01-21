@@ -7,7 +7,7 @@ import { useCallback } from 'react';
 import { formatIngredientUpdates } from './helpers/formatIngredientUpdates';
 
 interface UseIngredientUpdateProps<
-  T extends { id: string; ingredient_name: string; cost_per_unit: number },
+  T extends { id: string; ingredient_name: string; cost_per_unit?: number },
 > {
   setIngredients: React.Dispatch<React.SetStateAction<T[]>>;
   setError: (error: string) => void;
@@ -15,7 +15,7 @@ interface UseIngredientUpdateProps<
 }
 
 export function useIngredientUpdate<
-  T extends { id: string; ingredient_name: string; cost_per_unit: number },
+  T extends { id: string; ingredient_name: string; cost_per_unit?: number },
 >({ setIngredients, setError, setEditingIngredient }: UseIngredientUpdateProps<T>) {
   const { showSuccess } = useNotification();
   const handleUpdateIngredient = useCallback(

@@ -6,7 +6,7 @@ import { useCallback } from 'react';
 import { addIngredient, rollbackIngredientAdd } from './useIngredientAdd/addIngredient';
 
 interface UseIngredientAddProps<
-  T extends { id: string; ingredient_name: string; cost_per_unit: number },
+  T extends { id: string; ingredient_name: string; cost_per_unit?: number },
 > {
   setIngredients: React.Dispatch<React.SetStateAction<T[]>>;
   setError: (error: string) => void;
@@ -31,7 +31,7 @@ const DEFAULT_INGREDIENT = {
 };
 
 export function useIngredientAdd<
-  T extends { id: string; ingredient_name: string; cost_per_unit: number },
+  T extends { id: string; ingredient_name: string; cost_per_unit?: number },
 >({
   setIngredients,
   setError,

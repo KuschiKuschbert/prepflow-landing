@@ -44,7 +44,11 @@ export interface Ingredient {
     ai?: boolean;
     ai_detected_at?: string;
   };
+  created_at?: string;
+  updated_at?: string;
 }
+
+export type ExistingIngredient = Ingredient & { id: string };
 
 export interface WizardStepProps {
   formData: Partial<Ingredient>;

@@ -2,7 +2,7 @@
  * Group ingredients by sort option
  */
 
-import { IngredientWithParLevel } from '../../../helpers/schemas';
+import { IngredientWithParLevel } from '../../../helpers/internal-types';
 
 export function groupIngredients(
   ingredients: IngredientWithParLevel[],

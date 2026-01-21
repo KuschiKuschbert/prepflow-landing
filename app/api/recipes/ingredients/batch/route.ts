@@ -4,6 +4,9 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
+import { handleMissingNestedIngredients } from './helpers/missing-ingredients';
+import { BatchIngredientData, BatchRecipeIngredientRow } from './helpers/types';
+
 // Helper to safely parse request body
 async function safeParseBody(request: NextRequest) {
   try {
@@ -40,24 +43,6 @@ export async function POST(request: NextRequest) {
 
     if (normalizedIds.length === 0) {
       return NextResponse.json({ items: [] });
-    }
-
-    interface BatchIngredientData {
-      id: string;
-      ingredient_name: string;
-      unit?: string;
-      cost_per_unit?: number;
-      trim_peel_waste_percentage?: number;
-      yield_percentage?: number;
-    }
-
-    interface BatchRecipeIngredientRow {
-      id: string;
-      recipe_id: string;
-      ingredient_id: string;
-      quantity: number;
-      unit: string;
-      ingredients?: BatchIngredientData; // Can be undefined if join fails
     }
 
     // Fetch all recipe ingredients in a single query
@@ -163,38 +148,4 @@ export async function POST(request: NextRequest) {
       { status: 500 },
     );
   }
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function handleMissingNestedIngredients(supabaseAdmin: any, rows: any[]): Promise<any[]> {
-    const missingNested = rows.some((r: any) => !r.ingredients);
-    if (missingNested) {
-      const uniqueIds = Array.from(
-        new Set(
-          rows
-            .map((r: any) => r.ingredient_id)
-            .filter((v: string | undefined) => Boolean(v)),
-        ),
-      );
-      if (uniqueIds.length > 0) {
-        const { data: ingRows, error: ingError } = await supabaseAdmin
-          .from('ingredients')
-          .select(
-            'id, ingredient_name, cost_per_unit, unit, trim_peel_waste_percentage, yield_percentage',
-          )
-          .in('id', uniqueIds);
-        if (!ingError && ingRows) {
-          const byId: Record<string, unknown> = {};
-          ingRows.forEach((ir: any) => {
-            byId[ir.id] = ir;
-          });
-          return rows.map((r: any) => ({
-            ...r,
-            ingredients:
-              r.ingredients || (byId[r.ingredient_id] as any | undefined),
-          }));
-        }
-      }
-    }
-    return rows;
 }

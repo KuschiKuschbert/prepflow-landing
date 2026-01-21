@@ -1,20 +1,6 @@
 import { exportToCSV } from '@/lib/csv/csv-utils';
 
-interface Ingredient {
-  id: string;
-  ingredient_name: string;
-  brand?: string;
-  pack_size?: string;
-  pack_size_unit?: string;
-  pack_price?: number;
-  unit?: string;
-  cost_per_unit: number;
-  supplier?: string;
-  product_code?: string;
-  storage_location?: string;
-  min_stock_level?: number;
-  current_stock?: number;
-}
+import { ExistingIngredient as Ingredient } from '../../components/types';
 
 const CSV_HEADERS = [
   'Ingredient Name',

@@ -2,8 +2,18 @@
  * Helper functions for menu item queries
  */
 
-import { supabaseAdmin } from '@/lib/supabase';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { supabaseAdmin } from '@/lib/supabase';
+import {
+    DISH_FIELDS_FULL,
+    DISH_FIELDS_MINIMAL,
+    DISH_FIELDS_NO_DIETARY,
+    MENU_ITEM_BASE_FIELDS,
+    MENU_ITEM_PRICING_FIELDS,
+    RECIPE_FIELDS_FULL,
+    RECIPE_FIELDS_MINIMAL,
+    RECIPE_FIELDS_NO_DIETARY,
+} from './constants';
 
 function ensureSupabaseAdmin() {
   if (!supabaseAdmin) {
@@ -17,42 +27,16 @@ function ensureSupabaseAdmin() {
 
 export function buildFullQuery(menuId: string) {
   ensureSupabaseAdmin();
+  const selectQuery = `
+    ${MENU_ITEM_BASE_FIELDS},
+    ${MENU_ITEM_PRICING_FIELDS},
+    dishes (${DISH_FIELDS_FULL}),
+    recipes (${RECIPE_FIELDS_FULL})
+  `;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return supabaseAdmin!
     .from('menu_items')
-    .select(
-      `
-      id,
-      dish_id,
-      recipe_id,
-      category,
-      position,
-      region,
-      actual_selling_price,
-      recommended_selling_price,
-      dishes (
-        id,
-        dish_name,
-        description,
-        selling_price,
-        allergens,
-        is_vegetarian,
-        is_vegan,
-        dietary_confidence,
-        dietary_method
-      ),
-      recipes (
-        id,
-        name,
-        description,
-        yield,
-        allergens,
-        is_vegetarian,
-        is_vegan,
-        dietary_confidence,
-        dietary_method
-      )
-    `,
-    )
+    .select(selectQuery)
     .eq('menu_id', menuId)
     .order('category')
     .order('position');
@@ -60,40 +44,15 @@ export function buildFullQuery(menuId: string) {
 
 export function buildQueryWithoutPricing(menuId: string) {
   ensureSupabaseAdmin();
+  const selectQuery = `
+    ${MENU_ITEM_BASE_FIELDS},
+    dishes (${DISH_FIELDS_FULL}),
+    recipes (${RECIPE_FIELDS_FULL})
+  `;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return supabaseAdmin!
     .from('menu_items')
-    .select(
-      `
-      id,
-      dish_id,
-      recipe_id,
-      category,
-      position,
-      region,
-      dishes (
-        id,
-        dish_name,
-        description,
-        selling_price,
-        allergens,
-        is_vegetarian,
-        is_vegan,
-        dietary_confidence,
-        dietary_method
-      ),
-      recipes (
-        id,
-        name,
-        description,
-        yield,
-        allergens,
-        is_vegetarian,
-        is_vegan,
-        dietary_confidence,
-        dietary_method
-      )
-    `,
-    )
+    .select(selectQuery)
     .eq('menu_id', menuId)
     .order('category')
     .order('position');
@@ -101,32 +60,16 @@ export function buildQueryWithoutPricing(menuId: string) {
 
 export function buildQueryWithoutDietary(menuId: string) {
   ensureSupabaseAdmin();
+  const selectQuery = `
+    ${MENU_ITEM_BASE_FIELDS},
+    ${MENU_ITEM_PRICING_FIELDS},
+    dishes (${DISH_FIELDS_NO_DIETARY}),
+    recipes (${RECIPE_FIELDS_NO_DIETARY})
+  `;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return supabaseAdmin!
     .from('menu_items')
-    .select(
-      `
-      id,
-      dish_id,
-      recipe_id,
-      category,
-      position,
-      region,
-      actual_selling_price,
-      recommended_selling_price,
-      dishes (
-        id,
-        dish_name,
-        description,
-        selling_price
-      ),
-      recipes (
-        id,
-        name,
-        description,
-        yield
-      )
-    `,
-    )
+    .select(selectQuery)
     .eq('menu_id', menuId)
     .order('category')
     .order('position');
@@ -134,30 +77,16 @@ export function buildQueryWithoutDietary(menuId: string) {
 
 export function buildQueryWithoutDescription(menuId: string) {
   ensureSupabaseAdmin();
+  const selectQuery = `
+    ${MENU_ITEM_BASE_FIELDS},
+    ${MENU_ITEM_PRICING_FIELDS},
+    dishes (${DISH_FIELDS_MINIMAL}),
+    recipes (${RECIPE_FIELDS_MINIMAL})
+  `;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return supabaseAdmin!
     .from('menu_items')
-    .select(
-      `
-      id,
-      dish_id,
-      recipe_id,
-      category,
-      position,
-      region,
-      actual_selling_price,
-      recommended_selling_price,
-      dishes (
-        id,
-        dish_name,
-        selling_price
-      ),
-      recipes (
-        id,
-        recipe_name,
-        yield
-      )
-    `,
-    )
+    .select(selectQuery)
     .eq('menu_id', menuId)
     .order('category')
     .order('position');
@@ -165,33 +94,18 @@ export function buildQueryWithoutDescription(menuId: string) {
 
 export function buildMinimalQuery(menuId: string) {
   ensureSupabaseAdmin();
-  return supabaseAdmin!
-    .from('menu_items')
-    .select(
-      `
-      id,
-      dish_id,
-      recipe_id,
-      category,
-      position,
-      region,
-      dishes (
-        id,
-        dish_name,
-        selling_price
-      ),
-      recipes (
-        id,
-        recipe_name,
-        yield
-      )
-    `,
-    )
-    .eq('menu_id', menuId);
+  const selectQuery = `
+    ${MENU_ITEM_BASE_FIELDS},
+    dishes (${DISH_FIELDS_MINIMAL}),
+    recipes (${RECIPE_FIELDS_MINIMAL})
+  `;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return supabaseAdmin!.from('menu_items').select(selectQuery).eq('menu_id', menuId);
 }
 
 export function buildQueryWithoutRelations(menuId: string) {
   ensureSupabaseAdmin();
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return supabaseAdmin!
     .from('menu_items')
     .select('id, dish_id, recipe_id, category, position, region')
@@ -202,5 +116,6 @@ export function buildQueryWithoutRelations(menuId: string) {
 
 export function buildEssentialQuery(menuId: string) {
   ensureSupabaseAdmin();
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return supabaseAdmin!.from('menu_items').select('id, dish_id, recipe_id').eq('menu_id', menuId);
 }

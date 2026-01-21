@@ -2,7 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { UpdateMenuItemInput } from '../../../helpers/schemas';
+import { UpdateMenuItemInput } from '../../../types';
 import { deleteMenuItem } from './helpers/deleteMenuItem';
 import { updateMenuItemSchema } from './helpers/schemas';
 import { updateMenuItem } from './helpers/updateMenuItem';
