@@ -9,6 +9,7 @@
 - [x] Implement Zod validation for `app/api/auth/error/route.ts` <!-- id: 102 -->
 
 - [x] **[WEB]** Eradicate `any` types (Mission Accomplished). Final count: 0 (explicit/justified only).
+- [x] **[WEB]** Refactor all files exceeding size limits (Batches 1-6) - **DONE**. All logic files are under limits (checked via `lint:filesize`).
 - [x] **[WEB]** Refactor `app/api/ingredients`- [x] Iteration 3: Dishes API (Type Safety) - **DONE**.
 - [x] **[ANDROID]** Extract all hardcoded strings to `strings.xml` (Found 100+ instances of `Text("..")`).
 - [x] **[WEB]** Replace `alert()` usage in `PassportIdPage` and `SettingsClient` with Toast notifications.

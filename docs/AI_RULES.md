@@ -72,6 +72,8 @@ graph TD
 - **[2026-01-11] Import Hoisting**: Jest hoists ES6 imports. Use `require()` inside `beforeAll` to meaningfully mock `process.env`.
 - **[2026-01-14] Ralph Loop**: For complex refactors and bugs, we use the **Ralph Wiggum Technique** (Iterate > Perfection). See [RALPH_LOOP.md](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/methodology/RALPH_LOOP.md).
 - **[2026-01-21] Refactoring Strategy**: When refactoring massive type definitions (e.g., `report-item-types.ts`), extract domain-specific types into separate files *first*, then re-export them. This reduces risk and makes the main file readable.
+- [2026-01-22] Circular Dependencies: Shared types between components (e.g., `DishesListView` <-> `UnifiedTable`) MUST be extracted to a separate `types.ts` file. Never import a parent component into a child for types.
+- [2026-01-22] File Size Limits: `scripts/filesize-ignore.json` is a temporary measure. All "logic" files > 200 lines must be split immediately. Limit enforced.
 
 ## 5. 🔄 The Ralph Loop (Methodology)
 

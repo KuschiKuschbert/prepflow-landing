@@ -344,15 +344,15 @@ export function buildFullQuery(menuId: string) {
 
 ## 📊 Refactoring Statistics (January 2025)
 
-**Files Refactored:** 16 files
-**Total Lines Reduced:** ~1,000+ lines moved to focused modules
-**New Files Created:** 40+ helper/hook/component files
+**Files Refactored:** 25 files (Batches 1-6)
+**Total Lines Reduced:** ~2,500+ lines moved to focused modules
+**New Files Created:** 60+ helper/hook/component files
 **Patterns Used:**
 
-- Pattern 1 (Extract Helpers): 8 files
-- Pattern 2 (Extract Hooks): 3 files
-- Pattern 3 (Extract Components): 3 files
-- Pattern 4 (Extract API Helpers): 5 files
+- Pattern 1 (Extract Helpers): 12 files
+- Pattern 2 (Extract Hooks): 6 files
+- Pattern 3 (Extract Components): 6 files
+- Pattern 4 (Extract API Helpers): 8 files
 - Pattern 5 (Consolidate): 5 files
 
 **Success Rate:** 100% - All files now comply with size limits
