@@ -33,7 +33,7 @@ export function buildFullQuery(menuId: string) {
     dishes (${DISH_FIELDS_FULL}),
     recipes (${RECIPE_FIELDS_FULL})
   `;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+   
   return supabaseAdmin!
     .from('menu_items')
     .select(selectQuery)
@@ -49,7 +49,7 @@ export function buildQueryWithoutPricing(menuId: string) {
     dishes (${DISH_FIELDS_FULL}),
     recipes (${RECIPE_FIELDS_FULL})
   `;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+   
   return supabaseAdmin!
     .from('menu_items')
     .select(selectQuery)
@@ -66,7 +66,7 @@ export function buildQueryWithoutDietary(menuId: string) {
     dishes (${DISH_FIELDS_NO_DIETARY}),
     recipes (${RECIPE_FIELDS_NO_DIETARY})
   `;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+   
   return supabaseAdmin!
     .from('menu_items')
     .select(selectQuery)
@@ -83,7 +83,7 @@ export function buildQueryWithoutDescription(menuId: string) {
     dishes (${DISH_FIELDS_MINIMAL}),
     recipes (${RECIPE_FIELDS_MINIMAL})
   `;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+   
   return supabaseAdmin!
     .from('menu_items')
     .select(selectQuery)
@@ -99,13 +99,13 @@ export function buildMinimalQuery(menuId: string) {
     dishes (${DISH_FIELDS_MINIMAL}),
     recipes (${RECIPE_FIELDS_MINIMAL})
   `;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+   
   return supabaseAdmin!.from('menu_items').select(selectQuery).eq('menu_id', menuId);
 }
 
 export function buildQueryWithoutRelations(menuId: string) {
   ensureSupabaseAdmin();
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+   
   return supabaseAdmin!
     .from('menu_items')
     .select('id, dish_id, recipe_id, category, position, region')
@@ -116,6 +116,6 @@ export function buildQueryWithoutRelations(menuId: string) {
 
 export function buildEssentialQuery(menuId: string) {
   ensureSupabaseAdmin();
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+   
   return supabaseAdmin!.from('menu_items').select('id, dish_id, recipe_id').eq('menu_id', menuId);
 }

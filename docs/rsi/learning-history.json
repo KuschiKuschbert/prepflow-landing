@@ -18,7 +18,9 @@
         "id": "rule-intersection-over-any",
         "description": "Suggest intersection types over 'any' when fixing external library type errors.",
         "ruleLogic": "if (context.hasExternalTypeMistmatch) { suggest('use-intersection-cast'); }",
-        "derivedFrom": ["external-type-intersection-fix"]
+        "derivedFrom": [
+          "external-type-intersection-fix"
+        ]
       }
     ]
   },
@@ -30,7 +32,9 @@
         "type": "Optimization",
         "confidence": 0.98,
         "insight": "Scaling batch size to 12 files for highly repetitive patterns (like standardAdminChecks) is optimal for efficiency. The limiting factor is usually context window and tool budget, but for standardized API refactors, this size is manageable and high-speed.",
-        "sourceFiles": ["admin/*"]
+        "sourceFiles": [
+          "admin/*"
+        ]
       }
     ],
     "rulesGenerated": []
@@ -43,7 +47,11 @@
         "type": "Optimization",
         "confidence": 0.95,
         "insight": "Increasing batch size for standardized refactoring (e.g., applying the same helper across 7 files) is highly efficient and low-risk when the pattern is well-established.",
-        "sourceFiles": ["billing/*", "users/*", "security/*"]
+        "sourceFiles": [
+          "billing/*",
+          "users/*",
+          "security/*"
+        ]
       }
     ],
     "rulesGenerated": []
@@ -56,7 +64,10 @@
         "type": "Code-Reusability",
         "confidence": 0.99,
         "insight": "Critical admin endpoints often repeat Auth + Rate Limit + DB Connection checks. A `standardAdminChecks` helper drastically reduces boilerplate and ensures consistent security enforcement across high-risk routes.",
-        "sourceFiles": ["lib/admin-auth.ts", "app/api/admin/support/impersonate/route.ts"]
+        "sourceFiles": [
+          "lib/admin-auth.ts",
+          "app/api/admin/support/impersonate/route.ts"
+        ]
       }
     ],
     "rulesGenerated": [
@@ -64,7 +75,9 @@
         "id": "rule-standard-admin-checks",
         "description": "If an API route performs multiple admin-related checks (auth, rate limit, db), suggest replacing them with `standardAdminChecks`.",
         "ruleLogic": "if (context.hasRequireAdmin && context.hasRateLimit && context.hasDbCheck) { suggest('use-standard-admin-checks'); }",
-        "derivedFrom": ["standard-admin-checks-helper"]
+        "derivedFrom": [
+          "standard-admin-checks-helper"
+        ]
       }
     ]
   },
@@ -87,7 +100,9 @@
         "id": "rule-batch-processing-helper",
         "description": "If an API route contains a loop iterating over >3 items with async logic, suggest extracting the iteration logic to a helper.",
         "ruleLogic": "if (context.isApiRoute && context.hasAsyncLoop) { suggest('extract-batch-helper'); }",
-        "derivedFrom": ["loop-extraction-to-helper"]
+        "derivedFrom": [
+          "loop-extraction-to-helper"
+        ]
       }
     ]
   },
@@ -109,7 +124,9 @@
         "id": "rule-extract-callback_logic",
         "description": "If a callback function inside a hook exceeds 20 lines or 3 levels of nesting, suggest extracting it to a standalone helper.",
         "ruleLogic": "if (context.isCallback && (context.lines > 20 || context.nesting > 3)) { suggest('extract-helper'); }",
-        "derivedFrom": ["callback-logic-extraction"]
+        "derivedFrom": [
+          "callback-logic-extraction"
+        ]
       }
     ]
   },
@@ -121,7 +138,10 @@
         "type": "UI-Refactoring",
         "confidence": 0.98,
         "insight": "Giant side-effect handlers (like ScrollTracker) that manage unrelated concerns (Scroll vs Auth vs Time) should always be split into multiple useEffects or extracted into domain-specific hooks to maintain a flat dependency graph.",
-        "sourceFiles": ["components/ScrollTracker.tsx", "app/curbos/CurbOSLayoutClient.tsx"]
+        "sourceFiles": [
+          "components/ScrollTracker.tsx",
+          "app/curbos/CurbOSLayoutClient.tsx"
+        ]
       }
     ],
     "rulesGenerated": [
@@ -129,7 +149,9 @@
         "id": "rule-max-effect-complexity",
         "description": "Suggest splitting a useEffect if it exceeds 50 lines or handles more than 2 unrelated external subscriptions (e.g. window events + intersection observers).",
         "ruleLogic": "if (context.effectLines > 50 || context.subscriptionCount > 2) { suggest('effect-split'); }",
-        "derivedFrom": ["monolithic-hook-effect-split"]
+        "derivedFrom": [
+          "monolithic-hook-effect-split"
+        ]
       }
     ]
   },
@@ -141,7 +163,10 @@
         "type": "Architecture",
         "confidence": 0.96,
         "insight": "API routes with multiple response formats (JSON/SQL/CSV/Encrypted) benefit from 'prepareResponseContent' helpers. This decouples data fetching from formatting and prevents deeply nested branching in the main handler.",
-        "sourceFiles": ["app/api/backup/create/route.ts", "app/api/admin/data/export/route.ts"]
+        "sourceFiles": [
+          "app/api/backup/create/route.ts",
+          "app/api/admin/data/export/route.ts"
+        ]
       }
     ],
     "rulesGenerated": [
@@ -149,7 +174,9 @@
         "id": "rule-multi-format-extraction",
         "description": "If an API route handles more than 2 distinct format branches, suggest extracting formatting logic into a dedicated helper function.",
         "ruleLogic": "if (context.formatBranches > 2) { suggest('format-helper-extraction'); }",
-        "derivedFrom": ["complex-branching-response-prep"]
+        "derivedFrom": [
+          "complex-branching-response-prep"
+        ]
       }
     ]
   },
@@ -161,7 +188,9 @@
         "type": "Architecture",
         "confidence": 0.94,
         "insight": "Complex Many-to-Many mapping logic (like Ingredient -> Recipe/Dish -> Menu) should be extracted into 'getIdsByEntityType' helpers to keep core business logic flat and readable.",
-        "sourceFiles": ["lib/menu-lock/change-tracking/helpers/getLockedMenusUsingEntity.ts"]
+        "sourceFiles": [
+          "lib/menu-lock/change-tracking/helpers/getLockedMenusUsingEntity.ts"
+        ]
       }
     ],
     "rulesGenerated": [
@@ -169,7 +198,9 @@
         "id": "rule-max-database-nesting-3",
         "description": "Suggest helper extraction if database query chains or Promise.all blocks exceed 3 levels of indentation.",
         "ruleLogic": "if (context.dbQueryDepth > 3) { suggest('helper-extraction'); }",
-        "derivedFrom": ["deep-nesting-database-mapping"]
+        "derivedFrom": [
+          "deep-nesting-database-mapping"
+        ]
       }
     ]
   },
@@ -181,14 +212,18 @@
         "type": "UI-Refactoring",
         "confidence": 0.9,
         "insight": "Extracting list item logic into sub-components like 'AdminNavLink' significantly reduces main component render size and improves deklarative mapping.",
-        "sourceFiles": ["app/admin/components/AdminNavigation.tsx"]
+        "sourceFiles": [
+          "app/admin/components/AdminNavigation.tsx"
+        ]
       },
       {
         "patternId": "data-driven-scheduler",
         "type": "Architecture",
         "confidence": 0.92,
         "insight": "Converting manual if-blocks into a configuration array and a centralized trigger helper reduces cyclomatic complexity and nesting depth in background schedulers.",
-        "sourceFiles": ["lib/personality/scheduler.ts"]
+        "sourceFiles": [
+          "lib/personality/scheduler.ts"
+        ]
       }
     ],
     "rulesGenerated": [
@@ -196,7 +231,9 @@
         "id": "rule-no-monolithic-lists",
         "description": "If a list item in a JSX map() exceeds 10 lines, suggest extraction into a sub-component.",
         "ruleLogic": "if (jsx.map().itemSize > 10) { suggestRefactor('extract-as-component'); }",
-        "derivedFrom": ["component-extraction-clean-sidebar"]
+        "derivedFrom": [
+          "component-extraction-clean-sidebar"
+        ]
       }
     ]
   },
@@ -219,7 +256,10 @@
         "type": "verification",
         "confidence": 0.9,
         "insight": "Establishing a baseline of zero unjustified 'any' usages using a dedicated audit script prevents type safety regression in CI/CD pipelines.",
-        "sourceFiles": ["scripts/audit-any.ts", "scripts/sentinel.ts"]
+        "sourceFiles": [
+          "scripts/audit-any.ts",
+          "scripts/sentinel.ts"
+        ]
       }
     ],
     "rulesGenerated": [
@@ -227,7 +267,9 @@
         "id": "rule-nesting-limit",
         "description": "Enforce a maximum indent depth of 4 for API helpers; higher depth must be refactored via extraction.",
         "ruleLogic": "if (file.type === 'api-helper' && file.maxIndent > 4) { suggestRefactor('extract-function'); }",
-        "derivedFrom": ["flatten-deep-nesting"]
+        "derivedFrom": [
+          "flatten-deep-nesting"
+        ]
       }
     ]
   },
@@ -247,7 +289,9 @@
         "id": "rule-1768264370112-124",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -267,7 +311,9 @@
         "id": "rule-1768264482863-107",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -287,7 +333,9 @@
         "id": "rule-1768343859571-304",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -307,7 +355,9 @@
         "id": "rule-1768404471676-745",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -327,7 +377,9 @@
         "id": "rule-1768490863417-270",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -347,7 +399,9 @@
         "id": "rule-1768521485980-442",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -367,7 +421,9 @@
         "id": "rule-1768553824742-444",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -387,7 +443,9 @@
         "id": "rule-1768554430890-218",
         "description": "Auto-generated rule from insight: Replacing \"any\" with specific interfaces has 100% success rate in API routes.",
         "ruleLogic": "apply fix when pattern matches 'fix-any-types'",
-        "derivedFrom": ["fix-any-types"]
+        "derivedFrom": [
+          "fix-any-types"
+        ]
       }
     ]
   },
@@ -399,7 +457,10 @@
         "type": "frequency",
         "confidence": 1,
         "insight": "Fixes of type 'fix-any-type' have a 100.0% success rate across 2 attempts.",
-        "sourceFiles": ["app/api/route.ts", "lib/utils.ts"]
+        "sourceFiles": [
+          "app/api/route.ts",
+          "lib/utils.ts"
+        ]
       }
     ],
     "rulesGenerated": [
@@ -407,7 +468,9 @@
         "id": "rule-fix-any-type-1768555936910",
         "description": "Auto-generated rule: Prioritize 'fix-any-type' fixes (100% success).",
         "ruleLogic": "if (issue.type === 'fix-any-type') { prioritize(); }",
-        "derivedFrom": ["fix-any-type"]
+        "derivedFrom": [
+          "fix-any-type"
+        ]
       }
     ]
   },
@@ -419,7 +482,10 @@
         "type": "frequency",
         "confidence": 1,
         "insight": "Fixes of type 'remove-console-log' have a 100.0% success rate across 2 attempts.",
-        "sourceFiles": ["app/page.tsx", "lib/utils.ts"]
+        "sourceFiles": [
+          "app/page.tsx",
+          "lib/utils.ts"
+        ]
       }
     ],
     "rulesGenerated": [
@@ -427,7 +493,9 @@
         "id": "rule-remove-console-log-1768556188848",
         "description": "Auto-generated rule: Prioritize 'remove-console-log' fixes (100% success).",
         "ruleLogic": "if (issue.type === 'remove-console-log') { prioritize(); }",
-        "derivedFrom": ["remove-console-log"]
+        "derivedFrom": [
+          "remove-console-log"
+        ]
       }
     ]
   },
@@ -439,7 +507,10 @@
         "type": "frequency",
         "confidence": 1,
         "insight": "Fixes of type 'remove-console-log' have a 100.0% success rate across 2 attempts.",
-        "sourceFiles": ["app/page.tsx", "lib/utils.ts"]
+        "sourceFiles": [
+          "app/page.tsx",
+          "lib/utils.ts"
+        ]
       }
     ],
     "rulesGenerated": [
@@ -447,7 +518,9 @@
         "id": "rule-remove-console-log-1768556212185",
         "description": "Auto-generated rule: Prioritize 'remove-console-log' fixes (100% success).",
         "ruleLogic": "if (issue.type === 'remove-console-log') { prioritize(); }",
-        "derivedFrom": ["remove-console-log"]
+        "derivedFrom": [
+          "remove-console-log"
+        ]
       }
     ]
   },
@@ -460,5 +533,51 @@
     "timestamp": "2026-01-17T23:07:38.608Z",
     "insights": [],
     "rulesGenerated": []
+  },
+  {
+    "timestamp": "2026-01-25T15:24:20.861Z",
+    "insights": [
+      {
+        "patternId": "lint-fix",
+        "type": "frequency",
+        "confidence": 1,
+        "insight": "Fixes of type 'lint-fix' have a 100.0% success rate across 2 attempts.",
+        "sourceFiles": [
+          "/Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/api/ingredients/helpers/updateIngredient.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/api/prep-lists/generate-from-menu/route.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/ingredients/hooks/useIngredientAdd.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/ingredients/hooks/useIngredientFiltering.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/menu-builder/components/MenuLockedView/hooks/useMenuItemsWithAllergens/helpers/processMenuItem.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/performance/components/PerformanceDateRange.tsx /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/recipes/components/hooks/useDishesClientPagination/helpers/filterAndSortDishes.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/recipes/components/hooks/useDishesClientPagination/helpers/filterAndSortRecipes.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/recipes/hooks/useDishFiltering.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/lib/populate-helpers/generate-sales-data.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/lib/populate-helpers/index.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/lib/populate-helpers/other-data.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/lib/rsi/auto-refactoring/refactoring-planner.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/lib/square/sync/catalog/helpers/processToSquare.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/lib/square/sync/staff/helpers/processToSquare.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/scripts/recipe-scraper/utils/recipe-processor.ts",
+          "/Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/api/allergens/[code]/dishes/route.ts"
+        ]
+      },
+      {
+        "patternId": "cleanup",
+        "type": "frequency",
+        "confidence": 1,
+        "insight": "Fixes of type 'cleanup' have a 100.0% success rate across 8 attempts.",
+        "sourceFiles": [
+          "lib/rsi/architecture-analysis/index.ts",
+          "lib/rsi/orchestrator.ts",
+          "lib/rsi/rule-evolution/rule-manager.ts",
+          "lib/rsi/rule-evolution/rule-evaluator.ts",
+          "lib/rsi/auto-refactoring/refactoring-planner.ts"
+        ]
+      }
+    ],
+    "rulesGenerated": [
+      {
+        "id": "rule-lint-fix-1769354660860",
+        "description": "Auto-generated rule: Prioritize 'lint-fix' fixes (100% success).",
+        "ruleLogic": "if (issue.type === 'lint-fix') { prioritize(); }",
+        "derivedFrom": [
+          "lint-fix"
+        ]
+      },
+      {
+        "id": "rule-cleanup-1769354660861",
+        "description": "Auto-generated rule: Prioritize 'cleanup' fixes (100% success).",
+        "ruleLogic": "if (issue.type === 'cleanup') { prioritize(); }",
+        "derivedFrom": [
+          "cleanup"
+        ]
+      }
+    ]
   }
 ]
