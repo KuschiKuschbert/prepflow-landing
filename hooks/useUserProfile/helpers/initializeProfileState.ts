@@ -1,5 +1,4 @@
 import { getCachedData } from '@/lib/cache/data-cache';
-import { logger } from '@/lib/logger';
 
 const CACHE_KEY = 'user_profile_me';
 
@@ -32,14 +31,16 @@ export function initializeProfileState({ userEmail, userName }: InitializeProfil
       ? cachedProfile
       : null;
 
+  /*
   logger.dev('[useUserProfile] Hook initialized:', {
     hasUserEmail: !!userEmail,
     userEmail,
-    hasCachedProfile: !!cachedProfile,
-    cachedProfileData: cachedProfile,
+    // hasCachedProfile: !!cachedProfile,
+    // cachedProfileData: cachedProfile,
     isValidCachedProfile: !!validCachedProfile,
-    validCachedProfileData: validCachedProfile,
+    // validCachedProfileData: validCachedProfile,
   });
+  */
 
   const initialProfile: UserProfile | null =
     validCachedProfile ||
@@ -56,10 +57,10 @@ export function initializeProfileState({ userEmail, userName }: InitializeProfil
 
   const initialLoading = !validCachedProfile;
 
-  logger.dev('[useUserProfile] Initial state set:', {
-    profile: initialProfile,
-    loading: initialLoading,
-  });
+  // logger.dev('[useUserProfile] Initial state set:', {
+  //   profile: initialProfile,
+  //   loading: initialLoading,
+  // });
 
   return {
     initialProfile,

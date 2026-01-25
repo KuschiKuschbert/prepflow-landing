@@ -50,7 +50,15 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'assets.epicurious.com',
+      },
+      {
+        protocol: 'https',
         hostname: 'www.bonappetit.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'assets.bonappetit.com',
       },
       {
         protocol: 'https',
@@ -80,7 +88,15 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'www.delish.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.buzzfeed.com',
+      },
       // CDN domains for recipe images (common image hosting)
+      {
+        protocol: 'https',
+        hostname: 'cdn.jwplayer.com',
+      },
       {
         protocol: 'https',
         hostname: '*.cloudinary.com',
