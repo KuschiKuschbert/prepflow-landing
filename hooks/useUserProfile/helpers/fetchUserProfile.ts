@@ -33,7 +33,7 @@ export async function fetchUserProfile({
   setProfile,
   setLoading,
 }: FetchUserProfileParams): Promise<void> {
-  logger.dev('[useUserProfile] Starting loadProfile (will try /api/me even without userEmail)');
+  // logger.dev('[useUserProfile] Starting loadProfile (will try /api/me even without userEmail)');
   if (!validCachedProfile) {
     setLoading(true);
   }
@@ -72,7 +72,7 @@ export async function fetchUserProfile({
       setProfile(profileData);
       cacheData(CACHE_KEY, profileData, CACHE_EXPIRY_MS);
     } else {
-      logger.dev('[useUserProfile] No userData in API response');
+      // logger.dev('[useUserProfile] No userData in API response');
       setProfile(buildFallbackProfile(userEmail, userName));
     }
   } catch (error) {
