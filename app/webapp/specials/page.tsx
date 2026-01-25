@@ -22,11 +22,12 @@ interface Recipe {
   matchCount?: number;
 }
 
-// Simple ingredient parser
+import { convertToStandardUnit } from '@/lib/unit-conversion';
+
+// Ingredient parser with metric conversion
 function parseIngredient(raw: string): RecipeIngredientWithDetails {
-    // Basic heuristic: "200g flour" -> qty: 200, unit: "g", name: "flour"
-    // Regex looking for number at start
-    const match = raw.trim().match(/^([\d./]+)\s*([a-zA-Z%]+)?\s+(.*)$/);
+    // Basic heuristic: "1 cup flour" -> parse, then convert to metric
+    const match = raw.trim().match(/^([\d./]+)\s*([a-zA-Z_]+)?\s+(.*)$/);
 
     let quantity = 1;
     let unit = 'unit';
@@ -37,7 +38,7 @@ function parseIngredient(raw: string): RecipeIngredientWithDetails {
         const unitStr = match[2];
         const nameStr = match[3];
 
-        // Parse quantity (handle fractions if needed, but simplistic for now)
+        // Parse quantity (handle fractions)
         if (qtyStr.includes('/')) {
              const [num, den] = qtyStr.split('/');
              quantity = parseFloat(num) / parseFloat(den);
@@ -49,6 +50,11 @@ function parseIngredient(raw: string): RecipeIngredientWithDetails {
         if (nameStr) name = nameStr;
     }
 
+    // Convert to metric using existing library
+    const converted = convertToStandardUnit(isNaN(quantity) ? 1 : quantity, unit);
+    const metricQuantity = converted.value;
+    const metricUnit = converted.unit;
+
     // Mock ID generation
     const id = btoa(name).substring(0, 10);
 
@@ -57,15 +63,15 @@ function parseIngredient(raw: string): RecipeIngredientWithDetails {
         recipe_id: 'ai-recipe',
         ingredient_id: id,
         ingredient_name: name,
-        quantity: isNaN(quantity) ? 1 : quantity,
-        unit: unit,
+        quantity: metricQuantity,
+        unit: metricUnit,
         cost_per_unit: 0,
         total_cost: 0,
         ingredients: {
             id: id,
             ingredient_name: name,
             cost_per_unit: 0,
-            unit: unit
+            unit: metricUnit
         }
     };
 }
