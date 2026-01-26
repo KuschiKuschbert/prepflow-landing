@@ -3,15 +3,21 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
+interface AIIngredient {
+  name: string;
+  original_text?: string;
+  quantity?: number;
+  unit?: string;
+}
+
 interface Recipe {
   id: string;
   name: string;
   image_url: string;
-  ingredients: string[];
+  ingredients: AIIngredient[];
   meta: {
     prep_time_minutes: number;
     cook_time_minutes: number;
-    val?: any;
   };
   matchCount?: number;
 }
