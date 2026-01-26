@@ -7,56 +7,42 @@ import { UnifiedRecipeModal } from '../recipes/components/UnifiedRecipeModal';
 import { RecipeIngredientWithDetails, Recipe as UnifiedRecipe } from '../recipes/types';
 import { RecipeCard } from './components/RecipeCard';
 
+interface AIIngredient {
+  name: string;
+  original_text?: string;
+  quantity?: number;
+  unit?: string;
+}
+
 interface Recipe {
   id: string;
   name: string;
   image_url: string;
-  ingredients: string[];
+  ingredients: AIIngredient[];
   instructions?: string[];
   description?: string;
   meta: {
     prep_time_minutes: number;
     cook_time_minutes: number;
-    val?: any;
   };
   matchCount?: number;
 }
 
 import { convertToStandardUnit } from '@/lib/unit-conversion';
 
-// Ingredient parser with metric conversion
-function parseIngredient(raw: string): RecipeIngredientWithDetails {
-    // Basic heuristic: "1 cup flour" -> parse, then convert to metric
-    const match = raw.trim().match(/^([\d./]+)\s*([a-zA-Z_]+)?\s+(.*)$/);
-
-    let quantity = 1;
-    let unit = 'unit';
-    let name = raw;
-
-    if (match) {
-        const qtyStr = match[1];
-        const unitStr = match[2];
-        const nameStr = match[3];
-
-        // Parse quantity (handle fractions)
-        if (qtyStr.includes('/')) {
-             const [num, den] = qtyStr.split('/');
-             quantity = parseFloat(num) / parseFloat(den);
-        } else {
-             quantity = parseFloat(qtyStr);
-        }
-
-        if (unitStr) unit = unitStr;
-        if (nameStr) name = nameStr;
-    }
+// Ingredient parser with metric conversion - handles structured ingredient objects
+function parseIngredient(ing: AIIngredient): RecipeIngredientWithDetails {
+    const name = ing.name || 'Unknown';
+    const rawQuantity = ing.quantity ?? 1;
+    const rawUnit = ing.unit || 'unit';
 
     // Convert to metric using existing library
-    const converted = convertToStandardUnit(isNaN(quantity) ? 1 : quantity, unit);
+    const converted = convertToStandardUnit(rawQuantity, rawUnit);
     const metricQuantity = converted.value;
     const metricUnit = converted.unit;
 
-    // Mock ID generation
-    const id = btoa(name).substring(0, 10);
+    // Generate stable ID from name
+    const id = btoa(encodeURIComponent(name)).substring(0, 10);
 
     return {
         id: id,
