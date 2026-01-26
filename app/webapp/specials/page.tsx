@@ -14,35 +14,81 @@ interface AIIngredient {
   unit?: string;
 }
 
-interface Recipe {
+// The API may return recipe_name instead of name
+interface APIRecipe {
   id: string;
-  name: string;
+  name?: string;
+  recipe_name?: string;
   image_url: string;
-  ingredients: AIIngredient[];
+  ingredients: (AIIngredient | string)[];
   instructions?: string[];
   description?: string;
-  meta: {
-    prep_time_minutes: number;
-    cook_time_minutes: number;
+  meta?: {
+    prep_time_minutes?: number;
+    cook_time_minutes?: number;
   };
   matchCount?: number;
 }
 
 import { convertToStandardUnit } from '@/lib/unit-conversion';
 
-// Ingredient parser with metric conversion - handles structured ingredient objects
-function parseIngredient(ing: AIIngredient): RecipeIngredientWithDetails {
-    const name = ing.name || 'Unknown';
+// Ingredient parser with metric conversion - handles structured ingredient objects or strings
+function parseIngredient(ing: AIIngredient | string, index: number): RecipeIngredientWithDetails {
+    // Handle string ingredients (fallback for some data sources)
+    if (typeof ing === 'string') {
+        // Parse string like "200g flour" or "2 cups sugar"
+        const match = ing.trim().match(/^([\d./]+)\s*([a-zA-Z_]+)?\s*(.*)$/);
+        let quantity = 1;
+        let unit = 'unit';
+        let name = ing;
+
+        if (match) {
+            const [, qtyStr, unitStr, nameStr] = match;
+            if (qtyStr) {
+                if (qtyStr.includes('/')) {
+                    const [num, den] = qtyStr.split('/');
+                    quantity = parseFloat(num) / parseFloat(den);
+                } else {
+                    quantity = parseFloat(qtyStr) || 1;
+                }
+            }
+            if (unitStr) unit = unitStr;
+            if (nameStr) name = nameStr || ing;
+        }
+
+        const converted = convertToStandardUnit(quantity, unit);
+        const id = `ing-${index}-${btoa(encodeURIComponent(name.slice(0, 20))).substring(0, 8)}`;
+
+        return {
+            id,
+            recipe_id: 'ai-recipe',
+            ingredient_id: id,
+            ingredient_name: name,
+            quantity: converted.value,
+            unit: converted.unit,
+            cost_per_unit: 0,
+            total_cost: 0,
+            ingredients: {
+                id,
+                ingredient_name: name,
+                cost_per_unit: 0,
+                unit: converted.unit
+            }
+        };
+    }
+
+    // Handle object ingredients
+    const name = ing.name || 'Unknown ingredient';
     const rawQuantity = ing.quantity ?? 1;
-    const rawUnit = ing.unit || 'unit';
+    const rawUnit = ing.unit || 'pc';
 
     // Convert to metric using existing library
     const converted = convertToStandardUnit(rawQuantity, rawUnit);
     const metricQuantity = converted.value;
     const metricUnit = converted.unit;
 
-    // Generate stable ID from name
-    const id = btoa(encodeURIComponent(name)).substring(0, 10);
+    // Generate stable unique ID with index to avoid duplicates
+    const id = `ing-${index}-${btoa(encodeURIComponent(name.slice(0, 20))).substring(0, 8)}`;
 
     return {
         id: id,
@@ -62,8 +108,18 @@ function parseIngredient(ing: AIIngredient): RecipeIngredientWithDetails {
     };
 }
 
-function adaptAiToUnified(aiRecipe: Recipe): { recipe: UnifiedRecipe, ingredients: RecipeIngredientWithDetails[] } {
-    const ingredients = aiRecipe.ingredients.map(parseIngredient);
+function adaptAiToUnified(aiRecipe: APIRecipe): { recipe: UnifiedRecipe, ingredients: RecipeIngredientWithDetails[] } {
+    // Debug log to trace data
+    // eslint-disable-next-line no-console
+    console.log('[Specials] Adapting recipe:', {
+        id: aiRecipe.id,
+        name: aiRecipe.name,
+        recipe_name: aiRecipe.recipe_name,
+        ingredientsCount: aiRecipe.ingredients?.length,
+        sampleIngredient: aiRecipe.ingredients?.[0]
+    });
+
+    const ingredients = (aiRecipe.ingredients || []).map((ing, idx) => parseIngredient(ing, idx));
 
     // Format Instructions
     let instructionsStr = '';
@@ -76,7 +132,7 @@ function adaptAiToUnified(aiRecipe: Recipe): { recipe: UnifiedRecipe, ingredient
     // Create Unified Recipe
     const unified: UnifiedRecipe = {
         id: aiRecipe.id,
-        recipe_name: aiRecipe.name,
+        recipe_name: aiRecipe.name || aiRecipe.recipe_name || 'Untitled Recipe',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
         yield: 4, // Default assumption for AI recipes
@@ -95,7 +151,7 @@ function adaptAiToUnified(aiRecipe: Recipe): { recipe: UnifiedRecipe, ingredient
 export default function AISpecialsPage() {
   const [inputInternal, setInputInternal] = useState('');
   const [ingredients, setIngredients] = useState<string[]>([]);
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [recipes, setRecipes] = useState<APIRecipe[]>([]);
   const [loading, setLoading] = useState(false);
 
 
@@ -186,7 +242,7 @@ export default function AISpecialsPage() {
     }
   };
 
-  const handleRecipeClick = (aiRecipe: Recipe) => {
+  const handleRecipeClick = (aiRecipe: APIRecipe) => {
       const adapted = adaptAiToUnified(aiRecipe);
       setSelectedRecipe(adapted);
   };
