@@ -30,6 +30,15 @@ export class RSIOrchestrator {
       const isClean = await SafetyChecker.isGitClean();
       if (!isClean) {
         logger.error('❌ Git working directory is not clean. Aborting RSI run.');
+
+        // Log failure to tracked file so it triggers a PR/notification
+        await PerformanceTracker.logPerformance({
+          taskId: 'orchestrator-safety-check',
+          taskType: 'safety-gate',
+          durationMs: 0,
+          success: false,
+          metadata: { error: 'Git working directory not clean' }
+        });
         return;
       }
     }
