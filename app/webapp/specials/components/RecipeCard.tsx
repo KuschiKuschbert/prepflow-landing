@@ -3,15 +3,22 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
+interface AIIngredient {
+  name: string;
+  original_text?: string;
+  quantity?: number;
+  unit?: string;
+}
+
 interface Recipe {
   id: string;
-  name: string;
+  name?: string;
+  recipe_name?: string;
   image_url: string;
-  ingredients: string[];
-  meta: {
-    prep_time_minutes: number;
-    cook_time_minutes: number;
-    val?: any;
+  ingredients: (AIIngredient | string)[];
+  meta?: {
+    prep_time_minutes?: number;
+    cook_time_minutes?: number;
   };
   matchCount?: number;
 }
@@ -23,6 +30,7 @@ interface RecipeCardProps {
 }
 
 export function RecipeCard({ recipe, searchIngredients: _searchIngredients, onClick }: RecipeCardProps) {
+  const displayName = recipe.name || recipe.recipe_name || 'Untitled Recipe';
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -35,7 +43,7 @@ export function RecipeCard({ recipe, searchIngredients: _searchIngredients, onCl
         {recipe.image_url ? (
           <Image
             src={recipe.image_url}
-            alt={recipe.name}
+            alt={displayName}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -57,7 +65,7 @@ export function RecipeCard({ recipe, searchIngredients: _searchIngredients, onCl
 
       <div className="flex flex-col gap-2 p-5">
         <h3 className="line-clamp-2 text-lg font-semibold leading-tight text-white group-hover:text-landing-primary transition-colors duration-200">
-          {recipe.name}
+          {displayName}
         </h3>
 
         <div className="flex items-center gap-3 text-xs font-medium text-gray-400">
