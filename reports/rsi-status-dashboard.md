@@ -1,29 +1,35 @@
 # 📊 RSI Autonomous Developer Dashboard
 
-**Last Run:** 1/18/2026, 9:07:56 AM
+**Last Run:** 1/25/2026, 3:24:24 PM
 **Status:** 🟢 Active | **Autonomy Level:** 🤖 Fully Autonomous (Safe Paths)
 
 ## 📈 Performance Summary
-
 | Cycle Stage | Duration | Success Rate |
-| ----------- | -------- | ------------ |
-| full-cycle  | 18.09s   | ✅           |
-| full-cycle  | 170.44s  | ✅           |
-| full-cycle  | 167.67s  | ✅           |
-| full-cycle  | 165.11s  | ✅           |
-| full-cycle  | 177.61s  | ✅           |
+|---|---|---|
+| full-cycle | 143.81s | ✅ |
+| full-cycle | 18.09s | ✅ |
+| full-cycle | 170.44s | ✅ |
+| full-cycle | 167.67s | ✅ |
+| full-cycle | 165.11s | ✅ |
 
 ## 🛠️ Recent Automated Improvements
-
 | Type | Description | Files | Confidence | Status |
-| ---- | ----------- | ----- | ---------- | ------ |
+|---|---|---|---|---|
+| lint-fix | Fix 1 ESLint issues in 1 files | /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/api/allergens/[code]/dishes/route.ts | 95% | ✅ Applied |
+| cleanup | Remove 1 console.log from logger.ts | lib/logger.ts | 85% | ✅ Applied |
+| cleanup | Remove 1 console.log from index.ts | lib/rsi/predictive-analysis/index.ts | 85% | ✅ Applied |
+| cleanup | Remove 2 console.log from codemod-runner.ts | lib/rsi/auto-refactoring/codemod-runner.ts | 85% | ✅ Applied |
+| cleanup | Remove 1 console.log from refactoring-planner.ts | lib/rsi/auto-refactoring/refactoring-planner.ts | 85% | ✅ Applied |
+| cleanup | Remove 3 console.log from rule-evaluator.ts | lib/rsi/rule-evolution/rule-evaluator.ts | 85% | ✅ Applied |
+| cleanup | Remove 1 console.log from rule-manager.ts | lib/rsi/rule-evolution/rule-manager.ts | 85% | ✅ Applied |
+| cleanup | Remove 1 console.log from orchestrator.ts | lib/rsi/orchestrator.ts | 85% | ✅ Applied |
+| cleanup | Remove 1 console.log from index.ts | lib/rsi/architecture-analysis/index.ts | 85% | ✅ Applied |
+| lint-fix | Fix 18 ESLint issues in 16 files | /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/api/ingredients/helpers/updateIngredient.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/api/prep-lists/generate-from-menu/route.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/ingredients/hooks/useIngredientAdd.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/ingredients/hooks/useIngredientFiltering.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/menu-builder/components/MenuLockedView/hooks/useMenuItemsWithAllergens/helpers/processMenuItem.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/performance/components/PerformanceDateRange.tsx /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/recipes/components/hooks/useDishesClientPagination/helpers/filterAndSortDishes.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/recipes/components/hooks/useDishesClientPagination/helpers/filterAndSortRecipes.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/app/webapp/recipes/hooks/useDishFiltering.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/lib/populate-helpers/generate-sales-data.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/lib/populate-helpers/index.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/lib/populate-helpers/other-data.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/lib/rsi/auto-refactoring/refactoring-planner.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/lib/square/sync/catalog/helpers/processToSquare.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/lib/square/sync/staff/helpers/processToSquare.ts /Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/scripts/recipe-scraper/utils/recipe-processor.ts | 95% | ✅ Applied |
 
 ## 🛡️ Safety & Reliability
-
 - **Rollback Automation:** ✅ Enabled
 - **Risk Assessor:** ✅ Active (Nesting, Magic Numbers, Dead Code)
 - **Gated Auto-Merge:** ✅ Enabled for `lib/rsi/`, `docs/rsi/`, `reports/`
 
 ---
-
-_This report is generated automatically by the RSI Orchestrator._
+*This report is generated automatically by the RSI Orchestrator.*

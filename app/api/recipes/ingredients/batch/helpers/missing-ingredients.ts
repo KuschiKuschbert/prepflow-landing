@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 export async function handleMissingNestedIngredients(
   supabase: SupabaseClient,
   rows: any[],

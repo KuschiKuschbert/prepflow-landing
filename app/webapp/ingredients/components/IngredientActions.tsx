@@ -42,9 +42,9 @@ export default function IngredientActions({
   onBulkUpdate,
   loading = false,
 }: IngredientActionsProps) {
-  /* eslint-disable @typescript-eslint/no-unused-vars */
+   
   const { t: _t } = useTranslation();
-  /* eslint-enable @typescript-eslint/no-unused-vars */
+   
 
   const [showBulkMenu, setShowBulkMenu] = useState(false);
   const selectedCount = selectedIngredients.size;
