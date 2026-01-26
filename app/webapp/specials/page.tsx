@@ -36,24 +36,71 @@ import { convertToStandardUnit } from '@/lib/unit-conversion';
 function parseIngredient(ing: AIIngredient | string, index: number): RecipeIngredientWithDetails {
     // Handle string ingredients (fallback for some data sources)
     if (typeof ing === 'string') {
-        // Parse string like "200g flour" or "2 cups sugar"
-        const match = ing.trim().match(/^([\d./]+)\s*([a-zA-Z_]+)?\s*(.*)$/);
-        let quantity = 1;
-        let unit = 'unit';
-        let name = ing;
+        // Clean up leading list symbols (., -, •, *, etc.) and whitespace
+        const cleaned = ing.trim().replace(/^[\.\-\•\*\·\>\)]+\s*/, '');
 
-        if (match) {
-            const [, qtyStr, unitStr, nameStr] = match;
-            if (qtyStr) {
-                if (qtyStr.includes('/')) {
-                    const [num, den] = qtyStr.split('/');
-                    quantity = parseFloat(num) / parseFloat(den);
-                } else {
-                    quantity = parseFloat(qtyStr) || 1;
+        // Try to parse various formats:
+        // "2 cups flour", "1/2 tsp salt", "200g butter", "3 eggs", "salt to taste"
+        // Format: [quantity] [unit] [ingredient name]
+        const patterns = [
+            // "1/2 cup flour" or "2 1/2 cups sugar" (fractions)
+            /^([\d]+(?:\s+[\d]+)?\/[\d]+)\s*([a-zA-Z]+)?\s+(.+)$/,
+            // "200g flour" or "2.5 cups sugar" (decimals, unit attached or separate)
+            /^([\d.]+)\s*([a-zA-Z]+)\s+(.+)$/,
+            // "2 cups flour" (whole number, separate unit)
+            /^([\d.]+)\s+([a-zA-Z]+)\s+(.+)$/,
+            // "3 eggs" (quantity + name, no unit)
+            /^([\d.]+)\s+(.+)$/,
+        ];
+
+        let quantity = 1;
+        let unit = 'pc';
+        let name = cleaned;
+        let matched = false;
+
+        for (const pattern of patterns) {
+            const match = cleaned.match(pattern);
+            if (match) {
+                const [, qtyStr, unitOrName, maybeRest] = match;
+
+                // Parse quantity (handle fractions like "1/2" or "1 1/2")
+                if (qtyStr) {
+                    if (qtyStr.includes('/')) {
+                        const parts = qtyStr.split(/\s+/);
+                        let total = 0;
+                        for (const part of parts) {
+                            if (part.includes('/')) {
+                                const [num, den] = part.split('/');
+                                total += parseFloat(num) / parseFloat(den);
+                            } else {
+                                total += parseFloat(part);
+                            }
+                        }
+                        quantity = total || 1;
+                    } else {
+                        quantity = parseFloat(qtyStr) || 1;
+                    }
                 }
+
+                // Determine if second capture is a unit or the ingredient name
+                if (maybeRest) {
+                    // Three-part match: qty, unit, name
+                    unit = unitOrName || 'pc';
+                    name = maybeRest;
+                } else if (unitOrName) {
+                    // Two-part match: qty, name (no unit)
+                    name = unitOrName;
+                    unit = 'pc';
+                }
+
+                matched = true;
+                break;
             }
-            if (unitStr) unit = unitStr;
-            if (nameStr) name = nameStr || ing;
+        }
+
+        // If no pattern matched, use the cleaned string as ingredient name
+        if (!matched) {
+            name = cleaned || ing;
         }
 
         const converted = convertToStandardUnit(quantity, unit);
