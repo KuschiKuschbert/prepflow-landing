@@ -74,6 +74,10 @@ graph TD
 - **[2026-01-21] Refactoring Strategy**: When refactoring massive type definitions (e.g., `report-item-types.ts`), extract domain-specific types into separate files *first*, then re-export them. This reduces risk and makes the main file readable.
 - [2026-01-22] Circular Dependencies: Shared types between components (e.g., `DishesListView` <-> `UnifiedTable`) MUST be extracted to a separate `types.ts` file. Never import a parent component into a child for types.
 - [2026-01-22] File Size Limits: `scripts/filesize-ignore.json` is a temporary measure. All "logic" files > 200 lines must be split immediately. Limit enforced.
+- [2026-01-28] **Ingredient Matching**: Fuzzy ingredient matching logic is defined in TWO places that MUST stay in sync:
+  1. **TypeScript**: `lib/ingredient-normalization.ts` - `INGREDIENT_ALIASES` map + `ingredientsMatch()` function
+  2. **PostgreSQL**: `ingredient_aliases` table + `match_recipes_by_stock()` RPC function
+  - When adding new aliases, update BOTH files. The database table mirrors the TypeScript map for server-side performance.
 
 ## 5. 🔄 The Ralph Loop (Methodology)
 

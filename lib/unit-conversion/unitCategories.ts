@@ -24,6 +24,11 @@ const VOLUME_UNITS = [
   'fl_oz',
   'tsp',
   'tbsp',
+  'pt',
+  'qt',
+  'gal',
+  'pinch',
+  'dash',
   'milliliter',
   'milliliters',
   'litre',
@@ -36,8 +41,30 @@ const VOLUME_UNITS = [
   'tablespoons',
   'fluid ounce',
   'fluid ounces',
+  'pint',
+  'pints',
+  'quart',
+  'quarts',
+  'gallon',
+  'gallons',
+  'pinches',
+  'dashes',
 ];
-const PIECE_UNITS = ['pc', 'box', 'pack', 'bag', 'bottle', 'can', 'bunch', 'piece', 'pieces'];
+const PIECE_UNITS = [
+  'pc',
+  'box',
+  'pack',
+  'bag',
+  'bottle',
+  'can',
+  'bunch',
+  'piece',
+  'pieces',
+  'clove',
+  'cloves',
+  'slice',
+  'slices',
+];
 
 export function getAllUnits(): string[] {
   return [...WEIGHT_UNITS, ...VOLUME_UNITS, ...PIECE_UNITS];

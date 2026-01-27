@@ -21,6 +21,7 @@ interface Recipe {
     cook_time_minutes?: number;
   };
   matchCount?: number;
+  stockMatchPercentage?: number;
 }
 
 interface RecipeCardProps {
@@ -31,13 +32,26 @@ interface RecipeCardProps {
 
 export function RecipeCard({ recipe, searchIngredients: _searchIngredients, onClick }: RecipeCardProps) {
   const displayName = recipe.name || recipe.recipe_name || 'Untitled Recipe';
+
+  // Determine styles dynamically based on compatibility
+  let borderClass = "border-[#2a2a2a]";
+  const percentage = recipe.stockMatchPercentage || 0;
+
+  if (percentage > 99) {
+     borderClass = "border-emerald-500 ring-1 ring-emerald-500/50 shadow-lg shadow-emerald-900/20";
+  } else if (percentage >= 75) {
+     borderClass = "border-amber-500/70 hover:border-amber-400";
+  } else if (percentage > 0) {
+     borderClass = "border-zinc-700 hover:border-zinc-500";
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4 }}
       onClick={() => onClick?.(recipe)}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] shadow-sm transition-all hover:bg-[#252525] hover:shadow-lg hover:shadow-black/50 cursor-pointer"
+      className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-[#1f1f1f] shadow-sm transition-all hover:bg-[#252525] hover:shadow-lg hover:shadow-black/50 cursor-pointer ${borderClass}`}
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#1a1a1a]">
         {recipe.image_url ? (
@@ -55,12 +69,32 @@ export function RecipeCard({ recipe, searchIngredients: _searchIngredients, onCl
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#1f1f1f] via-transparent to-transparent opacity-90" />
 
-        {/* Optional: Show matched ingredients count if searched */}
-        {recipe.matchCount !== undefined && recipe.matchCount > 0 && (
-           <div className="absolute top-3 right-3 rounded-full bg-landing-primary/20 px-2.5 py-1 text-xs font-bold text-landing-primary backdrop-blur-sm border border-landing-primary/30">
-              {recipe.matchCount} Matches
-           </div>
-        )}
+       {/* Optional: Show matched ingredients count if searched */}
+        <div className="absolute top-3 right-3 flex gap-2">
+          {percentage > 99 ? (
+             <div className="rounded-full bg-emerald-600 px-3 py-1.5 text-sm font-bold text-white shadow-md shadow-black/30 border border-emerald-400 flex items-center gap-1.5">
+               <span className="text-yellow-300">✨</span> Ready to Cook
+             </div>
+          ) : percentage > 0 ? (
+             <div
+               className="rounded-full px-3 py-1.5 text-sm font-bold shadow-md shadow-black/30 border border-white/10 flex items-center text-white relative overflow-hidden"
+               style={{
+                 background: `linear-gradient(90deg, ${
+                    percentage >= 75 ? '#d97706' : '#52525b' // amber-600 or zinc-600
+                 } ${percentage}%, #18181b ${percentage}%)` // zinc-900 base
+               }}
+             >
+               <span className="opacity-90 mr-1.5 relative z-10">Inventory:</span>
+               <span className="relative z-10">{percentage}%</span>
+             </div>
+          ) : null}
+
+          {recipe.matchCount !== undefined && recipe.matchCount > 0 && !percentage && (
+            <div className="rounded-full bg-landing-primary px-3 py-1.5 text-sm font-bold text-white shadow-md shadow-black/30 border border-white/20">
+               {recipe.matchCount} Matches
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="flex flex-col gap-2 p-5">

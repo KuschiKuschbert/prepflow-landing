@@ -1,11 +1,13 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChefHat, Search, Sparkles, X } from 'lucide-react';
+import { Camera, ChefHat, Search, Sparkles, X } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 import { UnifiedRecipeModal } from '../recipes/components/UnifiedRecipeModal';
 import { RecipeIngredientWithDetails, Recipe as UnifiedRecipe } from '../recipes/types';
+import { PhotoUploadModal } from './components/PhotoUploadModal';
 import { RecipeCard } from './components/RecipeCard';
+import { usePhotoUpload } from './hooks/usePhotoUpload';
 
 interface AIIngredient {
   name: string;
@@ -28,131 +30,97 @@ interface APIRecipe {
     cook_time_minutes?: number;
   };
   matchCount?: number;
+  stockMatchPercentage?: number;
 }
 
 import { convertToStandardUnit } from '@/lib/unit-conversion';
 
 // Ingredient parser with metric conversion - handles structured ingredient objects or strings
 function parseIngredient(ing: AIIngredient | string, index: number): RecipeIngredientWithDetails {
-    // Handle string ingredients (fallback for some data sources)
+    let quantity = 1;
+    let unit = 'pc';
+    let name = '';
+
+    // Handle string ingredients
     if (typeof ing === 'string') {
-        // Clean up leading list symbols (., -, •, *, etc.) and whitespace
-        const cleaned = ing.trim().replace(/^[\.\-\•\*\·\>\)]+\s*/, '');
+        const parsed = parseIngredientString(ing);
+        if (parsed) {
+            quantity = parsed.quantity;
+            unit = parsed.unit;
+            name = parsed.name;
+        } else {
+            // Fallback if parsing failed
+            name = ing.trim();
+        }
+    } else {
+        // Handle object ingredients
+        name = ing.name || 'Unknown ingredient';
 
-        // Try to parse various formats:
-        // "2 cups flour", "1/2 tsp salt", "200g butter", "3 eggs", "salt to taste"
-        // Format: [quantity] [unit] [ingredient name]
-        const patterns = [
-            // "1/2 cup flour" or "2 1/2 cups sugar" (fractions)
-            /^([\d]+(?:\s+[\d]+)?\/[\d]+)\s*([a-zA-Z]+)?\s+(.+)$/,
-            // "200g flour" or "2.5 cups sugar" (decimals, unit attached or separate)
-            /^([\d.]+)\s*([a-zA-Z]+)\s+(.+)$/,
-            // "2 cups flour" (whole number, separate unit)
-            /^([\d.]+)\s+([a-zA-Z]+)\s+(.+)$/,
-            // "3 eggs" (quantity + name, no unit)
-            /^([\d.]+)\s+(.+)$/,
-        ];
-
-        let quantity = 1;
-        let unit = 'pc';
-        let name = cleaned;
-        let matched = false;
-
-        for (const pattern of patterns) {
-            const match = cleaned.match(pattern);
-            if (match) {
-                const [, qtyStr, unitOrName, maybeRest] = match;
-
-                // Parse quantity (handle fractions like "1/2" or "1 1/2")
-                if (qtyStr) {
-                    if (qtyStr.includes('/')) {
-                        const parts = qtyStr.split(/\s+/);
-                        let total = 0;
-                        for (const part of parts) {
-                            if (part.includes('/')) {
-                                const [num, den] = part.split('/');
-                                total += parseFloat(num) / parseFloat(den);
-                            } else {
-                                total += parseFloat(part);
-                            }
-                        }
-                        quantity = total || 1;
-                    } else {
-                        quantity = parseFloat(qtyStr) || 1;
-                    }
-                }
-
-                // Determine if second capture is a unit or the ingredient name
-                if (maybeRest) {
-                    // Three-part match: qty, unit, name
-                    unit = unitOrName || 'pc';
-                    name = maybeRest;
-                } else if (unitOrName) {
-                    // Two-part match: qty, name (no unit)
-                    name = unitOrName;
-                    unit = 'pc';
-                }
-
-                matched = true;
-                break;
-            }
+        // If we have quantity and unit from the object, use them
+        if (ing.quantity !== undefined && ing.quantity !== null) {
+            quantity = ing.quantity;
+        }
+        if (ing.unit) {
+            unit = ing.unit;
         }
 
-        // If no pattern matched, use the cleaned string as ingredient name
-        if (!matched) {
-            name = cleaned || ing;
-        }
-
-        const converted = convertToStandardUnit(quantity, unit);
-        const id = `ing-${index}-${btoa(encodeURIComponent(name.slice(0, 20))).substring(0, 8)}`;
-
-        return {
-            id,
-            recipe_id: 'ai-recipe',
-            ingredient_id: id,
-            ingredient_name: name,
-            quantity: converted.value,
-            unit: converted.unit,
-            cost_per_unit: 0,
-            total_cost: 0,
-            ingredients: {
-                id,
-                ingredient_name: name,
-                cost_per_unit: 0,
-                unit: converted.unit
+        // If quantity is still 1 and unit is 'pc', try parsing original_text
+        if (quantity === 1 && unit === 'pc' && ing.original_text) {
+            const parsed = parseIngredientString(ing.original_text);
+            if (parsed && (parsed.quantity !== 1 || parsed.unit !== 'pc')) {
+                quantity = parsed.quantity;
+                unit = parsed.unit;
+                // Prefer the structured name over parsed name
+                // name stays as ing.name
             }
-        };
+        }
     }
 
-    // Handle object ingredients
-    const name = ing.name || 'Unknown ingredient';
-    const rawQuantity = ing.quantity ?? 1;
-    const rawUnit = ing.unit || 'pc';
-
     // Convert to metric using existing library
-    const converted = convertToStandardUnit(rawQuantity, rawUnit);
-    const metricQuantity = converted.value;
-    const metricUnit = converted.unit;
+    const converted = convertToStandardUnit(quantity, unit, name);
 
     // Generate stable unique ID with index to avoid duplicates
     const id = `ing-${index}-${btoa(encodeURIComponent(name.slice(0, 20))).substring(0, 8)}`;
 
     return {
-        id: id,
+        id,
         recipe_id: 'ai-recipe',
         ingredient_id: id,
         ingredient_name: name,
-        quantity: metricQuantity,
-        unit: metricUnit,
+        quantity: converted.value,
+        unit: converted.unit,
         cost_per_unit: 0,
         total_cost: 0,
         ingredients: {
-            id: id,
+            id,
             ingredient_name: name,
             cost_per_unit: 0,
-            unit: metricUnit
+            unit: converted.unit
         }
     };
+}
+
+// Helper function to parse ingredient strings like "2 cups flour" or "1/2 lb chicken"
+// Now using shared utility
+import { parseIngredientString } from '@/lib/recipe-normalization/ingredient-parser';
+
+// Normalize unit abbreviations to standard forms
+function normalizeUnit(unit: string): string {
+    const lower = unit.toLowerCase().replace(/\.$/, '');
+    const unitMap: Record<string, string> = {
+        'c': 'cup', 'cups': 'cup',
+        'tbsp': 'tbsp', 'tablespoon': 'tbsp', 'tablespoons': 'tbsp',
+        'tsp': 'tsp', 'teaspoon': 'tsp', 'teaspoons': 'tsp',
+        'lb': 'lb', 'lbs': 'lb', 'pound': 'lb', 'pounds': 'lb',
+        'oz': 'oz', 'ounce': 'oz', 'ounces': 'oz',
+        'g': 'g', 'gram': 'g', 'grams': 'g',
+        'kg': 'kg', 'kilogram': 'kg', 'kilograms': 'kg',
+        'l': 'L', 'liter': 'L', 'liters': 'L', 'litre': 'L', 'litres': 'L',
+        'ml': 'ml', 'milliliter': 'ml', 'milliliters': 'ml',
+        'pc': 'pc', 'piece': 'pc', 'pieces': 'pc',
+        'whole': 'pc', 'large': 'pc', 'medium': 'pc', 'small': 'pc',
+    };
+    return unitMap[lower] || lower;
 }
 
 function adaptAiToUnified(aiRecipe: APIRecipe): { recipe: UnifiedRecipe, ingredients: RecipeIngredientWithDetails[] } {
@@ -200,54 +168,176 @@ export default function AISpecialsPage() {
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [recipes, setRecipes] = useState<APIRecipe[]>([]);
   const [loading, setLoading] = useState(false);
+  // useInventory is now implicit (always calculate match %), but filtering is explicit via readyToCook
 
+  // New Filter State
+  const [readyToCook, setReadyToCook] = useState(true);
+  const [filterTags, setFilterTags] = useState<string[]>([]);
+  const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
+
+  // Pagination State
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+
+  // Photo Upload State
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const { submitPhoto, isProcessing, isAuthenticated } = usePhotoUpload();
+
+  const CUISINES = [
+    'Italian', 'Mexican', 'Asian', 'Indian', 'Mediterranean',
+    'American', 'French', 'Middle Eastern', 'Latin American',
+    'Korean', 'Japanese', 'Thai', 'Chinese', 'Vegetarian'
+  ];
 
   const searchTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  const fetchRecipes = async (currentIngredients: string[], searchQuery?: string) => {
-    if (currentIngredients.length === 0 && !searchQuery) {
+  // Refactored Fetch Recipe
+  const fetchRecipes = async (
+      reset: boolean = false,
+      currentIngredients: string[] = ingredients,
+      searchQuery: string = inputInternal,
+      activeTags: string[] = filterTags,
+      activeCuisines: string[] = selectedCuisines,
+      isReadyToCook: boolean = readyToCook
+  ) => {
+
+    // Resolve effective offset
+    const currentOffset = reset ? 0 : offset;
+
+    // Allow fetching if we have ANY criteria (always calculate inventory, so just check readyToCook not useInventory state)
+    const hasCriteria = currentIngredients.length > 0 || searchQuery || activeTags.length > 0 || activeCuisines.length > 0 || true; // Always allow fetching now
+
+
+    if (!hasCriteria) {
       setRecipes([]);
       return;
     }
 
     setLoading(true);
     try {
-      let url = '/api/ai-specials/search?limit=50';
-      if (searchQuery) {
-          url += `&q=${encodeURIComponent(searchQuery)}`;
-      } else {
+      let url = `/api/ai-specials/search?limit=50&offset=${currentOffset}`;
+
+      const hasExplicitQuery = searchQuery && searchQuery.length > 0;
+      const hasFilters = activeTags.length > 0;
+
+      // 1. Build Text Query (q)
+      if (hasExplicitQuery || hasFilters) {
+          const parts = [];
+          if (searchQuery) parts.push(searchQuery);
+          if (hasFilters) parts.push(...activeTags);
+          if (currentIngredients.length > 0) parts.push(...currentIngredients);
+
+          url += `&q=${encodeURIComponent(parts.join(' '))}`;
+
+      } else if (currentIngredients.length > 0) {
           url += `&ingredients=${encodeURIComponent(currentIngredients.join(','))}`;
+      }
+
+      // 2. Add Cuisine Filter
+      if (activeCuisines.length > 0) {
+          url += `&cuisine=${encodeURIComponent(activeCuisines.join(','))}`;
+      }
+
+      // 3. Inventory Logic
+      // Always request stock data to calculate percentages
+      url += `&use_stock=true`;
+
+      if (isReadyToCook) {
+        // Force strict 100% match
+        url += `&min_stock_match=100`;
       }
 
       const res = await fetch(url);
       const data = await res.json();
+
       if (data.data) {
-        setRecipes(data.data);
+        // Sort: Prioritize stock match percentage, then ingredient match count
+        const sorted = data.data.sort((a: APIRecipe, b: APIRecipe) => {
+           const stockA = a.stockMatchPercentage || 0;
+           const stockB = b.stockMatchPercentage || 0;
+
+           if (stockA !== stockB) {
+               return stockB - stockA; // Higher stock match first
+           }
+
+           // Secondary sort: Number of matched search ingredients
+           const matchA = a.matchCount || 0;
+           const matchB = b.matchCount || 0;
+           return matchB - matchA;
+        });
+
+        if (reset) {
+            setRecipes(sorted);
+            setOffset(50); // Next batch starts at 50
+        } else {
+            // Append unique recipes
+            setRecipes(prev => {
+                const map = new Map();
+                prev.forEach(r => map.set(r.id, r));
+                sorted.forEach((r: APIRecipe) => map.set(r.id, r));
+                return Array.from(map.values()) as APIRecipe[];
+            });
+            setOffset(prev => prev + 50);
+        }
+
+        // Simple check for hasMore
+        if (sorted.length < 50) {
+            setHasMore(false);
+        } else {
+            setHasMore(true);
+        }
       }
     } catch (error) {
-  // eslint-disable-next-line no-console
+      // eslint-disable-next-line no-console
       console.error('Failed to fetch recipes', error);
     } finally {
       setLoading(false);
     }
   };
 
+  // Wrapper for loading more
+  const handleLoadMore = () => {
+      fetchRecipes(false);
+  };
+
+  const toggleFilterTag = (tag: string) => {
+      const newTags = filterTags.includes(tag)
+        ? filterTags.filter(t => t !== tag)
+        : [...filterTags, tag];
+
+      setFilterTags(newTags);
+      fetchRecipes(true, ingredients, inputInternal, newTags, selectedCuisines, readyToCook);
+  };
+
+  const toggleCuisine = (cuisine: string) => {
+      const newCuisines = selectedCuisines.includes(cuisine)
+        ? selectedCuisines.filter(c => c !== cuisine)
+        : [...selectedCuisines, cuisine];
+
+      setSelectedCuisines(newCuisines);
+      fetchRecipes(true, ingredients, inputInternal, filterTags, newCuisines, readyToCook);
+  };
+
+  // Effect to refetch when inventory settings change
+  React.useEffect(() => {
+    // Debounce toggle changes
+    const timer = setTimeout(() => {
+        fetchRecipes(true, ingredients, inputInternal.length > 3 ? inputInternal : undefined, filterTags, selectedCuisines, readyToCook);
+    }, 300);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [readyToCook]);
+
   const [selectedRecipe, setSelectedRecipe] = useState<{ recipe: UnifiedRecipe | null, ingredients: RecipeIngredientWithDetails[] }>({ recipe: null, ingredients: [] });
 
   const activeSearch = (term: string) => {
       // Trigger a smart search immediately
       setInputInternal(term);
-      // Clear tags to show we are in prompt mode? Or just use both?
-      // Let's clear tags for pure AI mode to avoid confusion
       setIngredients([]);
-      fetchRecipes([], term);
+      fetchRecipes(true, [], term); // True = reset
   };
 
-   // Removed unused smartMode state
-
   const addIngredient = (ing: string) => {
-    // If strict AI mode or long sentence, maybe treat as query?
-    // For now, keep tag behavior unless user explicitly clicks "AI Search" button which we will add.
     const trimmed = ing.trim();
     if (trimmed && !ingredients.includes(trimmed)) {
       const newIngredients = [...ingredients, trimmed];
@@ -256,7 +346,7 @@ export default function AISpecialsPage() {
 
       if (searchTimeout.current) clearTimeout(searchTimeout.current);
       searchTimeout.current = setTimeout(() => {
-        fetchRecipes(newIngredients);
+        fetchRecipes(true, newIngredients);
       }, 500);
     }
   };
@@ -267,7 +357,7 @@ export default function AISpecialsPage() {
 
     if (searchTimeout.current) clearTimeout(searchTimeout.current);
     searchTimeout.current = setTimeout(() => {
-      fetchRecipes(newIngredients);
+      fetchRecipes(true, newIngredients);
     }, 500);
   };
 
@@ -294,8 +384,22 @@ export default function AISpecialsPage() {
       setSelectedRecipe(adapted);
   };
 
+  const handlePhotoSubmit = async (file: File, prompt: string) => {
+      const result = await submitPhoto(file, prompt);
+      if (result) {
+          setIsUploadModalOpen(false);
+
+          // Add unique newly detected ingredients
+          const newIngredients = Array.from(new Set([...ingredients, ...(result.ingredients || [])]));
+          setIngredients(newIngredients);
+
+          // Trigger fetch immediately with new ingredients (Reset=true)
+          fetchRecipes(true, newIngredients, inputInternal, filterTags, selectedCuisines, readyToCook);
+      }
+  };
+
   return (
-    <div className="webapp-main-content min-h-screen w-full bg-[#0a0a0a]">
+    <div className="webapp-main-content min-h-screen w-full bg-transparent">
       {/* Search Header Section */}
       <div className="mx-auto max-w-7xl pt-8 pb-12 desktop:pt-16 desktop:pb-20">
         <div className="relative text-center">
@@ -328,6 +432,19 @@ export default function AISpecialsPage() {
           >
             Enter ingredients or describe what you want to eat (e.g. &quot;Spicy vegetarian dinner&quot;).
           </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.25 }}
+            className="mx-auto mb-8 max-w-lg rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm shadow-xl shadow-black/10"
+          >
+             <p className="text-sm text-white/70 italic text-center">
+               <span className="not-italic font-semibold text-landing-primary mr-2 block mb-1">⚠️ Chef&apos;s Disclaimer</span>
+               &quot;For when your creativity has been 86&apos;d.&quot;<br/>
+               <span className="opacity-60 text-xs mt-1 block">These are AI suggestions based on your stock—season to taste!</span>
+             </p>
+          </motion.div>
 
           <motion.div
              initial={{ opacity: 0, scale: 0.95 }}
@@ -363,6 +480,15 @@ export default function AISpecialsPage() {
                 />
              </div>
 
+             {/* Camera / Upload Button */}
+             <button
+                onClick={() => setIsUploadModalOpen(true)}
+                className="mr-2 rounded-xl p-2 text-white/50 hover:bg-white/10 hover:text-white transition-colors"
+                title={isAuthenticated ? "Upload photo of ingredients" : "Log in to use kitchen scanner"}
+             >
+                <Camera size={20} />
+             </button>
+
              {/* AI Search Action Button */}
              {inputInternal.length > 3 && (
                  <motion.button
@@ -379,15 +505,81 @@ export default function AISpecialsPage() {
         </div>
       </div>
 
-      {/* Results Grid */}
+
       <div className="mx-auto max-w-[2560px]">
+        {/* Filters Section */}
+        <div className="mb-8 px-4 flex flex-col gap-4 items-center">
+
+            {/* Inventory Controls */}
+            <div className="flex flex-wrap items-center justify-center gap-6 p-4 rounded-2xl bg-[#1f1f1f] border border-[#2a2a2a] shadow-lg shadow-black/20">
+                <label className="flex items-center cursor-pointer gap-3 select-none">
+                    <span className={`text-sm font-medium ${readyToCook ? 'text-landing-primary' : 'text-white/60'}`}>Ready to Cook</span>
+                    <div className="relative">
+                        <input
+                        type="checkbox"
+                        className="sr-only"
+                        checked={readyToCook}
+                        onChange={() => setReadyToCook(!readyToCook)}
+                        />
+                        <div className={`block w-10 h-6 rounded-full transition-colors ${readyToCook ? 'bg-landing-primary' : 'bg-[#3a3a3a]'}`}></div>
+                        <div className={`dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${readyToCook ? 'transform translate-x-4' : ''}`}></div>
+                    </div>
+                </label>
+            </div>
+
+            {/* Cuisine Filters */}
+            <div className="w-full max-w-5xl overflow-x-auto pb-4 scrollbar-hide">
+                <div className="flex flex-nowrap gap-2 px-2">
+                    {CUISINES.map(c => {
+                        const isSelected = selectedCuisines.includes(c);
+                        return (
+                            <button
+                                key={c}
+                                onClick={() => toggleCuisine(c)}
+                                className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                                    isSelected
+                                    ? 'bg-landing-primary text-white shadow-lg shadow-landing-primary/20 border-landing-primary scale-105'
+                                    : 'bg-[#1f1f1f] text-white/70 hover:bg-[#2a2a2a] hover:text-white border border-[#2a2a2a]'
+                                }`}
+                            >
+                                {c}
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+
+
+            {/* Quick Filters (Proteins/Tags) */}
+            <div className="flex flex-wrap justify-center gap-2 max-w-4xl">
+                {['Chicken', 'Beef', 'Pork', 'Fish', 'Healthy', 'Quick', 'Breakfast'].map(tag => {
+                    const isActive = filterTags.includes(tag);
+                    return (
+                        <button
+                            key={tag}
+                            onClick={() => toggleFilterTag(tag)}
+                            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                                isActive
+                                ? 'bg-white/10 text-white border-white/20'
+                                : 'bg-transparent text-white/40 hover:text-white border border-transparent hover:border-white/10'
+                            }`}
+                        >
+                            {tag}
+                        </button>
+                    )
+                })}
+            </div>
+
+        </div>
+
+
         {loading ? (
              <div className="flex flex-col items-center justify-center py-24 text-white/30">
                 <ChefHat className="mb-4 h-12 w-12 animate-bounce opacity-50" />
                 <p>Finding the perfect recipes...</p>
              </div>
         ) : recipes.length > 0 ? (
-          <div className="grid grid-cols-1 gap-6 px-4 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 large-desktop:gap-8 xl:grid-cols-5">
+          <div className="grid grid-cols-1 gap-6 px-4 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 large-desktop:gap-8 xl:grid-cols-5 pb-12">
             {recipes.map((recipe) => (
               <RecipeCard
                 key={recipe.id}
@@ -396,16 +588,24 @@ export default function AISpecialsPage() {
                 onClick={handleRecipeClick}
               />
             ))}
+
+            {hasMore && (
+                <div className="col-span-full flex justify-center pt-8">
+                     <button
+                        onClick={handleLoadMore}
+                        disabled={loading}
+                        className="px-6 py-3 rounded-xl bg-[#2a2a2a] text-white/70 hover:bg-[#333] hover:text-white transition-all font-medium flex items-center gap-2 disabled:opacity-50"
+                     >
+                        {loading ? 'Loading...' : 'Load More Recipes'}
+                     </button>
+                </div>
+            )}
           </div>
-        ) : (ingredients.length > 0 || inputInternal.length > 0 && loading) ? (
-            <div className="py-24 text-center">
-                <p className="text-xl text-white/50">No recipes matched your exact criteria.</p>
-                <p className="mt-2 text-sm text-white/30">Try adding common staples or broadening your search.</p>
-            </div>
         ) : (
-             <div className="py-24 text-center text-white/20">
-                Start typing above to explore recipes
-             </div>
+            <div className="py-24 text-center">
+                <p className="text-xl text-white/50">No recipes matched your criteria.</p>
+                <p className="mt-2 text-sm text-white/30">Try adjusting the &quot;Ready to Cook&quot; slider or removing filters.</p>
+            </div>
         )}
       </div>
 
@@ -427,8 +627,16 @@ export default function AISpecialsPage() {
         onDeleteRecipe={() => {}}
         onUpdatePreviewYield={() => {}}
         onRefreshIngredients={async () => {}}
+
         capitalizeRecipeName={(name: string) => name}
         formatQuantity={(q: number, u: string) => ({ value: q.toFixed(2), unit: u, original: `${q} ${u}` })}
+      />
+
+      <PhotoUploadModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+        onSubmit={handlePhotoSubmit}
+        isProcessing={isProcessing}
       />
     </div>
   );

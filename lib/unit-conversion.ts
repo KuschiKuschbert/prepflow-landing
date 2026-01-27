@@ -16,7 +16,7 @@ export function convertUnit(value: number, fromUnit: string, toUnit: string): Co
     return { value, unit: normalizedTo, originalValue: value, originalUnit: fromUnit };
   const conversionFactor = conversions[normalizedFrom]?.[normalizedTo];
   if (!conversionFactor)
-    return { value, unit: normalizedTo, originalValue: value, originalUnit: fromUnit };
+    return { value, unit: normalizedFrom, originalValue: value, originalUnit: fromUnit };
   return {
     value: value * conversionFactor,
     unit: normalizedTo,
@@ -40,18 +40,14 @@ export function formatUnit(value: number, unit: string): string {
 }
 
 export const STANDARD_UNITS = { WEIGHT: 'g', VOLUME: 'ml', PIECE: 'pc' } as const;
-export type { UnitCategory } from './unit-conversion/unitCategories';
 export {
-  getAllUnits,
-  isVolumeUnit,
-  isWeightUnit,
-  isPieceUnit,
-  getUnitCategory,
-} from './unit-conversion/unitCategories';
-export {
-  convertToStandardUnit,
-  convertFromStandardUnit,
+    convertFromStandardUnit, convertToStandardUnit
 } from './unit-conversion/standardUnitConversions';
+export {
+    getAllUnits, getUnitCategory, isPieceUnit, isVolumeUnit,
+    isWeightUnit
+} from './unit-conversion/unitCategories';
+export type { UnitCategory } from './unit-conversion/unitCategories';
 
 export function convertCupMeasurements(
   value: number,

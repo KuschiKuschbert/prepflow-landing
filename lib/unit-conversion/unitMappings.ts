@@ -20,6 +20,22 @@ export const UNIT_ALIASES: { [key: string]: string } = {
   tablespoons: 'tbsp',
   'fluid ounce': 'fl_oz',
   'fluid ounces': 'fl_oz',
+  cup: 'cup',
+  cups: 'cup',
+  pint: 'pt',
+  pints: 'pt',
+  quart: 'qt',
+  quarts: 'qt',
+  gallon: 'gal',
+  gallons: 'gal',
+  pinch: 'pinch',
+  pinches: 'pinch',
+  dash: 'dash',
+  dashes: 'dash',
+  clove: 'clove',
+  cloves: 'clove',
+  slice: 'slice',
+  slices: 'slice',
   piece: 'pc',
   pieces: 'pc',
   box: 'box',
@@ -28,6 +44,16 @@ export const UNIT_ALIASES: { [key: string]: string } = {
   bottle: 'bottle',
   can: 'can',
   bunch: 'bunch',
+  stick: 'stick',
+  sticks: 'stick',
+  'imperial gallon': 'uk_gal',
+  'uk gallon': 'uk_gal',
+  'imperial quart': 'uk_qt',
+  'uk quart': 'uk_qt',
+  'imperial pint': 'uk_pt',
+  'uk pint': 'uk_pt',
+  'metric cup': 'metric_cup',
+  'australian cup': 'metric_cup',
 };
 
 export const conversions: { [key: string]: { [key: string]: number } } = {
@@ -41,6 +67,16 @@ export const conversions: { [key: string]: { [key: string]: number } } = {
   fl_oz: { l: 0.0295735, ml: 29.5735, cup: 0.125, tsp: 6, tbsp: 2 },
   tsp: { ml: 4.92892, l: 0.00492892, cup: 0.0208333, fl_oz: 0.166667, tbsp: 0.333333 },
   tbsp: { ml: 14.7868, l: 0.0147868, cup: 0.0625, fl_oz: 0.5, tsp: 3 },
+  pt: { ml: 473.176, l: 0.473176, cup: 2, fl_oz: 16, qt: 0.5, gal: 0.125 },
+  qt: { ml: 946.353, l: 0.946353, cup: 4, fl_oz: 32, pt: 2, gal: 0.25 },
+  gal: { ml: 3785.41, l: 3.78541, cup: 16, fl_oz: 128, qt: 4 },
+  stick: { ml: 118.294, l: 0.118294, cup: 0.5, tbsp: 8 }, // 1 stick butter = 1/2 cup
+  // Imperial (UK) Units
+  uk_gal: { ml: 4546.09, l: 4.54609 },
+  uk_qt: { ml: 1136.52, l: 1.13652 },
+  uk_pt: { ml: 568.261, l: 0.568261 },
+  // Metric Cup (Commonwealth, Latin America)
+  metric_cup: { ml: 250, l: 0.25 },
 };
 
 export function normalizeUnit(unit: string): string {

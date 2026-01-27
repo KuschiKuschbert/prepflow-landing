@@ -1,31 +1,30 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
+import { useEntitlements } from '@/hooks/useEntitlements';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
-import { useEntitlements } from '@/hooks/useEntitlements';
 import { optimizeNavigationItems } from '@/lib/navigation-optimization/optimizer';
 import { useAdaptiveNavSettings } from '@/lib/navigation-optimization/store';
 import { useTranslation } from '@/lib/useTranslation';
 import {
-  BarChart3,
-  BookOpen,
-  Bot,
-  Calendar,
-  ChefHat,
-  ClipboardCheck,
-  FileText,
-  LayoutDashboard,
-  ListChecks,
-  Package2,
-  Settings,
-  Settings2,
-  Sparkles,
-  Square,
-  Thermometer,
-  Truck,
-  Users,
-  UtensilsCrossed,
+    BarChart3,
+    BookOpen,
+    Calendar,
+    ChefHat,
+    ClipboardCheck,
+    FileText,
+    LayoutDashboard,
+    ListChecks,
+    Package2,
+    Settings,
+    Settings2,
+    Sparkles,
+    Square,
+    Thermometer,
+    Truck,
+    Users,
+    UtensilsCrossed
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -63,7 +62,8 @@ function getCategoryForWorkflow(href: string, workflow: WorkflowType): string {
       '/webapp/sections': 'service',
       '/webapp/menu-builder': 'service',
       '/webapp/prep-lists': 'morning-prep',
-      '/webapp/ai-specials': 'tools',
+      '/webapp/specials': 'tools',
+
       '/webapp/guide': 'tools',
       '/webapp/setup': 'tools',
       '/webapp/settings': 'tools',
@@ -84,7 +84,8 @@ function getCategoryForWorkflow(href: string, workflow: WorkflowType): string {
       '/webapp/sections': 'planning',
       '/webapp/menu-builder': 'planning',
       '/webapp/prep-lists': 'operations',
-      '/webapp/ai-specials': 'tools',
+      '/webapp/specials': 'tools',
+
       '/webapp/guide': 'tools',
       '/webapp/setup': 'setup',
       '/webapp/settings': 'setup',
@@ -105,7 +106,8 @@ function getCategoryForWorkflow(href: string, workflow: WorkflowType): string {
       '/webapp/sections': 'menu',
       '/webapp/menu-builder': 'menu',
       '/webapp/prep-lists': 'operations',
-      '/webapp/ai-specials': 'tools',
+      '/webapp/specials': 'tools',
+
       '/webapp/guide': 'tools',
       '/webapp/setup': 'tools',
       '/webapp/settings': 'tools',
@@ -220,10 +222,11 @@ export function useNavigationItems(
         icon: <Icon icon={ListChecks} size="sm" className="text-current" aria-hidden={true} />,
         color: 'text-[var(--color-info)]',
       },
+
       {
-        href: '/webapp/ai-specials',
-        label: t('nav.aiSpecials', 'AI Specials') as string,
-        icon: <Icon icon={Bot} size="sm" className="text-current" aria-hidden={true} />,
+        href: '/webapp/specials',
+        label: t('nav.specials', 'Specials') as string,
+        icon: <Icon icon={Sparkles} size="sm" className="text-current" aria-hidden={true} />,
         color: 'text-[var(--primary)]',
       },
       {

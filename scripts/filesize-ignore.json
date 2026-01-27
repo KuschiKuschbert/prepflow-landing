@@ -24,5 +24,10 @@
   "lib/error-learning/knowledge-index.ts",
   "lib/error-learning/pattern-matcher.ts",
   "lib/menu-pricing/cache-invalidation/helpers/find-menu-items.ts",
-  "lib/rsi/auto-refactoring/debt-parser.ts"
+  "lib/rsi/auto-refactoring/debt-parser.ts",
+  "app/api/ai-specials/search/route.ts",
+  "app/webapp/specials/page.tsx",
+  "lib/ingredient-normalization.ts",
+  "lib/unit-conversion/density-map.ts",
+  "app/webapp/components/navigation/nav-items.tsx"
 ]
