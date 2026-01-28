@@ -72,7 +72,7 @@ export function RecipePreviewInstructions({
                     className="mr-3 animate-spin text-violet-400"
                     aria-hidden={true}
                 />
-                <span className="text-sm text-violet-300">Generating chef's method...</span>
+                <span className="text-sm text-violet-300">Generating chef&apos;s method...</span>
                 </div>
             ) : (
                 <div className="prose prose-invert max-w-none text-sm leading-relaxed text-[var(--foreground-secondary)]">

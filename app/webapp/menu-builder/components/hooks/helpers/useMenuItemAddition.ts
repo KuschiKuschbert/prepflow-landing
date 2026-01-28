@@ -88,6 +88,7 @@ export function useMenuItemAddition({
       setCategories,
       refreshStatistics,
       showError,
+      showSuccess,
       onMenuBuilt,
     ],
   );
