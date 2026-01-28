@@ -2,9 +2,10 @@
 
 import { FoodImageGenerator } from '@/components/ui/FoodImageGenerator';
 import { Icon } from '@/components/ui/Icon';
-import { ChefHat, FileText, Loader2 } from 'lucide-react';
+import { ChefHat } from 'lucide-react';
 import { Recipe, RecipeIngredientWithDetails } from '../types';
 import { RecipeIngredientsList } from './RecipeIngredientsList';
+import { RecipePreviewInstructions } from './RecipePreviewInstructions';
 
 interface UnifiedRecipeModalPreviewTabProps {
   recipe: Recipe;
@@ -59,60 +60,16 @@ export function UnifiedRecipeModalPreviewTab({
           selectedRecipe={recipe}
           previewYield={previewYield}
           formatQuantity={formatQuantity}
+          interactive={true}
         />
       </div>
 
-      {/* AI Instructions */}
-      <div>
-        <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
-          <Icon icon={FileText} size="md" className="text-[var(--primary)]" aria-hidden={true} />
-          AI-Generated Cooking Method
-        </h3>
-        <div className="rounded-lg bg-[var(--background)] p-4">
-          {generatingInstructions ? (
-            <div className="flex items-center justify-center py-8">
-              <Icon
-                icon={Loader2}
-                size="lg"
-                className="animate-spin text-[var(--primary)]"
-                aria-hidden={true}
-              />
-              <span className="ml-3 text-[var(--foreground-muted)]">
-                Generating cooking instructions...
-              </span>
-            </div>
-          ) : (
-            <div className="whitespace-pre-wrap text-[var(--foreground-secondary)]">
-              {aiInstructions}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Manual Instructions */}
-      {recipe.instructions ? (
-        <div>
-          <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
-            <Icon icon={FileText} size="md" className="text-[var(--primary)]" aria-hidden={true} />
-            Manual Instructions
-          </h3>
-          <div className="rounded-lg bg-[var(--background)] p-4">
-            <p className="whitespace-pre-wrap text-[var(--foreground-secondary)]">
-              {recipe.instructions}
-            </p>
-          </div>
-        </div>
-      ) : (
-        <div>
-          <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
-            <Icon icon={FileText} size="md" className="text-[var(--primary)]" aria-hidden={true} />
-            Manual Instructions
-          </h3>
-          <div className="rounded-lg bg-[var(--background)] p-8 text-center text-[var(--foreground-subtle)]">
-            No instructions added yet. Use the Edit button to add instructions.
-          </div>
-        </div>
-      )}
+      {/* Instructions Section */}
+      <RecipePreviewInstructions
+        recipe={recipe}
+        aiInstructions={aiInstructions}
+        generatingInstructions={generatingInstructions}
+      />
     </div>
   );
 }

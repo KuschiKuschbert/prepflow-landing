@@ -1,5 +1,6 @@
 'use client';
-import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { TableSkeleton } from '@/components/ui/LoadingSkeleton';
+import { ResponsivePageContainer } from '@/components/ui/ResponsivePageContainer';
 import { logger } from '@/lib/logger';
 import CSVImportModal from './CSVImportModal';
 import IngredientEditDrawer from './IngredientEditDrawer';
@@ -71,7 +72,21 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
     availableUnits,
   } = useIngredientsClientController();
 
-  if (loading || isLoading) return <PageSkeleton />;
+  if (loading || isLoading) {
+      return (
+          <ResponsivePageContainer>
+              <div className="space-y-4">
+                  {!hideHeader && (
+                      <div className="flex justify-between items-center mb-6">
+                          <div className="h-8 w-48 bg-[var(--muted)] rounded-lg animate-pulse" />
+                          <div className="h-10 w-32 bg-[var(--muted)] rounded-lg animate-pulse" />
+                      </div>
+                  )}
+                  <TableSkeleton rows={10} columns={6} />
+              </div>
+          </ResponsivePageContainer>
+      );
+  }
 
   return (
     <>

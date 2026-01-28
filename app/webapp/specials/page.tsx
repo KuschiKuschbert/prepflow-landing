@@ -1,12 +1,14 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { Camera, ChefHat, Search, Sparkles, X } from 'lucide-react';
+import { Camera, Search, Sparkles, X } from 'lucide-react';
 import React, { useRef, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { UnifiedRecipeModal } from '../recipes/components/UnifiedRecipeModal';
 import { RecipeIngredientWithDetails, Recipe as UnifiedRecipe } from '../recipes/types';
 import { PhotoUploadModal } from './components/PhotoUploadModal';
 import { RecipeCard } from './components/RecipeCard';
+import { RecipeCardSkeleton } from './components/RecipeCardSkeleton';
 import { usePhotoUpload } from './hooks/usePhotoUpload';
 
 interface AIIngredient {
@@ -199,6 +201,20 @@ export default function AISpecialsPage() {
   // Photo Upload State
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const { submitPhoto, isProcessing, isAuthenticated } = usePhotoUpload();
+
+  // Infinite Scroll Hook
+  const { ref, inView } = useInView({
+      threshold: 0,
+      rootMargin: '100px', // Preload before hitting bottom
+  });
+
+  // Trigger load more when in view
+  React.useEffect(() => {
+      if (inView && hasMore && !loading) {
+          handleLoadMore();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView, hasMore, loading]);
 
   const CUISINES = [
     'Italian', 'Mexican', 'Asian', 'Indian', 'Mediterranean',
@@ -591,9 +607,10 @@ export default function AISpecialsPage() {
 
 
         {loading ? (
-             <div className="flex flex-col items-center justify-center py-24 text-white/30">
-                <ChefHat className="mb-4 h-12 w-12 animate-bounce opacity-50" />
-                <p>Finding the perfect recipes...</p>
+             <div className="grid grid-cols-1 gap-6 px-4 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 large-desktop:gap-8 xl:grid-cols-5 pb-12">
+                {Array.from({ length: 10 }).map((_, i) => (
+                    <RecipeCardSkeleton key={i} />
+                ))}
              </div>
         ) : recipes.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 px-4 tablet:grid-cols-2 desktop:grid-cols-3 large-desktop:grid-cols-4 large-desktop:gap-8 xl:grid-cols-5 pb-12">
@@ -607,21 +624,30 @@ export default function AISpecialsPage() {
             ))}
 
             {hasMore && (
-                <div className="col-span-full flex justify-center pt-8">
-                     <button
-                        onClick={handleLoadMore}
-                        disabled={loading}
-                        className="px-6 py-3 rounded-xl bg-[#2a2a2a] text-white/70 hover:bg-[#333] hover:text-white transition-all font-medium flex items-center gap-2 disabled:opacity-50"
-                     >
-                        {loading ? 'Loading...' : 'Load More Recipes'}
-                     </button>
-                </div>
+                 <div ref={ref} className="col-span-full flex justify-center pt-8">
+                     {inView && loading && (
+                        <div className="flex items-center gap-2 text-white/50 animate-pulse">
+                            <div className="h-2 w-2 rounded-full bg-white/50" />
+                            <div className="h-2 w-2 rounded-full bg-white/50 animation-delay-200" />
+                            <div className="h-2 w-2 rounded-full bg-white/50 animation-delay-400" />
+                        </div>
+                     )}
+                     {!inView && (
+                         <button
+                            onClick={handleLoadMore}
+                            className="text-sm text-white/30 hover:text-white/70 transition-colors"
+                         >
+                            Load More
+                         </button>
+                     )}
+                 </div>
             )}
           </div>
         ) : (
-            <div className="py-24 text-center">
-                <p className="text-xl text-white/50">No recipes matched your criteria.</p>
-                <p className="mt-2 text-sm text-white/30">Try adjusting the &quot;Ready to Cook&quot; slider or removing filters.</p>
+            <div className="flex flex-col items-center justify-center py-24 text-center">
+                <div className="mb-4 rounded-full bg-white/5 p-4 text-4xl">👨‍🍳</div>
+                <p className="text-xl font-medium text-white/60">Our chefs are stumped!</p>
+                <p className="mt-2 max-w-sm text-sm text-white/40">We couldn&apos;t find any recipes matching your criteria. Try loosening the &quot;Strict Match&quot; filter or adding more ingredients.</p>
             </div>
         )}
       </div>

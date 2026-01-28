@@ -1,6 +1,7 @@
 'use client';
 
 import { Icon } from '@/components/ui/Icon';
+import { useNotification } from '@/contexts/NotificationContext';
 import { Edit, QrCode, Trash2 } from 'lucide-react';
 
 interface RecipeCardActionsProps {
@@ -23,6 +24,7 @@ export function RecipeCardActions({
   onDelete,
   capitalizeRecipeName,
 }: RecipeCardActionsProps) {
+  const { showInfo } = useNotification();
   return (
     <div className="ml-7 flex gap-2">
       <button
@@ -38,6 +40,7 @@ export function RecipeCardActions({
       <button
         onClick={e => {
           e.stopPropagation();
+          showInfo('Opening QR Code...');
           onShowQR();
         }}
         className="rounded-lg bg-[var(--muted)]/50 px-3 py-1.5 text-xs text-[var(--foreground-muted)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--primary)]"

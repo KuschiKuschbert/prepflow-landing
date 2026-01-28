@@ -14,6 +14,7 @@ interface UseMenuItemAdditionProps {
   setCategories: React.Dispatch<React.SetStateAction<string[]>>;
   refreshStatistics: () => Promise<void>;
   showError: (message: string) => void;
+  showSuccess: (message: string) => void;
 }
 
 /**
@@ -29,6 +30,7 @@ export function useMenuItemAddition({
   setCategories,
   refreshStatistics,
   showError,
+  showSuccess,
 }: UseMenuItemAdditionProps) {
   const onMenuBuilt = useOnMenuBuilt();
 
@@ -73,6 +75,8 @@ export function useMenuItemAddition({
       if (menuItems.length === 0) {
         onMenuBuilt();
       }
+
+      showSuccess('Item added to menu');
     },
     [
       menuId,

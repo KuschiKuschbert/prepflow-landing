@@ -1,3 +1,4 @@
+import { useNotification } from '@/contexts/NotificationContext';
 import { useAlert } from '@/hooks/useAlert';
 import { useConfirm } from '@/hooks/useConfirm';
 import { usePrompt } from '@/hooks/usePrompt';
@@ -27,6 +28,7 @@ export function useBulkActions({
   const { showConfirm, ConfirmDialog } = useConfirm();
   const { showPrompt, InputDialog } = usePrompt();
   const { showAlert, AlertDialog } = useAlert();
+  const { showSuccess } = useNotification();
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
 
   const selectedCount = selectedIngredients.size;
@@ -40,6 +42,7 @@ export function useBulkActions({
     setBulkActionLoading(true);
     try {
       await action();
+      showSuccess(`${actionName} completed successfully`);
     } catch (err) {
       logger.error(`[useBulkActions] Error in ${actionName}:`, {
         error: err instanceof Error ? err.message : String(err),
