@@ -16,7 +16,18 @@ const CUISINES = [
     'Vegetarian', 'Healthy', 'Other'
 ];
 
-async function classifyBatch(recipes: any[]) {
+interface Recipe {
+    id: string;
+    name: string;
+    ingredients: unknown;
+}
+
+interface ClassifiedItem {
+    id: string;
+    cuisine: string;
+}
+
+async function classifyBatch(recipes: Recipe[]) {
     try {
         const prompt = `
         You are a culinary expert. Classify these recipes into ONE of these cuisines:
@@ -55,7 +66,7 @@ async function classifyBatch(recipes: any[]) {
 async function main() {
     console.log('Starting Cuisine Classification...');
 
-    const offset = 0;
+    // const offset = 0; // Removed as unused
     const DB_BATCH = 1000;
 
     while (true) {
@@ -80,7 +91,7 @@ async function main() {
                 // Upsert requires all fields. Let's update one by one for safety or use upsert if schema allows partial.
                 // We'll update one by one for now to be safe.
 
-                await Promise.all(classified.map(async (item: any) => {
+                await Promise.all(classified.map(async (item: ClassifiedItem) => {
                     if (CUISINES.includes(item.cuisine)) {
                         await supabase
                             .from('ai_specials')

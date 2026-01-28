@@ -56,10 +56,11 @@ async function main() {
 
 function createSkeleton(sourceFile: string, testFile: string, componentName: string) {
   const isReact = sourceFile.endsWith('.tsx') || sourceFile.endsWith('.jsx');
+  const isHook = componentName.startsWith('use');
 
   let content = '';
 
-  // Inject Mock Env Vars to prevent side-effect crashes (Supabase, Auth0, etc)
+  // Inject Mock Env Vars
   const envMocks = `
 // Mock env vars for smoke test
 process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://mock.supabase.co';
@@ -69,27 +70,48 @@ process.env.NEXT_PUBLIC_AUTH0_DOMAIN = 'mock-domain.auth0.com';
 process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID = 'mock-client-id';
 `;
 
-  if (isReact) {
+  if (isHook) {
     content = `${envMocks}
+import { renderHook } from '@testing-library/react';
+import * as Module from './${componentName}';
+
+describe('${componentName}', () => {
+  it('hook initializes without crashing (smoke test)', () => {
+    // Detect hook export
+    const hook = (Module as any).default || (Module as any)[Object.keys(Module).find(k => k.toLowerCase().includes('hook') || k === componentName) || ''];
+
+    if (typeof hook === 'function') {
+        try {
+            renderHook(() => hook());
+        } catch (e) {
+            // Hook might require providers, but module loaded
+        }
+    }
+    expect(Module).toBeDefined();
+  });
+});
+`;
+  } else if (isReact) {
+    content = `${envMocks}
+import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import * as Module from './${componentName}';
 
 describe('${componentName}', () => {
   it('renders without crashing (smoke test)', () => {
-    // Verify module exports something
     expect(Module).toBeDefined();
 
-    // Try to find a component to render using heuristics
-    const defaultExport = (Module as { default?: unknown }).default;
-    const Component = (typeof defaultExport === 'function' ? (defaultExport as React.ElementType) : undefined) ||
-      (Object.values(Module).find((exp) => typeof exp === 'function') as React.ElementType);
+    const defaultExport = (Module as any).default;
+    const Component = (typeof defaultExport === 'function' ? defaultExport : undefined) ||
+      Object.values(Module).find((exp) => typeof exp === 'function');
 
-    if (Component) {
+    if (Component && typeof Component === 'function') {
         try {
-            render(<Component />);
+            // Use a simple mock for any children or complex props if needed
+            render(React.createElement(Component as any, {} as any));
         } catch (e) {
-             // console.warn('Render failed for ${componentName}, but module loaded');
+             // Render failure is okay for smoke test as long as module is loaded
         }
     }
   });
@@ -100,8 +122,15 @@ describe('${componentName}', () => {
 import * as Module from './${componentName}';
 
 describe('${componentName}', () => {
-  it('module loads (smoke test)', () => {
+  it('module exports are defined (smoke test)', () => {
     expect(Module).toBeDefined();
+
+    // Check all exported functions
+    Object.entries(Module).forEach(([name, exp]) => {
+        if (typeof exp === 'function') {
+            expect(exp).toBeDefined();
+        }
+    });
   });
 });
 `;

@@ -47,7 +47,7 @@ async function main() {
 
         console.log(`\nRecipe: ${recipe.name} (${totalIngredients} ingredients)`);
 
-        recipe.ingredients.forEach((ing: any) => {
+        recipe.ingredients.forEach((ing: string | { name: string }) => {
              const ingName = typeof ing === 'string' ? ing : ing.name;
              let matched = false;
 

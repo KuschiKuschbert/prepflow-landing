@@ -119,8 +119,17 @@ echo ""
 
 # 8. Build check (most important - this is what Vercel runs)
 echo -e "${BLUE}▶ Build check (this is what Vercel runs)...${NC}"
-if npm run build > /dev/null 2>&1; then
+if npm run build >/dev/null 2>&1; then
     echo -e "${GREEN}✅ Build check passed${NC}"
+
+    # Bundle budget check (Phase 5: The Auditor)
+    echo -e "${BLUE}▶ Bundle budget check...${NC}"
+    if npm run check:bundle; then
+        echo -e "${GREEN}✅ Bundle budget passed${NC}"
+    else
+        echo -e "${RED}❌ Bundle budget exceeded${NC}"
+        FAILED=1
+    fi
 else
     echo -e "${RED}❌ Build check failed${NC}"
     echo -e "${YELLOW}   Run manually: npm run build${NC}"

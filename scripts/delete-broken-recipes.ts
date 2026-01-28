@@ -29,7 +29,7 @@ async function main() {
     }
 
     let deletedCount = 0;
-    const offset = 0;
+    // const offset = 0; // Removed as unused
     const BATCH = 1000;
     // Processing in chunks
 
@@ -65,7 +65,7 @@ async function main() {
             }
 
              // Heuristic: >50% ingredients are "1 pc"
-            const badIngredients = r.ingredients.filter((i: any) => {
+            const badIngredients = r.ingredients.filter((i: { unit?: string; quantity?: number | string }) => {
                 const u = (i.unit || '').toLowerCase();
                 const q = i.quantity;
                 return (u === 'pc' || u === '') && (q === 1 || q == '1');

@@ -29,6 +29,14 @@ const MODEL = 'meta-llama/Meta-Llama-3-8B-Instruct';
 // Concurrency limit
 const CONCURRENCY = 5;
 
+// Simplified ingredient interface
+interface Ingredient {
+    name: string;
+    unit: string;
+    quantity: number;
+    source?: string;
+}
+
 async function processRecipe(id: string, index: number, total: number) {
   try {
       const { data: recipe } = await supabase
@@ -40,7 +48,7 @@ async function processRecipe(id: string, index: number, total: number) {
       if (!recipe) return;
 
       // Identify ingredients that need inferring
-      const needsInference = recipe.ingredients.filter((i: any) =>
+      const needsInference = recipe.ingredients.filter((i: Ingredient) =>
           i.unit === 'pc' && i.quantity === 1
       );
 
@@ -51,7 +59,7 @@ async function processRecipe(id: string, index: number, total: number) {
 
       console.log(`[${index}/${total}] "${recipe.name}": Inferring ${needsInference.length} items...`);
 
-      const ingredientNames = needsInference.map((i: any) => i.name).join(', ');
+      const ingredientNames = needsInference.map((i: Ingredient) => i.name).join(', ');
 
       // Prompt
       const prompt = `You are a professional chef. Infer standard metric quantities for these ingredients in a recipe called "${recipe.name}":
@@ -88,7 +96,7 @@ async function processRecipe(id: string, index: number, total: number) {
                   prediction = JSON.parse(cleanJson);
                   break; // Success
               }
-          } catch (retryErr) {
+          } catch (_retryErr) {
                // silent retry
           }
           await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
@@ -101,9 +109,9 @@ async function processRecipe(id: string, index: number, total: number) {
       }
 
       let changesMade = false;
-      const newIngredients = recipe.ingredients.map((ing: any) => {
+      const newIngredients = recipe.ingredients.map((ing: Ingredient) => {
           const nName = ing.name.toLowerCase().replace(/[^a-z0-9]/g, '');
-          const predictionItem = prediction.find((p: any) => {
+          const predictionItem = (prediction as Ingredient[]).find((p: Ingredient) => {
               const pName = p.name.toLowerCase().replace(/[^a-z0-9]/g, '');
               return nName.includes(pName) || pName.includes(nName);
           });
@@ -133,8 +141,9 @@ async function processRecipe(id: string, index: number, total: number) {
           console.log(`  ℹ️ "${recipe.name}": No matching ingredients found in AI response`);
       }
 
-  } catch (err: any) {
-      console.error(`  🔥 Error "${id}":`, err.message);
+  } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(`  🔥 Error "${id}":`, msg);
   }
 }
 
@@ -152,7 +161,7 @@ async function main() {
   const queue = [...ids];
   let nextIndex = 0;
 
-  const workers = Array(CONCURRENCY).fill(null).map(async (_, workerId) => {
+  const workers = Array(CONCURRENCY).fill(null).map(async (_, _workerId) => {
       while (queue.length > 0) {
           const id = queue.shift();
           const index = ++nextIndex;

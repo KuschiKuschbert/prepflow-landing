@@ -34,7 +34,7 @@ async function main() {
     // Construct prompt
     const instructions = Array.isArray(recipe.instructions) ? recipe.instructions.join('\n') : recipe.instructions;
     const ingredientNames = Array.isArray(recipe.ingredients)
-        ? recipe.ingredients.map((i: any) => typeof i === 'string' ? i : i.name).join(', ')
+        ? recipe.ingredients.map((i: string | { name: string }) => typeof i === 'string' ? i : i.name).join(', ')
         : 'Unknown';
 
     const prompt = `

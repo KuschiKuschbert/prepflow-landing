@@ -48,7 +48,7 @@ async function main() {
         for (const r of batch) {
             if (!Array.isArray(r.ingredients)) continue;
              // Heuristic: >50% ingredients are "1 pc"
-            const badIngredients = r.ingredients.filter((i: any) => {
+            const badIngredients = r.ingredients.filter((i: { unit?: string; quantity?: number }) => {
                 const u = (i.unit || '').toLowerCase();
                 const q = i.quantity;
                 return (u === 'pc' || u === '') && q === 1;

@@ -22,6 +22,18 @@ const customJestConfig = {
     '<rootDir>/__tests__/reset-self.api.test.ts',
   ],
   transformIgnorePatterns: ['/node_modules/(?!(@auth0/nextjs-auth0|auth0|uuid)/)'],
+  collectCoverageFrom: [
+    'app/**/*.{ts,tsx}',
+    'components/**/*.{ts,tsx}',
+    'lib/**/*.{ts,tsx}',
+    'hooks/**/*.{ts,tsx}',
+    'utils/**/*.{ts,tsx}',
+    '!**/*.d.ts',
+    '!**/*.test.{ts,tsx}',
+    '!**/node_modules/**',
+    '!**/.next/**',
+  ],
+  coverageReporters: ['json', 'lcov', 'text', 'clover', 'json-summary'],
 };
 
 module.exports = createJestConfig(customJestConfig);

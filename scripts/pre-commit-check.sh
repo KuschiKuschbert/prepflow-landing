@@ -63,5 +63,15 @@ else
     exit 1
 fi
 
+# 5. Documentation (ADR)
+echo -n "   - Documentation (ADR)... "
+if npm run check:adr; then
+    echo -e "${GREEN}Pass${NC}"
+else
+    echo -e "${YELLOW}Warning (ADR Missing)${NC}"
+    echo "     Architectural changes detected without a record."
+    # We don't exit 1 for ADRs yet, just warn.
+fi
+
 echo -e "${GREEN}✅ All Guards Passed. Commit Approved.${NC}"
 exit 0

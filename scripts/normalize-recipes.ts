@@ -78,7 +78,7 @@ async function main() {
           if (!Array.isArray(special.ingredients)) continue;
 
           let hasChanges = false;
-          const newIngredients = special.ingredients.map((ing: any) => {
+          const newIngredients = special.ingredients.map((ing: string | { name?: string; unit?: string; quantity?: number; original_text?: string }) => {
               // Handle string ingredients
               if (typeof ing === 'string') {
                   const parsed = parseIngredientString(ing);

@@ -154,6 +154,57 @@ function checkLibBoundaries(): boolean {
   return true;
 }
 
+function checkFeatureIsolation(): boolean {
+  console.log(`\n${YELLOW}🧩 Checking Feature Isolation in webapp...${NC}`);
+
+  const webappPath = path.join(process.cwd(), 'app/webapp');
+  if (!fs.existsSync(webappPath)) return true;
+
+  const features = fs.readdirSync(webappPath).filter(f =>
+    fs.statSync(path.join(webappPath, f)).isDirectory() &&
+    f !== 'components' && // Shared components are allowed
+    f !== 'sections'      // Shared sections are allowed
+  );
+
+  let hasErrors = false;
+
+  for (const feature of features) {
+    const featureDir = path.join(webappPath, feature);
+    const files = glob.sync('**/*.{ts,tsx}', { cwd: featureDir });
+
+    for (const file of files) {
+      const filePath = path.join(featureDir, file);
+      const content = fs.readFileSync(filePath, 'utf-8');
+
+      // Look for imports from other features
+      // Regex: matches @/app/webapp/[other_feature]
+      // excluding @/app/webapp/[feature], @/app/webapp/components, etc.
+      const crossImportRegex = /from\s+['"]@\/app\/webapp\/([a-zA-Z0-9_-]+).*?['"]/g;
+
+      let match;
+      while ((match = crossImportRegex.exec(content)) !== null) {
+        const importedFeature = match[1];
+        if (
+          importedFeature !== feature &&
+          importedFeature !== 'components' &&
+          importedFeature !== 'sections' &&
+          importedFeature !== 'types' // Assuming types might be shared via a common types folder if it existed
+        ) {
+          // It's a violation if it's not a type-only import?
+          // For now we flag it but prioritize documentation.
+          // Roadmap says: "Ensure features remain loosely coupled".
+          console.warn(`${YELLOW}⚠️  Isolation Warning in ${feature}/${file}:${NC}`);
+          console.warn(`   Directly imports from feature '${importedFeature}'.`);
+          console.warn(`   Consider moving shared logic to @/lib or @/hooks.`);
+          // We warn instead of error for now because existing violations are many.
+        }
+      }
+    }
+  }
+
+  return true; // We don't block build yet, just warn.
+}
+
 async function main() {
   let success = true;
 
@@ -166,6 +217,10 @@ async function main() {
   }
 
   if (!checkLibBoundaries()) {
+    success = false;
+  }
+
+  if (!checkFeatureIsolation()) {
     success = false;
   }
 

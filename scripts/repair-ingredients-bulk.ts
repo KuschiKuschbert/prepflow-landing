@@ -145,7 +145,7 @@ async function main() {
 
       const brokenList = specials.filter(s => {
           if (!Array.isArray(s.ingredients)) return false;
-          const brokenCount = s.ingredients.filter((i: any) => {
+          const brokenCount = s.ingredients.filter((i: { name?: string; unit?: string; quantity?: number }) => {
               const u = (i.unit || '').toLowerCase();
               const q = i.quantity;
               const n = i.name || '';
@@ -157,7 +157,7 @@ async function main() {
           id: s.id,
           name: s.name,
           instructions: Array.isArray(s.instructions) ? s.instructions.join('\n') : s.instructions,
-          ingredientNames: Array.isArray(s.ingredients) ? s.ingredients.map((i: any) => typeof i === 'string' ? i : i.name).join(', ') : 'Unknown',
+          ingredientNames: Array.isArray(s.ingredients) ? s.ingredients.map((i: string | { name: string }) => typeof i === 'string' ? i : i.name).join(', ') : 'Unknown',
           yield: `${s.meta?.yield || 4} ${s.meta?.yield_unit || 'servings'}`
       }));
 
@@ -187,7 +187,7 @@ async function main() {
                   }
 
                   // Apply Chef Rounding & Normalization
-                  const cleanedIngredients = rawIngredients.map((p: any) => {
+                  const cleanedIngredients = rawIngredients.map((p: { name: string; quantity: number | string; unit?: string }) => {
                         let qty = typeof p.quantity === 'number' ? p.quantity : parseFloat(p.quantity) || 1;
                         if (qty < 5) qty = Math.round(qty * 2) / 2;
                         else if (qty < 50) qty = Math.round(qty / 5) * 5;

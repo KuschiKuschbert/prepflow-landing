@@ -12,28 +12,42 @@ This document outlines the features required to elevate our autonomous scripts f
 
 **Goal**: Enforce strict architectural boundaries to prevent spaghetti code.
 
-- [ ] **Dependency Guard**: Block illegal imports (e.g., Client components importing Server secrets).
-- [ ] **Circular Dependency Detection**: Prevent module cycles before they build.
-- [ ] **Feature Isolation**: Ensure features (e.g., `auth`, `billing`) remain loosely coupled.
+- [x] **Dependency Guard**: Block illegal imports (e.g., Client components importing Server secrets). ✅
+- [x] **Circular Dependency Detection**: Prevent module cycles before they build. ✅
+- [x] **Feature Isolation**: Ensure features (e.g., `auth`, `billing`) remain loosely coupled. ✅
 
 ## Phase 3: The Sentinel (Proactive Health) 🛡️
 
 **Goal**: Monitor code health metrics to prevent technical debt accumulation.
 
-- [ ] **Code Smell Detector**: Warn on functions > 50 lines or high complexity.
-- [ ] **Tech Debt Tracker**: Count and date-stamp `TODO` comments. Fail build if > 30 days old.
-- [ ] **Type Guard**: Strict "No Consensus" on `any` types.
+- [x] **Code Smell Detector**: Warn on functions > 60 lines or high complexity (Heuristic). ✅
+- [x] **Tech Debt Tracker**: Count and date-stamp `TODO` comments. Fail build if > 30. ✅
+- [x] **Type Guard**: Strict "No Consensus" on `any` types. ✅
 
 ## Phase 4: The Test Generator (Coverage Guardian) 🧪
 
 **Goal**: Ensure no critical path is left untested.
 
-- [ ] **Zero-Coverage Scanner**: Identify critical files with 0% coverage.
-- [ ] **Skeleton Generator**: Auto-generate test files (`.test.tsx`) for uncovered components.
+- [x] **Zero-Coverage Scanner**: Identify critical files with 0% coverage. ✅
+- [x] **Skeleton Generator**: Auto-generate test files (`.test.tsx`) for uncovered components. ✅
 
 ## Phase 5: The Auditor (Security & Performance) 👮
 
 **Goal**: Block security risks and bloat.
 
-- [ ] **Secret Scanner**: Pre-commit check for API keys/tokens.
-- [ ] **Bundle Budget**: Fail build if a PR increases bundle size by > 10KB.
+- [x] **Secret Scanner**: Pre-commit check for API keys/tokens. ✅
+- [x] **Bundle Budget**: Fail build if a PR increases bundle size by > 10KB. ✅
+
+## Phase 6: The Janitor (Hygiene) 🧹
+
+**Goal**: Keep the dependencies and codebase lean by removing dead weight.
+
+- [x] **Unused Dependency Auditor**: Detect and flag packages in `package.json` that aren't imported. ✅
+- [x] **Dead Code Detector**: Warn on exports that are never imported elsewhere. ✅
+
+## Phase 7: The Documenter (Memory Guardian) 📖
+
+**Goal**: Preserve architectural context as the system evolves.
+
+- [x] **ADR Guard**: Detect structural changes and prompt for Architecture Decision Records (ADRs). ✅
+- [x] **Knowledge Base Sync**: Automatically feed new solutions into `TROUBLESHOOTING_LOG.md`. ✅

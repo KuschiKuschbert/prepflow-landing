@@ -28,6 +28,12 @@ if (!supabaseUrl || !supabaseServiceKey) {
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+interface RPCResult {
+  id: string;
+  name: string;
+  stock_match_percentage?: number;
+}
+
 async function verify() {
   console.log('🧪 Verifying Stock Matching RPCs...\n');
 
@@ -63,12 +69,12 @@ async function verify() {
       if (v2Error) {
           console.error('❌ match_recipes_by_stock_v2 Failed:', v2Error);
       } else {
-          const found = v2Results.find((r: any) => r.id === recipe.id);
+          const found = v2Results.find((r: RPCResult) => r.id === recipe.id);
           if (found) {
               console.log('✅ Found target recipe! (100% Subset Match works)');
           } else {
               console.error('❌ Target recipe NOT found in V2 results.');
-              console.log('   Results:', v2Results.map((r: any) => r.name));
+              console.log('   Results:', v2Results.map((r: RPCResult) => r.name));
           }
       }
   }
@@ -88,14 +94,14 @@ async function verify() {
       if (partialError) {
           console.error('❌ match_recipes_by_stock_partial Failed:', partialError);
       } else {
-          const found = partialResults.find((r: any) => r.id === recipe.id);
+          const found = partialResults.find((r: RPCResult) => r.id === recipe.id);
           if (found) {
               console.log(`✅ Found target recipe! Match: ${found.stock_match_percentage}%`);
           } else {
               // It's possible it's ranked too low if limit is small, but filtering should find it via FTS?
               // The partial match uses FTS pre-filter.
               console.log('⚠️ Target recipe not in top 5 (expected if common ingredient).');
-              console.log('   Results:', partialResults.map((r: any) => `${r.name} (${r.stock_match_percentage}%)`));
+              console.log('   Results:', partialResults.map((r: RPCResult) => `${r.name} (${r.stock_match_percentage}%)`));
           }
       }
   }

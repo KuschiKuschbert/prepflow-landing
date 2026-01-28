@@ -43,6 +43,9 @@ jobs:
       - name: 🔍 TypeScript check
         run: npm run type-check
 
+      - name: 📜 Audit scripts (Hygiene)
+        run: npm run audit:scripts
+
       - name: 🧪 Run tests
         run: npm run test
         continue-on-error: true

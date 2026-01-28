@@ -238,7 +238,7 @@ async function main() {
              }
 
              let hasChanges = false;
-             const newIngredients = currentIngredients.map((ing: any) => {
+             const newIngredients = currentIngredients.map((ing: { original_text?: string; quantity?: number; unit?: string }) => {
                  if (ing.original_text) {
                      const parsed = parseQuantity(ing.original_text);
                      if (parsed) {

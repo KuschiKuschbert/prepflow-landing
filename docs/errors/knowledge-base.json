@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-01-13T02:00:00.000Z",
+  "lastUpdated": "2026-01-28T06:30:16.932Z",
   "errors": [
     {
       "id": "ERR-AUTH0-STARTUP",
@@ -22,7 +22,9 @@
         }
       ],
       "similarErrors": [],
-      "preventionRules": ["RULE-ENV-CHECK"]
+      "preventionRules": [
+        "RULE-ENV-CHECK"
+      ]
     },
     {
       "id": "ERR-WORKFLOW-SYNTAX",
@@ -40,6 +42,70 @@
           "prevention": "Run YAML header check or linter.",
           "documentedAt": "2026-01-13T02:00:00.000Z",
           "documentedBy": "system"
+        }
+      ],
+      "similarErrors": [],
+      "preventionRules": []
+    },
+    {
+      "id": "ERR-RULE-INGREDIENT-MATCHING",
+      "errorType": "BestPractice",
+      "category": "Architecture",
+      "severity": "Medium",
+      "pattern": "Ingredient Matching",
+      "context": {
+        "source": "AI_RULES.md",
+        "date": "2026-01-28"
+      },
+      "fixes": [
+        {
+          "id": "FIX-ERR-RULE-INGREDIENT-MATCHING",
+          "solution": "Fuzzy ingredient matching logic is defined in TWO places that MUST stay in sync:",
+          "prevention": "Follow AI Rules strictly",
+          "documentedAt": "2026-01-28T06:30:16.932Z",
+          "documentedBy": "The Documenter"
+        }
+      ],
+      "similarErrors": [],
+      "preventionRules": []
+    },
+    {
+      "id": "ERR-FIX-MISSING-ERROR-HANDLING",
+      "errorType": "HistoricalFix",
+      "category": "Development",
+      "severity": "Medium",
+      "pattern": "Missing Error Handling",
+      "context": {
+        "file": "missing-error-handling.md"
+      },
+      "fixes": [
+        {
+          "id": "FIX-ERR-FIX-MISSING-ERROR-HANDLING",
+          "solution": "See docs/errors/fixes/missing-error-handling.md",
+          "prevention": "Check historical fixes before refactoring",
+          "documentedAt": "2026-01-28T06:30:16.932Z",
+          "documentedBy": "The Documenter"
+        }
+      ],
+      "similarErrors": [],
+      "preventionRules": []
+    },
+    {
+      "id": "ERR-FIX-TYPESCRIPT-TYPE-ERRORS",
+      "errorType": "HistoricalFix",
+      "category": "Development",
+      "severity": "Medium",
+      "pattern": "TypeScript Type Errors",
+      "context": {
+        "file": "typescript-type-errors.md"
+      },
+      "fixes": [
+        {
+          "id": "FIX-ERR-FIX-TYPESCRIPT-TYPE-ERRORS",
+          "solution": "See docs/errors/fixes/typescript-type-errors.md",
+          "prevention": "Check historical fixes before refactoring",
+          "documentedAt": "2026-01-28T06:30:16.932Z",
+          "documentedBy": "The Documenter"
         }
       ],
       "similarErrors": [],

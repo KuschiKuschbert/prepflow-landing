@@ -112,6 +112,13 @@
     "error:report": "node scripts/error-learning/generate-learning-report.js",
     "error:generate-rules": "node -e \"const { generateRulesFromKnowledgeBase } = require('./lib/error-learning/rule-generator.ts'); generateRulesFromKnowledgeBase().catch(console.error);\"",
     "audit:any": "tsx scripts/audit-any.ts",
+    "audit:scripts": "eslint scripts/",
+    "check:coverage": "tsx scripts/coverage-scanner.ts",
+    "check:bundle": "tsx scripts/bundle-budget.ts",
+    "audit:unused": "tsx scripts/audit-dependencies.ts",
+    "check:adr": "tsx scripts/adr-guard.ts",
+    "sync:kb": "tsx scripts/kb-sync.ts",
+    "adr:new": "cp docs/adr/TEMPLATE.md docs/adr/$(date +%Y-%m-%d)-new-record.md",
     "rsi:status": "node scripts/rsi/status.js",
     "rsi:rollback": "node scripts/rsi/rollback.js",
     "rsi:fix": "node scripts/rsi/auto-fix.js",
@@ -182,6 +189,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@types/canvas-confetti": "^1.9.0",
+    "@types/glob": "^8.1.0",
     "@types/jest": "^30.0.0",
     "@types/jscodeshift": "^0.11.10",
     "@types/madge": "^5.0.3",
@@ -193,6 +201,7 @@
     "eslint": "^9.38.0",
     "eslint-config-next": "^16.0.7",
     "eslint-plugin-unused-imports": "^4.3.0",
+    "glob": "^8.1.0",
     "husky": "^9.1.7",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
@@ -219,7 +228,6 @@
   },
   "overrides": {
     "js-yaml": ">=4.1.1",
-    "glob": "^11.0.4",
     "tar": "^7.5.6"
   }
 }
