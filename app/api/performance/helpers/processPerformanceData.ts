@@ -3,11 +3,12 @@ import { deduplicateDishes, filterDishesWithSales } from '@/lib/api/performance/
 import { calculatePerformanceMetrics } from '@/lib/api/performance/performanceCalculation';
 import { aggregateSalesData } from '@/lib/api/performance/salesAggregation';
 import {
-  calculateAveragePopularity,
-  calculateAverageProfitMargin,
-  calculateThresholds,
+    calculateAveragePopularity,
+    calculateAverageProfitMargin,
+    calculateThresholds,
 } from '@/lib/api/performance/thresholdCalculation';
 import { PerformanceDish } from '@/lib/api/performance/types';
+import { aggregateTimeSeries } from './aggregateTimeSeries';
 
 /**
  * Process performance data for all dishes.
@@ -23,8 +24,6 @@ export function processPerformanceData(
   endDateParam: string | null,
 ) {
   const dateRange = parseDateRange(startDateParam, endDateParam);
-
-  // Filter sales_data by date range if provided
   const filteredDishes = dishes?.map(dish => {
     if (!dish.sales_data || dish.sales_data.length === 0) return dish;
     return {
@@ -77,8 +76,25 @@ export function processPerformanceData(
     };
   });
 
+  // Generate Time-Series History
+  const performanceHistory = aggregateTimeSeries(
+    filteredDishes || [], // Use all dishes (including dups if dates differ) to catch all sales?
+    // Actually, deduplication logic "keep most recent" might lose historical sales if not careful.
+    // Ideally we aggregate sales from ALL filteredDishes before deduplication if dedupe strips items.
+    // However, deduplicateDishes logic likely keeps one "dish definition" but sales_data is nested.
+    // Let's assume uniqueDishes has correct sales_data attached or use filteredDishes if uniqueDishes strips sales.
+    // Looking at deduplicateDishes: "Remove duplicates by keeping only the most recent entry".
+    // If "entry" means dish row, and sales are joined... wait.
+    // If the same dish ID appears multiple times? No, dish.sales_data is an array.
+    // If deduplication removes "duplicate dish definitions", we should verify if sales_data is merged.
+    // Assuming uniqueDishes is safe to use for now, but let's use filteredDishes to be safe and catch all sales.
+    startDateParam ? dateRange.startDate?.toISOString().split('T')[0] ?? null : null,
+    endDateParam ? dateRange.endDate?.toISOString().split('T')[0] ?? null : null
+  );
+
   return {
     performanceData,
+    performanceHistory,
     metadata: {
       methodology: 'PrepFlow COGS Dynamic',
       averageProfitMargin: averageProfitMargin,

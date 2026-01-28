@@ -102,7 +102,8 @@ RETURNS TABLE (
     created_at TIMESTAMPTZ,
     stock_match_percentage INT,
     stock_match_count INT,
-    total_ingredients INT
+    total_ingredients INT,
+    full_count BIGINT
 )
 LANGUAGE plpgsql
 AS $$
@@ -120,7 +121,8 @@ BEGIN
         r.created_at,
         100::INT as stock_match_percentage, -- Always 100% because we use containment!
         jsonb_array_length(r.ingredient_tags)::INT as stock_match_count,
-        jsonb_array_length(r.ingredient_tags)::INT as total_ingredients
+        jsonb_array_length(r.ingredient_tags)::INT as total_ingredients,
+        COUNT(*) OVER()::BIGINT as full_count
     FROM ai_specials r
     WHERE
         -- THE MAGIC: GIN Index Containment check

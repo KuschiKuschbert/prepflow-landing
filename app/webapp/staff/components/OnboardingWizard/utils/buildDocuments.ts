@@ -1,7 +1,7 @@
 import type { OnboardingDocument } from '@/app/webapp/roster/types';
 
 interface BuildDocumentsParams {
-  idFile: File | null;
+  idFileUrl: string | null;
   signatureData: string | null;
   bankBSB: string;
   bankAccount: string;
@@ -12,19 +12,18 @@ interface BuildDocumentsParams {
  * Build onboarding documents array from form data
  */
 export function buildDocuments({
-  idFile,
+  idFileUrl,
   signatureData,
   bankBSB,
   bankAccount,
   taxFileNumber,
-}: BuildDocumentsParams): Partial<OnboardingDocument>[] {
+}: BuildDocumentsParams): any[] {
   const documents: Partial<OnboardingDocument>[] = [];
 
-  if (idFile) {
-    // TODO: Upload ID file to Supabase Storage and get URL
+  if (idFileUrl) {
     documents.push({
       document_type: 'id',
-      file_url: null, // Will be set after upload
+      file_url: idFileUrl,
     });
   }
 

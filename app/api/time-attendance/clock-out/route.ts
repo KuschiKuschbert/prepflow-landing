@@ -12,7 +12,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const ClockOutSchema = z.object({
-  employee_id: z.string().uuid(),
+  // employee_id: Removed - derived from session
   shift_id: z.string().uuid().optional().nullable(),
   clock_out_time: z.string().datetime(),
   clock_out_latitude: z.number().min(-90).max(90),
@@ -23,7 +23,7 @@ const ClockOutSchema = z.object({
   notes: z.string().optional().nullable(),
 });
 
-// Haversine formula to calculate distance between two lat/lon points
+// Haversine formula (kept as is)
 const haversineDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
   const R = 6371e3; // metres
   const φ1 = (lat1 * Math.PI) / 180;
@@ -41,15 +41,27 @@ const haversineDistance = (lat1: number, lon1: number, lat2: number, lon2: numbe
 
 export async function POST(request: NextRequest) {
   try {
+    // 1. Authenticate User
     const { supabase, error } = await standardAdminChecks(request);
+    // Note: standardAdminChecks validates the JWT. We now need the user ID.
+
     if (error) return error;
     if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+
+    // Get the authenticated user
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401),
+        { status: 401 }
+      );
+    }
 
     const body = await request.json();
     const validatedData = ClockOutSchema.parse(body);
 
     const {
-      employee_id,
       shift_id,
       clock_out_time,
       clock_out_latitude,
@@ -59,6 +71,25 @@ export async function POST(request: NextRequest) {
       geofence_radius_meters,
       notes,
     } = validatedData;
+
+    // 2. Resolve Employee ID from User ID
+    const { data: employeeData, error: employeeError } = await supabase
+      .from('employees')
+      .select('id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (employeeError || !employeeData) {
+      logger.warn('[Time Attendance API] Clock-out attempted by user without linked employee record', {
+        user_id: user.id
+      });
+      return NextResponse.json(
+        ApiErrorHandler.createError('User is not linked to an employee record', 'FORBIDDEN', 403),
+        { status: 403 }
+      );
+    }
+
+    const employee_id = employeeData.id;
 
     // Perform geofencing validation
     const distance = haversineDistance(

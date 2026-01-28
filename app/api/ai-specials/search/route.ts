@@ -183,9 +183,7 @@ export async function GET(request: Request) {
              return NextResponse.json({ data: [], meta: { total: 0, page: 1 } });
         }
 
-        // console.log('[Specials Search] RPC Result Count:', rpcData?.length);
-
-        const transformedData = (rpcData || []).map((row: Record<string, unknown>) => ({
+        const transformedData = (rpcData || []).map((row: any) => ({
             id: row.id,
             name: row.name,
             image_url: row.image_url,
@@ -195,24 +193,15 @@ export async function GET(request: Request) {
             meta: row.meta,
             cuisine: row.cuisine,
             created_at: row.created_at,
-            stockMatchPercentage: row.stock_match_percentage as number || 0,
-            stockMatchCount: row.stock_match_count as number || 0,
-            totalIngredients: row.total_ingredients as number || 0, // Ensure this is passed
+            stockMatchPercentage: row.stock_match_percentage || 0,
+            stockMatchCount: row.stock_match_count || 0,
+            totalIngredients: row.total_ingredients || 0,
             matchCount: 0,
             randomScore: Math.random()
         }));
 
-        // Get total count
-        // For V2, we don't have full window count efficiently yet (requires separate query),
-        // but for now we'll just use length if it's less than limit, or "many" if full.
-        // Actually the partial RPC returns full_count. V2 does NOT returned full_count in my previous SQL definition?
-        // Let's check V2 SQL. It returns `RETURNS TABLE...`.
-        // If V2 doesn't return full_count, pagination might be tricky.
-        // But the previous V2 SQL from migrations did not have count(*) OVER().
-        // Let's rely on data length for now or assume infinite scroll.
-        const totalCount = (rpcData && rpcData.length > 0 && 'full_count' in rpcData[0])
-            ? (rpcData[0] as any).full_count
-            : (rpcData?.length || 0) + offset + (rpcData?.length === limit ? 1 : 0);
+        // Get total count from window function
+        const totalCount = rpcData?.[0]?.full_count || transformedData.length + offset;
 
         return NextResponse.json({
             data: transformedData,

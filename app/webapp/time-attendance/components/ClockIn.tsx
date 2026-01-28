@@ -68,7 +68,7 @@ export function ClockIn({ employee, shift, venueLocation }: ClockInProps) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          employee_id: employee.id,
+          // employee_id: employee.id, // Removed - handled by session
           shift_id: shift?.id || null,
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,

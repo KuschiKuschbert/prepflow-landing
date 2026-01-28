@@ -48,6 +48,7 @@ export async function fetchPerformanceData(dateRange?: DateRange, lockedMenuOnly
   const performanceItems = data.data || [];
   const result = {
     performanceItems,
+    performanceHistory: data.performanceHistory || [],
     metadata: data.metadata || null,
     performanceAlerts: [],
     performanceScore: calculatePerformanceScore(performanceItems),

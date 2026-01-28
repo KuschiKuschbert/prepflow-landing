@@ -44,6 +44,7 @@ export async function GET(request: NextRequest) {
       search: searchParams.get('search') || undefined,
       page: parseInt(searchParams.get('page') || '1', 10),
       pageSize: parseInt(searchParams.get('pageSize') || '100', 10),
+      include_qualifications: searchParams.get('include_qualifications') === 'true',
     };
 
     const { data: employees, error: dbError, count } = await buildEmployeeQuery(supabase, params);

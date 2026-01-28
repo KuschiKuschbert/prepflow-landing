@@ -1,5 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { requireAuth } from '@/lib/auth0-api-helpers';
+import { sendEmail } from '@/lib/email/sender';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import { checkRateLimit } from './helpers/checkRateLimit';
@@ -87,10 +88,27 @@ export async function POST(req: NextRequest) {
       return ticketResult;
     }
 
-    // TODO: Send email notification via Resend if SUPPORT_EMAIL_NOTIFICATIONS=true
-    // if (process.env.SUPPORT_EMAIL_NOTIFICATIONS === 'true') {
-    //   // Send email to hello@prepflow.org
-    // }
+    // Send email notification via Resend
+    if (process.env.RESEND_API_KEY) {
+      await sendEmail({
+        to: process.env.SUPPORT_EMAIL || 'support@prepflow.org',
+        subject: `New Support Request: ${subject}`,
+        html: `
+          <div style="font-family:sans-serif;padding:20px;color:#333;">
+            <h2 style="color:#29E7CD;">New Support Request</h2>
+            <p><strong>User:</strong> ${userEmail}</p>
+            <p><strong>Subject:</strong> ${subject}</p>
+            <p><strong>Type:</strong> ${type || 'other'}</p>
+            <p><strong>Severity:</strong> ${severity}</p>
+            <div style="background:#f5f5f5;padding:15px;border-radius:5px;margin:20px 0;">
+              <h3>Message:</h3>
+              <p>${message.replace(/\n/g, '<br>')}</p>
+            </div>
+            <p><a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://app.prepflow.io'}/admin/support-tickets">View in Admin Dashboard</a></p>
+          </div>
+        `,
+      });
+    }
 
     return NextResponse.json({
       success: true,

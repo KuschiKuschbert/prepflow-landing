@@ -2,31 +2,31 @@
 
 import { logger } from '@/lib/logger';
 import { useCallback, useEffect, useState } from 'react';
-import type { Employee, QualificationType } from '../types';
+import type { Employee, QualificationType } from '../../roster/types';
 
-export function useEmployeesData() {
-  const [employees, setEmployees] = useState<Employee[]>([]);
+export function useStaffData() {
+  const [staff, setStaff] = useState<Employee[]>([]);
   const [qualificationTypes, setQualificationTypes] = useState<QualificationType[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState<
     'all' | 'active' | 'inactive' | 'terminated'
   >('active');
 
-  const fetchEmployees = useCallback(async () => {
+  const fetchStaff = useCallback(async () => {
     try {
       setLoading(true);
-      let url = '/api/employees';
+      let url = '/api/staff/employees?include_qualifications=true';
       if (selectedStatus !== 'all') {
-        url += `?status=${selectedStatus}`;
+        url += `&status=${selectedStatus}`;
       }
 
       const response = await fetch(url);
       const data = await response.json();
       if (data.success) {
-        setEmployees(data.data);
+        setStaff(data.employees);
       }
     } catch (error) {
-      logger.error('Error fetching employees:', error);
+      logger.error('Error fetching staff:', error);
     } finally {
       setLoading(false);
     }
@@ -45,17 +45,17 @@ export function useEmployeesData() {
   }, []);
 
   useEffect(() => {
-    fetchEmployees();
+    fetchStaff();
     fetchQualificationTypes();
-  }, [fetchEmployees, fetchQualificationTypes]);
+  }, [fetchStaff, fetchQualificationTypes]);
 
   return {
-    employees,
-    setEmployees, // Exposed for actions
+    staff,
+    setStaff,
     qualificationTypes,
     loading,
     selectedStatus,
     setSelectedStatus,
-    fetchEmployees, // Exposed for refresh if needed
+    fetchStaff,
   };
 }

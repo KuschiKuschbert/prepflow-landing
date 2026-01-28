@@ -61,8 +61,16 @@ export interface ChartData {
   color?: string;
 }
 
+export interface PerformanceHistoryItem {
+  date: string;
+  grossProfit: number;
+  revenue: number;
+  itemsSold: number;
+}
+
 export interface PerformanceState {
   performanceItems: PerformanceItem[];
+  performanceHistory: PerformanceHistoryItem[];
   metadata: PerformanceMetadata | null;
   performanceAlerts: PerformanceAlert[];
   performanceScore: number;

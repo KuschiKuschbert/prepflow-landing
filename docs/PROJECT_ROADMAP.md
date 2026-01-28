@@ -50,6 +50,15 @@
 - Advanced integrations
 - Mobile app development (React Native)
 
+### Phase 5 (Month 5+): Enterprise Multi-Tenancy & Whitelabeling
+
+- **Strict Data Isolation:** Complete separation of data (Ingredients, Recipes, Menus) per tenant/venue using Row Level Security (RLS). No shared global data.
+- **Organization Support:** "Team" accounts where multiple users (Chefs, Staff) belong to one Venue.
+- **PIN Authentication:** Simplified login for kitchen staff (kiosk style) while maintaining individual user tracking.
+- **Custom Branding (Whitelabeling):** Tenant-specific "Surface" with custom logos, color themes, and potentially subdomains (e.g., `venue.prepflow.io`).
+- **Isolated Configuration:** Per-tenant settings for features, operational rules, and integrations.
+
+
 ## 📞 Contact & Support
 
 ### Development Team

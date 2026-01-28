@@ -1,6 +1,6 @@
 'use client';
 
-import { EmployeeFormData } from '../types';
+import { EmployeeFormData } from '../types_legacy';
 
 interface EmployeeFormFieldsProps {
   formData: EmployeeFormData;

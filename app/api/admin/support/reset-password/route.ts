@@ -1,6 +1,7 @@
 import { logAdminApiAction } from '@/lib/admin-audit';
 import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
+import { sendEmail } from '@/lib/email/sender';
 import { logger } from '@/lib/logger';
 import crypto from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
@@ -68,8 +69,28 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // TODO: Send password reset email via Resend
-    // For now, just log the action
+    // Send password reset email via Resend
+    if (process.env.RESEND_API_KEY) {
+      const resetLink = `${process.env.NEXT_PUBLIC_APP_URL || 'https://app.prepflow.io'}/reset-password?token=${resetToken}`;
+
+      await sendEmail({
+        to: user.email,
+        subject: 'Password Reset Request',
+        html: `
+          <div style="font-family:sans-serif;padding:20px;color:#333;">
+            <h2 style="color:#29E7CD;">Password Reset</h2>
+            <p>Hello,</p>
+            <p>An administrator has requested a password reset for your PrepFlow account.</p>
+            <p>Click the link below to set a new password:</p>
+            <p style="margin:20px 0;">
+              <a href="${resetLink}" style="background:#29E7CD;color:#000;padding:12px 24px;text-decoration:none;border-radius:5px;font-weight:bold;">Reset Password</a>
+            </p>
+            <p>This link will expire in 24 hours.</p>
+            <p>If you did not request this, please contact support immediately.</p>
+          </div>
+        `,
+      });
+    }
 
     // Log admin action
     await logAdminApiAction(adminUser, 'reset_user_password', request, {
@@ -80,9 +101,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: 'Password reset token generated. Email functionality needs to be implemented.',
-      resetToken, // In production, don't return token - send via email
-      note: 'Password reset email functionality needs to be implemented with Resend.',
+      message: 'Password reset instructions have been sent to the user.',
     });
   } catch (error) {
     if (error instanceof NextResponse) {

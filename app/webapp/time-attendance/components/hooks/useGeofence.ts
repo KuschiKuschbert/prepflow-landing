@@ -7,22 +7,53 @@ interface GeofenceConfig {
   radiusMeters: number;
 }
 
-export function useGeofence(venueLocation?: GeofenceConfig) {
+export function useGeofence(propVenueLocation?: GeofenceConfig) {
   const [location, setLocation] = useState<GeolocationPosition | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [distance, setDistance] = useState<number | null>(null);
   const [isValidLocation, setIsValidLocation] = useState<boolean | null>(null);
+  const [venueConfig, setVenueConfig] = useState<GeofenceConfig | null>(null);
 
-  // Default venue location (should be configured per venue in reality)
+  // Default venue location (fallback)
   const defaultVenueLocation = useMemo(
-    () =>
-      venueLocation || {
-        latitude: -27.6394, // Brisbane, QLD (example)
+    () => ({
+        latitude: -27.6394, // Brisbane, QLD
         longitude: 153.1094,
         radiusMeters: 100,
-      },
-    [venueLocation],
+    }),
+    [],
   );
+
+  // Determine active config (Prop > API/State > Default)
+  const activeConfig = useMemo(() => {
+    return propVenueLocation || venueConfig || defaultVenueLocation;
+  }, [propVenueLocation, venueConfig, defaultVenueLocation]);
+
+  // Fetch venue settings if not provided via props
+  useEffect(() => {
+    if (propVenueLocation) return;
+
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch('/api/settings/venue');
+        if (response.ok) {
+          const data = await response.json();
+          if (data && typeof data.latitude === 'number' && typeof data.longitude === 'number') {
+             // Map API response to GeofenceConfig (handle potential naming diffs)
+             setVenueConfig({
+               latitude: data.latitude,
+               longitude: data.longitude,
+               radiusMeters: data.geofence_radius_meters || data.radiusMeters || 100
+             });
+          }
+        }
+      } catch (error) {
+        logger.error('Failed to fetch venue settings:', error);
+      }
+    };
+
+    fetchSettings();
+  }, [propVenueLocation]);
 
   /**
    * Calculates distance between current location and venue.
@@ -31,8 +62,8 @@ export function useGeofence(venueLocation?: GeofenceConfig) {
     (position: GeolocationPosition) => {
       const lat1 = position.coords.latitude;
       const lon1 = position.coords.longitude;
-      const lat2 = defaultVenueLocation.latitude;
-      const lon2 = defaultVenueLocation.longitude;
+      const lat2 = activeConfig.latitude;
+      const lon2 = activeConfig.longitude;
 
       const R = 6371e3; // Earth radius in meters
       const φ1 = (lat1 * Math.PI) / 180;
@@ -47,9 +78,9 @@ export function useGeofence(venueLocation?: GeofenceConfig) {
 
       const distanceMeters = R * c;
       setDistance(distanceMeters);
-      setIsValidLocation(distanceMeters <= defaultVenueLocation.radiusMeters);
+      setIsValidLocation(distanceMeters <= activeConfig.radiusMeters);
     },
-    [defaultVenueLocation],
+    [activeConfig],
   );
 
   // Get current location
@@ -101,6 +132,6 @@ export function useGeofence(venueLocation?: GeofenceConfig) {
     locationError,
     distance,
     isValidLocation,
-    venueRadius: defaultVenueLocation.radiusMeters,
+    venueRadius: activeConfig.radiusMeters,
   };
 }

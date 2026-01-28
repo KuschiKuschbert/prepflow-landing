@@ -7,6 +7,7 @@ interface EmployeeQueryParams {
   search?: string | null;
   page?: number;
   pageSize?: number;
+  include_qualifications?: boolean;
 }
 
 interface QueryResult {
@@ -26,7 +27,11 @@ export async function buildEmployeeQuery(
   supabase: SupabaseClient,
   params: EmployeeQueryParams,
 ): Promise<QueryResult> {
-  let query = supabase.from('employees').select('*', { count: 'exact' });
+  const selectQuery = params.include_qualifications
+    ? '*, employee_qualifications(*, qualification_types(*))'
+    : '*';
+
+  let query = supabase.from('employees').select(selectQuery, { count: 'exact' });
 
   // Filter by role
   if (params.role) {

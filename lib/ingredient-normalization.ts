@@ -67,6 +67,19 @@ export const INGREDIENT_ALIASES: Record<string, string[]> = {
   // Stock/Broth
   'stock': ['broth', 'chicken stock', 'beef stock', 'vegetable stock', 'chicken broth', 'beef broth'],
   'chicken stock': ['chicken broth', 'chicken bouillon'],
+
+  // Starch & Grains
+  'rice': ['basmati rice', 'jasmine rice', 'brown rice', 'sushi rice', 'white rice', 'long grain rice', 'short grain rice'],
+  'pasta': ['spaghetti', 'penne', 'fusilli', 'rigatoni', 'linguine', 'macaroni', 'fettuccine', 'dried pasta', 'fresh pasta'],
+
+  // Vegetables
+  'potato': ['baby potato', 'new potato', 'king edward potato', 'maris piper', 'russet potato', 'sweet potato', 'yam'],
+  'ginger': ['fresh ginger', 'ginger root', 'grated ginger', 'minced ginger'],
+  'lemon': ['lemon juice', 'lemon zest', 'fresh lemon juice'],
+  'lime': ['lime juice', 'lime zest', 'fresh lime juice'],
+
+  // Dairy
+  'yoghurt': ['greek yoghurt', 'natural yoghurt', 'plain yoghurt', 'low fat yoghurt', 'full fat yoghurt'],
 };
 
 // Reverse map for quick lookup: alias -> base ingredient

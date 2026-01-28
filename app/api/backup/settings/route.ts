@@ -56,6 +56,12 @@ export async function GET(request: NextRequest) {
       .eq('user_id', userId)
       .single();
 
+    // Check if user has Google Drive connected
+    const { count: googleTokenCount } = await supabase
+      .from('user_google_tokens')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', userId);
+
     const settings: BackupSettings = {
       userId,
       defaultFormat: 'encrypted',
@@ -63,6 +69,7 @@ export async function GET(request: NextRequest) {
       scheduledBackupEnabled: schedule?.enabled || false,
       scheduledBackupInterval: schedule?.interval_hours || DEFAULT_SCHEDULE_INTERVAL,
       autoUploadToDrive: schedule?.auto_upload_to_drive || false,
+      googleDriveConnected: (googleTokenCount || 0) > 0,
     };
 
     return NextResponse.json({ success: true, settings });

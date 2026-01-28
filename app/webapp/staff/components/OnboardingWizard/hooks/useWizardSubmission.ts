@@ -1,7 +1,8 @@
-import { useCallback } from 'react';
+import type { Employee } from '@/app/webapp/roster/types';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
-import type { Employee } from '@/app/webapp/roster/types';
+import { supabase } from '@/lib/supabase';
+import { useCallback } from 'react';
 import { buildDocuments } from '../utils/buildDocuments';
 
 interface UseWizardSubmissionProps {
@@ -33,33 +34,55 @@ export function useWizardSubmission({
   const handleSubmit = useCallback(async () => {
     setLoading(true);
     try {
-      // Build documents array
-      const _documents = buildDocuments({
-        idFile,
+      let idFileUrl: string | null = null;
+
+      // 1. Upload ID file if present
+      if (idFile) {
+        const fileExt = idFile.name.split('.').pop();
+        const fileName = `${employee.id}/id_${Date.now()}.${fileExt}`;
+        const { data, error: uploadError } = await supabase.storage
+          .from('onboarding-docs')
+          .upload(fileName, idFile);
+
+        if (uploadError) {
+          throw new Error(`Failed to upload ID: ${uploadError.message}`);
+        }
+
+        const { data: publicUrlData } = supabase.storage
+          .from('onboarding-docs')
+          .getPublicUrl(fileName);
+
+        idFileUrl = publicUrlData.publicUrl;
+      }
+
+      // 2. Build documents payload
+      const documents = buildDocuments({
+        idFileUrl,
         signatureData,
         bankBSB,
         bankAccount,
         taxFileNumber,
       });
 
-      // Update employee with bank details and TFN
-      const updateResponse = await fetch(`/api/staff/employees/${employee.id}`, {
-        method: 'PUT',
+      // 3. Submit entire package to onboarding API
+      const response = await fetch('/api/staff/onboarding', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          employee_id: employee.id,
           bank_account_bsb: bankBSB,
           bank_account_number: bankAccount,
           tax_file_number: taxFileNumber,
+          documents,
         }),
       });
 
-      if (!updateResponse.ok) {
-        throw new Error('Failed to update employee details');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to complete onboarding');
       }
-
-      // TODO: Save onboarding documents via API
 
       showSuccess('Onboarding completed successfully');
       onComplete?.();

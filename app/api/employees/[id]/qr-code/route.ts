@@ -27,7 +27,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const host = request.headers.get('host') || 'prepflow.org';
     const protocol = request.headers.get('x-forwarded-proto') || 'https';
     const baseUrl = `${protocol}://${host}`;
-    const employeeUrl = `${baseUrl}/webapp/employees?id=${id}`;
+    const employeeUrl = `${baseUrl}/webapp/staff?id=${id}`;
 
     // Generate QR code as PNG buffer
     const qrCodeBuffer = await QRCode.toBuffer(employeeUrl, {

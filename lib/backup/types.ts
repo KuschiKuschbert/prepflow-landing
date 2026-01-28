@@ -79,6 +79,7 @@ export interface BackupSettings {
   scheduledBackupEnabled: boolean;
   scheduledBackupInterval: number; // hours
   autoUploadToDrive: boolean;
+  googleDriveConnected?: boolean;
 }
 
 export interface TableData {

@@ -48,7 +48,7 @@ USING (bucket_id = 'employee-photos');
 
 After creating the bucket, test the photo upload functionality:
 
-1. Go to the Employees page (`/webapp/employees`)
+1. Go to the Staff page (`/webapp/staff`)
 2. Click "Add Employee" or edit an existing employee
 3. Try uploading a photo (JPG, PNG, or WebP, max 5MB)
 4. Verify the photo appears in the preview

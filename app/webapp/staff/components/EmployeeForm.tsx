@@ -3,7 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { Award } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { Employee, EmployeeFormData, QualificationType } from '../types';
+import { Employee, EmployeeFormData, QualificationType } from '../types_legacy';
 import { EmployeeFormFields } from './EmployeeFormFields';
 import { EmployeePhotoUpload } from './EmployeePhotoUpload';
 import { useEmployeePhoto } from './hooks/useEmployeePhoto';

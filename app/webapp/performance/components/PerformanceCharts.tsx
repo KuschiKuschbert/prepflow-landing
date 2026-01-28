@@ -1,12 +1,13 @@
 'use client';
 
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
-import { PerformanceItem } from '../types';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { PerformanceHistoryItem, PerformanceItem } from '../types';
 
 interface PerformanceChartsProps {
   performanceItems: PerformanceItem[];
+  performanceHistory: PerformanceHistoryItem[];
   dateRange?: {
     startDate: Date | null;
     endDate: Date | null;
@@ -26,7 +27,11 @@ const PerformanceChartsContent = dynamic(() => import('./PerformanceChartsLazy')
   ),
 });
 
-export default function PerformanceCharts({ performanceItems, dateRange }: PerformanceChartsProps) {
+export default function PerformanceCharts({
+  performanceItems,
+  performanceHistory,
+  dateRange,
+}: PerformanceChartsProps) {
   const [isMobile, setIsMobile] = useState(false);
   const { ref, isIntersecting } = useIntersectionObserver({
     threshold: 0.1,
@@ -53,6 +58,7 @@ export default function PerformanceCharts({ performanceItems, dateRange }: Perfo
       {isIntersecting && (
         <PerformanceChartsContent
           performanceItems={performanceItems}
+          performanceHistory={performanceHistory}
           dateRange={dateRange}
           isMobile={isMobile}
         />

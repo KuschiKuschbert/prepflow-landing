@@ -13,10 +13,10 @@ echo "🦁 The Brain (Pre-Commit Guard)..."
 
 # 0. Merge Conflict Check
 echo -n "   - Merge Conflicts... "
-if grep -rE "^<<<<<<<|^=======$|^>>>>>>>" --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.next . > /dev/null; then
+if git grep --cached -E "^<<<<<<<|^=======$|^>>>>>>>" > /dev/null 2>&1; then
     echo -e "${RED}FAIL (Merge Conflicts Detected)${NC}"
-    echo "     Please resolve merge conflicts before committing."
-    grep -rE "^<<<<<<<|^=======$|^>>>>>>>" --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.next .
+    echo "     Please resolve merge conflicts in staged files before committing."
+    git grep --cached -E "^<<<<<<<|^=======$|^>>>>>>>"
     exit 1
 else
     echo -e "${GREEN}Pass${NC}"

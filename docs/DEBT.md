@@ -11,7 +11,7 @@
 
 ## Medium Priority
 
-- [ ] Review `scripts/pre-commit-check.sh` and ensure it handles edge cases (e.g. merge conflicts).
+- [x] Review `scripts/pre-commit-check.sh` and ensure it handles edge cases (e.g. merge conflicts) - **DONE**.
 
 ## Low Priority
 

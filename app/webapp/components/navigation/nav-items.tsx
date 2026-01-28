@@ -54,7 +54,7 @@ function getCategoryForWorkflow(href: string, workflow: WorkflowType): string {
       '/webapp/cleaning': 'end-of-day',
       '/webapp/temperature': 'morning-prep',
       '/webapp/compliance': 'end-of-day',
-      '/webapp/employees': 'tools',
+      '/webapp/staff': 'tools',
       '/webapp/roster': 'operations',
       '/webapp/suppliers': 'planning',
       '/webapp/par-levels': 'planning',
@@ -76,7 +76,7 @@ function getCategoryForWorkflow(href: string, workflow: WorkflowType): string {
       '/webapp/cleaning': 'operations',
       '/webapp/temperature': 'operations',
       '/webapp/compliance': 'operations',
-      '/webapp/employees': 'tools',
+      '/webapp/staff': 'tools',
       '/webapp/roster': 'operations',
       '/webapp/suppliers': 'planning',
       '/webapp/par-levels': 'planning',
@@ -98,7 +98,7 @@ function getCategoryForWorkflow(href: string, workflow: WorkflowType): string {
       '/webapp/cleaning': 'operations',
       '/webapp/temperature': 'operations',
       '/webapp/compliance': 'operations',
-      '/webapp/employees': 'tools',
+      '/webapp/staff': 'tools',
       '/webapp/roster': 'operations',
       '/webapp/suppliers': 'inventory',
       '/webapp/par-levels': 'inventory',
@@ -175,7 +175,7 @@ export function useNavigationItems(
         color: 'text-[var(--accent)]',
       },
       {
-        href: '/webapp/employees',
+        href: '/webapp/staff',
         label: t('nav.employees', 'Kitchen Staff') as string,
         icon: <Icon icon={Users} size="sm" className="text-current" aria-hidden={true} />,
         color: 'text-[var(--primary)]',
@@ -262,7 +262,7 @@ export function useNavigationItems(
     ];
 
     return allItems.filter(item => {
-      if (item.href === '/webapp/employees' && !kitchenStaffEnabled) {
+      if (item.href === '/webapp/staff' && !kitchenStaffEnabled) {
         return false;
       }
       if (item.href === '/webapp/roster' && !rosterEnabled) {

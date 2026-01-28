@@ -1,28 +1,62 @@
 // Roster System Types
 // TypeScript types for ShiftSync roster system
 
+// Qualification Types
+export interface QualificationType {
+  id: string;
+  name: string;
+  description: string | null;
+  is_required: boolean;
+  default_expiry_days: number | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface EmployeeQualification {
+  id: string;
+  employee_id: string;
+  qualification_type_id: string;
+  certificate_number: string | null;
+  issue_date: string;
+  expiry_date: string | null;
+  issuing_authority: string | null;
+  document_url: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+  qualification_types?: QualificationType;
+}
+
 // Employee Types
 export interface Employee {
   id: string;
   user_id?: string | null;
+  employee_id?: string | null; // Corporate/Internal ID
   first_name: string;
   last_name: string;
   full_name?: string; // Legacy field from existing employees table
   email: string;
   phone?: string | null;
   role: 'admin' | 'manager' | 'staff';
+  status: 'active' | 'inactive' | 'terminated';
   employment_type: 'full-time' | 'part-time' | 'casual';
+  employment_start_date?: string | null;
+  employment_end_date?: string | null;
   hourly_rate: number;
   saturday_rate?: number | null;
   sunday_rate?: number | null;
-  skills?: string[] | null; // Array of skills (e.g., ['chef', 'dishhand', 'barista'])
+  skills?: string[] | null;
   bank_account_bsb?: string | null;
   bank_account_number?: string | null;
   tax_file_number?: string | null;
   emergency_contact_name?: string | null;
   emergency_contact_phone?: string | null;
+  photo_url?: string | null;
+  notes?: string | null;
   created_at: string;
   updated_at: string;
+  employee_qualifications?: (EmployeeQualification & { qualification_types: QualificationType })[];
 }
 
 // Roster Template Types

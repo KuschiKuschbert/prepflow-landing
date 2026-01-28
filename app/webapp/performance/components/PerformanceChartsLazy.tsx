@@ -2,21 +2,24 @@
 
 import { useMemo } from 'react';
 import {
-  Bar,
-  CartesianGrid,
-  Cell,
-  Pie,
-  BarChart as ReBarChart,
-  PieChart as RePieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
+    Area,
+    AreaChart,
+    Bar,
+    CartesianGrid,
+    Cell,
+    Pie,
+    BarChart as ReBarChart,
+    PieChart as RePieChart,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
 } from 'recharts';
-import { PerformanceItem } from '../types';
+import { PerformanceHistoryItem, PerformanceItem } from '../types';
 
 interface PerformanceChartsLazyProps {
   performanceItems: PerformanceItem[];
+  performanceHistory: PerformanceHistoryItem[];
   dateRange?: {
     startDate: Date | null;
     endDate: Date | null;
@@ -26,6 +29,7 @@ interface PerformanceChartsLazyProps {
 
 export default function PerformanceChartsLazy({
   performanceItems,
+  performanceHistory,
   dateRange,
   isMobile,
 }: PerformanceChartsLazyProps) {
@@ -169,12 +173,13 @@ export default function PerformanceChartsLazy({
             <ResponsiveContainer width="100%" height="100%">
               <ReBarChart data={chartData} margin={{ top: 10, right: 20, bottom: 0, left: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
-                <XAxis dataKey="name" stroke="var(--foreground-muted)" />
+                <XAxis dataKey="name" stroke="var(--foreground-muted)" tick={{ fontSize: 12 }} />
                 <YAxis
                   stroke="var(--foreground-muted)"
                   tickFormatter={(v: number | string) =>
                     `${typeof v === 'number' ? v.toFixed(0) : v}%`
                   }
+                  tick={{ fontSize: 12 }}
                 />
                 <Tooltip
                   contentStyle={{
@@ -224,23 +229,89 @@ export default function PerformanceChartsLazy({
         </div>
       </div>
 
-      {/* Time Series Chart - Show if date range is selected */}
-      {dateRange?.startDate && dateRange?.endDate && (
+      {/* Time Series Chart */}
+      {performanceHistory.length > 0 ? (
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
+          <h3 className="desktop:text-xl mb-4 text-lg font-semibold text-[var(--foreground)]">
+            Profit Over Time
+          </h3>
+          <div className="h-80 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                data={performanceHistory}
+                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+              >
+                <defs>
+                  <linearGradient id="colorProfit" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.1} />
+                    <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <XAxis
+                  dataKey="date"
+                  stroke="var(--foreground-muted)"
+                  tick={{ fontSize: 12 }}
+                  tickFormatter={(value: number | string) => {
+                    const d = new Date(value);
+                    return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short' });
+                  }}
+                />
+                <YAxis
+                  stroke="var(--foreground-muted)"
+                  tick={{ fontSize: 12 }}
+                  tickFormatter={(value: number) =>
+                    new Intl.NumberFormat('en-AU', {
+                      style: 'currency',
+                      currency: 'AUD',
+                      notation: 'compact',
+                    }).format(value)
+                  }
+                />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'var(--surface)',
+                    border: '1px solid var(--border)',
+                    color: 'var(--foreground)',
+                  }}
+                  labelFormatter={(value: number | string) => {
+                    const d = new Date(value);
+                    return d.toLocaleDateString('en-AU', {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                    });
+                  }}
+                  formatter={(value: number | string) => [
+                    formatCurrency(value as number),
+                    'Gross Profit',
+                  ]}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="grossProfit"
+                  stroke="var(--primary)"
+                  fillOpacity={1}
+                  fill="url(#colorProfit)"
+                  strokeWidth={2}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      ) : dateRange?.startDate && dateRange?.endDate ? (
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
           <h3 className="desktop:text-xl mb-4 text-lg font-semibold text-[var(--foreground)]">
             Performance Over Time
           </h3>
           <p className="mb-4 text-sm text-[var(--foreground-muted)]">
-            Note: Time-series visualization requires daily sales data. Currently showing aggregated
-            data for the selected period.
+            Time-series data is not available for the selected period.
           </p>
           <div className="flex h-64 w-full items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--muted)]/30 p-4">
-            <p className="text-sm text-[var(--foreground-subtle)]">
-              Time-series chart coming soon. Select a date range to see trends over time.
-            </p>
+            <p className="text-sm text-[var(--foreground-subtle)]">No sales data found.</p>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

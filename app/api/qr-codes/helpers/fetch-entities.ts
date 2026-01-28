@@ -110,7 +110,7 @@ export async function fetchEmployees(
     name: e.full_name,
     type: 'employee',
     subtitle: e.role || undefined,
-    destinationUrl: `${baseUrl}/webapp/employees?id=${e.id}`,
+    destinationUrl: `${baseUrl}/webapp/staff?id=${e.id}`,
     createdAt: e.created_at,
   }));
 }

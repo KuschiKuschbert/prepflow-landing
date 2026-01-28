@@ -5,18 +5,18 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { useNotification } from '@/contexts/NotificationContext';
-import { GoogleDriveConnection } from './components/GoogleDriveConnection';
-import { ScheduledBackupConfig } from './components/ScheduledBackupConfig';
-import { ManualBackupControls } from './components/ManualBackupControls';
-import { BackupList } from './components/BackupList';
-import { RestoreDialog } from './components/RestoreDialog';
-import type { BackupFile, BackupSettings } from '@/lib/backup/types';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { useNotification } from '@/contexts/NotificationContext';
+import type { BackupFile, BackupSettings } from '@/lib/backup/types';
 import { logger } from '@/lib/logger';
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { useCallback, useEffect, useState } from 'react';
+import { BackupList } from './components/BackupList';
+import { GoogleDriveConnection } from './components/GoogleDriveConnection';
+import { ManualBackupControls } from './components/ManualBackupControls';
+import { RestoreDialog } from './components/RestoreDialog';
+import { ScheduledBackupConfig } from './components/ScheduledBackupConfig';
 
 export default function BackupSettingsPage() {
   const [settings, setSettings] = useState<BackupSettings | null>(null);
@@ -112,7 +112,10 @@ export default function BackupSettingsPage() {
 
       {/* Google Drive Connection */}
       <div className="mb-6">
-        <GoogleDriveConnection onConnectionChange={loadBackups} />
+        <GoogleDriveConnection
+          connected={settings?.googleDriveConnected || false}
+          onConnectionChange={loadSettings}
+        />
       </div>
 
       {/* Scheduled Backup Configuration */}

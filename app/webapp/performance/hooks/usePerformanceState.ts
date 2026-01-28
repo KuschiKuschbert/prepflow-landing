@@ -12,6 +12,7 @@ export function usePerformanceState(dateRange?: DateRange): PerformanceState {
 
   return {
     performanceItems: cachedData?.performanceItems || [],
+    performanceHistory: cachedData?.performanceHistory || [],
     metadata: cachedData?.metadata || null,
     performanceAlerts: [],
     performanceScore: cachedData?.performanceScore || 0,

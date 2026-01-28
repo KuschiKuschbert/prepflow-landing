@@ -3,26 +3,26 @@
 import { Icon } from '@/components/ui/Icon';
 import { Users } from 'lucide-react';
 
-interface EmployeesHeaderProps {
+interface StaffHeaderProps {
   selectedStatus: 'all' | 'active' | 'inactive' | 'terminated';
   onStatusChange: (status: 'all' | 'active' | 'inactive' | 'terminated') => void;
-  onAddEmployee: () => void;
+  onAddStaff: () => void;
 }
 
-export function EmployeesHeader({
+export function StaffHeader({
   selectedStatus,
   onStatusChange,
-  onAddEmployee,
-}: EmployeesHeaderProps) {
+  onAddStaff,
+}: StaffHeaderProps) {
   return (
     <>
       <div className="mb-8">
         <h1 className="mb-2 flex items-center gap-2 text-4xl font-bold text-[var(--foreground)]">
           <Icon icon={Users} size="lg" aria-hidden={true} />
-          Kitchen Staff & Food Handlers
+          Staff Management
         </h1>
         <p className="text-[var(--foreground-muted)]">
-          Manage your kitchen staff and food handlers, track qualifications and certifications
+          Manage your team members, track certifications, and handle onboarding.
         </p>
       </div>
 
@@ -47,10 +47,10 @@ export function EmployeesHeader({
           </select>
         </div>
         <button
-          onClick={onAddEmployee}
+          onClick={onAddStaff}
           className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
         >
-          ➕ Add Employee
+          ➕ Add Staff Member
         </button>
       </div>
     </>

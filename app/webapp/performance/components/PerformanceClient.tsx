@@ -1,5 +1,8 @@
 'use client';
 
+import { TablePagination } from '@/components/ui/TablePagination';
+import { useState } from 'react';
+import PerformanceCharts from '../components/PerformanceCharts';
 import PerformanceDateRange from '../components/PerformanceDateRange';
 import PerformanceEmptyState from '../components/PerformanceEmptyState';
 import PerformanceFilters from '../components/PerformanceFilters';
@@ -7,13 +10,11 @@ import PerformanceHeader from '../components/PerformanceHeader';
 import PerformanceImportModal from '../components/PerformanceImportModal';
 import PerformanceInsights from '../components/PerformanceInsights';
 import PerformanceSummaryCards from '../components/PerformanceSummaryCards';
-import PerformanceTrends from '../components/PerformanceTrends';
-import { TablePagination } from '@/components/ui/TablePagination';
 import PerformanceTable from '../components/PerformanceTable';
+import PerformanceTrends from '../components/PerformanceTrends';
 import { usePerformanceData } from '../hooks/usePerformanceData';
 import { usePerformanceFilters } from '../hooks/usePerformanceFilters';
 import { DateRange } from '../types';
-import { useState } from 'react';
 
 export default function PerformanceClient() {
   // Date range state
@@ -88,6 +89,13 @@ export default function PerformanceClient() {
 
           {/* Summary Cards - Key Metrics */}
           <PerformanceSummaryCards performanceItems={state.performanceItems} />
+
+          {/* Performance Charts - Visualizations */}
+          <PerformanceCharts
+            performanceItems={state.performanceItems}
+            performanceHistory={state.performanceHistory}
+            dateRange={dateRange}
+          />
 
           {/* Insights & Recommendations */}
           <PerformanceInsights

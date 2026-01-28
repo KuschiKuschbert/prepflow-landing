@@ -20,20 +20,12 @@ export async function upsertSalesData(salesData: {
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
-  const { data, error } = await supabaseAdmin
-    .from('sales_data')
-    .upsert(
-      {
-        dish_id: salesData.dish_id,
-        number_sold: salesData.number_sold,
-        popularity_percentage: salesData.popularity_percentage,
-        date: salesData.date || new Date().toISOString().split('T')[0],
-      },
-      {
-        onConflict: 'dish_id,date',
-      },
-    )
-    .select();
+  const { data, error } = await supabaseAdmin.rpc('consolidate_daily_sales', {
+    p_dish_id: salesData.dish_id,
+    p_number_sold: salesData.number_sold,
+    p_popularity_percentage: salesData.popularity_percentage,
+    p_date: salesData.date || new Date().toISOString().split('T')[0],
+  });
 
   if (error) {
     logger.error('[Performance API] Database error inserting sales data:', {

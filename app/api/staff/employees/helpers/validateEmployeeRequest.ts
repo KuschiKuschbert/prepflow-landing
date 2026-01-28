@@ -64,7 +64,7 @@ export function validateEmployeeRequest(body: unknown): ValidationResult {
   return {
     isValid: true,
     data: {
-      user_id: typeof b.user_id === 'string' ? b.user_id : undefined,
+      user_id: typeof b.user_id === 'string' ? b.user_id : null,
       first_name: b.first_name,
       last_name: b.last_name as string,
       email: b.email,
@@ -84,6 +84,8 @@ export function validateEmployeeRequest(body: unknown): ValidationResult {
         typeof b.emergency_contact_name === 'string' ? b.emergency_contact_name : undefined,
       emergency_contact_phone:
         typeof b.emergency_contact_phone === 'string' ? b.emergency_contact_phone : undefined,
+      status: 'active',
+      onboarding_status: 'pending',
     },
   };
 }
