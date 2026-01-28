@@ -166,8 +166,6 @@ function checkFeatureIsolation(): boolean {
     f !== 'sections'      // Shared sections are allowed
   );
 
-  let hasErrors = false;
-
   for (const feature of features) {
     const featureDir = path.join(webappPath, feature);
     const files = glob.sync('**/*.{ts,tsx}', { cwd: featureDir });

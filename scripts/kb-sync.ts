@@ -1,9 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const RED = '\x1b[31m';
 const GREEN = '\x1b[32m';
-const YELLOW = '\x1b[33m';
 const BLUE = '\x1b[34m';
 const NC = '\x1b[0m';
 
@@ -17,7 +15,12 @@ interface KBEntry {
   category: string;
   severity: string;
   pattern: string;
-  context: any;
+  context: {
+    source?: string;
+    date?: string;
+    file?: string;
+    environment?: string;
+  };
   fixes: {
     id: string;
     solution: string;
@@ -29,12 +32,28 @@ interface KBEntry {
   preventionRules: string[];
 }
 
+interface KBPattern {
+  id: string;
+  name: string;
+  description: string;
+  detection: string;
+  fix: string;
+  prevention: string;
+}
+
+interface KBRule {
+  id: string;
+  name: string;
+  source: string;
+  enforcement: string;
+}
+
 interface KB {
   version: string;
   lastUpdated: string;
   errors: KBEntry[];
-  patterns: any[];
-  rules: any[];
+  patterns: KBPattern[];
+  rules: KBRule[];
 }
 
 function syncFromAiRules(kb: KB) {

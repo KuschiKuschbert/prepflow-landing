@@ -1,5 +1,4 @@
 import { execSync } from 'child_process';
-import path from 'path';
 
 const RED = '\x1b[31m';
 const GREEN = '\x1b[32m';
@@ -7,13 +6,11 @@ const YELLOW = '\x1b[33m';
 const BLUE = '\x1b[34m';
 const NC = '\x1b[0m';
 
-const ADR_DIR = path.join(process.cwd(), 'docs/adr');
-
 function getStagedFiles(): string[] {
   try {
     const output = execSync('git diff --cached --name-only', { encoding: 'utf-8' });
     return output.split('\n').filter(f => f.trim().length > 0);
-  } catch (e) {
+  } catch (_e) {
     return [];
   }
 }
