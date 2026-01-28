@@ -31,6 +31,7 @@ interface APIRecipe {
   };
   matchCount?: number;
   stockMatchPercentage?: number;
+  missingIngredients?: string[];
 }
 
 import { convertToStandardUnit } from '@/lib/unit-conversion';
@@ -134,7 +135,23 @@ function adaptAiToUnified(aiRecipe: APIRecipe): { recipe: UnifiedRecipe, ingredi
         sampleIngredient: aiRecipe.ingredients?.[0]
     });
 
-    const ingredients = (aiRecipe.ingredients || []).map((ing, idx) => parseIngredient(ing, idx));
+    const ingredients = (aiRecipe.ingredients || []).map((ing, idx) => {
+        const parsed = parseIngredient(ing, idx);
+
+        // Check if this ingredient was flagged as missing by the API
+        let originalName = '';
+        if (typeof ing === 'string') {
+            originalName = ing;
+        } else if (typeof ing === 'object' && ing !== null) {
+            originalName = ing.name || '';
+        }
+
+        if (originalName && aiRecipe.missingIngredients?.includes(originalName)) {
+            parsed.is_missing = true;
+        }
+
+        return parsed;
+    });
 
     // Format Instructions
     let instructionsStr = '';
@@ -171,7 +188,7 @@ export default function AISpecialsPage() {
   // useInventory is now implicit (always calculate match %), but filtering is explicit via readyToCook
 
   // New Filter State
-  const [readyToCook, setReadyToCook] = useState(true);
+  const [readyToCook, setReadyToCook] = useState(false); // Default to FALSE to show "Best Matches" (Partial)
   const [filterTags, setFilterTags] = useState<string[]>([]);
   const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
 
@@ -513,7 +530,7 @@ export default function AISpecialsPage() {
             {/* Inventory Controls */}
             <div className="flex flex-wrap items-center justify-center gap-6 p-4 rounded-2xl bg-[#1f1f1f] border border-[#2a2a2a] shadow-lg shadow-black/20">
                 <label className="flex items-center cursor-pointer gap-3 select-none">
-                    <span className={`text-sm font-medium ${readyToCook ? 'text-landing-primary' : 'text-white/60'}`}>Ready to Cook</span>
+                    <span className={`text-sm font-medium ${readyToCook ? 'text-landing-primary' : 'text-white/60'}`}>Strict Match (100%)</span>
                     <div className="relative">
                         <input
                         type="checkbox"

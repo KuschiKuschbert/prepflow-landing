@@ -1,8 +1,8 @@
 'use client';
 
-import { Recipe, RecipeIngredientWithDetails } from '../types';
-import { Package } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
+import { Package } from 'lucide-react';
+import { Recipe, RecipeIngredientWithDetails } from '../types';
 
 import { logger } from '@/lib/logger';
 interface RecipeIngredientsListProps {
@@ -88,21 +88,37 @@ export function RecipeIngredientsList({
               );
             }
 
+            const isMissing = ri.is_missing;
+
             return (
-              <div key={ri.id} className="px-4 py-3 transition-colors hover:bg-[var(--muted)]/20">
+              <div
+                key={ri.id}
+                className={`px-4 py-3 transition-colors ${
+                    isMissing
+                    ? 'bg-rose-500/5 hover:bg-rose-500/10'
+                    : 'hover:bg-[var(--muted)]/20'
+                }`}
+              >
                 <div className="grid grid-cols-12 items-center gap-4">
                   <div className="col-span-1 text-center">
-                    <span className="font-mono text-sm text-[var(--foreground-muted)]">
+                    <span className={`font-mono text-sm ${isMissing ? 'text-rose-400' : 'text-[var(--foreground-muted)]'}`}>
                       {String(index + 1).padStart(2, '0')}
                     </span>
                   </div>
                   <div className="col-span-8">
-                    <div className="font-medium text-[var(--foreground)]">
-                      {ingredient.ingredient_name}
+                    <div className="flex items-center gap-2">
+                        <div className={`font-medium ${isMissing ? 'text-rose-200' : 'text-[var(--foreground)]'}`}>
+                          {ingredient.ingredient_name}
+                        </div>
+                        {isMissing && (
+                            <span className="inline-flex items-center rounded-md bg-rose-500/10 px-1.5 py-0.5 text-[10px] font-medium text-rose-300 ring-1 ring-inset ring-rose-500/20">
+                                Missing
+                            </span>
+                        )}
                     </div>
                   </div>
                   <div className="col-span-3 text-center">
-                    <span className="font-medium text-[var(--foreground)]">
+                    <span className={`font-medium ${isMissing ? 'text-rose-200' : 'text-[var(--foreground)]'}`}>
                       {(() => {
                         const formatted = formatQuantity(quantity, ri.unit || '');
                         const isConverted = formatted.unit !== (ri.unit || '').toLowerCase();

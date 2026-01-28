@@ -22,6 +22,7 @@ interface Recipe {
   };
   matchCount?: number;
   stockMatchPercentage?: number;
+  missingIngredients?: string[];
 }
 
 interface RecipeCardProps {
@@ -109,6 +110,21 @@ export function RecipeCard({ recipe, searchIngredients: _searchIngredients, onCl
           </div>
           {/* Add more meta info here if available */}
         </div>
+
+        {recipe.missingIngredients && recipe.missingIngredients.length > 0 && percentage < 100 && (
+            <div className="mt-3 flex flex-wrap gap-1.5">
+                {recipe.missingIngredients.slice(0, 3).map((ing, i) => (
+                    <span key={i} className="inline-flex items-center px-2 py-0.5 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-300 text-[11px] font-medium leading-tight">
+                        {ing}
+                    </span>
+                ))}
+                {recipe.missingIngredients.length > 3 && (
+                     <span className="inline-flex items-center px-1.5 py-0.5 text-xs text-rose-400/60 font-medium">
+                        +{recipe.missingIngredients.length - 3} more
+                    </span>
+                )}
+            </div>
+        )}
       </div>
     </motion.div>
   );

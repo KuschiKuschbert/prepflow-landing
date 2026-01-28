@@ -78,6 +78,7 @@ graph TD
   1. **TypeScript**: `lib/ingredient-normalization.ts` - `INGREDIENT_ALIASES` map + `ingredientsMatch()` function
   2. **PostgreSQL**: `ingredient_aliases` table + `match_recipes_by_stock()` RPC function
   - When adding new aliases, update BOTH files. The database table mirrors the TypeScript map for server-side performance.
+- **[2026-01-28] Database Timeouts**: When updating > 2000 rows (e.g., backfilling columns), **NEVER** rely on the Supabase SQL Editor or direct migrations as they time out (10s limit). **Must Use Batch Scripts**: Create a `scripts/fix-xyz.ts` script using `supabase-js` to process updates in small chunks (e.g., 100 at a time). Call a lightweight RPC function for each batch if complex logic is needed.
 
 ## 5. 🔄 The Ralph Loop (Methodology)
 

@@ -53,9 +53,11 @@ END;
 $$;
 
 -- Step 3: Populate the column
-UPDATE ai_specials
-SET ingredient_tags = generate_ingredient_tags(ingredients)
-WHERE ingredient_tags IS NULL;
+-- Step 3: Populate the column
+-- MOVED TO BATCH SCRIPT (scripts/backfill-ingredient-tags.ts) to avoid timeout on 24k rows
+-- UPDATE ai_specials
+-- SET ingredient_tags = generate_ingredient_tags(ingredients)
+-- WHERE ingredient_tags IS NULL;
 
 -- Step 4: Create GIN Index (jsonb_path_ops is best for @> and <@)
 CREATE INDEX IF NOT EXISTS idx_ai_specials_ingredient_tags_gin
@@ -128,5 +130,29 @@ BEGIN
     ORDER BY r.created_at DESC
     LIMIT p_limit
     OFFSET p_offset;
+END;
+$$;
+
+-- RPC for Safe Backfilling (Batch Processing)
+CREATE OR REPLACE FUNCTION backfill_ingredient_tags(p_limit INT DEFAULT 100)
+RETURNS INT
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_count INT;
+BEGIN
+    WITH updated_rows AS (
+        UPDATE ai_specials
+        SET ingredient_tags = generate_ingredient_tags(ingredients)
+        WHERE id IN (
+            SELECT id FROM ai_specials
+            WHERE ingredient_tags IS NULL
+            LIMIT p_limit
+        )
+        RETURNING 1
+    )
+    SELECT COUNT(*) INTO v_count FROM updated_rows;
+
+    RETURN v_count;
 END;
 $$;

@@ -38,6 +38,7 @@ export interface RecipeIngredient {
   supplier_name?: string;
   category?: string;
   notes?: string;
+  is_missing?: boolean;
 }
 
 export interface RecipeIngredientWithDetails extends RecipeIngredient {

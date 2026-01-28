@@ -1,29 +1,48 @@
+import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
-import { supabaseAdmin } from '../lib/supabase';
+
+// Standalone script: Load .env.local manually
+const envPath = path.resolve(process.cwd(), '.env.local');
+if (fs.existsSync(envPath)) {
+  const envConfig = fs.readFileSync(envPath, 'utf8');
+  envConfig.split('\n').forEach(line => {
+    const trimmed = line.trim();
+    if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
+      const parts = trimmed.split('=');
+      const key = parts[0].trim();
+      const val = parts.slice(1).join('=').trim().replace(/^["']|["']$/g, '');
+      process.env[key] = val;
+    }
+  });
+}
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseServiceKey) {
+  console.error('❌ Missing Supabase credentials in .env.local');
+  process.exit(1);
+}
+
+const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
 async function run() {
-    const filePath = path.join(process.cwd(), 'migrations/add_stock_matching_rpc.sql');
-    console.log(`Reading migration from: ${filePath}`);
+    const filePath = process.argv[2];
+    if (!filePath) {
+        console.error('Usage: npx tsx scripts/apply-migration-manual.ts <path-to-sql-file>');
+        process.exit(1);
+    }
+    const fullPath = path.resolve(process.cwd(), filePath);
+    console.log(`Reading migration from: ${fullPath}`);
 
-    if (!fs.existsSync(filePath)) {
+    if (!fs.existsSync(fullPath)) {
         console.error('File not found!');
         process.exit(1);
     }
 
-    const sql = fs.readFileSync(filePath, 'utf-8');
+    const sql = fs.readFileSync(fullPath, 'utf-8');
 
-    // Split by statement if needed, or run as one block if it's a function definition
-    // For CREATE FUNCTION, it's usually one block.
-    // However, supabase-js doesn't have a direct 'query' method on the client safely exposed usually?
-    // Actually, supabase-js doesn't support raw SQL query execution easily unless via RPC or REST if exposed.
-    // Wait, I can try to use PG directly if I had connection string, but I only have Supabase Client.
-
-    // BUT! I can use the existing `scripts/verify-conversion.ts` pattern or similar?
-    // No, Supabase JS client doesn't execute DDL.
-
-    // ALTERNATIVE: Use the `psql` command if available? No.
-    // ALTERNATIVE: Use RPC to execute SQL? Only if `exec_sql` function exists.
 
     // CHECK: Does `exec_sql` exist?
     // I can try to use the MCP tool again? No, failed auth.
@@ -50,10 +69,9 @@ async function run() {
 
     if (error) {
         console.error('Failed via RPC exec_sql:', error);
-        // If this fails, I might simply have to Instruct User or try `psql` if connection string is in env.
-
-        console.log('Attempting to check if we can run via direct postgres connection using env vars...');
-        // (This script won't implement pg client logic now).
+        // Fallback: Try split by simple statements if it's not a function definition?
+        // No, DDL is complex.
+        process.exit(1);
     } else {
         console.log('Migration applied successfully via exec_sql!');
     }

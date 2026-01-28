@@ -376,6 +376,27 @@ node scripts/populate-ingredients.js
 
 ---
 
+### Batch Database Repair
+
+**Example Script:** `scripts/fix-fts.ts`
+**Command:** `npx tsx scripts/fix-fts.ts`
+**Referenced in:** `AI_RULES.md`
+
+Specialized scripts for repairing or backfilling large datasets (> 2000 rows) that would timeout in standard SQL migrations.
+
+**Pattern:**
+1.  **Iterative**: Processes records in small batches (e.g., 100).
+2.  **Robust**: Retries or fails gracefully without locking the database.
+3.  **Client-Side**: Runs via Node.js (`supabase-js`) rather than server-side SQL timeout limits.
+
+**Usage:**
+
+```bash
+npx tsx scripts/your-repair-script.ts
+```
+
+---
+
 ## Screenshots & Assets
 
 ### Add Screenshots

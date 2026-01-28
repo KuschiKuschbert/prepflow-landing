@@ -64,20 +64,21 @@ export async function GET(request: Request) {
 
     if (queryParam) {
         // mixed mode: check if it looks like a list of ingredients
-        const isIngredientList = queryParam.includes(',');
+        const isIngredientList = /[;,]/.test(queryParam);
 
         if (isIngredientList) {
-            // "chicken, basil, garlic" -> "chicken & basil & garlic"
-            searchType = 'plain'; // Use plain to support logical operators we construct
-            const terms = queryParam.split(',').map(t => t.trim()).filter(Boolean);
+            // "chicken breast, cream" -> "chicken breast OR cream"
+            // Use 'websearch' to properly interpret "OR" and spaces (as AND)
+            searchType = 'websearch';
+
+            // Support comma and semicolon as delimiters
+            const terms = queryParam.split(/[,;]+/).map(t => t.trim()).filter(Boolean);
 
             usedIngredients = terms;
 
-            // Construct AND query for specific ingredients
-            ftsQuery = terms.map(term => {
-                 // Handle spaces within an ingredient: "chicken breast" -> "chicken & breast"
-                 return `(${term.split(/\s+/).join(' & ')})`;
-            }).join(' & ');
+            // Construct OR query: "chicken breast" OR "cream"
+            // Postgres websearch_to_tsquery handles this as: (chicken & breast) | cream
+            ftsQuery = terms.join(' OR ');
         } else {
             // Natural Language -> Use Postgres websearch
             // "mediterranean chicken" -> websearch handles the operators
@@ -130,72 +131,112 @@ export async function GET(request: Request) {
         }
     }
 
-    // 4. Optimized "Ready to Cook" Search (100% Match)
-    // Use the new V2 RPC with GIN Index for instant Set Containment matching
-
-
-    if (useStock && minStockMatch >= 100 && !queryParam && !ingredientsParam) {
-
-
-        // Prepare stock tags (normalized array of lowercase strings)
-        // We use the raw names but clean them, matching the DB generation logic
+    // 4. Stock Match (RPC-based) - Unified Logic
+    // Uses the partial match RPC which supports pagination (full_count) and varying thresholds.
+    // This handles both "Strict 100% Match" (when minStockMatch=100) and "Best Match" (minStockMatch=0).
+    if (useStock && !queryParam && !ingredientsParam) {
+        // Prepare stock tags
         const stockTags = stockIngredientsRaw.map(s => s.toLowerCase().trim()).filter(s => s);
 
-        const { data: rpcData, error: rpcError } = await supabaseAdmin.rpc('match_recipes_by_stock_v2', {
-            p_stock_tags: stockTags,
-            p_limit: limit, // User asked for 10 initially, but we respect the limit param passed by UI
-            p_offset: offset,
-            p_cuisine: cuisineParam || null
-        });
-
-        if (rpcError) {
-
-            throw rpcError;
+        // OPTIMIZATION: If no valid stock tags, return empty result immediately
+        // This prevents passing empty/invalid search params to RPC which might cause full table scans
+        if (stockTags.length === 0) {
+            return NextResponse.json({
+                data: [],
+                meta: { total: 0, page: 1 }
+            });
         }
 
+        // Determine which RPC to use based on strictness
+        // If minStockMatch is 100, we use the ULTRA-FAST GIN Index Subset Match (v2)
+        // If it's less, we use the FTS-based Partial Match (slower but fuzzy)
+        const isStrictMatch = minStockMatch >= 100;
+        const rpcName = isStrictMatch ? 'match_recipes_by_stock_v2' : 'match_recipes_by_stock_partial';
 
+        // console.log('[Specials Search] unified stock match:', {
+        //     useStock,
+        //     minStockMatch,
+        //     stockTagCount: stockTags.length,
+        //     limit,
+        //     offset,
+        //     cuisineParam,
+        //     rpcToCheck: rpcName
+        // });
 
-        // Transform snake_case to camelCase
+        // Parameters differ slightly between v2 and partial
+        const rpcParams: any = {
+             p_stock_tags: stockTags,
+             p_limit: limit,
+             p_offset: offset,
+             p_cuisine: cuisineParam || null
+        };
+
+        if (!isStrictMatch) {
+            rpcParams.p_min_match = minStockMatch;
+        }
+
+        const { data: rpcData, error: rpcError } = await supabaseAdmin.rpc(rpcName, rpcParams);
+
+        if (rpcError) {
+             // eslint-disable-next-line no-console
+             console.error(`Stock Match RPC Error (${rpcName}):`, rpcError);
+             return NextResponse.json({ data: [], meta: { total: 0, page: 1 } });
+        }
+
+        // console.log('[Specials Search] RPC Result Count:', rpcData?.length);
+
         const transformedData = (rpcData || []).map((row: Record<string, unknown>) => ({
             id: row.id,
             name: row.name,
-            image_url: row.image_url, // Note: DB uses snake_case, Type uses snake_case, all good
+            image_url: row.image_url,
             ingredients: row.ingredients,
             instructions: row.instructions,
             description: row.description,
             meta: row.meta,
             cuisine: row.cuisine,
             created_at: row.created_at,
-            stockMatchPercentage: 100, // By definition of V2 RPC
+            stockMatchPercentage: row.stock_match_percentage as number || 0,
             stockMatchCount: row.stock_match_count as number || 0,
+            totalIngredients: row.total_ingredients as number || 0, // Ensure this is passed
             matchCount: 0,
-            randomScore: Math.random() // For consistent sorting if needed later
+            randomScore: Math.random()
         }));
+
+        // Get total count
+        // For V2, we don't have full window count efficiently yet (requires separate query),
+        // but for now we'll just use length if it's less than limit, or "many" if full.
+        // Actually the partial RPC returns full_count. V2 does NOT returned full_count in my previous SQL definition?
+        // Let's check V2 SQL. It returns `RETURNS TABLE...`.
+        // If V2 doesn't return full_count, pagination might be tricky.
+        // But the previous V2 SQL from migrations did not have count(*) OVER().
+        // Let's rely on data length for now or assume infinite scroll.
+        const totalCount = (rpcData && rpcData.length > 0 && 'full_count' in rpcData[0])
+            ? (rpcData[0] as any).full_count
+            : (rpcData?.length || 0) + offset + (rpcData?.length === limit ? 1 : 0);
 
         return NextResponse.json({
             data: transformedData,
             meta: {
-                total: transformedData.length, // Pagination might be inexact if not returning total count, but fine for infinite scroll
+                total: Number(totalCount),
                 page: Math.floor(offset / limit) + 1
             }
         });
     }
 
-    // 5. Fallback / Standard Search (Partial Match or Text Search)
-    // Checks standard query logic with client-side or partial RPC matching (removed partial RPC for now, using direct query)
+
+
+    // 6. Text Search / Legacy Search (Fallback)
+    // Only used if queryParam or ingredientsParam are present
     let recipes: Recipe[] = [];
 
     // For stock matching, fetch a smaller batch to prevent timeouts (500 was too heavy)
     const fetchLimit = useStock ? 50 : effectiveLimit;
-    // Use a smaller random offset to avoid exceeding record count (24k recipes)
-    // And use offset 0 for now to ensure basic functionality works
     const actualOffset = offset;
-
-
 
     // Apply search filters if provided
     if (queryParam || ingredientsParam) {
         if (ftsQuery) {
+            // console.log(`[Search Debug] Query: "${ftsQuery}", Type: ${searchType}`);
             query = query.textSearch('fts', ftsQuery, { type: searchType, config: 'english' });
         }
     }
@@ -204,14 +245,15 @@ export async function GET(request: Request) {
         .order('created_at', { ascending: false })
         .range(actualOffset, actualOffset + fetchLimit - 1);
 
-    if (qError) {
+    if (data) {
+        // console.log(`[Search Debug] Rows returned: ${data.length}`);
+    }
 
+    if (qError) {
         throw qError;
     }
 
-
     recipes = data as unknown as Recipe[];
-
 
     let rankedRecipes = (recipes as unknown as Recipe[])?.map((recipe) => {
         // Standard query match count
@@ -223,6 +265,7 @@ export async function GET(request: Request) {
         // Stock Match Calculation - use fuzzy matching
         let stockMatchPercentage = 0;
         let stockMatchCount = 0;
+        const missingIngredients: string[] = [];
 
         if (useStock && recipe.ingredients && Array.isArray(recipe.ingredients)) {
              recipe.ingredients.forEach(recipeIng => {
@@ -237,10 +280,22 @@ export async function GET(request: Request) {
                 if (!ingName) return;
 
                 // Check if any stock ingredient matches this recipe ingredient
+                let isMatch = false;
                 for (const stockItem of stockIngredientsRaw) {
                     if (ingredientsMatch(stockItem, ingName)) {
-                        stockMatchCount++;
-                        return; // Count each recipe ingredient only once
+                        isMatch = true;
+                        break;
+                    }
+                }
+
+                if (isMatch) {
+                    stockMatchCount++;
+                } else {
+                    // Check if pantry staple (salt, oil, water, pepper, sugar) - if so, don't count as missing
+                    const lowerName = ingName.toLowerCase();
+                    const isPantry = ['salt', 'pepper', 'water', 'oil', 'sugar'].some(p => lowerName.includes(p));
+                    if (!isPantry) {
+                        missingIngredients.push(ingName);
                     }
                 }
              });
@@ -255,6 +310,7 @@ export async function GET(request: Request) {
             matchCount,
             stockMatchCount,
             stockMatchPercentage,
+            missingIngredients, // Pass missing ingredients to frontend
             randomScore: Math.random() // Assign stable random score for this request
         };
     }).sort((a, b) => {

@@ -149,20 +149,43 @@ function transformIngredients(ingredients: (RecipeIngredient | string)[]): Recip
 /**
  * Insert or update recipe in ai_specials table
  */
+/**
+ * Clean recipe title by removing common noise
+ */
+function cleanTitle(title: string): string {
+  let newTitle = title;
+  // Decode HTML
+  newTitle = newTitle
+      .replace(/&#39;/g, "'")
+      .replace(/&amp;/g, "&")
+      .replace(/&quot;/g, '"');
+
+  // Remove Suffixes
+  newTitle = newTitle
+      .replace(/\s+Recipe by Tasty$/i, '')
+      .replace(/\s+by Tasty$/i, '')
+      .replace(/\s+With Step-by-Step Video$/i, '')
+      .replace(/\s+Recipe$/i, '') // Remove trailing " Recipe"
+      .replace(/\s+Recipe$/i, ''); // Double check in case of " ... Recipe Recipe" (rare but possible)
+
+  return newTitle.trim();
+}
+
 async function upsertRecipe(recipe: ScrapedRecipe): Promise<boolean> {
   try {
     const ingredients = transformIngredients(recipe.ingredients);
+    const cleanedName = cleanTitle(recipe.recipe_name);
 
     // Check if recipe exists (by source_url or name)
     const { data: existing } = await supabase
       .from('ai_specials')
       .select('id')
-      .or(`source_url.eq.${recipe.source_url},name.eq.${recipe.recipe_name}`)
+      .or(`source_url.eq.${recipe.source_url},name.eq.${recipe.recipe_name}`) // Check original name match too
       .limit(1)
       .single();
 
     const recipeData = {
-      name: recipe.recipe_name,
+      name: cleanedName,
       description: recipe.description,
       image_url: recipe.image_url,
       ingredients: ingredients, // JSONB array
