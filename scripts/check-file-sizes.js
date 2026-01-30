@@ -95,7 +95,6 @@ function listFiles(dir) {
   return result;
 }
 
-
 function loadIgnoreList() {
   try {
     const ignorePath = path.join(__dirname, 'filesize-ignore.json');

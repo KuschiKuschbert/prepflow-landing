@@ -15,8 +15,7 @@ export const IngredientSearchSuggestions: React.FC<IngredientSearchSuggestionsPr
   return (
     <div className="suggestions-dropdown relative z-[60] mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-lg">
       {filteredIngredients.slice(0, 10).map((ingredient, index) => {
-        const displayCost =
-          ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
+        const displayCost = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
         const isHighlighted = highlightedIndex === index;
         return (
           <button

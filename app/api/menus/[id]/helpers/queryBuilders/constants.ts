@@ -1,4 +1,3 @@
-
 export const DISH_FIELDS_FULL = `
   id,
   dish_name,

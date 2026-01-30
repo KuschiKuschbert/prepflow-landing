@@ -2,9 +2,7 @@
  * Dish allergen aggregation helper
  */
 
-import {
-    aggregateDishAllergens
-} from '@/lib/allergens/allergen-aggregation';
+import { aggregateDishAllergens } from '@/lib/allergens/allergen-aggregation';
 import { logger } from '@/lib/logger';
 import { getDishIngredientSources, getDishRecipeSources } from './dataFetchers';
 
@@ -64,7 +62,6 @@ export async function aggregateDishAllergensForExport(
 
         const recipeSources = await getDishRecipeSources(dish.id, recipeIngredientSources);
         Object.assign(allergenSources, recipeSources);
-
       } catch (err) {
         logger.warn('[Allergen Export] Error aggregating dish allergens:', err);
       }

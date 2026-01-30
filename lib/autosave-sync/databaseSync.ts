@@ -1,10 +1,10 @@
 import { logger } from '@/lib/logger';
 import { clearDraft, saveDraft } from '../autosave-storage';
 import {
-    checkEntityExists,
-    extractSupabaseErrorMessage,
-    formatEntityData,
-    type EntityType,
+  checkEntityExists,
+  extractSupabaseErrorMessage,
+  formatEntityData,
+  type EntityType,
 } from '../autosave-sync-utils';
 import { supabase } from '../supabase';
 
@@ -24,14 +24,12 @@ export async function syncToDatabase(
 ): Promise<SyncResult> {
   try {
     const isUpdate = entityId !== 'new' && entityId !== null && entityId !== undefined;
-    const dataObj = (typeof data === 'object' && data !== null && !Array.isArray(data))
-      ? (data as Record<string, unknown>)
-      : {};
+    const dataObj =
+      typeof data === 'object' && data !== null && !Array.isArray(data)
+        ? (data as Record<string, unknown>)
+        : {};
 
-    const formattedData = formatEntityData(
-      entityType,
-      dataObj,
-    );
+    const formattedData = formatEntityData(entityType, dataObj);
     let savedEntityId = entityId;
     if (isUpdate) {
       const exists = await checkEntityExists(entityType, entityId);

@@ -3,7 +3,7 @@ import { logger } from '@/lib/logger';
 export async function toggleTaskCompletion(
   taskId: string,
   date: string,
-  newCompleted: boolean
+  newCompleted: boolean,
 ): Promise<void> {
   const endpoint = newCompleted
     ? `/api/cleaning-tasks/${taskId}/complete`

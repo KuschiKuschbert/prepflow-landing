@@ -81,7 +81,7 @@ export default function KitchenOperations() {
         </p>
       </div>
       <div className="tablet:grid-cols-2 tablet:gap-4 desktop:[grid-template-columns:repeat(auto-fit,minmax(240px,1fr))] grid grid-cols-1 gap-3">
-        {operations.map((op) => (
+        {operations.map(op => (
           <KitchenOperationCard key={op.title} operation={op} />
         ))}
       </div>

@@ -57,7 +57,9 @@ function scanFile(filePath: string): FileStats {
 
     // Heuristic for function starts:
     // "function name() {" or "name = (...) => {"
-    const funcMatch = trimmed.match(/(?:function\s+([a-zA-Z0-9_]+)|([a-zA-Z0-9_]+)\s*=\s*(?:async\s*)?\(.*?\)\s*=>)\s*{/);
+    const funcMatch = trimmed.match(
+      /(?:function\s+([a-zA-Z0-9_]+)|([a-zA-Z0-9_]+)\s*=\s*(?:async\s*)?\(.*?\)\s*=>)\s*{/,
+    );
 
     // Track nesting with simple brace counting
     const openBraces = (trimmed.match(/{/g) || []).length;
@@ -75,7 +77,7 @@ function scanFile(filePath: string): FileStats {
     while (stack.length > 0 && currentIndent <= stack[stack.length - 1].level) {
       const finished = stack.pop();
       if (finished) {
-        const length = (i + 1) - finished.start;
+        const length = i + 1 - finished.start;
         if (length > CONFIG.maxFunctionLines) {
           longFunctions.push({ name: finished.name, lines: length, start: finished.start });
         }
@@ -146,7 +148,9 @@ function checkDeadCode(files: string[], stats: FileStats[]) {
       console.warn(`   - ${e.name} (${e.path})`);
     });
     if (deadExports.length > 15) console.warn(`   ... and ${deadExports.length - 15} more.`);
-    console.warn(`\n${BLUE}💡 Note: This check includes false positives for entry points or common names.${NC}`);
+    console.warn(
+      `\n${BLUE}💡 Note: This check includes false positives for entry points or common names.${NC}`,
+    );
   } else {
     console.log(`${GREEN}✅ No obvious dead code detected.${NC}`);
   }

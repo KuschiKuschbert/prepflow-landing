@@ -108,7 +108,7 @@ export function RecipesModals({
           try {
             await onRefreshIngredients();
           } catch (error) {
-           logger.error('[RecipesModals] Error refreshing ingredients:', {
+            logger.error('[RecipesModals] Error refreshing ingredients:', {
               error: error instanceof Error ? error.message : String(error),
             });
           }

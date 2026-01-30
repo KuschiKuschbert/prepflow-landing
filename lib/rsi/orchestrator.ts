@@ -37,7 +37,7 @@ export class RSIOrchestrator {
           taskType: 'safety-gate',
           durationMs: 0,
           success: false,
-          metadata: { error: 'Git working directory not clean' }
+          metadata: { error: 'Git working directory not clean' },
         });
         return;
       }

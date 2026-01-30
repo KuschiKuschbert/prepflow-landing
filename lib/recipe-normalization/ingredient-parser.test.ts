@@ -1,4 +1,3 @@
-
 import { parseIngredientString } from './ingredient-parser';
 
 describe('Ingredient Parser', () => {
@@ -34,33 +33,33 @@ describe('Ingredient Parser', () => {
   });
 
   test('parses unicode fractions: ½ lb beef', () => {
-      const result = parseIngredientString('½ lb beef');
-      expect(result).toEqual({ quantity: 0.5, unit: 'lb', name: 'beef' });
+    const result = parseIngredientString('½ lb beef');
+    expect(result).toEqual({ quantity: 0.5, unit: 'lb', name: 'beef' });
   });
 
   test('parses package pattern: 1 (14-oz.) can chickpeas', () => {
-      const result = parseIngredientString('1 (14-oz.) can chickpeas');
-      expect(result).toEqual({ quantity: 1, unit: 'can', name: 'chickpeas' });
+    const result = parseIngredientString('1 (14-oz.) can chickpeas');
+    expect(result).toEqual({ quantity: 1, unit: 'can', name: 'chickpeas' });
   });
 
   test('parses dash-separated unit: 1/2-inch-thick', () => {
-       // This is tricky. "1/2" is qty, "inch" is unit? Or "inch-thick" is adjective?
-       // Current parser doesn't explicitly handle "inch".
-       // But let's check basic behaviour.
+    // This is tricky. "1/2" is qty, "inch" is unit? Or "inch-thick" is adjective?
+    // Current parser doesn't explicitly handle "inch".
+    // But let's check basic behaviour.
   });
 
   test('parses words like stick: 1 cinnamon stick', () => {
-      // Need to ensure 'stick' is recognized if in package list
-      // But "1 cinnamon stick" -> raw string "cinnamon", rest "stick" isn't matched by typical patterns.
-      // Wait, "1 cinnamon stick" -> ^([\d.]+)\s*([a-zA-Z_]+)\s+(.+)$ matches 1, cinnamon, stick.
-      // normalizeUnit('cinnamon') -> 'cinnamon' (not a unit).
-      // So parser returns {qty: 1, unit: 'cinnamon', name: 'stick'}. This is actually WRONG for ingredients.
-      // But we can't solve NLP here.
+    // Need to ensure 'stick' is recognized if in package list
+    // But "1 cinnamon stick" -> raw string "cinnamon", rest "stick" isn't matched by typical patterns.
+    // Wait, "1 cinnamon stick" -> ^([\d.]+)\s*([a-zA-Z_]+)\s+(.+)$ matches 1, cinnamon, stick.
+    // normalizeUnit('cinnamon') -> 'cinnamon' (not a unit).
+    // So parser returns {qty: 1, unit: 'cinnamon', name: 'stick'}. This is actually WRONG for ingredients.
+    // But we can't solve NLP here.
   });
 
   test('parses mixed case: 1 Tbsp Olive Oil', () => {
-      const result = parseIngredientString('1 Tbsp Olive Oil');
-      expect(result).toEqual({ quantity: 1, unit: 'tbsp', name: 'Olive Oil' });
+    const result = parseIngredientString('1 Tbsp Olive Oil');
+    expect(result).toEqual({ quantity: 1, unit: 'tbsp', name: 'Olive Oil' });
   });
 
   test('returns null for plain string: salt', () => {
@@ -69,7 +68,7 @@ describe('Ingredient Parser', () => {
   });
 
   test('parses complex float: 0.5 kg beef', () => {
-      const result = parseIngredientString('0.5 kg beef');
-      expect(result).toEqual({ quantity: 0.5, unit: 'kg', name: 'beef' });
+    const result = parseIngredientString('0.5 kg beef');
+    expect(result).toEqual({ quantity: 0.5, unit: 'kg', name: 'beef' });
   });
 });

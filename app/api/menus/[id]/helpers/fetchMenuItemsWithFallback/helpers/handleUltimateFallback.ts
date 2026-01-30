@@ -8,8 +8,8 @@ import { PostgrestError } from '@supabase/supabase-js';
 import { detectMissingColumns } from '../../errorDetection/detectMissingColumns';
 import { logDetailedError } from '../../fetchMenuWithItems.helpers';
 import {
-    buildEssentialQuery,
-    buildQueryWithoutRelations,
+  buildEssentialQuery,
+  buildQueryWithoutRelations,
 } from '../../queryBuilders/menuItemQueries';
 import { FetchResult } from '../../types';
 

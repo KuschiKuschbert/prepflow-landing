@@ -64,9 +64,9 @@ export function usePriceCalculation({
           logger.error('[RecipesClient] Failed to calculate visible recipe prices:', err);
         })
         .finally(() => {
-           recipesNeedingPrices.forEach(recipe => {
-             calculatingPricesRef.current.delete(recipe.id);
-           });
+          recipesNeedingPrices.forEach(recipe => {
+            calculatingPricesRef.current.delete(recipe.id);
+          });
         });
     };
 

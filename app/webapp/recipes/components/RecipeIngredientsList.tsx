@@ -30,14 +30,14 @@ export function RecipeIngredientsList({
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
 
   const toggleItem = (id: string) => {
-      if (!interactive) return;
-      const newSet = new Set(checkedItems);
-      if (newSet.has(id)) {
-          newSet.delete(id);
-      } else {
-          newSet.add(id);
-      }
-      setCheckedItems(newSet);
+    if (!interactive) return;
+    const newSet = new Set(checkedItems);
+    if (newSet.has(id)) {
+      newSet.delete(id);
+    } else {
+      newSet.add(id);
+    }
+    setCheckedItems(newSet);
   };
   return (
     <div className="overflow-hidden rounded-xl border border-[var(--border)]/50 bg-[var(--background)]">
@@ -110,55 +110,65 @@ export function RecipeIngredientsList({
                 key={ri.id}
                 onClick={() => toggleItem(ri.id)}
                 className={`px-4 py-3 transition-all duration-200 ${
-                    interactive ? 'cursor-pointer' : ''
+                  interactive ? 'cursor-pointer' : ''
                 } ${
-                    isChecked
+                  isChecked
                     ? 'bg-emerald-500/5 hover:bg-emerald-500/10'
                     : isMissing
-                    ? 'bg-rose-500/5 hover:bg-rose-500/10'
-                    : 'hover:bg-[var(--muted)]/20'
+                      ? 'bg-rose-500/5 hover:bg-rose-500/10'
+                      : 'hover:bg-[var(--muted)]/20'
                 }`}
               >
-                <div className={`grid grid-cols-12 items-center gap-4 transition-opacity duration-200 ${isChecked ? 'opacity-50' : 'opacity-100'}`}>
-                  <div className="col-span-1 text-center flex justify-center">
+                <div
+                  className={`grid grid-cols-12 items-center gap-4 transition-opacity duration-200 ${isChecked ? 'opacity-50' : 'opacity-100'}`}
+                >
+                  <div className="col-span-1 flex justify-center text-center">
                     {interactive ? (
-                         <Icon
-                            icon={isChecked ? CheckCircle2 : Circle}
-                            size="sm"
-                            className={isChecked ? 'text-emerald-500' : 'text-[var(--foreground-muted)]'}
-                         />
+                      <Icon
+                        icon={isChecked ? CheckCircle2 : Circle}
+                        size="sm"
+                        className={
+                          isChecked ? 'text-emerald-500' : 'text-[var(--foreground-muted)]'
+                        }
+                      />
                     ) : (
-                        <span className={`font-mono text-sm ${isMissing ? 'text-rose-400' : 'text-[var(--foreground-muted)]'}`}>
+                      <span
+                        className={`font-mono text-sm ${isMissing ? 'text-rose-400' : 'text-[var(--foreground-muted)]'}`}
+                      >
                         {String(index + 1).padStart(2, '0')}
-                        </span>
+                      </span>
                     )}
                   </div>
                   <div className="col-span-8">
                     <div className="flex items-center gap-2">
-                        <div className={`font-medium transition-all ${
-                            isChecked
-                            ? 'line-through text-[var(--foreground-muted)]'
+                      <div
+                        className={`font-medium transition-all ${
+                          isChecked
+                            ? 'text-[var(--foreground-muted)] line-through'
                             : isMissing
-                            ? 'text-rose-200'
-                            : 'text-[var(--foreground)]'
-                        }`}>
-                          {ingredient.ingredient_name}
-                        </div>
-                        {isMissing && !isChecked && (
-                            <span className="inline-flex items-center rounded-md bg-rose-500/10 px-1.5 py-0.5 text-[10px] font-medium text-rose-300 ring-1 ring-inset ring-rose-500/20">
-                                Missing
-                            </span>
-                        )}
+                              ? 'text-rose-200'
+                              : 'text-[var(--foreground)]'
+                        }`}
+                      >
+                        {ingredient.ingredient_name}
+                      </div>
+                      {isMissing && !isChecked && (
+                        <span className="inline-flex items-center rounded-md bg-rose-500/10 px-1.5 py-0.5 text-[10px] font-medium text-rose-300 ring-1 ring-rose-500/20 ring-inset">
+                          Missing
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className="col-span-3 text-center">
-                    <span className={`font-medium transition-all ${
-                         isChecked
-                         ? 'line-through text-[var(--foreground-muted)]'
-                         : isMissing
-                         ? 'text-rose-200'
-                         : 'text-[var(--foreground)]'
-                    }`}>
+                    <span
+                      className={`font-medium transition-all ${
+                        isChecked
+                          ? 'text-[var(--foreground-muted)] line-through'
+                          : isMissing
+                            ? 'text-rose-200'
+                            : 'text-[var(--foreground)]'
+                      }`}
+                    >
                       {(() => {
                         const formatted = formatQuantity(quantity, ri.unit || '');
                         const isConverted = formatted.unit !== (ri.unit || '').toLowerCase();

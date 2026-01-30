@@ -1,6 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
- 
 export async function handleMissingNestedIngredients(
   supabase: SupabaseClient,
   rows: any[],
@@ -8,11 +7,7 @@ export async function handleMissingNestedIngredients(
   const missingNested = rows.some((r: any) => !r.ingredients);
   if (missingNested) {
     const uniqueIds = Array.from(
-      new Set(
-        rows
-          .map((r: any) => r.ingredient_id)
-          .filter((v: string | undefined) => Boolean(v)),
-      ),
+      new Set(rows.map((r: any) => r.ingredient_id).filter((v: string | undefined) => Boolean(v))),
     );
     if (uniqueIds.length > 0) {
       const { data: ingRows, error: ingError } = await supabase

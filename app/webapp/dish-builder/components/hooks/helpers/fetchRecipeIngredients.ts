@@ -1,4 +1,4 @@
-import { logger } from "@/lib/logger";
+import { logger } from '@/lib/logger';
 
 interface RecipeIngredient {
   ingredient_id: string;
@@ -13,7 +13,7 @@ export async function fetchRecipeIngredients(recipeId: string): Promise<RecipeIn
     });
 
     if (!response.ok) {
-       throw new Error(`Failed to fetch ingredients: ${response.statusText}`);
+      throw new Error(`Failed to fetch ingredients: ${response.statusText}`);
     }
 
     const data = await response.json();

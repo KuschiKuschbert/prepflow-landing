@@ -33,12 +33,7 @@ export function CleaningAreaList({
         <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-12 text-center">
           <div className="mb-4 flex justify-center">
             <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20">
-              <Icon
-                icon={MapPin}
-                size="xl"
-                className="text-[var(--primary)]"
-                aria-hidden={true}
-              />
+              <Icon icon={MapPin} size="xl" className="text-[var(--primary)]" aria-hidden={true} />
             </div>
           </div>
           <h3 className="mb-2 text-xl font-semibold text-[var(--foreground)]">

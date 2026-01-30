@@ -9,11 +9,7 @@ interface StaffHeaderProps {
   onAddStaff: () => void;
 }
 
-export function StaffHeader({
-  selectedStatus,
-  onStatusChange,
-  onAddStaff,
-}: StaffHeaderProps) {
+export function StaffHeader({ selectedStatus, onStatusChange, onAddStaff }: StaffHeaderProps) {
   return (
     <>
       <div className="mb-8">
@@ -34,9 +30,7 @@ export function StaffHeader({
           <select
             value={selectedStatus}
             onChange={e =>
-              onStatusChange(
-                e.target.value as 'all' | 'active' | 'inactive' | 'terminated',
-              )
+              onStatusChange(e.target.value as 'all' | 'active' | 'inactive' | 'terminated')
             }
             className="rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2 text-[var(--foreground)] focus:border-transparent focus:ring-2 focus:ring-[var(--primary)]"
           >

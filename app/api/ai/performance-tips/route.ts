@@ -8,8 +8,8 @@ import type { PerformanceItem } from '@/app/webapp/performance/types';
 import { generatePerformanceTips } from '@/app/webapp/performance/utils/generatePerformanceTips';
 import { generateAIResponse } from '@/lib/ai/ai-service';
 import {
-    buildPerformanceTipsPrompt,
-    parsePerformanceTipsResponse,
+  buildPerformanceTipsPrompt,
+  parsePerformanceTipsResponse,
 } from '@/lib/ai/prompts/performance-tips';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';

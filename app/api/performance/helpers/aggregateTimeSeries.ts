@@ -41,7 +41,9 @@ export function aggregateTimeSeries(
         };
       }
 
-      const grossProfitPerItem = dish.profit_margin_value ?? (Number(dish.selling_price || 0) - Number(dish.cost_per_serving || 0));
+      const grossProfitPerItem =
+        dish.profit_margin_value ??
+        Number(dish.selling_price || 0) - Number(dish.cost_per_serving || 0);
       // Fallback calculation if profit_margin_value missing, assuming pure cost deduction without tax logic here
       // Ideally profit_margin_value comes from DB or calculated upstream with tax.
       // For simplicity/consistency with existing metrics, ensure we use same logic.
@@ -53,7 +55,8 @@ export function aggregateTimeSeries(
       // Note: dish.profit_margin_value is usually pre-tax GP.
       // If undef, calculate: (Price / 1.1) - Cost (assuming 10% GST included in price)
       // For this helper, let's stick to simple (Price - Cost) * Sold if pre-calc missing
-      const gp = (Number(dish.selling_price || 0) - Number(dish.cost_per_serving || 0)) * sale.number_sold;
+      const gp =
+        (Number(dish.selling_price || 0) - Number(dish.cost_per_serving || 0)) * sale.number_sold;
 
       historyMap[saleDate].grossProfit += gp;
       historyMap[saleDate].revenue += revenue;

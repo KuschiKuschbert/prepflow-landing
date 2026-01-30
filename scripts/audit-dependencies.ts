@@ -29,14 +29,36 @@ function main() {
 
   // These are usually false positives or used indirectly
   const ignoreList = [
-    'typescript', '@types/node', '@types/react', '@types/react-dom', 'ts-node', 'tsx',
-    'eslint', 'prettier', 'husky', 'lint-staged', 'jest', 'ts-jest', '@testing-library/react',
-    'madge', 'glob', 'autoprefixer', 'postcss', 'tailwindcss', 'encoding',
-    'next', 'react', 'react-dom' // Core Next.js
+    'typescript',
+    '@types/node',
+    '@types/react',
+    '@types/react-dom',
+    'ts-node',
+    'tsx',
+    'eslint',
+    'prettier',
+    'husky',
+    'lint-staged',
+    'jest',
+    'ts-jest',
+    '@testing-library/react',
+    'madge',
+    'glob',
+    'autoprefixer',
+    'postcss',
+    'tailwindcss',
+    'encoding',
+    'next',
+    'react',
+    'react-dom', // Core Next.js
   ];
 
-  const dependencies = Object.keys(packageJson.dependencies || {}).filter(d => !ignoreList.includes(d));
-  const devDependencies = Object.keys(packageJson.devDependencies || {}).filter(d => !ignoreList.includes(d));
+  const dependencies = Object.keys(packageJson.dependencies || {}).filter(
+    d => !ignoreList.includes(d),
+  );
+  const devDependencies = Object.keys(packageJson.devDependencies || {}).filter(
+    d => !ignoreList.includes(d),
+  );
 
   console.log(`Scanning ${SRC_DIRS.join(', ')}...`);
 
@@ -50,7 +72,8 @@ function main() {
 
     // Improved regex to catch more variations and avoid false positives
     // Matches: from 'pkg', import 'pkg', require('pkg'), from "pkg/sub"
-    const importRegex = /(?:from|import|require)\s*\(?\s*['"](@?[a-zA-Z0-9._-]+)(?:\/[a-zA-Z0-9._-]+)*['"]\s*\)?/g;
+    const importRegex =
+      /(?:from|import|require)\s*\(?\s*['"](@?[a-zA-Z0-9._-]+)(?:\/[a-zA-Z0-9._-]+)*['"]\s*\)?/g;
     let match;
     while ((match = importRegex.exec(content)) !== null) {
       const pkg = match[1];
@@ -86,7 +109,9 @@ function main() {
       unusedDevDeps.forEach(d => console.log(`   - ${d}`));
     }
 
-    console.log(`\n${BLUE}💡 Note: Some packages might be used in config files (e.g. tailwind.config.js) or indirectly.${NC}`);
+    console.log(
+      `\n${BLUE}💡 Note: Some packages might be used in config files (e.g. tailwind.config.js) or indirectly.${NC}`,
+    );
     console.log(`${BLUE}   Double check before removing.${NC}`);
   }
 }

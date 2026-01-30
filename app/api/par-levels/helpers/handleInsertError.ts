@@ -30,7 +30,14 @@ export function handleInsertError(insertError: PostgrestError, dataToInsert: unk
     errorMessage.includes('null value') ||
     errorMessage.includes('violates not-null')
   ) {
-    handleNotNullViolation(insertError, dataToInsert, errorMessage, errorDetails, errorHint, errorCode);
+    handleNotNullViolation(
+      insertError,
+      dataToInsert,
+      errorMessage,
+      errorDetails,
+      errorHint,
+      errorCode,
+    );
   }
 
   // Check if it's a column-not-found error
@@ -68,8 +75,7 @@ function handleNotNullViolation(
       : [];
 
   // Special handling for par_quantity column (legacy column that should be nullable)
-  const isParQuantityIssue =
-    columnName === 'par_quantity' || columnName?.includes('par_quantity');
+  const isParQuantityIssue = columnName === 'par_quantity' || columnName?.includes('par_quantity');
 
   throw ApiErrorHandler.createError(
     `Required field is missing: ${columnName || nullFields.join(', ') || 'unknown field'}`,

@@ -1,4 +1,3 @@
-
 // --- Join Types for Statistics ---
 
 export interface IngredientJoinData {

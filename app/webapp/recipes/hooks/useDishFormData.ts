@@ -2,7 +2,11 @@ import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import type { Ingredient } from '../../cogs/types';
-import type { APIResponse, SelectedIngredient, SelectedRecipe } from '../components/DishEditDrawerTypes';
+import type {
+  APIResponse,
+  SelectedIngredient,
+  SelectedRecipe,
+} from '../components/DishEditDrawerTypes';
 import type { Dish, DishWithDetails, Recipe } from '../types';
 
 interface UseDishFormDataProps {
@@ -75,11 +79,7 @@ export function useDishFormData({
           logger.dev('Dish data loaded:', data);
           if (data.success && data.dish) {
             const recipes = (data.dish.recipes || []).map(
-              (r: {
-                recipe_id: string;
-                quantity: number;
-                recipes?: { recipe_name: string };
-              }) => ({
+              (r: { recipe_id: string; quantity: number; recipes?: { recipe_name: string } }) => ({
                 recipe_id: r.recipe_id,
                 quantity: r.quantity || 1,
                 recipe_name: r.recipes?.recipe_name,

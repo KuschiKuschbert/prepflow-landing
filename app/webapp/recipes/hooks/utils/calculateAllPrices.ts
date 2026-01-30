@@ -1,5 +1,8 @@
 import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../../types';
-import { executeBatchCalculation, executeIndividualCalculation } from './price-calculation-strategies';
+import {
+  executeBatchCalculation,
+  executeIndividualCalculation,
+} from './price-calculation-strategies';
 
 /**
  * Calculate prices for all recipes using batch fetch or fallback to parallel individual fetches.

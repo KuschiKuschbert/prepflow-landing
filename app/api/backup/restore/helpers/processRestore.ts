@@ -36,7 +36,11 @@ export async function processRestoreRequest(
           return {
             success: false,
             response: NextResponse.json(
-              ApiErrorHandler.createError('password is required for encryption', 'BAD_REQUEST', 400),
+              ApiErrorHandler.createError(
+                'password is required for encryption',
+                'BAD_REQUEST',
+                400,
+              ),
               { status: 400 },
             ),
           };
@@ -53,11 +57,7 @@ export async function processRestoreRequest(
       return {
         success: false,
         response: NextResponse.json(
-          ApiErrorHandler.createError(
-            'Failed to decrypt/parse backup file',
-            'BAD_REQUEST',
-            400,
-          ),
+          ApiErrorHandler.createError('Failed to decrypt/parse backup file', 'BAD_REQUEST', 400),
           { status: 400 },
         ),
       };

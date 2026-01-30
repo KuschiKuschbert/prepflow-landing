@@ -47,14 +47,7 @@ export async function processPrepFlowDish(
     if (mapping) {
       await updateSquareCatalogItem(userId, dish, mapping, squareItemData, catalogApi, result);
     } else {
-      await createSquareCatalogItem(
-        userId,
-        locationId,
-        dish,
-        squareItemData,
-        catalogApi,
-        result,
-      );
+      await createSquareCatalogItem(userId, locationId, dish, squareItemData, catalogApi, result);
     }
   } catch (dishError: unknown) {
     const dishErrorMessage = dishError instanceof Error ? dishError.message : String(dishError);

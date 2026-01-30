@@ -1,4 +1,3 @@
-
 import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
@@ -12,7 +11,11 @@ if (fs.existsSync(envPath)) {
     if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
       const parts = trimmed.split('=');
       const key = parts[0].trim();
-      const val = parts.slice(1).join('=').trim().replace(/^["']|["']$/g, '');
+      const val = parts
+        .slice(1)
+        .join('=')
+        .trim()
+        .replace(/^["']|["']$/g, '');
       process.env[key] = val;
     }
   });
@@ -49,7 +52,7 @@ async function fixFtsIndex() {
       break;
     }
 
-    processed += (count as number);
+    processed += count as number;
     console.log(`✅ Processed ${processed} recipes so far...`);
 
     // Small pause to be nice to the DB

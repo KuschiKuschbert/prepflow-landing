@@ -73,7 +73,7 @@ function handleResponseError(
   response: Response,
   data: DiscoveryResponse,
   setDiscoveryError: (err: string | null) => void,
-  showError: (msg: string) => void
+  showError: (msg: string) => void,
 ) {
   const errorMessage = data.message || data.error || 'Failed to discover feature flags';
   setDiscoveryError(errorMessage);
@@ -89,7 +89,7 @@ function handleResponseSuccess(
   data: DiscoveryResponse,
   setDiscoveredFlags: (flags: { regular: DiscoveredFlag[]; hidden: DiscoveredFlag[] }) => void,
   showSuccess: (msg: string) => void,
-  showError: (msg: string) => void
+  showError: (msg: string) => void,
 ) {
   setDiscoveredFlags({
     regular: data.regular || [],
@@ -108,10 +108,9 @@ function handleResponseSuccess(
 function handleCatchError(
   error: unknown,
   setDiscoveryError: (err: string | null) => void,
-  showError: (msg: string) => void
+  showError: (msg: string) => void,
 ) {
-  const errorMessage =
-    error instanceof Error ? error.message : 'Failed to discover feature flags';
+  const errorMessage = error instanceof Error ? error.message : 'Failed to discover feature flags';
   setDiscoveryError(errorMessage);
   logger.error('[Admin Features] Discovery fetch error:', error);
   showError(errorMessage);

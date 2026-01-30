@@ -6,9 +6,9 @@ import { getStripe } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import {
-    getSubscriptionIdFromDb,
-    reactivateStripeSubscription,
-    updateUserSubscriptionInDb,
+  getSubscriptionIdFromDb,
+  reactivateStripeSubscription,
+  updateUserSubscriptionInDb,
 } from './helpers';
 
 /**
@@ -73,7 +73,9 @@ export async function POST(req: NextRequest) {
       subscription: {
         id: subscription.id,
         status: subscription.status,
-        expires_at: new Date((subscription as any).current_period_end * 1000).toISOString(),
+        expires_at: new Date(
+          (subscription as unknown as { current_period_end: number }).current_period_end * 1000,
+        ).toISOString(),
       },
     });
   } catch (error) {
@@ -81,8 +83,8 @@ export async function POST(req: NextRequest) {
     // Handle custom errors thrown by helpers (if they return formatted objects, check structure)
     // But helpers currently throw Error or ApiErrorHandler objects.
     // Let's safe check:
-    const err = error as any;
-    if (err.statusCode && err.code) {
+    const err = error as Record<string, unknown>;
+    if (err.statusCode && typeof err.statusCode === 'number' && err.code) {
       return NextResponse.json(err, { status: err.statusCode });
     }
 

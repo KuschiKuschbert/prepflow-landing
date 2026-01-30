@@ -9,7 +9,7 @@ export function useResetStateOnViewModeChange(
   setEditingRecipe: (val: any) => void,
   setEditingItem: (val: any) => void,
   setHighlightingRowId: (val: any) => void,
-  setHighlightingRowType: (val: any) => void
+  setHighlightingRowType: (val: any) => void,
 ) {
   useEffect(() => {
     if (viewMode === 'list') {
@@ -29,11 +29,7 @@ export function useResetStateOnViewModeChange(
   ]);
 }
 
-export function useSelectedItemTypes(
-  dishes: any[],
-  recipes: any[],
-  selectedItems: Set<string>
-) {
+export function useSelectedItemTypes(dishes: any[], recipes: any[], selectedItems: Set<string>) {
   return useMemo(() => {
     const types = new Map<string, 'recipe' | 'dish'>();
     dishes.forEach(d => {
@@ -49,7 +45,7 @@ export function useSelectedItemTypes(
 export function useRecipeImagesHandler(
   setRecipes: any,
   selectedRecipeForPreview: any,
-  setSelectedRecipeForPreview: any
+  setSelectedRecipeForPreview: any,
 ) {
   return useCallback(
     (
@@ -107,9 +103,8 @@ export function buildControllerResult(
   handlers: any, // useDishesClientHandlers result
   sidePanelsHandlers: any,
   selectionHandlers: any, // useDishesClientSelection result - destructuring handled inside or passed whole?
-  selectionModeHelpers: any // useSelectionMode result
+  selectionModeHelpers: any, // useSelectionMode result
 ): UseDishesClientControllerResult {
-
   const {
     bulkActionLoading,
     showBulkMenu,
@@ -164,10 +159,7 @@ export function buildControllerResult(
     // cancelDeleteItem // unused in interface but potentially used in side panels
   } = handlers;
 
-  const {
-      handleSelectAll,
-      handleSelectItem,
-  } = selectionHandlers;
+  const { handleSelectAll, handleSelectItem } = selectionHandlers;
 
   const { startLongPress, cancelLongPress, enterSelectionMode } = selectionModeHelpers;
 

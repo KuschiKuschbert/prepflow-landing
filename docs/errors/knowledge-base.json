@@ -22,9 +22,7 @@
         }
       ],
       "similarErrors": [],
-      "preventionRules": [
-        "RULE-ENV-CHECK"
-      ]
+      "preventionRules": ["RULE-ENV-CHECK"]
     },
     {
       "id": "ERR-WORKFLOW-SYNTAX",

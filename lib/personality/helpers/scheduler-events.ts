@@ -11,11 +11,7 @@ export interface SchedulerContext {
   settings: any; // Using any for now to avoid circular deps or complex type imports, can refine later
 }
 
-export function triggerMoment(
-  type: MomentType,
-  baseProb: number,
-  context: SchedulerContext
-) {
+export function triggerMoment(type: MomentType, baseProb: number, context: SchedulerContext) {
   const { settings } = context;
   const currentAdaptive = getAdaptiveSettings(settings);
   const currentTimeAdjustments = getTimeBasedAdjustments();
@@ -36,9 +32,7 @@ export function triggerMoment(
     }
 
     if (msg) {
-      window.dispatchEvent(
-        new CustomEvent('personality:addToast', { detail: { message: msg } }),
-      );
+      window.dispatchEvent(new CustomEvent('personality:addToast', { detail: { message: msg } }));
     }
   }
 }

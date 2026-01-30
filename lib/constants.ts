@@ -68,7 +68,9 @@ export const ANIMATION_CONSTANTS = {
 } as const;
 
 // App Configuration
-export const APP_BASE_URL = process.env.AUTH0_BASE_URL || (isProduction ? 'https://app.prepflow.io' : 'http://localhost:3000');
+export const APP_BASE_URL =
+  process.env.AUTH0_BASE_URL ||
+  (isProduction ? 'https://app.prepflow.io' : 'http://localhost:3000');
 
 // Business Logic
 export const BUSINESS_LOGIC = {

@@ -3,10 +3,10 @@ import { verifyGoogleConnection } from '@/lib/auth0-google-connection';
 import { logger } from '@/lib/logger';
 import { NextResponse } from 'next/server';
 import {
-    enableGoogleConnectionSchema,
-    handleConfigAndEnable,
-    handleEnableOnly,
-    parseRequestBody,
+  enableGoogleConnectionSchema,
+  handleConfigAndEnable,
+  handleEnableOnly,
+  parseRequestBody,
 } from './controller';
 
 /**

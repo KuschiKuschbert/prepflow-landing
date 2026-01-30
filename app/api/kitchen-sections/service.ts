@@ -1,4 +1,3 @@
-
 import { logger } from '@/lib/logger';
 import { PostgrestError, SupabaseClient } from '@supabase/supabase-js';
 import { Dish, DishSection, KitchenSection, NormalizedDish } from './types';
@@ -67,10 +66,10 @@ export async function fetchDishes(supabase: SupabaseClient) {
     .select('id, dish_name, description, selling_price, category');
   if (basicDishes) dishes = basicDishes as unknown as Dish[];
   else {
-     const { data: menuDishes } = await supabase
-        .from('menu_dishes')
-        .select('id, name, description, selling_price, category');
-     if (menuDishes) dishes = menuDishes as unknown as Dish[];
+    const { data: menuDishes } = await supabase
+      .from('menu_dishes')
+      .select('id, name, description, selling_price, category');
+    if (menuDishes) dishes = menuDishes as unknown as Dish[];
   }
 
   return dishes;

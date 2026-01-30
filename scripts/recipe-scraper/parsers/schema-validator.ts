@@ -100,33 +100,79 @@ export function normalizeIngredient(ingredientText: string): {
 
   // Common units (order matters - longer ones first to avoid partial matches)
   const units = [
-    'tablespoons', 'tablespoon', 'teaspoons', 'teaspoon',
-    'tbsp\\.?', 'tsp\\.?',
-    'ounces', 'ounce', 'oz\\.?',
-    'pounds', 'pound', 'lbs\\.?', 'lb\\.?',
-    'kilograms', 'kilogram', 'kg\\.?',
-    'grams', 'gram', 'g\\.?',
-    'milliliters', 'milliliter', 'ml\\.?',
-    'liters', 'liter', 'l\\.?',
-    'cups', 'cup', 'c\\.?',
-    'pieces', 'piece', 'pc\\.?',
-    'cloves', 'clove',
-    'cans', 'can',
-    'packages', 'package',
-    'bunches', 'bunch',
-    'heads', 'head',
-    'slices', 'slice',
-    'pinches', 'pinch',
-    'dashes', 'dash',
-    'whole', 'large', 'medium', 'small',
+    'tablespoons',
+    'tablespoon',
+    'teaspoons',
+    'teaspoon',
+    'tbsp\\.?',
+    'tsp\\.?',
+    'ounces',
+    'ounce',
+    'oz\\.?',
+    'pounds',
+    'pound',
+    'lbs\\.?',
+    'lb\\.?',
+    'kilograms',
+    'kilogram',
+    'kg\\.?',
+    'grams',
+    'gram',
+    'g\\.?',
+    'milliliters',
+    'milliliter',
+    'ml\\.?',
+    'liters',
+    'liter',
+    'l\\.?',
+    'cups',
+    'cup',
+    'c\\.?',
+    'pieces',
+    'piece',
+    'pc\\.?',
+    'cloves',
+    'clove',
+    'cans',
+    'can',
+    'packages',
+    'package',
+    'bunches',
+    'bunch',
+    'heads',
+    'head',
+    'slices',
+    'slice',
+    'pinches',
+    'pinch',
+    'dashes',
+    'dash',
+    'whole',
+    'large',
+    'medium',
+    'small',
   ];
 
   // Unicode fraction map
   const unicodeFractions: Record<string, number> = {
-    '½': 0.5, '⅓': 1/3, '⅔': 2/3, '¼': 0.25, '¾': 0.75,
-    '⅕': 0.2, '⅖': 0.4, '⅗': 0.6, '⅘': 0.8,
-    '⅙': 1/6, '⅚': 5/6, '⅐': 1/7, '⅛': 0.125, '⅜': 0.375,
-    '⅝': 0.625, '⅞': 0.875, '⅑': 1/9, '⅒': 0.1,
+    '½': 0.5,
+    '⅓': 1 / 3,
+    '⅔': 2 / 3,
+    '¼': 0.25,
+    '¾': 0.75,
+    '⅕': 0.2,
+    '⅖': 0.4,
+    '⅗': 0.6,
+    '⅘': 0.8,
+    '⅙': 1 / 6,
+    '⅚': 5 / 6,
+    '⅐': 1 / 7,
+    '⅛': 0.125,
+    '⅜': 0.375,
+    '⅝': 0.625,
+    '⅞': 0.875,
+    '⅑': 1 / 9,
+    '⅒': 0.1,
   };
 
   // Build unit pattern
@@ -135,20 +181,17 @@ export function normalizeIngredient(ingredientText: string): {
   // Pattern 1: "1 1/2 cups flour" or "1½ cups flour" (mixed number with unit)
   const mixedPattern = new RegExp(
     `^(\\d+)\\s*([\\u00BC-\\u00BE\\u2150-\\u215E]|\\d+\\/\\d+)?\\s*(${unitPattern})\\s+(.+)$`,
-    'i'
+    'i',
   );
 
   // Pattern 2: "1/2 cup flour" or "½ cup flour" (fraction with unit)
   const fractionPattern = new RegExp(
     `^([\\u00BC-\\u00BE\\u2150-\\u215E]|\\d+\\/\\d+)\\s*(${unitPattern})\\s+(.+)$`,
-    'i'
+    'i',
   );
 
   // Pattern 3: "2 cups flour" or "200g flour" (number with unit, possibly attached)
-  const numberUnitPattern = new RegExp(
-    `^([\\d.]+)\\s*(${unitPattern})\\.?\\s+(.+)$`,
-    'i'
-  );
+  const numberUnitPattern = new RegExp(`^([\\d.]+)\\s*(${unitPattern})\\.?\\s+(.+)$`, 'i');
 
   // Pattern 4: "2 eggs" (number + ingredient, no unit)
   const numberOnlyPattern = /^([\d.]+)\s+(.+)$/;
@@ -232,7 +275,10 @@ export function normalizeIngredient(ingredientText: string): {
   }
 
   // Clean up name
-  result.name = result.name.replace(/^,+\s*/, '').replace(/,+\s*$/, '').trim();
+  result.name = result.name
+    .replace(/^,+\s*/, '')
+    .replace(/,+\s*$/, '')
+    .trim();
 
   // Final fallback - ensure name is not empty
   if (!result.name) {

@@ -1,4 +1,3 @@
-
 import { loadEnvConfig } from '@next/env';
 import { createClient } from '@supabase/supabase-js';
 
@@ -16,20 +15,20 @@ if (!supabaseUrl || !supabaseKey) {
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function main() {
-    console.log('Checking Inventory...');
-    const { data: stock, error } = await supabase
-        .from('ingredients')
-        .select('ingredient_name, current_stock')
-        .gt('current_stock', 0)
-        .limit(100);
+  console.log('Checking Inventory...');
+  const { data: stock, error } = await supabase
+    .from('ingredients')
+    .select('ingredient_name, current_stock')
+    .gt('current_stock', 0)
+    .limit(100);
 
-    if (error) {
-        console.error(error);
-        return;
-    }
+  if (error) {
+    console.error(error);
+    return;
+  }
 
-    console.log(`Found ${stock.length} items in stock (limit 100 display).`);
-    console.log(stock.map(s => `${s.ingredient_name}: ${s.current_stock}`).join('\n'));
+  console.log(`Found ${stock.length} items in stock (limit 100 display).`);
+  console.log(stock.map(s => `${s.ingredient_name}: ${s.current_stock}`).join('\n'));
 }
 
 main();

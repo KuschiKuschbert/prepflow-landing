@@ -4,11 +4,11 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import {
-    fetchCleaningAreas,
-    fetchEmployees,
-    fetchRecipes,
-    fetchStorageAreas,
-    fetchSuppliers,
+  fetchCleaningAreas,
+  fetchEmployees,
+  fetchRecipes,
+  fetchStorageAreas,
+  fetchSuppliers,
 } from './helpers/fetch-entities';
 import { QRCodeEntity } from './helpers/types';
 

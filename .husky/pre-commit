@@ -1,1 +1,2 @@
 ./scripts/pre-commit-check.sh
+npx lint-staged

@@ -29,12 +29,7 @@ export function TierCard({ tier, isEditing, onEdit, onCancel, onSave, onDisable 
 
   return (
     <div className="rounded-2xl border border-[#2a2a2a] bg-[#1f1f1f] p-6">
-      <TierHeader
-        tier={tier}
-        isEditing={isEditing}
-        onEdit={onEdit}
-        onDisable={onDisable}
-      />
+      <TierHeader tier={tier} isEditing={isEditing} onEdit={onEdit} onDisable={onDisable} />
 
       {isEditing ? (
         <TierEditForm

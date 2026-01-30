@@ -5,15 +5,15 @@ import { calculateYAxisBounds } from '@/app/webapp/temperature/components/Temper
 import { prepareChartData } from '@/app/webapp/temperature/components/TemperatureChartLazy/utils/prepareChartData';
 import { logger } from '@/lib/logger';
 import {
-    Area,
-    CartesianGrid,
-    ComposedChart,
-    Line,
-    ReferenceLine,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
+  Area,
+  CartesianGrid,
+  ComposedChart,
+  Line,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from 'recharts';
 import { TemperatureEquipment } from '../types';
 

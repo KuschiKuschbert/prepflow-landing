@@ -5,11 +5,7 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import type { CostData } from '../../costs';
 import { calculateFinancialMetrics } from './calculateFinancialMetrics';
-import {
-    fetchDishData,
-    fetchDishIngredients,
-    fetchDishRecipes,
-} from './calculation/dish-data';
+import { fetchDishData, fetchDishIngredients, fetchDishRecipes } from './calculation/dish-data';
 import { calculateIngredientsCost } from './calculation/ingredient-cost';
 import { calculateRecipesCost } from './calculation/recipe-cost';
 

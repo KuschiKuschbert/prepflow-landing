@@ -15,7 +15,15 @@ interface SidebarLinkProps {
   index: number;
 }
 
-export function SidebarLink({ href, label, icon, color, isActive, onClose, index }: SidebarLinkProps) {
+export function SidebarLink({
+  href,
+  label,
+  icon,
+  color,
+  isActive,
+  onClose,
+  index,
+}: SidebarLinkProps) {
   const reducedMotion = prefersReducedMotion();
 
   return (

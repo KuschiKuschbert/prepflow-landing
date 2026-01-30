@@ -3,7 +3,10 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import type { PostgrestError } from '@supabase/supabase-js';
 import { DishRelationIngredient } from '../../helpers/schemas';
-import { manualFetchAndJoinIngredients, retryFetchWithoutCategory } from './fetch-ingredients-utils';
+import {
+  manualFetchAndJoinIngredients,
+  retryFetchWithoutCategory,
+} from './fetch-ingredients-utils';
 
 /** Fetches ingredients for a dish with fallback logic */
 export async function fetchDishIngredients(dishId: string): Promise<DishRelationIngredient[]> {

@@ -1,9 +1,9 @@
 import { searchRecipesByIngredients } from '@/lib/ai/recipe-database';
 import { logger } from '@/lib/logger';
 import {
-    filterByFormatAfterLoad,
-    filterByFormatAtIndex,
-    filterBySource,
+  filterByFormatAfterLoad,
+  filterByFormatAtIndex,
+  filterBySource,
 } from '../helpers/filter-helpers';
 import { StorageInterface } from '../helpers/storage-helpers';
 
@@ -12,17 +12,13 @@ export async function processSearchRequest(
   sourceFilter: string | undefined,
   formatFilter: string,
   offset: number,
-  pageSize: number
+  pageSize: number,
 ) {
   const ingredients = search
     .split(',')
     .map(i => i.trim())
     .filter(Boolean);
-  const allMatchingRecipes = await searchRecipesByIngredients(
-    ingredients,
-    10000,
-    sourceFilter,
-  );
+  const allMatchingRecipes = await searchRecipesByIngredients(ingredients, 10000, sourceFilter);
 
   const filteredRecipes = filterByFormatAfterLoad(allMatchingRecipes, formatFilter);
   const totalRecipes = filteredRecipes.length;
@@ -36,7 +32,7 @@ export async function processListRequest(
   sourceFilter: string | undefined,
   formatFilter: string,
   offset: number,
-  pageSize: number
+  pageSize: number,
 ) {
   let recipes: unknown[] = [];
   let totalRecipes = 0;
@@ -49,9 +45,7 @@ export async function processListRequest(
 
     if (filteredRecipes.length > 0) {
       const paginatedEntries = filteredRecipes.slice(offset, offset + pageSize);
-      const recipePromises = paginatedEntries.map(entry =>
-        storage.loadRecipe(entry.file_path!),
-      );
+      const recipePromises = paginatedEntries.map(entry => storage.loadRecipe(entry.file_path!));
       const loadedRecipes = await Promise.all(recipePromises);
       recipes = loadedRecipes.filter((recipe: unknown) => recipe !== null);
     }

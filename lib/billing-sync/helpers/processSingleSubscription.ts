@@ -9,7 +9,7 @@ interface SyncResult {
 
 export async function processSingleSubscription(
   subscription: any, // Using any for Stripe subscription object to avoid complex typing for now
-  stripe: any
+  stripe: any,
 ): Promise<SyncResult> {
   if (!supabaseAdmin) {
     throw new Error('Supabase Admin not available');
@@ -59,7 +59,6 @@ export async function processSingleSubscription(
     }
 
     return { success: false, message: `No email determined` };
-
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     logger.error('[Billing Sync] Error processing subscription:', {

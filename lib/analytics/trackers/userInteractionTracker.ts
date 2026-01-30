@@ -9,10 +9,8 @@ export function trackUserInteractions(
   trackConversion: (conversion: ConversionEvent) => void,
 ): void {
   document.addEventListener('click', e =>
-    handleTrackerClick(e, { sessionId, userId, trackConversion })
+    handleTrackerClick(e, { sessionId, userId, trackConversion }),
   );
 
-  window.addEventListener('scroll', () =>
-    handleTrackerScroll({ trackEvent })
-  );
+  window.addEventListener('scroll', () => handleTrackerScroll({ trackEvent }));
 }

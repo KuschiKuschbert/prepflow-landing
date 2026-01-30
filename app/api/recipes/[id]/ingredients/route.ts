@@ -43,7 +43,10 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     normalizedId = String(recipeId).trim();
 
     // First try with category, fallback without if column doesn't exist
-    const { data: fetchedData, error: fetchError } = await fetchIngredientsWithCategoryFallback(supabaseAdmin, normalizedId);
+    const { data: fetchedData, error: fetchError } = await fetchIngredientsWithCategoryFallback(
+      supabaseAdmin,
+      normalizedId,
+    );
 
     const data = fetchedData;
     const error = fetchError;

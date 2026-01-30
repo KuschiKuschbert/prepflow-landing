@@ -39,9 +39,7 @@ export function GoogleDriveConnection({
       }
     } catch (error: unknown) {
       logger.error('[GoogleDriveConnection] Connect error:', error);
-      showError(
-        error instanceof Error ? error.message : 'Failed to connect to Google Drive',
-      );
+      showError(error instanceof Error ? error.message : 'Failed to connect to Google Drive');
       setLoading(false);
     }
   };
@@ -64,9 +62,7 @@ export function GoogleDriveConnection({
       await onConnectionChange(); // Refresh settings/state
     } catch (error: unknown) {
       logger.error('[GoogleDriveConnection] Disconnect error:', error);
-      showError(
-        error instanceof Error ? error.message : 'Failed to disconnect Google Drive',
-      );
+      showError(error instanceof Error ? error.message : 'Failed to disconnect Google Drive');
     } finally {
       setLoading(false);
     }
@@ -76,11 +72,13 @@ export function GoogleDriveConnection({
     <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/50 p-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className={`rounded-xl p-3 ${connected ? 'bg-[var(--color-success)]/10 text-[var(--color-success)]' : 'bg-[var(--muted)] text-[var(--foreground-muted)]'}`}>
-             <Icon icon={Cloud} size="lg" />
+          <div
+            className={`rounded-xl p-3 ${connected ? 'bg-[var(--color-success)]/10 text-[var(--color-success)]' : 'bg-[var(--muted)] text-[var(--foreground-muted)]'}`}
+          >
+            <Icon icon={Cloud} size="lg" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-[var(--foreground)] flex items-center gap-2">
+            <h3 className="flex items-center gap-2 text-lg font-semibold text-[var(--foreground)]">
               Google Drive
               {connected && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-success)]/10 px-2 py-0.5 text-xs font-medium text-[var(--color-success)]">
@@ -104,16 +102,24 @@ export function GoogleDriveConnection({
               disabled={loading}
               className="flex items-center gap-2 rounded-xl border border-[var(--color-danger)]/30 bg-[var(--color-danger)]/10 px-4 py-2 text-sm font-medium text-[var(--color-danger)] transition-colors hover:bg-[var(--color-danger)]/20 disabled:opacity-50"
             >
-              {loading ? <Icon icon={Loader2} className="animate-spin" size="sm" /> : <Icon icon={LogOut} size="sm" />}
+              {loading ? (
+                <Icon icon={Loader2} className="animate-spin" size="sm" />
+              ) : (
+                <Icon icon={LogOut} size="sm" />
+              )}
               Disconnect
             </button>
           ) : (
             <button
               onClick={handleConnect}
               disabled={loading}
-              className="flex items-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[var(--primary)]/90 disabled:opacity-50 shadow-lg shadow-[var(--primary)]/20"
+              className="flex items-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-2 text-sm font-medium text-white shadow-[var(--primary)]/20 shadow-lg transition-colors hover:bg-[var(--primary)]/90 disabled:opacity-50"
             >
-              {loading ? <Icon icon={Loader2} className="animate-spin" size="sm" /> : <Icon icon={Cloud} size="sm" />}
+              {loading ? (
+                <Icon icon={Loader2} className="animate-spin" size="sm" />
+              ) : (
+                <Icon icon={Cloud} size="sm" />
+              )}
               Connect Drive
             </button>
           )}

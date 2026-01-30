@@ -123,7 +123,7 @@ function getAllRecipeFiles(): string[] {
  * Transform ingredients to proper format
  */
 function transformIngredients(ingredients: (RecipeIngredient | string)[]): RecipeIngredient[] {
-  return ingredients.map((ing) => {
+  return ingredients.map(ing => {
     if (typeof ing === 'string') {
       // Parse string ingredient - extract quantity/unit if possible
       const trimmed = ing.trim().replace(/^[\.\-\•\*]+\s*/, '');
@@ -131,7 +131,7 @@ function transformIngredients(ingredients: (RecipeIngredient | string)[]): Recip
         name: trimmed,
         quantity: 1,
         unit: 'pc',
-        original_text: trimmed
+        original_text: trimmed,
       };
     }
 
@@ -141,7 +141,8 @@ function transformIngredients(ingredients: (RecipeIngredient | string)[]): Recip
       quantity: ing.quantity ?? 1,
       unit: ing.unit || 'pc',
       notes: ing.notes,
-      original_text: ing.original_text || `${ing.quantity || ''} ${ing.unit || ''} ${ing.name}`.trim()
+      original_text:
+        ing.original_text || `${ing.quantity || ''} ${ing.unit || ''} ${ing.name}`.trim(),
     };
   });
 }
@@ -156,17 +157,17 @@ function cleanTitle(title: string): string {
   let newTitle = title;
   // Decode HTML
   newTitle = newTitle
-      .replace(/&#39;/g, "'")
-      .replace(/&amp;/g, "&")
-      .replace(/&quot;/g, '"');
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"');
 
   // Remove Suffixes
   newTitle = newTitle
-      .replace(/\s+Recipe by Tasty$/i, '')
-      .replace(/\s+by Tasty$/i, '')
-      .replace(/\s+With Step-by-Step Video$/i, '')
-      .replace(/\s+Recipe$/i, '') // Remove trailing " Recipe"
-      .replace(/\s+Recipe$/i, ''); // Double check in case of " ... Recipe Recipe" (rare but possible)
+    .replace(/\s+Recipe by Tasty$/i, '')
+    .replace(/\s+by Tasty$/i, '')
+    .replace(/\s+With Step-by-Step Video$/i, '')
+    .replace(/\s+Recipe$/i, '') // Remove trailing " Recipe"
+    .replace(/\s+Recipe$/i, ''); // Double check in case of " ... Recipe Recipe" (rare but possible)
 
   return newTitle.trim();
 }
@@ -201,28 +202,23 @@ async function upsertRecipe(recipe: ScrapedRecipe): Promise<boolean> {
       updated_at: new Date().toISOString(),
       meta: {
         prep_time_minutes: recipe.prep_time_minutes,
-        cook_time_minutes: recipe.cook_time_minutes
-      }
+        cook_time_minutes: recipe.cook_time_minutes,
+      },
     };
 
     if (existing?.id) {
       // Update existing
-      const { error } = await supabase
-        .from('ai_specials')
-        .update(recipeData)
-        .eq('id', existing.id);
+      const { error } = await supabase.from('ai_specials').update(recipeData).eq('id', existing.id);
 
       if (error) throw error;
       return true;
     } else {
       // Insert new
-      const { error } = await supabase
-        .from('ai_specials')
-        .insert({
-          ...recipeData,
-          created_at: new Date().toISOString(),
-          status: 'active'
-        });
+      const { error } = await supabase.from('ai_specials').insert({
+        ...recipeData,
+        created_at: new Date().toISOString(),
+        status: 'active',
+      });
 
       if (error) throw error;
       return true;
@@ -259,13 +255,13 @@ async function main() {
     const batch = files.slice(i, i + BATCH_SIZE);
 
     const results = await Promise.all(
-      batch.map(async (file) => {
+      batch.map(async file => {
         const recipe = await loadRecipe(file);
         if (!recipe) return false;
 
         const success = await upsertRecipe(recipe);
         return success;
-      })
+      }),
     );
 
     const batchSuccess = results.filter(Boolean).length;
@@ -275,7 +271,9 @@ async function main() {
 
     // Progress update
     const percent = Math.round((processed / files.length) * 100);
-    process.stdout.write(`\r⏳ Progress: ${processed}/${files.length} (${percent}%) - Updated: ${updated}, Failed: ${failed}`);
+    process.stdout.write(
+      `\r⏳ Progress: ${processed}/${files.length} (${percent}%) - Updated: ${updated}, Failed: ${failed}`,
+    );
   }
 
   console.log('\n');

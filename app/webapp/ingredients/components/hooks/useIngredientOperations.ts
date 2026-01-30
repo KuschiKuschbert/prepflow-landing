@@ -105,9 +105,16 @@ export function useIngredientOperations({
   };
 
   return {
-    handleAddIngredient, handleDeleteIngredient, handleBulkDelete,
-    exportToCSV, handleSelectIngredient, handleSelectAll,
-    handleBulkUpdate, handleBulkAutoCategorize, handleCategorizeAllUncategorized,
-    handleEditSave, handleCSVImport,
+    handleAddIngredient,
+    handleDeleteIngredient,
+    handleBulkDelete,
+    exportToCSV,
+    handleSelectIngredient,
+    handleSelectAll,
+    handleBulkUpdate,
+    handleBulkAutoCategorize,
+    handleCategorizeAllUncategorized,
+    handleEditSave,
+    handleCSVImport,
   };
 }

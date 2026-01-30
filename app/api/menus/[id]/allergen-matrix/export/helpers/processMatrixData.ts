@@ -19,11 +19,7 @@ export function processMenuItemsToMatrix(items: EnrichedMenuItem[]): MatrixItem[
       allergens = item.allergens;
     } else if (item.dish_id && item.dishes?.allergens && Array.isArray(item.dishes.allergens)) {
       allergens = item.dishes.allergens as string[];
-    } else if (
-      item.recipe_id &&
-      item.recipes?.allergens &&
-      Array.isArray(item.recipes.allergens)
-    ) {
+    } else if (item.recipe_id && item.recipes?.allergens && Array.isArray(item.recipes.allergens)) {
       allergens = item.recipes.allergens as string[];
     }
     const validAllergenCodes = AUSTRALIAN_ALLERGENS.map(a => a.code);

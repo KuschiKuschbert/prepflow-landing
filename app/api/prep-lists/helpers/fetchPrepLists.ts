@@ -165,12 +165,7 @@ export async function fetchAllPrepListData(params: FetchPrepListsParams) {
     ),
   );
   const ingredientsMap = await fetchIngredientsBatch(ingredientIds);
-  const mappedData = combinePrepListData(
-    prepLists,
-    sectionsMap,
-    itemsByPrepListId,
-    ingredientsMap,
-  );
+  const mappedData = combinePrepListData(prepLists, sectionsMap, itemsByPrepListId, ingredientsMap);
   const totalPages = Math.max(1, Math.ceil(count / pageSize));
 
   return { items: mappedData, total: count, page, pageSize, totalPages };

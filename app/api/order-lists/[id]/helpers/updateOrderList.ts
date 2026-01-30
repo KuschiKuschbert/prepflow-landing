@@ -88,9 +88,7 @@ async function updateOrderListItems(
       notes: item.notes,
     }));
 
-    const { error: insertItemsError } = await supabase
-      .from('order_list_items')
-      .insert(orderItems);
+    const { error: insertItemsError } = await supabase.from('order_list_items').insert(orderItems);
 
     if (insertItemsError) {
       logger.error('[Order Lists API] Error inserting order list items:', {

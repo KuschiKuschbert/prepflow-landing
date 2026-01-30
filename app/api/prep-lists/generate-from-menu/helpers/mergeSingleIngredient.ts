@@ -17,7 +17,9 @@ export function mergeSingleIngredient(
   }
 
   const existingIngredients = map.get(recipeId)!;
-  const isDuplicate = existingIngredients.some(existing => existing.ingredient_id === ingredient.ingredient_id);
+  const isDuplicate = existingIngredients.some(
+    existing => existing.ingredient_id === ingredient.ingredient_id,
+  );
 
   if (!isDuplicate) {
     existingIngredients.push(ingredient);

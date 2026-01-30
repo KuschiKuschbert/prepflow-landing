@@ -1,4 +1,3 @@
-
 import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
@@ -12,7 +11,11 @@ if (fs.existsSync(envPath)) {
     if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
       const parts = trimmed.split('=');
       const key = parts[0].trim();
-      const val = parts.slice(1).join('=').trim().replace(/^["']|["']$/g, '');
+      const val = parts
+        .slice(1)
+        .join('=')
+        .trim()
+        .replace(/^["']|["']$/g, '');
       process.env[key] = val;
     }
   });
@@ -37,15 +40,20 @@ async function backfillTags() {
 
   while (true) {
     // Call the RPC
-    const { data: count, error } = await supabase.rpc('backfill_ingredient_tags', { p_limit: batchSize });
+    const { data: count, error } = await supabase.rpc('backfill_ingredient_tags', {
+      p_limit: batchSize,
+    });
 
     if (error) {
       console.error('❌ Error executing backfill RPC:', error);
       // Wait a bit before retrying or exit?
       // If it's a timeout, maybe retry? But RPC itself should be fast.
       // If RPC is missing, break.
-      if (error.message.includes('function backfill_ingredient_tags') && error.message.includes('does not exist')) {
-         console.error('RPC not found! Did you run the migration?');
+      if (
+        error.message.includes('function backfill_ingredient_tags') &&
+        error.message.includes('does not exist')
+      ) {
+        console.error('RPC not found! Did you run the migration?');
       }
       break;
     }
@@ -55,7 +63,7 @@ async function backfillTags() {
       break;
     }
 
-    processed += (count as number);
+    processed += count as number;
     console.log(`✅ Processed ${processed} recipes so far...`);
 
     // Small pause to be nice to the DB

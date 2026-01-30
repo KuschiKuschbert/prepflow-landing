@@ -9,7 +9,10 @@ interface AnimatedBackgroundProps {
   theme?: string;
 }
 
-export default function AnimatedBackground({ className = '', theme = 'dark' }: AnimatedBackgroundProps) {
+export default function AnimatedBackground({
+  className = '',
+  theme = 'dark',
+}: AnimatedBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useCanvasAnimation(canvasRef, theme);
 
@@ -23,10 +26,7 @@ export default function AnimatedBackground({ className = '', theme = 'dark' }: A
   );
 }
 
-function useCanvasAnimation(
-  canvasRef: React.RefObject<HTMLCanvasElement | null>,
-  theme: string
-) {
+function useCanvasAnimation(canvasRef: React.RefObject<HTMLCanvasElement | null>, theme: string) {
   const animationFrameRef = useRef<number | undefined>(undefined);
   const waveRef = useRef({ phase: 0, speed: 0.02 });
   const [mounted, setMounted] = useState(false);

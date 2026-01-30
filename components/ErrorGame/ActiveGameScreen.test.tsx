@@ -1,4 +1,3 @@
-
 // Mock env vars for smoke test
 process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://mock.supabase.co';
 process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'mock-key';
@@ -16,16 +15,17 @@ describe('ActiveGameScreen', () => {
     expect(Module).toBeDefined();
 
     const defaultExport = (Module as any).default;
-    const Component = (typeof defaultExport === 'function' ? defaultExport : undefined) ||
-      Object.values(Module).find((exp) => typeof exp === 'function');
+    const Component =
+      (typeof defaultExport === 'function' ? defaultExport : undefined) ||
+      Object.values(Module).find(exp => typeof exp === 'function');
 
     if (Component && typeof Component === 'function') {
-        try {
-            // Use a simple mock for any children or complex props if needed
-            render(React.createElement(Component as any, {} as any));
-        } catch (e) {
-             // Render failure is okay for smoke test as long as module is loaded
-        }
+      try {
+        // Use a simple mock for any children or complex props if needed
+        render(React.createElement(Component as any, {} as any));
+      } catch (e) {
+        // Render failure is okay for smoke test as long as module is loaded
+      }
     }
   });
 });

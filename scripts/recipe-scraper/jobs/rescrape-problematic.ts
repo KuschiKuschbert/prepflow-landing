@@ -65,25 +65,37 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // Map source names to scraper instances
 function getScraper(source: string) {
   switch (source.toLowerCase()) {
-    case 'allrecipes': return new AllRecipesScraper();
+    case 'allrecipes':
+      return new AllRecipesScraper();
     case 'bon-appetit':
     case 'bon appetit':
-    case 'bonappetit': return new BonAppetitScraper();
-    case 'delish': return new DelishScraper();
-    case 'epicurious': return new EpicuriousScraper();
+    case 'bonappetit':
+      return new BonAppetitScraper();
+    case 'delish':
+      return new DelishScraper();
+    case 'epicurious':
+      return new EpicuriousScraper();
     case 'food-and-wine':
-    case 'food and wine': return new FoodAndWineScraper();
+    case 'food and wine':
+      return new FoodAndWineScraper();
     case 'food-network':
-    case 'food network': return new FoodNetworkScraper();
-    case 'food52': return new Food52Scraper();
+    case 'food network':
+      return new FoodNetworkScraper();
+    case 'food52':
+      return new Food52Scraper();
     case 'serious-eats':
-    case 'serious eats': return new SeriousEatsScraper();
+    case 'serious eats':
+      return new SeriousEatsScraper();
     case 'simply-recipes':
-    case 'simply recipes': return new SimplyRecipesScraper();
+    case 'simply recipes':
+      return new SimplyRecipesScraper();
     case 'smitten-kitchen':
-    case 'smitten kitchen': return new SmittenKitchenScraper();
-    case 'tasty': return new TastyScraper();
-    default: return null;
+    case 'smitten kitchen':
+      return new SmittenKitchenScraper();
+    case 'tasty':
+      return new TastyScraper();
+    default:
+      return null;
   }
 }
 
@@ -111,12 +123,27 @@ function detectIssues(recipe: {
     return { ...recipe, ingredients: [], issue: 'No ingredients array' };
   }
 
-  const ingredients = recipe.ingredients as { name: string; quantity?: number; unit?: string; original_text?: string }[];
+  const ingredients = recipe.ingredients as {
+    name: string;
+    quantity?: number;
+    unit?: string;
+    original_text?: string;
+  }[];
 
   // Check for truncated names (ending with "or", "and", "freshly", etc.)
-  const truncatedEndings = [' or', ' and', ' freshly', ' finely', ' roughly', ' thinly', ' to', ' for', ' plus'];
+  const truncatedEndings = [
+    ' or',
+    ' and',
+    ' freshly',
+    ' finely',
+    ' roughly',
+    ' thinly',
+    ' to',
+    ' for',
+    ' plus',
+  ];
   const truncated = ingredients.filter(ing =>
-    truncatedEndings.some(ending => ing.name?.toLowerCase().endsWith(ending))
+    truncatedEndings.some(ending => ing.name?.toLowerCase().endsWith(ending)),
   );
   if (truncated.length > 0) {
     issues.push(`${truncated.length} truncated ingredient names`);
@@ -141,7 +168,7 @@ function detectIssues(recipe: {
       source: recipe.source,
       source_url: recipe.source_url,
       ingredients,
-      issue: issues.join('; ')
+      issue: issues.join('; '),
     };
   }
 
@@ -157,7 +184,13 @@ async function main() {
   // Fetch ALL recipes from ai_specials using pagination
   scraperLogger.info('Fetching ALL recipes from ai_specials...');
 
-  const allRecipes: { id: string; name: string; source: string; source_url: string; ingredients: unknown }[] = [];
+  const allRecipes: {
+    id: string;
+    name: string;
+    source: string;
+    source_url: string;
+    ingredients: unknown;
+  }[] = [];
   const pageSize = 1000;
   let offset = 0;
   let hasMore = true;
@@ -203,9 +236,11 @@ async function main() {
     problematic.slice(0, 5).forEach((r, i) => {
       scraperLogger.info(`  ${i + 1}. "${r.name}" (${r.source}): ${r.issue}`);
       // Show first 3 truncated ingredients
-      const truncated = r.ingredients.filter(ing =>
-        [' or', ' and', ' freshly', ' finely'].some(e => ing.name?.toLowerCase().endsWith(e))
-      ).slice(0, 3);
+      const truncated = r.ingredients
+        .filter(ing =>
+          [' or', ' and', ' freshly', ' finely'].some(e => ing.name?.toLowerCase().endsWith(e)),
+        )
+        .slice(0, 3);
       truncated.forEach(ing => {
         scraperLogger.info(`      - "${ing.name}"`);
       });
@@ -255,7 +290,9 @@ async function main() {
           scraperLogger.error(`Failed to update ${recipe.name}:`, updateError.message);
           failCount++;
         } else {
-          scraperLogger.info(`✅ Updated: "${recipe.name}" with ${result.recipe.ingredients.length} ingredients`);
+          scraperLogger.info(
+            `✅ Updated: "${recipe.name}" with ${result.recipe.ingredients.length} ingredients`,
+          );
           successCount++;
         }
       } else {

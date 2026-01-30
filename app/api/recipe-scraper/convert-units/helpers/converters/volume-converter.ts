@@ -16,7 +16,11 @@ export const VOLUME_UNITS_TO_CONVERT = [
   'fluid ounces',
 ];
 
-export function convertVolumeUnit(quantity: number, unit: string, normalized: string): ConversionResult | null {
+export function convertVolumeUnit(
+  quantity: number,
+  unit: string,
+  normalized: string,
+): ConversionResult | null {
   if (!VOLUME_UNITS_TO_CONVERT.includes(normalized)) {
     return null;
   }

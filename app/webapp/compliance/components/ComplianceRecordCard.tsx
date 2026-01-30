@@ -15,9 +15,7 @@ export function ComplianceRecordCard({ record }: ComplianceRecordCardProps) {
   const daysUntilExpiry = getDaysUntilExpiry(record.expiry_date);
 
   return (
-    <div
-      className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg transition-all duration-200 hover:shadow-xl"
-    >
+    <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-lg transition-all duration-200 hover:shadow-xl">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/10">
@@ -85,9 +83,7 @@ export function ComplianceRecordCard({ record }: ComplianceRecordCardProps) {
         )}
       </div>
 
-      {record.notes && (
-        <p className="mb-4 text-[var(--foreground-secondary)]">{record.notes}</p>
-      )}
+      {record.notes && <p className="mb-4 text-[var(--foreground-secondary)]">{record.notes}</p>}
 
       {(record.document_url || record.photo_url) && (
         <div className="mb-4 flex space-x-4">

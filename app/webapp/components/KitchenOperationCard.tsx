@@ -83,9 +83,7 @@ export function KitchenOperationCard({ operation }: KitchenOperationCardProps) {
         </div>
       </div>
       <div className="tablet:mt-4 mt-3">
-        <p className="text-fluid-xs line-clamp-2 text-[var(--foreground)]/60">
-          {description}
-        </p>
+        <p className="text-fluid-xs line-clamp-2 text-[var(--foreground)]/60">{description}</p>
       </div>
     </Link>
   );

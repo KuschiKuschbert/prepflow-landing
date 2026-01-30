@@ -1,11 +1,11 @@
 import { logger } from '@/lib/logger';
 import { RecipeIngredientWithDetails } from '../../types';
 import {
-    globalBatchRequestCache,
-    globalRequestQueue,
-    isProcessingQueue,
-    normalizeRecipeIds,
-    processBatchRequestQueue,
+  globalBatchRequestCache,
+  globalRequestQueue,
+  isProcessingQueue,
+  normalizeRecipeIds,
+  processBatchRequestQueue,
 } from './batchRequestQueue';
 
 type BatchFetchFn = (

@@ -4,11 +4,11 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import {
-    deleteFeatureFlag,
-    handleRouteError,
-    safeParseBody,
-    updateFeatureFlag,
-    updateFlagSchema,
+  deleteFeatureFlag,
+  handleRouteError,
+  safeParseBody,
+  updateFeatureFlag,
+  updateFlagSchema,
 } from './controller';
 
 export async function PUT(request: NextRequest, context: { params: Promise<{ flag: string }> }) {

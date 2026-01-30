@@ -50,9 +50,7 @@ export async function getDishIdsForMenu(
   }
 
   if (menuItems && menuItems.length > 0) {
-    return menuItems
-      .map((item: { dish_id: unknown }) => item.dish_id)
-      .filter(Boolean) as string[];
+    return menuItems.map((item: { dish_id: unknown }) => item.dish_id).filter(Boolean) as string[];
   }
   return [];
 }

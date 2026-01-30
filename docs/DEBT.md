@@ -18,4 +18,5 @@
 - [x] Add more "Personas" for different coding styles (e.g. "Security Expert", "Performance Optimizer") - **DONE**.
 
 ---
-*Archived 30+ completed items on 2026-01-28*
+
+_Archived 30+ completed items on 2026-01-28_

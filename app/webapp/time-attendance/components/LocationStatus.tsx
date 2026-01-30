@@ -19,12 +19,7 @@ export function LocationStatus({
   if (locationError) {
     return (
       <div className="flex items-center gap-3 rounded-xl border border-[var(--color-error)]/50 bg-[var(--color-error)]/10 p-4">
-        <Icon
-          icon={XCircle}
-          size="md"
-          className="text-[var(--color-error)]"
-          aria-hidden={true}
-        />
+        <Icon icon={XCircle} size="md" className="text-[var(--color-error)]" aria-hidden={true} />
         <div>
           <div className="font-medium text-[var(--color-error)]">Location Error</div>
           <div className="text-sm text-red-300">{locationError}</div>

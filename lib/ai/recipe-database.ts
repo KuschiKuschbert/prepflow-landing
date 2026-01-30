@@ -6,15 +6,15 @@
 import { logger } from '@/lib/logger';
 import { ScrapedRecipe } from '../../scripts/recipe-scraper/parsers/types';
 import {
-    formatRecipesForPrompt,
-    getRecipeDatabaseStats,
-    loadIndex
+  formatRecipesForPrompt,
+  getRecipeDatabaseStats,
+  loadIndex,
 } from './recipe-database-helpers';
 import {
-    processRecipeEntry,
-    RecipeMatch,
-    selectDiverseRecipes,
-    sortRecipeMatches,
+  processRecipeEntry,
+  RecipeMatch,
+  selectDiverseRecipes,
+  sortRecipeMatches,
 } from './recipe-database/helpers/search-helpers';
 
 /**

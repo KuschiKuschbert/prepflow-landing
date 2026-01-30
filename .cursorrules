@@ -35,4 +35,5 @@ If you encounter an error (build fail, runtime crash, lint error):
 - **Zero Tolerance**: You are FORBIDDEN from committing directly to `main`.
 - **Branching**: Always create a feature branch (`feature/xyz`, `fix/xyz`) before writing code.
 - **Merging**: You must use `scripts/safe-merge.sh` to merge. This script runs all verifications.
+- **Formatting**: Code MUST be formatted with Prettier before saving (`npm run format`).
 - **Safety**: If you are unsure about a destructive action, ASK the user.

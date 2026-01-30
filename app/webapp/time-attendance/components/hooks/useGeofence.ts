@@ -17,9 +17,9 @@ export function useGeofence(propVenueLocation?: GeofenceConfig) {
   // Default venue location (fallback)
   const defaultVenueLocation = useMemo(
     () => ({
-        latitude: -27.6394, // Brisbane, QLD
-        longitude: 153.1094,
-        radiusMeters: 100,
+      latitude: -27.6394, // Brisbane, QLD
+      longitude: 153.1094,
+      radiusMeters: 100,
     }),
     [],
   );
@@ -39,12 +39,12 @@ export function useGeofence(propVenueLocation?: GeofenceConfig) {
         if (response.ok) {
           const data = await response.json();
           if (data && typeof data.latitude === 'number' && typeof data.longitude === 'number') {
-             // Map API response to GeofenceConfig (handle potential naming diffs)
-             setVenueConfig({
-               latitude: data.latitude,
-               longitude: data.longitude,
-               radiusMeters: data.geofence_radius_meters || data.radiusMeters || 100
-             });
+            // Map API response to GeofenceConfig (handle potential naming diffs)
+            setVenueConfig({
+              latitude: data.latitude,
+              longitude: data.longitude,
+              radiusMeters: data.geofence_radius_meters || data.radiusMeters || 100,
+            });
           }
         }
       } catch (error) {

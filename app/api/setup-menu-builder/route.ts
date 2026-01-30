@@ -81,25 +81,25 @@ export async function POST(_request: NextRequest) {
     const tableStatus = await checkMenuBuilderTables(supabaseAdmin);
 
     if (!tableStatus.tablesExist) {
-        return NextResponse.json({
-            success: false,
-            message: tableStatus.message,
-            tablesExist: false,
-            missingTables: tableStatus.missingTables,
-            instructions: tableStatus.instructions
-        });
+      return NextResponse.json({
+        success: false,
+        message: tableStatus.message,
+        tablesExist: false,
+        missingTables: tableStatus.missingTables,
+        instructions: tableStatus.instructions,
+      });
     }
 
     if (tableStatus.error) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: 'Database error',
-            message: tableStatus.error.message,
-            tablesExist: false,
-          },
-          { status: 500 },
-        );
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Database error',
+          message: tableStatus.error.message,
+          tablesExist: false,
+        },
+        { status: 500 },
+      );
     }
 
     // All tables exist
@@ -128,66 +128,65 @@ export async function POST(_request: NextRequest) {
       { status: 500 },
     );
   }
-
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function checkMenuBuilderTables(supabaseAdmin: any): Promise<{
-    tablesExist: boolean;
-    message?: string;
-    missingTables?: string[];
-    instructions?: string[];
-    error?: any;
+  tablesExist: boolean;
+  message?: string;
+  missingTables?: string[];
+  instructions?: string[];
+  error?: any;
 }> {
-    // Check if dishes table exists (primary table for menu builder)
-    const { data: _data, error } = await supabaseAdmin.from('dishes').select('id').limit(1);
+  // Check if dishes table exists (primary table for menu builder)
+  const { data: _data, error } = await supabaseAdmin.from('dishes').select('id').limit(1);
 
-    if (error && error.code === '42P01') {
-      return {
-          tablesExist: false,
-          message: 'Menu builder tables not found',
-          instructions: [
-            'The menu builder tables have not been created yet.',
-            'Please run the migration SQL in your Supabase SQL Editor:',
-            '1. Visit /api/setup-menu-builder (GET) to get the SQL',
-            '2. Or open menu-builder-schema.sql from the project root',
-            '3. Copy the SQL and run it in Supabase SQL Editor',
-          ]
-      };
+  if (error && error.code === '42P01') {
+    return {
+      tablesExist: false,
+      message: 'Menu builder tables not found',
+      instructions: [
+        'The menu builder tables have not been created yet.',
+        'Please run the migration SQL in your Supabase SQL Editor:',
+        '1. Visit /api/setup-menu-builder (GET) to get the SQL',
+        '2. Or open menu-builder-schema.sql from the project root',
+        '3. Copy the SQL and run it in Supabase SQL Editor',
+      ],
+    };
+  }
+
+  if (error) {
+    return { tablesExist: false, error };
+  }
+
+  // Check other required tables
+  const requiredTables = ['menus', 'menu_items', 'dish_recipes', 'dish_ingredients'];
+  const missingTables: string[] = [];
+
+  for (const table of requiredTables) {
+    const { error: tableError } = await supabaseAdmin.from(table).select('id').limit(1);
+    if (tableError && tableError.code !== '42P01') {
+      logger.warn('[Setup Menu Builder API] Error checking table:', {
+        error: tableError.message,
+        code: tableError.code,
+        context: { table, operation: 'checkTableExists' },
+      });
     }
-
-    if (error) {
-        return { tablesExist: false, error };
+    if (tableError && tableError.code === '42P01') {
+      missingTables.push(table);
     }
+  }
 
-    // Check other required tables
-    const requiredTables = ['menus', 'menu_items', 'dish_recipes', 'dish_ingredients'];
-    const missingTables: string[] = [];
+  if (missingTables.length > 0) {
+    return {
+      tablesExist: false,
+      message: 'Some menu builder tables are missing',
+      missingTables,
+      instructions: [
+        'Some required tables are missing. Please run the migration SQL in your Supabase SQL Editor.',
+      ],
+    };
+  }
 
-    for (const table of requiredTables) {
-      const { error: tableError } = await supabaseAdmin.from(table).select('id').limit(1);
-      if (tableError && tableError.code !== '42P01') {
-        logger.warn('[Setup Menu Builder API] Error checking table:', {
-          error: tableError.message,
-          code: tableError.code,
-          context: { table, operation: 'checkTableExists' },
-        });
-      }
-      if (tableError && tableError.code === '42P01') {
-        missingTables.push(table);
-      }
-    }
-
-    if (missingTables.length > 0) {
-      return {
-          tablesExist: false,
-          message: 'Some menu builder tables are missing',
-          missingTables,
-          instructions: [
-            'Some required tables are missing. Please run the migration SQL in your Supabase SQL Editor.',
-          ]
-      };
-    }
-
-    return { tablesExist: true };
+  return { tablesExist: true };
 }

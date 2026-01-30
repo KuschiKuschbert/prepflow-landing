@@ -38,25 +38,25 @@ export async function scrapeRecipes(
 }
 
 async function processSingleUrl(
-    scraper: ScraperInstance,
-    storage: JSONStorage,
-    url: string
+  scraper: ScraperInstance,
+  storage: JSONStorage,
+  url: string,
 ): Promise<{ success: boolean; recipe?: unknown; error?: string; url: string }> {
-    try {
-      const result = await scraper.scrapeRecipe(url);
-      if (result.success && result.recipe) {
-        const saveResult = await storage.saveRecipe(result.recipe);
-        if (saveResult.saved) {
-          return { success: true, recipe: result.recipe, url };
-        } else {
-          return { success: false, error: saveResult.reason || 'Failed to save', url };
-        }
+  try {
+    const result = await scraper.scrapeRecipe(url);
+    if (result.success && result.recipe) {
+      const saveResult = await storage.saveRecipe(result.recipe);
+      if (saveResult.saved) {
+        return { success: true, recipe: result.recipe, url };
       } else {
-        return { success: false, error: result.error || 'Failed to scrape', url };
+        return { success: false, error: saveResult.reason || 'Failed to save', url };
       }
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      logger.error(`[Recipe Scraper API] Error scraping ${url}:`, { error: errorMessage });
-      return { success: false, error: errorMessage, url };
+    } else {
+      return { success: false, error: result.error || 'Failed to scrape', url };
     }
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error(`[Recipe Scraper API] Error scraping ${url}:`, { error: errorMessage });
+    return { success: false, error: errorMessage, url };
+  }
 }

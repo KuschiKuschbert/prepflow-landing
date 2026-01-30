@@ -4,7 +4,11 @@ import { smartRound } from './rounding';
 import { getUnitCategory } from './unitCategories';
 import { normalizeUnit } from './unitMappings';
 
-export function convertToStandardUnit(value: number, fromUnit: string, ingredientName?: string): ConversionResult {
+export function convertToStandardUnit(
+  value: number,
+  fromUnit: string,
+  ingredientName?: string,
+): ConversionResult {
   const normalized = normalizeUnit(fromUnit);
   const category = getUnitCategory(normalized);
   let standardUnit: string;
@@ -32,15 +36,16 @@ export function convertToStandardUnit(value: number, fromUnit: string, ingredien
       const density = ingredientName ? getIngredientDensity(ingredientName) : null;
 
       if (density) {
-          // Convert Volume (ml) -> Weight (g)
-          // Mass = Volume * Density
-          const mlValue = normalized === 'ml' ? value : convertUnit(value, normalized, STANDARD_UNITS.VOLUME).value;
-          convertedValue = mlValue * density;
-          standardUnit = STANDARD_UNITS.WEIGHT; // Switch target to Grams
+        // Convert Volume (ml) -> Weight (g)
+        // Mass = Volume * Density
+        const mlValue =
+          normalized === 'ml' ? value : convertUnit(value, normalized, STANDARD_UNITS.VOLUME).value;
+        convertedValue = mlValue * density;
+        standardUnit = STANDARD_UNITS.WEIGHT; // Switch target to Grams
       } else {
-          standardUnit = STANDARD_UNITS.VOLUME;
-          convertedValue =
-            normalized === 'ml' ? value : convertUnit(value, normalized, STANDARD_UNITS.VOLUME).value;
+        standardUnit = STANDARD_UNITS.VOLUME;
+        convertedValue =
+          normalized === 'ml' ? value : convertUnit(value, normalized, STANDARD_UNITS.VOLUME).value;
       }
       break;
     case 'piece':

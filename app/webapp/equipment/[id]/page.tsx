@@ -9,7 +9,6 @@ import { useState } from 'react';
 import { useEquipmentData } from './hooks/useEquipmentData';
 import { useTemperatureLogSubmit } from './hooks/useTemperatureLogSubmit';
 
-
 export default function EquipmentPage() {
   const params = useParams();
   const { formatDate } = useCountryFormatting();

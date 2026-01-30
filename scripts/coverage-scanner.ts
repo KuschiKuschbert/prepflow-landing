@@ -56,8 +56,12 @@ function main() {
 
   console.log(`${YELLOW}📊 Coverage Stats:${NC}`);
   console.log(`   Files Scanned: ${files.length}`);
-  console.log(`   Zero-Coverage Files (The Wall of Shame): ${zeroCoverageFiles.length > 0 ? RED : GREEN}${zeroCoverageFiles.length}${NC}`);
-  console.log(`   Low-Coverage Files (<${CRITICAL_THRESHOLD}%): ${lowCoverageFiles.length > 0 ? YELLOW : GREEN}${lowCoverageFiles.length}${NC}\n`);
+  console.log(
+    `   Zero-Coverage Files (The Wall of Shame): ${zeroCoverageFiles.length > 0 ? RED : GREEN}${zeroCoverageFiles.length}${NC}`,
+  );
+  console.log(
+    `   Low-Coverage Files (<${CRITICAL_THRESHOLD}%): ${lowCoverageFiles.length > 0 ? YELLOW : GREEN}${lowCoverageFiles.length}${NC}\n`,
+  );
 
   if (zeroCoverageFiles.length > 0) {
     console.log(`${RED}🟥 Wall of Shame (0% Coverage):${NC}`);
@@ -73,7 +77,9 @@ function main() {
     lowCoverageFiles.slice(0, 20).forEach(f => console.log(`   - ${f}`));
   }
 
-  console.log(`\n${BLUE}💡 Suggestion: Use 'npm run generate:tests' to create smoke tests for these files.${NC}`);
+  console.log(
+    `\n${BLUE}💡 Suggestion: Use 'npm run generate:tests' to create smoke tests for these files.${NC}`,
+  );
 }
 
 main();

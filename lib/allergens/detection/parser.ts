@@ -1,7 +1,7 @@
 import {
-    AUSTRALIAN_ALLERGENS,
-    consolidateAllergens,
-    getAllAllergenCodes,
+  AUSTRALIAN_ALLERGENS,
+  consolidateAllergens,
+  getAllAllergenCodes,
 } from '../australian-allergens';
 
 /**

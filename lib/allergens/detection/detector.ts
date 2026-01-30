@@ -1,7 +1,7 @@
 import {
-    generateTextWithHuggingFace,
-    getHuggingFaceTextModel,
-    isAIEnabled,
+  generateTextWithHuggingFace,
+  getHuggingFaceTextModel,
+  isAIEnabled,
 } from '@/lib/ai/huggingface-client';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';

@@ -38,27 +38,27 @@ export function UnifiedRecipeModalHeader({
   const { showSuccess, showInfo } = useNotification();
 
   const handleShare = async () => {
-      onShareRecipe(); // Execute parent logic (likely clipboard copy or modal)
-      // We assume parent logic is sync or fast. If it's a simple copy, we can confirm.
-      // Ideally parent should toast, but for consistency we can add a generic one if we know it's just a copy.
-      // Safest: showInfo("Sharing options opened") or similar if we don't know context.
-      // Actually, let's just assume it copies URL for now as that's standard.
-      try {
-        await navigator.clipboard.writeText(window.location.href);
-        showSuccess('Link copied to clipboard');
-      } catch (err) {
-        showInfo('Share menu opened');
-      }
+    onShareRecipe(); // Execute parent logic (likely clipboard copy or modal)
+    // We assume parent logic is sync or fast. If it's a simple copy, we can confirm.
+    // Ideally parent should toast, but for consistency we can add a generic one if we know it's just a copy.
+    // Safest: showInfo("Sharing options opened") or similar if we don't know context.
+    // Actually, let's just assume it copies URL for now as that's standard.
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      showSuccess('Link copied to clipboard');
+    } catch (err) {
+      showInfo('Share menu opened');
+    }
   };
 
   const handlePrint = () => {
-      showInfo('Preparing for printer...');
-      setTimeout(onPrint, 100);
+    showInfo('Preparing for printer...');
+    setTimeout(onPrint, 100);
   };
 
   const handleDuplicate = () => {
-      onDuplicateRecipe();
-      showSuccess('Recipe duplicated to drafts');
+    onDuplicateRecipe();
+    showSuccess('Recipe duplicated to drafts');
   };
   const tabs = [
     { id: 'preview' as ModalTab, label: 'Preview', icon: FileText },

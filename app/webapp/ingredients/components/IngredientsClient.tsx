@@ -73,19 +73,19 @@ export default function IngredientsClient({ hideHeader = false }: IngredientsCli
   } = useIngredientsClientController();
 
   if (loading || isLoading) {
-      return (
-          <ResponsivePageContainer>
-              <div className="space-y-4">
-                  {!hideHeader && (
-                      <div className="flex justify-between items-center mb-6">
-                          <div className="h-8 w-48 bg-[var(--muted)] rounded-lg animate-pulse" />
-                          <div className="h-10 w-32 bg-[var(--muted)] rounded-lg animate-pulse" />
-                      </div>
-                  )}
-                  <TableSkeleton rows={10} columns={6} />
-              </div>
-          </ResponsivePageContainer>
-      );
+    return (
+      <ResponsivePageContainer>
+        <div className="space-y-4">
+          {!hideHeader && (
+            <div className="mb-6 flex items-center justify-between">
+              <div className="h-8 w-48 animate-pulse rounded-lg bg-[var(--muted)]" />
+              <div className="h-10 w-32 animate-pulse rounded-lg bg-[var(--muted)]" />
+            </div>
+          )}
+          <TableSkeleton rows={10} columns={6} />
+        </div>
+      </ResponsivePageContainer>
+    );
   }
 
   return (

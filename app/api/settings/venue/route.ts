@@ -23,13 +23,16 @@ export async function GET(request: NextRequest) {
 
     if (dbError) {
       // If table doesn't exist or empty, return default (fallback)
-      if (dbError.code === 'PGRST116' || dbError.message.includes('relation "venue_settings" does not exist')) {
-          logger.warn('[Venue Settings API] Venue settings not found, using defaults.');
-          return NextResponse.json({
-            latitude: -27.6394,
-            longitude: 153.1094,
-            geofence_radius_meters: 100
-          });
+      if (
+        dbError.code === 'PGRST116' ||
+        dbError.message.includes('relation "venue_settings" does not exist')
+      ) {
+        logger.warn('[Venue Settings API] Venue settings not found, using defaults.');
+        return NextResponse.json({
+          latitude: -27.6394,
+          longitude: 153.1094,
+          geofence_radius_meters: 100,
+        });
       }
 
       logger.error('[Venue Settings API] Database error:', dbError);

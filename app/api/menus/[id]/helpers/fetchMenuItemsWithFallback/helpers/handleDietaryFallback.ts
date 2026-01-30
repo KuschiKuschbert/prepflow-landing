@@ -5,8 +5,8 @@ import { MenuItem } from '../../../../helpers/schemas';
 import { detectMissingColumns } from '../../errorDetection/detectMissingColumns';
 import { logDetailedError } from '../../fetchMenuWithItems.helpers';
 import {
-    buildQueryWithoutDescription,
-    buildQueryWithoutDietary,
+  buildQueryWithoutDescription,
+  buildQueryWithoutDietary,
 } from '../../queryBuilders/menuItemQueries';
 import { FetchResult } from '../../types';
 

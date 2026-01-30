@@ -68,36 +68,38 @@ export function convertRecipeIngredients(ingredients: RecipeIngredient[]): Conve
   return { ingredients: converted, convertedCount };
 }
 
-function parseIngredientQuantity(originalText: string): { quantity: number; unit: string; name: string } | null {
-      const parsed = normalizeIngredient(originalText);
-      if (parsed.quantity && parsed.unit) {
-        return {
-            quantity: parsed.quantity,
-            unit: parsed.unit,
-            name: parsed.name || ''
-        };
-      }
+function parseIngredientQuantity(
+  originalText: string,
+): { quantity: number; unit: string; name: string } | null {
+  const parsed = normalizeIngredient(originalText);
+  if (parsed.quantity && parsed.unit) {
+    return {
+      quantity: parsed.quantity,
+      unit: parsed.unit,
+      name: parsed.name || '',
+    };
+  }
 
-      // Try alternative parsing: look for common patterns like "2 cups", "1/2 cup", etc.
-      const text = originalText.toLowerCase();
-      const fractionMatch = text.match(
-          /^(\d+\/\d+|\d+\.\d+|\d+)\s*(cup|cups|tbsp|tablespoon|tablespoons|tsp|teaspoon|teaspoons|oz|ounce|ounces|lb|pound|pounds|g|gram|grams|kg|kilogram|kilograms|ml|milliliter|milliliters|l|liter|liters|litre|litres)\s*(.+)$/i,
-      );
+  // Try alternative parsing: look for common patterns like "2 cups", "1/2 cup", etc.
+  const text = originalText.toLowerCase();
+  const fractionMatch = text.match(
+    /^(\d+\/\d+|\d+\.\d+|\d+)\s*(cup|cups|tbsp|tablespoon|tablespoons|tsp|teaspoon|teaspoons|oz|ounce|ounces|lb|pound|pounds|g|gram|grams|kg|kilogram|kilograms|ml|milliliter|milliliters|l|liter|liters|litre|litres)\s*(.+)$/i,
+  );
 
-      if (fractionMatch) {
-          const qtyStr = fractionMatch[1];
-          let quantity: number;
-          // Parse fraction
-          if (qtyStr.includes('/')) {
-            const [num, den] = qtyStr.split('/').map(Number);
-            quantity = num / den;
-          } else {
-            quantity = parseFloat(qtyStr);
-          }
-          const unit = fractionMatch[2].toLowerCase();
-          const parsedName = fractionMatch[3].trim();
-          return { quantity, unit, name: parsedName };
-      }
+  if (fractionMatch) {
+    const qtyStr = fractionMatch[1];
+    let quantity: number;
+    // Parse fraction
+    if (qtyStr.includes('/')) {
+      const [num, den] = qtyStr.split('/').map(Number);
+      quantity = num / den;
+    } else {
+      quantity = parseFloat(qtyStr);
+    }
+    const unit = fractionMatch[2].toLowerCase();
+    const parsedName = fractionMatch[3].trim();
+    return { quantity, unit, name: parsedName };
+  }
 
-      return null;
+  return null;
 }

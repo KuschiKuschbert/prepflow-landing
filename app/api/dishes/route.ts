@@ -8,8 +8,6 @@ import { handleDishListError } from './helpers/handleDishListError';
 import { parseAndValidateDishRequest } from './helpers/requestHelpers';
 import { createDishSchema, DishResponse } from './helpers/schemas';
 
-
-
 export async function GET(request: NextRequest) {
   try {
     if (!supabaseAdmin) {

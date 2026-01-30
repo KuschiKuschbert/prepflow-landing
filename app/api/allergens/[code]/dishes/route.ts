@@ -10,10 +10,12 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
+interface Dish {
+  id: string;
+  allergens?: string[] | null;
+}
 
-async function getDishAllergensWithFallback(
-  dish: any /* justified: complex DB record */,
-): Promise<string[]> {
+async function getDishAllergensWithFallback(dish: Dish): Promise<string[]> {
   const cachedAllergens = dish.allergens as string[] | null | undefined;
   if (cachedAllergens && cachedAllergens.length > 0) {
     return cachedAllergens;
@@ -33,7 +35,7 @@ async function getDishAllergensWithFallback(
 /**
  * Gets all dishes containing a specific allergen.
  */
-export async function GET(_request: NextRequest, context: { params: Promise<{ code: string }> }) {
+export async function GET(request: NextRequest, context: { params: Promise<{ code: string }> }) {
   try {
     const { code } = await context.params;
 

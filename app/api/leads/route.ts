@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     const upsertResult = await upsertLead(supabase, { name, email, source });
     if (!upsertResult.success) {
       if (upsertResult.error && upsertResult.response) {
-         return upsertResult.response;
+        return upsertResult.response;
       }
       // fallback generic error if needed, but upsertLead returns response on error
       return NextResponse.json({ error: 'Failed to save lead' }, { status: 500 });

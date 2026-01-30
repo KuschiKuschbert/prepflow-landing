@@ -16,19 +16,19 @@ export async function updateIngredientViaApi<T extends { id: string }>(
     if (!response.ok || !result.success) {
       return {
         success: false,
-        error: result.error || 'Failed to update via API'
+        error: result.error || 'Failed to update via API',
       };
     }
 
     return {
       success: true,
-      data: result.data
+      data: result.data,
     };
   } catch (error) {
     logger.error('[API Fallback] Error sending update:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : String(error)
+      error: error instanceof Error ? error.message : String(error),
     };
   }
 }

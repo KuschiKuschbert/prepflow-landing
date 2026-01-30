@@ -41,7 +41,7 @@ export function useRecipeLoading({
             // Clear existing calculations first
             clearCalculations();
             // Add all ingredients from recipe
-            recipeIngredients.forEach((ri) => {
+            recipeIngredients.forEach(ri => {
               const ingredientData = ingredients.find(ing => ing.id === ri.ingredient_id);
               if (ingredientData) {
                 // Calculate single serve quantity

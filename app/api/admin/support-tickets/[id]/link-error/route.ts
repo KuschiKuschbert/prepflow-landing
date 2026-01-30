@@ -1,6 +1,7 @@
 import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -85,7 +86,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
 async function verifyErrorAndLinkTicket(
   id: string,
   error_id: string,
-  supabase: any,
+  supabase: SupabaseClient,
 ): Promise<NextResponse> {
   // Verify error exists
   const { data: errorLog, error: errorCheck } = await supabase
@@ -102,10 +103,9 @@ async function verifyErrorAndLinkTicket(
         error_id,
       });
     }
-    return NextResponse.json(
-      ApiErrorHandler.createError('Error log not found', 'NOT_FOUND', 404),
-      { status: 404 },
-    );
+    return NextResponse.json(ApiErrorHandler.createError('Error log not found', 'NOT_FOUND', 404), {
+      status: 404,
+    });
   }
 
   // Update ticket with related_error_id
@@ -118,10 +118,9 @@ async function verifyErrorAndLinkTicket(
 
   if (updateDbError) {
     if (updateDbError.code === 'PGRST116') {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Ticket not found', 'NOT_FOUND', 404),
-        { status: 404 },
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Ticket not found', 'NOT_FOUND', 404), {
+        status: 404,
+      });
     }
 
     logger.error('[Admin Support Tickets API] Database error:', {

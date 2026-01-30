@@ -18,9 +18,7 @@ export default function CSVImportModal({
   onImport,
   loading = false,
 }: CSVImportModalProps) {
-   
   const { t: _t } = useTranslation();
-   
 
   const {
     parsedIngredients,

@@ -21,12 +21,7 @@ export async function createSquareTeamMember(
     const squareTeamMemberId = createResponse.result.teamMember.id;
 
     // Create mapping
-    const newMapping = await createAutoMapping(
-      employee.id,
-      squareTeamMemberId,
-      'employee',
-      userId,
-    );
+    const newMapping = await createAutoMapping(employee.id, squareTeamMemberId, 'employee', userId);
 
     if (!newMapping) {
       logger.error('[Square Staff Sync] Error creating mapping:', {

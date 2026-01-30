@@ -1,4 +1,3 @@
-
 export type Section = 'title' | 'yield' | 'ingredients' | 'method' | 'notes';
 
 export function detectSection(line: string): Section | null {

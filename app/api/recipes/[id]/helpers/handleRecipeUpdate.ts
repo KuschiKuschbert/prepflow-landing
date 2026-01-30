@@ -3,8 +3,8 @@
  */
 
 import {
-    invalidateDishesWithRecipe,
-    invalidateRecipeAllergenCache,
+  invalidateDishesWithRecipe,
+  invalidateRecipeAllergenCache,
 } from '@/lib/allergens/cache-invalidation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getUserEmail } from '@/lib/auth0-api-helpers';
@@ -87,57 +87,57 @@ export async function handleRecipeUpdate(
 
   // Invalidate caches if needed
   if (ingredientsChanged || yieldChanged) {
-      void invalidateCaches(
-          recipeId,
-          recipeName,
-          changeType as ChangeType,
-          changeDetails,
-          userEmail,
-          ingredientsChanged,
-          yieldChanged
-      );
+    void invalidateCaches(
+      recipeId,
+      recipeName,
+      changeType as ChangeType,
+      changeDetails,
+      userEmail,
+      ingredientsChanged,
+      yieldChanged,
+    );
   }
 
   return updatedRecipe;
 }
 
 async function invalidateCaches(
-    recipeId: string,
-    recipeName: string,
-    changeType: ChangeType | null,
-    changeDetails: unknown,
-    userEmail: string | null,
-    ingredientsChanged: boolean,
-    yieldChanged: boolean
+  recipeId: string,
+  recipeName: string,
+  changeType: ChangeType | null,
+  changeDetails: unknown,
+  userEmail: string | null,
+  ingredientsChanged: boolean,
+  yieldChanged: boolean,
 ) {
-    if (ingredientsChanged) {
-      try {
-        await Promise.all([
-          invalidateRecipeAllergenCache(recipeId),
-          invalidateDishesWithRecipe(recipeId),
-        ]);
-      } catch (err) {
-        logger.error('[Recipes API] Error invalidating allergen caches:', {
-          error: err instanceof Error ? err.message : String(err),
-          context: { recipeId, operation: 'invalidateAllergenCaches' },
-        });
-      }
+  if (ingredientsChanged) {
+    try {
+      await Promise.all([
+        invalidateRecipeAllergenCache(recipeId),
+        invalidateDishesWithRecipe(recipeId),
+      ]);
+    } catch (err) {
+      logger.error('[Recipes API] Error invalidating allergen caches:', {
+        error: err instanceof Error ? err.message : String(err),
+        context: { recipeId, operation: 'invalidateAllergenCaches' },
+      });
     }
+  }
 
-    if (ingredientsChanged || yieldChanged) {
-      try {
-        await invalidateMenuItemsWithRecipe(
-          recipeId,
-          recipeName,
-          changeType as ChangeType,
-          changeDetails as unknown as ChangeDetails,
-          userEmail,
-        );
-      } catch (err) {
-        logger.error('[Recipes API] Error invalidating menu pricing cache:', {
-          error: err instanceof Error ? err.message : String(err),
-          context: { recipeId, recipeName, operation: 'invalidateMenuPricingCache' },
-        });
-      }
+  if (ingredientsChanged || yieldChanged) {
+    try {
+      await invalidateMenuItemsWithRecipe(
+        recipeId,
+        recipeName,
+        changeType as ChangeType,
+        changeDetails as unknown as ChangeDetails,
+        userEmail,
+      );
+    } catch (err) {
+      logger.error('[Recipes API] Error invalidating menu pricing cache:', {
+        error: err instanceof Error ? err.message : String(err),
+        context: { recipeId, recipeName, operation: 'invalidateMenuPricingCache' },
+      });
     }
+  }
 }

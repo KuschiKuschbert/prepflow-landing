@@ -58,7 +58,6 @@
 - **Custom Branding (Whitelabeling):** Tenant-specific "Surface" with custom logos, color themes, and potentially subdomains (e.g., `venue.prepflow.io`).
 - **Isolated Configuration:** Per-tenant settings for features, operational rules, and integrations.
 
-
 ## 📞 Contact & Support
 
 ### Development Team

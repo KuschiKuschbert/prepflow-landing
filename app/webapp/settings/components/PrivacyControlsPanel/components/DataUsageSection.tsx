@@ -24,7 +24,8 @@ import { DATA_SIZE_CONSTANTS } from '@/lib/constants';
 
 function formatFileSize(bytes: number) {
   if (bytes < DATA_SIZE_CONSTANTS.BYTES_PER_KB) return `${bytes} B`;
-  if (bytes < DATA_SIZE_CONSTANTS.BYTES_PER_MB) return `${(bytes / DATA_SIZE_CONSTANTS.BYTES_PER_KB).toFixed(1)} KB`;
+  if (bytes < DATA_SIZE_CONSTANTS.BYTES_PER_MB)
+    return `${(bytes / DATA_SIZE_CONSTANTS.BYTES_PER_KB).toFixed(1)} KB`;
   return `${(bytes / DATA_SIZE_CONSTANTS.BYTES_PER_MB).toFixed(1)} MB`;
 }
 

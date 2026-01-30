@@ -1,8 +1,8 @@
 import { parseCSV } from '@/lib/csv/csv-utils';
 import {
-    getIngredientsValidationSchema,
-    transformCSVData,
-    validateCSVData,
+  getIngredientsValidationSchema,
+  transformCSVData,
+  validateCSVData,
 } from '@/lib/csv/validation';
 import { logger } from '@/lib/logger';
 import { supabase } from '@/lib/supabase';

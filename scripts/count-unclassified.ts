@@ -1,4 +1,3 @@
-
 import { loadEnvConfig } from '@next/env';
 import { createClient } from '@supabase/supabase-js';
 
@@ -21,13 +20,13 @@ async function main() {
 
     // Also get total count
     const { count: total } = await supabase
-        .from('ai_specials')
-        .select('*', { count: 'exact', head: true });
+      .from('ai_specials')
+      .select('*', { count: 'exact', head: true });
 
     console.log(`Total recipes: ${total}`);
     if (total && count) {
-        const progress = ((total - count) / total) * 100;
-        console.log(`Progress: ${progress.toFixed(2)}%`);
+      const progress = ((total - count) / total) * 100;
+      console.log(`Progress: ${progress.toFixed(2)}%`);
     }
   }
 }

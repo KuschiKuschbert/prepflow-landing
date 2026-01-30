@@ -1,25 +1,25 @@
 import type { ExecutiveSummary } from './ExecutiveSummary';
 import type { ReportEmployee, ReportLicense } from './report-item-types';
 import type {
-    ReportAllergensSection,
-    ReportComplianceGapsSection,
-    ReportComplianceRecordsSection,
-    ReportHACCPSection,
-    ReportIncidentsSection,
-    ReportProceduresSection,
-    ReportSupplierVerificationSection,
+  ReportAllergensSection,
+  ReportComplianceGapsSection,
+  ReportComplianceRecordsSection,
+  ReportHACCPSection,
+  ReportIncidentsSection,
+  ReportProceduresSection,
+  ReportSupplierVerificationSection,
 } from './sections/ComplianceSections';
 import type {
-    ReportCleaningRecordsSection,
-    ReportEquipmentMaintenanceSection,
-    ReportSanitizerLogsSection,
-    ReportTemperatureLogsSection,
-    ReportTemperatureViolationsSection,
-    ReportWasteManagementSection,
+  ReportCleaningRecordsSection,
+  ReportEquipmentMaintenanceSection,
+  ReportSanitizerLogsSection,
+  ReportTemperatureLogsSection,
+  ReportTemperatureViolationsSection,
+  ReportWasteManagementSection,
 } from './sections/OperationalSections';
 import type {
-    ReportQualificationsSection,
-    ReportStaffHealthSection,
+  ReportQualificationsSection,
+  ReportStaffHealthSection,
 } from './sections/StaffSections';
 
 export interface ReportData {

@@ -1,8 +1,7 @@
-
 import {
-    configureAndEnableGoogleConnection,
-    enableGoogleConnectionForApp,
-    verifyGoogleConnection,
+  configureAndEnableGoogleConnection,
+  enableGoogleConnectionForApp,
+  verifyGoogleConnection,
 } from '@/lib/auth0-google-connection';
 import { logger } from '@/lib/logger';
 import { NextResponse } from 'next/server';

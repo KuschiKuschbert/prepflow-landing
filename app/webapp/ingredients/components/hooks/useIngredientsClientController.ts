@@ -32,11 +32,7 @@ export function useIngredientsClientController() {
 
   // Form State
   const formState = useIngredientFormState();
-  const {
-    showAddForm,
-    setShowAddForm,
-    resetWizard,
-  } = formState;
+  const { showAddForm, setShowAddForm, resetWizard } = formState;
 
   // Operations
   const operations = useIngredientOperations({
@@ -66,7 +62,14 @@ export function useIngredientsClientController() {
     setIsHydrated(true);
     if (view.page > view.totalPages && view.totalPages > 0) view.setPage(1);
     if (isSelectionMode && selectedIngredients.size === 0) exitSelectionMode();
-  }, [view.page, view.totalPages, isSelectionMode, selectedIngredients.size, exitSelectionMode, view.setPage]);
+  }, [
+    view.page,
+    view.totalPages,
+    isSelectionMode,
+    selectedIngredients.size,
+    exitSelectionMode,
+    view.setPage,
+  ]);
 
   // Check for action=new query parameter and open wizard
   useEffect(() => {
@@ -79,16 +82,26 @@ export function useIngredientsClientController() {
     }
   }, [searchParams, showAddForm, setShowAddForm, resetWizard, router]);
 
-
   return {
     // State
-    loading, isLoading, error, isHydrated, ingredients,
+    loading,
+    isLoading,
+    error,
+    isHydrated,
+    ingredients,
     // Selection
-    isSelectionMode, selectedIngredients, startLongPress, cancelLongPress, enterSelectionMode, exitSelectionMode,
+    isSelectionMode,
+    selectedIngredients,
+    startLongPress,
+    cancelLongPress,
+    enterSelectionMode,
+    exitSelectionMode,
     ...view,
     ...formState,
     ...operations,
     // Data
-    suppliers, availableUnits, refetchIngredients,
+    suppliers,
+    availableUnits,
+    refetchIngredients,
   };
 }

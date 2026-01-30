@@ -1,4 +1,3 @@
-
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
@@ -33,14 +32,14 @@ export async function handleCreateShift(request: NextRequest, supabase: Supabase
     // Additional semantic validation
     const semanticValidation = validateShiftData(body);
     if (!semanticValidation.isValid) {
-        return NextResponse.json(
-            ApiErrorHandler.createError(
-              semanticValidation.error || 'Invalid request data',
-              'VALIDATION_ERROR',
-              400,
-            ),
-            { status: 400 },
-          );
+      return NextResponse.json(
+        ApiErrorHandler.createError(
+          semanticValidation.error || 'Invalid request data',
+          'VALIDATION_ERROR',
+          400,
+        ),
+        { status: 400 },
+      );
     }
 
     const shiftData = zodValidation.data;

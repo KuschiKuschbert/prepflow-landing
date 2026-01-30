@@ -38,12 +38,7 @@ export function RecentActivityItem({ activity }: RecentActivityItemProps) {
             />
           )}
           {activity.type === 'menu_dish' && (
-            <Icon
-              icon={UtensilsCrossed}
-              size="sm"
-              className="text-purple-400"
-              aria-hidden={true}
-            />
+            <Icon icon={UtensilsCrossed} size="sm" className="text-purple-400" aria-hidden={true} />
           )}
         </div>
       </div>

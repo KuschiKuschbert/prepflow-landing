@@ -17,24 +17,28 @@ export function useSpecialsData() {
 
   // Infinite Scroll Hook
   const { ref, inView } = useInView({
-      threshold: 0,
-      rootMargin: '100px', // Preload before hitting bottom
+    threshold: 0,
+    rootMargin: '100px', // Preload before hitting bottom
   });
 
   const fetchRecipes = async (
-      reset: boolean = false,
-      currentIngredients: string[] = ingredients,
-      searchQuery: string = inputInternal,
-      activeTags: string[] = [],
-      activeCuisines: string[] = [],
-      isReadyToCook: boolean = false
+    reset: boolean = false,
+    currentIngredients: string[] = ingredients,
+    searchQuery: string = inputInternal,
+    activeTags: string[] = [],
+    activeCuisines: string[] = [],
+    isReadyToCook: boolean = false,
   ) => {
-
     // Resolve effective offset
     const currentOffset = reset ? 0 : offset;
 
     // Allow fetching if we have ANY criteria
-    const hasCriteria = currentIngredients.length > 0 || searchQuery || activeTags.length > 0 || activeCuisines.length > 0 || true;
+    const hasCriteria =
+      currentIngredients.length > 0 ||
+      searchQuery ||
+      activeTags.length > 0 ||
+      activeCuisines.length > 0 ||
+      true;
 
     if (!hasCriteria) {
       setRecipes([]);
@@ -50,20 +54,19 @@ export function useSpecialsData() {
 
       // 1. Build Text Query (q)
       if (hasExplicitQuery || hasFilters) {
-          const parts = [];
-          if (searchQuery) parts.push(searchQuery);
-          if (hasFilters) parts.push(...activeTags);
-          if (currentIngredients.length > 0) parts.push(...currentIngredients);
+        const parts = [];
+        if (searchQuery) parts.push(searchQuery);
+        if (hasFilters) parts.push(...activeTags);
+        if (currentIngredients.length > 0) parts.push(...currentIngredients);
 
-          url += `&q=${encodeURIComponent(parts.join(' '))}`;
-
+        url += `&q=${encodeURIComponent(parts.join(' '))}`;
       } else if (currentIngredients.length > 0) {
-          url += `&ingredients=${encodeURIComponent(currentIngredients.join(','))}`;
+        url += `&ingredients=${encodeURIComponent(currentIngredients.join(','))}`;
       }
 
       // 2. Add Cuisine Filter
       if (activeCuisines.length > 0) {
-          url += `&cuisine=${encodeURIComponent(activeCuisines.join(','))}`;
+        url += `&cuisine=${encodeURIComponent(activeCuisines.join(','))}`;
       }
 
       // 3. Inventory Logic
@@ -79,38 +82,38 @@ export function useSpecialsData() {
       if (data.data) {
         // Sort: Prioritize stock match percentage, then ingredient match count
         const sorted = data.data.sort((a: APIRecipe, b: APIRecipe) => {
-           const stockA = a.stockMatchPercentage || 0;
-           const stockB = b.stockMatchPercentage || 0;
+          const stockA = a.stockMatchPercentage || 0;
+          const stockB = b.stockMatchPercentage || 0;
 
-           if (stockA !== stockB) {
-               return stockB - stockA; // Higher stock match first
-           }
+          if (stockA !== stockB) {
+            return stockB - stockA; // Higher stock match first
+          }
 
-           // Secondary sort: Number of matched search ingredients
-           const matchA = a.matchCount || 0;
-           const matchB = b.matchCount || 0;
-           return matchB - matchA;
+          // Secondary sort: Number of matched search ingredients
+          const matchA = a.matchCount || 0;
+          const matchB = b.matchCount || 0;
+          return matchB - matchA;
         });
 
         if (reset) {
-            setRecipes(sorted);
-            setOffset(50); // Next batch starts at 50
+          setRecipes(sorted);
+          setOffset(50); // Next batch starts at 50
         } else {
-            // Append unique recipes
-            setRecipes((prev: APIRecipe[]) => {
-                const map = new Map();
-                prev.forEach(r => map.set(r.id, r));
-                sorted.forEach((r: APIRecipe) => map.set(r.id, r));
-                return Array.from(map.values()) as APIRecipe[];
-            });
-            setOffset(prev => prev + 50);
+          // Append unique recipes
+          setRecipes((prev: APIRecipe[]) => {
+            const map = new Map();
+            prev.forEach(r => map.set(r.id, r));
+            sorted.forEach((r: APIRecipe) => map.set(r.id, r));
+            return Array.from(map.values()) as APIRecipe[];
+          });
+          setOffset(prev => prev + 50);
         }
 
         // Simple check for hasMore
         if (sorted.length < 50) {
-            setHasMore(false);
+          setHasMore(false);
         } else {
-            setHasMore(true);
+          setHasMore(true);
         }
       }
     } catch (error) {
@@ -122,11 +125,11 @@ export function useSpecialsData() {
   };
 
   const handleLoadMore = (
-      activeTags: string[],
-      activeCuisines: string[],
-      isReadyToCook: boolean
+    activeTags: string[],
+    activeCuisines: string[],
+    isReadyToCook: boolean,
   ) => {
-      fetchRecipes(false, ingredients, inputInternal, activeTags, activeCuisines, isReadyToCook);
+    fetchRecipes(false, ingredients, inputInternal, activeTags, activeCuisines, isReadyToCook);
   };
 
   return {
@@ -142,6 +145,6 @@ export function useSpecialsData() {
     handleLoadMore,
     ref,
     inView,
-    searchTimeout
+    searchTimeout,
   };
 }

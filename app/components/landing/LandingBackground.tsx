@@ -76,8 +76,6 @@ const LandingBackground = React.memo(function LandingBackground() {
           } as React.CSSProperties
         }
       />
-
-
     </>
   );
 });

@@ -70,17 +70,11 @@ function TierActions({
 
   return (
     <>
-      <button
-        onClick={onEdit}
-        className="text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80"
-      >
+      <button onClick={onEdit} className="text-[#29E7CD] transition-colors hover:text-[#29E7CD]/80">
         <Icon icon={Edit} size="sm" />
       </button>
       {isActive && (
-        <button
-          onClick={onDisable}
-          className="text-red-400 transition-colors hover:text-red-300"
-        >
+        <button onClick={onDisable} className="text-red-400 transition-colors hover:text-red-300">
           <Icon icon={Trash2} size="sm" />
         </button>
       )}

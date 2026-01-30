@@ -14,9 +14,7 @@
     "id": "428dfd85-5389-4e5f-a608-ef73a72f80fa",
     "timestamp": "2026-01-17T23:32:01.558Z",
     "type": "cleanup",
-    "files": [
-      "lib/rsi/architecture-analysis/index.ts"
-    ],
+    "files": ["lib/rsi/architecture-analysis/index.ts"],
     "description": "Remove 1 console.log from index.ts",
     "confidenceScore": 0.85,
     "status": "applied"
@@ -25,9 +23,7 @@
     "id": "6a9bfb8d-49ce-4062-8618-ff271cdfabf5",
     "timestamp": "2026-01-17T23:32:06.698Z",
     "type": "cleanup",
-    "files": [
-      "lib/rsi/orchestrator.ts"
-    ],
+    "files": ["lib/rsi/orchestrator.ts"],
     "description": "Remove 1 console.log from orchestrator.ts",
     "confidenceScore": 0.85,
     "status": "applied"
@@ -36,9 +32,7 @@
     "id": "76d90da4-0764-4c2d-8124-f3c30a8244eb",
     "timestamp": "2026-01-17T23:32:11.818Z",
     "type": "cleanup",
-    "files": [
-      "lib/rsi/rule-evolution/rule-manager.ts"
-    ],
+    "files": ["lib/rsi/rule-evolution/rule-manager.ts"],
     "description": "Remove 1 console.log from rule-manager.ts",
     "confidenceScore": 0.85,
     "status": "applied"
@@ -47,9 +41,7 @@
     "id": "2f0d557a-22f3-4281-9438-9fafc94e1868",
     "timestamp": "2026-01-17T23:32:17.052Z",
     "type": "cleanup",
-    "files": [
-      "lib/rsi/rule-evolution/rule-evaluator.ts"
-    ],
+    "files": ["lib/rsi/rule-evolution/rule-evaluator.ts"],
     "description": "Remove 3 console.log from rule-evaluator.ts",
     "confidenceScore": 0.85,
     "status": "applied"
@@ -58,9 +50,7 @@
     "id": "ab38851e-d12e-42c7-8cfc-ed223ae59e36",
     "timestamp": "2026-01-17T23:32:22.368Z",
     "type": "cleanup",
-    "files": [
-      "lib/rsi/auto-refactoring/refactoring-planner.ts"
-    ],
+    "files": ["lib/rsi/auto-refactoring/refactoring-planner.ts"],
     "description": "Remove 1 console.log from refactoring-planner.ts",
     "confidenceScore": 0.85,
     "status": "applied"
@@ -69,9 +59,7 @@
     "id": "3fc73b35-144a-40f5-afd6-64e2b69c19d5",
     "timestamp": "2026-01-17T23:32:27.464Z",
     "type": "cleanup",
-    "files": [
-      "lib/rsi/auto-refactoring/codemod-runner.ts"
-    ],
+    "files": ["lib/rsi/auto-refactoring/codemod-runner.ts"],
     "description": "Remove 2 console.log from codemod-runner.ts",
     "confidenceScore": 0.85,
     "status": "applied"
@@ -80,9 +68,7 @@
     "id": "0d67d121-6fd8-4a9f-a8f3-44a1c4771776",
     "timestamp": "2026-01-17T23:32:32.562Z",
     "type": "cleanup",
-    "files": [
-      "lib/rsi/predictive-analysis/index.ts"
-    ],
+    "files": ["lib/rsi/predictive-analysis/index.ts"],
     "description": "Remove 1 console.log from index.ts",
     "confidenceScore": 0.85,
     "status": "applied"
@@ -91,9 +77,7 @@
     "id": "5e3104f8-d3ca-4d5c-b1cc-d0e95773a878",
     "timestamp": "2026-01-17T23:32:38.025Z",
     "type": "cleanup",
-    "files": [
-      "lib/logger.ts"
-    ],
+    "files": ["lib/logger.ts"],
     "description": "Remove 1 console.log from logger.ts",
     "confidenceScore": 0.85,
     "status": "applied"

@@ -2,18 +2,18 @@
 
 import { useMemo } from 'react';
 import {
-    Area,
-    AreaChart,
-    Bar,
-    CartesianGrid,
-    Cell,
-    Pie,
-    BarChart as ReBarChart,
-    PieChart as RePieChart,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
+  Area,
+  AreaChart,
+  Bar,
+  CartesianGrid,
+  Cell,
+  Pie,
+  BarChart as ReBarChart,
+  PieChart as RePieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from 'recharts';
 import { PerformanceHistoryItem, PerformanceItem } from '../types';
 

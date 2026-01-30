@@ -19,7 +19,10 @@ export default function AISpecialsPage() {
   const { submitPhoto, isProcessing, isAuthenticated } = usePhotoUpload();
 
   // Selected Recipe State for Modal
-  const [selectedRecipe, setSelectedRecipe] = useState<{ recipe: UnifiedRecipe | null, ingredients: RecipeIngredientWithDetails[] }>({ recipe: null, ingredients: [] });
+  const [selectedRecipe, setSelectedRecipe] = useState<{
+    recipe: UnifiedRecipe | null;
+    ingredients: RecipeIngredientWithDetails[];
+  }>({ recipe: null, ingredients: [] });
 
   // Data & Search Hook
   const {
@@ -33,15 +36,15 @@ export default function AISpecialsPage() {
     fetchRecipes, // Exposed: (reset, ingredients, query, tags, cuisines, readyToCook)
     ref,
     inView,
-    searchTimeout
+    searchTimeout,
   } = useSpecialsData();
 
   // Filter Trigger Wrapper (to update recipes)
   const handleFilterChange = () => {
-     // Re-fetch with new state (will be picked up by the values passed below or effects)
-     // Actually, we need to pass the *latest* values.
-     // Since state updates are async, we might need to rely on an Effect in this component
-     // or pass the new value directly if available.
+    // Re-fetch with new state (will be picked up by the values passed below or effects)
+    // Actually, we need to pass the *latest* values.
+    // Since state updates are async, we might need to rely on an Effect in this component
+    // or pass the new value directly if available.
   };
 
   const {
@@ -52,9 +55,8 @@ export default function AISpecialsPage() {
     selectedCuisines,
     setSelectedCuisines,
     toggleFilterTag,
-    toggleCuisine
+    toggleCuisine,
   } = useSpecialsFilters(handleFilterChange);
-
 
   // --- Logic Wiring ---
 
@@ -62,14 +64,14 @@ export default function AISpecialsPage() {
   // We use an effect here to sync filter state with data fetching
   useEffect(() => {
     const timer = setTimeout(() => {
-         fetchRecipes(
-            true, // reset
-            ingredients,
-            inputInternal.length > 3 ? inputInternal : undefined,
-            filterTags,
-            selectedCuisines,
-            readyToCook
-         );
+      fetchRecipes(
+        true, // reset
+        ingredients,
+        inputInternal.length > 3 ? inputInternal : undefined,
+        filterTags,
+        selectedCuisines,
+        readyToCook,
+      );
     }, 300);
     return () => clearTimeout(timer);
     // We intentionally omit fetchRecipes from deps to avoid loops if strict deps
@@ -79,36 +81,36 @@ export default function AISpecialsPage() {
 
   // 2. Load More Handler
   const handleLoadMore = () => {
-      fetchRecipes(
-        false, // no reset
-        ingredients,
-        inputInternal,
-        filterTags,
-        selectedCuisines,
-        readyToCook
-      );
+    fetchRecipes(
+      false, // no reset
+      ingredients,
+      inputInternal,
+      filterTags,
+      selectedCuisines,
+      readyToCook,
+    );
   };
 
   // 3. Search Actions
   const handleActiveSearch = (term: string) => {
-      setInputInternal(term);
-      setIngredients([]);
-      // Immediate fetch
-      fetchRecipes(true, [], term, filterTags, selectedCuisines, readyToCook);
+    setInputInternal(term);
+    setIngredients([]);
+    // Immediate fetch
+    fetchRecipes(true, [], term, filterTags, selectedCuisines, readyToCook);
   };
 
   const handleAddIngredient = (ing: string) => {
-      const trimmed = ing.trim();
-      if (trimmed && !ingredients.includes(trimmed)) {
-          setIngredients([...ingredients, trimmed]);
-          setInputInternal('');
-          // Effect will trigger fetch due to [ingredients] dependency
-      }
+    const trimmed = ing.trim();
+    if (trimmed && !ingredients.includes(trimmed)) {
+      setIngredients([...ingredients, trimmed]);
+      setInputInternal('');
+      // Effect will trigger fetch due to [ingredients] dependency
+    }
   };
 
   const handleRemoveIngredient = (ing: string) => {
-      setIngredients(ingredients.filter(i => i !== ing));
-      // Effect will trigger fetch
+    setIngredients(ingredients.filter(i => i !== ing));
+    // Effect will trigger fetch
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -116,38 +118,36 @@ export default function AISpecialsPage() {
       e.preventDefault();
       const term = inputInternal.trim();
       if (term.length > 0) {
-          if (term.includes(' ')) {
-              handleActiveSearch(term);
-          } else {
-              handleAddIngredient(term);
-          }
+        if (term.includes(' ')) {
+          handleActiveSearch(term);
+        } else {
+          handleAddIngredient(term);
+        }
       }
     } else if (e.key === 'Backspace' && inputInternal === '' && ingredients.length > 0) {
-        handleRemoveIngredient(ingredients[ingredients.length - 1]);
+      handleRemoveIngredient(ingredients[ingredients.length - 1]);
     }
   };
 
   // 4. Recipe Click
   const handleRecipeClick = (aiRecipe: APIRecipe) => {
-      const adapted = adaptAiToUnified(aiRecipe);
-      setSelectedRecipe(adapted);
+    const adapted = adaptAiToUnified(aiRecipe);
+    setSelectedRecipe(adapted);
   };
 
   // 5. Photo Upload
   const handlePhotoSubmit = async (file: File, prompt: string) => {
-      const result = await submitPhoto(file, prompt);
-      if (result) {
-          setIsUploadModalOpen(false);
-          const newIngredients = Array.from(new Set([...ingredients, ...(result.ingredients || [])]));
-          setIngredients(newIngredients);
-          // Effect will trigger fetch
-      }
+    const result = await submitPhoto(file, prompt);
+    if (result) {
+      setIsUploadModalOpen(false);
+      const newIngredients = Array.from(new Set([...ingredients, ...(result.ingredients || [])]));
+      setIngredients(newIngredients);
+      // Effect will trigger fetch
+    }
   };
-
 
   return (
     <div className="webapp-main-content min-h-screen w-full bg-transparent">
-
       <SpecialsHeader
         inputInternal={inputInternal}
         setInputInternal={setInputInternal}
@@ -161,24 +161,24 @@ export default function AISpecialsPage() {
 
       <div className="mx-auto max-w-[2560px]">
         <SpecialsFilters
-            readyToCook={readyToCook}
-            setReadyToCook={setReadyToCook}
-            selectedCuisines={selectedCuisines}
-            toggleCuisine={toggleCuisine}
-            filterTags={filterTags}
-            toggleFilterTag={toggleFilterTag}
+          readyToCook={readyToCook}
+          setReadyToCook={setReadyToCook}
+          selectedCuisines={selectedCuisines}
+          toggleCuisine={toggleCuisine}
+          filterTags={filterTags}
+          toggleFilterTag={toggleFilterTag}
         />
 
         <SpecialsGrid
-            loading={loading}
-            recipes={recipes}
-            ingredients={ingredients}
-            inputInternal={inputInternal}
-            hasMore={hasMore}
-            loadMore={handleLoadMore}
-            onRecipeClick={handleRecipeClick}
-            observerRef={ref}
-            inView={inView}
+          loading={loading}
+          recipes={recipes}
+          ingredients={ingredients}
+          inputInternal={inputInternal}
+          hasMore={hasMore}
+          loadMore={handleLoadMore}
+          onRecipeClick={handleRecipeClick}
+          observerRef={ref}
+          inView={inView}
         />
       </div>
 
@@ -190,7 +190,6 @@ export default function AISpecialsPage() {
         generatingInstructions={false} // Would need separate state if implementing AI gen logic here
         previewYield={selectedRecipe.recipe?.yield || 4}
         onClose={() => setSelectedRecipe({ recipe: null, ingredients: [] })}
-
         // Stubs
         onEditRecipe={() => {}}
         onShareRecipe={() => {}}
@@ -199,9 +198,12 @@ export default function AISpecialsPage() {
         onDeleteRecipe={() => {}}
         onUpdatePreviewYield={() => {}}
         onRefreshIngredients={async () => {}}
-
         capitalizeRecipeName={(name: string) => name}
-        formatQuantity={(q: number, u: string) => ({ value: q.toFixed(2), unit: u, original: `${q} ${u}` })}
+        formatQuantity={(q: number, u: string) => ({
+          value: q.toFixed(2),
+          unit: u,
+          original: `${q} ${u}`,
+        })}
       />
 
       <PhotoUploadModal

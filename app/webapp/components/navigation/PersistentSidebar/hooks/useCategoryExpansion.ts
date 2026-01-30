@@ -73,13 +73,7 @@ export function useCategoryExpansion(
         lastActiveCategoryRef.current = activeCategory;
       }
     }
-  }, [
-    mounted,
-    hasLoadedSavedCategory,
-    getActiveCategory,
-    expandedCategory,
-    userManuallyToggled,
-  ]);
+  }, [mounted, hasLoadedSavedCategory, getActiveCategory, expandedCategory, userManuallyToggled]);
 
   const handleCategoryToggle = useCallback((category: string) => {
     setUserManuallyToggled(true);

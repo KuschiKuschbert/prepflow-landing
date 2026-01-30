@@ -70,7 +70,7 @@ async function buildErrorUpdateData(
   if (updates.status) {
     updateData.status = updates.status;
     if (updates.status === 'resolved') {
-       Object.assign(updateData, await getResolutionUpdateData(adminUser));
+      Object.assign(updateData, await getResolutionUpdateData(adminUser));
     }
   }
 
@@ -82,16 +82,16 @@ async function buildErrorUpdateData(
 }
 
 async function getResolutionUpdateData(adminUser: AdminUser) {
-    const data: Record<string, unknown> = {
-        resolved_at: new Date().toISOString()
-    };
-    if (supabaseAdmin) {
-        const adminId = await resolveAdminUserId(adminUser.email, supabaseAdmin, logger);
-        if (adminId) {
-          data.resolved_by = adminId;
-        }
+  const data: Record<string, unknown> = {
+    resolved_at: new Date().toISOString(),
+  };
+  if (supabaseAdmin) {
+    const adminId = await resolveAdminUserId(adminUser.email, supabaseAdmin, logger);
+    if (adminId) {
+      data.resolved_by = adminId;
     }
-    return data;
+  }
+  return data;
 }
 
 export { updateErrorSchema };

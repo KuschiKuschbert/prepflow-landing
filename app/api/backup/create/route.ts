@@ -11,18 +11,13 @@ import { getAppError } from '@/lib/utils/error';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import {
-    BackupFormat,
-    prepareBackupContent,
-} from './helpers/prepareContent';
+import { BackupFormat, prepareBackupContent } from './helpers/prepareContent';
 
 const createBackupSchema = z.object({
   format: z.enum(['json', 'sql', 'encrypted']).optional().default('json'),
   encryptionMode: z.enum(['user-password', 'prepflow-only']).optional(),
   password: z.string().optional(),
 });
-
-
 
 /**
  * Creates a manual backup of user data.

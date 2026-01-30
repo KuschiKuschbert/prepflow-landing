@@ -64,7 +64,9 @@ function main() {
 
   if (!fs.existsSync(BASELINE_PATH)) {
     console.warn(`${YELLOW}⚠️  No baseline found at ${BASELINE_PATH}${NC}`);
-    console.log(`${BLUE}💡 Run 'tsx scripts/bundle-budget.ts --save' to set current size as baseline.${NC}`);
+    console.log(
+      `${BLUE}💡 Run 'tsx scripts/bundle-budget.ts --save' to set current size as baseline.${NC}`,
+    );
     return;
   }
 
@@ -78,8 +80,12 @@ function main() {
   console.log(`   Change:   ${diffKB > 0 ? RED : GREEN}${diffKB > 0 ? '+' : ''}${diffKB}KB${NC}`);
 
   if (diffKB > BUDGET_KB) {
-    console.error(`${RED}❌ Budget Exceeded! Bundle increased by ${diffKB}KB (Limit: ${BUDGET_KB}KB)${NC}`);
-    console.error(`   Please optimize your changes or update the baseline if this increase is expected.`);
+    console.error(
+      `${RED}❌ Budget Exceeded! Bundle increased by ${diffKB}KB (Limit: ${BUDGET_KB}KB)${NC}`,
+    );
+    console.error(
+      `   Please optimize your changes or update the baseline if this increase is expected.`,
+    );
     process.exit(1);
   } else {
     console.log(`${GREEN}✅ Bundle stays within budget.${NC}`);

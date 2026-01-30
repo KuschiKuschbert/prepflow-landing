@@ -2,19 +2,19 @@
 
 import { logger } from '@/lib/logger';
 import {
-    formatBrandName,
-    formatIngredientName,
-    formatStorageLocation,
-    formatSupplierName,
-    formatTextInput,
+  formatBrandName,
+  formatIngredientName,
+  formatStorageLocation,
+  formatSupplierName,
+  formatTextInput,
 } from '@/lib/text-utils';
 import { useMemo, useState } from 'react';
 import {
-    calculateCostPerUnit,
-    calculateWastagePercentage,
-    checkValidation as checkValidationHelper,
-    formatCost,
-    getValidationErrors,
+  calculateCostPerUnit,
+  calculateWastagePercentage,
+  checkValidation as checkValidationHelper,
+  formatCost,
+  getValidationErrors,
 } from '../utils/wizard-helpers';
 import { useAllergenDetection } from './hooks/useAllergenDetection';
 import IngredientWizardNavigation from './IngredientWizardNavigation';
@@ -210,8 +210,6 @@ export default function IngredientWizard({
   };
 
   const skipStep2 = () => setWizardStep(3);
-
-
 
   const canProceed = useMemo(() => {
     if (wizardStep === 1 || wizardStep === 4) return checkValidationHelper(1, formData);

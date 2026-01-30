@@ -1,7 +1,4 @@
-import type {
-    ReportQualification,
-    ReportStaffHealthDeclaration,
-} from '../report-item-types';
+import type { ReportQualification, ReportStaffHealthDeclaration } from '../report-item-types';
 
 export interface ReportQualificationsSection {
   all_qualifications: ReportQualification[];

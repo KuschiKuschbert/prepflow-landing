@@ -8,7 +8,7 @@ interface OptimisticCompletion {
 export function mergeOptimisticTasks(
   tasks: TaskWithCompletions[],
   optimisticCompletions: Map<string, OptimisticCompletion>,
-  dates: string[]
+  dates: string[],
 ): TaskWithCompletions[] {
   return tasks.map(task => {
     const optimisticCompletionsForTask: typeof task.completions = [];

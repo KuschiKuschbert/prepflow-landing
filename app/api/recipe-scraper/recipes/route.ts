@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
           sourceFilter,
           formatFilter,
           offset,
-          pageSize
+          pageSize,
         );
         recipes = result.recipes;
         totalRecipes = result.totalRecipes;
@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
           sourceFilter,
           formatFilter,
           offset,
-          pageSize
+          pageSize,
         );
         recipes = result.recipes;
         totalRecipes = result.totalRecipes;

@@ -17,7 +17,11 @@ export async function handlePdfExport(url: string, showSuccess: (msg: string) =>
   }
 }
 
-export function handleFileDownload(url: string, format: string, showSuccess: (msg: string) => void) {
+export function handleFileDownload(
+  url: string,
+  format: string,
+  showSuccess: (msg: string) => void,
+) {
   const a = document.createElement('a');
   a.href = url;
   a.download = `allergen_overview.${format === 'csv' ? 'csv' : 'html'}`;

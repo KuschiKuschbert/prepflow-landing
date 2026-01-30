@@ -5,9 +5,9 @@
 
 import type { KnowledgeBasePattern, KnowledgeBaseRule } from './knowledge-base';
 import {
-    addPatternToKnowledgeBase,
-    addRuleToKnowledgeBase,
-    loadKnowledgeBase,
+  addPatternToKnowledgeBase,
+  addRuleToKnowledgeBase,
+  loadKnowledgeBase,
 } from './knowledge-base';
 import { extractPattern } from './pattern-extractor';
 import { generateRule, updateErrorPatternsFile } from './rule-manager';

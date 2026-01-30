@@ -7,10 +7,7 @@ import { handleDietaryFallback } from './fetchMenuItemsWithFallback/helpers/hand
 import { handlePricingFallback } from './fetchMenuItemsWithFallback/helpers/handlePricingFallback';
 import { handleUltimateFallback } from './fetchMenuItemsWithFallback/helpers/handleUltimateFallback';
 import { logDetailedError } from './fetchMenuWithItems.helpers';
-import {
-    buildFullQuery,
-    buildMinimalQuery
-} from './queryBuilders/menuItemQueries';
+import { buildFullQuery, buildMinimalQuery } from './queryBuilders/menuItemQueries';
 import { FetchResult } from './types';
 
 /**

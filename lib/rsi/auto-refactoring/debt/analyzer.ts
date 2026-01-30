@@ -68,11 +68,7 @@ export function analyzeItem(itemText: string, priority: string): RefactoringPlan
       riskScore: 1,
       status: 'pending',
       codemodPath: 'lib/rsi/auto-refactoring/codemods/log-sanitization.ts',
-      targetFiles: extractPath(itemText) || [
-        'app/**/*.{ts,tsx}',
-        'lib/**/*.ts',
-        '!lib/rsi/**/*',
-      ],
+      targetFiles: extractPath(itemText) || ['app/**/*.{ts,tsx}', 'lib/**/*.ts', '!lib/rsi/**/*'],
       sourceDebtItem: itemText,
     };
   }

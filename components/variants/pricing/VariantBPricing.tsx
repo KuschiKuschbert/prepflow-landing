@@ -23,12 +23,7 @@ export function VariantBPricing({ t: _t, handleEngagement: _handleEngagement }: 
             title="Other Restaurant Software"
             price="$500+"
             period="per month"
-            features={[
-              'Complex setup',
-              'Monthly fees',
-              'Learning curve',
-              'Limited customization'
-            ]}
+            features={['Complex setup', 'Monthly fees', 'Learning curve', 'Limited customization']}
           />
 
           <PricingCard
@@ -39,7 +34,7 @@ export function VariantBPricing({ t: _t, handleEngagement: _handleEngagement }: 
               'Expensive',
               'One-time analysis',
               'No ongoing support',
-              'Limited availability'
+              'Limited availability',
             ]}
           />
 
@@ -47,12 +42,7 @@ export function VariantBPricing({ t: _t, handleEngagement: _handleEngagement }: 
             title="PrepFlow"
             price="AUD $29"
             period="one-time"
-            features={[
-              'Simple setup',
-              'No monthly fees',
-              'Easy to use',
-              'Lifetime access'
-            ]}
+            features={['Simple setup', 'No monthly fees', 'Easy to use', 'Lifetime access']}
             isHighlighted
             ctaLink="https://7495573591101.gumroad.com/l/prepflow"
             ctaText="Choose PrepFlow"
@@ -98,9 +88,7 @@ function PricingCard({
     >
       <h4
         className={`text-fluid-xl mb-4 font-semibold ${
-          isHighlighted
-            ? 'text-[var(--button-active-text)]'
-            : 'text-[var(--foreground-secondary)]'
+          isHighlighted ? 'text-[var(--button-active-text)]' : 'text-[var(--foreground-secondary)]'
         }`}
       >
         {title}

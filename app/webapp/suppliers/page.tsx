@@ -16,9 +16,9 @@ import { useSupplierImport } from './hooks/useSupplierImport';
 import { useSuppliersData } from './hooks/useSuppliersData';
 import { useSuppliersForms } from './hooks/useSuppliersForms';
 import {
-    exportSuppliersToCSV,
-    exportSuppliersToHTML,
-    exportSuppliersToPDF,
+  exportSuppliersToCSV,
+  exportSuppliersToHTML,
+  exportSuppliersToPDF,
 } from './utils/exportSuppliers';
 import { printSuppliers } from './utils/printSuppliers';
 

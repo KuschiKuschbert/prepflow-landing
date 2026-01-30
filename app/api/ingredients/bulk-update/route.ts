@@ -3,12 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import {
-    parseBulkUpdateBody,
-    prepareIngredientUpdateData,
-} from './helpers/parseBody';
-
-
+import { parseBulkUpdateBody, prepareIngredientUpdateData } from './helpers/parseBody';
 
 export async function PUT(request: NextRequest) {
   try {

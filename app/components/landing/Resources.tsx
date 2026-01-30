@@ -37,9 +37,7 @@ function FeatureGrid() {
       </div>
       <div className="rounded-2xl bg-[#1f1f1f]/50 p-6 text-center">
         <h3 className="text-fluid-lg mb-2 font-semibold text-[#3B82F6]">Safe storage</h3>
-        <p className="text-gray-300">
-          Reliable storage, protected access, and regular backups.
-        </p>
+        <p className="text-gray-300">Reliable storage, protected access, and regular backups.</p>
       </div>
       <div className="rounded-2xl bg-[#1f1f1f]/50 p-6 text-center">
         <h3 className="text-fluid-lg mb-2 font-semibold text-[#D925C7]">Privacy first</h3>

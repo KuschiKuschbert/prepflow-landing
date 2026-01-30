@@ -14,5 +14,12 @@ export { isAdmin };
 export type { AuthUser };
 
 // Export everything from new modules
-    export { checkIsAdmin, getAdminRole, getAdminUser, requireAdmin, resolveAdminUserId, standardAdminChecks };
-    export type { AdminRole, AdminUser, SupabaseAdmin };
+export {
+  checkIsAdmin,
+  getAdminRole,
+  getAdminUser,
+  requireAdmin,
+  resolveAdminUserId,
+  standardAdminChecks,
+};
+export type { AdminRole, AdminUser, SupabaseAdmin };

@@ -30,9 +30,8 @@ export async function GET(request: NextRequest) {
     const { totalRecipes, recipesWithNoLines } = await checkRecipeIntegrity(supabaseAdmin);
 
     // Recipe ingredient rows with missing ingredient reference
-    const { uniqueIngredientIdsInLines, missingIngredientRefs } = await checkIngredientIntegrity(
-      supabaseAdmin,
-    );
+    const { uniqueIngredientIdsInLines, missingIngredientRefs } =
+      await checkIngredientIntegrity(supabaseAdmin);
 
     return NextResponse.json({
       success: true,

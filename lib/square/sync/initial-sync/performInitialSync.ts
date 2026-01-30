@@ -7,9 +7,9 @@ import type { SquareConfig } from '../../config';
 import { logSyncOperation } from '../../sync-log';
 import { logInitialSyncCompletion } from './helpers/logSyncCompletion';
 import {
-    markInitialSyncCompleted,
-    markInitialSyncFailed,
-    markInitialSyncStarted,
+  markInitialSyncCompleted,
+  markInitialSyncFailed,
+  markInitialSyncStarted,
 } from './helpers/updateSyncStatus';
 import { runInitialSyncSteps } from './steps-runner';
 import type { InitialSyncResult } from './types';

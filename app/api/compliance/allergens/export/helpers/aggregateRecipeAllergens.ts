@@ -2,9 +2,7 @@
  * Recipe allergen aggregation helper
  */
 
-import {
-    batchAggregateRecipeAllergens
-} from '@/lib/allergens/allergen-aggregation';
+import { batchAggregateRecipeAllergens } from '@/lib/allergens/allergen-aggregation';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
@@ -19,8 +17,6 @@ interface InputRecipe {
   id: string;
   name?: string;
 }
-
-
 
 /**
  * Aggregates allergens for recipes

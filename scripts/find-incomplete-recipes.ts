@@ -19,7 +19,10 @@ if (fs.existsSync(envPath)) {
   }
 }
 
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+);
 
 async function main() {
   console.log('🔍 Identifying incomplete recipes...');
@@ -40,7 +43,12 @@ async function main() {
   const matches = [];
 
   for (const recipe of recipes) {
-    if (!recipe.ingredients || !Array.isArray(recipe.ingredients) || recipe.ingredients.length === 0) continue;
+    if (
+      !recipe.ingredients ||
+      !Array.isArray(recipe.ingredients) ||
+      recipe.ingredients.length === 0
+    )
+      continue;
 
     let defaultCount = 0;
     const total = recipe.ingredients.length;
@@ -49,31 +57,40 @@ async function main() {
       // Check for default "1 pc" signature
       // Also check if name is just "salt" or something that truly is 1 pc vs "chicken breast"
       if (ing.quantity === 1 && ing.unit === 'pc') {
-          defaultCount++;
+        defaultCount++;
       }
     }
 
     // Heuristic: If >50% of ingredients are 1 pc, it's likely incomplete
     if (defaultCount / total > 0.5) {
-        matches.push({
-            id: recipe.id,
-            name: recipe.name,
-            total,
-            defaultCount,
-            ingredients: recipe.ingredients
-        });
+      matches.push({
+        id: recipe.id,
+        name: recipe.name,
+        total,
+        defaultCount,
+        ingredients: recipe.ingredients,
+      });
     }
   }
 
   console.log(`✅ Found ${matches.length} incomplete recipes.`);
 
   if (matches.length > 0) {
-      console.log('Examples:');
-      matches.slice(0, 5).forEach(m => console.log(`- ${m.name} (${m.defaultCount}/${m.total} default)`));
+    console.log('Examples:');
+    matches
+      .slice(0, 5)
+      .forEach(m => console.log(`- ${m.name} (${m.defaultCount}/${m.total} default)`));
 
-      // Save ID list to file for the next script to consume
-      fs.writeFileSync('incomplete-recipes.json', JSON.stringify(matches.map(m => m.id), null, 2));
-      console.log('📝 Saved IDs to incomplete-recipes.json');
+    // Save ID list to file for the next script to consume
+    fs.writeFileSync(
+      'incomplete-recipes.json',
+      JSON.stringify(
+        matches.map(m => m.id),
+        null,
+        2,
+      ),
+    );
+    console.log('📝 Saved IDs to incomplete-recipes.json');
   }
 }
 

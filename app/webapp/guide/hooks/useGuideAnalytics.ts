@@ -29,14 +29,16 @@ export function useGuideAnalytics({
   });
 
   // Get event handlers (passing refs for timing logic)
-  const { onSelectGuide, onNextStep, onPrevStep, onComplete, onBackToList } = useGuideEventHandlers({
-    currentGuide,
-    currentStepIndex,
-    currentStep,
-    guideStartTimeRef,
-    stepStartTimeRef,
-    previousStepIndexRef,
-  });
+  const { onSelectGuide, onNextStep, onPrevStep, onComplete, onBackToList } = useGuideEventHandlers(
+    {
+      currentGuide,
+      currentStepIndex,
+      currentStep,
+      guideStartTimeRef,
+      stepStartTimeRef,
+      previousStepIndexRef,
+    },
+  );
 
   return { onSelectGuide, onNextStep, onPrevStep, onComplete, onBackToList };
 }

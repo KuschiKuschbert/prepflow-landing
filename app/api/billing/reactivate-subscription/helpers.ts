@@ -31,8 +31,9 @@ export async function reactivateStripeSubscription(
 
   try {
     subscription = await stripe.subscriptions.retrieve(subscriptionId);
-  } catch (error: any) {
-    if (error?.code === 'resource_missing') {
+  } catch (error: unknown) {
+    const stripeError = error as { code?: string };
+    if (stripeError?.code === 'resource_missing') {
       throw ApiErrorHandler.createError(
         'Subscription missing in Stripe',
         'SUBSCRIPTION_NOT_FOUND',

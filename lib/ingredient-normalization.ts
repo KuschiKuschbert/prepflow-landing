@@ -8,78 +8,134 @@
 // Common ingredient aliases - maps specific names to base ingredient
 export const INGREDIENT_ALIASES: Record<string, string[]> = {
   // Salts
-  'salt': ['kosher salt', 'sea salt', 'kosher sea salt', 'table salt', 'fine salt', 'coarse salt', 'fleur de sel', 'himalayan salt', 'pink salt', 'rock salt'],
+  salt: [
+    'kosher salt',
+    'sea salt',
+    'kosher sea salt',
+    'table salt',
+    'fine salt',
+    'coarse salt',
+    'fleur de sel',
+    'himalayan salt',
+    'pink salt',
+    'rock salt',
+  ],
 
   // Peppers
-  'pepper': ['black pepper', 'white pepper', 'ground pepper', 'cracked pepper', 'peppercorns', 'freshly ground pepper'],
+  pepper: [
+    'black pepper',
+    'white pepper',
+    'ground pepper',
+    'cracked pepper',
+    'peppercorns',
+    'freshly ground pepper',
+  ],
 
   // Oils
-  'oil': ['vegetable oil', 'canola oil', 'sunflower oil', 'neutral oil', 'cooking oil'],
+  oil: ['vegetable oil', 'canola oil', 'sunflower oil', 'neutral oil', 'cooking oil'],
   'olive oil': ['extra virgin olive oil', 'evoo', 'light olive oil', 'pure olive oil'],
 
   // Butter & Fats
-  'butter': ['unsalted butter', 'salted butter', 'clarified butter', 'melted butter', 'softened butter'],
+  butter: [
+    'unsalted butter',
+    'salted butter',
+    'clarified butter',
+    'melted butter',
+    'softened butter',
+  ],
 
   // Onions & Aromatics
-  'onion': ['brown onion', 'yellow onion', 'white onion', 'spanish onion'],
-  'garlic': ['garlic clove', 'garlic cloves', 'minced garlic', 'fresh garlic', 'crushed garlic'],
+  onion: ['brown onion', 'yellow onion', 'white onion', 'spanish onion'],
+  garlic: ['garlic clove', 'garlic cloves', 'minced garlic', 'fresh garlic', 'crushed garlic'],
 
   // Sugars
-  'sugar': ['white sugar', 'granulated sugar', 'caster sugar', 'superfine sugar'],
+  sugar: ['white sugar', 'granulated sugar', 'caster sugar', 'superfine sugar'],
   'brown sugar': ['light brown sugar', 'dark brown sugar', 'muscovado'],
 
   // Flour
-  'flour': ['plain flour', 'all-purpose flour', 'all purpose flour', 'ap flour', 'wheat flour'],
+  flour: ['plain flour', 'all-purpose flour', 'all purpose flour', 'ap flour', 'wheat flour'],
 
   // Eggs
-  'eggs': ['egg', 'large eggs', 'medium eggs', 'free range eggs', 'chicken eggs'],
+  eggs: ['egg', 'large eggs', 'medium eggs', 'free range eggs', 'chicken eggs'],
 
   // Milk & Cream
-  'milk': ['whole milk', 'full cream milk', 'full fat milk', '2% milk', 'skim milk'],
-  'cream': ['heavy cream', 'thickened cream', 'whipping cream', 'double cream', 'single cream'],
+  milk: ['whole milk', 'full cream milk', 'full fat milk', '2% milk', 'skim milk'],
+  cream: ['heavy cream', 'thickened cream', 'whipping cream', 'double cream', 'single cream'],
 
   // Chicken
-  'chicken': ['chicken breast', 'chicken thigh', 'chicken drumstick', 'chicken leg', 'chicken wing'],
+  chicken: ['chicken breast', 'chicken thigh', 'chicken drumstick', 'chicken leg', 'chicken wing'],
   'chicken breast': ['skinless chicken breast', 'boneless chicken breast', 'chicken fillet'],
 
   // Beef
-  'beef': ['beef mince', 'ground beef', 'beef steak', 'stewing beef'],
+  beef: ['beef mince', 'ground beef', 'beef steak', 'stewing beef'],
   'beef mince': ['ground beef', 'minced beef', 'hamburger meat'],
 
   // Herbs
-  'parsley': ['flat leaf parsley', 'curly parsley', 'italian parsley', 'fresh parsley'],
-  'basil': ['fresh basil', 'sweet basil', 'thai basil'],
-  'cilantro': ['coriander', 'fresh coriander', 'coriander leaves'],
-  'thyme': ['fresh thyme', 'thyme leaves'],
-  'rosemary': ['fresh rosemary', 'rosemary sprig'],
+  parsley: ['flat leaf parsley', 'curly parsley', 'italian parsley', 'fresh parsley'],
+  basil: ['fresh basil', 'sweet basil', 'thai basil'],
+  cilantro: ['coriander', 'fresh coriander', 'coriander leaves'],
+  thyme: ['fresh thyme', 'thyme leaves'],
+  rosemary: ['fresh rosemary', 'rosemary sprig'],
 
   // Tomatoes
-  'tomato': ['roma tomato', 'cherry tomato', 'grape tomato', 'plum tomato', 'vine tomato'],
+  tomato: ['roma tomato', 'cherry tomato', 'grape tomato', 'plum tomato', 'vine tomato'],
   'canned tomatoes': ['diced tomatoes', 'crushed tomatoes', 'tomato puree', 'tinned tomatoes'],
 
   // Cheese
-  'cheese': ['cheddar', 'cheddar cheese', 'mozzarella', 'parmesan'],
-  'parmesan': ['parmigiano reggiano', 'grated parmesan', 'parmesan cheese'],
+  cheese: ['cheddar', 'cheddar cheese', 'mozzarella', 'parmesan'],
+  parmesan: ['parmigiano reggiano', 'grated parmesan', 'parmesan cheese'],
 
   // Vinegar
-  'vinegar': ['white vinegar', 'distilled vinegar'],
+  vinegar: ['white vinegar', 'distilled vinegar'],
 
   // Stock/Broth
-  'stock': ['broth', 'chicken stock', 'beef stock', 'vegetable stock', 'chicken broth', 'beef broth'],
+  stock: ['broth', 'chicken stock', 'beef stock', 'vegetable stock', 'chicken broth', 'beef broth'],
   'chicken stock': ['chicken broth', 'chicken bouillon'],
 
   // Starch & Grains
-  'rice': ['basmati rice', 'jasmine rice', 'brown rice', 'sushi rice', 'white rice', 'long grain rice', 'short grain rice'],
-  'pasta': ['spaghetti', 'penne', 'fusilli', 'rigatoni', 'linguine', 'macaroni', 'fettuccine', 'dried pasta', 'fresh pasta'],
+  rice: [
+    'basmati rice',
+    'jasmine rice',
+    'brown rice',
+    'sushi rice',
+    'white rice',
+    'long grain rice',
+    'short grain rice',
+  ],
+  pasta: [
+    'spaghetti',
+    'penne',
+    'fusilli',
+    'rigatoni',
+    'linguine',
+    'macaroni',
+    'fettuccine',
+    'dried pasta',
+    'fresh pasta',
+  ],
 
   // Vegetables
-  'potato': ['baby potato', 'new potato', 'king edward potato', 'maris piper', 'russet potato', 'sweet potato', 'yam'],
-  'ginger': ['fresh ginger', 'ginger root', 'grated ginger', 'minced ginger'],
-  'lemon': ['lemon juice', 'lemon zest', 'fresh lemon juice'],
-  'lime': ['lime juice', 'lime zest', 'fresh lime juice'],
+  potato: [
+    'baby potato',
+    'new potato',
+    'king edward potato',
+    'maris piper',
+    'russet potato',
+    'sweet potato',
+    'yam',
+  ],
+  ginger: ['fresh ginger', 'ginger root', 'grated ginger', 'minced ginger'],
+  lemon: ['lemon juice', 'lemon zest', 'fresh lemon juice'],
+  lime: ['lime juice', 'lime zest', 'fresh lime juice'],
 
   // Dairy
-  'yoghurt': ['greek yoghurt', 'natural yoghurt', 'plain yoghurt', 'low fat yoghurt', 'full fat yoghurt'],
+  yoghurt: [
+    'greek yoghurt',
+    'natural yoghurt',
+    'plain yoghurt',
+    'low fat yoghurt',
+    'full fat yoghurt',
+  ],
 };
 
 // Reverse map for quick lookup: alias -> base ingredient
@@ -129,13 +185,40 @@ export function extractCoreIngredient(ingredientName: string): string {
 
   // Words to remove (descriptors, quantities, etc.)
   const removeWords = [
-    'fresh', 'dried', 'frozen', 'raw', 'cooked',
-    'chopped', 'diced', 'minced', 'sliced', 'crushed', 'grated',
-    'large', 'medium', 'small', 'extra',
-    'organic', 'free range', 'grass fed',
-    'for frying', 'for cooking', 'to taste',
-    'whole', 'white', 'brown', 'red', 'green', 'yellow', 'black', 'blue',
-    'sweet', 'hot', 'dry', 'fresh', 'canned',
+    'fresh',
+    'dried',
+    'frozen',
+    'raw',
+    'cooked',
+    'chopped',
+    'diced',
+    'minced',
+    'sliced',
+    'crushed',
+    'grated',
+    'large',
+    'medium',
+    'small',
+    'extra',
+    'organic',
+    'free range',
+    'grass fed',
+    'for frying',
+    'for cooking',
+    'to taste',
+    'whole',
+    'white',
+    'brown',
+    'red',
+    'green',
+    'yellow',
+    'black',
+    'blue',
+    'sweet',
+    'hot',
+    'dry',
+    'fresh',
+    'canned',
   ];
 
   let result = lower;
@@ -155,7 +238,8 @@ export function extractCoreIngredient(ingredientName: string): string {
  */
 function levenshtein(a: string, b: string): number {
   const matrix = [];
-  const al = a.length, bl = b.length;
+  const al = a.length,
+    bl = b.length;
 
   for (let i = 0; i <= al; i++) matrix[i] = [i];
   for (let j = 0; j <= bl; j++) matrix[0][j] = j;
@@ -167,8 +251,8 @@ function levenshtein(a: string, b: string): number {
       } else {
         matrix[i][j] = Math.min(
           matrix[i - 1][j - 1] + 1, // substitution
-          matrix[i][j - 1] + 1,     // insertion
-          matrix[i - 1][j] + 1      // deletion
+          matrix[i][j - 1] + 1, // insertion
+          matrix[i - 1][j] + 1, // deletion
         );
       }
     }
@@ -194,7 +278,7 @@ export function ingredientsMatch(stockIngredient: string, recipeIngredient: stri
 
   // Skip fuzzy logic for very short words to avoid false positives (e.g. "oil" matching "il")
   if (coreStock.length < 3 || coreRecipe.length < 3) {
-      return coreStock === coreRecipe;
+    return coreStock === coreRecipe;
   }
 
   if (coreStock.includes(coreRecipe) || coreRecipe.includes(coreStock)) {

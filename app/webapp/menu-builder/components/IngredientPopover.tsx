@@ -58,11 +58,7 @@ export function IngredientPopover({
       aria-labelledby="popover-title"
     >
       <div className="flex max-h-[500px] w-full flex-col overflow-hidden rounded-2xl bg-[var(--surface)]/95">
-        <PopoverHeader
-          menuItemName={menuItemName}
-          menuItemType={menuItemType}
-          onClose={onClose}
-        />
+        <PopoverHeader menuItemName={menuItemName} menuItemType={menuItemType} onClose={onClose} />
         <PopoverContent
           loading={loading}
           error={error}
@@ -83,10 +79,7 @@ function PopoverHeader({ menuItemName, menuItemType, onClose }: any) {
   return (
     <div className="flex items-center justify-between border-b border-[var(--border)] p-4">
       <div className="min-w-0 flex-1">
-        <h3
-          id="popover-title"
-          className="truncate text-sm font-semibold text-[var(--foreground)]"
-        >
+        <h3 id="popover-title" className="truncate text-sm font-semibold text-[var(--foreground)]">
           {menuItemName}
         </h3>
         <p className="mt-0.5 text-xs text-[var(--foreground-muted)]">

@@ -12,7 +12,10 @@ interface AIResponse {
 }
 
 interface UsePhotoUploadResult {
-  submitPhoto: (file: File, prompt: string) => Promise<{ ingredients: string[]; suggestions: string[] } | null>;
+  submitPhoto: (
+    file: File,
+    prompt: string,
+  ) => Promise<{ ingredients: string[]; suggestions: string[] } | null>;
   isProcessing: boolean;
   isAuthenticated: boolean;
 }
@@ -61,7 +64,6 @@ export function usePhotoUpload(): UsePhotoUploadResult {
       } else {
         throw new Error(result.message || 'Failed to process image');
       }
-
     } catch (err) {
       logger.error('[usePhotoUpload] Error processing image:', {
         error: err instanceof Error ? err.message : String(err),

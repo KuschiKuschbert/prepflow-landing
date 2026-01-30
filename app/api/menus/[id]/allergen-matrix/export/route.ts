@@ -4,8 +4,8 @@
 
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import {
-    aggregateDishDietaryStatus,
-    aggregateRecipeDietaryStatus,
+  aggregateDishDietaryStatus,
+  aggregateRecipeDietaryStatus,
 } from '@/lib/dietary/dietary-aggregation';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
@@ -13,8 +13,6 @@ import { EnrichedMenuItem } from '../../../types';
 import { fetchMenuWithItems } from '../../helpers/fetchMenuWithItems';
 import { generateHTML } from './helpers/generateHTML';
 import { generateCSV, processMenuItemsToMatrix } from './helpers/processMatrixData';
-
-
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {

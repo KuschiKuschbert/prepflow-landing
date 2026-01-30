@@ -2,12 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
-import {
-    fetchDishSections,
-    fetchDishes,
-    fetchSections,
-    mapSectionsWithDishes,
-} from './service';
+import { fetchDishSections, fetchDishes, fetchSections, mapSectionsWithDishes } from './service';
 import { Dish, DishSection, KitchenSection } from './types';
 
 const TABLE_NOT_FOUND_RESPONSE = {

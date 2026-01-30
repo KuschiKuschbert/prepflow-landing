@@ -20,7 +20,6 @@ export async function validateGeofence(
   latitude: number,
   longitude: number,
 ): Promise<{ isValid: boolean; distance: number; error?: NextResponse }> {
-
   // Fetch venue settings
   let targetVenue = DEFAULT_VENUE;
 

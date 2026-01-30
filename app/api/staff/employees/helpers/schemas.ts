@@ -4,7 +4,11 @@ export const createQualificationSchema = z.object({
   qualification_type_id: z.string().uuid('Invalid qualification type ID'),
   issue_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)'),
   certificate_number: z.string().optional().nullable(),
-  expiry_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)').optional().nullable(),
+  expiry_date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)')
+    .optional()
+    .nullable(),
   issuing_authority: z.string().optional().nullable(),
   document_url: z.string().url().optional().nullable().or(z.literal('')),
   notes: z.string().optional().nullable(),

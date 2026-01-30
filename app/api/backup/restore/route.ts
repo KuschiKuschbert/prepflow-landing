@@ -28,8 +28,6 @@ const restoreBackupSchema = z.object({
   password: z.string().optional(),
 });
 
-
-
 // Helper to safely parse request body
 async function safeParseBody(request: NextRequest) {
   try {

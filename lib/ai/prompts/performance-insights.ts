@@ -49,8 +49,10 @@ export function buildPerformanceInsightsPrompt(
   const burntToastList = burntToast.slice(0, 10).map(formatItem).join('\n') || 'None';
   const chefsKissList = chefsKiss.slice(0, 10).map(formatItem).join('\n') || 'None';
 
-  return PERFORMANCE_INSIGHTS_PROMPT_TEMPLATE
-    .replace('{{performanceScore}}', performanceScore.toString())
+  return PERFORMANCE_INSIGHTS_PROMPT_TEMPLATE.replace(
+    '{{performanceScore}}',
+    performanceScore.toString(),
+  )
     .replace('{{averageMargin}}', averageMargin.toFixed(1))
     .replace('{{totalRevenue}}', totalRevenue.toFixed(2))
     .replace('{{totalProfit}}', totalProfit.toFixed(2))

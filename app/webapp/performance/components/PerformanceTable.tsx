@@ -55,7 +55,7 @@ function MobileView({ performanceItems }: { performanceItems: PerformanceItem[] 
 function DesktopView({
   performanceItems,
   handleColumnSort,
-  getSortIcon
+  getSortIcon,
 }: {
   performanceItems: PerformanceItem[];
   handleColumnSort: any;

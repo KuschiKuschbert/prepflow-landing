@@ -4,7 +4,11 @@ import { ConversionResult } from '../types';
 
 export const WEIGHT_UNITS_TO_CONVERT = ['oz', 'ounce', 'ounces', 'lb', 'pound', 'pounds'];
 
-export function convertWeightUnit(quantity: number, unit: string, normalized: string): ConversionResult | null {
+export function convertWeightUnit(
+  quantity: number,
+  unit: string,
+  normalized: string,
+): ConversionResult | null {
   if (!WEIGHT_UNITS_TO_CONVERT.includes(normalized)) {
     return null;
   }

@@ -66,61 +66,61 @@ export async function analyzePrepDetails({
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapToRecipePrepDetails(recipe: Recipe, parsed: any): RecipePrepDetails {
   return {
-      recipeId: recipe.id,
-      recipeName: recipe.recipe_name,
-      prepDetails: [
-        ...parsed.cutShapes.map((cs: any) => ({
-          type: 'cut_shape' as const,
-          ingredientName: cs.ingredient,
-          description: `${cs.ingredient} - ${cs.shape}${cs.quantity ? ` (${cs.quantity})` : ''}`,
-        })),
-        ...parsed.sauces.map((s: any) => ({
-          type: 'sauce' as const,
-          description: s.name,
-          details: s.instructions,
-        })),
-        ...parsed.marinations.map((m: any) => ({
-          type: 'marination' as const,
-          ingredientName: m.ingredient,
-          description: `${m.ingredient} - ${m.method}${m.duration ? ` (${m.duration})` : ''}`,
-        })),
-        ...parsed.preCookingSteps.map((pc: any) => ({
-          type: 'pre_cooking' as const,
-          ingredientName: pc.ingredient,
-          description: `${pc.ingredient} - ${pc.step}`,
-        })),
-        ...parsed.specialTechniques.map((st: any) => ({
-          type: 'technique' as const,
-          description: st.description,
-          details: st.details,
-        })),
-      ],
-      sauces: parsed.sauces.map((s: any) => ({
-        name: s.name,
-        ingredients: s.ingredients,
-        instructions: s.instructions,
-        recipeId: recipe.id,
+    recipeId: recipe.id,
+    recipeName: recipe.recipe_name,
+    prepDetails: [
+      ...parsed.cutShapes.map((cs: any) => ({
+        type: 'cut_shape' as const,
+        ingredientName: cs.ingredient,
+        description: `${cs.ingredient} - ${cs.shape}${cs.quantity ? ` (${cs.quantity})` : ''}`,
       })),
-      marinations: parsed.marinations.map((m: any) => ({
-        ingredient: m.ingredient,
-        method: m.method,
-        duration: m.duration,
-        recipeId: recipe.id,
+      ...parsed.sauces.map((s: any) => ({
+        type: 'sauce' as const,
+        description: s.name,
+        details: s.instructions,
       })),
-      cutShapes: parsed.cutShapes.map((cs: any) => ({
-        ingredient: cs.ingredient,
-        shape: cs.shape,
-        quantity: cs.quantity,
+      ...parsed.marinations.map((m: any) => ({
+        type: 'marination' as const,
+        ingredientName: m.ingredient,
+        description: `${m.ingredient} - ${m.method}${m.duration ? ` (${m.duration})` : ''}`,
       })),
-      preCookingSteps: parsed.preCookingSteps.map((pc: any) => ({
-        ingredient: pc.ingredient,
-        step: pc.step,
+      ...parsed.preCookingSteps.map((pc: any) => ({
+        type: 'pre_cooking' as const,
+        ingredientName: pc.ingredient,
+        description: `${pc.ingredient} - ${pc.step}`,
       })),
-      specialTechniques: parsed.specialTechniques.map((st: any) => ({
+      ...parsed.specialTechniques.map((st: any) => ({
+        type: 'technique' as const,
         description: st.description,
         details: st.details,
       })),
-    };
+    ],
+    sauces: parsed.sauces.map((s: any) => ({
+      name: s.name,
+      ingredients: s.ingredients,
+      instructions: s.instructions,
+      recipeId: recipe.id,
+    })),
+    marinations: parsed.marinations.map((m: any) => ({
+      ingredient: m.ingredient,
+      method: m.method,
+      duration: m.duration,
+      recipeId: recipe.id,
+    })),
+    cutShapes: parsed.cutShapes.map((cs: any) => ({
+      ingredient: cs.ingredient,
+      shape: cs.shape,
+      quantity: cs.quantity,
+    })),
+    preCookingSteps: parsed.preCookingSteps.map((pc: any) => ({
+      ingredient: pc.ingredient,
+      step: pc.step,
+    })),
+    specialTechniques: parsed.specialTechniques.map((st: any) => ({
+      description: st.description,
+      details: st.details,
+    })),
+  };
 }
 
 /**

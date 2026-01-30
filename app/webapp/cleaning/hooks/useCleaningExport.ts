@@ -6,9 +6,9 @@ import { getTaskDatesWithStatus, type TaskWithCompletions } from '@/lib/cleaning
 import { logger } from '@/lib/logger';
 import { useState } from 'react';
 import {
-    exportCleaningScheduleToCSV,
-    exportCleaningScheduleToHTML,
-    exportCleaningScheduleToPDF,
+  exportCleaningScheduleToCSV,
+  exportCleaningScheduleToHTML,
+  exportCleaningScheduleToPDF,
 } from '../utils/exportCleaningSchedules';
 import { printCleaningSchedule, type CleaningTask } from '../utils/printCleaningSchedule';
 

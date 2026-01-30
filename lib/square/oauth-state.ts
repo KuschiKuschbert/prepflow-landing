@@ -18,7 +18,6 @@ interface StateData {
 const NONCE_LENGTH = 16;
 const DEFAULT_STATE_AGE_MS = 10 * 60 * 1000; // 10 minutes
 
-
 /**
  * Generate a secure state token for OAuth flow.
  * Includes user ID, environment, and a timestamp for validation.

@@ -3,21 +3,21 @@
 import { Icon } from '@/components/ui/Icon';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import {
-    Activity,
-    AlertTriangle,
-    BarChart3,
-    ChefHat,
-    CreditCard,
-    Database,
-    Flag,
-    LayoutDashboard,
-    LogOut,
-    Menu,
-    MessageSquare,
-    Package,
-    Users,
-    Wrench,
-    X,
+  Activity,
+  AlertTriangle,
+  BarChart3,
+  ChefHat,
+  CreditCard,
+  Database,
+  Flag,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  MessageSquare,
+  Package,
+  Users,
+  Wrench,
+  X,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -87,7 +87,11 @@ function AdminNavLink({ item, isActive, onClick }: AdminNavLinkProps) {
  * @component
  * @returns {JSX.Element} Admin navigation sidebar with mobile menu support
  */
-function getNavItemsWithBadges(items: NavItem[], ticketsCount: number, errorsCount: number): (NavItem & { badge?: number })[] {
+function getNavItemsWithBadges(
+  items: NavItem[],
+  ticketsCount: number,
+  errorsCount: number,
+): (NavItem & { badge?: number })[] {
   return items.map(item => {
     if (item.href === '/admin/support-tickets') {
       return { ...item, badge: ticketsCount };
@@ -112,7 +116,11 @@ export default function AdminNavigation() {
   };
 
   // Update nav items with badge count
-  const navItemsWithBadge = getNavItemsWithBadges(navItems, unresolvedTicketsCount, unresolvedErrorsCount);
+  const navItemsWithBadge = getNavItemsWithBadges(
+    navItems,
+    unresolvedTicketsCount,
+    unresolvedErrorsCount,
+  );
 
   return (
     <>
@@ -190,10 +198,5 @@ function SidebarFooter({ onSignOut }: { onSignOut: () => void }) {
 
 function MobileOverlay({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   if (!isOpen) return null;
-  return (
-    <div
-      className="desktop:hidden fixed inset-0 z-30 bg-black/60"
-      onClick={onClose}
-    />
-  );
+  return <div className="desktop:hidden fixed inset-0 z-30 bg-black/60" onClick={onClose} />;
 }

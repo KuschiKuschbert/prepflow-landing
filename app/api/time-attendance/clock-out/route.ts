@@ -49,13 +49,15 @@ export async function POST(request: NextRequest) {
     if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
 
     // Get the authenticated user
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401),
-        { status: 401 }
-      );
+      return NextResponse.json(ApiErrorHandler.createError('Unauthorized', 'UNAUTHORIZED', 401), {
+        status: 401,
+      });
     }
 
     const body = await request.json();
@@ -80,12 +82,15 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (employeeError || !employeeData) {
-      logger.warn('[Time Attendance API] Clock-out attempted by user without linked employee record', {
-        user_id: user.id
-      });
+      logger.warn(
+        '[Time Attendance API] Clock-out attempted by user without linked employee record',
+        {
+          user_id: user.id,
+        },
+      );
       return NextResponse.json(
         ApiErrorHandler.createError('User is not linked to an employee record', 'FORBIDDEN', 403),
-        { status: 403 }
+        { status: 403 },
       );
     }
 

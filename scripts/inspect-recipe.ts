@@ -34,19 +34,19 @@ async function main() {
 
   console.log(`Found ${recipes.length} recipes.`);
   for (const recipe of recipes) {
-      console.log(`\nID: ${recipe.id}`);
-      console.log(`Name: ${recipe.name}`);
-      console.log('Recipe Dump:', JSON.stringify(recipe, null, 2));
+    console.log(`\nID: ${recipe.id}`);
+    console.log(`Name: ${recipe.name}`);
+    console.log('Recipe Dump:', JSON.stringify(recipe, null, 2));
 
-      console.log('Description:', recipe.description);
-      console.log('AI Prompt:', recipe.ai_prompt);
-      console.log('Meta:', JSON.stringify(recipe.meta, null, 2));
+    console.log('Description:', recipe.description);
+    console.log('AI Prompt:', recipe.ai_prompt);
+    console.log('Meta:', JSON.stringify(recipe.meta, null, 2));
 
-      // Check instructions specifically as they naturally contain quantities
-      console.log('Instructions Dump:', JSON.stringify(recipe.instructions, null, 2));
+    // Check instructions specifically as they naturally contain quantities
+    console.log('Instructions Dump:', JSON.stringify(recipe.instructions, null, 2));
 
-      // Also log what our parser WOULD find
-      /*
+    // Also log what our parser WOULD find
+    /*
       if (Array.isArray(recipe.ingredients)) {
           console.log('--- Parser Check ---');
           const { parseIngredientString } = require('../lib/recipe-normalization/ingredient-parser');

@@ -1,10 +1,10 @@
 import type {
-    ReportCleaningTask,
-    ReportEquipmentMaintenance,
-    ReportSanitizerLog,
-    ReportTemperatureLog,
-    ReportTemperatureViolation,
-    ReportWasteLog,
+  ReportCleaningTask,
+  ReportEquipmentMaintenance,
+  ReportSanitizerLog,
+  ReportTemperatureLog,
+  ReportTemperatureViolation,
+  ReportWasteLog,
 } from '../report-item-types';
 
 export interface ReportTemperatureLogsSection {

@@ -59,7 +59,9 @@ interface KB {
 function syncFromAiRules(kb: KB) {
   if (!fs.existsSync(AI_RULES_PATH)) return;
   const content = fs.readFileSync(AI_RULES_PATH, 'utf-8');
-  const memoryBankMatch = content.match(/## 4\. 🧠 Memory Bank \(Lessons Learned\)\n\n([\s\S]*?)\n##/);
+  const memoryBankMatch = content.match(
+    /## 4\. 🧠 Memory Bank \(Lessons Learned\)\n\n([\s\S]*?)\n##/,
+  );
 
   if (memoryBankMatch) {
     const entries = memoryBankMatch[1].split('\n').filter(l => l.trim().startsWith('-'));
@@ -79,15 +81,17 @@ function syncFromAiRules(kb: KB) {
             severity: 'Medium',
             pattern: title,
             context: { source: 'AI_RULES.md', date },
-            fixes: [{
-              id: `FIX-${id}`,
-              solution: desc,
-              prevention: 'Follow AI Rules strictly',
-              documentedAt: new Date().toISOString(),
-              documentedBy: 'The Documenter'
-            }],
+            fixes: [
+              {
+                id: `FIX-${id}`,
+                solution: desc,
+                prevention: 'Follow AI Rules strictly',
+                documentedAt: new Date().toISOString(),
+                documentedBy: 'The Documenter',
+              },
+            ],
             similarErrors: [],
-            preventionRules: []
+            preventionRules: [],
           });
           console.log(`${GREEN}  + Added rule from AI_RULES: ${title}${NC}`);
         }
@@ -113,15 +117,17 @@ function syncFromFixes(kb: KB) {
         severity: 'Medium',
         pattern: titleMatch[1],
         context: { file },
-        fixes: [{
-          id: `FIX-${id}`,
-          solution: `See docs/errors/fixes/${file}`,
-          prevention: 'Check historical fixes before refactoring',
-          documentedAt: new Date().toISOString(),
-          documentedBy: 'The Documenter'
-        }],
+        fixes: [
+          {
+            id: `FIX-${id}`,
+            solution: `See docs/errors/fixes/${file}`,
+            prevention: 'Check historical fixes before refactoring',
+            documentedAt: new Date().toISOString(),
+            documentedBy: 'The Documenter',
+          },
+        ],
         similarErrors: [],
-        preventionRules: []
+        preventionRules: [],
       });
       console.log(`${GREEN}  + Added fix from ${file}${NC}`);
     }
@@ -136,7 +142,7 @@ function main() {
     lastUpdated: new Date().toISOString(),
     errors: [],
     patterns: [],
-    rules: []
+    rules: [],
   };
 
   if (fs.existsSync(KB_PATH)) {

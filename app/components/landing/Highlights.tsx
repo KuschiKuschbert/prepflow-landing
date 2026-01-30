@@ -121,7 +121,6 @@ function HighlightAccent({ highlight }: { highlight: Highlight }) {
   );
 }
 
-
 function Highlights() {
   return (
     <section className="tablet:py-32 relative bg-transparent py-24">

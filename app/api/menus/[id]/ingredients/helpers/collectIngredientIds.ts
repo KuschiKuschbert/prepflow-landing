@@ -1,15 +1,11 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
-import {
-    fetchDishIngredients,
-    fetchDishRecipes,
-    fetchRecipeIngredients
-} from './db-fetchers';
+import { fetchDishIngredients, fetchDishRecipes, fetchRecipeIngredients } from './db-fetchers';
 
 async function processDishIngredients(
   dishIds: Set<string>,
   menuId: string,
-  ingredientIds: Set<string>
+  ingredientIds: Set<string>,
 ) {
   const idsArray = Array.from(dishIds);
   if (idsArray.length === 0) return;
@@ -40,7 +36,7 @@ async function processDishIngredients(
 async function processRecipeIngredients(
   recipeIds: Set<string>,
   menuId: string,
-  ingredientIds: Set<string>
+  ingredientIds: Set<string>,
 ) {
   const idsArray = Array.from(recipeIds);
   if (idsArray.length === 0) return;

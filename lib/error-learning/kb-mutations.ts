@@ -1,9 +1,9 @@
 import { loadKnowledgeBase, saveKnowledgeBase } from './storage';
 import type {
-    KnowledgeBaseError,
-    KnowledgeBaseFix,
-    KnowledgeBasePattern,
-    KnowledgeBaseRule,
+  KnowledgeBaseError,
+  KnowledgeBaseFix,
+  KnowledgeBasePattern,
+  KnowledgeBaseRule,
 } from './types';
 
 /**

@@ -65,8 +65,7 @@ async function handleDataExportRequest(request: NextRequest) {
   const format = searchParams.get('format') || 'json';
 
   // Get data (reuse search logic)
-  const tablesToSearch =
-    table === 'all' ? ['ingredients', 'recipes', 'dishes', 'users'] : [table];
+  const tablesToSearch = table === 'all' ? ['ingredients', 'recipes', 'dishes', 'users'] : [table];
 
   const allData = await collectExportData(tablesToSearch, query);
 

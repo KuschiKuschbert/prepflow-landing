@@ -12,12 +12,7 @@ interface UseSaveHandlerProps {
   onSaveSuccess?: () => void;
 }
 
-export function useDishSave({
-  dishState,
-  saveDish,
-  setError,
-  onSaveSuccess,
-}: UseSaveHandlerProps) {
+export function useDishSave({ dishState, saveDish, setError, onSaveSuccess }: UseSaveHandlerProps) {
   const { showSuccess, showError } = useNotification();
   const onRecipeCreated = useOnRecipeCreated();
   const onDishCreated = useOnDishCreated();

@@ -247,7 +247,9 @@ export function RecipeEditDrawer({
             updateCalculation(ingredientId, newQuantity, ingredients, setCalculations)
           }
           onRemoveCalculation={ingredientId =>
-            setCalculations(prev => prev.filter((calc: COGSCalculation) => calc.ingredientId !== ingredientId))
+            setCalculations(prev =>
+              prev.filter((calc: COGSCalculation) => calc.ingredientId !== ingredientId),
+            )
           }
           setCalculations={setCalculations}
         />

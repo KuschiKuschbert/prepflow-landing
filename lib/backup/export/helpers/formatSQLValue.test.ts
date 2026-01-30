@@ -1,4 +1,3 @@
-
 // Mock env vars for smoke test
 process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://mock.supabase.co';
 process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'mock-key';
@@ -14,9 +13,9 @@ describe('formatSQLValue', () => {
 
     // Check all exported functions
     Object.entries(Module).forEach(([name, exp]) => {
-        if (typeof exp === 'function') {
-            expect(exp).toBeDefined();
-        }
+      if (typeof exp === 'function') {
+        expect(exp).toBeDefined();
+      }
     });
   });
 });

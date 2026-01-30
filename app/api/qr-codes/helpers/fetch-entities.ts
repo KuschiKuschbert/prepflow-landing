@@ -1,12 +1,12 @@
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
 import {
-    CleaningAreaRow,
-    EmployeeRow,
-    QRCodeEntity,
-    RecipeRow,
-    StorageEquipmentRow,
-    SupplierRow,
+  CleaningAreaRow,
+  EmployeeRow,
+  QRCodeEntity,
+  RecipeRow,
+  StorageEquipmentRow,
+  SupplierRow,
 } from './types';
 
 const STORAGE_EQUIPMENT_TYPES = [

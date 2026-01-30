@@ -8,7 +8,6 @@ interface Feature {
   screenshotAlt: string;
 }
 
-
 const STAGGER_DELAY = 30;
 
 export function useImageEntranceAnimation(

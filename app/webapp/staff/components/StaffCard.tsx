@@ -68,35 +68,47 @@ export function StaffCard({
               <h3 className="truncate text-lg font-bold text-[var(--foreground)]">
                 {member.first_name} {member.last_name}
               </h3>
-              <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${getStatusColor(member.status)}`}>
+              <span
+                className={`rounded-full border px-2.5 py-0.5 text-[10px] font-bold tracking-wider uppercase ${getStatusColor(member.status)}`}
+              >
                 {member.status}
               </span>
             </div>
 
             <p className="mt-0.5 truncate text-sm text-[var(--foreground-muted)]">
-              {member.role.charAt(0).toUpperCase() + member.role.slice(1)} • {member.employment_type}
+              {member.role.charAt(0).toUpperCase() + member.role.slice(1)} •{' '}
+              {member.employment_type}
             </p>
 
             <div className="mt-4 flex items-center gap-4">
-               <div className="flex items-center gap-1.5 text-xs font-medium text-[var(--foreground-muted)]">
-                  <Icon icon={ShieldCheck} size="xs" className={qualCount > 0 ? "text-[var(--primary)]" : "text-gray-400"} />
-                  <span>{qualCount} Quals</span>
-               </div>
+              <div className="flex items-center gap-1.5 text-xs font-medium text-[var(--foreground-muted)]">
+                <Icon
+                  icon={ShieldCheck}
+                  size="xs"
+                  className={qualCount > 0 ? 'text-[var(--primary)]' : 'text-gray-400'}
+                />
+                <span>{qualCount} Quals</span>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Quick Actions Overlay (Appears on Hover) */}
-        <div className="absolute right-2 top-2 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="absolute top-2 right-2 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
           <button
-            onClick={(e) => {
+            onClick={e => {
               e.stopPropagation();
               setShowDeleteConfirm(true);
             }}
             className="rounded-lg bg-red-500/10 p-2 text-red-500 hover:bg-red-500/20"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
             </svg>
           </button>
         </div>

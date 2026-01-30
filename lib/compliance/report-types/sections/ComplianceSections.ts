@@ -1,11 +1,11 @@
 import type {
-    ReportAllergenRecord,
-    ReportComplianceGap,
-    ReportComplianceRecord,
-    ReportHACCPRecord,
-    ReportIncident,
-    ReportProcedure,
-    ReportSupplierVerification,
+  ReportAllergenRecord,
+  ReportComplianceGap,
+  ReportComplianceRecord,
+  ReportHACCPRecord,
+  ReportIncident,
+  ReportProcedure,
+  ReportSupplierVerification,
 } from '../report-item-types';
 
 export interface ReportComplianceRecordsSection {

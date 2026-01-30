@@ -11,7 +11,6 @@
   "app/webapp/recipes/hooks/useDishFormData.ts",
   "app/webapp/suppliers/hooks/useSupplierImportProcessor.ts",
   "app/webapp/ingredients/components/hooks/useCSVImport.ts",
-
   "app/webapp/menu-builder/utils/normalizeMenuItem.ts",
   "app/webapp/recipes/components/hooks/useDishesClientController.ts",
   "app/webapp/recipes/hooks/useDishForm.ts",
@@ -32,5 +31,9 @@
   "app/webapp/components/navigation/nav-items.tsx",
   "app/webapp/performance/components/PerformanceChartsLazy.tsx",
   "app/webapp/specials/hooks/useSpecialsData.ts",
-  "app/webapp/time-attendance/components/hooks/useGeofence.ts"
+  "app/webapp/time-attendance/components/hooks/useGeofence.ts",
+  "app/api/time-attendance/clock-out/route.ts",
+  "app/webapp/ingredients/components/hooks/useIngredientOperations.ts",
+  "app/webapp/specials/utils.ts",
+  "app/admin/features/hooks/useFlagDiscovery.ts"
 ]

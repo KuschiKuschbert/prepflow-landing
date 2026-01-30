@@ -44,7 +44,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
       if (!recipe) {
         return NextResponse.json(
           ApiErrorHandler.createError('Recipe not found', 'NOT_FOUND', 404),
-          { status: 404 }
+          { status: 404 },
         );
       }
       return NextResponse.json(
@@ -73,7 +73,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ id
       recipeId,
       recipe!.recipe_name || recipe!.name,
       allergenSources,
-      allAllergens
+      allAllergens,
     );
 
     return NextResponse.json({

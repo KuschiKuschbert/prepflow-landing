@@ -5,14 +5,14 @@
 
 import { logger } from '@/lib/logger';
 import {
-    detectSection,
-    isValidTitleCandidate,
-    parseIngredient,
-    parseMethodStep,
-    parseNote,
-    parseTitleFromHeader,
-    parseYieldFromHeader,
-    Section,
+  detectSection,
+  isValidTitleCandidate,
+  parseIngredient,
+  parseMethodStep,
+  parseNote,
+  parseTitleFromHeader,
+  parseYieldFromHeader,
+  Section,
 } from './recipe-parsing-utils';
 
 export interface ParsedRecipeCard {

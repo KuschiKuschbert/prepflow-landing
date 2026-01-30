@@ -18,8 +18,6 @@ import { parseAndValidateRequest } from './helpers/requestHelpers';
 import { createIngredientSchema, updateIngredientSchema } from './helpers/schemas';
 import { updateIngredient } from './helpers/updateIngredient';
 
-
-
 export async function GET(request: NextRequest) {
   try {
     const supabaseAdmin = createSupabaseAdmin();

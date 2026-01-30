@@ -3,12 +3,12 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { NextRequest, NextResponse } from 'next/server';
 import {
-    checkSystemHealth,
-    fetchErrorCounts,
-    fetchRecentSafetyErrors,
-    fetchTicketCounts,
-    fetchTotalDataRecords,
-    fetchUserCounts,
+  checkSystemHealth,
+  fetchErrorCounts,
+  fetchRecentSafetyErrors,
+  fetchTicketCounts,
+  fetchTotalDataRecords,
+  fetchUserCounts,
 } from './helpers/fetchDashboardData';
 
 /**

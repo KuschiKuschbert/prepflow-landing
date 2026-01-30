@@ -32,13 +32,7 @@ export async function createSquareCatalogItem(
     const squareItemId = createResponse.objects[0].id;
 
     // Create mapping
-    const newMapping = await createAutoMapping(
-      dish.id,
-      squareItemId,
-      'dish',
-      userId,
-      locationId,
-    );
+    const newMapping = await createAutoMapping(dish.id, squareItemId, 'dish', userId, locationId);
 
     if (!newMapping) {
       logger.error('[Square Catalog Sync] Error creating mapping:', {

@@ -53,5 +53,4 @@ async function checkInternalAdminAccess(req: NextRequest): Promise<string | null
     );
     return null;
   }
-
 }

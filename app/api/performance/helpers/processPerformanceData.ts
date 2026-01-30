@@ -3,9 +3,9 @@ import { deduplicateDishes, filterDishesWithSales } from '@/lib/api/performance/
 import { calculatePerformanceMetrics } from '@/lib/api/performance/performanceCalculation';
 import { aggregateSalesData } from '@/lib/api/performance/salesAggregation';
 import {
-    calculateAveragePopularity,
-    calculateAverageProfitMargin,
-    calculateThresholds,
+  calculateAveragePopularity,
+  calculateAverageProfitMargin,
+  calculateThresholds,
 } from '@/lib/api/performance/thresholdCalculation';
 import { PerformanceDish } from '@/lib/api/performance/types';
 import { aggregateTimeSeries } from './aggregateTimeSeries';
@@ -88,8 +88,8 @@ export function processPerformanceData(
     // If the same dish ID appears multiple times? No, dish.sales_data is an array.
     // If deduplication removes "duplicate dish definitions", we should verify if sales_data is merged.
     // Assuming uniqueDishes is safe to use for now, but let's use filteredDishes to be safe and catch all sales.
-    startDateParam ? dateRange.startDate?.toISOString().split('T')[0] ?? null : null,
-    endDateParam ? dateRange.endDate?.toISOString().split('T')[0] ?? null : null
+    startDateParam ? (dateRange.startDate?.toISOString().split('T')[0] ?? null) : null,
+    endDateParam ? (dateRange.endDate?.toISOString().split('T')[0] ?? null) : null,
   );
 
   return {

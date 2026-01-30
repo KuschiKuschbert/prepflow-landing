@@ -35,7 +35,7 @@ function main() {
       'next.config.js',
       'tailwind.config.ts',
       'tsconfig.json',
-      '.env.example'
+      '.env.example',
     ];
     if (coreConfigs.includes(f)) return true;
 
@@ -50,12 +50,16 @@ function main() {
     significantChanges.forEach(f => console.log(`   - ${f}`));
 
     // Check if a new ADR has been added in the same commit
-    const newADR = stagedFiles.find(f => f.startsWith('docs/adr/') && f.endsWith('.md') && f !== 'docs/adr/TEMPLATE.md');
+    const newADR = stagedFiles.find(
+      f => f.startsWith('docs/adr/') && f.endsWith('.md') && f !== 'docs/adr/TEMPLATE.md',
+    );
 
     if (!newADR) {
       console.warn(`\n${RED}❗ Architectural Decision Alert:${NC}`);
       console.warn(`   You've made structural changes but haven't recorded an ADR.`);
-      console.warn(`   Please consider adding a record in ${BLUE}docs/adr/${NC} to preserve context.`);
+      console.warn(
+        `   Please consider adding a record in ${BLUE}docs/adr/${NC} to preserve context.`,
+      );
       console.warn(`   Template: ${BLUE}docs/adr/TEMPLATE.md${NC}`);
 
       // We don't block the commit yet (soft guard), but we warn heavily.

@@ -66,7 +66,14 @@ interface PaginationControlProps {
   className?: string;
 }
 
-function PaginationControl({ loading, page, totalPages, total, onPageChange, className }: PaginationControlProps) {
+function PaginationControl({
+  loading,
+  page,
+  totalPages,
+  total,
+  onPageChange,
+  className,
+}: PaginationControlProps) {
   if (loading) return null;
   return (
     <TablePagination

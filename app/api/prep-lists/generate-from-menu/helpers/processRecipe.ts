@@ -1,9 +1,9 @@
 import {
-    DBIngredient,
-    DBRecipeIngredient,
-    IngredientSimple,
-    RecipeGroupedItem,
-    SectionData
+  DBIngredient,
+  DBRecipeIngredient,
+  IngredientSimple,
+  RecipeGroupedItem,
+  SectionData,
 } from '../types';
 
 export function processRecipe(

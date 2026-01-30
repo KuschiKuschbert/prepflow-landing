@@ -19,11 +19,7 @@ interface DishRecipe {
 export async function getDishIngredientSources(dishId: string): Promise<Record<string, string[]>> {
   if (!supabaseAdmin) {
     logger.error('[Allergen Export] Supabase admin client not initialized');
-    throw ApiErrorHandler.createError(
-      'Database connection not available',
-      'DATABASE_ERROR',
-      500,
-    );
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   const { data: dishIngredients, error } = await supabaseAdmin
@@ -59,11 +55,7 @@ export async function getDishRecipeSources(
 ): Promise<Record<string, string[]>> {
   if (!supabaseAdmin) {
     logger.error('[Allergen Export] Supabase admin client not initialized');
-    throw ApiErrorHandler.createError(
-      'Database connection not available',
-      'DATABASE_ERROR',
-      500,
-    );
+    throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
 
   const { data: dishRecipes, error } = await supabaseAdmin
@@ -109,7 +101,7 @@ interface RecipeIngredientRow {
 export async function getRecipeIngredientSources(
   recipeIds: string[],
 ): Promise<Record<string, Record<string, string[]>>> {
-    if (!supabaseAdmin) {
+  if (!supabaseAdmin) {
     logger.error('[Allergen Export] Supabase admin client not initialized');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }

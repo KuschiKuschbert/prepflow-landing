@@ -106,7 +106,7 @@ function RecipeTableRowComponent({
         valueSuffix="%"
         isSelectionMode={isSelectionMode}
         onClick={() => onPreviewRecipe(recipe)}
-        className="hidden desktop:table-cell"
+        className="desktop:table-cell hidden"
       />
       <MarginCell
         value={recipePrice?.contributingMargin}
@@ -115,7 +115,7 @@ function RecipeTableRowComponent({
         subValueSuffix="%/portion"
         isSelectionMode={isSelectionMode}
         onClick={() => onPreviewRecipe(recipe)}
-        className="hidden desktop:table-cell"
+        className="desktop:table-cell hidden"
         valueClassName="text-[var(--accent)]"
       />
       <td
@@ -202,10 +202,14 @@ function MarginCell({
       {value !== undefined && subValue !== undefined ? (
         <div className="flex flex-col">
           <span className={`font-semibold ${valueClassName}`}>
-            {valuePrefix}{value.toFixed(1)}{valueSuffix}
+            {valuePrefix}
+            {value.toFixed(1)}
+            {valueSuffix}
           </span>
           <span className="text-xs text-[var(--foreground-muted)]">
-            {subValuePrefix}{subValue.toFixed(2)}{subValueSuffix}
+            {subValuePrefix}
+            {subValue.toFixed(2)}
+            {subValueSuffix}
           </span>
         </div>
       ) : (

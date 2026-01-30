@@ -92,11 +92,7 @@ export async function decryptSquareToken(encryptedToken: string): Promise<string
     const iv = combined.slice(0, IV_LENGTH);
     const encryptedData = combined.slice(IV_LENGTH);
 
-    const decrypted = await crypto.subtle.decrypt(
-      { name: ALGORITHM_NAME, iv },
-      key,
-      encryptedData,
-    );
+    const decrypted = await crypto.subtle.decrypt({ name: ALGORITHM_NAME, iv }, key, encryptedData);
     const decoder = new TextDecoder();
 
     return decoder.decode(decrypted);

@@ -160,10 +160,11 @@ function checkFeatureIsolation(): boolean {
   const webappPath = path.join(process.cwd(), 'app/webapp');
   if (!fs.existsSync(webappPath)) return true;
 
-  const features = fs.readdirSync(webappPath).filter(f =>
-    fs.statSync(path.join(webappPath, f)).isDirectory() &&
-    f !== 'components' && // Shared components are allowed
-    f !== 'sections'      // Shared sections are allowed
+  const features = fs.readdirSync(webappPath).filter(
+    f =>
+      fs.statSync(path.join(webappPath, f)).isDirectory() &&
+      f !== 'components' && // Shared components are allowed
+      f !== 'sections', // Shared sections are allowed
   );
 
   for (const feature of features) {

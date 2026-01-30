@@ -42,9 +42,7 @@ export default function IngredientActions({
   onBulkUpdate,
   loading = false,
 }: IngredientActionsProps) {
-   
   const { t: _t } = useTranslation();
-   
 
   const [showBulkMenu, setShowBulkMenu] = useState(false);
   const selectedCount = selectedIngredients.size;

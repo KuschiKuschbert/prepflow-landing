@@ -1,4 +1,3 @@
-
 import { logger } from '@/lib/logger';
 import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../../types';
 
@@ -20,9 +19,7 @@ export async function executeBatchCalculation({
   calculateRecommendedPrice: CalculatorFn;
   fetchBatchWithDeduplication: (
     recipeIds: string[],
-    fetchBatchFn: (
-      recipeIds: string[],
-    ) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
+    fetchBatchFn: (recipeIds: string[]) => Promise<Record<string, RecipeIngredientWithDetails[]>>,
   ) => Promise<Record<string, RecipeIngredientWithDetails[]>>;
 }): Promise<Record<string, RecipePriceData> | null> {
   try {

@@ -41,11 +41,15 @@ export function formatUnit(value: number, unit: string): string {
 
 export const STANDARD_UNITS = { WEIGHT: 'g', VOLUME: 'ml', PIECE: 'pc' } as const;
 export {
-    convertFromStandardUnit, convertToStandardUnit
+  convertFromStandardUnit,
+  convertToStandardUnit,
 } from './unit-conversion/standardUnitConversions';
 export {
-    getAllUnits, getUnitCategory, isPieceUnit, isVolumeUnit,
-    isWeightUnit
+  getAllUnits,
+  getUnitCategory,
+  isPieceUnit,
+  isVolumeUnit,
+  isWeightUnit,
 } from './unit-conversion/unitCategories';
 export type { UnitCategory } from './unit-conversion/unitCategories';
 

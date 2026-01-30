@@ -1,4 +1,3 @@
-
 import { calculateRecipeCost } from '@/app/api/menus/[id]/statistics/helpers/calculateRecipeCost';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
@@ -108,9 +107,7 @@ export async function calculateDishCost(dishId: string) {
       if (ingredient) {
         const costPerUnit = ingredient.cost_per_unit_incl_trim || ingredient.cost_per_unit || 0;
         const quantity =
-          typeof di.quantity === 'string'
-            ? parseFloat(di.quantity)
-            : (di.quantity as number) || 0;
+          typeof di.quantity === 'string' ? parseFloat(di.quantity) : (di.quantity as number) || 0;
 
         const isConsumable = ingredient.category === 'Consumables';
 

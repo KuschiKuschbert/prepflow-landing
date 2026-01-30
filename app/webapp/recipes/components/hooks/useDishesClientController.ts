@@ -4,10 +4,10 @@ import { useRecipeIngredients } from '../../hooks/useRecipeIngredients';
 import { useRecipePricing } from '../../hooks/useRecipePricing';
 import { useDishesClientBulkActions } from '../DishesClient/hooks/useDishesClientBulkActions';
 import {
-    buildControllerResult,
-    useRecipeImagesHandler,
-    useResetStateOnViewModeChange,
-    useSelectedItemTypes,
+  buildControllerResult,
+  useRecipeImagesHandler,
+  useResetStateOnViewModeChange,
+  useSelectedItemTypes,
 } from './useDishesClientController.helpers';
 import { UseDishesClientControllerResult } from './useDishesClientController.types';
 import { useDishesClientData } from './useDishesClientData';
@@ -97,7 +97,7 @@ export function useDishesClientController(): UseDishesClientControllerResult {
     setEditingRecipe,
     setEditingItem,
     setHighlightingRowId,
-    setHighlightingRowType
+    setHighlightingRowType,
   );
 
   useDishesClientRecipePricing({
@@ -109,7 +109,9 @@ export function useDishesClientController(): UseDishesClientControllerResult {
   });
 
   const selectedItemTypes = useSelectedItemTypes(dishes, recipes, selectedItems);
-  const selectedRecipeCount = Array.from(selectedItemTypes.values()).filter(t => t === 'recipe').length;
+  const selectedRecipeCount = Array.from(selectedItemTypes.values()).filter(
+    t => t === 'recipe',
+  ).length;
 
   const bulkActions = useDishesClientBulkActions({
     dishes,
@@ -130,7 +132,7 @@ export function useDishesClientController(): UseDishesClientControllerResult {
   const handleRecipeImagesGenerated = useRecipeImagesHandler(
     setRecipes,
     selectedRecipeForPreview,
-    setSelectedRecipeForPreview
+    setSelectedRecipeForPreview,
   );
 
   const sidePanelsHandlers = useDishesSidePanelsHandlers({
@@ -176,6 +178,6 @@ export function useDishesClientController(): UseDishesClientControllerResult {
     handlers,
     sidePanelsHandlers,
     selectionHandlers,
-    selectionModeHelpers
+    selectionModeHelpers,
   );
 }

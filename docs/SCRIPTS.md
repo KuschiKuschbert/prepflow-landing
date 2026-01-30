@@ -385,6 +385,7 @@ node scripts/populate-ingredients.js
 Specialized scripts for repairing or backfilling large datasets (> 2000 rows) that would timeout in standard SQL migrations.
 
 **Pattern:**
+
 1.  **Iterative**: Processes records in small batches (e.g., 100).
 2.  **Robust**: Retries or fails gracefully without locking the database.
 3.  **Client-Side**: Runs via Node.js (`supabase-js`) rather than server-side SQL timeout limits.

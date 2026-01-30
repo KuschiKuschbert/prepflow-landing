@@ -44,6 +44,6 @@ export function useSpecialsFilters(onFilterChange: () => void) {
     selectedCuisines,
     setSelectedCuisines,
     toggleFilterTag,
-    toggleCuisine
+    toggleCuisine,
   };
 }

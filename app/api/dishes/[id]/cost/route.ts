@@ -37,7 +37,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     // Check if error has status (ApiError)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((err as any).status && (err as any).body) {
-         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return NextResponse.json(err, { status: (err as any).status });
     }
 

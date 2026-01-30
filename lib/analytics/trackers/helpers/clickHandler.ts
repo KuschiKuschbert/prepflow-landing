@@ -6,7 +6,10 @@ interface ClickHandlerContext {
   trackConversion: (conversion: ConversionEvent) => void;
 }
 
-export function handleTrackerClick(e: MouseEvent, { sessionId, userId, trackConversion }: ClickHandlerContext) {
+export function handleTrackerClick(
+  e: MouseEvent,
+  { sessionId, userId, trackConversion }: ClickHandlerContext,
+) {
   const target = e.target as HTMLElement;
   const cta = target.closest('a, button');
   if (cta) {
@@ -28,9 +31,7 @@ export function handleTrackerClick(e: MouseEvent, { sessionId, userId, trackConv
         window.gtag('event', 'begin_checkout', {
           currency: 'AUD',
           value: 29.0,
-          items: [
-            { item_id: 'prepflow_app', item_name: 'PrepFlow App', price: 29.0, quantity: 1 },
-          ],
+          items: [{ item_id: 'prepflow_app', item_name: 'PrepFlow App', price: 29.0, quantity: 1 }],
         });
       }
     }

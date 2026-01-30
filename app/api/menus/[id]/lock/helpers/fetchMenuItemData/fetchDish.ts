@@ -5,11 +5,11 @@
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
 import {
-    MenuItemData,
-    MenuItemIngredient,
-    MenuItemSubRecipe,
-    RawDishResult,
-    RawRecipeResult,
+  MenuItemData,
+  MenuItemIngredient,
+  MenuItemSubRecipe,
+  RawDishResult,
+  RawRecipeResult,
 } from '../types';
 
 /**
