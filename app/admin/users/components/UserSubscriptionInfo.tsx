@@ -1,8 +1,11 @@
 interface UserSubscriptionInfoProps {
   formData: {
     subscription_status: string;
+    first_name: string;
+    last_name: string;
+    business_name: string;
   };
-  setFormData: (data: any) => void; // justified
+  setFormData: (data: UserSubscriptionInfoProps['formData']) => void;
   user: {
     created_at: string;
     subscription_expires: string | null;

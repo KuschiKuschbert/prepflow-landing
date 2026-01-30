@@ -2,7 +2,7 @@ jest.mock('next/server', () => {
   return {
     NextRequest: class {},
     NextResponse: {
-      json: (body: any) => ({ json: async () => body }),
+      json: (body: unknown) => ({ json: async () => body }),
     },
   };
 });

@@ -28,8 +28,8 @@ export async function fetchStripeData() {
       const amount = sub.items.data[0]?.price?.unit_amount || 0;
       monthlyRecurringRevenue += amount;
 
-      const periodStart = (sub as any).current_period_start; // justified
-      const periodEnd = (sub as any).current_period_end; // justified
+      const periodStart = (sub as unknown as { current_period_start: number }).current_period_start;
+      const periodEnd = (sub as unknown as { current_period_end: number }).current_period_end;
       if (typeof periodStart === 'number' && typeof periodEnd === 'number') {
         totalRevenue += (amount * (periodEnd - periodStart)) / (30 * 24 * 60 * 60);
       }

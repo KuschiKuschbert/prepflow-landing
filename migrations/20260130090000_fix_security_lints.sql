@@ -1,0 +1,56 @@
+-- Fix Security Definer Views
+-- Changing to security_invoker to ensure RLS is enforced based on the invoking user
+ALTER VIEW "public"."pos_menu_items" SET (security_invoker = true);
+ALTER VIEW "public"."pos_customers" SET (security_invoker = true);
+
+-- Enable Row Level Security (RLS) on public tables
+ALTER TABLE "public"."employee_qualifications" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."qualification_types" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."haccp_records" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."allergen_records" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."dish_recipes" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."dish_ingredients" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."promotions" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."menus" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."loyalty_ranks" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."menu_items" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."dishes" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."loyalty_regions" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."equipment_maintenance" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."waste_management_logs" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."loyalty_rewards" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."sanitizer_logs" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."staff_health_declarations" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."incident_reports" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."loyalty_history" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."region_items" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."customer_region_progress" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."food_safety_procedures" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."supplier_verification" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."ingredient_composition_cache" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."user_google_tokens" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."backup_schedules" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."backup_metadata" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."cleaning_task_completions" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."menu_recipe_cards" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."menu_item_recipe_card_links" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."login_logs" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."account_activity" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."import_export_logs" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."roster_templates" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."template_shifts" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."shifts" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."availability" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."leave_requests" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."employees" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."time_attendance" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."onboarding_documents" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."hidden_feature_flags" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."billing_customers" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."user_notifications" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."webhook_events" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."security_breaches" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."account_deletions" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."data_transfer_restrictions" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."ingredient_aliases" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "public"."venue_settings" ENABLE ROW LEVEL SECURITY;

@@ -59,7 +59,16 @@ export function useFlagDiscovery() {
 
 // Helper functions extracted to reduce nesting
 
-function logDiscoveryResponse(response: Response, data: any) {
+interface DiscoveryResponse {
+  success: boolean;
+  total: number;
+  message?: string;
+  error?: string;
+  regular?: DiscoveredFlag[];
+  hidden?: DiscoveredFlag[];
+}
+
+function logDiscoveryResponse(response: Response, data: DiscoveryResponse) {
   logger.dev('[Admin Features] Discovery response:', {
     ok: response.ok,
     success: data.success,
@@ -71,7 +80,7 @@ function logDiscoveryResponse(response: Response, data: any) {
 
 function handleResponseError(
   response: Response,
-  data: any,
+  data: DiscoveryResponse,
   setDiscoveryError: (err: string | null) => void,
   showError: (msg: string) => void
 ) {
@@ -86,8 +95,8 @@ function handleResponseError(
 }
 
 function handleResponseSuccess(
-  data: any,
-  setDiscoveredFlags: (flags: any) => void,
+  data: DiscoveryResponse,
+  setDiscoveredFlags: (flags: { regular: DiscoveredFlag[]; hidden: DiscoveredFlag[] }) => void,
   showSuccess: (msg: string) => void,
   showError: (msg: string) => void
 ) {
