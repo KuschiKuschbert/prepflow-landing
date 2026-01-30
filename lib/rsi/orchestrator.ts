@@ -80,6 +80,12 @@ export class RSIOrchestrator {
       if (config.modules.architectureAnalysis) {
         await runArchitectureAnalysis(config.dryRun);
       }
+
+      // 9. Final Formatting (Crucial for CI/CD compliance)
+      if (!config.dryRun) {
+        logger.info('🧹 Running final formatting...');
+        await this.runScript('format', false);
+      }
     } catch (error) {
       logger.error('RSI Run failed:', error);
     } finally {
