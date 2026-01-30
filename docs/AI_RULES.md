@@ -22,6 +22,7 @@ graph TD
 
 - **Architecture**: See [PROJECT_ARCHITECTURE.md](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/PROJECT_ARCHITECTURE.md)
 - **Automation**: See [SCRIPTS.md](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/SCRIPTS.md)
+- **Workflow**: See [GIT_WORKFLOW.md](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/GIT_WORKFLOW.md)
 - **Methodology**: See [RALPH_LOOP.md](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/methodology/RALPH_LOOP.md)
 
 ## 1. ⚡ Quick Commands
@@ -109,3 +110,12 @@ The RSI system matches the **Ralph Loop** methodology with autonomous tooling. I
 1.  **Check Status**: Before starting a complex task, run `npm run rsi:status` to see if the RSI has warnings or advice for the current codebase state.
 2.  **Prefer Auto-Fix**: If you see a lint error that looks common, try `npm run rsi:fix` first.
 3.  **Respect the Config**: Rules in `rsi.eslint.config.mjs` are generated from successful valid patterns. Do not disable them manually; instead, fix the code to comply.
+
+## 7. 🐙 Git Workflow
+
+> **Full Guide**: [docs/GIT_WORKFLOW.md](file:///Users/danielkuschmierz/Prepflow-Ecosystem/prepflow-web/docs/GIT_WORKFLOW.md)
+
+1.  **Branch**: `feature/`, `fix/`, `refactor/`.
+2.  **Format**: `lint-staged` runs automatically on commit.
+3.  **Check**: Run `npm run rsi:status` before starting.
+4.  **Merge**: MUST use `scripts/safe-merge.sh`.
