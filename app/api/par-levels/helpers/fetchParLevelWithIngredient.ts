@@ -110,7 +110,6 @@ async function fetchIngredientData(supabaseAdmin: any, ingredientId: string) {
   return null;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function fetchIngredientFallback(
   supabaseAdmin: any,
   parLevelId: string,

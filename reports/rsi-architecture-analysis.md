@@ -1,9 +1,9 @@
 # 🏗️ RSI Architecture Analysis Report
 
-**Date:** 1/28/2026, 3:36:05 PM
+**Date:** 1/30/2026, 3:39:29 PM
 
 **Detected Design Patterns:** 6
-**Detected Anti-Patterns:** 461
+**Detected Anti-Patterns:** 465
 
 ## ⚠️ Anti-Patterns Detected
 
@@ -101,6 +101,12 @@
 
 **File:** `app/api/admin/features/[flag]/controller.ts`
 **Description:** Found 12 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/api/admin/support/reset-password/route.ts`
+**Description:** Found 11 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -699,6 +705,12 @@
 
 ### Magic Numbers (MEDIUM)
 
+**File:** `app/api/staff/employees/[id]/qualifications/route.ts`
+**Description:** Found 12 magic numbers
+**Suggestion:** Extract magic numbers to named constants
+
+### Magic Numbers (MEDIUM)
+
 **File:** `app/api/staff/employees/[id]/route.ts`
 **Description:** Found 14 magic numbers
 **Suggestion:** Extract magic numbers to named constants
@@ -742,13 +754,13 @@
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/api/time-attendance/clock-in/route.ts`
-**Description:** Found 11 magic numbers
+**Description:** Found 15 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
 
 **File:** `app/api/time-attendance/clock-out/route.ts`
-**Description:** Found 17 magic numbers
+**Description:** Found 21 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
@@ -1308,12 +1320,6 @@
 **File:** `app/webapp/dish-builder/components/hooks/useSaveHandler.ts`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
-
-### Magic Numbers (MEDIUM)
-
-**File:** `app/webapp/employees/components/EmployeeList.tsx`
-**Description:** Found 18 magic numbers
-**Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
 
@@ -2019,7 +2025,7 @@
 
 ### Spaghetti Code (HIGH)
 
-**File:** `app/webapp/specials/page.tsx`
+**File:** `app/webapp/specials/hooks/useSpecialsData.ts`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
@@ -2040,6 +2046,18 @@
 **File:** `app/webapp/square/page.tsx`
 **Description:** Code has 7 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+
+**File:** `app/webapp/staff/components/OnboardingWizard/hooks/useWizardSubmission.ts`
+**Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Magic Numbers (MEDIUM)
+
+**File:** `app/webapp/staff/components/StaffCard.tsx`
+**Description:** Found 22 magic numbers
+**Suggestion:** Extract magic numbers to named constants
 
 ### Spaghetti Code (HIGH)
 
@@ -2118,6 +2136,12 @@
 **File:** `app/webapp/temperature/utils/temperatureLogPrintStyles.ts`
 **Description:** Found 12 magic numbers
 **Suggestion:** Extract magic numbers to named constants
+
+### Spaghetti Code (HIGH)
+
+**File:** `app/webapp/time-attendance/components/hooks/useGeofence.ts`
+**Description:** Code has 7 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
 
 ### Spaghetti Code (HIGH)
 
