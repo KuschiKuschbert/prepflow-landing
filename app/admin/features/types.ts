@@ -32,3 +32,12 @@ export interface DiscoveredFlag {
 }
 
 export type TabType = 'regular' | 'hidden';
+
+export interface DiscoveryResponse {
+  success: boolean;
+  total: number;
+  message?: string;
+  error?: string;
+  regular?: DiscoveredFlag[];
+  hidden?: DiscoveredFlag[];
+}
