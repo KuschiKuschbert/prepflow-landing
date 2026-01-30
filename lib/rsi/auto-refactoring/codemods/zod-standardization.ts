@@ -1,10 +1,10 @@
-import { API, FileInfo, Options, Transform } from 'jscodeshift';
+import { API, FileInfo, Transform } from 'jscodeshift';
 
 /**
  * Codemod: Zod Validation Standardization
  * Migrates manual 'body' Property checks to safeParse
  */
-const transform: Transform = (file: FileInfo, api: API, _options: Options) => {
+const transform: Transform = (file: FileInfo, api: API) => {
   const j = api.jscodeshift;
   const root = j(file.source);
   let changed = false;
@@ -14,7 +14,6 @@ const transform: Transform = (file: FileInfo, api: API, _options: Options) => {
   if (root.find(j.ImportDeclaration, { source: { value: 'zod' } }).size() > 0) {
     hasZodImport = true;
   }
-
   // 1. Identify POST/PUT handlers
   root.find(j.ExportNamedDeclaration).forEach(path => {
     const decl = path.node.declaration;
@@ -29,6 +28,7 @@ const transform: Transform = (file: FileInfo, api: API, _options: Options) => {
         .find(j.IfStatement)
         .forEach(ifPath => {
           const test = ifPath.node.test;
+          // Check for manual check: if (!body.prop)
           if (
             j.UnaryExpression.check(test) &&
             test.operator === '!' &&
@@ -38,16 +38,13 @@ const transform: Transform = (file: FileInfo, api: API, _options: Options) => {
             j.Identifier.check(test.argument.property)
           ) {
             const fieldName = test.argument.property.name;
-            // Check if the body is just a return or simple error
-            // We assume this is a validation check if it returns
             const consequent = ifPath.node.consequent;
+            // Check if returns or throws
             if (
-              j.BlockStatement.check(consequent) &&
-              consequent.body.some(s => j.ReturnStatement.check(s))
+              (j.BlockStatement.check(consequent) &&
+                consequent.body.some(s => j.ReturnStatement.check(s))) ||
+              j.ReturnStatement.check(consequent)
             ) {
-              collectedFields.push(fieldName);
-              nodesToRemove.push(ifPath);
-            } else if (j.ReturnStatement.check(consequent)) {
               collectedFields.push(fieldName);
               nodesToRemove.push(ifPath);
             }
@@ -57,7 +54,6 @@ const transform: Transform = (file: FileInfo, api: API, _options: Options) => {
       if (collectedFields.length > 0) {
         changed = true;
         const schemaName = `${decl.id.name.toLowerCase()}Schema`;
-
         // 3. Create Zod Schema
         const schemaProperties = collectedFields.map(field => {
           return j.objectProperty(
@@ -77,7 +73,6 @@ const transform: Transform = (file: FileInfo, api: API, _options: Options) => {
 
         // Insert schema before the function
         path.insertBefore(schemaDecl);
-
         // 4. Create safeParse call
         // const validation = schema.safeParse(body);
         const validationCall = j.variableDeclaration('const', [
@@ -89,7 +84,6 @@ const transform: Transform = (file: FileInfo, api: API, _options: Options) => {
             ),
           ),
         ]);
-
         // 5. Create validation check
         // if (!validation.success) { return NextResponse.json({ error: 'Invalid data' }, { status: 400 }); }
         const validationCheck = j.ifStatement(
@@ -108,7 +102,7 @@ const transform: Transform = (file: FileInfo, api: API, _options: Options) => {
                       j.identifier('details'),
                       j.memberExpression(
                         j.memberExpression(j.identifier('validation'), j.identifier('error')),
-                        j.identifier('errors'),
+                        j.identifier('issues'),
                       ),
                     ),
                   ]),
@@ -132,7 +126,6 @@ const transform: Transform = (file: FileInfo, api: API, _options: Options) => {
           funcBody.body.unshift(validationCheck);
           funcBody.body.unshift(validationCall);
         }
-
         // 6. Remove old checks
         nodesToRemove.forEach(p => j(p).remove());
       }

@@ -1,5 +1,7 @@
-import { z } from 'zod';
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
+
+const db = { create: async (d: any) => d };
 
 const postSchema = z.object({
   email: z.string(),
@@ -15,7 +17,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         error: 'Invalid data',
-        details: validation.error.errors,
+        details: validation.error.issues,
       },
       {
         status: 400,
@@ -42,7 +44,7 @@ export async function PUT(req: Request) {
     return NextResponse.json(
       {
         error: 'Invalid data',
-        details: validation.error.errors,
+        details: validation.error.issues,
       },
       {
         status: 400,
