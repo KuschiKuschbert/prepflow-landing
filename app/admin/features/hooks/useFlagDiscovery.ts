@@ -1,7 +1,7 @@
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { useCallback, useState } from 'react';
-import type { DiscoveredFlag } from '../types';
+import type { DiscoveredFlag, DiscoveryResponse } from '../types';
 
 /**
  * Hook for discovering feature flags from codebase.
@@ -58,15 +58,6 @@ export function useFlagDiscovery() {
 }
 
 // Helper functions extracted to reduce nesting
-
-interface DiscoveryResponse {
-  success: boolean;
-  total: number;
-  message?: string;
-  error?: string;
-  regular?: DiscoveredFlag[];
-  hidden?: DiscoveredFlag[];
-}
 
 function logDiscoveryResponse(response: Response, data: DiscoveryResponse) {
   logger.dev('[Admin Features] Discovery response:', {
