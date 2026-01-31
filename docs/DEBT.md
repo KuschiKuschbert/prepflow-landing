@@ -8,7 +8,7 @@
 - [x] **[SECURITY]** Fix next.js DoS vulnerability (GHSA-9g9p-9gw9-jx7f) - **DONE**.
 - [x] **[SCRIPTS]** Fix ~270 lint warnings in `scripts/` folder - **DONE**.
 - [x] Maintain 0 warnings in `scripts/` directory by integrating it into main CI pipeline - **DONE**.
-- [ ] Standardize Zod validation in `app/api/` APIs to replace manual checks.
+- [x] Standardize Zod validation in `app/api/` APIs to replace manual checks.
 
 ## Medium Priority
 
