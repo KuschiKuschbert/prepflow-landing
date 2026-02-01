@@ -1,9 +1,9 @@
 # 🏗️ RSI Architecture Analysis Report
 
-**Date:** 1/30/2026, 3:39:29 PM
+**Date:** 2/1/2026, 3:28:45 PM
 
 **Detected Design Patterns:** 6
-**Detected Anti-Patterns:** 465
+**Detected Anti-Patterns:** 466
 
 ## ⚠️ Anti-Patterns Detected
 
@@ -2482,6 +2482,12 @@
 ### Spaghetti Code (HIGH)
 
 **File:** `lib/rsi/auto-refactoring/codemods/extract-function.ts`
+**Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+
+**File:** `lib/rsi/auto-refactoring/codemods/zod-standardization.ts`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
