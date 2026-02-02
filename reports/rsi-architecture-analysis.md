@@ -1,6 +1,6 @@
 # 🏗️ RSI Architecture Analysis Report
 
-**Date:** 1/30/2026, 3:39:29 PM
+**Date:** 2/2/2026, 3:42:41 PM
 
 **Detected Design Patterns:** 6
 **Detected Anti-Patterns:** 465
@@ -653,12 +653,6 @@
 
 **File:** `app/api/roster/shifts/[id]/route.ts`
 **Description:** Found 13 magic numbers
-**Suggestion:** Extract magic numbers to named constants
-
-### Magic Numbers (MEDIUM)
-
-**File:** `app/api/roster/shifts/helpers/createShiftHandler.ts`
-**Description:** Found 12 magic numbers
 **Suggestion:** Extract magic numbers to named constants
 
 ### Magic Numbers (MEDIUM)
@@ -2326,7 +2320,7 @@
 ### Spaghetti Code (HIGH)
 
 **File:** `lib/error-learning/rule-generator.ts`
-**Description:** Code has 6 levels of nesting
+**Description:** Code has 7 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
 ### Magic Numbers (MEDIUM)
@@ -2482,6 +2476,12 @@
 ### Spaghetti Code (HIGH)
 
 **File:** `lib/rsi/auto-refactoring/codemods/extract-function.ts`
+**Description:** Code has 6 levels of nesting
+**Suggestion:** Extract nested logic into separate functions
+
+### Spaghetti Code (HIGH)
+
+**File:** `lib/rsi/auto-refactoring/codemods/zod-standardization.ts`
 **Description:** Code has 6 levels of nesting
 **Suggestion:** Extract nested logic into separate functions
 
@@ -2799,10 +2799,6 @@
 
 ## 🧩 Design Patterns Usage
 
-**app/webapp/cogs/types.ts**
-
-- **Strategy** (behavioral): Defines family of algorithms, makes them interchangeable
-
 **lib/css-optimization.ts**
 
 - **Singleton** (creational): Ensures a class has only one instance
@@ -2822,3 +2818,35 @@
 **lib/rsi/meta-learning/learning-strategy.ts**
 
 - **Strategy** (behavioral): Defines family of algorithms, makes them interchangeable
+
+**lib/types/cogs.ts**
+
+- **Strategy** (behavioral): Defines family of algorithms, makes them interchangeable
+
+## 🏗️ Structural Integrity
+
+✅ **Structural Checks Passed**
+
+```
+
+> curbos@0.6.7 check:architecture
+> tsx scripts/check-architecture.ts
+
+🏗️  The Architect: Starting Architectural Scan...
+
+🔄 Checking for Circular Dependencies...
+
+🛡️  Checking Client/Server Boundaries...
+Scanning 2647 files for boundaries...
+✅ Client/Server boundaries respected.
+
+📚 Checking Lib vs Components Boundaries...
+
+📡 Checking API Boundaries...
+✅ API boundaries respected.
+
+🧩 Checking Feature Isolation in webapp...
+
+✅ The Architect approves this code.
+
+```
