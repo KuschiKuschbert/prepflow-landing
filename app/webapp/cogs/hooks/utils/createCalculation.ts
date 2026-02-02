@@ -1,4 +1,4 @@
-import { COGSCalculation, Ingredient } from '../../types';
+import { COGSCalculation, Ingredient } from '@/lib/types/cogs';
 
 export function createCalculation(
   ingredientId: string,

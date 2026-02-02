@@ -1,7 +1,7 @@
 /**
  * Update cards state based on fetch result.
  */
-import { RecipeCardData, SubRecipeCards } from '../../../types';
+import { RecipeCardData, SubRecipeCards } from '@/lib/types/menu-builder';
 
 interface UpdateCardsParams {
   result: {

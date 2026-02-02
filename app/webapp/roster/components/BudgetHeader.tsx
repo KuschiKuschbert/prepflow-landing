@@ -15,7 +15,7 @@ import {
   formatCurrency,
   formatHours,
 } from '@/lib/services/payroll/calculator';
-import type { Shift, Employee, RosterBudget } from '../types';
+import type { Shift, Employee, RosterBudget } from '@/lib/types/roster';
 
 interface BudgetHeaderProps {
   shifts: Shift[];

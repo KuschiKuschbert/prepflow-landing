@@ -13,7 +13,7 @@ import { MainCardsGrid } from './components/MainCardsGrid';
 import { SubRecipeSections } from './components/SubRecipeSections';
 import { useCardGeneration } from './hooks/useCardGeneration';
 import { useRecipeCards } from './hooks/useRecipeCards';
-import { RecipeCardsViewProps } from './types';
+import { RecipeCardsViewProps } from '@/lib/types/menu-builder';
 
 export function RecipeCardsView({ menuId }: RecipeCardsViewProps) {
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);

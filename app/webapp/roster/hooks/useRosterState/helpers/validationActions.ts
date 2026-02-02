@@ -1,9 +1,9 @@
 /**
  * Validation warning action helpers for roster state.
  */
-import type { ShiftValidationWarning } from '../../../types';
+import type { ShiftValidationWarning } from '@/lib/types/roster';
 
-import type { RosterState, RosterStoreSet } from '../types';
+import type { RosterState, RosterStoreSet } from '@/lib/types/roster';
 
 export function createValidationActions(set: RosterStoreSet) {
   return {

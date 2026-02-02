@@ -1,4 +1,4 @@
-import type { Employee } from '@/app/webapp/roster/types';
+import type { Employee } from '@/lib/types/roster';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { supabase } from '@/lib/supabase';

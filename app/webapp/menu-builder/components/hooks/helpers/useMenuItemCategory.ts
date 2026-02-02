@@ -3,7 +3,7 @@
  */
 import { logger } from '@/lib/logger';
 import { useCallback } from 'react';
-import type { MenuItem } from '../../../types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 
 interface UseMenuItemCategoryProps {
   menuId: string;

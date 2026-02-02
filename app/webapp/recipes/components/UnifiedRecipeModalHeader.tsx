@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { Calculator, ChefHat, Copy, Edit, FileText, Printer, Share2, X } from 'lucide-react';
-import { Recipe } from '../types';
+import { Recipe } from '@/lib/types/recipes';
 
 type ModalTab = 'preview' | 'ingredients' | 'cogs';
 

@@ -2,7 +2,7 @@
 
 import { Plus, Trash2 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-import { Recipe } from '../types';
+import { Recipe } from '@/lib/types/recipes';
 import DishRecipeCombobox from './DishRecipeCombobox';
 
 interface SelectedRecipe {

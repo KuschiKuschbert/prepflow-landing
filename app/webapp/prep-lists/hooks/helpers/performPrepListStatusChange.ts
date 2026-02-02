@@ -2,7 +2,7 @@
  * Perform prep list status change operation with optimistic updates.
  */
 import { logger } from '@/lib/logger';
-import type { PrepList } from '../../types';
+import type { PrepList } from '@/lib/types/prep-lists';
 
 interface PerformPrepListStatusChangeParams {
   id: string;

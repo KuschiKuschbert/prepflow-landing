@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { Upload } from 'lucide-react';
-import type { DocumentType } from '@/app/webapp/roster/types';
+import type { DocumentType } from '@/lib/types/roster';
 
 interface Step2IDUploadProps {
   idFile: File | null;

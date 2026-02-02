@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import type { Shift } from '../../../types';
+import type { Shift } from '@/lib/types/roster';
 
 /**
  * Get shifts for a specific day

@@ -1,7 +1,7 @@
 /**
  * Rollback employee deletion on error.
  */
-import type { Shift } from '../../../../../../types';
+import type { Shift } from '@/lib/types/roster';
 
 export function rollbackEmployeeDeletion(
   originalShifts: Shift[],

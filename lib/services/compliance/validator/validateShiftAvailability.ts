@@ -1,8 +1,8 @@
 /**
  * Validate shift against employee availability.
  */
-import type { ComplianceValidationResult } from '@/app/webapp/roster/types';
-import type { Shift, Availability } from '@/app/webapp/roster/types';
+import type { ComplianceValidationResult } from '@/lib/types/roster';
+import type { Shift, Availability } from '@/lib/types/roster';
 import { getDayName, formatTime } from './helpers/dateUtils';
 
 /**

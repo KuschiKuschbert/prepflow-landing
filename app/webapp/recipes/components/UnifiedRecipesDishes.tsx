@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { Icon } from '@/components/ui/Icon';
-import { ChefHat, UtensilsCrossed, Calculator } from 'lucide-react';
+import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
+import { UnifiedItem } from '@/lib/types/recipes';
+import { Calculator, ChefHat, UtensilsCrossed } from 'lucide-react';
+import { useState } from 'react';
 import { useUnifiedItems } from '../hooks/useUnifiedItems';
-import { UnifiedItem } from '../types';
 import { COGSCalculatorModal } from './COGSCalculatorModal';
 
 export default function UnifiedRecipesDishes() {
@@ -28,15 +28,18 @@ export default function UnifiedRecipesDishes() {
 
   // Filter items by selected category
   const filteredItems =
-    selectedCategory === 'All' ? items : items.filter(item => item.category === selectedCategory);
+    selectedCategory === 'All'
+      ? items
+      : items.filter(item => (item.category || 'Uncategorized') === selectedCategory);
 
   // Group items by category
   const groupedItems = filteredItems.reduce(
     (acc, item) => {
-      if (!acc[item.category]) {
-        acc[item.category] = [];
+      const category = item.category || 'Uncategorized';
+      if (!acc[category]) {
+        acc[category] = [];
       }
-      acc[item.category].push(item);
+      acc[category].push(item);
       return acc;
     },
     {} as Record<string, UnifiedItem[]>,
@@ -90,25 +93,27 @@ export default function UnifiedRecipesDishes() {
               <div className="tablet:grid-cols-3 desktop:grid-cols-4 large-desktop:grid-cols-5 grid grid-cols-1 gap-4">
                 {categoryItems.map(item => (
                   <div
-                    key={`${item.type}-${item.id}`}
+                    key={`${item.itemType}-${item.id}`}
                     className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 transition-all duration-200 hover:border-[var(--primary)]/50 hover:shadow-lg"
                   >
                     <div className="mb-3 flex items-start justify-between">
                       <div className="flex items-center gap-2">
                         <Icon
-                          icon={item.type === 'recipe' ? ChefHat : UtensilsCrossed}
+                          icon={item.itemType === 'recipe' ? ChefHat : UtensilsCrossed}
                           size="sm"
                           className={
-                            item.type === 'recipe'
+                            item.itemType === 'recipe'
                               ? 'text-[var(--primary)]'
                               : 'text-[var(--color-info)]'
                           }
                           aria-hidden={true}
                         />
-                        <h3 className="font-semibold text-[var(--foreground)]">{item.name}</h3>
+                        <h3 className="font-semibold text-[var(--foreground)]">
+                          {item.itemType === 'recipe' ? item.recipe_name : item.dish_name}
+                        </h3>
                       </div>
                       <span className="rounded-full bg-[var(--muted)] px-2 py-1 text-xs text-[var(--foreground-muted)]">
-                        {item.type === 'recipe' ? 'Recipe' : 'Dish'}
+                        {item.itemType === 'recipe' ? 'Recipe' : 'Dish'}
                       </span>
                     </div>
 
@@ -120,7 +125,7 @@ export default function UnifiedRecipesDishes() {
 
                     <div className="flex items-center justify-between">
                       <div className="text-xs text-[var(--foreground-subtle)]">
-                        {item.type === 'recipe' ? (
+                        {item.itemType === 'recipe' ? (
                           <>
                             Yield: {item.yield} {item.yield_unit}
                           </>

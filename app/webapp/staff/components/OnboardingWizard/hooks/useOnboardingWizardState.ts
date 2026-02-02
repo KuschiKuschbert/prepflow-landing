@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Employee } from '@/app/webapp/roster/types';
+import type { Employee } from '@/lib/types/roster';
 import type { WizardStep } from '../types';
 
 /**

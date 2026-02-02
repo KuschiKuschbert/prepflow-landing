@@ -1,6 +1,6 @@
 'use client';
 import { createPortal } from 'react-dom';
-import { MenuItem } from '../types';
+import { MenuItem } from '@/lib/types/menu-builder';
 import { MenuItemTooltipContent } from './MenuItemTooltipContent';
 import { useStatisticsLoading } from './MenuItemHoverStatistics/hooks/useStatisticsLoading';
 import { useTooltipPosition } from './MenuItemHoverStatistics/hooks/useTooltipPosition';

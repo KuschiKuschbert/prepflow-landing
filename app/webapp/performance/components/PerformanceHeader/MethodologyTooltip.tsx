@@ -7,7 +7,7 @@ import { useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Icon } from '@/components/ui/Icon';
 import { Info } from 'lucide-react';
-import type { PerformanceMetadata } from '../../types';
+import type { PerformanceMetadata } from '@/lib/types/performance';
 
 interface MethodologyTooltipProps {
   showMethodologyTooltip: boolean;

@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Dish, DishCostData, DishWithDetails, RecipeIngredientWithDetails } from '../types';
+import {
+  Dish,
+  DishCostData,
+  DishWithDetails,
+  RecipeIngredientWithDetails,
+} from '@/lib/types/recipes';
 
 import { logger } from '@/lib/logger';
 export function useDishPreviewModalData(dish: Dish) {

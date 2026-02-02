@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import { Dish, Recipe, UnifiedItem } from '../types';
 import { logger } from '@/lib/logger';
+import { Dish, Recipe, UnifiedItem } from '@/lib/types/recipes';
+import { useCallback, useEffect, useState } from 'react';
 
 interface UseUnifiedItemsReturn {
   items: UnifiedItem[];
@@ -38,35 +38,26 @@ export function useUnifiedItems(): UseUnifiedItemsReturn {
 
       // Convert recipes to unified items
       const recipeItems: UnifiedItem[] = (recipesResult.recipes || []).map((recipe: Recipe) => ({
-        id: recipe.id,
-        type: 'recipe' as const,
-        name: recipe.recipe_name,
-        description: recipe.description,
-        category: recipe.category || 'Uncategorized',
-        created_at: recipe.created_at,
-        updated_at: recipe.updated_at,
-        yield: recipe.yield,
-        yield_unit: recipe.yield_unit,
+        ...recipe,
+        itemType: 'recipe' as const,
       }));
 
       // Convert dishes to unified items
       const dishItems: UnifiedItem[] = (dishesResult.dishes || []).map((dish: Dish) => ({
-        id: dish.id,
-        type: 'dish' as const,
-        name: dish.dish_name,
-        description: dish.description,
-        category: dish.category || 'Uncategorized',
-        created_at: dish.created_at,
-        updated_at: dish.updated_at,
-        selling_price: dish.selling_price,
+        ...dish,
+        itemType: 'dish' as const,
       }));
 
       // Combine and sort by category, then by name
       const allItems = [...recipeItems, ...dishItems].sort((a, b) => {
-        if (a.category !== b.category) {
-          return a.category.localeCompare(b.category);
+        const catA = a.category || 'Uncategorized';
+        const catB = b.category || 'Uncategorized';
+        if (catA !== catB) {
+          return catA.localeCompare(catB);
         }
-        return a.name.localeCompare(b.name);
+        const nameA = a.itemType === 'recipe' ? a.recipe_name : a.dish_name;
+        const nameB = b.itemType === 'recipe' ? b.recipe_name : b.dish_name;
+        return nameA.localeCompare(nameB);
       });
 
       setItems(allItems);
@@ -87,7 +78,9 @@ export function useUnifiedItems(): UseUnifiedItemsReturn {
   }, [fetchItems]);
 
   // Extract unique categories
-  const categories = Array.from(new Set(items.map(item => item.category))).sort();
+  const categories = Array.from(
+    new Set(items.map(item => item.category || 'Uncategorized')),
+  ).sort();
 
   return {
     items,

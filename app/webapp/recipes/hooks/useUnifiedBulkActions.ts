@@ -1,6 +1,6 @@
 'use client';
 import { useCallback, useState } from 'react';
-import { Recipe, Dish } from '../types';
+import { Recipe, Dish } from '@/lib/types/recipes';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { performBulkDelete as performBulkDeleteHelper } from './useUnifiedBulkActions/helpers/performBulkDelete';

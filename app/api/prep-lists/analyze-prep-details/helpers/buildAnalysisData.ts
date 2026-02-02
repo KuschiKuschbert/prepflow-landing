@@ -1,5 +1,5 @@
-import { RecipeAnalysisData } from '@/app/webapp/prep-lists/types';
-import { RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
+import { RecipeAnalysisData } from '@/lib/types/prep-lists';
+import { RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 interface RawRecipe {
   id: string;

@@ -3,7 +3,7 @@
  */
 import { logger } from '@/lib/logger';
 import { printPerformanceReport } from '../../../utils/printPerformanceReport';
-import type { PerformanceItem, DateRange, PerformanceMetadata } from '../../../types';
+import type { PerformanceItem, DateRange, PerformanceMetadata } from '@/lib/types/performance';
 
 export function handlePrintHelper(
   performanceItems: PerformanceItem[],

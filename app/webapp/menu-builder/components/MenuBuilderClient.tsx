@@ -2,7 +2,7 @@
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { logger } from '@/lib/logger';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Menu } from '../types';
+import { Menu } from '@/lib/types/menu-builder';
 import MenuEditor from './MenuEditor';
 import MenuForm from './MenuForm';
 import MenuList from './MenuList';

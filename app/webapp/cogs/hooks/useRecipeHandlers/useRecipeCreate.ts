@@ -3,7 +3,7 @@
  */
 
 import { useCallback } from 'react';
-import type { Recipe } from '../../types';
+import type { Recipe } from '@/lib/types/cogs';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useOnRecipeCreated } from '@/lib/personality/hooks';
 import { logger } from '@/lib/logger';

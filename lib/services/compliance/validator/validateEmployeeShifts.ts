@@ -1,7 +1,7 @@
 /**
  * Validate all shifts for an employee.
  */
-import type { Shift, Employee, ComplianceValidationResult } from '@/app/webapp/roster/types';
+import type { Shift, Employee, ComplianceValidationResult } from '@/lib/types/roster';
 import { validateShift } from './validateShift';
 
 /**

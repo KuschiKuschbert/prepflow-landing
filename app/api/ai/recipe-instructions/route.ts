@@ -7,7 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateAIResponse } from '@/lib/ai/ai-service';
 import { buildRecipeInstructionsPrompt } from '@/lib/ai/prompts/recipe-instructions';
-import type { Recipe, RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
+import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 import { logger } from '@/lib/logger';
 import { ApiErrorHandler } from '@/lib/api-error-handler';

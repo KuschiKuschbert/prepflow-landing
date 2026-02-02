@@ -2,7 +2,7 @@ import { Icon } from '@/components/ui/Icon';
 import { ChefHat, ChevronDown, ChevronUp } from 'lucide-react';
 import React from 'react';
 import { COGSTableRow } from '../../COGSTableRow';
-import type { RecipeGroup } from '../types';
+import type { RecipeGroup } from '@/lib/types/cogs';
 
 interface COGSRecipeGroupRowProps {
   group: RecipeGroup;

@@ -2,7 +2,7 @@
  * Handle error cases for batch fetch.
  */
 import { logger } from '@/lib/logger';
-import type { RecipeIngredientWithDetails } from '../../../../types';
+import type { RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 export async function handleErrorHelper(
   err: unknown,

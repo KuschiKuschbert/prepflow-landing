@@ -2,7 +2,7 @@
  * Utility for getting the formatted item name.
  */
 
-import type { Dish, Recipe } from '@/app/webapp/recipes/types';
+import type { Dish, Recipe } from '@/lib/types/recipes';
 
 type UnifiedItem = (Dish & { itemType: 'dish' }) | (Recipe & { itemType: 'recipe' });
 

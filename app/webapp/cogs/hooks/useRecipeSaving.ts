@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import type { COGSCalculation } from '../types';
+import type { COGSCalculation } from '@/lib/types/cogs';
 import { useRecipeValidation } from './useRecipeValidation';
 import { useRecipeCRUD } from './useRecipeCRUD';
 import { useNotification } from '@/contexts/NotificationContext';

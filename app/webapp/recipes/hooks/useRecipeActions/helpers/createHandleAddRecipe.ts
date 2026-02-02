@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { Recipe } from '../../../types';
+import { Recipe } from '@/lib/types/recipes';
 import { handleAddRecipe as handleAddRecipeHelper } from './handleAddRecipe';
 
 export function createHandleAddRecipe(

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation';
-import { Recipe } from '../../types';
-import { RecipeIngredientWithDetails } from '../../types';
+import { Recipe } from '@/lib/types/recipes';
+import { RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { convertToCOGSCalculations } from './recipeCalculationHelpers';
 import { storeRecipeForEditing } from './recipeEditHelpers';
 import { logger } from '@/lib/logger';

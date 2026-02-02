@@ -7,7 +7,7 @@ import { useIngredientConversion } from '../../cogs/hooks/useIngredientConversio
 import { useAutoPopulatePrice } from './utils/autoPopulatePrice';
 import { createDishBuilderCallbacks } from './helpers/createCallbacks';
 import { DishBuilderState } from '../types';
-import { COGSCalculation } from '../../cogs/types';
+import { COGSCalculation } from '@/lib/types/cogs';
 
 export function useDishBuilder() {
   const { ingredients, recipes, loading, error, setError, fetchData } = useCOGSDataFetching();

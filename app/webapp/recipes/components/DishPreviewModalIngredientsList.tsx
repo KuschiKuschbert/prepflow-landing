@@ -1,6 +1,6 @@
 'use client';
 
-import { DishWithDetails } from '../types';
+import { DishWithDetails } from '@/lib/types/recipes';
 
 interface DishPreviewModalIngredientsListProps {
   dishDetails: DishWithDetails;

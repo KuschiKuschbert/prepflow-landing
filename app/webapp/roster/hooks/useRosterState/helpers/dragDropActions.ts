@@ -1,9 +1,9 @@
 /**
  * Drag and drop action helpers for roster state.
  */
-import type { Shift } from '../../../types';
+import type { Shift } from '@/lib/types/roster';
 
-import type { RosterStoreSet } from '../types';
+import type { RosterStoreSet } from '@/lib/types/roster';
 
 export function createDragDropActions(set: RosterStoreSet) {
   return {

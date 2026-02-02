@@ -5,7 +5,7 @@ import { EditDrawer } from '@/components/ui/EditDrawer';
 import { useEffect } from 'react';
 import { useDishCostCalculation } from '../hooks/useDishCostCalculation';
 import { useDishForm } from '../hooks/useDishForm';
-import { Dish } from '../types';
+import { Dish } from '@/lib/types/recipes';
 import { DishBasicInfo } from './DishBasicInfo';
 import DishFormPricing from './DishFormPricing';
 import DishIngredientSelector from './DishIngredientSelector';

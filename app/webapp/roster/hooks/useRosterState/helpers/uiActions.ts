@@ -1,9 +1,9 @@
 /**
  * UI state action helpers for roster state.
  */
-import type { ShiftStatus } from '../../../types';
+import type { ShiftStatus } from '@/lib/types/roster';
 
-import type { RosterStoreSet } from '../types';
+import type { RosterStoreSet } from '@/lib/types/roster';
 
 export function createUIActions(set: RosterStoreSet) {
   return {

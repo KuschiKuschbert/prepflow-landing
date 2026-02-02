@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
-import type { DocumentType } from '@/app/webapp/roster/types';
+import type { DocumentType } from '@/lib/types/roster';
 
 interface UseOnboardingWizardHandlersProps {
   setSignatureData: (data: string | null) => void;

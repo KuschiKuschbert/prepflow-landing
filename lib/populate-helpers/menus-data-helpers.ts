@@ -2,7 +2,7 @@
  * Helper functions for menu data population (extracted to keep menus-data.ts under 150 lines)
  */
 
-import { Dish } from '@/app/webapp/recipes/types';
+import { Dish } from '@/lib/types/recipes';
 import { cleanSampleMenus } from '@/lib/sample-menus-clean';
 
 export interface MenuData {

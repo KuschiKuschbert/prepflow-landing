@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { useCallback, useRef } from 'react';
-import type { Menu } from '../../../types';
+import type { Menu } from '@/lib/types/menu-builder';
 
 interface UseMenuHandlersProps {
   menus: Menu[];

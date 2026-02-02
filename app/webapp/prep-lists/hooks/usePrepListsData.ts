@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react';
 import { getCachedData, cacheData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
-import type { KitchenSection, Ingredient } from '../types';
+import type { KitchenSection, Ingredient } from '@/lib/types/prep-lists';
 
 interface UsePrepListsDataProps {
   showForm: boolean;

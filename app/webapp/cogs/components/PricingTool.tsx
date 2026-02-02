@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { PricingCalculation } from '../types';
+import { PricingCalculation } from '@/lib/types/cogs';
 import { HelpTooltip } from '@/components/ui/HelpTooltip';
 import { DollarSign, Target, BarChart3 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';

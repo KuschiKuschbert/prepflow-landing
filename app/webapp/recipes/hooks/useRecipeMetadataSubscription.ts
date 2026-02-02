@@ -2,7 +2,7 @@
 
 import { supabase } from '@/lib/supabase';
 import { useEffect, useRef } from 'react';
-import { Recipe } from '../types';
+import { Recipe } from '@/lib/types/recipes';
 
 import { logger } from '@/lib/logger';
 interface UseRecipeMetadataSubscriptionProps {

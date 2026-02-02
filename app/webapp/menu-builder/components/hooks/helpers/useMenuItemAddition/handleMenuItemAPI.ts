@@ -4,7 +4,7 @@
  */
 
 import { logger } from '@/lib/logger';
-import type { Dish, MenuItem, Recipe } from '../../../../types';
+import type { Dish, MenuItem, Recipe } from '@/lib/types/menu-builder';
 import { normalizeMenuItem } from '../../../../utils/normalizeMenuItem';
 import { updateMenuItemsWithServerItem } from './updateMenuItemsWithServerItem';
 

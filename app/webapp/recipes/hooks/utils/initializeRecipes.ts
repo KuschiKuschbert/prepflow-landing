@@ -1,5 +1,5 @@
 import { getCachedRecipes, prefetchRecipes } from '@/lib/cache/recipe-cache';
-import { Recipe } from '../../types';
+import { Recipe } from '@/lib/types/recipes';
 
 /**
  * Initialize recipes from cache on client-side mount.

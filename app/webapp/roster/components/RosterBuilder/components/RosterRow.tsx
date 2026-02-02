@@ -3,7 +3,7 @@ import { useDroppable } from '@dnd-kit/core';
 import { Icon } from '@/components/ui/Icon';
 import { Users, X } from 'lucide-react';
 import { logger } from '@/lib/logger';
-import type { Shift, Employee, ShiftValidationWarning } from '../../../types';
+import type { Shift, Employee, ShiftValidationWarning } from '@/lib/types/roster';
 import { RosterCell } from './RosterCell';
 
 interface RosterRowProps {

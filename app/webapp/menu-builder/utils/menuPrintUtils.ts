@@ -8,7 +8,7 @@
 import { formatMenuForPrint } from './formatMenuForPrint';
 import { getMenuPrintStyles } from './menuPrintStyles';
 import { printWithTemplate } from '@/lib/exports/print-template';
-import type { Menu, MenuItem } from '../types';
+import type { Menu, MenuItem } from '@/lib/types/menu-builder';
 
 /**
  * Print menu with all items, descriptions, prices, allergens, and allergen matrix.

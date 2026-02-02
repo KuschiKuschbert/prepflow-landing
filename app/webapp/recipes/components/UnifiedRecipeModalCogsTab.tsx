@@ -4,7 +4,7 @@ import { COGSTable } from '../../cogs/components/COGSTable';
 import { COGSTableSummary } from '../../cogs/components/COGSTableSummary';
 import { PricingTool } from '../../cogs/components/PricingTool';
 import { usePricing } from '../../cogs/hooks/usePricing';
-import { COGSCalculation } from '../../cogs/types';
+import { COGSCalculation } from '@/lib/types/recipes';
 
 interface UnifiedRecipeModalCogsTabProps {
   calculations: COGSCalculation[];

@@ -6,7 +6,7 @@
 import { printWithTemplate } from '@/lib/exports/print-template';
 import { generateItemsSection } from './printPerformanceReport/helpers/generateItemsSection';
 import { generateSummarySection } from './printPerformanceReport/helpers/generateSummarySection';
-import type { PerformanceItem, PerformanceMetadata } from '../types';
+import type { PerformanceItem, PerformanceMetadata } from '@/lib/types/performance';
 
 export interface PrintPerformanceReportOptions {
   performanceItems: PerformanceItem[];

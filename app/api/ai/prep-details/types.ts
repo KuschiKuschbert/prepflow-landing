@@ -1,4 +1,4 @@
-import { Recipe, RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
+import { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { z } from 'zod';
 
 export const prepDetailsSchema = z

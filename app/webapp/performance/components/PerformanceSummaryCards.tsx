@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { PerformanceItem } from '../types';
+import { PerformanceItem } from '@/lib/types/performance';
 import {
   TrendingUp,
   TrendingDown,

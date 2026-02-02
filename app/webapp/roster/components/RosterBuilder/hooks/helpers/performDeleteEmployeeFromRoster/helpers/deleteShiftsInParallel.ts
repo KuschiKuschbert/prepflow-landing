@@ -1,7 +1,7 @@
 /**
  * Delete shifts in parallel.
  */
-import type { Shift } from '../../../../../../types';
+import type { Shift } from '@/lib/types/roster';
 
 export async function deleteShiftsInParallel(
   employeeShifts: Shift[],

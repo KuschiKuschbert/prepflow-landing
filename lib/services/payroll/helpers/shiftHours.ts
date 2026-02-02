@@ -1,7 +1,7 @@
 /**
  * Shift hours calculation utilities.
  */
-import type { Shift } from '@/app/webapp/roster/types';
+import type { Shift } from '@/lib/types/roster';
 
 /**
  * Calculates total hours worked in a period.

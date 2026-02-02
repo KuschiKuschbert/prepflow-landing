@@ -11,7 +11,7 @@ import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { Icon } from '@/components/ui/Icon';
 import { AlertTriangle, Clock, User, GripVertical, X } from 'lucide-react';
-import type { Shift, ShiftValidationWarning } from '../types';
+import type { Shift, ShiftValidationWarning } from '@/lib/types/roster';
 import { format } from 'date-fns';
 
 interface ShiftCardProps {

@@ -1,9 +1,9 @@
 /**
  * Template action helpers for roster state.
  */
-import type { RosterTemplate } from '../../../types';
+import type { RosterTemplate } from '@/lib/types/roster';
 
-import type { RosterStoreSet } from '../types';
+import type { RosterStoreSet } from '@/lib/types/roster';
 
 export function createTemplateActions(set: RosterStoreSet) {
   return {

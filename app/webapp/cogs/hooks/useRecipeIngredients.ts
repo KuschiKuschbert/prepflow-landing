@@ -5,7 +5,7 @@
 
 import { supabase } from '@/lib/supabase';
 import { useCallback } from 'react';
-import { COGSCalculation, RecipeIngredient } from '../types';
+import { COGSCalculation, RecipeIngredient } from '@/lib/types/cogs';
 import { useRecipeIngredientLoading } from './useRecipeIngredientLoading';
 
 import { logger } from '@/lib/logger';

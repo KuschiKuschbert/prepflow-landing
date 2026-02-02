@@ -3,7 +3,7 @@
  */
 
 import { useCallback } from 'react';
-import type { Recipe } from '../../types';
+import type { Recipe } from '@/lib/types/cogs';
 
 /**
  * Hook for recipe selection handler

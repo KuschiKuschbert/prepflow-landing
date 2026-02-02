@@ -1,7 +1,7 @@
 /**
  * Create handler functions for menu editing.
  */
-import type { Menu } from '../../../../types';
+import type { Menu } from '@/lib/types/menu-builder';
 
 interface TitleEditingHandler {
   handleStartEditTitle?: (menu: Menu, e: React.MouseEvent) => void;

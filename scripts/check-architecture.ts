@@ -136,7 +136,7 @@ function checkLibBoundaries(): boolean {
       `${RED}❌ Error: ${violationCount} Lib-to-Component violations detected (Limit: ${MAX_LIB_VIOLATIONS}).${NC}`,
     );
     console.error(
-      `${RED}   'lib/' should not depend on 'components/'. Please move shared logic to 'lib/' or 'utils/'.${NC}`,
+      `${RED}   'lib/' should not depend on 'components/'. Please move shared logic to 'lib/'.${NC}`,
     );
     // Show top 5
     violations.slice(0, 5).forEach(v => console.error(`   - ${v}`));
@@ -204,6 +204,56 @@ function checkFeatureIsolation(): boolean {
   return true; // We don't block build yet, just warn.
 }
 
+function checkApiBoundaries(): boolean {
+  console.log(`\n${YELLOW}📡 Checking API Boundaries...${NC}`);
+
+  // Rule: app/api/ should not import from app/webapp/ (Frontend implementation details)
+  // Shared logic should be in lib/
+  const apiFiles = glob.sync('app/api/**/*.{ts,tsx}', {
+    ignore: ['**/*.test.*', '**/*.spec.*'],
+  });
+
+  let violationCount = 0;
+  const violations: string[] = [];
+
+  for (const file of apiFiles) {
+    const content = fs.readFileSync(file, 'utf-8');
+
+    // Look for imports from @/app/webapp or ../webapp
+    // excluding potentially safe 'types' if strictly type-only (but hard to distinguish here without AST)
+    // We'll flag all for now.
+    const importRegex = /from\s+['"](@\/app\/webapp.*|\.\.\/webapp.*|\.\.\/\.\.\/webapp.*)['"]/g;
+
+    if (importRegex.test(content)) {
+      violationCount++;
+      violations.push(file);
+    }
+  }
+
+  const MAX_API_VIOLATIONS = 0; // Strict! No debt allowed.
+
+  if (violationCount > MAX_API_VIOLATIONS) {
+    console.error(
+      `${RED}❌ Error: ${violationCount} API-to-Webapp violations detected (Limit: ${MAX_API_VIOLATIONS}).${NC}`,
+    );
+    console.error(
+      `${RED}   'app/api/' (Backend) must not depend on 'app/webapp/' (Frontend). Move shared logic to 'lib/'.${NC}`,
+    );
+    violations.slice(0, 5).forEach(v => console.error(`   - ${v}`));
+    if (violations.length > 5) console.error(`   ... and ${violations.length - 5} more.`);
+    return false;
+  } else if (violationCount > 0) {
+    console.warn(
+      `${YELLOW}⚠️  Warning: ${violationCount} API-to-Webapp violations detected (Baseline: ${MAX_API_VIOLATIONS}).${NC}`,
+    );
+    console.warn(`${YELLOW}   These are allowed as technical debt, but do not add more.${NC}`);
+    return true;
+  }
+
+  console.log(`${GREEN}✅ API boundaries respected.${NC}`);
+  return true;
+}
+
 async function main() {
   let success = true;
 
@@ -216,6 +266,10 @@ async function main() {
   }
 
   if (!checkLibBoundaries()) {
+    success = false;
+  }
+
+  if (!checkApiBoundaries()) {
     success = false;
   }
 

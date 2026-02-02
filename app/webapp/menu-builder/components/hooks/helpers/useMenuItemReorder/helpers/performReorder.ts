@@ -2,7 +2,7 @@
  * Perform reorder operation for menu items.
  */
 import { logger } from '@/lib/logger';
-import { MenuItem } from '../../../../../types';
+import { MenuItem } from '@/lib/types/menu-builder';
 
 interface PerformReorderParams {
   menuId: string;

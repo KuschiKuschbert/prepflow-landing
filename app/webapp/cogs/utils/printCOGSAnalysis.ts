@@ -5,7 +5,7 @@
  */
 
 import { printWithTemplate } from '@/lib/exports/print-template';
-import type { COGSCalculation, PricingCalculation } from '../types';
+import type { COGSCalculation, PricingCalculation } from '@/lib/types/cogs';
 import { formatCOGSHeader } from './printCOGSAnalysis/formatHeader';
 import { formatCOGSCostTable } from './printCOGSAnalysis/formatCostTable';
 import { formatCOGSPricing } from './printCOGSAnalysis/formatPricing';

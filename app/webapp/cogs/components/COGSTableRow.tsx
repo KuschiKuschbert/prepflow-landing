@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { Edit, Trash2 } from 'lucide-react';
-import { COGSCalculation } from '../types';
+import { COGSCalculation } from '@/lib/types/cogs';
 
 interface COGSTableRowProps {
   calc: COGSCalculation;

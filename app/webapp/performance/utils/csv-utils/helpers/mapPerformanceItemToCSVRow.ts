@@ -1,4 +1,4 @@
-import { PerformanceItem } from '../../../types';
+import { PerformanceItem } from '@/lib/types/performance';
 
 /**
  * Map performance item to CSV row format.

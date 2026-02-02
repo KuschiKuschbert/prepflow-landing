@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Dish, DishCostData, Recipe, RecipePriceData } from '../../types';
+import { Dish, DishCostData, Recipe, RecipePriceData } from '@/lib/types/recipes';
 import { useFilterState } from './useDishesClientPagination/helpers/useFilterState';
 import { filterAndSortDishes } from './useDishesClientPagination/helpers/filterAndSortDishes';
 import { filterAndSortRecipes } from './useDishesClientPagination/helpers/filterAndSortRecipes';

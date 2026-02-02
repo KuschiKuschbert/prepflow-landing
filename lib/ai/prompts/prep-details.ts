@@ -4,7 +4,7 @@
  * Extracts detailed prep information from recipes including cut shapes, sauces, marination, etc.
  */
 
-import type { Recipe, RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
+import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 export function buildPrepDetailsPrompt(
   recipe: Recipe,

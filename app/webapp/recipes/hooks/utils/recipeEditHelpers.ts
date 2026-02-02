@@ -1,4 +1,4 @@
-import { Recipe } from '../../types';
+import { Recipe } from '@/lib/types/recipes';
 
 /**
  * Store recipe data in sessionStorage for COGS editor

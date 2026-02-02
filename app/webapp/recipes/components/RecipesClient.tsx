@@ -9,7 +9,7 @@ import { useRecipeAutosaveListener } from '../hooks/useRecipeAutosaveListener';
 import { useRecipeManagement } from '../hooks/useRecipeManagement';
 import { useRecipeFiltering } from '../hooks/useRecipeFiltering';
 import { useRecipeRefreshEffects } from '../hooks/useRecipeRefreshEffects';
-import { Recipe, RecipeIngredientWithDetails } from '../types';
+import { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { RecipesEmptyState } from './RecipesEmptyState';
 import { RecipesErrorDisplay } from './RecipesErrorDisplay';
 import { UnifiedBulkActionsMenu } from './UnifiedBulkActionsMenu';

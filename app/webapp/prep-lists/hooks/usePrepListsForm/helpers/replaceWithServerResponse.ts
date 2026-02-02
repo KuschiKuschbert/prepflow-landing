@@ -1,7 +1,7 @@
 /**
  * Replace optimistic update with server response.
  */
-import type { PrepList } from '../../../types';
+import type { PrepList } from '@/lib/types/prep-lists';
 
 interface ReplaceWithServerResponseParams {
   editingPrepList: PrepList | null;

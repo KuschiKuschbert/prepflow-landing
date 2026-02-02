@@ -2,8 +2,8 @@
  * Helper to process standalone ingredients for COGS calculations.
  */
 
-import { COGSCalculation } from '@/app/webapp/cogs/types';
-import { DishWithDetails } from '@/app/webapp/recipes/types';
+import { COGSCalculation } from '@/lib/types/cogs';
+import { DishWithDetails } from '@/lib/types/recipes';
 import { logger } from '@/lib/logger';
 
 /**

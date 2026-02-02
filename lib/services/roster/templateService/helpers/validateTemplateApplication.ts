@@ -1,4 +1,4 @@
-import type { RosterTemplate, TemplateShift } from '@/app/webapp/roster/types';
+import type { RosterTemplate, TemplateShift } from '@/lib/types/roster';
 
 /**
  * Validates that a template can be applied to a date range.

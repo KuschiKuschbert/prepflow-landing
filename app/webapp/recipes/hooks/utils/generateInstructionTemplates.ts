@@ -1,4 +1,4 @@
-import { Recipe, RecipeIngredientWithDetails } from '../../types';
+import { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { IngredientAnalysis } from './analyzeIngredients';
 import { RecipeTypeInfo } from './determineRecipeType';
 import { generateBurgerInstructions } from './generateInstructionTemplates/helpers/burgerInstructions';

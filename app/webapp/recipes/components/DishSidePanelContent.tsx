@@ -6,8 +6,8 @@ import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { UtensilsCrossed } from 'lucide-react';
 import { COGSTable } from '../../cogs/components/COGSTable';
 import { COGSTableGrouped } from '../../cogs/components/COGSTableGrouped';
-import { COGSCalculation } from '../../cogs/types';
-import { DishCostData, DishWithDetails } from '../types';
+import { COGSCalculation } from '@/lib/types/recipes';
+import { DishCostData, DishWithDetails } from '@/lib/types/recipes';
 import { DishSidePanelCostInfo } from './DishSidePanelCostInfo';
 
 interface DishSidePanelContentProps {

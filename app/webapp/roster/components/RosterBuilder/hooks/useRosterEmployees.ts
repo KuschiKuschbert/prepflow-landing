@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import { format, addDays } from 'date-fns';
-import type { Shift, Employee } from '../../../types';
+import type { Shift, Employee } from '@/lib/types/roster';
 
 interface UseRosterEmployeesProps {
   employees: Employee[];

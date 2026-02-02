@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Recipe } from '../types';
+import { Recipe } from '@/lib/types/cogs';
 
 import { logger } from '@/lib/logger';
 interface UseDishHandlersProps {

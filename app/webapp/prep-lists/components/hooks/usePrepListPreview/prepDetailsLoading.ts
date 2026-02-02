@@ -2,8 +2,11 @@
  * Prep details loading logic for prep list preview.
  */
 import { logger } from '@/lib/logger';
-import { aggregatePrepTechniques, addPrepNotesToIngredients } from '../../../utils/prepTechniques';
-import type { SectionData, RecipePrepDetails } from '../../../types';
+import {
+  aggregatePrepTechniques,
+  addPrepNotesToIngredients,
+} from '@/lib/prep-lists/prepTechniques';
+import type { SectionData, RecipePrepDetails } from '@/lib/types/prep-lists';
 
 interface PrepDetailsLoadingProps {
   sectionsWithPrepInstructions: SectionData[];

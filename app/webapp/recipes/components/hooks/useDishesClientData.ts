@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Dish, DishCostData, Recipe } from '../../types';
+import { Dish, DishCostData, Recipe } from '@/lib/types/recipes';
 
 import { logger } from '@/lib/logger';
 export function useDishesClientData() {

@@ -1,9 +1,9 @@
 /**
  * Draft mode action helpers for roster state.
  */
-import type { Shift, ShiftStatus } from '../../../types';
+import type { Shift, ShiftStatus } from '@/lib/types/roster';
 
-import type { RosterState, RosterStoreSet } from '../types';
+import type { RosterState, RosterStoreSet } from '@/lib/types/roster';
 
 export function createDraftActions(set: RosterStoreSet) {
   return {

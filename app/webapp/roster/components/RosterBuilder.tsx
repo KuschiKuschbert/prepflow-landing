@@ -15,7 +15,7 @@ import { ShiftForm } from './ShiftForm';
 import { EmployeeChipBar } from './EmployeeChipBar';
 import { Icon } from '@/components/ui/Icon';
 import { Users } from 'lucide-react';
-import type { Shift, Employee } from '../types';
+import type { Shift, Employee } from '@/lib/types/roster';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useConfirm } from '@/hooks/useConfirm';
 import { useRosterDragAndDrop } from './RosterBuilder/hooks/useRosterDragAndDrop';

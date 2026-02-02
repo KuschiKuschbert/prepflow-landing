@@ -1,5 +1,5 @@
 import { convertIngredientCost } from '@/lib/unit-conversion';
-import { COGSCalculation, RecipeIngredient } from '../../types';
+import { COGSCalculation, RecipeIngredient } from '@/lib/types/cogs';
 
 type ApiIngredientItem = {
   id: string;

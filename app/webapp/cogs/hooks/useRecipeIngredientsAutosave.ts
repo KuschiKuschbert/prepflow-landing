@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { COGSCalculation } from '../types';
+import { COGSCalculation } from '@/lib/types/cogs';
 import { serializeCalculations } from './utils/recipeIngredientsAutosaveUtils';
 import { useAutosaveResetEffect } from './helpers/autosaveEffects';
 import { useAutosaveDebounce } from './helpers/autosaveDebounce';

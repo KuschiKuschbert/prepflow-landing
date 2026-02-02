@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Dish, DishCostData } from '../types';
+import { Dish, DishCostData } from '@/lib/types/recipes';
 
 export type DishSortField = 'name' | 'selling_price' | 'cost' | 'profit_margin' | 'created';
 

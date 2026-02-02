@@ -3,7 +3,7 @@
 import { FoodImageGenerator } from '@/components/ui/FoodImageGenerator';
 import { Icon } from '@/components/ui/Icon';
 import { ChefHat } from 'lucide-react';
-import { Recipe, RecipeIngredientWithDetails } from '../types';
+import { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { RecipeIngredientsList } from './RecipeIngredientsList';
 import { RecipePreviewInstructions } from './RecipePreviewInstructions';
 

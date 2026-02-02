@@ -1,7 +1,7 @@
 /**
  * Types for recipe subscription setup.
  */
-import type { Recipe, RecipeIngredientWithDetails } from '../../../types';
+import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import type { MutableRefObject } from 'react';
 
 export interface SubscriptionRefs {

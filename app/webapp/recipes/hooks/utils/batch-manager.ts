@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { RecipeIngredientWithDetails } from '../../types';
+import { RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import {
   globalBatchRequestCache,
   globalRequestQueue,

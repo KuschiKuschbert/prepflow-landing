@@ -1,4 +1,4 @@
-import { Ingredient } from '../../types';
+import { Ingredient } from '@/lib/types/cogs';
 
 export function filterIngredients(ingredients: Ingredient[], searchTerm: string): Ingredient[] {
   // Filter out consumables - they should only appear in consumables section

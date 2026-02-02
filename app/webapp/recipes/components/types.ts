@@ -1,4 +1,4 @@
-import { Dish, Recipe } from '../types';
+import { Dish, Recipe } from '@/lib/types/recipes';
 
 export type UnifiedItem = (Dish & { itemType: 'dish' }) | (Recipe & { itemType: 'recipe' });
 

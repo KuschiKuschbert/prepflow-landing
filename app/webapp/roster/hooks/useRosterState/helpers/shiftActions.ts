@@ -1,9 +1,9 @@
 /**
  * Shift action helpers for roster state.
  */
-import type { Shift } from '../../../types';
+import type { Shift } from '@/lib/types/roster';
 
-import type { RosterState, RosterStoreGet, RosterStoreSet } from '../types';
+import type { RosterState, RosterStoreGet, RosterStoreSet } from '@/lib/types/roster';
 
 export function createShiftActions(set: RosterStoreSet, get: RosterStoreGet) {
   return {

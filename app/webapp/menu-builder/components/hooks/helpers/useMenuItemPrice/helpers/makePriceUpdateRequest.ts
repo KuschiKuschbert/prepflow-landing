@@ -3,7 +3,7 @@
  */
 
 import { logger } from '@/lib/logger';
-import { MenuItem } from '../../../../../types';
+import { MenuItem } from '@/lib/types/menu-builder';
 
 /**
  * Make API request to update menu item price.

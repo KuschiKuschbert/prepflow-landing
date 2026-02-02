@@ -1,6 +1,6 @@
 import { parseIngredientString } from '@/lib/recipe-normalization/ingredient-parser';
 import { convertToStandardUnit } from '@/lib/unit-conversion';
-import { RecipeIngredientWithDetails, Recipe as UnifiedRecipe } from '../recipes/types';
+import { RecipeIngredientWithDetails, Recipe as UnifiedRecipe } from '@/lib/types/recipes';
 
 export interface AIIngredient {
   name: string;

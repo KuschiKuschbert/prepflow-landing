@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { Dish, Recipe, RecipeIngredientWithDetails } from '../../types';
+import { Dish, Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 import { logger } from '@/lib/logger';
 interface UseDishesClientPreviewProps {

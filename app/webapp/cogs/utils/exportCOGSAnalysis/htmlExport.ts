@@ -3,7 +3,7 @@
  */
 
 import { generatePrintTemplate } from '@/lib/exports/print-template';
-import type { COGSCalculation, PricingCalculation } from '../../types';
+import type { COGSCalculation, PricingCalculation } from '@/lib/types/cogs';
 import { formatCOGSAnalysisForExport } from './htmlFormatting';
 
 /**

@@ -1,4 +1,4 @@
-import { COGSCalculation } from '../../../cogs/types';
+import { COGSCalculation } from '@/lib/types/recipes';
 
 /**
  * Convert COGS calculations to per-portion values.

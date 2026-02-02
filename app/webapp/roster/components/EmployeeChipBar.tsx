@@ -10,7 +10,7 @@
 import { useState, useMemo } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { Search, User } from 'lucide-react';
-import type { Employee, Shift } from '../types';
+import type { Employee, Shift } from '@/lib/types/roster';
 import { formatCurrency } from '@/lib/services/payroll/calculator';
 
 interface EmployeeChipBarProps {

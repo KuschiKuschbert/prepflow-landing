@@ -3,7 +3,7 @@
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
-import { PerformanceHistoryItem, PerformanceItem } from '../types';
+import { PerformanceHistoryItem, PerformanceItem } from '@/lib/types/performance';
 
 interface PerformanceChartsProps {
   performanceItems: PerformanceItem[];

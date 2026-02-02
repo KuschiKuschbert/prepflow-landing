@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Recipe } from '../../../types';
+import { Recipe } from '@/lib/types/recipes';
 
 interface UseRecipeStateSettersProps {
   setSelectedRecipe: (recipe: Recipe | null) => void;

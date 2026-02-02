@@ -1,12 +1,12 @@
 import { useCallback, useMemo } from 'react';
-import { Recipe } from '../../types';
+import { Recipe } from '@/lib/types/recipes';
 import { handlePreviewRecipe as handlePreviewRecipeUtil } from './utils/handlePreviewRecipe';
 import { handleDuplicateRecipeWrapper as handleDuplicateRecipeWrapperUtil } from './utils/handleDuplicateRecipe';
 import { buildRecipeHandlers } from './utils/buildRecipeHandlers';
 import { buildFormatQuantity } from './utils/buildFormatQuantity';
 import { buildRefreshIngredients } from './utils/buildRefreshIngredients';
 import { buildRecipeHandlersReturn } from './utils/buildRecipeHandlersReturn';
-import type { UseRecipeHandlersParams } from './utils/types';
+import type { UseRecipeHandlersParams } from '@/lib/types/recipes';
 
 /**
  * Hook to manage recipe handlers for preview, edit, duplicate, share, and print.

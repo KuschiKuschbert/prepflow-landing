@@ -4,7 +4,7 @@
  */
 
 import { escapeHtml } from '@/lib/exports/template-utils';
-import type { PrepList } from '../types';
+import type { PrepList } from '@/lib/types/prep-lists';
 
 export function formatPrepListForPrint(
   prepList: PrepList,

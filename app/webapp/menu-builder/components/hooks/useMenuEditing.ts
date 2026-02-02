@@ -3,7 +3,7 @@
  * Orchestrates specialized hooks for title and description editing.
  */
 import { useMemo, useRef } from 'react';
-import type { Menu } from '../../types';
+import type { Menu } from '@/lib/types/menu-builder';
 import { useMenuDescriptionEditing } from './helpers/useMenuDescriptionEditing';
 import { useMenuTitleEditing } from './helpers/useMenuTitleEditing';
 import { createEditingState } from './useMenuEditing/helpers/createEditingState';

@@ -1,7 +1,7 @@
 /**
  * Validate shift against employee skills/role.
  */
-import type { Shift, Employee, ComplianceValidationResult } from '@/app/webapp/roster/types';
+import type { Shift, Employee, ComplianceValidationResult } from '@/lib/types/roster';
 
 /**
  * Validates shift against required skills/role.

@@ -1,7 +1,7 @@
 /**
  * Hour calculation helpers for compliance validation.
  */
-import type { Shift } from '@/app/webapp/roster/types';
+import type { Shift } from '@/lib/types/roster';
 
 export function calculateWeeklyHours(shifts: Shift[], weekStart: Date, weekEnd: Date): number {
   let totalHours = 0;

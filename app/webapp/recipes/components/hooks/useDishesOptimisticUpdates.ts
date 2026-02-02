@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Dish, Recipe } from '../../types';
+import { Dish, Recipe } from '@/lib/types/recipes';
 
 interface UseDishesOptimisticUpdatesProps {
   dishes: Dish[];

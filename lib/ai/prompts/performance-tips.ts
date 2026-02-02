@@ -1,4 +1,4 @@
-import type { PerformanceItem } from '@/app/webapp/performance/types';
+import type { PerformanceItem } from '@/lib/types/performance';
 import { logger } from '@/lib/logger';
 
 export interface PerformanceTip {

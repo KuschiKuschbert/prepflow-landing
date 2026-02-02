@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Recipe } from '../types';
+import { Recipe } from '@/lib/types/recipes';
 import { useAutosave } from '@/hooks/useAutosave';
 import { deriveAutosaveId } from '@/lib/autosave-id';
 import { AutosaveStatus } from '@/components/ui/AutosaveStatus';

@@ -1,6 +1,6 @@
 import { useNotification } from '@/contexts/NotificationContext';
 import { useCallback, useState } from 'react';
-import type { Shift } from '../../../types';
+import type { Shift } from '@/lib/types/roster';
 import { handleCreateShiftHelper } from './useRosterShiftManagement/helpers/handleCreateShift';
 import { handleDeleteShiftHelper } from './useRosterShiftManagement/helpers/handleDeleteShift';
 import { handleUpdateShiftHelper } from './useRosterShiftManagement/helpers/handleUpdateShift';

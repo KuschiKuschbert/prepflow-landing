@@ -1,7 +1,7 @@
 'use client';
 import { logger } from '@/lib/logger';
 import { useCallback, useRef } from 'react';
-import { RecipeIngredientWithDetails } from '../types';
+import { RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { manageBatchRequest } from './utils/batch-manager';
 import { batchFetchWithRetry } from './utils/batchFetchWithRetry';
 import { fetchFromClientJoin } from './utils/fetchFromClientJoin';

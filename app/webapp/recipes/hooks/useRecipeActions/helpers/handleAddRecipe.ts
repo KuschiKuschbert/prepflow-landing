@@ -2,7 +2,7 @@
  * Handle adding a new recipe with optimistic updates.
  */
 import { supabase } from '@/lib/supabase';
-import type { Recipe } from '../../../types';
+import type { Recipe } from '@/lib/types/recipes';
 import { logger } from '@/lib/logger';
 
 interface HandleAddRecipeParams {

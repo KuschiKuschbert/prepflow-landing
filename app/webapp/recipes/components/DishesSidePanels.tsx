@@ -1,4 +1,4 @@
-import { Dish, Recipe, RecipeIngredientWithDetails } from '../types';
+import { Dish, Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { formatQuantity as formatQuantityUtil } from '../utils/formatQuantity';
 import { DeleteConfirmationModal } from './DeleteConfirmationModal';
 import { DishEditDrawer } from './DishEditDrawer';

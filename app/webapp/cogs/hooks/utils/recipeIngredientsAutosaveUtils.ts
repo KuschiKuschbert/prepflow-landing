@@ -1,6 +1,6 @@
 'use client';
 
-import { COGSCalculation } from '../../types';
+import { COGSCalculation } from '@/lib/types/cogs';
 import { logger } from '@/lib/logger';
 
 export function serializeCalculations(calculations: COGSCalculation[]): string {

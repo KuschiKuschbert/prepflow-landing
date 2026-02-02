@@ -2,7 +2,7 @@
  * Helper to filter and sort dishes.
  */
 
-import type { Dish, DishCostData } from '@/app/webapp/recipes/types';
+import type { Dish, DishCostData } from '@/lib/types/recipes';
 import type { UnifiedFilters } from './useFilterState';
 
 /**

@@ -1,7 +1,7 @@
 /**
  * Utility functions for normalizing menu items from server responses.
  */
-import type { Dish, MenuItem, Recipe } from '../types';
+import type { Dish, MenuItem, Recipe } from '@/lib/types/menu-builder';
 
 interface ServerMenuItem {
   id: string;

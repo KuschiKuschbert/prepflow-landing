@@ -7,7 +7,7 @@ import { consolidateAllergens } from '@/lib/allergens/australian-allergens';
 import { logger } from '@/lib/logger';
 import { AlertCircle, AlertTriangle, ChefHat, Utensils } from 'lucide-react';
 import { useEffect, useRef } from 'react';
-import { MenuItem } from '../../../types';
+import { MenuItem } from '@/lib/types/menu-builder';
 import { useMenuItemStatistics } from '../hooks/useMenuItemStatistics';
 
 interface MenuItemContentProps {

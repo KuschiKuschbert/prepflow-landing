@@ -2,7 +2,7 @@
  * Hook for managing prep list form state and submission.
  */
 import { useState, useCallback } from 'react';
-import type { PrepList, PrepListFormData } from '../types';
+import type { PrepList, PrepListFormData } from '@/lib/types/prep-lists';
 import { submitPrepListForm as submitPrepListFormHelper } from './usePrepListsForm/formSubmission';
 const DEFAULT_FORM_DATA: PrepListFormData = {
   kitchenSectionId: '',

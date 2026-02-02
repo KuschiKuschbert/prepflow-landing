@@ -1,13 +1,13 @@
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { Dispatch, SetStateAction, useEffect } from 'react';
-import type { Ingredient } from '../../cogs/types';
+import type { Ingredient } from '@/lib/types/recipes';
 import type {
   APIResponse,
   SelectedIngredient,
   SelectedRecipe,
 } from '../components/DishEditDrawerTypes';
-import type { Dish, DishWithDetails, Recipe } from '../types';
+import type { Dish, DishWithDetails, Recipe } from '@/lib/types/recipes';
 
 interface UseDishFormDataProps {
   dish: Dish | null;

@@ -1,5 +1,5 @@
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
-import type { RecipePriceData } from '../../../types';
+import type { RecipePriceData } from '@/lib/types/recipes';
 
 interface RecipeCardPricingProps {
   recipeId: string;

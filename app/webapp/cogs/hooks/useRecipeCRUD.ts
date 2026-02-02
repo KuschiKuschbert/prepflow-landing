@@ -6,7 +6,7 @@
 import { logger } from '@/lib/logger';
 import { formatDishName } from '@/lib/text-utils';
 import { useCallback } from 'react';
-import type { Recipe } from '../types';
+import type { Recipe } from '@/lib/types/cogs';
 
 interface RecipeIngredientInsert {
   recipe_id: string;

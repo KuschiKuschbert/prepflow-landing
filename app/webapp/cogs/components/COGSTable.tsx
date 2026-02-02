@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useCOGSTableSort } from '../hooks/useCOGSTableSort';
-import { COGSCalculation } from '../types';
+import { COGSCalculation } from '@/lib/types/cogs';
 import { COGSTableEmptyState } from './COGSTableEmptyState';
 import { COGSTableHeader } from './COGSTableHeader';
 import { COGSTableMobileCard } from './COGSTableMobileCard';

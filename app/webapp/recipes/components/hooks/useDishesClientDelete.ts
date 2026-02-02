@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Dish, Recipe } from '../../types';
+import { Dish, Recipe } from '@/lib/types/recipes';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 

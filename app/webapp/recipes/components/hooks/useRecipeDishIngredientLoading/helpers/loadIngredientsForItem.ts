@@ -1,8 +1,8 @@
 /**
  * Load ingredients for a recipe or dish item.
  */
-import type { COGSCalculation, Ingredient } from '../../../../../cogs/types';
-import type { Recipe } from '../../../../types';
+import type { COGSCalculation, Ingredient } from '@/lib/types/recipes';
+import type { Recipe } from '@/lib/types/recipes';
 import {
   loadDishIngredients,
   loadRecipeIngredients,

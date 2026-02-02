@@ -3,7 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { Check, Plus, Search, Sparkles, Utensils, X } from 'lucide-react';
 import React from 'react';
-import { Ingredient, RecipeIngredient } from '../types';
+import { Ingredient, RecipeIngredient } from '@/lib/types/cogs';
 import { IngredientSearchSuggestions } from './IngredientManager/IngredientSearchSuggestions';
 import { RecipeUnitSelect } from './RecipeUnitSelect';
 

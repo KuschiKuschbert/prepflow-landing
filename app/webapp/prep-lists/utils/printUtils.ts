@@ -7,7 +7,7 @@ import { getPrintStyles } from './prepListPrintStyles';
 import { formatPrepListForPrint } from './formatPrepList';
 import { formatGeneratedPrepListForPrint } from './formatGeneratedPrepList';
 import { printWithTemplate } from '@/lib/exports/print-template';
-import type { PrepList, SectionData } from '../types';
+import type { PrepList, SectionData } from '@/lib/types/prep-lists';
 
 interface ExportOptions {
   sections?: string[];

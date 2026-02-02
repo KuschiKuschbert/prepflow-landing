@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
-import { MenuItem } from '../types';
+import { MenuItem } from '@/lib/types/menu-builder';
 
 interface MenuItemStatisticsModalProps {
   isOpen: boolean;

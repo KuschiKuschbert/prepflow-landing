@@ -12,7 +12,7 @@ import {
 } from '@dnd-kit/core';
 import { snapCenterToCursor } from '@dnd-kit/modifiers';
 import { format } from 'date-fns';
-import type { Employee, Shift, ShiftValidationWarning } from '../../../types';
+import type { Employee, Shift, ShiftValidationWarning } from '@/lib/types/roster';
 import { ShiftCard } from '../../ShiftCard';
 import { getCurrentWeekShifts } from '../utils/rosterHelpers';
 import { RosterRow } from './RosterRow';

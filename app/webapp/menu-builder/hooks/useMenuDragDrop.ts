@@ -1,6 +1,6 @@
 import { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import { useCallback, useState } from 'react';
-import type { MenuItem } from '../types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 import { handleDragEnd as handleDragEndHelper } from './useMenuDragDrop/dragEnd';
 import { handleDragStart as handleDragStartHelper } from './useMenuDragDrop/dragStart';
 

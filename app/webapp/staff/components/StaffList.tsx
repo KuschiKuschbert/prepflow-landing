@@ -1,7 +1,7 @@
 'use client';
 
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
-import type { Employee, QualificationType } from '../../roster/types';
+import type { Employee, QualificationType } from '@/lib/types/roster';
 import { StaffCard } from './StaffCard';
 
 interface StaffListProps {

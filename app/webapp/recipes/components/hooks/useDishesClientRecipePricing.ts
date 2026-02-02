@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react';
-import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../../types';
+import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '@/lib/types/recipes';
 
 import { logger } from '@/lib/logger';
 interface UseDishesClientRecipePricingProps {

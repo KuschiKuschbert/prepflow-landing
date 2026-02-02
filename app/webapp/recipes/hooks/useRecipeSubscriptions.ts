@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { Recipe, RecipeIngredientWithDetails } from '../types';
+import { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { setupRecipeSubscriptions } from './utils/recipeSubscriptionSetup';
 interface UseRecipeSubscriptionsProps {
   recipes: Recipe[];

@@ -1,9 +1,4 @@
-import type {
-  Availability,
-  ComplianceValidationResult,
-  Employee,
-  Shift,
-} from '@/app/webapp/roster/types';
+import type { Availability, ComplianceValidationResult, Employee, Shift } from '@/lib/types/roster';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import {

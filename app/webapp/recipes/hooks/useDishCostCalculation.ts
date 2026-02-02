@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { useEffect, useMemo, useState } from 'react';
-import { Ingredient } from '../../cogs/types';
-import { Recipe, RecipeIngredient } from '../types';
+import { Ingredient } from '@/lib/types/recipes';
+import { Recipe, RecipeIngredient } from '@/lib/types/recipes';
 import {
   calculateRecipeCost,
   calculateRecommendedPrice,

@@ -5,7 +5,7 @@ import { PAGINATION_CONSTANTS } from '@/lib/constants';
 import { Leaf, Tag, Vegan, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { RecipeSortField } from '../hooks/useRecipeFiltering';
-import { Recipe } from '../types';
+import { Recipe } from '@/lib/types/recipes';
 import { AllergenFilterDropdown } from './AllergenFilterDropdown';
 import { RecipeSearchBar } from './RecipeSearchBar';
 import { RecipeSortDropdown } from './RecipeSortDropdown';

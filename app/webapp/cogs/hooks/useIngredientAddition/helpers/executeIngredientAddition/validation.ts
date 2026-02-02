@@ -4,7 +4,7 @@
 
 import { logger } from '@/lib/logger';
 import { validateIngredientInput } from '../../../helpers/ingredientValidation';
-import type { Ingredient } from '../../../../types';
+import type { Ingredient } from '@/lib/types/cogs';
 
 interface NewIngredient {
   ingredient_id?: string;

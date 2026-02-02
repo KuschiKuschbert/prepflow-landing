@@ -7,8 +7,8 @@
 import { Icon } from '@/components/ui/Icon';
 import { ChefHat, ChevronDown, ChevronUp } from 'lucide-react';
 import { COGSTableMobileCard } from '../../COGSTableMobileCard';
-import type { COGSCalculation } from '../../../types';
-import type { RecipeGroup } from '../types';
+import type { COGSCalculation } from '@/lib/types/cogs';
+import type { RecipeGroup } from '@/lib/types/cogs';
 
 interface COGSTableMobileProps {
   recipeGroups: RecipeGroup[];

@@ -9,7 +9,7 @@
 
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import type { RosterState } from './useRosterState/types';
+import type { RosterState } from '@/lib/types/roster';
 import { initialState } from './useRosterState/initialState';
 import { createShiftActions } from './useRosterState/helpers/shiftActions';
 import { createDraftActions } from './useRosterState/helpers/draftActions';

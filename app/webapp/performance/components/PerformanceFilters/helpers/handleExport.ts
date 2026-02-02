@@ -7,7 +7,7 @@ import {
   exportPerformanceReportToHTML,
   exportPerformanceReportToPDF,
 } from '../../../utils/exportPerformanceReport';
-import type { PerformanceItem, DateRange, PerformanceMetadata } from '../../../types';
+import type { PerformanceItem, DateRange, PerformanceMetadata } from '@/lib/types/performance';
 import type { ExportFormat } from '@/components/ui/ExportButton';
 
 export async function handleExportHelper(

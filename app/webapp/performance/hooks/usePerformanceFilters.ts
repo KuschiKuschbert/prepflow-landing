@@ -1,7 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { PerformanceFilters as PerformanceFiltersType, PerformanceItem } from '../types';
+import {
+  PerformanceFilters as PerformanceFiltersType,
+  PerformanceItem,
+} from '@/lib/types/performance';
 import { filterPerformanceItems } from '../utils/performanceFiltering';
 import { sortPerformanceItems } from '../utils/performanceSorting';
 

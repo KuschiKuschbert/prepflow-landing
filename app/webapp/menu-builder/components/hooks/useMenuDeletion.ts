@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
-import { Menu } from '../../types';
+import { Menu } from '@/lib/types/menu-builder';
 
 interface UseMenuDeletionProps {
   menus: Menu[];

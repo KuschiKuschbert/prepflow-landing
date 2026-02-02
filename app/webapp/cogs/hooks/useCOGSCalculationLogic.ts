@@ -1,7 +1,7 @@
 'use client';
 import { convertIngredientCost } from '@/lib/unit-conversion';
 import { useCallback } from 'react';
-import { COGSCalculation, Ingredient, RecipeIngredient } from '../types';
+import { COGSCalculation, Ingredient, RecipeIngredient } from '@/lib/types/cogs';
 import { updateCalculation as updateCalculationUtil } from './utils/updateCalculation';
 import { useOnCOGSCalculated } from '@/lib/personality/hooks';
 

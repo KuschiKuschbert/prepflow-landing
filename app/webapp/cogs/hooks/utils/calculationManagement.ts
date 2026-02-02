@@ -1,4 +1,4 @@
-import { COGSCalculation, RecipeIngredient } from '../../types';
+import { COGSCalculation, RecipeIngredient } from '@/lib/types/cogs';
 import { createRecipeIngredientFromCalculation } from './syncRecipeIngredients';
 
 export function removeCalculationHelper(

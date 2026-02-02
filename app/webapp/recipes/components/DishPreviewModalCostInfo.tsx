@@ -1,6 +1,6 @@
 'use client';
 
-import { DishCostData } from '../types';
+import { DishCostData } from '@/lib/types/recipes';
 
 interface DishPreviewModalCostInfoProps {
   costData: DishCostData;

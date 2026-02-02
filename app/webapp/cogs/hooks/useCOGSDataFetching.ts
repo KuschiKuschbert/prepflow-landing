@@ -4,7 +4,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { Ingredient, Recipe } from '../types';
+import { Ingredient, Recipe } from '@/lib/types/cogs';
 
 import { logger } from '@/lib/logger';
 export function useCOGSDataFetching() {

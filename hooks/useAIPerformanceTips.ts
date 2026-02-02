@@ -5,7 +5,7 @@
  */
 
 import { useState, useCallback } from 'react';
-import type { PerformanceItem } from '@/app/webapp/performance/types';
+import type { PerformanceItem } from '@/lib/types/performance';
 
 export interface PerformanceTip {
   priority: 'high' | 'medium' | 'low';

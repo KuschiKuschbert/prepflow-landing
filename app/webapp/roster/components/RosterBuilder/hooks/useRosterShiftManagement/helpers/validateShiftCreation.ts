@@ -1,4 +1,4 @@
-import type { Shift } from '../../../../../types';
+import type { Shift } from '@/lib/types/roster';
 
 interface ValidateShiftCreationParams {
   shiftData: Partial<Shift>;

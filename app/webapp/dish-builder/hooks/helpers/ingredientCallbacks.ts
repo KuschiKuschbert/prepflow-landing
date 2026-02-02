@@ -1,4 +1,4 @@
-import { COGSCalculation, Ingredient } from '../../../cogs/types';
+import { COGSCalculation, Ingredient } from '@/lib/types/cogs';
 import { editCalculation, handleIngredientAdded } from '../utils/ingredientManagement';
 import { createSimpleCallbacks } from './simpleCallbacks';
 

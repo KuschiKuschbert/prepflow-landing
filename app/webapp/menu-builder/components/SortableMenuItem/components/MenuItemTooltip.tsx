@@ -1,6 +1,6 @@
 'use client';
 
-import { MenuItem } from '../../../types';
+import { MenuItem } from '@/lib/types/menu-builder';
 import { MenuItemHoverStatistics } from '../../MenuItemHoverStatistics';
 
 interface MenuItemTooltipProps {

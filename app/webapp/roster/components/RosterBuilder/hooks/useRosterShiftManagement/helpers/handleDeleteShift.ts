@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import type { Shift } from '../../../../../types';
+import type { Shift } from '@/lib/types/roster';
 
 interface HandleDeleteShiftParams {
   shiftId: string;

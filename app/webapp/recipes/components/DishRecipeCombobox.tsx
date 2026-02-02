@@ -3,7 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { ChevronDown, Search } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { Recipe } from '../types';
+import { Recipe } from '@/lib/types/recipes';
 
 interface SelectedRecipe {
   recipe_id: string;

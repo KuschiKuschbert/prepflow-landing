@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { Edit, Trash2 } from 'lucide-react';
-import { Dish } from '../types';
+import { Dish } from '@/lib/types/recipes';
 
 interface DishSidePanelActionsProps {
   dish: Dish;

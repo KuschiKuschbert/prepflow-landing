@@ -2,7 +2,11 @@
 
 import { logger } from '@/lib/logger';
 import { useState } from 'react';
-import type { GeneratedPrepListData, KitchenSection, PrepListCreationItem } from '../types';
+import type {
+  GeneratedPrepListData,
+  KitchenSection,
+  PrepListCreationItem,
+} from '@/lib/types/prep-lists';
 import { usePrepListPreview } from './hooks/usePrepListPreview';
 import { PrepListExport } from './PrepListExport';
 import { PrepListPreviewFooter } from './PrepListPreviewFooter';

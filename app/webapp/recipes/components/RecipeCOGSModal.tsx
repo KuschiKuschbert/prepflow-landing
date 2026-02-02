@@ -7,13 +7,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { COGSTable } from '../../cogs/components/COGSTable';
 import { PricingTool } from '../../cogs/components/PricingTool';
 import { usePricing } from '../../cogs/hooks/usePricing';
-import { COGSCalculation } from '../../cogs/types';
+import { COGSCalculation } from '@/lib/types/recipes';
 import { convertToCOGSCalculations } from '../hooks/utils/recipeCalculationHelpers';
 import {
   Recipe,
   COGSCalculation as RecipeCOGSCalculation,
   RecipeIngredientWithDetails,
-} from '../types';
+} from '@/lib/types/recipes';
 
 interface RecipeCOGSModalProps {
   isOpen: boolean;

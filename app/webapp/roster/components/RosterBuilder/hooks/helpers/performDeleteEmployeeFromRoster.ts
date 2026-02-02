@@ -2,7 +2,7 @@
  * Perform delete employee from roster operation with optimistic updates.
  */
 import { logger } from '@/lib/logger';
-import type { Employee, Shift } from '../../../../types';
+import type { Employee, Shift } from '@/lib/types/roster';
 import { getEmployeeWeekShifts } from './getEmployeeWeekShifts';
 import { deleteShiftsInParallel } from './performDeleteEmployeeFromRoster/helpers/deleteShiftsInParallel';
 import { rollbackEmployeeDeletion } from './performDeleteEmployeeFromRoster/helpers/rollbackEmployeeDeletion';

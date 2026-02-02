@@ -2,7 +2,11 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { PageHeader } from '../../components/static/PageHeader';
-import type { PerformanceAlert, PerformanceItem, PerformanceMetadata } from '../types';
+import type {
+  PerformanceAlert,
+  PerformanceItem,
+  PerformanceMetadata,
+} from '@/lib/types/performance';
 import { BarChart3, Info, Sparkles } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { useAIPerformanceTips } from '@/hooks/useAIPerformanceTips';
@@ -11,7 +15,7 @@ import { PerformanceScoreTooltip } from './PerformanceHeader/PerformanceScoreToo
 import { MethodologyTooltip } from './PerformanceHeader/MethodologyTooltip';
 import { calculatePopoverPosition } from './PerformanceHeader/helpers/calculatePopoverPosition';
 import { fetchPerformanceTips } from './PerformanceHeader/helpers/fetchPerformanceTips';
-import { generatePerformanceTips } from '../utils/generatePerformanceTips';
+import { generatePerformanceTips } from '@/lib/performance/generatePerformanceTips';
 
 interface PerformanceHeaderProps {
   performanceScore: number;

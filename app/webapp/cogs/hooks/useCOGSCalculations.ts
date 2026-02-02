@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { COGSCalculation, RecipeIngredient } from '../types';
+import { COGSCalculation, RecipeIngredient } from '@/lib/types/cogs';
 import { useCOGSCalculationLogic } from './useCOGSCalculationLogic';
 import { useCOGSDataFetching } from './useCOGSDataFetching';
 import { useRecipeIngredients } from './useRecipeIngredients';

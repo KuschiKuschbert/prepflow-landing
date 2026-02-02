@@ -3,7 +3,7 @@ import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { Check, Edit, Eye, Trash2 } from 'lucide-react';
 import { memo } from 'react';
-import { Dish, DishCostData, Recipe, RecipePriceData } from '../types';
+import { Dish, DishCostData, Recipe, RecipePriceData } from '@/lib/types/recipes';
 import { formatRecipeDate } from '../utils/formatDate';
 import { useUnifiedTableRowHandlers } from './UnifiedTableRow/hooks/useUnifiedTableRowHandlers';
 import { getItemName } from './UnifiedTableRow/utils/getItemName';

@@ -1,4 +1,4 @@
-import { Recipe, RecipeIngredientWithDetails } from '../../../types';
+import { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 /**
  * Build recipe handler functions.

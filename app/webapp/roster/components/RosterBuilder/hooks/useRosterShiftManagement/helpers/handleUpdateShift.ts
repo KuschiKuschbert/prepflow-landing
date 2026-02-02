@@ -2,7 +2,7 @@
  * Handle updating an existing shift.
  */
 import { logger } from '@/lib/logger';
-import type { Shift } from '../../../../../types';
+import type { Shift } from '@/lib/types/roster';
 
 export async function handleUpdateShiftHelper(
   editingShiftId: string,

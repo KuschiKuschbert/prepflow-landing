@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import type { Ingredient, Recipe } from '../../../cogs/types';
+import type { Ingredient, Recipe } from '@/lib/types/cogs';
 import type { DishBuilderState } from '../../types';
 import { fetchRecipeIngredients } from './helpers/fetchRecipeIngredients';
 

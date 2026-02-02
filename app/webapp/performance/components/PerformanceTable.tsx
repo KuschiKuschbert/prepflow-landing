@@ -2,7 +2,7 @@
 
 import { memo } from 'react';
 import { usePerformanceTableSort } from '../hooks/usePerformanceTableSort';
-import { PerformanceItem } from '../types';
+import { PerformanceItem } from '@/lib/types/performance';
 import { PerformanceClassificationLegend } from './PerformanceClassificationLegend';
 import { PerformanceTableHeader } from './PerformanceTableHeader';
 import { PerformanceTableMobileCard } from './PerformanceTableMobileCard';

@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { Package, Percent, TrendingUp } from 'lucide-react';
-import { MenuStatistics } from '../types';
+import { MenuStatistics } from '@/lib/types/menu-builder';
 
 interface MenuStatisticsPanelProps {
   statistics: MenuStatistics | null | undefined;

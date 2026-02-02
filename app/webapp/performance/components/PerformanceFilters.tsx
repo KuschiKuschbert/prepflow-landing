@@ -9,7 +9,7 @@ import {
   PerformanceFilters as PerformanceFiltersType,
   PerformanceItem,
   PerformanceMetadata,
-} from '../types';
+} from '@/lib/types/performance';
 import { ImportButton } from './PerformanceFilters/ImportButton';
 import { MenuItemClassFilters } from './PerformanceFilters/MenuItemClassFilters';
 import { handleExportHelper } from './PerformanceFilters/helpers/handleExport';

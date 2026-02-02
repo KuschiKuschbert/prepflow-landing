@@ -2,7 +2,7 @@
  * Hook for managing prep list CRUD operations.
  */
 import { useCallback, useState } from 'react';
-import type { PrepList } from '../types';
+import type { PrepList } from '@/lib/types/prep-lists';
 import { performPrepListDelete } from './helpers/performPrepListDelete';
 import { performPrepListStatusChange } from './helpers/performPrepListStatusChange';
 

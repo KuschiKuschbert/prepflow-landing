@@ -3,7 +3,7 @@
  */
 import { logger } from '@/lib/logger';
 import { invalidateRecipeCache } from '@/lib/cache/recipe-cache';
-import type { SubscriptionRefs } from '../types';
+import type { SubscriptionRefs } from '@/lib/types/recipes';
 
 export function createDebouncedRefreshHandler(refs: SubscriptionRefs) {
   return () => {

@@ -3,7 +3,7 @@
  */
 
 import type { UnifiedItem } from './combineItems';
-import type { Dish, Recipe } from '@/app/webapp/recipes/types';
+import type { Dish, Recipe } from '@/lib/types/recipes';
 
 /**
  * Paginate unified items and separate into dishes and recipes.

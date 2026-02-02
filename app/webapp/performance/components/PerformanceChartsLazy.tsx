@@ -15,7 +15,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { PerformanceHistoryItem, PerformanceItem } from '../types';
+import { PerformanceHistoryItem, PerformanceItem } from '@/lib/types/performance';
 
 interface PerformanceChartsLazyProps {
   performanceItems: PerformanceItem[];

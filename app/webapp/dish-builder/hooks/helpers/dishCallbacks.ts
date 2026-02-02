@@ -1,6 +1,6 @@
 import { saveDish as saveDishHelper } from '../utils/dishSave';
 import { DishBuilderState } from '../../types';
-import { COGSCalculation } from '../../../cogs/types';
+import { COGSCalculation } from '@/lib/types/cogs';
 
 interface DishCallbacksProps {
   dishState: DishBuilderState;

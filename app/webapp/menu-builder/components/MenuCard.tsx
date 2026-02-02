@@ -3,7 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
 import { Check, Edit2, Lock, Printer, Trash2, X } from 'lucide-react';
-import { Menu } from '../types';
+import { Menu } from '@/lib/types/menu-builder';
 
 interface MenuCardProps {
   menu: Menu;

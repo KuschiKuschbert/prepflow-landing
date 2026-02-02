@@ -1,4 +1,4 @@
-import { Recipe } from '../../../types';
+import { Recipe } from '@/lib/types/recipes';
 import { formatQuantity as formatQuantityUtil } from '../../../utils/formatQuantity';
 
 /**

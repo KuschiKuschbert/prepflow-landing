@@ -1,5 +1,5 @@
 import { RefObject } from 'react';
-import { COGSCalculation, Ingredient } from '../../../cogs/types';
+import { COGSCalculation, Ingredient } from '@/lib/types/cogs';
 import { DishBuilderState } from '../../types';
 import { createIngredientCallbacks } from './ingredientCallbacks';
 import { createDishCallbacks } from './dishCallbacks';

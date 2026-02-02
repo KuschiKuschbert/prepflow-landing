@@ -3,7 +3,7 @@
  */
 import { cacheData, getCachedData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
-import type { MenuItem, MenuStatistics } from '../../../../../types';
+import type { MenuItem, MenuStatistics } from '@/lib/types/menu-builder';
 
 interface HandleStatisticsParams {
   statsResponse: Response;

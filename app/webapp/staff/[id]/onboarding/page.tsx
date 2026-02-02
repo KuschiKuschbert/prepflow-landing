@@ -14,7 +14,7 @@ import { PageHeader } from '@/app/webapp/components/static/PageHeader';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { UserPlus } from 'lucide-react';
 import { logger } from '@/lib/logger';
-import type { Employee } from '@/app/webapp/roster/types';
+import type { Employee } from '@/lib/types/roster';
 
 export default function OnboardingPage() {
   const params = useParams();

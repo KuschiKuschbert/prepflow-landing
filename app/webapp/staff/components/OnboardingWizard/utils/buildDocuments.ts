@@ -1,4 +1,4 @@
-import type { OnboardingDocument } from '@/app/webapp/roster/types';
+import type { OnboardingDocument } from '@/lib/types/roster';
 
 interface BuildDocumentsParams {
   idFileUrl: string | null;

@@ -1,7 +1,7 @@
 /**
  * Detect changes in menu items by comparing signatures and references.
  */
-import type { MenuItem } from '../../../../../types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 import { createItemSignature } from './createItemSignature';
 
 interface ItemChange {

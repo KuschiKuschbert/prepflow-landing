@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { RecipeDishItem } from './useRecipeDishEditorData';
-import { Recipe } from '../../types';
-import { COGSCalculation, Ingredient } from '../../../cogs/types';
+import { Recipe } from '@/lib/types/recipes';
+import { COGSCalculation, Ingredient } from '@/lib/types/recipes';
 import { logger } from '@/lib/logger';
 import { loadIngredientsForItem } from './useRecipeDishIngredientLoading/helpers/loadIngredientsForItem';
 

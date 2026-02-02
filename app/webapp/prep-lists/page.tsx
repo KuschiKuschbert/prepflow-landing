@@ -18,7 +18,7 @@ import { usePrepListsForm } from './hooks/usePrepListsForm';
 import { usePrepListsModals } from './hooks/usePrepListsModals';
 import { usePrepListsPagination } from './hooks/usePrepListsPagination';
 import { usePrepListsQuery } from './hooks/usePrepListsQuery';
-import type { PrepList, PrepListCreationItem } from './types';
+import type { PrepList, PrepListCreationItem } from '@/lib/types/prep-lists';
 
 // Lazy load prep list components to reduce initial bundle size
 const PrepListForm = dynamic(

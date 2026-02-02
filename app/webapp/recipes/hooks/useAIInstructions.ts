@@ -1,6 +1,6 @@
 'use client';
 import { useCallback, useState } from 'react';
-import { Recipe, RecipeIngredientWithDetails } from '../types';
+import { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { useCountry } from '@/contexts/CountryContext';
 import { logger } from '@/lib/logger';
 import { analyzeIngredients } from './utils/analyzeIngredients';

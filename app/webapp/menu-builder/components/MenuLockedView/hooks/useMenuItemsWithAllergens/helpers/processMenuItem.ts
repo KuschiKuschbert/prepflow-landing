@@ -1,6 +1,6 @@
 import { AUSTRALIAN_ALLERGENS, consolidateAllergens } from '@/lib/allergens/australian-allergens';
 import { logger } from '@/lib/logger';
-import type { MenuItem } from '@/app/webapp/menu-builder/types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 
 const VALID_ALLERGEN_CODES = AUSTRALIAN_ALLERGENS.map(a => a.code);
 

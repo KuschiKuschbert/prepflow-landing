@@ -2,7 +2,7 @@
 
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useEffect } from 'react';
-import type { Recipe } from '../../cogs/types';
+import type { Recipe } from '@/lib/types/cogs';
 import { useDishBuilder } from '../hooks/useDishBuilder';
 import CostAnalysisSection from './CostAnalysisSection';
 import DishBuilderDragDrop from './DishBuilderDragDrop';

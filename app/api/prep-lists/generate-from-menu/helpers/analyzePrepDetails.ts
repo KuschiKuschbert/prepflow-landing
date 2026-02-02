@@ -2,8 +2,8 @@
  * Analyze recipe prep details using AI
  */
 
-import type { RecipePrepDetails } from '@/app/webapp/prep-lists/types';
-import type { Recipe, RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
+import type { RecipePrepDetails } from '@/lib/types/prep-lists';
+import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { generateAIResponse } from '@/lib/ai/ai-service';
 import { buildPrepDetailsPrompt, parsePrepDetailsResponse } from '@/lib/ai/prompts/prep-details';
 import { logger } from '@/lib/logger';

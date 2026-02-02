@@ -3,7 +3,7 @@
  */
 
 import { exportToCSV } from '@/lib/csv/csv-utils';
-import type { COGSCalculation } from '../../types';
+import type { COGSCalculation } from '@/lib/types/cogs';
 
 const CSV_HEADERS = [
   'Ingredient',

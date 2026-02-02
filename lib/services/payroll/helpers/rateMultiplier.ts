@@ -1,7 +1,7 @@
 /**
  * Rate multiplier calculation for day-of-week penalty rates.
  */
-import type { Employee } from '@/app/webapp/roster/types';
+import type { Employee } from '@/lib/types/roster';
 
 /**
  * Gets the rate multiplier for a given day of week.

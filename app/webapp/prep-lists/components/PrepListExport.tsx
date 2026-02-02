@@ -5,7 +5,7 @@ import { useTranslation } from '@/lib/useTranslation';
 import { Icon } from '@/components/ui/Icon';
 import { X, Printer } from 'lucide-react';
 import { usePrepListExport } from '../hooks/usePrepListExport';
-import type { PrepList, SectionData, KitchenSection } from '../types';
+import type { PrepList, SectionData, KitchenSection } from '@/lib/types/prep-lists';
 
 interface PrepListExportProps {
   prepList?: PrepList;

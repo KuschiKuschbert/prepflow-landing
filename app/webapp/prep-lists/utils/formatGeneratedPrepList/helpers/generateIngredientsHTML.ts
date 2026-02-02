@@ -2,7 +2,7 @@
  * Generate ingredients HTML for prep list.
  */
 import { escapeHtml } from '@/lib/exports/template-utils';
-import type { SectionData } from '../../../types';
+import type { SectionData } from '@/lib/types/prep-lists';
 
 export function generateIngredientsHTML(
   section: SectionData,

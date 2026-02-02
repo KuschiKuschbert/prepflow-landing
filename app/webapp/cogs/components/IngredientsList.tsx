@@ -3,7 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { Check, Edit, Trash2, X } from 'lucide-react';
 import React, { useState } from 'react';
-import { COGSCalculation } from '../types';
+import { COGSCalculation } from '@/lib/types/cogs';
 
 interface IngredientsListProps {
   calculations: COGSCalculation[];

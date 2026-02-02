@@ -1,5 +1,5 @@
 import { escapeHtml } from '@/lib/exports/template-utils';
-import type { Recipe, RecipeIngredientWithDetails } from '../../types';
+import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 interface RecipePrintData {
   recipe: Recipe;

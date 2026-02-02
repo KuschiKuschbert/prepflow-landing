@@ -1,5 +1,5 @@
 'use client';
-import { COGSCalculation } from '@/app/webapp/cogs/types';
+import { COGSCalculation } from '@/lib/types/cogs';
 import { RecipeEditFooter } from '@/app/webapp/recipes/components/RecipeEditDrawer/components/RecipeEditFooter';
 import { EditDrawer } from '@/components/ui/EditDrawer';
 import { useNotification } from '@/contexts/NotificationContext';
@@ -7,7 +7,7 @@ import { useAutosave } from '@/hooks/useAutosave';
 import { deriveAutosaveId } from '@/lib/autosave-id';
 import { logger } from '@/lib/logger';
 import { useCallback, useEffect, useState } from 'react';
-import { Recipe } from '../types';
+import { Recipe } from '@/lib/types/recipes';
 import { useRecipeEditIngredientSave } from './hooks/useRecipeEditIngredientSave';
 import { useRecipeIngredientsState } from './RecipeEditDrawer/hooks/useRecipeIngredientsState';
 import { RecipeIngredientsTab } from './RecipeIngredientsTab';

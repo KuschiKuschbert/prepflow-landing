@@ -1,7 +1,7 @@
 /**
  * Show confirmation dialog for deleting all shifts.
  */
-import type { Shift } from '../../../../types';
+import type { Shift } from '@/lib/types/roster';
 
 interface ConfirmDeleteAllShiftsParams {
   shiftsToDelete: Shift[];

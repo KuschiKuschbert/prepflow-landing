@@ -3,7 +3,7 @@
  */
 import { cacheData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
-import type { Menu, MenuItem, MenuStatistics } from '../../../../../types';
+import type { Menu, MenuItem, MenuStatistics } from '@/lib/types/menu-builder';
 
 interface MenuApiResponse {
   success: boolean;

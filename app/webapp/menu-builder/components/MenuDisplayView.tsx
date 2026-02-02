@@ -8,7 +8,7 @@
 import { DietaryBadge } from '@/components/ui/DietaryBadge';
 import { FoodImageDisplay } from '@/components/ui/FoodImageDisplay';
 import { useMemo } from 'react';
-import { Menu, MenuItem } from '../types';
+import { Menu, MenuItem } from '@/lib/types/menu-builder';
 
 interface MenuDisplayViewProps {
   menu: Menu;

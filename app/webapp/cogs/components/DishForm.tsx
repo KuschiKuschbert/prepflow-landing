@@ -3,7 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { Edit, X } from 'lucide-react';
 import React from 'react';
-import { COGSCalculation, Ingredient, Recipe, RecipeIngredient } from '../types';
+import { COGSCalculation, Ingredient, Recipe, RecipeIngredient } from '@/lib/types/cogs';
 import { IngredientManager } from './IngredientManager';
 import { IngredientsList } from './IngredientsList';
 import { RecipeCombobox } from './RecipeCombobox';

@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import type { Shift } from '../../../types';
+import type { Shift } from '@/lib/types/roster';
 
 interface UseRosterFormProps {
   shifts: Shift[];

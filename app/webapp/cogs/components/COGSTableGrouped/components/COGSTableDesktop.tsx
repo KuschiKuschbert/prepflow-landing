@@ -5,10 +5,10 @@
  */
 
 import React from 'react';
-import type { COGSCalculation } from '../../../types';
+import type { COGSCalculation } from '@/lib/types/cogs';
 import { COGSTableHeader } from '../../COGSTableHeader';
 import { COGSTableRow } from '../../COGSTableRow';
-import type { RecipeGroup } from '../types';
+import type { RecipeGroup } from '@/lib/types/cogs';
 import { COGSRecipeGroupRow } from './COGSRecipeGroupRow';
 
 interface COGSTableDesktopProps {

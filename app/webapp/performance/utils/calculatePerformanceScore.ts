@@ -8,7 +8,7 @@
  * @param performanceItems - Array of performance items to calculate score from
  * @returns Performance score from 0-100
  */
-import { PerformanceItem } from '../types';
+import { PerformanceItem } from '@/lib/types/performance';
 
 const MENU_ITEM_CLASS_SCORES: Record<string, number> = {
   "Chef's Kiss": 100, // High Profit + High Popularity

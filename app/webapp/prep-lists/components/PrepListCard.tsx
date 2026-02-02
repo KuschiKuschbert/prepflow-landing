@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
-import { PrepList } from '../types';
+import { PrepList } from '@/lib/types/prep-lists';
 import { getStatusColor } from '../utils';
 import { ListChecks, Edit, Trash2, Printer } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';

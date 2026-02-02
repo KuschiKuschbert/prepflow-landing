@@ -2,7 +2,7 @@ import { useNotification } from '@/contexts/NotificationContext';
 import { createValidationWarnings, validateShift } from '@/lib/services/compliance/validator';
 import { DragEndEvent, DragOverEvent, DragStartEvent } from '@dnd-kit/core';
 import { useCallback } from 'react';
-import type { Employee, Shift, ShiftValidationWarning } from '../../../types';
+import type { Employee, Shift, ShiftValidationWarning } from '@/lib/types/roster';
 import { buildUpdatedShift } from './useRosterDragAndDrop/helpers/buildUpdatedShift';
 
 interface RosterCellData {

@@ -1,4 +1,4 @@
-import { COGSCalculation } from '../../../cogs/types';
+import { COGSCalculation } from '@/lib/types/cogs';
 import { clearCalculations, removeCalculation } from '../utils/ingredientManagement';
 
 /**

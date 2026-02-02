@@ -2,7 +2,7 @@
  * Hook for managing menu item operations (add, remove, move, reorder, update price)
  * Orchestrates specialized hooks for different operations.
  */
-import type { Dish, MenuItem, Recipe } from '../../types';
+import type { Dish, MenuItem, Recipe } from '@/lib/types/menu-builder';
 import { useMenuItemAddition } from './helpers/useMenuItemAddition';
 import { useMenuItemCategory } from './helpers/useMenuItemCategory';
 import { useMenuItemPrice } from './helpers/useMenuItemPrice';

@@ -8,7 +8,7 @@ import type {
   Shift,
   ShiftStatus,
   ShiftValidationWarning,
-} from '../../types';
+} from '@/lib/types/roster';
 
 export type RosterStoreSet = StoreApi<RosterState>['setState'];
 export type RosterStoreGet = StoreApi<RosterState>['getState'];

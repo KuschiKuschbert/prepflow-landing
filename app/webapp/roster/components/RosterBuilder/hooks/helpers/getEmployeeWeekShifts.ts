@@ -2,7 +2,7 @@
  * Get shifts for a specific employee in the current week.
  */
 import { addDays, format } from 'date-fns';
-import type { Shift } from '../../../../types';
+import type { Shift } from '@/lib/types/roster';
 
 export function getEmployeeWeekShifts(
   shifts: Shift[],

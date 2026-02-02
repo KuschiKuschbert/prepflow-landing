@@ -3,7 +3,7 @@
  */
 
 import { logger } from '@/lib/logger';
-import { RecipeCardData, SubRecipeCards } from '../../../types';
+import { RecipeCardData, SubRecipeCards } from '@/lib/types/menu-builder';
 
 export interface FetchCardsResult {
   success: boolean;

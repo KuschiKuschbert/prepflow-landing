@@ -3,7 +3,7 @@
  */
 import { escapeHtml } from '@/lib/exports/template-utils';
 import { formatMenuItem } from './formatMenuItem';
-import type { MenuItem } from '../../../types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 
 export function formatCategorySection(category: string, categoryItems: MenuItem[]): string {
   categoryItems.sort((a, b) => a.position - b.position);

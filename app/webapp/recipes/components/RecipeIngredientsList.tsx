@@ -4,7 +4,7 @@ import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
 import { CheckCircle2, Circle, Package } from 'lucide-react';
 import { useState } from 'react';
-import { Recipe, RecipeIngredientWithDetails } from '../types';
+import { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 interface RecipeIngredientsListProps {
   recipeIngredients: RecipeIngredientWithDetails[];
   selectedRecipe: Recipe;

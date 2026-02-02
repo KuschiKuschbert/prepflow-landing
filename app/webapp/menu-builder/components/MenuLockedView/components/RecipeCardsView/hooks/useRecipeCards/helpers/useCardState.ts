@@ -3,7 +3,7 @@
  */
 
 import { useState } from 'react';
-import { RecipeCardData, SubRecipeCards } from '../../../types';
+import { RecipeCardData, SubRecipeCards } from '@/lib/types/menu-builder';
 
 /**
  * Hook for managing recipe card state.

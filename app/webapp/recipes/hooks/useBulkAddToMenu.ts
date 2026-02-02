@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
-import { Menu } from '@/app/webapp/menu-builder/types';
+import { Menu } from '@/lib/types/menu-builder';
 
 interface UseBulkAddToMenuProps {
   selectedItems: Set<string>;

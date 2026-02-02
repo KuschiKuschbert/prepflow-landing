@@ -1,7 +1,7 @@
 /**
  * Calculate consecutive days helper.
  */
-import type { Shift } from '@/app/webapp/roster/types';
+import type { Shift } from '@/lib/types/roster';
 import { isSameDay } from './dateUtils';
 
 export function getConsecutiveDays(date: Date, shifts: Shift[]): number {

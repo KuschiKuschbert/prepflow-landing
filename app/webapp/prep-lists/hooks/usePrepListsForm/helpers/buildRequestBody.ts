@@ -1,7 +1,7 @@
 /**
  * Build request body for prep list form submission.
  */
-import type { PrepList, PrepListFormData } from '../../../types';
+import type { PrepList, PrepListFormData } from '@/lib/types/prep-lists';
 
 interface BuildRequestBodyParams {
   formData: PrepListFormData;

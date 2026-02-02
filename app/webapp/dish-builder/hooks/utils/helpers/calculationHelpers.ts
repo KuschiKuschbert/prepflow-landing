@@ -1,4 +1,4 @@
-import type { COGSCalculation } from '../../../../cogs/types';
+import type { COGSCalculation } from '@/lib/types/cogs';
 
 /**
  * Remove a calculation by ingredient ID.

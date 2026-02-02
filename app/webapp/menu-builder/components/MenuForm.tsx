@@ -3,7 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Menu } from '../types';
+import { Menu } from '@/lib/types/menu-builder';
 import { logger } from '@/lib/logger';
 
 interface MenuFormProps {

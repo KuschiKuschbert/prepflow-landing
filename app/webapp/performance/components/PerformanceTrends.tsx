@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { PerformanceItem } from '../types';
+import { PerformanceItem } from '@/lib/types/performance';
 import { TrendingUp, TrendingDown, Minus, ChevronDown, ChevronUp } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 

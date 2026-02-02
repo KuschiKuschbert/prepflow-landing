@@ -1,6 +1,6 @@
 'use client';
 
-import { Recipe } from '../types';
+import { Recipe } from '@/lib/types/recipes';
 
 interface DeleteConfirmationModalProps {
   show?: boolean;

@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { Package, DollarSign, Calculator, TrendingUp } from 'lucide-react';
-import { PricingCalculation } from '../../cogs/types';
+import { PricingCalculation } from '@/lib/types/cogs';
 
 interface DishSummaryCardProps {
   ingredientCount: number;

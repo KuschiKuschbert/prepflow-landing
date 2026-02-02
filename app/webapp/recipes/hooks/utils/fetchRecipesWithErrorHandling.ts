@@ -1,6 +1,6 @@
 import { cacheRecipes } from '@/lib/cache/recipe-cache';
 import { categorizeError, retryWithBackoff, RecipeError } from '../../types/errors';
-import { Recipe, RecipeIngredientWithDetails } from '../../types';
+import { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { precalculatePrices } from './precalculatePrices';
 import { logger } from '@/lib/logger';
 

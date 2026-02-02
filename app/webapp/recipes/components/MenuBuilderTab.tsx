@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useCallback } from 'react';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
-import dynamic from 'next/dynamic';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
-import type { Menu } from '../../menu-builder/types';
+import type { Menu } from '@/lib/types/menu-builder';
+import dynamic from 'next/dynamic';
+import { useCallback, useState } from 'react';
 
 // Lazy load MenuBuilderClient to reduce initial bundle size (uses dnd-kit)
 const MenuBuilderClient = dynamic(() => import('../../menu-builder/components/MenuBuilderClient'), {

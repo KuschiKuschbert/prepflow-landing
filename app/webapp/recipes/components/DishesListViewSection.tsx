@@ -4,7 +4,13 @@ import {
   UnifiedSortField,
 } from '@/app/webapp/recipes/components/hooks/useDishesClientPagination/helpers/useFilterState';
 import { useCallback } from 'react';
-import { Dish, DishCostData, Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../types';
+import {
+  Dish,
+  DishCostData,
+  Recipe,
+  RecipeIngredientWithDetails,
+  RecipePriceData,
+} from '@/lib/types/recipes';
 import { DishesListView } from './DishesListView';
 import { DishesSidePanels, DishesSidePanelsProps } from './DishesSidePanels';
 

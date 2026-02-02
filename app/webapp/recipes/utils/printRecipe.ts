@@ -7,7 +7,7 @@
 import { printWithTemplate } from '@/lib/exports/print-template';
 import { formatRecipeForPrint } from './formatRecipeForPrint';
 import { getRecipePrintStyles } from './recipePrintStyles';
-import type { Recipe, RecipeIngredientWithDetails } from '../types';
+import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 export interface PrintRecipeOptions {
   recipe: Recipe;

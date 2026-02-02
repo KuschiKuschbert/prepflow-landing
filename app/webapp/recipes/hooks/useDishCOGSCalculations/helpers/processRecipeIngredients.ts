@@ -2,8 +2,8 @@
  * Helper to process recipe ingredients for COGS calculations.
  */
 
-import { COGSCalculation } from '@/app/webapp/cogs/types';
-import { DishRecipe, RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
+import { COGSCalculation } from '@/lib/types/cogs';
+import { DishRecipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { logger } from '@/lib/logger';
 import { convertToCOGSCalculations } from '../../utils/recipeCalculationHelpers';
 

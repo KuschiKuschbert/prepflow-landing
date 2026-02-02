@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { Recipe, RecipeIngredientWithDetails } from '../../../types';
+import { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { handleDuplicateRecipe as handleDuplicateRecipeHelper } from './handleDuplicateRecipe';
 
 export function createHandleDuplicateRecipe(

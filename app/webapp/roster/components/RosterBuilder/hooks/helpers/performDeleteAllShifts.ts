@@ -2,7 +2,7 @@
  * Perform delete all shifts operation with optimistic updates.
  */
 import { logger } from '@/lib/logger';
-import type { Shift } from '../../../../types';
+import type { Shift } from '@/lib/types/roster';
 import { getWeekShifts } from './getWeekShifts';
 
 interface PerformDeleteAllShiftsParams {

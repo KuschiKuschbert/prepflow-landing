@@ -12,7 +12,7 @@ import type {
   Shift,
   TemplateApplicationRequest,
   TemplateApplicationResult,
-} from '@/app/webapp/roster/types';
+} from '@/lib/types/roster';
 import { logger } from '@/lib/logger';
 import { createShiftFromTemplate } from './templateService/helpers/createShiftFromTemplate';
 import { findShiftConflict } from './templateService/helpers/findShiftConflict';

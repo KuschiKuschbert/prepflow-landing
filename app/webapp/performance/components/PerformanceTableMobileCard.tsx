@@ -1,7 +1,7 @@
 'use client';
 
 import { memo } from 'react';
-import { PerformanceItem } from '../types';
+import { PerformanceItem } from '@/lib/types/performance';
 import { formatCurrency, formatNumber, formatPercentage } from '../utils/performanceUtils';
 
 interface PerformanceTableMobileCardProps {

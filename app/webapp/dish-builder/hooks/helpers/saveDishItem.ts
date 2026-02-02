@@ -1,4 +1,4 @@
-import { Dish } from '../../../menu-builder/types';
+import { Dish } from '@/lib/types/menu-builder';
 import { DishBuilderState } from '../../types';
 
 interface SaveDishItemProps {

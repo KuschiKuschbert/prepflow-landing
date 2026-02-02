@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from '@/lib/useTranslation';
 import { Icon } from '@/components/ui/Icon';
 import { X, ChefHat, Loader2 } from 'lucide-react';
-import type { Menu, GeneratedPrepListData } from '../types';
+import type { Menu, GeneratedPrepListData } from '@/lib/types/prep-lists';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 interface GenerateFromMenuModalProps {

@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { useMemo } from 'react';
-import { COGSCalculation } from '../../cogs/types';
-import { Dish, DishWithDetails, RecipeIngredientWithDetails } from '../types';
+import { COGSCalculation } from '@/lib/types/recipes';
+import { Dish, DishWithDetails, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { processRecipeIngredients } from './useDishCOGSCalculations/helpers/processRecipeIngredients';
 import { processStandaloneIngredients } from './useDishCOGSCalculations/helpers/processStandaloneIngredients';
 

@@ -14,16 +14,16 @@ interface NewIngredient {
 
 interface ExecuteIngredientAdditionParams {
   newIngredient: NewIngredient;
-  ingredients: import('../../../types').Ingredient[];
+  ingredients: import('@/lib/types/recipes').Ingredient[];
   selectedRecipe: string | null;
-  currentCalculations: import('../../../types').COGSCalculation[];
+  currentCalculations: import('@/lib/types/recipes').COGSCalculation[];
   convertIngredientQuantity: (
     quantity: number,
     userUnit: string,
     ingredientUnit: string,
   ) => { convertedQuantity: number; convertedUnit: string; conversionNote: string };
   updateCalculation: (ingredientId: string, quantity: number) => void;
-  addCalculation: (calc: import('../../../types').COGSCalculation) => void;
+  addCalculation: (calc: import('@/lib/types/recipes').COGSCalculation) => void;
   resetForm: () => void;
   setSaveError: (error: string) => void;
 }

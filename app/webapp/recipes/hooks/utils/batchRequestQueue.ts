@@ -1,4 +1,4 @@
-import { RecipeIngredientWithDetails } from '../../types';
+import { RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { logger } from '@/lib/logger';
 
 // Module-level shared cache for batch requests (shared across all hook instances)

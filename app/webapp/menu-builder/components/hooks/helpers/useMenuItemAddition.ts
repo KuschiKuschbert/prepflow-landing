@@ -1,6 +1,6 @@
 import { useOnMenuBuilt } from '@/lib/personality/hooks';
 import { useCallback } from 'react';
-import type { Dish, MenuItem, Recipe } from '../../../types';
+import type { Dish, MenuItem, Recipe } from '@/lib/types/menu-builder';
 import { createOptimisticItem } from './useMenuItemAddition/createOptimisticItem';
 import { handleMenuItemAPI } from './useMenuItemAddition/handleMenuItemAPI';
 

@@ -4,7 +4,7 @@
  */
 import { generateItemsSection } from './formatPerformanceReportForPrint/helpers/generateItemsSection';
 import { generateSummarySection } from './formatPerformanceReportForPrint/helpers/generateSummarySection';
-import type { PerformanceItem, PerformanceMetadata, DateRange } from '../types';
+import type { PerformanceItem, PerformanceMetadata, DateRange } from '@/lib/types/performance';
 
 /**
  * Format performance report for print/export

@@ -13,7 +13,7 @@ import { PageHeader } from '@/app/webapp/components/static/PageHeader';
 import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { Clock } from 'lucide-react';
 import { logger } from '@/lib/logger';
-import type { Employee, Shift } from '@/app/webapp/roster/types';
+import type { Employee, Shift } from '@/lib/types/roster';
 
 export default function TimeAttendancePage() {
   const [employee, setEmployee] = useState<Employee | null>(null);

@@ -7,7 +7,7 @@
 
 import { logger } from '@/lib/logger';
 import { memo, useState } from 'react';
-import { Menu, MenuItem } from '../types';
+import { Menu, MenuItem } from '@/lib/types/menu-builder';
 import { IngredientPopover } from './IngredientPopover';
 import { MenuDisplayView } from './MenuDisplayView';
 import { AllergenMatrixTable } from './MenuLockedView/components/AllergenMatrixTable';

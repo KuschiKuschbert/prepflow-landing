@@ -4,8 +4,8 @@ import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { IngredientsList } from '../../../../cogs/components/IngredientsList';
 import { IngredientManager } from '../../../../cogs/components/IngredientManager';
-import { COGSCalculation } from '../../../../cogs/types';
-import { Ingredient } from '../../../../cogs/types';
+import { COGSCalculation } from '@/lib/types/recipes';
+import { Ingredient } from '@/lib/types/recipes';
 import { Save } from 'lucide-react';
 
 interface IngredientEditorPanelProps {

@@ -1,4 +1,4 @@
-import { COGSCalculation, RecipeIngredientWithDetails } from '../../types';
+import { COGSCalculation, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 /**
  * Convert recipe ingredients to COGS calculation format

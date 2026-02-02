@@ -1,6 +1,6 @@
 'use client';
 
-import { ImportCSVData } from '../types';
+import { ImportCSVData } from '@/lib/types/performance';
 import { ImportProgress } from '@/components/ui/ImportProgress';
 
 interface PerformanceImportModalProps {

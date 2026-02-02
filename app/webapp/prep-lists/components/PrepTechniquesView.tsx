@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { ChevronDown, ChevronUp, Scissors, Droplets, Clock, Flame, Sparkles } from 'lucide-react';
-import type { PrepTechniquesSection } from '../types';
+import type { PrepTechniquesSection } from '@/lib/types/prep-lists';
 
 interface PrepTechniquesViewProps {
   prepTechniques: PrepTechniquesSection;

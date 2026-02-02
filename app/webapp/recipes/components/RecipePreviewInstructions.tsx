@@ -3,7 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { FileText, Loader2, Play, Wand2 } from 'lucide-react';
 import { useState } from 'react';
-import { Recipe } from '../types';
+import { Recipe } from '@/lib/types/recipes';
 import { CookingFocusMode } from './CookingFocusMode';
 
 interface RecipePreviewInstructionsProps {

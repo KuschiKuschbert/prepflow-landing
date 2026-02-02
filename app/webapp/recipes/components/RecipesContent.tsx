@@ -1,6 +1,6 @@
 'use client';
 
-import { Recipe, RecipePriceData } from '../types';
+import { Recipe, RecipePriceData } from '@/lib/types/recipes';
 import { RecipeFilters } from '../hooks/useRecipeFiltering';
 import { TablePagination } from '@/components/ui/TablePagination';
 import RecipeCard from './RecipeCard';

@@ -1,6 +1,6 @@
 'use client';
 import { useNotification } from '@/contexts/NotificationContext';
-import { Recipe } from '../types';
+import { Recipe } from '@/lib/types/recipes';
 
 interface RecipeMetadataFormProps {
   recipe: Recipe;

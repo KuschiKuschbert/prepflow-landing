@@ -2,7 +2,7 @@
  * Helper to combine dishes and recipes into unified items.
  */
 
-import type { Dish, Recipe } from '@/app/webapp/recipes/types';
+import type { Dish, Recipe } from '@/lib/types/recipes';
 import type { UnifiedFilters } from './useFilterState';
 
 export type UnifiedItem = (Dish & { itemType: 'dish' }) | (Recipe & { itemType: 'recipe' });

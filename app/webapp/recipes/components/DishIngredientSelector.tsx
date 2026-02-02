@@ -6,7 +6,7 @@ import DishIngredientCombobox from './DishIngredientCombobox';
 
 import { logger } from '@/lib/logger';
 import { useState } from 'react';
-import { Ingredient } from '../../cogs/types';
+import { Ingredient } from '@/lib/types/recipes';
 interface SelectedIngredient {
   ingredient_id: string;
   quantity: number;

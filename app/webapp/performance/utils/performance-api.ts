@@ -2,7 +2,7 @@
  * Performance API utilities
  */
 
-import type { DateRange } from '../types';
+import type { DateRange } from '@/lib/types/performance';
 import { calculatePerformanceScore } from './calculatePerformanceScore';
 import type { SalesData } from './csv-utils/helpers/mapCSVRowToSalesData';
 

@@ -1,6 +1,6 @@
 import { flushSync } from 'react-dom';
 import { createCalculation } from '../utils/createCalculation';
-import { Ingredient, COGSCalculation } from '../../types';
+import { Ingredient, COGSCalculation } from '@/lib/types/cogs';
 
 interface NewIngredient {
   ingredient_id?: string;

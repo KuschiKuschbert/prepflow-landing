@@ -1,6 +1,6 @@
 'use client';
 
-import { COGSCalculation, PricingCalculation } from '../../cogs/types';
+import { COGSCalculation, PricingCalculation } from '@/lib/types/cogs';
 import { PricingTool } from '../../cogs/components/PricingTool';
 import { DishIngredientTable } from './DishIngredientTable';
 

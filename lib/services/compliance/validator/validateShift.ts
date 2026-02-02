@@ -1,7 +1,7 @@
 /**
  * Validate a single shift against compliance rules.
  */
-import type { Shift, Employee, ComplianceValidationResult } from '@/app/webapp/roster/types';
+import type { Shift, Employee, ComplianceValidationResult } from '@/lib/types/roster';
 import { COMPLIANCE_RULES } from './constants';
 import { getConsecutiveDays } from './helpers/getConsecutiveDays';
 import { getWeekStart } from './helpers/dateUtils';

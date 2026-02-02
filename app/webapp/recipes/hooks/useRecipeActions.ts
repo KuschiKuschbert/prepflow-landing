@@ -4,7 +4,7 @@ import { logger } from '@/lib/logger';
 import { useOnRecipeCreated } from '@/lib/personality/hooks';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
-import { Recipe, RecipeIngredientWithDetails } from '../types';
+import { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { createHandleAddRecipe } from './useRecipeActions/helpers/createHandleAddRecipe';
 import { createHandleDuplicateRecipe } from './useRecipeActions/helpers/createHandleDuplicateRecipe';
 import { handleEditFromPreview as handleEditFromPreviewHelper } from './useRecipeActions/helpers/handleEditFromPreview';

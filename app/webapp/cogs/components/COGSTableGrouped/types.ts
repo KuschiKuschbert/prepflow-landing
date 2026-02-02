@@ -2,7 +2,7 @@
  * Types for COGSTableGrouped component.
  */
 
-import type { COGSCalculation } from '../../types';
+import type { COGSCalculation } from '@/lib/types/cogs';
 
 export interface RecipeGroup {
   recipeId: string;

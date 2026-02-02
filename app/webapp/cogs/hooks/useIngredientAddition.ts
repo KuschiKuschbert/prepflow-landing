@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useRef, useEffect } from 'react';
-import { Ingredient } from '../types';
+import { Ingredient } from '@/lib/types/cogs';
 import { useIngredientConversion } from './useIngredientConversion';
 import { executeIngredientAddition } from './useIngredientAddition/helpers/executeIngredientAddition';
 
@@ -12,10 +12,10 @@ interface NewIngredient {
 }
 
 interface UseIngredientAdditionProps {
-  calculations: import('../types').COGSCalculation[];
+  calculations: import('@/lib/types/recipes').COGSCalculation[];
   ingredients: Ingredient[];
   selectedRecipe: string | null;
-  addCalculation: (calc: import('../types').COGSCalculation) => void;
+  addCalculation: (calc: import('@/lib/types/recipes').COGSCalculation) => void;
   updateCalculation: (ingredientId: string, quantity: number) => void;
   resetForm: () => void;
   setSaveError: (error: string) => void;

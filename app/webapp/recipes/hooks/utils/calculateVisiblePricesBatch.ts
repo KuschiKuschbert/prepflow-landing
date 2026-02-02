@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../../types';
+import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '@/lib/types/recipes';
 /**
  * Calculate prices using batch fetch.
  * @param {Object} params - Batch calculation parameters

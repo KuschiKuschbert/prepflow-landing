@@ -1,4 +1,4 @@
-import { Dish, DishCostData, Recipe, RecipePriceData } from '../../types';
+import { Dish, DishCostData, Recipe, RecipePriceData } from '@/lib/types/recipes';
 
 // We might need to adjust these imports based on where Dish/Recipe are actually defined.
 // Based on typical project structure, checking shared types or inferring from usage.

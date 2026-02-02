@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { DateRange, PerformanceItem } from '../types';
+import { DateRange, PerformanceItem } from '@/lib/types/performance';
 import { fetchPerformanceData as fetchPerformanceApi } from '../utils/performance-api';
 
 import { logger } from '@/lib/logger';

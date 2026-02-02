@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Ingredient } from '../../../cogs/types';
+import { Ingredient } from '@/lib/types/recipes';
 import { Icon } from '@/components/ui/Icon';
 import { Search, Package, Plus, ArrowLeft } from 'lucide-react';
 

@@ -4,8 +4,8 @@
 
 import { useState } from 'react';
 import { logger } from '@/lib/logger';
-import type { Recipe } from '../../../cogs/types';
-import type { Ingredient } from '../../../cogs/types';
+import type { Recipe } from '@/lib/types/cogs';
+import type { Ingredient } from '@/lib/types/cogs';
 
 interface UseRecipeExpansionProps {
   ingredients: Ingredient[];

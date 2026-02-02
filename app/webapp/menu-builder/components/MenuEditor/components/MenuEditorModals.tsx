@@ -1,6 +1,6 @@
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { MenuChangeTracking } from '@/lib/menu-lock/change-tracking';
-import { MenuItem } from '../../../types';
+import { MenuItem } from '@/lib/types/menu-builder';
 import CategorySelectorModal from '../../CategorySelectorModal';
 import { MenuItemStatisticsModal } from '../../MenuItemStatisticsModal';
 import { MenuUnlockChangesDialog } from '../../MenuUnlockChangesDialog';

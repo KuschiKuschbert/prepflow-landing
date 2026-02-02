@@ -1,5 +1,5 @@
 import React from 'react';
-import { Ingredient } from '../../types';
+import { Ingredient } from '@/lib/types/cogs';
 
 interface IngredientSearchSuggestionsProps {
   filteredIngredients: Ingredient[];

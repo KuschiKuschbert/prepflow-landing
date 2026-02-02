@@ -4,9 +4,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { createCleaningTask } from '../helpers/createCleaningTask';
 import { handleCleaningTaskError } from './handleCleaningTaskError';
-import { parseCreateTaskBody } from './parseCreateTaskBody';
 import { createCleaningTaskSchema } from './schemas';
-import { validateCreateTaskRequest } from './validateCleaningTaskRequest';
 
 export async function handleCreateCleaningTask(supabase: SupabaseClient, request: NextRequest) {
   try {
@@ -35,13 +33,7 @@ export async function handleCreateCleaningTask(supabase: SupabaseClient, request
       );
     }
 
-    const taskData = parseCreateTaskBody(validationResult.data);
-
-    // Validate request (additional business logic validation)
-    const validationError = validateCreateTaskRequest(taskData);
-    if (validationError) {
-      return validationError;
-    }
+    const taskData = validationResult.data;
 
     const data = await createCleaningTask(supabase, {
       ...taskData,

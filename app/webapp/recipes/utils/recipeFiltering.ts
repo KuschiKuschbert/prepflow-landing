@@ -1,4 +1,4 @@
-import { Recipe } from '../types';
+import { Recipe } from '@/lib/types/recipes';
 
 export function filterRecipes(
   recipes: Recipe[],

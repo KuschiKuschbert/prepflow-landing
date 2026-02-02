@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { logger } from '@/lib/logger';
 import { saveRecipeIngredients } from '../utils/recipeIngredientsAutosaveUtils';
-import { COGSCalculation } from '../../types';
+import { COGSCalculation } from '@/lib/types/cogs';
 import { AutosaveStatus } from '../useRecipeIngredientsAutosave';
 
 interface AutosaveDebounceProps {

@@ -1,7 +1,7 @@
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import type { SelectedIngredient, SelectedRecipe } from '../components/DishEditDrawerTypes';
-import type { Dish } from '../types';
+import type { Dish } from '@/lib/types/recipes';
 
 interface UseDishFormSubmitProps {
   dish: Dish | null;

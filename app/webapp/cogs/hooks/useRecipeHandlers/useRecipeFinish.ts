@@ -3,14 +3,14 @@
  */
 
 import { useCallback } from 'react';
-import type { Recipe } from '../../types';
+import type { Recipe } from '@/lib/types/cogs';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 
 interface RecipeFinishParams {
   recipes: Recipe[];
   selectedRecipe: string;
-  calculations: import('../../types').COGSCalculation[];
+  calculations: import('@/lib/types/recipes').COGSCalculation[];
   saveNow?: () => Promise<void>;
   setSaveError?: (error: string) => void;
 }

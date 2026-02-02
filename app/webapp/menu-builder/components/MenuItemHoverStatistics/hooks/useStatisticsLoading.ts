@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { MenuItem } from '@/app/webapp/menu-builder/types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 import {
   getCachedStatistics,
   setCachedStatistics,

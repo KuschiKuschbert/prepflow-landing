@@ -4,8 +4,8 @@ import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { Package, ShoppingBag } from 'lucide-react';
 import { IngredientManager } from '../../cogs/components/IngredientManager';
 import { IngredientsList } from '../../cogs/components/IngredientsList';
-import { COGSCalculation } from '../../cogs/types';
-import { Ingredient } from '../../cogs/types';
+import { COGSCalculation } from '@/lib/types/recipes';
+import { Ingredient } from '@/lib/types/recipes';
 
 interface RecipeIngredientsTabProps {
   activeTab: 'ingredients' | 'consumables';

@@ -4,7 +4,7 @@
 
 import { logger } from '@/lib/logger';
 import { useCallback } from 'react';
-import type { MenuItem } from '../../../types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 import { applyOptimisticUpdate } from './useMenuItemPrice/helpers/applyOptimisticUpdate';
 import { makePriceUpdateRequest } from './useMenuItemPrice/helpers/makePriceUpdateRequest';
 import { updateItemInState } from './useMenuItemPrice/helpers/updateItemInState';

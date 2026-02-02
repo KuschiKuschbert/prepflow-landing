@@ -4,7 +4,7 @@ import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { memo, useEffect, useRef, useState } from 'react';
 import { useCategorySort, type SortOption } from '../hooks/useCategorySort';
-import { MenuItem } from '../types';
+import { MenuItem } from '@/lib/types/menu-builder';
 import { CategoryHeader } from './CategoryHeader';
 import { MenuItemPriceEditPopup } from './MenuItemPriceEditPopup';
 import { SortableMenuItem } from './SortableMenuItem';

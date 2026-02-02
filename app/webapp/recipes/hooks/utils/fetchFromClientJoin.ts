@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import { RecipeIngredientWithDetails } from '../../types';
+import { RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 import { logger } from '@/lib/logger';
 /**

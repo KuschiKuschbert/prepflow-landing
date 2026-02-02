@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../../types';
+import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '@/lib/types/recipes';
 
 type CalculatorFn = (
   recipe: Recipe,

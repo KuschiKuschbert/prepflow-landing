@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { createCalculation } from '../../../cogs/hooks/utils/createCalculation';
-import { COGSCalculation } from '../../../cogs/types';
-import { RecipeIngredientWithDetails } from '../../types';
+import { COGSCalculation } from '@/lib/types/recipes';
+import { RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import {
   LoadDishIngredientsParams,
   LoadRecipeIngredientsParams,

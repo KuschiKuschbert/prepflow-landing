@@ -3,7 +3,10 @@
  */
 'use client';
 
-import { PerformanceFilters as PerformanceFiltersType, PerformanceItem } from '../../types';
+import {
+  PerformanceFilters as PerformanceFiltersType,
+  PerformanceItem,
+} from '@/lib/types/performance';
 
 const MENU_ITEM_CLASSES = ["Chef's Kiss", 'Hidden Gem', 'Bargain Bucket', 'Burnt Toast'] as const;
 

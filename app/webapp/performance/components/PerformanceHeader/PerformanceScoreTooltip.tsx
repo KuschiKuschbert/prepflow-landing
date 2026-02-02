@@ -5,8 +5,8 @@
 
 import { useRef } from 'react';
 import { Sparkles } from 'lucide-react';
-import { generatePerformanceTips } from '../../utils/generatePerformanceTips';
-import type { PerformanceTip } from '../../utils/generatePerformanceTips/tipCategories';
+import { generatePerformanceTips } from '@/lib/performance/generatePerformanceTips';
+import type { PerformanceTip } from '@/lib/performance/generatePerformanceTips/tipCategories';
 
 interface PerformanceScoreTooltipProps {
   showTooltip: boolean;

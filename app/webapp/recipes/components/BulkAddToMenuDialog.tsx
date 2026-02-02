@@ -1,6 +1,6 @@
 'use client';
 
-import { Menu } from '@/app/webapp/menu-builder/types';
+import { Menu } from '@/lib/types/menu-builder';
 import { Icon } from '@/components/ui/Icon';
 import { Loader2, Plus, X } from 'lucide-react';
 

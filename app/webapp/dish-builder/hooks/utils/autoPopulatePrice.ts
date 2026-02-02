@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { DishBuilderState } from '../../types';
-import type { PricingCalculation } from '../../../cogs/types';
+import type { PricingCalculation } from '@/lib/types/cogs';
 
 interface AutoPopulatePriceProps {
   pricingCalculation: PricingCalculation | null;

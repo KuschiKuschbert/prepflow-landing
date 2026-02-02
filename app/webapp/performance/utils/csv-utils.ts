@@ -8,7 +8,7 @@ import {
   validateCSVData,
 } from '@/lib/csv/validation';
 import { logger } from '@/lib/logger';
-import { PerformanceItem } from '../types';
+import { PerformanceItem } from '@/lib/types/performance';
 import { mapCSVRowToSalesData, SalesData } from './csv-utils/helpers/mapCSVRowToSalesData';
 import { mapPerformanceItemToCSVRow } from './csv-utils/helpers/mapPerformanceItemToCSVRow';
 

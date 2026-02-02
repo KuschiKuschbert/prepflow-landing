@@ -1,7 +1,7 @@
 /**
  * Apply optimistic update to prep lists state.
  */
-import type { PrepList, PrepListFormData } from '../../../types';
+import type { PrepList, PrepListFormData } from '@/lib/types/prep-lists';
 
 interface ApplyOptimisticUpdateParams {
   editingPrepList: PrepList | null;

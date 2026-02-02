@@ -2,7 +2,7 @@
 
 import { Calendar } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-import { DateRange, DateRangePreset } from '../types';
+import { DateRange, DateRangePreset } from '@/lib/types/performance';
 import { useEffect, useState } from 'react';
 
 interface PerformanceDateRangeProps {

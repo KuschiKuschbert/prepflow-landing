@@ -1,6 +1,6 @@
 'use client';
-import { Menu } from '@/app/webapp/menu-builder/types';
-import { Dish, Recipe } from '../types';
+import { Menu } from '@/lib/types/menu-builder';
+import { Dish, Recipe } from '@/lib/types/recipes';
 import { BulkAddToMenuDialog } from './BulkAddToMenuDialog';
 import { UnifiedBulkDeleteConfirmationModal } from './UnifiedBulkDeleteConfirmationModal';
 

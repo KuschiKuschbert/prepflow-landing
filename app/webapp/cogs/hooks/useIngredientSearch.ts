@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
-import { Ingredient, RecipeIngredient } from '../types';
+import { Ingredient, RecipeIngredient } from '@/lib/types/cogs';
 import { handleKeyboardNavigation } from './utils/keyboardNavigation';
 import { filterIngredients } from './utils/ingredientFiltering';
 

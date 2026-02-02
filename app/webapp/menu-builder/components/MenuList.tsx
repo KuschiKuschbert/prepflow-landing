@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useNotification } from '@/contexts/NotificationContext';
-import { Menu, MenuItem } from '../types';
+import { Menu, MenuItem } from '@/lib/types/menu-builder';
 import { EmptyMenuList } from './EmptyMenuList';
 import { useMenuDeletion } from './hooks/useMenuDeletion';
 import { useMenuEditing } from './hooks/useMenuEditing';

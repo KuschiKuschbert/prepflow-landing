@@ -2,7 +2,7 @@
  * Generate prep instructions HTML for prep list.
  */
 import { escapeHtml } from '@/lib/exports/template-utils';
-import type { SectionData } from '../../../types';
+import type { SectionData } from '@/lib/types/prep-lists';
 
 export function generatePrepInstructionsHTML(section: SectionData): string {
   if (!section.prepInstructions || section.prepInstructions.length === 0) return '';

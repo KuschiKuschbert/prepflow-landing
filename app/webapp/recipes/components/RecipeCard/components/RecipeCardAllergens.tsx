@@ -1,6 +1,6 @@
 import { AllergenDisplay } from '@/components/ui/AllergenDisplay';
 import { DietaryBadge } from '@/components/ui/DietaryBadge';
-import type { Recipe } from '../../../types';
+import type { Recipe } from '@/lib/types/recipes';
 
 interface RecipeCardAllergensProps {
   recipe: Recipe;

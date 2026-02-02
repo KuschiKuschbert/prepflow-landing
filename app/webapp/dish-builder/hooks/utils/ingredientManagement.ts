@@ -1,4 +1,4 @@
-import type { COGSCalculation, Ingredient } from '../../../cogs/types';
+import type { COGSCalculation, Ingredient } from '@/lib/types/cogs';
 import { addIngredientToCalculations } from './helpers/addIngredient';
 import { editIngredientCalculation } from './helpers/editIngredient';
 import { removeCalculation, clearCalculations } from './helpers/calculationHelpers';

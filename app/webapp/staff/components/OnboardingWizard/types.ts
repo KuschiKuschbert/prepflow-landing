@@ -1,4 +1,4 @@
-import type { Employee } from '@/app/webapp/roster/types';
+import type { Employee } from '@/lib/types/roster';
 
 export interface OnboardingWizardProps {
   employee: Employee;

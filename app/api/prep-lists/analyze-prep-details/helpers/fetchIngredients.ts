@@ -1,4 +1,4 @@
-import { RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
+import { RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 

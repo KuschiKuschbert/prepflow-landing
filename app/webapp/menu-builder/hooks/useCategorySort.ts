@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { MenuItem } from '../types';
+import { MenuItem } from '@/lib/types/menu-builder';
 
 export type SortOption = 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc' | 'position';
 

@@ -6,12 +6,7 @@
  */
 
 import { getDay } from 'date-fns';
-import type {
-  Shift,
-  Employee,
-  ShiftCostCalculation,
-  RosterBudget,
-} from '@/app/webapp/roster/types';
+import type { Shift, Employee, ShiftCostCalculation, RosterBudget } from '@/lib/types/roster';
 import { logger } from '@/lib/logger';
 import { getRateMultiplier } from './helpers/rateMultiplier';
 

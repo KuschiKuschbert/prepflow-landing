@@ -1,5 +1,5 @@
-import { Recipe } from '../../types';
-import { RecipeIngredientWithDetails } from '../../types';
+import { Recipe } from '@/lib/types/recipes';
+import { RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 import { logger } from '@/lib/logger';
 /**

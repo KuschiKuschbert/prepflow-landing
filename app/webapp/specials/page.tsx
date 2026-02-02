@@ -6,7 +6,7 @@ import { PhotoUploadModal } from './components/PhotoUploadModal';
 import { usePhotoUpload } from './hooks/usePhotoUpload';
 
 // New Imports
-import { RecipeIngredientWithDetails, Recipe as UnifiedRecipe } from '../recipes/types';
+import { RecipeIngredientWithDetails, Recipe as UnifiedRecipe } from '@/lib/types/recipes';
 import { SpecialsFilters } from './components/SpecialsFilters';
 import { SpecialsGrid } from './components/SpecialsGrid';
 import { SpecialsHeader } from './components/SpecialsHeader';

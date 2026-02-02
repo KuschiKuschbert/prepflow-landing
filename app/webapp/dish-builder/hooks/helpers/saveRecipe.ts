@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import type { Recipe } from '../../../cogs/types';
+import type { Recipe } from '@/lib/types/cogs';
 import type { DishBuilderState } from '../../types';
 import { createRecipe } from './saveRecipe/createRecipe';
 import { saveIngredients } from './saveRecipe/saveIngredients';

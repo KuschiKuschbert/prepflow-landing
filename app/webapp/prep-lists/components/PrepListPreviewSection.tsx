@@ -9,7 +9,7 @@ import { PrepListAggregatedView } from './PrepListAggregatedView';
 import { PrepListRecipeGroupedView } from './PrepListRecipeGroupedView';
 import { PrepInstructionsView } from './PrepInstructionsView';
 import { PrepTechniquesView } from './PrepTechniquesView';
-import type { GeneratedPrepListData } from '../types';
+import type { GeneratedPrepListData } from '@/lib/types/prep-lists';
 
 interface PrepListPreviewSectionProps {
   section: GeneratedPrepListData['sections'][0];

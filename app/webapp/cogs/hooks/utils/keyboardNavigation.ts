@@ -1,4 +1,4 @@
-import { Ingredient } from '../../types';
+import { Ingredient } from '@/lib/types/cogs';
 
 export function handleKeyboardNavigation(
   e: React.KeyboardEvent<HTMLInputElement>,

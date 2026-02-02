@@ -7,7 +7,7 @@
 
 'use client';
 
-import type { Employee, Shift } from '@/app/webapp/roster/types';
+import type { Employee, Shift } from '@/lib/types/roster';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Icon } from '@/components/ui/Icon';

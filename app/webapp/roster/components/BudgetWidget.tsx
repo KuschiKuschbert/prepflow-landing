@@ -12,7 +12,7 @@ import { useMemo, useState, useEffect } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { DollarSign, TrendingUp, TrendingDown, ChevronDown, ChevronUp } from 'lucide-react';
 import { calculateRosterBudget, formatCurrency } from '@/lib/services/payroll/calculator';
-import type { Shift, Employee, RosterBudget } from '../types';
+import type { Shift, Employee, RosterBudget } from '@/lib/types/roster';
 
 interface BudgetWidgetProps {
   shifts: Shift[];

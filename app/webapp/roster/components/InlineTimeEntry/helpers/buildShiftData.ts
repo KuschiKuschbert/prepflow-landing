@@ -2,7 +2,7 @@
  * Build shift data from times.
  */
 import { format } from 'date-fns';
-import type { Shift } from '../../../types';
+import type { Shift } from '@/lib/types/roster';
 
 export function buildShiftData(
   employeeId: string,

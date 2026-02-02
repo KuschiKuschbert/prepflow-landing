@@ -1,4 +1,4 @@
-import { RecipeIngredientWithDetails } from '../../types';
+import { RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 export interface IngredientAnalysis {
   hasProtein: boolean;

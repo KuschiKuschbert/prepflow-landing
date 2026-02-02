@@ -7,7 +7,7 @@ import { RecipeCardHeader } from './RecipeCard/components/RecipeCardHeader';
 import { RecipeCardPricing } from './RecipeCard/components/RecipeCardPricing';
 import { RecipeCardAllergens } from './RecipeCard/components/RecipeCardAllergens';
 import { RecipeCardActions } from './RecipeCard/components/RecipeCardActions';
-import type { RecipeCardProps } from './RecipeCard/types';
+import type { RecipeCardProps } from '@/lib/types/recipes';
 
 const RecipeCard = React.memo(function RecipeCard({
   recipe,

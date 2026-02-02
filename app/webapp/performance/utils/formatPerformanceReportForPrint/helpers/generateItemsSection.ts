@@ -1,7 +1,7 @@
 /**
  * Generate items by classification section HTML.
  */
-import type { PerformanceItem } from '../../../types';
+import type { PerformanceItem } from '@/lib/types/performance';
 
 export function getClassColor(className: string): string {
   switch (className) {

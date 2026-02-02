@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { Trash2 } from 'lucide-react';
-import type { SectionData } from '../types';
+import type { SectionData } from '@/lib/types/prep-lists';
 import { IngredientPrepNotes } from './IngredientPrepNotes';
 
 interface PrepListAggregatedViewProps {

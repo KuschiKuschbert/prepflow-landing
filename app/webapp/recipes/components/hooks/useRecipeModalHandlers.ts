@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Recipe, RecipeIngredientWithDetails } from '../../types';
+import { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 import { logger } from '@/lib/logger';
 /**

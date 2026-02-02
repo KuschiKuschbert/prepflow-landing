@@ -1,7 +1,7 @@
 'use client';
 
 import { getCachedData } from '@/lib/cache/data-cache';
-import { DateRange, PerformanceState } from '../types';
+import { DateRange, PerformanceState } from '@/lib/types/performance';
 
 export function usePerformanceState(dateRange?: DateRange): PerformanceState {
   const cacheKey = dateRange

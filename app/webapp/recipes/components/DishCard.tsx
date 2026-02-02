@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Dish, DishCostData } from '../types';
+import { Dish, DishCostData } from '@/lib/types/recipes';
 import { Edit, Trash2 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { formatRecipeDate } from '../utils/formatDate';

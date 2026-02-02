@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { COGSCalculation } from '../types';
+import { COGSCalculation } from '@/lib/types/cogs';
 import { useNotification } from '@/contexts/NotificationContext';
 
 import { logger } from '@/lib/logger';

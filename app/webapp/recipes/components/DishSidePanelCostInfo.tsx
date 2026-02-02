@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { Calculator } from 'lucide-react';
-import { DishCostData } from '../types';
+import { DishCostData } from '@/lib/types/recipes';
 
 interface DishSidePanelCostInfoProps {
   costData: DishCostData;

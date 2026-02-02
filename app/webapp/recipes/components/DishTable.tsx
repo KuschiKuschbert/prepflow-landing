@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Dish, DishCostData } from '../types';
+import { Dish, DishCostData } from '@/lib/types/recipes';
 import { Check } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import { useDishTableSort } from '../hooks/useDishTableSort';

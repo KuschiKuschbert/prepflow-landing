@@ -2,7 +2,7 @@
  * Handle duplicating a recipe with optimistic updates.
  */
 import { supabase } from '@/lib/supabase';
-import type { Recipe, RecipeIngredientWithDetails } from '../../../types';
+import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { logger } from '@/lib/logger';
 
 interface HandleDuplicateRecipeParams {

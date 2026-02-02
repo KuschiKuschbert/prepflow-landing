@@ -4,7 +4,7 @@ import { Icon } from '@/components/ui/Icon';
 import { ChefHat, Plus, Search, Utensils, X } from 'lucide-react';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { Dish, Recipe } from '../types';
+import { Dish, Recipe } from '@/lib/types/menu-builder';
 
 interface DishPaletteProps {
   dishes: Dish[];

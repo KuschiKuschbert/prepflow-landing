@@ -1,5 +1,5 @@
 import { DishBuilderState } from '../../types';
-import { COGSCalculation } from '../../../cogs/types';
+import { COGSCalculation } from '@/lib/types/cogs';
 
 /**
  * Validate dish state before saving.

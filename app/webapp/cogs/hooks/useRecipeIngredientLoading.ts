@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import { COGSCalculation, RecipeIngredient } from '../types';
+import { COGSCalculation, RecipeIngredient } from '@/lib/types/cogs';
 import { mergeCalculations, mergeRecipeIngredients } from './utils/mergeCalculations';
 import { logger } from '@/lib/logger';
 import {

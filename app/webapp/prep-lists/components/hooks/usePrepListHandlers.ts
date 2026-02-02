@@ -1,4 +1,4 @@
-import type { SectionData, KitchenSection } from '../../types';
+import type { SectionData, KitchenSection } from '@/lib/types/prep-lists';
 
 interface UsePrepListHandlersProps {
   sections: SectionData[];

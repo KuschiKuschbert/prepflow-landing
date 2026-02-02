@@ -3,7 +3,7 @@
  */
 
 import { logger } from '@/lib/logger';
-import type { MenuItem } from '../../../../../types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 
 /**
  * Update menu item in state from API response.

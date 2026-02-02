@@ -4,7 +4,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { ChefHat, Utensils } from 'lucide-react';
-import type { MenuItem } from '../../types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 
 interface DragOverlayContentProps {
   menuItem: MenuItem;

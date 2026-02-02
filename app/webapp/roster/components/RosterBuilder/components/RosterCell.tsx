@@ -7,7 +7,7 @@ import { Icon } from '@/components/ui/Icon';
 import { Plus } from 'lucide-react';
 import { InlineTimeEntry } from '../../InlineTimeEntry';
 import { ShiftCard } from '../../ShiftCard';
-import type { Shift, ShiftValidationWarning } from '../../../types';
+import type { Shift, ShiftValidationWarning } from '@/lib/types/roster';
 
 interface RosterCellProps {
   employeeId: string;

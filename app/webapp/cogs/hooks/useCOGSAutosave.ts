@@ -2,7 +2,7 @@
 
 import { useAutosave } from '@/hooks/useAutosave';
 import { deriveAutosaveId } from '@/lib/autosave-id';
-import { COGSCalculation, Recipe } from '../types';
+import { COGSCalculation, Recipe } from '@/lib/types/cogs';
 import { useRecipeIngredientsAutosave } from './useRecipeIngredientsAutosave';
 import { useRecipeExistence } from './useRecipeExistence';
 

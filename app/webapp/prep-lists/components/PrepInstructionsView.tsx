@@ -3,7 +3,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { ChefHat, ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
-import type { PrepInstructionItem } from '../types';
+import type { PrepInstructionItem } from '@/lib/types/prep-lists';
 
 interface PrepInstructionsViewProps {
   prepInstructions: PrepInstructionItem[];

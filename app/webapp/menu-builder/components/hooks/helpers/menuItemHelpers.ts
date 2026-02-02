@@ -1,4 +1,4 @@
-import type { Dish, MenuItem, Recipe } from '../../../types';
+import type { Dish, MenuItem, Recipe } from '@/lib/types/menu-builder';
 
 /**
  * Creates an optimistic menu item for a dish or recipe.

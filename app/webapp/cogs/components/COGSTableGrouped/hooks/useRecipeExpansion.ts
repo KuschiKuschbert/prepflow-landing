@@ -3,7 +3,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import type { RecipeGroup } from '../types';
+import type { RecipeGroup } from '@/lib/types/cogs';
 
 export function useRecipeExpansion(recipeGroups: RecipeGroup[]) {
   const [expandedRecipes, setExpandedRecipes] = useState<Set<string>>(new Set());

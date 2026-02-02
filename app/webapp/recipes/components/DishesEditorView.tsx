@@ -1,6 +1,6 @@
 import { RecipeDishEditor } from './RecipeDishEditor';
 import DishBuilderClient from '../../dish-builder/components/DishBuilderClient';
-import { Recipe, Dish } from '../types';
+import { Recipe, Dish } from '@/lib/types/recipes';
 
 type ViewMode = 'list' | 'editor' | 'builder';
 

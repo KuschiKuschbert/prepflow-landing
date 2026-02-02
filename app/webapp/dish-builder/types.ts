@@ -1,5 +1,5 @@
 // Dish Builder Types
-import { COGSCalculation, PricingCalculation, Ingredient, Recipe } from '../cogs/types';
+import { COGSCalculation, PricingCalculation, Ingredient, Recipe } from '@/lib/types/cogs';
 
 export interface DishBuilderState {
   dishName: string;

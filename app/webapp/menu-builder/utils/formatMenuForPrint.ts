@@ -4,7 +4,7 @@
  * Generates HTML structure for printable menu with items, descriptions, prices, allergens, and allergen matrix
  */
 
-import type { Menu, MenuItem } from '../types';
+import type { Menu, MenuItem } from '@/lib/types/menu-builder';
 import { AUSTRALIAN_ALLERGENS } from '@/lib/allergens/australian-allergens';
 import { formatCategorySection } from './formatMenuForPrint/helpers/formatCategorySection';
 import { generateAllergenMatrix } from './formatMenuForPrint/helpers/generateAllergenMatrix';

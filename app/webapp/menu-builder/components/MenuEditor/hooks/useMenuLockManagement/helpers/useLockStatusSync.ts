@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { logger } from '@/lib/logger';
-import type { Menu } from '@/app/webapp/menu-builder/types';
+import type { Menu } from '@/lib/types/menu-builder';
 import { fetchMenuLockStatus } from './fetchLockStatus';
 
 interface MenuLockStatus {

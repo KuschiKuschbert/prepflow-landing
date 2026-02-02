@@ -1,4 +1,4 @@
-import { Recipe } from '../../types';
+import { Recipe } from '@/lib/types/recipes';
 
 export interface RecipeTypeInfo {
   recipeType: 'burger' | 'soup' | 'salad' | 'pasta' | 'general';

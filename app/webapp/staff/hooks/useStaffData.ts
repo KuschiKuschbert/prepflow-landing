@@ -2,7 +2,7 @@
 
 import { logger } from '@/lib/logger';
 import { useCallback, useEffect, useState } from 'react';
-import type { Employee, QualificationType } from '../../roster/types';
+import type { Employee, QualificationType } from '@/lib/types/roster';
 
 export function useStaffData() {
   const [staff, setStaff] = useState<Employee[]>([]);

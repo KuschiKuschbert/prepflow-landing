@@ -5,7 +5,7 @@
  * Called after prep list is generated to avoid blocking
  */
 
-import type { RecipePrepDetails } from '@/app/webapp/prep-lists/types';
+import type { RecipePrepDetails } from '@/lib/types/prep-lists';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { batchAnalyzePrepDetails } from '../generate-from-menu/helpers/analyzePrepDetails';

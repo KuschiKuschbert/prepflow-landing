@@ -1,4 +1,4 @@
-import type { Recipe, RecipePriceData } from '../../types';
+import type { Recipe, RecipePriceData } from '@/lib/types/recipes';
 
 export interface RecipeCardProps {
   recipe: Recipe;

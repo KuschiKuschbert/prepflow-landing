@@ -37,12 +37,20 @@ function findCommonPattern(strings: string[]): string | null {
 /**
  * Extract pattern from fixes
  */
-export function extractPattern(fixes: Array<{ solution: string; prevention: string }>): {
+/**
+ * Extract pattern from fixes
+ */
+export function extractPattern(
+  fixes: Array<{ solution: string; prevention: string; badCode?: string }>,
+): {
   name: string;
   description: string;
   detection: string;
   fix: string;
   prevention: string;
+  badPattern?: string;
+  goodPattern?: string;
+  context?: string[];
 } | null {
   if (fixes.length < MIN_FIX_COUNT_FOR_RULE) {
     return null; // Not enough fixes to generate pattern
@@ -55,6 +63,12 @@ export function extractPattern(fixes: Array<{ solution: string; prevention: stri
   // Extract common prevention pattern
   const preventions = fixes.map(f => f.prevention);
   const commonPrevention = findCommonPattern(preventions);
+
+  // Extract common bad code pattern (naive)
+  const badCodes = fixes.map(f => f.badCode).filter((c): c is string => !!c);
+  // For now, just take the first one or use common pattern logic if we implemented strict pattern matching
+  const commonBadCode =
+    badCodes.length > 0 ? findCommonPattern(badCodes) || badCodes[0] : undefined;
 
   if (!commonSolution && !commonPrevention) {
     return null; // No clear pattern
@@ -71,5 +85,8 @@ export function extractPattern(fixes: Array<{ solution: string; prevention: stri
     detection: 'Error pattern detected from knowledge base',
     fix: commonSolution || 'Review fixes in knowledge base',
     prevention: commonPrevention || 'Follow prevention strategies from fixes',
+    badPattern: commonBadCode || undefined, // Ensure it is string | undefined
+    goodPattern: commonSolution || undefined, // undefined if null
+    context: ['CallExpression'], // Defaulting to CallExpression for now as a heuristic
   };
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import type { PrepList, SectionData } from '../types';
+import type { PrepList, SectionData } from '@/lib/types/prep-lists';
 import { formatPrepListForPrint } from '../utils/formatPrepList';
 import { formatGeneratedPrepListForPrint } from '../utils/formatGeneratedPrepList';
 import { printPrepList, printGeneratedPrepList } from '../utils/printUtils';

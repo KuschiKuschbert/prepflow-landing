@@ -2,7 +2,7 @@
  * Build updated shift from drag and drop.
  */
 import { format, addDays } from 'date-fns';
-import type { Shift } from '../../../../../types';
+import type { Shift } from '@/lib/types/roster';
 
 export function buildUpdatedShift(draggedShift: Shift, employeeId: string, date: Date): Shift {
   const newShiftDate = format(date, 'yyyy-MM-dd');

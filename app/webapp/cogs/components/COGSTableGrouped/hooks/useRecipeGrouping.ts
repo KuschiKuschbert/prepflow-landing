@@ -3,9 +3,9 @@
  */
 
 import { useMemo } from 'react';
-import type { DishWithDetails } from '../../../../recipes/types';
-import type { COGSCalculation } from '../../../types';
-import type { RecipeGroup } from '../types';
+import type { DishWithDetails } from '@/lib/types/recipes';
+import type { COGSCalculation } from '@/lib/types/cogs';
+import type { RecipeGroup } from '@/lib/types/cogs';
 
 interface UseRecipeGroupingProps {
   calculations: COGSCalculation[];

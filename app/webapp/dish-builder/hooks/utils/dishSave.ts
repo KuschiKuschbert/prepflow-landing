@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
-import type { COGSCalculation, Recipe } from '../../../cogs/types';
-import type { Dish } from '../../../menu-builder/types';
+import type { COGSCalculation, Recipe } from '@/lib/types/cogs';
+import type { Dish } from '@/lib/types/menu-builder';
 import type { DishBuilderState } from '../../types';
 import { saveDishItem } from '../helpers/saveDishItem';
 import { saveRecipe } from '../helpers/saveRecipe';

@@ -3,7 +3,7 @@
  */
 import { cacheData } from '@/lib/cache/data-cache';
 import { logger } from '@/lib/logger';
-import { Dish, Recipe } from '../../../../../types';
+import { Dish, Recipe } from '@/lib/types/menu-builder';
 
 interface DishesApiResponse {
   success: boolean;

@@ -4,7 +4,7 @@
  * Generates AI-powered menu descriptions for dishes and recipes
  */
 
-import type { MenuItem } from '@/app/webapp/menu-builder/types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 import { generateAIResponse } from '@/lib/ai/ai-service';
 import { buildMenuItemDescriptionPrompt } from '@/lib/ai/prompts/menu-item-description';
 import { ApiErrorHandler } from '@/lib/api-error-handler';

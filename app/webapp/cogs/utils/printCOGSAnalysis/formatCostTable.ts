@@ -2,7 +2,7 @@
  * Format cost breakdown table for COGS analysis print
  */
 
-import type { COGSCalculation } from '../../types';
+import type { COGSCalculation } from '@/lib/types/cogs';
 
 /**
  * Format cost breakdown table

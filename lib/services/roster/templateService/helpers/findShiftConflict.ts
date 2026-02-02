@@ -1,4 +1,4 @@
-import type { Shift } from '@/app/webapp/roster/types';
+import type { Shift } from '@/lib/types/roster';
 
 /**
  * Finds conflicts between a new shift and existing shifts.

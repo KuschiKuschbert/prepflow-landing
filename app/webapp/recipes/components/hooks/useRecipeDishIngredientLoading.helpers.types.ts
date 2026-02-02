@@ -1,5 +1,5 @@
-import { Recipe } from '../../types';
-import { Ingredient } from '../../../cogs/types';
+import { Recipe } from '@/lib/types/recipes';
+import { Ingredient } from '@/lib/types/recipes';
 
 export interface ConvertQuantityFn {
   (

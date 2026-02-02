@@ -1,5 +1,5 @@
 import { addDays, format } from 'date-fns';
-import type { TemplateShift, Shift } from '@/app/webapp/roster/types';
+import type { TemplateShift, Shift } from '@/lib/types/roster';
 
 /**
  * Creates a shift from a template shift for a specific date.

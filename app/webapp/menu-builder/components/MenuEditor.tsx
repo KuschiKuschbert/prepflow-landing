@@ -3,7 +3,7 @@ import { PageSkeleton } from '@/components/ui/LoadingSkeleton';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { memo } from 'react';
-import { Menu } from '../types';
+import { Menu } from '@/lib/types/menu-builder';
 import CategoryManager from './CategoryManager';
 import DishPalette from './DishPalette';
 import { useCategoryOperations } from './hooks/useCategoryOperations';

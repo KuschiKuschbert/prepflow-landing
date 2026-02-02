@@ -1,5 +1,5 @@
-import { RecipePrepDetails } from '@/app/webapp/prep-lists/types';
-import { Recipe } from '@/app/webapp/recipes/types';
+import { RecipePrepDetails } from '@/lib/types/prep-lists';
+import { Recipe } from '@/lib/types/recipes';
 import { parsePrepDetailsResponse } from '@/lib/ai/prompts/prep-details';
 
 /**

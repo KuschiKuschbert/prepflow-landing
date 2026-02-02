@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Dish, Recipe, RecipeIngredientWithDetails } from '../../types';
+import { Dish, Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 interface UseDishesSidePanelsHandlersProps {
   setShowDishPanel: (show: boolean) => void;

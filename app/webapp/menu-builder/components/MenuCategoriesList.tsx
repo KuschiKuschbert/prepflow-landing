@@ -1,7 +1,7 @@
 'use client';
 import { logger } from '@/lib/logger';
 import { useMemo, useRef } from 'react';
-import { MenuItem } from '../types';
+import { MenuItem } from '@/lib/types/menu-builder';
 import MenuCategory from './MenuCategory';
 
 interface MenuCategoriesListProps {

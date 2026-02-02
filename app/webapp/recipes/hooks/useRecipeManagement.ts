@@ -3,7 +3,7 @@
 import { formatRecipeName } from '@/lib/text-utils';
 import { useRouter } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
-import { Recipe } from '../types';
+import { Recipe } from '@/lib/types/recipes';
 import { RecipeError } from '../types/errors';
 import { useRecipeIngredients } from './useRecipeIngredients';
 import { useRecipePricing } from './useRecipePricing';

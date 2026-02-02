@@ -1,4 +1,4 @@
-import { PerformanceFilters, PerformanceItem } from '../types';
+import { PerformanceFilters, PerformanceItem } from '@/lib/types/performance';
 
 export function filterPerformanceItems(
   items: PerformanceItem[],

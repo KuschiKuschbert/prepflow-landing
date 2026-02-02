@@ -3,9 +3,9 @@
 import { useAutosave } from '@/hooks/useAutosave';
 import { deriveAutosaveId } from '@/lib/autosave-id';
 import { useState } from 'react';
-import type { Ingredient } from '../../cogs/types';
+import type { Ingredient } from '@/lib/types/recipes';
 import type { SelectedIngredient, SelectedRecipe } from '../components/DishEditDrawerTypes';
-import type { Dish, Recipe } from '../types';
+import type { Dish, Recipe } from '@/lib/types/recipes';
 import { useDishFormData } from './useDishFormData';
 import { useDishFormSubmit } from './useDishFormSubmit';
 

@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const createCleaningTaskSchema = z.object({
   task_name: z.string().min(1, 'Task name is required'),
   frequency_type: z.enum(['daily', 'bi-daily', 'weekly', 'monthly', '3-monthly']),
-  area_id: z.string().optional(),
+  area_id: z.string().min(1, 'area_id is required'),
   assigned_date: z.string().optional(),
   equipment_id: z.string().optional(),
   section_id: z.string().optional(),

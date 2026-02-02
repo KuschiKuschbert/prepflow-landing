@@ -1,7 +1,7 @@
 /**
  * Handle inline entry save.
  */
-import type { Shift } from '../../../types';
+import type { Shift } from '@/lib/types/roster';
 
 interface InlineEntryState {
   employeeId: string;

@@ -31,13 +31,20 @@ export interface KnowledgeBasePattern {
   detection: string;
   fix: string;
   prevention: string;
+  badPattern?: string; // Code snippet showing the bad pattern
+  goodPattern?: string; // Code snippet showing the good pattern
+  context?: string[]; // AST context (e.g., 'CallExpression')
 }
 
 export interface KnowledgeBaseRule {
   id: string;
   name: string;
+  description?: string; // Rule description
   source: string;
   enforcement: 'automated' | 'manual';
+  severity?: 'error' | 'warning' | 'info'; // ESLint severity
+  implementation?: string; // Custom ESLint rule implementation
+  ruleId?: string; // ESLint rule ID (e.g., rsi/no-bad-pattern)
 }
 
 export interface KnowledgeBase {

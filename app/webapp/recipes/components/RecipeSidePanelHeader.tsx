@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { X } from 'lucide-react';
-import { Recipe } from '../types';
+import { Recipe } from '@/lib/types/recipes';
 
 interface RecipeSidePanelHeaderProps {
   recipe: Recipe;

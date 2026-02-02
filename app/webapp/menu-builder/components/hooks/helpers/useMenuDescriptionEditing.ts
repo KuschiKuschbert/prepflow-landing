@@ -4,7 +4,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useNotification } from '@/contexts/NotificationContext';
-import { Menu } from '../../../types';
+import { Menu } from '@/lib/types/menu-builder';
 import { saveMenuDescription } from './saveMenuDescription';
 
 interface UseMenuDescriptionEditingProps {

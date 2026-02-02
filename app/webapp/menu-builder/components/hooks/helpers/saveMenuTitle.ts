@@ -2,7 +2,7 @@
  * Helper function for saving menu title.
  */
 
-import { Menu } from '../../../types';
+import { Menu } from '@/lib/types/menu-builder';
 import { logger } from '@/lib/logger';
 
 interface SaveMenuTitleProps {

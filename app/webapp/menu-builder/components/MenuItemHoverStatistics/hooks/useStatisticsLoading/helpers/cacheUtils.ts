@@ -3,7 +3,7 @@
  */
 
 import { logger } from '@/lib/logger';
-import type { MenuItem } from '@/app/webapp/menu-builder/types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 
 interface ItemStatistics {
   cogs: number;

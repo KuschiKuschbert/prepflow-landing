@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { Recipe } from '../types';
+import { Recipe } from '@/lib/types/recipes';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 

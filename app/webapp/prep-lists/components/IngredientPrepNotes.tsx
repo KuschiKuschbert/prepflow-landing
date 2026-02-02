@@ -1,6 +1,6 @@
 'use client';
 
-import type { AggregatedIngredient } from '../types';
+import type { AggregatedIngredient } from '@/lib/types/prep-lists';
 
 interface IngredientPrepNotesProps {
   ingredient: AggregatedIngredient;

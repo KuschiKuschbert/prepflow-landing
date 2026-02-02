@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { RecipeDishItem } from './useRecipeDishEditorData';
-import { Recipe, Dish } from '../../types';
-import { COGSCalculation } from '../../../cogs/types';
+import { Recipe, Dish } from '@/lib/types/recipes';
+import { COGSCalculation } from '@/lib/types/recipes';
 import { logger } from '@/lib/logger';
 import { saveDishIngredients } from './useRecipeDishSave/helpers/saveDishIngredients';
 import { saveRecipeIngredients } from './useRecipeDishSave/helpers/saveRecipeIngredients';

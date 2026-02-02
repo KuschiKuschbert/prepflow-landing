@@ -2,7 +2,7 @@
  * Initialize state from cache.
  */
 import { getCachedData } from '@/lib/cache/data-cache';
-import type { Dish, MenuItem, MenuStatistics, Recipe } from '../../../../types';
+import type { Dish, MenuItem, MenuStatistics, Recipe } from '@/lib/types/menu-builder';
 
 interface InitializeStateParams {
   menuCacheKey: string;

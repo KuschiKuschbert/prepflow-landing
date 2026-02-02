@@ -7,7 +7,7 @@ import { COGSTable } from '../../cogs/components/COGSTable';
 import { COGSTableGrouped } from '../../cogs/components/COGSTableGrouped';
 import { useDishCOGSCalculations } from '../hooks/useDishCOGSCalculations';
 import { useDishPreviewModalData } from '../hooks/useDishPreviewModalData';
-import { Dish } from '../types';
+import { Dish } from '@/lib/types/recipes';
 import { DishPreviewModalActions } from './DishPreviewModalActions';
 import { DishPreviewModalCostInfo } from './DishPreviewModalCostInfo';
 import { DishPreviewModalHeader } from './DishPreviewModalHeader';

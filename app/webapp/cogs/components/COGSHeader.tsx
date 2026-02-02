@@ -16,7 +16,7 @@ import {
 } from '../utils/exportCOGSAnalysis';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
-import type { Recipe, COGSCalculation } from '../types';
+import type { Recipe, COGSCalculation } from '@/lib/types/cogs';
 
 interface COGSHeaderProps {
   recipe: Recipe | null;

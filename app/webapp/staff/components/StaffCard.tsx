@@ -7,7 +7,7 @@ import { ShieldCheck, User } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import type { Employee, QualificationType } from '../../roster/types';
+import type { Employee, QualificationType } from '@/lib/types/roster';
 
 interface StaffCardProps {
   member: Employee;

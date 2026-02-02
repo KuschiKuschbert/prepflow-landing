@@ -6,7 +6,7 @@ import { ChefHat } from 'lucide-react';
 import { useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { COGSTable } from '../../cogs/components/COGSTable';
-import { COGSCalculation } from '../../cogs/types';
+import { COGSCalculation } from '@/lib/types/recipes';
 import { useSidePanelCommon } from '../hooks/useSidePanelCommon';
 import { convertToPerPortion } from '../hooks/utils/convertToPerPortion';
 import { calculateRecipePrice } from '../hooks/utils/pricingHelpers';
@@ -15,7 +15,7 @@ import {
   Recipe,
   COGSCalculation as RecipeCOGSCalculation,
   RecipeIngredientWithDetails,
-} from '../types';
+} from '@/lib/types/recipes';
 import { RecipeIngredientsList } from './RecipeIngredientsList';
 import { RecipeSidePanelActions } from './RecipeSidePanelActions';
 import { RecipeSidePanelCostSummary } from './RecipeSidePanelCostSummary';

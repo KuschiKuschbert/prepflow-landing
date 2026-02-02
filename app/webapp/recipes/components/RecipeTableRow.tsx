@@ -5,7 +5,7 @@ import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { Check, Edit, Eye, Trash2 } from 'lucide-react';
 import React, { memo } from 'react';
-import { Recipe, RecipePriceData } from '../types';
+import { Recipe, RecipePriceData } from '@/lib/types/recipes';
 import { formatRecipeDate } from '../utils/formatDate';
 
 interface RecipeTableRowProps {

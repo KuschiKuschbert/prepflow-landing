@@ -4,8 +4,8 @@
  * Generates AI-powered performance tips with fallback to rule-based logic
  */
 
-import type { PerformanceItem } from '@/app/webapp/performance/types';
-import { generatePerformanceTips } from '@/app/webapp/performance/utils/generatePerformanceTips';
+import type { PerformanceItem } from '@/lib/types/performance';
+import { generatePerformanceTips } from '@/lib/performance/generatePerformanceTips';
 import { generateAIResponse } from '@/lib/ai/ai-service';
 import {
   buildPerformanceTipsPrompt,

@@ -1,4 +1,4 @@
-import { Menu, MenuItem } from '../../../types';
+import { Menu, MenuItem } from '@/lib/types/menu-builder';
 import { MenuLockedView } from '../../MenuLockedView';
 
 interface LockedMenuViewProps {

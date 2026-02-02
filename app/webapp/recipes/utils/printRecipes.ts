@@ -4,7 +4,7 @@
  */
 
 import { printWithTemplate } from '@/lib/exports/print-template';
-import type { Recipe, RecipeIngredientWithDetails } from '../types';
+import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 /**
  * Format recipe for print display

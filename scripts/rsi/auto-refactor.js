@@ -28,52 +28,54 @@ async function main() {
     return;
   }
 
-  // Filter plans by risk and impact
+  // 1b. Filtering & Batching (New: Staged Batching)
   const allPlans = plans.map(plan => ({
     ...plan,
     risk: RiskAssessor.assess(plan.type || 'refactor', plan.targetFiles || []),
   }));
 
-  const safePlan = allPlans.find(
-    p => p.risk.level !== RiskLevel.HIGH && p.risk.level !== RiskLevel.CRITICAL,
+  const safePlans = allPlans.filter(
+    p => p.risk.level !== RiskLevel.HIGH && p.risk.level !== RiskLevel.CRITICAL && p.codemodPath,
   );
 
-  if (!safePlan) {
-    console.log('⚠️  No safe refactoring plans found for autonomous execution.');
-    // List risky plans for visibility in logs
-    allPlans.forEach(p => {
-      console.log(`   [RISKY] ${p.title} (${p.risk.level}): ${p.risk.reasons.join(', ')}`);
-    });
+  if (safePlans.length === 0) {
+    console.log('✅ No safe, automated refactoring plans found.');
     return;
   }
 
-  const selectedPlan = safePlan;
-  console.log(`\n📋 Selected Plan: ${selectedPlan.title}`);
-  console.log(`   Description: ${selectedPlan.description}`);
-  console.log(
-    `   Impact: ${selectedPlan.impactScore} | Risk Level: ${selectedPlan.risk.level} (${selectedPlan.risk.score})`,
-  );
+  // Find independent plans (no overlapping target files)
+  const selectedBatch = [];
+  const affectedFiles = new Set();
+  const MAX_BATCH_SIZE = 5; // Bumping to 5 for better recursive throughput
 
-  // 2. Execute (or Dry Run)
-  if (!selectedPlan.targetFiles || !selectedPlan.codemodPath) {
-    console.log(`\n⚠️  This plan is 'Manual Debt'. No automated codemod available.`);
-    console.log(`   Please manually address: ${selectedPlan.sourceDebtItem}`);
-    return;
+  for (const plan of safePlans) {
+    if (selectedBatch.length >= MAX_BATCH_SIZE) break;
+
+    const hasOverlap = plan.targetFiles.some(f => affectedFiles.has(f));
+    if (!hasOverlap) {
+      selectedBatch.push(plan);
+      plan.targetFiles.forEach(f => affectedFiles.add(f));
+    }
   }
 
-  if (dryRun) {
+  console.log(`\n📋 Selected Batch (${selectedBatch.length} tasks):`);
+  selectedBatch.forEach((p, idx) => {
+    console.log(`   ${idx + 1}. [${p.risk.level}] ${p.title}`);
+  });
+
+  // 2. Sequential Execution
+  let resolvedCount = 0;
+  for (const selectedPlan of selectedBatch) {
     console.log(
-      `\n[DRY RUN] Would execute codemod: ${selectedPlan.codemodPath} on ${selectedPlan.targetFiles.join(', ')}`,
+      `\n🚀 [${resolvedCount + 1}/${selectedBatch.length}] Executing: ${selectedPlan.title}...`,
     );
 
-    const result = await CodemodRunner.run(
-      selectedPlan.codemodPath,
-      selectedPlan.targetFiles,
-      true, // dryRun
-    );
-    console.log('   Dry run complete.');
-  } else {
-    console.log(`\n🚀 Executing refactor...`);
+    if (dryRun) {
+      console.log(`   [DRY RUN] Codemod: ${selectedPlan.codemodPath}`);
+      resolvedCount++;
+      continue;
+    }
+
     const result = await CodemodRunner.run(
       selectedPlan.codemodPath,
       selectedPlan.targetFiles,
@@ -81,31 +83,38 @@ async function main() {
     );
 
     if (result.success) {
-      console.log('✅ Refactoring applied.');
+      console.log('   ✅ Applied.');
 
       // 3. Validate
-      console.log('🔍 Validating changes...');
+      console.log('   🔍 Validating...');
       const isValid = await ValidationSuite.validate(selectedPlan.targetFiles);
 
       if (isValid) {
-        console.log('✅ Validation passed. Ready for review.');
-
-        // 4. Close the loop: Mark DEBT.md item as resolved if it came from there
+        console.log('   ✅ Passed.');
         if (
           selectedPlan.sourceDebtItem &&
           !selectedPlan.sourceDebtItem.includes('Architecture Report')
         ) {
           await RefactoringPlanner.resolveDebtItem(selectedPlan.sourceDebtItem);
         }
+        resolvedCount++;
       } else {
-        console.error('❌ Validation failed or no changes detected. Reverting...');
+        console.error('   ❌ Validation failed. Reverting...');
         await RollbackManager.discardChanges();
       }
     } else {
-      console.error('❌ Refactoring execution failed. Cleaning up...');
+      console.error('   ❌ Execution failed. Cleaning up...');
       await RollbackManager.discardChanges();
     }
   }
+
+  console.log(
+    `\n✨ Batch processing complete. Resolved ${resolvedCount}/${selectedBatch.length} items.`,
+  );
+
+  // Extra logging for CI to help recursive trigger
+  const remaining = plans.length - resolvedCount;
+  console.log(`RSI_REMAINING_DEBT=${remaining}`);
 }
 
 main().catch(console.error);

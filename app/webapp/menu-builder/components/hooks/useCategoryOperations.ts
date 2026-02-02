@@ -3,7 +3,7 @@
  * Orchestrates specialized hooks for different operations.
  */
 
-import type { MenuItem } from '../../types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 import { useCategoryAddition } from './helpers/useCategoryAddition';
 import { useCategoryRemoval } from './helpers/useCategoryRemoval';
 import { useCategoryRename } from './helpers/useCategoryRename';

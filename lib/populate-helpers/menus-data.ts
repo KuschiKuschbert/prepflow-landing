@@ -2,7 +2,7 @@
  * Helper functions for populating menus and menu_items
  */
 
-import { Dish } from '@/app/webapp/recipes/types';
+import { Dish } from '@/lib/types/recipes';
 import { logger } from '@/lib/logger';
 import { cleanSampleMenus } from '@/lib/sample-menus-clean';
 import { createSupabaseAdmin } from '@/lib/supabase';

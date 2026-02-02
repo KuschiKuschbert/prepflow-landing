@@ -2,7 +2,7 @@
  * PDF export utilities for COGS analysis
  */
 
-import type { COGSCalculation, PricingCalculation } from '../../types';
+import type { COGSCalculation, PricingCalculation } from '@/lib/types/cogs';
 import { logger } from '@/lib/logger';
 import { formatCOGSAnalysisForExport } from './htmlFormatting';
 

@@ -3,8 +3,8 @@
 import { Icon } from '@/components/ui/Icon';
 import { Check, ChevronDown, ChevronUp } from 'lucide-react';
 import { useMemo } from 'react';
-import { Dish, DishCostData, Recipe, RecipePriceData } from '../types';
-import { UnifiedItem, UnifiedSortField } from './types';
+import { Dish, DishCostData, Recipe, RecipePriceData } from '@/lib/types/recipes';
+import { UnifiedItem, UnifiedSortField } from '@/lib/types/recipes';
 import { UnifiedTableRow } from './UnifiedTableRow';
 
 interface UnifiedTableProps {

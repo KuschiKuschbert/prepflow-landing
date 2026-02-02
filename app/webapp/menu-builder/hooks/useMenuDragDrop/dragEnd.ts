@@ -3,7 +3,7 @@
  */
 import { DragEndEvent } from '@dnd-kit/core';
 import { moveItemToCategory } from './dragEnd/helpers/moveItemToCategory';
-import type { MenuItem } from '../../types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 import { reorderMenuItems } from '../../utils/menuDragDropHelpers';
 
 interface NotificationFunctions {

@@ -1,5 +1,5 @@
 import { flushSync } from 'react-dom';
-import type { COGSCalculation, Ingredient } from '../../../../cogs/types';
+import type { COGSCalculation, Ingredient } from '@/lib/types/cogs';
 
 interface EditIngredientProps {
   ingredientId: string;

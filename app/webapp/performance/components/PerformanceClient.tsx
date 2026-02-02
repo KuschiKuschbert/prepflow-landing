@@ -14,7 +14,7 @@ import PerformanceTable from '../components/PerformanceTable';
 import PerformanceTrends from '../components/PerformanceTrends';
 import { usePerformanceData } from '../hooks/usePerformanceData';
 import { usePerformanceFilters } from '../hooks/usePerformanceFilters';
-import { DateRange } from '../types';
+import { DateRange } from '@/lib/types/performance';
 
 export default function PerformanceClient() {
   // Date range state

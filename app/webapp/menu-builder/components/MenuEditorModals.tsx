@@ -3,7 +3,7 @@
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { MenuItemStatisticsModal } from './MenuItemStatisticsModal';
 import CategorySelectorModal from './CategorySelectorModal';
-import { MenuItem } from '../types';
+import { MenuItem } from '@/lib/types/menu-builder';
 
 interface MenuEditorModalsProps {
   showCategoryModal: boolean;

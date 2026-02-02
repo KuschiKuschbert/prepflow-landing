@@ -2,7 +2,7 @@
  * Format pricing analysis section for COGS analysis print
  */
 
-import type { PricingCalculation } from '../../types';
+import type { PricingCalculation } from '@/lib/types/cogs';
 
 /**
  * Format pricing analysis section

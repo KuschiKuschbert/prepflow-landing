@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import type { SectionData } from '../types';
+import type { SectionData } from '@/lib/types/prep-lists';
 
 interface PrepListRecipeGroupedViewProps {
   section: SectionData;

@@ -5,7 +5,7 @@
 
 import { exportToCSV } from '@/lib/csv/csv-utils';
 import { exportHTMLReport, exportPDFReport } from '@/lib/exports/export-html';
-import type { PerformanceItem, PerformanceMetadata, DateRange } from '../types';
+import type { PerformanceItem, PerformanceMetadata, DateRange } from '@/lib/types/performance';
 import { formatPerformanceReportForPrint } from './formatPerformanceReportForPrint';
 
 const CSV_HEADERS = [

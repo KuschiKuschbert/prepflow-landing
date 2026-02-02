@@ -12,7 +12,7 @@ import {
   exportRecipesToHTML,
   exportRecipesToPDF,
 } from '../utils/exportRecipes';
-import type { Recipe, RecipeIngredientWithDetails } from '../types';
+import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 

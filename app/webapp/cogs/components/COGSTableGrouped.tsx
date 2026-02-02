@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import { DishWithDetails } from '../../recipes/types';
+import { DishWithDetails } from '@/lib/types/recipes';
 import { useCOGSTableSort } from '../hooks/useCOGSTableSort';
-import { COGSCalculation } from '../types';
+import { COGSCalculation } from '@/lib/types/cogs';
 import { COGSTableDesktop } from './COGSTableGrouped/components/COGSTableDesktop';
 import { COGSTableMobile } from './COGSTableGrouped/components/COGSTableMobile';
 import { useRecipeExpansion } from './COGSTableGrouped/hooks/useRecipeExpansion';

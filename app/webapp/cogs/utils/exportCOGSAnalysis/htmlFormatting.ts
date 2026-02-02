@@ -2,7 +2,7 @@
  * HTML formatting utilities for COGS analysis export
  */
 
-import type { COGSCalculation, PricingCalculation } from '../../types';
+import type { COGSCalculation, PricingCalculation } from '@/lib/types/cogs';
 
 /**
  * Format COGS analysis for HTML/PDF export

@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/ui/Icon';
 import { X } from 'lucide-react';
-import { Dish } from '../types';
+import { Dish } from '@/lib/types/recipes';
 
 interface DishSidePanelHeaderProps {
   dish: Dish;

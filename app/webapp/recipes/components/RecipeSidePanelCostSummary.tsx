@@ -3,8 +3,8 @@
 import { Icon } from '@/components/ui/Icon';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { Calculator } from 'lucide-react';
-import { COGSCalculation } from '../../cogs/types';
-import { RecipePriceData } from '../types';
+import { COGSCalculation } from '@/lib/types/recipes';
+import { RecipePriceData } from '@/lib/types/recipes';
 
 interface RecipeSidePanelCostSummaryProps {
   calculations: COGSCalculation[];

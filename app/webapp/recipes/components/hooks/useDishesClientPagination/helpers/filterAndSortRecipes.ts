@@ -2,7 +2,7 @@
  * Helper to filter and sort recipes.
  */
 
-import type { Recipe, RecipePriceData } from '@/app/webapp/recipes/types';
+import type { Recipe, RecipePriceData } from '@/lib/types/recipes';
 import { sortRecipes } from '@/app/webapp/recipes/utils/recipeSorting';
 import type { UnifiedFilters, UnifiedSortField } from './useFilterState';
 

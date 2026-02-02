@@ -2,7 +2,7 @@
  * Helper functions for dish data population (extracted to keep dishes-data.ts under 150 lines)
  */
 
-import { Dish } from '@/app/webapp/recipes/types';
+import { Dish } from '@/lib/types/recipes';
 import { cleanSampleDishes } from '@/lib/sample-dishes-clean';
 
 export interface IngredientData {

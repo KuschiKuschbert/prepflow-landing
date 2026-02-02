@@ -9,6 +9,7 @@
 - [x] **[SCRIPTS]** Fix ~270 lint warnings in `scripts/` folder - **DONE**.
 - [x] Maintain 0 warnings in `scripts/` directory by integrating it into main CI pipeline - **DONE**.
 - [ ] Standardize Zod validation in `app/api/` APIs to replace manual checks.
+- [x] Refactor 12 API routes (`app/api/*`) that import from `app/webapp/` (Architecture Violation) - **DONE**.
 
 ## Medium Priority
 

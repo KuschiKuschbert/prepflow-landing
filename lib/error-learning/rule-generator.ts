@@ -82,6 +82,9 @@ export async function generateRulesFromKnowledgeBase(): Promise<{
 /**
  * Generate rules from recent fixes
  */
+/**
+ * Generate rules from recent fixes
+ */
 export async function generateRulesFromRecentFixes(days = 7): Promise<{
   patterns: KnowledgeBasePattern[];
   rules: KnowledgeBaseRule[];
@@ -98,6 +101,7 @@ export async function generateRulesFromRecentFixes(days = 7): Promise<{
         category: err.category,
         solution: fix.solution,
         prevention: fix.prevention,
+        badCode: err.pattern, // Assuming err.pattern contains the bad code snippet
       })),
   );
 
@@ -119,7 +123,11 @@ export async function generateRulesFromRecentFixes(days = 7): Promise<{
   for (const [key, fixes] of Object.entries(fixGroups)) {
     if (fixes.length >= MIN_FIX_COUNT_FOR_RULE) {
       const patternData = extractPattern(
-        fixes.map(f => ({ solution: f.solution, prevention: f.prevention })),
+        fixes.map(f => ({
+          solution: f.solution,
+          prevention: f.prevention,
+          badCode: f.badCode,
+        })),
       );
 
       if (patternData) {
@@ -131,7 +139,15 @@ export async function generateRulesFromRecentFixes(days = 7): Promise<{
         await addPatternToKnowledgeBase(pattern);
         newPatterns.push(pattern);
 
-        const rule = generateRule(pattern);
+        // Enhanced Rule Generation using AST heuristics if available
+        let rule: KnowledgeBaseRule;
+        if (patternData.context && patternData.context.includes('CallExpression')) {
+          // Attempt to synthesize a no-restricted-syntax rule
+          rule = synthesizeRestrictedSyntaxRule(pattern);
+        } else {
+          rule = generateRule(pattern);
+        }
+
         await addRuleToKnowledgeBase(rule);
         newRules.push(rule);
 
@@ -141,4 +157,66 @@ export async function generateRulesFromRecentFixes(days = 7): Promise<{
   }
 
   return { patterns: newPatterns, rules: newRules };
+}
+
+/**
+ * Synthesize a highly specific ESLint no-restricted-syntax rule
+ * This is a heuristic-based generator that attempts to create valid selectors
+ */
+function synthesizeRestrictedSyntaxRule(pattern: KnowledgeBasePattern): KnowledgeBaseRule {
+  // 1. naive heuristic: if the bad pattern is a function call "foo()"
+  // we want a selector like CallExpression[callee.name='foo']
+  let selector = '';
+  const badCode = pattern.badPattern ? pattern.badPattern.trim() : '';
+
+  // Check for Simple CallExpression: foo()
+  const callMatch = badCode.match(/^(\w+)\s*\(/);
+  if (callMatch) {
+    const funcName = callMatch[1];
+    selector = `CallExpression[callee.name='${funcName}']`;
+  }
+
+  // Check for MemberExpression Call: foo.bar()
+  const memberCallMatch = badCode.match(/^(\w+)\.(\w+)\s*\(/);
+  if (memberCallMatch) {
+    const obj = memberCallMatch[1];
+    const prop = memberCallMatch[2];
+    selector = `CallExpression[callee.object.name='${obj}'][callee.property.name='${prop}']`;
+  }
+
+  // Fallback to basic regex if no AST selector could be built
+  if (!selector) {
+    return generateRule(pattern);
+  }
+
+  return {
+    id: `rule-${pattern.id}`,
+    name: `No generic ${pattern.id}`,
+    source: 'rsi-synthesized',
+    enforcement: 'automated',
+    ruleId: `rsi/no-${pattern.id.toLowerCase()}`,
+    description: `Detects ${pattern.id} usage via AST`,
+    severity: 'error',
+    implementation: `
+          module.exports = {
+            meta: {
+              type: 'problem',
+              docs: { description: '${pattern.description}' },
+              messages: {
+                noRestricted: 'The pattern "${badCode}" is restricted. Use "${pattern.goodPattern || 'alternative'}" instead.'
+              }
+            },
+            create(context) {
+              return {
+                "${selector}"(node) {
+                  context.report({
+                    node,
+                    messageId: 'noRestricted'
+                  });
+                }
+              };
+            }
+          };
+        `,
+  };
 }

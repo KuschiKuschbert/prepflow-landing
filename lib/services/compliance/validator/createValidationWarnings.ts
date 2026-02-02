@@ -1,7 +1,7 @@
 /**
  * Create validation warnings from compliance results.
  */
-import type { ComplianceValidationResult, ShiftValidationWarning } from '@/app/webapp/roster/types';
+import type { ComplianceValidationResult, ShiftValidationWarning } from '@/lib/types/roster';
 
 /**
  * Creates validation warnings from compliance results.

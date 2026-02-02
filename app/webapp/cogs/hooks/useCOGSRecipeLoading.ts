@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { RefObject, useEffect } from 'react';
-import { Recipe } from '../types';
+import { Recipe } from '@/lib/types/cogs';
 
 interface UseCOGSRecipeLoadingProps {
   selectedRecipe: string | null;

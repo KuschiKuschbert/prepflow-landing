@@ -3,8 +3,8 @@
  */
 
 import { useState } from 'react';
-import type { Ingredient } from '../../../cogs/types';
-import type { COGSCalculation } from '../../../cogs/types';
+import type { Ingredient } from '@/lib/types/cogs';
+import type { COGSCalculation } from '@/lib/types/cogs';
 
 interface UseIngredientHandlersProps {
   calculations: COGSCalculation[];

@@ -1,7 +1,7 @@
 /**
  * Weekly cost calculation utilities.
  */
-import type { Shift, Employee } from '@/app/webapp/roster/types';
+import type { Shift, Employee } from '@/lib/types/roster';
 import { calculateShiftCost } from '../calculator';
 
 /**

@@ -4,7 +4,7 @@
  * Generates AI-powered performance insights with fallback to rule-based logic
  */
 
-import type { PerformanceItem } from '@/app/webapp/performance/types';
+import type { PerformanceItem } from '@/lib/types/performance';
 import { generateAIResponse } from '@/lib/ai/ai-service';
 import {
   buildPerformanceInsightsPrompt,

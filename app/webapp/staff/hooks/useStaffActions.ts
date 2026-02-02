@@ -3,7 +3,7 @@
 import { useNotification } from '@/contexts/NotificationContext';
 import { logger } from '@/lib/logger';
 import { useCallback } from 'react';
-import type { Employee } from '../../roster/types';
+import type { Employee } from '@/lib/types/roster';
 
 interface UseStaffActionsProps {
   staff: Employee[];

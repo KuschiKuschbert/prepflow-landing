@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { X } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
-import { UnifiedItem } from '../types';
+import { UnifiedItem } from '@/lib/types/recipes';
+import { X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { CalculatorTab } from './CalculatorTab';
 
 interface COGSCalculatorModalProps {
@@ -18,7 +18,7 @@ export function COGSCalculatorModal({ isOpen, item, onClose }: COGSCalculatorMod
   // Pre-select the recipe when modal opens
   useEffect(() => {
     if (isOpen && item) {
-      if (item.type === 'recipe') {
+      if (item.itemType === 'recipe') {
         // For recipes, use the recipe ID directly
         setInitialRecipeId(item.id);
       } else {
@@ -48,7 +48,8 @@ export function COGSCalculatorModal({ isOpen, item, onClose }: COGSCalculatorMod
             <div>
               <h2 className="text-2xl font-bold text-[var(--foreground)]">COGS Calculator</h2>
               <p className="mt-1 text-sm text-[var(--foreground-muted)]">
-                {item.name} ({item.type === 'recipe' ? 'Recipe' : 'Dish'})
+                {item.itemType === 'recipe' ? item.recipe_name : item.dish_name} (
+                {item.itemType === 'recipe' ? 'Recipe' : 'Dish'})
               </p>
             </div>
             <button

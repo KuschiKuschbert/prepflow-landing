@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { COGSCalculation } from '../../cogs/types';
+import { COGSCalculation } from '@/lib/types/cogs';
 import { Edit, Trash2 } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 

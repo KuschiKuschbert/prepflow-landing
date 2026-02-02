@@ -2,7 +2,7 @@
  * Refresh menu statistics.
  */
 import { logger } from '@/lib/logger';
-import type { MenuStatistics } from '../../../../types';
+import type { MenuStatistics } from '@/lib/types/menu-builder';
 
 export async function refreshStatistics(
   menuId: string,

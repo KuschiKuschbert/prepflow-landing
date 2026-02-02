@@ -1,7 +1,7 @@
 import { useNotification } from '@/contexts/NotificationContext';
 import { MenuChangeTracking } from '@/lib/menu-lock/change-tracking';
 import { useCallback, useRef, useState } from 'react';
-import { Menu } from '../../../types';
+import { Menu } from '@/lib/types/menu-builder';
 import { handleLockToggle as performLockToggle } from './useMenuLockManagement/helpers/handleLockToggle';
 import { useLockStatusSync } from './useMenuLockManagement/helpers/useLockStatusSync';
 

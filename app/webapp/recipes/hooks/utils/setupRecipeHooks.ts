@@ -1,4 +1,4 @@
-import { Recipe, RecipeIngredientWithDetails } from '../../types';
+import { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { useRecipePricing } from '../useRecipePricing';
 import { useSetupRecipeSubscriptions } from './setupRecipeSubscriptions';
 import { useRecipeInitialization } from './useRecipeInitialization';

@@ -1,4 +1,4 @@
-import type { PerformanceItem } from '@/app/webapp/performance/types';
+import type { PerformanceItem } from '@/lib/types/performance';
 import { logger } from '@/lib/logger';
 import { PERFORMANCE_INSIGHTS_PROMPT_TEMPLATE } from './templates/performance-insights-template';
 

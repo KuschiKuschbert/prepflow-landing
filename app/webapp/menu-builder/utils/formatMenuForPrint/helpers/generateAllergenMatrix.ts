@@ -4,7 +4,7 @@
 import { AUSTRALIAN_ALLERGENS, consolidateAllergens } from '@/lib/allergens/australian-allergens';
 import { getAllergenIconSVG } from '../../allergenIconUtils';
 import { escapeHtml } from './escapeHtml';
-import type { MenuItem } from '../../../types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 
 const VALID_ALLERGEN_CODES = AUSTRALIAN_ALLERGENS.map(a => a.code);
 

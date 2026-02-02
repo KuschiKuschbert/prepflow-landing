@@ -4,7 +4,7 @@ import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
 import { X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { MenuItem } from '../types';
+import { MenuItem } from '@/lib/types/menu-builder';
 
 interface MenuItemRegionPopupProps {
   item: MenuItem | null;

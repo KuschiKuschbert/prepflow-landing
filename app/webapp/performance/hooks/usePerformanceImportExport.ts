@@ -1,6 +1,6 @@
 'use client';
 
-import { PerformanceState } from '../types';
+import { PerformanceState } from '@/lib/types/performance';
 import { exportPerformanceDataToCSV, parseCSVSalesData } from '../utils/csv-utils';
 import { importPerformanceData } from '../utils/performance-api';
 

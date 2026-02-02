@@ -1,6 +1,6 @@
 import { flushSync } from 'react-dom';
 import { createCalculation } from '../../../../cogs/hooks/utils/createCalculation';
-import type { COGSCalculation, Ingredient } from '../../../../cogs/types';
+import type { COGSCalculation, Ingredient } from '@/lib/types/cogs';
 
 interface AddIngredientProps {
   ingredient: Ingredient;

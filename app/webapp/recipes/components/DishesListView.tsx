@@ -1,9 +1,9 @@
 'use client';
-import { Dish, DishCostData, Recipe, RecipePriceData } from '../types';
+import { Dish, DishCostData, Recipe, RecipePriceData } from '@/lib/types/recipes';
 import DishCard from './DishCard';
 import { DishesListPagination, DishesListSearch } from './DishesListControls';
 import RecipeCard from './RecipeCard';
-import { UnifiedItem } from './types';
+import { UnifiedItem } from '@/lib/types/recipes';
 import { UnifiedTable } from './UnifiedTable';
 interface DishesListViewProps {
   allItems: UnifiedItem[];

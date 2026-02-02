@@ -1,7 +1,7 @@
 import { useNotification } from '@/contexts/NotificationContext';
 import { useConfirm } from '@/hooks/useConfirm';
 import { useCallback } from 'react';
-import type { Employee, Shift } from '../../../types';
+import type { Employee, Shift } from '@/lib/types/roster';
 import { confirmDeleteAllShifts } from './helpers/confirmDeleteAllShifts';
 import { confirmDeleteEmployee } from './helpers/confirmDeleteEmployee';
 import { getEmployeeName } from './helpers/getEmployeeName';

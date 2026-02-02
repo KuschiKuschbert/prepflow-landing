@@ -2,7 +2,7 @@
 
 import { useCountry } from '@/contexts/CountryContext';
 import { useEffect, useMemo, useState } from 'react';
-import type { PerformanceItem } from '../types';
+import type { PerformanceItem } from '@/lib/types/performance';
 import {
   generateBargainBucketInsight,
   generateBurntToastInsight,

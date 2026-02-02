@@ -1,8 +1,8 @@
 /**
  * Save recipe ingredients.
  */
-import type { COGSCalculation } from '../../../../../cogs/types';
-import type { Recipe } from '../../../../types';
+import type { COGSCalculation } from '@/lib/types/recipes';
+import type { Recipe } from '@/lib/types/recipes';
 import type { RecipeDishItem } from '../../useRecipeDishEditorData';
 
 export async function saveRecipeIngredients(

@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Recipe, RecipePriceData } from '../types';
+import { Recipe, RecipePriceData } from '@/lib/types/recipes';
 import { filterRecipes } from '../utils/recipeFiltering';
 import { sortRecipes } from '../utils/recipeSorting';
 

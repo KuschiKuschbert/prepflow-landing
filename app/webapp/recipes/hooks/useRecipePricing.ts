@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
-import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../types';
+import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '@/lib/types/recipes';
 import { calculateRecipePrice } from './utils/pricingHelpers';
 import { buildPricingCallbacks } from './utils/buildPricingCallbacks';
 import { buildPricingReturn } from './utils/buildPricingReturn';

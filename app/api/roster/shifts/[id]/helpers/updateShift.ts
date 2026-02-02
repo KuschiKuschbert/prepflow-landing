@@ -2,7 +2,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
-import { validateShiftData } from '../../helpers/requestHelpers';
+import { updateShiftSchema } from '../../helpers/schemas';
 import { buildUpdateData } from './buildUpdateData';
 
 import type { CreateShiftInput, Shift } from '../../helpers/types';
@@ -17,29 +17,28 @@ export async function updateShift(
   existingShift: Shift,
 ): Promise<NextResponse> {
   // Validate if required fields are present
-  if (body.start_time || body.end_time || body.shift_date) {
-    // Construct a temporary full object for format validation if partial data is provided
-    // Note: This is tricky with partial updates.
-    // Ideally we should validate only the fields provided.
-    // The previous code merged with existingShift to do a full validation.
-    // Let's do the same.
-    const mergedShift: any = { ...existingShift, ...body };
+  const mergedShift = { ...existingShift, ...body };
 
-    // Convert to request format expected by validator
-    // CreateShiftRequest expects strings for dates/times, but existingShift might have them as whatever Shift type has.
-    // Assuming Shift type has string dates or compatible
+  const validation = updateShiftSchema.safeParse(mergedShift);
+  if (!validation.success) {
+    return NextResponse.json(
+      ApiErrorHandler.createError(
+        validation.error.issues[0]?.message || 'Invalid request data',
+        'VALIDATION_ERROR',
+        400,
+      ),
+      { status: 400 },
+    );
+  }
 
-    const validation = validateShiftData(mergedShift);
-    if (!validation.isValid) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          validation.error || 'Invalid request data',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
+  // Additional semantic check for time order (since schema refine might be loose on partials)
+  const startTime = new Date(mergedShift.start_time);
+  const endTime = new Date(mergedShift.end_time);
+  if (endTime <= startTime) {
+    return NextResponse.json(
+      ApiErrorHandler.createError('End time must be after start time', 'VALIDATION_ERROR', 400),
+      { status: 400 },
+    );
   }
 
   // Build update data

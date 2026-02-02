@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { COGSCalculation } from '../types';
+import { COGSCalculation } from '@/lib/types/cogs';
 
 export type SortField = 'ingredient_name' | 'quantity' | 'cost';
 export type SortDirection = 'asc' | 'desc';

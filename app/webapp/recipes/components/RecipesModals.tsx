@@ -1,7 +1,7 @@
 'use client';
 
 import { logger } from '@/lib/logger';
-import { Recipe, RecipeIngredientWithDetails } from '../types';
+import { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { BulkDeleteConfirmationModal } from './BulkDeleteConfirmationModal';
 import { DeleteConfirmationModal } from './DeleteConfirmationModal';
 import { RecipeEditDrawer } from './RecipeEditDrawer';

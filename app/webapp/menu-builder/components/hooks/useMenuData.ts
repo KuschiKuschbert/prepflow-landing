@@ -2,7 +2,7 @@
  * Hook for managing menu data loading and caching
  */
 import { useState, useEffect, useCallback } from 'react';
-import type { MenuItem, MenuStatistics, Dish, Recipe } from '../../types';
+import type { MenuItem, MenuStatistics, Dish, Recipe } from '@/lib/types/menu-builder';
 import { loadMenuData as loadMenuDataHelper } from './useMenuData/dataLoading';
 import { initializeState } from './useMenuData/helpers/initializeState';
 import { refreshStatistics as refreshStatisticsHelper } from './useMenuData/helpers/refreshStatistics';

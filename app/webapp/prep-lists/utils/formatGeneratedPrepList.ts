@@ -6,7 +6,7 @@ import { escapeHtml } from '@/lib/exports/template-utils';
 import { generateIngredientsHTML } from './formatGeneratedPrepList/helpers/generateIngredientsHTML';
 import { generatePrepInstructionsHTML } from './formatGeneratedPrepList/helpers/generatePrepInstructionsHTML';
 import { generatePrepTechniquesHTML } from './formatGeneratedPrepList/helpers/generatePrepTechniquesHTML';
-import type { SectionData } from '../types';
+import type { SectionData } from '@/lib/types/prep-lists';
 
 interface ExportOptions {
   sections?: string[]; // Filter by section IDs

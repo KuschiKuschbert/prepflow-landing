@@ -3,7 +3,7 @@
  */
 
 import { logger } from '@/lib/logger';
-import type { COGSCalculation, Recipe } from '../../types';
+import type { COGSCalculation, Recipe } from '@/lib/types/cogs';
 
 interface SaveRecipeParams {
   calculations: COGSCalculation[];

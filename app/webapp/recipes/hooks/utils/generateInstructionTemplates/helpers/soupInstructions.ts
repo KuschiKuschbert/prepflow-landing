@@ -1,7 +1,7 @@
 /**
  * Generate soup instruction template.
  */
-import type { Recipe, RecipeIngredientWithDetails } from '../../../../types';
+import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import type { IngredientAnalysis } from '../../analyzeIngredients';
 
 export function generateSoupInstructions(

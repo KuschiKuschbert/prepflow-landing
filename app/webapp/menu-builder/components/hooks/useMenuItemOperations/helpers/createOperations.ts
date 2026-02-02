@@ -1,7 +1,7 @@
 /**
  * Create menu item operations from specialized hook results.
  */
-import type { MenuItem } from '../../../../types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 
 interface CreateOperationsParams {
   additionResult: {

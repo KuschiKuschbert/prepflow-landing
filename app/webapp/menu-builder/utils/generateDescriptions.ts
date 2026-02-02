@@ -5,7 +5,7 @@
  */
 
 import { logger } from '@/lib/logger';
-import type { MenuItem } from '../types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 
 interface RecipeIngredient {
   quantity?: number;

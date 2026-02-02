@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { useSelectionMode } from '@/app/webapp/ingredients/hooks/useSelectionMode';
-import { Dish, Recipe } from '../../types';
+import { Dish, Recipe } from '@/lib/types/recipes';
 
 export function useDishesClientSelection(dishes: Dish[], recipes: Recipe[]) {
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());

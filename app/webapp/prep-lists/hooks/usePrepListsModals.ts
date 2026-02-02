@@ -4,7 +4,7 @@
 
 import { useNotification } from '@/contexts/NotificationContext';
 import { useCallback, useState } from 'react';
-import type { GeneratedPrepListData, PrepList, PrepListCreationItem } from '../types';
+import type { GeneratedPrepListData, PrepList, PrepListCreationItem } from '@/lib/types/prep-lists';
 import { handleSaveBatchPrepLists as handleSaveBatchPrepListsHelper } from './helpers/handleSaveBatchPrepLists';
 
 /**

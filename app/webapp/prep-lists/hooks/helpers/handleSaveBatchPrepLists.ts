@@ -2,7 +2,7 @@
  * Handle batch prep list creation with optimistic updates.
  */
 import { logger } from '@/lib/logger';
-import type { GeneratedPrepListData, PrepList, PrepListCreationItem } from '../../types';
+import type { GeneratedPrepListData, PrepList, PrepListCreationItem } from '@/lib/types/prep-lists';
 
 interface HandleSaveBatchPrepListsParams {
   prepListsToCreate: Array<{

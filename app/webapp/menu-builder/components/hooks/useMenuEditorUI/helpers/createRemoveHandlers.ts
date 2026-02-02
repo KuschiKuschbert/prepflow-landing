@@ -1,7 +1,7 @@
 /**
  * Create remove handlers for categories and items.
  */
-import type { MenuItem } from '../../../../types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 import { createCategoryRemoveDialog, createItemRemoveDialog } from './createConfirmDialog';
 import { getItemName } from './getItemName';
 

@@ -35,5 +35,9 @@
   "app/api/time-attendance/clock-out/route.ts",
   "app/webapp/ingredients/components/hooks/useIngredientOperations.ts",
   "app/webapp/specials/utils.ts",
-  "app/admin/features/hooks/useFlagDiscovery.ts"
+  "app/admin/features/hooks/useFlagDiscovery.ts",
+  "lib/error-learning/rule-generator.ts",
+  "lib/types/prep-lists.ts",
+  "lib/types/recipes.ts",
+  "lib/types/roster.ts"
 ]

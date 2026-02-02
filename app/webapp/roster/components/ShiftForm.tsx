@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { logger } from '@/lib/logger';
 import { Clock, User, Briefcase, Coffee, FileText, X } from 'lucide-react';
-import type { Shift, Employee } from '../types';
+import type { Shift, Employee } from '@/lib/types/roster';
 import { buildShiftDataFromForm } from './ShiftForm/helpers/buildShiftData';
 import { validateShiftForm } from './ShiftForm/helpers/validateForm';
 import { FormField } from './ShiftForm/components/FormField';

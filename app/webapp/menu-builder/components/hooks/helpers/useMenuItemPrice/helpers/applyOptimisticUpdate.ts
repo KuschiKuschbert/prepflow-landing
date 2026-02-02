@@ -3,7 +3,7 @@
  */
 
 import { logger } from '@/lib/logger';
-import { MenuItem } from '../../../../../types';
+import { MenuItem } from '@/lib/types/menu-builder';
 
 /**
  * Apply optimistic update to menu items state.

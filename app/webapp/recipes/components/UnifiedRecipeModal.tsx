@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState, useMemo } from 'react';
-import { Recipe, RecipeIngredientWithDetails } from '../types';
+import { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { convertToCOGSCalculations } from '../hooks/utils/recipeCalculationHelpers';
-import { COGSCalculation } from '../../cogs/types';
-import { COGSCalculation as RecipeCOGSCalculation } from '../types';
+import { COGSCalculation } from '@/lib/types/recipes';
+import { COGSCalculation as RecipeCOGSCalculation } from '@/lib/types/recipes';
 import { UnifiedRecipeModalHeader } from './UnifiedRecipeModalHeader';
 import { UnifiedRecipeModalPreviewTab } from './UnifiedRecipeModalPreviewTab';
 import { UnifiedRecipeModalIngredientsTab } from './UnifiedRecipeModalIngredientsTab';

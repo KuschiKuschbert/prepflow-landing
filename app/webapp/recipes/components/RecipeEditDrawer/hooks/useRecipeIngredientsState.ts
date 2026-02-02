@@ -3,10 +3,10 @@ import { useCOGSDataFetching } from '@/app/webapp/cogs/hooks/useCOGSDataFetching
 import { useIngredientAddition } from '@/app/webapp/cogs/hooks/useIngredientAddition';
 import { useIngredientConversion } from '@/app/webapp/cogs/hooks/useIngredientConversion';
 import { useIngredientSearch } from '@/app/webapp/cogs/hooks/useIngredientSearch';
-import { COGSCalculation } from '@/app/webapp/cogs/types';
+import { COGSCalculation } from '@/lib/types/cogs';
 import { useNotification } from '@/contexts/NotificationContext';
 import { useCallback, useMemo, useState } from 'react';
-import type { Recipe } from '../../../types';
+import type { Recipe } from '@/lib/types/recipes';
 import { useRecipeEditIngredientLoading } from '../../hooks/useRecipeEditIngredientLoading';
 import { useRecipeEditHandlers } from './useRecipeEditHandlers';
 

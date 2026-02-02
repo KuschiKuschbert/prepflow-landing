@@ -3,7 +3,7 @@
  * Converts recipe with ingredients and instructions into HTML format
  */
 
-import type { Recipe, RecipeIngredientWithDetails } from '../types';
+import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { buildRecipePrintHTML } from './helpers/buildRecipePrintHTML';
 
 export interface RecipePrintData {

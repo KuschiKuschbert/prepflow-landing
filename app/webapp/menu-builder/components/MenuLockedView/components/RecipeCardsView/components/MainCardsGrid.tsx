@@ -5,7 +5,7 @@
  */
 
 import { RecipeCard } from '../../RecipeCard';
-import { RecipeCardData } from '../types';
+import { RecipeCardData } from '@/lib/types/menu-builder';
 
 interface MainCardsGridProps {
   cards: RecipeCardData[];

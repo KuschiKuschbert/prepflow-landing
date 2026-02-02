@@ -1,7 +1,7 @@
 /**
  * Handle publish draft shifts.
  */
-import type { Shift } from '../../../types';
+import type { Shift } from '@/lib/types/roster';
 import { logger } from '@/lib/logger';
 
 export function createPublishHandler(

@@ -2,7 +2,7 @@
 
 import { logger } from '@/lib/logger';
 import { useRef } from 'react';
-import { MenuItem } from '../types';
+import { MenuItem } from '@/lib/types/menu-builder';
 import { MenuItemActions } from './SortableMenuItem/components/MenuItemActions';
 import { MenuItemContent } from './SortableMenuItem/components/MenuItemContent';
 import { MenuItemTooltip } from './SortableMenuItem/components/MenuItemTooltip';

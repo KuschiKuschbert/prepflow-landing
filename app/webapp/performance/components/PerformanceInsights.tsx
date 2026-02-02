@@ -1,7 +1,7 @@
 'use client';
 
 import { usePerformanceInsights } from '../hooks/usePerformanceInsights';
-import { PerformanceItem } from '../types';
+import { PerformanceItem } from '@/lib/types/performance';
 import { Lightbulb, TrendingUp, AlertTriangle, Award } from 'lucide-react';
 import { Icon } from '@/components/ui/Icon';
 import Link from 'next/link';

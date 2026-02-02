@@ -4,7 +4,7 @@
  * Generates professional kitchen instructions for recipes
  */
 
-import type { Recipe, RecipeIngredientWithDetails } from '@/app/webapp/recipes/types';
+import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 
 export function buildRecipeInstructionsPrompt(
   recipe: Recipe,

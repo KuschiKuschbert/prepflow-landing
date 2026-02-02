@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import { useDishCOGSCalculations } from '../hooks/useDishCOGSCalculations';
 import { useDishSidePanelData } from '../hooks/useDishSidePanelData';
 import { useSidePanelCommon } from '../hooks/useSidePanelCommon';
-import { Dish } from '../types';
+import { Dish } from '@/lib/types/recipes';
 import { DishSidePanelActions } from './DishSidePanelActions';
 import { DishSidePanelContent } from './DishSidePanelContent';
 import { DishSidePanelHeader } from './DishSidePanelHeader';

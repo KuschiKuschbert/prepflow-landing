@@ -5,7 +5,7 @@
 
 import { exportToCSV } from '@/lib/csv/csv-utils';
 import { exportHTMLReport, exportPDFReport } from '@/lib/exports/export-html';
-import type { Recipe, RecipeIngredientWithDetails } from '../types';
+import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
 import { formatRecipeForExport } from './helpers/formatRecipeForExport';
 
 const CSV_HEADERS = [

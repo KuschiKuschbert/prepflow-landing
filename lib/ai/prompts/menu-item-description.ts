@@ -4,7 +4,7 @@
  * Generates professional, appetizing menu descriptions for dishes and recipes
  */
 
-import type { MenuItem } from '@/app/webapp/menu-builder/types';
+import type { MenuItem } from '@/lib/types/menu-builder';
 import { getAllergenDisplayName } from '@/lib/allergens/australian-allergens';
 
 /**

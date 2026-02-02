@@ -10,7 +10,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { Clock, X, Save } from 'lucide-react';
-import type { Shift } from '../types';
+import type { Shift } from '@/lib/types/roster';
 import { calculatePopoverPosition } from './InlineTimeEntry/helpers/calculatePopoverPosition';
 import { buildShiftData } from './InlineTimeEntry/helpers/buildShiftData';
 import { logger } from '@/lib/logger';

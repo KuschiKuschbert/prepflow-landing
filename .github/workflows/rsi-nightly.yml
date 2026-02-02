@@ -36,8 +36,33 @@ jobs:
         # using --full mode for nightly runs to include refactoring/heavy tasks if needed
         run: npm run rsi:run -- --full
         env:
-          # Pass any necessary env vars here
           CI: true
+
+      - name: Verify Resulting Health & Stability
+        id: verify
+        run: |
+          echo "🔍 Running comprehensive health check on RSI output..."
+
+          # 1. Check Technical Debt (DEBT.md)
+          if grep -q "\[ \]" docs/DEBT.md; then
+            echo "DEBT_CLEAN=false" >> $GITHUB_OUTPUT
+            echo "🛑 DEBT.md still has pending tasks."
+          else
+            echo "DEBT_CLEAN=true" >> $GITHUB_OUTPUT
+            echo "✅ DEBT.md is clean!"
+          fi
+
+          # 2. Run architecture, security, and health checks
+          # We check if these pass before allowing auto-merge
+          npm run check:architecture
+          npm run check:security
+          npm run check:health
+
+          # 3. Run type-check (strict stability check)
+          npm run type-check
+
+          echo "CHECKS_PASSED=true" >> $GITHUB_OUTPUT
+        continue-on-error: true
 
       - name: Check for Changes
         id: git-check
@@ -60,8 +85,12 @@ jobs:
             - Self-Optimization: Tuned system parameters based on metrics.
             - Meta-Learning: Analyzed history for new insights.
             - Rule Evolution: Generated potential new rules.
+            - Health Check: ${{ steps.verify.outputs.CHECKS_PASSED == 'true' && '✅ PASSED' || '❌ FAILED' }}
+            - Debt Status: ${{ steps.verify.outputs.DEBT_CLEAN == 'true' && '✅ CLEAN' || '🛑 PENDING' }}
 
-            🤖 **Auto-merge eligibility**: This PR will be auto-merged if all CI passes AND changes are limited to safe paths.
+            🤖 **Auto-merge eligibility**: This PR will be auto-merged if:
+            1. All CI passes AND changes are limited to safe paths.
+            2. **OR** All CI passes AND `DEBT.md` is empty (Phase Complete).
           branch: rsi/nightly-improvements
           base: main
           delete-branch: true
@@ -111,13 +140,45 @@ jobs:
           if [[ "$SAFE_TO_MERGE" == "true" ]]; then
             echo "✅ All changes are in safe paths - eligible for auto-merge"
           else
-            echo "🛑 Some changes require human review - skipping auto-merge"
+            echo "🛑 Some changes require human review - skipping path-based auto-merge"
           fi
 
-      - name: Enable Auto-Merge
-        if: steps.safe-check.outputs.safe_to_merge == 'true' && steps.create-pr.outputs.pull-request-number
+      # Final decision logic
+      - name: Decision Logic
+        id: decision
+        run: |
+          CHECKS_PASSED="${{ steps.verify.outputs.CHECKS_PASSED }}"
+          DEBT_CLEAN="${{ steps.verify.outputs.DEBT_CLEAN }}"
+          SAFE_PATHS="${{ steps.safe-check.outputs.safe_to_merge }}"
+
+          AUTO_MERGE="false"
+
+          if [[ "$CHECKS_PASSED" == "true" ]]; then
+             if [[ "$DEBT_CLEAN" == "true" ]]; then
+                echo "🚀 Condition Met: All checks passed AND Tech Debt is clear. Auto-merging..."
+                AUTO_MERGE="true"
+             elif [[ "$SAFE_PATHS" == "true" ]]; then
+                echo "✅ Condition Met: Changes are within safe paths. Auto-merging..."
+                AUTO_MERGE="true"
+             fi
+          fi
+
+          echo "eligible=$AUTO_MERGE" >> $GITHUB_OUTPUT
+
+      - name: Enable Auto-Merge & Recursive Trigger
+        if: steps.decision.outputs.eligible == 'true' && steps.create-pr.outputs.pull-request-number
         run: |
           echo "🤖 Enabling auto-merge for PR #${{ steps.create-pr.outputs.pull-request-number }}"
           gh pr merge ${{ steps.create-pr.outputs.pull-request-number }} --auto --squash
+
+          # Recursive Trigger: If debt still exists, schedule the next batch
+          if [[ "${{ steps.verify.outputs.DEBT_CLEAN }}" == "false" ]]; then
+            echo "🔄 Debt still exists. Scheduling recursive follow-up run..."
+            # Wait 60 seconds to allow the merge to register and avoid overlap issues
+            sleep 60
+            gh workflow run rsi-nightly.yml
+          else
+            echo "✨ All debt cleared. Nightly mission complete."
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

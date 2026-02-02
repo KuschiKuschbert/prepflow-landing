@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { Recipe } from '../../types';
-import { COGSCalculation } from '../../../cogs/types';
+import { Recipe } from '@/lib/types/recipes';
+import { COGSCalculation } from '@/lib/types/recipes';
 import { logger } from '@/lib/logger';
 
 interface UseRecipeEditIngredientSaveProps {

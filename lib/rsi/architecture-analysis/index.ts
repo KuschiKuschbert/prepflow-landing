@@ -6,11 +6,15 @@
  */
 
 import { logger } from '@/lib/logger';
+import { exec } from 'child_process';
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import * as util from 'util';
 import { detectAntiPatterns } from './anti-patterns';
 import { detectDesignPatterns } from './design-patterns';
 import { AntiPattern, DesignPattern } from './types';
+
+const execAsync = util.promisify(exec);
 
 export * from './adr';
 export * from './anti-patterns';
@@ -107,6 +111,20 @@ export async function runArchitectureAnalysis(dryRun = false): Promise<void> {
       markdown += '\n';
     }
   }
+
+  // Run Structural Checks (check-architecture.ts)
+  let structuralReport = '';
+  try {
+    const { stdout } = await execAsync('npm run check:architecture');
+    structuralReport = `✅ **Structural Checks Passed**\n\n\`\`\`\n${stdout.replace(/\x1b\[[0-9;]*m/g, '')}\n\`\`\`\n`;
+  } catch (error: any) {
+    const output = error.stdout || error.message;
+    structuralReport = `❌ **Structural Checks Failed**\n\n\`\`\`\n${output.replace(/\x1b\[[0-9;]*m/g, '')}\n\`\`\`\n`;
+    // We don't throw here to ensure the report is generated
+  }
+
+  markdown += '## 🏗️ Structural Integrity\n\n';
+  markdown += structuralReport + '\n';
 
   await fs.writeFile(reportPath, markdown, 'utf8');
 }

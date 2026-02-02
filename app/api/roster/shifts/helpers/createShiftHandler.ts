@@ -2,39 +2,29 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
-import { validateCreateShiftRequest, validateShiftData } from './requestHelpers';
 import { createShiftSchema } from './schemas';
 
 export async function handleCreateShift(request: NextRequest, supabase: SupabaseClient) {
   try {
-    const body = await validateCreateShiftRequest(request);
-
-    if (!body) {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch (err) {
+      logger.warn('[Shifts API] Failed to parse request JSON:', {
+        error: err instanceof Error ? err.message : String(err),
+      });
       return NextResponse.json(
         ApiErrorHandler.createError('Invalid request body', 'VALIDATION_ERROR', 400),
         { status: 400 },
       );
     }
 
-    // Zod validation first for types and basic constraints
+    // Zod validation first for types and semantic constraints (like start/end time order)
     const zodValidation = createShiftSchema.safeParse(body);
     if (!zodValidation.success) {
       return NextResponse.json(
         ApiErrorHandler.createError(
           zodValidation.error.issues[0]?.message || 'Invalid request data',
-          'VALIDATION_ERROR',
-          400,
-        ),
-        { status: 400 },
-      );
-    }
-
-    // Additional semantic validation
-    const semanticValidation = validateShiftData(body);
-    if (!semanticValidation.isValid) {
-      return NextResponse.json(
-        ApiErrorHandler.createError(
-          semanticValidation.error || 'Invalid request data',
           'VALIDATION_ERROR',
           400,
         ),

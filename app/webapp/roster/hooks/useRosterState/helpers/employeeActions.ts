@@ -1,9 +1,9 @@
 /**
  * Employee action helpers for roster state.
  */
-import type { Employee } from '../../../types';
+import type { Employee } from '@/lib/types/roster';
 
-import type { RosterStoreSet } from '../types';
+import type { RosterStoreSet } from '@/lib/types/roster';
 
 export function createEmployeeActions(set: RosterStoreSet) {
   return {

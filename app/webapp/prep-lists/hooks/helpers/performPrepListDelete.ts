@@ -2,7 +2,7 @@
  * Perform prep list delete operation with optimistic updates.
  */
 import { logger } from '@/lib/logger';
-import type { PrepList } from '../../types';
+import type { PrepList } from '@/lib/types/prep-lists';
 
 interface PerformPrepListDeleteParams {
   id: string;

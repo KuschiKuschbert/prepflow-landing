@@ -4,7 +4,7 @@
 
 import { logger } from '@/lib/logger';
 import { useCallback } from 'react';
-import { MenuItem } from '../../../types';
+import { MenuItem } from '@/lib/types/menu-builder';
 
 interface UseMenuItemRegionProps {
   menuId: string;

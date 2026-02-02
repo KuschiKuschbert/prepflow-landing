@@ -3,8 +3,8 @@
  */
 import { logger } from '@/lib/logger';
 import { supabase } from '@/lib/supabase';
-import type { Recipe } from '../../../../types';
-import type { SubscriptionRefs } from '../types';
+import type { Recipe } from '@/lib/types/recipes';
+import type { SubscriptionRefs } from '@/lib/types/recipes';
 import { createDebouncedRefreshHandler } from './handleDebouncedRefresh';
 
 export function setupSubscriptionsHelper(refs: SubscriptionRefs, recipes: Recipe[]) {

@@ -1,5 +1,5 @@
 import { arrayMove } from '@dnd-kit/sortable';
-import { MenuItem } from '../types';
+import { MenuItem } from '@/lib/types/menu-builder';
 
 import { logger } from '@/lib/logger';
 

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Dish, Recipe } from '../../types';
+import { Dish, Recipe } from '@/lib/types/recipes';
 import { useDishesClientDelete } from './useDishesClientDelete';
 type ViewMode = 'list' | 'editor' | 'builder';
 

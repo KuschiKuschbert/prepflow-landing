@@ -1,4 +1,4 @@
-import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '../../types';
+import { Recipe, RecipeIngredientWithDetails, RecipePriceData } from '@/lib/types/recipes';
 import { calculateVisiblePricesBatch } from './calculateVisiblePricesBatch';
 import { calculateVisiblePricesFallback } from './calculateVisiblePricesFallback';
 

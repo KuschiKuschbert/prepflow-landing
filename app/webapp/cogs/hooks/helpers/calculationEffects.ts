@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { useEffect, useRef } from 'react';
-import { COGSCalculation, Ingredient, RecipeIngredient } from '../../types';
+import { COGSCalculation, Ingredient, RecipeIngredient } from '@/lib/types/cogs';
 
 interface CalculationEffectsProps {
   selectedRecipe: string;
