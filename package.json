@@ -173,7 +173,6 @@
     "react-signature-canvas": "^1.0.7",
     "recharts": "^3.7.0",
     "robots-parser": "^3.0.1",
-    "signature_pad": "^4.2.0",
     "sonner": "^2.0.7",
     "square": "^44.0.0",
     "stripe": "^20.3.0",
