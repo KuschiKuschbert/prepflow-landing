@@ -17,7 +17,13 @@ const transform: Transform = (file: FileInfo, api: API) => {
   // 1. Identify POST/PUT handlers
   root.find(j.ExportNamedDeclaration).forEach(path => {
     const decl = path.node.declaration;
-    if (j.FunctionDeclaration.check(decl) && decl.id && ['POST', 'PUT'].includes(decl.id.name)) {
+    if (
+      j.FunctionDeclaration.check(decl) &&
+      decl.id &&
+      typeof decl.id.name === 'string' &&
+      ['POST', 'PUT'].includes(decl.id.name)
+    ) {
+      const funcName = decl.id.name;
       const funcBody = decl.body;
       const collectedFields: string[] = [];
       const nodesToRemove: any[] = [];
@@ -53,7 +59,7 @@ const transform: Transform = (file: FileInfo, api: API) => {
 
       if (collectedFields.length > 0) {
         changed = true;
-        const schemaName = `${decl.id.name.toLowerCase()}Schema`;
+        const schemaName = `${funcName.toLowerCase()}Schema`;
         // 3. Create Zod Schema
         const schemaProperties = collectedFields.map(field => {
           return j.objectProperty(

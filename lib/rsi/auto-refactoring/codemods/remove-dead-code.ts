@@ -15,14 +15,14 @@ const transform: Transform = (file: FileInfo, api: API) => {
     if (!specifiers) return;
 
     const usedSpecifiers = specifiers.filter(specifier => {
-      const name = specifier.local?.name;
-      if (!name) return true;
+      const localName = specifier.local?.name;
+      if (!localName || typeof localName !== 'string') return true;
 
       // Special case: React might be implicitly used
-      if (name === 'React') return true;
+      if (localName === 'React') return true;
 
       // Look for ANY usage of the identifier name in AST
-      const hasAstUsage = root.find(j.Identifier, { name }).some(idPath => {
+      const hasAstUsage = root.find(j.Identifier, { name: localName }).some(idPath => {
         const p = idPath.parent.node;
         return (
           !j.ImportSpecifier.check(p) &&
@@ -36,7 +36,7 @@ const transform: Transform = (file: FileInfo, api: API) => {
       // Regex fallback: Search in source code (stripping single-line comments for better accuracy)
       // This catches type references that some parsers might miss
       const sourceWithoutComments = file.source.replace(/\/\/.*$/gm, '');
-      const nameRegex = new RegExp(`\\b${name}\\b`, 'g');
+      const nameRegex = new RegExp(`\\b${localName}\\b`, 'g');
       const matches = sourceWithoutComments.match(nameRegex) || [];
 
       // If found more than once (one is the import itself), keep it

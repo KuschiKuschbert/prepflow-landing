@@ -28,8 +28,14 @@ async function storeErrorInDatabase(
   }
 
   // Run asynchronously to avoid blocking
-  const scheduleAsync = typeof setImmediate !== 'undefined' ? setImmediate : setTimeout;
-  scheduleAsync(async () => {
+  const scheduleCallback = (fn: () => void) => {
+    if (typeof setImmediate !== 'undefined') {
+      setImmediate(fn);
+    } else {
+      setTimeout(fn, 0);
+    }
+  };
+  scheduleCallback(async () => {
     try {
       // Lazy import supabaseAdmin to prevent module load failures if env vars are missing
       let supabaseAdminModule;
@@ -74,7 +80,7 @@ async function storeErrorInDatabase(
       // Use console directly to avoid circular dependency
       console.error('[Logger] Failed to store error in database:', err);
     }
-  }, 0);
+  });
 }
 
 export const logger = {
