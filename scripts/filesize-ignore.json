@@ -45,5 +45,6 @@
   "app/api/prep-lists/route.ts",
   "app/api/roster/shifts/[id]/route.ts",
   "app/api/roster/templates/[id]/template-shifts/route.ts",
-  "app/api/roster/templates/route.ts"
+  "app/api/roster/templates/route.ts",
+  "lib/rsi/auto-refactoring/codemods/zod-standardization.ts"
 ]

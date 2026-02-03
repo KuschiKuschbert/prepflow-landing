@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
+import type Stripe from 'stripe';
 import { syncUserSubscription } from './syncUserSubscription';
 
 interface SyncResult {
@@ -8,8 +9,8 @@ interface SyncResult {
 }
 
 export async function processSingleSubscription(
-  subscription: any, // Using any for Stripe subscription object to avoid complex typing for now
-  stripe: any,
+  subscription: Stripe.Subscription,
+  stripe: Stripe,
 ): Promise<SyncResult> {
   if (!supabaseAdmin) {
     throw new Error('Supabase Admin not available');
