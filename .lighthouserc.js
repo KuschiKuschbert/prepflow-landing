@@ -35,6 +35,10 @@ module.exports = {
           height: 667,
           deviceScaleFactor: 2,
         },
+        // Bypass authentication for performance testing
+        extraHeaders: process.env.PERFORMANCE_TEST_TOKEN
+          ? { 'x-prepflow-perf-bypass': process.env.PERFORMANCE_TEST_TOKEN }
+          : undefined,
       },
     },
     assert: {

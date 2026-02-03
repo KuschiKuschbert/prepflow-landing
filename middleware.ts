@@ -161,6 +161,15 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Performance test bypass: Skip auth if correct secret token is provided in header
+  const perfTestToken = process.env.PERFORMANCE_TEST_TOKEN;
+  const bypassHeader = req.headers.get('x-prepflow-perf-bypass');
+
+  if (perfTestToken && bypassHeader === perfTestToken) {
+    logger.info('[Middleware] Performance test bypass enabled for request', { pathname });
+    return NextResponse.next();
+  }
+
   // Get session for protected routes
   const session = await auth0.getSession(req);
 

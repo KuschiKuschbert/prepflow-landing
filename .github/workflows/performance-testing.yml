@@ -10,6 +10,8 @@ on:
     branches: [main]
   schedule:
     - cron: '0 2 * * *' # Daily at 2 AM
+  workflow_dispatch: # Enable manual triggering
+
 
 jobs:
   performance-test:
@@ -38,7 +40,11 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
 
       - name: Start application
-        run: npm start > server.log 2>&1 &
+        run: |
+          # Generate a random token for performance testing if not provided
+          PERFORMANCE_TOKEN=${{ secrets.PERFORMANCE_TEST_TOKEN || 'perf-test-token-$(date +%s)' }}
+          echo "PERFORMANCE_TEST_TOKEN=$PERFORMANCE_TOKEN" >> $GITHUB_ENV
+          PERFORMANCE_TEST_TOKEN=$PERFORMANCE_TOKEN npm start > server.log 2>&1 &
         env:
           PORT: 3000
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
@@ -61,6 +67,7 @@ jobs:
         run: npx lhci autorun
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          PERFORMANCE_TEST_TOKEN: ${{ env.PERFORMANCE_TEST_TOKEN }}
 
       - name: Run bundle analysis
         run: npm run analyze
@@ -240,7 +247,11 @@ jobs:
         run: npm run build
 
       - name: Start application
-        run: npm start &
+        run: |
+          # Generate a random token for performance testing if not provided
+          PERFORMANCE_TOKEN=${{ secrets.PERFORMANCE_TEST_TOKEN || 'perf-test-token-$(date +%s)' }}
+          echo "PERFORMANCE_TEST_TOKEN=$PERFORMANCE_TOKEN" >> $GITHUB_ENV
+          PERFORMANCE_TEST_TOKEN=$PERFORMANCE_TOKEN npm start &
         env:
           PORT: 3000
 
@@ -250,7 +261,7 @@ jobs:
       - name: Run comprehensive performance tests
         run: |
           # Run Lighthouse CI
-          npx lhci autorun
+          PERFORMANCE_TEST_TOKEN=${{ env.PERFORMANCE_TEST_TOKEN }} npx lhci autorun
 
           # Run bundle analysis
           npm run analyze || echo "Bundle analysis failed, continuing..."
