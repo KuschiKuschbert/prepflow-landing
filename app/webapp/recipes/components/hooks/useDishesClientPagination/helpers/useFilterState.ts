@@ -43,7 +43,7 @@ export function useFilterState() {
         updates.sortField !== undefined ||
         updates.sortDirection !== undefined
           ? 1
-          : prev.currentPage,
+          : (updates.currentPage ?? prev.currentPage),
     }));
   };
 

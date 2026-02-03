@@ -5,7 +5,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { deleteSupplier } from '../helpers/deleteSupplier';
 import { handleSupplierError } from './handleSupplierError';
 
-export async function handleDeleteSupplier(request: NextRequest, supabase: SupabaseClient) {
+export async function handleDeleteSupplier(
+  request: NextRequest,
+  supabase: SupabaseClient,
+  userId: string,
+) {
   try {
     if (!supabase) {
       return NextResponse.json(
@@ -24,7 +28,7 @@ export async function handleDeleteSupplier(request: NextRequest, supabase: Supab
       );
     }
 
-    await deleteSupplier(id, supabase);
+    await deleteSupplier(id, userId, supabase);
 
     return NextResponse.json({
       success: true,

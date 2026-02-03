@@ -7,6 +7,9 @@ import type { ShiftQueryParams } from './types';
 export async function buildShiftQuery(supabase: SupabaseClient, params: ShiftQueryParams) {
   let query = supabase.from('shifts').select('*', { count: 'exact' });
 
+  // Filter by user_id
+  query = query.eq('user_id', params.userId);
+
   // Filter by employee
   if (params.employee_id) {
     query = query.eq('employee_id', params.employee_id);

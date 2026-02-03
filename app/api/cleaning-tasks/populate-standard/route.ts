@@ -1,7 +1,7 @@
-import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { generateAllStandardTasks, KitchenSection } from '@/lib/cleaning/standard-tasks';
 import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 interface ExistingTask {
@@ -11,20 +11,47 @@ interface ExistingTask {
   section_id: string | null;
 }
 
+async function getAuthenticatedUser(request: NextRequest) {
+  const supabaseAdmin = createSupabaseAdmin();
+
+  // Authenticate user
+  const {
+    data: { user },
+    error: authError,
+  } = await supabaseAdmin.auth.getUser(
+    request.headers.get('Authorization')?.replace('Bearer ', '') || '',
+  );
+
+  // Fallback/Use Auth0 helper
+  const { requireAuth } = await import('@/lib/auth0-api-helpers');
+  const authUser = await requireAuth(request);
+
+  // Get user_id from email
+  const { data: userData, error: userError } = await supabaseAdmin
+    .from('users')
+    .select('id')
+    .eq('email', authUser.email)
+    .single();
+
+  if (userError || !userData) {
+    throw ApiErrorHandler.createError('User not found', 'NOT_FOUND', 404);
+  }
+  return { userId: userData.id, supabase: supabaseAdmin };
+}
+
 /**
  * POST /api/cleaning-tasks/populate-standard
  * Pre-populate standard cleaning tasks based on equipment and sections
  */
 export async function POST(request: NextRequest) {
   try {
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) throw new Error('Unexpected database state');
+    const { userId, supabase } = await getAuthenticatedUser(request);
 
     // Fetch areas (required)
     const { data: areas, error: areasError } = await supabase
       .from('cleaning_areas')
       .select('id, area_name, description')
+      .eq('user_id', userId)
       .eq('is_active', true);
 
     if (areasError) {
@@ -54,6 +81,7 @@ export async function POST(request: NextRequest) {
     const { data: equipment, error: equipmentError } = await supabase
       .from('temperature_equipment')
       .select('id, name, equipment_type, location')
+      .eq('user_id', userId)
       .eq('is_active', true);
 
     if (equipmentError && equipmentError.code !== '42P01') {
@@ -68,7 +96,8 @@ export async function POST(request: NextRequest) {
     try {
       const { data: sectionsData, error: sectionsError } = await supabase
         .from('kitchen_sections')
-        .select('id, name, description');
+        .select('id, name, description')
+        .eq('user_id', userId);
 
       if (!sectionsError && sectionsData) {
         sections = sectionsData as KitchenSection[];
@@ -99,6 +128,7 @@ export async function POST(request: NextRequest) {
     const { data: existingTasksData, error: existingTasksError } = await supabase
       .from('cleaning_tasks')
       .select('task_name, standard_task_type, equipment_id, section_id')
+      .eq('user_id', userId)
       .eq('is_standard_task', true);
 
     if (existingTasksError) {
@@ -117,11 +147,16 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Filter out tasks that already exist
-    const newTasks = tasksToCreate.filter(task => {
-      const key = `${task.task_name}_${task.standard_task_type}_${task.equipment_id || ''}_${task.section_id || ''}`;
-      return !existingTaskKeys.has(key);
-    });
+    // Filter out tasks that already exist and assign userId
+    const newTasks = tasksToCreate
+      .filter(task => {
+        const key = `${task.task_name}_${task.standard_task_type}_${task.equipment_id || ''}_${task.section_id || ''}`;
+        return !existingTaskKeys.has(key);
+      })
+      .map(task => ({
+        ...task,
+        user_id: userId,
+      }));
 
     if (newTasks.length === 0) {
       return NextResponse.json({

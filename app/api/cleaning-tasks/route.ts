@@ -1,5 +1,6 @@
-import { standardAdminChecks } from '@/lib/admin-auth';
+import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { handleCreateCleaningTask } from './helpers/createCleaningTaskHandler';
 import { handleDeleteCleaningTask } from './helpers/deleteCleaningTaskHandler';
@@ -7,32 +8,46 @@ import { handleCleaningTaskError } from './helpers/handleCleaningTaskError';
 import { handleGetRequest } from './helpers/handleGetRequest';
 import { handleUpdateCleaningTask } from './helpers/updateCleaningTaskHandler';
 
+async function getAuthenticatedUser(request: NextRequest) {
+  const supabaseAdmin = createSupabaseAdmin();
+
+  // Authenticate user
+  const {
+    data: { user },
+    error: authError,
+  } = await supabaseAdmin.auth.getUser(
+    request.headers.get('Authorization')?.replace('Bearer ', '') || '',
+  );
+
+  // Fallback/Use Auth0 helper
+  const { requireAuth } = await import('@/lib/auth0-api-helpers');
+  const authUser = await requireAuth(request);
+
+  // Get user_id from email
+  const { data: userData, error: userError } = await supabaseAdmin
+    .from('users')
+    .select('id')
+    .eq('email', authUser.email)
+    .single();
+
+  if (userError || !userData) {
+    throw ApiErrorHandler.createError('User not found', 'NOT_FOUND', 404);
+  }
+  return { userId: userData.id, supabase: supabaseAdmin };
+}
+
 /**
  * GET /api/cleaning-tasks
  * Get cleaning tasks with optional filters and date range
- *
- * @param {NextRequest} request - Request object
- * @param {string} [request.url.searchParams.start_date] - Start date for date range (ISO date string)
- * @param {string} [request.url.searchParams.end_date] - End date for date range (ISO date string)
- * @param {string} [request.url.searchParams.area_id] - Filter by area ID
- * @param {string} [request.url.searchParams.equipment_id] - Filter by equipment ID
- * @param {string} [request.url.searchParams.section_id] - Filter by section ID
- * @param {string} [request.url.searchParams.frequency_type] - Filter by frequency type
- * @param {string} [request.url.searchParams.status] - Filter by status (legacy)
- * @param {string} [request.url.searchParams.date] - Filter by assigned date (legacy)
- * @param {number} [request.url.searchParams.page] - Page number for pagination
- * @param {number} [request.url.searchParams.pageSize] - Page size for pagination
- * @returns {Promise<NextResponse>} List of cleaning tasks with completions for date range
  */
 export async function GET(request: NextRequest) {
   try {
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+    const { userId, supabase } = await getAuthenticatedUser(request);
 
     const { searchParams } = new URL(request.url);
 
     return handleGetRequest(supabase, {
+      userId,
       startDate: searchParams.get('start_date'),
       endDate: searchParams.get('end_date'),
       areaId: searchParams.get('area_id'),
@@ -63,10 +78,16 @@ export async function GET(request: NextRequest) {
  * Create a new cleaning task
  */
 export async function POST(request: NextRequest) {
-  const { supabase, error } = await standardAdminChecks(request);
-  if (error) return error;
-  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
-  return handleCreateCleaningTask(supabase, request);
+  try {
+    const { userId, supabase } = await getAuthenticatedUser(request);
+    return handleCreateCleaningTask(supabase, request, userId);
+  } catch (err) {
+    if (err instanceof NextResponse) return err;
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
+    }
+    return handleCleaningTaskError(err, 'POST');
+  }
 }
 
 /**
@@ -74,10 +95,16 @@ export async function POST(request: NextRequest) {
  * Update an existing cleaning task
  */
 export async function PUT(request: NextRequest) {
-  const { supabase, error } = await standardAdminChecks(request);
-  if (error) return error;
-  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
-  return handleUpdateCleaningTask(supabase, request);
+  try {
+    const { userId, supabase } = await getAuthenticatedUser(request);
+    return handleUpdateCleaningTask(supabase, request, userId);
+  } catch (err) {
+    if (err instanceof NextResponse) return err;
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
+    }
+    return handleCleaningTaskError(err, 'PUT');
+  }
 }
 
 /**
@@ -85,8 +112,14 @@ export async function PUT(request: NextRequest) {
  * Delete a cleaning task
  */
 export async function DELETE(request: NextRequest) {
-  const { supabase, error } = await standardAdminChecks(request);
-  if (error) return error;
-  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
-  return handleDeleteCleaningTask(supabase, request);
+  try {
+    const { userId, supabase } = await getAuthenticatedUser(request);
+    return handleDeleteCleaningTask(supabase, request, userId);
+  } catch (err) {
+    if (err instanceof NextResponse) return err;
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
+    }
+    return handleCleaningTaskError(err, 'DELETE');
+  }
 }

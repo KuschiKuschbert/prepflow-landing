@@ -57,8 +57,8 @@
   --color-info-border: rgba(96, 165, 250, 0.3); /* Blue border */
 
   /* Header height variables for mobile and desktop */
-  --header-height-mobile: 56px;
-  --header-height-desktop: 64px;
+  --header-height-mobile: 64px;
+  --header-height-desktop: 80px;
 
   /* Navigation dimensions */
   --bottom-navbar-height: 56px;

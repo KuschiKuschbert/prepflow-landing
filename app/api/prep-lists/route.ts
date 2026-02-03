@@ -1,6 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { supabaseAdmin } from '@/lib/supabase';
+import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { createPrepList } from './helpers/createPrepList';
 import { deletePrepList } from './helpers/deletePrepList';
@@ -11,8 +11,38 @@ import { createPrepListSchema, getPrepListsSchema, updatePrepListSchema } from '
 import { transformItems } from './helpers/transformItems';
 import { updatePrepList } from './helpers/updatePrepList';
 
+async function getAuthenticatedUser(request: NextRequest) {
+  const supabaseAdmin = createSupabaseAdmin();
+
+  // Authenticate user
+  const {
+    data: { user },
+    error: authError,
+  } = await supabaseAdmin.auth.getUser(
+    request.headers.get('Authorization')?.replace('Bearer ', '') || '',
+  );
+
+  // Fallback/Use Auth0 helper
+  const { requireAuth } = await import('@/lib/auth0-api-helpers');
+  const authUser = await requireAuth(request);
+
+  // Get user_id from email
+  const { data: userData, error: userError } = await supabaseAdmin
+    .from('users')
+    .select('id')
+    .eq('email', authUser.email)
+    .single();
+
+  if (userError || !userData) {
+    throw ApiErrorHandler.createError('User not found', 'NOT_FOUND', 404);
+  }
+  return { userId: userData.id, supabaseAdmin };
+}
+
 export async function GET(request: NextRequest) {
   try {
+    const { userId: authUserId } = await getAuthenticatedUser(request);
+
     const { searchParams } = new URL(request.url);
     const params = Object.fromEntries(searchParams.entries());
 
@@ -28,17 +58,11 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { userId, page, pageSize } = validation.data;
+    const { page, pageSize } = validation.data;
 
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
-
+    // Use authUserId to ensure security
     const data = await fetchAllPrepListData({
-      userId: userId || null,
+      userId: authUserId,
       page,
       pageSize,
     });
@@ -48,6 +72,11 @@ export async function GET(request: NextRequest) {
       data,
     });
   } catch (err) {
+    if (err instanceof NextResponse) return err;
+    if (err instanceof Error && 'status' in err) {
+      return NextResponse.json(err, { status: (err as any).status });
+    }
+
     logger.error('[Prep Lists API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/prep-lists', method: 'GET' },
@@ -58,6 +87,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const { userId: authUserId } = await getAuthenticatedUser(request);
+
     let body: unknown;
     try {
       body = await request.json();
@@ -80,9 +111,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { userId, kitchenSectionId, name, notes, items } = validation.data;
+    const { kitchenSectionId, name, notes, items } = validation.data;
+
+    // Overwrite userId with authenticated user ID
     const prepList = await createPrepList({
-      userId,
+      userId: authUserId,
       kitchenSectionId,
       name,
       notes,
@@ -95,6 +128,11 @@ export async function POST(request: NextRequest) {
       data: prepList,
     });
   } catch (err: unknown) {
+    if (err instanceof NextResponse) return err;
+    if (err instanceof Error && 'status' in err) {
+      return NextResponse.json(err, { status: (err as any).status });
+    }
+
     logger.error('[Prep Lists API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/prep-lists', method: 'POST' },
@@ -105,6 +143,8 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
+    const { userId: authUserId } = await getAuthenticatedUser(request);
+
     let body: unknown;
     try {
       body = await request.json();
@@ -127,7 +167,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const data = await updatePrepList(validation.data);
+    const data = await updatePrepList(validation.data, authUserId);
 
     return NextResponse.json({
       success: true,
@@ -135,6 +175,11 @@ export async function PUT(request: NextRequest) {
       data,
     });
   } catch (err: unknown) {
+    if (err instanceof NextResponse) return err;
+    if (err instanceof Error && 'status' in err) {
+      return NextResponse.json(err, { status: (err as any).status });
+    }
+
     logger.error('[Prep Lists API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/prep-lists', method: 'PUT' },
@@ -145,6 +190,8 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    const { userId: authUserId } = await getAuthenticatedUser(request);
+
     const id = parseDeleteRequest(request);
 
     if (!id) {
@@ -154,13 +201,18 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    await deletePrepList(id);
+    await deletePrepList(id, authUserId);
 
     return NextResponse.json({
       success: true,
       message: 'Prep list deleted successfully',
     });
   } catch (err: unknown) {
+    if (err instanceof NextResponse) return err;
+    if (err instanceof Error && 'status' in err) {
+      return NextResponse.json(err, { status: (err as any).status });
+    }
+
     logger.error('[Prep Lists API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/prep-lists', method: 'DELETE' },

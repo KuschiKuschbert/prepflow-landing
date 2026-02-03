@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { deleteIngredient } from './deleteIngredient';
 import { handleIngredientError } from './handleIngredientError';
 
-export async function handleDeleteIngredient(request: NextRequest) {
+export async function handleDeleteIngredient(request: NextRequest, userId: string) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
@@ -16,7 +16,7 @@ export async function handleDeleteIngredient(request: NextRequest) {
       );
     }
 
-    await deleteIngredient(id);
+    await deleteIngredient(id, userId);
 
     return NextResponse.json({
       success: true,

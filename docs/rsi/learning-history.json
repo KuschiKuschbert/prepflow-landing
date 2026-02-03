@@ -629,5 +629,45 @@
       }
     ],
     "astRulesGenerated": []
+  },
+  {
+    "timestamp": "2026-02-04T00:25:00.000Z",
+    "insights": [
+      {
+        "patternId": "resilient-multi-tenant-migrations",
+        "type": "Architecture",
+        "confidence": 0.98,
+        "insight": "In an evolving multi-app ecosystem, database migrations must be idempotent and resilient. Using PL/pgSQL 'DO' blocks to check for table/column existence prevents migration crashes when one app's schema is ahead of another's.",
+        "sourceFiles": ["supabase/migrations/20260204000000_phase_2_ecosystem_expansion.sql"]
+      },
+      {
+        "patternId": "unified-entity-naming",
+        "type": "Code-Consistency",
+        "confidence": 0.99,
+        "insight": "Standardizing field names to '[entity]_port_name' (e.g., recipe_name, dish_name) globally reduces frontend hydration mismatches and prevent silent data display failures. Fragmentation (e.g., 'name' vs 'recipe_name') is a high-risk anti-pattern.",
+        "sourceFiles": ["app/api/recipes/helpers/schemas.ts", "lib/types/recipes.ts"]
+      },
+      {
+        "patternId": "jit-user-provisioning-helper",
+        "type": "Security",
+        "confidence": 0.97,
+        "insight": "A centralized 'getAuthenticatedUser' helper that performs Just-In-Time (JIT) provisioning from Auth0 identity to Supabase Auth ensures that multi-tenant data segregation is always available, even for first-time users.",
+        "sourceFiles": ["lib/server/get-authenticated-user.ts"]
+      }
+    ],
+    "rulesGenerated": [
+      {
+        "id": "rule-resilient-alters",
+        "description": "Enforce use of 'DO' blocks for ALTER TABLE statements in migrations that target shared resources.",
+        "ruleLogic": "if (migration.contains('ALTER TABLE') && !migration.contains('DO')) { suggest('wrap-in-existence-check'); }",
+        "derivedFrom": ["resilient-multi-tenant-migrations"]
+      },
+      {
+        "id": "rule-entity-naming-consistency",
+        "description": "Ensure naming consistency for entity name fields (e.g. recipe_name vs name).",
+        "ruleLogic": "if (table.name === 'recipes' && column.name === 'name') { suggest('rename-to-recipe_name'); }",
+        "derivedFrom": ["unified-entity-naming"]
+      }
+    ]
   }
 ]

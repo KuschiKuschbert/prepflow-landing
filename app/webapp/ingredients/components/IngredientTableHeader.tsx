@@ -1,8 +1,8 @@
 'use client';
 
-import { Icon } from '@/components/ui/Icon';
 import { Button } from '@/components/ui/Button';
-import { Plus, Upload, Download } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
+import { Download, Plus, Upload } from 'lucide-react';
 import { IngredientBulkActionsMenu } from './IngredientBulkActionsMenu';
 
 interface IngredientTableHeaderProps {

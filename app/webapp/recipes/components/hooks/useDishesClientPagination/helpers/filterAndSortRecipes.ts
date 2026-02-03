@@ -2,8 +2,8 @@
  * Helper to filter and sort recipes.
  */
 
-import type { Recipe, RecipePriceData } from '@/lib/types/recipes';
 import { sortRecipes } from '@/app/webapp/recipes/utils/recipeSorting';
+import type { Recipe, RecipePriceData } from '@/lib/types/recipes';
 import type { UnifiedFilters, UnifiedSortField } from './useFilterState';
 
 /**
@@ -30,9 +30,11 @@ export function filterAndSortRecipes(
   filters: UnifiedFilters,
 ): Recipe[] {
   // Filter by search term first
-  const filtered = recipes.filter(recipe =>
-    recipe.recipe_name.toLowerCase().includes(filters.searchTerm.toLowerCase()),
-  );
+  const filtered = recipes.filter(recipe => {
+    const name = recipe.recipe_name || '';
+    const term = filters.searchTerm || '';
+    return name.toLowerCase().includes(term.toLowerCase());
+  });
 
   // Map unified sort fields to recipe sort fields
   const recipeSortField = mapSortFieldToRecipeField(filters.sortField);

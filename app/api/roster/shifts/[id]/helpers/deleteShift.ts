@@ -10,15 +10,20 @@ import { checkShiftExists } from './checkShiftExists';
 export async function deleteShift(
   supabase: SupabaseClient,
   shiftId: string,
+  userId: string,
 ): Promise<NextResponse> {
   // Check if shift exists
-  const existsResult = await checkShiftExists(supabase, shiftId);
+  const existsResult = await checkShiftExists(supabase, shiftId, userId);
   if (existsResult instanceof NextResponse) {
     return existsResult;
   }
 
   // Delete shift
-  const { error: deleteError } = await supabase.from('shifts').delete().eq('id', shiftId);
+  const { error: deleteError } = await supabase
+    .from('shifts')
+    .delete()
+    .eq('id', shiftId)
+    .eq('user_id', userId);
 
   if (deleteError) {
     logger.error('[Shifts API] Database error deleting shift:', {

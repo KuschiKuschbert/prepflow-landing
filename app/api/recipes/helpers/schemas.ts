@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const recipeSchema = z.object({
   id: z.number().int().positive(),
-  name: z.string().min(1, 'Recipe name is required'),
+  recipe_name: z.string().min(1, 'Recipe name is required'),
   yield: z.number().positive().default(1),
   yield_unit: z.string().default('servings'),
   category: z.string().optional().nullable(),

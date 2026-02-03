@@ -6,7 +6,11 @@ import { updateSupplier } from '../helpers/updateSupplier';
 import { handleSupplierError } from './handleSupplierError';
 import { updateSupplierSchema } from './schemas';
 
-export async function handleUpdateSupplier(request: NextRequest, supabase: SupabaseClient) {
+export async function handleUpdateSupplier(
+  request: NextRequest,
+  supabase: SupabaseClient,
+  userId: string,
+) {
   try {
     if (!supabase) {
       return NextResponse.json(
@@ -41,7 +45,7 @@ export async function handleUpdateSupplier(request: NextRequest, supabase: Supab
     }
 
     const { id, ...updates } = validationResult.data;
-    const data = await updateSupplier(id, updates, supabase);
+    const data = await updateSupplier(id, updates, userId, supabase);
 
     return NextResponse.json({
       success: true,

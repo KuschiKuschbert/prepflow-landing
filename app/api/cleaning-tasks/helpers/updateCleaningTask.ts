@@ -31,6 +31,7 @@ export async function updateCleaningTask(
   supabase: SupabaseClient,
   id: string,
   updateData: UpdateCleaningTaskInput,
+  userId: string,
 ): Promise<CleaningTaskJoinResult> {
   const finalUpdateData: Record<string, unknown> = { ...updateData };
   if (updateData.status === 'completed' && !updateData.completed_date) {
@@ -41,6 +42,7 @@ export async function updateCleaningTask(
     .from('cleaning_tasks')
     .update(finalUpdateData)
     .eq('id', id)
+    .eq('user_id', userId)
     .select(CLEANING_AREAS_SELECT)
     .single();
 

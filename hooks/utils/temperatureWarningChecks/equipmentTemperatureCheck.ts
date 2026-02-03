@@ -1,4 +1,4 @@
-import { TemperatureLog, TemperatureEquipment } from '../../types/temperature';
+import { TemperatureEquipment, TemperatureLog } from '../../types/temperature';
 
 interface WarningCheckResult {
   shouldShow: boolean;
@@ -34,9 +34,17 @@ export function checkEquipmentTemperatureWarning(
     eq => eq.location && !checkedEquipment.has(eq.location),
   );
   if (uncheckedEquipment.length > 0) {
-    const equipmentNames = uncheckedEquipment.map(eq => eq.name).join(', ');
+    const maxItems = 2;
+    const displayedNames = uncheckedEquipment.slice(0, maxItems).map(eq => eq.name);
+    const remainingCount = uncheckedEquipment.length - maxItems;
+
+    let equipmentText = displayedNames.join(', ');
+    if (remainingCount > 0) {
+      equipmentText += ` and ${remainingCount} other${remainingCount > 1 ? 's' : ''}`;
+    }
+
     const isMultiple = uncheckedEquipment.length > 1;
-    const warningKey = `equipment-check-${equipmentNames}`;
+    const warningKey = `equipment-check-${uncheckedEquipment.map(eq => eq.id).join('-')}`;
     if (!warningsShown.has(warningKey)) {
       return {
         shouldShow: true,
@@ -44,7 +52,7 @@ export function checkEquipmentTemperatureWarning(
         warning: {
           type: 'warning',
           title: 'Equipment Temperature Check Required',
-          message: `${isMultiple ? 'Equipment' : 'Equipment'} ${equipmentNames} ${isMultiple ? 'have' : 'has'} not been temperature checked in the last 8 hours. Ensure all active equipment is monitored for safety compliance.`,
+          message: `${isMultiple ? 'Equipment' : 'Equipment'} ${equipmentText} ${isMultiple ? 'have' : 'has'} not been temperature checked in the last 8 hours. Ensure all active equipment is monitored for safety compliance.`,
           action: {
             label: 'Go to Temperature Logs',
             onClick: () => {

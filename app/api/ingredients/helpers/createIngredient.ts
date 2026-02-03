@@ -10,10 +10,11 @@ import { CreateIngredientInput } from './schemas';
  * Create an ingredient with normalized data.
  *
  * @param {CreateIngredientInput} ingredientData - Raw ingredient data
+ * @param {string} userId - The ID of the user creating the ingredient
  * @returns {Promise<Object>} Created ingredient
  * @throws {Error} If creation fails
  */
-export async function createIngredient(ingredientData: CreateIngredientInput) {
+export async function createIngredient(ingredientData: CreateIngredientInput, userId: string) {
   const supabaseAdmin = createSupabaseAdmin();
 
   // Normalize ingredient data
@@ -83,7 +84,10 @@ export async function createIngredient(ingredientData: CreateIngredientInput) {
   }
 
   // Insert using admin client (bypasses RLS)
-  const { data, error } = await supabaseAdmin.from('ingredients').insert([normalized]).select();
+  const { data, error } = await supabaseAdmin
+    .from('ingredients')
+    .insert([{ ...normalized, user_id: userId }])
+    .select();
 
   if (error) {
     logger.error('[Ingredients API] Database error inserting ingredient:', {

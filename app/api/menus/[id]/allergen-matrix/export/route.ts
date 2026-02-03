@@ -8,6 +8,7 @@ import {
   aggregateRecipeDietaryStatus,
 } from '@/lib/dietary/dietary-aggregation';
 import { logger } from '@/lib/logger';
+import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { NextRequest, NextResponse } from 'next/server';
 import { EnrichedMenuItem } from '../../../types';
 import { fetchMenuWithItems } from '../../helpers/fetchMenuWithItems';
@@ -38,8 +39,10 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       );
     }
 
+    const { userId } = await getAuthenticatedUser(request);
+
     // Fetch menu with items
-    const menu = await fetchMenuWithItems(menuId);
+    const menu = await fetchMenuWithItems(menuId, userId);
 
     if (!menu) {
       return NextResponse.json(ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404), {
@@ -72,7 +75,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     await Promise.all(dietaryRecalculations);
 
     // Re-fetch menu with items to get updated dietary status
-    const menuWithFreshData = await fetchMenuWithItems(menuId);
+    const menuWithFreshData = await fetchMenuWithItems(menuId, userId);
 
     if (!menuWithFreshData) {
       return NextResponse.json(ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404), {

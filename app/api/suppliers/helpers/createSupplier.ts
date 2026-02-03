@@ -7,11 +7,17 @@ import { buildSupplierData } from './buildSupplierData';
  * Create a supplier.
  *
  * @param {Object} supplierData - Supplier data
+ * @param {Object} supplierData - Supplier data
+ * @param {string} userId - User ID
  * @param {SupabaseClient} supabase - Supabase client
  * @returns {Promise<Object>} Created supplier
  * @throws {Error} If creation fails
  */
-export async function createSupplier(supplierData: unknown, supabase: SupabaseClient) {
+export async function createSupplier(
+  supplierData: unknown,
+  userId: string,
+  supabase: SupabaseClient,
+) {
   if (!supabase) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
@@ -19,7 +25,7 @@ export async function createSupplier(supplierData: unknown, supabase: SupabaseCl
 
   const { data, error } = await supabase
     .from('suppliers')
-    .insert(buildSupplierData(supplierData))
+    .insert({ ...buildSupplierData(supplierData), user_id: userId })
     .select()
     .single();
 

@@ -1,6 +1,6 @@
-import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
 import { getAppError } from '@/lib/utils/error';
 import { NextRequest, NextResponse } from 'next/server';
 import { ZodSchema } from 'zod';
@@ -29,19 +29,46 @@ async function safeParseBody<T>(req: NextRequest, schema: ZodSchema<T>): Promise
   return result.data;
 }
 
+async function getAuthenticatedUser(request: NextRequest) {
+  const supabaseAdmin = createSupabaseAdmin();
+
+  // Authenticate user
+  const {
+    data: { user },
+    error: authError,
+  } = await supabaseAdmin.auth.getUser(
+    request.headers.get('Authorization')?.replace('Bearer ', '') || '',
+  );
+
+  // Fallback/Use Auth0 helper
+  const { requireAuth } = await import('@/lib/auth0-api-helpers');
+  const authUser = await requireAuth(request);
+
+  // Get user_id from email
+  const { data: userData, error: userError } = await supabaseAdmin
+    .from('users')
+    .select('id')
+    .eq('email', authUser.email)
+    .single();
+
+  if (userError || !userData) {
+    throw ApiErrorHandler.createError('User not found', 'NOT_FOUND', 404);
+  }
+  return { userId: userData.id, supabase: supabaseAdmin };
+}
+
 /**
  * GET /api/cleaning-areas
  * Get all cleaning areas
  */
 export async function GET(request: NextRequest) {
   try {
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) throw new Error('Unexpected database state');
+    const { userId, supabase } = await getAuthenticatedUser(request);
 
     const { data, error: dbError } = await supabase
       .from('cleaning_areas')
       .select('*')
+      .eq('user_id', userId)
       .order('area_name');
 
     if (dbError) {
@@ -60,9 +87,15 @@ export async function GET(request: NextRequest) {
       data: data || [],
     });
   } catch (err) {
-    logger.error('[route.ts] Error in catch block:', {
+    if (err instanceof NextResponse) return err;
+    if (err instanceof Error && 'status' in err) {
+      return NextResponse.json(err, { status: (err as any).status });
+    }
+
+    logger.error('[Cleaning Areas API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
+      context: { endpoint: '/api/cleaning-areas', method: 'GET' },
     });
 
     return handleCleaningAreaError(err, 'GET');
@@ -74,10 +107,16 @@ export async function GET(request: NextRequest) {
  * Create a new cleaning area
  */
 export async function POST(request: NextRequest) {
-  const { supabase, error } = await standardAdminChecks(request);
-  if (error) return error;
-  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
-  return handleCreateCleaningArea(supabase, request);
+  try {
+    const { userId, supabase } = await getAuthenticatedUser(request);
+    return handleCreateCleaningArea(supabase, request, userId);
+  } catch (err) {
+    if (err instanceof NextResponse) return err;
+    if (err instanceof Error && 'status' in err) {
+      return NextResponse.json(err, { status: (err as any).status });
+    }
+    return handleCleaningAreaError(err, 'POST');
+  }
 }
 
 /**
@@ -86,9 +125,7 @@ export async function POST(request: NextRequest) {
  */
 export async function PUT(request: NextRequest) {
   try {
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+    const { userId, supabase } = await getAuthenticatedUser(request);
 
     const body = await safeParseBody(request, updateCleaningAreaSchema);
     const { id, area_name, description, cleaning_frequency, is_active } = body;
@@ -99,7 +136,7 @@ export async function PUT(request: NextRequest) {
     if (cleaning_frequency !== undefined) updateData.cleaning_frequency = cleaning_frequency;
     if (is_active !== undefined) updateData.is_active = is_active;
 
-    const data = await updateCleaningArea(supabase, id, updateData);
+    const data = await updateCleaningArea(supabase, id, updateData, userId);
 
     return NextResponse.json({
       success: true,
@@ -130,8 +167,14 @@ export async function PUT(request: NextRequest) {
  * Delete a cleaning area
  */
 export async function DELETE(request: NextRequest) {
-  const { supabase, error } = await standardAdminChecks(request);
-  if (error) return error;
-  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
-  return handleDeleteCleaningArea(supabase, request);
+  try {
+    const { userId, supabase } = await getAuthenticatedUser(request);
+    return handleDeleteCleaningArea(supabase, request, userId);
+  } catch (err) {
+    if (err instanceof NextResponse) return err;
+    if (err instanceof Error && 'status' in err) {
+      return NextResponse.json(err, { status: (err as any).status });
+    }
+    return handleCleaningAreaError(err, 'DELETE');
+  }
 }

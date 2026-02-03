@@ -6,7 +6,11 @@ import { createSupplier } from '../helpers/createSupplier';
 import { handleSupplierError } from './handleSupplierError';
 import { createSupplierSchema } from './schemas';
 
-export async function handleCreateSupplier(request: NextRequest, supabase: SupabaseClient) {
+export async function handleCreateSupplier(
+  request: NextRequest,
+  supabase: SupabaseClient,
+  userId: string,
+) {
   try {
     if (!supabase) {
       return NextResponse.json(
@@ -40,7 +44,7 @@ export async function handleCreateSupplier(request: NextRequest, supabase: Supab
       );
     }
 
-    const data = await createSupplier(validationResult.data, supabase);
+    const data = await createSupplier(validationResult.data, userId, supabase);
 
     return NextResponse.json({
       success: true,

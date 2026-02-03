@@ -16,6 +16,7 @@ import { logDetailedError } from './fetchMenuWithItems.helpers';
  */
 export async function fetchMenuWithItems(
   menuId: string,
+  userId: string,
 ): Promise<Menu & { items: EnrichedMenuItem[] }> {
   if (!supabaseAdmin) {
     logger.error('[API] Database connection not available');
@@ -27,6 +28,7 @@ export async function fetchMenuWithItems(
     .from('menus')
     .select('*')
     .eq('id', menuId)
+    .eq('user_id', userId)
     .single();
 
   if (menuError || !menu) {

@@ -348,6 +348,7 @@ This comprehensive audit examined all aspects of code continuity, formatting con
    - `setup-database.sql` (line 24): Uses `name` ❌
    - `COMPLETE_DATABASE_FIX.sql` (line 30): Uses `recipe_name` ✅
    - `supabase-complete-setup.sql` (line 39): Uses `name` ⚠️
+   - **UPDATE (2026-02-04):** Resolved via migration `20260204000001_rename_recipe_name.sql`. All frontend and backend code now standardized to `recipe_name`. ✅
 
 3. **menu_dishes table - Field Name Variations:**
    - `supabase-tables-only.sql` (line 46): Uses `name` ❌

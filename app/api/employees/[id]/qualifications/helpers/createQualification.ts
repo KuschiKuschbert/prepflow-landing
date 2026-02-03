@@ -16,14 +16,32 @@ export async function createQualification(
     notes?: string;
   },
   // Merged return type: strict Data (Qualification) + strict Error (ApiError)
+) {
+  return createQualificationWithUser(supabase, employeeId, qualificationData, '');
+}
+
+export async function createQualificationWithUser(
+  supabase: SupabaseClient,
+  employeeId: string,
+  qualificationData: {
+    qualification_type_id: string;
+    certificate_number?: string;
+    issue_date: string;
+    expiry_date?: string;
+    issuing_authority?: string;
+    document_url?: string;
+    notes?: string;
+  },
+  userId: string,
 ): Promise<
   { success: boolean; message: string; data: Qualification } | { error: ApiError; status: number }
 > {
-  // Verify employee exists
+  // Verify employee exists and belongs to user
   const { data: employee, error: employeeError } = await supabase
     .from('employees')
     .select('id')
     .eq('id', employeeId)
+    .eq('user_id', userId)
     .single();
 
   if (employeeError || !employee) {
@@ -37,6 +55,7 @@ export async function createQualification(
     .from('employee_qualifications')
     .insert({
       employee_id: employeeId,
+      user_id: userId,
       qualification_type_id: qualificationData.qualification_type_id,
       certificate_number: qualificationData.certificate_number || null,
       issue_date: qualificationData.issue_date,

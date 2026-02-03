@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Users } from 'lucide-react';
 
@@ -40,12 +41,14 @@ export function StaffHeader({ selectedStatus, onStatusChange, onAddStaff }: Staf
             <option value="terminated">Terminated</option>
           </select>
         </div>
-        <button
+        <Button
           onClick={onAddStaff}
-          className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
+          variant="primary"
+          size="sm"
+          className="shadow-lg hover:shadow-xl"
         >
           ➕ Add Staff Member
-        </button>
+        </Button>
       </div>
     </>
   );

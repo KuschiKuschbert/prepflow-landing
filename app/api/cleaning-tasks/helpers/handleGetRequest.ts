@@ -11,6 +11,7 @@ import { fetchPaginatedTasks } from './fetchPaginatedTasks';
 import { fetchTasksWithCompletions } from './fetchTasksWithCompletions';
 
 export interface GetRequestParams {
+  userId: string;
   startDate: string | null;
   endDate: string | null;
   areaId: string | null;
@@ -36,6 +37,7 @@ export async function handleGetRequest(
 ): Promise<NextResponse> {
   // Build query with filters
   const query = buildCleaningTasksQuery(supabase, {
+    userId: params.userId,
     areaId: params.areaId,
     equipmentId: params.equipmentId,
     sectionId: params.sectionId,

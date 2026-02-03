@@ -8,7 +8,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
 import { triggerRecipeSync } from '@/lib/square/sync/hooks';
-import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { buildQuery } from './helpers/buildQuery';
 import { checkExistingRecipe } from './helpers/checkExistingRecipe';
@@ -19,18 +18,19 @@ import { createRecipeSchema, RecipeResponse } from './helpers/schemas';
 import { updateRecipe } from './helpers/updateRecipe';
 import { validateRequest } from './helpers/validateRequest';
 
+import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
+
 export async function GET(request: NextRequest) {
   try {
-    if (!supabaseAdmin) {
-      return NextResponse.json(
-        ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500),
-        { status: 500 },
-      );
-    }
+    const { userId, supabase: supabaseAdmin } = await getAuthenticatedUser(request);
 
     const { searchParams } = new URL(request.url);
     const params = validateRequest(searchParams);
-    const { data: recipes, error, count } = await buildQuery(supabaseAdmin, params);
+
+    // Override page size limit safely if needed, though validateRequest handles it now
+    // But we need to ensure validateRequest allows 1000.
+
+    const { data: recipes, error, count } = await buildQuery(supabaseAdmin, params, userId);
 
     if (error) {
       logger.error('[Recipes API] Database error fetching recipes:', {
@@ -91,9 +91,11 @@ export async function POST(request: NextRequest) {
 
     const recipeData = validationResult.data;
 
+    const { userId, supabase: supabaseAdmin } = await getAuthenticatedUser(request);
+
     // Check if recipe already exists
     const { recipe: existingRecipe, error: checkError } = await checkExistingRecipe(
-      recipeData.name,
+      recipeData.recipe_name,
     );
 
     if (existingRecipe && !checkError) {
@@ -101,7 +103,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create new recipe
-    return await handleNewRecipe(request, recipeData);
+    return await handleNewRecipe(request, recipeData, userId);
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : String(err);
     logger.error('[Recipes API] Unexpected error:', {
@@ -144,8 +146,12 @@ async function handleExistingRecipe(request: NextRequest, existingRecipe: any, r
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function handleNewRecipe(request: NextRequest, recipeData: any) {
-  const { recipe: newRecipe, error: createError } = await createRecipe(recipeData.name, recipeData);
+async function handleNewRecipe(request: NextRequest, recipeData: any, userId: string) {
+  const { recipe: newRecipe, error: createError } = await createRecipe(
+    recipeData.recipe_name,
+    recipeData,
+    userId,
+  );
 
   if (createError) {
     const safeError = createError as { message: string; code?: string };

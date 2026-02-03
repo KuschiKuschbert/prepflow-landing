@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { ClipboardCheck, Plus } from 'lucide-react';
 import { PageHeader } from '../../components/static/PageHeader';
@@ -18,24 +19,28 @@ export function CleaningHeader({ activeTab, onCreateTask, onAddArea }: CleaningH
       icon={ClipboardCheck}
       actions={
         activeTab === 'grid' ? (
-          <button
+          <Button
             onClick={onCreateTask}
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-4 py-2 text-sm font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-lg"
+            variant="primary"
+            size="sm"
             title="Create new task (N)"
+            className="shadow-lg hover:shadow-xl"
           >
-            <Icon icon={Plus} size="sm" aria-hidden={true} />
+            <Icon icon={Plus} size="sm" className="mr-1.5" aria-hidden={true} />
             <span className="tablet:inline hidden">New Task</span>
             <span className="tablet:hidden">New</span>
-          </button>
+          </Button>
         ) : (
-          <button
+          <Button
             onClick={onAddArea}
-            className="rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] transition-all duration-200 hover:shadow-xl"
+            variant="primary"
+            size="sm"
             title="Add new cleaning area (A)"
+            className="shadow-lg hover:shadow-xl"
           >
-            <Icon icon={Plus} size="sm" className="mr-2 inline" aria-hidden={true} />
+            <Icon icon={Plus} size="sm" className="mr-1.5" aria-hidden={true} />
             Add Area
-          </button>
+          </Button>
         )
       }
     >

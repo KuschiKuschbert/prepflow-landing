@@ -25,10 +25,15 @@ const EMPLOYEE_SELECT = `
  * @returns {Promise<Employee>} Created employee
  * @throws {Error} If creation fails
  */
-export async function createEmployee(supabase: SupabaseClient, employeeData: CreateEmployeeInput) {
+export async function createEmployee(
+  supabase: SupabaseClient,
+  employeeData: CreateEmployeeInput,
+  userId: string,
+) {
   const { data, error } = await supabase
     .from('employees')
     .insert({
+      user_id: userId,
       employee_id: employeeData.employee_id || null,
       full_name: employeeData.full_name,
       role: employeeData.role || null,

@@ -10,9 +10,10 @@ import { checkTemplateExists } from './checkTemplateExists';
 export async function deleteTemplate(
   supabase: SupabaseClient,
   templateId: string,
+  userId: string,
 ): Promise<NextResponse> {
   // Check if template exists
-  const existsResult = await checkTemplateExists(supabase, templateId);
+  const existsResult = await checkTemplateExists(supabase, templateId, userId);
   if (existsResult instanceof NextResponse) {
     return existsResult;
   }
@@ -21,7 +22,8 @@ export async function deleteTemplate(
   const { error: deleteError } = await supabase
     .from('roster_templates')
     .delete()
-    .eq('id', templateId);
+    .eq('id', templateId)
+    .eq('user_id', userId);
 
   if (deleteError) {
     logger.error('[Templates API] Database error deleting template:', {

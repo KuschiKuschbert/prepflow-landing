@@ -12,9 +12,10 @@ export async function updateTemplate(
   supabase: SupabaseClient,
   templateId: string,
   body: unknown,
+  userId: string,
 ): Promise<NextResponse> {
   // Check if template exists
-  const existsResult = await checkTemplateExists(supabase, templateId);
+  const existsResult = await checkTemplateExists(supabase, templateId, userId);
   if (existsResult instanceof NextResponse) {
     return existsResult;
   }
@@ -27,6 +28,7 @@ export async function updateTemplate(
     .from('roster_templates')
     .update(updateData)
     .eq('id', templateId)
+    .eq('user_id', userId)
     .select()
     .single();
 

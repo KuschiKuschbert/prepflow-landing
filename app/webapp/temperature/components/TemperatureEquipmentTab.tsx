@@ -1,21 +1,22 @@
 'use client';
 
+import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { useCountryFormatting } from '@/hooks/useCountryFormatting';
 import { useTranslation } from '@/lib/useTranslation';
-import { Sparkles, Plus } from 'lucide-react';
+import { Plus, Sparkles } from 'lucide-react';
+import { useEquipmentLogInfo } from '../hooks/useEquipmentLogInfo';
+import { useTemperatureEquipmentTabHandlers } from '../hooks/useTemperatureEquipmentTabHandlers';
 import { TemperatureEquipment, TemperatureLog } from '../types';
+import { temperatureTypesForSelect } from '../utils/temperatureUtils';
 import { CreateEquipmentForm } from './CreateEquipmentForm';
+import { EquipmentCardsPagination } from './EquipmentCardsPagination';
 import { EquipmentDetailDrawer } from './EquipmentDetailDrawer';
+import { EquipmentEmptyState } from './EquipmentEmptyState';
 import { EquipmentItem } from './EquipmentItem';
 import { EquipmentListTable } from './EquipmentListTable';
 import { EquipmentQRCodeModal } from './EquipmentQRCodeModal';
 import { EquipmentViewToggle } from './EquipmentViewToggle';
-import { EquipmentEmptyState } from './EquipmentEmptyState';
-import { EquipmentCardsPagination } from './EquipmentCardsPagination';
-import { useTemperatureEquipmentTabHandlers } from '../hooks/useTemperatureEquipmentTabHandlers';
-import { useEquipmentLogInfo } from '../hooks/useEquipmentLogInfo';
-import { temperatureTypesForSelect } from '../utils/temperatureUtils';
 
 interface TemperatureEquipmentTabProps {
   equipment: TemperatureEquipment[];
@@ -122,18 +123,15 @@ export default function TemperatureEquipmentTab({
               <span className="tablet:hidden">{isGenerating ? '...' : '📊'}</span>
             </button>
           )}
-          <button
+          <Button
             onClick={() => setShowCreateForm(!showCreateForm)}
-            className="group flex min-h-[44px] items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-semibold text-[var(--button-active-text)] shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+            variant="primary"
+            size="sm"
+            className="shadow-lg hover:scale-105 hover:shadow-xl"
           >
-            <Icon
-              icon={Plus}
-              size="md"
-              className="text-[var(--button-active-text)]"
-              aria-hidden={true}
-            />
+            <Icon icon={Plus} size="sm" className="text-current" aria-hidden={true} />
             <span>{t('temperature.addEquipment', 'Add Equipment')}</span>
-          </button>
+          </Button>
         </div>
       </div>
       {/* Create New Equipment Form */}

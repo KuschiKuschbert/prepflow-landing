@@ -45,9 +45,11 @@ const CLEANING_TASKS_SELECT = `
 export async function createCleaningTask(
   supabase: SupabaseClient,
   taskData: CreateCleaningTaskInput,
+  userId: string,
 ): Promise<CleaningTaskJoinResult | DBCleaningTask> {
   // Build insert data
   const insertData: Record<string, unknown> = {
+    user_id: userId,
     status: 'pending',
   };
 

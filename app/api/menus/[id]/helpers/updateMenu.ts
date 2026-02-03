@@ -18,6 +18,7 @@ export async function updateMenu(
     menu_name?: string;
     description?: string | null;
   },
+  userId: string,
 ): Promise<Menu> {
   if (!supabaseAdmin) {
     logger.error('[API] Database connection not available');
@@ -28,6 +29,7 @@ export async function updateMenu(
     .from('menus')
     .update(updateData)
     .eq('id', menuId)
+    .eq('user_id', userId)
     .select()
     .single();
 

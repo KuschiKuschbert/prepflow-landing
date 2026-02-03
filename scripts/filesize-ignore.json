@@ -39,5 +39,10 @@
   "lib/error-learning/rule-generator.ts",
   "lib/types/prep-lists.ts",
   "lib/types/recipes.ts",
-  "lib/types/roster.ts"
+  "lib/types/roster.ts",
+  "app/api/cleaning-tasks/populate-standard/route.ts",
+  "app/api/employees/[id]/route.ts",
+  "app/api/prep-lists/route.ts",
+  "app/api/roster/shifts/[id]/route.ts",
+  "app/api/roster/templates/[id]/template-shifts/route.ts"
 ]

@@ -8,12 +8,13 @@ import { RecipeQueryParams } from './validateRequest';
 export async function buildQuery(
   supabase: SupabaseClient,
   params: RecipeQueryParams,
+  userId: string,
 ): Promise<{ data: Recipe[] | null; error: PostgrestError | null; count: number | null }> {
   const { category, excludeAllergens, vegetarian, vegan } = params;
   const start = (params.page - 1) * params.pageSize;
   const end = start + params.pageSize - 1;
 
-  let query = supabase.from('recipes').select('*', { count: 'exact' });
+  let query = supabase.from('recipes').select('*', { count: 'exact' }).eq('user_id', userId);
 
   if (category && category !== 'All') {
     query = query.eq('category', category);
@@ -26,7 +27,7 @@ export async function buildQuery(
   if (vegetarian) query = query.eq('is_vegetarian', true);
   if (vegan) query = query.eq('is_vegan', true);
 
-  const { data, error, count } = await query.order('name').range(start, end);
+  const { data, error, count } = await query.order('recipe_name').range(start, end);
 
   return {
     data: data as Recipe[] | null,

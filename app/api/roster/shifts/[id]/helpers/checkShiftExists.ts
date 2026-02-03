@@ -11,11 +11,13 @@ import { Shift } from '../../helpers/types';
 export async function checkShiftExists(
   supabase: SupabaseClient,
   shiftId: string,
+  userId: string,
 ): Promise<{ shift: Shift } | NextResponse> {
   const { data: existingShift, error: fetchError } = await supabase
     .from('shifts')
     .select('*')
     .eq('id', shiftId)
+    .eq('user_id', userId)
     .single();
 
   if (fetchError || !existingShift) {
