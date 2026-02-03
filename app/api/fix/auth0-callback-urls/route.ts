@@ -85,7 +85,7 @@ export async function POST() {
     }
 
     // Get current application configuration
-    const appResponse = await managementClient.clients.get({ client_id: applicationClientId });
+    const appResponse = await managementClient.clients.get(applicationClientId);
     // Handle both potential response structures (axios-like with data or direct)
     const app = ('data' in appResponse
       ? appResponse.data
@@ -114,7 +114,7 @@ export async function POST() {
     };
 
     await managementClient.clients.update(
-      { client_id: applicationClientId },
+      applicationClientId,
       updateData as unknown as any, // Cast required due to strict SDK types not matching exact update payload sometimes // justified
     );
 

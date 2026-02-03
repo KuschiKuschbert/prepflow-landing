@@ -3,10 +3,10 @@
  * Test execution functions for Auth0 configuration
  */
 
+import { logger } from '@/lib/logger';
 import { ManagementClient } from 'auth0';
 import { testCallbackURLs } from './test-helpers/callback-url-tests';
 import { addTest, type TestResults } from './test-utils';
-import { logger } from '@/lib/logger';
 
 /**
  * Test environment variables
@@ -99,7 +99,7 @@ export async function testManagementAPI(results: TestResults): Promise<void> {
       clientSecret: auth0ClientSecret,
     });
 
-    const appResponse = await managementClient.clients.get({ client_id: auth0ClientId });
+    const appResponse = await managementClient.clients.get(auth0ClientId);
     const app = appResponse.data || (appResponse as unknown);
     addTest(
       results,

@@ -13,7 +13,8 @@ export async function getUserRoles(auth0UserId: string): Promise<string[]> {
   }
 
   try {
-    const roles = await client.users.getRoles({ id: auth0UserId });
+    const response = await client.users.roles.list(auth0UserId);
+    const roles = response.data;
 
     if (!roles || !Array.isArray(roles)) {
       return [];

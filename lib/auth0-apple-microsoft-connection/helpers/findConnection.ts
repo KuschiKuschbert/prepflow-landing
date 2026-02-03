@@ -11,7 +11,7 @@ export async function findAppleConnection(): Promise<Connection | null> {
   }
 
   try {
-    const response = await client.connections.getAll();
+    const response = await client.connections.list();
     const connections = response.data;
 
     return (connections.find(
@@ -33,7 +33,7 @@ export async function findMicrosoftConnection(): Promise<Connection | null> {
   }
 
   try {
-    const response = await client.connections.getAll();
+    const response = await client.connections.list();
     const connections = response.data;
 
     return (connections.find(

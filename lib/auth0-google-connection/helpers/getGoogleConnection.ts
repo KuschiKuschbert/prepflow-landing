@@ -5,7 +5,7 @@ import { ManagementClient } from 'auth0';
  * Get Google connection from Auth0
  */
 export async function getGoogleConnection(client: ManagementClient): Promise<Connection | null> {
-  const response = await client.connections.getAll();
+  const response = await client.connections.list();
   const connections = response.data;
   if (!connections || !Array.isArray(connections)) {
     return null;

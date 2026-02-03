@@ -48,10 +48,7 @@ export async function enableConnectionForApp(
 
   try {
     const enabledClients = [...currentEnabledClients, applicationClientId];
-    await client.connections.update(
-      { id: connection.id as string },
-      { enabled_clients: enabledClients },
-    );
+    await client.connections.update(connection.id as string, { enabled_clients: enabledClients });
 
     logger.info(`[Auth0 ${connectionType}] Enabled ${connectionName} connection for application`, {
       connectionId: connection.id,

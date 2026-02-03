@@ -19,7 +19,7 @@ export async function verifyCallbackUrls(expectedUrls: string[]): Promise<Callba
   }
   try {
     const auth0ClientId = process.env.AUTH0_CLIENT_ID;
-    const appResponse = await client.clients.get({ client_id: auth0ClientId });
+    const appResponse = await client.clients.get(auth0ClientId);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const app = appResponse.data || (appResponse as any); // justified
 

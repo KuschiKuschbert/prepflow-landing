@@ -46,7 +46,7 @@ export async function GET() {
       );
     }
 
-    const connectionsResponse = await client.connections.getAll();
+    const connectionsResponse = await client.connections.list();
     const connections = Array.isArray(connectionsResponse)
       ? connectionsResponse
       : (connectionsResponse as { data?: unknown[] })?.data || [];

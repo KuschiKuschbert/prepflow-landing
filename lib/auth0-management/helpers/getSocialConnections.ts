@@ -12,10 +12,8 @@ export async function getSocialConnections(): Promise<Connection[]> {
     return [];
   }
   try {
-    const connectionsResponse = await client.connections.getAll();
-    const connections = Array.isArray(connectionsResponse)
-      ? connectionsResponse
-      : (connectionsResponse as { data: Connection[] })?.data || [];
+    const response = await client.connections.list();
+    const connections = response.data;
     if (!connections || !Array.isArray(connections)) {
       return [];
     }

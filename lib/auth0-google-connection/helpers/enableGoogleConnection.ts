@@ -59,7 +59,7 @@ export async function enableGoogleConnectionForApp(): Promise<{
       };
     }
 
-    await client.connections.update({ id: googleConnection.id }, {
+    await client.connections.update(googleConnection.id, {
       enabled_clients: [...new Set([...enabledClients, auth0ClientId])],
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any); // justified

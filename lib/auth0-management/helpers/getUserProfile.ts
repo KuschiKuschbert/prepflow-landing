@@ -25,9 +25,8 @@ export async function getUserProfileFromManagementAPI(
     return null;
   }
   try {
-    const userResponse = await client.users.get({ id: auth0UserId });
-    const user =
-      (userResponse as { data: Auth0UserProfile }).data || (userResponse as Auth0UserProfile); // Handle potential Axios wrap
+    const response = await client.users.get(auth0UserId);
+    const user = response.data as Auth0UserProfile;
     if (!user) {
       return null;
     }

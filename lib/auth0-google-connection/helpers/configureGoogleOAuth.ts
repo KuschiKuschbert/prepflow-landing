@@ -27,7 +27,7 @@ export async function configureGoogleOAuthCredentials(
   }
 
   try {
-    const connectionsResponse = await client.connections.getAll();
+    const connectionsResponse = await client.connections.list();
     const connections = Array.isArray(connectionsResponse)
       ? connectionsResponse
       : (connectionsResponse as unknown as { data: unknown[] })?.data || [];
@@ -56,7 +56,7 @@ export async function configureGoogleOAuthCredentials(
       };
     }
 
-    await client.connections.update({ id: googleConnection.id }, {
+    await client.connections.update(googleConnection.id, {
       options: {
         ...googleConnection.options,
         client_id: googleClientId,
