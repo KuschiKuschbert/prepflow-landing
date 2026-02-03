@@ -1,6 +1,6 @@
-import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
 import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { ZodSchema, z } from 'zod';
@@ -25,6 +25,34 @@ async function safeParseBody<T>(req: NextRequest, schema: ZodSchema<T>): Promise
     );
   }
   return result.data;
+}
+
+async function getAuthenticatedUser(request: NextRequest) {
+  const supabaseAdmin = createSupabaseAdmin();
+
+  // Authenticate user
+  const {
+    data: { user },
+    error: authError,
+  } = await supabaseAdmin.auth.getUser(
+    request.headers.get('Authorization')?.replace('Bearer ', '') || '',
+  );
+
+  // Fallback/Use Auth0 helper
+  const { requireAuth } = await import('@/lib/auth0-api-helpers');
+  const authUser = await requireAuth(request);
+
+  // Get user_id from email
+  const { data: userData, error: userError } = await supabaseAdmin
+    .from('users')
+    .select('id')
+    .eq('email', authUser.email)
+    .single();
+
+  if (userError || !userData) {
+    throw ApiErrorHandler.createError('User not found', 'NOT_FOUND', 404);
+  }
+  return { userId: userData.id, supabase: supabaseAdmin };
 }
 
 const updateEmployeeByIdSchema = z.object({
@@ -61,14 +89,13 @@ const EMPLOYEE_SELECT = `
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
   try {
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) throw new Error('Unexpected database state');
+    const { userId, supabase } = await getAuthenticatedUser(request);
 
     const { data, error: dbError } = await supabase
       .from('employees')
       .select(EMPLOYEE_SELECT)
       .eq('id', id)
+      .eq('user_id', userId)
       .single();
 
     if (dbError) {
@@ -100,10 +127,15 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       data,
     });
   } catch (err) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Employees API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/employees/[id]', method: 'GET', employeeId: id },
     });
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
+    }
     return handleEmployeeError(err, 'GET');
   }
 }
@@ -115,13 +147,11 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
   try {
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+    const { userId, supabase } = await getAuthenticatedUser(request);
 
     const body = await safeParseBody(request, updateEmployeeByIdSchema);
 
-    const data = await updateEmployee(supabase, id, body);
+    const data = await updateEmployee(supabase, id, body, userId);
 
     return NextResponse.json({
       success: true,
@@ -151,11 +181,9 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
   try {
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+    const { userId, supabase } = await getAuthenticatedUser(request);
 
-    await deleteEmployee(supabase, id);
+    await deleteEmployee(supabase, id, userId);
 
     return NextResponse.json({
       success: true,

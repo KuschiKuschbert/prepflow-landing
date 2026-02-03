@@ -15,6 +15,7 @@ export async function updateShift(
   shiftId: string,
   body: Partial<CreateShiftInput>,
   existingShift: Shift,
+  userId: string,
 ): Promise<NextResponse> {
   // Validate if required fields are present
   const mergedShift = { ...existingShift, ...body };
@@ -49,6 +50,7 @@ export async function updateShift(
     .from('shifts')
     .update(updateData)
     .eq('id', shiftId)
+    .eq('user_id', userId)
     .select()
     .single();
 

@@ -26,6 +26,7 @@ const CLEANING_TASKS_SELECT = `
 `;
 
 export interface CleaningTasksQueryParams {
+  userId: string;
   areaId?: string | null;
   equipmentId?: string | null;
   sectionId?: string | null;
@@ -47,6 +48,8 @@ export function buildCleaningTasksQuery(
   let query = supabase.from('cleaning_tasks').select(CLEANING_TASKS_SELECT);
 
   // Apply filters
+  query = query.eq('user_id', params.userId);
+
   if (params.areaId) query = query.eq('area_id', params.areaId);
   if (params.equipmentId) query = query.eq('equipment_id', params.equipmentId);
   if (params.sectionId) query = query.eq('section_id', params.sectionId);

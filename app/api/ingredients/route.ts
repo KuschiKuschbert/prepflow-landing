@@ -8,8 +8,8 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { getUserEmail } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
+import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { triggerIngredientSync } from '@/lib/square/sync/hooks';
-import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { createIngredient } from './helpers/createIngredient';
 import { handleDeleteIngredient } from './helpers/deleteIngredientHandler';
@@ -20,7 +20,7 @@ import { updateIngredient } from './helpers/updateIngredient';
 
 export async function GET(request: NextRequest) {
   try {
-    const supabaseAdmin = createSupabaseAdmin();
+    const { userId, supabase: supabaseAdmin } = await getAuthenticatedUser(request);
 
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
@@ -32,6 +32,7 @@ export async function GET(request: NextRequest) {
     const { data, error, count } = await supabaseAdmin
       .from('ingredients')
       .select('*', { count: 'exact' })
+      .eq('user_id', userId)
       .order('ingredient_name')
       .range(start, end);
 
@@ -57,6 +58,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (err) {
+    if (err instanceof NextResponse) return err;
     logger.error('[Ingredients API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/ingredients', method: 'GET' },
@@ -75,7 +77,10 @@ export async function POST(request: NextRequest) {
     if (dataOrResponse instanceof NextResponse) {
       return dataOrResponse;
     }
-    const data = await createIngredient(dataOrResponse);
+
+    const { userId } = await getAuthenticatedUser(request);
+
+    const data = await createIngredient(dataOrResponse, userId);
 
     // Trigger Square sync hook (non-blocking)
     (async () => {
@@ -162,5 +167,12 @@ export async function PUT(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  return handleDeleteIngredient(request);
+  try {
+    const { userId } = await getAuthenticatedUser(request);
+
+    return handleDeleteIngredient(request, userId);
+  } catch (err) {
+    if (err instanceof NextResponse) return err;
+    return handleIngredientError(err, 'DELETE');
+  }
 }

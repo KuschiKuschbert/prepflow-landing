@@ -14,6 +14,7 @@ import type { CleaningArea, CreateCleaningAreaInput } from './schemas';
 export async function createCleaningArea(
   supabase: SupabaseClient,
   areaData: CreateCleaningAreaInput,
+  userId: string,
 ): Promise<CleaningArea> {
   const { data, error } = await supabase
     .from('cleaning_areas')
@@ -21,6 +22,7 @@ export async function createCleaningArea(
       area_name: areaData.area_name,
       description: areaData.description || null,
       cleaning_frequency: areaData.cleaning_frequency || 'daily',
+      user_id: userId,
     })
     .select()
     .single();

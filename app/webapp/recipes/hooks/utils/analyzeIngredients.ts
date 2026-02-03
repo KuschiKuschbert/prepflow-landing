@@ -8,7 +8,9 @@ export interface IngredientAnalysis {
 }
 
 export function analyzeIngredients(ingredients: RecipeIngredientWithDetails[]): IngredientAnalysis {
-  const ingredientNames = ingredients.map(ri => ri.ingredients.ingredient_name.toLowerCase());
+  const ingredientNames = ingredients.map(ri =>
+    (ri.ingredients.ingredient_name || '').toLowerCase(),
+  );
   const hasProtein = ingredientNames.some(
     name =>
       name.includes('beef') ||

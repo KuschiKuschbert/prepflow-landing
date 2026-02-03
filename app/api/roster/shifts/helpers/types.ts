@@ -24,6 +24,7 @@ export interface ShiftQueryParams {
   start_date?: string;
   end_date?: string;
   shift_date?: string;
-  page?: number;
-  pageSize?: number;
+  page: number;
+  pageSize: number;
+  userId: string;
 }

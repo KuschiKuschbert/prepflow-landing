@@ -28,6 +28,7 @@ export async function fetchMenuCounts(supabase: SupabaseClient, menus: any[]): P
 export async function createNewMenu(
   supabase: SupabaseClient,
   menuName: string,
+  userId: string,
   description?: string,
 ): Promise<Menu> {
   const { data: newMenu, error: createError } = await supabase
@@ -35,6 +36,7 @@ export async function createNewMenu(
     .insert({
       menu_name: menuName.trim(),
       description: description?.trim() || null,
+      user_id: userId,
     })
     .select()
     .single();

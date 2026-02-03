@@ -1,5 +1,6 @@
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { fetchMenuWithItems } from '../helpers/fetchMenuWithItems';
@@ -32,8 +33,10 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     const { searchParams } = new URL(request.url);
     const sortBy = searchParams.get('sortBy') || 'storage';
 
+    const { userId } = await getAuthenticatedUser(request);
+
     // Fetch menu with items
-    const menu = await fetchMenuWithItems(menuId);
+    const menu = await fetchMenuWithItems(menuId, userId);
 
     if (!menu.items || menu.items.length === 0) {
       return NextResponse.json({

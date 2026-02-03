@@ -36,33 +36,17 @@ export async function fetchPrepListsData({
     .range(start, end);
 
   if (userId) prepListsQuery = prepListsQuery.eq('user_id', userId);
+  else {
+    // If no userId provided, return empty or throw error?
+    // For multi-tenancy we MUST have userId.
+    logger.warn('[Prep Lists API] No userId provided for fetchPrepListsData');
+    return { prepLists: [], count: 0, empty: true };
+  }
+
   const { data: prepLists, error: prepListsError, count } = await prepListsQuery;
 
-  // If user_id filter fails, try without it
-  if (prepListsError && prepListsError.message?.includes('user_id')) {
-    const fallbackQuery = supabaseAdmin
-      .from('prep_lists')
-      .select('*', { count: 'exact' })
-      .order('created_at', { ascending: false })
-      .range(start, end);
-    const fallbackResult = await fallbackQuery;
+  // REMOVED INSECURE FALLBACK
 
-    if (fallbackResult.error) {
-      const pgFallbackError = fallbackResult.error as PostgrestError;
-      logger.error('[Prep Lists API] Error fetching prep lists (fallback):', {
-        error: pgFallbackError.message,
-        code: pgFallbackError.code,
-        context: { endpoint: '/api/prep-lists', operation: 'GET', table: 'prep_lists' },
-      });
-      throw ApiErrorHandler.fromSupabaseError(pgFallbackError, 500);
-    }
-
-    return {
-      prepLists: (fallbackResult.data || []) as PrepList[],
-      count: fallbackResult.count || 0,
-      empty: true,
-    };
-  }
   if (prepListsError) {
     const pgError = prepListsError as PostgrestError;
     logger.error('[Prep Lists API] Error fetching prep lists:', {

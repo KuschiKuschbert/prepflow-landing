@@ -17,7 +17,7 @@ export interface RecipeQueryParams {
  */
 export function validateRequest(searchParams: URLSearchParams): RecipeQueryParams {
   const page = parseInt(searchParams.get('page') || '1');
-  const pageSize = Math.min(parseInt(searchParams.get('pageSize') || '50'), 100);
+  const pageSize = Math.min(parseInt(searchParams.get('pageSize') || '50'), 1000);
   const category = searchParams.get('category') || undefined;
   const excludeAllergens = searchParams.get('exclude_allergens')?.split(',').filter(Boolean) || [];
   const includeAllergens = searchParams.get('include_allergens')?.split(',').filter(Boolean) || [];

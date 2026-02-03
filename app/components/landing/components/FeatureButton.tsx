@@ -88,7 +88,7 @@ export function FeatureButton({
           duration: 0.6,
         },
       }}
-      className={`relative flex border text-left focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
+      className={`relative flex cursor-pointer overflow-hidden border border-solid text-left focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] focus:outline-none ${
         !isExpanded ? 'hover:scale-[1.02] hover:border-white/18 hover:bg-white/12' : ''
       }`}
       whileHover={
@@ -106,16 +106,21 @@ export function FeatureButton({
               ? `${initialWidth}px`
               : 'auto',
         borderRadius,
-        borderColor: isExpanded ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.12)',
-        borderWidth: '1px',
+        borderTopColor: isExpanded ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.12)',
+        borderRightColor: isExpanded ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.12)',
+        borderBottomColor: isExpanded ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.12)',
+        borderLeftColor: isExpanded ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.12)',
+        borderTopWidth: '1px',
+        borderRightWidth: '1px',
+        borderBottomWidth: '1px',
+        borderLeftWidth: '1px',
         backgroundColor: isExpanded ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.1)',
-        cursor: 'pointer',
         padding: isExpanded ? '0.75rem 1rem' : '0.625rem 0.875rem',
-        overflow: 'hidden',
         maxHeight: isExpanded ? '1000px' : buttonHeight ? `${buttonHeight}px` : '200px',
         minHeight: buttonHeight ? `${buttonHeight}px` : undefined,
         boxShadow: isExpanded ? getShadowStyle(feature.colorClass) : 'none',
       }}
+      suppressHydrationWarning
       aria-expanded={isExpanded}
       aria-controls={`feature-content-${index}`}
     >

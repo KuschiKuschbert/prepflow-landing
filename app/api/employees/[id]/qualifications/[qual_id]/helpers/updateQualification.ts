@@ -15,15 +15,18 @@ export async function updateQualification(
     document_url?: string;
     notes?: string;
   },
+  // Merged return type: strict Data (Qualification) + strict Error (ApiError)
+  userId: string,
 ): Promise<
   { success: boolean; message: string; data: Qualification } | { error: ApiError; status: number }
 > {
-  // Verify qualification belongs to employee
+  // Verify qualification belongs to employee and user
   const { data: qualification, error: checkError } = await supabase
     .from('employee_qualifications')
     .select('id, employee_id')
     .eq('id', qualificationId)
     .eq('employee_id', employeeId)
+    .eq('user_id', userId)
     .single();
 
   if (checkError || !qualification) {

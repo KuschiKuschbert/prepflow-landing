@@ -27,8 +27,8 @@ export function combineItems(
   // Combine and sort by name if sortField is 'name', otherwise keep separate groups
   if (filters.sortField === 'name') {
     return [...dishItems, ...recipeItems].sort((a, b) => {
-      const aName = (a.itemType === 'dish' ? a.dish_name : a.recipe_name).toLowerCase();
-      const bName = (b.itemType === 'dish' ? b.dish_name : b.recipe_name).toLowerCase();
+      const aName = (a.itemType === 'dish' ? a.dish_name || '' : a.recipe_name || '').toLowerCase();
+      const bName = (b.itemType === 'dish' ? b.dish_name || '' : b.recipe_name || '').toLowerCase();
       return filters.sortDirection === 'asc'
         ? aName.localeCompare(bName)
         : bName.localeCompare(aName);

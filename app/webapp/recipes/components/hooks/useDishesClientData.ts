@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
 import { Dish, DishCostData, Recipe } from '@/lib/types/recipes';
+import { useCallback, useEffect, useState } from 'react';
 
 import { logger } from '@/lib/logger';
 export function useDishesClientData() {
@@ -14,8 +14,8 @@ export function useDishesClientData() {
     setError(null);
     try {
       const [dishesResponse, recipesResponse] = await Promise.all([
-        fetch('/api/dishes', { cache: 'no-store' }),
-        fetch('/api/recipes', { cache: 'no-store' }),
+        fetch('/api/dishes?pageSize=1000', { cache: 'no-store' }),
+        fetch('/api/recipes?pageSize=1000', { cache: 'no-store' }),
       ]);
 
       const dishesResult = await dishesResponse.json();

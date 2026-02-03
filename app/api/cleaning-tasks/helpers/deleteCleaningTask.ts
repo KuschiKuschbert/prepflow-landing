@@ -10,8 +10,16 @@ import { SupabaseClient } from '@supabase/supabase-js';
  * @returns {Promise<void>}
  * @throws {Error} If delete fails
  */
-export async function deleteCleaningTask(supabase: SupabaseClient, id: string): Promise<void> {
-  const { error } = await supabase.from('cleaning_tasks').delete().eq('id', id);
+export async function deleteCleaningTask(
+  supabase: SupabaseClient,
+  id: string,
+  userId: string,
+): Promise<void> {
+  const { error } = await supabase
+    .from('cleaning_tasks')
+    .delete()
+    .eq('id', id)
+    .eq('user_id', userId);
 
   if (error) {
     logger.error('[Cleaning Tasks API] Database error deleting task:', {

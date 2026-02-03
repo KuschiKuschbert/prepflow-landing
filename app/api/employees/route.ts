@@ -1,6 +1,6 @@
-import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { PostgrestError } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { ZodSchema } from 'zod';
@@ -35,15 +35,16 @@ async function safeParseBody<T>(req: NextRequest, schema: ZodSchema<T>): Promise
  */
 export async function GET(request: NextRequest) {
   try {
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) throw new Error('Unexpected database state');
+    const { userId, supabase } = await getAuthenticatedUser(request);
 
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
     const role = searchParams.get('role');
 
     let query = supabase.from('employees').select(EMPLOYEE_SELECT).order('full_name');
+
+    // Filter by user_id
+    query = query.eq('user_id', userId);
 
     if (status) {
       query = query.eq('status', status);
@@ -75,10 +76,15 @@ export async function GET(request: NextRequest) {
       data: employees || [],
     });
   } catch (err) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Employees API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/employees', method: 'GET' },
     });
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
+    }
     return handleEmployeeError(err, 'GET');
   }
 }
@@ -87,16 +93,13 @@ export async function GET(request: NextRequest) {
  * POST /api/employees
  * Create a new employee
  */
-// POST Handler
 export async function POST(request: NextRequest) {
   try {
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+    const { userId, supabase } = await getAuthenticatedUser(request);
 
     const body = await safeParseBody(request, createEmployeeSchema);
 
-    const data = await createEmployee(supabase, body);
+    const data = await createEmployee(supabase, body, userId);
 
     return NextResponse.json({
       success: true,
@@ -110,6 +113,9 @@ export async function POST(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/employees', method: 'POST' },
     });
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
+    }
     return handleEmployeeError(err, 'POST');
   }
 }
@@ -120,14 +126,12 @@ export async function POST(request: NextRequest) {
  */
 export async function PUT(request: NextRequest) {
   try {
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+    const { userId, supabase } = await getAuthenticatedUser(request);
 
     const body = await safeParseBody(request, updateEmployeeSchema);
     const { id, ...updates } = body;
 
-    const data = await updateEmployee(supabase, id, updates);
+    const data = await updateEmployee(supabase, id, updates, userId);
 
     return NextResponse.json({
       success: true,
@@ -141,6 +145,9 @@ export async function PUT(request: NextRequest) {
       error: err instanceof Error ? err.message : String(err),
       context: { endpoint: '/api/employees', method: 'PUT' },
     });
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
+    }
     return handleEmployeeError(err, 'PUT');
   }
 }
@@ -150,9 +157,14 @@ export async function PUT(request: NextRequest) {
  * Delete (deactivate) an employee
  */
 export async function DELETE(request: NextRequest) {
-  const { supabase, error } = await standardAdminChecks(request);
-  if (error) return error;
-  if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
-
-  return handleDeleteEmployee(request, supabase);
+  try {
+    const { userId, supabase } = await getAuthenticatedUser(request);
+    return handleDeleteEmployee(request, supabase, userId);
+  } catch (err) {
+    if (err instanceof NextResponse) return err;
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
+    }
+    return handleEmployeeError(err, 'DELETE');
+  }
 }

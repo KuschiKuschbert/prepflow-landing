@@ -3,17 +3,29 @@ import { logger } from '@/lib/logger';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
+export interface RosterTemplate {
+  id: string;
+  name: string;
+  description: string | null;
+  is_active: boolean;
+  user_id: string;
+  created_at: string;
+  updated_at: string;
+}
+
 /**
  * Check if template exists and return it
  */
 export async function checkTemplateExists(
   supabase: SupabaseClient,
   templateId: string,
-): Promise<{ template: unknown } | NextResponse> {
+  userId: string,
+): Promise<{ template: RosterTemplate } | NextResponse> {
   const { data: existingTemplate, error: fetchError } = await supabase
     .from('roster_templates')
-    .select('id')
+    .select('*')
     .eq('id', templateId)
+    .eq('user_id', userId)
     .single();
 
   if (fetchError || !existingTemplate) {

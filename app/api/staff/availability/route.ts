@@ -5,9 +5,9 @@
  * @module api/staff/availability
  */
 
-import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { NextRequest, NextResponse } from 'next/server';
 import { ZodSchema } from 'zod';
 import { createAvailabilitySchema } from './helpers/schemas';
@@ -40,14 +40,18 @@ async function safeParseBody<T>(req: NextRequest, schema: ZodSchema<T>): Promise
  */
 export async function GET(request: NextRequest) {
   try {
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) throw new Error('Unexpected database state');
+    const { userId, supabase } = await getAuthenticatedUser(request);
 
     const { searchParams } = new URL(request.url);
     const employeeId = searchParams.get('employee_id');
 
     let query = supabase.from('availability').select('*').order('day_of_week', { ascending: true });
+
+    // Filter by user_id
+    // Note: Availability table might not have user_id derived directly if it relies on employee_id relation,
+    // but based on our migration plan, we added user_id to ALL tables.
+    // If availability is joined with employees, we could filter via employees, but user_id column is safer/faster.
+    query = query.eq('user_id', userId);
 
     if (employeeId) {
       query = query.eq('employee_id', employeeId);
@@ -71,11 +75,18 @@ export async function GET(request: NextRequest) {
       availability: availability || [],
     });
   } catch (err) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Availability API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/staff/availability', method: 'GET' },
     });
+
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
+    }
+
     return NextResponse.json(
       ApiErrorHandler.createError(
         process.env.NODE_ENV === 'development'
@@ -97,18 +108,17 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) throw new Error('Unexpected database state');
+    const { userId, supabase } = await getAuthenticatedUser(request);
 
     const body = await safeParseBody(request, createAvailabilitySchema);
     const { employee_id, day_of_week, start_time, end_time, is_available } = body;
 
-    // Check if employee exists
+    // Check if employee exists and belongs to user
     const { data: employee, error: employeeError } = await supabase
       .from('employees')
       .select('id')
       .eq('id', employee_id)
+      .eq('user_id', userId)
       .single();
 
     if (employeeError || !employee) {
@@ -124,6 +134,7 @@ export async function POST(request: NextRequest) {
       start_time: start_time || null,
       end_time: end_time || null,
       is_available: is_available !== undefined ? is_available : true,
+      user_id: userId,
     };
 
     // Upsert (insert or update) availability record
@@ -161,6 +172,11 @@ export async function POST(request: NextRequest) {
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/staff/availability', method: 'POST' },
     });
+
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
+    }
+
     return NextResponse.json(
       ApiErrorHandler.createError(
         process.env.NODE_ENV === 'development'

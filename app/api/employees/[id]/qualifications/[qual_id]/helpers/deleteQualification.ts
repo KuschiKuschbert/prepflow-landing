@@ -6,13 +6,15 @@ export async function deleteQualification(
   supabase: SupabaseClient,
   employeeId: string,
   qualificationId: string,
+  userId: string,
 ): Promise<{ success: boolean; message: string } | { error: ApiError; status: number }> {
-  // Verify qualification belongs to employee
+  // Verify qualification belongs to employee and user
   const { data: qualification, error: checkError } = await supabase
     .from('employee_qualifications')
     .select('id, employee_id')
     .eq('id', qualificationId)
     .eq('employee_id', employeeId)
+    .eq('user_id', userId)
     .single();
 
   if (checkError || !qualification) {
@@ -25,7 +27,8 @@ export async function deleteQualification(
   const { error } = await supabase
     .from('employee_qualifications')
     .delete()
-    .eq('id', qualificationId);
+    .eq('id', qualificationId)
+    .eq('user_id', userId);
 
   if (error) {
     logger.error('[Employee Qualifications API] Database error deleting qualification:', {

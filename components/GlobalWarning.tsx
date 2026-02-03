@@ -67,33 +67,37 @@ const GlobalWarning: React.FC<GlobalWarningProps> = ({ onHeightChange }) => {
     switch (type) {
       case 'error':
         return {
-          container: 'bg-red-900/90 border-red-700/50 text-red-100',
+          container:
+            'bg-[var(--color-error-bg)] border-[var(--color-error-border)] text-[var(--color-error)]',
           icon: 'text-[var(--color-error)]',
-          button: 'bg-red-800/50 hover:bg-red-700/50 text-red-100',
+          button: 'bg-[var(--color-error)] text-white hover:opacity-90',
         };
       case 'warning':
         return {
-          container: 'bg-yellow-900/90 border-yellow-700/50 text-yellow-100',
+          container:
+            'bg-[var(--color-warning-bg)] border-[var(--color-warning-border)] text-[var(--color-warning)]',
           icon: 'text-[var(--color-warning)]',
-          button: 'bg-yellow-800/50 hover:bg-yellow-700/50 text-yellow-100',
+          button: 'bg-[var(--color-warning)] text-white hover:opacity-90',
         };
       case 'info':
         return {
-          container: 'bg-blue-900/90 border-blue-700/50 text-blue-100',
+          container:
+            'bg-[var(--color-info-bg)] border-[var(--color-info-border)] text-[var(--color-info)]',
           icon: 'text-[var(--color-info)]',
-          button: 'bg-blue-800/50 hover:bg-blue-700/50 text-blue-100',
+          button: 'bg-[var(--color-info)] text-white hover:opacity-90',
         };
       case 'success':
         return {
-          container: 'bg-green-900/90 border-green-700/50 text-green-100',
+          container:
+            'bg-[var(--color-success-bg)] border-[var(--color-success-border)] text-[var(--color-success)]',
           icon: 'text-[var(--color-success)]',
-          button: 'bg-green-800/50 hover:bg-green-700/50 text-green-100',
+          button: 'bg-[var(--color-success)] text-white hover:opacity-90',
         };
       default:
         return {
-          container: 'bg-gray-900/90 border-gray-700/50 text-gray-100',
+          container: 'bg-[var(--muted)]/80 border-[var(--border)] text-[var(--foreground)]',
           icon: 'text-[var(--foreground-muted)]',
-          button: 'bg-gray-800/50 hover:bg-gray-700/50 text-gray-100',
+          button: 'bg-[var(--primary)] text-white hover:opacity-90',
         };
     }
   };
@@ -102,51 +106,81 @@ const GlobalWarning: React.FC<GlobalWarningProps> = ({ onHeightChange }) => {
     switch (type) {
       case 'error':
         return (
-          <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+          <svg
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
             <path
-              fillRule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-              clipRule="evenodd"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
             />
           </svg>
         );
       case 'warning':
         return (
-          <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+          <svg
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
             <path
-              fillRule="evenodd"
-              d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-              clipRule="evenodd"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
         );
       case 'info':
         return (
-          <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+          <svg
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
             <path
-              fillRule="evenodd"
-              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-              clipRule="evenodd"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
         );
       case 'success':
         return (
-          <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+          <svg
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
             <path
-              fillRule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-              clipRule="evenodd"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
         );
       default:
         return (
-          <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+          <svg
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
             <path
-              fillRule="evenodd"
-              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-              clipRule="evenodd"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
         );
@@ -158,26 +192,28 @@ const GlobalWarning: React.FC<GlobalWarningProps> = ({ onHeightChange }) => {
   return (
     <div
       ref={warningRef}
-      className={`fixed right-0 left-0 z-[45] w-full border-b backdrop-blur-sm ${styles.container} desktop:top-[calc(var(--header-height-desktop)+var(--safe-area-inset-top))] top-[calc(var(--header-height-mobile)+var(--safe-area-inset-top))] transition-all duration-200`}
+      className={`fixed right-0 left-0 z-[45] w-full border-b shadow-lg backdrop-blur-md ${styles.container} desktop:top-[calc(var(--header-height-desktop)+var(--safe-area-inset-top))] top-[calc(var(--header-height-mobile)+var(--safe-area-inset-top))] transition-all duration-300`}
       style={{ pointerEvents: 'auto' }}
     >
-      <div className="mx-auto max-w-7xl px-4 py-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className={styles.icon}>{getWarningIcon(warning.type)}</div>
-            <div>
-              <h4 className="text-fluid-sm font-semibold">{warning.title || 'Notification'}</h4>
-              <p className="text-fluid-xs opacity-90">{warning.message}</p>
+      <div className="mx-auto max-w-7xl px-4 py-2.5">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center space-x-3 overflow-hidden">
+            <div className={`flex-shrink-0 ${styles.icon}`}>{getWarningIcon(warning.type)}</div>
+            <div className="min-w-0">
+              <h4 className="text-sm leading-tight font-bold">{warning.title || 'Notification'}</h4>
+              <p className="tablet:whitespace-normal truncate text-xs opacity-90">
+                {warning.message}
+              </p>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-shrink-0 items-center space-x-2">
             {warning.action && (
               <button
                 onClick={() => {
                   warning.action?.onClick();
                   removeWarning(warning.id);
                 }}
-                className={`text-fluid-xs rounded-lg px-3 py-1.5 font-medium transition-colors duration-200 focus:ring-2 focus:ring-white/20 focus:outline-none ${styles.button}`}
+                className={`rounded-full px-4 py-1.5 text-xs font-bold shadow-sm transition-all duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none active:scale-95 ${styles.button}`}
               >
                 {warning.action.label}
               </button>

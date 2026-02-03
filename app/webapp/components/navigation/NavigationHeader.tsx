@@ -134,7 +134,7 @@ function NavigationHeaderBase({
     <>
       <div
         className={cn(
-          'desktop:h-20 fixed inset-x-0 top-0 z-50 flex h-16 transform items-center transition-all duration-300',
+          'desktop:h-20 fixed inset-x-0 top-0 z-50 flex h-16 transform items-center border-b border-[var(--border)]/50 bg-[var(--background)]/80 backdrop-blur-md transition-all duration-300',
           shouldHideHeader && '-translate-y-full',
           className,
         )}

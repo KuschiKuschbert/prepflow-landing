@@ -1,10 +1,38 @@
-import { standardAdminChecks } from '@/lib/admin-auth';
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { deleteQualification } from './helpers/deleteQualification';
 import { updateQualificationSchema } from './helpers/schemas';
 import { updateQualification } from './helpers/updateQualification';
+
+async function getAuthenticatedUser(request: NextRequest) {
+  const supabaseAdmin = createSupabaseAdmin();
+
+  // Authenticate user
+  const {
+    data: { user },
+    error: authError,
+  } = await supabaseAdmin.auth.getUser(
+    request.headers.get('Authorization')?.replace('Bearer ', '') || '',
+  );
+
+  // Fallback/Use Auth0 helper
+  const { requireAuth } = await import('@/lib/auth0-api-helpers');
+  const authUser = await requireAuth(request);
+
+  // Get user_id from email
+  const { data: userData, error: userError } = await supabaseAdmin
+    .from('users')
+    .select('id')
+    .eq('email', authUser.email)
+    .single();
+
+  if (userError || !userData) {
+    throw ApiErrorHandler.createError('User not found', 'NOT_FOUND', 404);
+  }
+  return { userId: userData.id, supabase: supabaseAdmin };
+}
 
 /**
  * PUT /api/employees/[id]/qualifications/[qual_id]
@@ -16,6 +44,8 @@ export async function PUT(
 ) {
   try {
     const { id, qual_id } = await context.params;
+    const { userId, supabase } = await getAuthenticatedUser(request);
+
     let body: unknown;
     try {
       body = await request.json();
@@ -41,22 +71,24 @@ export async function PUT(
       );
     }
 
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
-
-    const result = await updateQualification(supabase, id, qual_id, validationResult.data);
+    const result = await updateQualification(supabase, id, qual_id, validationResult.data, userId);
     if ('error' in result) {
       return NextResponse.json(result.error, { status: result.status });
     }
 
     return NextResponse.json(result);
   } catch (err) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Employee Qualifications API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/employees/[id]/qualifications/[qual_id]', method: 'PUT' },
     });
+
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
+    }
 
     return NextResponse.json(
       ApiErrorHandler.createError(
@@ -83,23 +115,26 @@ export async function DELETE(
 ) {
   try {
     const { id, qual_id } = await context.params;
+    const { userId, supabase } = await getAuthenticatedUser(request);
 
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
-
-    const result = await deleteQualification(supabase, id, qual_id);
+    const result = await deleteQualification(supabase, id, qual_id, userId);
     if ('error' in result) {
       return NextResponse.json(result.error, { status: result.status });
     }
 
     return NextResponse.json(result);
   } catch (err) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Employee Qualifications API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/employees/[id]/qualifications/[qual_id]', method: 'DELETE' },
     });
+
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
+    }
 
     return NextResponse.json(
       ApiErrorHandler.createError(

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 
 interface Feature {
   title: string;
@@ -21,7 +21,9 @@ export function useAnimationState(_features: Feature[]) {
   const [scaleXValues, setScaleXValues] = useState<number[]>([]);
   const [buttonHeights, setButtonHeights] = useState<number[]>([]);
   const [imageMounted, setImageMounted] = useState(false);
-  const [buttonsVisible, setButtonsVisible] = useState<boolean[]>([]);
+  const [buttonsVisible, setButtonsVisible] = useState<boolean[]>(
+    new Array(_features.length).fill(false),
+  );
   const contentRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const containerRefs = useRef<(HTMLButtonElement | null)[]>([]);

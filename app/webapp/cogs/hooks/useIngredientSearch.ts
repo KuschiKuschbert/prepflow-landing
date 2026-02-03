@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
 import { Ingredient, RecipeIngredient } from '@/lib/types/cogs';
-import { handleKeyboardNavigation } from './utils/keyboardNavigation';
+import { useCallback, useMemo, useState } from 'react';
 import { filterIngredients } from './utils/ingredientFiltering';
+import { handleKeyboardNavigation } from './utils/keyboardNavigation';
 
 export const useIngredientSearch = (ingredients: Ingredient[]) => {
   const [ingredientSearch, setIngredientSearch] = useState<string>('');
@@ -28,7 +28,7 @@ export const useIngredientSearch = (ingredients: Ingredient[]) => {
       ingredient_id: ingredient.id,
       unit: ingredient.unit || 'kg',
     }));
-    setIngredientSearch(ingredient.ingredient_name.toLowerCase());
+    setIngredientSearch((ingredient.ingredient_name || '').toLowerCase());
     setShowSuggestions(false);
     setHighlightedIndex(-1);
   }, []);

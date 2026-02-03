@@ -1,7 +1,42 @@
-import { standardAdminChecks } from '@/lib/admin-auth';
+/**
+ * Template Shifts API Route
+ * Handles GET (list template shifts) and POST (create template shift) operations.
+ *
+ * @module api/roster/templates/[id]/template-shifts
+ */
+
 import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { createSupabaseAdmin } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+
+async function getAuthenticatedUser(request: NextRequest) {
+  const supabaseAdmin = createSupabaseAdmin();
+
+  // Authenticate user
+  const {
+    data: { user },
+    error: authError,
+  } = await supabaseAdmin.auth.getUser(
+    request.headers.get('Authorization')?.replace('Bearer ', '') || '',
+  );
+
+  // Fallback/Use Auth0 helper
+  const { requireAuth } = await import('@/lib/auth0-api-helpers');
+  const authUser = await requireAuth(request);
+
+  // Get user_id from email
+  const { data: userData, error: userError } = await supabaseAdmin
+    .from('users')
+    .select('id')
+    .eq('email', authUser.email)
+    .single();
+
+  if (userError || !userData) {
+    throw ApiErrorHandler.createError('User not found', 'NOT_FOUND', 404);
+  }
+  return { userId: userData.id, supabase: supabaseAdmin };
+}
 
 /**
  * GET /api/roster/templates/[id]/template-shifts
@@ -9,12 +44,25 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+    const { userId, supabase } = await getAuthenticatedUser(request);
 
     const { id } = await context.params;
     const templateId = id;
+
+    // Verify template exists and belongs to user
+    const { data: template, error: templateError } = await supabase
+      .from('roster_templates')
+      .select('id')
+      .eq('id', templateId)
+      .eq('user_id', userId)
+      .single();
+
+    if (templateError || !template) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Template not found', 'NOT_FOUND', 404),
+        { status: 404 },
+      );
+    }
 
     const { data: templateShifts, error: dbError } = await supabase
       .from('template_shifts')
@@ -43,11 +91,18 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       templateShifts: templateShifts || [],
     });
   } catch (err) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Template Shifts API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/roster/templates/[id]/template-shifts', method: 'GET' },
     });
+
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
+    }
+
     return NextResponse.json(
       ApiErrorHandler.createError(
         process.env.NODE_ENV === 'development'
@@ -66,28 +121,20 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 /**
  * POST /api/roster/templates/[id]/template-shifts
  * Create a new template shift for a template.
- *
- * Request body:
- * - day_of_week: Day of week (0=Sunday, 1=Monday, ..., 6=Saturday) (required)
- * - start_time: Start time (HH:MM:SS) (required)
- * - end_time: End time (HH:MM:SS) (required)
- * - role_required: Role required for shift (optional)
- * - min_employees: Minimum employees needed (optional, default: 1)
  */
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { supabase, error } = await standardAdminChecks(request);
-    if (error) return error;
-    if (!supabase) return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+    const { userId, supabase } = await getAuthenticatedUser(request);
 
     const { id } = await context.params;
     const templateId = id;
 
-    // Verify template exists
+    // Verify template exists and belongs to user
     const { data: template, error: templateError } = await supabase
       .from('roster_templates')
       .select('id')
       .eq('id', templateId)
+      .eq('user_id', userId)
       .single();
 
     if (templateError || !template) {
@@ -99,7 +146,16 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       );
     }
 
-    const body = await request.json();
+    let body;
+    try {
+      body = await request.json();
+    } catch (e) {
+      return NextResponse.json(
+        ApiErrorHandler.createError('Invalid JSON body', 'VALIDATION_ERROR', 400),
+        { status: 400 },
+      );
+    }
+
     const { day_of_week, start_time, end_time, role_required, min_employees } = body;
 
     if (day_of_week === undefined || day_of_week < 0 || day_of_week > 6) {
@@ -160,11 +216,18 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       message: 'Template shift created successfully',
     });
   } catch (err) {
+    if (err instanceof NextResponse) return err;
+
     logger.error('[Template Shifts API] Unexpected error:', {
       error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
       context: { endpoint: '/api/roster/templates/[id]/template-shifts', method: 'POST' },
     });
+
+    if (err && typeof err === 'object' && 'status' in err) {
+      return NextResponse.json(err, { status: (err as { status: number }).status || 500 });
+    }
+
     return NextResponse.json(
       ApiErrorHandler.createError(
         process.env.NODE_ENV === 'development'

@@ -5,7 +5,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { deleteEmployee } from './deleteEmployee';
 import { handleEmployeeError } from './handleEmployeeError';
 
-export async function handleDeleteEmployee(request: NextRequest, supabase: SupabaseClient) {
+export async function handleDeleteEmployee(
+  request: NextRequest,
+  supabase: SupabaseClient,
+  userId: string,
+) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
@@ -17,7 +21,7 @@ export async function handleDeleteEmployee(request: NextRequest, supabase: Supab
       );
     }
 
-    await deleteEmployee(supabase, id);
+    await deleteEmployee(supabase, id, userId);
 
     return NextResponse.json({
       success: true,

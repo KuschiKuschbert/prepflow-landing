@@ -4,7 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { PostgrestError } from '@supabase/supabase-js';
 import { PrepList, UpdatePrepListParams } from '../types';
 
-export async function updatePrepList(params: UpdatePrepListParams) {
+export async function updatePrepList(params: UpdatePrepListParams, userId: string) {
   if (!supabaseAdmin) {
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
   }
@@ -24,6 +24,7 @@ export async function updatePrepList(params: UpdatePrepListParams) {
     .from('prep_lists')
     .update(updateData)
     .eq('id', id)
+    .eq('user_id', userId)
     .select()
     .single();
 

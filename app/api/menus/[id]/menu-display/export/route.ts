@@ -6,6 +6,7 @@ import { ApiErrorHandler } from '@/lib/api-error-handler';
 import { checkFeatureAccess } from '@/lib/api-feature-gate';
 import { requireAuth } from '@/lib/auth0-api-helpers';
 import { logger } from '@/lib/logger';
+import { getAuthenticatedUser } from '@/lib/server/get-authenticated-user';
 import { NextRequest, NextResponse } from 'next/server';
 import { EnrichedMenuItem } from '../../../types';
 import { fetchMenuWithItems } from '../../helpers/fetchMenuWithItems';
@@ -52,8 +53,10 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
       }
     }
 
+    const { userId } = await getAuthenticatedUser(request);
+
     // Fetch menu with items
-    const menu = await fetchMenuWithItems(menuId);
+    const menu = await fetchMenuWithItems(menuId, userId);
 
     if (!menu) {
       return NextResponse.json(ApiErrorHandler.createError('Menu not found', 'NOT_FOUND', 404), {

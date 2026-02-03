@@ -12,8 +12,9 @@ import { CreateRecipeInput, Recipe } from './schemas';
  * Create a new recipe.
  */
 export async function createRecipe(
-  name: string,
+  recipe_name: string,
   recipeData: CreateRecipeInput,
+  userId: string,
 ): Promise<{ recipe: Recipe | null; error: unknown }> {
   if (!supabaseAdmin) {
     return {
@@ -29,7 +30,7 @@ export async function createRecipe(
   try {
     const { data, error } = await supabaseAdmin
       .from('recipes')
-      .insert({ ...recipeData }) // Fixed: Removed duplicate 'name' field
+      .insert({ ...recipeData, user_id: userId }) // Fixed: Removed duplicate 'name' field
       .select()
       .single();
 

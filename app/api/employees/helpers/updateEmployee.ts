@@ -30,6 +30,7 @@ export async function updateEmployee(
   supabase: SupabaseClient,
   id: string,
   updates: UpdateEmployeeInput,
+  userId: string,
 ) {
   const { data, error } = await supabase
     .from('employees')
@@ -38,6 +39,7 @@ export async function updateEmployee(
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)
+    .eq('user_id', userId)
     .select(EMPLOYEE_SELECT)
     .single();
 

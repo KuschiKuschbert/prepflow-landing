@@ -9,7 +9,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
  * @param {string} id - Employee ID
  * @throws {Error} If deletion fails
  */
-export async function deleteEmployee(supabase: SupabaseClient, id: string) {
+export async function deleteEmployee(supabase: SupabaseClient, id: string, userId: string) {
   // Soft delete by setting status to 'terminated' instead of actually deleting
   const { error } = await supabase
     .from('employees')
@@ -18,7 +18,8 @@ export async function deleteEmployee(supabase: SupabaseClient, id: string) {
       employment_end_date: new Date().toISOString().split('T')[0],
       updated_at: new Date().toISOString(),
     })
-    .eq('id', id);
+    .eq('id', id)
+    .eq('user_id', userId);
 
   if (error) {
     logger.error('[Employees API] Database error deleting employee:', {

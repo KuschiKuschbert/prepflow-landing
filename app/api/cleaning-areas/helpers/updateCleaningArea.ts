@@ -16,11 +16,13 @@ export async function updateCleaningArea(
   supabase: SupabaseClient,
   id: string,
   updateData: Omit<UpdateCleaningAreaInput, 'id'>,
+  userId: string,
 ): Promise<CleaningArea> {
   const { data, error } = await supabase
     .from('cleaning_areas')
     .update(updateData)
     .eq('id', id)
+    .eq('user_id', userId)
     .select()
     .single();
 

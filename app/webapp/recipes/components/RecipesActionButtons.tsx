@@ -1,20 +1,20 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { Plus, RefreshCw } from 'lucide-react';
-import { Icon } from '@/components/ui/Icon';
-import { LANDING_COLORS } from '@/lib/landing-styles';
-import { PrintButton } from '@/components/ui/PrintButton';
+import { Button } from '@/components/ui/Button';
 import { ExportButton, type ExportFormat } from '@/components/ui/ExportButton';
-import { printRecipes } from '../utils/printRecipes';
+import { Icon } from '@/components/ui/Icon';
+import { PrintButton } from '@/components/ui/PrintButton';
+import { useNotification } from '@/contexts/NotificationContext';
+import { logger } from '@/lib/logger';
+import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
+import { Plus, RefreshCw } from 'lucide-react';
+import { useCallback, useState } from 'react';
 import {
   exportRecipesToCSV,
   exportRecipesToHTML,
   exportRecipesToPDF,
 } from '../utils/exportRecipes';
-import type { Recipe, RecipeIngredientWithDetails } from '@/lib/types/recipes';
-import { useNotification } from '@/contexts/NotificationContext';
-import { logger } from '@/lib/logger';
+import { printRecipes } from '../utils/printRecipes';
 
 interface RecipesActionButtonsProps {
   onRefresh: () => void;
@@ -111,32 +111,32 @@ export function RecipesActionButtons({
 
   return (
     <div className="mb-8 flex flex-wrap gap-3">
-      <a
+      <Button
         href="/webapp/recipes#dishes"
-        className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--primary)]/80 hover:to-[var(--accent)]/80 hover:shadow-xl"
-        style={{
-          background: `linear-gradient(to right, ${LANDING_COLORS.primary}, ${LANDING_COLORS.accent})`,
-        }}
+        variant="primary"
+        size="sm"
+        className="shadow-lg hover:shadow-xl"
+        landingStyle
       >
-        <Icon icon={Plus} size="sm" className="text-[var(--foreground)]" aria-hidden={true} />
+        <Icon icon={Plus} size="sm" className="mr-1.5 text-current" aria-hidden={true} />
         Add Recipe
-      </a>
-      <button
+      </Button>
+      <Button
         onClick={onRefresh}
+        variant="secondary"
+        size="sm"
         disabled={loading}
-        className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[var(--color-info)] to-[var(--primary)] px-6 py-3 font-medium text-[var(--button-active-text)] shadow-lg transition-all duration-200 hover:from-[var(--color-info)]/80 hover:to-[var(--primary)]/80 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
-        style={{
-          background: `linear-gradient(to right, ${LANDING_COLORS.secondary}, ${LANDING_COLORS.primary})`,
-        }}
+        className="shadow-lg hover:shadow-xl"
+        landingStyle
       >
         <Icon
           icon={RefreshCw}
           size="sm"
-          className={`text-[var(--foreground)] ${loading ? 'animate-spin' : ''}`}
+          className={`mr-1.5 text-current ${loading ? 'animate-spin' : ''}`}
           aria-hidden={true}
         />
         Refresh Recipes
-      </button>
+      </Button>
       <PrintButton onClick={handlePrint} loading={printLoading} disabled={recipes.length === 0} />
       <ExportButton
         onExport={handleExport}

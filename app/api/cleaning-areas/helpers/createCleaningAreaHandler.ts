@@ -8,7 +8,11 @@ import { createCleaningArea } from '../helpers/createCleaningArea';
 import { handleCleaningAreaError } from './handleCleaningAreaError';
 import { createCleaningAreaSchema } from './schemas';
 
-export async function handleCreateCleaningArea(supabase: SupabaseClient, request: NextRequest) {
+export async function handleCreateCleaningArea(
+  supabase: SupabaseClient,
+  request: NextRequest,
+  userId: string,
+) {
   try {
     let body: unknown;
     try {
@@ -37,11 +41,15 @@ export async function handleCreateCleaningArea(supabase: SupabaseClient, request
 
     const { area_name, description, cleaning_frequency } = validationResult.data;
 
-    const data = await createCleaningArea(supabase, {
-      area_name,
-      description,
-      cleaning_frequency,
-    });
+    const data = await createCleaningArea(
+      supabase,
+      {
+        area_name,
+        description,
+        cleaning_frequency,
+      },
+      userId,
+    );
 
     return NextResponse.json({
       success: true,

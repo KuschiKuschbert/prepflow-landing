@@ -8,11 +8,17 @@ import { buildSupplierData } from './buildSupplierData';
  *
  * @param {string} id - Supplier ID
  * @param {Object} updates - Update data
+ * @param {string} userId - User ID
  * @param {SupabaseClient} supabase - Supabase client
  * @returns {Promise<Object>} Updated supplier
  * @throws {Error} If update fails
  */
-export async function updateSupplier(id: string, updates: unknown, supabase: SupabaseClient) {
+export async function updateSupplier(
+  id: string,
+  updates: unknown,
+  userId: string,
+  supabase: SupabaseClient,
+) {
   if (!supabase) {
     logger.error('[API] Database connection not available');
     throw ApiErrorHandler.createError('Database connection not available', 'DATABASE_ERROR', 500);
@@ -28,6 +34,7 @@ export async function updateSupplier(id: string, updates: unknown, supabase: Sup
     .from('suppliers')
     .update(updateData)
     .eq('id', id)
+    .eq('user_id', userId)
     .select()
     .single();
 

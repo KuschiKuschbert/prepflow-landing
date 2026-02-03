@@ -7,7 +7,11 @@ import { buildUpdateData } from './buildUpdateData';
 import { handleCleaningTaskError } from './handleCleaningTaskError';
 import { updateCleaningTaskSchema } from './schemas';
 
-export async function handleUpdateCleaningTask(supabase: SupabaseClient, request: NextRequest) {
+export async function handleUpdateCleaningTask(
+  supabase: SupabaseClient,
+  request: NextRequest,
+  userId: string,
+) {
   try {
     let body: unknown;
     try {
@@ -37,7 +41,7 @@ export async function handleUpdateCleaningTask(supabase: SupabaseClient, request
     const { id } = validationResult.data;
 
     const updateData = buildUpdateData(body);
-    const data = await updateCleaningTask(supabase, id, updateData);
+    const data = await updateCleaningTask(supabase, id, updateData, userId);
 
     return NextResponse.json({
       success: true,

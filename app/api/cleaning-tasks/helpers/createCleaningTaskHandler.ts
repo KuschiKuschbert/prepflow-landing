@@ -6,7 +6,11 @@ import { createCleaningTask } from '../helpers/createCleaningTask';
 import { handleCleaningTaskError } from './handleCleaningTaskError';
 import { createCleaningTaskSchema } from './schemas';
 
-export async function handleCreateCleaningTask(supabase: SupabaseClient, request: NextRequest) {
+export async function handleCreateCleaningTask(
+  supabase: SupabaseClient,
+  request: NextRequest,
+  userId: string,
+) {
   try {
     let body: unknown;
     try {
@@ -35,10 +39,14 @@ export async function handleCreateCleaningTask(supabase: SupabaseClient, request
 
     const taskData = validationResult.data;
 
-    const data = await createCleaningTask(supabase, {
-      ...taskData,
-      is_standard_task: taskData.is_standard_task || false,
-    });
+    const data = await createCleaningTask(
+      supabase,
+      {
+        ...taskData,
+        is_standard_task: taskData.is_standard_task || false,
+      },
+      userId,
+    );
 
     return NextResponse.json({
       success: true,

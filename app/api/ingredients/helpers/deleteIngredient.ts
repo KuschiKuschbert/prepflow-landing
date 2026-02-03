@@ -6,14 +6,19 @@ import { createSupabaseAdmin } from '@/lib/supabase';
  * Delete an ingredient.
  *
  * @param {string} id - Ingredient ID
+ * @param {string} userId - User ID
  * @returns {Promise<void>}
  * @throws {Error} If delete fails
  */
-export async function deleteIngredient(id: string): Promise<void> {
+export async function deleteIngredient(id: string, userId: string): Promise<void> {
   const supabaseAdmin = createSupabaseAdmin();
 
   // Delete using admin client (bypasses RLS)
-  const { error } = await supabaseAdmin.from('ingredients').delete().eq('id', id);
+  const { error } = await supabaseAdmin
+    .from('ingredients')
+    .delete()
+    .eq('id', id)
+    .eq('user_id', userId);
 
   if (error) {
     logger.error('[Ingredients API] Database error deleting ingredient:', {

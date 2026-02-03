@@ -1,5 +1,5 @@
-import { RecipeSortField } from '../hooks/useRecipeFiltering';
 import { Recipe, RecipePriceData } from '@/lib/types/recipes';
+import { RecipeSortField } from '../hooks/useRecipeFiltering';
 
 export function sortRecipes(
   recipes: Recipe[],
@@ -13,8 +13,8 @@ export function sortRecipes(
 
     switch (sortField) {
       case 'name':
-        aValue = a.recipe_name.toLowerCase();
-        bValue = b.recipe_name.toLowerCase();
+        aValue = (a.recipe_name || '').toLowerCase();
+        bValue = (b.recipe_name || '').toLowerCase();
         break;
       case 'recommended_price':
         aValue = recipePrices[a.id]?.recommendedPrice || 0;
@@ -33,8 +33,8 @@ export function sortRecipes(
         bValue = new Date(b.created_at).getTime();
         break;
       default:
-        aValue = a.recipe_name.toLowerCase();
-        bValue = b.recipe_name.toLowerCase();
+        aValue = (a.recipe_name || '').toLowerCase();
+        bValue = (b.recipe_name || '').toLowerCase();
     }
 
     if (sortOrder === 'asc') {

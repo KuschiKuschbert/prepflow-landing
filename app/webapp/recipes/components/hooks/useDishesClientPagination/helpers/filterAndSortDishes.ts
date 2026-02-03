@@ -13,9 +13,11 @@ export function filterAndSortDishes(
   dishCosts: Map<string, DishCostData>,
   filters: UnifiedFilters,
 ): Dish[] {
-  const filtered = dishes.filter(dish =>
-    dish.dish_name.toLowerCase().includes(filters.searchTerm.toLowerCase()),
-  );
+  const filtered = dishes.filter(dish => {
+    const name = dish.dish_name || '';
+    const term = filters.searchTerm || '';
+    return name.toLowerCase().includes(term.toLowerCase());
+  });
 
   filtered.sort((a, b) => {
     let aValue: string | number;
@@ -23,8 +25,8 @@ export function filterAndSortDishes(
 
     switch (filters.sortField) {
       case 'name':
-        aValue = a.dish_name.toLowerCase();
-        bValue = b.dish_name.toLowerCase();
+        aValue = (a.dish_name || '').toLowerCase();
+        bValue = (b.dish_name || '').toLowerCase();
         break;
       case 'selling_price':
         aValue = a.selling_price;
@@ -46,8 +48,8 @@ export function filterAndSortDishes(
         break;
       default:
         // For recipe-only fields, dishes sort by name
-        aValue = a.dish_name.toLowerCase();
-        bValue = b.dish_name.toLowerCase();
+        aValue = (a.dish_name || '').toLowerCase();
+        bValue = (b.dish_name || '').toLowerCase();
     }
 
     if (filters.sortDirection === 'asc') {

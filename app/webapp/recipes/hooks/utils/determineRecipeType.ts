@@ -7,7 +7,7 @@ export interface RecipeTypeInfo {
 }
 
 export function determineRecipeType(recipe: Recipe): RecipeTypeInfo {
-  const nameLower = recipe.recipe_name.toLowerCase();
+  const nameLower = (recipe.recipe_name || '').toLowerCase();
   if (nameLower.includes('burger') || nameLower.includes('patty'))
     return {
       recipeType: 'burger',

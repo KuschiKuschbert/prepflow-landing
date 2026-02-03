@@ -18,6 +18,7 @@ export async function createDishWithRelations(
     description?: string | null;
     selling_price: number;
     category?: string;
+    user_id: string;
   },
   recipes?: DishRecipeInput[],
   ingredients?: DishIngredientInput[],
@@ -35,6 +36,7 @@ export async function createDishWithRelations(
       description: dishData.description?.trim() || null,
       selling_price: dishData.selling_price,
       category: dishData.category || 'Uncategorized',
+      user_id: dishData.user_id,
     })
     .select()
     .single();

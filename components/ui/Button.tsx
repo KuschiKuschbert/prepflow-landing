@@ -1,17 +1,15 @@
 'use client';
 
+import { LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
 import React from 'react';
 import { MagneticButton } from './MagneticButton';
-import { LANDING_TYPOGRAPHY } from '@/lib/landing-styles';
 
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   href?: string;
-  onClick?: () => void;
-  className?: string;
-  disabled?: boolean;
+  onClick?: () => void; // Keeping simple signature, but it overrides MouseEventHandler
   loading?: boolean;
   'aria-label'?: string;
   /**
@@ -72,7 +70,7 @@ export const Button: React.FC<ButtonProps> = ({
         lg: `px-8 py-4 ${LANDING_TYPOGRAPHY.lg} rounded-2xl`,
       }
     : {
-        sm: 'px-4 py-2 text-fluid-sm rounded-lg',
+        sm: 'px-3 py-1.5 text-xs rounded-lg',
         md: 'px-6 py-3 text-fluid-base rounded-xl',
         lg: 'px-8 py-4 text-fluid-lg rounded-2xl',
       };
@@ -101,7 +99,7 @@ export const Button: React.FC<ButtonProps> = ({
   // Note: MagneticButton only works with button elements, not links
   if (href) {
     return (
-      <a href={href} className={classes} aria-label={ariaLabel} {...props}>
+      <a href={href} className={classes} aria-label={ariaLabel} {...(props as any)}>
         {buttonContent}
       </a>
     );

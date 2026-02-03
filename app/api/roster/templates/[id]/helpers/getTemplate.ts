@@ -9,12 +9,14 @@ import { NextResponse } from 'next/server';
 export async function getTemplate(
   supabase: SupabaseClient,
   templateId: string,
+  userId: string,
 ): Promise<NextResponse> {
   // Get template
   const { data: template, error: templateError } = await supabase
     .from('roster_templates')
     .select('*')
     .eq('id', templateId)
+    .eq('user_id', userId)
     .single();
 
   if (templateError || !template) {

@@ -4,7 +4,11 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { createShiftSchema } from './schemas';
 
-export async function handleCreateShift(request: NextRequest, supabase: SupabaseClient) {
+export async function handleCreateShift(
+  request: NextRequest,
+  supabase: SupabaseClient,
+  userId: string,
+) {
   try {
     let body: unknown;
     try {
@@ -34,11 +38,12 @@ export async function handleCreateShift(request: NextRequest, supabase: Supabase
 
     const shiftData = zodValidation.data;
 
-    // Check if employee exists
+    // Check if employee exists and belongs to user
     const { data: employee, error: employeeError } = await supabase
       .from('employees')
       .select('id')
       .eq('id', shiftData.employee_id)
+      .eq('user_id', userId)
       .single();
 
     if (employeeError || !employee) {
@@ -51,7 +56,7 @@ export async function handleCreateShift(request: NextRequest, supabase: Supabase
     // Insert shift
     const { data: shift, error: insertError } = await supabase
       .from('shifts')
-      .insert(shiftData)
+      .insert({ ...shiftData, user_id: userId })
       .select()
       .single();
 
