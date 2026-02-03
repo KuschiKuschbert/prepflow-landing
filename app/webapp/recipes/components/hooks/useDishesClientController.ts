@@ -121,8 +121,7 @@ export function useDishesClientController(): UseDishesClientControllerResult {
     setDishes,
     setRecipes,
     onClearSelection: handleExitSelectionMode,
-    // Add missing props if needed by the hook, inferred from usage
-  } as any);
+  });
 
   const { selectedRecipeIds } = bulkActions; // Used in original code for count??
   // Wait, selectedRecipeCount logic was: const selectedRecipeCount = selectedRecipeIds.length;

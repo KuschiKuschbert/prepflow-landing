@@ -1,15 +1,19 @@
 import { formatRecipeName } from '@/lib/text-utils';
-import { useCallback, useEffect, useMemo } from 'react';
+import { Dish, Recipe } from '@/lib/types/recipes';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { createRecipeImagesGeneratedHandler } from '../DishesClient/helpers/handleRecipeImagesGenerated';
-import { UseDishesClientControllerResult } from './useDishesClientController.types';
+import {
+  EditingItemShape,
+  UseDishesClientControllerResult,
+} from './useDishesClientController.types';
 
 export function useResetStateOnViewModeChange(
   viewMode: string,
   fetchItems: () => void,
-  setEditingRecipe: (val: any) => void,
-  setEditingItem: (val: any) => void,
-  setHighlightingRowId: (val: any) => void,
-  setHighlightingRowType: (val: any) => void,
+  setEditingRecipe: (val: Recipe | null) => void,
+  setEditingItem: (val: EditingItemShape | null) => void,
+  setHighlightingRowId: (val: string | null) => void,
+  setHighlightingRowType: (val: 'dish' | 'recipe' | null) => void,
 ) {
   useEffect(() => {
     if (viewMode === 'list') {
@@ -29,7 +33,11 @@ export function useResetStateOnViewModeChange(
   ]);
 }
 
-export function useSelectedItemTypes(dishes: any[], recipes: any[], selectedItems: Set<string>) {
+export function useSelectedItemTypes(
+  dishes: Dish[],
+  recipes: Recipe[],
+  selectedItems: Set<string>,
+) {
   return useMemo(() => {
     const types = new Map<string, 'recipe' | 'dish'>();
     dishes.forEach(d => {
@@ -43,9 +51,9 @@ export function useSelectedItemTypes(dishes: any[], recipes: any[], selectedItem
 }
 
 export function useRecipeImagesHandler(
-  setRecipes: any,
-  selectedRecipeForPreview: any,
-  setSelectedRecipeForPreview: any,
+  setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>,
+  selectedRecipeForPreview: Recipe | null,
+  setSelectedRecipeForPreview: React.Dispatch<React.SetStateAction<Recipe | null>>,
 ) {
   return useCallback(
     (
