@@ -2,13 +2,13 @@ import { logger } from '@/lib/logger';
 import { supabaseAdmin } from '@/lib/supabase';
 import type { Dish, SyncResult } from '../../../catalog';
 import { logCatalogSyncOperation } from '../common';
-import type { CatalogApi } from './types';
+import type { CatalogApi, SquareItemPayload } from './types';
 
 export async function updateSquareCatalogItem(
   userId: string,
   dish: Dish,
   mapping: { id: string; square_id: string },
-  squareItemData: { id?: string; itemData: any },
+  squareItemData: SquareItemPayload,
   catalogApi: CatalogApi,
   result: SyncResult,
 ): Promise<void> {

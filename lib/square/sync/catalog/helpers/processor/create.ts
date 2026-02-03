@@ -2,13 +2,13 @@ import { logger } from '@/lib/logger';
 import { createAutoMapping } from '../../../../mappings';
 import type { Dish, SyncResult } from '../../../catalog';
 import { logCatalogSyncOperation } from '../common';
-import type { CatalogApi } from './types';
+import type { CatalogApi, SquareItemPayload } from './types';
 
 export async function createSquareCatalogItem(
   userId: string,
   locationId: string,
   dish: Dish,
-  squareItemData: { id?: string; itemData: any },
+  squareItemData: SquareItemPayload,
   catalogApi: CatalogApi,
   result: SyncResult,
 ): Promise<void> {
